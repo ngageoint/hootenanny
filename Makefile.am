@@ -4,7 +4,6 @@ TAR=tar
 EXCLUDE_DIRS=grep -E -v ".*/$$"
 confdir=$(prefix)/conf
 plugindir=$(prefix)/plugins
-UNINSTALL_MANIFEST=$(confdir)/HootUninstallManifest.txt
 
 always:
 
@@ -44,16 +43,23 @@ tmp/schema.png:
 	$(MAKE) -f Makefile.old tmp/schema.png
 
 help:
-	@echo "help       - This help message."
-	@echo "build      - Build all source and populated/upgrade the DB if necessary."
-	@echo "clean      - Clean out all binaries. This will not modify the DB."
-	@echo "clean-all  - Clean out all binaries and remove all tables from the DB defined in liquibase.properties"
-	@echo "clean-db   - Remove all tables from the DB defined in liquibase.properties"
-	@echo "check      - Run all the tests that should be run before commit."
-	@echo "test-all   - Run all tests. Could take hours."
-	@echo "dist       - Make a distributable tarball."
-	@echo "coverage   - If configure was run with '--with-coverage' then it creates coverage reports."
-	@echo "eclipse    - Builds eclipse project files."
+	@echo "help          - This help message."
+	@echo "archive       - Make a distributable tarball."
+	@echo "build         - Build all source and populated/upgrade the DB if necessary."
+	@echo "check         - Run all the tests that should be run before commit."
+	@echo "clean         - Clean out all binaries. This will not modify the DB."
+	@echo "clean-all     - Clean out all binaries and remove all tables from the DB defined in liquibase.properties"
+	@echo "clean-db      - Remove all tables from the DB defined in liquibase.properties"
+	@echo "coverage      - If configure was run with '--with-coverage' then it creates coverage reports."
+	@echo "dist          - Make a distributable tarball."
+	@echo "eclipse       - Builds Eclipse IDE project files."
+	@echo "pp-test       - Run the pretty-pipes tests.  Should take less than five minutes."
+	@echo "plugins-test  - Run the mocha plugins tests.  Should take less than five minutes."
+	@echo "services-test - Run web services slow tests.  Should take five to ten minutes.  Must enable --with-services configuration option."
+	@echo "test          - Run slow tests.  Should take five to ten minutes."
+	@echo "test-all      - Run all tests.  Could take hours."
+	@echo "test-quick    - Run quick tests.  Should take less than five minutes."
+	@echo "ui-test       - Run user interface tests.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
 
 test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test
@@ -67,33 +73,57 @@ test-all-no-core:
 test-quick:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-quick
 
+services-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old services-test
+
+ui-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-test
+
+pp-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old pp-test
+
+plugins-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old plugins-test
+
 conf/DatabaseConfig.sh:
 	$(MAKE) -f Makefile.old conf/DatabaseConfig.sh
 
 # Use some tar fanciness to grab all the files in conf, plugins, translations and scripts
 install-other:
 	mkdir -p tmp
-	$(TAR) cf tmp/other.tar conf plugins scripts translations
-	cat tmp/other.tar | $(TAR) --list | $(EXCLUDE_DIRS) >> $(UNINSTALL_MANIFEST)
-	cat tmp/other.tar | $(TAR) x -C $(prefix)
+	$(TAR) cf tmp/other.tar conf plugins scripts translations rules report
+	mkdir -p $(localstatedir)
+	cat tmp/other.tar | $(TAR) xv -C $(localstatedir)
 	rm -f tmp/other.tar
+	mkdir -p $(docdir)
+	cp INSTALL LICENSE AUTHORS COPYING GPLv3 README* docs/*.pdf $(docdir)
+	mkdir -p $(sysconfdir)/profile.d/
+	mkdir -p $(sysconfdir)/asciidoc/filters/
+	cp -R docs/filters/* $(sysconfdir)/asciidoc/filters/
+	echo "export HOOT_HOME=$(localstatedir)" > $(sysconfdir)/profile.d/hootenanny.sh
+	mkdir -p $(includedir)
+	export HOOT_HOME=`pwd`; \
+	cd $$HOOT_HOME/hoot-core/src/main/cpp/; \
+	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -); \
+	cd $$HOOT_HOME/hoot-js/src/main/cpp; \
+	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -); \
+	cd $$HOOT_HOME/hoot-rnd/src/main/cpp/; \
+	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -)
 
 install-data-local: install-other
 
 install-exec-local:
 	mkdir -p $(bindir) $(libdir) $(confdir)
 	$(INSTALL) bin/* $(bindir)
-	$(INSTALL) lib/* $(libdir)
-	ls bin/* lib/* >> $(UNINSTALL_MANIFEST)
+	rm $(bindir)/HootEnv.sh
+	mkdir -p $(localstatedir)/bin/
+	cp bin/HootEnv.sh $(localstatedir)/bin/
+	cp -l $(localstatedir)/bin/HootEnv.sh $(bindir)
+	cp -a lib/* $(libdir)
 	test $(HAS_HADOOP) && $(INSTALL) pretty-pipes/bin/* $(bindir) || true
 	test $(HAS_HADOOP) && $(INSTALL) pretty-pipes/lib/* $(libdir) || true
-	test $(HAS_HADOOP) && (cd pretty-pipes ; ls bin/* >> $(UNINSTALL_MANIFEST)) || true
-	test $(HAS_HADOOP) && (cd pretty-pipes ; ls lib/* >> $(UNINSTALL_MANIFEST)) || true
 
 # Clean out all install files and then remove the empty directories.
 uninstall-local:
-	cd $(prefix) && test -f $(UNINSTALL_MANIFEST) && xargs -a $(UNINSTALL_MANIFEST) -d "\n" rm -f || true
-	rm -f $(UNINSTALL_MANIFEST)
-	find $(confdir) $(plugindir) $(bindir) $(libdir) -depth -type d -empty -exec rmdir {} \;
 
 SUBDIRS=stub

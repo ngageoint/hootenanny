@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.readers.review;
 
@@ -92,7 +92,13 @@ public class ReviewReferencesRetriever
   	{
   		stmt = conn.createStatement();
   	  rs = stmt.executeQuery(sql);
-  		while (rs.next())
+  	  
+  	  if (rs == null)
+			{
+				throw new SQLException("Error executing getUnresolvedReviewRelations");
+			}
+  	  
+	  	while (rs.next())
   		{
   			relationIds.add(rs.getLong(1));
   		}
@@ -112,8 +118,6 @@ public class ReviewReferencesRetriever
   	return relationIds;
   }
 	
-  
-
   private List<Long> getAllReviewRelations(final ElementInfo queryElementInfo, 
   	final long mapId) throws SQLException
   {
@@ -136,32 +140,34 @@ public class ReviewReferencesRetriever
   	{
   		stmt = conn.createStatement();
   	  rs = stmt.executeQuery(sql);
-  		while (rs.next())
+  	  if (rs == null)
+  	  {
+  	  	throw new SQLException("Error executing getAllReviewRelations");
+  	  }
+	  	while (rs.next())
   		{
   			relationIds.add(rs.getLong(1));
   		}
   	}
   	finally
   	{
-  		if (stmt != null)
-  		{
-  			stmt.close();
-  		}
   		if (rs != null)
   		{
   			rs.close();
+  		}
+  		if (stmt != null)
+  		{
+  			stmt.close();
   		}
   	}
   	
   	return relationIds;
   }
   
-  
-  
   /**
    * Retrieves all other unresolved element references to reviews for a given element
    * 
-   * @param requestingElementInfo element whose review references are to be retrieved
+   * @param queryElementInfo element whose review references are to be retrieved
    * @return a list containing all features the input feature needs to be reviewed with
    * @throws Exception 
    * @throws InvocationTargetException 
@@ -238,7 +244,7 @@ public class ReviewReferencesRetriever
   /**
    * Retrieves all other unresolved element references to reviews for a given element
    * 
-   * @param requestingElementInfo element whose review references are to be retrieved
+   * @param queryElementInfo element whose review references are to be retrieved
    * @return a list containing all features the input feature needs to be reviewed with
    * @throws Exception 
    * @throws InvocationTargetException 

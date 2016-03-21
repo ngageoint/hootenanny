@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.writers.osm;
 
@@ -76,7 +76,7 @@ import com.mysema.query.sql.SQLQuery;
  * referenced way is written. This design does cause the code to be less intuitive, unfortunately, 
  * but hopefully should result in increased write performance.
  * 
- * @todo All element type specific db writing code should be made generic again like it was before
+ * //TODO: All element type specific db writing code should be made generic again like it was before
  * the jooq to querydsl conversion.
  */
 public class ChangesetDbWriter
@@ -150,7 +150,7 @@ public class ChangesetDbWriter
    * Create/Modify requests cause the element ID to be incremented. Delete requests cause it to be 
    * unchanged.
    */
-  private long getNewElementId(final long oldElementId, final long nextElementId,
+  private static long getNewElementId(final long oldElementId, final long nextElementId,
     final EntityChangeType entityChangeType, final int elementCtr)
   {
     long newElementId;
@@ -199,8 +199,8 @@ public class ChangesetDbWriter
    * Parses and returns an OSM element from OSM changeset diff input XML data
    * 
    * @param xml xml data to construct the elements from
-   * @param oldId TODO
-   * @param newId TODO
+   * @param oldId 
+   * @param newId 
    * @param elementType type of elements being parsed
    * @param entityChangeType type of request database change to be performed on
    * the elements
@@ -286,7 +286,7 @@ public class ChangesetDbWriter
         	"current_" + elementType.toString().toLowerCase() + "s_" + 
         	String.valueOf(requestChangesetMapId) + "_id_seq"));
 
-    // TODO: this is a bigtime hack put in place b/c I was getting dupe IDs...really needs to be
+    // This is a bigtime hack put in place b/c I was getting dupe IDs...really needs to be
     // fixed; I need to generate the IDs myself, rather than letting the db do it automatically,
     // so I have the new IDs to send back in the changeset upload response...there might be a way
     // to let the db auto-gen them and then return those, but I'm not sure how that would work yet.

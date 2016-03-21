@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
@@ -40,52 +40,44 @@ import hoot.services.IntegrationTest;
 import hoot.services.controllers.wps.ETLProcesslet;
 import hoot.services.wps.WpsUtils;
 
-import java.io.IOException;
 import java.lang.reflect.*;
 
+public class ETLProcessletTest
+{
 
-public class ETLProcessletTest {
-
-
-	  @Test
-	  @Category(IntegrationTest.class)
-	  public void testParseParam() throws Exception
-	  {
+	@Test
+	@Category(IntegrationTest.class)
+	public void testParseParam() throws Exception
+	{
 		String ret = generateJobParam();
 		String expected = "";
-		try {	    	
-	    	String ETLMakefile = HootProperties.getInstance().getProperty("ETLMakefile",
-			          HootProperties.getDefault("ETLMakefile"));
-	    	
-	    	expected = "{\"caller\":\"ETLProcesslet\",\"exec\":\"" + ETLMakefile + "\",\"params\":[{\"translation\":\"\\/test\\/file\\/test.js\"},";
-	    	expected += "{\"INPUT_TYPE\":\"OSM\"},";
-				expected += "{\"INPUT\":\"\\/test\\/file\\/INPUT.osm\"}],\"exectype\":\"make\"}";
-			} catch (IOException e) {
-				
-		}
- 
+		String ETLMakefile = HootProperties.getInstance().getProperty("ETLMakefile",
+				HootProperties.getDefault("ETLMakefile"));
+
+		expected = "{\"caller\":\"ETLProcesslet\",\"exec\":\"" + ETLMakefile
+				+ "\",\"params\":[{\"translation\":\"\\/test\\/file\\/test.js\"},";
+		expected += "{\"INPUT_TYPE\":\"OSM\"},";
+		expected += "{\"INPUT\":\"\\/test\\/file\\/INPUT.osm\"}],\"exectype\":\"make\"}";
+
 		Assert.assertEquals(expected, ret);
-	  }
-	  
-	  public String generateJobParam() throws Exception
-	  {
-			ETLProcesslet processlet = new ETLProcesslet();
-			LinkedList<ProcessletInput> allInputs = new LinkedList<ProcessletInput>();
-			allInputs.add(WpsUtils.createLiteralInput("translation", "/test/file/test.js"));
-			allInputs.add(WpsUtils.createLiteralInput("INPUT_TYPE", "OSM"));
-			allInputs.add(WpsUtils.createLiteralInput("INPUT", "/test/file/INPUT.osm"));
-			ProcessletInputs in = new ProcessletInputs(allInputs);
-			 
-			  
-			JSONArray arr = processlet.parseRequestParams(in);
-			    
-			Class<?>[] cArg = new Class[1];
-			cArg[0] = JSONArray.class;
-			Method method = JobProcesslet.class.getDeclaredMethod("createPostBody", cArg);
-			method.setAccessible(true);
-			String ret = (String)method.invoke(processlet, arr);
-			return ret;
-	  }
+	}
 
+	public String generateJobParam() throws Exception
+	{
+		ETLProcesslet processlet = new ETLProcesslet();
+		LinkedList<ProcessletInput> allInputs = new LinkedList<ProcessletInput>();
+		allInputs.add(WpsUtils.createLiteralInput("translation", "/test/file/test.js"));
+		allInputs.add(WpsUtils.createLiteralInput("INPUT_TYPE", "OSM"));
+		allInputs.add(WpsUtils.createLiteralInput("INPUT", "/test/file/INPUT.osm"));
+		ProcessletInputs in = new ProcessletInputs(allInputs);
 
+		JSONArray arr = processlet.parseRequestParams(in);
+
+		Class<?>[] cArg = new Class[1];
+		cArg[0] = JSONArray.class;
+		Method method = JobProcesslet.class.getDeclaredMethod("createPostBody", cArg);
+		method.setAccessible(true);
+		String ret = (String) method.invoke(processlet, arr);
+		return ret;
+	}
 }

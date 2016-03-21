@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HilbertRTree.h"
@@ -39,6 +39,9 @@ using namespace std;
 #include "RTreeNode.h"
 
 using namespace Tgs;
+
+// Tgs
+#include <tgs/Statistics/Random.h>
 
 
 HilbertRTree::HilbertRTree(shared_ptr<PageStore> ps, int dimensions) :
@@ -62,7 +65,7 @@ void HilbertRTree::bulkInsert(const std::vector<Box>& boxes, const std::vector<i
   std::vector<int> childNodes;
   _createLeafNodes(sortedBoxes, childNodes);
   _setHeight(0);
-  
+
   while (childNodes.size() != 1)
   {
     std::vector<int> parentNodes;
@@ -73,7 +76,7 @@ void HilbertRTree::bulkInsert(const std::vector<Box>& boxes, const std::vector<i
   _setRootId(childNodes[0]);
 }
 
-void HilbertRTree::_calculateHilbertValues(const std::vector<Box>& boxes, 
+void HilbertRTree::_calculateHilbertValues(const std::vector<Box>& boxes,
   const std::vector<int>& fids, std::vector<UserBoxHolder>& hilbertBoxes)
 {
   assert(hilbertBoxes.size() == 0);
@@ -187,9 +190,9 @@ int HilbertRTree::_chooseWeightedChild(const std::vector<double>& weights)
   }
   if (sum == 0.0)
   {
-    return rand() % weights.size();
+    return Tgs::Random::instance()->generateInt(weights.size());
   }
-  double r = (double)rand() / (double)RAND_MAX * sum;
+  double r = Tgs::Random::instance()->generateUniform() * sum;
   double incr = 0.0;
   for (unsigned int i = 0; i < weights.size(); i++)
   {
@@ -204,7 +207,7 @@ int HilbertRTree::_chooseWeightedChild(const std::vector<double>& weights)
   return result;
 }
 
-void HilbertRTree::_createLeafNodes(const std::vector<UserBoxHolder>& hilbertBoxes, 
+void HilbertRTree::_createLeafNodes(const std::vector<UserBoxHolder>& hilbertBoxes,
   std::vector<int>& result)
 {
   int maxChildCount = getRoot()->getMaxChildCount();
@@ -222,7 +225,7 @@ void HilbertRTree::_createLeafNodes(const std::vector<UserBoxHolder>& hilbertBox
   }
 }
 
-void HilbertRTree::_createParentNodes(const std::vector<int>& childNodes, 
+void HilbertRTree::_createParentNodes(const std::vector<int>& childNodes,
   std::vector<int>& result)
 {
   int maxChildCount = getRoot()->getMaxChildCount();
@@ -357,7 +360,7 @@ int HilbertRTree::_splitBoxes(BoxVector& boxes)
   }
   //sort(hilbertBoxes.begin(), hilbertBoxes.end());
   bool swap = false;
-  do 
+  do
   {
     swap = false;
     for (unsigned int i = 0; i < hilbertBoxes.size() - 1; i++)
@@ -406,7 +409,7 @@ double HilbertRTree::_swapGrandChildNodes(int parentId, const std::vector<double
   int childIndex = _chooseWeightedChild(overlaps);
   int childId = parent->getChildNodeId(childIndex);
   RTreeNode* child = _getNode(childId);
-  int grandChildOffset = rand() % child->getChildCount();
+  int grandChildOffset = Tgs::Random::instance()->generateInt(child->getChildCount());
 
   std::vector<double> tmp = overlaps;
   tmp[childIndex] = 0.0;
@@ -414,7 +417,7 @@ double HilbertRTree::_swapGrandChildNodes(int parentId, const std::vector<double
   int otherChildIndex = _chooseWeightedChild(tmp);
   int otherChildId = parent->getChildNodeId(otherChildIndex);
   RTreeNode* otherChild = _getNode(otherChildId);
-  int otherGrandChildOffset = rand() % otherChild->getChildCount();
+  int otherGrandChildOffset = Tgs::Random::instance()->generateInt(otherChild->getChildCount());
   int otherGrandChildId = otherChild->getChildId(otherGrandChildOffset);
   Box otherGrandChildBox = otherChild->getChildEnvelope(otherGrandChildOffset).toBox();
 
@@ -427,7 +430,7 @@ double HilbertRTree::_swapGrandChildNodes(int parentId, const std::vector<double
     _calculatePairwiseOverlap(childId, tmp) +
     _calculatePairwiseOverlap(otherChildId, tmp);
 
-//   std::cout << "Swapping(" << parentId << ") " << childId << ":" << childIndex << " " << 
+//   std::cout << "Swapping(" << parentId << ") " << childId << ":" << childIndex << " " <<
 //     otherChildId << ":" << otherChildIndex << std::endl;
 
   double startVolume = child->calculateEnvelope().calculateVolume() +
@@ -436,7 +439,7 @@ double HilbertRTree::_swapGrandChildNodes(int parentId, const std::vector<double
 //     otherChild->calculateEnvelope().calculatePerimeter();
 
   // swap the children.
-  otherChild->updateChild(otherGrandChildOffset, child->getChildId(grandChildOffset), 
+  otherChild->updateChild(otherGrandChildOffset, child->getChildId(grandChildOffset),
     child->getChildEnvelope(grandChildOffset).toBox());
   if (otherChild->isLeafNode() == false)
   {
@@ -453,7 +456,7 @@ double HilbertRTree::_swapGrandChildNodes(int parentId, const std::vector<double
 //     std::cout << "Parent2 " << grandChild->getParentId() << std::endl;
     grandChild->setParentId(childId);
 //     std::cout << "Parent2 " << grandChild->getParentId() << std::endl;
-  } 
+  }
   _updateBounds(child);
   _updateBounds(otherChild);
 
@@ -465,10 +468,10 @@ double HilbertRTree::_swapGrandChildNodes(int parentId, const std::vector<double
   double endOverlap = _calculatePairwiseOverlap(parentId, tmp) +
     _calculatePairwiseOverlap(childId, tmp) +
     _calculatePairwiseOverlap(otherChildId, tmp);
-  
+
   double result;
   //std::cout << startOverlap << " " << endOverlap << "\t";
-//   if (startOverlap * startPerimeter * startVolume > 
+//   if (startOverlap * startPerimeter * startVolume >
 //     endOverlap * endPerimeter * endVolume)
   if (startVolume > endVolume)
   {
@@ -478,7 +481,7 @@ double HilbertRTree::_swapGrandChildNodes(int parentId, const std::vector<double
   else
   {
     // swap the children back.
-    child->updateChild(grandChildOffset, otherChild->getChildId(otherGrandChildOffset), 
+    child->updateChild(grandChildOffset, otherChild->getChildId(otherGrandChildOffset),
       otherChild->getChildEnvelope(otherGrandChildOffset).toBox());
     if (child->isLeafNode() == false)
     {
@@ -488,7 +491,7 @@ double HilbertRTree::_swapGrandChildNodes(int parentId, const std::vector<double
 //       std::cout << childId << std::endl;
       grandChild->setParentId(childId);
 //       std::cout << " Parent1 " << grandChild->getParentId() << std::endl;
-    } 
+    }
     otherChild->updateChild(otherGrandChildOffset, otherGrandChildId, otherGrandChildBox);
     if (child->isLeafNode() == false)
     {
@@ -497,7 +500,7 @@ double HilbertRTree::_swapGrandChildNodes(int parentId, const std::vector<double
 //       std::cout << " Parent2 " << otherGrandChild->getParentId() << std::endl;
       otherGrandChild->setParentId(otherChildId);
 //       std::cout << " Parent2 " << otherGrandChild->getParentId() << std::endl;
-    } 
+    }
 
     _updateBounds(child);
     _updateBounds(otherChild);

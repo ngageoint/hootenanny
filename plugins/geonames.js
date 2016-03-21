@@ -54,11 +54,11 @@ geonames = {
 
     // toOsm - Translate Attrs to Tags
     // This is the main routine to convert TO OSM
-    toOsm : function(attrs, layerName)
+    toOsm : function(attrs, layerName, geometryType)
     { 
         tags = {};  // The final output Tag list
 
-        if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
         // Names
         tags.name = attrs.name;

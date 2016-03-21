@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "CalculatorGenome.h"
@@ -37,6 +37,9 @@ using namespace std;
 #include "../Xml/XmlHelper.h"
 #include "BasicMathCalculatorNode.h"
 #include "ConstantCalculatorNodeSource.h"
+
+// Tgs
+#include <tgs/Statistics/Random.h>
 
 namespace Tgs
 {
@@ -116,7 +119,7 @@ namespace Tgs
   shared_ptr<CalculatorGenomeNode> CalculatorGenome::_chooseRandomNode()
   {
     int count = _countNodes(_root);
-    int nodeIndex = rand() % count;
+    int nodeIndex = Tgs::Random::instance()->generateInt(count);
     return _findNode(nodeIndex);
   }
 
@@ -161,7 +164,7 @@ namespace Tgs
     {
       weight = _sourceWeight;
     }
-    double r = ((double)rand() / (double)RAND_MAX) * weight;
+    double r = Tgs::Random::instance()->generateUniform() * weight;
     double last = 0.0;
     double sum = 0.0;
     for (map<string, AvailableNode>::const_iterator it = _availableNodes.begin(); 
@@ -331,7 +334,7 @@ namespace Tgs
       getline(s, buffer);
       stringstream strm1(buffer);
       strm1 >> firstStr;
-    }      
+    }
 
     //<CalculatorGenomeNode id='class Tgs::AddCalculatorNode'>
     if(firstStr == "<CalculatorGenomeNode")
@@ -370,7 +373,7 @@ namespace Tgs
 
   void CalculatorGenome::_mutate(double p, shared_ptr<CalculatorGenomeNode> node)
   {
-    double r = (double)rand() / (double)RAND_MAX;
+    double r = Tgs::Random::instance()->generateUniform();
 
     if (r <= p)
     {

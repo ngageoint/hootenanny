@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -77,24 +77,17 @@ public class Way extends Element
   // temp collection of way node coordinates used to calculate the way's bounds
   private Map<Long, Coordinates> nodeCoordsCollection;
 
-  public Way(final long mapId, Connection dbConn)
+  public Way(final long mapId, Connection dbConn) throws Exception
   {
     super(dbConn);
 
     elementType = ElementType.Way;
 
     this.record = new CurrentWays();
-    //TODO: what's the purpose of this catch?
-    try
-    {
-    	setMapId(mapId);
-    }
-    catch (Exception ex)
-    {
-    }
+    setMapId(mapId);
   }
 
-  public Way(final long mapId, Connection dbConn, final CurrentWays record)
+  public Way(final long mapId, Connection dbConn, final CurrentWays record) throws Exception
   {
     super(dbConn);
     elementType = ElementType.Way;
@@ -107,14 +100,7 @@ public class Way extends Element
     wayRecord.setVisible(record.getVisible());
     wayRecord.setTags(record.getTags());
     this.record = wayRecord;
-     //TODO: what's the purpose of this catch?
-    try
-    {
-    	setMapId(mapId);
-    }
-    catch (Exception ex)
-    {
-    }
+    setMapId(mapId);
   }
 
   /**
@@ -138,10 +124,7 @@ public class Way extends Element
           .where(currentWayNodes.wayId.in(wayIds))
           .list(currentNodes);
     }
-    else
-    {
-      return new ArrayList<CurrentNodes>();
-    }
+    return new ArrayList<CurrentNodes>();
   }
 
   /*
@@ -263,6 +246,7 @@ public class Way extends Element
    * @return a bounding box
    * @throws Exception
    */
+  @Override
   public BoundingBox getBounds() throws Exception
   {
     // this is a little kludgy, but...first see if the related record data (way
@@ -280,10 +264,7 @@ public class Way extends Element
     // way nodes data
     // for this way must be in the services database and up to date, so get it
     // from there.
-    else
-    {
-      return new BoundingBox(new ArrayList<CurrentNodes>(getNodes()));
-    }
+    return new BoundingBox(new ArrayList<CurrentNodes>(getNodes()));
   }
   
   /**
@@ -293,6 +274,7 @@ public class Way extends Element
    *          xml data to construct the element from
    * @throws Exception
    */
+  @Override
   public void fromXml(final org.w3c.dom.Node xml) throws Exception
   {
     log.debug("Parsing way...");
@@ -326,7 +308,7 @@ public class Way extends Element
    * Returns an XML representation of the element returned in a query; does not
    * add tags; assumes way nodes have already been written to the services db
    *
-   * @param parent XML node this element should be attached under
+   * @param parentXml XML node this element should be attached under
    * @param modifyingUserId ID of the user which created this element
    * @param modifyingUserDisplayName user display name of the user which created this element
    * @param multiLayerUniqueElementIds if true, IDs are prepended with <map id>_<first letter of the
@@ -336,6 +318,7 @@ public class Way extends Element
    * @return an XML element
    * @throws Exception
    */
+  @Override
   public org.w3c.dom.Element toXml(final org.w3c.dom.Element parentXml, final long modifyingUserId,
     final String modifyingUserDisplayName, final boolean multiLayerUniqueElementIds,
     final boolean addChildren) throws Exception
@@ -385,10 +368,7 @@ public class Way extends Element
     {
       return element;
     }
-    else
-    {
-      return elementWithTags;
-    }
+    return elementWithTags;
   }
 
   private void validateWayNodesSize(final NodeList wayNodesXml) throws Exception
@@ -509,6 +489,7 @@ public class Way extends Element
    *
    * @return a table
    */
+  @Override
   public RelationalPathBase<?> getElementTable()
   {
     return currentWays;
@@ -519,6 +500,7 @@ public class Way extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getElementIdField()
   {
     return currentWays.id;
@@ -530,6 +512,7 @@ public class Way extends Element
    *
    * @return a table field
    */
+  @Override
   public BooleanPath getElementVisibilityField()
   {
     return currentWays.visible;
@@ -540,6 +523,7 @@ public class Way extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getElementVersionField()
   {
     return currentWays.version;
@@ -550,6 +534,7 @@ public class Way extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getChangesetIdField()
   {
     return currentWays.changesetId;
@@ -560,6 +545,7 @@ public class Way extends Element
    *
    * @return a table
    */
+  @Override
   public RelationalPathBase<?> getRelatedRecordTable()
   {
     return currentWayNodes;
@@ -571,6 +557,7 @@ public class Way extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getRelatedRecordJoinField()
   {
     return currentWayNodes.wayId;
@@ -592,6 +579,7 @@ public class Way extends Element
    *
    * @return a list of element types
    */
+  @Override
   public List<ElementType> getRelatedElementTypes()
   {
     return Arrays.asList(new ElementType[] { ElementType.Node });

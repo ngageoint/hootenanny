@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "AttributeCoOccurence.h"
 
 // Hoot
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
@@ -49,7 +49,7 @@ namespace hoot
 /**
  * Traverses the OsmMap and creates a map from REF tags to ElementIds.
  */
-class RefToEidVisitor : public ElementVisitor, public OsmMapConsumer
+class RefToEidVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
   typedef map<QString, set<ElementId> > RefToEid;
@@ -90,7 +90,7 @@ private:
 /**
  * Traverses the OsmMap and build a hashmap of Attribute Co-Occurence values.
  */
-class CoOccurenceVisitor : public ElementVisitor, public OsmMapConsumer
+class CoOccurenceVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
   // CoOccurenceVisitor(RefToEidVisitor::RefToEid refSet) : _refSet(refSet) {}

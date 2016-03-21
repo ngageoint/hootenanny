@@ -1,3 +1,29 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ */
 package hoot.services.readers.review;
 
 import hoot.services.HootProperties;
@@ -13,16 +39,13 @@ import hoot.services.models.review.ReviewableItemBbox;
 import hoot.services.models.review.ReviewableItemBboxInfo;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,7 +146,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 				// we want have unique member relations bbox
 				for(Tuple rel : rels)
 				{
-					long relId = (long) rel.get(Expressions.path(Long.class, _currentRelMembersSubQPath, "member_id"));
+					long relId = rel.get(Expressions.path(Long.class, _currentRelMembersSubQPath, "member_id"));
 					if(!relsBbox.containsKey(relId))
 					{					
 						ReviewableItemBbox bbxInfo = _getRelationMemberBbox(relId);
@@ -137,9 +160,9 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 				Map<Long, ReviewableItemBboxInfo> reviewRelationWithRelationMembers  = new HashMap<>();
 				for(Tuple rel : rels)
 				{
-					long relId = (long) rel.get(Expressions.path(Long.class, _currentRelMembersSubQPath, "relation_id"));
-					long memId = (long) rel.get(Expressions.path(Long.class, _currentRelMembersSubQPath, "member_id"));
-					String needReview = (String)rel.get(Expressions.path(String.class, _reviewableCurrentRelSubQPath, "needreview"));
+					long relId = rel.get(Expressions.path(Long.class, _currentRelMembersSubQPath, "relation_id"));
+					long memId = rel.get(Expressions.path(Long.class, _currentRelMembersSubQPath, "member_id"));
+					String needReview = rel.get(Expressions.path(String.class, _reviewableCurrentRelSubQPath, "needreview"));
 					
 					BoundingBox memBbox = relsBbox.get(memId);
 					// we have relation member bbox and it is within the requested bbox
@@ -213,7 +236,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 	 * @param reviewRelationWithMembers - list of member bbox
 	 * @throws Exception
 	 */
-	private boolean _combineBbox(final Map<Long, ReviewableItemBboxInfo> allReviewables, 
+	private static boolean _combineBbox(final Map<Long, ReviewableItemBboxInfo> allReviewables, 
 			final Map<Long, ReviewableItemBboxInfo> reviewRelationWithMembers) throws Exception
 	{
 		boolean isOverFlow = false;
@@ -306,7 +329,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 	 * @return - BoundingBox
 	 * @throws Exception
 	 */
-	private BoundingBox _resultSetToBbox(final Tuple tup, final Path bboxPath) throws Exception
+	private static BoundingBox _resultSetToBbox(final Tuple tup, final Path bboxPath) throws Exception
 	{
 		BoundingBox bbox = null;
 		double minLon=-1, minLat=-1, maxLon=-1, maxLat=-1;
@@ -322,7 +345,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 		}
 		catch (Exception ex)
 		{
-			log.error(ex.getMessage());;
+			log.error(ex.getMessage());
 			throw ex;
 		}
 		return bbox;
@@ -354,10 +377,8 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 		
 		try
 		{
-	
-			Path currentNodeSubQPath = Expressions.path(Void.class, "currentNodeSubQ");
-			Path reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath = Expressions.path(Void.class, "reviewRelJoinRelMemberJoinCurrentWayNodesSubQ");
-			Path reviewRelWayMembersCentroidSubQPath = Expressions.path(Void.class, "reviewRelWayMembersCentroidSubQ");
+			Path reviewRelWayMembersCentroidSubQPath = 
+			  Expressions.path(Void.class, "reviewRelWayMembersCentroidSubQ");
 			List<Tuple> tups = _getReviewableRelatioWithWayMembersCentroidInBboxQuery().list(
 					Expressions.path(Long.class, reviewRelWayMembersCentroidSubQPath, "relation_id"),
 						Expressions.path(String.class, reviewRelWayMembersCentroidSubQPath, "needreview"),
@@ -513,9 +534,8 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 		
 		try
 		{
-			Path reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath = Expressions.path(Void.class, "reviewRelJoinRelMemberJoinCurrentWayNodesSubQ");
-			Path currentNodeSubQPath = Expressions.path(Void.class, "currentNodeSubQ");
-			Path reviewRelNodeMembersCentroidSubQPath = Expressions.path(Void.class, "reviewRelNodeMembersCentroidSubQ");
+			Path reviewRelNodeMembersCentroidSubQPath = 
+			  Expressions.path(Void.class, "reviewRelNodeMembersCentroidSubQ");
 			List<Tuple> tups = _getReviewableRelatioWithNodeMembersCentroidInBboxQuery().list(
 					Expressions.path(Long.class, reviewRelNodeMembersCentroidSubQPath, "relation_id"),
 						Expressions.path(String.class, reviewRelNodeMembersCentroidSubQPath, "needreview"),

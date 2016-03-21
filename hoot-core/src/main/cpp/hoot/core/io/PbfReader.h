@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef PBFREADER_H
@@ -125,11 +125,6 @@ public:
    */
   void read(QString path, shared_ptr<OsmMap> map);
 
-  /**
-   * Reads the specified file into the specified map.
-   */
-  void readFile(QString path, shared_ptr<OsmMap> map);
-
   void parse(istream* strm, shared_ptr<OsmMap> map);
 
   void parseBlob(BlobLocation& bl, istream* strm, shared_ptr<OsmMap> map);
@@ -154,8 +149,6 @@ public:
   virtual void initializePartial();
   /**
    * The read command called after open.
-
-     TODO: this can probably replace read::(QString, map) and readFile can be made private
    */
   virtual void read(shared_ptr<OsmMap> map);
 
@@ -190,16 +183,12 @@ private:
   double _startReadTime;
   long _fileLength;
 
-
-
   string _inflated;
   // Bend over backwards to keep the PBF headers out of the normal build. They're quite large.
   PbfReaderData* _d;
   vector<QString> _strings;
-  //TODO: Possibly, it makes sense to replace _map with _partialMap (then rename to _map in base
-  //class), which was added to PartialOsmMapReader after it was implemented on this class.  So far
-  //I've had difficulty making the substitution work with non-partial reading code, so leaving it
-  //as is for now.
+  /// @todo Possibly, it makes sense to replace _map with _partialMap (then rename to _map in base
+  /// class), which was added to PartialOsmMapReader after it was implemented on this class.
   shared_ptr<OsmMap> _map;
   int _missingElementCount;
   Tgs::BigMap<long, long> _nodeIdMap;
@@ -228,13 +217,14 @@ private:
   RelationMap::const_iterator _relationsItr;
 
   //partial read elements read counters
-  //TODO: consolidate these into a single collection
   long _partialNodesRead;
   long _partialWaysRead;
   long _partialRelationsRead;
 
   QString _urlStr;
   bool _firstPartialReadCompleted;
+
+  void _readFile(QString path, shared_ptr<OsmMap> map);
 
   void _init(bool useFileId);
 

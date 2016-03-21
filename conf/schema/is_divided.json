@@ -1,0 +1,27 @@
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "linestring"
+        ],
+        "influence": 1,
+        "name": "is_divided",
+        "objectType": "tag"
+    },
+    {
+        "description": "This key indicates that the linestring is part of a dual carrageway",
+        "isA": "is_divided",
+        "name": "is_divided=*",
+        "objectType": "tag"
+    },
+    {
+        "isA": "is_divided",
+        "name": "is_divided=yes",
+        "objectType": "tag"
+    },
+    {
+        "isA": "is_divided",
+        "name": "is_divided=no",
+        "objectType": "tag"
+    }
+]

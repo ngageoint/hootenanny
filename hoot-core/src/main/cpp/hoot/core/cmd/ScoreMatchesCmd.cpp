@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -49,8 +49,6 @@ class ScoreMatchesCmd : public BaseCommand
 {
 
 public:
-
-  static QString removeNodesKey() { return "score.matches.remove.nodes"; }
 
   static string className() { return "hoot::ScoreMatchesCmd"; }
 
@@ -195,7 +193,7 @@ public:
       MapProjector::projectToWgs84(mapCopy);
       OsmUtils::saveMap(mapCopy, "/tmp/score-matches-before-prep.osm");
 
-      MatchScoringMapPreparer().prepMap(map, conf().getBool(removeNodesKey(), false));
+      MatchScoringMapPreparer().prepMap(map, ConfigOptions().getScoreMatchesRemoveNodes());
       maps.push_back(map);
     }
 

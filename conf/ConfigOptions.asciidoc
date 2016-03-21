@@ -288,15 +288,6 @@ in meters.
 The buffer to add to the alpha shape before cutting by the cookie cutter map operation
 (CookieCutterOp). A negative value will make the shape smaller.  Value in meters.
 
-=== cookie.cutter.output.buffer
-
-* Data Type: double
-* Default Value: `0.0`
-
-Optional buffer value used by the cookie cutter map operation (CookieCutterOp).  If the buffer
-value is provided then the shape is buffered by this many meters before cutting. The buffer may be
-positive or negative.
-
 === cookie.cutter.output.crop
 
 * Data Type: bool
@@ -787,19 +778,12 @@ If the output file/layer exists when exporting, append the data instead of tryin
 
 Debugging: Add the FCODE as the OSM source:fcode tag during translation.
 
-=== ogr.debug.dumpattrs
-
-* Data Type: bool
-* Default Value: `false`
-
-Debugging: Print out Attribute values during translation.
-
 === ogr.debug.dumptags
 
 * Data Type: bool
 * Default Value: `false`
 
-Debugging: Print out OSM Tag values during translation.
+Debugging: Print out Attributes and OSM Tag values during translation. For each feature, this will show what keys and values go into the translation and what the translated output is.
 
 === ogr.debug.lookupclash
 
@@ -813,7 +797,7 @@ Debugging: When building internal lookup tables, print values that clash.
 * Data Type: bool
 * Default Value: `false`
 
-Debugging: Print the columns that are not matched during one2one translation. This will show all ATTR columns and values that do not match a one2one rule.
+Debugging: Print the columns that are not matched during one2one translation. This will show all Attribute columns and values that do not match a one2one rule.
 
 
 === ogr.debug.dumpvalidate
@@ -1362,6 +1346,39 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.match.threshold
+
+* Data Type: double
+* Default Value: `${conflate.match.threshold.default}`
+
+The threshold at which a match is called a match for PoiPolygon.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== poi.polygon.miss.threshold
+
+* Data Type: double
+* Default Value: `${conflate.miss.threshold.default}`
+
+The threshold at which a miss is called a miss for PoiPolygon.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== poi.polygon.review.threshold
+
+* Data Type: double
+* Default Value: `${conflate.review.threshold.default}`
+
+The threshold at which a review is called a review for PoiPolygon. See `conflate.review.threshold.default`.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
 === poi.polygon.match.name.threshold
 
 * Data Type: double
@@ -1375,6 +1392,65 @@ If the name similarity score is greater than this then the names are considered 
 * Default Value: `0`
 
 How far away from a polygon should name matches be considered reviews. This is a fixed value in meters that is added to the CE calculation.
+
+=== postgresql.dumpfile.writer.cache.size
+
+* Data Type: int
+* Default Value: `10000000`
+
+Maximum number of elements (nodes, ways, and relations) that can be held in memory before the system starts using disk-based storage.  Note that this limit applies to each element type individually, so worst case is that three times this value of elements can be stored in memory at the same time.
+
+=== postgresql.dumpfile.writer.changeset.user.id
+
+* Data Type: int
+* Default Value: `1`
+
+Value that will be set in the "user_id" field for all changesets added by the ingest operation
+
+=== postgresql.dumpfile.writer.start.id.changeset
+
+* Data Type: long
+* Default Value: `1`
+
+Starting ID value for changesets created in a PostgreSQL dumpfile.
+
+=== postgresql.dumpfile.writer.start.id.node
+
+* Data Type: long
+* Default Value: `1`
+
+Starting ID value for nodes created in a PostgreSQL dumpfile. 
+
+=== postgresql.dumpfile.writer.start.id.relation
+
+* Data Type: long
+* Default Value: `1`
+
+Starting ID value for relations created in a PostgreSQL dumpfile.
+
+=== postgresql.dumpfile.writer.start.id.way
+
+* Data Type: long
+* Default Value: `1`
+
+Starting ID value for ways created in a PostgreSQL dumpfile.
+
+=== postgresql.dumpfile.writer.user.email
+
+* Data Type: string
+* Default Value: ``
+
+If this value is set, the generated dumpfile will insert statements that add a user with the specified email address to
+the database.
+
+=== postgresql.dumpfile.writer.user.id
+
+* Data Type: int
+* Default Value: `1`
+
+If the `postgresql.dumpfile.writer.user.email` field is set, the user that is added to the database will be assigned
+the user id set by this field.
+
 
 === reader.add.source.datetime
 
@@ -1460,6 +1536,13 @@ weighting is determined based on the circular error.
 
 Export some of the images used when evaluating the graph connections between two maps (`score` command).
 
+=== score.matches.remove.nodes
+
+* Data Type: bool
+* Default Value: `false`
+
+Remove REF tags from nodes before match scoring when using the score-matches command.
+
 === script.match.scripts
 
 * Data Type: list
@@ -1507,26 +1590,18 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
+=== services.db.reader.email
+
+* Data Type: string
+* Default Value: ``
+
+Email address of the DG reader user.  Can be set here for debugging and testing.
+
 === services.db.reader.max.elements.per.partial.map
 * Data Type: int
 * Default Value: `50000`
 
 The maximum number of OSM elements that may be read from the services database into a single OSM map during a partial map read.
-
-=== services.db.test.url
-
-* Data Type: string
-* Default Value: `postgresql://hoot:hoottest@localhost:5432/hoot/testMap`
-
-Contains the DB URL for unit testing. This is typically only used by developers.
-
-=== services.db.test.url.osmapi
-
-* Data Type: string
-* Default Value: `postgresql://hoot:hoottest@localhost:5432/osmapi_test`
-
-Contains the DB URL for an OpenStreetMaps (OSM) API database for unit testing. This is
-typically only used by developers.
 
 === services.db.writer.create.user
 
@@ -2033,7 +2108,7 @@ Location of the word frequency dictionary. If the absolute file path isn't found
 the local `conf` and `$HOOT_HOME/conf` directories will be searched.
 
 This file is typically downloaded from:
-https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/words1.sqlite
+https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
 
 === weighted.word.distance.p
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFLATECMD_H
@@ -52,6 +52,8 @@
 
 // Tgs
 #include <tgs/System/Timer.h>
+
+#include <QFileInfo>
 
 namespace hoot
 {
@@ -83,10 +85,23 @@ public:
 
     QList<SingleStat> stats;
     bool displayStats = false;
-    if (args.endsWith("--stats"))
+    QString outputStatsFile;
+    if (args.contains("--stats"))
     {
-      displayStats = true;
-      args.pop_back();
+      if (args.endsWith("--stats"))
+      {
+        displayStats = true;
+        //remove "--stats" from args list
+        args.pop_back();
+      }
+      else if (args.size() == 5)
+      {
+        displayStats = true;
+        outputStatsFile = args[4];
+        //remove "--stats" and stats output file name from args list
+        args.pop_back();
+        args.pop_back();
+      }
     }
 
     if (args.size() < 2 || args.size() > 3)
@@ -218,10 +233,19 @@ public:
 
     if (displayStats)
     {
-      allStats.append(stats);
-      MapStatsWriter().writeStats(allStats, args);
-      QString statsMsg = MapStatsWriter().statsToString( allStats, "\t" );
-      cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" << statsMsg << endl;
+      if (outputStatsFile.isEmpty())
+      {
+        allStats.append(stats);
+        MapStatsWriter().writeStats(allStats, args);
+        QString statsMsg = MapStatsWriter().statsToString( allStats, "\t" );
+        cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" << statsMsg << endl;
+      }
+      else
+      {
+        allStats.append(stats);
+        MapStatsWriter().writeStatsToJson(allStats, outputStatsFile);
+        cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: " << outputStatsFile << endl;
+      }
     }
 
     return 0;

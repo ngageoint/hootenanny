@@ -60,6 +60,8 @@ public:
     return !_child->isSatisfied(e);
   }
 
+  virtual ElementCriterion* clone() { return new NotCriterion(_child->clone()); }
+
 private:
   ElementCriterionPtr _child;
 };

@@ -49,6 +49,9 @@ public:
   {
     return OsmSchema::getInstance().isPoi(*e);
   }
+
+  virtual ElementCriterion* clone() { return new PoiCriterion(); }
+
 };
 
 }

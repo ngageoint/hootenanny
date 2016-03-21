@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -30,8 +30,11 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OgrWriter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 
 namespace hoot
 {
@@ -50,31 +53,68 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 3)
+    if (args.size() < 3 || args.size() > 4 )
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes exactly three parameters.").arg(getName()));
+      throw HootException(QString("%1 takes either three or four parameters.").arg(getName()));
     }
 
     int a = 0;
     QString translation = args[a++];
     QString input = args[a++];
     QString output = args[a++];
+    unsigned long elementCacheSize = 0;
 
-    OgrWriter writer;
-    writer.setScriptPath(translation);
-    writer.open(output);
+    if ( args.size() == 4 )
+    {
+      elementCacheSize = args[a++].toLong();
+    }
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    shared_ptr<OgrWriter> writer(new OgrWriter());
+    if ( elementCacheSize > 0 )
+    {
+      writer->setCacheCapacity(elementCacheSize);
+    }
+    writer->setScriptPath(translation);
+    writer->open(output);
 
-    loadMap(map, input, true);
+    OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
+    if (readerFactory.hasElementInputStream(input) &&
+      ConfigOptions().getOsm2ogrOps().size() == 0)
+    {
+      shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(input);
+      reader->open(input);
+      shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
+      shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
 
-    // Apply any user specified operations.
-    NamedOp(ConfigOptions().getOsm2ogrOps()).apply(map);
+      shared_ptr<OGRSpatialReference> projection = streamReader->getProjection();
+      ProjectToGeographicVisitor visitor;
+      bool notGeographic = !projection->IsGeographic();
 
-    MapProjector::projectToWgs84(map);
+      if (notGeographic)
+        visitor.initialize(projection);
 
-    writer.write(map);
+      while (streamReader->hasMoreElements())
+      {
+        ElementPtr element = streamReader->readNextElement();
+        if (notGeographic)
+          visitor.visit(element);
+        streamWriter->writeElement(element);
+      }
+    }
+    else
+    {
+      shared_ptr<OsmMap> map(new OsmMap());
+
+      loadMap(map, input, true);
+
+      // Apply any user specified operations.
+      NamedOp(ConfigOptions().getOsm2ogrOps()).apply(map);
+
+      MapProjector::projectToWgs84(map);
+
+      writer->write(map);
+    }
 
     return 0;
   }

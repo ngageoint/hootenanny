@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PluginFactory.h"
@@ -40,10 +40,8 @@
 #define SA_VERSION "3.2.0"
 #endif
 
-#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 CPPUNIT_PLUGIN_IMPLEMENT();
-#pragma GCC diagnostic pop
 
 boost::any createObjectNoParams(const std::string& className)
 {

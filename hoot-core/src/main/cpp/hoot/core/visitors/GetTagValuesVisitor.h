@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef GETTAGVALUESVISITOR_H
 #define GETTAGVALUESVISITOR_H
@@ -31,7 +31,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
@@ -41,7 +41,7 @@ using namespace std;
  * Puts all values for the given key into a bag. If you want to filter based on type see
  * FilteredVisitor. If the values are a list then they're split before they're put in the bag.
  */
-class GetTagValuesVisitor : public ElementVisitor, public OsmMapConsumer
+class GetTagValuesVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

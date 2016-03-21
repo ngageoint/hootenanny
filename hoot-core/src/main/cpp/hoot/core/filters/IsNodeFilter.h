@@ -61,6 +61,8 @@ public:
     }
   }
 
+  virtual ElementCriterion* clone() { return new IsNodeFilter(_type); }
+
 private:
   FilterType _type;
 };

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PARTIALOSMMAPREADER_H
 #define PARTIALOSMMAPREADER_H
@@ -50,9 +50,9 @@ public:
   long getMaxElementsPerMap() { return _maxElementsPerMap; }
 
   /**
-   *  TODO: is this needed?
+   *  @todo is this needed?
    */
-  virtual void initializePartial() = 0;
+  //virtual void initializePartial() = 0;
 
   void setMaxElementsPerMap(long maxElements) { _maxElementsPerMap = maxElements; }
 

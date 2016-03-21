@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DECOMPOSEBUILDINGRELATIONSVISITOR_H
 #define DECOMPOSEBUILDINGRELATIONSVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/filters/ElementCriterion.h>
@@ -43,7 +43,7 @@ namespace hoot
  *
  * http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings
  */
-class DecomposeBuildingRelationsVisitor : public ElementVisitor, public OsmMapConsumer
+class DecomposeBuildingRelationsVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

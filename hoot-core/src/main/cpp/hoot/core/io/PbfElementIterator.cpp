@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PbfElementIterator.h"
 
@@ -40,6 +40,7 @@ PbfElementIterator::PbfElementIterator(QString path)
     fp->open(path.toUtf8().data(), ios::in | ios::binary);
     if (fp->is_open() == false)
     {
+      delete fp;
       throw HootException("Error opening " + path + " for writing.");
     }
     _init(fp);

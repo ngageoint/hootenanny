@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -80,7 +80,7 @@ import com.mysema.query.types.expr.BooleanExpression;
 
    ...although I haven't had to do that yet.
 
-   @todo This class needs to conduct its queries within a read-only transaction so that it
+   //TODO: This class needs to conduct its queries within a read-only transaction so that it
    doesn't read invalid information while writers are writing elements at the same time it queries
    elements out.
  */
@@ -113,7 +113,7 @@ public class Map extends Maps
   /*
    * Retrieves all ranges of quad tiles that fall within the bounds
    */
-  private Vector<Range> getTileRanges(final BoundingBox bounds) throws NumberFormatException,
+  private static Vector<Range> getTileRanges(final BoundingBox bounds) throws NumberFormatException,
     IOException
   {
     log.debug("Retrieving tile ranges...");
@@ -135,7 +135,7 @@ public class Map extends Maps
   /*
    * Returns the SQL where condition for the calculated tile ranges
    */
-  private BooleanExpression getTileWhereCondition(final Vector<Range> tileIdRanges)
+  private static BooleanExpression getTileWhereCondition(final Vector<Range> tileIdRanges)
   {
     List<BooleanExpression> tileConditions = new ArrayList<BooleanExpression>();
     for (Range range : tileIdRanges)
@@ -164,7 +164,7 @@ public class Map extends Maps
    * Returns the geospatial where condition to apply with the tile conditions to
    * ensure nodes that fall outside the bounding box are not returned
    */
-  private BooleanExpression getGeospatialWhereCondition(final BoundingBox bounds)
+  private static BooleanExpression getGeospatialWhereCondition(final BoundingBox bounds)
   {
   	QCurrentNodes nodes = QCurrentNodes.currentNodes;
   	return 
@@ -174,7 +174,7 @@ public class Map extends Maps
   			.and(nodes.latitude.loe(bounds.getMaxLat()));
   }
 
-  private void validateQueryBounds(final BoundingBox bounds) throws Exception
+  private static void validateQueryBounds(final BoundingBox bounds) throws Exception
   {
     log.debug("Checking request bounds size...");
     final double maxQueryAreaDegrees =
@@ -222,18 +222,11 @@ public class Map extends Maps
     }
   }
 
-  /**
-   * 
-   * @param bounds
-   * @return
-   * @throws Exception
-   */
   public JSONObject retrieveNodesMBR(final BoundingBox bounds) throws Exception
   {
   	JSONObject ret = new JSONObject();
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
-    new HashMap<ElementType, java.util.Map<Long, Tuple>>();
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
@@ -258,18 +251,11 @@ public class Map extends Maps
     return ret;
   }
 
-  /**
-   * 
-   * @param bounds
-   * @return
-   * @throws Exception
-   */
   public long getNodesCount(final BoundingBox bounds) throws Exception
   {
   	long ret = 0;
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
-    new HashMap<ElementType, java.util.Map<Long, Tuple>>();
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
@@ -283,19 +269,12 @@ public class Map extends Maps
 
     return ret;
   }
-
-  /**
-   * 
-   * @param bounds
-   * @return
-   * @throws Exception
-   */
+  
   public JSONObject retrieveANode(final BoundingBox bounds) throws Exception
   {
   	JSONObject ret = new JSONObject();
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
-    new HashMap<ElementType, java.util.Map<Long, Tuple>>();
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
@@ -387,7 +366,7 @@ public class Map extends Maps
 	      	    .from(currentWayNodes)
 	  			    .where(currentWayNodes.nodeId.in(pageList))
 	  			    .list(currentWayNodes.wayId);
-	      	//TODO: should this be an assert instead?
+	      	//TODO: should this be an assert instead?  Regardless, fix the error handling.
 	      	if (wayIds.addAll(pageWayIds) == false)
 	      	{
 	      		// error
@@ -446,6 +425,7 @@ public class Map extends Maps
 	        	}
 	        	else
 	        	{
+	        		assert(wayResults != null);
 	        		wayResults.putAll(
 	        			new SQLQuery(conn, DbUtils.getConfiguration(getId()))
 	        			  .from(currentWays)
@@ -577,6 +557,7 @@ public class Map extends Maps
 	          	}
 	          	else
 	          	{
+	          		assert(additionalNodeResults != null);
 	          		additionalNodeResults.putAll(
 	          			new SQLQuery(conn, DbUtils.getConfiguration(getId()))
 	          			  .from(currentnodes)
@@ -767,6 +748,7 @@ public class Map extends Maps
 	        	}
 	        	else
 	        	{
+	        		assert(relationResults != null);
 	        		relationResults.putAll(
 	        			new SQLQuery(conn, DbUtils.getConfiguration(getId()))
 	        			  .from(currentRelations)
@@ -809,7 +791,7 @@ public class Map extends Maps
    * @param bounds geospatial bounds the returned nodes should fall within
    * @return a collection of elements mapped to their IDs, grouped by element type
    * @throws Exception if the number of nodes requested is larger than the maximum number allowed
-   * @todo get the readonly transaction working; see
+   * //TODO: get the readonly transaction working; see
    * MapResourceTest::testReadTransactionWithoutFailure
    */
   public java.util.Map<ElementType, java.util.Map<Long, Tuple>> query(final BoundingBox bounds)
@@ -922,7 +904,7 @@ public class Map extends Maps
    * @param bounds geospatial bounds the returned nodes should fall within
    * @return a collection of element IDs, grouped by element type
    * @throws Exception if the number of nodes requested is larger than the maximum number allowed
-   * @todo see query
+   * //TODO: see query
    */
   public java.util.Map<ElementType, Set<Long>> queryForElementIds(final BoundingBox bounds)
     throws Exception
@@ -992,7 +974,7 @@ public class Map extends Maps
   /**
    * Converts a set of database records into an object returnable by a web service
    *
-   * @param folderRecordSet set of map layer records
+   * @param linkRecordSet set of map layer records
    * @return folders web service object
    */
   public static LinkRecords mapLinkRecordsToLinks(List<FolderMapMappings> linkRecordSet)

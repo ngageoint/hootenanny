@@ -33,7 +33,6 @@ OTHER_FILES = \
     ../conf/schema/highway.json \
     ../conf/schema/natural.json \
     ../conf/schema/public_transport.json \
-    ../conf/schema/surface.json \
     ../rules/template/ConflateRules.js \
 
 include(../Configure.pri)
@@ -136,7 +135,6 @@ SOURCES += \
     src/main/cpp/hoot/core/manipulators/DanglerRemover.cpp \
     src/main/cpp/hoot/core/manipulators/DanglerRemoverManipulation.cpp \
     src/main/cpp/hoot/core/conflate/SmallWayMerger.cpp \
-    src/main/cpp/hoot/core/schema/JsonSchemaLoader.cpp \
     src/main/cpp/hoot/core/conflate/TileConflator.cpp \
     src/main/cpp/hoot/core/algorithms/Translator.cpp \
     src/main/cpp/hoot/core/conflate/LargeWaySplitter.cpp \
@@ -380,7 +378,6 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/RfExtractorClassifier.cpp \
     src/main/cpp/hoot/core/cmd/CropMapCmd.cpp \
     src/main/cpp/hoot/core/util/MultiPolygonCreator.cpp \
-    src/main/cpp/hoot/core/io/db/SequenceIdReserver.cpp \
     src/main/cpp/hoot/core/io/db/InternalIdReserver.cpp \
     src/main/cpp/hoot/core/conflate/ReviewMarker.cpp \
     src/main/cpp/hoot/core/cmd/AttributeCoOccuranceCmd.cpp \
@@ -454,11 +451,9 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/SearchRadiusCalculator.cpp \
     src/main/cpp/hoot/core/io/ElementOutputStream.cpp \
     src/main/cpp/hoot/core/io/ElementInputStream.cpp \
-    src/main/cpp/hoot/core/io/VisitorElementInputStream.cpp \
     src/main/cpp/hoot/core/visitors/TranslationVisitor.cpp \
     src/main/cpp/hoot/core/io/ElementVisitorInputStream.cpp \
     src/main/cpp/hoot/core/io/ElementCacheLRU.cpp \
-    src/main/cpp/hoot/core/cmd/ExportCmd.cpp \
     src/main/cpp/hoot/core/visitors/MatchCandidateCountVisitor.cpp \
     src/main/cpp/hoot/core/algorithms/string/WeightedWordDistance.cpp \
     src/main/cpp/hoot/core/algorithms/string/TextFileWordWeightDictionary.cpp \
@@ -475,6 +470,7 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.cpp \
     src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
     src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp \
+	src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriter.cpp \
     src/main/cpp/hoot/core/ops/ReplaceElementOp.cpp \
     src/main/cpp/hoot/core/filters/NeedsReviewCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.cpp \
@@ -491,7 +487,9 @@ SOURCES += \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp \
     src/main/cpp/hoot/core/visitors/MedianNodeVisitor.cpp \
     src/main/cpp/hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.cpp \
-    src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.cpp
+    src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.cpp \
+    src/main/cpp/hoot/core/filters/WaterwayCriterion.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -585,7 +583,6 @@ HEADERS += \
     src/main/cpp/hoot/core/manipulators/DanglerRemover.h \
     src/main/cpp/hoot/core/manipulators/DanglerRemoverManipulation.h \
     src/main/cpp/hoot/core/conflate/SmallWayMerger.h \
-    src/main/cpp/hoot/core/schema/JsonSchemaLoader.h \
     src/main/cpp/hoot/core/conflate/TileConflator.h \
     src/main/cpp/hoot/core/algorithms/Translator.h \
     src/main/cpp/hoot/core/conflate/LargeWaySplitter.h \
@@ -641,6 +638,7 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/RemoveDuplicateReviewsOp.h \
     src/main/cpp/hoot/core/ops/VisitorOp.h \
     src/main/cpp/hoot/core/OsmMapConsumer.h \
+    src/main/cpp/hoot/core/ConstOsmMapConsumer.h \
     src/main/cpp/hoot/core/ops/NamedOp.h \
     src/main/cpp/hoot/core/visitors/ReportMissingElementsVisitor.h \
     src/main/cpp/hoot/core/visitors/KeepBuildingsVisitor.h \
@@ -652,7 +650,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/polygon/extractors/AbstractDistanceExtractor.h \
     src/main/cpp/hoot/core/util/GeometryConverter.h \
     src/main/cpp/hoot/core/algorithms/VertexHausdorffDistance.h \
-    src/main/cpp/hoot/core/conflate/polygon/BuildingMergeManipulation.h \
     src/main/cpp/hoot/core/elements/ElementId.h \
     src/main/cpp/hoot/core/elements/ElementType.h \
     src/main/cpp/hoot/core/manipulators/WayManipulator.h \
@@ -780,7 +777,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/schema/StringFieldDefinition.h \
     src/main/cpp/hoot/core/io/schema/DoubleFieldDefinition.h \
     src/main/cpp/hoot/core/io/schema/IntegerFieldDefinition.h \
-    src/main/cpp/hoot/core/conflate/polygon/BuildingMergeManipulator.h \
     src/main/cpp/hoot/core/index/metric-hybrid/FqTree.h \
     src/main/cpp/hoot/core/index/metric-hybrid/RFqHybridTree.h \
     src/main/cpp/hoot/core/index/metric-hybrid/RTree.h \
@@ -860,7 +856,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/polygon/BuildingRfClassifier.h \
     src/main/cpp/hoot/core/conflate/RfExtractorClassifier.h \
     src/main/cpp/hoot/core/util/MultiPolygonCreator.h \
-    src/main/cpp/hoot/core/io/db/SequenceIdReserver.h \
     src/main/cpp/hoot/core/io/db/InternalIdReserver.h \
     src/main/cpp/hoot/core/conflate/ReviewMarker.h \
     src/main/cpp/hoot/core/visitors/LongestTagVisitor.h \
@@ -935,7 +930,6 @@ HEADERS += \
     src/main/cpp/hoot/core/elements/ElementVisitor.h \
     src/main/cpp/hoot/core/io/ElementInputStream.h \
     src/main/cpp/hoot/core/io/ElementOutputStream.h \
-    src/main/cpp/hoot/core/io/VisitorElementInputStream.h \
     src/main/cpp/hoot/core/visitors/TranslationVisitor.h \
     src/main/cpp/hoot/core/io/ElementVisitorInputStream.h \
     src/main/cpp/hoot/core/io/ElementCache.h \
@@ -977,5 +971,7 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h \
     src/main/cpp/hoot/core/visitors/MedianNodeVisitor.h \
     src/main/cpp/hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h \
-    src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.h
+    src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.h \
+    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.h \
+    src/main/cpp/hoot/core/filters/WaterwayCriterion.h
 

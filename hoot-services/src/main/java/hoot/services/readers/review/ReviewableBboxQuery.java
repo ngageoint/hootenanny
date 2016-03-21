@@ -1,3 +1,29 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ */
 package hoot.services.readers.review;
 
 import hoot.services.db.DbUtils;
@@ -6,13 +32,10 @@ import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.ReviewQueryMapper;
-import hoot.services.models.review.ReviewableItem;
 import hoot.services.models.review.ReviewableItemBbox;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +67,8 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 	 * @see hoot.services.readers.review.IReviewableQuery#execQuery()
 	 * Main entry point
 	 */
-	public ReviewQueryMapper execQuery() throws SQLException, Exception
+	@Override
+  public ReviewQueryMapper execQuery() throws SQLException, Exception
 	{
 		BoundingBox currBbox = new BoundingBox();
 		ReviewableItemBbox ret = new ReviewableItemBbox(currBbox, getMapId(), _relationId);
@@ -111,7 +135,7 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 		}
 	}
 	
-	private boolean _validateTuple(final Tuple tup)
+	private static boolean _validateTuple(final Tuple tup)
 	{
 		boolean ret = true;
 		try
@@ -141,7 +165,7 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 	 * @return - BoundingBox
 	 * @throws Exception
 	 */
-	private BoundingBox _resultSetToBbox(final Tuple tup)
+	private static BoundingBox _resultSetToBbox(final Tuple tup)
 	{
 		BoundingBox bbox = null;
 		double minLon=-1, minLat=-1, maxLon=-1, maxLat=-1;
@@ -162,7 +186,7 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 		{
 			// we will not throw error since ret will be null and null ret 
 			// will be handled gracefully by caller.
-			log.error(ex.getMessage());;
+			log.error(ex.getMessage());
 			
 		}
 		return bbox;

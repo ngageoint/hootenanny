@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "JavaScriptTranslator.h"
@@ -67,47 +67,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ScriptTranslator, JavaScriptTranslator)
 
-/**
- * This works around a bug in Qt 4.6. It is fixed in 4.8.2, but this function works for both.
- *
- * In Qt 4.6 (and maybe other versions) the QScriptValue::toVariant() method will convert the
- * top level object (e.g. a list) to a QVariant properly, but all its children will not be converted
- * properly. In the case of a list of maps you get a list of strings. This method does the operation
- * recursively and is consistent with the Qt 4.8.2 QScriptValue::toVariant() functionality.
- */
-//QVariant toVariant(const QScriptValue& v)
-//{
-//  QVariant result;
-//  if (v.isArray())
-//  {
-//    QVariantList l;
-//    int length = v.property("length").toInteger();
-//    for (int i = 0; i < length; ++i)
-//    {
-//      l.append(toVariant(v.property(i)));
-//    }
-//    result = l;
-//  }
-//  else if (v.isObject())
-//  {
-//    QVariantMap m;
-//    QScriptValueIterator it(v);
-//    while (it.hasNext())
-//    {
-//      it.next();
-//      m[it.name()] = toVariant(it.value());
-//    }
-//    result = m;
-//  }
-//  else
-//  {
-//    result = v.toVariant();
-//  }
-
-//  return result;
-//}
-
-
 // Return the current time
 Handle<Value> jsGetTimeNow(const Arguments& /*args*/)
 {
@@ -132,28 +91,6 @@ JavaScriptTranslator::~JavaScriptTranslator()
     LOG_DEBUG("Translation script run time (ms): " << stats.toString());
   }
   close();
-}
-
-void JavaScriptTranslator::_checkError()
-{
-#warning fix me
-// Not sure if we can make a v8 version of this. -Matt
-
-//  if (_engine->hasUncaughtException())
-//  {
-//    QString message = _engine->uncaughtException().toString();
-//    long lineNumber = _engine->uncaughtException().property("lineNumber").toNumber();
-//    QString fileName = _engine->uncaughtException().property("fileName").toString();
-//    QString error = QString("%1(%2) %3").arg(fileName).arg(lineNumber).arg(message);
-//    _error = true;
-//    LOG_WARN(error);
-//    LOG_WARN(_engine->uncaughtExceptionBacktrace());
-//    close();
-//    throw Exception(error);
-//  }
-
-// Stubbed
-//  LOG_WARN("Called _checkError")
 }
 
 vector<JavaScriptTranslator::TranslatedFeature> JavaScriptTranslator::_createAllFeatures(
@@ -254,9 +191,10 @@ void JavaScriptTranslator::_finalize()
 
     if (tObj->Has(String::NewSymbol("finalize")))
     {
-      _gContext->call(tObj,"finalize");
+      TryCatch trycatch;
+      Handle<Value> final = _gContext->call(tObj,"finalize");
+      HootExceptionJs::checkV8Exception(final, trycatch);
     }
-    _checkError();
   }
 
   _initialized = false;
@@ -316,9 +254,10 @@ void JavaScriptTranslator::_init()
   // Run Initiallise, if it exists
   if (tObj->Has(String::NewSymbol("initialize")))
   {
-    _gContext->call(tObj,"initialize");
+    TryCatch trycatch;
+    Handle<Value> initial = _gContext->call(tObj,"initialize");
+    HootExceptionJs::checkV8Exception(initial, trycatch);
   }
-  _checkError();
 
   // Sort out what the toOsm function is called
   if (tObj->Has(String::NewSymbol("translateToOsm")))
@@ -402,7 +341,7 @@ bool JavaScriptTranslator::isValidScript()
       }
       catch (const HootException& e)
       {
-        LOG_WARN("Error initializing JavaScript: " +  e.getWhat());
+        LOG_ERROR("Error initializing JavaScript: " +  e.getWhat());
         result = false;
       }
     }
@@ -876,7 +815,6 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
   {
     _timing.push_back((Tgs::Time::getTime() - start) * 1000.0);
   }
-  _checkError();
 
   QVariantList result;
   if (translated->IsNull() || translated->IsUndefined())
@@ -904,7 +842,7 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
   return result;
 }
 
-void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName)
+void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const char* geomType)
 {
   _tags = &t;
 
@@ -917,16 +855,19 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName)
     tags->Set(toV8(it.key()), toV8(it.value()));
   }
 
-  Handle<Value> args[2];
+  Handle<Value> args[3];
   args[0] = tags;
   args[1] = toV8(layerName);
+  args[2] = toV8(geomType);
 
   Handle<Object> tObj = _gContext->getContext()->Global();
 
   // This has a variable since we don't know if it will be "translateToOsm" or "translateAttributes"
   Handle<v8::Function> tFunc = Handle<v8::Function>::Cast(tObj->Get(toV8(_toOsmFunctionName)));
   TryCatch trycatch;
-  Handle<Value> newTags = tFunc->Call(tObj, 2, args);
+
+  // NOTE: the "3" here is the number of arguments
+  Handle<Value> newTags = tFunc->Call(tObj, 3, args);
   HootExceptionJs::checkV8Exception(newTags, trycatch);
 
   double start = 0.00; // to stop warnings
@@ -939,7 +880,6 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName)
   {
     _timing.push_back((Tgs::Time::getTime() - start) * 1000.0);
   }
-  _checkError();
 
   t.clear();
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PbfReader.h"
@@ -417,7 +417,10 @@ void PbfReader::_loadDenseNodes(const DenseNodes& dn)
 
         if (timestamp != 0 && nodes[i]->getTags().getInformationCount() > 0)
         {
-          QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
+          // QT 4.6 does not have fromMSecsSinceEpoch
+          //QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
+	  // same time, but friendly to earlier Qt version
+          QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
           QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
           nodes[i]->setTag("source:datetime", dts);
         }
@@ -541,7 +544,7 @@ vector<PbfReader::BlobLocation> PbfReader::loadOsmDataBlobOffsets(istream& strm)
     {
       long pos = _in->tellg();
       printf("%.1f / %.1f - %.2f MB/s                  \r",
-        pos / 1.0e6, length / 1.0e6, 
+        pos / 1.0e6, length / 1.0e6,
         ((_in->tellg() - lastPos) / (t - last)) / 1.0e6);
       cout.flush();
       last = t;
@@ -554,7 +557,7 @@ vector<PbfReader::BlobLocation> PbfReader::loadOsmDataBlobOffsets(istream& strm)
   {
     // print the final summary
     printf("%.1f / %.1f - %.2f MB/s                  \n",
-      length / 1.0e6, length / 1.0e6, 
+      length / 1.0e6, length / 1.0e6,
       ((length) / (t - start)) / 1.0e6);
     cout.flush();
   }
@@ -926,7 +929,7 @@ void PbfReader::parse(istream* strm, shared_ptr<OsmMap> map)
   }
 }
 
-//TODO: this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
+/// @todo this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
 void PbfReader::read(QString path, shared_ptr<OsmMap> map)
 {
   if (_status == Status::Invalid)
@@ -943,20 +946,19 @@ void PbfReader::read(QString path, shared_ptr<OsmMap> map)
     QFileInfoList files = d.entryInfoList(filter, QDir::Files, QDir::Name);
     for (int i = 0; i < files.size(); i++)
     {
-      readFile(files.at(i).filePath(), map);
+      _readFile(files.at(i).filePath(), map);
     }
   }
   else
   {
-    readFile(path, map);
+    _readFile(path, map);
   }
 
   ReportMissingElementsVisitor v(true);
   map->visitRw(v);
 }
 
-//TODO: this method can probably go away
-void PbfReader::readFile(QString path, shared_ptr<OsmMap> map)
+void PbfReader::_readFile(QString path, shared_ptr<OsmMap> map)
 {
   fstream input(path.toUtf8().constData(), ios::in | ios::binary);
 
@@ -982,7 +984,7 @@ void PbfReader::read(shared_ptr<OsmMap> map)
   map->visitRw(v);
 }
 
-//TODO: make the partial reader handle dir inputs?
+/// @todo make the partial reader handle dir inputs?
 bool PbfReader::isSupported(QString urlStr)
 {
   QFileInfo fileInfo(urlStr);
@@ -1001,29 +1003,17 @@ bool PbfReader::isSupported(QString urlStr)
 void PbfReader::open(QString urlStr)
 {
   fstream* fp = new fstream();
-  try
+  fp->open(urlStr.toUtf8().data(), ios::in | ios::binary);
+  if (fp->is_open() == false)
   {
-    fp->open(urlStr.toUtf8().data(), ios::in | ios::binary);
-    if (fp->is_open() == false)
-    {
-      throw HootException("Error opening " + urlStr + " for reading.");
-    }
-    _in = fp;
-    _needToCloseInput = true;
+    delete fp;
+    throw HootException("Error opening " + urlStr + " for reading.");
+  }
+  _in = fp;
+  _needToCloseInput = true;
 
-    // Have to call initial partial to ensure stream functions work
-    initializePartial();
-  }
-  catch (const HootException& e)
-  {
-    delete fp;
-    throw e;
-  }
-  catch (const std::exception& e)
-  {
-    delete fp;
-    throw e;
-  }
+  // Have to call initial partial to ensure stream functions work
+  initializePartial();
 }
 
 void PbfReader::initializePartial()
@@ -1197,7 +1187,8 @@ void PbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
 
       if (timestamp != 0)
       {
-        QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
+        //QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
+        QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
         QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
 
         t.set("source:datetime", dts);

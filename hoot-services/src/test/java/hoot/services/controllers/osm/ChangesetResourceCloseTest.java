@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -126,7 +126,8 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 		}
 	}
 
-	@Test(expected = Exception.class)
+	@SuppressWarnings("null")
+  @Test(expected = Exception.class)
 	@Category(UnitTest.class)
 	public void testCloseClosedChangeset() throws Exception
 	{
@@ -141,7 +142,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 		    .where(changesets.id.eq(changesetId)).singleResult(changesets);
 		final Timestamp now = new Timestamp(Calendar.getInstance()
 		    .getTimeInMillis());*/
-		// TODO: this check causes intermittent test failures
+		// this check causes intermittent test failures
 		// Thread.sleep(1000);
 		// Assert.assertTrue(changeset.getClosedAt().before(now));
 
@@ -168,7 +169,8 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 		}
 	}
 
-	@Test(expected = Exception.class)
+	@SuppressWarnings("null")
+  @Test(expected = Exception.class)
 	@Category(UnitTest.class)
 	public void testCloseNonExistingChangeset() throws Exception
 	{

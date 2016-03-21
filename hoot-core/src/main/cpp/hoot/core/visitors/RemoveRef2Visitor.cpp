@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveRef2Visitor.h"
 
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
@@ -41,7 +42,7 @@ QMutex RemoveRef2Visitor::_mutex;
 /**
  * Traverses the OsmMap and creates a map from uuid tags to ElementIds.
  */
-class Ref1ToEidVisitor : public ElementVisitor, public OsmMapConsumer
+class Ref1ToEidVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.geo.zindex;
 
@@ -66,8 +66,6 @@ final public class LongBox
 
   /**
    * Returns true if at least one edge overlaps with one of the other boxes edges.
-   * @param b
-   * @return
    */
   public boolean edgeOverlaps(LongBox b)
   {
@@ -149,6 +147,7 @@ final public class LongBox
     return result;
   }
 
+  @Override
   public String toString()
   {
     String result = "{ ";

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCACHE_H
 #define ELEMENTCACHE_H
@@ -147,8 +147,7 @@ public:
 
   // Functions for ElementOutputStream
   virtual void writeElement(ElementInputStream& inputStream) = 0;
-
-
+  virtual void writeElement(ElementPtr& element) = 0;
 
   // Functions from ElementProvider
 

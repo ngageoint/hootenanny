@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
@@ -58,8 +58,7 @@ public class LTDSTranslateProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-
+		//
 	}
 
 	/* (non-Javadoc)
@@ -67,9 +66,7 @@ public class LTDSTranslateProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-
-
+		//
 	}
 	
 	@Override
@@ -116,7 +113,7 @@ public class LTDSTranslateProcesslet extends BaseProcesslet {
 	 * @param requestParams
 	 * @throws Exception 
 	 */
-	private String postJobRquest(String osmId, String translation, String requestParams) throws Exception{
+	private static String postJobRquest(String osmId, String translation, String requestParams) throws Exception{
 		String ret = "";
 		CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
 		try{

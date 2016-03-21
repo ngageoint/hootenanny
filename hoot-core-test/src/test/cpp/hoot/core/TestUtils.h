@@ -118,12 +118,17 @@ public:
     OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,
     Meters circularError = 15);
 
-  static ElementPtr getElement(OsmMapPtr map, QString note);
+  static ElementPtr getElementWithNote(OsmMapPtr map, QString note);
 
   /**
-   * Return the way with the note value 'note'. Bad things will happen if it doesn't exist.
+   * Gets a single element by tag
+   *
+   * @param map map containing the element
+   * @param tagKey tag key to search for
+   * @param tagValue tag value to search for
+   * @return Returns a single element with the intput tag key/value pair; fails if more than one element
    */
-  static WayPtr getWay(OsmMapPtr map, QString note);
+  static ElementPtr getElementWithTag(OsmMapPtr map, const QString tagKey, const QString tagValue);
 
   /**
    * Resets the test environment to a known state.

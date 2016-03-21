@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FQTREE_H
 #define FQTREE_H
@@ -36,6 +36,7 @@
 
 // TGS
 #include <tgs/HashMap.h>
+#include <tgs/Statistics/Random.h>
 
 #include "Node.h"
 #include "SubTreeCallback.h"
@@ -401,7 +402,7 @@ private:
   const KeyType& _pickKey() const
   {
     // for now just use a random key as described in the paper.
-    const KeyType& result = (*_keys)[rand() % _keys->size()];
+    const KeyType& result = (*_keys)[Tgs::Random::instance()->generateInt(_keys->size())];
 
     return result;
   }

@@ -24,8 +24,15 @@ LT_INIT
 # GDAL
 m4_include([m4/ax_lib_gdal.m4])
 AX_LIB_GDAL([1.4.4])
-LIBS="$LIBS $GDAL_LDFLAGS $GDAL_DEP_LDFLAGS"
+LIBS="$LIBS $GDAL_RPATH $GDAL_LDFLAGS"
 CPPFLAGS="$CPPFLAGS $GDAL_CFLAGS"
+if test "${GDAL_OGR_ENABLED}" = "yes" ; then
+  ogrinfo --formats > /dev/null
+  OGR_FORMAT_EXIT_STATUS=`echo $?`
+  if test "$OGR_FORMAT_EXIT_STATUS" != "0"; then
+    AC_MSG_ERROR(["There is an error with one or more GDAL file formats."]);
+  fi
+fi
 if test "${GDAL_VERSION}" = "1.9.1" ; then
   AC_MSG_WARN(["GDAL v1.9.1 is known to have a bug in FileGDB export where the file can't be opened by ArcMap 10.2. GDAL v1.10.1 is known to work."]);
 fi
@@ -120,9 +127,11 @@ SERVICES_INIT()
 m4_include([m4/rnd.m4])
 RND_INIT()
 
-# Include UI
-m4_include([m4/ui.m4])
-UI_INIT()
+# Include UI tests
+m4_include([m4/ax_compare_version.m4])
+m4_include([m4/ruby.m4])
+m4_include([m4/ui-tests.m4])
+UI_TESTS_INIT()
 
 # Code Coverage
 m4_include([m4/coverage.m4])

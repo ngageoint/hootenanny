@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Log.h"
@@ -32,6 +32,7 @@
 #include <QDebug>
 
 // Standard
+#include <iomanip>
 #include <iostream>
 using namespace std;
 
@@ -44,13 +45,8 @@ void Log::init()
 
 void Log::log(WarningLevel level, const string& str)
 {
-  if (level >= _level)
-  {
-    QDateTime dt = QDateTime::currentDateTime();
-
-    // takes the form: "09:34:21.635 WARN  <str>"
-    cout << dt.toString("hh:mm:ss.zzz") << " " << getLevelString(level) << "  " << str << endl;
-  }
+  //  Mimic log4cxx with unknown file name (...?), function name ("") and line number (-1)
+  log(level, str, "...?", "", -1);
 }
 
 void Log::log(WarningLevel level, const string& str, const string& filename,
@@ -60,9 +56,9 @@ void Log::log(WarningLevel level, const string& str, const string& filename,
   {
     QDateTime dt = QDateTime::currentDateTime();
 
-    // takes the form: "09:34:21.635 WARN  <filename>(<lineNumber>) - "
-    cout << dt.toString("hh:mm:ss.zzz") << " " << getLevelString(level) << "  " <<
-            filename << "(" << lineNumber << ")" << " - " << str << endl;
+    // takes the form: "09:34:21.635 WARN  <filename>(<lineNumber>) <str>"
+    cout << dt.toString("hh:mm:ss.zzz") << " " << setw(5) << left << getLevelString(level) << " " <<
+            ellipsisStr(filename) << "(" << setw(4) << right << lineNumber << ")" << " " << str << endl;
   }
 }
 

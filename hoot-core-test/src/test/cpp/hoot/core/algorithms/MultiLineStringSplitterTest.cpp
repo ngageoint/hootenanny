@@ -156,7 +156,7 @@ public:
     WayPtr matchWay = map->getWay(match->getId());
     //LOG_VAR(matchWay->getNodeIds());
     const std::vector<long>& matchWayNodeIds = matchWay->getNodeIds();
-    //TODO: these results still need to be validated
+    /// @todo these results still need to be validated
     CPPUNIT_ASSERT_EQUAL(-1L, matchWayNodeIds.at(0));
     CPPUNIT_ASSERT_EQUAL(-3L, matchWayNodeIds.at(1));
     way1 = map->getWay(-1);

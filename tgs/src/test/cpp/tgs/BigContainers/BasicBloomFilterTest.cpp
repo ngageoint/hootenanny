@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit Includes
@@ -37,6 +37,7 @@ using namespace std;
 
 // TGS Includes
 #include <tgs/BigContainers/BasicBloomFilter.h>
+#include <tgs/Statistics/Random.h>
 #include <tgs/StreamUtils.h>
 
 namespace Tgs
@@ -73,7 +74,7 @@ public:
     set<long> s;
     for (size_t i = 0; i < 100000; i++)
     {
-      long k = rand();
+      long k = Tgs::Random::instance()->generateInt();
       ks.push_back(k);
       s.insert(k);
       uut.insert(k);
@@ -89,7 +90,7 @@ public:
 //    size_t testCount = 0;
 //    for (size_t i = 0; i < tests; i++)
 //    {
-//      long k = rand();
+//      long k = Tgs::Random::instance()->generateInt();
 //      if (s.find(k) == s.end())
 //      {
 //        testCount++;

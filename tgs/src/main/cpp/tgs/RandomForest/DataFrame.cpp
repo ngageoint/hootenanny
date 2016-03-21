@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DataFrame.h"
@@ -45,6 +45,9 @@ using namespace std;
 
 //Urgent Includes
 #include "../TgsException.h"
+
+// Tgs
+#include <tgs/Statistics/Random.h>
 
 namespace Tgs
 {
@@ -226,16 +229,13 @@ namespace Tgs
     }
   }
 
-  void DataFrame::exportData(QDomDocument & modelDoc, QDomElement & parentNode)
+  void DataFrame::exportData(QDomDocument & modelDoc, QDomElement & dataFrameNode) const
   {
     try
     {
-
-      //Create DataFrame Node
-      QDomElement dataFrameNode = modelDoc.createElement("DataFrame");
-
       //Add Factor Labels
       QDomElement factorLabelNode = modelDoc.createElement("FactorLabels");
+      modelDoc.appendChild(factorLabelNode);
       std::stringstream factorStream;
 
       for(unsigned int i = 0; i < _factorLabels.size(); i++)
@@ -256,6 +256,7 @@ namespace Tgs
       if(!_factorType.empty())
       {
         QDomElement factorTypeNode = modelDoc.createElement("FactorTypes");
+        modelDoc.appendChild(factorTypeNode);
         std::stringstream factorTypeStream;
 
         for(unsigned int i = 0; i < _factorType.size(); i++)
@@ -278,6 +279,7 @@ namespace Tgs
       if(!_nullTreatment.empty())
       {
         QDomElement factorNullNode = modelDoc.createElement("FactorNullTreatment");
+        modelDoc.appendChild(factorNullNode);
         std::stringstream factorNullStream;
 
         for(unsigned int i = 0; i < _nullTreatment.size(); i++)
@@ -300,18 +302,22 @@ namespace Tgs
       if(!_medianMaps.empty())
       {
         QDomElement medianValuesNode = modelDoc.createElement("MedianValues");
+        modelDoc.appendChild(medianValuesNode);
 
         std::map<std::string, double>::iterator medianItr;
 
         for(unsigned int i = 0; i < _medianMaps.size(); i++)
         {
           QDomElement medianValuesByFactorNode = modelDoc.createElement("MedianValuesByFactor");
+          modelDoc.appendChild(medianValuesByFactorNode);
 
           std::map<std::string, double> factorMedianMap = _medianMaps[i];
 
           for(medianItr = factorMedianMap.begin(); medianItr != factorMedianMap.end(); ++medianItr)
           {
             QDomElement classMedianNode = modelDoc.createElement("ClassMedian");
+            modelDoc.appendChild(classMedianNode);
+
             std::stringstream medianStream;
             medianStream << medianItr->first << " " << medianItr->second;
             QDomText classMedianText = modelDoc.createTextNode(medianStream.str().c_str());
@@ -327,18 +333,24 @@ namespace Tgs
 
       //Create DataVectors node
       QDomElement dataVectorsNode = modelDoc.createElement("DataVectors");
+      modelDoc.appendChild(dataVectorsNode);
 
       //Export data vectors as trainingClass and data values
       for(unsigned int i = 0; i < _data.size(); i++)
       {
         QDomElement vectorNode = modelDoc.createElement("DataVector");
+        modelDoc.appendChild(vectorNode);
 
         QDomElement classNode = modelDoc.createElement("ClassName");
+        modelDoc.appendChild(classNode);
+
         QDomText classText = modelDoc.createTextNode(_trainingLabels[i].c_str());
         classNode.appendChild(classText);
         vectorNode.appendChild(classNode);
 
         QDomElement dataNode = modelDoc.createElement("Data");
+        modelDoc.appendChild(dataNode);
+
         std::stringstream dataStream;
         for(unsigned int j = 0; j < _data[i].size(); j++)
         {
@@ -358,8 +370,6 @@ namespace Tgs
       }
 
       dataFrameNode.appendChild(dataVectorsNode);
-
-      parentNode.appendChild(dataFrameNode);
     }
     catch(const Exception & e)
     {
@@ -367,102 +377,16 @@ namespace Tgs
     }
   }
 
-  void DataFrame::exportData(std::ostream & fileStream, std::string tabDepth) const
+  void DataFrame::exportData(std::ostream & fileStream) const
   {
-    //Its a *lot* of work to lose this method in hoot.  Making it a future task.
-    //throw Exception(__LINE__, "This function has been deprecated.");
-#warning replace this with DataFrame::exportData(QDomDocument&, QDomElement&)
-
-    //Yes, this is awful. A real parser would be better (see above). Jason G.
     try
     {
-      if(fileStream.good())
-      {
-        fileStream << tabDepth << "<DataFrame>" << std::endl;
-
-        //Export Factor Labels
-        fileStream << tabDepth << "\t" << "<FactorLabels>";
-
-        for(unsigned int i = 0; i < _factorLabels.size(); i++)
-        {
-          fileStream << "\t" << _factorLabels[i];
-        }
-
-        fileStream << "\t</FactorLabels>" << std::endl;
-
-        //Export Data Type
-        if(!_factorType.empty())
-        {
-          fileStream << tabDepth << "\t" << "<FactorTypes>";
-
-          for(unsigned int i = 0; i < _factorType.size(); i++)
-          {
-            fileStream << "\t" << _factorType[i];
-          }
-
-          fileStream << "\t</FactorTypes>" << std::endl;
-        }
-
-        //Export NULL Treatment
-        if(!_nullTreatment.empty())
-        {
-          fileStream << tabDepth << "\t" << "<FactorNullTreatment>";
-
-          for(unsigned int i = 0; i < _nullTreatment.size(); i++)
-          {
-            fileStream << "\t" << _nullTreatment[i];
-          }
-
-          fileStream << "\t</FactorNullTreatment>" << std::endl;
-        }
-
-        if(!_medianMaps.empty())
-        {
-          //Export median data
-          fileStream << tabDepth << "\t" << "<MedianValues>" << std::endl;
-
-          std::map<std::string, double>::iterator medianItr;
-
-          for(unsigned int i = 0; i < _medianMaps.size(); i++)
-          {
-            fileStream << tabDepth << "\t\t" << "<MedianValuesByFactor>"<< std::endl;
-
-            std::map<std::string, double> factorMedianMap = _medianMaps[i];
-
-            for(medianItr = factorMedianMap.begin(); medianItr != factorMedianMap.end(); ++medianItr)
-            {
-              fileStream << tabDepth << "\t\t\t" << "<ClassMedian>" << "\t" << medianItr->first <<
-                "\t" << medianItr->second  << "\t</ClassMedian>" << std::endl;
-            }
-
-            fileStream << tabDepth << "\t\t" << "</MedianValuesByFactor>"<< std::endl;
-          }
-
-          fileStream << tabDepth << "\t" << "</MedianValues>" << std::endl;
-        }
-
-        //Export data vectors as trainingClass and data values
-        for(unsigned int i = 0; i < _data.size(); i++)
-        {
-          fileStream << tabDepth << "\t<DataVector>" << std::endl;
-
-          fileStream << tabDepth << "\t\t<ClassName>\t" << _trainingLabels[i] << "\t</ClassName>" << std::endl;
-          fileStream << tabDepth << "\t\t<Data>";
-          for(unsigned int j = 0; j < _data[i].size(); j++)
-          {
-            fileStream << "\t" << _data[i][j];
-          }
-          fileStream << "\t</Data>" << std::endl;
-          fileStream << tabDepth << "\t</DataVector>" << std::endl;
-        }
-
-
-        fileStream << tabDepth << "</DataFrame>" << std::endl;
-      }
-      else
-      {
-        throw Exception(__LINE__, "File stream is not open for writing");
-      }
+      QDomDocument modelDoc("XML");
+      QDomElement rootNode = modelDoc.createElement("DataFrame");
+      modelDoc.appendChild(rootNode);
+      exportData(modelDoc, rootNode);
+      std::string xmlData = modelDoc.toString().toLatin1().constData();
+      fileStream << xmlData;
     }
     catch(const Exception & e)
     {
@@ -702,165 +626,14 @@ namespace Tgs
 
   void DataFrame::import(std::istream & fileStream)
   {
-    //Its a *lot* of work to lose this method in hoot.  Making it a future task.
-    //throw Exception(__LINE__, "This function has been deprecated.");
-#warning replace this with DataFrame::import(QDomElement&)
-
-    //Yes, this is awful. A real parser would be better. Jason G.
     try
     {
-      clear();
-      unsigned int maxVectorSize = 0;
-
-      if(fileStream.good())
-      {
-        std::string buffer;
-        std::string firstStr;
-        std::getline(fileStream, buffer);
-
-        //std::cout << "F1" << buffer << std::endl;
-        while(buffer.find("</DataFrame>") == std::string::npos && fileStream.eof() == false)
-        {
-          std::stringstream ss0(buffer);
-          ss0 >> firstStr;
-
-          if(firstStr == "<FactorLabels>")
-          {
-            std::string nextStr;
-            ss0 >> nextStr;
-
-            while(nextStr != "</FactorLabels>")
-            {
-              _factorLabels.push_back(nextStr);
-              ss0 >> nextStr;
-            }
-          }
-          else if(firstStr == "<FactorTypes>")
-          {
-            std::string nextStr;
-            ss0 >> nextStr;
-
-            while(nextStr != "</FactorTypes>")
-            {
-              _factorType.push_back(atoi(nextStr.c_str()));
-              ss0 >> nextStr;
-            }
-          }
-          else if(firstStr == "<FactorNullTreatment>")
-          {
-            std::string nextStr;
-            ss0 >> nextStr;
-
-            while(nextStr != "</FactorNullTreatment>")
-            {
-              _factorType.push_back(atoi(nextStr.c_str()));
-              ss0 >> nextStr;
-            }
-          }
-          else if(firstStr == "<MedianValues>")
-          {
-            std::string nextStr;
-            ss0 >> nextStr;
-
-            while(nextStr != "</MedianValues>")
-            {
-
-              if(nextStr == "<MedianValuesByFactor>")
-              {
-                _medianMaps.push_back(std::map<std::string, double>());
-
-                ss0 >> nextStr;
-
-                while(nextStr != "</MedianValuesByFactor>")
-                {
-                  if(nextStr == "<ClassMedian>")
-                  {
-                    std::string className;
-                    double medianValue;
-                    ss0 >> className;
-                    ss0 >> medianValue;
-
-                    _medianMaps.back()[className] = medianValue;
-
-                    ss0 >> nextStr; //Clear end tag
-                  }
-
-                  ss0 >> nextStr;
-                }
-              }
-            }
-          }
-          else if(firstStr == "<DataVector>")
-          {
-            std::string buffer2;
-            std::string classLabel;
-            std::vector<double> dataVector;
-            dataVector.reserve(maxVectorSize);
-            std::getline(fileStream, buffer2);
-           // std::cout << "F2" << buffer2 << std::endl;
-
-            while(buffer2.find("</DataVector>") == std::string::npos)
-            {
-              std::stringstream ss1(buffer2);
-              ss1 >> firstStr;
-
-              if(firstStr == "<ClassName>")
-              {
-                std::string nextStr;
-                ss1 >> nextStr;
-
-                bool first = true;
-                while(nextStr != "</ClassName>")
-                {
-                  if(first == false)
-                  {
-                    classLabel += " ";
-                  }
-                  else
-                  {
-                    first = false;
-                  }
-
-                  classLabel += nextStr;
-                  ss1 >> nextStr;
-                }
-               // std::cout << "ClassName " << "|" << classLabel << "|" << std::endl;
-              }
-              else if(firstStr == "<Data>")
-              {
-                std::string nextStr;
-                ss1 >> nextStr;
-
-                while(nextStr != "</Data>")
-                {
-                  double val;
-                  std::stringstream valstr(nextStr);
-                  valstr >> val;
-                  dataVector.push_back(val);
-                  ss1 >> nextStr;
-                }
-               // std::cout << "Data read!" << std::endl;
-              }
-              std::getline(fileStream, buffer2);
-              //std::cout << "F2" << buffer2 << std::endl;
-            }
-
-            maxVectorSize = std::max(maxVectorSize, (unsigned int)dataVector.size());
-
-            //Use this method instead of just adding the items
-            //to their respective vectors because it also
-            //generates the set of unique class labels
-            addDataVector(classLabel, dataVector);
-          }
-
-          std::getline(fileStream, buffer);
-          //std::cout << "F1" << buffer << std::endl;
-        }
-      }
-      else
-      {
-        throw Exception(__LINE__, "File stream is not open for reading");
-      }
+      std::istreambuf_iterator<char> eos;
+      std::string stdString(std::istreambuf_iterator<char>(fileStream), eos);
+      QDomDocument modelDoc("XML");
+      modelDoc.setContent(QString::fromStdString(stdString));
+      QDomElement elem = modelDoc.documentElement();
+      import(elem);
     }
     catch(const Exception & e)
     {
@@ -886,7 +659,6 @@ namespace Tgs
           QDomElement childNode = childList.at(i).toElement(); // try to convert the node to an element.
 
           QString tag = childNode.tagName().toUpper();
-
           if(tag == "FACTORLABELS")
           {
             QStringList factorList = childNode.text().split(" ");
@@ -911,7 +683,7 @@ namespace Tgs
             std::stringstream ss;
             ss << "The tag " << tag.toLatin1().constData() <<
               " is not supported with in the <DataFrame> tag";
-            throw Exception(__LINE__, ss.str());
+            //throw Exception(__LINE__, ss.str());
           }
         }
       }
@@ -1042,7 +814,7 @@ namespace Tgs
         {
           for(itr = idxSortedByClass.begin(); itr != idxSortedByClass.end(); ++itr)
           {
-            r = ((double)rand() / ((double)(RAND_MAX)+(double)(1)));
+            r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
 
             unsigned int rndIdx = (unsigned int)(r * (double)itr->second.size());
             bootstrap[pickCtr] = itr->second[rndIdx];
@@ -1124,7 +896,7 @@ namespace Tgs
         while(pickCtr < bootstrap.size())
         {
           //Pick a positive training example
-          r = ((double)rand() / ((double)(RAND_MAX)+(double)(1)));
+          r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
           rndIdx = (unsigned int)(r * (double)posIndices.size());
           bootstrap[pickCtr] = posIndices[rndIdx];
           selectedPos[rndIdx] = true;
@@ -1132,7 +904,7 @@ namespace Tgs
           pickCtr++;
 
           //Pick a negative training example
-          r = ((double)rand() / ((double)(RAND_MAX)+(double)(1)));
+          r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
           rndIdx = (unsigned int)(r * (double)negIndices.size());
           bootstrap[pickCtr] = negIndices[rndIdx];
           selectedNeg[rndIdx] = true;
@@ -1194,7 +966,7 @@ namespace Tgs
 
         for(unsigned int j = 0; j < bootstrap.size(); j++)
         {
-          r = ((double)rand() / ((double)(RAND_MAX)+(double)(1)));
+          r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
 
           unsigned int rndIdx = (unsigned int)(r * (double)_data.size());
           bootstrap[j] = rndIdx;
@@ -1330,7 +1102,7 @@ namespace Tgs
 
         for(unsigned int k = 0; k < numFactors; k++)
         {
-          double rr = (double)rand();
+          double rr = (double)Tgs::Random::instance()->generateInt();
           r = (rr / ((double)(RAND_MAX)+(double)(1)));
 
           unsigned int rndIdx = (unsigned int)(r * (double)candidateFactors.size());

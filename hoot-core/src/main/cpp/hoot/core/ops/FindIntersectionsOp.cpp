@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FindIntersectionsOp.h"
 
@@ -68,7 +68,6 @@ void FindIntersectionsOp::apply(shared_ptr<OsmMap>& map)
   VisitorOp(new RemoveElementsVisitor(rFilter)).apply(map);
   LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelationMap().size()));
 
-
   /// @todo move this to a config file.
   // pragmatically remove "bad" data in OSM afghanistan
   map->removeWays(TagFilter(Filter::FilterMatches, "source", "AIMS"));
@@ -81,7 +80,7 @@ void FindIntersectionsOp::apply(shared_ptr<OsmMap>& map)
   // split ways up on intersections. This must come before DualWaySplitter. The DualWaySplitter
   // assumes that all intersections are on end nodes.
   IntersectionSplitter::splitIntersections(map);
-  map = UnlikelyIntersectionRemover::removeIntersections(map);
+  UnlikelyIntersectionRemover::removeIntersections(map);
   LOG_INFO("Assuming drives on right.");
 //  map = DualWaySplitter::splitAll(map, DualWaySplitter::Right, 12.5);
 //  map = ImpliedDividedMarker::markDivided(map);

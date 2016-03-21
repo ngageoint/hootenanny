@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.db;
 
@@ -57,6 +57,8 @@ import hoot.services.db2.QMaps;
 import hoot.services.db2.QUsers;
 import hoot.services.models.osm.Element.ElementType;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -109,7 +111,7 @@ public class DbUtils
     DELETE
   }
 
-	public enum nwr_enum 
+	public enum nwr_enum
 	{
 		 node,
 		 way,
@@ -207,13 +209,6 @@ public class DbUtils
   	return null;
   }
 
-  /**
-   * 
-   * 
-   * @param conn
-   * @return
-   * @throws Exception
-   */
   public static boolean closeConnection(Connection conn) throws Exception
   {
   	if (conn != null)
@@ -280,25 +275,17 @@ public class DbUtils
 
     return mapIds;
   }
-  
-  /**
-   * 
-   * 
-   * @param conn
-   * @param mapId
-   * @return
-   * @throws Exception
-   */
+
   public static String getDisplayNameById(final Connection conn, final long mapId) throws Exception
   {
   	QMaps maps = QMaps.maps;
     SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-    
+
     String displayName = query.from(maps).where(maps.id.eq(mapId)).uniqueResult(maps.displayName);
-    
+
     return displayName;
   }
-  
+
   //TODO: use reflection to get these three element count queries down to one
 
   /**
@@ -401,8 +388,8 @@ public class DbUtils
   }
 
   /**
-   * 
-   * 
+   *
+   *
    * @param mapId
    * @throws Exception
    */
@@ -425,8 +412,8 @@ public class DbUtils
   // remove this. replace by calling hoot core layer delete native command
 
   /**
-   * 
-   * 
+   *
+   *
    * @param conn
    * @param mapId
    * @throws Exception
@@ -471,7 +458,7 @@ public class DbUtils
   {
     try
     {
-      String dbname = "renderdb_" + mapName;
+      String dbname = conn.getCatalog() + "_renderdb_" + mapName;
       DataDefinitionManager ddm = new DataDefinitionManager();
       ddm.deleteDb(dbname, false);
     }
@@ -484,10 +471,10 @@ public class DbUtils
   }
 
   //remove this. replace by calling hoot core layer delete native command
- 
+
   /**
-   * 
-   * 
+   *
+   *
    * @param conn
    * @param mapName
    * @throws Exception
@@ -497,7 +484,7 @@ public class DbUtils
 		Configuration configuration = getConfiguration();
 
 		QMaps maps = QMaps.maps;
-  	List<Long> mapIds = 
+  	List<Long> mapIds =
   		new SQLQuery(conn, configuration)
   	    .from(maps)
 		    .where(maps.displayName.equalsIgnoreCase(mapName))
@@ -540,14 +527,6 @@ public class DbUtils
     return recordCtr > 0;
   }
 
-  // TODO: remove
-  
-  /**
-   * 
-   * 
-   * @param conn
-   * @return
-   */
   public static long getTestUserId(Connection conn)
   {
   	QUsers users = QUsers.users;
@@ -557,13 +536,6 @@ public class DbUtils
     return query.from(users).singleResult(users.id);
   }
 
-  /**
-   * 
-   * 
-   * @param conn
-   * @return
-   * @throws Exception
-   */
   public static long insertUser(Connection conn) throws Exception
   {
   	Long newId = (long) -1;
@@ -588,18 +560,27 @@ public class DbUtils
     return newId.longValue();
   }
 
-  //TODO: this code needs to be changed to dynamically read in the data types from querydsl.  If
-  //I make a change to the schema in liquibase, it will never be picked up unless this static code
-  //is also changed.  See #6777
+  public static void deleteUser(Connection conn, long userId) throws Exception
+  {
+      Configuration configuration = getConfiguration();
+      QUsers users = QUsers.users;
+      new SQLDeleteClause(conn, configuration, users)
+        .where(users.id.eq(userId))
+        .execute();
+  }
+
   /**
-   * 
-   * 
+   *
+   *
    * @param mapId
    * @throws Exception
+   * //TODO: This code needs to be changed to dynamically read in the data types from querydsl.  If
+     I make a change to the schema in liquibase, it will never be picked up unless this static code
+     is also changed.  See r6777
    */
   public static void createMap(final long mapId) throws Exception
   {
-  	try 
+  	try
   	{
 			String dbname = HootProperties.getProperty("dbName");
 
@@ -709,22 +690,14 @@ public class DbUtils
 
 	  	ddm.createTable(createTblSql, dbname);
 
-		} 
-  	catch (Exception e) 
+		}
+  	catch (Exception e)
   	{
 			log.error(e.getMessage());
 			throw e;
 		}
   }
 
-  /**
-   * 
-   * 
-   * @param userId
-   * @param conn
-   * @return
-   * @throws Exception
-   */
   public static long insertMap(final long userId, Connection conn) throws Exception
   {
   	Long newId = (long) -1;
@@ -754,8 +727,8 @@ public class DbUtils
   }
 
   /**
-   * 
-   * 
+   *
+   *
    * @param jobId
    * @param status
    * @param conn
@@ -790,7 +763,7 @@ public class DbUtils
 
   	QJobStatus jobStatusTbl = QJobStatus.jobStatus;
   	SQLQuery query = new SQLQuery(conn, configuration);
-  	JobStatus stat = 
+  	JobStatus stat =
   		query
   		  .from(jobStatusTbl)
   		  .where(jobStatusTbl.jobId.eq(jobId))
@@ -841,7 +814,7 @@ public class DbUtils
   {
   	QJobStatus jobStatusTbl = QJobStatus.jobStatus;
   	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-  	JobStatus stat = 
+  	JobStatus stat =
   		query
   		  .from(jobStatusTbl)
   		  .where(jobStatusTbl.jobId.eq(jobId))
@@ -849,26 +822,13 @@ public class DbUtils
 
     return stat.getStatus();
   }
-  
-  /**
-   * 
-   * 
-   * @param mapId
-   * @param records
-   * @param t
-   * @param predicateslist
-   * @param recordBatchType
-   * @param conn
-   * @param maxRecordBatchSize
-   * @return
-   * @throws Exception
-   */
-  public static long batchRecords(final long mapId, final List<?> records, 
-    com.mysema.query.sql.RelationalPathBase<?> t, List<List<BooleanExpression>> predicateslist, 
+
+  public static long batchRecords(final long mapId, final List<?> records,
+    com.mysema.query.sql.RelationalPathBase<?> t, List<List<BooleanExpression>> predicateslist,
     final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
    {
-  	  log.debug("Batch element " + recordBatchType.toString() + "..."); 
-  	
+  	  log.debug("Batch element " + recordBatchType.toString() + "...");
+
   	  try
       {
         Configuration configuration = getConfiguration(mapId);
@@ -876,7 +836,7 @@ public class DbUtils
         switch (recordBatchType)
         {
           case INSERT:
-          	
+
           	SQLInsertClause insert = new SQLInsertClause(conn, configuration, t);
           	long nBatch = 0;
           	for (int i=0; i<records.size(); i++)
@@ -887,7 +847,7 @@ public class DbUtils
 
           		if (maxRecordBatchSize > -1 && i > 0)
           		{
-	          		if (i % maxRecordBatchSize == 0) 
+	          		if (i % maxRecordBatchSize == 0)
 	          		{
 	          			insert.execute();
 
@@ -926,7 +886,7 @@ public class DbUtils
 
           		if (maxRecordBatchSize > -1 && i > 0)
           		{
-	          		if (i % maxRecordBatchSize == 0) 
+	          		if (i % maxRecordBatchSize == 0)
 	          		{
 	          			update.execute();
 
@@ -964,7 +924,7 @@ public class DbUtils
         			nBatchDel++;
         			if (maxRecordBatchSize > -1 && i > 0)
         			{
-	        			if(i % maxRecordBatchSize == 0) 
+	        			if(i % maxRecordBatchSize == 0)
 	        			{
 	          			delete.execute();
 
@@ -991,15 +951,35 @@ public class DbUtils
     }
 
   /**
-   * 
-   * 
-   * @param tags
-   * @param mapId
-   * @param conn
-   * @return
-   * @throws SQLException
+   *
+   *
+   * @param input
+   * @return String
+   * @throws Exception
    */
-  public static long updateMapsTableTags(final Map<String, String> tags, final long mapId, 
+  public static String escapeJson(String input) throws Exception
+  {
+    JSONParser parser = new JSONParser();
+    JSONObject json = (JSONObject)parser.parse(input);
+
+    //Special handling of ADV_OPTIONS
+    String key = "ADV_OPTIONS";
+    if (json.containsKey(key)) {
+      String advopts = json.get(key).toString();
+      String cleanup = advopts.replaceAll("-D \"", "'").replaceAll("=", "': '").replaceAll("\"", "',").replaceAll("'", "\"");
+      //wrap with curly braces and remove trailing comma
+      cleanup = "{" + cleanup.substring(0, cleanup.length() - 1) + "}";
+      //System.out.println(cleanup);
+      JSONObject obj = (JSONObject)parser.parse(cleanup);
+
+      json.put(key, obj);
+    }
+    //System.out.println(JSONObject.escape(json.toString()).toString());
+
+    return JSONObject.escape(json.toString());
+  }
+
+  public static long updateMapsTableTags(final Map<String, String> tags, final long mapId,
   	final Connection conn) throws SQLException
   {
   	long execResult = -1;
@@ -1007,13 +987,13 @@ public class DbUtils
     try
     {
     	String sql = null;
-      
-    	sql = "update maps set tags=? " +
-					"where id=?";
+
+      sql = "update maps set tags = COALESCE(tags, '') || ?::hstore " +
+        "where id=?";
     	ps = conn.prepareStatement(sql);
     	String hstoreStr = "";
 			Iterator it = tags.entrySet().iterator();
-	    while (it.hasNext()) 
+	    while (it.hasNext())
 	    {
 	        Map.Entry pairs = (Map.Entry)it.next();
 	        if (hstoreStr.length() > 0)
@@ -1024,7 +1004,7 @@ public class DbUtils
 	    }
 			ps.setObject(1, hstoreStr, Types.OTHER);
 			ps.setLong(2, mapId);
-		
+
 			execResult = ps.executeUpdate();
     }
     finally
@@ -1036,48 +1016,29 @@ public class DbUtils
     }
     return execResult;
   }
-  
-  /**
-   * 
-   * 
-   * @param mapId
-   * @param conn
-   * @return
-   * @throws Exception
-   */
-  public static Map<String, String> getMapsTableTags(final long mapId, final Connection conn) 
+
+  public static Map<String, String> getMapsTableTags(final long mapId, final Connection conn)
   	throws Exception
   {
   	Map<String, String> tags = new HashMap<String, String>();
   	QMaps  mp = QMaps.maps;
-  	
-  	List<Object> res = 
+
+  	List<Object> res =
   		new SQLQuery(conn, DbUtils.getConfiguration(mapId))
   	    .from(mp)
   	    .where(mp.id.eq(mapId))
   	    .list(mp.tags);
-  	
+
   	if (res.size() > 0)
   	{
   		Object oTag = res.get(0);
   		tags = PostgresUtils.postgresObjToHStore((org.postgresql.util.PGobject)oTag);
   	}
-  	
+
   	return tags;
   }
 
-  /**
-   * 
-   * 
-   * @param mapId
-   * @param records
-   * @param recordBatchType
-   * @param conn
-   * @param maxRecordBatchSize
-   * @return
-   * @throws Exception
-   */
-	public static long batchRecordsDirectNodes(final long mapId, final List<?> records, 
+	public static long batchRecordsDirectNodes(final long mapId, final List<?> records,
 		final RecordBatchType recordBatchType,  Connection conn, int maxRecordBatchSize) throws Exception
 	{
 		log.debug("Batch node " + recordBatchType.toString() + "...");
@@ -1236,18 +1197,7 @@ public class DbUtils
 		return updateCount;
 	}
 
-	/**
-	 * 
-	 * 
-	 * @param mapId
-	 * @param records
-	 * @param recordBatchType
-	 * @param conn
-	 * @param maxRecordBatchSize
-	 * @return
-	 * @throws Exception
-	 */
-	public static long batchRecordsDirectWays(final long mapId, final List<?> records, 
+	public static long batchRecordsDirectWays(final long mapId, final List<?> records,
 		final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
 	{
 		log.debug("Batch way " + recordBatchType.toString() + "...");
@@ -1397,18 +1347,7 @@ public class DbUtils
 		return updateCount;
 	}
 
-	/**
-	 * 
-	 * 
-	 * @param mapId
-	 * @param records
-	 * @param recordBatchType
-	 * @param conn
-	 * @param maxRecordBatchSize
-	 * @return
-	 * @throws Exception
-	 */
-	public static long batchRecordsDirectRelations(final long mapId, final List<?> records, 
+	public static long batchRecordsDirectRelations(final long mapId, final List<?> records,
 		final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
 	{
 		log.debug("Batch relation " + recordBatchType.toString() + "...");
@@ -1558,30 +1497,32 @@ public class DbUtils
 
 	/**
 	 * Returns table size in byte
-	 * 
-	 * @param tableName
-	 * @return
-	 * @throws Exception
 	 */
 	public static long getTableSizeInByte(final String tableName) throws Exception
 	{
 		long ret = 0;
 		Connection conn = null;
 	  Statement stmt = null;
+	  ResultSet rs = null;
 		try
 		{
 			conn = DbUtils.createConnection();
 			stmt = conn.createStatement();
-			
+
 			String sql = "select pg_total_relation_size('" + tableName + "') as tablesize";
-			ResultSet rs = stmt.executeQuery(sql);
-      //STEP 5: Extract data from result set
+		  rs = stmt.executeQuery(sql);
+		  
+		  if (rs == null)
+			{
+				throw new SQLException("Error executing getTableSizeInByte");
+			}
+		  
+			//STEP 5: Extract data from result set
       while (rs.next())
       {
          //Retrieve by column name
       	ret = rs.getLong("tablesize");
       }
-      rs.close();
 		}
 		catch (Exception e)
 		{
@@ -1590,40 +1531,20 @@ public class DbUtils
 		}
 		finally
 		{
-			// finally block used to close resources
-			try
-			{
-				if (stmt != null)
-					stmt.close();
-			}
-			catch (SQLException se2)
-			{
-				log.equals(se2.getMessage());
-			}// nothing we can do
-			try
-			{
-				if (conn != null)
-					DbUtils.closeConnection(conn);
-			}
-			catch (SQLException se)
-			{
-				log.equals(se.getMessage());
-			}// end finally try
-		}// end try
-		
+			if (rs != null) rs.close();
+			if (stmt != null)
+				stmt.close();
+			if (conn != null)
+				DbUtils.closeConnection(conn);
+		}
+
 		return ret;
 	}
-	
+
 	/**
-	 * 
-	 * 
-	 * @param result
-	 * @param elementType
-	 * @return
-	 * @throws SQLException 
-	 * @todo change back to original element generic code
+	 * //TODO: change back to original element generic code
 	 */
-	public static Object resultToObj(final ResultSet rs, final ElementType elementType) 
+	public static Object resultToObj(final ResultSet rs, final ElementType elementType)
 		throws SQLException
 	{
 		if (elementType == ElementType.Node)

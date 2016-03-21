@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.osm;
 
@@ -87,6 +87,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
       conn = DbUtils.createConnection();
       OsmTestUtils.conn = conn;
       ReviewTestUtils.conn = conn;
+      userId = DbUtils.insertUser(conn);
     }
     catch (Exception e)
     {
@@ -101,13 +102,6 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   {
     try
     {
-    	//TODO: This is going to result in a lot of users created by the services test, now that
-    	//we don't clear out the database automatically between tests.  Only inserting one user is
-    	//causing UserResourceTest failures for a not so obvious reason.
-    	//if (userId == -1)
-    	//{
-    		userId = DbUtils.insertUser(conn);
-    	//}
     	mapId = DbUtils.insertMap(userId, conn);
 
       OsmTestUtils.userId = userId;
@@ -148,6 +142,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   {
     try
     {
+      //DbUtils.deleteUser(conn, userId);
     	OsmTestUtils.conn = null;
     	ReviewTestUtils.conn = null;
     }

@@ -47,6 +47,9 @@ public:
   {
     return OsmSchema::getInstance().isLinearHighway(e.getTags(), e.getElementType());
   }
+
+  virtual ElementCriterion* clone() { return new HighwayFilter(_type); }
+
 };
 
 }

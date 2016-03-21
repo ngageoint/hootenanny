@@ -3,9 +3,6 @@ QT += xml
 TEMPLATE = lib
 win32:CONFIG += dll
 
-# ln doesn't work when you're using samba as a working directory
-unix:QMAKE_LN_SHLIB = cp
-
 TARGET=Tgs
 
 # Include the shared settings.

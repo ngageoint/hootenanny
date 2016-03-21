@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.nativeInterfaces;
 
@@ -119,7 +119,8 @@ public class ProcessStreamInterface implements INativeInterface {
 	    }
 	}
 
-	public String getJobProgress(String jobId)
+	@Override
+  public String getJobProgress(String jobId)
 	{
 		String stdStr = "";
 		Object oCmdRunner = _progProcesses.get(jobId);
@@ -209,38 +210,31 @@ public class ProcessStreamInterface implements INativeInterface {
 					{
 						throw new Exception("User requested termination.");
 					}
-					else
+
+					boolean doThrowException = true;
+					if(cmd.containsKey("throwerror"))
 					{
-						boolean doThrowException = true;
-						if(cmd.containsKey("throwerror"))
-						{
-							doThrowException = Boolean.parseBoolean(cmd.get("throwerror").toString());
-						}
-						if(doThrowException)
-						{
-							throw new Exception(err);
-						}
-						else
-						{
-							String stdOut = res.getStdout();
-							ret.put("stdout", stdOut);
-							ret.put("stderr", err);
-						}
+						doThrowException = Boolean.parseBoolean(cmd.get("throwerror").toString());
 					}
+
+					if (doThrowException)
+					{
+						throw new Exception(err);
+					}
+					
+					String stdOut = res.getStdout();
+					ret.put("stdout", stdOut);
+					ret.put("stderr", err);					
 				}
 			}
 		} catch (Exception e){
-			if(res.getExitStatus() == -9999)
+			if(res != null && res.getExitStatus() == -9999)
 			{
 				throw new NativeInterfaceException("Failed to execute." + e.getMessage(),
 						NativeInterfaceException.HttpCode.USER_CANCEL);
 			}
-			else
-			{
-				throw new NativeInterfaceException("Failed to execute." + e.getMessage(),
-						NativeInterfaceException.HttpCode.SERVER_ERROR);
-			}
-
+			throw new NativeInterfaceException("Failed to execute." + e.getMessage(),
+					NativeInterfaceException.HttpCode.SERVER_ERROR);
 		}
 		finally
 		{
@@ -262,7 +256,7 @@ public class ProcessStreamInterface implements INativeInterface {
 	 * @return true if successfully added
 	 * @throws Exception
 	 */
-	private boolean addToProcessQ(JSONObject cmd, ICommandRunner cmdRunner) throws Exception
+	private static boolean addToProcessQ(JSONObject cmd, ICommandRunner cmdRunner) throws Exception
 	{
 
 		boolean success = false;
@@ -295,7 +289,7 @@ public class ProcessStreamInterface implements INativeInterface {
 	 * @param cmd
 	 * @throws Exception
 	 */
-	private void removeFromProcessQ(JSONObject cmd )
+	private static void removeFromProcessQ(JSONObject cmd )
 	{
 		String jobId = "";
 		try
@@ -317,7 +311,7 @@ public class ProcessStreamInterface implements INativeInterface {
 	}
 
 
-	private void removeFromProgressProcessQ(String jobId )
+	private static void removeFromProgressProcessQ(String jobId )
 	{
 
 		try
@@ -339,7 +333,8 @@ public class ProcessStreamInterface implements INativeInterface {
 	 * @param jobId : Job Id to terminate
 	 * @throws NativeInterfaceException
 	 */
-	public  void terminate(String jobId) throws NativeInterfaceException
+	@Override
+  public  void terminate(String jobId) throws NativeInterfaceException
 	{
 		try
 		{
@@ -363,25 +358,21 @@ public class ProcessStreamInterface implements INativeInterface {
 	 * see CoreServiceContext.xml
 	 */
 	public void init(){
-
+		//
 	}
 
 	/**
 	 * see CoreServiceContext.xml
 	 */
 	public void destroy(){
-
+		//
 	}
 
 	/**
 	 * Creates direct exec call
 	 * like hoot --ogr2osm target input output if the "exectype" is "hoot"
-	 *
-	 * @param cmd
-	 * @return
 	 */
-
-	private String[] createCmdArray(JSONObject cmd){
+	private static String[] createCmdArray(JSONObject cmd){
 		ArrayList<String> execCmd = new ArrayList<String>();
 		try
 		{
@@ -414,11 +405,8 @@ public class ProcessStreamInterface implements INativeInterface {
 	/**
 	 * Creates command for make file script based call if exectype = "make"
 	 * output looks like make -f [some makefile] [any argument make file uses]
-	 *
-	 * @param cmd
-	 * @return
 	 */
-	private String[] createScriptCmdArray(JSONObject cmd) {
+	private static String[] createScriptCmdArray(JSONObject cmd) {
 		ArrayList<String> execCmd = new ArrayList<String>();
 
 		try
@@ -456,12 +444,7 @@ public class ProcessStreamInterface implements INativeInterface {
 		return Arrays.copyOf(objectArray, objectArray.length, String[].class);
 	}
 
-
-	/**
-	 * @param cmd
-	 * @return
-	 */
-	private String[] createBashScriptCmdArray(JSONObject cmd) {
+	private static String[] createBashScriptCmdArray(JSONObject cmd) {
 		ArrayList<String> execCmd = new ArrayList<String>();
 
 		try

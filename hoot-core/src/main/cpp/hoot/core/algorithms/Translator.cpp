@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Translator.h"
@@ -36,13 +36,11 @@
 #include <unicode/utypes.h>
 #include <unicode/uobject.h>
 
-// json-spirit
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#include <json_spirit_reader.h>
-#include <json_spirit_reader_template.h>
-#pragma GCC diagnostic push
-using namespace json_spirit;
+// Boost
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
+namespace pt = boost::property_tree;
 
 // Qt
 #include <QMap>
@@ -73,77 +71,37 @@ public:
 
   void load(QString path)
   {
-    ifstream is(path.toAscii().data());
-    Value value;
     try
     {
-      read_stream_or_throw(is, value);
-      _loadTags(value);
-    }
-    catch (Error_position& ep)
-    {
-      QString reason = QString("Reason: %1 %2 line: %3 col: %4").
-          arg(QString::fromStdString(ep.reason_)).arg(path).arg(ep.line_).arg(ep.column_);
-      throw HootException("Error parsing JSON. " + reason);
-    }
-  }
+      pt::ptree pt;
+      pt::read_json(path.toAscii().data(), pt);
 
-  static QString toString(const Value& value)
-  {
-    if (value.type() == str_type)
-    {
-      return QString::fromUtf8(value.get_str().data());
+      _loadTags(pt);
     }
-    if (value.type() == int_type)
+    catch (std::exception e)
     {
-      return QString("%1").arg(value.get_int());
-    }
-    if (value.type() == real_type)
-    {
-      return QString("%1").arg(value.get_real());
-    }
-    else
-    {
-      throw HootException("Unsupported type.");
+      QString reason = e.what();
+      throw HootException("Error parsing JSON. " + reason);
     }
   }
 
 private:
   QMap<QString, QStringList> _translations;
 
-  void _loadATranslation(const Value& value)
+  void _loadTags(pt::ptree& tree)
   {
-    if (value.type() != array_type)
+    BOOST_FOREACH(pt::ptree::value_type& translation, tree.get_child("Dictionary"))
     {
-      throw HootException("Expected an array.");
-    }
-    else
-    {
-      const Array& arr = value.get_array();
-
-      QString from = toString(arr[0]).toLower();
-
-      for (size_t i = 1; i < arr.size(); i++)
+      int i = 0;
+      QString from;
+      BOOST_FOREACH(pt::ptree::value_type& t, translation.second.get_child(""))
       {
-        QString to = toString(arr[i]).toLower();
-        _translations[from].push_back(to);
-      }
-    }
-  }
-
-  void _loadTags(const Value& value)
-  {
-    if (value.type() != array_type)
-    {
-      throw HootException("Expected an array of arrays at the top level.");
-    }
-    else
-    {
-      const Array& arr = value.get_array();
-
-      for (size_t i = 0; i < arr.size(); i++)
-      {
-        _loadATranslation(arr[i]);
+        string s = t.second.data();
+        if (i == 0)
+          from = QString::fromUtf8(s.c_str()).toLower();
+        else
+          _translations[from].push_back(QString::fromUtf8(s.c_str()).toLower());
+        i++;
       }
     }
   }

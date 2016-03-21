@@ -35,8 +35,6 @@ docs/*.html
 docs/*.xml
 docs/*.text
 docs/~*.docx
-docs/algorithms/GenericLineTestGraph.png
-docs/algorithms/GenericLineTestTimingGraph.png
 docs/Exploratory Funds Presentation.ppt
 docs/docbook-xsl.css
 docs/ref
@@ -63,9 +61,9 @@ hoot-core/src/proto/
 hoot-core/src/test/resources/cmd/**/*.stripped
 hoot-core/src/test/resources/cmd/**/*.first
 hoot-core/src/test/resources/cmd/**/*.failed
-hoot-core-test/src/test/resources/cmd/**/*.stripped
-hoot-core-test/src/test/resources/cmd/**/*.first
-hoot-core-test/src/test/resources/cmd/**/*.failed
+test-files/cmd/**/*.stripped
+test-files/cmd/**/*.first
+test-files/cmd/**/*.failed
 hoot-pipes/tmp
 hoot-services/src/main/resources/conf/local.conf
 hoot-services/src/main/resources/db/*.properties
@@ -154,7 +152,7 @@ summaryChart.png
 tagCountHistogram1.png
 tagCountHistogram2.png
 uniqueHistogram.png
-hoot-core-test/src/test/resources/cmd/current
+test-files/cmd/current
 test-files/DcTigerRoadsHighwayExactMatchInputs.osm
 data/
 .vagrant/
@@ -163,3 +161,6 @@ docs/developer/restDocs/
 docs/developer/wpsDocs/
 log4j.xml
 Vagrant.marker
+test-files/services-system/node_modules
+vagrant*.lock
+vagrant*-*
