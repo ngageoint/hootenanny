@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CalculateStatsOp.h"
 
@@ -35,6 +35,7 @@
 #include <hoot/core/filters/HighwayFilter.h>
 #include <hoot/core/filters/LinearFilter.h>
 #include <hoot/core/filters/NeedsReviewCriterion.h>
+#include <hoot/core/filters/NoInformationCriterion.h>
 #include <hoot/core/filters/NotCriterion.h>
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/filters/StatsAreaFilter.h>
@@ -211,10 +212,12 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     const double numReviewsToBeMade = curv.getStat();
     const double conflatedFeatureCount =
       fmax(featuresProcessedDuringConflationCount - numFeaturesMarkedForReview, 0);
+    const double untaggedFeatureCount = _applyVisitor(constMap,FilteredVisitor(new NoInformationCriterion(),new FeatureCountVisitor()));
+    _stats.append(SingleStat("Untagged Feature Count", untaggedFeatureCount));
     long unconflatableFeatureCount = -1.0;
     if (!_inputIsConflatedMapOutput)
     {
-      unconflatableFeatureCount = fmax((featureCount - conflatableFeatureCount), (long)0);
+      unconflatableFeatureCount = fmax((featureCount - untaggedFeatureCount - conflatableFeatureCount), (long)0);
     }
     else
     {
@@ -363,23 +366,10 @@ bool CalculateStatsOp::_matchDescriptorCompare(const MatchCreator::Description& 
   return m1.className > m2.className;
 }
 
-/// @todo a little too much duplicated code in these two _applyVisitor's
-
 double CalculateStatsOp::_applyVisitor(shared_ptr<const OsmMap> &map, const FilteredVisitor& v)
 {
-  // this is a hack to let C++ pass v as a temporary. Bad Jason.
-  FilteredVisitor* fv = const_cast<FilteredVisitor*>(&v);
-  auto_ptr<FilteredVisitor> critFv;
-  if (_criterion)
-  {
-    critFv.reset(new FilteredVisitor(*_criterion, *fv));
-    fv = critFv.get();
-  }
-  SingleStatistic* ss = dynamic_cast<SingleStatistic*>(&v.getChildVisitor());
-  assert(ss != 0);
-
-  map->visitRo(*fv);
-  return ss->getStat();
+  any emptyVisitorData;
+  return _applyVisitor(map, v, emptyVisitorData);
 }
 
 double CalculateStatsOp::_applyVisitor(shared_ptr<const OsmMap> &map, const FilteredVisitor& v,

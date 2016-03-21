@@ -1708,7 +1708,7 @@ shared_ptr<QSqlQuery> ServicesDb::selectAllElements(const long elementId, const 
   switch ( _connectionType )
   {
     case DBTYPE_SERVICES:
-      return selectElements(elementId, elementType, -1, 0);
+      return selectElements(elementType);
       break;
 
     case DBTYPE_OSMAPI:
@@ -1769,36 +1769,17 @@ shared_ptr<QSqlQuery> ServicesDb::selectElements_OsmApi(const long elementId,
   return _selectElementsForMap;
 }
 
-shared_ptr<QSqlQuery> ServicesDb::selectElements(const long elementId,
-  const ElementType& elementType, const long limit, const long offset)
+shared_ptr<QSqlQuery> ServicesDb::selectElements(const ElementType& elementType)
 {
   const long mapId = _currMapId;
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
-  QString limitStr;
-  if (limit == -1)
-  {
-    limitStr = "ALL";
-  }
-  else
-  {
-    limitStr = QString::number(limit);
-  }
 
   QString sql =  "SELECT * FROM " + _elementTypeToElementTableName(mapId, elementType);
   LOG_DEBUG(QString("SERVICES: Result sql query= "+sql));
 
-  if(elementId > -1)
-  {
-    sql += " WHERE id = :elementId ";
-  }
-  sql += " ORDER BY id LIMIT " + limitStr + " OFFSET " + QString::number(offset);
   _selectElementsForMap->prepare(sql);
   _selectElementsForMap->bindValue(":mapId", (qlonglong)mapId);
-  if(elementId > -1)
-  {
-    _selectElementsForMap->bindValue(":elementId", (qlonglong)elementId);
-  }
 
   if (_selectElementsForMap->exec() == false)
   {

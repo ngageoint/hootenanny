@@ -54,7 +54,6 @@ class ServicesDbReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runUrlMissingMapIdTest);
   CPPUNIT_TEST(runUrlInvalidMapIdTest);
   CPPUNIT_TEST(runReadTest);
-  CPPUNIT_TEST(runReadWithElemTest);
   CPPUNIT_TEST(runPartialReadTest);
   CPPUNIT_TEST(runFactoryReadTest);
 
@@ -467,9 +466,9 @@ public:
     ////////////////////////////////////////
     QString auth = "-h "+dbHost+" -p "+dbPort+" -U "+dbUser;
     QString cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1; \
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1; \
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodesReadTest.sql > /dev/null 2>&1";
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/users.sql > /dev/null 2>&1; \
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/changesets.sql > /dev/null 2>&1; \
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/nodesReadTest.sql > /dev/null 2>&1";
 
     if( std::system(cmd.toStdString().c_str()) != 0 )
     {
@@ -484,20 +483,9 @@ public:
     ServicesDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
 
-    Settings s = conf();
-    reader.open(ConfigOptions(s).getServicesDbTestUrlOsmapi());
+    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
     verifyFullReadOutput_OsmApi(map);
-    reader.close();
-  }
-
-  void runReadWithElemTest()
-  {
-    ServicesDbReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
-    reader.open(ServicesDbTestUtils::getDbReadUrl(mapId,3,"node").toString());
-    reader.read(map);
-    verifySingleReadOutput(map);
     reader.close();
   }
 
@@ -524,6 +512,7 @@ public:
     QString tagValue;
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
+
     CPPUNIT_ASSERT_EQUAL(
       chunkSize,
       (int)(map->getNodeMap().size() + map->getWays().size() + map->getRelationMap().size()));

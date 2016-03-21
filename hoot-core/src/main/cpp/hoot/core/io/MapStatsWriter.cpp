@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MapStatsWriter.h"
 
@@ -214,6 +214,29 @@ void MapStatsWriter::writeStatsToJson(QList< QList<SingleStat> >& stats, const Q
     QString reason = e.what();
     LOG_ERROR("Error writing JSON " + reason);
   }
+}
+
+void MapStatsWriter::writeStatsToText(QList<QList<SingleStat> > &stats, const QString &statsOutputFilePath)
+{
+  LOG_INFO("Writing stats to file: " << statsOutputFilePath);
+
+  //  Write to the text file
+  QFile outputFile(statsOutputFilePath);
+  if (outputFile.exists())
+  {
+    outputFile.remove();
+  }
+  if (outputFile.open(QFile::WriteOnly | QFile::Text))
+  {
+    QTextStream out(&outputFile);
+    out << statsToString(stats, "\t");
+    outputFile.close();
+  }
+  else
+  {
+    LOG_ERROR("Unable to write to output file.");
+  }
+
 }
 
 void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& statsOutputFilePath,

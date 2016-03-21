@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SERVICESDBREADER_H
 #define SERVICESDBREADER_H
@@ -124,28 +124,20 @@ private:
 
   long _osmElemId;
   ElementType _osmElemType;
+  ElementType _selectElementType;
 
-  bool _firstPartialReadCompleted;
+  shared_ptr<Element> _nextElement;
 
   Tgs::BigMap<long, long> _nodeIdMap;
   Tgs::BigMap<long, long> _relationIdMap;
   Tgs::BigMap<long, long> _wayIdMap;
 
-  //indexes are 0 based and indicate the next record that should be returned by a partial query
-
-  long _nodeIndex;
-  long _totalNumMapNodes;
-
-  long _wayIndex;
-  long _totalNumMapWays;
-
-  long _relationIndex;
-  long _totalNumMapRelations;
-
-
   void _addTagsToElement(shared_ptr<Element> element);
 
   ElementId _mapElementId(const OsmMap& map, ElementId oldId);
+
+  //get element from QSqlQuery iterator
+  shared_ptr<Element> _getElementUsingIterator();
 
   /**
    * Converts a query result to an OSM element

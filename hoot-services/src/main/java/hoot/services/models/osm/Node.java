@@ -22,12 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -60,23 +59,16 @@ public class Node extends Element
 {
   private static final Logger log = LoggerFactory.getLogger(Node.class);
 
-  public Node(final Long mapId, Connection dbConnection)
+  public Node(final Long mapId, Connection dbConnection) throws Exception
   {
     super(dbConnection);
     elementType = ElementType.Node;
 
-    //TODO: what's the purpose of this catch?
-    try
-    {
-    	setMapId(mapId);
-    }
-    catch(Exception ex)
-    {
-    }
+    setMapId(mapId);
     this.record = new CurrentNodes();
   }
 
-  public Node(final Long mapId, Connection dbConnection, final CurrentNodes record)
+  public Node(final Long mapId, Connection dbConnection, final CurrentNodes record) throws Exception
   {
     super(dbConnection);
 
@@ -94,15 +86,7 @@ public class Node extends Element
     nodeRecord.setTags(record.getTags());
     this.record = nodeRecord;
 
-    //TODO: what's the purpose of this catch?
-    try
-    {
-    	setMapId(mapId);
-    }
-    catch(Exception ex)
-    {
-
-    }
+    setMapId(mapId);
   }
 
   /**
@@ -114,6 +98,7 @@ public class Node extends Element
    * @return a bounding box
    * @throws Exception if the element has invalid coordinates
    */
+  @Override
   public BoundingBox getBounds() throws Exception
   {
     CurrentNodes nodeRecord = null;
@@ -155,10 +140,7 @@ public class Node extends Element
           .where(currentNodes.id.in(nodeIds))
           .list(currentNodes);
     }
-    else
-    {
-      return new ArrayList<CurrentNodes>();
-    }
+    return new ArrayList<CurrentNodes>();
   }
     
   /**
@@ -167,6 +149,7 @@ public class Node extends Element
    * @param xml XML data to construct the element from
    * @throws Exception
    */
+  @Override
   public void fromXml(final org.w3c.dom.Node xml) throws Exception
   {
     log.debug("Parsing node...");
@@ -226,6 +209,7 @@ public class Node extends Element
    * @return an XML node
    * @throws Exception
    */
+  @Override
   public org.w3c.dom.Element toXml(final org.w3c.dom.Element parentXml, final long modifyingUserId,
     final String modifyingUserDisplayName, final boolean multiLayerUniqueElementIds,
     final boolean addChildren) throws Exception
@@ -246,15 +230,13 @@ public class Node extends Element
   	{
   		return element;
   	}
-  	else
-  	{
-  		return elementWithTags;
-  	}
+  	return elementWithTags;
   }
 
   /**
    * Returns the generated table identifier for this element
    */
+  @Override
   public RelationalPathBase<?> getElementTable()
   {
     return currentNodes;
@@ -265,6 +247,7 @@ public class Node extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getElementIdField()
   {
     return currentNodes.id;
@@ -275,6 +258,7 @@ public class Node extends Element
    *
    * @return a table field
    */
+  @Override
   public BooleanPath getElementVisibilityField()
   {
     return currentNodes.visible;
@@ -285,6 +269,7 @@ public class Node extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getElementVersionField()
   {
     return currentNodes.version;
@@ -295,6 +280,7 @@ public class Node extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getChangesetIdField()
   {
     return currentNodes.changesetId;
@@ -316,6 +302,7 @@ public class Node extends Element
    *
    * @return a list of element types
    */
+  @Override
   public List<ElementType> getRelatedElementTypes()
   {
     return null;
@@ -326,6 +313,7 @@ public class Node extends Element
    *
    * @return a table
    */
+  @Override
   public RelationalPathBase<?> getRelatedRecordTable()
   {
     return null;
@@ -337,6 +325,7 @@ public class Node extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getRelatedRecordJoinField()
   {
     return null;
@@ -442,14 +431,8 @@ public class Node extends Element
   	}
   	finally
   	{
-  		try
-  		{
-  			if (stmt != null)
-  				stmt.close();
-  		}
-  		catch (SQLException se2)
-  		{
-  		}
+  		if (stmt != null)
+  			stmt.close();
   	}
   }
 }

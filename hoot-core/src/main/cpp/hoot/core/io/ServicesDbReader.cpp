@@ -31,6 +31,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/ElementType.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>
@@ -218,22 +219,13 @@ void ServicesDbReader::open(QString urlStr)
 
 bool ServicesDbReader::hasMoreElements()
 {
-  if (!_firstPartialReadCompleted)
+  if (_nextElement == 0)
   {
-    //get the total element counts before beginning results parsing
-    _totalNumMapNodes = _database.numElements(ElementType::Node);
-    _totalNumMapWays = _database.numElements(ElementType::Way);
-    _totalNumMapRelations = _database.numElements(ElementType::Relation);
-
-    _firstPartialReadCompleted = true;
+    //populate next element.
+    _nextElement = _getElementUsingIterator();
   }
 
-  const long numElementsRead = _nodeIndex + _wayIndex + _relationIndex;
-  const long numElementsTotal = _totalNumMapNodes + _totalNumMapWays + _totalNumMapRelations;
-  assert(numElementsRead <= numElementsTotal);
-  //each results index is 0 based, so as soon as the sum of indexes is equal to the total number of
-  //elements, we're done iterating through them
-  return (numElementsRead < numElementsTotal);
+  return _nextElement != NULL;
 }
 
 void  ServicesDbReader::initializePartial()
@@ -241,18 +233,9 @@ void  ServicesDbReader::initializePartial()
   _partialMap.reset(new OsmMap());
 
   _elementResultIterator.reset();
-  _firstPartialReadCompleted = false;
+  _selectElementType = ElementType::Node;
 
   _elementsRead = 0;
-
-  _nodeIndex = 0;
-  _totalNumMapNodes = 0;
-
-  _wayIndex = 0;
-  _totalNumMapWays = 0;
-
-  _relationIndex = 0;
-  _totalNumMapRelations = 0;
 }
 
 void ServicesDbReader::read(shared_ptr<OsmMap> map)
@@ -656,43 +639,54 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
   LOG_DEBUG("LEAVING ServicesDbReader::_read...");
 }
 
-shared_ptr<Element> ServicesDbReader::readNextElement()
+shared_ptr<Element> ServicesDbReader::_getElementUsingIterator()
 {
-  if (!hasMoreElements())
+  if (_selectElementType == ElementType::Unknown)
   {
-    throw HootException(
-      "No more elements available to read from map");
+    return shared_ptr<Element>();
   }
 
-  ElementType selectElementType = _getCurrentSelectElementType();
   //see of another result is available
   if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
   {
     //no results available, so request some more results
-    _elementResultIterator =
-      _database.selectElements(
-        -1, selectElementType, _maxElementsPerMap, _getCurrentElementOffset(selectElementType));
+    _elementResultIterator = _database.selectElements(_selectElementType);
   }
 
   //results still available, so keep parsing through them
-  shared_ptr<Element> element = _resultToElement(*_elementResultIterator, selectElementType,
+  shared_ptr<Element> element = _resultToElement(*_elementResultIterator, _selectElementType,
     *_partialMap);
+
+  //QSqlQuery::next() in ServicesDbReader::_resultToElement will return null
+  //when end of records loop. The iterator will be reset and go to next element type
   if (!element.get())
   {
-    //exceptional case to deal with having to call QSqlQuery::next() inside of
-    //ServicesDb::resultToElement rather than from inside this method
     _elementResultIterator.reset();
-    return shared_ptr<Element>();
+    const int currentTypeIndex = static_cast<int>(_selectElementType.getEnum());
+    ElementType::Type nextType = static_cast<ElementType::Type>((currentTypeIndex + 1));
+    ElementType t(nextType);
+    _selectElementType = t;
+    return _getElementUsingIterator();
   }
 
-  _incrementElementIndex(selectElementType);
-  assert(selectElementType == element->getElementType());
-  _elementsRead++;
-  if (_elementsRead == _maxElementsPerMap)
-  {
-    _elementResultIterator->finish();
-  }
+  assert(_selectElementType == element->getElementType());
+
   return element;
+}
+
+shared_ptr<Element> ServicesDbReader::readNextElement()
+{
+  if (hasMoreElements())
+  {
+    shared_ptr<Element> result = _nextElement;
+    _nextElement.reset();
+    _elementsRead++;
+    return result;
+  }
+  else
+  {
+    throw HootException("readNextElement should not called if hasMoreElements return false.");
+  }
 }
 
 void ServicesDbReader::finalizePartial()
@@ -710,70 +704,6 @@ void ServicesDbReader::finalizePartial()
 void ServicesDbReader::close()
 {
   finalizePartial();
-}
-
-const ElementType ServicesDbReader::_getCurrentSelectElementType() const
-{
-  ElementType selectElementType;
-  if (_nodeIndex < _totalNumMapNodes)
-  {
-    selectElementType = ElementType::Node;
-  }
-  else if (_wayIndex < _totalNumMapWays)
-  {
-    selectElementType = ElementType::Way;
-  }
-  else if (_relationIndex < _totalNumMapRelations)
-  {
-    selectElementType = ElementType::Relation;
-  }
-  else
-  {
-    assert(false);  //hasMoreElements should have kept us from being here
-  }
-  return selectElementType;
-}
-
-long ServicesDbReader::_getCurrentElementOffset(const ElementType& selectElementType) const
-{
-  long selectOffset = -1;
-  if (selectElementType == ElementType::Node)
-  {
-    selectOffset = _nodeIndex;
-  }
-  else if (selectElementType == ElementType::Way)
-  {
-    selectOffset = _wayIndex;
-  }
-  else if (selectElementType == ElementType::Relation)
-  {
-    selectOffset = _relationIndex;
-  }
-  else
-  {
-    assert(false);  //hasMoreElements should have kept us from being here
-  }
-  return selectOffset;
-}
-
-void ServicesDbReader::_incrementElementIndex(const ElementType& selectElementType)
-{
-  if (selectElementType == ElementType::Node)
-  {
-    _nodeIndex++;
-  }
-  else if (selectElementType == ElementType::Way)
-  {
-    _wayIndex++;
-  }
-  else if (selectElementType == ElementType::Relation)
-  {
-    _relationIndex++;
-  }
-  else
-  {
-    assert(false);  //hasMoreElements should have kept us from being here
-  }
 }
 
 ElementId ServicesDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
@@ -899,7 +829,6 @@ shared_ptr<Node> ServicesDbReader::_resultToNode(const QSqlQuery& resultIterator
 
   result->setTags(ServicesDb::unescapeTags(resultIterator.value(ServicesDb::NODES_TAGS)));
   _addTagsToElement(result);
-
   return result;
 }
 
@@ -936,7 +865,7 @@ shared_ptr<Way> ServicesDbReader::_resultToWay(const QSqlQuery& resultIterator, 
   way->setTags(ServicesDb::unescapeTags(resultIterator.value(ServicesDb::WAYS_TAGS)));
   _addTagsToElement(way);
 
-  /// @todo read these out in batch at the same time the element results are read
+  //TODO: read these out in batch at the same time the element results are read
   vector<long> nodeIds = _database.selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
@@ -957,7 +886,7 @@ shared_ptr<Way> ServicesDbReader::_resultToWay_OsmApi(const QSqlQuery& resultIte
       newWayId,
       ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR));
 
-  /// @todo read these out in batch at the same time the element results are read
+  //TODO: read these out in batch at the same time the element results are read
   vector<long> nodeIds = _database.selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
@@ -983,12 +912,12 @@ shared_ptr<Relation> ServicesDbReader::_resultToRelation(const QSqlQuery& result
       OsmUtils::fromTimeString(
         resultIterator.value(ServicesDb::RELATIONS_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ")),
       ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR/*,
-      "collection"*/));  /// @todo services db doesn't support relation "type" yet
+      "collection"*/));  //TODO: services db doesn't support relation "type" yet
 
   relation->setTags(ServicesDb::unescapeTags(resultIterator.value(ServicesDb::RELATIONS_TAGS)));
   _addTagsToElement(relation);
 
-  /// @todo read these out in batch at the same time the element results are read
+  //TODO: read these out in batch at the same time the element results are read
   vector<RelationData::Entry> members = _database.selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
   {
@@ -1010,9 +939,9 @@ shared_ptr<Relation> ServicesDbReader::_resultToRelation_OsmApi(const QSqlQuery&
       _status,
       newRelationId,
       ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR/*,
-      "collection"*/));  /// @todo services db doesn't support relation "type" yet
+      "collection"*/));  //TODO: services db doesn't support relation "type" yet
 
-  /// @todo read these out in batch at the same time the element results are read
+  //TODO: read these out in batch at the same time the element results are read
   vector<RelationData::Entry> members = _database.selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
   {

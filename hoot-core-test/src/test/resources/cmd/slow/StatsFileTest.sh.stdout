@@ -1,0 +1,443 @@
+****Quick Stats****
+Reprojecting 0 / 117         
+10:26:03.354 INFO  .../core/ops/CalculateStatsOp.cpp(  95) Calculating map statistics...
+10:26:03.354 INFO  .../core/ops/CalculateStatsOp.cpp( 357) Map statistics calculated.
+10:26:03.354 INFO  ...oot/core/io/MapStatsWriter.cpp( 221) Writing stats to file: test-output/StatsAllDataTypesA.txt
+Node Count	117
+Way Count	14
+Relation Count	0
+Minimum Node ID	-1559901
+Maximum Node ID	-1559547
+Minimum Way ID	-1559905
+Maximum Way ID	-1559687
+Minimum Relation ID	9.2233720368547758e+18
+Maximum Relation ID	-9.2233720368547758e+18
+****JSON Stats****
+Reprojecting 0 / 117         
+10:26:03.615 INFO  .../core/ops/CalculateStatsOp.cpp(  95) Calculating map statistics...
+10:26:04.562 INFO  .../core/ops/CalculateStatsOp.cpp( 357) Map statistics calculated.
+Reprojecting 0 / 116         
+10:26:04.586 INFO  .../core/ops/CalculateStatsOp.cpp(  95) Calculating map statistics...
+10:26:05.194 INFO  .../core/ops/CalculateStatsOp.cpp( 357) Map statistics calculated.
+{
+    "Node Count":
+    [
+        "117",
+        "116"
+    ],
+    "Way Count":
+    [
+        "14",
+        "12"
+    ],
+    "Relation Count":
+    [
+        "0",
+        "0"
+    ],
+    "Minimum Node ID":
+    [
+        "-1559901",
+        "-1560063"
+    ],
+    "Maximum Node ID":
+    [
+        "-1559547",
+        "-1559707"
+    ],
+    "Minimum Way ID":
+    [
+        "-1559905",
+        "-1560043"
+    ],
+    "Maximum Way ID":
+    [
+        "-1559687",
+        "-1559789"
+    ],
+    "Minimum Relation ID":
+    [
+        "9.2233720368547758e+18",
+        "9.2233720368547758e+18"
+    ],
+    "Maximum Relation ID":
+    [
+        "-9.2233720368547758e+18",
+        "-9.2233720368547758e+18"
+    ],
+    "Total Feature Tags":
+    [
+        "77",
+        "62"
+    ],
+    "Total Feature Information Tags":
+    [
+        "77",
+        "62"
+    ],
+    "Total Feature Metadata Tags":
+    [
+        "0",
+        "0"
+    ],
+    "Unique Names":
+    [
+        "12",
+        "12"
+    ],
+    "Meters of Linear Features":
+    [
+        "1268.3914716830379",
+        "1199.5578038005933"
+    ],
+    "Meters Squared of Area Features":
+    [
+        "20531.705361263041",
+        "18518.601059491091"
+    ],
+    "Meters of Highway":
+    [
+        "1268.3914716830379",
+        "1199.5578038005933"
+    ],
+    "Highway Unique Name Count":
+    [
+        "0",
+        "0"
+    ],
+    "Meters Squared of Buildings":
+    [
+        "20531.705361263041",
+        "18518.601059491091"
+    ],
+    "Building Unique Name Count":
+    [
+        "7",
+        "7"
+    ],
+    "Total Feature Count":
+    [
+        "25",
+        "22"
+    ],
+    "Total Conflatable Features":
+    [
+        "25",
+        "22"
+    ],
+    "Percentage of Total Features Conflatable":
+    [
+        "100",
+        "100"
+    ],
+    "Total Unconflatable Features":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Total Features Unconflatable":
+    [
+        "0",
+        "0"
+    ],
+    "Total Features Processed By Conflation":
+    [
+        "0",
+        "0"
+    ],
+    "Number of Match Creators":
+    [
+        "3",
+        "3"
+    ],
+    "Features Conflatable by: hoot::BuildingMatchCreator":
+    [
+        "10",
+        "8"
+    ],
+    "Features Conflatable by: hoot::PlacesPoiMatchCreator":
+    [
+        "11",
+        "10"
+    ],
+    "Features Conflatable by: hoot::HighwayMatchCreator":
+    [
+        "4",
+        "4"
+    ],
+    "Total Conflated Features":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Total Features Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Total Features Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Total Features Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Total Number of Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Total Unmatched Features":
+    [
+        "25",
+        "22"
+    ],
+    "Percentage of Total Features Unmatched":
+    [
+        "100",
+        "100"
+    ],
+    "POI Count":
+    [
+        "11",
+        "10"
+    ],
+    "Conflatable POIs":
+    [
+        "11",
+        "10"
+    ],
+    "Conflated POIs":
+    [
+        "0",
+        "0"
+    ],
+    "POIs Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Number of POI Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched POIs":
+    [
+        "11",
+        "10"
+    ],
+    "Percentage of POIs Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of POIs Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched POIs":
+    [
+        "100",
+        "100"
+    ],
+    "Highway Count":
+    [
+        "4",
+        "4"
+    ],
+    "Conflatable Highways":
+    [
+        "4",
+        "4"
+    ],
+    "Conflated Highways":
+    [
+        "0",
+        "0"
+    ],
+    "Highways Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Number of Highway Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Highways":
+    [
+        "4",
+        "4"
+    ],
+    "Meters of Highway Processed by Conflation":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Highways Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Highways Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Highways":
+    [
+        "100",
+        "100"
+    ],
+    "Building Count":
+    [
+        "10",
+        "8"
+    ],
+    "Conflatable Buildings":
+    [
+        "10",
+        "8"
+    ],
+    "Conflated Buildings":
+    [
+        "0",
+        "0"
+    ],
+    "Buildings Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Number of Building Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Buildings":
+    [
+        "10",
+        "8"
+    ],
+    "Meters Squared of Buildings Processed by Conflation":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Buildings Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Buildings Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Buildings":
+    [
+        "100",
+        "100"
+    ],
+    "Waterway Count":
+    [
+        "0",
+        "0"
+    ],
+    "Conflatable Waterways":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Waterways":
+    [
+        "0",
+        "0"
+    ],
+    "Waterways Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Number of Waterway Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Waterways":
+    [
+        "0",
+        "0"
+    ],
+    "Meters of Waterway Processed by Conflation":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Waterways Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Waterways Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Waterways":
+    [
+        "0",
+        "0"
+    ],
+    "Longest Tag":
+    [
+        "21",
+        "21"
+    ],
+    "Translated Populated Tag Percent":
+    [
+        "0.04434314131786158",
+        "0.042325581395348838"
+    ],
+    "Translated Populated Tag Count":
+    [
+        "107",
+        "91"
+    ],
+    "Translated Default Tag Count":
+    [
+        "1762",
+        "1549"
+    ],
+    "Translated Null Tag Count":
+    [
+        "544",
+        "510"
+    ],
+    "Building Translated Populated Tag Percent":
+    [
+        "0.040404040404040407",
+        "0.040404040404040407"
+    ],
+    "Highway Translated Populated Tag Percent":
+    [
+        "0.031847133757961783",
+        "0.025477707006369428"
+    ],
+    "POI Translated Populated Tag Percent":
+    [
+        "0.059119496855345913",
+        "0.058904109589041097"
+    ],
+    "Waterway Translated Populated Tag Percent":
+    [
+        "nan",
+        "nan"
+    ]
+}

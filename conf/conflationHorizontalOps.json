@@ -2,8 +2,7 @@
 	"id": "horizontal_conflation_options",
 	"elem_type": "group",
 	"description": "Cookie Cutter and Horizontal conflation options.",
-	"name": "Cookie Cutter and Horizontal Conflation Options",
-	"required":"true",
+	"name": "Cookie Cutter & Horizontal Options",
 	"members": [
       {
         "id": "reference_override_conflate_enable_old_roads",
@@ -131,7 +130,6 @@
 				"name":"Cookie Cutter Alpha Shape Buffer",
 				"defaultvalue":"0",
 				"hoot_key":"cookie.cutter.alpha.shape.buffer",
-				"required":"true"
 			},
 			{
 				"id":"horizontal_cookie_cutter_output_buffer",

@@ -22,10 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -106,7 +107,7 @@ public class JobResource
   	}
   	catch (Exception ee)
   	{
-
+  		//
   	}
   	 _initJob(jobId);
   	Runnable chainJobWorker = new processChainJobWorkerThread(jobId, jobs);
@@ -167,6 +168,11 @@ public class JobResource
 	  	  		{
 	  	  			// getting jobInfo from inside since it generates job id.
 	  	  			childJobInfo = _execReflection( jobId, job, jobStatusManager );
+	  	  			Object oWarn = childJobInfo.get("warnings");
+	  	  			if(oWarn != null)
+	  	  			{
+	  	  				warnings = oWarn.toString();
+	  	  			}
 	  	  		}
 	  	  		else if(excType.equalsIgnoreCase("reflection_sync"))
 	  	  		{
@@ -363,6 +369,12 @@ public class JobResource
 						{
 							throw new Exception(status.get("statusDetail").toString());
 						}
+						if(status.get("statusDetail") != null)
+						{
+							childJobInfo.put("warnings", status.get("statusDetail").toString());
+							childJobInfo.put("detail", "warning");
+							childJobInfo.put("status", JOB_STATUS.COMPLETE.toString());
+						}
 					}
 				}
 				else
@@ -384,7 +396,7 @@ public class JobResource
 					try {
 				    Thread.sleep(_chainJosStatusPingInterval);
 					} catch (InterruptedException e) {
-
+						//
 					}
 				}
 			}
@@ -409,7 +421,7 @@ public class JobResource
   	}
   	catch (Exception ee)
   	{
-
+  		//
   	}
   	 _initJob(jobId);
   	Runnable jobWorker = new processJobWorkerThread(jobId, params);
@@ -805,49 +817,41 @@ public class JobResource
   /**
    * Constructor. execManager is the one that handles the execution through
    * configured Native Interface.
+   * @throws IOException 
+   * @throws NumberFormatException 
    */
-  public JobResource()
+  public JobResource() throws NumberFormatException, IOException
   {
     appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
     dbAppContext = new ClassPathXmlApplicationContext("db/spring-database.xml");
 
     _jobExecMan = ((JobExecutionManager)appContext.getBean("jobExecutionManagerNative"));
 
+  	_chainJosStatusPingInterval = Long.parseLong(HootProperties.getProperty("chainJosStatusPingInterval"));
 
-    try
-    {
-    	_chainJosStatusPingInterval = Long.parseLong(HootProperties.getProperty("chainJosStatusPingInterval"));
+  	if(_chainJosStatusPingInterval < 1000)
+  	{
+  		_chainJosStatusPingInterval = 1000;
+  	}
 
-    	if(_chainJosStatusPingInterval < 1000)
+
+  	synchronized(_jobThreadLock)
+  	{
+    	if(jobThreadExecutor ==  null)
     	{
-    		_chainJosStatusPingInterval = 1000;
+    		int threadpoolSize = 5;
+    		try
+    		{
+    			Integer.parseInt(HootProperties.getProperty("internalJobThreadSize"));
+    		}
+    		catch(Exception ex)
+    		{
+    			log.error("Failed to get internalJobThreadSize. Setting threadpool size to 5." );
+    		}
+    		log.debug("Threadpool Acquire");
+    		jobThreadExecutor = Executors.newFixedThreadPool(threadpoolSize);
     	}
-
-
-    	synchronized(_jobThreadLock)
-    	{
-	    	if(jobThreadExecutor ==  null)
-	    	{
-	    		int threadpoolSize = 5;
-	    		try
-	    		{
-	    			Integer.parseInt(HootProperties.getProperty("internalJobThreadSize"));
-	    		}
-	    		catch(Exception ex)
-	    		{
-	    			log.error("Failed to get internalJobThreadSize. Setting threadpool size to 5." );
-	    		}
-	    		log.debug("Threadpool Acquire");
-	    		jobThreadExecutor = Executors.newFixedThreadPool(threadpoolSize);
-	    	}
-    	}
-
-    }
-    catch (Exception ex)
-    {
-
-    }
-
+  	}
   }
 
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -302,62 +302,69 @@ public class CustomScriptResource
   	for (String configFile : configFiles)
   	{
   		File f = new File(configFile);
-    	if(f.exists())
+    	if (f.exists())
     	{
     		FileReader reader = new FileReader(configFile);
-    		JSONParser jsonParser = new JSONParser();
-    		JSONArray defTranslations = (JSONArray)jsonParser.parse(reader);
-    		for(int i=0; i < defTranslations.size(); i++)
+    		try
     		{
-    			JSONObject oTrans = (JSONObject)defTranslations.get(i);
-    			oTrans.put("DEFAULT", true);
-    			String desc = oTrans.get("DESCRIPTION").toString();
-    			if(desc.length() == 0)
-    			{
-    				desc = oTrans.get("NAME").toString();
-    			}
-    			oTrans.put("DESCRIPTION", desc);
+    			JSONParser jsonParser = new JSONParser();
+      		JSONArray defTranslations = (JSONArray)jsonParser.parse(reader);
+      		for(int i=0; i < defTranslations.size(); i++)
+      		{
+      			JSONObject oTrans = (JSONObject)defTranslations.get(i);
+      			oTrans.put("DEFAULT", true);
+      			String desc = oTrans.get("DESCRIPTION").toString();
+      			if(desc.length() == 0)
+      			{
+      				desc = oTrans.get("NAME").toString();
+      			}
+      			oTrans.put("DESCRIPTION", desc);
 
-    			Object oCanExport = oTrans.get("CANEXPORT");
+      			Object oCanExport = oTrans.get("CANEXPORT");
 
-    			// If the CANEXPORT is not available then try to determine
-    			if(oCanExport == null)
-    			{
-    				// Get the script
-    				if(oTrans.get("PATH") != null)
-    				{
-    					File fScript = new File(homeFolder + "/" + oTrans.get("PATH").toString());
-    					if(fScript.exists())
-    					{
-    						String sScript = FileUtils.readFileToString(fScript);
-    						boolean canExport = validateExport(sScript);
-    						oTrans.put("CANEXPORT", canExport);
-    					}
-    				}
-    			}
+      			// If the CANEXPORT is not available then try to determine
+      			if(oCanExport == null)
+      			{
+      				// Get the script
+      				if(oTrans.get("PATH") != null)
+      				{
+      					File fScript = new File(homeFolder + "/" + oTrans.get("PATH").toString());
+      					if(fScript.exists())
+      					{
+      						String sScript = FileUtils.readFileToString(fScript);
+      						boolean canExport = validateExport(sScript);
+      						oTrans.put("CANEXPORT", canExport);
+      					}
+      				}
+      			}
+      		}
+
+      		// validate FOUO support
+      		if(defTranslations.size() > 0)
+      		{
+      			for(Object oTrans : defTranslations)
+      			{
+      				JSONObject jsTrans = (JSONObject) oTrans;
+      				if(jsTrans.get("FOUO_PATH") != null)
+      				{
+      					// See if FOUO folder exists
+      					File fouoPath = new File(homeFolder + "/" + jsTrans.get("FOUO_PATH").toString());
+      					if(fouoPath.exists())
+      					{
+      						filesList.add(jsTrans);
+      					}
+      				}
+      				else
+      				{
+      					// If there is no FOUO_PATH then assume it is not FOUO translation
+      					filesList.add(jsTrans);
+      				}
+      			}
+      		}
     		}
-
-    		// validate FOUO support
-    		if(defTranslations.size() > 0)
+    		finally
     		{
-    			for(Object oTrans : defTranslations)
-    			{
-    				JSONObject jsTrans = (JSONObject) oTrans;
-    				if(jsTrans.get("FOUO_PATH") != null)
-    				{
-    					// See if FOUO folder exists
-    					File fouoPath = new File(homeFolder + "/" + jsTrans.get("FOUO_PATH").toString());
-    					if(fouoPath.exists())
-    					{
-    						filesList.add(jsTrans);
-    					}
-    				}
-    				else
-    				{
-    					// If there is no FOUO_PATH then assume it is not FOUO translation
-    					filesList.add(jsTrans);
-    				}
-    			}
+    			reader.close();
     		}
     	}
   	}
@@ -370,7 +377,7 @@ public class CustomScriptResource
    * 
    * GET hoot-services/ingest/customscript/getscript?SCRIPT_NAME=MyTest
    * 
-   * * 	// A non-standard extension to include additional js files within the same dir
+   * 	// A non-standard extension to include additional js files within the same dir
 	 * 	// sub-tree.
 	 * 	require("example")
 	 *
@@ -621,6 +628,12 @@ public class CustomScriptResource
   }
 
 
+  /**
+   * Deletes requested script
+   * 
+   * @param deleteScriptsRequest
+   * @return ScriptsModifiedResponse
+   */
   @DELETE
   @Path("/deletescripts")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -663,6 +676,7 @@ public class CustomScriptResource
         }
         catch (Exception e)
         {
+        	assert(f != null);
           log.error("Failed to read file header for script: " + f.getName() + e.getMessage());
         }
       }
@@ -740,6 +754,10 @@ public class CustomScriptResource
       FileUtils.forceMkdir(getUploadDir());
     }
 
+	if(!hoot.services.utils.FileUtils.validateFilePath(scriptFolder, scriptFolder + "/" + name + ".js"))
+    {
+    	throw new Exception("Script name can not contain path.");
+    }
     File fScript = new File(scriptFolder + "/" + name + ".js");
 
     if (!fScript.exists())

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -217,7 +217,11 @@ public class BasemapResource extends JobControllerBase {
 	        log.debug("Preparing Basemap Ingest for :" + fName);
 	        String inputFileName = "";
 	        String bmName = inputName;
-	        bmName = fName;
+	        
+	        if(bmName == null || bmName.length() == 0)
+	        {
+	        	bmName = fName;
+	        }
 
 
 	  			inputFileName = uploadedFilesPaths.get(fName);

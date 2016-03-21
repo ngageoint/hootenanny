@@ -288,15 +288,6 @@ in meters.
 The buffer to add to the alpha shape before cutting by the cookie cutter map operation
 (CookieCutterOp). A negative value will make the shape smaller.  Value in meters.
 
-=== cookie.cutter.output.buffer
-
-* Data Type: double
-* Default Value: `0.0`
-
-Optional buffer value used by the cookie cutter map operation (CookieCutterOp).  If the buffer
-value is provided then the shape is buffered by this many meters before cutting. The buffer may be
-positive or negative.
-
 === cookie.cutter.output.crop
 
 * Data Type: bool
@@ -1355,6 +1346,39 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.match.threshold
+
+* Data Type: double
+* Default Value: `${conflate.match.threshold.default}`
+
+The threshold at which a match is called a match for PoiPolygon.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== poi.polygon.miss.threshold
+
+* Data Type: double
+* Default Value: `${conflate.miss.threshold.default}`
+
+The threshold at which a miss is called a miss for PoiPolygon.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== poi.polygon.review.threshold
+
+* Data Type: double
+* Default Value: `${conflate.review.threshold.default}`
+
+The threshold at which a review is called a review for PoiPolygon. See `conflate.review.threshold.default`.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
 === poi.polygon.match.name.threshold
 
 * Data Type: double
@@ -1578,21 +1602,6 @@ Email address of the DG reader user.  Can be set here for debugging and testing.
 * Default Value: `50000`
 
 The maximum number of OSM elements that may be read from the services database into a single OSM map during a partial map read.
-
-=== services.db.test.url
-
-* Data Type: string
-* Default Value: `postgresql://hoot:hoottest@localhost:5432/hoot/testMap`
-
-Contains the DB URL for unit testing. This is typically only used by developers.
-
-=== services.db.test.url.osmapi
-
-* Data Type: string
-* Default Value: `postgresql://hoot:hoottest@localhost:5432/osmapi_test`
-
-Contains the DB URL for an OpenStreetMaps (OSM) API database for unit testing. This is
-typically only used by developers.
 
 === services.db.writer.create.user
 

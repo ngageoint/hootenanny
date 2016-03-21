@@ -236,7 +236,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 	 * @param reviewRelationWithMembers - list of member bbox
 	 * @throws Exception
 	 */
-	private boolean _combineBbox(final Map<Long, ReviewableItemBboxInfo> allReviewables, 
+	private static boolean _combineBbox(final Map<Long, ReviewableItemBboxInfo> allReviewables, 
 			final Map<Long, ReviewableItemBboxInfo> reviewRelationWithMembers) throws Exception
 	{
 		boolean isOverFlow = false;
@@ -329,7 +329,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 	 * @return - BoundingBox
 	 * @throws Exception
 	 */
-	private BoundingBox _resultSetToBbox(final Tuple tup, final Path bboxPath) throws Exception
+	private static BoundingBox _resultSetToBbox(final Tuple tup, final Path bboxPath) throws Exception
 	{
 		BoundingBox bbox = null;
 		double minLon=-1, minLat=-1, maxLon=-1, maxLat=-1;
@@ -345,7 +345,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 		}
 		catch (Exception ex)
 		{
-			log.error(ex.getMessage());;
+			log.error(ex.getMessage());
 			throw ex;
 		}
 		return bbox;

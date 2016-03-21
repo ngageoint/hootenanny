@@ -1,7 +1,0 @@
-
-[[HootenannyVagrantSetup]]
-== Using Vagrant to set up a Development Hootenanny Instance 
- 
-To make the installation process simpler for users who wish to set up a Hootenanny instance within a virtual environment, we have provided a pre-configured Vagrant file that can be easily deployed assuming the user can install and use Vagrant within their particular development environment.  link:$$https://docs.vagrantup.com/v2/$$[Vagrant] is an open source software application that works with common VM providers such as link:$$https://www.virtualbox.org/[Oracle VirtualBox] or link:$$http://www.vmware.com/$$[VMWare] to deploy any scriptable application stack in an automated and configurable manner.  It can be installed on Windows, MacOS X, Linux (DEB) and Linux (RPM). Using the recommended minimum parameters from <<CreateHootVM>>, we have packaged a Vagrant file that will build Hootenanny with all of the necessary dependencies assuming you are working within a supported Operating System such as Windows, Ubuntu, or CentOS/RHEL 6.5. Note that this is typically practical from a physical machine rather than a virtualized environment since the Vagrant file itself creates a corresponding VM. Updated instructions for installing on Ubuntu can also be found in the *VAGRANT.MD* file located in $HOOT_HOME/.   
-
-

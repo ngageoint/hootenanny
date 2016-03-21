@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -64,13 +64,15 @@ public class ResourcesCleanUtil implements Executable {
   private ClassPathXmlApplicationContext appContext;
 
 	private String finalStatusDetail;
+  @Override
   public String getFinalStatusDetail() { return finalStatusDetail; }
 	public ResourcesCleanUtil()
 	{
 		appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
 	}
 
-	public void exec(JSONObject command) throws Exception
+	@Override
+  public void exec(JSONObject command) throws Exception
 	{
 		JSONObject res = deleteLayers(command.get("mapId").toString());
 		finalStatusDetail = res.toJSONString();
@@ -123,6 +125,18 @@ public class ResourcesCleanUtil implements Executable {
 	    	// the new path is within container path
 	    	final String basePath = _ingestPath;
 	    	final String newPath = _ingestPath + "/" + mapName;
+	    	
+	    	// Fortify fix
+	    	if(!hoot.services.utils.FileUtils.validateFilePath(_ingestPath, newPath))
+	    	{
+	    		throw new Exception("Map name can not contain path.");
+	    	}
+
+	    	// Fortify fix
+	    	if(!hoot.services.utils.FileUtils.validateFilePath(_ingestPath, newPath))
+	    	{
+	    		throw new Exception("Map name can not contain path.");
+	    	}
 
 	    	boolean isValidated = false;
 	    	File fDel = new File(newPath);
@@ -171,14 +185,14 @@ public class ResourcesCleanUtil implements Executable {
 	 * see CoreServiceContext.xml
 	 */
 	public void init(){
-
+		//
 	}
 
 	/**
 	 * see CoreServiceContext.xml
 	 */
 	public void destroy(){
-
+		//
 	}
 
 }

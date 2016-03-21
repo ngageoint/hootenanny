@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -117,7 +117,7 @@ class PaintNodesCmd : public BaseCommand
       {
         ElementPtr e = r->readNextElement();
 
-        if (e.get() && e->getElementType() == ElementType::Node)
+        if (e->getElementType() == ElementType::Node)
         {
           shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
           int px = int((n->getX() - envelope.getMinX()) / pixelSize);
