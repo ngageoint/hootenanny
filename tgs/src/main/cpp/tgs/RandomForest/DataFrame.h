@@ -98,6 +98,12 @@ namespace Tgs
     void addDataVector(std::string label, const double* dataItem, double eventWeight = 1.);
 
     /**
+     * Checks to ensure that there is a value for each factor. If there are one or more bad factors
+     * an exception is thrown. Call validateData to automatically fix such errors.
+     */
+    void checkData() const;
+
+    /**
     *  Resets all the internal data structures associated with data frame
     */  
     void clear();
@@ -116,7 +122,7 @@ namespace Tgs
     * @return the computed bandwidth
     */
     double computeBandwidthByFactor(unsigned int fIdx, std::vector<unsigned int> & dataIndices, 
-      double & minVal, double & maxVal, double & mean, double & q1, double & q3);
+      double & minVal, double & maxVal, double & mean, double & q1, double & q3) const;
 
     /**
     * Deactivates the factor by removing its index from the 
@@ -129,14 +135,14 @@ namespace Tgs
     /**
     *  @return true is DataFrame contains 0 data vectors
     */
-    bool empty(){return _data.empty();}
+    bool empty() const { return _data.empty(); }
 
     /**
      * @brief exportData exports the data to an XML document
      * @param modelDoc the main XML doc object
      * @param parentNode the node to add the data to
      */
-    void exportData(QDomDocument & modelDoc, QDomElement & parentNode);
+    void exportData(QDomDocument & modelDoc, QDomElement & parentNode) const;
 
     /**
     *  Export the data frame as XML through to the file stream
@@ -167,7 +173,7 @@ namespace Tgs
     *  @param populations the output map of class names to number of instances
     */
     void getClassPopulations(const std::vector<unsigned int>& indices, 
-      HashMap<std::string, int>& populations);
+      HashMap<std::string, int>& populations) const;
 
     /**
      *  Get the number of instances per class based on the subset of data
@@ -248,7 +254,7 @@ namespace Tgs
     * @param dataSet the data vector set
     * @return the class label corresponding to the majority of data vectors
     */
-    std::string getMajorityTrainingLabel(std::vector<unsigned int> & dataSet);
+    std::string getMajorityTrainingLabel(std::vector<unsigned int> & dataSet) const;
 
     /**
      * Returns the NullTreatment for a given factor
@@ -299,7 +305,7 @@ namespace Tgs
     *  Checks to see if the data vectors belonging to the set of indices
     * are all of the same class
     */
-    bool isDataSetPure(std::vector<unsigned int> & indices);
+    bool isDataSetPure(std::vector<unsigned int> & indices) const;
 
     /**
      * Returns true if the specified column is nominal.
@@ -321,7 +327,7 @@ namespace Tgs
     * @param oob  the output container to hold indices to data vectors for the out of bag set
     */
     void makeBalancedBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
-      std::vector<unsigned int> & oob, unsigned int seed = 0);
+      std::vector<unsigned int> & oob, unsigned int seed = 0) const;
 
     /**
     *  Creates balanced binary bootstrap and out of bag sets with replacement
@@ -345,7 +351,7 @@ namespace Tgs
     * @param oob  the output container to hold indices to data vectors for the out of bag set
     */
     void makeBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
-      std::vector<unsigned int> & oob, unsigned int seed = 0);
+      std::vector<unsigned int> & oob, unsigned int seed = 0) const;
 
     /**
      * Returns what DataFrame considers a null value (NaN in double land).
@@ -399,7 +405,7 @@ namespace Tgs
     * has already been resized to the number of requested factors
     */
     void selectRandomFactors(unsigned int numFactors, std::vector<unsigned int> & fIndices,
-                             unsigned int seed = 0);
+                             unsigned int seed = 0) const;
 
     /**
     * Adds all factors to the active factor list.
@@ -452,12 +458,19 @@ namespace Tgs
     void sortIndicesOnFactorValue(std::vector<unsigned int> & indices, unsigned int fIdx) const;
 
     /**
-    * Checks to ensure that there is a value for each factor.  If all values are the
-    * same then the factor is deactivated.
-    */
-    void validateData();
+     * Returns an XML string that represents this data frame.
+     */
+    QString toXmlString() const;
+
+    /**
+     * Checks to ensure that there is a value for each factor.  If all values are the
+     * same then the factor is deactivated.
+     */
+    void validateData() const;
 
   private:
+
+    std::vector<std::string> _getBadFactors() const;
      
     /**
     *  Imports a data vectpr

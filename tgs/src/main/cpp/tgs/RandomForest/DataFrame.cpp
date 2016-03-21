@@ -114,6 +114,15 @@ namespace Tgs
     }
   }
 
+  void DataFrame::checkData() const
+  {
+    if (_getBadFactors().size() > 0)
+    {
+      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__,
+        "Found 1 or more bad factors. Try calling validateData().");
+    }
+  }
+
   void DataFrame::clear()
   {
     try
@@ -140,7 +149,7 @@ namespace Tgs
 
   double DataFrame::computeBandwidthByFactor(unsigned int fIdx,
     std::vector<unsigned int> & dataIndices, double & minVal, double & maxVal, double & mean,
-    double & q1, double & q3)
+    double & q1, double & q3) const
   {
     try
     {
@@ -226,7 +235,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::exportData(QDomDocument & modelDoc, QDomElement & parentNode)
+  void DataFrame::exportData(QDomDocument & modelDoc, QDomElement & parentNode) const
   {
     try
     {
@@ -470,8 +479,46 @@ namespace Tgs
     }
   }
 
+  std::vector<std::string> DataFrame::getBadFactors() const
+  {
+    try
+    {
+      if(!_data.empty())
+      {
+        std::vector<std::string> badFactors;
+        for(unsigned int i = 0; i < _activeFactorIndices.size(); i++)
+        {
+          std::set<double> dataCheck;
+
+          for(unsigned int k = 0; k < _data.size(); k++)
+          {
+            dataCheck.insert(_data[k][_activeFactorIndices[i]]);
+          }
+
+          if(dataCheck.size() == 1) //All data has the same value
+          {
+            std::cout << "Deactivating factor due to all vectors having the same value: " <<
+              _factorLabels[_activeFactorIndices[i]] << std::endl;
+
+            badFactors.push_back(_factorLabels[_activeFactorIndices[i]]);
+          }
+        }
+
+        return badFactors;
+      }
+      else
+      {
+        throw Exception(__LINE__, "Can't validate empty data frame.");
+      }
+    }
+    catch(const Exception & e)
+    {
+      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+    }
+  }
+
   void DataFrame::getClassPopulations(const std::vector<unsigned int> & indices, 
-    HashMap<std::string, int>& populations)
+    HashMap<std::string, int>& populations) const
   {
     try
     {
@@ -624,7 +671,7 @@ namespace Tgs
     }
   }
 
-  std::string DataFrame::getMajorityTrainingLabel(std::vector<unsigned int> & dataSet)
+  std::string DataFrame::getMajorityTrainingLabel(std::vector<unsigned int> & dataSet) const
   {
     try
     {
@@ -922,7 +969,7 @@ namespace Tgs
     }
   }
 
-  bool DataFrame::isDataSetPure(std::vector<unsigned int> & indices)
+  bool DataFrame::isDataSetPure(std::vector<unsigned int> & indices) const
   {
     try
     {
@@ -992,7 +1039,7 @@ namespace Tgs
   }
 
   void DataFrame::makeBalancedBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
-    std::vector<unsigned int> & oob, unsigned int seed)
+    std::vector<unsigned int> & oob, unsigned int seed) const
   {
     try
     {
@@ -1170,7 +1217,7 @@ namespace Tgs
 
 
   void DataFrame::makeBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
-    std::vector<unsigned int> & oob, unsigned int seed)
+    std::vector<unsigned int> & oob, unsigned int seed) const
   {
     try
     {
@@ -1310,7 +1357,7 @@ namespace Tgs
   }
 
   void DataFrame::selectRandomFactors(unsigned int numFactors,
-    std::vector<unsigned int> & fIndices, unsigned int seed)
+    std::vector<unsigned int> & fIndices, unsigned int seed) const
   {
     try
     {
@@ -1500,39 +1547,15 @@ namespace Tgs
     }
   }
 
-  void DataFrame::validateData()
+  void DataFrame::validateData() const
   {
     try
     {
-      if(!_data.empty())
+      std::vector<std::string> badFactors = _getBadFactors();
+
+      for(unsigned int j = 0; j < badFactors.size(); j++)
       {
-        std::vector<std::string> badFactors;
-        for(unsigned int i = 0; i < _activeFactorIndices.size(); i++)
-        {
-          std::set<double> dataCheck;
-
-          for(unsigned int k = 0; k < _data.size(); k++)
-          {
-            dataCheck.insert(_data[k][_activeFactorIndices[i]]);
-          }
-
-          if(dataCheck.size() == 1) //All data has the same value
-          {
-            std::cout << "Deactivating factor due to all vectors having the same value: " <<
-              _factorLabels[_activeFactorIndices[i]] << std::endl;
-
-            badFactors.push_back(_factorLabels[_activeFactorIndices[i]]);
-          }
-        }
-
-        for(unsigned int j = 0; j < badFactors.size(); j++)
-        {
-          deactivateFactor(badFactors[j]);
-        }
-      }
-      else
-      {
-        throw Exception(__LINE__, "Can't validate empty data frame.");
+        deactivateFactor(badFactors[j]);
       }
     }
     catch(const Exception & e)
@@ -1676,6 +1699,16 @@ namespace Tgs
     {
       throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
     }
+  }
+
+  QString DataFrame::toXmlString() const
+  {
+    QDomDocument doc("df");
+    QDomElement root = doc.createElement("dataFrame");
+    doc.appendChild(root);
+    exportData(doc, root);
+
+    return doc.toString();
   }
 }  //End namespace
 

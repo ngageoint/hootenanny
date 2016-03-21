@@ -146,7 +146,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::findAverageError(boost::shared_ptr<DataFrame> data, double & average,
+  void BaseRandomForest::findAverageError(boost::shared_ptr<const DataFrame> data, double & average,
     double & stdDev)
   {
     try
@@ -208,7 +208,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::getFactorImportance(boost::shared_ptr<DataFrame> data,
+  void BaseRandomForest::getFactorImportance(const shared_ptr<const DataFrame> &data,
     std::map<std::string, double> & factorImportance)
   {
     try

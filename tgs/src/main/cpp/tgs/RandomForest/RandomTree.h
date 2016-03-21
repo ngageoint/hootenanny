@@ -92,7 +92,7 @@ namespace Tgs
     *
     * @param data this data frame contains all the data vectors in the training set
     */
-    double computeErrorRate(boost::shared_ptr<DataFrame> data);
+    double computeErrorRate(boost::shared_ptr<const DataFrame> data);
 
     /**
     * Computes the proximity of the data vectors in the data set by running the 
@@ -159,7 +159,7 @@ namespace Tgs
     * @param nodeSize the minimum number of data vectors in a set to split a node 
     * @param balanced true if the tree should used balanced data
     */
-    void trainMulticlass(boost::shared_ptr<DataFrame> data, unsigned int numFactors,
+    void trainMulticlass(const shared_ptr<const DataFrame>& data, unsigned int numFactors,
       unsigned int nodeSize = 1, bool balanced = false);
 
     /**
@@ -179,7 +179,7 @@ namespace Tgs
     /**
     * Recursive function for building random tree nodes
     */
-    void _build(boost::shared_ptr<DataFrame> data, std::vector<unsigned int> & dataSet,
+    void _build(const shared_ptr<const DataFrame>& data, std::vector<unsigned int> & dataSet,
       boost::shared_ptr<TreeNode> &node, unsigned int nodeSize);
 
     /**

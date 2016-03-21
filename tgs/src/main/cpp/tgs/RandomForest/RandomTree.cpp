@@ -149,7 +149,7 @@ namespace Tgs
     }
   }
 
-  double RandomTree::computeErrorRate(boost::shared_ptr<DataFrame> data)
+  double RandomTree::computeErrorRate(boost::shared_ptr<const DataFrame> data)
   {
     try
     {
@@ -410,7 +410,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::trainMulticlass(boost::shared_ptr<DataFrame> data, unsigned int numFactors,
+  void RandomTree::trainMulticlass(const shared_ptr<const DataFrame>& data, unsigned int numFactors,
     unsigned int nodeSize, bool balanced)
   {
     try
@@ -473,8 +473,8 @@ namespace Tgs
 
   }
 
-  void RandomTree::_build(boost::shared_ptr<DataFrame> data, std::vector<unsigned int> & dataSet,
-    boost::shared_ptr<TreeNode> & node, unsigned int nodeSize)
+  void RandomTree::_build(const shared_ptr<const DataFrame>& data,
+    std::vector<unsigned int> & dataSet, boost::shared_ptr<TreeNode> & node, unsigned int nodeSize)
   {
     try
     {

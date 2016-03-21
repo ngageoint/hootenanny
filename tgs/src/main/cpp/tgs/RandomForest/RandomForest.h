@@ -88,7 +88,7 @@ namespace Tgs
     * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
     * @param balanced true if the forest will be balanced
     */
-    void trainMulticlass(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
+    void trainMulticlass(const boost::shared_ptr<const DataFrame>& data, unsigned int numTrees,
       unsigned int numFactors, unsigned int nodeSize = 1, double retrain = 1.0,
       bool balanced = false);
 
