@@ -58,7 +58,7 @@ namespace Tgs
     {
       cout << qHash(_trainInputs.data->toXmlString()) << endl;
 
-      tree->trainMulticlass(*_trainInputs.data, _trainInputs.numFactors, _trainInputs.nodeSize,
+      tree->trainMulticlass(_trainInputs.data, _trainInputs.numFactors, _trainInputs.nodeSize,
         _trainInputs.balanced);
       cout << qHash(_trainInputs.data->toXmlString()) << endl;
 
@@ -84,7 +84,7 @@ namespace Tgs
     }
   }
 
-  void MultithreadedRandomForest::trainMulticlass(const shared_ptr<const DataFrame>& data,
+  void MultithreadedRandomForest::trainMulticlass(const shared_ptr<DataFrame> &data,
     unsigned int numTrees, unsigned int numFactors, unsigned int nodeSize, double retrain,
     bool balanced)
   {
@@ -108,8 +108,6 @@ namespace Tgs
 
         //Initialize the thread pool
         QThreadPool pool;
-        #warning remove me
-        pool.setMaxThreadCount(1);
         pool.setExpiryTimeout(-1);
 
         QList<boost::shared_ptr<RandomTree> > mapTrees;

@@ -116,7 +116,7 @@ namespace Tgs
 
   void DataFrame::checkData() const
   {
-    if (_getBadFactors().size() > 0)
+    if (getBadFactors().size() > 0)
     {
       throw Exception(typeid(this).name(), __FUNCTION__, __LINE__,
         "Found 1 or more bad factors. Try calling validateData().");
@@ -1547,11 +1547,11 @@ namespace Tgs
     }
   }
 
-  void DataFrame::validateData() const
+  void DataFrame::validateData()
   {
     try
     {
-      std::vector<std::string> badFactors = _getBadFactors();
+      std::vector<std::string> badFactors = getBadFactors();
 
       for(unsigned int j = 0; j < badFactors.size(); j++)
       {

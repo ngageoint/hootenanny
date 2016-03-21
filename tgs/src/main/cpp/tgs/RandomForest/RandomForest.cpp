@@ -146,7 +146,7 @@ namespace Tgs
     }
   }
 
-  void RandomForest::trainMulticlass(const shared_ptr<const DataFrame>& data, unsigned int numTrees,
+  void RandomForest::trainMulticlass(const shared_ptr<DataFrame>& data, unsigned int numTrees,
     unsigned int numFactors, unsigned int nodeSize, double retrain, bool balanced)
   {
     try

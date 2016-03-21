@@ -159,6 +159,11 @@ namespace Tgs
     size_t getActiveFactorCount() const { return _activeFactorIndices.size(); }
 
     /**
+     * Returns a list of factors that contain only one data value.
+     */
+    std::vector<std::string> getBadFactors() const;
+
+    /**
     *  Gets the class labels unique to the whole data set
     *
     * @return the class labels
@@ -466,12 +471,10 @@ namespace Tgs
      * Checks to ensure that there is a value for each factor.  If all values are the
      * same then the factor is deactivated.
      */
-    void validateData() const;
+    void validateData();
 
   private:
 
-    std::vector<std::string> _getBadFactors() const;
-     
     /**
     *  Imports a data vectpr
     *
