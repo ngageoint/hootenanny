@@ -9,45 +9,45 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- Name: btree_gist; Type: EXTENSION; Schema: -; Owner: 
+-- Name: btree_gist; Type: EXTENSION; Schema: -; Owner:
 --
 
 CREATE EXTENSION IF NOT EXISTS btree_gist WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION btree_gist; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION btree_gist; Type: COMMENT; Schema: -; Owner:
 --
 
 COMMENT ON EXTENSION btree_gist IS 'support for indexing common datatypes in GiST';
 
 
 --
--- Name: hstore; Type: EXTENSION; Schema: -; Owner: 
+-- Name: hstore; Type: EXTENSION; Schema: -; Owner:
 --
 
-CREATE EXTENSION IF NOT EXISTS hstore WITH SCHEMA public;
+--CREATE EXTENSION IF NOT EXISTS hstore WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION hstore; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION hstore; Type: COMMENT; Schema: -; Owner:
 --
 
-COMMENT ON EXTENSION hstore IS 'data type for storing sets of (key, value) pairs';
+--COMMENT ON EXTENSION hstore IS 'data type for storing sets of (key, value) pairs';
 
 
 SET search_path = public, pg_catalog;
@@ -152,7 +152,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: acls; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: acls; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE acls (
@@ -188,7 +188,7 @@ ALTER SEQUENCE acls_id_seq OWNED BY acls.id;
 
 
 --
--- Name: changeset_comments; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: changeset_comments; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE changeset_comments (
@@ -225,7 +225,7 @@ ALTER SEQUENCE changeset_comments_id_seq OWNED BY changeset_comments.id;
 
 
 --
--- Name: changeset_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: changeset_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE changeset_tags (
@@ -238,7 +238,7 @@ CREATE TABLE changeset_tags (
 ALTER TABLE public.changeset_tags OWNER TO hoot;
 
 --
--- Name: changesets; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: changesets; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE changesets (
@@ -278,7 +278,7 @@ ALTER SEQUENCE changesets_id_seq OWNED BY changesets.id;
 
 
 --
--- Name: changesets_subscribers; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: changesets_subscribers; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE changesets_subscribers (
@@ -290,7 +290,7 @@ CREATE TABLE changesets_subscribers (
 ALTER TABLE public.changesets_subscribers OWNER TO hoot;
 
 --
--- Name: client_applications; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: client_applications; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE client_applications (
@@ -338,7 +338,7 @@ ALTER SEQUENCE client_applications_id_seq OWNED BY client_applications.id;
 
 
 --
--- Name: current_node_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_node_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE current_node_tags (
@@ -351,7 +351,7 @@ CREATE TABLE current_node_tags (
 ALTER TABLE public.current_node_tags OWNER TO hoot;
 
 --
--- Name: current_nodes; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_nodes; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE current_nodes (
@@ -390,7 +390,7 @@ ALTER SEQUENCE current_nodes_id_seq OWNED BY current_nodes.id;
 
 
 --
--- Name: current_relation_members; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_relation_members; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE current_relation_members (
@@ -405,7 +405,7 @@ CREATE TABLE current_relation_members (
 ALTER TABLE public.current_relation_members OWNER TO hoot;
 
 --
--- Name: current_relation_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_relation_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE current_relation_tags (
@@ -418,7 +418,7 @@ CREATE TABLE current_relation_tags (
 ALTER TABLE public.current_relation_tags OWNER TO hoot;
 
 --
--- Name: current_relations; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_relations; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE current_relations (
@@ -454,7 +454,7 @@ ALTER SEQUENCE current_relations_id_seq OWNED BY current_relations.id;
 
 
 --
--- Name: current_way_nodes; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_way_nodes; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE current_way_nodes (
@@ -467,7 +467,7 @@ CREATE TABLE current_way_nodes (
 ALTER TABLE public.current_way_nodes OWNER TO hoot;
 
 --
--- Name: current_way_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_way_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE current_way_tags (
@@ -480,7 +480,7 @@ CREATE TABLE current_way_tags (
 ALTER TABLE public.current_way_tags OWNER TO hoot;
 
 --
--- Name: current_ways; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_ways; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE current_ways (
@@ -516,7 +516,7 @@ ALTER SEQUENCE current_ways_id_seq OWNED BY current_ways.id;
 
 
 --
--- Name: diary_comments; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: diary_comments; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE diary_comments (
@@ -555,7 +555,7 @@ ALTER SEQUENCE diary_comments_id_seq OWNED BY diary_comments.id;
 
 
 --
--- Name: diary_entries; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: diary_entries; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE diary_entries (
@@ -597,7 +597,7 @@ ALTER SEQUENCE diary_entries_id_seq OWNED BY diary_entries.id;
 
 
 --
--- Name: friends; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: friends; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE friends (
@@ -631,7 +631,7 @@ ALTER SEQUENCE friends_id_seq OWNED BY friends.id;
 
 
 --
--- Name: gps_points; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: gps_points; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE gps_points (
@@ -648,7 +648,7 @@ CREATE TABLE gps_points (
 ALTER TABLE public.gps_points OWNER TO hoot;
 
 --
--- Name: gpx_file_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: gpx_file_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE gpx_file_tags (
@@ -682,7 +682,7 @@ ALTER SEQUENCE gpx_file_tags_id_seq OWNED BY gpx_file_tags.id;
 
 
 --
--- Name: gpx_files; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: gpx_files; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE gpx_files (
@@ -724,7 +724,7 @@ ALTER SEQUENCE gpx_files_id_seq OWNED BY gpx_files.id;
 
 
 --
--- Name: languages; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: languages; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE languages (
@@ -737,7 +737,7 @@ CREATE TABLE languages (
 ALTER TABLE public.languages OWNER TO hoot;
 
 --
--- Name: messages; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: messages; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE messages (
@@ -778,7 +778,7 @@ ALTER SEQUENCE messages_id_seq OWNED BY messages.id;
 
 
 --
--- Name: node_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: node_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE node_tags (
@@ -792,7 +792,7 @@ CREATE TABLE node_tags (
 ALTER TABLE public.node_tags OWNER TO hoot;
 
 --
--- Name: nodes; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: nodes; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE nodes (
@@ -811,7 +811,7 @@ CREATE TABLE nodes (
 ALTER TABLE public.nodes OWNER TO hoot;
 
 --
--- Name: note_comments; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: note_comments; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE note_comments (
@@ -850,7 +850,7 @@ ALTER SEQUENCE note_comments_id_seq OWNED BY note_comments.id;
 
 
 --
--- Name: notes; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: notes; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE notes (
@@ -889,7 +889,7 @@ ALTER SEQUENCE notes_id_seq OWNED BY notes.id;
 
 
 --
--- Name: oauth_nonces; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: oauth_nonces; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE oauth_nonces (
@@ -925,7 +925,7 @@ ALTER SEQUENCE oauth_nonces_id_seq OWNED BY oauth_nonces.id;
 
 
 --
--- Name: oauth_tokens; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: oauth_tokens; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE oauth_tokens (
@@ -977,7 +977,7 @@ ALTER SEQUENCE oauth_tokens_id_seq OWNED BY oauth_tokens.id;
 
 
 --
--- Name: redactions; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: redactions; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE redactions (
@@ -1015,7 +1015,7 @@ ALTER SEQUENCE redactions_id_seq OWNED BY redactions.id;
 
 
 --
--- Name: relation_members; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: relation_members; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE relation_members (
@@ -1031,7 +1031,7 @@ CREATE TABLE relation_members (
 ALTER TABLE public.relation_members OWNER TO hoot;
 
 --
--- Name: relation_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: relation_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE relation_tags (
@@ -1045,7 +1045,7 @@ CREATE TABLE relation_tags (
 ALTER TABLE public.relation_tags OWNER TO hoot;
 
 --
--- Name: relations; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: relations; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE relations (
@@ -1061,7 +1061,7 @@ CREATE TABLE relations (
 ALTER TABLE public.relations OWNER TO hoot;
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE schema_migrations (
@@ -1072,7 +1072,7 @@ CREATE TABLE schema_migrations (
 ALTER TABLE public.schema_migrations OWNER TO hoot;
 
 --
--- Name: user_blocks; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: user_blocks; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE user_blocks (
@@ -1113,7 +1113,7 @@ ALTER SEQUENCE user_blocks_id_seq OWNED BY user_blocks.id;
 
 
 --
--- Name: user_preferences; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: user_preferences; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE user_preferences (
@@ -1126,7 +1126,7 @@ CREATE TABLE user_preferences (
 ALTER TABLE public.user_preferences OWNER TO hoot;
 
 --
--- Name: user_roles; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: user_roles; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE user_roles (
@@ -1163,7 +1163,7 @@ ALTER SEQUENCE user_roles_id_seq OWNED BY user_roles.id;
 
 
 --
--- Name: user_tokens; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: user_tokens; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE user_tokens (
@@ -1199,7 +1199,7 @@ ALTER SEQUENCE user_tokens_id_seq OWNED BY user_tokens.id;
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: users; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE users (
@@ -1260,7 +1260,7 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
--- Name: way_nodes; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: way_nodes; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE way_nodes (
@@ -1274,7 +1274,7 @@ CREATE TABLE way_nodes (
 ALTER TABLE public.way_nodes OWNER TO hoot;
 
 --
--- Name: way_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: way_tags; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE way_tags (
@@ -1288,7 +1288,7 @@ CREATE TABLE way_tags (
 ALTER TABLE public.way_tags OWNER TO hoot;
 
 --
--- Name: ways; Type: TABLE; Schema: public; Owner: hoot; Tablespace: 
+-- Name: ways; Type: TABLE; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE TABLE ways (
@@ -2258,7 +2258,7 @@ COPY ways (way_id, changeset_id, "timestamp", version, visible, redaction_id) FR
 
 
 --
--- Name: acls_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: acls_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY acls
@@ -2266,7 +2266,7 @@ ALTER TABLE ONLY acls
 
 
 --
--- Name: changeset_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: changeset_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY changeset_comments
@@ -2274,7 +2274,7 @@ ALTER TABLE ONLY changeset_comments
 
 
 --
--- Name: changesets_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: changesets_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY changesets
@@ -2282,7 +2282,7 @@ ALTER TABLE ONLY changesets
 
 
 --
--- Name: client_applications_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: client_applications_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY client_applications
@@ -2290,7 +2290,7 @@ ALTER TABLE ONLY client_applications
 
 
 --
--- Name: current_node_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_node_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY current_node_tags
@@ -2298,7 +2298,7 @@ ALTER TABLE ONLY current_node_tags
 
 
 --
--- Name: current_nodes_pkey1; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_nodes_pkey1; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY current_nodes
@@ -2306,7 +2306,7 @@ ALTER TABLE ONLY current_nodes
 
 
 --
--- Name: current_relation_members_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_relation_members_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY current_relation_members
@@ -2314,7 +2314,7 @@ ALTER TABLE ONLY current_relation_members
 
 
 --
--- Name: current_relation_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_relation_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY current_relation_tags
@@ -2322,7 +2322,7 @@ ALTER TABLE ONLY current_relation_tags
 
 
 --
--- Name: current_relations_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_relations_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY current_relations
@@ -2330,7 +2330,7 @@ ALTER TABLE ONLY current_relations
 
 
 --
--- Name: current_way_nodes_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_way_nodes_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY current_way_nodes
@@ -2338,7 +2338,7 @@ ALTER TABLE ONLY current_way_nodes
 
 
 --
--- Name: current_way_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_way_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY current_way_tags
@@ -2346,7 +2346,7 @@ ALTER TABLE ONLY current_way_tags
 
 
 --
--- Name: current_ways_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_ways_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY current_ways
@@ -2354,7 +2354,7 @@ ALTER TABLE ONLY current_ways
 
 
 --
--- Name: diary_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: diary_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY diary_comments
@@ -2362,7 +2362,7 @@ ALTER TABLE ONLY diary_comments
 
 
 --
--- Name: diary_entries_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: diary_entries_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY diary_entries
@@ -2370,7 +2370,7 @@ ALTER TABLE ONLY diary_entries
 
 
 --
--- Name: friends_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: friends_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY friends
@@ -2378,7 +2378,7 @@ ALTER TABLE ONLY friends
 
 
 --
--- Name: gpx_file_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: gpx_file_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY gpx_file_tags
@@ -2386,7 +2386,7 @@ ALTER TABLE ONLY gpx_file_tags
 
 
 --
--- Name: gpx_files_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: gpx_files_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY gpx_files
@@ -2394,7 +2394,7 @@ ALTER TABLE ONLY gpx_files
 
 
 --
--- Name: languages_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: languages_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY languages
@@ -2402,7 +2402,7 @@ ALTER TABLE ONLY languages
 
 
 --
--- Name: messages_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: messages_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY messages
@@ -2410,7 +2410,7 @@ ALTER TABLE ONLY messages
 
 
 --
--- Name: node_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: node_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY node_tags
@@ -2418,7 +2418,7 @@ ALTER TABLE ONLY node_tags
 
 
 --
--- Name: nodes_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: nodes_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY nodes
@@ -2426,7 +2426,7 @@ ALTER TABLE ONLY nodes
 
 
 --
--- Name: note_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: note_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY note_comments
@@ -2434,7 +2434,7 @@ ALTER TABLE ONLY note_comments
 
 
 --
--- Name: notes_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: notes_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY notes
@@ -2442,7 +2442,7 @@ ALTER TABLE ONLY notes
 
 
 --
--- Name: oauth_nonces_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: oauth_nonces_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY oauth_nonces
@@ -2450,7 +2450,7 @@ ALTER TABLE ONLY oauth_nonces
 
 
 --
--- Name: oauth_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: oauth_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY oauth_tokens
@@ -2458,7 +2458,7 @@ ALTER TABLE ONLY oauth_tokens
 
 
 --
--- Name: redactions_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: redactions_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY redactions
@@ -2466,7 +2466,7 @@ ALTER TABLE ONLY redactions
 
 
 --
--- Name: relation_members_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: relation_members_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY relation_members
@@ -2474,7 +2474,7 @@ ALTER TABLE ONLY relation_members
 
 
 --
--- Name: relation_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: relation_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY relation_tags
@@ -2482,7 +2482,7 @@ ALTER TABLE ONLY relation_tags
 
 
 --
--- Name: relations_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: relations_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY relations
@@ -2490,7 +2490,7 @@ ALTER TABLE ONLY relations
 
 
 --
--- Name: user_blocks_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: user_blocks_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY user_blocks
@@ -2498,7 +2498,7 @@ ALTER TABLE ONLY user_blocks
 
 
 --
--- Name: user_preferences_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: user_preferences_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY user_preferences
@@ -2506,7 +2506,7 @@ ALTER TABLE ONLY user_preferences
 
 
 --
--- Name: user_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: user_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY user_roles
@@ -2514,7 +2514,7 @@ ALTER TABLE ONLY user_roles
 
 
 --
--- Name: user_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: user_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY user_tokens
@@ -2522,7 +2522,7 @@ ALTER TABLE ONLY user_tokens
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY users
@@ -2530,7 +2530,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: way_nodes_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: way_nodes_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY way_nodes
@@ -2538,7 +2538,7 @@ ALTER TABLE ONLY way_nodes
 
 
 --
--- Name: way_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: way_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY way_tags
@@ -2546,7 +2546,7 @@ ALTER TABLE ONLY way_tags
 
 
 --
--- Name: ways_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace: 
+-- Name: ways_pkey; Type: CONSTRAINT; Schema: public; Owner: hoot; Tablespace:
 --
 
 ALTER TABLE ONLY ways
@@ -2554,420 +2554,420 @@ ALTER TABLE ONLY ways
 
 
 --
--- Name: acls_k_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: acls_k_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX acls_k_idx ON acls USING btree (k);
 
 
 --
--- Name: changeset_tags_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: changeset_tags_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX changeset_tags_id_idx ON changeset_tags USING btree (changeset_id);
 
 
 --
--- Name: changesets_bbox_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: changesets_bbox_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX changesets_bbox_idx ON changesets USING gist (min_lat, max_lat, min_lon, max_lon);
 
 
 --
--- Name: changesets_closed_at_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: changesets_closed_at_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX changesets_closed_at_idx ON changesets USING btree (closed_at);
 
 
 --
--- Name: changesets_created_at_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: changesets_created_at_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX changesets_created_at_idx ON changesets USING btree (created_at);
 
 
 --
--- Name: changesets_user_id_created_at_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: changesets_user_id_created_at_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX changesets_user_id_created_at_idx ON changesets USING btree (user_id, created_at);
 
 
 --
--- Name: changesets_user_id_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: changesets_user_id_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX changesets_user_id_id_idx ON changesets USING btree (user_id, id);
 
 
 --
--- Name: current_nodes_tile_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_nodes_tile_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX current_nodes_tile_idx ON current_nodes USING btree (tile);
 
 
 --
--- Name: current_nodes_timestamp_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_nodes_timestamp_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX current_nodes_timestamp_idx ON current_nodes USING btree ("timestamp");
 
 
 --
--- Name: current_relation_members_member_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_relation_members_member_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX current_relation_members_member_idx ON current_relation_members USING btree (member_type, member_id);
 
 
 --
--- Name: current_relations_timestamp_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_relations_timestamp_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX current_relations_timestamp_idx ON current_relations USING btree ("timestamp");
 
 
 --
--- Name: current_way_nodes_node_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_way_nodes_node_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX current_way_nodes_node_idx ON current_way_nodes USING btree (node_id);
 
 
 --
--- Name: current_ways_timestamp_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: current_ways_timestamp_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX current_ways_timestamp_idx ON current_ways USING btree ("timestamp");
 
 
 --
--- Name: diary_comment_user_id_created_at_index; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: diary_comment_user_id_created_at_index; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX diary_comment_user_id_created_at_index ON diary_comments USING btree (user_id, created_at);
 
 
 --
--- Name: diary_comments_entry_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: diary_comments_entry_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE UNIQUE INDEX diary_comments_entry_id_idx ON diary_comments USING btree (diary_entry_id, id);
 
 
 --
--- Name: diary_entry_created_at_index; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: diary_entry_created_at_index; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX diary_entry_created_at_index ON diary_entries USING btree (created_at);
 
 
 --
--- Name: diary_entry_language_code_created_at_index; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: diary_entry_language_code_created_at_index; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX diary_entry_language_code_created_at_index ON diary_entries USING btree (language_code, created_at);
 
 
 --
--- Name: diary_entry_user_id_created_at_index; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: diary_entry_user_id_created_at_index; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX diary_entry_user_id_created_at_index ON diary_entries USING btree (user_id, created_at);
 
 
 --
--- Name: friends_user_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: friends_user_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX friends_user_id_idx ON friends USING btree (user_id);
 
 
 --
--- Name: gpx_file_tags_gpxid_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: gpx_file_tags_gpxid_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX gpx_file_tags_gpxid_idx ON gpx_file_tags USING btree (gpx_id);
 
 
 --
--- Name: gpx_file_tags_tag_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: gpx_file_tags_tag_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX gpx_file_tags_tag_idx ON gpx_file_tags USING btree (tag);
 
 
 --
--- Name: gpx_files_timestamp_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: gpx_files_timestamp_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX gpx_files_timestamp_idx ON gpx_files USING btree ("timestamp");
 
 
 --
--- Name: gpx_files_user_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: gpx_files_user_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX gpx_files_user_id_idx ON gpx_files USING btree (user_id);
 
 
 --
--- Name: gpx_files_visible_visibility_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: gpx_files_visible_visibility_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX gpx_files_visible_visibility_idx ON gpx_files USING btree (visible, visibility);
 
 
 --
--- Name: index_changeset_comments_on_created_at; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: index_changeset_comments_on_created_at; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX index_changeset_comments_on_created_at ON changeset_comments USING btree (created_at);
 
 
 --
--- Name: index_changesets_subscribers_on_changeset_id; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: index_changesets_subscribers_on_changeset_id; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX index_changesets_subscribers_on_changeset_id ON changesets_subscribers USING btree (changeset_id);
 
 
 --
--- Name: index_changesets_subscribers_on_subscriber_id_and_changeset_id; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: index_changesets_subscribers_on_subscriber_id_and_changeset_id; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE UNIQUE INDEX index_changesets_subscribers_on_subscriber_id_and_changeset_id ON changesets_subscribers USING btree (subscriber_id, changeset_id);
 
 
 --
--- Name: index_client_applications_on_key; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: index_client_applications_on_key; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE UNIQUE INDEX index_client_applications_on_key ON client_applications USING btree (key);
 
 
 --
--- Name: index_note_comments_on_body; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: index_note_comments_on_body; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX index_note_comments_on_body ON note_comments USING gin (to_tsvector('english'::regconfig, body));
 
 
 --
--- Name: index_note_comments_on_created_at; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: index_note_comments_on_created_at; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX index_note_comments_on_created_at ON note_comments USING btree (created_at);
 
 
 --
--- Name: index_oauth_nonces_on_nonce_and_timestamp; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: index_oauth_nonces_on_nonce_and_timestamp; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE UNIQUE INDEX index_oauth_nonces_on_nonce_and_timestamp ON oauth_nonces USING btree (nonce, "timestamp");
 
 
 --
--- Name: index_oauth_tokens_on_token; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: index_oauth_tokens_on_token; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE UNIQUE INDEX index_oauth_tokens_on_token ON oauth_tokens USING btree (token);
 
 
 --
--- Name: index_user_blocks_on_user_id; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: index_user_blocks_on_user_id; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX index_user_blocks_on_user_id ON user_blocks USING btree (user_id);
 
 
 --
--- Name: messages_from_user_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: messages_from_user_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX messages_from_user_id_idx ON messages USING btree (from_user_id);
 
 
 --
--- Name: messages_to_user_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: messages_to_user_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX messages_to_user_id_idx ON messages USING btree (to_user_id);
 
 
 --
--- Name: nodes_changeset_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: nodes_changeset_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX nodes_changeset_id_idx ON nodes USING btree (changeset_id);
 
 
 --
--- Name: nodes_tile_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: nodes_tile_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX nodes_tile_idx ON nodes USING btree (tile);
 
 
 --
--- Name: nodes_timestamp_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: nodes_timestamp_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX nodes_timestamp_idx ON nodes USING btree ("timestamp");
 
 
 --
--- Name: note_comments_note_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: note_comments_note_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX note_comments_note_id_idx ON note_comments USING btree (note_id);
 
 
 --
--- Name: notes_created_at_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: notes_created_at_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX notes_created_at_idx ON notes USING btree (created_at);
 
 
 --
--- Name: notes_tile_status_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: notes_tile_status_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX notes_tile_status_idx ON notes USING btree (tile, status);
 
 
 --
--- Name: notes_updated_at_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: notes_updated_at_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX notes_updated_at_idx ON notes USING btree (updated_at);
 
 
 --
--- Name: points_gpxid_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: points_gpxid_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX points_gpxid_idx ON gps_points USING btree (gpx_id);
 
 
 --
--- Name: points_tile_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: points_tile_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX points_tile_idx ON gps_points USING btree (tile);
 
 
 --
--- Name: relation_members_member_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: relation_members_member_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX relation_members_member_idx ON relation_members USING btree (member_type, member_id);
 
 
 --
--- Name: relations_changeset_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: relations_changeset_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX relations_changeset_id_idx ON relations USING btree (changeset_id);
 
 
 --
--- Name: relations_timestamp_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: relations_timestamp_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX relations_timestamp_idx ON relations USING btree ("timestamp");
 
 
 --
--- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
 
 
 --
--- Name: user_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: user_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX user_id_idx ON friends USING btree (friend_user_id);
 
 
 --
--- Name: user_openid_url_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: user_openid_url_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE UNIQUE INDEX user_openid_url_idx ON users USING btree (openid_url);
 
 
 --
--- Name: user_roles_id_role_unique; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: user_roles_id_role_unique; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE UNIQUE INDEX user_roles_id_role_unique ON user_roles USING btree (user_id, role);
 
 
 --
--- Name: user_tokens_token_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: user_tokens_token_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE UNIQUE INDEX user_tokens_token_idx ON user_tokens USING btree (token);
 
 
 --
--- Name: user_tokens_user_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: user_tokens_user_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX user_tokens_user_id_idx ON user_tokens USING btree (user_id);
 
 
 --
--- Name: users_display_name_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: users_display_name_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE UNIQUE INDEX users_display_name_idx ON users USING btree (display_name);
 
 
 --
--- Name: users_display_name_lower_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: users_display_name_lower_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX users_display_name_lower_idx ON users USING btree (lower((display_name)::text));
 
 
 --
--- Name: users_email_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: users_email_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE UNIQUE INDEX users_email_idx ON users USING btree (email);
 
 
 --
--- Name: users_email_lower_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: users_email_lower_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX users_email_lower_idx ON users USING btree (lower((email)::text));
 
 
 --
--- Name: way_nodes_node_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: way_nodes_node_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX way_nodes_node_idx ON way_nodes USING btree (node_id);
 
 
 --
--- Name: ways_changeset_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: ways_changeset_id_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX ways_changeset_id_idx ON ways USING btree (changeset_id);
 
 
 --
--- Name: ways_timestamp_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace: 
+-- Name: ways_timestamp_idx; Type: INDEX; Schema: public; Owner: hoot; Tablespace:
 --
 
 CREATE INDEX ways_timestamp_idx ON ways USING btree ("timestamp");
