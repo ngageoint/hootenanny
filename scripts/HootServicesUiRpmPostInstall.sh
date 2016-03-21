@@ -1,6 +1,6 @@
 #!/bin/sh
 echo "Hoot Services-UI RPM PostInstall"
-# init and tart Postgres
+# init and start Postgres
 PG_SERVICE=$(ls /etc/init.d | grep postgresql-)
 sudo service $PG_SERVICE initdb
 sudo service $PG_SERVICE start
@@ -11,7 +11,7 @@ sudo service tomcat6 start
 # create Hoot services db
 if ! sudo -u postgres psql -lqt | cut -d \| -f 1 | grep -qw hoot; then
     RAND_PW=$(pwgen -s 16 1)
-    sudo -u postgres createuser --superuser hoot
+    sudo -u postgres createuser --superuser hoot || true
     sudo -u postgres psql -c "alter user hoot with password '$RAND_PW';"
     sudo sed -i s/DB_PASSWORD=.*/DB_PASSWORD=$RAND_PW/ /var/lib/hootenanny/conf/DatabaseConfig.sh
     while [ ! -f /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml ]; do
