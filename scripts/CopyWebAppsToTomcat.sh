@@ -11,6 +11,8 @@ else
   source $HOOT_HOME/conf/ServerConfig.sh
 fi
 
+echo "Deploying web application files..."
+
 rm -rf $TOMCAT6_HOME/webapps/hoot-services/
 cp $HOOT_HOME/hoot-services/target/hoot-services-*.war $TOMCAT6_HOME/webapps/hoot-services.war
 unzip -q -d $TOMCAT6_HOME/webapps/hoot-services $TOMCAT6_HOME/webapps/hoot-services.war
