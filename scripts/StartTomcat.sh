@@ -23,7 +23,7 @@ hoot version &> /dev/null || (echo Please make sure hoot is in your PATH.; exit 
 
 [ -d $TOMCAT6_HOME/webapps ] || (echo Please set TOMCAT6_HOME; exit -1)
 
-echo Starting Tomcat.  Making connection attempts... 
+echo Starting Tomcat.  Making connection attempts...
 
 #printOnError bin/catalina.sh start
 $TOMCAT6_HOME/bin/startup.sh
@@ -37,5 +37,7 @@ until [ "$VERSION_INFO" != "" ]; do
   let COUNT=COUNT+1
   [ $COUNT -gt 20 ] && (echo Tomcat didn\'t start; exit -1)
 done
+
+echo Tomcat started and listening on port $TOMCAT_PORT
 
 exit 0

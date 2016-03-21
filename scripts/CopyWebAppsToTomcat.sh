@@ -11,7 +11,7 @@ else
   source $HOOT_HOME/conf/ServerConfig.sh
 fi
 
-echo "Deploying web application files..."
+echo Deploying web application files...
 
 rm -rf $TOMCAT6_HOME/webapps/hoot-services/
 cp $HOOT_HOME/hoot-services/target/hoot-services-*.war $TOMCAT6_HOME/webapps/hoot-services.war
@@ -29,3 +29,5 @@ sed -i s/8000/$NODE_MAPNIK_SERVER_PORT/g $TOMCAT6_HOME/webapps/hootenanny-id/dat
 
 rm -rf $TOMCAT6_HOME/webapps/hootenanny-id/css/img
 cp -R $TOMCAT6_HOME/webapps/hootenanny-id/dist/img $TOMCAT6_HOME/webapps/hootenanny-id/css/
+
+echo Web application files deployed.
