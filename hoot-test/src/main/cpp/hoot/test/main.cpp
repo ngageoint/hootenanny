@@ -287,6 +287,7 @@ int main(int argc, char *argv[])
       int i = args.indexOf("--single") + 1;
       if (i >= args.size())
       {
+        delete searchSuite;
         throw HootException("Expected a test name after --single.");
       }
       QString testName = args[i];
@@ -299,6 +300,8 @@ int main(int argc, char *argv[])
       CppUnit::Test* t = findTest(searchSuite, testName);
       if (t == 0)
       {
+        delete searchSuite;
+        delete listener;
         throw HootException("Could not find the specified test: " + testName);
       }
 
@@ -314,7 +317,7 @@ int main(int argc, char *argv[])
         rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
           printDiff));
       }
-      if (args.contains("--quick"))
+      else if (args.contains("--quick"))
       {
         listener = new HootTestListener(false, 1.0);
         rootSuite->addTest(registry.makeTest());
@@ -326,7 +329,7 @@ int main(int argc, char *argv[])
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
       }
-      if (args.contains("--slow"))
+      else if (args.contains("--slow"))
       {
         listener = new HootTestListener(false, 30.0);
         rootSuite->addTest(registry.makeTest());
@@ -343,7 +346,7 @@ int main(int argc, char *argv[])
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
       }
-      if (args.contains("--all") || args.contains("--glacial"))
+      else if (args.contains("--all") || args.contains("--glacial"))
       {
         listener = new HootTestListener(false, 900.0);
         rootSuite->addTest(registry.makeTest());

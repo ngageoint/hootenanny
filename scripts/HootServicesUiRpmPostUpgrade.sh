@@ -1,13 +1,17 @@
 #!/bin/sh
-echo "Hoot UI RPM PostUpgrade"
+echo "Hoot Services-UI RPM PostUpgrade"
 
 # Apply any database schema changes
+TOMCAT_HOME=/usr/share/tomcat6
+source /var/lib/hootenanny/conf/DatabaseConfig.sh
 cd $TOMCAT_HOME/webapps/hoot-services/WEB-INF
 liquibase --contexts=default,production \
     --changeLogFile=classes/db/db.changelog-master.xml \
     --promptForNonLocalDatabase=false \
-    --defaultsFile=classes/db/liquibase.properties \
+    --driver=org.postgresql.Driver \
+    --url=jdbc:postgresql:$DB_NAME \
+    --username=$DB_USER \
+    --password=$DB_PASSWORD \
     --logLevel=warning \
     --classpath=lib/postgresql-9.1-901-1.jdbc4.jar \
-    --url jdbc:postgresql:hoot update
-
+    update

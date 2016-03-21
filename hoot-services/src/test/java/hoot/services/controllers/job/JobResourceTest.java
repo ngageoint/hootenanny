@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -141,7 +141,8 @@ public class JobResourceTest {
 
 		class validParam2Matcher extends ArgumentMatcher<JSONObject>
 		{
-			public boolean matches(Object oParam)
+			@Override
+      public boolean matches(Object oParam)
 			{
 				JSONObject param = (JSONObject)oParam;
 				boolean val1 = param.get("class").toString().equals("hoot.services.controllers.ingest.RasterToTilesService");

@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "Hoot UI RPM PostInstall"
+echo "Hoot Services-UI RPM PostInstall"
 # init and start Postgres
 PG_SERVICE=$(ls /etc/init.d | grep postgresql-)
 sudo service $PG_SERVICE initdb
@@ -9,9 +9,9 @@ PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1
 sudo service tomcat6 start
 
 # create Hoot services db
-if ! sudo -u postgres psql -d postgres -c "\du" | cut -d \| -f 1 | grep -qw hoot; then
+if ! sudo -u postgres psql -lqt | cut -d \| -f 1 | grep -qw hoot; then
     RAND_PW=$(pwgen -s 16 1)
-    sudo -u postgres createuser --superuser hoot
+    sudo -u postgres createuser --superuser hoot || true
     sudo -u postgres psql -c "alter user hoot with password '$RAND_PW';"
     sudo sed -i s/DB_PASSWORD=.*/DB_PASSWORD=$RAND_PW/ /var/lib/hootenanny/conf/DatabaseConfig.sh
     while [ ! -f /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml ]; do
@@ -71,6 +71,9 @@ if ! grep --quiet 2097152 $SYSCTL_CONF; then
 fi
 sudo service postgresql-$PG_VERSION restart
 
+# create the osm api test db
+sudo -i /var/lib/hootenanny/scripts/SetupOsmApiDB.sh
+
 # configure Tomcat environment
 TOMCAT_ENV=/usr/sbin/tomcat6
 if ! grep -i --quiet HOOT $TOMCAT_ENV; then
@@ -116,6 +119,12 @@ if [ ! -d $BASEMAP_HOME ]; then
     echo "Creating ingest/processed directory for webapp"
     sudo mkdir -p $BASEMAP_HOME
     sudo chown tomcat:tomcat $BASEMAP_HOME
+fi
+UPLOAD_HOME=/var/lib/hootenanny/upload
+if [ ! -d $UPLOAD_HOME ]; then
+    echo "Creating upload directory for webapp"
+    sudo mkdir -p $UPLOAD_HOME
+    sudo chown tomcat:tomcat $UPLOAD_HOME
 fi
 sudo service tomcat6 restart
 

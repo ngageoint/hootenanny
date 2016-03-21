@@ -26,6 +26,7 @@ AC_DEFUN([UI_TESTS_INIT],[
       CHECK_GEM(1.8)
       CHECK_RUBY_GEM(mime-types, 2.6.2)
       CHECK_RUBY_GEM(cucumber, 2.3.2)
+      CHECK_RUBY_GEM(selenium-cucumber, 2.1.4)
       CHECK_RUBY_GEM(selenium-webdriver, 2.52.0)
       CHECK_RUBY_GEM(capybara, 2.5.0)
       CHECK_RUBY_GEM(capybara-webkit, 1.8.0)

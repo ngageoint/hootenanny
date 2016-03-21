@@ -55,7 +55,7 @@ fi
 
 sudo gem install mime-types -v 2.6.2
 sudo gem install capybara -v 2.5.0
-sudo gem install cucumber capybara-webkit selenium-webdriver rspec capybara-screenshot
+sudo gem install cucumber capybara-webkit selenium-webdriver rspec capybara-screenshot selenium-cucumber
 
 if [ ! -f google-chrome-stable_current_amd64.deb ]; then
     echo "Installing Chrome..."
@@ -212,7 +212,7 @@ sudo mkdir -p $TOMCAT6_HOME/logs
 sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME/logs
 sudo chown -R vagrant:tomcat6 /var/lib/tomcat6
 sudo chown -R vagrant:tomcat6 /etc/tomcat6
-sudo chown -R tomcat6:tomcat6 /var/log/tomcat6
+sudo chown -R vagrant:tomcat6 /var/log/tomcat6
 mkdir -p $HOOT_HOME/ingest/processed
 sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
 
@@ -289,6 +289,7 @@ touch Vagrant.marker
 echo "Configuring Hoot..."
 echo HOOT_HOME: $HOOT_HOME
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
+cp conf/ServerConfig.sh.orig conf/ServerConfig.sh
 
 echo "Installing node-mapnik-server..."
 sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
@@ -307,14 +308,16 @@ fi
 echo "Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
 make -s clean && make -sj$(nproc)
-echo "Deploying web application..."
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
 scripts/CopyWebAppsToTomcat.sh #&> /dev/null
-make -sj$(nproc) docs 
+# docs build is always failing the first time during the npm install portion for an unknown reason, but then 
+# always passes the second time its run...needs fixed, but this is the workaround for now
+make -sj$(nproc) docs &> /dev/null || true
+make -sj$(nproc) docs
 hoot version
 
 echo "See VAGRANT.md for additional configuration instructions and then run 'vagrant ssh' to log into the Hootenanny virtual machine."
-echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation."
+echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation files."
 echo "Access the web application at http://localhost:8888/hootenanny-id"
 echo "If you wish to run the diagnostic tests, log into the virtual machine and run: 'cd $HOOT_HOME && make -sj$(nproc) test-all'"
 
