@@ -190,14 +190,14 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     echo "Adding Tomcat to profile..."
     echo "export TOMCAT6_HOME=/usr/share/tomcat6" >> ~/.profile
     source ~/.profile
-    cd $TOMCAT6_HOME
-    # These sym links are needed so that the ui tests can deploy the services and iD 
-    # app to Tomcat using the Tomcat startup and shutdown scripts.
-    sudo ln -s /var/lib/tomcat6/webapps webapps
-    sudo ln -s /var/lib/tomcat6/conf conf
-    sudo ln -s /var/log/tomcat6 log
-    cd ~
 fi
+cd $TOMCAT6_HOME
+# These sym links are needed so that the ui tests can deploy the services and iD 
+# app to Tomcat using the Tomcat startup and shutdown scripts.
+sudo ln -s /var/lib/tomcat6/webapps webapps
+sudo ln -s /var/lib/tomcat6/conf conf
+sudo ln -s /var/log/tomcat6 log
+cd ~
 
 # These permission changes needed so that the ui tests can deploy the services and iD app to 
 # Tomcat using the Tomcat startup and shutdown scripts.
@@ -213,8 +213,6 @@ sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME/logs
 sudo chown -R vagrant:tomcat6 /var/lib/tomcat6
 sudo chown -R vagrant:tomcat6 /etc/tomcat6
 sudo chown -R vagrant:tomcat6 /var/log/tomcat6
-mkdir -p $HOOT_HOME/ingest/processed
-sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
 
 cd $HOOT_HOME
 source ./SetupEnv.sh
@@ -227,11 +225,17 @@ fi
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment..."
-echo "#--------------
+# This echo properly substitutes the home path dir and keeps it from having to be hardcoded, but fails on permissions during write...so hardcoding the home path instead for now
+#sudo echo "#--------------
 # Hoot Settings
 #--------------
-HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
+#HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
+
+#--------------
+# Hoot Settings
+#--------------
+HOOT_HOME=/home/vagrant/hoot
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
 GDAL_DATA=/usr/local/share/gdal
 GDAL_LIB_DIR=/usr/local/lib
@@ -299,6 +303,10 @@ cd node-mapnik-server
 sudo npm install
 cd ..
 
+mkdir -p $HOOT_HOME/ingest/processed
+sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
+mkdir -p $HOOT_HOME/upload
+sudo chown -R vagrant:tomcat6 $HOOT_HOME/upload
 aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'

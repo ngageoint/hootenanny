@@ -88,5 +88,5 @@ If you've updated the code, you must connect to the vm via ssh to build and rede
     cd $HOOT_HOME
     source ./SetupEnv.sh
     make -sj$(nproc)
-    scripts/DeployTomcat.sh
+    scripts/CopyWebAppsToTomcat.sh
 
