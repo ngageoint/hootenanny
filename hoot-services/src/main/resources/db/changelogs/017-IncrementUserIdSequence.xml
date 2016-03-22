@@ -11,7 +11,7 @@
 		</comment>
 
         <sql>
-            SELECT NEXTVAL('user_id_seq');
+            SELECT NEXTVAL('users_id_seq');
         </sql>
 	</changeSet>
 </databaseChangeLog>
