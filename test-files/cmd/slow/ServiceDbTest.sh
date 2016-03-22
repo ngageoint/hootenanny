@@ -9,11 +9,9 @@ export DB_URL="postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 
 rm -rf test-output/cmd/ServiceDbTest
 mkdir -p test-output/cmd/ServiceDbTest
-# Don't run these commands in parallel -- they might try to create the same
-# user twice and then fail due to duplicates.
-# https://github.com/ngageoint/hootenanny/issues/478
-hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesA"
-hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesB"
+hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesA" &
+hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesB" &
+wait
 ###
 # I've run into strange situations where it seems like the whole files isn't being converted.
 # It almost looks like the transaction isn't fully committed when the conflat op runs. I can't
