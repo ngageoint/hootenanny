@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -47,12 +47,12 @@ namespace Tgs
   using namespace std;
 
   /**
-  * The DataFrame is a vector of data vectors.  Each data vector contains 
-  * the factor values for each piece of data as doubles.  
+  * The DataFrame is a vector of data vectors.  Each data vector contains
+  * the factor values for each piece of data as doubles.
   *
   * The data frame also contains the methods required for finding information
   * gain for various splits of the data.  In the future this will probably
-  * be put in a separate class. 
+  * be put in a separate class.
   */
   class TGS_EXPORT DataFrame
   {
@@ -105,11 +105,11 @@ namespace Tgs
 
     /**
     *  Resets all the internal data structures associated with data frame
-    */  
+    */
     void clear();
 
     /**
-    *  Computes the Silverman's rule for a set of data vectors values for a single 
+    *  Computes the Silverman's rule for a set of data vectors values for a single
     *  factor
     *
     * @param fIdx the factor index
@@ -117,15 +117,15 @@ namespace Tgs
     * @param minVal returns the minimum factor value computed by the function
     * @param minVal returns the minimum factor value computed by the function
     * @param mean returns the mean factor value computed by the function
-    * @param q1 returns the first quartile 
+    * @param q1 returns the first quartile
     * @param q3 returns the third quartile
     * @return the computed bandwidth
     */
-    double computeBandwidthByFactor(unsigned int fIdx, std::vector<unsigned int> & dataIndices, 
+    double computeBandwidthByFactor(unsigned int fIdx, std::vector<unsigned int> & dataIndices,
       double & minVal, double & maxVal, double & mean, double & q1, double & q3) const;
 
     /**
-    * Deactivates the factor by removing its index from the 
+    * Deactivates the factor by removing its index from the
     * list of active factor indices
     *
     * @param factor the factor to deactivate
@@ -150,18 +150,13 @@ namespace Tgs
     * @param fileStream the output file stream
     * @param tabDepth set of tabs to indent the exported content
     */
-    void exportData(std::ostream & fileStream) const;
+    void exportData(std::ostream & fileStream, std::string tabDepth = "") const;
 
     /**
      * @brief getActiveFactorCount
      * @return the number of active factors
      */
     size_t getActiveFactorCount() const { return _activeFactorIndices.size(); }
-
-    /**
-     * Returns a list of factors that contain only one data value.
-     */
-    std::vector<std::string> getBadFactors() const;
 
     /**
     *  Gets the class labels unique to the whole data set
@@ -173,11 +168,11 @@ namespace Tgs
     /**
     *  Get the number of instances per class based on the subset of data
     *  vectors represented by the index value within the indices input parameter
-    * 
+    *
     *  @param indices a list of data vector indices in the data set
     *  @param populations the output map of class names to number of instances
     */
-    void getClassPopulations(const std::vector<unsigned int>& indices, 
+    void getClassPopulations(const std::vector<unsigned int>& indices,
       HashMap<std::string, int>& populations) const;
 
     /**
@@ -185,11 +180,11 @@ namespace Tgs
      *  vectors represented by the index value within the indices input parameter. This cannot
      *  be mapped back to the enumerated classes and is provided because it is slightly more
      *  efficient than the above function.
-     * 
+     *
      *  @param indices a list of data vector indices in the data set
      *  @param populations the output of number of instances in each class represented
      */
-    void getClassDistribution(const std::vector<unsigned int> & indices, 
+    void getClassDistribution(const std::vector<unsigned int> & indices,
       std::vector<int>& distribution) const;
 
     /**
@@ -199,9 +194,9 @@ namespace Tgs
     * @param vIdx the vector index
     * @param fIdx the factor index
     * @return the requested value
-    * 
+    *
     */
-    double getDataElement(unsigned int vIdx, int fIdx) const;  
+    double getDataElement(unsigned int vIdx, int fIdx) const;
 
     /**
     * Gets reference to a single data vector in the data frame
@@ -241,7 +236,7 @@ namespace Tgs
     * representation
     *
     * @param fLabel the factor label to find the index
-    * @return the index into the list of factors 
+    * @return the index into the list of factors
     */
     unsigned int getIndexFromFactorLabel(const std::string &fLabel) const;
 
@@ -331,7 +326,7 @@ namespace Tgs
     * @param bootstrap the output container to hold indices to data vectors for the bootstrap set
     * @param oob  the output container to hold indices to data vectors for the out of bag set
     */
-    void makeBalancedBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
+    void makeBalancedBoostrapAndOobSets(std::vector<unsigned int> & bootstrap,
       std::vector<unsigned int> & oob, unsigned int seed = 0) const;
 
     /**
@@ -340,13 +335,13 @@ namespace Tgs
     *
     * C. Chen, et.al. Using Random Forest to Learn Imbalanced Data
     *
-    * 
+    *
     * @param className1 the name of the class to represent the positive class
     * @param className2 the name of the class to represent the negative class
     * @param bootstrap the output container to hold indices to data vectors for the bootstrap set
     * @param oob  the output container to hold indices to data vectors for the out of bag set
     */
-    void makeBalancedRoundRobinBootstrapAndOobSets(std::string className1, std::string className2, 
+    void makeBalancedRoundRobinBootstrapAndOobSets(std::string className1, std::string className2,
       std::vector<unsigned int> & bootstrap, std::vector<unsigned int> & oob);
 
     /**
@@ -355,7 +350,7 @@ namespace Tgs
     * @param bootstrap the output container to hold indices to data vectors for the bootstrap set
     * @param oob  the output container to hold indices to data vectors for the out of bag set
     */
-    void makeBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
+    void makeBoostrapAndOobSets(std::vector<unsigned int> & bootstrap,
       std::vector<unsigned int> & oob, unsigned int seed = 0) const;
 
     /**
@@ -385,7 +380,7 @@ namespace Tgs
     * @param labelMap a map of the original class name to a new class name
     */
     void remapClassLabels(std::map<std::string, std::string> & labelMap);
-    
+
     /**
     * Partitions the dataframe into two parts based on the splitting idx
     *
@@ -395,7 +390,7 @@ namespace Tgs
     * @param leftSplit the data vectors indices on the left side of the split
     * @param rightSplit the data vectors indices on the right side of the split
     */
-//     void partition(unsigned int splitIdx, std::vector<unsigned int> & leftSplit, 
+//     void partition(unsigned int splitIdx, std::vector<unsigned int> & leftSplit,
 //       std::vector<unsigned int> & rightSplit);
 
     /**
@@ -420,7 +415,7 @@ namespace Tgs
     /**
     * Goes through the training label list and renames all classes not matching posClass
     * to "other"
-    * 
+    *
     * Use restoreClassLabels to restore to original scheme
     *
     * @param posClass the positive class label
@@ -431,7 +426,7 @@ namespace Tgs
      * Sets the value of a single data element.
      */
     void setDataElement(int vIdx, int fIdx, double v) { _data[vIdx][fIdx] = v; }
-    
+
     /**
     *  Copies the factor names into an internal vector (not strictly needed inside the data set)
     */
@@ -455,7 +450,7 @@ namespace Tgs
 
     /**
     * Sorts a vector of indices to data vectors by the selected factor
-    * value.  
+    * value.
     *
     * @param indices the input/output containing the data vector indices
     * @param fIdx the factor index on the data vector
@@ -471,9 +466,11 @@ namespace Tgs
      * Checks to ensure that there is a value for each factor.  If all values are the
      * same then the factor is deactivated.
      */
-    void validateData();
+    void validateData() const;
 
   private:
+
+    std::vector<std::string> _getBadFactors() const;
 
     /**
     *  Imports a data vectpr
@@ -484,12 +481,12 @@ namespace Tgs
 
     /**
     * Sorts a vector of indices to data vectors by the selected factor
-    * value.  
+    * value.
     *
     * @param indices the input/output containing the data vector indices
     * @param fIdx the factor index on the data vector
     */
-    void _qSortIndicesOnFactorValue(std::vector<unsigned int> & indices, unsigned int posP, 
+    void _qSortIndicesOnFactorValue(std::vector<unsigned int> & indices, unsigned int posP,
       unsigned int posR, unsigned int fIdx) const;
 
     /**
@@ -500,10 +497,10 @@ namespace Tgs
     * @param posP the beginning partition position
     * @param posR the ending partition position
     * @param fIdx the index of the factor to use as the basis for sorting the indices
-    * @return the new split position 
-    * 
+    * @return the new split position
+    *
     */
-    unsigned int _qSortPartition(std::vector<unsigned int> & indices, unsigned int posP, 
+    unsigned int _qSortPartition(std::vector<unsigned int> & indices, unsigned int posP,
       unsigned int posR, unsigned int fIdx) const;
 
     std::vector< std::string > _trainingLabels;  ///The class labels corresponding to the training data vectors
@@ -517,9 +514,9 @@ namespace Tgs
     std::vector<std::map<std::string, double> > _medianMaps;  //For each factor a map of each class to its median value
 
     /**
-     * true if nulls should be interpreted as values, false if nulls should be interpreted as 
+     * true if nulls should be interpreted as values, false if nulls should be interpreted as
      * missing values. See http://en.wikipedia.org/wiki/Missing_value for a discussion.
-     */ 
+     */
     std::vector< int > _nullTreatment;
 
     std::vector< double > _weights; ///weight for each row
@@ -527,7 +524,7 @@ namespace Tgs
     int _trainingEnumCnt;
 
     unsigned int _randSeedCtr;  ///This is used to add a constant to the received clock to ensure a new seed
-                                      
+
   };
 
   TGS_EXPORT std::ostream& operator<<(std::ostream& s, const DataFrame& df);
@@ -535,5 +532,3 @@ namespace Tgs
 } //End namespace
 
 #endif
-
-
