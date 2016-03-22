@@ -20,8 +20,11 @@ hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesB"
 # reproduce it reliably, but I would like to fix it if I can get more info. -JRS
 # I think this is fixed by #3588, but can't really prove a negative. -JRS
 ##
-hoot --convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesA.osm "$DB_URL/AllDataTypesA" &
-hoot --convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesB.osm "$DB_URL/AllDataTypesB" &
+# Don't run these commands in parallel -- they might try to create the same
+# user twice and then fail due to duplicates.
+# https://github.com/ngageoint/hootenanny/issues/478
+hoot --convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesA.osm "$DB_URL/AllDataTypesA"
+hoot --convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesB.osm "$DB_URL/AllDataTypesB"
 wait
 hoot --conflate $HOOT_OPTS "$DB_URL/AllDataTypesA" "$DB_URL/AllDataTypesB" test-output/cmd/ServiceDbTest/output.osm
 # Do a very coarse comparison check.
