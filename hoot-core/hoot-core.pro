@@ -308,6 +308,9 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmMapWriter.cpp \
     src/main/cpp/hoot/core/io/OsmMapReader.cpp \
     src/main/cpp/hoot/core/io/ServicesDb.cpp \
+    src/main/cpp/hoot/core/io/ApiDb.cpp \
+    src/main/cpp/hoot/core/io/OsmApiDb.cpp \
+    src/main/cpp/hoot/core/io/HootApiDb.cpp \
     src/main/cpp/hoot/core/io/OsmMapWriterFactory.cpp \
     src/main/cpp/hoot/core/io/OsmMapReaderFactory.cpp \
     src/main/cpp/hoot/core/io/OgrWriter.cpp \
@@ -765,6 +768,9 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmMapWriter.h \
     src/main/cpp/hoot/core/io/OsmMapReader.h \
     src/main/cpp/hoot/core/io/ServicesDb.h \
+    src/main/cpp/hoot/core/io/ApiDb.h \
+    src/main/cpp/hoot/core/io/OsmApiDb.h \
+    src/main/cpp/hoot/core/io/HootApiDb.h \
     src/main/cpp/hoot/core/io/OsmMapWriterFactory.h \
     src/main/cpp/hoot/core/io/OsmMapReaderFactory.h \
     src/main/cpp/hoot/core/io/OgrWriter.h \

@@ -1575,9 +1575,19 @@ The maximum number of OSM elements that may be read from the services database i
 * Data Type: string
 * Default Value: `postgresql://hoot:hoottest@localhost:5432/hoot/testMap`
 
+=== hootapi.db.test.url
+
+* Data Type: string
+* Default Value: `postgresql://hoot:hoottest@localhost:5432/hoot/testMap`
+
 Contains the DB URL for unit testing. This is typically only used by developers.
 
 === services.db.test.url.osmapi
+
+* Data Type: string
+* Default Value: `postgresql://hoot:hoottest@localhost:5432/osmapi_test`
+
+=== osmapi.db.test.url
 
 * Data Type: string
 * Default Value: `postgresql://hoot:hoottest@localhost:5432/osmapi_test`

@@ -101,7 +101,7 @@ QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId)
 QUrl ServicesDbTestUtils::getOsmApiDbUrl()
 {
   Settings s = conf();
-  return QUrl(ConfigOptions(s).getServicesDbTestUrlOsmapi());
+  return QUrl(ConfigOptions(s).getOsmapiDbTestUrl());
 }
 
 void ServicesDbTestUtils::deleteUser(QString email)
