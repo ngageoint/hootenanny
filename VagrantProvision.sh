@@ -7,23 +7,23 @@ source ~/.profile
 export DEBIAN_FRONTEND=noninteractive
 
 echo "Updating OS..."
-sudo apt-get -qq update 
-sudo apt-get -q -y upgrade 
-sudo apt-get -q -y dist-upgrade 
+sudo apt-get -qq update > Ubuntu_upgrade.txt 2>&1
+sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
+sudo apt-get -q -y dist-upgrade >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y install ntp
 
 if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
     echo "### Adding PostgreSQL repository to apt..."
     sudo bash -c "echo 'deb http://apt.postgresql.org/pub/repos/apt/ '$(lsb_release -cs)'-pgdg main' > /etc/apt/sources.list.d/pgdg.list"
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-    sudo apt-get -qq -y update 
-    sudo apt-get -q -y upgrade 
+    sudo apt-get -qq -y update >> Ubuntu_upgrade.txt 2>&1
+    sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
 fi
 
 echo "### Installing dependencies from repos..."
 #sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane
 
-sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite >> Ubuntu_upgrade.txt
+sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite >> Ubuntu_upgrade.txt 2>&1
 
 #if ! dpkg -l | grep --quiet wamerican-insane; then
 if ! dpkg -l | grep --quiet dictionaries-common; then
@@ -39,7 +39,7 @@ if ! dpkg -l | grep --quiet dictionaries-common; then
     sudo dpkg-reconfigure dictionaries-common
 fi
 
-sudo apt-get -y autoremove 
+sudo apt-get -y autoremove
 
 if ! grep --quiet "export HOOT_HOME" ~/.profile; then
     echo "Adding hoot home to profile..."
@@ -82,7 +82,7 @@ if [ ! -f bin/chromedriver ]; then
     mkdir -p $HOME/bin
     if [ ! -f chromedriver_linux64.zip ]; then
       wget http://chromedriver.storage.googleapis.com/2.14/chromedriver_linux64.zip
-    fi 
+    fi
     unzip -d $HOME/bin chromedriver_linux64.zip
 fi
 
@@ -95,7 +95,7 @@ if [ ! -f bin/osmosis ]; then
     mkdir -p $HOME/bin
     if [ ! -f osmosis-latest.tgz ]; then
       wget http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
-    fi 
+    fi
     mkdir -p $HOME/bin/osmosis_src
     tar -zxf osmosis-latest.tgz -C $HOME/bin/osmosis_src
     ln -s $HOME/bin/osmosis_src/bin/osmosis $HOME/bin/osmosis
@@ -141,14 +141,14 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
     echo "GDAL: configure"
     sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
     echo "GDAL: make"
-    sudo make -sj$(nproc) > GDAL_Build.txt
+    sudo make -sj$(nproc) > GDAL_Build.txt 2>&1
     echo "GDAL: install"
-    sudo make -s install >> GDAL_Build.txt
+    sudo make -s install >> GDAL_Build.txt 2>&1
     cd swig/python
     echo "GDAL: python build"
-    python setup.py build >> GDAL_Build.txt
+    python setup.py build >> GDAL_Build.txt 2>&1
     echo "GDAL: python install"
-    sudo python setup.py install >> GDAL_Build.txt
+    sudo python setup.py install >> GDAL_Build.txt 2>&1
     sudo ldconfig
     cd ~
 fi
@@ -224,7 +224,7 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     echo "export TOMCAT6_HOME=/usr/share/tomcat6" >> ~/.profile
     source ~/.profile
     cd $TOMCAT6_HOME
-    # These sym links are needed so that the ui tests can deploy the services and iD 
+    # These sym links are needed so that the ui tests can deploy the services and iD
     # app to Tomcat using the Tomcat startup and shutdown scripts.
     sudo ln -s /var/lib/tomcat6/webapps webapps
     sudo ln -s /var/lib/tomcat6/conf conf
@@ -232,7 +232,7 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     cd ~
 fi
 
-# These permission changes needed so that the ui tests can deploy the services and iD app to 
+# These permission changes needed so that the ui tests can deploy the services and iD app to
 # Tomcat using the Tomcat startup and shutdown scripts.
 username=vagrant
 if groups $username | grep &>/dev/null '\btomcat6\b'; then
@@ -245,12 +245,7 @@ sudo mkdir -p $TOMCAT6_HOME/logs
 sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME/logs
 sudo chown -R vagrant:tomcat6 /var/lib/tomcat6
 sudo chown -R vagrant:tomcat6 /etc/tomcat6
-sudo chown -R tomcat6:tomcat6 /var/log/tomcat6
-
-# This is a workaround.
-mkdir -p $HOOT_HOME/ingest/processed
-#sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
-sudo chmod -R 777 $HOOT_HOME/ingest
+sudo chown -R vagrant:tomcat6 /var/log/tomcat6
 
 cd $HOOT_HOME
 source ./SetupEnv.sh
@@ -336,6 +331,16 @@ cd node-mapnik-server
 sudo npm install --quiet
 cd ..
 
+mkdir -p $HOOT_HOME/ingest/processed
+#sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
+mkdir -p $HOOT_HOME/upload
+#sudo chown -R vagrant:tomcat6 $HOOT_HOME/upload
+
+# This is a workaround.
+sudo chmod -R 777 $HOOT_HOME/ingest
+sudo chmod -R 777 $HOOT_HOME/upload
+
+
 aclocal && autoconf && autoheader && automake && ./configure --quiet --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
@@ -348,11 +353,14 @@ make -s clean && make -sj$(nproc)
 echo "### Deploying web application..."
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
 scripts/CopyWebAppsToTomcat.sh #&> /dev/null
-make -sj$(nproc) docs 
+# docs build is always failing the first time during the npm install portion for an unknown reason, but t
+# always passes the second time its run...needs fixed, but this is the workaround for now
+make -sj$(nproc) docs &> /dev/null || true
+make -sj$(nproc) docs
 hoot version
 
 echo "See VAGRANT.md for additional configuration instructions and then run 'vagrant ssh' to log into the Hootenanny virtual machine."
-echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation."
+echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation files."
 echo "Access the web application at http://localhost:8888/hootenanny-id"
 echo "If you wish to run the diagnostic tests, log into the virtual machine and run: 'cd $HOOT_HOME && make -sj$(nproc) test-all'"
 
