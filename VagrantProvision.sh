@@ -213,8 +213,6 @@ sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME/logs
 sudo chown -R vagrant:tomcat6 /var/lib/tomcat6
 sudo chown -R vagrant:tomcat6 /etc/tomcat6
 sudo chown -R vagrant:tomcat6 /var/log/tomcat6
-mkdir -p $HOOT_HOME/ingest/processed
-sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
 
 cd $HOOT_HOME
 source ./SetupEnv.sh
@@ -305,6 +303,10 @@ cd node-mapnik-server
 sudo npm install
 cd ..
 
+mkdir -p $HOOT_HOME/ingest/processed
+sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
+mkdir -p $HOOT_HOME/upload
+sudo chown -R vagrant:tomcat6 $HOOT_HOME/upload
 aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
