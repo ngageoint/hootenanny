@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.services;
 
@@ -41,7 +41,8 @@ import hoot.services.HootProperties;
 import hoot.services.nodeJs.ServerControllerBase;
 import hoot.services.utils.ResourceErrorHandler;
 
-public class P2PResource extends ServerControllerBase {
+public class P2PResource extends ServerControllerBase 
+{
 	private static final Logger log = LoggerFactory.getLogger(P2PResource.class);
 	
 	private static String homeFolder = null;
@@ -70,9 +71,8 @@ public class P2PResource extends ServerControllerBase {
   	}
   }
   
-
-  public void startP2PService() {
-
+  public void startP2PService() 
+  {
   	// set default default port and threadcount
   	String currPort = P2PServerPort;
   	String currThreadCnt = P2PServerThreadCount;
@@ -80,8 +80,6 @@ public class P2PResource extends ServerControllerBase {
 		{
 			// Make sure to wipe out previosuly running servers.
 			stopServer(homeFolder + "/scripts/" + P2PServerScript);
-			
-		
 			
 			// Probably an overkill but just in-case using synch lock
 			synchronized(portLock)
@@ -102,31 +100,14 @@ public class P2PResource extends ServerControllerBase {
 		    Status.INTERNAL_SERVER_ERROR,
 			log);
 		}
- 
   }
 
- 
-  
-  
-  
   /**
-	 * <NAME>POI to POI Service Node Server Stop</NAME>
-	 * <DESCRIPTION>
-	 *  Destroys all POI to POI server process where it effectively shutting them down.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON containing state
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/services/p2pserver/stop</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>{"isRunning":"false"}</OUTPUT>
-	 * </EXAMPLE>
-   * @return
+   * Destroys all POI to POI server process where it effectively shutting them down.
+   * 
+   * GET hoot-services/services/p2pserver/stop
+   * 
+   * @return JSON containing state
    */
   @GET
   @Path("/p2pserver/stop")
@@ -136,7 +117,11 @@ public class P2PResource extends ServerControllerBase {
   	// should not be reliable since there are many path where it will not be invoked.
 		try
 		{  
-			stopServer(homeFolder + "/scripts/" + P2PServerScript);
+			//Destroy the reference to the process directly here via the Java API vs having the base 
+			//class kill it with a unix command.  Killing it via command causes the stxxl temp files 
+			//created hoot threads not to be cleaned up.
+			//stopServer(homeFolder + "/scripts/" + P2PServerScript);
+			_P2PProc.destroy();
 		}
 		catch (Exception ex)
 		{
@@ -150,34 +135,20 @@ public class P2PResource extends ServerControllerBase {
 		res.put("isRunning", "false");
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
   }
-  
-  
-  
+   
   /**
-	 * <NAME>POI to POI Service Node Server status</NAME>
-	 * <DESCRIPTION>
-	 *  Gets current status of P2P server.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON containing state and port it is running
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/services/p2pserver/status</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>{"isRunning":"true","port":"8096"}</OUTPUT>
-	 * </EXAMPLE>
-   * @return
-   */  
+   * Gets current status of P2P server.
+   * 
+   * GET hoot-services/services/p2pserver/status
+   * 
+   * @return JSON containing state and port it is running
+   */
   @GET
   @Path("/p2pserver/status")
   @Produces(MediaType.TEXT_PLAIN)
-  public Response isP2PServiceRunning() {
+  public Response isP2PServiceRunning()
+  {
   	boolean isRunning = false;
-  	
   	
 		try
 		{
@@ -196,7 +167,4 @@ public class P2PResource extends ServerControllerBase {
 		res.put("port", currentPort);
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
   }
-
-
-
 }

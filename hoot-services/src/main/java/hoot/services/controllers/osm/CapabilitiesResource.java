@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -51,31 +51,14 @@ public class CapabilitiesResource
 {
   private static final Logger log = LoggerFactory.getLogger(CapabilitiesResource.class);
 
-	/**
-	 * <NAME>Capabilities Service</NAME>
-	 * <DESCRIPTION>
-	 * The Hootenanny Capabilities Service implements the OSM
-	 * Capabilities Service v0.6 with some differences. The Hootenanny API does not support the following
-	 * capabilities properties: tracepoints.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	Capability OSM XML
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/api/capabilities</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * Capability OSM XML
-	 * </OUTPUT>
-	 * </EXAMPLE>
-   *
-   * Service method endpoint for retrieving OSM capabilities
-   *
-   * @return Response containing requested capabilities data
+  /**
+   * The Hootenanny Capabilities Service implements the OSM Capabilities Service v0.6 with some 
+   * differences. The Hootenanny API does not support the following capabilities properties: 
+   * tracepoints.
+   * 
+   * GET hoot-services/osm/api/capabilities
+   * 
+   * @return Capability OSM XML
    */
   @GET
   @Consumes(MediaType.TEXT_PLAIN)

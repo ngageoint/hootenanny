@@ -1,3 +1,29 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ */
 package hoot.services.writers.review;
 
 import hoot.services.db.DbUtils;
@@ -12,7 +38,8 @@ import org.slf4j.LoggerFactory;
 import com.mysema.query.sql.Configuration;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 
-public class ReviewBookmarksRemover {
+public class ReviewBookmarksRemover 
+{
 	@SuppressWarnings("unused")
   private static final Logger log = LoggerFactory.getLogger(ReviewBookmarksRemover.class);
 	
@@ -20,7 +47,7 @@ public class ReviewBookmarksRemover {
 	
 	public ReviewBookmarksRemover(final Connection cn) 
 	{
-		_conn = cn;
+	  _conn = cn;
 	}
 	
 	/**
@@ -32,20 +59,8 @@ public class ReviewBookmarksRemover {
 	 */
 	public long remove(final ReviewBookmarkDelRequest request) throws Exception
 	{
-		long nDeleted = 0;
-		
-		try
-		{
-			SQLDeleteClause cl = _createDelClause(request);
-			nDeleted = cl.execute();
-		}
-		catch (Exception ex)
-		{
-			
-		}
-		return nDeleted;
+		return _createDelClause(request).execute();
 	}
-	
 	
 	/**
 	 * Delete clause
@@ -56,20 +71,9 @@ public class ReviewBookmarksRemover {
 	 */
 	protected SQLDeleteClause _createDelClause(final ReviewBookmarkDelRequest request) throws Exception
 	{
-		SQLDeleteClause cl = null;
-		
-		try
-		{
-			QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
-			Configuration configuration = DbUtils.getConfiguration();
-			cl = new SQLDeleteClause(_conn, configuration, reviewBookmarks)
+		QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
+		Configuration configuration = DbUtils.getConfiguration();
+		return new SQLDeleteClause(_conn, configuration, reviewBookmarks)
 			.where(reviewBookmarks.id.eq(request.getBookmarkId()));
-		}
-		catch (Exception ex)
-		{
-			
-		}
-		
-		return cl;
 	}
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ATTRIBUTEDISTANCEEXTRACTOR_H
 #define ATTRIBUTEDISTANCEEXTRACTOR_H
@@ -42,9 +42,7 @@ class AttributeDistanceExtractor : public WayFeatureExtractor
 public:
   static string className() { return "hoot::AttributeDistanceExtractor"; }
 
-  AttributeDistanceExtractor(QString key) : _key(key) {}
-  //TODO: is _key even used?
-  AttributeDistanceExtractor(ValueAggregator* wayAgg = 0) : WayFeatureExtractor(wayAgg) {}
+  AttributeDistanceExtractor(ValueAggregator* wayAgg = 0, QString key = "") : WayFeatureExtractor(wayAgg), _key(key) {}
 
   virtual string getClassName() const { return className(); }
 
@@ -58,8 +56,7 @@ protected:
   {
     double score;
     double weight;
-    TagComparator::getInstance()./*compareTags()*/
-        compareEnumeratedTags(w1->getTags(), w2->getTags(), score, weight);
+    TagComparator::getInstance().compareEnumeratedTags(w1->getTags(), w2->getTags(), score, weight);
     if (_useWeight)
     {
       return weight * score;

@@ -229,7 +229,7 @@ tds61 = {
     }, // End getDbSchema
 
     // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
-    //                feature, checking enumerated values and populateing the OTH field.
+    //                feature, checking values and populateing the OTH field.
     validateAttrs: function(geometryType,attrs) {
 
         // First, use the lookup table to quickly drop all attributes that are not part of the feature.
@@ -286,8 +286,11 @@ tds61 = {
                                 attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
                             }
                         } // End text attr length > max length
+
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
-        	    }
+                } // End attrs loop
             }
             else
             {
@@ -327,6 +330,9 @@ tds61 = {
                                 attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
                             }
                         } // End text attr length > max length
+
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
         	    } // End attrs loop
             }
@@ -514,7 +520,7 @@ tds61 = {
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.numBiased, 'backward');
+            translate.applySimpleNumBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.numBiased, 'backward',tds61.rules.intList);
             translate.applySimpleTxtBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.txtBiased, 'backward');
 
             // post processing
@@ -583,6 +589,9 @@ tds61 = {
         // List of data values to drop/ignore
         var ignoreList = { '-999999.0':1, '-999999':1, 'noinformation':1 };
 
+        // List of attributes that can't have '0' as a value
+        var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
+
         // This is a handy loop. We use it to:
         // 1) Remove all of the "No Information" and -999999 fields
         // 2) Convert all of the Attrs to uppercase - if needed
@@ -599,6 +608,13 @@ tds61 = {
             if (attrs[col] == '' || attrValue in ignoreList || attrs[col] in ignoreList)
             {
                 delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
+                continue;
+            }
+
+            // Remove attributes with '0' values if they can't be '0'
+            if (noZeroList.indexOf(col) > -1 && attrs[col] == '0')
+            {
+                delete attrs[col];
                 continue;
             }
 
@@ -1726,7 +1742,8 @@ tds61 = {
 
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(attrs, tags, tds61.rules.txtBiased, 'forward');
 
         // Crack open the OTH field and populate the appropriate attributes
@@ -1853,7 +1870,7 @@ tds61 = {
 
         // apply the simple number and text biased rules
         // Note: These are BACKWARD, not forward!
-        translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'backward',tds61.rules.intList);
         translate.applySimpleTxtBiased(attrs, tags, tds61.rules.txtBiased, 'backward');
 
         // post processing

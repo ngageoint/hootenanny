@@ -24,7 +24,7 @@ LT_INIT
 # GDAL
 m4_include([m4/ax_lib_gdal.m4])
 AX_LIB_GDAL([1.4.4])
-LIBS="$LIBS $GDAL_LDFLAGS $GDAL_DEP_LDFLAGS"
+LIBS="$LIBS $GDAL_RPATH $GDAL_LDFLAGS"
 CPPFLAGS="$CPPFLAGS $GDAL_CFLAGS"
 if test "${GDAL_OGR_ENABLED}" = "yes" ; then
   ogrinfo --formats > /dev/null
@@ -127,9 +127,11 @@ SERVICES_INIT()
 m4_include([m4/rnd.m4])
 RND_INIT()
 
-# Include UI
-m4_include([m4/ui.m4])
-UI_INIT()
+# Include UI tests
+m4_include([m4/ax_compare_version.m4])
+m4_include([m4/ruby.m4])
+m4_include([m4/ui-tests.m4])
+UI_TESTS_INIT()
 
 # Code Coverage
 m4_include([m4/coverage.m4])

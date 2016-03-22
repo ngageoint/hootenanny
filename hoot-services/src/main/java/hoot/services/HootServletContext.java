@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services;
 
@@ -31,14 +31,15 @@ import hoot.services.controllers.ogr.TranslatorResource;
 import hoot.services.controllers.services.P2PResource;
 
 import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;;
+import javax.servlet.ServletContextListener;
 
 public class HootServletContext implements ServletContextListener {
 
 	private TranslatorResource _transRes = null;
 	private P2PResource _P2PRes = null;
 	private BasemapResource _BRes = null;
-	public void contextInitialized(ServletContextEvent arg0) 
+	@Override
+  public void contextInitialized(ServletContextEvent arg0) 
 	{
 		_transRes = new TranslatorResource();
 		_transRes.startTranslationService();
@@ -46,13 +47,13 @@ public class HootServletContext implements ServletContextListener {
 		_P2PRes = new P2PResource();
 		_P2PRes.startP2PService();
 		
-		
 		// Doing this to make sure we create ingest folder
 		_BRes = new BasemapResource();
 		_BRes.createTileServerPath();
 	}
 	
-	public void contextDestroyed(ServletContextEvent arg0) 
+	@Override
+  public void contextDestroyed(ServletContextEvent arg0) 
 	{
 		_transRes.stopTranslationService();
 		_P2PRes.stopP2PService();

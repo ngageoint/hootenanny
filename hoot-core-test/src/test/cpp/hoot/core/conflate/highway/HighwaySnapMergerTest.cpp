@@ -70,6 +70,7 @@ class HighwaySnapMergerTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runTagsTest);
   CPPUNIT_TEST(runTagsSplitTest);
   CPPUNIT_TEST(runTagsNoRelationTest);
+  CPPUNIT_TEST(reviewMarkingTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -454,7 +455,39 @@ public:
       "}\n"
       "").replace("'", "\"");
     HOOT_STR_EQUALS(expected, json);
+  }
 
+  //simple test to make sure review note/type strings don't get interchanged
+  void reviewMarkingTest()
+  {
+    OsmMapPtr map = createMap();
+
+    Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
+    WayPtr w1 = createWay(map, w1c, Status::Unknown1);
+
+    Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
+    WayPtr w2 = createWay(map, w2c, Status::Unknown2);
+
+    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    sublineMatcher->setMinSplitSize(5.0);
+    sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
+
+    set< pair<ElementId, ElementId> > pairs;
+    pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
+
+    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+
+    vector< pair<ElementId, ElementId> > replaced;
+    merger.apply(map, replaced);
+
+    merger._markNeedsReview(map, w1, w2, "a review note", "a review type");
+
+    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelationMap().size());
+    //will throw an exception on failure
+    ConstRelationPtr reviewRelation =
+      dynamic_pointer_cast<Relation>(
+        TestUtils::getElementWithTag(map, "hoot:review:note", "a review note"));
+    HOOT_STR_EQUALS("a review type", reviewRelation->getTags().get("hoot:review:type"));
   }
 };
 

@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FILTEREDVISITOR_H
 #define FILTEREDVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/filters/ElementCriterionConsumer.h>
@@ -40,7 +40,7 @@ namespace hoot
 
 class FilteredVisitor :
     public ElementVisitor,
-    public OsmMapConsumer,
+    public ConstOsmMapConsumer,
     public ElementCriterionConsumer,
     public ElementVisitorConsumer
 {

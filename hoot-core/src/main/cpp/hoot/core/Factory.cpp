@@ -117,7 +117,8 @@ void Factory::registerCreator(ObjectCreator* oc, bool baseClass)
   }
   else
   {
-    throw Exception("A class got registered multiple times.");
+    throw Exception("A class got registered multiple times. " +
+      QString::fromStdString(oc->getName()));
   }
 }
 

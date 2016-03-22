@@ -46,8 +46,6 @@ namespace hoot
    populated are being populated.  Detailed testing of the accuracy of the values of the statistics
    should occur in separate filter and visitor test classes (that's why value comparisons are a
    little lax in precision here).
-
-   TODO: add tests for input files as well
  */
 class CalculateStatsOpTest : public CppUnit::TestFixture
 {
@@ -79,8 +77,8 @@ public:
   {
     shared_ptr<CalculateStatsOp> calcStatsOp =
       _calcStats("test-files/ops/CalculateStatsOp/all-data-types.osm");
-
-    CPPUNIT_ASSERT_EQUAL(73, calcStatsOp->getStats().size());
+//WARNING: Change this with the added stats!
+    CPPUNIT_ASSERT_EQUAL(85, calcStatsOp->getStats().size());
 
     CPPUNIT_ASSERT_EQUAL(201.0, calcStatsOp->getSingleStat("Node Count"));
     CPPUNIT_ASSERT_EQUAL(22.0, calcStatsOp->getSingleStat("Way Count"));
@@ -111,6 +109,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(31.0, calcStatsOp->getSingleStat("Total Feature Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Conflatable Features"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Untagged Feature Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Unconflatable Features"));
     CPPUNIT_ASSERT_EQUAL(12.0, calcStatsOp->getSingleStat("Total Features Processed By Conflation"));
     CPPUNIT_ASSERT_EQUAL(12.0, calcStatsOp->getSingleStat("Total Conflated Features"));
@@ -167,6 +166,18 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Buildings Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(63.63, calcStatsOp->getSingleStat("Percentage of Unmatched Buildings"), 1e-1);
 
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Waterway Count"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Waterways"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Waterways"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Waterways Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Waterway Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Waterways"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Meters of Waterway Processed by Conflation"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Conflated"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Marked for Review"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Waterways"), 1e-1);
+
     CPPUNIT_ASSERT_EQUAL(52.0, calcStatsOp->getSingleStat("Longest Tag"));
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -181,6 +192,8 @@ public:
       0.6481481, calcStatsOp->getSingleStat("Highway Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.704545, calcStatsOp->getSingleStat("POI Translated Populated Tag Percent"), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(
+      isnan(calcStatsOp->getSingleStat("Waterway Translated Populated Tag Percent")), 1);
   }
 
   /*
@@ -195,7 +208,7 @@ public:
     shared_ptr<CalculateStatsOp> calcStatsOp =
       _calcStats("test-files/ops/CalculateStatsOp/all-data-types-with-reviews.osm");
 
-    CPPUNIT_ASSERT_EQUAL(73, calcStatsOp->getStats().size());
+    CPPUNIT_ASSERT_EQUAL(85, calcStatsOp->getStats().size());
 
     CPPUNIT_ASSERT_EQUAL(201.0, calcStatsOp->getSingleStat("Node Count"));
     CPPUNIT_ASSERT_EQUAL(21.0, calcStatsOp->getSingleStat("Way Count"));
@@ -224,9 +237,10 @@ public:
       25331.2, calcStatsOp->getSingleStat("Meters Squared of Buildings"), 1e-1);
     CPPUNIT_ASSERT_EQUAL(13.0, calcStatsOp->getSingleStat("Building Unique Name Count"));
 
-    //TODO: fix; totals don't add up...
+    //fix; totals don't add up...
     CPPUNIT_ASSERT_EQUAL(29.0, calcStatsOp->getSingleStat("Total Feature Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Conflatable Features"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Untagged Feature Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Unconflatable Features"));
     CPPUNIT_ASSERT_EQUAL(11.0, calcStatsOp->getSingleStat("Total Features Processed By Conflation"));
     CPPUNIT_ASSERT_EQUAL(4.0, calcStatsOp->getSingleStat("Total Features Marked for Review"));
@@ -270,7 +284,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Highways Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(22.22, calcStatsOp->getSingleStat("Percentage of Unmatched Highways"), 1e-1);
 
-    //TODO: fix; totals don't add up...
+    //fix; totals don't add up...
     CPPUNIT_ASSERT_EQUAL(12.0, calcStatsOp->getSingleStat("Building Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Buildings"));
     CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Conflated Buildings"));
@@ -282,6 +296,18 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(16.67, calcStatsOp->getSingleStat("Percentage of Buildings Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(16.67, calcStatsOp->getSingleStat("Percentage of Buildings Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(58.33, calcStatsOp->getSingleStat("Percentage of Unmatched Buildings"), 1e-1);
+
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Waterway Count"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Waterways"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Waterways"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Waterways Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Waterway Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Waterways"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Meters of Waterway Processed by Conflation"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Conflated"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Marked for Review"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Waterways"), 1e-1);
 
     CPPUNIT_ASSERT_EQUAL(52.0, calcStatsOp->getSingleStat("Longest Tag"));
 
@@ -297,6 +323,8 @@ public:
       0.6481481, calcStatsOp->getSingleStat("Highway Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.704545, calcStatsOp->getSingleStat("POI Translated Populated Tag Percent"), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(
+      isnan(calcStatsOp->getSingleStat("Waterway Translated Populated Tag Percent")), 1);
   }
 
 private:
@@ -312,7 +340,7 @@ private:
     reader.read(inputFile, map);
 
     shared_ptr<CalculateStatsOp> calcStatsOp(new CalculateStatsOp());
-    //TODO: If we figure out the error messages logged by the script translator related stats are
+    //If we figure out the error messages logged by the script translator related stats are
     //invalid and fix them, then this log disablement can be removed.
     {
       DisableLog dl(Log::Fatal);

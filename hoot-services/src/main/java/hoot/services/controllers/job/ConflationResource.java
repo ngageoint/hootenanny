@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -90,10 +90,17 @@ public class ConflationResource extends JobControllerBase {
 			log.error(ex.getMessage());
 		}
 	}
+
 	/**
-	 * <NAME>Conflate Service</NAME>
-	 * <DESCRIPTION>Conflate service operates like a standard ETL service. The conflate service specifies the input files, conflation type, match threshold, miss threshold, and output file name. The conflation type can be specified as the average of the two input datasets or based on a single input file that is intended to be the reference dataset. It has two fronts, WPS and standard rest end point.</DESCRIPTION>
-	 * <PARAMETERS>
+	 * Conflate service operates like a standard ETL service. The conflate service specifies the 
+	 * input files, conflation type, match threshold, miss threshold, and output file name. The 
+	 * conflation type can be specified as the average of the two input datasets or based on a 
+	 * single input file that is intended to be the reference dataset. It has two fronts, WPS and 
+	 * standard rest end point.
+	 * 
+	 * POST hoot-services/ogc
+	 * 
+	 * @param Conflation parameters in json format
 	 * <INPUT1_TYPE>
 	 * 	Conflation input type [OSM] | [OGR] | [DB]
 	 * </INPUT1_TYPE>
@@ -110,7 +117,7 @@ public class ConflationResource extends JobControllerBase {
 	 * 	 Conflation operation output name
 	 * </OUTPUT_NAME>
 	 * <CONFLATION_TYPE>
-	 * 	 [average] | [reference]
+	 * 	 [Average] | [Reference]
 	 * </CONFLATION_TYPE>
 	 * <REFERENCE_LAYER>
 	 * 	The reference layer which will be dominant tags. Default is 1 and if 2 selected, layer 2 tags will be dominant with layer 1 as geometry snap layer.
@@ -133,20 +140,30 @@ public class ConflationResource extends JobControllerBase {
 	 * <ADV_OPTIONS>
 	 * Advanced options list for hoot-core command
 	 * </ADV_OPTIONS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	Job ID
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/ogc</URL>
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-         * </OUTPUT>
-	 * </EXAMPLE>
-	 * @param params
-	 * @return
+	 * 
+	 * Example parameters:
+	 * {"INPUT1":"3","INPUT2":"4","OUTPUT_NAME":"Merged_AllDataTypes_ffc","CONFLATION_TYPE":"Reference","GENERATE_REPORT":"false",
+	 * "COLLECT_STATS":"false"
+	 * ,"TIME_STAMP":"1456423201777","REFERENCE_LAYER":"1","AUTO_TUNNING":"false","ADV_OPTIONS":"
+	 * -D \"map.cleaner.transforms=hoot::ReprojectToPlanarOp;hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;
+	 * hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover
+	 * ;hoot::DualWaySplitter;hoot::ImpliedDividedMarker;hoot::DuplicateNameRemover;
+	 * hoot::SmallWayMerger;hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor
+	 * ;hoot::NoInformationElementRemover\" -D \"small.way.merger.threshold=15\" -D \"unify.optimizer.time.limit=30\" 
+	 * -D \"ogr.split.o2s=false\" 
+	 * -D \"ogr.tds.add.fcsubtype=true\" -D \"ogr.tds.structure=true\" -D \"duplicate.name.case.sensitive=true\" 
+	 * -D \"conflate.match.highway.classifier=hoot::HighwayRfClassifier\" 
+	 * -D \"match.creators=hoot::HighwayMatchCreator;hoot::BuildingMatchCreator;
+	 * hoot::ScriptMatchCreator,PoiGeneric.js;hoot::ScriptMatchCreator,LinearWaterway.js\" 
+	 * -D \"merger.creators=hoot::HighwaySnapMergerCreator;hoot::BuildingMergerCreator;hoot::ScriptMergerCreator\" 
+	 * -D \"search.radius.highway=-1\" -D \"highway.matcher.heading.delta=5.0\" -D \"highway.matcher.max.angle=60\" 
+	 * -D \"way.merger.min.split.size=5\" -D \"conflate.enable.old.roads=false\" 
+	 * -D \"way.subline.matcher=hoot::MaximalNearestSublineMatcher\" -D \"waterway.angle.sample.distance=20.0\" 
+	 * -D \"waterway.matcher.heading.delta=150.0\" -D \"waterway.auto.calc.search.radius=true\" 
+	 * -D \"search.radius.waterway=-1\" -D \"waterway.rubber.sheet.minimum.ties=5\" 
+	 * -D \"waterway.rubber.sheet.ref=true\" -D \"osm.writer.include.debug=false\"","INPUT1_TYPE":"DB"
+	 * ,"INPUT2_TYPE":"DB","USER_EMAIL":"test@test.com"}
+	 * @return Job ID
 	 */
 	@POST
 	@Path("/execute")

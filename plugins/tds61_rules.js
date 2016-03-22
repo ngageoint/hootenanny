@@ -50,23 +50,23 @@ tds61.rules = {
      ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
      ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
      ['F_CODE','AL200','historic','ruins'], // Ruins
-     ['F_CODE','AL241','tower','communication'], 
-     ['F_CODE','AL241','tower','yes'], // OSM
-     ['F_CODE','AM080','tower:type','water'], // 
+     ['F_CODE','AL241','tower','communication'],
+     ['F_CODE','AL241','tower','yes'],
+     ['F_CODE','AM080','tower:type','water'],
 //      ['F_CODE','AN060','railway','yes'], // Rail yards
      ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
      ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
      ['F_CODE','AP030','highway','trunk'], // Motorway
      ['F_CODE','AP030','highway','trunk_link'], // Motorway
-     ['F_CODE','AP030','highway','primary'], 
-     ['F_CODE','AP030','highway','primary_link'], 
+     ['F_CODE','AP030','highway','primary'],
+     ['F_CODE','AP030','highway','primary_link'],
      ['F_CODE','AP030','highway','secondary'],
      ['F_CODE','AP030','highway','secondary_link'],
-     ['F_CODE','AP030','highway','tertiary'], 
-     ['F_CODE','AP030','highway','tertiary_link'], 
-     ['F_CODE','AP030','highway','residential'], 
-     ['F_CODE','AP030','highway','unclassified'], 
-     ['F_CODE','AP030','highway','service'], 
+     ['F_CODE','AP030','highway','tertiary'],
+     ['F_CODE','AP030','highway','tertiary_link'],
+     ['F_CODE','AP030','highway','residential'],
+     ['F_CODE','AP030','highway','unclassified'],
+     ['F_CODE','AP030','highway','service'],
      ['F_CODE','AP030','highway','yes'], // Just in case...
      ['F_CODE','AP040','railway','level_crossing'], // Level Crossing - See custom rules
      ['F_CODE','AP040','railway','crossing'], // Pedestrian Crossing - See custom rules
@@ -636,7 +636,7 @@ tds61.rules = {
      ['BH141_SHDB','1001','waterway:bank2:shoreline_delineated','yes'],
 
      // BH141_SLTA - Waterbody bank 1 shoreline type: No OSM even close, See MGCP SHR & SHL
-     // ['BH141_SLTA','-999999',undefined,undefined],  // Null
+     // ['BH141_SLTA','-999999',undefined,undefined], // Null
      ['BH141_SLTA','6','waterway:bank1:type','mangrove'],
      ['BH141_SLTA','8','waterway:bank1:type','marshy'],
      ['BH141_SLTA','10','waterway:bank1:type','stony'],
@@ -649,7 +649,7 @@ tds61.rules = {
      ['BH141_SLTA','999','waterway:bank1:type','other'],
 
      // BH141_SLTB - Waterbody bank 2 shoreline type: No OSM even close, See MGCP SHR & SHL
-     // ['BH141_SLTB','-999999',undefined,undefined],  // Null
+     // ['BH141_SLTB','-999999',undefined,undefined], // Null
      ['BH141_SLTB','6','waterway:bank2:type','mangrove'],
      ['BH141_SLTB','8','waterway:bank2:type','marshy'],
      ['BH141_SLTB','10','waterway:bank2:type','stony'],
@@ -2699,8 +2699,8 @@ tds61.rules = {
 
      // SEP - Divided
      // ['SEP','-999999',undefined,undefined], // No Information
-     ['SEP','1000','divider','no'],
-     ['SEP','1001','divider','yes'],
+     ['SEP','1000','is_divided','no'],
+     ['SEP','1001','is_divided','yes'],
 
      // SGCC - Surface Slope (interval closure)
      ['SGCC','2','incline:interval:closure','open_interval'], // Open Interval
@@ -3025,7 +3025,7 @@ tds61.rules = {
      ['TRS','23','transport:type','drove'], // Drove
      ['TRS','25','transport:type','runway'], // Runway
      ['TRS','30','transport:type','cableway'], // Cableway
-     ['TRS','999', 'transport:type','other'], // Other
+     ['TRS','999','transport:type','other'], // Other
 
      // TSCC - Tree Spacing (interval closure)
      ['TSCC','2','tree:spacing:closure','open_interval'], // Open Interval
@@ -4535,6 +4535,14 @@ tds61.rules = {
      'ZSAX_RX0':254, 'ZSAX_RX3':254, 'ZSAX_RX4':254
     },
     // ##### End of txtLength #####
+
+    // ##### Start of intList #####
+    // This list is for validateing the integer attributes prior to export
+    intList : [
+    'BC040_LCN', 'BC040_LVN', 'BNF', 'DEV', 'DZC', 'LC1', 'LC2', 'LC3', 'LC4', 'LTN', 'NOS', 'NPL', 'ZI026_CTUL',
+    'ZI026_CTUU'
+    ],
+    // ##### End of intList#####
 
 
     // ##### Start of Thematic Group Rules #####

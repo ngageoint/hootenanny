@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services;
 
@@ -64,7 +64,10 @@ public class HootProperties
       }
       finally
       {
-      	propsStrm.close();
+      	if (propsStrm != null)
+      	{
+      		propsStrm.close();
+      	}
       }
     }
 
@@ -106,7 +109,6 @@ public class HootProperties
    * It looks for property from the local properties and if it does not find it then uses environmental variable.
    *
    * @param prop
-   * @return
    * @throws Exception
    */
   public synchronized static String getProperty(String prop) throws IOException

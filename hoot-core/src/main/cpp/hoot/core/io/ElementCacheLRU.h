@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCACHELRU_H
 #define ELEMENTCACHELRU_H
@@ -99,6 +99,7 @@ public:
 
   // Functions for ElementOutputStream
   virtual void writeElement(ElementInputStream& inputStream);
+  virtual void writeElement(ElementPtr& element);
 
   // Functions for ElementProvider
 

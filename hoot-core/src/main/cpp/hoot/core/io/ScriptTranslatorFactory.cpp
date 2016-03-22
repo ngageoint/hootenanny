@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptTranslatorFactory.h"
 
@@ -47,15 +47,6 @@ bool CompareSt(ScriptTranslator* st1, ScriptTranslator* st2)
 
 ScriptTranslator* ScriptTranslatorFactory::createTranslator(QString scriptPath)
 {
-//  LOG_DEBUG("script path before: " + scriptPath);
-//  const QString hootHome = QString(getenv("HOOT_HOME"));
-//  //TODO: should HOOT_HOME be verified not to be an empty string here?
-//  if (!scriptPath.startsWith(hootHome))
-//  {
-//    scriptPath = hootHome + "/" + scriptPath;
-//  }
-//  LOG_DEBUG("script path after: " + scriptPath);
-
   _init();
 
   vector<ScriptTranslator*> st;

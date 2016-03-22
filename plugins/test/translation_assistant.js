@@ -348,11 +348,11 @@ describe('translateAttributes', function(){
     it('should translate shapefile attributes to osm tags', function(){
         assert.equal(JSON.stringify(translation.translateAttributes(attrs, layerName, mapping)), JSON.stringify(tags));
     })
-    it('should throw an error if no attributes could be translated to tags', function(){
-        assert.throws(function() { translation.translateAttributes(attrsNoMatch, layerName, mapping); }, Error);
+    it('should return null if no attributes could be translated to tags', function(){
+        assert.equal(translation.translateAttributes(attrsNoMatch, layerName, mapping), null);
     })
-    it('should throw an error if no layere name matched and no attributes could be translated to tags', function(){
-        assert.throws(function() { translation.translateAttributes(attrsLNoMatch, 'foo', mapping); }, Error);
+    it('should return null if no layer name matched and no attributes could be translated to tags', function(){
+        assert.equal(translation.translateAttributes(attrsNoMatch, 'foo', mapping), null);
     })
     it('for duplicate tag keys, values should be appended', function(){
         assert.equal(JSON.stringify(translation.translateAttributes(attrs, layerName, mappingWithDuplicateTags)), JSON.stringify(tagsWithDuplicateKeys));

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DataFrame.h"
@@ -51,7 +51,7 @@ namespace Tgs
   /**
   * Constructor
   */
-  DataFrame::DataFrame() 
+  DataFrame::DataFrame()
   {
     try
     {
@@ -116,7 +116,7 @@ namespace Tgs
 
   void DataFrame::checkData() const
   {
-    if (getBadFactors().size() > 0)
+    if (_getBadFactors().size() > 0)
     {
       throw Exception(typeid(this).name(), __FUNCTION__, __LINE__,
         "Found 1 or more bad factors. Try calling validateData().");
@@ -517,7 +517,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::getClassPopulations(const std::vector<unsigned int> & indices, 
+  void DataFrame::getClassPopulations(const std::vector<unsigned int> & indices,
     HashMap<std::string, int>& populations) const
   {
     try
@@ -543,7 +543,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::getClassDistribution(const std::vector<unsigned int>& indices, 
+  void DataFrame::getClassDistribution(const std::vector<unsigned int>& indices,
     std::vector<int>& distribution) const
   {
     try
@@ -1038,7 +1038,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::makeBalancedBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
+  void DataFrame::makeBalancedBoostrapAndOobSets(std::vector<unsigned int> & bootstrap,
     std::vector<unsigned int> & oob, unsigned int seed) const
   {
     try
@@ -1118,7 +1118,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::makeBalancedRoundRobinBootstrapAndOobSets(std::string className1, 
+  void DataFrame::makeBalancedRoundRobinBootstrapAndOobSets(std::string className1,
     std::string className2, std::vector<unsigned int> & bootstrap, std::vector<unsigned int> & oob)
   {
     try
@@ -1216,7 +1216,7 @@ namespace Tgs
   }
 
 
-  void DataFrame::makeBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
+  void DataFrame::makeBoostrapAndOobSets(std::vector<unsigned int> & bootstrap,
     std::vector<unsigned int> & oob, unsigned int seed) const
   {
     try
@@ -1523,7 +1523,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::sortIndicesOnFactorValue(std::vector<unsigned int> & indices, 
+  void DataFrame::sortIndicesOnFactorValue(std::vector<unsigned int> & indices,
     unsigned int fIdx) const
   {
     try
@@ -1547,11 +1547,11 @@ namespace Tgs
     }
   }
 
-  void DataFrame::validateData()
+  void DataFrame::validateData() const
   {
     try
     {
-      std::vector<std::string> badFactors = getBadFactors();
+      std::vector<std::string> badFactors = _getBadFactors();
 
       for(unsigned int j = 0; j < badFactors.size(); j++)
       {
@@ -1711,5 +1711,3 @@ namespace Tgs
     return doc.toString();
   }
 }  //End namespace
-
-

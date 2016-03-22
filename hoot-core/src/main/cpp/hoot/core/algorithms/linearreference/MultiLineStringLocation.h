@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __MULTI_LINE_STRING_LOCATION_H__
 #define __MULTI_LINE_STRING_LOCATION_H__
@@ -43,7 +43,7 @@ class MultiLineStringLocation
 {
   public:
 
-    //TODO: I don't like having a default constructor here, but its needed by PertyWaySplitVisitor
+    //I don't like having a default constructor here, but its needed by PertyWaySplitVisitor
     //for now.
     MultiLineStringLocation(){}
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STATUS_H
 #define STATUS_H
@@ -73,7 +73,6 @@ public:
 
   bool isUnknown() { return _type == Unknown1 || _type == Unknown2; }
 
-  //TODO: I think there is a better way to do this with an array of strings mirroring the enum...
   static Type fromString(QString typeString)
   {
     typeString = typeString.toLower();

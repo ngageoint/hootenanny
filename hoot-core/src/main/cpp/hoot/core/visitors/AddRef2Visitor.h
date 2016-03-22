@@ -22,20 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDREF2VISITOR_H
 #define ADDREF2VISITOR_H
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
 using namespace std;
 
-class AddRef2Visitor : public ElementVisitor, public OsmMapConsumer
+class AddRef2Visitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

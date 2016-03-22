@@ -289,8 +289,10 @@ tds = {
                                 hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
                             }
                         } // End text attr length > max length
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
-                }
+                } // End attrs loop
             }
             else
             {
@@ -329,6 +331,8 @@ tds = {
                                 hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
                             }
                         } // End text attr length > max length
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
                 } // End attrs loop
             }
@@ -482,7 +486,7 @@ tds = {
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newAttrs, tags, tds.rules.numBiased, 'backward');
+            translate.applySimpleNumBiased(newAttrs, tags, tds.rules.numBiased, 'backward',tds.rules.intList);
             translate.applySimpleTxtBiased(newAttrs, tags, tds.rules.txtBiased, 'backward');
 
             // post processing
@@ -529,6 +533,9 @@ tds = {
         // List of data values to drop/ignore
         var ignoreList = { '-999999.0':1, '-999999':1, 'noinformation':1 };
 
+        // List of attributes that can't have '0' as a value
+        var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
+
         // This is a handy loop. We use it to:
         // 1) Remove all of the "No Information" and -999999 fields
         // 2) Convert all of the Attrs to uppercase - if needed
@@ -547,6 +554,13 @@ tds = {
             {
                 delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
                 continue;
+            }
+
+            // Remove attributes with '0' values if they can't be '0'
+            if (noZeroList.indexOf(col) > -1 && attrs[col] == '0')
+            {
+                delete attrs[col];
+                continue
             }
 
             // Push the attribute to upper case - if needed
@@ -1510,7 +1524,8 @@ tds = {
         translate.applyOne2One(attrs, tags, tds.lookup, {'k':'v'}, tds.ignoreList);
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(attrs, tags, tds.rules.txtBiased, 'forward');
 
         // Crack open the OTH field and populate the appropriate attributes
@@ -1553,7 +1568,12 @@ tds = {
         }
 
         // Start processing here
-        if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+        // Debug
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
+            for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+        }
 
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
@@ -1601,7 +1621,7 @@ tds = {
 
         // apply the simple number and text biased rules
         // Note: These are BACKWARD, not forward!
-        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'backward',tds.rules.intList);
         translate.applySimpleTxtBiased(attrs, tags, tds.rules.txtBiased, 'backward');
 
         // post processing

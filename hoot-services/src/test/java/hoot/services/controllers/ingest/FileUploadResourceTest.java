@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -194,7 +194,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"fgdb_ogr", inputsList, "test@test.com", "false");
+				"fgdb_ogr", inputsList, "test@test.com", "false", null);
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -313,7 +313,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"fgdb_ogr", inputsList, "test@test.com", "false");
+				"fgdb_ogr", inputsList, "test@test.com", "false", null);
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -431,7 +431,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"osm", inputsList, "test@test.com", "false");
+				"osm", inputsList, "test@test.com", "false", null);
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -552,7 +552,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"ogr", inputsList, "test@test.com", "false");
+				"ogr", inputsList, "test@test.com", "false", null);
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -661,7 +661,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"ogr", inputsList, "test@test.com", "false");
+				"ogr", inputsList, "test@test.com", "false", null);
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -769,7 +769,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"osm", inputsList, "test@test.com", "false");
+				"osm", inputsList, "test@test.com", "false", null);
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -858,7 +858,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"fgdb", inputsList, "test@test.com", "false");
+				"fgdb", inputsList, "test@test.com", "false", null);
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -893,7 +893,8 @@ public class FileUploadResourceTest {
 	}
 
 	
-	@Ignore
+	@SuppressWarnings("unused")
+  @Ignore
 	@Test
 	@Category(UnitTest.class)
 	public void TestserializeFGDB() throws Exception
@@ -954,7 +955,8 @@ public class FileUploadResourceTest {
 	}
 
 
-	@Ignore
+	@SuppressWarnings("unused")
+  @Ignore
 	@Test
 	@Category(UnitTest.class)
 	public void TestserializeUploadedFiles() throws Exception
@@ -1012,4 +1014,5 @@ public class FileUploadResourceTest {
 
 		FileUtils.forceDelete(workingDir);*/
 	}
+
 }

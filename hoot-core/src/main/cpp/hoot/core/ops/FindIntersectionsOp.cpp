@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FindIntersectionsOp.h"
 
@@ -67,7 +67,6 @@ void FindIntersectionsOp::apply(shared_ptr<OsmMap>& map)
   shared_ptr<ElementTypeCriterion> rFilter(new ElementTypeCriterion(ElementType::Relation));
   VisitorOp(new RemoveElementsVisitor(rFilter)).apply(map);
   LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelationMap().size()));
-
 
   /// @todo move this to a config file.
   // pragmatically remove "bad" data in OSM afghanistan

@@ -121,13 +121,10 @@ public:
     Settings s = conf();
     ServicesDb db;
     CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_UNSUPPORTED, db.getDatabaseType());
-    db.open(QUrl(ConfigOptions(s).getServicesDbTestUrlOsmapi()));
+    db.open(ServicesDbTestUtils::getOsmApiDbUrl());
     CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_OSMAPI, db.getDatabaseType());
     db.close();
     CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_UNSUPPORTED, db.getDatabaseType());
-
-    // Reset this back to default value
-    s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), ConfigOptions(s).getServicesDbTestUrlOsmapiDefaultValue());
   }
 
   /***********************************************************************************************
@@ -472,9 +469,9 @@ public:
 
     // Insert nodes
     QString cmd = "export PGPASSWORD="+dbPassword+"; \
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1; \
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1; \
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodes.sql > /dev/null 2>&1";
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/users.sql > /dev/null 2>&1; \
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/changesets.sql > /dev/null 2>&1; \
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/nodes.sql > /dev/null 2>&1";
 
     if( std::system(cmd.toStdString().c_str()) != 0 )
     {
@@ -561,7 +558,7 @@ public:
     nodeIds.push_back(nodeId2);
 
     cmd = "export PGPASSWORD="+dbPassword+";\
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/ways.sql > /dev/null 2>&1";
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/ways.sql > /dev/null 2>&1";
     if( std::system(cmd.toStdString().c_str()) != 0 )
     {
       LOG_WARN("Failed postgres command.  Exiting test.");
@@ -633,7 +630,7 @@ public:
     ids.append(relationId);
 
     cmd = "export PGPASSWORD="+dbPassword+";\
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/relations.sql > /dev/null 2>&1";
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/relations.sql > /dev/null 2>&1";
     if( std::system(cmd.toStdString().c_str()) != 0 )
     {
       LOG_WARN("Failed postgres command.  Exiting test.");
@@ -710,38 +707,27 @@ public:
     const long nodeId2 = ids->at(3);
 
     shared_ptr<QSqlQuery> nodeResultIterator =
-      database.selectElements(-1, ElementType::Node, 2, 1);
+      database.selectElements(ElementType::Node);
     int ctr = 0;
     while (nodeResultIterator->next())
     {
-      switch (ctr)
-      {
-        case 0:
-        {
-          HOOT_STR_EQUALS(nodeId1, nodeResultIterator->value(0).toLongLong());
-          HOOT_STR_EQUALS(37.9, nodeResultIterator->value(1).toDouble());
-          HOOT_STR_EQUALS(-105.0, nodeResultIterator->value(2).toDouble());
-          HOOT_STR_EQUALS("foo = bar\n", ServicesDb::unescapeTags(nodeResultIterator->value(8)));
-        }
-        break;
-
-        case 1:
-        {
-          HOOT_STR_EQUALS(nodeId2, nodeResultIterator->value(0).toLongLong());
-          HOOT_STR_EQUALS(38.1, nodeResultIterator->value(1).toDouble());
-          HOOT_STR_EQUALS(-106.0, nodeResultIterator->value(2).toDouble());
-          HOOT_STR_EQUALS("foo2 = bar2\n", ServicesDb::unescapeTags(nodeResultIterator->value(8)));
-        }
-        break;
-
-        default:
-
-          const QString errorMessage = "Invalid number of results: " + QString::number(ctr);
-          CPPUNIT_FAIL(errorMessage.toStdString());
+     if (ctr == 1)
+     {
+        HOOT_STR_EQUALS(nodeId1, nodeResultIterator->value(0).toLongLong());
+        HOOT_STR_EQUALS(37.9, nodeResultIterator->value(1).toDouble());
+        HOOT_STR_EQUALS(-105.0, nodeResultIterator->value(2).toDouble());
+        HOOT_STR_EQUALS("foo = bar\n", ServicesDb::unescapeTags(nodeResultIterator->value(8)));
+      }
+      else if (ctr == 2)
+     {
+        HOOT_STR_EQUALS(nodeId2, nodeResultIterator->value(0).toLongLong());
+        HOOT_STR_EQUALS(38.1, nodeResultIterator->value(1).toDouble());
+        HOOT_STR_EQUALS(-106.0, nodeResultIterator->value(2).toDouble());
+        HOOT_STR_EQUALS("foo2 = bar2\n", ServicesDb::unescapeTags(nodeResultIterator->value(8)));
       }
       ctr++;
     }
-    CPPUNIT_ASSERT_EQUAL(2, ctr);
+    CPPUNIT_ASSERT_EQUAL(3, ctr);
   }
 
   void runSelectElementsCustomTagsTest()

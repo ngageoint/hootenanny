@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Log.h"
@@ -88,10 +88,10 @@ LevelPtr toLog4CxxLevel(Log::WarningLevel l)
 void Log::init()
 {
   _logger = Logger::getLogger("hoot");
-  ConsoleAppender* ca = new ConsoleAppender(
-        new PatternLayout(ConfigOptions().getLogFormat().toStdString()));
+  LayoutPtr layout(new PatternLayout(ConfigOptions().getLogFormat().toStdString()));
+  AppenderPtr appender(new ConsoleAppender(layout));
   _logger->removeAllAppenders();
-  _logger->addAppender(ca);
+  _logger->addAppender(appender);
   _logger->setLevel(toLog4CxxLevel(Log::getLevel()));
 }
 

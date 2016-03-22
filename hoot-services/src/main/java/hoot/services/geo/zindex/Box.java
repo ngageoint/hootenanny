@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.geo.zindex;
 
@@ -136,6 +136,7 @@ final public class Box
     return d;
   }
 
+  @Override
   public String toString()
   {
     String result = "{ ";
@@ -154,8 +155,6 @@ final public class Box
 
   /**
    * returns true if this box is inside "container"
-   * @param box
-   * @return
    */
   public boolean in(Box container)
   {

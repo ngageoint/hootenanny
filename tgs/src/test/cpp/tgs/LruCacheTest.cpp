@@ -55,7 +55,7 @@ namespace Tgs
       int n = map.size();
       cout << "[" << n << "]{";
 
-      for (/*typename*/ std::map<int, std::list< pair<int, int> >::iterator>::const_iterator it = map.begin(); it != map.end();)
+      for (std::map<int, std::list< pair<int, int> >::iterator>::const_iterator it = map.begin(); it != map.end();)
       {
         cout << "(" << it->first << ", " << *(it->second) << ")";
         it++;

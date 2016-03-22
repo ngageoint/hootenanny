@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaximalSubline.h"
 
@@ -210,7 +210,7 @@ vector< pair<WayLocation, WayLocation> > MaximalSubline::_discretizePointPairs(
   const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
   vector<WaySublineMatch>& rawSublineMatches)
 {
-  /// @todo this requires a more robust mechanism for generating point pairs. -JRS #2701
+  /// @todo this requires a more robust mechanism for generating point pairs. -JRS r2701
 
   // figure out where to start on the lines
   double diff = rawSublineMatches[0].getSubline1().getStart().calculateDistanceOnWay() -

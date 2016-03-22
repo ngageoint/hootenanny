@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SERVICESDB_H
 #define SERVICESDB_H
@@ -189,11 +189,9 @@ public:
 
   /**
    * Returns a results iterator to all OSM elements for a given map and element type in the services
-   * database.  If limit = 0, no limit will be placed on the number of elements returned.  If offset
-   * = 0, no records will be skipped in the returned result set.
+   * database.
    */
-  shared_ptr<QSqlQuery> selectElements(const long elementId, const ElementType& elementType,
-                                       const long limit, const long offset);
+  shared_ptr<QSqlQuery> selectElements(const ElementType& elementType);
 
   /**
    * Returns a results iterator to all OSM elements for a given map and element type in the osm api

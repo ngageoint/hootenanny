@@ -150,7 +150,7 @@ namespace Tgs
     * @param fileStream the output file stream
     * @param tabDepth set of tabs to indent the exported content
     */
-    void exportData(std::ostream & fileStream, std::string tabDepth = "") const;
+    void exportData(std::ostream & fileStream) const;
 
     /**
      * @brief getActiveFactorCount

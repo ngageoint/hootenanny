@@ -195,7 +195,8 @@ etds_osm = {
         // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After one2one:' + i + ': :' + tags[i] + ':');
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(nAttrs, tags, tds.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(nAttrs, tags, tds.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(nAttrs, tags, tds.rules.txtBiased, 'forward');
 
         // Debug:
@@ -225,7 +226,8 @@ etds_osm = {
             // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After 2nd one2one:' + i + ': :' + tags[i] + ':');
 
             // apply the simple number and text biased rules
-            translate.applySimpleNumBiased(nAttrs, tags, tds.rules.numBiased, 'forward');
+            // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+            translate.applySimpleNumBiased(nAttrs, tags, tds.rules.numBiased, 'forward',[]);
             translate.applySimpleTxtBiased(nAttrs, tags, tds.rules.txtBiased, 'forward');
 
             // Debug:

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.db;
 
@@ -33,17 +33,12 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -119,7 +114,9 @@ public class DbUtilsTest {
             Assert.assertEquals(v1, checkTags.get(k1));
             Assert.assertEquals(v2, checkTags.get(k2));
             Assert.assertEquals(v4, checkTags.get(k4));
-            Assert.assertEquals((JSONObject)parser.parse(DbUtils.escapeJson(v5).replaceAll("\\\\\"", "\"")), (JSONObject)parser.parse(checkTags.get(k5).replaceAll("\\\\\"", "\"")));
+            Assert.assertEquals(
+              parser.parse(DbUtils.escapeJson(v5).replaceAll("\\\\\"", "\"")), 
+              parser.parse(checkTags.get(k5).replaceAll("\\\\\"", "\"")));
 
             //Test that we can parse back into json
             JSONObject oParams = (JSONObject)parser.parse(checkTags.get(k5).replaceAll("\\\\\"", "\""));

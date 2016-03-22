@@ -40,6 +40,8 @@ class TagElementFilter : public BaseElementFilter
 public:
   TagElementFilter(FilterType type, QString k, QString v) { _type = type; _k = k; _v = v; }
 
+  virtual ElementCriterion* clone() { return new TagElementFilter(_type, _k, _v); }
+
 protected:
   virtual bool isFiltered(const Element& e) const;
 

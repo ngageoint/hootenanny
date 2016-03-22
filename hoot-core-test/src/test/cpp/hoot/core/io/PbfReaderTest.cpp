@@ -351,7 +351,7 @@ public:
     CPPUNIT_ASSERT(!reader.isSupported("test-files/fileDoesntExist.osm"));
   }
 
-  //TODO: in the future might try to support dir urls with this interface, but for now we don't
+  //in the future might try to support dir urls with this interface, but for now we don't
   void runIsSupportedUrlIsDirTest()
   {
     PbfReader reader(false);
