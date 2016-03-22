@@ -190,14 +190,14 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     echo "Adding Tomcat to profile..."
     echo "export TOMCAT6_HOME=/usr/share/tomcat6" >> ~/.profile
     source ~/.profile
-    cd $TOMCAT6_HOME
-    # These sym links are needed so that the ui tests can deploy the services and iD 
-    # app to Tomcat using the Tomcat startup and shutdown scripts.
-    sudo ln -s /var/lib/tomcat6/webapps webapps
-    sudo ln -s /var/lib/tomcat6/conf conf
-    sudo ln -s /var/log/tomcat6 log
-    cd ~
 fi
+cd $TOMCAT6_HOME
+# These sym links are needed so that the ui tests can deploy the services and iD 
+# app to Tomcat using the Tomcat startup and shutdown scripts.
+sudo ln -s /var/lib/tomcat6/webapps webapps
+sudo ln -s /var/lib/tomcat6/conf conf
+sudo ln -s /var/log/tomcat6 log
+cd ~
 
 # These permission changes needed so that the ui tests can deploy the services and iD app to 
 # Tomcat using the Tomcat startup and shutdown scripts.
@@ -227,11 +227,17 @@ fi
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment..."
-echo "#--------------
+# This echo properly substitutes the home path dir and keeps it from having to be hardcoded, but fails on permissions during write...so hardcoding the home path instead for now
+#sudo echo "#--------------
 # Hoot Settings
 #--------------
-HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
+#HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
+
+#--------------
+# Hoot Settings
+#--------------
+HOOT_HOME=/home/vagrant/hoot
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
 GDAL_DATA=/usr/local/share/gdal
 GDAL_LIB_DIR=/usr/local/lib
