@@ -18,6 +18,8 @@
 #  hoot/scripts/InstallHootDevelopmentEnvironment.sh
 #
 # Some of the tools installed (Eclipse, etc.) will require additional manual configuration.
+#
+# TODO: Fix hardcoded HOOT_HOME in VagrantProvision.sh to make this script work.
 
 cd ~
 

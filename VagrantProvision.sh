@@ -3,32 +3,43 @@
 cd ~
 source ~/.profile
 
-echo "### Updating OS..."
-sudo apt-get update
-sudo apt-get upgrade -y
-sudo apt-get dist-upgrade -y
-sudo apt-get install ntp -y
+#To get rid of "dpkg-preconfigure: unable to re-open stdin: No such file or directory" warnings
+export DEBIAN_FRONTEND=noninteractive
+
+echo "Updating OS..."
+sudo apt-get -qq update 
+sudo apt-get -q -y upgrade 
+sudo apt-get -q -y dist-upgrade 
+sudo apt-get -q -y install ntp
 
 if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
     echo "### Adding PostgreSQL repository to apt..."
     sudo bash -c "echo 'deb http://apt.postgresql.org/pub/repos/apt/ '$(lsb_release -cs)'-pgdg main' > /etc/apt/sources.list.d/pgdg.list"
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-    sudo apt-get update -y
-    sudo apt-get upgrade -y
+    sudo apt-get -qq -y update 
+    sudo apt-get -q -y upgrade 
 fi
 
 echo "### Installing dependencies from repos..."
-sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane
+#sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane
 
-if ! dpkg -l | grep --quiet wamerican-insane; then
+sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite >> Ubuntu_upgrade.txt
+
+#if ! dpkg -l | grep --quiet wamerican-insane; then
+if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
     # http://www.linuxquestions.org/questions/debian-26/dpkg-error-processing-dictionaries-common-4175451951/
-    sudo apt-get install -y wamerican-insane
+    sudo apt-get -q -y install dictionaries-common
+
+    sudo /usr/share/debconf/fix_db.pl
+
+    sudo apt-get -q -y install wamerican-insane
+
     sudo /usr/share/debconf/fix_db.pl
     sudo dpkg-reconfigure dictionaries-common
 fi
 
-sudo apt-get autoremove -y
+sudo apt-get -y autoremove 
 
 if ! grep --quiet "export HOOT_HOME" ~/.profile; then
     echo "Adding hoot home to profile..."
@@ -63,7 +74,7 @@ if  ! dpkg -l | grep google-chrome-stable; then
       wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     fi
     sudo dpkg -i google-chrome-stable_current_amd64.deb
-    sudo apt-get -f install -y
+    sudo apt-get -f -y -q install
 fi
 
 if [ ! -f bin/chromedriver ]; then
@@ -98,41 +109,46 @@ if  ! dpkg -l | grep  postgresql-9.1-postgis-[0-9]; then
       wget http://launchpadlibrarian.net/86690107/postgresql-9.1-postgis_1.5.3-2_amd64.deb
     fi
     sudo dpkg -i postgresql-9.1-postgis_1.5.3-2_amd64.deb
-    sudo apt-get -f install -y
+    sudo apt-get -f -q -y install
     # fixes missing dependency of postgis 1.5 by installing postgresql 9.1. 9.1 is installed listening on the default port, 5432. It unfortunately also installs postgres 9.5 but we remove that cleanly in the following steps, while leaving postgres 9.1 untouched
     echo "### Removing PostgreSQL 9.5..."
     sudo apt-get purge -y postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts
-    sudo apt-get install -y postgresql-contrib-9.1
-fi
-
-if [ ! -f gdal-1.10.1.tar.gz ]; then
-    echo "### Downloading GDAL source..."
-    wget http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
-fi
-if [ ! -d gdal-1.10.1 ]; then
-    echo "### Extracting GDAL source..."
-    tar zxfp gdal-1.10.1.tar.gz
-fi
-if [ ! -f FileGDB_API_1_3-64.tar.gz ]; then
-    echo "### Downloading FileGDB API source..."
-    wget http://downloads2.esri.com/Software/FileGDB_API_1_3-64.tar.gz
-fi
-if [ ! -d /usr/local/FileGDB_API ]; then
-    echo "### Extracting FileGDB API source & installing lib..."
-    sudo tar xfp FileGDB_API_1_3-64.tar.gz --directory /usr/local
-    sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
+    sudo apt-get -q -y install postgresql-contrib-9.1
 fi
 
 if ! ogrinfo --formats | grep --quiet FileGDB; then
+    if [ ! -f gdal-1.10.1.tar.gz ]; then
+        echo "### Downloading GDAL source..."
+        wget http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
+    fi
+    if [ ! -d gdal-1.10.1 ]; then
+        echo "### Extracting GDAL source..."
+        tar zxfp gdal-1.10.1.tar.gz
+    fi
+    if [ ! -f FileGDB_API_1_3-64.tar.gz ]; then
+        echo "### Downloading FileGDB API source..."
+        wget http://downloads2.esri.com/Software/FileGDB_API_1_3-64.tar.gz
+    fi
+    if [ ! -d /usr/local/FileGDB_API ]; then
+        echo "### Extracting FileGDB API source & installing lib..."
+        sudo tar xfp FileGDB_API_1_3-64.tar.gz --directory /usr/local
+        sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
+    fi
+
     echo "### Building GDAL w/ FileGDB..."
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
     cd gdal-1.10.1
+    echo "GDAL: configure"
     sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
-    sudo make -s -j$(nproc)
-    sudo make -s install
+    echo "GDAL: make"
+    sudo make -sj$(nproc) > GDAL_Build.txt
+    echo "GDAL: install"
+    sudo make -s install >> GDAL_Build.txt
     cd swig/python
-    python setup.py build
-    sudo python setup.py install
+    echo "GDAL: python build"
+    python setup.py build >> GDAL_Build.txt
+    echo "GDAL: python install"
+    sudo python setup.py install >> GDAL_Build.txt
     sudo ldconfig
     cd ~
 fi
@@ -230,8 +246,11 @@ sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME/logs
 sudo chown -R vagrant:tomcat6 /var/lib/tomcat6
 sudo chown -R vagrant:tomcat6 /etc/tomcat6
 sudo chown -R tomcat6:tomcat6 /var/log/tomcat6
+
+# This is a workaround.
 mkdir -p $HOOT_HOME/ingest/processed
-sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
+#sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
+sudo chmod -R 777 $HOOT_HOME/ingest
 
 cd $HOOT_HOME
 source ./SetupEnv.sh
@@ -244,10 +263,11 @@ fi
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "### Configuring tomcat6 environment..."
-echo "#--------------
-# Hoot Settings
-#--------------
+sudo echo "#-------------- \
+# Hoot Settings \
+#-------------- \
 HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
+
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
 GDAL_DATA=/usr/local/share/gdal
@@ -325,17 +345,15 @@ fi
 echo "### Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
 make -s clean && make -sj$(nproc)
+echo "### Deploying web application..."
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
 scripts/CopyWebAppsToTomcat.sh #&> /dev/null
-# docs build is always failing the first time during the npm install portion for an unknown reason, but then 
-# always passes the second time its run...needs fixed, but this is the workaround for now
-make -sj$(nproc) docs &> /dev/null || true
-make -sj$(nproc) docs
+make -sj$(nproc) docs 
 hoot version
 
 echo "See VAGRANT.md for additional configuration instructions and then run 'vagrant ssh' to log into the Hootenanny virtual machine."
-echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation files."
+echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation."
 echo "Access the web application at http://localhost:8888/hootenanny-id"
-echo "If you wish to run the diagnostic tests, log into the virtual machine and run: 'cd $HOOT_HOME && make -s -j$(nproc) test-all'"
+echo "If you wish to run the diagnostic tests, log into the virtual machine and run: 'cd $HOOT_HOME && make -sj$(nproc) test-all'"
 
 

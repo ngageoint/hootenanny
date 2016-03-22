@@ -4,7 +4,7 @@ set -e
 export HOOT_OPTS=--warn
 export ADDITIONAL_VISITORS="hoot::SplitLongLinearWaysVisitor"
 export TRANSLATION="TDSv40.js"
-export OUTPUT_DIR=$HOOT_HOME/test-output/cmd/SplitLongWaysTest
+export OUTPUT_DIR=$HOOT_HOME/test-output/cmd/slow/SplitLongWaysTest
 export DATA_DIR=$HOOT_HOME/test-files
 export INPUTS=$DATA_DIR/SplitLongWaysTest.shp
 export KNOWN_GOOD_OUTPUT=$DATA_DIR/SplitLongWaysTestResults.osm.pbf
