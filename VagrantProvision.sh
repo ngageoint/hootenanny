@@ -318,7 +318,7 @@ fi
 # if the marker file is older than this file (VagrantProvision.sh)
 touch Vagrant.marker
 
-echo "### Configuring Hoot..."
+echo "### Initial Hoot Setup..."
 echo HOOT_HOME: $HOOT_HOME
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
 cp conf/ServerConfig.sh.orig conf/ServerConfig.sh
@@ -341,6 +341,7 @@ sudo chmod -R 777 $HOOT_HOME/ingest
 sudo chmod -R 777 $HOOT_HOME/upload
 
 
+echo "### Configuring Hoot..."
 aclocal && autoconf && autoheader && automake && ./configure --quiet --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
