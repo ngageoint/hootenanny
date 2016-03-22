@@ -4,7 +4,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
@@ -13,7 +13,7 @@ namespace hoot
  * Calculates the median node. This is very inefficient and shouldn't be used on large maps. E.g.
  * O(n^2).
  */
-class MedianNodeVisitor : public ElementVisitor, public OsmMapConsumer
+class MedianNodeVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
   MedianNodeVisitor();

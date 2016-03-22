@@ -7,6 +7,8 @@
 namespace hoot
 {
 
+const double NetworkMatcher::EPSILON = 1e-6;
+
 NetworkMatcher::~NetworkMatcher()
 {
 }

@@ -3,8 +3,6 @@
 namespace hoot
 {
 
-const double IterativeEdgeMatcher::EPSILON = 1e-6;
-
 IterativeEdgeMatcher::IterativeEdgeMatcher() :
   _p(.5),
   _dampening(1)

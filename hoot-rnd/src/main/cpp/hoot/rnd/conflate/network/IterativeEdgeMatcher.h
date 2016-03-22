@@ -4,7 +4,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
-#include <hoot/rnd/conflate/network/NetworkMatcher.h>
+#include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
 #include <hoot/rnd/conflate/network/NetworkEdgeScore.h>
 #include <hoot/rnd/conflate/network/NetworkVertexScore.h>
 #include <hoot/rnd/conflate/network/OsmNetwork.h>
@@ -19,16 +19,12 @@ namespace hoot
 using namespace Tgs;
 
 /**
- * This approach iteratively improves scores based on neighboring vertex and edge scores.
- *
- * The approach seems to work well most of the time, but suffers from a greedy mentality.
+ * This approach iteratively improves scores based on edge scores. It is more restrictive than
+ * the IterativeNetworkMatcher by looking at possible edge paths not just vertex connectivity.
  */
-class IterativeEdgeMatcher : public NetworkMatcher
+class IterativeEdgeMatcher : public VagabondNetworkMatcher
 {
 public:
-
-  const static double EPSILON;
-
   IterativeEdgeMatcher();
 
   void iterate();
