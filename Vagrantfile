@@ -20,17 +20,39 @@ Vagrant.configure(2) do |config|
   # `vagrant box outdated`. This is not recommended.
   # config.vm.box_check_update = false
 
+
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
+
+  tomcatPort = ENV['TOMCAT_PORT']
+  if tomcatPort.nil?
+    tomcatPort = '8888'
+  end
+
+  transPort = ENV['NODEJS_PORT']
+  if transPort.nil?
+    transPort = '8094'
+  end
+
+  mergePort = ENV['P2P_PORT']
+  if mergePort.nil?
+    mergePort = '8096'
+  end
+
+  mapnikPort = ENV['NODE_MAPNIK_SERVER_PORT']
+  if mapnikPort.nil?
+    mapnikPort = '8000'
+  end
+
   # tomcat service
-  config.vm.network "forwarded_port", guest: 8080, host: 8888
+  config.vm.network "forwarded_port", guest: 8080, host: tomcatPort
   # translation nodejs service
-  config.vm.network "forwarded_port", guest: 8094, host: 8094
+  config.vm.network "forwarded_port", guest: 8094, host: transPort
   # merge nodejs service
-  config.vm.network "forwarded_port", guest: 8096, host: 8096
+  config.vm.network "forwarded_port", guest: 8096, host: mergePort
   # node-mapnik-server nodejs service
-  config.vm.network "forwarded_port", guest: 8000, host: 8000
+  config.vm.network "forwarded_port", guest: 8000, host: mapnikPort
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -96,8 +118,19 @@ Vagrant.configure(2) do |config|
   #   sudo apt-get update
   #   sudo apt-get install -y apache2
   # SHELL
-  config.vm.provision :shell, :privileged => false, :path => "VagrantProvision.sh"
-  config.vm.provision :shell, :privileged => false, :inline => "sudo service tomcat6 restart", run: "always"
-  config.vm.provision :shell, :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+  config.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
+  config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "echo Tomcat; #sudo service tomcat6 restart", run: "always"
+  config.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "echo Mapnik; #sudo service node-mapnik-server start", run: "always"
 
 end
+
+# Allow local overrides of vagrant settings
+if File.exists?('VagrantfileLocal')
+  load 'VagrantfileLocal'
+else
+  if File.exists?('VagrantfileLocal.vbox')
+    load 'VagrantfileLocal.vbox'
+  end
+end
+
+
