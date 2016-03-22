@@ -71,7 +71,7 @@ sudo gem install cucumber capybara-webkit selenium-webdriver rspec capybara-scre
 if  ! dpkg -l | grep google-chrome-stable; then
     echo "### Installing Chrome..."
     if [ ! -f google-chrome-stable_current_amd64.deb ]; then
-      wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     fi
     sudo dpkg -i google-chrome-stable_current_amd64.deb
     sudo apt-get -f -y -q install
@@ -81,7 +81,7 @@ if [ ! -f bin/chromedriver ]; then
     echo "### Installing Chromedriver..."
     mkdir -p $HOME/bin
     if [ ! -f chromedriver_linux64.zip ]; then
-      wget http://chromedriver.storage.googleapis.com/2.14/chromedriver_linux64.zip
+      wget --quiet http://chromedriver.storage.googleapis.com/2.14/chromedriver_linux64.zip
     fi
     unzip -d $HOME/bin chromedriver_linux64.zip
 fi
@@ -94,7 +94,7 @@ if [ ! -f bin/osmosis ]; then
     echo "### Installing Osmosis"
     mkdir -p $HOME/bin
     if [ ! -f osmosis-latest.tgz ]; then
-      wget http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
+      wget --quiet http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
     fi
     mkdir -p $HOME/bin/osmosis_src
     tar -zxf osmosis-latest.tgz -C $HOME/bin/osmosis_src
@@ -106,7 +106,7 @@ fi
 if  ! dpkg -l | grep  postgresql-9.1-postgis-[0-9]; then
     echo "### Installing PostgreSQL 9.1..."
     if [ ! -f postgresql-9.1-postgis_1.5.3-2_amd64.deb ]; then
-      wget http://launchpadlibrarian.net/86690107/postgresql-9.1-postgis_1.5.3-2_amd64.deb
+      wget --quiet http://launchpadlibrarian.net/86690107/postgresql-9.1-postgis_1.5.3-2_amd64.deb
     fi
     sudo dpkg -i postgresql-9.1-postgis_1.5.3-2_amd64.deb
     sudo apt-get -f -q -y install
@@ -119,7 +119,7 @@ fi
 if ! ogrinfo --formats | grep --quiet FileGDB; then
     if [ ! -f gdal-1.10.1.tar.gz ]; then
         echo "### Downloading GDAL source..."
-        wget http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
+        wget --quiet http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
     fi
     if [ ! -d gdal-1.10.1 ]; then
         echo "### Extracting GDAL source..."
@@ -127,7 +127,7 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
     fi
     if [ ! -f FileGDB_API_1_3-64.tar.gz ]; then
         echo "### Downloading FileGDB API source..."
-        wget http://downloads2.esri.com/Software/FileGDB_API_1_3-64.tar.gz
+        wget --quiet http://downloads2.esri.com/Software/FileGDB_API_1_3-64.tar.gz
     fi
     if [ ! -d /usr/local/FileGDB_API ]; then
         echo "### Extracting FileGDB API source & installing lib..."
