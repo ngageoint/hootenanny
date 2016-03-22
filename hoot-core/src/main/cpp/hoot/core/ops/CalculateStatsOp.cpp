@@ -454,7 +454,6 @@ void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QStr
                                              float conflatableCount, FeatureCalcType type,
                                              ElementCriterion* criterion)
 {
-  LOG_VARD(description);
   shared_ptr<ElementCriterion> e_criterion(criterion);
   const double totalFeatures =
     _applyVisitor(map, FilteredVisitor(e_criterion->clone(), new FeatureCountVisitor()));
@@ -487,7 +486,6 @@ void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QStr
           new NotCriterion(new NeedsReviewCriterion(map)),
           e_criterion->clone()),
         new FeatureCountVisitor()));
-  LOG_VARD(unconflatedFeatureCount);
   _stats.append(SingleStat(QString("Unmatched %1s").arg(description), unconflatedFeatureCount));
   if (type == Length)
   {
