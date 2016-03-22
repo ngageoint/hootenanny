@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -159,7 +159,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     const long featureCount = featureCountVisitor.getCount();
     _stats.append(SingleStat("Total Feature Count", featureCount));
     vector< shared_ptr<MatchCreator> > matchCreators = MatchFactory::getInstance().getCreators();
-    const double featuresProcessedDuringConflationCount =
+    const double conflatedFeatureCount =
       _applyVisitor(
         constMap,
         FilteredVisitor(StatusCriterion(Status::Conflated), new FeatureCountVisitor()));
@@ -172,7 +172,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     //the same data is conflated more than once.  In that case, it may be wise to let the stats
     //command pass in a variable stating whether the map is input/output, like the conflate command
     //does.
-    if (featuresProcessedDuringConflationCount > 0)
+    if (conflatedFeatureCount > 0)
     {
       _inputIsConflatedMapOutput = true;
     }
@@ -210,9 +210,8 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     CountUniqueReviewsVisitor curv;
     constMap->visitRo(curv);
     const double numReviewsToBeMade = curv.getStat();
-    const double conflatedFeatureCount =
-      fmax(featuresProcessedDuringConflationCount - numFeaturesMarkedForReview, 0);
-    const double untaggedFeatureCount = _applyVisitor(constMap,FilteredVisitor(new NoInformationCriterion(),new FeatureCountVisitor()));
+    const double untaggedFeatureCount =
+      _applyVisitor(constMap,FilteredVisitor(new NoInformationCriterion(),new FeatureCountVisitor()));
     _stats.append(SingleStat("Untagged Feature Count", untaggedFeatureCount));
     long unconflatableFeatureCount = -1.0;
     if (!_inputIsConflatedMapOutput)
@@ -230,11 +229,8 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
       SingleStat(
         "Percentage of Total Features Unconflatable",
         ((double)unconflatableFeatureCount / (double)featureCount) * 100.0));
-    _stats.append(
-      SingleStat("Total Features Processed By Conflation", featuresProcessedDuringConflationCount));
 
     _stats.append(SingleStat("Number of Match Creators", matchCreators.size()));
-    LOG_VARD(matchCreators.size());
     double conflatablePoiCount = 0.0;
     double conflatableHighwayCount = 0.0;
     double conflatableBuildingCount = 0.0;
@@ -264,7 +260,8 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
         _stats.append(
           SingleStat(
             "Features Conflatable by: " + matchCreatorName, conflatableFeatureCountForFeatureType));
-        if (matchCreatorName == "hoot::PlacesPoiMatchCreator")
+        if (matchCreatorName == "hoot::ScriptMatchCreator,PoiGeneric.js" ||
+            matchCreatorName == "hoot::PlacesPoiMatchCreator")
         {
           conflatablePoiCount = conflatableFeatureCountForFeatureType;
         }
@@ -453,21 +450,24 @@ void CalculateStatsOp::printStats()
   }
 }
 
-void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QString description, float conflatableCount, FeatureCalcType type, ElementCriterion* criterion)
+void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QString description,
+                                             float conflatableCount, FeatureCalcType type,
+                                             ElementCriterion* criterion)
 {
+  LOG_VARD(description);
   shared_ptr<ElementCriterion> e_criterion(criterion);
   const double totalFeatures =
     _applyVisitor(map, FilteredVisitor(e_criterion->clone(), new FeatureCountVisitor()));
   _stats.append(SingleStat(QString("%1 Count").arg(description), totalFeatures));
   _stats.append(SingleStat(QString("Conflatable %1s").arg(description), conflatableCount));
-  const double featuresProcessedByConflation =
+  const double conflatedFeatureCount =
     _applyVisitor(map, FilteredVisitor(
       ChainCriterion(new StatusCriterion(Status::Conflated), e_criterion->clone()), new FeatureCountVisitor()));
   const double featuresMarkedForReview =
     _applyVisitor(map, FilteredVisitor(
       ChainCriterion(new NeedsReviewCriterion(map), e_criterion->clone()), new FeatureCountVisitor()));
-  const double conflatedFeatureCount = fmax(featuresProcessedByConflation - featuresMarkedForReview, 0);
-  _stats.append(SingleStat(QString("Conflated %1s").arg(description), conflatedFeatureCount));
+  _stats.append(
+    SingleStat(QString("Conflated %1s").arg(description), conflatedFeatureCount));
   _stats.append(SingleStat(QString("%1s Marked for Review").arg(description), featuresMarkedForReview));
   const double numFeatureReviewsToBeMade =
     _applyVisitor(
@@ -475,7 +475,9 @@ void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QStr
        FilteredVisitor(
         e_criterion->clone(),
         new CountUniqueReviewsVisitor()));
-  _stats.append(SingleStat(QString("Number of %1 Reviews to be Made").arg(description), numFeatureReviewsToBeMade));
+  LOG_VARD(numFeatureReviewsToBeMade);
+  _stats.append(
+    SingleStat(QString("Number of %1 Reviews to be Made").arg(description), numFeatureReviewsToBeMade));
   const double unconflatedFeatureCount =
     _applyVisitor(
       map,
@@ -485,6 +487,7 @@ void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QStr
           new NotCriterion(new NeedsReviewCriterion(map)),
           e_criterion->clone()),
         new FeatureCountVisitor()));
+  LOG_VARD(unconflatedFeatureCount);
   _stats.append(SingleStat(QString("Unmatched %1s").arg(description), unconflatedFeatureCount));
   if (type == Length)
   {
@@ -521,7 +524,6 @@ void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QStr
   }
   _stats.append(
     SingleStat(QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated));
-
 }
 
 }
