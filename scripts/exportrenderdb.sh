@@ -11,7 +11,7 @@ echo $RENDER_DB
 #  Export hoot dataset to a PostGIS render db
 #
 createdb $AUTH $RENDER_DB -E UTF-8
-if psql $AUTH -d $RENDER_DB -c 'CREATE EXTENSION postgis'; then
+if psql $AUTH -d $RENDER_DB -c 'CREATE EXTENSION postgis' &>/dev/null; then
     #Do Nothing
     :
 else
