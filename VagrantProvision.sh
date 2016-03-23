@@ -198,25 +198,6 @@ shared_buffers = 1024MB
 max_files_per_process = 1000
 work_mem = 16MB
 maintenance_work_mem = 256MB
-if ! grep -i --quiet HOOT /etc/default/tomcat6; then
-echo "Configuring tomcat6 environment..."
-# This echo properly substitutes the home path dir and keeps it from having to be hardcoded, but fails on permissions during write...so hardcoding the home path instead for now
-#sudo echo "#--------------
-# Hoot Settings
-#--------------
-#HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
-sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
-#--------------
-# Hoot Settings
-#--------------
-HOOT_HOME=/home/vagrant/hoot
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
-GDAL_DATA=/usr/local/share/gdal
-GDAL_LIB_DIR=/usr/local/lib
-HOOT_WORKING_NAME=hoot
-PATH=$HOOT_HOME/bin:$PATH
-EOT
-ficheckpoint_segments = 20
 autovacuum = off
 EOT
 fi
@@ -363,7 +344,6 @@ mkdir -p $HOOT_HOME/ingest/processed
 #sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
 mkdir -p $HOOT_HOME/upload
 #sudo chown -R vagrant:tomcat6 $HOOT_HOME/upload
-
 # This is a workaround.
 sudo chmod -R 777 $HOOT_HOME/ingest
 sudo chmod -R 777 $HOOT_HOME/upload
@@ -381,7 +361,7 @@ make -s clean && make -sj$(nproc)
 echo "### Deploying web application..."
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
 scripts/CopyWebAppsToTomcat.sh #&> /dev/null
-# docs build is always failing the first time during the npm install portion for an unknown reason, but t
+# docs build is always failing the first time during the npm install portion for an unknown reason, but
 # always passes the second time its run...needs fixed, but this is the workaround for now
 make -sj$(nproc) docs &> /dev/null || true
 make -sj$(nproc) docs
