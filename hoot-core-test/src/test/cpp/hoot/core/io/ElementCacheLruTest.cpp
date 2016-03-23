@@ -20,6 +20,7 @@ namespace hoot
 class ElementCacheLruTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ElementCacheLruTest);
+  CPPUNIT_TEST(runCacheSizeTest);
   CPPUNIT_TEST(runCacheEmptyTest);
   CPPUNIT_TEST(runAddSingleNodeTest);
   CPPUNIT_TEST(runAddAllTypesTest);
@@ -32,7 +33,7 @@ public:
 
   void runCacheEmptyTest()
   {
-    ElementCacheLRU myCache(10);  // Max ten elements of each type
+    ElementCacheLRU myCache(10, 10, 10);  // Max ten elements of each type
 
     // Make sure a new cache is empty
     CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), false );
@@ -47,9 +48,18 @@ public:
     CPPUNIT_ASSERT_EQUAL( myCache.readNextElement(), emptyElement);
   }
 
+  void runCacheSizeTest()
+  {
+    ElementCacheLRU myCache(1, 2, 3);
+
+    CPPUNIT_ASSERT_EQUAL(myCache.getNodeCacheSize(), static_cast<unsigned long>(1));
+    CPPUNIT_ASSERT_EQUAL(myCache.getWayCacheSize(), static_cast<unsigned long>(2));
+    CPPUNIT_ASSERT_EQUAL(myCache.getRelationCacheSize(), static_cast<unsigned long>(3));
+  }
+
   void runAddSingleNodeTest()
   {
-    ElementCacheLRU myCache(10);  // Max ten elements of each type
+    ElementCacheLRU myCache(10, 10, 10);  // Max ten elements of each type
 
     // Make sure we're empty
     CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), false );
@@ -81,7 +91,7 @@ public:
 
   void runAddAllTypesTest()
   {
-    ElementCacheLRU myCache(10);  // Max ten elements of each type
+    ElementCacheLRU myCache(10, 10, 10);  // Max ten elements of each type
 
     // Make sure we're empty
     CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), false );
@@ -173,7 +183,7 @@ public:
 
   void runForceNodeReplacementTest()
   {
-    ElementCacheLRU myCache(2);  // Max two elements of each type
+    ElementCacheLRU myCache(2, 2, 2);  // Max two elements of each type
 
     // Add first node
     Status status;
@@ -205,7 +215,7 @@ public:
 
   void runForceWayReplacementTest()
   {
-    ElementCacheLRU myCache(2);  // Max two elements of each type
+    ElementCacheLRU myCache(2, 2, 2);  // Max two elements of each type
 
     // Add first way
     Status status;
@@ -237,7 +247,7 @@ public:
 
   void runForceRelationReplacementTest()
   {
-    ElementCacheLRU myCache(2);  // Max two elements of each type
+    ElementCacheLRU myCache(2, 2, 2);  // Max two elements of each type
 
     // Add first relation
     Status status;
@@ -267,11 +277,9 @@ public:
     CPPUNIT_ASSERT( myRelationCopy == emptyRelation );
   }
 
-
-
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PbfWriterTest, "current");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementCacheLruTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementCacheLruTest, "quick");
 
 }

@@ -85,8 +85,11 @@ static OGRFieldType toOgrFieldType(QVariant::Type t)
 }
 
 OgrWriter::OgrWriter():
-  _currElementCacheCapacity(_maxCacheElementsPerTypeDefault),
-  _elementCache(new ElementCacheLRU(_currElementCacheCapacity)),
+  _elementCache(
+    new ElementCacheLRU(
+      ConfigOptions().getElementCacheSizeNode(),
+      ConfigOptions().getElementCacheSizeWay(),
+      ConfigOptions().getElementCacheSizeRelation())),
   _wgs84()
 {
   setConfiguration(conf());
@@ -590,11 +593,11 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
    * Make sure this way has any hope of working (i.e., are there enough spots in the cache
    * for all its nodes?
    */
-  if ((long)newWay->getNodeCount() > _currElementCacheCapacity )
+  if ((unsigned long)newWay->getNodeCount() > _elementCache->getNodeCacheSize())
   {
     LOG_FATAL("Cannot do partial write of Way ID " << newWay->getId() <<
       " as it contains " << newWay->getNodeCount() << " nodes but our cache can only hold " <<
-      _currElementCacheCapacity );
+      _elementCache->getNodeCacheSize() );
     throw HootException("Cannot stream write way with more nodes than our cache can hold");
   }
 
@@ -647,38 +650,38 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
     {
       case ElementType::Node:
         nodeCount++;
-        if ( nodeCount > _currElementCacheCapacity )
+        if (nodeCount > _elementCache->getNodeCacheSize())
         {
           LOG_FATAL("Relation ID " << newRelation->getId() <<
-            " contains more nodes than can fit in the cache (" << _currElementCacheCapacity<<
-            ")");
+            " contains more nodes than can fit in the cache (" <<
+            _elementCache->getNodeCacheSize() << ")");
           throw HootException("Relation with too many nodes");
         }
         break;
       case ElementType::Way:
         wayCount++;
-        if ( wayCount > _currElementCacheCapacity)
+        if (wayCount > _elementCache->getWayCacheSize())
         {
           LOG_FATAL("Relation ID " << newRelation->getId() <<
-            " contains more ways than can fit in the cache (" << _currElementCacheCapacity <<
-            ")");
+            " contains more ways than can fit in the cache (" <<
+            _elementCache->getWayCacheSize() << ")");
           throw HootException("Relation with too many ways");
         }
 
         break;
       case ElementType::Relation:
         relationCount++;
-        if ( relationCount > _currElementCacheCapacity)
+        if (relationCount > _elementCache->getRelationCacheSize())
         {
           LOG_FATAL("Relation ID " << newRelation->getId() <<
-            " contains more relations than can fit in the cache (" << _currElementCacheCapacity <<
-            ")");
+            " contains more relations than can fit in the cache (" <<
+            _elementCache->getRelationCacheSize() << ")");
           throw HootException("Relation with too many relations");
         }
 
         break;
       default:
-        throw HootException("Relation containus unknown type");
+        throw HootException("Relation contains unknown type");
         break;
     }
 
@@ -743,14 +746,12 @@ void OgrWriter::writeElement(ElementPtr &element, bool debug)
   }
 }
 
-void OgrWriter::setCacheCapacity(unsigned long maxElementsPerType)
+void OgrWriter::setCacheCapacity(const unsigned long maxNodes, const unsigned long maxWays,
+                                 const unsigned long maxRelations)
 {
   _elementCache.reset();
-  _currElementCacheCapacity = maxElementsPerType;
-  _elementCache = boost::shared_ptr<ElementCache>(new ElementCacheLRU(_currElementCacheCapacity));
-
-  LOG_DEBUG("OGRWriter element cache resized to " << _currElementCacheCapacity <<
-            " elements per type");
+  _elementCache =
+    boost::shared_ptr<ElementCache>(new ElementCacheLRU(maxNodes, maxWays, maxRelations));
 }
 
 }
