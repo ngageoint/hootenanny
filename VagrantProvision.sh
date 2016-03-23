@@ -223,14 +223,15 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     echo "### Adding Tomcat to profile..."
     echo "export TOMCAT6_HOME=/usr/share/tomcat6" >> ~/.profile
     source ~/.profile
-    cd $TOMCAT6_HOME
-    # These sym links are needed so that the ui tests can deploy the services and iD
-    # app to Tomcat using the Tomcat startup and shutdown scripts.
-    sudo ln -s /var/lib/tomcat6/webapps webapps
-    sudo ln -s /var/lib/tomcat6/conf conf
-    sudo ln -s /var/log/tomcat6 log
-    cd ~
 fi
+
+cd $TOMCAT6_HOME
+# These sym links are needed so that the ui tests can deploy the services and iD 
+# app to Tomcat using the Tomcat startup and shutdown scripts.
+sudo ln -sf /var/lib/tomcat6/webapps webapps
+sudo ln -sf /var/lib/tomcat6/conf conf
+sudo ln -sf /var/log/tomcat6 log
+cd ~
 
 # These permission changes needed so that the ui tests can deploy the services and iD app to
 # Tomcat using the Tomcat startup and shutdown scripts.
@@ -313,6 +314,11 @@ if [ ! -d $TOMCAT6_HOME/.deegree ]; then
     sudo chown vagrant:tomcat6 $TOMCAT6_HOME/.deegree
 fi
 
+if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
+    echo "Removing LocalHoot.json..."
+    rm $HOOT_HOME/conf/LocalHoot.json
+fi
+
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
 # if the marker file is older than this file (VagrantProvision.sh)
@@ -339,7 +345,6 @@ mkdir -p $HOOT_HOME/upload
 # This is a workaround.
 sudo chmod -R 777 $HOOT_HOME/ingest
 sudo chmod -R 777 $HOOT_HOME/upload
-
 
 echo "### Configuring Hoot..."
 aclocal && autoconf && autoheader && automake && ./configure --quiet --with-rnd --with-services --with-uitests

@@ -18,5 +18,5 @@ else
     psql $AUTH -d $RENDER_DB -f /usr/share/postgresql/9.1/contrib/postgis-1.5/postgis.sql
     psql $AUTH -d $RENDER_DB -f /usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql
 fi
-# Have only seen cache errors in hoot when running this script so far, so setting a higher cache size.
-hoot osm2ogr -D services.db.reader.email=test@test.com -D services.db.writer.email=test@test.com $HOOT_HOME/translations/RenderDb.js "$DB_URL/$INPUT" "PG:dbname='$RENDER_DB' host='$DB_HOST' port='$DB_PORT' user='$DB_USER' password='$DB_PASSWORD'" 150000
+
+hoot osm2ogr -D services.db.reader.email=test@test.com -D services.db.writer.email=test@test.com $HOOT_HOME/translations/RenderDb.js "$DB_URL/$INPUT" "PG:dbname='$RENDER_DB' host='$DB_HOST' port='$DB_PORT' user='$DB_USER' password='$DB_PASSWORD'"
