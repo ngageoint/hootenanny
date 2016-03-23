@@ -198,7 +198,25 @@ shared_buffers = 1024MB
 max_files_per_process = 1000
 work_mem = 16MB
 maintenance_work_mem = 256MB
-checkpoint_segments = 20
+if ! grep -i --quiet HOOT /etc/default/tomcat6; then
+echo "Configuring tomcat6 environment..."
+# This echo properly substitutes the home path dir and keeps it from having to be hardcoded, but fails on permissions during write...so hardcoding the home path instead for now
+#sudo echo "#--------------
+# Hoot Settings
+#--------------
+#HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
+sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
+#--------------
+# Hoot Settings
+#--------------
+HOOT_HOME=/home/vagrant/hoot
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
+GDAL_DATA=/usr/local/share/gdal
+GDAL_LIB_DIR=/usr/local/lib
+HOOT_WORKING_NAME=hoot
+PATH=$HOOT_HOME/bin:$PATH
+EOT
+ficheckpoint_segments = 20
 autovacuum = off
 EOT
 fi
@@ -258,13 +276,17 @@ if [ ! "$(ls -A hoot-ui)" ]; then
 fi
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
-echo "### Configuring tomcat6 environment..."
-sudo echo "#-------------- \
-# Hoot Settings \
-#-------------- \
-HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
-
+echo "Configuring tomcat6 environment..."
+# This echo properly substitutes the home path dir and keeps it from having to be hardcoded, but fails on permissions during write...so hardcoding the home path instead for now
+#sudo echo "#--------------
+# Hoot Settings
+#--------------
+#HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
+#--------------
+# Hoot Settings
+#--------------
+HOOT_HOME=/home/vagrant/hoot
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
 GDAL_DATA=/usr/local/share/gdal
 GDAL_LIB_DIR=/usr/local/lib
