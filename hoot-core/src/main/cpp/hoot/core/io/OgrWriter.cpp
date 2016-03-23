@@ -638,15 +638,15 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
   const std::vector<RelationData::Entry>& relationEntries = newRelation->getMembers();
 
   std::vector<RelationData::Entry>::const_iterator relationElementIter;
-  long nodeCount = 0;
-  long wayCount = 0;
-  long relationCount = 0;
+  unsigned long nodeCount = 0;
+  unsigned long wayCount = 0;
+  unsigned long relationCount = 0;
 
-  for ( relationElementIter = relationEntries.begin();
+  for (relationElementIter = relationEntries.begin();
       relationElementIter != relationEntries.end();
-      relationElementIter++ )
+      relationElementIter++)
   {
-    switch ( relationElementIter->getElementId().getType().getEnum() )
+    switch (relationElementIter->getElementId().getType().getEnum())
     {
       case ElementType::Node:
         nodeCount++;
