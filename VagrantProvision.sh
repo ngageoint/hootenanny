@@ -194,9 +194,9 @@ fi
 cd $TOMCAT6_HOME
 # These sym links are needed so that the ui tests can deploy the services and iD 
 # app to Tomcat using the Tomcat startup and shutdown scripts.
-sudo ln -s /var/lib/tomcat6/webapps webapps
-sudo ln -s /var/lib/tomcat6/conf conf
-sudo ln -s /var/log/tomcat6 log
+sudo ln -sf /var/lib/tomcat6/webapps webapps
+sudo ln -sf /var/lib/tomcat6/conf conf
+sudo ln -sf /var/log/tomcat6 log
 cd ~
 
 # These permission changes needed so that the ui tests can deploy the services and iD app to 
@@ -284,6 +284,13 @@ if [ ! -d $TOMCAT6_HOME/.deegree ]; then
     sudo mkdir $TOMCAT6_HOME/.deegree
     sudo chown vagrant:tomcat6 $TOMCAT6_HOME/.deegree
 fi
+
+# Remove LocalHoot.json based on #464
+if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
+    echo "Removing LocalHoot.json..."
+    rm $HOOT_HOME/conf/LocalHoot.json
+fi
+
 
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
