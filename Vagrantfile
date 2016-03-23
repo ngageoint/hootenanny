@@ -119,6 +119,7 @@ Vagrant.configure(2) do |config|
   #   sudo apt-get install -y apache2
   # SHELL
   config.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
+  config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
   config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat6 restart", run: "always"
   config.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
 
