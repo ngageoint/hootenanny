@@ -326,16 +326,6 @@ void HootApiDb::deleteUser(long userId)
   _exec("DELETE FROM users WHERE id=:id", (qlonglong)userId);
 }
 
-QSqlQuery HootApiDb::_exec(QString sql, QVariant v1, QVariant v2, QVariant v3) const
-{
-  return ApiDb::_exec(sql, _db, v1, v2, v3);
-}
-
-QSqlQuery HootApiDb::_execNoPrepare(QString sql) const
-{
-  return ApiDb::_execNoPrepare(sql, _db);
-}
-
 QString HootApiDb::_escapeTags(const Tags& tags) const
 {
   QStringList l;
@@ -703,11 +693,6 @@ bool HootApiDb::insertRelationMember(const long relationId, const ElementType& t
   return true;
 }
 
-long HootApiDb::insertUser(QString email, QString displayName)
-{
-  return ApiDb::insertUser(email, _db, displayName);
-}
-
 long HootApiDb::getOrCreateUser(QString email, QString displayName)
 {
   long result = getUserId(email, false);
@@ -828,7 +813,7 @@ void HootApiDb::_lazyFlushBulkInsert()
   }
 }
 
-void HootApiDb::open(QUrl url)
+void HootApiDb::open(const QUrl& url)
 {
   if (!isSupported(url))
   {
@@ -837,7 +822,7 @@ void HootApiDb::open(QUrl url)
 
   _resetQueries();
 
-  ApiDb::open(url, _db);
+  ApiDb::open(url);
 
   if (isCorrectDbVersion() == false)
   {
@@ -845,11 +830,6 @@ void HootApiDb::open(QUrl url)
     LOG_WARN("Expected: " << expectedDbVersion());
     LOG_WARN("Actual: " << getDbVersion());
   }
-}
-
-long HootApiDb::getUserId(QString email, bool throwWhenMissing)
-{
-  return ApiDb::getUserId(email, _db, throwWhenMissing);
 }
 
 void HootApiDb::_resetQueries()
@@ -871,8 +851,6 @@ void HootApiDb::_resetQueries()
   _selectNodeIdsForWay.reset();
   _selectMapIds.reset();
   _selectMembersForRelation.reset();
-  _selectTagsForWay.reset();
-  _selectTagsForRelation.reset();
   _updateNode.reset();
   _updateRelation.reset();
   _updateWay.reset();
@@ -1089,7 +1067,7 @@ vector<long> HootApiDb::selectNodeIdsForWay(long wayId)
   QString sql = "SELECT node_id FROM " + getWayNodesTableName(mapId) +
       " WHERE way_id = :wayId ORDER BY sequence_id";
 
-  return ApiDb::selectNodeIdsForWay(wayId, sql, _db, _selectNodeIdsForWay);
+  return ApiDb::selectNodeIdsForWay(wayId, sql);
 }
 
 shared_ptr<QSqlQuery> HootApiDb::selectNodesForWay(long wayId)
@@ -1099,7 +1077,7 @@ shared_ptr<QSqlQuery> HootApiDb::selectNodesForWay(long wayId)
   QString sql = "SELECT node_id FROM " + getWayNodesTableName(mapId) +
       " WHERE way_id = :wayId ORDER BY sequence_id";
 
-  return ApiDb::selectNodesForWay(wayId, sql, _db, _selectNodeIdsForWay);
+  return ApiDb::selectNodesForWay(wayId, sql);
 }
 
 vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)

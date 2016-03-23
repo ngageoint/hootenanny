@@ -138,38 +138,18 @@ bool OsmApiDb::isSupported(QUrl url)
   return valid;
 }
 
-void OsmApiDb::open(QUrl url)
+void OsmApiDb::open(const QUrl& url)
 {
   if (!isSupported(url))
   {
     throw HootException("An unsupported URL was passed in.");
   }
-  ApiDb::open(url, _db);
-}
-
-long OsmApiDb::getUserId(QString email, bool throwWhenMissing)
-{
-  return ApiDb::getUserId(email, _db, throwWhenMissing);
-}
-
-long OsmApiDb::insertUser(QString email, QString displayName)
-{
-  return ApiDb::insertUser(email, _db, displayName);
+  ApiDb::open(url);
 }
 
 void OsmApiDb::deleteUser(long userId)
 {
   _exec("DELETE FROM users WHERE id=:id", (qlonglong)userId);
-}
-
-QSqlQuery OsmApiDb::_exec(QString sql, QVariant v1, QVariant v2, QVariant v3) const
-{
-  return ApiDb::_exec(sql, _db, v1, v2, v3);
-}
-
-QSqlQuery OsmApiDb::_execNoPrepare(QString sql) const
-{
-  return ApiDb::_execNoPrepare(sql,_db);
 }
 
 void OsmApiDb::_init()
@@ -270,14 +250,14 @@ vector<long> OsmApiDb::selectNodeIdsForWay(long wayId)
   QString sql =  "SELECT ";
   sql += "node_id FROM " + _getWayNodesTableName() + " WHERE way_id = :wayId ORDER BY sequence_id";
 
-  return ApiDb::selectNodeIdsForWay(wayId, sql, _db, _selectNodeIdsForWay);
+  return ApiDb::selectNodeIdsForWay(wayId, sql);
 }
 
 shared_ptr<QSqlQuery> OsmApiDb::selectNodesForWay(long wayId)
 {
   QString sql =  "SELECT ";
   sql += "node_id, latitude, longitude FROM current_way_nodes inner join current_nodes on current_way_nodes.node_id=current_nodes.id and way_id = :wayId ORDER BY sequence_id";
-  return ApiDb::selectNodesForWay(wayId, sql, _db, _selectNodeIdsForWay);
+  return ApiDb::selectNodesForWay(wayId, sql);
 }
 
 vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)

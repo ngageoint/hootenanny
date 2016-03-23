@@ -72,6 +72,14 @@ ApiDb::~ApiDb()
   {
     _insertUser.reset();
   }
+  if (_selectNodeIdsForWay != 0)
+  {
+    _selectNodeIdsForWay.reset();
+  }
+  if (_db.isOpen())
+  {
+    _db.close();
+  }
 }
 
 bool ApiDb::isSupported(const QUrl& url)
@@ -80,7 +88,7 @@ bool ApiDb::isSupported(const QUrl& url)
   return valid && url.scheme() == "postgresql";
 }
 
-void ApiDb::open(const QUrl& url, QSqlDatabase& database)
+void ApiDb::open(const QUrl& url)
 {
   QStringList pList = url.path().split("/");
   QString db = pList[1];
@@ -88,58 +96,58 @@ void ApiDb::open(const QUrl& url, QSqlDatabase& database)
   QString connectionName = url.toString() + " 0x" + QString::number((qulonglong)this, 16);
   if (QSqlDatabase::contains(connectionName) == false)
   {
-    database = QSqlDatabase::addDatabase("QPSQL", connectionName);
+    _db = QSqlDatabase::addDatabase("QPSQL", connectionName);
   }
   else
   {
-    database = QSqlDatabase::database(connectionName);
+    _db =  QSqlDatabase::database(connectionName);
   }
 
-  if (database.isOpen() == false)
+  if (_db.isOpen() == false)
   {
-    database.setDatabaseName(db);
+    _db.setDatabaseName(db);
     if (url.host() == "local")
     {
-      database.setHostName("/var/run/postgresql");
+      _db.setHostName("/var/run/postgresql");
     }
     else
     {
-      database.setHostName(url.host());
+      _db.setHostName(url.host());
     }
-    database.setPort(url.port());
-    database.setUserName(url.userName());
-    database.setPassword(url.password());
+    _db.setPort(url.port());
+    _db.setUserName(url.userName());
+    _db.setPassword(url.password());
 
-    if (database.open() == false)
+    if (_db.open() == false)
     {
-      throw HootException("Error opening database: " + database.lastError().text());
+      throw HootException("Error opening _db: " + _db.lastError().text());
     }
   }
 
-  if (database.tables().size() == 0)
+  if (_db.tables().size() == 0)
   {
-    throw HootException("Attempting to open database " + url.toString() +
+    throw HootException("Attempting to open _db " + url.toString() +
                         " but found zero tables. Does the DB exist? Has it been populated?");
   }
 
-  QSqlQuery query("SET client_min_messages TO WARNING", database);
+  QSqlQuery query("SET client_min_messages TO WARNING", _db);
   // if there was an error
   if (query.lastError().isValid())
   {
     LOG_WARN("Error disabling Postgresql INFO messages.");
   }
 
-  LOG_DEBUG("Successfully opened database: " << url.toString());
+  LOG_DEBUG("Successfully opened _db: " << url.toString());
 }
 
-long ApiDb::getUserId(const QString& email, const QSqlDatabase& database, bool throwWhenMissing)
+long ApiDb::getUserId(const QString& email, bool throwWhenMissing)
 {
-    LOG_DEBUG("debug email = "+email);
-    LOG_DEBUG("debug throwwhenmissing = "+QString::number(throwWhenMissing));
+    LOG_DEBUG("debug email = " + email);
+    LOG_DEBUG("debug throwwhenmissing = " + QString::number(throwWhenMissing));
 
   if (_selectUserByEmail == 0)
   {
-    _selectUserByEmail.reset(new QSqlQuery(database));
+    _selectUserByEmail.reset(new QSqlQuery(_db));
     _selectUserByEmail->prepare("SELECT email, id, display_name FROM users WHERE email LIKE :email");
   }
   _selectUserByEmail->bindValue(":email", email);
@@ -172,15 +180,14 @@ long ApiDb::getUserId(const QString& email, const QSqlDatabase& database, bool t
   return result;
 }
 
-long ApiDb::insertUser(const QString& email, const QSqlDatabase& database,
-                       const QString& displayName)
+long ApiDb::insertUser(const QString& email, const QString& displayName)
 {
   long id = -1;
 
   LOG_DEBUG("Inside insert user");
   if (_insertUser == 0)
   {
-    _insertUser.reset(new QSqlQuery(database));
+    _insertUser.reset(new QSqlQuery(_db));
     _insertUser->prepare("INSERT INTO users (email, display_name) "
                          "VALUES (:email, :display_name) "
                          "RETURNING id");
@@ -193,7 +200,7 @@ long ApiDb::insertUser(const QString& email, const QSqlDatabase& database,
   {
     // it may be that another process beat us to it and the user was already inserted. This can
     // happen if a bunch of converts are run in parallel. See #3588
-    id = getUserId(email, database, false);
+    id = getUserId(email, false);
 
     // nope, there is something else wrong. Report an error.
     if (id == -1)
@@ -234,35 +241,33 @@ long ApiDb::insertUser(const QString& email, const QSqlDatabase& database,
 
 
 vector<long> ApiDb::selectNodeIdsForWay(long wayId,
-                                        const QString& sql,
-                                        const QSqlDatabase& database,
-                                        shared_ptr<QSqlQuery>& sqlQuery)
+                                        const QString& sql)
 {
   vector<long> result;
 
-  if (!sqlQuery)
+  if (!_selectNodeIdsForWay)
   {
-    sqlQuery.reset(new QSqlQuery(database));
-    sqlQuery->setForwardOnly(true);
-    sqlQuery->prepare(sql);
+    _selectNodeIdsForWay.reset(new QSqlQuery(_db));
+    _selectNodeIdsForWay->setForwardOnly(true);
+    _selectNodeIdsForWay->prepare(sql);
   }
 
-  sqlQuery->bindValue(":wayId", (qlonglong)wayId);
-  if (sqlQuery->exec() == false)
+  _selectNodeIdsForWay->bindValue(":wayId", (qlonglong)wayId);
+  if (_selectNodeIdsForWay->exec() == false)
   {
     throw HootException("Error selecting node ID's for way with ID: " + QString::number(wayId) +
-      " Error: " + sqlQuery->lastError().text());
+      " Error: " + _selectNodeIdsForWay->lastError().text());
   }
 
-  while (sqlQuery->next())
+  while (_selectNodeIdsForWay->next())
   {
     bool ok;
-    result.push_back(sqlQuery->value(0).toLongLong(&ok));
+    result.push_back(_selectNodeIdsForWay->value(0).toLongLong(&ok));
 
     if (!ok)
     {
       QString err = QString("Error converting node ID to long. (%1)").
-          arg(sqlQuery->value(0).toString());
+          arg(_selectNodeIdsForWay->value(0).toString());
       throw HootException(err);
     }
   }
@@ -270,25 +275,23 @@ vector<long> ApiDb::selectNodeIdsForWay(long wayId,
   return result;
 }
 
-shared_ptr<QSqlQuery> selectNodesForWay(long wayId, const QString& sql,
-                                        const QSqlDatabase& database,
-                                        shared_ptr<QSqlQuery>& sqlQuery)
+shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString& sql)
 {
-  if (!sqlQuery)
+  if (!_selectNodeIdsForWay)
   {
-    sqlQuery.reset(new QSqlQuery(database));
-    sqlQuery->setForwardOnly(true);
-    sqlQuery->prepare(sql);
+    _selectNodeIdsForWay.reset(new QSqlQuery(_db));
+    _selectNodeIdsForWay->setForwardOnly(true);
+    _selectNodeIdsForWay->prepare(sql);
   }
 
-  sqlQuery->bindValue(":wayId", (qlonglong)wayId);
-  if (sqlQuery->exec() == false)
+  _selectNodeIdsForWay->bindValue(":wayId", (qlonglong)wayId);
+  if (_selectNodeIdsForWay->exec() == false)
   {
     throw HootException("Error selecting node ID's for way with ID: " + QString::number(wayId) +
-      " Error: " + sqlQuery->lastError().text());
+      " Error: " + _selectNodeIdsForWay->lastError().text());
   }
 
-  return sqlQuery;
+  return _selectNodeIdsForWay;
 }
 
 Tags ApiDb::unescapeTags(const QVariant &v)
@@ -329,10 +332,9 @@ void ApiDb::_unescapeString(QString& s)
   s.replace("\\134", "\\");
 }
 
-QSqlQuery ApiDb::_exec(const QString& sql, const QSqlDatabase& database,
-                       QVariant v1, QVariant v2, QVariant v3) const
+QSqlQuery ApiDb::_exec(const QString& sql, QVariant v1, QVariant v2, QVariant v3) const
 {
-  QSqlQuery q(database);
+  QSqlQuery q(_db);
 
   if (q.prepare(sql) == false)
   {
@@ -362,11 +364,11 @@ QSqlQuery ApiDb::_exec(const QString& sql, const QSqlDatabase& database,
   return q;
 }
 
-QSqlQuery ApiDb::_execNoPrepare(const QString& sql, const QSqlDatabase& database) const
+QSqlQuery ApiDb::_execNoPrepare(const QString& sql) const
 {
   // inserting strings in this fashion is safe b/c it is private and we closely control the table
   // names.
-  QSqlQuery q(database);
+  QSqlQuery q(_db);
 
   //LOG_VARD(sql);
 

@@ -44,17 +44,13 @@ public:
 
   virtual bool isSupported(QUrl url);
 
-  virtual void open(QUrl url);
+  virtual void open(const QUrl& url);
 
   virtual void transaction();
 
   virtual void rollback();
 
   virtual void commit();
-
-  virtual long getUserId(QString email, bool throwWhenMissing);
-
-  virtual long insertUser(QString email, QString displayName);
 
   virtual void deleteUser(long userId);
 
@@ -94,23 +90,14 @@ public:
 
   shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
-  QSqlDatabase getDB() { return _db; }
-
 private:
 
-  QSqlDatabase _db;
   bool _inTransaction;
 
   shared_ptr<QSqlQuery> _selectElementsForMap;
   shared_ptr<QSqlQuery> _selectTagsForWay;
   shared_ptr<QSqlQuery> _selectTagsForRelation;
-  shared_ptr<QSqlQuery> _selectNodeIdsForWay;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
-
-  virtual QSqlQuery _exec(QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
-                  QVariant v3 = QVariant()) const;
-
-  virtual QSqlQuery _execNoPrepare(QString sql) const;
 
   void _resetQueries();
 

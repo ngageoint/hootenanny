@@ -119,12 +119,7 @@ public:
   /**
    * Open the database.
    */
-  virtual void open(QUrl url) = 0;
-
-  /**
-   * Open the database.
-   */
-  void open(const QUrl& url, QSqlDatabase& database);
+  virtual void open(const QUrl& url);
 
   /**
    * Transact the data.
@@ -156,17 +151,14 @@ public:
    */
   virtual vector<long> selectNodeIdsForWay(long wayId) = 0;
 
-  vector<long> selectNodeIdsForWay(long wayId, const QString& sql, const QSqlDatabase& database,
-                                   shared_ptr<QSqlQuery>& sqlQuery);
+  vector<long> selectNodeIdsForWay(long wayId, const QString& sql);
 
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
    */
   virtual shared_ptr<QSqlQuery> selectNodesForWay(long wayId) = 0;
 
-  shared_ptr<QSqlQuery> selectNodesForWay(long wayId, const QString& sql,
-                                          const QSqlDatabase& database,
-                                          shared_ptr<QSqlQuery>& sqlQuery);
+  shared_ptr<QSqlQuery> selectNodesForWay(long wayId, const QString& sql);
 
   /**
    * Returns a vector with all the relation members for a given relation
@@ -177,16 +169,12 @@ public:
    * Returns the user ID if the email is found. If throwWhenMissing is false then -1 is returned
    * if the user doesn't exist.
    */
-  virtual long getUserId(QString email, bool throwWhenMissing) = 0;
-
-  long getUserId(const QString& email, const QSqlDatabase& database, bool throwWhenMissing);
+  virtual long getUserId(const QString& email, bool throwWhenMissing);
 
   /**
    * Inserts a user.
    */
-  virtual long insertUser(QString email, QString displayName) = 0;
-
-  long insertUser(const QString& email, const QSqlDatabase& database, const QString& displayName);
+  virtual long insertUser(const QString& email, const QString& displayName);
 
   /**
    * Deletes a user.
@@ -198,22 +186,29 @@ public:
    */
   static Tags unescapeTags(const QVariant& v);
 
+  /**
+   * Returns database
+   */
+  QSqlDatabase getDB() { return _db; }
+
 protected:
 
-  virtual QSqlQuery _exec(QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
-                  QVariant v3 = QVariant()) const = 0;
+  virtual QSqlQuery _exec(const QString& sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
+                  QVariant v3 = QVariant()) const;
 
-  QSqlQuery _exec(const QString& sql, const QSqlDatabase& database, QVariant v1 = QVariant(),
-                  QVariant v2 = QVariant(), QVariant v3 = QVariant()) const;
-
-  virtual QSqlQuery _execNoPrepare(QString sql) const = 0;
-
-  QSqlQuery _execNoPrepare(const QString& sql, const QSqlDatabase& database) const;
+  /**
+   * @brief Executes the provided SQL statement without calling prepare. This is handy when creating
+   * constraints, tables, etc.
+   * @param sql SQL to execute.
+   */
+  virtual QSqlQuery _execNoPrepare(const QString& sql) const;
 
   static void _unescapeString(QString& s);
 
+  QSqlDatabase _db;
   shared_ptr<QSqlQuery> _selectUserByEmail;
   shared_ptr<QSqlQuery> _insertUser;
+  shared_ptr<QSqlQuery> _selectNodeIdsForWay;
 };
 
 }

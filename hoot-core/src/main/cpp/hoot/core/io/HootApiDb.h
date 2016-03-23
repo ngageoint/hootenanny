@@ -54,17 +54,13 @@ public:
 
   virtual bool isSupported(QUrl url);
 
-  virtual void open(QUrl url);
+  virtual void open(const QUrl& url);
 
   virtual void transaction();
 
   virtual void rollback();
 
   virtual void commit();
-
-  virtual long getUserId(QString email, bool throwWhenMissing);
-
-  virtual long insertUser(QString email, QString displayName);
 
   //reading
 
@@ -242,11 +238,6 @@ public:
   bool hasTable(const QString& tableName);
 
   /**
-   * Returns database
-   */
-  QSqlDatabase getDB() { return _db; }
-
-  /**
    * Returns a map ID string suitable for using in table names. E.g. _1
    */
   static QString getMapIdString(long id) { return QString("_%1").arg(id); }
@@ -274,7 +265,6 @@ public:
 
 private:
 
-  QSqlDatabase _db;
   bool _inTransaction;
   shared_ptr<QSqlQuery> _closeChangeSet;
   shared_ptr<QSqlQuery> _insertChangeSet;
@@ -288,9 +278,6 @@ private:
   shared_ptr<QSqlQuery> _numTypeElementsForMap;
   shared_ptr<QSqlQuery> _selectReserveNodeIds;
   shared_ptr<QSqlQuery> _selectElementsForMap;
-  shared_ptr<QSqlQuery> _selectNodeIdsForWay;
-  shared_ptr<QSqlQuery> _selectTagsForWay;
-  shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMapIds;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
   shared_ptr<QSqlQuery> _updateNode;
@@ -352,16 +339,6 @@ private:
   QString _elementTypeToElementTableName(long mapId, const ElementType& elementType) const;
 
   QString _escapeTags(const Tags& tags) const;
-
-  virtual QSqlQuery _exec(QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
-                  QVariant v3 = QVariant()) const;
-
-  /**
-   * @brief Executes the provided SQL statement without calling prepare. This is handy when creating
-   * constraints, tables, etc.
-   * @param sql SQL to execute.
-   */
-  virtual QSqlQuery _execNoPrepare(QString sql) const;
 
   /**
    * Very handy for testing.
