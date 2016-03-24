@@ -18,12 +18,12 @@ HOOT_OPTS+= -D services.db.writer.overwrite.map=true -D services.db.writer.creat
 HOOT_OPTS+= -D "services.db.writer.email=test@test.com" -D "services.db.reader.email=test@test.com"
 
 test:
-	echo Running user interface tests...
 ifneq (,$(findstring s,$(MAKEFLAGS)))
-	$(HOOT_HOME)/scripts/DeployTomcat.sh --quiet 2> >( $(FILTER) >&2 )
+	$(HOOT_HOME)/scripts/VerifyTomcatStarted.sh 8080 --quiet 2> >( $(FILTER) >&2 )
 else
-	$(HOOT_HOME)/scripts/DeployTomcat.sh
+	$(HOOT_HOME)/scripts/VerifyTomcatStarted.sh 8080
 endif
+	echo Running user interface tests...
 	rm -f tmp/TestRun.log*
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcGisRoads.osm $(DB_URL)/DcGisRoadsCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcTigerRoads.osm $(DB_URL)/DcTigerRoadsCucumber
@@ -35,7 +35,6 @@ ifneq (,$(findstring s,$(MAKEFLAGS)))
 else
 	./SetupDisplay.sh cucumber
 endif
-	# $(HOOT_HOME)/scripts/StopTomcat.sh
 	echo ""
 
 clean:

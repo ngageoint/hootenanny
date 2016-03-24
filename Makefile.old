@@ -146,10 +146,6 @@ conf/DatabaseConfig.sh: conf/DatabaseConfig.sh.orig
 	# This will copy conf/DatabaseConfig.sh.orig to conf/DatabaseConfig.sh if necessary
 	if [ ! -f conf/DatabaseConfig.sh ]; then echo "Using default database configuration. You can safely customize: conf/DatabaseConfig.sh"; cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh; else echo; echo; echo "Check your conf/DatabaseConfig.sh to see if it needs updating with conf/DatabaseConfig.sh.orig, if not just 'touch conf/DatabaseConfig.sh'"; echo; echo; false; fi
 
-conf/ServerConfig.sh: conf/ServerConfig.sh.orig
-	# This will copy conf/ServerConfig.sh.orig to conf/ServerConfig.sh if necessary
-	if [ ! -f conf/ServerConfig.sh ]; then echo "Using default server configuration. You can safely customize: conf/ServerConfig.sh"; cp conf/ServerConfig.sh.orig conf/ServerConfig.sh; else echo; echo; echo "Check your conf/ServerConfig.sh to see if it needs updating with conf/ServerConfig.sh.orig, if not just 'touch conf/ServerConfig.sh'"; echo; echo; false; fi
-
 conf/LocalHoot.json: conf/LocalHoot.json.in conf/DatabaseConfig.sh conf/ServerConfig.sh
 	export HOOT_HOME=`pwd`; scripts/ReplaceEnvironmentVariables.sh conf/LocalHoot.json.in conf/LocalHoot.json
 
