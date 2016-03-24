@@ -345,8 +345,6 @@ fi
 # if the marker file is older than this file (VagrantProvision.sh)
 touch Vagrant.marker
 
-echo "### Configuring Hoot..."
-
 mkdir -p $HOOT_HOME/ingest/processed
 mkdir -p $HOOT_HOME/upload
 # This is a workaround.

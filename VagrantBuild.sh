@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-# We assume that $HOOT_HOME has been set in ~/.profile.....
 source ~/.profile
-cd $HOOT_HOME
+#cd $HOOT_HOME
+cd hoot
 source ./SetupEnv.sh
 
+echo "### Configuring Hoot..."
 aclocal && autoconf && autoheader && automake && ./configure --quiet --with-rnd --with-services --with-uitests
+
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
     cp LocalConfig.pri.orig LocalConfig.pri
@@ -16,7 +18,10 @@ fi
 echo "### Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
 make -sj$(nproc)
+
+echo "### Building Hoot Docs..."
 make -sj$(nproc) docs
+
 sudo -u tomcat6 scripts/CopyWebAppsToTomcat.sh
 
 echo "### Hootenanny successfully installed to virtual machine:"
