@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -67,8 +67,12 @@
 namespace hoot
 {
 
-ElementCacheLRU::ElementCacheLRU(const unsigned long maxCountEachElementType) :
-  _maxCountPerType(maxCountEachElementType),
+ElementCacheLRU::ElementCacheLRU(const unsigned long maxNodeCount,
+                                 const unsigned long maxWayCount,
+                                 const unsigned long maxRelationCount) :
+  _maxNodeCount(maxNodeCount),
+  _maxWayCount(maxWayCount),
+  _maxRelationCount(maxRelationCount),
   _projection(),
   _nodes(),
   _nodesIter(_nodes.begin()),
@@ -77,7 +81,9 @@ ElementCacheLRU::ElementCacheLRU(const unsigned long maxCountEachElementType) :
   _relations(),
   _relationsIter(_relations.begin())
 {
-  LOG_DEBUG("New LRU cache created, " << _maxCountPerType << " entries for each type");
+  LOG_DEBUG(
+    "New LRU cache created, " << _maxNodeCount << " max entries for nodes, " <<
+    _maxWayCount << " max entries for ways, " << _maxRelationCount << " max entries for relations.");
 }
 
 bool ElementCacheLRU::isEmpty() const
@@ -89,7 +95,6 @@ unsigned long ElementCacheLRU::size() const
 {
   return ( _nodes.size() + _ways.size() + _relations.size() );
 }
-
 
 void ElementCacheLRU::addElement(ConstElementPtr &newElement)
 {
@@ -104,7 +109,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
     if ( newNode != ConstNodePtr() )
     {
       // Do we have to replace an entry?
-      if ( _nodes.size() == _maxCountPerType )
+      if ( _nodes.size() == _maxNodeCount )
       {
         _removeOldest(ElementType::Node);
       }
@@ -119,7 +124,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
     if ( newWay != ConstWayPtr() )
     {
       // Do we have to replace an entry?
-      if ( _ways.size() == _maxCountPerType )
+      if ( _ways.size() == _maxWayCount )
       {
         _removeOldest(ElementType::Way);
       }
@@ -133,7 +138,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
     if ( newRelation != ConstRelationPtr() )
     {
       // Do we have to replace an entry?
-      if ( _relations.size() == _maxCountPerType )
+      if ( _relations.size() == _maxRelationCount )
       {
         _removeOldest(ElementType::Relation);
       }
