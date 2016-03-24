@@ -53,6 +53,8 @@ namespace Tgs
   class TGS_EXPORT Random
   {
   public:
+    Random(unsigned int seed);
+
     static boost::shared_ptr<Random> instance()
     {
       if (!_instance)
@@ -85,6 +87,9 @@ namespace Tgs
     Random();
 
     static boost::shared_ptr<Random> _instance;
+
+    unsigned int _seed;
+    bool _is_single;
 
 #ifdef NEW_RAND
     static boost::shared_ptr<random_type> _gen;

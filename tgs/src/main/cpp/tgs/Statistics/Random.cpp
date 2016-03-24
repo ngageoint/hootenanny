@@ -39,7 +39,14 @@ namespace Tgs
   boost::shared_ptr<generator_type> Random::_rnd;
 #endif
 
+  Random::Random(unsigned int seed)
+    : _seed(seed), _is_single(false)
+  {
+
+  }
+
   Random::Random()
+    : _seed(0), _is_single(true)
   {
 #ifdef NEW_RAND
     seed();
@@ -82,7 +89,10 @@ namespace Tgs
 #ifdef NEW_RAND
     return _rnd->operator ()();
 #else
-    return rand();
+    if (_is_single)
+      return rand();
+    else
+      return rand_r(&_seed);
 #endif
   }
 
@@ -92,7 +102,10 @@ namespace Tgs
     _gen.reset(new random_type(s));
     _rnd.reset(new generator_type(*_gen, number_type(0, RAND_MAX)));
 #else
-    srand(s);
+    if (_is_single)
+      srand(s);
+    else
+      _seed = s;
 #endif
   }
 
@@ -103,7 +116,10 @@ namespace Tgs
     generator_type rnd(gen, number_type(0, RAND_MAX));
     seed(rnd());
 #else
-    seed(0);
+    if (_is_single)
+      seed(0);
+    else
+      _seed = 0;
 #endif
   }
 }
