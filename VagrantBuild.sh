@@ -1,31 +1,27 @@
 #!/usr/bin/env bash
 
 cd $HOOT_HOME
+source ~/.profile
 source ./SetupEnv.sh
 
-echo "### Configuring Hoot..."
 aclocal && autoconf && autoheader && automake && ./configure --quiet --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
     cp LocalConfig.pri.orig LocalConfig.pri
-    echo 'QMAKE_CXX=ccache g++' >> LocalConfig.pri
+    # ccache is not enabled by default
+    sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri
+    sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri
 fi
 echo "### Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
-make -s clean && make -sj$(nproc)
-echo "### Deploying web application..."
-# vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
-scripts/CopyWebAppsToTomcat.sh #&> /dev/null
-# docs build is always failing the first time during the npm install portion for an unknown reason, but
-# always passes the second time its run...needs fixed, but this is the workaround for now
-make -sj$(nproc) docs &> /dev/null || true
+make -sj$(nproc)
 make -sj$(nproc) docs
-hoot version
+sudo -u tomcat6 scripts/CopyWebAppsToTomcat.sh
 
-echo "See VAGRANT.md for additional configuration instructions and then run 'vagrant ssh' to log into the Hootenanny virtual machine."
-echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation files."
-echo "Access the web application at http://localhost:8888/hootenanny-id"
-echo "If you wish to run the diagnostic tests, log into the virtual machine and run: 'cd $HOOT_HOME && make -sj$(nproc) test-all'"
-echo "If you wish to rebuild Hoot, log into the virtual machine and run: './VagrantBuild.sh'"
-echo "NOTE: if you rebuild Hoot, you will need to restart Tomcat and the Mapnik server."
+echo "### Hootenanny successfully installed to virtual machine:"
+hoot version
+echo "See VAGRANT.md for additional configuration instructions and then access the web application from the host machine at: http://localhost:8888/hootenanny-id"
+echo "Run 'vagrant ssh' at any time from the host machine to log into the Hootenanny virtual machine."
+echo "See $HOOT_HOME/docs for Hootenanny documentation files."
+echo "See VAGRANT.md for instructions on running the diagnostic tests."
 

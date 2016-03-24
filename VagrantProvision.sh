@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+HOOT_HOME=$HOME/hoot
+echo HOOT_HOME: $HOOT_HOME
 cd ~
 source ~/.profile
 
@@ -21,11 +23,8 @@ if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
 fi
 
 echo "### Installing dependencies from repos..."
-#sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane
+sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip >> Ubuntu_upgrade.txt 2>&1
 
-sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite >> Ubuntu_upgrade.txt 2>&1
-
-#if ! dpkg -l | grep --quiet wamerican-insane; then
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
     # http://www.linuxquestions.org/questions/debian-26/dpkg-error-processing-dictionaries-common-4175451951/
@@ -41,12 +40,18 @@ fi
 
 sudo apt-get -y autoremove
 
-if ! grep --quiet "export HOOT_HOME" ~/.profile; then
-    echo "Adding hoot home to profile..."
-    echo "export HOOT_HOME=\$HOME/hoot" >> ~/.profile
-    echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.profile
-    source ~/.profile
-fi
+echo "### Installing node-mapnik-server..."
+sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+sudo chmod a+x /etc/init.d/node-mapnik-server
+# Make sure all npm modules are installed
+cd node-mapnik-server
+sudo npm install --quiet
+cd ..
+
+# checkpoint for snapshotting - see snapshotting notes in Developer's Guide
+#exit 0
+
+echo "### Configuring environment..."
 
 if ! grep --quiet "export JAVA_HOME" ~/.profile; then
     echo "Adding Java home to profile..."
@@ -54,19 +59,46 @@ if ! grep --quiet "export JAVA_HOME" ~/.profile; then
     source ~/.profile
 fi
 
-# cucumber deps install for ui tests
-
-sudo apt-get install -y ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip
-
-if ! grep --quiet "\$HOME/.gem/ruby/1.9.1/bin" ~/.profile; then
+if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
-    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin" >> ~/.profile
+    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
-sudo gem install mime-types -v 2.6.2
-sudo gem install capybara -v 2.5.0
-sudo gem install cucumber capybara-webkit selenium-webdriver rspec capybara-screenshot selenium-cucumber
+# gem installs are *very* slow, hence all the checks in place here to facilitate debugging
+echo "### Installing cucumber gems..."
+gem list --local | grep -q mime-types
+if [ $? -eq 1 ]; then
+   sudo gem install mime-types -v 2.6.2
+fi
+gem list --local | grep -q capybara
+if [ $? -eq 1 ]; then
+   sudo gem install capybara -v 2.5.0
+fi
+gem list --local | grep -q cucumber
+if [ $? -eq 1 ]; then
+   sudo gem install cucumber
+fi
+gem list --local | grep -q capybara-webkit
+if [ $? -eq 1 ]; then
+   sudo gem install capybara-webkit
+fi
+gem list --local | grep -q selenium-webdriver
+if [ $? -eq 1 ]; then
+   sudo gem install selenium-webdriver
+fi
+gem list --local | grep -q rspec
+if [ $? -eq 1 ]; then
+   sudo gem install rspec
+fi
+gem list --local | grep -q capybara-screenshot
+if [ $? -eq 1 ]; then
+   sudo gem install capybara-screenshot
+fi
+gem list --local | grep -q selenium-cucumber
+if [ $? -eq 1 ]; then
+   sudo gem install selenium-cucumber
+fi    
 
 if  ! dpkg -l | grep google-chrome-stable; then
     echo "### Installing Chrome..."
@@ -85,10 +117,6 @@ if [ ! -f bin/chromedriver ]; then
     fi
     unzip -d $HOME/bin chromedriver_linux64.zip
 fi
-
-sudo apt-get autoremove -y
-
-# end cucumber deps install
 
 if [ ! -f bin/osmosis ]; then
     echo "### Installing Osmosis"
@@ -220,32 +248,10 @@ sudo service postgresql restart
 
 if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     echo "### Adding Tomcat to profile..."
-    echo "export TOMCAT6_HOME=/usr/share/tomcat6" >> ~/.profile
+    #echo "export TOMCAT6_HOME=/usr/share/tomcat6" >> ~/.profile
+    echo "export TOMCAT6_HOME=/var/lib/tomcat6" >> ~/.profile
     source ~/.profile
 fi
-
-cd $TOMCAT6_HOME
-# These sym links are needed so that the ui tests can deploy the services and iD 
-# app to Tomcat using the Tomcat startup and shutdown scripts.
-sudo ln -sf /var/lib/tomcat6/webapps webapps
-sudo ln -sf /var/lib/tomcat6/conf conf
-sudo ln -sf /var/log/tomcat6 log
-cd ~
-
-# These permission changes needed so that the ui tests can deploy the services and iD app to
-# Tomcat using the Tomcat startup and shutdown scripts.
-username=vagrant
-if groups $username | grep &>/dev/null '\btomcat6\b'; then
-    echo "### Adding vagrant user to tomcat6 user group..."
-    sudo usermod -a -G tomcat6 vagrant
-fi
-sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME
-sudo mkdir -p /var/lib/tomcat6/logs
-sudo mkdir -p $TOMCAT6_HOME/logs
-sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME/logs
-sudo chown -R vagrant:tomcat6 /var/lib/tomcat6
-sudo chown -R vagrant:tomcat6 /etc/tomcat6
-sudo chown -R vagrant:tomcat6 /var/log/tomcat6
 
 cd $HOOT_HOME
 source ./SetupEnv.sh
@@ -258,11 +264,15 @@ fi
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment..."
-# This echo properly substitutes the home path dir and keeps it from having to be hardcoded, but fails on permissions during write...so hardcoding the home path instead for now
+# This echo properly substitutes the home path dir and keeps it from having to be hardcoded, but 
+# fails on permissions during write...so hardcoding the home path here instead for now.  This 
+# hardcode needs to be removed in order for hoot dev env install script to work correctly.
+#
 #sudo echo "#--------------
 # Hoot Settings
 #--------------
 #HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
+
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
 #--------------
 # Hoot Settings
@@ -311,15 +321,20 @@ if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then
     sudo sed -i.bak "s@^<Context>@<Context allowLinking=\"true\">@" /etc/tomcat6/context.xml
 fi
 
-if [ ! -d $TOMCAT6_HOME/.deegree ]; then
+if [ ! -d /usr/share/tomcat6/.deegree ]; then
     echo "Creating deegree directory for webapp..."
-    sudo mkdir $TOMCAT6_HOME/.deegree
-    sudo chown vagrant:tomcat6 $TOMCAT6_HOME/.deegree
+    sudo mkdir /usr/share/tomcat6/.deegree
+    sudo chown tomcat6:tomcat6 /usr/share/tomcat6/.deegree
 fi
 
 if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
     echo "Removing LocalHoot.json..."
-    rm $HOOT_HOME/conf/LocalHoot.json
+    rm -f $HOOT_HOME/conf/LocalHoot.json
+fi
+
+if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
+    echo "Removing services local.conf..."
+    rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
 
 # Update marker file date now that dependency and config stuff has run
@@ -327,23 +342,10 @@ fi
 # if the marker file is older than this file (VagrantProvision.sh)
 touch Vagrant.marker
 
-echo "### Initial Hoot Setup..."
-echo HOOT_HOME: $HOOT_HOME
-cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
-cp conf/ServerConfig.sh.orig conf/ServerConfig.sh
-
-echo "### Installing node-mapnik-server..."
-sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
-sudo chmod a+x /etc/init.d/node-mapnik-server
-# Make sure all npm modules are installed
-cd node-mapnik-server
-sudo npm install --quiet
-cd ..
+echo "### Configuring Hoot..."
 
 mkdir -p $HOOT_HOME/ingest/processed
-#sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
 mkdir -p $HOOT_HOME/upload
-#sudo chown -R vagrant:tomcat6 $HOOT_HOME/upload
 # This is a workaround.
 sudo chmod -R 777 $HOOT_HOME/ingest
 sudo chmod -R 777 $HOOT_HOME/upload

@@ -12,15 +12,16 @@ Tests are divided into the following groups: current, quick, slow, and glacial.
 in this directory.
 * quick - Individual tests that each run in less than 1 sec.
 * slow - Individual tests that each run in less than 30 sec.
-* glacial - Individual tests that each run in less than 15 min.  You shouldn't need tests that take
- longer than 15min.
+* glacial - Individual tests that each run in less than 15 min.  You shouldn't need unit tests that take longer than 15min.  If you're writing a regression test that uses large input data and runs longer than 15min, then put it with the regression tests, not the unit tests.
  
  If you want to run the tests for all codebases at the same time, you can use the following commands:
 
 -------------------
-./configure && make -sj($nproc) test-quick
-./configure && make -sj($nproc) test       # slow
-./configure && make -sj($nproc) test-all   # glacial
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure
+make -sj($nproc) test-quick
+make -sj($nproc) test       # slow
+make -sj($nproc) test-all   # glacial
 ------------------
 
 quick is a subset of the slow suite, and quick and slow are subsets of the glacial suite.
@@ -254,7 +255,9 @@ test routines. At this time the micro tests run as part of _quick_ and up.
 The Plugins Test test various translation related operations.  They may be invoked in isolation with:
 
 --------------
-./configure && make -sj($nproc) plugins-test
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure 
+make -sj($nproc) plugins-test
 --------------
 
 They run by default in the slow test suite.
@@ -264,7 +267,9 @@ They run by default in the slow test suite.
 The Pretty Pipes Test test the pretty-pipes submodule.  They may be invoked in isolation with:
 
 --------------
-./configure && make -sj($nproc) pp-test
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure
+make -sj($nproc) pp-test
 --------------
 
 They run by default in the quick test suite.
@@ -286,13 +291,17 @@ suite corresponds to the glacial test suite.
 To run web services unit tests:
 
 ---------
-./configure --with-services && make -sj($nproc) test
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure  --with-services
+make -sj($nproc) test
 -----------
 
 To run both web services unit and integration tests:
 
 ---------
-./configure --with-services && make -sj($nproc) test-all
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure  --with-services
+make -sj($nproc) test-all
 -----------
 
 The above commands will run the corresponding Core Tests immediately after the web services test 
@@ -376,17 +385,28 @@ web to get you started,
 @test-files/ui/tmp/TestRun.log@.  When running without silent mode, Cucumber test output is written
 to the screen.
 
-The User Interface Tests run as part of the glacial test suite by default.  To run them with all 
-other tests:  
+The User Interface Tests run as part of the glacial test suite by default.  You must start Tomcat and then deploy the Hootenanny web services and user interface code to Tomcat yourself before running these tests, as shown below.  
+
+To run the User Interface tests with all other glacial tests:  
 
 -----------------------
-./configure --with-services --with-uitests && make -sj($nproc) test-all
+cd $HOOT_HOME
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure --with-services --with-uitests
+make -sj($nproc)
+sudo -u tomcat6 scripts/CopyWebAppsToTomcat.sh
+make -sj($nproc) test-all
 -----------------------
 
 To run the User Interface Tests by themselves:
 
 -----------------------
-./configure --with-services --with-uitests && make -sj($nproc) ui-test
+cd $HOOT_HOME
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure --with-services --with-uitests
+make -sj($nproc)
+sudo -u tomcat6 scripts/CopyWebAppsToTomcat.sh
+make -sj($nproc) ui-test
 -----------------------
 
 You have to add the --with-services option since the UI tests rely on the services to be deployed before they're run.
@@ -459,7 +479,10 @@ makefile. To generate code coverage results do the following:
 * Run: 
 
 --------------------
-make clean && ./configure --with-coverage && make -j($nproc) test && make -j($nproc) coverage
+make clean
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure --with-coverage
+make -j($nproc) test && make -j($nproc) coverage
 -------------------
 
 * When it is completed you will have the coverage results in _$HOOT_HOME/tmp/coverage/*/index.html_. 
@@ -468,7 +491,10 @@ There is a report for each of the main libraries.
 If you want to get coverage results for a specific command do the following:
 
 ---------------
-make clean && ./configure --with-coverage && make -j($nproc)
+make clean
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure --with-coverage
+make -j($nproc)
 ---------------------------
 
 * Run the command or commands you want to evaluate:
