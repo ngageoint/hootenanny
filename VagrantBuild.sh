@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-cd $HOOT_HOME
+# We assume that $HOOT_HOME has been set in ~/.profile.....
 source ~/.profile
+cd $HOOT_HOME
 source ./SetupEnv.sh
 
 aclocal && autoconf && autoheader && automake && ./configure --quiet --with-rnd --with-services --with-uitests

@@ -44,9 +44,9 @@ echo "### Installing node-mapnik-server..."
 sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
 sudo chmod a+x /etc/init.d/node-mapnik-server
 # Make sure all npm modules are installed
-cd node-mapnik-server
+cd $HOOT_HOME/node-mapnik-server
 sudo npm install --quiet
-cd ..
+cd ~
 
 # checkpoint for snapshotting - see snapshotting notes in Developer's Guide
 #exit 0
@@ -99,6 +99,9 @@ gem list --local | grep -q selenium-cucumber
 if [ $? -eq 1 ]; then
    sudo gem install selenium-cucumber
 fi    
+
+# Make sure that we are in ~ before trying to wget & install stuff 
+cd ~
 
 if  ! dpkg -l | grep google-chrome-stable; then
     echo "### Installing Chrome..."
