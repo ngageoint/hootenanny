@@ -6,6 +6,7 @@ cd hoot
 source ./SetupEnv.sh
 
 echo "### Configuring Hoot..."
+git submodule update
 aclocal && autoconf && autoheader && automake && ./configure --quiet --with-rnd --with-services --with-uitests
 
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
