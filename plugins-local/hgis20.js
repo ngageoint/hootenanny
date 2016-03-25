@@ -360,7 +360,6 @@ hgis20 = {
             for (var i in tList)
             {
                 bType = tList[i].trim();
-      print('bType: ' + bType);
 
                 // Drop 'Other' values
                 if (bType == 'Other' || bType == '') continue;
@@ -368,7 +367,6 @@ hgis20 = {
                 if (bType in hgis20.rules.buildingList)
                 {
                     var nTags = hgis20.rules.buildingList[bType];
-      print('Found bType: ' + bType);
 
                     if (tags[nTags[0]])
                     {
@@ -381,7 +379,6 @@ hgis20 = {
                     {
                         tags[nTags[0]] = nTags[1];
                     }
-      print('Made bType: ' + nTags[0] + '=' + tags[nTags[0]]);
 
                     continue;
                 }
