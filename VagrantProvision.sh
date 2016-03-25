@@ -350,6 +350,7 @@ mkdir -p $HOOT_HOME/upload
 # This is a workaround.
 sudo chmod -R 777 $HOOT_HOME/ingest
 sudo chmod -R 777 $HOOT_HOME/upload
+sudo chmod -R 777 $HOOT_HOME/tmp
 
 # Now we are ready to build Hoot.  The VagrantBuild.sh script will build Hoot.
 
