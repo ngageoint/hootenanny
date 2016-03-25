@@ -1562,6 +1562,11 @@ waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 * Data Type: string
 * Default Value: ``
 
+=== hootapi.db.reader.email
+
+* Data Type: string
+* Default Value: ``
+
 Email address of the DG reader user.  Can be set here for debugging and testing.
 
 === services.db.reader.max.elements.per.partial.map

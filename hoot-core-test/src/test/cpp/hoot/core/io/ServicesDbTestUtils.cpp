@@ -33,6 +33,7 @@
 
 // Hoot
 #include <hoot/core/io/ServicesDb.h>
+#include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
@@ -83,10 +84,33 @@ QUrl ServicesDbTestUtils::getDbModifyUrl()
   return QUrl(ConfigOptions(s).getServicesDbTestUrl());
 }
 
+QUrl ServicesDbTestUtils::getDbModifyHootApiUrl()
+{
+  // don't use the default settings b/c they've been cleared for unit testing.
+  Settings s;
+  s.loadDefaults();
+  return QUrl(ConfigOptions(s).getHootapiDbTestUrl());
+}
+
 QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId)
 {
   //insert url example: postgresql://hoot:hoottest@localhost:5432/hoot/testMap
   QString dbModifyUrl = getDbModifyUrl().toString();
+  QStringList modifyUrlParts = dbModifyUrl.split("/");
+  //read url example: postgresql://hoot:hoottest@localhost:5432/hoot/1
+  assert(mapId > 0);
+  QString dbReadUrl =
+    dbModifyUrl.remove("/" + modifyUrlParts[modifyUrlParts.size() - 1]) + "/" +
+    QString::number(mapId);
+
+  QUrl url(dbReadUrl);
+  return url;
+}
+
+QUrl ServicesDbTestUtils::getHootDbReadUrl(const long mapId)
+{
+  //insert url example: postgresql://hoot:hoottest@localhost:5432/hoot/testMap
+  QString dbModifyUrl = getDbModifyHootApiUrl().toString();
   QStringList modifyUrlParts = dbModifyUrl.split("/");
   //read url example: postgresql://hoot:hoottest@localhost:5432/hoot/1
   assert(mapId > 0);
@@ -108,6 +132,18 @@ void ServicesDbTestUtils::deleteUser(QString email)
 {
   ServicesDb database;
   database.open(getDbModifyUrl());
+
+  long userId = database.getUserId(email, false);
+  if (userId != -1)
+  {
+    database.deleteUser(userId);
+  }
+}
+
+void ServicesDbTestUtils::deleteHootApiUser(QString email)
+{
+  HootApiDb database;
+  database.open(getDbModifyHootApiUrl());
 
   long userId = database.getUserId(email, false);
   if (userId != -1)

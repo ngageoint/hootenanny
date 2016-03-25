@@ -333,7 +333,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const ElementType& element
   }
   else
   {
-    throw HootException("selectBoundedElements_OsmApi cannot operate on an unknown data type.");
+    throw HootException("selectBoundedElements cannot operate on an unknown data type.");
   }
 
   // sort them in descending order, set limit and offset

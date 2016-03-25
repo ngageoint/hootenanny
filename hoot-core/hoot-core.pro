@@ -304,6 +304,7 @@ SOURCES += \
     src/main/cpp/hoot/core/io/ServicesDbWriter.cpp \
     src/main/cpp/hoot/core/io/ServicesDbReader.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbReader.cpp \
+    src/main/cpp/hoot/core/io/HootApiDbReader.cpp \
     src/main/cpp/hoot/core/perty/BigPertyOp.cpp \
     src/main/cpp/hoot/core/io/PartialOsmMapReader.cpp \
     src/main/cpp/hoot/core/io/OsmMapWriter.cpp \
@@ -764,7 +765,9 @@ HEADERS += \
     src/main/cpp/hoot/core/util/Float.h \
     src/main/cpp/hoot/core/io/ServicesDbWriter.h \
     src/main/cpp/hoot/core/io/ServicesDbReader.h \
+    src/main/cpp/hoot/core/io/ApiDbReader.h \
     src/main/cpp/hoot/core/io/OsmApiDbReader.h \
+    src/main/cpp/hoot/core/io/HootApiDbReader.h \
     src/main/cpp/hoot/core/perty/BigPertyOp.h \
     src/main/cpp/hoot/core/io/PartialOsmMapReader.h \
     src/main/cpp/hoot/core/io/OsmMapWriter.h \

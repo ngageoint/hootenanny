@@ -59,88 +59,6 @@ OsmApiDbReader::~OsmApiDbReader()
   close();
 }
 
-void OsmApiDbReader::_addTagsToElement(shared_ptr<Element> element)
-{
-  bool ok;
-  Tags& tags = element->getTags();
-
-  if (tags.contains("hoot:status"))
-  {
-    QString statusStr = tags.get("hoot:status");
-    bool ok;
-    const int statusInt = statusStr.toInt(&ok);
-    Status status = static_cast<Status::Type>(statusInt);
-    if (ok && status.getEnum() >= Status::Invalid && status.getEnum() <= Status::Conflated)
-    {
-      element->setStatus(status);
-    }
-    else
-    {
-      LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
-               QString::number(element->getId()));
-    }
-    tags.remove("hoot:status");
-  }
-
-  if (tags.contains("type"))
-  {
-    Relation* r = dynamic_cast<Relation*>(element.get());
-    if (r)
-    {
-      r->setType(tags["type"]);
-      tags.remove("type");
-    }
-  }
-
-  if (tags.contains("error:circular"))
-  {
-    element->setCircularError(tags.get("error:circular").toDouble(&ok));
-    if (!ok)
-    {
-      try
-      {
-        double tv = tags.getLength("error:circular").value();
-        element->setCircularError(tv);
-        ok = true;
-      }
-      catch (const HootException& e)
-      {
-        ok = false;
-      }
-
-      if (!ok)
-      {
-        LOG_WARN("Error parsing error:circular.");
-      }
-    }
-    tags.remove("error:circular");
-  }
-  else if (tags.contains("accuracy"))
-  {
-    element->setCircularError(tags.get("accuracy").toDouble(&ok));
-
-    if (!ok)
-    {
-      try
-      {
-        double tv = tags.getLength("accuracy").value();
-        element->setCircularError(tv);
-        ok = true;
-      }
-      catch (const HootException& e)
-      {
-        ok = false;
-      }
-
-      if (!ok)
-      {
-        LOG_WARN("Error parsing accuracy.");
-      }
-    }
-    tags.remove("accuracy");
-  }
-}
-
 bool OsmApiDbReader::isSupported(QString urlStr)
 {
   QUrl url(urlStr);
@@ -242,7 +160,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
             if(tags.size()>0)
             {
               element->setTags( ApiDb::unescapeTags(tags.join(", ")) );
-              _addTagsToElement( element );
+              ApiDbReader::addTagsToElement( element );
             }
 
             if (_status != Status::Invalid) { element->setStatus(_status); }
@@ -269,7 +187,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
         if(tags.size()>0)
         {
           element->setTags(ApiDb::unescapeTags(tags.join(", ")) );
-          _addTagsToElement( element );
+          ApiDbReader::addTagsToElement( element );
         }
         if (_status != Status::Invalid) { element->setStatus(_status); }
         map->addElement(element);
@@ -314,7 +232,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
           if(tags.size()>0)
           {
             element->setTags( ApiDb::unescapeTags(tags.join(", ")) );
-            _addTagsToElement( element );
+            ApiDbReader::addTagsToElement( element );
           }
 
           if (_status != Status::Invalid) { element->setStatus(_status); }
@@ -380,7 +298,7 @@ void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& m
         if(tags.size()>0)
         {
           element->setTags(ApiDb::unescapeTags(tags.join(", ")) );
-          _addTagsToElement( element );
+          ApiDbReader::addTagsToElement( element );
         }
 
         if (_status != Status::Invalid) {element->setStatus(_status); }
@@ -418,7 +336,7 @@ void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& m
         if(tags.size()>0)
         {
           element->setTags( ApiDb::unescapeTags(tags.join(", ")) );
-          _addTagsToElement( element );
+          ApiDbReader::addTagsToElement( element );
         }
 
         if (_status != Status::Invalid) { element->setStatus(_status); }
@@ -460,7 +378,7 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
         if(tags.size()>0)
         {
           element->setTags(ApiDb::unescapeTags(tags.join(", ")) );
-          _addTagsToElement( element );
+          ApiDbReader::addTagsToElement( element );
         }
 
         if (_status != Status::Invalid) { element->setStatus(_status); }
@@ -503,7 +421,7 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
     if(tags.size()>0)
     {
       element->setTags(ApiDb::unescapeTags(tags.join(", ")) );
-      _addTagsToElement( element );
+      ApiDbReader::addTagsToElement( element );
     }
     if (_status != Status::Invalid) { element->setStatus(_status); }
     map->addElement(element);

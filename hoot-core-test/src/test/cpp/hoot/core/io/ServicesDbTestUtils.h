@@ -71,6 +71,22 @@ public:
   static void deleteUser(QString email);
 
   /**
+   * Retrieves a URL used to read services database data
+   */
+  static QUrl getHootDbReadUrl(const long mapId);
+
+
+  /**
+   * Retrieves a URL used to modify hootapi database data
+   */
+  static QUrl getDbModifyHootApiUrl();
+
+  /**
+   * Delete the user with the specified email from the HootApi database
+   */
+  static void deleteHootApiUser(QString email);
+
+  /**
    * Find a match in the test key list and return the index
    */
   static int findIndex(const QList<QString>& keys, const QString& key);
