@@ -65,17 +65,21 @@ hgis20.rules = {
 //      ['XtableName','Agricultural_POI','XXX','XXX'],
 //      ['XtableName','Airfield_POI','XXX','XXX'],
 //      ['XtableName','Airfields','aeroway','aerodrome'],
+//      ['XtableName','AISP','XXX','XXX'],
 //      ['XtableName','Border_Crossings','barrier','border_control'],
 //      ['XtableName','Bridges_Tunnels','XXX','XXX'],
+//      ['XtableName','Buildings','XXX','XXX'],
 //      ['XtableName','Commercial_POI','XXX','XXX'],
 //      ['XtableName','Conflict_Points','hgis:conflict_point','yes'],
 //      ['XtableName','Crime_Data','hgis:crime_point','yes'],
 //      ['XtableName','Cultural_POI','XXX','XXX'],
 //      ['XtableName','Dams','waterway','dam'],
+//      ['XtableName','DP','XXX','XXX'],
      ['XtableName','Educational_Institutions','amenity','school'],
 //      ['XtableName','Electrical_POI','XXX','XXX'],
 //      ['XtableName','Embassies','XXX','XXX'],
 //      ['XtableName','Ethnicity','ethnicity_data','yes'],
+//      ['XtableName','Favela','XXX','XXX'], // This might be Rio dataset specific
 //      ['XtableName','Foreign_Investment_Projects','XXX','XXX'],
 //      ['XtableName','Free_Trade_Zones','free_trade_zone','yes'],
      ['XtableName','Free_Trade_Zones_Polygons','place','free_trade_zone'],
@@ -97,11 +101,13 @@ hgis20.rules = {
 //      ['XtableName','Military_Installations','military','installation'],
 //      ['XtableName','Natural_POI','XXX','XXX'],
 //      ['XtableName','Natural_Resources','XXX','XXX'],
+//      ['XtableName','Olympic_Venues','XXX','XXX'], // Probably Rio dataset specific
 //      ['XtableName','Places_POI','XXX','XXX'],
 //      ['XtableName','Ports','landuse','port'],
 //      ['XtableName','Power_Plants','power','plant'],
 //      ['XtableName','Prisons','amenity','prison'],
 //      ['XtableName','Protected_Areas','protected_area','yes'],
+//      ['XtableName','Public_Access','XXX','XXX'],
 //      ['XtableName','Public_POI','XXX','XXX'],
 //      ['XtableName','Public_Security_POI','XXX','XXX'],
 //      ['XtableName','Public_Transportation_POI','XXX','XXX'],
@@ -150,17 +156,21 @@ hgis20.rules = {
 //      ['XtableName','Agricultural_POI','XXX','XXX'],
 //      ['XtableName','Airfield_POI','XXX','XXX'],
      ['XtableName','Airfields','aeroway','aerodrome'],
+//      ['XtableName','AISP','XXX','XXX'],
      ['XtableName','Border_Crossings','barrier','border_control'],
 //      ['XtableName','Bridges_Tunnels','XXX','XXX'],
+//      ['XtableName','Buildings','XXX','XXX'],
 //      ['XtableName','Commercial_POI','XXX','XXX'],
      ['XtableName','Conflict_Points','hgis:conflict_point','yes'],
      ['XtableName','Crime_Data','hgis:crime_point','yes'],
 //      ['XtableName','Cultural_POI','XXX','XXX'],
      ['XtableName','Dams','waterway','dam'],
+//      ['XtableName','DP','XXX','XXX'],
 //      ['XtableName','Educational_Institutions','XXX','XXX'],
      ['XtableName','Electrical_POI','power','generator'],
 //      ['XtableName','Embassies','XXX','XXX'],
 //      ['XtableName','Ethnicity','ethnicity_data','yes'],
+     ['XtableName','Favela','landuse','residential'], // This might be Rio dataset specific
      ['XtableName','Foreign_Investment_Projects','foreign_investment','yes'],
      ['XtableName','Free_Trade_Zones','place','free_trade_zone'],
 //      ['XtableName','Free_Trade_Zones_Polygons','free','XXX'],
@@ -182,11 +192,13 @@ hgis20.rules = {
      ['XtableName','Military_Installations','military','installation'],
 //      ['XtableName','Natural_POI','XXX','XXX'],
 //      ['XtableName','Natural_Resources','XXX','XXX'],
+//      ['XtableName','Olympic_Venues','XXX','XXX'], // Probably Rio dataset specific
 //      ['XtableName','Places_POI','XXX','XXX'],
      ['XtableName','Ports','landuse','port'],
      ['XtableName','Power_Plants','power','plant'],
      ['XtableName','Prisons','amenity','prison'],
      ['XtableName','Protected_Areas','protected_area','yes'],
+//      ['XtableName','Public_Access','XXX','XXX'],
 //      ['XtableName','Public_POI','XXX','XXX'],
 //      ['XtableName','Public_Security_POI','XXX','XXX'],
 //      ['XtableName','Public_Transportation_POI','XXX','XXX'],
@@ -235,18 +247,22 @@ hgis20.rules = {
 //      ['XtableName','Agricultural_POI','XXX','XXX'],
 //      ['XtableName','Airfield_POI','XXX','XXX'],
 //      ['XtableName','Airfields','aeroway','aerodrome'],
+//      ['XtableName','AISP','XXX','XXX'],
 //      ['XtableName','Border_Crossings','barrier','border_control'],
      ['XtableName','Bridges_Tunnels','bridge','yes'],
      ['XtableName','Bridges_Tunnels','tunnel','yes'],
+//      ['XtableName','Buildings','XXX','XXX'],
 //      ['XtableName','Commercial_POI','XXX','XXX'],
 //      ['XtableName','Conflict_Points','XXX','XXX'],
 //      ['XtableName','Crime_Data','XXX','XXX'],
 //      ['XtableName','Cultural_POI','XXX','XXX'],
 //      ['XtableName','Dams','waterway','dam'],
+//      ['XtableName','DP','XXX','XXX'],
      ['XtableName','Educational_Institutions','amenity','school'],
 //      ['XtableName','Electrical_POI','XXX','XXX'],
 //      ['XtableName','Embassies','XXX','XXX'],
 //      ['XtableName','Ethnicity','XXX','XXX'],
+//      ['XtableName','Favela','XXX','XXX'], // This might be Rio dataset specific
 //      ['XtableName','Foreign_Investment_Projects','XXX','XXX'],
 //      ['XtableName','Free_Trade_Zones','XXX','XXX'],
 //      ['XtableName','Free_Trade_Zones_Polygons','XXX','XXX'],
@@ -268,11 +284,13 @@ hgis20.rules = {
 //      ['XtableName','Military_Installations','military','installation'],
 //      ['XtableName','Natural_POI','XXX','XXX'],
 //      ['XtableName','Natural_Resources','XXX','XXX'],
+//      ['XtableName','Olympic_Venues','XXX','XXX'], // Probably Rio dataset specific
 //      ['XtableName','Places_POI','XXX','XXX'],
 //      ['XtableName','Ports','landuse','port'],
 //      ['XtableName','Power_Plants','power','plant'],
 //      ['XtableName','Prisons','amenity','prison'],
 //      ['XtableName','Protected_Areas','XXX','XXX'],
+//      ['XtableName','Public_Access','XXX','XXX'],
 //      ['XtableName','Public_POI','XXX','XXX'],
 //      ['XtableName','Public_Security_POI','XXX','XXX'],
 //      ['XtableName','Public_Transportation_POI','XXX','XXX'],
@@ -324,6 +342,7 @@ hgis20.rules = {
      'ALT_NAMES':'ethnicity:alt_names',
      'ANCH_DEPTH':'port:anchor_depth',
      'APP_DATE':'foreign_investment:app_date',
+     'AREA':'olympic:area',
      'AREA_AFF':'hadr:area_affected',
      'CAPACITY':'capacity',
      'CARBCHMOOR':'port:cargo:beach_mooring',
@@ -346,6 +365,9 @@ hgis20.rules = {
      'CRANEFLOAT':'port:floating_crane',
      'CRANEMOBIL':'port:mobile_crane',
      'DATE':'date',
+     'DATE_END':'date:end',
+     'DATE_DATA':'hgis:aisp:date',
+     'DATE_START':'date:start',
      'DECKSUPPLY':'port:deck_supply_available',
      'DEGAUSS':'port:degauss_available',
      'DESCRIP':'foreign_investment:description',
@@ -371,6 +393,7 @@ hgis20.rules = {
      'ENTRY_TIDE':'port:entry:tide',
      'ETAMESSAGE':'port:eta_message_required',
      'FAOSOIL':'soil:faosoil',
+     'FC':'hgis:building_source', //From Rio - Buildings
      'FUEL_OIL':'port:fuel_oil_available',
      'FULL_NAME':'name:full',
      'GARBAGE':'port:garbage_disposal_available',
@@ -382,6 +405,8 @@ hgis20.rules = {
      'IATA':'iata',
      'ICAO':'icao',
      'IUCN_CAT':'ref:iucn',
+     'KM_HOTEL':'olympic:km_to_hotel',
+     'KM_village':'olympic:km_to_village',
      'LANG_FAM':'language:family', // Supposed to be a coded domain
      'LANG_SUBGR':'language:subgroup', // Supposed to be a coded domain
      'LANGUAGE':'language',
@@ -427,19 +452,25 @@ hgis20.rules = {
      'REPAIRCODE':'port:repair_code',
      'RIVER':'river_name',
      'ROUTES':'smuggling:routes', // ??? difference between this and the other smuggling route fields
+     'SEATING':'olympic:seating',
      'SECTOR':'foreign_investment:sector',
      'SERV_STEAM':'port:steam_services_available',
      'SHELTER':'port:shelter',
+     'SITE':'olympic:site',
      'SORT_NAME':'geonames:sort:name',
      'SOURCE':'source', // Source Information : Source Description
      'SOURCE2':'source:2', // Source Information : Source Description
      'SOURCE_DT':'source:datetime', // Source Information : Source Date and Time
      'SOURCE2_DT':'source:datetime:2', // Source Information : Source Date and Time
+     'SPEC_OCCP':'olympic:spectator_occupancy',
      'SSCC_CERT':'port:sscc_certificate_required',
      'START_DT':'date:start',
      'SUB_NAME':'name:sub_name',
+     'TIME_HOTEL':'olympic:time_to_hotel',
+     'TIME_VILLAGE':'olympic:time_to_village',
      'TELEPHONE':'phone',
      'TOT_CAP_MW':'generator:output:electricity', // Generator Output
+     'TOT_OCCP':'olympic:total_occupancy',
      'TUG_ASSIST':'port:tug_assist',
      'TUGSALVAGE':'port:tug_salvage',
      'TURN_BASIN':'port:turn_basin',
@@ -447,6 +478,7 @@ hgis20.rules = {
      'US_REP':'port:US_representative_available',
      'VALIDFR':'admin_level0:validfr',
      'WEBSITE':'website',
+     'WORK_OCCP':'olympic:working_occupancy',
      'YR_OPER':'year_operational',
     }, // End txtBiased
 
@@ -464,6 +496,7 @@ hgis20.rules = {
      'AGE_65OVR':'demographic:population:age_over_65',
      'AGE_UNDR15':'demographic:population:age_under_15',
      'AGR_SEC':'demographic:agr_sec',
+     'AISP':'hgis:aisp', // I don't have a clue what this is
      'APP_YEAR':'foreign_investment:app_year',
      'ASSETS':'poverty:assets',
      'CBR':'demographic:cbr',
@@ -471,6 +504,7 @@ hgis20.rules = {
      'CONFLICT':'poverty:conflict',
      'CORRUPT':'poverty:corrupt',
      'DGMDPI':'poverty:dgmdpi',
+     'DRUG_SEIZ':'aisp:drug_seiz',
      'ECO_ACT_F':'demographic:eco_act_f',
      'ECO_ACT_M':'demographic:eco_act_m',
      'ECO_ACT_T':'demographic:eco_act_t',
@@ -486,8 +520,8 @@ hgis20.rules = {
      'HR':'poverty:hr',
      'HUMSEC_FAC':'poverty:humsec_fac',
      'IMR':'demographic:imr',
-     'LF_EXP':'demographic:life_expectancy',
      'LFPR':'demographic:lfpr',
+     'LF_EXP':'demographic:life_expectancy',
      'LIT_RATE':'demographic:literacy_rate',
      'LIT_RT_F':'demographic:literacy_rate:female',
      'LIT_RT_M':'demographic:literacy_rate:male',
@@ -497,24 +531,48 @@ hgis20.rules = {
      'MAT_MR':'poverty:mat_mr',
      'NAT_FAC':'poverty:nat_fac',
      'NO_TK_AREA':'protected_area:no_tk_area',
-     'N_RUNWAYS':'runway:count',
+     'NUM_ASLT':'aisp:num_aslt',
+     'NUM_ATT':'aisp:num_att',
      'NUM_DTH':'conflict:number_of_deaths',
+     'NUM_D_ASLT':'aisp:num_d_aslt',
+     'NUM_D_POLA':'aisp:num_d_pola',
+     'NUM_D_ROB':'aisp:num_d_rob',
+     'NUM_D_VHC':'aisp:num_d_vhc',
+     'NUM_EMBZ':'aisp:num_embz',
+     'NUM_EXTR':'aisp:num_extr',
+     'NUM_HOMC':'aisp:num_homc',
      'NUM_INJ':'conflict:number_injured',
+     'NUM_INJVHC':'aisp:num_injvhc',
+     'NUM_KDNP':'aisp:num_kdnp',
+     'NUM_MISSP':'aisp:num_missp',
+     'NUM_RAPE':'aisp:num_rape',
+     'NUM_THREAT':'aisp:num_threat',
+     'N_RUNWAYS':'runway:count',
      'PER_POP_F':'demographic:population:percent_female',
      'PER_POP_M':'demographic:population:percent_male',
      'PER_RUL':'demographic:population:percent_rural',
      'PER_URB':'demographic:population:percent_urban',
+     'POPULATION':'refugee:population',
      'POP_DEN':'demographic:population:density',
      'POP_T':'demographic:population:total',
-     'POPULATION':'refugee:population',
      'PREV_DIS':'poverty:prev_dis',
+     'PRIM_ED':'poverty:prim_ed',
      'PRI_COMPL':'demographic:primary_school:completion',
      'PRI_ENROL':'demographic:primary_school:enrollment',
-     'PRIM_ED':'poverty:prim_ed',
      'PUB_SEC':'demographic:pub_sec',
      'REP_AREA':'protected_area:rep_area',
      'REP_M':'protected_area:rep_m',
      'RES_SEC':'demographic:res_sec',
+     'ROB_ATM':'aisp:rob_atm',
+     'ROB_BANK':'aisp:rob_bank',
+     'ROB_BUS':'aisp:rob_bus',
+     'ROB_CARG':'aisp:rob_carg',
+     'ROB_CARJ':'aisp:rob_carj',
+     'ROB_COMM':'aisp:rob_comm',
+     'ROB_MOBL':'aisp:rob_mobl',
+     'ROB_MUGG':'aisp:rob_mugg',
+     'ROB_RESD':'aisp:rob_resd',
+     'ROB_VHC':'aisp:rob_vhc',
      'R_LENGTH':'length',
      'R_WIDTH':'width',
      'SEC_COMPL':'demographic:secondary_school:completion',
@@ -522,10 +580,10 @@ hgis20.rules = {
      'SEV_SEC':'demographic:sev_sec',
      'STATUS_YR':'protected_area:status_year',
      'STRAHLER':'strahler',
-     'TER_COMPL':'demographic:tertiary_school:completion',
-     'TER_ENROL':'demographic:tertiary_school:enrollment',
      'TERROR':'poverty:terror',
      'TERT_ED':'poverty:tert_ed',
+     'TER_COMPL':'demographic:tertiary_school:completion',
+     'TER_ENROL':'demographic:tertiary_school:enrollment',
      'TFR':'demographic:tfr',
      'TIDE_RANGE':'port:tide_range',
      'TL_AFFECT':'total_affected',
@@ -543,6 +601,7 @@ hgis20.rules = {
      'UNEMP_T':'demographic:unemployment:total',
      'VALUE':'foreign_investment:value',
      'WATER':'port:water_available',
+     'WEAP_SEIZ':'aisp:weap_seiz',
      'YEAR':'year',
     }, // End numBiased
     
@@ -640,6 +699,58 @@ hgis20.rules = {
 //      ['DSG','PPLL','place','hamlet'], // Populated Locality
 //      ['DSG','PPLW','distroyed:place','populated'], // Destroyed populated place
 //      ['DSG','PPLX','place','neighbourhood'], // Section of a populated place
+
+     // EVENT - The Olympic event
+     // NOTE These get fixed in Post Processing
+     ['EVENT','Archery','sport','archery'],
+     ['EVENT','Athletics - Marathon','sport','marathon'],
+     ['EVENT','Athletics - Race Walk','sport','race_walk'],
+     ['EVENT','Athletics - Track and Field','sport','athletics'],
+     ['EVENT','Badminton','sport','badminton'],
+     ['EVENT','Basketball','sport','basketball'],
+     ['EVENT','Beach Volleyball','sport','beachvollyball'],
+     ['EVENT','Boxing','sport','boxing'],
+     ['EVENT','Canoe Slalom','sport','canoe_slalom'],
+     ['EVENT','Canoe Sprint','sport','canoe_sprint'],
+     ['EVENT','Closing Ceremony','olympic','closing_ceremony'],
+     ['EVENT','Cycling - BMX','sport','bmx'],
+     ['EVENT','Cycling - Mountain Bike','sport','mountain_bike'],
+     ['EVENT','Cycling - Road','sport','cycleing_road'],
+     ['EVENT','Cycling - Road - Time Trial','sport','cycleing_trial'],
+     ['EVENT','Cycling - Track','sport','cycleing_track'],
+     ['EVENT','Diving','sport','olympic_diving'],
+     ['EVENT','Equestrian - Dressage','sport','dressage'],
+     ['EVENT','Equestrian - Eventing','sport','eventing'],
+     ['EVENT','Equestrian - Jumping','sport','jumping'],
+     ['EVENT','Fencing','sport','fencing'],
+     ['EVENT','Golf','sport','golf'],
+     ['EVENT','Gymnastics - Rhythmic','sport','rythmic'],
+     ['EVENT','Gymnatics - Artistic','sport','artistic'],
+     ['EVENT','Gymnatics - Trampoline','sport','trampoline'],
+     ['EVENT','Handball','sport','handball'],
+     ['EVENT','Hockey','sport','field_hockey'],
+     ['EVENT','Judo','sport','judo'],
+     ['EVENT','Modern Pentathlon - Fencing','sport','pent_fencing'],
+     ['EVENT','Modern Pentathlon - Riding and Combined','sport','pent_riding'],
+     ['EVENT','Modern Pentathlon - Swimming','sport','pent_swim'],
+     ['EVENT','Opening Ceremony','olympic','opening_ceremony'],
+     ['EVENT','Rowing','sport','rowing'],
+     ['EVENT','Rugby','sport','rugby_union'],
+     ['EVENT','Sailing','sport','sailing'],
+     ['EVENT','Shooting','sport','shooting'],
+     ['EVENT','Soccer','sport','soccer'],
+     ['EVENT','Swimming','sport','swimming'],
+     ['EVENT','Swimming - Marathon','sport','swim_marathon'],
+     ['EVENT','Synchronised Swimming','sport','swim_synchro'],
+     ['EVENT','Table Tennis','sport','table_tennis'],
+     ['EVENT','Taekwondo','sport','taekwondo'],
+     ['EVENT','Tennis','sport','tennis'],
+     ['EVENT','Triathlon','sport','triathlon'],
+     ['EVENT','Volleyball','sport','vollyball'],
+     ['EVENT','Water Polo','sport','water_polo'],
+     ['EVENT','Weightlifting','sport','weightlifting'],
+     ['EVENT','Wrestling - Freestyle','sport','wrestling_free'],
+     ['EVENT','Wrestling - Greco-roman','sport','wrestling_greco'],
 
      // EVENT_TYPE - Conflict Points
      ['EVENT_TYPE','armed assault','conflict:event','armed_assault'],
@@ -1229,6 +1340,11 @@ hgis20.rules = {
      ['TYPE_AREA','Marine','protected_area','marine'],
      ['TYPE_AREA','Terrestrial/Marine','protected_area','terrestrial_or_marine'],
      ['TYPE_AREA','Not Reported','protected_area','not_reported'],
+
+     // VENUE - Status of the Olympic Venue
+     ['VENUE','Existing','olympic:venue:status','existing'],
+     ['VENUE','New','olympic:venue:status','new'],
+     ['VENUE','Temporary','olympic:venue:status','temporary'],
 
      // TYPE, TYPE1 and TYPE2 are shared by a lot of features
      // This is ugly
@@ -1998,6 +2114,383 @@ hgis20.rules = {
    intList : [ 'FATALITY', 'NO_TK_AREA', 'POPULATION', 'REP_AREA', 'REP_M', 'STATUS_YR', 'TL_AFFECT' ],
    // ##### End of intList#####
 
+   // ##### Start of buildingList #####
+   // This list for translating the "TYPE" attribute from the Rio Buildings layer
+   buildingList : {
+     'Administrative Facility':['ofice','public_administration'], // 'public$TYPE'
+     'Administrative Offices':['military','administrative_offices'], // 'MIL_TYPE'
+     'Aircraft':['military','aircraft'], // 'MIL_TYPE'
+     'Aircraft Storage':['military','aircraft_storage'], // 'MIL_TYPE'
+     'Airfield':['military','airfield'], // 'MIL_TYPE'
+     'Air Force Academy':['military','air_force_academy'], // 'MIL_TYPE'
+     'Air Force':['military:service','air_force'], // 'military$TYPE'
+     'Airline':['shop','travel_agency'], // 'commercial$TYPE2'
+     'Analytical Laboratory':['military','analytical_laboratory'], // 'MIL_TYPE'
+     'Animism':['denomination','animist'], // 'religion$TYPE2'
+     'Anti-Aircraft Site':['military','anti-aircraft_site'], // 'MIL_TYPE'
+     'Anti-Ship Site':['military','anti-ship_site'], // 'MIL_TYPE'
+     'Anti-Tank Site':['military','anti-tank_site'], // 'MIL_TYPE'
+     'Apartment':['tourism','apartment'], // 'lodging$TYPE2'
+     'Aprons':['aeroway','apron'], // 'airfieldp$TYPE'
+     'Aquaculture':['landuse','aquaculture'], // 'agriculture$TYPE1'
+     'Armistice Signing Hall':['military','armistice_signing_hall'], // 'MIL_TYPE'
+     'Armistice Talks Hall':['military','armistice_talks_hall'], // 'MIL_TYPE'
+     'Army':['military:service','army'], // 'military$TYPE'
+     'Arsenal':['military','arsenal'], // 'MIL_TYPE'
+     'Artillery':['military','artillery'], // 'MIL_TYPE'
+     'ATM':['amenity','atm'], // 'commercial$TYPE2'
+     'Automotive':['commercial:category','automotive'], // 'commercial$TYPE1'
+     'Auto Repair':['shop','car_repair'], // 'commercial$TYPE2'
+     'Bakery':['shop','bakery'], // 'commercial$TYPE2'
+     'Ballistic':['military','ballistic'], // 'MIL_TYPE'
+     'Bank':['amenity','bank'], // 'commercial$TYPE2'
+     'Bar':['amenity','bar'], // 'commercial$TYPE2'
+     'Barracks':['military','barracks'], // 'MIL_TYPE'
+     'Base':['military','base'], // 'MIL_TYPE'
+     'Bath House':['amenity','public_bath'], // 'medical$TYPE2'
+     'Bathroom':['amenity','bathroom'], // 'publicp$TYPE'
+     'Beauty Salon':['shop','beauty'], // 'commercial$TYPE2'
+     'Bed & Breakfast':['tourism','bed_and_breakfast'], // 'lodging$TYPE2'
+     'Bench':['amenity','bench'], // 'publicp$TYPE'
+     'Border Control':['military','border_control'], // 'MIL_TYPE'
+     'Botanic Garden':['garden:type','botanical'], // 'tourist$TYPE'
+     'Breeding Ground':['livestock','breeding ground'], // 'agriculture$TYPE2'
+     'Brewery':['building','brewery'], // 'commercial$TYPE2'
+     'Brine Operation':['industrial','brine_operation'], // 'OPER_TYPE'
+     'Building':['military','building'], // 'MIL_TYPE'
+     'Bunker':['military','bunker'], // 'MIL_TYPE'
+     'Burial Site':['amenity','grave_yard'], // 'cultural$TYPE'
+     'Bus':['bus','yes'], // 'transport$TYPE1'
+     'Butcher':['shop','butcher'], // 'commercial$TYPE2'
+     'Camp':['military','camp'], // 'MIL_TYPE'
+     'Camp Site':['tourism','camp_site'], // 'lodging$TYPE2'
+     'Car':['car','yes'], // 'transport$TYPE1'
+     'Car Dealership':['shop','car'], // 'commercial$TYPE2'
+     'Car Rental':['amenity','car_rental'], // 'commercial$TYPE2'
+     'Car Wash':['amenity','car_wash'], // 'commercial$TYPE2'
+     'Casino':['amenity','casino'], // 'tourist$TYPE'
+     'Catholic':['denomination','catholic'], // 'religion$TYPE2'
+     'Check Point':['amenity','check_point'], // 'public$TYPE'
+     'Checkpoint':['military','checkpoint'], // 'MIL_TYPE'
+     'Children':['medical:type','children'], // 'medical$TYPE2'
+     'Chinese Folk Religionists':['denomination','chinese'], // 'religion$TYPE2'
+     'Church':['building','church'], // 'religioni$TYPE'
+     'City Walls':['barrier','city_wall'], // New, not really a building
+     'Civic':['government:type','civic'], // 'government$TYPE1'
+     'Clinic':['amenity','clinic'], // 'medical$TYPE1'
+     'Clock':['amenity','clock'], // New
+     'Coal':['generator:source','coal'], // 'pplant$TYPE'
+     'Coastal Battery Positions':['military','coastal_battery_positions'], // 'MIL_TYPE'
+     'Coast Guard':['military:service','coast_guard'], // 'military$TYPE'
+     'Combustion':['generator:source','combustion'], // 'pplant$TYPE'
+     'Command Facility':['military','command_facility'], // 'MIL_TYPE'
+     'Commercial':['controlling_authority','civilian'], // 'airfield$TYPE'
+     'Communications and Electronics Site':['military','communications_and_electronics_site'], // 'MIL_TYPE'
+     'Compound':['military','compound'], // 'MIL_TYPE'
+     'Computer':['shop','computer'], // 'commercial$TYPE2'
+     'Condominium':['building','condominium'], // 'lodging$TYPE2'
+     'Condominiums':['building','condominium'], // 'lodging$TYPE2'
+     'Conservative':['denomination','conservative'], // 'religion$TYPE2'
+     'Construction':['amenity','construction'], // 'commercial$TYPE2'
+     'Consulate':['diplomatic','consulate'], // 'embassy$TYPE'
+     'Control Tower':['control_tower','yes'], // New
+     'Cooperative':['agriculture:type','cooperative'], // 'agriculture$TYPE2'
+     'Cultural':['amenity','cultural'], // 'tourist$TYPE'
+     'Cultural Center':['amenity','cultural_center'], // 'cultural$TYPE'
+     'Customs':['amenity','customs'], // 'public$TYPE'
+     'Dairy':['crop','dairy'], // 'agriculture$TYPE2'
+     'Day Care':['amenity','child_care'], // 'commercial$TYPE2'
+     'Defensive River Obstacles':['military','defensive_river_obstacles'], // 'MIL_TYPE'
+     'Delicatessen':['shop','deli'], // 'commercial$TYPE2'
+     'Dental':['amenity','dentist'], // 'medical$TYPE2'
+     'Detention Center':['military','detention_center'], // 'MIL_TYPE'
+     'Diesel':['generator:source','diesel'], // 'pplant$TYPE'
+     'Dispensary':['amenity','dispensary'], // 'medical$TYPE1'
+     'Dock Facility':['military','dock_facility'], // 'MIL_TYPE'
+     'Dormitory':['building','dormitory'], // 'lodging$TYPE2'
+     'Drinking Fountain':['amenity','drinking_water'], // 'publicp$TYPE'
+     'Druze':['denomination','druze'], // 'religion$TYPE2'
+     'Dual':['controlling_authority','joint_military_civilian'], // 'airfield$TYPE'
+     'Duck':['livestock','duck'], // 'agriculture$TYPE2'
+     'Electric':['plant:output:electricity','yes'], // 'pplant$TYPE'
+     'Electronics':['shop','electronics'], // 'commercial$TYPE2'
+     'Elite Area':['landuse','elite_area'], // 'lodging$TYPE2'
+     'Embassy':['diplomatic','embassy'], // 'embassy$TYPE'
+     'Emergency':['emergency','yes'], // 'medical$TYPE2'
+     'Entertainment':['amenity','entertainment'], // 'commercial$TYPE2'
+     'Entrance':['military','entrance'], // 'MIL_TYPE'
+     'Facility':['military','facility'], // 'MIL_TYPE'
+     'Factory':['building','industrial'], // 'commercial$TYPE2'
+     'Farm':['place','farm'], // 'agriculture$TYPE1'
+     'Female':['prison','female'], // New value
+     'Ferry':['ferry','yes'], // 'transport$TYPE1'
+     'Film':['amenity','film'], // 'commercial$TYPE2'
+     'Financial':['commercial:category','financial'], // 'commercial$TYPE1'
+     'Firebase':['military','firebase'], // 'MIL_TYPE'
+     'Fire Hydrant':['emergency','fire_hydrant'], // 'hydrop$TYPE'
+     'Fire Station':['amenity','fire_station'], // 'public$TYPE'
+     'Firing Position':['military','firing_position'], // 'MIL_TYPE'
+     'Fisheries':['livestock','fish'], // 'agriculture$TYPE2'
+     'Foreign':['government:type','foreign'], // 'government$TYPE1'
+     'Foreign Mission':['diplomatic','mission'], // 'embassy$TYPE'
+     'Fortified Position':['military','fortified_position'], // 'MIL_TYPE'
+     'Fortress':['military','fortress'], // 'MIL_TYPE'
+     'Freight & Passenger':['railway:type','freight_and_passenger'], // 'railwayp$TYPE1'
+     'Freight':['railway:type','freight'], // 'railwayp$TYPE1'
+     'Freight - Shipping':['amenity','freight_shipping'], // 'commercial$TYPE2'
+     'Funeral Home':['shop','funeral_directors'], // 'commercial$TYPE2'
+     'Gallery':['tourism','gallery'], // 'tourist$TYPE'
+     'Game Reserve':['landuse','game_reserve'], // 'tourist$TYPE'
+     'Garrison':['military','garrison'], // 'MIL_TYPE'
+     'Gas':['amenity','fuel'], // 'commercial$TYPE2'
+//      'Gas':['generator:source','gas'], // 'pplant$TYPE'
+     'Gatehouse':['military','gatehouse'], // 'MIL_TYPE'
+     'Gate':['military','gate'], // 'MIL_TYPE'
+     'Gateway':['military','gateway'], // 'MIL_TYPE'
+     'General':['prison:type','general'], // 'prison$TYPE'
+     'Generator':['power','generator'], // 'electrical$TYPE'
+     'Geothermal':['generator:source','geothermal'], // 'pplant$TYPE'
+//      'Geothermal':['resource:type','geothermal'], // 'OPER_TYPE'
+     'Goat':['livestock','goat'], // 'agriculture$TYPE2'
+     'Government':['ownership','government'], // 'OWNERTYPE'
+     'Greenhouse':['building','greenhouse'], // 'agriculture$TYPE2'
+     'Grocery':['shop','grocery'], // 'commercial$TYPE2'
+     'Guard Post':['military','guard_post'], // 'MIL_TYPE'
+     'Guest House':['tourism','guest_house'], // 'lodging$TYPE2'
+     'Hangar':['military','hangar'], // 'MIL_TYPE'
+     'Hangars':['building','hangar'], // 'airfieldp$TYPE'
+     'Headquarters':['headquarters','yes'], // 'medical$TYPE2'
+//      'Headquarters':['military','headquarters'], // 'MIL_TYPE'
+     'Health Center':['amenity','health_centre'], // 'medical$TYPE2'
+     'Health Complex':['amenity','health_complex'], // 'medical$TYPE2'
+     'Heavy Machinery':['amenity','heavy_machinery'], // 'commercial$TYPE2'
+     'Helipad':['military','helipad'], // 'MIL_TYPE'
+     'Historical':['historic','yes'], // 'tourist$TYPE'
+     'Hospital':['amenity','hospital'], // 'medical$TYPE1'
+     'Hostel':['tourism','hostel'], // 'lodging$TYPE2'
+     'Hotel':['tourism','hotel'], // 'lodging$TYPE2'
+     'Hot Spring':['natural','hot_spring'], // 'medical$TYPE2'
+     'Housing':['building','residential'], // 'lodging$TYPE2'
+     'Hydroelectricity':['generator:source','hydro'], // 'pplant$TYPE'
+     'Industrial':['commercial:category','industrial'], // 'commercial$TYPE1'
+     'Inn':['tourism','inn'], // 'lodging$TYPE2'
+     'Institute':['building','institute'], // 'MIL_TYPE'
+     'Installation':['military','installation'], // 'MIL_TYPE'
+     'Jetway':['aeroway','aerobridge'], // 'airfieldp$TYPE'
+     'Joint Security Area':['military','joint_security_area'], // 'MIL_TYPE'
+     'Juvenile':['amenity','juvenile_corrections'], // 'prison$TYPE'
+     'Keshadharis':['denomination','keshadharis'], // 'religion$TYPE2'
+     'Launch Site':['military','launch_site'], // 'MIL_TYPE'
+     'Leach':['resource:type','leach'], // 'OPER_TYPE'
+     'Legal':['office','lawyer'], // 'commercial$TYPE2'
+     'Library':['amenity','library'], // 'tourist$TYPE'
+     'Livestock':['landuse','livestock'], // 'agriculture$TYPE1'
+     'Local Government Facility':['government:facility','local_government_facility'], // 'government$TYPE2'
+     'Lodge':['tourism','lodge'], // 'lodging$TYPE2'
+     'Magazine':['communication:type','magazine'], // 'media$TYPE'
+     'Mahayana':['denomination','Mahayana'], // 'religion$TYPE2'
+     'Main Building Guards':['military','main_building_guards'], // 'MIL_TYPE'
+     'Manufacturing':['commercial:category','manufacturing'], // 'commercial$TYPE1'
+     'Marines':['military:service','marines'], // 'military$TYPE'
+     'Market':['amenity','marketplace'], // 'commercial$TYPE2'
+     'Medical':['amenity','medical'], // 'commercial$TYPE2'
+     'Medical Facility':['amenity','medical_facility'], // 'medical$TYPE1'
+     'Memorial':['historic','memorial'], // 'tourist$TYPE'
+     'Military':['controlling_authority','military'], // 'airfield$TYPE'
+     'Mine':['landuse','mineral_mining'], // 'OPER_TYPE'
+     'Mining':['amenity','mining'], // 'commercial$TYPE2'
+     'Mission':['building','mission'], // 'religioni$TYPE'
+     'Mixed':['denomination','mixed'], // 'religion$TYPE2'
+     'Monastery':['amenity','monastery'], // 'religioni$TYPE'
+     'Monument':['historic','monument'], // 'tourist$TYPE'
+     'Mortar Pits':['military','mortar_pits'], // 'MIL_TYPE'
+     'Mosque':['building','mosque'], // 'religioni$TYPE'
+     'Motel':['tourism','motel'], // 'lodging$TYPE2'
+     'Motor Pool':['military','motor_pool'], // 'MIL_TYPE'
+     'Mound':['military','mound'], // 'MIL_TYPE'
+     'Museum':['tourism','museum'], // 'tourist$TYPE'
+     'National Facility':['government:facility','national_facility'], // 'government$TYPE2'
+     'National Park':['leisure','national park'], // 'tourist$TYPE'
+     'National':['prison:type','national'], // 'prison$TYPE'
+     'Navy':['military:service','navy'], // 'military$TYPE'
+     'Newspaper':['communication:type','newspaper'], // 'media$TYPE'
+     'Nuclear':['generator:source','nuclear'], // 'pplant$TYPE'
+     'Nuclear Site':['military','nuclear_site'], // 'MIL_TYPE'
+     'Nursery':['amenity','nursery'], // 'commercial$TYPE2'
+//      'Nursery':['landuse','plant_nursery'], // 'agriculture$TYPE1'
+     'Observation Point':['military','observation_point'], // 'MIL_TYPE'
+     'Obstructions':['military','obstructions'], // 'MIL_TYPE'
+     'Office':['building','office'], // 'commercial$TYPE2'
+     'Offshore':['resource:location','Offshore'], // 'OPER_TYPE'
+     'Oil':['generator:source','oil'], // 'pplant$TYPE'
+     'Open Shelter':['military','open_shelter'], // 'MIL_TYPE'
+     'Orchard':['landuse','orchard'], // 'agriculture$TYPE1'
+     'Orthodox':['denomination','orthodox'], // 'religion$TYPE2'
+     'Ostrich':['livestock','ostrich'], // 'agriculture$TYPE2'
+//      'Other':['commercial:category','other'], // 'commercial$TYPE1'
+//      'Other':['commercial:type','other'], // 'commercial$TYPE2'
+//      'Other':['cultural','other'], // 'cultural$TYPE'
+//      'Other':['government:facility','other'], // 'government$TYPE2'
+//      'Other':['government:type','other'], // 'government$TYPE1'
+//      'Other':['leisure','other'], // 'recreation$TYPE'
+//      'Other':['livestock','other'], // 'agriculture$TYPE2'
+//      'Other':['medical:type','other'], // 'medical$TYPE2'
+//      'Other':['tourism','other'], // 'tourist$TYPE'
+     'Outdoor/Adventure':['tourism','outdoor_adventure'], // 'tourist$TYPE'
+     'Outdoor':['tourism','outdoor'], // 'tourist$TYPE'
+     'Outpost':['military','outpost'], // 'MIL_TYPE'
+     'Parade Reviewing Stand':['military','parade_reviewing_stand'], // 'MIL_TYPE'
+     'Parking Lot':['amenity','parking'], // 'transport$TYPE2'
+     'Park':['leisure','park'], // 'recreation$TYPE'
+     'Passenger':['railway:type','passenger'], // 'railwayp$TYPE1'
+     'Peace House':['military','peace_house'], // 'MIL_TYPE'
+     'Permanent':['transient','no'], // 'lodging$TYPE1'
+     'Pharmaceutical':['amenity','pharmaceutical'], // 'medical$TYPE2'
+     'Pharmacy':['amenity','pharmacy'], // 'medical$TYPE1'
+     'Phone':['amenity','telephone'], // 'publicp$TYPE'
+     'Pigeon':['livestock','pigeon'], // 'agriculture$TYPE2'
+     'Pig':['livestock','pig'], // 'agriculture$TYPE2'
+     'Placer':['mine:type','placer'], // 'OPER_TYPE'
+     'Plantation':['landuse','plantation'], // 'OPER_TYPE'
+     'Police Station':['amenity','police'], // 'public$TYPE'
+     'Political':['government:type','political'], // 'government$TYPE1'
+     'Political Party Facility':['government:facility','political_party_facility'], // 'government$TYPE2'
+     'Pool':['leisure','swimming_pool'], // 'recreation$TYPE'
+     'Post':['military','post'], // 'MIL_TYPE'
+     'Post Office':['amenity','post_office'], // 'government$TYPE2'
+     'Poultry':['livestock','poultry'], // 'agriculture$TYPE2'
+     'Primary':['isced:level','1'], // 'education$TYPE1'
+     'Private':['ownership','private'], // 'OWNERTYPE'
+     'Processing Plant':['industrial','processing_plant'], // 'OPER_TYPE'
+     'Protestant':['denomination','protestant'], // 'religion$TYPE2'
+     'Psychological Warfare Liaison Office':['military','psychological_warfare_liaison_office'], // 'MIL_TYPE'
+     'PTG':['military','ptg'], // 'MIL_TYPE'
+     'Public':['school:type','public'], // 'education$TYPE2'
+     'Public Toilet':['amenity','toilets'], // new
+     'Quarry':['landuse','quarry'], // 'OPER_TYPE'
+     'Rabbit':['livestock','rabbit'], // 'agriculture$TYPE2'
+     'Radar':['man_made','radar_station'], // 'airfieldp$TYPE'
+     'Radio':['communication:type','radio'], // 'media$TYPE'
+     'Rail Cargo Facility':['military','rail_cargo_facility'], // 'MIL_TYPE'
+     'Rail':['train','yes'], // 'transport$TYPE1'
+//      'Rail':['transport:type','rail'], // 'transport$TYPE1'
+     'Reconnaissance Bureau':['military','reconnaissance_bureau'], // 'MIL_TYPE'
+     'Recreation Facility':['military','recreation_facility'], // 'MIL_TYPE'
+     'Refinery':['industrial','refinery'], // 'OPER_TYPE'
+     'Reform':['denomination','reform'], // 'religion$TYPE2'
+     'Regional':['prison:type','regional'], // 'prison$TYPE'
+     'Rehabilitation':['amenity','rehabilitation'], // 'medical$TYPE2'
+     'Rehabilitation Center':['amenity','rehabilitation_center'], // 'medical$TYPE1'
+     'Research And Housing':['military','research_and_housing'], // 'MIL_TYPE'
+     'Research':['building','research'], // 'commercial$TYPE2'
+     'Resort':['tourism','resort'], // 'lodging$TYPE2'
+     'Restaurant':['amenity','restaurant'], // 'commercial$TYPE2'
+     'Retail':['commercial:category','retail'], // 'commercial$TYPE1'
+     'Revetment':['military','revetment'], // 'MIL_TYPE'
+     'Revolutionary Site':['military','revolutionary_site'], // 'MIL_TYPE'
+     'Rice Field':['crop','rice'], // 'agriculture$TYPE2'
+     'Sahajdharis':['denomination','sahajdharis'], // 'religion$TYPE2'
+     'Salt':['crop','salt'], // 'agriculture$TYPE2'
+     'Sanatorium':['amenity','sanatorium'], // 'medical$TYPE1'
+     'Sculpture':['artwork:type','sculpture'], // 'cultural$TYPE'
+     'Secondary':['isced:level','2'], // 'education$TYPE1'
+     'Security Force':['military:service','security_force'], // 'military$TYPE'
+     'Security':['military','security'], // 'MIL_TYPE'
+     'Security Station':['use','security_services'], // 'public$TYPE'
+     'Service':['commercial:category','service'], // 'commercial$TYPE1'
+     'Shaivism':['denomination','shaivism'], // 'religion$TYPE2'
+     'Shaktism':['denomination','shaktism'], // 'religion$TYPE2'
+     'Shamanism':['denomination','shamanic'], // 'religion$TYPE2'
+     'Shed':['military','shed'], // 'MIL_TYPE'
+     'Shelters':['military','shelters'], // 'MIL_TYPE'
+     'Shia':['denomination','shia'], // 'religion$TYPE2'
+     'Shipping':['amenity','shipping'], // 'commercial$TYPE2'
+     'Shower':['amenity','shower'], // 'publicp$TYPE'
+     'Shrine':['building','shrine'], // 'religioni$TYPE'
+     'Site':['military','site'], // 'MIL_TYPE'
+     'Smartism':['denomination','smartism'], // 'religion$TYPE2'
+     'Smelter':['man_made','smelter'], // 'OPER_TYPE'
+     'Social':['government:facility','social'], // 'government$TYPE2'
+     'Solar Panel':['generator:method','photovoltaic'], // 'electrical$TYPE'
+     'Solitary':['prison:type','solitary'], // 'prison$TYPE'
+     'Spa':['leisure','spa'], // 'medical$TYPE2'
+     'Special Operations Force':['military:service','special_operations_force'], // 'military$TYPE'
+     'Sports Facility':['sport','multi'], // 'recreation$TYPE'
+     'State Facility':['government:facility','state_facility'], // 'government$TYPE2'
+     'Station':['public_transport','station'], // 'transport$TYPE2'
+     'Statue':['artwork:type','statue'], // 'cultural$TYPE'
+     'Stop':['public_transport','stop_position'], // 'transport$TYPE2'
+     'Storage Facility':['military','storage_facility'], // 'MIL_TYPE'
+     'Store':['shop','general'], // 'commercial$TYPE2'
+     'Submarine Pen':['military','submarine_pen'], // 'MIL_TYPE'
+     'Submerged Facility':['military','submerged_facility'], // 'MIL_TYPE'
+     'Substation':['power','substation'], // 'electrical$TYPE'
+     'Subway':['subway','yes'], // 'transport$TYPE1'
+//      'Subway':['transport:type','subway'], // 'transport$TYPE1'
+     'Sunni':['denomination','sunni'], // 'religion$TYPE2'
+     'Support Facilities':['military','support_facilities'], // 'MIL_TYPE'
+     'Support Facility':['building','support_facility'], // 'MIL_TYPE'
+     'Surface':['resource:location','surface'], // 'OPER_TYPE'
+     'Surface - Underground':['resource:location','surface - underground'], // 'OPER_TYPE'
+     'Synagogue':['building','synagogue'], // 'religioni$TYPE'
+     'Taxi':['taxi','yes'], // 'transport$TYPE1'
+//      'Telecommunications':['commercial:category','telecommunications'], // 'commercial$TYPE1'
+     'Telecommunications':['shop','mobile_phone'], // 'commercial$TYPE2'
+//      'Television':['communication:type','television'], // 'media$TYPE'
+     'Television':['shop','television'], // 'commercial$TYPE2'
+     'Telephone':['amenity','telephone'], // New
+     'Temple':['building','temple'], // 'religioni$TYPE'
+     'Terminal':['public_transport','terminal'], // 'transport$TYPE2'
+     'Tertiary':['amenity','university'], // 'education$TYPE1'
+     'Test Site':['military','test_site'], // 'MIL_TYPE'
+     'Theater':['amenity','theatre'], // 'tourist$TYPE'
+     'Theatre':['amenity','theatre'], // 'cultural$TYPE'
+     'Theme Park':['tourism','theme_park'], // 'tourist$TYPE'
+     'Theravada':['denomination','theravada'], // 'religion$TYPE2'
+     'Toilets':['amenity','toilets'], // 'publicp$TYPE'
+     'Tourist':['tourism','information'], // 'commercial$TYPE2'
+     'Tower':['man_made','tower'], // 'commercial$TYPE2'
+     'Training Site':['military','training_site'], // 'MIL_TYPE'
+     'Tram':['tram','yes'], // 'transport$TYPE1'
+     'Tram Subway':['railway','tram_subway'],
+     'Transformer':['power','transformer'], // 'electrical$TYPE'
+     'Transient':['transient','yes'], // 'lodging$TYPE1'
+     'Transmission Pole':['power','pole'], // 'electrical$TYPE'
+     'Transmission Tower':['power','tower'], // 'electrical$TYPE'
+     'Trench':['military','trench'], // 'MIL_TYPE'
+     'Trolley':['transport:type','trolley'], // 'transport$TYPE1'
+     'Udasi':['denomination','udasi'], // 'religion$TYPE2'
+     'Underground Facility':['military','underground_facility'], // 'MIL_TYPE'
+     'Underground':['resource:location','underground'], // 'OPER_TYPE'
+     'United Nations':['military:service','united_nations'], // 'military$TYPE'
+     'Unit':['military','unit'], // 'MIL_TYPE'
+     'Vaishnavism':['denomination','viashnavism'], // 'religion$TYPE2'
+     'Vajrayana':['denomination','vajrayana'], // 'religion$TYPE2'
+     'Vehicle Positions':['military','vehicle_positions'], // 'MIL_TYPE'
+     'Vehicles':['military','vehicles'], // 'MIL_TYPE'
+     'Veterinarian':['amenity','veterinary'], // 'commercial$TYPE2'
+     'Viewpoint':['tourism','viewpoint'], // 'tourist$TYPE'
+     'Villas':['building','villas'], // 'lodging$TYPE2'
+     'Vineyard':['landuse','vineyard'], // 'agriculture$TYPE1'
+     'Visitor Center and Gift Shop':['military','visitor_center_and_gift_shop'], // 'MIL_TYPE'
+     'Vocational':['amenity','college'], // 'education$TYPE1'
+     'Wahhabi':['denomination','wahhabi'], // 'religion$TYPE2'
+     'Waste Basket':['amenity','waste_basket'], // New
+     'Water Park':['leisure','water_park'], // 'tourist$TYPE'
+     'Water Supply':['amenity','water_point'], // 'hydrop$TYPE'
+     'Water Tank':['man_made','water_tank'], // 'hydrop$TYPE'
+     'Water Tower':['man_made','water_tower'], // 'hydrop$TYPE'
+     'Water Treatment Plant':['man_made','water_works'], // 'hydrop$TYPE'
+     'Well':['man_made','water_well'], // 'hydrop$TYPE'
+     'Wind':['generator:source','wind'], // 'pplant$TYPE'
+     'Yard':['public_transport','yard'], // 'transport$TYPE2'
+     'Yearbook':['communication:type','yearbook'], // 'media$TYPE'
+     'Youth Center':['building','youth_center'], // 'religioni$TYPE'
+     'Zoo':['tourism','zoo'], // 'tourist$TYPE'
+   },
+   // ##### End of buildingList#####
+
+
    // Lookup table for layernames.
    // We use this for assigning a short name and validation
     layerNames : {
@@ -2031,17 +2524,21 @@ hgis20.rules = {
      'Agricultural_POI':'agriculture',
      'Airfield_POI':'airfieldp',
      'Airfields':'airfield',
+     'AISP':'aisp',
      'Border_Crossings':'border',
      'Bridges_Tunnels':'bridge',
+     'Buildings':'bldg',
      'Commercial_POI':'commercial',
      'Conflict_Points':'conflict',
      'Crime_Data':'crime',
      'Cultural_POI':'cultural',
      'Dams':'dams',
+     'DP':'dp',
      'Educational_Institutions':'education',
      'Electrical_POI':'electrical',
      'Embassies':'embassy',
      'Ethnicity':'ethnicity',
+     'Favela':'favela',
      'Foreign_Investment_Projects':'foreign',
      'Free_Trade_Zones':'freep',
      'Free_Trade_Zones_Polygons':'freepoly',
@@ -2063,11 +2560,13 @@ hgis20.rules = {
      'Military_Installations':'military',
      'Natural_POI':'natural',
      'Natural_Resources':'resources',
+     'Olympic_Venues':'olympic',
      'Places_POI':'places',
      'Ports':'ports',
      'Power_Plants':'pplant',
      'Prisons':'prison',
      'Protected_Areas':'protected',
+     'Public_Access':'publicacc',
      'Public_POI':'publicp',
      'Public_Security_POI':'public',
      'Public_Transportation_POI':'transport',
@@ -2084,5 +2583,7 @@ hgis20.rules = {
      'Soils':'soils',
      'Tourist_Locations_POI':'tourist',
      } // End layerNames
+
+
 
 } // End of hgis20.rules

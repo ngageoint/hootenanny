@@ -262,33 +262,37 @@ hgis20 = {
             }
       } // End SPA_ACC
 
-        //Sort out TYPE, TYPE1 & TYPE2. This is to make life easier in the one2one rules
-        if (hgis20.rules.layerNames[layerName] !== undefined)
-        {
-            var tName = hgis20.rules.layerNames[layerName];
+      //Sort out TYPE, TYPE1 & TYPE2. This is to make life easier in the one2one rules
+      if (hgis20.rules.layerNames[layerName] !== undefined)
+      {
+          var tName = hgis20.rules.layerNames[layerName];
 
-            if (attrs.TYPE)
-            {
-                attrs[tName + '$TYPE'] = attrs.TYPE;
-                delete attrs.TYPE;
-            }
+          if (attrs.TYPE)
+          {
+              attrs[tName + '$TYPE'] = attrs.TYPE;
+              delete attrs.TYPE;
+          }
 
-            if (attrs.TYPE1)
-            {
-                attrs[tName + '$TYPE1'] = attrs.TYPE1;
-                delete attrs.TYPE1;
-            }
+          if (attrs.TYPE1)
+          {
+              attrs[tName + '$TYPE1'] = attrs.TYPE1;
+              delete attrs.TYPE1;
+          }
 
-            if (attrs.TYPE2)
-            {
-                attrs[tName + '$TYPE2'] = attrs.TYPE2;
-                delete attrs.TYPE2;
-            }
-        }
-        else
-        {
-            logError('Layer: ' + layerName + ' not found in layer names list.');
-        }
+          if (attrs.TYPE2)
+          {
+              attrs[tName + '$TYPE2'] = attrs.TYPE2;
+              delete attrs.TYPE2;
+          }
+      }
+      else
+      {
+          logError('Layer: ' + layerName + ' not found in layer names list.');
+      }
+
+      // Rio: Fix up typos
+      if (attrs.EVENT == 'canoe_salom') attrs.EVENT = 'canoe_slalom';
+
 
     }, // End of applyToOsmPreProcessing
 
@@ -307,6 +311,135 @@ hgis20 = {
             tags.ford = 'yes';
             delete tags.nford;
         }
+
+        // Rio specific rules
+        if (layerName == 'Olympic_Venues' && tags['conflict:location'])
+        {
+            tags['olympic:location'] = tags['conflict:location'];
+            delete tags['conflict:location'];
+        }
+
+        if (hgis20.osmPostRules == undefined)
+        {
+        // See TDSv61 ToOsmPostProcessing for more details about rulesList.
+            var rulesList = [
+            ["t.sport == 'marathon'","t.sport = 'athletics'; t.athletics = 'marathon'"],
+            ["t.sport == 'race_walk'","t.sport = 'athletics'; t.athletics = 'race_walk'"],
+            ["t.sport == 'canoe_slalom'","t.sport = 'canoe'; t.canoe = 'slalom'"],
+            ["t.sport == 'canoe_sprint'","t.sport = 'canoe'; t.canoe = 'sprint'"],
+            ["t.sport == 'mountain_bike'","t.sport = 'cycling'; t.cycling = 'mountain_bike'"],
+            ["t.sport == 'cycleing_road'","t.sport = 'cycling'; t.cycling = 'road'"],
+            ["t.sport == 'cycleing_trial'","t.sport = 'cycling'; t.cycling = 'time_trial'"],
+            ["t.sport == 'cycleing_track'","t.sport = 'cycling'; t.cycling = 'track'"],
+            ["t.sport == 'dressage'","t.sport = 'equestrian'; t.equestrian = 'dressage'"],
+            ["t.sport == 'eventing'","t.sport = 'equestrian'; t.equestrian = 'eventing'"],
+            ["t.sport == 'jumping'","t.sport = 'equestrian'; t.equestrian = 'jumping'"],
+            ["t.sport == 'rythmic'","t.sport = 'gymnastics'; t.gymnastics= 'rythmic'"],
+            ["t.sport == 'artistic'","t.sport = 'gymnastics'; t.gymnastics= 'artistic'"],
+            ["t.sport == 'pent_fencing'","t.sport = 'pentathalon'; t.pentathalon= 'fencing'"],
+            ["t.sport == 'pent_riding'","t.sport = 'pentathalon'; t.pentathalon= 'riding_and_combined'"],
+            ["t.sport == 'pent_swim'","t.sport = 'pentathalon'; t.pentathalon= 'swimming'"],
+            ["t.sport == 'swim_marathon'","t.sport = 'swimming'; t.swimming= 'marathon'"],
+            ["t.sport == 'swim_synchro'","t.sport = 'swimming'; t.swimming= 'synchronised'"],
+            ["t.sport == 'wrestling_free'","t.sport = 'wrestling'; t.wrestling= 'free'"],
+            ["t.sport == 'wrestling_greco'","t.sport = 'wrestling'; t.wrestling= 'greco-roman'"],
+            ];
+
+            hgis20.osmPostRules = translate.buildComplexRules(rulesList);
+        }
+
+        // Apply the rulesList.
+        // translate.applyComplexRules(tags,attrs,rulesList);
+        translate.applyComplexRules(tags,attrs,hgis20.osmPostRules);
+
+        // Now sort out the 'TYPE' attribute from the Rio Buildings layer
+        if (layerName == 'Buildings' && attrs['bldg$TYPE'])
+        {
+            var tList = attrs['bldg$TYPE'].split(',');
+
+            for (var i in tList)
+            {
+                bType = tList[i].trim();
+      print('bType: ' + bType);
+
+                // Drop 'Other' values
+                if (bType == 'Other' || bType == '') continue;
+
+                if (bType in hgis20.rules.buildingList)
+                {
+                    var nTags = hgis20.rules.buildingList[bType];
+      print('Found bType: ' + bType);
+
+                    if (tags[nTags[0]])
+                    {
+                        if (tags[nTags[0]].indexOf(nTags[1]) == -1)
+                        {
+                            tags[nTags[0]] = translate.appendValue(tags[nTags[0]],nTags[1],';');
+                        }
+                    }
+                    else
+                    {
+                        tags[nTags[0]] = nTags[1];
+                    }
+      print('Made bType: ' + nTags[0] + '=' + tags[nTags[0]]);
+
+                    continue;
+                }
+                else
+                {
+                    hoot.logError('Buildings: Didnt find ' + bType + ' in buildingList');
+                }
+            } // End for tList
+        } // End Buildings TYPE
+
+        // Building cleanup
+        if (tags.building)
+        {
+            if (tags.building.indexOf('church') > -1)
+            {
+                if (tags.amenity)
+                {
+                    if (tags.amenity.indexOf('place_of_worship') == -1)
+                    {
+                        tags.amenity = translate.appendValue(tags.amenity,'place_of_worship',';');
+                    }
+                }
+                else
+                {
+                    tags.amenity = 'place_of_worship';
+                }
+            } // End Church
+        } // End Building cleanup
+
+        if (tags['isced:level'])
+        {
+            if (tags.amenity)
+            {
+                if (tags.amenity.indexOf('school') == -1)
+                {
+                    tags.amenity = translate.appendValue(tags.amenity,'school',';');
+                }
+            }
+            else
+            {
+                tags.amenity = 'school';
+            }
+        } // End isced:level
+
+        if (tags.prison)
+        {
+            if (tags.amenity)
+            {
+                if (tags.amenity.indexOf('prison') == -1)
+                {
+                    tags.amenity = translate.appendValue(tags.amenity,'prison',';');
+                }
+            }
+            else
+            {
+                tags.amenity = 'prison';
+            }
+        } // End Female Prison
 
     }, // End of applyToOsmPostProcessing
   
@@ -937,6 +1070,10 @@ hgis20 = {
             // Drop GEONAMES stuff
             hgis20.ignoreList.DSG = '';
         }
+
+        // Defensive Programming:
+        // Fix a typo in the Rio dataset
+        if (layerName == 'Roads_POI') layerName = 'Road_POI';
 
         // pre processing
         hgis20.applyToOsmPreProcessing(attrs, layerName, geometryType);
