@@ -31,8 +31,6 @@
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/util/DataProducer.h>
 #include <hoot/core/conflate/MatchCreator.h>
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/Settings.h>
 #include "SingleStatistic.h"
 
 namespace hoot
@@ -43,7 +41,7 @@ namespace hoot
  * of match creators.
  */
 class MatchCandidateCountVisitor : public ElementConstOsmMapVisitor, public SingleStatistic,
-                                   public DataProducer, public Configurable
+                                   public DataProducer
 {
 public:
 
@@ -57,23 +55,13 @@ public:
 
   any getData() const { return _matchCandidateCountsByMatchCreator; }
 
-  /**
-    @see Configurable
-    */
-  virtual void setConfiguration(const Settings &conf);
-
 private:
 
-  vector< shared_ptr<MatchCreator> > _matchCreators;
-  QStringList _matchCreatorDescriptions;
+  QMap<QString, shared_ptr<MatchCreator> > _matchCreatorsByName;
   long _candidateCount;
   QMap<QString, long> _matchCandidateCountsByMatchCreator;
-  Settings _settings;
 
-  static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
-                                      const MatchCreator::Description& m2);
-
-  void _setupCreators();
+  void _setupCreators(const vector< shared_ptr<MatchCreator> >& matchCreators);
 };
 
 }

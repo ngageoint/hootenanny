@@ -100,6 +100,18 @@ public:
   {
     throw HootException("This match creator takes no argument.");
   }
+
+  /*
+   * This is actually being done in order to track the script name in ScriptMatchCreator, so we
+   * need to do some refactoring to get rid of this.  Redundant with Description class above.
+   */
+  QString getDescription() { return _description; }
+  void setDescription(QString description) { _description = description; }
+
+protected:
+
+  QString _description;
+
 };
 
 }

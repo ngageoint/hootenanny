@@ -64,6 +64,8 @@ class MatchCandidateCountVisitorTest : public CppUnit::TestFixture
   //CPPUNIT_TEST(runCombinedMatchCandidateCountOriginalTest);
   CPPUNIT_TEST(runCombinedMatchCandidateCountTest);
   CPPUNIT_TEST(runScriptMatchCreatorTest);
+  CPPUNIT_TEST(runMultipleScriptMatchCreatorTest);
+  CPPUNIT_TEST(runDualPoiScriptMatchCreatorTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -213,11 +215,7 @@ public:
     MatchFactory::getInstance().reset();
     MatchFactory::_setMatchCreators(matchCreators);
 
-    Settings testSettings;
-    testSettings.set("match.creators", "hoot::ScriptMatchCreator,PoiGeneric.js");
     MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
-    uut.setConfiguration(testSettings);
-
     map->visitRo(uut);
     CPPUNIT_ASSERT_EQUAL((int)21, (int)uut.getStat());
     QMap<QString, long> matchCandidateCountsByMatchCreator =
@@ -225,6 +223,67 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
     CPPUNIT_ASSERT_EQUAL(
       (long)21, matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,PoiGeneric.js"]);
+  }
+
+  void runMultipleScriptMatchCreatorTest()
+  {
+    OsmReader reader;
+    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMap::resetCounters();
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
+    MapProjector::projectToPlanar(map);
+
+    TestUtils::resetEnvironment();
+
+    QStringList matchCreators;
+    matchCreators.append("hoot::ScriptMatchCreator,LinearWaterway.js");
+    matchCreators.append("hoot::ScriptMatchCreator,PoiGeneric.js");
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setMatchCreators(matchCreators);
+
+    MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
+    map->visitRo(uut);
+    CPPUNIT_ASSERT_EQUAL((int)21, (int)uut.getStat());
+    QMap<QString, long> matchCandidateCountsByMatchCreator =
+      any_cast<QMap<QString, long> >(uut.getData());
+    CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
+    LOG_VARD(matchCandidateCountsByMatchCreator);
+    CPPUNIT_ASSERT_EQUAL(
+      (long)21, matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,PoiGeneric.js"]);
+  }
+
+  void runDualPoiScriptMatchCreatorTest()
+  {
+    OsmReader reader;
+    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMap::resetCounters();
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
+    MapProjector::projectToPlanar(map);
+
+    TestUtils::resetEnvironment();
+
+    QStringList matchCreators;
+    matchCreators.append("hoot::ScriptMatchCreator,PoiGeneric.js");
+    matchCreators.append("hoot::PlacesPoiMatchCreator");
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setMatchCreators(matchCreators);
+
+    MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
+    map->visitRo(uut);
+    CPPUNIT_ASSERT_EQUAL((int)42, (int)uut.getStat());
+    QMap<QString, long> matchCandidateCountsByMatchCreator =
+      any_cast<QMap<QString, long> >(uut.getData());
+    CPPUNIT_ASSERT_EQUAL(2, matchCandidateCountsByMatchCreator.size());
+    CPPUNIT_ASSERT_EQUAL(
+      (long)21, matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,PoiGeneric.js"]);
+    CPPUNIT_ASSERT_EQUAL(
+      (long)21, matchCandidateCountsByMatchCreator["hoot::PlacesPoiMatchCreator"]);
   }
 };
 

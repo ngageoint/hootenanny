@@ -31,72 +31,44 @@ namespace hoot
 
 MatchCandidateCountVisitor::MatchCandidateCountVisitor(
   const vector< shared_ptr<MatchCreator> >& matchCreators) :
-_matchCreators(matchCreators),
-_candidateCount(0),
-_settings(conf())
+_candidateCount(0)
 {
-  _setupCreators();
+  _setupCreators(matchCreators);
 }
 
-void MatchCandidateCountVisitor::setConfiguration(const Settings &conf)
+void MatchCandidateCountVisitor::_setupCreators(const vector< shared_ptr<MatchCreator> >& matchCreators)
 {
-  _settings = conf;
-  _setupCreators();
-}
-
-void MatchCandidateCountVisitor::_setupCreators()
-{
-  _matchCreatorDescriptions.clear();
-  LOG_VARD(_matchCreators.size());
-  for (size_t i = 0; i < _matchCreators.size(); i++)
+  LOG_VARD(matchCreators.size());
+  for (size_t i = 0; i < matchCreators.size(); i++)
   {
-    shared_ptr<MatchCreator> matchCreator = _matchCreators[i];
-    vector<MatchCreator::Description> matchCreatorDescriptions = matchCreator->getAllCreators();
-    sort(matchCreatorDescriptions.begin(), matchCreatorDescriptions.end(), _matchDescriptorCompare);
-    LOG_VARD(matchCreatorDescriptions.size());
-    for (size_t j = 0; j < matchCreatorDescriptions.size(); j++)
+    shared_ptr<MatchCreator> matchCreator = matchCreators[i];
+    QString matchCreatorName;
+    const QString matchCreatorDescription = matchCreator->getDescription();
+    if (matchCreatorDescription.isEmpty())
     {
-      //For a ScriptMatchCreator, matchCreatorName is "class name,script name"; e.g.
-      //hoot::ScriptMatchCreator,PoiGeneric.js
-      const QString matchCreatorName =
-        QString::fromStdString(matchCreatorDescriptions.at(j).className);
-      LOG_VARD(matchCreatorName);
-      const bool isScriptMatchCreator = matchCreatorName.split(",").size() > 1;
-      LOG_VARD(isScriptMatchCreator);
-      if (isScriptMatchCreator)
-      {
-        //If a ScriptMatchCreator is being used, we will actually be passed all
-        //ScriptMatchCreator/script combinations here due to an impendence mismatch of sorts between
-        //this class and MatchFactory.  To make sure we're only using the ScriptMatchCreators
-        //specified in the executing command, we filter out any ScriptMatchCreator/script combos not
-        //specified in the configuration for the command.
-        LOG_VARD(_settings.get("match.creators").toStringList());
-        if (!_matchCreatorDescriptions.contains(matchCreatorName) &&
-            _settings.get("match.creators").toStringList().contains(matchCreatorName))
-        {
-          _matchCreatorDescriptions.append(matchCreatorName);
-        }
-      }
-      else
-      {
-        _matchCreatorDescriptions.append(matchCreatorName);
-      }
+      matchCreatorName = QString::fromStdString(matchCreator->getAllCreators().at(0).className);
     }
+    else
+    {
+      matchCreatorName = matchCreatorDescription;
+    }
+     LOG_DEBUG("Appending: " + matchCreatorName);
+    _matchCreatorsByName.insert(matchCreatorName, matchCreator);
   }
-
-  LOG_VARD(_matchCreators.size());
-  LOG_VARD(_matchCreatorDescriptions.size());
+  LOG_VARD(_matchCreatorsByName.size());
 }
 
 void MatchCandidateCountVisitor::visit(const shared_ptr<const Element>& e)
 {
-  for (size_t i = 0; i < _matchCreators.size(); i++)
+  QMap<QString, shared_ptr<MatchCreator> >::const_iterator iterator;
+  for (iterator = _matchCreatorsByName.begin(); iterator != _matchCreatorsByName.end(); ++iterator)
   {
-    shared_ptr<MatchCreator> matchCreator = _matchCreators[i];
+    const QString matchCreatorName = iterator.key();
+    //LOG_VARD(matchCreatorName);
+    shared_ptr<MatchCreator> matchCreator = iterator.value();
     if (matchCreator->isMatchCandidate(e, _map->shared_from_this()))
     {
-      const QString matchCreatorName = _matchCreatorDescriptions.at(i);
-      //LOG_VARD(matchCreatorName);
+      //LOG_DEBUG("is match candidate");
       if (_matchCandidateCountsByMatchCreator.contains(matchCreatorName))
       {
         _matchCandidateCountsByMatchCreator[matchCreatorName] =
@@ -110,12 +82,6 @@ void MatchCandidateCountVisitor::visit(const shared_ptr<const Element>& e)
       _candidateCount++;
     }
   }
-}
-
-bool MatchCandidateCountVisitor::_matchDescriptorCompare(const MatchCreator::Description& m1,
-                                                         const MatchCreator::Description& m2)
-{
-  return m1.className > m2.className;
 }
 
 }
