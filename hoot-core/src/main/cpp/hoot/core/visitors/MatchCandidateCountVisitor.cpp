@@ -32,9 +32,22 @@ namespace hoot
 MatchCandidateCountVisitor::MatchCandidateCountVisitor(
   const vector< shared_ptr<MatchCreator> >& matchCreators) :
 _matchCreators(matchCreators),
-_candidateCount(0)//,
-//_settings(conf())
+_candidateCount(0),
+_settings(conf())
 {
+  _setupCreators();
+}
+
+void MatchCandidateCountVisitor::setConfiguration(const Settings &conf)
+{
+  _settings = conf;
+  _setupCreators();
+}
+
+void MatchCandidateCountVisitor::_setupCreators()
+{
+  _matchCreatorDescriptions.clear();
+  LOG_VARD(_matchCreators.size());
   for (size_t i = 0; i < _matchCreators.size(); i++)
   {
     shared_ptr<MatchCreator> matchCreator = _matchCreators[i];
@@ -57,9 +70,9 @@ _candidateCount(0)//,
         //this class and MatchFactory.  To make sure we're only using the ScriptMatchCreators
         //specified in the executing command, we filter out any ScriptMatchCreator/script combos not
         //specified in the configuration for the command.
+        LOG_VARD(_settings.get("match.creators").toStringList());
         if (!_matchCreatorDescriptions.contains(matchCreatorName) &&
-            ConfigOptions(conf()).getMatchCreators().split(";").contains(matchCreatorName))
-            //_settings.get("match.creators").toStringList().contains(matchCreatorName))
+            _settings.get("match.creators").toStringList().contains(matchCreatorName))
         {
           _matchCreatorDescriptions.append(matchCreatorName);
         }
@@ -83,7 +96,7 @@ void MatchCandidateCountVisitor::visit(const shared_ptr<const Element>& e)
     if (matchCreator->isMatchCandidate(e, _map->shared_from_this()))
     {
       const QString matchCreatorName = _matchCreatorDescriptions.at(i);
-      LOG_VARD(matchCreatorName);
+      //LOG_VARD(matchCreatorName);
       if (_matchCandidateCountsByMatchCreator.contains(matchCreatorName))
       {
         _matchCandidateCountsByMatchCreator[matchCreatorName] =
@@ -93,7 +106,7 @@ void MatchCandidateCountVisitor::visit(const shared_ptr<const Element>& e)
       {
         _matchCandidateCountsByMatchCreator[matchCreatorName] = 1;
       }
-      LOG_VARD(_matchCandidateCountsByMatchCreator[matchCreatorName]);
+      //LOG_VARD(_matchCandidateCountsByMatchCreator[matchCreatorName]);
       _candidateCount++;
     }
   }

@@ -63,7 +63,7 @@ class MatchCandidateCountVisitorTest : public CppUnit::TestFixture
   //TODO: re-enable this when #310 is fixed
   //CPPUNIT_TEST(runCombinedMatchCandidateCountOriginalTest);
   CPPUNIT_TEST(runCombinedMatchCandidateCountTest);
-  //CPPUNIT_TEST(runScriptMatchCreatorTest);
+  CPPUNIT_TEST(runScriptMatchCreatorTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -85,7 +85,6 @@ public:
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
-    matchCreators.clear();
     matchCreators.append("hoot::BuildingMatchCreator");
     MatchFactory::getInstance().reset();
     MatchFactory::_setMatchCreators(matchCreators);
@@ -111,7 +110,6 @@ public:
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
-    matchCreators.clear();
     matchCreators.append("hoot::HighwayMatchCreator");
     MatchFactory::getInstance().reset();
     MatchFactory::_setMatchCreators(matchCreators);
@@ -137,7 +135,6 @@ public:
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
-    matchCreators.clear();
     matchCreators.append("hoot::BuildingMatchCreator");
     matchCreators.append("hoot::HighwayMatchCreator");
     matchCreators.append("hoot::PlacesPoiMatchCreator");
@@ -175,7 +172,6 @@ public:
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
-    matchCreators.clear();
     matchCreators.append("hoot::BuildingMatchCreator");
     matchCreators.append("hoot::HighwayMatchCreator");
     matchCreators.append("hoot::PlacesPoiMatchCreator");
@@ -210,25 +206,25 @@ public:
     reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
     MapProjector::projectToPlanar(map);
 
+    TestUtils::resetEnvironment();
+
     QStringList matchCreators;
-    matchCreators.clear();
     matchCreators.append("hoot::ScriptMatchCreator,PoiGeneric.js");
     MatchFactory::getInstance().reset();
     MatchFactory::_setMatchCreators(matchCreators);
 
-    TestUtils::resetEnvironment();
-    Settings testSettings = conf();
+    Settings testSettings;
     testSettings.set("match.creators", "hoot::ScriptMatchCreator,PoiGeneric.js");
     MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
-    //uut.setConfiguration(testSettings);
+    uut.setConfiguration(testSettings);
 
     map->visitRo(uut);
-    CPPUNIT_ASSERT_EQUAL((int)68, (int)uut.getStat());
+    CPPUNIT_ASSERT_EQUAL((int)21, (int)uut.getStat());
     QMap<QString, long> matchCandidateCountsByMatchCreator =
       any_cast<QMap<QString, long> >(uut.getData());
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
     CPPUNIT_ASSERT_EQUAL(
-      (long)18, matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,PoiGeneric.js"]);
+      (long)21, matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,PoiGeneric.js"]);
   }
 };
 

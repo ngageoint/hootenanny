@@ -31,19 +31,19 @@
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/util/DataProducer.h>
 #include <hoot/core/conflate/MatchCreator.h>
-//#include <hoot/core/util/Configurable.h>
-//#include <hoot/core/util/Settings.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/Settings.h>
 #include "SingleStatistic.h"
 
 namespace hoot
 {
 
 /**
- * Calculates a count of all elements that are candidates for matches given the provided set
+ * Calculates a count of all elements that are candidates for matches given a set
  * of match creators.
  */
 class MatchCandidateCountVisitor : public ElementConstOsmMapVisitor, public SingleStatistic,
-                                   public DataProducer//, public Configurable
+                                   public DataProducer, public Configurable
 {
 public:
 
@@ -60,7 +60,7 @@ public:
   /**
     @see Configurable
     */
-  //virtual void setConfiguration(const Settings &conf) { _settings = conf; }
+  virtual void setConfiguration(const Settings &conf);
 
 private:
 
@@ -68,11 +68,12 @@ private:
   QStringList _matchCreatorDescriptions;
   long _candidateCount;
   QMap<QString, long> _matchCandidateCountsByMatchCreator;
-  //Settings _settings;
+  Settings _settings;
 
   static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
                                       const MatchCreator::Description& m2);
 
+  void _setupCreators();
 };
 
 }
