@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -31,6 +31,8 @@
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/util/DataProducer.h>
 #include <hoot/core/conflate/MatchCreator.h>
+//#include <hoot/core/util/Configurable.h>
+//#include <hoot/core/util/Settings.h>
 #include "SingleStatistic.h"
 
 namespace hoot
@@ -41,7 +43,7 @@ namespace hoot
  * of match creators.
  */
 class MatchCandidateCountVisitor : public ElementConstOsmMapVisitor, public SingleStatistic,
-                                   public DataProducer
+                                   public DataProducer//, public Configurable
 {
 public:
 
@@ -55,12 +57,18 @@ public:
 
   any getData() const { return _matchCandidateCountsByMatchCreator; }
 
+  /**
+    @see Configurable
+    */
+  //virtual void setConfiguration(const Settings &conf) { _settings = conf; }
+
 private:
 
   vector< shared_ptr<MatchCreator> > _matchCreators;
   QStringList _matchCreatorDescriptions;
   long _candidateCount;
   QMap<QString, long> _matchCandidateCountsByMatchCreator;
+  //Settings _settings;
 
   static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
                                       const MatchCreator::Description& m2);

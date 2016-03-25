@@ -10,7 +10,6 @@ Total Unconflatable Features	0	0	0
 Percentage of Total Features Unconflatable	0	0	0	
 Number of Match Creators	1	1	1	
 Features Conflatable by: hoot::ScriptMatchCreator,LinearWaterway.js	14	15	0	
-Features Conflatable by: hoot::ScriptMatchCreator,LineStringGeneric.js	0	0	0	
 Total Conflated Features	0	0	23	
 Percentage of Total Features Conflated	0	0	29.11392405063291	
 Total Features Involved in a Review	0	0	0	

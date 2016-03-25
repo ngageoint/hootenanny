@@ -178,7 +178,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
       _inputIsConflatedMapOutput = true;
     }
     double conflatableFeatureCount = -1.0;
-    any visitorData;
+    any matchCandidateCountsData;
     if (!_inputIsConflatedMapOutput)
     {
       conflatableFeatureCount =
@@ -189,7 +189,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
               new NotCriterion(new StatusCriterion(Status::Conflated)),
               new NotCriterion(new NeedsReviewCriterion(constMap))),
             new MatchCandidateCountVisitor(matchCreators)),
-          visitorData);
+          matchCandidateCountsData);
     }
     else
     {
@@ -237,8 +237,9 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     double conflatableBuildingCount = 0.0;
     double conflatableWaterwayCount = 0.0;
     /// @todo This isn't very extensible to hardcode the matchup between each match creator and each
-    //feature type (e.g. hoot::PlacesPoiMatchCreator matches up with POI type).  Need a more
-    //maintainable way to do this if many more feature types get added.
+    /// feature type (e.g. hoot::PlacesPoiMatchCreator matches up with POI type).  Need a more
+    /// maintainable way to do this if many more feature types get added.  Also, see comments
+    /// in MatchCandidateCountVisitor for additional changes that may need to be made.
     for (vector< shared_ptr<MatchCreator> >::const_iterator matchCreatorItr = matchCreators.begin();
          matchCreatorItr != matchCreators.end(); ++matchCreatorItr)
     {
@@ -249,33 +250,59 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
       {
         const QString matchCreatorName =
           QString::fromStdString(matchCreatorDescriptions.at(i).className);
-        LOG_VARD(matchCreatorName);
+        //LOG_VARD(matchCreatorName);
         double conflatableFeatureCountForFeatureType = 0.0;
         if (!_inputIsConflatedMapOutput)
         {
-          QMap<QString, long> matchCandidateCountsByMatchCreator =
-            any_cast<QMap<QString, long> >(visitorData);
+          const QMap<QString, long> matchCandidateCountsByMatchCreator =
+            any_cast<QMap<QString, long> >(matchCandidateCountsData);
           conflatableFeatureCountForFeatureType = matchCandidateCountsByMatchCreator[matchCreatorName];
         }
-        _stats.append(
-          SingleStat(
-            "Features Conflatable by: " + matchCreatorName, conflatableFeatureCountForFeatureType));
-        if (matchCreatorName == "hoot::ScriptMatchCreator,PoiGeneric.js" ||
-            matchCreatorName == "hoot::PlacesPoiMatchCreator")
+        //We only want to see stats for match creators specified in the config...not for ones
+        //that weren't specified.  See MatchCandidateCountVisitor for more info.
+        if (ConfigOptions(conf()).getMatchCreators().split(";").contains(matchCreatorName))
         {
-          conflatablePoiCount = conflatableFeatureCountForFeatureType;
-        }
-        else if (matchCreatorName == "hoot::HighwayMatchCreator")
-        {
-          conflatableHighwayCount = conflatableFeatureCountForFeatureType;
-        }
-        else if (matchCreatorName == "hoot::BuildingMatchCreator")
-        {
-          conflatableBuildingCount = conflatableFeatureCountForFeatureType;
-        }
-        else if (matchCreatorDescriptions.at(i).description == "Linear Waterway")
-        {
-          conflatableWaterwayCount = conflatableFeatureCountForFeatureType;
+          if (!matchCreatorName.contains("hoot::ScriptMatchCreator"))
+          {
+            _stats.append(
+              SingleStat(
+                "Features Conflatable by: " + matchCreatorName,
+                conflatableFeatureCountForFeatureType));
+            if (matchCreatorName == "hoot::PlacesPoiMatchCreator")
+            {
+              conflatablePoiCount = conflatableFeatureCountForFeatureType;
+            }
+            else if (matchCreatorName == "hoot::HighwayMatchCreator")
+            {
+              conflatableHighwayCount = conflatableFeatureCountForFeatureType;
+            }
+            else if (matchCreatorName == "hoot::BuildingMatchCreator")
+            {
+              conflatableBuildingCount = conflatableFeatureCountForFeatureType;
+            }
+          }
+          else
+          {
+            if (matchCreatorDescriptions.at(i).experimental == false)
+            {
+              _stats.append(
+                SingleStat(
+                  "Features Conflatable by: " + matchCreatorName,
+                  conflatableFeatureCountForFeatureType));
+              //Not all of the non-experimental script match creator types are being accounted for
+              //yet.
+              if (matchCreatorDescriptions.at(i).description == "POI Generic")
+              {
+                conflatablePoiCount = conflatableFeatureCountForFeatureType;
+                //LOG_VARD(conflatablePoiCount);
+              }
+              else if (matchCreatorDescriptions.at(i).description == "Linear Waterway")
+              {
+                conflatableWaterwayCount = conflatableFeatureCountForFeatureType;
+                //LOG_VARD(conflatableWaterwayCount);
+              }
+            }
+          }
         }
       }
     }
@@ -472,7 +499,6 @@ void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QStr
        FilteredVisitor(
         e_criterion->clone(),
         new CountUniqueReviewsVisitor()));
-  LOG_VARD(numFeatureReviewsToBeMade);
   _stats.append(
     SingleStat(QString("Number of %1 Reviews to be Made").arg(description), numFeatureReviewsToBeMade));
   const double unconflatedFeatureCount =

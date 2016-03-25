@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -32,42 +32,69 @@ namespace hoot
 MatchCandidateCountVisitor::MatchCandidateCountVisitor(
   const vector< shared_ptr<MatchCreator> >& matchCreators) :
 _matchCreators(matchCreators),
-_candidateCount(0)
+_candidateCount(0)//,
+//_settings(conf())
 {
-  for (size_t i = 0; i < _matchCreators.size(); ++i)
+  for (size_t i = 0; i < _matchCreators.size(); i++)
   {
-    vector<MatchCreator::Description> matchCreatorDescriptions = _matchCreators[i]->getAllCreators();
+    shared_ptr<MatchCreator> matchCreator = _matchCreators[i];
+    vector<MatchCreator::Description> matchCreatorDescriptions = matchCreator->getAllCreators();
     sort(matchCreatorDescriptions.begin(), matchCreatorDescriptions.end(), _matchDescriptorCompare);
-    // Grabbing the first element doesn't seem right here, but its behavior has been expected
-    //so far.
-    LOG_VARD(matchCreatorDescriptions.at(0).className);
-     _matchCreatorDescriptions.append(
-       QString::fromStdString(matchCreatorDescriptions.at(0).className));
+    LOG_VARD(matchCreatorDescriptions.size());
+    for (size_t j = 0; j < matchCreatorDescriptions.size(); j++)
+    {
+      //For a ScriptMatchCreator, matchCreatorName is "class name,script name"; e.g.
+      //hoot::ScriptMatchCreator,PoiGeneric.js
+      const QString matchCreatorName =
+        QString::fromStdString(matchCreatorDescriptions.at(j).className);
+      LOG_VARD(matchCreatorName);
+      const bool isScriptMatchCreator = matchCreatorName.split(",").size() > 1;
+      LOG_VARD(isScriptMatchCreator);
+      if (isScriptMatchCreator)
+      {
+        //If a ScriptMatchCreator is being used, we will actually be passed all
+        //ScriptMatchCreator/script combinations here due to an impendence mismatch of sorts between
+        //this class and MatchFactory.  To make sure we're only using the ScriptMatchCreators
+        //specified in the executing command, we filter out any ScriptMatchCreator/script combos not
+        //specified in the configuration for the command.
+        if (!_matchCreatorDescriptions.contains(matchCreatorName) &&
+            ConfigOptions(conf()).getMatchCreators().split(";").contains(matchCreatorName))
+            //_settings.get("match.creators").toStringList().contains(matchCreatorName))
+        {
+          _matchCreatorDescriptions.append(matchCreatorName);
+        }
+      }
+      else
+      {
+        _matchCreatorDescriptions.append(matchCreatorName);
+      }
+    }
   }
 
+  LOG_VARD(_matchCreators.size());
+  LOG_VARD(_matchCreatorDescriptions.size());
 }
 
 void MatchCandidateCountVisitor::visit(const shared_ptr<const Element>& e)
 {
-  for (size_t i = 0; i < _matchCreators.size(); ++i)
+  for (size_t i = 0; i < _matchCreators.size(); i++)
   {
     shared_ptr<MatchCreator> matchCreator = _matchCreators[i];
     if (matchCreator->isMatchCandidate(e, _map->shared_from_this()))
     {
-     _candidateCount++;
-
-     const QString matchCreatorName = _matchCreatorDescriptions.at(i);
-     LOG_VARD(matchCreatorName);
-     if (_matchCandidateCountsByMatchCreator.contains(matchCreatorName))
-     {
-       _matchCandidateCountsByMatchCreator[matchCreatorName] =
-         _matchCandidateCountsByMatchCreator[matchCreatorName] + 1;
-     }
-     else
-     {
-       _matchCandidateCountsByMatchCreator[matchCreatorName] = 1;
-     }
-     //LOG_VARD(_matchCandidateCountsByMatchCreator[matchCreatorName]);
+      const QString matchCreatorName = _matchCreatorDescriptions.at(i);
+      LOG_VARD(matchCreatorName);
+      if (_matchCandidateCountsByMatchCreator.contains(matchCreatorName))
+      {
+        _matchCandidateCountsByMatchCreator[matchCreatorName] =
+          _matchCandidateCountsByMatchCreator[matchCreatorName] + 1;
+      }
+      else
+      {
+        _matchCandidateCountsByMatchCreator[matchCreatorName] = 1;
+      }
+      LOG_VARD(_matchCandidateCountsByMatchCreator[matchCreatorName]);
+      _candidateCount++;
     }
   }
 }
