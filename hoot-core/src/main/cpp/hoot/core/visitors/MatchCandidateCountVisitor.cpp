@@ -82,6 +82,7 @@ void MatchCandidateCountVisitor::visit(const shared_ptr<const Element>& e)
       _candidateCount++;
     }
   }
+  //LOG_VARD(_matchCandidateCountsByMatchCreator.size());
 }
 
 }

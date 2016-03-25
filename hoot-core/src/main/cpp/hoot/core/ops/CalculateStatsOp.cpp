@@ -179,19 +179,16 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     }
     double conflatableFeatureCount = -1.0;
     any matchCandidateCountsData;
-    if (!_inputIsConflatedMapOutput)
-    {
-      conflatableFeatureCount =
-        _applyVisitor(
-          constMap,
-          FilteredVisitor(
-            ChainCriterion(
-              new NotCriterion(new StatusCriterion(Status::Conflated)),
-              new NotCriterion(new NeedsReviewCriterion(constMap))),
-            new MatchCandidateCountVisitor(matchCreators)),
-          matchCandidateCountsData);
-    }
-    else
+    conflatableFeatureCount =
+      _applyVisitor(
+        constMap,
+        FilteredVisitor(
+          ChainCriterion(
+            new NotCriterion(new StatusCriterion(Status::Conflated)),
+            new NotCriterion(new NeedsReviewCriterion(constMap))),
+          new MatchCandidateCountVisitor(matchCreators)),
+        matchCandidateCountsData);
+    if (_inputIsConflatedMapOutput)
     {
       //The conflatable stat has no meaning on a conflated output map, since everything in the
       //output is either conflated, passed through, marked for review, or left unconflated.
@@ -236,76 +233,56 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     double conflatableHighwayCount = 0.0;
     double conflatableBuildingCount = 0.0;
     double conflatableWaterwayCount = 0.0;
-    /// @todo This isn't very extensible to hardcode the matchup between each match creator and each
-    /// feature type (e.g. hoot::PlacesPoiMatchCreator matches up with POI type).  Need a more
-    /// maintainable way to do this if many more feature types get added.  Also, see comments
-    /// in MatchCandidateCountVisitor for additional changes that may need to be made.
-    for (vector< shared_ptr<MatchCreator> >::const_iterator matchCreatorItr = matchCreators.begin();
-         matchCreatorItr != matchCreators.end(); ++matchCreatorItr)
+    QMap<QString, long> matchCandidateCountsByMatchCreator =
+        any_cast<QMap<QString, long> >(matchCandidateCountsData);
+    LOG_VARD(matchCandidateCountsByMatchCreator.size());
+    LOG_VARD(matchCandidateCountsByMatchCreator);
+    for (QMap<QString, long >::const_iterator iterator = matchCandidateCountsByMatchCreator.begin();
+         iterator != matchCandidateCountsByMatchCreator.end(); ++iterator)
     {
-      shared_ptr<MatchCreator> matchCreator = *matchCreatorItr;
-      vector<MatchCreator::Description> matchCreatorDescriptions = matchCreator->getAllCreators();
-      sort(matchCreatorDescriptions.begin(), matchCreatorDescriptions.end(), _matchDescriptorCompare);
-      for (size_t i = 0; i < matchCreatorDescriptions.size(); i++)
+      const QString matchCreatorName = iterator.key();
+      LOG_VARD(matchCreatorName);
+      double conflatableFeatureCountForFeatureType = 0.0;
+      if (!_inputIsConflatedMapOutput)
       {
-        const QString matchCreatorName =
-          QString::fromStdString(matchCreatorDescriptions.at(i).className);
-        //LOG_VARD(matchCreatorName);
-        double conflatableFeatureCountForFeatureType = 0.0;
-        if (!_inputIsConflatedMapOutput)
-        {
-          const QMap<QString, long> matchCandidateCountsByMatchCreator =
-            any_cast<QMap<QString, long> >(matchCandidateCountsData);
-          conflatableFeatureCountForFeatureType = matchCandidateCountsByMatchCreator[matchCreatorName];
-        }
-        //We only want to see stats for match creators specified in the config...not for ones
-        //that weren't specified.  See MatchCandidateCountVisitor for more info.
-        if (ConfigOptions(conf()).getMatchCreators().split(";").contains(matchCreatorName))
-        {
-          if (!matchCreatorName.contains("hoot::ScriptMatchCreator"))
-          {
-            _stats.append(
-              SingleStat(
-                "Features Conflatable by: " + matchCreatorName,
-                conflatableFeatureCountForFeatureType));
-            if (matchCreatorName == "hoot::PlacesPoiMatchCreator")
-            {
-              conflatablePoiCount = conflatableFeatureCountForFeatureType;
-            }
-            else if (matchCreatorName == "hoot::HighwayMatchCreator")
-            {
-              conflatableHighwayCount = conflatableFeatureCountForFeatureType;
-            }
-            else if (matchCreatorName == "hoot::BuildingMatchCreator")
-            {
-              conflatableBuildingCount = conflatableFeatureCountForFeatureType;
-            }
-          }
-          else
-          {
-            if (matchCreatorDescriptions.at(i).experimental == false)
-            {
-              _stats.append(
-                SingleStat(
-                  "Features Conflatable by: " + matchCreatorName,
-                  conflatableFeatureCountForFeatureType));
-              //Not all of the non-experimental script match creator types are being accounted for
-              //yet.
-              if (matchCreatorDescriptions.at(i).description == "POI Generic")
-              {
-                conflatablePoiCount = conflatableFeatureCountForFeatureType;
-                //LOG_VARD(conflatablePoiCount);
-              }
-              else if (matchCreatorDescriptions.at(i).description == "Linear Waterway")
-              {
-                conflatableWaterwayCount = conflatableFeatureCountForFeatureType;
-                //LOG_VARD(conflatableWaterwayCount);
-              }
-            }
-          }
-        }
+        conflatableFeatureCountForFeatureType = matchCandidateCountsByMatchCreator[matchCreatorName];
+        LOG_VARD(conflatableFeatureCountForFeatureType);
+      }
+
+      _stats.append(
+            SingleStat(
+              "Features Conflatable by: " + matchCreatorName,
+              conflatableFeatureCountForFeatureType));
+      /// @todo This isn't very extensible to hardcode the matchup between each match creator and each
+      /// feature count type (e.g. hoot::PlacesPoiMatchCreator matches up with POI count type).  Need
+      /// a more maintainable way to do this if many more feature types get added.
+      if (matchCreatorName == "hoot::PlacesPoiMatchCreator")
+      {
+        conflatablePoiCount += conflatableFeatureCountForFeatureType;
+      }
+      else if (matchCreatorName == "hoot::HighwayMatchCreator")
+      {
+        conflatableHighwayCount = conflatableFeatureCountForFeatureType;
+      }
+      else if (matchCreatorName == "hoot::BuildingMatchCreator")
+      {
+        conflatableBuildingCount = conflatableFeatureCountForFeatureType;
+      }
+      //Not all of the non-experimental script match creator types are being accounted for
+      //yet.
+      else if (matchCreatorName.contains("PoiGeneric"))
+      {
+        conflatablePoiCount += conflatableFeatureCountForFeatureType;
+      }
+      else if (matchCreatorName.contains("LinearWaterway"))
+      {
+        conflatableWaterwayCount = conflatableFeatureCountForFeatureType;
       }
     }
+    LOG_VARD(conflatablePoiCount);
+    LOG_VARD(conflatableHighwayCount);
+    LOG_VARD(conflatableBuildingCount);
+    LOG_VARD(conflatableWaterwayCount);
 
     _stats.append(SingleStat("Total Conflated Features", conflatedFeatureCount));
     _stats.append(

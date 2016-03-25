@@ -10,8 +10,8 @@ Total Unconflatable Features	0	0	0
 Percentage of Total Features Unconflatable	0	0	0	
 Number of Match Creators	3	3	3	
 Features Conflatable by: hoot::BuildingMatchCreator	10	8	0	
-Features Conflatable by: hoot::ScriptMatchCreator,PoiGeneric.js	11	10	0	
 Features Conflatable by: hoot::HighwayMatchCreator	4	4	0	
+Features Conflatable by: hoot::ScriptMatchCreator,PoiGeneric.js	11	10		
 Total Conflated Features	0	0	18	
 Percentage of Total Features Conflated	0	0	46.153846153846153	
 Total Features Marked for Review	0	0	11	
