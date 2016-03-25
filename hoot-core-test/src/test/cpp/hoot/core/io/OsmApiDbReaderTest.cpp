@@ -34,8 +34,7 @@
 // Hoot
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/io/OsmApiDb.h>
-#include <hoot/core/io/ServicesDbReader.h>
-#include <hoot/core/io/ServicesDbWriter.h>
+#include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/OsmMap.h>
@@ -72,18 +71,38 @@ public:
   void verifyFullReadOutput(shared_ptr<OsmMap> map)
   {
     //nodes
-    HOOT_STR_EQUALS(true, map->containsNode(500));
-    shared_ptr<Node> node = map->getNode(500);
-    CPPUNIT_ASSERT_EQUAL((long)500, node->getId());
+    HOOT_STR_EQUALS(true, map->containsNode(1));
+    shared_ptr<Node> node = map->getNode(1);
+    CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
     CPPUNIT_ASSERT_EQUAL(38.4, node->getY());
     CPPUNIT_ASSERT_EQUAL(-106.5, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getCircularError());
     CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
+
+    //ways
+    HOOT_STR_EQUALS(true, map->containsWay(1));
+    shared_ptr<Way> way = map->getWay(1);
+    CPPUNIT_ASSERT_EQUAL((long)1, way->getId());
+    CPPUNIT_ASSERT_EQUAL(2, (int)way->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((long)1, way->getNodeId(0));
+    CPPUNIT_ASSERT_EQUAL((long)2, way->getNodeId(1));
+    CPPUNIT_ASSERT_EQUAL(0.0, way->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
+
+    //relations
+    HOOT_STR_EQUALS(true, map->containsRelation(1));
+    shared_ptr<Relation> relation = map->getRelation(1);
+    CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
+    vector<RelationData::Entry> relationData = relation->getMembers();
+    CPPUNIT_ASSERT_EQUAL(2, (int)relation->getMembers().size());
+    HOOT_STR_EQUALS("wayrole", relationData[0].getRole());
+    HOOT_STR_EQUALS("noderole",relationData[1].getRole());
+    CPPUNIT_ASSERT_EQUAL(0.0, relation->getCircularError());
   }
 
   void runReadOsmApiTest()
   {
-    ServicesDbReader reader;
+    OsmApiDbReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
 
     // parse out the osm api dbname, dbuser, and dbpassword
@@ -107,7 +126,9 @@ public:
     QString cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
       psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/users.sql > /dev/null 2>&1; \
       psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/changesets.sql > /dev/null 2>&1; \
-      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/nodesReadTest.sql > /dev/null 2>&1";
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/nodes.sql > /dev/null 2>&1; \
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/ways.sql > /dev/null 2>&1; \
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/relations.sql > /dev/null 2>&1";
 
     if( std::system(cmd.toStdString().c_str()) != 0 )
     {
