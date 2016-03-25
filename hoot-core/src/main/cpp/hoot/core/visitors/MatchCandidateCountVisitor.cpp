@@ -60,8 +60,8 @@ void MatchCandidateCountVisitor::_setupCreators(const vector< shared_ptr<MatchCr
 
 void MatchCandidateCountVisitor::visit(const shared_ptr<const Element>& e)
 {
-  QMap<QString, shared_ptr<MatchCreator> >::const_iterator iterator;
-  for (iterator = _matchCreatorsByName.begin(); iterator != _matchCreatorsByName.end(); ++iterator)
+  for (QMap<QString, shared_ptr<MatchCreator> >::const_iterator iterator = _matchCreatorsByName.begin();
+       iterator != _matchCreatorsByName.end(); ++iterator)
   {
     const QString matchCreatorName = iterator.key();
     //LOG_VARD(matchCreatorName);
