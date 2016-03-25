@@ -57,7 +57,7 @@ fi
 
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
-    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:$HADOOP_HOME/bin:$HOOT_HOME/bin" >> ~/.profile
+    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HADOOP_HOME/bin:\$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
@@ -328,15 +328,17 @@ if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
 fi
 
 #hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos, so purposefully not installing hoot from the repos.
-if [ ! -f hadoop-0.20.2.tar.gz ]; then
+if [ ! hadoop fs -ls &> /dev/null ]; then
   echo "Installing Hadoop..."
+  if [ ! -f hadoop-0.20.2.tar.gz ]; then
+    wget --quiet https://archive.apache.org/dist/hadoop/core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
+  fi
   
   ssh-keygen -t rsa -N "" -f $HOME/.ssh/id_rsa
   cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
   chmod 600 ~/.ssh/authorized_keys
   ssh -o StrictHostKeyChecking=no localhost
 
-  wget https://archive.apache.org/dist/hadoop/core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
   #cd /usr/local
   sudo tar -zxvf $HOME/hadoop-0.20.2.tar.gz
   sudo chown -R vagrant:vagrant hadoop-0.20.2
@@ -476,6 +478,7 @@ EOT
   #hadoop fs -ls /
   #hadoop jar ./hadoop-0.20.2-examples.jar pi 2 100
 fi
+
 cd ~
 
 echo "### Installing node-mapnik-server..."
