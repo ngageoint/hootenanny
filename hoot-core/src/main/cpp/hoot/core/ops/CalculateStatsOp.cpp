@@ -313,10 +313,10 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
         "Percentage of Total Features Conflated",
         ((double)conflatedFeatureCount / (double)featureCount) * 100.0));
     _stats.append(
-      SingleStat("Total Features Involved in a Review", numFeaturesMarkedForReview));
+      SingleStat("Total Features Marked for Review", numFeaturesMarkedForReview));
     _stats.append(
       SingleStat(
-        "Percentage of Total Features Involved in a Review",
+        "Percentage of Total Features Marked for Review",
         ((double)numFeaturesMarkedForReview / (double)featureCount) * 100.0));
     _stats.append(
       SingleStat("Total Number of Reviews to be Made", numReviewsToBeMade));
@@ -492,7 +492,7 @@ void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QStr
       ChainCriterion(new NeedsReviewCriterion(map), e_criterion->clone()), new FeatureCountVisitor()));
   _stats.append(
     SingleStat(QString("Conflated %1s").arg(description), conflatedFeatureCount));
-  _stats.append(SingleStat(QString("%1s Involved in a Review").arg(description), featuresMarkedForReview));
+  _stats.append(SingleStat(QString("%1s Marked for Review").arg(description), featuresMarkedForReview));
   const double numFeatureReviewsToBeMade =
     _applyVisitor(
       map,
@@ -537,7 +537,7 @@ void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QStr
       ((double)featuresMarkedForReview / (double)totalFeatures) * 100.0;
   }
   _stats.append(
-    SingleStat(QString("Percentage of %1s Involved in a Review").arg(description), percentageOfTotalFeaturesMarkedForReview));
+    SingleStat(QString("Percentage of %1s Marked for Review").arg(description), percentageOfTotalFeaturesMarkedForReview));
   double percentageOfTotalFeaturesUnconflated = 0.0;
   if (totalFeatures > 0.0)
   {
