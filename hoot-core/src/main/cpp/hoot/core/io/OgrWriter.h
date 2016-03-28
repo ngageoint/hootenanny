@@ -136,6 +136,7 @@ public:
   virtual void writeElement(ElementInputStream& inputStream, bool debug);
 
 protected:
+
   bool _createAllLayers;
   bool _appendData;
   QString _scriptPath;
@@ -164,6 +165,13 @@ protected:
   void strictError(QString warning);
 
   virtual void _writePartial(ElementProviderPtr& provider, const ConstElementPtr& e);
+
+private:
+
+  //relations that weren't written on a first pass b/c they contained relations as a member which
+  //had not yet been written.
+  QList<long> _unwrittenFirstPassRelationIds;
+  bool _failOnSkipRelation;
 
 };
 

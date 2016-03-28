@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -49,6 +49,7 @@ class OgrWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(OgrWriterTest);
   CPPUNIT_TEST(runGdbTest);
   CPPUNIT_TEST(runShpTest);
+  CPPUNIT_TEST(runRelationContainingRelationTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -144,6 +145,32 @@ public:
 
     QDir().mkpath("tmp");
     OsmMapWriterFactory::write(createTestMap(), "tmp/TestMap.osm");
+
+    // make sure it created a bunch of files. We aren't testing for correct output.
+    CPPUNIT_ASSERT(QDir("test-output/io/OgrWriterTest.gdb").entryList().size() > 10);
+  }
+
+  //We're testing here that the writer properly writes the relations in two passes (not checking
+  //the output, just for an error) and is able to write a relation which references another relation
+  //that hasn't been yet written.
+  void runRelationContainingRelationTest()
+  {
+    OsmMapPtr map = createTestMap();
+
+    shared_ptr<Relation> r2(new Relation(Status::Unknown1, 2, 15.0, "multipolygon"));
+    r2->setTag("building", "yes");
+    r2->setTag("name", "r2");
+    r2->addElement("outer", ElementId(ElementType::Way, 1));
+    r2->addElement("inner", ElementId(ElementType::Way, 2));
+    map->addRelation(r2);
+
+    map->getRelation(1)->addElement("test", ElementId(ElementType::Relation, 2));
+
+    OgrWriter uut;
+    uut.setScriptPath("test-files/io/SampleTranslation.js");
+    FileUtils::removeDir("test-output/io/OgrWriterTest.gdb");
+    uut.open("test-output/io/OgrWriterTest.gdb");
+    uut.write(map);
 
     // make sure it created a bunch of files. We aren't testing for correct output.
     CPPUNIT_ASSERT(QDir("test-output/io/OgrWriterTest.gdb").entryList().size() > 10);
