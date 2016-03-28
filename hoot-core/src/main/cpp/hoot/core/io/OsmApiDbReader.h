@@ -94,10 +94,6 @@ private:
   Status _status;
   bool _useDataSourceIds;
 
-  void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
-  void _readBounded(shared_ptr<OsmMap> map, const ElementType& elementType);
-  void _processRelation(const QSqlQuery& resultIterator, OsmMap& map);
-
   OsmApiDb _database;
   bool _open;
   shared_ptr<QSqlQuery> _elementResultIterator;
@@ -111,6 +107,10 @@ private:
   Tgs::BigMap<long, long> _nodeIdMap;
   Tgs::BigMap<long, long> _relationIdMap;
   Tgs::BigMap<long, long> _wayIdMap;
+
+  void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
+  void _readBounded(shared_ptr<OsmMap> map, const ElementType& elementType);
+  void _processRelation(const QSqlQuery& resultIterator, OsmMap& map);
 
   ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 

@@ -46,9 +46,7 @@ HOOT_FACTORY_REGISTER(OsmMapReader, HootApiDbReader)
 HootApiDbReader::HootApiDbReader() :
 _status(Status::Invalid),
 _useDataSourceIds(true),
-_open(false),
-_osmElemId(-1),
-_osmElemType(ElementType::Unknown)
+_open(false)
 {
   setConfiguration(conf());
 }
@@ -80,21 +78,12 @@ void HootApiDbReader::open(QString urlStr)
   initializePartial();
 
   QUrl url(urlStr);
-  QString osmElemId = url.queryItemValue("osm-element-id");
-  QString osmElemType = url.queryItemValue("osm-element-type");
   QStringList pList = url.path().split("/");
   LOG_DEBUG("url path = "+url.path());
   bool ok;
-  bool ok2;
   _database.open(url);
 
   long requestedMapId = pList[pList.size() - 1].toLong(&ok);
-
-  if(osmElemId.length() > 0 && osmElemType.length() > 0)
-  {
-    _osmElemId = osmElemId.toLong(&ok2);
-    _osmElemType = ElementType::fromString(osmElemType);
-  }
 
   if (_email == "")
   {
@@ -151,20 +140,11 @@ void  HootApiDbReader::initializePartial()
 void HootApiDbReader::read(shared_ptr<OsmMap> map)
 {
   LOG_DEBUG("IN HootApiDbReader::read()...");
-  //LOG_DEBUG("bounding box key=");
-  //LOG_DEBUG(_bbox);
 
-  if(_osmElemId > -1 && _osmElemType != ElementType::Unknown)
+  for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
   {
-    _read(map, _osmElemType);
-  }
-  else if(_bbox == "") // process SELECT ALL
-  {
-    for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
-    {
-      ElementType::Type elementType = static_cast<ElementType::Type>(ctr);
-      _read(map, elementType);
-    }
+    ElementType::Type elementType = static_cast<ElementType::Type>(ctr);
+    _read(map, elementType);
   }
 }
 
@@ -452,7 +432,6 @@ void HootApiDbReader::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   setUserEmail(configOptions.getServicesDbReaderEmail());
-  setBoundingBox(configOptions.getConvertBoundingBox());
 }
 
 boost::shared_ptr<OGRSpatialReference> HootApiDbReader::getProjection() const

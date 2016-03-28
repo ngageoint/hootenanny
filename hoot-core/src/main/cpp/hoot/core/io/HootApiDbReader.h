@@ -97,8 +97,6 @@ public:
 
   void setUserEmail(const QString& email) { _email = email; }
 
-  void setBoundingBox(const QString& bbox) { _bbox = bbox; }
-
   virtual bool hasMoreElements();
 
   virtual shared_ptr<Element> readNextElement();
@@ -110,19 +108,10 @@ private:
   Status _status;
   bool _useDataSourceIds;
 
-  const ElementType _getCurrentSelectElementType() const;
-  long _getCurrentElementOffset(const ElementType& selectElementType) const;
-  void _incrementElementIndex(const ElementType& selectElementType);
-  void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
-
   HootApiDb _database;
   bool _open;
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
-  QString _bbox;
-
-  long _osmElemId;
-  ElementType _osmElemType;
   ElementType _selectElementType;
 
   shared_ptr<Element> _nextElement;
@@ -130,6 +119,10 @@ private:
   Tgs::BigMap<long, long> _nodeIdMap;
   Tgs::BigMap<long, long> _relationIdMap;
   Tgs::BigMap<long, long> _wayIdMap;
+
+  const ElementType _getCurrentSelectElementType() const;
+
+  void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
 
   ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 
