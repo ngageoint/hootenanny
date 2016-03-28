@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -717,25 +717,30 @@ void OgrWriter::writeElement(ElementInputStream& inputStream, bool debug)
 
 void OgrWriter::writeElement(ElementPtr &element, bool debug)
 {
-  Tags sourceTags = element->getTags();
-  Tags destTags;
-  for (Tags::const_iterator it = element->getTags().begin();
-       it != element->getTags().end(); ++it)
+  //Unfortunately, this check also has to happen in addition to checking hasMoreElements.  See
+  //explanation in ServicesDbReader::readNextElement.
+  if (element.get())
   {
-    if (sourceTags[it.key()] != "")
+    Tags sourceTags = element->getTags();
+    Tags destTags;
+    for (Tags::const_iterator it = element->getTags().begin();
+         it != element->getTags().end(); ++it)
     {
-      destTags.appendValue(it.key(), it.value());
+      if (sourceTags[it.key()] != "")
+      {
+        destTags.appendValue(it.key(), it.value());
+      }
     }
-  }
-  // Now that all the empties are gone, update our element
-  element->setTags(destTags);
+    // Now that all the empties are gone, update our element
+    element->setTags(destTags);
 
-  if ( debug == true )
-  {
-    LOG_DEBUG(element->toString());
-  }
+    if ( debug == true )
+    {
+      LOG_DEBUG(element->toString());
+    }
 
-  PartialOsmMapWriter::writePartial(element);
+    PartialOsmMapWriter::writePartial(element);
+  }
 }
 
 void OgrWriter::setCacheCapacity(unsigned long maxElementsPerType)
