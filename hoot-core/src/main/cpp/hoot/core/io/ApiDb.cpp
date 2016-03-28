@@ -170,7 +170,7 @@ long ApiDb::getUserId(const QString& email, bool throwWhenMissing)
   else if (throwWhenMissing)
   {
     QString error = QString("No user found with the email: %1 (maybe specify `%2=true`?)")
-        .arg(email).arg(ConfigOptions::getServicesDbWriterCreateUserKey());
+        .arg(email).arg(ConfigOptions::getHootapiDbWriterCreateUserKey());
     LOG_WARN(error);
     throw HootException(error);
   }

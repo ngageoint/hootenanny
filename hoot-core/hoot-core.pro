@@ -301,8 +301,6 @@ SOURCES += \
     src/main/cpp/hoot/core/io/ScriptTranslatorFactory.cpp \
     src/main/cpp/hoot/core/cmd/IsMatchCmd.cpp \
     src/main/cpp/hoot/core/scoring/MapComparator.cpp \
-    src/main/cpp/hoot/core/io/ServicesDbWriter.cpp \
-    src/main/cpp/hoot/core/io/ServicesDbReader.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbReader.cpp \
     src/main/cpp/hoot/core/io/HootApiDbReader.cpp \
     src/main/cpp/hoot/core/io/HootApiDbWriter.cpp \
@@ -310,7 +308,6 @@ SOURCES += \
     src/main/cpp/hoot/core/io/PartialOsmMapReader.cpp \
     src/main/cpp/hoot/core/io/OsmMapWriter.cpp \
     src/main/cpp/hoot/core/io/OsmMapReader.cpp \
-    src/main/cpp/hoot/core/io/ServicesDb.cpp \
     src/main/cpp/hoot/core/io/ApiDb.cpp \
     src/main/cpp/hoot/core/io/OsmApiDb.cpp \
     src/main/cpp/hoot/core/io/HootApiDb.cpp \
@@ -764,8 +761,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/ScriptTranslatorFactory.h \
     src/main/cpp/hoot/core/scoring/MapComparator.h \
     src/main/cpp/hoot/core/util/Float.h \
-    src/main/cpp/hoot/core/io/ServicesDbWriter.h \
-    src/main/cpp/hoot/core/io/ServicesDbReader.h \
     src/main/cpp/hoot/core/io/ApiDbReader.h \
     src/main/cpp/hoot/core/io/OsmApiDbReader.h \
     src/main/cpp/hoot/core/io/HootApiDbReader.h \
@@ -774,7 +769,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/PartialOsmMapReader.h \
     src/main/cpp/hoot/core/io/OsmMapWriter.h \
     src/main/cpp/hoot/core/io/OsmMapReader.h \
-    src/main/cpp/hoot/core/io/ServicesDb.h \
     src/main/cpp/hoot/core/io/ApiDb.h \
     src/main/cpp/hoot/core/io/OsmApiDb.h \
     src/main/cpp/hoot/core/io/HootApiDb.h \

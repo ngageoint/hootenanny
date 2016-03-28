@@ -58,7 +58,7 @@ using namespace std;
 
 class BulkInsert;
 class InternalIdReserver;
-class ServicesDbWriterTest;
+class HootApiDbWriterTest;
 class Element;
 class Tags;
 class ElementId;

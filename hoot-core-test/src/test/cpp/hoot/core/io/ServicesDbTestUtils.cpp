@@ -32,7 +32,6 @@
 #include <cppunit/TestAssert.h>
 
 // Hoot
-#include <hoot/core/io/ServicesDb.h>
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
@@ -53,9 +52,9 @@ using namespace Tgs;
 void ServicesDbTestUtils::compareRecords(QString sql, QString expected, QVariant v1,
   QVariant v2)
 {
-  ServicesDb db;
+  HootApiDb db;
   db.open(ServicesDbTestUtils::getDbModifyUrl());
-  QString result = db._execToString(sql, v1, v2);
+  QString result = db.execToString(sql, v1, v2);
   if (expected == "")
   {
     QStringList rows = result.split("\n");
@@ -123,7 +122,7 @@ QUrl ServicesDbTestUtils::getOsmApiDbUrl()
 
 void ServicesDbTestUtils::deleteUser(QString email)
 {
-  ServicesDb database;
+  HootApiDb database;
   database.open(getDbModifyUrl());
 
   long userId = database.getUserId(email, false);

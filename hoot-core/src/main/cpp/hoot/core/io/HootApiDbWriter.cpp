@@ -304,9 +304,9 @@ vector<long> HootApiDbWriter::_remapNodes(const vector<long>& nids)
 void HootApiDbWriter::setConfiguration(const Settings &conf)
 {
   ConfigOptions configOptions(conf);
-  setUserEmail(configOptions.getServicesDbWriterEmail());
-  setCreateUser(configOptions.getServicesDbWriterCreateUser());
-  setOverwriteMap(configOptions.getServicesDbWriterOverwriteMap());
+  setUserEmail(configOptions.getHootapiDbWriterEmail());
+  setCreateUser(configOptions.getHootapiDbWriterCreateUser());
+  setOverwriteMap(configOptions.getHootapiDbWriterOverwriteMap());
 }
 
 void HootApiDbWriter::_startNewChangeSet()

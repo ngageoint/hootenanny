@@ -164,12 +164,9 @@ SOURCES += \
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
-    src/test/cpp/hoot/core/io/ServicesDbTest.cpp \
     src/test/cpp/hoot/core/io/HootApiDbTest.cpp \
     src/test/cpp/hoot/core/io/OsmApiDbTest.cpp \
     src/test/cpp/hoot/core/io/ServicesDbTestUtils.cpp \
-    src/test/cpp/hoot/core/io/ServicesDbWriterTest.cpp \
-    src/test/cpp/hoot/core/io/ServicesDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/HootApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/HootApiDbWriterTest.cpp \

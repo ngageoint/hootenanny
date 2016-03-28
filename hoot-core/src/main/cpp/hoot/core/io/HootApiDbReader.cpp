@@ -434,7 +434,7 @@ void HootApiDbReader::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
-  setUserEmail(configOptions.getServicesDbReaderEmail());
+  setUserEmail(configOptions.getHootapiDbReaderEmail());
 }
 
 boost::shared_ptr<OGRSpatialReference> HootApiDbReader::getProjection() const

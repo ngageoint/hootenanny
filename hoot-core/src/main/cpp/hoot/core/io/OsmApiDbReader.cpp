@@ -563,7 +563,7 @@ void OsmApiDbReader::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   //setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
-  setUserEmail(configOptions.getServicesDbReaderEmail());
+  setUserEmail(configOptions.getOsmapiDbReaderEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
 }
 
