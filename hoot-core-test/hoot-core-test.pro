@@ -172,6 +172,7 @@ services:SOURCES += \
     src/test/cpp/hoot/core/io/ServicesDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/HootApiDbReaderTest.cpp \
+    src/test/cpp/hoot/core/io/HootApiDbWriterTest.cpp \
 
 HEADERS += \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.h \

@@ -85,22 +85,25 @@ void HootApiDbReader::open(QString urlStr)
 
   long requestedMapId = pList[pList.size() - 1].toLong(&ok);
 
-  if (_email == "")
+  if (!ok)
   {
-    throw HootException("If a map name is specified then the user email must also be specified "
-                        "via: " + emailKey());
-  }
+    if (_email == "")
+    {
+      throw HootException("If a map name is specified then the user email must also be specified "
+                          "via: " + emailKey());
+    }
 
-  QString mapName = pList[pList.size() - 1];
-  _database.setUserId(_database.getUserId(_email, false));
-  set<long> mapIds = _database.selectMapIds(mapName);
-  if (mapIds.size() != 1)
-  {
-    QString str = QString("Expected 1 map with the name '%1' but found %2 maps.").arg(mapName)
-        .arg(mapIds.size());
-    throw HootException(str);
+    QString mapName = pList[pList.size() - 1];
+    _database.setUserId(_database.getUserId(_email, false));
+    set<long> mapIds = _database.selectMapIds(mapName);
+    if (mapIds.size() != 1)
+    {
+      QString str = QString("Expected 1 map with the name '%1' but found %2 maps.").arg(mapName)
+          .arg(mapIds.size());
+      throw HootException(str);
+    }
+    requestedMapId = *mapIds.begin();
   }
-  requestedMapId = *mapIds.begin();
 
   if (!_database.mapExists(requestedMapId))
   {

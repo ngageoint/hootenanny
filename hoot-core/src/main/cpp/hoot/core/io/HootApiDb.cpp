@@ -348,7 +348,7 @@ QString HootApiDb::_escapeTags(const Tags& tags) const
   return l.join(",");
 }
 
-QString HootApiDb::_execToString(QString sql, QVariant v1, QVariant v2, QVariant v3)
+QString HootApiDb::execToString(QString sql, QVariant v1, QVariant v2, QVariant v3)
 {
   QSqlQuery q = _exec(sql, v1, v2, v3);
 
@@ -761,7 +761,6 @@ bool HootApiDb::isSupported(QUrl url)
 
     if ( plist.size() == 3 )
     {
-
       if (plist[1] == "")
       {
         LOG_WARN("Looks like a DB path, but a DB name was expected. E.g. "
@@ -779,6 +778,13 @@ bool HootApiDb::isSupported(QUrl url)
     {
       LOG_WARN("Looks like a DB path, but a valid DB name, layer, and element was expected. E.g. "
                "postgresql://myhost:5432/mydb/mylayer/1");
+      valid = false;
+    }
+    else
+    {
+      // NO other list sizes are valid
+      LOG_WARN("Looks like a DB path, but a DB name and layer name was expected. E.g. "
+               "postgresql://myhost:5432/mydb/mylayer");
       valid = false;
     }
   }

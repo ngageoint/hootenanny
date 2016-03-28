@@ -263,6 +263,12 @@ public:
   static QString getWaysTableName(long mapId)
   { return "current_ways" + getMapIdString(mapId); }
 
+  /**
+   * Very handy for testing.
+   */
+  QString execToString(QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
+                        QVariant v3 = QVariant());
+
 private:
 
   bool _inTransaction;
@@ -339,12 +345,6 @@ private:
   QString _elementTypeToElementTableName(long mapId, const ElementType& elementType) const;
 
   QString _escapeTags(const Tags& tags) const;
-
-  /**
-   * Very handy for testing.
-   */
-  QString _execToString(QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
-                        QVariant v3 = QVariant());
 
   void _flushBulkInserts();
   long _getNextNodeId();

@@ -27,14 +27,10 @@
 #ifndef APIDBREADER_H
 #define APIDBREADER_H
 
-#include "OsmApiDb.h"
-
 // hoot
 #include <hoot/core/util/Configurable.h>
 
 #include <boost/shared_ptr.hpp>
-
-#include <ogr_spatialref.h>
 
 // tgs
 #include <tgs/BigContainers/BigMap.h>

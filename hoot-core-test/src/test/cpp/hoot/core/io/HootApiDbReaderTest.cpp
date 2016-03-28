@@ -34,7 +34,7 @@
 // Hoot
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/HootApiDbReader.h>
-#include <hoot/core/io/ServicesDbWriter.h>
+#include <hoot/core/io/HootApiDbWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/OsmMap.h>
@@ -50,14 +50,13 @@ class HootApiDbReaderTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(HootApiDbReaderTest);
 
-//comment out all tests for now until the HootApiDbWrter finish
-// CPPUNIT_TEST(runCalculateBoundsTest);
-//  CPPUNIT_TEST(runElementIdTest);
-//  CPPUNIT_TEST(runUrlMissingMapIdTest);
-//  CPPUNIT_TEST(runUrlInvalidMapIdTest);
-//  CPPUNIT_TEST(runReadTest);
-//  CPPUNIT_TEST(runPartialReadTest);
-//  CPPUNIT_TEST(runFactoryReadTest);
+  CPPUNIT_TEST(runCalculateBoundsTest);
+  CPPUNIT_TEST(runElementIdTest);
+  CPPUNIT_TEST(runUrlMissingMapIdTest);
+  CPPUNIT_TEST(runUrlInvalidMapIdTest);
+  CPPUNIT_TEST(runReadTest);
+  CPPUNIT_TEST(runPartialReadTest);
+  CPPUNIT_TEST(runFactoryReadTest);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -134,7 +133,7 @@ public:
     r2->addElement("n2", n2->getElementId());
     map->addRelation(r2);
 
-    ServicesDbWriter writer;
+    HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.setRemap(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
@@ -158,7 +157,6 @@ public:
   {
     HootApiDbReader reader;
     QString url = ServicesDbTestUtils::getDbReadUrl(mapId).toString();
-    LOG_VAR(url);
     reader.open(url);
     HOOT_STR_EQUALS("Env[0:0.4,0:0]", reader.calculateEnvelope().toString());
   }
