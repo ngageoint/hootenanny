@@ -691,9 +691,26 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
 
     if (_elementCache->containsElement(relationElementIter->getElementId()) == false)
     {
+      unsigned long cacheSize;
+      switch (relationElementIter->getElementId().getType().getEnum())
+      {
+        case ElementType::Node:
+          cacheSize =  _elementCache->getNodeCacheSize();
+          break;
+        case ElementType::Way:
+          cacheSize =  _elementCache->getWayCacheSize();
+          break;
+        case ElementType::Relation:
+          cacheSize =  _elementCache->getRelationCacheSize();
+          break;
+        default:
+          throw HootException("Relation contains unknown type");
+          break;
+      }
       throw HootException("Relation element with ID: " +
          QString::number(relationElementIter->getElementId().getId()) + " and type: " +
-         relationElementIter->getElementId().getType().toString() + " did not exist in element cache.");
+         relationElementIter->getElementId().getType().toString() + " did not exist in the element " +
+         "cache with size = " + QString::number(cacheSize));
     }
   }
 
