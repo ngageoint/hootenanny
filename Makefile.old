@@ -55,6 +55,9 @@ clean: Makefile.qmake services-clean
 ifeq ($(BUILD_SERVICES),services)
 	scripts/CleanOsmApiDB.sh
 endif
+ifeq ($(BUILD_UI_TESTS),uitests)
+	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile clean
+endif
 
 clean-db: services-clean-db
 
@@ -62,17 +65,19 @@ clean-db: services-clean-db
 clean-all: clean clean-db
 
 check: test
-test: build ui-test services-test pp-test plugins-test
+test: build services-test pp-test plugins-test
 	bin/HootTest $(HOOT_TEST_DIFF) --slow
 
 docs: always HOOT_VERSION_FILE services-docs
+	echo Building documentation...
 	cd docs; $(MAKE)
 
-test-quick: build services-test pp-test
+test-quick: build pp-test
 	bin/HootTest $(HOOT_TEST_DIFF) --quick
 
-test-all-no-core: ui-test build services-test-all pp-test plugins-test
-
+test-all-no-core: services-test-all pp-test plugins-test
+	$(MAKE) ui-test
+	
 test-all: test-all-no-core
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial
 
@@ -108,13 +113,9 @@ ifneq ($(HADOOP_HOME),)
 endif
 
 plugins-test:
+	echo Running plugins tests...
 	# Only run the plugins tests if mocha is installed.
 	cd plugins; (command -v mocha &> /dev/null) && mocha test || echo Skipping mocha tests
-
-ui-test:
-ifeq ($(BUILD_UI),ui)
-	cd hoot-ui; npm test #&> /dev/null
-endif
 
 pp-test-all:
 ifneq ($(HADOOP_HOME),)
@@ -144,6 +145,10 @@ tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 conf/DatabaseConfig.sh: conf/DatabaseConfig.sh.orig
 	# This will copy conf/DatabaseConfig.sh.orig to conf/DatabaseConfig.sh if necessary
 	if [ ! -f conf/DatabaseConfig.sh ]; then echo "Using default database configuration. You can safely customize: conf/DatabaseConfig.sh"; cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh; else echo; echo; echo "Check your conf/DatabaseConfig.sh to see if it needs updating with conf/DatabaseConfig.sh.orig, if not just 'touch conf/DatabaseConfig.sh'"; echo; echo; false; fi
+
+conf/ServerConfig.sh: conf/ServerConfig.sh.orig
+	# This will copy conf/ServerConfig.sh.orig to conf/ServerConfig.sh if necessary
+	if [ ! -f conf/ServerConfig.sh ]; then echo "Using default server configuration. You can safely customize: conf/ServerConfig.sh"; cp conf/ServerConfig.sh.orig conf/ServerConfig.sh; else echo; echo; echo "Check your conf/ServerConfig.sh to see if it needs updating with conf/ServerConfig.sh.orig, if not just 'touch conf/ServerConfig.sh'"; echo; echo; false; fi
 
 # We now have different versions of the NFDD Schema that are built from Excel files:
 # LTDSv40.csv.gz - Local TDS v4.0
@@ -251,6 +256,14 @@ ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile test-all
 endif
 
+ui-test: services-build build
+ifeq ($(BUILD_UI_TESTS),uitests)
+ifeq ($(BUILD_SERVICES),services)
+	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile test
+else
+	echo "UI tests must specify both --with-services and --with-uitests."
+endif
+endif
 
 FORCE: vagrant
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -31,6 +31,9 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/perty/PertyOp.h>
 #include <hoot/core/util/Settings.h>
+
+// Tgs
+#include <tgs/Statistics/Random.h>
 
 // Standard
 #include <time.h>
@@ -79,10 +82,10 @@ public:
          << "Greg Schmidt"
          << "Mike Benedict";
 
-    srand(time(0));
+    Tgs::Random::instance()->seed(time(0));
     for (int i = 0; i < pigs.size(); i++)
     {
-      pigs[i] = QString("%1 %2").arg(rand() % 20 + 1, 2).arg(pigs[i]);
+      pigs[i] = QString("%1 %2").arg(Tgs::Random::instance()->generateInt(20) + 1, 2).arg(pigs[i]);
     }
 
     pigs.sort();

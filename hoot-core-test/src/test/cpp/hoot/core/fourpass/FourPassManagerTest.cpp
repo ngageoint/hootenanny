@@ -47,6 +47,9 @@
 #include <hoot/core/util/Settings.h>
 using namespace hoot;
 
+// Tgs
+#include <tgs/Statistics/Random.h>
+
 // Qt
 #include <QDebug>
 #include <QDir>
@@ -66,7 +69,7 @@ public:
 
   void runToyTest()
   {
-    srand(0);
+    Tgs::Random::instance()->seed(0);
     OsmMap::resetCounters();
     Settings::getInstance().clear();
 

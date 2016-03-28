@@ -22,11 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.services;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.Collection;
 import java.util.Date;
@@ -72,21 +73,19 @@ public class TunningService  implements Executable {
 	private String tempPath = null;
 	private String coreScriptPath = null;
 	
+  @Override
   public String getFinalStatusDetail() { return finalStatusDetail; }
   
-	public TunningService()
+	public TunningService() throws IOException
 	{
 		totalSize = new Double(0);
 		appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
-		try {
-			tempPath = HootProperties.getProperty("tempOutputPath");
-			coreScriptPath = HootProperties.getProperty("coreScriptPath");
-		} catch (Exception e) {
-		
-		}
+		tempPath = HootProperties.getProperty("tempOutputPath");
+		coreScriptPath = HootProperties.getProperty("coreScriptPath");
 	}
 	
-	public void exec(JSONObject command) throws Exception
+	@Override
+  public void exec(JSONObject command) throws Exception
 	{
 
 		JSONObject res = new JSONObject();
@@ -104,10 +103,6 @@ public class TunningService  implements Executable {
 				DbUtils.getWayCountByName(conn, input);
 				DbUtils.getRelationCountByName(conn, input);
 				
-				
-				
-				
-				
 				// if the count is greater than threshold then just use it and tell it too big
 				
 				
@@ -124,12 +119,14 @@ public class TunningService  implements Executable {
 						throw new Exception(err);
 					}
 				
+
 				tempOutputPath = tempPath +  "/" + input + ".osm";  
+
 				// fortify fix
 				if(!hoot.services.utils.FileUtils.validateFilePath(tempPath, tempOutputPath))
 				{
 					throw new Exception("input can not contain path.");
-				}
+				}     	  
 			}
 			else 
 			{
@@ -139,14 +136,8 @@ public class TunningService  implements Executable {
 			 	
     	File outputFile = new File(tempOutputPath);
 
-    	JobSink sinkImplementation = parseOsm(Long.parseLong("0"), outputFile); 
+    	JobSink sinkImplementation = parseOsm(outputFile); 
   
-    	javax.management.MBeanServer mBeanServer = java.lang.management.ManagementFactory.getPlatformMBeanServer();
-    	Object attribute = mBeanServer.getAttribute(new javax.management.ObjectName("java.lang","type","OperatingSystem"), "TotalPhysicalMemorySize");
-    	long totalMemSize = Long.parseLong(attribute.toString());
-    	
-    	new Double(totalMemSize);
-    	
     	long endTime = new Date().getTime();
   		log.debug("Start:" + starttime + "  - End: " + endTime + " Diff:" + (endTime-starttime) + " TOTAL:" + totalSize
   				+ " NODES:" + sinkImplementation.getTotalNodes() + " Way:" + sinkImplementation.getTotalWay() + " Relations:" + 
@@ -174,7 +165,7 @@ public class TunningService  implements Executable {
 	}
 	
 	
-	private JobSink parseOsm(Long elemId, File inputOsmFile) throws Exception
+	private JobSink parseOsm(File inputOsmFile) throws Exception
   {
   	CompressionMethod compression = CompressionMethod.None;  
   	
@@ -194,7 +185,7 @@ public class TunningService  implements Executable {
   	    try {   	    	
   	        readerThread.join();
   	    } catch (InterruptedException e) {
-  	       
+  	       //
   	    }
   	}
   	
@@ -209,21 +200,24 @@ public class TunningService  implements Executable {
 	 * see CoreServiceContext.xml
 	 */
 	public void init(){
-
+		//
 	}
 
 	/**
 	 * see CoreServiceContext.xml
 	 */
 	public void destroy(){
-
+		//
 	}
 	
 	public class JobSink implements Sink
 	{
  		
-    public void release() { }
+    @Override
+    public void release() { /**/ }
+    @Override
     public void complete() {
+    	//
     }
     private Double totalOSMsize = (double)0;
     private Double totalNodeCnt = (double)0;
@@ -232,7 +226,7 @@ public class TunningService  implements Executable {
 
 		@Override
 		public void initialize(Map<String, Object> arg0) {
-	
+			//
 		}
 		
 		public double getTotalSize()

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -126,12 +126,12 @@ namespace Tgs
     // inspected. I hope to revisit.
     void initializeTest()
     {
-      srand(0);
+      Tgs::Random::instance()->seed(0);
 
       std::vector<double> v;
       for (unsigned int i = 0; i < 10; i++)
       {
-        v.push_back(rand() % 1000);
+        v.push_back(Tgs::Random::instance()->generateInt(1000));
       }
 
       for (unsigned int i = 0; i < 10; i++)
@@ -142,7 +142,7 @@ namespace Tgs
         father->initialize();
         cout << "dad: " << father->toString() << endl;
 
-        shared_ptr<CalculatorGenome> mother = 
+        shared_ptr<CalculatorGenome> mother =
           dynamic_pointer_cast<CalculatorGenome>(father->clone());
         mother->initialize();
         cout << "mom: " << mother->toString() << endl;
@@ -174,7 +174,7 @@ namespace Tgs
       {
         for (unsigned int j = 0; j < scores.size(); j++)
         {
-          if ((scores[i] == scores[j] && rawIndividuals[i] < rawIndividuals[j]) || 
+          if ((scores[i] == scores[j] && rawIndividuals[i] < rawIndividuals[j]) ||
             scores[i] > scores[j])
           {
             std::swap(scores[i], scores[j]);
@@ -190,7 +190,7 @@ namespace Tgs
     /**
      * Test to see if the GA can derive the correct answer
      * score, evals, population size,  bad variables
-     * .00724 27163  2000              120 
+     * .00724 27163  2000              120
      * .00727 108065 10000             120
      */
     void deriveTest()
@@ -239,7 +239,7 @@ namespace Tgs
           }
           double score = calculateMedianScore(params, maxPopulation, vs, individuals);
           cout << "Individuals: " << individuals << "\tScore: " << score << endl;
-          if (score > bestScore || 
+          if (score > bestScore ||
             (score == bestScore && individuals < bestIndividuals))
           {
             cout << "*** Best Score: " << score << " Indv: " << individuals << " ***" << endl;
@@ -270,7 +270,7 @@ namespace Tgs
       }
     }
 
-    double deriveTestRun(const map<string, Parameter>& params, 
+    double deriveTestRun(const map<string, Parameter>& params,
       int maxIndividuals, const int VARIABLE_SIZE, int& individuals)
     {
       const int SAMPLE_SIZE = 100;
@@ -279,8 +279,8 @@ namespace Tgs
       v2.resize(SAMPLE_SIZE);
       for (int i = 0; i < SAMPLE_SIZE; i++)
       {
-        v1[i] = rand();
-        v2[i] = rand();
+        v1[i] = Tgs::Random::instance()->generateInt();
+        v2[i] = Tgs::Random::instance()->generateInt();
       }
 
       double vweight = 1.0 / (VARIABLE_SIZE + 2) * (params.find("variableWeight")->second.value);
@@ -307,7 +307,7 @@ namespace Tgs
         std::vector<double> bad;
         for (int i = 0; i < SAMPLE_SIZE; i++)
         {
-          bad.push_back(rand());
+          bad.push_back(Tgs::Random::instance()->generateInt());
         }
         shared_ptr<VectorCalculatorNodeSource> src(new VectorCalculatorNodeSource(bad));
         src->setLabel(strm.str() + "[]");
@@ -328,8 +328,8 @@ namespace Tgs
       {
         for (int i = 0; i < SAMPLE_SIZE; i++)
         {
-          v1[i] = rand();
-          v2[i] = rand();
+          v1[i] = Tgs::Random::instance()->generateInt();
+          v2[i] = Tgs::Random::instance()->generateInt();
         }
         fitness->setValues(v1, v2);
         good1->setSource(v1);
@@ -339,7 +339,7 @@ namespace Tgs
           std::vector<double> bad;
           for (int i = 0; i < SAMPLE_SIZE; i++)
           {
-            bad.push_back(rand());
+            bad.push_back(Tgs::Random::instance()->generateInt());
           }
           badGenome[j]->setSource(bad);
         }
@@ -347,7 +347,7 @@ namespace Tgs
 
         ga.step();
         c+= ga.getPopulation().size();
-        shared_ptr<CalculatorGenome> best = 
+        shared_ptr<CalculatorGenome> best =
           dynamic_pointer_cast<CalculatorGenome>(ga.getBestGenome());
         score = best->getScore();
         //cout << "individuals: " << c << "\r";
@@ -375,7 +375,7 @@ namespace Tgs
         //cout << endl;
 //         for (unsigned int i = 0; i < ga.getPopulation().size() && i < 15; i++)
 //         {
-//           cout << "  " << ga.getPopulation()[i]->getScore() << "\t" << 
+//           cout << "  " << ga.getPopulation()[i]->getScore() << "\t" <<
 //             ga.getPopulation()[i]->toString() << endl;
 //         }
       }

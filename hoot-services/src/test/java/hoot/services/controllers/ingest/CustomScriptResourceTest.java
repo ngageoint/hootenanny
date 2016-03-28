@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -69,33 +69,24 @@ public class CustomScriptResourceTest
   private static CustomScriptResource res = new CustomScriptResource();
 
   @BeforeClass
-  public static void oneTimeSetup()
+  public static void oneTimeSetup() throws IOException
   {
     // one-time setup code
-    try
-    {
-      res.scriptFolder += "/test";
-      String jsHeaderScriptPath = HootProperties.getProperty("dummyjsHeaderScriptPath");
-      assertNotNull(jsHeaderScriptPath);
-      File f = new File(jsHeaderScriptPath);
-      assertTrue(f.exists());
+    res.scriptFolder += "/test";
+    String jsHeaderScriptPath = HootProperties.getProperty("dummyjsHeaderScriptPath");
+    assertNotNull(jsHeaderScriptPath);
+    File f = new File(jsHeaderScriptPath);
+    assertTrue(f.exists());
 
-      String defaultTranslationsConfig = HootProperties.getProperty("defaultTranslationsConfig");
-      assertNotNull(defaultTranslationsConfig);
-      f = new File(defaultTranslationsConfig);
-      assertTrue(f.exists());
+    String defaultTranslationsConfig = HootProperties.getProperty("defaultTranslationsConfig");
+    assertNotNull(defaultTranslationsConfig);
+    f = new File(defaultTranslationsConfig);
+    assertTrue(f.exists());
 
-      homefolder = HootProperties.getProperty("homeFolder");
-      assertNotNull(homefolder);
-      f = new File(homefolder);
-      assertTrue(f.exists());
-
-    }
-    catch (Exception ex)
-    {
-
-    }
-
+    homefolder = HootProperties.getProperty("homeFolder");
+    assertNotNull(homefolder);
+    f = new File(homefolder);
+    assertTrue(f.exists());
   }
 
   @After
@@ -590,17 +581,9 @@ public class CustomScriptResourceTest
   }
 
   @AfterClass
-  public static void oneTimeTearDown()
+  public static void oneTimeTearDown() throws IOException
   {
-    // one-time cleanup code
-    try
-    {
-      File dir = new File(res.scriptFolder);
-      FileUtils.deleteDirectory(dir);
-    }
-    catch (Exception ex)
-    {
-
-    }
+    File dir = new File(res.scriptFolder);
+    FileUtils.deleteDirectory(dir);
   }
 }

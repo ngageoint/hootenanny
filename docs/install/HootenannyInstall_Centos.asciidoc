@@ -1,5 +1,7 @@
 == Overview
 
+TODO: I believe these instructions are obsolete.
+
 This document describes how to install Hootenanny in a CentOS/RHEL Environment.
 
 === Environment

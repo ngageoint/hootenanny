@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -34,6 +34,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -107,6 +108,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    */
   private long requestChangesetId = -1;
   public long getRequestChangesetId() { return requestChangesetId; }
+  @Override
   public void setRequestChangesetId(long id) { this.requestChangesetId = id; }
 
   /**
@@ -122,7 +124,9 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * The element's ID before it is updated by a changeset diff
    */
   protected long oldId;
+  @Override
   public long getOldId() { return oldId; }
+  @Override
   public void setOldId(long id) { oldId = id; }
 
   /*
@@ -131,6 +135,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * This cache is ignored by elements which don't have related element (e.g. Node).
   */
   protected Map<ElementType, Map<Long, Element>> parsedElementIdsToElementsByType;
+  @Override
   public void setElementCache(Map<ElementType, Map<Long, Element>> parsedElementIdsToElementsByType)
   {
     this.parsedElementIdsToElementsByType = parsedElementIdsToElementsByType;
@@ -140,13 +145,16 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * The associated services database record
    */
   protected Object record;
+  @Override
   public Object getRecord() { return record; }
+  @Override
   public void setRecord(Object record) { this.record = record; }
 
   /**
    * Records associated with the contained services database record
    */
   protected Collection<Object> relatedRecords;
+  @Override
   public Collection<Object> getRelatedRecords() { return relatedRecords; }
 
   /**
@@ -158,7 +166,9 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * Changeset diff type being applied to the node: create, modify, or delete
    */
   protected EntityChangeType entityChangeType = EntityChangeType.CREATE;
+  @Override
   public EntityChangeType getEntityChangeType() { return entityChangeType; }
+  @Override
   public void setEntityChangeType(EntityChangeType changeType)
   {
     entityChangeType = changeType;
@@ -173,6 +183,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
   /**
    * Returns the ID of the element associated services database record
    */
+  @Override
   public long getId() throws Exception
   {
     return (Long)MethodUtils.invokeMethod(record, "getId", new Object[]{});
@@ -181,6 +192,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
   /**
    * Sets the ID of the element associated services database record
    */
+  @Override
   public void setId(long id) throws Exception
   {
     MethodUtils.invokeMethod(record, "setId", new Object[]{ id });
@@ -265,6 +277,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * relation member for relations); parameter is ignored by the Node element
    * @return an XML element
    */
+  @Override
   public org.w3c.dom.Element toXml(final org.w3c.dom.Element parentXml, final long modifyingUserId,
     final String modifyingUserDisplayName, final boolean multiLayerUniqueElementIds,
     final boolean addChildren) throws Exception
@@ -304,6 +317,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
     }
     catch (NumberFormatException e)
     {
+    	//
     }
     if (elementChangesetId != requestChangesetId)
     {
@@ -348,6 +362,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
       }
       catch (IllegalArgumentException e)
       {
+      	//
       }
     }
     if (timestamp == null)
@@ -363,6 +378,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * @param parent XML node this element should be attached under
    * @throws Exception
    */
+  @Override
   public org.w3c.dom.Element toChangesetResponseXml(final org.w3c.dom.Element parent)
     throws Exception
   {
@@ -542,10 +558,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
   			  .where(prototype.getElementIdField().in(elementIds))
   			  .count() == elementIds.size();
     }
-    else
-    {
-    	return 0 == elementIds.size();
-    }
+    return 0 == elementIds.size();
   }
 
   /**
@@ -578,10 +591,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
               .and(prototype.getElementVisibilityField().eq(true)))
   			  .count() == elementIds.size();
     }
-    else
-    {
-    	return 0 == elementIds.size();
-    }
+    return 0 == elementIds.size();
   }
   
   /**
@@ -645,17 +655,18 @@ public abstract class Element implements XmlSerializable, DbSerializable
   {
     if (!StringUtils.isEmpty(elementTypeStr))
     {
-      if (elementTypeStr.toLowerCase().equals("node") || elementTypeStr.toLowerCase().equals("n"))
+      if (elementTypeStr.toLowerCase(Locale.ENGLISH).equals("node") || 
+      		elementTypeStr.toLowerCase(Locale.ENGLISH).equals("n"))
       {
         return ElementType.Node;
       }
-      else if (elementTypeStr.toLowerCase().equals("way") ||
-               elementTypeStr.toLowerCase().equals("w"))
+      else if (elementTypeStr.toLowerCase(Locale.ENGLISH).equals("way") ||
+               elementTypeStr.toLowerCase(Locale.ENGLISH).equals("w"))
       {
         return ElementType.Way;
       }
-      else if (elementTypeStr.toLowerCase().equals("relation") ||
-               elementTypeStr.toLowerCase().equals("r"))
+      else if (elementTypeStr.toLowerCase(Locale.ENGLISH).equals("relation") ||
+               elementTypeStr.toLowerCase(Locale.ENGLISH).equals("r"))
       {
         return ElementType.Relation;
       }

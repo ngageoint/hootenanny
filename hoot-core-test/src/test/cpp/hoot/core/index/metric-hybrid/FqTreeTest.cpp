@@ -91,7 +91,7 @@ public:
     names.push_back("banana");
     names.push_back("bandana");
 
-    srand(0);
+    Tgs::Random::instance()->seed(0);
 
     for (size_t i = 0; i < names.size(); ++i)
     {
@@ -265,7 +265,7 @@ public:
       double indexTime = 0.0;
       for (int i = 0; i < testCount; i++)
       {
-        QString n = names[rand() % names.size()].getMetricElement();
+        QString n = names[Tgs::Random::instance()->generateInt(names.size())].getMetricElement();
         int D = max(1, (int)(n.size() * .2));
         double start = Tgs::Time::getTime();
         set<int> base = bruteForce(n, names, D);

@@ -77,13 +77,13 @@ public:
 
   shared_ptr<OsmMap> genPoints(int seed)
   {
-    srand(seed);
+    Tgs::Random::instance()->seed(seed);
     shared_ptr<OsmMap> result(new OsmMap());
 
     for (int i = 0; i < 1000; i++)
     {
-      double x = Random::generateUniform() * 360 - 180;
-      double y = Random::generateUniform() * 180 - 90;
+      double x = Random::instance()->generateUniform() * 360 - 180;
+      double y = Random::instance()->generateUniform() * 180 - 90;
 
       shared_ptr<Node> n(new Node(Status::Invalid, result->createNextNodeId(), x, y, 10));
       result->addNode(n);

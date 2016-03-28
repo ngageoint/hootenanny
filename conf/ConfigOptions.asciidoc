@@ -1346,6 +1346,39 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.match.threshold
+
+* Data Type: double
+* Default Value: `${conflate.match.threshold.default}`
+
+The threshold at which a match is called a match for PoiPolygon.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== poi.polygon.miss.threshold
+
+* Data Type: double
+* Default Value: `${conflate.miss.threshold.default}`
+
+The threshold at which a miss is called a miss for PoiPolygon.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== poi.polygon.review.threshold
+
+* Data Type: double
+* Default Value: `${conflate.review.threshold.default}`
+
+The threshold at which a review is called a review for PoiPolygon. See `conflate.review.threshold.default`.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
 === poi.polygon.match.name.threshold
 
 * Data Type: double

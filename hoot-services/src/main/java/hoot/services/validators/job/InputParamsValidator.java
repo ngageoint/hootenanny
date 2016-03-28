@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.validators.job;
 
@@ -71,10 +71,7 @@ public class InputParamsValidator extends InputParamsValidatorAbstract
       {
         return new BoundingBox((String)defaultValue);
       }
-      else
-      {
-        return new BoundingBox((String)inputParams.get("geospatialBounds"));
-      }
+      return new BoundingBox((String)inputParams.get("geospatialBounds"));
     }
     
     Object param = inputParams.get(name);

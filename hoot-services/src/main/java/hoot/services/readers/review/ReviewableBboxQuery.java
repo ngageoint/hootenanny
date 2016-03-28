@@ -67,7 +67,8 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 	 * @see hoot.services.readers.review.IReviewableQuery#execQuery()
 	 * Main entry point
 	 */
-	public ReviewQueryMapper execQuery() throws SQLException, Exception
+	@Override
+  public ReviewQueryMapper execQuery() throws SQLException, Exception
 	{
 		BoundingBox currBbox = new BoundingBox();
 		ReviewableItemBbox ret = new ReviewableItemBbox(currBbox, getMapId(), _relationId);
@@ -134,7 +135,7 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 		}
 	}
 	
-	private boolean _validateTuple(final Tuple tup)
+	private static boolean _validateTuple(final Tuple tup)
 	{
 		boolean ret = true;
 		try
@@ -164,7 +165,7 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 	 * @return - BoundingBox
 	 * @throws Exception
 	 */
-	private BoundingBox _resultSetToBbox(final Tuple tup)
+	private static BoundingBox _resultSetToBbox(final Tuple tup)
 	{
 		BoundingBox bbox = null;
 		double minLon=-1, minLat=-1, maxLon=-1, maxLat=-1;
@@ -185,7 +186,7 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 		{
 			// we will not throw error since ret will be null and null ret 
 			// will be handled gracefully by caller.
-			log.error(ex.getMessage());;
+			log.error(ex.getMessage());
 			
 		}
 		return bbox;

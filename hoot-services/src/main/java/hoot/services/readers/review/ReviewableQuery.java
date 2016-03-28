@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.readers.review;
 
@@ -60,18 +60,22 @@ public class ReviewableQuery extends ReviewableQueryBase implements IReviewableQ
 				_seqId + "'";
 	}
 	
-	
-	public ReviewQueryMapper execQuery() throws SQLException, Exception
+	@Override
+  public ReviewQueryMapper execQuery() throws SQLException, Exception
 	{
 		ReviewableItem ret = null;
-		try(
-				Statement stmt = getConnection().createStatement();
-				ResultSet rs = stmt.executeQuery(_getQueryString())
-				)
+		try(Statement stmt = getConnection().createStatement();
+				ResultSet rs = stmt.executeQuery(_getQueryString()))
 		{
 			long nResCnt = 0;
 			long relid = -1;
-			while(rs.next())
+			
+			if (rs == null)
+			{
+				throw new SQLException("Error executing ReviewQueryMapper::execQuery");
+			}
+			
+			while (rs.next())
       {
          //Retrieve by column name
 				relid = rs.getLong("id");  
@@ -84,5 +88,4 @@ public class ReviewableQuery extends ReviewableQueryBase implements IReviewableQ
 
 		return ret;
 	}
-
 }
