@@ -782,9 +782,7 @@ bool HootApiDb::isSupported(QUrl url)
     }
     else
     {
-      // NO other list sizes are valid
-      LOG_WARN("Looks like a DB path, but a DB name and layer name was expected. E.g. "
-               "postgresql://myhost:5432/mydb/mylayer");
+      //It might be OsmApiDb url. postgresql://myhost:5432/osmapi_test
       valid = false;
     }
   }
