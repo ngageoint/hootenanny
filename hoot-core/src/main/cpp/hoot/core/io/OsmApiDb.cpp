@@ -300,7 +300,8 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
   return result;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const ElementType& elementType,
+shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId,
+                                                      const ElementType& elementType,
                                                       const QString& bbox)
 {
   LOG_DEBUG("IN selectBoundedElement");
@@ -322,14 +323,23 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const ElementType& element
     sql += _elementTypeToElementTableName(elementType) +
       " where (latitude between "+QString::number(minLat)+" and "+QString::number(maxLat)+") and (longitude between "+
       QString::number(minLon)+" and "+QString::number(maxLon)+")";
+
+    // if requesting a specific id then append this string
+    if (elementId > -1) { sql += " AND (id = :elementId) "; }
   }
-  else if(elementType == ElementType::Way)
+  else if (elementType == ElementType::Way)
   {
     sql += "* FROM current_ways ";
+
+    // if requesting a specific id then append this string
+    if (elementId > -1) { sql += " WHERE id = :elementId "; }
   }
   else if(elementType == ElementType::Relation)
   {
     sql += "* FROM current_relations ";
+
+    // if requesting a specific id then append this string
+    if(elementId > -1) { sql += " WHERE id = :elementId "; }
   }
   else
   {
@@ -343,6 +353,12 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const ElementType& element
   LOG_DEBUG(QString("The sql query= "+sql));
 
   _selectElementsForMap->prepare(sql);
+
+  // add the element id value if needed by inserting where the marker was placed
+  if (elementId > -1)
+  {
+    _selectElementsForMap->bindValue(":elementId", (qlonglong)elementId);
+  }
 
   // execute the query on the DB and get the results back
   if (_selectElementsForMap->exec() == false)

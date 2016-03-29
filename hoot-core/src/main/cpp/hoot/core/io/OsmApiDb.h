@@ -77,7 +77,7 @@ public:
   /**
    * Returns a results iterator to all OSM elements for a given bbox.
    */
-  shared_ptr<QSqlQuery> selectBoundedElements(const ElementType& elementType, const QString& bbox);
+  shared_ptr<QSqlQuery> selectBoundedElements(const long elementId, const ElementType& elementType, const QString& bbox);
 
   /**
     * Deletes data in the Osm Api db

@@ -138,7 +138,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
   double maxLon = bboxParts[2].toDouble();
 
   // contact the DB and select all
-  shared_ptr<QSqlQuery> elementResultsIterator = _database.selectBoundedElements(elementType, _bbox);
+  shared_ptr<QSqlQuery> elementResultsIterator = _database.selectBoundedElements(_osmElemId, elementType, _bbox);
 
   // check if db active or not
   assert(elementResultsIterator->isActive());
@@ -274,11 +274,12 @@ void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& m
   {
     ElementId eid = (*it).getElementId();
     QString type = eid.getType().toString();
+    LOG_VAR(type);
     long idFromRelation = eid.getId();
 
     if(type=="Node")
     {
-      shared_ptr<QSqlQuery> nodeIterator = _database.selectBoundedElements(ElementType::Node, _bbox);
+      shared_ptr<QSqlQuery> nodeIterator = _database.selectBoundedElements(idFromRelation, ElementType::Node, _bbox);
       if( nodeIterator->next() ) // we found a relation in the bounds
       {
         // process the relation into a data structure
@@ -346,8 +347,9 @@ void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& m
     }
     else if(type == "Relation")
     {
-      shared_ptr<QSqlQuery> relIterator = _database.selectBoundedElements(ElementType::Relation, _bbox);
-      while(relIterator->next()) {
+      shared_ptr<QSqlQuery> relIterator = _database.selectBoundedElements(idFromRelation, ElementType::Relation, _bbox);
+      while(relIterator->next())
+      {
         _processRelation(*relIterator, map);
       }
     }
