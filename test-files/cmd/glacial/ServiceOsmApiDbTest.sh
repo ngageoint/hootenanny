@@ -22,7 +22,7 @@ mkdir -p test-output/cmd/ServiceOsmApiDbTest
 ######################################################
 
 # Load the database with known data
-echo $PGDATABASE $PGHOST $PGPORT $PGUSER $PGPASSWORD
+#echo $PGDATABASE $PGHOST $PGPORT $PGUSER $PGPASSWORD
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/ToyTestA.sql
 
 export DB_URL="postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
@@ -44,8 +44,6 @@ source scripts/CleanOsmApiDB.sh
 createdb $AUTH $DB_NAME_OSMAPI
 
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/bbox_test.sql
-
-echo $DB_URL
 
 hoot convert -D convert.bounding.box=-106.5100000,38.3000000,-106.4000000,38.5000000 $DB_URL test-output/cmd/ServiceOsmApiDbTest/bboxOutput.osm
 
