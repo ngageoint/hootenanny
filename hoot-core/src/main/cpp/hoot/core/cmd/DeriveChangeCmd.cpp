@@ -93,6 +93,7 @@ public:
   }
 };
 
+//TODO: re-enable
 //HOOT_FACTORY_REGISTER(Command, DeriveChangeCmd)
 
 
