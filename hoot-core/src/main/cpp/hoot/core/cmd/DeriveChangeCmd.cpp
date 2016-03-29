@@ -84,7 +84,7 @@ public:
     }
     else
     {
-      OsmChangeWriterSql writer(QUrl("postgresql://openstreetmap:postgres@10.194.71.149/ngademo"));
+      OsmChangeWriterSql writer(QUrl(""));
 
       writer.write(args[2], delta);
     }
@@ -93,7 +93,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, DeriveChangeCmd)
+//HOOT_FACTORY_REGISTER(Command, DeriveChangeCmd)
 
 
 }
