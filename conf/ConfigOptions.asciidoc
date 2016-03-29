@@ -362,6 +362,27 @@ See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
 The spacing used by the EdgeDistanceExtractor.  Units in meters.
 
+=== element.cache.size.node
+
+* Data Type: long
+* Default Value: `2000000`
+
+Size of the cache used when streaming I/O is used with nodes.
+
+=== element.cache.size.relation
+
+* Data Type: long
+* Default Value: `20000`
+
+Size of the cache used when streaming I/O is used with relations.
+
+=== element.cache.size.way
+
+* Data Type: long
+* Default Value: `20000`
+
+Size of the cache used when streaming I/O is used with ways.
+
 === english.words.files
 
 * Data Type: list
@@ -1419,7 +1440,7 @@ Starting ID value for changesets created in a PostgreSQL dumpfile.
 * Data Type: long
 * Default Value: `1`
 
-Starting ID value for nodes created in a PostgreSQL dumpfile. 
+Starting ID value for nodes created in a PostgreSQL dumpfile.
 
 === postgresql.dumpfile.writer.start.id.relation
 
