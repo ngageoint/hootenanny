@@ -78,13 +78,15 @@ private:
   const OsmMap& _map;
 };
 
-AngleHistogramExtractor::AngleHistogramExtractor()
+AngleHistogramExtractor::AngleHistogramExtractor(Radians smoothing) :
+  _smoothing(smoothing)
 {
 }
 
 Histogram* AngleHistogramExtractor::_createHistogram(const OsmMap& map, const ConstElementPtr& e)
   const
 {
+  #warning this should probably be increased. 32? 64? Could make it a parameter and determine experimentally.
   Histogram* result = new Histogram(16);
   HistogramVisitor v(*result, map);
   e->visitRo(map, v);
@@ -96,11 +98,26 @@ double AngleHistogramExtractor::extract(const OsmMap& map, const ConstElementPtr
 {
   auto_ptr<Histogram> h1(_createHistogram(map, target));
   auto_ptr<Histogram> h2(_createHistogram(map, candidate));
+  if (_smoothing > 0.0)
+  {
+    h1->smooth(_smoothing);
+    h2->smooth(_smoothing);
+  }
   h1->normalize();
   h2->normalize();
 
   const double diff = max(0.0, h1->diff(*h2));
   return 1.0 - diff;
+}
+
+string AngleHistogramExtractor::getName() const
+{
+  string result = getClassName();
+  if (_smoothing > 0.0)
+  {
+    result += QString(" %2").arg(_smoothing, 0, 'g', 4).toStdString();
+  }
+  return result;
 }
 
 }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,55 +24,51 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HISTOGRAM_H
-#define HISTOGRAM_H
 
-// hoot
-#include <hoot/core/Units.h>
+// Hoot
+#include <hoot/core/conflate/extractors/Histogram.h>
 
-// standard
-#include <vector>
+// Standard
+#include <math.h>
 
-using namespace std;
+#include "../../TestUtils.h"
 
 namespace hoot
 {
 
-class Histogram
+class HistogramTest : public CppUnit::TestFixture
 {
+  CPPUNIT_TEST_SUITE(HistogramTest);
+  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(smoothTest);
+  CPPUNIT_TEST_SUITE_END();
+
 public:
 
-  Histogram(int bins);
+  void runTest()
+  {
+    Histogram h(16);
 
-  const vector<double>& getAllBins() const { return _bins; }
+    HOOT_STR_EQUALS(8, h.getBin(M_PI));
+    HOOT_STR_EQUALS(7, h.getBin(M_PI - 0.01));
+    HOOT_STR_EQUALS(0, h.getBin(0.01));
+    HOOT_STR_EQUALS(15, h.getBin(-0.01));
+    HOOT_STR_EQUALS(8, h.getBin(-M_PI));
+    HOOT_STR_EQUALS(15, h.getBin(M_PI * 2.0 - .001));
+    HOOT_STR_EQUALS(0, h.getBin(M_PI * 2.0));
+    HOOT_STR_EQUALS(0, h.getBin(M_PI * 2.0 + .001));
+  }
 
-  void addAngle(Radians theta, double length);
-
-  size_t getBin(Radians theta);
-
-  /**
-   * Normalize all the bins so the sum of the bins is 1.0.
-   */
-  void normalize();
-
-  /**
-   * Returns a value from 0.0 to 1.0 describing the diff. 1.0 is exactly the same.
-   */
-  double diff(Histogram& other);
-
-  /**
-   * Smooth the bins with a normal curve.
-   */
-  void smooth(Radians sigma);
-
-private:
-
-  vector<double> _bins;
-
-  Radians _getBinAngle(size_t i);
-
+  void smoothTest()
+  {
+    Histogram h(8);
+    h.addAngle(M_PI / 4.0, 1.0);
+    h.smooth(M_PI / 4);
+    HOOT_STR_EQUALS("[8]{0.273035, 0.450158, 0.273035, 0.0609223, 0.00500081, 0.000151011, 0.00500081, 0.0609223}",
+      h.getAllBins());
+  }
 };
 
-}
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HistogramTest, "quick");
 
-#endif // HISTOGRAM_H
+}
