@@ -48,6 +48,7 @@ long OsmChangeWriterSql::_createChangeSet()
                    "(%1, %2, now(), now());\n").arg(id).
                    arg(ConfigOptions().getChangesetUserId()).toUtf8());
 
+  return id;
 }
 
 void OsmChangeWriterSql::_createTags(const Tags& tags, ElementId eid)
@@ -189,6 +190,9 @@ void OsmChangeWriterSql::write(const QString& path, const ChangeSetProviderPtr c
     case Change::Modify:
       //_updateExistingElement(c.e);
       break;
+    case Change::Unknown:
+
+      break;
     }
     changes++;
 
@@ -229,27 +233,27 @@ void OsmChangeWriterSql::_updateExistingElement(const ConstElementPtr updatedEle
   }
 }
 
-void OsmChangeWriterSql::_deleteExistingElement(const ConstElementPtr removedElement)
+void OsmChangeWriterSql::_deleteExistingElement(const ConstElementPtr /*removedElement*/)
 {
   throw NotImplementedException("Deleting existing element not supported");
 }
 
-void OsmChangeWriterSql::_modify(const ConstNodePtr node)
+void OsmChangeWriterSql::_modify(const ConstNodePtr /*node*/)
 {
-  ;
+
 }
 
-void OsmChangeWriterSql::_modify(const ConstWayPtr way)
+void OsmChangeWriterSql::_modify(const ConstWayPtr /*way*/)
 {
   // Modify contents of way
 }
 
-void OsmChangeWriterSql::_modify(const ConstRelationPtr relation)
+void OsmChangeWriterSql::_modify(const ConstRelationPtr /*relation*/)
 {
   throw NotImplementedException("Modifying relations not yet supported");
 }
 
-long OsmChangeWriterSql::_getLatestVersion(const ConstElementPtr element)
+long OsmChangeWriterSql::_getLatestVersion(const ConstElementPtr /*element*/)
 {
   throw NotImplementedException("Getting latest version not implemented");
   return -1;
