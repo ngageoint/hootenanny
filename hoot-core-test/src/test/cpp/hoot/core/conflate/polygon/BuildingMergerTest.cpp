@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -198,7 +198,7 @@ public:
                     "{\"type\":\"way\",\"id\":-25,\"nodes\":[-218,-219,-220,-221,-222,-223,-224,-225,-226,-218],\"tags\":{\"building:part\":\"yes\",\"error:circular\":\"15\"},\n"
                     "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
                     "{\"type\":\"way\",\"ref\":-26,\"role\":\"part\"},\n"
-                    "{\"type\":\"way\",\"ref\":-25,\"role\":\"part\"}],\"tags\":{\"REF1\":\"Panera\",\"REF2\":\"Panera\",\"hoot:building:match\":\"true\",\"alt_name\":\"Maid-Rite;Maid-Rite Diner\",\"building\":\"yes\",\"name\":\"Panera Bread\",\"error:circular\":\"-1\"}]\n"
+                    "{\"type\":\"way\",\"ref\":-25,\"role\":\"part\"}],\"tags\":{\"REF1\":\"Panera\",\"REF2\":\"Panera\",\"hoot:building:match\":\"true\",\"alt_name\":\"Maid-Rite;Maid-Rite Diner\",\"building\":\"yes\",\"name\":\"Panera Bread\",\"error:circular\":\"15\"}]\n"
                     "}\n",
                     OsmJsonWriter(8).toString(map));
   }
