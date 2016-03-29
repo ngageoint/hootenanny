@@ -135,6 +135,9 @@ while [ ! -f /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-da
 done
 sudo sed -i s/password\:\ hoottest/password\:\ $DB_PASSWORD/ /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/liquibase.properties
 sudo sed -i s/value=\"hoottest\"/value=\"$DB_PASSWORD\"/ /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml
+sudo sed -i s/dbPassword=hoottest/dbPassword=$DB_PASSWORD/ /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf
+sudo sed -i s/\<Password\>hoottest\<\\/Password\>/\<Password\>$DB_PASSWORD\<\\/Password\>/ /var/lib/tomcat6/webapps/hoot-services/WEB-INF/workspace/jdbc/WFS_Connection.xml
+sudo sed -i s/\<jdbcPassword\>hoottest\<\\/jdbcPassword\>/\<jdbcPassword\>$DB_PASSWORD\<\\/jdbcPassword\>/ /var/lib/tomcat6/webapps/hoot-services/META-INF/maven/hoot/hoot-services/pom.xml
 
 sudo service tomcat6 restart
 
