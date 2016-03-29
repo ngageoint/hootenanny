@@ -380,7 +380,7 @@ public:
     relation = map->getRelation(2);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)2, relation->getId());
-    CPPUNIT_ASSERT_EQUAL(0.0, relation->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(15.0, relation->getCircularError());
     CPPUNIT_ASSERT_EQUAL(QString("").toStdString(), relation->getType().toStdString());
     CPPUNIT_ASSERT(relation->contains(ElementId::node(2)));
     CPPUNIT_ASSERT_EQUAL(size_t(1), relation->getMembers().size());
@@ -668,7 +668,7 @@ public:
     relation = map->getRelation(2);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)2, relation->getId());
-    CPPUNIT_ASSERT_EQUAL(0.0, relation->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(15.0, relation->getCircularError());
     CPPUNIT_ASSERT_EQUAL(QString("").toStdString(), relation->getType().toStdString());
     CPPUNIT_ASSERT(relation->contains(ElementId::node(2)));
     CPPUNIT_ASSERT_EQUAL(size_t(1), relation->getMembers().size());
