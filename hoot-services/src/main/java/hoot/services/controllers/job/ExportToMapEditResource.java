@@ -30,6 +30,8 @@ public class ExportToMapEditResource  extends JobControllerBase {
 			{
 				processScriptName = HootProperties.getProperty("HootToMapEdit");
 			}
+			
+			throw new UnsupportedOperationException("OSM API DB support not yet enabled.");
 		}
 		catch (Exception ex)
 		{
