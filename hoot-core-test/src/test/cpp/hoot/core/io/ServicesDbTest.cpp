@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -634,6 +634,7 @@ public:
 
     cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
       psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/relations.sql > /dev/null 2>&1";
+    LOG_VARD(cmd);
     if( std::system(cmd.toStdString().c_str()) != 0 )
     {
       LOG_WARN("Failed postgres command.  Exiting test.");
@@ -834,7 +835,7 @@ public:
           ServicesDb::_getNodesTableName(mapId) +
           " WHERE id=:id "
           "ORDER BY longitude",
-          "3.1415;2.71828;true;3222453693;1",
+          "3.1415;2.71828;true;3222453693;2",
           (qlonglong)nodeId);
   }
 
