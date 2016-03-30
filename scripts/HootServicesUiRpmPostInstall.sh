@@ -127,6 +127,14 @@ if [ ! -d $UPLOAD_HOME ]; then
     sudo mkdir -p $UPLOAD_HOME
     sudo chown tomcat:tomcat $UPLOAD_HOME
 fi
+CUSTOMSCRIPT_HOME=/var/lib/hootenanny/customscript
+if [ ! -d $CUSTOMSCRIPT_HOME ]; then
+    echo "Creating customscript directory for webapp"
+    sudo mkdir -p $CUSTOMSCRIPT_HOME
+    sudo chown tomcat:tomcat $CUSTOMSCRIPT_HOME
+fi
+sudo chmod 777 /var/lib/hootenanny/tmp
+
 # Update the db password in hoot-services war
 source /var/lib/hootenanny/conf/DatabaseConfig.sh
 while [ ! -f /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml ]; do
