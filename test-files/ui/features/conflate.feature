@@ -3,11 +3,11 @@ Feature: Conflate feature
   Scenario: I can conflate the DC GIS data
     Given I am on Hootenanny
     And I resize the window
-    And I press "Get Started"
+    And I press "Get Fubar"
     And I press first "Add Reference Dataset"
     And I select reference dataset "DcGisRoadsCucumber"
     And I press first "Add Layer"
-    Then I should see "DcGisRoadsCucumber" 
+    Then I should see "DcGisRoadsCucumber"
     And I press first "Add Secondary Dataset"
     And I select secondary dataset "DcTigerRoadsCucumber"
     And I press first "Add Layer"
