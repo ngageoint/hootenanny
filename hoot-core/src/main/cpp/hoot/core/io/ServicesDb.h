@@ -118,7 +118,7 @@ public:
   /**
    * This value should be updated after the DB is upgraded and all tests run successfully.
    */
-  static QString expectedDbVersion() { return "16:jong.choi"; }
+  static QString expectedDbVersion() { return "17:jason.surratt"; }
   static int maximumChangeSetEdits() { return 50000; }
 
   static const Status DEFAULT_ELEMENT_STATUS;
@@ -189,11 +189,9 @@ public:
 
   /**
    * Returns a results iterator to all OSM elements for a given map and element type in the services
-   * database.  If limit = 0, no limit will be placed on the number of elements returned.  If offset
-   * = 0, no records will be skipped in the returned result set.
+   * database.
    */
-  shared_ptr<QSqlQuery> selectElements(const long elementId, const ElementType& elementType,
-                                       const long limit, const long offset);
+  shared_ptr<QSqlQuery> selectElements(const ElementType& elementType);
 
   /**
    * Returns a results iterator to all OSM elements for a given map and element type in the osm api

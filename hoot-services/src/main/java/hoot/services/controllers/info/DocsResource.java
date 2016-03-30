@@ -71,6 +71,10 @@ public class DocsResource
 		}
 	}
 
+	/**
+	 * REST end point for user document
+	 * @return Octet stream of retrieved file
+	 */
 	@GET
 	@Path("/export")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)

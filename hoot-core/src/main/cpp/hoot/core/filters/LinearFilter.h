@@ -44,6 +44,9 @@ public:
   {
     return OsmSchema::getInstance().isLinear(e);
   }
+
+  virtual ElementCriterion* clone() { return new LinearFilter(_type); }
+
 };
 
 }

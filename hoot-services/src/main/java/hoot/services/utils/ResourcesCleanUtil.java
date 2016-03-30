@@ -125,6 +125,12 @@ public class ResourcesCleanUtil implements Executable {
 	    	// the new path is within container path
 	    	final String basePath = _ingestPath;
 	    	final String newPath = _ingestPath + "/" + mapName;
+	    	
+	    	// Fortify fix
+	    	if(!hoot.services.utils.FileUtils.validateFilePath(_ingestPath, newPath))
+	    	{
+	    		throw new Exception("Map name can not contain path.");
+	    	}
 
 	    	// Fortify fix
 	    	if(!hoot.services.utils.FileUtils.validateFilePath(_ingestPath, newPath))

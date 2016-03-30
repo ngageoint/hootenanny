@@ -33,7 +33,6 @@ OTHER_FILES = \
     ../conf/schema/highway.json \
     ../conf/schema/natural.json \
     ../conf/schema/public_transport.json \
-    ../conf/schema/surface.json \
     ../rules/template/ConflateRules.js \
 
 include(../Configure.pri)
@@ -472,6 +471,7 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.cpp \
     src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
     src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp \
+	src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriter.cpp \
     src/main/cpp/hoot/core/ops/ReplaceElementOp.cpp \
     src/main/cpp/hoot/core/filters/NeedsReviewCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.cpp \
@@ -487,7 +487,8 @@ SOURCES += \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp \
     src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.cpp \
-    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.cpp
+    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.cpp \
+    src/main/cpp/hoot/core/filters/WaterwayCriterion.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -969,5 +970,6 @@ HEADERS += \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h \
     src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.h \
-    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.h
+    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.h \
+    src/main/cpp/hoot/core/filters/WaterwayCriterion.h
 

@@ -247,7 +247,7 @@ mgcp = {
             translate.applyOne2One(tags, newAttrs, mgcp.lookup, mgcp.fcodeLookup, mgcp.ignoreList);
 
             // apply the simple number and text biased rules
-            translate.applySimpleNumBiased(newAttrs, tags, mgcp.rules.numBiased, 'backward');
+            translate.applySimpleNumBiased(newAttrs, tags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
             translate.applySimpleTxtBiased(newAttrs, tags,  mgcp.rules.txtBiased,'backward');
 
             // post processing
@@ -1065,7 +1065,8 @@ mgcp = {
         translate.applyOne2One(attrs, tags, mgcp.lookup, {'k':'v'}, mgcp.ignoreList);
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, mgcp.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(attrs, tags, mgcp.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(attrs, tags,  mgcp.rules.txtBiased,'forward');
 
         // post processing
@@ -1157,7 +1158,7 @@ mgcp = {
         translate.applyOne2One(tags, attrs, mgcp.lookup, mgcp.fcodeLookup, mgcp.ignoreList);
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, mgcp.rules.numBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, tags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
         translate.applySimpleTxtBiased(attrs, tags,  mgcp.rules.txtBiased,'backward');
 
         // post processing
@@ -1248,8 +1249,22 @@ mgcp = {
             print('');
         }
 
-        // Send back the feature
+        // Swap F_CODE for FCODE. Too many lookup tables etc to change it earlier
+        if (attrs.F_CODE)
+        {
+            attrs.FCODE = attrs.F_CODE;
+            delete attrs.F_CODE;
+        }
+
         if (attrs2.F_CODE)
+        {
+            attrs2.FCODE = attrs2.F_CODE;
+            delete attrs2.F_CODE;
+        }
+
+
+        // Send back the feature
+        if (attrs2.FCODE)
         {
             return([{attrs: attrs, tableName: tableName},{attrs: attrs2, tableName: tableName2}]);
         }

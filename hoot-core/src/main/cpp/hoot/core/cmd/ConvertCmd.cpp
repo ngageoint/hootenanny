@@ -78,7 +78,7 @@ public:
     OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
     OsmMapWriterFactory writerFactory = OsmMapWriterFactory::getInstance();
 
-        // Is there a streaming reader and writer?
+    // Is there a streaming reader and writer?
     if (readerFactory.hasElementInputStream(args[0]) &&
         writerFactory.hasElementOutputStream(args[1]) &&
         ConfigOptions().getConvertOps().size() == 0)

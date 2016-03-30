@@ -216,6 +216,7 @@ public class ProcessStreamInterface implements INativeInterface {
 					{
 						doThrowException = Boolean.parseBoolean(cmd.get("throwerror").toString());
 					}
+
 					if (doThrowException)
 					{
 						throw new Exception(err);
@@ -223,11 +224,11 @@ public class ProcessStreamInterface implements INativeInterface {
 					
 					String stdOut = res.getStdout();
 					ret.put("stdout", stdOut);
-					ret.put("stderr", err);
+					ret.put("stderr", err);					
 				}
 			}
 		} catch (Exception e){
-			if (res != null && res.getExitStatus() == -9999)
+			if(res != null && res.getExitStatus() == -9999)
 			{
 				throw new NativeInterfaceException("Failed to execute." + e.getMessage(),
 						NativeInterfaceException.HttpCode.USER_CANCEL);

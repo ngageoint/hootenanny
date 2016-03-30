@@ -216,6 +216,29 @@ void MapStatsWriter::writeStatsToJson(QList< QList<SingleStat> >& stats, const Q
   }
 }
 
+void MapStatsWriter::writeStatsToText(QList<QList<SingleStat> > &stats, const QString &statsOutputFilePath)
+{
+  LOG_INFO("Writing stats to file: " << statsOutputFilePath);
+
+  //  Write to the text file
+  QFile outputFile(statsOutputFilePath);
+  if (outputFile.exists())
+  {
+    outputFile.remove();
+  }
+  if (outputFile.open(QFile::WriteOnly | QFile::Text))
+  {
+    QTextStream out(&outputFile);
+    out << statsToString(stats, "\t");
+    outputFile.close();
+  }
+  else
+  {
+    LOG_ERROR("Unable to write to output file.");
+  }
+
+}
+
 void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& statsOutputFilePath,
                                 QString sep)
 {

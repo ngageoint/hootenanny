@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -37,9 +37,9 @@
 
 namespace hoot
 {
+
 using namespace std;
 class Match;
-//class MatchThreshold;
 
 class MatchCreator
 {
@@ -100,6 +100,18 @@ public:
   {
     throw HootException("This match creator takes no argument.");
   }
+
+  /*
+   * This is actually being done in order to track the script name in ScriptMatchCreator, so we
+   * need to do some refactoring to get rid of this.  Redundant with Description class above.
+   */
+  QString getDescription() { return _description; }
+  void setDescription(QString description) { _description = description; }
+
+protected:
+
+  QString _description;
+
 };
 
 }

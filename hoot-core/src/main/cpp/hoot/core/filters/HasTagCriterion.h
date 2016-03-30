@@ -77,6 +77,14 @@ public:
     return false;
   }
 
+  virtual ElementCriterion* clone() { return new HasTagCriterion(_keys); }
+
+protected:
+  HasTagCriterion(QStringList keys)
+  {
+    _keys = keys;
+  }
+
 private:
   QStringList _keys;
 };

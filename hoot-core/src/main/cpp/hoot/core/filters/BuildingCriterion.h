@@ -98,6 +98,8 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
+  virtual ElementCriterion* clone() { return new BuildingCriterion(_map); }
+
 private:
 
   ConstOsmMapPtr _map;

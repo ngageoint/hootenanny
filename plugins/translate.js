@@ -690,7 +690,7 @@ translate = {
 
     // applySimpleNumBiased - Apply 0ne2one rules for Number Attributes
     // The "direction is either "forward" or "backward" - convert to or from
-    applySimpleNumBiased : function(attrs, tags, rules, direction)
+    applySimpleNumBiased : function(attrs, tags, rules, direction, intList)
     {
         if (direction == 'forward')
         {
@@ -699,17 +699,14 @@ translate = {
             {
                 if (i in attrs)
                 {
-                    // Sanity checking :-)
-                    // if (translate.isOK(attrs[i])) tags[rules[i]] = attrs[i];
-
-                    // Just checking it is a number
+                    // Just checking it is a number. Dont care if it is an Int or a Real
                     if (translate.isNumber(attrs[i]))
                     {
                         tags[rules[i]] = attrs[i];
                     }
                     else
                     {
-                        logVerbose('Expected a number for:: ' + i + ' got ' + attrs[i] + ' instead. Dropping ' + i);
+                        logVerbose('Expected a number for:: ' + i + '. Got ' + attrs[i] + ' instead. Skipping ' + i);
                     }
                 }
             }
@@ -724,15 +721,27 @@ translate = {
                     // Strip out anything that is not a number. Get rid of 125m etc
                     var tNum = tags[rules[i]].replace(/-[^0-9\\.]+/g, '');
 
-                    // if (translate.isOK(tNum)) attrs[i] = tNum;
-
                     if (translate.isNumber(tNum))
                     {
+                        // Now check the Integer attributes
+                        if (intList.indexOf(i) > -1)
+                        {
+                            // Quick bitwise or to strip off anything after the decimal
+                            var tInt = tNum | 0;
+
+                                // Back to a string for a comparison
+                                if ((tInt + '') !== tNum)
+                                {
+                                    hoot.logVerbose('Converting ' + i + ' from ' + tNum + ' to ' + tInt);
+                                }
+                                tNum = tInt;
+                        } // End in intList
+
                         attrs[i] = tNum;
                     }
                     else
                     {
-                        logVerbose('Expected a number for:: ' + rules[i] + ' got ' + tags[rules[i]] + ' instead. Dropping ' + i);
+                        logVerbose('Expected a number for:: ' + rules[i] + '. Got ' + tags[rules[i]] + ' instead. Skipping ' + i);
                     }
                 }
             }

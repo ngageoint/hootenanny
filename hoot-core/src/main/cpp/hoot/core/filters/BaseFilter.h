@@ -49,7 +49,6 @@ protected:
    */
   virtual bool isMatch(const Element& e) const = 0;
 
-private:
   FilterType _type;
 };
 

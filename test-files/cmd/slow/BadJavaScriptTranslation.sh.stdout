@@ -1,0 +1,19 @@
+Initialize works!
+16:11:06.333 ERROR ...ot/js/JavaScriptTranslator.cpp( 344) Error initializing JavaScript: test-files/cmd/slow/tSimple.js (63) 
+    if (translate !== undefined)
+        ^ 
+ReferenceError: translate is not defined
+16:11:06.333 INFO  ...t/core/io/PythonTranslator.cpp(  66) Initializing Python
+16:11:06.333 INFO  ...t/core/io/PythonTranslator.cpp(  96) Python path: translations:PYTHONPATH:/home/matt/dg/src/hoot/translations
+16:11:06.413 ERROR ...ot/js/JavaScriptTranslator.cpp( 344) Error initializing JavaScript: plugins/BadSyntaxTest.js (4) 
+foo is bad.
+    ^^ 
+SyntaxError: Unexpected identifier
+16:11:06.413 INFO  ...t/core/io/PythonTranslator.cpp(  66) Initializing Python
+16:11:06.413 INFO  ...t/core/io/PythonTranslator.cpp(  96) Python path: translations:PYTHONPATH:/home/matt/dg/src/hoot/translations
+16:11:06.493 ERROR ...ot/js/JavaScriptTranslator.cpp( 344) Error initializing JavaScript: /home/matt/dg/src/hoot/plugins/BadSyntaxTest.js (4) 
+foo is bad.
+    ^^ 
+SyntaxError: Unexpected identifier
+16:11:06.493 INFO  ...t/core/io/PythonTranslator.cpp(  66) Initializing Python
+16:11:06.493 INFO  ...t/core/io/PythonTranslator.cpp(  96) Python path: translations:PYTHONPATH:/home/matt/dg/src/hoot/translations

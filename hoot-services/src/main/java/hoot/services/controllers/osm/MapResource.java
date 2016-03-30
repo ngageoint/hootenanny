@@ -1169,7 +1169,7 @@ public class MapResource
 		}
 		catch (Exception ex)
 		{
-			if (jobStatusManager != null)
+			if(jobStatusManager != null)
 			{
 				jobStatusManager.setFailed(jobId, ex.getMessage());
 			}

@@ -104,11 +104,8 @@ void MatchConflicts::calculateSubsetConflicts(const vector<const Match *> &match
       size_t m2 = matchSet[j];
       // if these aren't the same match and it is conflicting in one direction or the other
       if (m1 != m2 &&
-    #warning look at this
           (MergerFactory::getInstance().isConflicting(_map, matches[m1], matches[m2]) ||
            MergerFactory::getInstance().isConflicting(_map, matches[m2], matches[m1])))
-//          (matches[m1]->isConflicting(*matches[m2], _map) ||
-//           matches[m2]->isConflicting(*matches[m1], _map)))
       {
         // make sure we're consistent and put the smaller one first.
         if (m2 < m1)
