@@ -14,12 +14,6 @@ if ! sudo -u postgres psql -lqt | cut -d \| -f 1 | grep -qw hoot; then
     sudo -u postgres createuser --superuser hoot || true
     sudo -u postgres psql -c "alter user hoot with password '$RAND_PW';"
     sudo sed -i s/DB_PASSWORD=.*/DB_PASSWORD=$RAND_PW/ /var/lib/hootenanny/conf/DatabaseConfig.sh
-    while [ ! -f /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml ]; do
-        echo "Waiting for hoot-services.war to deploy"
-        sleep 1
-    done
-    sudo sed -i s/password\:\ hoottest/password\:\ $RAND_PW/ /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/liquibase.properties
-    sudo sed -i s/value=\"hoottest\"/value=\"$RAND_PW\"/ /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml
     sudo -u postgres createdb hoot --owner=hoot
     sudo -u postgres createdb wfsstoredb --owner=hoot
     sudo -u postgres psql -d hoot -c 'create extension hstore;'
@@ -29,6 +23,7 @@ if ! sudo -u postgres psql -lqt | cut -d \| -f 1 | grep -qw hoot; then
     sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on geography_columns TO PUBLIC;"
     sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on spatial_ref_sys TO PUBLIC;"
 fi
+
 # configure Postgres settings
 PG_HB_CONF=/var/lib/pgsql/$PG_VERSION/data/pg_hba.conf
 if ! sudo grep -i --quiet hoot $PG_HB_CONF; then
@@ -114,11 +109,17 @@ if [ ! -d $TOMCAT_HOME/.deegree ]; then
     sudo mkdir $TOMCAT_HOME/.deegree
     sudo chown tomcat:tomcat $TOMCAT_HOME/.deegree
 fi
-BASEMAP_HOME=/var/lib/hootenanny/ingest/processed
-if [ ! -d $BASEMAP_HOME ]; then
+BASEMAP_UPLOAD_HOME=/var/lib/hootenanny/ingest/upload
+if [ ! -d $BASEMAP_UPLOAD_HOME ]; then
+    echo "Creating ingest/upload directory for webapp"
+    sudo mkdir -p $BASEMAP_UPLOAD_HOME
+    sudo chown tomcat:tomcat $BASEMAP_UPLOAD_HOME
+fi
+BASEMAP_PROCESSED_HOME=/var/lib/hootenanny/ingest/processed
+if [ ! -d $BASEMAP_PROCESSED_HOME ]; then
     echo "Creating ingest/processed directory for webapp"
-    sudo mkdir -p $BASEMAP_HOME
-    sudo chown tomcat:tomcat $BASEMAP_HOME
+    sudo mkdir -p $BASEMAP_PROCESSED_HOME
+    sudo chown tomcat:tomcat $BASEMAP_PROCESSED_HOME
 fi
 UPLOAD_HOME=/var/lib/hootenanny/upload
 if [ ! -d $UPLOAD_HOME ]; then
@@ -126,10 +127,21 @@ if [ ! -d $UPLOAD_HOME ]; then
     sudo mkdir -p $UPLOAD_HOME
     sudo chown tomcat:tomcat $UPLOAD_HOME
 fi
+# Update the db password in hoot-services war
+source /var/lib/hootenanny/conf/DatabaseConfig.sh
+while [ ! -f /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml ]; do
+    echo "Waiting for hoot-services.war to deploy"
+    sleep 1
+done
+sudo sed -i s/password\:\ hoottest/password\:\ $DB_PASSWORD/ /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/liquibase.properties
+sudo sed -i s/value=\"hoottest\"/value=\"$DB_PASSWORD\"/ /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml
+sudo sed -i s/dbPassword=hoottest/dbPassword=$DB_PASSWORD/ /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf
+sudo sed -i s/\<Password\>hoottest\<\\/Password\>/\<Password\>$DB_PASSWORD\<\\/Password\>/ /var/lib/tomcat6/webapps/hoot-services/WEB-INF/workspace/jdbc/WFS_Connection.xml
+sudo sed -i s/\<jdbcPassword\>hoottest\<\\/jdbcPassword\>/\<jdbcPassword\>$DB_PASSWORD\<\\/jdbcPassword\>/ /var/lib/tomcat6/webapps/hoot-services/META-INF/maven/hoot/hoot-services/pom.xml
+
 sudo service tomcat6 restart
 
 # Apply any database schema changes
-source /var/lib/hootenanny/conf/DatabaseConfig.sh
 cd $TOMCAT_HOME/webapps/hoot-services/WEB-INF
 liquibase --contexts=default,production \
     --changeLogFile=classes/db/db.changelog-master.xml \
