@@ -451,10 +451,9 @@ public:
       psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodesReadTest.sql > /dev/null 2>&1";
     LOG_VARD(cmd);
 
-    if( std::system(cmd.toStdString().c_str()) != 0 )
+    if (std::system(cmd.toStdString().c_str()) != 0)
     {
-      LOG_WARN("Failed postgres command.  Exiting test.");
-      return;
+      throw HootException("Failed postgres command.  Exiting test.");
     }
 
     ///////////////////////////////////////
