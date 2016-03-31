@@ -35,7 +35,7 @@ if ! dpkg -l | grep --quiet dictionaries-common; then
     sudo apt-get -q -y install wamerican-insane
 
     sudo /usr/share/debconf/fix_db.pl
-    sudo dpkg-reconfigure dictionaries-common
+    sudo dpkg-reconfigure -f noninteractive dictionaries-common
 fi
 
 sudo apt-get -y autoremove
@@ -95,7 +95,7 @@ fi
 gem list --local | grep -q selenium-cucumber
 if [ $? -eq 1 ]; then
    sudo gem install selenium-cucumber
-fi    
+fi
 
 # Make sure that we are in ~ before trying to wget & install stuff 
 cd ~
@@ -330,13 +330,14 @@ fi
 
 # hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
 # so purposefully not installing hoot from the repos.
-if [ ! hadoop fs -ls &> /dev/null ]; then
+if ! which hadoop > /dev/null ; then
   echo "Installing Hadoop..."
   if [ ! -f hadoop-0.20.2.tar.gz ]; then
     wget --quiet https://archive.apache.org/dist/hadoop/core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
   fi
-  
-  ssh-keygen -t rsa -N "" -f $HOME/.ssh/id_rsa
+
+  # Vagrant already sets up ssh
+  #ssh-keygen -t rsa -N "" -f $HOME/.ssh/id_rsa
   cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
   chmod 600 ~/.ssh/authorized_keys
   # ssh -o StrictHostKeyChecking=no localhost
@@ -458,7 +459,7 @@ EOT
 
   sudo sed -i.bak 's/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/lib\/jvm\/java-1.7.0-openjdk-amd64/g' $HADOOP_HOME/conf/hadoop-env.sh
   sudo sed -i.bak 's/#include <pthread.h>/#include <pthread.h>\n#include <unistd.h>/g' $HADOOP_HOME/src/c++/pipes/impl/HadoopPipes.cc
-  
+
   sudo mkdir -p $HOME/hadoop/dfs/name/current
   # this could perhaps be more strict
   sudo chmod -R 777 $HOME/hadoop
@@ -490,11 +491,11 @@ sudo chmod a+x /etc/init.d/node-mapnik-server
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-mapnik-server
 sudo npm install --quiet
-cd ~
 
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
 # if the marker file is older than this file (VagrantProvision.sh)
+cd $HOOT_HOME
 touch Vagrant.marker
 
 mkdir -p $HOOT_HOME/ingest/processed
