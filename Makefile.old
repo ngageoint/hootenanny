@@ -77,7 +77,7 @@ test-quick: build pp-test
 
 test-all-no-core: services-test-all pp-test plugins-test
 	$(MAKE) ui-test
-	
+
 test-all: test-all-no-core
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial
 
@@ -266,6 +266,8 @@ ifeq ($(BUILD_SERVICES),services)
 else
 	echo "UI tests must specify both --with-services and --with-uitests."
 endif
+else
+	echo "UI tests must specify both --with-services and --with-uitests."
 endif
 
 FORCE: vagrant
