@@ -344,7 +344,7 @@ if ! which hadoop > /dev/null ; then
 
   #cd /usr/local
   cd ~
-  sudo tar -zxvf $HOME/hadoop-0.20.2.tar.gz
+  sudo tar -zxf $HOME/hadoop-0.20.2.tar.gz
   sudo chown -R vagrant:vagrant hadoop-0.20.2
   sudo ln -s hadoop-0.20.2 hadoop
   sudo chown -R vagrant:vagrant hadoop
@@ -505,7 +505,6 @@ sudo chmod -R 777 $HOOT_HOME/ingest
 sudo chmod -R 777 $HOOT_HOME/upload
 sudo chmod -R 777 $HOOT_HOME/tmp
 
-cd hoot
 if [ ! "$(ls -A hoot-ui)" ]; then
     echo "hoot-ui is empty"
     echo "init'ing and updating submodule"
