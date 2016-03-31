@@ -97,8 +97,8 @@ void OsmReader::_createNode(const QXmlAttributes &attributes)
   double x = _parseDouble(attributes.value("lon"));
   double y = _parseDouble(attributes.value("lat"));
 
-  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
-  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these
+  // are not officially required by the DTD
   long version = ElementData::VERSION_EMPTY;
   if (attributes.value("version") != "")
   {
@@ -125,8 +125,8 @@ void OsmReader::_createNode(const QXmlAttributes &attributes)
     uid = _parseDouble(attributes.value("uid"));
   }
 
-  _element.reset(new Node(_status, newId, x, y, changeset, version, timestamp,
-                          user, uid, _circularError));
+  _element.reset(new Node(_status, newId, x, y, _circularError, changeset, version, timestamp,
+                          user, uid));
 
   if (_element->getTags().getInformationCount() > 0)
   {
@@ -139,7 +139,8 @@ void OsmReader::_createRelation(const QXmlAttributes &attributes)
   _relationId = _parseLong(attributes.value("id"));
   long newId = _getRelationId(_relationId);
 
-  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are
+  // not officially required by the DTD
   long version = ElementData::VERSION_EMPTY;
   if (attributes.value("version") != "")
   {

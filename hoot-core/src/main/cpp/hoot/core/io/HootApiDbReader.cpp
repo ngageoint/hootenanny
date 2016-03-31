@@ -360,11 +360,11 @@ shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator,
       nodeId,
       resultIterator.value(ApiDb::NODES_LONGITUDE).toDouble(),
       resultIterator.value(ApiDb::NODES_LATITUDE).toDouble(),
+      ApiDb::DEFAULT_ELEMENT_CIRCULAR_ERROR,
       resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
-        resultIterator.value(ApiDb::NODES_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ")),
-      ApiDb::DEFAULT_ELEMENT_CIRCULAR_ERROR));
+        resultIterator.value(ApiDb::NODES_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ"))));
 
   result->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::NODES_TAGS)));
   ApiDbReader::addTagsToElement(result);
