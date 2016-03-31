@@ -32,8 +32,8 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/io/ServicesDb.h>
-#include <hoot/core/io/ServicesDbWriter.h>
+#include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/io/HootApiDbWriter.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/OsmUtils.h>
 
@@ -50,9 +50,9 @@
 namespace hoot
 {
 
-class ServicesDbWriterTest : public CppUnit::TestFixture
+class HootApiDbWriterTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(ServicesDbWriterTest);
+  CPPUNIT_TEST_SUITE(HootApiDbWriterTest);
   CPPUNIT_TEST(runEscapeTest);
   CPPUNIT_TEST(runInsertTest);
   CPPUNIT_TEST(runRemapInsertTest);
@@ -60,13 +60,13 @@ class ServicesDbWriterTest : public CppUnit::TestFixture
 
 public:
 
-  static QString userEmail() { return "ServicesDbWriterTest@hoottestcpp.org"; }
+  static QString userEmail() { return "HootApiDbWriterTest@hoottestcpp.org"; }
 
   void compareRecords(QString sql, QString expected, QVariant v1 = QVariant())
   {
-    ServicesDb db;
+    HootApiDb db;
     db.open(ServicesDbTestUtils::getDbModifyUrl());
-    QString result = db._execToString(sql, v1);
+    QString result = db.execToString(sql, v1);
     if (expected == "")
     {
       QStringList rows = result.split("\n");
@@ -96,7 +96,7 @@ public:
   void runEscapeTest()
   {
     // populate the database.
-    ServicesDbWriter writer;
+    HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
 
@@ -116,7 +116,7 @@ public:
 
     long mapId = writer.getMapId();
 
-    compareRecords("SELECT tags FROM " + ServicesDb::_getNodesTableName(mapId) +
+    compareRecords("SELECT tags FROM " + HootApiDb::getNodesTableName(mapId) +
                    " ORDER BY longitude",
                    "\"note\"=>\"n1',\n\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"10\"\n"
                    "\"note\"=>\"n2\\\"\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
@@ -127,7 +127,7 @@ public:
   void runInsertTest()
   {
     // populate the database.
-    ServicesDbWriter writer;
+    HootApiDbWriter writer;
     writer.setRemap(false);
     writer.setUserEmail(userEmail());
     writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
@@ -167,11 +167,11 @@ public:
 
     compareRecords("SELECT email, display_name FROM users "
                    "WHERE email LIKE :email",
-                   "ServicesDbWriterTest@hoottestcpp.org;ServicesDbWriterTest",
+                   "HootApiDbWriterTest@hoottestcpp.org;HootApiDbWriterTest",
                    userEmail());
 
     compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
-                   ServicesDb::_getNodesTableName(mapId) +
+                   HootApiDb::getNodesTableName(mapId) +
                    " ORDER BY longitude",
                    "0;0;true;3221225472;1;\"note\"=>\"n1\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"10\"\n"
                    "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
@@ -179,14 +179,14 @@ public:
                    (qlonglong)mapId);
 
     compareRecords("SELECT id, visible, version, tags FROM " +
-                   ServicesDb::_getWaysTableName(mapId) +
+                   HootApiDb::getWaysTableName(mapId) +
                    " ORDER BY id",
                    "1;true;1;\"note\"=>\"w1\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"13\"\n"
                    "2;true;1;\"note\"=>\"w2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"14\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT way_id, node_id, sequence_id FROM " +
-                   ServicesDb::_getWayNodesTableName(mapId) +
+                   HootApiDb::getWayNodesTableName(mapId) +
                    " ORDER BY way_id, node_id, sequence_id",
                    "1;1;0\n"
                    "1;2;1\n"
@@ -195,30 +195,30 @@ public:
                    (qlonglong)mapId);
 
     compareRecords("SELECT id, visible, version, tags FROM " +
-                   ServicesDb::_getRelationsTableName(mapId),
+                   HootApiDb::getRelationsTableName(mapId),
                    "1;true;1;\"note\"=>\"r1\", \"type\"=>\"collection\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"15\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT relation_id, member_type, member_id, member_role, sequence_id "
                    "FROM " +
-                   ServicesDb::_getRelationMembersTableName(mapId) +
+                   HootApiDb::getRelationMembersTableName(mapId) +
                    " ORDER BY relation_id, member_type",
                    "1;node;1;n1;0\n"
                    "1;way;1;w1;1",
                    (qlonglong)mapId);
 
-    ServicesDb db;
+    HootApiDb db;
     db.open(ServicesDbTestUtils::getDbModifyUrl());
 
     QStringList tableNames;
-    tableNames.append(ServicesDb::_getNodesTableName(mapId));
-    tableNames.append(ServicesDb::_getWaysTableName(mapId));
-    tableNames.append(ServicesDb::_getRelationsTableName(mapId));
+    tableNames.append(HootApiDb::getNodesTableName(mapId));
+    tableNames.append(HootApiDb::getWaysTableName(mapId));
+    tableNames.append(HootApiDb::getRelationsTableName(mapId));
 
     for (int i = 0; i < tableNames.length(); i++)
     {
       QStringList results =
-        db._execToString("SELECT timestamp FROM " + tableNames[i],
+        db.execToString("SELECT timestamp FROM " + tableNames[i],
                          (qlonglong)mapId).split("\n");
       for (int j = 0; j < results.length(); j++)
       {
@@ -232,7 +232,7 @@ public:
   void runRemapInsertTest()
   {
     // populate the database.
-    ServicesDbWriter writer;
+    HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
 
@@ -275,11 +275,11 @@ public:
 
     compareRecords("SELECT email, display_name FROM users "
                    "WHERE email LIKE :email",
-                   "ServicesDbWriterTest@hoottestcpp.org;ServicesDbWriterTest",
+                   "HootApiDbWriterTest@hoottestcpp.org;HootApiDbWriterTest",
                    userEmail());
 
     compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
-                   ServicesDb::_getNodesTableName(mapId) +
+                   HootApiDb::getNodesTableName(mapId) +
                    " ORDER BY longitude",
                    "0;0;true;3221225472;1;\"note\"=>\"n1\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"10\"\n"
                    "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
@@ -287,14 +287,14 @@ public:
                    (qlonglong)mapId);
 
     compareRecords("SELECT visible, version, tags FROM " +
-                   ServicesDb::_getWaysTableName(mapId) +
+                   HootApiDb::getWaysTableName(mapId) +
                    " ORDER BY id",
                    "true;1;\"note\"=>\"w2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"14\"\n"
                    "true;1;\"note\"=>\"w1\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"13\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT sequence_id FROM " +
-                   ServicesDb::_getWayNodesTableName(mapId) +
+                   HootApiDb::getWayNodesTableName(mapId) +
                    " ORDER BY way_id, node_id, sequence_id",
                    "1\n"
                    "0\n"
@@ -303,7 +303,7 @@ public:
                    (qlonglong)mapId);
 
     compareRecords("SELECT visible, version, tags FROM " +
-                   ServicesDb::_getRelationsTableName(mapId) +
+                   HootApiDb::getRelationsTableName(mapId) +
                    " ORDER BY id",
                    "true;1;\"note\"=>\"r2\", \"type\"=>\"collection\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"15\"\n"
                    "true;1;\"note\"=>\"r1\", \"type\"=>\"collection\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"15\"",
@@ -311,7 +311,7 @@ public:
 
     compareRecords("SELECT member_type, member_role, sequence_id "
                    "FROM " +
-                   ServicesDb::_getRelationMembersTableName(mapId) +
+                   HootApiDb::getRelationMembersTableName(mapId) +
                    " ORDER BY relation_id, member_type",
                    "relation;r1;0\n"
                    "node;n1;0\n"
@@ -332,9 +332,9 @@ public:
   void setUp()
   {
     ServicesDbTestUtils::deleteUser(userEmail());
-    ServicesDb db;
+    HootApiDb db;
     db.open(ServicesDbTestUtils::getDbModifyUrl());
-    db.getOrCreateUser(userEmail(), "ServicesDbWriterTest");
+    db.getOrCreateUser(userEmail(), "HootApiDbWriterTest");
   }
 
   void tearDown()
@@ -344,7 +344,6 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServicesDbWriterTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServicesDbWriterTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HootApiDbWriterTest, "slow");
 
 }
