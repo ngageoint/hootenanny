@@ -72,10 +72,6 @@ public:
     ElementId _eid;
   };
 
-  //RelationData(long id);
-
-  //RelationData(long id, long changeset, long version, unsigned int timestamp);
-
   RelationData(long id, long changeset = ElementData::CHANGESET_EMPTY,
                long version = ElementData::VERSION_EMPTY,
                unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
