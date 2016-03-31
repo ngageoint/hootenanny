@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -161,8 +161,10 @@ public:
     HandleScope handleScope;
     Context::Scope context_scope(_script->getContext());
 
+    ConstOsmMapPtr map = getMap();
+
     // create an envlope around the e plus the search radius.
-    auto_ptr<Envelope> env(e->getEnvelope(_map));
+    auto_ptr<Envelope> env(e->getEnvelope(map));
     Meters searchRadius = getSearchRadius(e);
     env->expandBy(searchRadius);
 
@@ -175,11 +177,11 @@ public:
 
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
-      ConstElementPtr e2 = _map->getElement(*it);
+      ConstElementPtr e2 = map->getElement(*it);
       if ((e->getStatus() != e2->getStatus() || from < *it) && isMatchCandidate(e2))
       {
         // score each candidate and push it on the result vector
-        ScriptMatch* m = new ScriptMatch(_script, getPlugin(), _map, from, *it, _mt);
+        ScriptMatch* m = new ScriptMatch(_script, getPlugin(), map, from, *it, _mt);
         // if we're confident this is a miss
         if (m->getType() == MatchType::Miss)
         {
@@ -217,7 +219,7 @@ public:
     return result;
   }
 
-  ConstOsmMapPtr getMap() const { return _map; }
+  ConstOsmMapPtr getMap() const { return _map.lock(); }
 
   static double getNumber(Handle<Object> obj, QString key, double minValue, double defaultValue)
   {
@@ -321,8 +323,8 @@ public:
     Handle<Value> jsArgs[1];
     int argc = 0;
     HandleScope scope;
-    assert(_map.get());
-    OsmMapPtr copiedMap(new OsmMap(_map));
+    assert(getMap().get());
+    OsmMapPtr copiedMap(new OsmMap(getMap()));
     jsArgs[argc++] = OsmMapJs::create(copiedMap);
 
     func->Call(plugin, argc, jsArgs);
@@ -341,7 +343,7 @@ public:
       _index.reset(new HilbertRTree(mps, 2));
 
       IndexElementsVisitor iev(_index, _indexToEid, *this);
-      _map->visitRo(iev);
+      getMap()->visitRo(iev);
       iev.finalizeIndex();
     }
 
@@ -368,7 +370,7 @@ public:
     Handle<Value> jsArgs[2];
 
     int argc = 0;
-    jsArgs[argc++] = OsmMapJs::create(_map);
+    jsArgs[argc++] = OsmMapJs::create(getMap());
     jsArgs[argc++] = ElementJs::New(e);
 
     Handle<Value> f = func->Call(plugin, argc, jsArgs);
@@ -386,7 +388,8 @@ public:
 
 private:
 
-  const ConstOsmMapPtr& _map;
+  // don't hold on to the map.
+  weak_ptr<const OsmMap> _map;
   vector<const Match*>& _result;
   set<ElementId> _empty;
   int _neighborCountMax;
@@ -459,11 +462,14 @@ void ScriptMatchCreator::setArguments(QStringList args)
   HandleScope handleScope;
   Context::Scope context_scope(_script->getContext());
   _script->loadScript(path, "plugin");
+  //bit of a hack...see MatchCreator.h...need to refactor
+  _description = QString::fromStdString(className()) + "," + args[0];
+  _matchCandidateChecker.reset();
 }
 
 Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
-  Match* result = new ScriptMatch(_script, ScriptMatchVisitor::getPlugin(_script), map, 
+  Match* result = new ScriptMatch(_script, ScriptMatchVisitor::getPlugin(_script), map,
     eid1, eid2, getMatchThreshold());
   return result;
 }
@@ -549,7 +555,7 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
   {
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
-  if (!_matchCandidateChecker.get())
+  if (!_matchCandidateChecker.get() || _matchCandidateChecker->getMap() != map)
   {
     vector<const Match *> emptyMatches;
     _matchCandidateChecker.reset(

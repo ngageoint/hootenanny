@@ -8,10 +8,7 @@ Percentage of Total Features Conflatable	100	100	0
 Untagged Feature Count	0	0	0	
 Total Unconflatable Features	0	0	0	
 Percentage of Total Features Unconflatable	0	0	0	
-Total Features Processed By Conflation	0	0	8	
 Number of Match Creators	3	3	3	
-Features Conflatable by: hoot::BuildingMatchCreator	0	0	0	
-Features Conflatable by: hoot::PlacesPoiMatchCreator	0	0	0	
 Features Conflatable by: hoot::HighwayMatchCreator	4	4	0	
 Total Conflated Features	0	0	8	
 Percentage of Total Features Conflated	0	0	88.888888888888886	

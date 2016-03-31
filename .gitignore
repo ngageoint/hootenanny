@@ -164,3 +164,5 @@ Vagrant.marker
 test-files/services-system/node_modules
 vagrant*.lock
 vagrant*-*
+MingsSuperAwesomePrompt.sh
+id_rsa.pub

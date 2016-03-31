@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -83,6 +83,7 @@ CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapNam
   _quick(false),
   _inputIsConflatedMapOutput(inputIsConflatedMapOutput)
 {
+  LOG_VARD(_inputIsConflatedMapOutput);
 }
 
 void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
@@ -159,7 +160,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     const long featureCount = featureCountVisitor.getCount();
     _stats.append(SingleStat("Total Feature Count", featureCount));
     vector< shared_ptr<MatchCreator> > matchCreators = MatchFactory::getInstance().getCreators();
-    const double featuresProcessedDuringConflationCount =
+    const double conflatedFeatureCount =
       _applyVisitor(
         constMap,
         FilteredVisitor(StatusCriterion(Status::Conflated), new FeatureCountVisitor()));
@@ -172,25 +173,22 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     //the same data is conflated more than once.  In that case, it may be wise to let the stats
     //command pass in a variable stating whether the map is input/output, like the conflate command
     //does.
-    if (featuresProcessedDuringConflationCount > 0)
+    if (conflatedFeatureCount > 0)
     {
       _inputIsConflatedMapOutput = true;
     }
     double conflatableFeatureCount = -1.0;
-    any visitorData;
-    if (!_inputIsConflatedMapOutput)
-    {
-      conflatableFeatureCount =
-        _applyVisitor(
-          constMap,
-          FilteredVisitor(
-            ChainCriterion(
-              new NotCriterion(new StatusCriterion(Status::Conflated)),
-              new NotCriterion(new NeedsReviewCriterion(constMap))),
-            new MatchCandidateCountVisitor(matchCreators)),
-          visitorData);
-    }
-    else
+    any matchCandidateCountsData;
+    conflatableFeatureCount =
+      _applyVisitor(
+        constMap,
+        FilteredVisitor(
+          ChainCriterion(
+            new NotCriterion(new StatusCriterion(Status::Conflated)),
+            new NotCriterion(new NeedsReviewCriterion(constMap))),
+          new MatchCandidateCountVisitor(matchCreators)),
+        matchCandidateCountsData);
+    if (_inputIsConflatedMapOutput)
     {
       //The conflatable stat has no meaning on a conflated output map, since everything in the
       //output is either conflated, passed through, marked for review, or left unconflated.
@@ -210,9 +208,8 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     CountUniqueReviewsVisitor curv;
     constMap->visitRo(curv);
     const double numReviewsToBeMade = curv.getStat();
-    const double conflatedFeatureCount =
-      fmax(featuresProcessedDuringConflationCount - numFeaturesMarkedForReview, 0);
-    const double untaggedFeatureCount = _applyVisitor(constMap,FilteredVisitor(new NoInformationCriterion(),new FeatureCountVisitor()));
+    const double untaggedFeatureCount =
+      _applyVisitor(constMap,FilteredVisitor(new NoInformationCriterion(),new FeatureCountVisitor()));
     _stats.append(SingleStat("Untagged Feature Count", untaggedFeatureCount));
     long unconflatableFeatureCount = -1.0;
     if (!_inputIsConflatedMapOutput)
@@ -230,58 +227,62 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
       SingleStat(
         "Percentage of Total Features Unconflatable",
         ((double)unconflatableFeatureCount / (double)featureCount) * 100.0));
-    _stats.append(
-      SingleStat("Total Features Processed By Conflation", featuresProcessedDuringConflationCount));
 
     _stats.append(SingleStat("Number of Match Creators", matchCreators.size()));
-    LOG_VARD(matchCreators.size());
     double conflatablePoiCount = 0.0;
     double conflatableHighwayCount = 0.0;
     double conflatableBuildingCount = 0.0;
     double conflatableWaterwayCount = 0.0;
-    /// @todo This isn't very extensible to hardcode the matchup between each match creator and each
-    //feature type (e.g. hoot::PlacesPoiMatchCreator matches up with POI type).  Need a more
-    //maintainable way to do this if many more feature types get added.
-    for (vector< shared_ptr<MatchCreator> >::const_iterator matchCreatorItr = matchCreators.begin();
-         matchCreatorItr != matchCreators.end(); ++matchCreatorItr)
+    QMap<QString, long> matchCandidateCountsByMatchCreator =
+        any_cast<QMap<QString, long> >(matchCandidateCountsData);
+    LOG_VARD(matchCandidateCountsByMatchCreator.size());
+    LOG_VARD(matchCandidateCountsByMatchCreator);
+    for (QMap<QString, long >::const_iterator iterator = matchCandidateCountsByMatchCreator.begin();
+         iterator != matchCandidateCountsByMatchCreator.end(); ++iterator)
     {
-      shared_ptr<MatchCreator> matchCreator = *matchCreatorItr;
-      vector<MatchCreator::Description> matchCreatorDescriptions = matchCreator->getAllCreators();
-      sort(matchCreatorDescriptions.begin(), matchCreatorDescriptions.end(), _matchDescriptorCompare);
-      for (size_t i = 0; i < matchCreatorDescriptions.size(); i++)
+      const QString matchCreatorName = iterator.key();
+      LOG_VARD(matchCreatorName);
+      double conflatableFeatureCountForFeatureType = 0.0;
+      if (!_inputIsConflatedMapOutput)
       {
-        const QString matchCreatorName =
-          QString::fromStdString(matchCreatorDescriptions.at(i).className);
-        LOG_VARD(matchCreatorName);
-        double conflatableFeatureCountForFeatureType = 0.0;
-        if (!_inputIsConflatedMapOutput)
-        {
-          QMap<QString, long> matchCandidateCountsByMatchCreator =
-            any_cast<QMap<QString, long> >(visitorData);
-          conflatableFeatureCountForFeatureType = matchCandidateCountsByMatchCreator[matchCreatorName];
-          LOG_VARD(conflatableFeatureCountForFeatureType);
-        }
-        _stats.append(
-          SingleStat(
-            "Features Conflatable by: " + matchCreatorName, conflatableFeatureCountForFeatureType));
-        if (matchCreatorName == "hoot::PlacesPoiMatchCreator")
-        {
-          conflatablePoiCount = conflatableFeatureCountForFeatureType;
-        }
-        else if (matchCreatorName == "hoot::HighwayMatchCreator")
-        {
-          conflatableHighwayCount = conflatableFeatureCountForFeatureType;
-        }
-        else if (matchCreatorName == "hoot::BuildingMatchCreator")
-        {
-          conflatableBuildingCount = conflatableFeatureCountForFeatureType;
-        }
-        else if (matchCreatorDescriptions.at(i).description == "Linear Waterway")
-        {
-          conflatableWaterwayCount = conflatableFeatureCountForFeatureType;
-        }
+        conflatableFeatureCountForFeatureType = matchCandidateCountsByMatchCreator[matchCreatorName];
+        LOG_VARD(conflatableFeatureCountForFeatureType);
+      }
+
+      _stats.append(
+            SingleStat(
+              "Features Conflatable by: " + matchCreatorName,
+              conflatableFeatureCountForFeatureType));
+      /// @todo This isn't very extensible to hardcode the matchup between each match creator and each
+      /// feature count type (e.g. hoot::PlacesPoiMatchCreator matches up with POI count type).  Need
+      /// a more maintainable way to do this if many more feature types get added.
+      if (matchCreatorName == "hoot::PlacesPoiMatchCreator")
+      {
+        conflatablePoiCount += conflatableFeatureCountForFeatureType;
+      }
+      else if (matchCreatorName == "hoot::HighwayMatchCreator")
+      {
+        conflatableHighwayCount = conflatableFeatureCountForFeatureType;
+      }
+      else if (matchCreatorName == "hoot::BuildingMatchCreator")
+      {
+        conflatableBuildingCount = conflatableFeatureCountForFeatureType;
+      }
+      //Not all of the non-experimental script match creator types are being accounted for
+      //yet.
+      else if (matchCreatorName.contains("PoiGeneric"))
+      {
+        conflatablePoiCount += conflatableFeatureCountForFeatureType;
+      }
+      else if (matchCreatorName.contains("LinearWaterway"))
+      {
+        conflatableWaterwayCount = conflatableFeatureCountForFeatureType;
       }
     }
+    LOG_VARD(conflatablePoiCount);
+    LOG_VARD(conflatableHighwayCount);
+    LOG_VARD(conflatableBuildingCount);
+    LOG_VARD(conflatableWaterwayCount);
 
     _stats.append(SingleStat("Total Conflated Features", conflatedFeatureCount));
     _stats.append(
@@ -300,9 +301,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
       _applyVisitor(
         constMap,
         FilteredVisitor(
-          ChainCriterion(
             new NotCriterion(new StatusCriterion(Status::Conflated)),
-            new NotCriterion(new NeedsReviewCriterion(constMap))),
           new FeatureCountVisitor()));
     _stats.append(SingleStat("Total Unmatched Features", unconflatedFeatureCount));
     _stats.append(
@@ -453,21 +452,23 @@ void CalculateStatsOp::printStats()
   }
 }
 
-void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QString description, float conflatableCount, FeatureCalcType type, ElementCriterion* criterion)
+void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QString description,
+                                             float conflatableCount, FeatureCalcType type,
+                                             ElementCriterion* criterion)
 {
   shared_ptr<ElementCriterion> e_criterion(criterion);
   const double totalFeatures =
     _applyVisitor(map, FilteredVisitor(e_criterion->clone(), new FeatureCountVisitor()));
   _stats.append(SingleStat(QString("%1 Count").arg(description), totalFeatures));
   _stats.append(SingleStat(QString("Conflatable %1s").arg(description), conflatableCount));
-  const double featuresProcessedByConflation =
+  const double conflatedFeatureCount =
     _applyVisitor(map, FilteredVisitor(
       ChainCriterion(new StatusCriterion(Status::Conflated), e_criterion->clone()), new FeatureCountVisitor()));
   const double featuresMarkedForReview =
     _applyVisitor(map, FilteredVisitor(
       ChainCriterion(new NeedsReviewCriterion(map), e_criterion->clone()), new FeatureCountVisitor()));
-  const double conflatedFeatureCount = fmax(featuresProcessedByConflation - featuresMarkedForReview, 0);
-  _stats.append(SingleStat(QString("Conflated %1s").arg(description), conflatedFeatureCount));
+  _stats.append(
+    SingleStat(QString("Conflated %1s").arg(description), conflatedFeatureCount));
   _stats.append(SingleStat(QString("%1s Marked for Review").arg(description), featuresMarkedForReview));
   const double numFeatureReviewsToBeMade =
     _applyVisitor(
@@ -475,14 +476,14 @@ void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QStr
        FilteredVisitor(
         e_criterion->clone(),
         new CountUniqueReviewsVisitor()));
-  _stats.append(SingleStat(QString("Number of %1 Reviews to be Made").arg(description), numFeatureReviewsToBeMade));
+  _stats.append(
+    SingleStat(QString("Number of %1 Reviews to be Made").arg(description), numFeatureReviewsToBeMade));
   const double unconflatedFeatureCount =
     _applyVisitor(
       map,
       FilteredVisitor(
         ChainCriterion(
           new NotCriterion(new StatusCriterion(Status::Conflated)),
-          new NotCriterion(new NeedsReviewCriterion(map)),
           e_criterion->clone()),
         new FeatureCountVisitor()));
   _stats.append(SingleStat(QString("Unmatched %1s").arg(description), unconflatedFeatureCount));
@@ -521,7 +522,6 @@ void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QStr
   }
   _stats.append(
     SingleStat(QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated));
-
 }
 
 }
