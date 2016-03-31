@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -409,12 +409,12 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
     new Relation(
       _status,
       newRelationId,
+      ApiDb::DEFAULT_ELEMENT_CIRCULAR_ERROR,
+      "",/*"collection"*///TODO: services db doesn't support relation "type" yet
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
-        resultIterator.value(ApiDb::RELATIONS_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ")),
-      ApiDb::DEFAULT_ELEMENT_CIRCULAR_ERROR/*,
-      "collection"*/));  //TODO: services db doesn't support relation "type" yet
+        resultIterator.value(ApiDb::RELATIONS_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ"))));
 
   relation->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
   ApiDbReader::addTagsToElement(relation);
