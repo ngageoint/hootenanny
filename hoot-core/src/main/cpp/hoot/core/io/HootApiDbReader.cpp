@@ -379,11 +379,12 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
     new Way(
       _status,
       newWayId,
+      ApiDb::DEFAULT_ELEMENT_CIRCULAR_ERROR,
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
-        resultIterator.value(ApiDb::WAYS_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ")),
-      ApiDb::DEFAULT_ELEMENT_CIRCULAR_ERROR));
+        resultIterator.value(ApiDb::WAYS_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ"))
+      ));
 
   way->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::WAYS_TAGS)));
   ApiDbReader::addTagsToElement(way);

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -35,13 +35,15 @@
 
 // Hoot
 #include <hoot/core/Units.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <set>
 
 #include <QString>
 
-namespace hoot {
+namespace hoot
+{
 
 /**
  * Base class for OSM element data -- node, way and releation.
@@ -88,17 +90,17 @@ protected:
   ElementData() { }
 
   ElementData(long id) : _id(id), _changeset(CHANGESET_EMPTY), _version(VERSION_EMPTY),
-    _timestamp(TIMESTAMP_EMPTY), _user(USER_EMPTY), _uid(UID_EMPTY) { }
+    _timestamp(TIMESTAMP_EMPTY), _user(USER_EMPTY), _uid(UID_EMPTY) {  }
 
   ElementData(long id, const Tags& tags, Meters circularError);
 
   ElementData(long id, long changeset, long version, unsigned int timestamp) :
              _id(id), _changeset(changeset), _version(version),
-             _timestamp(timestamp), _user(USER_EMPTY), _uid(UID_EMPTY) { }
+             _timestamp(timestamp), _user(USER_EMPTY), _uid(UID_EMPTY) {  }
 
   ElementData(long id, long changeset, long version, unsigned int timestamp,
               QString user, long uid) : _id(id), _changeset(changeset), _version(version),
-             _timestamp(timestamp), _user(user), _uid(uid) { }
+             _timestamp(timestamp), _user(user), _uid(uid) {  }
 
   long _id;
   long _changeset;

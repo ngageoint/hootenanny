@@ -215,8 +215,8 @@ void OsmReader::_createWay(const QXmlAttributes &attributes)
     uid = _parseDouble(attributes.value("uid"));
   }
 
-  _element.reset(new Way(_status, newId, changeset, version, timestamp, user,
-                         uid, _circularError));
+  _element.reset(new Way(_status, newId, _circularError, changeset, version, timestamp, user,
+                         uid));
 
   _parseTimeStamp(attributes);
 }
