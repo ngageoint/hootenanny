@@ -18,7 +18,7 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
 fi
 
 # Cleanup
-make -sj$(nproc)
+make -sj$(nproc) clean
 
 echo "### Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."

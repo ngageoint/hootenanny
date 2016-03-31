@@ -49,15 +49,16 @@ if ! grep --quiet "export JAVA_HOME" ~/.profile; then
 fi
 
 if ! grep --quiet "export HADOOP_HOME" ~/.profile; then
-    echo "Adding hadoop home to profile..."
+    echo "Adding Hadoop home to profile..."
     #echo "export HADOOP_HOME=/usr/local/hadoop" >> ~/.profile
     echo "export HADOOP_HOME=\$HOME/hadoop" >> ~/.profile
+    echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
-    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HADOOP_HOME/bin:\$HOOT_HOME/bin" >> ~/.profile
+    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
@@ -327,7 +328,8 @@ if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
     rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
 
-#hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos, so purposefully not installing hoot from the repos.
+# hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
+# so purposefully not installing hoot from the repos.
 if [ ! hadoop fs -ls &> /dev/null ]; then
   echo "Installing Hadoop..."
   if [ ! -f hadoop-0.20.2.tar.gz ]; then
@@ -337,9 +339,10 @@ if [ ! hadoop fs -ls &> /dev/null ]; then
   ssh-keygen -t rsa -N "" -f $HOME/.ssh/id_rsa
   cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
   chmod 600 ~/.ssh/authorized_keys
-  ssh -o StrictHostKeyChecking=no localhost
+  # ssh -o StrictHostKeyChecking=no localhost
 
   #cd /usr/local
+  cd ~
   sudo tar -zxvf $HOME/hadoop-0.20.2.tar.gz
   sudo chown -R vagrant:vagrant hadoop-0.20.2
   sudo ln -s hadoop-0.20.2 hadoop
