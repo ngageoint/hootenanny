@@ -11,7 +11,6 @@
 19:03:45.405 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 633) Found 10 bad circular error values, no longer reporting bad accuracies.
 19:03:45.483 INFO  ...t/core/io/ServicesDbWriter.cpp( 177) Removing map with ID: 1
 19:03:45.496 INFO  ...t/core/io/ServicesDbWriter.cpp( 179) Finished removing map with ID: 1
-hoot_renderdb_Merged_PoiRoadBuilding_3d0950d4
 SET
 BEGIN
 CREATE FUNCTION
