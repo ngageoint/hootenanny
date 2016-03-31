@@ -24,11 +24,11 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SERVICESDBWRITER_H
-#define SERVICESDBWRITER_H
+#ifndef HOOTAPIDBWRITER_H
+#define HOOTAPIDBWRITER_H
 
 #include "PartialOsmMapWriter.h"
-#include "ServicesDb.h"
+#include "HootApiDb.h"
 
 // hoot
 #include <hoot/core/util/Configurable.h>
@@ -39,23 +39,23 @@
 namespace hoot
 {
 
-class ServicesDbWriter : public PartialOsmMapWriter, public Configurable
+class HootApiDbWriter : public PartialOsmMapWriter, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::ServicesDbWriter"; }
-  static QString emailKey() { return "services.db.writer.email"; }
-  static QString overwriteMapKey() { return "services.db.writer.overwrite.map"; }
+  static std::string className() { return "hoot::HootApiDbWriter"; }
+  static QString emailKey() { return "hootapi.db.writer.email"; }
+  static QString overwriteMapKey() { return "hootapi.db.writer.overwrite.map"; }
 
-  ServicesDbWriter();
+  HootApiDbWriter();
 
-  virtual ~ServicesDbWriter();
+  virtual ~HootApiDbWriter();
 
   void close();
 
   virtual void finalizePartial();
 
-  long getMapId() const { return _sdb.getMapId(); }
+  long getMapId() const { return _hootdb.getMapId(); }
 
   virtual bool isSupported(QString urlStr);
 
@@ -90,7 +90,7 @@ private:
   bool _createUserIfNotFound;
   bool _overwriteMap;
   QString _userEmail;
-  ServicesDb _sdb;
+  HootApiDb _hootdb;
   //int _numChangeSetChanges;
   //geos::geom::Envelope _env;
   bool _open;
@@ -137,4 +137,4 @@ private:
 
 }
 
-#endif // SERVICESDBWRITER_H
+#endif // HOOTAPIDBWRITER_H
