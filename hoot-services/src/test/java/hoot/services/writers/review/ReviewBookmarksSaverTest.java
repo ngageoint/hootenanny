@@ -27,18 +27,22 @@
 package hoot.services.writers.review;
 
 import java.sql.Connection;
-import java.sql.Timestamp;
-import java.util.Calendar;
-
-import hoot.services.UnitTest;
-import hoot.services.db2.ReviewBookmarks;
-import hoot.services.models.review.ReviewBookmarkSaveRequest;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.List;
+import java.util.Random;
 
 import org.json.simple.JSONObject;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import com.mysema.query.sql.dml.SQLInsertClause;
+
+import hoot.services.UnitTest;
+import hoot.services.db.DbUtils;
+import hoot.services.db2.ReviewBookmarks;
+import hoot.services.models.review.ReviewBookmarkSaveRequest;
+import hoot.services.readers.review.ReviewBookmarkRetriever;
 
 public class ReviewBookmarksSaverTest {
 
@@ -58,6 +62,21 @@ public class ReviewBookmarksSaverTest {
     org.junit.Assert.assertEquals(expected, actual);
   }
 
+  @Test
+  @Category(UnitTest.class)
+  public void testInsertDetailWithConn() throws Exception
+  {
+    Connection conn = DbUtils.createConnection();
+    JSONObject o = new JSONObject();
+    o.put("test1", "val1");
+    o.put("test2", "val2");
+    ReviewBookmarkSaveRequest req = new ReviewBookmarkSaveRequest(getMapId(conn), 1, o, -1);
+    ReviewBookmarksSaver tagsSaver = new ReviewBookmarksSaver(conn);
+
+    long saved = tagsSaver.save(req);
+
+    org.junit.Assert.assertEquals(1, saved);
+  }
 
   @Test
   @Category(UnitTest.class)
@@ -83,33 +102,57 @@ public class ReviewBookmarksSaverTest {
   @Category(UnitTest.class)
   public void testUpdateWithDetail() throws Exception
   {
-    Connection conn = null;
-    final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-    ReviewBookmarks dto = new ReviewBookmarks();
-    dto.setId((long)10);
-    dto.setMapId((long)1);
-    dto.setRelationId((long)2);
-    dto.setDetail("\"\"test1\"=>\"val1\", \"test2\"=>\"val2\"\"");
-    dto.setCreatedAt(now);
-    dto.setCreatedBy((long)-1);
+    Connection conn = DbUtils.createConnection();
+    long mapId = getMapId(conn);
+    long generatedLong = new Random().nextLong();
 
     JSONObject o = new JSONObject();
-    o.put("test3", "val3");
-    o.put("test4", "val4");
-    ReviewBookmarkSaveRequest req = new ReviewBookmarkSaveRequest(1, 2, o, -2);
+    o.put("utest1", "val1");
+    o.put("utest2", "val2");
+    ReviewBookmarkSaveRequest req = new ReviewBookmarkSaveRequest(mapId, generatedLong, o, -1);
     ReviewBookmarksSaver tagsSaver = new ReviewBookmarksSaver(conn);
+    tagsSaver.save(req);
 
-    /*SQLUpdateClause cl =*/ tagsSaver._getUpdateQuery(req, dto);
+    ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
+    List<ReviewBookmarks> bookmarks = retriever.retrieve(mapId, generatedLong);
 
-    String expected = "update \"review_bookmarks\"\n" +
-        "set \"last_modified_by\" = ?, \"id\" = ?, \"created_by\" = ?, \"created_at\" = ?, \"detail\" = '\"test4\"=>\"val4\",\"test3\"=>\"val3\"', \"last_modified_at\" = ?\n" +
-        "where \"review_bookmarks\".\"id\" = ?";
+    o = new JSONObject();
+    o.put("utest1", "new_val1");
+    o.put("utest3", "val3");
+    o.put("utest4", "val4");
+    req = new ReviewBookmarkSaveRequest(getMapId(conn), generatedLong, o, -1);
 
-    org.junit.Assert.assertTrue(expected.indexOf("\"last_modified_by\" = ?") > 0);
-    org.junit.Assert.assertTrue(expected.indexOf("\"id\" = ?") > 0);
-    org.junit.Assert.assertTrue(expected.indexOf("\"created_by\" = ?") > 0);
-    org.junit.Assert.assertTrue(expected.indexOf("\"created_at\" = ?") > 0);
-    org.junit.Assert.assertTrue(expected.indexOf("\"detail\" = '\"test4\"=>\"val4\",\"test3\"=>\"val3\"'") > 0);
-    org.junit.Assert.assertTrue(expected.indexOf("\"last_modified_at\" = ?") > 0);
+    org.junit.Assert.assertEquals(1, bookmarks.size());
+    org.junit.Assert.assertEquals(1, tagsSaver.update(req, bookmarks.get(0)));
+  }
+
+  protected long getMapId(Connection conn) throws Exception
+  {
+    long mapId = 0;
+    Statement stmt = null;
+    ResultSet rs = null;
+
+    String sql = "select min(id) as id from maps";
+    try
+    {
+      stmt = conn.createStatement();
+      rs = stmt.executeQuery(sql);
+      while (rs.next())
+      {
+        mapId = rs.getLong("id");
+      }
+    }
+    finally
+    {
+      if (rs != null)
+      {
+        rs.close();
+      }
+      if (stmt != null)
+      {
+        stmt.close();
+      }
+    }
+    return mapId;
   }
 }
