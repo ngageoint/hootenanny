@@ -2,8 +2,8 @@
 #  Clean Data Make file
 #
 
-HOOT_OPTS+= -D services.db.writer.overwrite.map=true -D services.db.writer.create.user=true
-HOOT_OPTS+= -D services.db.writer.email=test@test.com -D services.db.reader.email=test@test.com
+HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
+HOOT_OPTS+= -D hootapi.db.writer.email=test@test.com -D hootapi.db.reader.email=test@test.com
 #DB_URL=postgresql://hoot:hoottest@localhost:5432/hoot
 OP_INPUT=$(HOOT_HOME)/$(INPUT)
 OP_OUTPUT=$(HOOT_HOME)/$(OUTPUT)

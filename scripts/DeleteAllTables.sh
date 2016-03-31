@@ -13,5 +13,5 @@ SQL=$(psql -h localhost -t -A -d $DB_NAME -U $DB_USER -c "SELECT 'DROP SEQUENCE 
 echo $SQL | psql -h localhost -d $DB_NAME -U $DB_USER
 
 # Drop all render dbs
-SQL=$(psql -h localhost -t -A -d $DB_NAME -U $DB_USER -c "SELECT 'DROP DATABASE \"' || datname || '\";' FROM pg_database WHERE datname like '$DB_NAME_renderdb\_%';")
+SQL=$( psql -h localhost -t -A -d $DB_NAME -U $DB_USER -c "SELECT 'DROP DATABASE \"' || datname || '\";' FROM pg_database WHERE datname like '"$DB_NAME"_renderdb\_%';" )
 echo $SQL | psql -h localhost -d $DB_NAME -U $DB_USER
