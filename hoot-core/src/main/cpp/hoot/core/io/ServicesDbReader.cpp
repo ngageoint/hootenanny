@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -907,12 +907,13 @@ shared_ptr<Relation> ServicesDbReader::_resultToRelation(const QSqlQuery& result
     new Relation(
       _status,
       newRelationId,
+      ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR,
+      /*"collection"*/"",  //TODO: services db doesn't support relation "type" yet
       resultIterator.value(ServicesDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ServicesDb::RELATIONS_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
-        resultIterator.value(ServicesDb::RELATIONS_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ")),
-      ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR/*,
-      "collection"*/));  //TODO: services db doesn't support relation "type" yet
+        resultIterator.value(ServicesDb::RELATIONS_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ"))
+      ));
 
   relation->setTags(ServicesDb::unescapeTags(resultIterator.value(ServicesDb::RELATIONS_TAGS)));
   _addTagsToElement(relation);
