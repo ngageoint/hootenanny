@@ -20,7 +20,7 @@ hoot --convert $HOOT_OPTS test-files/$INPUT.osm $DB_URL/$INPUT
 # to test the streaming reader to ogr writer
 # with data that generated the error:
 # Relation element did not exist in cache
-scripts/exportrenderdb.sh || true # Don't error out so test will continue to clean up
+scripts/exportrenderdb.sh # || true # Don't error out so test will continue to clean up
 
 # Clean up
 dropdb $AUTH $RENDER_DB
