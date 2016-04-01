@@ -25,3 +25,9 @@ hoot --conflate $HOOT_OPTS "$DB_URL/AllDataTypesA" "$DB_URL/AllDataTypesB" test-
 # Do a very coarse comparison check.
 hoot --stats --quick test-output/cmd/ServiceDbTest/output.osm
 
+hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesA" &
+hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesB" &
+wait
+
+# export PGPASSWORD=$DB_PASSWORD
+# psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | cut -d \| -f 1 | grep -qw AllDataTypesA
