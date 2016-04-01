@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/MatchCreator.h>
@@ -36,15 +36,13 @@
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-// Qt
-#include <QFile>
-
 // Standard
 #include <fstream>
 #include <iostream>
 
 // Tgs
 #include <tgs/RandomForest/RandomForest.h>
+#include <tgs/Statistics/Random.h>
 #include <tgs/System/DisableCout.h>
 
 namespace hoot
@@ -57,18 +55,6 @@ public:
   static string className() { return "hoot::BuildModelCmd"; }
 
   BuildModelCmd() { }
-
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return "build-model (ref1 ref2) [ref1 ref2 ...] (output)\n"
-        "  Reads the inputs, generates a model and writes the result to a .arff and \n"
-        "  .rf files.\n"
-        "  * input1 - Input with REF1 tags (e.g. .osm file).\n"
-        "  * input2 - Input with REF2 tags (e.g. .osm file).\n"
-        "  * output - Output model base name.";
-  }
 
   virtual QString getName() const { return "build-model"; }
 
@@ -125,7 +111,7 @@ public:
     // ideally we'll circle back and update RF to use null values.
     shared_ptr<DataFrame> df = mfe.getSamples().toDataFrame(-1);
 
-    srand(0);
+    Tgs::Random::instance()->seed(0);
     RandomForest rf;
     auto_ptr<DisableCout> dc;
     if (Log::getInstance().getLevel() >= Log::Warn)
@@ -134,18 +120,18 @@ public:
       dc.reset(new DisableCout());
     }
     int numFactors = min(df->getNumFactors(), max<unsigned int>(3, df->getNumFactors() / 5));
-    rf.trainMulticlass(*df, 40, numFactors);
+    rf.trainMulticlass(df, 40, numFactors);
     dc.reset();
 
     double error;
     double sigma;
-    rf.findAverageError(*df, error, sigma);
+    rf.findAverageError(df, error, sigma);
     LOG_INFO("Error: " << error << " sigma: " << sigma);
 
-    ofstream rfFp;
-    rfFp.open((output + ".rf").toStdString().data());
-    rf.exportModel(rfFp);
-    rfFp.close();
+    ofstream fileStream;
+    fileStream.open((output + ".rf").toStdString().data());
+    rf.exportModel(fileStream);
+    fileStream.close();
 
     return 0;
   }

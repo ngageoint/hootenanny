@@ -206,5 +206,5 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CppSeqFileRecordWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CppSeqFileRecordWriterTest, "slow");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CppSeqFileRecordWriterTest, "current");

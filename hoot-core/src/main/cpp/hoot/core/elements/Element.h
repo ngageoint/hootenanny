@@ -106,6 +106,10 @@ public:
 
   unsigned int getTimestamp() const { return _getElementData().getTimestamp(); }
 
+  QString getUser() const { return _getElementData().getUser(); }
+
+  long getUid() const { return _getElementData().getUid(); }
+
   const Tags& getTags() const { return _getElementData().getTags(); }
 
   Tags& getTags() { return _getElementData().getTags(); }

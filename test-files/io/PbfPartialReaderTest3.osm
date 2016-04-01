@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="38.8542618000000033" lon="-104.8997171000000037"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="38.8539525000000054" lon="-104.8996840000000077"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="38.8536248000000057" lon="-104.8996934000000039"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="38.8532583000000002" lon="-104.8997542000000038"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="38.8532423999999992" lon="-104.8996868000000120"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="38.8533001000000056" lon="-104.8994528000000059"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="38.8533469999999994" lon="-104.8993671000000063"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="38.8535165999999990" lon="-104.8992698000000132"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="38.8535688999999991" lon="-104.8990568000000110"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="38.8535508000000007" lon="-104.8988321000000070"/>
+</osm>

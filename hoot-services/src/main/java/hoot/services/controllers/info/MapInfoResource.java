@@ -22,19 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.info;
 
-import java.sql.Connection;
-import java.util.List;
-
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-import hoot.services.db2.Maps;
-import hoot.services.db2.QMaps;
-import hoot.services.models.osm.Map;
-import hoot.services.models.osm.MapLayers;
 import hoot.services.utils.ResourceErrorHandler;
 
 import javax.ws.rs.GET;
@@ -49,8 +42,6 @@ import org.codehaus.jettison.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.mysema.query.sql.SQLQuery;
 
 @Path("/map")
 public class MapInfoResource {
@@ -89,24 +80,13 @@ public class MapInfoResource {
 	}
 	
 	/**
-  * <NAME>Map Physical Size Information Service</NAME>
-  * <DESCRIPTION>Service method endpoint for retrieving the physical size of a map record.</DESCRIPTION>
-  * <PARAMETERS></PARAMETERS>
-	* <OUTPUT>
-	* 	JSON containing size information
-	* </OUTPUT>
-	* <EXAMPLE>
-	* 	<URL>http://localhost:8080/hoot-services/info/map/size?mapid=4</URL>
-	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	* <INPUT>None</INPUT>
-  * <OUTPUT>
-	* {
-  * 	"mapid": "4","size_byte": 172032
-  * } 
-  * </OUTPUT>
-  * </EXAMPLE>
-  * 
-  */
+	 * Service method endpoint for retrieving the physical size of a map record.
+	 * 
+	 * GET hoot-services/info/map/size?mapid=1
+	 * 
+	 * @param mapIds ids of the maps for which to retrieve sizes
+	 * @return JSON containing size information
+	 */
 	@GET
   @Path("/size")
   @Produces(MediaType.TEXT_PLAIN)
@@ -145,24 +125,13 @@ public class MapInfoResource {
 	}
 	
 	/**
-  * <NAME>Individual Map Physical Size Information Service</NAME>
-  * <DESCRIPTION>Service method endpoint for retrieving the physical size of multiple map records.</DESCRIPTION>
-  * <PARAMETERS></PARAMETERS>
-	* <OUTPUT>
-	* 	JSON containing a list of size information for all current maps
-	* </OUTPUT>
-	* <EXAMPLE>
-	* 	<URL>http://localhost:8080/hoot-services/info/map/sizes?mapid=54,62</URL>
-	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	* <INPUT>None</INPUT>
-  * <OUTPUT>
-	{ "layers": [ {
-	 * "id": 54, "size": "14582", }, { "id": 62, "size": "56818", } ] }
-  * </OUTPUT>
-  * </EXAMPLE>
-	 * @throws Exception 
-  * 
-  */
+	 * Service method endpoint for retrieving the physical size of multiple map records.
+	 * 
+	 * GET hoot-services/info/map/sizes?mapid=54,62
+	 * 
+	 * @param mapIds ids of the maps for which to retrieve sizes
+	 * @return JSON containing a list of size information for all current maps
+	 */
 	@GET
   @Path("/sizes")
   @Produces(MediaType.TEXT_PLAIN)
@@ -182,12 +151,11 @@ public class MapInfoResource {
 				long nsize = 0;
 				try
 				{
-					for(String table : maptables)
+					for (String table : maptables)
 					{
 						nsize += DbUtils.getTableSizeInByte(table + "_" +  mapId);
 					}					
 				}
-				catch (Exception exx){}
 				finally
 				{
 					jo.put("id", Long.parseLong(mapId));
@@ -195,7 +163,6 @@ public class MapInfoResource {
 					retval.put(jo);
 				}
 			}
-			
 		}
 		catch (Exception ex)
 		{
@@ -212,26 +179,13 @@ public class MapInfoResource {
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
 	}
 	
-	
 	/**
-  * <NAME>Maximum Data Size Information Service</NAME>
-  * <DESCRIPTION>Maximum data size for export conflate and ingest. </DESCRIPTION>
-  * <PARAMETERS></PARAMETERS>
-	* <OUTPUT>
-	* 	JSON containing threshold information
-	* </OUTPUT>
-	* <EXAMPLE>
-	* 	<URL>http://localhost:8080/hoot-services/info/map/thresholds</URL>
-	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	* <INPUT>None</INPUT>
-  * <OUTPUT>
-	* {
-  * 	"export_threshold": 400000000, "conflate_threshold": 200000000, "ingest_threshold": 200000000
-  * } 
-  * </OUTPUT>
-  * </EXAMPLE>
-  * 
-  */	
+	 * Service endpoint for maximum data size for export conflate and ingest.
+	 * 
+	 * GET hoot-services/info/map/thresholds
+	 * 
+	 * @return JSON containing threshold information
+	 */
 	@GET
   @Path("/thresholds")
   @Produces(MediaType.TEXT_PLAIN)
@@ -242,7 +196,5 @@ public class MapInfoResource {
 		res.put("ingest_threshold", ingestThreshold);
 		res.put("export_threshold", exportThreshold);
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
-		
 	}
-
 }

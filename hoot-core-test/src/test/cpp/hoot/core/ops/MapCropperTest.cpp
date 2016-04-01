@@ -26,12 +26,15 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/ObjectInputStream.h>
 #include <hoot/core/io/ObjectOutputStream.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/ElementConverter.h>
 using namespace hoot;
 
 // Boost
@@ -46,6 +49,8 @@ using namespace boost;
 // geos
 #include <geos/io/WKTReader.h>
 #include <geos/geom/Point.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geom/Polygon.h>
 
 // Qt
 #include <QDebug>
@@ -65,19 +70,20 @@ class MapCropperTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runGeometryTest);
   CPPUNIT_TEST(runSerializationTest);
   CPPUNIT_TEST(runConfigurationTest);
+  CPPUNIT_TEST(runMultiPolygonTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   shared_ptr<OsmMap> genPoints(int seed)
   {
-    srand(seed);
+    Tgs::Random::instance()->seed(seed);
     shared_ptr<OsmMap> result(new OsmMap());
 
     for (int i = 0; i < 1000; i++)
     {
-      double x = Random::generateUniform() * 360 - 180;
-      double y = Random::generateUniform() * 180 - 90;
+      double x = Random::instance()->generateUniform() * 360 - 180;
+      double y = Random::instance()->generateUniform() * 180 - 90;
 
       shared_ptr<Node> n(new Node(Status::Invalid, result->createNextNodeId(), x, y, 10));
       result->addNode(n);
@@ -94,10 +100,10 @@ public:
       "POLYGON ((-50 0, 0 50, 50 0, 0 -50, 0 0, -50 0))"));
 
     int insideCount = 0;
-    const OsmMap::NodeMap& nm = map->getNodeMap();
-    for (OsmMap::NodeMap::const_iterator it = nm.constBegin(); it != nm.constEnd(); ++it)
+    const NodeMap& nm = map->getNodeMap();
+    for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
     {
-      Coordinate c = it.value()->toCoordinate();
+      Coordinate c = it->second->toCoordinate();
       auto_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
       if (g->intersects(p.get()))
       {
@@ -109,7 +115,7 @@ public:
       MapCropper uut(g, false);
       uut.apply(map);
 
-      CPPUNIT_ASSERT_EQUAL(insideCount, map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(insideCount, (int)map->getNodeMap().size());
     }
 
     {
@@ -117,7 +123,7 @@ public:
 
       MapCropper uut(g, true);
       uut.apply(map);
-      CPPUNIT_ASSERT_EQUAL(1000 - insideCount, map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map->getNodeMap().size());
     }
   }
 
@@ -241,6 +247,49 @@ public:
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid bounds passed to map cropper"));
     HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
+  }
+
+  void runMultiPolygonTest()
+  {
+    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapReaderFactory::read(map, "test-files/MultipolygonTest.osm",true);
+
+    Envelope env(0.30127,0.345,0.213,0.28154);
+
+    MapCropper::crop(map, env);
+
+    //compare relations
+    const RelationMap relations = map->getRelationMap();
+    HOOT_STR_EQUALS(1, relations.size());
+    QString relationStr = "relation(-1592); type: multipolygon; members:   Entry: role: outer, eid: Way:-1556;   Entry: role: inner, eid: Way:-1552; ; tags: landuse = farmland; status: invalid";
+    for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
+    {
+      const shared_ptr<Relation>& r = it->second;
+      HOOT_STR_EQUALS(relationStr, r->toString().replace("\n","; "));
+    }
+
+    //compare ways
+    int count = 0;
+    const WayMap ways = map->getWays();
+    HOOT_STR_EQUALS(2, ways.size());
+    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+    {
+      const shared_ptr<Way>& w = it->second;
+      shared_ptr<Polygon> pl = ElementConverter(map).convertToPolygon(w);
+      const Envelope& e = *(pl->getEnvelopeInternal());
+      double area = pl->getArea();
+      if (count == 0)
+      {
+        HOOT_STR_EQUALS("Env[0.303878:0.336159,0.220255:0.270199]", e.toString());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00150737, area, 0.00001);
+      }
+      else
+      {
+        HOOT_STR_EQUALS("Env[0.314996:0.328946,0.231514:0.263127]", e.toString());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.000401258, area, 0.00001);
+      }
+      count++;
+    }
   }
 
 };

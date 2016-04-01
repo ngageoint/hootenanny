@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DuplicateWayRemover.h"
@@ -36,6 +36,8 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/TagComparator.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 
 // Standard
 #include <iostream>
@@ -54,6 +56,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, DuplicateWayRemover)
 
 DuplicateWayRemover::DuplicateWayRemover()
 {
+  setStrictTagMatching(ConfigOptions().getDuplicateWayRemoverStrictTagMatching());
 }
 
 void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
@@ -127,13 +130,29 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
         // if this is a candidate for de-duping
         if (_isCandidateWay(w2))
         {
-          if (w->getNodeCount() > w2->getNodeCount())
+          LOG_DEBUG("candidate way tags:");
+          LOG_VARD(w->getTags());
+          LOG_VARD(w2->getTags());
+
+          bool nonNameTagsIdentical = false;
+          if (_strictTagMatching)
           {
-            _removeDuplicateNodes(w, _map->getWay(wit->first));
+            nonNameTagsIdentical =
+              TagComparator::getInstance().nonNameTagsExactlyMatch(w->getTags(), w2->getTags());
           }
-          else
+
+          if (nonNameTagsIdentical || !_strictTagMatching)
           {
-            _removeDuplicateNodes(_map->getWay(wit->first), w);
+            LOG_DEBUG("Ways have exact non-name tag match or strict tag matching is disabled.");
+
+            if (w->getNodeCount() > w2->getNodeCount())
+            {
+              _removeDuplicateNodes(w, w2);
+            }
+            else
+            {
+              _removeDuplicateNodes(w2, w);
+            }
           }
         }
       }
@@ -159,13 +178,20 @@ bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
   return result;
 }
 
+
 void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<Way> w2)
 {
   LongestCommonNodeString lcs(w1, w2);
 
+  //If the ways have any common geometry, then merge their tags.
+
   int length = lcs.apply();
   if (length > 1)
   {
+    const Tags mergedTags =
+      TagMergerFactory::getInstance().mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
+    //w1->setTags(mergedTags);
+    w2->setTags(mergedTags);
     _removeNodes(w1, lcs.getW1Index(), length);
   }
   else
@@ -185,6 +211,10 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
     int length = lcs.apply();
     if (length > 1)
     {
+      const Tags mergedTags =
+        TagMergerFactory::getInstance().mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
+      //w1->setTags(mergedTags);
+      w2->setTags(mergedTags);
       _removeNodes(w1, lcs.getW1Index(), length);
     }
     else
@@ -210,6 +240,8 @@ void DuplicateWayRemover::removeDuplicates(shared_ptr<OsmMap> map)
 
 void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int length)
 {
+  LOG_DEBUG("Ways have common node(s)");
+
   const std::vector<long>& nodes = w->getNodeIds();
 
   Meters ce = w->hasCircularError() ? w->getCircularError() : -1;
@@ -224,6 +256,7 @@ void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int l
       shared_ptr<Way> newWay(new Way(w->getStatus(), _map->createNextWayId(), ce));
       newWay->addNodes(newNodes);
       newWay->setTags(w->getTags());
+
       _map->replace(w, newWay);
     }
     // if the end as at the end of the way
@@ -233,6 +266,7 @@ void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int l
       shared_ptr<Way> newWay(new Way(w->getStatus(), _map->createNextWayId(), ce));
       newWay->addNodes(newNodes);
       newWay->setTags(w->getTags());
+
       _map->replace(w, newWay);
     }
     // If the section to remove is in the middle of the way
@@ -283,6 +317,5 @@ void DuplicateWayRemover::_replaceMultiple(const shared_ptr<const Way>& oldWay,
 
   _map->removeWay(oldWay);
 }
-
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BIGMAPSTXXL_H
 #define BIGMAPSTXXL_H
@@ -99,7 +99,7 @@ public:
       return 0;
     }
     typename MapType::const_iterator it = _map->find(k);
-    return it == _map->end() ? 0 : 1;
+    return it == _map->end() ? (size_t)0 : (size_t)1;
   }
 
   void insert(const K& k, const V& v) { _bloom->insert(k); _map->insert(std::pair<K, V>(k, v)); }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ISCOMPLETEVISITOR_H
 #define ISCOMPLETEVISITOR_H
@@ -31,7 +31,7 @@
 #include <geos/geom/MultiLineString.h>
 
 // hoot
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 // standard
@@ -52,7 +52,7 @@ using namespace std;
  * relevant during tile based operations because not all elements may be completely represented
  * within a tile.
  */
-class IsCompleteVisitor : public ElementVisitor, public OsmMapConsumer
+class IsCompleteVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
   static string className() { return "hoot::IsCompleteVisitor"; }

@@ -27,8 +27,8 @@
 
 /*
     MGCP conversion script for TRD3 and TRD4
-        MGCP -> OSM, and
-        OSM -> MGCP
+        MGCP [TRD3 | TRD4] -> OSM, and
+        OSM -> MGCP TRD4
 
     Based on TableExample.js script by Jason S.
 
@@ -74,22 +74,73 @@ mgcp = {
                 {
                     if (attrList.indexOf(val) == -1)
                     {
-                        logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
+                        hoot.logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
                         delete attrs[val];
+
+                        // Since we deleted the attribute, Skip the text check
+                        continue;
                     }
+
+                    // Now check the length of the text fields
+                    // We need more info from the customer about this: What to do if it is too long
+                    if (val in mgcp.rules.txtLength)
+                    {
+                        if (attrs[val].length > mgcp.rules.txtLength[val])
+                        {
+                            // First try splitting the attribute and grabbing the first value
+                            var tStr = attrs[val].split(';');
+                            if (tStr[0].length <= mgcp.rules.txtLength[val])
+                            {
+                                attrs[val] = tStr[0];
+                            }
+                            else
+                            {
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + mgcp.rules.txtLength[val] + ' characters.');
+                                // Still too long. Chop to the maximum length.
+                                attrs[val] = tStr[0].substring(0,mgcp.rules.txtLength[val]);
+                            }
+                        } // End text attr length > max length
+                    } // End in txtLength
                 }
             }
             else
             {
                 for (var val in attrs)
                 {
-                    if (attrList.indexOf(val) == -1) delete attrs[val];
+                    if (attrList.indexOf(val) == -1)
+                    {
+                        delete attrs[val];
+
+                        // Since we deleted the attribute, Skip the text check
+                        continue;
+                    }
+
+                    // Now check the length of the text fields
+                    // We need more info from the customer about this: What to do if it is too long
+                    if (val in mgcp.rules.txtLength)
+                    {
+                        if (attrs[val].length > mgcp.rules.txtLength[val])
+                        {
+                            // First try splitting the attribute and grabbing the first value
+                            var tStr = attrs[val].split(';');
+                            if (tStr[0].length <= mgcp.rules.txtLength[val])
+                            {
+                                attrs[val] = tStr[0];
+                            }
+                            else
+                            {
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + mgcp.rules.txtLength[val] + ' characters.');
+                                // Still too long. Chop to the maximum length.
+                                attrs[val] = tStr[0].substring(0,mgcp.rules.txtLength[val]);
+                            }
+                        } // End text attr length > max length
+                    } // End in txtLength
                 }
-            }
+            } // End getOgrDebugDumpvalidate
         }
         else
         {
-            logWarn('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+            hoot.logWarn('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
         }
 
         // No quick and easy way to do this unless we build yet another lookup table
@@ -125,7 +176,7 @@ mgcp = {
             // Check if it is a valid enumerated value
             if (enumValueList.indexOf(attrValue) == -1)
             {
-                if (config.getOgrDebugDumpvalidate() == 'true') logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
+                if (config.getOgrDebugDumpvalidate() == 'true') hoot.logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
 
                 var othVal = '(' + enumName + ':' + attrValue + ')';
 
@@ -135,14 +186,14 @@ mgcp = {
                     // No: Set the offending enumerated value to the default value
                     attrs[enumName] = feature.columns[i].defValue;
 
-                    logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
                 }
                 else
                 {
                     // Yes: Set the offending enumerated value to the "other" value
                     attrs[enumName] = '999';
 
-                    logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
+                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
                 }
             }
         } // End Validate Enumerations
@@ -166,7 +217,7 @@ mgcp = {
             {
                 if (tags.railway)
                 {
-                    newAttrs.F_CODE = 'AT010';
+                    newAttrs.F_CODE = 'AN010';
                 }
                 else
                 {
@@ -190,13 +241,13 @@ mgcp = {
         if (newAttrs.F_CODE)
         {
             // pre processing
-            mgcp.applyToMgcpPreProcessing(tags,newAttrs, geometryType);
+            mgcp.applyToMgcpPreProcessing(tags, newAttrs, geometryType);
 
             // one 2 one
             translate.applyOne2One(tags, newAttrs, mgcp.lookup, mgcp.fcodeLookup, mgcp.ignoreList);
 
             // apply the simple number and text biased rules
-            translate.applySimpleNumBiased(newAttrs, tags, mgcp.rules.numBiased, 'backward');
+            translate.applySimpleNumBiased(newAttrs, tags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
             translate.applySimpleTxtBiased(newAttrs, tags,  mgcp.rules.txtBiased,'backward');
 
             // post processing
@@ -213,7 +264,7 @@ mgcp = {
 
 
     // ##### Start of the xxToOsmxx Block #####
-    applyToOsmPreProcessing: function(attrs, layerName)
+    applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // The swap list. These are the same attr, just named differently
         // These may get converted back on output.
@@ -383,7 +434,7 @@ mgcp = {
     }, // End of applyToOsmPreProcessing
 
     // Post Processing: Lots of cleanup
-    applyToOsmPostProcessing : function (attrs, tags, layerName)
+    applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
         // Calculate accuracy: taken straight from facc.py
         // 1/30 inch * SCALE for standard
@@ -545,6 +596,39 @@ mgcp = {
 
         // if (tags.building == 'train_station' && !(tags.railway)) tags.railway = 'station';
 
+        // AL020 (Built-up Area) should become a Place.
+        // NOTE: This is a bit vague...
+        if (fCode == 'AL020')
+        {
+            tags.place = 'yes'; // Catch All
+
+            if (tags['place:importance'])
+                switch (tags['place:importance'])
+                {
+                    case 'first':
+                        tags.place = 'city';
+                        tags.capital = 'yes'
+                        break;
+
+                    case 'second':
+                        tags.place = 'city';
+                        break;
+
+                    case 'third':
+                    case 'fourth':
+                        tags.place = 'town';
+                        break;
+
+                    case 'fifth':
+                        tags.place = 'village';
+                        break;
+
+                    case 'sixth':
+                        tags.place = 'hamlet';
+                        break;
+                } // End switch
+        } // End AL020
+
     }, // End of applyToOsmPostProcessing
 
     // ##### Start of the xxToMgcpxx Block #####
@@ -686,11 +770,11 @@ mgcp = {
                 case 'neighbourhood':
                 case 'quarter':
                 case 'village':
+                case 'hamlet':
                     attrs.F_CODE = 'AL020'; // Built Up Area
                     delete tags.place;
                     break;
 
-                case 'hamlet':
                 case 'isolated_dwelling':
                     attrs.F_CODE = 'AL105'; // Settlement
                     delete tags.place;
@@ -824,7 +908,7 @@ mgcp = {
         // MCC and RST both have mappings to surface=XXX.
         if (fCode == 'AQ040' && attrs.RST)
         {
-            // logWarn('Found RST = ' + attrsi.RST + ' in AQ040'); // Should not get this
+            // hoot.logWarn('Found RST = ' + attrsi.RST + ' in AQ040'); // Should not get this
             var convSurf = { 1:5, 2:46, 5:104, 6:104, 8:104, 999:999 };
 
             attrs.MCC = convSurf[attrs.RST];
@@ -871,7 +955,7 @@ mgcp = {
         if (fCode == 'EA010' && attrs.CSP == '15')
         {
             attrs.F_CODE = 'EA040';
-            // logWarn('TRD3 feature EA010 changed to TRD4 EA040 - some data has been dropped');
+            // hoot.logVerbose('TRD3 feature EA010 changed to TRD4 EA040 - some data has been dropped');
         }
 
         if (mgcp.mgcpPostRules == undefined)
@@ -909,21 +993,27 @@ mgcp = {
 
         if (attrs.SRT in srtFix) attrs.SRT = srtFix[attrs.SRT];
 
+        // Chop the milliseconds off the "source:datetime"
+        if (attrs.SDV)
+        {
+            attrs.SDV = translate.chopDateTime(attrs.SDV);
+        }
+
+
     }, // End of applyToMgcpPostProcessing
 
     // ##### End of the xxToMgcpxx Block #####
 
     // toOsm - Translate Attrs to Tags
-    toOsm : function(attrs, layerName)
+    toOsm : function(attrs, layerName, geometryType)
     {
         tags = {};  // This is the output
         // fCode = '';
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true')
+        if (config.getOgrDebugDumptags() == 'true')
         {
-            print('');
-            print('#####');
+            print('In Layername: ' + layerName);
             for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
         }
 
@@ -960,7 +1050,7 @@ mgcp = {
         }
 
         // pre processing
-        mgcp.applyToOsmPreProcessing(attrs, layerName);
+        mgcp.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
         // Use the FCODE to add some tags.
         if (attrs.F_CODE)
@@ -975,17 +1065,22 @@ mgcp = {
         translate.applyOne2One(attrs, tags, mgcp.lookup, {'k':'v'}, mgcp.ignoreList);
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, mgcp.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(attrs, tags, mgcp.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(attrs, tags,  mgcp.rules.txtBiased,'forward');
 
         // post processing
-        mgcp.applyToOsmPostProcessing(attrs, tags, layerName);
+        mgcp.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug: Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+            print('');
+        }
 
         return tags;
     }, // End of ToOsm
@@ -1017,8 +1112,7 @@ mgcp = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            print ('');
-            print ('#####');
+            print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
             for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
         }
 
@@ -1041,6 +1135,9 @@ mgcp = {
 
             mgcp.lookup = translate.createBackwardsLookup(mgcp.rules.one2one);
 
+            // Debug
+            // translate.dumpOne2OneLookup(mgcp.lookup);
+
             // Build a list of things to ignore and flip is backwards
             mgcp.ignoreList = translate.flipList(translate.joinList(mgcp.rules.numBiased, mgcp.rules.txtBiased));
 
@@ -1061,7 +1158,7 @@ mgcp = {
         translate.applyOne2One(tags, attrs, mgcp.lookup, mgcp.fcodeLookup, mgcp.ignoreList);
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, mgcp.rules.numBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, tags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
         translate.applySimpleTxtBiased(attrs, tags,  mgcp.rules.txtBiased,'backward');
 
         // post processing
@@ -1078,12 +1175,12 @@ mgcp = {
         if (!(layerNameLookup[tableName]))
         {
             // tableName = layerNameLookup[tableName];
-            logError('FCODE and Geometry: ' + tableName + ' is not in the schema');
+            hoot.logVerbose('FCODE and Geometry: ' + tableName + ' is not in the schema');
 
             tableName = 'o2s_' + geometryType.toString().charAt(0);
 
             // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
 
             for (var i in tags)
             {
@@ -1108,7 +1205,7 @@ mgcp = {
                 // Not good. Will fix with the rewrite of the tag splitting code
                 if (str.length > 1012)
                 {
-                    logError('o2s tags truncated to fit in available space.');
+                    hoot.logVerbose('o2s tags truncated to fit in available space.');
                     str = str.substring(0,1012);
                 }
 
@@ -1140,22 +1237,34 @@ mgcp = {
         } // End else
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true' || config.getOgrDebugDumptags() == 'true')
+        if (config.getOgrDebugDumptags() == 'true')
         {
             print('TableName: ' + tableName + '  FCode: ' + attrs.F_CODE + '  Geom: ' + geometryType);
-            if (tableName2 !== '') print('TableName2: ' + tableName2 + '  FCode: ' + attrs2.F_CODE + '  Geom: ' + geometryType);
-        }
 
-        // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true')
-        {
+            if (tableName2 !== '') print('TableName2: ' + tableName2 + '  FCode: ' + attrs2.F_CODE + '  Geom: ' + geometryType);
+
             for (var i in attrs) print('Out Attrs:' + i + ': :' + attrs[i] + ':');
+
             if (attrs2.F_CODE) for (var i in attrs2) print('2Out Attrs:' + i + ': :' + attrs2[i] + ':');
             print('');
         }
 
-        // Send back the feature
+        // Swap F_CODE for FCODE. Too many lookup tables etc to change it earlier
+        if (attrs.F_CODE)
+        {
+            attrs.FCODE = attrs.F_CODE;
+            delete attrs.F_CODE;
+        }
+
         if (attrs2.F_CODE)
+        {
+            attrs2.FCODE = attrs2.F_CODE;
+            delete attrs2.F_CODE;
+        }
+
+
+        // Send back the feature
+        if (attrs2.FCODE)
         {
             return([{attrs: attrs, tableName: tableName},{attrs: attrs2, tableName: tableName2}]);
         }

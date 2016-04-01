@@ -45,17 +45,6 @@ public:
 
   AttributeCountCmd() { }
 
-  virtual QString getHelp() const
-  {
-    return getName() + " (input1[;layer]) [input2[;layer]] ...\n"
-        "  * inputs - One or more OGR compatible inputs. If you're using a layer within a\n"
-        "    data source then delimit it with a semicolon. E.g:\n"
-        "       myshapefile.shp \"myfgb.gdb;mylayer\"\n\n"
-        "  Prints out a JSON structure with the layer name, attribute name and up to \n"
-        "  30 attribute values";
-    ;
-  }
-
   virtual QString getName() const { return "attribute-count"; }
 
   virtual int runSimple(QStringList args)

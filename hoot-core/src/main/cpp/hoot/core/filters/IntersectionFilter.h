@@ -43,7 +43,11 @@ public:
 
   virtual bool isSatisfied(const shared_ptr<const Element>& e) const;
 
+  virtual ElementCriterion* clone() { return new IntersectionFilter(_nids); }
+
 protected:
+  IntersectionFilter(std::set<long> ids) : _nids(ids) { }
+
 //  virtual bool isFiltered(const Element& e) const;
 
   std::set<long> _nids;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MapCleaner.h"
@@ -46,10 +46,6 @@ MapCleaner::MapCleaner()
 
 void MapCleaner::apply(shared_ptr<OsmMap>& map)
 {
-  /// @todo move this to a config file.
-  // pragmatically remove "bad" data in OSM afghanistan
-  map->removeWays(TagFilter(Filter::FilterMatches, "source", "AIMS"));
-
   // Apply any user specified operations.
   NamedOp(ConfigOptions().getMapCleanerTransforms()).apply(map);
 }

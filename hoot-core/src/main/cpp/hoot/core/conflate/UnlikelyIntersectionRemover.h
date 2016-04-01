@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef UNLIKELYINTERSECTIONREMOVER_H
@@ -58,20 +58,15 @@ public:
 
   UnlikelyIntersectionRemover();
 
-  UnlikelyIntersectionRemover(shared_ptr<const OsmMap> map);
-
   void apply(shared_ptr<OsmMap>& map);
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
    */
-  static shared_ptr<OsmMap> removeIntersections(shared_ptr<const OsmMap> map);
-
-  shared_ptr<OsmMap> removeIntersections();
+  static void removeIntersections(shared_ptr<OsmMap> map);
 
 protected:
 
-  shared_ptr<const OsmMap> _inputMap;
   shared_ptr<OsmMap> _result;
 
   void _evaluateAndSplit(long intersectingNode, const set<long>& wayIds);

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TileConflator.h"
 
 // Hoot
 #include <hoot/core/Conflator.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/conflate/NodeReplacements.h>
@@ -41,10 +41,6 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/NotImplementedException.h>
-
-// Qt
-#include <QDir>
-#include <QUuid>
 
 // Standard
 #include <set>

@@ -22,11 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wfs;
 
 import hoot.services.HootProperties;
+import hoot.services.db.DataDefinitionManager;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 
@@ -82,8 +83,21 @@ public class WfsManager {
 		{
 	      log.error("WFS error: " + e.getMessage());
 		}
-		
 	}
+	
+	
+		public void createWfsResource(String wfsJobName) throws Exception
+		{
+			
+			DataDefinitionManager ddlMan = new DataDefinitionManager();
+	
+			List<String>tblsList = ddlMan.getTablesList(wfsStoreDb, wfsJobName);		
+			_createWFSDatasourceFeature(wfsJobName, wfsStoreConnName, tblsList);
+			_createService(wfsJobName);
+			
+	
+		}
+		
 	
 	public void removeWfsResource(String wfsJobName) throws Exception
 	{
@@ -118,7 +132,7 @@ public class WfsManager {
     }
 
     TransformerFactory transformerFactory = TransformerFactory.newInstance();
-    //TODO: Fortify may require this instead but it doesn't work.
+    //Fortify may require this, but it doesn't work.
     //TransformerFactory transformerFactory = XmlDocumentBuilder.getSecureTransformerFactory();
 		Transformer transformer = transformerFactory.newTransformer();
 		//transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
@@ -185,28 +199,20 @@ public class WfsManager {
 		InputStream stream = new ByteArrayInputStream(content.getBytes("UTF-8"));
 		ResourceState<?> resStatus = fsMan.createResource(name, stream);
 		
-		if(resStatus.getType() == StateType.deactivated)
+		if (resStatus.getType() == StateType.deactivated)
 		{
 			ResourceState<FeatureStore> fsActivationState = fsMan.activate(name);
-			if(fsActivationState.getType() == StateType.init_ok)
+			if (fsActivationState.getType() == StateType.init_ok)
 			{
 				return fsActivationState.getResource();
 			}
-			else
-			{
-				log.error("Failed to activate featurestore");
-				throw new Exception("Failed to activate featurestore");
-			}
-		}
-		else
-		{
-			log.error("Failed to create featurestore");
-			throw new Exception("Failed to create featurestore");
+			log.error("Failed to activate featurestore");
+			throw new Exception("Failed to activate featurestore");
 		}
 		
+		log.error("Failed to create featurestore");
+		throw new Exception("Failed to create featurestore");
 	}
-	
-
 	
 	protected void _addToWfsStore(FeatureStore fstore) throws Exception
 	{

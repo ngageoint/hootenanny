@@ -1,3 +1,29 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ */
 #ifndef __SCHEMA_VERTEX_H__
 #define __SCHEMA_VERTEX_H__
 
@@ -24,6 +50,7 @@ enum TagValueType
   Text,
   Enumeration,
   Int,
+  Real,
   Unknown
 };
 
@@ -47,6 +74,7 @@ class SchemaVertex
 public:
   typedef enum VertexType
   {
+    UnknownVertexType,
     Tag,
     Compound
   } VertexType;
@@ -81,9 +109,21 @@ public:
    */
   static bool isMatch(const CompoundRule& rule, const Tags& t);
 
-  bool isValid() const { return !isEmpty(); }
+  bool isValid() const { return _type != UnknownVertexType; }
+
+  /**
+   * Sets the name and does not parse out the key/value. The key and value will not be changed.
+   */
+  void setName(QString n);
+
+  /**
+   * Sets the name and parses out and stores the key/value.
+   */
+  void setNameKvp(QString n);
 
   void setType(VertexType t);
+
+  void setValueTypeString(QString t);
 
   QString toString() const;
 

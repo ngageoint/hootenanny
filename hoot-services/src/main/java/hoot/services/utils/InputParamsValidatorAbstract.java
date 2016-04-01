@@ -22,9 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
+
+import java.util.Locale;
 
 
 /**
@@ -57,8 +59,8 @@ public abstract class InputParamsValidatorAbstract
     }
     else if (type instanceof Boolean)
     { 
-      if (!paramValueStr.toLowerCase().equals("false") && 
-          !paramValueStr.toLowerCase().equals("true"))
+      if (!paramValueStr.toLowerCase(Locale.ENGLISH).equals("false") && 
+          !paramValueStr.toLowerCase(Locale.ENGLISH).equals("true"))
       {
         throw new Exception(
           "Invalid input parameter: " + name + " sent to: " + ReflectUtils.getCallingClassName());

@@ -34,7 +34,6 @@
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/MaximalSubline.h>
-#include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/algorithms/WayAverager.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/schema/TagMergerFactory.h>
@@ -135,74 +134,6 @@ void WaySnapMergeManipulation::applyManipulation(shared_ptr<OsmMap> map,
     }
   }
 }
-
-//double WaySnapMergeManipulation::_calculateExpertProbability(shared_ptr<const OsmMap> map) const
-//{
-//  vector<long> wids;
-//  wids.push_back(_left);
-//  wids.push_back(_right);
-//  shared_ptr<OsmMap> theMap = map->copyWays(wids);
-
-//  shared_ptr<Way> w1 = theMap->getWay(_left);
-//  shared_ptr<Way> w2 = theMap->getWay(_right);
-
-//  MaximalSubline ms(
-//    new MaximalSubline::ThresholdMatchCriteria(w1->getCircularError() + w2->getCircularError(), M_PI / 4.0));
-//  vector<WayLocation> wl1, wl2;
-//  vector<WayLocation> rwl1, rwl2;
-
-//  // do we get a better match by reversing the way?
-//  double score = ms.findMaximalSubline(w1, w2, wl1, wl2);
-//  w2->reverseOrder();
-//  double scoreRev = ms.findMaximalSubline(w1, w2, rwl1, rwl2);
-
-//  if (scoreRev <= score)
-//  {
-//    w2->reverseOrder();
-//  }
-//  else
-//  {
-//    wl1 = rwl1;
-//    wl2 = rwl2;
-//  }
-
-//  if (score == 0.0)
-//  {
-//    return 0.0;
-//  }
-
-//  vector<WayPtr> splits1 = WaySplitter(w1).createSplits(wl1);
-//  vector<WayPtr> splits2 = WaySplitter(w2).createSplits(wl2);
-
-//  WayPtr ms1 = splits1[1];
-//  WayPtr ms2 = splits2[1];
-
-//  if (ms1 == 0 || ms2 == 0 || ms1->getNodeCount() == 0 || ms2->getNodeCount() == 0)
-//  {
-//    return 0.0;
-//  }
-
-//  // what portion of the original lines is the MNS
-//  double pl = ElementConverter(map).convertToLineString(ms1)->getLength() / ElementConverter(map).convertToLineString(w1)->getLength();
-//  double pr = ElementConverter(map).convertToLineString(ms2)->getLength() / ElementConverter(map).convertToLineString(w2)->getLength();
-
-//  // give it a score
-//  double ps = std::min(pl, pr) / 2.0 + 0.5;
-
-//  double p;
-
-//  // if either of the lines are zero in length.
-//  if (pl == 0 || pr == 0)
-//  {
-//    p = 0.0;
-//  }
-//  else
-//  {
-//    p = ps * ProbabilityOfMatch::getInstance().expertProbability(ms1, ms2);
-//  }
-
-//  return p;
-//}
 
 const set<long>& WaySnapMergeManipulation::getImpactedWayIds(shared_ptr<const OsmMap> /*map*/) const
 {

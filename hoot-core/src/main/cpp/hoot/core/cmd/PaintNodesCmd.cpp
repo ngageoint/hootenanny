@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -53,18 +53,6 @@ class PaintNodesCmd : public BaseCommand
 
     PaintNodesCmd() { }
 
-    virtual QString getHelp() const
-    {
-      return getName() + " (input) (output-image) [base-colors] [count-colors]\n"
-        "  Create a density plot of the specified input.\n"
-        "  * input - Input path.\n"
-        "  * output-image - Output image name.\n"
-        "  * max-dimension - maximum size of the image on one side. The actual size will be\n"
-        "    determined based on the envelope.\n"
-        "  * base-colors - Base colors to use. These will be added to each channel.\n"
-        "  * multipliers - Multiply the log count ratio by these values. 4 comma delimi.";
-    }
-
     virtual QString getName() const { return "paint-nodes"; }
 
     Envelope getEnvelope(shared_ptr<OsmMapReader> reader)
@@ -81,7 +69,7 @@ class PaintNodesCmd : public BaseCommand
         long nodeCount = 0;
         Envelope result;
         reader->setUseDataSourceIds(true);
-        r->initializePartial();
+        //r->initializePartial();
         while (r->hasMoreElements())
         {
           ElementPtr e = r->readNextElement();
@@ -117,7 +105,7 @@ class PaintNodesCmd : public BaseCommand
     {
       shared_ptr<PartialOsmMapReader> r = dynamic_pointer_cast<PartialOsmMapReader>(reader);
       r->setUseDataSourceIds(true);
-      r->initializePartial();
+      //r->initializePartial();
 
       int width = ceil(envelope.getWidth() / pixelSize);
       int height = ceil(envelope.getHeight() / pixelSize);
@@ -129,7 +117,7 @@ class PaintNodesCmd : public BaseCommand
       {
         ElementPtr e = r->readNextElement();
 
-        if (e.get() && e->getElementType() == ElementType::Node)
+        if (e->getElementType() == ElementType::Node)
         {
           shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
           int px = int((n->getX() - envelope.getMinX()) / pixelSize);

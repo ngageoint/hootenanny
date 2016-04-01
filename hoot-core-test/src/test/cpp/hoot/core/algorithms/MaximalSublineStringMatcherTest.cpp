@@ -29,7 +29,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -81,7 +81,7 @@ public:
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
-    MapReprojector::reprojectToOrthographic(map, env);
+    MapProjector::projectToOrthographic(map, env);
 
     return map;
   }
@@ -111,7 +111,7 @@ public:
     env.MaxX = 1;
     env.MinY = 0;
     env.MaxY = 1;
-    MapReprojector::reprojectToPlanar(map, env);
+    MapProjector::projectToPlanar(map, env);
 
     // Many of these scenarios are taken directly from "Hootenanny - Multilinestring *.pptx"
 
@@ -411,7 +411,7 @@ public:
 
       // @todo This test fails with the default subline matcher. The MaximalSublineMatcher
       // performs better, but has other flaws.
-      // #2701 should resolve this.
+      // r2701 should resolve this.
 //      HOOT_STR_EQUALS("score: 80\n"
 //        "matches:\n"
 //        "subline 1: start: way: -3 index: 0 fraction: 0 end: way: -3 index: 0 fraction: 0.4\n"

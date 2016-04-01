@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REPORTMISSINGELEMENTSVISITOR_H
 #define REPORTMISSINGELEMENTSVISITOR_H
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
@@ -40,7 +40,7 @@ using namespace std;
  * all missing references are removed. Note: This may not give desired results if your data
  * shouldn't contain missing references.
  */
-class ReportMissingElementsVisitor : public ElementVisitor, public OsmMapConsumer
+class ReportMissingElementsVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

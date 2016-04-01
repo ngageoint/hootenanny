@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTOUTPUTSTREAM_H
 #define ELEMENTOUTPUTSTREAM_H
@@ -54,6 +54,7 @@ public:
    * @brief writeElement
    */
   virtual void writeElement(ElementInputStream& inputStream) = 0;
+  virtual void writeElement(ElementPtr& element) = 0;
 
   /**
    * Read elements from the input stream and write to the output stream. There may be a better place

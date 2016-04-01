@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -58,35 +58,21 @@ public class UserDetailsResource
   }
 
 	/**
-	 * <NAME>User Details Service </NAME>
-	 * <DESCRIPTION>
-	 * 	The Hootenanny user services implements the methods of the OSM User service v0.6 and OSM User Details service v0.6.
-	 * Hootenanny has no authentication mechanism implemented yet. This service exists for now only to avoid modifications to
-	 * the iD editor. In the future the Hootenanny OSM services will likely support OAuth 2.0 and this service will have purpose.
-	 * The service methods first attempt to parse the request user identification data as a numerical user ID, and then, if unsuccessful,
-	 *  attempts to parse it as a user name string.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	XML representation of the user
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/user/test</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * 	XML representation of the user
-	 * </OUTPUT>
-	 * </EXAMPLE>
-	 *
    * Service method endpoint for retrieving OSM user detail information for the authenticated user
    * associated with the request
+   * 
+   * The Hootenanny user services implements the methods of the OSM User service v0.6 and OSM User 
+   * Details service v0.6.  Hootenanny has no authentication mechanism implemented yet. This 
+   * service exists for now only to avoid modifications to the iD editor. In the future the 
+   * Hootenanny OSM services will likely support OAuth 2.0 and this service will have purpose.  The 
+   * service methods first attempt to parse the request user identification data as a numerical 
+   * user ID, and then, if unsuccessful, attempts to parse it as a user name string.
+   * 
+   * GET hoot-services/osm/user/test
    *
-   * @return Response with user detail information
+   * @return XML response with user detail information
    * @throws Exception
-   * @todo update to get actual logged in user once security is implemented
+   * //TODO: update to get actual logged in user once security is implemented
    */
   @GET
   @Consumes(MediaType.TEXT_PLAIN)
@@ -95,9 +81,10 @@ public class UserDetailsResource
   {
     log.debug("Retrieving logged in user details...");
 
-    //TODO: finish - For now, we're just grabbing the first user in the db, since we don't have
-    //any authentication in place to get the correct user.  Worst case, for now, you see incorrect
-    //user information from iD editor...not a big deal since authentication doesn't exist anyway.
+    //For now, we're just grabbing the first user in the db, since we don't have any authentication 
+    //in place to get the correct user.  Worst case, for now, you see incorrect user information 
+    //from iD editor...not a big deal since authentication doesn't exist anyway.  When hoot gets
+    //user authentication, then this obviously has to be updated.
     Connection conn = DbUtils.createConnection();
     long userId = -1;
     try

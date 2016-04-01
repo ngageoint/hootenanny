@@ -1,28 +1,72 @@
 # Introduction
 
-Hootenanny was developed to provide an open source, standards-based approach to geospatial vector data conflation. Hootenanny is designed to facilitate automated and semi-automated conflation of critical foundation GEOINT features in the topographic domain, namely roads (polylines), buildings (polygons), and points-of-interest (POI's) (points). Conflation happens at the dataset level, where the user's workflow determines the best reference dataset and source content, geometry and attributes, to transfer to the output map.
+Hootenanny is an open source conflation tool developed to facilitate automated and semi-automated conflation 
+of critical Foundation GEOINT features in the topographic domain, namely roads (polylines), buildings (polygons), 
+and points-of-interest (POI’s) (points). Conflation occurs at the dataset level, where the user’s workflow 
+determines the best reference dataset and source content, geometry and attributes, to transfer to the output map. 
+Hootenanny internal processing leverages the key value pair structure of OpenStreetMap (OSM) for improved utility 
+and applicability to broader user groups, e.g. normalized attributes can be used to aid in feature matching and OSM’s 
+free tagging system allows the map to include an unlimited number of attributes describing each feature.  Hootenanny 
+is developed under the open source General Public License (GPL) and maintained on the National Geospatial-Intelligence 
+Agency’s (NGA) GitHub [site](https://github.com/ngageoint/hootenanny).
 
-If you have any support questions please contact Hootenanny.Help@DigitalGlobe.com.
+Hootenanny is built upon the open source [Mapbox iD Editor](https://github.com/openstreetmap/iD) which provides an intuitive 
+and user-friendly conflation experience without the extra overhead of thick desktop GIS clients. This offers several key 
+benefits which include its open license allowing users to easily customize and add functionality, a robust editing capability 
+originally targeted for interactive editing of OSM features, and a web service based architecture for integrating into SOA environments.  
+A REST API is in place to connect the web browser based User Interface (UI) with the core conflation algorithms and database. 
+The translation and conflation operations are also exposed through node.js service endpoints, Open Geospatial Consortium (OGC) 
+Web Processing Service (WPS) and the resulting vector data is accessible via a Web Feature Service (WFS) for additional open 
+interoperability. The application is primarily supported in either the Chrome or Chromium browser with limited supported in Firefox.  
 
-# Installing Hootenanny 
+If you have any support questions please create an Issue in this repo or contact us via email: Hootenanny.Help@DigitalGlobe.com.
 
-Hootenanny has been tested on both CentOS/RHEL 6.x and Ubuntu 14.04.  Ubuntu receives more 
-active development, has more streamlined installation instructions, and is the recommended operating
-system to run Hootenanny on. 
+# Specifications
 
-To quickly run Hootenanny on Ubuntu, refer to the Vagrant (VM container) set up instructions in
-VAGRANT.md.  For additional notes on configuring a Hootenanny development environment on Ubuntu, 
-see the Hootenanny - Developers Guide document.
+We actively maintain and update our [Frequently Asked Questions page](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions) 
+so please refer to that page for any questions about general Hootenanny capabilities.
 
-To run Hootenanny on CentOS/RHEL, follow the Hootenanny - Installation Instructions document.  
-There is currently no Vagrant set up available for CentOS/RHEL, but there may be one in the future.  
-Following the CentOS/RHEL installation instructions is currently more complicated than installing 
-Hootenanny on Ubuntu and requires a higher level of Linux expertise.  Setting up a Hootenanny 
-development environment on CentOS/RHEL is neither advised nor supported.
+## Conflation
+Hootenanny currently supports the conflation of POIs, Building polygons, Transportation polylines (highways, cart tracks, trails, bridges, 
+and tunnels), and Waterway polylines (hydrologic features such as rivers, streams, drainage, and ditches).   When conflating these features, 
+it is important to note that conflation occurs between similar feature types (e.g. POI to POI, Building to Building, Transportation 
+polyline to Transportation polyline, etc.).
 
-Running Hootenanny with Hadoop is optional.  Hootenanny has been tested on Hadoop 0.20.2.  Neither 
-the Ubuntu nor CentOS/RHEL installation documents currently include instructions for installing 
-Hadoop, but the Developer's Guide has instructions for setting up a pseudo-distributed test cluster.
+## Supported Data Formats
+_Import:_ Hootenanny can ingest shapefiles, openstreetmap (.osm), ESRI File Geodatabase (.gdb), and geonames.org (.geonames).  Additionally, 
+.zip files containing shapefiles and/or .gdb files can be uploaded.
+
+_Export:_ There are currently four options for exporting data from Hootenanny: File Geodatabase (FGDB), Shapefile, OSM and Web 
+Feature Service (WFS). Note that .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the relevant 
+associated files, while WFS is exported as WFS Get Capabilities service URL that can be added into an OGC-enabled third party application
+
+## Tag Schemas
+Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database structure to support translation between various 
+data schemas.  By default, Hootenanny supports automated schema conversion between Topographic Data Store (TDS) v6.1/v4.0, 
+Multi-National Geospatial Co-Production Program (MGCP), Geonames, OSM, as well as user defined "custom" translations where a 
+specific mapping can be defined based on an uploaded dataset using a semi-automated Translation Assistant.  More detailed 
+background on the translation capabilities of Hootenanny can be found in Hootenanny User Guide as well as specific examples 
+from the UI in the Hootenanny User Interface Guide. These documents can accessed in your local Hootenanny instance in hoot/docs 
+or on the [releases](https://github.com/ngageoint/hootenanny/releases) under each version e.g. hootenanny-0.2.22.tar.gz/docs. 
+
+# Installation
+Instructions to launch a Hootenanny virtual machine using [Vagrant](https://www.vagrantup.com/) may
+be found [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
+
+Additional instructions for setting up a Hootenanny development environment may be found in the Hootenanny
+Developer's Guide.
+
+# Getting Started
+Once installed and configured, Hootenanny can be accessed from a browser by opening the application URL.  http://localhost:port/hootenanny-id
+
+![](https://cloud.githubusercontent.com/assets/7560096/11984226/6ed7b6ae-a96e-11e5-9470-dc1f987f0b7a.png)
+
+* Note that the specific port designation can be configured from either the Vagrantfile (if using Vagrant installation approach) or from the Tomcat/conf/server.xml file.  
+
+## Hootenanny User Interface Guide
+The Hootenanny User Interface Guide contains all of the background required to walk through each functional 
+component of the software.  Sample datasets can be acquired from the provided URLs in the guide or within the 
+%HOOT_HOME/test-files directory.
 
 # Redistribution
 
@@ -42,13 +86,15 @@ This program is free software; you can redistribute it and/or modify it under th
 
 In alphabetical order:
 
+* Trey Caldwell (Trey.Caldwell@digitalglobe.com)
 * Jong Choi (Jong.Choi@digitalglobe.com)
 * Jason Goffeney (jason.goffeney@digitalglobe.com)
 * Brian Hatchl (Brian.Hatchl@digitalglobe.com)
 * Matt Jackson (Matthew.Jackson@digitalglobe.com)
+* Ben Marchant (Benjamin.Marchant@digitalglobe.com)
 * Terry Ott (Terry.Ott@digitalglobe.com)
-* Jason R. Surratt (Jason.Surratt@digitalglobe.com)
-* Josh Sisskind (Josh.Sisskind@digitalglobe.com)
 * Greg Schmidt (Greg.Schmidt@digitalglobe.com)
+* Josh Sisskind (Josh.Sisskind@digitalglobe.com)
+* Ming Su (Ming.Su@digitalglobe.com)
+* Jason R. Surratt (Jason.Surratt@digitalglobe.com)
 * Brandon Witham (Brandon.Witham@digitalglobe.com)
-

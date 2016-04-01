@@ -1,0 +1,12 @@
+[
+    {
+        "dataType": "text",
+        "geometries": [
+            "node",
+            "way",
+            "relation"
+        ],
+        "name": "destination",
+        "objectType": "tag"
+    }
+]

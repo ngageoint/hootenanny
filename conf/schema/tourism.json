@@ -1,34 +1,56 @@
-{
-    "tag": {
-        "name": "tourism",
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "influence": 1,
         "isA": "hgispoi",
-        "influence": 1.0,
-        "type": "enumeration",
-        "geometries": ["node","area"]
+        "name": "tourism",
+        "objectType": "tag"
     },
-
-    "tag": {
+    {
+        "#": "Give this a low level similarity to all historic, leisure & amenity tags. The very low similarity score should prevent it from being used inappropriately.",
+        "isA": "tourism",
         "name": "tourism=*",
-        "isA": "tourism",
-        "#" : "Give this a low level similarity to all historic, leisure & amenity tags. The very low similarity score should prevent it from being used inappropriately.",
-        "similarTo": { "name": "leisure", "weight": 0.1 },
-        "similarTo": { "name": "historic", "weight": 0.1 },
-        "similarTo": { "name": "amenity", "weight": 0.1 }
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "leisure",
+                "weight": 0.1
+            },
+            {
+                "name": "historic",
+                "weight": 0.1
+            },
+            {
+                "name": "amenity",
+                "weight": 0.1
+            }
+        ]
     },
-    "tag": {
+    {
+        "isA": "tourism",
         "name": "tourism=artwork",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "historic=monument",
+            "weight": 0.6
+        }
+    },
+    {
         "isA": "tourism",
-        "similarTo": { "name": "historic=monument", "weight": 0.6 }
-    },
-    "tag": {
-        "name": "tourism=hotel",
-        "isA": "tourism"
-    },
-    "tag": {
         "name": "tourism=guest_house",
-        "isA": "tourism",
-        "similarTo": { "name": "tourism=hotel", "weight": 0.8 }
+        "objectType": "tag",
+        "similarTo": {
+            "name": "tourism=hotel",
+            "weight": 0.8
+        }
     },
-
-    "#" : "end"
-}
+    {
+        "isA": "tourism",
+        "name": "tourism=hotel",
+        "objectType": "tag"
+    }
+]

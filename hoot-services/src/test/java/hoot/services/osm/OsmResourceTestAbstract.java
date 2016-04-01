@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.osm;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.List;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -42,10 +41,8 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-import hoot.services.db2.QMaps;
 import hoot.services.review.ReviewTestUtils;
 
-import com.mysema.query.sql.SQLQuery;
 import com.sun.jersey.api.client.AsyncWebResource;
 import com.sun.jersey.test.framework.JerseyTest;
 
@@ -90,6 +87,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
       conn = DbUtils.createConnection();
       OsmTestUtils.conn = conn;
       ReviewTestUtils.conn = conn;
+      userId = DbUtils.insertUser(conn);
     }
     catch (Exception e)
     {
@@ -104,27 +102,13 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   {
     try
     {
-    	if (Boolean.parseBoolean(
-    			  HootProperties.getInstance().getProperty(
-              "servicesTestClearEntireDb", HootProperties.getDefault("servicesTestClearEntireDb"))))
-    	{
-    		DbUtils.clearServicesDb(conn);
-    	}
-    	
-    	//TODO: This is going to result in a lot of users created by the services test, now that
-    	//we don't clear out the database automatically between tests.  Only inserting one user is
-    	//causing UserResourceTest failures for a not so obvious reason.
-    	//if (userId == -1)
-    	//{
-    		userId = DbUtils.insertUser(conn);
-    	//}
     	mapId = DbUtils.insertMap(userId, conn);
 
       OsmTestUtils.userId = userId;
-      ReviewTestUtils.userId = userId;
+
 
       OsmTestUtils.mapId = mapId;
-      ReviewTestUtils.mapId = mapId;
+
     }
     catch (Exception e)
     {
@@ -144,16 +128,6 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
             "servicesTestClearEntireDb", HootProperties.getDefault("servicesTestClearEntireDb"))))
     	{
     		DbUtils.deleteOSMRecord(conn, mapId);
-        
-        QMaps maps = QMaps.maps;
-        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-        final List<Long> mapIds = 
-        	query.from(maps).where(maps.id.eq(ReviewTestUtils.secondMapId)).list(maps.id);
-        assert(mapIds.size() == 0 || mapIds.size() == 1);
-        if (mapIds.size() == 1)
-        {
-        	DbUtils.deleteOSMRecord(conn, ReviewTestUtils.secondMapId);
-        }
     	}
     }
     catch (Exception e)
@@ -168,8 +142,9 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   {
     try
     {
+      //DbUtils.deleteUser(conn, userId);
     	OsmTestUtils.conn = null;
-      ReviewTestUtils.conn = null;
+    	ReviewTestUtils.conn = null;
     }
     catch (Exception e)
     {

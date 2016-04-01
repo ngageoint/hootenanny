@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
@@ -211,7 +211,7 @@ void PertyOp::apply(shared_ptr<OsmMap>& map)
   // Apply any user specified operations.
   NamedOp namedOps(_namedOps);
   namedOps.setConfiguration(_settings);
-  MapReprojector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
   namedOps.apply(map);
 }
 
@@ -238,7 +238,7 @@ Mat PertyOp::_calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& col
 
 shared_ptr<OsmMap> PertyOp::generateDebugMap(shared_ptr<OsmMap>& map)
 {
-  MapReprojector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
   shared_ptr<OsmMap> result(new OsmMap(map->getProjection()));
 
   LOG_INFO(toString());
@@ -285,7 +285,7 @@ shared_ptr<OsmMap> PertyOp::generateDebugMap(shared_ptr<OsmMap>& map)
 
 void PertyOp::permute(const shared_ptr<OsmMap> &map)
 {
-  MapReprojector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   geos::geom::Envelope env = map->calculateEnvelope();
 

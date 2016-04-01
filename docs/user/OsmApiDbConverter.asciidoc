@@ -52,7 +52,7 @@ hoot convert -D services.db.writer.email=OsmApiInsert@hoot.local -D services.db.
 
 === Validating Writes to the OpenStreetMap Editing API Database
 
-After writing to the OpenSteetMap Editing API Database, the data can be validated by performing the following steps:
+After writing to the OpenStreetMap Editing API Database, the data can be validated by performing the following steps:
 
 ------
 % Dump DB
@@ -106,7 +106,7 @@ sys 0m0.004s
 
 === Validating Reads from the OpenStreetMap Editing API Database
 
-After reading from the OpenSteetMap Editing API Database, the data can be validated by performing the following steps:
+After reading from the OpenStreetMap Editing API Database, the data can be validated by performing the following steps:
 
 ------
 % Dump DB

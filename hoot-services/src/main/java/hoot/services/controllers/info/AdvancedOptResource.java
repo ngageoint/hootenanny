@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.info;
 
@@ -30,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Map;
@@ -52,8 +53,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Path("/advancedopts")
-public class AdvancedOptResource {
-	
+public class AdvancedOptResource
+{
 	private static final Logger log = LoggerFactory.getLogger(AdvancedOptResource.class);
 	private String _asciidocPath = null;
 	private String _templatePath = null;
@@ -69,93 +70,95 @@ public class AdvancedOptResource {
 	protected JSONObject _refOverride = null;
 	protected JSONObject _horzOverride = null;
 	protected JSONObject _aveOverride = null;
-	
-	public AdvancedOptResource() {
+
+	public AdvancedOptResource()
+	{
 		try
 		{
-			_homeFolder = HootProperties.getProperty("homeFolder");		
+			_homeFolder = HootProperties.getProperty("homeFolder");
 			_asciidocPath = HootProperties.getProperty("configAsciidocPath");
-			
+
 			File f = new File(_homeFolder + "/" + _asciidocPath);
-			if(!f.exists())
+			if (!f.exists())
 			{
 				throw new Exception("Missing required file: " + f.getAbsolutePath());
 			}
-			
-			_templatePath = HootProperties.getProperty("advOptTemplate");			
-			_refOverridePath = HootProperties.getProperty("advOptRefOverride");			
-			_horzOverridePath = HootProperties.getProperty("advOptHorizontalOverride");			
+
+			_templatePath = HootProperties.getProperty("advOptTemplate");
+			_refOverridePath = HootProperties.getProperty("advOptRefOverride");
+			_horzOverridePath = HootProperties
+					.getProperty("advOptHorizontalOverride");
 			_aveOverridePath = HootProperties.getProperty("advOptAverageOverride");
 		}
 		catch (Exception ex)
 		{
 			log.error(ex.getMessage());
 		}
-		
 	}
-	
-	
+
 	@GET
-  @Path("/getoptions")
-  @Produces(MediaType.TEXT_PLAIN)
-  public Response getOptions(@QueryParam("conftype") final String confType, @QueryParam("force") final String isForce)
+	@Path("/getoptions")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response getOptions(@QueryParam("conftype") final String confType,
+		@QueryParam("force") final String isForce) throws IOException
 	{
-		FileReader fr  = null;
+		FileReader fr = null;
 		JSONArray template = null;
 		try
 		{
-			
-			// Force option should only be used to update options list by administrator
+
+			// Force option should only be used to update options list by
+			// administrator
 			boolean doForce = false;
-			if(isForce != null)
+			if (isForce != null)
 			{
 				doForce = isForce.equalsIgnoreCase("true");
 			}
-			
+
 			_getOverrides(isForce);
-			if(_doc == null || doForce)
+			if (_doc == null || doForce)
 			{
 				_doc = new JSONObject();
 				_parseAsciidoc();
 			}
-			
-			if(_doc != null)
+
+			if (_doc != null)
 			{
 				JSONParser par = new JSONParser();
-				if(confType.equalsIgnoreCase("reference"))
+				if (confType.equalsIgnoreCase("reference"))
 				{
-					
-					if(_refTemplate == null || doForce)
-					{					
+
+					if (_refTemplate == null || doForce)
+					{
 						_refTemplate = new JSONArray();
 						_refTemplate.add(_refOverride);
 					}
 					template = _refTemplate;
-					
+
 				}
-				else if(confType.equalsIgnoreCase("horizontal"))
+				else if (confType.equalsIgnoreCase("horizontal"))
 				{
-					if(_hrzTemplate == null || doForce)
+					if (_hrzTemplate == null || doForce)
 					{
 						_hrzTemplate = new JSONArray();
 						_hrzTemplate.add(_horzOverride);
 					}
 					template = _hrzTemplate;
-					
+
 				}
-				else if(confType.equalsIgnoreCase("average"))
+				else if (confType.equalsIgnoreCase("average"))
 				{
-					if(_aveTemplate == null || doForce)
+					if (_aveTemplate == null || doForce)
 					{
 						_aveTemplate = new JSONArray();
 						_aveTemplate.add(_aveOverride);
 					}
 					template = _aveTemplate;
-					
+
 				}
 				else
 				{
-					if(_doc == null || _template == null || doForce)
+					if (_doc == null || _template == null || doForce)
 					{
 						fr = new FileReader(_homeFolder + "/" + _templatePath);
 						_template = (JSONArray) par.parse(fr);
@@ -168,61 +171,53 @@ public class AdvancedOptResource {
 			{
 				throw new Exception("Failed to populate asciidoc information.");
 			}
-				
-		
+
 		}
 		catch (Exception ex)
 		{
 			ResourceErrorHandler.handleError(
 					"Error getting advanced options: " + ex.toString(),
-				    Status.INTERNAL_SERVER_ERROR,
-					log);
+					Status.INTERNAL_SERVER_ERROR, log);
 		}
 		finally
 		{
-			if(fr != null)
+			if (fr != null)
 			{
-				try
-				{
-					fr.close();
-				}
-				catch (Exception ee)
-				{
-					
-				}
+				fr.close();
 			}
 		}
 
-		return Response.ok(template.toJSONString(), MediaType.APPLICATION_JSON).build();
+		assert(template != null);
+		return Response.ok(template.toJSONString(), MediaType.APPLICATION_JSON)
+				.build();
 	}
-	
-	
-  public void _getOverrides(final String isForce) throws Exception
+
+	public void _getOverrides(final String isForce) throws Exception
 	{
-		FileReader frRef  = null;
-		FileReader frHrz  = null;
+		FileReader frRef = null;
+		FileReader frHrz = null;
 		FileReader frAve = null;
 		try
 		{
-			// Force option should only be used to update options list by administrator
+			// Force option should only be used to update options list by
+			// administrator
 			boolean doForce = false;
-			if(isForce != null)
+			if (isForce != null)
 			{
 				doForce = isForce.equalsIgnoreCase("true");
 			}
-			if(_horzOverride == null || _refOverride == null || doForce)
+			if (_horzOverride == null || _refOverride == null || doForce)
 			{
 				JSONParser par = new JSONParser();
-				frRef = new FileReader(_homeFolder + "/" + _refOverridePath);
+				frRef = new FileReader(_homeFolder + File.separator + _refOverridePath);
 				_refOverride = (JSONObject) par.parse(frRef);
-				
-				frHrz = new FileReader(_homeFolder + "/" + _horzOverridePath);
+
+				frHrz = new FileReader(_homeFolder + File.separator + _horzOverridePath);
 				_horzOverride = (JSONObject) par.parse(frHrz);
-				
-				frAve = new FileReader(_homeFolder + "/" + _aveOverridePath);
-				_aveOverride  = (JSONObject) par.parse(frAve);
+
+				frAve = new FileReader(_homeFolder + File.separator + _aveOverridePath);
+				_aveOverride = (JSONObject) par.parse(frAve);
 			}
-			
 		}
 		catch (Exception ex)
 		{
@@ -230,173 +225,94 @@ public class AdvancedOptResource {
 		}
 		finally
 		{
-			if(frRef != null)
+			if (frRef != null)
 			{
-				try
-				{
-					frRef.close();
-				}
-				catch (Exception ee)
-				{
-					throw ee;
-				}
+				frRef.close();
 			}
-			
-			if(frHrz != null)
-			{
-				try
-				{
-					frHrz.close();
-				}
-				catch (Exception ee)
-				{
-					throw ee;
-				}
-			}
-			
-			if(frAve != null)
-			{
-				try
-				{
-					frAve.close();
-				}
-				catch (Exception ee)
-				{
-					throw ee;
-				}
-			}
-			
-		}
 
+			if (frHrz != null)
+			{
+				frHrz.close();
+			}
+
+			if (frAve != null)
+			{
+			  frAve.close();
+			}
+		}
 	}
-/*
-	protected void _cleanDefault(Object o) throws Exception
+
+	protected String _getDepKeyVal(String sDefVal)
 	{
-		
-		if(o instanceof JSONObject)
-		{
-			JSONObject elem = (JSONObject)o;
-			
-			boolean defValExist = false;
-			boolean isDefExist = false;
-			Iterator it = elem.entrySet().iterator();
-			while (it.hasNext()) {
-				Map.Entry pair = (Map.Entry)it.next();
-				Object curO = pair.getValue();
-				if(curO instanceof JSONObject || curO instanceof JSONArray)
-				{
-					_cleanDefault(curO);
-				}
-				
-				if(pair.getKey().toString().equals("defaultvalue"))
-				{
-					if(pair.getValue() != null && pair.getValue().toString().equals("true"))
-					{
-						defValExist = true;
-					}
-				}
-				
-				if(pair.getKey().toString().equals("isDefault"))
-				{
-					if(pair.getValue() != null && pair.getValue().toString().equals("true"))
-					{
-						isDefExist = true;
-					}
-					
-				}
-		  }
-			
-			if(defValExist)
-			{
-				elem.put("defaultvalue", "false");
-			}
-			
-			if(isDefExist)
-			{
-				elem.put("isDefault", "false");
-			}
-		}
-		else if(o instanceof JSONArray)
-		{
-			JSONArray arr = (JSONArray)o;
-			for(int i=0; i<arr.size(); i++)
-			{
-				_cleanDefault(arr.get(i));
-			}
-		}
-	}
-	*/
-
-  protected String _getDepKeyVal(String sDefVal)
-  {
-  	try
+		try
 		{
 			int iStart = sDefVal.indexOf('{') + 1;
 			int iEnd = sDefVal.indexOf('}');
 			String depKey = sDefVal.substring(iStart, iEnd).trim();
-			if(depKey != null && depKey.length() > 0)
+			if (depKey != null && depKey.length() > 0)
 			{
 				// now find the dep value
-				JSONObject oDep = (JSONObject)_doc.get(depKey);
+				JSONObject oDep = (JSONObject) _doc.get(depKey);
 				String depDefVal = oDep.get("Default Value").toString();
 				return depDefVal;
 			}
 		}
-		catch(Exception e1)
+		catch (Exception e1)
 		{
-			
+      log.debug(e1.getMessage());
 		}
-  	return "";
-  }
+		return "";
+	}
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-  protected void _generateRule(JSONArray a, JSONObject p) throws Exception
+	protected void _generateRule(JSONArray a, JSONObject p) throws Exception
 	{
-		
 		// for each options in template apply the value
-		
-		for(int i=0; i< a.size(); i++)
+
+		for (int i = 0; i < a.size(); i++)
 		{
 			Object o = a.get(i);
-			if(o instanceof JSONObject)
+			if (o instanceof JSONObject)
 			{
-				JSONObject curOpt = (JSONObject)o;
+				JSONObject curOpt = (JSONObject) o;
 				// first check to see if there is key then apply the asciidoc val
 				Object oKey = curOpt.get("hoot_key");
-				if(oKey != null)
+				if (oKey != null)
 				{
 					String sKey = oKey.toString();
 					Object oDocKey = _doc.get(sKey);
-					if(oDocKey != null)
+					if (oDocKey != null)
 					{
-						JSONObject jDocKey = (JSONObject)oDocKey;
-						
+						JSONObject jDocKey = (JSONObject) oDocKey;
+
 						Object oAttrib = jDocKey.get("Data Type");
-						if(oAttrib != null)
+						if (oAttrib != null)
 						{
 							String sDataType = oAttrib.toString().trim();
-							// We can not determine list vs multilist from asciidoc so we will skip for the data type
-							if(!sDataType.equals("list") && sDataType.length() > 0)
+							// We can not determine list vs multilist from asciidoc so we will
+							// skip for the data type
+							if (!sDataType.equals("list") && sDataType.length() > 0)
 							{
 								curOpt.put("elem_type", sDataType);
-								if(sDataType.equalsIgnoreCase("bool"))
+								if (sDataType.equalsIgnoreCase("bool"))
 								{
 									// bool type is checkbox
 									curOpt.put("elem_type", "checkbox");
 								}
 							}
 						}
-						
+
 						oAttrib = jDocKey.get("Default Value");
-						if(oAttrib != null)
+						if (oAttrib != null)
 						{
 							String sDefVal = oAttrib.toString().trim();
-							if(sDefVal.length() > 0)
+							if (sDefVal.length() > 0)
 							{
 								// It is poting to other val
-								if(sDefVal.startsWith("$"))
-								{								
-									 String depDefVal = _getDepKeyVal(sDefVal);
-									 curOpt.put("defaultvalue", depDefVal);
+								if (sDefVal.startsWith("$"))
+								{
+									String depDefVal = _getDepKeyVal(sDefVal);
+									curOpt.put("defaultvalue", depDefVal);
 								}
 								else
 								{
@@ -404,165 +320,169 @@ public class AdvancedOptResource {
 								}
 							}
 						}
-						
+
 						oAttrib = jDocKey.get("Description");
-						if(oAttrib != null)
+						if (oAttrib != null)
 						{
 							String sDesc = oAttrib.toString().trim();
-							if(sDesc.length() > 0)
+							if (sDesc.length() > 0)
 							{
 								curOpt.put("description", sDesc);
 							}
 						}
-						
+
 						// handle override
 						oAttrib = curOpt.get("override");
-						if(oAttrib != null)
+						if (oAttrib != null)
 						{
-							JSONObject override = (JSONObject)oAttrib;
+							JSONObject override = (JSONObject) oAttrib;
 
 							Iterator it = override.entrySet().iterator();
 							@SuppressWarnings("unused")
-              boolean hasNext = true;
-							while (it.hasNext()) {
-								Map.Entry pair = (Map.Entry)it.next();
+							boolean hasNext = true;
+							while (it.hasNext())
+							{
+								Map.Entry pair = (Map.Entry) it.next();
 								curOpt.put(pair.getKey(), pair.getValue());
-						  }
+							}
 							// remove override element
 							curOpt.remove("override");
 						}
-						
+
 					}
 				}
 				else
 				{
-					// Second check for hoot_val and if there is one then apply descripton from asciidoc
+					// Second check for hoot_val and if there is one then apply descripton
+					// from asciidoc
 					// This can be checked from parent object
 					Object oVal = curOpt.get("hoot_val");
-					if(oVal != null)
+					if (oVal != null)
 					{
 						String sVal = oVal.toString();
-						if(p != null)
+						if (p != null)
 						{
 							// parent always have to have hoot_key for hoot_val
 							Object pKey = p.get("hoot_key");
-							if(pKey != null)
+							if (pKey != null)
 							{
 								// try to get default list from parent
 								String sPKey = pKey.toString();
 								Object oDocPKey = _doc.get(sPKey);
-								if(oDocPKey != null)
+								if (oDocPKey != null)
 								{
-									JSONObject jDocPKey = (JSONObject)oDocPKey;
+									JSONObject jDocPKey = (JSONObject) oDocPKey;
 									Object oDocDefList = jDocPKey.get("Default List");
-				
-									if(oDocDefList != null)
+
+									if (oDocDefList != null)
 									{
-										JSONObject defList = (JSONObject)oDocDefList;
+										JSONObject defList = (JSONObject) oDocDefList;
 										Iterator it = defList.entrySet().iterator();
 										boolean hasNext = true;
-										while (hasNext) {
-									      Map.Entry pair = (Map.Entry)it.next();
-									      hasNext = it.hasNext();
-									      if(pair.getKey().toString().equalsIgnoreCase(sVal))
-									      {
-									      	String sDefListDesc = pair.getValue().toString().trim();
-									      	if(sDefListDesc.length() > 0)
-									      	{
-									      		curOpt.put("description", sDefListDesc);
-									      		curOpt.put("defaultvalue", "true");
-									      		
-									      	}
-									      	hasNext = false;
-									      }
-									      
-									  }
+										while (hasNext)
+										{
+											Map.Entry pair = (Map.Entry) it.next();
+											hasNext = it.hasNext();
+											if (pair.getKey().toString().equalsIgnoreCase(sVal))
+											{
+												String sDefListDesc = pair.getValue().toString().trim();
+												if (sDefListDesc.length() > 0)
+												{
+													curOpt.put("description", sDefListDesc);
+													curOpt.put("defaultvalue", "true");
+
+												}
+												hasNext = false;
+											}
+										}
 									}
-									
+
 									// If the parent is boolean then try to get default value
 									Object oDocDataType = jDocPKey.get("Data Type");
-									if(oDocDataType != null && oDocDataType.toString().equalsIgnoreCase("bool"))
+									if (oDocDataType != null
+											&& oDocDataType.toString().equalsIgnoreCase("bool"))
 									{
 										Object oDocDefVal = jDocPKey.get("Default Value");
-										if(oDocDefVal != null)
+										if (oDocDefVal != null)
 										{
-											if(oDocDefVal.toString().equalsIgnoreCase("true"))
+											if (oDocDefVal.toString().equalsIgnoreCase("true"))
 											{
-												if(sVal.equalsIgnoreCase("true"))
+												if (sVal.equalsIgnoreCase("true"))
 												{
 													curOpt.put("isDefault", "true");
 												}
-											
-												if(sVal.equalsIgnoreCase("false"))
+
+												if (sVal.equalsIgnoreCase("false"))
 												{
 													curOpt.put("isDefault", "false");
 												}
 											}
-											
-											if(oDocDefVal.toString().equalsIgnoreCase("false"))
+
+											if (oDocDefVal.toString().equalsIgnoreCase("false"))
 											{
-												if(sVal.equalsIgnoreCase("true"))
+												if (sVal.equalsIgnoreCase("true"))
 												{
 													curOpt.put("isDefault", "false");
 												}
-											
-												if(sVal.equalsIgnoreCase("false"))
+
+												if (sVal.equalsIgnoreCase("false"))
 												{
 													curOpt.put("isDefault", "true");
 												}
-											}											
+											}
 										}
-									
+
 									}
-									
 								}
 							}
 						}
-					// handle override
+						// handle override
 						Object oAttrib = curOpt.get("override");
-						if(oAttrib != null)
+						if (oAttrib != null)
 						{
-							JSONObject override = (JSONObject)oAttrib;
+							JSONObject override = (JSONObject) oAttrib;
 
 							Iterator it = override.entrySet().iterator();
-							while (it.hasNext()) {
-								Map.Entry pair = (Map.Entry)it.next();
+							while (it.hasNext())
+							{
+								Map.Entry pair = (Map.Entry) it.next();
 								curOpt.put(pair.getKey(), pair.getValue());
-						  }
+							}
 							// remove override element
 							curOpt.remove("override");
 						}
 					}
-										
+
 				}
-				
-			// now check for members and if one exist then recurse
-				
+
+				// now check for members and if one exist then recurse
+
 				Object oValMembers = curOpt.get("members");
-				if(oValMembers != null && (oValMembers instanceof JSONArray))
+				if (oValMembers != null && (oValMembers instanceof JSONArray))
 				{
 					_generateRule((JSONArray) oValMembers, curOpt);
 				}
-			
+
 			}
-			else if(o instanceof JSONArray)
+			/*else if (o instanceof JSONArray)
 			{
-				
-			}
+			}*/
 		}
-		
+
 		// do recursion to visit each object and try to update value
 	}
-	// If line starts with  "* " then attribute field
-	//		"Data Type:"
-	//		"Default Value:"
-	
+
+	// If line starts with "* " then attribute field
+	// "Data Type:"
+	// "Default Value:"
+
 	// If line starts with "** " then list item field
-	protected String _parseLine(final String line, final String curOptName) throws Exception
+	protected String _parseLine(final String line, final String curOptName)
+			throws Exception
 	{
 		String optName = curOptName;
 		// If line starts with "=== " then it is option field
-		if(line.startsWith("=== "))
+		if (line.startsWith("=== "))
 		{
 			optName = line.substring(3).trim();
 			JSONObject field = new JSONObject();
@@ -571,21 +491,21 @@ public class AdvancedOptResource {
 		else
 		{
 			Object curObject = _doc.get(optName);
-			if(curObject != null)
+			if (curObject != null)
 			{
-				JSONObject curOpt = (JSONObject)curObject;
-				
-				if(line.startsWith("* "))
+				JSONObject curOpt = (JSONObject) curObject;
+
+				if (line.startsWith("* "))
 				{
 					String field = line.substring(1).trim();
 					String[] parts = field.split(":");
-					if(parts.length > 1)
+					if (parts.length > 1)
 					{
 						String k = parts[0];
 						String v = "";
-						for(int i=1; i<parts.length; i++)
+						for (int i = 1; i < parts.length; i++)
 						{
-							if(v.length() > 0)
+							if (v.length() > 0)
 							{
 								v += ":";
 							}
@@ -593,34 +513,34 @@ public class AdvancedOptResource {
 						}
 						curOpt.put(k.trim(), v.trim());
 					}
-				} 
-				else if(line.startsWith("** ")) // must be list item
+				}
+				else if (line.startsWith("** ")) // must be list item
 				{
 					// Try to get default list object for current option
 					String listKey = "Default List";
 					Object o = curOpt.get(listKey);
 					JSONObject defList = new JSONObject();
-					if(o != null)
+					if (o != null)
 					{
-						defList = (JSONObject)o;
+						defList = (JSONObject) o;
 					}
 					else
 					{
 						curOpt.put(listKey, defList); // create new if not exist
 					}
-					
+
 					String curLine = line.substring(2).trim();
 					// try getting item description
 					String[] parts = curLine.split("` - ");
-					if(parts.length > 0)
+					if (parts.length > 0)
 					{
 						String k = parts[0].replaceAll("`", "").trim();
 						String v = "";
-						if(parts.length > 1) // there is description
-						{						
-							for(int i=1; i<parts.length; i++)
+						if (parts.length > 1) // there is description
+						{
+							for (int i = 1; i < parts.length; i++)
 							{
-								if(v.length() > 0)
+								if (v.length() > 0)
 								{
 									v += "` - ";
 								}
@@ -628,16 +548,17 @@ public class AdvancedOptResource {
 							}
 						}
 						defList.put(k.trim(), v.trim());
-					}				
+					}
 				}
-				else // must be description
+				else
+					// must be description
 				{
 					String curLine = line.trim();
-					if(curLine.length() > 0)
+					if (curLine.length() > 0)
 					{
 						String k = "Description";
 						Object o = curOpt.get(k);
-						if(o == null)
+						if (o == null)
 						{
 							curOpt.put(k, curLine);
 						}
@@ -646,7 +567,6 @@ public class AdvancedOptResource {
 							String v = curOpt.get(k).toString() + " " + curLine;
 							curOpt.put(k, v.trim());
 						}
-						
 					}
 				}
 			}
@@ -654,7 +574,7 @@ public class AdvancedOptResource {
 
 		return optName;
 	}
-	
+
 	protected void _parseAsciidoc() throws Exception
 	{
 		FileInputStream fstream = null;
@@ -663,43 +583,42 @@ public class AdvancedOptResource {
 
 		try
 		{
-		// Open the file
+			// Open the file
 			fstream = new FileInputStream(_homeFolder + "/" + _asciidocPath);
 			istream = new InputStreamReader(fstream);
 			br = new BufferedReader(istream);
-	
+
 			String strLine;
-	
+
 			String curOptName = null;
-			//Read File Line By Line
-			while ((strLine = br.readLine()) != null)   {
-			  // Print the content on the console
+			// Read File Line By Line
+			while ((strLine = br.readLine()) != null)
+			{
+				// Print the content on the console
 				curOptName = _parseLine(strLine, curOptName);
 			}
-
 		}
-		catch(Exception ex)
+		catch (Exception ex)
 		{
 			log.error(ex.getMessage());
 			throw ex;
 		}
 		finally
 		{
-			if(br != null)
+			if (br != null)
 			{
 				br.close();
 			}
-			
-			if(istream != null)
+
+			if (istream != null)
 			{
 				istream.close();
 			}
-			
-			if(fstream != null)
+
+			if (fstream != null)
 			{
 				fstream.close();
 			}
 		}
-		
 	}
 }

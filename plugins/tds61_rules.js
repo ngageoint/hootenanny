@@ -50,23 +50,23 @@ tds61.rules = {
      ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
      ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
      ['F_CODE','AL200','historic','ruins'], // Ruins
-     ['F_CODE','AL241','tower','communication'], 
-     ['F_CODE','AL241','tower','yes'], // OSM
-     ['F_CODE','AM080','tower:type','water'], // 
+     ['F_CODE','AL241','tower','communication'],
+     ['F_CODE','AL241','tower','yes'],
+     ['F_CODE','AM080','tower:type','water'],
 //      ['F_CODE','AN060','railway','yes'], // Rail yards
      ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
      ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
      ['F_CODE','AP030','highway','trunk'], // Motorway
      ['F_CODE','AP030','highway','trunk_link'], // Motorway
-     ['F_CODE','AP030','highway','primary'], 
-     ['F_CODE','AP030','highway','primary_link'], 
+     ['F_CODE','AP030','highway','primary'],
+     ['F_CODE','AP030','highway','primary_link'],
      ['F_CODE','AP030','highway','secondary'],
      ['F_CODE','AP030','highway','secondary_link'],
-     ['F_CODE','AP030','highway','tertiary'], 
-     ['F_CODE','AP030','highway','tertiary_link'], 
-     ['F_CODE','AP030','highway','residential'], 
-     ['F_CODE','AP030','highway','unclassified'], 
-     ['F_CODE','AP030','highway','service'], 
+     ['F_CODE','AP030','highway','tertiary'],
+     ['F_CODE','AP030','highway','tertiary_link'],
+     ['F_CODE','AP030','highway','residential'],
+     ['F_CODE','AP030','highway','unclassified'],
+     ['F_CODE','AP030','highway','service'],
      ['F_CODE','AP030','highway','yes'], // Just in case...
      ['F_CODE','AP040','railway','level_crossing'], // Level Crossing - See custom rules
      ['F_CODE','AP040','railway','crossing'], // Pedestrian Crossing - See custom rules
@@ -636,7 +636,7 @@ tds61.rules = {
      ['BH141_SHDB','1001','waterway:bank2:shoreline_delineated','yes'],
 
      // BH141_SLTA - Waterbody bank 1 shoreline type: No OSM even close, See MGCP SHR & SHL
-     // ['BH141_SLTA','-999999',undefined,undefined],  // Null
+     // ['BH141_SLTA','-999999',undefined,undefined], // Null
      ['BH141_SLTA','6','waterway:bank1:type','mangrove'],
      ['BH141_SLTA','8','waterway:bank1:type','marshy'],
      ['BH141_SLTA','10','waterway:bank1:type','stony'],
@@ -649,7 +649,7 @@ tds61.rules = {
      ['BH141_SLTA','999','waterway:bank1:type','other'],
 
      // BH141_SLTB - Waterbody bank 2 shoreline type: No OSM even close, See MGCP SHR & SHL
-     // ['BH141_SLTB','-999999',undefined,undefined],  // Null
+     // ['BH141_SLTB','-999999',undefined,undefined], // Null
      ['BH141_SLTB','6','waterway:bank2:type','mangrove'],
      ['BH141_SLTB','8','waterway:bank2:type','marshy'],
      ['BH141_SLTB','10','waterway:bank2:type','stony'],
@@ -1182,19 +1182,7 @@ tds61.rules = {
      ['ETS','msd5','source:extraction_specification','msd5'], // MSD5
      ['ETS','onc','source:extraction_specification','1ab-onc'], // 1AB-ONC
      ['ETS','other','source:extraction_specification','other'], // Other
-     ['ETS','regionalTdsEg','source:extraction_specification','rtds-eg'], // RTDS-EG
-     ['ETS','specUrbanTdsEg','source:extraction_specification','s-utds-eg'], // S-UTDS-EG
-     ['ETS','tercomE','source:extraction_specification','4gf-tercom-e'], // 4GF-TERCOM-E
-     ['ETS','tercomL','source:extraction_specification','4ge-tercom-l'], // 4GE-TERCOM-L
-     ['ETS','tercomT','source:extraction_specification','4gg-tercom-t'], // 4GG-TERCOM-T
-     ['ETS','tlm100','source:extraction_specification','3ag-tlm100'], // 3AG-TLM100
-     ['ETS','tlm50','source:extraction_specification','3aa-tlm50'], // 3AA-TLM50
-     ['ETS','tod0','source:extraction_specification','tod0'], // TOD0
-     ['ETS','tod1','source:extraction_specification','tod1'], // TOD1
-     ['ETS','tod2','source:extraction_specification','tod2'], // TOD2
-     ['ETS','tod3','source:extraction_specification','tod3'], // TOD3
-     ['ETS','tod4','source:extraction_specification','tod4'], // TOD4
-     ['ETS','tpc','source:extraction_specification','1aa-tpc'], // 1AA-TPC
+     ['ETS','regionalTdsEg','Fpc','source:extraction_specification','1aa-tpc'], // 1AA-TPC
      ['ETS','uvmap','source:extraction_specification','3ku-uvmap'], // 3KU-UVMap
      ['ETS','vitd','source:extraction_specification','3ka-vitd'], // 3KA-VITD
      ['ETS','vmap0','source:extraction_specification','3kl-vmap-0'], // 3KL-VMap-0
@@ -1336,7 +1324,7 @@ tds61.rules = {
      ['FFN','257','use','fabricated_metal_product_manufacturing'], // Fabricated Metal Product Manufacture
      ['FFN','260','use','electronic_equipment_manufacturing'], // Electronic Equipment Manufacture
      ['FFN','270','use','electrical_equipment_manufacturing'], // Electrical Equipment Manufacture
-     ['FFN','272','shop','propane'], // Propane Sale
+     ['FFN','272','shop','gas'], // Propane Sale
      ['FFN','280','use','machinery_manufacturing'], // Machinery Manufacture
      ['FFN','289','use','transportation_equipment_manufacturing'], // Transportation Equipment Manufacturing
      ['FFN','290','use','motor_vehicle_manufacturing'], // Motor Vehicle Manufacture
@@ -1380,11 +1368,11 @@ tds61.rules = {
      ['FFN','464','shop','specialized'], // Specialized Store
      ['FFN','465','shop','non-specialized'], // Non-specialized Store
      ['FFN','466','shop','convenience'], // Convenience Store
-     ['FFN','470','shop','fuel'], // Petrol Sale -- links to AQ170 Motor Vehicle Station
+     ['FFN','470','amenity','fuel'], // Petrol Sale -- links to AQ170 Motor Vehicle Station
      ['FFN','473','amenity','sales_yard'], // Sales Yard
      ['FFN','474','shop','precious_metal'], // Precious Metal Merchant
      ['FFN','475','amenity','marketplace'], // Market
-     ['FFN','476','shop','grocery'], // Grocery
+     ['FFN','476','shop','supermarket'], // Grocery
      ['FFN','477','amenity','pharmacy'], // Pharmacy
      ['FFN','478','shop','pet'], // Pet-shop
      ['FFN','480','use','transportation'], // Transport
@@ -1506,10 +1494,10 @@ tds61.rules = {
      ['FFN','819','office','legislative_activities'], // Legislative Activities
      ['FFN','821','use','polling_station'], // Polling Station
      ['FFN','822','use','civil_activities'], // Civil Activities
-     ['FFN','825','amenity','diplomatic_building'], // Diplomacy
-     ['FFN','826','amenity','diplomatic_mission'], // Diplomatic Mission
-     ['FFN','827','amenity','embassy'], // Embassy
-     ['FFN','828','amenity','consul'], // Consul
+     ['FFN','825','amenity','diplomacy'], // Diplomacy
+     ['FFN','826','diplomatic','mission'], // Diplomatic Mission
+     ['FFN','827','diplomatic','embassy'], // Embassy
+     ['FFN','828','diplomatic','consulate'], // Consul
      ['FFN','829','use','maritime_defense'], // Maritime Defense
      ['FFN','830','use','public_order_safety_and_security_services'], // Public Order, Safety and Security Services
      ['FFN','831','use','public_order'], // Public Order
@@ -1530,9 +1518,9 @@ tds61.rules = {
      ['FFN','847','use','emergency_operations'], // Emergency Operations
      ['FFN','848','use','civil_intelligence'], // Civil Intelligence
      ['FFN','850','use','education'], // Education
-     ['FFN','851','use','primary_education'], // Primary Education
-     ['FFN','852','use','secondary_education'], // Secondary Education
-     ['FFN','855','use','higher_education'], // Higher Education
+     ['FFN','851','isced:level','1'], // Primary Education
+     ['FFN','852','isced:level','2,3'], // Secondary Education
+     ['FFN','855','building','university'], // Higher Education
      ['FFN','857','use','vocational_education'], // Vocational Education
      ['FFN','860','use','healthcare'], // Human Health Activities
      ['FFN','861','use','in-patient_care'], // In-patient Care
@@ -1577,7 +1565,7 @@ tds61.rules = {
      ['FFN','954','amenity','club'], // Club
      ['FFN','955','leisure','yacht_club'], // Yacht-club
      ['FFN','961','shop','laundry'], // Laundry
-     ['FFN','962','shop','beauty_treatment'], // Beauty Treatment
+     ['FFN','962','shop','beauty'], // Beauty Treatment
      ['FFN','963','shop','funeral_directors'], // Funeral Services
      ['FFN','964','amenity','crematorium'], // Cremation
      ['FFN','965','amenity','mortuary'], // Mortuary Services
@@ -2575,7 +2563,7 @@ tds61.rules = {
      // ROR - Road Interchange Ramp
      // ['ROR','-999999',undefined,undefined], // No Information
      ['ROR','1000',undefined,undefined], // The default: No ramp
-     ['ROR','1001','link_road','yes'],
+     ['ROR','1001','interchange_ramp','yes'],
 
      // RRC - Railway Use
      // ['RRC','-999999',undefined,undefined], // No Information
@@ -2711,8 +2699,8 @@ tds61.rules = {
 
      // SEP - Divided
      // ['SEP','-999999',undefined,undefined], // No Information
-     ['SEP','1000','divider','no'],
-     ['SEP','1001','divider','yes'],
+     ['SEP','1000','is_divided','no'],
+     ['SEP','1001','is_divided','yes'],
 
      // SGCC - Surface Slope (interval closure)
      ['SGCC','2','incline:interval:closure','open_interval'], // Open Interval
@@ -3037,7 +3025,7 @@ tds61.rules = {
      ['TRS','23','transport:type','drove'], // Drove
      ['TRS','25','transport:type','runway'], // Runway
      ['TRS','30','transport:type','cableway'], // Cableway
-     ['TRS','999', 'transport:type','other'], // Other
+     ['TRS','999','transport:type','other'], // Other
 
      // TSCC - Tree Spacing (interval closure)
      ['TSCC','2','tree:spacing:closure','open_interval'], // Open Interval
@@ -3751,28 +3739,29 @@ tds61.rules = {
      ['ZI014_PRW','154','raw_material','sulphur'], // Sulphur -- Added from PRW
      ['ZI014_PRW','999','raw_material','other'], // Other
 
+     // Some of these have been added to the fuzzy table for export
      // ZI016_ROC - Route Pavement Information : Route Surface Composition
      // ['ZI016_ROC','-999999','surface','unknown'], // Trying this instead of undefined
      ['ZI016_ROC','-999999',undefined,undefined], // No Information
-     ['ZI016_ROC','1','surface','ground'], // Unimproved
-     ['ZI016_ROC','2','surface','compacted'], // Stabilized earth
-     ['ZI016_ROC','3','surface','flexible_pavement'], // Flexible Pavement
-     ['ZI016_ROC','4','surface','gravel'], // Aggregate
-     ['ZI016_ROC','5','surface','macadam'], // Macadam
-     ['ZI016_ROC','6','surface','bound_surface'], // Bound Surface
-     ['ZI016_ROC','7','surface','ridgid_pavement'], // Rigid Pavement
-     ['ZI016_ROC','8','surface','concrete'], // Concrete
-     ['ZI016_ROC','9','surface','asphalt'], // Asphalt
-     ['ZI016_ROC','10','surface','asphalt_over_concrete'], // Asphalt over Concrete
-     ['ZI016_ROC','11','surface','cobblestone'], // Cebble-stone
-     ['ZI016_ROC','12','surface','brick'], // Brick
-     ['ZI016_ROC','13','surface','metal'], // Metal
-     ['ZI016_ROC','14','surface','wood'], // Wood
-     ['ZI016_ROC','15','surface','corduroy'], // rough hewn logs...  // Corduroy
-     ['ZI016_ROC','16','surface','wood_plank'], // Wood Plank
-     ['ZI016_ROC','17','surface','ice'], // Ice
-     ['ZI016_ROC','18','surface','snow'], // Snow
-     ['ZI016_ROC','999','surface','other'], // Other
+//      ['ZI016_ROC','1','surface','ground'], // Unimproved
+//      ['ZI016_ROC','2','surface','compacted'], // Stabilized earth
+//      ['ZI016_ROC','3','surface','flexible_pavement'], // Flexible Pavement
+//      ['ZI016_ROC','4','surface','gravel'], // Aggregate
+//      ['ZI016_ROC','5','surface','macadam'], // Macadam
+//      ['ZI016_ROC','6','surface','bound_surface'], // Bound Surface
+//      ['ZI016_ROC','7','surface','ridgid_pavement'], // Rigid Pavement
+//      ['ZI016_ROC','8','surface','concrete'], // Concrete
+//      ['ZI016_ROC','9','surface','asphalt'], // Asphalt
+//      ['ZI016_ROC','10','surface','asphalt_over_concrete'], // Asphalt over Concrete
+//      ['ZI016_ROC','11','surface','cobblestone'], // Cobble-stone
+//      ['ZI016_ROC','12','surface','brick'], // Brick
+//      ['ZI016_ROC','13','surface','metal'], // Metal
+//      ['ZI016_ROC','14','surface','wood'], // Wood
+//      ['ZI016_ROC','15','surface','corduroy'], // rough hewn logs...  // Corduroy
+//      ['ZI016_ROC','16','surface','wood_plank'], // Wood Plank
+//      ['ZI016_ROC','17','surface','ice'], // Ice
+//      ['ZI016_ROC','18','surface','snow'], // Snow
+//      ['ZI016_ROC','999','surface','other'], // Other
 
      // ZI016_WTC - Route Pavement Information : Road Weather Restriction
      // ['ZI016_WTC','-999999',undefined,undefined], // No Information
@@ -4270,18 +4259,18 @@ tds61.rules = {
      // ['ZI037_REL','-999999',undefined,undefined], // No Information
      ['ZI037_REL','1','religion','buddhist'], // Buddhism
      ['ZI037_REL','2','religion','muslim'], // Islam
-     ['ZI037_REL','3','religion','roman_catholic'], // Roman Catholic
+     ['ZI037_REL','3','denomination','roman_catholic'], // Roman Catholic
      ['ZI037_REL','4','religion','christian'], // Christian
      ['ZI037_REL','5','religion','jewish'], // Judaism
-     ['ZI037_REL','6','religion','orthodox'], // Orthodox
-     ['ZI037_REL','7','religion','protestant'], // Protestant
+     ['ZI037_REL','6','denomination','orthodox'], // Orthodox
+     ['ZI037_REL','7','denomination','protestant'], // Protestant
      ['ZI037_REL','8','religion','shinto'], // Shinto
      ['ZI037_REL','9','religion','hindu'], // Hinduism
-     ['ZI037_REL','10','religion','shia'], // Shia
-     ['ZI037_REL','11','religion','sunni'], // Sunni
-     ['ZI037_REL','12','religion','nestorian'], // Nestorian
-     ['ZI037_REL','13','religion','chaldean'], // Chaldean
-     ['ZI037_REL','14','religion','mixed_and/or_no_designation'], // Mixed and/or No Designation
+     ['ZI037_REL','10','denomination','shia'], // Shia
+     ['ZI037_REL','11','denomination','sunni'], // Sunni
+     ['ZI037_REL','12','denomination','nestorian'], // Nestorian
+     ['ZI037_REL','13','denomination','chaldean_catholic'], // Chaldean
+     ['ZI037_REL','14','religion','mixed_or_none'], // Mixed and/or No Designation
      ['ZI037_REL','999','religion','other'], // Other
 
      // ZI037_RFA - Religious Information : Religious Facility Type
@@ -4290,7 +4279,7 @@ tds61.rules = {
      ['ZI037_RFA','2','building','chapel'], // Chapel
      ['ZI037_RFA','3','building','church'], // Church
      ['ZI037_RFA','4','building','marabout'], // Marabout
-     ['ZI037_RFA','5','building','minaret'], // Minaret
+     ['ZI037_RFA','5','tower:type','minaret'], // Minaret // Fixed in pre/post processing
      ['ZI037_RFA','6','building','mission'], // Mission
      ['ZI037_RFA','7','building','mosque'], // Mosque
      ['ZI037_RFA','8','building','pagoda'], // Pagoda
@@ -4351,9 +4340,31 @@ tds61.rules = {
      // To account for an "error" in the TDSv61 sample GDB
      ['ZI001_VSC','Stereoscopic Imagery','source:vertical_source:type','stereoscopic_imagery'],
      ['ZI001_SRT','NTM Imagery','source:non_spatial_source:type','ntm_imagery'],
+
+     // ['ZI016_ROC','-999999',undefined,undefined], // No Information
+     ['ZI016_ROC','1','surface','ground'], // Unimproved
+     ['ZI016_ROC','2','surface','compacted'], // Stabilized earth
+     ['ZI016_ROC','3','surface','unpaved'], // Flexible Pavement
+     ['ZI016_ROC','4','surface','gravel'], // Aggregate
+     ['ZI016_ROC','5','surface','macadam'], // Macadam
+     ['ZI016_ROC','6','surface','bound_surface'], // Bound Surface
+     ['ZI016_ROC','7','surface','paved'], // Rigid Pavement
+     ['ZI016_ROC','8','surface','concrete'], // Concrete
+     ['ZI016_ROC','9','surface','asphalt'], // Asphalt
+     ['ZI016_ROC','10','surface','asphalt_over_concrete'], // Asphalt over Concrete
+     ['ZI016_ROC','11','surface','cobblestone'], // Cobble-stone
+     ['ZI016_ROC','12','surface','brick'], // Brick
+     ['ZI016_ROC','13','surface','metal'], // Metal
+     ['ZI016_ROC','14','surface','wood'], // Wood
+     ['ZI016_ROC','15','surface','corduroy'], // rough hewn logs...  // Corduroy
+     ['ZI016_ROC','16','surface','wood_plank'], // Wood Plank
+     ['ZI016_ROC','17','surface','ice'], // Ice
+     ['ZI016_ROC','18','surface','snow'], // Snow
+     ['ZI016_ROC','999','surface','other'], // Other
+
     ], // End one2oneIn
 
-    // One2one translation table for converting "Other" OSM attributes to NFDD
+    // One2one translation table for converting "Other" OSM attributes to TDS
     // This is for Export only. The values are swapped before use
     one2oneOut : [
      // OTH Filler.  These are to build OTH values
@@ -4387,17 +4398,28 @@ tds61.rules = {
      [undefined,undefined,'building','industrial'], // Industrial
      [undefined,undefined,'man_made','works'], // Works
      ['FFN','2','building','farm'], // Agriculture
-     ['FFN','850','amenity','kindergarten'], // Education
+
+     ['FFN','827','amenity','embassy'], // Embassy
+
      ['FFN','850','building','school'],
-     ['FFN','855','building','university'], 
+     ['FFN','850','isced:level','0'], // Education
+     ['FFN','850','amenity','kindergarten'], // Education
+     // ['FFN','851','isced:level','1'], // Primary Education
+     ['FFN','852','isced:level','2'], // Secondary Education
+     ['FFN','852','isced:level','3'], // Secondary Education
+     // ['FFN','852','isced:level','2,3'], // Secondary Education
+     ['FFN','855','building','university'],
+     ['FFN','857','building','college'], // Vocational Education
+
      ['FFN','572','amenity','cafe'], // Restaurant
      ['FFN','572','building','restaurant'], // Restaurant
 
-     // Extra road stuff
-     ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
-     ['ZI016_ROC','2','surface','unpaved'], // Stabilized earth
-     ['ZI016_ROC','1','surface','dirt'], // Unimproved 
-     ['ZI016_ROC','1','surface','earth'], // Unimproved 
+
+     // Extra road stuff - see similarTable
+     // ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
+     // ['ZI016_ROC','3','surface','unpaved'], // Stabilized earth
+     // ['ZI016_ROC','1','surface','dirt'], // Unimproved
+     // ['ZI016_ROC','1','surface','earth'], // Unimproved
 
      // Fix up some of the Defaults
      // ['FFN','-999999','building','yes'], // Map to No Information
@@ -4418,6 +4440,7 @@ tds61.rules = {
      [undefined,undefined,'amenity','school'], //  converted in pre processing
      [undefined,undefined,'amenity','hospital'], //  converted in pre processing
      [undefined,undefined,'amenity','university'], //  converted in pre processing
+     [undefined,undefined,'amenity','college'], //  converted in pre processing
      [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
 
      // From UFD
@@ -4461,7 +4484,6 @@ tds61.rules = {
 
      // ### From OSM - This list could never end.....
      ['FFN','464','shop','books'], // Specialized Store
-     ['FFN','465','shop','supermarket'], // Non-specialized
      ['FFN','563','building','house'], // Residence
      ['FFN','558','building','dependents_housing'], // Dependents Housing
      ['FFN','610','office','telecommunication'], // telecommunication
@@ -4473,23 +4495,55 @@ tds61.rules = {
 
     // ##### End of One2One Rules #####
 
-    // ##### Start of shopList #####
-    // This list is taken from the top 100 values for "shop" on taginfo with the values in the one2one rules removed
-    // http://taginfo.openstreetmap.org/api/4/key/values?key=shop&filter=all&lang=en&sortname=count&sortorder=desc&page=1&rp=100&qtype=value&format=json_pretty
-    shopList : [
-        "alcohol", "antiques", "art", "baby_goods", "bag", "bakery", "bathroom_furnishing", "beauty", "bed",
-        "beverages", "bicycle", "bookmaker", "books", "boutique", "butcher", "car", "car_parts", "carpet",
-        "charity", "chemist", "clothes", "computer", "confectionery", "copyshop", "cosmetics", "craft",
-        "curtain", "deli", "department_store", "doityourself", "dry_cleaning", "electronics", "energy", "erotic",
-        "estate_agent", "fabric", "farm", "fashion", "fishmonger", "florist", "food", "frame", "funeral_directors",
-        "furniture", "garden_centre", "general", "gift", "greengrocer", "hairdresser", "hardware", "hearing_aids",
-        "hifi", "houseware", "ice_cream", "interior_decoration", "jewelry", "kiosk", "kitchen", "locksmith",
-        "lottery", "mall", "massage", "medical_supply", "mobile_phone", "motorcycle", "music", "musical_instrument",
-        "newsagent", "no", "optician", "organic", "outdoor", "paint", "pawnbroker", "seafood", "second_hand",
-        "shoes", "sports", "stationery", "supermarket", "tailor", "tattoo", "tea", "ticket", "tobacco", "toys",
-        "trade", "tyres", "vacant", "variety_store", "video", "video_games", "wine"
+   
+    // ##### Start of fuzzyTable #####
+    // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
+    fuzzyTable : [
+
+     ['ZI016_ROC','1',schemaTools.simple('surface=ground',1)], // Unimproved
+     ['ZI016_ROC','2',schemaTools.simple('surface=compacted',1)], // Stabilized earth
+     ['ZI016_ROC','3',schemaTools.isA('surface=unpaved', 0.8)], // Flexible Pavement
+     ['ZI016_ROC','4',schemaTools.simple('surface=gravel',1)], // Aggregate
+     ['ZI016_ROC','5',schemaTools.simple('surface=macadam',1)], // Macadam
+     ['ZI016_ROC','6',schemaTools.simple('surface=bound_surface',1)], // Bound Surface
+     ['ZI016_ROC','7',schemaTools.isA('surface=paved', 0.8)], // Ridgid Pavement
+     ['ZI016_ROC','8',schemaTools.simple('surface=concrete',1)], // Concrete
+     ['ZI016_ROC','9',schemaTools.simple('surface=asphalt',1)], // Asphalt
+     ['ZI016_ROC','10',schemaTools.simple('surface=asphalt_over_concrete',1)], // Asphalt over Concrete
+     ['ZI016_ROC','11',"surface=cobblestone",schemaTools.isA('surface=cobblestone',1),schemaTools.simple('surface=sett')], // Cobble-stone
+     ['ZI016_ROC','12',schemaTools.simple('surface=brick',1)], // Brick
+     ['ZI016_ROC','13',schemaTools.simple('surface=metal',1)], // Metal
+     ['ZI016_ROC','14',schemaTools.simple('surface=wood',1)], // Wood
+     ['ZI016_ROC','15',schemaTools.simple('surface=corduroy',1)], // rough hewn logs...  // Corduroy
+     ['ZI016_ROC','16',schemaTools.simple('surface=wood_plank',1)], // Wood Plank
+     ['ZI016_ROC','17',schemaTools.simple('surface=ice',1)], // Ice
+     ['ZI016_ROC','18',schemaTools.simple('surface=snow',1)], // Snow
+     ['ZI016_ROC','999',schemaTools.simple('surface=other',1)], // Other
     ],
-    // ##### End of shopList #####
+    // ##### End of fuzzyTable #####
+
+    // ##### Start of txtLength #####
+    // This list is for validateing the lengths of text attributes prior to export
+    txtLength : {
+     'BA000_VDR':80, 'BEN':15, 'BRN':24, 'CID':20, 'CUD':20, 'ETZ':24, 'F_CODE':5, 'GB052_RIDH':14, 'GB052_RIDL':14,
+     'IKO':14, 'MDE':20, 'NA8':80, 'PDA':14, 'PSE':14, 'RIN_RTN':24, 'RIN_RTN2':24, 'RIN_RTN3':24, 'RTN':24, 'RTN2':24,
+     'RTN3':24, 'SAX_RS3':14, 'SAX_RS4':14, 'SAX_RS6':14, 'SAX_RX1':254, 'SAX_RX2':254, 'SAX_RX5':254, 'SAX_RX6':254,
+     'SAX_RX7':254, 'SAX_RX8':14, 'SAX_RY1':254, 'SAX_RY2':254, 'SSE':14, 'UFI':254, 'URI':254, 'VCS_VCR':132, 'VOI':14,
+     'WPI':14, 'ZI001_SDV':20, 'ZI001_VSD':20, 'ZI002_UFI':254, 'ZI005_FNA':200, 'ZI005_FNA2':200, 'ZI005_FNA3':200,
+     'ZI005_NFN':18, 'ZI005_NFN2':18, 'ZI005_NFN3':18, 'ZI026T_UFI':254, 'ZI027T_UFI':254, 'ZI028_UFI':254, 'ZI031S_URI':254,
+     'ZI031T_URI':254, 'ZI039S_UFI':254, 'ZI039T_UFI':254, 'ZSAX_RS0':14,
+     'ZSAX_RX0':254, 'ZSAX_RX3':254, 'ZSAX_RX4':254
+    },
+    // ##### End of txtLength #####
+
+    // ##### Start of intList #####
+    // This list is for validateing the integer attributes prior to export
+    intList : [
+    'BC040_LCN', 'BC040_LVN', 'BNF', 'DEV', 'DZC', 'LC1', 'LC2', 'LC3', 'LC4', 'LTN', 'NOS', 'NPL', 'ZI026_CTUL',
+    'ZI026_CTUU'
+    ],
+    // ##### End of intList#####
+
 
     // ##### Start of Thematic Group Rules #####
     thematicGroupList : {

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/Factory.h>
-//#include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
 
@@ -122,6 +121,7 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
     QString c = matchCreatorsList[i];
     QStringList args = c.split(",");
     QString className = args[0];
+    //LOG_VARD(className);
     args.removeFirst();
     shared_ptr<MatchCreator> mc(Factory::getInstance().constructObject<MatchCreator>(className));
     _theInstance.registerCreator(mc);
@@ -137,6 +137,7 @@ MatchFactory& MatchFactory::getInstance()
 {
   if (_theInstance._creators.size() == 0)
   {
+    //only get the match creators that are specified in the config
     _setMatchCreators(ConfigOptions(conf()).getMatchCreators().split(";"));
   }
   return _theInstance;

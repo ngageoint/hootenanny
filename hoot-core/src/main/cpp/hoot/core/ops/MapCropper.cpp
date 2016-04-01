@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MapCropper.h"
@@ -39,7 +39,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -115,13 +115,13 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
   LOG_INFO("Cropping map.");
   shared_ptr<OsmMap> result = map;
 
-  if (MapReprojector::isGeographic(map) == false && _nodeBounds.isNull() == false)
+  if (MapProjector::isGeographic(map) == false && _nodeBounds.isNull() == false)
   {
     throw HootException("If the node bounds is set the projection must be geographic.");
   }
 
-  // @todo visit the elements from the most senior (e.g. relation that has no parents) to the
-  // most junior (nodes).
+  /// @todo visit the elements from the most senior (e.g. relation that has no parents) to the
+  /// most junior (nodes).
 
   // go through all the ways
   const WayMap ways = result->getWays();
@@ -154,10 +154,10 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
   LOG_INFO("  Removing nodes...");
 
   // go through all the nodes
-  const OsmMap::NodeMap nodes = result->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nodes.constBegin(); it != nodes.constEnd(); it++)
+  const NodeMap nodes = result->getNodeMap();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
   {
-    const Coordinate& c = it.value()->toCoordinate();
+    const Coordinate& c = it->second->toCoordinate();
 
     bool nodeInside = false;
 
@@ -193,10 +193,10 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
       if (_nodeBounds.isNull() == true || _nodeBounds.contains(c))
       {
         // if the node is not part of a way
-        if (n2w.find(it.key()) == n2w.end())
+        if (n2w.find(it->first) == n2w.end())
         {
           // remove the node
-          result->removeNodeNoCheck(it.value()->getId());
+          result->removeNodeNoCheck(it->second->getId());
         }
       }
     }

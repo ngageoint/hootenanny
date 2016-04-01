@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TAGCOMPARATOR_H
@@ -40,6 +40,7 @@ namespace hoot
 class TagComparator
 {
 public:
+
   TagComparator();
 
   /**
@@ -70,7 +71,7 @@ public:
 
   /**
    * Generalize the tags in t1 and t2 to make them consistent. Using the following rules:
-   * - Names are merged using _mergeNames.
+   * - Names are merged using mergeNames.
    * - Exact matches are unchanged (lists are treated as unordered)
    * - Unrecognized tags are concatenated in a list.
    * - Tags that share an ancestor are promoted to the first common ancestor
@@ -86,6 +87,19 @@ public:
    * Keep all names. If there is a conflict in tags between t1 and t2 then use the value in t1.
    */
   Tags overwriteMerge(Tags t1, Tags t2);
+
+  void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
+
+  /**
+   * Determines whether two tag sets have identical non-name, non-metadata tags.  Case sensitivity
+   * is determined with duplicate.name.case.sensitive.
+   *
+   * @param t1 first set of tags to compare
+   * @param t2 second set of tags to compare
+   * @return true if both tag sets have identical non-name, non-metadata contents (excluding
+   * ordering); false otherwise
+   */
+  bool nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2);
 
 private:
 
@@ -130,6 +144,8 @@ private:
   void _promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result);
 
   QSet<QString> _toSet(const Tags& t, const QString& k);
+
+  bool _caseSensitive;
 };
 
 }

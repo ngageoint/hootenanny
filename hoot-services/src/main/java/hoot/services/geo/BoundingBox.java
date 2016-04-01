@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.geo;
 
@@ -74,8 +74,6 @@ public class BoundingBox
   
   /**
    * Returns XML that can be as bounding box input for a WPS request
-   * 
-   * @return
    */
   public String toWpsXml()
   {
@@ -182,7 +180,6 @@ public class BoundingBox
    * Creates a bounding box that contains all the specified nodes
    * 
    * @param nodes a list of nodes the bounding box should contain
-   * @return a bounding box containing all of the input nodes
    * @throws Exception
    */
   public BoundingBox(final ArrayList<CurrentNodes> nodes)
@@ -269,7 +266,6 @@ public class BoundingBox
   /**
    * Creates a bounding box from an OSM XML bounds node
    * 
-   * @param xmlBounds OSM XML bounds node
    * @return a bounding box
    * @throws Exception 
    * @throws DOMException 
@@ -348,7 +344,7 @@ public class BoundingBox
    * 
    * @param bounds bounds to expand by
    * @param margin buffer amount to add to the expansion
-   * @tod this is only used for changeset bounds calc, but I'm not sure this method is correct...
+   * //TODO: this is only used for changeset bounds calc, but I'm not sure this method is correct...
    * hence the reason for expand2
    */
   public void expand(final BoundingBox bounds, final double margin)

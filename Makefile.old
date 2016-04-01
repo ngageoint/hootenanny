@@ -24,7 +24,10 @@ build: js-make qt-make pp-build services-build model-build conf/words.sqlite \
 	conf/WordsAbridged.sqlite osmapidb
 
 clean: Makefile.qmake services-clean
-	$(MAKE) -f Makefile.qmake clean
+	$(MAKE) -f Makefile.qmake clean 2>&1 \
+	  | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
+	  || true \
+	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 	rm -f `find . -name Makefile.qmake`
 	rm -f `find . -name \*.gcov`
 	rm -f lib/*
@@ -36,19 +39,25 @@ clean: Makefile.qmake services-clean
 	rm -rf hoot-core/tmp/debug/* hoot-core-test/tmp/debug/* hoot-hadoop/tmp/debug/* tbs/tmp/debug/* hoot-rnd/tmp/debug/*
 	rm -rf bin/*
 	rm -f plugins/config.js
+	rm -f translations/*.pyc
 	rm -f $(SCHEMA_FILES)
 	# The following bits are due to moving files in git. Since the Output.osm
 	# file is written to the test-files/cases/**/ directory git won't remove
-	# the directory. Doing this as part of clean will ensure that the 
+	# the directory. Doing this as part of clean will ensure that the
 	# directories are removed.
-	# remove any empty test cases 
+	# remove any empty test cases
 	find test-files/cases -type f -name Output.osm -exec rm {} \;
 	# call this command 3 times b/c there may be sub-dirs that need deleteing.
 	rm -rf `find test-files/cases -type d -empty`
 	rm -rf `find test-files/cases -type d -empty`
 	rm -rf `find test-files/cases -type d -empty`
 	cd docs; $(MAKE) clean
+ifeq ($(BUILD_SERVICES),services)
 	scripts/CleanOsmApiDB.sh
+endif
+ifeq ($(BUILD_UI_TESTS),uitests)
+	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile clean
+endif
 
 clean-db: services-clean-db
 
@@ -56,17 +65,19 @@ clean-db: services-clean-db
 clean-all: clean clean-db
 
 check: test
-test: build ui-test services-test pp-test plugins-test 
+test: build services-test pp-test plugins-test
 	bin/HootTest $(HOOT_TEST_DIFF) --slow
 
-docs: always HOOT_VERSION_FILE
+docs: always HOOT_VERSION_FILE services-docs
+	echo Building documentation...
 	cd docs; $(MAKE)
 
-test-quick: build services-test pp-test
+test-quick: build pp-test
 	bin/HootTest $(HOOT_TEST_DIFF) --quick
 
-test-all-no-core: ui-test build services-test-all pp-test plugins-test 
-
+test-all-no-core: services-test-all pp-test plugins-test
+	$(MAKE) ui-test
+	
 test-all: test-all-no-core
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial
 
@@ -102,13 +113,9 @@ ifneq ($(HADOOP_HOME),)
 endif
 
 plugins-test:
+	echo Running plugins tests...
 	# Only run the plugins tests if mocha is installed.
 	cd plugins; (command -v mocha &> /dev/null) && mocha test || echo Skipping mocha tests
-
-ui-test:
-ifeq ($(BUILD_UI),ui)
-	cd hoot-ui; npm test #&> /dev/null
-endif
 
 pp-test-all:
 ifneq ($(HADOOP_HOME),)
@@ -137,10 +144,11 @@ tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 
 conf/DatabaseConfig.sh: conf/DatabaseConfig.sh.orig
 	# This will copy conf/DatabaseConfig.sh.orig to conf/DatabaseConfig.sh if necessary
-	if [ ! -f conf/DatabaseConfig.sh ]; then echo "Using default database configuration. You can safely customize: conf/DatabaseConfig.sh"; cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh; else echo "Check your conf/DatabaseConfig.sh to see if it needs updating with conf/DatabaseConfig.sh.orig, if not just 'touch conf/DatabaseConfig.sh'"; false; fi
+	if [ ! -f conf/DatabaseConfig.sh ]; then echo "Using default database configuration. You can safely customize: conf/DatabaseConfig.sh"; cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh; else echo; echo; echo "Check your conf/DatabaseConfig.sh to see if it needs updating with conf/DatabaseConfig.sh.orig, if not just 'touch conf/DatabaseConfig.sh'"; echo; echo; false; fi
 
-conf/LocalHoot.json: conf/LocalHoot.json.in conf/DatabaseConfig.sh
-	export HOOT_HOME=`pwd`; scripts/ReplaceEnvironmentVariables.sh conf/LocalHoot.json.in conf/LocalHoot.json
+conf/ServerConfig.sh: conf/ServerConfig.sh.orig
+	# This will copy conf/ServerConfig.sh.orig to conf/ServerConfig.sh if necessary
+	if [ ! -f conf/ServerConfig.sh ]; then echo "Using default server configuration. You can safely customize: conf/ServerConfig.sh"; cp conf/ServerConfig.sh.orig conf/ServerConfig.sh; else echo; echo; echo "Check your conf/ServerConfig.sh to see if it needs updating with conf/ServerConfig.sh.orig, if not just 'touch conf/ServerConfig.sh'"; echo; echo; false; fi
 
 # We now have different versions of the NFDD Schema that are built from Excel files:
 # LTDSv40.csv.gz - Local TDS v4.0
@@ -170,7 +178,7 @@ plugins/tds61_schema.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz 
 	mkdir -p $(@D)
 	$< $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
-# TDSv61 full schema is built from the TDSv60 spec with NGA's extensions. 
+# TDSv61 full schema is built from the TDSv60 spec with NGA's extensions.
 # This one has all of the Text Enumerations
 plugins/tds61_full_schema.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz conf/nfdd/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
@@ -187,8 +195,10 @@ plugins/etds61_osm_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build osmapi db
-osmapidb:
+osmapidb: conf/DatabaseConfig.sh
+ifeq ($(BUILD_SERVICES),services)
 	scripts/SetupOsmApiDB.sh
+endif
 
 # Build automatically generated JS files
 js-make: $(SCHEMA_FILES) plugins/config.js
@@ -206,12 +216,19 @@ model-build: $(RF_MODELS)
 conf/%.rf: conf/%.arff.bz2 qt-make
 	[ $< -nt $@ ] && hoot build-rf $< $@ || true
 
-qt-make: HOOT_VERSION_FILE Makefile.qmake hoot-core/src/main/cpp/hoot/core/HootConfig.h conf/LocalHoot.json tgs/src/main/cpp/tgs/TgsConfig.h hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h bin/hoot bin/HootTest
-	$(MAKE) -f Makefile.qmake
-	
+qt-make: HOOT_VERSION_FILE Makefile.qmake hoot-core/src/main/cpp/hoot/core/HootConfig.h tgs/src/main/cpp/tgs/TgsConfig.h hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h bin/hoot bin/HootTest
+	$(MAKE) -f Makefile.qmake 2>&1 | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
+	  || true \
+	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
+
 services-build:	HOOT_VERSION_FILE conf/DatabaseConfig.sh
 ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile build
+endif
+
+services-docs:
+ifeq ($(BUILD_SERVICES),services)
+	cd hoot-services && $(MAKE) -f Makefile docs
 endif
 
 services-clean:
@@ -239,8 +256,16 @@ ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile test-all
 endif
 
+ui-test: services-build build
+ifeq ($(BUILD_UI_TESTS),uitests)
+ifeq ($(BUILD_SERVICES),services)
+	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile test
+else
+	echo "UI tests must specify both --with-services and --with-uitests."
+endif
+endif
 
-FORCE:
+FORCE: vagrant
 
 HOOT_VERSION_FILE: FORCE
 	$(SHELL_PATH) ./HOOT_VERSION_GEN;
@@ -251,15 +276,19 @@ rebuild-db:
 	cd hoot-services && $(MAKE) -f Makefile build
 
 HOOT_TARNAME=hootenanny-$(HOOT_VERSION)
+JAVADOC_TARBALL=docs/hootenanny-services-javadoc-$(HOOT_VERSION).tar.gz
 dist: archive
 archive: default docs
-	if [ "$(BUILD_SERVICES)" == "services" ]; then cp hoot-services/target/hoot-services-*.war hootenanny-services-$(HOOT_VERSION).war; fi
+	mkdir -p $(HOOT_TARNAME)/docs/
+	if [ "$(BUILD_SERVICES)" == "services" ]; then \
+	  cp hoot-services/target/hoot-services-*.war hootenanny-services-$(HOOT_VERSION).war; \
+	  tar czf $(HOOT_TARNAME)/$(JAVADOC_TARBALL) hoot-services/target/site/apidocs; fi
 	rm -f $(HOOT_TARNAME).tar.gz
 	scripts/git-archive-all.sh --prefix $(HOOT_TARNAME)/ $(HOOT_TARNAME).tar
-	mkdir -p $(HOOT_TARNAME)
-	cp Makefile.in aclocal.m4 configure config.h.in $(HOOT_TARNAME)
-	mkdir -p $(HOOT_TARNAME)/docs/
 	cp docs/*.pdf docs/*.html docs/*.text $(HOOT_TARNAME)/docs/
+	# Put the docs in their own compressed file
+	tar czf hootenanny-documentation-$(HOOT_VERSION).tar.gz $(HOOT_TARNAME)
+	cp Makefile.in aclocal.m4 configure config.h.in $(HOOT_TARNAME)
 	# Copy the protocol buffer generated files. Eases a dependency when building
 	# on CentOS
 	mkdir -p $(HOOT_TARNAME)/hoot-core/src/main/cpp/hoot/core/proto/
@@ -272,18 +301,30 @@ archive: default docs
 	cp plugins/mgcp_schema.js $(HOOT_TARNAME)/plugins/mgcp_schema.js
 	cp plugins/etds_rules.js $(HOOT_TARNAME)/plugins/etds_rules.js
 	cp plugins/etds61_rules.js $(HOOT_TARNAME)/plugins/etds61_rules.js
+	# Copy the buildInfo.json file for hoot services
 	if [ "$(BUILD_SERVICES)" == "services" ]; then mkdir -p $(HOOT_TARNAME)/hoot-ui/data; cp hoot-ui/data/buildInfo.json $(HOOT_TARNAME)/hoot-ui/data; fi
+	# Include the RF files in the tarball so they don't have to be rebuilt
+	mkdir -p $(HOOT_TARNAME)/conf/
+	cp conf/BuildingModel.rf $(HOOT_TARNAME)/conf/BuildingModel.rf
+	cp conf/HighwayModel.rf $(HOOT_TARNAME)/conf/HighwayModel.rf
+	cp conf/PoiModel.rf $(HOOT_TARNAME)/conf/PoiModel.rf
+	# Create the version file
 	echo $(HOOT_VERSION) > $(HOOT_TARNAME)/version
-	tar rf $(HOOT_TARNAME).tar \
-	$(HOOT_TARNAME)/*  
+	# tar the file and zip it
+	tar rf $(HOOT_TARNAME).tar $(HOOT_TARNAME)/*
 	rm -rf $(HOOT_TARNAME)
 	gzip -9 $(HOOT_TARNAME).tar
 
 LocalConfig.pri:
 	cp LocalConfig.pri.orig LocalConfig.pri
-  
+
 Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
-	qmake
+	# suppress the harmless warning about generated HootSwig.cxx
+	# All the true craziness is so we use the qmake return code rather than
+	# the grep code.
+	qmake-qt4 2>&1 | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
+	  || true \
+	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 
 tmp/schema.dot: qt-make
 	HootTest --single hoot::OsmSchemaTest
@@ -295,19 +336,19 @@ tmp/schema.png: tmp/schema.dot
 
 IGNORED=/usr/\* \*test/cpp\* \*tgs/src\* \*/local/\* \*/tmp/moc/\*
 
-tmp/coverage/core/index.html: 
+tmp/coverage/core/index.html:
 	mkdir -p tmp/coverage
 	lcov --capture --ignore-errors source -d hoot-core/tmp/debug -b hoot-core/ --output-file tmp/coverage/Core.info
 	lcov -r tmp/coverage/Core.info $(IGNORED) \*tbs/src\* -o tmp/coverage/CoreTrimmed.info
 	genhtml tmp/coverage/CoreTrimmed.info --output-directory tmp/coverage/core/
 
-tmp/coverage/hadoop/index.html: 
+tmp/coverage/hadoop/index.html:
 	mkdir -p tmp/coverage
 	lcov --capture --ignore-errors source -d hoot-hadoop/tmp/debug -b hoot-hadoop/ --output-file tmp/coverage/Hadoop.info
 	lcov -r tmp/coverage/Hadoop.info $(IGNORED) \*tbs/src\* -o tmp/coverage/HadoopTrimmed.info
 	genhtml tmp/coverage/HadoopTrimmed.info --output-directory tmp/coverage/hadoop/
 
-tmp/coverage/tbs/index.html: 
+tmp/coverage/tbs/index.html:
 	mkdir -p tmp/coverage
 	lcov --capture --ignore-errors source -d tbs/tmp/debug -b tbs/ --output-file tmp/coverage/Tbs.info
 	lcov -r tmp/coverage/Tbs.info $(IGNORED) -o tmp/coverage/TbsTrimmed.info
@@ -325,7 +366,12 @@ conf/words.sqlite: conf/words1.sqlite
 # If you create a new words.sqlite please just increment the number rather than
 # replacing the old file. This way we can maintain the history.
 conf/words1.sqlite:
-	wget -N -P conf/ https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/words1.sqlite || echo "Failure downloading words1.sqlite. Build will continue, but conflation accuracy may suffer."
+	([ -e /tmp/words1.sqlite.bz2 ] && \
+	 test "`sha1sum /tmp/words1.sqlite.bz2`" == 'cdf47302fec4c8ec6c576849ae877feb1a9cf220  /tmp/words1.sqlite.bz2' && \
+	 bzcat /tmp/words1.sqlite.bz2 > conf/words1.sqlite) || \
+	(wget -N -P /tmp/ https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2 && \
+	 bzcat /tmp/words1.sqlite.bz2 > conf/words1.sqlite) || \
+	echo "Failure downloading words1.sqlite. Build will continue, but conflation accuracy may suffer."
 
 bin/HootEnv.sh: scripts/HootEnv.sh
 	mkdir -p bin
@@ -344,3 +390,7 @@ eclipse:
 ifeq ($(BUILD_SERVICES),services)
 	scripts/mvn-build $(MVN_QUIET) eclipse
 endif
+
+vagrant:
+	# Check the Vagrant.marker file data to see if provisioning needs to run
+	if [ -f Vagrant.marker ]; then if [ Vagrant.marker -ot VagrantProvision.sh ]; then echo; echo; echo "New dependencies have been added to Vagrant!"; echo "Please exit the vm and run 'vagrant provision' or"; echo "run 'touch Vagrant.marker' and re-run 'make' to continue."; echo; echo; false; fi fi

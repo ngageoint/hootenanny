@@ -43,6 +43,8 @@ class CopySubsetOp : public OsmMapOperation
 public:
   CopySubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids);
 
+  CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
+
   /**
    * A new map is created and the eids specified in the constructor and their depedencies will be
    * copied into the new map. The @a map will be set to point to the new map.

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-5205856' visible='true' version='1' lat='-6.2216463' lon='106.923875' />
+  <node id='-5205858' visible='true' version='1' lat='-6.2216409' lon='106.9240472' />
+  <node id='-5205852' visible='true' version='1' lat='-6.2221169' lon='106.9240623' />
+  <node id='-5205854' visible='true' version='1' lat='-6.2221223' lon='106.9238902' />
+  <way id='-5385908' action='modify' visible='true' version='1'>
+    <nd ref='-5205856' />
+    <nd ref='-5205858' />
+    <nd ref='-5205852' />
+    <nd ref='-5205854' />
+    <nd ref='-5205856' />
+    <tag k='building' v='yes' />
+    <tag k='name' v='building 2' />
+    <tag k='error:circular' v='15' />
+  </way>
+</osm>

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwaySnapMergerJs.h"
 
@@ -115,7 +115,7 @@ Handle<Value> HighwaySnapMergerJs::apply(const Arguments& args)
   // modify the parameter that was passed in
   Handle<Array> newArr = Handle<Array>::Cast(toV8(replaced));
   Handle<Array> arr = Handle<Array>::Cast(args[3]);
-  arr->Set(String::New("length"), Integer::New(newArr->Length()));
+  arr->Set(String::New("length"), v8::Integer::New(newArr->Length()));
   for (uint32_t i = 0; i < newArr->Length(); i++)
   {
     arr->Set(i, newArr->Get(i));

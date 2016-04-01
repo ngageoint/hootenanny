@@ -33,7 +33,7 @@
 
 // Hoot
 #include <hoot/core/Conflator.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -52,6 +52,7 @@ using namespace hoot;
 // TGS
 #include <tgs/RStarTree/KnnIterator.h>
 #include <tgs/RStarTree/RStarTreePrinter.h>
+#include <tgs/Statistics/Random.h>
 using namespace Tgs;
 
 #include "TestUtils.h"
@@ -174,7 +175,7 @@ public:
 
     mapA->append(mapB);
 
-    MapReprojector::reprojectToWgs84(mapA);
+    MapProjector::projectToWgs84(mapA);
 
     OsmWriter writer;
     writer.write(mapA, "test-output/OsmMapAppendTest.osm");
@@ -290,7 +291,7 @@ public:
     shared_ptr<OsmMap> mapA(new OsmMap());
     reader.read("test-files/ToyTestA.osm", mapA);
 
-    const char* exceptionMsg;
+    const char* exceptionMsg = "<wrong>";
     try
     {
       mapA->append(mapA);
@@ -315,7 +316,7 @@ public:
     shared_ptr<OsmMap> mapB(new OsmMap());
     reader.read("test-files/ToyTestB.osm", mapB);
 
-    MapReprojector::reprojectToPlanar(mapB);
+    MapProjector::projectToPlanar(mapB);
 
     QString exceptionMsg;
     try
@@ -347,7 +348,7 @@ public:
 
     t.restart();
 
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::projectToOrthographic(map);
     const WayMap& ways = map ->getWays();
 
     LOG_INFO("Finished reprojecting. " << t.elapsed() << "ms");
@@ -401,13 +402,15 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::projectToOrthographic(map);
 
     shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
 
     for (int i = 0; i < 10; i++)
     {
-      KnnIterator it(tree.get(), rand() % 200 - 100, rand() % 200 - 100);
+      KnnIterator it(tree.get(),
+                     Tgs::Random::instance()->generateInt() % 200 - 100,
+                     Tgs::Random::instance()->generateInt() % 200 - 100);
 
       double lastDistance = 0.0;
       while (it.hasNext())
@@ -428,7 +431,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::projectToOrthographic(map);
 
     // force it to build the tree before we start removing nodes.
     map->getIndex().getWayTree();
@@ -499,12 +502,12 @@ public:
     // Original data had nodes -1 through -36.  Make sure that even-numbered nodes -2 through
     //  -20 are gone
 
-    const OsmMap::NodeMap nodes = map->getNodeMap();
-    CPPUNIT_ASSERT_EQUAL(26, nodes.size());
-    for ( OsmMap::NodeMap::const_iterator nodeIter = nodes.constBegin();
-          nodeIter != nodes.constEnd(); ++nodeIter )
+    const NodeMap nodes = map->getNodeMap();
+    CPPUNIT_ASSERT_EQUAL(26, (int)nodes.size());
+    for ( NodeMap::const_iterator nodeIter = nodes.begin();
+          nodeIter != nodes.end(); ++nodeIter )
     {
-      const shared_ptr<const Node> n = nodeIter.value();
+      const shared_ptr<const Node> n = nodeIter->second;
       //LOG_DEBUG("Node: " << n->getId());
       CPPUNIT_ASSERT( (n->getId() >= -36) && (n->getId() <= -1) );
 
@@ -529,15 +532,15 @@ public:
       CPPUNIT_ASSERT( (-5 + i) == way->getId() );
       if ( i == 1 )
       {
-        const int correctSize = 4;
-        CPPUNIT_ASSERT( nodeIds.size() == correctSize );
+        const size_t correctSize = 4;
+        CPPUNIT_ASSERT(nodeIds.size() == correctSize);
         long correctIds[correctSize] = { -35, -34, -33, -30 };
         std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));
         CPPUNIT_ASSERT(correctIdVector == nodeIds);
       }
       else if ( i == 2 )
       {
-        const int correctSize = 30;
+        const size_t correctSize = 30;
         CPPUNIT_ASSERT( nodeIds.size() == correctSize );
         long correctIds[correctSize] = { -3, -24, -5, -26, -7, -32, -31, -30, -36, -29, -28, -27, -26,
                                 -25, -24, -23, -22, -21, -30, -19, -28, -17, -26, -15, -24,
@@ -547,7 +550,7 @@ public:
       }
       else if ( i == 3 )
       {
-        const int correctSize = 3;
+        const size_t correctSize = 3;
         CPPUNIT_ASSERT( nodeIds.size() == correctSize );
         long correctIds[correctSize] = { -33, -28, -7 };
         std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));
@@ -555,7 +558,7 @@ public:
       }
       else if (i == 4 )
       {
-        const int correctSize = 3;
+        const size_t correctSize = 3;
         CPPUNIT_ASSERT( nodeIds.size() == correctSize );
         long correctIds[correctSize] = { -32, -22, -1 };
         std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));

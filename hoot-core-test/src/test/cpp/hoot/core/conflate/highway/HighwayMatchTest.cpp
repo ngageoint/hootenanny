@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalNearestSublineMatcher.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
@@ -106,7 +106,7 @@ public:
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
-    MapReprojector::reprojectToOrthographic(map, env);
+    MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(90, 0), Coordinate::getNull() };
     WayPtr w1 = createWay(map, w1c);
@@ -156,7 +156,7 @@ public:
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
-    MapReprojector::reprojectToOrthographic(map, env);
+    MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(50, 0), Coordinate::getNull() };
     WayPtr w1 = createWay(map, w1c);
@@ -207,7 +207,7 @@ public:
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
-    MapReprojector::reprojectToOrthographic(map, env);
+    MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(60, 0), Coordinate::getNull() };
     WayPtr w1 = createWay(map, w1c);
@@ -255,7 +255,7 @@ public:
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
-    MapReprojector::reprojectToOrthographic(map, env);
+    MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr w1 = createWay(map, w1c);
@@ -301,17 +301,24 @@ public:
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/conflate/highway/HighwayMatchRealWorld1Test.osm",
       false);
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::projectToOrthographic(map);
 
     shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
-    LOG_INFO(sublineMatcher->findMatch(map, TestUtils::getWay(map, "1"), TestUtils::getWay(map, "3")));
+    LOG_INFO(
+      sublineMatcher->findMatch(
+        map,
+        dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),
+        dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "3"))));
     HOOT_STR_EQUALS("matches:\n"
       "subline 1: start: way: -3 index: 0 fraction: 0.354292349419726 end: way: -3 index: 1 fraction: 0\n"
       "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 1 fraction: 0",
-      sublineMatcher->findMatch(map, TestUtils::getWay(map, "1"), TestUtils::getWay(map, "3")));
+      sublineMatcher->findMatch(
+        map,
+        dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),
+        dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "3"))));
   }
 
   /**
@@ -322,7 +329,7 @@ public:
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/conflate/highway/HighwayMatchRealWorld2Test.osm",
       false);
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::projectToOrthographic(map);
 
     Settings conf;
     conf.set(ConfigOptions::getWaySublineMatcherKey(), MaximalNearestSublineMatcher::className());
@@ -333,9 +340,9 @@ public:
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
-    WayPtr w218 = TestUtils::getWay(map, "-218");
-    WayPtr w948 = TestUtils::getWay(map, "-948");
-    WayPtr w582 = TestUtils::getWay(map, "-582");
+    WayPtr w218 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-218"));
+    WayPtr w948 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-948"));
+    WayPtr w582 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-582"));
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.0001, 0.9999));
 

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CALCULATEAREAFORSTATSVISITOR_H
 #define CALCULATEAREAFORSTATSVISITOR_H
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 #include "SingleStatistic.h"
@@ -42,7 +42,7 @@ using namespace std;
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first reprojected into meters.
  */
-class CalculateAreaForStatsVisitor : public ElementVisitor, public OsmMapConsumer, public SingleStatistic
+class CalculateAreaForStatsVisitor : public ElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
 {
 public:
 

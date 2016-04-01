@@ -52,7 +52,11 @@ public:
 
   bool isSatisfied(const shared_ptr<const Element> &e) const;
 
+  virtual ElementCriterion* clone() { return new JsFunctionCriterion(_func); }
+
 private:
+  JsFunctionCriterion(Persistent<Function> func) { _func = func; }
+
   Persistent<Function> _func;
 };
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * Calculates a count of all elements that are candidates for matches given the provided set
+ * Calculates a count of all elements that are candidates for matches given a set
  * of match creators.
  */
 class MatchCandidateCountVisitor : public ElementConstOsmMapVisitor, public SingleStatistic,
@@ -57,14 +57,11 @@ public:
 
 private:
 
-  vector< shared_ptr<MatchCreator> > _matchCreators;
-  QStringList _matchCreatorDescriptions;
+  QMap<QString, shared_ptr<MatchCreator> > _matchCreatorsByName;
   long _candidateCount;
   QMap<QString, long> _matchCandidateCountsByMatchCreator;
 
-  static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
-                                      const MatchCreator::Description& m2);
-
+  void _setupCreators(const vector< shared_ptr<MatchCreator> >& matchCreators);
 };
 
 }

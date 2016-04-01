@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CookieCutterOp.h"
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/AlphaShapeGenerator.h>
 #include <hoot/core/conflate/CookieCutter.h>
 #include <hoot/core/filters/StatusCriterion.h>
@@ -51,7 +51,6 @@ void CookieCutterOp::setConfiguration(const Settings& conf)
   ConfigOptions config(conf);
   setAlpha(config.getCookieCutterAlpha());
   setAlphaShapeBuffer(config.getCookieCutterAlphaShapeBuffer());
-  setOutputBuffer(config.getCookieCutterOutputBuffer());
   setCrop(config.getCookieCutterOutputCrop());
 }
 
@@ -76,7 +75,7 @@ void CookieCutterOp::apply(shared_ptr<OsmMap>& map)
   LOG_VARD(doughMap->getNodeMap().size());
   
   //cookie cut the alpha shape obtained from the ref map out of the source map
-  CookieCutter(_crop, _outputBuffer).cut(cutShapeMap, doughMap);
+  CookieCutter(_crop, 0.0).cut(cutShapeMap, doughMap);
   OsmMapPtr cookieCutMap = doughMap;
   LOG_VARD(cookieCutMap->getNodeMap().size());
     

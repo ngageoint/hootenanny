@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/DistanceUtils.h>
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/index/ClosePointHash.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/Settings.h>
@@ -64,7 +64,7 @@ MergeNearbyNodes::MergeNearbyNodes(Meters distance)
 
   if (_distance < 0.0)
   {
-    _distance = conf().getDouble(distanceKey(), 1.0);
+    _distance = ConfigOptions().getMergeNearbyNodesDistance();
   }
 }
 
@@ -78,11 +78,11 @@ void MergeNearbyNodes::apply(shared_ptr<OsmMap>& map)
   shared_ptr<OsmMap> wgs84;
   shared_ptr<OsmMap> planar;
 
-  if (MapReprojector::isGeographic(map))
+  if (MapProjector::isGeographic(map))
   {
     wgs84 = map;
     planar.reset(new OsmMap(map));
-    MapReprojector::reprojectToPlanar(planar);
+    MapProjector::projectToPlanar(planar);
   }
   else
   {
@@ -91,16 +91,16 @@ void MergeNearbyNodes::apply(shared_ptr<OsmMap>& map)
     if (_bounds.isNull() == false)
     {
       wgs84.reset(new OsmMap(map));
-      MapReprojector::reprojectToWgs84(wgs84);
+      MapProjector::projectToWgs84(wgs84);
     }
   }
 
   ClosePointHash cph(_distance);
 
-  const OsmMap::NodeMap& nodes = planar->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
+  const NodeMap& nodes = planar->getNodeMap();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
   {
-    const shared_ptr<Node>& n = it.value();
+    const shared_ptr<Node>& n = it->second;
     cph.addPoint(n->getX(), n->getY(), n->getId());
   }
 

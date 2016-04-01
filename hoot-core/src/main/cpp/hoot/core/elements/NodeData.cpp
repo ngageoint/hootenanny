@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,8 +30,22 @@
 // Boost
 using namespace boost;
 
-namespace hoot {
+namespace hoot
+{
 
+NodeData::NodeData(const NodeData& nd) :
+ElementData(nd.getId(), nd.getTags(), nd.getCircularError()),
+_x(nd._x),
+_y(nd._y)
+{
+}
+
+NodeData::NodeData(long id, double x, double y) :
+ElementData(id),
+_x(x),
+_y(y)
+{
+}
 
 NodeData& NodeData::operator=(const NodeData& nd)
 {
@@ -40,6 +54,19 @@ NodeData& NodeData::operator=(const NodeData& nd)
   setCircularError(nd.getCircularError());
 
   return *this;
+}
+
+void NodeData::init(long id, double x, double y, long changeset, long version, long timestamp,
+                    QString user, long uid)
+{
+ _id = id;
+ _x = x;
+ _y = y;
+ _changeset = changeset;
+ _version = version;
+ _timestamp = timestamp;
+ _user = user;
+ _uid = uid;
 }
 
 }

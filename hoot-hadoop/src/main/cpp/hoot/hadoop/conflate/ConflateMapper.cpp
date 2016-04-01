@@ -190,10 +190,10 @@ void ConflateMapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& contex
   }
 
   // go through all nodes
-  const OsmMap::NodeMap& nm = m->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nm.constBegin(); it != nm.constEnd(); ++it)
+  const NodeMap& nm = m->getNodeMap();
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const shared_ptr<Node>& n = it.value();
+    const shared_ptr<Node>& n = it->second;
 
     // add node to appropriate map
     _addNode(n);
@@ -246,7 +246,7 @@ void ConflateMapper::_replaceNodes(shared_ptr<OsmMap>& m)
 
   if (fs.getFileStatus(_replacmentsPath).isDir())
   {
-    vector<pp::FileStatus> status = fs.listStatus(_replacmentsPath);
+    vector<pp::FileStatus> status = fs.listStatus(_replacmentsPath, true);
     for (size_t i = 0; i < status.size(); i++)
     {
       if (QString::fromStdString(status[i].getPath()).endsWith(".replacement") &&

@@ -168,6 +168,14 @@ function logWarn(e)
 }
 
 /**
+ * Wrapper for logVerbose for backward compatibility.
+ */
+function logVerbose(e)
+{
+    return hoot.logVerbose(e);
+}
+
+/**
  * Wrapper for logError for backward compatibility.
  */
 function logError(e)
@@ -288,6 +296,24 @@ function mergeTags(e1, e2)
 function calculatePercentOverlap(map, e1, e2)
 {
     return new hoot.OverlapExtractor().extract(map, e1, e2);
+}
+
+/**
+ * This will merge elements 1 and 2. The geometry of 1 will be kept and 2
+ * discarded. If element 2 is part of another element (e.g. in a way or
+ * relation) element 1 will take its place in that element.
+ */
+function mergeElements(map, e1, e2) {
+    // merge tags from e2 into e1 using default tag merging
+    var newTags = mergeTags(e1, e2);
+    e1.setTags(newTags);
+
+    new hoot.ReplaceElementOp(e2, e1).apply(map);
+    // remove the tags on e2 just in case we can't delete it.
+    e2.setTags(new hoot.Tags());
+    // try to delete e2. This may silently fail if it is still part of another
+    // element. Failure in this case isn't necessarily bad.
+    new hoot.RecursiveElementRemover(e2).apply(map);
 }
 
 /**

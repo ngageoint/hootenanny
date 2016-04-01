@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -45,17 +45,14 @@ using namespace geos::geom;
 
 #include <tgs/StreamUtils.h>
 
-namespace hoot {
-
-Way::Way(Status s, long id, Meters circularError) : Element(s)
+namespace hoot
 {
-  _wayData.reset(new WayData(id));
-  _getElementData().setCircularError(circularError);
-}
 
-Way::Way(Status s, long id, long changeset, long version, unsigned int timestamp, Meters circularError) : Element(s)
+Way::Way(Status s, long id, Meters circularError, long changeset, long version,
+         unsigned int timestamp, QString user, long uid)
+: Element(s)
 {
-  _wayData.reset(new WayData(id, changeset, version, timestamp));
+  _wayData.reset(new WayData(id, changeset, version, timestamp, user, uid));
   _getElementData().setCircularError(circularError);
 }
 

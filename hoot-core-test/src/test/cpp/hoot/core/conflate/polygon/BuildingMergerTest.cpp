@@ -42,7 +42,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
 #include <hoot/core/elements/ElementVisitor.h>
@@ -100,7 +100,7 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/ToyBuildingsTestB.osm", map);
 
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     vector<long> wids1 = map->findWays("REF1", "Target");
     vector<long> wids2 = map->findWays("REF2", "Target");
@@ -116,7 +116,7 @@ public:
     BuildingMerger bm(pairs);
     bm.apply(map, replaced);
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     QDir(".").mkpath("test-output/conflate/polygon");
     OsmWriter writer;

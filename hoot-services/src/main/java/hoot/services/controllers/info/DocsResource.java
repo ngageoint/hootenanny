@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.info;
 
@@ -43,7 +43,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Path("/document")
-public class DocsResource {
+public class DocsResource
+{
 	private static final Logger log = LoggerFactory.getLogger(DocsResource.class);
 
 	protected static String _docName = null;
@@ -53,12 +54,12 @@ public class DocsResource {
 	{
 		try
 		{
-			if (_docName ==  null)
+			if (_docName == null)
 			{
 				_docName = HootProperties.getProperty("documentName");
 			}
 
-			if(_homeFolder ==  null)
+			if (_homeFolder == null)
 			{
 				_homeFolder = HootProperties.getProperty("homeFolder");
 			}
@@ -70,10 +71,14 @@ public class DocsResource {
 		}
 	}
 
+	/**
+	 * REST end point for user document
+	 * @return Octet stream of retrieved file
+	 */
 	@GET
-  @Path("/export")
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  public Response exportDoc()
+	@Path("/export")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	public Response exportDoc()
 	{
 		File out = null;
 		try
@@ -84,12 +89,11 @@ public class DocsResource {
 		catch (Exception ex)
 		{
 			ResourceErrorHandler.handleError(
-					"Error exporting document file: " + ex.toString(),
-				    Status.INTERNAL_SERVER_ERROR,
-					log);
+			    "Error exporting document file: " + ex.toString(),
+			    Status.INTERNAL_SERVER_ERROR, log);
 		}
 		ResponseBuilder rBuild = Response.ok(out, "application/pdf");
-		rBuild.header("Content-Disposition", "attachment; filename=" + _docName );
+		rBuild.header("Content-Disposition", "attachment; filename=" + _docName);
 
 		return rBuild.build();
 	}

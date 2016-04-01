@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMatch.h"
 
@@ -44,7 +44,7 @@
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/conflate/js/ScriptMergerCreator.h>
 #include <hoot/js/elements/ElementJs.h>
@@ -104,9 +104,13 @@ void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Obj
     _p.setMissP(_script->toNumber(v, "miss", 0));
     _p.setReviewP(_script->toNumber(v, "review", 0));
 
+    _explainText = vm["explain"].toString();
+    if (_explainText.isEmpty())
+    {
+      _explainText = _threshold->getTypeDetail(_p);
+    }
     if (_threshold->getType(_p) == MatchType::Review)
     {
-      _explainText = vm["explain"].toString();
       if (_explainText.isEmpty())
       {
         throw IllegalArgumentException("If the match is a review an appropriate explanation must "

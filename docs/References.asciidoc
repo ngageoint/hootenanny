@@ -92,7 +92,7 @@
 [[Conflation]]Conflation::
   http://wiki.gis.com/wiki/index.php/Conflation[In GIS], conflation is defined 
   as the process of combining geographic information from overlapping sources so
-  as to retain accuracte data, minimize redundancy, and reconcile data 
+  as to retain accurate data, minimize redundancy, and reconcile data 
   conflicts.
 [[ConnectedComponent]]Connected component::
   In graph theory, a

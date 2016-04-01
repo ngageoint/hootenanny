@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MapStatsWriter.h"
 
@@ -32,7 +32,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/OsmUtils.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/StatsComposer.h>
@@ -41,6 +41,12 @@
 #include <QFile>
 #include <QTextStream>
 #include <QProcess>
+
+// Boost
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
+namespace pt = boost::property_tree;
 
 namespace hoot
 {
@@ -161,6 +167,78 @@ void MapStatsWriter::writeStats(QList< QList<SingleStat> >& stats, QStringList n
   }
 }
 
+void MapStatsWriter::writeStatsToJson(QList< QList<SingleStat> >& stats, const QString& statsOutputFilePath)
+{
+  try
+  {
+    pt::ptree pt;
+    QStringList allStats = statsToString(stats, "\t").split("\n");
+    for (int i = 0; i < allStats.size(); i++)
+    {
+      QStringList statrow = allStats.at(i).split("\t");
+      if (statrow.size() > 0 && !statrow[0].isEmpty())
+      {
+        QStringList tmpValues;
+        //filter out empty values, first one in array is key, so the loop starts with 1
+        for (int j = 1; j < statrow.size(); j++)
+        {
+          if (!statrow.at(j).trimmed().isEmpty())
+          {
+            tmpValues << statrow.at(j).trimmed();
+          }
+        }
+        //if only one value in the array, do not use array in json file
+        if (tmpValues.size() == 1)
+        {
+          pt::ptree child;
+          child.put("", tmpValues.at(0).toStdString());
+          pt.add_child(statrow.at(0).toStdString(), child);
+        }
+        else
+        {
+          pt::ptree children;
+          for (int j = 0; j < tmpValues.size(); j++)
+          {
+            pt::ptree child;
+            child.put("", tmpValues.at(j).toStdString());
+            children.push_back(std::make_pair("", child));
+          }
+          pt.add_child(statrow.at(0).toStdString(), children);
+        }
+      }
+    }
+    pt::write_json(statsOutputFilePath.toStdString(), pt);
+  }
+  catch (std::exception e)
+  {
+    QString reason = e.what();
+    LOG_ERROR("Error writing JSON " + reason);
+  }
+}
+
+void MapStatsWriter::writeStatsToText(QList<QList<SingleStat> > &stats, const QString &statsOutputFilePath)
+{
+  LOG_INFO("Writing stats to file: " << statsOutputFilePath);
+
+  //  Write to the text file
+  QFile outputFile(statsOutputFilePath);
+  if (outputFile.exists())
+  {
+    outputFile.remove();
+  }
+  if (outputFile.open(QFile::WriteOnly | QFile::Text))
+  {
+    QTextStream out(&outputFile);
+    out << statsToString(stats, "\t");
+    outputFile.close();
+  }
+  else
+  {
+    LOG_ERROR("Unable to write to output file.");
+  }
+
+}
+
 void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& statsOutputFilePath,
                                 QString sep)
 {
@@ -170,7 +248,7 @@ void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& stat
   conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
   shared_ptr<OsmMap> map(new OsmMap());
   OsmUtils::loadMap(map, mapInputPath, true, Status::Invalid);
-  MapReprojector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   QList< QList<SingleStat> > allStats;
   shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());

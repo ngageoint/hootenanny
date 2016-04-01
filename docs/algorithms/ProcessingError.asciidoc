@@ -100,7 +100,7 @@ image::algorithms/ProcessingErrorGraph.png[Graph of mean and max distance errors
 .Table of movement errors and distance errors in nanodegrees.
 [options="header"]
 |======
-| |Number of Points Moved|Number of Pairs Separated|Mean Error (nanodegrees)|Max Error (nanodegrees)|Standard Devation of Error (nanodegrees)
+| |Number of Points Moved|Number of Pairs Separated|Mean Error (nanodegrees)|Max Error (nanodegrees)|Standard Deviation of Error (nanodegrees)
 |null transform|0|0|0.0000000|0.0000000|0.0000000
 |Memory Copy|0|0|0.0000000|0.0000000|0.0000000
 |Project|937|0|0.0000219|0.0000853|0.0000147
@@ -115,7 +115,7 @@ image::algorithms/ProcessingErrorGraph.png[Graph of mean and max distance errors
 .Table of movement errors and distance errors in micrometers. With the exception of units this table is similar to the one above.
 [options="header"]
 |======
-| |Number of Points Moved|Number of Pairs Separated|Mean Error (~um)|Max Error (~um)|Standard Devation of Error (~um)
+| |Number of Points Moved|Number of Pairs Separated|Mean Error (~um)|Max Error (~um)|Standard Deviation of Error (~um)
 |null transform|0|0|0.00000|0.00000|0.00000
 |Memory Copy|0|0|0.00000|0.00000|0.00000
 |Project|937|0|0.00244|0.00948|0.00164
@@ -177,8 +177,7 @@ nodesep=1.75;
 node [shape=record,width=1.5,height=.75,style=filled,fillcolor="#e7e7f3",fontsize=10];
 edge [arrowhead=none, arrowtail=none,fontsize=9];
 db [label="PostgreSQL\nDatabase\n(WGS84 100 nanodegrees)",shape=record,width=2,height=1,style=filled,fillcolor="#e7e7f3"];
-ui [shape=record,label="Web\nBrowser|{Data\nStructures\n(WGS84 IEEE
-754)|Visualize\n(Web Mercator\nIEEE 754)}"];
+ui [shape=record,label="Web\nBrowser|{Data\nStructures\n(WGS84 IEEE 754)|Visualize\n(Web Mercator\nIEEE 754)}"];
 services [label="Web\nServices\n(WGS84 IEEE 754)"];
 core [label="Hoot\nCore\n(IEEE 754)"];
 core -> db;

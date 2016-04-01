@@ -55,7 +55,7 @@
 // Hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/ServicesDbWriter.h>
+#include <hoot/core/io/HootApiDbWriter.h>
 
 namespace hoot
 {
@@ -66,15 +66,6 @@ public:
   static string className() { return "hoot::DeleteMapCmd"; }
 
   DeleteMapCmd() {}
-
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (Map Name)\n"
-        "  Delete a map from the database\n"
-        "  * Map Name - The name of the map.";
-  }
 
   virtual QString getName() const { return "delete-map"; }
 
@@ -87,7 +78,7 @@ public:
     }
     QString input = args[0];
 
-    ServicesDbWriter writer;
+    HootApiDbWriter writer;
 
     writer.deleteMap(input);
 

@@ -19,7 +19,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/fourpass/FourPassManager.h>
 #include <hoot/core/ops/OpList.h>
@@ -52,35 +52,13 @@ public:
       throw HootException("Error creating EPSG:4326 projection.");
     }
     auto_ptr<OGREnvelope> e(GeometryUtils::toOGREnvelope(*g->getEnvelopeInternal()));
-    shared_ptr<OGRSpatialReference> planar = MapReprojector::createAeacProjection(*e);
+    shared_ptr<OGRSpatialReference> planar = MapProjector::createAeacProjection(*e);
 
-    MapReprojector::reproject(g, wgs84, planar);
+    MapProjector::project(g, wgs84, planar);
 
     g.reset(g->buffer(b));
 
-    MapReprojector::reproject(g, planar, wgs84);
-  }
-
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (cutter-shape) (dough.osm.pbf) (output.osm.pbf) [buffer] \n"
-        "  [--local] [--crop]\n"
-        "  Reads in a OSM input file as the 'cutter-shape', and removes the \n"
-        "  cookie cutter shape from the contents of the 'dough' file. The\n"
-        "  resulting geometries are written to 'output'. Very large inputs are\n"
-        "  supported.\n"
-        "  * cutter-shape - The input Polygons to use as the cutter shape. This must \n"
-        "             reside on the local file system and must easily fit in RAM.\n"
-        "  * dough.osm.pbf - The input OSM data to cut from. This is the data that will \n"
-        "             be cut and written out. This must reside on HDFS.\n"
-        "  * output.osm.pbf - The output OSM data path. This must reside on HDFS.\n"
-        "  * buffer - Optional buffer value, if the buffer value is provided then the\n"
-        "             shape is buffered by this many meters before cutting. The buffer\n"
-        "             may be positive or negative.\n"
-        "  * --local - Runs the job locally rather than using Hadoop.\n"
-        "  * --crop - Crops based on the polygon rather than doing a cookie cut.";
+    MapProjector::project(g, planar, wgs84);
   }
 
   QString getName() const { return "big-cookie-cutter"; }
@@ -103,8 +81,8 @@ public:
     }
     bool local = args.contains("--local");
     bool crop = args.contains("--crop");
-    double pixelSize = conf().getDouble(HadoopTileWorker2::pixelSizeKey());
-    int maxNodeCount = conf().getInt(HadoopTileWorker2::maxNodeCountKey());
+    double pixelSize = ConfigOptions().getHootHadoopPixelSize();
+    int maxNodeCount = ConfigOptions().getHootHadoopMaxNodeCount();
 
     if (local)
     {

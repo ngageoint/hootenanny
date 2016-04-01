@@ -90,7 +90,7 @@ void TranslatedTagCountVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getTags().getInformationCount() > 0)
   {
-    shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);
+    shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e, false);
 
     Tags t = e->getTags();
     t["error:circular"] = QString::number(e->getCircularError());

@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/point/CustomPoiMatchCreator.h>
 #include <hoot/core/elements/Way.h>
@@ -69,7 +69,7 @@ public:
     env.MinY = 0.0;
     env.MaxX = 1.0;
     env.MaxY = 1.0;
-    MapReprojector::reprojectToPlanar(map, env);
+    MapProjector::projectToPlanar(map, env);
 
     //to be a match candidate: needs to be a node and a poi; being a poi means its tagged as a
     //poi OR has a name tag

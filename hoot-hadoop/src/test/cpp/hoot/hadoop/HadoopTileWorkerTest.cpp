@@ -37,6 +37,9 @@ using namespace pp;
 #include <hoot/hadoop/conflate/ConflateDriver.h>
 #include <hoot/hadoop/HadoopTileWorker.h>
 
+// Tgs
+#include <tgs/Statistics/Random.h>
+
 #include "MapReduceTestFixture.h"
 
 namespace hoot
@@ -52,6 +55,12 @@ public:
 
   void testAll()
   {
+    Tgs::Random::instance()->seed(0);
+    OsmMap::resetCounters();
+    Settings::getInstance().clear();
+    conf().set(ConfigOptions().getUuidHelperRepeatableKey(), true);
+    conf().set(ConfigOptions().getUnifyOptimizerTimeLimitKey(), -1);
+
     string outDir = "test-output/hadoop/HadoopTileWorkerTest/";
     Hdfs fs;
     if (fs.exists(outDir))
@@ -75,7 +84,7 @@ public:
     shared_ptr<OsmMap> map(new OsmMap);
     PbfReader reader(true);
     reader.setUseFileStatus(true);
-    std::vector<FileStatus> status = fs.listStatus(outDir + "HadoopTileWorkerTest.pbf");
+    std::vector<FileStatus> status = fs.listStatus(outDir + "HadoopTileWorkerTest.pbf", true);
     for (size_t i = 0; i < status.size(); i++)
     {
       const string& path = status[i].getPath();
@@ -95,6 +104,11 @@ public:
 
     HOOT_FILE_EQUALS("test-files/hadoop/HadoopTileWorkerTest/result.osm",
                      "test-output/hadoop/HadoopTileWorkerTest/result.osm");
+  }
+
+  virtual void tearDown()
+  {
+    Settings::getInstance().clear();
   }
 };
 

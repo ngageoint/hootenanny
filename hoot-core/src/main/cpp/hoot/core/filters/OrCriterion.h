@@ -62,6 +62,9 @@ public:
 
     return false;
   }
+
+  virtual ElementCriterion* clone() { return new OrCriterion(_filters[0]->clone(), _filters[1]->clone()); }
+
 };
 
 }

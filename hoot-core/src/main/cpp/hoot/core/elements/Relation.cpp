@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -50,6 +50,7 @@ QString Relation::INNER = "inner";
 QString Relation::MULTILINESTRING = "multilinestring";
 QString Relation::MULTIPOLYGON = "multipolygon";
 QString Relation::OUTER = "outer";
+QString Relation::REVIEW = "review";
 
 /**
  * This is a convenience class to handle cases when exceptions are thrown.
@@ -82,18 +83,11 @@ Relation::Relation(const Relation& from) :
   _relationData = from._relationData;
 }
 
-Relation::Relation(Status s, long id, Meters circularError, QString type) :
-  Element(s)
+Relation::Relation(Status s, long id, Meters circularError, QString type, long changeset,
+                   long version, unsigned int timestamp, QString user, long uid) :
+Element(s)
 {
-  _relationData.reset(new RelationData(id));
-  _relationData->setCircularError(circularError);
-  _relationData->setType(type);
-}
-
-Relation::Relation(Status s, long id, long changeset, long version, unsigned int timestamp, Meters circularError, QString type) :
-  Element(s)
-{
-  _relationData.reset(new RelationData(id, changeset, version, timestamp));
+  _relationData.reset(new RelationData(id, changeset, version, timestamp, user, uid));
   _relationData->setCircularError(circularError);
   _relationData->setType(type);
 }

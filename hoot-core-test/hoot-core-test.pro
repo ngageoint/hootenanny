@@ -39,11 +39,6 @@ release:OBJECTS_DIR = tmp/release
 else:OBJECTS_DIR = tmp/debug
 DESTDIR = ../lib/
 
-octave {
-cppunit:SOURCES += src/test/cpp/hoot/core/perty/PertyOpTest.cpp \
-
-}
-
 cppunit {
 SOURCES += \
     src/test/cpp/hoot/core/ConflatorTest.cpp \
@@ -61,6 +56,7 @@ SOURCES += \
     src/test/cpp/hoot/core/ops/MergeNearbyNodesTest.cpp \
     src/test/cpp/hoot/core/algorithms/LevenshteinDistanceTest.cpp \
     src/test/cpp/hoot/core/schema/OsmSchemaTest.cpp \
+    src/test/cpp/hoot/core/schema/SchemaCheckerTest.cpp \
     src/test/cpp/hoot/core/schema/TagComparatorTest.cpp \
     src/test/cpp/hoot/core/scoring/AttributeComparatorTest.cpp \
     src/test/cpp/hoot/core/index/ClosePointHashTest.cpp \
@@ -104,10 +100,9 @@ SOURCES += \
     src/test/cpp/hoot/core/perty/PertyNameVisitorTest.cpp \
     src/test/cpp/hoot/core/perty/PertyDuplicatePoiOpTest.cpp \
     src/test/cpp/hoot/core/perty/PertyRemoveTagVisitorTest.cpp \
-    src/test/cpp/hoot/core/MapReprojectorTest.cpp \
+    src/test/cpp/hoot/core/MapProjectorTest.cpp \
     src/test/cpp/hoot/core/util/GeometryUtilsTest.cpp \
     src/test/cpp/hoot/core/elements/TagsTest.cpp \
-    src/test/cpp/hoot/core/conflate/polygon/BuildingMergeManipulatorTest.cpp \
     src/test/cpp/hoot/core/perty/BigPertyOpTest.cpp \
     src/test/cpp/hoot/core/index/metric-hybrid/FqTreeTest.cpp \
     src/test/cpp/hoot/core/index/metric-hybrid/RTreeTest.cpp \
@@ -163,14 +158,18 @@ SOURCES += \
     src/test/cpp/hoot/core/visitors/KeepTagsVisitorTest.cpp \
     src/test/cpp/hoot/core/conflate/CookieCutterTest.cpp \
     src/test/cpp/hoot/core/conflate/AlphaShapeGeneratorTest.cpp \
-    src/test/cpp/hoot/core/ops/CookieCutterOpTest.cpp
+    src/test/cpp/hoot/core/perty/PertyOpTest.cpp \
+    src/test/cpp/hoot/core/ops/CookieCutterOpTest.cpp \
+    src/test/cpp/hoot/core/visitors/RemoveElementsVisitorTest.cpp \
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
-    src/test/cpp/hoot/core/io/ServicesDbTest.cpp \
+    src/test/cpp/hoot/core/io/HootApiDbTest.cpp \
+    src/test/cpp/hoot/core/io/OsmApiDbTest.cpp \
     src/test/cpp/hoot/core/io/ServicesDbTestUtils.cpp \
-    src/test/cpp/hoot/core/io/ServicesDbWriterTest.cpp \
-    src/test/cpp/hoot/core/io/ServicesDbReaderTest.cpp \
+    src/test/cpp/hoot/core/io/OsmApiDbReaderTest.cpp \
+    src/test/cpp/hoot/core/io/HootApiDbReaderTest.cpp \
+    src/test/cpp/hoot/core/io/HootApiDbWriterTest.cpp \
 
 HEADERS += \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.h \
@@ -200,5 +199,6 @@ SOURCES += \
     src/test/cpp/hoot/core/algorithms/string/StringTokenizerTest.cpp \
     src/test/cpp/hoot/core/schema/TagCategoryDifferencerTest.cpp \
     src/test/cpp/hoot/core/schema/TagAncestorDifferencerTest.cpp \
-    src/test/cpp/hoot/core/elements/RelationTest.cpp
+    src/test/cpp/hoot/core/elements/RelationTest.cpp \
+    src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp
 

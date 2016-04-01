@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMatch.h"
 
@@ -37,16 +37,17 @@
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/Soundex.h>
 #include <hoot/core/conflate/MatchType.h>
-#include <hoot/core/conflate/polygon/extractors/BufferedOverlapExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/CentroidDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/CompactnessExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/SmallerOverlapExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/index/ElementToRelationMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
 
 // Standard
 #include <sstream>
@@ -59,14 +60,37 @@
 namespace hoot
 {
 
+QString BuildingMatch::_matchName = "Building";
+
 BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, shared_ptr<const BuildingRfClassifier> rf,
   const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt) :
   Match(mt),
   _eid1(eid1),
   _eid2(eid2),
-  _rf(rf)
+  _rf(rf),
+  _explainText("")
 {
+  //LOG_DEBUG("Classifying building pair: " << eid1 << "; " << eid2);
+
   _p = _rf->classify(map, _eid1, _eid2);
+
+  //If the buildings aren't matched and they overlap at all, then make them be reviewed.
+  if (getType() == MatchType::Miss &&
+      (OverlapExtractor().extract(*map, map->getElement(eid1), map->getElement(eid2)) > 0.0))
+  {
+    //LOG_DEBUG("Building miss overlap:");
+    //LOG_VARD(eid1);
+    //LOG_VARD(eid2);
+
+    _p.clear();
+    _p.setReviewP(1.0);
+    _explainText = "Unmatched buildings are overlapping.";
+  }
+  else
+  {
+    _explainText = mt->getTypeDetail(_p);
+  }
+  //LOG_DEBUG(toString());
 }
 
 map<QString, double> BuildingMatch::getFeatures(const shared_ptr<const OsmMap>& m) const
@@ -103,6 +127,10 @@ QString BuildingMatch::toString() const
 {
   stringstream ss;
   ss << "BuildingMatch: " << _eid1 << ", " << _eid2 << " p: " << _p.toString();
+  //if (getType() == MatchType::Review)
+  //{
+    //ss << " note: " << _explainText;
+  //}
   return QString::fromStdString(ss.str());
 }
 

@@ -152,8 +152,8 @@ translate = {
     
         return lookup;
     },
-    
-    
+
+
     // Apply one to one translations - used for import and export
     applyOne2One : function(inList, outList, lookup, fCodeList, ignoreList) 
     { 
@@ -181,7 +181,7 @@ translate = {
                     // If these tags are used to find an FCODE, ignore them
                     if ((col in fCodeList) && (value in fCodeList[col])) continue;
 
-                    logWarn('Lookup value not found for column:: (' + col + '=' + value + ')');
+                    logVerbose('Lookup value not found for column:: (' + col + '=' + value + ')');
                 }
             }
             else
@@ -212,7 +212,7 @@ translate = {
                     }
                     else
                     {
-                        if (config.getOgrDebugLookupcolumn() == 'true') logWarn('Column not found:: (' + col + '=' + value + ')');
+                        if (config.getOgrDebugLookupcolumn() == 'true') logVerbose('Column not found:: (' + col + '=' + value + ')');
                     }
 
                 } // End col in ignoreList
@@ -220,7 +220,65 @@ translate = {
         } // End for col in inList
     }, // End applyOne2One
 
-    // Apply one to one translations - For NFDD export 
+
+    // Apply one to one translations and don't report errors: missing columns etc
+    applyOne2OneQuiet : function(inList, outList, lookup)
+    {
+        var endChar = '',
+            tAttrib = '',
+            row = [];
+
+        for (var col in inList)
+        {
+            var value = inList[col];
+            if (col in lookup)
+            {
+                if (value in lookup[col])
+                {
+                    row = lookup[col][value];
+
+                    // Drop all of the undefined values
+                    if (row[0]) outList[row[0]] = row[1];
+                }
+            }
+        } // End for col in inList
+    }, // End applyOne2OneQuiet
+
+
+    // Apply one to one translations and:
+    // * Don't report errors
+    // * Send back the tags that were used.
+    applyOne2OneUsed : function(inList, outList, lookup)
+    {
+        var endChar = '',
+            tAttrib = '',
+            row = [];
+            used = [];
+
+        for (var col in inList)
+        {
+            var value = inList[col];
+            if (col in lookup)
+            {
+                if (value in lookup[col])
+                {
+                    row = lookup[col][value];
+
+                    // Drop all of the undefined values
+                    if (row[0])
+                    {
+                        outList[row[0]] = row[1];
+                        used.push([col,value]);
+                    }
+                }
+            } // End col in lookup
+        } // End for col in inList
+
+        return used;
+    }, // End applyOne2OneUsed
+
+
+    // Apply one to one translations - For NFDD export
     // This version populates the OTH field for values that are not in the rules
     applyNfddOne2One : function(inList, outList, lookup, fCodeList, ignoreList) 
     { 
@@ -267,7 +325,7 @@ translate = {
                     // If these tags are used to find an FCODE, ignore them
                     if ((tAttrib in fCodeList) && (value in fCodeList[tAttrib])) continue;
                         
-                    logWarn('Lookup value not found for column:: (' + tAttrib + '=' + value + ')');
+                    logVerbose('Lookup value not found for column:: (' + tAttrib + '=' + value + ')');
 
                     // The following is used for export. If we have an attribute value that can't
                     // find a rule for, we add it to the OTH Field.
@@ -279,7 +337,7 @@ translate = {
                         othVal = '(' + otherVal[0] + endChar + ':' + value + ')';
                         outList.OTH = translate.appendValue(outList.OTH,othVal,' ');
 
-                        logWarn('Adding to OTH field:: ' + othVal);
+                        logVerbose('Adding to OTH field:: ' + othVal);
 
                         // Set the output attribute to "other"
                         outList[otherVal[0] + endChar] = otherVal[1];
@@ -294,7 +352,7 @@ translate = {
 //                 // ignoreList is the list of fields that get handled later
 //                 if (!(col in ignoreList))
 //                 {
-//                     if (getHootConfig('ogr.debug.lookupcolumn') == 'true') logWarn('Column not found:: (' + col + '=' + value + ')');
+//                     if (getHootConfig('ogr.debug.lookupcolumn') == 'true') logVerbose('Column not found:: (' + col + '=' + value + ')');
 //                 }
 //             }
         } // End col in inList
@@ -395,7 +453,7 @@ translate = {
             }
             else
             {
-                logWarn('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is not set. Skipping it.');
+                logVerbose('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is not set. Skipping it.');
                 continue
             } // End !attrsi[]
 
@@ -405,7 +463,7 @@ translate = {
 
             if (tValue !== '999')
             {
-                logWarn('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is :' + tValue + ':. Skipping it.');
+                logVerbose('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is :' + tValue + ':. Skipping it.');
                 continue;
             }
 
@@ -501,11 +559,11 @@ translate = {
     
     fixConstruction : function(tags, key)
     {
-        if ('status' in tags && key in tags && tags['status'] == 'construction' && tags[key] != '')
+        if ('condition' in tags && key in tags && tags.condition == 'construction' && tags[key] != '')
         {
-            tags['construction'] = tags[key];
+            tags.construction = tags[key];
             tags[key] = 'construction';
-            delete tags['status'];
+            delete tags.condition;
         }
     },
 
@@ -569,10 +627,36 @@ translate = {
         return result;
     },
 
+
     isNumber : function(n)
     {
         return !isNaN(parseFloat(n)) && isFinite(n);
     },
+
+
+    // Chop a datetime field down to a single value and get it to 20 characters long for export to MGCP & TDS
+    chopDateTime : function(rawDateTime)
+    {
+        var finalDateTime = '';
+
+        var tmpList = rawDateTime.split(';');
+
+        // NOTE: This is a workaround untill we can get the "reference dataset" datetime
+        // Sort the list so we grab the earliest date.
+        tmpList.sort();
+
+        finalDateTime = tmpList[0];
+
+        // Try chopping the milliseconds off the datetime
+        if (finalDateTime.length > 20)
+        {
+            finalDateTime = finalDateTime.replace(/\.\d\d\dZ$/,'Z');
+        }
+
+        return finalDateTime;
+    },
+
+
 
     // applySimpleTxtBiased - Apply 0ne2one rules for Text Attributes
     // The "direction is either "forward" or "backward" - convert to or from
@@ -606,7 +690,7 @@ translate = {
 
     // applySimpleNumBiased - Apply 0ne2one rules for Number Attributes
     // The "direction is either "forward" or "backward" - convert to or from
-    applySimpleNumBiased : function(attrs, tags, rules, direction)
+    applySimpleNumBiased : function(attrs, tags, rules, direction, intList)
     {
         if (direction == 'forward')
         {
@@ -615,17 +699,14 @@ translate = {
             {
                 if (i in attrs)
                 {
-                    // Sanity checking :-)
-                    // if (translate.isOK(attrs[i])) tags[rules[i]] = attrs[i];
-
-                    // Just checking it is a number
+                    // Just checking it is a number. Dont care if it is an Int or a Real
                     if (translate.isNumber(attrs[i]))
                     {
                         tags[rules[i]] = attrs[i];
                     }
                     else
                     {
-                        logWarn('Expected a number for:: ' + i + ' got ' + attrs[i] + ' instead. Dropping ' + i);
+                        logVerbose('Expected a number for:: ' + i + '. Got ' + attrs[i] + ' instead. Skipping ' + i);
                     }
                 }
             }
@@ -640,15 +721,27 @@ translate = {
                     // Strip out anything that is not a number. Get rid of 125m etc
                     var tNum = tags[rules[i]].replace(/-[^0-9\\.]+/g, '');
 
-                    // if (translate.isOK(tNum)) attrs[i] = tNum;
-
                     if (translate.isNumber(tNum))
                     {
+                        // Now check the Integer attributes
+                        if (intList.indexOf(i) > -1)
+                        {
+                            // Quick bitwise or to strip off anything after the decimal
+                            var tInt = tNum | 0;
+
+                                // Back to a string for a comparison
+                                if ((tInt + '') !== tNum)
+                                {
+                                    hoot.logVerbose('Converting ' + i + ' from ' + tNum + ' to ' + tInt);
+                                }
+                                tNum = tInt;
+                        } // End in intList
+
                         attrs[i] = tNum;
                     }
                     else
                     {
-                        logWarn('Expected a number for:: ' + rules[i] + ' got ' + tags[rules[i]] + ' instead. Dropping ' + i);
+                        logVerbose('Expected a number for:: ' + rules[i] + '. Got ' + tags[rules[i]] + ' instead. Skipping ' + i);
                     }
                 }
             }

@@ -22,26 +22,33 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
 import java.sql.Connection;
+import java.util.List;
 
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QUsers;
 import hoot.services.db2.Users;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.osm.User;
+import hoot.services.models.user.UserSaveResponse;
+import hoot.services.models.user.UsersGetResponse;
+import hoot.services.readers.users.UsersRetriever;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.writers.osm.UserResponseWriter;
+import hoot.services.writers.user.UserSaver;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -72,28 +79,13 @@ public class UserResource
   }
 
 	/**
-	 * <NAME>User Service </NAME>
-	 * <DESCRIPTION>
-	 * 	This is currently implemented as a dummy method to appease iD.
-	 *  It always retrieves information for the first user record in the services database.
-	 *  It cannot properly be implemented until user authentication is first implemented.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	information about the currently logged in user in XML format
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/user/details</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * information about the currently logged in user in XML format
-	 * </OUTPUT>
-	 * </EXAMPLE>
-	 *
    * Service method endpoint for retrieving OSM user information
+   * 
+   * This is currently implemented as a dummy method to appease iD.  It always retrieves 
+   * information for the first user record in the services database.  It cannot properly be 
+   * implemented until user authentication is first implemented.
+   * 
+   * GET hoot-services/osm/api/0.6/user/details
    *
    * @param userId ID of the user to retrieve information for
    * @return Response with the requested user's information
@@ -178,5 +170,73 @@ public class UserResource
         .ok(new DOMSource(responseDoc), MediaType.APPLICATION_XML)
         .header("Content-type", MediaType.APPLICATION_XML)
         .build();
+  }
+  
+  /**
+   * Service method endpoint for retrieving OSM user information.  This rest end point retrieves 
+   * user based on user email. If it does not exist then it creates first.
+   * 
+   * @param userEmail User email to save/get
+   * @return Response with the requested user's information
+   * @throws Exception
+   */
+  @POST
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public UserSaveResponse getSaveUser(@QueryParam("userEmail") final String userEmail) throws Exception
+  {
+  	UserSaveResponse response = new UserSaveResponse();
+  	try(Connection conn = DbUtils.createConnection())
+  	{
+  		UserSaver saver = new UserSaver(conn);
+  		Users user = saver.getOrSaveByEmail(userEmail);
+  		if(user == null)
+  		{
+  			throw new Exception("SQL Insert failed.");
+  		}
+  		
+  		response = new UserSaveResponse(user);
+  	}
+  	catch(Exception ex)
+  	{
+  		ResourceErrorHandler.handleError(
+	        "Error saving user: " + " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+  	}
+  	return response;
+  }
+  
+  
+  /**
+   * This rest end point retrieves all users based on user email.
+   * 
+   * GET hoot-services/osm/user/1/all
+   *
+   * @return JSONArray Object containing users detail
+   * @throws Exception
+   */
+  @GET
+  @Path("/all")
+  @Produces(MediaType.APPLICATION_JSON)
+  public UsersGetResponse  getAllUsers() throws Exception
+  {
+  	UsersGetResponse response = new UsersGetResponse();
+  	try(Connection conn = DbUtils.createConnection())
+  	{
+  		UsersRetriever retreiver = new UsersRetriever(conn);
+  		List<Users> res = retreiver.retrieveAll();
+  		response = new UsersGetResponse(res);
+  	}
+  	catch (Exception ex)
+  	{
+  		ResourceErrorHandler.handleError(
+	        "Error getting all users: " + " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+  	}
+  	return response;
   }
 }

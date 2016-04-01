@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
@@ -40,6 +40,9 @@
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/manipulators/WayMerger.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
+
+// Tgs
+#include <tgs/Statistics/Random.h>
 
 // Qt
 #include <QDir>
@@ -67,7 +70,7 @@ public:
   {
     OsmReader reader;
 
-    srand(0);
+    Tgs::Random::instance()->seed(0);
     OsmMap::resetCounters();
 
     shared_ptr<OsmMap> map(new OsmMap());
@@ -77,7 +80,7 @@ public:
     reader.read(s2, map);
 
     // make the results consistent.
-    MapReprojector::reprojectToAeac(map);
+    MapProjector::projectToAeac(map);
     MapCleaner().apply(map);
 
     return map;

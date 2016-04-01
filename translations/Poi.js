@@ -58,7 +58,7 @@ function translateToOgr(tags, elementType, geometryType)
 //
 // Keeps all columns in the CSV file.
 //
-function translateToOsm(attrs, layerName) 
+function translateToOsm(attrs, layerName, geometryType)
 { 
     return attrs;
 }

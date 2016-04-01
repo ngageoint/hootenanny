@@ -1,0 +1,12 @@
+[
+    {
+        "dataType": "text",
+        "geometries": [
+            "node",
+            "linestring",
+            "relation"
+        ],
+        "name": "network",
+        "objectType": "tag"
+    }
+]

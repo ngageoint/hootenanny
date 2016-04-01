@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,16 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OgrWriter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 
 namespace hoot
 {
@@ -44,49 +47,85 @@ public:
 
   Osm2OgrCmd() { }
 
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (translation) (input.osm) (output)\n"
-        "  * translation - JavaScript file name.\n"
-        "  * input.osm - An OSM compatible input format (e.g. .osm or .osm.pbf)\n"
-        "  * output - Output file name. The format is determined by extension. \n"
-        "      FileGDB (*.gdb) and Shapefile (*.shp) have been tested but other\n"
-        "      OGR compatible formats will likely work.\n";
-  }
-
   virtual QString getName() const { return "osm2ogr"; }
 
   static QString opsKey() { return "osm2ogr.ops"; }
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 3)
+    QString errorMsg = QString("%1 takes either three or six parameters.").arg(getName());
+    if (args.size() < 3 || args.size() > 6 )
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes exactly three parameters.").arg(getName()));
+      throw HootException(errorMsg);
+    }
+    else if (args.size() == 4 || args.size() == 5)
+    {
+      errorMsg += "  A separate cache size must be set for nodes, ways, and relations.";
+      cout << getHelp() << endl << endl;
+      throw HootException(errorMsg);
     }
 
     int a = 0;
     QString translation = args[a++];
     QString input = args[a++];
     QString output = args[a++];
+    unsigned long nodeCacheSize = 0;
+    unsigned long wayCacheSize = 0;
+    unsigned long relationCacheSize = 0;
 
-    OgrWriter writer;
-    writer.setScriptPath(translation);
-    writer.open(output);
+    if (args.size() == 6)
+    {
+      nodeCacheSize = args[a++].toLong();
+      wayCacheSize = args[a++].toLong();
+      relationCacheSize = args[a++].toLong();
+    }
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    shared_ptr<OgrWriter> writer(new OgrWriter());
+    if (nodeCacheSize > 0 && wayCacheSize > 0 && relationCacheSize > 0)
+    {
+      writer->setCacheCapacity(nodeCacheSize, wayCacheSize, relationCacheSize);
+    }
+    writer->setScriptPath(translation);
+    writer->open(output);
 
-    loadMap(map, input, true);
+    OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
+    if (readerFactory.hasElementInputStream(input) &&
+      ConfigOptions().getOsm2ogrOps().size() == 0)
+    {
+      shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(input);
+      reader->open(input);
+      shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
+      shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
 
-    // Apply any user specified operations.
-    NamedOp(conf().getList(opsKey(), "")).apply(map);
+      shared_ptr<OGRSpatialReference> projection = streamReader->getProjection();
+      ProjectToGeographicVisitor visitor;
+      bool notGeographic = !projection->IsGeographic();
 
-    MapReprojector::reprojectToWgs84(map);
+      if (notGeographic)
+        visitor.initialize(projection);
 
-    writer.write(map);
+      while (streamReader->hasMoreElements())
+      {
+        ElementPtr element = streamReader->readNextElement();
+        if (notGeographic)
+          visitor.visit(element);
+        streamWriter->writeElement(element);
+      }
+    }
+    else
+    {
+      shared_ptr<OsmMap> map(new OsmMap());
+
+      loadMap(map, input, true);
+
+      // Apply any user specified operations.
+      NamedOp(ConfigOptions().getOsm2ogrOps()).apply(map);
+
+      MapProjector::projectToWgs84(map);
+
+      writer->write(map);
+    }
 
     return 0;
   }

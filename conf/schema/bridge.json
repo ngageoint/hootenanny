@@ -1,0 +1,35 @@
+[
+    {
+        "categories": [
+            "poi",
+            "hgispoi"
+        ],
+        "isA": "waterway",
+        "name": "bridge=aqueduct",
+        "objectType": "tag"
+    },
+    {
+        "isA": "bridge_tunnel=unknown",
+        "name": "bridge=no",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "poi",
+            "hgispoi"
+        ],
+        "isA": "bridge_tunnel=unknown",
+        "name": "bridge=yes",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "bridge=no",
+                "weight": 0.5
+            },
+            {
+                "name": "tunnel=yes",
+                "weight": 0.01
+            }
+        ]
+    }
+]

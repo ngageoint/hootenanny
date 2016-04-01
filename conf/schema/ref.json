@@ -1,0 +1,42 @@
+[
+    {
+        "isA": "abstract_name",
+        "name": "ref",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_name",
+        "name": "ref:FR:FANTOIR",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_name",
+        "name": "ref:UrbIS",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_name",
+        "name": "ref:bag",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_name",
+        "name": "ref:bagid",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_name",
+        "name": "ref:ruian",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_name",
+        "name": "ref:ruian:addr",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_name",
+        "name": "ref:ruian:building",
+        "objectType": "tag"
+    }
+]

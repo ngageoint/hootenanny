@@ -1,3 +1,29 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ */
 package hoot.services.controllers.job.custom.HGIS;
 
 import java.util.List;
@@ -55,19 +81,9 @@ public class HGISReviewResourceTest {
 		connStr = spy._generateDbMapParam("out1");
 		Assert.assertEquals(((JSONObject)arr.get(1)).get("OUTPUT"), connStr);
 		
+	
+		
 		command = (JSONObject)result.get(1);
-		
-		Assert.assertEquals(command.get("class"), "hoot.services.controllers.job.ReviewResource");
-		Assert.assertEquals(command.get("method"), "prepareItemsForReview");
-		Assert.assertEquals(command.get("exectype"), "reflection");
-		Assert.assertNotNull(command.get("params"));
-		arr = (JSONArray)command.get("params");
-
-		Assert.assertEquals(((JSONObject)arr.get(0)).get("value"), "out1");
-		Assert.assertEquals(((JSONObject)arr.get(1)).get("value"), false);
-		
-		
-		command = (JSONObject)result.get(2);
 		
 		Assert.assertEquals(command.get("class"), "hoot.services.controllers.job.custom.HGIS.HGISReviewResource");
 		Assert.assertEquals(command.get("method"), "updateMapsTag");

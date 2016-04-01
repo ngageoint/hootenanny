@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.db;
 
@@ -52,14 +52,13 @@ import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QCurrentWays;
-import hoot.services.db2.QElementIdMappings;
 import hoot.services.db2.QJobStatus;
 import hoot.services.db2.QMaps;
-import hoot.services.db2.QReviewItems;
-import hoot.services.db2.QReviewMap;
 import hoot.services.db2.QUsers;
 import hoot.services.models.osm.Element.ElementType;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -67,7 +66,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.mysema.query.sql.Configuration;
 import com.mysema.query.sql.PostgresTemplates;
 import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.SQLSubQuery;
 import com.mysema.query.sql.SQLTemplates;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLInsertClause;
@@ -75,7 +73,6 @@ import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.mysema.query.sql.types.EnumAsObjectType;
 import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.expr.NumberExpression;
-import com.mysema.query.types.query.ListSubQuery;
 import com.mysema.query.types.template.NumberTemplate;
 
 /**
@@ -114,17 +111,13 @@ public class DbUtils
     DELETE
   }
 
-	public enum nwr_enum {
+	public enum nwr_enum
+	{
 		 node,
 		 way,
 		 relation
 	}
 
-	public enum review_status_enum
-	{
-		unreviewed,
-		reviewed
-	}
   /**
    * Returns a record batch type given the corresponding entity change type
    *
@@ -175,9 +168,8 @@ public class DbUtils
   	}
 
   	Configuration configuration = new Configuration(templates);
-  		configuration.register("current_relation_members", "member_type",  new EnumAsObjectType<nwr_enum>(nwr_enum.class));
-    	configuration.register("element_id_mappings", "osm_element_type",  new EnumAsObjectType<nwr_enum>(nwr_enum.class));
-    	configuration.register("review_items", "review_status",  new EnumAsObjectType<review_status_enum>(review_status_enum.class));
+  	configuration.register(
+  		"current_relation_members", "member_type", new EnumAsObjectType<nwr_enum>(nwr_enum.class));
   	if(mapId != null && mapId.length() > 0)
   	{
   		overrideTable(mapId, configuration);
@@ -221,19 +213,19 @@ public class DbUtils
   {
   	if (conn != null)
   	{
-  		if (conn.isClosed())
-    	{
-    		return true;
-    	}
-    	try
-    	{
-  	  	conn.close();
-  	  	return true;
-    	}
-    	catch (Exception e)
-    	{
-    		throw e;
-    	}
+	    if (conn.isClosed())
+	    {
+		    return true;
+	    }
+	    try
+	    {
+  		  conn.close();
+  		  return true;
+      }
+	    catch (Exception e)
+	    {
+		    throw e;
+	    }
   	}
   	return false;
   }
@@ -266,7 +258,6 @@ public class DbUtils
     return recordCount > 0;
   }
 
-
   /**
    * Gets the map id list from map name
    *
@@ -284,17 +275,18 @@ public class DbUtils
 
     return mapIds;
   }
-  
-  
+
   public static String getDisplayNameById(final Connection conn, final long mapId) throws Exception
   {
   	QMaps maps = QMaps.maps;
     SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-    
+
     String displayName = query.from(maps).where(maps.id.eq(mapId)).uniqueResult(maps.displayName);
-    
+
     return displayName;
   }
+
+  //TODO: use reflection to get these three element count queries down to one
 
   /**
    * Get current_nodes record count by map name
@@ -311,10 +303,10 @@ public class DbUtils
     {
     	List<Long> mapIds = getMapIdsByName(conn,  mapName);
 
-    	for(int i=0; i<mapIds.size(); i++)
+    	for (int i=0; i<mapIds.size(); i++)
     	{
     		Long mapId = mapIds.get(i);
-    	QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
+    	  QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
 	    	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId.toString()));
 
 	    	recordCount += query.from(currentNodes).count();
@@ -328,7 +320,6 @@ public class DbUtils
     }
     return recordCount;
   }
-
 
   /**
    * Get current_ways record count by map name
@@ -345,16 +336,14 @@ public class DbUtils
     {
     	List<Long> mapIds = getMapIdsByName(conn,  mapName);
 
-    	for(int i=0; i<mapIds.size(); i++)
+    	for (int i=0; i<mapIds.size(); i++)
     	{
     		Long mapId = mapIds.get(i);
-    	QCurrentWays currentWays = QCurrentWays.currentWays;
+    	  QCurrentWays currentWays = QCurrentWays.currentWays;
 	    	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId.toString()));
 
 	    	recordCount += query.from(currentWays).count();
     	}
-
-
     }
     catch (Exception e)
     {
@@ -364,7 +353,6 @@ public class DbUtils
     }
     return recordCount;
   }
-
 
   /**
    * Get current_relations record count by map name
@@ -384,12 +372,11 @@ public class DbUtils
     	for(int i=0; i<mapIds.size(); i++)
     	{
     		Long mapId = mapIds.get(i);
-    	QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
+    	  QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
 	    	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId.toString()));
 
 	    	recordCount += query.from(currentRelations).count();
     	}
-
     }
     catch (Exception e)
     {
@@ -401,84 +388,11 @@ public class DbUtils
   }
 
   /**
-   * Clears all data in all resource related tables in the database
    *
-   * @param conn JDBC Connection
+   *
+   * @param mapId
    * @throws Exception
-   *           if any records still exist in the table after the attempted
-   *           deletion
    */
-  public static void clearServicesDb(Connection conn) throws Exception
-  {
-    try
-    {
-    	deleteMapRelatedTables();
-    	conn.setAutoCommit(false);
-			Configuration configuration = getConfiguration();
-
-    	SQLDeleteClause delete = new SQLDeleteClause(conn, configuration, QCurrentWayNodes.currentWayNodes);
-    	delete.execute();
-    	delete = new SQLDeleteClause(conn, configuration, QCurrentRelationMembers.currentRelationMembers);
-    	delete.execute();
-    	delete = new SQLDeleteClause(conn, configuration, QCurrentNodes.currentNodes);
-    	delete.execute();
-    	delete = new SQLDeleteClause(conn, configuration, QCurrentWays.currentWays);
-    	delete.execute();
-    	delete = new SQLDeleteClause(conn, configuration, QCurrentRelations.currentRelations);
-    	delete.execute();
-    	delete = new SQLDeleteClause(conn, configuration, QChangesets.changesets);
-    	delete.execute();
-    	delete = new SQLDeleteClause(conn, configuration, QMaps.maps);
-    	delete.execute();
-    	delete = new SQLDeleteClause(conn, configuration, QUsers.users);
-    	delete.execute();
-    	delete = new SQLDeleteClause(conn, configuration, QReviewItems.reviewItems);
-    	delete.execute();
-    	delete = new SQLDeleteClause(conn, configuration, QElementIdMappings.elementIdMappings);
-    	delete.execute();
-    	delete = new SQLDeleteClause(conn, configuration, QReviewMap.reviewMap);
-    	delete.execute();
-    	delete = new SQLDeleteClause(conn, configuration, QJobStatus.jobStatus);
-    	delete.execute();
-    	conn.commit();
-    }
-    catch (Exception e)
-    {
-    	conn.rollback();
-      String msg = "Error clearing services database.  ";
-      msg += "  " + e.getCause().getMessage();
-      throw new Exception(msg);
-    }
-    finally
-    {
-    	conn.setAutoCommit(true);
-    }
-  }
-
-
-  public static void deleteMapRelatedTables() throws Exception
-  {
-
-  	List<String> tables = new ArrayList<String>();
-  	String dbname = HootProperties.getProperty("dbName");
-  	DataDefinitionManager ddm = new DataDefinitionManager();
-  	List<String> childrenTables = ddm.getTablesList(dbname, "current_way_nodes");
-  	tables.addAll(childrenTables);
-  	childrenTables = ddm.getTablesList(dbname, "current_relation_members");
-  	tables.addAll(childrenTables);
-  	childrenTables = ddm.getTablesList(dbname, "current_nodes");
-  	tables.addAll(childrenTables);
-  	childrenTables = ddm.getTablesList(dbname, "current_ways");
-  	tables.addAll(childrenTables);
-  	childrenTables = ddm.getTablesList(dbname, "current_relations");
-  	tables.addAll(childrenTables);
-  	childrenTables = ddm.getTablesList(dbname, "changesets");
-  	tables.addAll(childrenTables);
-
-  	ddm.deleteTables(tables, dbname);
-  }
-
-
   public static void deleteMapRelatedTablesByMapId(final long mapId) throws Exception
   {
 
@@ -497,6 +411,13 @@ public class DbUtils
 
   // remove this. replace by calling hoot core layer delete native command
 
+  /**
+   *
+   *
+   * @param conn
+   * @param mapId
+   * @throws Exception
+   */
   public static void deleteOSMRecord(Connection conn, Long mapId) throws Exception
   {
     try
@@ -508,24 +429,8 @@ public class DbUtils
 
     	QMaps maps = QMaps.maps;
     	new SQLDeleteClause(conn, configuration, maps)
-    	.where(maps.id.eq(mapId))
-    	.execute();
-
-    	QReviewItems reviewItems = QReviewItems.reviewItems;
-    	new SQLDeleteClause(conn, configuration, reviewItems)
-    	.where(reviewItems.mapId.eq(mapId))
-    	.execute();
-
-    	QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
-    	new SQLDeleteClause(conn, configuration, elementIdMappings)
-    	.where(elementIdMappings.mapId.eq(mapId))
-    	.execute();
-
-    	QReviewMap reviewMap = QReviewMap.reviewMap;
-    	new SQLDeleteClause(conn, configuration, reviewMap)
-    	.where(reviewMap.mapId.eq(mapId))
-    	.execute();
-
+    	  .where(maps.id.eq(mapId))
+    	  .execute();
 
     	conn.commit();
     }
@@ -542,15 +447,48 @@ public class DbUtils
     }
   }
 
+  /**
+   * Drops the postgis render db created for hoot map dataset
+   *
+   * @param conn JDBC Connection
+   * @param mapName String
+   * @throws Exception
+   */
+  public static void deleteRenderDb(Connection conn, String mapName) throws Exception
+  {
+    try
+    {
+      String dbname = conn.getCatalog() + "_renderdb_" + mapName;
+      DataDefinitionManager ddm = new DataDefinitionManager();
+      ddm.deleteDb(dbname, false);
+    }
+    catch (Exception e)
+    {
+      String msg = "Error dropping postgis render database.  ";
+      msg += "  " + e.getCause().getMessage();
+      throw new Exception(msg);
+    }
+  }
 
   //remove this. replace by calling hoot core layer delete native command
+
+  /**
+   *
+   *
+   * @param conn
+   * @param mapName
+   * @throws Exception
+   */
   public static void deleteOSMRecordByName(Connection conn, String  mapName) throws Exception
   {
 		Configuration configuration = getConfiguration();
 
 		QMaps maps = QMaps.maps;
-  	List<Long> mapIds = new SQLQuery(conn, configuration).from(maps)
-		.where(maps.displayName.equalsIgnoreCase(mapName)).list(maps.id);
+  	List<Long> mapIds =
+  		new SQLQuery(conn, configuration)
+  	    .from(maps)
+		    .where(maps.displayName.equalsIgnoreCase(mapName))
+		    .list(maps.id);
 
   	if(mapIds.size() > 0)
   	{
@@ -559,27 +497,12 @@ public class DbUtils
 
     	conn.setAutoCommit(false);
 
-			ListSubQuery<Long> res = new SQLSubQuery().from(maps)
-			.where(maps.displayName.equalsIgnoreCase(mapName)).list(maps.id);
+			//ListSubQuery<Long> res = new SQLSubQuery().from(maps)
+			//.where(maps.displayName.equalsIgnoreCase(mapName)).list(maps.id);
 
   	  new SQLDeleteClause(conn, configuration, maps)
-  	  .where(maps.displayName.eq(mapName))
-  	  .execute();
-
-  	  QReviewItems reviewItems = QReviewItems.reviewItems;
-  	  new SQLDeleteClause(conn, configuration, reviewItems)
-  	  .where(reviewItems.mapId.in(res))
-  	  .execute();
-
-  	  QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
-  	  new SQLDeleteClause(conn, configuration, elementIdMappings)
-  	  .where(elementIdMappings.mapId.in(res))
-  	  .execute();
-
-  	  QReviewMap reviewMap = QReviewMap.reviewMap;
-  	  new SQLDeleteClause(conn, configuration, reviewMap)
-  	  .where(reviewMap.mapId.in(res))
-  	  .execute();
+  	    .where(maps.displayName.eq(mapName))
+  	    .execute();
 
   	  conn.commit();
     }
@@ -604,7 +527,6 @@ public class DbUtils
     return recordCtr > 0;
   }
 
-  // TODO: remove
   public static long getTestUserId(Connection conn)
   {
   	QUsers users = QUsers.users;
@@ -638,13 +560,28 @@ public class DbUtils
     return newId.longValue();
   }
 
+  public static void deleteUser(Connection conn, long userId) throws Exception
+  {
+      Configuration configuration = getConfiguration();
+      QUsers users = QUsers.users;
+      new SQLDeleteClause(conn, configuration, users)
+        .where(users.id.eq(userId))
+        .execute();
+  }
 
-  //TODO: this code needs to be changed to dynamically read in the data types from querydsl.  If
-  //I make a change to the schema in liquibase, it will never be picked up unless this static code
-  //is also changed.  See #6777
+  /**
+   *
+   *
+   * @param mapId
+   * @throws Exception
+   * //TODO: This code needs to be changed to dynamically read in the data types from querydsl.  If
+     I make a change to the schema in liquibase, it will never be picked up unless this static code
+     is also changed.  See r6777
+   */
   public static void createMap(final long mapId) throws Exception
   {
-  	try {
+  	try
+  	{
 			String dbname = HootProperties.getProperty("dbName");
 
 			DataDefinitionManager ddm = new DataDefinitionManager();
@@ -700,7 +637,6 @@ public class DbUtils
 
 	  	ddm.createTable(createTblSql, dbname);
 
-
 	  	//current_relations
 	  	createTblSql = "CREATE TABLE current_relations_" + mapId +
 	  			"(" +
@@ -720,7 +656,6 @@ public class DbUtils
 	  			");";
 	  	ddm.createTable(createTblSql, dbname);
 
-
 	  	//current_way_nodes
 
 	  	createTblSql = "CREATE TABLE current_way_nodes_" + mapId +
@@ -734,7 +669,6 @@ public class DbUtils
 	  			"  OIDS=FALSE" +
 	  			");";
 	  	ddm.createTable(createTblSql, dbname);
-
 
 	  	//current_ways
 	  	createTblSql = "CREATE TABLE current_ways_" + mapId +
@@ -756,12 +690,12 @@ public class DbUtils
 
 	  	ddm.createTable(createTblSql, dbname);
 
-		} catch (Exception e) {
+		}
+  	catch (Exception e)
+  	{
 			log.error(e.getMessage());
 			throw e;
 		}
-
-
   }
 
   public static long insertMap(final long userId, Connection conn) throws Exception
@@ -783,30 +717,35 @@ public class DbUtils
 			final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
 			new SQLInsertClause(conn, configuration, maps)
-	    .columns(maps.id, maps.createdAt, maps.displayName, maps.publicCol, maps.userId)
-	    .values(newId, now, "map-with-id-" + newId, true, userId).execute();
+	      .columns(maps.id, maps.createdAt, maps.displayName, maps.publicCol, maps.userId)
+	      .values(newId, now, "map-with-id-" + newId, true, userId)
+	      .execute();
 
 		}
 		DbUtils.createMap(newId.longValue());
     return newId.longValue();
   }
 
-
+  /**
+   *
+   *
+   * @param jobId
+   * @param status
+   * @param conn
+   * @throws Exception
+   */
   public static void insertJobStatus(final String jobId, final int status, Connection conn)
-      throws Exception
-    {
+    throws Exception
+  {
+	  Configuration configuration = getConfiguration();
+		QJobStatus jobStatus = QJobStatus.jobStatus;
 
-	  	Configuration configuration = getConfiguration();
-			QJobStatus jobStatus = QJobStatus.jobStatus;
+		final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
-			final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-
-			new SQLInsertClause(conn, configuration, jobStatus)
+		new SQLInsertClause(conn, configuration, jobStatus)
 	    .columns(jobStatus.jobId, jobStatus.status, jobStatus.start)
 	    .values(jobId,  status, now).execute();
-
-
-    }
+  }
 
   /**
    * Updates job status. If the record does not exist then creates.
@@ -824,7 +763,11 @@ public class DbUtils
 
   	QJobStatus jobStatusTbl = QJobStatus.jobStatus;
   	SQLQuery query = new SQLQuery(conn, configuration);
-  	JobStatus stat = query.from(jobStatusTbl).where(jobStatusTbl.jobId.eq(jobId)).singleResult(jobStatusTbl);
+  	JobStatus stat =
+  		query
+  		  .from(jobStatusTbl)
+  		  .where(jobStatusTbl.jobId.eq(jobId))
+  		  .singleResult(jobStatusTbl);
     if (stat != null)
     {
       if (isComplete == true)
@@ -838,12 +781,10 @@ public class DbUtils
         stat.setStatusDetail(statusDetail);
       }
 
-
       new SQLUpdateClause(conn, configuration, jobStatusTbl)
-      .populate(stat)
-      .where(jobStatusTbl.jobId.eq(stat.getJobId()))
-      .execute();
-
+        .populate(stat)
+        .where(jobStatusTbl.jobId.eq(stat.getJobId()))
+        .execute();
     }
     else
     {
@@ -857,10 +798,8 @@ public class DbUtils
         stat.setEnd(ts);
       }
       new SQLInsertClause(conn, configuration, jobStatusTbl)
-      .populate(stat).execute();
-
+        .populate(stat).execute();
     }
-
   }
 
   /**
@@ -875,36 +814,43 @@ public class DbUtils
   {
   	QJobStatus jobStatusTbl = QJobStatus.jobStatus;
   	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-  	JobStatus stat = query.from(jobStatusTbl).where(jobStatusTbl.jobId.eq(jobId)).singleResult(jobStatusTbl);
+  	JobStatus stat =
+  		query
+  		  .from(jobStatusTbl)
+  		  .where(jobStatusTbl.jobId.eq(jobId))
+  		  .singleResult(jobStatusTbl);
 
     return stat.getStatus();
   }
-  
-  public static long batchRecords(final long mapId, final List<?> records, 
-    com.mysema.query.sql.RelationalPathBase<?> t,
-    List<List<BooleanExpression>> predicateslist, final RecordBatchType recordBatchType, 
-  	Connection conn, int maxRecordBatchSize) throws Exception
-    {
-      try
+
+  public static long batchRecords(final long mapId, final List<?> records,
+    com.mysema.query.sql.RelationalPathBase<?> t, List<List<BooleanExpression>> predicateslist,
+    final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
+   {
+  	  log.debug("Batch element " + recordBatchType.toString() + "...");
+
+  	  try
       {
         Configuration configuration = getConfiguration(mapId);
 
         switch (recordBatchType)
         {
           case INSERT:
-          	
+
           	SQLInsertClause insert = new SQLInsertClause(conn, configuration, t);
           	long nBatch = 0;
-          	for(int i=0; i<records.size(); i++)
+          	for (int i=0; i<records.size(); i++)
           	{
           		Object oRec = records.get(i);
           		insert.populate(oRec).addBatch();
           		nBatch++;
 
-          		if(maxRecordBatchSize > -1 && i > 0)
+          		if (maxRecordBatchSize > -1 && i > 0)
           		{
-	          		if(i % maxRecordBatchSize == 0) {
+	          		if (i % maxRecordBatchSize == 0)
+	          		{
 	          			insert.execute();
+
 		              insert = new SQLInsertClause(conn, configuration, t);
 		              nBatch = 0;
 		      			}
@@ -921,7 +867,7 @@ public class DbUtils
 
           	SQLUpdateClause update = new SQLUpdateClause(conn, configuration, t);
           	long nBatchUpdate = 0;
-          	for(int i=0; i<records.size(); i++)
+          	for (int i=0; i<records.size(); i++)
           	{
           		Object oRec = records.get(i);
 
@@ -930,7 +876,7 @@ public class DbUtils
         			BooleanExpression[] params;
         			params = new BooleanExpression[predicates.size()];
 
-        			for(int ii=0; ii<predicates.size(); ii++)
+        			for (int ii=0; ii<predicates.size(); ii++)
         			{
         				params[ii] = predicates.get(ii);
         			}
@@ -940,8 +886,10 @@ public class DbUtils
 
           		if (maxRecordBatchSize > -1 && i > 0)
           		{
-	          		if(i % maxRecordBatchSize == 0) {
+	          		if (i % maxRecordBatchSize == 0)
+	          		{
 	          			update.execute();
+
 		              update = new SQLUpdateClause(conn, configuration, t);
 		              nBatchUpdate = 0;
 		      			}
@@ -974,15 +922,16 @@ public class DbUtils
 
         			delete.where(params).addBatch();
         			nBatchDel++;
-        			if(maxRecordBatchSize > -1 && i > 0)
+        			if (maxRecordBatchSize > -1 && i > 0)
         			{
-	        			if(i % maxRecordBatchSize == 0) {
+	        			if(i % maxRecordBatchSize == 0)
+	        			{
 	          			delete.execute();
+
 		              delete = new SQLDeleteClause(conn, configuration, t);
 		              nBatchDel = 0;
 		      			}
         			}
-
           	}
 
           	if(nBatchDel > 0)
@@ -994,14 +943,6 @@ public class DbUtils
           default:
             throw new Exception("");
         }
-
-      }
-      catch (Exception e)
-      {
-        String msg = "Error executing batch query.";
-        msg += "  " + e.getMessage();
-        msg += " Cause:" + e.getCause().toString();
-        throw new Exception(msg);
       }
       finally
       {
@@ -1009,26 +950,53 @@ public class DbUtils
       }
     }
 
-
-  public static long updateMapsTableTags(final Map<String, String> tags, 
-  		final long mapId, final Connection conn) throws SQLException
+  /**
+   *
+   *
+   * @param input
+   * @return String
+   * @throws Exception
+   */
+  public static String escapeJson(String input) throws Exception
   {
+    JSONParser parser = new JSONParser();
+    JSONObject json = (JSONObject)parser.parse(input);
 
+    //Special handling of ADV_OPTIONS
+    String key = "ADV_OPTIONS";
+    if (json.containsKey(key)) {
+      String advopts = json.get(key).toString();
+      String cleanup = advopts.replaceAll("-D \"", "'").replaceAll("=", "': '").replaceAll("\"", "',").replaceAll("'", "\"");
+      //wrap with curly braces and remove trailing comma
+      cleanup = "{" + cleanup.substring(0, cleanup.length() - 1) + "}";
+      //System.out.println(cleanup);
+      JSONObject obj = (JSONObject)parser.parse(cleanup);
+
+      json.put(key, obj);
+    }
+    //System.out.println(JSONObject.escape(json.toString()).toString());
+
+    return JSONObject.escape(json.toString());
+  }
+
+  public static long updateMapsTableTags(final Map<String, String> tags, final long mapId,
+  	final Connection conn) throws SQLException
+  {
   	long execResult = -1;
 		PreparedStatement ps = null;
     try
     {
     	String sql = null;
-      
 
-    	sql = "update maps set tags=? " +
-					"where id=?";
+      sql = "update maps set tags = COALESCE(tags, '') || ?::hstore " +
+        "where id=?";
     	ps = conn.prepareStatement(sql);
     	String hstoreStr = "";
 			Iterator it = tags.entrySet().iterator();
-	    while (it.hasNext()) {
+	    while (it.hasNext())
+	    {
 	        Map.Entry pairs = (Map.Entry)it.next();
-	        if(hstoreStr.length() > 0)
+	        if (hstoreStr.length() > 0)
 	        {
 	        	hstoreStr += ",";
 	        }
@@ -1036,7 +1004,7 @@ public class DbUtils
 	    }
 			ps.setObject(1, hstoreStr, Types.OTHER);
 			ps.setLong(2, mapId);
-		
+
 			execResult = ps.executeUpdate();
     }
     finally
@@ -1045,545 +1013,538 @@ public class DbUtils
     	{
     		ps.close();
     	}
-
     }
     return execResult;
   }
-  
-  
-  public static Map<String, String> getMapsTableTags(final long mapId, final Connection conn) throws Exception
+
+  public static Map<String, String> getMapsTableTags(final long mapId, final Connection conn)
+  	throws Exception
   {
   	Map<String, String> tags = new HashMap<String, String>();
   	QMaps  mp = QMaps.maps;
-  	
-  	List<Object> res = new SQLQuery(conn,DbUtils.getConfiguration(mapId))
-  	.from(mp)
-  	.where(mp.id.eq(mapId))
-  	.list(mp.tags);
-  	
-  	if(res.size() > 0)
+
+  	List<Object> res =
+  		new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+  	    .from(mp)
+  	    .where(mp.id.eq(mapId))
+  	    .list(mp.tags);
+
+  	if (res.size() > 0)
   	{
   		Object oTag = res.get(0);
-  		tags = 
-					PostgresUtils.postgresObjToHStore((org.postgresql.util.PGobject)oTag);
+  		tags = PostgresUtils.postgresObjToHStore((org.postgresql.util.PGobject)oTag);
   	}
-  	
+
   	return tags;
   }
 
-  public static long batchRecordsDirectNodes(final long mapId, final List<?> records,
-    final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
-  {
-  	long updateCount = 0;
+	public static long batchRecordsDirectNodes(final long mapId, final List<?> records,
+		final RecordBatchType recordBatchType,  Connection conn, int maxRecordBatchSize) throws Exception
+	{
+		log.debug("Batch node " + recordBatchType.toString() + "...");
+
+		long updateCount = 0;
 		PreparedStatement ps = null;
-    try
-    {
-    	String sql = null;
-      int count = 0;
+		try
+		{
+			String sql = null;
 
-      switch (recordBatchType)
-      {
-        case INSERT:
+			int count = 0;
 
-    			sql = "insert into current_nodes_" + mapId + " (id, latitude, " +
-    					"longitude, changeset_id, visible, \"timestamp\", tile, version, tags) " +
-    					"values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			switch (recordBatchType)
+			{
+				case INSERT:
 
-    			ps = conn.prepareStatement(sql);
-        	for(Object o : records)
-        	{
-        		CurrentNodes node  = (CurrentNodes)o;
+					sql = "insert into current_nodes_"
+					    + mapId
+					    + " (id, latitude, "
+					    + "longitude, changeset_id, visible, \"timestamp\", tile, version, tags) "
+					    + "values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-      			ps.setLong(1, node.getId());
-      			ps.setDouble(2, node.getLatitude());
-      			ps.setDouble(3, node.getLongitude());
-      			ps.setLong(4, node.getChangesetId());
-      			ps.setBoolean(5, node.getVisible());
-      			ps.setTimestamp(6, node.getTimestamp());
-      			ps.setLong(7, node.getTile());
-      			ps.setLong(8, node.getVersion());
+					ps = conn.prepareStatement(sql);
+					for (Object o : records)
+					{
+						CurrentNodes node = (CurrentNodes) o;
 
-      			@SuppressWarnings("unchecked")
-            Map<String, String> tags = (Map<String, String>)node.getTags();
+						ps.setLong(1, node.getId());
+						ps.setDouble(2, node.getLatitude());
+						ps.setDouble(3, node.getLongitude());
+						ps.setLong(4, node.getChangesetId());
+						ps.setBoolean(5, node.getVisible());
+						ps.setTimestamp(6, node.getTimestamp());
+						ps.setLong(7, node.getTile());
+						ps.setLong(8, node.getVersion());
 
-      			String hstoreStr = "";
-      			Iterator it = tags.entrySet().iterator();
-      	    while (it.hasNext()) 
-      	    {
-    	        Map.Entry pairs = (Map.Entry)it.next();
-    	        if (hstoreStr.length() > 0)
-    	        {
-    	        	hstoreStr += ",";
-    	        }
-    	        hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue() + "\"";
-      	    }
-      			ps.setObject(9, hstoreStr, Types.OTHER);
-      			ps.addBatch();
+						@SuppressWarnings("unchecked")
+						Map<String, String> tags = (Map<String, String>) node.getTags();
 
-      			if (maxRecordBatchSize > -1)
-      			{
-	      			if (++count % maxRecordBatchSize == 0) 
-	      			{
-	      				updateCount += ps.executeBatch().length;
-	      			}
-      			}
-        	}
+						String hstoreStr = "";
+						Iterator it = tags.entrySet().iterator();
+						while (it.hasNext())
+						{
+							Map.Entry pairs = (Map.Entry) it.next();
+							if (hstoreStr.length() > 0)
+							{
+								hstoreStr += ",";
+							}
+							hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue()
+							    + "\"";
+						}
+						ps.setObject(9, hstoreStr, Types.OTHER);
+						ps.addBatch();
 
-          break;
+						if (maxRecordBatchSize > -1)
+						{
+							if (++count % maxRecordBatchSize == 0)
+							{
+								updateCount += ps.executeBatch().length;
+							}
+						}
+					}
 
-        case UPDATE:
+					break;
 
-        	sql = "update current_nodes_" + mapId +" set  latitude=?, " +
-    					"longitude=?, changeset_id=?, visible=?, \"timestamp\"=?, tile=?, version=?, tags=? " +
-    					"where id=?";
-        	ps = conn.prepareStatement(sql);
-        	for(Object o : records)
-        	{
-        		CurrentNodes node  = (CurrentNodes)o;
+				case UPDATE:
 
-      			ps.setDouble(1, node.getLatitude());
-      			ps.setDouble(2, node.getLongitude());
-      			ps.setLong(3, node.getChangesetId());
-      			ps.setBoolean(4, node.getVisible());
-      			ps.setTimestamp(5, node.getTimestamp());
-      			ps.setLong(6, node.getTile());
-      			ps.setLong(7, node.getVersion());
+					sql = "update current_nodes_"
+					    + mapId
+					    + " set  latitude=?, "
+					    + "longitude=?, changeset_id=?, visible=?, \"timestamp\"=?, tile=?, version=?, tags=? "
+					    + "where id=?";
+					ps = conn.prepareStatement(sql);
+					for (Object o : records)
+					{
+						CurrentNodes node = (CurrentNodes) o;
 
-      			@SuppressWarnings("unchecked")
-            Map<String, String> tags = (Map<String, String>)node.getTags();
+						ps.setDouble(1, node.getLatitude());
+						ps.setDouble(2, node.getLongitude());
+						ps.setLong(3, node.getChangesetId());
+						ps.setBoolean(4, node.getVisible());
+						ps.setTimestamp(5, node.getTimestamp());
+						ps.setLong(6, node.getTile());
+						ps.setLong(7, node.getVersion());
 
-      			String hstoreStr = "";
-      			Iterator it = tags.entrySet().iterator();
-      	    while (it.hasNext()) 
-      	    {
-    	        Map.Entry pairs = (Map.Entry)it.next();
-    	        if(hstoreStr.length() > 0)
-    	        {
-    	        	hstoreStr += ",";
-    	        }
-    	        hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue() + "\"";
-      	    }
-      			ps.setObject(8, hstoreStr, Types.OTHER);
+						@SuppressWarnings("unchecked")
+						Map<String, String> tags = (Map<String, String>) node.getTags();
 
-      			ps.setLong(9, node.getId());
+						String hstoreStr = "";
+						Iterator it = tags.entrySet().iterator();
+						while (it.hasNext())
+						{
+							Map.Entry pairs = (Map.Entry) it.next();
+							if (hstoreStr.length() > 0)
+							{
+								hstoreStr += ",";
+							}
+							hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue()
+							    + "\"";
+						}
+						ps.setObject(8, hstoreStr, Types.OTHER);
 
-      			ps.addBatch();
+						ps.setLong(9, node.getId());
 
-      			if (maxRecordBatchSize > -1)
-      			{
-	      			if (++count % maxRecordBatchSize == 0) 
-	      			{
-	      				updateCount += ps.executeBatch().length;
-	              ps.clearBatch();
-	      			}
-      			}
-        	}
+						ps.addBatch();
 
-          break;
+						if (maxRecordBatchSize > -1)
+						{
+							if (++count % maxRecordBatchSize == 0)
+							{
+								updateCount += ps.executeBatch().length;
+								ps.clearBatch();
+							}
+						}
+					}
 
-        case DELETE:
+					break;
 
-        	sql = "delete from current_nodes_" + mapId +
-    					" where id=?";
-        	ps = conn.prepareStatement(sql);
-        	for( Object o : records)
-        	{
-        		CurrentNodes node  = (CurrentNodes)o;
+				case DELETE:
 
-      			ps.setLong(1, node.getId());
+					sql = "delete from current_nodes_" + mapId + " where id=?";
+					ps = conn.prepareStatement(sql);
+					for (Object o : records)
+					{
+						CurrentNodes node = (CurrentNodes) o;
 
-      			ps.addBatch();
-      			if (maxRecordBatchSize > -1)
-      			{
-	      			if (++count % maxRecordBatchSize == 0) 
-	      			{
-	      				updateCount += ps.executeBatch().length;
-	              ps.clearBatch();
-	      			}
-      			}
-        	}
+						ps.setLong(1, node.getId());
 
-          break;
+						ps.addBatch();
+						if (maxRecordBatchSize > -1)
+						{
+							if (++count % maxRecordBatchSize == 0)
+							{
+								updateCount += ps.executeBatch().length;
+								ps.clearBatch();
+							}
+						}
+					}
 
-        default:
-          throw new Exception("");
-      }
+					break;
 
-      updateCount += ps.executeBatch().length;
-    }
-    catch (Exception e)
-    {
-      String msg = "Error executing batch query.";
-      msg += "  " + e.getMessage();
-      msg += " Cause:" + e.getCause().toString();
-      throw new Exception(msg);
-    }
-    finally
-    {
-    	if(ps != null)
-    	{
-    		ps.close();
-    	}
-    }
-    
-    return updateCount;
-  }
+				default:
+					throw new Exception("");
+			}
 
-  public static long batchRecordsDirectWays(final long mapId, final List<?> records,
-    final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
-  {
-  	long updateCount = 0;
+			updateCount += ps.executeBatch().length;
+		}
+		finally
+		{
+			if (ps != null)
+			{
+				ps.close();
+			}
+
+		}
+		return updateCount;
+	}
+
+	public static long batchRecordsDirectWays(final long mapId, final List<?> records,
+		final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
+	{
+		log.debug("Batch way " + recordBatchType.toString() + "...");
+
+		long updateCount = 0;
 		PreparedStatement ps = null;
-    try
-    {
-    	String sql = null;
-      int count = 0;
+		try
+		{
+			String sql = null;
 
-      switch (recordBatchType)
-      {
-        case INSERT:
+			int count = 0;
 
-    			sql = "insert into current_ways_" + mapId + " (id, changeset_id, \"timestamp\", visible, version, tags) " +
-    					"values (?, ?, ?, ?, ?, ?)";
+			switch (recordBatchType)
+			{
+				case INSERT:
 
-    			ps = conn.prepareStatement(sql);
-        	for( Object o : records)
-        	{
-        		CurrentWays way  = (CurrentWays)o;
+					sql = "insert into current_ways_" + mapId
+					    + " (id, changeset_id, \"timestamp\", visible, version, tags) "
+					    + "values (?, ?, ?, ?, ?, ?)";
 
-      			ps.setLong(1, way.getId());
-      			ps.setLong(2, way.getChangesetId());
-      			ps.setTimestamp(3, way.getTimestamp());
-      			ps.setBoolean(4, way.getVisible());
-      			ps.setLong(5, way.getVersion());
+					ps = conn.prepareStatement(sql);
+					for (Object o : records)
+					{
+						CurrentWays way = (CurrentWays) o;
 
-      			@SuppressWarnings("unchecked")
-            Map<String, String> tags = (Map<String, String>)way.getTags();
+						ps.setLong(1, way.getId());
+						ps.setLong(2, way.getChangesetId());
+						ps.setTimestamp(3, way.getTimestamp());
+						ps.setBoolean(4, way.getVisible());
+						ps.setLong(5, way.getVersion());
 
-      			String hstoreStr = "";
-      			Iterator it = tags.entrySet().iterator();
-      	    while (it.hasNext()) 
-      	    {
-    	        Map.Entry pairs = (Map.Entry)it.next();
-    	        if(hstoreStr.length() > 0)
-    	        {
-    	        	hstoreStr += ",";
-    	        }
-    	        hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue() + "\"";
-      	    }
-      			ps.setObject(6, hstoreStr, Types.OTHER);
-      			ps.addBatch();
+						@SuppressWarnings("unchecked")
+						Map<String, String> tags = (Map<String, String>) way.getTags();
 
-      			if (maxRecordBatchSize > -1)
-      			{
-	      			if (++count % maxRecordBatchSize == 0) 
-	      			{
-	      				updateCount += ps.executeBatch().length;
-	      			}
-      			}
-        	}
+						String hstoreStr = "";
+						Iterator it = tags.entrySet().iterator();
+						while (it.hasNext())
+						{
+							Map.Entry pairs = (Map.Entry) it.next();
+							if (hstoreStr.length() > 0)
+							{
+								hstoreStr += ",";
+							}
+							hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue()
+							    + "\"";
+						}
+						ps.setObject(6, hstoreStr, Types.OTHER);
+						ps.addBatch();
 
-          break;
+						if (maxRecordBatchSize > -1)
+						{
+							if (++count % maxRecordBatchSize == 0)
+							{
+								updateCount += ps.executeBatch().length;
+							}
+						}
 
-        case UPDATE:
+					}
 
-        	sql = "update current_ways_" + mapId + " set changeset_id=?, visible=?, \"timestamp\"=?, version=?, tags=? " +
-    					"where id=?";
-        	ps = conn.prepareStatement(sql);
-        	for (Object o : records)
-        	{
-        		CurrentWays way  = (CurrentWays)o;
+					break;
 
-      			ps.setLong(1, way.getChangesetId());
-      			ps.setBoolean(2, way.getVisible());
-      			ps.setTimestamp(3, way.getTimestamp());
-      			ps.setLong(4, way.getVersion());
+				case UPDATE:
 
-      			@SuppressWarnings("unchecked")
-            Map<String, String> tags = (Map<String, String>)way.getTags();
+					sql = "update current_ways_"
+					    + mapId
+					    + " set changeset_id=?, visible=?, \"timestamp\"=?, version=?, tags=? "
+					    + "where id=?";
+					ps = conn.prepareStatement(sql);
+					for (Object o : records)
+					{
+						CurrentWays way = (CurrentWays) o;
 
-      			String hstoreStr = "";
-      			Iterator it = tags.entrySet().iterator();
-      	    while (it.hasNext()) 
-      	    {
-    	        Map.Entry pairs = (Map.Entry)it.next();
-    	        if(hstoreStr.length() > 0)
-    	        {
-    	        	hstoreStr += ",";
-    	        }
-    	        hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue() + "\"";
-      	    }
-      			ps.setObject(5, hstoreStr, Types.OTHER);
+						ps.setLong(1, way.getChangesetId());
+						ps.setBoolean(2, way.getVisible());
+						ps.setTimestamp(3, way.getTimestamp());
+						ps.setLong(4, way.getVersion());
 
-      			ps.setLong(6, way.getId());
+						@SuppressWarnings("unchecked")
+						Map<String, String> tags = (Map<String, String>) way.getTags();
 
-      			ps.addBatch();
+						String hstoreStr = "";
+						Iterator it = tags.entrySet().iterator();
+						while (it.hasNext())
+						{
+							Map.Entry pairs = (Map.Entry) it.next();
+							if (hstoreStr.length() > 0)
+							{
+								hstoreStr += ",";
+							}
+							hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue()
+							    + "\"";
+						}
+						ps.setObject(5, hstoreStr, Types.OTHER);
 
-      			if (maxRecordBatchSize > -1)
-      			{
-	      			if (++count % maxRecordBatchSize == 0) 
-	      			{
-	      				updateCount += ps.executeBatch().length;
-	      			}
-      			}
-        	}
+						ps.setLong(6, way.getId());
 
-          break;
+						ps.addBatch();
 
-        case DELETE:
+						if (maxRecordBatchSize > -1)
+						{
+							if (++count % maxRecordBatchSize == 0)
+							{
+								updateCount += ps.executeBatch().length;
+							}
+						}
+					}
 
-        	sql = "delete from current_ways_" + mapId +
-    					" where id=?";
-        	ps = conn.prepareStatement(sql);
-        	for (Object o : records)
-        	{
-        		CurrentWays way  = (CurrentWays)o;
+					break;
 
-      			ps.setLong(1, way.getId());
+				case DELETE:
 
-      			ps.addBatch();
+					sql = "delete from current_ways_" + mapId + " where id=?";
+					ps = conn.prepareStatement(sql);
+					for (Object o : records)
+					{
+						CurrentWays way = (CurrentWays) o;
 
-      			if (maxRecordBatchSize > -1)
-      			{
-	      			if (++count % maxRecordBatchSize == 0) 
-	      			{
-	      				updateCount += ps.executeBatch().length;
-	      			}
-      			}
-        	}
+						ps.setLong(1, way.getId());
 
-          break;
+						ps.addBatch();
 
-        default:
-          throw new Exception("");
-      }
+						if (maxRecordBatchSize > -1)
+						{
+							if (++count % maxRecordBatchSize == 0)
+							{
+								updateCount += ps.executeBatch().length;
+							}
+						}
 
-      updateCount += ps.executeBatch().length;
-    }
-    catch (Exception e)
-    {
-    	conn.rollback();
-      String msg = "Error executing batch query.";
-      msg += "  " + e.getMessage();
-      msg += " Cause:" + e.getCause().toString();
-      throw new Exception(msg);
-    }
-    finally
-    {
-    	if (ps != null)
-    	{
-    		ps.close();
-    	}
-    }
-    
-    return updateCount;
-  }
-  
-  public static long batchRecordsDirectRelations(final long mapId, final List<?> records,
-    final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
-  {
-  	long updateCount = 0;
+					}
+
+					break;
+
+				default:
+					throw new Exception("");
+			}
+
+			updateCount += ps.executeBatch().length;
+		}
+		finally
+		{
+			if (ps != null)
+			{
+				ps.close();
+			}
+		}
+		return updateCount;
+	}
+
+	public static long batchRecordsDirectRelations(final long mapId, final List<?> records,
+		final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
+	{
+		log.debug("Batch relation " + recordBatchType.toString() + "...");
+
+		long updateCount = 0;
 		PreparedStatement ps = null;
-    try
-    {
-    	String sql = null;
-      int count = 0;
+		try
+		{
+			String sql = null;
+			int count = 0;
 
-      switch (recordBatchType)
-      {
-        case INSERT:
+			switch (recordBatchType)
+			{
+				case INSERT:
 
-    			sql = "insert into current_relations_" + mapId + " (id, changeset_id, \"timestamp\", visible, version, tags) " +
-    					"values (?, ?, ?, ?, ?, ?)";
+					sql = "insert into current_relations_" + mapId
+					    + " (id, changeset_id, \"timestamp\", visible, version, tags) "
+					    + "values (?, ?, ?, ?, ?, ?)";
 
-    			ps = conn.prepareStatement(sql);
-        	for (Object o : records)
-        	{
-        		CurrentRelations rel  = (CurrentRelations)o;
+					ps = conn.prepareStatement(sql);
+					for (Object o : records)
+					{
+						CurrentRelations rel = (CurrentRelations) o;
 
-      			ps.setLong(1, rel.getId());
-      			ps.setLong(2, rel.getChangesetId());
-      			ps.setTimestamp(3, rel.getTimestamp());
-      			ps.setBoolean(4, rel.getVisible());
-      			ps.setLong(5, rel.getVersion());
+						ps.setLong(1, rel.getId());
+						ps.setLong(2, rel.getChangesetId());
+						ps.setTimestamp(3, rel.getTimestamp());
+						ps.setBoolean(4, rel.getVisible());
+						ps.setLong(5, rel.getVersion());
 
-      			@SuppressWarnings("unchecked")
-            Map<String, String> tags = (Map<String, String>)rel.getTags();
+						@SuppressWarnings("unchecked")
+						Map<String, String> tags = (Map<String, String>) rel.getTags();
 
-      			String hstoreStr = "";
-      			Iterator it = tags.entrySet().iterator();
-      	    while (it.hasNext()) 
-      	    {
-    	        Map.Entry pairs = (Map.Entry)it.next();
-    	        if(hstoreStr.length() > 0)
-    	        {
-    	        	hstoreStr += ",";
-    	        }
-    	        hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue() + "\"";
-      	    }
-      			ps.setObject(6, hstoreStr, Types.OTHER);
-      			ps.addBatch();
+						String hstoreStr = "";
+						Iterator it = tags.entrySet().iterator();
+						while (it.hasNext())
+						{
+							Map.Entry pairs = (Map.Entry) it.next();
+							if (hstoreStr.length() > 0)
+							{
+								hstoreStr += ",";
+							}
+							hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue()
+							    + "\"";
+						}
+						ps.setObject(6, hstoreStr, Types.OTHER);
+						ps.addBatch();
 
-      			if (maxRecordBatchSize > -1)
-      			{
-	      			if(++count % maxRecordBatchSize == 0) 
-	      			{
-	      				updateCount += ps.executeBatch().length;
-	      			}
-      			}
-        	}
+						if (maxRecordBatchSize > -1)
+						{
+							if (++count % maxRecordBatchSize == 0)
+							{
+								updateCount += ps.executeBatch().length;
+							}
+						}
 
-          break;
+					}
 
-        case UPDATE:
+					break;
 
-        	sql = "update current_relations_" + mapId + " set changeset_id=?, visible=?, \"timestamp\"=?, version=?, tags=? " +
-    					"where id=?";
-        	ps = conn.prepareStatement(sql);
-        	for( Object o : records)
-        	{
-        		CurrentRelations rel  = (CurrentRelations)o;
+				case UPDATE:
 
-      			ps.setLong(1, rel.getChangesetId());
-      			ps.setBoolean(2, rel.getVisible());
-      			ps.setTimestamp(3, rel.getTimestamp());
-      			ps.setLong(4, rel.getVersion());
+					sql = "update current_relations_"
+					    + mapId
+					    + " set changeset_id=?, visible=?, \"timestamp\"=?, version=?, tags=? "
+					    + "where id=?";
+					ps = conn.prepareStatement(sql);
+					for (Object o : records)
+					{
+						CurrentRelations rel = (CurrentRelations) o;
 
-      			@SuppressWarnings("unchecked")
-            Map<String, String> tags = (Map<String, String>)rel.getTags();
+						ps.setLong(1, rel.getChangesetId());
+						ps.setBoolean(2, rel.getVisible());
+						ps.setTimestamp(3, rel.getTimestamp());
+						ps.setLong(4, rel.getVersion());
 
-      			String hstoreStr = "";
-      			Iterator it = tags.entrySet().iterator();
-      	    while (it.hasNext()) 
-      	    {
-    	        Map.Entry pairs = (Map.Entry)it.next();
-    	        if(hstoreStr.length() > 0)
-    	        {
-    	        	hstoreStr += ",";
-    	        }
-    	        hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue() + "\"";
-      	    }
-      			ps.setObject(5, hstoreStr, Types.OTHER);
+						@SuppressWarnings("unchecked")
+						Map<String, String> tags = (Map<String, String>) rel.getTags();
 
-      			ps.setLong(6, rel.getId());
+						String hstoreStr = "";
+						Iterator it = tags.entrySet().iterator();
+						while (it.hasNext())
+						{
+							Map.Entry pairs = (Map.Entry) it.next();
+							if (hstoreStr.length() > 0)
+							{
+								hstoreStr += ",";
+							}
+							hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue()
+							    + "\"";
+						}
+						ps.setObject(5, hstoreStr, Types.OTHER);
 
-      			ps.addBatch();
+						ps.setLong(6, rel.getId());
 
-      			if (maxRecordBatchSize > -1)
-      			{
-	      			if (++count % maxRecordBatchSize == 0) 
-	      			{
-	      				updateCount += ps.executeBatch().length;
-	      			}
-      			}
-        	}
+						ps.addBatch();
 
-          break;
+						if (maxRecordBatchSize > -1)
+						{
+							if (++count % maxRecordBatchSize == 0)
+							{
+								updateCount += ps.executeBatch().length;
+							}
+						}
+					}
 
-        case DELETE:
+					break;
 
-        	sql = "delete from current_relations_" + mapId +
-    					" where id=?";
-        	ps = conn.prepareStatement(sql);
-        	for (Object o : records)
-        	{
-        		CurrentRelations rel  = (CurrentRelations)o;
+				case DELETE:
 
-      			ps.setLong(1, rel.getId());
+					sql = "delete from current_relations_" + mapId + " where id=?";
+					ps = conn.prepareStatement(sql);
+					for (Object o : records)
+					{
+						CurrentRelations rel = (CurrentRelations) o;
 
-      			ps.addBatch();
+						ps.setLong(1, rel.getId());
 
-      			if (maxRecordBatchSize > -1)
-      			{
-	      			if (++count % maxRecordBatchSize == 0) 
-	      			{
-	      				updateCount += ps.executeBatch().length;
-	      			}
-      			}
-        	}
+						ps.addBatch();
 
-          break;
+						if (maxRecordBatchSize > -1)
+						{
+							if (++count % maxRecordBatchSize == 0)
+							{
+								updateCount += ps.executeBatch().length;
+							}
+						}
+					}
 
-        default:
-          throw new Exception("");
-      }
+					break;
 
-      updateCount += ps.executeBatch().length;
-    }
-    catch (Exception e)
-    {
-    	conn.rollback();
-      String msg = "Error executing batch query.";
-      msg += "  " + e.getMessage();
-      msg += " Cause:" + e.getCause().toString();
-      throw new Exception(msg);
-    }
-    finally
-    {
-    	if (ps != null)
-    	{
-    		ps.close();
-    	}
-    }
-    
-    return updateCount;
-  }
+				default:
+					throw new Exception("");
+			}
 
-  // Returns table size in byte
+			updateCount += ps.executeBatch().length;
+		}
+		finally
+		{
+			if (ps != null)
+			{
+				ps.close();
+			}
+		}
+		return updateCount;
+	}
+
+	/**
+	 * Returns table size in byte
+	 */
 	public static long getTableSizeInByte(final String tableName) throws Exception
 	{
 		long ret = 0;
 		Connection conn = null;
 	  Statement stmt = null;
+	  ResultSet rs = null;
 		try
 		{
 			conn = DbUtils.createConnection();
 			stmt = conn.createStatement();
-			
+
 			String sql = "select pg_total_relation_size('" + tableName + "') as tablesize";
-			ResultSet rs = stmt.executeQuery(sql);
-      //STEP 5: Extract data from result set
-      while(rs.next())
+		  rs = stmt.executeQuery(sql);
+		  
+		  if (rs == null)
+			{
+				throw new SQLException("Error executing getTableSizeInByte");
+			}
+		  
+			//STEP 5: Extract data from result set
+      while (rs.next())
       {
          //Retrieve by column name
       	ret = rs.getLong("tablesize");
       }
-      rs.close();
 		}
 		catch (Exception e)
 		{
 			log.error(e.getMessage());
 			throw e;
 		}
-		finally{
-      //finally block used to close resources
-      try{
-         if(stmt!=null)
-            stmt.close();
-      }catch(SQLException se2){
-      	log.equals(se2.getMessage());
-      }// nothing we can do
-      try{
-         if(conn!=null)
-            DbUtils.closeConnection(conn);
-      }catch(SQLException se){
-      	log.equals(se.getMessage());
-      }//end finally try
-		}//end try
-		
+		finally
+		{
+			if (rs != null) rs.close();
+			if (stmt != null)
+				stmt.close();
+			if (conn != null)
+				DbUtils.closeConnection(conn);
+		}
+
 		return ret;
 	}
-	
+
 	/**
-	 * 
-	 * 
-	 * @param result
-	 * @param elementType
-	 * @return
-	 * @throws SQLException 
-	 * @todo change back to original element generic code
+	 * //TODO: change back to original element generic code
 	 */
-	public static Object resultToObj(final ResultSet rs, final ElementType elementType) 
+	public static Object resultToObj(final ResultSet rs, final ElementType elementType)
 		throws SQLException
 	{
 		if (elementType == ElementType.Node)

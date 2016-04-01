@@ -3,8 +3,8 @@
 #
 
 HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
-HOOT_OPTS+= -D services.db.writer.overwrite.map=true -D services.db.writer.create.user=true
-HOOT_OPTS+= -D services.db.writer.email=test@test.com -D services.db.reader.email=test@test.com
+HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
+HOOT_OPTS+= -D hootapi.db.writer.email=test@test.com -D hootapi.db.reader.email=test@test.com
 
 # Add the option to append
 ifeq "$(append)" "true"
@@ -50,7 +50,7 @@ ifeq ("$(outputtype)","wfs")
 	hoot --osm2ogr $(REMOVE_REVIEW) -D ogr.writer.pre.layer.name=$(outputname)_ $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" $(OP_PG_URL)
 else ifeq ("$(outputtype)","osm")
 	mkdir -p "$(outputfolder)"	
-	hoot --convert -D services.db.writer.create.user=true -D services.db.reader.email='test@test.com' "$(INPUT_PATH)" "$(OP_OUTPUT)"
+  hoot --convert -D hootapi.db.writer.create.user=true -D hootapi.db.reader.email='test@test.com' "$(INPUT_PATH)" "$(OP_OUTPUT)"
 	cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
 else
 	mkdir -p "$(outputfolder)"

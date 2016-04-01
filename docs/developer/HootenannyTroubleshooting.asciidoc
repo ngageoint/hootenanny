@@ -5,7 +5,7 @@ This is similar, but not identical to, the troubleshooting section in the Hooten
 
 === Core
 
-* *Don't think the correct version of Hootenanny core is installed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision| logo from within the UI.  Or as a sanity check, type 'hoot --version' from the command line.  The version displayed should match the version you installed.  Finally, the core version used by the services can be found by navigating to the following URL's:
+* *Don't think the correct version of Hootenanny core is installed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision| logo from within the UI.  Or as a sanity check, type 'hoot --version' from the command line.  The version displayed should match the version you installed.  Finally, the core version used by the services can be found by navigating to the following URLs:
   ** +http://localhost/hoot-services/info/about/coreVersionInfo+
   ** +http://localhost/hoot-services/info/about/coreVersionDetail+
 
@@ -22,7 +22,7 @@ This is similar, but not identical to, the troubleshooting section in the Hooten
 
 * *Getting a compiler failure when compiling Hoot core?* --> g++ fails with a non-descript error? Its not known what causes this yet, but its very bad and has happened a few times now. First, be sure you've done a make uninstall on the previous version of Hoot and go ahead and do a make uninstall on the version you're trying to compile. Its also possible you have a bad release, in which case a new one should be built.
 
-* *Receiving Qt related errors at compile time?* --> Possibly, you are pointing to the incorrect version of Qt.  Hootenanny uses Qt 4.x and will not currently run on Qt 5.x, the default for Ubuntu 14.04.  Try running 'sudo apt-get remove qt5-default'.  Also use ldd to see if any other Qt 5 libraries are on Hootennanny's path and remove them as well.
+* *Receiving Qt related errors at compile time?* --> Possibly, you are pointing to the incorrect version of Qt.  Hootenanny uses Qt 4.x and will not currently run on Qt 5.x, the default for Ubuntu 14.04.  Try running 'sudo apt-get remove qt5-default'.  Also use ldd to see if any other Qt 5 libraries are on Hootenanny's path and remove them as well.
 
 === Database
 
@@ -78,8 +78,12 @@ delete from databasechangeloglock *;
 -------------------------------------- 
 tail -f /var/log/tomcat6/catalina.out | grep -i -e ERROR -e SEVERE
 -------------------------------------- 
+In some cases, you may need to execute the following instead:
+-------------------------------------- 
+tail -f /usr/share/tomcat6/logs/catalina.out | grep -i -e ERROR -e SEVERE
+-------------------------------------- 
 
-* *Not sure the correct version of Hootenanny services are deployed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision| logo from within the UI.  Or as a sanity check, verify the services version by navigating to the following URL's:
+* *Not sure the correct version of Hootenanny services are deployed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision| logo from within the UI.  Or as a sanity check, verify the services version by navigating to the following URLs:
   ** +http://localhost/hoot-services/info/about/servicesVersionInfo+
   ** +http://localhost/hoot-services/info/about/servicesVersionDetail+
 
@@ -127,6 +131,6 @@ sudo rm -f services/ex_*.xml
 
 * *Trouble seeing your base map?* -->
 	** In +$HOOT_HOME/hoot-services/src/main/webapps/hootenanny-id/data/imagery.json+ , verify that the base map URLs for all your layers are correct.
-	** You may also need to tweak the "source.url" variable in +$HOOT_HOME/hoot-services/src/main/webapps/hootenanny-id/js/id/renderer/background_source.js+ depending on how the base maps are to be parsed. Make sure the url produced by iD.BackgroundSource. <your layer> function is correct by cut and pasting the url on browser and see if that returns image.
+	** You may also need to tweak the "source.url" variable in +$HOOT_HOME/hoot-services/src/main/webapps/hootenanny-id/js/id/renderer/background_source.js+ depending on how the base maps are to be parsed. Make sure the URL produced by iD.BackgroundSource. <your layer> function is correct by cut and pasting the URL on browser and see if that returns image.
 	** If changes are made to the imagery.json file, always then clear the browser history, close the browser, and open a new browser pointed to the Hootenanny UI application.
 

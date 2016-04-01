@@ -22,7 +22,7 @@ namespace hoot
   using namespace boost;
   using namespace geos::geom;
 
-class MapReprojector
+class MapProjector
 {
 public:
 

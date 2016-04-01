@@ -1,12 +1,16 @@
 == print-tags
 
 === Description
-Prints OSM tag documentation. If +[documentation script]+ is not provided, the default translation script +$HOOT_HOME/translations/PrintOsmDocs.js+ will be used.
+
+Prints OSM tag documentation. If +[documentation script]+ is not provided, the
+default translation script +$HOOT_HOME/translations/PrintOsmDocs.js+ will be
+used.
 
 * +[documentation script]+ - The script that will print the documentation.
 
-
 === Usage
+
 --------------------------------------
 print-tags [documentation script]
 --------------------------------------
+

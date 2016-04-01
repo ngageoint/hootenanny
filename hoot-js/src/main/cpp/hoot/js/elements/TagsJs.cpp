@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/elements/TagsJs.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
@@ -80,6 +81,10 @@ void TagsJs::Init(Handle<Object> target)
       FunctionTemplate::New(get)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("getCreateUuid"),
       FunctionTemplate::New(getCreateUuid)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("getLengthInMeters"),
+      FunctionTemplate::New(getLengthInMeters)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("getVelocityInMeters"),
+      FunctionTemplate::New(getVelocityInMeters)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("getInformationCount"),
       FunctionTemplate::New(getInformationCount)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("set"),
@@ -139,6 +144,28 @@ Handle<Value> TagsJs::getCreateUuid(const Arguments& args)
   Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
   return scope.Close(toV8(t.getCreateUuid()));
+}
+
+Handle<Value> TagsJs::getLengthInMeters(const Arguments& args)
+{
+  HandleScope scope;
+
+  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+
+  QString key = str(args[0]->ToString());
+
+  return scope.Close(toV8(t.getLength(key).value()));
+}
+
+Handle<Value> TagsJs::getVelocityInMeters(const Arguments& args)
+{
+  HandleScope scope;
+
+  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+
+  QString key = str(args[0]->ToString());
+
+  return scope.Close(toV8(t.getVelocity(key).value()));
 }
 
 Handle<Value> TagsJs::getInformationCount(const Arguments& args)

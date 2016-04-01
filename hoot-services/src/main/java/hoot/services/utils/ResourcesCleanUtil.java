@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -30,7 +30,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.List;
+//import java.util.List;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
@@ -47,7 +47,7 @@ public class ResourcesCleanUtil implements Executable {
 	//remove data
 	// remove file store
 	private static final Logger log = LoggerFactory.getLogger(ResourcesCleanUtil.class);
-	
+
 	static
 	{
 		try
@@ -59,18 +59,20 @@ public class ResourcesCleanUtil implements Executable {
 			log.error("failed get hoot home value:" + ex.getMessage());
 		}
 	}
-	
+
   @SuppressWarnings("unused")
   private ClassPathXmlApplicationContext appContext;
-	
+
 	private String finalStatusDetail;
+  @Override
   public String getFinalStatusDetail() { return finalStatusDetail; }
 	public ResourcesCleanUtil()
 	{
 		appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
 	}
-	
-	public void exec(JSONObject command) throws Exception
+
+	@Override
+  public void exec(JSONObject command) throws Exception
 	{
 		JSONObject res = deleteLayers(command.get("mapId").toString());
 		finalStatusDetail = res.toJSONString();
@@ -82,15 +84,16 @@ public class ResourcesCleanUtil implements Executable {
 		res.put("result", "success");
 	  Connection conn = DbUtils.createConnection();
 	  try
-	  {     
+	  {
 	    log.debug("Initializing database connection...");
-	    
-	    List<Long> ids = DbUtils.getMapIdsByName( conn, mapId);
-	    int nMapCnt = ids.size();
-	    
+
+	    //List<Long> ids = DbUtils.getMapIdsByName( conn, mapId);
+	    //int nMapCnt = ids.size();
+
 	    DbUtils.deleteOSMRecordByName(conn, mapId);
+	    DbUtils.deleteRenderDb(conn, mapId);
 	    // Modify when core implements broad casting map id when conflation completes
-	    _deleteIngestResource(mapId, nMapCnt);
+	    //_deleteIngestResource(mapId, nMapCnt);
 	  }
 	  catch (Exception e)
 	  {
@@ -101,47 +104,59 @@ public class ResourcesCleanUtil implements Executable {
 	  {
 	    DbUtils.closeConnection(conn);
 	  }
-	  
+
 		return res;
 	}
-	
-	// TODO; Change mapName to mapId
-	protected void _deleteIngestResource(final String mapName, final int nMapCnt) 
+
+	// TODO: Change mapName to mapId
+	protected void _deleteIngestResource(final String mapName, final int nMapCnt)
 			throws NullPointerException, FileNotFoundException, IOException, Exception
 	{
 
 	  Connection conn = DbUtils.createConnection();
 	  try
-	  {     
+	  {
 	    log.debug("Initializing database connection...");
-	    
+
 	    // we will not delete resource for layer with duplicate names
 	    if(nMapCnt == 1)
 	    {
-	    	// This block is to check if we have file path manipulation by validating 
+	    	// This block is to check if we have file path manipulation by validating
 	    	// the new path is within container path
 	    	final String basePath = _ingestPath;
 	    	final String newPath = _ingestPath + "/" + mapName;
 	    	
+	    	// Fortify fix
+	    	if(!hoot.services.utils.FileUtils.validateFilePath(_ingestPath, newPath))
+	    	{
+	    		throw new Exception("Map name can not contain path.");
+	    	}
+
+	    	// Fortify fix
+	    	if(!hoot.services.utils.FileUtils.validateFilePath(_ingestPath, newPath))
+	    	{
+	    		throw new Exception("Map name can not contain path.");
+	    	}
+
 	    	boolean isValidated = false;
 	    	File fDel = new File(newPath);
 				String potentialPath = fDel.getCanonicalPath();
-				
+
 				File fBase = new File(basePath);
 				String containerPath = fBase.getCanonicalPath();
-				
+
 				// verify that newPath is within basePath
 				if(potentialPath.indexOf(containerPath) == 0)
 				{
 					isValidated = true;
 				}
-				
+
 				// If it is safe to delete then delete
 				if(isValidated)
 				{
 					org.apache.commons.io.FileUtils.forceDelete(fDel);
 				}
-				
+
 	    }
 	  }
 	  catch (NullPointerException npe)
@@ -163,21 +178,21 @@ public class ResourcesCleanUtil implements Executable {
 	  {
 	    DbUtils.closeConnection(conn);
 	  }
-	  
+
 	}
-	
+
 	/**
 	 * see CoreServiceContext.xml
 	 */
 	public void init(){
-
+		//
 	}
 
 	/**
 	 * see CoreServiceContext.xml
 	 */
 	public void destroy(){
-
+		//
 	}
-	
+
 }

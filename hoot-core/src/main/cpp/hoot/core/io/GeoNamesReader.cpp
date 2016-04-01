@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 
 // qt
 #include <QDir>
@@ -79,7 +79,7 @@ shared_ptr<OGRSpatialReference> GeoNamesReader::getProjection() const
 {
   if (!_wgs84)
   {
-    _wgs84 = MapReprojector::getInstance().createWgs84Projection();
+    _wgs84 = MapProjector::getInstance().createWgs84Projection();
   }
 
   return _wgs84;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFLATECMD_H
@@ -34,7 +34,7 @@
 // Hoot
 #include <hoot/core/Conflator.h>
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/ConflateStatsHelper.h>
 #include <hoot/core/conflate/StatsComposer.h>
@@ -53,6 +53,8 @@
 // Tgs
 #include <tgs/System/Timer.h>
 
+#include <QFileInfo>
+
 namespace hoot
 {
 using namespace std;
@@ -63,15 +65,6 @@ public:
   static string className() { return "hoot::ConflateCmd"; }
 
   ConflateCmd() {}
-
-  QString getHelp() const
-  {
-    return getName() + " (input1) [input2] (output) [--stats]\n"
-        "  Conflates two input sources into one output.\n"
-        "  * input1 - First input.\n"
-        "  * input2 - Second input.\n"
-        "  * output - The output path.";
-  }
 
   virtual QString getName() const { return "conflate"; }
 
@@ -92,10 +85,23 @@ public:
 
     QList<SingleStat> stats;
     bool displayStats = false;
-    if (args.endsWith("--stats"))
+    QString outputStatsFile;
+    if (args.contains("--stats"))
     {
-      displayStats = true;
-      args.pop_back();
+      if (args.endsWith("--stats"))
+      {
+        displayStats = true;
+        //remove "--stats" from args list
+        args.pop_back();
+      }
+      else if (args.size() == 5)
+      {
+        displayStats = true;
+        outputStatsFile = args[4];
+        //remove "--stats" and stats output file name from args list
+        args.pop_back();
+        args.pop_back();
+      }
     }
 
     if (args.size() < 2 || args.size() > 3)
@@ -188,7 +194,7 @@ public:
     // Apply any user specified operations.
     NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
 
-    MapReprojector::reprojectToWgs84(result);
+    MapProjector::projectToWgs84(result);
     stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
 
     saveMap(result, output);
@@ -229,10 +235,19 @@ public:
 
     if (displayStats)
     {
-      allStats.append(stats);
-      MapStatsWriter().writeStats(allStats, args);
-      QString statsMsg = MapStatsWriter().statsToString( allStats, "\t" );
-      cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" << statsMsg << endl;
+      if (outputStatsFile.isEmpty())
+      {
+        allStats.append(stats);
+        MapStatsWriter().writeStats(allStats, args);
+        QString statsMsg = MapStatsWriter().statsToString( allStats, "\t" );
+        cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" << statsMsg << endl;
+      }
+      else
+      {
+        allStats.append(stats);
+        MapStatsWriter().writeStatsToJson(allStats, outputStatsFile);
+        cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: " << outputStatsFile << endl;
+      }
     }
 
     return 0;

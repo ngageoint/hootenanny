@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.writers.osm;
 
@@ -48,7 +48,6 @@ public class CapabilitiesResponseWriter
    * Writes the capabilities response to an XML document
    * 
    * @return an XML document
-   * @example see http://wiki.openstreetmap.org/wiki/API_0.6#Capabilities:_GET_.2Fapi.2Fcapabilities
    */
   public Document writeResponse()
   {

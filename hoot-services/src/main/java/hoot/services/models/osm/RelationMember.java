@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -97,14 +97,13 @@ public class RelationMember
    * @param role the member's role
    * @param elementType the member's element type
    * @param relationId the owning relation ID
-   * @param mapId the owning map ID
    * @param dbConn JDBC Connection
    * @return a relation member database record
    * @throws Exception
    */
-  public static CurrentRelationMembers createRecord(final long id,
-    final int sequenceId, final String role, final Object elementType, final long relationId,
-    Connection dbConn) throws Exception
+  public static CurrentRelationMembers createRecord(final long id, final int sequenceId, 
+  	final String role, final Object elementType, final long relationId, Connection dbConn) 
+  	throws Exception
   {
     CurrentRelationMembers memberRecord = new CurrentRelationMembers();
     memberRecord.setMemberId(id);

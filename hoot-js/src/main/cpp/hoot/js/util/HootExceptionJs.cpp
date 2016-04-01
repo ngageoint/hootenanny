@@ -30,6 +30,7 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
+#include <hoot/js/util/StringUtilsJs.h>
 
 namespace hoot
 {
@@ -69,6 +70,8 @@ void HootExceptionJs::Init(Handle<Object> target)
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewSymbol("toString"),
         FunctionTemplate::New(toString)->GetFunction());
+    tpl->PrototypeTemplate()->Set(String::NewSymbol("toJSON"),
+        FunctionTemplate::New(toJSON)->GetFunction());
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                   toV8(HootException::className()));
 
@@ -139,6 +142,16 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
         throw HootException(toJson(exception));
       }
     }
+    // if this is a generic error (e.g. throw new Errro("blah");) then just report the string.
+    else if (exception->IsNativeError() &&
+      str(exception->ToObject()->GetConstructorName()) == "Error")
+    {
+      throw HootException(str(exception->ToDetailString()));
+    }
+    else if (exception->IsString())
+    {
+      throw HootException(str(exception));
+    }
     else
     {
       // See ReportException in http://v8.googlecode.com/svn/trunk/samples/shell.cc
@@ -153,9 +166,22 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
       QString blank(start,' ');
       QString wave(end - start,'^');
 
-      throw HootException(QString("%1 (%2) \n%3\n%4").arg(fileName).arg(lineNumber).arg(sourceLine).arg(blank + wave));
+      throw HootException(QString("%1 (%2) \n%3\n%4 \n%5").arg(fileName).arg(lineNumber).arg(sourceLine).arg(blank + wave).arg(str(exception->ToString())));
     }
   }
+}
+
+v8::Handle<v8::Value> HootExceptionJs::toJSON(const v8::Arguments& args)
+{
+  HandleScope scope;
+
+  shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
+
+  QVariantMap m;
+  m["message"] = e->getWhat();
+  m["classname"] = QString::fromStdString(e->getClassName());
+
+  return scope.Close(toV8(m));
 }
 
 v8::Handle<v8::Value> HootExceptionJs::toString(const v8::Arguments& args)

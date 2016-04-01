@@ -18,7 +18,6 @@
 
 // Hoot
 #include <hoot/core/io/ObjectOutputStream.h>
-#include <hoot/core/schema/JsonSchemaLoader.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfPath.h>
@@ -94,11 +93,9 @@ void TileOpDriver::apply(QString in, vector<Envelope> envelopes, double buffer,
   job.setRecordWriterClass(PbfRecordWriter::className());
 
   // Adds all libraries in this directory to the job.
-  job.addLibraryDirs(conf().getList("hoot.hadoop.libpath",
-    "${HOOT_HOME}/lib/;${HOOT_HOME}/local/lib/;${HADOOP_HOME}/c++/Linux-amd64-64/lib/;"
-    "${HOOT_HOME}/pretty-pipes/lib/"));
+  job.addLibraryDirs(ConfigOptions().getHootHadoopLibpath());
 
-  LOG_INFO("Hoot home: " << conf().getString("foo", "${HOOT_HOME}"));
+  LOG_INFO("Hoot home: " << getenv("HOOT_HOME"));
 
   const std::vector<std::string>& dirs = job.getLibraryDirs();
   for (size_t i = 0; i < dirs.size(); i++)
@@ -121,7 +118,7 @@ void TileOpDriver::apply(QString in, vector<Envelope> envelopes, double buffer,
     {
       QStringList filters;
       filters << "*.csv";
-      QFileInfoList fil = gdalDir.entryInfoList(filters, QDir::Files);
+      QFileInfoList fil = gdalDir.entryInfoList(filters, QDir::Files, QDir::Name);
       for (int i = 0; i < fil.size(); i++)
       {
         LOG_INFO("Adding GDAL_DATA file: " << fil[i].absoluteFilePath());
@@ -141,7 +138,7 @@ void TileOpDriver::apply(QString in, vector<Envelope> envelopes, double buffer,
 
   _addDefaultJobSettings(job);
 
-  QStringList fileDeps = conf().getList(fileDepsKey(), QStringList());
+  QStringList fileDeps = ConfigOptions().getHootHadoopFileDeps();
   for (int i = 0; i < fileDeps.size(); i++)
   {
     job.addFile(fileDeps[i].toStdString());

@@ -59,6 +59,8 @@ public:
     _status = Status::fromString(ConfigOptions(conf).getStatusCriterionStatus());
   }
 
+  virtual ElementCriterion* clone() { return new StatusCriterion(_status); }
+
 private:
   Status _status;
 };

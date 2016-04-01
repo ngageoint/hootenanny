@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/point/PlacesPoiMatch.h>
 #include <hoot/core/conflate/point/PlacesPoiMatchCreator.h>
@@ -96,7 +96,7 @@ public:
     env.MinY = 0.0;
     env.MaxX = 1.0;
     env.MaxY = 1.0;
-    MapReprojector::reprojectToPlanar(map, env);
+    MapProjector::projectToPlanar(map, env);
 
     int matchCount = 0;
 
@@ -150,7 +150,7 @@ public:
       mergers[i]->apply(map, replaced);
     }
 
-    CPPUNIT_ASSERT_EQUAL(3, map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getNodeMap().size());
 
     CPPUNIT_ASSERT_EQUAL(true, map->containsNode(n2->getId()));
     CPPUNIT_ASSERT_EQUAL(string("Mc Donalds"), n2->getTags()["name"].toStdString());

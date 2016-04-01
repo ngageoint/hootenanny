@@ -1,7 +1,8 @@
 
 == Command Line Documentation
 
-All Hootenanny operations are available via the command line interface. The following sections describe these operations in detail.
+All Hootenanny operations are available via the command line interface. The
+following sections describe these operations in detail.
 
 The base command line interface follows the following syntax:
 
@@ -9,21 +10,30 @@ The base command line interface follows the following syntax:
 hoot (operation) [args...]
 -----
 
-Where +operation+ is an operation name such as +ogr2osm+ or +conflate+. The parenthesis around +operation+ show that the argument is required.
+Where +operation+ is an operation name such as +ogr2osm+ or +conflate+. The
+parenthesis around +operation+ show that the argument is required.
 
-+[args...]+ shows that there are zero or more arguments to the operation. The brackets around +args...+ show that it is optional. This standard will be used in the documentation when referring to each 
++[args...]+ shows that there are zero or more arguments to the operation. The
+brackets around +args...+ show that it is optional. This standard will be used
+in the documentation when referring to each 
 
-If at any time you need simple command line help just run +hoot+ without any arguments and a short help screen will be displayed.
+If at any time you need simple command line help just run +hoot+ without any
+arguments and a short help screen will be displayed.
 
-Commands that start with +big+ are commands for running against large data sets. In general these commands will take longer on small data sets, or come with some other caveat. If you aren't running into memory errors these should generally be avoided.
+Commands that start with +big+ are commands for running against large data sets.
+In general these commands will take longer on small data sets, or come with some
+other caveat. If you aren't running into memory errors these should generally be
+avoided.
 
 :leveloffset: 1
 // be sure all included asciidocs end with a newline
 include::add-pbf-header.asciidoc[]
+include::accuracy-dist.asciidoc[]
 include::alpha-shape.asciidoc[]
 include::apply-rubber-sheet.asciidoc[]
 include::attr-conflate.asciidoc[]
 include::attr-co-occurence.asciidoc[]
+include::attribute-count.asciidoc[]
 include::big-cat.asciidoc[]
 include::big-conflate.asciidoc[]
 include::big-cookie-cutter.asciidoc[]
@@ -55,10 +65,12 @@ include::perty.asciidoc[]
 include::perty-score.asciidoc[]
 include::perty-test.asciidoc[]
 include::print-tags.asciidoc[]
+include::reviewed-tag.asciidoc[]
 include::rubber-sheet.asciidoc[]
 include::score.asciidoc[]
 include::score-matches.asciidoc[]
 include::stats.asciidoc[]
+include::tile-conflate.asciidoc[]
 include::unify.asciidoc[]
 include::union-polygons.asciidoc[]
 include::version.asciidoc[]

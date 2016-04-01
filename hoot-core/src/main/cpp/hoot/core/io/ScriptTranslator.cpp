@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptTranslator.h"
 
@@ -78,13 +78,13 @@ void ScriptTranslator::strictError(const QString& s)
   }
 }
 
-void ScriptTranslator::translateToOsm(Tags& tags, const char *layerName)
+void ScriptTranslator::translateToOsm(Tags& tags, const char *layerName, const char* geomType)
 {
   if (!_initialized)
   {
     _init();
     _initialized = true;
   }
-  _translateToOsm(tags, layerName);
+  _translateToOsm(tags, layerName, geomType);
 }
 }

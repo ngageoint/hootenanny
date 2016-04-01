@@ -22,43 +22,28 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ogr;
 
-import hoot.services.HootProperties;
+//import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-public class TranslatorResourceTest {
-	
-	@Ignore
-	@Test
-	@Category(UnitTest.class)
-	public void testParseOsm() throws Exception
-	{
-
-	}
-	
+//TODO: clean up ignored tests
+public class TranslatorResourceTest 
+{
 	@Ignore
 	@Test
 	@Category(UnitTest.class)
 	public void testExecOsmConversion() throws Exception
 	{
-		String homeFolder = HootProperties.getInstance().getProperty("homeFolder", "");
+		//String homeFolder = HootProperties.getInstance().getProperty("homeFolder", "");
 		/*Translator translator = new Translator();
 		translator.execOsmConversion(homeFolder + "/test-files/conflate/unified/AllDataTypesA.osm", 
 				homeFolder + "/test-output/OsmConversion.osm");*/
-	}
-	
-	@Ignore
-	@Test
-	@Category(UnitTest.class)
-	public void testTranslateToOgr() throws Exception
-	{
-
 	}
 }

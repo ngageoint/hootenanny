@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGKEYCOUNTVISITOR_H
 #define TAGKEYCOUNTVISITOR_H
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 #include "SingleStatistic.h"
@@ -40,7 +40,7 @@ namespace hoot
 /**
  * Counts the number of tags in all elements with the given key
  */
-class TagKeyCountVisitor : public ElementVisitor, public OsmMapConsumer, public SingleStatistic
+class TagKeyCountVisitor : public ElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
 {
   public:
 

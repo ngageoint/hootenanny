@@ -30,6 +30,7 @@
 //
 
 // For the OSM+ to NFDD translation
+hoot.require('SchemaTools')
 hoot.require('tds61')
 hoot.require('tds61_schema')
 hoot.require('tds61_rules')
@@ -64,10 +65,10 @@ function getRawDbSchema()
 // hoot --convert -D "convert.ops=hoot::TranslationOp"  \ 
 //      -D translation.script=$HOOT_HOME/translations/OSM_to_englishTDS.js <input>.osm <output>.osm
 //
-function translateAttributes(attrs, layerName)
+function translateAttributes(attrs, layerName, geometryType)
 {
     // We use the temp var because etds.toEnglish returns "attrs" and "tableName"
-    var output = etds61.toEnglish(attrs,'','');
+    var output = etds61.toEnglish(attrs,layerName,geometryType);
 
     // Make sure the returned value isn't NULL. This does occur
     if (output)

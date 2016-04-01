@@ -22,11 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.nodeJs;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
@@ -35,12 +36,14 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ServerControllerBase {
+public class ServerControllerBase 
+{
 	private static final Logger log = LoggerFactory.getLogger(ServerControllerBase.class);
 	
   private Process _serverProc = null;
 	
-	protected Process startServer(final String currPort, final String currThreadCnt, final String serverScript) throws Exception
+	protected Process startServer(final String currPort, final String currThreadCnt, 
+	final String serverScript) throws Exception
 	{
 		List<String> command = new ArrayList<String>();
 		command.add("node");
@@ -57,8 +60,16 @@ public class ServerControllerBase {
 		// Also, if there is no handler to pump out the std and stderr stream for Processbuilder (Also applies to Runtime.exe)
 		// the outputs get built up and then end up locking up process. Quite nesty!
 		new Thread() {
-		    public void run() {
-		    	_processStreamHandler(_serverProc, true);
+		    @Override
+        public void run() {
+		    	try
+		    	{
+		    		_processStreamHandler(_serverProc, true);
+		    	}
+		    	catch (IOException e)
+		    	{
+		    		log.error(e.getMessage());
+		    	}
 		    }
 		}.start();
 		
@@ -69,7 +80,7 @@ public class ServerControllerBase {
 		_closeAllServers(processSignature);
 	}
 	
-	private Integer getProcessId(final Process serverProc)
+	private static Integer getProcessId()
 	{
 		//this may not work with every JVM implementation
 		return Integer.parseInt(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
@@ -82,7 +93,7 @@ public class ServerControllerBase {
 		Integer transServerPID = null;
 		if (serverProc.getClass().getName().equals("java.lang.UNIXProcess"))
     {
-			transServerPID = getProcessId(serverProc);
+			transServerPID = getProcessId();
     } 
 		else
     {
@@ -91,9 +102,10 @@ public class ServerControllerBase {
     }
 
 		// And then gets the status
-		if(transServerPID != null && transServerPID > 0)
+		if (transServerPID != null && transServerPID > 0)
 		{
-			try {
+			try 
+			{
 		    Runtime runtime = Runtime.getRuntime();
 		    
 		    Process statusProcess = runtime.exec(new String[] { "kill", "-0", ""+transServerPID });
@@ -102,44 +114,30 @@ public class ServerControllerBase {
 		    _processStreamHandler(statusProcess, false); 
 		    
 		    int exitCode = statusProcess.waitFor();
-		    if(exitCode == 0)
+		    if (exitCode == 0)
 		    {
 		    	isRunning = true;
 		    }
-
 		  }
-		  catch (Exception e) {
+		  catch (Exception e) 
+			{
 		  	isRunning = false;
-		  }
-	    
+		  }   
 		}
 		return isRunning;
 	}
 	
-	
-  private void _closeAllServers(final String processSignature)
+  private static void _closeAllServers(final String processSignature) throws IOException
   {
-
-  	try
-		{
-  		// Note that we kill process that contains the name of server script
-  		Process killProc = Runtime.getRuntime().exec("pkill -f " + processSignature);
-  		_processStreamHandler(killProc, false);
-		}
-		catch (Exception ex)
-		{
-			// We just log error
-		  log.error("Failed to clean server processes:" + ex.getMessage());
-		}
-  	finally
-  	{
-  		
-  	}
+		// Note that we kill process that contains the name of server script
+		Process killProc = Runtime.getRuntime().exec("pkill -f " + processSignature);
+		_processStreamHandler(killProc, false);
   }
   
-  private void _processStreamHandler(final Process proc, boolean doSendToStdout)
+  private static void _processStreamHandler(final Process proc, boolean doSendToStdout) 
+  	throws IOException
   {
- // usually we should not get any output but just in case if we get some error..
+    // usually we should not get any output but just in case if we get some error..
     InputStreamReader stdStream = null;
     BufferedReader stdInput = null;
 
@@ -155,21 +153,22 @@ public class ServerControllerBase {
 	    stdError = new BufferedReader(stdErrStream);
 
 			String s = null;
-			while ((s = stdInput.readLine()) != null) {
-			    log.info(s);
-			    if(doSendToStdout)
-			    {
-			    	System.out.println(s);
-			    }
+			while ((s = stdInput.readLine()) != null) 
+			{
+			  log.info(s);
+			  if (doSendToStdout)
+			  {
+			   System.out.println(s);
+			  }
 			}
 			
-
-			while ((s = stdError.readLine()) != null) {
-			    log.error(s);
-			    if(doSendToStdout)
-			    {
-			    	System.out.println(s);
-			    }
+			while ((s = stdError.readLine()) != null) 
+			{
+			  log.error(s);
+			  if (doSendToStdout)
+			  {
+			    System.out.println(s);
+			  }
 			}
     }
     catch(Exception e)
@@ -178,18 +177,11 @@ public class ServerControllerBase {
     }
     finally
     {
-    	try
-    	{
-    	stdStream.close();
-    	stdInput.close();
+    	if (stdStream != null) { stdStream.close(); }
+    	if (stdInput != null) { stdInput.close(); }
     	
-    	stdErrStream.close();
-    	stdError.close();
-    	}
-    	catch (Exception ex)
-    	{
-    		log.error("Failed to close streams.");
-    	}
+    	if (stdErrStream != null) { stdErrStream.close(); }
+    	if (stdError != null) { stdError.close(); }
     }
   }
 }

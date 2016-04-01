@@ -65,6 +65,7 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches,
 
   bool foundAPoi = false;
   bool foundAPolygon = false;
+  QStringList matchTypes;
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
@@ -76,6 +77,10 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches,
     if (m->getMatchMembers() & MatchMembers::Polygon)
     {
       foundAPolygon = true;
+    }
+    if (matchTypes.contains(m->getMatchName()) == false)
+    {
+      matchTypes.append(m->getMatchName());
     }
   }
 
@@ -94,7 +99,8 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches,
 
     if (_isConflictingSet(matches))
     {
-      mergers.push_back(new MarkForReviewMerger(eids, "Conflicting information", 1));
+      mergers.push_back(new MarkForReviewMerger(eids, "Conflicting information",
+        matchTypes.join(";"), 1));
     }
     else
     {
@@ -178,7 +184,8 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
     auto_ptr<Match> ma(_createMatch(map, o1, o2));
 
     // return conflict only if it is a miss, a review is ok.
-#warning need to load this from a configuration
+    // need to load this from a configuration
+    // https://github.com/ngageoint/hootenanny/issues/353
     MatchThreshold mt;
     result = false;
     if (ma.get() == 0 ||

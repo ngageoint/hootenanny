@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 package hoot.services.utils;
@@ -36,6 +36,8 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+
 //import javax.xml.transform.TransformerConfigurationException;
 //import javax.xml.transform.TransformerFactory;
 import org.apache.xml.serialize.OutputFormat;
@@ -55,20 +57,11 @@ public class XmlDocumentBuilder
    * 
    * @return XML document
    * @throws IOException
+   * @throws ParserConfigurationException 
    */
-  public static Document create() throws IOException
+  public static Document create() throws IOException, ParserConfigurationException
   {
-    DocumentBuilderFactory dBF = DocumentBuilderFactory.newInstance();
-    DocumentBuilder builder;
-    try
-    {
-      builder = dBF.newDocumentBuilder();
-    }
-    catch (ParserConfigurationException e)
-    {
-      throw new IOException("Error creating document builder. (" + e.getMessage() + ")");
-    }
-    return builder.newDocument();
+  	return XmlDocumentBuilder.getSecureDocBuilderFactory().newDocumentBuilder().newDocument();
   }
 
   /**
@@ -83,24 +76,15 @@ public class XmlDocumentBuilder
   public static Document parse(String xml) throws SAXException, IOException,
     ParserConfigurationException
   {
-    return parse(xml, true);
-  }
-  
-  /**
-   * Parses an XML string into a DOM
-   * 
-   * @param xml an XML string
-   * @param namespaceAware determines whether namespaces are respected during the parsing
-   * @return an XML DOM
-   * @throws SAXException
-   * @throws IOException
-   * @throws ParserConfigurationException
-   */
-  public static Document parse(String xml, boolean namespaceAware) throws SAXException, 
-    IOException, ParserConfigurationException
-  {
-    DocumentBuilderFactory domFactory = getSecureDocBuilderFactory();
-    domFactory.setNamespaceAware(namespaceAware); // never forget this!
+  	DocumentBuilderFactory domFactory = getSecureDocBuilderFactory();
+  	//DocumentBuilderFactory domFactory = getNormalDocBuilderFactory();
+    domFactory.setNamespaceAware(false);
+    domFactory.setValidating(false);
+    domFactory.setFeature("http://xml.org/sax/features/namespaces", false);
+    domFactory.setFeature("http://xml.org/sax/features/validation", false);
+    domFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+    domFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+    
     DocumentBuilder builder;
     builder = domFactory.newDocumentBuilder();
     
@@ -148,7 +132,7 @@ public class XmlDocumentBuilder
    * 
    * @return a TransformerFactory
    * @throws TransformerConfigurationException
-   * @todo could not get this code to run in JDK 1.7
+   * //TODO: could not get this code to run in JDK 1.7
    */
   /*public static TransformerFactory getSecureTransformerFactory() 
     throws TransformerConfigurationException
@@ -173,6 +157,13 @@ public class XmlDocumentBuilder
   	docBuilderFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
   	docBuilderFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
   	docBuilderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+    return docBuilderFactory;
+  }
+  
+  @SuppressWarnings("unused")
+  private static DocumentBuilderFactory getNormalDocBuilderFactory() 
+  {
+  	DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
     return docBuilderFactory;
   }
 }

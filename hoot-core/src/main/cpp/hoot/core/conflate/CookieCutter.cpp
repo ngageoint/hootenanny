@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/conflate/SuperfluousWayRemover.h>
 #include <hoot/core/ops/MapCropper.h>
@@ -51,8 +51,8 @@ void CookieCutter::cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap)
   env.Merge(doughMap->calculateBounds());
 
   // reproject the dough and cutter into the same planar projection.
-  MapReprojector::reprojectToPlanar(doughMap, env);
-  MapReprojector::reprojectToPlanar(cutterShapeMap, env);
+  MapProjector::projectToPlanar(doughMap, env);
+  MapProjector::projectToPlanar(cutterShapeMap, env);
 
   // create a complex geometry representing the alpha shape
   UnionPolygonsVisitor v;

@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/filters/HasTagCriterion.h>
 #include <hoot/core/io/OsmReader.h>
@@ -90,14 +90,7 @@ public:
 
     shared_ptr<OsmMap> copy(new OsmMap(map));
 
-/*#warning Remove this custom configuration that keeps the test from erroring out
-    Settings testSettings = conf();
-    testSettings.set("conflate.match.threshold", QString::number(0.6));
-    testSettings.set("conflate.miss.threshold", QString::number(0.6));
-    testSettings.set("conflate.review.threshold", QString::number(0.6));*/
-
     UnifyingConflator conflator;
-    //conflator.setConfiguration(testSettings);
     conflator.apply(copy);
 
     MatchComparator comparator;
@@ -105,7 +98,7 @@ public:
     LOG_INFO(comparator.toString());
 
     // for debugging
-    MapReprojector::reprojectToWgs84(copy);
+    MapProjector::projectToWgs84(copy);
     QDir(".").mkpath("test-output/scoring");
     OsmWriter writer;
     writer.write(copy, "test-output/scoring/MatchComparatorTest.osm");

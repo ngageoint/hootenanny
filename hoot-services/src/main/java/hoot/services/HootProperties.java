@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services;
 
@@ -64,7 +64,10 @@ public class HootProperties
       }
       finally
       {
-      	propsStrm.close();
+      	if (propsStrm != null)
+      	{
+      		propsStrm.close();
+      	}
       }
     }
 
@@ -106,7 +109,6 @@ public class HootProperties
    * It looks for property from the local properties and if it does not find it then uses environmental variable.
    *
    * @param prop
-   * @return
    * @throws Exception
    */
   public synchronized static String getProperty(String prop) throws IOException
@@ -241,10 +243,6 @@ public class HootProperties
     {
       return "false";
     }
-    else if (key.equals("hootCoreServicesDatabaseWriterCompatibility"))
-    {
-      return "false";
-    }
     else if (key.equals("coreScriptPath"))
     {
       return "/project/hoot/scripts";
@@ -269,14 +267,6 @@ public class HootProperties
     {
       return "5000";
     }
-    else if (key.equals("reviewGetMaxReviewSize"))
-    {
-      return "50000";
-    }
-    else if (key.equals("reviewPrepareOverwriteExistingDataDefault"))
-    {
-      return "false";
-    }
     else if (key.equals("testJobStatusPollerTimeout"))
     {
       return "250";
@@ -293,21 +283,17 @@ public class HootProperties
     {
       return "true";
     }
-    else if (key.equals("reviewPrepareCleanup"))
-    {
-      return "true";
-    }
-    else if (key.equals("reviewTags"))
-    {
-      return "hoot:review:uuid;hoot:review:score;hoot:review:note;hoot:review:needs";
-    }
     else if (key.equals("maxWarningsDisplayed"))
     {
       return "10";
     }
-    else if (key.equals("cleanReviewTags"))
+    else if (key.equals("seedRandomQueries"))
     {
-      return "true";
+      return "false";
+    }
+    else if (key.equals("randomQuerySeed"))
+    {
+      return "0.1";
     }
     return null;
   }

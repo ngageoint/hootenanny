@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAXIMALSUBLINE_H
 #define MAXIMALSUBLINE_H
@@ -36,6 +36,9 @@
 #include <hoot/core/elements/Way.h>
 
 #include "Sparse2dMatrix.h"
+
+// OpenCV
+#include <opencv/cv.h>
 
 namespace hoot
 {
@@ -223,6 +226,25 @@ private:
   void _snapToEnd(WayLocation& wl, double thresh = -1) { _snapToTerminal(wl, false, thresh); }
   void _snapToStart(WayLocation& wl, double thresh = -1) { _snapToTerminal(wl, true, thresh); }
   void _snapToTerminal(WayLocation& wl, bool startOfLines = true, double threshold = -1);
+
+  bool _checkForSortedSecondSubline(const vector<WaySublineMatch>& rawSublineMatches) const;
+  bool _rawSublinesTooSmall(const vector<WaySublineMatch>& rawSublineMatches) const;
+  cv::Mat _createConstraintMatrix(const vector<int>& starts, const vector<int>& ends,
+                                  const vector< pair<WayLocation, WayLocation> >& pairs,
+                                  vector<int>& matchIndexes);
+  void _calculateSnapStarts(const WaySublineMatch& rawSublineMatch, const int matchIndex,
+                            const vector<double>& splits,
+                            const vector< pair<WayLocation, WayLocation> >& pairs,
+                            const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+                            WayLocation& w1Start, WayLocation& w2Start);
+  void _calculateSnapEnds(const int matchIndex, const vector<double>& splits,
+                          const vector< pair<WayLocation, WayLocation> >& pairs,
+                          const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+                          WayLocation& w1End, WayLocation& w2End);
+  void _calculatePointPairMatches(const double way1CircularError, const double way2CircularError,
+                                  const vector<WaySublineMatch>& rawSublineMatches,
+                                  const vector< pair<WayLocation, WayLocation> >& pairs,
+                                  cv::Mat& m, vector<int>& starts, vector<int>& ends);
 
 };
 

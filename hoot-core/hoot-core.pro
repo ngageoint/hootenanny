@@ -1,7 +1,7 @@
 # -------------------------------------------------
 # Project created by QtCreator 2011-09-29T12:27:47
 # -------------------------------------------------
-QT += script \
+QT += \
     sql \
     testlib \
     xml \
@@ -19,7 +19,6 @@ INCLUDEPATH += \
   ../local/include/ \
 
 CONFIG += rtti \
-    qtestlib \
     debug
 
 OTHER_FILES = \
@@ -30,7 +29,10 @@ OTHER_FILES = \
     ../rules/LinearWaterway.js \
     ../conf/LinearWaterway.conf \
     ../conf/LinearWaterway-match-scoring.conf \
-    ../conf/WaterwaySchema.json \
+    ../conf/schema/all_weather.json \
+    ../conf/schema/highway.json \
+    ../conf/schema/natural.json \
+    ../conf/schema/public_transport.json \
     ../rules/template/ConflateRules.js \
 
 include(../Configure.pri)
@@ -57,14 +59,6 @@ log4cxx {
   HEADERS += src/main/cpp/hoot/core/util/LogGeneric.h
 }
 
-octave {
-  SOURCES += src/main/cpp/hoot/core/util/Octave.cpp \
-    src/main/cpp/hoot/core/perty/FullCovariance.cpp \
-
-  HEADERS += src/main/cpp/hoot/core/util/Octave.h \
-    src/main/cpp/hoot/core/perty/FullCovariance.h \
-}
-
 SOURCES += \
     src/main/cpp/hoot/core/util/Progress.cpp \
     src/main/cpp/hoot/core/OgrFeatureProvider.cpp \
@@ -81,7 +75,7 @@ SOURCES += \
     src/main/cpp/hoot/core/elements/WayData.cpp \
     src/main/cpp/hoot/core/elements/NodeData.cpp \
     src/main/cpp/hoot/core/elements/ElementData.cpp \
-    src/main/cpp/hoot/core/MapReprojector.cpp \
+    src/main/cpp/hoot/core/MapProjector.cpp \
     src/main/cpp/hoot/core/io/OsmWriter.cpp \
     src/main/cpp/hoot/core/WorkingMap.cpp \
     src/main/cpp/hoot/core/manipulators/WayMerger.cpp \
@@ -142,7 +136,6 @@ SOURCES += \
     src/main/cpp/hoot/core/manipulators/DanglerRemover.cpp \
     src/main/cpp/hoot/core/manipulators/DanglerRemoverManipulation.cpp \
     src/main/cpp/hoot/core/conflate/SmallWayMerger.cpp \
-    src/main/cpp/hoot/core/schema/JsonSchemaLoader.cpp \
     src/main/cpp/hoot/core/conflate/TileConflator.cpp \
     src/main/cpp/hoot/core/algorithms/Translator.cpp \
     src/main/cpp/hoot/core/conflate/LargeWaySplitter.cpp \
@@ -201,6 +194,7 @@ SOURCES += \
     src/main/cpp/hoot/core/ops/BuildingPartMergeOp.cpp \
     src/main/cpp/hoot/core/index/ElementToRelationMap.cpp \
     src/main/cpp/hoot/core/ops/BuildingOutlineUpdateOp.cpp \
+    src/main/cpp/hoot/core/ops/RemoveDuplicateReviewsOp.cpp \
     src/main/cpp/hoot/core/cmd/ConvertCmd.cpp \
     src/main/cpp/hoot/core/ops/VisitorOp.cpp \
     src/main/cpp/hoot/core/ops/NamedOp.cpp \
@@ -307,13 +301,16 @@ SOURCES += \
     src/main/cpp/hoot/core/io/ScriptTranslatorFactory.cpp \
     src/main/cpp/hoot/core/cmd/IsMatchCmd.cpp \
     src/main/cpp/hoot/core/scoring/MapComparator.cpp \
-    src/main/cpp/hoot/core/io/ServicesDbWriter.cpp \
-    src/main/cpp/hoot/core/io/ServicesDbReader.cpp \
+    src/main/cpp/hoot/core/io/OsmApiDbReader.cpp \
+    src/main/cpp/hoot/core/io/HootApiDbReader.cpp \
+    src/main/cpp/hoot/core/io/HootApiDbWriter.cpp \
     src/main/cpp/hoot/core/perty/BigPertyOp.cpp \
     src/main/cpp/hoot/core/io/PartialOsmMapReader.cpp \
     src/main/cpp/hoot/core/io/OsmMapWriter.cpp \
     src/main/cpp/hoot/core/io/OsmMapReader.cpp \
-    src/main/cpp/hoot/core/io/ServicesDb.cpp \
+    src/main/cpp/hoot/core/io/ApiDb.cpp \
+    src/main/cpp/hoot/core/io/OsmApiDb.cpp \
+    src/main/cpp/hoot/core/io/HootApiDb.cpp \
     src/main/cpp/hoot/core/io/OsmMapWriterFactory.cpp \
     src/main/cpp/hoot/core/io/OsmMapReaderFactory.cpp \
     src/main/cpp/hoot/core/io/OgrWriter.cpp \
@@ -385,7 +382,6 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/RfExtractorClassifier.cpp \
     src/main/cpp/hoot/core/cmd/CropMapCmd.cpp \
     src/main/cpp/hoot/core/util/MultiPolygonCreator.cpp \
-    src/main/cpp/hoot/core/io/db/SequenceIdReserver.cpp \
     src/main/cpp/hoot/core/io/db/InternalIdReserver.cpp \
     src/main/cpp/hoot/core/conflate/ReviewMarker.cpp \
     src/main/cpp/hoot/core/cmd/AttributeCoOccuranceCmd.cpp \
@@ -459,11 +455,9 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/SearchRadiusCalculator.cpp \
     src/main/cpp/hoot/core/io/ElementOutputStream.cpp \
     src/main/cpp/hoot/core/io/ElementInputStream.cpp \
-    src/main/cpp/hoot/core/io/VisitorElementInputStream.cpp \
     src/main/cpp/hoot/core/visitors/TranslationVisitor.cpp \
     src/main/cpp/hoot/core/io/ElementVisitorInputStream.cpp \
     src/main/cpp/hoot/core/io/ElementCacheLRU.cpp \
-    src/main/cpp/hoot/core/cmd/ExportCmd.cpp \
     src/main/cpp/hoot/core/visitors/MatchCandidateCountVisitor.cpp \
     src/main/cpp/hoot/core/algorithms/string/WeightedWordDistance.cpp \
     src/main/cpp/hoot/core/algorithms/string/TextFileWordWeightDictionary.cpp \
@@ -480,7 +474,15 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.cpp \
     src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
     src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp \
+    src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriter.cpp \
+    src/main/cpp/hoot/core/ops/ReplaceElementOp.cpp \
+    src/main/cpp/hoot/core/filters/NeedsReviewCriterion.cpp \
+    src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.cpp \
+    src/main/cpp/hoot/core/ops/RemoveReviewsByEidOp.cpp \
+    src/main/cpp/hoot/core/conflate/highway/HighwayReviewCleanerOp.cpp \
+    src/main/cpp/hoot/core/ops/AddHilbertReviewSortOrderOp.cpp \
     src/main/cpp/hoot/core/schema/SchemaVertex.cpp \
+    src/main/cpp/hoot/core/schema/SchemaChecker.cpp \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp \
@@ -488,7 +490,13 @@ SOURCES += \
     src/main/cpp/hoot/core/io/ChangesetDeriver.cpp \
     src/main/cpp/hoot/core/io/OsmChangeWriter.cpp \
     src/main/cpp/hoot/core/cmd/DeriveChangeCmd.cpp \
-    src/main/cpp/hoot/core/io/OsmChangeWriterSql.cpp
+    src/main/cpp/hoot/core/io/OsmChangeWriterSql.cpp \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
+    src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp \
+    src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.cpp \
+    src/main/cpp/hoot/core/filters/WaterwayCriterion.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -511,7 +519,7 @@ HEADERS += \
     src/main/cpp/hoot/core/elements/WayData.h \
     src/main/cpp/hoot/core/elements/NodeData.h \
     src/main/cpp/hoot/core/elements/ElementData.h \
-    src/main/cpp/hoot/core/MapReprojector.h \
+    src/main/cpp/hoot/core/MapProjector.h \
     src/main/cpp/hoot/core/io/OsmWriter.h \
     src/main/cpp/hoot/core/Units.h \
     src/main/cpp/hoot/core/manipulators/WayMerger.h \
@@ -542,6 +550,7 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WayFilter.h \
     src/main/cpp/hoot/core/filters/NeighborFilter.h \
     src/main/cpp/hoot/core/WayMap.h \
+    src/main/cpp/hoot/core/NodeMap.h \
     src/main/cpp/hoot/core/filters/WayFilterChain.h \
     src/main/cpp/hoot/core/filters/UnknownFilter.h \
     src/main/cpp/hoot/core/filters/StatusFilter.h \
@@ -582,7 +591,6 @@ HEADERS += \
     src/main/cpp/hoot/core/manipulators/DanglerRemover.h \
     src/main/cpp/hoot/core/manipulators/DanglerRemoverManipulation.h \
     src/main/cpp/hoot/core/conflate/SmallWayMerger.h \
-    src/main/cpp/hoot/core/schema/JsonSchemaLoader.h \
     src/main/cpp/hoot/core/conflate/TileConflator.h \
     src/main/cpp/hoot/core/algorithms/Translator.h \
     src/main/cpp/hoot/core/conflate/LargeWaySplitter.h \
@@ -635,8 +643,10 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/BuildingPartMergeOp.h \
     src/main/cpp/hoot/core/index/ElementToRelationMap.h \
     src/main/cpp/hoot/core/ops/BuildingOutlineUpdateOp.h \
+    src/main/cpp/hoot/core/ops/RemoveDuplicateReviewsOp.h \
     src/main/cpp/hoot/core/ops/VisitorOp.h \
     src/main/cpp/hoot/core/OsmMapConsumer.h \
+    src/main/cpp/hoot/core/ConstOsmMapConsumer.h \
     src/main/cpp/hoot/core/ops/NamedOp.h \
     src/main/cpp/hoot/core/visitors/ReportMissingElementsVisitor.h \
     src/main/cpp/hoot/core/visitors/KeepBuildingsVisitor.h \
@@ -648,7 +658,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/polygon/extractors/AbstractDistanceExtractor.h \
     src/main/cpp/hoot/core/util/GeometryConverter.h \
     src/main/cpp/hoot/core/algorithms/VertexHausdorffDistance.h \
-    src/main/cpp/hoot/core/conflate/polygon/BuildingMergeManipulation.h \
     src/main/cpp/hoot/core/elements/ElementId.h \
     src/main/cpp/hoot/core/elements/ElementType.h \
     src/main/cpp/hoot/core/manipulators/WayManipulator.h \
@@ -757,13 +766,17 @@ HEADERS += \
     src/main/cpp/hoot/core/io/ScriptTranslatorFactory.h \
     src/main/cpp/hoot/core/scoring/MapComparator.h \
     src/main/cpp/hoot/core/util/Float.h \
-    src/main/cpp/hoot/core/io/ServicesDbWriter.h \
-    src/main/cpp/hoot/core/io/ServicesDbReader.h \
+    src/main/cpp/hoot/core/io/ApiDbReader.h \
+    src/main/cpp/hoot/core/io/OsmApiDbReader.h \
+    src/main/cpp/hoot/core/io/HootApiDbReader.h \
+    src/main/cpp/hoot/core/io/HootApiDbWriter.h \
     src/main/cpp/hoot/core/perty/BigPertyOp.h \
     src/main/cpp/hoot/core/io/PartialOsmMapReader.h \
     src/main/cpp/hoot/core/io/OsmMapWriter.h \
     src/main/cpp/hoot/core/io/OsmMapReader.h \
-    src/main/cpp/hoot/core/io/ServicesDb.h \
+    src/main/cpp/hoot/core/io/ApiDb.h \
+    src/main/cpp/hoot/core/io/OsmApiDb.h \
+    src/main/cpp/hoot/core/io/HootApiDb.h \
     src/main/cpp/hoot/core/io/OsmMapWriterFactory.h \
     src/main/cpp/hoot/core/io/OsmMapReaderFactory.h \
     src/main/cpp/hoot/core/io/OgrWriter.h \
@@ -776,7 +789,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/schema/StringFieldDefinition.h \
     src/main/cpp/hoot/core/io/schema/DoubleFieldDefinition.h \
     src/main/cpp/hoot/core/io/schema/IntegerFieldDefinition.h \
-    src/main/cpp/hoot/core/conflate/polygon/BuildingMergeManipulator.h \
     src/main/cpp/hoot/core/index/metric-hybrid/FqTree.h \
     src/main/cpp/hoot/core/index/metric-hybrid/RFqHybridTree.h \
     src/main/cpp/hoot/core/index/metric-hybrid/RTree.h \
@@ -856,7 +868,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/polygon/BuildingRfClassifier.h \
     src/main/cpp/hoot/core/conflate/RfExtractorClassifier.h \
     src/main/cpp/hoot/core/util/MultiPolygonCreator.h \
-    src/main/cpp/hoot/core/io/db/SequenceIdReserver.h \
     src/main/cpp/hoot/core/io/db/InternalIdReserver.h \
     src/main/cpp/hoot/core/conflate/ReviewMarker.h \
     src/main/cpp/hoot/core/visitors/LongestTagVisitor.h \
@@ -931,7 +942,6 @@ HEADERS += \
     src/main/cpp/hoot/core/elements/ElementVisitor.h \
     src/main/cpp/hoot/core/io/ElementInputStream.h \
     src/main/cpp/hoot/core/io/ElementOutputStream.h \
-    src/main/cpp/hoot/core/io/VisitorElementInputStream.h \
     src/main/cpp/hoot/core/visitors/TranslationVisitor.h \
     src/main/cpp/hoot/core/io/ElementVisitorInputStream.h \
     src/main/cpp/hoot/core/io/ElementCache.h \
@@ -956,7 +966,14 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.h \
     src/main/cpp/hoot/core/conflate/CookieCutter.h \
     src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.h \
+    src/main/cpp/hoot/core/ops/ReplaceElementOp.h \
+    src/main/cpp/hoot/core/filters/NeedsReviewCriterion.h \
+    src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.h \
+    src/main/cpp/hoot/core/ops/RemoveReviewsByEidOp.h \
+    src/main/cpp/hoot/core/conflate/highway/HighwayReviewCleanerOp.h \
+    src/main/cpp/hoot/core/ops/AddHilbertReviewSortOrderOp.h \
     src/main/cpp/hoot/core/schema/SchemaVertex.h \
+    src/main/cpp/hoot/core/schema/SchemaChecker.h \
     src/main/cpp/hoot/core/schema/KeyValuePair.h \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.h \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.h \
@@ -964,5 +981,11 @@ HEADERS += \
     src/main/cpp/hoot/core/io/ElementSorter.h \
     src/main/cpp/hoot/core/io/ChangesetDeriver.h \
     src/main/cpp/hoot/core/io/ChangesetProvider.h \
-    src/main/cpp/hoot/core/io/OsmChangeWriter.h
+    src/main/cpp/hoot/core/io/OsmChangeWriter.h \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h \
+    src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h \
+    src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.h \
+    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.h \
+    src/main/cpp/hoot/core/filters/WaterwayCriterion.h
 

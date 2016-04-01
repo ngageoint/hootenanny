@@ -60,6 +60,9 @@
 // Standard
 #include <fstream>
 
+// Qt
+#include <QFile>
+
 namespace hoot
 {
 
@@ -251,7 +254,7 @@ map<QString, double> HighwayRfClassifier::getFeatures(const shared_ptr<const Osm
     LOG_VAR(eid2);
     LOG_VAR(match.toString());
     throw NeedsReviewException("Internal Error: Expected a matching subline, but got an empty "
-                               "match. Please report this to the developers.");
+                               "match. Please report this to hootenanny.help@digitalglobe.com.");
   }
   else
   {
@@ -281,14 +284,23 @@ void HighwayRfClassifier::_init() const
     QString path = ConfPath::search(ConfigOptions().getConflateMatchHighwayModel());
     LOG_INFO("Loading highway model from: " << path);
 
-    ifstream fp;
-    fp.open(path.toAscii().data());
-    if (!fp.is_open())
+    QFile file(path.toAscii().data());
+    if (!file.open(QIODevice::ReadOnly))
     {
       throw HootException("Error opening file: " + path);
     }
     _rf.reset(new RandomForest());
-    _rf->import(fp);
+    try
+    {
+      _rf->importModel(file);
+      file.close();
+    }
+    catch (const Exception& e)
+    {
+      file.close();
+      throw e;
+    }
+
     vector<string> factorLabels = _rf->getFactorLabels();
     LOG_VAR(factorLabels);
 

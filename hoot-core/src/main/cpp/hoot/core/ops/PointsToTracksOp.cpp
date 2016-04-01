@@ -60,15 +60,15 @@ void PointsToTracksOp::apply(shared_ptr<OsmMap>& map)
 {
   HashMap<QString, deque<long> > trackIdToNid;
 
-  const OsmMap::NodeMap& nm = map->getNodeMap();
+  const NodeMap& nm = map->getNodeMap();
 
-  for (OsmMap::NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    if (it.value()->getTags().contains("hoot:track:id") &&
-        it.value()->getTags().contains("hoot:track:seq"))
+    if (it->second->getTags().contains("hoot:track:id") &&
+        it->second->getTags().contains("hoot:track:seq"))
     {
-      QString trackId = it.value()->getTags()["hoot:track:id"];
-      trackIdToNid[trackId].push_back(it.key());
+      QString trackId = it->second->getTags()["hoot:track:id"];
+      trackIdToNid[trackId].push_back(it->first);
     }
   }
 

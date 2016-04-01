@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGFILTER_H
 #define BUILDINGFILTER_H
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 
@@ -41,7 +41,7 @@ namespace hoot
 /**
  * A filter that will either keep or remove matches.
  */
-class BuildingCriterion : public ElementCriterion, public OsmMapConsumer
+class BuildingCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
@@ -97,6 +97,8 @@ public:
   }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
+  virtual ElementCriterion* clone() { return new BuildingCriterion(_map); }
 
 private:
 

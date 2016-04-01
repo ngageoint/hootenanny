@@ -22,11 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.nativeInterfaces;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 
 import hoot.services.HootProperties;
@@ -105,31 +104,25 @@ public class ProcessStreamInterfaceTest {
 
 		String expected = "";
 
-		try {
-	    	String coreScriptPath = HootProperties.getProperty("coreScriptPath");
+  	String coreScriptPath = HootProperties.getProperty("coreScriptPath");
 
-	    	HootProperties.getProperty("coreScriptOutputPath");
+  	HootProperties.getProperty("coreScriptOutputPath");
 
-	    	String ETLMakefile = HootProperties.getInstance().getProperty("ETLMakefile",
-			          HootProperties.getDefault("ETLMakefile"));
-	    	String makePath = coreScriptPath + "/" + ETLMakefile;
+  	String ETLMakefile = HootProperties.getInstance().getProperty("ETLMakefile",
+	          HootProperties.getDefault("ETLMakefile"));
+  	String makePath = coreScriptPath + "/" + ETLMakefile;
 
-	    	//[make, -f, /project/hoot/scripts/makeetl, translation=/test/file/test.js, INPUT_TYPE=OSM, INPUT=/test/file/INPUT.osm,  jobid=123-456-789]
-	    	expected = "{make,-f," + makePath + ",translation=/test/file/test.js,INPUT_TYPE=OSM,INPUT=/test/file/INPUT.osm";
-	    	expected += ",jobid=123-456-789";
+  	//[make, -f, /project/hoot/scripts/makeetl, translation=/test/file/test.js, INPUT_TYPE=OSM, INPUT=/test/file/INPUT.osm,  jobid=123-456-789]
+  	expected = "{make,-f," + makePath + ",translation=/test/file/test.js,INPUT_TYPE=OSM,INPUT=/test/file/INPUT.osm";
+  	expected += ",jobid=123-456-789";
 
-	    	String dbname = HootProperties.getProperty("dbName");
-  	  	String userid = HootProperties.getProperty("dbUserId");
-  	  	String pwd = HootProperties.getProperty("dbPassword");
-  	  	String host = HootProperties.getProperty("dbHost");
-  	  	String dbUrl = "postgresql://" + userid + ":" + pwd + "@" + host + "/" + dbname;
-  	  	expected += ",DB_URL=" + dbUrl + "}";
-
-		} catch (IOException e) {
-
-		}
+  	String dbname = HootProperties.getProperty("dbName");
+  	String userid = HootProperties.getProperty("dbUserId");
+  	String pwd = HootProperties.getProperty("dbPassword");
+  	String host = HootProperties.getProperty("dbHost");
+  	String dbUrl = "postgresql://" + userid + ":" + pwd + "@" + host + "/" + dbname;
+  	expected += ",DB_URL=" + dbUrl + "}";
 
 		Assert.assertEquals(expected, commandStr);
-
 	}
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONFLATOR_H
 #define CONFLATOR_H
@@ -165,7 +165,7 @@ protected:
   shared_ptr<OsmMap> _map;
   shared_ptr<WorkingMap> _bestMap;
   shared_ptr<OGRSpatialReference> _planarSrs;
-  map< ElementId, set< shared_ptr<Manipulation> > > _impacted2Manipulation;
+  map< ElementId, set< shared_ptr<Manipulation>, LessThanManipulation > > _impacted2Manipulation;
 
   double _minValidScore;
   bool _createBogusReviewTags;

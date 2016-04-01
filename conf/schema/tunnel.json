@@ -1,0 +1,24 @@
+[
+    {
+        "isA": "bridge_tunnel=unknown",
+        "name": "tunnel=no",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "poi",
+            "hgispoi"
+        ],
+        "geometries": [
+            "linestring",
+            "relation"
+        ],
+        "isA": "bridge_tunnel=unknown",
+        "name": "tunnel=yes",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "tunnel=no",
+            "weight": 0.5
+        }
+    }
+]

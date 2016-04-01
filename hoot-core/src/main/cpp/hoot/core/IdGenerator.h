@@ -66,6 +66,8 @@ private:
   static shared_ptr<IdGenerator> _theInstance;
 };
 
+typedef boost::shared_ptr<IdGenerator> IdGeneratorPtr;
+
 }
 
 #endif // IDGENERATOR_H

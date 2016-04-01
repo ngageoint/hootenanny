@@ -1,0 +1,115 @@
+stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
+Node Count	337	156	473	
+Way Count	0	0	0	
+Relation Count	0	0	63	
+Minimum Node ID	-337	-493	-493	
+Maximum Node ID	-1	-338	-1	
+Minimum Way ID	9.2233720368547758e+18	9.2233720368547758e+18	9.2233720368547758e+18	
+Maximum Way ID	-9.2233720368547758e+18	-9.2233720368547758e+18	-9.2233720368547758e+18	
+Minimum Relation ID	9.2233720368547758e+18	9.2233720368547758e+18	-69	
+Maximum Relation ID	-9.2233720368547758e+18	-9.2233720368547758e+18	-1	
+Total Feature Tags	978	468	1504	
+Total Feature Information Tags	641	312	953	
+Total Feature Metadata Tags	337	156	551	
+Unique Names	323	152	475	
+Meters of Linear Features	0	0	0	
+Meters Squared of Area Features	0	0	0	
+Meters of Highway	0	0	0	
+Highway Unique Name Count	0	0	0	
+Meters Squared of Buildings	0	0	0	
+Building Unique Name Count	0	0	0	
+Total Feature Count	337	156	473	
+Total Conflatable Features	337	156	0	
+Percentage of Total Features Conflatable	100	100	0	
+Total Unconflatable Features	0	0	0	
+Percentage of Total Features Unconflatable	0	0	0	
+Total Features Processed By Conflation	0	0	20	
+Number of Match Creators	4	4	4	
+Features Conflatable by: hoot::HighwayMatchCreator	0	0	0	
+Features Conflatable by: hoot::BuildingMatchCreator	0	0	0	
+Features Conflatable by: hoot::ScriptMatchCreator,LinearWaterway.js	337	337	156	156	0	0	
+Features Conflatable by: hoot::ScriptMatchCreator,LineStringGeneric.js	0	0	0	0	0	0	
+Total Conflated Features	0	0	0	
+Percentage of Total Features Conflated	0	0	0	
+Total Features Marked for Review	0	0	87	
+Percentage of Total Features Marked for Review	0	0	18.393234672304441	
+Total Number of Reviews to be Made	0	0	63	
+Total Unmatched Features	337	156	375	
+Percentage of Total Features Unmatched	100	100	79.281183932346721	
+POI Count	337	156	473	
+Conflatable POIs	0	0	0	
+Conflated POIs	0	0	0	
+POIs Marked for Review	0	0	87	
+Number of POI Reviews to be Made	0	0	63	
+Unmatched POIs	337	156	375	
+Percentage of POIs Conflated	0	0	0	
+Percentage of POIs Marked for Review	0	0	18.393234672304441	
+Percentage of Unmatched POIs	100	100	79.281183932346721	
+Highway Count	0	0	0	
+Conflatable Highways	0	0	0	
+Conflated Highways	0	0	0	
+Highways Marked for Review	0	0	0	
+Number of Highway Reviews to be Made	0	0	0	
+Unmatched Highways	0	0	0	
+Meters of Highway Processed by Conflation	0	0	0	
+Percentage of Highways Conflated	0	0	0	
+Percentage of Highways Marked for Review	0	0	0	
+Percentage of Unmatched Highways	0	0	0	
+Building Count	0	0	0	
+Conflatable Buildings	0	0	0	
+Conflated Buildings	0	0	0	
+Buildings Marked for Review	0	0	0	
+Number of Building Reviews to be Made	0	0	0	
+Unmatched Buildings	0	0	0	
+Meters Squared of Buildings Processed by Conflation	0	0	0	
+Percentage of Buildings Conflated	0	0	0	
+Percentage of Buildings Marked for Review	0	0	0	
+Percentage of Unmatched Buildings	0	0	0	
+Longest Tag	57	63	155	
+Translated Populated Tag Percent	nan	0.05338345864661654	0.054285714285714284	
+Translated Populated Tag Count	0	710	722	
+Translated Default Tag Count	0	10595	10583	
+Translated Null Tag Count	0	1995	1995	
+Building Translated Populated Tag Percent	nan	nan	nan	
+Highway Translated Populated Tag Percent	nan	nan	nan	
+POI Translated Populated Tag Percent	nan	0.05338345864661654	0.054285714285714284	
+Difference Between Total Features in Output and Total Features in Inputs			-20	
+Percentage Difference Between Total Features in Output and Total Features in Inputs			-4.056795131845842	
+Read Inputs Time (sec)				0.10216903686523438
+(Dubious) Read Inputs Bytes				19959
+(Dubious) Read Inputs Bytes per Second				195352.7273270358
+Time to Calculate Stats for Input 1 (sec)				1.6182370185852051
+Time to Calculate Stats for Input 2 (sec)				1.1634528636932373
+Initial Element Count				493
+Apply Named Ops Time (sec)				0.0035240650177001953
+Apply Pre Ops Time (sec)				0.00011205673217773438
+Project to Planar Time (sec)				2.86102294921875e-06
+Find Matches Time (sec)				2.671273946762085
+Number of Matches Found				87
+Number of Matches Found per Second				32.568730026905243
+Number of Matches Before Whole Groups				87
+Number of Whole Groups				83
+Optimize Matches Time (sec)				0.0019640922546386719
+Number of Optimized Matches				0
+Number of Matches Optimized per Second				44295.271667880552
+Create Mergers Time (sec)				0.00043010711669921875
+Apply Mergers Time (sec)				0.0026679039001464844
+Mergers Applied per Second				31110.565862377123
+Apply Post Ops Time (sec)				0.0014569759368896484
+Conflation Time (sec)				2.6782951354980469
+Project to WGS84 Time (sec)				0.0057909488677978516
+Time to Calculate Stats for Output (sec)				1.1664350032806396
+(Dubious) Initial Elements Processed per Second				71.260097414224944
+(Dubious) Final Elements Processed per Second				77.475481164350043
+Write Output Time (sec)				0.18033099174499512
+Final Element Count				536
+Total Time Elapsed (sec)				6.9183177947998047
+Bytes Read				45424936
+Bytes Written				106282
+Number of Read Syscalls				5769
+Number of Write Syscalls				1023
+Bytes Read From Storage				0
+Bytes Written To Storage				0
+Cancelled Write Bytes				0
+(Dubious) Bytes Processed per Second				2884.9498667150419
+

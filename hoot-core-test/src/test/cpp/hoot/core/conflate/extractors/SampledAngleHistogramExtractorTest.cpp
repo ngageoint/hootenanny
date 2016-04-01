@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/extractors/SampledAngleHistogramExtractor.h>
 #include <hoot/core/elements/Way.h>
@@ -45,7 +45,6 @@ using namespace hoot;
 namespace hoot
 {
 
-//TODO: make this test more robust
 class SampledAngleHistogramExtractorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(SampledAngleHistogramExtractorTest);
@@ -67,7 +66,7 @@ public:
     reader.read(
       "test-files/conflate/extractor/SampledAngleHistogramExtractorTest/Haiti_osm_waterway_ss_REF2-cropped.osm",
       map);
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     SampledAngleHistogramExtractor angleHistogramExtractor;
     angleHistogramExtractor.setHeadingDelta(ConfigOptions().getWayMatcherHeadingDelta());

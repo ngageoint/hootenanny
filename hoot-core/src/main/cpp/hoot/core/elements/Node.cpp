@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -40,29 +40,24 @@ using namespace geos::geom;
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
-namespace hoot {
+namespace hoot
+{
 
 Node::Node(const Node& from) : Element(from.getStatus()), _nodeData(from._nodeData)
 {
 }
 
-Node::Node(Status s, long id, const Coordinate& c, Meters circularError) : Element(s),
-  _nodeData(id, c.x, c.y)
+Node::Node(Status s, long id, const Coordinate& c, Meters circularError) :
+Element(s)
 {
   _getElementData().setCircularError(circularError);
 }
 
-Node::Node(Status s, long id, double x, double y, Meters circularError) : Element(s),
-  _nodeData(id, x, y)
+Node::Node(Status s, long id, double x, double y, Meters circularError, long changeset,
+           long version, unsigned int timestamp, QString user, long uid) :
+Element(s)
 {
-  _getElementData().setCircularError(circularError);
-}
-
-Node::Node(Status s, long id, double x, double y, long changeset, long version,
-  unsigned int timestamp, Meters circularError) : Element(s),
-  _nodeData(id, x, y)
-{
-  _nodeData.init(id, x, y, changeset, version, timestamp);
+  _nodeData.init(id, x, y, changeset, version, timestamp, user, uid);
   _getElementData().setCircularError(circularError);
 }
 

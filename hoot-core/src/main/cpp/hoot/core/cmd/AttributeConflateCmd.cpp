@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/Conflator.h>
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
@@ -44,18 +44,6 @@ public:
   static string className() { return "hoot::ReferenceConflateCmd"; }
 
   AttributeConflateCmd() {}
-
-  QString getHelp() const
-  {
-    return getName() +" (input-ref) (input-nonref) (output)\n"
-        "  Conflates the attributes from non-reference input (input-nonref) onto the reference\n"
-        "  input (input-ref). The geometries from input-ref should be mostly unchanged (some \n"
-        "  cleaning of bad data may occur), but any tags found on input-nonref will\n"
-        "  overwrite tags on input-ref."
-        "  * input-ref - The input reference map path.\n"
-        "  * input-nonref - The input non-reference map path.\n"
-        "  * output - The output map path.";
-  }
 
   virtual QString getName() const { return "attr-conflate"; }
 
@@ -100,7 +88,7 @@ public:
       }
     }
 
-    MapReprojector::reprojectToWgs84(conflated);
+    MapProjector::projectToWgs84(conflated);
     saveMap(conflated, output);
 
     return 0;

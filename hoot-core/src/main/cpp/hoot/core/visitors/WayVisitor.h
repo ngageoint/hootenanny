@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYVISITOR_H
 #define WAYVISITOR_H
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 // tgs
@@ -42,7 +42,7 @@ using namespace std;
 /**
  * Base class to ease OsmMapConsumer usage.
  */
-class WayVisitor : public ElementVisitor, public OsmMapConsumer
+class WayVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

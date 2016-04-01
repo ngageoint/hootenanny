@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include <vector>
 
@@ -34,6 +34,7 @@
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/ScriptTranslator.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -66,14 +67,22 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
   // this is a hack to get around the visitor interface. The visitor interface should probably be
   // redesigned into ConstElementVisitor and ElementVisitor.
   ElementPtr e = _map->getElement(ce->getElementId());
+  Tags& tags = e->getTags();
 
-  if (e->getTags().getNonDebugCount() > 0)
+  if (tags.getNonDebugCount() > 0)
   {
+    GeometryTypeId gtype = ElementConverter::getGeometryType(e, false);
+
+    // If we don't know what it is, no point in translating it.
+    if (gtype == ElementConverter::UNKNOWN_GEOMETRY)
+    {
+      return;
+    }
+
     if (_toOgr)
     {
-      GeometryTypeId gtype = ElementConverter::getGeometryType(e, false);
 
-      vector<Tags> allTags = _togr->translateToOgrTags(e->getTags(), e->getElementType(), gtype);
+      vector<Tags> allTags = _togr->translateToOgrTags(tags, e->getElementType(), gtype);
 
       if (allTags.size() > 0)
       {
@@ -87,19 +96,48 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
     }
     else
     {
-      _t.translateToOsm(e->getTags(), "");
-
-      if (e->getTags().contains(_circularErrorKey))
+      QByteArray layerName;
+      if (tags.contains(OsmSchema::layerNameKey()))
       {
-        e->setCircularError(e->getTags().getDouble(_circularErrorKey));
-        e->getTags().remove(_circularErrorKey);
-        e->getTags().remove(_accuracyKey);
+        layerName = tags[OsmSchema::layerNameKey()].toUtf8();
       }
-      else if (e->getTags().contains(_accuracyKey))
+
+      QByteArray geomType;
+
+      switch (gtype)
       {
-        e->setCircularError(e->getTags().getDouble(_accuracyKey));
-        e->getTags().remove(_circularErrorKey);
-        e->getTags().remove(_accuracyKey);
+      case GEOS_POINT:
+      case GEOS_MULTIPOINT:
+        geomType = "Point";
+        break;
+      case GEOS_LINESTRING:
+      case GEOS_MULTILINESTRING:
+        geomType = "Line";
+        break;
+      case GEOS_POLYGON:
+      case GEOS_MULTIPOLYGON:
+        geomType = "Area";
+        break;
+      case GEOS_GEOMETRYCOLLECTION:
+        geomType = "Collection";
+        break;
+      default:
+        throw InternalErrorException("Unexpected geometry type.");
+      }
+
+      _t.translateToOsm(tags, layerName.data(), geomType);
+
+      if (tags.contains(_circularErrorKey))
+      {
+        e->setCircularError(tags.getDouble(_circularErrorKey));
+        tags.remove(_circularErrorKey);
+        tags.remove(_accuracyKey);
+      }
+      else if (tags.contains(_accuracyKey))
+      {
+        e->setCircularError(tags.getDouble(_accuracyKey));
+        tags.remove(_circularErrorKey);
+        tags.remove(_accuracyKey);
       }
     }
   }

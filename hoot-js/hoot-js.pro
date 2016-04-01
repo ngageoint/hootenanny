@@ -33,7 +33,7 @@ include(../Configure.pri)
 
 QMAKE_CXXFLAGS = -I/usr/include/nodejs $$QMAKE_CXXFLAGS
 
-QMAKE_POST_LINK = cp ../lib/libHootJs.so.1.0.0 ../lib/HootJs.node
+QMAKE_POST_LINK = cp -l ../lib/libHootJs.so.1.0.0 ../lib/HootJs.node 2>/dev/null || cp ../lib/libHootJs.so.1.0.0 ../lib/HootJs.node
 
 LIBS += -L../lib/ -lTgs -ltbs -lHootCore -lv8
 
@@ -47,6 +47,10 @@ cppunit {
 SOURCES += \
     src/test/cpp/hoot/js/util/DataConvertJsTest.cpp \
     src/test/cpp/hoot/js/PluginContextTest.cpp \
+    src/test/cpp/hoot/js/util/UuidHelperJsTest.cpp \
+    src/test/cpp/hoot/js/JavaScriptTranslatorTest.cpp \
+    src/test/cpp/hoot/js/conflate/js/ScriptMatchTest.cpp \
+    src/test/cpp/hoot/js/conflate/js/ScriptMatchCreatorTest.cpp \
 
 HEADERS += \
 
@@ -57,6 +61,7 @@ SOURCES += \
     src/main/cpp/hoot/js/OsmMapJs.cpp \
     src/main/cpp/hoot/js/MapIoJs.cpp \
     src/main/cpp/hoot/js/JsRegistrar.cpp \
+    src/main/cpp/hoot/js/IdGeneratorJs.cpp \
     src/main/cpp/hoot/js/ops/OsmMapOperationJs.cpp \
     src/main/cpp/hoot/js/util/SettingsJs.cpp \
     src/main/cpp/hoot/js/filter/ElementCriterionJs.cpp \
@@ -83,12 +88,9 @@ SOURCES += \
     src/main/cpp/hoot/js/util/ElementConverterJs.cpp \
     src/main/cpp/hoot/js/util/HootExceptionJs.cpp \
     src/main/cpp/hoot/js/util/UuidHelperJs.cpp \
-    src/test/cpp/hoot/js/util/UuidHelperJsTest.cpp \
     src/main/cpp/hoot/js/JavaScriptTranslator.cpp \
-    src/test/cpp/hoot/js/JavaScriptTranslatorTest.cpp \
     src/main/cpp/hoot/js/util/PrintJs.cpp \
     src/main/cpp/hoot/js/util/RequireJs.cpp \
-    src/test/cpp/hoot/js/conflate/js/ScriptMatchTest.cpp \
     src/main/cpp/hoot/js/filter/JsFunctionCriterion.cpp \
     src/main/cpp/hoot/js/algorithms/StringDistanceJs.cpp \
     src/main/cpp/hoot/js/conflate/js/ScriptStatsComposer.cpp \
@@ -96,16 +98,19 @@ SOURCES += \
     src/main/cpp/hoot/js/io/OsmWriterJs.cpp \
     src/main/cpp/hoot/js/conflate/MatchFactoryJs.cpp \
     src/main/cpp/hoot/js/conflate/MergerFactoryJs.cpp \
-    src/test/cpp/hoot/js/conflate/js/ScriptMatchCreatorTest.cpp \
     src/main/cpp/hoot/js/conflate/PoiMergerJs.cpp \
+    src/main/cpp/hoot/js/conflate/ReviewMarkerJs.cpp \
     src/main/cpp/hoot/js/visitors/JsFunctionVisitor.cpp \
-    src/main/cpp/hoot/js/schema/TagDifferencerJs.cpp
+    src/main/cpp/hoot/js/schema/TagDifferencerJs.cpp \
+    src/main/cpp/hoot/js/schema/JsonOsmSchemaLoader.cpp \
+    src/main/cpp/hoot/js/algorithms/string/MostEnglishNameJs.cpp
 
 HEADERS += \
     src/main/cpp/hoot/js/HelloWorld.h \
     src/main/cpp/hoot/js/OsmMapJs.h \
     src/main/cpp/hoot/js/MapIoJs.h \
     src/main/cpp/hoot/js/JsRegistrar.h \
+    src/main/cpp/hoot/js/IdGeneratorJs.h \
     src/main/cpp/hoot/js/ops/OsmMapOperationJs.h \
     src/main/cpp/hoot/js/util/SettingsJs.h \
     src/main/cpp/hoot/js/util/StringUtilsJs.h \
@@ -148,8 +153,11 @@ HEADERS += \
     src/main/cpp/hoot/js/conflate/MatchFactoryJs.h \
     src/main/cpp/hoot/js/conflate/MergerFactoryJs.h \
     src/main/cpp/hoot/js/conflate/PoiMergerJs.h \
+    src/main/cpp/hoot/js/conflate/ReviewMarkerJs.h \
     src/main/cpp/hoot/js/visitors/JsFunctionVisitor.h \
-    src/main/cpp/hoot/js/schema/TagDifferencerJs.h
+    src/main/cpp/hoot/js/schema/TagDifferencerJs.h \
+    src/main/cpp/hoot/js/schema/JsonOsmSchemaLoader.h \
+    src/main/cpp/hoot/js/algorithms/string/MostEnglishNameJs.h
 
 FORMS +=
 

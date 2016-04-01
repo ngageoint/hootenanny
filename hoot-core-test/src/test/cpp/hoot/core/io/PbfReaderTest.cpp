@@ -170,7 +170,7 @@ public:
     reader.parse(&ss, map);
 
     string expected("note = test tag\nhello = world\nhighway = road\n");
-    CPPUNIT_ASSERT_EQUAL(2, map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeMap().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(expected, map->getWay(42)->getTags().toString().toStdString());
     CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWay(42)->getNodeCount());
@@ -204,7 +204,7 @@ public:
     reader.parseElements(&ss, map);
 
     string expected("note = test tag\nhello = world\n");
-    CPPUNIT_ASSERT_EQUAL(1, map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeMap().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(expected, map->getNode(72)->getTags().toString().toStdString());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(42.0, map->getNode(72)->getX(), 0.0001);
@@ -271,7 +271,7 @@ public:
     reader.parseElements(&ss, map);
 
     string expected("note = test tag\nhello = world\nhighway = road\n");
-    CPPUNIT_ASSERT_EQUAL(0, map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeMap().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(expected, map->getWay(42)->getTags().toString().toStdString());
     CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWay(42)->getNodeCount());
@@ -351,7 +351,7 @@ public:
     CPPUNIT_ASSERT(!reader.isSupported("test-files/fileDoesntExist.osm"));
   }
 
-  //TODO: in the future might try to support dir urls with this interface, but for now we don't
+  //in the future might try to support dir urls with this interface, but for now we don't
   void runIsSupportedUrlIsDirTest()
   {
     PbfReader reader(false);

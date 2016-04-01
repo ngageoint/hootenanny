@@ -35,7 +35,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmReader.h>
@@ -108,7 +108,7 @@ public:
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     auto_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
-    MapReprojector::reprojectToPlanar(map, *env);
+    MapProjector::projectToPlanar(map, *env);
 
     return map;
   }
@@ -129,7 +129,7 @@ public:
 
     double score;
 
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     {
       WayPtr w1 = map->getWay(map->findWays("note", "1")[0]);
@@ -166,7 +166,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/MaximalSublineTestIn.osm", map);
 
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     std::vector<long> wids = map->findWays("note", "trail");
 
@@ -180,7 +180,7 @@ public:
     addEndNodes(map, m);
 
     QDir().mkpath("test-output/algorithms/");
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
     OsmWriter().write(map, "test-output/algorithms/MaximalSublineJoinTestOut.osm");
   }
 
@@ -244,10 +244,10 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/conflate/highway/HighwayMatchRealWorld3Test.osm",
       false, Status::Unknown1);
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
-    WayPtr w52 = TestUtils::getWay(map, "-52");
-    WayPtr w812 = TestUtils::getWay(map, "-812");
+    WayPtr w52 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-52"));
+    WayPtr w812 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-812"));
 
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(25.08, 1.0471975511965976), 5);
 
@@ -268,10 +268,10 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/conflate/waterway/RealWorld4Test.osm",
       false, Status::Unknown1);
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
-    WayPtr w1 = TestUtils::getWay(map, "1");
-    WayPtr w2 = TestUtils::getWay(map, "2");
+    WayPtr w1 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1"));
+    WayPtr w2 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "2"));
 
     //MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(36, 1.57079632679), 5);
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(46, 1.5708), 5);
@@ -279,7 +279,7 @@ public:
     double bestScore;
     vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, bestScore);
     LOG_VAR(m);
-    /// TODO: not valid compare
+    /// @todo not valid compare
 //    HOOT_STR_EQUALS(
 //      "[1]{subline 1: start: way: -18 index: 2 fraction: 0.440972029332128 end: way: -18 index: 2 fraction: 0.553077811243426\n"
 //      "subline 2: start: way: -17 index: 2 fraction: 0 end: way: -17 index: 3 fraction: 0}",
@@ -414,7 +414,7 @@ public:
       reader.read("test-files/ToyTestA.osm", map);
       reader.setDefaultStatus(Status::Unknown2);
       reader.read("test-files/ToyTestB.osm", map);
-      MapReprojector::reprojectToPlanar(map);
+      MapProjector::projectToPlanar(map);
 
       {
         WayPtr w1 = map->getWay(map->findWays("note", "0")[0]);

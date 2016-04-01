@@ -40,7 +40,7 @@ hoot.require('etds61_osm')
 // hoot --convert -D "convert.ops=hoot::TranslationOp"  \ 
 //      -D translation.script=$HOOT_HOME/translations/NFDD_English.js <input>.osm <output>.osm
 //
-function translateAttributes(attrs, layerName)
+function translateAttributes(attrs, layerName, geometryType)
 {
 
     // We use the temp var because nfdd_e.toEnglish returns "attrs" and "tableName"

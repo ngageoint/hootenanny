@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
@@ -62,38 +62,24 @@ public class ConflateProcesslet extends JobProcesslet {
 		JSONArray args = parseRequestParams(in);
 		
 		try {		
-			String confOutputName = null;
+			@SuppressWarnings("unused")
+      String confOutputName = null;
 			for(int i=0; i<args.size(); i++)
 			{
 				JSONObject arg = (JSONObject)args.get(i);
 				Object val = arg.get("OUTPUT_NAME");
 				
-				if(val != null)
+				if (val != null)
 				{
 					confOutputName = val.toString();
 					break;
 				}
 			}
 			JSONObject conflationCommand = _createPostBody(args);
-			JSONArray reviewArgs = new JSONArray();
-			JSONObject param = new JSONObject();
-			param.put("value", confOutputName);
-			param.put("paramtype", String.class.getName());
-			param.put("isprimitivetype", "false");
-			reviewArgs.add(param);
-			
-			param = new JSONObject();
-			param.put("value", false);
-			param.put("paramtype", Boolean.class.getName());
-			param.put("isprimitivetype", "true");
-			reviewArgs.add(param);
-			
-			JSONObject prepareItemsForReviewCommand = _createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.ReviewResource",
-					"prepareItemsForReview");
+
 			
 			JSONArray jobArgs = new JSONArray();
 			jobArgs.add(conflationCommand);
-			jobArgs.add(prepareItemsForReviewCommand);
 			
 			
 			postChainJobRquest( jobIdStr,  jobArgs.toJSONString());	

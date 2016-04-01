@@ -111,6 +111,5 @@ public:
 
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::HadoopTileWorker2Test, "slow");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::HadoopTileWorker2Test, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::HadoopTileWorker2Test, "glacial");
 

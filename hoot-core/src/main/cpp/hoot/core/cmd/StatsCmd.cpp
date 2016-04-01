@@ -22,22 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/io/MapStatsWriter.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
 
-class NameSizesVisitor : public ElementVisitor, public OsmMapConsumer
+class NameSizesVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 
 };
@@ -49,18 +50,6 @@ public:
 
   StatsCmd() {}
 
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " [--quick] (input) [input2, ...]\n"
-        "  Reads input and write out stats like node and way count. More may be added in\n"
-        "  the future.\n"
-        "  * --quick - If quick is specified then only a fast subset of the stats are \n"
-        "    calculated.\n"
-        "  * input - The input map path.";
-  }
-
   virtual QString getName() const { return "stats"; }
 
   int runSimple(QStringList args)
@@ -71,11 +60,29 @@ public:
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
 
+    const QString QUICK_SWITCH = "--quick";
+    const QString OUTPUT_SWITCH = "--output=";
+
+    QStringList inputs(args);
+
     bool quick = false;
-    if (args.contains("--quick"))
+    bool toFile = false;
+    QString output_filename = "";
+    //  Capture any flags and remove them before processing inputs
+    for (int i = 0; i < args.size(); i++)
     {
-      args.removeOne("--quick");
-      quick = true;
+      if (args[i].startsWith(OUTPUT_SWITCH))
+      {
+        output_filename = args[i];
+        output_filename.remove(OUTPUT_SWITCH);
+        toFile = true;
+        inputs.removeOne(args[i]);
+      }
+      else if (args[i] == QUICK_SWITCH)
+      {
+        quick = true;
+        inputs.removeOne(args[i]);
+      }
     }
 
     QString sep = "\t";
@@ -84,12 +91,12 @@ public:
 
     QList< QList<SingleStat> > allStats;
 
-    for (int i = 0; i < args.size(); i++)
+    for (int i = 0; i < inputs.size(); i++)
     {
       shared_ptr<OsmMap> map(new OsmMap());
-      loadMap(map, args[i], true, Status::Invalid);
+      loadMap(map, inputs[i], true, Status::Invalid);
 
-      MapReprojector::reprojectToPlanar(map);
+      MapProjector::projectToPlanar(map);
 
       shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
       cso->setQuickSubset(quick);
@@ -97,9 +104,18 @@ public:
       allStats.append(cso->getStats());
     }
 
-    //MapStatsWriter().writeStats(allStats, args);
-    cout << "Stat Name\t" << args.join(sep) << endl;
-    cout << MapStatsWriter().statsToString(allStats, sep);
+    if (toFile)
+    {
+      if (output_filename.endsWith(".json", Qt::CaseInsensitive))
+        MapStatsWriter().writeStatsToJson(allStats, output_filename);
+      else
+        MapStatsWriter().writeStatsToText(allStats, output_filename);
+    }
+    else
+    {
+      cout << "Stat Name\t" << inputs.join(sep) << endl;
+      cout << MapStatsWriter().statsToString(allStats, sep);
+    }
 
     return 0;
   }

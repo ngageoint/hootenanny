@@ -1,0 +1,179 @@
+[
+    {
+        "dataType": "text",
+        "isA": "abstract_address",
+        "name": "addr:city",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "isA": "abstract_address",
+        "name": "addr:city:de",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "isA": "abstract_address",
+        "name": "addr:city:it",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "isA": "abstract_address",
+        "name": "addr:conscriptionnumber",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "isA": "abstract_address",
+        "name": "addr:country",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "isA": "abstract_address",
+        "name": "addr:county",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "isA": "abstract_address",
+        "name": "addr:district",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_address",
+        "name": "addr:full",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "isA": "abstract_address",
+        "name": "addr:hamlet",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "name"
+        ],
+        "isA": "abstract_address",
+        "dataType": "text",
+        "name": "addr:housename",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_address",
+        "name": "addr:housenumber",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "linestring"
+        ],
+        "influence": 2,
+        "name": "addr:inclusion",
+        "objectType": "tag"
+    },
+    {
+        "isA": "addr:inclusion",
+        "name": "addr:inclusion=actual",
+        "objectType": "tag"
+    },
+    {
+        "isA": "addr:inclusion",
+        "name": "addr:inclusion=estimate",
+        "objectType": "tag"
+    },
+    {
+        "isA": "addr:inclusion",
+        "name": "addr:inclusion=potential",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "geometries": [
+            "linestring"
+        ],
+        "influence": 2,
+        "name": "addr:interpolation",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_address",
+        "name": "addr:place",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_address",
+        "name": "addr:postcode",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "isA": "abstract_address",
+        "name": "addr:province",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_address",
+        "name": "addr:provisionalnumber",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_address",
+        "name": "addr:region",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "isA": "abstract_address",
+        "name": "addr:state",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "isA": "abstract_address",
+        "name": "addr:street",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_address",
+        "name": "addr:street:name",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "enumeration",
+        "isA": "abstract_address",
+        "name": "addr:street:prefix",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "enumeration",
+        "isA": "abstract_address",
+        "name": "addr:street:type",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_address",
+        "name": "addr:streetnumber",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "isA": "abstract_address",
+        "name": "addr:subdistrict",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "isA": "abstract_address",
+        "name": "addr:suburb",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_address",
+        "name": "addr:unit",
+        "objectType": "tag"
+    }
+]

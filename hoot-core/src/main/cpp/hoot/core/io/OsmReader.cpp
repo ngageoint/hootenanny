@@ -39,6 +39,7 @@ using namespace boost;
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/Tags.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
@@ -97,15 +98,36 @@ void OsmReader::_createNode(const QXmlAttributes &attributes)
   double x = _parseDouble(attributes.value("lon"));
   double y = _parseDouble(attributes.value("lat"));
 
-  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
-  long version = 1;
-  if (attributes.value("version") != "") version = _parseDouble(attributes.value("version"));
-  long changeset = 1;
-  if (attributes.value("changeset") != "") changeset = _parseDouble(attributes.value("changeset"));
-  unsigned int timestamp = 0;
-  if (attributes.value("timestamp") != "") timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these
+  // are not officially required by the DTD
+  long version = ElementData::VERSION_EMPTY;
+  if (attributes.value("version") != "")
+  {
+    version = _parseDouble(attributes.value("version"));
+  }
+  long changeset = ElementData::CHANGESET_EMPTY;
+  if (attributes.value("changeset") != "")
+  {
+    changeset = _parseDouble(attributes.value("changeset"));
+  }
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  if (attributes.value("timestamp") != "")
+  {
+    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  }
+  QString user = ElementData::USER_EMPTY;
+  if (attributes.value("user") != "")
+  {
+    user = attributes.value("user");
+  }
+  long uid = ElementData::UID_EMPTY;
+  if (attributes.value("uid") != "")
+  {
+    uid = _parseDouble(attributes.value("uid"));
+  }
 
-  _element.reset(new Node(_status, newId, x, y, changeset, version, timestamp, _circularError));
+  _element.reset(new Node(_status, newId, x, y, _circularError, changeset, version, timestamp,
+                          user, uid));
 
   if (_element->getTags().getInformationCount() > 0)
   {
@@ -118,15 +140,36 @@ void OsmReader::_createRelation(const QXmlAttributes &attributes)
   _relationId = _parseLong(attributes.value("id"));
   long newId = _getRelationId(_relationId);
 
-  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
-  long version = 1;
-  if (attributes.value("version") != "") version = _parseDouble(attributes.value("version"));
-  long changeset = 1;
-  if (attributes.value("changeset") != "") changeset = _parseDouble(attributes.value("changeset"));
-  unsigned int timestamp = 0;
-  if (attributes.value("timestamp") != "") timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are
+  // not officially required by the DTD
+  long version = ElementData::VERSION_EMPTY;
+  if (attributes.value("version") != "")
+  {
+    version = _parseDouble(attributes.value("version"));
+  }
+  long changeset = ElementData::CHANGESET_EMPTY;
+  if (attributes.value("changeset") != "")
+  {
+    changeset = _parseDouble(attributes.value("changeset"));
+  }
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  if (attributes.value("timestamp") != "")
+  {
+    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  }
+  QString user = ElementData::USER_EMPTY;
+  if (attributes.value("user") != "")
+  {
+    user = attributes.value("user");
+  }
+  long uid = ElementData::UID_EMPTY;
+  if (attributes.value("uid") != "")
+  {
+    uid = _parseDouble(attributes.value("uid"));
+  }
 
-  _element.reset(new Relation(_status, newId, changeset, version, timestamp, _circularError));
+  _element.reset(new Relation(_status, newId, _circularError, "", changeset, version, timestamp,
+                              user, uid));
 
   _parseTimeStamp(attributes);
 }
@@ -147,14 +190,35 @@ void OsmReader::_createWay(const QXmlAttributes &attributes)
   _wayIdMap.insert(_wayId, newId);
 
   // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
-  long version = 1;
-  if (attributes.value("version") != "") version = _parseDouble(attributes.value("version"));
-  long changeset = 1;
-  if (attributes.value("changeset") != "") changeset = _parseDouble(attributes.value("changeset"));
-  unsigned int timestamp = 0;
-  if (attributes.value("timestamp") != "") timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  long version = ElementData::VERSION_EMPTY;
+  if (attributes.value("version") != "")
+  {
+    version = _parseDouble(attributes.value("version"));
+  }
+  long changeset = ElementData::CHANGESET_EMPTY;
+  if (attributes.value("changeset") != "")
+  {
+    changeset = _parseDouble(attributes.value("changeset"));
+  }
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  if (attributes.value("timestamp") != "")
+  {
+    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  }
+  QString user = ElementData::USER_EMPTY;
+  if (attributes.value("user") != "")
+  {
+    user = attributes.value("user");
+  }
+  long uid = ElementData::UID_EMPTY;
+  if (attributes.value("uid") != "")
+  {
+    uid = _parseDouble(attributes.value("uid"));
+  }
 
-  _element.reset(new Way(_status, newId, changeset, version, timestamp, _circularError));
+  _element.reset(new Way(_status, newId, _circularError, changeset, version, timestamp, user,
+                         uid));
 
   _parseTimeStamp(attributes);
 }
@@ -313,7 +377,7 @@ void OsmReader::read(shared_ptr<OsmMap> map)
 
   if (reader.parse(xmlInputSource) == false)
   {
-      throw Exception(_errorString);
+      throw HootException(_errorString);
   }
   file.close();
 
@@ -521,6 +585,7 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
       {
         const QString& key = _saveMemory(attributes.value("k"));
         const QString& value = _saveMemory(attributes.value("v"));
+
         if (_useFileStatus && key == "hoot:status")
         {
           _element->setStatus(_parseStatus(value));
@@ -534,13 +599,34 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
         {
           bool ok;
           Meters circularError = value.toDouble(&ok);
+
           if (circularError > 0 && ok)
           {
             _element->setCircularError(circularError);
           }
           else
           {
-            if (_badAccuracyCount < 10)
+            bool isBad = false;
+            hoot::Tags t1;
+            t1.set(key, value);
+            try
+            {
+              circularError = t1.getLength(key).value();
+              if (circularError > 0)
+              {
+                _element->setCircularError(circularError);
+              }
+              else
+              {
+                isBad = true;
+              }
+            }
+            catch (const HootException& e)
+            {
+              isBad = true;
+            }
+
+            if (isBad && _badAccuracyCount < 10)
             {
               LOG_WARN("Bad circular error value: " << value.toStdString());
               _badAccuracyCount++;
@@ -559,9 +645,6 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
           }
         }
       }
-
-
-
   }
   catch (const Exception& e)
   {

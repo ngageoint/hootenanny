@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,14 +41,22 @@
 
 #include <QString>
 
-namespace hoot {
+namespace hoot
+{
 
 /**
  * Base class for OSM element data -- node, way and releation.
  */
 class ElementData
 {
+
 public:
+
+  static long CHANGESET_EMPTY;
+  static long VERSION_EMPTY;
+  static unsigned int TIMESTAMP_EMPTY;
+  static QString USER_EMPTY;
+  static long UID_EMPTY;
 
   virtual ~ElementData() {}
 
@@ -66,7 +74,11 @@ public:
 
   long getVersion() const { return _version; }
 
-  long getTimestamp() const { return _timestamp; }
+  unsigned int getTimestamp() const { return _timestamp; }
+
+  QString getUser() const { return _user; }
+
+  long getUid() const { return _uid; }
 
   const Tags& getTags() const { return _tags; }
 
@@ -80,21 +92,22 @@ public:
 
 protected:
 
-  //ElementData()  { }
+  ElementData();
 
-  ElementData(long id, const Tags& tags = Tags(), Meters circularError = -1, long changeset = 0, long version = 1,
-    unsigned int timestamp = 0);
-
-
-  ElementData(long id, long changeset, long version, unsigned int timestamp) :
-    _id(id), _changeset(changeset), _version(version), _timestamp(timestamp), _circularError(-1) { }
+  ElementData(long id, long changeset = ElementData::CHANGESET_EMPTY,
+              long version = ElementData::VERSION_EMPTY,
+              unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
+              QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY);
 
   long _id;
+  Tags _tags;
+  Meters _circularError;
   long _changeset;
   long _version;
   unsigned int _timestamp;
-  Tags _tags;
-  Meters _circularError;
+  QString _user;
+  long _uid;
+
 };
 
 }

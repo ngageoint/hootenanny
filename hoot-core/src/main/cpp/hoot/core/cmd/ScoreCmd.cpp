@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/splitter/DualWaySplitter.h>
 #include <hoot/core/conflate/SuperfluousWayRemover.h>
@@ -52,23 +52,14 @@ public:
 
   ScoreCmd() { }
 
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (base1) [base2] (uut)\n"
-        "  Compares a map (uut, Unit Under Test) to one or two test maps (base1 & base)\n"
-        "  * base1 - The first base file to compare against.\n"
-        "  * base2 - (optional) The second base file to compare against.\n"
-        "  * uut - The file being evaluated.";
-  }
-
   virtual QString getName() const { return "score"; }
 
   void attributeCompare(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2, shared_ptr<OsmMap> outMap,
                         int& mean, int& confidence)
   {
-    int iterations = 300;
+    Tgs::Random::instance()->seed(100);
+
+    int iterations = 600;
     {
       AttributeComparator attr(map1, outMap);
       attr.setIterations(iterations);
@@ -105,7 +96,7 @@ public:
   void graphCompare(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2, double& mean,
                     double& confidence)
   {
-    srand(0);
+    Tgs::Random::instance()->seed(0);
     GraphComparator graph(map1, map2);
     graph.setDebugImages(ConfigOptions().getScoreGraphDebugImages());
     graph.setIterations(1000);

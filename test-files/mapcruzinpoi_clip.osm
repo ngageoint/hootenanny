@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+    <node visible="true" id="1" timestamp="2016-02-23T15:22:24Z" version="1" changeset="220" lat="38.9206669000000005" lon="-77.0449770999999970">
+        <tag k="source:ingest:datetime" v="2015-06-01T19:33:35.303Z"/>
+        <tag k="name" v="Kalorama Recreation Center"/>
+        <tag k="amenity" v="park"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="2" timestamp="2016-02-23T15:22:24Z" version="1" changeset="220" lat="38.9201114000000032" lon="-77.0441437000000064">
+        <tag k="source:ingest:datetime" v="2015-06-01T19:33:35.303Z"/>
+        <tag k="name" v="Gala Hispanic Theater"/>
+        <tag k="amenity" v="theatre"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="3" timestamp="2016-02-23T15:22:24Z" version="1" changeset="220" lat="38.9203892000000025" lon="-77.0441437000000064">
+        <tag k="source:ingest:datetime" v="2015-06-01T19:33:35.303Z"/>
+        <tag k="name" v="Kalorama Park"/>
+        <tag k="amenity" v="park"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+</osm>

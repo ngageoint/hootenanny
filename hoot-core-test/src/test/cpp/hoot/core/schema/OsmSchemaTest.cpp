@@ -28,7 +28,6 @@
 // Hoot
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/JsonSchemaLoader.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Log.h>
 
@@ -95,7 +94,7 @@ public:
 
     avg = uut.average("highway=primary", 1, "highway=service", 1, score);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.512, score, 0.001);
-    CPPUNIT_ASSERT_EQUAL(avg.toStdString(), std::string("highway=secondary"));
+    CPPUNIT_ASSERT_EQUAL(std::string("highway=secondary"), avg.toStdString());
 
     avg = uut.average("highway=primary", 1, "highway=service", 2, score);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.512, score, 0.001);
@@ -262,7 +261,7 @@ public:
     d = uut.score("highway=trunk", "highway=motorway");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, d, 0.001);
     d = uut.score("highway=path", "highway=motorway");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.168, d, 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.210, d, 0.001);
     d = uut.score("highway=path", "highway=road");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, d, 0.001);
 
@@ -270,12 +269,12 @@ public:
     double score;
     avg = uut.average("highway=path", "highway=motorway", score);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.410, score, 0.001);
-    CPPUNIT_ASSERT_EQUAL(avg.toStdString(), std::string("highway=tertiary"));
+    CPPUNIT_ASSERT_EQUAL(std::string("highway=tertiary"), avg.toStdString());
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.7, uut.score("surface=cobblestone", "surface=asphault"), 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.7, uut.score("surface=cobblestone", "surface=asphalt"), 0.001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.score("surface=cobblestone:flattened",
                                                 "surface=cobblestone"), 0.001);
-    avg = uut.average("surface=cobblestone:flattened", "surface=asphault", score);
+    avg = uut.average("surface=cobblestone:flattened", "surface=asphalt", score);
     CPPUNIT_ASSERT_EQUAL(std::string("surface=paved"), avg.toStdString());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(.2, score, 0.001);
     avg = uut.average("surface=cobblestone:flattened", "surface=earth", score);
@@ -340,6 +339,16 @@ public:
       "}", toString(uut.getUniqueSchemaVertices(t)));
 
     HOOT_STR_EQUALS(1, uut.score("highway=bus_stop", "bus_platform"));
+
+    avg = uut.average("highway=track", "highway=secondary", score);
+    HOOT_STR_EQUALS("highway=unclassified", avg.toStdString());
+
+
+    HOOT_STR_EQUALS(0.3, uut.score("highway=residential", "highway=construction"));
+
+    // expecting the first tag as a result if there is only one hop between the two.
+    avg = uut.average("highway=track", "highway=unclassified", score);
+    HOOT_STR_EQUALS("highway=track", avg.toStdString());
   }
 
   /**
@@ -466,6 +475,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmSchemaTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmSchemaTest, "slow");
 
 }

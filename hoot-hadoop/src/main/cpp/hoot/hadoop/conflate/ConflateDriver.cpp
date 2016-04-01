@@ -79,9 +79,7 @@ void ConflateDriver::conflate(QString in, vector<Envelope> envelopes, double buf
   job.setRecordWriterClass(PbfRecordWriter::className());
 
   // Adds all libraries in this directory to the job.
-  job.addLibraryDirs(conf().getList("hoot.hadoop.libpath",
-    "${HOOT_HOME}/lib/;${HOOT_HOME}/local/lib/;${HADOOP_HOME}/c++/Linux-amd64-64/lib/;"
-    "${HOOT_HOME}/pretty-pipes/lib/"));
+  job.addLibraryDirs(ConfigOptions().getHootHadoopLibpath());
 
   job.addFile(ConfPath::search("hoot.json").toStdString());
 
@@ -98,7 +96,7 @@ void ConflateDriver::conflate(QString in, vector<Envelope> envelopes, double buf
     {
       QStringList filters;
       filters << "*.csv";
-      QFileInfoList fil = gdalDir.entryInfoList(filters, QDir::Files);
+      QFileInfoList fil = gdalDir.entryInfoList(filters, QDir::Files, QDir::Name);
       for (int i = 0; i < fil.size(); i++)
       {
         LOG_INFO("Adding GDAL_DATA file: " << fil[i].absoluteFilePath());

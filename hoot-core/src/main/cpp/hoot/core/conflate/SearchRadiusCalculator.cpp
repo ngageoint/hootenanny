@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SearchRadiusCalculator.h"
@@ -90,9 +90,8 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
   }
   if (mapWithOnlyUnknown1And2->getElementCount() == 0)
   {
-    //TODO: is this the right setting to use here?
     _result = _circularError;
-    LOG_WARN(
+    LOG_INFO(
       "Unable to automatically calculate search radius.  All features have already been " <<
       "conflated or are invalid.\n Using default search radius value = " << QString::number(_result));
     return;
@@ -119,9 +118,8 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
     }
     catch (const HootException& e)
     {
-      //TODO: is this the right setting to use here?
       _result = _circularError;
-      LOG_WARN(
+      LOG_INFO(
         QString("Unable to automatically calculate search radius: ") + e.getWhat() + QString("\n") +
         QString("Using default search radius value = ") + QString::number(_result));
       return;
@@ -145,10 +143,9 @@ void SearchRadiusCalculator::_calculateSearchRadius(const vector<double>& tiePoi
 {
   if (tiePointDistances.size() < 2)
   {
-    //TODO: is this the right setting to use here?
     _result = _circularError;
-    LOG_WARN(
-      QString("Unable to automatically calculate search radius.  Not enough tie points.") +
+    LOG_INFO(
+      QString("Unable to automatically calculate search radius.  Not enough tie points.  ") +
       QString("Using default search radius value = ") + QString::number(_result));
   }
   else

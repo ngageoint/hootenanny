@@ -222,10 +222,10 @@ private:
     keys.reserve(_map->getNodeMap().size() * 2);
     nids.reserve(_map->getNodeMap().size() * 2);
 
-    for (OsmMap::NodeMap::const_iterator it = _map->getNodeMap().begin();
+    for (NodeMap::const_iterator it = _map->getNodeMap().begin();
          it != _map->getNodeMap().end(); ++it)
     {
-      const shared_ptr<const Node>& n = it.value();
+      const shared_ptr<const Node>& n = it->second;
       set<QString> allNames = _getNamePermutations(n->getTags().getNames());
       for (set<QString>::iterator it = allNames.begin(); it != allNames.end(); ++it)
       {
@@ -250,8 +250,7 @@ private:
 
     set<QString> allNames = _getNamePermutations(n->getTags().getNames());
 
-    double minSimilarity = conf().getDouble(PlacesPoiMatch::minimumEditSimilarityKey(),
-                                            PlacesPoiMatch::minimumEditSimilarityDefault());
+    double minSimilarity = ConfigOptions().getPlacesMinimumEditSimilarity();
 
     for (set<QString>::const_iterator it = allNames.begin(); it != allNames.end(); ++it)
     {

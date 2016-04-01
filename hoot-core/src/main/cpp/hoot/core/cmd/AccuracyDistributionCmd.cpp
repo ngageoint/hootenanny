@@ -46,13 +46,6 @@ public:
 
   AccuracyDistributionCmd() { }
 
-  virtual QString getHelp() const
-  {
-    return getName() + " (input)\n"
-        "  Prints out the distribution of accuracy values.\n"
-        "  * input - Input (e.g. .osm file).\n";
-  }
-
   virtual QString getName() const { return "accuracy-dist"; }
 
   virtual int runSimple(QStringList args)

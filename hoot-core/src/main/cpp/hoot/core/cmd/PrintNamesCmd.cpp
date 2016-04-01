@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -99,16 +99,6 @@ public:
   };
 
   PrintNamesCmd() {}
-
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (input) [inputs...] [--write outputBase]\n"
-        "  Reads input and write out a list of names ordered by frequency.\n"
-        "  * input - One or more input map paths.\n"
-        "  * outputBase - Write out the counts to a .frequent and .all dictionary.";
-  }
 
   virtual QString getName() const { return "names"; }
 

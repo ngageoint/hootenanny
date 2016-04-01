@@ -32,7 +32,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Settings.h>
@@ -56,15 +56,15 @@ BigPertyOp::~BigPertyOp()
 
 void BigPertyOp::apply(shared_ptr<OsmMap>& map)
 {
-  MapReprojector::reprojectToWgs84(map);
+  MapProjector::projectToWgs84(map);
 
   const QString pertiedStr("hoot:pertied");
   const QString trueStr("true");
 
-  const OsmMap::NodeMap& nm = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
+  const NodeMap& nm = map->getNodeMap();
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    NodePtr n = it.value();
+    NodePtr n = it->second;
     Coordinate nc = n->toCoordinate();
 
     if ((_bounds.isNull() || _bounds.contains(nc)) &&
@@ -128,8 +128,9 @@ void BigPertyOp::readObject(QDataStream& is)
 
 void BigPertyOp::setConfiguration(const Settings &conf)
 {
-  setSigma(ConfigOptions(conf).getBigPertyOpSigma());
-  setMaxDistance(ConfigOptions(conf).getBigPertyOpMaxDistance());
+  ConfigOptions configOptions(conf);
+  setSigma(configOptions.getBigPertyOpSigma());
+  setMaxDistance(configOptions.getBigPertyOpMaxDistance());
 }
 
 void BigPertyOp::setMaxDistance(Meters maxDistance)
