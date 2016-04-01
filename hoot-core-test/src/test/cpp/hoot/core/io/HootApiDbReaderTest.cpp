@@ -397,7 +397,7 @@ public:
   {
     //nodes
 
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodeMap().size());
 
     shared_ptr<Node> node = map->getNode(3);
     CPPUNIT_ASSERT_EQUAL(Status::Conflated, node->getStatus().getEnum());
