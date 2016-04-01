@@ -344,9 +344,10 @@ if ! which hadoop > /dev/null ; then
     wget --quiet https://archive.apache.org/dist/hadoop/core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
   fi
 
-  # Vagrant already sets up ssh
-  #ssh-keygen -t rsa -N "" -f $HOME/.ssh/id_rsa
-  cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+  if [ ! -f $HOME/.ssh/id_rsa ]; then
+    ssh-keygen -t rsa -N "" -f $HOME/.ssh/id_rsa
+    cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+  fi
   chmod 600 ~/.ssh/authorized_keys
   # ssh -o StrictHostKeyChecking=no localhost
 
