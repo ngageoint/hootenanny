@@ -47,9 +47,10 @@ Node::Node(const Node& from) : Element(from.getStatus()), _nodeData(from._nodeDa
 {
 }
 
-Node::Node(Status s, long /*id*/, const Coordinate& /*c*/, Meters circularError) :
+Node::Node(Status s, long id, const Coordinate& c, Meters circularError) :
 Element(s)
 {
+  _nodeData.init(id, c.x, c.y);
   _getElementData().setCircularError(circularError);
 }
 
