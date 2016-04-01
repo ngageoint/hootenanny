@@ -32,9 +32,9 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/io/ServicesDb.h>
-#include <hoot/core/io/ServicesDbReader.h>
-#include <hoot/core/io/ServicesDbWriter.h>
+#include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/io/HootApiDbReader.h>
+#include <hoot/core/io/HootApiDbWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/OsmMap.h>
@@ -46,9 +46,10 @@
 namespace hoot
 {
 
-class ServicesDbReaderTest : public CppUnit::TestFixture
+class HootApiDbReaderTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(ServicesDbReaderTest);
+  CPPUNIT_TEST_SUITE(HootApiDbReaderTest);
+
   CPPUNIT_TEST(runCalculateBoundsTest);
   CPPUNIT_TEST(runElementIdTest);
   CPPUNIT_TEST(runUrlMissingMapIdTest);
@@ -57,13 +58,11 @@ class ServicesDbReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runPartialReadTest);
   CPPUNIT_TEST(runFactoryReadTest);
 
-  // Osm Api tests
-  CPPUNIT_TEST(runReadOsmApiTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  static QString userEmail() { return "ServicesDbReaderTest@hoottestcpp.org"; }
+  static QString userEmail() { return "HootApiDbReaderTest@hoottestcpp.org"; }
 
   long mapId;
 
@@ -71,10 +70,10 @@ public:
   {
     mapId = -1;
     ServicesDbTestUtils::deleteUser(userEmail());
-    ServicesDb database;
+    HootApiDb database;
 
     database.open(ServicesDbTestUtils::getDbModifyUrl());
-    database.getOrCreateUser(userEmail(), "ServicesDbReaderTest");
+    database.getOrCreateUser(userEmail(), "HootApiDbReaderTest");
     database.close();
 
     //inserting a map before all of these tests isn't actually necessary (url tests) and
@@ -84,19 +83,13 @@ public:
 
   void tearDown()
   {
-    // Services DB
+    // HootApi DB
     ServicesDbTestUtils::deleteUser(userEmail());
 
-    ServicesDb database;
+    HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.deleteMap(mapId);
     database.close();
-
-    // Osm Api DB
-    ServicesDb database2;
-    database2.open(ServicesDbTestUtils::getOsmApiDbUrl());
-    database2.deleteData_OsmApi();
-    database2.close();
   }
 
   long populateMap()
@@ -140,7 +133,7 @@ public:
     r2->addElement("n2", n2->getElementId());
     map->addRelation(r2);
 
-    ServicesDbWriter writer;
+    HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.setRemap(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
@@ -162,14 +155,15 @@ public:
 
   void runCalculateBoundsTest()
   {
-    ServicesDbReader reader;
-    reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
+    HootApiDbReader reader;
+    QString url = ServicesDbTestUtils::getDbReadUrl(mapId).toString();
+    reader.open(url);
     HOOT_STR_EQUALS("Env[0:0.4,0:0]", reader.calculateEnvelope().toString());
   }
 
   void runElementIdTest()
   {
-    ServicesDbReader reader;
+    HootApiDbReader reader;
     // make sure all the element ids start with -1
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
@@ -196,7 +190,7 @@ public:
     // temporarily disable logging to avoid isValid warning
     DisableLog dl;
 
-    ServicesDbReader reader;
+    HootApiDbReader reader;
     QString exceptionMsg("");
     try
     {
@@ -209,14 +203,14 @@ public:
     }
 
     //I would rather this return: "URL does not contain valid map ID." from
-    //ServicesDbReader::open
+    //HootApiDbReader::open
     CPPUNIT_ASSERT_EQUAL(
       QString("An unsupported URL was passed in.").toStdString(), exceptionMsg.toStdString());
   }
 
   void runUrlInvalidMapIdTest()
   {
-    ServicesDbReader reader;
+    HootApiDbReader reader;
     QString exceptionMsg("");
     const long invalidMapId = mapId + 1;
     try
@@ -231,19 +225,6 @@ public:
     }
     CPPUNIT_ASSERT_EQUAL(
       QString("No map exists with ID: " + QString::number(invalidMapId)).toStdString(), exceptionMsg.toStdString());
-  }
-
-  void verifyFullReadOutput_OsmApi(shared_ptr<OsmMap> map)
-  {
-    //nodes
-
-    HOOT_STR_EQUALS(true, map->containsNode(500));
-    shared_ptr<Node> node = map->getNode(500);
-    CPPUNIT_ASSERT_EQUAL((long)500, node->getId());
-    CPPUNIT_ASSERT_EQUAL(38.4, node->getY());
-    CPPUNIT_ASSERT_EQUAL(-106.5, node->getX());
-    CPPUNIT_ASSERT_EQUAL(0.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
   }
 
   void verifyFullReadOutput(shared_ptr<OsmMap> map)
@@ -431,61 +412,13 @@ public:
     CPPUNIT_ASSERT_EQUAL(12.0, node->getCircularError());
   }
 
-
   void runReadTest()
   {
-    ServicesDbReader reader;
+    HootApiDbReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
     reader.read(map);
     verifyFullReadOutput(map);
-    reader.close();
-  }
-
-  void runReadOsmApiTest()
-  {
-    ServicesDbReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
-
-    // parse out the osm api dbname, dbuser, and dbpassword
-    //example: postgresql://hoot:hoottest@localhost:5432/osmapi_test
-    QUrl dbUrl = ServicesDbTestUtils::getOsmApiDbUrl();
-    QString dbUrlString = dbUrl.toString();
-    QStringList dbUrlParts = dbUrlString.split("/");
-    QString dbName = dbUrlParts[dbUrlParts.size()-1];
-    QStringList userParts = dbUrlParts[dbUrlParts.size()-2].split(":");
-    QString dbUser = userParts[0];
-    QString dbPassword = userParts[1].split("@")[0];
-    QString dbHost = userParts[1].split("@")[1];
-    QString dbPort = userParts[2];
-
-    LOG_DEBUG("Name="+dbName+", user="+dbUser+", pass="+dbPassword+", port="+dbPort+", host="+dbHost);
-
-    ////////////////////////////////////////
-    // insert simple test data
-    ////////////////////////////////////////
-    QString auth = "-h "+dbHost+" -p "+dbPort+" -U "+dbUser;
-    QString cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
-      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/users.sql > /dev/null 2>&1; \
-      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/changesets.sql > /dev/null 2>&1; \
-      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/nodesReadTest.sql > /dev/null 2>&1";
-
-    if( std::system(cmd.toStdString().c_str()) != 0 )
-    {
-      LOG_WARN("Failed postgres command.  Exiting test.");
-      return;
-    }
-
-    ///////////////////////////////////////
-    // test the reader
-    ///////////////////////////////////////
-
-    ServicesDb database;
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
-
-    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    reader.read(map);
-    verifyFullReadOutput_OsmApi(map);
     reader.close();
   }
 
@@ -498,7 +431,7 @@ public:
 
   void runPartialReadTest()
   {
-    ServicesDbReader reader;
+    HootApiDbReader reader;
     const int chunkSize = 3;
     reader.setMaxElementsPerMap(chunkSize);
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
@@ -698,7 +631,6 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServicesDbReaderTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServicesDbReaderTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HootApiDbReaderTest, "slow");
 
 }
