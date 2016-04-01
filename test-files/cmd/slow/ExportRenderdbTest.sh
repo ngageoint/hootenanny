@@ -2,7 +2,7 @@
 set -e
 source $HOOT_HOME/conf/DatabaseConfig.sh
 
-export INPUT=Merged_PoiRoadBuilding_3d0950d4
+export INPUT=ExRenDb
 # setup db, user, and password to avoid password prompt
 export AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD
