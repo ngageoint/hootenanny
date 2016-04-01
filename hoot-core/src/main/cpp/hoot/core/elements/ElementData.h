@@ -94,6 +94,12 @@ protected:
 
   ElementData();
 
+  ElementData(long id, const Tags& tags, Meters circularError,
+              long changeset = ElementData::CHANGESET_EMPTY,
+              long version = ElementData::VERSION_EMPTY,
+              unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
+              QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY);
+
   ElementData(long id, long changeset = ElementData::CHANGESET_EMPTY,
               long version = ElementData::VERSION_EMPTY,
               unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,

@@ -36,8 +36,8 @@ ElementData(id, changeset, version, timestamp, user, uid)
 }
 
 RelationData::RelationData(const RelationData& rd) :
-  ElementData(rd.getId(), rd.getTags(), rd.getCircularError(), rd._changeset, rd._version,
-              rd._timestamp)
+ElementData(rd.getId(), rd.getTags(), rd.getCircularError(), rd._changeset, rd._version,
+            rd._timestamp)
 {
   _members = rd._members;
   _type = rd._type;

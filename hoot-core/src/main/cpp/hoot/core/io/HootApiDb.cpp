@@ -605,7 +605,7 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   v.append(lon);
   v.append((qlonglong)_currChangesetId);
   v.append(OsmUtils::currentTimeAsString());
-  v.append(_tileForPoint(lat, lon));
+  v.append(tileForPoint(lat, lon));
   v.append((qlonglong)1);
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
@@ -666,7 +666,7 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
 bool HootApiDb::insertRelationMember(const long relationId, const ElementType& type,
   const long elementId, const QString& role, const int sequenceId)
 
-{ 
+{
   const long mapId = _currMapId;
   _checkLastMapId(mapId);
 
@@ -882,12 +882,12 @@ void HootApiDb::rollback()
   _inTransaction = false;
 }
 
-long HootApiDb::_round(double x)
+long HootApiDb::round(double x)
 {
   return (long)(x + 0.5);
 }
 
-long HootApiDb::_round(double x, int precision)
+long HootApiDb::round(double x, int precision)
 {
   return (long)(floor(x * (10 * (precision - 1)) + 0.5) / (10 * (precision - 1)));
 }
@@ -927,10 +927,10 @@ set<long> HootApiDb::selectMapIds(QString name)
   return result;
 }
 
-unsigned int HootApiDb::_tileForPoint(double lat, double lon)
+unsigned int HootApiDb::tileForPoint(double lat, double lon)
 {
-  int lonInt = _round((lon + 180.0) * 65535.0 / 360.0);
-  int latInt = _round((lat + 90.0) * 65535.0 / 180.0);
+  int lonInt = round((lon + 180.0) * 65535.0 / 360.0);
+  int latInt = round((lat + 90.0) * 65535.0 / 180.0);
 
   unsigned int tile = 0;
   int          i;
@@ -1128,7 +1128,7 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
 
 void HootApiDb::updateNode(const long id, const double lat, const double lon, const long version,
                             const Tags& tags)
-{ 
+{
   const long mapId = _currMapId;
   _flushBulkInserts();
 
@@ -1151,7 +1151,7 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
   _updateNode->bindValue(":longitude", lon);
   _updateNode->bindValue(":changeset_id", (qlonglong)_currChangesetId);
   _updateNode->bindValue(":timestamp", OsmUtils::currentTimeAsString());
-  _updateNode->bindValue(":tile", (qlonglong)_tileForPoint(lat, lon));
+  _updateNode->bindValue(":tile", (qlonglong)tileForPoint(lat, lon));
   _updateNode->bindValue(":version", (qlonglong)version);
   _updateNode->bindValue(":tags", _escapeTags(tags));
 
@@ -1274,7 +1274,7 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags)
 }
 
 void HootApiDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
-{  
+{
   const long mapId = _currMapId;
   double start = Tgs::Time::getTime();
 

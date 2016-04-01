@@ -13,10 +13,10 @@ ElementSorter::ElementSorter(ConstOsmMapPtr source) :
 {
   _source = source;
 
-  for (OsmMap::NodeMap::const_iterator it = _source->getNodeMap().constBegin();
-    it != _source->getNodeMap().constEnd(); ++it)
+  for (NodeMap::const_iterator it = _source->getNodeMap().begin();
+    it != _source->getNodeMap().end(); ++it)
   {
-    _nodeIds.push_back(it.key());
+    _nodeIds.push_back(it->first);
   }
   for (WayMap::const_iterator it = _source->getWays().begin();
     it != _source->getWays().end(); ++it)

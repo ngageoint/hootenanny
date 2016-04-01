@@ -57,6 +57,7 @@ class HootApiDbReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runReadTest);
   CPPUNIT_TEST(runPartialReadTest);
   CPPUNIT_TEST(runFactoryReadTest);
+  CPPUNIT_TEST(runReadWithElemTest);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -422,58 +423,9 @@ public:
     reader.close();
   }
 
-<<<<<<< HEAD:hoot-core-test/src/test/cpp/hoot/core/io/ServicesDbReaderTest.cpp
-  void runReadOsmApiTest()
-  {
-    ServicesDbReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
-
-    // parse out the osm api dbname, dbuser, and dbpassword
-    //example: postgresql://hoot:hoottest@localhost:5432/osmapi_test
-    QUrl dbUrl = ServicesDbTestUtils::getOsmApiDbUrl();
-    QString dbUrlString = dbUrl.toString();
-    QStringList dbUrlParts = dbUrlString.split("/");
-    QString dbName = dbUrlParts[dbUrlParts.size()-1];
-    QStringList userParts = dbUrlParts[dbUrlParts.size()-2].split(":");
-    QString dbUser = userParts[0];
-    QString dbPassword = userParts[1].split("@")[0];
-    QString dbHost = userParts[1].split("@")[1];
-    QString dbPort = userParts[2];
-
-    LOG_DEBUG("Name="+dbName+", user="+dbUser+", pass="+dbPassword+", port="+dbPort+", host="+dbHost);
-
-    ////////////////////////////////////////
-    // insert simple test data
-    ////////////////////////////////////////
-    //QString auth = "-h "+dbHost+" -p "+dbPort+" -U "+dbUser;
-    QString cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
-      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1; \
-      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1; \
-      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodesReadTest.sql > /dev/null 2>&1";
-    LOG_VARD(cmd);
-
-    if (std::system(cmd.toStdString().c_str()) != 0)
-    {
-      throw HootException("Failed postgres command.  Exiting test.");
-    }
-
-    ///////////////////////////////////////
-    // test the reader
-    ///////////////////////////////////////
-
-    ServicesDb database;
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
-
-    Settings s = conf();
-    reader.open(ConfigOptions(s).getServicesDbTestUrlOsmapi());
-    reader.read(map);
-    verifyFullReadOutput_OsmApi(map);
-    reader.close();
-  }
-
   void runReadWithElemTest()
   {
-    ServicesDbReader reader;
+    HootApiDbReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId,3,"node").toString());
     reader.read(map);
@@ -481,8 +433,6 @@ public:
     reader.close();
   }
 
-=======
->>>>>>> develop:hoot-core-test/src/test/cpp/hoot/core/io/HootApiDbReaderTest.cpp
   void runFactoryReadTest()
   {
     shared_ptr<OsmMap> map(new OsmMap());

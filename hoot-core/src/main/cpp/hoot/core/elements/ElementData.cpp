@@ -48,6 +48,19 @@ _uid(ElementData::UID_EMPTY)
 {
 }
 
+ElementData::ElementData(long id, const Tags& tags, Meters circularError, long changeset,
+                         long version, unsigned int timestamp, QString user, long uid) :
+_id(id),
+_tags(tags),
+_circularError(circularError),
+_changeset(changeset),
+_version(version),
+_timestamp(timestamp),
+_user(user),
+_uid(uid)
+{
+}
+
 ElementData::ElementData(long id, long changeset, long version, unsigned int timestamp,
                          QString user, long uid) :
 _id(id),
@@ -61,16 +74,6 @@ _uid(uid)
 {
 }
 
-ElementData::ElementData(long id, const Tags& tags, Meters circularError) :
-_id(id),
-_tags(tags),
-_circularError(circularError),
-_changeset(ElementData::CHANGESET_EMPTY),
-_version(ElementData::VERSION_EMPTY),
-_timestamp(ElementData::TIMESTAMP_EMPTY),
-_user(ElementData::USER_EMPTY),
-_uid(ElementData::UID_EMPTY)
-{
-}
+
 
 }

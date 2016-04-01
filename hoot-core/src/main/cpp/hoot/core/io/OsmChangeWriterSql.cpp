@@ -2,7 +2,7 @@
 
 // hoot
 #include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/io/ServicesDb.h>
+#include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/OsmUtils.h>
 
@@ -27,10 +27,10 @@ void OsmChangeWriterSql::_create(const ConstNodePtr node)
   QString values = QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
       "tile,  version) VALUES (%1, %2, %3, %4, true, now(), %5, 1);\n").
       arg(id).
-      arg((qlonglong)ServicesDb::round(node->getY() * ServicesDb::COORDINATE_SCALE, 7)).
-      arg((qlonglong)ServicesDb::round(node->getX() * ServicesDb::COORDINATE_SCALE, 7)).
+      arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7)).
+      arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7)).
       arg(_changesetId).
-      arg(ServicesDb::tileForPoint(node->getY(), node->getX()));
+      arg(HootApiDb::tileForPoint(node->getY(), node->getX()));
 
   _outputSql.write(("INSERT INTO nodes (node_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_nodes (id, " + values).toUtf8());

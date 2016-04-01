@@ -377,11 +377,7 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
     wayId = _getRemappedElementId(w->getElementId());
     if (alreadyThere)
     {
-<<<<<<< HEAD:hoot-core/src/main/cpp/hoot/core/io/ServicesDbWriter.cpp
-      _sdb.updateWay(wayId, tags, w->getVersion() + 1);
-=======
       _hootdb.updateWay(wayId, w->getVersion() + 1, tags);
->>>>>>> develop:hoot-core/src/main/cpp/hoot/core/io/HootApiDbWriter.cpp
     }
     else
     {

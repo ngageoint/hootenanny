@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -101,6 +101,22 @@ QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId)
   QString dbReadUrl =
     dbModifyUrl.remove("/" + modifyUrlParts[modifyUrlParts.size() - 1]) + "/" +
     QString::number(mapId);
+
+  QUrl url(dbReadUrl);
+  return url;
+}
+
+QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId, const long elemId, const QString& elemType)
+{
+  //insert url example: postgresql://hoot:hoottest@localhost:5432/hoot/testMap
+  QString dbModifyUrl = getDbModifyUrl().toString();
+  QStringList modifyUrlParts = dbModifyUrl.split("/");
+  //read url example: postgresql://hoot:hoottest@localhost:5432/hoot/1
+  assert(mapId > 0);
+  QString dbReadUrl =
+    dbModifyUrl.remove("/" + modifyUrlParts[modifyUrlParts.size() - 1]) + "/" +
+      QString::number(mapId) + "?osm-element-id=" + QString::number((elemId)) +
+      "&osm-element-type=" + elemType;
 
   QUrl url(dbReadUrl);
   return url;
