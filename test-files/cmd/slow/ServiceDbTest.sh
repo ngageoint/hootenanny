@@ -29,5 +29,6 @@ hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesA" &
 hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesB" &
 wait
 
-# export PGPASSWORD=$DB_PASSWORD
-# psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | cut -d \| -f 1 | grep -qw AllDataTypesA
+export PGPASSWORD=$DB_PASSWORD
+psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw AllDataTypesA && echo "Error: delete-map did not remove AllDataTypesA dataset"
+psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw AllDataTypesB && echo "Error: delete-map did not remove AllDataTypesB dataset"
