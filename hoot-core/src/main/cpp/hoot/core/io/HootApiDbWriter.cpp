@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ServicesDbWriter.h"
+#include "HootApiDbWriter.h"
 
 #include <iostream>
 #include <fstream>
@@ -42,9 +42,9 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapWriter, ServicesDbWriter)
+HOOT_FACTORY_REGISTER(OsmMapWriter, HootApiDbWriter)
 
-ServicesDbWriter::ServicesDbWriter()
+HootApiDbWriter::HootApiDbWriter()
 {
   _open = false;
   _remapIds = true;
@@ -55,12 +55,12 @@ ServicesDbWriter::ServicesDbWriter()
   setConfiguration(conf());
 }
 
-ServicesDbWriter::~ServicesDbWriter()
+HootApiDbWriter::~HootApiDbWriter()
 {
   close();
 }
 
-void ServicesDbWriter::_addElementTags(const shared_ptr<const Element> &e, Tags& t)
+void HootApiDbWriter::_addElementTags(const shared_ptr<const Element> &e, Tags& t)
 {
   if (e->getCircularError() >= 0.0)
   {
@@ -69,7 +69,7 @@ void ServicesDbWriter::_addElementTags(const shared_ptr<const Element> &e, Tags&
   t["hoot:status"] = QString::number(e->getStatus().getEnum());
 }
 
-void ServicesDbWriter::close()
+void HootApiDbWriter::close()
 {
   finalizePartial();
   if ( (_nodesWritten > 0) || (_waysWritten > 0) || (_relationsWritten > 0) )
@@ -81,37 +81,37 @@ void ServicesDbWriter::close()
   }
 }
 
-void ServicesDbWriter::_countChange()
+void HootApiDbWriter::_countChange()
 {
-  _sdb.incrementChangesetChangeCount();
+  _hootdb.incrementChangesetChangeCount();
 }
 
-void ServicesDbWriter::finalizePartial()
+void HootApiDbWriter::finalizePartial()
 {
   //LOG_DEBUG("Inside finalize partial");
   if (_open)
   {
     //LOG_DEBUG("Ending changeset");
-    _sdb.endChangeset();
+    _hootdb.endChangeset();
     //LOG_DEBUG("Calling commit");
-    _sdb.commit();
+    _hootdb.commit();
     //LOG_DEBUG("Calling close");
-    _sdb.close();
+    _hootdb.close();
     _open = false;
   }
 
   //LOG_DEBUG("Leaving finalize partial");
 }
 
-bool ServicesDbWriter::isSupported(QString urlStr)
+bool HootApiDbWriter::isSupported(QString urlStr)
 {
   QUrl url(urlStr);
 
-  return _sdb.isSupported(url);
+  return _hootdb.isSupported(url);
 }
 
 
-void ServicesDbWriter::open(QString urlStr)
+void HootApiDbWriter::open(QString urlStr)
 {
   _openDb(urlStr, _overwriteMap);
 
@@ -119,16 +119,16 @@ void ServicesDbWriter::open(QString urlStr)
 
 }
 
-void ServicesDbWriter::deleteMap(QString urlStr)
+void HootApiDbWriter::deleteMap(QString urlStr)
 {
   _openDb(urlStr, true); // "True" forces the map delete
 
-  _sdb.commit();
-  _sdb.close();
+  _hootdb.commit();
+  _hootdb.close();
   _open = false;
 }
 
-void ServicesDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
+void HootApiDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
 {
   if (!isSupported(urlStr))
   {
@@ -142,7 +142,7 @@ void ServicesDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
 
   QUrl url(urlStr);
 
-  _sdb.open(url);
+  _hootdb.open(url);
   _open = true;
 
   LOG_DEBUG("DB opened");
@@ -150,53 +150,50 @@ void ServicesDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
   // create the user before we have a transaction so we can make sure the user gets added.
   if (_createUserIfNotFound)
   {
-    _sdb.setUserId(_sdb.getOrCreateUser(_userEmail, _userEmail));
+    _hootdb.setUserId(_hootdb.getOrCreateUser(_userEmail, _userEmail));
   }
   else
   {
-    _sdb.setUserId(_sdb.getUserId(_userEmail, true));
+    _hootdb.setUserId(_hootdb.getUserId(_userEmail, true));
   }
 
   //LOG_DEBUG("DB user set");
 
   // start the transaction. We'll close it when finalizePartial is called.
-  _sdb.transaction();
+  _hootdb.transaction();
 
-  if ( _sdb.getDatabaseType() == ServicesDb::DBTYPE_SERVICES)
-  {\
-    QStringList pList = url.path().split("/");
-    QString mapName = pList[2];
-    set<long> mapIds = _sdb.selectMapIds(mapName);
+  QStringList pList = url.path().split("/");
+  QString mapName = pList[2];
+  set<long> mapIds = _hootdb.selectMapIds(mapName);
 
-    if (mapIds.size() > 0)
+  if (mapIds.size() > 0)
+  {
+    if (deleteMapFlag) // deleteMapFlag is either True or _overwriteMap
     {
-      if (deleteMapFlag) // deleteMapFlag is either True or _overwriteMap
+      for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
       {
-        for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
-        {
-          LOG_INFO("Removing map with ID: " << *it);
-          _sdb.deleteMap(*it);
-          LOG_INFO("Finished removing map with ID: " << *it);
-        }
-
-        _sdb.setMapId(_sdb.insertMap(mapName, true));
-
+        LOG_INFO("Removing map with ID: " << *it);
+        _hootdb.deleteMap(*it);
+        LOG_INFO("Finished removing map with ID: " << *it);
       }
-      else
-      {
-        LOG_INFO("There are one or more maps with this name. Consider using "
-                 "'services.db.writer.overwrite.map'. Map IDs: " << mapIds);
-      }
+
+      _hootdb.setMapId(_hootdb.insertMap(mapName, true));
+
     }
-    else if ( mapIds.size() == 0 )
+    else
     {
-      LOG_DEBUG("Map " << mapName << " was not found, must insert");
-      _sdb.setMapId(_sdb.insertMap(mapName, true));
+      LOG_INFO("There are one or more maps with this name. Consider using "
+               "'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
     }
+  }
+  else if ( mapIds.size() == 0 )
+  {
+    LOG_DEBUG("Map " << mapName << " was not found, must insert");
+    _hootdb.setMapId(_hootdb.insertMap(mapName, true));
   }
 }
 
-long ServicesDbWriter::_getRemappedElementId(const ElementId& eid)
+long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
 {
   if (_remapIds == false)
   {
@@ -214,7 +211,7 @@ long ServicesDbWriter::_getRemappedElementId(const ElementId& eid)
     }
     else
     {
-      retVal = _sdb.reserveElementId(ElementType::Node);
+      retVal = _hootdb.reserveElementId(ElementType::Node);
       _nodeRemap[eid.getId()] = retVal;
       if ( _outputMappingFile.length() > 0 )
       {
@@ -231,7 +228,7 @@ long ServicesDbWriter::_getRemappedElementId(const ElementId& eid)
     }
     else
     {
-      retVal = _sdb.reserveElementId(ElementType::Way);
+      retVal = _hootdb.reserveElementId(ElementType::Way);
       _wayRemap[eid.getId()] = retVal;
       if ( _outputMappingFile.length() > 0 )
       {
@@ -253,7 +250,7 @@ long ServicesDbWriter::_getRemappedElementId(const ElementId& eid)
     }
     else
     {
-      retVal = _sdb.reserveElementId(ElementType::Relation);
+      retVal = _hootdb.reserveElementId(ElementType::Relation);
       _relationRemap[eid.getId()] = retVal;
       if ( _outputMappingFile.length() > 0 )
       {
@@ -279,7 +276,7 @@ long ServicesDbWriter::_getRemappedElementId(const ElementId& eid)
   return retVal;
 }
 
-vector<long> ServicesDbWriter::_remapNodes(const vector<long>& nids)
+vector<long> HootApiDbWriter::_remapNodes(const vector<long>& nids)
 {
   vector<long> result(nids.size()); // Creates the vector and fills nids.size number of zeroes
 
@@ -304,38 +301,33 @@ vector<long> ServicesDbWriter::_remapNodes(const vector<long>& nids)
   return result;
 }
 
-void ServicesDbWriter::setConfiguration(const Settings &conf)
+void HootApiDbWriter::setConfiguration(const Settings &conf)
 {
   ConfigOptions configOptions(conf);
-  setUserEmail(configOptions.getServicesDbWriterEmail());
-  setCreateUser(configOptions.getServicesDbWriterCreateUser());
-  setOverwriteMap(configOptions.getServicesDbWriterOverwriteMap());
+  setUserEmail(configOptions.getHootapiDbWriterEmail());
+  setCreateUser(configOptions.getHootapiDbWriterCreateUser());
+  setOverwriteMap(configOptions.getHootapiDbWriterOverwriteMap());
 }
 
-void ServicesDbWriter::_startNewChangeSet()
+void HootApiDbWriter::_startNewChangeSet()
 {
-  _sdb.endChangeset();
+  _hootdb.endChangeset();
   Tags tags;
   tags["bot"] = "yes";
   tags["created_by"] = "hootenanny";
-  _sdb.beginChangeset(tags);
+  _hootdb.beginChangeset(tags);
 }
 
-void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
+void HootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
 {
   bool countChange = true;
 
   //LOG_DEBUG("Inside writePartial for Node");
 
   Tags t = n->getTags();
-  // Only add tags for servicesDB, not good for OSM API
-  if ( _sdb.getDatabaseType() == ServicesDb::DBTYPE_SERVICES)
-  {
-    _addElementTags(n, t);
-  }
+  _addElementTags(n, t);
 
   //LOG_DEBUG("Incoming node ID: " << n->getId());
-
 
   if (_remapIds)
   {
@@ -344,11 +336,11 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
     long nodeId = _getRemappedElementId(n->getElementId());
     if (alreadyThere)
     {
-      _sdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, t);
+      _hootdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, t);
     }
     else
     {
-      _sdb.insertNode(nodeId, n->getY(), n->getX(), t);
+      _hootdb.insertNode(nodeId, n->getY(), n->getX(), t);
     }
   }
   else
@@ -356,11 +348,11 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
     if ( n->getId() < 1 )
     {
       throw HootException("Writing non-positive IDs without remap is not supported by "
-                          "ServicesDbWriter.");
+                          "HootApiDbWriter.");
     }
 
     //LOG_DEBUG("Inserted node " << QString::number(n->getId()) << ", no remapping" );
-    _sdb.insertNode(n->getId(), n->getY(), n->getX(), t);
+    _hootdb.insertNode(n->getId(), n->getY(), n->getX(), t);
   }
 
   if (countChange)
@@ -370,18 +362,14 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
   }
 }
 
-void ServicesDbWriter::writePartial(const shared_ptr<const Way>& w)
+void HootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
 {
   long wayId;
 
   //LOG_DEBUG("Inside writePartial for Way " << QString::number(w->getId()));
 
   Tags tags = w->getTags();
-
-  if ( _sdb.getDatabaseType() == ServicesDb::DBTYPE_SERVICES)
-  {
-    _addElementTags(w, tags);
-  }
+  _addElementTags(w, tags);
 
   if (_remapIds)
   {
@@ -389,30 +377,30 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Way>& w)
     wayId = _getRemappedElementId(w->getElementId());
     if (alreadyThere)
     {
-      _sdb.updateWay(wayId, w->getVersion() + 1, tags);
+      _hootdb.updateWay(wayId, w->getVersion() + 1, tags);
     }
     else
     {
-      _sdb.insertWay(wayId, tags);
+      _hootdb.insertWay(wayId, tags);
     }
   }
   else if (w->getId() < 1)
   {
-    throw HootException("Non-positive IDs are not supported by ServicesDbWriter.");
+    throw HootException("Non-positive IDs are not supported by HootApiDbWriter.");
   }
   else
   {
     wayId = w->getId();
-    _sdb.insertWay(w->getId(), tags);
+    _hootdb.insertWay(w->getId(), tags);
   }
 
   if ( _remapIds == true )
   {
-    _sdb.insertWayNodes(wayId, _remapNodes(w->getNodeIds()));
+    _hootdb.insertWayNodes(wayId, _remapNodes(w->getNodeIds()));
   }
   else
   {
-    _sdb.insertWayNodes(wayId, w->getNodeIds());
+    _hootdb.insertWayNodes(wayId, w->getNodeIds());
   }
 
   _countChange();
@@ -420,17 +408,14 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Way>& w)
   _waysWritten++;
 }
 
-void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
+void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
 {
   long relationId;
 
   //LOG_DEBUG("Inside writePartial for Relation");
 
   Tags tags = r->getTags();
-  if ( _sdb.getDatabaseType() == ServicesDb::DBTYPE_SERVICES)
-  {
-    _addElementTags(r, tags);
-  }
+  _addElementTags(r, tags);
 
   if (!r->getType().isEmpty())
   {
@@ -445,16 +430,16 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
               QString::number(r->getId()) << " which maps to DB ID = " <<
               QString::number(relationId) );
 
-      _sdb.insertRelation(relationId, tags);
+      _hootdb.insertRelation(relationId, tags);
   }
   else
   {
     if (r->getId() < 1)
     {
-      throw HootException("Non-positive IDs are not supported by ServicesDbWriter without remapping");
+      throw HootException("Non-positive IDs are not supported by HootApiDbWriter without remapping");
     }
 
-    _sdb.insertRelation(r->getId(), tags);
+    _hootdb.insertRelation(r->getId(), tags);
     relationId = r->getId();
   }
 
@@ -472,7 +457,7 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
         _getRemappedElementId(relationMemberElementId));
     }
 
-    _sdb.insertRelationMember(relationId, relationMemberElementId.getType(),
+    _hootdb.insertRelationMember(relationId, relationMemberElementId.getType(),
                               relationMemberElementId.getId(), e.role, i);
   }
 

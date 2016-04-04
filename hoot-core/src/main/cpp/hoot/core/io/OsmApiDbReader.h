@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SERVICESDBREADER_H
-#define SERVICESDBREADER_H
+#ifndef OSMAPIDBREADER_H
+#define OSMAPIDBREADER_H
 
-#include "PartialOsmMapReader.h"
-#include "ServicesDb.h"
+#include "OsmMapReader.h"
+#include "ApiDbReader.h"
+#include "OsmApiDb.h"
 
 // hoot
 #include <hoot/core/util/Configurable.h>
@@ -40,25 +41,21 @@
 // tgs
 #include <tgs/BigContainers/BigMap.h>
 
-#include "EnvelopeProvider.h"
-
 namespace hoot
 {
 
-class ServicesDbReader :
-    public PartialOsmMapReader,
-    public Configurable,
-    public EnvelopeProvider
+class OsmApiDbReader :
+    public OsmMapReader,
+    public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::ServicesDbReader"; }
-  static QString maxElementsPerMapKey() { return "services.db.reader.max.elements.per.partial.map"; }
-  static QString emailKey() { return "services.db.reader.email"; }
+  static std::string className() { return "hoot::OsmApiDbReader"; }
+  static QString emailKey() { return "osmapi.db.reader.email"; }
 
-  ServicesDbReader();
+  OsmApiDbReader();
 
-  virtual ~ServicesDbReader();
+  virtual ~OsmApiDbReader();
 
   /**
    * Determines the reader's default element status. By default this is Invalid which specifies that
@@ -75,32 +72,20 @@ public:
 
   virtual void open(QString urlStr);
 
-  virtual void initializePartial();
-
   /**
    * The read command called after open.
    */
   virtual void read(shared_ptr<OsmMap> map);
 
-  virtual void finalizePartial();
+  //virtual void finalizePartial();
 
   void close();
-
-  /**
-   * Called after open. This will read the bounds of the specified layer in a relatively efficient
-   * manner. (e.g. SELECT min(x)...)
-   */
-  virtual Envelope calculateEnvelope() const;
 
   virtual void setConfiguration(const Settings &conf);
 
   void setUserEmail(const QString& email) { _email = email; }
 
   void setBoundingBox(const QString& bbox) { _bbox = bbox; }
-
-  virtual bool hasMoreElements();
-
-  virtual shared_ptr<Element> readNextElement();
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
@@ -109,14 +94,7 @@ private:
   Status _status;
   bool _useDataSourceIds;
 
-  const ElementType _getCurrentSelectElementType() const;
-  long _getCurrentElementOffset(const ElementType& selectElementType) const;
-  void _incrementElementIndex(const ElementType& selectElementType);
-  void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
-  void _readBounded(shared_ptr<OsmMap> map, const ElementType& elementType);
-  void _processRelation(const QSqlQuery& resultIterator, OsmMap& map);
-
-  ServicesDb _database;
+  OsmApiDb _database;
   bool _open;
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
@@ -126,36 +104,22 @@ private:
   ElementType _osmElemType;
   ElementType _selectElementType;
 
-  shared_ptr<Element> _nextElement;
-
   Tgs::BigMap<long, long> _nodeIdMap;
   Tgs::BigMap<long, long> _relationIdMap;
   Tgs::BigMap<long, long> _wayIdMap;
 
-  void _addTagsToElement(shared_ptr<Element> element);
+  void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
+  void _readBounded(shared_ptr<OsmMap> map, const ElementType& elementType);
+  void _processRelation(const QSqlQuery& resultIterator, OsmMap& map);
 
   ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 
-  //get element from QSqlQuery iterator
-  shared_ptr<Element> _getElementUsingIterator();
-
-  /**
-   * Converts a query result to an OSM element
-   */
-  shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
-    const ElementType& elementType, OsmMap& map);
-
-  // Services data assignment methods
+  // Osm Api data assignment methods
   shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
   shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
   shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
-
-  // Osm Api data assignment methods
-  shared_ptr<Node> _resultToNode_OsmApi(const QSqlQuery& resultIterator, OsmMap& map);
-  shared_ptr<Way> _resultToWay_OsmApi(const QSqlQuery& resultIterator, OsmMap& map);
-  shared_ptr<Relation> _resultToRelation_OsmApi(const QSqlQuery& resultIterator, const OsmMap& map);
 };
 
 }
 
-#endif // SERVICESDBREADER_H
+#endif // OSMAPIDBREADER_H

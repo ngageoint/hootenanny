@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -97,8 +97,8 @@ void OsmReader::_createNode(const QXmlAttributes &attributes)
   double x = _parseDouble(attributes.value("lon"));
   double y = _parseDouble(attributes.value("lat"));
 
-  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
-  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these
+  // are not officially required by the DTD
   long version = ElementData::VERSION_EMPTY;
   if (attributes.value("version") != "")
   {
@@ -125,8 +125,8 @@ void OsmReader::_createNode(const QXmlAttributes &attributes)
     uid = _parseDouble(attributes.value("uid"));
   }
 
-  _element.reset(new Node(_status, newId, x, y, changeset, version, timestamp,
-                          user, uid, _circularError));
+  _element.reset(new Node(_status, newId, x, y, _circularError, changeset, version, timestamp,
+                          user, uid));
 
   if (_element->getTags().getInformationCount() > 0)
   {
@@ -139,7 +139,8 @@ void OsmReader::_createRelation(const QXmlAttributes &attributes)
   _relationId = _parseLong(attributes.value("id"));
   long newId = _getRelationId(_relationId);
 
-  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are
+  // not officially required by the DTD
   long version = ElementData::VERSION_EMPTY;
   if (attributes.value("version") != "")
   {
@@ -166,8 +167,8 @@ void OsmReader::_createRelation(const QXmlAttributes &attributes)
     uid = _parseDouble(attributes.value("uid"));
   }
 
-  _element.reset(new Relation(_status, newId, changeset, version, timestamp,
-                              user, uid, _circularError));
+  _element.reset(new Relation(_status, newId, _circularError, "", changeset, version, timestamp,
+                              user, uid));
 
   _parseTimeStamp(attributes);
 }
@@ -215,8 +216,8 @@ void OsmReader::_createWay(const QXmlAttributes &attributes)
     uid = _parseDouble(attributes.value("uid"));
   }
 
-  _element.reset(new Way(_status, newId, changeset, version, timestamp, user,
-                         uid, _circularError));
+  _element.reset(new Way(_status, newId, _circularError, changeset, version, timestamp, user,
+                         uid));
 
   _parseTimeStamp(attributes);
 }

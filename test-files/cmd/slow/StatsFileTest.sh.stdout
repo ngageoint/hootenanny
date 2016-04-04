@@ -1,8 +1,8 @@
 ****Quick Stats****
 Reprojecting 0 / 117         
-10:26:03.354 INFO  .../core/ops/CalculateStatsOp.cpp(  95) Calculating map statistics...
-10:26:03.354 INFO  .../core/ops/CalculateStatsOp.cpp( 357) Map statistics calculated.
-10:26:03.354 INFO  ...oot/core/io/MapStatsWriter.cpp( 221) Writing stats to file: test-output/StatsAllDataTypesA.txt
+13:31:32.860 INFO  .../core/ops/CalculateStatsOp.cpp(  97) Calculating map statistics...
+13:31:32.861 INFO  .../core/ops/CalculateStatsOp.cpp( 359) Map statistics calculated.
+13:31:32.861 INFO  ...oot/core/io/MapStatsWriter.cpp( 221) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -14,11 +14,11 @@ Minimum Relation ID	9.2233720368547758e+18
 Maximum Relation ID	-9.2233720368547758e+18
 ****JSON Stats****
 Reprojecting 0 / 117         
-10:26:03.615 INFO  .../core/ops/CalculateStatsOp.cpp(  95) Calculating map statistics...
-10:26:04.562 INFO  .../core/ops/CalculateStatsOp.cpp( 357) Map statistics calculated.
+13:31:32.985 INFO  .../core/ops/CalculateStatsOp.cpp(  97) Calculating map statistics...
+13:31:33.999 INFO  .../core/ops/CalculateStatsOp.cpp( 359) Map statistics calculated.
 Reprojecting 0 / 116         
-10:26:04.586 INFO  .../core/ops/CalculateStatsOp.cpp(  95) Calculating map statistics...
-10:26:05.194 INFO  .../core/ops/CalculateStatsOp.cpp( 357) Map statistics calculated.
+13:31:34.032 INFO  .../core/ops/CalculateStatsOp.cpp(  97) Calculating map statistics...
+13:31:34.886 INFO  .../core/ops/CalculateStatsOp.cpp( 359) Map statistics calculated.
 {
     "Node Count":
     [
@@ -130,17 +130,17 @@ Reprojecting 0 / 116
         "100",
         "100"
     ],
+    "Untagged Feature Count":
+    [
+        "0",
+        "0"
+    ],
     "Total Unconflatable Features":
     [
         "0",
         "0"
     ],
     "Percentage of Total Features Unconflatable":
-    [
-        "0",
-        "0"
-    ],
-    "Total Features Processed By Conflation":
     [
         "0",
         "0"
@@ -155,15 +155,15 @@ Reprojecting 0 / 116
         "10",
         "8"
     ],
-    "Features Conflatable by: hoot::PlacesPoiMatchCreator":
-    [
-        "11",
-        "10"
-    ],
     "Features Conflatable by: hoot::HighwayMatchCreator":
     [
         "4",
         "4"
+    ],
+    "Features Conflatable by: hoot::PlacesPoiMatchCreator":
+    [
+        "11",
+        "10"
     ],
     "Total Conflated Features":
     [

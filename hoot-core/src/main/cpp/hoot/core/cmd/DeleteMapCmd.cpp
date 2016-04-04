@@ -55,7 +55,7 @@
 // Hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/ServicesDbWriter.h>
+#include <hoot/core/io/HootApiDbWriter.h>
 
 namespace hoot
 {
@@ -78,7 +78,7 @@ public:
     }
     QString input = args[0];
 
-    ServicesDbWriter writer;
+    HootApiDbWriter writer;
 
     writer.deleteMap(input);
 

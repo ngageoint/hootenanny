@@ -150,9 +150,6 @@ conf/ServerConfig.sh: conf/ServerConfig.sh.orig
 	# This will copy conf/ServerConfig.sh.orig to conf/ServerConfig.sh if necessary
 	if [ ! -f conf/ServerConfig.sh ]; then echo "Using default server configuration. You can safely customize: conf/ServerConfig.sh"; cp conf/ServerConfig.sh.orig conf/ServerConfig.sh; else echo; echo; echo "Check your conf/ServerConfig.sh to see if it needs updating with conf/ServerConfig.sh.orig, if not just 'touch conf/ServerConfig.sh'"; echo; echo; false; fi
 
-conf/LocalHoot.json: conf/LocalHoot.json.in conf/DatabaseConfig.sh conf/ServerConfig.sh
-	export HOOT_HOME=`pwd`; scripts/ReplaceEnvironmentVariables.sh conf/LocalHoot.json.in conf/LocalHoot.json
-
 # We now have different versions of the NFDD Schema that are built from Excel files:
 # LTDSv40.csv.gz - Local TDS v4.0
 # SUTDSv40.csv.gz - Specialized Urban TDS v4.0
