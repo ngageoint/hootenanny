@@ -1,12 +1,12 @@
 @javascript
 Feature: Hootenanny Clip Dataset Test
 	As a software tester
-	I want test the clip tool
+	I want to test the clip tool
 	So I can ensure that it is working properly
 
 	Scenario: Clip Feature
-		Given I am on the Hootenanny site
-		Then I click Get Started
+		Given I am on Hootenanny
+		Then I press "Get Started"
 		When I click the "Add Reference Dataset" link
 		And I click the "DcGisRoadsCucumber" Dataset
 		Then I click first "Add Layer"
