@@ -3,15 +3,15 @@ Given(/^I am on Hootenanny$/) do
 end
 
 # FIXME: Do we ever use this?  press "Get Started" seems to be alternate
-When(/^I click Get Started$/) do
-  begin
-    el = find('.col6.start')
-  rescue Capybara::ElementNotFound
-    # In Capybara 0.4+ #find_field raises an error instead of returning nil
-    el = nil
-  end
-  el.click unless el.nil?
-end
+# When(/^I click Get Started$/) do
+#   begin
+#     el = find('.col6.start')
+#   rescue Capybara::ElementNotFound
+#     # In Capybara 0.4+ #find_field raises an error instead of returning nil
+#     el = nil
+#   end
+#   el.click unless el.nil?
+# end
 
 When(/^I click the "([^"]*)" link$/) do |linkText|
   find('a', :text=> linkText).click
@@ -21,6 +21,9 @@ Then(/^I should see "([^"]*)"$/) do |text|
   page.should have_content(text)
 end
 
+Then(/^I should not see "([^"]*)"$/) do |text|
+  page.should have_no_content(text)
+end
 
 When(/^I select the "([^"]*)" div$/) do |cls|
   find('div.' + cls).click
@@ -33,7 +36,7 @@ When(/^I click the "([^"]*)" Dataset$/) do |dataset|
   parent.find('rect').click
 end
 
-When (/^I click first "([^"]*)"$/) do |text|
+When(/^I click first "([^"]*)"$/) do |text|
   Capybara.ignore_hidden_elements = false
   elements = all('a', :text => text)
   if elements.empty?
@@ -43,7 +46,7 @@ When (/^I click first "([^"]*)"$/) do |text|
   Capybara.ignore_hidden_elements = true
 end
 
-When (/^I click second "([^"]*)"$/) do |text|
+When(/^I click second "([^"]*)"$/) do |text|
   Capybara.ignore_hidden_elements = false
   e1 = all('a', :text => text)
   e2 = all(:xpath, '//input[@value="' + text + '"]')
@@ -101,23 +104,23 @@ When(/^I fill "([^"]*)" input with "([^"]*)"$/) do |el, value|
   sleep 1
 end
 
-When (/^I press "([^"]*)"$/) do |button|
+When(/^I press "([^"]*)"$/) do |button|
   click_link_or_button(button)
 end
 
-When (/^I hover over "([^"]*)"$/) do |el|
+When(/^I hover over "([^"]*)"$/) do |el|
   find(el).hover
 end
 
-When (/^I press "([^"]*)" big loud span$/) do |txt|
+When(/^I press "([^"]*)" big loud span$/) do |txt|
   find('span.big.loud', :text=>txt).click
 end
 
-When (/^I wait$/) do
+When(/^I wait$/) do
   sleep 5
 end
 
-When (/^I remove the first layer$/) do
+When(/^I remove the first layer$/) do
   trash_cans = all('button._icon.trash')
   trash_cans[0].click
   sleep 5
@@ -125,7 +128,7 @@ When (/^I remove the first layer$/) do
   sleep 2
 end
 
-When (/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)"$/) do |timeout, unit, text|
+When(/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)"$/) do |timeout, unit, text|
   if unit == "seconds"
     multiplier = 1
   elsif unit == "minutes"
@@ -139,6 +142,35 @@ When (/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)"$/) do |timeout, unit, text|
   Capybara.default_max_wait_time = oldTimeout
 end
 
-When (/^I close the UI alert$/) do
+When(/^I wait ([0-9]*) "([^"]*)" to not see "([^"]*)"$/) do |timeout, unit, text|
+  if unit == "seconds"
+    multiplier = 1
+  elsif unit == "minutes"
+    multiplier = 60
+  else
+    throw :badunits
+  end
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout) * multiplier
+  page.should have_no_content(text)
+  Capybara.default_max_wait_time = oldTimeout
+end
+
+When(/^I close the UI alert$/) do
   find('#alerts').all('.x')[0].click
+end
+
+When(/^I scroll element into view and press "([^"]*)"$/) do |id|
+  Capybara.ignore_hidden_elements = false
+  element = page.driver.browser.find_element(:id, id)
+  page.driver.browser.execute_script("arguments[0].scrollIntoView(true)", element)
+  element.click
+  Capybara.ignore_hidden_elements = true
+end
+
+Then(/^I resize the window$/) do
+  if Capybara.javascript_driver != :webkit
+    window = Capybara.current_session.driver.browser.manage.window
+    window.resize_to(1280, 960) # width, height
+  end
 end
