@@ -3,7 +3,7 @@ Feature: Manage Tab
     Scenario: Opening Management Tab
         Given I am on Hootenanny
         # And I resize the window
-        And I press "Get Started"
+        And I click Get Started
         When I select the "sprocket" div
         Then I should see options in this order:
             | Settings |

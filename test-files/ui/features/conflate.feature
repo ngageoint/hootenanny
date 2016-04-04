@@ -3,7 +3,7 @@ Feature: Conflate feature
   Scenario: I can conflate the DC GIS data
     Given I am on Hootenanny
     #And I resize the window
-    And I press "Get Started"
+    And I click Get Started
     And I press "Add Reference Dataset"
     And I click the "DcGisRoadsCucumber" Dataset
     And I press "Add Layer"

@@ -2,16 +2,15 @@ Given(/^I am on Hootenanny$/) do
   visit "http://localhost:8080/hootenanny-id" # may need to change URL
 end
 
-# FIXME: Do we ever use this?  press "Get Started" seems to be alternate
-# When(/^I click Get Started$/) do
-#   begin
-#     el = find('.col6.start')
-#   rescue Capybara::ElementNotFound
-#     # In Capybara 0.4+ #find_field raises an error instead of returning nil
-#     el = nil
-#   end
-#   el.click unless el.nil?
-# end
+When(/^I click Get Started$/) do
+  begin
+    el = find('.col6.start')
+  rescue Capybara::ElementNotFound
+    # In Capybara 0.4+ #find_field raises an error instead of returning nil
+    el = nil
+  end
+  el.click unless el.nil?
+end
 
 When(/^I click the "([^"]*)" link$/) do |linkText|
   find('a', :text=> linkText).click
