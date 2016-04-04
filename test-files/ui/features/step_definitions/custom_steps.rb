@@ -133,10 +133,10 @@ When (/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)"$/) do |timeout, unit, text|
   else
     throw :badunits
   end
-  oldTimeout = Capybara.default_wait_time
-  Capybara.default_wait_time = Float(timeout) * multiplier
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout) * multiplier
   page.should have_content(text)
-  Capybara.default_wait_time = oldTimeout
+  Capybara.default_max_wait_time = oldTimeout
 end
 
 When (/^I close the UI alert$/) do
