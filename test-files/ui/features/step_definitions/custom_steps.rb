@@ -4,7 +4,7 @@ end
 
 When(/^I click Get Started$/) do
   begin
-    el = find('.col6.start')
+    el = find_button('Get Started')
   rescue Capybara::ElementNotFound
     # In Capybara 0.4+ #find_field raises an error instead of returning nil
     el = nil
