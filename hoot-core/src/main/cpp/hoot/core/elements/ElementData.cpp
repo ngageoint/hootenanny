@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,7 +27,8 @@
 
 #include "Element.h"
 
-namespace hoot {
+namespace hoot
+{
 
 long ElementData::CHANGESET_EMPTY = 0;
 long ElementData::VERSION_EMPTY = 0;
@@ -35,10 +36,40 @@ unsigned int ElementData::TIMESTAMP_EMPTY = 0;
 QString ElementData::USER_EMPTY = "";
 long ElementData::UID_EMPTY = 0;
 
+ElementData::ElementData() :
+_id(LLONG_MIN),
+_tags(Tags()),
+_circularError(15.0),
+_changeset(ElementData::CHANGESET_EMPTY),
+_version(ElementData::VERSION_EMPTY),
+_timestamp(ElementData::TIMESTAMP_EMPTY),
+_user(ElementData::USER_EMPTY),
+_uid(ElementData::UID_EMPTY)
+{
+}
 
-ElementData::ElementData(long id, const Tags& tags, Meters circularError) : _id(id),
-  _changeset(CHANGESET_EMPTY), _version(VERSION_EMPTY), _timestamp(TIMESTAMP_EMPTY),
-  _user(USER_EMPTY), _uid(UID_EMPTY), _tags(tags), _circularError(circularError)
+ElementData::ElementData(long id, long changeset, long version, unsigned int timestamp,
+                         QString user, long uid) :
+_id(id),
+_tags(Tags()),
+_circularError(15.0),
+_changeset(changeset),
+_version(version),
+_timestamp(timestamp),
+_user(user),
+_uid(uid)
+{
+}
+
+ElementData::ElementData(long id, const Tags& tags, Meters circularError) :
+_id(id),
+_tags(tags),
+_circularError(circularError),
+_changeset(ElementData::CHANGESET_EMPTY),
+_version(ElementData::VERSION_EMPTY),
+_timestamp(ElementData::TIMESTAMP_EMPTY),
+_user(ElementData::USER_EMPTY),
+_uid(ElementData::UID_EMPTY)
 {
 }
 

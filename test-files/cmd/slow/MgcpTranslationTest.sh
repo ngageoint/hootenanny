@@ -46,4 +46,6 @@ checkMgcpV3 LAP050
 checkMgcpV3 LBH140
 # Building Points
 checkMgcpV3 PAL015
+# Bridge Lines
+checkMgcpV3 LAQ040
 
