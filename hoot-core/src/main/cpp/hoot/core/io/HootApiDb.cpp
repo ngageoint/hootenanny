@@ -341,11 +341,24 @@ QString HootApiDb::_escapeTags(const Tags& tags) const
       // The spec described above does seem to work on the psql command line. Curious.
       QString k = QString(it.key()).replace(f1, "\\\\").replace(f2, "\\\"");
       QString v = QString(it.value()).replace(f1, "\\\\").replace(f2, "\\\"");
+      k.replace("'", "''");
+      v.replace("'", "''");
 
-      l << QString("\"%1\"=>\"%2\"").arg(k).arg(v);
+      l << QString("'%1'").arg(k);
+      l << QString("'%1'").arg(v);
     }
   }
-  return l.join(",");
+
+  QString hstoreStr = l.join(",");
+  if (!hstoreStr.isEmpty())
+  {
+     hstoreStr = "hstore(ARRAY[" + hstoreStr + "])";
+  }
+  else
+  {
+     hstoreStr = "''";
+  }
+  return hstoreStr;
 }
 
 QString HootApiDb::execToString(QString sql, QVariant v1, QVariant v2, QVariant v3)
@@ -505,7 +518,7 @@ void HootApiDb::beginChangeset(const Tags& tags)
     _insertChangeSet->prepare(
       QString("INSERT INTO %1 (user_id, created_at, min_lat, max_lat, min_lon, max_lon, "
           "closed_at, tags) "
-      "VALUES (:user_id, NOW(), :min_lat, :max_lat, :min_lon, :max_lon, NOW(), :tags) "
+      "VALUES (:user_id, NOW(), :min_lat, :max_lat, :min_lon, :max_lon, NOW(), " + _escapeTags(tags) + ") "
       "RETURNING id")
         .arg(getChangesetsTableName(mapId)));
   }
@@ -514,7 +527,6 @@ void HootApiDb::beginChangeset(const Tags& tags)
   _insertChangeSet->bindValue(":max_lat", _changesetEnvelope.getMaxY());
   _insertChangeSet->bindValue(":min_lon", _changesetEnvelope.getMinX());
   _insertChangeSet->bindValue(":max_lon", _changesetEnvelope.getMaxX());
-  _insertChangeSet->bindValue(":tags", _escapeTags(tags));
 
   _currChangesetId = _insertRecord(*_insertChangeSet);
 
@@ -1140,8 +1152,7 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
     _updateNode->prepare(
       "UPDATE " + getNodesTableName(mapId) +
       " SET latitude=:latitude, longitude=:longitude, changeset_id=:changeset_id, "
-      " timestamp=:timestamp, tile=:tile, version=:version, tags=:tags "
-      "WHERE id=:id");
+      " timestamp=:timestamp, tile=:tile, version=:version, tags=" + _escapeTags(tags) + " WHERE id=:id");
   }
 
   _updateNode->bindValue(":id", (qlonglong)id);
@@ -1153,7 +1164,6 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
   _updateNode->bindValue(":timestamp", OsmUtils::currentTimeAsString());
   _updateNode->bindValue(":tile", (qlonglong)_tileForPoint(lat, lon));
   _updateNode->bindValue(":version", (qlonglong)version);
-  _updateNode->bindValue(":tags", _escapeTags(tags));
 
   if (_updateNode->exec() == false)
   {
@@ -1177,15 +1187,13 @@ void HootApiDb::updateRelation(const long id, const long version, const Tags& ta
     _updateRelation.reset(new QSqlQuery(_db));
     _updateRelation->prepare(
       "UPDATE " + getRelationsTableName(mapId) +
-      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=:tags "
-      "WHERE id=:id");
+      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" + _escapeTags(tags) + " WHERE id=:id");
   }
 
   _updateRelation->bindValue(":id", (qlonglong)id);
   _updateRelation->bindValue(":changeset_id", (qlonglong)_currChangesetId);
   _updateRelation->bindValue(":timestamp", OsmUtils::currentTimeAsString());
   _updateRelation->bindValue(":version", (qlonglong)version);
-  _updateRelation->bindValue(":tags", _escapeTags(tags));
 
   if (_updateRelation->exec() == false)
   {
@@ -1209,15 +1217,13 @@ void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
     _updateWay.reset(new QSqlQuery(_db));
     _updateWay->prepare(
       "UPDATE " + getWaysTableName(mapId) +
-      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=:tags "
-      "WHERE id=:id");
+      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" + _escapeTags(tags) + " WHERE id=:id");
   }
 
   _updateWay->bindValue(":id", (qlonglong)id);
   _updateWay->bindValue(":changeset_id", (qlonglong)_currChangesetId);
   _updateWay->bindValue(":timestamp", OsmUtils::currentTimeAsString());
   _updateWay->bindValue(":version", (qlonglong)version);
-  _updateWay->bindValue(":tags", _escapeTags(tags));
 
   if (_updateWay->exec() == false)
   {
