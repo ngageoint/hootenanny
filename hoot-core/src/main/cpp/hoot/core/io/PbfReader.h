@@ -167,6 +167,8 @@ public:
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
+  bool getSortedTypeThanId() { return _typeThenId; }
+
 private:
 
   Meters _circularError;
@@ -198,6 +200,7 @@ private:
   Status _status;
   bool _useFileId;
   bool _osmHeaderRead;
+  bool _typeThenId;
   bool _addSourceDateTime;
 
   int _granularity;
