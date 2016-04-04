@@ -106,7 +106,7 @@ shared_ptr<Way> DualWaySplitter::_createOneWay(shared_ptr<const Way> w, Meters b
   const LineString* newLs = dynamic_cast<const LineString*>(g.get());
 
   shared_ptr<Way> result(new Way(w->getStatus(), _result->createNextWayId(),
-    w->hasCircularError() ? w->getCircularError() : -1));
+    w->getRawCircularError()));
 
   // This sometimes happens if the buffer builder returns a multilinestring. See #2275
   if (newLs == 0)

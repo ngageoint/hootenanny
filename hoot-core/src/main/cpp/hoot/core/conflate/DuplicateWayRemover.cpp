@@ -244,7 +244,7 @@ void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int l
 
   const std::vector<long>& nodes = w->getNodeIds();
 
-  Meters ce = w->hasCircularError() ? w->getCircularError() : -1;
+  Meters ce = w->getRawCircularError();
 
   // if we're not deleting all the nodes
   if (length != (int)nodes.size())

@@ -31,7 +31,7 @@ namespace hoot
 
 RelationData::RelationData(long id, long changeset, long version, unsigned int timestamp,
   QString user, long uid) :
-ElementData(id, changeset, version, timestamp, user, uid)
+ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid)
 {
 }
 

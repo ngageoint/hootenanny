@@ -156,7 +156,8 @@ WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* n
     nfPtr.reset(nf);
   }
 
-  Meters ce = way->hasCircularError() ? way->getCircularError() : -1;
+  Meters ce = way->getRawCircularError();
+
   WayPtr result(new Way(way->getStatus(), map->createNextWayId(), ce));
   result->setTags(way->getTags());
 
