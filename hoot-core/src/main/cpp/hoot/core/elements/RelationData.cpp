@@ -31,12 +31,13 @@ namespace hoot
 
 RelationData::RelationData(long id, long changeset, long version, unsigned int timestamp,
   QString user, long uid) :
-ElementData(id, changeset, version, timestamp, user, uid)
+ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid)
 {
 }
 
 RelationData::RelationData(const RelationData& rd) :
-  ElementData(rd.getId(), rd.getTags(), rd.getCircularError())
+ElementData(rd.getId(), rd.getTags(), rd.getCircularError(), rd._changeset, rd._version,
+            rd._timestamp)
 {
   _members = rd._members;
   _type = rd._type;

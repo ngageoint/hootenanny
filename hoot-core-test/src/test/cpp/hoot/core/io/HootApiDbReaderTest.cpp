@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -57,6 +57,7 @@ class HootApiDbReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runReadTest);
   CPPUNIT_TEST(runPartialReadTest);
   CPPUNIT_TEST(runFactoryReadTest);
+  CPPUNIT_TEST(runReadWithElemTest);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -379,7 +380,7 @@ public:
     relation = map->getRelation(2);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)2, relation->getId());
-    CPPUNIT_ASSERT_EQUAL(0.0, relation->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(15.0, relation->getCircularError());
     CPPUNIT_ASSERT_EQUAL(QString("").toStdString(), relation->getType().toStdString());
     CPPUNIT_ASSERT(relation->contains(ElementId::node(2)));
     CPPUNIT_ASSERT_EQUAL(size_t(1), relation->getMembers().size());
@@ -396,7 +397,7 @@ public:
   {
     //nodes
 
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodeMap().size());
 
     shared_ptr<Node> node = map->getNode(3);
     CPPUNIT_ASSERT_EQUAL(Status::Conflated, node->getStatus().getEnum());
@@ -419,6 +420,16 @@ public:
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
     reader.read(map);
     verifyFullReadOutput(map);
+    reader.close();
+  }
+
+  void runReadWithElemTest()
+  {
+    HootApiDbReader reader;
+    shared_ptr<OsmMap> map(new OsmMap());
+    reader.open(ServicesDbTestUtils::getDbReadUrl(mapId,3,"node").toString());
+    reader.read(map);
+    verifySingleReadOutput(map);
     reader.close();
   }
 
@@ -611,7 +622,7 @@ public:
     relation = map->getRelation(2);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)2, relation->getId());
-    CPPUNIT_ASSERT_EQUAL(0.0, relation->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(15.0, relation->getCircularError());
     CPPUNIT_ASSERT_EQUAL(QString("").toStdString(), relation->getType().toStdString());
     CPPUNIT_ASSERT(relation->contains(ElementId::node(2)));
     CPPUNIT_ASSERT_EQUAL(size_t(1), relation->getMembers().size());

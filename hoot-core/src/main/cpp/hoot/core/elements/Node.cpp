@@ -40,11 +40,11 @@ using namespace geos::geom;
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
-namespace hoot {
-
-Node::Node(const Node& from) : Element(from.getStatus())
+namespace hoot
 {
-  _nodeData = from._nodeData;
+
+Node::Node(const Node& from) : Element(from.getStatus()), _nodeData(from._nodeData)
+{
 }
 
 Node::Node(Status s, long id, const Coordinate& c, Meters circularError) :

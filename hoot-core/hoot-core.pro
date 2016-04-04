@@ -474,7 +474,7 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.cpp \
     src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
     src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp \
-	src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriter.cpp \
+    src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriter.cpp \
     src/main/cpp/hoot/core/ops/ReplaceElementOp.cpp \
     src/main/cpp/hoot/core/filters/NeedsReviewCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.cpp \
@@ -486,6 +486,11 @@ SOURCES += \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp \
+    src/main/cpp/hoot/core/io/ElementSorter.cpp \
+    src/main/cpp/hoot/core/io/ChangesetDeriver.cpp \
+    src/main/cpp/hoot/core/io/OsmChangeWriter.cpp \
+    src/main/cpp/hoot/core/cmd/DeriveChangeCmd.cpp \
+    src/main/cpp/hoot/core/io/OsmChangeWriterSql.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp \
@@ -973,6 +978,10 @@ HEADERS += \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.h \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.h \
     src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h \
+    src/main/cpp/hoot/core/io/ElementSorter.h \
+    src/main/cpp/hoot/core/io/ChangesetDeriver.h \
+    src/main/cpp/hoot/core/io/ChangesetProvider.h \
+    src/main/cpp/hoot/core/io/OsmChangeWriter.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h \
