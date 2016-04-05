@@ -538,6 +538,7 @@ mgcp = {
             // Rules format:  ["test expression","output result"];
             // Note: t = tags, a = attrs and attrs can only be on the RHS
             var rulesList = [
+            ["t['bridge:movable'] && t['bridge:movable'] !== 'no'","t.bridge = 'movable'"],
             ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
             ["t['generator:source'] == 'wind'","t.power = 'generator'"],
             ["t.waterway == 'flow_control'","t.flow_control = 'sluice_gate'"],
@@ -583,7 +584,7 @@ mgcp = {
             // print('Added building to military');
             if (tags.military !== 'range') tags.building = 'yes';
         }
-
+        
         // Add tags if we have Null attributes.  This happens when a feature has an
         // FCODE and no other attributes.  These FCODES don't have default values
         // in the fcode_common lookup table.
@@ -803,6 +804,17 @@ mgcp = {
             tags.building = tags['settlement:type'];
             delete tags['settlement:type'];
         }
+        
+        // Movable Bridges
+        if (tags.bridge == 'movable')
+	{
+	  if (! tags['bridge:movable'])
+	  {
+	    tags['bridge:movable'] = 'unknown';
+	  }
+	  tags.bridge = 'yes';
+	  attrs.F_CODE = 'AQ040';
+	}
 
         // Keep looking for an FCODE
         // This uses the fcodeLookup tables that are defined earlier

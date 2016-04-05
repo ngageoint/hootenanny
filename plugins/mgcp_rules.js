@@ -208,13 +208,13 @@ mgcp.rules = {
 
         // BOT - Bridge Opening Type
         ['BOT','-32768',undefined,undefined], // Null
-        ['BOT','0','bridge','yes'], // Unk
-        ['BOT','4','bridge','bascule'],
-        ['BOT','10','bridge','swing'],
-        ['BOT','11','bridge','lift'],
-        ['BOT','12','bridge','retractable'],
+        ['BOT','0','bridge:movable','unknown'], // Unk
+        ['BOT','4','bridge:movable','bascule'],
+        ['BOT','10','bridge:movable','swing'],
+        ['BOT','11','bridge:movable','lift'],
+        ['BOT','12','bridge:movable','retractable'],
         ['BOT','13',undefined,undefined], // In data but not in any spec!
-        ['BOT','17','bridge','fixed'],
+        ['BOT','17','bridge:movable','no'],
         // ['BOT','998',undefined,undefined], // NA
 
         // BSC - Bridge Structure
