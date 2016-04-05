@@ -177,8 +177,10 @@ void HootApiDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
         LOG_INFO("Finished removing map with ID: " << *it);
       }
 
-      _hootdb.setMapId(_hootdb.insertMap(mapName, true));
-
+      if (_overwriteMap)
+      {
+        _hootdb.setMapId(_hootdb.insertMap(mapName, true));
+      }
     }
     else
     {
