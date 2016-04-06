@@ -161,6 +161,7 @@ SOURCES += \
     src/test/cpp/hoot/core/perty/PertyOpTest.cpp \
     src/test/cpp/hoot/core/ops/CookieCutterOpTest.cpp \
     src/test/cpp/hoot/core/visitors/RemoveElementsVisitorTest.cpp \
+    src/test/cpp/hoot/core/io/ElementSorterTest.cpp
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
