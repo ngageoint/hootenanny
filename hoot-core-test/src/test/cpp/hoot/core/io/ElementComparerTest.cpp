@@ -46,6 +46,7 @@ class ElementComparerTest : public CppUnit::TestFixture
     CPPUNIT_TEST(runNodeDifferentTagsTest);
     CPPUNIT_TEST(runNodeDifferentStatusTest);
     CPPUNIT_TEST(runNodeDifferentCircularErrorTest);
+    CPPUNIT_TEST(runNodeDifferentVersionsTest);
     CPPUNIT_TEST(runWaySameTest);
     CPPUNIT_TEST(runWayDifferentIdsTest);
     CPPUNIT_TEST(runWayDifferentNodesTest);
@@ -53,6 +54,7 @@ class ElementComparerTest : public CppUnit::TestFixture
     CPPUNIT_TEST(runWayDifferentTagsTest);
     CPPUNIT_TEST(runWayDifferentStatusTest);
     CPPUNIT_TEST(runWayDifferentCircularErrorTest);
+    CPPUNIT_TEST(runWayDifferentVersionsTest);
     CPPUNIT_TEST(runRelationSameTest);
     CPPUNIT_TEST(runRelationDifferentIdsTest);
     CPPUNIT_TEST(runRelationDifferentTypesTest);
@@ -61,6 +63,7 @@ class ElementComparerTest : public CppUnit::TestFixture
     CPPUNIT_TEST(runRelationDifferentTagsTest);
     CPPUNIT_TEST(runRelationDifferentStatusTest);
     CPPUNIT_TEST(runRelationDifferentCircularErrorTest);
+    CPPUNIT_TEST(runRelationDifferentVersionsTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -70,7 +73,7 @@ public:
     NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
     node1->setTag("key1", "value1");
 
-    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0000000001, 15.0));
+    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0000001, 15.0));
     node2->setTag("key1", "value1");
 
     CPPUNIT_ASSERT(ElementComparer().isSame(node1, node2));
@@ -103,7 +106,7 @@ public:
     NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
     node1->setTag("key1", "value1");
 
-    NodePtr node2(new Node(Status::Unknown1, 2, 0.0, 0.0000000001, 15.0));
+    NodePtr node2(new Node(Status::Unknown1, 2, 0.0, 0.0000001, 15.0));
     node2->setTag("key1", "value1");
 
     CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
@@ -114,7 +117,7 @@ public:
     NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
     node1->setTag("key1", "value1");
 
-    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0000000001, 15.0));
+    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0000001, 15.0));
     node2->setTag("key1", "value2");
 
     CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
@@ -125,7 +128,7 @@ public:
     NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
     node1->setTag("key1", "value1");
 
-    NodePtr node2(new Node(Status::Unknown2, 1, 0.0, 0.0000000001, 15.0));
+    NodePtr node2(new Node(Status::Unknown2, 1, 0.0, 0.0000001, 15.0));
     node2->setTag("key1", "value1");
 
     CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
@@ -136,7 +139,20 @@ public:
     NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
     node1->setTag("key1", "value1");
 
-    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0000000001, 16.0));
+    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0000001, 16.0));
+    node2->setTag("key1", "value1");
+
+    CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
+  }
+
+  void runNodeDifferentVersionsTest()
+  {
+    NodePtr node1(
+      new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0, ElementData::CHANGESET_EMPTY, 1));
+    node1->setTag("key1", "value1");
+
+    NodePtr node2(
+      new Node(Status::Unknown1, 1, 0.0, 0.0000001, 15.0, ElementData::CHANGESET_EMPTY, 2));
     node2->setTag("key1", "value1");
 
     CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
@@ -267,6 +283,24 @@ public:
     CPPUNIT_ASSERT(!ElementComparer().isSame(way1, way2));
   }
 
+  void runWayDifferentVersionsTest()
+  {
+    NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
+    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
+
+    WayPtr way1(new Way(Status::Unknown1, 1, 15.0, ElementData::CHANGESET_EMPTY, 1));
+    way1->setTag("key1", "value1");
+    way1->addNode(node1->getId());
+    way1->addNode(node2->getId());
+
+    WayPtr way2(new Way(Status::Unknown1, 1, 15.0, ElementData::CHANGESET_EMPTY, 2));
+    way2->setTag("key1", "value1");
+    way2->addNode(node1->getId());
+    way2->addNode(node2->getId());
+
+    CPPUNIT_ASSERT(!ElementComparer().isSame(way1, way2));
+  }
+
   void runRelationSameTest()
   {
     WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
@@ -382,6 +416,23 @@ public:
     relation1->addElement("role1", way1);
 
     RelationPtr relation2(new Relation(Status::Unknown1, 1, 16.0, "type1"));
+    relation2->setTag("key1", "value1");
+    relation2->addElement("role1", way1);
+
+    CPPUNIT_ASSERT(!ElementComparer().isSame(relation1, relation2));
+  }
+
+  void runRelationDifferentVersionsTest()
+  {
+    WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
+
+    RelationPtr relation1(
+      new Relation(Status::Unknown1, 1, 15.0, "type1", ElementData::CHANGESET_EMPTY, 1));
+    relation1->setTag("key1", "value1");
+    relation1->addElement("role1", way1);
+
+    RelationPtr relation2(
+      new Relation(Status::Unknown1, 1, 15.0, "type1", ElementData::CHANGESET_EMPTY, 2));
     relation2->setTag("key1", "value1");
     relation2->addElement("role1", way1);
 

@@ -22,6 +22,7 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2)
   if (e1->getElementId() != e2->getElementId() ||
       !(e1->getTags() == e2->getTags()) ||
       e1->getStatus() != e2->getStatus() ||
+      e1->getVersion() != e2->getVersion() ||
       fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
   {
     return false;
@@ -45,7 +46,7 @@ bool ElementComparer::_compareNode(const shared_ptr<const Element>& re,
   shared_ptr<const Node> rn = dynamic_pointer_cast<const Node>(re);
   shared_ptr<const Node> n = dynamic_pointer_cast<const Node>(e);
 
-  LOG_VARD(GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()));
+  //LOG_VARD(GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()));
   return (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) <= _threshold);
 }
 
