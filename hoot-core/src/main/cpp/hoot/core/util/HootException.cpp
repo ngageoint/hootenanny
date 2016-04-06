@@ -34,7 +34,7 @@ namespace hoot
 
 // the base class is a special case that doesn't need to be registered with the
 // HootExceptionThrower.
-HOOT_FACTORY_REGISTER_BASE(HootException, HootException)
+HOOT_FACTORY_REGISTER_BASE(HootException)
 HOOT_REGISTER_EXCEPTION(FileNotFoundException)
 HOOT_REGISTER_EXCEPTION(IllegalArgumentException)
 HOOT_REGISTER_EXCEPTION(InternalErrorException)
