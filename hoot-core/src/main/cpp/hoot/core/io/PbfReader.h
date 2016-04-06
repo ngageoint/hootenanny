@@ -167,7 +167,7 @@ public:
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
-  bool getSortedTypeThanId() { return _typeThenId; }
+  bool getSortedTypeThenId() { return _typeThenId; }
 
 private:
 

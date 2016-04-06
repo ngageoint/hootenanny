@@ -566,7 +566,7 @@ public:
     reader.open("test-files/PbfPartialReaderTest4_with_sorttype.osm.pbf");
     reader.read(map);
 
-    CPPUNIT_ASSERT_EQUAL(true, reader.getSortedTypeThanId());
+    CPPUNIT_ASSERT_EQUAL(true, reader.getSortedTypeThenId());
     CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeMap().size());
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getWay(-1)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getWay(-2)->getNodeCount());
@@ -587,14 +587,30 @@ public:
     Log::WarningLevel loglLevel = Log::getInstance().getLevel();
     Log::getInstance().setLevel(Log::Error);
     reader1.read(map1);
-    Log::getInstance().setLevel(loglLevel);
 
-    CPPUNIT_ASSERT_EQUAL(false, reader1.getSortedTypeThanId());
+    CPPUNIT_ASSERT_EQUAL(false, reader1.getSortedTypeThenId());
     CPPUNIT_ASSERT_EQUAL(6, (int)map1->getNodeMap().size());
     CPPUNIT_ASSERT_EQUAL(3, (int)map1->getWay(-1)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(3, (int)map1->getWay(-2)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(1, (int)map1->getWay(-3)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(1, (int)map1->getWay(-4)->getNodeCount());
+
+
+    //test the pbf file that the sorted flag isn't set and values are out of order
+    shared_ptr<OsmMap> map2(new OsmMap());
+    PbfReader reader2(true);
+    reader2.open("test-files/PbfTest_withoursoretype_unsorted.osm.pbf");
+    reader2.setPermissive(false);
+
+    reader2.read(map2);
+    Log::getInstance().setLevel(loglLevel);
+
+    CPPUNIT_ASSERT_EQUAL(false, reader2.getSortedTypeThenId());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map2->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map2->getWay(-1)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map2->getWay(-2)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map2->getWay(-3)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map2->getWay(-4)->getNodeCount());
   }
 };
 
