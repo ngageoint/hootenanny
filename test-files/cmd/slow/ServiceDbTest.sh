@@ -5,8 +5,6 @@ source $HOOT_HOME/conf/DatabaseConfig.sh
 
 export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=HootApiDbWriterTest@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=HootApiDbWriterTest@hoottestcpp.org -D writer.include.debug=true --warn"
 
-export HOOT_DELETE_OPTS="-D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=HootApiDbWriterTest@hoottestcpp.org -D hootapi.db.reader.email=HootApiDbWriterTest@hoottestcpp.org -D writer.include.debug=true --warn"
-
 export DB_URL="postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 
 rm -rf test-output/cmd/ServiceDbTest
@@ -27,8 +25,8 @@ hoot --conflate $HOOT_OPTS "$DB_URL/AllDataTypesA" "$DB_URL/AllDataTypesB" test-
 # Do a very coarse comparison check.
 hoot --stats --quick test-output/cmd/ServiceDbTest/output.osm
 
-hoot --delete-map $HOOT_DELETE_OPTS "$DB_URL/AllDataTypesA" &
-hoot --delete-map $HOOT_DELETE_OPTS "$DB_URL/AllDataTypesB" &
+hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesA" &
+hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesB" &
 wait
 
 export PGPASSWORD=$DB_PASSWORD
