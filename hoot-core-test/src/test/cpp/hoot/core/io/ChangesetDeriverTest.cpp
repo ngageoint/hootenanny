@@ -26,18 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OgrReader.h>
-#include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Progress.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
+#include <hoot/core/io/ElementSorter.h>
+#include <hoot/core/io/ChangesetDeriver.h>
 
 #include "../TestUtils.h"
 
@@ -50,14 +40,17 @@ namespace hoot
 class ChangesetDeriverTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(ChangesetDeriverTest);
-    CPPUNIT_TEST(runBasicTest);
+    //CPPUNIT_TEST(runBasicTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
     void runBasicTest()
     {
+      //ElementSorterPtr sorted1(new ElementSorter(map1));
+      //ElementSorterPtr sorted2(new ElementSorter(map2));
 
+      //ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
     }
 };
 

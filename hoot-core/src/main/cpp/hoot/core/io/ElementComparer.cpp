@@ -45,6 +45,7 @@ bool ElementComparer::_compareNode(const shared_ptr<const Element>& re,
   shared_ptr<const Node> rn = dynamic_pointer_cast<const Node>(re);
   shared_ptr<const Node> n = dynamic_pointer_cast<const Node>(e);
 
+  LOG_VARD(GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()));
   return (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) <= _threshold);
 }
 
@@ -54,16 +55,12 @@ bool ElementComparer::_compareWay(const shared_ptr<const Element>& re,
   shared_ptr<const Way> rw = dynamic_pointer_cast<const Way>(re);
   shared_ptr<const Way> w = dynamic_pointer_cast<const Way>(e);
 
-  LOG_VARD(rw->getNodeIds().size());
-  LOG_VARD(w->getNodeIds().size());
   if (rw->getNodeIds().size() != w->getNodeIds().size())
   {
     return false;
   }
   for (size_t i = 0; i < rw->getNodeIds().size(); ++i)
   {
-    LOG_VARD(rw->getNodeIds()[i]);
-    LOG_VARD(w->getNodeIds()[i]);
     if (rw->getNodeIds()[i] != w->getNodeIds()[i])
     {
       return false;
