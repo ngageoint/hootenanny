@@ -8,7 +8,7 @@ namespace hoot
 {
 
 /**
- * Derives a difference changeset between two input element streams
+ * Calculates the changeset difference between a source and target map
  */
 class ChangesetDeriver : public ChangeSetProvider
 {

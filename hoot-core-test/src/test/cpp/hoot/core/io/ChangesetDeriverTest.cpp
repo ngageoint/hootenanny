@@ -28,6 +28,8 @@
 // Hoot
 #include <hoot/core/io/ElementSorter.h>
 #include <hoot/core/io/ChangesetDeriver.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/ChangesetProvider.h>
 
 #include "../TestUtils.h"
 
@@ -40,17 +42,44 @@ namespace hoot
 class ChangesetDeriverTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(ChangesetDeriverTest);
-    //CPPUNIT_TEST(runBasicTest);
+    CPPUNIT_TEST(runTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-    void runBasicTest()
+    void runTest()
     {
-      //ElementSorterPtr sorted1(new ElementSorter(map1));
-      //ElementSorterPtr sorted2(new ElementSorter(map2));
+      shared_ptr<OsmMap> map1(new OsmMap());
+      OsmMapReaderFactory::read(map1, "test-files/io/ChangesetDeriverTest/Map1.osm", true);
 
-      //ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
+      shared_ptr<OsmMap> map2(new OsmMap());
+      OsmMapReaderFactory::read(map2, "test-files/io/ChangesetDeriverTest/Map2.osm", true);
+
+      ElementSorterPtr map1SortedElements(new ElementSorter(map1));
+      ElementSorterPtr map2SortedElements(new ElementSorter(map2));
+
+      ChangesetDeriverPtr changesetDiff(
+        new ChangesetDeriver(map1SortedElements, map2SortedElements));
+
+      QMap<Change::ChangeType, QList<long> > changeTypeToIds;
+      while (changesetDiff->hasMoreChanges())
+      {
+        const Change change = changesetDiff->readNextChange();
+        //LOG_VARD(change.toString());
+        changeTypeToIds[change.type].append(change.e->getElementId().getId());
+      }
+
+      CPPUNIT_ASSERT_EQUAL(2, changeTypeToIds[Change::Create].size());
+      CPPUNIT_ASSERT(changeTypeToIds[Change::Create].contains(-7));
+      CPPUNIT_ASSERT(changeTypeToIds[Change::Create].contains(-2));
+
+      CPPUNIT_ASSERT_EQUAL(1, changeTypeToIds[Change::Modify].size());
+      CPPUNIT_ASSERT(changeTypeToIds[Change::Modify].contains(-4));
+
+      CPPUNIT_ASSERT_EQUAL(3, changeTypeToIds[Change::Delete].size());
+      CPPUNIT_ASSERT(changeTypeToIds[Change::Delete].contains(-6));
+      CPPUNIT_ASSERT(changeTypeToIds[Change::Delete].contains(-4));
+      CPPUNIT_ASSERT(changeTypeToIds[Change::Delete].contains(-1));
     }
 };
 
