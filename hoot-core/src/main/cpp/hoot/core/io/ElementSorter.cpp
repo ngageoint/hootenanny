@@ -42,8 +42,8 @@ boost::shared_ptr<OGRSpatialReference> ElementSorter::getProjection() const
 bool ElementSorter::hasMoreElements()
 {
   return _nodeIndex != _nodeIds.size() ||
-      _wayIndex != _wayIds.size() ||
-      _relationIndex != _relationIds.size();
+    _wayIndex != _wayIds.size() ||
+    _relationIndex != _relationIds.size();
 }
 
 ElementPtr ElementSorter::readNextElement()
