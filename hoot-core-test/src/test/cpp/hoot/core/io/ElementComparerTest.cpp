@@ -1,0 +1,248 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ */
+
+// Hoot
+#include <hoot/core/io/ElementComparer.h>
+
+#include "../TestUtils.h"
+
+// Qt
+#include <QDebug>
+
+namespace hoot
+{
+
+class ElementComparerTest : public CppUnit::TestFixture
+{
+    CPPUNIT_TEST_SUITE(ElementComparerTest);
+    CPPUNIT_TEST(runNodeWithinDistanceThresholdTest1);
+    CPPUNIT_TEST(runNodeWithinDistanceThresholdTest2);
+    CPPUNIT_TEST(runNodeOutsideOfDistanceThresholdTest);
+    CPPUNIT_TEST(runNodeDifferentIdsTest);
+    CPPUNIT_TEST(runNodeDifferentTagsTest);
+    CPPUNIT_TEST(runWaySameTest);
+    CPPUNIT_TEST(runWayDifferentIdsTest);
+    CPPUNIT_TEST(runWayDifferentNodesTest);
+    CPPUNIT_TEST(runWayDifferentNodeOrderTest);
+    CPPUNIT_TEST(runRelationSameTest);
+    CPPUNIT_TEST(runRelationDifferentIdsTest);
+    CPPUNIT_TEST(runRelationDifferentTypesTest);
+    CPPUNIT_TEST(runRelationDifferentMembersTest);
+    CPPUNIT_TEST(runRelationDifferentMemberRolesTest);
+    CPPUNIT_TEST_SUITE_END();
+
+public:
+
+  void runNodeWithinDistanceThresholdTest1()
+  {
+    NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
+    node1->setTag("key1", "value1");
+
+    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0000000001, 15.0));
+    node2->setTag("key1", "value1");
+
+    CPPUNIT_ASSERT(ElementComparer().isSame(node1, node2));
+  }
+
+  void runNodeWithinDistanceThresholdTest2()
+  {
+    NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
+    node1->setTag("key1", "value1");
+
+    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.01, 15.0));
+    node2->setTag("key1", "value1");
+
+    CPPUNIT_ASSERT(ElementComparer(10000).isSame(node1, node2));
+  }
+
+  void runNodeOutsideOfDistanceThresholdTest()
+  {
+    NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
+    node1->setTag("key1", "value1");
+
+    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.01, 15.0));
+    node2->setTag("key1", "value1");
+
+    CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
+  }
+
+  void runNodeDifferentIdsTest()
+  {
+    NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
+    node1->setTag("key1", "value1");
+
+    NodePtr node2(new Node(Status::Unknown1, 2, 0.0, 0.0000000001, 15.0));
+    node2->setTag("key1", "value1");
+
+    CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
+  }
+
+  void runNodeDifferentTagsTest()
+  {
+    NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
+    node1->setTag("key1", "value1");
+
+    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0000000001, 15.0));
+    node2->setTag("key1", "value2");
+
+    CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
+  }
+
+  void runWaySameTest()
+  {
+    NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
+    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
+
+    WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
+    way1->addNode(node1->getId());
+    way1->addNode(node2->getId());
+
+    WayPtr way2(new Way(Status::Unknown1, 1, 15.0));
+    way2->addNode(node1->getId());
+    way2->addNode(node2->getId());
+
+    CPPUNIT_ASSERT(ElementComparer().isSame(way1, way2));
+  }
+
+  void runWayDifferentIdsTest()
+  {
+    NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
+    NodePtr node2(new Node(Status::Unknown1, 2, 0.0, 0.0, 15.0));
+
+    WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
+    way1->addNode(node1->getId());
+    way1->addNode(node2->getId());
+
+    WayPtr way2(new Way(Status::Unknown1, 2, 15.0));
+    way2->addNode(node1->getId());
+    way2->addNode(node2->getId());
+
+    CPPUNIT_ASSERT(!ElementComparer().isSame(way1, way2));
+  }
+
+  void runWayDifferentNodesTest()
+  {
+    NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
+    NodePtr node2(new Node(Status::Unknown1, 2, 0.0, 0.0, 15.0));
+
+    WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
+    way1->addNode(node1->getId());
+    way1->addNode(node2->getId());
+
+    WayPtr way2(new Way(Status::Unknown1, 1, 15.0));
+    way2->addNode(node1->getId());
+
+    CPPUNIT_ASSERT(!ElementComparer().isSame(way1, way2));
+  }
+
+  void runWayDifferentNodeOrderTest()
+  {
+    NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
+    NodePtr node2(new Node(Status::Unknown1, 2, 0.0, 0.0, 15.0));
+
+    WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
+    way1->addNode(node1->getId());
+    way1->addNode(node2->getId());
+
+    WayPtr way2(new Way(Status::Unknown1, 1, 15.0));
+    way2->addNode(node2->getId());
+    way2->addNode(node1->getId());
+
+    CPPUNIT_ASSERT(!ElementComparer().isSame(way1, way2));
+  }
+
+  void runRelationSameTest()
+  {
+    WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
+
+    RelationPtr relation1(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    relation1->addElement("role1", way1);
+
+    RelationPtr relation2(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    relation2->addElement("role1", way1);
+
+    CPPUNIT_ASSERT(ElementComparer().isSame(relation1, relation2));
+  }
+
+  void runRelationDifferentIdsTest()
+  {
+    WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
+
+    RelationPtr relation1(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    relation1->addElement("role1", way1);
+
+    RelationPtr relation2(new Relation(Status::Unknown1, 2, 15.0, "type1"));
+    relation1->addElement("role1", way1);
+
+    CPPUNIT_ASSERT(!ElementComparer().isSame(relation1, relation2));
+  }
+
+  void runRelationDifferentTypesTest()
+  {
+    WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
+
+    RelationPtr relation1(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    relation1->addElement("role1", way1);
+
+    RelationPtr relation2(new Relation(Status::Unknown1, 1, 15.0, "type2"));
+    relation1->addElement("role1", way1);
+
+    CPPUNIT_ASSERT(!ElementComparer().isSame(relation1, relation2));
+  }
+
+  void runRelationDifferentMembersTest()
+  {
+    WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way2(new Way(Status::Unknown1, 2, 15.0));
+
+    RelationPtr relation1(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    relation1->addElement("role1", way1);
+
+    RelationPtr relation2(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    relation1->addElement("role1", way2);
+
+    CPPUNIT_ASSERT(!ElementComparer().isSame(relation1, relation2));
+  }
+
+  void runRelationDifferentMemberRolesTest()
+  {
+    WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
+
+    RelationPtr relation1(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    relation1->addElement("role1", way1);
+
+    RelationPtr relation2(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    relation1->addElement("role2", way1);
+
+    CPPUNIT_ASSERT(!ElementComparer().isSame(relation1, relation2));
+  }
+
+};
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementComparerTest, "quick");
+
+}

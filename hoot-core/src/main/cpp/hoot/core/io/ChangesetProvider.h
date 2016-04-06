@@ -10,9 +10,14 @@
 namespace hoot
 {
 
+/**
+ * Enumerates the allowable changeset types
+ */
 class Change
 {
+
 public:
+
   enum ChangeType
   {
     Unknown,
@@ -28,8 +33,12 @@ public:
 };
 
 
+/**
+ * Interface for classes implementing OSM changeset capabilities
+ */
 class ChangeSetProvider
 {
+
 public:
 
   /**
@@ -61,6 +70,7 @@ public:
    *
    */
   virtual Change readNextChange() = 0;
+
 };
 
 typedef shared_ptr<ChangeSetProvider> ChangeSetProviderPtr;
