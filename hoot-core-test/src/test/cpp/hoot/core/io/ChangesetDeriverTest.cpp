@@ -69,17 +69,9 @@ public:
         changeTypeToIds[change.type].append(change.e->getElementId().getId());
       }
 
-      CPPUNIT_ASSERT_EQUAL(2, changeTypeToIds[Change::Create].size());
-      CPPUNIT_ASSERT(changeTypeToIds[Change::Create].contains(-7));
-      CPPUNIT_ASSERT(changeTypeToIds[Change::Create].contains(-2));
-
-      CPPUNIT_ASSERT_EQUAL(1, changeTypeToIds[Change::Modify].size());
-      CPPUNIT_ASSERT(changeTypeToIds[Change::Modify].contains(-4));
-
-      CPPUNIT_ASSERT_EQUAL(3, changeTypeToIds[Change::Delete].size());
-      CPPUNIT_ASSERT(changeTypeToIds[Change::Delete].contains(-6));
-      CPPUNIT_ASSERT(changeTypeToIds[Change::Delete].contains(-4));
-      CPPUNIT_ASSERT(changeTypeToIds[Change::Delete].contains(-1));
+      HOOT_STR_EQUALS("[2]{-7, -2}", changeTypeToIds[Change::Create]);
+      HOOT_STR_EQUALS("[1]{-4}", changeTypeToIds[Change::Modify]);
+      HOOT_STR_EQUALS("[3]{-6, -4, -1}", changeTypeToIds[Change::Delete]);
     }
 };
 
