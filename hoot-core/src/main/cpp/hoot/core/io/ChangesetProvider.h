@@ -23,11 +23,13 @@ public:
    */
   enum ChangeType
   {
-    Create,
-    Modify,
-    Delete,
+    Create = 0,
+    Modify = 1,
+    Delete = 2,
     Unknown
   };
+
+   Change() : type(Unknown) {}
 
   static QString changeTypeToString(const ChangeType changeType)
   {
@@ -45,11 +47,6 @@ public:
     throw HootException("Invalid change type.");
   }
 
-  ElementPtr e;
-  ChangeType type;
-
-  Change() : type(Unknown) {}
-
   QString toString() const
   {
     return changeTypeToString(type) + ": " +
@@ -57,6 +54,10 @@ public:
       //e->toString()
       ;
   }
+
+  ElementPtr e;
+  ChangeType type;
+
 };
 
 

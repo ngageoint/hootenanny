@@ -42,56 +42,52 @@ void OsmChangeWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
   writer.writeAttribute("version", "0.6");
   writer.writeAttribute("generator", "hootenanny");
 
-  Change::ChangeType last = Change::Unknown;
-
+  //Make the changeset have only one set of entries per change type.  Also for readability,
+  //sort the set of changes within each change type by element type.
+  QMap<Change::ChangeType, QMap<QString, QVector<ElementPtr> > > elementsByChangesetTypeAndElementType;
   while (cs->hasMoreChanges())
   {
-    Change c = cs->readNextChange();
-
-    if (c.type != last)
+    Change change = cs->readNextChange();
+    if (change.type != Change::Unknown)
     {
-      if (last != Change::Unknown)
-      {
-        writer.writeEndElement();
-      }
-      switch (c.type)
-      {
-      case Change::Create:
-        writer.writeStartElement("create");
-        break;
-      case Change::Delete:
-        writer.writeStartElement("delete");
-        break;
-      case Change::Modify:
-        writer.writeStartElement("modify");
-        break;
-      default:
-        throw IllegalArgumentException("Unexepected change type.");
-      }
-      last = c.type;
-    }
-
-    switch (c.e->getElementType().getEnum())
-    {
-    case ElementType::Node:
-      writeNode(writer, dynamic_pointer_cast<const Node>(c.e));
-      break;
-    case ElementType::Way:
-      writeWay(writer, dynamic_pointer_cast<const Way>(c.e));
-      break;
-    case ElementType::Relation:
-      writeRelation(writer, dynamic_pointer_cast<const Relation>(c.e));
-      break;
-    default:
-      throw IllegalArgumentException("Unexpected element type.");
+      elementsByChangesetTypeAndElementType[change.type][change.e->getElementType().toString()]
+        .push_back(change.e);
     }
   }
-
-  if (last != Change::Unknown)
+  const int NUM_CHANGE_TYPES = 3;
+  const int NUM_ELEMENT_TYPES = 3;
+  for (int i = 0; i < NUM_CHANGE_TYPES; i++)
   {
+    const Change::ChangeType changeType = static_cast<Change::ChangeType>(i);
+    writer.writeStartElement(Change::changeTypeToString(changeType).toLower());
+    for (int j = 0; j < NUM_ELEMENT_TYPES; j++)
+    {
+      QVector<ElementPtr> elements =
+        elementsByChangesetTypeAndElementType[changeType][ElementType(static_cast<ElementType::Type>(j))
+          .toString()];
+      QVectorIterator<ElementPtr> elementItr(elements);
+      while (elementItr.hasNext())
+      {
+        ElementPtr element = elementItr.next();
+        switch (element->getElementType().getEnum())
+        {
+          case ElementType::Node:
+            writeNode(writer, dynamic_pointer_cast<const Node>(element));
+            break;
+          case ElementType::Way:
+            writeWay(writer, dynamic_pointer_cast<const Way>(element));
+            break;
+          case ElementType::Relation:
+            writeRelation(writer, dynamic_pointer_cast<const Relation>(element));
+            break;
+          default:
+            throw IllegalArgumentException("Unexpected element type.");
+        }
+      }
+    }
     writer.writeEndElement();
   }
-  writer.writeEndElement();
+
   writer.writeEndDocument();
 }
 
