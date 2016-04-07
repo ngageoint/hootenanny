@@ -39,6 +39,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/OsmMap.h>
 
+#include <hoot/core/io/OsmMapWriterFactory.h>
+
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
@@ -50,6 +52,7 @@ class OsmApiDbReaderTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(OsmApiDbReaderTest);
   CPPUNIT_TEST(runReadOsmApiTest);
+  CPPUNIT_TEST(runReadBoundingBoxTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -65,43 +68,8 @@ public:
     database.close();
   }
 
-  void verifyFullReadOutput(shared_ptr<OsmMap> map)
+  void insertData()
   {
-    //nodes
-    HOOT_STR_EQUALS(true, map->containsNode(1));
-    shared_ptr<Node> node = map->getNode(1);
-    CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
-    CPPUNIT_ASSERT_EQUAL(38.4, node->getY());
-    CPPUNIT_ASSERT_EQUAL(-106.5, node->getX());
-    CPPUNIT_ASSERT_EQUAL(0.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
-
-    //ways
-    HOOT_STR_EQUALS(true, map->containsWay(1));
-    shared_ptr<Way> way = map->getWay(1);
-    CPPUNIT_ASSERT_EQUAL((long)1, way->getId());
-    CPPUNIT_ASSERT_EQUAL(2, (int)way->getNodeCount());
-    CPPUNIT_ASSERT_EQUAL((long)1, way->getNodeId(0));
-    CPPUNIT_ASSERT_EQUAL((long)2, way->getNodeId(1));
-    CPPUNIT_ASSERT_EQUAL(0.0, way->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
-
-    //relations
-    HOOT_STR_EQUALS(true, map->containsRelation(1));
-    shared_ptr<Relation> relation = map->getRelation(1);
-    CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
-    vector<RelationData::Entry> relationData = relation->getMembers();
-    CPPUNIT_ASSERT_EQUAL(2, (int)relation->getMembers().size());
-    HOOT_STR_EQUALS("wayrole", relationData[0].getRole());
-    HOOT_STR_EQUALS("noderole",relationData[1].getRole());
-    CPPUNIT_ASSERT_EQUAL(0.0, relation->getCircularError());
-  }
-
-  void runReadOsmApiTest()
-  {
-    OsmApiDbReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
-
     // parse out the osm api dbname, dbuser, and dbpassword
     //example: postgresql://hoot:hoottest@localhost:5432/osmapi_test
     QUrl dbUrl = ServicesDbTestUtils::getOsmApiDbUrl();
@@ -131,10 +99,96 @@ public:
     {
       throw HootException("Failed postgres command.  Exiting test.");
     }
+  }
 
-    ///////////////////////////////////////
-    // test the reader
-    ///////////////////////////////////////
+  void verifyFullReadOutput(shared_ptr<OsmMap> map)
+  {
+    //nodes
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeMap().size());
+    HOOT_STR_EQUALS(true, map->containsNode(1));
+    shared_ptr<Node> node = map->getNode(1);
+    CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
+    CPPUNIT_ASSERT_EQUAL(38.4, node->getY());
+    CPPUNIT_ASSERT_EQUAL(-106.5, node->getX());
+    CPPUNIT_ASSERT_EQUAL(0.0, node->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
+
+    shared_ptr<Node> node1 = map->getNode(2);
+    CPPUNIT_ASSERT_EQUAL((long)2, node1->getId());
+    CPPUNIT_ASSERT_EQUAL(38.0, node1->getY());
+    CPPUNIT_ASSERT_EQUAL(-104.0, node1->getX());
+
+    //ways
+    HOOT_STR_EQUALS(true, map->containsWay(1));
+    shared_ptr<Way> way = map->getWay(1);
+    CPPUNIT_ASSERT_EQUAL((long)1, way->getId());
+    CPPUNIT_ASSERT_EQUAL(2, (int)way->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((long)1, way->getNodeId(0));
+    CPPUNIT_ASSERT_EQUAL((long)2, way->getNodeId(1));
+    CPPUNIT_ASSERT_EQUAL(0.0, way->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
+
+    //relations
+    HOOT_STR_EQUALS(true, map->containsRelation(1));
+    shared_ptr<Relation> relation = map->getRelation(1);
+    CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
+    vector<RelationData::Entry> relationData = relation->getMembers();
+    CPPUNIT_ASSERT_EQUAL(2, (int)relation->getMembers().size());
+    HOOT_STR_EQUALS("wayrole", relationData[0].getRole());
+    HOOT_STR_EQUALS("noderole",relationData[1].getRole());
+    CPPUNIT_ASSERT_EQUAL(0.0, relation->getCircularError());
+  }
+
+  void verifyReadBoundingBoxOutput(shared_ptr<OsmMap> map)
+  {
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationMap().size());
+
+    HOOT_STR_EQUALS(true, map->containsNode(1));
+    shared_ptr<Node> node = map->getNode(1);
+    CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
+    CPPUNIT_ASSERT_EQUAL(38.4, node->getY());
+    CPPUNIT_ASSERT_EQUAL(-106.5, node->getX());
+    CPPUNIT_ASSERT_EQUAL(0.0, node->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
+
+    //The original second node is outside the bounding box (38.0, -104.0)
+    //so the new second node generated after cropping
+    HOOT_STR_EQUALS(true, map->containsNode(2));
+    shared_ptr<Node> node1 = map->getNode(2);
+    CPPUNIT_ASSERT_EQUAL((long)2, node1->getId());
+    CPPUNIT_ASSERT_EQUAL(38.22048, node1->getY());
+    CPPUNIT_ASSERT_EQUAL(-105.378, node1->getX());
+
+    //ways
+    HOOT_STR_EQUALS(true, map->containsWay(1));
+    shared_ptr<Way> way = map->getWay(1);
+    CPPUNIT_ASSERT_EQUAL((long)1, way->getId());
+    CPPUNIT_ASSERT_EQUAL(2, (int)way->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((long)1, way->getNodeId(0));
+    CPPUNIT_ASSERT_EQUAL((long)2, way->getNodeId(1));
+    CPPUNIT_ASSERT_EQUAL(0.0, way->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
+
+    //relations
+    HOOT_STR_EQUALS(true, map->containsRelation(1));
+    shared_ptr<Relation> relation = map->getRelation(1);
+    CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
+    vector<RelationData::Entry> relationData = relation->getMembers();
+    CPPUNIT_ASSERT_EQUAL(2, (int)relation->getMembers().size());
+    HOOT_STR_EQUALS("wayrole", relationData[0].getRole());
+    HOOT_STR_EQUALS("noderole",relationData[1].getRole());
+    CPPUNIT_ASSERT_EQUAL(0.0, relation->getCircularError());
+  }
+
+  void runReadOsmApiTest()
+  {
+    //test reader
+    OsmApiDbReader reader;
+    shared_ptr<OsmMap> map(new OsmMap());
+
+    insertData();
 
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
@@ -142,7 +196,33 @@ public:
     Settings s = conf();
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
+
     verifyFullReadOutput(map);
+    reader.close();
+  }
+
+  void runReadBoundingBoxTest()
+  {
+    OsmApiDbReader reader;
+    shared_ptr<OsmMap> map(new OsmMap());
+
+    insertData();
+
+    OsmApiDb database;
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+
+    Settings s = conf();
+    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+
+    QString bbox = "-106.51848,38.0445,-105.378,38.56";
+    reader.setBoundingBox(bbox);
+
+    reader.read(map);
+
+    OsmMapWriterFactory::write(map, "/home/vagrant/hoot/tmp/mingtest-out.osm");
+
+    //verifyReadBoundingBoxOutput(map);
+
     reader.close();
   }
 };
