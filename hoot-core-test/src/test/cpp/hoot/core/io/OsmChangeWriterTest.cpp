@@ -118,23 +118,9 @@ public:
     shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
     OsmChangeWriter().write("test-output/OsmChangeWriterTest.osc", changesetProvider);
 
-    QFile refFile("test-files/io/OsmChangeWriterTest/OsmChangeWriterTest.osc");
-    if (!refFile.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-      throw HootException("Cannot open: " + QFileInfo(refFile).fileName());
-    }
-    QTextStream refStr(&refFile);
-    QFile outFile("test-output/OsmChangeWriterTest.osc");
-    if (!outFile.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-      throw HootException("Cannot open: " + QFileInfo(outFile).fileName());
-    }
-    QTextStream outStr(&outFile);
-
-    HOOT_STR_EQUALS(refStr.readAll(), outStr.readAll());
-
-    refFile.close();
-    outFile.close();
+    HOOT_STR_EQUALS(
+      TestUtils::readFile("test-files/io/OsmChangeWriterTest/OsmChangeWriterTest.osc"),
+      TestUtils::readFile("test-output/OsmChangeWriterTest.osc"));
   }
 };
 
