@@ -856,6 +856,7 @@ tds61 = {
             // Rules format:  ["test expression","output result"];
             // Note: t = tags, a = attrs and attrs can only be on the RHS
             var rulesList = [
+            ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
             ["t.navigationaid && !(t.aeroway)","t.aeroway = 'navigationaid'"],
             ["t.amenity == 'stop' && t['transport:type'] == 'bus'","t.highway = 'bus_stop'"],
             ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],
@@ -1312,6 +1313,23 @@ tds61 = {
 
         }
 
+        // Movable Bridges
+        if (tags.bridge == 'movable')
+		{
+		  if (! tags['bridge:movable'])
+		  {
+			tags['bridge:movable'] = 'unknown';
+		  }
+		  tags.bridge = 'yes';
+		  attrs.F_CODE = 'AQ040';
+		}
+
+		// Viaducts
+		if (tags.bridge == 'viaduct')
+		{
+		  tags.bridge = 'yes';
+		  tags.note = translate.appendValue(tags.note,'Viaduct',';');
+		}
 
         // Now use the lookup table to find an FCODE. This is here to stop clashes with the 
         // standard one2one rules

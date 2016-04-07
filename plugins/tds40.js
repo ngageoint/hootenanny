@@ -799,6 +799,7 @@ tds = {
             var rulesList = [
             ["t.amenity == 'stop' && t['transport:type'] == 'bus'","t.highway = 'bus_stop';"],
             ["t.boundary == 'protected_area' && !(t.protect_class)","t.protect_class = '4';"],
+            ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
             ["t.control_tower == 'yes' && t.use == 'air_traffic_control'","t['tower:type'] = 'observation'"],
             ["t.desert_surface","t.surface = t.desert_surface; delete t.desert_surface"],
             ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],
@@ -1232,7 +1233,26 @@ tds = {
         // If we have a point, we need to make sure that it becomes a bridge, not a road.
         if (tags.bridge && geometryType =='Point') attrs.F_CODE = 'AQ040';
 
+        // Movable Bridges
+        if (tags.bridge == 'movable')
+		{
+		  if (! tags['bridge:movable'])
+		  {
+			tags['bridge:movable'] = 'unknown';
+		  }
+		  tags.bridge = 'yes';
+		  attrs.F_CODE = 'AQ040';
+		}
 
+		// Viaducts
+		if (tags.bridge == 'viaduct')
+		{
+		  tags.bridge = 'yes';
+		  tags.note = translate.appendValue(tags.note,'Viaduct',';');
+		}
+
+		
+		
         // Now use the lookup table to find an FCODE. This is here to stop clashes with the
         // standard one2one rules
         if (!(attrs.F_CODE) && tds.fcodeLookup)
