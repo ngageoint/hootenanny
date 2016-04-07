@@ -45,7 +45,10 @@ namespace hoot
 {
 
 /**
- * Base class for OSM element data -- node, way and releation.
+ * Base class for OSM element data -- node, way and relation.
+ *
+ * The ElementData can be shared between multiple copies of an Element. The ElementData will be
+ * copied on write. This doesn't save a lot of memory/time, but every little bit helps.
  */
 class ElementData
 {
@@ -62,11 +65,15 @@ public:
 
   virtual void clear() { _tags.clear(); }
 
-  Meters getCircularError() const { return _circularError; }
+  Meters getCircularError() const { return _circularError >= 0 ? _circularError : 15.0; }
+
+  bool hasCircularError() const { return _circularError >= 0; }
 
   long getId() const { return _id; }
 
   long getChangeset() const { return _changeset; }
+
+  Meters getRawCircularError() const { return _circularError; }
 
   long getVersion() const { return _version; }
 
@@ -88,11 +95,11 @@ public:
 
 protected:
 
-  ElementData();
-
-  ElementData(long id, const Tags& tags, Meters circularError);
-
-  ElementData(long id, long changeset = ElementData::CHANGESET_EMPTY,
+  // Please don't add any additional constructors. Multiple constructors has lead to a large number
+  // of errors in the past. If you need more parameters please just add them to the end with a
+  // sensible default value.
+  ElementData(long id = LLONG_MIN, const Tags& tags = Tags(), Meters circularError = -1,
+              long changeset = ElementData::CHANGESET_EMPTY,
               long version = ElementData::VERSION_EMPTY,
               unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
               QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY);

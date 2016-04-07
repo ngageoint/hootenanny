@@ -56,15 +56,16 @@ using namespace boost;
 #include <iostream>
 using namespace std;
 
-namespace hoot {
-    using namespace elements;
+namespace hoot
+{
+using namespace elements;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmReader)
 
 OsmReader::OsmReader()
 {
   _status = hoot::Status::Invalid;
-  _circularError = 15.0;
+  _circularError = -1;
   _useFileStatus = ConfigOptions().getReaderUseFileStatus();
   _useDataSourceId = false;
   _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();

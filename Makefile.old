@@ -280,7 +280,7 @@ rebuild-db:
 HOOT_TARNAME=hootenanny-$(HOOT_VERSION)
 JAVADOC_TARBALL=docs/hootenanny-services-javadoc-$(HOOT_VERSION).tar.gz
 dist: archive
-archive: default docs
+archive: js-make services-build docs
 	mkdir -p $(HOOT_TARNAME)/docs/
 	if [ "$(BUILD_SERVICES)" == "services" ]; then \
 	  cp hoot-services/target/hoot-services-*.war hootenanny-services-$(HOOT_VERSION).war; \
@@ -305,11 +305,11 @@ archive: default docs
 	cp plugins/etds61_rules.js $(HOOT_TARNAME)/plugins/etds61_rules.js
 	# Copy the buildInfo.json file for hoot services
 	if [ "$(BUILD_SERVICES)" == "services" ]; then mkdir -p $(HOOT_TARNAME)/hoot-ui/data; cp hoot-ui/data/buildInfo.json $(HOOT_TARNAME)/hoot-ui/data; fi
-	# Include the RF files in the tarball so they don't have to be rebuilt
-	mkdir -p $(HOOT_TARNAME)/conf/
-	cp conf/BuildingModel.rf $(HOOT_TARNAME)/conf/BuildingModel.rf
-	cp conf/HighwayModel.rf $(HOOT_TARNAME)/conf/HighwayModel.rf
-	cp conf/PoiModel.rf $(HOOT_TARNAME)/conf/PoiModel.rf
+	# Don't include RF files at this time, to speed up archive
+	#mkdir -p $(HOOT_TARNAME)/conf/
+	#cp conf/BuildingModel.rf $(HOOT_TARNAME)/conf/BuildingModel.rf
+	#cp conf/HighwayModel.rf $(HOOT_TARNAME)/conf/HighwayModel.rf
+	#cp conf/PoiModel.rf $(HOOT_TARNAME)/conf/PoiModel.rf
 	# Create the version file
 	echo $(HOOT_VERSION) > $(HOOT_TARNAME)/version
 	# tar the file and zip it

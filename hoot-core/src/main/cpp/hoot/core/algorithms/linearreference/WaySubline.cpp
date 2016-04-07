@@ -156,7 +156,9 @@ WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* n
     nfPtr.reset(nf);
   }
 
-  WayPtr result(new Way(way->getStatus(), map->createNextWayId(), way->getCircularError()));
+  Meters ce = way->getRawCircularError();
+
+  WayPtr result(new Way(way->getStatus(), map->createNextWayId(), ce));
   result->setTags(way->getTags());
 
   int includedStartIndex = _start.getSegmentIndex();
@@ -173,8 +175,7 @@ WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* n
   if (!_start.isNode())
   {
     Coordinate c = _start.getCoordinate();
-    shared_ptr<Node> n = nf->createNode(map, c, way->getStatus(),
-      way->getCircularError());
+    shared_ptr<Node> n = nf->createNode(map, c, way->getStatus(), ce);
     map->addNode(n);
     result->addNode(n->getId());
   }
@@ -187,7 +188,7 @@ WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* n
   if (!_end.isNode())
   {
     Coordinate c = _end.getCoordinate();
-    shared_ptr<Node> n = nf->createNode(map, c, way->getStatus(), way->getCircularError());
+    shared_ptr<Node> n = nf->createNode(map, c, way->getStatus(), ce);
     map->addNode(n);
     result->addNode(n->getId());
   }

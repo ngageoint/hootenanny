@@ -119,8 +119,8 @@ public:
     compareRecords("SELECT tags FROM " + HootApiDb::getNodesTableName(mapId) +
                    " ORDER BY longitude",
                    "\"note\"=>\"n1',\n\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"10\"\n"
-                   "\"note\"=>\"n2\\\"\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
-                   "\"note\"=>\"n3\\\\\", \"hoot:status\"=>\"3\", \"error:circular\"=>\"12\"",
+                   "\"note\"=>\"n2\\\\\\\"\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
+                   "\"note\"=>\"n3\\\\\\\\\", \"hoot:status\"=>\"3\", \"error:circular\"=>\"12\"",
                    (qlonglong)mapId);
   }
 
