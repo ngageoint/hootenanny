@@ -19,17 +19,16 @@ class Change
 public:
 
   /**
-   * Enumerates the allowable changeset types
+   * The allowable changeset types
    */
   enum ChangeType
   {
     Create = 0,
     Modify = 1,
-    Delete = 2,
-    Unknown
+    Delete = 2
   };
 
-   Change() : type(Unknown) {}
+   Change() {}
 
   static QString changeTypeToString(const ChangeType changeType)
   {
@@ -41,8 +40,6 @@ public:
         return "Modify";
       case Delete:
         return "Delete";
-      case Unknown:
-        return "Unknown";
     }
     throw HootException("Invalid change type.");
   }

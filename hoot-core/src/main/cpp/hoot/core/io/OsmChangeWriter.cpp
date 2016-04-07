@@ -44,15 +44,11 @@ void OsmChangeWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
 
   //Make the changeset have only one set of entries per change type.  Also for readability,
   //sort the set of changes within each change type by element type.
-  QMap<Change::ChangeType, QMap<QString, QVector<ElementPtr> > > elementsByChangesetTypeAndElementType;
+  QMap<Change::ChangeType, QMap<ElementType::Type, QVector<ElementPtr> > > elementsByChangesetTypeAndElementType;
   while (cs->hasMoreChanges())
   {
-    Change change = cs->readNextChange();
-    if (change.type != Change::Unknown)
-    {
-      elementsByChangesetTypeAndElementType[change.type][change.e->getElementType().toString()]
-        .push_back(change.e);
-    }
+    const Change change = cs->readNextChange();
+    elementsByChangesetTypeAndElementType[change.type][change.e->getElementType().getEnum()].push_back(change.e);
   }
   const int NUM_CHANGE_TYPES = 3;
   const int NUM_ELEMENT_TYPES = 3;
@@ -62,9 +58,8 @@ void OsmChangeWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
     writer.writeStartElement(Change::changeTypeToString(changeType).toLower());
     for (int j = 0; j < NUM_ELEMENT_TYPES; j++)
     {
-      QVector<ElementPtr> elements =
-        elementsByChangesetTypeAndElementType[changeType][ElementType(static_cast<ElementType::Type>(j))
-          .toString()];
+      const QVector<ElementPtr> elements =
+        elementsByChangesetTypeAndElementType[changeType][ElementType::Type(static_cast<ElementType::Type>(j))];
       QVectorIterator<ElementPtr> elementItr(elements);
       while (elementItr.hasNext())
       {
@@ -74,12 +69,15 @@ void OsmChangeWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
           case ElementType::Node:
             writeNode(writer, dynamic_pointer_cast<const Node>(element));
             break;
+
           case ElementType::Way:
             writeWay(writer, dynamic_pointer_cast<const Way>(element));
             break;
+
           case ElementType::Relation:
             writeRelation(writer, dynamic_pointer_cast<const Relation>(element));
             break;
+
           default:
             throw IllegalArgumentException("Unexpected element type.");
         }

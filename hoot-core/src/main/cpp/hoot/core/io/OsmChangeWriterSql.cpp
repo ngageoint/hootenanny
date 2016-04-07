@@ -190,9 +190,6 @@ void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr cs
     case Change::Modify:
       //_updateExistingElement(c.e);
       break;
-    case Change::Unknown:
-
-      break;
     }
     changes++;
 
