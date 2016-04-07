@@ -19,6 +19,8 @@ OsmChangeWriter::OsmChangeWriter()
 
 void OsmChangeWriter::write(QString path, ChangeSetProviderPtr cs)
 {
+  LOG_INFO("Writing changeset to " << path);
+
   QFile f;
   f.setFileName(path);
   if (!f.open(QIODevice::WriteOnly | QIODevice::Text))

@@ -164,7 +164,7 @@ void OsmChangeWriterSql::_open(QUrl url)
   }
 }
 
-void OsmChangeWriterSql::write(const QString& path, const ChangeSetProviderPtr cs)
+void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr cs)
 {
   _outputSql.setFileName(path);
   if (_outputSql.open(QIODevice::WriteOnly | QIODevice::Text) == false)

@@ -11,6 +11,8 @@ ElementSorter::ElementSorter(ConstOsmMapPtr source) :
   _wayIndex(0),
   _relationIndex(0)
 {
+  LOG_INFO("Sorting element by element type...");
+
   _source = source;
 
   for (NodeMap::const_iterator it = _source->getNodeMap().begin();

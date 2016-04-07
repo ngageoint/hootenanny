@@ -11,6 +11,8 @@ ChangesetDeriver::ChangesetDeriver(ElementInputStreamPtr from, ElementInputStrea
   _from(from),
   _to(to)
 {
+  LOG_INFO("Changeset deriver initialization...");
+
   if (_from->getProjection()->IsGeographic() == false ||
       _to->getProjection()->IsGeographic() == false)
   {
