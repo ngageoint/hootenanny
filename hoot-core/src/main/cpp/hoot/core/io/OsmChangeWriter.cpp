@@ -29,6 +29,8 @@ void OsmChangeWriter::write(QString path, ChangeSetProviderPtr cs)
   }
 
   write(f, cs);
+
+  f.close();
 }
 
 void OsmChangeWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
@@ -44,7 +46,7 @@ void OsmChangeWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
 
   //Make the changeset have only one set of entries per change type.  Also for readability,
   //sort the set of changes within each change type by element type.
-  QMap<Change::ChangeType, QMap<ElementType::Type, QVector<ElementPtr> > > elementsByChangesetTypeAndElementType;
+  QMap<Change::ChangeType, QMap<ElementType::Type, QVector<ConstElementPtr> > > elementsByChangesetTypeAndElementType;
   while (cs->hasMoreChanges())
   {
     const Change change = cs->readNextChange();
@@ -58,12 +60,12 @@ void OsmChangeWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
     writer.writeStartElement(Change::changeTypeToString(changeType).toLower());
     for (int j = 0; j < NUM_ELEMENT_TYPES; j++)
     {
-      const QVector<ElementPtr> elements =
+      const QVector<ConstElementPtr> elements =
         elementsByChangesetTypeAndElementType[changeType][ElementType::Type(static_cast<ElementType::Type>(j))];
-      QVectorIterator<ElementPtr> elementItr(elements);
+      QVectorIterator<ConstElementPtr> elementItr(elements);
       while (elementItr.hasNext())
       {
-        ElementPtr element = elementItr.next();
+        ConstElementPtr element = elementItr.next();
         switch (element->getElementType().getEnum())
         {
           case ElementType::Node:

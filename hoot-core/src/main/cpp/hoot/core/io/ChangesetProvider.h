@@ -52,7 +52,7 @@ public:
       ;
   }
 
-  ElementPtr e;
+  ConstElementPtr e;
   ChangeType type;
 
 };
