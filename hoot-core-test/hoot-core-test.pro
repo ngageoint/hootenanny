@@ -164,6 +164,7 @@ SOURCES += \
     src/test/cpp/hoot/core/io/ChangesetDeriverTest.cpp \
     src/test/cpp/hoot/core/io/ElementComparerTest.cpp \
     src/test/cpp/hoot/core/io/ElementSorterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmChangeWriterSqlTest.cpp \
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
