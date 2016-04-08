@@ -133,6 +133,13 @@ The DB URL for a OSM API DB. Used by changeset writing.
 
 The DB user ID for a OSM API DB. Used by changeset writing.
 
+=== changeset.max.size
+
+* Data Type: long
+* Default Value: `50000`
+
+The maximum allowed size of an OSM changeset written to the OSM API database.
+
 === conflate.add.score.tags
 
 * Data Type: bool

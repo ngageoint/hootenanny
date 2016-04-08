@@ -42,8 +42,6 @@ private:
 
   void _open(QUrl url);
 
-  //long _getLatestVersion(const ConstElementPtr element);
-
   long _createChangeSet();
 
   long _getNextId(const ElementType type);

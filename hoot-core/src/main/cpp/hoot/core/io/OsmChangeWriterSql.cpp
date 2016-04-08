@@ -45,7 +45,7 @@ void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr ch
     }
     changes++;
 
-    if (changes > 40000) //TODO: move to config
+    if (changes > ConfigOptions().getChangesetMaxSize())
     {
       _createChangeSet();
       changes = 0;
@@ -54,13 +54,6 @@ void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr ch
 
   _outputSql.write("COMMIT;\n");
 }
-
-//long OsmChangeWriterSql::_getLatestVersion(const ConstElementPtr /*element*/)
-//{
-  ////TODO: ??
-  //throw NotImplementedException("Getting latest version not implemented");
-  //return -1;
-//}
 
 void OsmChangeWriterSql::_open(QUrl url)
 {
@@ -105,6 +98,20 @@ void OsmChangeWriterSql::_open(QUrl url)
   }
 }
 
+long OsmChangeWriterSql::_createChangeSet()
+{
+  long id = _getNextId("changesets");
+
+  _changesetId = id;
+
+  _outputSql.write(QString("INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES "
+                   "(%1, %2, now(), now());\n").arg(id).
+                   arg(ConfigOptions().getChangesetUserId()).toUtf8());
+
+  return id;
+}
+
+
 long OsmChangeWriterSql::_getNextId(const ElementType type)
 {
   return _getNextId("current_" + type.toString().toLower() + "s");
@@ -146,19 +153,6 @@ long OsmChangeWriterSql::_getNextId(QString type)
   query->finish();
 
   return result;
-}
-
-long OsmChangeWriterSql::_createChangeSet()
-{
-  long id = _getNextId("changesets");
-
-  _changesetId = id;
-
-  _outputSql.write(QString("INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES "
-                   "(%1, %2, now(), now());\n").arg(id).
-                   arg(ConfigOptions().getChangesetUserId()).toUtf8());
-
-  return id;
 }
 
 void OsmChangeWriterSql::_createTags(const Tags& tags, ElementId eid)
