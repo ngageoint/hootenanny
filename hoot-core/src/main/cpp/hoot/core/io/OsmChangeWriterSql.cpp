@@ -1,16 +1,12 @@
 #include "OsmChangeWriterSql.h"
 
 // hoot
-#include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/OsmUtils.h>
 
 // Qt
-#include <QFile>
 #include <QSqlError>
 #include <QSqlQuery>
-#include <QXmlStreamWriter>
 
 namespace hoot
 {
@@ -20,7 +16,7 @@ OsmChangeWriterSql::OsmChangeWriterSql(QUrl url)
   _open(url);
 }
 
-void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr cs)
+void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr changesetProvider)
 {
   _outputSql.setFileName(path);
   if (_outputSql.open(QIODevice::WriteOnly | QIODevice::Text) == false)
@@ -32,19 +28,19 @@ void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr cs
 
   int changes = 0;
   _createChangeSet();
-  while (cs->hasMoreChanges())
+  while (changesetProvider->hasMoreChanges())
   {
-    Change c = cs->readNextChange();
-    switch (c.type)
+    Change change = changesetProvider->readNextChange();
+    switch (change.type)
     {
       case Change::Create:
-        _writeNewElement(c.e);
+        _writeNewElement(change.e);
         break;
       case Change::Modify:
-        _updateExistingElement(c.e);
+        _updateExistingElement(change.e);
         break;
       case Change::Delete:
-        _deleteExistingElement(c.e);
+        _deleteExistingElement(change.e);
         break;
     }
     changes++;
@@ -167,8 +163,6 @@ long OsmChangeWriterSql::_createChangeSet()
 
 void OsmChangeWriterSql::_createTags(const Tags& tags, ElementId eid)
 {
-  QString tableName;
-
   QString tn1 = "current_" + eid.getType().toString().toLower() + "_tags";
   QString tn2 = eid.getType().toString().toLower() + "_tags";
 
@@ -177,12 +171,14 @@ void OsmChangeWriterSql::_createTags(const Tags& tags, ElementId eid)
     QString k = it.key();
     QString v = it.value();
 
-    QString values1 = QString("(%1_id, k, v) VALUES (%2, '%3', '%4');\n").
+    QString values1 =
+      QString("(%1_id, k, v) VALUES (%2, '%3', '%4');\n").
         arg(eid.getType().toString().toLower()).
         arg(eid.getId()).arg(k.replace('\'', "''")).
         arg(v.replace('\'', "''"));
 
-    QString values2 = QString("(%1_id, k, v, version) VALUES (%2, '%3', '%4', 1);\n").
+    QString values2 =
+      QString("(%1_id, k, v, version) VALUES (%2, '%3', '%4', 1);\n").
         arg(eid.getType().toString().toLower()).
         arg(eid.getId()).arg(k.replace('\'', "''")).
         arg(v.replace('\'', "''"));
@@ -212,7 +208,7 @@ void OsmChangeWriterSql::_writeNewElement(const ConstElementPtr newElement)
 
 void OsmChangeWriterSql::_updateExistingElement(const ConstElementPtr updatedElement)
 {
-  switch ( updatedElement->getElementType().getEnum())
+  switch (updatedElement->getElementType().getEnum())
   {
     case ElementType::Node:
       _modify(dynamic_pointer_cast<const Node>(updatedElement));
