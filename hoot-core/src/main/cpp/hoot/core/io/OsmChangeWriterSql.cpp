@@ -269,11 +269,47 @@ void OsmChangeWriterSql::_create(const ConstWayPtr way)
       "version) VALUES (%1, %2, true, now(), 1);\n")
       .arg(id)
       .arg(_changesetId);
-  _outputSql.write(("INSERT INTO nodes (way_id, " + values).toUtf8());
-  _outputSql.write(("INSERT INTO current_nodes (id, " + values).toUtf8());
+  _outputSql.write(("INSERT INTO way (way_id, " + values).toUtf8());
+  _outputSql.write(("INSERT INTO current_ways (id, " + values).toUtf8());
 
   values = "";
   const std::vector<long>& nodeIds = way->getNodeIds();
+  for (size_t i = 0; i < nodeIds.size(); i++)
+  {
+    const long nodeId = nodeIds.at(i);
+
+    values =
+      QString("way_id, node_id, version sequence_id) VALUES (%1, %2, 1, %3);\n")
+        .arg(id)
+        .arg(nodeId)
+        .arg(i + 1);
+    _outputSql.write(("INSERT INTO nodes (way_nodes, " + values).toUtf8());
+
+    values =
+      QString("way_id, node_id, sequence_id) VALUES (%1, %2, %3);\n")
+        .arg(id)
+        .arg(nodeId)
+        .arg(i + 1);
+    _outputSql.write(("INSERT INTO nodes (current_way_nodes, " + values).toUtf8());
+  }
+
+  _createTags(way->getTags(), ElementId::way(id));
+}
+
+void OsmChangeWriterSql::_create(const ConstRelationPtr relation)
+{
+  /*const long id = _getNextId(ElementType::Relation);
+
+  QString values =
+    QString("changeset_id, visible, \"timestamp\", "
+      "version) VALUES (%1, %2, true, now(), 1);\n")
+      .arg(id)
+      .arg(_changesetId);
+  _outputSql.write(("INSERT INTO relations (relation_id, " + values).toUtf8());
+  _outputSql.write(("INSERT INTO current_relations (id, " + values).toUtf8());
+
+  values = "";
+  const std::vector<long>& nodeIds = relati
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
     values +=
@@ -284,12 +320,7 @@ void OsmChangeWriterSql::_create(const ConstWayPtr way)
     _outputSql.write(("INSERT INTO current_way_nodes (id, " + values).toUtf8());
   }
 
-  _createTags(way->getTags(), ElementId::node(id));
-}
-
-void OsmChangeWriterSql::_create(const ConstRelationPtr /*relation*/)
-{
-  throw NotImplementedException("Creating relation not implemented");
+  _createTags(relation->getTags(), ElementId::relation(id));*/
 }
 
 void OsmChangeWriterSql::_modify(const ConstNodePtr /*node*/)
