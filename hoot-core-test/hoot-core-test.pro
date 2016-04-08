@@ -164,7 +164,6 @@ SOURCES += \
     src/test/cpp/hoot/core/io/ChangesetDeriverTest.cpp \
     src/test/cpp/hoot/core/io/ElementComparerTest.cpp \
     src/test/cpp/hoot/core/io/ElementSorterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmChangeWriterSqlTest.cpp \
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
@@ -174,6 +173,7 @@ services:SOURCES += \
     src/test/cpp/hoot/core/io/OsmApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/HootApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/HootApiDbWriterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmChangeWriterSqlTest.cpp \
 
 HEADERS += \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.h \

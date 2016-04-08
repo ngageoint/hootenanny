@@ -252,6 +252,7 @@ void OsmChangeWriterSql::_modify(const ConstRelationPtr /*relation*/)
 
 long OsmChangeWriterSql::_getLatestVersion(const ConstElementPtr /*element*/)
 {
+  //TODO: ??
   throw NotImplementedException("Getting latest version not implemented");
   return -1;
 }
@@ -263,6 +264,7 @@ void OsmChangeWriterSql::_writeNewElement(const ConstElementPtr newElement)
   case ElementType::Node:
     _create(dynamic_pointer_cast<const Node>(newElement));
     break;
+    //TODO: implement for way and relation
   default:
     LOG_WARN("Not implemented");
   }

@@ -19,6 +19,10 @@
 namespace hoot
 {
 
+/**
+ * Writes out a set of SQL commands that, when executed, will update the contents of
+ * an OSM API database with an OSM changeset.
+ */
 class OsmChangeWriterSql
 {
 
