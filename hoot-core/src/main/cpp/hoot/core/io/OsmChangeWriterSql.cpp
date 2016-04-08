@@ -123,7 +123,6 @@ void OsmChangeWriterSql::_createChangeSet()
     .toUtf8());
 }
 
-
 long OsmChangeWriterSql::_getNextId(const ElementType type)
 {
   switch (type.getEnum())
