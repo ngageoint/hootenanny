@@ -39,8 +39,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/OsmMap.h>
 
-#include <hoot/core/io/OsmMapWriterFactory.h>
-
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
@@ -141,7 +139,7 @@ public:
 
   void verifyReadBoundingBoxOutput(shared_ptr<OsmMap> map)
   {
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeMap().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationMap().size());
 
@@ -155,19 +153,19 @@ public:
 
     //The original second node is outside the bounding box (38.0, -104.0)
     //so the new second node generated after cropping
-    HOOT_STR_EQUALS(true, map->containsNode(2));
-    shared_ptr<Node> node1 = map->getNode(2);
-    CPPUNIT_ASSERT_EQUAL((long)2, node1->getId());
+    HOOT_STR_EQUALS(true, map->containsNode(-1));
+    shared_ptr<Node> node1 = map->getNode(-1);
+    CPPUNIT_ASSERT_EQUAL((long)-1, node1->getId());
     CPPUNIT_ASSERT_EQUAL(38.22048, node1->getY());
     CPPUNIT_ASSERT_EQUAL(-105.378, node1->getX());
 
     //ways
-    HOOT_STR_EQUALS(true, map->containsWay(1));
-    shared_ptr<Way> way = map->getWay(1);
-    CPPUNIT_ASSERT_EQUAL((long)1, way->getId());
+    HOOT_STR_EQUALS(true, map->containsWay(-1));
+    shared_ptr<Way> way = map->getWay(-1);
+    CPPUNIT_ASSERT_EQUAL((long)-1, way->getId());
     CPPUNIT_ASSERT_EQUAL(2, (int)way->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((long)1, way->getNodeId(0));
-    CPPUNIT_ASSERT_EQUAL((long)2, way->getNodeId(1));
+    CPPUNIT_ASSERT_EQUAL((long)-1, way->getNodeId(1));
     CPPUNIT_ASSERT_EQUAL(0.0, way->getCircularError());
     CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
 
@@ -219,9 +217,7 @@ public:
 
     reader.read(map);
 
-    OsmMapWriterFactory::write(map, "/home/vagrant/hoot/tmp/mingtest-out.osm");
-
-    //verifyReadBoundingBoxOutput(map);
+    verifyReadBoundingBoxOutput(map);
 
     reader.close();
   }
