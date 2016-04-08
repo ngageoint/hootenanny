@@ -51,10 +51,10 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 3)
+    if (args.size() != 3 && args.size() != 4)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes three parameters.").arg(getName()));
+      throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
     }
 
     shared_ptr<OsmMap> map1(new OsmMap());
@@ -74,8 +74,15 @@ public:
     }
     else if (args[2].endsWith(".sql"))
     {
-      throw HootException("SQL changeset writing not yet supported.");
-      //OsmChangeWriterSql(QUrl(ConfigOptions().getChangesetApiUrl())).write(args[2], delta);
+      if (args.size() != 4)
+      {
+        throw HootException(
+          QString("SQL changeset writing requires a target database URL for configuration, ") +
+          QString("although the changeset will not be automatically written to the database."));
+      }
+
+      OsmChangeWriterSql(QUrl(args[3]), ConfigOptions().getChangesetSqlUseInternalIds())
+        .write(args[2], delta);
     }
     else
     {

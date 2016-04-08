@@ -26,7 +26,7 @@ class OsmChangeWriterSql
 
 public:
 
-  OsmChangeWriterSql(QUrl url);
+  OsmChangeWriterSql(QUrl url, bool useInternalIds = false);
 
   /**
    * Write a SQL changeset to the specified output path

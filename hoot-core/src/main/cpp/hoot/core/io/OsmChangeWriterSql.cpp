@@ -11,8 +11,8 @@
 namespace hoot
 {
 
-OsmChangeWriterSql::OsmChangeWriterSql(QUrl url) :
-_useInternalIds(false),
+OsmChangeWriterSql::OsmChangeWriterSql(QUrl url, bool useInternalIds) :
+_useInternalIds(useInternalIds),
 _changesetId(0),
 _nodeId(0),
 _wayId(0),

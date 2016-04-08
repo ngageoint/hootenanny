@@ -117,10 +117,9 @@ public:
   void runBasicTest()
   {
     shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
-    OsmChangeWriterSql changesetWriter(ServicesDbTestUtils::getDbModifyUrl());
-
-    //start the ID's at the same place every time to keep the test output consistent
-    changesetWriter._useInternalIds = true;
+    //enable internal ID management on the writer so that ID's start at the same place every time
+    //to keep the test output consistent
+    OsmChangeWriterSql changesetWriter(ServicesDbTestUtils::getDbModifyUrl(), true);
     changesetWriter.write("test-output/OsmChangeWriterSqlTest.sql", changesetProvider);
     HOOT_STR_EQUALS(
       TestUtils::readFile("test-files/io/OsmChangeWriterSqlTest/OsmChangeWriterSqlTest.sql"),
