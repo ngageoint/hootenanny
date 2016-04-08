@@ -244,25 +244,47 @@ void OsmChangeWriterSql::_deleteExistingElement(const ConstElementPtr removedEle
 
 void OsmChangeWriterSql::_create(const ConstNodePtr node)
 {
-  long id = _getNextId(ElementType::Node);
+  const long id = _getNextId(ElementType::Node);
 
-  QString values = QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
-      "tile,  version) VALUES (%1, %2, %3, %4, true, now(), %5, 1);\n").
-      arg(id).
-      arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7)).
-      arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7)).
-      arg(_changesetId).
-      arg(HootApiDb::tileForPoint(node->getY(), node->getX()));
-
+  QString values =
+    QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
+      "tile,  version) VALUES (%1, %2, %3, %4, true, now(), %5, 1);\n")
+      .arg(id)
+      .arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg(_changesetId)
+      .arg(HootApiDb::tileForPoint(node->getY(), node->getX()));
   _outputSql.write(("INSERT INTO nodes (node_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_nodes (id, " + values).toUtf8());
 
   _createTags(node->getTags(), ElementId::node(id));
 }
 
-void OsmChangeWriterSql::_create(const ConstWayPtr /*way*/)
+void OsmChangeWriterSql::_create(const ConstWayPtr way)
 {
-  throw NotImplementedException("Creating way not implemented");
+  const long id = _getNextId(ElementType::Way);
+
+  QString values =
+    QString("changeset_id, visible, \"timestamp\", "
+      "version) VALUES (%1, %2, true, now(), 1);\n")
+      .arg(id)
+      .arg(_changesetId);
+  _outputSql.write(("INSERT INTO nodes (way_id, " + values).toUtf8());
+  _outputSql.write(("INSERT INTO current_nodes (id, " + values).toUtf8());
+
+  values = "";
+  const std::vector<long>& nodeIds = way->getNodeIds();
+  for (size_t i = 0; i < nodeIds.size(); i++)
+  {
+    values +=
+      QString("way_id, node_id, sequence_id);\n")
+        .arg(id)
+        .arg(nodeIds.at(i))
+        .arg(i + 1);
+    _outputSql.write(("INSERT INTO current_way_nodes (id, " + values).toUtf8());
+  }
+
+  _createTags(way->getTags(), ElementId::node(id));
 }
 
 void OsmChangeWriterSql::_create(const ConstRelationPtr /*relation*/)
