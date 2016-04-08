@@ -239,7 +239,7 @@ void OsmChangeWriterSql::_create(const ConstWayPtr way)
   _outputSql.write(("INSERT INTO way (way_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_ways (id, " + values).toUtf8());
 
-  _createWayNodeIds(way->getId(), way->getNodeIds());
+  _createWayNodes(way->getId(), way->getNodeIds());
 
   _createTags(way->getTags(), ElementId::way(id));
 }
@@ -256,31 +256,7 @@ void OsmChangeWriterSql::_create(const ConstRelationPtr relation)
   _outputSql.write(("INSERT INTO relations (relation_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_relations (id, " + values).toUtf8());
 
-  const vector<RelationData::Entry>& members = relation->getMembers();
-  for (size_t i = 0; i < members.size(); i++)
-  {
-    RelationData::Entry member = members[i];
-
-    values =
-      QString(
-        "(relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (%1, %2, %3, %4, 1, %5);\n")
-        .arg(id)
-        .arg(relation->getType())
-        .arg(member.getElementId().getId())
-        .arg(member.getRole())
-        .arg(i + 1);
-    _outputSql.write(("INSERT INTO relation_members " + values).toUtf8());
-
-    values =
-      QString(
-        "(relation_id, member_type, member_id, member_role, sequence_id) VALUES (%1, %2, %3, %4, %5);\n")
-        .arg(id)
-        .arg(relation->getType())
-        .arg(member.getElementId().getId())
-        .arg(member.getRole())
-        .arg(i + 1);
-    _outputSql.write(("INSERT INTO current_relation_members " + values).toUtf8());
-  }
+  _createRelationMembers(id, relation->getType(), relation->getMembers());
 
   _createTags(relation->getTags(), ElementId::relation(id));
 }
@@ -310,16 +286,27 @@ void OsmChangeWriterSql::_modify(const ConstWayPtr way)
   _outputSql.write(("UPDATE ways SET way_id" + values).toUtf8());
   _outputSql.write(("UPDATE current_ways SET id" + values).toUtf8());
 
-  _deleteWayNodeIds(way->getId());
-  _createWayNodeIds(way->getId(), way->getNodeIds());
+  _deleteAllWayNodes(way->getId());
+  _createWayNodes(way->getId(), way->getNodeIds());
 
   _deleteAllTags(ElementId::node(way->getId()));
   _createTags(way->getTags(), ElementId::node(way->getId()));
 }
 
-void OsmChangeWriterSql::_modify(const ConstRelationPtr /*relation*/)
+void OsmChangeWriterSql::_modify(const ConstRelationPtr relation)
 {
-  throw NotImplementedException("Updating relation not implemented");
+  QString values =
+    QString("=%1, changeset_id=%2, visible=true, \"timestamp\"=now(), version= version + 1;\n")
+      .arg(relation->getId())
+      .arg(_changesetId);
+  _outputSql.write(("UPDATE relations SET relation_id" + values).toUtf8());
+  _outputSql.write(("UPDATE current_relations SET relation_id" + values).toUtf8());
+
+  _deleteAllRelationMembers(relation->getId());
+  _createRelationMembers(relation->getId(), relation->getType(), relation->getMembers());
+
+  _deleteAllTags(ElementId::relation(relation->getId()));
+  _createTags(relation->getTags(), ElementId::relation(relation->getId()));
 }
 
 void OsmChangeWriterSql::_delete(const ConstNodePtr /*node*/)
@@ -380,7 +367,7 @@ QStringList OsmChangeWriterSql::_tagTableNamesForElement(ElementId eid) const
   return tableNames;
 }
 
-void OsmChangeWriterSql::_createWayNodeIds(const long wayId, const std::vector<long>& nodeIds)
+void OsmChangeWriterSql::_createWayNodes(const long wayId, const std::vector<long>& nodeIds)
 {
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
@@ -402,10 +389,47 @@ void OsmChangeWriterSql::_createWayNodeIds(const long wayId, const std::vector<l
   }
 }
 
-void OsmChangeWriterSql::_deleteWayNodeIds(long wayId)
+void OsmChangeWriterSql::_deleteAllWayNodes(long wayId)
 {
   _outputSql.write((QString("DELETE * FROM way_nodes WHERE way_id=%1 ").arg(wayId)).toUtf8());
   _outputSql.write((QString("DELETE * FROM current_way_nodes WHERE way_id=%1 ").arg(wayId)).toUtf8());
+}
+
+void OsmChangeWriterSql::_createRelationMembers(const long relationId, const QString type,
+                                                const vector<RelationData::Entry>& members)
+{
+  for (size_t i = 0; i < members.size(); i++)
+  {
+    const RelationData::Entry member = members[i];
+
+    QString values =
+      QString(
+        "(relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (%1, %2, %3, %4, 1, %5);\n")
+        .arg(relationId)
+        .arg(type)
+        .arg(member.getElementId().getId())
+        .arg(member.getRole())
+        .arg(i + 1);
+    _outputSql.write(("INSERT INTO relation_members " + values).toUtf8());
+
+    values =
+      QString(
+        "(relation_id, member_type, member_id, member_role, sequence_id) VALUES (%1, %2, %3, %4, %5);\n")
+        .arg(relationId)
+        .arg(type)
+        .arg(member.getElementId().getId())
+        .arg(member.getRole())
+        .arg(i + 1);
+    _outputSql.write(("INSERT INTO current_relation_members " + values).toUtf8());
+  }
+}
+
+void OsmChangeWriterSql::_deleteAllRelationMembers(const long relationId)
+{
+  _outputSql.write(
+    (QString("DELETE * FROM relation_members WHERE relation_id=%1 ").arg(relationId)).toUtf8());
+  _outputSql.write(
+    (QString("DELETE * FROM current_relation_members WHERE relation_id=%1 ").arg(relationId)).toUtf8());
 }
 
 }

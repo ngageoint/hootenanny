@@ -64,8 +64,12 @@ private:
   void _deleteAllTags(ElementId eid);
   QStringList _tagTableNamesForElement(ElementId eid) const;
 
-  void _createWayNodeIds(const long wayId, const std::vector<long>& nodeIds);
-  void _deleteWayNodeIds(long wayId);
+  void _createWayNodes(const long wayId, const std::vector<long>& nodeIds);
+  void _deleteAllWayNodes(long wayId);
+
+  void _createRelationMembers(const long relationId, const QString type,
+                              const vector<RelationData::Entry>& members);
+  void _deleteAllRelationMembers(const long relationId);
 
   long _changesetId;
   QSqlDatabase _db;
