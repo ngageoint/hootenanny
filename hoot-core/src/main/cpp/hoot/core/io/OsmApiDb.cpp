@@ -165,6 +165,7 @@ void OsmApiDb::_resetQueries()
   _selectTagsForRelation.reset();
   _selectNodeIdsForWay.reset();
   _selectMembersForRelation.reset();
+  _selectNodeById.reset();
   _selectUserByEmail.reset();
   _insertUser.reset();
 }
@@ -298,6 +299,30 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
   }
 
   return result;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
+{
+  LOG_DEBUG("IN selectNodeById");
+  _selectNodeById.reset(new QSqlQuery(_db));
+  _selectNodeById->setForwardOnly(true);
+  QString sql = "SELECT " + _elementTypeToElementTableName(ElementType::Node) + " WHERE (id=:elementId) ORDER BY id DESC";
+  _selectNodeById->prepare(sql);
+  _selectNodeById->bindValue(":elementId", (qlonglong)elementId);
+
+  LOG_DEBUG(QString("The sql query= "+ sql));
+
+  // execute the query on the DB and get the results back
+  if (_selectNodeById->exec() == false)
+  {
+    QString err = _selectNodeById->lastError().text();
+    LOG_WARN(sql);
+    throw HootException("Error selecting node by id: " + QString::number(elementId) +
+      " Error: " + err);
+  }
+
+  LOG_DEBUG("LEAVING OsmApiDb::selectNodeById...");
+  return _selectNodeById;
 }
 
 shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId,
