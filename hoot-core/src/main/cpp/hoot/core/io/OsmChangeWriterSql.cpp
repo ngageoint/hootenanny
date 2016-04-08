@@ -309,19 +309,24 @@ void OsmChangeWriterSql::_modify(const ConstRelationPtr relation)
   _createTags(relation->getTags(), ElementId::relation(relation->getId()));
 }
 
-void OsmChangeWriterSql::_delete(const ConstNodePtr /*node*/)
+void OsmChangeWriterSql::_delete(const ConstNodePtr node)
 {
-  throw NotImplementedException("Deleting node not implemented");
+  _outputSql.write((QString("DELETE FROM nodes WHERE node_id=%1 ").arg(node->getId())).toUtf8());
+  _outputSql.write((QString("DELETE FROM current_nodes WHERE id=%1 ").arg(node->getId())).toUtf8());
 }
 
-void OsmChangeWriterSql::_delete(const ConstWayPtr /*way*/)
+void OsmChangeWriterSql::_delete(const ConstWayPtr way)
 {
-  throw NotImplementedException("Deleting way not implemented");
+  _outputSql.write((QString("DELETE FROM ways WHERE way_id=%1 ").arg(way->getId())).toUtf8());
+  _outputSql.write((QString("DELETE FROM current_ways WHERE id=%1 ").arg(way->getId())).toUtf8());
 }
 
-void OsmChangeWriterSql::_delete(const ConstRelationPtr /*relation*/)
+void OsmChangeWriterSql::_delete(const ConstRelationPtr relation)
 {
-  throw NotImplementedException("Deleting relation not implemented");
+  _outputSql.write(
+    (QString("DELETE FROM relations WHERE relation_id=%1 ").arg(relation->getId())).toUtf8());
+  _outputSql.write(
+    (QString("DELETE FROM current_relations WHERE id=%1 ").arg(relation->getId())).toUtf8());
 }
 
 void OsmChangeWriterSql::_createTags(const Tags& tags, ElementId eid)
@@ -391,8 +396,8 @@ void OsmChangeWriterSql::_createWayNodes(const long wayId, const std::vector<lon
 
 void OsmChangeWriterSql::_deleteAllWayNodes(long wayId)
 {
-  _outputSql.write((QString("DELETE * FROM way_nodes WHERE way_id=%1 ").arg(wayId)).toUtf8());
-  _outputSql.write((QString("DELETE * FROM current_way_nodes WHERE way_id=%1 ").arg(wayId)).toUtf8());
+  _outputSql.write((QString("DELETE FROM way_nodes WHERE way_id=%1 ").arg(wayId)).toUtf8());
+  _outputSql.write((QString("DELETE FROM current_way_nodes WHERE way_id=%1 ").arg(wayId)).toUtf8());
 }
 
 void OsmChangeWriterSql::_createRelationMembers(const long relationId, const QString type,
@@ -427,9 +432,9 @@ void OsmChangeWriterSql::_createRelationMembers(const long relationId, const QSt
 void OsmChangeWriterSql::_deleteAllRelationMembers(const long relationId)
 {
   _outputSql.write(
-    (QString("DELETE * FROM relation_members WHERE relation_id=%1 ").arg(relationId)).toUtf8());
+    (QString("DELETE FROM relation_members WHERE relation_id=%1 ").arg(relationId)).toUtf8());
   _outputSql.write(
-    (QString("DELETE * FROM current_relation_members WHERE relation_id=%1 ").arg(relationId)).toUtf8());
+    (QString("DELETE FROM current_relation_members WHERE relation_id=%1 ").arg(relationId)).toUtf8());
 }
 
 }
