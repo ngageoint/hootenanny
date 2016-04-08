@@ -143,6 +143,20 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationMap().size());
 
+    //get the seconde node id. It changes during HootTest depends on how many tests
+    NodeMap nm = map->getNodeMap();
+    long secondNodeId = 0;
+    int count = 1;
+    for (NodeMap::iterator nodeIter = nm.begin(); nodeIter != nm.end(); ++nodeIter )
+    {
+      shared_ptr<Node> n = nodeIter->second;
+      if (count == 2) //second node
+      {
+        secondNodeId = n->getId();
+      }
+      count++;
+    }
+
     HOOT_STR_EQUALS(true, map->containsNode(1));
     shared_ptr<Node> node = map->getNode(1);
     CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
@@ -153,19 +167,28 @@ public:
 
     //The original second node is outside the bounding box (38.0, -104.0)
     //so the new second node generated after cropping
-    HOOT_STR_EQUALS(true, map->containsNode(-1));
-    shared_ptr<Node> node1 = map->getNode(-1);
-    CPPUNIT_ASSERT_EQUAL((long)-1, node1->getId());
+    HOOT_STR_EQUALS(true, map->containsNode(secondNodeId));
+    shared_ptr<Node> node1 = map->getNode(secondNodeId);
+    CPPUNIT_ASSERT_EQUAL((long)secondNodeId, node1->getId());
     CPPUNIT_ASSERT_EQUAL(38.22048, node1->getY());
     CPPUNIT_ASSERT_EQUAL(-105.378, node1->getX());
 
     //ways
-    HOOT_STR_EQUALS(true, map->containsWay(-1));
-    shared_ptr<Way> way = map->getWay(-1);
-    CPPUNIT_ASSERT_EQUAL((long)-1, way->getId());
+    WayMap wm = map->getWays();
+    long wayId = 0;
+    for (WayMap::iterator wayIter = wm.begin(); wayIter != wm.end(); ++wayIter )
+    {
+      shared_ptr<Way> w = wayIter->second;
+      //we know there is only one way
+      wayId = w->getId();
+    }
+
+    HOOT_STR_EQUALS(true, map->containsWay(wayId));
+    shared_ptr<Way> way = map->getWay(wayId);
+    CPPUNIT_ASSERT_EQUAL(wayId, way->getId());
     CPPUNIT_ASSERT_EQUAL(2, (int)way->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((long)1, way->getNodeId(0));
-    CPPUNIT_ASSERT_EQUAL((long)-1, way->getNodeId(1));
+    CPPUNIT_ASSERT_EQUAL((long)secondNodeId, way->getNodeId(1));
     CPPUNIT_ASSERT_EQUAL(0.0, way->getCircularError());
     CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
 
