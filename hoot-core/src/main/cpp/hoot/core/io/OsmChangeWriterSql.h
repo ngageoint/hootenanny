@@ -47,8 +47,6 @@ private:
   long _getNextId(const ElementType type);
   long _getNextId(QString type);
 
-  void _createTags(const Tags& tags, ElementId eid);
-
   void _writeNewElement(const ConstElementPtr newElement);
   void _updateExistingElement(const ConstElementPtr updatedElement);
   void _deleteExistingElement(const ConstElementPtr removedElement);
@@ -64,6 +62,10 @@ private:
   void _delete(const ConstNodePtr node);
   void _delete(const ConstWayPtr way);
   void _delete(const ConstRelationPtr relation);
+
+  void _createTags(const Tags& tags, ElementId eid);
+  void _deleteAllTags(ElementId eid);
+  QStringList _tagTableNamesForElement(ElementId eid);
 
 };
 

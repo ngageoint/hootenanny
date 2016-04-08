@@ -155,33 +155,6 @@ long OsmChangeWriterSql::_getNextId(QString type)
   return result;
 }
 
-void OsmChangeWriterSql::_createTags(const Tags& tags, ElementId eid)
-{
-  QString tn1 = "current_" + eid.getType().toString().toLower() + "_tags";
-  QString tn2 = eid.getType().toString().toLower() + "_tags";
-
-  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
-  {
-    QString k = it.key();
-    QString v = it.value();
-
-    QString values1 =
-      QString("(%1_id, k, v) VALUES (%2, '%3', '%4');\n").
-        arg(eid.getType().toString().toLower()).
-        arg(eid.getId()).arg(k.replace('\'', "''")).
-        arg(v.replace('\'', "''"));
-
-    QString values2 =
-      QString("(%1_id, k, v, version) VALUES (%2, '%3', '%4', 1);\n").
-        arg(eid.getType().toString().toLower()).
-        arg(eid.getId()).arg(k.replace('\'', "''")).
-        arg(v.replace('\'', "''"));
-
-    _outputSql.write((QString("INSERT INTO %1 ").arg(tn1) + values1).toUtf8());
-    _outputSql.write((QString("INSERT INTO %1 ").arg(tn2) + values2).toUtf8());
-  }
-}
-
 void OsmChangeWriterSql::_writeNewElement(const ConstElementPtr newElement)
 {
   switch (newElement->getElementType().getEnum())
@@ -330,9 +303,20 @@ void OsmChangeWriterSql::_create(const ConstRelationPtr relation)
   _createTags(relation->getTags(), ElementId::relation(id));
 }
 
-void OsmChangeWriterSql::_modify(const ConstNodePtr /*node*/)
+void OsmChangeWriterSql::_modify(const ConstNodePtr node)
 {
-  throw NotImplementedException("Updating node not implemented");
+  QString values =
+    QString("=%1, latitude=%2, longitude=%3, changeset_id=%4, visible=true, \"timestamp\"=now(), tile=%5, version=version + 1;\n")
+      .arg(node->getId())
+      .arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg(_changesetId)
+      .arg(HootApiDb::tileForPoint(node->getY(), node->getX()));
+  _outputSql.write(("UPDATE nodes SET node_id" + values).toUtf8());
+  _outputSql.write(("UPDATE current_nodes SET id" + values).toUtf8());
+
+  _deleteAllTags(ElementId::node(node->getId()));
+  _createTags(node->getTags(), ElementId::node(node->getId()));
 }
 
 void OsmChangeWriterSql::_modify(const ConstWayPtr /*way*/)
@@ -358,6 +342,49 @@ void OsmChangeWriterSql::_delete(const ConstWayPtr /*way*/)
 void OsmChangeWriterSql::_delete(const ConstRelationPtr /*relation*/)
 {
   throw NotImplementedException("Deleting relation not implemented");
+}
+
+void OsmChangeWriterSql::_createTags(const Tags& tags, ElementId eid)
+{
+  QStringList tableNames = _tagTableNamesForElement(eid);
+
+  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+  {
+    QString k = it.key();
+    QString v = it.value();
+
+    QString values1 =
+      QString("(%1_id, k, v) VALUES (%2, '%3', '%4');\n").
+        arg(eid.getType().toString().toLower()).
+        arg(eid.getId()).arg(k.replace('\'', "''")).
+        arg(v.replace('\'', "''"));
+
+    QString values2 =
+      QString("(%1_id, k, v, version) VALUES (%2, '%3', '%4', 1);\n").
+        arg(eid.getType().toString().toLower()).
+        arg(eid.getId()).arg(k.replace('\'', "''")).
+        arg(v.replace('\'', "''"));
+
+    _outputSql.write((QString("INSERT INTO %1 ").arg(tableNames.at(0)) + values1).toUtf8());
+    _outputSql.write((QString("INSERT INTO %1 ").arg(tableNames.at(1)) + values2).toUtf8());
+  }
+}
+
+void OsmChangeWriterSql::_deleteAllTags(ElementId eid)
+{
+  QStringList tableNames = _tagTableNamesForElement(eid);
+  _outputSql.write((QString("DELETE * FROM %1 ").arg(tableNames.at(0))).toUtf8());
+  _outputSql.write((QString("DELETE * FROM %1 ").arg(tableNames.at(1))).toUtf8());
+}
+
+QStringList OsmChangeWriterSql::_tagTableNamesForElement(ElementId eid)
+{
+  QStringList tableNames;
+  QString tableName1 = "current_" + eid.getType().toString().toLower() + "_tags";
+  tableNames.append(tableName1);
+  QString tableName2 = eid.getType().toString().toLower() + "_tags";
+  tableNames.append(tableName2);
+  return tableNames;
 }
 
 }
