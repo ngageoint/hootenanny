@@ -26,7 +26,6 @@ Feature: Hootenanny Clip Dataset Test
         Then I wait 5 "seconds" to see "Success:"
         Then I remove the first layer
         Then I close the UI alert
-        Then I close the UI alert
         When I click the "Add Reference Dataset" link
         And I click the "CucumberClip" Dataset
         Then I click first "Add Layer"

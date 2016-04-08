@@ -103,6 +103,11 @@ When(/^I fill "([^"]*)" input with "([^"]*)"$/) do |el, value|
   sleep 1
 end
 
+When(/^I append "([^"]*)" input with "([^"]*)"$/) do |el, value|
+  find('input.' + el).native.send_keys(value)
+  sleep 1
+end
+
 When(/^I press "([^"]*)"$/) do |button|
   click_link_or_button(button)
 end

@@ -10,7 +10,7 @@ Feature: Hootenanny Settings Test
 
     Scenario: Validating Hootenanny Version
         And I click the "Hootenanny" link
-        And I should see "Hootenanny Core - Version:"
+        Then I wait 5 "seconds" to see "Hootenanny Core - Version:"
         And I should see "Hootenanny Web Services - Version:"
         And I should see "Hootenanny iD "
         #When I click the "Download User Guide" link
