@@ -29,6 +29,7 @@
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/OsmChangeWriterSql.h>
+#include "ServicesDbTestUtils.h"
 
 // Boost
 using namespace boost;
@@ -108,16 +109,19 @@ private:
 class OsmChangeWriterSqlTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(OsmChangeWriterSqlTest);
-    //CPPUNIT_TEST(runTest);
+    CPPUNIT_TEST(runBasicTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runTest()
+  void runBasicTest()
   {
     shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
-    OsmChangeWriterSql(QUrl("TODO")).write("test-output/OsmChangeWriterSqlTest.sql", changesetProvider);
+    OsmChangeWriterSql changesetWriter(ServicesDbTestUtils::getDbModifyUrl());
 
+    //start the ID's at the same place every time to keep the test output consistent
+    changesetWriter._useInternalIds = true;
+    changesetWriter.write("test-output/OsmChangeWriterSqlTest.sql", changesetProvider);
     HOOT_STR_EQUALS(
       TestUtils::readFile("test-files/io/OsmChangeWriterSqlTest/OsmChangeWriterSqlTest.sql"),
       TestUtils::readFile("test-output/OsmChangeWriterSqlTest.sql"));

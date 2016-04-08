@@ -11,7 +11,12 @@
 namespace hoot
 {
 
-OsmChangeWriterSql::OsmChangeWriterSql(QUrl url)
+OsmChangeWriterSql::OsmChangeWriterSql(QUrl url) :
+_useInternalIds(false),
+_changesetId(0),
+_nodeId(0),
+_wayId(0),
+_relationId(0)
 {
   _open(url);
 }
@@ -53,6 +58,8 @@ void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr ch
   }
 
   _outputSql.write("COMMIT;\n");
+
+  _outputSql.close();
 }
 
 void OsmChangeWriterSql::_open(QUrl url)
@@ -98,23 +105,62 @@ void OsmChangeWriterSql::_open(QUrl url)
   }
 }
 
-long OsmChangeWriterSql::_createChangeSet()
+void OsmChangeWriterSql::_createChangeSet()
 {
-  long id = _getNextId("changesets");
-
-  _changesetId = id;
-
-  _outputSql.write(QString("INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES "
-                   "(%1, %2, now(), now());\n").arg(id).
-                   arg(ConfigOptions().getChangesetUserId()).toUtf8());
-
-  return id;
+  if (!_useInternalIds)
+  {
+    _changesetId = _getNextId("changesets");
+  }
+  else
+  {
+    _changesetId++;
+  }
+  _outputSql.write(
+    QString("INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES "
+            "(%1, %2, now(), now());\n")
+      .arg(_changesetId)
+      .arg(ConfigOptions().getChangesetUserId())
+    .toUtf8());
 }
 
 
 long OsmChangeWriterSql::_getNextId(const ElementType type)
 {
-  return _getNextId("current_" + type.toString().toLower() + "s");
+  switch (type.getEnum())
+  {
+    case ElementType::Node:
+      if (!_useInternalIds)
+      {
+        _nodeId = _getNextId("current_" + type.toString().toLower() + "s");
+      }
+      else
+      {
+        _nodeId++;
+      }
+      return _nodeId;
+    case ElementType::Way:
+      if (!_useInternalIds)
+      {
+        _wayId = _getNextId("current_" + type.toString().toLower() + "s");
+      }
+      else
+      {
+        _wayId++;
+      }
+      return _wayId;
+    case ElementType::Relation:
+      if (!_useInternalIds)
+      {
+        _relationId = _getNextId("current_" + type.toString().toLower() + "s");
+      }
+      else
+      {
+        _relationId++;
+      }
+      return _relationId;
+    default:
+      throw HootException("Unknown element type");
+  }
 }
 
 long OsmChangeWriterSql::_getNextId(QString type)
@@ -252,7 +298,7 @@ void OsmChangeWriterSql::_create(const ConstWayPtr way)
   _outputSql.write(("INSERT INTO way (way_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_ways (id, " + values).toUtf8());
 
-  _createWayNodes(way->getId(), way->getNodeIds());
+  _createWayNodes(id, way->getNodeIds());
 
   _createTags(way->getTags(), ElementId::way(id));
 }
@@ -415,7 +461,7 @@ void OsmChangeWriterSql::_deleteAll(const QString tableName, const QString idFie
                                     const long id)
 {
   _outputSql.write(
-    (QString("DELETE FROM %1 WHERE %2=%3")
+    (QString("DELETE FROM %1 WHERE %2 = %3;\n")
       .arg(tableName)
       .arg(idFieldName)
       .arg(id))

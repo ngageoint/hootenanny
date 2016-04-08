@@ -5,6 +5,7 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/ElementType.h>
 #include <tgs/BigContainers/BigMap.h>
 
 // Qt
@@ -39,7 +40,7 @@ private:
 
   void _open(QUrl url);
 
-  long _createChangeSet();
+  void _createChangeSet();
 
   long _getNextId(const ElementType type);
   long _getNextId(QString type);
@@ -67,7 +68,12 @@ private:
   void _createRelationMembers(const long relationId, const QString type,
                               const vector<RelationData::Entry>& members);
 
+  bool _useInternalIds;
   long _changesetId;
+  long _nodeId;
+  long _wayId;
+  long _relationId;
+
   QSqlDatabase _db;
   QFile _outputSql;
   QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
@@ -75,6 +81,8 @@ private:
   Tgs::BigMap<long, long> _idMappingsNode;
   Tgs::BigMap<long, long> _idMappingsWay;
   Tgs::BigMap<long, long> _idMappingsRelation;
+
+  friend class OsmChangeWriterSqlTest;
 
 };
 
