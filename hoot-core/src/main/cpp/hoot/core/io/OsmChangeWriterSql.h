@@ -56,20 +56,16 @@ private:
   void _modify(const ConstWayPtr way);
   void _modify(const ConstRelationPtr relation);
 
-  void _delete(const ConstNodePtr node);
-  void _delete(const ConstWayPtr way);
-  void _delete(const ConstRelationPtr relation);
+  void _deleteAll(const QString tableName, const QString idFieldName, const long id);
 
   void _createTags(const Tags& tags, ElementId eid);
-  void _deleteAllTags(ElementId eid);
   QStringList _tagTableNamesForElement(ElementId eid) const;
+  void _deleteAllTags(ElementId eid);
 
   void _createWayNodes(const long wayId, const std::vector<long>& nodeIds);
-  void _deleteAllWayNodes(long wayId);
 
   void _createRelationMembers(const long relationId, const QString type,
                               const vector<RelationData::Entry>& members);
-  void _deleteAllRelationMembers(const long relationId);
 
   long _changesetId;
   QSqlDatabase _db;

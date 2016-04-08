@@ -196,14 +196,27 @@ void OsmChangeWriterSql::_deleteExistingElement(const ConstElementPtr removedEle
   switch (removedElement->getElementType().getEnum())
   {
     case ElementType::Node:
-      _delete(dynamic_pointer_cast<const Node>(removedElement));
+      _deleteAllTags(removedElement->getElementId());
+      _deleteAll("nodes", "node_id", removedElement->getId());
+      _deleteAll("current_nodes", "id", removedElement->getId());
       break;
+
     case ElementType::Way:
-      _delete(dynamic_pointer_cast<const Way>(removedElement));
+      _deleteAll("current_ways_nodes", "way_id", removedElement->getId());
+      _deleteAll("way_nodes", "way_id", removedElement->getId());
+      _deleteAllTags(removedElement->getElementId());
+      _deleteAll("current_ways", "id", removedElement->getId());
+      _deleteAll("ways", "way_id", removedElement->getId());
       break;
+
     case ElementType::Relation:
-      _delete(dynamic_pointer_cast<const Relation>(removedElement));
+      _deleteAll("current_relation_members", "relation_id", removedElement->getId());
+      _deleteAll("relation_members", "relation_id", removedElement->getId());
+      _deleteAllTags(removedElement->getElementId());
+      _deleteAll("current_relations", "id", removedElement->getId());
+      _deleteAll("relations", "relation_id", removedElement->getId());
       break;
+
     default:
       throw HootException("Unknown element type");
   }
@@ -286,7 +299,8 @@ void OsmChangeWriterSql::_modify(const ConstWayPtr way)
   _outputSql.write(("UPDATE ways SET way_id" + values).toUtf8());
   _outputSql.write(("UPDATE current_ways SET id" + values).toUtf8());
 
-  _deleteAllWayNodes(way->getId());
+  _deleteAll("current_way_nodes", "way_id", way->getId());
+  _deleteAll("way_nodes", "way_id", way->getId());
   _createWayNodes(way->getId(), way->getNodeIds());
 
   _deleteAllTags(ElementId::node(way->getId()));
@@ -302,31 +316,12 @@ void OsmChangeWriterSql::_modify(const ConstRelationPtr relation)
   _outputSql.write(("UPDATE relations SET relation_id" + values).toUtf8());
   _outputSql.write(("UPDATE current_relations SET relation_id" + values).toUtf8());
 
-  _deleteAllRelationMembers(relation->getId());
+  _deleteAll("current_relation_members", "relation_id", relation->getId());
+  _deleteAll("relation_members", "relation_id", relation->getId());
   _createRelationMembers(relation->getId(), relation->getType(), relation->getMembers());
 
   _deleteAllTags(ElementId::relation(relation->getId()));
   _createTags(relation->getTags(), ElementId::relation(relation->getId()));
-}
-
-void OsmChangeWriterSql::_delete(const ConstNodePtr node)
-{
-  _outputSql.write((QString("DELETE FROM nodes WHERE node_id=%1 ").arg(node->getId())).toUtf8());
-  _outputSql.write((QString("DELETE FROM current_nodes WHERE id=%1 ").arg(node->getId())).toUtf8());
-}
-
-void OsmChangeWriterSql::_delete(const ConstWayPtr way)
-{
-  _outputSql.write((QString("DELETE FROM ways WHERE way_id=%1 ").arg(way->getId())).toUtf8());
-  _outputSql.write((QString("DELETE FROM current_ways WHERE id=%1 ").arg(way->getId())).toUtf8());
-}
-
-void OsmChangeWriterSql::_delete(const ConstRelationPtr relation)
-{
-  _outputSql.write(
-    (QString("DELETE FROM relations WHERE relation_id=%1 ").arg(relation->getId())).toUtf8());
-  _outputSql.write(
-    (QString("DELETE FROM current_relations WHERE id=%1 ").arg(relation->getId())).toUtf8());
 }
 
 void OsmChangeWriterSql::_createTags(const Tags& tags, ElementId eid)
@@ -353,13 +348,6 @@ void OsmChangeWriterSql::_createTags(const Tags& tags, ElementId eid)
     _outputSql.write((QString("INSERT INTO %1 ").arg(tableNames.at(0)) + values1).toUtf8());
     _outputSql.write((QString("INSERT INTO %1 ").arg(tableNames.at(1)) + values2).toUtf8());
   }
-}
-
-void OsmChangeWriterSql::_deleteAllTags(ElementId eid)
-{
-  QStringList tableNames = _tagTableNamesForElement(eid);
-  _outputSql.write((QString("DELETE * FROM %1 ").arg(tableNames.at(0))).toUtf8());
-  _outputSql.write((QString("DELETE * FROM %1 ").arg(tableNames.at(1))).toUtf8());
 }
 
 QStringList OsmChangeWriterSql::_tagTableNamesForElement(ElementId eid) const
@@ -394,12 +382,6 @@ void OsmChangeWriterSql::_createWayNodes(const long wayId, const std::vector<lon
   }
 }
 
-void OsmChangeWriterSql::_deleteAllWayNodes(long wayId)
-{
-  _outputSql.write((QString("DELETE FROM way_nodes WHERE way_id=%1 ").arg(wayId)).toUtf8());
-  _outputSql.write((QString("DELETE FROM current_way_nodes WHERE way_id=%1 ").arg(wayId)).toUtf8());
-}
-
 void OsmChangeWriterSql::_createRelationMembers(const long relationId, const QString type,
                                                 const vector<RelationData::Entry>& members)
 {
@@ -429,12 +411,24 @@ void OsmChangeWriterSql::_createRelationMembers(const long relationId, const QSt
   }
 }
 
-void OsmChangeWriterSql::_deleteAllRelationMembers(const long relationId)
+void OsmChangeWriterSql::_deleteAll(const QString tableName, const QString idFieldName,
+                                    const long id)
 {
   _outputSql.write(
-    (QString("DELETE FROM relation_members WHERE relation_id=%1 ").arg(relationId)).toUtf8());
-  _outputSql.write(
-    (QString("DELETE FROM current_relation_members WHERE relation_id=%1 ").arg(relationId)).toUtf8());
+    (QString("DELETE FROM %1 WHERE %2=%3")
+      .arg(tableName)
+      .arg(idFieldName)
+      .arg(id))
+    .toUtf8());
+}
+
+void OsmChangeWriterSql::_deleteAllTags(ElementId eid)
+{
+  QStringList tableNames = _tagTableNamesForElement(eid);
+  foreach (QString tableName, tableNames)
+  {
+    _deleteAll(tableName, tableName + "_id", eid.getId());
+  }
 }
 
 }
