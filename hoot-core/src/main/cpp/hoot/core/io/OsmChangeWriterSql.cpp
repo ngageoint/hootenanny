@@ -272,25 +272,24 @@ void OsmChangeWriterSql::_create(const ConstWayPtr way)
   _outputSql.write(("INSERT INTO way (way_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_ways (id, " + values).toUtf8());
 
-  values = "";
   const std::vector<long>& nodeIds = way->getNodeIds();
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
     const long nodeId = nodeIds.at(i);
 
     values =
-      QString("way_id, node_id, version sequence_id) VALUES (%1, %2, 1, %3);\n")
+      QString("(way_id, node_id, version sequence_id) VALUES (%1, %2, 1, %3);\n")
         .arg(id)
         .arg(nodeId)
         .arg(i + 1);
-    _outputSql.write(("INSERT INTO nodes (way_nodes, " + values).toUtf8());
+    _outputSql.write(("INSERT INTO way_nodes (" + values).toUtf8());
 
     values =
-      QString("way_id, node_id, sequence_id) VALUES (%1, %2, %3);\n")
+      QString("(way_id, node_id, sequence_id) VALUES (%1, %2, %3);\n")
         .arg(id)
         .arg(nodeId)
         .arg(i + 1);
-    _outputSql.write(("INSERT INTO nodes (current_way_nodes, " + values).toUtf8());
+    _outputSql.write(("INSERT INTO current_way_nodes " + values).toUtf8());
   }
 
   _createTags(way->getTags(), ElementId::way(id));
@@ -298,7 +297,7 @@ void OsmChangeWriterSql::_create(const ConstWayPtr way)
 
 void OsmChangeWriterSql::_create(const ConstRelationPtr relation)
 {
-  /*const long id = _getNextId(ElementType::Relation);
+  const long id = _getNextId(ElementType::Relation);
 
   QString values =
     QString("changeset_id, visible, \"timestamp\", "
@@ -308,19 +307,33 @@ void OsmChangeWriterSql::_create(const ConstRelationPtr relation)
   _outputSql.write(("INSERT INTO relations (relation_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_relations (id, " + values).toUtf8());
 
-  values = "";
-  const std::vector<long>& nodeIds = relati
-  for (size_t i = 0; i < nodeIds.size(); i++)
+  const vector<RelationData::Entry>& members = relation->getMembers();
+  for (size_t i = 0; i < members.size(); i++)
   {
-    values +=
-      QString("way_id, node_id, sequence_id);\n")
+    RelationData::Entry member = members[i];
+
+    values =
+      QString(
+        "(relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (%1, %2, %3, %4, 1, %5);\n")
         .arg(id)
-        .arg(nodeIds.at(i))
+        .arg(relation->getType())
+        .arg(member.getElementId().getId())
+        .arg(member.getRole())
         .arg(i + 1);
-    _outputSql.write(("INSERT INTO current_way_nodes (id, " + values).toUtf8());
+    _outputSql.write(("INSERT INTO relation_members " + values).toUtf8());
+
+    values =
+      QString(
+        "(relation_id, member_type, member_id, member_role, sequence_id) VALUES (%1, %2, %3, %4, %5);\n")
+        .arg(id)
+        .arg(relation->getType())
+        .arg(member.getElementId().getId())
+        .arg(member.getRole())
+        .arg(i + 1);
+    _outputSql.write(("INSERT INTO current_relation_members " + values).toUtf8());
   }
 
-  _createTags(relation->getTags(), ElementId::relation(id));*/
+  _createTags(relation->getTags(), ElementId::relation(id));
 }
 
 void OsmChangeWriterSql::_modify(const ConstNodePtr /*node*/)
