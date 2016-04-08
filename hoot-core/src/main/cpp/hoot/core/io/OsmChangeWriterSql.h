@@ -27,18 +27,15 @@ public:
 
   OsmChangeWriterSql(QUrl url);
 
-  void write(const QString path, const ChangeSetProviderPtr cs);
+  /**
+   * Write a SQL changeset to the specified output path
+   *
+   * @param path SQL file output path
+   * @param changesetProvider changeset data
+   */
+  void write(const QString path, const ChangeSetProviderPtr changesetProvider);
 
 private:
-
-  long _changesetId;
-  QSqlDatabase _db;
-  QFile _outputSql;
-  QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
-
-  Tgs::BigMap<long, long> _idMappingsNode;
-  Tgs::BigMap<long, long> _idMappingsWay;
-  Tgs::BigMap<long, long> _idMappingsRelation;
 
   void _open(QUrl url);
 
@@ -65,7 +62,19 @@ private:
 
   void _createTags(const Tags& tags, ElementId eid);
   void _deleteAllTags(ElementId eid);
-  QStringList _tagTableNamesForElement(ElementId eid);
+  QStringList _tagTableNamesForElement(ElementId eid) const;
+
+  void _createWayNodeIds(const long wayId, const std::vector<long>& nodeIds);
+  void _deleteWayNodeIds(long wayId);
+
+  long _changesetId;
+  QSqlDatabase _db;
+  QFile _outputSql;
+  QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
+
+  Tgs::BigMap<long, long> _idMappingsNode;
+  Tgs::BigMap<long, long> _idMappingsWay;
+  Tgs::BigMap<long, long> _idMappingsRelation;
 
 };
 

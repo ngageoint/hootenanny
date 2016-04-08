@@ -239,25 +239,7 @@ void OsmChangeWriterSql::_create(const ConstWayPtr way)
   _outputSql.write(("INSERT INTO way (way_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_ways (id, " + values).toUtf8());
 
-  const std::vector<long>& nodeIds = way->getNodeIds();
-  for (size_t i = 0; i < nodeIds.size(); i++)
-  {
-    const long nodeId = nodeIds.at(i);
-
-    values =
-      QString("(way_id, node_id, version sequence_id) VALUES (%1, %2, 1, %3);\n")
-        .arg(id)
-        .arg(nodeId)
-        .arg(i + 1);
-    _outputSql.write(("INSERT INTO way_nodes (" + values).toUtf8());
-
-    values =
-      QString("(way_id, node_id, sequence_id) VALUES (%1, %2, %3);\n")
-        .arg(id)
-        .arg(nodeId)
-        .arg(i + 1);
-    _outputSql.write(("INSERT INTO current_way_nodes " + values).toUtf8());
-  }
+  _createWayNodeIds(way->getId(), way->getNodeIds());
 
   _createTags(way->getTags(), ElementId::way(id));
 }
@@ -319,9 +301,20 @@ void OsmChangeWriterSql::_modify(const ConstNodePtr node)
   _createTags(node->getTags(), ElementId::node(node->getId()));
 }
 
-void OsmChangeWriterSql::_modify(const ConstWayPtr /*way*/)
+void OsmChangeWriterSql::_modify(const ConstWayPtr way)
 {
-  throw NotImplementedException("Updating way not implemented");
+  QString values =
+    QString("=%1, changeset_id=%2, visible=true, \"timestamp\"=now(), version= version + 1;\n")
+      .arg(way->getId())
+      .arg(_changesetId);
+  _outputSql.write(("UPDATE ways SET way_id" + values).toUtf8());
+  _outputSql.write(("UPDATE current_ways SET id" + values).toUtf8());
+
+  _deleteWayNodeIds(way->getId());
+  _createWayNodeIds(way->getId(), way->getNodeIds());
+
+  _deleteAllTags(ElementId::node(way->getId()));
+  _createTags(way->getTags(), ElementId::node(way->getId()));
 }
 
 void OsmChangeWriterSql::_modify(const ConstRelationPtr /*relation*/)
@@ -377,7 +370,7 @@ void OsmChangeWriterSql::_deleteAllTags(ElementId eid)
   _outputSql.write((QString("DELETE * FROM %1 ").arg(tableNames.at(1))).toUtf8());
 }
 
-QStringList OsmChangeWriterSql::_tagTableNamesForElement(ElementId eid)
+QStringList OsmChangeWriterSql::_tagTableNamesForElement(ElementId eid) const
 {
   QStringList tableNames;
   QString tableName1 = "current_" + eid.getType().toString().toLower() + "_tags";
@@ -385,6 +378,34 @@ QStringList OsmChangeWriterSql::_tagTableNamesForElement(ElementId eid)
   QString tableName2 = eid.getType().toString().toLower() + "_tags";
   tableNames.append(tableName2);
   return tableNames;
+}
+
+void OsmChangeWriterSql::_createWayNodeIds(const long wayId, const std::vector<long>& nodeIds)
+{
+  for (size_t i = 0; i < nodeIds.size(); i++)
+  {
+    const long nodeId = nodeIds.at(i);
+
+    QString values =
+      QString("(way_id, node_id, version sequence_id) VALUES (%1, %2, 1, %3);\n")
+        .arg(wayId)
+        .arg(nodeId)
+        .arg(i + 1);
+    _outputSql.write(("INSERT INTO way_nodes (" + values).toUtf8());
+
+    values =
+      QString("(way_id, node_id, sequence_id) VALUES (%1, %2, %3);\n")
+        .arg(wayId)
+        .arg(nodeId)
+        .arg(i + 1);
+    _outputSql.write(("INSERT INTO current_way_nodes " + values).toUtf8());
+  }
+}
+
+void OsmChangeWriterSql::_deleteWayNodeIds(long wayId)
+{
+  _outputSql.write((QString("DELETE * FROM way_nodes WHERE way_id=%1 ").arg(wayId)).toUtf8());
+  _outputSql.write((QString("DELETE * FROM current_way_nodes WHERE way_id=%1 ").arg(wayId)).toUtf8());
 }
 
 }
