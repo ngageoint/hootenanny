@@ -766,6 +766,11 @@ bool HootApiDb::isSupported(QUrl url)
 {
   bool valid = ApiDb::isSupported(url);
 
+  if (url.scheme() != "hootapidb" && url.scheme() != "postgresql") //postgresql is deprecated but still support
+  {
+    valid = false;
+  }
+
   if (valid)
   {
     QString path = url.path();

@@ -123,6 +123,11 @@ bool OsmApiDb::isSupported(QUrl url)
 {
   bool valid = ApiDb::isSupported(url);
 
+  if (url.scheme() != "osmapidb" && url.scheme() != "postgresql") //postgresql is deprecated but still support
+  {
+    valid = false;
+  }
+
   if (valid)
   {
     QString path = url.path();

@@ -25,7 +25,7 @@ mkdir -p test-output/cmd/ServiceOsmApiDbTest
 #echo $PGDATABASE $PGHOST $PGPORT $PGUSER $PGPASSWORD
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/ToyTestA.sql
 
-export DB_URL="postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
+export DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
 
 # do the read operation
 echo "Performing read operation"
