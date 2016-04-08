@@ -5,8 +5,6 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
-#include <boost/shared_ptr.hpp>
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/ElementType.h>
 #include <tgs/BigContainers/BigMap.h>
 
@@ -20,7 +18,7 @@ namespace hoot
 {
 
 /**
- * Writes out a set of SQL commands that, when executed, will update the contents of
+ * Writes out a set of SQL commands, that when executed, will update the contents of
  * an OSM API database with an OSM changeset.
  */
 class OsmChangeWriterSql
@@ -43,29 +41,30 @@ private:
   Tgs::BigMap<long, long> _idMappingsWay;
   Tgs::BigMap<long, long> _idMappingsRelation;
 
-  void _writeNewElement(const ConstElementPtr newElement);
-  void _updateExistingElement(const ConstElementPtr updatedElement);
-  void _deleteExistingElement(const ConstElementPtr removedElement);
+  void _open(QUrl url);
+
+  //long _getLatestVersion(const ConstElementPtr element);
+
+  long _createChangeSet();
+
   long _getNextId(const ElementType type);
   long _getNextId(QString type);
 
-  long _getLatestVersion(const ConstElementPtr element);
+  void _createTags(const Tags& tags, ElementId eid);
+
+  void _writeNewElement(const ConstElementPtr newElement);
+  void _updateExistingElement(const ConstElementPtr updatedElement);
+  void _deleteExistingElement(const ConstElementPtr removedElement);
 
   void _create(const ConstNodePtr node);
   void _create(const ConstWayPtr way);
   void _create(const ConstRelationPtr relation);
-  void _createTags(const Tags& tags, ElementId eid);
-
-  long _createChangeSet();
 
   void _modify(const ConstNodePtr node);
   void _modify(const ConstWayPtr way);
   void _modify(const ConstRelationPtr relation);
 
   void _delete(const ConstNodePtr node);
-
-  void _open(QUrl url);
-
   void _delete(const ConstWayPtr way);
   void _delete(const ConstRelationPtr relation);
 
