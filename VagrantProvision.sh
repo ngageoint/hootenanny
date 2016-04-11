@@ -364,6 +364,7 @@ if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
     rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
 
+cd ~
 # hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
 # so purposefully not installing hoot from the repos.
 if ! which hadoop > /dev/null ; then
@@ -374,9 +375,9 @@ if ! which hadoop > /dev/null ; then
 
   if [ ! -f $HOME/.ssh/id_rsa ]; then
     ssh-keygen -t rsa -N "" -f $HOME/.ssh/id_rsa
-    cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+    cat ~/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
   fi
-  chmod 600 ~/.ssh/authorized_keys
+  chmod 600 $HOME/.ssh/authorized_keys
   # ssh -o StrictHostKeyChecking=no localhost
 
   #cd /usr/local
