@@ -108,7 +108,9 @@ private:
   std::set<long> _sourceWayIds;
   std::set<long> _sourceRelationIds;
 
-  void _openDb(QString& urlStr, bool deleteMapFlag);
+  set<long> _openDb(QString& urlStr);
+
+  void _overwriteMaps(const QString& mapName, const set<long>& mapIds);
 
   void _addElementTags(const shared_ptr<const Element>& e, Tags& t);
 

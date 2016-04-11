@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -110,25 +110,35 @@ bool HootApiDbWriter::isSupported(QString urlStr)
   return _hootdb.isSupported(url);
 }
 
-
 void HootApiDbWriter::open(QString urlStr)
 {
-  _openDb(urlStr, _overwriteMap);
+  set<long> mapIds = _openDb(urlStr);
+
+  QUrl url(urlStr);
+  QStringList pList = url.path().split("/");
+  QString mapName = pList[2];
+  _overwriteMaps(mapName, mapIds);
 
   _startNewChangeSet();
-
 }
 
 void HootApiDbWriter::deleteMap(QString urlStr)
 {
-  _openDb(urlStr, true); // "True" forces the map delete
+  set<long> mapIds = _openDb(urlStr);
+
+  for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
+  {
+    LOG_INFO("Removing map with ID: " << *it);
+    _hootdb.deleteMap(*it);
+    LOG_INFO("Finished removing map with ID: " << *it);
+  }
 
   _hootdb.commit();
   _hootdb.close();
   _open = false;
 }
 
-void HootApiDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
+set<long> HootApiDbWriter::_openDb(QString& urlStr)
 {
   if (!isSupported(urlStr))
   {
@@ -166,9 +176,14 @@ void HootApiDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
   QString mapName = pList[2];
   set<long> mapIds = _hootdb.selectMapIds(mapName);
 
+  return mapIds;
+}
+
+void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& mapIds)
+{
   if (mapIds.size() > 0)
   {
-    if (deleteMapFlag) // deleteMapFlag is either True or _overwriteMap
+    if (_overwriteMap) // delete mape and overwrite it
     {
       for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
       {
@@ -178,7 +193,6 @@ void HootApiDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
       }
 
       _hootdb.setMapId(_hootdb.insertMap(mapName, true));
-
     }
     else
     {

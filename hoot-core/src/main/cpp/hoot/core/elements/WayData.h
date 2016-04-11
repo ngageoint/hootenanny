@@ -61,6 +61,7 @@ public:
   std::vector<long>& getNodeIds() { return _nodes; }
 
 protected:
+
   std::vector<long> _nodes;
 };
 

@@ -33,6 +33,7 @@
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/io/ApiDb.h>
+#include <hoot/core/ops/MapCropper.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>
@@ -113,29 +114,35 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
   }
   else // process BOUNDED REGION
   {
+    QStringList bboxParts = _bbox.split(",");
+    double minLat = bboxParts[1].toDouble();
+    double minLon = bboxParts[0].toDouble();
+    double maxLat = bboxParts[3].toDouble();
+    double maxLon = bboxParts[2].toDouble();
+
+    Envelope env(minLon, maxLon, minLat, maxLat);
+
+    //select all elements in the bounding box
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
     {
       LOG_DEBUG("About to call bounded with element");
       LOG_DEBUG(ctr);
       ElementType::Type elementType = static_cast<ElementType::Type>(ctr);
-      _readBounded(map, elementType);
+      _readBounded(map, elementType, env);
     }
+
+    //crop the map
+    MapCropper::crop(map, env);
   }
 }
 
-void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& elementType)
+void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& elementType, const Envelope& env)
 {
   LOG_DEBUG("IN OsmApiDbReader::readBounded(,)...");
   long long lastId = LLONG_MIN;
   shared_ptr<Element> element;
   QStringList tags;
   bool firstElement = true;
-  QStringList bboxParts = _bbox.split(",");
-
-  double minLat = bboxParts[1].toDouble();
-  double minLon = bboxParts[0].toDouble();
-  double maxLat = bboxParts[3].toDouble();
-  double maxLon = bboxParts[2].toDouble();
 
   // contact the DB and select all
   shared_ptr<QSqlQuery> elementResultsIterator = _database.selectBoundedElements(_osmElemId, elementType, _bbox);
@@ -163,7 +170,10 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
               ApiDbReader::addTagsToElement( element );
             }
 
-            if (_status != Status::Invalid) { element->setStatus(_status); }
+            if (_status != Status::Invalid)
+            {
+              element->setStatus(_status);
+            }
             map->addElement(element);
             tags.clear();
           }
@@ -177,9 +187,11 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
 
         // read the tag for as many rows as there are tags
         // need to get into form "key1"=>"val1", "key2"=>"val2", ...
-
         QString result = _database.extractTagFromRow(elementResultsIterator, elementType.getEnum());
-        if(result != "") tags << result;
+        if(result != "")
+        {
+          tags << result;
+        }
       }
       // process the last complete element only if an element has been created
       if(!firstElement)
@@ -209,12 +221,15 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
           // do the bounds check
           double lat = nodeInfoIterator->value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
           double lon = nodeInfoIterator->value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
-          if(lat >= minLat && lat <= maxLat && lon >= minLon && lon <= maxLon) foundOne = true; // ToDo: process boundary condition
+          Coordinate c(lon, lat);
+          if (env.contains(c))
+          {
+            foundOne = true;
+          }
         }
         if( foundOne )
         {
           // we have a polygon, so now you have to do some work; else go on to the next way_id
-
           // process the way into a data structure
           shared_ptr<Element> element = _resultToWay(*elementResultsIterator, *map);
 
@@ -232,10 +247,13 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
           if(tags.size()>0)
           {
             element->setTags( ApiDb::unescapeTags(tags.join(", ")) );
-            ApiDbReader::addTagsToElement( element );
+            ApiDbReader::addTagsToElement(element);
           }
 
-          if (_status != Status::Invalid) { element->setStatus(_status); }
+          if (_status != Status::Invalid)
+          {
+            element->setStatus(_status);
+          }
           map->addElement(element);
           tags.clear();
         }
@@ -248,7 +266,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
     case ElementType::Relation:
       while( elementResultsIterator->next() )
       {
-        _processRelation(*elementResultsIterator, *map);
+        _processRelation(*elementResultsIterator, *map, env);
       }
       break;
 
@@ -259,22 +277,16 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
   LOG_DEBUG("LEAVING OsmApiDbReader::_read...");
 }
 
-void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& map)
+void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& map, const Envelope& env)
 {
   QStringList tags;
   long long relId = resultIterator.value(0).toLongLong();
-  QStringList bboxParts = _bbox.split(",");
-  double minLat = bboxParts[1].toDouble();
-  double minLon = bboxParts[0].toDouble();
-  double maxLat = bboxParts[3].toDouble();
-  double maxLon = bboxParts[2].toDouble();
 
   vector<RelationData::Entry> members = _database.selectMembersForRelation( relId );
   for(vector<RelationData::Entry>::iterator it = members.begin(); it != members.end(); ++it)
   {
     ElementId eid = (*it).getElementId();
     QString type = eid.getType().toString();
-    LOG_VAR(type);
     long idFromRelation = eid.getId();
 
     if(type=="Node")
@@ -316,7 +328,11 @@ void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& m
         // do the bounds check
         double lat = nodeInfoIterator->value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
         double lon = nodeInfoIterator->value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
-        if(lat >= minLat && lat <= maxLat && lon >= minLon && lon <= maxLon) foundOne = true; // ToDo: process boundary condition
+        Coordinate c(lon, lat);
+        if (env.contains(c))
+        {
+          foundOne = true;
+        }
       }
       if( foundOne ) // we found a relation in the bounds
       {
@@ -350,7 +366,7 @@ void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& m
       shared_ptr<QSqlQuery> relIterator = _database.selectBoundedElements(idFromRelation, ElementType::Relation, _bbox);
       while(relIterator->next())
       {
-        _processRelation(*relIterator, map);
+        _processRelation(*relIterator, map, env);
       }
     }
   }
@@ -534,7 +550,43 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
   }
   way->addNodes(nodeIds);
 
+  //add nodes to the map if the map does not contain the node for way. Since query nodes in bounding box
+  //may not contain all nodes for the way which will cause problem when cropping map later
+  _addNodesForWay(nodeIds, map);
+
   return way;
+}
+
+void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
+{
+  for (unsigned int i = 0; i < nodeIds.size(); i++)
+  {
+    QStringList tags;
+    if (map.containsNode(nodeIds[i]) == false)
+    {
+      shared_ptr<QSqlQuery> queryIterator = _database.selectNodeById(nodeIds[i]);
+      while (queryIterator->next())
+      {
+        shared_ptr<Node> node = _resultToNode(*queryIterator.get(), map);
+        QString result = _database.extractTagFromRow(queryIterator, ElementType::Node);
+        if(result != "")
+        {
+          tags << result;
+        }
+
+        if(tags.size()>0)
+        {
+          node->setTags(ApiDb::unescapeTags(tags.join(", ")) );
+          ApiDbReader::addTagsToElement(node);
+        }
+        if (_status != Status::Invalid)
+        {
+          node->setStatus(_status);
+        }
+        map.addElement(node);
+      }
+    }
+  }
 }
 
 shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator,
@@ -564,7 +616,6 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
 void OsmApiDbReader::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  //setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   setUserEmail(configOptions.getOsmapiDbReaderEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
 }

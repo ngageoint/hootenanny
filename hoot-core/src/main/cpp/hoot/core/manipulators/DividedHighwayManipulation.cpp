@@ -219,7 +219,7 @@ void DividedHighwayManipulation::_createStub(shared_ptr<OsmMap> map, shared_ptr<
   }
 
   shared_ptr<Way> stub(new Way(otherUnknown, map->createNextWayId(),
-                               oneway->getCircularError()));
+                               oneway->getRawCircularError()));
   stub->addNode(endNode->getId());
   stub->addNode(nodeId);
   stub->setTags(mid->getTags());
