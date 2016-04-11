@@ -27,8 +27,7 @@
 package hoot.services.writers.review;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Random;
 
@@ -70,12 +69,18 @@ public class ReviewBookmarksSaverTest {
     JSONObject o = new JSONObject();
     o.put("test1", "val1");
     o.put("test2", "val2");
-    ReviewBookmarkSaveRequest req = new ReviewBookmarkSaveRequest(getMapId(conn), 1, o, -1);
+    long userId = DbUtils.insertUser(conn);
+    long mapId = DbUtils.insertMap(userId, conn);
+    long relationId = new Random().nextLong();
+    ReviewBookmarkSaveRequest req = new ReviewBookmarkSaveRequest(mapId, relationId, o, userId);
     ReviewBookmarksSaver tagsSaver = new ReviewBookmarksSaver(conn);
 
     long saved = tagsSaver.save(req);
 
     org.junit.Assert.assertEquals(1, saved);
+
+    cleanUp(userId, mapId, relationId, conn);
+    DbUtils.closeConnection(conn);
   }
 
   @Test
@@ -103,56 +108,70 @@ public class ReviewBookmarksSaverTest {
   public void testUpdateWithDetail() throws Exception
   {
     Connection conn = DbUtils.createConnection();
-    long mapId = getMapId(conn);
-    long generatedLong = new Random().nextLong();
+    long userId = DbUtils.insertUser(conn);
+    long mapId = DbUtils.insertMap(userId, conn);
+    long relationId = new Random().nextLong();
 
     JSONObject o = new JSONObject();
     o.put("utest1", "val1");
     o.put("utest2", "val2");
-    ReviewBookmarkSaveRequest req = new ReviewBookmarkSaveRequest(mapId, generatedLong, o, -1);
+    ReviewBookmarkSaveRequest req = new ReviewBookmarkSaveRequest(mapId, relationId, o, userId);
     ReviewBookmarksSaver tagsSaver = new ReviewBookmarksSaver(conn);
     tagsSaver.save(req);
 
     ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
-    List<ReviewBookmarks> bookmarks = retriever.retrieve(mapId, generatedLong);
+    List<ReviewBookmarks> bookmarks = retriever.retrieve(mapId, relationId);
 
     o = new JSONObject();
     o.put("utest1", "new_val1");
     o.put("utest3", "val3");
     o.put("utest4", "val4");
-    req = new ReviewBookmarkSaveRequest(getMapId(conn), generatedLong, o, -1);
+    req = new ReviewBookmarkSaveRequest(mapId, relationId, o, userId);
 
     org.junit.Assert.assertEquals(1, bookmarks.size());
     org.junit.Assert.assertEquals(1, tagsSaver.update(req, bookmarks.get(0)));
+
+    cleanUp(userId, mapId, relationId, conn);
+    DbUtils.closeConnection(conn);
   }
 
-  protected long getMapId(Connection conn) throws Exception
+  protected void cleanUp(long userId, long mapId, long relationId, Connection conn) throws Exception
   {
-    long mapId = 0;
-    Statement stmt = null;
-    ResultSet rs = null;
-
-    String sql = "select min(id) as id from maps";
+    DbUtils.deleteMapRelatedTablesByMapId(mapId);
+    PreparedStatement ps = null;
+    PreparedStatement mps = null;
     try
     {
-      stmt = conn.createStatement();
-      rs = stmt.executeQuery(sql);
-      while (rs.next())
-      {
-        mapId = rs.getLong("id");
-      }
+      String sql = null;
+
+      sql = "delete from review_bookmarks where relation_id=?";
+      ps = conn.prepareStatement(sql);
+
+      ps.setLong(1, relationId);
+
+      ps.executeUpdate();
+
+
+      String msql = null;
+      msql = "delete from maps where id=?";
+      mps = conn.prepareStatement(msql);
+
+      mps.setLong(1, mapId);
+
+      mps.executeUpdate();
     }
     finally
     {
-      if (rs != null)
+      if(ps != null)
       {
-        rs.close();
+        ps.close();
       }
-      if (stmt != null)
+      if(mps != null)
       {
-        stmt.close();
+        mps.close();
       }
     }
-    return mapId;
+
+    DbUtils.deleteUser(conn, userId);
   }
 }
