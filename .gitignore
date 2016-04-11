@@ -71,6 +71,8 @@ hoot-streaming/tmp
 hootenanny-*.tar.gz
 HOOT_VERSION_FILE
 HootConfig.h
+.idea/*
+*.iml
 ingest/processed
 ingest/upload
 **/lib*.a
