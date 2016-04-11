@@ -10,7 +10,7 @@ echo HOOT_HOME: $HOOT_HOME
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
 cp conf/ServerConfig.sh.orig conf/ServerConfig.sh
 
-aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
+aclocal && autoconf && autoheader && automake && ./configure --quiet --with-rnd --with-services --with-uitests
 
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
