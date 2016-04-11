@@ -12,7 +12,7 @@ include::JavascriptOverview.asciidoc[]
 include::tmp/RulesLib.asciidoc[]                                                
 include::tmp/RulesTemplate.asciidoc[]                                           
 :leveloffset: 0
-include::user/PostgresExamples.asciidoc[]
+include::user/HootAPIexamples.asciidoc[]
 include::user/SchemaFiles.asciidoc[]
 include::HootenannyConfigOptions.asciidoc[]
 :leveloffset: 0
