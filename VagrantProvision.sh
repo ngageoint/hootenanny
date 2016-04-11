@@ -540,11 +540,16 @@ echo HOOT_HOME: $HOOT_HOME
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
 cp conf/ServerConfig.sh.orig conf/ServerConfig.sh
 
+rm -rf $HOOT_HOME/ingest
 mkdir -p $HOOT_HOME/ingest/processed
 sudo chown -R $username:tomcat6 $HOOT_HOME/ingest
+
+rm -rf $HOOT_HOME/upload
 mkdir -p $HOOT_HOME/upload
 sudo chown -R $username:tomcat6 $HOOT_HOME/upload
+
 aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
+
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
     cp LocalConfig.pri.orig LocalConfig.pri
