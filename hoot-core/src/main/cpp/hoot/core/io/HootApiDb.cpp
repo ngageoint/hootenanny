@@ -201,7 +201,9 @@ void HootApiDb::commit()
 
   _inTransaction = false;
 
-  // If we get this far successful, execute all of our post-transaction tasks
+  // If we get this far, transaction commit was successful. Now execute
+  // all of our post-transaction tasks. (like drop database statements)
+  // A task that throws an error will prevent subsequent tasks from executing.
   QVectorIterator<QString> taskIt(_postTransactionStatements);
   while (taskIt.hasNext())
   {
@@ -314,8 +316,9 @@ void HootApiDb::dropDatabase(const QString& databaseName)
 {
   QString sql = QString("DROP DATABASE IF EXISTS \"%1\"").arg(databaseName);
 
-  // TRICKY: if we're in a transaction, we store this statement to execute
-  // later, if transaction is successful
+  // TRICKY: You are not allowed to drop a database within a transaction.
+  // If this is the case, we store the statement & execute it right after
+  // the current trans is successfully committed.
   if (_inTransaction)
   { // Store for later
     _postTransactionStatements.push_back(sql);
@@ -1426,10 +1429,7 @@ long HootApiDb::reserveElementId(const ElementType::Type type)
 
 QString HootApiDb::_getRenderDBName(long mapId)
 {
-  // RenderDBName be like:
-  // $DB_NAME . '_renderdb_' . $DB_NAME.maps.display_name
-
-  // Get maps.display_name
+  // Get current database & maps.display_name
   QString dbName = "";
   QString mapDisplayName = "";
   QString sql = "SELECT current_database(), maps.display_name "
