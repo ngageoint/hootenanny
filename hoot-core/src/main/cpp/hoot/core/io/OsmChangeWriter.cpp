@@ -44,50 +44,56 @@ void OsmChangeWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
   writer.writeAttribute("version", "0.6");
   writer.writeAttribute("generator", "hootenanny");
 
-  //Make the changeset have only one set of entries per change type.  Also for readability,
-  //sort the set of changes within each change type by element type.
-  QMap<Change::ChangeType, QMap<ElementType::Type, QVector<ConstElementPtr> > > elementsByChangesetTypeAndElementType;
+  Change::ChangeType last = Change::Unknown;
+
   while (cs->hasMoreChanges())
   {
-    const Change change = cs->readNextChange();
-    elementsByChangesetTypeAndElementType[change.type][change.e->getElementType().getEnum()].push_back(change.e);
-  }
-  const int NUM_CHANGE_TYPES = 3;
-  const int NUM_ELEMENT_TYPES = 3;
-  for (int i = 0; i < NUM_CHANGE_TYPES; i++)
-  {
-    const Change::ChangeType changeType = static_cast<Change::ChangeType>(i);
-    writer.writeStartElement(Change::changeTypeToString(changeType).toLower());
-    for (int j = 0; j < NUM_ELEMENT_TYPES; j++)
+    Change c = cs->readNextChange();
+
+    if (c.type != last)
     {
-      const QVector<ConstElementPtr> elements =
-        elementsByChangesetTypeAndElementType[changeType][ElementType::Type(static_cast<ElementType::Type>(j))];
-      QVectorIterator<ConstElementPtr> elementItr(elements);
-      while (elementItr.hasNext())
+      if (last != Change::Unknown)
       {
-        ConstElementPtr element = elementItr.next();
-        switch (element->getElementType().getEnum())
-        {
-          case ElementType::Node:
-            writeNode(writer, dynamic_pointer_cast<const Node>(element));
-            break;
-
-          case ElementType::Way:
-            writeWay(writer, dynamic_pointer_cast<const Way>(element));
-            break;
-
-          case ElementType::Relation:
-            writeRelation(writer, dynamic_pointer_cast<const Relation>(element));
-            break;
-
-          default:
-            throw IllegalArgumentException("Unexpected element type.");
-        }
+        writer.writeEndElement();
       }
+      switch (c.type)
+      {
+      case Change::Create:
+        writer.writeStartElement("create");
+        break;
+      case Change::Delete:
+        writer.writeStartElement("delete");
+        break;
+      case Change::Modify:
+        writer.writeStartElement("modify");
+        break;
+      default:
+        throw IllegalArgumentException("Unexepected change type.");
+      }
+      last = c.type;
     }
+
+    switch (c.e->getElementType().getEnum())
+    {
+    case ElementType::Node:
+      writeNode(writer, dynamic_pointer_cast<const Node>(c.e));
+      break;
+    case ElementType::Way:
+      writeWay(writer, dynamic_pointer_cast<const Way>(c.e));
+      break;
+    case ElementType::Relation:
+      writeRelation(writer, dynamic_pointer_cast<const Relation>(c.e));
+      break;
+    default:
+      throw IllegalArgumentException("Unexpected element type.");
+    }
+  }
+
+  if (last != Change::Unknown)
+  {
     writer.writeEndElement();
   }
-
+  writer.writeEndElement();
   writer.writeEndDocument();
 }
 

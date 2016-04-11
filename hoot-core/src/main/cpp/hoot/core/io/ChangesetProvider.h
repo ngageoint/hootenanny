@@ -25,7 +25,8 @@ public:
   {
     Create = 0,
     Modify = 1,
-    Delete = 2
+    Delete = 2,
+    Unknown = 3
   };
 
    Change() {}
@@ -40,16 +41,18 @@ public:
         return "Modify";
       case Delete:
         return "Delete";
+      case Unknown:
+        return "Unknown";
     }
     throw HootException("Invalid change type.");
   }
 
   QString toString() const
   {
-    return changeTypeToString(type) + ": " +
-      e->getElementId().toString() //+
-      //e->toString()
-      ;
+    QString str =
+      changeTypeToString(type) + ": " + e->getElementId().toString();
+    //str += ->toString();
+    return str;
   }
 
   ConstElementPtr e;
