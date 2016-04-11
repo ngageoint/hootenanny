@@ -203,16 +203,16 @@ cd ~
 # Tomcat using the Tomcat startup and shutdown scripts.
 username=vagrant
 if groups $username | grep &>/dev/null '\btomcat6\b'; then
-    echo "Adding vagrant user to tomcat6 user group..."
-    sudo usermod -a -G tomcat6 vagrant
+    echo "Adding $username user to tomcat6 user group..."
+    sudo usermod -a -G tomcat6 $username
 fi
-sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME
+sudo chown -R $username:tomcat6 $TOMCAT6_HOME
 sudo mkdir -p /var/lib/tomcat6/logs
 sudo mkdir -p $TOMCAT6_HOME/logs
-sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME/logs
-sudo chown -R vagrant:tomcat6 /var/lib/tomcat6
-sudo chown -R vagrant:tomcat6 /etc/tomcat6
-sudo chown -R vagrant:tomcat6 /var/log/tomcat6
+sudo chown -R $username:tomcat6 $TOMCAT6_HOME/logs
+sudo chown -R $username:tomcat6 /var/lib/tomcat6
+sudo chown -R $username:tomcat6 /etc/tomcat6
+sudo chown -R $username:tomcat6 /var/log/tomcat6
 
 cd $HOOT_HOME
 source ./SetupEnv.sh
@@ -282,7 +282,7 @@ fi
 if [ ! -d $TOMCAT6_HOME/.deegree ]; then
     echo "Creating deegree directory for webapp..."
     sudo mkdir $TOMCAT6_HOME/.deegree
-    sudo chown vagrant:tomcat6 $TOMCAT6_HOME/.deegree
+    sudo chown $username:tomcat6 $TOMCAT6_HOME/.deegree
 fi
 
 # Remove LocalHoot.json based on #464
@@ -311,9 +311,9 @@ sudo npm install
 cd ..
 
 mkdir -p $HOOT_HOME/ingest/processed
-sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
+sudo chown -R $username:tomcat6 $HOOT_HOME/ingest
 mkdir -p $HOOT_HOME/upload
-sudo chown -R vagrant:tomcat6 $HOOT_HOME/upload
+sudo chown -R $username:tomcat6 $HOOT_HOME/upload
 aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
