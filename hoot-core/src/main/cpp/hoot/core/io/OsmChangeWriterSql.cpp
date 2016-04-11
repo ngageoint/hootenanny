@@ -47,6 +47,9 @@ void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr ch
       case Change::Delete:
         _deleteExistingElement(change.e);
         break;
+      case Change::Unknown:
+        //TODO: ??
+        break;
     }
     changes++;
 
