@@ -252,6 +252,8 @@ void OsmChangeWriterSql::_deleteExistingElement(const ConstElementPtr removedEle
   _throwErrorIfElementAtVersionDoesntExist(
     "current_" + elementName + "s", "id", removedElement->getId(), removedElement->getVersion());
 
+  //API DB keeps history for all elements, so the element just gets set to invisible during a delete...
+  //not actually deleted
   const QString values = QString("=%1;\n").arg(removedElement->getId());
   _outputSql.write(
     ("UPDATE " + elementName + "s SET visible=false WHERE " + elementName + "_id" + values).toUtf8());
