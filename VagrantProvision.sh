@@ -31,11 +31,11 @@ sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-d
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
     # http://www.linuxquestions.org/questions/debian-26/dpkg-error-processing-dictionaries-common-4175451951/
-    sudo apt-get -q -y install dictionaries-common
+    sudo apt-get -q -y install dictionaries-common >> Ubuntu_upgrade.txt 2>&1
 
     sudo /usr/share/debconf/fix_db.pl
 
-    sudo apt-get -q -y install wamerican-insane
+    sudo apt-get -q -y install wamerican-insane >> Ubuntu_upgrade.txt 2>&1
 
     sudo /usr/share/debconf/fix_db.pl
     sudo dpkg-reconfigure -f noninteractive dictionaries-common
@@ -44,6 +44,13 @@ fi
 sudo apt-get -y autoremove
 
 echo "### Configuring environment..."
+
+if ! grep --quiet "export HOOT_HOME" ~/.profile; then
+    echo "Adding hoot home to profile..."
+    echo "export HOOT_HOME=\$HOME/hoot" >> ~/.profile
+    echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.profile
+    source ~/.profile
+fi
 
 if ! grep --quiet "export JAVA_HOME" ~/.profile; then
     echo "Adding Java home to profile..."
@@ -59,9 +66,11 @@ if ! grep --quiet "export HADOOP_HOME" ~/.profile; then
     source ~/.profile
 fi
 
+sudo apt-get install -y ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip >> Ubuntu_upgrade.txt 2>&1
+
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
-    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" >> ~/.profile
+    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
@@ -120,6 +129,8 @@ if [ ! -f bin/chromedriver ]; then
     fi
     unzip -d $HOME/bin chromedriver_linux64.zip
 fi
+
+sudo apt-get autoremove -y
 
 if [ ! -f bin/osmosis ]; then
     echo "### Installing Osmosis"
@@ -235,6 +246,7 @@ shared_buffers = 1024MB
 max_files_per_process = 1000
 work_mem = 16MB
 maintenance_work_mem = 256MB
+checkpoint_segments = 20
 autovacuum = off
 EOT
 fi
@@ -348,7 +360,7 @@ if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then
     sudo sed -i.bak "s@^<Context>@<Context allowLinking=\"true\">@" /etc/tomcat6/context.xml
 fi
 
-if [ ! -d /usr/share/tomcat6/.deegree ]; then
+if [ ! -d $TOMCAT6_HOME/.deegree ]; then
     echo "Creating deegree directory for webapp..."
     sudo mkdir $TOMCAT6_HOME/.deegree
     sudo chown $username:tomcat6 $TOMCAT6_HOME/.deegree
@@ -359,10 +371,10 @@ if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
     rm -f $HOOT_HOME/conf/LocalHoot.json
 fi
 
-if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
-    echo "Removing services local.conf..."
-    rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
-fi
+# if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
+#     echo "Removing services local.conf..."
+#     rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
+# fi
 
 cd ~
 # hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
