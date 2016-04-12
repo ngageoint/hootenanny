@@ -1,6 +1,6 @@
 # Installing Vagrant
 
-To download Vagrant for supported platforms, see [here](http://www.vagrantup.com/downloads.html)
+To download Vagrant for supported platforms, see [here](https://www.vagrantup.com/downloads.html)
 
 # Installing VirtualBox
 

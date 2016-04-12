@@ -7,7 +7,9 @@ Hootenanny supports writing and reading from the OpenStreetMap API database usin
 
 === Writing to an OpenStreetMap Editing API Database
 
-Writing to an OpenStreetMap API database requires the use of Hootenanny's 'convert' command and the following command arguments described here:
+Writing to an OpenStreetMap API database is currently not supported but will be updated with command line examples in the future.
+
+////
 
 ------
 % Hootenanny 'convert' command: hoot convert [args] input output
@@ -22,11 +24,14 @@ services.db.writer.output.id.mappings=/tmp/idmaps.xml  e.g. optional to validati
 a sample osm file: $HOOT_HOME/test-files/ToyTestA.osm
 
 % Output source:
-a sample OpenStreetMap Editing API Database: postgresql://hoot:hoottest@localhost:5432/osmapi_test  This database is the test database and should be active for testing. However, any database output source may be applied here. 
+a sample OpenStreetMap Editing API Database: osmapidb://hoot:hoottest@localhost:5432/osmapi_test  This database is the test database and should be active for testing. However, any database output source may be applied here. 
 
 % Command syntax example:
-hoot convert -D services.db.writer.email=OsmApiInsert@hoot.local -D services.db.writer.create.user=true -D reader.add.source.datetime=false -D services.db.writer.output.id.mappings=/tmp/idmaps.xml $HOOT_HOME/test-files/ToyTestA.osm postgresql://hoot:hoottest@localhost:5432/osmapi_test
+hoot convert -D services.db.writer.email=OsmApiInsert@hoot.local -D services.db.writer.create.user=true -D reader.add.source.datetime=false -D services.db.writer.output.id.mappings=/tmp/idmaps.xml $HOOT_HOME/test-files/ToyTestA.osm osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 ------
+
+NOTE: Currently it is not possible to write to an OpenStreetMap API database so this example will likely be updated in future versions.
+////
 
 === Reading from an OpenStreetMap Editing API Database
 
@@ -35,19 +40,17 @@ Reading from an OpenStreetMap Editing API database requires the use of Hootenann
 ------
 % Hootenanny 'convert' command: hoot convert [args] input output
 
-% Command arguments:
-services.db.writer.email='email address'  e.g. make up an email address like: OsmApiInsert@hoot.local
-services.db.writer.create.user=true  e.g. set this to true
-reader.add.source.datetime=false  e.g. setting this to false uses current date
-
 % Input source:
-a sample OpenStreetMap Edit API Database: postgresql://hoot:hoottest@localhost:5432/osmapi_test  This database is the test database and should be active for testing. However, any database input source may be supplied here. 
+a sample OpenStreetMap Edit API Database: osmapidb://hoot:hoottest@localhost:5432/osmapi_test  This database is the test database and should be active for testing. However, any database input source may be supplied here. 
 
 % Output source:
 define an output osm file: /tmp/ToyTestA-out.osm
 
 % Command syntax example:
-hoot convert -D services.db.writer.email=OsmApiInsert@hoot.local -D services.db.writer.create.user=true -D reader.add.source.datetime=false postgresql://hoot:hoottest@localhost:5432/osmapi_test /tmp/ToyTestA-out.osm
+
+hoot convert osmapidb://hoot:hoottest@localhost:5432/osmapi_test test-output/ToyTestA-out.osm
+
+hoot convert -D convert.bounding.box=-106.5100000,38.3000000,-106.4000000,38.5000000 osmapidb://hoot:hoottest@localhost:5432/osmapi_test test-output/bboxOutput.osm
 ------
 
 === Validating Writes to the OpenStreetMap Editing API Database

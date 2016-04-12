@@ -82,7 +82,7 @@ QUrl ServicesDbTestUtils::getDbModifyUrl()
   // read the DB values from the DB config file.
   Settings s = _readDbConfig();
   QUrl result;
-  result.setScheme("postgresql");
+  result.setScheme("hootapidb");
   result.setHost(s.get("DB_HOST").toString());
   result.setPort(s.get("DB_PORT").toInt());
   result.setUserName(s.get("DB_USER").toString());
@@ -93,10 +93,10 @@ QUrl ServicesDbTestUtils::getDbModifyUrl()
 
 QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId)
 {
-  //insert url example: postgresql://hoot:hoottest@localhost:5432/hoot/testMap
+  //insert url example: hootapidb://hoot:hoottest@localhost:5432/hoot/testMap
   QString dbModifyUrl = getDbModifyUrl().toString();
   QStringList modifyUrlParts = dbModifyUrl.split("/");
-  //read url example: postgresql://hoot:hoottest@localhost:5432/hoot/1
+  //read url example: hootapidb://hoot:hoottest@localhost:5432/hoot/1
   assert(mapId > 0);
   QString dbReadUrl =
     dbModifyUrl.remove("/" + modifyUrlParts[modifyUrlParts.size() - 1]) + "/" +
@@ -108,10 +108,10 @@ QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId)
 
 QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId, const long elemId, const QString& elemType)
 {
-  //insert url example: postgresql://hoot:hoottest@localhost:5432/hoot/testMap
+  //insert url example: hootapidb://hoot:hoottest@localhost:5432/hoot/testMap
   QString dbModifyUrl = getDbModifyUrl().toString();
   QStringList modifyUrlParts = dbModifyUrl.split("/");
-  //read url example: postgresql://hoot:hoottest@localhost:5432/hoot/1
+  //read url example: hootapidb://hoot:hoottest@localhost:5432/hoot/1
   assert(mapId > 0);
   QString dbReadUrl =
     dbModifyUrl.remove("/" + modifyUrlParts[modifyUrlParts.size() - 1]) + "/" +
@@ -127,7 +127,7 @@ QUrl ServicesDbTestUtils::getOsmApiDbUrl()
   // read the DB values from the DB config file.
   Settings s = _readDbConfig();
   QUrl result;
-  result.setScheme("postgresql");
+  result.setScheme("osmapidb");
   result.setHost(s.get("DB_HOST").toString());
   result.setPort(s.get("DB_PORT").toInt());
   result.setUserName(s.get("DB_USER").toString());
