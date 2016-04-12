@@ -78,10 +78,12 @@ public:
       {
         throw HootException(
           QString("SQL changeset writing requires a target database URL for configuration, ") +
-          QString("although the changeset will not be automatically written to the database."));
+          QString("purposes.  However, the changeset will not be automatically written to the ") +
+          QString("database by this command."));
       }
 
-      OsmChangeWriterSql(QUrl(args[3]), ConfigOptions().getChangesetSqlUseInternalIds())
+      OsmChangeWriterSql(
+        QUrl(args[3]), ConfigOptions().getChangesetSqlUseInternalIds())
         .write(args[2], delta);
     }
     else

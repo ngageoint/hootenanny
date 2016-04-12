@@ -57,7 +57,8 @@ private:
   void _modify(const ConstWayPtr way);
   void _modify(const ConstRelationPtr relation);
 
-  void _deleteAll(const QString tableName, const QString idFieldName, const long id);
+  void _deleteAll(const QString tableName, const QString idFieldName, const long id,
+                  const long version = -1);
 
   void _createTags(const Tags& tags, ElementId eid);
   QStringList _tagTableNamesForElement(ElementId eid) const;
@@ -68,6 +69,8 @@ private:
   void _createRelationMembers(const long relationId, const QString type,
                               const vector<RelationData::Entry>& members);
 
+  //This is for testing only, so that we don't have to rely on the database for our starting element
+  //ID's and can, therefore, have repeatable test output.
   bool _useInternalIds;
   long _changesetId;
   long _nodeId;

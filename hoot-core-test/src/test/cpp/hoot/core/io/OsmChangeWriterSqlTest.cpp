@@ -120,10 +120,10 @@ public:
     //enable internal ID management on the writer so that ID's start at the same place every time
     //to keep the test output consistent
     OsmChangeWriterSql changesetWriter(ServicesDbTestUtils::getDbModifyUrl(), true);
-    changesetWriter.write("test-output/OsmChangeWriterSqlTest.sql", changesetProvider);
+    changesetWriter.write("test-output/io/OsmChangeWriterSqlTest.sql", changesetProvider);
     HOOT_STR_EQUALS(
       TestUtils::readFile("test-files/io/OsmChangeWriterSqlTest/OsmChangeWriterSqlTest.sql"),
-      TestUtils::readFile("test-output/OsmChangeWriterSqlTest.sql"));
+      TestUtils::readFile("test-output/io/OsmChangeWriterSqlTest.sql"));
   }
 };
 

@@ -245,24 +245,24 @@ void OsmChangeWriterSql::_deleteExistingElement(const ConstElementPtr removedEle
   {
     case ElementType::Node:
       _deleteAllTags(removedElement->getElementId());
-      _deleteAll("nodes", "node_id", removedElement->getId());
-      _deleteAll("current_nodes", "id", removedElement->getId());
+      _deleteAll("nodes", "node_id", removedElement->getId(), removedElement->getVersion());
+      _deleteAll("current_nodes", "id", removedElement->getId(), removedElement->getVersion());
       break;
 
     case ElementType::Way:
       _deleteAll("current_ways_nodes", "way_id", removedElement->getId());
       _deleteAll("way_nodes", "way_id", removedElement->getId());
       _deleteAllTags(removedElement->getElementId());
-      _deleteAll("current_ways", "id", removedElement->getId());
-      _deleteAll("ways", "way_id", removedElement->getId());
+      _deleteAll("current_ways", "id", removedElement->getId(), removedElement->getVersion());
+      _deleteAll("ways", "way_id", removedElement->getId(), removedElement->getVersion());
       break;
 
     case ElementType::Relation:
       _deleteAll("current_relation_members", "relation_id", removedElement->getId());
       _deleteAll("relation_members", "relation_id", removedElement->getId());
       _deleteAllTags(removedElement->getElementId());
-      _deleteAll("current_relations", "id", removedElement->getId());
-      _deleteAll("relations", "relation_id", removedElement->getId());
+      _deleteAll("current_relations", "id", removedElement->getId(), removedElement->getVersion());
+      _deleteAll("relations", "relation_id", removedElement->getId(), removedElement->getVersion());
       break;
 
     default:
@@ -325,12 +325,13 @@ void OsmChangeWriterSql::_create(const ConstRelationPtr relation)
 void OsmChangeWriterSql::_modify(const ConstNodePtr node)
 {
   QString values =
-    QString("=%1, latitude=%2, longitude=%3, changeset_id=%4, visible=true, \"timestamp\"=now(), tile=%5, version=version + 1;\n")
+    QString("=%1, latitude=%2, longitude=%3, changeset_id=%4, visible=true, \"timestamp\"=now(), tile=%5, version=version+1 WHERE version=%6;\n")
       .arg(node->getId())
       .arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7))
       .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
       .arg(_changesetId)
-      .arg(HootApiDb::tileForPoint(node->getY(), node->getX()));
+      .arg(HootApiDb::tileForPoint(node->getY(), node->getX()))
+      .arg(node->getVersion());
   _outputSql.write(("UPDATE nodes SET node_id" + values).toUtf8());
   _outputSql.write(("UPDATE current_nodes SET id" + values).toUtf8());
 
@@ -341,9 +342,10 @@ void OsmChangeWriterSql::_modify(const ConstNodePtr node)
 void OsmChangeWriterSql::_modify(const ConstWayPtr way)
 {
   QString values =
-    QString("=%1, changeset_id=%2, visible=true, \"timestamp\"=now(), version= version + 1;\n")
+    QString("=%1, changeset_id=%2, visible=true, \"timestamp\"=now(), version=version+1 WHERE version=%3;\n")
       .arg(way->getId())
-      .arg(_changesetId);
+      .arg(_changesetId)
+      .arg(way->getVersion());
   _outputSql.write(("UPDATE ways SET way_id" + values).toUtf8());
   _outputSql.write(("UPDATE current_ways SET id" + values).toUtf8());
 
@@ -351,16 +353,17 @@ void OsmChangeWriterSql::_modify(const ConstWayPtr way)
   _deleteAll("way_nodes", "way_id", way->getId());
   _createWayNodes(way->getId(), way->getNodeIds());
 
-  _deleteAllTags(ElementId::node(way->getId()));
-  _createTags(way->getTags(), ElementId::node(way->getId()));
+  _deleteAllTags(ElementId::way(way->getId()));
+  _createTags(way->getTags(), ElementId::way(way->getId()));
 }
 
 void OsmChangeWriterSql::_modify(const ConstRelationPtr relation)
 {
   QString values =
-    QString("=%1, changeset_id=%2, visible=true, \"timestamp\"=now(), version= version + 1;\n")
+    QString("=%1, changeset_id=%2, visible=true, \"timestamp\"=now(), version=version+1 WHERE version=%3;\n")
       .arg(relation->getId())
-      .arg(_changesetId);
+      .arg(_changesetId)
+      .arg(relation->getVersion());
   _outputSql.write(("UPDATE relations SET relation_id" + values).toUtf8());
   _outputSql.write(("UPDATE current_relations SET relation_id" + values).toUtf8());
 
@@ -460,14 +463,27 @@ void OsmChangeWriterSql::_createRelationMembers(const long relationId, const QSt
 }
 
 void OsmChangeWriterSql::_deleteAll(const QString tableName, const QString idFieldName,
-                                    const long id)
+                                    const long id, const long version)
 {
-  _outputSql.write(
-    (QString("DELETE FROM %1 WHERE %2 = %3;\n")
-      .arg(tableName)
-      .arg(idFieldName)
-      .arg(id))
-    .toUtf8());
+  if (version != -1)
+  {
+    _outputSql.write(
+      (QString("DELETE FROM %1 WHERE %2 = %3 AND version = %4;\n")
+        .arg(tableName)
+        .arg(idFieldName)
+        .arg(id))
+        .arg(version)
+      .toUtf8());
+  }
+  else
+  {
+    _outputSql.write(
+      (QString("DELETE FROM %1 WHERE %2 = %3;\n")
+        .arg(tableName)
+        .arg(idFieldName)
+        .arg(id))
+      .toUtf8());
+  }
 }
 
 void OsmChangeWriterSql::_deleteAllTags(ElementId eid)
