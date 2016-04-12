@@ -45,20 +45,13 @@ private:
   long _getNextId(const ElementType type);
   long _getNextId(QString type);
 
-  void _writeNewElement(const ConstElementPtr newElement);
+  void _createNewElement(const ConstElementPtr newElement);
   void _updateExistingElement(const ConstElementPtr updatedElement);
   void _deleteExistingElement(const ConstElementPtr removedElement);
 
   void _create(const ConstNodePtr node);
   void _create(const ConstWayPtr way);
   void _create(const ConstRelationPtr relation);
-
-  void _modify(const ConstNodePtr node);
-  void _modify(const ConstWayPtr way);
-  void _modify(const ConstRelationPtr relation);
-
-  void _deleteAll(const QString tableName, const QString idFieldName, const long id,
-                  const long version = -1);
 
   void _createTags(const Tags& tags, ElementId eid);
   QStringList _tagTableNamesForElement(ElementId eid) const;
@@ -68,6 +61,15 @@ private:
 
   void _createRelationMembers(const long relationId, const QString type,
                               const vector<RelationData::Entry>& members);
+
+  void _modify(const ConstNodePtr node);
+  void _modify(const ConstWayPtr way);
+  void _modify(const ConstRelationPtr relation);
+
+  void _deleteAll(const QString tableName, const QString idFieldName, const long id);
+
+  void _throwErrorIfElementAtVersionDoesntExist(const QString tableName, const QString idFieldName,
+                                                const long id, const long version);
 
   //This is for testing only, so that we don't have to rely on the database for our starting element
   //ID's and can, therefore, have repeatable test output.

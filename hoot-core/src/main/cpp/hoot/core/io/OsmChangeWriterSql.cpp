@@ -29,17 +29,18 @@ void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr ch
     throw HootException(QObject::tr("Error opening %1 for writing").arg(path));
   }
 
-  _outputSql.write("BEGIN TRANSACTION;\n");
+  _outputSql.write("BEGIN;\n");
 
   int changes = 0;
   _createChangeSet();
+
   while (changesetProvider->hasMoreChanges())
   {
     Change change = changesetProvider->readNextChange();
     switch (change.type)
     {
       case Change::Create:
-        _writeNewElement(change.e);
+        _createNewElement(change.e);
         break;
       case Change::Modify:
         _updateExistingElement(change.e);
@@ -47,9 +48,8 @@ void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr ch
       case Change::Delete:
         _deleteExistingElement(change.e);
         break;
-      case Change::Unknown:
-        //TODO: ??
-        break;
+      default:
+        throw IllegalArgumentException("Unexepected change type.");
     }
     changes++;
 
@@ -203,7 +203,7 @@ long OsmChangeWriterSql::_getNextId(QString type)
   return result;
 }
 
-void OsmChangeWriterSql::_writeNewElement(const ConstElementPtr newElement)
+void OsmChangeWriterSql::_createNewElement(const ConstElementPtr newElement)
 {
   switch (newElement->getElementType().getEnum())
   {
@@ -241,33 +241,22 @@ void OsmChangeWriterSql::_updateExistingElement(const ConstElementPtr updatedEle
 
 void OsmChangeWriterSql::_deleteExistingElement(const ConstElementPtr removedElement)
 {
-  switch (removedElement->getElementType().getEnum())
+  ElementType::Type elementType = removedElement->getElementType().getEnum();
+  if (elementType != ElementType::Node && elementType != ElementType::Way &&
+      elementType != ElementType::Relation)
   {
-    case ElementType::Node:
-      _deleteAllTags(removedElement->getElementId());
-      _deleteAll("nodes", "node_id", removedElement->getId(), removedElement->getVersion());
-      _deleteAll("current_nodes", "id", removedElement->getId(), removedElement->getVersion());
-      break;
-
-    case ElementType::Way:
-      _deleteAll("current_ways_nodes", "way_id", removedElement->getId());
-      _deleteAll("way_nodes", "way_id", removedElement->getId());
-      _deleteAllTags(removedElement->getElementId());
-      _deleteAll("current_ways", "id", removedElement->getId(), removedElement->getVersion());
-      _deleteAll("ways", "way_id", removedElement->getId(), removedElement->getVersion());
-      break;
-
-    case ElementType::Relation:
-      _deleteAll("current_relation_members", "relation_id", removedElement->getId());
-      _deleteAll("relation_members", "relation_id", removedElement->getId());
-      _deleteAllTags(removedElement->getElementId());
-      _deleteAll("current_relations", "id", removedElement->getId(), removedElement->getVersion());
-      _deleteAll("relations", "relation_id", removedElement->getId(), removedElement->getVersion());
-      break;
-
-    default:
-      throw HootException("Unknown element type");
+    throw HootException("Unknown element type");
   }
+  const QString elementName = removedElement->getElementType().toString().toLower();
+
+  _throwErrorIfElementAtVersionDoesntExist(
+    "current_" + elementName + "s", "id", removedElement->getId(), removedElement->getVersion());
+
+  const QString values = QString("=%1;\n").arg(removedElement->getId());
+  _outputSql.write(
+    ("UPDATE " + elementName + "s SET visible=false WHERE " + elementName + "_id" + values).toUtf8());
+  _outputSql.write(
+    ("UPDATE current_" + elementName + "s SET visible=false WHERE id" + values).toUtf8());
 }
 
 void OsmChangeWriterSql::_create(const ConstNodePtr node)
@@ -324,6 +313,8 @@ void OsmChangeWriterSql::_create(const ConstRelationPtr relation)
 
 void OsmChangeWriterSql::_modify(const ConstNodePtr node)
 {
+  _throwErrorIfElementAtVersionDoesntExist("current_nodes", "id", node->getId(), node->getVersion());
+
   QString values =
     QString("=%1, latitude=%2, longitude=%3, changeset_id=%4, visible=true, \"timestamp\"=now(), tile=%5, version=version+1 WHERE version=%6;\n")
       .arg(node->getId())
@@ -341,6 +332,8 @@ void OsmChangeWriterSql::_modify(const ConstNodePtr node)
 
 void OsmChangeWriterSql::_modify(const ConstWayPtr way)
 {
+  _throwErrorIfElementAtVersionDoesntExist("current_ways", "id", way->getId(), way->getVersion());
+
   QString values =
     QString("=%1, changeset_id=%2, visible=true, \"timestamp\"=now(), version=version+1 WHERE version=%3;\n")
       .arg(way->getId())
@@ -359,6 +352,9 @@ void OsmChangeWriterSql::_modify(const ConstWayPtr way)
 
 void OsmChangeWriterSql::_modify(const ConstRelationPtr relation)
 {
+  _throwErrorIfElementAtVersionDoesntExist(
+    "current_relations", "id", relation->getId(), relation->getVersion());
+
   QString values =
     QString("=%1, changeset_id=%2, visible=true, \"timestamp\"=now(), version=version+1 WHERE version=%3;\n")
       .arg(relation->getId())
@@ -462,30 +458,6 @@ void OsmChangeWriterSql::_createRelationMembers(const long relationId, const QSt
   }
 }
 
-void OsmChangeWriterSql::_deleteAll(const QString tableName, const QString idFieldName,
-                                    const long id, const long version)
-{
-  if (version != -1)
-  {
-    _outputSql.write(
-      (QString("DELETE FROM %1 WHERE %2 = %3 AND version = %4;\n")
-        .arg(tableName)
-        .arg(idFieldName)
-        .arg(id))
-        .arg(version)
-      .toUtf8());
-  }
-  else
-  {
-    _outputSql.write(
-      (QString("DELETE FROM %1 WHERE %2 = %3;\n")
-        .arg(tableName)
-        .arg(idFieldName)
-        .arg(id))
-      .toUtf8());
-  }
-}
-
 void OsmChangeWriterSql::_deleteAllTags(ElementId eid)
 {
   QStringList tableNames = _tagTableNamesForElement(eid);
@@ -493,6 +465,35 @@ void OsmChangeWriterSql::_deleteAllTags(ElementId eid)
   {
     _deleteAll(tableName, tableName + "_id", eid.getId());
   }
+}
+
+void OsmChangeWriterSql::_deleteAll(const QString tableName, const QString idFieldName,
+                                    const long id)
+{
+  _outputSql.write(
+    (QString("DELETE FROM %1 WHERE %2 = %3;\n")
+      .arg(tableName)
+      .arg(idFieldName)
+      .arg(id))
+    .toUtf8());
+}
+
+void OsmChangeWriterSql::_throwErrorIfElementAtVersionDoesntExist(const QString tableName,
+                                                                  const QString idFieldName,
+                                                                  const long id, const long version)
+{
+  const QString ifStmt =
+    QString("IF (SELECT count(*) FROM %1 WHERE %2=%3 AND version=%4) == 0 THEN\n")
+      .arg(tableName)
+      .arg(idFieldName)
+      .arg(id)
+      .arg(version);
+  const QString error =
+    QString("  RAISE EXCEPTION '%1 to be modified/deleted with ID: %2 and version: %3 does not exist';\n")
+      .arg(tableName)
+      .arg(id)
+      .arg(version);
+  _outputSql.write(QString(ifStmt + error + "END IF;\n").toUtf8());
 }
 
 }

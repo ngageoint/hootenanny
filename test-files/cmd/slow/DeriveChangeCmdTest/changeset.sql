@@ -1,149 +1,185 @@
-BEGIN TRANSACTION;
+BEGIN;
 INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (1, -1, now(), now());
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669793;
-DELETE FROM node_tags WHERE node_tags_id = -1669793;
-DELETE FROM nodes WHERE node_id = -1669793 AND version = 3;
-DELETE FROM current_nodes WHERE id = -1669793 AND version = 3;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669791;
-DELETE FROM node_tags WHERE node_tags_id = -1669791;
-DELETE FROM nodes WHERE node_id = -1669791 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669791 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669789;
-DELETE FROM node_tags WHERE node_tags_id = -1669789;
-DELETE FROM nodes WHERE node_id = -1669789 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669789 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669787;
-DELETE FROM node_tags WHERE node_tags_id = -1669787;
-DELETE FROM nodes WHERE node_id = -1669787 AND version = 3;
-DELETE FROM current_nodes WHERE id = -1669787 AND version = 3;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669785;
-DELETE FROM node_tags WHERE node_tags_id = -1669785;
-DELETE FROM nodes WHERE node_id = -1669785 AND version = 2;
-DELETE FROM current_nodes WHERE id = -1669785 AND version = 2;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669783;
-DELETE FROM node_tags WHERE node_tags_id = -1669783;
-DELETE FROM nodes WHERE node_id = -1669783 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669783 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669781;
-DELETE FROM node_tags WHERE node_tags_id = -1669781;
-DELETE FROM nodes WHERE node_id = -1669781 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669781 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669779;
-DELETE FROM node_tags WHERE node_tags_id = -1669779;
-DELETE FROM nodes WHERE node_id = -1669779 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669779 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669777;
-DELETE FROM node_tags WHERE node_tags_id = -1669777;
-DELETE FROM nodes WHERE node_id = -1669777 AND version = 2;
-DELETE FROM current_nodes WHERE id = -1669777 AND version = 2;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669775;
-DELETE FROM node_tags WHERE node_tags_id = -1669775;
-DELETE FROM nodes WHERE node_id = -1669775 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669775 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669773;
-DELETE FROM node_tags WHERE node_tags_id = -1669773;
-DELETE FROM nodes WHERE node_id = -1669773 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669773 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669771;
-DELETE FROM node_tags WHERE node_tags_id = -1669771;
-DELETE FROM nodes WHERE node_id = -1669771 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669771 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669769;
-DELETE FROM node_tags WHERE node_tags_id = -1669769;
-DELETE FROM nodes WHERE node_id = -1669769 AND version = 2;
-DELETE FROM current_nodes WHERE id = -1669769 AND version = 2;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669767;
-DELETE FROM node_tags WHERE node_tags_id = -1669767;
-DELETE FROM nodes WHERE node_id = -1669767 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669767 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669765;
-DELETE FROM node_tags WHERE node_tags_id = -1669765;
-DELETE FROM nodes WHERE node_id = -1669765 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669765 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669763;
-DELETE FROM node_tags WHERE node_tags_id = -1669763;
-DELETE FROM nodes WHERE node_id = -1669763 AND version = 2;
-DELETE FROM current_nodes WHERE id = -1669763 AND version = 2;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669761;
-DELETE FROM node_tags WHERE node_tags_id = -1669761;
-DELETE FROM nodes WHERE node_id = -1669761 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669761 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669759;
-DELETE FROM node_tags WHERE node_tags_id = -1669759;
-DELETE FROM nodes WHERE node_id = -1669759 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669759 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669757;
-DELETE FROM node_tags WHERE node_tags_id = -1669757;
-DELETE FROM nodes WHERE node_id = -1669757 AND version = 4;
-DELETE FROM current_nodes WHERE id = -1669757 AND version = 4;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669755;
-DELETE FROM node_tags WHERE node_tags_id = -1669755;
-DELETE FROM nodes WHERE node_id = -1669755 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669755 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669753;
-DELETE FROM node_tags WHERE node_tags_id = -1669753;
-DELETE FROM nodes WHERE node_id = -1669753 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669753 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669751;
-DELETE FROM node_tags WHERE node_tags_id = -1669751;
-DELETE FROM nodes WHERE node_id = -1669751 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669751 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669749;
-DELETE FROM node_tags WHERE node_tags_id = -1669749;
-DELETE FROM nodes WHERE node_id = -1669749 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669749 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669747;
-DELETE FROM node_tags WHERE node_tags_id = -1669747;
-DELETE FROM nodes WHERE node_id = -1669747 AND version = 4;
-DELETE FROM current_nodes WHERE id = -1669747 AND version = 4;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669745;
-DELETE FROM node_tags WHERE node_tags_id = -1669745;
-DELETE FROM nodes WHERE node_id = -1669745 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669745 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669743;
-DELETE FROM node_tags WHERE node_tags_id = -1669743;
-DELETE FROM nodes WHERE node_id = -1669743 AND version = 5;
-DELETE FROM current_nodes WHERE id = -1669743 AND version = 5;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669741;
-DELETE FROM node_tags WHERE node_tags_id = -1669741;
-DELETE FROM nodes WHERE node_id = -1669741 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669741 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669739;
-DELETE FROM node_tags WHERE node_tags_id = -1669739;
-DELETE FROM nodes WHERE node_id = -1669739 AND version = 3;
-DELETE FROM current_nodes WHERE id = -1669739 AND version = 3;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669737;
-DELETE FROM node_tags WHERE node_tags_id = -1669737;
-DELETE FROM nodes WHERE node_id = -1669737 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669737 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669735;
-DELETE FROM node_tags WHERE node_tags_id = -1669735;
-DELETE FROM nodes WHERE node_id = -1669735 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669735 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669733;
-DELETE FROM node_tags WHERE node_tags_id = -1669733;
-DELETE FROM nodes WHERE node_id = -1669733 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669733 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669731;
-DELETE FROM node_tags WHERE node_tags_id = -1669731;
-DELETE FROM nodes WHERE node_id = -1669731 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669731 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669729;
-DELETE FROM node_tags WHERE node_tags_id = -1669729;
-DELETE FROM nodes WHERE node_id = -1669729 AND version = 2;
-DELETE FROM current_nodes WHERE id = -1669729 AND version = 2;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669727;
-DELETE FROM node_tags WHERE node_tags_id = -1669727;
-DELETE FROM nodes WHERE node_id = -1669727 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669727 AND version = 1;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669725;
-DELETE FROM node_tags WHERE node_tags_id = -1669725;
-DELETE FROM nodes WHERE node_id = -1669725 AND version = 2;
-DELETE FROM current_nodes WHERE id = -1669725 AND version = 2;
-DELETE FROM current_node_tags WHERE current_node_tags_id = -1669723;
-DELETE FROM node_tags WHERE node_tags_id = -1669723;
-DELETE FROM nodes WHERE node_id = -1669723 AND version = 1;
-DELETE FROM current_nodes WHERE id = -1669723 AND version = 1;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669793 AND version=3) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669793 and version: 3 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669793;
+UPDATE current_nodes SET visible=false WHERE id=-1669793;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669791 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669791 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669791;
+UPDATE current_nodes SET visible=false WHERE id=-1669791;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669789 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669789 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669789;
+UPDATE current_nodes SET visible=false WHERE id=-1669789;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669787 AND version=3) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669787 and version: 3 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669787;
+UPDATE current_nodes SET visible=false WHERE id=-1669787;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669785 AND version=2) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669785 and version: 2 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669785;
+UPDATE current_nodes SET visible=false WHERE id=-1669785;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669783 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669783 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669783;
+UPDATE current_nodes SET visible=false WHERE id=-1669783;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669781 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669781 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669781;
+UPDATE current_nodes SET visible=false WHERE id=-1669781;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669779 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669779 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669779;
+UPDATE current_nodes SET visible=false WHERE id=-1669779;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669777 AND version=2) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669777 and version: 2 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669777;
+UPDATE current_nodes SET visible=false WHERE id=-1669777;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669775 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669775 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669775;
+UPDATE current_nodes SET visible=false WHERE id=-1669775;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669773 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669773 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669773;
+UPDATE current_nodes SET visible=false WHERE id=-1669773;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669771 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669771 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669771;
+UPDATE current_nodes SET visible=false WHERE id=-1669771;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669769 AND version=2) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669769 and version: 2 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669769;
+UPDATE current_nodes SET visible=false WHERE id=-1669769;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669767 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669767 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669767;
+UPDATE current_nodes SET visible=false WHERE id=-1669767;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669765 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669765 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669765;
+UPDATE current_nodes SET visible=false WHERE id=-1669765;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669763 AND version=2) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669763 and version: 2 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669763;
+UPDATE current_nodes SET visible=false WHERE id=-1669763;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669761 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669761 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669761;
+UPDATE current_nodes SET visible=false WHERE id=-1669761;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669759 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669759 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669759;
+UPDATE current_nodes SET visible=false WHERE id=-1669759;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669757 AND version=4) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669757 and version: 4 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669757;
+UPDATE current_nodes SET visible=false WHERE id=-1669757;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669755 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669755 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669755;
+UPDATE current_nodes SET visible=false WHERE id=-1669755;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669753 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669753 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669753;
+UPDATE current_nodes SET visible=false WHERE id=-1669753;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669751 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669751 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669751;
+UPDATE current_nodes SET visible=false WHERE id=-1669751;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669749 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669749 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669749;
+UPDATE current_nodes SET visible=false WHERE id=-1669749;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669747 AND version=4) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669747 and version: 4 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669747;
+UPDATE current_nodes SET visible=false WHERE id=-1669747;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669745 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669745 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669745;
+UPDATE current_nodes SET visible=false WHERE id=-1669745;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669743 AND version=5) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669743 and version: 5 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669743;
+UPDATE current_nodes SET visible=false WHERE id=-1669743;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669741 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669741 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669741;
+UPDATE current_nodes SET visible=false WHERE id=-1669741;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669739 AND version=3) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669739 and version: 3 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669739;
+UPDATE current_nodes SET visible=false WHERE id=-1669739;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669737 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669737 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669737;
+UPDATE current_nodes SET visible=false WHERE id=-1669737;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669735 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669735 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669735;
+UPDATE current_nodes SET visible=false WHERE id=-1669735;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669733 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669733 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669733;
+UPDATE current_nodes SET visible=false WHERE id=-1669733;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669731 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669731 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669731;
+UPDATE current_nodes SET visible=false WHERE id=-1669731;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669729 AND version=2) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669729 and version: 2 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669729;
+UPDATE current_nodes SET visible=false WHERE id=-1669729;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669727 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669727 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669727;
+UPDATE current_nodes SET visible=false WHERE id=-1669727;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669725 AND version=2) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669725 and version: 2 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669725;
+UPDATE current_nodes SET visible=false WHERE id=-1669725;
+IF (SELECT count(*) FROM current_nodes WHERE id=-1669723 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669723 and version: 1 does not exist';
+END IF;
+UPDATE nodes SET visible=false WHERE node_id=-1669723;
+UPDATE current_nodes SET visible=false WHERE id=-1669723;
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile,  version) VALUES (1, 388532641, -1048997533, 1, true, now(), 1329018923, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile,  version) VALUES (1, 388532641, -1048997533, 1, true, now(), 1329018923, 1);
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile,  version) VALUES (2, 388541669, -1048997069, 1, true, now(), 1329018926, 1);
@@ -218,30 +254,26 @@ INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timesta
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile,  version) VALUES (36, 388549524, -1048987388, 1, true, now(), 1329019012, 1);
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile,  version) VALUES (37, 388549321, -1048979050, 1, true, now(), 1329019012, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile,  version) VALUES (37, 388549321, -1048979050, 1, true, now(), 1329019012, 1);
-DELETE FROM current_ways_nodes WHERE way_id = -1669801;
-DELETE FROM way_nodes WHERE way_id = -1669801;
-DELETE FROM current_way_tags WHERE current_way_tags_id = -1669801;
-DELETE FROM way_tags WHERE way_tags_id = -1669801;
-DELETE FROM current_ways WHERE id = -1669801 AND version = 1;
-DELETE FROM ways WHERE way_id = -1669801 AND version = 1;
-DELETE FROM current_ways_nodes WHERE way_id = -1669799;
-DELETE FROM way_nodes WHERE way_id = -1669799;
-DELETE FROM current_way_tags WHERE current_way_tags_id = -1669799;
-DELETE FROM way_tags WHERE way_tags_id = -1669799;
-DELETE FROM current_ways WHERE id = -1669799 AND version = 3;
-DELETE FROM ways WHERE way_id = -1669799 AND version = 3;
-DELETE FROM current_ways_nodes WHERE way_id = -1669797;
-DELETE FROM way_nodes WHERE way_id = -1669797;
-DELETE FROM current_way_tags WHERE current_way_tags_id = -1669797;
-DELETE FROM way_tags WHERE way_tags_id = -1669797;
-DELETE FROM current_ways WHERE id = -1669797 AND version = 1;
-DELETE FROM ways WHERE way_id = -1669797 AND version = 1;
-DELETE FROM current_ways_nodes WHERE way_id = -1669795;
-DELETE FROM way_nodes WHERE way_id = -1669795;
-DELETE FROM current_way_tags WHERE current_way_tags_id = -1669795;
-DELETE FROM way_tags WHERE way_tags_id = -1669795;
-DELETE FROM current_ways WHERE id = -1669795 AND version = 2;
-DELETE FROM ways WHERE way_id = -1669795 AND version = 2;
+IF (SELECT count(*) FROM current_ways WHERE id=-1669801 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_ways to be modified/deleted with ID: -1669801 and version: 1 does not exist';
+END IF;
+UPDATE ways SET visible=false WHERE way_id=-1669801;
+UPDATE current_ways SET visible=false WHERE id=-1669801;
+IF (SELECT count(*) FROM current_ways WHERE id=-1669799 AND version=3) == 0 THEN
+  RAISE EXCEPTION 'current_ways to be modified/deleted with ID: -1669799 and version: 3 does not exist';
+END IF;
+UPDATE ways SET visible=false WHERE way_id=-1669799;
+UPDATE current_ways SET visible=false WHERE id=-1669799;
+IF (SELECT count(*) FROM current_ways WHERE id=-1669797 AND version=1) == 0 THEN
+  RAISE EXCEPTION 'current_ways to be modified/deleted with ID: -1669797 and version: 1 does not exist';
+END IF;
+UPDATE ways SET visible=false WHERE way_id=-1669797;
+UPDATE current_ways SET visible=false WHERE id=-1669797;
+IF (SELECT count(*) FROM current_ways WHERE id=-1669795 AND version=2) == 0 THEN
+  RAISE EXCEPTION 'current_ways to be modified/deleted with ID: -1669795 and version: 2 does not exist';
+END IF;
+UPDATE ways SET visible=false WHERE way_id=-1669795;
+UPDATE current_ways SET visible=false WHERE id=-1669795;
 INSERT INTO way (way_id, changeset_id, visible, "timestamp", version) VALUES (1, 1, true, now(), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (1, 1, true, now(), 1);
 INSERT INTO way_nodes ((way_id, node_id, version sequence_id) VALUES (1, -32, 1, 1);
