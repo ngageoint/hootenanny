@@ -40,12 +40,13 @@ _y(y)
 {
 }
 
-NodeData::NodeData(const NodeData& nd) :
-ElementData(nd.getId(), nd.getTags(), nd.getCircularError()),
-_x(nd._x),
-_y(nd._y)
+NodeData::NodeData(const NodeData& from) :
+ElementData(from.getId(), from.getTags(), from.getCircularError()),
+_x(from._x),
+_y(from._y)
 {
-  init(nd.getId(), nd.getX(), nd.getY(), nd.getChangeset(), nd.getVersion(), nd.getTimestamp());
+  init(from.getId(), from.getX(), from.getY(), from.getChangeset(), from.getVersion(),
+       from.getTimestamp());
 }
 
 NodeData& NodeData::operator=(const NodeData& nd)
