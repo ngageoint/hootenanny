@@ -200,6 +200,16 @@ void HootApiDb::commit()
   }
 
   _inTransaction = false;
+
+  // If we get this far, transaction commit was successful. Now execute
+  // all of our post-transaction tasks. (like drop database statements)
+  // A task that throws an error will prevent subsequent tasks from executing.
+  QVectorIterator<QString> taskIt(_postTransactionStatements);
+  while (taskIt.hasNext())
+  {
+    QString task = taskIt.next();
+    _execNoPrepare(task);
+  }
 }
 
 void HootApiDb::_copyTableStructure(QString from, QString to)
@@ -273,6 +283,10 @@ void HootApiDb::createPendingMapIndexes()
 
 void HootApiDb::deleteMap(long mapId)
 {
+  // Drop related renderDB First
+  dropDatabase(_getRenderDBName(mapId));
+
+  // Drop related tables
   dropTable(getRelationMembersTableName(mapId));
   dropTable(getRelationsTableName(mapId));
   dropTable(getWayNodesTableName(mapId));
@@ -280,10 +294,12 @@ void HootApiDb::deleteMap(long mapId)
   dropTable(getNodesTableName(mapId));
   dropTable(getChangesetsTableName(mapId));
 
+  // Drop related sequences
   _execNoPrepare("DROP SEQUENCE IF EXISTS " + getNodeSequenceName(mapId) + " CASCADE");
   _execNoPrepare("DROP SEQUENCE IF EXISTS " + getWaySequenceName(mapId) + " CASCADE");
   _execNoPrepare("DROP SEQUENCE IF EXISTS " + getRelationSequenceName(mapId) + " CASCADE");
 
+  // Delete map last
   _exec("DELETE FROM maps WHERE id=:id", (qlonglong)mapId);
 }
 
@@ -294,6 +310,23 @@ bool HootApiDb::hasTable(const QString& tableName)
   QSqlQuery q = _exec(sql, tableName);
 
   return q.next();
+}
+
+void HootApiDb::dropDatabase(const QString& databaseName)
+{
+  QString sql = QString("DROP DATABASE IF EXISTS \"%1\"").arg(databaseName);
+
+  // TRICKY: You are not allowed to drop a database within a transaction.
+  // If this is the case, we store the statement & execute it right after
+  // the current trans is successfully committed.
+  if (_inTransaction)
+  { // Store for later
+    _postTransactionStatements.push_back(sql);
+  }
+  else
+  { // Execute now
+    _execNoPrepare(sql);
+  }
 }
 
 void HootApiDb::dropTable(const QString& tableName)
@@ -1392,6 +1425,25 @@ long HootApiDb::reserveElementId(const ElementType::Type type)
   }
 
   return retVal;
+}
+
+QString HootApiDb::_getRenderDBName(long mapId)
+{
+  // Get current database & maps.display_name
+  QString dbName = "";
+  QString mapDisplayName = "";
+  QString sql = "SELECT current_database(), maps.display_name "
+                "FROM maps "
+                "WHERE maps.id=" + QString::number(mapId);
+  QSqlQuery q = _exec(sql);
+
+  if (q.next())
+  {
+    dbName = q.value(0).toString();
+    mapDisplayName = q.value(1).toString();
+  }
+
+  return (dbName + "_renderdb_" + mapDisplayName);
 }
 
 }
