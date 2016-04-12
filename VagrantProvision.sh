@@ -246,7 +246,6 @@ shared_buffers = 1024MB
 max_files_per_process = 1000
 work_mem = 16MB
 maintenance_work_mem = 256MB
-checkpoint_segments = 20
 autovacuum = off
 EOT
 fi
