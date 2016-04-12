@@ -1,4 +1,20 @@
-12:40:02.334 INFO  ...hoot/core/io/ElementSorter.cpp(  14) Sorting element by element type...
-12:40:02.335 INFO  ...hoot/core/io/ElementSorter.cpp(  14) Sorting element by element type...
-12:40:02.335 INFO  ...t/core/io/ChangesetDeriver.cpp(  14) Changeset deriver initialization...
-12:40:02.335 INFO  ...ot/core/io/OsmChangeWriter.cpp(  22) Writing changeset to test-output/cmd/DeriveChangeCmdTest/changeset.osc
+12:51:59.079 INFO  ...hoot/core/io/ElementSorter.cpp(  14) Sorting element by element type...
+12:51:59.079 INFO  ...hoot/core/io/ElementSorter.cpp(  14) Sorting element by element type...
+12:51:59.079 INFO  ...t/core/io/ChangesetDeriver.cpp(  14) Changeset deriver initialization...
+12:51:59.079 INFO  ...ot/core/io/OsmChangeWriter.cpp(  22) Writing changeset to test-output/cmd/DeriveChangeCmdTest/changeset.osc
+81c81
+<         <way id="-1669801" version="1">
+---
+>         <way id="-1669801" version="0">
+88c88
+<         <way id="-1669799" version="3">
+---
+>         <way id="-1669799" version="0">
+95c95
+<         <way id="-1669797" version="1">
+---
+>         <way id="-1669797" version="0">
+129c129
+<         <way id="-1669795" version="2">
+---
+>         <way id="-1669795" version="0">
