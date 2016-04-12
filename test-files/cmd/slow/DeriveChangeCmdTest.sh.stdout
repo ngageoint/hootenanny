@@ -1,7 +1,7 @@
-15:51:11.663 INFO  ...hoot/core/io/ElementSorter.cpp(  14) Sorting element by element type...
-15:51:11.663 INFO  ...hoot/core/io/ElementSorter.cpp(  14) Sorting element by element type...
-15:51:11.663 INFO  ...t/core/io/ChangesetDeriver.cpp(  14) Changeset deriver initialization...
-15:51:11.663 INFO  ...ot/core/io/OsmChangeWriter.cpp(  22) Writing changeset to test-output/cmd/DeriveChangeCmdTest/changeset.osc
+12:35:22.424 INFO  ...hoot/core/io/ElementSorter.cpp(  14) Sorting element by element type...
+12:35:22.424 INFO  ...hoot/core/io/ElementSorter.cpp(  14) Sorting element by element type...
+12:35:22.424 INFO  ...t/core/io/ChangesetDeriver.cpp(  14) Changeset deriver initialization...
+12:35:22.424 INFO  ...ot/core/io/OsmChangeWriter.cpp(  22) Writing changeset to test-output/cmd/DeriveChangeCmdTest/changeset.osc
 3,40d2
 <     <delete>
 <         <node id="-1669793" version="0" lat="38.8549321261880536" lon="-104.8979050333482093"/>
@@ -41,7 +41,7 @@
 <         <node id="-1669725" version="0" lat="38.8540851073630833" lon="-104.9014476647277121"/>
 <         <node id="-1669723" version="0" lat="38.8541670018907581" lon="-104.8997069874790355"/>
 <     </delete>
-79,138d40
+79,139c41
 <     </create>
 <     <delete>
 <         <way id="-1669801" version="0">
@@ -102,6 +102,41 @@
 <         </way>
 <     </delete>
 <     <create>
+<         <way id="-231" version="0">
+---
+>         <way id="-231" version="1">
+147c49
+<         <way id="-228" version="0">
+---
+>         <way id="-228" version="1">
+172c74
+<         <way id="-224" version="0">
+---
+>         <way id="-224" version="1">
+182c84
+<         <way id="-221" version="0">
+---
+>         <way id="-221" version="1">
+192c94
+<         <way id="-217" version="0">
+---
+>         <way id="-217" version="1">
+199c101
+<         <way id="-214" version="0">
+---
+>         <way id="-214" version="1">
+207c109
+<         <way id="-211" version="0">
+---
+>         <way id="-211" version="1">
+215c117
+<         <way id="-207" version="0">
+---
+>         <way id="-207" version="1">
+222c124
+<         <way id="-2" version="0">
+---
+>         <way id="-2" version="1">
 229a132,226
 >     <modify/>
 >     <delete>

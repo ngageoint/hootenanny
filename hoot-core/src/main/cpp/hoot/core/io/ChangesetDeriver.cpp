@@ -63,6 +63,8 @@ Change ChangesetDeriver::_nextChange()
   if (!_fromE.get() && _toE.get())
   {
     result.type = Change::Create;
+    //OSM expects created elements to have version = 0
+    _toE->setVersion(0);
     result.e = _toE;
 
     LOG_DEBUG("run out of 'from'' elements:");
@@ -103,6 +105,8 @@ Change ChangesetDeriver::_nextChange()
     else if (!_fromE.get() && _toE.get())
     {
       result.type = Change::Create;
+      //OSM expects created elements to have version = 0
+      _toE->setVersion(0);
       result.e = _toE;
 
       LOG_DEBUG("'from' element null; 'to' element not null: " << _toE->getElementId());
@@ -148,6 +152,8 @@ Change ChangesetDeriver::_nextChange()
     else
     {
       result.type = Change::Create;
+      //OSM expects created elements to have version = 0
+      _toE->setVersion(0);
       result.e = _toE;
 
       LOG_DEBUG(
