@@ -256,12 +256,12 @@ sudo service postgresql restart
 # Configure Tomcat
 
 if ! grep --quiet TOMCAT6_HOME ~/.profile; then
-    echo "### Adding Tomcat to profile..."
-    echo "export TOMCAT6_HOME=/var/lib/tomcat6" >> ~/.profile
+    echo "Adding Tomcat to profile..."
+    echo "export TOMCAT6_HOME=/usr/share/tomcat6" >> ~/.profile
     source ~/.profile
 fi
 cd $TOMCAT6_HOME
-# These sym links are needed so that the ui tests can deploy the services and iD 
+# These sym links are needed so that the ui tests can deploy the services and iD
 # app to Tomcat using the Tomcat startup and shutdown scripts.
 sudo ln -sf /var/lib/tomcat6/webapps webapps
 sudo ln -sf /var/lib/tomcat6/conf conf
@@ -299,8 +299,8 @@ echo "Configuring tomcat6 environment..."
 # Hoot Settings
 #--------------
 #HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
-
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
+
 #--------------
 # Hoot Settings
 #--------------
