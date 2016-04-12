@@ -33,18 +33,19 @@ using namespace boost;
 namespace hoot
 {
 
-NodeData::NodeData(const NodeData& nd) :
-ElementData(nd.getId(), nd.getTags(), nd.getCircularError()),
-_x(nd._x),
-_y(nd._y)
-{
-}
-
 NodeData::NodeData(long id, double x, double y) :
 ElementData(id),
 _x(x),
 _y(y)
 {
+}
+
+NodeData::NodeData(const NodeData& nd) :
+ElementData(nd.getId(), nd.getTags(), nd.getCircularError()),
+_x(nd._x),
+_y(nd._y)
+{
+  init(nd.getId(), nd.getX(), nd.getY(), nd.getChangeset(), nd.getVersion(), nd.getTimestamp());
 }
 
 NodeData& NodeData::operator=(const NodeData& nd)
