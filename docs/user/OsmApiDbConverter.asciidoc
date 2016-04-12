@@ -7,7 +7,9 @@ Hootenanny supports writing and reading from the OpenStreetMap API database usin
 
 === Writing to an OpenStreetMap Editing API Database
 
-Writing to an OpenStreetMap API database requires the use of Hootenanny's 'convert' command and the following command arguments described here:
+Writing to an OpenStreetMap API database is currently not supported but will be updated with command line examples in the future.
+
+////
 
 ------
 % Hootenanny 'convert' command: hoot convert [args] input output
@@ -29,6 +31,7 @@ hoot convert -D services.db.writer.email=OsmApiInsert@hoot.local -D services.db.
 ------
 
 NOTE: Currently it is not possible to write to an OpenStreetMap API database so this example will likely be updated in future versions.
+////
 
 === Reading from an OpenStreetMap Editing API Database
 
