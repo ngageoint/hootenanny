@@ -97,17 +97,17 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   OsmNetworkPtr n2 = e2.extractNetwork(map);
 
   // call class to derive final graph node and graph edge matches
-  IterativeNetworkMatcher matcher;
+  IterativeNetworkMatcherPtr matcher = IterativeNetworkMatcher::create();
   //VagabondNetworkMatcher matcher;
-  matcher.matchNetworks(map, n1, n2);
+  matcher->matchNetworks(map, n1, n2);
 
   for (size_t i = 0; i < 10; ++i)
   {
-    matcher.iterate();
+    matcher->iterate();
   }
 
   // convert graph edge matches into NetworkMatch objects.
-  QList<NetworkEdgeScorePtr> edgeMatch = matcher.getAllEdgeScores();
+  QList<NetworkEdgeScorePtr> edgeMatch = matcher->getAllEdgeScores();
 
   for (int i = 0; i < edgeMatch.size(); i++)
   {

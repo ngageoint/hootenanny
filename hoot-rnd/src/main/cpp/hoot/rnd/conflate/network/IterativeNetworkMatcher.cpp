@@ -1,5 +1,9 @@
 #include "IterativeNetworkMatcher.h"
 
+#include <hoot/rnd/conflate/network/EdgeMatch.h>
+
+#include "EdgeMatchSetFinder.h"
+
 namespace hoot
 {
 
@@ -9,6 +13,7 @@ IterativeNetworkMatcher::IterativeNetworkMatcher() :
   _p(.5),
   _dampening(1)
 {
+  _edgeMatches.reset(new EdgeMatchSet());
 }
 
 bool greaterThan(const double& v1, const double& v2)
@@ -22,7 +27,7 @@ double IterativeNetworkMatcher::_aggregateScores(QList<double> pairs)
   qSort(pairs);
 
   // this quick little method makes the scores decrease with each matching pair
-  // the idea being that you get big boost for the highest score than then the benefit goes down
+  // the idea being that you get big boost for the highest score then the benefit goes down
   // quickly. So more intersections matched is better, but having one poorly matched or unmatched
   // intersection won't hurt. We'll see what happens.
   double result = EPSILON;
@@ -37,7 +42,7 @@ double IterativeNetworkMatcher::_aggregateScores(QList<double> pairs)
   return result;
 }
 
-double IterativeNetworkMatcher::_calculateEdgeVertexScore(const VertexScoreMap& vm,
+double IterativeNetworkMatcher::_calculateEdgeVertexScore(const VertexScoreMap& /*vm*/,
   ConstNetworkVertexPtr from1, ConstNetworkVertexPtr from2,
   ConstNetworkVertexPtr to1, ConstNetworkVertexPtr to2) const
 {
@@ -48,6 +53,11 @@ double IterativeNetworkMatcher::_calculateEdgeVertexScore(const VertexScoreMap& 
     std::max(_vertex12Scores[to2][to1], _vertex21Scores[to2][to1]);
 
   return pow(sFrom * sTo, _p);
+}
+
+shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcher::create()
+{
+  return shared_ptr<IterativeNetworkMatcher>(new IterativeNetworkMatcher());
 }
 
 QList<NetworkEdgeScorePtr> IterativeNetworkMatcher::getAllEdgeScores() const
@@ -95,6 +105,23 @@ QList<NetworkVertexScorePtr> IterativeNetworkMatcher::getAllVertexScores() const
   return result;
 }
 
+double IterativeNetworkMatcher::getEdgeMatchScore(ConstNetworkEdgePtr e1,
+  ConstNetworkEdgePtr e2) const
+{
+  if (_edge12Scores.contains(e1) && _edge12Scores[e1].contains(e2))
+  {
+    return _edge12Scores[e1][e2].score;
+  }
+  else if (_edge21Scores.contains(e1) && _edge21Scores[e1].contains(e2))
+  {
+    return _edge21Scores[e1][e2].score;
+  }
+  else
+  {
+    return 0.0;
+  }
+}
+
 QList<ConstNetworkEdgePtr> IterativeNetworkMatcher::_getEdgesOnVertex(ConstNetworkVertexPtr v)
 {
   QList<ConstNetworkEdgePtr> r1 = _n1->getEdgesFromVertex(v);
@@ -104,6 +131,12 @@ QList<ConstNetworkEdgePtr> IterativeNetworkMatcher::_getEdgesOnVertex(ConstNetwo
   result.append(r2);
 
   return result;
+}
+
+double IterativeNetworkMatcher::getVertexMatchScore(ConstNetworkVertexPtr v1,
+  ConstNetworkVertexPtr v2) const
+{
+  return std::max(_vertex12Scores[v1][v2], _vertex21Scores[v2][v1]);
 }
 
 void IterativeNetworkMatcher::iterate()
@@ -199,6 +232,8 @@ void IterativeNetworkMatcher::_normalizeGlobalScores(VertexScoreMap& t)
   }
 }
 
+#warning
+/// @todo this method will need to be redefined to take advantage of the new match strings
 void IterativeNetworkMatcher::_normalizeScores(EdgeScoreMap& t)
 {
   for (EdgeScoreMap::iterator it = t.begin(); it != t.end(); ++it)
@@ -252,8 +287,11 @@ double IterativeNetworkMatcher::_scoreVertices(ConstNetworkVertexPtr /*e1*/,
 
 void IterativeNetworkMatcher::_seedEdgeScores()
 {
+  EdgeMatchSetFinder finder(_details1, _edgeMatches, _n1, _n2, shared_from_this());
+
   // go through all the n1 edges
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();
+  LOG_VAR(em);
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
     NetworkEdgePtr e1 = it.value();
@@ -261,15 +299,25 @@ void IterativeNetworkMatcher::_seedEdgeScores()
     Envelope env = _details1->getEnvelope(it.value());
     env.expandBy(_details1->getSearchRadius(it.value()));
     IntersectionIterator iit = _createIterator(env, _edge2Index);
+    LOG_VAR(e1);
 
     while (iit.next())
     {
       NetworkEdgePtr e2 = _index2Edge[iit.getId()];
       double score = _scoreEdges(it.value(), e2);
       bool reversed = _details1->isReversed(e1, e2);
+      LOG_VAR(e2);
+
+      if (_details1->getPartialEdgeMatchScore(e1, e2) > 0)
+      {
+        // add all the EdgeMatches that are seeded with this edge pair.
+        finder.addEdgeMatches(e1, e2);
+      }
 
       if (score > 0)
       {
+
+        #warning remove this
         _edge12Scores[e1][e2] = DirectedEdgeScore(score, reversed);
         _edge21Scores[e2][e1] = DirectedEdgeScore(score, reversed);
       }
@@ -306,6 +354,9 @@ void IterativeNetworkMatcher::_seedVertexScores()
   }
 }
 
+#warning
+/// @todo modify this method to take a EdgeMatchSet or just one half of the set. -- dunno how
+/// that will work yet.
 void IterativeNetworkMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexScoreMap& vm)
 {
   // go through all edge matches
@@ -335,22 +386,8 @@ void IterativeNetworkMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexSc
 
       if (!reversed)
       {
-        if (e1->getMembers()[0]->getId() == -1803179 || e2->getMembers()[0]->getId() == -1803179)
-        {
-          LOG_INFO(from1 << " => " << from2);
-          LOG_INFO(to1 << " => " << to2);
-        }
         v = _calculateEdgeVertexScore(vm, from1, from2, to1, to2);
         e = _scoreEdges(e1, e2);
-        if (e1->getMembers()[0]->getId() == -1803179 || e2->getMembers()[0]->getId() == -1803179)
-        {
-          LOG_INFO(from1 << " => " << from2);
-          LOG_INFO(to1 << " => " << to2);
-          LOG_VAR(e1);
-          LOG_VAR(e2);
-          LOG_VAR(v);
-          LOG_VAR(e);
-        }
       }
       else
       {
@@ -364,6 +401,8 @@ void IterativeNetworkMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexSc
   }
 }
 
+#warning
+/// @todo modify this to use the EdgeMatchSet rather than the vertices
 void IterativeNetworkMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &em)
 {
   CostFunction cost;
@@ -422,14 +461,6 @@ void IterativeNetworkMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreM
 
       // aggregate the scores between the two sets of edges
       double edgeScore = pow(_aggregateScores(scores), _dampening) * _scoreVertices(v1, v2);
-      if (v1->getElementId() == ElementId::node(-1803252))
-      {
-        LOG_VAR(em);
-        LOG_VAR(v1);
-        LOG_VAR(v2);
-        LOG_VAR(scores);
-        LOG_VAR(edgeScore);
-      }
 
       // set this vertex pair's score to the new aggregated score.
       jt.value() = edgeScore;

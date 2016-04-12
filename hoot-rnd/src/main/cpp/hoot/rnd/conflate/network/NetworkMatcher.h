@@ -27,6 +27,10 @@ public:
 
   virtual ~NetworkMatcher();
 
+  /**
+   * Iterate torwards a solution. Each iteration should slowly move towards a better result, but
+   * there will likely be a diminishing return for each call.
+   */
   virtual void iterate() = 0;
 
   virtual void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) = 0;

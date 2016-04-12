@@ -4,6 +4,8 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
+#include <hoot/rnd/conflate/network/EdgeMatchSet.h>
+#include <hoot/rnd/conflate/network/MatchScoreProvider.h>
 #include <hoot/rnd/conflate/network/NetworkMatcher.h>
 #include <hoot/rnd/conflate/network/NetworkEdgeScore.h>
 #include <hoot/rnd/conflate/network/NetworkVertexScore.h>
@@ -18,18 +20,26 @@ namespace hoot
 
 using namespace Tgs;
 
+class IterativeNetworkMatcherTest;
+
 /**
  * This approach iteratively improves scores based on neighboring vertex and edge scores.
  *
  * The approach seems to work well most of the time, but suffers from a greedy mentality.
  */
-class IterativeNetworkMatcher : public NetworkMatcher
+class IterativeNetworkMatcher :
+  public enable_shared_from_this<IterativeNetworkMatcher>,
+  public NetworkMatcher,
+  public MatchScoreProvider
 {
 public:
 
   const static double EPSILON;
 
-  IterativeNetworkMatcher();
+  /**
+   * Use this instead of a constructor.
+   */
+  static shared_ptr<IterativeNetworkMatcher> create();
 
   void iterate();
 
@@ -39,12 +49,19 @@ public:
 
   QList<NetworkVertexScorePtr> getAllVertexScores() const;
 
+  virtual double getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
+
+  virtual double getVertexMatchScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const;
+
 protected:
   virtual double _scoreEdges(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
 
   virtual double _scoreVertices(ConstNetworkVertexPtr e1, ConstNetworkVertexPtr e2) const;
 
 private:
+
+  // for white box testing.
+  friend class IterativeNetworkMatcherTest;
 
   class DirectedEdgeScore
   {
@@ -126,11 +143,17 @@ private:
     }
   };
 
+  EdgeMatchSetPtr _edgeMatches;
   EdgeScoreMap _edge12Scores, _edge21Scores;
   VertexScoreMap _vertex12Scores, _vertex21Scores;
   /// P modifies the aggressiveness of the algorithm. Higher is more aggressive.
   double _p;
   double _dampening;
+
+  /**
+   * Always construct with create() to make a shared pointer.
+   */
+  IterativeNetworkMatcher();
 
   double _aggregateScores(QList<double> pairs);
 
@@ -164,6 +187,9 @@ private:
   void _updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &em);
 
 };
+
+typedef shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcherPtr;
+typedef shared_ptr<const IterativeNetworkMatcher> ConstIterativeNetworkMatcherPtr;
 
 }
 

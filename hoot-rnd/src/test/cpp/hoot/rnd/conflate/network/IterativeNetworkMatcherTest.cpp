@@ -45,6 +45,7 @@ class IterativeNetworkMatcherTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(IterativeNetworkMatcherTest);
   CPPUNIT_TEST(toyTest);
+  CPPUNIT_TEST(edgeMatchTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -64,14 +65,46 @@ public:
   /**
    * Extract a toy network and verify that the result is as expected.
    */
+  void edgeMatchTest()
+  {
+    TestUtils::resetEnvironment();
+
+    OsmMapPtr map(new OsmMap());
+
+    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestE1.osm", true,
+      Status::Unknown1);
+    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestE2.osm", true,
+      Status::Unknown2);
+    MapCleaner().apply(map);
+    MapProjector::projectToPlanar(map);
+
+    OsmNetworkExtractor one;
+
+    ElementCriterionPtr c1(
+      new ChainCriterion(new HighwayCriterion(), new StatusCriterion(Status::Unknown1)));
+    one.setCriterion(c1);
+    OsmNetworkPtr network1 = one.extractNetwork(map);
+
+    ElementCriterionPtr c2(
+      new ChainCriterion(new HighwayCriterion(), new StatusCriterion(Status::Unknown2)));
+    one.setCriterion(c2);
+    OsmNetworkPtr network2 = one.extractNetwork(map);
+
+    IterativeNetworkMatcherPtr uut(new IterativeNetworkMatcher());
+    uut->matchNetworks(map, network1, network2);
+
+    /// @todo sloppy quick & dirty test to keep things moving
+    HOOT_STR_EQUALS("[5]{(s1: [1]{Node:-225 -- Way:-232 -- Node:-226} s2: [1]{Node:-212 -- Way:-240 -- Node:-213}, 1), (s1: [2]{Node:-33 -- Way:-45 -- Node:-37, Node:-41 -- Way:-47 -- Node:-37 (reverse)} s2: [1]{Node:-17 -- Way:-27 -- Node:-23}, 1), (s1: [2]{Node:-226 -- Way:-236 -- Node:-230, Node:-226 -- Way:-227 -- Node:-230 (reverse)} s2: [1]{Node:-213 -- Way:-241 -- Node:-213}, 1), (s1: [2]{Node:-226 -- Way:-227 -- Node:-230, Node:-226 -- Way:-236 -- Node:-230 (reverse)} s2: [1]{Node:-213 -- Way:-241 -- Node:-213}, 1), (s1: [2]{Node:-75 -- Way:-73 -- Node:-77, Node:-101 -- Way:-99 -- Node:-77 (reverse)} s2: [1]{Node:-144 -- Way:-148 -- Node:-151}, 1)}",
+      uut->_edgeMatches);
+  }
+
+  /**
+   * Extract a toy network and verify that the result is as expected.
+   */
   void toyTest()
   {
     OsmMapPtr map(new OsmMap());
 
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestD1.osm", true,
-//      Status::Unknown1);
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestD2.osm", false,
-//      Status::Unknown2);
     OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/DcGisRoads.osm", true,
       Status::Unknown1);
     OsmMapReaderFactory::getInstance().read(map, "tmp/dcperb30.osm", false,
@@ -91,15 +124,15 @@ public:
     one.setCriterion(c2);
     OsmNetworkPtr network2 = one.extractNetwork(map);
 
-    IterativeNetworkMatcher uut;
-    uut.matchNetworks(map, network1, network2);
+    IterativeNetworkMatcherPtr uut = IterativeNetworkMatcher::create();
+    uut->matchNetworks(map, network1, network2);
 
-    writeDebugMap(map, uut, 0);
+    writeDebugMap(map, *uut, 0);
     for (int i = 1; i <= 10; ++i)
     {
       LOG_VAR(i);
-      uut.iterate();
-      writeDebugMap(map, uut, i);
+      uut->iterate();
+      writeDebugMap(map, *uut, i);
     }
 
     TestUtils::resetEnvironment();

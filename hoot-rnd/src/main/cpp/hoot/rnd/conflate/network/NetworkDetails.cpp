@@ -6,6 +6,7 @@
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
+#include <hoot/core/Factory.h>
 
 namespace hoot
 {
@@ -14,6 +15,13 @@ NetworkDetails::NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr network) :
   _map(map),
   _network(network)
 {
+  _sublineMatcher.reset(
+    Factory::getInstance().constructObject<SublineStringMatcher>(
+      ConfigOptions().getHighwaySublineStringMatcher()));
+  _classifier.reset(
+    Factory::getInstance().constructObject<HighwayClassifier>(
+      ConfigOptions().getConflateMatchHighwayClassifier()));
+
 }
 
 double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
@@ -36,6 +44,28 @@ double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdg
   }
 
   return result;
+}
+
+double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
+{
+  assert(e1->getMembers().size() == 1);
+  assert(e2->getMembers().size() == 1);
+
+  ConstWayPtr w1 = dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
+  ConstWayPtr w2 = dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
+
+  // calculated the shared sublines
+  WaySublineMatchString sublineMatch = _sublineMatcher->findMatch(_map, w1, w2,
+    ConfigOptions().getSearchRadiusHighway());
+
+  MatchClassification c;
+  if (sublineMatch.isValid())
+  {
+    // calculate the match score
+    c = _classifier->classify(_map, w1->getElementId(), w2->getElementId(), sublineMatch);
+  }
+
+  return c.getMatchP();
 }
 
 Envelope NetworkDetails::getEnvelope(ConstNetworkEdgePtr e)

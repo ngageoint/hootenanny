@@ -3,6 +3,8 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/algorithms/SublineStringMatcher.h>
+#include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/rnd/conflate/network/OsmNetwork.h>
 
 namespace hoot
@@ -20,6 +22,8 @@ public:
   NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr network);
 
   double getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
+  
+  double getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
   Envelope getEnvelope(ConstNetworkEdgePtr e);
 
@@ -36,8 +40,10 @@ public:
   bool isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 
 private:
+  shared_ptr<HighwayClassifier> _classifier;
   ConstOsmMapPtr _map;
   ConstOsmNetworkPtr _network;
+  shared_ptr<SublineStringMatcher> _sublineMatcher;
 };
 
 typedef shared_ptr<NetworkDetails> NetworkDetailsPtr;
