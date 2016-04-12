@@ -116,11 +116,11 @@ public:
   void runTest()
   {
     shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
-    OsmChangeWriter().write("test-output/OsmChangeWriterTest.osc", changesetProvider);
+    OsmChangeWriter().write("test-output/io/OsmChangeWriterTest.osc", changesetProvider);
 
     HOOT_STR_EQUALS(
       TestUtils::readFile("test-files/io/OsmChangeWriterTest/OsmChangeWriterTest.osc"),
-      TestUtils::readFile("test-output/OsmChangeWriterTest.osc"));
+      TestUtils::readFile("test-output/io/OsmChangeWriterTest.osc"));
   }
 };
 
