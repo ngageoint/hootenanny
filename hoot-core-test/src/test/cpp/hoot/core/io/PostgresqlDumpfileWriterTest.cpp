@@ -122,7 +122,8 @@ public:
   {
     PostgresqlDumpfileWriter pgDumpWriter;
 
-    QString outFile = "tmp/PostgresqlDumpWriter_out.sql";
+    QDir().mkpath("test-output/io/PostgresqlDumpWriterTest/");
+    QString outFile = "test-output/io/PostgresqlDumpWriterTest/PostgresqlDumpWriter_out.sql";
     pgDumpWriter.open(outFile);
     pgDumpWriter.write(createTestMap());
 
@@ -136,47 +137,47 @@ public:
           QString line = in.readLine();
           QStringList lineList = line.split("t\t");
           //pick up some lines in the file to check match
-          if (lineCount == 1)
+          if (lineCount == 0)
           {
             HOOT_STR_EQUALS("SELECT pg_catalog.setval('changesets_id_seq', 2);", lineList[0]);
           }
-          else if (lineCount == 7)
+          else if (lineCount == 6)
           {
             HOOT_STR_EQUALS("COPY changesets (id, user_id, created_at, closed_at, num_changes) FROM stdin;", lineList[0]);
           }
-          else if (lineCount == 12)
+          else if (lineCount == 11)
           {
             HOOT_STR_EQUALS("COPY current_nodes (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) FROM stdin;", lineList[0]);
           }
-          else if (lineCount == 30)
+          else if (lineCount == 29)
           {
             HOOT_STR_EQUALS("COPY current_node_tags (node_id, k, v) FROM stdin;", lineList[0]);
           }
-          else if (lineCount == 31)
+          else if (lineCount == 30)
           {
             HOOT_STR_EQUALS("14	building	yes", lineList[0]);
           }
-          else if (lineCount == 55)
+          else if (lineCount == 54)
           {
             HOOT_STR_EQUALS("14	1	building	yes", lineList[0]);
           }
-          else if (lineCount == 91)
+          else if (lineCount == 90)
           {
             HOOT_STR_EQUALS("3	highway	road", lineList[0]);
           }
-          else if (lineCount == 145)
+          else if (lineCount == 144)
           {
             HOOT_STR_EQUALS("COPY current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;", lineList[0]);
           }
-          else if (lineCount == 147)
+          else if (lineCount == 146)
           {
             HOOT_STR_EQUALS("1	Way	1	inner	2", lineList[0]);
           }
-          else if (lineCount == 168)
+          else if (lineCount == 167)
           {
             HOOT_STR_EQUALS("COPY relation_tags (relation_id, version, k, v) FROM stdin;", lineList[0]);
           }
-          else if (lineCount == 169)
+          else if (lineCount == 168)
           {
             HOOT_STR_EQUALS("1	1	building	yes", lineList[0]);
           }
@@ -184,8 +185,8 @@ public:
        }
        inputFile.close();
     }
+    CPPUNIT_ASSERT_EQUAL(173, lineCount);
     pgDumpWriter.close();
-    CPPUNIT_ASSERT_EQUAL(174, lineCount);
   }
 
 };
