@@ -7,7 +7,7 @@ export INPUT=ExRenDb
 export AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD
 export RENDER_DB="$DB_NAME"_renderdb_$INPUT
-export DB_URL=postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME
+export DB_URL=hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME
 export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=test@test.com -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=test@test.com -D writer.include.debug=true --warn"
 
 # Preventative clean up
@@ -23,5 +23,8 @@ hoot --convert $HOOT_OPTS test-files/$INPUT.osm $DB_URL/$INPUT
 scripts/exportrenderdb.sh # || true # Don't error out so test will continue to clean up
 
 # Clean up
-dropdb $AUTH $RENDER_DB
 hoot delete-map $HOOT_OPTS $DB_URL/$INPUT
+
+# Assert that hoot map and render db have been deleted
+psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw ExRenDb && echo "Error: delete-map did not remove ExRenDb dataset"
+psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -lqt | cut -d \| -f 1 | grep -qw $RENDER_DB && echo "Error: delete-map did not remove ExRenDb render db"

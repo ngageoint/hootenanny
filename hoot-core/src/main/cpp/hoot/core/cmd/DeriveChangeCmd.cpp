@@ -27,7 +27,6 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/ElementSorter.h>
@@ -40,8 +39,6 @@
 namespace hoot
 {
 
-/**
- */
 class DeriveChangeCmd : public BaseCommand
 {
 public:
@@ -50,11 +47,6 @@ public:
 
   DeriveChangeCmd() { }
 
-  virtual QString getHelp() const
-  {
-    return "derive-change (from) (to) (output)";
-  }
-
   virtual QString getName() const { return "derive-change"; }
 
   virtual int runSimple(QStringList args)
@@ -62,7 +54,7 @@ public:
     if (args.size() != 3)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      throw HootException(QString("%1 takes three parameters.").arg(getName()));
     }
 
     shared_ptr<OsmMap> map1(new OsmMap());
@@ -78,24 +70,23 @@ public:
 
     if (args[2].endsWith(".osc"))
     {
-      OsmChangeWriter writer;
-
-      writer.write(args[2], delta);
+      OsmChangeWriter().write(args[2], delta);
+    }
+    else if (args[2].endsWith(".sql"))
+    {
+      throw HootException("SQL changeset writing not yet supported.");
+      //OsmChangeWriterSql(QUrl(ConfigOptions().getChangesetApiUrl())).write(args[2], delta);
     }
     else
     {
-      OsmChangeWriterSql writer(QUrl(""));
-
-      writer.write(args[2], delta);
+      throw HootException("Unsupported changeset output format: " + args[2]);
     }
 
     return 0;
   }
 };
 
-//TODO: re-enable
-//HOOT_FACTORY_REGISTER(Command, DeriveChangeCmd)
-
+HOOT_FACTORY_REGISTER(Command, DeriveChangeCmd)
 
 }
 

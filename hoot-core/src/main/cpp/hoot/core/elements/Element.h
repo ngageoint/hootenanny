@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -103,6 +103,8 @@ public:
   Meters getRawCircularError() const { return _getElementData().getRawCircularError(); }
 
   long getVersion() const { return _getElementData().getVersion(); }
+
+  void setVersion(long version) { _getElementData().setVersion(version); }
 
   unsigned int getTimestamp() const { return _getElementData().getTimestamp(); }
 

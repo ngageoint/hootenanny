@@ -85,7 +85,11 @@ ApiDb::~ApiDb()
 bool ApiDb::isSupported(const QUrl& url)
 {
   bool valid = url.isValid();
-  return valid && url.scheme() == "postgresql";
+  if (url.scheme() == "postgresql")
+  {
+     LOG_WARN("postgresql:// is deprecated.")
+  }
+  return valid;
 }
 
 void ApiDb::open(const QUrl& url)
