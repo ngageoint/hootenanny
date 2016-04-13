@@ -77,12 +77,6 @@ private:
   long _thisId;
 };
 
-Relation::Relation(const Relation& from) :
-  Element(from.getStatus())
-{
-  _relationData = from._relationData;
-}
-
 Relation::Relation(Status s, long id, Meters circularError, QString type, long changeset,
                    long version, unsigned int timestamp, QString user, long uid) :
 Element(s)
@@ -90,6 +84,13 @@ Element(s)
   _relationData.reset(new RelationData(id, changeset, version, timestamp, user, uid));
   _relationData->setCircularError(circularError);
   _relationData->setType(type);
+}
+
+Relation::Relation(const Relation& from) :
+Element(from.getStatus()),
+_relationData(from._relationData)
+{
+
 }
 
 void Relation::addElement(const QString& role, const shared_ptr<const Element>& e)
