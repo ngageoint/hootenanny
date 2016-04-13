@@ -63,6 +63,9 @@ public:
 
     return result;
   }
+
+  virtual ElementCriterion* clone() { return new DeletableBuildingPart(); }
+
 };
 
 BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :

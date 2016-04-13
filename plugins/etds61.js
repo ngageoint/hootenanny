@@ -98,7 +98,7 @@ etds61 = {
 
         // apply the simple number and text biased rules
         // Note: These are BACKWARD, not forward!
-        translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'backward',tds61.rules.intList);
         translate.applySimpleTxtBiased(attrs, tags, tds61.rules.txtBiased, 'backward');
 
         // post processing
@@ -152,7 +152,7 @@ etds61 = {
 
                 // apply the simple number and text biased rules
                 // Note: These are BACKWARD, not forward!
-                translate.applySimpleNumBiased(attrs2, tags, tds61.rules.numBiased, 'backward');
+                translate.applySimpleNumBiased(attrs2, tags, tds61.rules.numBiased, 'backward',tds61.rules.intList);
                 translate.applySimpleTxtBiased(attrs2, tags, tds61.rules.txtBiased, 'backward');
 
                 // post processing

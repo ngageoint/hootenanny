@@ -47,6 +47,9 @@ public:
   {
     return OsmSchema::getInstance().isAreaForStats(e.getTags(), e.getElementType());
   }
+
+  virtual ElementCriterion* clone() { return new StatsAreaFilter(_type); }
+
 };
 
 }

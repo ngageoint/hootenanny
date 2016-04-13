@@ -119,6 +119,20 @@ Path to the RF building model. A new model can be created with `build-model`. Se
 
 Training a model is typically done during research. While all the tools are available to do limited training, the documentation is not. Please contact the developers if you would like to dig deeper.
 
+=== changeset.api.url
+
+* Data Type: string
+* Default Value: ``
+
+The DB URL for a OSM API DB. Used by changeset writing.
+
+=== changeset.user.id
+
+* Data Type: double
+* Default Value: `-1`
+
+The DB user ID for a OSM API DB. Used by changeset writing.
+
 === conflate.add.score.tags
 
 * Data Type: bool
@@ -288,15 +302,6 @@ in meters.
 The buffer to add to the alpha shape before cutting by the cookie cutter map operation
 (CookieCutterOp). A negative value will make the shape smaller.  Value in meters.
 
-=== cookie.cutter.output.buffer
-
-* Data Type: double
-* Default Value: `0.0`
-
-Optional buffer value used by the cookie cutter map operation (CookieCutterOp).  If the buffer
-value is provided then the shape is buffered by this many meters before cutting. The buffer may be
-positive or negative.
-
 === cookie.cutter.output.crop
 
 * Data Type: bool
@@ -370,6 +375,27 @@ See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 * Default Value: `5.0`
 
 The spacing used by the EdgeDistanceExtractor.  Units in meters.
+
+=== element.cache.size.node
+
+* Data Type: long
+* Default Value: `2000000`
+
+Size of the cache used when streaming I/O is used with nodes.
+
+=== element.cache.size.relation
+
+* Data Type: long
+* Default Value: `20000`
+
+Size of the cache used when streaming I/O is used with relations.
+
+=== element.cache.size.way
+
+* Data Type: long
+* Default Value: `20000`
+
+Size of the cache used when streaming I/O is used with ways.
 
 === english.words.files
 
@@ -981,7 +1007,7 @@ User specified operations for converting OSM files to OGR compatible file types.
 * Data Type: int
 * Default Value: `50000`
 
-The maximum number of OSM elements that may be read from the services database into a single OSM map during a partial map read.
+The maximum number of OSM elements that may be read from the hootapi services database into a single OSM map during a partial map read.
 
 === perty.algorithm
 
@@ -1355,6 +1381,39 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.match.threshold
+
+* Data Type: double
+* Default Value: `${conflate.match.threshold.default}`
+
+The threshold at which a match is called a match for PoiPolygon.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== poi.polygon.miss.threshold
+
+* Data Type: double
+* Default Value: `${conflate.miss.threshold.default}`
+
+The threshold at which a miss is called a miss for PoiPolygon.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== poi.polygon.review.threshold
+
+* Data Type: double
+* Default Value: `${conflate.review.threshold.default}`
+
+The threshold at which a review is called a review for PoiPolygon. See `conflate.review.threshold.default`.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
 === poi.polygon.match.name.threshold
 
 * Data Type: double
@@ -1368,6 +1427,65 @@ If the name similarity score is greater than this then the names are considered 
 * Default Value: `0`
 
 How far away from a polygon should name matches be considered reviews. This is a fixed value in meters that is added to the CE calculation.
+
+=== postgresql.dumpfile.writer.cache.size
+
+* Data Type: int
+* Default Value: `10000000`
+
+Maximum number of elements (nodes, ways, and relations) that can be held in memory before the system starts using disk-based storage.  Note that this limit applies to each element type individually, so worst case is that three times this value of elements can be stored in memory at the same time.
+
+=== postgresql.dumpfile.writer.changeset.user.id
+
+* Data Type: int
+* Default Value: `1`
+
+Value that will be set in the "user_id" field for all changesets added by the ingest operation
+
+=== postgresql.dumpfile.writer.start.id.changeset
+
+* Data Type: long
+* Default Value: `1`
+
+Starting ID value for changesets created in a PostgreSQL dumpfile.
+
+=== postgresql.dumpfile.writer.start.id.node
+
+* Data Type: long
+* Default Value: `1`
+
+Starting ID value for nodes created in a PostgreSQL dumpfile.
+
+=== postgresql.dumpfile.writer.start.id.relation
+
+* Data Type: long
+* Default Value: `1`
+
+Starting ID value for relations created in a PostgreSQL dumpfile.
+
+=== postgresql.dumpfile.writer.start.id.way
+
+* Data Type: long
+* Default Value: `1`
+
+Starting ID value for ways created in a PostgreSQL dumpfile.
+
+=== postgresql.dumpfile.writer.user.email
+
+* Data Type: string
+* Default Value: ``
+
+If this value is set, the generated dumpfile will insert statements that add a user with the specified email address to
+the database.
+
+=== postgresql.dumpfile.writer.user.id
+
+* Data Type: int
+* Default Value: `1`
+
+If the `postgresql.dumpfile.writer.user.email` field is set, the user that is added to the database will be assigned
+the user id set by this field.
+
 
 === reader.add.source.datetime
 
@@ -1507,50 +1625,42 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
-=== services.db.reader.email
+=== osmapi.db.reader.email
+
+* Data Type: string
+* Default Value: ``
+
+Email address of the osm api reader user.  Can be set here for debugging and testing.
+
+=== hootapi.db.reader.email
 
 * Data Type: string
 * Default Value: ``
 
 Email address of the DG reader user.  Can be set here for debugging and testing.
 
-=== services.db.reader.max.elements.per.partial.map
+=== hootapi.db.reader.max.elements.per.partial.map
 * Data Type: int
 * Default Value: `50000`
 
-The maximum number of OSM elements that may be read from the services database into a single OSM map during a partial map read.
+The maximum number of OSM elements that may be read from the hootapi services database into a single OSM map during a partial map read.
 
-=== services.db.test.url
-
-* Data Type: string
-* Default Value: `postgresql://hoot:hoottest@localhost:5432/hoot/testMap`
-
-Contains the DB URL for unit testing. This is typically only used by developers.
-
-=== services.db.test.url.osmapi
-
-* Data Type: string
-* Default Value: `postgresql://hoot:hoottest@localhost:5432/osmapi_test`
-
-Contains the DB URL for an OpenStreetMaps (OSM) API database for unit testing. This is
-typically only used by developers.
-
-=== services.db.writer.create.user
+=== hootapi.db.writer.create.user
 
 * Data Type: bool
 * Default Value: `false`
 
-Should the services DB writer automatically create the specified user if it doesn't exist. This
+Should the hootapi services DB writer automatically create the specified user if it doesn't exist. This
 is most useful when debugging and testing.
 
-=== services.db.writer.email
+=== hootapi.db.writer.email
 
 * Data Type: string
 * Default Value: ``
 
 Email address of the DG writer user.  Can be set here for debugging and testing.
 
-=== services.db.writer.overwrite.map
+=== hootapi.db.writer.overwrite.map
 
 * Data Type: bool
 * Default Value: `false`
@@ -1558,7 +1668,7 @@ Email address of the DG writer user.  Can be set here for debugging and testing.
 If set to true then if there is already a map with the specified name then it will be removed before
 a new map is written.
 
-=== services.db.writer.output.id.mappings
+=== hootapi.db.writer.output.id.mappings
 
 * Data Type: string
 * Default Value: ``
@@ -2040,7 +2150,7 @@ Location of the word frequency dictionary. If the absolute file path isn't found
 the local `conf` and `$HOOT_HOME/conf` directories will be searched.
 
 This file is typically downloaded from:
-https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/words1.sqlite
+https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
 
 === weighted.word.distance.p
 
@@ -2056,3 +2166,12 @@ generally it should be `1 >= p >= 0`.
 * Default Value: `false`
 
 By default should a writer include debug information (e.g. status). Not honored by all writers.
+
+=== writer.precision
+
+* Data Type: double
+* Default Value: `16`
+
+Set the output precision when writing. Not honored by all writers.
+
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+    <node visible="true" id="1" timestamp="2016-02-23T15:22:24Z" version="1" changeset="221" lat="38.9204261000000002" lon="-77.0447510000000051">
+        <tag k="source:ingest:datetime" v="2015-06-01T17:43:03.057Z"/>
+        <tag k="name" v="KALORAMA PARK"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="2" timestamp="2016-02-23T15:22:24Z" version="1" changeset="221" lat="38.9207324999999997" lon="-77.0443596000000070">
+        <tag k="addr:full" v="1875 COLUMBIA ROAD NW"/>
+        <tag k="source:ingest:datetime" v="2015-06-01T17:43:03.102Z"/>
+        <tag k="name" v="KALORAMA RECREATION CENTER"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="3" timestamp="2016-02-23T15:22:24Z" version="1" changeset="221" lat="38.9199442000000033" lon="-77.0444856999999956">
+        <tag k="source:ingest:datetime" v="2015-06-01T17:43:03.109Z"/>
+        <tag k="name" v="KALORAMA COMMUNITY GARDEN"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+</osm>

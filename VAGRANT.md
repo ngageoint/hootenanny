@@ -1,12 +1,21 @@
 # Installing Vagrant
 
-To download Vagrant for supported platforms, see [here](http://www.vagrantup.com/downloads)
+To download Vagrant for supported platforms, see [here](https://www.vagrantup.com/downloads.html)
+
+# Installing VirtualBox
+
+If choosing VirtualBox as your virtualization provider, see [here](https://www.virtualbox.org/wiki/Downloads).  
+
+You may have to enable hardware virtualization extensions in your BIOS before using it.
+
+If running on Ubuntu, you may have to install a newer version of VirtualBox than what is available in the public repositories in order for it to work correctly with Vagrant.
 
 # Setting up Hootennany with Vagrant & VirtualBox
 
 Once Vagrant has been installed, you can start an environment by checking out the hoot code, then changing to the directory which contains the Vagrantfile by typing:
 
-    git clone git@github.com:ngageoint/hootenanny.git hoot
+    # Windows users will need to uncomment the line ending configuration option.
+    git clone git@github.com:ngageoint/hootenanny.git hoot #--config core.autocrlf=input
     cd hoot
     git submodule init
     git submodule update
@@ -34,13 +43,10 @@ vagrant plugin install vagrant-vmware-workstation
 
 # *On Windows hosts,*
 
-* Be sure to clone with the `--config core.autocrlf=input` option.
 * Windows hosts will also have to create a symlink that's in the git repo, but seems to be treated as a file when cloning to windows.
 
     `vagrant ssh`
     `cd hoot`
-    `rm test-files`
-    `ln -s hoot-core-test/src/test/resources test-files`
 
 # Vagrant Provisioning
 
@@ -60,9 +66,9 @@ You should be able to log into the running VM by typing:
 
 Within this login shell, you can build the code, run the server or the tests. For example, to run the tests:
 
-    cd hoot
-    source SetupEnv.sh
-    make test
+    cd $HOOT_HOME
+    source ./SetupEnv.sh
+    make -sj$(nproc) test-all
 
 # Using Hootenanny
 
@@ -71,17 +77,16 @@ To access the web pages you access the site in your [local Chrome browser](http:
 To run hoot from commandline
 
     vagrant ssh
-    cd hoot
-    source SetupEnv.sh
+    cd $HOOT_HOME
+    source ./SetupEnv.sh
     hoot help
 
 
 If you've updated the code, you must connect to the vm via ssh to build and redeploy to Tomcat:
 
     vagrant ssh
-    cd hoot
-    source SetupEnv.sh
-    scripts/ezClean.sh
-    scripts/ezBuildAll.sh
-    sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
+    cd $HOOT_HOME
+    source ./SetupEnv.sh
+    make -sj$(nproc)
+    scripts/CopyWebAppsToTomcat.sh
 

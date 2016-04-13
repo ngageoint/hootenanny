@@ -27,6 +27,7 @@
 #include "HelloWorld.h"
 
 // hoot
+#include <hoot/core/Factory.h>
 #include <hoot/core/util/Log.h>
 
 // node.js
@@ -38,6 +39,19 @@
 
 using namespace hoot;
 using namespace v8;
+
+/**
+ * This class is used to determine if the HootJs library has already been loaded or not. This may
+ * occur when using hoot from node.js. Unlike other classnames this string may be hard coded in
+ * other spots. Be sure and do a thorough search before you change the class name.
+ */
+class HootJsLoaded
+{
+public:
+  static string className() { return "hoot::HootJsLoaded"; }
+};
+
+HOOT_FACTORY_REGISTER_BASE(HootJsLoaded)
 
 void init(Handle<Object> exports)
 {

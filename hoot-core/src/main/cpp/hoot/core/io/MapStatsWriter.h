@@ -57,12 +57,20 @@ class MapStatsWriter
     void writeStats(const QString& mapInputPath, const QString& statsOutputFilePath, QString sep);
 
     /**
-      Writes map stats to a file
+      Writes map stats to a json file
 
       @param map stats
       @param statsOutputFilePath path of the output stats file
       */
     void writeStatsToJson(QList< QList<SingleStat> >& stats, const QString& statsOutputFilePath);
+
+    /**
+      Write map stats to a text file
+
+      @param map stats
+      @param statsOutputFilePath path of the output stats file
+      */
+    void writeStatsToText(QList< QList<SingleStat> >& stats, const QString& statsOutputFilePath);
 
     /**
       Creates a string for map stats

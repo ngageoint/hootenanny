@@ -95,10 +95,7 @@ void PartialOsmMapWriter::writePartial(const shared_ptr<Relation>& r)
 void PartialOsmMapWriter::writeElement(ElementInputStream& in)
 {
   ElementPtr ele = in.readNextElement();
-  if (ele != 0)
-  {
-    writePartial(ele);
-  }
+  writePartial(ele);
 }
 
 void PartialOsmMapWriter::writeElement(ElementPtr &element)

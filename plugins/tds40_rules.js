@@ -574,16 +574,16 @@ tds.rules = {
 
      // BOT - Bridge Opening Type
      // ['BOT','-999999',undefined,undefined], // Null
-     ['BOT','4','bridge','bascule'],
-     ['BOT','10','bridge','swing'],
-     ['BOT','11','bridge','lift'],
-     ['BOT','12','bridge','retractable'],
+     ['BOT','4','bridge:movable','bascule'],
+     ['BOT','10','bridge:movable','swing'],
+     ['BOT','11','bridge:movable','lift'],
+     ['BOT','12','bridge:movable','retractable'],
      ['BOT','13',undefined,undefined], // In data but not in any spec!
-     ['BOT','14','bridge','submersible'],
-     ['BOT','15','bridge','drawbridge'],
-     ['BOT','16','bridge','opening'],
-     ['BOT','17','bridge','fixed'],
-     ['BOT','999','bridge','other'],
+     ['BOT','14','bridge:movable','submersible'],
+     ['BOT','15','bridge:movable','drawbridge'],
+     ['BOT','16','bridge:movable','opening'],
+     ['BOT','17','bridge:movable','no'],
+     ['BOT','999','bridge:movable','other'],
 
      // BPWHAC - Waterbody Bank 1 height interval closure
      ['BPWHAC','2','waterway:bank1:height:closure','open_interval'], 
@@ -4345,6 +4345,11 @@ tds.rules = {
      'ZI005_NFN2':18, 'ZSAX_RS0':2, 'ZSAX_RX3':254, 'ZSAX_RX4':254
     },
     // ##### End of txtLength #####
+
+    // ##### Start of intList #####
+    // This list is for validateing the integer attributes prior to export
+    intList : [ 'BNF', 'DEV', 'DZC', 'LC1', 'LC2', 'LC3', 'LC4', 'LTN', 'NOS', 'NPL', 'VST' ],
+    // ##### End of intList#####
 
     // ##### Start of Thematic Group Rules #####
     thematicGroupList : {

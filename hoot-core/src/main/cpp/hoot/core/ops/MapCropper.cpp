@@ -381,7 +381,7 @@ shared_ptr<Way> MapCropper::_reintroduceWay(shared_ptr<OsmMap> map, shared_ptr<c
 {
   // create a new way
   shared_ptr<Way> newWay(new Way(w->getStatus(), map->createNextWayId(),
-    w->getCircularError()));
+    w->getRawCircularError()));
   newWay->setTags(w->getTags());
 
   // for each point on the linestring

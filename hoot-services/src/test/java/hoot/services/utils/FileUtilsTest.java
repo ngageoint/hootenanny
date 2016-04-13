@@ -24,6 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
+
 package hoot.services.utils;
 
 import hoot.services.HootProperties;

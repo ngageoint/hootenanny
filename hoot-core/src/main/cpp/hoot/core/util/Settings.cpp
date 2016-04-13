@@ -300,6 +300,45 @@ int Settings::getInt(const QString& key, int defaultValue, int min, int max) con
   return retVal;
 }
 
+long Settings::getLong(const QString& key) const
+{
+  if (hasKey(key) == false)
+  {
+    throw HootException("Error finding key: " + key);
+  }
+  const QVariant v = get(key);
+  _checkConvert(key, v, QVariant::LongLong);
+  return v.toLongLong();
+}
+
+long Settings::getLong(const QString& key, long defaultValue) const
+{
+  if (hasKey(key) == false)
+  {
+    return defaultValue;
+  }
+  const QVariant v = get(key);
+  _checkConvert(key, v, QVariant::LongLong);
+  return v.toLongLong();
+}
+
+long Settings::getLong(const QString& key, long defaultValue, long min, long max) const
+{
+  long retVal = getLong(key, defaultValue);
+
+  if ( retVal < min )
+  {
+    retVal = min;
+  }
+  else if ( retVal > max )
+  {
+    retVal = max;
+  }
+
+  return retVal;
+}
+
+
 QStringList Settings::getList(const QString& key) const
 {
   QString str = getString(key);

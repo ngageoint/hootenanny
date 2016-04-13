@@ -58,6 +58,8 @@ public:
 
   void setConfiguration(const Settings& s);
 
+  virtual ElementCriterion* clone() { return new TagCriterion(_k, _v); }
+
 private:
   QString _k, _v;
 };

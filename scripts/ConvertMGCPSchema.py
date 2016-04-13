@@ -268,7 +268,7 @@ try:
 
             print '          geom:"%s",' % (fGeom)
             print '          columns:[ '
-            print '                     { name:"F_CODE",'
+            print '                     { name:"FCODE",'
             print '                       desc:"Feature Code",'
             print '                       type:"String",'
             print '                       optional:"R",'

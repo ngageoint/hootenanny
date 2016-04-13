@@ -73,7 +73,7 @@ public class RasterToTilesResourceTest {
 		oExpected.put("params", params);
 
 		oExpected.put("exectype","make");
-		oExpected.put("throwerror", "false");
+		oExpected.put("erroraswarning", "true");
 
 		String actual = rts._createCommand("test", "0-1 2-3", 500);
 

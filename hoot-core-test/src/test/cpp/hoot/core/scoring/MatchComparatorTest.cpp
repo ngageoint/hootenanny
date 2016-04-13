@@ -90,14 +90,7 @@ public:
 
     shared_ptr<OsmMap> copy(new OsmMap(map));
 
-/*#warning Remove this custom configuration that keeps the test from erroring out
-    Settings testSettings = conf();
-    testSettings.set("conflate.match.threshold", QString::number(0.6));
-    testSettings.set("conflate.miss.threshold", QString::number(0.6));
-    testSettings.set("conflate.review.threshold", QString::number(0.6));*/
-
     UnifyingConflator conflator;
-    //conflator.setConfiguration(testSettings);
     conflator.apply(copy);
 
     MatchComparator comparator;

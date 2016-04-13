@@ -89,7 +89,7 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
   }
 }
 
-shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Element>& e,
+shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Element>& e, bool throwError,
                                                          const bool statsFlag) const
 {
   switch(e->getElementType().getEnum())
@@ -97,14 +97,15 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const 
   case ElementType::Node:
     return convertToGeometry(dynamic_pointer_cast<const Node>(e));
   case ElementType::Way:
-    return convertToGeometry(dynamic_pointer_cast<const Way>(e), statsFlag);
+    return convertToGeometry(dynamic_pointer_cast<const Way>(e), throwError, statsFlag);
   case ElementType::Relation:
-    return convertToGeometry(dynamic_pointer_cast<const Relation>(e), statsFlag);
+    return convertToGeometry(dynamic_pointer_cast<const Relation>(e), throwError, statsFlag);
   default:
     LOG_WARN(e->toString());
     throw HootException("Unexpected element type: " + e->getElementType().toString());
   }
 }
+
 
 shared_ptr<Point> ElementConverter::convertToGeometry(const shared_ptr<const Node>& n) const
 {
@@ -116,9 +117,9 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const WayPtr& w) const
   return convertToGeometry((ConstWayPtr)w);
 }
 
-shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Way>& e, const bool statsFlag) const
+shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Way>& e, bool throwError, const bool statsFlag) const
 {
-  GeometryTypeId gid = getGeometryType(e, true, statsFlag);
+  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
   if (gid == GEOS_POLYGON)
   {
     return convertToPolygon(e);
@@ -135,9 +136,9 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const 
   }
 }
 
-shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Relation>& e, const bool statsFlag) const
+shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Relation>& e, bool throwError, const bool statsFlag) const
 {
-  GeometryTypeId gid = getGeometryType(e, true, statsFlag);
+  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
 
   if (gid == GEOS_MULTIPOLYGON)
   {

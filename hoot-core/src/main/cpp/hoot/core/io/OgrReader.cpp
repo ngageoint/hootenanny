@@ -353,6 +353,9 @@ shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
   return _d->getBoundingBoxFromConfig(s, srs);
 }
 
+/**
+ * Returns a list of all layer names includeing those that don't have geometry.
+ */
 QStringList OgrReader::getLayerNames(QString path)
 {
   QStringList result;
@@ -365,19 +368,22 @@ QStringList OgrReader::getLayerNames(QString path)
     l->Dereference();
   }
 
-  // make the results consitent
+  // make the results consistent
   result.sort();
 
   return result;
 }
 
+/**
+ * Returns a filtered list of layer names that have geometry.
+ */
 QStringList OgrReader::getFilteredLayerNames(QString path)
 {
   QRegExp filterStr = _d->getNameFilter();
 
   QStringList result;
 
-  QStringList allLayers = getLayerNames(path);
+  QStringList allLayers = _d->getLayersWithGeometry(path);
 
   for (int i = 0; i < allLayers.size(); i++)
   {
@@ -515,10 +521,12 @@ QStringList OgrReaderInternal::getLayersWithGeometry(QString path) const
   for (int i = 0; i < count; i++)
   {
     OGRLayer* l = ds->GetLayer(i);
+
     if (l->GetGeomType() != wkbNone)
     {
       result.append(l->GetName());
     }
+
     l->Dereference();
   }
 
@@ -583,7 +591,7 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
 
   // Add an ingest datetime tag
   t.appendValue("source:ingest:datetime",
-                QDateTime::currentDateTimeUtc().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
+                QDateTime::currentDateTime().toUTC().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
 
   if (t.size() != 0)
   {
@@ -916,7 +924,6 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
   {
     throw HootException("Failed to identify source layer from data source.");
   }
-
 
   shared_ptr<OGRSpatialReference> sourceSrs;
 
