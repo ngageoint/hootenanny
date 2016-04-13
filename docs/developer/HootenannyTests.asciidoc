@@ -1,4 +1,3 @@
-
 == Hootenanny Tests
 
 Hootenanny contains three distinct codebases: the core, the web services, and the user interface.  
@@ -447,23 +446,13 @@ image::developer/images/LoadLatest.png[]
 === Test Coverage Reporting
 
 Reports can be generated which detail how well unit test coverage is for Hootenanny code.  This 
-coverage will only take into account CPPUnit tests in the C++ code and JUnit tests in the Java 
-code (no test coverage currently available for the Javascript user interface code).
+coverage will take into command line and CPPUnit tests in the Hootenanny core code code, as well as Java JUnit tests in the Hootenanny Web Services code when the application is configured --with-services.
 
-**C++ Code Coverage**
-
-Code coverage is supplied now by @gcov@ and @lcov@, utilities for using GCC to generate coverage 
-results. The code coverage commands are a bit cryptic, but they are baked into the top level 
-makefile. To generate code coverage results do the following:
-
-* Run: 
+To generate Hootenanny Core code coverage results do the following (the extra make after configuration is due to ngageoint/hootenanny#604):
 
 --------------------
-make clean && ./configure --with-coverage && make -j($nproc) test && make -j($nproc) coverage
+make clean && ./configure --with-rnd --with-coverage &&  make -j($nproc) && make -j($nproc) test && make -j($nproc) coverage
 -------------------
-
-* When it is completed you will have the coverage results in _$HOOT_HOME/tmp/coverage/*/index.html_. 
-There is a report for each of the main libraries.
 
 If you want to get coverage results for a specific command do the following:
 
@@ -471,26 +460,21 @@ If you want to get coverage results for a specific command do the following:
 make clean && ./configure --with-coverage && make -j($nproc)
 ---------------------------
 
-* Run the command or commands you want to evaluate:
+Then run the command or commands you want to evaluate:
 
 ---------------------
 make -j($nproc) coverage
 -----------------------
 
-If you want a new clean coverage result the you'll need to do make clean again before you start 
-the run. It is possible to clean just the coverage data, but that'll take a little work in Makefile 
-land.
-
-**Java Code Coverage**
-
-Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura] via Maven.  
-The following will generate code coverage reports for Hootenanny Java code:
+For Hootenanny Core C++ and additionally core C++ services and Hootenanny Java Web Services code coverage support, add the --with-services option (there is currently no way via the 'make' command to separate Hootenanny Core C++ services coverage reporting from Hootenanny Web Services Java coverage reporting):
 
 ----------
-make clean && ./configure --with-services --with-coverage && make -j($nproc) test && make -j($nproc) coverage
+make clean && ./configure --with-rnd --with-services --with-coverage &&  make -j($nproc) && make -j($nproc) test && make -j($nproc) coverage
 -----------
 
-A separate report for each project is output to: *<project dir>/target/site/cobertura/index.html*
+For the C++ code, you will have the coverage results in _$HOOT_HOME/tmp/coverage/*/index.html_.  There is a report for each of the main libraries.  For the Java code, a separate report for each project is output to: _hoot-services/target/site/cobertura/index.html_.  If you want a new clean coverage result the you'll need to do make clean again before you start the run. It is possible to clean just the coverage data, but that'll take a little work in Makefile land (ngageoint/hootenanny#600).
+
+For Hootenanny Core C++, code coverage is supplied @gcov@ and @lcov@, utilities for using GCC to generate coverage results.  Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura] via Maven. 
 
 === General Test Writing Guidelines
 
@@ -522,4 +506,5 @@ so you are still preserving the integrity of the test.
 * Design a class so that testing of all of its members is possible.  In some cases, you may need 
 to expose members only to the tests.  e.g. Use C++ friend keyword, etc.; or in Java, Mockito may 
 help with this.
+
 
