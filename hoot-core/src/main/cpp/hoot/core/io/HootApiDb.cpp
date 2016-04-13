@@ -1435,7 +1435,7 @@ long HootApiDb::reserveElementId(const ElementType::Type type)
 QString HootApiDb::_getRenderDBName(long mapId)
 {
   // Get current database & maps.display_name
-  QString dbName = "";
+  /*QString dbName = "";
   QString mapDisplayName = "";
   QString sql = "SELECT current_database(), maps.display_name "
                 "FROM maps "
@@ -1446,9 +1446,9 @@ QString HootApiDb::_getRenderDBName(long mapId)
   {
     dbName = q.value(0).toString();
     mapDisplayName = q.value(1).toString();
-  }
+  }*/
 
-  return (dbName + "_renderdb_" + mapDisplayName);
+  return (dbName + "_renderdb_" + mapId.toString());
 }
 
 }
