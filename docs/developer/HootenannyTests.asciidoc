@@ -445,36 +445,36 @@ image::developer/images/LoadLatest.png[]
 
 === Test Coverage Reporting
 
-Reports can be generated which detail how well unit test coverage is for Hootenanny code.  This 
-coverage will take into command line and CPPUnit tests in the Hootenanny core code code, as well as Java JUnit tests in the Hootenanny Web Services code when the application is configured --with-services.
+Reports can be generated which detail how well test coverage is for Hootenanny code.  This 
+coverage will take into account command line and CPPUnit tests in the Hootenanny core code, as well as Java JUnit tests in the Hootenanny Web Services code when the application is configured --with-services.  Hootenanny Core code coverage is supplied @gcov@ and @lcov@, utilities for using GCC to generate coverage results.  Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura] via Maven. 
 
-To generate Hootenanny Core code coverage results do the following (the extra make after configuration is due to ngageoint/hootenanny#604):
+To generate Hootenanny Core code coverage results only, do the following (the extra make after configuration is due to ngageoint/hootenanny#604):
 
 --------------------
-make clean && ./configure --with-rnd --with-coverage &&  make -j($nproc) && make -j($nproc) test && make -j($nproc) coverage
+make clean && ./configure --with-rnd --with-coverage && make -j($nproc) && make -j($nproc) test && make -j($nproc) coverage
 -------------------
 
-If you want to get coverage results for a specific command do the following:
-
----------------
-make clean && ./configure --with-coverage && make -j($nproc)
----------------------------
-
-Then run the command or commands you want to evaluate:
-
----------------------
-make -j($nproc) coverage
------------------------
-
-For Hootenanny Core C++ and additionally core C++ services and Hootenanny Java Web Services code coverage support, add the --with-services option (there is currently no way via the 'make' command to separate Hootenanny Core C++ services coverage reporting from Hootenanny Web Services Java coverage reporting):
+To add Hootenanny Core services and Hootenanny Java Web Services code coverage support, add the --with-services option (there is currently no way via the 'make' command to separate Hootenanny Core services coverage reporting from Hootenanny Web Services Java coverage reporting):
 
 ----------
 make clean && ./configure --with-rnd --with-services --with-coverage &&  make -j($nproc) && make -j($nproc) test && make -j($nproc) coverage
 -----------
 
-For the C++ code, you will have the coverage results in _$HOOT_HOME/tmp/coverage/*/index.html_.  There is a report for each of the main libraries.  For the Java code, a separate report for each project is output to: _hoot-services/target/site/cobertura/index.html_.  If you want a new clean coverage result the you'll need to do make clean again before you start the run. It is possible to clean just the coverage data, but that'll take a little work in Makefile land (ngageoint/hootenanny#600).
+Here's a shortcut to generate the report for just the Java web services code:
 
-For Hootenanny Core C++, code coverage is supplied @gcov@ and @lcov@, utilities for using GCC to generate coverage results.  Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura] via Maven. 
+----------------
+make clean && ./configure --with-rnd --with-coverage && make -j($nproc) && mvn -Dmodules=all -DfailIfNoTests=false -DscmModified=1 cobertura:cobertura -Dredirect-test-output-to-file=false
+----------------
+
+For the Core code, you will see the coverage results in _$HOOT_HOME/tmp/coverage/*/index.html_.  
+
+For the Java code, you will see the coverage results in _$HOOT_HOME/hoot-services/target/site/cobertura/index.html_.  
+
+*NOTE:* 
+
+* You *must* run 'make test' before running 'make coverage' or you will get inaccurate reports for the Core code coverage.  (the Java 'make coverage' command doesn't actually require this, but if you run the two together when generating coverage reporting using --with-services, you should always run it beforehand in order to not receive inaccurate reporting for the Core code; if you just want a report generated for the Java code, use the shortcut listed above).
+* For the C++ code coverage reporting, although certain configuration option disable the compiling of certain code (--with-rnd, --with-services, etc.), the total lines the reporting sees does not seem to change.  Therefore, to get an accurate coverage report for the Core code you need to always run with all configuration options enabled.
+* If you want a new clean coverage result the you'll need to do 'make clean' again before you start the run.  It is possible to clean just the coverage data, but that'll take a little work in Makefile land (ngageoint/hootenanny#600).
 
 === General Test Writing Guidelines
 
