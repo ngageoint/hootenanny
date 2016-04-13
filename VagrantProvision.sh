@@ -12,7 +12,13 @@ echo "Updating OS..."
 sudo apt-get -qq update > Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y dist-upgrade >> Ubuntu_upgrade.txt 2>&1
+
+echo "### Setup NTP..."
 sudo apt-get -q -y install ntp
+sudo service ntp stop
+sudo ntpd -gq
+sudo service ntp start
+
 
 if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
     echo "### Adding PostgreSQL repository to apt..."
