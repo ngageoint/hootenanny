@@ -70,6 +70,10 @@ public class RasterToTilesResourceTest {
 		param.put("RASTER_SIZE", "500");
 		params.add(param);
 
+		param = new JSONObject();
+		param.put("MAP_ID", 1);
+		params.add(param);
+
 		oExpected.put("params", params);
 
 		oExpected.put("exectype","make");
