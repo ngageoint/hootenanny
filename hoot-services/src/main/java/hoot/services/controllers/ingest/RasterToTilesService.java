@@ -274,7 +274,7 @@ public class RasterToTilesService extends JobControllerBase {
 		commandArgs.add(arg);
 
 		arg = new JSONObject();
-		arg.put("MAP_ID", mapId);
+		arg.put("MAP_ID", String.valueOf(mapId));
 		commandArgs.add(arg);
 
 		if(userEmail != null)

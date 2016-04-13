@@ -71,7 +71,7 @@ public class RasterToTilesResourceTest {
 		params.add(param);
 
 		param = new JSONObject();
-		param.put("MAP_ID", 1);
+		param.put("MAP_ID", "1");
 		params.add(param);
 
 		oExpected.put("params", params);
