@@ -88,17 +88,12 @@ bool PostgresqlDumpfileWriter::isSupported(QString url)
 
 void PostgresqlDumpfileWriter::open(QString url)
 {
-  // Make sure we're not already open and the URL is valid
-  if ( _outputFilename.length() > 0)
-  {
-    throw HootException( QString("Tried to open writer when already open") );
-  }
-  else if ( isSupported(url) == false )
+  if ( isSupported(url) == false )
   {
     throw HootException( QString("Could not open URL ") + url);
   }
 
-  _outputFilename = url;
+  _outputFilename.setFileName(url);
   //LOG_INFO( QString("Output filename set to ") + _outputFilename);
 
   _zeroWriteStats();
@@ -143,7 +138,6 @@ void PostgresqlDumpfileWriter::close()
   }
 
   _zeroWriteStats();
-  _outputFilename = "";
   _outputSections.clear();
   _sectionNames.erase(_sectionNames.begin(), _sectionNames.end());
   _changesetData.changesetId  = _configData.startingChangesetId;
@@ -163,10 +157,13 @@ void PostgresqlDumpfileWriter::finalizePartial()
     return;
   }
 
-  LOG_DEBUG( QString("Finalize called, time to create ") + _outputFilename);
+  LOG_DEBUG( QString("Finalize called, time to create ") + _outputFilename.fileName());
 
   // Remove file if it used to be there;
-  std::remove(_outputFilename.toStdString().c_str());
+  if (_outputFilename.exists())
+  {
+    _outputFilename.remove();
+  }
 
   // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
   _createTable( "byte_order_mark", "\n", true );
@@ -191,6 +188,9 @@ void PostgresqlDumpfileWriter::finalizePartial()
     LOG_DEBUG("Flushed changeset to disk");
     _writeChangesetToTable();
   }
+
+  _outputFilename.open(QFile::WriteOnly);
+  QTextStream outStream(&_outputFilename);
 
   for ( std::list<QString>::const_iterator it = _sectionNames.begin();
         it != _sectionNames.end(); ++it )
@@ -217,23 +217,12 @@ void PostgresqlDumpfileWriter::finalizePartial()
     }
 
     // Append contents of file to output file
-    QString cmdToExec(
-      QString("/bin/cat ") + (_outputSections[*it].first)->fileName() +
-      QString(" >> ") + _outputFilename );
-
-    //LOG_DEBUG("Flush cmd: " + cmdToExec );
-
-    const int systemRetval = std::system( cmdToExec.toStdString().c_str() );
-
-    if ( systemRetval != 0 )
-    {
-      LOG_ERROR("Flush for section " + *it + " had error, retval = " +
-                QString::number(systemRetval));
-      throw HootException("Error generating output file " + _outputFilename);
-    }
+    boost::shared_ptr<QTextStream> outContents = _outputSections[*it].second;
+    outStream << outContents->readAll();
 
     LOG_DEBUG( "Wrote contents of section " + *it );
   }
+  _outputFilename.close();
 
   _dataWritten = true;
 }
