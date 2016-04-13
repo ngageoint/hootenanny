@@ -146,8 +146,9 @@ conf/DatabaseConfig.sh: conf/DatabaseConfig.sh.orig
 	# This will copy conf/DatabaseConfig.sh.orig to conf/DatabaseConfig.sh if necessary
 	if [ ! -f conf/DatabaseConfig.sh ]; then echo "Using default database configuration. You can safely customize: conf/DatabaseConfig.sh"; cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh; else echo; echo; echo "Check your conf/DatabaseConfig.sh to see if it needs updating with conf/DatabaseConfig.sh.orig, if not just 'touch conf/DatabaseConfig.sh'"; echo; echo; false; fi
 
-conf/LocalHoot.json: conf/LocalHoot.json.in conf/DatabaseConfig.sh conf/ServerConfig.sh
-	export HOOT_HOME=`pwd`; scripts/ReplaceEnvironmentVariables.sh conf/LocalHoot.json.in conf/LocalHoot.json
+conf/ServerConfig.sh: conf/ServerConfig.sh.orig
+	# This will copy conf/ServerConfig.sh.orig to conf/ServerConfig.sh if necessary
+	if [ ! -f conf/ServerConfig.sh ]; then echo "Using default server configuration. You can safely customize: conf/ServerConfig.sh"; cp conf/ServerConfig.sh.orig conf/ServerConfig.sh; else echo; echo; echo "Check your conf/ServerConfig.sh to see if it needs updating with conf/ServerConfig.sh.orig, if not just 'touch conf/ServerConfig.sh'"; echo; echo; false; fi
 
 # We now have different versions of the NFDD Schema that are built from Excel files:
 # LTDSv40.csv.gz - Local TDS v4.0
@@ -277,7 +278,7 @@ rebuild-db:
 HOOT_TARNAME=hootenanny-$(HOOT_VERSION)
 JAVADOC_TARBALL=docs/hootenanny-services-javadoc-$(HOOT_VERSION).tar.gz
 dist: archive
-archive: default docs
+archive: js-make services-build docs
 	mkdir -p $(HOOT_TARNAME)/docs/
 	if [ "$(BUILD_SERVICES)" == "services" ]; then \
 	  cp hoot-services/target/hoot-services-*.war hootenanny-services-$(HOOT_VERSION).war; \
@@ -302,11 +303,11 @@ archive: default docs
 	cp plugins/etds61_rules.js $(HOOT_TARNAME)/plugins/etds61_rules.js
 	# Copy the buildInfo.json file for hoot services
 	if [ "$(BUILD_SERVICES)" == "services" ]; then mkdir -p $(HOOT_TARNAME)/hoot-ui/data; cp hoot-ui/data/buildInfo.json $(HOOT_TARNAME)/hoot-ui/data; fi
-	# Include the RF files in the tarball so they don't have to be rebuilt
-	mkdir -p $(HOOT_TARNAME)/conf/
-	cp conf/BuildingModel.rf $(HOOT_TARNAME)/conf/BuildingModel.rf
-	cp conf/HighwayModel.rf $(HOOT_TARNAME)/conf/HighwayModel.rf
-	cp conf/PoiModel.rf $(HOOT_TARNAME)/conf/PoiModel.rf
+	# Don't include RF files at this time, to speed up archive
+	#mkdir -p $(HOOT_TARNAME)/conf/
+	#cp conf/BuildingModel.rf $(HOOT_TARNAME)/conf/BuildingModel.rf
+	#cp conf/HighwayModel.rf $(HOOT_TARNAME)/conf/HighwayModel.rf
+	#cp conf/PoiModel.rf $(HOOT_TARNAME)/conf/PoiModel.rf
 	# Create the version file
 	echo $(HOOT_VERSION) > $(HOOT_TARNAME)/version
 	# tar the file and zip it

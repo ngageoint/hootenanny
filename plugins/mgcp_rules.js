@@ -208,13 +208,13 @@ mgcp.rules = {
 
         // BOT - Bridge Opening Type
         ['BOT','-32768',undefined,undefined], // Null
-        ['BOT','0','bridge','yes'], // Unk
-        ['BOT','4','bridge','bascule'],
-        ['BOT','10','bridge','swing'],
-        ['BOT','11','bridge','lift'],
-        ['BOT','12','bridge','retractable'],
+        ['BOT','0',undefined,undefined], // Unk
+        ['BOT','4','bridge:movable','bascule'],
+        ['BOT','10','bridge:movable','swing'],
+        ['BOT','11','bridge:movable','lift'],
+        ['BOT','12','bridge:movable','retractable'],
         ['BOT','13',undefined,undefined], // In data but not in any spec!
-        ['BOT','17','bridge','fixed'],
+        ['BOT','17','bridge:movable','no'],
         // ['BOT','998',undefined,undefined], // NA
 
         // BSC - Bridge Structure
@@ -355,7 +355,7 @@ mgcp.rules = {
         ['FAC','1001','solid_construction','yes'], // Solid Face 
 
         // FFN - Feature Function from MGCP v4
-        ['FFN','0','building','yes'], // Good default?
+        ['FFN','0',undefined,undefined], // Good default?
         ['FFN','2','use','agriculture'], // Farm?
         ['FFN','99','industrial','manufacturing'],
         ['FFN','105','use','oil-mill'],

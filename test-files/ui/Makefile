@@ -14,8 +14,8 @@ $(shell $(HOOT_HOME)/scripts/ReplaceEnvironmentVariables.sh DbSettings.inc.in Db
 -include DbSettings.inc
 
 HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
-HOOT_OPTS+= -D services.db.writer.overwrite.map=true -D services.db.writer.create.user=true
-HOOT_OPTS+= -D "services.db.writer.email=test@test.com" -D "services.db.reader.email=test@test.com"
+HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
+HOOT_OPTS+= -D "hootapi.db.writer.email=test@test.com" -D "hootapi.db.reader.email=test@test.com"
 
 test:
 ifneq (,$(findstring s,$(MAKEFLAGS)))

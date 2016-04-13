@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,16 +30,24 @@
 // Boost
 using namespace boost;
 
-namespace hoot {
-
-WayData::WayData(const WayData& from) : ElementData(from._id, from.getTags(), from._circularError)
+namespace hoot
 {
-  _nodes = from._nodes;
+
+WayData::WayData(long id, long changeset, long version, unsigned int timestamp, QString user,
+                 long uid) :
+ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid)
+{
+}
+
+WayData::WayData(const WayData& from) :
+ElementData(from.getId(), from.getTags(), from.getCircularError()),
+_nodes(from._nodes)
+{
+
 }
 
 WayData::~WayData()
 {
 }
-
 
 }

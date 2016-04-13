@@ -98,6 +98,8 @@ unsigned long ElementCacheLRU::size() const
 
 void ElementCacheLRU::addElement(ConstElementPtr &newElement)
 {
+  //LOG_DEBUG("Adding element: " + newElement->toString() + " to cache...");
+
   ConstNodePtr newNode;
   ConstWayPtr newWay;
   ConstRelationPtr newRelation;
@@ -116,7 +118,6 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
 
       _nodes.insert(std::make_pair(newNode->getId(),
        std::make_pair(newNode, boost::posix_time::microsec_clock::universal_time())));
-        //LOG_DEBUG("Added new node with ID " << newNode->getId() );
     }
     break;
   case ElementType::Way:
@@ -212,26 +213,6 @@ ElementPtr ElementCacheLRU::readNextElement()
   return returnElement;
 }
 
-/*
-const RelationPtr& ElementCacheLRU::getRelation(long relationId)
-{
-  const RelationPtr returnRelation;
-  std::map<long,
-    std::pair<ConstRelationPtr, boost::posix_time::ptime> >::iterator searchIter;
-
-  if ( (searchIter = _relations.find(relationId)) != _relations.end() )
-  {
-    // Update access time
-    searchIter->second.second = boost::posix_time::microsec_clock::universal_time();
-
-    const RelationPtr foundRelation(searchIter->second.first);
-    return foundRelation;
-  }
-
-  return returnRelation;
-}
-*/
-
 void ElementCacheLRU::writeElement(ElementInputStream& inputStream)
 {
   boost::shared_ptr<OGRSpatialReference> emptyProjection;
@@ -259,25 +240,6 @@ void ElementCacheLRU::writeElement(ElementPtr &element)
   ConstElementPtr el = element;
   addElement(el);
 }
-
-/*
-ConstWayPtr ElementCacheLRU::getWay(long wayId)
-{
-  ConstWayPtr returnWay;
-  std::map<long,
-    std::pair<ConstWayPtr, boost::posix_time::ptime> >::iterator searchIter;
-
-  if ( (searchIter = _ways.find(wayId)) != _ways.end() )
-  {
-    // Update access time
-    searchIter->second.second = boost::posix_time::microsec_clock::universal_time();
-
-    returnWay = searchIter->second.first;
-  }
-
-  return returnWay;
-}
-*/
 
 ConstWayPtr ElementCacheLRU::getNextWay()
 {
@@ -314,25 +276,6 @@ void ElementCacheLRU::resetElementIterators()
   _relationsIter = _relations.begin();
 }
 
-/*
-ConstNodePtr ElementCacheLRU::getNode(long nodeId)
-{
-  ConstNodePtr returnNode;
-  std::map<long,
-    std::pair<ConstNodePtr, boost::posix_time::ptime> >::iterator searchIter;
-
-  if ( (searchIter = _nodes.find(nodeId)) != _nodes.end() )
-  {
-    // Update access time
-    searchIter->second.second = boost::posix_time::microsec_clock::universal_time();
-
-    returnNode = searchIter->second.first;
-  }
-
-  return returnNode;
-}
-*/
-
 void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 {
   std::map<long, std::pair<ConstNodePtr, boost::posix_time::ptime> >::iterator nodesIter;
@@ -343,7 +286,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
   boost::posix_time::ptime oldestTime(boost::posix_time::microsec_clock::universal_time());
   long oldestId = 0;
 
-  switch ( typeToRemove )
+  switch (typeToRemove)
   {
   case ElementType::Node:
     for (nodesIter = _nodes.begin(); nodesIter != _nodes.end(); nodesIter++)
@@ -357,6 +300,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 
     // Remove oldest entry
     _nodes.erase(oldestId);
+    //LOG_DEBUG("Removed node: " << oldestId << " from cache.");
 
     break;
 
@@ -372,6 +316,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 
     // Remove oldest entry
     _ways.erase(oldestId);
+    //LOG_DEBUG("Removed way: " << oldestId << " from cache.");
 
     break;
 
@@ -387,6 +332,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 
     // Remove oldest entry
     _relations.erase(oldestId);
+    //LOG_DEBUG("Removed relation: " << oldestId << " from cache.");
 
     break;
 

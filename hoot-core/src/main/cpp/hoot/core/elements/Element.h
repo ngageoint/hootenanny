@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -100,7 +100,11 @@ public:
 
   long getChangeset() const { return _getElementData().getChangeset(); }
 
+  Meters getRawCircularError() const { return _getElementData().getRawCircularError(); }
+
   long getVersion() const { return _getElementData().getVersion(); }
+
+  void setVersion(long version) { _getElementData().setVersion(version); }
 
   unsigned int getTimestamp() const { return _getElementData().getTimestamp(); }
 
@@ -111,6 +115,8 @@ public:
   const Tags& getTags() const { return _getElementData().getTags(); }
 
   Tags& getTags() { return _getElementData().getTags(); }
+
+  bool hasCircularError() const { return _getElementData().hasCircularError(); }
 
   void removeTag(QString k) { _getElementData().getTags().remove(k); }
 

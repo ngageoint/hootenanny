@@ -256,6 +256,29 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     source ~/.profile
 fi
 
+cd $TOMCAT6_HOME
+# These sym links are needed so that the ui tests can deploy the services and iD 
+# app to Tomcat using the Tomcat startup and shutdown scripts.
+sudo ln -sf /var/lib/tomcat6/webapps webapps
+sudo ln -sf /var/lib/tomcat6/conf conf
+sudo ln -sf /var/log/tomcat6 log
+cd ~
+
+# These permission changes needed so that the ui tests can deploy the services and iD app to 
+# Tomcat using the Tomcat startup and shutdown scripts.
+username=vagrant
+if groups $username | grep &>/dev/null '\btomcat6\b'; then
+    echo "Adding $username user to tomcat6 user group..."
+    sudo usermod -a -G tomcat6 $username
+fi
+sudo chown -R $username:tomcat6 $TOMCAT6_HOME
+sudo mkdir -p /var/lib/tomcat6/logs
+sudo mkdir -p $TOMCAT6_HOME/logs
+sudo chown -R $username:tomcat6 $TOMCAT6_HOME/logs
+sudo chown -R $username:tomcat6 /var/lib/tomcat6
+sudo chown -R $username:tomcat6 /etc/tomcat6
+sudo chown -R $username:tomcat6 /var/log/tomcat6
+
 cd $HOOT_HOME
 source ./SetupEnv.sh
 
@@ -326,8 +349,8 @@ fi
 
 if [ ! -d /usr/share/tomcat6/.deegree ]; then
     echo "Creating deegree directory for webapp..."
-    sudo mkdir /usr/share/tomcat6/.deegree
-    sudo chown tomcat6:tomcat6 /usr/share/tomcat6/.deegree
+    sudo mkdir $TOMCAT6_HOME/.deegree
+    sudo chown $username:tomcat6 $TOMCAT6_HOME/.deegree
 fi
 
 if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
@@ -346,11 +369,30 @@ fi
 touch Vagrant.marker
 
 mkdir -p $HOOT_HOME/ingest/processed
+sudo chown -R $username:tomcat6 $HOOT_HOME/ingest
 mkdir -p $HOOT_HOME/upload
-# This is a workaround.
-sudo chmod -R 777 $HOOT_HOME/ingest
-sudo chmod -R 777 $HOOT_HOME/upload
-sudo chmod -R 777 $HOOT_HOME/tmp
+sudo chown -R $username:tomcat6 $HOOT_HOME/upload
+aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
+if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
+    echo 'Customizing LocalConfig.pri...'
+    cp LocalConfig.pri.orig LocalConfig.pri
+    echo 'QMAKE_CXX=ccache g++' >> LocalConfig.pri
+fi
+echo "Building Hoot... "
+echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
+make -s clean && make -sj$(nproc)
+# vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
+scripts/CopyWebAppsToTomcat.sh #&> /dev/null
+# docs build is always failing the first time during the npm install portion for an unknown reason, but then 
+# always passes the second time its run...needs fixed, but this is the workaround for now
+make -sj$(nproc) docs &> /dev/null || true
+make -sj$(nproc) docs
+hoot version
+
+echo "See VAGRANT.md for additional configuration instructions and then run 'vagrant ssh' to log into the Hootenanny virtual machine."
+echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation files."
+echo "Access the web application at http://localhost:8888/hootenanny-id"
+echo "If you wish to run the diagnostic tests, log into the virtual machine and run: 'cd $HOOT_HOME && make -sj$(nproc) test-all'"
 
 # Now we are ready to build Hoot.  The VagrantBuild.sh script will build Hoot.
 

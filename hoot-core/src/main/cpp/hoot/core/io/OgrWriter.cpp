@@ -90,7 +90,8 @@ OgrWriter::OgrWriter():
       ConfigOptions().getElementCacheSizeNode(),
       ConfigOptions().getElementCacheSizeWay(),
       ConfigOptions().getElementCacheSizeRelation())),
-  _wgs84()
+  _wgs84(),
+  _failOnSkipRelation(false)
 {
   setConfiguration(conf());
   _wgs84.SetWellKnownGeogCS("WGS84");
@@ -507,10 +508,21 @@ void OgrWriter::write(shared_ptr<const OsmMap> map)
     _writePartial(provider, it->second);
   }
 
+  _failOnSkipRelation = false;
+  _unwrittenFirstPassRelationIds.clear();
   const RelationMap& rm = map->getRelationMap();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
   {
     _writePartial(provider, it->second);
+  }
+  //Since relations may contain other relations, which were unavailable to write during the first
+  //pass, we're doing two write passes here.  We're only allowing two total passes for writing the
+  //relations, so fail if any get skipped during the second pass.
+  _failOnSkipRelation = true;
+  for (QList<long>::const_iterator relationIdIter = _unwrittenFirstPassRelationIds.begin();
+       relationIdIter != _unwrittenFirstPassRelationIds.end(); relationIdIter++)
+  {
+    _writePartial(provider, map->getRelation(*relationIdIter));
   }
 }
 
@@ -582,7 +594,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Node>& newNode)
 
   // It's a base datatype, so can write immediately
 
-  //LOG_DEBUG("Writing node " << newNode->getId() << " as it's in our range");
+  //LOG_DEBUG("Writing node " << newNode->getId());
 
   _writePartial(cacheProvider, newNode);
 }
@@ -595,10 +607,12 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
    */
   if ((unsigned long)newWay->getNodeCount() > _elementCache->getNodeCacheSize())
   {
-    LOG_FATAL("Cannot do partial write of Way ID " << newWay->getId() <<
-      " as it contains " << newWay->getNodeCount() << " nodes but our cache can only hold " <<
-      _elementCache->getNodeCacheSize() );
-    throw HootException("Cannot stream write way with more nodes than our cache can hold");
+    throw HootException("Cannot do partial write of Way ID " + QString::number(newWay->getId()) +
+      " as it contains " + QString::number(newWay->getNodeCount()) + " nodes, but our cache can " +
+      " only hold " + QString::number(_elementCache->getNodeCacheSize()) + ".  If you have enough " +
+      " memory to load this way, you can increase the element.cache.size.node setting to " +
+      " an appropriate value larger than " + QString::number(newWay->getNodeCount()) +
+      " to allow for loading it.");
   }
 
   // Make sure all the nodes in the way are in our cache
@@ -607,22 +621,17 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
 
   for ( nodeIdIterator = wayNodeIds.begin(); nodeIdIterator != wayNodeIds.end(); nodeIdIterator++ )
   {
-    if ( _elementCache->containsNode(*nodeIdIterator) == true )
+    if (_elementCache->containsNode(*nodeIdIterator) == false)
     {
-      /*LOG_DEBUG("Way " << newWay->getId() << " contains node " << *nodeIdIterator <<
-                   ": " << _elementCache->getNode(*nodeIdIterator)->getX() << ", " <<
-                  _elementCache->getNode(*nodeIdIterator)->getY() );*/
+      throw HootException("Way " + QString::number(newWay->getId()) + " contains node " +
+        QString::number(*nodeIdIterator) + ", which is NOT PRESENT in the cache");
     }
-    else
-    {
-      LOG_FATAL("Way " << newWay->getId() << " contains node " << *nodeIdIterator <<
-        " which is NOT PRESENT in the cache");
-
-      throw HootException("Way contains node which is NOT present in the cache!");
-    }
+    /*LOG_DEBUG("Way " << newWay->getId() << " contains node " << *nodeIdIterator <<
+                 ": " << _elementCache->getNode(*nodeIdIterator)->getX() << ", " <<
+                _elementCache->getNode(*nodeIdIterator)->getY() );*/
   }
 
-  //LOG_DEBUG("Writing way " << newWay->getId() );
+  //LOG_DEBUG("Writing way " << newWay->getId());
 
   // Add to the element cache
   ConstElementPtr constWay(newWay);
@@ -636,15 +645,14 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
 {
   // Make sure all the elements in the relation are in the cache
   const std::vector<RelationData::Entry>& relationEntries = newRelation->getMembers();
+  LOG_VARD(relationEntries.size());
 
-  std::vector<RelationData::Entry>::const_iterator relationElementIter;
   unsigned long nodeCount = 0;
   unsigned long wayCount = 0;
   unsigned long relationCount = 0;
 
-  for (relationElementIter = relationEntries.begin();
-      relationElementIter != relationEntries.end();
-      relationElementIter++)
+  for (std::vector<RelationData::Entry>::const_iterator relationElementIter = relationEntries.begin();
+       relationElementIter != relationEntries.end(); relationElementIter++)
   {
     switch (relationElementIter->getElementId().getType().getEnum())
     {
@@ -652,20 +660,23 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
         nodeCount++;
         if (nodeCount > _elementCache->getNodeCacheSize())
         {
-          LOG_FATAL("Relation ID " << newRelation->getId() <<
-            " contains more nodes than can fit in the cache (" <<
-            _elementCache->getNodeCacheSize() << ")");
-          throw HootException("Relation with too many nodes");
+          throw HootException("Relation with ID " +
+            QString::number(newRelation->getId()) + " contains more nodes than can fit in the " +
+            "cache (" + QString::number(_elementCache->getNodeCacheSize()) + ").  If you have enough " +
+            " memory to load this relation, you can increase the element.cache.size.node setting to " +
+            " an appropriate value larger than " + QString::number(nodeCount) + " to allow for loading it.");
         }
         break;
       case ElementType::Way:
         wayCount++;
         if (wayCount > _elementCache->getWayCacheSize())
         {
-          LOG_FATAL("Relation ID " << newRelation->getId() <<
-            " contains more ways than can fit in the cache (" <<
-            _elementCache->getWayCacheSize() << ")");
-          throw HootException("Relation with too many ways");
+          throw HootException("Relation with ID " +
+            QString::number(newRelation->getId()) + " contains more ways than can fit in the " +
+            "cache (" + QString::number(_elementCache->getWayCacheSize()) + ").  If you have enough " +
+            " memory to load this relation, you can increase the element.cache.size.way setting to " +
+            " an appropriate value larger than " + QString::number(wayCount) +
+            " to allow for loading it.");
         }
 
         break;
@@ -673,10 +684,12 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
         relationCount++;
         if (relationCount > _elementCache->getRelationCacheSize())
         {
-          LOG_FATAL("Relation ID " << newRelation->getId() <<
-            " contains more relations than can fit in the cache (" <<
-            _elementCache->getRelationCacheSize() << ")");
-          throw HootException("Relation with too many relations");
+          throw HootException("Relation with ID " +
+            QString::number(newRelation->getId()) + " contains more relations than can fit in the " +
+            "cache (" + QString::number(_elementCache->getRelationCacheSize()) + ").  If you have enough " +
+            " memory to load this relation, you can increase the element.cache.size.relation setting to " +
+            " to an appropriate value larger than " + QString::number(relationCount) +
+            " to allow for loading it.");
         }
 
         break;
@@ -685,18 +698,55 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
         break;
     }
 
-    if ( _elementCache->containsElement(relationElementIter->getElementId()) == false )
+    /*LOG_DEBUG("Checking to see if element with ID: " << relationElementIter->getElementId().getId() <<
+              " and type: " << relationElementIter->getElementId().getType() <<
+              " contained by relation " << newRelation->getId() << " is in the element cache...");*/
+
+    if (_elementCache->containsElement(relationElementIter->getElementId()) == false)
     {
-      throw HootException("Relation element did not exist in cache");
+      unsigned long cacheSize;
+      switch (relationElementIter->getElementId().getType().getEnum())
+      {
+        case ElementType::Node:
+          cacheSize =  _elementCache->getNodeCacheSize();
+          break;
+        case ElementType::Way:
+          cacheSize =  _elementCache->getWayCacheSize();
+          break;
+        case ElementType::Relation:
+          cacheSize =  _elementCache->getRelationCacheSize();
+          break;
+        default:
+          throw HootException("Relation contains unknown type");
+          break;
+      }
+      const QString msg = "Relation element with ID: " +
+        QString::number(relationElementIter->getElementId().getId()) + " and type: " +
+        relationElementIter->getElementId().getType().toString() + " did not exist in the element " +
+        "cache with size = " + QString::number(cacheSize) + ".";
+      if (_failOnSkipRelation ||
+          relationElementIter->getElementId().getType().getEnum() != ElementType::Relation)
+      {
+        throw HootException(msg);
+      }
+      else
+      {
+        LOG_DEBUG(msg << "   Will attempt to write relation with ID: " + newRelation->getId() <<
+                 " on a subsequent pass.");
+        _unwrittenFirstPassRelationIds.append(newRelation->getId());
+        return;
+      }
     }
   }
+
+  //LOG_DEBUG("Writing relation " << newRelation->getId());
 
   // Add to the cache
   ConstElementPtr constRelation(newRelation);
   _elementCache->addElement(constRelation);
 
   ElementProviderPtr cacheProvider(_elementCache);
-    _writePartial(cacheProvider, newRelation);
+  _writePartial(cacheProvider, newRelation);
 }
 
 void OgrWriter::writeElement(ElementPtr &element)
