@@ -72,11 +72,9 @@ if ! grep --quiet "export HADOOP_HOME" ~/.profile; then
     source ~/.profile
 fi
 
-sudo apt-get install -y ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip >> Ubuntu_upgrade.txt 2>&1
-
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
-    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin" >> ~/.profile
+    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
@@ -273,10 +271,12 @@ sudo service postgresql restart
 # Configure Tomcat
 
 if ! grep --quiet TOMCAT6_HOME ~/.profile; then
-    echo "Adding Tomcat to profile..."
-    echo "export TOMCAT6_HOME=/usr/share/tomcat6" >> ~/.profile
+    echo "### Adding Tomcat to profile..."
+    #echo "export TOMCAT6_HOME=/usr/share/tomcat6" >> ~/.profile
+    echo "export TOMCAT6_HOME=/var/lib/tomcat6" >> ~/.profile
     source ~/.profile
 fi
+
 cd $TOMCAT6_HOME
 # These sym links are needed so that the ui tests can deploy the services and iD
 # app to Tomcat using the Tomcat startup and shutdown scripts.
@@ -311,11 +311,15 @@ fi
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment..."
-# This echo properly substitutes the home path dir and keeps it from having to be hardcoded, but fails on permissions during write...so hardcoding the home path here instead for now.  This hardcode needs to be removed in order for hoot dev env install script to work correctly.
+# This echo properly substitutes the home path dir and keeps it from having to be hardcoded, but
+# fails on permissions during write...so hardcoding the home path here instead for now.  This
+# hardcode needs to be removed in order for hoot dev env install script to work correctly.
+#
 #sudo echo "#--------------
 # Hoot Settings
 #--------------
 #HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
+
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
 
 #--------------
@@ -376,10 +380,10 @@ if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
     rm -f $HOOT_HOME/conf/LocalHoot.json
 fi
 
-# if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
-#     echo "Removing services local.conf..."
-#     rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
-# fi
+if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
+    echo "Removing services local.conf..."
+    rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
+fi
 
 cd ~
 # hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
