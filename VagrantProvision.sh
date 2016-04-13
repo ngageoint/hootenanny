@@ -12,7 +12,13 @@ echo "Updating OS..."
 sudo apt-get -qq update > Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y dist-upgrade >> Ubuntu_upgrade.txt 2>&1
+
+echo "### Setup NTP..."
 sudo apt-get -q -y install ntp
+sudo service ntp stop
+sudo ntpd -gq
+sudo service ntp start
+
 
 if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
     echo "### Adding PostgreSQL repository to apt..."
@@ -23,39 +29,46 @@ if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
 fi
 
 echo "### Installing dependencies from repos..."
-sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip >> Ubuntu_upgrade.txt 2>&1
+#sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server htop unzip >> Ubuntu_upgrade.txt 2>&1
+
+# Added postgres9.5
+sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server htop unzip postgresql-9.5  postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.2 >> Ubuntu_upgrade.txt 2>&1
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
     # http://www.linuxquestions.org/questions/debian-26/dpkg-error-processing-dictionaries-common-4175451951/
-    sudo apt-get -q -y install dictionaries-common
+    sudo apt-get -q -y install dictionaries-common >> Ubuntu_upgrade.txt 2>&1
 
     sudo /usr/share/debconf/fix_db.pl
 
-    sudo apt-get -q -y install wamerican-insane
+    sudo apt-get -q -y install wamerican-insane >> Ubuntu_upgrade.txt 2>&1
 
     sudo /usr/share/debconf/fix_db.pl
-    sudo dpkg-reconfigure dictionaries-common
+    sudo dpkg-reconfigure -f noninteractive dictionaries-common
 fi
 
 sudo apt-get -y autoremove
 
-echo "### Installing node-mapnik-server..."
-sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
-sudo chmod a+x /etc/init.d/node-mapnik-server
-# Make sure all npm modules are installed
-cd $HOOT_HOME/node-mapnik-server
-sudo npm install --quiet
-cd ~
-
-# checkpoint for snapshotting - see snapshotting notes in Developer's Guide
-#exit 0
-
 echo "### Configuring environment..."
+
+if ! grep --quiet "export HOOT_HOME" ~/.profile; then
+    echo "Adding hoot home to profile..."
+    echo "export HOOT_HOME=\$HOME/hoot" >> ~/.profile
+    echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.profile
+    source ~/.profile
+fi
 
 if ! grep --quiet "export JAVA_HOME" ~/.profile; then
     echo "Adding Java home to profile..."
     echo "export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64" >> ~/.profile
+    source ~/.profile
+fi
+
+if ! grep --quiet "export HADOOP_HOME" ~/.profile; then
+    echo "Adding Hadoop home to profile..."
+    #echo "export HADOOP_HOME=/usr/local/hadoop" >> ~/.profile
+    echo "export HADOOP_HOME=\$HOME/hadoop" >> ~/.profile
+    echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
@@ -98,7 +111,7 @@ fi
 gem list --local | grep -q selenium-cucumber
 if [ $? -eq 1 ]; then
    sudo gem install selenium-cucumber
-fi    
+fi
 
 # Make sure that we are in ~ before trying to wget & install stuff 
 cd ~
@@ -121,6 +134,8 @@ if [ ! -f bin/chromedriver ]; then
     unzip -d $HOME/bin chromedriver_linux64.zip
 fi
 
+sudo apt-get autoremove -y
+
 if [ ! -f bin/osmosis ]; then
     echo "### Installing Osmosis"
     mkdir -p $HOME/bin
@@ -132,20 +147,24 @@ if [ ! -f bin/osmosis ]; then
     ln -s $HOME/bin/osmosis_src/bin/osmosis $HOME/bin/osmosis
 fi
 
+# Moved to standard deps  install
+#sudo apt-get install -y postgresql-9.5  postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.2
+
+
 # Hoot Baseline is PostgreSQL 9.1 and PostGIS 1.5, so we need a deb file and
 # then remove 9.5
-if  ! dpkg -l | grep  postgresql-9.1-postgis-[0-9]; then
-    echo "### Installing PostgreSQL 9.1..."
-    if [ ! -f postgresql-9.1-postgis_1.5.3-2_amd64.deb ]; then
-      wget --quiet http://launchpadlibrarian.net/86690107/postgresql-9.1-postgis_1.5.3-2_amd64.deb
-    fi
-    sudo dpkg -i postgresql-9.1-postgis_1.5.3-2_amd64.deb
-    sudo apt-get -f -q -y install
+#if  ! dpkg -l | grep  postgresql-9.1-postgis-[0-9]; then
+#    echo "### Installing PostgreSQL 9.1..."
+#    if [ ! -f postgresql-9.1-postgis_1.5.3-2_amd64.deb ]; then
+#      wget --quiet http://launchpadlibrarian.net/86690107/postgresql-9.1-postgis_1.5.3-2_amd64.deb
+#    fi
+#    sudo dpkg -i postgresql-9.1-postgis_1.5.3-2_amd64.deb
+#    sudo apt-get -f -q -y install
     # fixes missing dependency of postgis 1.5 by installing postgresql 9.1. 9.1 is installed listening on the default port, 5432. It unfortunately also installs postgres 9.5 but we remove that cleanly in the following steps, while leaving postgres 9.1 untouched
-    echo "### Removing PostgreSQL 9.5..."
-    sudo apt-get purge -y postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts
-    sudo apt-get -q -y install postgresql-contrib-9.1
-fi
+#    echo "### Removing PostgreSQL 9.5..."
+#    sudo apt-get purge -y postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts
+#    sudo apt-get -q -y install postgresql-contrib-9.1
+#fi
 
 if ! ogrinfo --formats | grep --quiet FileGDB; then
     if [ ! -f gdal-1.10.1.tar.gz ]; then
@@ -198,8 +217,10 @@ if [ ! -d $HOME/.cpan ]; then
     echo "### Installing Perl XML::Simple module..."
     (echo y;echo o conf prerequisites_policy follow;echo o conf commit)|sudo cpan
     sudo perl -MCPAN -e 'install XML::Simple' > /dev/null
+    sudo chown -R vagrant:vagrant $HOME/.cpan
 fi
 
+# NOTE: These have been changed to pg9.5
 if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
     echo "### Creating Services Database..."
     sudo -u postgres createuser --superuser hoot
@@ -208,18 +229,18 @@ if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
     sudo -u postgres createdb wfsstoredb --owner=hoot
     sudo -u postgres psql -d hoot -c 'create extension hstore;'
     sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" > /dev/null
-    sudo -u postgres psql -d wfsstoredb -f /usr/share/postgresql/9.1/contrib/postgis-1.5/postgis.sql > /dev/null
-    sudo -u postgres psql -d wfsstoredb -f /usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql > /dev/null
+    sudo -u postgres psql -d wfsstoredb -f /usr/share/postgresql/9.5/contrib/postgis-2.2/postgis.sql > /dev/null
+    sudo -u postgres psql -d wfsstoredb -f /usr/share/postgresql/9.5/contrib/postgis-2.2/spatial_ref_sys.sql > /dev/null
     sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on geometry_columns TO PUBLIC;"
     sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on geography_columns TO PUBLIC;"
     sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on spatial_ref_sys TO PUBLIC;"
 fi
 
-if ! grep -i --quiet HOOT /etc/postgresql/9.1/main/postgresql.conf; then
+if ! grep -i --quiet HOOT /etc/postgresql/9.5/main/postgresql.conf; then
 echo "### Tuning PostgreSQL..."
-sudo -u postgres sed -i.bak s/^max_connections/\#max_connections/ /etc/postgresql/9.1/main/postgresql.conf
-sudo -u postgres sed -i.bak s/^shared_buffers/\#shared_buffers/ /etc/postgresql/9.1/main/postgresql.conf
-sudo -u postgres bash -c "cat >> /etc/postgresql/9.1/main/postgresql.conf" <<EOT
+sudo -u postgres sed -i.bak s/^max_connections/\#max_connections/ /etc/postgresql/9.5/main/postgresql.conf
+sudo -u postgres sed -i.bak s/^shared_buffers/\#shared_buffers/ /etc/postgresql/9.5/main/postgresql.conf
+sudo -u postgres bash -c "cat >> /etc/postgresql/9.5/main/postgresql.conf" <<EOT
 
 #--------------
 # Hoot Settings
@@ -257,7 +278,7 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
 fi
 
 cd $TOMCAT6_HOME
-# These sym links are needed so that the ui tests can deploy the services and iD 
+# These sym links are needed so that the ui tests can deploy the services and iD
 # app to Tomcat using the Tomcat startup and shutdown scripts.
 sudo ln -sf /var/lib/tomcat6/webapps webapps
 sudo ln -sf /var/lib/tomcat6/conf conf
@@ -290,8 +311,8 @@ fi
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment..."
-# This echo properly substitutes the home path dir and keeps it from having to be hardcoded, but 
-# fails on permissions during write...so hardcoding the home path here instead for now.  This 
+# This echo properly substitutes the home path dir and keeps it from having to be hardcoded, but
+# fails on permissions during write...so hardcoding the home path here instead for now.  This
 # hardcode needs to be removed in order for hoot dev env install script to work correctly.
 #
 #sudo echo "#--------------
@@ -300,6 +321,7 @@ echo "Configuring tomcat6 environment..."
 #HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
 
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
+
 #--------------
 # Hoot Settings
 #--------------
@@ -347,7 +369,7 @@ if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then
     sudo sed -i.bak "s@^<Context>@<Context allowLinking=\"true\">@" /etc/tomcat6/context.xml
 fi
 
-if [ ! -d /usr/share/tomcat6/.deegree ]; then
+if [ ! -d $TOMCAT6_HOME/.deegree ]; then
     echo "Creating deegree directory for webapp..."
     sudo mkdir $TOMCAT6_HOME/.deegree
     sudo chown $username:tomcat6 $TOMCAT6_HOME/.deegree
@@ -363,8 +385,180 @@ if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
     rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
 
+cd ~
+# hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
+# so purposefully not installing hoot from the repos.
+if ! which hadoop > /dev/null ; then
+  echo "Installing Hadoop..."
+  if [ ! -f hadoop-0.20.2.tar.gz ]; then
+    wget --quiet https://archive.apache.org/dist/hadoop/core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
+  fi
+
+  if [ ! -f $HOME/.ssh/id_rsa ]; then
+    ssh-keygen -t rsa -N "" -f $HOME/.ssh/id_rsa
+    cat ~/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
+  fi
+  chmod 600 $HOME/.ssh/authorized_keys
+  # ssh -o StrictHostKeyChecking=no localhost
+
+  #cd /usr/local
+  cd ~
+  sudo tar -zxf $HOME/hadoop-0.20.2.tar.gz
+  sudo chown -R vagrant:vagrant hadoop-0.20.2
+  sudo ln -s hadoop-0.20.2 hadoop
+  sudo chown -R vagrant:vagrant hadoop
+  cd hadoop
+  sudo find . -type d -exec chmod a+rwx {} \;
+  sudo find . -type f -exec chmod a+rw {} \;
+  sudo chmod go+w hadoop/bin
+  cd ~
+
+#TODO: remove these home dir hardcodes
+sudo rm -f $HADOOP_HOME/conf/core-site.xml
+sudo bash -c "cat >> /home/vagrant/hadoop/conf/core-site.xml" <<EOT
+
+<configuration>
+  <property>
+    <name>fs.default.name</name>
+    <value>hdfs://localhost:9000/</value>
+  </property>
+</configuration>
+EOT
+sudo rm -f $HADOOP_HOME/conf/mapred-site.xml
+sudo bash -c "cat >> /home/vagrant/hadoop/conf/mapred-site.xml" <<EOT
+
+<configuration>
+  <property>
+    <name>mapred.job.tracker</name>
+    <value>localhost:9001</value>
+  </property>
+  <property>
+    <name>mapred.job.tracker.http.address</name>
+    <value>0.0.0.0:50030</value>
+  </property>
+  <property>
+    <name>mapred.task.tracker.http.address</name>
+    <value>0.0.0.0:50060</value>
+  </property>
+  <property>
+    <name>mapred.child.java.opts</name>
+    <value>-Xmx2048m</value>
+  </property>
+  <property>
+    <name>mapred.map.tasks</name>
+    <value>17</value>
+  </property>
+  <property>
+    <name>mapred.tasktracker.map.tasks.maximum</name>
+    <value>4</value>
+  </property>
+  <property>
+    <name>mapred.tasktracker.reduce.tasks.maximum</name>
+    <value>2</value>
+  </property>
+  <property>
+    <name>mapred.reduce.tasks</name>
+    <value>1</value>
+  </property>
+</configuration>
+EOT
+sudo rm -f $HADOOP_HOME/conf/hdfs-site.xml
+sudo bash -c "cat >> /home/vagrant/hadoop/conf/hdfs-site.xml" <<EOT
+
+<configuration>
+  <property>
+    <name>dfs.secondary.http.address</name>
+    <value>0.0.0.0:50090</value>
+  </property>
+  <property>
+    <name>dfs.datanode.address</name>
+    <value>0.0.0.0:50010</value>
+  </property>
+  <property>
+    <name>dfs.datanode.http.address</name>
+    <value>0.0.0.0:50075</value>
+  </property>
+  <property>
+    <name>dfs.datanode.ipc.address</name>
+    <value>0.0.0.0:50020</value>
+  </property>
+  <property>
+    <name>dfs.http.address</name>
+    <value>0.0.0.0:50070</value>
+  </property>
+  <property>
+    <name>dfs.datanode.https.address</name>
+    <value>0.0.0.0:50475</value>
+  </property>
+  <property>
+    <name>dfs.https.address</name>
+    <value>0.0.0.0:50470</value>
+  </property>
+  <property>
+    <name>dfs.replication</name>
+    <value>2</value>
+  </property>
+  <property>
+    <name>dfs.umaskmode</name>
+    <value>002</value>
+  </property>
+  <property>
+    <name>fs.checkpoint.dir</name>
+    <value>/home/vagrant/hadoop/dfs/namesecondary</value>
+  </property>
+  <property>
+    <name>dfs.name.dir</name>
+    <value>/home/vagrant/hadoop/dfs/name</value>
+  </property>
+  <property>
+    <name>dfs.data.dir</name>
+    <value>/home/vagrant/hadoop/dfs/data</value>
+  </property>
+</configuration>
+EOT
+
+  sudo sed -i.bak 's/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/lib\/jvm\/java-1.7.0-openjdk-amd64/g' $HADOOP_HOME/conf/hadoop-env.sh
+  sudo sed -i.bak 's/#include <pthread.h>/#include <pthread.h>\n#include <unistd.h>/g' $HADOOP_HOME/src/c++/pipes/impl/HadoopPipes.cc
+
+  sudo mkdir -p $HOME/hadoop/dfs/name/current
+  # this could perhaps be more strict
+  sudo chmod -R 777 $HOME/hadoop
+  echo 'Y' | hadoop namenode -format 
+
+  cd /lib
+  sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so libjvm.so
+  cd /lib64
+  sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so libjvm.so
+  cd ~
+
+  echo '1' | sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-1.7.0-openjdk-amd64/bin/java 1
+  echo '1' | sudo update-alternatives --config java
+  echo '1' | sudo update-alternatives --install "/usr/bin/javac" "javac" "$JAVA_HOME/bin/javac" 1
+  echo '1' | sudo update-alternatives --config javac
+
+  # test hadoop out
+  #stop-all.sh
+  #start-all.sh
+  #hadoop fs -ls /
+  #hadoop jar ./hadoop-0.20.2-examples.jar pi 2 100
+fi
+
+cd ~
+
+echo "### Installing node-mapnik-server..."
+sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+sudo chmod a+x /etc/init.d/node-mapnik-server
+# Make sure all npm modules are installed
+cd $HOOT_HOME/node-mapnik-server
+sudo npm install --quiet
+
+cd $HOOT_HOME
+
+rm -rf $HOOT_HOME/ingest
 mkdir -p $HOOT_HOME/ingest/processed
 sudo chown -R $username:tomcat6 $HOOT_HOME/ingest
+
+rm -rf $HOOT_HOME/upload
 mkdir -p $HOOT_HOME/upload
 sudo chown -R $username:tomcat6 $HOOT_HOME/upload
 
