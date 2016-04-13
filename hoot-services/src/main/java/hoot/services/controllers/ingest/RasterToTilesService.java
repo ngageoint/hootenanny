@@ -147,7 +147,7 @@ public class RasterToTilesService extends JobControllerBase {
 				String zoomList = zoomInfo.get("zoomlist").toString();
 				int rasterSize = (Integer)zoomInfo.get("rastersize");
 	
-				JSONObject argStr =  _createCommandObj(name, zoomList, rasterSize, userEmail);
+				JSONObject argStr =  _createCommandObj(name, zoomList, rasterSize, userEmail, mapIdNum.toString());
 				argStr.put("jobId", jobId);
 	
 				JobExecutionManager jobExecManager = 
@@ -236,7 +236,7 @@ public class RasterToTilesService extends JobControllerBase {
 			String zoomList = zoomInfo.get("zoomlist").toString();
 			int rasterSize = (Integer)zoomInfo.get("rastersize");
 
-			String argStr =  _createCommand(name, zoomList, rasterSize);
+			String argStr =  _createCommand(name, zoomList, rasterSize, mapIdNum.toString());
 			postJobRquest( jobId,  argStr);
 		}
 		catch (Exception ex)
@@ -253,7 +253,7 @@ public class RasterToTilesService extends JobControllerBase {
 		return jobId;
 	}
 
-	protected JSONObject _createCommandObj(String name, String zoomList, int rasterSize, String userEmail) throws Exception
+	protected JSONObject _createCommandObj(String name, String zoomList, int rasterSize, String userEmail, String mapId) throws Exception
 	{
 		JSONArray commandArgs = new JSONArray();
 		JSONObject arg = new JSONObject();
@@ -272,6 +272,10 @@ public class RasterToTilesService extends JobControllerBase {
 		arg = new JSONObject();
 		arg.put("RASTER_SIZE", "" + rasterSize);
 		commandArgs.add(arg);
+
+		arg = new JSONObject();
+		arg.put("MAP_ID", mapId);
+		commandArgs.add(arg);
 		
 		if(userEmail != null)
 		{
@@ -287,9 +291,9 @@ public class RasterToTilesService extends JobControllerBase {
 	}
 
 
-	protected String _createCommand(String name, String zoomList, int rasterSize) throws Exception
+	protected String _createCommand(String name, String zoomList, int rasterSize, String mapId) throws Exception
 	{
-		return _createCommandObj( name,  zoomList,  rasterSize, null).toJSONString();
+		return _createCommandObj( name,  zoomList,  rasterSize, null, mapId).toJSONString();
 	}
 
 	protected JSONObject _getZoomInfo(double maxDelta) throws Exception
