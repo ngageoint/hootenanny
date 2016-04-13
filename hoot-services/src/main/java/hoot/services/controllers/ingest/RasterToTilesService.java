@@ -147,7 +147,7 @@ public class RasterToTilesService extends JobControllerBase {
 				String zoomList = zoomInfo.get("zoomlist").toString();
 				int rasterSize = (Integer)zoomInfo.get("rastersize");
 	
-				JSONObject argStr =  _createCommandObj(name, zoomList, rasterSize, userEmail, mapIdNum.toString());
+				JSONObject argStr =  _createCommandObj(name, zoomList, rasterSize, userEmail, String.valueOf(mapIdNum));
 				argStr.put("jobId", jobId);
 	
 				JobExecutionManager jobExecManager = 
@@ -236,7 +236,7 @@ public class RasterToTilesService extends JobControllerBase {
 			String zoomList = zoomInfo.get("zoomlist").toString();
 			int rasterSize = (Integer)zoomInfo.get("rastersize");
 
-			String argStr =  _createCommand(name, zoomList, rasterSize, mapIdNum.toString());
+			String argStr =  _createCommand(name, zoomList, rasterSize, String.valueOf(mapIdNum));
 			postJobRquest( jobId,  argStr);
 		}
 		catch (Exception ex)
