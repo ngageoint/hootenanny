@@ -347,28 +347,31 @@ tmp/schema.png: tmp/schema.dot
 
 IGNORED=/usr/\* \*test/cpp\* \*tgs/src\* \*/local/\* \*/tmp/moc/\*
 
-# Supressing "geninfo" due to a known issue on Ubuntu 14.04.  Suppressing "Processing", "Removing" b/c it makes it easier to see the test result output. 
+# Passing the --quiet switch to lcov is causing errors, so writing out to a log for now.
 
 coverage/core/core/index.html:
 	echo "Generating core code coverage report..."
 	mkdir -p coverage/core/core
-	lcov --capture --ignore-errors source -d hoot-core/tmp/debug -b hoot-core/ --output-file coverage/core/core/Core.info 2>&1 | grep -v -F "geninfo" | grep -v -F "Processing" | grep -v -F "Removing"
-	lcov -r coverage/core/core/Core.info $(IGNORED) \*tbs/src\* -o coverage/core/core/CoreTrimmed.info 2>&1 | grep -v -F "geninfo" | grep -v -F "Processing" | grep -v -F "Removing"
-	genhtml coverage/core/core/CoreTrimmed.info --output-directory coverage/core/core/ 2>&1 | grep -v -F "geninfo" | grep -v -F "Processing" | grep -v -F "Removing"
+	rm -f coverage/core/log
+	lcov --capture --ignore-errors source -d hoot-core/tmp/debug -b hoot-core/ --output-file coverage/core/core/Core.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	lcov -r coverage/core/core/Core.info $(IGNORED) \*tbs/src\* -o coverage/core/core/CoreTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	genhtml coverage/core/core/CoreTrimmed.info --output-directory coverage/core/core/ 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 
 coverage/core/hadoop/index.html:
 	echo "Generating hadoop code coverage report..."
 	mkdir -p coverage/core/hadoop
-	lcov --capture --ignore-errors source -d hoot-hadoop/tmp/debug -b hoot-hadoop/ --output-file coverage/core/hadoop/Hadoop.info 2>&1 | grep -v -F "geninfo" | grep -v -F "Processing" | grep -v -F "Removing"
-	lcov -r coverage/core/hadoop/Hadoop.info $(IGNORED) \*tbs/src\* -o coverage/core/hadoop/HadoopTrimmed.info 2>&1 | grep -v -F "geninfo" | grep -v -F "Processing" | grep -v -F "Removing"
-	genhtml coverage/core/hadoop/HadoopTrimmed.info --output-directory coverage/core/hadoop/ 2>&1 | grep -v -F "geninfo" | grep -v -F "Processing"
+	rm -f coverage/core/log
+	lcov --capture --ignore-errors source -d hoot-hadoop/tmp/debug -b hoot-hadoop/ --output-file coverage/core/hadoop/Hadoop.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	lcov -r coverage/core/hadoop/Hadoop.info $(IGNORED) \*tbs/src\* -o coverage/core/hadoop/HadoopTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	genhtml coverage/core/hadoop/HadoopTrimmed.info --output-directory coverage/core/hadoop/ 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 
 coverage/core/tbs/index.html:
 	echo "Generating tbs code coverage report..."
 	mkdir -p coverage/core/tbs
-	lcov --capture --ignore-errors source -d tbs/tmp/debug -b tbs/ --output-file coverage/core/tbs/Tbs.info 2>&1 | grep -v -F "geninfo" | grep -v -F "Processing" | grep -v -F "Removing"
-	lcov -r coverage/core/tbs/Tbs.info $(IGNORED) -o coverage/core/tbs/TbsTrimmed.info 2>&1 | grep -v -F "geninfo" | grep -v -F "Processing" | grep -v -F "Removing"
-	genhtml coverage/core/tbs/TbsTrimmed.info --output-directory coverage/core/tbs/ 2>&1 | grep -v -F "geninfo" | grep -v -F "Processing" | grep -v -F "Removing"
+	rm -f coverage/core/log
+	lcov --capture --ignore-errors source -d tbs/tmp/debug -b tbs/ --output-file coverage/core/tbs/Tbs.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	lcov -r coverage/core/tbs/Tbs.info $(IGNORED) -o coverage/core/tbs/TbsTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	genhtml coverage/core/tbs/TbsTrimmed.info --output-directory coverage/core/tbs/ 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 
 coverage: services-coverage coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html
 
