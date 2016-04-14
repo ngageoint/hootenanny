@@ -8,26 +8,26 @@ source ./SetupEnv.sh
 echo "### Configuring Hoot..."
 echo HOOT_HOME: $HOOT_HOME
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
-cp conf/ServerConfig.sh.orig conf/ServerConfig.sh
 
 aclocal && autoconf && autoheader && automake && ./configure --quiet --with-rnd --with-services --with-uitests
 
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
     cp LocalConfig.pri.orig LocalConfig.pri
-    echo 'QMAKE_CXX=ccache g++' >> LocalConfig.pri
+    sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri
+    sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri
+
 fi
 echo "Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
 make -s clean && make -sj$(nproc)
 
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
-./scripts/CopyWebAppsToTomcat.sh #&> /dev/null
+sudo -u tomcat6 scripts/CopyWebAppsToTomcat.sh #&> /dev/null
+
 # docs build is always failing the first time during the npm install portion for an unknown reason, but then
 # always passes the second time its run...needs fixed, but this is the workaround for now
-
 make -sj$(nproc) docs &> /dev/null || true
-
 make -sj$(nproc) docs
 
 hoot version
