@@ -3,6 +3,25 @@
 Hootenanny contains three distinct codebases: the core, the web services, and the user interface.  
 Each employs a different testing technology, which is described here.
 
+=== Initial Build Configuration
+
+Before building Hootenanny and running its tests, the application must be configured.  To configure:
+----------------
+aclocal && autoconf && autoheader && automake # run one time only
+./configure <options> # run each time options are changed
+----------------
+
+Note that the first line only has to be run the very first time you clone Hootenanny or whenever the master 
+Makefile changes in source control, so it is omitted from the examples below.
+
+At the time of this writing, the Hootenanny configuration options consist of:
+* --with-services - builds all Hootenanny Core services database code as well as all Hootenanny Java Web Services code.
+* --with-uitests - enables the Hootenanny User Interface tests
+* --with-rnd - builds all Hootenanny Core experimental R&D code
+* --with-coverage - generates code test coverage reports
+
+See the Notes On Configure doc for more information about using configure with make.
+
 === Test Suites
 
 Tests are divided into the following groups: current, quick, slow, and glacial.
@@ -14,15 +33,16 @@ in this directory.
 * glacial - Individual tests that each run in less than 15 min.  You shouldn't need tests that take
  longer than 15min.
  
- If you want to run the tests for all codebases at the same time, you can use the following commands:
+If you want to run the tests for all codebases at the same time, first configure as described in a 
+previous section, then run one of the following commands:
 
 -------------------
-./configure && make -sj($nproc) test-quick
-./configure && make -sj($nproc) test       # slow
-./configure && make -sj($nproc) test-all   # glacial
+make -sj($nproc) test-quick # slow tests
+make -sj($nproc) test       # slow tests
+make -sj($nproc) test-all   # glacial tests
 ------------------
 
-quick is a subset of the slow suite, and quick and slow are subsets of the glacial suite.
+"quick" is a subset of the "slow" suite, and "quick" and "slow" are subsets of the "glacial" suite.
 
 As a developer, you are expected to, at a minimum, run the slow tests before pushing commits.  
 If you are doing user interface or web service work, you may also want to test your changes against 
@@ -39,7 +59,7 @@ In a later section the Hootenanny Web Services Java test code is described.  It 
 that there is also C++ code labeled "services".  That is code which writes to the Hoot API and OSM 
 API services database and is not affiliated with the Hootenanny Web Services Java code.
 
-To run all the Core Tests in a suite, choose one of the following:
+To run all the Core Tests in a suite, choose one of the following after running configure:
 
 --------------------
 HootTest --current
@@ -458,20 +478,18 @@ will take into account command line and CPPUnit tests in the Hootenanny core cod
 JUnit tests in the Hootenanny Web Services code when the application is configured --with-services.  
 Hootenanny Core code coverage is supplied @gcov@ and @lcov@, utilities for using GCC to generate 
 coverage results.  Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura] 
-via Maven. Report coverage for Javascript code is currently in the works.
+via Maven.  Report coverage generation for Javascript code is currently in the works.
 
 To generate a report for just the Hootenanny Java web services code:
 
 ----------------
-./configure --with-services --with-coverage # run this one time only
-make clean && make -j($nproc) services-coverage
+./configure --with-services --with-coverage && make clean-coverage && make -j($nproc) services-coverage
 ----------------
 
 To generate a report for all Hootenanny Core code and the Hootenanny Java Web Services code together:
 
 ----------
-./configure --with-rnd --with-services --with-coverage # run this one time only
-make clean && make -j($nproc) && make -j($nproc) test && make -j($nproc) coverage
+./configure --with-rnd --with-services --with-coverage && make clean-coverage && make -j($nproc) && make -j($nproc) test-all && make -j($nproc) coverage
 -----------
 
 For the Core code, you will see the coverage results in _$HOOT_HOME/tmp/coverage/*/index.html_.  
@@ -481,9 +499,8 @@ For the Java code, you will see the coverage results in _$HOOT_HOME/hoot-service
 *NOTES:* 
 
 * See ngageoint/hootenanny#604 for why the extra 'make' is required before running 'make coverage' when generating a report for the Hootenanny core code.
-* You *must* run 'make test' before running 'make coverage' when generating coverage reports for the Hootenanny Core code or you will get inaccurate results.  The Java 'make services-coverage' command doesn't actually require 'make test' to be run beforehand since it does it automatically, but if you run 'make coverage' when generating coverage reporting using the --with-services configuration option, you should always run 'make test' beforehand in order to not receive inaccurate reporting for the Hootenanny Core code.
-* For the Hootenanny Core code coverage reporting, although certain configuration options disable the compiling of certain code (--with-rnd, --with-services, etc.), the total lines the coverage report reports does not seem to change.  Therefore, to get a totally accurate coverage report for the Core code you need to always run with all configuration options enabled.
-* If you want a new clean coverage result the you'll need to do 'make clean' again before you start the run.  It is possible to clean just the coverage data, but that'll take a little work in Makefile land (ngageoint/hootenanny#600).
+* You *must* run 'make test-all' before running 'make coverage' when generating coverage reports for the Hootenanny Core code or you will get inaccurate results.  The Java 'make services-coverage' command doesn't actually require 'make test' to be run beforehand since it does it automatically, but if you run 'make coverage' when generating coverage reporting using the --with-services configuration option, you should always run 'make test' beforehand in order to not receive inaccurate reporting for the Hootenanny Core code.
+* For the Hootenanny Core code coverage reporting, although certain configuration options disable the compiling of certain code (--with-rnd, --with-services, etc.), the total lines the coverage report reports does not seem to change.  Therefore, to get a totally accurate coverage report for the Core code you need to always run with all configuration options enabled and run 'make test-all' to make sure all the code is covered.
 
 === General Test Writing Guidelines
 

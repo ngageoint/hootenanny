@@ -64,6 +64,10 @@ clean-db: services-clean-db
 # start over as close to a new build as is reasonable
 clean-all: clean clean-db
 
+clean-coverage: services-clean-coverage
+	rm -rf tmp/coverage
+	rm -f `find . -name *.gcda`
+
 check: test
 test: build services-test pp-test plugins-test
 	bin/HootTest $(HOOT_TEST_DIFF) --slow
@@ -239,6 +243,11 @@ endif
 services-clean-db:
 ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile clean-db
+endif
+
+services-clean-coverage:
+ifeq ($(BUILD_SERVICES),services)
+	cd hoot-services && $(MAKE) -f Makefile clean-coverage
 endif
 
 services-coverage:
