@@ -6,12 +6,18 @@ echo Deploying web application files...
 
 source ~/.profile
 
-rm -f $TOMCAT6_HOME/webapps/hoot-services.war
-rm -rf $TOMCAT6_HOME/webapps/hoot-services/
+rm -f $TOMCAT6_HOME/webapps/hoot-services.war &> /dev/null || true
+
+# Need to make sure we don't die due to nfs funkyness
+rm -rf $TOMCAT6_HOME/webapps/hoot-services/ &> /dev/null || true
+rm -rf $TOMCAT6_HOME/webapps/hoot-services/ &> /dev/null || true
+
 cp `ls -t hoot-services/target/hoot-services-*.war | sed -n 1p` $TOMCAT6_HOME/webapps/hoot-services.war
-rm -rf $TOMCAT6_HOME/webapps/hootenanny-id/
+
+rm -rf $TOMCAT6_HOME/webapps/hootenanny-id/ &> /dev/null || true
 cp -R hoot-ui $TOMCAT6_HOME/webapps/hootenanny-id
-rm -rf $TOMCAT6_HOME/webapps/hootenanny-id/css/img
+
+rm -rf $TOMCAT6_HOME/webapps/hootenanny-id/css/img &> /dev/null || true
 cp -R $TOMCAT6_HOME/webapps/hootenanny-id/dist/img $TOMCAT6_HOME/webapps/hootenanny-id/css/
 
 #rm -f $TOMCAT6_HOME/webapps/hoot-services.war
