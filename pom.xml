@@ -81,7 +81,9 @@
         <configuration>
           <formats>
             <format>html</format>
+            <!-- format>xml</format -->
           </formats>
+          <quiet>true</quiet>
         </configuration>
       </plugin>
     </plugins>
@@ -114,7 +116,6 @@
       </activation>
       <modules>
         <module>hoot-services</module>
-        <!-- module>hootenanny-id</module -->
         <module>distribution</module>
       </modules>
     </profile>
