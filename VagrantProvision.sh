@@ -334,11 +334,12 @@ PATH=$HOOT_HOME/bin:$PATH
 EOT
 fi
 
-if ! grep -i --quiet 'umask 002' /etc/default/tomcat6; then
+# Was 002, changing it to 000 to get rid of errors
+if ! grep -i --quiet 'umask 000' /etc/default/tomcat6; then
 echo "### Changing Tomcat umask to group write..."
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
 # Set tomcat6 umask to group write because all files in shared folder are owned by vagrant
-umask 002
+umask 000
 EOT
 fi
 
@@ -397,9 +398,9 @@ if ! which hadoop > /dev/null ; then
   if [ ! -f $HOME/.ssh/id_rsa ]; then
     ssh-keygen -t rsa -N "" -f $HOME/.ssh/id_rsa
     cat ~/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
+    ssh-keyscan -H localhost >> $HOME/.ssh/known_hosts
   fi
   chmod 600 $HOME/.ssh/authorized_keys
-  # ssh -o StrictHostKeyChecking=no localhost
 
   #cd /usr/local
   cd ~
