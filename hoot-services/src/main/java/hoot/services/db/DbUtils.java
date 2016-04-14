@@ -463,7 +463,19 @@ public class DbUtils
         long mapId = mapIds.get(0);
         String dbname = conn.getCatalog() + "_renderdb_" + String.valueOf(mapId);
         DataDefinitionManager ddm = new DataDefinitionManager();
-        ddm.deleteDb(dbname, false);
+		try {
+			ddm.deleteDb(dbname, false);
+		} catch (SQLException e) {
+			try {
+				ddm.deleteDb(
+						conn.getCatalog() + "_renderdb_" + mapName,
+						false);
+			} catch (SQLException f) {
+				log.warn("No renderdb present to delete for " + mapName
+						+ " or map id " + String.valueOf(mapId));
+			}
+		}
+
       }
     }
     catch (Exception e)
