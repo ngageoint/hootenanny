@@ -15,4 +15,4 @@ OP_INPUT=$(DB_URL)/$(INPUT_NAME)
 OP_OUTPUT=$(DB_URL)/$(OUTPUT_NAME)
 
 step1:
-	hoot crop-map $(HOOT_OPTS) $(OP_INPUT) $(OP_OUTPUT) "$(BBOX)"
+	hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
