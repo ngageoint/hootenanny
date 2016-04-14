@@ -410,7 +410,7 @@ if ! which hadoop > /dev/null ; then
   cd hadoop
   sudo find . -type d -exec chmod a+rwx {} \;
   sudo find . -type f -exec chmod a+rw {} \;
-  sudo chmod go+w hadoop/bin
+  sudo chmod go-w bin
   cd ~
 
 #TODO: remove these home dir hardcodes
