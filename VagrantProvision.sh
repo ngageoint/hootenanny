@@ -191,30 +191,28 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     echo "export TOMCAT6_HOME=/usr/share/tomcat6" >> ~/.profile
     source ~/.profile
 fi
-cd $TOMCAT6_HOME
-# These sym links are needed so that the ui tests can deploy the services and iD 
-# app to Tomcat using the Tomcat startup and shutdown scripts.
+    cd $TOMCAT6_HOME
+    # These sym links are needed so that the ui tests can deploy the services and iD 
+    # app to Tomcat using the Tomcat startup and shutdown scripts.
 sudo ln -sf /var/lib/tomcat6/webapps webapps
 sudo ln -sf /var/lib/tomcat6/conf conf
 sudo ln -sf /var/log/tomcat6 log
-cd ~
+    cd ~
 
 # These permission changes needed so that the ui tests can deploy the services and iD app to 
 # Tomcat using the Tomcat startup and shutdown scripts.
 username=vagrant
 if groups $username | grep &>/dev/null '\btomcat6\b'; then
-    echo "Adding vagrant user to tomcat6 user group..."
-    sudo usermod -a -G tomcat6 vagrant
+    echo "Adding $username user to tomcat6 user group..."
+    sudo usermod -a -G tomcat6 $username
 fi
-sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME
+sudo chown -R $username:tomcat6 $TOMCAT6_HOME
 sudo mkdir -p /var/lib/tomcat6/logs
 sudo mkdir -p $TOMCAT6_HOME/logs
-sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME/logs
-sudo chown -R vagrant:tomcat6 /var/lib/tomcat6
-sudo chown -R vagrant:tomcat6 /etc/tomcat6
-sudo chown -R tomcat6:tomcat6 /var/log/tomcat6
-mkdir -p $HOOT_HOME/ingest/processed
-sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
+sudo chown -R $username:tomcat6 $TOMCAT6_HOME/logs
+sudo chown -R $username:tomcat6 /var/lib/tomcat6
+sudo chown -R $username:tomcat6 /etc/tomcat6
+sudo chown -R $username:tomcat6 /var/log/tomcat6
 
 cd $HOOT_HOME
 source ./SetupEnv.sh
@@ -227,11 +225,16 @@ fi
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment..."
-echo "#--------------
+# This echo properly substitutes the home path dir and keeps it from having to be hardcoded, but fails on permissions during write...so hardcoding the home path instead for now
+#sudo echo "#--------------
 # Hoot Settings
 #--------------
-HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
+#HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
+#--------------
+# Hoot Settings
+#--------------
+HOOT_HOME=/home/vagrant/hoot
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
 GDAL_DATA=/usr/local/share/gdal
 GDAL_LIB_DIR=/usr/local/lib
@@ -278,7 +281,7 @@ fi
 if [ ! -d $TOMCAT6_HOME/.deegree ]; then
     echo "Creating deegree directory for webapp..."
     sudo mkdir $TOMCAT6_HOME/.deegree
-    sudo chown vagrant:tomcat6 $TOMCAT6_HOME/.deegree
+    sudo chown $username:tomcat6 $TOMCAT6_HOME/.deegree
 fi
 
 # Remove LocalHoot.json based on #464
@@ -286,8 +289,6 @@ if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
     echo "Removing LocalHoot.json..."
     rm $HOOT_HOME/conf/LocalHoot.json
 fi
-
-
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
 # if the marker file is older than this file (VagrantProvision.sh)
@@ -306,6 +307,10 @@ cd node-mapnik-server
 sudo npm install
 cd ..
 
+mkdir -p $HOOT_HOME/ingest/processed
+sudo chown -R $username:tomcat6 $HOOT_HOME/ingest
+mkdir -p $HOOT_HOME/upload
+sudo chown -R $username:tomcat6 $HOOT_HOME/upload
 aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
@@ -315,14 +320,16 @@ fi
 echo "Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
 make -s clean && make -sj$(nproc)
-echo "Deploying web application..."
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
 scripts/CopyWebAppsToTomcat.sh #&> /dev/null
+# docs build is always failing the first time during the npm install portion for an unknown reason, but then 
+# always passes the second time its run...needs fixed, but this is the workaround for now
+make -sj$(nproc) docs &> /dev/null || true
 make -sj$(nproc) docs 
 hoot version
 
 echo "See VAGRANT.md for additional configuration instructions and then run 'vagrant ssh' to log into the Hootenanny virtual machine."
-echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation."
+echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation files."
 echo "Access the web application at http://localhost:8888/hootenanny-id"
 echo "If you wish to run the diagnostic tests, log into the virtual machine and run: 'cd $HOOT_HOME && make -sj$(nproc) test-all'"
 

@@ -107,6 +107,7 @@ void PbfReader::_init(bool useFileId)
   _permissive = true;
   _in = NULL;
   _needToCloseInput = false;
+  _typeThenId = false;
 
   initializePartial();
 
@@ -293,7 +294,22 @@ long PbfReader::_getNodeId(long fromFile)
   long newId;
   if (_useFileId)
   {
-    newId = fromFile;
+    if (_permissive == false && _typeThenId == false)
+    {
+      if (_nodeIdMap.contains(fromFile))
+      {
+        newId = _nodeIdMap[fromFile];
+      }
+      else
+      {
+        newId = fromFile;
+        _nodeIdMap.insert(fromFile, newId);
+      }
+    }
+    else
+    {
+      newId = fromFile;
+    }
   }
   else
   {
@@ -859,6 +875,16 @@ void PbfReader::_parseOsmHeader()
   size_t size = _d->blob.raw_size();
   const char* inflated = _inflate(_d->blob.zlib_data(), size);
   _d->headerBlock.ParseFromArray(inflated, size);
+
+  int optionalFeatureSize = _d->headerBlock.optional_features_size();
+  for (int i = 0; i < optionalFeatureSize; i++)
+  {
+    std::string typeThenId = _d->headerBlock.optional_features(i);
+    if (typeThenId == PBF_SORT_TYPE_THEN_ID)
+    {
+      _typeThenId = true;
+    }
+  }
 
   _osmHeaderRead = true;
 }

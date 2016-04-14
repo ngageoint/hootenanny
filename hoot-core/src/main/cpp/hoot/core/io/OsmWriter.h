@@ -97,6 +97,11 @@ public:
 
   virtual void write(boost::shared_ptr<const OsmMap> map);
 
+  /**
+   * Remove any invalid characters from the string s and print an error if one is found.
+   */
+  QString removeInvalidCharacters(const QString& s);
+
 protected:
   bool _includeIds;
   bool _includeDebug;
@@ -106,11 +111,6 @@ protected:
   int _precision;
   auto_ptr<QIODevice> _fp;
   int _encodingErrorCount;
-
-  /**
-   * Remove any invalid characters from the string s and print an error if one is found.
-   */
-  QString _e(const QString& s);
 
   static QString _typeName(ElementType e);
 

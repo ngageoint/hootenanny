@@ -111,6 +111,7 @@ while [ $# -gt 0 ] ; do
         ;;
     "docs") 
         PHASE="docs"
+	ARGS=$ARGS" -Dliquibase.should.run=false"
         shift 1
         ;;
     "-f" | "--failfast")

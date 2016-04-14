@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -61,6 +61,8 @@ public:
    * Retrieves a URL used to read services database data
    */
   static QUrl getDbReadUrl(const long mapId);
+
+  static QUrl getDbReadUrl(const long mapId, const long elemId, const QString& elemType);
 
   /**
    * Retrieves URL for OSM API database

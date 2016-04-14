@@ -71,6 +71,8 @@ hoot-streaming/tmp
 hootenanny-*.tar.gz
 HOOT_VERSION_FILE
 HootConfig.h
+.idea/*
+*.iml
 ingest/processed
 ingest/upload
 **/lib*.a
@@ -164,3 +166,5 @@ Vagrant.marker
 test-files/services-system/node_modules
 vagrant*.lock
 vagrant*-*
+MingsSuperAwesomePrompt.sh
+id_rsa.pub

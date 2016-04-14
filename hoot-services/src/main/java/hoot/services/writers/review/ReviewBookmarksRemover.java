@@ -38,7 +38,8 @@ import org.slf4j.LoggerFactory;
 import com.mysema.query.sql.Configuration;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 
-public class ReviewBookmarksRemover {
+public class ReviewBookmarksRemover 
+{
 	@SuppressWarnings("unused")
   private static final Logger log = LoggerFactory.getLogger(ReviewBookmarksRemover.class);
 	
@@ -46,7 +47,7 @@ public class ReviewBookmarksRemover {
 	
 	public ReviewBookmarksRemover(final Connection cn) 
 	{
-		_conn = cn;
+	  _conn = cn;
 	}
 	
 	/**

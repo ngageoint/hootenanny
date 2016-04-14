@@ -6,19 +6,8 @@ sudo service tomcat6 stop
 PG_SERVICE=$(ls /etc/init.d | grep postgresql-)
 sudo service $PG_SERVICE start
 PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}')
-# Drop Hoot user and services db
-if sudo -u postgres psql -d postgres -c "\du" | cut -d \| -f 1 | grep -qw hoot; then
-    sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='false' WHERE datname='wfsstoredb'"
-    sudo -u postgres dropdb hoot
-    sudo -u postgres dropdb wfsstoredb
-    sudo -u postgres dropdb osmapi_test
-    # Drop all render dbs
-    source /var/lib/hootenanny/conf/DatabaseConfig.sh
-    SQL=$(sudo -u postgres psql -t -A -d postgres -c "SELECT 'DROP DATABASE \"' || datname || '\";' FROM pg_database WHERE datname like '$DB_NAME_renderdb\_%';")
-    echo $SQL | sudo -u postgres psql -d postgres
-    sudo -u postgres dropuser hoot
-fi
-# configure Postgres settings
+
+# Restore Postgres settings
 PG_HB_CONF=/var/lib/pgsql/$PG_VERSION/data/pg_hba.conf
 if sudo grep -i --quiet hoot $PG_HB_CONF; then
     sudo -u postgres mv $PG_HB_CONF.orig $PG_HB_CONF
@@ -27,12 +16,12 @@ POSTGRES_CONF=/var/lib/pgsql/$PG_VERSION/data/postgresql.conf
 if grep -i --quiet HOOT $POSTGRES_CONF; then
     sudo -u postgres mv $POSTGRES_CONF.orig $POSTGRES_CONF
 fi
-# configure kernal parameters
+# Restore kernal parameters
 if sysctl -e kernel.shmmax | grep --quiet 1173741824; then
     sudo mv /etc/sysctl.conf.orig /etc/sysctl.conf
 fi
 
-# configure Tomcat environment
+# Restore Tomcat environment
 TOMCAT_ENV=/usr/sbin/tomcat6
 if grep -i --quiet HOOT $TOMCAT_ENV; then
     sudo mv $TOMCAT_ENV.orig $TOMCAT_ENV
@@ -51,16 +40,6 @@ fi
 TOMCAT_HOME=/usr/share/tomcat6
 if [ -d $TOMCAT_HOME/.deegree ]; then
     sudo rm -rf $TOMCAT_HOME/.deegree
-fi
-# Remove ingest/processed directory
-BASEMAP_HOME=/var/lib/hootenanny/ingest/processed
-if [ -d $BASEMAP_HOME ]; then
-    sudo rm -rf $BASEMAP_HOME
-fi
-# Remove upload directory
-UPLOAD_HOME=/var/lib/hootenanny/upload
-if [ -d $UPLOAD_HOME ]; then
-    sudo rm -rf $UPLOAD_HOME
 fi
 # Remove exploded hoot-services war remnants
 SERVICES_HOME=/var/lib/tomcat6/webapps/hoot-services

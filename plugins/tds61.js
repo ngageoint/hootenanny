@@ -244,8 +244,8 @@ tds61 = {
             delete attrs.OTH;
         }
 
-		if (attrList != undefined)
-		{
+        if (attrList != undefined)
+        {
             // The code is duplicated but it is quicker than doing the "if" on each iteration
             if (config.getOgrDebugDumpvalidate() == 'true')
             {
@@ -340,7 +340,7 @@ tds61 = {
         else
         {
             hoot.logVerbose('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
-		} // End Drop attrs
+        } // End Drop attrs
 
         // Repack the OTH field
         if (Object.keys(othList).length > 0)
@@ -856,6 +856,7 @@ tds61 = {
             // Rules format:  ["test expression","output result"];
             // Note: t = tags, a = attrs and attrs can only be on the RHS
             var rulesList = [
+            ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
             ["t.navigationaid && !(t.aeroway)","t.aeroway = 'navigationaid'"],
             ["t.amenity == 'stop' && t['transport:type'] == 'bus'","t.highway = 'bus_stop'"],
             ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],
@@ -1312,8 +1313,36 @@ tds61 = {
 
         }
 
+        // Movable Bridges
+        if (tags.bridge == 'movable')
+        {
+          if (! tags['bridge:movable'])
+          {
+        	tags['bridge:movable'] = 'unknown';
+          }
+          tags.bridge = 'yes';
+          attrs.F_CODE = 'AQ040';
+        }
 
-        // Now use the lookup table to find an FCODE. This is here to stop clashes with the 
+        // Viaducts
+        if (tags.bridge == 'viaduct')
+        {
+          tags.bridge = 'yes';
+          tags.note = translate.appendValue(tags.note,'Viaduct',';');
+        }
+
+        // Fix road junctions.
+        // TDS has junctions as points. If we can make the feature into a road, railway or bridge then we will
+        // If not, it should go to the o2s layer
+        if (tags.junction && geometryType !== 'Point')
+        {
+            if (tags.highway || tags.bridge || tags.railway)
+            {
+                delete tags.junction;
+            }
+        } // End AP020 not Point
+
+        // Now use the lookup table to find an FCODE. This is here to stop clashes with the
         // standard one2one rules
         if (!(attrs.F_CODE) && tds61.fcodeLookup)
         {
