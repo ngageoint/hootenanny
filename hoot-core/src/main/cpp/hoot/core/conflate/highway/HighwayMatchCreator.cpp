@@ -135,7 +135,7 @@ public:
         e1->getStatus() != e2->getStatus() && e2->isUnknown() &&
         OsmSchema::getInstance().isLinearHighway(e1->getTags(), e1->getElementType()) &&
         OsmSchema::getInstance().isLinearHighway(e2->getTags(), e2->getElementType()) &&
-        tagAncestorDiff->diff(map, e1, e2) < ConfigOptions().getHighwayMaxEnumDiff())
+        tagAncestorDiff->diff(map, e1, e2) <= ConfigOptions().getHighwayMaxEnumDiff())
     {
       // score each candidate and push it on the result vector
       result = new HighwayMatch(classifier, sublineMatcher, map, e1->getElementId(),
