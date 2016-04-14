@@ -480,6 +480,10 @@ Hootenanny Core code coverage is supplied @gcov@ and @lcov@, utilities for using
 coverage results.  Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura] 
 via Maven.  Report coverage generation for Javascript code is currently in the works.
 
+*Coverage report generation has the pre-requisite of running all tests associated with the code being profiled.*
+For the Java Web Services code, this is done automatically by Cobertura, but for the Hootenanny Core code, 'make test' must
+be made explicit as described below.
+
 To generate a report for just the Hootenanny Java web services code:
 
 ----------------
@@ -499,7 +503,10 @@ For the Java code, you will see the coverage results in _$HOOT_HOME/hoot-service
 *NOTES:* 
 
 * See ngageoint/hootenanny#604 for why the extra 'make' is required before running 'make coverage' when generating a report for the Hootenanny core code.
-* You *must* run 'make test-all' before running 'make coverage' when generating coverage reports for the Hootenanny Core code or you will get inaccurate results.  The Java 'make services-coverage' command doesn't actually require 'make test' to be run beforehand since it does it automatically, but if you run 'make coverage' when generating coverage reporting using the --with-services configuration option, you should always run 'make test' beforehand in order to not receive inaccurate reporting for the Hootenanny Core code.
+* To get a code coverage report for *all* Hootenanny code, you *must* run 'make test-all' before running 'make coverage'
+for the Hootenanny Core code or you will get inaccurate results.  The Java Web Services'make services-coverage' command doesn't actually require 'make test' to be run 
+beforehand since it is done automatically, but if you run 'make coverage' when generating coverage reporting using the --with-services configuration option, 
+you should always run 'make test' beforehand in order to not receive inaccurate reporting for the Hootenanny Core code.
 * For the Hootenanny Core code coverage reporting, although certain configuration options disable the compiling of certain code (--with-rnd, --with-services, etc.), the total lines the coverage report reports does not seem to change.  Therefore, to get a totally accurate coverage report for the Core code you need to always run with all configuration options enabled and run 'make test-all' to make sure all the code is covered.
 
 === General Test Writing Guidelines
