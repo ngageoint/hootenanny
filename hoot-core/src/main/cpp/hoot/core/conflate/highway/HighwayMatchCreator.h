@@ -32,6 +32,7 @@
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/schema/TagAncestorDifferencer.h>
 
 namespace hoot
 {
@@ -75,7 +76,7 @@ private:
   shared_ptr<HighwayClassifier> _classifier;
   shared_ptr<SublineStringMatcher> _sublineMatcher;
   shared_ptr<MatchThreshold> _matchThreshold;
-
+  shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
 };
 
 }
