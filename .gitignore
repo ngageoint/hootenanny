@@ -168,3 +168,4 @@ vagrant*.lock
 vagrant*-*
 MingsSuperAwesomePrompt.sh
 id_rsa.pub
+coverage/

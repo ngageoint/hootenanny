@@ -79,6 +79,7 @@
         <artifactId>cobertura-maven-plugin</artifactId>
         <version>2.7</version>
         <configuration>
+          <outputDirectory>../../../coverage/services</outputDirectory>
           <formats>
             <format>html</format>
             <!-- format>xml</format -->

@@ -61,10 +61,6 @@ clean-db-force:
 	../scripts/DeleteAllTables.sh
 	rm -rf ./src/main/java/hoot/services/db2
 
-clean-coverage:
-	rm -rf target/site/cobertura
-	rm -rf target/cobertura
-
 test: config
 	echo Running services tests...
 	rm -rf ./src/main/java/hoot/services/db2
