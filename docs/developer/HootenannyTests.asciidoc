@@ -487,7 +487,7 @@ be made explicit as described below.
 To generate a report for just the Hootenanny Java web services code:
 
 ----------------
-./configure --with-services --with-coverage && make clean-coverage && make -j($nproc) services-coverage
+./configure --with-services --with-coverage && make services-clean-coverage && make -j($nproc) services-coverage
 ----------------
 
 To generate a report for all Hootenanny Core code and the Hootenanny Java Web Services code together:
@@ -496,13 +496,13 @@ To generate a report for all Hootenanny Core code and the Hootenanny Java Web Se
 ./configure --with-rnd --with-services --with-coverage && make clean-coverage && make -j($nproc) && make -j($nproc) test-all && make -j($nproc) coverage
 -----------
 
-The test coverage result will be output to _$HOOT_HOME/coverage_. 
+The test coverage reports will be output to _$HOOT_HOME/coverage_. 
 
 *NOTES:* 
 
 * See ngageoint/hootenanny#604 for why the extra 'make' is required before running 'make coverage' when generating a report for the Hootenanny core code.
 * To get a code coverage report for *all* Hootenanny code, you *must* run 'make test-all' before running 'make coverage'
-for the Hootenanny Core code or you will get inaccurate results.  The Java Web Services'make services-coverage' command doesn't actually require 'make test' to be run 
+for the Hootenanny Core code or you will get incomplete results.  The Java Web Services'make services-coverage' command doesn't actually require 'make test' to be run 
 beforehand since it is done automatically, but if you run 'make coverage' when generating coverage reporting using the --with-services configuration option, 
 you should always run 'make test' beforehand in order to not receive inaccurate reporting for the Hootenanny Core code.
 * For the Hootenanny Core code coverage reporting, although certain configuration options disable the compiling of certain code (--with-rnd, --with-services, etc.), the total lines the coverage report reports does not seem to change.  Therefore, to get a totally accurate coverage report for the Core code you need to always run with all configuration options enabled and run 'make test-all' to make sure all the code is covered.

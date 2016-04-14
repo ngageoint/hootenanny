@@ -57,9 +57,25 @@ clean: pom.xml src/main/resources/log4j.xml config
 
 # Both commands now do the same thing.
 clean-db: clean-db-force
+
 clean-db-force:
 	../scripts/DeleteAllTables.sh
 	rm -rf ./src/main/java/hoot/services/db2
+
+coverage:
+	echo "Generating services code coverage report (runs services tests)..."
+	mkdir -p ../coverage
+	../scripts/mvn-build $(MVN_QUIET) cobertura:cobertura
+	rm -rf ../coverage/services
+	cp -R target/site/cobertura ../coverage
+	mv ../coverage/cobertura ../coverage/services
+
+clean-coverage:
+	# cobertura:clean doesn't seem to be working right
+	#../scripts/mvn-build $(MVN_QUIET) cobertura:clean
+	rm -rf target/site/cobertura
+	rm -rf target/cobertura
+	rm -rf ../coverage/services
 
 test: config
 	echo Running services tests...

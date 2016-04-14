@@ -247,14 +247,12 @@ endif
 
 services-clean-coverage:
 ifeq ($(BUILD_SERVICES),services)
-	scripts/mvn-build $(MVN_QUIET) cobertura:clean
+	cd hoot-services && $(MAKE) -f Makefile clean-coverage
 endif
 
 services-coverage:
 ifeq ($(BUILD_SERVICES),services)
-	echo "Generating service code coverage report..."
-	mkdir -p coverage/services
-	scripts/mvn-build $(MVN_QUIET) cobertura:cobertura
+	cd hoot-services && $(MAKE) -f Makefile coverage
 endif
 
 services-test: services-build
@@ -347,7 +345,7 @@ tmp/schema.png: tmp/schema.dot
 
 IGNORED=/usr/\* \*test/cpp\* \*tgs/src\* \*/local/\* \*/tmp/moc/\*
 
-# Passing the --quiet switch to lcov is causing errors, so writing out to a log for now.
+# Passing the --quiet switch to lcov when -s is present is causing errors, so writing out to a log every time instead.
 
 coverage/core/core/index.html:
 	echo "Generating core code coverage report..."
