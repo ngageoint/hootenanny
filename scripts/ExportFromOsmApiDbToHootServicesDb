@@ -5,7 +5,7 @@
 HOOT_OPTS+= -D services.db.writer.email=test@test.com -D services.db.reader.email=test@test.com
 HOOT_OPTS+= -D convert.bounding.box=$(minx),$(miny),$(maxx),$(maxy)
 
-MAPEDIT_DB_URL=hootapidb://$(MapEditDbUserId):$(MapEditDbPassword)@$(MapEditDbHostAddr):$(MapEditDbHostPort)/$(MapEditDbName)
+MAPEDIT_DB_URL=osmapidb://$(MapEditDbUserId):$(MapEditDbPassword)@$(MapEditDbHostAddr):$(MapEditDbHostPort)/$(MapEditDbName)
 
 step1:
 	hoot convert $(HOOT_OPTS) "$(MAPEDIT_DB_URL)/$(exportDbName)" "$(DB_URL)/$(outputLayerName)"
