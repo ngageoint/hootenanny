@@ -264,43 +264,6 @@ fi
 
 sudo service postgresql restart
 
-# Configure Tomcat
-
-if ! grep --quiet TOMCAT6_HOME ~/.profile; then
-    echo "### Adding Tomcat to profile..."
-    echo "export TOMCAT6_HOME=/var/lib/tomcat6" >> ~/.profile
-    source ~/.profile
-fi
-
-cd $TOMCAT6_HOME
-# These sym links are needed so that the ui tests can deploy the services and iD
-# app to Tomcat using the Tomcat startup and shutdown scripts.
-sudo ln -sf /var/lib/tomcat6/webapps webapps
-sudo ln -sf /var/lib/tomcat6/conf conf
-sudo ln -sf /var/log/tomcat6 log
-cd ~
-
-# These permission changes needed so that the ui tests can deploy the services and iD app to 
-# Tomcat using the Tomcat startup and shutdown scripts.
-username=vagrant
-if ! groups $username | grep --quiet '\btomcat6\b'; then
-    echo "Adding $username user to tomcat6 user group..."
-    sudo usermod -a -G tomcat6 $username
-fi
-if ! groups tomcat6 | grep --quiet "\b$username\b"; then
-    echo "Adding tomcat6 user to $username user group..."
-    sudo usermod -a -G $username tomcat6
-fi
-sudo chown -R $username:tomcat6 $TOMCAT6_HOME
-sudo mkdir -p /var/lib/tomcat6/logs
-sudo mkdir -p $TOMCAT6_HOME/logs
-sudo chown -R $username:tomcat6 $TOMCAT6_HOME/logs
-sudo chown -R $username:tomcat6 /var/lib/tomcat6
-sudo chown -R $username:tomcat6 /etc/tomcat6
-sudo chown -R $username:tomcat6 /var/log/tomcat6
-
-sudo chmod g+w $TOMCAT6_HOME/logs /var/lib/tomcat6/logs /var/log/tomcat6/log
-
 cd $HOOT_HOME
 source ./SetupEnv.sh
 
@@ -308,6 +271,13 @@ if [ ! "$(ls -A hoot-ui)" ]; then
     echo "hoot-ui is empty"
     echo "init'ing and updating submodule"
     git submodule init && git submodule update
+fi
+
+# Configure Tomcat
+if ! grep --quiet TOMCAT6_HOME ~/.profile; then
+    echo "### Adding Tomcat to profile..."
+    echo "export TOMCAT6_HOME=/var/lib/tomcat6" >> ~/.profile
+    source ~/.profile
 fi
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
@@ -370,13 +340,11 @@ if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then
     echo "Set allowLinking to true in Tomcat context..."
     sudo sed -i.bak "s@^<Context>@<Context allowLinking=\"true\">@" /etc/tomcat6/context.xml
 fi
-i
-# Hard coded
-#if [ ! -d $TOMCAT6_HOME/.deegree ]; then
+
 if [ ! -d /usr/share/tomcat6/.deegree ]; then
     echo "Creating deegree directory for webapp..."
     sudo mkdir /usr/share/tomcat6/.deegree
-    sudo chown $username:tomcat6 /usr/share/tomcat6/.deegree
+    sudo chown tomcat6:tomcat6 /usr/share/tomcat6/.deegree
 fi
 
 if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
