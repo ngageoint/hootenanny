@@ -66,6 +66,8 @@ To build a deployable, complete Hootenanny package:
 ./configure --with-rnd --with-services && make -sj$(nproc) archive
 --------------------
 
+A .tar.gz file containing the Hootenanny Core and User Interface binaries, as well as a .war file containing the Hootenanny Web Services binaries will be created in the root Hootenanny directory.
+
 To generate Hootenanny documention:
 ------
 make docs
