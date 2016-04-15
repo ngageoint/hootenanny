@@ -409,10 +409,10 @@ private:
 
   /**
    * Builds the expected renderdb name from our current database & map
-   * display name.
+   * id.
    *
    * @param mapId id of the map for which we want the associated renderdb
-   * @return should be <dbname>_renderdb_<map_display_name>
+   * @return should be <dbname>_renderdb_<map_id>
    */
   QString _getRenderDBName(long mapId);
 };

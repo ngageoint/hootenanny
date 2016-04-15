@@ -3,24 +3,8 @@
 Hootenanny contains three distinct codebases: the core, the web services, and the user interface.  
 Each employs a different testing technology, which is described here.
 
-=== Initial Build Configuration
-
-Before building Hootenanny and running its tests, the application must be configured.  To configure:
-----------------
-aclocal && autoconf && autoheader && automake # run one time only
-./configure <options> # run each time options are changed
-----------------
-
-Note that the first line only has to be run the very first time you clone Hootenanny or whenever the master 
-Makefile changes in source control, so it is omitted from the examples below.
-
-At the time of this writing, the Hootenanny configuration options consist of:
-* --with-services - builds all Hootenanny Core services database code as well as all Hootenanny Java Web Services code.
-* --with-uitests - enables the Hootenanny User Interface tests
-* --with-rnd - builds all Hootenanny Core experimental R&D code
-* --with-coverage - generates code test coverage reports
-
-See the Notes On Configure doc for more information about using configure with make.
+Before building Hootenanny and running its tests, the application must be configured.  See the
+Building Hootenanny section in this document for details.
 
 === Test Suites
 
@@ -47,6 +31,8 @@ make -sj($nproc) test-all   # glacial tests
 As a developer, you are expected to, at a minimum, run the slow tests before pushing commits.  
 If you are doing user interface or web service work, you may also want to test your changes against 
 the User Interface Tests, which run as part of the glacial tests.
+
+To see other, more granular testing options, run 'make help'.
 
 === Core Tests
 
@@ -480,10 +466,14 @@ Hootenanny Core code coverage is supplied @gcov@ and @lcov@, utilities for using
 coverage results.  Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura] 
 via Maven.  Report coverage generation for Javascript code is currently in the works.
 
+*Coverage report generation has the pre-requisite of running all tests associated with the code being profiled.*
+For the Java Web Services code, this is done automatically by Cobertura, but for the Hootenanny Core code, 'make test' must
+be made explicit as described below.
+
 To generate a report for just the Hootenanny Java web services code:
 
 ----------------
-./configure --with-services --with-coverage && make clean-coverage && make -j($nproc) services-coverage
+./configure --with-services --with-coverage && make services-clean-coverage && make -j($nproc) services-coverage
 ----------------
 
 To generate a report for all Hootenanny Core code and the Hootenanny Java Web Services code together:
@@ -492,15 +482,17 @@ To generate a report for all Hootenanny Core code and the Hootenanny Java Web Se
 ./configure --with-rnd --with-services --with-coverage && make clean-coverage && make -j($nproc) && make -j($nproc) test-all && make -j($nproc) coverage
 -----------
 
-For the Core code, you will see the coverage results in _$HOOT_HOME/tmp/coverage/*/index.html_.  
-
-For the Java code, you will see the coverage results in _$HOOT_HOME/hoot-services/target/site/cobertura/index.html_.  
+The test coverage reports will be output to _$HOOT_HOME/coverage_. 
 
 *NOTES:* 
 
 * See ngageoint/hootenanny#604 for why the extra 'make' is required before running 'make coverage' when generating a report for the Hootenanny core code.
-* You *must* run 'make test-all' before running 'make coverage' when generating coverage reports for the Hootenanny Core code or you will get inaccurate results.  The Java 'make services-coverage' command doesn't actually require 'make test' to be run beforehand since it does it automatically, but if you run 'make coverage' when generating coverage reporting using the --with-services configuration option, you should always run 'make test' beforehand in order to not receive inaccurate reporting for the Hootenanny Core code.
+* To get a code coverage report for *all* Hootenanny code, you *must* run 'make test-all' before running 'make coverage'
+for the Hootenanny Core code or you will get incomplete results.  The Java Web Services'make services-coverage' command doesn't actually require 'make test' to be run 
+beforehand since it is done automatically, but if you run 'make coverage' when generating coverage reporting using the --with-services configuration option, 
+you should always run 'make test' beforehand in order to not receive inaccurate reporting for the Hootenanny Core code.
 * For the Hootenanny Core code coverage reporting, although certain configuration options disable the compiling of certain code (--with-rnd, --with-services, etc.), the total lines the coverage report reports does not seem to change.  Therefore, to get a totally accurate coverage report for the Core code you need to always run with all configuration options enabled and run 'make test-all' to make sure all the code is covered.
+* See ngageoint/hootenanny#610 for why the Java web services tests will run twice when generating the Hootenanny Core and Web Services coverage reports in the same command.
 
 === General Test Writing Guidelines
 

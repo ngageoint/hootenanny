@@ -49,7 +49,7 @@ build: build-info config
 docs: config
 	../scripts/mvn-build $(MVN_QUIET) docs
 
-clean: pom.xml src/main/resources/log4j.xml config
+clean: pom.xml src/main/resources/log4j.xml config clean-coverage
 	../scripts/mvn-build $(MVN_QUIET) clean
 	rm -f pom.xml
 	rm -f src/main/resources/log4j.xml
@@ -57,13 +57,25 @@ clean: pom.xml src/main/resources/log4j.xml config
 
 # Both commands now do the same thing.
 clean-db: clean-db-force
+
 clean-db-force:
 	../scripts/DeleteAllTables.sh
 	rm -rf ./src/main/java/hoot/services/db2
 
+coverage:
+	echo "Generating services code coverage report (runs services tests)..."
+	mkdir -p ../coverage
+	# Run the integration tests for the code coverage, so we get a report covering all of the code.
+	../scripts/mvn-build $(MVN_QUIET) coverage
+	rm -rf ../coverage/services
+	cp -R target/site/cobertura ../coverage
+	mv ../coverage/cobertura ../coverage/services
+
 clean-coverage:
+	#../scripts/mvn-build $(MVN_QUIET) cobertura:clean
 	rm -rf target/site/cobertura
 	rm -rf target/cobertura
+	rm -rf ../coverage/services
 
 test: config
 	echo Running services tests...
