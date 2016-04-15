@@ -305,12 +305,18 @@ PATH=$HOOT_HOME/bin:$PATH
 EOT
 fi
 
-# Was 002, changing it to 000 to get rid of errors
-if ! grep -i --quiet 'umask 000' /etc/default/tomcat6; then
+# Trying this to try to get rid of errors
+sudo mkdir -p /usr/share/tomcat6/server/classes
+sudo mkdir -p /usr/share/tomcat6/shared/classes
+sudo chown -R tomcat6:tomcat6 /usr/share/tomcat6/server
+sudo chown -R tomcat6:tomcat6 /usr/share/tomcat6/shared
+
+# Can change it to 000 to get rid of errors
+if ! grep -i --quiet 'umask 002' /etc/default/tomcat6; then
 echo "### Changing Tomcat umask to group write..."
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
 # Set tomcat6 umask to group write because all files in shared folder are owned by vagrant
-umask 000
+umask 002
 EOT
 fi
 
