@@ -3,24 +3,8 @@
 Hootenanny contains three distinct codebases: the core, the web services, and the user interface.  
 Each employs a different testing technology, which is described here.
 
-=== Initial Build Configuration
-
-Before building Hootenanny and running its tests, the application must be configured.  To configure:
-----------------
-aclocal && autoconf && autoheader && automake # run one time only
-./configure <options> # run each time options are changed
-----------------
-
-Note that the first line only has to be run the very first time you clone Hootenanny or whenever the master 
-Makefile changes in source control, so it is omitted from the examples below.
-
-At the time of this writing, the Hootenanny configuration options consist of:
-* --with-services - builds all Hootenanny Core services database code as well as all Hootenanny Java Web Services code.
-* --with-uitests - enables the Hootenanny User Interface tests
-* --with-rnd - builds all Hootenanny Core experimental R&D code
-* --with-coverage - generates code test coverage reports
-
-See the Notes On Configure doc for more information about using configure with make.
+Before building Hootenanny and running its tests, the application must be configured.  See the
+Building Hootenanny section in this document for details.
 
 === Test Suites
 
@@ -47,6 +31,8 @@ make -sj($nproc) test-all   # glacial tests
 As a developer, you are expected to, at a minimum, run the slow tests before pushing commits.  
 If you are doing user interface or web service work, you may also want to test your changes against 
 the User Interface Tests, which run as part of the glacial tests.
+
+To see other, more granular testing options, run 'make help'.
 
 === Core Tests
 
