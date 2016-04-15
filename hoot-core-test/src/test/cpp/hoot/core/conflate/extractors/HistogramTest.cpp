@@ -55,8 +55,8 @@ public:
     HOOT_STR_EQUALS(15, h.getBin(-0.01));
     HOOT_STR_EQUALS(8, h.getBin(-M_PI));
     HOOT_STR_EQUALS(15, h.getBin(M_PI * 2.0 - .001));
-    HOOT_STR_EQUALS(0, h.getBin(M_PI * 2.0));
-    HOOT_STR_EQUALS(0, h.getBin(M_PI * 2.0 + .001));
+    HOOT_STR_EQUALS(16, h.getBin(M_PI * 2.0));
+    HOOT_STR_EQUALS(16, h.getBin(M_PI * 2.0 + .001));
   }
 
   void smoothTest()
