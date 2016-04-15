@@ -4,6 +4,7 @@ DigitalGlobe, Inc.
 :Email: hootenanny@digitalglobe.com
 
 include::developer/HootenannyDevelopmentEnvironmentSetupInstructions.asciidoc[]
+include::developer/HootenannyBuild.asciidoc[]
 include::developer/HootenannyDeveloperIDESetup.asciidoc[]
 include::developer/HootenannyTroubleshooting.asciidoc[]
 include::developer/HootenannyTests.asciidoc[]
