@@ -62,7 +62,7 @@ endif
 clean-db: services-clean-db
 
 # start over as close to a new build as is reasonable
-clean-all: clean clean-db clean-coverage
+clean-all: clean clean-db
 
 clean-coverage: services-clean-coverage
 	rm -rf coverage
