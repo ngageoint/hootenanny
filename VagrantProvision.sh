@@ -268,7 +268,6 @@ sudo service postgresql restart
 
 if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     echo "### Adding Tomcat to profile..."
-    #echo "export TOMCAT6_HOME=/usr/share/tomcat6" >> ~/.profile
     echo "export TOMCAT6_HOME=/var/lib/tomcat6" >> ~/.profile
     source ~/.profile
 fi
@@ -299,6 +298,8 @@ sudo chown -R $username:tomcat6 $TOMCAT6_HOME/logs
 sudo chown -R $username:tomcat6 /var/lib/tomcat6
 sudo chown -R $username:tomcat6 /etc/tomcat6
 sudo chown -R $username:tomcat6 /var/log/tomcat6
+
+sudo chmod g+w $TOMCAT6_HOME/logs /var/lib/tomcat6/logs /var/log/tomcat6/log
 
 cd $HOOT_HOME
 source ./SetupEnv.sh
@@ -369,11 +370,13 @@ if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then
     echo "Set allowLinking to true in Tomcat context..."
     sudo sed -i.bak "s@^<Context>@<Context allowLinking=\"true\">@" /etc/tomcat6/context.xml
 fi
-
-if [ ! -d $TOMCAT6_HOME/.deegree ]; then
+i
+# Hard coded
+#if [ ! -d $TOMCAT6_HOME/.deegree ]; then
+if [ ! -d /usr/share/tomcat6/.deegree ]; then
     echo "Creating deegree directory for webapp..."
-    sudo mkdir $TOMCAT6_HOME/.deegree
-    sudo chown $username:tomcat6 $TOMCAT6_HOME/.deegree
+    sudo mkdir /usr/share/tomcat6/.deegree
+    sudo chown $username:tomcat6 /usr/share/tomcat6/.deegree
 fi
 
 if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
