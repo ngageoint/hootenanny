@@ -65,7 +65,7 @@ clean-db: services-clean-db
 clean-all: clean clean-db
 
 clean-coverage: services-clean-coverage
-	rm -rf `find coverage -type d`
+	rm -rf coverage
 	rm -f `find . -name *.gcda`
 
 check: test

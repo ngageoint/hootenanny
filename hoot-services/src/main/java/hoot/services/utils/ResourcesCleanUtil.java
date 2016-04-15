@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -90,8 +90,8 @@ public class ResourcesCleanUtil implements Executable {
 	    //List<Long> ids = DbUtils.getMapIdsByName( conn, mapId);
 	    //int nMapCnt = ids.size();
 
-	    DbUtils.deleteOSMRecordByName(conn, mapId);
 	    DbUtils.deleteRenderDb(conn, mapId);
+	    DbUtils.deleteOSMRecordByName(conn, mapId);
 	    // Modify when core implements broad casting map id when conflation completes
 	    //_deleteIngestResource(mapId, nMapCnt);
 	  }
@@ -125,7 +125,7 @@ public class ResourcesCleanUtil implements Executable {
 	    	// the new path is within container path
 	    	final String basePath = _ingestPath;
 	    	final String newPath = _ingestPath + "/" + mapName;
-	    	
+
 	    	// Fortify fix
 	    	if(!hoot.services.utils.FileUtils.validateFilePath(_ingestPath, newPath))
 	    	{

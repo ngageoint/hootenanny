@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -458,9 +458,25 @@ public class DbUtils
   {
     try
     {
-      String dbname = conn.getCatalog() + "_renderdb_" + mapName;
-      DataDefinitionManager ddm = new DataDefinitionManager();
-      ddm.deleteDb(dbname, false);
+      List<Long> mapIds = getMapIdsByName(conn, mapName);
+      if (mapIds.size() > 0) {
+        long mapId = mapIds.get(0);
+        String dbname = conn.getCatalog() + "_renderdb_" + String.valueOf(mapId);
+        DataDefinitionManager ddm = new DataDefinitionManager();
+		try {
+			ddm.deleteDb(dbname, false);
+		} catch (SQLException e) {
+			try {
+				ddm.deleteDb(
+						conn.getCatalog() + "_renderdb_" + mapName,
+						false);
+			} catch (SQLException f) {
+				log.warn("No renderdb present to delete for " + mapName
+						+ " or map id " + String.valueOf(mapId));
+			}
+		}
+
+      }
     }
     catch (Exception e)
     {
@@ -1511,12 +1527,12 @@ public class DbUtils
 
 			String sql = "select pg_total_relation_size('" + tableName + "') as tablesize";
 		  rs = stmt.executeQuery(sql);
-		  
+
 		  if (rs == null)
 			{
 				throw new SQLException("Error executing getTableSizeInByte");
 			}
-		  
+
 			//STEP 5: Extract data from result set
       while (rs.next())
       {

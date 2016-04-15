@@ -32,7 +32,7 @@ import java.util.Properties;
 import javax.ws.rs.core.MediaType;
 
 import hoot.services.HootProperties;
-import hoot.services.UnitTest;
+import hoot.services.IntegrationTest;
 import hoot.services.info.BuildInfo;
 import hoot.services.info.CoreDetail;
 import hoot.services.info.ServicesDetail;
@@ -79,7 +79,7 @@ public class AboutResourceTest extends JerseyTest
   
   @SuppressWarnings("null")
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void getServicesVersionInfo() throws IOException
   { 
 	  mockBuildInfo();
@@ -106,7 +106,7 @@ public class AboutResourceTest extends JerseyTest
   
   @SuppressWarnings("null")
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void getServicesVersionDetail() throws IOException
   {
 	  Properties hootProps = HootProperties.getInstance();
@@ -141,7 +141,7 @@ public class AboutResourceTest extends JerseyTest
   
   @SuppressWarnings("null")
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void getCoreVersionInfo() throws IOException
   {
 	  mockBuildInfo();
@@ -168,7 +168,7 @@ public class AboutResourceTest extends JerseyTest
   }
   
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void getCoreVersionDetail() throws IOException
   {
 	  mockBuildInfo();
@@ -197,7 +197,7 @@ public class AboutResourceTest extends JerseyTest
   
   @SuppressWarnings({ "unchecked", "null" })
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void getServicesVersionNoBuildFile() throws Exception
   {
 	  //Use PowerMock here so we can mock a static method.

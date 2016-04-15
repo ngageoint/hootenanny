@@ -36,7 +36,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.HootProperties;
-import hoot.services.IntegrationTest;
+import hoot.services.UnitTest;
 import hoot.services.controllers.wps.ETLProcesslet;
 import hoot.services.wps.WpsUtils;
 
@@ -44,9 +44,8 @@ import java.lang.reflect.*;
 
 public class ETLProcessletTest
 {
-
 	@Test
-	@Category(IntegrationTest.class)
+	@Category(UnitTest.class)
 	public void testParseParam() throws Exception
 	{
 		String ret = generateJobParam();
