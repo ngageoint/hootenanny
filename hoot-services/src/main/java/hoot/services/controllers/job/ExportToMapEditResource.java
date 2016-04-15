@@ -30,7 +30,7 @@ public class ExportToMapEditResource  extends JobControllerBase {
 			{
 				processScriptName = HootProperties.getProperty("HootToMapEdit");
 			}
-			
+
 			throw new UnsupportedOperationException("OSM API DB support not yet enabled.");
 		}
 		catch (Exception ex)
@@ -38,7 +38,7 @@ public class ExportToMapEditResource  extends JobControllerBase {
 			log.error(ex.getMessage());
 		}
 	}
-	
+
 	@POST
 	@Path("/execute")
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -49,9 +49,9 @@ public class ExportToMapEditResource  extends JobControllerBase {
 		jobId = "ex_" + jobId.replace("-", "");
 		try
 		{
-			
-			
-	  	
+
+
+
 			JSONArray commandArgs = parseParams(params);
 			String tmpLoc = HootProperties.getProperty("osmTempOutputPath");
 			String dbname = HootProperties.getProperty("MapEditDbName");
@@ -59,18 +59,18 @@ public class ExportToMapEditResource  extends JobControllerBase {
 	  	String pwd = HootProperties.getProperty("MapEditDbPassword");
 	  	String host = HootProperties.getProperty("MapEditDbHostAddr");
 	  	String port = HootProperties.getProperty("MapEditDbHostPort");
-	  	String dbUrl = "postgresql://" + userid + ":" + pwd + "@" + host + ":" + port + "/" + dbname;
-	  	
+	  	String dbUrl = "hootapidb://" + userid + ":" + pwd + "@" + host + ":" + port + "/" + dbname;
+
 	  	JSONObject arg = new JSONObject();
 			arg.put("MAPEDIT_DB_URL", dbUrl);
 			commandArgs.add(arg);
-			
+
 			arg = new JSONObject();
 			arg.put("OUTPUT_DIR", tmpLoc);
 			commandArgs.add(arg);
-			
-			
-			
+
+
+
 			String argStr = createPostBody(commandArgs);
 			postJobRquest( jobId,  argStr);
 		}
