@@ -54,7 +54,7 @@ sudo apt-get update
 sudo apt-get install -y qtcreator eclipse eclipse-jdt eclipse-pde eclipse-platform*
 
 # misc goodies - distcc requires further configuration
-sudo apt-get install -y meld distcc htop synergy gparted osmosis qgis
+sudo apt-get install -y meld distcc htop synergy gparted qgis
 
 # needed for webex
 sudo apt-get install -y libpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 icedtea-plugin

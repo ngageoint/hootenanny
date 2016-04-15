@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import hoot.services.HootProperties;
-import hoot.services.UnitTest;
+import hoot.services.IntegrationTest;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.utils.XmlUtils;
 
@@ -60,7 +60,7 @@ public class CapabilitiesResourceTest extends OsmResourceTestAbstract
   }
   
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGet() throws IOException, TransformerException
   {
     Document responseData = null;

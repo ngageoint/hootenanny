@@ -41,7 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import hoot.services.UnitTest;
+import hoot.services.IntegrationTest;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QChangesets;
 import hoot.services.geo.BoundingBox;
@@ -63,7 +63,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetById() throws Exception
   {
     try
@@ -119,7 +119,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetByName() throws Exception
   {
     try
@@ -175,7 +175,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetWithChangesetsModified() throws Exception
   {
     try
@@ -263,7 +263,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetInvalidUserId() throws Exception
   {
   	//TODO: change this to something randomly generated and very large
@@ -286,7 +286,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetEmptyUserId() throws Exception
   {
     try
@@ -306,7 +306,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetMissingUserId() throws Exception
   {
     try
@@ -326,7 +326,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetDetails() throws Exception
   {
     //authentication doesn't exist yet, so this just looks for the first user from a select

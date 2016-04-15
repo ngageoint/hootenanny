@@ -38,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import hoot.services.UnitTest;
+import hoot.services.IntegrationTest;
 import hoot.services.db.DbUtils;
 import hoot.services.geo.BoundingBox;
 import hoot.services.osm.OsmResourceTestAbstract;
@@ -58,7 +58,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadPreflight() throws Exception
   {
     try
@@ -91,7 +91,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadMultipleChangesets() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -167,7 +167,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadBadXml() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -219,7 +219,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadEmptyChangeset() throws Exception
   {
     final long changesetId = OsmTestUtils.createTestChangeset(null);

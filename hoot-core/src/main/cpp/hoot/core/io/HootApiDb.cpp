@@ -1437,9 +1437,10 @@ QString HootApiDb::_getRenderDBName(long mapId)
   // Get current database & maps.display_name
   QString dbName = "";
   QString mapDisplayName = "";
+  QString mapIdNumber = QString::number(mapId);
   QString sql = "SELECT current_database(), maps.display_name "
                 "FROM maps "
-                "WHERE maps.id=" + QString::number(mapId);
+                "WHERE maps.id=" + mapIdNumber;
   QSqlQuery q = _exec(sql);
 
   if (q.next())
@@ -1448,7 +1449,7 @@ QString HootApiDb::_getRenderDBName(long mapId)
     mapDisplayName = q.value(1).toString();
   }
 
-  return (dbName + "_renderdb_" + mapDisplayName);
+  return (dbName + "_renderdb_" + mapIdNumber);
 }
 
 }

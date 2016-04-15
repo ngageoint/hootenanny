@@ -47,7 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import hoot.services.UnitTest;
+import hoot.services.IntegrationTest;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Element.ElementType;
@@ -178,7 +178,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetNode() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -213,7 +213,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetWay() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -247,7 +247,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetRelation() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -281,7 +281,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetNodeUniqueId() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -315,7 +315,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetWayUniqueId() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -349,7 +349,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetRelationUniqueId() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -383,7 +383,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetWayFull() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -422,7 +422,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetRelationFull() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -464,7 +464,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetWayFullUniqueId() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -503,7 +503,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetRelationFullUniqueId() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -544,7 +544,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetNodeDoesntExist() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -575,7 +575,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetNodeUniqueIdDoesntExist() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -606,7 +606,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetWayDoesntExist() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -637,7 +637,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetWayUniqueIdDoesntExist() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -668,7 +668,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetWayFullDoesntExist() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -699,7 +699,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetWayFullUniqueIdDoesntExist() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -730,7 +730,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetRelationDoesntExist() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -761,7 +761,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetRelationUniqueIdDoesntExist() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -792,7 +792,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetRelationFullDoesntExist() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -823,7 +823,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetRelationFullUniqueIdDoesntExist() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -857,7 +857,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   //should always be the same for all element types.
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetElementMapDoesntExist() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -890,7 +890,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetUniqueIdMapDoesntExist() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -923,7 +923,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetFullElementMapDoesntExist() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -956,7 +956,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetElementUniqueIdFullMapDoesntExist() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -988,7 +988,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetInvalidElementType() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1018,7 +1018,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetFullInvalidElementType() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1048,7 +1048,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetElementUniqueIdInvalidElementIdFormat() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1080,7 +1080,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   }
   
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetElementUniqueIdFullInvalidElementIdFormat() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1116,7 +1116,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
    * relations do) and, therefore, the call makes no sense.
    */
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetNodeFull() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1149,7 +1149,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
    * see testGetNodeFull
    */
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testGetNodeUniqueIdFull() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
