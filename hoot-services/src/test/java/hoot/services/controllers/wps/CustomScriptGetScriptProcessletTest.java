@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.LinkedList;
 
-import hoot.services.IntegrationTest;
+import hoot.services.UnitTest;
 import hoot.services.wps.WpsUtils;
 
 import org.apache.http.ProtocolVersion;
@@ -49,12 +49,11 @@ import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
-public class CustomScriptGetScriptProcessletTest {
-
-  
+public class CustomScriptGetScriptProcessletTest 
+{
 	@SuppressWarnings("unused")
   @Test
-	@Category(IntegrationTest.class)
+	@Category(UnitTest.class)
 	public void testProcess() throws Exception
 	{
 		CustomScriptGetScriptProcesslet processlet = Mockito.spy(new CustomScriptGetScriptProcesslet());

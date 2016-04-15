@@ -50,7 +50,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import hoot.services.HootProperties;
-import hoot.services.UnitTest;
+import hoot.services.IntegrationTest;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelations;
@@ -90,7 +90,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreate() throws Exception
   {
     try
@@ -348,7 +348,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateClosedPolygon() throws Exception
   {
     try
@@ -597,7 +597,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateElementNoTags() throws Exception
   {
     try
@@ -840,7 +840,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateMissingNodeTagValue() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -892,7 +892,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateInvalidChangesetSpecifiedInUrl() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -945,7 +945,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateInvalidChangesetIdInNode() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -998,7 +998,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateEmptyNodeCoords() throws Exception
   {
     //Try to update a changeset with nodes that have empty coordinate strings.  A failure should
@@ -1007,7 +1007,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateNodeCoordsOutOfBounds() throws Exception
   {
     //Try to update a changeset with nodes that have out of world bounds coordinate values.
@@ -1105,7 +1105,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateExistingNode() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1167,7 +1167,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateDuplicateNodeIds() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1243,7 +1243,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateTooFewNodesForWay() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1292,7 +1292,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateTooManyNodesForWay() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1359,7 +1359,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     }
   }
 
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateNoMembersInRelation() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1394,7 +1394,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateWayWithNonExistentNode() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1445,7 +1445,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateRelationWithNonExistentNode() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1496,7 +1496,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateRelationWithNonExistentWay() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1550,7 +1550,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateRelationWithNonExistentRelation() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1605,7 +1605,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
 
   //haven't been able to find any good way to handle this yet, so I'm choosing not to for now
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateRelationWhereRelationReferencesAnotherRelationThatComesAfterIt()
     throws Exception
   {
@@ -1664,7 +1664,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateWayWithInvisibleNode() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1733,7 +1733,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateRelationWithInvisibleNode() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1802,7 +1802,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateRelationWithInvisibleWay() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1872,7 +1872,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateRelationWithInvisibleRelation() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1945,7 +1945,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateDuplicateWayIds() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1999,7 +1999,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateDuplicateRelationIds() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2056,7 +2056,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateExistingWay() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2118,7 +2118,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateExistingRelation() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2181,7 +2181,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateRelationReferencingItself() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2243,7 +2243,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateInvalidChangesetIdInWay() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2303,7 +2303,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateInvalidChangesetIdInRelation() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2366,7 +2366,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateMissingWayTagValue() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2427,7 +2427,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateMissingRelationTagValue() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2490,7 +2490,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateDuplicateWayNodeIds() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2544,7 +2544,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateNodeInvalidVersion() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2610,7 +2610,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateWayInvalidVersion() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2670,7 +2670,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateRelationInvalidVersion() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2730,7 +2730,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateWayEmptyNodeId() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2786,7 +2786,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateRelationEmptyMemberId() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2845,7 +2845,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateWayMissingNodeId() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2904,7 +2904,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateRelationMissingMemberId() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2963,7 +2963,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateRelationInvalidMemberType() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -3023,7 +3023,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
+  @Category(IntegrationTest.class)
   public void testUploadCreateRelationMissingMemberType() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();

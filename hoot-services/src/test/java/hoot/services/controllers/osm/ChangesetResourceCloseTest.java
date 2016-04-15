@@ -52,7 +52,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import hoot.services.HootProperties;
-import hoot.services.UnitTest;
+import hoot.services.IntegrationTest;
 import hoot.services.db.DbUtils;
 import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.CurrentNodes;
@@ -92,7 +92,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 	}
 
 	@Test
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testClose() throws Exception
 	{
 		try
@@ -128,7 +128,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 
 	@SuppressWarnings("null")
   @Test(expected = Exception.class)
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testCloseClosedChangeset() throws Exception
 	{
 		final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -171,7 +171,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 
 	@SuppressWarnings("null")
   @Test(expected = Exception.class)
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testCloseNonExistingChangeset() throws Exception
 	{
 		// Try to close a changeset that doesn't exist. A failure should occur and
@@ -195,7 +195,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 	}
 
 	@Test(expected = UniformInterfaceException.class)
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testChangesetMaxElementsExceededUploadedToEmptyChangeset()
 	    throws Exception
 	{
@@ -324,7 +324,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 	}
 
 	@Test
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testChangesetAutoCloseWhenMaxElementsUploadedToEmptyChangeset()
 	    throws Exception
 	{
@@ -650,7 +650,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 	}
 
 	@Test(expected = UniformInterfaceException.class)
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testChangesetMaxElementsExceededUploadedToExistingChangeset()
 	    throws Exception
 	{
@@ -801,7 +801,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 	}
 
 	@Test
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testChangesetAutoCloseWhenMaxElementsUploadedToExistingChangeset()
 	    throws Exception
 	{
@@ -1368,7 +1368,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 	}
 
 	@Test(expected = UniformInterfaceException.class)
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testChangesetAutoCloseWhenNoElementsAddedToItBeforeExpiration()
 	    throws Exception
 	{
@@ -1472,7 +1472,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 	}
 
 	@Test(expected = UniformInterfaceException.class)
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testChangesetAutoCloseWhenLengthBetweenUpdatesCausesExpiration()
 	    throws Exception
 	{
@@ -1601,7 +1601,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 	}
 
 	@Test
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testClosePreflight() throws Exception
 	{
 		try

@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 
 import java.util.LinkedList;
 
-import hoot.services.IntegrationTest;
+import hoot.services.UnitTest;
 import hoot.services.wps.WpsUtils;
 
 import org.deegree.process.jaxb.java.ProcessDefinition;
@@ -46,11 +46,11 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Mockito;
 
-public class CustomScriptGetListProcessletTest {
-
+public class CustomScriptGetListProcessletTest 
+{
   
 	@Test
-	@Category(IntegrationTest.class)
+	@Category(UnitTest.class)
 	public void testProcess() throws Exception
 	{
 		CustomScriptGetListProcesslet processlet = Mockito.spy(new CustomScriptGetListProcesslet());
