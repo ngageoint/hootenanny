@@ -229,11 +229,7 @@ if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
     sudo -u postgres createdb wfsstoredb --owner=hoot
     sudo -u postgres psql -d hoot -c 'create extension hstore;'
     sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" > /dev/null
-    sudo -u postgres psql -d wfsstoredb -f /usr/share/postgresql/9.5/contrib/postgis-2.2/postgis.sql > /dev/null
-    sudo -u postgres psql -d wfsstoredb -f /usr/share/postgresql/9.5/contrib/postgis-2.2/spatial_ref_sys.sql > /dev/null
-    sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on geometry_columns TO PUBLIC;"
-    sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on geography_columns TO PUBLIC;"
-    sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on spatial_ref_sys TO PUBLIC;"
+    sudo -u postgres psql -d wfsstoredb -c 'create extension postgis;' > /dev/null
 fi
 
 if ! grep -i --quiet HOOT /etc/postgresql/9.5/main/postgresql.conf; then
@@ -288,9 +284,13 @@ cd ~
 # These permission changes needed so that the ui tests can deploy the services and iD app to 
 # Tomcat using the Tomcat startup and shutdown scripts.
 username=vagrant
-if groups $username | grep &>/dev/null '\btomcat6\b'; then
+if ! groups $username | grep --quiet '\btomcat6\b'; then
     echo "Adding $username user to tomcat6 user group..."
     sudo usermod -a -G tomcat6 $username
+fi
+if ! groups tomcat6 | grep --quiet "\b$username\b"; then
+    echo "Adding tomcat6 user to $username user group..."
+    sudo usermod -a -G $username tomcat6
 fi
 sudo chown -R $username:tomcat6 $TOMCAT6_HOME
 sudo mkdir -p /var/lib/tomcat6/logs
