@@ -33,7 +33,7 @@ import java.sql.Statement;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
-import hoot.services.IntegrationTest;
+import hoot.services.UnitTest;
 import hoot.services.models.review.ReviewResolverRequest;
 import hoot.services.models.review.ReviewResolverResponse;
 import hoot.services.osm.OsmResourceTestAbstract;
@@ -54,7 +54,7 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract
   }
 	
 	@Test
-	@Category(IntegrationTest.class)
+	@Category(UnitTest.class)
 	public void testSetAllReviewsResolved() throws Exception
 	{
 		ReviewTestUtils testUtils = new ReviewTestUtils();
@@ -141,7 +141,7 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract
 	}
 	
 	@Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testSetAllReviewsResolvedMapDoesntExist() throws Exception
   {
     try
@@ -165,7 +165,7 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testSetAllReviewsResolvedMissingMapIdParam() throws Exception
   {
     try

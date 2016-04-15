@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
 
 import java.util.LinkedList;
 
-import hoot.services.UnitTest;
+import hoot.services.IntegrationTest;
 import hoot.services.wps.WpsUtils;
 
 import org.apache.http.ProtocolVersion;
@@ -56,7 +56,7 @@ public class CustomScriptDeleteScriptProcessletTest {
   
 	@SuppressWarnings("unused")
   @Test
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testProcess() throws Exception
 	{
 		CustomScriptDeleteScriptProcesslet processlet = Mockito.spy(new CustomScriptDeleteScriptProcesslet());

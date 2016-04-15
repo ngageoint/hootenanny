@@ -32,7 +32,7 @@ import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
-import hoot.services.IntegrationTest;
+import hoot.services.UnitTest;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.ElementInfo;
 import hoot.services.models.osm.Element.ElementType;
@@ -58,7 +58,7 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract
   }
 	
 	@Test
-	@Category(IntegrationTest.class)
+	@Category(UnitTest.class)
 	public void testGetReferences() throws Exception
 	{
 		ReviewTestUtils testUtils = new ReviewTestUtils();
@@ -158,7 +158,7 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract
 	}
 	
 	@Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapDoesntExist() throws Exception
   {
     try
@@ -190,7 +190,7 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract
   }
 	
 	@Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetQueryElementDoesntExist() throws Exception
   {
     try
@@ -219,7 +219,7 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract
   }
   
 	@Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetQueryElementEmptyElementType() throws Exception
   {
     try
