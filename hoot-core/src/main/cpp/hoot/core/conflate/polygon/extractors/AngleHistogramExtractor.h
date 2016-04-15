@@ -58,7 +58,7 @@ class Histogram;
 class AngleHistogramExtractor : public FeatureExtractor
 {
 public:
-  AngleHistogramExtractor(Radians smoothing = 0.0);
+  AngleHistogramExtractor(Radians smoothing = 0.0, unsigned int bins = 16);
 
   static string className() { return "hoot::AngleHistogramExtractor"; }
 
@@ -80,6 +80,7 @@ protected:
   virtual Histogram* _createHistogram(const OsmMap& map, const ConstElementPtr& e) const;
 
   Radians _smoothing;
+  unsigned int _bins;
 };
 
 }
