@@ -65,6 +65,7 @@ clean-db-force:
 coverage:
 	echo "Generating services code coverage report (runs services tests)..."
 	mkdir -p ../coverage
+	# Run the integration tests for the code coverage, so we get a report covering all of the code.
 	../scripts/mvn-build $(MVN_QUIET) cobertura:cobertura-integration-test
 	rm -rf ../coverage/services
 	cp -R target/site/cobertura ../coverage

@@ -101,6 +101,10 @@ while [ $# -gt 0 ] ; do
         PHASE="cobertura:cobertura"
         shift 1
         ;;
+    "cobertura:cobertura-integration-test")
+        PHASE="cobertura:cobertura-integration-test"
+        shift 1
+        ;;
     "clean")
         PHASE="clean"
         shift 1
@@ -178,6 +182,9 @@ case $PHASE in
    ;;   
    "cobertura:cobertura")
    ARGS="$ARGS cobertura:cobertura"
+   ;;
+   "cobertura:cobertura-integration-test")
+   ARGS="$ARGS cobertura:cobertura-integration-test"
    ;;
    "clean")
    ARGS="$ARGS clean"
