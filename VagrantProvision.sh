@@ -280,6 +280,16 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     source ~/.profile
 fi
 
+# Add tomcat6 and vagrant to each others groups so we can get the group write working with nfs
+if ! groups vagrant | grep --quiet '\btomcat6\b'; then
+    echo "Adding vagrant user to tomcat6 user group..."
+    sudo usermod -a -G tomcat6 vagrant
+fi
+if ! groups tomcat6 | grep --quiet "\bvagrant\b"; then
+    echo "Adding tomcat6 user to vagrant user group..."
+    sudo usermod -a -G vagrant tomcat6
+fi
+
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment..."
 # This echo properly substitutes the home path dir and keeps it from having to be hardcoded, but
@@ -534,11 +544,11 @@ cd $HOOT_HOME
 
 rm -rf $HOOT_HOME/ingest
 mkdir -p $HOOT_HOME/ingest/processed
-sudo chown -R $username:tomcat6 $HOOT_HOME/ingest
+#sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
 
 rm -rf $HOOT_HOME/upload
 mkdir -p $HOOT_HOME/upload
-sudo chown -R $username:tomcat6 $HOOT_HOME/upload
+#sudo chown -R vagrant:tomcat6 $HOOT_HOME/upload
 
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
