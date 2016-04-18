@@ -19,7 +19,7 @@ _nodeId(0),
 _wayId(0),
 _relationId(0)
 {
-  _open(url);
+  _db.open(url);
 }
 
 void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr changesetProvider)
@@ -68,54 +68,11 @@ void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr ch
   _outputSql.close();
 }
 
-void OsmChangeWriterSql::_open(QUrl url)
-{
-  QStringList pList = url.path().split("/");
-  QString db = pList[1];
-
-  QString connectionName = url.toString() + " 0x" + QString::number((qulonglong)this, 16);
-  if (QSqlDatabase::contains(connectionName) == false)
-  {
-    _db = QSqlDatabase::addDatabase("QPSQL", connectionName);
-  }
-  else
-  {
-    _db = QSqlDatabase::database(connectionName);
-  }
-
-  if (_db.isOpen() == false)
-  {
-    _db.setDatabaseName(db);
-    if (url.host() == "local")
-    {
-      _db.setHostName("/var/run/postgresql");
-    }
-    else
-    {
-      _db.setHostName(url.host());
-    }
-    _db.setPort(url.port());
-    _db.setUserName(url.userName());
-    _db.setPassword(url.password());
-
-    if (_db.open() == false)
-    {
-      throw HootException("Error opening database: " + _db.lastError().text());
-    }
-  }
-
-  if (_db.tables().size() == 0)
-  {
-    throw HootException("Attempting to open database " + url.toString() +
-                        " but found zero tables. Does the DB exist? Has it been populated?");
-  }
-}
-
 void OsmChangeWriterSql::_createChangeSet()
 {
   if (!_useInternalIds)
   {
-    _changesetId = _getNextId("changesets");
+    _changesetId = _db.getNextId("changesets");
   }
   else
   {
@@ -136,7 +93,7 @@ long OsmChangeWriterSql::_getNextId(const ElementType type)
     case ElementType::Node:
       if (!_useInternalIds)
       {
-        _nodeId = _getNextId("current_" + type.toString().toLower() + "s");
+        _nodeId = _db.getNextId("current_" + type.toString().toLower() + "s");
       }
       else
       {
@@ -146,7 +103,7 @@ long OsmChangeWriterSql::_getNextId(const ElementType type)
     case ElementType::Way:
       if (!_useInternalIds)
       {
-        _wayId = _getNextId("current_" + type.toString().toLower() + "s");
+        _wayId = _db.getNextId("current_" + type.toString().toLower() + "s");
       }
       else
       {
@@ -156,7 +113,7 @@ long OsmChangeWriterSql::_getNextId(const ElementType type)
     case ElementType::Relation:
       if (!_useInternalIds)
       {
-        _relationId = _getNextId("current_" + type.toString().toLower() + "s");
+        _relationId = _db.getNextId("current_" + type.toString().toLower() + "s");
       }
       else
       {
@@ -166,44 +123,6 @@ long OsmChangeWriterSql::_getNextId(const ElementType type)
     default:
       throw HootException("Unknown element type");
   }
-}
-
-long OsmChangeWriterSql::_getNextId(QString type)
-{
-  long result;
-  if (_seqQueries[type].get() == 0)
-  {
-    _seqQueries[type].reset(new QSqlQuery(_db));
-    _seqQueries[type]->setForwardOnly(true);
-    _seqQueries[type]->prepare(
-      QString("SELECT NEXTVAL('%1_id_seq')").arg(type.toLower()));
-  }
-
-  shared_ptr<QSqlQuery> query = _seqQueries[type];
-  if (query->exec() == false)
-  {
-    throw HootException("Error reserving IDs. type: " +
-      type + " Error: " + query->lastError().text());
-  }
-
-  if (query->next())
-  {
-    bool ok;
-    result = query->value(0).toLongLong(&ok);
-    if (!ok)
-    {
-      throw HootException("Did not retrieve starting reserved ID.");
-    }
-  }
-  else
-  {
-    throw HootException("Error retrieving sequence value. type: " +
-      type + " Error: " + query->lastError().text());
-  }
-
-  query->finish();
-
-  return result;
 }
 
 void OsmChangeWriterSql::_createNewElement(const ConstElementPtr newElement)

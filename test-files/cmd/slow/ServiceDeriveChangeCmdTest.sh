@@ -8,6 +8,6 @@ export PGPASSWORD=$DB_PASSWORD
 
 mkdir -p test-output/cmd/ServiceDeriveChangeCmdTest
 
-hoot derive-change -D changeset.sql.use.internal.ids=true test-files/cmd/slow/DeriveChangeCmdTest/map1.osm test-files/cmd/slow/DeriveChangeCmdTest/map2.osm test-output/cmd/ServiceDeriveChangeCmdTest/changeset.sql "$DB_URL"
-diff test-output/cmd/ServiceDeriveChangeCmdTest/changeset.sql test-files/cmd/slow/ServiceDeriveChangeCmdTest/changeset.sql
+hoot derive-change -D changeset.sql.use.internal.ids=true test-files/cmd/slow/DeriveChangeCmdTest/map1.osm test-files/cmd/slow/DeriveChangeCmdTest/map2.osm test-output/cmd/ServiceDeriveChangeCmdTest/changeset.osc.sql "$DB_URL"
+diff test-output/cmd/ServiceDeriveChangeCmdTest/changeset.osc.sql test-files/cmd/slow/ServiceDeriveChangeCmdTest/changeset.osc.sql
 

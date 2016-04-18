@@ -72,7 +72,7 @@ public:
     {
       OsmChangeWriter().write(args[2], delta);
     }
-    else if (args[2].endsWith(".sql"))
+    else if (args[2].endsWith(".osc.sql"))
     {
       if (args.size() != 4)
       {

@@ -1,12 +1,17 @@
 #ifndef OSMCHANGEWRITERSQL_H
 #define OSMCHANGEWRITERSQL_H
 
+// Hoot
+#include <hoot/core/io/OsmApiDb.h>
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/ElementType.h>
+
+// tgs
 #include <tgs/BigContainers/BigMap.h>
+
 
 // Qt
 #include <QUrl>
@@ -38,12 +43,9 @@ public:
 
 private:
 
-  void _open(QUrl url);
-
   void _createChangeSet();
 
   long _getNextId(const ElementType type);
-  long _getNextId(QString type);
 
   void _createNewElement(const ConstElementPtr newElement);
   void _updateExistingElement(const ConstElementPtr updatedElement);
@@ -79,9 +81,8 @@ private:
   long _wayId;
   long _relationId;
 
-  QSqlDatabase _db;
+  OsmApiDb _db;
   QFile _outputSql;
-  QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
 
   Tgs::BigMap<long, long> _idMappingsNode;
   Tgs::BigMap<long, long> _idMappingsWay;
