@@ -14,8 +14,7 @@ Tests are divided into the following groups: current, quick, slow, and glacial.
 in this directory.
 * quick - Individual tests that each run in less than 1 sec.
 * slow - Individual tests that each run in less than 30 sec.
-* glacial - Individual tests that each run in less than 15 min.  You shouldn't need tests that take
- longer than 15min.
+* glacial - Individual tests that each run in less than 15 min.  You shouldn't need unit tests that take longer than 15min.  If you're writing a regression test that uses large input data and runs longer than 15min, then put it with the regression tests, not the unit tests.
  
 If you want to run the tests for all codebases at the same time, first configure as described in a 
 previous section, then run one of the following commands:
@@ -263,7 +262,9 @@ test routines. At this time the micro tests run as part of _quick_ and up.
 The Plugins Test test various translation related operations.  They may be invoked in isolation with:
 
 --------------
-./configure && make -sj($nproc) plugins-test
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure 
+make -sj($nproc) plugins-test
 --------------
 
 They run by default in the slow test suite.
@@ -273,7 +274,9 @@ They run by default in the slow test suite.
 The Pretty Pipes Test test the pretty-pipes submodule.  They may be invoked in isolation with:
 
 --------------
-./configure && make -sj($nproc) pp-test
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure
+make -sj($nproc) pp-test
 --------------
 
 They run by default in the quick test suite.
@@ -299,13 +302,17 @@ suite corresponds to the glacial test suite.
 To run web services unit tests:
 
 ---------
-./configure --with-services && make -sj($nproc) test
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure  --with-services
+make -sj($nproc) test
 -----------
 
 To run both web services unit and integration tests:
 
 ---------
-./configure --with-services && make -sj($nproc) test-all
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure  --with-services
+make -sj($nproc) test-all
 -----------
 
 The above commands will run the corresponding Core Tests immediately after the web services test 
@@ -389,17 +396,28 @@ web to get you started,
 @test-files/ui/tmp/TestRun.log@.  When running without silent mode, Cucumber test output is written
 to the screen.
 
-The User Interface Tests run as part of the glacial test suite by default.  To run them with all 
-other tests:  
+The User Interface Tests run as part of the glacial test suite by default.  You must start Tomcat and then deploy the Hootenanny web services and user interface code to Tomcat yourself before running these tests, as shown below.  
+
+To run the User Interface tests with all other glacial tests:  
 
 -----------------------
-./configure --with-services --with-uitests && make -sj($nproc) test-all
+cd $HOOT_HOME
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure --with-services --with-uitests
+make -sj($nproc)
+sudo -u tomcat6 scripts/CopyWebAppsToTomcat.sh
+make -sj($nproc) test-all
 -----------------------
 
 To run the User Interface Tests by themselves:
 
 -----------------------
-./configure --with-services --with-uitests && make -sj($nproc) ui-test
+cd $HOOT_HOME
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure --with-services --with-uitests
+make -sj($nproc)
+sudo -u tomcat6 scripts/CopyWebAppsToTomcat.sh
+make -sj($nproc) ui-test
 -----------------------
 
 You have to add the --with-services option since the UI tests rely on the services to be deployed before they're run.  The tests will fail with an error message otherwise.
