@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/io/SqlWriter.h>
+#include <hoot/core/io/SqlExecutor.h>
 
 // Qt
 
@@ -36,9 +36,9 @@
 namespace hoot
 {
 
-class SqlWriterTest : public CppUnit::TestFixture
+class SqlExecutorTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(SqlWriterTest);
+    CPPUNIT_TEST_SUITE(SqlExecutorTest);
     CPPUNIT_TEST(runTest);
     CPPUNIT_TEST_SUITE_END();
 
@@ -50,7 +50,7 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SqlWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SqlExecutorTest, "quick");
 
 }
 

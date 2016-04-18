@@ -39,7 +39,7 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/io/SqlWriter.h>
+#include <hoot/core/io/SqlExecutor.h>
 
 namespace hoot
 {
@@ -92,7 +92,9 @@ public:
     }
     else if (args[0].endsWith(".osc.sql"))
     {
-      SqlWriter().write(args[0], QUrl(args[1]));
+      QFile inputSqlFile(args[0]);
+      inputSqlFile.open(QIODevice::ReadOnly);
+      SqlExecutor().exec(inputSqlFile.readAll(), QUrl(args[1]));
     }
     else
     {
