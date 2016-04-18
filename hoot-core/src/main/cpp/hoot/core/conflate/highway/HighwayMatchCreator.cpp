@@ -220,7 +220,7 @@ vector<MatchCreator::Description> HighwayMatchCreator::getAllCreators() const
 {
   vector<Description> result;
 
-  result.push_back(Description(className(), "Highway Match Creator", false));
+  result.push_back(Description(className(), "Highway Match Creator", MatchCreator::Highway, false));
 
   return result;
 }

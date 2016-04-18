@@ -162,7 +162,7 @@ public:
         shared_ptr<const Element> e1 = map->getElement(it->first);
         shared_ptr<const Element> e2 = map->getElement(it->second);
         //LOG_INFO(e1->getTags()["note"] << " <=> " << e2->getTags()["note"]);
-        CPPUNIT_ASSERT_EQUAL(e1->getTags()["note"], e2->getTags()["note"]);
+        CPPUNIT_ASSERT_EQUAL(e1->getTags()["note"].toStdString(), e2->getTags()["note"].toStdString());
       }
     }
 
