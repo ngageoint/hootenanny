@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -39,6 +39,7 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/io/SqlWriter.h>
 
 namespace hoot
 {
@@ -84,6 +85,14 @@ public:
         ConfigOptions().getConvertOps().size() == 0)
     {
       streamElements(args[0], args[1]);
+    }
+    else if (args[0].endsWith(".osc"))
+    {
+      throw HootException("XML changeset writing not supported.");
+    }
+    else if (args[0].endsWith(".osc.sql"))
+    {
+      SqlWriter().write(args[0], QUrl(args[1]));
     }
     else
     {
