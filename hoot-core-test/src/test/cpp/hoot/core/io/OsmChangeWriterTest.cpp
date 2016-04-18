@@ -101,10 +101,6 @@ private:
 
 };
 
-/**
- * Not doing any tricky invalid input changeset testing here, as the ChangesetProvider should
- * handle that.
- */
 class OsmChangeWriterTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(OsmChangeWriterTest);
