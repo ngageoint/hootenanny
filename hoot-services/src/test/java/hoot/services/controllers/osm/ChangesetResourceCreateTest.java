@@ -38,7 +38,7 @@ import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.IntegrationTest;
+import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.Maps;
 import hoot.services.db2.QMaps;
@@ -63,7 +63,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testCreatePreflight() throws Exception
   {
     try
@@ -95,7 +95,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testCreateSendingMapId() throws Exception
   {
     //Create a changeset, specifying the its map by ID.
@@ -137,7 +137,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
 
 
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testCreateSendingMapName() throws Exception
   {
     //Create a changeset, specifying its map by name.
@@ -178,7 +178,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testCreateByNonUniqueMapName() throws Exception
   {
     //insert another map with the same name as the test map
@@ -235,7 +235,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testCreateMissingMapParam() throws Exception
   {
     //Try to create a changeset without specifying its map.  A failure should occur and no data
@@ -269,7 +269,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testCreateEmptyMapId() throws Exception
   {
     //Try to create a changeset, specifying an empty map ID string.  A failure should occur and
@@ -304,7 +304,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testCreateInvalidMapId() throws Exception
   {
     //Try to create a changeset, specifying an ID of a map that doesn't exist.  A failure should
@@ -339,7 +339,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testCreateBadXml() throws Exception
   {
     //Try to create a changeset with malformed XML.  A failure should occur and no data in
@@ -374,7 +374,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testCreateEmptyTag() throws Exception
   {
     //Try to create a changeset with a tag that has no attributes.  A failure should occur and
@@ -409,7 +409,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testCreateMissingTagValue() throws Exception
   {
     //Try to create a changeset with a tag missing its attribute value.  A failure should occur

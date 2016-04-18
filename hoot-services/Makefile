@@ -49,7 +49,7 @@ build: build-info config
 docs: config
 	../scripts/mvn-build $(MVN_QUIET) docs
 
-clean: pom.xml src/main/resources/log4j.xml config
+clean: pom.xml src/main/resources/log4j.xml config clean-coverage
 	../scripts/mvn-build $(MVN_QUIET) clean
 	rm -f pom.xml
 	rm -f src/main/resources/log4j.xml
@@ -66,13 +66,12 @@ coverage:
 	echo "Generating services code coverage report (runs services tests)..."
 	mkdir -p ../coverage
 	# Run the integration tests for the code coverage, so we get a report covering all of the code.
-	../scripts/mvn-build $(MVN_QUIET) cobertura:cobertura-integration-test
+	../scripts/mvn-build $(MVN_QUIET) coverage
 	rm -rf ../coverage/services
 	cp -R target/site/cobertura ../coverage
 	mv ../coverage/cobertura ../coverage/services
 
 clean-coverage:
-	# cobertura:clean doesn't seem to be working right
 	#../scripts/mvn-build $(MVN_QUIET) cobertura:clean
 	rm -rf target/site/cobertura
 	rm -rf target/cobertura

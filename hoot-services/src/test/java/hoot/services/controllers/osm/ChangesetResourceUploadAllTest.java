@@ -50,7 +50,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import hoot.services.HootProperties;
-import hoot.services.IntegrationTest;
+import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
 import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.CurrentNodes;
@@ -95,7 +95,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
    * ChangesetResourceUploadDeleteTest, and ChangesetResourceUploadModifyTest.
    */
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testUploadAll() throws Exception
   {
     try

@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import hoot.services.HootProperties;
-import hoot.services.IntegrationTest;
+import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelations;
@@ -527,28 +527,28 @@ public class MapResourceTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapById() throws Exception
   {
     getMap(String.valueOf(mapId), "false", true);
   }
 
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapByName() throws Exception
   {
     getMap("map-with-id-" + String.valueOf(mapId), "false", true);
   }
 
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapMultiLayerUniqueElementIds() throws Exception
   {
     getMap(String.valueOf(mapId), "true", true);
   }
 
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetEmptyMap() throws Exception
   {
     try
@@ -589,7 +589,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapNoWays() throws Exception
   {
     try
@@ -795,7 +795,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapNoRelations() throws Exception
   {
     try
@@ -1003,7 +1003,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapNoWaysOrRelations() throws Exception
   {
     try
@@ -1118,7 +1118,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapWithInvisibleElements() throws Exception
   {
   	QCurrentNodes currentNodes  = QCurrentNodes.currentNodes;
@@ -1332,7 +1332,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapNodeLimitExceeded() throws Exception
   {
   	QCurrentNodes currentNodes  = QCurrentNodes.currentNodes;
@@ -1406,7 +1406,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapInvalidMap() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1444,7 +1444,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapMissingMapParam() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1481,7 +1481,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapEmptyMapId() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1519,7 +1519,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapByNonUniqueName() throws Exception
   {
   	QMaps maps = QMaps.maps;
@@ -1581,7 +1581,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
   }
 
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapMissingBounds() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1622,7 +1622,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
  
   @Ignore
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapBoundsOutsideWorld() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1661,7 +1661,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
 
   @Ignore
   @Test(expected=UniformInterfaceException.class)
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapBoundsTooLarge() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1703,28 +1703,28 @@ public class MapResourceTest extends OsmResourceTestAbstract
   }
   
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapMissingMultiLayerUniqueElementIdsParam() throws Exception
   {
     getMap(String.valueOf(mapId), "true", false);
   }
 
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapInvalidMultiLayerUniqueElementIdsParam() throws Exception
   {
     getMap(String.valueOf(mapId), "blah", true);
   }
 
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetMapEmptyMultiLayerUniqueElementIdsParam() throws Exception
   {
     getMap(String.valueOf(mapId), "", true);
   }
 
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetLayers() throws Exception
   {
     List<Long> mapIds = new ArrayList<Long>();
@@ -1781,7 +1781,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
   }
 
   @Test
-  @Category(IntegrationTest.class)
+  @Category(UnitTest.class)
   public void testGetDeletedLayer() throws Exception
   {
     //delete the only existing map

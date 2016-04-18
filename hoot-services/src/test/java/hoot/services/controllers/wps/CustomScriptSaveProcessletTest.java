@@ -32,7 +32,11 @@ import static org.junit.Assert.*;
 
 import java.util.LinkedList;
 
-import hoot.services.UnitTest;
+
+
+
+
+import hoot.services.IntegrationTest;
 import hoot.services.wps.WpsUtils;
 
 import org.apache.http.HttpResponse;
@@ -54,13 +58,13 @@ import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
-public class CustomScriptSaveProcessletTest 
-{
+public class CustomScriptSaveProcessletTest {
+
 	@SuppressWarnings("unused")
   private JSONParser _parser = new JSONParser();
   
 	@Test
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testProcess() throws Exception
 	{
 		CustomScriptSaveProcesslet processlet = Mockito.spy(new CustomScriptSaveProcesslet());
