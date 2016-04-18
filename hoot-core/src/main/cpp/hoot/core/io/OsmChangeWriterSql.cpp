@@ -3,6 +3,7 @@
 // hoot
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QSqlError>
@@ -23,6 +24,8 @@ _relationId(0)
 
 void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr changesetProvider)
 {
+  LOG_INFO("Writing changeset to " << path);
+
   _outputSql.setFileName(path);
   if (_outputSql.open(QIODevice::WriteOnly | QIODevice::Text) == false)
   {
@@ -49,7 +52,7 @@ void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr ch
         _deleteExistingElement(change.e);
         break;
       default:
-        throw IllegalArgumentException("Unexepected change type.");
+        throw IllegalArgumentException("Unexpected change type.");
     }
     changes++;
 
