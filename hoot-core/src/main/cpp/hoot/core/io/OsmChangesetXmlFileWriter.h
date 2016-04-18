@@ -1,5 +1,5 @@
-#ifndef OSMCHANGEWRITER_H
-#define OSMCHANGEWRITER_H
+#ifndef OSMCHANGESETXMLFILEWRITER_H
+#define OSMCHANGESETXMLFILEWRITER_H
 
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/elements/Node.h>
@@ -19,12 +19,12 @@ namespace hoot
  * would have to be created using the API.  Optionally, after writing this the changeset
  * can be closed via the API.
  */
-class OsmChangeWriter
+class OsmChangesetXmlFileWriter
 {
 
 public:
 
-  OsmChangeWriter();
+  OsmChangesetXmlFileWriter();
 
   QString writeToString(ChangeSetProviderPtr cs);
 
@@ -44,4 +44,4 @@ private:
 
 }
 
-#endif // OSMCHANGEWRITER_H
+#endif // OSMCHANGESETXMLFILEWRITER_H

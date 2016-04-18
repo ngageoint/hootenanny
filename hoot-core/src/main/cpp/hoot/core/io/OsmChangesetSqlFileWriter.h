@@ -1,5 +1,5 @@
-#ifndef OSMCHANGEWRITERSQL_H
-#define OSMCHANGEWRITERSQL_H
+#ifndef OSMCHANGESETSQLFILEWRITER_H
+#define OSMCHANGESETSQLFILEWRITER_H
 
 // Hoot
 #include <hoot/core/io/OsmApiDb.h>
@@ -26,12 +26,12 @@ namespace hoot
  * Writes out a set of SQL commands, that when executed, will update the contents of
  * an OSM API database with an OSM changeset.
  */
-class OsmChangeWriterSql
+class OsmChangesetSqlFileWriter
 {
 
 public:
 
-  OsmChangeWriterSql(QUrl url, bool useInternalIds = false);
+  OsmChangesetSqlFileWriter(QUrl url, bool useInternalIds = false);
 
   /**
    * Write a SQL changeset to the specified output path
@@ -94,4 +94,4 @@ private:
 
 }
 
-#endif // OSMCHANGEWRITERSQL_H
+#endif // OSMCHANGESETSQLFILEWRITER_H

@@ -1,4 +1,4 @@
-#include "OsmChangeWriterSql.h"
+#include "OsmChangesetSqlFileWriter.h"
 
 // hoot
 #include <hoot/core/io/HootApiDb.h>
@@ -12,7 +12,7 @@
 namespace hoot
 {
 
-OsmChangeWriterSql::OsmChangeWriterSql(QUrl url, bool useInternalIds) :
+OsmChangesetSqlFileWriter::OsmChangesetSqlFileWriter(QUrl url, bool useInternalIds) :
 _useInternalIds(useInternalIds),
 _changesetId(0),
 _nodeId(0),
@@ -22,7 +22,7 @@ _relationId(0)
   _db.open(url);
 }
 
-void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr changesetProvider)
+void OsmChangesetSqlFileWriter::write(const QString path, const ChangeSetProviderPtr changesetProvider)
 {
   LOG_INFO("Writing changeset to " << path);
 
@@ -68,7 +68,7 @@ void OsmChangeWriterSql::write(const QString path, const ChangeSetProviderPtr ch
   _outputSql.close();
 }
 
-void OsmChangeWriterSql::_createChangeSet()
+void OsmChangesetSqlFileWriter::_createChangeSet()
 {
   if (!_useInternalIds)
   {
@@ -86,7 +86,7 @@ void OsmChangeWriterSql::_createChangeSet()
     .toUtf8());
 }
 
-long OsmChangeWriterSql::_getNextId(const ElementType type)
+long OsmChangesetSqlFileWriter::_getNextId(const ElementType type)
 {
   switch (type.getEnum())
   {
@@ -125,7 +125,7 @@ long OsmChangeWriterSql::_getNextId(const ElementType type)
   }
 }
 
-void OsmChangeWriterSql::_createNewElement(const ConstElementPtr newElement)
+void OsmChangesetSqlFileWriter::_createNewElement(const ConstElementPtr newElement)
 {
   switch (newElement->getElementType().getEnum())
   {
@@ -143,7 +143,7 @@ void OsmChangeWriterSql::_createNewElement(const ConstElementPtr newElement)
   }
 }
 
-void OsmChangeWriterSql::_updateExistingElement(const ConstElementPtr updatedElement)
+void OsmChangesetSqlFileWriter::_updateExistingElement(const ConstElementPtr updatedElement)
 {
   switch (updatedElement->getElementType().getEnum())
   {
@@ -161,7 +161,7 @@ void OsmChangeWriterSql::_updateExistingElement(const ConstElementPtr updatedEle
   }
 }
 
-void OsmChangeWriterSql::_deleteExistingElement(const ConstElementPtr removedElement)
+void OsmChangesetSqlFileWriter::_deleteExistingElement(const ConstElementPtr removedElement)
 {
   ElementType::Type elementType = removedElement->getElementType().getEnum();
   if (elementType != ElementType::Node && elementType != ElementType::Way &&
@@ -183,7 +183,7 @@ void OsmChangeWriterSql::_deleteExistingElement(const ConstElementPtr removedEle
     ("UPDATE current_" + elementName + "s SET visible=false WHERE id" + values).toUtf8());
 }
 
-void OsmChangeWriterSql::_create(const ConstNodePtr node)
+void OsmChangesetSqlFileWriter::_create(const ConstNodePtr node)
 {
   const long id = _getNextId(ElementType::Node);
 
@@ -201,7 +201,7 @@ void OsmChangeWriterSql::_create(const ConstNodePtr node)
   _createTags(node->getTags(), ElementId::node(id));
 }
 
-void OsmChangeWriterSql::_create(const ConstWayPtr way)
+void OsmChangesetSqlFileWriter::_create(const ConstWayPtr way)
 {
   const long id = _getNextId(ElementType::Way);
 
@@ -218,7 +218,7 @@ void OsmChangeWriterSql::_create(const ConstWayPtr way)
   _createTags(way->getTags(), ElementId::way(id));
 }
 
-void OsmChangeWriterSql::_create(const ConstRelationPtr relation)
+void OsmChangesetSqlFileWriter::_create(const ConstRelationPtr relation)
 {
   const long id = _getNextId(ElementType::Relation);
 
@@ -235,7 +235,7 @@ void OsmChangeWriterSql::_create(const ConstRelationPtr relation)
   _createTags(relation->getTags(), ElementId::relation(id));
 }
 
-void OsmChangeWriterSql::_modify(const ConstNodePtr node)
+void OsmChangesetSqlFileWriter::_modify(const ConstNodePtr node)
 {
   _throwErrorIfElementAtVersionDoesntExist("current_nodes", "id", node->getId(), node->getVersion());
 
@@ -254,7 +254,7 @@ void OsmChangeWriterSql::_modify(const ConstNodePtr node)
   _createTags(node->getTags(), ElementId::node(node->getId()));
 }
 
-void OsmChangeWriterSql::_modify(const ConstWayPtr way)
+void OsmChangesetSqlFileWriter::_modify(const ConstWayPtr way)
 {
   _throwErrorIfElementAtVersionDoesntExist("current_ways", "id", way->getId(), way->getVersion());
 
@@ -274,7 +274,7 @@ void OsmChangeWriterSql::_modify(const ConstWayPtr way)
   _createTags(way->getTags(), ElementId::way(way->getId()));
 }
 
-void OsmChangeWriterSql::_modify(const ConstRelationPtr relation)
+void OsmChangesetSqlFileWriter::_modify(const ConstRelationPtr relation)
 {
   _throwErrorIfElementAtVersionDoesntExist(
     "current_relations", "id", relation->getId(), relation->getVersion());
@@ -295,7 +295,7 @@ void OsmChangeWriterSql::_modify(const ConstRelationPtr relation)
   _createTags(relation->getTags(), ElementId::relation(relation->getId()));
 }
 
-void OsmChangeWriterSql::_createTags(const Tags& tags, ElementId eid)
+void OsmChangesetSqlFileWriter::_createTags(const Tags& tags, ElementId eid)
 {
   QStringList tableNames = _tagTableNamesForElement(eid);
 
@@ -321,7 +321,7 @@ void OsmChangeWriterSql::_createTags(const Tags& tags, ElementId eid)
   }
 }
 
-QStringList OsmChangeWriterSql::_tagTableNamesForElement(ElementId eid) const
+QStringList OsmChangesetSqlFileWriter::_tagTableNamesForElement(ElementId eid) const
 {
   QStringList tableNames;
   QString tableName1 = "current_" + eid.getType().toString().toLower() + "_tags";
@@ -331,7 +331,7 @@ QStringList OsmChangeWriterSql::_tagTableNamesForElement(ElementId eid) const
   return tableNames;
 }
 
-void OsmChangeWriterSql::_createWayNodes(const long wayId, const std::vector<long>& nodeIds)
+void OsmChangesetSqlFileWriter::_createWayNodes(const long wayId, const std::vector<long>& nodeIds)
 {
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
@@ -353,8 +353,8 @@ void OsmChangeWriterSql::_createWayNodes(const long wayId, const std::vector<lon
   }
 }
 
-void OsmChangeWriterSql::_createRelationMembers(const long relationId, const QString type,
-                                                const vector<RelationData::Entry>& members)
+void OsmChangesetSqlFileWriter::_createRelationMembers(const long relationId, const QString type,
+                                                       const vector<RelationData::Entry>& members)
 {
   for (size_t i = 0; i < members.size(); i++)
   {
@@ -382,7 +382,7 @@ void OsmChangeWriterSql::_createRelationMembers(const long relationId, const QSt
   }
 }
 
-void OsmChangeWriterSql::_deleteAllTags(ElementId eid)
+void OsmChangesetSqlFileWriter::_deleteAllTags(ElementId eid)
 {
   QStringList tableNames = _tagTableNamesForElement(eid);
   foreach (QString tableName, tableNames)
@@ -391,8 +391,8 @@ void OsmChangeWriterSql::_deleteAllTags(ElementId eid)
   }
 }
 
-void OsmChangeWriterSql::_deleteAll(const QString tableName, const QString idFieldName,
-                                    const long id)
+void OsmChangesetSqlFileWriter::_deleteAll(const QString tableName, const QString idFieldName,
+                                           const long id)
 {
   _outputSql.write(
     (QString("DELETE FROM %1 WHERE %2 = %3;\n")
@@ -402,9 +402,10 @@ void OsmChangeWriterSql::_deleteAll(const QString tableName, const QString idFie
     .toUtf8());
 }
 
-void OsmChangeWriterSql::_throwErrorIfElementAtVersionDoesntExist(const QString tableName,
-                                                                  const QString idFieldName,
-                                                                  const long id, const long version)
+void OsmChangesetSqlFileWriter::_throwErrorIfElementAtVersionDoesntExist(const QString tableName,
+                                                                         const QString idFieldName,
+                                                                         const long id,
+                                                                         const long version)
 {
   const QString ifStmt =
     QString("IF (SELECT count(*) FROM %1 WHERE %2=%3 AND version=%4) == 0 THEN\n")

@@ -28,8 +28,7 @@
 // Hoot
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/io/OsmChangeWriterSql.h>
-#include "ServicesDbTestUtils.h"
+#include <hoot/core/io/OsmChangesetXmlFileWriter.h>
 
 // Boost
 using namespace boost;
@@ -44,7 +43,7 @@ using namespace boost;
 namespace hoot
 {
 
-//dummy implementation for testing
+//dummy implementation for testing the OsmChangeWriter
 class TestChangesetProvider : public ChangeSetProvider
 {
 
@@ -102,27 +101,29 @@ private:
 
 };
 
-class OsmChangeWriterSqlTest : public CppUnit::TestFixture
+class OsmChangesetXmlFileWriterTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(OsmChangeWriterSqlTest);
-    CPPUNIT_TEST(runBasicTest);
+    CPPUNIT_TEST_SUITE(OsmChangesetXmlFileWriterTest);
+    CPPUNIT_TEST(runTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runBasicTest()
+  void runTest()
   {
     shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
-    //enable internal ID management on the writer so that ID's start at the same place every time
-    //to keep the test output consistent
-    OsmChangeWriterSql changesetWriter(ServicesDbTestUtils::getOsmApiDbUrl(), true);
-    changesetWriter.write("test-output/io/OsmChangeWriterSqlTest.osc.sql", changesetProvider);
+    OsmChangesetXmlFileWriter().write(
+      "test-output/io/OsmChangesetXmlFileWriterTest.osc", changesetProvider);
+
     HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/OsmChangeWriterSqlTest/OsmChangeWriterSqlTest.osc.sql"),
-      TestUtils::readFile("test-output/io/OsmChangeWriterSqlTest.osc.sql"));
+      TestUtils::readFile("test-files/io/OsmChangesetXmlFileWriterTest/OsmChangesetXmlFileWriterTest.osc"),
+      TestUtils::readFile("test-output/io/OsmChangesetXmlFileWriterTest.osc"));
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangeWriterSqlTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangesetXmlFileWriterTest, "quick");
 
 }
+
+
+

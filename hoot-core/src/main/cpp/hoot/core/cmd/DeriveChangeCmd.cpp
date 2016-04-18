@@ -30,8 +30,8 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/ElementSorter.h>
-#include <hoot/core/io/OsmChangeWriter.h>
-#include <hoot/core/io/OsmChangeWriterSql.h>
+#include <hoot/core/io/OsmChangesetXmlFileWriter.h>
+#include <hoot/core/io/OsmChangesetSqlFileWriter.h>
 
 // Qt
 #include <QUrl>
@@ -57,10 +57,10 @@ public:
       throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
     }
 
-    shared_ptr<OsmMap> map1(new OsmMap());
+    OsmMapPtr map1(new OsmMap());
     loadMap(map1, args[0], true);
 
-    shared_ptr<OsmMap> map2(new OsmMap());
+    OsmMapPtr map2(new OsmMap());
     loadMap(map2, args[1], true);
 
     ElementSorterPtr sorted1(new ElementSorter(map1));
@@ -70,19 +70,17 @@ public:
 
     if (args[2].endsWith(".osc"))
     {
-      OsmChangeWriter().write(args[2], delta);
+      OsmChangesetXmlFileWriter().write(args[2], delta);
     }
     else if (args[2].endsWith(".osc.sql"))
     {
       if (args.size() != 4)
       {
         throw HootException(
-          QString("SQL changeset writing requires a target database URL for configuration, ") +
-          QString("purposes.  However, the changeset will not be automatically written to the ") +
-          QString("database by this command."));
+          QString("SQL changeset writing requires a target database URL for configuration purposes."));
       }
 
-      OsmChangeWriterSql(
+      OsmChangesetSqlFileWriter(
         QUrl(args[3]), ConfigOptions().getChangesetSqlUseInternalIds())
         .write(args[2], delta);
     }

@@ -1,4 +1,4 @@
-#include "OsmChangeWriter.h"
+#include "OsmChangesetXmlFileWriter.h"
 
 // hoot
 #include <hoot/core/io/OsmWriter.h>
@@ -12,12 +12,12 @@
 namespace hoot
 {
 
-OsmChangeWriter::OsmChangeWriter()
+OsmChangesetXmlFileWriter::OsmChangesetXmlFileWriter()
 {
   _precision = ConfigOptions().getWriterPrecision();
 }
 
-void OsmChangeWriter::write(QString path, ChangeSetProviderPtr cs)
+void OsmChangesetXmlFileWriter::write(QString path, ChangeSetProviderPtr cs)
 {
   LOG_INFO("Writing changeset to " << path);
 
@@ -33,7 +33,7 @@ void OsmChangeWriter::write(QString path, ChangeSetProviderPtr cs)
   f.close();
 }
 
-void OsmChangeWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
+void OsmChangesetXmlFileWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
 {
   QXmlStreamWriter writer(&d);
   writer.setCodec("UTF-8");
@@ -97,7 +97,7 @@ void OsmChangeWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
   writer.writeEndDocument();
 }
 
-void OsmChangeWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
+void OsmChangesetXmlFileWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
 {
   writer.writeStartElement("node");
   writer.writeAttribute("id", QString::number(n->getId()));
@@ -135,7 +135,7 @@ void OsmChangeWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
   writer.writeEndElement();
 }
 
-void OsmChangeWriter::writeWay(QXmlStreamWriter& writer, ConstWayPtr w)
+void OsmChangesetXmlFileWriter::writeWay(QXmlStreamWriter& writer, ConstWayPtr w)
 {
   writer.writeStartElement("way");
   writer.writeAttribute("id", QString::number(w->getId()));
@@ -175,7 +175,7 @@ void OsmChangeWriter::writeWay(QXmlStreamWriter& writer, ConstWayPtr w)
   writer.writeEndElement();
 }
 
-void OsmChangeWriter::writeRelation(QXmlStreamWriter& writer, ConstRelationPtr r)
+void OsmChangesetXmlFileWriter::writeRelation(QXmlStreamWriter& writer, ConstRelationPtr r)
 {
   writer.writeStartElement("relation");
   writer.writeAttribute("id", QString::number(r->getId()));
