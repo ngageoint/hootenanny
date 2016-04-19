@@ -82,10 +82,25 @@ public:
     OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
     OsmMapWriterFactory writerFactory = OsmMapWriterFactory::getInstance();
 
+    if (args[0].endsWith(".osc"))
+    {
+      throw HootException("XML changeset file writing is not supported by the convert command.");
+    }
+    else if (args[0].endsWith(".osc.sql"))
+    {
+      QFile inputSqlFile(args[0]);
+      inputSqlFile.open(QIODevice::ReadOnly);
+      OsmApiDb database;
+      database.open(QUrl(args[1]));
+      database.transaction();
+      database.execSql(inputSqlFile.readAll());
+      database.commit();
+      database.close();
+    }
     // Is there a streaming reader and writer?
-    if (readerFactory.hasElementInputStream(args[0]) &&
-        writerFactory.hasElementOutputStream(args[1]) &&
-        ConfigOptions().getConvertOps().size() == 0)
+    else if (readerFactory.hasElementInputStream(args[0]) &&
+             writerFactory.hasElementOutputStream(args[1]) &&
+             ConfigOptions().getConvertOps().size() == 0)
     {
       streamElements(args[0], args[1]);
     }
