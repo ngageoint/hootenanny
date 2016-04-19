@@ -71,7 +71,7 @@ public:
 
   //TODO: the sql output shouldn't be written out to null
 
-  void execOsmSqlScript(const QString scriptName)
+  void execOsmSqlTestScript(const QString scriptName)
   {
     // parse out the osm api dbname, dbuser, and dbpassword
     //example: osmapidb://hoot:hoottest@localhost:5432/osmapi_test
@@ -109,10 +109,10 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    execOsmSqlScript("users.sql");
-    execOsmSqlScript("changesets.sql");
+    execOsmSqlTestScript("users.sql");
+    execOsmSqlTestScript("changesets.sql");
 
-    execOsmSqlScript("nodes.sql");
+    execOsmSqlTestScript("nodes.sql");
 
     /////////////////////////////////////
     // Need to get the data in the format exactly like the return of the Services Db now so we don't need to
@@ -140,7 +140,7 @@ public:
     const long nodeId2 = 2;
     ids.append(nodeId1);
     ids.append(nodeId2);
-    QList<QString> keys = QList<QString>() << "highway" << "accuracy" << "foo";
+    QList<QString> keys = QList<QString>() << "highway" << "accuracy1" << "foo";
     QList<QString> values = QList<QString>() << "road" << "5" << "bar";
     QList<float> lats = QList<float>() << 38.4 << 38;
     QList<float> lons = QList<float>() << -106.5 << -104;
@@ -207,7 +207,7 @@ public:
     nodeIds.push_back(nodeId1);
     nodeIds.push_back(nodeId2);
 
-    execOsmSqlScript("ways.sql");
+    execOsmSqlTestScript("ways.sql");
 
     shared_ptr<QSqlQuery> wayResultIterator = database.selectElements(ElementType::Way);
 
@@ -274,7 +274,7 @@ public:
     long relationId = 1;
     ids.append(relationId);
 
-    execOsmSqlScript("relations.sql");
+    execOsmSqlTestScript("relations.sql");
 
     shared_ptr<QSqlQuery> relationResultIterator = database.selectElements(ElementType::Relation);
 
@@ -339,10 +339,10 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    execOsmSqlScript("users.sql");
-    execOsmSqlScript("changesets.sql");
+    execOsmSqlTestScript("users.sql");
+    execOsmSqlTestScript("changesets.sql");
 
-    execOsmSqlScript("nodes.sql");
+    execOsmSqlTestScript("nodes.sql");
 
     shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());
