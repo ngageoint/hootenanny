@@ -89,21 +89,6 @@ public:
     {
       streamElements(args[0], args[1]);
     }
-    else if (args[0].endsWith(".osc"))
-    {
-      throw HootException("XML changeset writing not supported.");
-    }
-    else if (args[0].endsWith(".osc.sql"))
-    {
-      QFile inputSqlFile(args[0]);
-      inputSqlFile.open(QIODevice::ReadOnly);
-      OsmApiDb database;
-      database.open(QUrl(args[1]));
-      database.transaction();
-      database.execSql(inputSqlFile.readAll());
-      database.commit();
-      database.close();
-    }
     else
     {
       shared_ptr<OsmMap> map(new OsmMap());
