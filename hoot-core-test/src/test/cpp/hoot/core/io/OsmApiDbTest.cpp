@@ -73,7 +73,6 @@ public:
 
   QUrl getOsmApiDbUrl()
   {
-    LOG_DEBUG(QString("Got URL for OSM API DB: ") + ServicesDbTestUtils::getOsmApiDbUrl().toString());
     return ServicesDbTestUtils::getOsmApiDbUrl();
   }
 
@@ -133,7 +132,6 @@ public:
       psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/users.sql > /dev/null 2>&1; \
       psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/changesets.sql > /dev/null 2>&1; \
       psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/nodes.sql > /dev/null 2>&1";
-
     if( std::system(cmd.toStdString().c_str()) != 0 )
     {
       throw HootException("Failed postgres command.  Exiting test.");
@@ -164,6 +162,7 @@ public:
 
     // check if db active or not
     assert(nodeResultIterator->isActive());
+    LOG_VARD(nodeResultIterator->size());
 
     const int numNodeFields = 10;
     long long lastId = LLONG_MIN;
@@ -186,12 +185,12 @@ public:
         // perform the comparison tests
         LOG_DEBUG(QString("Processing element ")+QString::number(elementCtr+1));
         // test the first line's data which is the current_nodes (main data): id, lat, lon, tag1
-        HOOT_STR_EQUALS(ids[elementCtr], id);
+        HOOT_STR_EQUALS(nodeIds[elementCtr], nodeId);
         HOOT_STR_EQUALS(lats[elementCtr], nodeResultIterator->value(1).toLongLong() /
           (double)ApiDb::COORDINATE_SCALE);
         HOOT_STR_EQUALS(lons[elementCtr], nodeResultIterator->value(2).toLongLong() /
           (double)ApiDb::COORDINATE_SCALE);
-        lastId = id;
+        lastId = nodeId;
         elementCtr--;
         ctr++;
       }
@@ -221,10 +220,7 @@ public:
     Tags t2;
     t2["highway"] = "primary";
     long insertedWayId = 1;
-    ids.append(insertedWayId);
-    vector<long> nodeIds;
-    nodeIds.push_back(nodeId1);
-    nodeIds.push_back(nodeId2);
+    wayIds.append(insertedWayId);
 
     cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
       psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/ways.sql > /dev/null 2>&1";
@@ -255,6 +251,7 @@ public:
     while( wayResultIterator->next() )
     {
       long long wayId = wayResultIterator->value(0).toLongLong();
+      LOG_VARD(wayId);
       if( lastId != wayId )
       {
         if(elementCtr < 0) break;
@@ -262,10 +259,10 @@ public:
         // perform the comparison tests
         LOG_DEBUG(QString("Processing element ")+QString::number(elementCtr+1));
         // test the first line's data which is the current_ways (main data): id
-        LOG_DEBUG("ids = "+QString::number(ids[elementCtr]));
+        LOG_DEBUG("ids = "+QString::number(wayIds[elementCtr]));
         LOG_DEBUG("wayId = "+QString::number(wayId));
 
-        HOOT_STR_EQUALS(ids[elementCtr], wayId);
+        HOOT_STR_EQUALS(wayIds[elementCtr], wayId);
 
         // get the way nodes and do some minimal testing
         vector<long> v = database.selectNodeIdsForWay(wayId);
@@ -298,13 +295,13 @@ public:
     /// Insert a relation into the Osm Api DB
     ///////////////////////////////////////////////
 
+    QList<long> relIds;
     const long nodeId3 = nodeIds.at(0);
-    const long wayId1 = ids.at(0);
-    ids.clear();
+    const long wayId1 = wayIds.at(0);
     Tags rt;
     rt["type"] = "multistuff";
     long relationId = 1;
-    ids.append(relationId);
+    relIds.append(relationId);
 
     cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
       psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/relations.sql > /dev/null 2>&1";
@@ -335,6 +332,7 @@ public:
     while ( relationResultIterator->next() )
     {
       long long relId = relationResultIterator->value(0).toLongLong();
+      LOG_VARD(relId);
       if( lastId != relId )
       {
         if(elementCtr < 0) break;
@@ -342,9 +340,9 @@ public:
         // perform the comparison tests
         LOG_DEBUG(QString("Processing element ") + QString::number(elementCtr+1));
         // test the first line's data which is the current_nodes (main data): id
-        LOG_DEBUG("ids = "+ QString::number(ids[elementCtr]));
+        LOG_DEBUG("ids = "+ QString::number(relIds[elementCtr]));
         LOG_DEBUG("relId = "+ QString::number(relId));
-        HOOT_STR_EQUALS(ids[elementCtr], relId);
+        HOOT_STR_EQUALS(relIds[elementCtr], relId);
 
         // get the relation nodes and do some minimal testing
         vector<RelationData::Entry> members = database.selectMembersForRelation(relId);
@@ -389,7 +387,7 @@ public:
 
     // tear down the osm api db
     database.open(getOsmApiDbUrl());
-    database.deleteData();
+    //database.deleteData();
     database.close();
   }
 

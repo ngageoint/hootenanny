@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -141,13 +141,13 @@ void ApiDb::open(const QUrl& url)
     LOG_WARN("Error disabling Postgresql INFO messages.");
   }
 
-  LOG_DEBUG("Successfully opened _db: " << url.toString());
+  //LOG_DEBUG("Successfully opened _db: " << url.toString());
 }
 
 long ApiDb::getUserId(const QString& email, bool throwWhenMissing)
 {
-    LOG_DEBUG("debug email = " + email);
-    LOG_DEBUG("debug throwwhenmissing = " + QString::number(throwWhenMissing));
+  //LOG_DEBUG("debug email = " + email);
+  //LOG_DEBUG("debug throwwhenmissing = " + QString::number(throwWhenMissing));
 
   if (_selectUserByEmail == 0)
   {
