@@ -119,12 +119,19 @@ Path to the RF building model. A new model can be created with `build-model`. Se
 
 Training a model is typically done during research. While all the tools are available to do limited training, the documentation is not. Please contact the developers if you would like to dig deeper.
 
-=== changeset.api.url
+=== changeset.max.size
 
-* Data Type: string
-* Default Value: ``
+* Data Type: long
+* Default Value: `50000`
 
-The DB URL for a OSM API DB. Used by changeset writing.
+The maximum allowed size of an OSM changeset written to the OSM API database.
+
+=== changeset.sql.use.internal.ids
+
+* Data Type: bool
+* Default Value: `false`
+
+This forces the SQL changeset writer to ignore element ID sequences in the target OSM API database.  Enable for testing purposes only.
 
 === changeset.user.id
 

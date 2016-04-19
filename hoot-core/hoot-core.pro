@@ -488,9 +488,9 @@ SOURCES += \
     src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp \
     src/main/cpp/hoot/core/io/ElementSorter.cpp \
     src/main/cpp/hoot/core/io/ChangesetDeriver.cpp \
-    src/main/cpp/hoot/core/io/OsmChangeWriter.cpp \
-    src/main/cpp/hoot/core/cmd/DeriveChangeCmd.cpp \
-    src/main/cpp/hoot/core/io/OsmChangeWriterSql.cpp \
+    src/main/cpp/hoot/core/io/OsmChangesetXmlFileWriter.cpp \
+    src/main/cpp/hoot/core/cmd/DeriveChangesetCmd.cpp \
+    src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp \
@@ -982,7 +982,7 @@ HEADERS += \
     src/main/cpp/hoot/core/io/ElementSorter.h \
     src/main/cpp/hoot/core/io/ChangesetDeriver.h \
     src/main/cpp/hoot/core/io/ChangesetProvider.h \
-    src/main/cpp/hoot/core/io/OsmChangeWriter.h \
+    src/main/cpp/hoot/core/io/OsmChangesetXmlFileWriter.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h \
@@ -990,4 +990,6 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.h \
     src/main/cpp/hoot/core/filters/WaterwayCriterion.h \
     src/main/cpp/hoot/core/io/ElementComparer.h \
+    src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.h \
+
 

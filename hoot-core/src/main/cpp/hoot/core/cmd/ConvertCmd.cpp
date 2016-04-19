@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -39,6 +39,10 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/io/OsmApiDb.h>
+
+// Qt
+#include <QFile>
 
 namespace hoot
 {
@@ -78,10 +82,25 @@ public:
     OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
     OsmMapWriterFactory writerFactory = OsmMapWriterFactory::getInstance();
 
+    if (args[0].endsWith(".osc"))
+    {
+      throw HootException("XML changeset file writing is not supported by the convert command.");
+    }
+    else if (args[0].endsWith(".osc.sql"))
+    {
+      QFile inputSqlFile(args[0]);
+      inputSqlFile.open(QIODevice::ReadOnly);
+      OsmApiDb database;
+      database.open(QUrl(args[1]));
+      database.transaction();
+      database.execSql(inputSqlFile.readAll());
+      database.commit();
+      database.close();
+    }
     // Is there a streaming reader and writer?
-    if (readerFactory.hasElementInputStream(args[0]) &&
-        writerFactory.hasElementOutputStream(args[1]) &&
-        ConfigOptions().getConvertOps().size() == 0)
+    else if (readerFactory.hasElementInputStream(args[0]) &&
+             writerFactory.hasElementOutputStream(args[1]) &&
+             ConfigOptions().getConvertOps().size() == 0)
     {
       streamElements(args[0], args[1]);
     }
