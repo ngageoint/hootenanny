@@ -118,22 +118,25 @@ public:
     /////////////////////////////////////
 
     // list of insertions
+    const long nodeId1 = 1;
+    const long nodeId2 = 2;
     QList<long> ids;
-    QList<QString> keys = QList<QString>() << "highway" << "accuracy" << "foo";
+    ids.append(nodeId1);
+    ids.append(nodeId2);
+    QList<QString> keys = QList<QString>() << "highway" << "accuracy1" << "foo";
     QList<QString> values = QList<QString>() << "road" << "5" << "bar";
     QList<float> lats = QList<float>() << 38.4 << 38;
     QList<float> lons = QList<float>() << -106.5 << -104;
 
     // Insert nodes
-    QString cmd = "export PGPASSWORD="+dbPassword+"; \
+    QString cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
       psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/users.sql > /dev/null 2>&1; \
       psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/changesets.sql > /dev/null 2>&1; \
       psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/nodes.sql > /dev/null 2>&1";
 
     if( std::system(cmd.toStdString().c_str()) != 0 )
     {
-      LOG_WARN("Failed postgres command.  Exiting test.");
-      return;
+      throw HootException("Failed postgres command.  Exiting test.");
     }
 
     /////////////////////////////////////
@@ -168,10 +171,14 @@ public:
     // read through the elements until the number inserted for this test is reached
     // - the number inserted is determined by ids.size()
     int elementCtr = ids.size()-1;
+    LOG_VARD(elementCtr);
+    CPPUNIT_ASSERT(elementCtr >= 0);
     int tagIndx = -1;
+    int ctr = 0;
     while( nodeResultIterator->next() )
     {
       long long id = nodeResultIterator->value(0).toLongLong();
+      LOG_VARD(id);
       if( lastId != id )
       {
         if(elementCtr < 0) break;
@@ -186,6 +193,7 @@ public:
           (double)ApiDb::COORDINATE_SCALE);
         lastId = id;
         elementCtr--;
+        ctr++;
       }
 
       // verify the values written to the DB upon their read-back
@@ -196,18 +204,19 @@ public:
 
       // read the tag for as many rows as there are tags
       QString key = nodeResultIterator->value(8).toString();
+      LOG_VARD(key);
       LOG_DEBUG(QString("Processing tag ") + key);
       tagIndx = ServicesDbTestUtils::findIndex(keys, key);
       HOOT_STR_EQUALS(QString(keys[tagIndx]+" = "+values[tagIndx]+"\n").toStdString().c_str(),
         ApiDb::unescapeTags(database.extractTagFromRow(nodeResultIterator, ElementType::Node)));
     }
+    LOG_VARD(ctr);
+    CPPUNIT_ASSERT_EQUAL(ids.size(), ctr);
 
     ///////////////////////////////////////////////
     /// Insert a way into the Osm Api DB
     ///////////////////////////////////////////////
 
-    const long nodeId1 = 1;
-    const long nodeId2 = 2;
     ids.clear();
     Tags t2;
     t2["highway"] = "primary";
@@ -217,12 +226,11 @@ public:
     nodeIds.push_back(nodeId1);
     nodeIds.push_back(nodeId2);
 
-    cmd = "export PGPASSWORD="+dbPassword+";\
+    cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
       psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/ways.sql > /dev/null 2>&1";
     if( std::system(cmd.toStdString().c_str()) != 0 )
     {
-      LOG_WARN("Failed postgres command.  Exiting test.");
-      return;
+      throw HootException("Failed postgres command.  Exiting test.");
     }
 
     ///////////////////////////////////////////////
@@ -240,7 +248,10 @@ public:
     // read through the elements until the number inserted for this test is reached
     // - the number inserted is determined by ids.size()
     elementCtr = ids.size()-1;
+    LOG_VARD(elementCtr);
+    CPPUNIT_ASSERT(elementCtr >= 0);
     tagIndx = -1;
+    ctr = 0;
     while( wayResultIterator->next() )
     {
       long long wayId = wayResultIterator->value(0).toLongLong();
@@ -265,6 +276,7 @@ public:
         // mark this way id processed
         lastId = wayId;
         elementCtr--;
+        ctr++;
       }
 
       // verify the values written to the DB upon their read-back
@@ -279,6 +291,8 @@ public:
       HOOT_STR_EQUALS("highway = primary\n", ApiDb::unescapeTags(
         database.extractTagFromRow(wayResultIterator, ElementType::Way)));
     }
+    LOG_VARD(ctr);
+    CPPUNIT_ASSERT_EQUAL(ids.size(), ctr);
 
     ///////////////////////////////////////////////
     /// Insert a relation into the Osm Api DB
@@ -292,12 +306,11 @@ public:
     long relationId = 1;
     ids.append(relationId);
 
-    cmd = "export PGPASSWORD="+dbPassword+";\
+    cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
       psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/relations.sql > /dev/null 2>&1";
     if( std::system(cmd.toStdString().c_str()) != 0 )
     {
-      LOG_WARN("Failed postgres command.  Exiting test.");
-      return;
+      throw HootException("Failed postgres command.  Exiting test.");
     }
 
     ///////////////////////////////////////////////
@@ -315,7 +328,10 @@ public:
     // read through the elements until the number inserted for this test is reached
     // - the number inserted is determined by ids.size()
     elementCtr = ids.size()-1;
+    LOG_VARD(elementCtr);
+    CPPUNIT_ASSERT(elementCtr >= 0);
     tagIndx = -1;
+    ctr = 0;
     while ( relationResultIterator->next() )
     {
       long long relId = relationResultIterator->value(0).toLongLong();
@@ -340,6 +356,7 @@ public:
         // mark this way id processed
         lastId = relId;
         elementCtr--;
+        ctr++;
       }
 
       // verify the values written to the DB upon their read-back
@@ -354,6 +371,8 @@ public:
       HOOT_STR_EQUALS("type = multistuff\n", ApiDb::unescapeTags(
         database.extractTagFromRow(relationResultIterator, ElementType::Relation)));
     }
+    LOG_VARD(ctr);
+    CPPUNIT_ASSERT_EQUAL(ids.size(), ctr);
   }
 
   void setUp()
