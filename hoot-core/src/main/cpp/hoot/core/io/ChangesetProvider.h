@@ -19,15 +19,17 @@ class Change
 public:
 
   /**
-   * Enumerates the allowable changeset types
+   * The allowable changeset types
    */
   enum ChangeType
   {
-    Create,
-    Modify,
-    Delete,
-    Unknown
+    Create = 0,
+    Modify = 1,
+    Delete = 2,
+    Unknown = 3
   };
+
+   Change() {}
 
   static QString changeTypeToString(const ChangeType changeType)
   {
@@ -45,18 +47,17 @@ public:
     throw HootException("Invalid change type.");
   }
 
-  ElementPtr e;
-  ChangeType type;
-
-  Change() : type(Unknown) {}
-
   QString toString() const
   {
-    return changeTypeToString(type) + ": " +
-      e->getElementId().toString() //+
-      //e->toString()
-      ;
+    QString str =
+      changeTypeToString(type) + ": " + e->getElementId().toString();
+    //str += ->toString();
+    return str;
   }
+
+  ConstElementPtr e;
+  ChangeType type;
+
 };
 
 

@@ -85,3 +85,4 @@ set<ConstWayPtr, WayPtrCompare> w2;
 E.g. using QDir::entryList without a sorting option may return the files in a different order each time.
 
 http://doc.qt.io/qt-4.8/qdir.html#entryList
+

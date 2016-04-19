@@ -40,9 +40,10 @@ ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid)
 }
 
 WayData::WayData(const WayData& from) :
-ElementData(from._id, from.getTags(), from._circularError)
+ElementData(from.getId(), from.getTags(), from.getCircularError()),
+_nodes(from._nodes)
 {
-  _nodes = from._nodes;
+
 }
 
 WayData::~WayData()
