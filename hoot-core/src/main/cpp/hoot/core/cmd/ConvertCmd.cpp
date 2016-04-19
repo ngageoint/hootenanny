@@ -39,7 +39,10 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/io/SqlExecutor.h>
+#include <hoot/core/io/OsmApiDb.h>
+
+// Qt
+#include <QFile>
 
 namespace hoot
 {
@@ -94,7 +97,12 @@ public:
     {
       QFile inputSqlFile(args[0]);
       inputSqlFile.open(QIODevice::ReadOnly);
-      SqlExecutor().exec(inputSqlFile.readAll(), QUrl(args[1]));
+      OsmApiDb database;
+      database.open(QUrl(args[1]));
+      database.transaction();
+      database.execSql(inputSqlFile.readAll());
+      database.commit();
+      database.close();
     }
     else
     {

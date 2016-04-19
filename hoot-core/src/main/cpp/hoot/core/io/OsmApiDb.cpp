@@ -173,6 +173,7 @@ void OsmApiDb::_resetQueries()
   _selectNodeById.reset();
   _selectUserByEmail.reset();
   _insertUser.reset();
+  _customQuery.reset();
   for (QHash<QString, shared_ptr<QSqlQuery> >::iterator itr = _seqQueries.begin();
        itr != _seqQueries.end(); ++itr)
   {
@@ -542,6 +543,21 @@ long OsmApiDb::getNextId(const QString tableName)
   query->finish();
 
   return result;
+}
+
+void OsmApiDb::execSql(const QString sql)
+{
+  LOG_INFO("Executing custom SQL query against OSM API database...");
+  LOG_VARD(sql);
+
+  _customQuery.reset(new QSqlQuery(_db));
+  _customQuery->prepare(sql);
+  if (!_customQuery->exec())
+  {
+    throw HootException(
+      "Error executing custom SQL query against OSM API database:\n" +
+      _customQuery->lastError().text());
+  }
 }
 
 }

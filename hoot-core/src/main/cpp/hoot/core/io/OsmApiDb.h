@@ -103,6 +103,13 @@ public:
    */
   long getNextId(const QString tableName);
 
+  /**
+   * Executes SQL against the OSM API database.
+   *
+   * @param sql The SQL to be executed.
+   */
+  void execSql(const QString sql);
+
 private:
 
   bool _inTransaction;
@@ -112,6 +119,7 @@ private:
   shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
   shared_ptr<QSqlQuery> _selectNodeById;
+  shared_ptr<QSqlQuery> _customQuery;
 
   QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
 

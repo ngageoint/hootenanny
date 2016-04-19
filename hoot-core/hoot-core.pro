@@ -498,7 +498,6 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.cpp \
     src/main/cpp/hoot/core/filters/WaterwayCriterion.cpp \
     src/main/cpp/hoot/core/io/ElementComparer.cpp \
-    src/main/cpp/hoot/core/io/SqlExecutor.cpp \
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -992,5 +991,5 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WaterwayCriterion.h \
     src/main/cpp/hoot/core/io/ElementComparer.h \
     src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.h \
-    src/main/cpp/hoot/core/io/SqlExecutor.h \
+
 
