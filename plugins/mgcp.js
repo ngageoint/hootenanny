@@ -1101,6 +1101,10 @@ mgcp = {
             print('');
         }
 
+        if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
+//        if (attrs.F_CODE == 'LBH070' && !(tags.highway)) tags.highway = 'road';
+//        if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
+
         return tags;
     }, // End of ToOsm
 
@@ -1237,18 +1241,18 @@ mgcp = {
         }
         else
         {
-	    // Swap F_CODE for FCODE. Too many lookup tables etc to change it earlier
+            // Swap F_CODE for FCODE. Too many lookup tables etc to change it earlier
             attrs.FCODE = attrs.F_CODE;
             delete attrs.F_CODE;
 
-	    // Check if we need to make a second feature
+            // Check if we need to make a second feature
             attrs2 = mgcp.twoFeatures(geometryType,tags,attrs);
 
-	    if (attrs2.F_CODE)
+            if (attrs2.F_CODE)
             {
-		attrs2.FCODE = attrs2.F_CODE;
-		delete attrs2.F_CODE;                
-		// Set the tablename: [P,A,L]<fcode>
+                attrs2.FCODE = attrs2.F_CODE;
+                delete attrs2.F_CODE;
+                // Set the tablename: [P,A,L]<fcode>
                 // tableName = geometryType.toString().substring(0,1) + attrs.F_CODE;
                 tableName2 = geometryType.toString().charAt(0) + attrs2.FCODE;
 
