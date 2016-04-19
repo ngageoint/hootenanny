@@ -46,7 +46,7 @@ class OsmApiDbTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(OsmApiDbTest);
   CPPUNIT_TEST(runOpenTest);
   CPPUNIT_TEST(runSelectElementsTest);
-  //CPPUNIT_TEST(runCustomSqlExecTest);
+  CPPUNIT_TEST(runSqlChangesetExecTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -54,6 +54,21 @@ public:
   static QString userEmail() { return "OsmApiDbTest@hoottestcpp.org"; }
 
   long mapId;
+
+  void setUp()
+  {
+    deleteUser(userEmail());
+  }
+
+  void tearDown()
+  {
+    deleteUser(userEmail());
+
+    OsmApiDb database;
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    database.deleteData();
+    database.close();
+  }
 
   void deleteUser(QString email)
   {
@@ -69,11 +84,11 @@ public:
     }
   }
 
-  //TODO: the sql output shouldn't be written out to null
+  //TODO: the sql output shouldn't be written out to null; simply checking the return value
+  //isn't enough to know whether it failed or not
 
   void execOsmSqlTestScript(const QString scriptName)
   {
-    // parse out the osm api dbname, dbuser, and dbpassword
     //example: osmapidb://hoot:hoottest@localhost:5432/osmapi_test
     QString dbUrlString = ServicesDbTestUtils::getOsmApiDbUrl().toString();
     QStringList dbUrlParts = dbUrlString.split("/");
@@ -334,7 +349,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(ids.size(), ctr);
   }
 
-  void runCustomSqlExecTest()
+  void runSqlChangesetExecTest()
   {
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
@@ -342,9 +357,13 @@ public:
     execOsmSqlTestScript("users.sql");
     execOsmSqlTestScript("changesets.sql");
 
+    shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
+    assert(nodesItr->isActive());
+    CPPUNIT_ASSERT_EQUAL(0, nodesItr->size());
+
     execOsmSqlTestScript("nodes.sql");
 
-    shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
+    nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());
     int nodesCountBefore = 0;
     long long changesetId = -1;
@@ -354,17 +373,15 @@ public:
       LOG_VARD(changesetId)
       nodesCountBefore++;
     }
+    nodesCountBefore--;
     LOG_VARD(nodesCountBefore);
 
     const long nextNodeId = database.getNextId("current_nodes");
     LOG_VARD(nextNodeId);
 
     database.transaction();
-    //QString sql = "BEGIN;\n";
-    //sql += "INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (1, -1, now(), now());\n";
-    // sql += "COMMIT;";
     const QString sql =
-      QString("INSERT INTO current_nodes (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile,  version) VALUES (%1, 0, 0, %2, true, now(), 3221225472, 1);")
+      QString("INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile,  version) VALUES (%1, 0, 0, %2, true, now(), 3221225472, 1);")
         .arg(nextNodeId)
         .arg(changesetId);
     database.execSql(sql);
@@ -377,29 +394,12 @@ public:
     {
       nodesCountAfter++;
     }
+    nodesCountAfter--;
     LOG_VARD(nodesCountAfter);
 
     CPPUNIT_ASSERT(nodesCountAfter == (nodesCountBefore + 1));
 
     database.deleteData();
-  }
-
-  void setUp()
-  {
-    deleteUser(userEmail());
-  }
-
-  void tearDown()
-  {
-    deleteUser(userEmail());
-
-    // tear down the ServicesDB
-    OsmApiDb database;
-
-    // tear down the osm api db
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
-    database.deleteData();
-    database.close();
   }
 
 };
