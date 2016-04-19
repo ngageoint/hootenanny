@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -173,6 +173,12 @@ void OsmApiDb::_resetQueries()
   _selectNodeById.reset();
   _selectUserByEmail.reset();
   _insertUser.reset();
+  _customQuery.reset();
+  for (QHash<QString, shared_ptr<QSqlQuery> >::iterator itr = _seqQueries.begin();
+       itr != _seqQueries.end(); ++itr)
+  {
+    itr.value().reset();
+  }
 }
 
 void OsmApiDb::rollback()
@@ -500,6 +506,58 @@ QString OsmApiDb::extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType
   if(val1!="" || val2!="") tag = "\""+val1+"\"=>\""+val2+"\"";
 
   return tag;
+}
+
+long OsmApiDb::getNextId(const QString tableName)
+{
+  long result;
+  if (_seqQueries[tableName].get() == 0)
+  {
+    _seqQueries[tableName].reset(new QSqlQuery(_db));
+    _seqQueries[tableName]->setForwardOnly(true);
+    _seqQueries[tableName]->prepare(QString("SELECT NEXTVAL('%1_id_seq')").arg(tableName.toLower()));
+  }
+
+  shared_ptr<QSqlQuery> query = _seqQueries[tableName];
+  if (query->exec() == false)
+  {
+    throw HootException("Error reserving IDs. type: " +
+      tableName + " Error: " + query->lastError().text());
+  }
+
+  if (query->next())
+  {
+    bool ok;
+    result = query->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Did not retrieve starting reserved ID.");
+    }
+  }
+  else
+  {
+    throw HootException("Error retrieving sequence value. type: " +
+      tableName + " Error: " + query->lastError().text());
+  }
+
+  query->finish();
+
+  return result;
+}
+
+void OsmApiDb::execSql(const QString sql)
+{
+  LOG_INFO("Executing custom SQL query against OSM API database...");
+  LOG_VARD(sql);
+
+  _customQuery.reset(new QSqlQuery(_db));
+  _customQuery->prepare(sql);
+  if (!_customQuery->exec())
+  {
+    throw HootException(
+      "Error executing custom SQL query against OSM API database:\n" +
+      _customQuery->lastError().text());
+  }
 }
 
 }

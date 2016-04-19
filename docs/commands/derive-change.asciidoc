@@ -3,21 +3,24 @@
 === Description
 
 The +derive-change+ command creates an OSM changeset file that represents the difference
-between two input OSM files. 
+between two input OSM files.  The changeset can later be applied to an OSM API database. 
 
 * +input1+ - Input 1 (e.g. .osm file).
 * +input2+ - Input 2 (e.g. .osm file).
-* +output+ - Output location (e.g. .osc file).
+* +output+ - Output location (e.g. .osc or .sql file).
+* +databaseUrl+ - Database the changeset will eventually be written to (but not by this command).
 
 === Usage
 
 --------------------------------------
-derive-change (input1) (input2) (output.osc)
+derive-change (input1) (input2) (output.osc) [databaseUrl]
 --------------------------------------
 
 ==== Example
 
 --------------------------------------
-hoot derive-change InputMap1.osm InputMap1.osm OutputMap.osc
+hoot derive-change InputMap1.osm InputMap1.osm OutputChangeset.osc
+
+hoot derive-change InputMap1.osm InputMap1.osm OutputChangeset.sql postgresql://username:password@localhost:5432/databaseName
 --------------------------------------
 

@@ -28,7 +28,8 @@
 // Hoot
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/io/OsmChangeWriter.h>
+#include <hoot/core/io/OsmChangesetSqlFileWriter.h>
+#include "ServicesDbTestUtils.h"
 
 // Boost
 using namespace boost;
@@ -43,7 +44,7 @@ using namespace boost;
 namespace hoot
 {
 
-//dummy implementation for testing the OsmChangeWriter
+//dummy implementation for testing
 class TestChangesetProvider : public ChangeSetProvider
 {
 
@@ -101,32 +102,28 @@ private:
 
 };
 
-/**
- * Not doing any tricky invalid input changeset testing here, as the ChangesetProvider should
- * handle that.
- */
-class OsmChangeWriterTest : public CppUnit::TestFixture
+class OsmChangesetSqlFileWriterTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(OsmChangeWriterTest);
-    CPPUNIT_TEST(runTest);
+    CPPUNIT_TEST_SUITE(OsmChangesetSqlFileWriterTest);
+    CPPUNIT_TEST(runBasicTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runTest()
+  void runBasicTest()
   {
     shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
-    OsmChangeWriter().write("test-output/io/OsmChangeWriterTest.osc", changesetProvider);
-
+    //enable internal ID management on the writer so that ID's start at the same place every time
+    //to keep the test output consistent
+    OsmChangesetSqlFileWriter changesetWriter(ServicesDbTestUtils::getOsmApiDbUrl(), true);
+    changesetWriter.write(
+      "test-output/io/OsmChangesetSqlFileWriterTest.osc.sql", changesetProvider);
     HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/OsmChangeWriterTest/OsmChangeWriterTest.osc"),
-      TestUtils::readFile("test-output/io/OsmChangeWriterTest.osc"));
+      TestUtils::readFile("test-files/io/OsmChangesetSqlFileWriterTest/OsmChangesetSqlFileWriterTest.osc.sql"),
+      TestUtils::readFile("test-output/io/OsmChangesetSqlFileWriterTest.osc.sql"));
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangeWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangesetSqlFileWriterTest, "quick");
 
 }
-
-
-

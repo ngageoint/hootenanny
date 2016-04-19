@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -95,6 +95,21 @@ public:
 
   shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
+  /**
+   * Gets the next sequence ID for the given database table
+   *
+   * @param table database table name
+   * @return an ID
+   */
+  long getNextId(const QString tableName);
+
+  /**
+   * Executes SQL against the OSM API database.
+   *
+   * @param sql The SQL to be executed.
+   */
+  void execSql(const QString sql);
+
 private:
 
   bool _inTransaction;
@@ -104,6 +119,9 @@ private:
   shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
   shared_ptr<QSqlQuery> _selectNodeById;
+  shared_ptr<QSqlQuery> _customQuery;
+
+  QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
 
   void _resetQueries();
 

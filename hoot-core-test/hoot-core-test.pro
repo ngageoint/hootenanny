@@ -162,7 +162,7 @@ SOURCES += \
     src/test/cpp/hoot/core/ops/CookieCutterOpTest.cpp \
     src/test/cpp/hoot/core/visitors/RemoveElementsVisitorTest.cpp \
     src/test/cpp/hoot/core/io/ElementSorterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmChangeWriterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
     src/test/cpp/hoot/core/io/ChangesetDeriverTest.cpp \
     src/test/cpp/hoot/core/io/ElementComparerTest.cpp \
 
@@ -174,6 +174,7 @@ services:SOURCES += \
     src/test/cpp/hoot/core/io/OsmApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/HootApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/HootApiDbWriterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmChangesetSqlFileWriterTest.cpp \
 
 HEADERS += \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.h \
