@@ -32,8 +32,6 @@ void OsmChangesetSqlFileWriter::write(const QString path, const ChangeSetProvide
     throw HootException(QObject::tr("Error opening %1 for writing").arg(path));
   }
 
-  _outputSql.write("BEGIN;\n");
-
   int changes = 0;
   _createChangeSet();
 
@@ -62,8 +60,6 @@ void OsmChangesetSqlFileWriter::write(const QString path, const ChangeSetProvide
       changes = 0;
     }
   }
-
-  _outputSql.write("COMMIT;\n");
 
   _outputSql.close();
 }
