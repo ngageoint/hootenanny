@@ -8,6 +8,8 @@ endif
 
 SHELL=/bin/bash
 
+.PHONY: clean-ccache
+
 # If you're adding another schema file be sure and update the archive target
 # too.
 #SCHEMA_FILES=plugins/script/tds40/schema/__init__.js plugins/script/tds61/schema/__init__.js plugins/script/mgcp/schema/__init__.js plugins/script/etds/rules/__init__.js plugins/script/etds61/rules/__init__.js plugins/script/etds61_osm/rules/__init__.js
@@ -61,11 +63,17 @@ endif
 clean-db: services-clean-db
 
 # start over as close to a new build as is reasonable
-clean-all: clean clean-db
+clean-all: clean clean-db clean-ccache
 
 clean-coverage: services-clean-coverage
 	rm -rf coverage
 	rm -f `find . -name *.gcda`
+
+# clean-all should call `ccache -C` to clear the cache if ccache is available
+clean-ccache:
+ifneq (, $(shell command -v ccache))
+	@ccache -C >/dev/null 2>&1
+endif
 
 check: test
 test: build services-test pp-test plugins-test
