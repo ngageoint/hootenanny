@@ -1,4 +1,3 @@
-BEGIN;
 INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (1, -1, now(), now());
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile,  version) VALUES (1, 0, 0, 1, true, now(), 3221225472, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile,  version) VALUES (1, 0, 0, 1, true, now(), 3221225472, 1);
@@ -22,4 +21,3 @@ DELETE FROM current_way_tags WHERE current_way_tags_id = 3;
 DELETE FROM way_tags WHERE way_tags_id = 3;
 INSERT INTO current_way_tags (way_id, k, v) VALUES (3, 'key1', 'value1');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (3, 'key1', 'value1', 1);
-COMMIT;

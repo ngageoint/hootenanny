@@ -1,4 +1,3 @@
-BEGIN;
 INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (1, -1, now(), now());
 IF (SELECT count(*) FROM current_nodes WHERE id=-1669793 AND version=3) == 0 THEN
   RAISE EXCEPTION 'current_nodes to be modified/deleted with ID: -1669793 and version: 3 does not exist';
@@ -420,4 +419,3 @@ INSERT INTO current_way_tags (way_id, k, v) VALUES (9, 'note', '3');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (9, 'note', '3', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (9, 'highway', 'road');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (9, 'highway', 'road', 1);
-COMMIT;

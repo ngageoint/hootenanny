@@ -44,11 +44,9 @@ namespace hoot
 class OsmApiDbTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(OsmApiDbTest);
-
-  // osm apidb tests
   CPPUNIT_TEST(runOpenTest);
   CPPUNIT_TEST(runSelectElementsTest);
-
+  CPPUNIT_TEST(runSqlChangesetExecTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -57,10 +55,25 @@ public:
 
   long mapId;
 
+  void setUp()
+  {
+    deleteUser(userEmail());
+  }
+
+  void tearDown()
+  {
+    deleteUser(userEmail());
+
+    OsmApiDb database;
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    database.deleteData();
+    database.close();
+  }
+
   void deleteUser(QString email)
   {
     OsmApiDb db;
-    db.open(getOsmApiDbUrl());
+    db.open(ServicesDbTestUtils::getOsmApiDbUrl());
 
     long userId = db.getUserId(email, false);
     if (userId != -1)
@@ -71,23 +84,36 @@ public:
     }
   }
 
-  QUrl getOsmApiDbUrl()
+  //TODO: the sql output shouldn't be written out to null; simply checking the return value
+  //isn't enough to know whether it failed or not
+
+  void execOsmSqlTestScript(const QString scriptName)
   {
-    LOG_DEBUG(QString("Got URL for OSM API DB: ") + ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    return ServicesDbTestUtils::getOsmApiDbUrl();
+    //example: osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+    QString dbUrlString = ServicesDbTestUtils::getOsmApiDbUrl().toString();
+    QStringList dbUrlParts = dbUrlString.split("/");
+    QString dbName = dbUrlParts[dbUrlParts.size()-1];
+    QStringList userParts = dbUrlParts[dbUrlParts.size()-2].split(":");
+    QString dbUser = userParts[0];
+    QString dbPassword = userParts[1].split("@")[0];
+    QString dbHost = userParts[1].split("@")[1];
+    QString dbPort = userParts[2];
+    const QString auth = "-h "+dbHost+" -p "+dbPort+" -U "+dbUser;
+
+    const QString cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/"+scriptName+" > /dev/null 2>&1";
+    LOG_VARD(cmd);
+    if (std::system(cmd.toStdString().c_str()) != 0)
+    {
+      throw HootException("Failed postgres command.  Exiting test.");
+    }
   }
 
-  /***********************************************************************************************
-   * Purpose: Quick test to open the Osm ApiDb database
-   * To see the output from this test, type the following:
-   *   bin/HootTest --debug --single hoot::ServicesDbTest::runOpenOsmApiTest
-   * *********************************************************************************************
-   */
   void runOpenTest()
   {
     OsmApiDb db;
 
-    db.open(getOsmApiDbUrl());
+    db.open(ServicesDbTestUtils::getOsmApiDbUrl());
     CPPUNIT_ASSERT_EQUAL(true, db.getDB().isOpen());
     db.close();
     CPPUNIT_ASSERT_EQUAL(false, db.getDB().isOpen());
@@ -96,48 +122,14 @@ public:
   void runSelectElementsTest()
   {
     OsmApiDb database;
-    database.open(getOsmApiDbUrl());
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    database.deleteData();
+    execOsmSqlTestScript("users.sql");
+    execOsmSqlTestScript("changesets.sql");
 
-    // parse out the osm api dbname, dbuser, and dbpassword
-    //example: postgresql://hoot:hoottest@localhost:5432/osmapi_test
-    QUrl dbUrl = getOsmApiDbUrl();
-    QString dbUrlString = dbUrl.toString();
-    QStringList dbUrlParts = dbUrlString.split("/");
-    QString dbName = dbUrlParts[dbUrlParts.size()-1];
-    QStringList userParts = dbUrlParts[dbUrlParts.size()-2].split(":");
-    QString dbUser = userParts[0];
-    QString dbPassword = userParts[1].split("@")[0];
-    QString dbHost = userParts[1].split("@")[1];
-    QString dbPort = userParts[2];
-    LOG_DEBUG("Name="+dbName+", user="+dbUser+", pass="+dbPassword+", port="+dbPort+", host="+dbHost);
-
-    QString auth = "-h "+dbHost+" -p "+dbPort+" -U "+dbUser;
+    execOsmSqlTestScript("nodes.sql");
 
     /////////////////////////////////////
-    // INSERT NODES INTO DB
-    /////////////////////////////////////
-
-    // list of insertions
-    QList<long> ids;
-    QList<QString> keys = QList<QString>() << "highway" << "accuracy" << "foo";
-    QList<QString> values = QList<QString>() << "road" << "5" << "bar";
-    QList<float> lats = QList<float>() << 38.4 << 38;
-    QList<float> lons = QList<float>() << -106.5 << -104;
-
-    // Insert nodes
-    QString cmd = "export PGPASSWORD="+dbPassword+"; \
-      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/users.sql > /dev/null 2>&1; \
-      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/changesets.sql > /dev/null 2>&1; \
-      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/nodes.sql > /dev/null 2>&1";
-
-    if( std::system(cmd.toStdString().c_str()) != 0 )
-    {
-      LOG_WARN("Failed postgres command.  Exiting test.");
-      return;
-    }
-
-    /////////////////////////////////////
-    // SELECT THE NODES USING SELECT_ALL
     // Need to get the data in the format exactly like the return of the Services Db now so we don't need to
     // change the front-end reader code
     //
@@ -155,7 +147,18 @@ public:
     // Note: Again, ideally this gets done in the DB, faster there and less data to pass overhead.
     // Note2: I think this is important to do this processing here, so the front-end code that calls upon selectAll
     //   doesn't have to change, so it works for both ServicesDb and ApiDb without change.
-    /////////////////////////////////////
+
+    // list of insertions
+
+    QList<long> ids;
+    const long nodeId1 = 1;
+    const long nodeId2 = 2;
+    ids.append(nodeId1);
+    ids.append(nodeId2);
+    QList<QString> keys = QList<QString>() << "highway" << "accuracy1" << "foo";
+    QList<QString> values = QList<QString>() << "road" << "5" << "bar";
+    QList<float> lats = QList<float>() << 38.4 << 38;
+    QList<float> lons = QList<float>() << -106.5 << -104;
 
     shared_ptr<QSqlQuery> nodeResultIterator = database.selectElements(ElementType::Node);
 
@@ -168,13 +171,17 @@ public:
     // read through the elements until the number inserted for this test is reached
     // - the number inserted is determined by ids.size()
     int elementCtr = ids.size()-1;
+    LOG_VARD(elementCtr);
+    CPPUNIT_ASSERT(elementCtr >= 0);
     int tagIndx = -1;
+    int ctr = 0;
     while( nodeResultIterator->next() )
     {
       long long id = nodeResultIterator->value(0).toLongLong();
+      LOG_VARD(id);
       if( lastId != id )
       {
-        if(elementCtr < 0) break;
+        if (elementCtr < 0) break;
 
         // perform the comparison tests
         LOG_DEBUG(QString("Processing element ")+QString::number(elementCtr+1));
@@ -186,6 +193,7 @@ public:
           (double)ApiDb::COORDINATE_SCALE);
         lastId = id;
         elementCtr--;
+        ctr++;
       }
 
       // verify the values written to the DB upon their read-back
@@ -196,18 +204,15 @@ public:
 
       // read the tag for as many rows as there are tags
       QString key = nodeResultIterator->value(8).toString();
+      LOG_VARD(key);
       LOG_DEBUG(QString("Processing tag ") + key);
       tagIndx = ServicesDbTestUtils::findIndex(keys, key);
       HOOT_STR_EQUALS(QString(keys[tagIndx]+" = "+values[tagIndx]+"\n").toStdString().c_str(),
         ApiDb::unescapeTags(database.extractTagFromRow(nodeResultIterator, ElementType::Node)));
     }
+    LOG_VARD(ctr);
+    CPPUNIT_ASSERT_EQUAL(ids.size(), ctr);
 
-    ///////////////////////////////////////////////
-    /// Insert a way into the Osm Api DB
-    ///////////////////////////////////////////////
-
-    const long nodeId1 = 1;
-    const long nodeId2 = 2;
     ids.clear();
     Tags t2;
     t2["highway"] = "primary";
@@ -217,17 +222,7 @@ public:
     nodeIds.push_back(nodeId1);
     nodeIds.push_back(nodeId2);
 
-    cmd = "export PGPASSWORD="+dbPassword+";\
-      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/ways.sql > /dev/null 2>&1";
-    if( std::system(cmd.toStdString().c_str()) != 0 )
-    {
-      LOG_WARN("Failed postgres command.  Exiting test.");
-      return;
-    }
-
-    ///////////////////////////////////////////////
-    /// Reads the ways from the Osm Api DB
-    ///////////////////////////////////////////////
+    execOsmSqlTestScript("ways.sql");
 
     shared_ptr<QSqlQuery> wayResultIterator = database.selectElements(ElementType::Way);
 
@@ -240,7 +235,10 @@ public:
     // read through the elements until the number inserted for this test is reached
     // - the number inserted is determined by ids.size()
     elementCtr = ids.size()-1;
+    LOG_VARD(elementCtr);
+    CPPUNIT_ASSERT(elementCtr >= 0);
     tagIndx = -1;
+    ctr = 0;
     while( wayResultIterator->next() )
     {
       long long wayId = wayResultIterator->value(0).toLongLong();
@@ -265,6 +263,7 @@ public:
         // mark this way id processed
         lastId = wayId;
         elementCtr--;
+        ctr++;
       }
 
       // verify the values written to the DB upon their read-back
@@ -279,10 +278,8 @@ public:
       HOOT_STR_EQUALS("highway = primary\n", ApiDb::unescapeTags(
         database.extractTagFromRow(wayResultIterator, ElementType::Way)));
     }
-
-    ///////////////////////////////////////////////
-    /// Insert a relation into the Osm Api DB
-    ///////////////////////////////////////////////
+    LOG_VARD(ctr);
+    CPPUNIT_ASSERT_EQUAL(ids.size(), ctr);
 
     const long nodeId3 = nodeIds.at(0);
     const long wayId1 = ids.at(0);
@@ -292,17 +289,7 @@ public:
     long relationId = 1;
     ids.append(relationId);
 
-    cmd = "export PGPASSWORD="+dbPassword+";\
-      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/relations.sql > /dev/null 2>&1";
-    if( std::system(cmd.toStdString().c_str()) != 0 )
-    {
-      LOG_WARN("Failed postgres command.  Exiting test.");
-      return;
-    }
-
-    ///////////////////////////////////////////////
-    /// Reads the relations from the Osm Api DB
-    ///////////////////////////////////////////////
+    execOsmSqlTestScript("relations.sql");
 
     shared_ptr<QSqlQuery> relationResultIterator = database.selectElements(ElementType::Relation);
 
@@ -315,7 +302,10 @@ public:
     // read through the elements until the number inserted for this test is reached
     // - the number inserted is determined by ids.size()
     elementCtr = ids.size()-1;
+    LOG_VARD(elementCtr);
+    CPPUNIT_ASSERT(elementCtr >= 0);
     tagIndx = -1;
+    ctr = 0;
     while ( relationResultIterator->next() )
     {
       long long relId = relationResultIterator->value(0).toLongLong();
@@ -340,6 +330,7 @@ public:
         // mark this way id processed
         lastId = relId;
         elementCtr--;
+        ctr++;
       }
 
       // verify the values written to the DB upon their read-back
@@ -354,24 +345,61 @@ public:
       HOOT_STR_EQUALS("type = multistuff\n", ApiDb::unescapeTags(
         database.extractTagFromRow(relationResultIterator, ElementType::Relation)));
     }
+    LOG_VARD(ctr);
+    CPPUNIT_ASSERT_EQUAL(ids.size(), ctr);
   }
 
-  void setUp()
+  void runSqlChangesetExecTest()
   {
-    deleteUser(userEmail());
-  }
-
-  void tearDown()
-  {
-    deleteUser(userEmail());
-
-    // tear down the ServicesDB
     OsmApiDb database;
-
-    // tear down the osm api db
-    database.open(getOsmApiDbUrl());
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    database.close();
+    execOsmSqlTestScript("users.sql");
+    execOsmSqlTestScript("changesets.sql");
+
+    shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
+    assert(nodesItr->isActive());
+    CPPUNIT_ASSERT_EQUAL(0, nodesItr->size());
+
+    execOsmSqlTestScript("nodes.sql");
+
+    nodesItr = database.selectElements(ElementType::Node);
+    assert(nodesItr->isActive());
+    int nodesCountBefore = 0;
+    long long changesetId = -1;
+    while (nodesItr->next())
+    {
+      changesetId = nodesItr->value(3).toLongLong();
+      LOG_VARD(changesetId)
+      nodesCountBefore++;
+    }
+    nodesCountBefore--;
+    LOG_VARD(nodesCountBefore);
+
+    const long nextNodeId = database.getNextId("current_nodes");
+    LOG_VARD(nextNodeId);
+
+    database.transaction();
+    const QString sql =
+      QString("INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile,  version) VALUES (%1, 0, 0, %2, true, now(), 3221225472, 1);")
+        .arg(nextNodeId)
+        .arg(changesetId);
+    database.execSql(sql);
+    database.commit();
+
+    nodesItr = database.selectElements(ElementType::Node);
+    assert(nodesItr->isActive());
+    int nodesCountAfter = 0;
+    while (nodesItr->next())
+    {
+      nodesCountAfter++;
+    }
+    nodesCountAfter--;
+    LOG_VARD(nodesCountAfter);
+
+    CPPUNIT_ASSERT(nodesCountAfter == (nodesCountBefore + 1));
+
+    database.deleteData();
   }
 
 };
