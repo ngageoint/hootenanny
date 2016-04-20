@@ -167,9 +167,6 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(const ConstElementPtr rem
   }
   const QString elementName = removedElement->getElementType().toString().toLower();
 
-  _throwErrorIfElementAtVersionDoesntExist(
-    "current_" + elementName + "s", "id", removedElement->getId(), removedElement->getVersion());
-
   //API DB keeps history for all elements, so the element just gets set to invisible during a delete...
   //not actually deleted
   const QString values = QString("=%1;\n").arg(removedElement->getId());
@@ -233,8 +230,6 @@ void OsmChangesetSqlFileWriter::_create(const ConstRelationPtr relation)
 
 void OsmChangesetSqlFileWriter::_modify(const ConstNodePtr node)
 {
-  _throwErrorIfElementAtVersionDoesntExist("current_nodes", "id", node->getId(), node->getVersion());
-
   QString values =
     QString("=%1, latitude=%2, longitude=%3, changeset_id=%4, visible=true, \"timestamp\"=now(), tile=%5, version=version+1 WHERE version=%6;\n")
       .arg(node->getId())
@@ -252,8 +247,6 @@ void OsmChangesetSqlFileWriter::_modify(const ConstNodePtr node)
 
 void OsmChangesetSqlFileWriter::_modify(const ConstWayPtr way)
 {
-  _throwErrorIfElementAtVersionDoesntExist("current_ways", "id", way->getId(), way->getVersion());
-
   QString values =
     QString("=%1, changeset_id=%2, visible=true, \"timestamp\"=now(), version=version+1 WHERE version=%3;\n")
       .arg(way->getId())
@@ -272,9 +265,6 @@ void OsmChangesetSqlFileWriter::_modify(const ConstWayPtr way)
 
 void OsmChangesetSqlFileWriter::_modify(const ConstRelationPtr relation)
 {
-  _throwErrorIfElementAtVersionDoesntExist(
-    "current_relations", "id", relation->getId(), relation->getVersion());
-
   QString values =
     QString("=%1, changeset_id=%2, visible=true, \"timestamp\"=now(), version=version+1 WHERE version=%3;\n")
       .arg(relation->getId())
@@ -396,25 +386,6 @@ void OsmChangesetSqlFileWriter::_deleteAll(const QString tableName, const QStrin
       .arg(idFieldName)
       .arg(id))
     .toUtf8());
-}
-
-void OsmChangesetSqlFileWriter::_throwErrorIfElementAtVersionDoesntExist(const QString tableName,
-                                                                         const QString idFieldName,
-                                                                         const long id,
-                                                                         const long version)
-{
-  const QString ifStmt =
-    QString("IF (SELECT count(*) FROM %1 WHERE %2=%3 AND version=%4) == 0 THEN\n")
-      .arg(tableName)
-      .arg(idFieldName)
-      .arg(id)
-      .arg(version);
-  const QString error =
-    QString("  RAISE EXCEPTION '%1 to be modified/deleted with ID: %2 and version: %3 does not exist';\n")
-      .arg(tableName)
-      .arg(id)
-      .arg(version);
-  _outputSql.write(QString(ifStmt + error + "END IF;\n").toUtf8());
 }
 
 }

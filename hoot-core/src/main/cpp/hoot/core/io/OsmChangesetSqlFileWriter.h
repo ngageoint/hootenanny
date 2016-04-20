@@ -70,9 +70,6 @@ private:
 
   void _deleteAll(const QString tableName, const QString idFieldName, const long id);
 
-  void _throwErrorIfElementAtVersionDoesntExist(const QString tableName, const QString idFieldName,
-                                                const long id, const long version);
-
   //This is for testing only, so that we don't have to rely on the database for our starting element
   //ID's and can, therefore, have repeatable test output.
   bool _useInternalIds;
