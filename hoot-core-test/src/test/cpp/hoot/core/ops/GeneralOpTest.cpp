@@ -34,9 +34,6 @@
 #include <hoot/core/ops/BuildingOutlineRemoveOp.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
-#include <hoot/core/ops/CreateIntersectionNodesOp.h>
-#include <hoot/core/ops/ParentFirstVisitorOp.h>
-#include <hoot/core/ops/PointsToTracksOp.h>
 #include <hoot/core/ops/RemoveDuplicateReviewsOp.h>
 #include <hoot/core/ops/RemoveReviewsByEidOp.h>
 #include <hoot/core/ops/ReprojectToGeographicOp.h>
@@ -102,20 +99,6 @@ public:
     HOOT_STR_EQUALS("hoot::BuildingPartMergeOp", className);
     buildingPartMergeOp.readObject(dataStream);
     buildingPartMergeOp.writeObject(dataStream);
-
-    // CreateIntersectionNodesOp
-    //CreateIntersectionNodesOp createIntersectionNodesOp;
-
-    // ParentFirstVisitorOp
-    shared_ptr<ElementVisitor> pElementVisitor;
-    ParentFirstVisitorOp parentFirstVisitorOp(pElementVisitor);
-    className = parentFirstVisitorOp.className();
-    HOOT_STR_EQUALS("hoot::ParentFirstVisitorOp", className);
-
-    // PointsToTracksOp
-    PointsToTracksOp pointsToTracksOp;
-    className = pointsToTracksOp.className();
-    HOOT_STR_EQUALS("hoot::PointsToTracksOp", className);
 
     // RemoveDuplicateReviewsOp
     RemoveDuplicateReviewsOp removeDuplicateReviewsOp;
