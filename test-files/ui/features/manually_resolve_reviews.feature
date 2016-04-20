@@ -2,7 +2,7 @@ Feature: Manually resolve reviews feature
 
   Scenario: I can conflate the AllDataTypes data, manually resolve some reviews, and merge some POIs during the review process
     Given I am on Hootenanny
-    And I resize the window
+    #And I resize the window
     And I click Get Started
     And I press "Add Reference Dataset"
     And I click the "AllDataTypesACucumber" Dataset
@@ -29,7 +29,7 @@ Feature: Manually resolve reviews feature
     And I press "Merge"
     Then I wait 30 "seconds" to see "Resolved"
     And I click the "r" key
-    Then I wait 30 "seconds" to see "Reviews remaining: 7 (Resolved: 1)"
+    Then I wait 60 "seconds" to see "Reviews remaining: 7 (Resolved: 1)"
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 6 (Resolved: 2)"
     And I press "Resolved"
