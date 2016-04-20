@@ -204,5 +204,6 @@ SOURCES += \
     src/test/cpp/hoot/core/schema/TagCategoryDifferencerTest.cpp \
     src/test/cpp/hoot/core/schema/TagAncestorDifferencerTest.cpp \
     src/test/cpp/hoot/core/elements/RelationTest.cpp \
-    src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp
+    src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp \
+    src/test/cpp/hoot/core/ops/GeneralOpTest.cpp
 
