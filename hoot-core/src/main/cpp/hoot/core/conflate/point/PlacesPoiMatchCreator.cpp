@@ -354,7 +354,7 @@ vector<MatchCreator::Description> PlacesPoiMatchCreator::getAllCreators() const
 {
   vector<Description> result;
 
-  result.push_back(Description(className(), "PLACES Match Creator", false));
+  result.push_back(Description(className(), "PLACES Match Creator", MatchCreator::POI, false));
 
   return result;
 }
