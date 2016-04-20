@@ -15,8 +15,8 @@ scripts/jenkins/VeryClean.sh
 git submodule update --init
 
 # Jenkins Vagrant setup
-ln -s ../vagrant/VSphereDummy.box VSphereDummy.box
-ln -s ../vagrant/VagrantfileLocal.ubuntu1404 VagrantfileLocal
+ln -s ../../vagrant/VSphereDummy.box VSphereDummy.box
+ln -s ../../vagrant/VagrantfileLocal.ubuntu1404 VagrantfileLocal
 
 # Copy words1.sqlite Db so we don't have to download it again
 ( [ -e $WORDS_HOME/words1.sqlite ] &&  cp $WORDS_HOME/words1.sqlite conf )
@@ -42,7 +42,7 @@ REBUILD_VAGRANT=false
 [ -f Vagrant.marker ] && [ Vagrant.marker -ot VagrantProvision.sh ] && REBUILD_VAGRANT=true
 
 # On the first build of the day, rebuild everything
-if [ "`date +%F`" != "`test -e BuildDate.txt && cat BuildDate.txt`" ]; then
+if [ "`date +%F`" != "`test -e ../BuildDate.txt && cat ../BuildDate.txt`" ]; then
     REBUILD_VAGRANT=true
 fi
 
@@ -53,5 +53,5 @@ else
     time -p vagrant up --provision-with nfs,build,EGD,tomcat,mapnik,hadoop --provider vsphere
 fi
 
-date +%F > BuildDate.txt
+date +%F > ../BuildDate.txt
 
