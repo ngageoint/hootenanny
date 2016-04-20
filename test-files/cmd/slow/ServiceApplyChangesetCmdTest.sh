@@ -11,12 +11,12 @@ export PGPASSWORD=$DB_PASSWORD
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/changesets.sql
 
-rm -rf test-output/cmd/ServiceSqlChangesetConvertCmdTest
-mkdir -p test-output/cmd/ServiceSqlChangesetConvertCmdTest
+rm -rf test-output/cmd/ServiceApplyChangesetCmdTest
+mkdir -p test-output/cmd/ServiceApplyChangesetCmdTest
 
 # write the contents
-hoot convert test-files/cmd/slow/ServiceSqlChangesetConvertCmdTest/changeset.osc.sql $DB_URL
+hoot apply-changeset test-files/cmd/slow/ServiceApplyChangesetCmdTest/changeset.osc.sql $DB_URL
 
 # read the contents back out
-hoot convert $DB_URL test-output/cmd/ServiceSqlChangesetConvertCmdTest/output.osm
-hoot is-match test-files/cmd/slow/ServiceSqlChangesetConvertCmdTest/output.osm test-output/cmd/ServiceSqlChangesetConvertCmdTest/output.osm
+hoot convert $DB_URL test-output/cmd/ServiceApplyChangesetCmdTest/output.osm
+hoot is-match test-files/cmd/slow/ServiceApplyChangesetCmdTest/output.osm test-output/cmd/ServiceApplyChangesetCmdTest/output.osm
