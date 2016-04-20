@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -100,12 +100,16 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
 {
   LOG_DEBUG("IN OsmApiDbReader::read()...");
 
-  if(_osmElemId > -1 && _osmElemType != ElementType::Unknown)
+  if (_osmElemId > -1 && _osmElemType != ElementType::Unknown)
   {
+    LOG_INFO("Executing OSM API read query against element type " << _osmElemType << "...");
+
     _read(map, _osmElemType);
   }
   else if(_bbox == "") // process SELECT ALL
   {
+    LOG_INFO("Executing OSM API read query against all element types...");
+
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
     {
       ElementType::Type elementType = static_cast<ElementType::Type>(ctr);
@@ -114,6 +118,9 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
   }
   else // process BOUNDED REGION
   {
+    LOG_INFO(
+      "Executing OSM API bounded read query against all element types with bounds " << _bbox << "...");
+
     QStringList bboxParts = _bbox.split(",");
     double minLat = bboxParts[1].toDouble();
     double minLon = bboxParts[0].toDouble();

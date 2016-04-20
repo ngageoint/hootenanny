@@ -39,15 +39,15 @@
 namespace hoot
 {
 
-class DeriveChangeCmd : public BaseCommand
+class DeriveChangesetCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::DeriveChangeCmd"; }
+  static string className() { return "hoot::DeriveChangesetCmd"; }
 
-  DeriveChangeCmd() { }
+  DeriveChangesetCmd() { }
 
-  virtual QString getName() const { return "derive-change"; }
+  virtual QString getName() const { return "derive-changeset"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -93,7 +93,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, DeriveChangeCmd)
+HOOT_FACTORY_REGISTER(Command, DeriveChangesetCmd)
 
 }
 

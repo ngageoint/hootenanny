@@ -558,6 +558,8 @@ void OsmApiDb::execSql(const QString sql)
       "Error executing custom SQL query against OSM API database:\n" +
       _customQuery->lastError().text());
   }
+
+  LOG_INFO("Custom SQL query execute finished against OSM API database.");
 }
 
 }

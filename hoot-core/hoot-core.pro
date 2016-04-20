@@ -489,7 +489,7 @@ SOURCES += \
     src/main/cpp/hoot/core/io/ElementSorter.cpp \
     src/main/cpp/hoot/core/io/ChangesetDeriver.cpp \
     src/main/cpp/hoot/core/io/OsmChangesetXmlFileWriter.cpp \
-    src/main/cpp/hoot/core/cmd/DeriveChangeCmd.cpp \
+    src/main/cpp/hoot/core/cmd/DeriveChangesetCmd.cpp \
     src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
