@@ -46,7 +46,7 @@ if [ "`date +%F`" != "`test -e BuildDate.txt && cat BuildDate.txt`" ]; then
     REBUILD_VAGRANT=true
 fi
 
-if [ $REBUILD_VAGRANT ]
+if [ $REBUILD_VAGRANT ]; then
     vagrant destroy -f
     time -p vagrant up --provider vsphere
 else
