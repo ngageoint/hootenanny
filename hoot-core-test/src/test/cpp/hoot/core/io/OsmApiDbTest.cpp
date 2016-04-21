@@ -84,9 +84,6 @@ public:
     }
   }
 
-  //TODO: the sql output shouldn't be written out to null; simply checking the return value
-  //isn't enough to know whether it failed or not
-
   void execOsmSqlTestScript(const QString scriptName)
   {
     //example: osmapidb://hoot:hoottest@localhost:5432/osmapi_test
@@ -101,7 +98,7 @@ public:
     const QString auth = "-h "+dbHost+" -p "+dbPort+" -U "+dbUser;
 
     const QString cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
-      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/"+scriptName+" > /dev/null 2>&1";
+      psql "+auth+" -v ON_ERROR_STOP=1 -f ${HOOT_HOME}/test-files/servicesdb/"+scriptName+" > /dev/null 2>&1";
     LOG_VARD(cmd);
     if (std::system(cmd.toStdString().c_str()) != 0)
     {
