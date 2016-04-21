@@ -35,8 +35,7 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/ops/BuildingPartMergeOp.h>
-#include <hoot/core/ops/RefRemoveOp.h>
+#include <hoot/core/ops/ReprojectToGeographicOp.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -52,39 +51,42 @@ namespace hoot
 {
 using namespace Tgs;
 
-class RefRemoveOpTest : public CppUnit::TestFixture
+class ReprojectToGeographicOpTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(RefRemoveOpTest);
-  CPPUNIT_TEST(runToyTest);
+  CPPUNIT_TEST_SUITE(ReprojectToGeographicOpTest);
+  CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runToyTest()
+  void runTest()
   {
-    OsmReader reader;
+    QString inputPath = "test-files/ops/ReprojectToGeographicOp/";
+    QString inputFile = "ToyMercator.osm";
+    QString outputPath = "test-output/ops/ReprojectToGeographicOp/";
+    QString outputFile = "ToyWGS84.osm";
 
+
+    OsmReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ops/RefRemoveOp/Toy.osm", map);
+    reader.read(inputPath + inputFile, map);
 
-    RefRemoveOp uut;
-    uut.addCriterion(ElementCriterionPtr(new BuildingCriterion(map)));
-    uut.apply(map);
+    ReprojectToGeographicOp myOp;
+    myOp.apply(map);
 
-    LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter(5).toString(map)));
-
-    QDir().mkpath("test-output/ops/RefRemoveOp/");
+    QDir().mkpath(outputPath);
     OsmWriter writer;
-    writer.write(map, "test-output/ops/RefRemoveOp/Toy.osm");
-    HOOT_FILE_EQUALS("test-files/ops/RefRemoveOp/ToyOutput.osm",
-                     "test-output/ops/RefRemoveOp/Toy.osm");
+    writer.write(map, outputPath + outputFile);
+    HOOT_FILE_EQUALS(inputPath+outputFile,
+                     outputPath+outputFile);
   }
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RefRemoveOpTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ReprojectToGeographicOpTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ReprojectToGeographicOpTest, "current");
 
 }
 

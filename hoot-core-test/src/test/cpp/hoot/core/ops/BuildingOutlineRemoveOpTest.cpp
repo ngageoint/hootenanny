@@ -89,7 +89,7 @@ public:
 
 }
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingOutlineRemoveOpTest, "quick");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingOutlineRemoveOpTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingOutlineRemoveOpTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingOutlineRemoveOpTest, "current");
 
 

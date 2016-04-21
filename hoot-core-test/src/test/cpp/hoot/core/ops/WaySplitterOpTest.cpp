@@ -35,7 +35,7 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/ops/ReprojectToPlanarOp.h>
+#include <hoot/core/ops/WaySplitterOp.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -51,9 +51,9 @@ namespace hoot
 {
 using namespace Tgs;
 
-class ReprojectToPlanarOpTest : public CppUnit::TestFixture
+class WaySplitterOpTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(ReprojectToPlanarOpTest);
+  CPPUNIT_TEST_SUITE(WaySplitterOpTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -61,10 +61,10 @@ public:
 
   void runTest()
   {
-    QString inputPath  = "test-files/ops/ReprojectToPlanarOp/";
+    QString inputPath  = "test-files/ops/WaySplitterOp/";
     QString inputFile  = "ToyWGS84.osm";
-    QString outputPath = "test-output/ops/ReprojectToPlanarOp/";
-    QString outputFile = "ToyPlanar.osm";
+    QString outputPath = "test-output/ops/WaySplitterOp/";
+    QString outputFile = "ToySplit.osm";
 
 
     OsmReader reader;
@@ -73,7 +73,8 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(inputPath + inputFile, map);
 
-    ReprojectToPlanarOp myOp;
+    WaySplitterOp myOp;
+    myOp.setMaxLength(20);
     myOp.apply(map);
 
     QDir().mkpath(outputPath);
@@ -85,8 +86,8 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ReprojectToPlanarOpTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ReprojectToPlanarOpTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WaySplitterOpTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WaySplitterOpTest, "current");
 
 }
 

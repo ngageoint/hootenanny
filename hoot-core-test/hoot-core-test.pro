@@ -206,5 +206,8 @@ SOURCES += \
     src/test/cpp/hoot/core/elements/RelationTest.cpp \
     src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp \
     src/test/cpp/hoot/core/ops/GeneralOpTest.cpp \
-    src/test/cpp/hoot/core/ops/BuildingOutlineRemoveOpTest.cpp
+    src/test/cpp/hoot/core/ops/BuildingOutlineRemoveOpTest.cpp \
+    src/test/cpp/hoot/core/ops/ReprojectToGeographicOpTest.cpp \
+    src/test/cpp/hoot/core/ops/ReprojectToPlanarOpTest.cpp \
+    src/test/cpp/hoot/core/ops/WaySplitterOpTest.cpp
 

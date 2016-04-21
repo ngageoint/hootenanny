@@ -75,21 +75,25 @@ public:
 
   void runTest()
   {
+    QDataStream dataStream;
+    string className = "";
+
     // AddHilbertReviewSortOrderOp
     AddHilbertReviewSortOrderOp addHilbertReviewSortOrderOp;
-    string className = addHilbertReviewSortOrderOp.getClassName();
+    className = addHilbertReviewSortOrderOp.getClassName();
     HOOT_STR_EQUALS("hoot::AddHilbertReviewSortOrderOp", className);
 
     // BuildingOutlineRemoveOp
     BuildingOutlineRemoveOp buildingOutlineRemoveOp;
     className = buildingOutlineRemoveOp.getClassName();
     HOOT_STR_EQUALS("hoot::BuildingOutlineRemoveOp", className);
+    buildingOutlineRemoveOp.readObject(dataStream);
+    buildingOutlineRemoveOp.writeObject(dataStream);
 
     // BuildingOutlineUpdateOp
     BuildingOutlineUpdateOp buildingOutlineUpdateOp;
     className = buildingOutlineUpdateOp.getClassName();
     HOOT_STR_EQUALS("hoot::BuildingOutlineUpdateOp", className);
-    QDataStream dataStream;
     buildingOutlineUpdateOp.readObject(dataStream);
     buildingOutlineUpdateOp.writeObject(dataStream);
 
@@ -116,11 +120,15 @@ public:
     ReprojectToGeographicOp reprojectToGeographicOp;
     className = reprojectToGeographicOp.getClassName();
     HOOT_STR_EQUALS("hoot::ReprojectToGeographicOp", className);
+    reprojectToGeographicOp.readObject(dataStream);
+    reprojectToGeographicOp.writeObject(dataStream);
 
     // ReprojectToPlanarOp
     ReprojectToPlanarOp reprojectToPlanarOp;
     className = reprojectToPlanarOp.getClassName();
     HOOT_STR_EQUALS("hoot::ReprojectToPlanarOp", className);
+    reprojectToPlanarOp.readObject(dataStream);
+    reprojectToPlanarOp.writeObject(dataStream);
 
     // SuperfluousNodeRemover
     SuperfluousNodeRemover superfluousNodeRemover;
@@ -131,6 +139,8 @@ public:
     WaySplitterOp waySplitterOp;
     className = waySplitterOp.getClassName();
     HOOT_STR_EQUALS("hoot::WaySplitterOp", className);
+    waySplitterOp.readObject(dataStream);
+    waySplitterOp.writeObject(dataStream);
   }
 
 };

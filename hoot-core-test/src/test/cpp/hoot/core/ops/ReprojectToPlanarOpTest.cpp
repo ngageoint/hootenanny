@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -35,8 +35,7 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/ops/BuildingPartMergeOp.h>
-#include <hoot/core/ops/RefRemoveOp.h>
+#include <hoot/core/ops/ReprojectToPlanarOp.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -52,39 +51,42 @@ namespace hoot
 {
 using namespace Tgs;
 
-class RefRemoveOpTest : public CppUnit::TestFixture
+class ReprojectToPlanarOpTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(RefRemoveOpTest);
-  CPPUNIT_TEST(runToyTest);
+  CPPUNIT_TEST_SUITE(ReprojectToPlanarOpTest);
+  CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runToyTest()
+  void runTest()
   {
-    OsmReader reader;
+    QString inputPath  = "test-files/ops/ReprojectToPlanarOp/";
+    QString inputFile  = "ToyWGS84.osm";
+    QString outputPath = "test-output/ops/ReprojectToPlanarOp/";
+    QString outputFile = "ToyPlanar.osm";
 
+
+    OsmReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ops/RefRemoveOp/Toy.osm", map);
+    reader.read(inputPath + inputFile, map);
 
-    RefRemoveOp uut;
-    uut.addCriterion(ElementCriterionPtr(new BuildingCriterion(map)));
-    uut.apply(map);
+    ReprojectToPlanarOp myOp;
+    myOp.apply(map);
 
-    LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter(5).toString(map)));
-
-    QDir().mkpath("test-output/ops/RefRemoveOp/");
+    QDir().mkpath(outputPath);
     OsmWriter writer;
-    writer.write(map, "test-output/ops/RefRemoveOp/Toy.osm");
-    HOOT_FILE_EQUALS("test-files/ops/RefRemoveOp/ToyOutput.osm",
-                     "test-output/ops/RefRemoveOp/Toy.osm");
+    writer.write(map, outputPath + outputFile);
+    HOOT_FILE_EQUALS(inputPath+outputFile,
+                     outputPath+outputFile);
   }
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RefRemoveOpTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ReprojectToPlanarOpTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ReprojectToPlanarOpTest, "current");
 
 }
 
