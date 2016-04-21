@@ -357,7 +357,7 @@ public:
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
     execOsmSqlTestScript("users.sql");
-    //execOsmSqlTestScript("changesets.sql");
+    execOsmSqlTestScript("changesets.sql");
 
     shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());
@@ -368,11 +368,11 @@ public:
     nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());
     int nodesCountBefore = 0;
-    long long changesetId = -1;
+    long existingChangesetId = -1;
     while (nodesItr->next())
     {
-      changesetId = nodesItr->value(3).toLongLong();
-      LOG_VARD(changesetId)
+      existingChangesetId = nodesItr->value(3).toLongLong();
+      LOG_VARD(existingChangesetId)
       nodesCountBefore++;
     }
     nodesCountBefore--;
@@ -381,13 +381,14 @@ public:
     const long nextNodeId = database.getNextId("current_nodes");
     LOG_VARD(nextNodeId);
 
+    const long nextChangesetId = existingChangesetId + 1;
     QString sql =
       QString("INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (%1, 1, now(), now());\n")
-        .arg(changesetId);
+        .arg(nextChangesetId);
     sql +=
       QString("INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile,  version) VALUES (%1, 0, 0, %2, true, now(), 3221225472, 1);")
         .arg(nextNodeId)
-        .arg(changesetId);
+        .arg(nextChangesetId);
 
     OsmApiDb().writeChangeset(sql, ServicesDbTestUtils::getOsmApiDbUrl());
 
