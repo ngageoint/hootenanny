@@ -65,9 +65,9 @@ using namespace boost;
 namespace hoot
 {
 
-class GeneralOpTest : public CppUnit::TestFixture
+class TrivialOpTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(GeneralOpTest);
+  CPPUNIT_TEST_SUITE(TrivialOpTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -147,7 +147,7 @@ public:
 
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GeneralOpTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GeneralOpTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TrivialOpTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TrivialOpTest, "current");
 
 
