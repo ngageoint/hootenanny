@@ -11,7 +11,7 @@ ifeq "$(append)" "true"
 HOOT_OPTS+= -D ogr.append.data=true
 endif
 
-#DB_URL=postgresql://hoot:hoottest@localhost:5432/hoot
+#DB_URL=hootapidb://hoot:hoottest@localhost:5432/hoot
 OP_PG_URL=PG:"$(PG_URL)"
 
 
@@ -34,7 +34,7 @@ ifeq "$(outputtype)" "shp"
 	OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
 endif
 
-ifeq "$(inputtype)" "file" 
+ifeq "$(inputtype)" "file"
 	INPUT_PATH=$(input)
 endif
 
@@ -49,8 +49,8 @@ step1:
 ifeq ("$(outputtype)","wfs")
 	hoot --osm2ogr $(REMOVE_REVIEW) -D ogr.writer.pre.layer.name=$(outputname)_ $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" $(OP_PG_URL)
 else ifeq ("$(outputtype)","osm")
-	mkdir -p "$(outputfolder)"	
-  hoot --convert -D hootapi.db.writer.create.user=true -D hootapi.db.reader.email='test@test.com' "$(INPUT_PATH)" "$(OP_OUTPUT)"
+	mkdir -p "$(outputfolder)"
+	hoot --convert -D hootapi.db.writer.create.user=true -D hootapi.db.reader.email='test@test.com' "$(INPUT_PATH)" "$(OP_OUTPUT)"
 	cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
 else
 	mkdir -p "$(outputfolder)"

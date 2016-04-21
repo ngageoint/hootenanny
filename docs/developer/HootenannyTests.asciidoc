@@ -1,8 +1,10 @@
-
 == Hootenanny Tests
 
 Hootenanny contains three distinct codebases: the core, the web services, and the user interface.  
 Each employs a different testing technology, which is described here.
+
+Before building Hootenanny and running its tests, the application must be configured.  See the
+Building Hootenanny section in this document for details.
 
 === Test Suites
 
@@ -12,22 +14,24 @@ Tests are divided into the following groups: current, quick, slow, and glacial.
 in this directory.
 * quick - Individual tests that each run in less than 1 sec.
 * slow - Individual tests that each run in less than 30 sec.
-* glacial - Individual tests that each run in less than 15 min.  You shouldn't need tests that take
- longer than 15min.
+* glacial - Individual tests that each run in less than 15 min.  You shouldn't need unit tests that take longer than 15min.  If you're writing a regression test that uses large input data and runs longer than 15min, then put it with the regression tests, not the unit tests.
  
- If you want to run the tests for all codebases at the same time, you can use the following commands:
+If you want to run the tests for all codebases at the same time, first configure as described in a 
+previous section, then run one of the following commands:
 
 -------------------
-./configure && make -sj($nproc) test-quick
-./configure && make -sj($nproc) test       # slow
-./configure && make -sj($nproc) test-all   # glacial
+make -sj($nproc) test-quick # slow tests
+make -sj($nproc) test       # slow tests
+make -sj($nproc) test-all   # glacial tests
 ------------------
 
-quick is a subset of the slow suite, and quick and slow are subsets of the glacial suite.
+"quick" is a subset of the "slow" suite, and "quick" and "slow" are subsets of the "glacial" suite.
 
 As a developer, you are expected to, at a minimum, run the slow tests before pushing commits.  
 If you are doing user interface or web service work, you may also want to test your changes against 
 the User Interface Tests, which run as part of the glacial tests.
+
+To see other, more granular testing options, run 'make help'.
 
 === Core Tests
 
@@ -36,7 +40,11 @@ The core code is written in C++ and employs several different types of tests, wh
 in the following sections.  The tests are also subdivided into different test suites with differing 
 runtimes.
 
-To run all the Core Tests in a suite, choose one of the following:
+In a later section the Hootenanny Web Services Java test code is described.  It is important to note 
+that there is also C++ code labeled "services".  That is code which writes to the Hoot API and OSM 
+API services database and is not affiliated with the Hootenanny Web Services Java code.
+
+To run all the Core Tests in a suite, choose one of the following after running configure:
 
 --------------------
 HootTest --current
@@ -254,7 +262,9 @@ test routines. At this time the micro tests run as part of _quick_ and up.
 The Plugins Test test various translation related operations.  They may be invoked in isolation with:
 
 --------------
-./configure && make -sj($nproc) plugins-test
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure 
+make -sj($nproc) plugins-test
 --------------
 
 They run by default in the slow test suite.
@@ -264,7 +274,9 @@ They run by default in the slow test suite.
 The Pretty Pipes Test test the pretty-pipes submodule.  They may be invoked in isolation with:
 
 --------------
-./configure && make -sj($nproc) pp-test
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure
+make -sj($nproc) pp-test
 --------------
 
 They run by default in the quick test suite.
@@ -277,6 +289,10 @@ combination of Mockito, PowerMock, EasyMock for mock objects.  One JUnit test cl
 multiple JUnit tests.  The other type is written in Javascript and uses a combination of mocha and 
 chai for testing.
 
+It is important to note that there is also C++ code labeled "services".  That is code which writes 
+to the Hoot API and OSM API services database and is not affiliated with the Hootenanny Web 
+Services Java code.
+
 ==== Test Suites
 
 Java web services test methods may be placed into either the UnitTest or IntegrationTest categories.  
@@ -286,13 +302,17 @@ suite corresponds to the glacial test suite.
 To run web services unit tests:
 
 ---------
-./configure --with-services && make -sj($nproc) test
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure  --with-services
+make -sj($nproc) test
 -----------
 
 To run both web services unit and integration tests:
 
 ---------
-./configure --with-services && make -sj($nproc) test-all
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure  --with-services
+make -sj($nproc) test-all
 -----------
 
 The above commands will run the corresponding Core Tests immediately after the web services test 
@@ -376,20 +396,31 @@ web to get you started,
 @test-files/ui/tmp/TestRun.log@.  When running without silent mode, Cucumber test output is written
 to the screen.
 
-The User Interface Tests run as part of the glacial test suite by default.  To run them with all 
-other tests:  
+The User Interface Tests run as part of the glacial test suite by default.  You must start Tomcat and then deploy the Hootenanny web services and user interface code to Tomcat yourself before running these tests, as shown below.  
+
+To run the User Interface tests with all other glacial tests:  
 
 -----------------------
-./configure --with-services --with-uitests && make -sj($nproc) test-all
+cd $HOOT_HOME
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure --with-services --with-uitests
+make -sj($nproc)
+sudo -u tomcat6 scripts/CopyWebAppsToTomcat.sh
+make -sj($nproc) test-all
 -----------------------
 
 To run the User Interface Tests by themselves:
 
 -----------------------
-./configure --with-services --with-uitests && make -sj($nproc) ui-test
+cd $HOOT_HOME
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure --with-services --with-uitests
+make -sj($nproc)
+sudo -u tomcat6 scripts/CopyWebAppsToTomcat.sh
+make -sj($nproc) ui-test
 -----------------------
 
-You have to add the --with-services option since the UI tests rely on the services to be deployed before they're run.
+You have to add the --with-services option since the UI tests rely on the services to be deployed before they're run.  The tests will fail with an error message otherwise.
 
 If a test errors out, you'll see the error message on the screen if you're not running in silent mode (-s).  If you are running the tests in silent mode, then you can look in test-files/ui/tmp for the error log.  Browser screenshots should also get written out in the tests directory when tests fail, if that's helpful.
 
@@ -446,51 +477,40 @@ image::developer/images/LoadLatest.png[]
 
 === Test Coverage Reporting
 
-Reports can be generated which detail how well unit test coverage is for Hootenanny code.  This 
-coverage will only take into account CPPUnit tests in the C++ code and JUnit tests in the Java 
-code (no test coverage currently available for the Javascript user interface code).
+Reports can be generated which detail how well test coverage is for Hootenanny code.  The report 
+will take into account command line and CPPUnit tests in the Hootenanny core code, as well as Java 
+JUnit tests in the Hootenanny Web Services code when the application is configured --with-services.  
+Hootenanny Core code coverage is supplied @gcov@ and @lcov@, utilities for using GCC to generate 
+coverage results.  Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura] 
+via Maven.  Report coverage generation for Javascript code is currently in the works.
 
-**C++ Code Coverage**
+*Coverage report generation has the pre-requisite of running all tests associated with the code being profiled.*
+For the Java Web Services code, this is done automatically by Cobertura, but for the Hootenanny Core code, 'make test' must
+be made explicit as described below.
 
-Code coverage is supplied now by @gcov@ and @lcov@, utilities for using GCC to generate coverage 
-results. The code coverage commands are a bit cryptic, but they are baked into the top level 
-makefile. To generate code coverage results do the following:
+To generate a report for just the Hootenanny Java web services code:
 
-* Run: 
+----------------
+./configure --with-services --with-coverage && make services-clean-coverage && make -j($nproc) services-coverage
+----------------
 
---------------------
-make clean && ./configure --with-coverage && make -j($nproc) test && make -j($nproc) coverage
--------------------
-
-* When it is completed you will have the coverage results in _$HOOT_HOME/tmp/coverage/*/index.html_. 
-There is a report for each of the main libraries.
-
-If you want to get coverage results for a specific command do the following:
-
----------------
-make clean && ./configure --with-coverage && make -j($nproc)
----------------------------
-
-* Run the command or commands you want to evaluate:
-
----------------------
-make -j($nproc) coverage
------------------------
-
-If you want a new clean coverage result the you'll need to do make clean again before you start 
-the run. It is possible to clean just the coverage data, but that'll take a little work in Makefile 
-land.
-
-**Java Code Coverage**
-
-Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura] via Maven.  
-The following will generate code coverage reports for Hootenanny Java code:
+To generate a report for all Hootenanny Core code and the Hootenanny Java Web Services code together:
 
 ----------
-make clean && ./configure --with-services --with-coverage && make -j($nproc) test && make -j($nproc) coverage
+./configure --with-rnd --with-services --with-coverage && make clean-coverage && make -j($nproc) && make -j($nproc) test-all && make -j($nproc) coverage
 -----------
 
-A separate report for each project is output to: *<project dir>/target/site/cobertura/index.html*
+The test coverage reports will be output to _$HOOT_HOME/coverage_. 
+
+*NOTES:* 
+
+* See ngageoint/hootenanny#604 for why the extra 'make' is required before running 'make coverage' when generating a report for the Hootenanny core code.
+* To get a code coverage report for *all* Hootenanny code, you *must* run 'make test-all' before running 'make coverage'
+for the Hootenanny Core code or you will get incomplete results.  The Java Web Services'make services-coverage' command doesn't actually require 'make test' to be run 
+beforehand since it is done automatically, but if you run 'make coverage' when generating coverage reporting using the --with-services configuration option, 
+you should always run 'make test' beforehand in order to not receive inaccurate reporting for the Hootenanny Core code.
+* For the Hootenanny Core code coverage reporting, although certain configuration options disable the compiling of certain code (--with-rnd, --with-services, etc.), the total lines the coverage report reports does not seem to change.  Therefore, to get a totally accurate coverage report for the Core code you need to always run with all configuration options enabled and run 'make test-all' to make sure all the code is covered.
+* See ngageoint/hootenanny#610 for why the Java web services tests will run twice when generating the Hootenanny Core and Web Services coverage reports in the same command.
 
 === General Test Writing Guidelines
 
@@ -522,4 +542,5 @@ so you are still preserving the integrity of the test.
 * Design a class so that testing of all of its members is possible.  In some cases, you may need 
 to expose members only to the tests.  e.g. Use C++ friend keyword, etc.; or in Java, Mockito may 
 help with this.
+
 

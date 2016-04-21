@@ -1,104 +1,18 @@
 #include "ChangesetDeriver.h"
 
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/io/ElementComparer.h>
 #include <hoot/core/util/GeometryUtils.h>
 
 namespace hoot
 {
 
-class ElementCompare
-{
-public:
-
-  /**
-   * Defaults to 5cm threshold
-   */
-  ElementCompare(Meters threshold = 0.05)
-  {
-    _threshold = threshold;
-  }
-
-  bool isSame(ElementPtr e1, ElementPtr e2)
-  {
-    if (e1->getElementId() != e2->getElementId() ||
-        !(e1->getTags() == e2->getTags()) ||
-        e1->getStatus() != e2->getStatus() ||
-        fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
-    {
-      return false;
-    }
-    switch (e1->getElementType().getEnum())
-    {
-    case ElementType::Node:
-      return compareNode(e1, e2);
-    case ElementType::Way:
-      return compareWay(e1, e2);
-    case ElementType::Relation:
-      return compareRelation(e1, e2);
-    default:
-      throw IllegalArgumentException("Unexpected element type.");
-    }
-  }
-
-  bool compareNode(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e)
-  {
-    shared_ptr<const Node> rn = dynamic_pointer_cast<const Node>(re);
-    shared_ptr<const Node> n = dynamic_pointer_cast<const Node>(e);
-
-    return (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) <= _threshold);
-  }
-
-  bool compareWay(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e)
-  {
-    shared_ptr<const Way> rw = dynamic_pointer_cast<const Way>(re);
-    shared_ptr<const Way> w = dynamic_pointer_cast<const Way>(e);
-
-    if (rw->getNodeIds().size() != w->getNodeIds().size())
-    {
-      return false;
-    }
-    for (size_t i = 0; i < rw->getNodeIds().size(); ++i)
-    {
-      if (rw->getNodeIds()[i] != w->getNodeIds()[i])
-      {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  bool compareRelation(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e)
-  {
-    shared_ptr<const Relation> rr = dynamic_pointer_cast<const Relation>(re);
-    shared_ptr<const Relation> r = dynamic_pointer_cast<const Relation>(e);
-
-    if (rr->getType() != r->getType() ||
-      rr->getMembers().size() != r->getMembers().size())
-    {
-      return false;
-    }
-
-    for (size_t i = 0; i < rr->getMembers().size(); i++)
-    {
-      if (rr->getMembers()[i].role != r->getMembers()[i].role ||
-          rr->getMembers()[i].getElementId() != r->getMembers()[i].getElementId())
-      {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-private:
-  Meters _threshold;
-};
-
 ChangesetDeriver::ChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to) :
   _from(from),
   _to(to)
 {
+  LOG_INFO("Changeset deriver initialization...");
+
   if (_from->getProjection()->IsGeographic() == false ||
       _to->getProjection()->IsGeographic() == false)
   {
@@ -128,7 +42,6 @@ bool ChangesetDeriver::hasMoreChanges()
   {
     _next = _nextChange();
   }
-
   return _next.e.get() != 0;
 }
 
@@ -146,18 +59,28 @@ Change ChangesetDeriver::_nextChange()
     _toE = _to->readNextElement();
   }
 
-  // if we've run out of from elements, create all the remaining elements in to
+  // if we've run out of "from" elements, create all the remaining elements in "to"
   if (!_fromE.get() && _toE.get())
   {
     result.type = Change::Create;
+    //OSM expects created elements to have version = 0
+    _toE->setVersion(0);
     result.e = _toE;
+
+    LOG_DEBUG("run out of 'from'' elements:");
+    LOG_VARD(result.toString());
+
     _toE = _to->readNextElement();
   }
-  // if we've run out of to elements, delete all the remaining elements in from
+  // if we've run out of "to" elements, delete all the remaining elements in "from"
   else if (_fromE.get() && !_toE.get())
   {
     result.type = Change::Delete;
     result.e = _fromE;
+
+    LOG_DEBUG("run out of 'to' elements:");
+    LOG_VARD(result.toString());
+
     _fromE = _from->readNextElement();
   }
   else
@@ -165,8 +88,11 @@ Change ChangesetDeriver::_nextChange()
     // while the elements are exactly the same there is nothing to do.
     while (_fromE.get() && _toE.get() &&
         _fromE->getElementId() == _toE->getElementId() &&
-        ElementCompare().isSame(_fromE, _toE))
+        ElementComparer().isSame(_fromE, _toE))
     {
+      LOG_DEBUG("skipping identical elements - 'from' element: " << _fromE->getElementId() <<
+                " 'to' element: " << _toE->getElementId());
+
       _fromE = _from->readNextElement();
       _toE = _to->readNextElement();
     }
@@ -174,36 +100,67 @@ Change ChangesetDeriver::_nextChange()
     if (!_fromE.get() && !_toE.get())
     {
       // pass
+      LOG_DEBUG("both null elements");
     }
     else if (!_fromE.get() && _toE.get())
     {
       result.type = Change::Create;
+      //OSM expects created elements to have version = 0
+      _toE->setVersion(0);
       result.e = _toE;
+
+      LOG_DEBUG("'from' element null; 'to' element not null: " << _toE->getElementId());
+      LOG_VARD(result.toString());
+
       _toE = _to->readNextElement();
     }
-    // if we've run out of to elements, delete all the remaining elements in from
+    // if we've run out of "to" elements, delete all the remaining elements in "from"
     else if (_fromE.get() && !_toE.get())
     {
       result.type = Change::Delete;
       result.e = _fromE;
+
+      LOG_DEBUG("'to' element null; 'from' element not null: " << _fromE->getElementId());
+      LOG_VARD(result.toString());
+
       _fromE = _from->readNextElement();
     }
     else if (_fromE->getElementId() == _toE->getElementId())
     {
       result.type = Change::Modify;
       result.e = _toE;
+
+      LOG_DEBUG(
+        "'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<
+        _toE->getElementId());
+      LOG_VARD(result.toString());
+
       _toE = _to->readNextElement();
     }
     else if (_fromE->getElementId() < _toE->getElementId())
     {
       result.type = Change::Delete;
       result.e = _fromE;
+
+      LOG_DEBUG(
+        "'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
+        _toE->getElementId());
+      LOG_VARD(result.toString());
+
       _fromE = _from->readNextElement();
     }
     else
     {
       result.type = Change::Create;
+      //OSM expects created elements to have version = 0
+      _toE->setVersion(0);
       result.e = _toE;
+
+      LOG_DEBUG(
+        "'from' element id: " << _fromE->getElementId() << " greater than 'to' element id: " <<
+        _toE->getElementId());
+      LOG_VARD(result.toString());
+
       _toE = _to->readNextElement();
     }
   }

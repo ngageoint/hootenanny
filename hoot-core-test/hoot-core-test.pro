@@ -161,6 +161,12 @@ SOURCES += \
     src/test/cpp/hoot/core/perty/PertyOpTest.cpp \
     src/test/cpp/hoot/core/ops/CookieCutterOpTest.cpp \
     src/test/cpp/hoot/core/visitors/RemoveElementsVisitorTest.cpp \
+    src/test/cpp/hoot/core/visitors/AddGeometryTypeVisitorTest.cpp \
+    src/test/cpp/hoot/core/visitors/TransliterateNameVisitorTest.cpp \
+    src/test/cpp/hoot/core/io/ElementSorterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmChangeWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ChangesetDeriverTest.cpp \
+    src/test/cpp/hoot/core/io/ElementComparerTest.cpp \
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \

@@ -77,6 +77,8 @@ public:
 
   long getVersion() const { return _version; }
 
+  void setVersion(long version) { _version = version; }
+
   unsigned int getTimestamp() const { return _timestamp; }
 
   QString getUser() const { return _user; }

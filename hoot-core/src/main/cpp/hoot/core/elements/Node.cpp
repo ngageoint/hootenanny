@@ -43,10 +43,6 @@ using namespace geos::geom;
 namespace hoot
 {
 
-Node::Node(const Node& from) : Element(from.getStatus()), _nodeData(from._nodeData)
-{
-}
-
 Node::Node(Status s, long id, const Coordinate& c, Meters circularError) :
 Element(s)
 {
@@ -60,6 +56,12 @@ Element(s)
 {
   _nodeData.init(id, x, y, changeset, version, timestamp, user, uid);
   _getElementData().setCircularError(circularError);
+}
+
+Node::Node(const Node& from) :
+Element(from.getStatus()),
+_nodeData(from._nodeData)
+{
 }
 
 void Node::clear()

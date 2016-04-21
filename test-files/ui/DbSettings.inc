@@ -1,1 +1,1 @@
-DB_URL=postgresql://hoot:hoottest@localhost:5432/hoot
+DB_URL=hootapidb://hoot:hoottest@localhost:5432/hoot

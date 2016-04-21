@@ -11,6 +11,8 @@ ElementSorter::ElementSorter(ConstOsmMapPtr source) :
   _wayIndex(0),
   _relationIndex(0)
 {
+  LOG_INFO("Sorting element by element type...");
+
   _source = source;
 
   for (NodeMap::const_iterator it = _source->getNodeMap().begin();
@@ -42,8 +44,8 @@ boost::shared_ptr<OGRSpatialReference> ElementSorter::getProjection() const
 bool ElementSorter::hasMoreElements()
 {
   return _nodeIndex != _nodeIds.size() ||
-      _wayIndex != _wayIds.size() ||
-      _relationIndex != _relationIds.size();
+    _wayIndex != _wayIds.size() ||
+    _relationIndex != _relationIds.size();
 }
 
 ElementPtr ElementSorter::readNextElement()

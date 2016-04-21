@@ -37,10 +37,11 @@ ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid)
 
 RelationData::RelationData(const RelationData& rd) :
 ElementData(rd.getId(), rd.getTags(), rd.getCircularError(), rd._changeset, rd._version,
-            rd._timestamp)
+            rd._timestamp),
+_type(rd._type),
+_members(rd._members)
 {
-  _members = rd._members;
-  _type = rd._type;
+
 }
 
 void RelationData::addElement(const QString& role, ElementId eid)

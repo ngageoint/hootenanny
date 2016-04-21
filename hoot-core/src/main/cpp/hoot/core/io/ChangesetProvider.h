@@ -10,26 +10,63 @@
 namespace hoot
 {
 
+/**
+ * Represents an individual OSM change in a changeset
+ */
 class Change
 {
+
 public:
+
+  /**
+   * The allowable changeset types
+   */
   enum ChangeType
   {
-    Unknown,
-    Modify,
-    Delete,
-    Create
+    Create = 0,
+    Modify = 1,
+    Delete = 2,
+    Unknown = 3
   };
 
-  ElementPtr e;
+   Change() {}
+
+  static QString changeTypeToString(const ChangeType changeType)
+  {
+    switch (changeType)
+    {
+      case Create:
+        return "Create";
+      case Modify:
+        return "Modify";
+      case Delete:
+        return "Delete";
+      case Unknown:
+        return "Unknown";
+    }
+    throw HootException("Invalid change type.");
+  }
+
+  QString toString() const
+  {
+    QString str =
+      changeTypeToString(type) + ": " + e->getElementId().toString();
+    //str += ->toString();
+    return str;
+  }
+
+  ConstElementPtr e;
   ChangeType type;
 
-  Change() : type(Unknown) {}
 };
 
 
+/**
+ * Interface for classes implementing OSM changeset capabilities
+ */
 class ChangeSetProvider
 {
+
 public:
 
   /**
@@ -53,14 +90,19 @@ public:
   virtual void close() = 0;
 
   /**
+   * Determines if the changeset has any unparsed changes
    *
+   * @return true if the changeset has more changes; false otherwise
    */
   virtual bool hasMoreChanges() = 0;
 
   /**
+   * Returns the next change in the changeset
    *
+   * @return a changeset change
    */
   virtual Change readNextChange() = 0;
+
 };
 
 typedef shared_ptr<ChangeSetProvider> ChangeSetProviderPtr;

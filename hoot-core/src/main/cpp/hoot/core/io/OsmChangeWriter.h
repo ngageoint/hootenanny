@@ -15,7 +15,9 @@ namespace hoot
 
 class OsmChangeWriter
 {
+
 public:
+
   OsmChangeWriter();
 
   QString writeToString(ChangeSetProviderPtr cs);
@@ -29,7 +31,9 @@ public:
   void writeRelation(QXmlStreamWriter& writer, ConstRelationPtr n);
 
 private:
+
   int _precision;
+
 };
 
 }

@@ -80,6 +80,11 @@ public:
   shared_ptr<QSqlQuery> selectBoundedElements(const long elementId, const ElementType& elementType, const QString& bbox);
 
   /**
+   * Returns a results iterator to a node for a given node id.
+   */
+  shared_ptr<QSqlQuery> selectNodeById(const long elementId);
+
+  /**
     * Deletes data in the Osm Api db
     */
   void deleteData();
@@ -98,6 +103,7 @@ private:
   shared_ptr<QSqlQuery> _selectTagsForWay;
   shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
+  shared_ptr<QSqlQuery> _selectNodeById;
 
   void _resetQueries();
 
