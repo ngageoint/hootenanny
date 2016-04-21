@@ -556,7 +556,9 @@ void OsmApiDb::execSql(const QString sql)
   {
     throw HootException(
       "Error executing custom SQL query against OSM API database:\n" +
-      _customQuery->lastError().text());
+      _customQuery->lastError().text() + "\n" + _customQuery->lastError().driverText() + "\n" +
+      _customQuery->lastError().databaseText() + "\n" + _customQuery->lastError().type() + "\n" +
+      _customQuery->lastError().number());
   }
 
   LOG_INFO("Custom SQL query execute finished against OSM API database.");
