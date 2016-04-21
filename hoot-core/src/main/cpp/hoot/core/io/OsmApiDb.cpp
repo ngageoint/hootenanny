@@ -42,6 +42,8 @@
 #include <QVariant>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlRecord>
+#include <QFile>
+#include <QTextStream>
 
 // Standard
 #include <math.h>
@@ -173,7 +175,6 @@ void OsmApiDb::_resetQueries()
   _selectNodeById.reset();
   _selectUserByEmail.reset();
   _insertUser.reset();
-  _customQuery.reset();
   for (QHash<QString, shared_ptr<QSqlQuery> >::iterator itr = _seqQueries.begin();
        itr != _seqQueries.end(); ++itr)
   {
@@ -545,21 +546,68 @@ long OsmApiDb::getNextId(const QString tableName)
   return result;
 }
 
-void OsmApiDb::execSql(const QString sql)
+void OsmApiDb::writeChangeset(const QString sql, const QUrl targetDatabaseUrl)
 {
-  LOG_INFO("Executing custom SQL query against OSM API database...");
-  LOG_VARD(sql);
+  LOG_INFO("Executing changeset SQL queries against OSM API database...");
 
-  _customQuery.reset(new QSqlQuery(_db));
-  _customQuery->prepare(sql);
-  if (!_customQuery->exec())
+  QString changesetInsertStatement;
+  QString elementSqlStatements = "";
+
+  const QStringList sqlParts = sql.split(";");
+  for (int i = 0; i < sqlParts.size(); i++)
   {
-    throw HootException(
-      "Error executing custom SQL query against OSM API database:\n" +
-      _customQuery->lastError().text());
+    const QString sqlStatement = sqlParts[i];
+    if (i == 0)
+    {
+      if (!sqlStatement.toUpper().startsWith("INSERT INTO CHANGESETS"))
+      {
+        throw HootException(
+          "The first SQL statement in a changeset SQL file must create a changeset.");
+      }
+      else
+      {
+        changesetInsertStatement = sqlStatement + ";";
+      }
+    }
+    else
+    {
+      elementSqlStatements += sqlStatement + ";";
+    }
   }
 
-  LOG_INFO("Custom SQL query execute finished against OSM API database.");
+  if (elementSqlStatements.trimmed().isEmpty())
+  {
+    throw HootException("No element SQL statements in sql file");
+  }
+
+  open(targetDatabaseUrl);
+  transaction();
+
+  _execNoPrepare(changesetInsertStatement);
+  _execNoPrepare(elementSqlStatements);
+
+  commit();
+  close();
+
+  LOG_INFO("Changeset SQL queries execute finished against OSM API database.");
+}
+
+void OsmApiDb::writeChangeset(QFile& changesetSqlFile, const QUrl targetDatabaseUrl)
+{
+  if (!changesetSqlFile.fileName().endsWith(".osc.sql"))
+  {
+    throw HootException("Invalid file type: " + changesetSqlFile.fileName());
+  }
+
+  if (changesetSqlFile.open(QIODevice::ReadOnly))
+  {
+    writeChangeset(changesetSqlFile.readAll(), targetDatabaseUrl);
+    changesetSqlFile.close();
+  }
+  else
+  {
+    throw HootException("Unable to open changeset file: " + changesetSqlFile.fileName());
+  }
 }
 
 }

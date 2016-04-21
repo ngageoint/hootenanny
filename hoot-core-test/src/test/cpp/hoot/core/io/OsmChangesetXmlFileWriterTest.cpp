@@ -37,6 +37,7 @@ using namespace boost;
 #include <QDebug>
 #include <QFile>
 #include <QFileInfo>
+#include <QDir>
 
 #include "../TestUtils.h"
 
@@ -112,6 +113,7 @@ public:
   void runTest()
   {
     shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
+    QDir().mkdir("test-output/io/");
     OsmChangesetXmlFileWriter().write(
       "test-output/io/OsmChangesetXmlFileWriterTest.osc", changesetProvider);
 

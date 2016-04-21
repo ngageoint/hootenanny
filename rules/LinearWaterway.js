@@ -5,6 +5,7 @@ var MISS_OVERLAP_THRESHOLD = 0.15;
 
 exports.description = "Linear Waterway";
 exports.experimental = false;
+exports.baseFeatureType = "Waterway";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("waterway.match.threshold"));

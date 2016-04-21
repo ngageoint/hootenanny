@@ -35,6 +35,11 @@
 #include <hoot/core/io/OsmApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
 
+// Qt
+#include <QFile>
+#include <QTextStream>
+#include <QDir>
+
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
@@ -352,7 +357,7 @@ public:
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
     execOsmSqlTestScript("users.sql");
-    execOsmSqlTestScript("changesets.sql");
+    //execOsmSqlTestScript("changesets.sql");
 
     shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());
@@ -376,13 +381,15 @@ public:
     const long nextNodeId = database.getNextId("current_nodes");
     LOG_VARD(nextNodeId);
 
-    database.transaction();
-    const QString sql =
+    QString sql =
+      QString("INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (%1, 1, now(), now());\n")
+        .arg(changesetId);
+    sql +=
       QString("INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile,  version) VALUES (%1, 0, 0, %2, true, now(), 3221225472, 1);")
         .arg(nextNodeId)
         .arg(changesetId);
-    database.execSql(sql);
-    database.commit();
+
+    OsmApiDb().writeChangeset(sql, ServicesDbTestUtils::getOsmApiDbUrl());
 
     nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());

@@ -1,6 +1,6 @@
 INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (1, -1, now(), now());
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile,  version) VALUES (1, 0, 0, 1, true, now(), 3221225472, 1);
-INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile,  version) VALUES (1, 0, 0, 1, true, now(), 3221225472, 1);
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 0, 0, 1, true, now(), 3221225472, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 0, 0, 1, true, now(), 3221225472, 1);
 UPDATE relations SET visible=false WHERE relation_id=1;
 UPDATE current_relations SET visible=false WHERE id=1;
 UPDATE ways SET way_id=3, changeset_id=1, visible=true, "timestamp"=now(), version=version+1 WHERE version=0;
