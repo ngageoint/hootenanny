@@ -22,7 +22,7 @@ ln -s ../../vagrant/VagrantfileLocal.ubuntu1404 VagrantfileLocal
 ( [ -e $WORDS_HOME/words1.sqlite ] &&  cp $WORDS_HOME/words1.sqlite conf )
 
 # Grab the latest version of the software that the VagrantProvision script will try to download
-cp -R ../software.ubuntu1404 software
+cp -R ../../software.ubuntu1404 software
 
 # Error out on any warnings. This only applies to Ubuntu 14.04, not CentOS (yet)
 # See: https://github.com/ngageoint/hootenanny/issues/348
