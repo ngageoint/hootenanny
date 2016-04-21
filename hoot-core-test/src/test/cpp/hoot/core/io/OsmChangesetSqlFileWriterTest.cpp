@@ -38,6 +38,7 @@ using namespace boost;
 #include <QDebug>
 #include <QFile>
 #include <QFileInfo>
+#include <QDir>
 
 #include "../TestUtils.h"
 
@@ -112,6 +113,7 @@ public:
 
   void runBasicTest()
   {
+    QDir().mkdir("test-output/io/");
     shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
     //enable internal ID management on the writer so that ID's start at the same place every time
     //to keep the test output consistent

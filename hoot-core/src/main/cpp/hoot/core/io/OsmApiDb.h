@@ -27,7 +27,12 @@
 #ifndef OSMAPIDB_H
 #define OSMAPIDB_H
 
+// Hoot
 #include <hoot/core/io/ApiDb.h>
+
+// Qt
+#include <QFile>
+
 
 namespace hoot
 {
@@ -104,11 +109,20 @@ public:
   long getNextId(const QString tableName);
 
   /**
-   * Executes SQL against the OSM API database.
+   * Executes changeset SQL against an OSM API database.
+   *
+   * @param changesetSqlFile The file containing the change SQL to be executed.
+   * @param targetDatabaseUrl The OSM API database to write the changeset to.
+   */
+  void writeChangeset(QFile& changesetSqlFile, const QUrl targetDatabaseUrl);
+
+  /**
+   * xecutes changeset SQL against an OSM API database.
    *
    * @param sql The SQL to be executed.
+   * @param targetDatabaseUrl The OSM API database to write the changeset to.
    */
-  void execSql(const QString sql);
+  void writeChangeset(const QString sql, const QUrl targetDatabaseUrl);
 
 private:
 
@@ -119,7 +133,6 @@ private:
   shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
   shared_ptr<QSqlQuery> _selectNodeById;
-  shared_ptr<QSqlQuery> _customQuery;
 
   QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
 

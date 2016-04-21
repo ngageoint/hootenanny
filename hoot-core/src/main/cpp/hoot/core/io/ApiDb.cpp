@@ -373,16 +373,13 @@ QSqlQuery ApiDb::_execNoPrepare(const QString& sql) const
   // inserting strings in this fashion is safe b/c it is private and we closely control the table
   // names.
   QSqlQuery q(_db);
-
-  //LOG_VARD(sql);
+  LOG_VARD(sql);
 
   if (q.exec(sql) == false)
   {
-    QString error = QString("Error executing query: %1 (%2)").arg(q.lastError().text()).
-        arg(sql);
-    LOG_WARN(error);
-    throw HootException(error);
+    throw HootException(QString("Error executing query: %1 (%2)").arg(q.lastError().text()).arg(sql));
   }
+  LOG_VARD(q.numRowsAffected());
 
   return q;
 }

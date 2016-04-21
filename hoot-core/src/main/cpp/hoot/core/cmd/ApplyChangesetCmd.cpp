@@ -61,14 +61,8 @@ public:
     }
     else if (args[0].endsWith(".osc.sql"))
     {
-      QFile inputSqlFile(args[0]);
-      inputSqlFile.open(QIODevice::ReadOnly);
-      OsmApiDb database;
-      database.open(QUrl(args[1]));
-      database.transaction();
-      database.execSql(inputSqlFile.readAll());
-      database.commit();
-      database.close();
+      QFile changesetSqlFile(args[0]);
+      OsmApiDb().writeChangeset(changesetSqlFile, QUrl(args[1]));
     }
     else
     {
