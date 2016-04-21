@@ -182,7 +182,7 @@ void OsmChangesetSqlFileWriter::_create(const ConstNodePtr node)
 
   QString values =
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
-      "tile,  version) VALUES (%1, %2, %3, %4, true, now(), %5, 1);\n")
+      "tile, version) VALUES (%1, %2, %3, %4, true, now(), %5, 1);\n")
       .arg(id)
       .arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7))
       .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
