@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 source ~/.profile
 #cd $HOOT_HOME
 cd hoot
@@ -16,8 +18,8 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     cp LocalConfig.pri.orig LocalConfig.pri
     sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri
     sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri
-
 fi
+
 echo "Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
 make -s clean && make -sj$(nproc)
