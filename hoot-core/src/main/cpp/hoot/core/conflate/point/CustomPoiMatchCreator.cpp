@@ -180,7 +180,7 @@ vector<MatchCreator::Description> CustomPoiMatchCreator::getAllCreators() const
 {
   vector<Description> result;
 
-  result.push_back(Description(className(), "Custom POI Match Creator", true));
+  result.push_back(Description(className(), "Custom POI Match Creator", MatchCreator::POI, true));
 
   return result;
 }
