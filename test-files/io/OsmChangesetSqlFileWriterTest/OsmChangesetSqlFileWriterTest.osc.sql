@@ -7,9 +7,9 @@ UPDATE ways SET way_id=3, changeset_id=1, visible=true, "timestamp"=now(), versi
 UPDATE current_ways SET id=3, changeset_id=1, visible=true, "timestamp"=now(), version=version+1 WHERE version=0;
 DELETE FROM current_way_nodes WHERE way_id = 3;
 DELETE FROM way_nodes WHERE way_id = 3;
-INSERT INTO way_nodes ((way_id, node_id, version sequence_id) VALUES (3, 1, 1, 1);
+INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (3, 1, 1, 1);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (3, 1, 1);
-INSERT INTO way_nodes ((way_id, node_id, version sequence_id) VALUES (3, 2, 1, 2);
+INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (3, 2, 1, 2);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (3, 2, 2);
 DELETE FROM current_way_tags WHERE current_way_tags_id = 3;
 DELETE FROM way_tags WHERE way_tags_id = 3;

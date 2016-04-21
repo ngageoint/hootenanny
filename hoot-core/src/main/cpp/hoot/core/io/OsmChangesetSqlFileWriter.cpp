@@ -324,11 +324,11 @@ void OsmChangesetSqlFileWriter::_createWayNodes(const long wayId, const std::vec
     const long nodeId = nodeIds.at(i);
 
     QString values =
-      QString("(way_id, node_id, version sequence_id) VALUES (%1, %2, 1, %3);\n")
+      QString("(way_id, node_id, version, sequence_id) VALUES (%1, %2, 1, %3);\n")
         .arg(wayId)
         .arg(nodeId)
         .arg(i + 1);
-    _outputSql.write(("INSERT INTO way_nodes (" + values).toUtf8());
+    _outputSql.write(("INSERT INTO way_nodes " + values).toUtf8());
 
     values =
       QString("(way_id, node_id, sequence_id) VALUES (%1, %2, %3);\n")
