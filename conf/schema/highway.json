@@ -69,6 +69,14 @@
         }
     },
     {
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "highway",
+        "name": "ford=yes",
+        "objectType": "tag"
+    },
+    {
         "categories": [
             "poi",
             "hgispoi"
