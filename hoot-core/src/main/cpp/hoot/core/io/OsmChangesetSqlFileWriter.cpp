@@ -12,12 +12,8 @@
 namespace hoot
 {
 
-OsmChangesetSqlFileWriter::OsmChangesetSqlFileWriter(QUrl url, bool useInternalIds) :
-_useInternalIds(useInternalIds),
-_changesetId(0),
-_nodeId(0),
-_wayId(0),
-_relationId(0)
+OsmChangesetSqlFileWriter::OsmChangesetSqlFileWriter(QUrl url) :
+_changesetId(0)
 {
   _db.open(url);
 }
@@ -62,18 +58,12 @@ void OsmChangesetSqlFileWriter::write(const QString path, const ChangeSetProvide
   }
 
   _outputSql.close();
+  _db.close();
 }
 
 void OsmChangesetSqlFileWriter::_createChangeSet()
 {
-  if (!_useInternalIds)
-  {
-    _changesetId = _db.getNextId("changesets");
-  }
-  else
-  {
-    _changesetId++;
-  }
+  _changesetId = _db.getNextId("changesets");
   _outputSql.write(
     QString("INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES "
             "(%1, %2, now(), now());\n")
@@ -87,35 +77,11 @@ long OsmChangesetSqlFileWriter::_getNextId(const ElementType type)
   switch (type.getEnum())
   {
     case ElementType::Node:
-      if (!_useInternalIds)
-      {
-        _nodeId = _db.getNextId("current_" + type.toString().toLower() + "s");
-      }
-      else
-      {
-        _nodeId++;
-      }
-      return _nodeId;
+      return _db.getNextId("current_" + type.toString().toLower() + "s");
     case ElementType::Way:
-      if (!_useInternalIds)
-      {
-        _wayId = _db.getNextId("current_" + type.toString().toLower() + "s");
-      }
-      else
-      {
-        _wayId++;
-      }
-      return _wayId;
+      return _db.getNextId("current_" + type.toString().toLower() + "s");
     case ElementType::Relation:
-      if (!_useInternalIds)
-      {
-        _relationId = _db.getNextId("current_" + type.toString().toLower() + "s");
-      }
-      else
-      {
-        _relationId++;
-      }
-      return _relationId;
+      return _db.getNextId("current_" + type.toString().toLower() + "s");
     default:
       throw HootException("Unknown element type");
   }

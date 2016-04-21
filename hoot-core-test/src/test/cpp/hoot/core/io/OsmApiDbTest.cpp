@@ -89,28 +89,6 @@ public:
     }
   }
 
-  void execOsmSqlTestScript(const QString scriptName)
-  {
-    //example: osmapidb://hoot:hoottest@localhost:5432/osmapi_test
-    QString dbUrlString = ServicesDbTestUtils::getOsmApiDbUrl().toString();
-    QStringList dbUrlParts = dbUrlString.split("/");
-    QString dbName = dbUrlParts[dbUrlParts.size()-1];
-    QStringList userParts = dbUrlParts[dbUrlParts.size()-2].split(":");
-    QString dbUser = userParts[0];
-    QString dbPassword = userParts[1].split("@")[0];
-    QString dbHost = userParts[1].split("@")[1];
-    QString dbPort = userParts[2];
-    const QString auth = "-h "+dbHost+" -p "+dbPort+" -U "+dbUser;
-
-    const QString cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
-      psql "+auth+" -v ON_ERROR_STOP=1 -f ${HOOT_HOME}/test-files/servicesdb/"+scriptName+" > /dev/null 2>&1";
-    LOG_VARD(cmd);
-    if (std::system(cmd.toStdString().c_str()) != 0)
-    {
-      throw HootException("Failed postgres command.  Exiting test.");
-    }
-  }
-
   void runOpenTest()
   {
     OsmApiDb db;
@@ -126,10 +104,10 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    execOsmSqlTestScript("users.sql");
-    execOsmSqlTestScript("changesets.sql");
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql");
 
-    execOsmSqlTestScript("nodes.sql");
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("nodes.sql");
 
     /////////////////////////////////////
     // Need to get the data in the format exactly like the return of the Services Db now so we don't need to
@@ -224,7 +202,7 @@ public:
     nodeIds.push_back(nodeId1);
     nodeIds.push_back(nodeId2);
 
-    execOsmSqlTestScript("ways.sql");
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("ways.sql");
 
     shared_ptr<QSqlQuery> wayResultIterator = database.selectElements(ElementType::Way);
 
@@ -291,7 +269,7 @@ public:
     long relationId = 1;
     ids.append(relationId);
 
-    execOsmSqlTestScript("relations.sql");
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("relations.sql");
 
     shared_ptr<QSqlQuery> relationResultIterator = database.selectElements(ElementType::Relation);
 
@@ -356,14 +334,14 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    execOsmSqlTestScript("users.sql");
-    execOsmSqlTestScript("changesets.sql");
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql");
 
     shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());
     CPPUNIT_ASSERT_EQUAL(0, nodesItr->size());
 
-    execOsmSqlTestScript("nodes.sql");
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("nodes.sql");
 
     nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());
@@ -403,8 +381,6 @@ public:
     LOG_VARD(nodesCountAfter);
 
     CPPUNIT_ASSERT(nodesCountAfter == (nodesCountBefore + 1));
-
-    database.deleteData();
   }
 
 };

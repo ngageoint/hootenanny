@@ -80,8 +80,7 @@ public:
           QString("SQL changeset writing requires a target database URL for configuration purposes."));
       }
 
-      OsmChangesetSqlFileWriter(
-        QUrl(args[3]), ConfigOptions().getChangesetSqlUseInternalIds())
+      OsmChangesetSqlFileWriter(QUrl(args[3]))
         .write(args[2], delta);
     }
     else

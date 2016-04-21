@@ -111,18 +111,31 @@ class OsmChangesetSqlFileWriterTest : public CppUnit::TestFixture
 
 public:
 
+  OsmApiDb database;
+
+  void tearDown()
+  {
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    database.deleteData();
+    database.close();
+  }
+
   void runBasicTest()
   {
-    QDir().mkdir("test-output/io/");
+    QDir().mkdir("test-output/io/OsmChangesetSqlFileWriterTest");
     shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
-    //enable internal ID management on the writer so that ID's start at the same place every time
-    //to keep the test output consistent
-    OsmChangesetSqlFileWriter changesetWriter(ServicesDbTestUtils::getOsmApiDbUrl(), true);
+
+    //clear out the db so we get consistent next id results
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    database.deleteData();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+
+    OsmChangesetSqlFileWriter changesetWriter(ServicesDbTestUtils::getOsmApiDbUrl());
     changesetWriter.write(
-      "test-output/io/OsmChangesetSqlFileWriterTest.osc.sql", changesetProvider);
+      "test-output/io/OsmChangesetSqlFileWriterTest/changeset.osc.sql", changesetProvider);
     HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/OsmChangesetSqlFileWriterTest/OsmChangesetSqlFileWriterTest.osc.sql"),
-      TestUtils::readFile("test-output/io/OsmChangesetSqlFileWriterTest.osc.sql"));
+      TestUtils::readFile("test-files/io/OsmChangesetSqlFileWriterTest/changeset.osc.sql"),
+      TestUtils::readFile("test-output/io/OsmChangesetSqlFileWriterTest/changeset.osc.sql"));
   }
 };
 

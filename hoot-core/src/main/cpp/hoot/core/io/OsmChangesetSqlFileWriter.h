@@ -31,7 +31,7 @@ class OsmChangesetSqlFileWriter
 
 public:
 
-  OsmChangesetSqlFileWriter(QUrl url, bool useInternalIds = false);
+  OsmChangesetSqlFileWriter(QUrl url);
 
   /**
    * Write a SQL changeset to the specified output path
@@ -70,9 +70,6 @@ private:
 
   void _deleteAll(const QString tableName, const QString idFieldName, const long id);
 
-  //This is for testing only, so that we don't have to rely on the database for our starting element
-  //ID's and can, therefore, have repeatable test output.
-  bool _useInternalIds;
   long _changesetId;
   long _nodeId;
   long _wayId;

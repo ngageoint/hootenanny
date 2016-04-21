@@ -126,13 +126,6 @@ Training a model is typically done during research. While all the tools are avai
 
 The maximum allowed size of an OSM changeset written to the OSM API database.
 
-=== changeset.sql.use.internal.ids
-
-* Data Type: bool
-* Default Value: `false`
-
-This forces the SQL changeset writer to ignore element ID sequences in the target OSM API database.  Enable for testing purposes only.
-
 === changeset.user.id
 
 * Data Type: double
