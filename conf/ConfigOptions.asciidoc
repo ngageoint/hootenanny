@@ -515,6 +515,7 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+
 === highway.matcher.heading.delta
 
 * Data Type: double
@@ -529,6 +530,17 @@ The distance around a point on a highway to look when calculating the heading.  
 * Default Value: `${way.matcher.max.angle}`
 
 Sets that maximum angle that is still considered a highway match. Units in degrees.
+
+=== highway.max.enum.diff
+
+* Data Type: double
+* Default Value: `0.6`
+
+If two highways have significantly different enumerated types then they will not be considered
+for match. For example:
+
+* "highway=primary" vs "highway=secondary" has a diff of 0.2.
+* "highway=primary" vs "highway=footway" has a diff of 0.67.
 
 === highway.miss.threshold
 
