@@ -87,29 +87,29 @@ public:
     BuildingOutlineRemoveOp buildingOutlineRemoveOp;
     className = buildingOutlineRemoveOp.getClassName();
     HOOT_STR_EQUALS("hoot::BuildingOutlineRemoveOp", className);
-    buildingOutlineRemoveOp.readObject(dataStream);
     buildingOutlineRemoveOp.writeObject(dataStream);
+    buildingOutlineRemoveOp.readObject(dataStream);
 
     // BuildingOutlineUpdateOp
     BuildingOutlineUpdateOp buildingOutlineUpdateOp;
     className = buildingOutlineUpdateOp.getClassName();
     HOOT_STR_EQUALS("hoot::BuildingOutlineUpdateOp", className);
-    buildingOutlineUpdateOp.readObject(dataStream);
     buildingOutlineUpdateOp.writeObject(dataStream);
+    buildingOutlineUpdateOp.readObject(dataStream);
 
     // BuildingPartMergeOp
     BuildingPartMergeOp buildingPartMergeOp;
     className = buildingPartMergeOp.getClassName();
     HOOT_STR_EQUALS("hoot::BuildingPartMergeOp", className);
-    buildingPartMergeOp.readObject(dataStream);
     buildingPartMergeOp.writeObject(dataStream);
+    buildingPartMergeOp.readObject(dataStream);
 
     // RemoveDuplicateReviewsOp
     RemoveDuplicateReviewsOp removeDuplicateReviewsOp;
     className = removeDuplicateReviewsOp.getClassName();
     HOOT_STR_EQUALS("hoot::RemoveDuplicateReviewsOp", className);
-    removeDuplicateReviewsOp.readObject(dataStream);
     removeDuplicateReviewsOp.writeObject(dataStream);
+    removeDuplicateReviewsOp.readObject(dataStream);
 
     // RemoveReviewsByEidOp
     RemoveReviewsByEidOp removeReviewsByEidOp;
@@ -120,27 +120,30 @@ public:
     ReprojectToGeographicOp reprojectToGeographicOp;
     className = reprojectToGeographicOp.getClassName();
     HOOT_STR_EQUALS("hoot::ReprojectToGeographicOp", className);
-    reprojectToGeographicOp.readObject(dataStream);
     reprojectToGeographicOp.writeObject(dataStream);
+    reprojectToGeographicOp.readObject(dataStream);
 
     // ReprojectToPlanarOp
     ReprojectToPlanarOp reprojectToPlanarOp;
     className = reprojectToPlanarOp.getClassName();
     HOOT_STR_EQUALS("hoot::ReprojectToPlanarOp", className);
-    reprojectToPlanarOp.readObject(dataStream);
     reprojectToPlanarOp.writeObject(dataStream);
+    reprojectToPlanarOp.readObject(dataStream);
 
     // SuperfluousNodeRemover
     SuperfluousNodeRemover superfluousNodeRemover;
     className = superfluousNodeRemover.getClassName();
     HOOT_STR_EQUALS("hoot::SuperfluousNodeRemover", className);
+    superfluousNodeRemover.writeObject(dataStream);
+    superfluousNodeRemover.readObject(dataStream);
+
 
     // WaySplitterOp
     WaySplitterOp waySplitterOp;
     className = waySplitterOp.getClassName();
     HOOT_STR_EQUALS("hoot::WaySplitterOp", className);
-    waySplitterOp.readObject(dataStream);
     waySplitterOp.writeObject(dataStream);
+    waySplitterOp.readObject(dataStream);
   }
 
 };
