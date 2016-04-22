@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,50 +24,57 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef PARENTFIRSTVISITOROP_H
-#define PARENTFIRSTVISITOROP_H
 
-#include "OsmMapOperation.h"
+// Hoot
+#include <hoot/core/Factory.h>
+#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/io/OsmApiDb.h>
 
-// hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/Element.h>
+// Qt
+#include <QFile>
 
 namespace hoot
 {
 
-/**
- * Visit the elements in a map where we visit the parents first and then eventually move on to the
- * children. This guarantees that elements will be visited in the following order:
- * - relations with no parents
- * - relations that have already had their parents visited
- * - ways
- * - nodes
- *
- * All elements will be visited exactly once. This method assume that there are no loops in relation
- * references.
- *
- * ### NOTE THIS IS COMPLETELY UNTESTED ###
- */
-class ParentFirstVisitorOp : public OsmMapOperation
+class ApplyChangesetCmd : public BaseCommand
 {
 public:
-  static string className() { return "hoot::ParentFirstVisitorOp"; }
 
-  ParentFirstVisitorOp(shared_ptr<ElementVisitor> v);
+  static string className() { return "hoot::ApplyChangesetCmd"; }
 
-  virtual void apply(shared_ptr<OsmMap> &map);
+  ApplyChangesetCmd() { }
 
-private:
-  shared_ptr<OsmMap> _map;
-  shared_ptr<ElementVisitor> _visitor;
-  set<ElementId> _visited;
+  virtual QString getName() const { return "apply-changeset"; }
 
-  void _clearCache();
+  virtual int runSimple(QStringList args)
+  {
+    if (args.size() != 2)
+    {
+      cout << getHelp() << endl << endl;
+      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+    }
 
-  void _visit(shared_ptr<Element> e);
+    if (args[0].endsWith(".osc"))
+    {
+      throw HootException(
+        "XML changeset file writing is not supported by the apply-changeset command.");
+    }
+    else if (args[0].endsWith(".osc.sql"))
+    {
+      QFile changesetSqlFile(args[0]);
+      OsmApiDb().writeChangeset(changesetSqlFile, QUrl(args[1]));
+    }
+    else
+    {
+      throw HootException("Invalid source file format: " + args[0]);
+    }
+
+    return 0;
+  }
+
 };
+
+HOOT_FACTORY_REGISTER(Command, ApplyChangesetCmd)
 
 }
 
-#endif // PARENTFIRSTVISITOROP_H

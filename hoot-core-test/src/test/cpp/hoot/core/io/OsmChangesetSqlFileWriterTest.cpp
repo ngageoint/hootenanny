@@ -28,7 +28,8 @@
 // Hoot
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/io/OsmChangeWriter.h>
+#include <hoot/core/io/OsmChangesetSqlFileWriter.h>
+#include "ServicesDbTestUtils.h"
 
 // Boost
 using namespace boost;
@@ -37,13 +38,14 @@ using namespace boost;
 #include <QDebug>
 #include <QFile>
 #include <QFileInfo>
+#include <QDir>
 
 #include "../TestUtils.h"
 
 namespace hoot
 {
 
-//dummy implementation for testing the OsmChangeWriter
+//dummy implementation for testing
 class TestChangesetProvider : public ChangeSetProvider
 {
 
@@ -101,32 +103,42 @@ private:
 
 };
 
-/**
- * Not doing any tricky invalid input changeset testing here, as the ChangesetProvider should
- * handle that.
- */
-class OsmChangeWriterTest : public CppUnit::TestFixture
+class OsmChangesetSqlFileWriterTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(OsmChangeWriterTest);
-    CPPUNIT_TEST(runTest);
+    CPPUNIT_TEST_SUITE(OsmChangesetSqlFileWriterTest);
+    CPPUNIT_TEST(runBasicTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runTest()
-  {
-    shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
-    OsmChangeWriter().write("test-output/io/OsmChangeWriterTest.osc", changesetProvider);
+  OsmApiDb database;
 
+  void tearDown()
+  {
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    database.deleteData();
+    database.close();
+  }
+
+  void runBasicTest()
+  {
+    QDir().mkdir("test-output/io/OsmChangesetSqlFileWriterTest");
+    shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
+
+    //clear out the db so we get consistent next id results
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    database.deleteData();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+
+    OsmChangesetSqlFileWriter changesetWriter(ServicesDbTestUtils::getOsmApiDbUrl());
+    changesetWriter.write(
+      "test-output/io/OsmChangesetSqlFileWriterTest/changeset.osc.sql", changesetProvider);
     HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/OsmChangeWriterTest/OsmChangeWriterTest.osc"),
-      TestUtils::readFile("test-output/io/OsmChangeWriterTest.osc"));
+      TestUtils::readFile("test-files/io/OsmChangesetSqlFileWriterTest/changeset.osc.sql"),
+      TestUtils::readFile("test-output/io/OsmChangesetSqlFileWriterTest/changeset.osc.sql"));
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangeWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangesetSqlFileWriterTest, "quick");
 
 }
-
-
-

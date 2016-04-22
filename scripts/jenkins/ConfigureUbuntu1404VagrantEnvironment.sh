@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+# * Assumes the parent directory is the workspace. E.g.
+#   * .../[jenkins workspaces]/[this project workspace]/hootenanny
 # * Configure LocalConfig.pri for tests
 # * Destroy vagrant instance if necessary
 # * Build hoot with most things enabled
@@ -10,6 +12,10 @@ set -x
 cd $HOOT_HOME
 
 scripts/jenkins/VeryClean.sh
+
+# Maintain vagrant state in the parent directory so very clean will still work.
+mkdir -p ../vagrant-hootenanny
+ln -s ../vagrant-hootenanny .vagrant
 
 # Update hoot-ui
 git submodule update --init

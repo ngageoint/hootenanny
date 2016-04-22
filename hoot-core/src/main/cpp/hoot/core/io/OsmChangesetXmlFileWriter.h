@@ -1,11 +1,10 @@
-#ifndef OSMCHANGEWRITER_H
-#define OSMCHANGEWRITER_H
+#ifndef OSMCHANGESETXMLFILEWRITER_H
+#define OSMCHANGESETXMLFILEWRITER_H
 
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/ElementType.h>
 
 // Qt
 class QXmlStreamWriter;
@@ -13,12 +12,19 @@ class QXmlStreamWriter;
 namespace hoot
 {
 
-class OsmChangeWriter
+/**
+ * Writes an OSM changeset to an XML file.
+ *
+ * Before writing this changeset to an OSM API database, the corresponding changeset
+ * would have to be created using the API.  Optionally, after writing this the changeset
+ * can be closed via the API.
+ */
+class OsmChangesetXmlFileWriter
 {
 
 public:
 
-  OsmChangeWriter();
+  OsmChangesetXmlFileWriter();
 
   QString writeToString(ChangeSetProviderPtr cs);
 
@@ -38,4 +44,4 @@ private:
 
 }
 
-#endif // OSMCHANGEWRITER_H
+#endif // OSMCHANGESETXMLFILEWRITER_H
