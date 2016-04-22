@@ -212,5 +212,6 @@ SOURCES += \
     src/test/cpp/hoot/core/ops/ReprojectToGeographicOpTest.cpp \
     src/test/cpp/hoot/core/ops/ReprojectToPlanarOpTest.cpp \
     src/test/cpp/hoot/core/ops/WaySplitterOpTest.cpp \
-    src/test/cpp/hoot/core/ops/TrivialOpTest.cpp
+    src/test/cpp/hoot/core/ops/TrivialOpTest.cpp \
+    src/test/cpp/hoot/core/conflate/extractors/HistogramTest.cpp
 
