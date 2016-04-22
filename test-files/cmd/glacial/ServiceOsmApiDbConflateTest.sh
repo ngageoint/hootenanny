@@ -2,7 +2,7 @@
 set -e
 
 # This test:
-#   - writes two datasets with the same AOI, one to an OSM API database and one to a Hoot API database 
+#   - writes two datasets within the same AOI, one to an OSM API database and one to a Hoot API database 
 #   - reads the OSM API dataset into the Hoot API database 
 #   - conflates the two datasets together in hoot
 #   - writes out a sql changeset file that contains the difference between the original OSM API database dataset and the conflated output  
@@ -70,8 +70,13 @@ echo ""
 echo "Writing the changeset back to the osm api db..."
 hoot apply-changeset test-output/cmd/glacial/ServiceOsmApiDbConflateTest/8-changeset-ToBeAppliedToOsmApiDb.osc.sql $DB_URL
 
+#echo ""
+#echo "Reading the final contents for the aoi back out of the osm api db and verifying it..."
+#hoot convert -D convert.bounding.box=$AOI $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/9-final-output-PulledFromOsmApiDb-cropped.osm
+#hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/cropped-output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/9-final-output-PulledFromOsmApiDb-cropped.osm
+
 echo ""
-echo "Reading the final contents back out of the osm api db and verifying the final output..."
-hoot convert $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/9-final-output-PulledFromOsmApiDb.osm
-hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/9-final-output-PulledFromOsmApiDb.osm
+echo "Reading the complete final contents back out of the osm api db and verifying it..."
+hoot convert $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/10-final-output-PulledFromOsmApiDb.osm
+hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/10-final-output-PulledFromOsmApiDb.osm
 
