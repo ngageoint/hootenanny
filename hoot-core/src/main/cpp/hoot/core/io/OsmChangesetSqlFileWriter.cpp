@@ -194,18 +194,37 @@ void OsmChangesetSqlFileWriter::_create(const ConstRelationPtr relation)
   _createTags(relation->getTags(), ElementId::relation(id));
 }
 
+/*
+ * For modify:
+ *
+   - <element-name> table contains all version of all elements of that type in a history, so insert
+into that table.
+
+   - current_<element-name> contains the single latest version of the element, so update that record.
+*/
+
 void OsmChangesetSqlFileWriter::_modify(const ConstNodePtr node)
 {
   QString values =
-    QString("=%1, latitude=%2, longitude=%3, changeset_id=%4, visible=true, \"timestamp\"=now(), tile=%5, version=version+1 WHERE version=%6;\n")
+    QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
+      "tile, version) VALUES (%1, %2, %3, %4, true, now(), %5, %6);\n")
       .arg(node->getId())
       .arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7))
       .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
       .arg(_changesetId)
       .arg(HootApiDb::tileForPoint(node->getY(), node->getX()))
-      .arg(node->getVersion());
-  _outputSql.write(("UPDATE nodes SET node_id" + values).toUtf8());
-  _outputSql.write(("UPDATE current_nodes SET id" + values).toUtf8());
+      .arg(node->getVersion() + 1);
+  _outputSql.write(("INSERT INTO nodes (node_id, " + values).toUtf8());
+
+  values =
+    QString("latitude=%2, longitude=%3, changeset_id=%4, visible=true, \"timestamp\"=now(), tile=%5, version=%6 WHERE id=%1;\n")
+      .arg(node->getId())
+      .arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg(_changesetId)
+      .arg(HootApiDb::tileForPoint(node->getY(), node->getX()))
+      .arg(node->getVersion() + 1);
+  _outputSql.write(("UPDATE current_nodes SET " + values).toUtf8());
 
   _deleteAllTags(ElementId::node(node->getId()));
   _createTags(node->getTags(), ElementId::node(node->getId()));
@@ -214,12 +233,19 @@ void OsmChangesetSqlFileWriter::_modify(const ConstNodePtr node)
 void OsmChangesetSqlFileWriter::_modify(const ConstWayPtr way)
 {
   QString values =
-    QString("=%1, changeset_id=%2, visible=true, \"timestamp\"=now(), version=version+1 WHERE version=%3;\n")
+    QString("changeset_id, visible, \"timestamp\", "
+      "version) VALUES (%1, %2, true, now(), %3);\n")
       .arg(way->getId())
       .arg(_changesetId)
-      .arg(way->getVersion());
-  _outputSql.write(("UPDATE ways SET way_id" + values).toUtf8());
-  _outputSql.write(("UPDATE current_ways SET id" + values).toUtf8());
+      .arg(way->getVersion() + 1);
+  _outputSql.write(("INSERT INTO way (way_id, " + values).toUtf8());
+
+  values =
+    QString("changeset_id=%2, visible=true, \"timestamp\"=now(), version=%3 WHERE id=%1;\n")
+      .arg(way->getId())
+      .arg(_changesetId)
+      .arg(way->getVersion() + 1);
+  _outputSql.write(("UPDATE current_ways SET " + values).toUtf8());
 
   _deleteAll("current_way_nodes", "way_id", way->getId());
   _deleteAll("way_nodes", "way_id", way->getId());
@@ -232,12 +258,19 @@ void OsmChangesetSqlFileWriter::_modify(const ConstWayPtr way)
 void OsmChangesetSqlFileWriter::_modify(const ConstRelationPtr relation)
 {
   QString values =
-    QString("=%1, changeset_id=%2, visible=true, \"timestamp\"=now(), version=version+1 WHERE version=%3;\n")
+    QString("changeset_id, visible, \"timestamp\", "
+      "version) VALUES (%1, %2, true, now(), %3);\n")
       .arg(relation->getId())
       .arg(_changesetId)
-      .arg(relation->getVersion());
-  _outputSql.write(("UPDATE relations SET relation_id" + values).toUtf8());
-  _outputSql.write(("UPDATE current_relations SET relation_id" + values).toUtf8());
+      .arg(relation->getVersion() + 1);
+  _outputSql.write(("INSERT INTO relations (relation_id, " + values).toUtf8());
+
+  values =
+    QString("changeset_id=%2, visible=true, \"timestamp\"=now(), version=%3 WHERE id=%1;\n")
+      .arg(relation->getId())
+      .arg(_changesetId)
+      .arg(relation->getVersion() + 1);
+  _outputSql.write(("UPDATE current_relations SET " + values).toUtf8());
 
   _deleteAll("current_relation_members", "relation_id", relation->getId());
   _deleteAll("relation_members", "relation_id", relation->getId());
