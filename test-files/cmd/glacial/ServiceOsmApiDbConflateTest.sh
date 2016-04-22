@@ -40,7 +40,6 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/ServiceOsmApiDbConflateTestDcGisRoads" tes
 echo ""
 echo "Writing a second dataset over the same aoi to a hoot api db..."
 cp test-files/DcTigerRoads.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/5-DcTigerRoads-raw.osm
-hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/ServiceOsmApiDbConflateTestDcTigerRoads"
 hoot convert $HOOT_OPTS -D convert.ops=hoot::MapCropper -D crop.bounds=$AOI test-output/cmd/glacial/ServiceOsmApiDbConflateTest/5-DcTigerRoads-raw.osm "$HOOT_DB_URL/ServiceOsmApiDbConflateTestDcTigerRoads"
 
 echo ""
