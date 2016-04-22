@@ -57,7 +57,6 @@ echo ""
 echo "Creating a changeset that is the diff between the osm api db input data and the conflated output..."
 hoot derive-changeset $HOOT_OPTS -D changeset.user.id=1 "$HOOT_DB_URL/ServiceOsmApiDbConflateTestDcGisRoads" "$HOOT_DB_URL/ServiceOsmApiDbConflateTestConflated" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/changeset.osc.sql $DB_URL
 
-#TODO: dying here b/c the database claims we're writing nodes that already exist (node with same id and same version already in database)
 echo ""
 echo "Writing the changeset back to the osm api db..."
 hoot apply-changeset test-output/cmd/glacial/ServiceOsmApiDbConflateTest/changeset.osc.sql $DB_URL
@@ -65,5 +64,5 @@ hoot apply-changeset test-output/cmd/glacial/ServiceOsmApiDbConflateTest/changes
 echo ""
 echo "Reading the final contents back out of the osm api db and verifying..."
 hoot convert $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/final-output.osm
-hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/final-output.osm
+hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/final-output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/final-output.osm
 

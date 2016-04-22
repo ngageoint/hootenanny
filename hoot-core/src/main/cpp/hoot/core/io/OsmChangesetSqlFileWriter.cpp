@@ -201,10 +201,23 @@ void OsmChangesetSqlFileWriter::_create(const ConstRelationPtr relation)
 into that table.
 
    - current_<element-name> contains the single latest version of the element, so update that record.
+
+  //The changeset deriver will start versions at 0 to keep the xml changeset writing happy, but
+  //we always want 1 to be the starting point for sql writing.
 */
 
 void OsmChangesetSqlFileWriter::_modify(const ConstNodePtr node)
 {
+  long version = -1;
+  if (node->getVersion() == 0)
+  {
+    version = 2;
+  }
+  else
+  {
+    version = node->getVersion() + 1;
+  }
+
   QString values =
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
       "tile, version) VALUES (%1, %2, %3, %4, true, now(), %5, %6);\n")
@@ -213,7 +226,7 @@ void OsmChangesetSqlFileWriter::_modify(const ConstNodePtr node)
       .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
       .arg(_changesetId)
       .arg(HootApiDb::tileForPoint(node->getY(), node->getX()))
-      .arg(node->getVersion() + 1);
+      .arg(version);
   _outputSql.write(("INSERT INTO nodes (node_id, " + values).toUtf8());
 
   values =
@@ -223,7 +236,7 @@ void OsmChangesetSqlFileWriter::_modify(const ConstNodePtr node)
       .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
       .arg(_changesetId)
       .arg(HootApiDb::tileForPoint(node->getY(), node->getX()))
-      .arg(node->getVersion() + 1);
+      .arg(version);
   _outputSql.write(("UPDATE current_nodes SET " + values).toUtf8());
 
   _deleteAllTags(ElementId::node(node->getId()));
@@ -232,19 +245,29 @@ void OsmChangesetSqlFileWriter::_modify(const ConstNodePtr node)
 
 void OsmChangesetSqlFileWriter::_modify(const ConstWayPtr way)
 {
+  long version = -1;
+  if (way->getVersion() == 0)
+  {
+    version = 2;
+  }
+  else
+  {
+    version = way->getVersion() + 1;
+  }
+
   QString values =
     QString("changeset_id, visible, \"timestamp\", "
       "version) VALUES (%1, %2, true, now(), %3);\n")
       .arg(way->getId())
       .arg(_changesetId)
-      .arg(way->getVersion() + 1);
+      .arg(version);
   _outputSql.write(("INSERT INTO ways (way_id, " + values).toUtf8());
 
   values =
     QString("changeset_id=%2, visible=true, \"timestamp\"=now(), version=%3 WHERE id=%1;\n")
       .arg(way->getId())
       .arg(_changesetId)
-      .arg(way->getVersion() + 1);
+      .arg(version);
   _outputSql.write(("UPDATE current_ways SET " + values).toUtf8());
 
   _deleteAll("current_way_nodes", "way_id", way->getId());
@@ -257,19 +280,29 @@ void OsmChangesetSqlFileWriter::_modify(const ConstWayPtr way)
 
 void OsmChangesetSqlFileWriter::_modify(const ConstRelationPtr relation)
 {
+  long version = -1;
+  if (relation->getVersion() == 0)
+  {
+    version = 2;
+  }
+  else
+  {
+    version = relation->getVersion() + 1;
+  }
+
   QString values =
     QString("changeset_id, visible, \"timestamp\", "
       "version) VALUES (%1, %2, true, now(), %3);\n")
       .arg(relation->getId())
       .arg(_changesetId)
-      .arg(relation->getVersion() + 1);
+      .arg(version);
   _outputSql.write(("INSERT INTO relations (relation_id, " + values).toUtf8());
 
   values =
     QString("changeset_id=%2, visible=true, \"timestamp\"=now(), version=%3 WHERE id=%1;\n")
       .arg(relation->getId())
       .arg(_changesetId)
-      .arg(relation->getVersion() + 1);
+      .arg(version);
   _outputSql.write(("UPDATE current_relations SET " + values).toUtf8());
 
   _deleteAll("current_relation_members", "relation_id", relation->getId());
