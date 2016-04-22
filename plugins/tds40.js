@@ -1574,6 +1574,9 @@ tds = {
         // Debug: Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
+        if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
+        if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
+
         return tags;
     }, // End of toOsm
 

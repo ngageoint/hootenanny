@@ -161,6 +161,8 @@ SOURCES += \
     src/test/cpp/hoot/core/perty/PertyOpTest.cpp \
     src/test/cpp/hoot/core/ops/CookieCutterOpTest.cpp \
     src/test/cpp/hoot/core/visitors/RemoveElementsVisitorTest.cpp \
+    src/test/cpp/hoot/core/visitors/AddGeometryTypeVisitorTest.cpp \
+    src/test/cpp/hoot/core/visitors/TransliterateNameVisitorTest.cpp \
     src/test/cpp/hoot/core/io/ElementSorterTest.cpp \
     src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
     src/test/cpp/hoot/core/io/ChangesetDeriverTest.cpp \
