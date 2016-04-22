@@ -3,6 +3,10 @@
  * This generic conflation script supports conflation of POI data
  */
 
+exports.description = "POI Generic";
+exports.experimental = false;
+exports.baseFeatureType = "POI";
+
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("poi.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("poi.miss.threshold"));

@@ -7,7 +7,7 @@ else
     cd $HOOT_HOME
     source SetupEnv.sh
     source conf/DatabaseConfig.sh
-    source conf/ServerConfig.sh
+    #source conf/ServerConfig.sh
     cd node-mapnik-server
     npm install -q
     NPID=`ps aux | grep node | grep "app.js hoot_style.xml $NODE_MAPNIK_SERVER_PORT" | awk '{print $2}'`

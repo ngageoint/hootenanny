@@ -40,7 +40,9 @@ fi
 
 # Make sure the expected files are listed.
 echo Output files:
-ls test-output/cmd/csr/ | sort
+# For LC_ALL explation see:
+# https://github.com/ngageoint/hootenanny-rpms/issues/41
+ls test-output/cmd/csr/ | LC_ALL=C sort
 
 # Size on yubyub, Ubuntu 14.04, 2016-02-01 - 192002
 PDF_SIZE=`wc -c test-output/cmd/csr/csr.pdf | cut -d' ' -f1`

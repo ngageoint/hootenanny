@@ -1,0 +1,14 @@
+14:07:37.308 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 630) Bad circular error value: 0
+14:07:37.308 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 630) Bad circular error value: 0
+14:07:37.309 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 630) Bad circular error value: 0
+14:07:37.309 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 630) Bad circular error value: 0
+14:07:37.309 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 630) Bad circular error value: 0
+14:07:37.359 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 630) Bad circular error value: 0
+14:07:37.359 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 630) Bad circular error value: 0
+14:07:37.360 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 630) Bad circular error value: 0
+14:07:37.360 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 630) Bad circular error value: 0
+14:07:37.360 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 630) Bad circular error value: 0
+14:07:37.360 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 634) Found 10 bad circular error values, no longer reporting bad accuracies.
+14:07:57.698 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: Point not found.  Creating layer...
+14:08:04.708 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: Line not found.  Creating layer...
+14:08:12.255 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: Area not found.  Creating layer...

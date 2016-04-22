@@ -68,7 +68,7 @@ public:
   int b;
 };
 
-HOOT_FACTORY_REGISTER_BASE(TestClass, TestClass)
+HOOT_FACTORY_REGISTER_BASE(TestClass)
 
 class ObjectInputStreamTest : public CppUnit::TestFixture
 {

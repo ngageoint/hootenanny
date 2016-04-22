@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -70,12 +70,16 @@ public class RasterToTilesResourceTest {
 		param.put("RASTER_SIZE", "500");
 		params.add(param);
 
+		param = new JSONObject();
+		param.put("MAP_ID", "1");
+		params.add(param);
+
 		oExpected.put("params", params);
 
 		oExpected.put("exectype","make");
 		oExpected.put("erroraswarning", "true");
 
-		String actual = rts._createCommand("test", "0-1 2-3", 500);
+		String actual = rts._createCommand("test", "0-1 2-3", 500, 1);
 
 		org.junit.Assert.assertEquals(oExpected.toString(), actual);
 	}
