@@ -113,6 +113,11 @@ def printJSFooter():
 # End printJSFooter
 
 
+def asint(s):
+    try: return int(s)
+    except ValueError: return s
+
+
 # Print Rules
 def printRules(schema):
     tList = {}
@@ -134,7 +139,6 @@ def printRules(schema):
                     tList[eName]['enum'][k['value']] = {}
 
                 tList[eName]['enum'][k['value']] = k['name']
-            #tList[schema[i]['columns'][j]['name']] = schema[i]['columns'][j]['desc']
 
     for i in sorted(tList.keys()):
         print "\n     // %s - %s" % (i,tList[i]['desc'])
@@ -358,7 +362,7 @@ def printAttributeCsv(schema):
 # End printAttributeCsv
 
 
-# Go through the shcema and pull out all of the attributes that are to be replaced with
+# Go through the schema and pull out all of the attributes that are to be replaced with
 # functions
 def printFuncList(schema):
     printList = {}
@@ -427,7 +431,6 @@ def processText(node):
     tmp = u' ' + tlist[0].firstChild.data
     #print 'Definition:', tmp.encode('utf8').strip()
     return tmp.encode('utf8').strip()
-    #return tlist[0].firstChild.data
 # End Text Node
 
 
@@ -437,7 +440,6 @@ def processSingleNode(node,text):
     tmp = u' ' + tlist[0].firstChild.data
     #print 'Feature Type:', tmp.encode('utf8').strip()
     return tmp.encode('utf8').strip()
-    #return tlist[0].firstChild.data
 # End typeName
 
 
@@ -507,8 +509,9 @@ def readFeatures(xmlDoc,funcList):
             #continue
 
         fGeometry = geoList[rawfCode[0]]
-        #print 'Geometry: ', fGeometry
         fCode = rawfCode[1:]
+        # Debug:
+        #print 'Geometry: ', fGeometry
         #print 'FCODE: ', fCode
 
         # Build a feature
@@ -579,9 +582,7 @@ def readFeatures(xmlDoc,funcList):
                         continue
 
                     if attribute.localName == 'definition':
-                        #tmp = u' '+processText(attribute)
-                        #print 'aDef:%s:' % tmp.encode('utf8').strip()
-                        #aDef = tmp.encode('utf8').strip()
+                        #print 'aDef: ', processText(attribute)
                         aDef = processText(attribute)
                         continue
 
