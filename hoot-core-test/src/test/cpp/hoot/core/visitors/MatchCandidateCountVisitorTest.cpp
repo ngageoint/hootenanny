@@ -58,14 +58,14 @@ namespace hoot
 class MatchCandidateCountVisitorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(MatchCandidateCountVisitorTest);
-  //CPPUNIT_TEST(runBuildingMatchCandidateCountTest);
-  //CPPUNIT_TEST(runHighwayMatchCandidateCountTest);
+  CPPUNIT_TEST(runBuildingMatchCandidateCountTest);
+  CPPUNIT_TEST(runHighwayMatchCandidateCountTest);
   //TODO: re-enable this when #310 is fixed
-  CPPUNIT_TEST(runCombinedMatchCandidateCountOriginalTest);
   CPPUNIT_TEST(runCombinedMatchCandidateCountTest);
-  //CPPUNIT_TEST(runScriptMatchCreatorTest);
-  //CPPUNIT_TEST(runMultipleScriptMatchCreatorTest);
-  //CPPUNIT_TEST(runDualPoiScriptMatchCreatorTest);
+  CPPUNIT_TEST(runCombinedMatchCandidateCountNewTest);
+  CPPUNIT_TEST(runScriptMatchCreatorTest);
+  CPPUNIT_TEST(runMultipleScriptMatchCreatorTest);
+  CPPUNIT_TEST(runDualPoiScriptMatchCreatorTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -125,7 +125,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)8, matchCandidateCountsByMatchCreator["hoot::HighwayMatchCreator"]);
   }
 
-  void runCombinedMatchCandidateCountOriginalTest()
+  void runCombinedMatchCandidateCountTest()
   {
     OsmReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
@@ -163,7 +163,7 @@ public:
       matchCandidateCountsByMatchCreator["hoot::hoot::ScriptMatchCreator,LineStringGenericTest.js"]);
   }
 
-  void runCombinedMatchCandidateCountTest()
+  void runCombinedMatchCandidateCountNewTest()
   {
     OsmReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
