@@ -25,7 +25,7 @@ hoot convert $HOOT_OPTS test-files/DcGisRoads.osm test-output/cmd/glacial/Servic
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-output/cmd/glacial/ServiceOsmApiDbConflateTest/DcGisRoads.sql
 
 echo ""
-echo "Reading the contents back out of the osm api db for debugging purposes..."
+echo "Reading the contents back out of the osm api db..."
 hoot convert $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/DcGisRoads.osm
 
 echo ""
@@ -33,7 +33,7 @@ echo "Querying a subset aoi for the data out of the osm api db into a hoot api d
 hoot convert $HOOT_OPTS -D convert.bounding.box=$AOI $DB_URL "$HOOT_DB_URL/ServiceOsmApiDbConflateTestDcGisRoads"
 
 echo ""
-echo "Reading the first dataset contents back out of the hoot api db for debugging purposes..."
+echo "Reading the first dataset contents back out of the hoot api db..."
 hoot convert $HOOT_OPTS "$HOOT_DB_URL/ServiceOsmApiDbConflateTestDcGisRoads" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/DcGisRoads-cropped.osm
 
 echo ""
@@ -42,7 +42,7 @@ hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/ServiceOsmApiDbConflateTestDcTigerRoads
 hoot convert $HOOT_OPTS -D convert.ops=hoot::MapCropper -D crop.bounds=$AOI test-files/DcTigerRoads.osm "$HOOT_DB_URL/ServiceOsmApiDbConflateTestDcTigerRoads"
 
 echo ""
-echo "Reading the second dataset contents back out of the hoot api db for debugging purposes..."
+echo "Reading the second dataset contents back out of the hoot api db..."
 hoot convert $HOOT_OPTS "$HOOT_DB_URL/ServiceOsmApiDbConflateTestDcTigerRoads" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/DcTigerRoads-cropped.osm
 
 echo ""
@@ -50,7 +50,7 @@ echo "Conflating the two datasets..."
 hoot conflate $HOOT_OPTS "$HOOT_DB_URL/ServiceOsmApiDbConflateTestDcGisRoads" "$HOOT_DB_URL/ServiceOsmApiDbConflateTestDcTigerRoads" "$HOOT_DB_URL/ServiceOsmApiDbConflateTestConflated"
 
 echo ""
-echo "Reading the conflated contents back out of the hoot api db for debugging purposes..."
+echo "Reading the conflated contents back out of the hoot api db..."
 hoot convert $HOOT_OPTS "$HOOT_DB_URL/ServiceOsmApiDbConflateTestConflated" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/conflated.osm
 
 echo ""
@@ -62,7 +62,7 @@ echo "Writing the changeset back to the osm api db..."
 hoot apply-changeset test-output/cmd/glacial/ServiceOsmApiDbConflateTest/changeset.osc.sql $DB_URL
 
 echo ""
-echo "Reading the final contents back out of the osm api db and verifying..."
+echo "Reading the final contents back out of the osm api db and verifying the final output..."
 hoot convert $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/final-output.osm
 hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/final-output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/final-output.osm
 

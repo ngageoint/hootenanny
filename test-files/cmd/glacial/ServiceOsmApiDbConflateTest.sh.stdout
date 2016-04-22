@@ -1,0 +1,75 @@
+
+Cleaning out the osm api db and setting it up with an initial single user...
+ setval 
+--------
+      1
+(1 row)
+
+
+Writing a dataset to an osm api db...
+ setval 
+--------
+      2
+(1 row)
+
+ setval 
+--------
+   4325
+(1 row)
+
+ setval 
+--------
+    375
+(1 row)
+
+ setval 
+--------
+      1
+(1 row)
+
+
+Reading the contents back out of the osm api db...
+11:28:30.427 INFO  ...oot/core/io/OsmApiDbReader.cpp( 111) Executing OSM API read query against all element types...
+
+Querying a subset aoi for the data out of the osm api db into a hoot api db...
+
+Reading the first dataset contents back out of the hoot api db...
+
+Writing a second dataset over the same aoi to a hoot api db...
+
+Reading the second dataset contents back out of the hoot api db...
+
+Conflating the two datasets...
+
+Reading the conflated contents back out of the hoot api db...
+
+Creating a changeset that is the diff between the osm api db input data and the conflated output...
+
+Writing the changeset back to the osm api db...
+11:28:38.429 INFO  .../cpp/hoot/core/io/OsmApiDb.cpp( 551) Executing changeset SQL queries against OSM API database...
+11:28:38.728 INFO  .../cpp/hoot/core/io/OsmApiDb.cpp( 592) Changeset SQL queries execute finished against OSM API database.
+
+Reading the final contents back out of the osm api db and verifying the final output...
+11:28:38.838 INFO  ...oot/core/io/OsmApiDbReader.cpp( 111) Executing OSM API read query against all element types...
+11:28:39.117 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.117 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.117 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.118 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.118 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.118 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.118 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.118 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.118 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.118 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.118 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 635) Found 10 bad circular error values, no longer reporting bad accuracies.
+11:28:39.209 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.209 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.209 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.209 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.209 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.209 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.209 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.210 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.210 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.210 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 631) Bad circular error value: 0
+11:28:39.210 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 635) Found 10 bad circular error values, no longer reporting bad accuracies.
