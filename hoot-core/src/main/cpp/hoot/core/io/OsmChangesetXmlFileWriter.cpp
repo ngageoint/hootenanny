@@ -1,4 +1,4 @@
-#include "OsmChangeWriter.h"
+#include "OsmChangesetXmlFileWriter.h"
 
 // hoot
 #include <hoot/core/io/OsmWriter.h>
@@ -12,12 +12,12 @@
 namespace hoot
 {
 
-OsmChangeWriter::OsmChangeWriter()
+OsmChangesetXmlFileWriter::OsmChangesetXmlFileWriter()
 {
   _precision = ConfigOptions().getWriterPrecision();
 }
 
-void OsmChangeWriter::write(QString path, ChangeSetProviderPtr cs)
+void OsmChangesetXmlFileWriter::write(QString path, ChangeSetProviderPtr cs)
 {
   LOG_INFO("Writing changeset to " << path);
 
@@ -33,7 +33,7 @@ void OsmChangeWriter::write(QString path, ChangeSetProviderPtr cs)
   f.close();
 }
 
-void OsmChangeWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
+void OsmChangesetXmlFileWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
 {
   QXmlStreamWriter writer(&d);
   writer.setCodec("UTF-8");
@@ -58,34 +58,34 @@ void OsmChangeWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
       }
       switch (c.type)
       {
-      case Change::Create:
-        writer.writeStartElement("create");
-        break;
-      case Change::Delete:
-        writer.writeStartElement("delete");
-        break;
-      case Change::Modify:
-        writer.writeStartElement("modify");
-        break;
-      default:
-        throw IllegalArgumentException("Unexepected change type.");
+        case Change::Create:
+          writer.writeStartElement("create");
+          break;
+        case Change::Delete:
+          writer.writeStartElement("delete");
+          break;
+        case Change::Modify:
+          writer.writeStartElement("modify");
+          break;
+        default:
+          throw IllegalArgumentException("Unexepected change type.");
       }
       last = c.type;
     }
 
     switch (c.e->getElementType().getEnum())
     {
-    case ElementType::Node:
-      writeNode(writer, dynamic_pointer_cast<const Node>(c.e));
-      break;
-    case ElementType::Way:
-      writeWay(writer, dynamic_pointer_cast<const Way>(c.e));
-      break;
-    case ElementType::Relation:
-      writeRelation(writer, dynamic_pointer_cast<const Relation>(c.e));
-      break;
-    default:
-      throw IllegalArgumentException("Unexpected element type.");
+      case ElementType::Node:
+        writeNode(writer, dynamic_pointer_cast<const Node>(c.e));
+        break;
+      case ElementType::Way:
+        writeWay(writer, dynamic_pointer_cast<const Way>(c.e));
+        break;
+      case ElementType::Relation:
+        writeRelation(writer, dynamic_pointer_cast<const Relation>(c.e));
+        break;
+      default:
+        throw IllegalArgumentException("Unexpected element type.");
     }
   }
 
@@ -97,7 +97,7 @@ void OsmChangeWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
   writer.writeEndDocument();
 }
 
-void OsmChangeWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
+void OsmChangesetXmlFileWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
 {
   writer.writeStartElement("node");
   writer.writeAttribute("id", QString::number(n->getId()));
@@ -135,7 +135,7 @@ void OsmChangeWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
   writer.writeEndElement();
 }
 
-void OsmChangeWriter::writeWay(QXmlStreamWriter& writer, ConstWayPtr w)
+void OsmChangesetXmlFileWriter::writeWay(QXmlStreamWriter& writer, ConstWayPtr w)
 {
   writer.writeStartElement("way");
   writer.writeAttribute("id", QString::number(w->getId()));
@@ -175,7 +175,7 @@ void OsmChangeWriter::writeWay(QXmlStreamWriter& writer, ConstWayPtr w)
   writer.writeEndElement();
 }
 
-void OsmChangeWriter::writeRelation(QXmlStreamWriter& writer, ConstRelationPtr r)
+void OsmChangesetXmlFileWriter::writeRelation(QXmlStreamWriter& writer, ConstRelationPtr r)
 {
   writer.writeStartElement("relation");
   writer.writeAttribute("id", QString::number(r->getId()));

@@ -30,8 +30,8 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/ElementSorter.h>
-#include <hoot/core/io/OsmChangeWriter.h>
-#include <hoot/core/io/OsmChangeWriterSql.h>
+#include <hoot/core/io/OsmChangesetXmlFileWriter.h>
+#include <hoot/core/io/OsmChangesetSqlFileWriter.h>
 
 // Qt
 #include <QUrl>
@@ -39,28 +39,28 @@
 namespace hoot
 {
 
-class DeriveChangeCmd : public BaseCommand
+class DeriveChangesetCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::DeriveChangeCmd"; }
+  static string className() { return "hoot::DeriveChangesetCmd"; }
 
-  DeriveChangeCmd() { }
+  DeriveChangesetCmd() { }
 
-  virtual QString getName() const { return "derive-change"; }
+  virtual QString getName() const { return "derive-changeset"; }
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 3)
+    if (args.size() != 3 && args.size() != 4)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes three parameters.").arg(getName()));
+      throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
     }
 
-    shared_ptr<OsmMap> map1(new OsmMap());
+    OsmMapPtr map1(new OsmMap());
     loadMap(map1, args[0], true);
 
-    shared_ptr<OsmMap> map2(new OsmMap());
+    OsmMapPtr map2(new OsmMap());
     loadMap(map2, args[1], true);
 
     ElementSorterPtr sorted1(new ElementSorter(map1));
@@ -70,12 +70,18 @@ public:
 
     if (args[2].endsWith(".osc"))
     {
-      OsmChangeWriter().write(args[2], delta);
+      OsmChangesetXmlFileWriter().write(args[2], delta);
     }
-    else if (args[2].endsWith(".sql"))
+    else if (args[2].endsWith(".osc.sql"))
     {
-      throw HootException("SQL changeset writing not yet supported.");
-      //OsmChangeWriterSql(QUrl(ConfigOptions().getChangesetApiUrl())).write(args[2], delta);
+      if (args.size() != 4)
+      {
+        throw HootException(
+          QString("SQL changeset writing requires a target database URL for configuration purposes."));
+      }
+
+      OsmChangesetSqlFileWriter(QUrl(args[3]))
+        .write(args[2], delta);
     }
     else
     {
@@ -86,7 +92,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, DeriveChangeCmd)
+HOOT_FACTORY_REGISTER(Command, DeriveChangesetCmd)
 
 }
 
