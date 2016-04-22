@@ -268,7 +268,6 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/IsCompleteVisitor.cpp \
     src/main/cpp/hoot/core/algorithms/MaximalSubline.cpp \
     src/main/cpp/hoot/core/algorithms/Sparse2dMatrix.cpp \
-    src/main/cpp/hoot/core/ops/PointsToTracksOp.cpp \
     src/main/cpp/hoot/core/visitors/RemoveUnknown1Visitor.cpp \
     src/main/cpp/hoot/core/visitors/UnionPolygonsVisitor.cpp \
     src/main/cpp/hoot/core/cmd/EvalMoveCmd.cpp \
@@ -355,7 +354,6 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/match-graph/GreedyConstrainedMatches.cpp \
     src/main/cpp/hoot/core/conflate/match-graph/OptimalConstrainedMatches.cpp \
     src/main/cpp/hoot/core/visitors/ExtractWaysVisitor.cpp \
-    src/main/cpp/hoot/core/ops/ParentFirstVisitorOp.cpp \
     src/main/cpp/hoot/core/scoring/MatchFeatureExtractor.cpp \
     src/main/cpp/hoot/core/conflate/highway/HighwayRfClassifier.cpp \
     src/main/cpp/hoot/core/cmd/DeleteMapCmd.cpp \
@@ -374,7 +372,6 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmJsonWriter.cpp \
     src/main/cpp/hoot/core/ops/stats/IoSingleStat.cpp \
     src/main/cpp/hoot/core/Hoot.cpp \
-    src/main/cpp/hoot/core/ops/CreateIntersectionNodesOp.cpp \
     src/main/cpp/hoot/core/schema/ExactTagDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TagDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TranslatedTagDifferencer.cpp \
@@ -733,7 +730,6 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/IsCompleteVisitor.h \
     src/main/cpp/hoot/core/algorithms/MaximalSubline.h \
     src/main/cpp/hoot/core/algorithms/Sparse2dMatrix.h \
-    src/main/cpp/hoot/core/ops/PointsToTracksOp.h \
     src/main/cpp/hoot/core/visitors/RemoveUnknown1Visitor.h \
     src/main/cpp/hoot/core/visitors/UnionPolygonsVisitor.h \
     src/main/cpp/hoot/core/cmd/EvalMoveCmd.h \
@@ -831,7 +827,6 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/ExtractWaysVisitor.h \
     src/main/cpp/hoot/core/scoring/MatchFeatureExtractor.h \
     src/main/cpp/hoot/core/conflate/MatchDetails.h \
-    src/main/cpp/hoot/core/ops/ParentFirstVisitorOp.h \
     src/main/cpp/hoot/core/conflate/highway/HighwayRfClassifier.h \
     src/main/cpp/hoot/core/io/OgrOptions.h \
     src/main/cpp/hoot/core/ops/CalculateStatsOp.h \
@@ -861,7 +856,6 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/stats/IoSingleStat.h \
     src/main/cpp/hoot/core/ops/stats/SingleStat.h \
     src/main/cpp/hoot/core/Hoot.h \
-    src/main/cpp/hoot/core/ops/CreateIntersectionNodesOp.h \
     src/main/cpp/hoot/core/schema/ExactTagDifferencer.h \
     src/main/cpp/hoot/core/schema/TagDifferencer.h \
     src/main/cpp/hoot/core/schema/ComparatorTagDifferencer.h \
@@ -992,5 +986,5 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WaterwayCriterion.h \
     src/main/cpp/hoot/core/io/ElementComparer.h \
     src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.h \
-
+    src/main/cpp/hoot/core/ops/FindIntersectionsOp.h
 

@@ -207,5 +207,10 @@ SOURCES += \
     src/test/cpp/hoot/core/schema/TagCategoryDifferencerTest.cpp \
     src/test/cpp/hoot/core/schema/TagAncestorDifferencerTest.cpp \
     src/test/cpp/hoot/core/elements/RelationTest.cpp \
-    src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp
+    src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp \
+    src/test/cpp/hoot/core/ops/BuildingOutlineRemoveOpTest.cpp \
+    src/test/cpp/hoot/core/ops/ReprojectToGeographicOpTest.cpp \
+    src/test/cpp/hoot/core/ops/ReprojectToPlanarOpTest.cpp \
+    src/test/cpp/hoot/core/ops/WaySplitterOpTest.cpp \
+    src/test/cpp/hoot/core/ops/TrivialOpTest.cpp
 
