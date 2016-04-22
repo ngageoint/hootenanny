@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -109,7 +109,7 @@ public class ProcessStreamInterface implements INativeInterface {
 	  	  	String userid = HootProperties.getProperty("dbUserId");
 	  	  	String pwd = HootProperties.getProperty("dbPassword");
 	  	  	String host = HootProperties.getProperty("dbHost");
-	  	  	dbUrl = "postgresql://" + userid + ":" + pwd + "@" + host + "/" + dbname;
+	  	  	dbUrl = "hootapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
 	    	}
 
 	    }
@@ -221,10 +221,10 @@ public class ProcessStreamInterface implements INativeInterface {
 					{
 						throw new Exception(err);
 					}
-					
+
 					String stdOut = res.getStdout();
 					ret.put("stdout", stdOut);
-					ret.put("stderr", err);					
+					ret.put("stderr", err);
 				}
 			}
 		} catch (Exception e){

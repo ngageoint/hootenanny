@@ -212,7 +212,7 @@ public class ChangesetDbWriter
    */
   private Element parseElement(final org.w3c.dom.Node xml, final long oldId, final long newId,
     final ElementType elementType, final EntityChangeType entityChangeType,
-    final boolean deleteIfUnused, boolean elementStillUsedByAnotherElement) throws Exception
+    final boolean deleteIfUnused, @SuppressWarnings("unused") boolean elementStillUsedByAnotherElement) throws Exception
   {
     //log.debug("Parsing OSM element type: " + elementType.toString() + ", entity change type: "
         //+ entityChangeType.toString() + "...");

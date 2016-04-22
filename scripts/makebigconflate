@@ -3,9 +3,9 @@
 #
 
 HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor -D conflate.add.score.tags=yes
-HOOT_OPTS+= -D services.db.writer.overwrite.map=true -D services.db.writer.create.user=true
-HOOT_OPTS+= -D services.db.writer.email=test@test.com -D services.db.reader.email=test@test.com
-#DB_URL=postgresql://hoot:hoottest@localhost:5432/hoot
+HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
+HOOT_OPTS+= -D hootapi.db.writer.email=test@test.com -D hootapi.db.reader.email=test@test.com
+#DB_URL=hootapidb://hoot:hoottest@localhost:5432/hoot
 OUTPUT_DIR=$(HOOT_HOME)/temp-out/$(jobid)
 
 OP_INPUT1=$(HOOT_HOME)/$(INPUT1)
@@ -24,11 +24,11 @@ ifeq "$(CONFLATION_TYPE)" "Average"
 endif
 
 
-ifeq "$(INPUT1_TYPE)" "DB" 
+ifeq "$(INPUT1_TYPE)" "DB"
 	OP_INPUT1=$(DB_URL)/$(INPUT1)
 endif
 
-ifeq "$(INPUT2_TYPE)" "DB" 
+ifeq "$(INPUT2_TYPE)" "DB"
 	OP_INPUT2=$(DB_URL)/$(INPUT2)
 endif
 
@@ -49,7 +49,7 @@ HOOT_OPTS+= -D conflate.miss.threshold=$(OP_MISS_TRESHOLD)
 ###
 # Conflate
 ###
-step1: 
+step1:
 	mkdir -p "$(OUTPUT_DIR)"
 	hoot --convert $(HOOT_OPTS) "$(OP_INPUT1)" "$(OUTPUT_DIR)/$(INPUT1).osm.pbf"
 	hoot --convert $(HOOT_OPTS) "$(OP_INPUT2)" "$(OUTPUT_DIR)/$(INPUT2).osm.pbf"
@@ -60,10 +60,10 @@ step1:
 	hoot $(OP_CONFLATE_TYPE) -C RemoveReview2Pre.conf $(HOOT_OPTS) "$(jobid)/$(INPUT1).osm.pbf" "$(jobid)/$(INPUT2).osm.pbf" "$(jobid)/$(OUTPUT_NAME)"
 
 	hadoop fs -cat "$(jobid)/$(OUTPUT_NAME)/*.pbf" | hoot --add-pbf-header - "$(OUTPUT_DIR)/$(OUTPUT_NAME).osm.pbf"
-	hoot --convert $(HOOT_OPTS) "$(OUTPUT_DIR)/$(OUTPUT_NAME).osm.pbf" "$(DB_OUTPUT)" 
+	hoot --convert $(HOOT_OPTS) "$(OUTPUT_DIR)/$(OUTPUT_NAME).osm.pbf" "$(DB_OUTPUT)"
 	rm -rf "$(OUTPUT_DIR)"
-	
-	
 
-	
+
+
+
 

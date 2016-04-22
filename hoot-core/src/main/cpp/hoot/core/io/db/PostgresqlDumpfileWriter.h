@@ -53,6 +53,10 @@
 namespace hoot
 {
 
+/**
+ * OSM element write optimization that writes out a Postgres dump file which can later be applied
+ * to Postgres.
+ */
 class PostgresqlDumpfileWriter : public hoot::PartialOsmMapWriter, public hoot::Configurable
 {
 

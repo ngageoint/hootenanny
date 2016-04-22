@@ -51,7 +51,7 @@ public:
   static string className() { return "hoot::HootJsLoaded"; }
 };
 
-HOOT_FACTORY_REGISTER_BASE(HootJsLoaded, HootJsLoaded)
+HOOT_FACTORY_REGISTER_BASE(HootJsLoaded)
 
 void init(Handle<Object> exports)
 {

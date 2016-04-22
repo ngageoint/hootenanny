@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -46,7 +46,8 @@ using namespace boost;
 #include <QFile>
 #include <QXmlStreamWriter>
 
-namespace hoot {
+namespace hoot
+{
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmWriter)
 
@@ -56,11 +57,11 @@ OsmWriter::OsmWriter()
   _includeDebug = ConfigOptions().getWriterIncludeDebug();
   _includePointInWays = false;
   _includeCompatibilityTags = true;
-  _precision = 16;
+  _precision = round(ConfigOptions().getWriterPrecision());
   _encodingErrorCount = 0;
 }
 
-QString OsmWriter::_e(const QString& s)
+QString OsmWriter::removeInvalidCharacters(const QString& s)
 {
   // See #3553 for an explanation.
 
@@ -245,14 +246,15 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
       if (it.key().isEmpty() == false && it.value().isEmpty() == false)
       {
         writer.writeStartElement("tag");
-        writer.writeAttribute("k", _e(it.key()));
-        writer.writeAttribute("v", _e(it.value()));
+        writer.writeAttribute("k", removeInvalidCharacters(it.key()));
+        writer.writeAttribute("v", removeInvalidCharacters(it.value()));
         writer.writeEndElement();
       }
     }
 
     // turn this on when we start using node circularError.
-    if (n->getCircularError() >= 0 && n->getTags().getNonDebugCount() > 0)
+    if (n->hasCircularError() &&
+        n->getTags().getNonDebugCount() > 0)
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", "error:circular");
@@ -320,13 +322,13 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
       if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
       {
         writer.writeStartElement("tag");
-        writer.writeAttribute("k", _e(tit.key()));
-        writer.writeAttribute("v", _e(tit.value()));
+        writer.writeAttribute("k", removeInvalidCharacters(tit.key()));
+        writer.writeAttribute("v", removeInvalidCharacters(tit.value()));
         writer.writeEndElement();
       }
     }
 
-    if (w->getCircularError() >= 0)
+    if (w->hasCircularError())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", "error:circular");
@@ -381,7 +383,7 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
       writer.writeStartElement("member");
       writer.writeAttribute("type", _typeName(e.getElementId().getType()));
       writer.writeAttribute("ref", QString::number(e.getElementId().getId()));
-      writer.writeAttribute("role", _e(e.role));
+      writer.writeAttribute("role", removeInvalidCharacters(e.role));
       writer.writeEndElement();
     }
 
@@ -391,8 +393,8 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
       if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
       {
         writer.writeStartElement("tag");
-        writer.writeAttribute("k", _e(tit.key()));
-        writer.writeAttribute("v", _e(tit.value()));
+        writer.writeAttribute("k", removeInvalidCharacters(tit.key()));
+        writer.writeAttribute("v", removeInvalidCharacters(tit.value()));
         writer.writeEndElement();
       }
     }
@@ -401,11 +403,11 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", "type");
-      writer.writeAttribute("v", _e(r->getType()));
+      writer.writeAttribute("v", removeInvalidCharacters(r->getType()));
       writer.writeEndElement();
     }
 
-    if (r->getCircularError() >= 0)
+    if (r->hasCircularError())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", "error:circular");

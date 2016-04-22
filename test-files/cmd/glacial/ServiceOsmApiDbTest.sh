@@ -25,11 +25,11 @@ mkdir -p test-output/cmd/ServiceOsmApiDbTest
 #echo $PGDATABASE $PGHOST $PGPORT $PGUSER $PGPASSWORD
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/ToyTestA.sql
 
-export DB_URL="postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
+export DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
 
 # do the read operation
 echo "Performing read operation"
-hoot convert -D services.db.writer.email=OsmApiInsert@hoot.local -D services.db.writer.create.user=true -D reader.add.source.datetime=false "$DB_URL" test-output/cmd/ServiceOsmApiDbTest/ToyTestA-out.osm
+hoot convert "$DB_URL" test-output/cmd/ServiceOsmApiDbTest/ToyTestA-out.osm
 
 # compare input to dumped
 echo "Doing comparison"
@@ -45,7 +45,7 @@ createdb $AUTH $DB_NAME_OSMAPI
 
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/bbox_test.sql
 
-hoot convert -D convert.bounding.box=-106.5100000,38.3000000,-106.4000000,38.5000000 -D services.db.writer.email=OsmEmail@hoot.local $DB_URL test-output/cmd/ServiceOsmApiDbTest/bboxOutput.osm
+hoot convert -D convert.bounding.box=-106.5100000,38.3000000,-106.4000000,38.5000000 $DB_URL test-output/cmd/ServiceOsmApiDbTest/bboxOutput.osm
 
 # perform a crude but effective comparison
 cat test-output/cmd/ServiceOsmApiDbTest/bboxOutput.osm | grep 'tag k'

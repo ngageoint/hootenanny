@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,6 +30,11 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/filters/BuildingCriterion.h>
+#include <hoot/core/filters/PoiCriterion.h>
+#include <hoot/core/filters/WaterwayCriterion.h>
+#include <hoot/core/filters/HighwayFilter.h>
+
 
 // Standard
 #include <string>
@@ -37,27 +42,126 @@
 
 namespace hoot
 {
+
 using namespace std;
 class Match;
-//class MatchThreshold;
 
 class MatchCreator
 {
 public:
+
+  // This is how we map various match creators to the feature
+  // they operate on. Helpful when generating stats later.
+  enum BaseFeatureType
+  {
+    POI = 0,
+    Highway = 1,
+    Building = 2,
+    Waterway = 3,
+    Unknown = 4 // Unknown must always be last
+  };
+
+  enum FeatureCalcType
+  {
+    CalcTypeNone = 0,
+    CalcTypeLength = 1,
+    CalcTypeArea = 2
+  };
+
+  static QString BaseFeatureTypeToString(BaseFeatureType t)
+  {
+    switch (t)
+    {
+      case POI:
+        return "POI";
+      case Highway:
+        return "Highway";
+      case Building:
+        return "Building";
+      case Waterway:
+        return "Waterway";
+      case Unknown:
+      default:
+        return "Unknown";
+    }
+  }
+
+  static BaseFeatureType StringToBaseFeatureType(QString s)
+  {
+    s = s.toLower();
+    if (0 == s.compare("poi"))
+      return POI;
+    else if (0 == s.compare("highway"))
+      return Highway;
+    else if (0 == s.compare("building"))
+      return Building;
+    else if (0 == s.compare("waterway"))
+      return Waterway;
+    else
+      return Unknown;
+  }
+
+  /* These two functions, getFeatureCalcType & getElementCriterion could be
+   * pushed down into the classes that are derived from MatchCreator, and
+   * that would seem logical and clean - BUT ScriptMatchCreator becomes
+   * problematic, as those match creators are generated at runtime. So you'd
+   * have to hard code the mappings between featureTypes and FeatureCalcTypes
+   * and the ElementCriterions for each script down in the ScriptMatchCreator
+   * class. SO, rather than that - we'll just keep all of this feature type
+   * stuff grouped together in one place.
+   */
+  static FeatureCalcType getFeatureCalcType (BaseFeatureType t)
+  {
+    switch (t)
+    {
+      case POI:
+        return CalcTypeNone;
+      case Highway:
+        return CalcTypeLength;
+      case Building:
+        return CalcTypeArea;
+      case Waterway:
+        return CalcTypeLength;
+      case Unknown:
+      default:
+        return CalcTypeNone;
+    }
+  }
+
+  static ElementCriterion * getElementCriterion (BaseFeatureType t, ConstOsmMapPtr map)
+  {
+    switch (t)
+    {
+      case POI:
+        return new PoiCriterion();
+      case Highway:
+        return new HighwayFilter(Filter::KeepMatches);
+      case Building:
+        return new BuildingCriterion(map);
+      case Waterway:
+        return new WaterwayCriterion();
+      case Unknown:
+      default:
+        return NULL;
+    }
+  }
+
   class Description
   {
   public:
     Description() : experimental() {}
-    Description(string className, QString description, bool experimental)
+    Description(string className, QString description, BaseFeatureType featureType, bool experimental)
     {
       this->className = className;
       this->experimental = experimental;
       this->description = description;
+      this->baseFeatureType = featureType;
     }
 
     bool experimental;
     string className;
     QString description;
+    BaseFeatureType baseFeatureType;
   };
 
   static string className() { return "hoot::MatchCreator"; }
@@ -100,6 +204,18 @@ public:
   {
     throw HootException("This match creator takes no argument.");
   }
+
+  /*
+   * This is actually being done in order to track the script name in ScriptMatchCreator, so we
+   * need to do some refactoring to get rid of this.  Redundant with Description class above.
+   */
+  QString getDescription() { return _description; }
+  void setDescription(QString description) { _description = description; }
+
+protected:
+
+  QString _description;
+
 };
 
 }

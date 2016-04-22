@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -77,36 +77,20 @@ private:
   long _thisId;
 };
 
-Relation::Relation(const Relation& from) :
-  Element(from.getStatus())
-{
-  _relationData = from._relationData;
-}
-
-Relation::Relation(Status s, long id, Meters circularError, QString type) :
-  Element(s)
-{
-  _relationData.reset(new RelationData(id));
-  _relationData->setCircularError(circularError);
-  _relationData->setType(type);
-}
-
-Relation::Relation(Status s, long id, long changeset, long version, unsigned int timestamp,
-                   Meters circularError, QString type) :
-  Element(s)
-{
-  _relationData.reset(new RelationData(id, changeset, version, timestamp));
-  _relationData->setCircularError(circularError);
-  _relationData->setType(type);
-}
-
-Relation::Relation(Status s, long id, long changeset, long version, unsigned int timestamp,
-                   QString user, long uid, Meters circularError, QString type) :
-  Element(s)
+Relation::Relation(Status s, long id, Meters circularError, QString type, long changeset,
+                   long version, unsigned int timestamp, QString user, long uid) :
+Element(s)
 {
   _relationData.reset(new RelationData(id, changeset, version, timestamp, user, uid));
   _relationData->setCircularError(circularError);
   _relationData->setType(type);
+}
+
+Relation::Relation(const Relation& from) :
+Element(from.getStatus()),
+_relationData(from._relationData)
+{
+
 }
 
 void Relation::addElement(const QString& role, const shared_ptr<const Element>& e)

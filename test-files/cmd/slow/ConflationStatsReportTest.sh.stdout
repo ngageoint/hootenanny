@@ -5,11 +5,11 @@ passed test 4
 Output files:
 areaHistogram.png
 conflatedFeature.png
-csr2.osm
 csr.asciidoc
 csr.html
 csr.osm
 csr.pdf
+csr2.osm
 csrStats.txt
 distancesHistogram.png
 featureCountHistogram1.png

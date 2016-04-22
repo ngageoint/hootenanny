@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -120,7 +120,7 @@ public class ProcessStreamInterfaceTest {
   	String userid = HootProperties.getProperty("dbUserId");
   	String pwd = HootProperties.getProperty("dbPassword");
   	String host = HootProperties.getProperty("dbHost");
-  	String dbUrl = "postgresql://" + userid + ":" + pwd + "@" + host + "/" + dbname;
+  	String dbUrl = "hootapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
   	expected += ",DB_URL=" + dbUrl + "}";
 
 		Assert.assertEquals(expected, commandStr);

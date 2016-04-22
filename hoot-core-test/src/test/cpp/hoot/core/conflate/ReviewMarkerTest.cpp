@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -100,7 +100,7 @@ public:
       "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n1\"}},\n"
       "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
       "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
-      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:needs\":\"yes\",\"hoot:review:type\":\"test\",\"hoot:review:score\":\"-1\",\"hoot:review:note\":\"a note\",\"error:circular\":\"-1\"}]\n"
+      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:needs\":\"yes\",\"hoot:review:type\":\"test\",\"hoot:review:score\":\"-1\",\"hoot:review:note\":\"a note\",\"error:circular\":\"15\"}]\n"
       "}\n",
       OsmJsonWriter().toString(map));
   }
@@ -136,10 +136,10 @@ public:
       "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n1\"}},\n"
       "{\"type\":\"relation\",\"id\":-2,\"members\":[\n"
       "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
-      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:needs\":\"yes\",\"hoot:review:type\":\"test\",\"hoot:review:score\":\"0.5\",\"hoot:review:note\":\"a note 2\",\"error:circular\":\"-1\"},\n"
+      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:needs\":\"yes\",\"hoot:review:type\":\"test\",\"hoot:review:score\":\"0.5\",\"hoot:review:note\":\"a note 2\",\"error:circular\":\"15\"},\n"
       "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
       "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
-      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:needs\":\"yes\",\"hoot:review:type\":\"test\",\"hoot:review:score\":\"0.15\",\"hoot:review:note\":\"a note\",\"error:circular\":\"-1\"}]\n"
+      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:needs\":\"yes\",\"hoot:review:type\":\"test\",\"hoot:review:score\":\"0.15\",\"hoot:review:note\":\"a note\",\"error:circular\":\"15\"}]\n"
       "}\n",
       OsmJsonWriter().toString(map));
   }
