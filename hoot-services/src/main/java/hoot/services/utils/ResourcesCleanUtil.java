@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -64,13 +64,15 @@ public class ResourcesCleanUtil implements Executable {
   private ClassPathXmlApplicationContext appContext;
 
 	private String finalStatusDetail;
+  @Override
   public String getFinalStatusDetail() { return finalStatusDetail; }
 	public ResourcesCleanUtil()
 	{
 		appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
 	}
 
-	public void exec(JSONObject command) throws Exception
+	@Override
+  public void exec(JSONObject command) throws Exception
 	{
 		JSONObject res = deleteLayers(command.get("mapId").toString());
 		finalStatusDetail = res.toJSONString();
@@ -88,8 +90,8 @@ public class ResourcesCleanUtil implements Executable {
 	    //List<Long> ids = DbUtils.getMapIdsByName( conn, mapId);
 	    //int nMapCnt = ids.size();
 
-	    DbUtils.deleteOSMRecordByName(conn, mapId);
 	    DbUtils.deleteRenderDb(conn, mapId);
+	    DbUtils.deleteOSMRecordByName(conn, mapId);
 	    // Modify when core implements broad casting map id when conflation completes
 	    //_deleteIngestResource(mapId, nMapCnt);
 	  }
@@ -123,7 +125,13 @@ public class ResourcesCleanUtil implements Executable {
 	    	// the new path is within container path
 	    	final String basePath = _ingestPath;
 	    	final String newPath = _ingestPath + "/" + mapName;
-	    	
+
+	    	// Fortify fix
+	    	if(!hoot.services.utils.FileUtils.validateFilePath(_ingestPath, newPath))
+	    	{
+	    		throw new Exception("Map name can not contain path.");
+	    	}
+
 	    	// Fortify fix
 	    	if(!hoot.services.utils.FileUtils.validateFilePath(_ingestPath, newPath))
 	    	{
@@ -177,14 +185,14 @@ public class ResourcesCleanUtil implements Executable {
 	 * see CoreServiceContext.xml
 	 */
 	public void init(){
-
+		//
 	}
 
 	/**
 	 * see CoreServiceContext.xml
 	 */
 	public void destroy(){
-
+		//
 	}
 
 }

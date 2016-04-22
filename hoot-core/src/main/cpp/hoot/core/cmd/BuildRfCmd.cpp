@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -43,6 +43,7 @@
 
 // Tgs
 #include <tgs/RandomForest/RandomForest.h>
+#include <tgs/Statistics/Random.h>
 #include <tgs/System/DisableCout.h>
 
 namespace hoot
@@ -74,7 +75,7 @@ public:
 
     shared_ptr<DataFrame> df = ar.read()->toDataFrame(-1);
 
-    srand(0);
+    Tgs::Random::instance()->seed(0);
     LOG_DEBUG("Building Random Forest");
     RandomForest rf;
     auto_ptr<DisableCout> dc;

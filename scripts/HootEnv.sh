@@ -52,6 +52,9 @@ export GDAL_DATA=`gdal-config --datadir`
 
 export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$HOOT_HOME/lib:$PRETTY_PIPES_HOME/lib/:$LD_LIBRARY_PATH
 export PATH=$HOOT_HOME/bin/:$PATH
+if [ -d "$HADOOP_HOME" ]; then
+  export PATH=$HADOOP_HOME/bin/:$PATH
+fi
 export QT_SELECT=4
 
 # If the user provided an argument then run as a command.

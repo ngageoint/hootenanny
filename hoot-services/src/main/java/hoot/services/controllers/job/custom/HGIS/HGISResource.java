@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job.custom.HGIS;
 
@@ -41,7 +41,7 @@ import hoot.services.validators.osm.MapValidator;
 
 /**
  * Base code for HGIS specific Rest endpoint.
- * 
+ *
  *
  */
 public class HGISResource extends JobControllerBase
@@ -50,7 +50,7 @@ public class HGISResource extends JobControllerBase
 	static private final String _dbUserId;
 	static private final String _dbPassword;
 	static private final String _dbHost;
-	
+
 	private static final Logger log = LoggerFactory.getLogger(HGISResource.class);
 
 	// Load just once during class load
@@ -68,37 +68,37 @@ public class HGISResource extends JobControllerBase
     } catch (IOException e) {
     	log.error("failed to retrieve parameter:" + e.getMessage());
     }
-		
+
 		_dbName = dbName;
 		_dbUserId = dbUserId;
 		_dbPassword = dbPassword;
 		_dbHost = dbHost;
 	}
-	
-	
-	protected final String  getDbName()
+
+
+	protected final static String  getDbName()
 	{
 		return _dbName;
 	}
-	
-	protected final String getDbUserId()
+
+	protected final static String getDbUserId()
 	{
 		return _dbUserId;
 	}
-	
-	protected final String getDbPassword()
+
+	protected final static String getDbPassword()
 	{
 		return _dbPassword;
 	}
-	
-	protected final String getDbHost()
+
+	protected final static String getDbHost()
 	{
 		return _dbHost;
 	}
-	
+
   /**
    * Checks for the existence of map
-   * 
+   *
    * @param mapName
    * @return returns true when exists else false
    * @throws Exception
@@ -110,30 +110,31 @@ public class HGISResource extends JobControllerBase
   	{
   		MapValidator validator = new MapValidator(conn);
   		exists = (validator.verifyMapExists(mapName) > -1);
-  		
+
   	}
   	catch(Exception ex)
   	{
   		throw ex;
   	}
-  	
-  	
+
+
   	return exists;
   }
-  
+
 
   /**
    * Creates db conection string based on config settings in hoot-services.conf
-   * 
-   * 
+   *
+   *
    * @param mapName
    * @return output looks like postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois
    */
+  @SuppressWarnings("static-method")
   protected final String _generateDbMapParam(final String mapName)
   {
-  	return "postgresql://" + getDbUserId() + ":" + getDbPassword() + "@" + getDbHost() + "/" + getDbName() + "/" + mapName;
+  	return "hootapidb://" + getDbUserId() + ":" + getDbPassword() + "@" + getDbHost() + "/" + getDbName() + "/" + mapName;
   }
-  
+
 
   /**
    * Default parameter creator. Child class probably will override this to meet its need.
@@ -151,7 +152,7 @@ public class HGISResource extends JobControllerBase
 		arg = new JSONObject();
 		arg.put("OUTPUT", _generateDbMapParam(out));
 		commandArgs.add(arg);
-		
+
   	return commandArgs;
   }
 }

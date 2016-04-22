@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCACHELRU_H
 #define ELEMENTCACHELRU_H
@@ -58,11 +58,13 @@ public:
 
   /**
    * @brief ElementCacheLRU
-   * @param maxCountEachElementType Total size of cache is three times this value (i.e.,
-   *      cache can hold that many nodes, that many ways, and that many relations before items
-   *      start being replaced)
+   * @param maxNodeCount Total size of node cache before items start being replaced.
+   * @param maxWayCount Total size of ways cache before items start being replaced.
+   * @param maxRelationCount Total size of relation cache before items start being replaced.
    */
-  ElementCacheLRU(const unsigned long maxCountEachElementType);
+  ElementCacheLRU(const unsigned long maxNodeCount,
+                  const unsigned long maxWayCount,
+                  const unsigned long maxRelationCount);
 
   /**
    * @brief ~ElementCache
@@ -132,9 +134,17 @@ public:
 
   virtual void removeElements(const ElementType::Type type);
 
+  virtual unsigned long getNodeCacheSize() { return _maxNodeCount; }
+
+  virtual unsigned long getWayCacheSize() { return _maxWayCount; }
+
+  virtual unsigned long getRelationCacheSize() { return _maxRelationCount; }
+
 protected:
 
-  unsigned long _maxCountPerType;
+  unsigned long _maxNodeCount;
+  unsigned long _maxWayCount;
+  unsigned long _maxRelationCount;
 
   boost::shared_ptr<OGRSpatialReference> _projection;
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,11 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.UUID;
 
@@ -55,31 +56,24 @@ public class RasterToTilesService extends JobControllerBase {
 	protected static String _rasterToTilesPath = null;
 	private static ClassPathXmlApplicationContext appContext = null;
 
-	public RasterToTilesService()
+	public RasterToTilesService() throws IOException
 	{
-		try
+		File f = null;
+		if (processScriptName ==  null)
 		{
-			File f = null;
-			if (processScriptName ==  null)
-			{
-				processScriptName = HootProperties.getProperty("RasterToTiles");
-			}
-
-			if(_tileServerPath == null)
-			{
-				_tileServerPath = HootProperties.getProperty("tileServerPath");
-				f = new File(_tileServerPath);
-				FileUtils.forceMkdir(f);
-			}
-			if (appContext == null)
-	    {
-	      appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
-	    }
+			processScriptName = HootProperties.getProperty("RasterToTiles");
 		}
-		catch(Exception ex)
+
+		if(_tileServerPath == null)
 		{
-
+			_tileServerPath = HootProperties.getProperty("tileServerPath");
+			f = new File(_tileServerPath);
+			FileUtils.forceMkdir(f);
 		}
+		if (appContext == null)
+    {
+      appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
+    }
 	}
 
 	public String ingestOSMResourceDirect(String name, String userEmail) throws Exception
@@ -123,14 +117,14 @@ public class RasterToTilesService extends JobControllerBase {
 
       hoot.services.models.osm.Map currMap = new hoot.services.models.osm.Map(mapIdNum, conn);
       final JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
-      
+
       Object oMinLon = extents.get("minlon");
       Object oMaxLon = extents.get("maxlon");
       Object oMinLat = extents.get("minlat");
       Object oMaxLat = extents.get("maxlat");
-      
+
       String warn = null;
-      
+
       // Make sure we have valid bbox. We may end up with invalid bbox and in that case we should
       // not produce raster density map
       if(oMinLon != null && oMaxLon != null && oMinLat != null && oMaxLat != null)
@@ -139,24 +133,24 @@ public class RasterToTilesService extends JobControllerBase {
 				double dMaxLon = (Double)extents.get("maxlon");
 				double dMinLat = (Double)extents.get("minlat");
 				double dMaxLat = (Double)extents.get("maxlat");
-	
+
 				double deltaLon = dMaxLon - dMinLon;
 				double deltaLat = dMaxLat - dMinLat;
-	
+
 				double maxDelta = deltaLon;
 				if(deltaLat > maxDelta)
 				{
 					maxDelta = deltaLat;
 				}
 				JSONObject zoomInfo = _getZoomInfo( maxDelta);
-	
+
 				String zoomList = zoomInfo.get("zoomlist").toString();
 				int rasterSize = (Integer)zoomInfo.get("rastersize");
-	
-				JSONObject argStr =  _createCommandObj(name, zoomList, rasterSize, userEmail);
+
+				JSONObject argStr =  _createCommandObj(name, zoomList, rasterSize, userEmail, mapIdNum);
 				argStr.put("jobId", jobId);
-	
-				JobExecutionManager jobExecManager = 
+
+				JobExecutionManager jobExecManager =
 					(JobExecutionManager)appContext.getBean("jobExecutionManagerNative");
 				JSONObject res = jobExecManager.exec(argStr);
 				Object oRes = res.get("warnings");
@@ -176,6 +170,7 @@ public class RasterToTilesService extends JobControllerBase {
 		}
 		catch (Exception ex)
 		{
+			assert(jobStatusManager != null);
 			jobStatusManager.setFailed(jobId, ex.getMessage());
 		  ResourceErrorHandler.handleError(
 			"Failure ingesting resource " + ex.toString(),
@@ -241,7 +236,7 @@ public class RasterToTilesService extends JobControllerBase {
 			String zoomList = zoomInfo.get("zoomlist").toString();
 			int rasterSize = (Integer)zoomInfo.get("rastersize");
 
-			String argStr =  _createCommand(name, zoomList, rasterSize);
+			String argStr =  _createCommand(name, zoomList, rasterSize, mapIdNum);
 			postJobRquest( jobId,  argStr);
 		}
 		catch (Exception ex)
@@ -258,7 +253,7 @@ public class RasterToTilesService extends JobControllerBase {
 		return jobId;
 	}
 
-	protected JSONObject _createCommandObj(String name, String zoomList, int rasterSize, String userEmail) throws Exception
+	protected JSONObject _createCommandObj(String name, String zoomList, int rasterSize, String userEmail, long mapId) throws Exception
 	{
 		JSONArray commandArgs = new JSONArray();
 		JSONObject arg = new JSONObject();
@@ -277,7 +272,11 @@ public class RasterToTilesService extends JobControllerBase {
 		arg = new JSONObject();
 		arg.put("RASTER_SIZE", "" + rasterSize);
 		commandArgs.add(arg);
-		
+
+		arg = new JSONObject();
+		arg.put("MAP_ID", String.valueOf(mapId));
+		commandArgs.add(arg);
+
 		if(userEmail != null)
 		{
 			arg = new JSONObject();
@@ -292,9 +291,9 @@ public class RasterToTilesService extends JobControllerBase {
 	}
 
 
-	protected String _createCommand(String name, String zoomList, int rasterSize) throws Exception
+	protected String _createCommand(String name, String zoomList, int rasterSize, long mapId) throws Exception
 	{
-		return _createCommandObj( name,  zoomList,  rasterSize, null).toJSONString();
+		return _createCommandObj( name,  zoomList,  rasterSize, null, mapId).toJSONString();
 	}
 
 	protected JSONObject _getZoomInfo(double maxDelta) throws Exception

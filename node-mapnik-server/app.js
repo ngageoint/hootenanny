@@ -54,7 +54,7 @@ var getLayers = function(db, cb) {
   });
 };
 
-var acquire = function(id, name, color, stylesheet, options, callback) {
+var acquire = function(id, mapid, color, stylesheet, options, callback) {
     methods = {
         create: function(cb) {
                 stylesheet = stylesheet.replace(/\${COLOR}/g, color || 'rgb(255, 85, 153)');
@@ -63,7 +63,7 @@ var acquire = function(id, name, color, stylesheet, options, callback) {
                     if (options.bufferSize) {
                         obj.bufferSize = options.bufferSize;
                     }
-                    var db = process.env['DB_NAME'] + '_renderdb_' + name;
+                    var db = process.env['DB_NAME'] + '_renderdb_' + mapid;
                     getLayers(db, function(rows) {
                       rows.forEach(function(r) {
                         var d = r.f_table_name;
@@ -115,9 +115,10 @@ http.createServer(function(req, res) {
         && query.z !== undefined
         && query.color !== undefined
         && query.name !== undefined
+        && query.mapid !== undefined
     ) {
-      var id = query.name + '_' + query.color;
-      acquire(id, query.name, query.color, s, {bufferSize: 128}, function(err, map) {
+      var id = query.mapid + '_' + query.color;
+      acquire(id, query.mapid, query.color, s, {bufferSize: 128}, function(err, map) {
           if (err) {
               process.nextTick(function() {
                   maps.release(id, map);
@@ -153,7 +154,7 @@ http.createServer(function(req, res) {
         res.writeHead(500, {
           'Content-Type': 'text/plain'
         });
-        res.end('no x,y,z,color,name provided!');
+        res.end('no x,y,z,color,name,mapid provided!');
     }
 }).listen(port);
 

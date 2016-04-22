@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
@@ -67,8 +67,12 @@
 namespace hoot
 {
 
-ElementCacheLRU::ElementCacheLRU(const unsigned long maxCountEachElementType) :
-  _maxCountPerType(maxCountEachElementType),
+ElementCacheLRU::ElementCacheLRU(const unsigned long maxNodeCount,
+                                 const unsigned long maxWayCount,
+                                 const unsigned long maxRelationCount) :
+  _maxNodeCount(maxNodeCount),
+  _maxWayCount(maxWayCount),
+  _maxRelationCount(maxRelationCount),
   _projection(),
   _nodes(),
   _nodesIter(_nodes.begin()),
@@ -77,7 +81,9 @@ ElementCacheLRU::ElementCacheLRU(const unsigned long maxCountEachElementType) :
   _relations(),
   _relationsIter(_relations.begin())
 {
-  LOG_DEBUG("New LRU cache created, " << _maxCountPerType << " entries for each type");
+  LOG_DEBUG(
+    "New LRU cache created, " << _maxNodeCount << " max entries for nodes, " <<
+    _maxWayCount << " max entries for ways, " << _maxRelationCount << " max entries for relations.");
 }
 
 bool ElementCacheLRU::isEmpty() const
@@ -90,9 +96,10 @@ unsigned long ElementCacheLRU::size() const
   return ( _nodes.size() + _ways.size() + _relations.size() );
 }
 
-
 void ElementCacheLRU::addElement(ConstElementPtr &newElement)
 {
+  //LOG_DEBUG("Adding element: " + newElement->toString() + " to cache...");
+
   ConstNodePtr newNode;
   ConstWayPtr newWay;
   ConstRelationPtr newRelation;
@@ -104,14 +111,13 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
     if ( newNode != ConstNodePtr() )
     {
       // Do we have to replace an entry?
-      if ( _nodes.size() == _maxCountPerType )
+      if ( _nodes.size() == _maxNodeCount )
       {
         _removeOldest(ElementType::Node);
       }
 
       _nodes.insert(std::make_pair(newNode->getId(),
        std::make_pair(newNode, boost::posix_time::microsec_clock::universal_time())));
-        //LOG_DEBUG("Added new node with ID " << newNode->getId() );
     }
     break;
   case ElementType::Way:
@@ -119,7 +125,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
     if ( newWay != ConstWayPtr() )
     {
       // Do we have to replace an entry?
-      if ( _ways.size() == _maxCountPerType )
+      if ( _ways.size() == _maxWayCount )
       {
         _removeOldest(ElementType::Way);
       }
@@ -133,7 +139,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
     if ( newRelation != ConstRelationPtr() )
     {
       // Do we have to replace an entry?
-      if ( _relations.size() == _maxCountPerType )
+      if ( _relations.size() == _maxRelationCount )
       {
         _removeOldest(ElementType::Relation);
       }
@@ -207,26 +213,6 @@ ElementPtr ElementCacheLRU::readNextElement()
   return returnElement;
 }
 
-/*
-const RelationPtr& ElementCacheLRU::getRelation(long relationId)
-{
-  const RelationPtr returnRelation;
-  std::map<long,
-    std::pair<ConstRelationPtr, boost::posix_time::ptime> >::iterator searchIter;
-
-  if ( (searchIter = _relations.find(relationId)) != _relations.end() )
-  {
-    // Update access time
-    searchIter->second.second = boost::posix_time::microsec_clock::universal_time();
-
-    const RelationPtr foundRelation(searchIter->second.first);
-    return foundRelation;
-  }
-
-  return returnRelation;
-}
-*/
-
 void ElementCacheLRU::writeElement(ElementInputStream& inputStream)
 {
   boost::shared_ptr<OGRSpatialReference> emptyProjection;
@@ -254,25 +240,6 @@ void ElementCacheLRU::writeElement(ElementPtr &element)
   ConstElementPtr el = element;
   addElement(el);
 }
-
-/*
-ConstWayPtr ElementCacheLRU::getWay(long wayId)
-{
-  ConstWayPtr returnWay;
-  std::map<long,
-    std::pair<ConstWayPtr, boost::posix_time::ptime> >::iterator searchIter;
-
-  if ( (searchIter = _ways.find(wayId)) != _ways.end() )
-  {
-    // Update access time
-    searchIter->second.second = boost::posix_time::microsec_clock::universal_time();
-
-    returnWay = searchIter->second.first;
-  }
-
-  return returnWay;
-}
-*/
 
 ConstWayPtr ElementCacheLRU::getNextWay()
 {
@@ -309,25 +276,6 @@ void ElementCacheLRU::resetElementIterators()
   _relationsIter = _relations.begin();
 }
 
-/*
-ConstNodePtr ElementCacheLRU::getNode(long nodeId)
-{
-  ConstNodePtr returnNode;
-  std::map<long,
-    std::pair<ConstNodePtr, boost::posix_time::ptime> >::iterator searchIter;
-
-  if ( (searchIter = _nodes.find(nodeId)) != _nodes.end() )
-  {
-    // Update access time
-    searchIter->second.second = boost::posix_time::microsec_clock::universal_time();
-
-    returnNode = searchIter->second.first;
-  }
-
-  return returnNode;
-}
-*/
-
 void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 {
   std::map<long, std::pair<ConstNodePtr, boost::posix_time::ptime> >::iterator nodesIter;
@@ -338,7 +286,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
   boost::posix_time::ptime oldestTime(boost::posix_time::microsec_clock::universal_time());
   long oldestId = 0;
 
-  switch ( typeToRemove )
+  switch (typeToRemove)
   {
   case ElementType::Node:
     for (nodesIter = _nodes.begin(); nodesIter != _nodes.end(); nodesIter++)
@@ -352,6 +300,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 
     // Remove oldest entry
     _nodes.erase(oldestId);
+    //LOG_DEBUG("Removed node: " << oldestId << " from cache.");
 
     break;
 
@@ -367,6 +316,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 
     // Remove oldest entry
     _ways.erase(oldestId);
+    //LOG_DEBUG("Removed way: " << oldestId << " from cache.");
 
     break;
 
@@ -382,6 +332,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 
     // Remove oldest entry
     _relations.erase(oldestId);
+    //LOG_DEBUG("Removed relation: " << oldestId << " from cache.");
 
     break;
 

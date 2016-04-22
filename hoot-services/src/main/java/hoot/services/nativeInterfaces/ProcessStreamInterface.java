@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.nativeInterfaces;
 
@@ -109,7 +109,7 @@ public class ProcessStreamInterface implements INativeInterface {
 	  	  	String userid = HootProperties.getProperty("dbUserId");
 	  	  	String pwd = HootProperties.getProperty("dbPassword");
 	  	  	String host = HootProperties.getProperty("dbHost");
-	  	  	dbUrl = "postgresql://" + userid + ":" + pwd + "@" + host + "/" + dbname;
+	  	  	dbUrl = "hootapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
 	    	}
 
 	    }
@@ -119,7 +119,8 @@ public class ProcessStreamInterface implements INativeInterface {
 	    }
 	}
 
-	public String getJobProgress(String jobId)
+	@Override
+  public String getJobProgress(String jobId)
 	{
 		String stdStr = "";
 		Object oCmdRunner = _progProcesses.get(jobId);
@@ -209,39 +210,21 @@ public class ProcessStreamInterface implements INativeInterface {
 					{
 						throw new Exception("User requested termination.");
 					}
-					else
+
+					boolean doThrowException = true;
+					if(cmd.containsKey("throwerror"))
 					{
-						boolean errorAsWarn = false;
-						if(cmd.containsKey("erroraswarning"))
-						{
-							errorAsWarn = Boolean.parseBoolean(cmd.get("erroraswarning").toString());
-						}
-						
-						if(errorAsWarn == true)
-						{
-							ret.put("warnings", err);
-						}
-						else
-						{
-							boolean doThrowException = true;
-							if(cmd.containsKey("throwerror"))
-							{
-								doThrowException = Boolean.parseBoolean(cmd.get("throwerror").toString());
-							}
-							if(doThrowException)
-							{
-								throw new Exception(err);
-							}
-							else
-							{
-								String stdOut = res.getStdout();
-								ret.put("stdout", stdOut);
-								ret.put("stderr", err);
-							}
-						}
-						
-						
+						doThrowException = Boolean.parseBoolean(cmd.get("throwerror").toString());
 					}
+
+					if (doThrowException)
+					{
+						throw new Exception(err);
+					}
+
+					String stdOut = res.getStdout();
+					ret.put("stdout", stdOut);
+					ret.put("stderr", err);
 				}
 			}
 		} catch (Exception e){
@@ -250,12 +233,8 @@ public class ProcessStreamInterface implements INativeInterface {
 				throw new NativeInterfaceException("Failed to execute." + e.getMessage(),
 						NativeInterfaceException.HttpCode.USER_CANCEL);
 			}
-			else
-			{
-				throw new NativeInterfaceException("Failed to execute." + e.getMessage(),
-						NativeInterfaceException.HttpCode.SERVER_ERROR);
-			}
-
+			throw new NativeInterfaceException("Failed to execute." + e.getMessage(),
+					NativeInterfaceException.HttpCode.SERVER_ERROR);
 		}
 		finally
 		{
@@ -277,7 +256,7 @@ public class ProcessStreamInterface implements INativeInterface {
 	 * @return true if successfully added
 	 * @throws Exception
 	 */
-	private boolean addToProcessQ(JSONObject cmd, ICommandRunner cmdRunner) throws Exception
+	private static boolean addToProcessQ(JSONObject cmd, ICommandRunner cmdRunner) throws Exception
 	{
 
 		boolean success = false;
@@ -310,7 +289,7 @@ public class ProcessStreamInterface implements INativeInterface {
 	 * @param cmd
 	 * @throws Exception
 	 */
-	private void removeFromProcessQ(JSONObject cmd )
+	private static void removeFromProcessQ(JSONObject cmd )
 	{
 		String jobId = "";
 		try
@@ -332,7 +311,7 @@ public class ProcessStreamInterface implements INativeInterface {
 	}
 
 
-	private void removeFromProgressProcessQ(String jobId )
+	private static void removeFromProgressProcessQ(String jobId )
 	{
 
 		try
@@ -354,7 +333,8 @@ public class ProcessStreamInterface implements INativeInterface {
 	 * @param jobId : Job Id to terminate
 	 * @throws NativeInterfaceException
 	 */
-	public  void terminate(String jobId) throws NativeInterfaceException
+	@Override
+  public  void terminate(String jobId) throws NativeInterfaceException
 	{
 		try
 		{
@@ -378,21 +358,21 @@ public class ProcessStreamInterface implements INativeInterface {
 	 * see CoreServiceContext.xml
 	 */
 	public void init(){
-
+		//
 	}
 
 	/**
 	 * see CoreServiceContext.xml
 	 */
 	public void destroy(){
-
+		//
 	}
 
 	/**
 	 * Creates direct exec call
 	 * like hoot --ogr2osm target input output if the "exectype" is "hoot"
 	 */
-	private String[] createCmdArray(JSONObject cmd){
+	private static String[] createCmdArray(JSONObject cmd){
 		ArrayList<String> execCmd = new ArrayList<String>();
 		try
 		{
@@ -426,7 +406,7 @@ public class ProcessStreamInterface implements INativeInterface {
 	 * Creates command for make file script based call if exectype = "make"
 	 * output looks like make -f [some makefile] [any argument make file uses]
 	 */
-	private String[] createScriptCmdArray(JSONObject cmd) {
+	private static String[] createScriptCmdArray(JSONObject cmd) {
 		ArrayList<String> execCmd = new ArrayList<String>();
 
 		try
@@ -464,7 +444,7 @@ public class ProcessStreamInterface implements INativeInterface {
 		return Arrays.copyOf(objectArray, objectArray.length, String[].class);
 	}
 
-	private String[] createBashScriptCmdArray(JSONObject cmd) {
+	private static String[] createBashScriptCmdArray(JSONObject cmd) {
 		ArrayList<String> execCmd = new ArrayList<String>();
 
 		try

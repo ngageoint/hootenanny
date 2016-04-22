@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.writers.osm;
 
@@ -150,7 +150,7 @@ public class ChangesetDbWriter
    * Create/Modify requests cause the element ID to be incremented. Delete requests cause it to be 
    * unchanged.
    */
-  private long getNewElementId(final long oldElementId, final long nextElementId,
+  private static long getNewElementId(final long oldElementId, final long nextElementId,
     final EntityChangeType entityChangeType, final int elementCtr)
   {
     long newElementId;
@@ -212,7 +212,7 @@ public class ChangesetDbWriter
    */
   private Element parseElement(final org.w3c.dom.Node xml, final long oldId, final long newId,
     final ElementType elementType, final EntityChangeType entityChangeType,
-    final boolean deleteIfUnused, boolean elementStillUsedByAnotherElement) throws Exception
+    final boolean deleteIfUnused, @SuppressWarnings("unused") boolean elementStillUsedByAnotherElement) throws Exception
   {
     //log.debug("Parsing OSM element type: " + elementType.toString() + ", entity change type: "
         //+ entityChangeType.toString() + "...");

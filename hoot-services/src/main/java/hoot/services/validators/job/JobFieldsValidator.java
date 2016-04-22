@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.validators.job;
 
@@ -72,9 +72,9 @@ public class JobFieldsValidator {
 	// validate required fields list.
 
 
+	//TODO: If this isn't to be used anymore, get rid of it.
 	public boolean validateField( String fieldName, String fieldValue)
 	{
-
 	/*
 		String resourceName = _resourceName;
 		boolean isValid = true;

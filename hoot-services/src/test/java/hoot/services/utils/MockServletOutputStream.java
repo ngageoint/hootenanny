@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -42,6 +42,7 @@ public class MockServletOutputStream extends ServletOutputStream
    * (non-Javadoc)
    * @see java.io.OutputStream#write(int)
    */
+  @Override
   public void write(int i) throws IOException
   {
     baos.write(i);

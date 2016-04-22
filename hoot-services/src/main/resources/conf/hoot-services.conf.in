@@ -21,7 +21,7 @@ homeFolder=$(HOOT_HOME)
 # prevents the services tests from taking a long time to run; may need to increase to as much as
 # 2000 or more in some continuous integration environments where postgres seems to respond more
 # slowly to queries
-testJobStatusPollerTimeout=2000
+testJobStatusPollerTimeout=250
 
 # determines whether the system automatically scans for changes to the log4j props file
 autoScanForLogPropsChanges=true
@@ -247,3 +247,11 @@ hgisPrepareForValidationScript=custom/HGIS/PrepareForValidation.sh
 
 # HGIS filter script name
 hgisFilterScript=custom/HGIS/RemoveNonHgisPois.sh
+
+# Map Edit
+HootToMapEdit=makeexporttomapedit
+MapEditDbName=osmapi_test
+MapEditDbUserId=hoot
+MapEditDbPassword=hoottest
+MapEditDbHostAddr=localhost
+MapEditDbHostPort=5432

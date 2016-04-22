@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -53,27 +53,38 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() < 3 || args.size() > 4 )
+    QString errorMsg = QString("%1 takes either three or six parameters.").arg(getName());
+    if (args.size() < 3 || args.size() > 6 )
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes either three or four parameters.").arg(getName()));
+      throw HootException(errorMsg);
+    }
+    else if (args.size() == 4 || args.size() == 5)
+    {
+      errorMsg += "  A separate cache size must be set for nodes, ways, and relations.";
+      cout << getHelp() << endl << endl;
+      throw HootException(errorMsg);
     }
 
     int a = 0;
     QString translation = args[a++];
     QString input = args[a++];
     QString output = args[a++];
-    unsigned long elementCacheSize = 0;
+    unsigned long nodeCacheSize = 0;
+    unsigned long wayCacheSize = 0;
+    unsigned long relationCacheSize = 0;
 
-    if ( args.size() == 4 )
+    if (args.size() == 6)
     {
-      elementCacheSize = args[a++].toLong();
+      nodeCacheSize = args[a++].toLong();
+      wayCacheSize = args[a++].toLong();
+      relationCacheSize = args[a++].toLong();
     }
 
     shared_ptr<OgrWriter> writer(new OgrWriter());
-    if ( elementCacheSize > 0 )
+    if (nodeCacheSize > 0 && wayCacheSize > 0 && relationCacheSize > 0)
     {
-      writer->setCacheCapacity(elementCacheSize);
+      writer->setCacheCapacity(nodeCacheSize, wayCacheSize, relationCacheSize);
     }
     writer->setScriptPath(translation);
     writer->open(output);

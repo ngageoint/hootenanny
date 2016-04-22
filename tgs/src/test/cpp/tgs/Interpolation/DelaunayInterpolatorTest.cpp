@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit Includes
@@ -80,8 +80,8 @@ public:
     double n0 = Normal::normal(0, 0.5);
     for (size_t i = 0; i < 100; i++)
     {
-      d[0] = Random::generateUniform() * 2 - 1;
-      d[1] = Random::generateUniform() * 2 - 1;
+      d[0] = Random::instance()->generateUniform() * 2 - 1;
+      d[1] = Random::instance()->generateUniform() * 2 - 1;
       double e = sqrt(d[0] * d[0] + d[1] * d[1]);
       d[2] = Normal::normal(e, .5) / n0;
       df.addDataVector("", d);
@@ -101,7 +101,7 @@ public:
 
   void optimizationTest()
   {
-    srand(0);
+    Tgs::Random::instance()->seed(0);
 
     shared_ptr<DelaunayInterpolator> di = buildRandom();
     DelaunayInterpolator& uut = *di;
@@ -160,12 +160,12 @@ public:
 
   void serializationTest()
   {
-    srand(0);
+    Tgs::Random::instance()->seed(0);
 
     shared_ptr<DelaunayInterpolator> di = buildRandom();
     DelaunayInterpolator& uut = *di;
 
-    srand(0);
+    Tgs::Random::instance()->seed(0);
     double error = uut.estimateError();
 
     QBuffer buf;
@@ -178,13 +178,13 @@ public:
 
     DelaunayInterpolator copy;
     copy.readInterpolator(buf);
-    srand(0);
+    Tgs::Random::instance()->seed(0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(error, copy.estimateError(), 0.0001);
   }
 
   void simpleTest()
   {
-    srand(0);
+    Tgs::Random::instance()->seed(0);
     DelaunayInterpolator uut;
 
     shared_ptr<DataFrame> dfPtr(new DataFrame());
@@ -202,8 +202,8 @@ public:
 
     for (size_t i = 0; i < 500; i++)
     {
-      d[0] = Random::generateUniform() * 2 - 1;
-      d[1] = Random::generateUniform() * 2 - 1;
+      d[0] = Random::instance()->generateUniform() * 2 - 1;
+      d[1] = Random::instance()->generateUniform() * 2 - 1;
       double e = sqrt(d[0] * d[0] + d[1] * d[1]);
       d[2] = Normal::normal(e, .5);
       df.addDataVector("", d);
@@ -218,7 +218,7 @@ public:
     dep.push_back("h");
     uut.setDependentColumns(dep);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0028, uut.estimateError(), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0029, uut.estimateError(), 0.0001);
   }
 
 };

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services;
 
@@ -45,7 +45,8 @@ public class DynamicLogPropsChangeScanner extends HttpServlet
 {
 	private static final Logger log = Logger.getLogger ( DynamicLogPropsChangeScanner.class );
 	
-	public void init()
+	@Override
+  public void init()
   {
 		try
 		{

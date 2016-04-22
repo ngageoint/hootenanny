@@ -22,11 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.info;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -111,11 +112,12 @@ public class ErrorLogResource {
 	 * GET hoot-services/info/logging/export
 	 * 
 	 * @return Binary octet stream
+	 * @throws IOException 
 	 */
 	@GET
   @Path("/export")
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  public Response exportLog()
+  public Response exportLog() throws IOException
 	{
 		ErrorLog logging = new ErrorLog();
 		File out = null;

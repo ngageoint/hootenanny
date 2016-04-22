@@ -3,7 +3,9 @@
 OUTPUT=test-output/cmd/slow/Osm2OgrTranslation
 
 function getLayerNames() {
-    result=`ogrinfo -q $1 2>&1 | sed "s/[0-9]*: //;s/ \(.*\)//g" | sort`
+    # For LC_ALL explanation see:
+    # https://github.com/ngageoint/hootenanny-rpms/issues/41
+    result=`ogrinfo -q $1 2>&1 | sed "s/[0-9]*: //;s/ \(.*\)//g" | LC_ALL=C sort`
 }
 
 # Using this function instead of "ogrinfo -al" gives more consistent output between
@@ -39,6 +41,7 @@ printLayerInfo $OUTPUT/options/
 echo "#### Test to make sure all layers are read from a data source. ####"
 rm -rf test-output/cmd/slow/delaware-tds test-output/cmd/slow/delaware-tds.shp
 mkdir -p test-output/cmd/slow
+export SHAPE_ENCODING=UTF-8
 hoot osm2ogr test-files/io/O2sTranslation.js test-files/cmd/slow/delaware.shp test-output/cmd/slow/delaware-tds.shp
 mv test-output/cmd/slow/delaware-tds test-output/cmd/slow/delaware-tds.shp
 hoot stats --quick test-output/cmd/slow/delaware-tds.shp

@@ -50,29 +50,11 @@ from the UI in the Hootenanny User Interface Guide. These documents can accessed
 or on the [releases](https://github.com/ngageoint/hootenanny/releases) under each version e.g. hootenanny-0.2.22.tar.gz/docs. 
 
 # Installation
-Hootenanny can be installed on both CentOS/RHEL 6.5 and Ubuntu 14.04 operating systems. Background on both 
-installation processes can be found in the Hootenanny Developer Guide for Ubuntu/Vagrant installs or 
-the Hootenanny Installation Instruction.pdf for CentOS/RHEL. For Ubuntu and Windows host environments 
-that support [Vagrant](https://www.vagrantup.com/), a pre-configured [Vagrantfile](https://github.com/ngageoint/hootenanny/blob/master/Vagrantfile) 
-containing all of the required software dependencies and configuration settings is included to greatly ease the installation process.  
+Instructions to launch a Hootenanny virtual machine using [Vagrant](https://www.vagrantup.com/) may
+be found [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
 
-Hootenanny has been tested on both CentOS/RHEL 6.x and Ubuntu 14.04.  Ubuntu receives more 
-active development, has more streamlined installation instructions, and is the recommended operating
-system to run Hootenanny on. 
-
-To quickly run Hootenanny on Ubuntu, refer to the Vagrant (VM container) set up instructions in
-VAGRANT.md.  For additional notes on configuring a Hootenanny development environment on Ubuntu, 
-see the Hootenanny - Developers Guide document.
-
-To run Hootenanny on CentOS/RHEL, follow the Hootenanny - Installation Instructions document.  
-There is currently no Vagrant set up available for CentOS/RHEL, but there may be one in the future.  
-Following the CentOS/RHEL installation instructions is currently more complicated than installing 
-Hootenanny on Ubuntu and requires a higher level of Linux expertise.  Setting up a Hootenanny 
-development environment on CentOS/RHEL is neither advised nor supported.
-
-Running Hootenanny with Hadoop is optional.  Hootenanny has been tested on Hadoop 0.20.2.  Neither 
-the Ubuntu nor CentOS/RHEL installation documents currently include instructions for installing 
-Hadoop, but the Developer's Guide has instructions for setting up a pseudo-distributed test cluster.
+Additional instructions for setting up a Hootenanny development environment may be found in the Hootenanny
+Developer's Guide.
 
 # Getting Started
 Once installed and configured, Hootenanny can be accessed from a browser by opening the application URL.  http://localhost:port/hootenanny-id

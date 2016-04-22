@@ -88,10 +88,10 @@ LevelPtr toLog4CxxLevel(Log::WarningLevel l)
 void Log::init()
 {
   _logger = Logger::getLogger("hoot");
-  ConsoleAppender* ca = new ConsoleAppender(
-        new PatternLayout(ConfigOptions().getLogFormat().toStdString()));
+  LayoutPtr layout(new PatternLayout(ConfigOptions().getLogFormat().toStdString()));
+  AppenderPtr appender(new ConsoleAppender(layout));
   _logger->removeAllAppenders();
-  _logger->addAppender(ca);
+  _logger->addAppender(appender);
   _logger->setLevel(toLog4CxxLevel(Log::getLevel()));
 }
 
