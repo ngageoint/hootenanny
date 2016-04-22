@@ -372,7 +372,10 @@ void OsmChangesetSqlFileWriter::_deleteAllTags(ElementId eid)
   QStringList tableNames = _tagTableNamesForElement(eid);
   foreach (QString tableName, tableNames)
   {
-    _deleteAll(tableName, tableName + "_id", eid.getId());
+    QString idFieldName = tableName;
+    idFieldName.replace("current_", "").replace("_tags", "");
+    idFieldName += "_id";
+    _deleteAll(tableName, idFieldName, eid.getId());
   }
 }
 
