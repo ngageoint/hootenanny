@@ -1,6 +1,14 @@
 #!/bin/bash
 set -e
 
+# This test:
+#   - writes two datasets with the same AOI, one to an OSM API database and one to a Hoot API database 
+#   - reads the OSM API dataset into the Hoot API database 
+#   - conflates the two datasets together in hoot
+#   - writes out a sql changeset file that contains the difference between the original OSM API database dataset and the conflated output  
+#   - executes the changeset file writes on the OSM API database
+#   - reads out the final contents of the OSM API database and verified thems
+
 source conf/DatabaseConfig.sh
 
 rm -rf test-output/cmd/glacial/ServiceOsmApiDbConflateTest
