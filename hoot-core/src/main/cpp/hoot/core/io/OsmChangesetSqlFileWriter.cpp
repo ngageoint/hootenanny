@@ -169,7 +169,7 @@ void OsmChangesetSqlFileWriter::_create(const ConstWayPtr way)
       "version) VALUES (%1, %2, true, now(), 1);\n")
       .arg(id)
       .arg(_changesetId);
-  _outputSql.write(("INSERT INTO way (way_id, " + values).toUtf8());
+  _outputSql.write(("INSERT INTO ways (way_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_ways (id, " + values).toUtf8());
 
   _createWayNodes(id, way->getNodeIds());
@@ -238,7 +238,7 @@ void OsmChangesetSqlFileWriter::_modify(const ConstWayPtr way)
       .arg(way->getId())
       .arg(_changesetId)
       .arg(way->getVersion() + 1);
-  _outputSql.write(("INSERT INTO way (way_id, " + values).toUtf8());
+  _outputSql.write(("INSERT INTO ways (way_id, " + values).toUtf8());
 
   values =
     QString("changeset_id=%2, visible=true, \"timestamp\"=now(), version=%3 WHERE id=%1;\n")
