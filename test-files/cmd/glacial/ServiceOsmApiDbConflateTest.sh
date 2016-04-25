@@ -49,10 +49,10 @@ hoot convert $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/3-ref-P
 
 echo ""
 echo "STEP 4: Querying out a cropped aoi for the reference dataset from the osm api db and writing it into a file (debugging purposes only)..."
-hoot convert $HOOT_OPTS -D convert.bounding.box=$AOI $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/4-ref-cropped-PulledFromHootApiDb.osm
+hoot convert $HOOT_OPTS -D convert.bounding.box=$AOI $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/4-ref-cropped-PulledFromOsmApiDb.osm
 
 echo ""
-echo "STEP 5: Writing a secondary dataset over the aoi to the hoot api db..."
+echo "STEP 5: Writing the secondary dataset to the hoot api db..."
 cp $SEC_DATASET test-output/cmd/glacial/ServiceOsmApiDbConflateTest/5-sec-raw.osm
 hoot convert $HOOT_OPTS -D convert.ops=hoot::MapCropper -D crop.bounds=$AOI test-output/cmd/glacial/ServiceOsmApiDbConflateTest/5-sec-raw.osm "$HOOT_DB_URL/5-sec-ServiceOsmApiDbConflateTest"
 
@@ -79,7 +79,7 @@ hoot apply-changeset test-output/cmd/glacial/ServiceOsmApiDbConflateTest/9-chang
 #echo ""
 #echo "STEP 11: Reading the contents of the osm api db for the specified aoi, writing it into a file, and verifying it (debugging purposes only)..."
 #hoot convert -D convert.bounding.box=$AOI $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/11-cropped-output-PulledFromOsmApiDb.osm
-#hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/cropped-output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/6_a-cropped-output-PulledFromOsmApiDb.osm
+#hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/cropped-output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/11-cropped-output-PulledFromOsmApiDb.osm
 
 echo ""
 echo "STEP 12: Reading the entire contents of the osm api db, writing it into a file, and verifying it..."
