@@ -35,17 +35,18 @@ export PGPASSWORD=$DB_PASSWORD
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
 
 export HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
-export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=HootApiDbWriterTest@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=HootApiDbWriterTest@hoottestcpp.org -D writer.include.debug=true --warn"
+export HOOT_OPTS="--warn -D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=HootApiDbWriterTest@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=HootApiDbWriterTest@hoottestcpp.org"
 
 echo ""
 echo "STEP 2: Writing the reference dataset to the osm api db..."
 cp $REF_DATASET test-output/cmd/glacial/ServiceOsmApiDbConflateTest/2-ref-raw.osm
+# By default, all of these element ID's start at 1.
 hoot convert $HOOT_OPTS test-output/cmd/glacial/ServiceOsmApiDbConflateTest/2-ref-raw.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/2-ref-ToBeAppliedToOsmApiDb.sql
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-output/cmd/glacial/ServiceOsmApiDbConflateTest/2-ref-ToBeAppliedToOsmApiDb.sql
 
 echo ""
 echo "STEP 3: Reading the reference dataset out of the osm api db and writing it into a file (debugging purposes only)..."
-hoot convert $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/3-ref-PulledFromOsmApiDb.osm
+hoot convert $HOOT_OPTS $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/3-ref-PulledFromOsmApiDb.osm
 
 echo ""
 echo "STEP 4: Querying out a cropped aoi for the reference dataset from the osm api db and writing it into a file (debugging purposes only)..."
@@ -54,10 +55,12 @@ hoot convert $HOOT_OPTS -D convert.bounding.box=$AOI $DB_URL test-output/cmd/gla
 echo ""
 echo "STEP 5: Writing the secondary dataset to the hoot api db..."
 cp $SEC_DATASET test-output/cmd/glacial/ServiceOsmApiDbConflateTest/5-sec-raw.osm
+# Start the element ID's after those that have already been written for the ref dataset to the osm api db.
+# Unfortunately, this won't work: -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=37 -D id.generator.relation.start=1 -D id.generator.way.start=5 -D hoot.api.db.writer.remap.ids=false
 hoot convert $HOOT_OPTS -D convert.ops=hoot::MapCropper -D crop.bounds=$AOI test-output/cmd/glacial/ServiceOsmApiDbConflateTest/5-sec-raw.osm "$HOOT_DB_URL/5-sec-ServiceOsmApiDbConflateTest"
 
 echo ""
-echo "STEP 6: Reading the secondary dataset out of the hoot api db writing it into a file (debugging purposes only)..."
+echo "STEP 6: Reading the secondary dataset out of the hoot api db and writing it into a file (debugging purposes only)..."
 hoot convert $HOOT_OPTS "$HOOT_DB_URL/5-sec-ServiceOsmApiDbConflateTest" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/6-sec-cropped-PulledFromHootApiDb.osm
 
 echo ""
@@ -74,15 +77,15 @@ hoot derive-changeset $HOOT_OPTS -D changeset.user.id=1 -D convert.bounding.box=
 
 echo ""
 echo "STEP 10: Executing the changeset SQL on the osm api db..."
-hoot apply-changeset test-output/cmd/glacial/ServiceOsmApiDbConflateTest/9-changeset-ToBeAppliedToOsmApiDb.osc.sql $DB_URL
+hoot apply-changeset $HOOT_OPTS test-output/cmd/glacial/ServiceOsmApiDbConflateTest/9-changeset-ToBeAppliedToOsmApiDb.osc.sql $DB_URL
 
 #echo ""
 #echo "STEP 11: Reading the contents of the osm api db for the specified aoi, writing it into a file, and verifying it (debugging purposes only)..."
-#hoot convert -D convert.bounding.box=$AOI $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/11-cropped-output-PulledFromOsmApiDb.osm
+#hoot convert $HOOT_OPTS -D convert.bounding.box=$AOI $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/11-cropped-output-PulledFromOsmApiDb.osm
 #hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/cropped-output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/11-cropped-output-PulledFromOsmApiDb.osm
 
 echo ""
 echo "STEP 12: Reading the entire contents of the osm api db, writing it into a file, and verifying it..."
-hoot convert $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/12-output-PulledFromOsmApiDb.osm
+hoot convert $HOOT_OPTS $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/12-output-PulledFromOsmApiDb.osm
 hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/12-output-PulledFromOsmApiDb.osm
 
