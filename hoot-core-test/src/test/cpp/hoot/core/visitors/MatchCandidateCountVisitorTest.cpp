@@ -60,7 +60,6 @@ class MatchCandidateCountVisitorTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(MatchCandidateCountVisitorTest);
   CPPUNIT_TEST(runBuildingMatchCandidateCountTest);
   CPPUNIT_TEST(runHighwayMatchCandidateCountTest);
-  //TODO: re-enable this when #310 is fixed
   CPPUNIT_TEST(runCombinedMatchCandidateCountTest);
   CPPUNIT_TEST(runScriptMatchCreatorTest);
   CPPUNIT_TEST(runMultipleScriptMatchCreatorTest);
@@ -140,7 +139,6 @@ public:
     matchCreators.append("hoot::HighwayMatchCreator");
     matchCreators.append("hoot::PlacesPoiMatchCreator");
     matchCreators.append("hoot::CustomPoiMatchCreator");
-    //This match creator will trigger the failure described in #310.
     matchCreators.append("hoot::ScriptMatchCreator,LineStringGeneric.js");
     MatchFactory::getInstance().reset();
     MatchFactory::_setMatchCreators(matchCreators);
