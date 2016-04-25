@@ -26,9 +26,8 @@ source conf/DatabaseConfig.sh
 rm -rf test-output/cmd/glacial/ServiceOsmApiDbConflateTest
 mkdir -p test-output/cmd/glacial/ServiceOsmApiDbConflateTest
 
-ctr=1
 echo ""
-echo "STEP "$ctr": Cleaning out the osm api db and initializing it for use..."
+echo "STEP 1: Cleaning out the osm api db and initializing it for use..."
 source scripts/SetupOsmApiDB.sh
 export DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
 export AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
@@ -38,68 +37,56 @@ psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
 export HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=HootApiDbWriterTest@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=HootApiDbWriterTest@hoottestcpp.org -D writer.include.debug=true --warn"
 
-ctr=$((ctr+1))
 echo ""
-echo "STEP "$ctr": Writing the reference dataset to an osm api db..."
-cp $REF_DATASET test-output/cmd/glacial/ServiceOsmApiDbConflateTest/1-ref-raw.osm
-hoot convert $HOOT_OPTS test-output/cmd/glacial/ServiceOsmApiDbConflateTest/1-ref-raw.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/2-ref-ToBeAppliedToOsmApiDb.sql
+echo "STEP 2: Writing the reference dataset to an osm api db..."
+cp $REF_DATASET test-output/cmd/glacial/ServiceOsmApiDbConflateTest/2-ref-raw.osm
+hoot convert $HOOT_OPTS test-output/cmd/glacial/ServiceOsmApiDbConflateTest/2-ref-raw.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/2-ref-ToBeAppliedToOsmApiDb.sql
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-output/cmd/glacial/ServiceOsmApiDbConflateTest/2-ref-ToBeAppliedToOsmApiDb.sql
 
-ctr=$((ctr+1))
 echo ""
-echo "STEP "$ctr": Reading the reference dataset back out of the osm api db into a file..."
+echo "STEP 3: Reading the reference dataset out of the osm api db into a file..."
 hoot convert $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/3-ref-PulledFromOsmApiDb.osm
 
-ctr=$((ctr+1))
 echo ""
-echo "STEP "$ctr": Querying out a cropped aoi for the reference dataset from the osm api db and writing it into a hoot api db..."
-hoot convert $HOOT_OPTS -D convert.bounding.box=$AOI $DB_URL "$HOOT_DB_URL/ServiceOsmApiDbConflateTestRef"
+echo "STEP 4: Querying out a cropped aoi for the reference dataset from the osm api db and writing it into a hoot api db..."
+hoot convert $HOOT_OPTS -D convert.bounding.box=$AOI $DB_URL "$HOOT_DB_URL/4-ref-ServiceOsmApiDbConflateTest"
 
-ctr=$((ctr+1))
 echo ""
-echo "STEP "$ctr": Reading the cropped reference dataset back out of the hoot api db into a file..."
-hoot convert $HOOT_OPTS "$HOOT_DB_URL/ServiceOsmApiDbConflateTestRef" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/4-ref-PulledFromHootApiDb-cropped.osm
+echo "STEP 5: Reading the cropped reference dataset out of the hoot api db into a file..."
+hoot convert $HOOT_OPTS "$HOOT_DB_URL/4-ref-ServiceOsmApiDbConflateTest" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/5-ref-PulledFromHootApiDb-cropped.osm
 
-ctr=$((ctr+1))
 echo ""
-echo "STEP "$ctr": Writing a secondary dataset over the aoi to the hoot api db..."
-cp $SEC_DATASET test-output/cmd/glacial/ServiceOsmApiDbConflateTest/5-sec-raw.osm
-hoot convert $HOOT_OPTS -D convert.ops=hoot::MapCropper -D crop.bounds=$AOI test-output/cmd/glacial/ServiceOsmApiDbConflateTest/5-sec-raw.osm "$HOOT_DB_URL/ServiceOsmApiDbConflateTestSec"
+echo "STEP 6: Writing a secondary dataset over the aoi to the hoot api db..."
+cp $SEC_DATASET test-output/cmd/glacial/ServiceOsmApiDbConflateTest/6-sec-raw.osm
+hoot convert $HOOT_OPTS -D convert.ops=hoot::MapCropper -D crop.bounds=$AOI test-output/cmd/glacial/ServiceOsmApiDbConflateTest/6-sec-raw.osm "$HOOT_DB_URL/6-sec-ServiceOsmApiDbConflateTest"
 
-ctr=$((ctr+1))
 echo ""
-echo "STEP "$ctr": Reading the second dataset back out of the hoot api db into a file..."
-hoot convert $HOOT_OPTS "$HOOT_DB_URL/ServiceOsmApiDbConflateTestSec" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/6-sec-PulledFromHootApiDb-cropped.osm
+echo "STEP 7: Reading the secondary dataset out of the hoot api db into a file..."
+hoot convert $HOOT_OPTS "$HOOT_DB_URL/6-sec-ServiceOsmApiDbConflateTest" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/7-sec-PulledFromHootApiDb-cropped.osm
 
-ctr=$((ctr+1))
 echo ""
-echo "STEP "$ctr": Conflating the two datasets..."
-hoot conflate $HOOT_OPTS "$HOOT_DB_URL/ServiceOsmApiDbConflateTestRef" "$HOOT_DB_URL/ServiceOsmApiDbConflateTestSec" "$HOOT_DB_URL/ServiceOsmApiDbConflateTestConflated"
+echo "STEP 8: Conflating the two datasets..."
+hoot conflate $HOOT_OPTS "$HOOT_DB_URL/4-ref-ServiceOsmApiDbConflateTest" "$HOOT_DB_URL/6-sec-ServiceOsmApiDbConflateTest" "$HOOT_DB_URL/8-conflated-ServiceOsmApiDbConflateTest"
 
-ctr=$((ctr+1))
 echo ""
-echo "Reading the conflated contents back out of the hoot api db..."
-hoot convert $HOOT_OPTS "$HOOT_DB_URL/ServiceOsmApiDbConflateTestConflated" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/7-PulledFromHootApiDb-conflated.osm
+echo "STEP 9: Reading the conflated dataset out of the hoot api db..."
+hoot convert $HOOT_OPTS "$HOOT_DB_URL/8-conflated-ServiceOsmApiDbConflateTest" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/9-conflated-PulledFromHootApiDb.osm
 
-ctr=$((ctr+1))
 echo ""
-echo "STEP "$ctr": Writing a SQL changeset file that is the difference between the cropped reference input dataset and the conflated output..."
-hoot derive-changeset $HOOT_OPTS -D changeset.user.id=1 "$HOOT_DB_URL/ServiceOsmApiDbConflateTestRef" "$HOOT_DB_URL/ServiceOsmApiDbConflateTestConflated" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/8-changeset-ToBeAppliedToOsmApiDb.osc.sql $DB_URL
+echo "STEP 10: Writing a SQL changeset file that is the difference between the cropped reference input dataset and the conflated output..."
+hoot derive-changeset $HOOT_OPTS -D changeset.user.id=1 "$HOOT_DB_URL/4-ref-ServiceOsmApiDbConflateTest" "$HOOT_DB_URL/8-conflated-ServiceOsmApiDbConflateTest" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/10-changeset-ToBeAppliedToOsmApiDb.osc.sql $DB_URL
 
-ctr=$((ctr+1))
 echo ""
-echo "STEP "$ctr": Writing the changeset SQL back to the osm api db..."
-hoot apply-changeset test-output/cmd/glacial/ServiceOsmApiDbConflateTest/8-changeset-ToBeAppliedToOsmApiDb.osc.sql $DB_URL
+echo "STEP 11: Writing the changeset SQL to the osm api db..."
+hoot apply-changeset test-output/cmd/glacial/ServiceOsmApiDbConflateTest/10-changeset-ToBeAppliedToOsmApiDb.osc.sql $DB_URL
 
-#ctr=$((ctr+1))
 #echo ""
-#echo "Reading the contents of the osm api db for the specified aoi into a file and verifying it..."
-#hoot convert -D convert.bounding.box=$AOI $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/9-final-output-PulledFromOsmApiDb-cropped.osm
-#hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/cropped-output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/9-final-output-PulledFromOsmApiDb-cropped.osm
+#echo "STEP 12: Reading the contents of the osm api db for the specified aoi into a file and verifying it..."
+#hoot convert -D convert.bounding.box=$AOI $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/12-cropped-output-PulledFromOsmApiDb.osm
+#hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/cropped-output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/12-cropped-output-PulledFromOsmApiDb.osm
 
-ctr=$((ctr+1))
 echo ""
-echo "STEP "$ctr": Reading the entire contents of the osm api db into a file and verifying it..."
-hoot convert $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/10-final-output-PulledFromOsmApiDb.osm
-hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/10-final-output-PulledFromOsmApiDb.osm
+echo "STEP 12: Reading the entire contents of the osm api db into a file and verifying it..."
+hoot convert $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/12-output-PulledFromOsmApiDb.osm
+hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/12-output-PulledFromOsmApiDb.osm
 

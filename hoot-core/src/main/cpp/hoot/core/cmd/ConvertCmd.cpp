@@ -82,6 +82,7 @@ public:
              writerFactory.hasElementOutputStream(args[1]) &&
              ConfigOptions().getConvertOps().size() == 0)
     {
+      LOG_INFO("streaming");
       streamElements(args[0], args[1]);
     }
     else
