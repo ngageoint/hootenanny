@@ -360,7 +360,7 @@ shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator,
       nodeId,
       resultIterator.value(ApiDb::NODES_LONGITUDE).toDouble(),
       resultIterator.value(ApiDb::NODES_LATITUDE).toDouble(),
-      ApiDb::DEFAULT_ELEMENT_CIRCULAR_ERROR,
+      ConfigOptions().getCircularErrorDefaultValue(),
       resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
@@ -379,7 +379,7 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
     new Way(
       _status,
       newWayId,
-      ApiDb::DEFAULT_ELEMENT_CIRCULAR_ERROR,
+      ConfigOptions().getCircularErrorDefaultValue(),
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
@@ -410,7 +410,7 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
     new Relation(
       _status,
       newRelationId,
-      ApiDb::DEFAULT_ELEMENT_CIRCULAR_ERROR,
+      ConfigOptions().getCircularErrorDefaultValue(),
       "",/*"collection"*///TODO: services db doesn't support relation "type" yet
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),

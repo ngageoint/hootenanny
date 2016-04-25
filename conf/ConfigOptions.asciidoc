@@ -133,6 +133,13 @@ The maximum allowed size of an OSM changeset written to the OSM API database.
 
 The DB user ID for a OSM API DB. Used by changeset writing.
 
+=== circular.error.default.value
+
+* Data Type: double
+* Default Value: `15`
+
+Set the circular error on items to this value, in meters, by default.
+
 === conflate.add.score.tags
 
 * Data Type: bool
@@ -1688,13 +1695,6 @@ a new map is written.
 If this value is set to a non-empty string, the system will attempt to open a file with the specified name
 and output all the ID mappings (source to destination) used for nodes, ways, and relations that were
 written to the database.
-
-=== set.circular.error.visitor.value
-
-* Data Type: double
-* Default Value: `15`
-
-Set the circular error on visited items to this value.
 
 === set.tag.visitor.key
 
