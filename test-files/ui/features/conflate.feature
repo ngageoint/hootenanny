@@ -16,4 +16,4 @@ Feature: Conflate feature
     And I press "Conflate"
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
-    Then I wait 3 "minutes" to see "Merged_RoadsCucumber"
+    Then I wait 5 "minutes" to see "Merged_RoadsCucumber"
