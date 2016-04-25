@@ -22,7 +22,7 @@ Feature: Hootenanny Clip Dataset Test
         Then I wait 5 "seconds" to see "Clip Data to Bounding Box"
         And I fill "LayerName" input with "CucumberClip_BB"
         And I press "Clip" big loud span
-        Then I wait 5 "seconds" to see "has been submitted."
+        Then I wait 10 "seconds" to see "has been submitted."
         Then I wait 10 "seconds" to see "Success:"
         Then I remove the first layer
         Then I close the UI alert
@@ -34,5 +34,5 @@ Feature: Hootenanny Clip Dataset Test
         Then I wait 5 "seconds" to see "Clip Data to Visual Extent"
         And I fill "LayerName" input with "CucumberClip_VE"
         Then I press "Clip" big loud span
-        Then I wait 5 "seconds" to see "has been submitted."
+        Then I wait 10 "seconds" to see "has been submitted."
         Then I wait 10 "seconds" to see "Success:"
