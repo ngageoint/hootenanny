@@ -123,21 +123,18 @@ public:
       output = args[1];
     }
 
-    ConfigOptions configOptions;
-
     double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
     LOG_VAR(bytesRead);
     QList< QList<SingleStat> > allStats;
 
     // read input 1
     shared_ptr<OsmMap> map(new OsmMap());
-    //TODO: make configurable for osm api db source data?
-    loadMap(map, input1, false, Status::Unknown1);
+    loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIdsInput1(), Status::Unknown1);
 
     // read input 2
     if (!input2.isEmpty())
     {
-      loadMap(map, input2, false, Status::Unknown2);
+      loadMap(map, input2, ConfigOptions().getConflateUseDataSourceIdsInput2(), Status::Unknown2);
     }
     double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
     LOG_VAR(inputBytes);
