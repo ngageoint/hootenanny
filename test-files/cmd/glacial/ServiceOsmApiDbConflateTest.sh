@@ -26,8 +26,6 @@ source conf/DatabaseConfig.sh
 rm -rf test-output/cmd/glacial/ServiceOsmApiDbConflateTest
 mkdir -p test-output/cmd/glacial/ServiceOsmApiDbConflateTest
 
-# Steps with letters after the numbers (e.g. 1a) are in place for debugging purposes only.
-
 echo ""
 echo "STEP 1: Cleaning out the osm api db and initializing it for use..."
 source scripts/SetupOsmApiDB.sh
@@ -46,45 +44,45 @@ hoot convert $HOOT_OPTS test-output/cmd/glacial/ServiceOsmApiDbConflateTest/2-re
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-output/cmd/glacial/ServiceOsmApiDbConflateTest/2-ref-ToBeAppliedToOsmApiDb.sql
 
 echo ""
-echo "STEP 2a: Reading the reference dataset out of the osm api db and writing it into a file..."
-hoot convert $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/2a-ref-PulledFromOsmApiDb.osm
+echo "STEP 3: Reading the reference dataset out of the osm api db and writing it into a file (debugging purposes only)..."
+hoot convert $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/3-ref-PulledFromOsmApiDb.osm
 
 echo ""
-echo "STEP 2b: Querying out a cropped aoi for the reference dataset from the osm api db and writing it into a file..."
-hoot convert $HOOT_OPTS -D convert.bounding.box=$AOI $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/2b-ref-cropped-PulledFromHootApiDb.osm
+echo "STEP 4: Querying out a cropped aoi for the reference dataset from the osm api db and writing it into a file (debugging purposes only)..."
+hoot convert $HOOT_OPTS -D convert.bounding.box=$AOI $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/4-ref-cropped-PulledFromHootApiDb.osm
 
 echo ""
-echo "STEP 3: Writing a secondary dataset over the aoi to the hoot api db..."
-cp $SEC_DATASET test-output/cmd/glacial/ServiceOsmApiDbConflateTest/3-sec-raw.osm
-hoot convert $HOOT_OPTS -D convert.ops=hoot::MapCropper -D crop.bounds=$AOI test-output/cmd/glacial/ServiceOsmApiDbConflateTest/3-sec-raw.osm "$HOOT_DB_URL/3-sec-ServiceOsmApiDbConflateTest"
+echo "STEP 5: Writing a secondary dataset over the aoi to the hoot api db..."
+cp $SEC_DATASET test-output/cmd/glacial/ServiceOsmApiDbConflateTest/5-sec-raw.osm
+hoot convert $HOOT_OPTS -D convert.ops=hoot::MapCropper -D crop.bounds=$AOI test-output/cmd/glacial/ServiceOsmApiDbConflateTest/5-sec-raw.osm "$HOOT_DB_URL/5-sec-ServiceOsmApiDbConflateTest"
 
 echo ""
-echo "STEP 3a: Reading the secondary dataset out of the hoot api db writing it into a file..."
-hoot convert $HOOT_OPTS "$HOOT_DB_URL/3-sec-ServiceOsmApiDbConflateTest" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/3a-sec-cropped-PulledFromHootApiDb.osm
+echo "STEP 6: Reading the secondary dataset out of the hoot api db writing it into a file (debugging purposes only)..."
+hoot convert $HOOT_OPTS "$HOOT_DB_URL/5-sec-ServiceOsmApiDbConflateTest" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/6-sec-cropped-PulledFromHootApiDb.osm
 
 echo ""
-echo "STEP 4: Conflating the two datasets..."
-hoot conflate $HOOT_OPTS -D convert.bounding.box=$AOI -D conflate.use.data.source.ids.input.1=true -D conflate.use.data.source.ids.input.2=true $DB_URL "$HOOT_DB_URL/3-sec-ServiceOsmApiDbConflateTest" "$HOOT_DB_URL/4-conflated-ServiceOsmApiDbConflateTest"
+echo "STEP 7: Conflating the two datasets..."
+hoot conflate $HOOT_OPTS -D convert.bounding.box=$AOI -D conflate.use.data.source.ids.input.1=true -D conflate.use.data.source.ids.input.2=false $DB_URL "$HOOT_DB_URL/5-sec-ServiceOsmApiDbConflateTest" "$HOOT_DB_URL/7-conflated-ServiceOsmApiDbConflateTest"
 
 echo ""
-echo "STEP 4a: Reading the conflated dataset out of the hoot api db and writing it into a file..."
-hoot convert $HOOT_OPTS "$HOOT_DB_URL/4-conflated-ServiceOsmApiDbConflateTest" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/4a-conflated-PulledFromHootApiDb.osm
+echo "STEP 8: Reading the conflated dataset out of the hoot api db and writing it into a file (debugging purposes only)..."
+hoot convert $HOOT_OPTS "$HOOT_DB_URL/7-conflated-ServiceOsmApiDbConflateTest" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/8-conflated-PulledFromHootApiDb.osm
 
 echo ""
-echo "STEP 5: Writing a SQL changeset file that is the difference between the cropped reference input dataset and the conflated output..."
-hoot derive-changeset $HOOT_OPTS -D changeset.user.id=1 -D convert.bounding.box=$AOI $DB_URL "$HOOT_DB_URL/4-conflated-ServiceOsmApiDbConflateTest" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/5-changeset-ToBeAppliedToOsmApiDb.osc.sql $DB_URL
+echo "STEP 9: Writing a SQL changeset file that is the difference between the cropped reference input dataset and the conflated output..."
+hoot derive-changeset $HOOT_OPTS -D changeset.user.id=1 -D convert.bounding.box=$AOI $DB_URL "$HOOT_DB_URL/7-conflated-ServiceOsmApiDbConflateTest" test-output/cmd/glacial/ServiceOsmApiDbConflateTest/9-changeset-ToBeAppliedToOsmApiDb.osc.sql $DB_URL
 
 echo ""
-echo "STEP 6: Writing the changeset SQL to the osm api db..."
-hoot apply-changeset test-output/cmd/glacial/ServiceOsmApiDbConflateTest/5-changeset-ToBeAppliedToOsmApiDb.osc.sql $DB_URL
+echo "STEP 10: Executing the changeset SQL on the osm api db..."
+hoot apply-changeset test-output/cmd/glacial/ServiceOsmApiDbConflateTest/9-changeset-ToBeAppliedToOsmApiDb.osc.sql $DB_URL
 
 #echo ""
-#echo "STEP 6a: Reading the contents of the osm api db for the specified aoi, writing it into a file, and verifying it..."
-#hoot convert -D convert.bounding.box=$AOI $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/6a-cropped-output-PulledFromOsmApiDb.osm
-#hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/cropped-output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/6a-cropped-output-PulledFromOsmApiDb.osm
+#echo "STEP 11: Reading the contents of the osm api db for the specified aoi, writing it into a file, and verifying it (debugging purposes only)..."
+#hoot convert -D convert.bounding.box=$AOI $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/11-cropped-output-PulledFromOsmApiDb.osm
+#hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/cropped-output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/6_a-cropped-output-PulledFromOsmApiDb.osm
 
 echo ""
-echo "STEP 7: Reading the entire contents of the osm api db, writing it into a file, and verifying it..."
-hoot convert $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/7-output-PulledFromOsmApiDb.osm
-hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/7-output-PulledFromOsmApiDb.osm
+echo "STEP 12: Reading the entire contents of the osm api db, writing it into a file, and verifying it..."
+hoot convert $DB_URL test-output/cmd/glacial/ServiceOsmApiDbConflateTest/12-output-PulledFromOsmApiDb.osm
+hoot is-match test-files/cmd/glacial/ServiceOsmApiDbConflateTest/output.osm test-output/cmd/glacial/ServiceOsmApiDbConflateTest/12-output-PulledFromOsmApiDb.osm
 
