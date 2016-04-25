@@ -389,7 +389,7 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
   way->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::WAYS_TAGS)));
   ApiDbReader::addTagsToElement(way);
 
-  //TODO: read these out in batch at the same time the element results are read
+  // These could be read out in batch at the same time the element results are read...
   vector<long> nodeIds = _database.selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
@@ -411,7 +411,7 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
       _status,
       newRelationId,
       ConfigOptions().getCircularErrorDefaultValue(),
-      "",/*"collection"*///TODO: services db doesn't support relation "type" yet
+      "",/*"collection"*/ //services db doesn't support relation "type" yet
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
@@ -420,7 +420,7 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
   relation->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
   ApiDbReader::addTagsToElement(relation);
 
-  //TODO: read these out in batch at the same time the element results are read
+  // These could be read out in batch at the same time the element results are read...
   vector<RelationData::Entry> members = _database.selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
   {
