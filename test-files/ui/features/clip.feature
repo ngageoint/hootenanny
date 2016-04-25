@@ -27,9 +27,9 @@ Feature: Hootenanny Clip Dataset Test
         Then I remove the first layer
         Then I close the UI alert
         When I click the "Add Reference Dataset" link
-        And I click the "CucumberClip" Dataset
+        And I click the "DcGisRoadsCucumber" Dataset
         Then I click first "Add Layer"
-        Then I wait 30 "seconds" to see "CucumberClip"
+        Then I wait 30 "seconds" to see "DcGisRoadsCucumber"
         Then I click the "9" key
         Then I wait 5 "seconds" to see "Clip Data to Visual Extent"
         And I fill "LayerName" input with "CucumberClip_VE"
