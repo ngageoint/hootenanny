@@ -10,10 +10,15 @@ set -e
 #   - reads out the final contents of the OSM API database and verifies them
 
 REF_DATASET=test-files/DcGisRoads.osm
-echo "reference dataset: " $REF_DATASET
 SEC_DATASET=test-files/DcTigerRoads.osm
-echo "secondary dataset: " $SEC_DATASET
 AOI=-77.040,38.892,-77.033,38.896
+
+#REF_DATASET=test-files/ToyTestA.osm
+#SEC_DATASET=test-files/ToyTestB.osm
+#AOI=-104.904,35.852,-104.895,38.856
+
+echo "reference dataset: " $REF_DATASET
+echo "secondary dataset: " $SEC_DATASET
 echo "AOI: " $AOI
 
 source conf/DatabaseConfig.sh
