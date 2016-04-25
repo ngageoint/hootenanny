@@ -2,7 +2,7 @@ Feature: Manually resolve reviews feature
 
   Scenario: I can conflate the AllDataTypes data, manually resolve some reviews, and merge some POIs during the review process
     Given I am on Hootenanny
-    #And I resize the window
+    And I resize the window
     And I click Get Started
     And I press "Add Reference Dataset"
     And I click the "AllDataTypesACucumber" Dataset
