@@ -62,7 +62,6 @@ class MatchCandidateCountVisitorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runHighwayMatchCandidateCountTest);
   //TODO: re-enable this when #310 is fixed
   CPPUNIT_TEST(runCombinedMatchCandidateCountTest);
-  CPPUNIT_TEST(runCombinedMatchCandidateCountNewTest);
   CPPUNIT_TEST(runScriptMatchCreatorTest);
   CPPUNIT_TEST(runMultipleScriptMatchCreatorTest);
   CPPUNIT_TEST(runDualPoiScriptMatchCreatorTest);
@@ -161,38 +160,6 @@ public:
     CPPUNIT_ASSERT_EQUAL(
       (long)0,
       matchCandidateCountsByMatchCreator["hoot::hoot::ScriptMatchCreator,LineStringGenericTest.js"]);
-  }
-
-  void runCombinedMatchCandidateCountNewTest()
-  {
-    OsmReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
-    OsmMap::resetCounters();
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
-    reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
-    MapProjector::projectToPlanar(map);
-
-    QStringList matchCreators;
-    matchCreators.append("hoot::BuildingMatchCreator");
-    matchCreators.append("hoot::HighwayMatchCreator");
-    matchCreators.append("hoot::PlacesPoiMatchCreator");
-    matchCreators.append("hoot::CustomPoiMatchCreator");
-    MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
-
-    MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
-    map->visitRo(uut);
-    CPPUNIT_ASSERT_EQUAL((int)68, (int)uut.getStat());
-    QMap<QString, long> matchCandidateCountsByMatchCreator =
-      any_cast<QMap<QString, long> >(uut.getData());
-    CPPUNIT_ASSERT_EQUAL(4, matchCandidateCountsByMatchCreator.size());
-    //These don't add up to the total...is there some overlap here?
-    CPPUNIT_ASSERT_EQUAL((long)18, matchCandidateCountsByMatchCreator["hoot::BuildingMatchCreator"]);
-    CPPUNIT_ASSERT_EQUAL((long)8, matchCandidateCountsByMatchCreator["hoot::HighwayMatchCreator"]);
-    CPPUNIT_ASSERT_EQUAL((long)21, matchCandidateCountsByMatchCreator["hoot::PlacesPoiMatchCreator"]);
-    CPPUNIT_ASSERT_EQUAL((long)21, matchCandidateCountsByMatchCreator["hoot::CustomPoiMatchCreator"]);
   }
 
   //Script match creators are handled a little differently during match candidate count creation than
