@@ -28,7 +28,7 @@ Feature: Manually resolve reviews feature
     Then I should see "Merge"
     And I press "Merge"
     Then I wait 30 "seconds" to see "Resolved"
-    And I hover over ".button.toggletable"
+    And I hover over ".layer-data"
     And I press "Resolved"
     #This should work too
     #And I click the "r" key
