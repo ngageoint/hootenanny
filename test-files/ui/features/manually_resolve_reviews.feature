@@ -7,11 +7,11 @@ Feature: Manually resolve reviews feature
     And I press "Add Reference Dataset"
     And I click the "AllDataTypesACucumber" Dataset
     And I press "Add Layer"
-    Then I wait 5 "seconds" to see "AllDataTypesACucumber"
+    Then I wait 30 "seconds" to see "AllDataTypesACucumber"
     And I press "Add Secondary Dataset"
     And I click the "AllDataTypesBCucumber" Dataset
     And I press "Add Layer"
-    Then I wait 5 "seconds" to see "AllDataTypesBCucumber"
+    Then I wait 30 "seconds" to see "AllDataTypesBCucumber"
     Then I should see "Conflate"
     And I press "Conflate"
     And I append "saveAs" input with "_Cucumber"
@@ -28,7 +28,10 @@ Feature: Manually resolve reviews feature
     Then I should see "Merge"
     And I press "Merge"
     Then I wait 30 "seconds" to see "Resolved"
-    And I click the "r" key
+    And I hover over ".button.toggletable"
+    And I press "Resolved"
+    #This should work too
+    #And I click the "r" key
     Then I wait 60 "seconds" to see "Reviews remaining: 7 (Resolved: 1)"
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 6 (Resolved: 2)"
