@@ -28,11 +28,12 @@ Feature: Manually resolve reviews feature
     Then I should see "Merge"
     And I press "Merge"
     Then I wait 30 "seconds" to see "Resolved"
-    And I hover over ".layer-data"
+    #And I hover over ".layer-data"
+    #And I click the "map" at "100","100"
     And I press "Resolved"
     #This should work too
     #And I click the "r" key
-    Then I wait 60 "seconds" to see "Reviews remaining: 7 (Resolved: 1)"
+    Then I wait 30 "seconds" to see "Reviews remaining: 7 (Resolved: 1)"
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 6 (Resolved: 2)"
     And I press "Resolved"
@@ -52,7 +53,7 @@ Feature: Manually resolve reviews feature
     And I press "Previous"
     Then I wait 5 "seconds" to see "Please resolve or undo the current feature changes before proceeding to the next review."
     And I press "Resolved"
-    Then I wait 5 "seconds" to see "There are no more available features to review.  Exiting the review session."
+    Then I wait 10 "seconds" to see "There are no more available features to review.  Exiting the review session."
     Then I should not see "Reviews remaining:"
     Then I should not see "Hide Table"
     Then I should not see "name"

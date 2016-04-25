@@ -175,6 +175,6 @@ end
 Then(/^I resize the window$/) do
   if Capybara.javascript_driver != :webkit
     window = Capybara.current_session.driver.browser.manage.window
-    window.resize_to(1280, 960) # width, height
+    window.resize_to(1920, 1080) # width, height
   end
 end
