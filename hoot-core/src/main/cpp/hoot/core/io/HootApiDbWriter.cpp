@@ -336,18 +336,18 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
 {
   bool countChange = true;
 
-  //LOG_DEBUG("Inside writePartial for Node");
+  LOG_DEBUG("Inside writePartial for Node");
+  LOG_VARD(n->getId());
 
   Tags t = n->getTags();
   _addElementTags(n, t);
-
-  //LOG_DEBUG("Incoming node ID: " << n->getId());
 
   if (_remapIds)
   {
     bool alreadyThere = _nodeRemap.count(n->getId()) != 0;
     LOG_VARD(alreadyThere);
     long nodeId = _getRemappedElementId(n->getElementId());
+    LOG_VARD(nodeId);
     if (alreadyThere)
     {
       _hootdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, t);
