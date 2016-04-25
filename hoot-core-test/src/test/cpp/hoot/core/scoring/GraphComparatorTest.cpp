@@ -93,10 +93,10 @@ public:
         uut.setIterations(3);
         uut.setPixelSize(10);
         uut.compareMaps();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.973744272810634, uut.getMeanScore(), 0.00001);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00177888445763033, uut.getConfidenceInterval(), 0.00001);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.973924616144161, uut.getMedianScore(), 0.00001);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00187302021970233, uut.getStandardDeviation(), 0.00001);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.97446063724555, uut.getMeanScore(), 0.00001);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.000945967334486422, uut.getConfidenceInterval(), 0.00001);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.97446889042001, uut.getMedianScore(), 0.00001);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.000996026435034034, uut.getStandardDeviation(), 0.00001);
     }
 
     void runDenverDistanceTest()

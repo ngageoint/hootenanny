@@ -40,7 +40,7 @@
 
 #include "../TgsExport.h"
 
-//#define NEW_RAND
+#define NEW_RAND
 
 namespace Tgs
 {
@@ -93,8 +93,8 @@ namespace Tgs
     bool _is_single;
 
 #ifdef NEW_RAND
-    static boost::shared_ptr<random_type> _gen;
-    static boost::shared_ptr<generator_type> _rnd;
+    boost::shared_ptr<random_type> _gen;
+    boost::shared_ptr<generator_type> _rnd;
 #endif
   };
 }

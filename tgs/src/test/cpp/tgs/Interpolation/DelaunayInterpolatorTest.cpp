@@ -111,17 +111,17 @@ public:
     vector<double> d(2);
     d[0] = 0.0;
     d[1] = 0.0;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.903, uut.interpolate(d)[0], 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.974, uut.interpolate(d)[0], 0.001);
     d[0] = 0.5;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.568, uut.interpolate(d)[0], 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.604, uut.interpolate(d)[0], 0.001);
     d[0] = 1.0;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.057, uut.interpolate(d)[0], 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.160, uut.interpolate(d)[0], 0.001);
     d[0] = 1.5;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.047, uut.interpolate(d)[0], 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.129, uut.interpolate(d)[0], 0.001);
     d[0] = 2.0;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.036, uut.interpolate(d)[0], 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.053, uut.interpolate(d)[0], 0.001);
     d[0] = 0.1;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.917, uut.interpolate(d)[0], 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.962, uut.interpolate(d)[0], 0.001);
 
 //    // write out as a .pgm image
 //    ofstream fs;
@@ -218,7 +218,7 @@ public:
     dep.push_back("h");
     uut.setDependentColumns(dep);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0029, uut.estimateError(), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0031, uut.estimateError(), 0.0001);
   }
 
 };

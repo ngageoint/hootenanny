@@ -34,15 +34,13 @@
 namespace Tgs
 {
   boost::shared_ptr<Random> Random::_instance;
-#ifdef NEW_RAND
-  boost::shared_ptr<random_type> Random::_gen;
-  boost::shared_ptr<generator_type> Random::_rnd;
-#endif
 
-  Random::Random(unsigned int seed)
-    : _seed(seed), _is_single(false)
+  Random::Random(unsigned int s)
+    : _seed(s), _is_single(false)
   {
-
+#ifdef NEW_RAND
+    seed(s);
+#endif
   }
 
   Random::Random()
@@ -112,7 +110,7 @@ namespace Tgs
   void Random::seed()
   {
 #ifdef NEW_RAND
-    random_type gen = random_type(time(0));
+    random_type gen = random_type(0);
     generator_type rnd(gen, number_type(0, RAND_MAX));
     seed(rnd());
 #else
