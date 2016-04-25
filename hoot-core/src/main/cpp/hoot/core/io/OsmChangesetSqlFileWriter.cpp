@@ -189,7 +189,7 @@ void OsmChangesetSqlFileWriter::_create(const ConstRelationPtr relation)
   _outputSql.write(("INSERT INTO relations (relation_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_relations (id, " + values).toUtf8());
 
-  _createRelationMembers(id, relation->getType(), relation->getMembers());
+  _createRelationMembers(id, relation->getMembers());
 
   _createTags(relation->getTags(), ElementId::relation(id));
 }
@@ -307,7 +307,7 @@ void OsmChangesetSqlFileWriter::_modify(const ConstRelationPtr relation)
 
   _deleteAll("current_relation_members", "relation_id", relation->getId());
   _deleteAll("relation_members", "relation_id", relation->getId());
-  _createRelationMembers(relation->getId(), relation->getType(), relation->getMembers());
+  _createRelationMembers(relation->getId(), relation->getMembers());
 
   _deleteAllTags(ElementId::relation(relation->getId()));
   _createTags(relation->getTags(), ElementId::relation(relation->getId()));
@@ -371,18 +371,19 @@ void OsmChangesetSqlFileWriter::_createWayNodes(const long wayId, const std::vec
   }
 }
 
-void OsmChangesetSqlFileWriter::_createRelationMembers(const long relationId, const QString type,
+void OsmChangesetSqlFileWriter::_createRelationMembers(const long relationId,
                                                        const vector<RelationData::Entry>& members)
 {
   for (size_t i = 0; i < members.size(); i++)
   {
     const RelationData::Entry member = members[i];
 
+    //TODO: is version right here?
     QString values =
       QString(
-        "(relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (%1, %2, %3, %4, 1, %5);\n")
+        "(relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (%1, '%2', %3, '%4', 1, %5);\n")
         .arg(relationId)
-        .arg(type)
+        .arg(member.getElementId().getType()/*.getEnum()*/.toString())
         .arg(member.getElementId().getId())
         .arg(member.getRole())
         .arg(i + 1);
@@ -390,9 +391,9 @@ void OsmChangesetSqlFileWriter::_createRelationMembers(const long relationId, co
 
     values =
       QString(
-        "(relation_id, member_type, member_id, member_role, sequence_id) VALUES (%1, %2, %3, %4, %5);\n")
+        "(relation_id, member_type, member_id, member_role, sequence_id) VALUES (%1, '%2', %3, '%4', %5);\n")
         .arg(relationId)
-        .arg(type)
+        .arg(member.getElementId().getType()/*.getEnum()*/.toString())
         .arg(member.getElementId().getId())
         .arg(member.getRole())
         .arg(i + 1);

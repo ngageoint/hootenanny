@@ -61,8 +61,7 @@ private:
 
   void _createWayNodes(const long wayId, const std::vector<long>& nodeIds);
 
-  void _createRelationMembers(const long relationId, const QString type,
-                              const vector<RelationData::Entry>& members);
+  void _createRelationMembers(const long relationId, const vector<RelationData::Entry>& members);
 
   void _modify(const ConstNodePtr node);
   void _modify(const ConstWayPtr way);
