@@ -1,0 +1,22 @@
+== apply-changeset
+
+=== Description
+
+The +apply-changeset+ command writes an OSM changeset file that represents the difference
+between two input OSM files to an OSM API database.
+
+* +sqlChangeset+ - input SQL changeset (e.g. .osc.sql file).
+* +targetDatabaseUrl+ - Database the changeset will be written to.
+
+=== Usage
+
+--------------------------------------
+apply-changeset (sqlChangeset) (targetDatabaseUrl)
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot apply-changeset changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName
+--------------------------------------
+

@@ -81,6 +81,8 @@ public:
    */
   static int findIndex(const QList<QString>& keys, const QString& key);
 
+  static void execOsmApiDbSqlTestScript(const QString scriptName);
+
 private:
   static Settings _readDbConfig();
 };
