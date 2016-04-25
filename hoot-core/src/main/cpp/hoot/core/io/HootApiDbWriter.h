@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -84,15 +84,14 @@ public:
   virtual void writePartial(const shared_ptr<const Relation>& r);
 
 private:
-  //typedef std::map<long, long> IdRemap;
+
   typedef Tgs::BigMap<long, long> IdRemap;
 
   bool _createUserIfNotFound;
   bool _overwriteMap;
   QString _userEmail;
   HootApiDb _hootdb;
-  //int _numChangeSetChanges;
-  //geos::geom::Envelope _env;
+
   bool _open;
   IdRemap _nodeRemap;
   IdRemap _relationRemap;

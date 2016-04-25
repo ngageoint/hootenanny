@@ -54,6 +54,8 @@ public:
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
+    LOG_INFO("Applying changeset " << args[0] << " to " << args[1] << "...");
+
     if (args[0].endsWith(".osc"))
     {
       throw HootException(

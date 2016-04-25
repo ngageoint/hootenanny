@@ -75,6 +75,8 @@ public:
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
+    LOG_INFO("Converting " << args[0] << " to " << args[1] << "...");
+
     OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
     OsmMapWriterFactory writerFactory = OsmMapWriterFactory::getInstance();
 

@@ -395,6 +395,7 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
   while( elementResultsIterator->next() )
   {
     long long id = elementResultsIterator->value(0).toLongLong();
+    LOG_VARD(id);
     if( lastId != id )
     {
       // process the complete element only after the first element created
@@ -526,6 +527,7 @@ ElementId OsmApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
+  LOG_VARD(nodeId);
   double lat = resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
   double lon = resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
   shared_ptr<Node> result(

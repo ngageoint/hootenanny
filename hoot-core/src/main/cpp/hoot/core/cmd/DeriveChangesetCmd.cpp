@@ -57,6 +57,8 @@ public:
       throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
     }
 
+    LOG_INFO("Deriving changeset for inputs " << args[0] << ", " << args[1] << "...");
+
     OsmMapPtr map1(new OsmMap());
     loadMap(map1, args[0], true);
 
