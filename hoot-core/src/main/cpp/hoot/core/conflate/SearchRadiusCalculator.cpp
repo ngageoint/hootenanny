@@ -57,7 +57,7 @@ void SearchRadiusCalculator::setConfiguration(const Settings& conf)
   {
     setUnifyPreOps(QStringList(unifyPreOpsStr));
   }
-  setCircularError(config.getSetCircularErrorVisitorValue());
+  setCircularError(config.getCircularErrorDefaultValue());
   setRubberSheetRef(config.getRubberSheetRef());
   setRubberSheetMinTies(config.getRubberSheetMinimumTies());
 }

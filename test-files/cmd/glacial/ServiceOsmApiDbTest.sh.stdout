@@ -24,6 +24,7 @@
 (1 row)
 
 Performing read operation
+12:56:34.338 INFO  ...oot/core/io/OsmApiDbReader.cpp( 111) Executing OSM API read query against all element types...
 Doing comparison
  setval 
 --------
@@ -135,16 +136,17 @@ Doing comparison
       1
 (1 row)
 
-19:38:41.387 INFO  ...p/hoot/core/ops/MapCropper.cpp( 115) Cropping map.
-19:38:41.389 INFO  ...p/hoot/core/ops/MapCropper.cpp( 154)   Removing nodes...
+12:56:44.130 INFO  ...oot/core/io/OsmApiDbReader.cpp( 122) Executing OSM API bounded read query against all element types with bounds -106.5100000,38.3000000,-106.4000000,38.5000000...
+12:56:44.143 INFO  ...p/hoot/core/ops/MapCropper.cpp( 115) Cropping map.
+12:56:44.144 INFO  ...p/hoot/core/ops/MapCropper.cpp( 154)   Removing nodes...
         <tag k="accuracy1" v="5"/>
         <tag k="highway" v="road"/>
-        <tag k="error:circular" v="0"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="primary"/>
-        <tag k="error:circular" v="0"/>
+        <tag k="error:circular" v="15"/>
         <tag k="type" v="multistuff"/>
-        <tag k="error:circular" v="0"/>
-        <tag k="error:circular" v="0"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="error:circular" v="15"/>
         <member type="node" ref="1" role="noderole"/>
         <member type="way" ref="-1" role="wayrole"/>
         <member type="way" ref="-1" role="wayrole"/>
