@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDbReader.h"
 
@@ -534,7 +534,7 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
       nodeId,
       lon,
       lat,
-      ApiDb::DEFAULT_ELEMENT_CIRCULAR_ERROR));
+      ConfigOptions().getCircularErrorDefaultValue()));
 
   return result;
 }
@@ -547,7 +547,7 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
     new Way(
       _status,
       newWayId,
-      ApiDb::DEFAULT_ELEMENT_CIRCULAR_ERROR));
+      ConfigOptions().getCircularErrorDefaultValue()));
 
   //TODO: read these out in batch at the same time the element results are read
   vector<long> nodeIds = _database.selectNodeIdsForWay(wayId);
@@ -606,7 +606,7 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
     new Relation(
       _status,
       newRelationId,
-      ApiDb::DEFAULT_ELEMENT_CIRCULAR_ERROR/*,
+      ConfigOptions().getCircularErrorDefaultValue()/*,
       "collection"*/));  //TODO: services db doesn't support relation "type" yet
 
   //TODO: read these out in batch at the same time the element results are read
