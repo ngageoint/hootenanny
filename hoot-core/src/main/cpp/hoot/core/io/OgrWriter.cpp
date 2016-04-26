@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -631,7 +631,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
                 _elementCache->getNode(*nodeIdIterator)->getY() );*/
   }
 
-  //LOG_DEBUG("Writing way " << newWay->getId());
+  //LOG_DEBUG("Writing way " << newWay->getId() );
 
   // Add to the element cache
   ConstElementPtr constWay(newWay);
@@ -654,7 +654,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
   for (std::vector<RelationData::Entry>::const_iterator relationElementIter = relationEntries.begin();
        relationElementIter != relationEntries.end(); relationElementIter++)
   {
-    switch (relationElementIter->getElementId().getType().getEnum())
+    switch ( relationElementIter->getElementId().getType().getEnum() )
     {
       case ElementType::Node:
         nodeCount++;
@@ -701,8 +701,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
     /*LOG_DEBUG("Checking to see if element with ID: " << relationElementIter->getElementId().getId() <<
               " and type: " << relationElementIter->getElementId().getType() <<
               " contained by relation " << newRelation->getId() << " is in the element cache...");*/
-
-    if (_elementCache->containsElement(relationElementIter->getElementId()) == false)
+    if ( _elementCache->containsElement(relationElementIter->getElementId()) == false )
     {
       unsigned long cacheSize;
       switch (relationElementIter->getElementId().getType().getEnum())
@@ -719,7 +718,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
         default:
           throw HootException("Relation contains unknown type");
           break;
-      }
+    }
       const QString msg = "Relation element with ID: " +
         QString::number(relationElementIter->getElementId().getId()) + " and type: " +
         relationElementIter->getElementId().getType().toString() + " did not exist in the element " +
@@ -728,7 +727,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
           relationElementIter->getElementId().getType().getEnum() != ElementType::Relation)
       {
         throw HootException(msg);
-      }
+  }
       else
       {
         LOG_DEBUG(msg << "   Will attempt to write relation with ID: " + newRelation->getId() <<
@@ -746,7 +745,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
   _elementCache->addElement(constRelation);
 
   ElementProviderPtr cacheProvider(_elementCache);
-  _writePartial(cacheProvider, newRelation);
+    _writePartial(cacheProvider, newRelation);
 }
 
 void OgrWriter::writeElement(ElementPtr &element)
