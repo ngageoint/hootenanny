@@ -47,8 +47,9 @@ if [ "$flag" = "1" ]; then
   db_date=`date -d "$db_date_str" "+%s"`
   file_date=`date -d "$file_date_str" "+%s"`;
 
-  if [ $file_date -ge $db_date ]; then
+  if [ $file_date -ge $db_date ] || [ "$1" = "force" ]; then
     # Drop the DB
+    # echo "DROPPING $DB_NAME_OSMAPI"
     dropdb $AUTH $DB_NAME_OSMAPI
     do_create="true"
   else

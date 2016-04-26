@@ -4,7 +4,7 @@ set -e
 #echo $PGDATABASE $PGHOST $PGPORT $PGUSER $PGPASSWORD
 
 # clean out the database
-source scripts/SetupOsmApiDB.sh
+source scripts/SetupOsmApiDB.sh force
 
 # setup DB variables for automation
 source conf/DatabaseConfig.sh
