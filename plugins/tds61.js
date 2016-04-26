@@ -229,7 +229,7 @@ tds61 = {
     }, // End getDbSchema
 
     // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
-    //                feature, checking enumerated values and populateing the OTH field.
+    //                feature, checking values and populateing the OTH field.
     validateAttrs: function(geometryType,attrs) {
 
         // First, use the lookup table to quickly drop all attributes that are not part of the feature.
@@ -244,8 +244,8 @@ tds61 = {
             delete attrs.OTH;
         }
 
-		if (attrList != undefined)
-		{
+        if (attrList != undefined)
+        {
             // The code is duplicated but it is quicker than doing the "if" on each iteration
             if (config.getOgrDebugDumpvalidate() == 'true')
             {
@@ -286,8 +286,11 @@ tds61 = {
                                 attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
                             }
                         } // End text attr length > max length
+
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
-        	    }
+                } // End attrs loop
             }
             else
             {
@@ -327,6 +330,9 @@ tds61 = {
                                 attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
                             }
                         } // End text attr length > max length
+
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
         	    } // End attrs loop
             }
@@ -334,7 +340,7 @@ tds61 = {
         else
         {
             hoot.logVerbose('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
-		} // End Drop attrs
+        } // End Drop attrs
 
         // Repack the OTH field
         if (Object.keys(othList).length > 0)
@@ -514,7 +520,7 @@ tds61 = {
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.numBiased, 'backward');
+            translate.applySimpleNumBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.numBiased, 'backward',tds61.rules.intList);
             translate.applySimpleTxtBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.txtBiased, 'backward');
 
             // post processing
@@ -850,6 +856,7 @@ tds61 = {
             // Rules format:  ["test expression","output result"];
             // Note: t = tags, a = attrs and attrs can only be on the RHS
             var rulesList = [
+            ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
             ["t.navigationaid && !(t.aeroway)","t.aeroway = 'navigationaid'"],
             ["t.amenity == 'stop' && t['transport:type'] == 'bus'","t.highway = 'bus_stop'"],
             ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],
@@ -1306,8 +1313,36 @@ tds61 = {
 
         }
 
+        // Movable Bridges
+        if (tags.bridge == 'movable')
+        {
+          if (! tags['bridge:movable'])
+          {
+        	tags['bridge:movable'] = 'unknown';
+          }
+          tags.bridge = 'yes';
+          attrs.F_CODE = 'AQ040';
+        }
 
-        // Now use the lookup table to find an FCODE. This is here to stop clashes with the 
+        // Viaducts
+        if (tags.bridge == 'viaduct')
+        {
+          tags.bridge = 'yes';
+          tags.note = translate.appendValue(tags.note,'Viaduct',';');
+        }
+
+        // Fix road junctions.
+        // TDS has junctions as points. If we can make the feature into a road, railway or bridge then we will
+        // If not, it should go to the o2s layer
+        if (tags.junction && geometryType !== 'Point')
+        {
+            if (tags.highway || tags.bridge || tags.railway)
+            {
+                delete tags.junction;
+            }
+        } // End AP020 not Point
+
+        // Now use the lookup table to find an FCODE. This is here to stop clashes with the
         // standard one2one rules
         if (!(attrs.F_CODE) && tds61.fcodeLookup)
         {
@@ -1736,7 +1771,8 @@ tds61 = {
 
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(attrs, tags, tds61.rules.txtBiased, 'forward');
 
         // Crack open the OTH field and populate the appropriate attributes
@@ -1863,7 +1899,7 @@ tds61 = {
 
         // apply the simple number and text biased rules
         // Note: These are BACKWARD, not forward!
-        translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'backward',tds61.rules.intList);
         translate.applySimpleTxtBiased(attrs, tags, tds61.rules.txtBiased, 'backward');
 
         // post processing

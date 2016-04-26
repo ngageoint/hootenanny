@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PointsToTracksOp.h"
 
@@ -86,7 +86,7 @@ void PointsToTracksOp::_createWays(shared_ptr<OsmMap>& map, HashMap<QString, deq
 
     LOG_INFO("Circular Error: " << firstNode->getCircularError());
     shared_ptr<Way> w(new Way(firstNode->getStatus(), map->createNextWayId(),
-      firstNode->getCircularError()));
+      firstNode->getRawCircularError()));
 
     // check to see if all the nodes have the same non-empty highway tag.
     QString highway = firstNode->getTags()["highway"];

@@ -91,15 +91,15 @@ public:
 
   /**
    * @brief setCacheCapacity
-   * @param maxElementsPerType Number of entries for the cache per type (node, way, relation).
    *
-   * @note Total cache size is three times this value, as there are three types of entries in the
-   *    cache that are all set to hold this many elements
-   *
+   * @param maxNodes Number of entries for the node cache.
+   * @param maxWays Number of entries for the ways cache.
+   * @param maxRelations Number of entries for the relations cache.
    * @note This call deletes the existing cache and creates an entirely new one -- make sure
    *    this function is called BEFORE any data is stored in the cache
    */
-  void setCacheCapacity(unsigned long maxElementsPerType);
+  void setCacheCapacity(const unsigned long maxNodes, const unsigned long maxWays,
+                        const unsigned long maxRelations);
 
   virtual ~OgrWriter();
 
@@ -135,9 +135,8 @@ public:
 
   virtual void writeElement(ElementInputStream& inputStream, bool debug);
 
-  static unsigned long getDefaultCacheCapacity() { return _maxCacheElementsPerTypeDefault; }
-
 protected:
+
   bool _createAllLayers;
   bool _appendData;
   QString _scriptPath;
@@ -147,8 +146,6 @@ protected:
   QString _prependLayerName;
   shared_ptr<const Schema> _schema;
   StrictChecking _strictChecking;
-  static const unsigned long _maxCacheElementsPerTypeDefault = 20000;
-  long _currElementCacheCapacity;
   ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
 
@@ -168,6 +165,13 @@ protected:
   void strictError(QString warning);
 
   virtual void _writePartial(ElementProviderPtr& provider, const ConstElementPtr& e);
+
+private:
+
+  //relations that weren't written on a first pass b/c they contained relations as a member which
+  //had not yet been written.
+  QList<long> _unwrittenFirstPassRelationIds;
+  bool _failOnSkipRelation;
 
 };
 

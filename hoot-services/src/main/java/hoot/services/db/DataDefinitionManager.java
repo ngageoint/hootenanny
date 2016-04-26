@@ -150,11 +150,15 @@ public class DataDefinitionManager
 				}
 				finally
 				{
-				  if (stmt != null)
-					{
-						stmt.close();
+					try {
+						if (stmt!=null){
+							stmt.close();
+						}
 					}
-				}
+					catch(SQLException se2) {
+		      			log.equals(se2.getMessage());
+		      		}
+		      	}
 			}
 		}
 		catch (Exception e)
@@ -176,12 +180,18 @@ public class DataDefinitionManager
 			Class.forName(POSTGRESQL_DRIVER);
 			conn = DriverManager.getConnection(DB_URL + db_name, userid, pwd);
 			stmt = conn.createStatement();
-			if (force)
-			{
-				String forceSql = "select pg_terminate_backend(procpid) from pg_stat_activity where datname='"
-						+ dbname + "'";
-				stmt.executeQuery(forceSql);
-			}
+
+            if(force)
+            {
+                //Get the column name from the db as it's version dependent
+                ResultSet rs = stmt.executeQuery("SELECT column_name FROM information_schema.columns WHERE table_name='pg_stat_activity' AND column_name like '%pid'");
+                rs.next();
+                String columnName = rs.getString("column_name");
+                rs.close();
+                String forceSql = "select pg_terminate_backend("+ columnName + ") from pg_stat_activity where datname='" + dbname + "'";
+                stmt.executeQuery(forceSql);
+            }
+
 			String sql = "DROP DATABASE \"" + dbname + "\"";
 			stmt.executeUpdate(sql);
 		}

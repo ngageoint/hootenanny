@@ -51,7 +51,6 @@ void CookieCutterOp::setConfiguration(const Settings& conf)
   ConfigOptions config(conf);
   setAlpha(config.getCookieCutterAlpha());
   setAlphaShapeBuffer(config.getCookieCutterAlphaShapeBuffer());
-  setOutputBuffer(config.getCookieCutterOutputBuffer());
   setCrop(config.getCookieCutterOutputCrop());
 }
 
@@ -76,7 +75,7 @@ void CookieCutterOp::apply(shared_ptr<OsmMap>& map)
   LOG_VARD(doughMap->getNodeMap().size());
   
   //cookie cut the alpha shape obtained from the ref map out of the source map
-  CookieCutter(_crop, _outputBuffer).cut(cutShapeMap, doughMap);
+  CookieCutter(_crop, 0.0).cut(cutShapeMap, doughMap);
   OsmMapPtr cookieCutMap = doughMap;
   LOG_VARD(cookieCutMap->getNodeMap().size());
     

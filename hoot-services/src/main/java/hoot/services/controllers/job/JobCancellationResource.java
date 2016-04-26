@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -53,6 +53,20 @@ public class JobCancellationResource  extends JobControllerBase {
 
 	}
 
+	/**
+	 * Cancel job.
+	 * 
+	 * @param args - json containing following parameters
+	 * 				jobid: Target job id
+	 * 				mpaid: Target map id.
+	 * 
+	 * Example:
+	 * 	{"jobid":"123", "mapid":"45"}
+	 * 
+	 * @return json containing cancel job id 
+	 * Example:
+	 *  {"jobid":"321"}
+	 */
 	@POST
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.TEXT_PLAIN)

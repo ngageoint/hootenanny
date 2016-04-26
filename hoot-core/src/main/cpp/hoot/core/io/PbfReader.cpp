@@ -107,6 +107,7 @@ void PbfReader::_init(bool useFileId)
   _permissive = true;
   _in = NULL;
   _needToCloseInput = false;
+  _typeThenId = false;
 
   initializePartial();
 
@@ -293,7 +294,22 @@ long PbfReader::_getNodeId(long fromFile)
   long newId;
   if (_useFileId)
   {
-    newId = fromFile;
+    if (_permissive == false && _typeThenId == false)
+    {
+      if (_nodeIdMap.contains(fromFile))
+      {
+        newId = _nodeIdMap[fromFile];
+      }
+      else
+      {
+        newId = fromFile;
+        _nodeIdMap.insert(fromFile, newId);
+      }
+    }
+    else
+    {
+      newId = fromFile;
+    }
   }
   else
   {
@@ -417,7 +433,10 @@ void PbfReader::_loadDenseNodes(const DenseNodes& dn)
 
         if (timestamp != 0 && nodes[i]->getTags().getInformationCount() > 0)
         {
-          QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
+          // QT 4.6 does not have fromMSecsSinceEpoch
+          //QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
+	  // same time, but friendly to earlier Qt version
+          QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
           QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
           nodes[i]->setTag("source:datetime", dts);
         }
@@ -857,6 +876,16 @@ void PbfReader::_parseOsmHeader()
   const char* inflated = _inflate(_d->blob.zlib_data(), size);
   _d->headerBlock.ParseFromArray(inflated, size);
 
+  int optionalFeatureSize = _d->headerBlock.optional_features_size();
+  for (int i = 0; i < optionalFeatureSize; i++)
+  {
+    std::string typeThenId = _d->headerBlock.optional_features(i);
+    if (typeThenId == PBF_SORT_TYPE_THEN_ID)
+    {
+      _typeThenId = true;
+    }
+  }
+
   _osmHeaderRead = true;
 }
 
@@ -1184,7 +1213,8 @@ void PbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
 
       if (timestamp != 0)
       {
-        QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
+        //QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
+        QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
         QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
 
         t.set("source:datetime", dts);

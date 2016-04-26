@@ -140,10 +140,7 @@ public:
         while (pomr->hasMoreElements())
         {
           ElementPtr e = pomr->readNextElement();
-          if (e.get())
-          {
-            v.visit(e);
-          }
+          v.visit(e);
         }
       }
       else

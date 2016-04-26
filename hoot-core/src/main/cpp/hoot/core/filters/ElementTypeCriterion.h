@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTTYPEFILTER_H
 #define ELEMENTTYPEFILTER_H
@@ -46,6 +46,8 @@ public:
   {
     return e->getElementType() == _elementType;
   }
+
+  virtual ElementCriterion* clone() { return new ElementTypeCriterion(_elementType); }
 
 protected:
   ElementType::Type _elementType;

@@ -109,7 +109,7 @@ public class ProcessStreamInterface implements INativeInterface {
 	  	  	String userid = HootProperties.getProperty("dbUserId");
 	  	  	String pwd = HootProperties.getProperty("dbPassword");
 	  	  	String host = HootProperties.getProperty("dbHost");
-	  	  	dbUrl = "postgresql://" + userid + ":" + pwd + "@" + host + "/" + dbname;
+	  	  	dbUrl = "hootapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
 	    	}
 
 	    }
@@ -216,18 +216,19 @@ public class ProcessStreamInterface implements INativeInterface {
 					{
 						doThrowException = Boolean.parseBoolean(cmd.get("throwerror").toString());
 					}
+
 					if (doThrowException)
 					{
 						throw new Exception(err);
 					}
-					
+
 					String stdOut = res.getStdout();
 					ret.put("stdout", stdOut);
 					ret.put("stderr", err);
 				}
 			}
 		} catch (Exception e){
-			if (res != null && res.getExitStatus() == -9999)
+			if(res != null && res.getExitStatus() == -9999)
 			{
 				throw new NativeInterfaceException("Failed to execute." + e.getMessage(),
 						NativeInterfaceException.HttpCode.USER_CANCEL);

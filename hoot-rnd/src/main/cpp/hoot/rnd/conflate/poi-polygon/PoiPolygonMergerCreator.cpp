@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMergerCreator.h"
 
@@ -184,7 +184,8 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
     auto_ptr<Match> ma(_createMatch(map, o1, o2));
 
     // return conflict only if it is a miss, a review is ok.
-#warning need to load this from a configuration
+    // need to load this from a configuration
+    // https://github.com/ngageoint/hootenanny/issues/353
     MatchThreshold mt;
     result = false;
     if (ma.get() == 0 ||

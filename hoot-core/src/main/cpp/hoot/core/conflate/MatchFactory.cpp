@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchFactory.h"
 
 // hoot
 #include <hoot/core/Factory.h>
-//#include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
 
@@ -122,6 +121,7 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
     QString c = matchCreatorsList[i];
     QStringList args = c.split(",");
     QString className = args[0];
+    //LOG_VARD(className);
     args.removeFirst();
     shared_ptr<MatchCreator> mc(Factory::getInstance().constructObject<MatchCreator>(className));
     _theInstance.registerCreator(mc);
@@ -137,7 +137,8 @@ MatchFactory& MatchFactory::getInstance()
 {
   if (_theInstance._creators.size() == 0)
   {
-    _setMatchCreators(ConfigOptions().getMatchCreators().split(";"));
+    //only get the match creators that are specified in the config
+    _setMatchCreators(ConfigOptions(conf()).getMatchCreators().split(";"));
   }
   return _theInstance;
 }

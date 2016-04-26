@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HASTAGFILTER_H
 #define HASTAGFILTER_H
@@ -75,6 +75,14 @@ public:
       }
     }
     return false;
+  }
+
+  virtual ElementCriterion* clone() { return new HasTagCriterion(_keys); }
+
+protected:
+  HasTagCriterion(QStringList keys)
+  {
+    _keys = keys;
   }
 
 private:

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.writers.review;
 
@@ -41,17 +41,17 @@ import org.slf4j.LoggerFactory;
 public class ReviewResolver
 {
   private static final Logger log = LoggerFactory.getLogger(ReviewResolver.class);
-  
+
   private Connection conn;
-	
+
   public ReviewResolver(final Connection conn) throws Exception
   {
     this.conn = conn;
   }
-  
+
   /**
    * Resolves all reviews for a given map
-   * 
+   *
    * @param mapId ID of the map owning the review data
    * @param userId user ID associated with the review data
    * @return the ID of the changeset used to resolve the reviews
@@ -62,10 +62,10 @@ public class ReviewResolver
   	//create a changeset
     java.util.Map<String, String> changesetTags = new HashMap<String, String>();
     changesetTags.put("bot", "yes");
-    changesetTags.put("created_by", "hootenanny"); 
+    changesetTags.put("created_by", "hootenanny");
   	final long changesetId = Changeset.createChangeset(mapId, userId, changesetTags, conn);
   	Changeset.closeChangeset(mapId, changesetId, conn);
-  	
+
   	/*
   	 * - mark all review relations belonging to the map as resolved
   	 * - update the changeset id for each review relation
@@ -73,11 +73,11 @@ public class ReviewResolver
   	 */
   	String sql = "";
   	sql += "update current_relations_" + mapId;
-  	sql += " set tags = tags || ('hoot:review:needs' => 'no'),";
+  	sql += " set tags = tags || hstore('hoot:review:needs', 'no'),";
   	sql += " changeset_id = " + changesetId + ",";
   	sql += " version = version + 1";
   	sql += " where tags->'type' = 'review'";
-  	
+
   	Statement stmt = null;
   	try
   	{
@@ -92,7 +92,7 @@ public class ReviewResolver
   			stmt.close();
   		}
   	}
-  	
+
   	return changesetId;
   }
 }

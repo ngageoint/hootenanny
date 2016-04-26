@@ -120,7 +120,7 @@ public class ProcessStreamInterfaceTest {
   	String userid = HootProperties.getProperty("dbUserId");
   	String pwd = HootProperties.getProperty("dbPassword");
   	String host = HootProperties.getProperty("dbHost");
-  	String dbUrl = "postgresql://" + userid + ":" + pwd + "@" + host + "/" + dbname;
+  	String dbUrl = "hootapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
   	expected += ",DB_URL=" + dbUrl + "}";
 
 		Assert.assertEquals(expected, commandStr);

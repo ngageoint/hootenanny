@@ -63,7 +63,7 @@ mgcp = {
     //                 feature.
     validateAttrs: function(geometryType,attrs) {
 
-        var attrList = mgcpAttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
+        var attrList = mgcpAttrLookup[geometryType.toString().charAt(0) + attrs.FCODE];
 
         if (attrList != undefined)
         {
@@ -74,7 +74,7 @@ mgcp = {
                 {
                     if (attrList.indexOf(val) == -1)
                     {
-                        hoot.logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
+                        hoot.logWarn('Validate: Dropping ' + val + '  from ' + attrs.FCODE);
                         delete attrs[val];
 
                         // Since we deleted the attribute, Skip the text check
@@ -140,7 +140,7 @@ mgcp = {
         }
         else
         {
-            hoot.logWarn('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+            hoot.logWarn('Validate: No attrList for ' + attrs.FCODE + ' ' + geometryType);
         }
 
         // No quick and easy way to do this unless we build yet another lookup table
@@ -148,7 +148,7 @@ mgcp = {
 
         for (var i=0, sLen = mgcp.rawSchema.length; i < sLen; i++)
         {
-            if (mgcp.rawSchema[i].fcode == attrs.F_CODE && mgcp.rawSchema[i].geom == geometryType)
+            if (mgcp.rawSchema[i].fcode == attrs.FCODE && mgcp.rawSchema[i].geom == geometryType)
             {
                 feature = mgcp.rawSchema[i];
                 break;
@@ -247,7 +247,7 @@ mgcp = {
             translate.applyOne2One(tags, newAttrs, mgcp.lookup, mgcp.fcodeLookup, mgcp.ignoreList);
 
             // apply the simple number and text biased rules
-            translate.applySimpleNumBiased(newAttrs, tags, mgcp.rules.numBiased, 'backward');
+            translate.applySimpleNumBiased(newAttrs, tags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
             translate.applySimpleTxtBiased(newAttrs, tags,  mgcp.rules.txtBiased,'backward');
 
             // post processing
@@ -538,6 +538,7 @@ mgcp = {
             // Rules format:  ["test expression","output result"];
             // Note: t = tags, a = attrs and attrs can only be on the RHS
             var rulesList = [
+            ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
             ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
             ["t['generator:source'] == 'wind'","t.power = 'generator'"],
             ["t.waterway == 'flow_control'","t.flow_control = 'sluice_gate'"],
@@ -583,7 +584,7 @@ mgcp = {
             // print('Added building to military');
             if (tags.military !== 'range') tags.building = 'yes';
         }
-
+        
         // Add tags if we have Null attributes.  This happens when a feature has an
         // FCODE and no other attributes.  These FCODES don't have default values
         // in the fcode_common lookup table.
@@ -803,6 +804,24 @@ mgcp = {
             tags.building = tags['settlement:type'];
             delete tags['settlement:type'];
         }
+        
+        // Movable Bridges
+        if (tags.bridge == 'movable')
+		{
+		  if (! tags['bridge:movable'])
+		  {
+			tags['bridge:movable'] = 'unknown';
+		  }
+		  tags.bridge = 'yes';
+		  attrs.F_CODE = 'AQ040';
+		}
+
+		// Viaducts
+		if (tags.bridge == 'viaduct')
+		{
+		  tags.bridge = 'yes';
+		  tags['source:text'] = translate.appendValue(tags['source:text'],'Viaduct',';');
+		}
 
         // Keep looking for an FCODE
         // This uses the fcodeLookup tables that are defined earlier
@@ -1065,7 +1084,8 @@ mgcp = {
         translate.applyOne2One(attrs, tags, mgcp.lookup, {'k':'v'}, mgcp.ignoreList);
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, mgcp.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(attrs, tags, mgcp.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(attrs, tags,  mgcp.rules.txtBiased,'forward');
 
         // post processing
@@ -1157,7 +1177,7 @@ mgcp = {
         translate.applyOne2One(tags, attrs, mgcp.lookup, mgcp.fcodeLookup, mgcp.ignoreList);
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, mgcp.rules.numBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, tags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
         translate.applySimpleTxtBiased(attrs, tags,  mgcp.rules.txtBiased,'backward');
 
         // post processing
@@ -1217,14 +1237,20 @@ mgcp = {
         }
         else
         {
-            // Check if we need to make a second feature
+	    // Swap F_CODE for FCODE. Too many lookup tables etc to change it earlier
+            attrs.FCODE = attrs.F_CODE;
+            delete attrs.F_CODE;
+
+	    // Check if we need to make a second feature
             attrs2 = mgcp.twoFeatures(geometryType,tags,attrs);
 
-            if (attrs2.F_CODE)
+	    if (attrs2.F_CODE)
             {
-                // Set the tablename: [P,A,L]<fcode>
+		attrs2.FCODE = attrs2.F_CODE;
+		delete attrs2.F_CODE;                
+		// Set the tablename: [P,A,L]<fcode>
                 // tableName = geometryType.toString().substring(0,1) + attrs.F_CODE;
-                tableName2 = geometryType.toString().charAt(0) + attrs2.F_CODE;
+                tableName2 = geometryType.toString().charAt(0) + attrs2.FCODE;
 
                 // Repeat the feature validation and adding attributes
                 mgcp.validateAttrs(geometryType,attrs2);
@@ -1238,18 +1264,18 @@ mgcp = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            print('TableName: ' + tableName + '  FCode: ' + attrs.F_CODE + '  Geom: ' + geometryType);
+            print('TableName: ' + tableName + '  FCode: ' + attrs.FCODE + '  Geom: ' + geometryType);
 
-            if (tableName2 !== '') print('TableName2: ' + tableName2 + '  FCode: ' + attrs2.F_CODE + '  Geom: ' + geometryType);
+            if (tableName2 !== '') print('TableName2: ' + tableName2 + '  FCode: ' + attrs2.FCODE + '  Geom: ' + geometryType);
 
             for (var i in attrs) print('Out Attrs:' + i + ': :' + attrs[i] + ':');
 
-            if (attrs2.F_CODE) for (var i in attrs2) print('2Out Attrs:' + i + ': :' + attrs2[i] + ':');
+            if (attrs2.FCODE) for (var i in attrs2) print('2Out Attrs:' + i + ': :' + attrs2[i] + ':');
             print('');
         }
 
         // Send back the feature
-        if (attrs2.F_CODE)
+        if (attrs2.FCODE)
         {
             return([{attrs: attrs, tableName: tableName},{attrs: attrs2, tableName: tableName2}]);
         }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CUSTOMCRITERION_H
@@ -52,7 +52,11 @@ public:
 
   bool isSatisfied(const shared_ptr<const Element> &e) const;
 
+  virtual ElementCriterion* clone() { return new JsFunctionCriterion(_func); }
+
 private:
+  JsFunctionCriterion(Persistent<Function> func) { _func = func; }
+
   Persistent<Function> _func;
 };
 

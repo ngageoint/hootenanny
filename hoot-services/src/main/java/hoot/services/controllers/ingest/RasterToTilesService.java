@@ -117,12 +117,14 @@ public class RasterToTilesService extends JobControllerBase {
 
       hoot.services.models.osm.Map currMap = new hoot.services.models.osm.Map(mapIdNum, conn);
       final JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
-      
+
       Object oMinLon = extents.get("minlon");
       Object oMaxLon = extents.get("maxlon");
       Object oMinLat = extents.get("minlat");
       Object oMaxLat = extents.get("maxlat");
-      
+
+      String warn = null;
+
       // Make sure we have valid bbox. We may end up with invalid bbox and in that case we should
       // not produce raster density map
       if(oMinLon != null && oMaxLon != null && oMinLat != null && oMaxLat != null)
@@ -131,28 +133,40 @@ public class RasterToTilesService extends JobControllerBase {
 				double dMaxLon = (Double)extents.get("maxlon");
 				double dMinLat = (Double)extents.get("minlat");
 				double dMaxLat = (Double)extents.get("maxlat");
-	
+
 				double deltaLon = dMaxLon - dMinLon;
 				double deltaLat = dMaxLat - dMinLat;
-	
+
 				double maxDelta = deltaLon;
 				if(deltaLat > maxDelta)
 				{
 					maxDelta = deltaLat;
 				}
 				JSONObject zoomInfo = _getZoomInfo( maxDelta);
-	
+
 				String zoomList = zoomInfo.get("zoomlist").toString();
 				int rasterSize = (Integer)zoomInfo.get("rastersize");
-	
-				JSONObject argStr =  _createCommandObj(name, zoomList, rasterSize, userEmail);
+
+				JSONObject argStr =  _createCommandObj(name, zoomList, rasterSize, userEmail, mapIdNum);
 				argStr.put("jobId", jobId);
-	
-				JobExecutionManager jobExecManager = 
+
+				JobExecutionManager jobExecManager =
 					(JobExecutionManager)appContext.getBean("jobExecutionManagerNative");
-				jobExecManager.exec(argStr);
+				JSONObject res = jobExecManager.exec(argStr);
+				Object oRes = res.get("warnings");
+				if(oRes != null)
+				{
+					warn = oRes.toString();
+				}
       }
-			jobStatusManager.setComplete(jobId);
+      if(warn == null)
+      {
+      	jobStatusManager.setComplete(jobId);
+      }
+      else
+      {
+      	jobStatusManager.setComplete(jobId, "WARNINGS: " + warn);
+      }
 		}
 		catch (Exception ex)
 		{
@@ -222,7 +236,7 @@ public class RasterToTilesService extends JobControllerBase {
 			String zoomList = zoomInfo.get("zoomlist").toString();
 			int rasterSize = (Integer)zoomInfo.get("rastersize");
 
-			String argStr =  _createCommand(name, zoomList, rasterSize);
+			String argStr =  _createCommand(name, zoomList, rasterSize, mapIdNum);
 			postJobRquest( jobId,  argStr);
 		}
 		catch (Exception ex)
@@ -239,7 +253,7 @@ public class RasterToTilesService extends JobControllerBase {
 		return jobId;
 	}
 
-	protected JSONObject _createCommandObj(String name, String zoomList, int rasterSize, String userEmail) throws Exception
+	protected JSONObject _createCommandObj(String name, String zoomList, int rasterSize, String userEmail, long mapId) throws Exception
 	{
 		JSONArray commandArgs = new JSONArray();
 		JSONObject arg = new JSONObject();
@@ -258,7 +272,11 @@ public class RasterToTilesService extends JobControllerBase {
 		arg = new JSONObject();
 		arg.put("RASTER_SIZE", "" + rasterSize);
 		commandArgs.add(arg);
-		
+
+		arg = new JSONObject();
+		arg.put("MAP_ID", String.valueOf(mapId));
+		commandArgs.add(arg);
+
 		if(userEmail != null)
 		{
 			arg = new JSONObject();
@@ -267,15 +285,15 @@ public class RasterToTilesService extends JobControllerBase {
 		}
 
 		JSONObject jsonArgs = _createPostBody(commandArgs);
-		jsonArgs.put("throwerror", "false");
+		jsonArgs.put("erroraswarning", "true");
 
 		return jsonArgs;
 	}
 
 
-	protected String _createCommand(String name, String zoomList, int rasterSize) throws Exception
+	protected String _createCommand(String name, String zoomList, int rasterSize, long mapId) throws Exception
 	{
-		return _createCommandObj( name,  zoomList,  rasterSize, null).toJSONString();
+		return _createCommandObj( name,  zoomList,  rasterSize, null, mapId).toJSONString();
 	}
 
 	protected JSONObject _getZoomInfo(double maxDelta) throws Exception

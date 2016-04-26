@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGCRITERION_H
 #define TAGCRITERION_H
@@ -57,6 +57,8 @@ public:
   }
 
   void setConfiguration(const Settings& s);
+
+  virtual ElementCriterion* clone() { return new TagCriterion(_k, _v); }
 
 private:
   QString _k, _v;

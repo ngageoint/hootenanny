@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -70,12 +70,16 @@ public class RasterToTilesResourceTest {
 		param.put("RASTER_SIZE", "500");
 		params.add(param);
 
+		param = new JSONObject();
+		param.put("MAP_ID", "1");
+		params.add(param);
+
 		oExpected.put("params", params);
 
 		oExpected.put("exectype","make");
-		oExpected.put("throwerror", "false");
+		oExpected.put("erroraswarning", "true");
 
-		String actual = rts._createCommand("test", "0-1 2-3", 500);
+		String actual = rts._createCommand("test", "0-1 2-3", 500, 1);
 
 		org.junit.Assert.assertEquals(oExpected.toString(), actual);
 	}

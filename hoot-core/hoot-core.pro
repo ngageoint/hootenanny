@@ -33,7 +33,6 @@ OTHER_FILES = \
     ../conf/schema/highway.json \
     ../conf/schema/natural.json \
     ../conf/schema/public_transport.json \
-    ../conf/schema/surface.json \
     ../rules/template/ConflateRules.js \
 
 include(../Configure.pri)
@@ -302,13 +301,16 @@ SOURCES += \
     src/main/cpp/hoot/core/io/ScriptTranslatorFactory.cpp \
     src/main/cpp/hoot/core/cmd/IsMatchCmd.cpp \
     src/main/cpp/hoot/core/scoring/MapComparator.cpp \
-    src/main/cpp/hoot/core/io/ServicesDbWriter.cpp \
-    src/main/cpp/hoot/core/io/ServicesDbReader.cpp \
+    src/main/cpp/hoot/core/io/OsmApiDbReader.cpp \
+    src/main/cpp/hoot/core/io/HootApiDbReader.cpp \
+    src/main/cpp/hoot/core/io/HootApiDbWriter.cpp \
     src/main/cpp/hoot/core/perty/BigPertyOp.cpp \
     src/main/cpp/hoot/core/io/PartialOsmMapReader.cpp \
     src/main/cpp/hoot/core/io/OsmMapWriter.cpp \
     src/main/cpp/hoot/core/io/OsmMapReader.cpp \
-    src/main/cpp/hoot/core/io/ServicesDb.cpp \
+    src/main/cpp/hoot/core/io/ApiDb.cpp \
+    src/main/cpp/hoot/core/io/OsmApiDb.cpp \
+    src/main/cpp/hoot/core/io/HootApiDb.cpp \
     src/main/cpp/hoot/core/io/OsmMapWriterFactory.cpp \
     src/main/cpp/hoot/core/io/OsmMapReaderFactory.cpp \
     src/main/cpp/hoot/core/io/OgrWriter.cpp \
@@ -472,6 +474,7 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.cpp \
     src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
     src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp \
+    src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriter.cpp \
     src/main/cpp/hoot/core/ops/ReplaceElementOp.cpp \
     src/main/cpp/hoot/core/filters/NeedsReviewCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.cpp \
@@ -483,11 +486,18 @@ SOURCES += \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp \
+    src/main/cpp/hoot/core/io/ElementSorter.cpp \
+    src/main/cpp/hoot/core/io/ChangesetDeriver.cpp \
+    src/main/cpp/hoot/core/io/OsmChangeWriter.cpp \
+    src/main/cpp/hoot/core/cmd/DeriveChangeCmd.cpp \
+    src/main/cpp/hoot/core/io/OsmChangeWriterSql.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp \
     src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.cpp \
-    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.cpp
+    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.cpp \
+    src/main/cpp/hoot/core/filters/WaterwayCriterion.cpp \
+    src/main/cpp/hoot/core/io/ElementComparer.cpp \
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -757,13 +767,17 @@ HEADERS += \
     src/main/cpp/hoot/core/io/ScriptTranslatorFactory.h \
     src/main/cpp/hoot/core/scoring/MapComparator.h \
     src/main/cpp/hoot/core/util/Float.h \
-    src/main/cpp/hoot/core/io/ServicesDbWriter.h \
-    src/main/cpp/hoot/core/io/ServicesDbReader.h \
+    src/main/cpp/hoot/core/io/ApiDbReader.h \
+    src/main/cpp/hoot/core/io/OsmApiDbReader.h \
+    src/main/cpp/hoot/core/io/HootApiDbReader.h \
+    src/main/cpp/hoot/core/io/HootApiDbWriter.h \
     src/main/cpp/hoot/core/perty/BigPertyOp.h \
     src/main/cpp/hoot/core/io/PartialOsmMapReader.h \
     src/main/cpp/hoot/core/io/OsmMapWriter.h \
     src/main/cpp/hoot/core/io/OsmMapReader.h \
-    src/main/cpp/hoot/core/io/ServicesDb.h \
+    src/main/cpp/hoot/core/io/ApiDb.h \
+    src/main/cpp/hoot/core/io/OsmApiDb.h \
+    src/main/cpp/hoot/core/io/HootApiDb.h \
     src/main/cpp/hoot/core/io/OsmMapWriterFactory.h \
     src/main/cpp/hoot/core/io/OsmMapReaderFactory.h \
     src/main/cpp/hoot/core/io/OgrWriter.h \
@@ -965,9 +979,15 @@ HEADERS += \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.h \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.h \
     src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h \
+    src/main/cpp/hoot/core/io/ElementSorter.h \
+    src/main/cpp/hoot/core/io/ChangesetDeriver.h \
+    src/main/cpp/hoot/core/io/ChangesetProvider.h \
+    src/main/cpp/hoot/core/io/OsmChangeWriter.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h \
     src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.h \
-    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.h
+    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.h \
+    src/main/cpp/hoot/core/filters/WaterwayCriterion.h \
+    src/main/cpp/hoot/core/io/ElementComparer.h \
 

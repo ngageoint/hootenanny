@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PartialOsmMapReader.h"
 
@@ -48,12 +48,7 @@ void PartialOsmMapReader::readPartial(shared_ptr<OsmMap> map)
   while (hasMoreElements() && (_elementsRead < _maxElementsPerMap))
   {
     shared_ptr<Element> element = readNextElement();
-    //This check is necessary for now, unfortunately.  See ServicesDbReader::_resultToElement for
-    //an explanation.
-    if (element.get())
-    {
-      _partialMap->addElement(element);
-    }
+    _partialMap->addElement(element);
   }
   _elementsRead = 0;
 }

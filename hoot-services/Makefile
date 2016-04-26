@@ -24,6 +24,7 @@ src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml: src/main/webapp/WEB-I
 
 pom.xml: pom.xml.in ../conf/DatabaseConfig.sh
 	../scripts/ReplaceEnvironmentVariables.sh pom.xml.in pom.xml
+	../scripts/UpdateJUnitForkCount.sh pom.xml
 	
 src/main/resources/log4j.xml: src/main/resources/log4j.xml.in ../conf/DatabaseConfig.sh 
 	../scripts/ReplaceEnvironmentVariables.sh src/main/resources/log4j.xml.in src/main/resources/log4j.xml
@@ -41,27 +42,43 @@ build: build-info config
 	# If there isn't a local copy of the properties, copy the global version.
 	# [ -f src/main/resources/conf/hoot-services.conf ] || cp src/main/resources/conf/hoot-services.conf.orig src/main/resources/conf/hoot-services.conf
 	rm -rf ./src/main/java/hoot/services/db2
-ifneq ($(MVN_QUIET),)
-	../scripts/mvn-build $(MVN_QUIET) build 2> >( $(FILTER) >&2 )
-else
 	../scripts/mvn-build $(MVN_QUIET) build
-endif
 	
 	cp target/hoot-services-*.war ../bin
 
+docs: config
+	../scripts/mvn-build $(MVN_QUIET) docs
 
-clean: pom.xml src/main/resources/log4j.xml
+clean: pom.xml src/main/resources/log4j.xml config clean-coverage
 	../scripts/mvn-build $(MVN_QUIET) clean
 	rm -f pom.xml
 	rm -f src/main/resources/log4j.xml
+	rm -rf target/site/apidocs
 
 # Both commands now do the same thing.
 clean-db: clean-db-force
+
 clean-db-force:
 	../scripts/DeleteAllTables.sh
 	rm -rf ./src/main/java/hoot/services/db2
-	
+
+coverage:
+	echo "Generating services code coverage report (runs services tests)..."
+	mkdir -p ../coverage
+	# Run the integration tests for the code coverage, so we get a report covering all of the code.
+	../scripts/mvn-build $(MVN_QUIET) coverage
+	rm -rf ../coverage/services
+	cp -R target/site/cobertura ../coverage
+	mv ../coverage/cobertura ../coverage/services
+
+clean-coverage:
+	#../scripts/mvn-build $(MVN_QUIET) cobertura:clean
+	rm -rf target/site/cobertura
+	rm -rf target/cobertura
+	rm -rf ../coverage/services
+
 test: config
+	echo Running services tests...
 	rm -rf ./src/main/java/hoot/services/db2
 ifneq ($(MVN_QUIET),)
 	../scripts/mvn-build $(MVN_QUIET) test 2> >( $(FILTER) >&2 )
@@ -70,6 +87,7 @@ else
 endif
 
 test-all: config
+	echo Running services tests...
 	rm -rf ./src/main/java/hoot/services/db2
 ifneq ($(MVN_QUIET),)
 	../scripts/mvn-build $(MVN_QUIET) verify 2> >( $(FILTER) >&2 )

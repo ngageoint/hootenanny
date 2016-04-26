@@ -391,7 +391,7 @@ image::user/images/id/hoot_sharereview.png[scaledwidth="25%"]
 
 The following conflation examples are provided as guidance to help users better understand potential conflation and review issues that may arise keeping in mind that each scenario will vary tremendously from one to another depending on the characteristics of the source input data.
 
-===== Reference Conflation: Washington DC GIS Roads against Census Tiger data.
+==== Reference Conflation: Washington DC GIS Roads against Census Tiger data.
 
 The following workflow describes a simple use case conflating DC GIS Roads data against Tiger Census data derived from the source data below. In this example, the datasets DcGisRoads.osm and DcTigerRoads can be found in the `%HOOT_HOME/test-files/` directory where Hootenanny is installed (see <<Hoot-iD_Datasets,Data Ingest>>). 
 
@@ -415,7 +415,7 @@ When reviewing each conflict, users can either accept the conflict 'as is' by cl
 image::user/images/id/hoot_save_output.png[]
 
 [[HootiD-HorizontalConflationExample]]
-===== Cookie Cutter and Horizontal Conflation: Conflating Boulder, CO City Streets against OpenStreetMap data.
+==== Cookie Cutter and Horizontal Conflation: Conflating Boulder, CO City Streets against OpenStreetMap data.
 
 The example describes a cookie cutter and horizontal conflation using a Street centerline data obtained from the link:$$https://www-static.bouldercolorado.gov/docs/opendata/Streets.zip$$[City of Boulder] and a Highway dataset obtained from OSM. The figure below shows the two layers displayed on top OpenStreetMap data. The dark gray lines represents the higher quality street centerline data and red lines represent the OSM highway layers for Boulder and the surrounding area.
 
@@ -451,7 +451,7 @@ The final conflated layer represents the merger of the Boulder streets layer and
 image::user/images/id/hoot_boulder_merged.png[]
 
 [[Poi2PoiConflation]]
-===== POI to POI conflation: Washington, D.C.
+==== POI to POI conflation: Washington, D.C.
 
 Points of Interest (POI) to POI conflation is supported within Hootenanny by default when any two layers containing POIs are added to the map. POIs are compared against one another and scored based on a variety of tag/conditions (see Algorithms/User Guide for more background on Unifying conflation scoring).
 

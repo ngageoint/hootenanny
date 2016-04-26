@@ -289,8 +289,10 @@ tds = {
                                 hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
                             }
                         } // End text attr length > max length
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
-                }
+                } // End attrs loop
             }
             else
             {
@@ -329,6 +331,8 @@ tds = {
                                 hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
                             }
                         } // End text attr length > max length
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
                 } // End attrs loop
             }
@@ -482,7 +486,7 @@ tds = {
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newAttrs, tags, tds.rules.numBiased, 'backward');
+            translate.applySimpleNumBiased(newAttrs, tags, tds.rules.numBiased, 'backward',tds.rules.intList);
             translate.applySimpleTxtBiased(newAttrs, tags, tds.rules.txtBiased, 'backward');
 
             // post processing
@@ -795,6 +799,7 @@ tds = {
             var rulesList = [
             ["t.amenity == 'stop' && t['transport:type'] == 'bus'","t.highway = 'bus_stop';"],
             ["t.boundary == 'protected_area' && !(t.protect_class)","t.protect_class = '4';"],
+            ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
             ["t.control_tower == 'yes' && t.use == 'air_traffic_control'","t['tower:type'] = 'observation'"],
             ["t.desert_surface","t.surface = t.desert_surface; delete t.desert_surface"],
             ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],
@@ -1228,6 +1233,34 @@ tds = {
         // If we have a point, we need to make sure that it becomes a bridge, not a road.
         if (tags.bridge && geometryType =='Point') attrs.F_CODE = 'AQ040';
 
+        // Movable Bridges
+        if (tags.bridge == 'movable')
+        {
+          if (! tags['bridge:movable'])
+          {
+        	tags['bridge:movable'] = 'unknown';
+          }
+          tags.bridge = 'yes';
+          attrs.F_CODE = 'AQ040';
+        }
+
+        // Viaducts
+        if (tags.bridge == 'viaduct')
+        {
+          tags.bridge = 'yes';
+          tags.note = translate.appendValue(tags.note,'Viaduct',';');
+        }
+
+        // Fix road junctions.
+        // TDS has junctions as points. If we can make the feature into a road, railway or bridge then we will
+        // If not, it should go to the o2s layer
+        if (tags.junction && geometryType !== 'Point')
+        {
+            if (tags.highway || tags.bridge || tags.railway)
+            {
+                delete tags.junction;
+            }
+        } // End AP020 not Point
 
         // Now use the lookup table to find an FCODE. This is here to stop clashes with the
         // standard one2one rules
@@ -1520,7 +1553,8 @@ tds = {
         translate.applyOne2One(attrs, tags, tds.lookup, {'k':'v'}, tds.ignoreList);
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(attrs, tags, tds.rules.txtBiased, 'forward');
 
         // Crack open the OTH field and populate the appropriate attributes
@@ -1563,7 +1597,12 @@ tds = {
         }
 
         // Start processing here
-        if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+        // Debug
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
+            for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+        }
 
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
@@ -1611,7 +1650,7 @@ tds = {
 
         // apply the simple number and text biased rules
         // Note: These are BACKWARD, not forward!
-        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'backward',tds.rules.intList);
         translate.applySimpleTxtBiased(attrs, tags, tds.rules.txtBiased, 'backward');
 
         // post processing

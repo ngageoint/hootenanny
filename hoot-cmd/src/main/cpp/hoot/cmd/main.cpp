@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GCC
@@ -40,9 +40,7 @@ using namespace geos::geom;
 #include <hoot/core/util/Log.h>
 using namespace hoot;
 
-
 // Qt
-#include <QLibrary>
 #include <QtGui/QApplication>
 #include <QString>
 #include <QTime>
@@ -56,31 +54,6 @@ int main(int argc, char *argv[])
 
   QCoreApplication app(argc, argv);
 
-  // force load hoot hadoop if it is available.
-# ifdef HOOT_HAVE_HADOOP
-    QLibrary lib("HootHadoop");
-    if (lib.load() == false)
-    {
-      // no biggie.
-      cout << lib.errorString().toStdString() << endl;
-    }
-# endif
-# ifdef HOOT_HAVE_RND
-    QLibrary libRnd("HootRnd");
-    if (libRnd.load() == false)
-    {
-      // no biggie.
-      cout << libRnd.errorString().toStdString() << endl;
-    }
-#endif
-# ifdef HOOT_HAVE_NODEJS
-    QLibrary libJs("HootJs");
-    if (libJs.load() == false)
-    {
-      // no biggie.
-      LOG_WARN(libJs.errorString().toStdString());
-    }
-#endif
   vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
 
   shared_ptr<Command> c;

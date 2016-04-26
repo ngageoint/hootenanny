@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CALCULATESTATSOP_H
 #define CALCULATESTATSOP_H
@@ -45,11 +45,17 @@ class FilteredVisitor;
 
 class CalculateStatsOp : public ConstOsmMapOperation
 {
-
 public:
 
-  CalculateStatsOp(QString mapName = "", bool inputIsAConflatedMap = false);
-  CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "", bool inputIsAConflatedMap = false);
+  enum FeatureCalcType
+  {
+    None,
+    Length,
+    Area
+  };
+
+  CalculateStatsOp(QString mapName = "", bool inputIsConflatedMapOutput = false);
+  CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "", bool inputIsConflatedMapOutput = false);
 
   virtual void apply(const shared_ptr<OsmMap>& map);
 
@@ -95,6 +101,8 @@ private:
 
   static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
                                       const MatchCreator::Description& m2);
+
+  void _generateFeatureStats(shared_ptr<const OsmMap>& map, QString description, float conflatableCount, FeatureCalcType type, ElementCriterion* criterion);
 };
 
 }

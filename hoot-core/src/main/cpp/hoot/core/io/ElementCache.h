@@ -181,6 +181,12 @@ public:
 
   virtual void removeElements(const ElementType::Type type) = 0;
 
+  virtual unsigned long getNodeCacheSize() = 0;
+
+  virtual unsigned long getWayCacheSize() = 0;
+
+  virtual unsigned long getRelationCacheSize() = 0;
+
 };
 
 typedef boost::shared_ptr<ElementCache> ElementCachePtr;

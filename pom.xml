@@ -22,17 +22,8 @@
   <artifactId>hoot-java</artifactId>
   <packaging>pom</packaging>
   <version>0.0.1</version>
-  <!-- scm>
-    <connection>scm:git:file://${project.basedir}</connection>
-  </scm -->
   <repositories>
-    <!--repository>
-      <id>artifactory</id>
-      <name>DG Internal Repository</name>
-      <url>http://artifactory:8081/artifactory/repo</url>
-    </repository-->
-    <!-- libraries that can't be found in Maven central -->
-    <!-- for cpsuite -->
+    <!-- can comment out these repos if using artifactory -->
     <repository>
       <id>xwiki.org-cache</id>
       <url>http://maven.xwiki.org/externals</url>
@@ -53,14 +44,22 @@
         <enabled>true</enabled>
       </snapshots>
     </repository>
+    <!-- uncomment below for artifactory support -->
+    <!-- repository>
+        <id>central</id>
+        <url>http://selma:8081/artifactory/libs-release</url>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </repository>
+    <repository>
+        <id>snapshots</id>
+        <url>http://selma:8081/artifactory/libs-snapshot</url>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+    </repository -->
   </repositories>
-  <pluginRepositories>
-    <!-- pluginRepository>
-      <id>artifactory</id>
-      <name>DG Internal Repository</name>
-      <url>http://artifactory:8081/artifactory/repo</url>
-    </pluginRepository -->
-  </pluginRepositories>
   <build>
     <defaultGoal>install</defaultGoal>
     <finalName>${hoot-version}</finalName>
@@ -78,12 +77,14 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
-        <version>2.5.2</version>
+        <version>2.7</version>
         <configuration>
+          <!-- outputDirectory>../../../coverage/services</outputDirectory -->
           <formats>
             <format>html</format>
-            <format>xml</format>
+            <!-- format>xml</format -->
           </formats>
+          <quiet>true</quiet>
         </configuration>
       </plugin>
     </plugins>
@@ -93,7 +94,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
-        <version>2.5.2</version>
+        <version>2.7</version>
       </plugin>
     </plugins>
   </reporting>
@@ -116,7 +117,6 @@
       </activation>
       <modules>
         <module>hoot-services</module>
-        <!-- module>hootenanny-id</module -->
         <module>distribution</module>
       </modules>
     </profile>

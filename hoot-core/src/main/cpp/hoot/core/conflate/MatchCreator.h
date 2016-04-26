@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHCREATOR_H
 #define MATCHCREATOR_H
@@ -37,9 +37,9 @@
 
 namespace hoot
 {
+
 using namespace std;
 class Match;
-//class MatchThreshold;
 
 class MatchCreator
 {
@@ -100,6 +100,18 @@ public:
   {
     throw HootException("This match creator takes no argument.");
   }
+
+  /*
+   * This is actually being done in order to track the script name in ScriptMatchCreator, so we
+   * need to do some refactoring to get rid of this.  Redundant with Description class above.
+   */
+  QString getDescription() { return _description; }
+  void setDescription(QString description) { _description = description; }
+
+protected:
+
+  QString _description;
+
 };
 
 }
