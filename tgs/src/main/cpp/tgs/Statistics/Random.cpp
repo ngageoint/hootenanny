@@ -36,19 +36,15 @@ namespace Tgs
   boost::shared_ptr<Random> Random::_instance;
 
   Random::Random(unsigned int s)
-    : _seed(s), _is_single(false)
+    : _is_single(false)
   {
-#ifdef NEW_RAND
     seed(s);
-#endif
   }
 
   Random::Random()
-    : _seed(0), _is_single(true)
+    : _is_single(true)
   {
-#ifdef NEW_RAND
-    seed();
-#endif
+    seed(0);
   }
 
   double Random::generateGaussian(double mean, double sigma)
@@ -109,15 +105,6 @@ namespace Tgs
 
   void Random::seed()
   {
-#ifdef NEW_RAND
-    random_type gen = random_type(0);
-    generator_type rnd(gen, number_type(0, RAND_MAX));
-    seed(rnd());
-#else
-    if (_is_single)
-      seed(0);
-    else
-      _seed = 0;
-#endif
+    seed(0);
   }
 }
