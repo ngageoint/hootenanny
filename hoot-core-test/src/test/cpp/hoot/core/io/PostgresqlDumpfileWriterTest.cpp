@@ -127,66 +127,47 @@ public:
     pgDumpWriter.open(outFile);
     pgDumpWriter.write(createTestMap());
 
+    QRegExp reDate("[12][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9]");
+    QRegExp reTime("[0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9]");
+
+    QString stdFile = "test-files/io/PostgresqlDumpWriterTest/PostgresqlDumpWriter.sql";
+    QFile stdInputFile(stdFile);
+
+    QStringList stdList;
+    if (stdInputFile.open(QIODevice::ReadOnly))
+    {
+      QTextStream in(&stdInputFile);
+      while (!in.atEnd())
+      {
+         QString line = in.readLine();
+         line = line.remove(reDate);
+         line = line.remove(reTime);
+         stdList << line;
+      }
+      stdInputFile.close();
+    }
+
     QFile inputFile(outFile);
-    int lineCount = 0;
+    QStringList inList;
     if (inputFile.open(QIODevice::ReadOnly))
     {
        QTextStream in(&inputFile);
        while (!in.atEnd())
        {
           QString line = in.readLine();
-          QStringList lineList = line.split("t\t");
-          //pick up some lines in the file to check match
-          if (lineCount == 0)
-          {
-            HOOT_STR_EQUALS("SELECT pg_catalog.setval('changesets_id_seq', 2);", lineList[0]);
-          }
-          else if (lineCount == 6)
-          {
-            HOOT_STR_EQUALS("COPY changesets (id, user_id, created_at, closed_at, num_changes) FROM stdin;", lineList[0]);
-          }
-          else if (lineCount == 11)
-          {
-            HOOT_STR_EQUALS("COPY current_nodes (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) FROM stdin;", lineList[0]);
-          }
-          else if (lineCount == 29)
-          {
-            HOOT_STR_EQUALS("COPY current_node_tags (node_id, k, v) FROM stdin;", lineList[0]);
-          }
-          else if (lineCount == 30)
-          {
-            HOOT_STR_EQUALS("14	building	yes", lineList[0]);
-          }
-          else if (lineCount == 54)
-          {
-            HOOT_STR_EQUALS("14	1	building	yes", lineList[0]);
-          }
-          else if (lineCount == 90)
-          {
-            HOOT_STR_EQUALS("3	highway	road", lineList[0]);
-          }
-          else if (lineCount == 144)
-          {
-            HOOT_STR_EQUALS("COPY current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;", lineList[0]);
-          }
-          else if (lineCount == 146)
-          {
-            HOOT_STR_EQUALS("1	Way	1	inner	2", lineList[0]);
-          }
-          else if (lineCount == 167)
-          {
-            HOOT_STR_EQUALS("COPY relation_tags (relation_id, version, k, v) FROM stdin;", lineList[0]);
-          }
-          else if (lineCount == 168)
-          {
-            HOOT_STR_EQUALS("1	1	building	yes", lineList[0]);
-          }
-          lineCount++;
+          line = line.remove(reDate);
+          line = line.remove(reTime);
+          inList << line;
        }
        inputFile.close();
     }
-    CPPUNIT_ASSERT_EQUAL(173, lineCount);
+    CPPUNIT_ASSERT_EQUAL(inList.size(), stdList.size());
     pgDumpWriter.close();
+
+    for (int i = 0; i < stdList.size(); i++)
+    {
+      HOOT_STR_EQUALS(stdList.at(i), inList.at(i));
+    }
   }
 
 };
