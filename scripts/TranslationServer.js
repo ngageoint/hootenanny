@@ -155,8 +155,8 @@ var osmtotds = function(request, response)
 		//Gets the translation schema for field population for a fcode
 		// TODO: In the future we should get this from caller
 		var schemaMap = {};
-		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_schema.js');
-		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_schema.js');
+		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_full_schema.js');
+		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
 		
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(trns){
@@ -285,8 +285,8 @@ var getTaginfoKeyFields = function(request, response)
 		//Gets the translation schema for field population for a fcode
 		// TODO: In the future we should get this from caller		
 		var schemaMap = {};
-		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_schema.js');
-		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_schema.js');
+		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_full_schema.js');
+		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
 		
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(trns){
@@ -366,8 +366,8 @@ var getTaginfoKeys = function(request, response)
 		//Gets the translation schema for field population for a fcode
 		// TODO: In the future we should get this from caller
 		var schemaMap = {};
-		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_schema.js');
-		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_schema.js');
+		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_full_schema.js');
+		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
 		
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(trns){
@@ -484,8 +484,8 @@ var getFilteredSchema = function(request, response) {
 		//Gets the translation schema for field population for a fcode
 		// TODO: In the future we should get this from caller
 		var schemaMap = {};
-		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_schema.js');
-		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_schema.js');
+		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_full_schema.js');
+		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
 
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(translation){

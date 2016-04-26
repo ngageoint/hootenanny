@@ -108,7 +108,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
     CPPUNIT_ASSERT_EQUAL(38.4, node->getY());
     CPPUNIT_ASSERT_EQUAL(-106.5, node->getX());
-    CPPUNIT_ASSERT_EQUAL(0.0, node->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(15.0, node->getCircularError());
     CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
 
     shared_ptr<Node> node1 = map->getNode(2);
@@ -123,7 +123,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(2, (int)way->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((long)1, way->getNodeId(0));
     CPPUNIT_ASSERT_EQUAL((long)2, way->getNodeId(1));
-    CPPUNIT_ASSERT_EQUAL(0.0, way->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(15.0, way->getCircularError());
     CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
 
     //relations
@@ -134,7 +134,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(2, (int)relation->getMembers().size());
     HOOT_STR_EQUALS("wayrole", relationData[0].getRole());
     HOOT_STR_EQUALS("noderole",relationData[1].getRole());
-    CPPUNIT_ASSERT_EQUAL(0.0, relation->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(15.0, relation->getCircularError());
   }
 
   void verifyReadBoundingBoxOutput(shared_ptr<OsmMap> map)
@@ -162,7 +162,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
     CPPUNIT_ASSERT_EQUAL(38.4, node->getY());
     CPPUNIT_ASSERT_EQUAL(-106.5, node->getX());
-    CPPUNIT_ASSERT_EQUAL(0.0, node->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(15.0, node->getCircularError());
     CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
 
     //The original second node is outside the bounding box (38.0, -104.0)
@@ -189,7 +189,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(2, (int)way->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((long)1, way->getNodeId(0));
     CPPUNIT_ASSERT_EQUAL((long)secondNodeId, way->getNodeId(1));
-    CPPUNIT_ASSERT_EQUAL(0.0, way->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(15.0, way->getCircularError());
     CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
 
     //relations
@@ -200,7 +200,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(2, (int)relation->getMembers().size());
     HOOT_STR_EQUALS("wayrole", relationData[0].getRole());
     HOOT_STR_EQUALS("noderole",relationData[1].getRole());
-    CPPUNIT_ASSERT_EQUAL(0.0, relation->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(15.0, relation->getCircularError());
   }
 
   void runReadOsmApiTest()
