@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDb.h"
 
@@ -1437,9 +1437,10 @@ QString HootApiDb::_getRenderDBName(long mapId)
   // Get current database & maps.display_name
   QString dbName = "";
   QString mapDisplayName = "";
+  QString mapIdNumber = QString::number(mapId);
   QString sql = "SELECT current_database(), maps.display_name "
                 "FROM maps "
-                "WHERE maps.id=" + QString::number(mapId);
+                "WHERE maps.id=" + mapIdNumber;
   QSqlQuery q = _exec(sql);
 
   if (q.next())
@@ -1448,7 +1449,7 @@ QString HootApiDb::_getRenderDBName(long mapId)
     mapDisplayName = q.value(1).toString();
   }
 
-  return (dbName + "_renderdb_" + mapDisplayName);
+  return (dbName + "_renderdb_" + mapIdNumber);
 }
 
 }

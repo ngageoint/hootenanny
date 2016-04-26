@@ -6,7 +6,7 @@ HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor -D conflate.a
 HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
 HOOT_OPTS+= -D hootapi.db.writer.email=test@test.com -D hootapi.db.reader.email=test@test.com
 
-#DB_URL=postgresql://hoot:hoottest@localhost:5432/hoot
+#DB_URL=hootapidb://hoot:hoottest@localhost:5432/hoot
 
 
 

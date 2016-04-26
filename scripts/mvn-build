@@ -97,8 +97,8 @@ while [ $# -gt 0 ] ; do
         PHASE="verify"
         shift 1
         ;;        
-    "cobertura:cobertura")
-        PHASE="cobertura:cobertura"
+    "coverage")
+        PHASE="coverage"
         shift 1
         ;;
     "clean")
@@ -176,8 +176,8 @@ case $PHASE in
    "verify")
    ARGS="$ARGS verify"
    ;;   
-   "cobertura:cobertura")
-   ARGS="$ARGS cobertura:cobertura"
+   "coverage")
+   ARGS="$ARGS cobertura:cobertura-integration-test"
    ;;
    "clean")
    ARGS="$ARGS clean"

@@ -8,10 +8,11 @@ endif
 
 SHELL=/bin/bash
 
+.PHONY: clean-ccache
+
 # If you're adding another schema file be sure and update the archive target
 # too.
-#SCHEMA_FILES=plugins/script/tds40/schema/__init__.js plugins/script/tds61/schema/__init__.js plugins/script/mgcp/schema/__init__.js plugins/script/etds/rules/__init__.js plugins/script/etds61/rules/__init__.js plugins/script/etds61_osm/rules/__init__.js
-SCHEMA_FILES=plugins/tds40_schema.js plugins/tds61_schema.js plugins/mgcp_schema.js plugins/etds_rules.js plugins/etds61_rules.js plugins/etds61_osm_rules.js plugins/tds61_full_schema.js
+SCHEMA_FILES=plugins/tds40_schema.js plugins/tds61_schema.js plugins/mgcp_schema.js plugins/etds_rules.js plugins/etds61_rules.js plugins/etds61_osm_rules.js plugins/tds40_full_schema.js plugins/tds61_full_schema.js plugins/emgcp_rules.js plugins/emgcp_osm_rules.js
 
 -include Makefile.inc
 
@@ -23,7 +24,7 @@ always:
 build: js-make qt-make pp-build services-build model-build conf/words.sqlite \
 	conf/WordsAbridged.sqlite osmapidb
 
-clean: Makefile.qmake services-clean
+clean: Makefile.qmake services-clean clean-coverage
 	$(MAKE) -f Makefile.qmake clean 2>&1 \
 	  | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
 	  || true \
@@ -35,7 +36,6 @@ clean: Makefile.qmake services-clean
 	rm -rf pretty-pipes/pp-lib/target/
 	rm -rf test-output/*
 	rm -rf tgs/libTgs.a
-	rm -rf tmp/coverage
 	rm -rf hoot-core/tmp/debug/* hoot-core-test/tmp/debug/* hoot-hadoop/tmp/debug/* tbs/tmp/debug/* hoot-rnd/tmp/debug/*
 	rm -rf bin/*
 	rm -f plugins/config.js
@@ -62,7 +62,17 @@ endif
 clean-db: services-clean-db
 
 # start over as close to a new build as is reasonable
-clean-all: clean clean-db
+clean-all: clean clean-db clean-ccache
+
+clean-coverage: services-clean-coverage
+	rm -rf coverage
+	rm -f `find . -name *.gcda`
+
+# clean-all should call `ccache -C` to clear the cache if ccache is available
+clean-ccache:
+ifneq (, $(shell command -v ccache))
+	@ccache -C >/dev/null 2>&1
+endif
 
 check: test
 test: build services-test pp-test plugins-test
@@ -77,8 +87,10 @@ test-quick: build pp-test
 
 test-all-no-core: services-test-all pp-test plugins-test
 	$(MAKE) ui-test
-	
+
 test-all: test-all-no-core
+	# Don't run services tests at the same time as glacial -- that may stomp
+	# on each other's DB changes.
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial
 
 licenses:
@@ -146,33 +158,47 @@ conf/DatabaseConfig.sh: conf/DatabaseConfig.sh.orig
 	# This will copy conf/DatabaseConfig.sh.orig to conf/DatabaseConfig.sh if necessary
 	if [ ! -f conf/DatabaseConfig.sh ]; then echo "Using default database configuration. You can safely customize: conf/DatabaseConfig.sh"; cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh; else echo; echo; echo "Check your conf/DatabaseConfig.sh to see if it needs updating with conf/DatabaseConfig.sh.orig, if not just 'touch conf/DatabaseConfig.sh'"; echo; echo; false; fi
 
-conf/ServerConfig.sh: conf/ServerConfig.sh.orig
-	# This will copy conf/ServerConfig.sh.orig to conf/ServerConfig.sh if necessary
-	if [ ! -f conf/ServerConfig.sh ]; then echo "Using default server configuration. You can safely customize: conf/ServerConfig.sh"; cp conf/ServerConfig.sh.orig conf/ServerConfig.sh; else echo; echo; echo "Check your conf/ServerConfig.sh to see if it needs updating with conf/ServerConfig.sh.orig, if not just 'touch conf/ServerConfig.sh'"; echo; echo; false; fi
-
 # We now have different versions of the NFDD Schema that are built from Excel files:
 # LTDSv40.csv.gz - Local TDS v4.0
 # SUTDSv40.csv.gz - Specialized Urban TDS v4.0
 # TDSv40.csv.gz - Full TDS v4.0
 # The default is to use the LTDSv40 file so we can append to existing LTDS templates
-
+#
+# The MGCP schema is built from an XML file
+#
 # The Macro's are for Jason :-)
+
+plugins/mgcp_schema.js: scripts/ConvertMGCPSchema_XML.py conf/mgcp/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+	mkdir -p $(@D)
+	$^ > $@ || (rm -f $@ ; exit -1)
+
+##### MGCP
+# Build the MGCP  "To English" rules
+plugins/emgcp_rules.js: scripts/ConvertMGCPSchema_XML.py conf/mgcp/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+	mkdir -p $(@D)
+	$< --toenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
+
+# Build the MGCP "From English" rules
+plugins/emgcp_osm_rules.js: scripts/ConvertMGCPSchema_XML.py conf/mgcp/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+	mkdir -p $(@D)
+	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 plugins/tds40_schema.js: scripts/ConvertTDSv40Schema.py conf/nfdd/LTDSv40.csv.gz
 	mkdir -p $(@D)
 	$^ > $@ || (rm -f $@ ; exit -1)
 
-plugins/mgcp_schema.js: scripts/ConvertMGCPSchema.py conf/gait/MGCP4_SchemaInfo_GAIT21.txt.gz
+#### TDSv40
+plugins/tds40_full_schema.js: scripts/ConvertTDSv40Schema.py conf/nfdd/TDSv40.csv.gz
 	mkdir -p $(@D)
-	$^ > $@ || (rm -f $@ ; exit -1)
+	$< --fullschema $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
-# Build the TDS40 "english" rules
+# Build the TDS40 "To English" rules
 # This need to be full TDS so we have access to the full range of attributes
-plugins/etds_rules.js: scripts/ConvertTDSv40English.py conf/nfdd/TDSv40.csv.gz
+plugins/etds_rules.js: scripts/ConvertTDSv40Schema.py conf/nfdd/TDSv40.csv.gz
 	mkdir -p $(@D)
-	$^ > $@ || (rm -f $@ ; exit -1)
+	$< --toenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
-
+#### TDSv61
 # TDSv61 is built from the TDSv60 spec with NGA's extensions
 plugins/tds61_schema.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz conf/nfdd/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
@@ -241,9 +267,14 @@ ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile clean-db
 endif
 
+services-clean-coverage:
+ifeq ($(BUILD_SERVICES),services)
+	cd hoot-services && $(MAKE) -f Makefile clean-coverage
+endif
+
 services-coverage:
 ifeq ($(BUILD_SERVICES),services)
-	scripts/mvn-build $(MVN_QUIET) cobertura:cobertura
+	cd hoot-services && $(MAKE) -f Makefile coverage
 endif
 
 services-test: services-build
@@ -292,15 +323,21 @@ archive: js-make services-build docs
 	# Copy the protocol buffer generated files. Eases a dependency when building
 	# on CentOS
 	mkdir -p $(HOOT_TARNAME)/hoot-core/src/main/cpp/hoot/core/proto/
-	# Copy the auto-generated schema definitions. This eases another dependency
-	# on CentOS
+	# Copy the auto-generated schema definitions. This eases another dependency on CentOS
 	mkdir -p $(HOOT_TARNAME)/plugins/
+	# TDSv40
 	cp plugins/tds40_schema.js $(HOOT_TARNAME)/plugins/tds40_schema.js
+	cp plugins/tds40_full_schema.js $(HOOT_TARNAME)/plugins/tds61_full_schema.js
+	cp plugins/etds_rules.js $(HOOT_TARNAME)/plugins/etds_rules.js
+	# TDSv61
 	cp plugins/tds61_schema.js $(HOOT_TARNAME)/plugins/tds61_schema.js
 	cp plugins/tds61_full_schema.js $(HOOT_TARNAME)/plugins/tds61_full_schema.js
-	cp plugins/mgcp_schema.js $(HOOT_TARNAME)/plugins/mgcp_schema.js
-	cp plugins/etds_rules.js $(HOOT_TARNAME)/plugins/etds_rules.js
 	cp plugins/etds61_rules.js $(HOOT_TARNAME)/plugins/etds61_rules.js
+	cp plugins/etds61_osm_rules.js $(HOOT_TARNAME)/plugins/etds61_osm_rules.js
+	# MGCP
+	cp plugins/mgcp_schema.js $(HOOT_TARNAME)/plugins/mgcp_schema.js
+	cp plugins/emgcp_rules.js $(HOOT_TARNAME)/plugins/emgcp_rules.js
+	cp plugins/emgcp_osm_rules.js $(HOOT_TARNAME)/plugins/emgcp_osm_rules.js
 	# Copy the buildInfo.json file for hoot services
 	if [ "$(BUILD_SERVICES)" == "services" ]; then mkdir -p $(HOOT_TARNAME)/hoot-ui/data; cp hoot-ui/data/buildInfo.json $(HOOT_TARNAME)/hoot-ui/data; fi
 	# Don't include RF files at this time, to speed up archive
@@ -334,27 +371,35 @@ tmp/schema.png: tmp/schema.dot
 
 # Code Coverage
 
-IGNORED=/usr/\* \*test/cpp\* \*tgs/src\* \*/local/\* \*/tmp/moc/\*
+IGNORED=/usr/\* \*test/cpp\* \*tgs/src\* \*/local/\* \*/tmp/moc/\* \*core/proto\*
 
-tmp/coverage/core/index.html:
-	mkdir -p tmp/coverage
-	lcov --capture --ignore-errors source -d hoot-core/tmp/debug -b hoot-core/ --output-file tmp/coverage/Core.info
-	lcov -r tmp/coverage/Core.info $(IGNORED) \*tbs/src\* -o tmp/coverage/CoreTrimmed.info
-	genhtml tmp/coverage/CoreTrimmed.info --output-directory tmp/coverage/core/
+# Passing the --quiet switch to lcov when -s is present is causing errors, so writing out to a log every time instead.
 
-tmp/coverage/hadoop/index.html:
-	mkdir -p tmp/coverage
-	lcov --capture --ignore-errors source -d hoot-hadoop/tmp/debug -b hoot-hadoop/ --output-file tmp/coverage/Hadoop.info
-	lcov -r tmp/coverage/Hadoop.info $(IGNORED) \*tbs/src\* -o tmp/coverage/HadoopTrimmed.info
-	genhtml tmp/coverage/HadoopTrimmed.info --output-directory tmp/coverage/hadoop/
+coverage/core/core/index.html:
+	echo "Generating core code coverage report..."
+	mkdir -p coverage/core/core
+	rm -f coverage/core/log
+	lcov --capture --ignore-errors source -d hoot-core/tmp/debug -b hoot-core/ --output-file coverage/core/core/Core.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	lcov -r coverage/core/core/Core.info $(IGNORED) \*tbs/src\* -o coverage/core/core/CoreTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	genhtml coverage/core/core/CoreTrimmed.info --output-directory coverage/core/core/ 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 
-tmp/coverage/tbs/index.html:
-	mkdir -p tmp/coverage
-	lcov --capture --ignore-errors source -d tbs/tmp/debug -b tbs/ --output-file tmp/coverage/Tbs.info
-	lcov -r tmp/coverage/Tbs.info $(IGNORED) -o tmp/coverage/TbsTrimmed.info
-	genhtml tmp/coverage/TbsTrimmed.info --output-directory tmp/coverage/tbs/
+coverage/core/hadoop/index.html:
+	echo "Generating hadoop code coverage report..."
+	mkdir -p coverage/core/hadoop
+	rm -f coverage/core/log
+	lcov --capture --ignore-errors source -d hoot-hadoop/tmp/debug -b hoot-hadoop/ --output-file coverage/core/hadoop/Hadoop.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	lcov -r coverage/core/hadoop/Hadoop.info $(IGNORED) \*tbs/src\* -o coverage/core/hadoop/HadoopTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	genhtml coverage/core/hadoop/HadoopTrimmed.info --output-directory coverage/core/hadoop/ 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 
-coverage: services-coverage tmp/coverage/core/index.html  tmp/coverage/hadoop/index.html tmp/coverage/tbs/index.html
+coverage/core/tbs/index.html:
+	echo "Generating tbs code coverage report..."
+	mkdir -p coverage/core/tbs
+	rm -f coverage/core/log
+	lcov --capture --ignore-errors source -d tbs/tmp/debug -b tbs/ --output-file coverage/core/tbs/Tbs.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	lcov -r coverage/core/tbs/Tbs.info $(IGNORED) -o coverage/core/tbs/TbsTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	genhtml coverage/core/tbs/TbsTrimmed.info --output-directory coverage/core/tbs/ 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+
+coverage: services-coverage coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html
 
 conf/WordsAbridged.sqlite: conf/WordsAbridged.sqlite.gz
 	gunzip -c $^ > $@

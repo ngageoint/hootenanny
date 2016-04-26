@@ -38,3 +38,4 @@ Similar to OSM changesets a changeset is created for each group of changes in th
 ==== Elements
 
 The OSM elements include nodes, ways and relations. Each of these element types have a set of tables that interrelate. In the normal OSM DB there are both current tables to represent the current map and historical tables to represent changes made over time. We are only implementing the current tables for now and may expand into historical data at some point in the future.
+

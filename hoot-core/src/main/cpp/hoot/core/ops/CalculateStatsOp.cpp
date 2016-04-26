@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -84,6 +84,29 @@ CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapNam
   _inputIsConflatedMapOutput(inputIsConflatedMapOutput)
 {
   LOG_VARD(_inputIsConflatedMapOutput);
+}
+
+shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
+    const vector< shared_ptr<MatchCreator> > &matchCreators,
+    const QString &matchCreatorName,
+    MatchCreator::BaseFeatureType &featureType)
+{
+  for (vector< shared_ptr<MatchCreator> >::const_iterator matchIt = matchCreators.begin();
+       matchIt != matchCreators.end(); ++matchIt)
+  {
+    vector<MatchCreator::Description> desc = (*matchIt)->getAllCreators();
+    for (vector<MatchCreator::Description>::const_iterator descIt = desc.begin();
+         descIt != desc.end(); ++descIt)
+    {
+      QString testName = QString::fromStdString(descIt->className);
+      if (0 == matchCreatorName.compare(testName))
+      {
+        featureType = descIt->baseFeatureType;
+        return (*matchIt);
+      }
+    }
+  }
+  return shared_ptr<MatchCreator>(); // empty if not found
 }
 
 void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
@@ -229,12 +252,14 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
         ((double)unconflatableFeatureCount / (double)featureCount) * 100.0));
 
     _stats.append(SingleStat("Number of Match Creators", matchCreators.size()));
-    double conflatablePoiCount = 0.0;
-    double conflatableHighwayCount = 0.0;
-    double conflatableBuildingCount = 0.0;
-    double conflatableWaterwayCount = 0.0;
+    QMap<MatchCreator::BaseFeatureType, double> featureCounts;
+    for(MatchCreator::BaseFeatureType ft = MatchCreator::POI; ft < MatchCreator::Unknown; ft = MatchCreator::BaseFeatureType(ft+1))
+    {
+      featureCounts[ft] = 0.0;
+    }
+
     QMap<QString, long> matchCandidateCountsByMatchCreator =
-        any_cast<QMap<QString, long> >(matchCandidateCountsData);
+            any_cast<QMap<QString, long> >(matchCandidateCountsData);
     LOG_VARD(matchCandidateCountsByMatchCreator.size());
     LOG_VARD(matchCandidateCountsByMatchCreator);
     for (QMap<QString, long >::const_iterator iterator = matchCandidateCountsByMatchCreator.begin();
@@ -242,6 +267,9 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     {
       const QString matchCreatorName = iterator.key();
       LOG_VARD(matchCreatorName);
+      MatchCreator::BaseFeatureType featureType = MatchCreator::Unknown;
+      shared_ptr<MatchCreator> matchCreator = getMatchCreator(matchCreators, iterator.key(), featureType);
+
       double conflatableFeatureCountForFeatureType = 0.0;
       if (!_inputIsConflatedMapOutput)
       {
@@ -253,36 +281,9 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
             SingleStat(
               "Features Conflatable by: " + matchCreatorName,
               conflatableFeatureCountForFeatureType));
-      /// @todo This isn't very extensible to hardcode the matchup between each match creator and each
-      /// feature count type (e.g. hoot::PlacesPoiMatchCreator matches up with POI count type).  Need
-      /// a more maintainable way to do this if many more feature types get added.
-      if (matchCreatorName == "hoot::PlacesPoiMatchCreator")
-      {
-        conflatablePoiCount += conflatableFeatureCountForFeatureType;
-      }
-      else if (matchCreatorName == "hoot::HighwayMatchCreator")
-      {
-        conflatableHighwayCount = conflatableFeatureCountForFeatureType;
-      }
-      else if (matchCreatorName == "hoot::BuildingMatchCreator")
-      {
-        conflatableBuildingCount = conflatableFeatureCountForFeatureType;
-      }
-      //Not all of the non-experimental script match creator types are being accounted for
-      //yet.
-      else if (matchCreatorName.contains("PoiGeneric"))
-      {
-        conflatablePoiCount += conflatableFeatureCountForFeatureType;
-      }
-      else if (matchCreatorName.contains("LinearWaterway"))
-      {
-        conflatableWaterwayCount = conflatableFeatureCountForFeatureType;
-      }
+
+      featureCounts[featureType] += conflatableFeatureCountForFeatureType;
     }
-    LOG_VARD(conflatablePoiCount);
-    LOG_VARD(conflatableHighwayCount);
-    LOG_VARD(conflatableBuildingCount);
-    LOG_VARD(conflatableWaterwayCount);
 
     _stats.append(SingleStat("Total Conflated Features", conflatedFeatureCount));
     _stats.append(
@@ -309,10 +310,15 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
         "Percentage of Total Features Unmatched",
         ((double)unconflatedFeatureCount / (double)featureCount) * 100.0));
 
-    _generateFeatureStats(constMap, "POI", conflatablePoiCount, None, new PoiCriterion());
-    _generateFeatureStats(constMap, "Highway", conflatableHighwayCount, Length, new HighwayFilter(keep));
-    _generateFeatureStats(constMap, "Building", conflatableBuildingCount, Area, new BuildingCriterion(map));
-    _generateFeatureStats(constMap, "Waterway", conflatableWaterwayCount, Length, new WaterwayCriterion());
+    for (QMap<MatchCreator::BaseFeatureType, double>::iterator it = featureCounts.begin();
+         it != featureCounts.end(); ++it)
+    {
+      _generateFeatureStats(constMap,
+                            MatchCreator::BaseFeatureTypeToString(it.key()),
+                            it.value(),
+                            MatchCreator::getFeatureCalcType(it.key()),
+                            MatchCreator::getElementCriterion(it.key(), map));
+    }
 
     LongestTagVisitor v2;
     _applyVisitor(constMap, &v2);
@@ -453,7 +459,8 @@ void CalculateStatsOp::printStats()
 }
 
 void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QString description,
-                                             float conflatableCount, FeatureCalcType type,
+                                             float conflatableCount,
+                                             MatchCreator::FeatureCalcType type,
                                              ElementCriterion* criterion)
 {
   shared_ptr<ElementCriterion> e_criterion(criterion);
@@ -487,13 +494,13 @@ void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QStr
           e_criterion->clone()),
         new FeatureCountVisitor()));
   _stats.append(SingleStat(QString("Unmatched %1s").arg(description), unconflatedFeatureCount));
-  if (type == Length)
+  if (type == MatchCreator::CalcTypeLength)
   {
     _stats.append(SingleStat(QString("Meters of %1 Processed by Conflation").arg(description),
       _applyVisitor(map, FilteredVisitor(ChainCriterion(new StatusCriterion(Status::Conflated),
         e_criterion->clone()), new LengthOfWaysVisitor()))));
   }
-  else if (type == Area)
+  else if (type == MatchCreator::CalcTypeArea)
   {
     _stats.append(SingleStat(QString("Meters Squared of %1s Processed by Conflation").arg(description),
       _applyVisitor(map, FilteredVisitor(ChainCriterion(new StatusCriterion(Status::Conflated),
