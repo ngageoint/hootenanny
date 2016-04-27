@@ -113,7 +113,7 @@ if [ $? -eq 1 ]; then
    sudo gem install selenium-cucumber
 fi
 
-# Make sure that we are in ~ before trying to wget & install stuff 
+# Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
 if  ! dpkg -l | grep google-chrome-stable; then
@@ -307,6 +307,7 @@ sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
 # Hoot Settings
 #--------------
 HOOT_HOME=/home/vagrant/hoot
+HADOOP_HOME=/home/vagrant/hadoop
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
 GDAL_DATA=/usr/local/share/gdal
 GDAL_LIB_DIR=/usr/local/lib
@@ -511,7 +512,7 @@ EOT
   sudo mkdir -p $HOME/hadoop/dfs/name/current
   # this could perhaps be more strict
   sudo chmod -R 777 $HOME/hadoop
-  echo 'Y' | hadoop namenode -format 
+  echo 'Y' | hadoop namenode -format
 
   cd /lib
   sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so libjvm.so
