@@ -27,12 +27,8 @@
 package hoot.services.models.osm;
 
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.Map;
-import java.util.Set;
 
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
@@ -41,6 +37,8 @@ import hoot.services.db.DbUtils.nwr_enum;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelationMembers;
 import hoot.services.db2.CurrentRelations;
+import hoot.services.exceptions.osm.OSMAPIAlreadyDeletedException;
+import hoot.services.exceptions.osm.OSMAPIPreconditionException;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.Coordinates;
 
@@ -93,6 +91,7 @@ public class Relation extends Element {
         setMapId(mapId);
     }
 
+
     /**
      * Populates this element model object based on osm diff data
      *
@@ -123,62 +122,30 @@ public class Relation extends Element {
         if (entityChangeType != EntityChangeType.DELETE) {
             parseMembersXml(xml);
         }
-        else {
-            for (CurrentRelationMembers currentRelationMember : getMembers()) {
-                //RelationMember.joins(:relation).find_by("visible = ? AND member_type = 'Relation' and member_id = ? ", true, id)
-                if (elementTypeFromString(currentRelationMember.getMemberType().toString()) == ElementType.Relation) {
-                    SQLQuery sqlQuery =
-                            new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
-                                    .from(currentRelations)
-                                    .join(currentRelationMembers)
-                                    .on(currentRelations.id.eq(currentRelationMembers.relationId))
-                                    .where(currentRelations.visible.eq(true)
-                                            .and(currentRelationMembers.memberId.eq(currentRelationMember.getMemberId())));
+    }
 
-                    setUsedByAnotherElement(sqlQuery.exists());
-                }
-                else if (elementTypeFromString(currentRelationMember.getMemberType().toString()) == ElementType.Way) {
-                    //rels = Relation.joins(:relation_members).where(:visible => true, :current_relation_members => { :member_type => "Way", :member_id => id }).
-                    SQLQuery sqlQuery =
-                            new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
-                                    .from(currentRelations)
-                                    .join(currentRelationMembers)
-                                    .on(currentRelations.id.eq(currentRelationMembers.relationId))
-                                    .where(currentRelations.visible.eq(true)
-                                            .and(currentRelationMembers.memberType.eq(nwr_enum.way))
-                                            .and(currentRelationMembers.memberId.eq(currentRelationMember.getMemberId())));
+    @Override
+    public void checkAndFailIfUsedByOtherObjects() throws Exception {
+        if (!super.getVisible()) {
+            throw new OSMAPIAlreadyDeletedException("Relation with ID = " + super.getId() + " has been already deleted!");
+        }
 
-                    setUsedByAnotherElement(sqlQuery.exists());
-                }
-                else if (elementTypeFromString(currentRelationMember.getMemberType().toString()) == ElementType.Node) {
+        // From the Rails port of OSM API:
+        // RelationMember.joins(:relation).find_by("visible = ? AND member_type = 'Relation' and member_id = ? ", true, id)
+        SQLQuery owningRelationsQuery =
+                new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+                        .distinct()
+                        .from(currentRelationMembers)
+                        .join(currentRelations)
+                        .on(currentRelationMembers.relationId.eq(currentRelations.id))
+                        .where(currentRelations.visible.eq(true)
+                                .and(currentRelationMembers.memberId.eq(super.getId())));
 
-                    //ways = Way.joins(:way_nodes).where(:visible => true, :current_way_nodes => { :node_id => id }).order(:id)
-                    SQLQuery sqlQuery1 = new SQLQuery(getDbConnection(), DbUtils.getConfiguration(getMapId()))
-                            .from(currentWays)
-                            .join(currentWayNodes)
-                            .on(currentWays.id.eq(currentWayNodes.wayId))
-                            .where(currentWays.visible.eq(true)
-                                    .and(currentWayNodes.nodeId.eq(currentRelationMember.getMemberId())));
+        Set<Long> owningRelationsIds = new TreeSet<>(owningRelationsQuery.list(currentRelationMembers.relationId));
 
-                    boolean isUsedByAnotherElement = sqlQuery1.exists();
-
-                    if (!isUsedByAnotherElement) {
-                        //rels = Relation.joins(:relation_members).where(:visible => true, :current_relation_members => { :member_type => "Node", :member_id => id }).
-                        SQLQuery sqlQuery2 =
-                                new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
-                                        .from(currentRelations)
-                                        .join(currentRelationMembers)
-                                        .on(currentRelations.id.eq(currentRelationMembers.relationId))
-                                        .where(currentRelations.visible.eq(true)
-                                                .and(currentRelationMembers.memberType.eq(nwr_enum.node))
-                                                .and(currentRelationMembers.memberId.eq(currentRelationMember.getMemberId())));
-
-                        isUsedByAnotherElement |= sqlQuery2.exists();
-                    }
-
-                    setUsedByAnotherElement(isUsedByAnotherElement);
-                }
-            }
+        if (!owningRelationsIds.isEmpty()) {
+            throw new OSMAPIPreconditionException("Relation with ID = " + super.getId() +
+                    " is still used by relation(s): " + StringUtils.join(owningRelationsIds));
         }
     }
 

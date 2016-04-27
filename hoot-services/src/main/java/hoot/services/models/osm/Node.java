@@ -28,14 +28,14 @@ package hoot.services.models.osm;
 
 import java.sql.Connection;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.Map;
-import java.util.Set;
 
 import hoot.services.db2.QChangesets;
 import hoot.services.db2.QCurrentWayNodes;
+import hoot.services.exceptions.osm.OSMAPIAlreadyDeletedException;
+import hoot.services.exceptions.osm.OSMAPIPreconditionException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
@@ -136,6 +136,7 @@ public class Node extends Element {
         return new ArrayList<>();
     }
 
+
     /**
      * Populates the element model object based on osm diff data
      *
@@ -177,35 +178,51 @@ public class Node extends Element {
             nodeRecord.setTile(QuadTileCalculator.tileForPoint(latitude, longitude));
             nodeRecord.setTags(parseTags(xml));
         }
-        else {
-            //ways = Way.joins(:way_nodes).where(:visible => true, :current_way_nodes => { :node_id => id }).order(:id)
-            SQLQuery sqlQuery1 = new SQLQuery(super.getDbConnection(), DbUtils.getConfiguration(super.getMapId()))
-                                        .from(currentWays)
-                                        .join(currentWayNodes)
-                                        .on(currentWays.id.eq(currentWayNodes.wayId))
-                                        .where(currentWays.visible.eq(true)
-                                                .and(currentWayNodes.nodeId.eq(nodeRecord.getId())));
-
-            boolean isUsedByAnotherElement = sqlQuery1.exists();
-
-            if (!isUsedByAnotherElement) {
-                //rels = Relation.joins(:relation_members).where(:visible => true, :current_relation_members => { :member_type => "Node", :member_id => id }).
-                SQLQuery sqlQuery2 =
-                        new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
-                                .from(currentRelations)
-                                .join(currentRelationMembers)
-                                .on(currentRelations.id.eq(currentRelationMembers.relationId))
-                                .where(currentRelations.visible.eq(true)
-                                        .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node))
-                                        .and(currentRelationMembers.memberId.eq(nodeRecord.getId())));
-
-                isUsedByAnotherElement |= sqlQuery2.exists();
-            }
-
-            this.setUsedByAnotherElement(isUsedByAnotherElement);
-        }
 
         setRecord(nodeRecord);
+    }
+
+    @Override
+    public void checkAndFailIfUsedByOtherObjects() throws Exception {
+        if (!super.getVisible()) {
+            throw new OSMAPIAlreadyDeletedException("Node with ID = " + super.getId() + " has been already deleted!");
+        }
+
+        // From the Rails port of OSM API:
+        // ways = Way.joins(:way_nodes).where(:visible => true, :current_way_nodes => { :node_id => id }).order(:id)
+        SQLQuery owningWaysQuery = new SQLQuery(super.getDbConnection(), DbUtils.getConfiguration(super.getMapId()))
+                .distinct()
+                .from(currentWays)
+                .join(currentWayNodes)
+                .on(currentWays.id.eq(currentWayNodes.wayId))
+                .where(currentWays.visible.eq(true)
+                        .and(currentWayNodes.nodeId.eq(super.getId())));
+
+        Set<Long> owningWayIds = new TreeSet<>(owningWaysQuery.list(currentWayNodes.wayId));
+
+        if (!owningWayIds.isEmpty()) {
+            throw new OSMAPIPreconditionException("Node with ID = " + super.getId() +
+                    " is still used by other way(s): " + StringUtils.join(owningWayIds));
+        }
+
+        // From the Rails port of OSM API:
+        // rels = Relation.joins(:relation_members).where(:visible => true, :current_relation_members => { :member_type => "Node", :member_id => id }).
+        SQLQuery owningRelationsQuery =
+                new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+                        .distinct()
+                        .from(currentRelations)
+                        .join(currentRelationMembers)
+                        .on(currentRelations.id.eq(currentRelationMembers.relationId))
+                        .where(currentRelations.visible.eq(true)
+                                .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node))
+                                .and(currentRelationMembers.memberId.eq(super.getId())));
+
+        Set<Long> owningRelationsIds = new TreeSet<>(owningRelationsQuery.list(currentRelationMembers.relationId));
+
+        if (!owningRelationsIds.isEmpty()) {
+            throw new OSMAPIPreconditionException("Node with ID = " + super.getId() +
+                    " is still used by relation(s): " + StringUtils.join(owningRelationsIds));
+        }
     }
 
     /**

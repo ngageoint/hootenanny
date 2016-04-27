@@ -104,9 +104,9 @@ public class ChangesetDbWriter {
      * changeset upload parsing process. For existing elements, both the key/value will always be the
      * same.
      */
-    private Map<ElementType, HashMap<Long, Element>> parsedElementIdsToElementsByType;
+    private Map<ElementType, Map<Long, Element>> parsedElementIdsToElementsByType;
 
-    public Map<ElementType, HashMap<Long, Element>> getParsedElementIdsToElementsByType() {
+    public Map<ElementType, Map<Long, Element>> getParsedElementIdsToElementsByType() {
         return parsedElementIdsToElementsByType;
     }
 
@@ -141,7 +141,7 @@ public class ChangesetDbWriter {
 
     private void initParsedElementCache() {
         // create an empty ID mapping for each element type
-        parsedElementIdsToElementsByType = new HashMap<Element.ElementType, HashMap<Long, Element>>();
+        parsedElementIdsToElementsByType = new HashMap<Element.ElementType, Map<Long, Element>>();
         for (ElementType elementType : ElementType.values()) {
             parsedElementIdsToElementsByType.put(elementType, new HashMap<Long, Element>());
         }
@@ -177,7 +177,7 @@ public class ChangesetDbWriter {
             throw new Exception("Duplicate OSM element ID: " + oldElementId + " in changeset " + requestChangesetId);
         }
 
-        if (entityChangeType.equals(EntityChangeType.CREATE)) {
+        if (entityChangeType == EntityChangeType.CREATE) {
             // by convention, new element IDs should have a negative value
             if (oldElementId >= 0) {
                 throw new Exception("Invalid OSM element ID for create: " + oldElementId + " for "
@@ -194,6 +194,7 @@ public class ChangesetDbWriter {
         return oldElementId;
     }
 
+
     /**
      * Parses and returns an OSM element from OSM changeset diff input XML data
      *
@@ -207,7 +208,7 @@ public class ChangesetDbWriter {
      * @throws Exception
      */
     private Element parseElement(org.w3c.dom.Node xml, long oldId, long newId, ElementType elementType,
-                                 EntityChangeType entityChangeType, boolean deleteIfUnused)
+                                 EntityChangeType entityChangeType)
     throws Exception {
 
         //log.debug("Parsing OSM element type: " + elementType.toString() + ", entity change type: "
@@ -233,19 +234,6 @@ public class ChangesetDbWriter {
         }
 
         element.fromXml(xml);
-
-        if ((entityChangeType == EntityChangeType.DELETE) && element.isUsedByAnotherElement()) {
-            if (deleteIfUnused) {
-                log.warn("Element of type " + elementType.toString().toLowerCase() + ", with ID: "
-                        + newId + " is used by another element and cannot be deleted " + "for changeset "
-                        + requestChangesetId);
-            }
-            else {
-                // Without the if-unused attribute trying to delete an element still in use by another should throw an error.
-                throw new Exception("Cannot delete element without when deleteIfUnused is false and the " +
-                                    "element is still being used by another element!");
-            }
-        }
 
         return element;
     }
@@ -327,50 +315,56 @@ public class ChangesetDbWriter {
             long oldElementId = getOldElementId(xmlAttributes, entityChangeType, oldElementIds);
             long newElementId = getNewElementId(oldElementId, nextElementId, entityChangeType, i);
 
-            Element element = parseElement(xmlElement, oldElementId, newElementId, elementType, entityChangeType, deleteIfUnused);
+            Element element = parseElement(xmlElement, oldElementId, newElementId, elementType, entityChangeType);
 
-            if ((entityChangeType != EntityChangeType.DELETE) ||
-                    ((entityChangeType == EntityChangeType.DELETE) && !element.isUsedByAnotherElement())) {
-                // update the parsed element cache; this allows us to keep track of the ID for each element
-                // passed in the request for later use, if the ID is different than what the database ID
-                // ends up being (create requests)
-                HashMap<Long, Element> idMappedElements = parsedElementIdsToElementsByType.get(elementType);
-                idMappedElements.put(oldElementId, element);
-                parsedElementIdsToElementsByType.put(elementType, idMappedElements);
+            //Per OSM API docs:
+            //   "A <delete> block in the OsmChange document may have an if-unused attribute (the value of which is ignored).
+            //    If this attribute is present, then the delete operation(s) in this block are conditional and will only
+            //    be executed if the object to be deleted is not used by another object. Without the if-unused,
+            //    such a situation would lead to an error, and the whole diff upload would fail."
+            if ((entityChangeType == EntityChangeType.DELETE) && deleteIfUnused) {
+                element.checkAndFailIfUsedByOtherObjects();
+            }
 
-                // add this to the records to be updated in the database
-                recordsToModify.add(element.getRecord());
+            // update the parsed element cache; this allows us to keep track of the ID for each element
+            // passed in the request for later use, if the ID is different than what the database ID
+            // ends up being (create requests)
+            Map<Long, Element> idMappedElements = parsedElementIdsToElementsByType.get(elementType);
+            idMappedElements.put(oldElementId, element);
+            parsedElementIdsToElementsByType.put(elementType, idMappedElements);
 
-                // update the list of elements that will propagate to the changeset response writer (doesn't
-                // contain child records, since those don't need to be written to the response)
-                changesetDiffElements.add(element);
-                parsedElementIds.add(newElementId);
+            // add this to the records to be updated in the database
+            recordsToModify.add(element.getRecord());
 
-                // Set related or child records (e.g. way nodes for a node, relation members for a relation,
-                // etc.) that need to be updated *after* this element is inserted into the db. The delete
-                // operation doesn't store these, because all related records will automatically be deleted
-                // in writeDiff.
-                if ((element.getRelatedRecords() != null) && (entityChangeType != EntityChangeType.DELETE)) {
-                    relatedRecordsToStore.addAll(element.getRelatedRecords());
-                }
+            // update the list of elements that will propagate to the changeset response writer (doesn't
+            // contain child records, since those don't need to be written to the response)
+            changesetDiffElements.add(element);
+            parsedElementIds.add(newElementId);
 
-                //log.debug("Updating changeset bounds for OSM element type: " + elementType.toString()
-                //+ ", entity change type: " + entityChangeType.toString() + "...");
-                if (diffBounds == null) {
-                    diffBounds = new BoundingBox(); // I think this is wrong
-                }
-                BoundingBox elementBounds = element.getBounds();
+            // Set related or child records (e.g. way nodes for a node, relation members for a relation,
+            // etc.) that need to be updated *after* this element is inserted into the db. The delete
+            // operation doesn't store these, because all related records will automatically be deleted
+            // in writeDiff.
+            if ((element.getRelatedRecords() != null) && (entityChangeType != EntityChangeType.DELETE)) {
+                relatedRecordsToStore.addAll(element.getRelatedRecords());
+            }
 
-                // null check here if for relations that only contain members of type relation, for which
-                // no bounds is being calculated
-                if (elementBounds != null) {
-                    diffBounds.expand(
-                            element.getBounds(),
-                            Double.parseDouble(
-                                    HootProperties.getInstance().getProperty(
-                                            "changesetBoundsExpansionFactorDeegrees",
-                                            HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"))));
-                }
+            //log.debug("Updating changeset bounds for OSM element type: " + elementType.toString()
+            //+ ", entity change type: " + entityChangeType.toString() + "...");
+            if (diffBounds == null) {
+                diffBounds = new BoundingBox(); // I think this is wrong
+            }
+            BoundingBox elementBounds = element.getBounds();
+
+            // null check here if for relations that only contain members of type relation, for which
+            // no bounds is being calculated
+            if (elementBounds != null) {
+                diffBounds.expand(
+                        element.getBounds(),
+                        Double.parseDouble(
+                                HootProperties.getInstance().getProperty(
+                                        "changesetBoundsExpansionFactorDeegrees",
+                                        HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"))));
             }
         }
 
@@ -599,8 +593,9 @@ public class ChangesetDbWriter {
         //of the modify/delete changesets.  would be more efficient to do them at the start of the
         //save along with the other error checking, but would probably increase the code complexity
         //quite a bit, if it could be done at all.
-        changesetErrorChecker.checkForElementVisibilityErrors();
-        changesetErrorChecker.checkForOwnershipErrors();
+
+        //changesetErrorChecker.checkForElementVisibilityErrors();
+        //changesetErrorChecker.checkForOwnershipErrors();
 
         changeset.updateNumChanges((int) changesetDiffElementsSize);
 

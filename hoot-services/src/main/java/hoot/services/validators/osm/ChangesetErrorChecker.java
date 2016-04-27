@@ -125,8 +125,8 @@ public class ChangesetErrorChecker {
      */
     public void checkForOwnershipErrors() throws Exception {
         log.debug("Checking for child element ownership errors...");
-        checkForRelationOwnershipErrors();
-        checkForWayOwnershipErrors();
+        //checkForRelationOwnershipErrors();
+        //checkForWayOwnershipErrors();
     }
 
     /*
@@ -262,7 +262,7 @@ public class ChangesetErrorChecker {
         //if an element is referenced (besides in its own create change) and doesn't exist in the db,
         //then fail
 
-        Map<ElementType, Set<Long>> elementTypesToElementIds = new HashMap<ElementType, Set<Long>>();
+        Map<ElementType, Set<Long>> elementTypesToElementIds = new HashMap<>();
         for (ElementType elementType : ElementType.values()) {
             if (elementType != ElementType.Changeset) {
                 elementTypesToElementIds.put(elementType, new HashSet<Long>());

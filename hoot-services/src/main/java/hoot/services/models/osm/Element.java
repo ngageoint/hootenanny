@@ -75,8 +75,6 @@ public abstract class Element implements XmlSerializable, DbSerializable {
 
     protected Map<Long, CurrentNodes> dbNodeCache;
 
-    private boolean isUsedByAnotherElement;
-
     public void setDbNodeCache(Map<Long, CurrentNodes> cache) {
         dbNodeCache = cache;
     }
@@ -235,14 +233,14 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     /**
      * Returns the map ID of the element's associated services database record
      */
-    public long getMapId() throws Exception {
+    public long getMapId() {
         return _mapId;
     }
 
     /**
      * Sets the map ID of the element associated map
      */
-    public void setMapId(long id) throws Exception {
+    public void setMapId(long id) {
         _mapId = id;
     }
 
@@ -701,11 +699,5 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         return elementXml;
     }
 
-    public boolean isUsedByAnotherElement() {
-        return this.isUsedByAnotherElement;
-    }
-
-    public void setUsedByAnotherElement(boolean usedByAnotherElement) {
-        this.isUsedByAnotherElement = usedByAnotherElement;
-    }
+    public abstract void checkAndFailIfUsedByOtherObjects() throws Exception;
 }
