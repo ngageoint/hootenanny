@@ -27,7 +27,7 @@ mkdir -p test-output/cmd/glacial/ServiceOsmApiDbConflateTest
 
 echo ""
 echo "STEP 1: Cleaning out the osm api db and initializing it for use..."
-source scripts/SetupOsmApiDB.sh
+source scripts/SetupOsmApiDB.sh force
 export DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
 export AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD
