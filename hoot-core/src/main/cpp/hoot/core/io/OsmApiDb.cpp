@@ -509,6 +509,21 @@ QString OsmApiDb::extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType
   return tag;
 }
 
+long OsmApiDb::getNextId(const ElementType type)
+{
+  switch (type.getEnum())
+  {
+    case ElementType::Node:
+      return getNextId("current_" + type.toString().toLower() + "s");
+    case ElementType::Way:
+      return getNextId("current_" + type.toString().toLower() + "s");
+    case ElementType::Relation:
+      return getNextId("current_" + type.toString().toLower() + "s");
+    default:
+      throw HootException("Unknown element type");
+  }
+}
+
 long OsmApiDb::getNextId(const QString tableName)
 {
   long result;

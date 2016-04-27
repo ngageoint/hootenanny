@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -110,6 +110,7 @@ public:
       throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
     }
 
+
     QString input1 = args[0];
     QString input2, output;
 
@@ -122,6 +123,8 @@ public:
     {
       output = args[1];
     }
+
+    LOG_INFO("Conflating " << input1 << " with " << input2 << " and writing the output to " << output);
 
     double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
     LOG_VAR(bytesRead);

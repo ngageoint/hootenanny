@@ -613,6 +613,14 @@ The highway subline matcher to use when determining matching sublines.
 
 The way subline string matcher to use when determining matching sublines for highways.
 
+=== osm.map.reader.factory.reader
+
+* Data Type: string
+* Default Value: ``
+
+Specifies the reader that the OsmMapReaderFactory will use. This overrides any information derived
+from the URL.
+
 === hoot.hadoop.file.deps
 
 * Data Type: list
@@ -903,7 +911,6 @@ Debugging: When building internal lookup tables, print values that clash.
 Debugging: Print the columns that are not matched during one2one translation. This will show all
 Attribute columns and values that do not match a one2one rule.
 
-
 === ogr.debug.dumpvalidate
 
 * Data Type: bool
@@ -1054,6 +1061,13 @@ hoot --convert \
 ** `hoot::BuildingPartMergeOp`
 
 Operations that should be applied to ingested data before saving the data.
+
+=== osm.changeset.file.writer.generate.new.ids
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the OSM changeset file writers will generate new ID's for elements being created.
 
 === osm.map.reader.factory.reader
 
@@ -1765,6 +1779,7 @@ Email address of the osm api reader user.  Can be set here for debugging and tes
 Email address of the DG reader user.  Can be set here for debugging and testing.
 
 === hootapi.db.reader.max.elements.per.partial.map
+
 * Data Type: int
 * Default Value: `50000`
 
@@ -1786,6 +1801,16 @@ This is most useful when debugging and testing.
 
 Email address of the DG writer user.  Can be set here for debugging and testing.
 
+=== hootapi.db.writer.osmapidb.id.sequence.url
+
+* Data Type: string
+* Default Value: ``
+
+If not empty, the Hoot API database writer will use a specified OSM API database for determining
+new element ID's.  If empty, the Hoot API database writer will use its internal ID sequencing
+scheme.  This setting should be used with with new Hoot API datasets only, as turning the setting
+on/off when writing to existing datasets can cause element ID conflicts to occur.
+
 === hootapi.db.writer.overwrite.map
 
 * Data Type: bool
@@ -1802,6 +1827,14 @@ a new map is written.
 If this value is set to a non-empty string, the system will attempt to open a file with the
 specified name and output all the ID mappings (source to destination) used for nodes, ways, and
 relations that were written to the database.
+
+=== hootapi.db.writer.remap.ids
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the Hoot API services database writer will internally remap element ID's.  If false,
+the original element ID's will be preserved.
 
 === set.tag.visitor.key
 

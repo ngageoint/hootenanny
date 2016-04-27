@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -58,6 +58,7 @@ HootApiDbWriter::HootApiDbWriter()
 HootApiDbWriter::~HootApiDbWriter()
 {
   close();
+  _osmApiDb.close();
 }
 
 void HootApiDbWriter::_addElementTags(const shared_ptr<const Element> &e, Tags& t)
@@ -209,7 +210,10 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
 
 long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
 {
-  if (_remapIds == false)
+  const QString osmApiDbUrl = ConfigOptions().getHootapiDbWriterOsmapidbIdSequenceUrl();
+  LOG_VARD(osmApiDbUrl);
+
+  if (_remapIds == false && osmApiDbUrl.isEmpty())
   {
     return eid.getId();
   }
@@ -219,13 +223,24 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
   switch(eid.getType().getEnum())
   {
   case ElementType::Node:
-    if (_nodeRemap.count(eid.getId()) == 1)
+    if (_nodeRemap.count(eid.getId()) == 1 && osmApiDbUrl.isEmpty())
     {
       retVal = _nodeRemap.at(eid.getId());
     }
     else
     {
-      retVal = _hootdb.reserveElementId(ElementType::Node);
+      if (osmApiDbUrl.isEmpty())
+      {
+        retVal = _hootdb.reserveElementId(ElementType::Node);
+      }
+      else
+      {
+        if (!_osmApiDb.getDB().isOpen())
+        {
+          _osmApiDb.open(osmApiDbUrl);
+        }
+        retVal = _osmApiDb.getNextId(ElementType::Node);
+      }
       _nodeRemap[eid.getId()] = retVal;
       if ( _outputMappingFile.length() > 0 )
       {
@@ -236,13 +251,24 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     break;
 
   case ElementType::Way:
-    if (_wayRemap.count(eid.getId()) == 1)
+    if (_wayRemap.count(eid.getId()) == 1 && osmApiDbUrl.isEmpty())
     {
       retVal = _wayRemap.at(eid.getId());
     }
     else
     {
-      retVal = _hootdb.reserveElementId(ElementType::Way);
+      if (osmApiDbUrl.isEmpty())
+      {
+        retVal = _hootdb.reserveElementId(ElementType::Way);
+      }
+      else
+      {
+        if (!_osmApiDb.getDB().isOpen())
+        {
+          _osmApiDb.open(osmApiDbUrl);
+        }
+        retVal = _osmApiDb.getNextId(ElementType::Way);
+      }
       _wayRemap[eid.getId()] = retVal;
       if ( _outputMappingFile.length() > 0 )
       {
@@ -253,7 +279,7 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     break;
 
   case ElementType::Relation:
-    if (_relationRemap.count(eid.getId()) == 1)
+    if (_relationRemap.count(eid.getId()) == 1 && osmApiDbUrl.isEmpty())
     {
       retVal = _relationRemap.at(eid.getId());
       /*
@@ -264,7 +290,18 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     }
     else
     {
-      retVal = _hootdb.reserveElementId(ElementType::Relation);
+      if (osmApiDbUrl.isEmpty())
+      {
+        retVal = _hootdb.reserveElementId(ElementType::Relation);
+      }
+      else
+      {
+        if (!_osmApiDb.getDB().isOpen())
+        {
+          _osmApiDb.open(osmApiDbUrl);
+        }
+        retVal = _osmApiDb.getNextId(ElementType::Relation);
+      }
       _relationRemap[eid.getId()] = retVal;
       if ( _outputMappingFile.length() > 0 )
       {
@@ -294,21 +331,26 @@ vector<long> HootApiDbWriter::_remapNodes(const vector<long>& nids)
 {
   vector<long> result(nids.size()); // Creates the vector and fills nids.size number of zeroes
 
-  Tags empty;
-
   for (size_t i = 0; i < nids.size(); i++)
   {
     // This is only called when adding nodes for a way.  If a way has a node we
     //    did not successfully create a mapping for when importing nodes,
     //    we can't continue
-    if ( _nodeRemap.count(nids[i]) == 1 )
+    if (_nodeRemap.count(nids[i]) == 1)
     {
       result[i] = _nodeRemap.at(nids[i]);
     }
     else
     {
-      throw HootException(QString("Requested ID remap for node " +  QString::number(nids[i])
-        + QString(" but it did not exist in mapping table")));
+      if (ConfigOptions().getHootapiDbWriterOsmapidbIdSequenceUrl().isEmpty())
+      {
+        throw HootException(QString("Requested ID remap for node " +  QString::number(nids[i])
+          + QString(" but it did not exist in mapping table")));
+      }
+      else
+      {
+        result[i] = nids[i];
+      }
     }
   }
 
@@ -321,6 +363,7 @@ void HootApiDbWriter::setConfiguration(const Settings &conf)
   setUserEmail(configOptions.getHootapiDbWriterEmail());
   setCreateUser(configOptions.getHootapiDbWriterCreateUser());
   setOverwriteMap(configOptions.getHootapiDbWriterOverwriteMap());
+  setRemap(configOptions.getHootapiDbWriterRemapIds());
 }
 
 void HootApiDbWriter::_startNewChangeSet()
@@ -336,13 +379,14 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
 {
   bool countChange = true;
 
-  LOG_DEBUG("Inside writePartial for Node");
+  //LOG_DEBUG("Inside writePartial for Node");
   LOG_VARD(n->getId());
 
   Tags t = n->getTags();
   _addElementTags(n, t);
 
-  if (_remapIds)
+  if (_remapIds ||
+      (!ConfigOptions().getHootapiDbWriterOsmapidbIdSequenceUrl().isEmpty() && n->getId() < 1))
   {
     bool alreadyThere = _nodeRemap.count(n->getId()) != 0;
     LOG_VARD(alreadyThere);
@@ -359,7 +403,7 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
   }
   else
   {
-    if ( n->getId() < 1 )
+    if (n->getId() < 1)
     {
       throw HootException("Writing non-positive IDs without remap is not supported by "
                           "HootApiDbWriter.");
@@ -385,10 +429,13 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
   Tags tags = w->getTags();
   _addElementTags(w, tags);
 
-  if (_remapIds)
+  if (_remapIds ||
+      (!ConfigOptions().getHootapiDbWriterOsmapidbIdSequenceUrl().isEmpty() && w->getId() < 1))
   {
     bool alreadyThere = _wayRemap.count(w->getId()) != 0;
+    LOG_VARD(alreadyThere);
     wayId = _getRemappedElementId(w->getElementId());
+    LOG_VARD(wayId);
     if (alreadyThere)
     {
       _hootdb.updateWay(wayId, w->getVersion() + 1, tags);
@@ -408,7 +455,7 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
     _hootdb.insertWay(w->getId(), tags);
   }
 
-  if ( _remapIds == true )
+  if (_remapIds == true || !ConfigOptions().getHootapiDbWriterOsmapidbIdSequenceUrl().isEmpty())
   {
     _hootdb.insertWayNodes(wayId, _remapNodes(w->getNodeIds()));
   }
@@ -436,15 +483,17 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
     tags["type"] = r->getType();
   }
 
-  if (_remapIds)
+  if (_remapIds ||
+      (!ConfigOptions().getHootapiDbWriterOsmapidbIdSequenceUrl().isEmpty() && r->getId() < 1))
   {
     relationId = _getRemappedElementId(r->getElementId());
+    LOG_VARD(relationId);
 
     LOG_DEBUG("Inserting relation with source ID = " <<
               QString::number(r->getId()) << " which maps to DB ID = " <<
               QString::number(relationId) );
 
-      _hootdb.insertRelation(relationId, tags);
+    _hootdb.insertRelation(relationId, tags);
   }
   else
   {
@@ -457,7 +506,6 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
     relationId = r->getId();
   }
 
-  Tags emptyTags;
   for (size_t i = 0; i < r->getMembers().size(); ++i)
   {
     RelationData::Entry e = r->getMembers()[i];
@@ -465,7 +513,8 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
     // May need to create new ID mappings for items we've not yet seen
     ElementId relationMemberElementId = e.getElementId();
 
-    if ( _remapIds == true )
+    if (_remapIds == true ||
+        (!ConfigOptions().getHootapiDbWriterOsmapidbIdSequenceUrl().isEmpty() && r->getId() < 1))
     {
       relationMemberElementId = ElementId(relationMemberElementId.getType(),
         _getRemappedElementId(relationMemberElementId));

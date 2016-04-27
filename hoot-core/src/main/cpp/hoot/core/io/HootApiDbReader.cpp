@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -48,6 +48,7 @@ _status(Status::Invalid),
 _useDataSourceIds(true),
 _open(false)
 {
+  LOG_VARD(_useDataSourceIds);
   setConfiguration(conf());
 }
 
@@ -250,6 +251,7 @@ ElementId HootApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
   ElementId result;
   if (_useDataSourceIds)
   {
+    //LOG_VARD(oldId);
     result = oldId;
   }
   else

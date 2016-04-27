@@ -29,6 +29,7 @@
 
 #include "PartialOsmMapWriter.h"
 #include "HootApiDb.h"
+#include "OsmApiDb.h"
 
 // hoot
 #include <hoot/core/util/Configurable.h>
@@ -106,6 +107,8 @@ private:
   std::set<long> _sourceNodeIds;
   std::set<long> _sourceWayIds;
   std::set<long> _sourceRelationIds;
+
+  OsmApiDb _osmApiDb;
 
   set<long> _openDb(QString& urlStr);
 

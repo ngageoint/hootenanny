@@ -16,6 +16,7 @@ OsmChangesetSqlFileWriter::OsmChangesetSqlFileWriter(QUrl url) :
 _changesetId(0)
 {
   _db.open(url);
+  LOG_VARD(ConfigOptions().getOsmChangesetFileWriterGenerateNewIds());
 }
 
 void OsmChangesetSqlFileWriter::write(const QString path, const ChangeSetProviderPtr changesetProvider)
@@ -34,6 +35,7 @@ void OsmChangesetSqlFileWriter::write(const QString path, const ChangeSetProvide
   while (changesetProvider->hasMoreChanges())
   {
     Change change = changesetProvider->readNextChange();
+    LOG_VARD(change.toString());
     switch (change.type)
     {
       case Change::Create:
@@ -70,21 +72,6 @@ void OsmChangesetSqlFileWriter::_createChangeSet()
       .arg(_changesetId)
       .arg(ConfigOptions().getChangesetUserId())
     .toUtf8());
-}
-
-long OsmChangesetSqlFileWriter::_getNextId(const ElementType type)
-{
-  switch (type.getEnum())
-  {
-    case ElementType::Node:
-      return _db.getNextId("current_" + type.toString().toLower() + "s");
-    case ElementType::Way:
-      return _db.getNextId("current_" + type.toString().toLower() + "s");
-    case ElementType::Relation:
-      return _db.getNextId("current_" + type.toString().toLower() + "s");
-    default:
-      throw HootException("Unknown element type");
-  }
 }
 
 void OsmChangesetSqlFileWriter::_createNewElement(const ConstElementPtr newElement)
@@ -144,7 +131,16 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(const ConstElementPtr rem
 
 void OsmChangesetSqlFileWriter::_create(const ConstNodePtr node)
 {
-  const long id = _getNextId(ElementType::Node);
+  long id;
+  if (ConfigOptions().getOsmChangesetFileWriterGenerateNewIds())
+  {
+    id = _db.getNextId(ElementType::Node);
+  }
+  else
+  {
+    id = node->getId();
+  }
+  LOG_VARD(id);
 
   QString values =
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
@@ -162,7 +158,16 @@ void OsmChangesetSqlFileWriter::_create(const ConstNodePtr node)
 
 void OsmChangesetSqlFileWriter::_create(const ConstWayPtr way)
 {
-  const long id = _getNextId(ElementType::Way);
+  long id;
+  if (ConfigOptions().getOsmChangesetFileWriterGenerateNewIds())
+  {
+    id = _db.getNextId(ElementType::Way);
+  }
+  else
+  {
+    id = way->getId();
+  }
+  LOG_VARD(id);
 
   QString values =
     QString("changeset_id, visible, \"timestamp\", "
@@ -179,7 +184,16 @@ void OsmChangesetSqlFileWriter::_create(const ConstWayPtr way)
 
 void OsmChangesetSqlFileWriter::_create(const ConstRelationPtr relation)
 {
-  const long id = _getNextId(ElementType::Relation);
+  long id;
+  if (ConfigOptions().getOsmChangesetFileWriterGenerateNewIds())
+  {
+    id = _db.getNextId(ElementType::Relation);
+  }
+  else
+  {
+    id = relation->getId();
+  }
+  LOG_VARD(id);
 
   QString values =
     QString("changeset_id, visible, \"timestamp\", "
