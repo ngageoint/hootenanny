@@ -871,7 +871,7 @@ mgcp.rules = {
         // RRC - Railway Use
         ['RRC','-32768',undefined,undefined], // Null
         ['RRC','-999999',undefined,undefined], 
-        ['RRC','0','railway','yes'],
+        ['RRC','0','railway','rail'],
         ['RRC','2','railway','carline'],
         ['RRC','6','railway','subway'],
         ['RRC','8','railway','logging'],
