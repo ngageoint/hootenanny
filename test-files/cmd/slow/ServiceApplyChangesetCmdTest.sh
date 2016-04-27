@@ -2,7 +2,7 @@
 set -e
 
 # clean out the database
-source scripts/SetupOsmApiDB.sh
+source scripts/SetupOsmApiDB.sh force
 source conf/DatabaseConfig.sh
 export DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
 export AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"

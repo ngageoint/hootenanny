@@ -8,6 +8,11 @@ ifneq (,$(findstring s,$(MAKEFLAGS)))
   ECHO=true
 endif
 
+# Check if we are using a different Tomcat6 port
+ifeq ($(TOMCAT_PORT),)
+  TOMCAT_PORT=8080
+endif
+
 CWD=$(shell pwd)
 
 $(shell $(HOOT_HOME)/scripts/ReplaceEnvironmentVariables.sh DbSettings.inc.in DbSettings.inc)
@@ -19,9 +24,9 @@ HOOT_OPTS+= -D hootapi.db.writer.email=test@test.com -D hootapi.db.reader.email=
 
 test: load-data
 ifneq (,$(findstring s,$(MAKEFLAGS)))
-	$(HOOT_HOME)/scripts/VerifyTomcatStarted.sh 8080 --quiet 2> >( $(FILTER) >&2 )
+	$(HOOT_HOME)/scripts/VerifyTomcatStarted.sh $(TOMCAT_PORT) --quiet 2> >( $(FILTER) >&2 )
 else
-	$(HOOT_HOME)/scripts/VerifyTomcatStarted.sh 8080
+	$(HOOT_HOME)/scripts/VerifyTomcatStarted.sh $(TOMCAT_PORT)
 endif
 	echo Running user interface tests...
 	rm -f tmp/TestRun.log*
