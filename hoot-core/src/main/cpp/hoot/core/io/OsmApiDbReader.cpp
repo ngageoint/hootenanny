@@ -166,15 +166,15 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
       while( elementResultsIterator->next() )
       {
         long long id = elementResultsIterator->value(0).toLongLong();
-        if( lastId != id )
+        if (lastId != id)
         {
           // process the complete element only after the first element created
           if(!firstElement)
           {
-            if(tags.size()>0)
+            if (tags.size()>0)
             {
-              element->setTags( ApiDb::unescapeTags(tags.join(", ")) );
-              ApiDbReader::addTagsToElement( element );
+              element->setTags( ApiDb::unescapeTags(tags.join(", ")));
+              ApiDbReader::addTagsToElement(element);
             }
 
             if (_status != Status::Invalid)
@@ -530,13 +530,17 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
   LOG_VARD(nodeId);
   double lat = resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
   double lon = resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
+
   shared_ptr<Node> result(
     new Node(
       _status,
       nodeId,
       lon,
       lat,
-      ConfigOptions().getCircularErrorDefaultValue()));
+      ConfigOptions().getCircularErrorDefaultValue(),
+      resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
+      resultIterator.value(ApiDb::NODES_TIMESTAMP).toUInt(),
+      resultIterator.value(ApiDb::NODES_VERSION).toLongLong()));
 
   return result;
 }
@@ -549,7 +553,10 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
     new Way(
       _status,
       newWayId,
-      ConfigOptions().getCircularErrorDefaultValue()));
+      ConfigOptions().getCircularErrorDefaultValue(),
+      resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
+      resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
+      resultIterator.value(ApiDb::WAYS_TIMESTAMP).toUInt()));
 
   //TODO: read these out in batch at the same time the element results are read
   vector<long> nodeIds = _database.selectNodeIdsForWay(wayId);
@@ -585,7 +592,7 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
 
         if(tags.size()>0)
         {
-          node->setTags(ApiDb::unescapeTags(tags.join(", ")) );
+          node->setTags(ApiDb::unescapeTags(tags.join(", ")));
           ApiDbReader::addTagsToElement(node);
         }
         if (_status != Status::Invalid)
@@ -608,10 +615,13 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
     new Relation(
       _status,
       newRelationId,
-      ConfigOptions().getCircularErrorDefaultValue()/*,
-      "collection"*/));  //TODO: services db doesn't support relation "type" yet
+      ConfigOptions().getCircularErrorDefaultValue(),
+      "",
+      resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
+      resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
+      resultIterator.value(ApiDb::RELATIONS_TIMESTAMP).toUInt()));
 
-  //TODO: read these out in batch at the same time the element results are read
+  // These could be read these out in batch at the same time the element results are read.
   vector<RelationData::Entry> members = _database.selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
   {
