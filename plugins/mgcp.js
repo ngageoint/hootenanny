@@ -451,7 +451,7 @@ mgcp = {
         }
         else if (attrs.FCODE)
         {
-            // fcode = attrs['F_CODE'];
+            // Swap these since the rest of the lookup tables & TDS use F_CODE
             attrs.F_CODE = attrs.FCODE;
             delete attrs.FCODE;
         }
@@ -549,6 +549,9 @@ mgcp = {
                 }
             }
         } // End of Find an FCode
+
+        // The FCODE for Buildings is different. TDS uses AL013
+        if (attrs.F_CODE == 'AL015') attrs.F_CODE = 'AL013';
 
     }, // End of applyToOsmPreProcessing
 
@@ -681,12 +684,6 @@ mgcp = {
         translate.fixConstruction(tags, 'highway');
         translate.fixConstruction(tags, 'railway');
 
-        // Cache for easy access
-        var fCode = attrs.F_CODE;
-
-        // Fix up the 'surface' values for buildings
-        if (fCode == 'AL015' && tags.surface == 'unknown') delete tags['surface'];
-
         // Add 'building = yes' to amenities if we don't already have one
         if (tags.amenity && !(tags.building))
         {
@@ -707,47 +704,58 @@ mgcp = {
         // Add tags if we have Null attributes.  This happens when a feature has an
         // FCODE and no other attributes.  These FCODES don't have default values
         // in the fcode_common lookup table.
-        if (fCode == 'AF030' && !(tags['tower:type'])) tags['tower:type'] = 'cooling';
-        if (fCode == 'AL015' && !(tags.building)) tags.building = 'yes';
-        if (fCode == 'AP020' && !(tags.junction)) tags.junction = 'yes';
-        if (fCode == 'AP030' && !(tags.highway)) tags.highway = 'road';
-        if (fCode == 'AQ040' && !(tags.bridge)) tags.bridge = 'yes';
-        if (fCode == 'BH140' && !(tags.waterway)) tags.waterway = 'river';
 
         // if (tags.building == 'train_station' && !(tags.railway)) tags.railway = 'station';
 
-        // AL020 (Built-up Area) should become a Place.
-        // NOTE: This is a bit vague...
-        if (fCode == 'AL020')
+
+        if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
+
+        switch (attrs.F_CODE)
         {
-            tags.place = 'yes'; // Catch All
+            case 'AF030': // Cooling Tower
+                if (!(tags['tower:type'])) tags['tower:type'] = 'cooling';
+                break;
 
-            if (tags['place:importance'])
-                switch (tags['place:importance'])
-                {
-                    case 'first':
-                        tags.place = 'city';
-                        tags.capital = 'yes'
-                        break;
+            case 'AL013': // Building  NOTE this is the TDS F_CODE for Building. This was swapped during pre-processing
+                if (tags.surface == 'unknown') delete tags.surface;
+                break;
 
-                    case 'second':
-                        tags.place = 'city';
-                        break;
+            case 'AL020': // AL020 (Built-up Area) should become a Place. NOTE: This is a bit vague...
+                tags.place = 'yes'; // Catch All
 
-                    case 'third':
-                    case 'fourth':
-                        tags.place = 'town';
-                        break;
+                if (tags['place:importance'])
+                    switch (tags['place:importance'])
+                    {
+                        case 'first':
+                            tags.place = 'city';
+                            tags.capital = 'yes'
+                            break;
 
-                    case 'fifth':
-                        tags.place = 'village';
-                        break;
+                        case 'second':
+                            tags.place = 'city';
+                            break;
 
-                    case 'sixth':
-                        tags.place = 'hamlet';
-                        break;
-                } // End switch
-        } // End AL020
+                        case 'third':
+                        case 'fourth':
+                            tags.place = 'town';
+                            break;
+
+                        case 'fifth':
+                            tags.place = 'village';
+                            break;
+
+                        case 'sixth':
+                            tags.place = 'hamlet';
+                            break;
+                    } // End switch
+                break;
+
+            case 'BH070': // Ford
+                // Fords are also supposed to be roads.
+                if (geometryType == 'Line' && !(tags.highway)) tags.highway = 'road';
+                break;
+
+        } // End switch FCODE
 
     }, // End of applyToOsmPostProcessing
 
@@ -1158,7 +1166,7 @@ mgcp = {
                 if (attrs.CSP == '15') attrs.F_CODE = 'EA040';
                 // hoot.logVerbose('TRD3 feature EA010 changed to TRD4 EA040 - some data has been dropped');
                 break;
-        }
+        } // End switch FCODE
 
         if (mgcp.mgcpPostRules == undefined)
         {
@@ -1282,9 +1290,6 @@ mgcp = {
             for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
             print('');
         }
-
-        if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
-        if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
         return tags;
     }, // End of ToOsm
