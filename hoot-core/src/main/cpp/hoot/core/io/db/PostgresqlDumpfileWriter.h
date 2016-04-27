@@ -1,3 +1,29 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ */
 #ifndef POSTGRESQLDUMPFILEWRITER_H
 #define POSTGRESQLDUMPFILEWRITER_H
 
@@ -84,12 +110,11 @@ public:
 
 protected:
 
-  std::map<QString,
-    std::pair<boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> > > _outputSections;
+  std::map<QString, QStringList> _outputSections;
 
   std::list<QString> _sectionNames;
 
-  QString _outputFilename;
+  QFile _outputFilename;
 
   struct _ElementWriteStats
   {
@@ -191,9 +216,9 @@ protected:
   void _writeTagsToTables(
     const Tags& tags,
     const ElementIdDatatype nodeDbId,
-    boost::shared_ptr<QTextStream>& currentTable,
+    const QString& currentTableName,
     const QString& currentTableFormatString,
-    boost::shared_ptr<QTextStream>& historicalTable,
+    const QString& historicalTableName,
     const QString& historicalTableFormatString );
 
   void _createWayTables();
@@ -214,8 +239,6 @@ protected:
     const unsigned int memberSequenceIndex );
 
   void _createTable( const QString& tableName, const QString& tableHeader );
-
-  void _createTable( const QString& tableName, const QString& tableHeader, const bool addByteOrderMarker );
 
   void _incrementChangesInChangeset();
 
