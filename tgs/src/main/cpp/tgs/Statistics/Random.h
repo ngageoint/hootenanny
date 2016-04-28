@@ -44,11 +44,9 @@
 
 namespace Tgs
 {
-#ifdef NEW_RAND
   typedef boost::minstd_rand random_type;
   typedef boost::uniform_int<> number_type;
   typedef boost::variate_generator<random_type&, number_type> generator_type;
-#endif
 
   class TGS_EXPORT Random
   {
