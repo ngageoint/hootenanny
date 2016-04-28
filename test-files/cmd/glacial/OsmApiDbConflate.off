@@ -73,7 +73,7 @@ fi
 
 echo ""
 echo "STEP 7: Conflating the two datasets..."
-hoot conflate --error $HOOT_OPTS -D convert.bounding.box=$AOI -D conflate.use.data.source.ids.input.1=true -D conflate.use.data.source.ids.input.2=true -D hootapi.db.writer.remap.ids=false -D hootapi.db.writer.osmapidb.id.sequence.url=$DB_URL $DB_URL "$HOOT_DB_URL/5-secondary-$TEST_NAME" "$HOOT_DB_URL/7-conflated-$TEST_NAME"
+hoot conflate --error $HOOT_OPTS -D convert.bounding.box=$AOI -D conflate.use.data.source.ids=true -D hootapi.db.writer.remap.ids=false -D hootapi.db.writer.osmapidb.id.sequence.url=$DB_URL $DB_URL "$HOOT_DB_URL/5-secondary-$TEST_NAME" "$HOOT_DB_URL/7-conflated-$TEST_NAME"
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""

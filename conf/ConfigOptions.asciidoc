@@ -249,21 +249,13 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== conflate.use.data.source.ids.input.1
+=== conflate.use.data.source.ids
 
 * Data Type: bool
 * Default Value: `false`
 
-Determines whether the conflate command will use the element ID's specified by the input dataset
-(true) or use internal ID management for the first conflation input.
-
-=== conflate.use.data.source.ids.input.2
-
-* Data Type: bool
-* Default Value: `false`
-
-Determines whether the conflate command will use the element ID's specified by the input dataset
-(true) or use internal ID management for the first conflation input.
+Determines whether the conflate command will use the element ID's specified by the input datasets
+(true) or use internal ID management for the inputs.
 
 === conflate.stats.types
 
