@@ -152,7 +152,8 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
   bool firstElement = true;
 
   // contact the DB and select all
-  shared_ptr<QSqlQuery> elementResultsIterator = _database.selectBoundedElements(_osmElemId, elementType, _bbox);
+  shared_ptr<QSqlQuery> elementResultsIterator =
+    _database.selectBoundedElements(_osmElemId, elementType, _bbox);
 
   // check if db active or not
   assert(elementResultsIterator->isActive());
@@ -163,17 +164,17 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
     // NODES
     ///////////////////////////////////////////////////////////////////
     case ElementType::Node:
-      while( elementResultsIterator->next() )
+      while (elementResultsIterator->next())
       {
         long long id = elementResultsIterator->value(0).toLongLong();
         if (lastId != id)
         {
           // process the complete element only after the first element created
-          if(!firstElement)
+          if (!firstElement)
           {
             if (tags.size()>0)
             {
-              element->setTags( ApiDb::unescapeTags(tags.join(", ")));
+              element->setTags(ApiDb::unescapeTags(tags.join(", ")));
               ApiDbReader::addTagsToElement(element);
             }
 
@@ -195,18 +196,18 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
         // read the tag for as many rows as there are tags
         // need to get into form "key1"=>"val1", "key2"=>"val2", ...
         QString result = _database.extractTagFromRow(elementResultsIterator, elementType.getEnum());
-        if(result != "")
+        if (result != "")
         {
           tags << result;
         }
       }
       // process the last complete element only if an element has been created
-      if(!firstElement)
+      if (!firstElement)
       {
-        if(tags.size()>0)
+        if (tags.size() > 0)
         {
-          element->setTags(ApiDb::unescapeTags(tags.join(", ")) );
-          ApiDbReader::addTagsToElement( element );
+          element->setTags(ApiDb::unescapeTags(tags.join(", ")));
+          ApiDbReader::addTagsToElement(element);
         }
         if (_status != Status::Invalid) { element->setStatus(_status); }
         map->addElement(element);
