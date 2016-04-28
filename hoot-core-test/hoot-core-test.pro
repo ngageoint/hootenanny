@@ -161,13 +161,22 @@ SOURCES += \
     src/test/cpp/hoot/core/perty/PertyOpTest.cpp \
     src/test/cpp/hoot/core/ops/CookieCutterOpTest.cpp \
     src/test/cpp/hoot/core/visitors/RemoveElementsVisitorTest.cpp \
+    src/test/cpp/hoot/core/visitors/AddGeometryTypeVisitorTest.cpp \
+    src/test/cpp/hoot/core/visitors/TransliterateNameVisitorTest.cpp \
+    src/test/cpp/hoot/core/io/ElementSorterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ChangesetDeriverTest.cpp \
+    src/test/cpp/hoot/core/io/ElementComparerTest.cpp \
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
-    src/test/cpp/hoot/core/io/ServicesDbTest.cpp \
+    src/test/cpp/hoot/core/io/HootApiDbTest.cpp \
+    src/test/cpp/hoot/core/io/OsmApiDbTest.cpp \
     src/test/cpp/hoot/core/io/ServicesDbTestUtils.cpp \
-    src/test/cpp/hoot/core/io/ServicesDbWriterTest.cpp \
-    src/test/cpp/hoot/core/io/ServicesDbReaderTest.cpp \
+    src/test/cpp/hoot/core/io/OsmApiDbReaderTest.cpp \
+    src/test/cpp/hoot/core/io/HootApiDbReaderTest.cpp \
+    src/test/cpp/hoot/core/io/HootApiDbWriterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmChangesetSqlFileWriterTest.cpp \
 
 HEADERS += \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.h \
@@ -198,5 +207,11 @@ SOURCES += \
     src/test/cpp/hoot/core/schema/TagCategoryDifferencerTest.cpp \
     src/test/cpp/hoot/core/schema/TagAncestorDifferencerTest.cpp \
     src/test/cpp/hoot/core/elements/RelationTest.cpp \
-    src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp
+    src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp \
+    src/test/cpp/hoot/core/ops/BuildingOutlineRemoveOpTest.cpp \
+    src/test/cpp/hoot/core/ops/ReprojectToGeographicOpTest.cpp \
+    src/test/cpp/hoot/core/ops/ReprojectToPlanarOpTest.cpp \
+    src/test/cpp/hoot/core/ops/WaySplitterOpTest.cpp \
+    src/test/cpp/hoot/core/ops/TrivialOpTest.cpp \
+    src/test/cpp/hoot/core/conflate/extractors/HistogramTest.cpp
 

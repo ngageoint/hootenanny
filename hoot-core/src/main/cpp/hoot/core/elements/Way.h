@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_WAY_H__
 #define __ELEMENT_WAY_H__
@@ -51,7 +51,8 @@ namespace geos {
 // Standard
 #include <deque>
 
-namespace hoot {
+namespace hoot
+{
 
 using namespace boost;
 using namespace geos::geom;
@@ -63,12 +64,9 @@ public:
 
   static string className() { return "hoot::Way"; }
 
-  Way(Status s, long id, Meters circularError);
-
-  Way(Status s, long id, long changeset, long version, unsigned int timestamp, Meters circularError);
-
-  Way(Status s, long id, long changeset, long version, unsigned int timestamp,
-      QString user, long uid, Meters circularError);
+  Way(Status s, long id, Meters circularError, long changeset = ElementData::CHANGESET_EMPTY,
+    long version = ElementData::VERSION_EMPTY, unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
+    QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY);
 
   Way(const Way& way);
 
@@ -235,6 +233,6 @@ struct WayPtrCompare {
   }
 };
 
-} // hoot
+}
 
 #endif // __ELEMENT_WAY_H__

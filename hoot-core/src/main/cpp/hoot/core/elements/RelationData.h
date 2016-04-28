@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RELATIONDATA_H
 #define RELATIONDATA_H
@@ -72,12 +72,11 @@ public:
     ElementId _eid;
   };
 
-  RelationData(long id);
-
-  RelationData(long id, long changeset, long version, unsigned int timestamp);
-
-  RelationData(long id, long changeset, long version, unsigned int timestamp, QString user,
-               long uid);
+  RelationData(long id, long changeset = ElementData::CHANGESET_EMPTY,
+               long version = ElementData::VERSION_EMPTY,
+               unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
+               QString user = ElementData::USER_EMPTY,
+               long uid = ElementData::UID_EMPTY);
 
   RelationData(const RelationData& rd);
 

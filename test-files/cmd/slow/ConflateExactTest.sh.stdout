@@ -1,8 +1,5 @@
-15:03:17.514 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:03:17.514 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = The feature pair with match score: 0.55, miss score: 0.45, and review score: 0 was marked for review because it met neither the threshold for a match (0.6), miss (0.6), nor review (0.6).
-15:03:17.514 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = BuildingMatch: Way:-718, Way:-2787 p: match: 0.55 miss: 0.45 review: 0 note: 
-15:03:17.514 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:03:17.515 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = The feature pair with match score: 0.325, miss score: 0.25, and review score: 0.425 was marked for review because it met neither the threshold for a match (0.6), miss (0.6), nor review (0.6).
-15:03:17.515 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = BuildingMatch: Way:-853, Way:-2521 p: match: 0.425 miss: 0.175 review: 0.4 note: 
-15:03:17.515 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:score = 0.425
-15:03:17.515 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:score = 0.4
+12:34:42.159 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+12:34:42.159 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = The feature pair with match score: 0.475, miss score: 0.325, and review score: 0.2 was marked for review because it met neither the threshold for a match (0.6), miss (0.6), nor review (0.6).
+12:34:42.159 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = The feature pair with match score: 0.55, miss score: 0.35, and review score: 0.1 was marked for review because it met neither the threshold for a match (0.6), miss (0.6), nor review (0.6).
+12:34:42.159 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:score = 0.2
+12:34:42.159 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:score = 0.1

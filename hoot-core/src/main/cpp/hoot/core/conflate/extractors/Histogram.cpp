@@ -26,6 +26,10 @@
  */
 #include "Histogram.h"
 
+// hoot
+#include <tgs/Statistics/Normal.h>
+#include <hoot/core/algorithms/WayHeading.h>
+
 // geos
 #include <geos/geom/Geometry.h>
 
@@ -41,18 +45,41 @@ Histogram::Histogram(int bins)
   _bins.resize(bins, 0.0);
 }
 
-void Histogram::addAngle(double theta, double length)
+void Histogram::addAngle(Radians theta, double length)
 {
   _bins[getBin(theta)] += length;
 }
 
-int Histogram::getBin(double theta)
+double Histogram::diff(Histogram& other)
 {
+  assert(_bins.size() == other._bins.size());
+  double diff = 0.0;
+  for (size_t i = 0; i < _bins.size(); i++)
+  {
+    diff += fabs(_bins[i] - other._bins[i]);
+  }
+
+  return diff / 2.0;
+}
+
+size_t Histogram::getBin(Radians theta)
+{
+//  const double c2pi = 2 * M_PI;
+//  // bring theta into 0 - 2pi if it is outside those bounds.
+//  theta = theta - c2pi * floor(theta / c2pi);
+//  return std::max<size_t>(0,
+//    std::min<size_t>(_bins.size() - 1, (theta / c2pi) * _bins.size()));
   while (theta < 0.0)
   {
     theta += 2 * M_PI;
   }
   return (theta / (2 * M_PI)) * _bins.size();
+
+}
+
+Radians Histogram::_getBinAngle(size_t i)
+{
+  return 2 * M_PI / _bins.size() * i + M_PI / _bins.size();
 }
 
 void Histogram::normalize()
@@ -74,16 +101,21 @@ void Histogram::normalize()
   }
 }
 
-double Histogram::diff(Histogram& other)
+void Histogram::smooth(Radians sigma)
 {
-  assert(_bins.size() == other._bins.size());
-  double diff = 0.0;
-  for (size_t i = 0; i < _bins.size(); i++)
+  vector<double> copy(_bins.size(), 0.0);
+
+  for (size_t i = 0; i < copy.size(); ++i)
   {
-    diff += fabs(_bins[i] - other._bins[i]);
+    for (size_t j = 0; j < _bins.size(); j++)
+    {
+      double diff = WayHeading::deltaMagnitude(_getBinAngle(i), _getBinAngle(j));
+      double weight = Tgs::Normal::normal(diff, sigma);
+      copy[i] += _bins[j] * weight;
+    }
   }
 
-  return diff / 2.0;
+  _bins = copy;
 }
 
 }

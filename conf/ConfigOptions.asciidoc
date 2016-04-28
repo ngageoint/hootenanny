@@ -119,6 +119,27 @@ Path to the RF building model. A new model can be created with `build-model`. Se
 
 Training a model is typically done during research. While all the tools are available to do limited training, the documentation is not. Please contact the developers if you would like to dig deeper.
 
+=== changeset.max.size
+
+* Data Type: long
+* Default Value: `50000`
+
+The maximum allowed size of an OSM changeset written to the OSM API database.
+
+=== changeset.user.id
+
+* Data Type: double
+* Default Value: `-1`
+
+The DB user ID for a OSM API DB. Used by changeset writing.
+
+=== circular.error.default.value
+
+* Data Type: double
+* Default Value: `15`
+
+Set the circular error on items to this value, in meters, by default.
+
 === conflate.add.score.tags
 
 * Data Type: bool
@@ -494,6 +515,7 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+
 === highway.matcher.heading.delta
 
 * Data Type: double
@@ -508,6 +530,17 @@ The distance around a point on a highway to look when calculating the heading.  
 * Default Value: `${way.matcher.max.angle}`
 
 Sets that maximum angle that is still considered a highway match. Units in degrees.
+
+=== highway.max.enum.diff
+
+* Data Type: double
+* Default Value: `0.6`
+
+If two highways have significantly different enumerated types then they will not be considered
+for match. For example:
+
+* "highway=primary" vs "highway=secondary" has a diff of 0.2.
+* "highway=primary" vs "highway=footway" has a diff of 0.67.
 
 === highway.miss.threshold
 
@@ -993,7 +1026,7 @@ User specified operations for converting OSM files to OGR compatible file types.
 * Data Type: int
 * Default Value: `50000`
 
-The maximum number of OSM elements that may be read from the services database into a single OSM map during a partial map read.
+The maximum number of OSM elements that may be read from the hootapi services database into a single OSM map during a partial map read.
 
 === perty.algorithm
 
@@ -1611,35 +1644,42 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
-=== services.db.reader.email
+=== osmapi.db.reader.email
+
+* Data Type: string
+* Default Value: ``
+
+Email address of the osm api reader user.  Can be set here for debugging and testing.
+
+=== hootapi.db.reader.email
 
 * Data Type: string
 * Default Value: ``
 
 Email address of the DG reader user.  Can be set here for debugging and testing.
 
-=== services.db.reader.max.elements.per.partial.map
+=== hootapi.db.reader.max.elements.per.partial.map
 * Data Type: int
 * Default Value: `50000`
 
-The maximum number of OSM elements that may be read from the services database into a single OSM map during a partial map read.
+The maximum number of OSM elements that may be read from the hootapi services database into a single OSM map during a partial map read.
 
-=== services.db.writer.create.user
+=== hootapi.db.writer.create.user
 
 * Data Type: bool
 * Default Value: `false`
 
-Should the services DB writer automatically create the specified user if it doesn't exist. This
+Should the hootapi services DB writer automatically create the specified user if it doesn't exist. This
 is most useful when debugging and testing.
 
-=== services.db.writer.email
+=== hootapi.db.writer.email
 
 * Data Type: string
 * Default Value: ``
 
 Email address of the DG writer user.  Can be set here for debugging and testing.
 
-=== services.db.writer.overwrite.map
+=== hootapi.db.writer.overwrite.map
 
 * Data Type: bool
 * Default Value: `false`
@@ -1647,7 +1687,7 @@ Email address of the DG writer user.  Can be set here for debugging and testing.
 If set to true then if there is already a map with the specified name then it will be removed before
 a new map is written.
 
-=== services.db.writer.output.id.mappings
+=== hootapi.db.writer.output.id.mappings
 
 * Data Type: string
 * Default Value: ``
@@ -1655,13 +1695,6 @@ a new map is written.
 If this value is set to a non-empty string, the system will attempt to open a file with the specified name
 and output all the ID mappings (source to destination) used for nodes, ways, and relations that were
 written to the database.
-
-=== set.circular.error.visitor.value
-
-* Data Type: double
-* Default Value: `15`
-
-Set the circular error on visited items to this value.
 
 === set.tag.visitor.key
 
@@ -2145,3 +2178,12 @@ generally it should be `1 >= p >= 0`.
 * Default Value: `false`
 
 By default should a writer include debug information (e.g. status). Not honored by all writers.
+
+=== writer.precision
+
+* Data Type: double
+* Default Value: `16`
+
+Set the output precision when writing. Not honored by all writers.
+
+

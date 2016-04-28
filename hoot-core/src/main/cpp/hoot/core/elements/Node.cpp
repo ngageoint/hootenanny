@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Node.h"
@@ -40,37 +40,28 @@ using namespace geos::geom;
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
-namespace hoot {
-
-Node::Node(const Node& from) : Element(from.getStatus())
+namespace hoot
 {
-  _nodeData = from._nodeData;
-}
 
-Node::Node(Status s, long id, const Coordinate& c, Meters circularError) : Element(s)
+Node::Node(Status s, long id, const Coordinate& c, Meters circularError) :
+Element(s)
 {
   _nodeData.init(id, c.x, c.y);
   _getElementData().setCircularError(circularError);
 }
 
-Node::Node(Status s, long id, double x, double y, Meters circularError) : Element(s)
-{
-  _nodeData.init(id, x, y);
-  _getElementData().setCircularError(circularError);
-}
-
-Node::Node(Status s, long id, double x, double y, long changeset, long version, unsigned int timestamp,
-           Meters circularError) : Element(s)
-{
-  _nodeData.init(id, x, y, changeset, version, timestamp);
-  _getElementData().setCircularError(circularError);
-}
-
-Node::Node(Status s, long id, double x, double y, long changeset, long version, unsigned int timestamp,
-           QString user, long uid, Meters circularError) : Element(s)
+Node::Node(Status s, long id, double x, double y, Meters circularError, long changeset,
+           long version, unsigned int timestamp, QString user, long uid) :
+Element(s)
 {
   _nodeData.init(id, x, y, changeset, version, timestamp, user, uid);
   _getElementData().setCircularError(circularError);
+}
+
+Node::Node(const Node& from) :
+Element(from.getStatus()),
+_nodeData(from._nodeData)
+{
 }
 
 void Node::clear()

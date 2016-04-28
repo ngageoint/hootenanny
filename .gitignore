@@ -71,6 +71,8 @@ hoot-streaming/tmp
 hootenanny-*.tar.gz
 HOOT_VERSION_FILE
 HootConfig.h
+.idea/*
+*.iml
 ingest/processed
 ingest/upload
 **/lib*.a
@@ -93,6 +95,7 @@ Output.osm
 /output.pgm
 plugins/*_schema.js
 plugins/etds*_rules.js
+plugins/emgcp*_rules.js
 plugins-local
 translations-local
 **/*.pro.user*
@@ -166,3 +169,4 @@ vagrant*.lock
 vagrant*-*
 MingsSuperAwesomePrompt.sh
 id_rsa.pub
+coverage/

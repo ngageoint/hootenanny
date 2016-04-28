@@ -1,4 +1,4 @@
 [submodule "hoot-ui"]
 	path = hoot-ui
 	url = https://github.com/ngageoint/hootenanny-ui.git
-	branch = develop
+	branch = release
