@@ -606,14 +606,6 @@ The highway subline matcher to use when determining matching sublines.
 
 The way subline string matcher to use when determining matching sublines for highways.
 
-=== osm.map.reader.factory.reader
-
-* Data Type: string
-* Default Value: ``
-
-Specifies the reader that the OsmMapReaderFactory will use. This overrides any information derived
-from the URL.
-
 === hoot.hadoop.file.deps
 
 * Data Type: list
