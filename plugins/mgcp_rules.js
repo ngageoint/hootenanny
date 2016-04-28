@@ -52,7 +52,6 @@ mgcp.rules = {
         ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
         ['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
         ['F_CODE','AK190','man_made','recreational_pier'], // Recreational Pier - NFDD BB081
-        ['F_CODE','AL015',undefined,undefined], // General Building - NFDD AL013 - to stop warnings
         ['F_CODE','AL210','route:protection','yes'], // Protection Shed - NFDD AL211
         ['F_CODE','AT030','power','line'], // Power Line - NFDD AT005
         ['F_CODE','AT050','use','communication'], // Communication Station - No replacement code
@@ -1165,7 +1164,7 @@ mgcp.rules = {
         ['TOS','999','tower:shape','other'], // Other
 
         // TRE - Foliage Type 
-        // ['TRE','0','wood','unknown'], // Unknown 
+        // ['TRE','0','wood','unknown'], // Unknown
         ['TRE','0',undefined,undefined], // Unknown 
         ['TRE','1','wood','deciduous'], // Deciduous 
         ['TRE','2','wood','evergreen'], // Evergreen 

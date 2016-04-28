@@ -168,7 +168,7 @@ mgcp = {
             var enumName = feature.columns[i].name;
 
             // Skip stuff that is missing and will end up as a default value
-            if (!(attrs[enumName])) continue;
+            if (!attrs[enumName]) continue;
 
             var attrValue = attrs[enumName];
             var enumList = feature.columns[i].enumerations;
@@ -204,67 +204,6 @@ mgcp = {
 
     }, // End validateAttrs
 
-
-    // Sort out if we need to return two features or one.
-    // This is generally for Roads/Railways & bridges but can also be for other features.
-    twoFeatures: function(geometryType, tags, attrs)
-    {
-        var newAttrs = {};
-
-        if (geometryType == 'Line' && tags.bridge == 'yes' && (tags.highway || tags.railway))
-        {
-            if (attrs.F_CODE !== 'AQ040')
-            {
-                newAttrs.F_CODE = 'AQ040';
-            }
-            else
-            {
-                if (tags.railway)
-                {
-                    newAttrs.F_CODE = 'AN010';
-                }
-                else
-                {
-                    if (tags.highway == 'track')
-                    {
-                        newAttrs.F_CODE = 'AP010';
-                    }
-                    else
-                    {   // The default is to make it a road
-                        newAttrs.F_CODE = 'AP030';
-                    }
-                }
-            }
-
-            // Remove the uuid from the tag list so we get a new one for the second feature
-            delete tags.uuid;
-        } // End sort out Road, Railway & Bridge
-
-
-        // If we are making a second feature, process it.
-        if (newAttrs.F_CODE)
-        {
-            // pre processing
-            mgcp.applyToMgcpPreProcessing(tags, newAttrs, geometryType);
-
-            // one 2 one
-            translate.applyOne2One(tags, newAttrs, mgcp.lookup, mgcp.fcodeLookup, mgcp.ignoreList);
-
-            // apply the simple number and text biased rules
-            translate.applySimpleNumBiased(newAttrs, tags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
-            translate.applySimpleTxtBiased(newAttrs, tags,  mgcp.rules.txtBiased,'backward');
-
-            // post processing
-            // mgcp.applyToMgcpPostProcessing(attrs, tableName, geometryType);
-            mgcp.applyToMgcpPostProcessing(tags, newAttrs, geometryType);
-        }
-
-        // Debug:
-        // for (var i in newAttrs) print('twoFeatures: New Attrs:' + i + ': :' + newAttrs[i] + ':');
-
-        // Return the new attributes
-        return newAttrs;
-    },
 
     // Sort out if we need to return more than one feature.
     // This is generally for Roads, Railways, bridges, tunnels etc.
@@ -685,35 +624,32 @@ mgcp = {
         translate.fixConstruction(tags, 'railway');
 
         // Add 'building = yes' to amenities if we don't already have one
-        if (tags.amenity && !(tags.building))
+        if (tags.amenity && !tags.building)
         {
             // Debug:
             // print('Added building');
             // Don't add building=yes to built up areas!
-            if (!(tags.place)) tags.building = 'yes';
+            if (!tags.place) tags.building = 'yes';
         }
 
         // Add 'building = yes' to military if it isn't a range
-        if (tags.military && !(tags.building))
+        if (tags.military && !tags.building)
         {
             // Debug:
             // print('Added building to military');
             if (tags.military !== 'range') tags.building = 'yes';
         }
         
-        // Add tags if we have Null attributes.  This happens when a feature has an
-        // FCODE and no other attributes.  These FCODES don't have default values
-        // in the fcode_common lookup table.
-
-        // if (tags.building == 'train_station' && !(tags.railway)) tags.railway = 'station';
-
-
-        if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
+        // if (tags.building == 'train_station' && !tags.railway) tags.railway = 'station';
+        // if ('ford' in tags && !tags.highway) tags.highway = 'road';
 
         switch (attrs.F_CODE)
         {
+            case undefined: // Break early if no value
+                break;
+
             case 'AF030': // Cooling Tower
-                if (!(tags['tower:type'])) tags['tower:type'] = 'cooling';
+                if (!tags['tower:type']) tags['tower:type'] = 'cooling';
                 break;
 
             case 'AL013': // Building  NOTE this is the TDS F_CODE for Building. This was swapped during pre-processing
@@ -723,39 +659,68 @@ mgcp = {
             case 'AL020': // AL020 (Built-up Area) should become a Place. NOTE: This is a bit vague...
                 tags.place = 'yes'; // Catch All
 
-                if (tags['place:importance'])
-                    switch (tags['place:importance'])
-                    {
-                        case 'first':
-                            tags.place = 'city';
-                            tags.capital = 'yes'
-                            break;
+                switch (tags['place:importance'])
+                {
+                    case undefined: // Break early if no value
+                        break;
 
-                        case 'second':
-                            tags.place = 'city';
-                            break;
+                    case 'first':
+                        tags.place = 'city';
+                        tags.capital = 'yes'
+                        break;
 
-                        case 'third':
-                        case 'fourth':
-                            tags.place = 'town';
-                            break;
+                    case 'second':
+                        tags.place = 'city';
+                        break;
 
-                        case 'fifth':
-                            tags.place = 'village';
-                            break;
+                    case 'third':
+                    case 'fourth':
+                        tags.place = 'town';
+                        break;
 
-                        case 'sixth':
-                            tags.place = 'hamlet';
-                            break;
-                    } // End switch
+                    case 'fifth':
+                        tags.place = 'village';
+                        break;
+
+                    case 'sixth':
+                        tags.place = 'hamlet';
+                        break;
+                } // End switch
                 break;
 
             case 'BH070': // Ford
                 // Fords are also supposed to be roads.
-                if (geometryType == 'Line' && !(tags.highway)) tags.highway = 'road';
+                if (geometryType == 'Line' && !tags.highway) tags.highway = 'road';
                 break;
 
         } // End switch FCODE
+
+        // Sort out TRS (Transport Type)
+        switch (attrs.TRS)
+        {
+            case undefined:
+                break;
+
+            case '9': // Pedestrian
+                // NOTE: This _might_ be a path: AP050 (Trail)
+                if (!tags.highway) tags.highway = 'track';
+                break;
+
+            case '12': // Railway
+                if (!tags.railway) tags.railway = 'rail';
+                break;
+
+            case '3': // TRD3 'Automotive'
+            case '4': // Bus
+            case '13': // Road
+                if (!tags.highway) tags.highway = 'road';
+                break;
+
+            case '14': // Road and Railway. This might be ugly....
+                if (!tags.highway) tags.highway = 'road';
+                if (!tags.railway) tags.railway = 'rail';
+                break;
+        } // End switch TRS
 
     }, // End of applyToOsmPostProcessing
 
@@ -843,7 +808,7 @@ mgcp = {
             'trailer_park','game_feeding'
             ]; // End bldArray
 
-        if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !(tags.building)) attrs.F_CODE = 'AL015';
+        if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
 
         // Going out on a limb and processing OSM specific tags:
         // - Building == a thing,
@@ -863,7 +828,7 @@ mgcp = {
             }
 
             // If we don't have a Feature Function then assign one.
-            if (!(attrs.FFN)) attrs.FFN = facilityList[tags.amenity];
+            if (!attrs.FFN) attrs.FFN = facilityList[tags.amenity];
         }
 
         // Cutlines and Highways.
@@ -872,7 +837,7 @@ mgcp = {
 
     /*
         // Geonames cause problems
-        if (tags.waterway && !(tags.intermittent))
+        if (tags.waterway && !tags.intermittent)
         {
             if (geometryType == "Point")
             {
@@ -888,45 +853,45 @@ mgcp = {
     */
 
         // Places, localities and regions
-        if (tags.place)
+        switch (tags.place)
         {
-            switch (tags.place)
-            {
-                case 'city':
-                case 'town':
-                case 'suburb':
-                case 'neighbourhood':
-                case 'quarter':
-                case 'village':
-                case 'hamlet':
-                    attrs.F_CODE = 'AL020'; // Built Up Area
-                    delete tags.place;
-                    break;
+            case undefined: // Break early if no value
+                break;
 
-                case 'isolated_dwelling':
-                    attrs.F_CODE = 'AL105'; // Settlement
-                    delete tags.place;
-                    break;
+            case 'city':
+            case 'town':
+            case 'suburb':
+            case 'neighbourhood':
+            case 'quarter':
+            case 'village':
+            case 'hamlet':
+                attrs.F_CODE = 'AL020'; // Built Up Area
+                delete tags.place;
+                break;
 
-                case 'populated':
-                case 'state':
-                case 'county':
-                case 'region':
-                case 'locality':
-                case 'municipality':
-                case 'borough':
-                case 'unknown':
-                    attrs.F_CODE = 'ZD040'; // Named Location
-                    delete tags.place;
-                    break;
+            case 'isolated_dwelling':
+                attrs.F_CODE = 'AL105'; // Settlement
+                delete tags.place;
+                break;
 
-            } // End switch
-        }
+            case 'populated':
+            case 'state':
+            case 'county':
+            case 'region':
+            case 'locality':
+            case 'municipality':
+            case 'borough':
+            case 'unknown':
+                attrs.F_CODE = 'ZD040'; // Named Location
+                delete tags.place;
+                break;
+
+        } // End switch
 
         // Built-up-areas & Settlements vs Buildings
         // If we have a BUA or a Settlement, change the settlement:type tag to a building so we can
         // go through one2one and get an FFN out
-        if (tags['settlement:type'] && !(tags.building))
+        if (tags['settlement:type'] && !tags.building)
         {
             tags.building = tags['settlement:type'];
             delete tags['settlement:type'];
@@ -1061,6 +1026,9 @@ mgcp = {
         // Additional rules for particular FCODE's
         switch (attrs.F_CODE)
         {
+            case undefined: // Break early if no value
+                break;
+
             case 'AJ085': // Barn: Valid NFDD/NAS FCODE but not in the MGCP spec
                 attrs.F_CODE = 'AL015'; // Barns are Buildings
                 break;
@@ -1101,7 +1069,7 @@ mgcp = {
                 if (tags.bridge) attrs.LOC = '45'; // Above Surface
                 if (tags.tunnel) attrs.LOC = '40'; // Below Surface
                 if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
-                if (attrs.WD1 && !(attrs.LTN))
+                if (attrs.WD1 && !attrs.LTN)
                 {
                 }
                 break;
@@ -1381,7 +1349,7 @@ mgcp = {
         // Now check for invalid feature geometry
         // E.g. If the spec says a runway is a polygon and we have a line, throw error and
         // push the feature to the o2s layer
-        if (!(layerNameLookup[tableName]))
+        if (!layerNameLookup[tableName])
         {
             // tableName = layerNameLookup[tableName];
             hoot.logVerbose('FCODE and Geometry: ' + tableName + ' is not in the schema');
