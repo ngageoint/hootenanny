@@ -143,6 +143,7 @@ void OsmChangesetSqlFileWriter::_create(const ConstNodePtr node)
   {
     id = node->getId();
   }
+  LOG_DEBUG("node create");
   LOG_VARD(id);
 
   QString values =
@@ -170,6 +171,7 @@ void OsmChangesetSqlFileWriter::_create(const ConstWayPtr way)
   {
     id = way->getId();
   }
+  LOG_DEBUG("way create");
   LOG_VARD(id);
 
   QString values =
@@ -195,6 +197,7 @@ void OsmChangesetSqlFileWriter::_create(const ConstRelationPtr relation)
   {
     id = relation->getId();
   }
+  LOG_DEBUG("relation create");
   LOG_VARD(id);
 
   QString values =
@@ -232,6 +235,7 @@ void OsmChangesetSqlFileWriter::_modify(const ConstNodePtr node)
   {
     version = node->getVersion() + 1;
   }
+  LOG_DEBUG("node modify");
   LOG_VARD(node->getId())
   LOG_VARD(version);
 
@@ -271,6 +275,7 @@ void OsmChangesetSqlFileWriter::_modify(const ConstWayPtr way)
   {
     version = way->getVersion() + 1;
   }
+  LOG_DEBUG("way modify");
   LOG_VARD(way->getId())
   LOG_VARD(version);
 
@@ -308,6 +313,7 @@ void OsmChangesetSqlFileWriter::_modify(const ConstRelationPtr relation)
   {
     version = relation->getVersion() + 1;
   }
+  LOG_DEBUG("relation modify");
   LOG_VARD(relation->getId())
   LOG_VARD(version);
 
@@ -372,6 +378,7 @@ QStringList OsmChangesetSqlFileWriter::_tagTableNamesForElement(ElementId eid) c
 
 void OsmChangesetSqlFileWriter::_createWayNodes(const long wayId, const std::vector<long>& nodeIds)
 {
+  LOG_DEBUG("way nodes create");
   LOG_VARD(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
@@ -397,6 +404,7 @@ void OsmChangesetSqlFileWriter::_createWayNodes(const long wayId, const std::vec
 void OsmChangesetSqlFileWriter::_createRelationMembers(const long relationId,
                                                        const vector<RelationData::Entry>& members)
 {
+  LOG_DEBUG("relation members create");
   LOG_VARD(relationId);
   for (size_t i = 0; i < members.size(); i++)
   {
@@ -441,6 +449,7 @@ void OsmChangesetSqlFileWriter::_deleteAllTags(ElementId eid)
 void OsmChangesetSqlFileWriter::_deleteAll(const QString tableName, const QString idFieldName,
                                            const long id)
 {
+  LOG_DEBUG("delete");
   LOG_VARD(tableName);
   _outputSql.write(
     (QString("DELETE FROM %1 WHERE %2 = %3;\n")
