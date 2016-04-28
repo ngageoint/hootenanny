@@ -37,7 +37,6 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbAwareHootApiDbWriter)
 OsmApiDbAwareHootApiDbWriter::OsmApiDbAwareHootApiDbWriter() :
 HootApiDbWriter()
 {
-
 }
 
 OsmApiDbAwareHootApiDbWriter::~OsmApiDbAwareHootApiDbWriter()
@@ -47,21 +46,18 @@ OsmApiDbAwareHootApiDbWriter::~OsmApiDbAwareHootApiDbWriter()
 
 void OsmApiDbAwareHootApiDbWriter::open(QString urlStr)
 {
-  LOG_VARD(ConfigOptions().getHootapiDbWriterOsmapidbUrl());
   if (!_osmApiDb.isSupported(ConfigOptions().getHootapiDbWriterOsmapidbUrl()))
   {
     throw HootException(
       "The OsmApiDbAwareHootApiDbWriter requires a valid OSM API DB URL for element id sequencing.");
   }
 
-  LOG_VARD(urlStr);
   HootApiDbWriter::open(urlStr);
   _osmApiDb.open(ConfigOptions().getHootapiDbWriterOsmapidbUrl());
 }
 
 long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
 {
-  LOG_DEBUG("OsmApiDbAwareHootApiDbWriter::_getRemappedElementId");
   long retVal = -1;
 
   switch(eid.getType().getEnum())
@@ -253,8 +249,6 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
 void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
 {
   long relationId;
-
-  //LOG_DEBUG("Inside writePartial for Relation");
 
   Tags tags = r->getTags();
   _addElementTags(r, tags);

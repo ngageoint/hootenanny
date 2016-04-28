@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-# This is a base test script for conflating datasets from OSM API and hoot api database sources at the same time.  
-# See ServiceOsmApiDbToyConflateTest.sh for an example of how to call it.
+# This is a base test script for conflating datasets where one dataset comes from an osm api database and the other from 
+# a hoot api database.  See ServiceOsmApiDbToyConflateTest.sh for an example of how to call it.
 # 
 # This script:
 #   - writes two datasets within the specified AOI, one to an OSM API database and one to a Hoot API database 
@@ -42,7 +42,7 @@ export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D hootapi.db.writer.ema
 echo ""
 echo "STEP 2: Writing the reference dataset to the osm api db..."
 cp $REF_DATASET test-output/cmd/glacial/$TEST_NAME/2-ref-raw.osm
-# By default, all of these element ID's start at 1.
+# By default, all of these element ID's will be written starting at 1.
 hoot convert --error $HOOT_OPTS test-output/cmd/glacial/$TEST_NAME/2-ref-raw.osm test-output/cmd/glacial/$TEST_NAME/2-ref-ToBeAppliedToOsmApiDb.sql
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-output/cmd/glacial/$TEST_NAME/2-ref-ToBeAppliedToOsmApiDb.sql
 
@@ -85,7 +85,7 @@ fi
 
 echo ""
 echo "STEP 9: Writing a SQL changeset file that is the difference between the cropped reference input dataset and the conflated output..."
-hoot derive-changeset --error $HOOT_OPTS -D changeset.user.id=1 -D osm.changeset.file.writer.generate.new.ids=false -D convert.bounding.box=$AOI $DB_URL "$HOOT_DB_URL/7-conflated-$TEST_NAME" test-output/cmd/glacial/$TEST_NAME/9-changeset-ToBeAppliedToOsmApiDb.osc.sql $DB_URL
+hoot derive-changeset --error $HOOT_OPTS -D changeset.user.id=1 -D convert.bounding.box=$AOI $DB_URL "$HOOT_DB_URL/7-conflated-$TEST_NAME" test-output/cmd/glacial/$TEST_NAME/9-changeset-ToBeAppliedToOsmApiDb.osc.sql $DB_URL
 
 echo ""
 echo "STEP 10: Executing the changeset SQL on the osm api db..."

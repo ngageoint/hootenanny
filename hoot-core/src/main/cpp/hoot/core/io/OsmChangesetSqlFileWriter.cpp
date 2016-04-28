@@ -16,7 +16,6 @@ OsmChangesetSqlFileWriter::OsmChangesetSqlFileWriter(QUrl url) :
 _changesetId(0)
 {
   _db.open(url);
-  LOG_VARD(ConfigOptions().getOsmChangesetFileWriterGenerateNewIds());
 }
 
 void OsmChangesetSqlFileWriter::write(const QString path, const ChangeSetProviderPtr changesetProvider)
@@ -129,23 +128,16 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(const ConstElementPtr rem
     ("UPDATE current_" + elementName + "s SET visible=false WHERE id" + values).toUtf8());
 }
 
+// These create methods assume you've already set the ID correctly in terms of the OSM API target db
+// for the element to be created.
+
 void OsmChangesetSqlFileWriter::_create(const ConstNodePtr node)
 {
-  long id;
-  if (ConfigOptions().getOsmChangesetFileWriterGenerateNewIds())
-  {
-    id = _db.getNextId(ElementType::Node);
-  }
-  else
-  {
-    id = node->getId();
-  }
-  LOG_VARD(id);
-
+  LOG_VARD(node->getId());
   QString values =
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
       "tile, version) VALUES (%1, %2, %3, %4, true, now(), %5, 1);\n")
-      .arg(id)
+      .arg(node->getId())
       .arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7))
       .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
       .arg(_changesetId)
@@ -153,59 +145,39 @@ void OsmChangesetSqlFileWriter::_create(const ConstNodePtr node)
   _outputSql.write(("INSERT INTO nodes (node_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_nodes (id, " + values).toUtf8());
 
-  _createTags(node->getTags(), ElementId::node(id));
+  _createTags(node->getTags(), ElementId::node(node->getId()));
 }
 
 void OsmChangesetSqlFileWriter::_create(const ConstWayPtr way)
 {
-  long id;
-  if (ConfigOptions().getOsmChangesetFileWriterGenerateNewIds())
-  {
-    id = _db.getNextId(ElementType::Way);
-  }
-  else
-  {
-    id = way->getId();
-  }
-  LOG_VARD(id);
-
+  LOG_VARD(way->getId());
   QString values =
     QString("changeset_id, visible, \"timestamp\", "
       "version) VALUES (%1, %2, true, now(), 1);\n")
-      .arg(id)
+      .arg(way->getId())
       .arg(_changesetId);
   _outputSql.write(("INSERT INTO ways (way_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_ways (id, " + values).toUtf8());
 
-  _createWayNodes(id, way->getNodeIds());
+  _createWayNodes(way->getId(), way->getNodeIds());
 
-  _createTags(way->getTags(), ElementId::way(id));
+  _createTags(way->getTags(), ElementId::way(way->getId()));
 }
 
 void OsmChangesetSqlFileWriter::_create(const ConstRelationPtr relation)
 {
-  long id;
-  if (ConfigOptions().getOsmChangesetFileWriterGenerateNewIds())
-  {
-    id = _db.getNextId(ElementType::Relation);
-  }
-  else
-  {
-    id = relation->getId();
-  }
-  LOG_VARD(id);
-
+  LOG_VARD(relation->getId());
   QString values =
     QString("changeset_id, visible, \"timestamp\", "
       "version) VALUES (%1, %2, true, now(), 1);\n")
-      .arg(id)
+      .arg(relation->getId())
       .arg(_changesetId);
   _outputSql.write(("INSERT INTO relations (relation_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_relations (id, " + values).toUtf8());
 
-  _createRelationMembers(id, relation->getMembers());
+  _createRelationMembers(relation->getId(), relation->getMembers());
 
-  _createTags(relation->getTags(), ElementId::relation(id));
+  _createTags(relation->getTags(), ElementId::relation(relation->getId()));
 }
 
 /*
@@ -231,6 +203,8 @@ void OsmChangesetSqlFileWriter::_modify(const ConstNodePtr node)
   {
     version = node->getVersion() + 1;
   }
+  LOG_VARD(node->getId())
+  LOG_VARD(version);
 
   QString values =
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
@@ -268,6 +242,8 @@ void OsmChangesetSqlFileWriter::_modify(const ConstWayPtr way)
   {
     version = way->getVersion() + 1;
   }
+  LOG_VARD(way->getId())
+  LOG_VARD(version);
 
   QString values =
     QString("changeset_id, visible, \"timestamp\", "
@@ -303,6 +279,8 @@ void OsmChangesetSqlFileWriter::_modify(const ConstRelationPtr relation)
   {
     version = relation->getVersion() + 1;
   }
+  LOG_VARD(relation->getId())
+  LOG_VARD(version);
 
   QString values =
     QString("changeset_id, visible, \"timestamp\", "
@@ -356,18 +334,20 @@ void OsmChangesetSqlFileWriter::_createTags(const Tags& tags, ElementId eid)
 QStringList OsmChangesetSqlFileWriter::_tagTableNamesForElement(ElementId eid) const
 {
   QStringList tableNames;
-  QString tableName1 = "current_" + eid.getType().toString().toLower() + "_tags";
+  const QString tableName1 = "current_" + eid.getType().toString().toLower() + "_tags";
   tableNames.append(tableName1);
-  QString tableName2 = eid.getType().toString().toLower() + "_tags";
+  const QString tableName2 = eid.getType().toString().toLower() + "_tags";
   tableNames.append(tableName2);
   return tableNames;
 }
 
 void OsmChangesetSqlFileWriter::_createWayNodes(const long wayId, const std::vector<long>& nodeIds)
 {
+  LOG_VARD(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
     const long nodeId = nodeIds.at(i);
+    LOG_VARD(nodeId);
 
     QString values =
       QString("(way_id, node_id, version, sequence_id) VALUES (%1, %2, 1, %3);\n")
@@ -388,16 +368,18 @@ void OsmChangesetSqlFileWriter::_createWayNodes(const long wayId, const std::vec
 void OsmChangesetSqlFileWriter::_createRelationMembers(const long relationId,
                                                        const vector<RelationData::Entry>& members)
 {
+  LOG_VARD(relationId);
   for (size_t i = 0; i < members.size(); i++)
   {
     const RelationData::Entry member = members[i];
+    LOG_VARD(member.toString());
 
     //TODO: is version right here?
     QString values =
       QString(
         "(relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (%1, '%2', %3, '%4', 1, %5);\n")
         .arg(relationId)
-        .arg(member.getElementId().getType()/*.getEnum()*/.toString())
+        .arg(member.getElementId().getType().toString())
         .arg(member.getElementId().getId())
         .arg(member.getRole())
         .arg(i + 1);
@@ -407,7 +389,7 @@ void OsmChangesetSqlFileWriter::_createRelationMembers(const long relationId,
       QString(
         "(relation_id, member_type, member_id, member_role, sequence_id) VALUES (%1, '%2', %3, '%4', %5);\n")
         .arg(relationId)
-        .arg(member.getElementId().getType()/*.getEnum()*/.toString())
+        .arg(member.getElementId().getType().toString())
         .arg(member.getElementId().getId())
         .arg(member.getRole())
         .arg(i + 1);
@@ -430,6 +412,7 @@ void OsmChangesetSqlFileWriter::_deleteAllTags(ElementId eid)
 void OsmChangesetSqlFileWriter::_deleteAll(const QString tableName, const QString idFieldName,
                                            const long id)
 {
+  LOG_VARD(tableName);
   _outputSql.write(
     (QString("DELETE FROM %1 WHERE %2 = %3;\n")
       .arg(tableName)

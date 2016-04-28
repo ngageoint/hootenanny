@@ -1054,13 +1054,6 @@ hoot --convert \
 
 Operations that should be applied to ingested data before saving the data.
 
-=== osm.changeset.file.writer.generate.new.ids
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, the OSM changeset file writers will generate new ID's for elements being created.
-
 === osm.map.reader.factory.reader
 
 * Data Type: string
