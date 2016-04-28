@@ -146,7 +146,8 @@ The DB user ID for a OSM API DB. Used by changeset writing.
 * Data Type: double
 * Default Value: `15`
 
-Set the circular error on items to this value, in meters, by default.
+Set the circular error tag on features to this value, in meters, by default if the tag isn't already
+populated.
 
 === conflate.add.score.tags
 
@@ -255,7 +256,7 @@ See also:
 * Default Value: `false`
 
 Determines whether the conflate command will use the element ID's specified by the input datasets
-(true) or use internal ID management for the inputs.
+(true) or use internal ID management for the inputs (false).
 
 === conflate.stats.types
 

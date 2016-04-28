@@ -64,59 +64,60 @@ long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
   {
     case ElementType::Node:
 
-      /*if (_nodeRemap.count(eid.getId()) == 1)
+      if (_nodeRemap.count(eid.getId()) == 1)
       {
         retVal = _nodeRemap.at(eid.getId());
       }
       else
-      {*/
+      {
         retVal = _osmApiDb.getNextId(ElementType::Node);
         _nodeRemap[eid.getId()] = retVal;
         if (_outputMappingFile.length() > 0)
         {
           _sourceNodeIds.insert(eid.getId());
         }
-      //}
+      }
 
       break;
 
     case ElementType::Way:
 
-      /*if (_wayRemap.count(eid.getId()) == 1)
+      if (_wayRemap.count(eid.getId()) == 1)
       {
         retVal = _wayRemap.at(eid.getId());
       }
       else
-      {*/
+      {
         retVal = _osmApiDb.getNextId(ElementType::Way);
         _wayRemap[eid.getId()] = retVal;
         if ( _outputMappingFile.length() > 0 )
         {
           _sourceWayIds.insert(eid.getId());
         }
-      //}
+      }
 
       break;
 
     case ElementType::Relation:
 
-      /*if (_relationRemap.count(eid.getId()) == 1)
+      if (_relationRemap.count(eid.getId()) == 1)
       {
         retVal = _relationRemap.at(eid.getId());
       }
       else
-      {*/
+      {
         retVal = _osmApiDb.getNextId(ElementType::Relation);
         _relationRemap[eid.getId()] = retVal;
         if ( _outputMappingFile.length() > 0 )
         {
           _sourceRelationIds.insert(eid.getId());
         }
-      //}
+      }
 
       break;
 
   default:
+
     LOG_ERROR("Tried to create or remap ID for invalid type");
     throw NotImplementedException();
 
@@ -126,7 +127,6 @@ long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
   return retVal;
 }
 
-//TODO: get rid of this method
 vector<long> OsmApiDbAwareHootApiDbWriter::_remapNodes(const vector<long>& nids)
 {
   vector<long> result(nids.size()); // Creates the vector and fills nids.size number of zeroes
@@ -142,6 +142,7 @@ vector<long> OsmApiDbAwareHootApiDbWriter::_remapNodes(const vector<long>& nids)
     }
     else
     {
+      //TODO: This isn't good, but haven't figured out how to get around it yet.
       if (ConfigOptions().getHootapiDbWriterOsmapidbUrl().isEmpty())
       {
         throw HootException(QString("Requested ID remap for node " +  QString::number(nids[i])
@@ -183,13 +184,6 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
   }
   else
   {
-    if (n->getId() < 1)
-    {
-      throw HootException("Writing non-positive IDs without remap is not supported by "
-                          "HootApiDbWriter.");
-    }
-
-    //LOG_DEBUG("Inserted node " << QString::number(n->getId()) << ", no remapping" );
     _hootdb.insertNode(n->getId(), n->getY(), n->getX(), t);
   }
 
@@ -221,10 +215,6 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
     {
       _hootdb.insertWay(wayId, tags);
     }
-  }
-  else if (w->getId() < 1)
-  {
-    throw HootException("Non-positive IDs are not supported by HootApiDbWriter.");
   }
   else
   {
@@ -263,19 +253,14 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Relation>
     relationId = _getRemappedElementId(r->getElementId());
     LOG_VARD(relationId);
 
-    LOG_DEBUG("Inserting relation with source ID = " <<
-              QString::number(r->getId()) << " which maps to DB ID = " <<
-              QString::number(relationId) );
+    //LOG_DEBUG("Inserting relation with source ID = " <<
+              //QString::number(r->getId()) << " which maps to DB ID = " <<
+              //QString::number(relationId) );
 
     _hootdb.insertRelation(relationId, tags);
   }
   else
   {
-    if (r->getId() < 1)
-    {
-      throw HootException("Non-positive IDs are not supported by HootApiDbWriter without remapping");
-    }
-
     _hootdb.insertRelation(r->getId(), tags);
     relationId = r->getId();
   }
@@ -297,11 +282,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Relation>
                               relationMemberElementId.getId(), e.role, i);
   }
 
-  //LOG_DEBUG("All members added to relation " << QString::number(relationId));
-
   _countChange();
-
-  //LOG_DEBUG("Leaving relation write cleanly");
 
   _relationsWritten++;
 }

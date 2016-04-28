@@ -33,6 +33,10 @@
 namespace hoot
 {
 
+/**
+ * Writer that doesn't allow hoot api db element ID's to clash with a specified osm api db's
+ * id's.
+ */
 class OsmApiDbAwareHootApiDbWriter : public HootApiDbWriter
 {
 public:
@@ -53,9 +57,6 @@ public:
 
 protected:
 
-  /**
-   *
-   */
   virtual long _getRemappedElementId(const ElementId& eid);
 
   virtual vector<long> _remapNodes(const vector<long>& nids);
