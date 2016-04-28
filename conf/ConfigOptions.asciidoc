@@ -1793,15 +1793,13 @@ This is most useful when debugging and testing.
 
 Email address of the DG writer user.  Can be set here for debugging and testing.
 
-=== hootapi.db.writer.osmapidb.id.sequence.url
+=== hootapi.db.writer.osmapidb.url
 
 * Data Type: string
 * Default Value: ``
 
-If not empty, the Hoot API database writer will use a specified OSM API database for determining
-new element ID's.  If empty, the Hoot API database writer will use its internal ID sequencing
-scheme.  This setting should be used with with new Hoot API datasets only, as turning the setting
-on/off when writing to existing datasets can cause element ID conflicts to occur.
+This is required when using the OsmApiDbAwareHootApiDbWriter.  It makes that Hoot API database writer
+use a specified OSM API database for determining new element ID's.
 
 === hootapi.db.writer.overwrite.map
 
@@ -1819,14 +1817,6 @@ a new map is written.
 If this value is set to a non-empty string, the system will attempt to open a file with the
 specified name and output all the ID mappings (source to destination) used for nodes, ways, and
 relations that were written to the database.
-
-=== hootapi.db.writer.remap.ids
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, the Hoot API services database writer will internally remap element ID's.  If false,
-the original element ID's will be preserved.
 
 === set.tag.visitor.key
 

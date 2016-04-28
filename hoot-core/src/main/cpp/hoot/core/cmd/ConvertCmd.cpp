@@ -81,8 +81,8 @@ public:
     OsmMapWriterFactory writerFactory = OsmMapWriterFactory::getInstance();
 
     if (readerFactory.hasElementInputStream(args[0]) &&
-             writerFactory.hasElementOutputStream(args[1]) &&
-             ConfigOptions().getConvertOps().size() == 0)
+        writerFactory.hasElementOutputStream(args[1]) &&
+        ConfigOptions().getConvertOps().size() == 0)
     {
       streamElements(args[0], args[1]);
     }

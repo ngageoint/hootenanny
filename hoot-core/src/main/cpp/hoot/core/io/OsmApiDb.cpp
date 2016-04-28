@@ -149,7 +149,7 @@ void OsmApiDb::open(const QUrl& url)
 {
   if (!isSupported(url))
   {
-    throw HootException("An unsupported URL was passed in.");
+    throw HootException("An unsupported URL was passed into OsmApiDb: " + url.toString());
   }
   ApiDb::open(url);
 }

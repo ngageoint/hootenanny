@@ -70,7 +70,7 @@ void OsmApiDbReader::open(QString urlStr)
 {
   if (!isSupported(urlStr))
   {
-    throw HootException("An unsupported URL was passed in.");
+    throw HootException("An unsupported URL was passed into OsmApiDbReader: " + urlStr);
   }
   _elementResultIterator.reset();
   _selectElementType = ElementType::Node;

@@ -29,7 +29,6 @@
 
 #include "PartialOsmMapWriter.h"
 #include "HootApiDb.h"
-#include "OsmApiDb.h"
 
 // hoot
 #include <hoot/core/util/Configurable.h>
@@ -84,42 +83,7 @@ public:
 
   virtual void writePartial(const shared_ptr<const Relation>& r);
 
-private:
-
-  typedef Tgs::BigMap<long, long> IdRemap;
-
-  bool _createUserIfNotFound;
-  bool _overwriteMap;
-  QString _userEmail;
-  HootApiDb _hootdb;
-
-  bool _open;
-  IdRemap _nodeRemap;
-  IdRemap _relationRemap;
-  IdRemap _wayRemap;
-  bool _remapIds;
-
-  unsigned long _nodesWritten;
-  unsigned long _waysWritten;
-  unsigned long _relationsWritten;
-
-  QString _outputMappingFile;
-  std::set<long> _sourceNodeIds;
-  std::set<long> _sourceWayIds;
-  std::set<long> _sourceRelationIds;
-
-  OsmApiDb _osmApiDb;
-
-  set<long> _openDb(QString& urlStr);
-
-  void _overwriteMaps(const QString& mapName, const set<long>& mapIds);
-
-  void _addElementTags(const shared_ptr<const Element>& e, Tags& t);
-
-  /**
-   * Counts the change and if necessary closes the old changeset and starts a new one.
-   */
-  void _countChange();
+protected:
 
   /**
    * Return the remapped ID for the specified element if it exists
@@ -129,9 +93,47 @@ private:
    * @note If there is no mapping for the requested element ID in the
    *  database, a new one is created which is guaranteed to be unique
    */
-  long _getRemappedElementId(const ElementId& eid);
+  virtual long _getRemappedElementId(const ElementId& eid);
 
-  vector<long> _remapNodes(const vector<long>& nids);
+  virtual vector<long> _remapNodes(const vector<long>& nids);
+
+  void _addElementTags(const shared_ptr<const Element>& e, Tags& t);
+
+  /**
+   * Counts the change and if necessary closes the old changeset and starts a new one.
+   */
+  void _countChange();
+
+  typedef Tgs::BigMap<long, long> IdRemap;
+  IdRemap _nodeRemap;
+  IdRemap _relationRemap;
+  IdRemap _wayRemap;
+
+  std::set<long> _sourceNodeIds;
+  std::set<long> _sourceWayIds;
+  std::set<long> _sourceRelationIds;
+
+  QString _outputMappingFile;
+
+  HootApiDb _hootdb;
+
+  unsigned long _nodesWritten;
+  unsigned long _waysWritten;
+  unsigned long _relationsWritten;
+
+  bool _remapIds;
+
+private:
+
+  bool _createUserIfNotFound;
+  bool _overwriteMap;
+  QString _userEmail;
+
+  bool _open;
+
+  set<long> _openDb(QString& urlStr);
+
+  void _overwriteMaps(const QString& mapName, const set<long>& mapIds);
 
   /**
    * Close the current changeset and start a new one.
