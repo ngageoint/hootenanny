@@ -84,8 +84,8 @@ if [ "$RUN_DEBUG_STEPS" == "true" ]; then
 fi
 
 echo ""
-echo "STEP 9: Writing a SQL changeset file that is the difference between the cropped reference input dataset and the conflated output..."
-hoot derive-changeset --error $HOOT_OPTS -D changeset.user.id=1 -D convert.bounding.box=$AOI $DB_URL "$HOOT_DB_URL/7-conflated-$TEST_NAME" test-output/cmd/glacial/$TEST_NAME/9-changeset-ToBeAppliedToOsmApiDb.osc.sql $DB_URL
+echo "STEP 9: Writing a SQL changeset file that is the dif-D osm.changeset.file.writer.generate.new.ids=falseference between the cropped reference input dataset and the conflated output..."
+hoot derive-changeset --error $HOOT_OPTS -D changeset.user.id=1 -D osm.changeset.file.writer.generate.new.ids=false -D convert.bounding.box=$AOI $DB_URL "$HOOT_DB_URL/7-conflated-$TEST_NAME" test-output/cmd/glacial/$TEST_NAME/9-changeset-ToBeAppliedToOsmApiDb.osc.sql $DB_URL
 
 echo ""
 echo "STEP 10: Executing the changeset SQL on the osm api db..."

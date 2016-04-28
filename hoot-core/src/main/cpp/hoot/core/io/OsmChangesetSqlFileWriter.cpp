@@ -128,16 +128,27 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(const ConstElementPtr rem
     ("UPDATE current_" + elementName + "s SET visible=false WHERE id" + values).toUtf8());
 }
 
-// These create methods assume you've already set the ID correctly in terms of the OSM API target db
-// for the element to be created.
+// If osm.changeset.file.writer.generate.new.ids is false, then these create methods assume
+// you've already set the ID correctly in terms of the OSM API target db for the element to be
+// created.
 
 void OsmChangesetSqlFileWriter::_create(const ConstNodePtr node)
 {
-  LOG_VARD(node->getId());
+  long id;
+  if (ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
+  {
+    id = _db.getNextId(ElementType::Node);
+  }
+  else
+  {
+    id = node->getId();
+  }
+  LOG_VARD(id);
+
   QString values =
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
       "tile, version) VALUES (%1, %2, %3, %4, true, now(), %5, 1);\n")
-      .arg(node->getId())
+      .arg(id)
       .arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7))
       .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
       .arg(_changesetId)
@@ -145,39 +156,57 @@ void OsmChangesetSqlFileWriter::_create(const ConstNodePtr node)
   _outputSql.write(("INSERT INTO nodes (node_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_nodes (id, " + values).toUtf8());
 
-  _createTags(node->getTags(), ElementId::node(node->getId()));
+  _createTags(node->getTags(), ElementId::node(id));
 }
 
 void OsmChangesetSqlFileWriter::_create(const ConstWayPtr way)
 {
-  LOG_VARD(way->getId());
+  long id;
+  if (ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
+  {
+    id = _db.getNextId(ElementType::Way);
+  }
+  else
+  {
+    id = way->getId();
+  }
+  LOG_VARD(id);
+
   QString values =
     QString("changeset_id, visible, \"timestamp\", "
       "version) VALUES (%1, %2, true, now(), 1);\n")
-      .arg(way->getId())
+      .arg(id)
       .arg(_changesetId);
   _outputSql.write(("INSERT INTO ways (way_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_ways (id, " + values).toUtf8());
 
-  _createWayNodes(way->getId(), way->getNodeIds());
-
-  _createTags(way->getTags(), ElementId::way(way->getId()));
+  _createWayNodes(id, way->getNodeIds());
+  _createTags(way->getTags(), ElementId::way(id));
 }
 
 void OsmChangesetSqlFileWriter::_create(const ConstRelationPtr relation)
 {
-  LOG_VARD(relation->getId());
+  long id;
+  if (ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
+  {
+    id = _db.getNextId(ElementType::Relation);
+  }
+  else
+  {
+    id = relation->getId();
+  }
+  LOG_VARD(id);
+
   QString values =
     QString("changeset_id, visible, \"timestamp\", "
       "version) VALUES (%1, %2, true, now(), 1);\n")
-      .arg(relation->getId())
+      .arg(id)
       .arg(_changesetId);
   _outputSql.write(("INSERT INTO relations (relation_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_relations (id, " + values).toUtf8());
 
-  _createRelationMembers(relation->getId(), relation->getMembers());
-
-  _createTags(relation->getTags(), ElementId::relation(relation->getId()));
+  _createRelationMembers(id, relation->getMembers());
+  _createTags(relation->getTags(), ElementId::relation(id));
 }
 
 /*
