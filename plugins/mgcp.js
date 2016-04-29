@@ -1069,9 +1069,6 @@ mgcp = {
                 if (tags.bridge) attrs.LOC = '45'; // Above Surface
                 if (tags.tunnel) attrs.LOC = '40'; // Below Surface
                 if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
-                if (attrs.WD1 && !attrs.LTN)
-                {
-                }
                 break;
 
             case 'AP050': // Trail
