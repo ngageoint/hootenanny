@@ -2617,10 +2617,9 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
             Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("is not visible for way"));
+            Assert.assertTrue(r.getEntity(String.class).contains("aren't visible for way"));
 
-            OsmTestUtils.verifyTestDataUnmodified(
-                    originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
         }
