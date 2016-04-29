@@ -31,6 +31,9 @@
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
 
+//Qt
+#include <QString>
+
 namespace hoot
 {
 
@@ -122,13 +125,16 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
     QStringList args = c.split(",");
     QString className = args[0];
     //LOG_VARD(className);
-    args.removeFirst();
-    shared_ptr<MatchCreator> mc(Factory::getInstance().constructObject<MatchCreator>(className));
-    _theInstance.registerCreator(mc);
-
-    if (args.size() > 0)
+    if (className.length() > 0)
     {
-      mc->setArguments(args);
+      args.removeFirst();
+      shared_ptr<MatchCreator> mc(Factory::getInstance().constructObject<MatchCreator>(className));
+      _theInstance.registerCreator(mc);
+
+      if (args.size() > 0)
+      {
+        mc->setArguments(args);
+      }
     }
   }
 }

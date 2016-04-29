@@ -9,7 +9,7 @@
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-6"/>
-        <tag k="source:ingest:datetime" v="2016-04-06T02:50:38.550Z"/>
+        <tag k="source:ingest:datetime" v="2016-04-28T02:06:59.710Z"/>
         <tag k="bridge" v="yes"/>
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{0d2eae0f-4e9f-4622-bedb-7550a298e0d3}"/>
@@ -19,7 +19,7 @@
         <nd ref="-3"/>
         <nd ref="-4"/>
         <tag k="width" v="5"/>
-        <tag k="source:ingest:datetime" v="2016-04-06T02:50:38.550Z"/>
+        <tag k="source:ingest:datetime" v="2016-04-28T02:06:59.710Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="condition" v="functional"/>
         <tag k="width:minimum_traveled_way" v="3"/>
@@ -34,6 +34,7 @@
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="source:datetime" v="2013-01-01T00:00:00Z"/>
+        <tag k="highway" v="road"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -52,9 +53,10 @@
         <tag k="transport:type" v="road"/>
         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="width" v="5"/>
-        <tag k="source:ingest:datetime" v="2016-04-06T02:50:38.549Z"/>
+        <tag k="source:ingest:datetime" v="2016-04-28T02:06:59.710Z"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="bridge:structure" v="girder"/>
+        <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2013-01-01T00:00:00Z"/>
         <tag k="uuid" v="{94B89763-543B-4B0E-967F-FECB55396E37}"/>
         <tag k="error:circular" v="15"/>
