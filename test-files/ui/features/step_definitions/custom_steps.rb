@@ -1,5 +1,5 @@
 Given(/^I am on Hootenanny$/) do
-  visit "http://localhost:" + ENV['TOMCAT_PORT'] + "/hootenanny-id" # may need to change URL
+  visit "http://localhost:" + (ENV['TOMCAT_PORT'] ? ENV['TOMCAT_PORT'] : "8080") + "/hootenanny-id" # may need to change URL
 end
 
 When(/^I click Get Started$/) do
