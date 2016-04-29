@@ -26,6 +26,9 @@
  */
 package hoot.services.writers.osm;
 
+import com.mysema.query.sql.RelationalPathBase;
+import com.mysema.query.sql.SQLExpressions;
+import com.mysema.query.sql.SQLQuery;
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
@@ -37,35 +40,23 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.models.osm.XmlSerializable;
 import hoot.services.models.osm.ElementFactory;
+import hoot.services.models.osm.XmlSerializable;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.validators.osm.ChangesetErrorChecker;
 import hoot.services.validators.osm.ChangesetUploadXmlValidator;
-
-import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.mysema.query.sql.RelationalPathBase;
-import com.mysema.query.sql.SQLExpressions;
-import com.mysema.query.sql.SQLQuery;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.Connection;
+import java.util.*;
 
 /**
  * Writes an uploaded changeset diff to the services database
@@ -165,8 +156,8 @@ public class ChangesetDbWriter {
         return newElementId;
     }
 
-    private long getOldElementId(NamedNodeMap nodeAttributes, EntityChangeType entityChangeType,
-            List<Long> oldElementIds) throws Exception {
+    private long getOldElementId(NamedNodeMap nodeAttributes, EntityChangeType entityChangeType, List<Long> oldElementIds)
+    throws Exception {
         long oldElementId = Long.parseLong(nodeAttributes.getNamedItem("id").getNodeValue());
 
         // make sure request has no duplicate IDs for new elements
@@ -203,11 +194,10 @@ public class ChangesetDbWriter {
      * @param newId
      * @param elementType type of elements being parsed
      * @param entityChangeType type of request database change to be performed on the elements
-     * @param deleteIfUnused see description in writeDiff
      * @return an element
      * @throws Exception
      */
-    private Element parseElement(org.w3c.dom.Node xml, long oldId, long newId, ElementType elementType,
+    private Element parseElement(Node xml, long oldId, long newId, ElementType elementType,
                                  EntityChangeType entityChangeType)
     throws Exception {
 
@@ -306,7 +296,7 @@ public class ChangesetDbWriter {
         List<Element> changesetDiffElements = new ArrayList<>();
         List<Long> oldElementIds = new ArrayList<>();
         for (int i = 0; i < xml.getLength(); i++) {
-            org.w3c.dom.Node xmlElement = xml.item(i);
+            Node xmlElement = xml.item(i);
             NamedNodeMap xmlAttributes = xmlElement.getAttributes();
 
             //log.debug("Calculating element IDs for OSM element type: " + elementType.toString()
@@ -322,7 +312,10 @@ public class ChangesetDbWriter {
             //    If this attribute is present, then the delete operation(s) in this block are conditional and will only
             //    be executed if the object to be deleted is not used by another object. Without the if-unused,
             //    such a situation would lead to an error, and the whole diff upload would fail."
-            if ((entityChangeType == EntityChangeType.DELETE) && deleteIfUnused) {
+            if (entityChangeType == EntityChangeType.DELETE) {
+                // We will always check whether the object to be deleted is being used by other object(s), and
+                // could potentially cause a low level referential integrity DB error, which we really don't
+                // want to propagate all the way up the user and rather wrap it in something more user-friendly.
                 element.checkAndFailIfUsedByOtherObjects();
             }
 
@@ -452,6 +445,7 @@ public class ChangesetDbWriter {
         changesetErrorChecker = new ChangesetErrorChecker(changesetDoc, requestChangesetMapId, conn);
         dbNodeCache = changesetErrorChecker.checkForElementExistenceErrors();
         changesetErrorChecker.checkForVersionErrors();
+        //changesetErrorChecker.checkForElementVisibilityErrors();
 
         initParsedElementCache();
 
@@ -463,7 +457,7 @@ public class ChangesetDbWriter {
         // when possible.
         log.debug("Changeset delete unused check...");
         boolean deleteIfUnused = false;
-        org.w3c.dom.Node deleteXml = XPathAPI.selectSingleNode(changesetDoc, "//osmChange/delete");
+        Node deleteXml = XPathAPI.selectSingleNode(changesetDoc, "//osmChange/delete");
         if ((deleteXml != null) && deleteXml.hasAttributes() &&
                 (deleteXml.getAttributes().getNamedItem("if-unused") != null)) {
             deleteIfUnused = true;
@@ -594,7 +588,7 @@ public class ChangesetDbWriter {
         //save along with the other error checking, but would probably increase the code complexity
         //quite a bit, if it could be done at all.
 
-        //changesetErrorChecker.checkForElementVisibilityErrors();
+        changesetErrorChecker.checkForElementVisibilityErrors();
         //changesetErrorChecker.checkForOwnershipErrors();
 
         changeset.updateNumChanges((int) changesetDiffElementsSize);
