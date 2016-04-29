@@ -11,7 +11,7 @@ ifeq "$(append)" "true"
 HOOT_OPTS+= -D ogr.append.data=true
 endif
 
-#DB_URL=postgresql://hoot:hoottest@localhost:5432/hoot
+#DB_URL=hootapidb://hoot:hoottest@localhost:5432/hoot
 OP_PG_URL=PG:"$(PG_URL)"
 
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ApiDb.h"
 
@@ -85,7 +85,11 @@ ApiDb::~ApiDb()
 bool ApiDb::isSupported(const QUrl& url)
 {
   bool valid = url.isValid();
-  return valid && url.scheme() == "postgresql";
+  if (url.scheme() == "postgresql")
+  {
+     LOG_WARN("postgresql:// is deprecated.")
+  }
+  return valid;
 }
 
 void ApiDb::open(const QUrl& url)
@@ -142,8 +146,8 @@ void ApiDb::open(const QUrl& url)
 
 long ApiDb::getUserId(const QString& email, bool throwWhenMissing)
 {
-    LOG_DEBUG("debug email = " + email);
-    LOG_DEBUG("debug throwwhenmissing = " + QString::number(throwWhenMissing));
+  //LOG_DEBUG("debug email = " + email);
+  //LOG_DEBUG("debug throwwhenmissing = " + QString::number(throwWhenMissing));
 
   if (_selectUserByEmail == 0)
   {
@@ -369,16 +373,13 @@ QSqlQuery ApiDb::_execNoPrepare(const QString& sql) const
   // inserting strings in this fashion is safe b/c it is private and we closely control the table
   // names.
   QSqlQuery q(_db);
-
-  //LOG_VARD(sql);
+  LOG_VARD(sql);
 
   if (q.exec(sql) == false)
   {
-    QString error = QString("Error executing query: %1 (%2)").arg(q.lastError().text()).
-        arg(sql);
-    LOG_WARN(error);
-    throw HootException(error);
+    throw HootException(QString("Error executing query: %1 (%2)").arg(q.lastError().text()).arg(sql));
   }
+  LOG_VARD(q.numRowsAffected());
 
   return q;
 }

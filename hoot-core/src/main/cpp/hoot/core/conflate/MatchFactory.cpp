@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchFactory.h"
 
@@ -30,6 +30,9 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
+
+//Qt
+#include <QString>
 
 namespace hoot
 {
@@ -122,13 +125,16 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
     QStringList args = c.split(",");
     QString className = args[0];
     //LOG_VARD(className);
-    args.removeFirst();
-    shared_ptr<MatchCreator> mc(Factory::getInstance().constructObject<MatchCreator>(className));
-    _theInstance.registerCreator(mc);
-
-    if (args.size() > 0)
+    if (className.length() > 0)
     {
-      mc->setArguments(args);
+      args.removeFirst();
+      shared_ptr<MatchCreator> mc(Factory::getInstance().constructObject<MatchCreator>(className));
+      _theInstance.registerCreator(mc);
+
+      if (args.size() > 0)
+      {
+        mc->setArguments(args);
+      }
     }
   }
 }

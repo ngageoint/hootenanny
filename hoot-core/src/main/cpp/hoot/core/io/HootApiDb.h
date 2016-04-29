@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDB_H
 #define HOOTAPIDB_H
@@ -223,6 +223,15 @@ public:
   long reserveElementId(const ElementType::Type type);
 
   /**
+   * Drops the specified database. No warning or error will be given if the DB doesn't exist.
+   *
+   * No validation is done on the DB name. In other words, don't pass in user provided strings.
+   *
+   * @param databaseName
+   */
+  void dropDatabase(const QString& databaseName);
+
+  /**
    * Drops the specified table and cascades (removes depedants). No warning or error will be given
    * if the table does not exist.
    *
@@ -335,6 +344,15 @@ private:
   unsigned long _nodesFlushedFromCache;
 
   /**
+   * There are some statements that cannot be executed within a transaction
+   * (like DROP DATABASE). There are times (when deleting a map) where we
+   * want to do such things, if the current transaction succeeds. So we build
+   * this list, and after a successful commit, all of these statements will
+   * be executed.
+   */
+  QVector<QString> _postTransactionStatements;
+
+  /**
    * This is here to improve query caching. In most cases users open a single ServiceDb and then
    * access one map ID over and over again. In these cases this class should perform pretty well
    * by lazily creating queries and caching them. This method checks the last map id against the
@@ -388,6 +406,15 @@ private:
   void _updateChangesetEnvelopeRelationNodes(const std::vector<long>& relationIds);
 
   void _updateChangesetEnvelopeRelationWays(const std::vector<long>& relationIds);
+
+  /**
+   * Builds the expected renderdb name from our current database & map
+   * id.
+   *
+   * @param mapId id of the map for which we want the associated renderdb
+   * @return should be <dbname>_renderdb_<map_id>
+   */
+  QString _getRenderDBName(long mapId);
 };
 
 }

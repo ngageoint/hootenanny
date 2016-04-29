@@ -1,3 +1,29 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ */
 #include "ChangesetDeriver.h"
 
 #include <hoot/core/elements/Node.h>
@@ -11,6 +37,8 @@ ChangesetDeriver::ChangesetDeriver(ElementInputStreamPtr from, ElementInputStrea
   _from(from),
   _to(to)
 {
+  LOG_INFO("Changeset deriver initialization...");
+
   if (_from->getProjection()->IsGeographic() == false ||
       _to->getProjection()->IsGeographic() == false)
   {
@@ -61,6 +89,8 @@ Change ChangesetDeriver::_nextChange()
   if (!_fromE.get() && _toE.get())
   {
     result.type = Change::Create;
+    //OSM expects created elements to have version = 0
+    _toE->setVersion(0);
     result.e = _toE;
 
     LOG_DEBUG("run out of 'from'' elements:");
@@ -101,6 +131,8 @@ Change ChangesetDeriver::_nextChange()
     else if (!_fromE.get() && _toE.get())
     {
       result.type = Change::Create;
+      //OSM expects created elements to have version = 0
+      _toE->setVersion(0);
       result.e = _toE;
 
       LOG_DEBUG("'from' element null; 'to' element not null: " << _toE->getElementId());
@@ -146,6 +178,8 @@ Change ChangesetDeriver::_nextChange()
     else
     {
       result.type = Change::Create;
+      //OSM expects created elements to have version = 0
+      _toE->setVersion(0);
       result.e = _toE;
 
       LOG_DEBUG(

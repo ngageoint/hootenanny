@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CALCULATESTATSOP_H
 #define CALCULATESTATSOP_H
@@ -46,13 +46,6 @@ class FilteredVisitor;
 class CalculateStatsOp : public ConstOsmMapOperation
 {
 public:
-
-  enum FeatureCalcType
-  {
-    None,
-    Length,
-    Area
-  };
 
   CalculateStatsOp(QString mapName = "", bool inputIsConflatedMapOutput = false);
   CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "", bool inputIsConflatedMapOutput = false);
@@ -92,6 +85,17 @@ private:
   bool _inputIsConflatedMapOutput;
   QList<SingleStat> _stats;
 
+  /**
+   * @brief getMatchCreator finds the match creator (in the supplied vector) by name
+   * @param [in]  matchCreators vector of matchCreators to search
+   * @param [in]  matchCreatorName name for which to search
+   * @param [out] featureType base feature type for the found matchCreator
+   * @return ptr to match creator, if found, otherwise shared_ptr to null
+   */
+  shared_ptr<MatchCreator> getMatchCreator(const vector< shared_ptr<MatchCreator> > &matchCreators,
+                                           const QString &matchCreatorName,
+                                           MatchCreator::BaseFeatureType &featureType);
+
   double _applyVisitor(shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v);
 
   double _applyVisitor(shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v,
@@ -102,7 +106,7 @@ private:
   static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
                                       const MatchCreator::Description& m2);
 
-  void _generateFeatureStats(shared_ptr<const OsmMap>& map, QString description, float conflatableCount, FeatureCalcType type, ElementCriterion* criterion);
+  void _generateFeatureStats(shared_ptr<const OsmMap>& map, QString description, float conflatableCount, MatchCreator::FeatureCalcType type, ElementCriterion* criterion);
 };
 
 }
