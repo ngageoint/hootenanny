@@ -893,11 +893,10 @@ mgcp.rules = {
         ['RST','0',undefined,undefined], 
         ['RST','1','surface','paved'], 
         ['RST','2','surface','unpaved'], 
-        ['RST','3','surface','gravel'], // DIGEST FACC from Data: Loose/Light
         ['RST','5','surface','grass'], // DIGEST FACC from Data: Grass/Sod
         ['RST','6','surface','ground'], // DIGEST FACC from Data: Natural
         ['RST','8','surface','earth'], // Temporary - same as ground?
-        ['RST','999','surface','Other'], 
+        ['RST','999','surface','Other'],
 
         // RTA - Linear Feature Arrangement
         ['RTA','-32768',undefined,undefined], // Null
@@ -2271,16 +2270,17 @@ mgcp.rules = {
         ['RST','1','surface','concrete'],
         ['RST','1','surface','paving_stones'],
         ['RST','1','surface','compacted'],
+        ['RST','1','surface','metal'],
+        ['RST','1','surface','pebblestone'],
+        ['RST','1','surface','wood'],
+        ['RST','2','surface','sand'],
         ['RST','2','surface','dirt'],
         ['RST','2','surface','fine_gravel'],
+        ['RST','2','surface','gravel'], // DIGEST FACC from Data: Loose/Light
+        ['RST','2','surface','mud'],
         ['RST','5','surface','grass_paver'],
         ['RST','999','surface','ice'],
-        ['RST','1','surface','metal'],
-        ['RST','2','surface','mud'],
-        ['RST','1','surface','pebblestone'],
-        ['RST','1','surface','sand'],
         ['RST','999','surface','snow'],
-        ['RST','1','surface','wood'],
 
         // Building 
         ['FFN','563','building','detached'],
