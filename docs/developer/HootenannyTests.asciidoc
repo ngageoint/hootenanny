@@ -10,11 +10,11 @@ Building Hootenanny section in this document for details.
 
 Tests are divided into the following groups: current, quick, slow, and glacial.
 
-* current - Used when you want to isolate a single test and work on it. No tests should be committed 
+* **current** - Used when you want to isolate a single test and work on it. No tests should be committed 
 in this directory.
-* quick - Individual tests that each run in less than 1 sec.
-* slow - Individual tests that each run in less than 30 sec.
-* glacial - Individual tests that each run in less than 15 min.  You shouldn't need unit tests that take longer than 15min.  If you're writing a regression test that uses large input data and runs longer than 15min, then put it with the regression tests, not the unit tests.
+* **quick** - Individual tests that each run in less than 1 sec.
+* **slow** - Individual tests that each run in less than 30 sec.
+* **glacial** - Individual tests that each run in less than 15 min.  You shouldn't need unit tests that take longer than 15min.  If you're writing a regression test that uses large input data and runs longer than 15min, then put it with the regression tests, not the unit tests.
  
 If you want to run the tests for all codebases at the same time, first configure as described in a 
 previous section, then run one of the following commands:
@@ -491,13 +491,13 @@ be made explicit as described below.
 To generate a report for just the Hootenanny Java web services code:
 
 ----------------
-./configure --with-services --with-coverage && make services-clean-coverage && make -j($nproc) services-coverage
+./configure --with-services --with-coverage && make services-clean-coverage && make -j$(nproc) services-coverage
 ----------------
 
 To generate a report for all Hootenanny Core code and the Hootenanny Java Web Services code together:
 
 ----------
-./configure --with-rnd --with-services --with-coverage && make clean-coverage && make -j($nproc) && make -j($nproc) test-all && make -j($nproc) coverage
+./configure --with-rnd --with-services --with-coverage && make clean-coverage && make -j$(nproc) && make -j$(nproc) test-all && make -j$(nproc) coverage
 -----------
 
 The test coverage reports will be output to _$HOOT_HOME/coverage_. 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDb.h"
 
@@ -42,6 +42,8 @@
 #include <QVariant>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlRecord>
+#include <QFile>
+#include <QTextStream>
 
 // Standard
 #include <math.h>
@@ -173,6 +175,11 @@ void OsmApiDb::_resetQueries()
   _selectNodeById.reset();
   _selectUserByEmail.reset();
   _insertUser.reset();
+  for (QHash<QString, shared_ptr<QSqlQuery> >::iterator itr = _seqQueries.begin();
+       itr != _seqQueries.end(); ++itr)
+  {
+    itr.value().reset();
+  }
 }
 
 void OsmApiDb::rollback()
@@ -500,6 +507,107 @@ QString OsmApiDb::extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType
   if(val1!="" || val2!="") tag = "\""+val1+"\"=>\""+val2+"\"";
 
   return tag;
+}
+
+long OsmApiDb::getNextId(const QString tableName)
+{
+  long result;
+  if (_seqQueries[tableName].get() == 0)
+  {
+    _seqQueries[tableName].reset(new QSqlQuery(_db));
+    _seqQueries[tableName]->setForwardOnly(true);
+    _seqQueries[tableName]->prepare(QString("SELECT NEXTVAL('%1_id_seq')").arg(tableName.toLower()));
+  }
+
+  shared_ptr<QSqlQuery> query = _seqQueries[tableName];
+  if (query->exec() == false)
+  {
+    throw HootException("Error reserving IDs. type: " +
+      tableName + " Error: " + query->lastError().text());
+  }
+
+  if (query->next())
+  {
+    bool ok;
+    result = query->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Did not retrieve starting reserved ID.");
+    }
+  }
+  else
+  {
+    throw HootException("Error retrieving sequence value. type: " +
+      tableName + " Error: " + query->lastError().text());
+  }
+
+  query->finish();
+
+  return result;
+}
+
+void OsmApiDb::writeChangeset(const QString sql, const QUrl targetDatabaseUrl)
+{
+  LOG_INFO("Executing changeset SQL queries against OSM API database...");
+
+  QString changesetInsertStatement;
+  QString elementSqlStatements = "";
+
+  const QStringList sqlParts = sql.split(";");
+  for (int i = 0; i < sqlParts.size(); i++)
+  {
+    const QString sqlStatement = sqlParts[i];
+    if (i == 0)
+    {
+      if (!sqlStatement.toUpper().startsWith("INSERT INTO CHANGESETS"))
+      {
+        throw HootException(
+          "The first SQL statement in a changeset SQL file must create a changeset.");
+      }
+      else
+      {
+        changesetInsertStatement = sqlStatement + ";";
+      }
+    }
+    else
+    {
+      elementSqlStatements += sqlStatement + ";";
+    }
+  }
+
+  if (elementSqlStatements.trimmed().isEmpty())
+  {
+    throw HootException("No element SQL statements in sql file");
+  }
+
+  open(targetDatabaseUrl);
+  transaction();
+
+  _execNoPrepare(changesetInsertStatement);
+  _execNoPrepare(elementSqlStatements);
+
+  commit();
+  close();
+
+  LOG_INFO("Changeset SQL queries execute finished against OSM API database.");
+}
+
+void OsmApiDb::writeChangeset(QFile& changesetSqlFile, const QUrl targetDatabaseUrl)
+{
+  if (!changesetSqlFile.fileName().endsWith(".osc.sql"))
+  {
+    throw HootException("Invalid file type: " + changesetSqlFile.fileName());
+  }
+
+  if (changesetSqlFile.open(QIODevice::ReadOnly))
+  {
+    writeChangeset(changesetSqlFile.readAll(), targetDatabaseUrl);
+    changesetSqlFile.close();
+  }
+  else
+  {
+    throw HootException("Unable to open changeset file: " + changesetSqlFile.fileName());
+  }
 }
 
 }
