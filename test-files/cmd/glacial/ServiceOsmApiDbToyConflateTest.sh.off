@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# This test is here to provide a simpler test scenario for holy grail debugging purposes and disabled by default, 
+# since test-wise its a little redundant with ServiceOsmApiDbDcConflateTest.sh.  It can be removed at some point in the future.
+
+test-files/cmd/glacial/OsmApiDbConflate.off test-files/ToyTestA.osm test-files/ToyTestB.osm -104.904,35.852,-104.895,38.856 ServiceOsmApiDbToyConflateTest
