@@ -41,7 +41,7 @@ sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri
 vagrant halt
 
 # This causes grief....
-touch Vagrant.marker
+#touch Vagrant.marker
 
 REBUILD_VAGRANT=false
 
@@ -52,7 +52,7 @@ if [ "`date +%F`" != "`test -e ../BuildDate.txt && cat ../BuildDate.txt`" ]; the
     REBUILD_VAGRANT=true
 fi
 
-if [ $REBUILD_VAGRANT ]; then
+if [ $REBUILD_VAGRANT == 'true' ]; then
     vagrant destroy -f
     time -p vagrant up --provider vsphere
 else
