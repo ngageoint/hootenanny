@@ -178,7 +178,6 @@ services:SOURCES += \
     src/test/cpp/hoot/core/io/HootApiDbWriterTest.cpp \
     src/test/cpp/hoot/core/io/OsmChangesetSqlFileWriterTest.cpp \
     src/test/cpp/hoot/core/io/PostgresqlDumpfileWriterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmApiDbAwareHootApiDbWriterTest.cpp \
 
 HEADERS += \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.h \
