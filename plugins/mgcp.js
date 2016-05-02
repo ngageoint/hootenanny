@@ -1264,11 +1264,9 @@ mgcp = {
     toMgcp : function(tags, elementType, geometryType)
     {
         var tableName = '';
+        var returnData = []; // The array of features to return
         attrs = {}; // This is the output <GLOBAL>
         attrs.F_CODE = '';
-
-        var tableName2 = ''; // The second table name - will populate if appropriate
-        var attrs2 = {}; // The second feature - will populate if appropriate
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
         if (mgcp.rawSchema == undefined)
@@ -1397,20 +1395,6 @@ mgcp = {
             // attrs2 = mgcp.twoFeatures(geometryType,tags,attrs);
             returnData = mgcp.manyFeatures(geometryType,tags,attrs);
 
-//             if (attrs2.F_CODE)
-//             {
-//                 attrs2.FCODE = attrs2.F_CODE;
-//                 delete attrs2.F_CODE;
-//                 // Set the tablename: [P,A,L]<fcode>
-//                 // tableName = geometryType.toString().substring(0,1) + attrs.F_CODE;
-//                 tableName2 = geometryType.toString().charAt(0) + attrs2.FCODE;
-//
-//                 // Repeat the feature validation and adding attributes
-//                 mgcp.validateAttrs(geometryType,attrs2);
-//             }
-//
-//             // Validate attrs: remove all that are not supposed to be part of a feature
-//             mgcp.validateAttrs(geometryType,attrs);
             // Now go through the features and clean them up.
             var gType = geometryType.toString().charAt(0);
 
@@ -1455,18 +1439,7 @@ mgcp = {
             returnData.push({attrs: reviewAttrs, tableName: reviewTable});
         }
 
-//         // Send back the feature
-//         if (attrs2.FCODE)
-//         {
-//             return([{attrs: attrs, tableName: tableName},{attrs: attrs2, tableName: tableName2}]);
-//         }
-//         else
-//         {
-//             return {attrs: attrs, tableName: tableName};
-//         }
-
         return returnData;
-
 
     } // End of toMgcp
 
