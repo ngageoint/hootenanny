@@ -339,6 +339,8 @@ int main(int argc, char *argv[])
                                                printDiff));
         rootSuite->addTest(new ScriptTestSuite("test-files/cmd/slow/",
                                                printDiff));
+        rootSuite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/slow/",
+                                               printDiff));
         rootSuite->addTest(new ConflateCaseTestSuite("test-files/cases"));
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
@@ -355,6 +357,8 @@ int main(int argc, char *argv[])
         rootSuite->addTest(new ScriptTestSuite("test-files/cmd/quick/",
                                                printDiff));
         rootSuite->addTest(new ScriptTestSuite("test-files/cmd/slow/",
+                                               printDiff));
+        rootSuite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/slow/",
                                                printDiff));
         rootSuite->addTest(new ScriptTestSuite("test-files/cmd/glacial/",
                                                printDiff));
