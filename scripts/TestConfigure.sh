@@ -2,13 +2,11 @@
 
 set -e
 
-aclocal
-autoconf
-./configure -q && make -s clean
+aclocal && autoconf && autoheader && automake && ./configure -q && make -s clean
 
 function build_notest {
     make -s clean
-    make -sj8
+    make -sj`nproc`
     hoot --version
     # make sure hadoop is enabled
     hoot --help | grep -- big-conflate &> /dev/null
@@ -17,7 +15,7 @@ function build_notest {
 
 function build {
     make -s clean
-    make -sj8
+    make -sj`nproc`
     HootTest --quick
     # make sure hadoop is enabled
     hoot --help | grep -- big-conflate &> /dev/null
