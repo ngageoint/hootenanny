@@ -426,7 +426,6 @@ SOURCES += \
     src/main/cpp/hoot/core/cmd/PaintNodesCmd.cpp \
     src/main/cpp/hoot/core/visitors/TransliterateNameVisitor.cpp \
     src/main/cpp/hoot/core/conflate/extractors/LengthScoreExtractor.cpp \
-    src/main/cpp/hoot/core/cmd/RollInitiativeCmd.cpp \
     src/main/cpp/hoot/core/algorithms/SingleAssignmentProblemSolver.cpp \
     src/main/cpp/hoot/core/conflate/extractors/Histogram.cpp \
     src/main/cpp/hoot/core/conflate/extractors/SampledAngleHistogramExtractor.cpp \
