@@ -1,10 +1,15 @@
 #!/bin/bash
-# Runs all tests that are appropriate for a pull request
+# Runs the initial nightly tests
 
 set -x
 set -e
 
-$HOOT_HOME/scripts/jenkins/TestPullRequest.sh
+# For the initial test run
+make -sj`nproc`
+
+hoot --version --debug
+
+#$HOOT_HOME/scripts/jenkins/TestPullRequest.sh
 
 cd $HOOT_HOME/docs
 make -sj`nproc`
