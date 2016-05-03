@@ -37,6 +37,7 @@
 
 // Qt
 #include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlError>
 #include <QUrl>
 
 namespace hoot
@@ -133,6 +134,13 @@ void HootApiDbWriter::deleteMap(QString urlStr)
     LOG_INFO("Finished removing map with ID: " << *it);
   }
 
+  // Since _openDb executes an explicit LOCK on the "lock table"
+  // we'll need to start a clean transaction to delete it.
+  QUrl url(urlStr);
+  QStringList pList = url.path().split("/");
+  QString mapName = pList[2];
+  _hootdb.dropLockTable(mapName);
+
   _hootdb.commit();
   _hootdb.close();
   _open = false;
@@ -168,12 +176,17 @@ set<long> HootApiDbWriter::_openDb(QString& urlStr)
   }
 
   //LOG_DEBUG("DB user set");
+  QStringList pList = url.path().split("/");
+  QString mapName = pList[2];
 
   // start the transaction. We'll close it when finalizePartial is called.
   _hootdb.transaction();
 
-  QStringList pList = url.path().split("/");
-  QString mapName = pList[2];
+  // Create a table with mapName, so we can process UPDATE/CREATE operations
+  // on the map thread safe in a thead safe manor. We will lock the table
+  // at the start of our transaction, making other threads WAIT.
+  _hootdb.lockProcess(mapName);
+
   set<long> mapIds = _hootdb.selectMapIds(mapName);
 
   return mapIds;
@@ -183,7 +196,7 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
 {
   if (mapIds.size() > 0)
   {
-    if (_overwriteMap) // delete mape and overwrite it
+    if (_overwriteMap) // delete map and overwrite it
     {
       for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
       {
