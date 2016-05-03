@@ -163,7 +163,6 @@ SOURCES += \
     src/main/cpp/hoot/core/manipulators/WayTagMerger.cpp \
     src/main/cpp/hoot/core/conflate/RubberSheet.cpp \
     src/main/cpp/hoot/core/conflate/NodeMatcher.cpp \
-    src/main/cpp/hoot/core/cmd/AttributeConflateCmd.cpp \
     src/main/cpp/hoot/core/cmd/CleanupCmd.cpp \
     src/main/cpp/hoot/core/util/Settings.cpp \
     src/main/cpp/hoot/core/cmd/Ogr2OsmCmd.cpp \
