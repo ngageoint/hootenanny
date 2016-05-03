@@ -27,9 +27,6 @@ function build {
 echo "### 01. --without-cppunit"
 ./configure -q --without-cppunit                                                                    && build_notest
 
-# For testing
-exit
-
 echo "### 02. --without-stxxl"
 ./configure -q                                                                      --without-stxxl && build
 

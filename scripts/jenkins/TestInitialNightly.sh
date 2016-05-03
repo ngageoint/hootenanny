@@ -4,15 +4,7 @@
 set -x
 set -e
 
-# For the initial test run
-make -sj`nproc`
+$HOOT_HOME/scripts/jenkins/TestPullRequest.sh
 
-hoot --version --debug
+make -sj`nproc` coverage
 
-#$HOOT_HOME/scripts/jenkins/TestPullRequest.sh
-
-cd $HOOT_HOME/docs
-make -sj`nproc`
-
-cd $HOOT_HOME
-make -sj`nproc` archive
