@@ -325,7 +325,6 @@ SOURCES += \
     src/main/cpp/hoot/core/index/metric-hybrid/FqTree.cpp \
     src/main/cpp/hoot/core/index/metric-hybrid/RFqHybridTree.cpp \
     src/main/cpp/hoot/core/index/metric-hybrid/RTree.cpp \
-    src/main/cpp/hoot/core/cmd/ConflateRoadsCmd.cpp \
     src/main/cpp/hoot/core/schema/AverageTagMerger.cpp \
     src/main/cpp/hoot/core/schema/TagMergerFactory.cpp \
     src/main/cpp/hoot/core/schema/GeneralizeTagMerger.cpp \
