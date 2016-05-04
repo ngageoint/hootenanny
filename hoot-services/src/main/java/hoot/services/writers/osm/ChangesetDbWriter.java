@@ -26,25 +26,18 @@
  */
 package hoot.services.writers.osm;
 
-import com.mysema.query.sql.RelationalPathBase;
-import com.mysema.query.sql.SQLExpressions;
-import com.mysema.query.sql.SQLQuery;
-import hoot.services.HootProperties;
-import hoot.services.db.DbUtils;
-import hoot.services.db.DbUtils.EntityChangeType;
-import hoot.services.db.DbUtils.RecordBatchType;
-import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.QCurrentRelationMembers;
-import hoot.services.db2.QCurrentWayNodes;
-import hoot.services.geo.BoundingBox;
-import hoot.services.models.osm.Changeset;
-import hoot.services.models.osm.Element;
-import hoot.services.models.osm.Element.ElementType;
-import hoot.services.models.osm.ElementFactory;
-import hoot.services.models.osm.XmlSerializable;
-import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.validators.osm.ChangesetErrorChecker;
-import hoot.services.validators.osm.ChangesetUploadXmlValidator;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
 import org.slf4j.Logger;
@@ -54,9 +47,27 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
-import java.util.*;
+import com.mysema.query.sql.RelationalPathBase;
+import com.mysema.query.sql.SQLExpressions;
+import com.mysema.query.sql.SQLQuery;
+
+import hoot.services.HootProperties;
+import hoot.services.db.DbUtils;
+import hoot.services.db.DbUtils.EntityChangeType;
+import hoot.services.db.DbUtils.RecordBatchType;
+import hoot.services.db2.CurrentNodes;
+import hoot.services.db2.QCurrentRelationMembers;
+import hoot.services.db2.QCurrentWayNodes;
+import hoot.services.exceptions.osm.OSMAPIPreconditionException;
+import hoot.services.geo.BoundingBox;
+import hoot.services.models.osm.Changeset;
+import hoot.services.models.osm.Element;
+import hoot.services.models.osm.Element.ElementType;
+import hoot.services.models.osm.ElementFactory;
+import hoot.services.models.osm.XmlSerializable;
+import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.validators.osm.ChangesetErrorChecker;
+import hoot.services.validators.osm.ChangesetUploadXmlValidator;
 
 /**
  * Writes an uploaded changeset diff to the services database
@@ -113,8 +124,6 @@ public class ChangesetDbWriter {
      */
     private List<Object> relatedRecordsToStore = new ArrayList<>();
 
-    private ChangesetErrorChecker changesetErrorChecker;
-
     //temporary node cache of nodes referenced in the changeset request; obtained from the database
     private Map<Long, CurrentNodes> dbNodeCache;
 
@@ -132,7 +141,7 @@ public class ChangesetDbWriter {
 
     private void initParsedElementCache() {
         // create an empty ID mapping for each element type
-        parsedElementIdsToElementsByType = new HashMap<Element.ElementType, Map<Long, Element>>();
+        parsedElementIdsToElementsByType = new HashMap<>();
         for (ElementType elementType : ElementType.values()) {
             parsedElementIdsToElementsByType.put(elementType, new HashMap<Long, Element>());
         }
@@ -316,7 +325,19 @@ public class ChangesetDbWriter {
                 // We will always check whether the object to be deleted is being used by other object(s), and
                 // could potentially cause a low level referential integrity DB error, which we really don't
                 // want to propagate all the way up the user and rather wrap it in something more user-friendly.
-                element.checkAndFailIfUsedByOtherObjects();
+                try {
+                    element.checkAndFailIfUsedByOtherObjects();
+                }
+                catch (OSMAPIPreconditionException e) {
+                    if (deleteIfUnused) {
+                        log.warn("Ignoring this delete's failure since 'if-unused' is specified.  Exact reason " +
+                                 "for the failure: " + e.getMessage());
+                        continue;  // go to the next element
+                    }
+                    else {
+                        throw e;  // re-throw the error since 'if-unused' is not specified.
+                    }
+                }
             }
 
             // update the parsed element cache; this allows us to keep track of the ID for each element
@@ -442,7 +463,7 @@ public class ChangesetDbWriter {
     private List<Element> write(Document changesetDoc) throws Exception {
         log.debug(XmlDocumentBuilder.toString(changesetDoc));
 
-        changesetErrorChecker = new ChangesetErrorChecker(changesetDoc, requestChangesetMapId, conn);
+        ChangesetErrorChecker changesetErrorChecker = new ChangesetErrorChecker(changesetDoc, requestChangesetMapId, conn);
         dbNodeCache = changesetErrorChecker.checkForElementExistenceErrors();
         changesetErrorChecker.checkForVersionErrors();
         changesetErrorChecker.checkForElementVisibilityErrors();
@@ -582,14 +603,6 @@ public class ChangesetDbWriter {
                 }
             }
         }
-
-        //believe these need to be done after the data is written, since they depend upon the outcomes
-        //of the modify/delete changesets.  would be more efficient to do them at the start of the
-        //save along with the other error checking, but would probably increase the code complexity
-        //quite a bit, if it could be done at all.
-
-        //changesetErrorChecker.checkForElementVisibilityErrors();
-        //changesetErrorChecker.checkForOwnershipErrors();
 
         changeset.updateNumChanges((int) changesetDiffElementsSize);
 
