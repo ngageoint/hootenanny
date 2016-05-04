@@ -109,20 +109,13 @@ public:
   long getNextId(const QString tableName);
 
   /**
-   * Executes changeset SQL against an OSM API database.
    *
-   * @param changesetSqlFile The file containing the change SQL to be executed.
-   * @param targetDatabaseUrl The OSM API database to write the changeset to.
-   */
-  void writeChangeset(QFile& changesetSqlFile, const QUrl targetDatabaseUrl);
-
-  /**
-   * xecutes changeset SQL against an OSM API database.
    *
-   * @param sql The SQL to be executed.
-   * @param targetDatabaseUrl The OSM API database to write the changeset to.
+   * @param bbox
+   * @param timestamp
+   * @return
    */
-  void writeChangeset(const QString sql, const QUrl targetDatabaseUrl);
+  long getChangesetsCountWithinBoundsAfterTimestamp(const Envelope& bbox, const QString timestamp);
 
 private:
 
@@ -133,6 +126,7 @@ private:
   shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
   shared_ptr<QSqlQuery> _selectNodeById;
+  shared_ptr<QSqlQuery> _selectChangesetsCountWithinBoundsAfterTimestamp;
 
   QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
 

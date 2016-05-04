@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -279,5 +279,29 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   return result;
 }
 
+Envelope GeometryUtils::envelopeFromString(const QString str)
+{
+  if (str.contains(","))
+  {
+    QStringList bboxParts = str.split(",");
+    if (bboxParts.size() == 4)
+    {
+      const double minLat = bboxParts[1].toDouble();
+      const double minLon = bboxParts[0].toDouble();
+      const double maxLat = bboxParts[3].toDouble();
+      const double maxLon = bboxParts[2].toDouble();
+      return Envelope(minLon, maxLon, minLat, maxLat);
+    }
+    else
+    {
+      throw HootException("Invalid envelope string: " + str);
+    }
+  }
+  else
+  {
+    throw HootException("Invalid envelope string: " + str);
+  }
+
+}
 
 }

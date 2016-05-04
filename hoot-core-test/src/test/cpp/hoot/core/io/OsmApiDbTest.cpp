@@ -51,7 +51,6 @@ class OsmApiDbTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(OsmApiDbTest);
   CPPUNIT_TEST(runOpenTest);
   CPPUNIT_TEST(runSelectElementsTest);
-  CPPUNIT_TEST(runSqlChangesetExecTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -328,61 +327,6 @@ public:
     LOG_VARD(ctr);
     CPPUNIT_ASSERT_EQUAL(ids.size(), ctr);
   }
-
-  void runSqlChangesetExecTest()
-  {
-    OsmApiDb database;
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
-    database.deleteData();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql");
-
-    shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
-    assert(nodesItr->isActive());
-    CPPUNIT_ASSERT_EQUAL(0, nodesItr->size());
-
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("nodes.sql");
-
-    nodesItr = database.selectElements(ElementType::Node);
-    assert(nodesItr->isActive());
-    int nodesCountBefore = 0;
-    long existingChangesetId = -1;
-    while (nodesItr->next())
-    {
-      existingChangesetId = nodesItr->value(3).toLongLong();
-      LOG_VARD(existingChangesetId)
-      nodesCountBefore++;
-    }
-    nodesCountBefore--;
-    LOG_VARD(nodesCountBefore);
-
-    const long nextNodeId = database.getNextId("current_nodes");
-    LOG_VARD(nextNodeId);
-
-    const long nextChangesetId = existingChangesetId + 1;
-    QString sql =
-      QString("INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (%1, 1, now(), now());\n")
-        .arg(nextChangesetId);
-    sql +=
-      QString("INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile,  version) VALUES (%1, 0, 0, %2, true, now(), 3221225472, 1);")
-        .arg(nextNodeId)
-        .arg(nextChangesetId);
-
-    OsmApiDb().writeChangeset(sql, ServicesDbTestUtils::getOsmApiDbUrl());
-
-    nodesItr = database.selectElements(ElementType::Node);
-    assert(nodesItr->isActive());
-    int nodesCountAfter = 0;
-    while (nodesItr->next())
-    {
-      nodesCountAfter++;
-    }
-    nodesCountAfter--;
-    LOG_VARD(nodesCountAfter);
-
-    CPPUNIT_ASSERT(nodesCountAfter == (nodesCountBefore + 1));
-  }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiDbTest, "slow");

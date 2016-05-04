@@ -180,6 +180,7 @@ void OsmApiDb::_resetQueries()
   {
     itr.value().reset();
   }
+  _selectChangesetsCountWithinBoundsAfterTimestamp.reset();
 }
 
 void OsmApiDb::rollback()
@@ -546,68 +547,33 @@ long OsmApiDb::getNextId(const QString tableName)
   return result;
 }
 
-void OsmApiDb::writeChangeset(const QString sql, const QUrl targetDatabaseUrl)
+long OsmApiDb::getChangesetsCountWithinBoundsAfterTimestamp(const Envelope& bbox,
+                                                            const QString timestamp)
 {
-  LOG_INFO("Executing changeset SQL queries against OSM API database...");
-
-  QString changesetInsertStatement;
-  QString elementSqlStatements = "";
-
-  const QStringList sqlParts = sql.split(";");
-  for (int i = 0; i < sqlParts.size(); i++)
+  //TODO: return all changesets that intersect with bbox and have a creation time after timestamp; if count
+  //is > 0, return true
+  _selectChangesetsCountWithinBoundsAfterTimestamp.reset(new QSqlQuery(_db));
+  _selectChangesetsCountWithinBoundsAfterTimestamp->prepare(
+    "SELECT COUNT(*) FROM ");
+  if (_selectChangesetsCountWithinBoundsAfterTimestamp->exec() == false)
   {
-    const QString sqlStatement = sqlParts[i];
-    if (i == 0)
+    LOG_ERROR(_selectChangesetsCountWithinBoundsAfterTimestamp->executedQuery());
+    LOG_ERROR(_selectChangesetsCountWithinBoundsAfterTimestamp->lastError().text());
+    throw HootException(_selectChangesetsCountWithinBoundsAfterTimestamp->lastError().text());
+  }
+
+  long result = -1;
+  if (_selectChangesetsCountWithinBoundsAfterTimestamp->next())
+  {
+    bool ok;
+    result = _selectChangesetsCountWithinBoundsAfterTimestamp->value(0).toLongLong(&ok);
+    if (!ok)
     {
-      if (!sqlStatement.toUpper().startsWith("INSERT INTO CHANGESETS"))
-      {
-        throw HootException(
-          "The first SQL statement in a changeset SQL file must create a changeset.");
-      }
-      else
-      {
-        changesetInsertStatement = sqlStatement + ";";
-      }
-    }
-    else
-    {
-      elementSqlStatements += sqlStatement + ";";
+      //throw HootException("Count not retrieve count for element type: " + elementType.toString());
     }
   }
-
-  if (elementSqlStatements.trimmed().isEmpty())
-  {
-    throw HootException("No element SQL statements in sql file");
-  }
-
-  open(targetDatabaseUrl);
-  transaction();
-
-  _execNoPrepare(changesetInsertStatement);
-  _execNoPrepare(elementSqlStatements);
-
-  commit();
-  close();
-
-  LOG_INFO("Changeset SQL queries execute finished against OSM API database.");
-}
-
-void OsmApiDb::writeChangeset(QFile& changesetSqlFile, const QUrl targetDatabaseUrl)
-{
-  if (!changesetSqlFile.fileName().endsWith(".osc.sql"))
-  {
-    throw HootException("Invalid file type: " + changesetSqlFile.fileName());
-  }
-
-  if (changesetSqlFile.open(QIODevice::ReadOnly))
-  {
-    writeChangeset(changesetSqlFile.readAll(), targetDatabaseUrl);
-    changesetSqlFile.close();
-  }
-  else
-  {
-    throw HootException("Unable to open changeset file: " + changesetSqlFile.fileName());
-  }
+  _selectChangesetsCountWithinBoundsAfterTimestamp->finish();
+  return result;
 }
 
 }

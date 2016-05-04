@@ -496,6 +496,7 @@ SOURCES += \
     src/main/cpp/hoot/core/filters/WaterwayCriterion.cpp \
     src/main/cpp/hoot/core/io/ElementComparer.cpp \
     src/main/cpp/hoot/core/cmd/ApplyChangesetCmd.cpp \
+    src/main/cpp/hoot/core/io/OsmApiDbChangesetWriter.cpp \
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -986,5 +987,6 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WaterwayCriterion.h \
     src/main/cpp/hoot/core/io/ElementComparer.h \
     src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.h \
-    src/main/cpp/hoot/core/ops/FindIntersectionsOp.h
+    src/main/cpp/hoot/core/ops/FindIntersectionsOp.h \
+    src/main/cpp/hoot/core/io/OsmApiDbChangesetWriter.h \
 

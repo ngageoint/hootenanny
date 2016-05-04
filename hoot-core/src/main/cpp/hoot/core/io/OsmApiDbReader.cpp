@@ -34,6 +34,7 @@
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>
@@ -121,13 +122,7 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
     LOG_INFO(
       "Executing OSM API bounded read query against all element types with bounds " << _bbox << "...");
 
-    QStringList bboxParts = _bbox.split(",");
-    double minLat = bboxParts[1].toDouble();
-    double minLon = bboxParts[0].toDouble();
-    double maxLat = bboxParts[3].toDouble();
-    double maxLon = bboxParts[2].toDouble();
-
-    Envelope env(minLon, maxLon, minLat, maxLat);
+    Envelope env = GeometryUtils::envelopeFromString(_bbox);
 
     //select all elements in the bounding box
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
