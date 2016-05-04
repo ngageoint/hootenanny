@@ -1,0 +1,21 @@
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
+Reprojecting 0 / 4324         Reprojecting 1000 / 4324         Reprojecting 2000 / 4324         Reprojecting 3000 / 4324         Reprojecting 4000 / 4324         
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
+INFO  ...nflate/DuplicateWayRemover.cpp(  64) Removing duplicate ways...
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
+INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
+INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
+  Intersection splitter todo: 0       
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
+INFO  ...e/splitter/DualWaySplitter.cpp(  83) Assuming drives on right.
+INFO  ...e/splitter/DualWaySplitter.cpp( 246) Splitting divided ways...
+
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ImpliedDividedMarker
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateNameRemover
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmptyAreasVisitor
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
+Reprojecting 0 / 4337         Reprojecting 1000 / 4337         Reprojecting 2000 / 4337         Reprojecting 3000 / 4337         Reprojecting 4000 / 4337         
