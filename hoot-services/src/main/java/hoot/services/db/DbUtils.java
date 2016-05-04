@@ -83,6 +83,8 @@ public class DbUtils
   private static final Logger log = LoggerFactory.getLogger(DbUtils.class);
 
   public static final String TIMESTAMP_DATE_FORMAT = "YYYY-MM-dd HH:mm:ss";
+  
+  public static final String TIME_STAMP_REGEX = "\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}\\.\\d+";
 
   private static SQLTemplates templates = null;
 

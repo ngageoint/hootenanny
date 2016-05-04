@@ -30,6 +30,8 @@ import hoot.services.db.DbUtils;
 import hoot.services.HootProperties;
 import hoot.services.utils.ResourceErrorHandler;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -207,6 +209,16 @@ public class ConflationResource extends JobControllerBase
 			String statsName = _homeFolder + "/" + _rptStorePath + "/" + confOutputName + "-stats.csv";
 			tags.put("stats", statsName);
 		}
+		
+		//osm api db related input params have already been validated by this point, so just check to 
+		//see if any osm api db input is present
+		if (oneLayerIsOsmApiDb(oParams))
+		{
+			//write a timestamp representing the time the osm api db data was queried out from the source;
+			//to be used during export of conflated data back into the osm api db at a later time
+			final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+			tags.put("osm_api_db_export_time", now.toString());
+		}
 
 		JSONArray mapTagsArgs = new JSONArray();
 		JSONObject param = new JSONObject();
@@ -260,36 +272,37 @@ public class ConflationResource extends JobControllerBase
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
 	}
 	
-	private static void validateOsmApiDbConflateParams(final JSONObject params)
+	private static boolean oneLayerIsOsmApiDb(final JSONObject inputParams)
+	{
+		return inputParams.get("INPUT1_TYPE").toString().toUpperCase().equals("OSM_API_DB") ||
+			inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB");
+	}
+	
+	private static void validateOsmApiDbConflateParams(final JSONObject inputParams)
 	{
 	  //default REFERENCE_LAYER = 1
-		if (params.get("REFERENCE_LAYER") != null)
+		if (inputParams.get("REFERENCE_LAYER") != null)
 		{
-			if ((params.get("INPUT1_TYPE").toString().toUpperCase().equals("OSM_API_DB") &&
-					 params.get("REFERENCE_LAYER").toString().toUpperCase().equals("2")) ||
-					(params.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB") &&
-					 params.get("REFERENCE_LAYER").toString().toUpperCase().equals("1")))
+			if ((inputParams.get("INPUT1_TYPE").toString().toUpperCase().equals("OSM_API_DB") &&
+					 inputParams.get("REFERENCE_LAYER").toString().toUpperCase().equals("2")) ||
+					(inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB") &&
+					 inputParams.get("REFERENCE_LAYER").toString().toUpperCase().equals("1")))
 			{
 				ResourceErrorHandler.handleError(
 					"OSM_API_DB not allowed as secondary input type.", Status.BAD_REQUEST, log);
 			}
 		}
-		else if (params.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB"))
+		else if (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB"))
 		{
 			ResourceErrorHandler.handleError(
 				"OSM_API_DB not allowed as secondary input type.", Status.BAD_REQUEST, log);
 		}
-		
-		final boolean oneLayerIsMapEdit = 
-			params.get("INPUT1_TYPE").toString().toUpperCase().equals("OSM_API_DB") ||
-			params.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB");
-		
+			
 		//will let the core actually validate the content of this setting during conflation...just 
 		//want to see that it is present
-		
-		if (oneLayerIsMapEdit && 
-				(params.get("ADV_OPTIONS") == null || 
-				!params.get("ADV_OPTIONS").toString().contains("convert.bounding.box")))
+		if (oneLayerIsOsmApiDb(inputParams) && 
+				(inputParams.get("ADV_OPTIONS") == null || 
+				!inputParams.get("ADV_OPTIONS").toString().contains("convert.bounding.box")))
 		{
 			ResourceErrorHandler.handleError(
 			  "OSM_API_DB input must be used with the convert.bounding.box setting.", 
