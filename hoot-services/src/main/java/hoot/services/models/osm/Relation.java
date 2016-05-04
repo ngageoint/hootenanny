@@ -26,11 +26,30 @@
  */
 package hoot.services.models.osm;
 
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
+import org.apache.xpath.XPathAPI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.NodeList;
+
 import com.mysema.query.sql.RelationalPathBase;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.types.path.BooleanPath;
 import com.mysema.query.types.path.NumberPath;
 import com.mysema.query.types.path.SimplePath;
+
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.db.DbUtils.nwr_enum;
@@ -41,18 +60,6 @@ import hoot.services.exceptions.osm.OSMAPIAlreadyDeletedException;
 import hoot.services.exceptions.osm.OSMAPIPreconditionException;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.Coordinates;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.reflect.MethodUtils;
-import org.apache.xpath.XPathAPI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.NodeList;
-
-import java.sql.Connection;
-import java.util.*;
-import java.util.Map;
 
 /**
  * Represents the model for an OSM relation
@@ -123,7 +130,8 @@ public class Relation extends Element {
     @Override
     public void checkAndFailIfUsedByOtherObjects() throws Exception {
         if (!super.getVisible()) {
-            throw new OSMAPIAlreadyDeletedException("Relation with ID = " + super.getId() + " has been already deleted!");
+            throw new OSMAPIAlreadyDeletedException("Relation with ID = " + super.getId() + " has been already deleted " +
+                                                    "from map with ID = " + getMapId());
         }
 
         // From the Rails port of OSM API:
@@ -141,7 +149,8 @@ public class Relation extends Element {
 
         if (!owningRelationsIds.isEmpty()) {
             throw new OSMAPIPreconditionException("Relation with ID = " + super.getId() +
-                    " is still used by other relation(s): " + StringUtils.join(owningRelationsIds));
+                    " is still used by other relation(s): " + StringUtils.join(owningRelationsIds) +
+                    " in map with ID = " + getMapId());
         }
     }
 

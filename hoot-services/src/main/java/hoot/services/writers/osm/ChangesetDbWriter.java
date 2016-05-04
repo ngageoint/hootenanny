@@ -330,8 +330,7 @@ public class ChangesetDbWriter {
                 }
                 catch (OSMAPIPreconditionException e) {
                     if (deleteIfUnused) {
-                        log.warn("Ignoring this delete's failure since 'if-unused' is specified.  Exact reason " +
-                                 "for the failure: " + e.getMessage());
+                        log.info("Skipping DELETE since 'if-unused' is specified.  More details: " + e.getMessage());
                         continue;  // go to the next element
                     }
                     else {
