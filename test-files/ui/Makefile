@@ -38,7 +38,7 @@ else
 endif
 	echo ""
 
-clean:
+	#Remove test datasets from db
 	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -t -A -c "SELECT display_name FROM maps WHERE display_name like '%Cucumber%'" \
 	| while read mapname; do \
  	   echo hoot delete-map $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
