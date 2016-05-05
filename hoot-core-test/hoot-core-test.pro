@@ -90,7 +90,10 @@ SOURCES += \
     src/test/cpp/hoot/core/ops/RecursiveElementRemoverTest.cpp \
     src/test/cpp/hoot/core/scoring/MatchComparatorTest.cpp \
     src/test/cpp/hoot/core/visitors/RemoveDuplicateAreaVisitorTest.cpp \
+    src/test/cpp/hoot/core/conflate/polygon/extractors/BufferedOverlapExtractorTest.cpp \
+    src/test/cpp/hoot/core/conflate/polygon/extractors/CentroidDistanceExtractorTest.cpp \
     src/test/cpp/hoot/core/conflate/polygon/extractors/EdgeDistanceExtractorTest.cpp \
+    src/test/cpp/hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractorTest.cpp \
     src/test/cpp/hoot/core/algorithms/MaximalSublineTest.cpp \
     src/test/cpp/hoot/core/algorithms/ExpectationIntersectionTest.cpp \
     src/test/cpp/hoot/core/conflate/point/PlacesPoiMatchTest.cpp \
@@ -145,6 +148,7 @@ SOURCES += \
     src/test/cpp/hoot/core/perty/PertyMatchScorerTest.cpp \
     src/test/cpp/hoot/core/algorithms/SingleAssignmentProblemSolverTest.cpp \
     src/test/cpp/hoot/core/conflate/extractors/SampledAngleHistogramExtractorTest.cpp \
+    src/test/cpp/hoot/core/conflate/extractors/WeightedMetricDistanceExtractorTest.cpp \
     src/test/cpp/hoot/core/io/ArffWriterTest.cpp \
     src/test/cpp/hoot/core/io/ArffReaderTest.cpp \
     src/test/cpp/hoot/core/conflate/WayCleanerTest.cpp \
