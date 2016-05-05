@@ -4,7 +4,7 @@
 #   * .../[jenkins workspaces]/[this project workspace]/hootenanny
 # * Configure LocalConfig.pri for tests
 # * Destroy vagrant instance if necessary
-# * Build hoot with most things enabled
+# * Get Hoot read to run the configure tests
 #
 set -e
 set -x
@@ -37,10 +37,14 @@ echo "QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri
 sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri                 
 sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri   
 
+
+# Setup the database config. We need to do this since we are not running the VagrantBuild.sh script
+cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
+
 # Make sure we are not running
 vagrant halt
 
-# This causes grief....
+# # This causes grief....
 #touch Vagrant.marker
 
 REBUILD_VAGRANT=false
@@ -52,11 +56,13 @@ if [ "`date +%F`" != "`test -e ../BuildDate.txt && cat ../BuildDate.txt`" ]; the
     REBUILD_VAGRANT=true
 fi
 
+# We are going to run a stack of configure tests, we don't neem Tomcat, Mapnik or Hadoop. Just the basic nfs and
+# software dependencies
 if [ $REBUILD_VAGRANT == 'true' ]; then
     vagrant destroy -f
-    time -p vagrant up --provider vsphere
+    time -p vagrant up --provision-with nfs,hoot --provider vsphere
 else
-    time -p vagrant up --provision-with nfs,build,EGD,tomcat,mapnik,hadoop --provider vsphere
+    time -p vagrant up --provision-with nfs --provider vsphere
 fi
 
 date +%F > ../BuildDate.txt
