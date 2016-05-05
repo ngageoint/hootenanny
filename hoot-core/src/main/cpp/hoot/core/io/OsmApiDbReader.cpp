@@ -122,7 +122,7 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
     LOG_INFO(
       "Executing OSM API bounded read query against all element types with bounds " << _bbox << "...");
 
-    Envelope env = GeometryUtils::envelopeFromString(_bbox);
+    Envelope env = GeometryUtils::envelopeFromConfigString(_bbox);
 
     //select all elements in the bounding box
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)

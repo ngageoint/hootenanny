@@ -32,6 +32,9 @@
 namespace hoot
 {
 
+/**
+ * Writes OSM changesets from a .osc.sql file to an OSM API database
+ */
 class OsmApiDbChangesetWriter
 {
 
@@ -56,13 +59,16 @@ public:
   void write(const QString sql);
 
   /**
+   * Detects conflicts in the target OSM API database by examining its changesets and bounds and
+   * time input parameters.
    *
-   *
-   * @param bbox
-   * @param timestamp
+   * @param boundsStr a bounds string of the form minx,maxx,miny,maxy for which to search
+   * within the target database for changesets
+   * @param timeStr a time string of the format specified by the OsmApiDb::TIME_FORMAT constant;
+   * only searches for changesets created after the time
    * @return
    */
-  bool conflictExistsInTarget(const QString bbox, const QString timestamp);
+  bool conflictExistsInTarget(const QString boundsStr, const QString timeStr);
 
 private:
 

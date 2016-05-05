@@ -58,6 +58,8 @@
 namespace hoot
 {
 
+const QString OsmApiDb::TIME_FORMAT = "yyyy-MM-dd hh:mm:ss.zzz";
+
 OsmApiDb::OsmApiDb()
 {
   _init();
@@ -180,7 +182,7 @@ void OsmApiDb::_resetQueries()
   {
     itr.value().reset();
   }
-  _selectChangesetsCountWithinBoundsAfterTimestamp.reset();
+  _selectChangesetsCreatedAfterTime.reset();
 }
 
 void OsmApiDb::rollback()
@@ -547,33 +549,26 @@ long OsmApiDb::getNextId(const QString tableName)
   return result;
 }
 
-long OsmApiDb::getChangesetsCountWithinBoundsAfterTimestamp(const Envelope& bbox,
-                                                            const QString timestamp)
+shared_ptr<QSqlQuery> OsmApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
 {
-  //TODO: return all changesets that intersect with bbox and have a creation time after timestamp; if count
-  //is > 0, return true
-  _selectChangesetsCountWithinBoundsAfterTimestamp.reset(new QSqlQuery(_db));
-  _selectChangesetsCountWithinBoundsAfterTimestamp->prepare(
-    "SELECT COUNT(*) FROM ");
-  if (_selectChangesetsCountWithinBoundsAfterTimestamp->exec() == false)
-  {
-    LOG_ERROR(_selectChangesetsCountWithinBoundsAfterTimestamp->executedQuery());
-    LOG_ERROR(_selectChangesetsCountWithinBoundsAfterTimestamp->lastError().text());
-    throw HootException(_selectChangesetsCountWithinBoundsAfterTimestamp->lastError().text());
-  }
+  LOG_VARD(timeStr);
+  _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
+  _selectChangesetsCreatedAfterTime->prepare(
+    QString("SELECT min_lon, max_lon, min_lat, max_lat FROM changesets ") +
+    QString("WHERE created_at > :createdAt"));
+  _selectChangesetsCreatedAfterTime->bindValue(":createdAt", "'" + timeStr + "'");
 
-  long result = -1;
-  if (_selectChangesetsCountWithinBoundsAfterTimestamp->next())
+  if (_selectChangesetsCreatedAfterTime->exec() == false)
   {
-    bool ok;
-    result = _selectChangesetsCountWithinBoundsAfterTimestamp->value(0).toLongLong(&ok);
-    if (!ok)
-    {
-      //throw HootException("Count not retrieve count for element type: " + elementType.toString());
-    }
+    LOG_ERROR(_selectChangesetsCreatedAfterTime->executedQuery());
+    LOG_ERROR(_selectChangesetsCreatedAfterTime->lastError().text());
+    throw HootException(
+      "Could not execute changesets query: " + _selectChangesetsCreatedAfterTime->lastError().text());
   }
-  _selectChangesetsCountWithinBoundsAfterTimestamp->finish();
-  return result;
+  LOG_VARD(_selectChangesetsCreatedAfterTime->executedQuery());
+  LOG_VARD(_selectChangesetsCreatedAfterTime->numRowsAffected());
+
+  return _selectChangesetsCreatedAfterTime;
 }
 
 }

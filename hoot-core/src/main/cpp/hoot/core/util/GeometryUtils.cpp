@@ -279,29 +279,40 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   return result;
 }
 
-Envelope GeometryUtils::envelopeFromString(const QString str)
+Envelope GeometryUtils::envelopeFromConfigString(const QString boundsStr)
 {
-  if (str.contains(","))
+  const QString errMsg = "Invalid envelope string: " + boundsStr;
+  if (boundsStr.contains(","))
   {
-    QStringList bboxParts = str.split(",");
+    const QStringList bboxParts = boundsStr.split(",");
     if (bboxParts.size() == 4)
     {
-      const double minLat = bboxParts[1].toDouble();
-      const double minLon = bboxParts[0].toDouble();
-      const double maxLat = bboxParts[3].toDouble();
-      const double maxLon = bboxParts[2].toDouble();
+      bool parseSuccess = true;
+      bool ok;
+      const double minLat = bboxParts[1].toDouble(&ok);
+      parseSuccess = parseSuccess && ok;
+      const double minLon = bboxParts[0].toDouble(&ok);
+      parseSuccess = parseSuccess && ok;
+      const double maxLat = bboxParts[3].toDouble(&ok);
+      parseSuccess = parseSuccess && ok;
+      const double maxLon = bboxParts[2].toDouble(&ok);
+      parseSuccess = parseSuccess && ok;
+
+      if (!parseSuccess)
+      {
+        throw HootException(errMsg);
+      }
       return Envelope(minLon, maxLon, minLat, maxLat);
     }
     else
     {
-      throw HootException("Invalid envelope string: " + str);
+      throw HootException(errMsg);
     }
   }
   else
   {
-    throw HootException("Invalid envelope string: " + str);
+    throw HootException(errMsg);
   }
-
 }
 
 }

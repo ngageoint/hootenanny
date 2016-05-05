@@ -39,7 +39,10 @@ namespace hoot
 
 class OsmApiDb : public ApiDb
 {
+
 public:
+
+  static const QString TIME_FORMAT;
 
   OsmApiDb();
 
@@ -109,13 +112,13 @@ public:
   long getNextId(const QString tableName);
 
   /**
+   * Returns all changesets created after the specified time.
    *
-   *
-   * @param bbox
-   * @param timestamp
-   * @return
+   * @param timeStr time string for which to search for changesets created after; should be of the
+   * format specified by the TIME_FORMAT constant
+   * @return a SQL results iterator
    */
-  long getChangesetsCountWithinBoundsAfterTimestamp(const Envelope& bbox, const QString timestamp);
+  shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
 
 private:
 
@@ -126,7 +129,7 @@ private:
   shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
   shared_ptr<QSqlQuery> _selectNodeById;
-  shared_ptr<QSqlQuery> _selectChangesetsCountWithinBoundsAfterTimestamp;
+  shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
 
   QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
 

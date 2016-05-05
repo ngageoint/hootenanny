@@ -77,7 +77,7 @@ public:
     }
     else
     {
-      throw HootException("Invalid source file format: " + args[0]);
+      throw HootException("Invalid changeset file format: " + args[0]);
     }
 
     return 0;

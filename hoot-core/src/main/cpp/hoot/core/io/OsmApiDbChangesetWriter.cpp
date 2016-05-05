@@ -33,6 +33,7 @@
 #include <QtSql/QSqlDatabase>
 #include <QUrl>
 #include <QSqlError>
+#include <QDateTime>
 
 namespace hoot
 {
@@ -86,8 +87,8 @@ void OsmApiDbChangesetWriter::write(const QString sql)
   }
 
   _db.transaction();
-  //had problems here when trying to prepare these queries; the changeset writing needs to be done
-  //before the element writing
+  //had problems here when trying to prepare these queries (should they be?); the changeset writing
+  //needs to be done before the element writing, hence the separate queries
   _execNoPrepare(changesetInsertStatement);
   _execNoPrepare(elementSqlStatements);
   _db.commit();
@@ -113,24 +114,47 @@ void OsmApiDbChangesetWriter::write(QFile& changesetSqlFile)
   }
 }
 
-bool OsmApiDbChangesetWriter::conflictExistsInTarget(const QString bbox,
-                                                     const QString timestamp)
+bool OsmApiDbChangesetWriter::conflictExistsInTarget(const QString boundsStr, const QString timeStr)
 {
-  //TODO: validate timestamp
+  LOG_INFO("Checking for OSM API DB conflicts for changesets within " << boundsStr << " and " <<
+           "created after " << timeStr << "...");
 
+  const Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
+  LOG_VARD(bounds.toString());
 
-  return
-    _db.getChangesetsCountWithinBoundsAfterTimestamp(GeometryUtils::envelopeFromString(bbox), timestamp) > 0;
+  const QDateTime time = QDateTime::fromString(timeStr, OsmApiDb::TIME_FORMAT);
+  LOG_VARD(time);
+  if (!time.isValid())
+  {
+    throw HootException(
+      "Invalid timestamp: " + time.toString() + ".  Should be of the form " + OsmApiDb::TIME_FORMAT);
+  }
+
+  shared_ptr<QSqlQuery> changesetItr = _db.getChangesetsCreatedAfterTime(timeStr);
+
+  Envelope allChangesetsBounds;
+  while (changesetItr->next())
+  {
+    shared_ptr<Envelope> changesetBounds(
+      new Envelope(changesetItr->value(0).toDouble(),
+                   changesetItr->value(1).toDouble(),
+                   changesetItr->value(2).toDouble(),
+                   changesetItr->value(3).toDouble()));
+    LOG_VARD(changesetBounds->toString());
+    allChangesetsBounds.expandToInclude(changesetBounds.get());
+    LOG_VARD(allChangesetsBounds.toString());
+  }
+  return bounds.intersects(allChangesetsBounds);
 }
 
 void OsmApiDbChangesetWriter::_execNoPrepare(const QString sql)
 {
   QSqlQuery q(_db.getDB());
   LOG_VARD(sql);
-
   if (q.exec(sql) == false)
   {
-    throw HootException(QString("Error executing query: %1 (%2)").arg(q.lastError().text()).arg(sql));
+    throw HootException(
+      QString("Error executing query: %1 (%2)").arg(q.lastError().text()).arg(sql));
   }
   LOG_VARD(q.numRowsAffected());
 }

@@ -107,11 +107,12 @@ public:
   static Geometry* validatePolygon(const Polygon* p);
 
   /**
-   * @brief envelopeFromString
-   * @param str
+   * Converts a bounds in the format used in the hoot options config to an envelope
+   *
+   * @param boundsStr bounds string in the format used in the hoot options config to an envelope
    * @return
    */
-  static Envelope envelopeFromString(const QString str);
+  static Envelope envelopeFromConfigString(const QString boundsStr);
 
 };
 
