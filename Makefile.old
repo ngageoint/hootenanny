@@ -290,7 +290,7 @@ endif
 ui-test: services-build build
 ifeq ($(BUILD_UI_TESTS),uitests)
 ifeq ($(BUILD_SERVICES),services)
-	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile test && $(MAKE) -f Makefile clean
+	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile test
 else
 	echo "UI tests must specify both --with-services and --with-uitests."
 endif
