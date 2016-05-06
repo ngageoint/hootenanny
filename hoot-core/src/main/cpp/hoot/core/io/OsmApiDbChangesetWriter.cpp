@@ -132,7 +132,6 @@ bool OsmApiDbChangesetWriter::conflictExistsInTarget(const QString boundsStr, co
 
   shared_ptr<QSqlQuery> changesetItr = _db.getChangesetsCreatedAfterTime(timeStr);
 
-  Envelope allChangesetsBounds;
   while (changesetItr->next())
   {
     shared_ptr<Envelope> changesetBounds(
@@ -141,10 +140,12 @@ bool OsmApiDbChangesetWriter::conflictExistsInTarget(const QString boundsStr, co
                    changesetItr->value(2).toDouble(),
                    changesetItr->value(3).toDouble()));
     LOG_VARD(changesetBounds->toString());
-    allChangesetsBounds.expandToInclude(changesetBounds.get());
-    LOG_VARD(allChangesetsBounds.toString());
+    if (changesetBounds->intersects(bounds))
+    {
+      return true;
+    }
   }
-  return bounds.intersects(allChangesetsBounds);
+  return false;
 }
 
 void OsmApiDbChangesetWriter::_execNoPrepare(const QString sql)
