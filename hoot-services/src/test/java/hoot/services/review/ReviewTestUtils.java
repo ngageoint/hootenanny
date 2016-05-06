@@ -34,7 +34,6 @@ import hoot.services.writers.osm.ChangesetDbWriter;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -51,7 +50,7 @@ public class ReviewTestUtils
    
   public static Connection conn;
   
-  public Map<ElementType, HashMap<Long, Element>> parsedElementIdsToElementsByType;
+  public Map<ElementType, Map<Long, Element>> parsedElementIdsToElementsByType;
   
   /**
    * Writes the conflated review relation output for conflating AllDataTypesA.osm with 
