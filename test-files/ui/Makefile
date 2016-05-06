@@ -44,7 +44,10 @@ endif
  	   echo hoot delete-map $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
 	done; \
 	true
+
+clean:
 	rm -rf tmp
+
 load-data:
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcGisRoads.osm $(DB_URL)/DcGisRoadsCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcTigerRoads.osm $(DB_URL)/DcTigerRoadsCucumber
