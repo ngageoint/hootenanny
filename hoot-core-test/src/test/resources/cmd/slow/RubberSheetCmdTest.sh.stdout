@@ -1,0 +1,31 @@
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
+Reprojecting 0 / 7487         Reprojecting 1000 / 7487         Reprojecting 2000 / 7487         Reprojecting 3000 / 7487         Reprojecting 4000 / 7487         Reprojecting 5000 / 7487         Reprojecting 6000 / 7487         Reprojecting 7000 / 7487         
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
+INFO  ...nflate/DuplicateWayRemover.cpp(  64) Removing duplicate ways...
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
+INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
+INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
+  Intersection splitter todo: 0       
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
+INFO  ...e/splitter/DualWaySplitter.cpp(  83) Assuming drives on right.
+INFO  ...e/splitter/DualWaySplitter.cpp( 246) Splitting divided ways...
+
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ImpliedDividedMarker
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateNameRemover
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmptyAreasVisitor
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
+INFO  .../core/conflate/RubberSheet.cpp( 325) Found 237 potential ties.
+INFO  .../core/conflate/RubberSheet.cpp( 363) Found 173 confident ties.
+INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: DelaunayInterpolator RMSE: 0.956749
+INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: IDW, p: 0 RMSE: 0.759081
+INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: Kernel estimation, sigma: 3176.88 RMSE: 0.759046
+INFO  .../core/conflate/RubberSheet.cpp( 258) Best candidate: Kernel estimation, sigma: 3176.88
+INFO  .../core/conflate/RubberSheet.cpp( 372) Kernel estimation, sigma: 3176.88
+INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: Kernel estimation, sigma: 3177.26 RMSE: 0.75905
+INFO  .../core/conflate/RubberSheet.cpp( 258) Best candidate: Kernel estimation, sigma: 3177.26
+INFO  .../core/conflate/RubberSheet.cpp( 376) Kernel estimation, sigma: 3177.26
+Reprojecting 0 / 7500         Reprojecting 1000 / 7500         Reprojecting 2000 / 7500         Reprojecting 3000 / 7500         Reprojecting 4000 / 7500         Reprojecting 5000 / 7500         Reprojecting 6000 / 7500         Reprojecting 7000 / 7500         
