@@ -102,6 +102,8 @@ public class Map extends Maps
   //type.
   private java.util.Map<ElementType, java.util.Map<Long, Tuple>> elementIdsToRecordsByType;
 
+  private BoundingBox bounds;
+  
   public Map(final long id, Connection conn)
   {
     super();
@@ -992,4 +994,29 @@ public class Map extends Maps
     linkRecords.setLinks(linkRecordList.toArray(new LinkRecord[]{}));
     return linkRecords;
   }
+  
+  /**
+   * Return the map's bounds
+   * 
+   * @return a bounding box
+   * @throws Exception 
+   */
+  public BoundingBox getBounds() throws Exception
+	{
+  	if (bounds == null)
+  	{
+      final Tuple nodeResults =
+    		new SQLQuery(conn, DbUtils.getConfiguration(getId()))
+          .from(currentnodes)
+  				.list(currentnodes.longitude.max(), currentnodes.longitude.min(),
+  					  	currentnodes.latitude.max(), currentnodes.latitude.min()).get(0);
+      bounds = 
+      	new BoundingBox(
+      		nodeResults.get(1, Double.class),
+      		nodeResults.get(3, Double.class),
+      		nodeResults.get(0, Double.class),
+      		nodeResults.get(2, Double.class));
+  	}
+  	return bounds;
+	}
 }

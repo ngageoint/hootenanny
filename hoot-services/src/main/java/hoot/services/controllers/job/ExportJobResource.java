@@ -27,12 +27,16 @@
 package hoot.services.controllers.job;
 
 import java.io.File;
+import java.sql.Connection;
 import java.util.List;
 import java.util.UUID;
 
 import hoot.services.HootProperties;
 import hoot.services.controllers.wfs.WfsManager;
 import hoot.services.db.DataDefinitionManager;
+import hoot.services.db.DbUtils;
+import hoot.services.geo.BoundingBox;
+import hoot.services.models.osm.Map;
 import hoot.services.nativeInterfaces.NativeInterfaceException;
 import hoot.services.utils.ResourceErrorHandler;
 
@@ -118,21 +122,27 @@ public class ExportJobResource extends JobControllerBase {
 	 * 
 	 * {
    * "translation":"MGCP.js", //Translation script name.
-   * "inputtype":"db", //[db | file] db means input from hoot db will be used. file mean a file path will be specified.
-   * "input":"ToyTestA", //Input name. for inputtype = db then specify name from hoot db. For inputtype=file, specify full path to a file.
-   * "outputtype":"gdb", //[gdb | shp | wfs]. gdb will produce file gdb, shp will output shapefile. if outputtype = wfs then a wfs front end will be created
+   * "inputtype":"db", //[db | file] db means input from hoot db will be used. file mean a file 
+   * path will be specified.
+   * "input":"ToyTestA", //Input name. for inputtype = db then specify name from hoot db. For 
+   * inputtype=file, specify full path to a file.
+   * "outputtype":"gdb", //[gdb | shp | wfs | osm_api_db]. gdb will produce file gdb, shp will 
+   * output shapefile. if outputtype = wfs then a wfs front end will be created.  osm_api_db will
+   * derive and apply a changeset to an OSM API database
    * "removereview" : "false" //?
    * }
 	 * 
 	 * @param params
 	 * @return Job ID
+	 * @throws Exception 
 	 */
 	@POST
 	@Path("/execute")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response process(String params)
+	public Response process(String params) throws Exception
 	{
+		Connection conn = DbUtils.createConnection();
 		String jobId = UUID.randomUUID().toString();
 		jobId = "ex_" + jobId.replace("-", "");
 		try
@@ -147,10 +157,8 @@ public class ExportJobResource extends JobControllerBase {
 			arg.put("output", jobId);
 			commandArgs.add(arg);
 
-
-
 			String type = getParameterValue("outputtype", commandArgs);
-			if(type != null && type.equalsIgnoreCase("wfs"))
+			if (type != null && type.equalsIgnoreCase("wfs"))
 			{
 				arg = new JSONObject();
 				arg.put("outputname", jobId);
@@ -180,16 +188,19 @@ public class ExportJobResource extends JobControllerBase {
 				param.put("isprimitivetype", "false");
 				wfsArgs.add(param);
 
-
-				JSONObject createWfsResCommand = _createReflectionSycJobReq(wfsArgs, "hoot.services.controllers.wfs.WfsManager",
-						"createWfsResource");
+				JSONObject createWfsResCommand = 
+					_createReflectionSycJobReq(
+						wfsArgs, "hoot.services.controllers.wfs.WfsManager", "createWfsResource");
 
 				JSONArray jobArgs = new JSONArray();
 				jobArgs.add(osm2orgCommand);
 				jobArgs.add(createWfsResCommand);
 
-
-				postChainJobRquest( jobId,  jobArgs.toJSONString());
+				postChainJobRquest(jobId,  jobArgs.toJSONString());
+			}
+			else if (type != null && type.equalsIgnoreCase("osm_api_db"))
+			{
+				exportToOsmApiDb(jobId, commandArgs, conn);
 			}
 			else
 			{
@@ -218,7 +229,7 @@ public class ExportJobResource extends JobControllerBase {
 				}
 
 				String argStr = createPostBody(commandArgs);
-				postJobRquest( jobId,  argStr);
+				postJobRquest(jobId,  argStr);
 			}
 		}
 		catch (Exception ex)
@@ -228,9 +239,86 @@ public class ExportJobResource extends JobControllerBase {
 		    Status.INTERNAL_SERVER_ERROR,
 			log);
 		}
+		finally
+    {
+      DbUtils.closeConnection(conn);
+    }
 		JSONObject res = new JSONObject();
 		res.put("jobid", jobId);
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+	}
+	
+	private void exportToOsmApiDb(final String jobId, JSONArray commandArgs, Connection conn) 
+		throws Exception
+	{
+		if (!getParameterValue("inputtype", commandArgs).equalsIgnoreCase("db"))
+		{
+			throw new Exception(
+				"When exporting to an OSM API database, the input type must be a Hootenanny API " +
+				"database.");
+		}
+		
+		//ignoring outputname, since we're only going to have a single mapedit connection
+		//configured in the core for now
+		
+		JSONObject arg = new JSONObject();
+		arg.put("temppath", HootProperties.getProperty("tempOutputPath"));
+		commandArgs.add(arg);
+		
+	  //hardcoding this for now; if mapedit user auth is tied in, then we'd expect the UI to get 
+		//the value from there and pass it in instead
+		arg = new JSONObject();
+		arg.put("changesetuserid", "1"); 
+		commandArgs.add(arg);
+		
+		final String conflatedMapName = getParameterValue("input", commandArgs);
+		List<Long> mapIds = DbUtils.getMapIdsByName(conn, conflatedMapName);
+		//we don't expect the services to try to export a map that has multiple name entries, but
+		//check for it anyway
+		if (mapIds.size() > 1)
+		{
+			ResourceErrorHandler.handleError(
+				"Error exporting data.  Multiple maps with name: " + conflatedMapName,
+				Status.BAD_REQUEST,
+				log);
+		}
+		//this may be checked somewhere else down the line...not sure
+		else if (mapIds.size() == 0)
+		{
+			ResourceErrorHandler.handleError(
+				"Error exporting data.  No map exists with name: " + conflatedMapName,
+				Status.BAD_REQUEST,
+				log);
+		}
+		final Map conflatedMap = new Map(mapIds.get(0), conn);
+		
+		final BoundingBox bounds = conflatedMap.getBounds();
+		arg = new JSONObject();
+		arg.put(
+			"changesetaoi", 
+			String.valueOf(bounds.getMinLon()) + "," +
+			  String.valueOf(bounds.getMinLat()) + "," + 
+			  String.valueOf(bounds.getMaxLon()) + "," + 
+			  String.valueOf(bounds.getMaxLat()));
+		commandArgs.add(arg);
+		
+		final java.util.Map<String, String> tags = DbUtils.getMapsTableTags(conflatedMap.getId(), conn);
+		//Technically, you don't have to have this tag to export the data, but since it helps to detect
+		//conflicts, and we want to be as safe as possible when writing to this external database will
+		//just always enforce it.
+		if (!tags.containsKey("osm_api_db_export_time"))
+		{
+			ResourceErrorHandler.handleError(
+				"Error exporting data.  Map with ID: " + String.valueOf(conflatedMap.getId()) + 
+				  " and name: " + conflatedMapName + " has no osm_api_db_export_time tag.",
+				Status.CONFLICT,
+				log);
+		}
+		arg = new JSONObject();
+		arg.put("changesetsourcedatatimestamp", tags.get("osm_api_db_export_time"));
+		commandArgs.add(arg);
+		
+		postJobRquest(jobId, createPostBody(commandArgs));
 	}
 
 	/**
@@ -239,8 +327,10 @@ public class ExportJobResource extends JobControllerBase {
 	 * GET hoot-services/job/export/[job id from export job]?outputname=[user defined name]&removecache=[true | false]
 	 * 
 	 * @param id ?
-	 * @param outputname parameter overrides the output file name with the user defined name. If not specified then defaults to job id as name.
-	 * @param remove parameter controls if the output file from export job should be delete when Get request completes.
+	 * @param outputname parameter overrides the output file name with the user defined name. If not 
+	 * specified then defaults to job id as name.
+	 * @param remove parameter controls if the output file from export job should be delete when Get 
+	 * request completes.
 	 * @return Octet stream
 	 */
 	@GET

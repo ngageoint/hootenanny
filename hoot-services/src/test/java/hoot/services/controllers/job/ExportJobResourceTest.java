@@ -30,6 +30,7 @@ import static org.mockito.Mockito.*;
 
 import java.io.File;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import hoot.services.HootProperties;
@@ -43,25 +44,28 @@ import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
+import com.sun.jersey.api.client.ClientResponse.Status;
+import com.sun.jersey.api.client.UniformInterfaceException;
+
 public class ExportJobResourceTest {
 
 	@Test
 	@Category(UnitTest.class)
 	public void testProcess() throws Exception
 	{
-		String params = "{\"translation\":\"MGCP.js\",\"inputtype\":\"db\",\"input\":\"ToyTestA\",\"outputtype\":\"gdb\",\"removereview\" : \"false\"}";
+		String params = 
+			"{\"translation\":\"MGCP.js\",\"inputtype\":\"db\",\"input\":\"ToyTestA\",\"outputtype\":\"gdb\",\"removereview\" : \"false\"}";
 		
 		String  tempOutputPath = HootProperties.getProperty("tempOutputPath");
 		JSONObject arg = new JSONObject();
 		arg.put("outputfolder", tempOutputPath + "/" + "f9a8d471");
 		tempOutputPath = arg.toJSONString();
-		String jobArgs = ",\"exec\":\"osm2ogrscript\",\"params\":[{\"input\":\"ToyTestA\"},{\"translation\":\"MGCP.js\"},";
+		String jobArgs = 
+			",\"exec\":\"osm2ogrscript\",\"params\":[{\"input\":\"ToyTestA\"},{\"translation\":\"MGCP.js\"},";
 		jobArgs += "{\"outputtype\":\"gdb\"},{\"removereview\":\"false\"},{\"inputtype\":\"db\"},";
 		jobArgs += tempOutputPath  + ",";
 		jobArgs += "{\"output\":\"f9a8d471\"},{\"outputname\":\"f9a8d471\"}],";
 		jobArgs += "\"exectype\":\"make\"}";
-	
-		
 
 		ExportJobResource spy = Mockito.spy(new ExportJobResource());
 		Mockito.doNothing().when((JobControllerBase)spy).postJobRquest(anyString(), anyString());
@@ -75,7 +79,6 @@ public class ExportJobResourceTest {
 		verify(spy).postJobRquest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
 	}
 	
-	
 	@Test
 	@Category(UnitTest.class)
 	public void testProcessForWFS() throws Exception
@@ -88,22 +91,21 @@ public class ExportJobResourceTest {
 		String pgUrl = "host='"+ hostParts[0] + "' port='" + hostParts[1] + "' user='" + userid 
 								+ "' password='" + pwd + "' dbname='" + wfsStoreDb + "'";
 								
-		String params = "{\"translation\":\"MGCP.js\",\"inputtype\":\"db\",\"input\":\"ToyTestA\",\"outputtype\":\"wfs\",\"removereview\" : \"false\"}";
+		String params = 
+			"{\"translation\":\"MGCP.js\",\"inputtype\":\"db\",\"input\":\"ToyTestA\",\"outputtype\":\"wfs\",\"removereview\" : \"false\"}";
 		
 		String  tempOutputPath = HootProperties.getProperty("tempOutputPath");
 		JSONObject arg = new JSONObject();
 		arg.put("outputfolder", tempOutputPath + "/" + "f9a8d471");
 		tempOutputPath = arg.toJSONString();
 		String jobArgs = ",\"exec\":\"osm2ogrscript\",\"params\":[{\"input\":\"ToyTestA\"},{\"translation\":\"MGCP.js\"},{\"outputtype\":\"wfs\"}," +
-				"{\"removereview\":\"false\"},{\"inputtype\":\"db\"},";
+			"{\"removereview\":\"false\"},{\"inputtype\":\"db\"},";
 		jobArgs += tempOutputPath  + ",";
 		jobArgs += "{\"output\":\"f9a8d471\"},{\"outputname\":\"f9a8d471\"}," +
-				"{\"PG_URL\":\"" + pgUrl + "\"}],\"exectype\":\"make\"},{\"class\":\"hoot.services.controllers.wfs.WfsManager\"," +
-				"\"method\":\"createWfsResource\",\"params\":[{\"isprimitivetype\":\"false\",\"value\":\"f9a8d471\"," +
-				"\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection_sync\"}]";
+			"{\"PG_URL\":\"" + pgUrl + "\"}],\"exectype\":\"make\"},{\"class\":\"hoot.services.controllers.wfs.WfsManager\"," +
+			"\"method\":\"createWfsResource\",\"params\":[{\"isprimitivetype\":\"false\",\"value\":\"f9a8d471\"," +
+			"\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection_sync\"}]";
 	
-		
-
 		ExportJobResource spy = Mockito.spy(new ExportJobResource());
 		Mockito.doNothing().when((JobControllerBase)spy).postChainJobRquest(anyString(), anyString());
 		Response resp = spy.process(params);		
@@ -115,7 +117,6 @@ public class ExportJobResourceTest {
 		jobArgs = jobArgs.replaceAll("f9a8d471", jobId);
 		verify(spy).postChainJobRquest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
 	}
-	
 	
 	@Test
 	@Category(UnitTest.class)
@@ -138,12 +139,93 @@ public class ExportJobResourceTest {
 		File f = new File(transExtPath);
 		if(f.exists() && f.isDirectory())
 		{
-			expected = "[{\"description\":\"LTDS 4.0\",\"name\":\"TDS\"},{\"description\":\"MGCP\",\"name\":\"MGCP\"},{\"description\":\"UTP\",\"name\":\"UTP\"}]";
+			expected = 
+				"[{\"description\":\"LTDS 4.0\",\"name\":\"TDS\"},{\"description\":\"MGCP\",\"name\":\"MGCP\"},{\"description\":\"UTP\",\"name\":\"UTP\"}]";
 		}
 		else
 		{
-			expected = "[{\"description\":\"LTDS 4.0\",\"name\":\"TDS\"},{\"description\":\"MGCP\",\"name\":\"MGCP\"}]";
+			expected = 
+				"[{\"description\":\"LTDS 4.0\",\"name\":\"TDS\"},{\"description\":\"MGCP\",\"name\":\"MGCP\"}]";
 		}
 		Assert.assertEquals(expected, result);	
+	}
+	
+	@Test
+	@Category(UnitTest.class)
+	public void testExportToOsmApiDb() throws Exception
+	{
+		
+	}
+	
+	@Test(expected=WebApplicationException.class)
+	@Category(UnitTest.class)
+	public void testExportToOsmApiDbNoTimestampTag() throws Exception
+	{
+		try
+		{
+			
+		}
+		catch (WebApplicationException e)
+    {
+			Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+			Assert.assertTrue(
+				e.getResponse().getEntity().toString().contains(
+				  "OSM_API_DB not allowed as secondary input type"));
+      throw e;
+    }
+	}
+	
+	@Test(expected=WebApplicationException.class)
+	@Category(UnitTest.class)
+	public void testExportToOsmApiDbBadInputType() throws Exception
+	{
+		try
+		{
+			
+		}
+		catch (WebApplicationException e)
+    {
+			Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+			Assert.assertTrue(
+				e.getResponse().getEntity().toString().contains(
+				  "OSM_API_DB not allowed as secondary input type"));
+      throw e;
+    }
+	}
+	
+	@Test(expected=WebApplicationException.class)
+	@Category(UnitTest.class)
+	public void testExportToOsmApiDbMultipleMapsWithSameName() throws Exception
+	{
+		try
+		{
+			
+		}
+		catch (WebApplicationException e)
+    {
+			Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+			Assert.assertTrue(
+				e.getResponse().getEntity().toString().contains(
+				  "OSM_API_DB not allowed as secondary input type"));
+      throw e;
+    }
+	}
+	
+	@Test(expected=WebApplicationException.class)
+	@Category(UnitTest.class)
+	public void testExportToOsmApiDbMissingMap() throws Exception
+	{
+		try
+		{
+			
+		}
+		catch (WebApplicationException e)
+    {
+			Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+			Assert.assertTrue(
+				e.getResponse().getEntity().toString().contains(
+				  "OSM_API_DB not allowed as secondary input type"));
+      throw e;
+    }
 	}
 }

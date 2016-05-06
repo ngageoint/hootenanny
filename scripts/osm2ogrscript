@@ -52,6 +52,11 @@ else ifeq ("$(outputtype)","osm")
 	mkdir -p "$(outputfolder)"
 	hoot --convert -D hootapi.db.writer.create.user=true -D hootapi.db.reader.email='test@test.com' "$(INPUT_PATH)" "$(OP_OUTPUT)"
 	cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
+else ifeq ("$(outputtype)","osm_api_db")
+	source conf/DatabaseConfig.sh
+	OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$(outputname)"
+	hoot derive-changeset $HOOT_OPTS -D changeset.user.id=$(changesetuserid) -D convert.bounding.box=$(changesetaoi) -D osm.changeset.sql.file.writer.generate.new.ids=false "$OSM_API_DB_URL" "$(INPUT_PATH)" $(temppath)/changeset.osc.sql "$OSM_API_DB_URL"
+	hoot apply-changeset $HOOT_OPTS $(temppath)/changeset.osc.sql "$OSM_API_DB_URL" $(changesetaoi) $(changesetsourcedatatimestamp)
 else
 	mkdir -p "$(outputfolder)"
 ifeq "$(append)" "true"
