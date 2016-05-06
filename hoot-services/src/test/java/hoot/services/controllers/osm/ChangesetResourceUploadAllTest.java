@@ -39,6 +39,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
 import org.junit.Test;
@@ -94,6 +95,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
    * superset of some of the tests in ChangesetResourceUploadCreateTest,
    * ChangesetResourceUploadDeleteTest, and ChangesetResourceUploadModifyTest.
    */
+  @Ignore
   @Test
   @Category(UnitTest.class)
   public void testUploadAll() throws Exception
