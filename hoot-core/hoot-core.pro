@@ -419,7 +419,6 @@ SOURCES += \
     src/main/cpp/hoot/core/perty/PermuteGridCalculator.cpp \
     src/main/cpp/hoot/core/perty/DirectSequentialSimulation.cpp \
     src/main/cpp/hoot/core/cmd/AccuracyDistributionCmd.cpp \
-    src/main/cpp/hoot/core/cmd/TileConflateCmd.cpp \
     src/main/cpp/hoot/core/PositiveIdGenerator.cpp \
     src/main/cpp/hoot/core/util/ElementConverter.cpp \
     src/main/cpp/hoot/core/io/PartialOsmMapWriter.cpp \

@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 
-mkdir -p $HOOT_HOME/test-output/cmd/slow/ScoreMatchesCmdTest
+mkdir -p $HOOT_HOME/test-output/cmd/glacial/ScoreMatchesCmdTest
 
 map1=$HOOT_HOME/test-files/DcGisRoads.osm
 map2=$HOOT_HOME/test-files/DcTigerRoads.osm
-outputfile=$HOOT_HOME/test-output/cmd/slow/ScoreMatchesCmdTest/conflated.osm
-comparefile=$HOOT_HOME/hoot-core-test/src/test/resources/cmd/slow/ScoreMatchesCmdTest/conflated.osm
+outputfile=$HOOT_HOME/test-output/cmd/glacial/ScoreMatchesCmdTest/conflated.osm
+comparefile=$HOOT_HOME/hoot-core-test/src/test/resources/cmd/glacial/ScoreMatchesCmdTest/conflated.osm
 
 # Run the command. Note that we sanitize output to remove timestamps
 hoot score-matches --confusion --optimize $map1 $map2 $outputfile |\
