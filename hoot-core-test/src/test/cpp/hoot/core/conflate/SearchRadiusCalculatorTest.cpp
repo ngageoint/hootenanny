@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -123,7 +123,7 @@ public:
     //if the search radius calculator can't find enough tie points, it will use the specified
     //default search radius
     CPPUNIT_ASSERT_EQUAL(
-      ConfigOptions().getSetCircularErrorVisitorValue(), searchRadiusCalculator._result);
+      ConfigOptions().getCircularErrorDefaultValue(), searchRadiusCalculator._result);
   }
 
   void runPreviouslyConflatedDataTest()

@@ -477,7 +477,10 @@ textFuncList = {
     'ZI020_GE4':'text_GE4',
     'ZI020_GE42':'text_GE4',
     'ZI020_GE43':'text_GE4',
-    'ZI020_GE44':'text_GE4'
+    'ZI020_GE44':'text_GE4',
+    'ZSAX_RS0':'ZSAX_RS0',
+    'text_SAX_RS6':'text_SAX_RS6',
+    'text_SAX_RX8':'text_SAX_RX8'
     }
 
 dataType_list = {
@@ -1524,6 +1527,46 @@ text_VSC = {
     'TIN Data':'tinData'
 }
 
+# Restriction Information : Security Attributes Group <resource classification>
+text_ZSAX_RS0 = {
+    'U':'U',
+    'R':'R',
+    'C':'C',
+    'S':'S',
+    'TS':'TS'
+}
+
+# Security Attributes Group <resource declassification exception>
+text_SAX_RS6 = {
+    'AEA':'AEA',
+    '25X1':'25X1',
+    '25X1-human':'25X1-human',
+    '25X1-EO-12951':'25X1-EO-12951',
+    '25X2':'25X2',
+    '25X3':'25X3',
+    '25X4':'25X4',
+    '25X5':'25X5',
+    '25X6':'25X6',
+    '25X7':'25X7',
+    '25X8':'25X8',
+    '25X9':'25X9',
+    '50X1-HUM':'50X1-HUM',
+    '50X2-WMD':'50X2-WMD'
+}
+
+# Security Attributes Group <resource type of exempted source>
+text_SAX_RX8 = {
+    'X1':'X1',
+    'X2':'X2',
+    'X3':'X3',
+    'X4':'X4',
+    'X5':'X5',
+    'X6':'X6',
+    'X7':'X7',
+    'X8':'X8'
+}
+
+
 
 # The main loop to process a file
 def processFile(fileName):
@@ -1611,6 +1654,34 @@ def processFile(fileName):
                 if aType.find('numeration') > -1:
                     tschema[fName]['columns'][aName]['enum'] = []
                     continue
+
+
+            # Override certain structured text values
+            if dataType == 'ResClassificationStrucText':
+                tschema[fName]['columns'][aName]['func'] = 'text_ZSAX_RS0'
+                tschema[fName]['columns'][aName]['type'] = 'textEnumeration'
+                #tschema[fName]['columns'][aName]['defValue'] = 'U'
+                tschema[fName]['columns'][aName]['enum'] = []
+                for i in text_ZSAX_RS0:
+                    tschema[fName]['columns'][aName]['enum'].append({'name':i,'value':text_ZSAX_RS0[i]})
+                continue
+
+            if dataType == 'ResDeclassExceptionStrucText':
+                tschema[fName]['columns'][aName]['func'] = 'text_SAX_RS6'
+                tschema[fName]['columns'][aName]['type'] = 'textEnumeration'
+                tschema[fName]['columns'][aName]['enum'] = []
+                for i in text_SAX_RS6:
+                    tschema[fName]['columns'][aName]['enum'].append({'name':i,'value':text_SAX_RS6[i]})
+                continue
+
+            if dataType == 'ResTypeExemptedSourceStrucText':
+                tschema[fName]['columns'][aName]['func'] = 'text_SAX_RX8'
+                tschema[fName]['columns'][aName]['type'] = 'textEnumeration'
+                tschema[fName]['columns'][aName]['enum'] = []
+                for i in text_SAX_RX8:
+                    tschema[fName]['columns'][aName]['enum'].append({'name':i,'value':text_SAX_RX8[i]})
+                continue
+
 
             #if tschema[fName]['columns'][aName]['type'] == 'enumeration'  or tschema[fName]['columns'][aName]['type'] == 'textEnumeration':
             if tschema[fName]['columns'][aName]['type'].find('numeration') > -1:
@@ -1763,6 +1834,9 @@ elif args.fullschema:
     printVariableBody('text_SRT',text_SRT)
     printVariableBody('text_VSC',text_VSC)
     printVariableBody('text_GE4',text_GE4)
+    printVariableBody('text_ZSAX_RS0',text_ZSAX_RS0)
+    printVariableBody('text_SAX_RS6',text_SAX_RS6)
+    printVariableBody('text_SAX_RX8',text_SAX_RX8)
 
     printJavascript(schema)
     printJSFooter()

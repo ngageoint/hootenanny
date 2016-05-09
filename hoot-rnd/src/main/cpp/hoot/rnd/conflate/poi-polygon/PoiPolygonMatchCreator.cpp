@@ -176,7 +176,7 @@ vector<MatchCreator::Description> PoiPolygonMatchCreator::getAllCreators() const
 {
   vector<Description> result;
 
-  result.push_back(Description(className(), "POI to Polygon Match Creator", true));
+  result.push_back(Description(className(), "POI to Polygon Match Creator", MatchCreator::POI, true));
 
   return result;
 }

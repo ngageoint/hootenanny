@@ -27,6 +27,10 @@
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
 
+// hoot
+#include <hoot/core/Units.h>
+
+// standard
 #include <vector>
 
 using namespace std;
@@ -40,9 +44,11 @@ public:
 
   Histogram(int bins);
 
-  void addAngle(double theta, double length);
+  const vector<double>& getAllBins() const { return _bins; }
 
-  int getBin(double theta);
+  void addAngle(Radians theta, double length);
+
+  size_t getBin(Radians theta);
 
   /**
    * Normalize all the bins so the sum of the bins is 1.0.
@@ -54,9 +60,16 @@ public:
    */
   double diff(Histogram& other);
 
+  /**
+   * Smooth the bins with a normal curve.
+   */
+  void smooth(Radians sigma);
+
 private:
 
   vector<double> _bins;
+
+  Radians _getBinAngle(size_t i);
 
 };
 

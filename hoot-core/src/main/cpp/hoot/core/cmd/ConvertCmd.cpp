@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -78,10 +78,9 @@ public:
     OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
     OsmMapWriterFactory writerFactory = OsmMapWriterFactory::getInstance();
 
-    // Is there a streaming reader and writer?
     if (readerFactory.hasElementInputStream(args[0]) &&
-        writerFactory.hasElementOutputStream(args[1]) &&
-        ConfigOptions().getConvertOps().size() == 0)
+             writerFactory.hasElementOutputStream(args[1]) &&
+             ConfigOptions().getConvertOps().size() == 0)
     {
       streamElements(args[0], args[1]);
     }
