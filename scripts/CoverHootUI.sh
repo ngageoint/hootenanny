@@ -13,6 +13,7 @@ sudo -u tomcat6 HOOT_HOME=$HOOT_HOME cp -R $HOOT_HOME/hoot-ui/istanbul/id /var/l
 
 # start istanbul-middleware
 cd $HOOT_HOME/test-files/ui/coverage_app
+npm install -q
 node app.js &
 PID=$!
 
