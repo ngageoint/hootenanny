@@ -58,9 +58,9 @@ fi
 # Just the basic nfs and software dependencies
 if [ $REBUILD_VAGRANT == 'true' ]; then
     vagrant destroy -f
-    time -p vagrant up --provision-with nfs,hoot --provider vsphere
+    time -p vagrant up --provision-with nfs,hoot,hadoop --provider vsphere
 else
-    time -p vagrant up --provision-with nfs --provider vsphere
+    time -p vagrant up --provision-with nfs,hadoop --provider vsphere
 fi
 
 date +%F > ../BuildDate.txt
