@@ -9,7 +9,7 @@ outputfile=$HOOT_HOME/test-output/cmd/slow/PaintNodesCmdTest/out.png
 hoot paint-nodes $inputfile $outputfile 1024 
 
 # Compare to known-good
-goodfile=$HOOT_HOME/test-files/cmd/slow/PaintNodesCmdTest/out.png
+goodfile=$HOOT_HOME/hoot-core-test/src/test/resources/cmd/slow/PaintNodesCmdTest/out.png
 cmp $goodfile $outputfile
 if [ "$?" = "1" ]; then
   echo "PNG files are not equal! Compare $goodfile $testfile visually"

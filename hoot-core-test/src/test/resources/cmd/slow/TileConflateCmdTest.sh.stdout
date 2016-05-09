@@ -1,0 +1,7 @@
+INFO  ...ore/conflate/TileConflator.cpp(  83) Way cache is: /fouo/hoot-release-1/hoot/test-output/cmd/slow/CropMapCmdTest/conflated.osm-cache/ways
+INFO  ...ore/conflate/TileConflator.cpp( 179) Determining tile bounds.
+INFO  ...flate/TileBoundsCalculator.cpp( 306) max value: 18
+INFO  ...flate/TileBoundsCalculator.cpp( 306) max value: 18
+INFO  ...flate/TileBoundsCalculator.cpp( 306) max value: 18
+INFO  ...flate/TileBoundsCalculator.cpp(  81) w: 2 h: 2
+INFO  ...flate/TileBoundsCalculator.cpp(  82) Total node count: 35

@@ -16,3 +16,5 @@ hoot score-matches --confusion --optimize $map1 $map2 $outputfile |\
 
 # Checking output
 hoot is-match $comparefile $outputfile || diff $comparefile $outputfile
+
+
