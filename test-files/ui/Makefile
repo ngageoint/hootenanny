@@ -48,6 +48,22 @@ endif
 clean:
 	rm -rf tmp
 
+coverage:
+	echo Running user interface coverage report...
+ifneq (,$(findstring s,$(MAKEFLAGS)))
+	$(HOOT_HOME)/scripts/CoverHootUI.sh &> coverage.log
+else
+	$(HOOT_HOME)/scripts/CoverHootUI.sh
+endif
+	echo ""
+
+clean-coverage:
+	rm -f coverage.log
+	rm -f $(HOOT_HOME)/hoot-ui/test/istanbul_index.html
+	rm -rf $(HOOT_HOME)/hoot-ui/istanbul
+	rm -rf $(HOOT_HOME)/hoot-ui/mocha-coverage
+	rm -rf $(HOOT_HOME)/hoot-ui/cucumber-coverage
+	rm -rf $(HOOT_HOME)/hoot-ui/combined-coverage
 load-data:
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcGisRoads.osm $(DB_URL)/DcGisRoadsCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcTigerRoads.osm $(DB_URL)/DcTigerRoadsCucumber
