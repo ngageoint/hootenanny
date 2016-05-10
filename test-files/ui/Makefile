@@ -8,37 +8,50 @@ ifneq (,$(findstring s,$(MAKEFLAGS)))
   ECHO=true
 endif
 
+# Check if we are using a different Tomcat6 port
+ifeq ($(TOMCAT_PORT),)
+  TOMCAT_PORT=8080
+endif
+
 CWD=$(shell pwd)
 
 $(shell $(HOOT_HOME)/scripts/ReplaceEnvironmentVariables.sh DbSettings.inc.in DbSettings.inc)
 -include DbSettings.inc
 
 HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
-HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
-HOOT_OPTS+= -D "hootapi.db.writer.email=test@test.com" -D "hootapi.db.reader.email=test@test.com"
+HOOT_OPTS+= -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true
+HOOT_OPTS+= -D hootapi.db.writer.email=test@test.com -D hootapi.db.reader.email=test@test.com
 
-test:
-	echo Running user interface tests...
+test: load-data
 ifneq (,$(findstring s,$(MAKEFLAGS)))
-	$(HOOT_HOME)/scripts/DeployTomcat.sh --quiet 2> >( $(FILTER) >&2 )
+	$(HOOT_HOME)/scripts/VerifyTomcatStarted.sh $(TOMCAT_PORT) --quiet 2> >( $(FILTER) >&2 )
 else
-	$(HOOT_HOME)/scripts/DeployTomcat.sh
+	$(HOOT_HOME)/scripts/VerifyTomcatStarted.sh $(TOMCAT_PORT)
 endif
+	echo Running user interface tests...
 	rm -f tmp/TestRun.log*
+	mkdir -p tmp
+ifneq (,$(findstring s,$(MAKEFLAGS)))
+	TOMCAT_PORT=$(TOMCAT_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber &> tmp/TestRun.log.tmp && mv tmp/TestRun.log.tmp tmp/TestRun.log
+else
+	TOMCAT_PORT=$(TOMCAT_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber
+endif
+	echo ""
+
+	#Remove test datasets from db
+	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -t -A -c "SELECT display_name FROM maps WHERE display_name like '%Cucumber%'" \
+	| while read mapname; do \
+ 	   echo hoot delete-map $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
+	done; \
+	true
+
+clean:
+	rm -rf tmp
+
+load-data:
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcGisRoads.osm $(DB_URL)/DcGisRoadsCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcTigerRoads.osm $(DB_URL)/DcTigerRoadsCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesA.osm $(DB_URL)/AllDataTypesACucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesB.osm $(DB_URL)/AllDataTypesBCucumber
-	mkdir -p tmp
-ifneq (,$(findstring s,$(MAKEFLAGS)))
-	./SetupDisplay.sh cucumber &> tmp/TestRun.log.tmp && mv tmp/TestRun.log.tmp tmp/TestRun.log
-else
-	./SetupDisplay.sh cucumber
-endif
-	# $(HOOT_HOME)/scripts/StopTomcat.sh
-	echo ""
 
-clean:
-	rm -rf tmp
-	
 

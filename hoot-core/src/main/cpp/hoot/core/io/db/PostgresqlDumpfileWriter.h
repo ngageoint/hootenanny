@@ -110,12 +110,11 @@ public:
 
 protected:
 
-  std::map<QString,
-    std::pair<boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> > > _outputSections;
+  std::map<QString, QStringList> _outputSections;
 
   std::list<QString> _sectionNames;
 
-  QString _outputFilename;
+  QFile _outputFilename;
 
   struct _ElementWriteStats
   {
@@ -217,9 +216,9 @@ protected:
   void _writeTagsToTables(
     const Tags& tags,
     const ElementIdDatatype nodeDbId,
-    boost::shared_ptr<QTextStream>& currentTable,
+    const QString& currentTableName,
     const QString& currentTableFormatString,
-    boost::shared_ptr<QTextStream>& historicalTable,
+    const QString& historicalTableName,
     const QString& historicalTableFormatString );
 
   void _createWayTables();
@@ -240,8 +239,6 @@ protected:
     const unsigned int memberSequenceIndex );
 
   void _createTable( const QString& tableName, const QString& tableHeader );
-
-  void _createTable( const QString& tableName, const QString& tableHeader, const bool addByteOrderMarker );
 
   void _incrementChangesInChangeset();
 

@@ -542,6 +542,12 @@ MatchCreator::Description ScriptMatchCreator::_getScriptDescription(QString path
     Handle<v8::Value> value = plugin->Get(experimentalStr);
     result.experimental = toCpp<bool>(value);
   }
+  Handle<String> featureTypeStr = String::New("baseFeatureType");
+  if (plugin->Has(featureTypeStr))
+  {
+    Handle<v8::Value> value = plugin->Get(featureTypeStr);
+    result.baseFeatureType = MatchCreator::StringToBaseFeatureType(toCpp<QString>(value));
+  }
 
   QFileInfo fi(path);
   result.className = (QString::fromStdString(className()) + "," + fi.fileName()).toStdString();

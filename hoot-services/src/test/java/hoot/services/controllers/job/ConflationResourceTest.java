@@ -28,19 +28,30 @@ package hoot.services.controllers.job;
 
 import static org.mockito.Mockito.*;
 
+import java.io.File;
+
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import hoot.services.UnitTest;
 
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class ConflationResourceTest {
-
+public class ConflationResourceTest 
+{
+	@SuppressWarnings("unused")
+  private static final Logger log = LoggerFactory.getLogger(ConflationResourceTest.class);
+	
 	@Test
 	@Category(UnitTest.class)
 	public void testProcess() throws Exception
@@ -67,5 +78,142 @@ public class ConflationResourceTest {
 		JSONObject o = (JSONObject)parser.parse(result);
 		String jobId = o.get("jobid").toString();
 		verify(spy).postChainJobRquest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
+	}
+	
+	@Test
+	@Category(UnitTest.class)
+	public void testProcessOsmApiDbInput() throws Exception
+	{
+		final String inputParams = 
+		  FileUtils.readFileToString(
+        new File(
+          Thread.currentThread().getContextClassLoader().getResource(
+            "hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
+          .getPath()));
+				
+		ConflationResource spy = Mockito.spy(new ConflationResource());
+		Mockito.doNothing().when((JobControllerBase)spy).postChainJobRquest(anyString(), anyString());
+		final String jobId = 
+			((JSONObject)(new JSONParser()).parse(
+				spy.process(inputParams).getEntity().toString())).get("jobid").toString();
+		
+		//just checking that the request made it the command runner w/o error and that the map tag
+		//got added; testProcess checks the generated input at a more detailed level
+		verify(spy)
+      .postChainJobRquest(
+  	    Matchers.matches(jobId), 
+  	    //had no luck getting the mockito matcher to take the timestamp regex...validated the 
+  	    //regex externally, and it looked good
+  	    /*Matchers.matches("\"osm_api_db_export_time\":\"" + DbUtils.TIME_STAMP_REGEX + "\"")*/
+  	    Matchers.contains("osm_api_db_export_time"));
+	}
+	
+	//An OSM API DB input must always be a reference layer.  Default ref layer = 1.
+	
+	@Test(expected=WebApplicationException.class)
+	@Category(UnitTest.class)
+	public void testOsmApiDbInputAsSecondary() throws Exception
+	{
+		try
+		{
+			final String inputParams = 
+			  FileUtils.readFileToString(
+	        new File(
+	          Thread.currentThread().getContextClassLoader().getResource(
+	            "hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondaryInput.json")
+	          .getPath()));
+			
+			ConflationResource spy = Mockito.spy(new ConflationResource());
+			Mockito.doNothing().when((JobControllerBase)spy).postChainJobRquest(anyString(), anyString());
+			spy.process(inputParams);
+		}
+		catch (WebApplicationException e)
+    {
+			Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+			Assert.assertTrue(
+				e.getResponse().getEntity().toString().contains(
+				  "OSM_API_DB not allowed as secondary input type"));
+      throw e;
+    }
+	}
+
+	@Test(expected=WebApplicationException.class)
+	@Category(UnitTest.class)
+	public void testOsmApiDbInputAsSecondary2() throws Exception
+	{
+		try
+		{
+			final String inputParams = 
+			  FileUtils.readFileToString(
+	        new File(
+	          Thread.currentThread().getContextClassLoader().getResource(
+	            "hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondary2Input.json")
+	          .getPath()));
+			
+			ConflationResource spy = Mockito.spy(new ConflationResource());
+			Mockito.doNothing().when((JobControllerBase)spy).postChainJobRquest(anyString(), anyString());
+			spy.process(inputParams);
+		}
+		catch (WebApplicationException e)
+    {
+			Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+			Assert.assertTrue(e.getResponse().getEntity().toString().contains(
+				"OSM_API_DB not allowed as secondary input type"));
+      throw e;
+    }
+	}
+	
+	//An OSM API DB input layer must always be accompanied with an aoi.
+
+	@Test(expected=WebApplicationException.class)
+	@Category(UnitTest.class)
+	public void testOsmApiDbInputMissingAoi() throws Exception
+	{
+		try
+		{
+			final String inputParams = 
+			  FileUtils.readFileToString(
+	        new File(
+	          Thread.currentThread().getContextClassLoader().getResource(
+	            "hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputMissingAoiInput.json")
+	          .getPath()));
+			
+			ConflationResource spy = Mockito.spy(new ConflationResource());
+			Mockito.doNothing().when((JobControllerBase)spy).postChainJobRquest(anyString(), anyString());
+			spy.process(inputParams).getEntity().toString();
+		}
+		catch (WebApplicationException e)
+    {
+			Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+			Assert.assertTrue(e.getResponse().getEntity().toString().contains(
+				"OSM_API_DB input must be used with the convert.bounding.box setting"));
+      throw e;
+    }
+	}
+	
+	@Test(expected=WebApplicationException.class)
+	@Category(UnitTest.class)
+	public void testOsmApiDbInputMissingAo2i() throws Exception
+	{
+		try
+		{
+			final String inputParams = 
+			  FileUtils.readFileToString(
+	        new File(
+	          Thread.currentThread().getContextClassLoader().getResource(
+	            "hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputMissingAoi2Input.json")
+	          .getPath()));
+			
+			ConflationResource spy = Mockito.spy(new ConflationResource());
+			Mockito.doNothing().when((JobControllerBase)spy).postChainJobRquest(anyString(), anyString());
+			spy.process(inputParams).getEntity().toString();
+		}
+		catch (WebApplicationException e)
+    {
+			Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+			Assert.assertTrue(e.getResponse().getEntity().toString().contains(
+				"OSM_API_DB input must be used with the convert.bounding.box setting"));
+      throw e;
+    }
 	}
 }

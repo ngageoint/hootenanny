@@ -45,6 +45,7 @@ WaySplitterOp::WaySplitterOp()
 
 void WaySplitterOp::apply(shared_ptr<OsmMap>& map)
 {
+  LOG_INFO("splitting with max length: " << _maxLength);
   MapProjector::projectToPlanar(map);
 
   // use a copy of the map since we'll be making changes
@@ -53,7 +54,6 @@ void WaySplitterOp::apply(shared_ptr<OsmMap>& map)
   {
     WaySplitter::split(map, map->getWay(it->first), _maxLength);
   }
-
 }
 
 void WaySplitterOp::readObject(QDataStream& is)
@@ -64,7 +64,7 @@ void WaySplitterOp::readObject(QDataStream& is)
 void WaySplitterOp::setConfiguration(const Settings& conf)
 {
   _maxLength = ConfigOptions(conf).getWaySplitterMaxLength();
-  LOG_INFO("max length: " << _maxLength);
+  LOG_INFO("default max length: " << _maxLength);
 }
 
 void WaySplitterOp::writeObject(QDataStream& os) const
