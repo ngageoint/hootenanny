@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<bean id="processStreamInterface" singleton="true"
+		  class="hoot.services.nativeInterfaces.INativeInterfaceStubImpl" init-method="init" destroy-method="destroy">
+	</bean>
+
+	<bean id="jobExecutionManagerNative" singleton="true" 
+		class="hoot.services.nativeInterfaces.JobExecutionManager" init-method="init" destroy-method="destroy">
+		<property name="nativeInterface" ref="processStreamInterface"/>
+	</bean>
+
+</beans>
