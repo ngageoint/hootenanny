@@ -54,6 +54,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -196,11 +197,12 @@ public class ExportJobResource extends JobControllerBase {
 				jobArgs.add(osm2orgCommand);
 				jobArgs.add(createWfsResCommand);
 
-				postChainJobRquest(jobId,  jobArgs.toJSONString());
+				postChainJobRquest(jobId, jobArgs.toJSONString());
 			}
 			else if (type != null && type.equalsIgnoreCase("osm_api_db"))
 			{
-				exportToOsmApiDb(jobId, commandArgs, conn);
+				commandArgs = addExportToOsmApiDbCommandArgs(commandArgs, conn);
+				postJobRquest(jobId, createPostBody(commandArgs));
 			}
 			else
 			{
@@ -248,14 +250,26 @@ public class ExportJobResource extends JobControllerBase {
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
 	}
 	
-	private void exportToOsmApiDb(final String jobId, JSONArray commandArgs, Connection conn) 
-		throws Exception
+	protected JSONArray addExportToOsmApiDbCommandArgs(final JSONArray inputCommandArgs, 
+		Connection conn) throws Exception
 	{
+		JSONArray commandArgs = new JSONArray();
+		commandArgs.addAll(inputCommandArgs);
+		
 		if (!getParameterValue("inputtype", commandArgs).equalsIgnoreCase("db"))
 		{
-			throw new Exception(
-				"When exporting to an OSM API database, the input type must be a Hootenanny API " +
-				"database.");
+			ResourceErrorHandler.handleError(
+				"When exporting to an OSM API database, the input type must be a Hootenanny API database.",
+				Status.BAD_REQUEST,
+				log);
+		}
+		
+		if (StringUtils.trimToNull(getParameterValue("translation", commandArgs)) != null)
+		{
+			ResourceErrorHandler.handleError(
+				"Custom translation not allowed when exporting to OSM API database.",
+				Status.BAD_REQUEST,
+				log);
 		}
 		
 		//ignoring outputname, since we're only going to have a single mapedit connection
@@ -271,8 +285,19 @@ public class ExportJobResource extends JobControllerBase {
 		arg.put("changesetuserid", "1"); 
 		commandArgs.add(arg);
 		
+		final Map conflatedMap = getConflatedMap(commandArgs, conn);
+		
+		checkMapForExportTag(conflatedMap, commandArgs, conn);
+		
+		setAoi(conflatedMap, commandArgs);
+		
+		return commandArgs;
+	}
+	
+	private Map getConflatedMap(final JSONArray commandArgs, Connection conn) throws Exception
+	{
 		final String conflatedMapName = getParameterValue("input", commandArgs);
-		List<Long> mapIds = DbUtils.getMapIdsByName(conn, conflatedMapName);
+		List<Long> mapIds = getMapIdsByName(conflatedMapName, conn);
 		//we don't expect the services to try to export a map that has multiple name entries, but
 		//check for it anyway
 		if (mapIds.size() > 1)
@@ -290,19 +315,35 @@ public class ExportJobResource extends JobControllerBase {
 				Status.BAD_REQUEST,
 				log);
 		}
-		final Map conflatedMap = new Map(mapIds.get(0), conn);
-		
-		final BoundingBox bounds = conflatedMap.getBounds();
-		arg = new JSONObject();
-		arg.put(
-			"changesetaoi", 
-			String.valueOf(bounds.getMinLon()) + "," +
-			  String.valueOf(bounds.getMinLat()) + "," + 
-			  String.valueOf(bounds.getMaxLon()) + "," + 
-			  String.valueOf(bounds.getMaxLat()));
-		commandArgs.add(arg);
-		
-		final java.util.Map<String, String> tags = DbUtils.getMapsTableTags(conflatedMap.getId(), conn);
+		Map conflatedMap = new Map(mapIds.get(0), conn);
+		conflatedMap.setDisplayName(conflatedMapName);
+		return conflatedMap;
+	}
+	
+  //adding this to satisfy the mock...don't love adding it
+	protected List<Long> getMapIdsByName(final String conflatedMapName, Connection conn) 
+		throws Exception
+	{
+		return DbUtils.getMapIdsByName(conn, conflatedMapName);
+	}
+	
+	//adding this to satisfy the mock...don't love adding it
+	protected java.util.Map<String, String> getMapTags(final long mapId, final Connection conn) 
+		throws Exception
+	{
+		return DbUtils.getMapsTableTags(mapId, conn);
+	}
+	
+  //adding this to satisfy the mock...don't love adding it
+	protected BoundingBox getMapBounds(final Map conflatedMap) throws Exception
+	{
+		return conflatedMap.getBounds();
+	}
+	
+	private void checkMapForExportTag(final Map conflatedMap, JSONArray commandArgs, 
+		Connection conn) throws Exception
+	{
+		final java.util.Map<String, String> tags = getMapTags(conflatedMap.getId(), conn);
 		//Technically, you don't have to have this tag to export the data, but since it helps to detect
 		//conflicts, and we want to be as safe as possible when writing to this external database will
 		//just always enforce it.
@@ -310,15 +351,26 @@ public class ExportJobResource extends JobControllerBase {
 		{
 			ResourceErrorHandler.handleError(
 				"Error exporting data.  Map with ID: " + String.valueOf(conflatedMap.getId()) + 
-				  " and name: " + conflatedMapName + " has no osm_api_db_export_time tag.",
+				  " and name: " + conflatedMap.getDisplayName() + " has no osm_api_db_export_time tag.",
 				Status.CONFLICT,
 				log);
 		}
-		arg = new JSONObject();
+		JSONObject arg = new JSONObject();
 		arg.put("changesetsourcedatatimestamp", tags.get("osm_api_db_export_time"));
 		commandArgs.add(arg);
-		
-		postJobRquest(jobId, createPostBody(commandArgs));
+	}
+	
+	private void setAoi(final Map conflatedMap, JSONArray commandArgs) throws Exception
+	{
+		final BoundingBox bounds = getMapBounds(conflatedMap);
+		JSONObject arg = new JSONObject();
+		arg.put(
+			"changesetaoi", 
+			String.valueOf(bounds.getMinLon()) + "," +
+			  String.valueOf(bounds.getMinLat()) + "," + 
+			  String.valueOf(bounds.getMaxLon()) + "," + 
+			  String.valueOf(bounds.getMaxLat()));
+		commandArgs.add(arg);
 	}
 
 	/**
