@@ -54,7 +54,8 @@ public class DataDefinitionManager {
             Class.forName(POSTGRESQL_DRIVER);
         }
         catch (ClassNotFoundException e) {
-            logger.error("Critical error!  Failed to load " + POSTGRESQL_DRIVER + " JDBC driver!");
+            String message = "Critical error!  Failed to load " + POSTGRESQL_DRIVER + " JDBC driver!";
+            throw new RuntimeException(message, e);
         }
     }
 
@@ -68,7 +69,7 @@ public class DataDefinitionManager {
 
     boolean checkDbExists(String dbName) throws SQLException {
         try (Connection conn = DriverManager.getConnection(dbUrl + this.dbName, dbUser, dbPassword)) {
-            String sql = "SELECT 1 FROM pg_database WHERE datname = '?'";
+            String sql = "SELECT 1 FROM pg_database WHERE datname = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString((int) 1, dbName);
                 try (ResultSet rs = stmt.executeQuery()) {
@@ -100,6 +101,7 @@ public class DataDefinitionManager {
 
     void deleteDb(String dbname, boolean force) throws SQLException {
         try (Connection conn = DriverManager.getConnection(dbUrl + dbName, dbUser, dbPassword)) {
+            // TODO: re-evaluate what this if block is supposed to to.
             if (force) {
                 String columnName = null;
                 String sql = "SELECT column_name " +
@@ -114,8 +116,11 @@ public class DataDefinitionManager {
                     }
                 }
 
-                String forceSql = "select pg_terminate_backend(" + columnName + ") from pg_stat_activity where datname='" + dbname + "'";
+                String forceSql = "SELECT pg_terminate_backend(" + columnName + ") " +
+                                  "FROM pg_stat_activity " +
+                                  "WHERE datname = ?";
                 try (PreparedStatement stmt = conn.prepareStatement(forceSql)) {
+                    stmt.setString((int) 1, dbname);
                     //Get the column name from the db as it's version dependent
                     try (ResultSet rs = stmt.executeQuery()) {
                     }
@@ -124,12 +129,12 @@ public class DataDefinitionManager {
 
             String sql = "DROP DATABASE \"" + dbname + "\"";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.executeUpdate(sql);
+                stmt.executeUpdate();
             }
         }
     }
 
-    public List<String> getTablesList(String dbName, String filter_prefix) throws Exception {
+    public List<String> getTablesList(String dbName, String filter_prefix) throws SQLException {
         List<String> tblList = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(dbUrl + dbName, dbUser, dbPassword)) {
             String sql = "SELECT table_name " +
@@ -138,7 +143,7 @@ public class DataDefinitionManager {
                          "'" + filter_prefix.replace('-', '_') + "_%'";
 
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                try (ResultSet rs = stmt.executeQuery(sql)) {
+                try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         // Retrieve by column name
                         tblList.add(rs.getString("table_name"));
@@ -150,7 +155,7 @@ public class DataDefinitionManager {
         return tblList;
     }
 
-    void createTable(String createTblSql, String dbname) throws Exception {
+    void createTable(String createTblSql, String dbname) throws SQLException {
         try (Connection conn = DriverManager.getConnection(dbUrl + dbname, dbUser, dbPassword)) {
             try (PreparedStatement stmt = conn.prepareStatement(createTblSql)) {
                 stmt.executeUpdate();
