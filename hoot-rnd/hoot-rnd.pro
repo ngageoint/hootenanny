@@ -43,22 +43,22 @@ DESTDIR = ../lib/
 
 cppunit {
 SOURCES += \
+    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreatorTest.cpp \
+    src/test/cpp/hoot/rnd/visitors/MatchCandidateCountVisitorRndTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreatorTest.cpp \
 
 HEADERS += \
 
 }
 
 SOURCES += \
-    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreatorTest.cpp \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.cpp \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatch.cpp \
-    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchTest.cpp \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMerger.cpp \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreator.cpp \
-    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreatorTest.cpp \
     src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.cpp \
-    src/test/cpp/hoot/rnd/visitors/MatchCandidateCountVisitorRndTest.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h \
