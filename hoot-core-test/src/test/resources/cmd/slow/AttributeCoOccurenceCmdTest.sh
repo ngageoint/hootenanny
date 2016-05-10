@@ -3,5 +3,7 @@ set -e
 
 # We just run the command and check stderr & stdout
 # for correctitude
-hoot attr-co-occurence $HOOT_HOME/test-files/ToyTestA.osm $HOOT_HOME/test-files/ToyTestB.osm
+inputfile1=$HOOT_HOME/test-files/cmd/slow/csr/csr.osm
+inputfile2=$HOOT_HOME/test-files/cmd/slow/csr/csr.osm
+hoot attr-co-occurence $inputfile1 $inputfile2
 
