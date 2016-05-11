@@ -70,26 +70,50 @@ BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, shared_ptr<const Buildin
   _rf(rf),
   _explainText("")
 {
-  //LOG_DEBUG("Classifying building pair: " << eid1 << "; " << eid2);
-
   _p = _rf->classify(map, _eid1, _eid2);
 
-  //If the buildings aren't matched and they overlap at all, then make them be reviewed.
-  if (getType() == MatchType::Miss &&
-      (OverlapExtractor().extract(*map, map->getElement(eid1), map->getElement(eid2)) > 0.0))
+  MatchType type = getType();
+  QStringList description;
+  if (type != MatchType::Match)
   {
-    //LOG_DEBUG("Building miss overlap:");
-    //LOG_VARD(eid1);
-    //LOG_VARD(eid2);
+    ConstElementPtr element1 = map->getElement(eid1);
+    ConstElementPtr element2 = map->getElement(eid2);
+    //  Get the overlap
+    double overlap = OverlapExtractor().extract(*map, element1, element2);
 
-    _p.clear();
-    _p.setReviewP(1.0);
-    _explainText = "Unmatched buildings are overlapping.";
+    //If the buildings aren't matched and they overlap at all, then make them be reviewed.
+    if (getType() == MatchType::Miss && overlap > 0.0)
+    {
+      _p.clear();
+      _p.setReviewP(1.0);
+      description.append("Unmatched buildings are overlapping.");
+    }
+    //  Add extra explanation text to reviews
+    else if (getType() == MatchType::Review)
+    {
+      //  Deal with the overlap first
+      if (overlap >= 0.75)        description.append("Large building overlap.");
+      else if (overlap >= 0.5)    description.append("Medium building overlap.");
+      else if (overlap >= 0.25)   description.append("Small building overlap.");
+      else                        description.append("Very little building overlap.");
+      //  Next check the Angle Histogram
+      double angle = AngleHistogramExtractor(0.0).extract(*map, element1, element2);
+      if (angle >= 0.75)          description.append("Very similar building orientation.");
+      else if (angle >= 0.5)      description.append("Similar building orientation.");
+      else if (angle >= 0.25)     description.append("Semi-similar building orientation.");
+      else                        description.append("Building orientation not similar.");
+      //  Finally the edge distance
+      double edge = EdgeDistanceExtractor(new QuantileAggregator(0.4)).extract(*map, element1, element2);
+      if (edge >= 90)             description.append("Building edges very close to each other.");
+      else if (edge >= 70)        description.append("Building edges somewhat close to each other.");
+      else                        description.append("Building edges not very close to each other.");
+    }
   }
+  //  Join the string descriptions together or generate the default
+  if (description.length() > 0)
+    _explainText = description.join(" ");
   else
-  {
     _explainText = mt->getTypeDetail(_p);
-  }
   //LOG_DEBUG(toString());
 }
 

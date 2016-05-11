@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -92,19 +92,19 @@ public:
     shared_ptr<const Way> w2 = map->getWay(r2[0]);
 
     EdgeDistanceExtractor uut(new MeanAggregator(), 5.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(28.9069, uut.distance(*map, w1, w2), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(9.9833, uut.distance(*map, w1, w2), 0.01);
 
     EdgeDistanceExtractor uut2(new RmseAggregator(), 5.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(41.2179, uut2.distance(*map, w1, w2), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(15.5733, uut2.distance(*map, w1, w2), 0.01);
 
     EdgeDistanceExtractor uut3(new MinAggregator(), 5.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.380561, uut3.distance(*map, w1, w2), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0227, uut3.distance(*map, w1, w2), 0.01);
 
     EdgeDistanceExtractor uut4(new QuantileAggregator(0.5), 5.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(7.28364, uut4.distance(*map, w1, w2), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5.5029, uut4.distance(*map, w1, w2), 0.01);
 
     EdgeDistanceExtractor uut5(new QuantileAggregator(0.1), 5.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.34317, uut5.distance(*map, w1, w2), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3982, uut5.distance(*map, w1, w2), 0.01);
   }
 
   void runRoadsTest()

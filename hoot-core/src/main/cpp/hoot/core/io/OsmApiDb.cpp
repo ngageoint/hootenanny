@@ -58,6 +58,8 @@
 namespace hoot
 {
 
+const QString OsmApiDb::TIME_FORMAT = "yyyy-MM-dd hh:mm:ss.zzz";
+
 OsmApiDb::OsmApiDb()
 {
   _init();
@@ -180,6 +182,7 @@ void OsmApiDb::_resetQueries()
   {
     itr.value().reset();
   }
+  _selectChangesetsCreatedAfterTime.reset();
 }
 
 void OsmApiDb::rollback()
@@ -546,68 +549,26 @@ long OsmApiDb::getNextId(const QString tableName)
   return result;
 }
 
-void OsmApiDb::writeChangeset(const QString sql, const QUrl targetDatabaseUrl)
+shared_ptr<QSqlQuery> OsmApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
 {
-  LOG_INFO("Executing changeset SQL queries against OSM API database...");
+  LOG_VARD(timeStr);
+  _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
+  _selectChangesetsCreatedAfterTime->prepare(
+    QString("SELECT min_lon, max_lon, min_lat, max_lat FROM changesets ") +
+    QString("WHERE created_at > :createdAt"));
+  _selectChangesetsCreatedAfterTime->bindValue(":createdAt", "'" + timeStr + "'");
 
-  QString changesetInsertStatement;
-  QString elementSqlStatements = "";
-
-  const QStringList sqlParts = sql.split(";");
-  for (int i = 0; i < sqlParts.size(); i++)
+  if (_selectChangesetsCreatedAfterTime->exec() == false)
   {
-    const QString sqlStatement = sqlParts[i];
-    if (i == 0)
-    {
-      if (!sqlStatement.toUpper().startsWith("INSERT INTO CHANGESETS"))
-      {
-        throw HootException(
-          "The first SQL statement in a changeset SQL file must create a changeset.");
-      }
-      else
-      {
-        changesetInsertStatement = sqlStatement + ";";
-      }
-    }
-    else
-    {
-      elementSqlStatements += sqlStatement + ";";
-    }
+    LOG_ERROR(_selectChangesetsCreatedAfterTime->executedQuery());
+    LOG_ERROR(_selectChangesetsCreatedAfterTime->lastError().text());
+    throw HootException(
+      "Could not execute changesets query: " + _selectChangesetsCreatedAfterTime->lastError().text());
   }
+  LOG_VARD(_selectChangesetsCreatedAfterTime->executedQuery());
+  LOG_VARD(_selectChangesetsCreatedAfterTime->numRowsAffected());
 
-  if (elementSqlStatements.trimmed().isEmpty())
-  {
-    throw HootException("No element SQL statements in sql file");
-  }
-
-  open(targetDatabaseUrl);
-  transaction();
-
-  _execNoPrepare(changesetInsertStatement);
-  _execNoPrepare(elementSqlStatements);
-
-  commit();
-  close();
-
-  LOG_INFO("Changeset SQL queries execute finished against OSM API database.");
-}
-
-void OsmApiDb::writeChangeset(QFile& changesetSqlFile, const QUrl targetDatabaseUrl)
-{
-  if (!changesetSqlFile.fileName().endsWith(".osc.sql"))
-  {
-    throw HootException("Invalid file type: " + changesetSqlFile.fileName());
-  }
-
-  if (changesetSqlFile.open(QIODevice::ReadOnly))
-  {
-    writeChangeset(changesetSqlFile.readAll(), targetDatabaseUrl);
-    changesetSqlFile.close();
-  }
-  else
-  {
-    throw HootException("Unable to open changeset file: " + changesetSqlFile.fileName());
-  }
+  return _selectChangesetsCreatedAfterTime;
 }
 
 }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -113,8 +113,7 @@ double EdgeDistanceExtractor::distance(const OsmMap &map,
   const shared_ptr<const Element>& target, const shared_ptr<const Element> &candidate) const
 {
   double d1 = _oneDistance(map, target, candidate);
-  // See #5619 this should swap target<->candidate. Right?
-  double d2 = _oneDistance(map, target, candidate);
+  double d2 = _oneDistance(map, candidate, target);
 
   return min(d1, d2);
 }
