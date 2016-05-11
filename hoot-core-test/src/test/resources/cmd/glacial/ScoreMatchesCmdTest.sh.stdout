@@ -32,11 +32,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 983.435
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 992.35
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 983.435
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 992.35
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 6
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -90,11 +90,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.79
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.7
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.79
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.7
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 29
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -148,11 +148,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -206,11 +206,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -264,11 +264,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -317,16 +317,16 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmpt
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.0416667 Miss: 0.471667 Review: 0.0633333
-INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.125
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 9
+INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1
+INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 8
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1045.37
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1054.29
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1045.37
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1054.29
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 7
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -380,11 +380,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -438,11 +438,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1045.37
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1054.29
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1045.37
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1054.29
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 7
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -491,16 +491,16 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmpt
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.11 Miss: 0.9 Review: 0.17
-INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.125
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 9
+INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1
+INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 8
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: -1
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: -1
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -554,11 +554,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -612,11 +612,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1045.37
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1054.29
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1045.37
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1054.29
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 7
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -670,11 +670,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -728,11 +728,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1045.37
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1054.29
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1045.37
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1054.29
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 7
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -781,16 +781,16 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmpt
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.055 Miss: 0.85 Review: 0.09
-INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.125
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 9
+INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1
+INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 8
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: -1
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: -1
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -844,11 +844,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -902,11 +902,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1045.37
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1054.29
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1045.37
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1054.29
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 7
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -960,11 +960,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1018,11 +1018,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1045.37
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1054.29
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1045.37
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1054.29
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 7
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1071,16 +1071,16 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmpt
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.0275 Miss: 0.825 Review: 0.05
-INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.125
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 9
+INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1
+INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 8
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: -1
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: -1
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1134,11 +1134,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1192,11 +1192,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1250,11 +1250,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1308,11 +1308,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1366,11 +1366,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1424,11 +1424,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1482,11 +1482,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1540,11 +1540,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1598,11 +1598,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1656,11 +1656,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1714,11 +1714,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1772,11 +1772,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1830,11 +1830,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1888,11 +1888,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -1946,11 +1946,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2004,11 +2004,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2062,11 +2062,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2120,11 +2120,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2178,11 +2178,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2236,11 +2236,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2294,11 +2294,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2352,11 +2352,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2410,11 +2410,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2468,11 +2468,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2526,11 +2526,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2584,11 +2584,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2642,11 +2642,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2700,11 +2700,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2758,11 +2758,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2816,11 +2816,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2874,11 +2874,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2932,11 +2932,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -2990,11 +2990,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3048,11 +3048,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3106,11 +3106,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3164,15 +3164,15 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
-Reprojecting 0 / 47         
+Reprojecting 0 / 46         
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveMissingElementsVisitor
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::RemoveDuplicateReviewsOp
@@ -3222,11 +3222,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3280,11 +3280,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3338,11 +3338,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3396,11 +3396,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3454,11 +3454,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3512,11 +3512,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3570,11 +3570,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3628,11 +3628,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3686,11 +3686,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3744,11 +3744,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3802,11 +3802,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3860,11 +3860,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3918,11 +3918,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -3976,11 +3976,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
@@ -4034,15 +4034,15 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
-Reprojecting 0 / 46         
+Reprojecting 0 / 47         
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveMissingElementsVisitor
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::RemoveDuplicateReviewsOp
@@ -4092,11 +4092,11 @@ INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1063.65
+INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
 INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
