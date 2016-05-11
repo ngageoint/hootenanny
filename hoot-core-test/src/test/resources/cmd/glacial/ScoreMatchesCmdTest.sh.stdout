@@ -21,8 +21,8 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmpt
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.01 Miss: 0.01 Review: 0.01
-INFO  ...lygon/BuildingMatchCreator.cpp( 220) Loading model from: /fouo/hoot-release-1/hoot/conf/BuildingModel.rf
-INFO  ...ighway/HighwayRfClassifier.cpp( 285) Loading highway model from: /fouo/hoot-release-1/hoot/conf/HighwayModel.rf
+INFO  ...lygon/BuildingMatchCreator.cpp( 220) Loading model
+INFO  ...ighway/HighwayRfClassifier.cpp( 285) Loading model
 INFO  ...ighway/HighwayRfClassifier.cpp( 305) factorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
 INFO  ...ighway/HighwayRfClassifier.cpp( 324) extractorNames: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
 INFO  ...ighway/HighwayRfClassifier.cpp( 325) missingExtractors: [0]{}
