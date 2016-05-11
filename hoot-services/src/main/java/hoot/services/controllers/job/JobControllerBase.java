@@ -81,6 +81,10 @@ public class JobControllerBase {
 	 * @param requestParams
 	 */
 	public void postJobRquest(String jobId, String requestParams) throws Exception {
+		
+		log.debug(jobId);
+		log.debug(requestParams);
+		
 		// Request should come back immediately but if something is wrong then timeout and clean up.
 		// To make UI responsive
 		RequestConfig requestConfig = RequestConfig.custom()
@@ -243,7 +247,7 @@ public class JobControllerBase {
 		return command;
 	}
 
-	public JSONArray parseParams(String params) throws Exception
+	public static JSONArray parseParams(String params) throws Exception
 	{
 		JSONParser parser = new JSONParser();
 		JSONObject command = (JSONObject)parser.parse(params);
