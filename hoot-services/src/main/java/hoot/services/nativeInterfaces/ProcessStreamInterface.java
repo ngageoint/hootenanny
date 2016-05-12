@@ -109,7 +109,7 @@ public class ProcessStreamInterface implements INativeInterface {
 	  	  	String userid = HootProperties.getProperty("dbUserId");
 	  	  	String pwd = HootProperties.getProperty("dbPassword");
 	  	  	String host = HootProperties.getProperty("dbHost");
-	  	  	dbUrl = "postgresql://" + userid + ":" + pwd + "@" + host + "/" + dbname;
+	  	  	dbUrl = "hootapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
 	    	}
 
 	    }
@@ -221,10 +221,10 @@ public class ProcessStreamInterface implements INativeInterface {
 					{
 						throw new Exception(err);
 					}
-					
+
 					String stdOut = res.getStdout();
 					ret.put("stdout", stdOut);
-					ret.put("stderr", err);					
+					ret.put("stderr", err);
 				}
 			}
 		} catch (Exception e){

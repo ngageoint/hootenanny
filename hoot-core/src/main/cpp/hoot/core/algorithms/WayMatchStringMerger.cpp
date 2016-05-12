@@ -3,8 +3,8 @@
 namespace hoot
 {
 
-WayMatchStringMerger::WayMatchStringMerger(WaySublineMatchStringPtr matchString,
-  WayMatchStringMappingPtr mapping)
+WayMatchStringMerger::WayMatchStringMerger(WaySublineMatchStringPtr /*matchString*/,
+  WayMatchStringMappingPtr /*mapping*/)
 {
 }
 

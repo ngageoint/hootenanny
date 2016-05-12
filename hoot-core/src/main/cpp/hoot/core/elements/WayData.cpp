@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Way.h"
@@ -30,16 +30,24 @@
 // Boost
 using namespace boost;
 
-namespace hoot {
-
-WayData::WayData(const WayData& from) : ElementData(from._id, from.getTags(), from._circularError)
+namespace hoot
 {
-  _nodes = from._nodes;
+
+WayData::WayData(long id, long changeset, long version, unsigned int timestamp, QString user,
+                 long uid) :
+ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid)
+{
+}
+
+WayData::WayData(const WayData& from) :
+ElementData(from.getId(), from.getTags(), from.getCircularError()),
+_nodes(from._nodes)
+{
+
 }
 
 WayData::~WayData()
 {
 }
-
 
 }

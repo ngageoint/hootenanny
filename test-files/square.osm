@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-53' action='modify' visible='true' lat='0.01958327281250578' lon='-0.026949458523585643' />
+  <node id='-51' action='modify' visible='true' lat='0.01958327281250578' lon='-0.014013718432264535' />
+  <node id='-49' action='modify' visible='true' lat='0.005120397112659148' lon='-0.014013718432264535' />
+  <node id='-47' action='modify' visible='true' lat='0.005210228640706047' lon='-0.02712912158040955' />
+  <way id='-55' action='modify' visible='true'>
+    <nd ref='-53' />
+    <nd ref='-51' />
+    <nd ref='-49' />
+    <nd ref='-47' />
+    <nd ref='-53' />
+  </way>
+  <relation id='-59' action='modify' visible='true'>
+    <member type='way' ref='-55' role='' />
+    <tag k='landuse' v='forest' />
+  </relation>
+</osm>

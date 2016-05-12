@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -281,5 +281,40 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   return result;
 }
 
+Envelope GeometryUtils::envelopeFromConfigString(const QString boundsStr)
+{
+  const QString errMsg = "Invalid envelope string: " + boundsStr;
+  if (boundsStr.contains(","))
+  {
+    const QStringList bboxParts = boundsStr.split(",");
+    if (bboxParts.size() == 4)
+    {
+      bool parseSuccess = true;
+      bool ok;
+      const double minLat = bboxParts[1].toDouble(&ok);
+      parseSuccess = parseSuccess && ok;
+      const double minLon = bboxParts[0].toDouble(&ok);
+      parseSuccess = parseSuccess && ok;
+      const double maxLat = bboxParts[3].toDouble(&ok);
+      parseSuccess = parseSuccess && ok;
+      const double maxLon = bboxParts[2].toDouble(&ok);
+      parseSuccess = parseSuccess && ok;
+
+      if (!parseSuccess)
+      {
+        throw HootException(errMsg);
+      }
+      return Envelope(minLon, maxLon, minLat, maxLat);
+    }
+    else
+    {
+      throw HootException(errMsg);
+    }
+  }
+  else
+  {
+    throw HootException(errMsg);
+  }
+}
 
 }

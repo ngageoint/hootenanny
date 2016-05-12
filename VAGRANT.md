@@ -1,6 +1,6 @@
 # Installing Vagrant
 
-To download Vagrant for supported platforms, see [here](http://www.vagrantup.com/downloads.html)
+To download Vagrant for supported platforms, see [here](https://www.vagrantup.com/downloads.html)
 
 # Installing VirtualBox
 
@@ -66,8 +66,10 @@ You should be able to log into the running VM by typing:
 
 Within this login shell, you can build the code, run the server or the tests. For example, to run the tests:
 
-    cd $HOOT_HOME
+    vagrant ssh
+    cd hoot
     source ./SetupEnv.sh
+    scripts/CopyWebAppsToTomcat.sh
     make -sj$(nproc) test-all
 
 # Using Hootenanny
@@ -77,15 +79,14 @@ To access the web pages you access the site in your [local Chrome browser](http:
 To run hoot from commandline
 
     vagrant ssh
-    cd $HOOT_HOME
+    cd hoot
     source ./SetupEnv.sh
     hoot help
-
 
 If you've updated the code, you must connect to the vm via ssh to build and redeploy to Tomcat:
 
     vagrant ssh
-    cd $HOOT_HOME
+    cd hoot
     source ./SetupEnv.sh
     make -sj$(nproc)
     scripts/CopyWebAppsToTomcat.sh

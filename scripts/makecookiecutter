@@ -3,9 +3,9 @@
 #
 -include $(HOOT_HOME)/HOOT_VERSION_FILE
 HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor -D add.review.tags=yes
-HOOT_OPTS+= -D services.db.writer.overwrite.map=true -D services.db.writer.create.user=true
-HOOT_OPTS+= -D services.db.writer.email=test@test.com -D services.db.reader.email=test@test.com
-#DB_URL=postgresql://hoot:hoottest@localhost:5432/hoot
+HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
+HOOT_OPTS+= -D hootapi.db.writer.email=test@test.com -D hootapi.db.reader.email=test@test.com
+#DB_URL=hootapidb://hoot:hoottest@localhost:5432/hoot
 OUTPUT_DIR=$(HOOT_HOME)/test-out/$(jobid)
 
 # Conflation
@@ -22,7 +22,7 @@ ifeq "$(REFERENCE_LAYER)" "2"
 	HOOT_OPTS+= -D tag.merger.default=hoot::OverwriteTag1Merger
 endif
 
-ifeq "$(INPUT1_TYPE)" "DB" 
+ifeq "$(INPUT1_TYPE)" "DB"
 	OP_INPUT1=$(DB_URL)/$(INPUT1)
 endif
 
@@ -40,7 +40,7 @@ CROP=
 OP_STAT=
 OP_CMD=
 
-ifeq "$(cuttershapetype)" "DB" 
+ifeq "$(cuttershapetype)" "DB"
 	CUTTER_SHAPE=$(DB_URL)/$(cuttershape)
 endif
 
@@ -52,7 +52,7 @@ ifeq ($(strip $(buffer)), )
 	BUFFER=1000
 endif
 
-ifeq "$(inputtype)" "DB" 
+ifeq "$(inputtype)" "DB"
 	INPUT=$(DB_URL)/$(input)
 endif
 
@@ -61,7 +61,7 @@ ifeq ($(strip $(outputbuffer)), )
 	OUTPUT_BUFFER=-500
 endif
 
-ifeq "$(crop)" "true" 
+ifeq "$(crop)" "true"
 	CROP=--crop
 endif
 
@@ -74,13 +74,13 @@ endif
 ###
 # Cookie Cutter
 ###
-step1: 
+step1:
 ifeq "$(GENERATE_REPORT)" "true"
 	mkdir -p $(HOOT_HOME)/data/reports/$(jobid)
 	cp -a $(HOOT_HOME)/report/. $(HOOT_HOME)/data/reports/$(jobid)
 endif
 	mkdir -p "$(OUTPUT_DIR)"
-	hoot --alpha-shape $(HOOT_OPTS) "$(CUTTER_SHAPE)" $(ALPHA) $(BUFFER) "$(TMP_ALPHA)" 
+	hoot --alpha-shape $(HOOT_OPTS) "$(CUTTER_SHAPE)" $(ALPHA) $(BUFFER) "$(TMP_ALPHA)"
 	hoot --cookie-cutter $(HOOT_OPTS) "$(TMP_ALPHA)" "$(INPUT)" "$(OP_OUTPUT_CC)" $(OUTPUT_BUFFER) $(CROP)
 	hoot $(OP_CONFLATE_TYPE) $(HOOT_OPTS) "$(OP_INPUT1)" "$(OP_OUTPUT_CC)" "$(DB_OUTPUT)" $(OP_STAT)
 ifeq "$(GENERATE_REPORT)" "true"
@@ -88,7 +88,7 @@ ifeq "$(GENERATE_REPORT)" "true"
 	echo '{"name":"$(OUTPUT_NAME)","description":"$(OUTPUT_NAME)","created":"$(TIME_STAMP)","reportpath":"$(HOOT_HOME)/data/reports/$(jobid)/report.pdf"}' > $(HOOT_HOME)/data/reports/$(jobid)/meta.data
 endif
 	rm -rf "$(OUTPUT_DIR)"
-	
 
-	
+
+
 

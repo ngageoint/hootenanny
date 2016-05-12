@@ -58,11 +58,13 @@ public:
 
   /**
    * @brief ElementCacheLRU
-   * @param maxCountEachElementType Total size of cache is three times this value (i.e.,
-   *      cache can hold that many nodes, that many ways, and that many relations before items
-   *      start being replaced)
+   * @param maxNodeCount Total size of node cache before items start being replaced.
+   * @param maxWayCount Total size of ways cache before items start being replaced.
+   * @param maxRelationCount Total size of relation cache before items start being replaced.
    */
-  ElementCacheLRU(const unsigned long maxCountEachElementType);
+  ElementCacheLRU(const unsigned long maxNodeCount,
+                  const unsigned long maxWayCount,
+                  const unsigned long maxRelationCount);
 
   /**
    * @brief ~ElementCache
@@ -132,9 +134,17 @@ public:
 
   virtual void removeElements(const ElementType::Type type);
 
+  virtual unsigned long getNodeCacheSize() { return _maxNodeCount; }
+
+  virtual unsigned long getWayCacheSize() { return _maxWayCount; }
+
+  virtual unsigned long getRelationCacheSize() { return _maxRelationCount; }
+
 protected:
 
-  unsigned long _maxCountPerType;
+  unsigned long _maxNodeCount;
+  unsigned long _maxWayCount;
+  unsigned long _maxRelationCount;
 
   boost::shared_ptr<OGRSpatialReference> _projection;
 

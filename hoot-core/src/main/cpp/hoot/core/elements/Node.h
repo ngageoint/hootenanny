@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef _ELEMENTS_NODE_H_
 #define _ELEMENTS_NODE_H_
@@ -55,13 +55,10 @@ public:
 
   Node(Status s, long id, const Coordinate& c, Meters circularError);
 
-  Node(Status s, long id, double x, double y, Meters circularError);
-
-  Node(Status s, long id, double x, double y, long changeset, long version, unsigned int timestamp,
-       Meters circularError);
-
-  Node(Status s, long id, double x, double y, long changeset, long version, unsigned int timestamp,
-       QString user, long uid, Meters circularError);
+  Node(Status s, long id, double x, double y, Meters circularError,
+       long changeset = ElementData::CHANGESET_EMPTY, long version = ElementData::VERSION_EMPTY,
+       unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
+       QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY);
 
   virtual ~Node() {}
 

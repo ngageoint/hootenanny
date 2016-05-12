@@ -3,17 +3,15 @@ set -e
 
 source $HOOT_HOME/conf/DatabaseConfig.sh
 
-export HOOT_OPTS="-D services.db.writer.create.user=true -D services.db.writer.email=ServicesDbWriterTest@hoottestcpp.org -D services.db.writer.overwrite.map=true -D services.db.reader.email=ServicesDbWriterTest@hoottestcpp.org -D writer.include.debug=true --warn"
+export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=HootApiDbWriterTest@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=HootApiDbWriterTest@hoottestcpp.org -D writer.include.debug=true --warn"
 
-export DB_URL="postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
+export DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 
 rm -rf test-output/cmd/ServiceDbTest
 mkdir -p test-output/cmd/ServiceDbTest
-# Don't run these commands in parallel -- they might try to create the same
-# user twice and then fail due to duplicates.
-# https://github.com/ngageoint/hootenanny/issues/478
-hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesA"
-hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesB"
+hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesA" &
+hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesB" &
+wait
 ###
 # I've run into strange situations where it seems like the whole files isn't being converted.
 # It almost looks like the transaction isn't fully committed when the conflat op runs. I can't
@@ -27,3 +25,10 @@ hoot --conflate $HOOT_OPTS "$DB_URL/AllDataTypesA" "$DB_URL/AllDataTypesB" test-
 # Do a very coarse comparison check.
 hoot --stats --quick test-output/cmd/ServiceDbTest/output.osm
 
+hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesA" &
+hoot --delete-map $HOOT_OPTS "$DB_URL/AllDataTypesB" &
+wait
+
+export PGPASSWORD=$DB_PASSWORD
+psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw AllDataTypesA && echo "Error: delete-map did not remove AllDataTypesA dataset"
+psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw AllDataTypesB && echo "Error: delete-map did not remove AllDataTypesB dataset"

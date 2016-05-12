@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -212,7 +212,7 @@ public:
       "{\"type\":\"way\",\"ref\":-22,\"role\":\"part\"},\n"
       "{\"type\":\"way\",\"ref\":-21,\"role\":\"part\"},\n"
       "{\"type\":\"way\",\"ref\":-20,\"role\":\"part\"},\n"
-      "{\"type\":\"way\",\"ref\":-19,\"role\":\"part\"}],\"tags\":{\"note\":\"Toy Scenario 1\",\"poi\":\"yes\",\"alt_name\":\"B;C;D;E;F\",\"building\":\"yes\",\"name\":\"A\",\"error:circular\":\"-1\"}]\n"
+      "{\"type\":\"way\",\"ref\":-19,\"role\":\"part\"}],\"tags\":{\"note\":\"Toy Scenario 1\",\"poi\":\"yes\",\"alt_name\":\"B;C;D;E;F\",\"building\":\"yes\",\"name\":\"A\",\"error:circular\":\"15\"}]\n"
       "}\n",
       OsmJsonWriter(4).toString(map));
   }
@@ -260,7 +260,7 @@ public:
                     "{\"type\":\"way\",\"ref\":-18,\"role\":\"part\"},\n"
                     "{\"type\":\"way\",\"ref\":-17,\"role\":\"part\"},\n"
                     "{\"type\":\"way\",\"ref\":-16,\"role\":\"part\"},\n"
-                    "{\"type\":\"way\",\"ref\":-15,\"role\":\"part\"}],\"tags\":{\"note\":\"Toy Scenario 2\",\"poi\":\"yes\",\"alt_name\":\"B;C;D;E;F\",\"building\":\"yes\",\"name\":\"A\",\"error:circular\":\"-1\"}]\n"
+                    "{\"type\":\"way\",\"ref\":-15,\"role\":\"part\"}],\"tags\":{\"note\":\"Toy Scenario 2\",\"poi\":\"yes\",\"alt_name\":\"B;C;D;E;F\",\"building\":\"yes\",\"name\":\"A\",\"error:circular\":\"15\"}]\n"
                     "}\n",
       OsmJsonWriter(4).toString(map));
   }
@@ -308,7 +308,7 @@ public:
                     "{\"type\":\"way\",\"ref\":-14,\"role\":\"part\"},\n"
                     "{\"type\":\"way\",\"ref\":-13,\"role\":\"part\"},\n"
                     "{\"type\":\"way\",\"ref\":-12,\"role\":\"part\"},\n"
-                    "{\"type\":\"way\",\"ref\":-11,\"role\":\"part\"}],\"tags\":{\"note\":\"Toy Scenario 3\",\"poi\":\"yes\",\"alt_name\":\"A;B;C;D;E;F\",\"building\":\"yes\",\"name\":\"G\",\"error:circular\":\"-1\"}]\n"
+                    "{\"type\":\"way\",\"ref\":-11,\"role\":\"part\"}],\"tags\":{\"note\":\"Toy Scenario 3\",\"poi\":\"yes\",\"alt_name\":\"A;B;C;D;E;F\",\"building\":\"yes\",\"name\":\"G\",\"error:circular\":\"15\"}]\n"
                     "}\n",
       OsmJsonWriter(4).toString(map));
   }
@@ -350,7 +350,7 @@ public:
                     "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
                     "{\"type\":\"way\",\"ref\":-10,\"role\":\"part\"},\n"
                     "{\"type\":\"way\",\"ref\":-9,\"role\":\"part\"},\n"
-                    "{\"type\":\"way\",\"ref\":-8,\"role\":\"part\"}],\"tags\":{\"note\":\"Toy Scenario 4\",\"poi\":\"yes\",\"alt_name\":\"A;B;C;E;F;bar;foo\",\"building\":\"yes\",\"name\":\"G\",\"error:circular\":\"-1\"}]\n"
+                    "{\"type\":\"way\",\"ref\":-8,\"role\":\"part\"}],\"tags\":{\"note\":\"Toy Scenario 4\",\"poi\":\"yes\",\"alt_name\":\"A;B;C;E;F;bar;foo\",\"building\":\"yes\",\"name\":\"G\",\"error:circular\":\"15\"}]\n"
                     "}\n",
       OsmJsonWriter(4).toString(map));
   }

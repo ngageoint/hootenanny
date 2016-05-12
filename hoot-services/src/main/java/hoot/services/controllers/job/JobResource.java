@@ -624,9 +624,10 @@ public class JobResource
   						}
 
   					}
-						if(mapId != null)
+						if (mapId != null)
 						{
-							hoot.services.utils.ResourcesCleanUtil clean = new hoot.services.utils.ResourcesCleanUtil();
+							hoot.services.utils.ResourcesCleanUtil clean = 
+								new hoot.services.utils.ResourcesCleanUtil();
 							clean.deleteLayers(mapId);
 						}
   				}

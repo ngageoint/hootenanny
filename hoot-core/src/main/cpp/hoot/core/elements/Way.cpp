@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Way.h"
@@ -45,31 +45,22 @@ using namespace geos::geom;
 
 #include <tgs/StreamUtils.h>
 
-namespace hoot {
-
-Way::Way(Status s, long id, Meters circularError) : Element(s)
+namespace hoot
 {
-  _wayData.reset(new WayData(id));
-  _getElementData().setCircularError(circularError);
-}
 
-Way::Way(Status s, long id, long changeset, long version, unsigned int timestamp,
-         Meters circularError) : Element(s)
-{
-  _wayData.reset(new WayData(id, changeset, version, timestamp));
-  _getElementData().setCircularError(circularError);
-}
-
-Way::Way(Status s, long id, long changeset, long version, unsigned int timestamp,
-         QString user, long uid, Meters circularError) : Element(s)
+Way::Way(Status s, long id, Meters circularError, long changeset, long version,
+         unsigned int timestamp, QString user, long uid)
+: Element(s)
 {
   _wayData.reset(new WayData(id, changeset, version, timestamp, user, uid));
   _getElementData().setCircularError(circularError);
 }
 
-Way::Way(const Way& way) : Element(way._status)
+Way::Way(const Way& from) :
+Element(from.getStatus()),
+_wayData(from._wayData)
 {
-  _wayData = way._wayData;
+
 }
 
 Way::~Way()

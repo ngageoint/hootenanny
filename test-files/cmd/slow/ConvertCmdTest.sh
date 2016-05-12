@@ -9,7 +9,7 @@ cat test-output/cmd/ConvertCmdTest/ToyTestA.osm
 hoot convert test-files/ToyTestA.osm.pbf test-output/cmd/ConvertCmdTest/ToyTestA.shp
 # comparing shapefiles is kinda hard. We'll convert it to a .osm file first.
 hoot convert test-output/cmd/ConvertCmdTest/ToyTestA.shp test-output/cmd/ConvertCmdTest/ToyTestAShp.osm
-hoot is-match test-output/cmd/ConvertCmdTest/ToyTestAShp.osm test-files/cmd/ConvertCmdTest/ToyTestAShp.osm
+hoot is-match test-output/cmd/ConvertCmdTest/ToyTestAShp.osm test-files/cmd/slow/ConvertCmdTest/ToyTestAShp.osm
 
 # Convert to SQL test
 hoot convert \

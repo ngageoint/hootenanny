@@ -27,6 +27,10 @@
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
 
+// hoot
+#include <hoot/core/Units.h>
+
+// standard
 #include <vector>
 
 // hoot
@@ -49,9 +53,11 @@ public:
 
   Histogram(int bins);
 
+  const vector<double>& getAllBins() const { return _bins; }
+
   void addAngle(Radians theta, double length);
 
-  int getBin(Radians theta);
+  size_t getBin(Radians theta);
 
   /**
    * Returns the angle of the center of the specified bin.
@@ -78,6 +84,8 @@ public:
 private:
 
   vector<double> _bins;
+
+  Radians _getBinAngle(size_t i);
 
 };
 

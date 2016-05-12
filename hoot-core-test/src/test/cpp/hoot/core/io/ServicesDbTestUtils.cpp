@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -32,7 +32,7 @@
 #include <cppunit/TestAssert.h>
 
 // Hoot
-#include <hoot/core/io/ServicesDb.h>
+#include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 
@@ -52,9 +52,9 @@ using namespace Tgs;
 void ServicesDbTestUtils::compareRecords(QString sql, QString expected, QVariant v1,
   QVariant v2)
 {
-  ServicesDb db;
+  HootApiDb db;
   db.open(ServicesDbTestUtils::getDbModifyUrl());
-  QString result = db._execToString(sql, v1, v2);
+  QString result = db.execToString(sql, v1, v2);
   if (expected == "")
   {
     QStringList rows = result.split("\n");
@@ -77,12 +77,34 @@ void ServicesDbTestUtils::compareRecords(QString sql, QString expected, QVariant
   }
 }
 
+void ServicesDbTestUtils::execOsmApiDbSqlTestScript(const QString scriptName)
+{
+  //example: osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+  QString dbUrlString = getOsmApiDbUrl().toString();
+  QStringList dbUrlParts = dbUrlString.split("/");
+  QString dbName = dbUrlParts[dbUrlParts.size()-1];
+  QStringList userParts = dbUrlParts[dbUrlParts.size()-2].split(":");
+  QString dbUser = userParts[0];
+  QString dbPassword = userParts[1].split("@")[0];
+  QString dbHost = userParts[1].split("@")[1];
+  QString dbPort = userParts[2];
+  const QString auth = "-h "+dbHost+" -p "+dbPort+" -U "+dbUser;
+
+  const QString cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
+    psql "+auth+" -v ON_ERROR_STOP=1 -f ${HOOT_HOME}/test-files/servicesdb/"+scriptName+" > /dev/null 2>&1";
+  LOG_VARD(cmd);
+  if (std::system(cmd.toStdString().c_str()) != 0)
+  {
+    throw HootException("Failed postgres command.  Exiting test.");
+  }
+}
+
 QUrl ServicesDbTestUtils::getDbModifyUrl()
 {
   // read the DB values from the DB config file.
   Settings s = _readDbConfig();
   QUrl result;
-  result.setScheme("postgresql");
+  result.setScheme("hootapidb");
   result.setHost(s.get("DB_HOST").toString());
   result.setPort(s.get("DB_PORT").toInt());
   result.setUserName(s.get("DB_USER").toString());
@@ -93,14 +115,30 @@ QUrl ServicesDbTestUtils::getDbModifyUrl()
 
 QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId)
 {
-  //insert url example: postgresql://hoot:hoottest@localhost:5432/hoot/testMap
+  //insert url example: hootapidb://hoot:hoottest@localhost:5432/hoot/testMap
   QString dbModifyUrl = getDbModifyUrl().toString();
   QStringList modifyUrlParts = dbModifyUrl.split("/");
-  //read url example: postgresql://hoot:hoottest@localhost:5432/hoot/1
+  //read url example: hootapidb://hoot:hoottest@localhost:5432/hoot/1
   assert(mapId > 0);
   QString dbReadUrl =
     dbModifyUrl.remove("/" + modifyUrlParts[modifyUrlParts.size() - 1]) + "/" +
     QString::number(mapId);
+
+  QUrl url(dbReadUrl);
+  return url;
+}
+
+QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId, const long elemId, const QString& elemType)
+{
+  //insert url example: hootapidb://hoot:hoottest@localhost:5432/hoot/testMap
+  QString dbModifyUrl = getDbModifyUrl().toString();
+  QStringList modifyUrlParts = dbModifyUrl.split("/");
+  //read url example: hootapidb://hoot:hoottest@localhost:5432/hoot/1
+  assert(mapId > 0);
+  QString dbReadUrl =
+    dbModifyUrl.remove("/" + modifyUrlParts[modifyUrlParts.size() - 1]) + "/" +
+      QString::number(mapId) + "?osm-element-id=" + QString::number((elemId)) +
+      "&osm-element-type=" + elemType;
 
   QUrl url(dbReadUrl);
   return url;
@@ -111,7 +149,7 @@ QUrl ServicesDbTestUtils::getOsmApiDbUrl()
   // read the DB values from the DB config file.
   Settings s = _readDbConfig();
   QUrl result;
-  result.setScheme("postgresql");
+  result.setScheme("osmapidb");
   result.setHost(s.get("DB_HOST").toString());
   result.setPort(s.get("DB_PORT").toInt());
   result.setUserName(s.get("DB_USER").toString());
@@ -122,7 +160,7 @@ QUrl ServicesDbTestUtils::getOsmApiDbUrl()
 
 void ServicesDbTestUtils::deleteUser(QString email)
 {
-  ServicesDb database;
+  HootApiDb database;
   database.open(getDbModifyUrl());
 
   long userId = database.getUserId(email, false);

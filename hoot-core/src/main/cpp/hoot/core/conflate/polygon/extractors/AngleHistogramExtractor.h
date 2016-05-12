@@ -58,11 +58,13 @@ class Histogram;
 class AngleHistogramExtractor : public FeatureExtractor
 {
 public:
-  AngleHistogramExtractor();
+  AngleHistogramExtractor(Radians smoothing = 0.0, unsigned int bins = 16);
 
   static string className() { return "hoot::AngleHistogramExtractor"; }
 
   virtual string getClassName() const { return AngleHistogramExtractor::className(); }
+
+  virtual string getName() const;
 
   virtual DataFrame::FactorType getFactorType() const { return DataFrame::Numerical; }
 
@@ -74,13 +76,13 @@ public:
   virtual double extract(const OsmMap& map, const shared_ptr<const Element>& target,
     const shared_ptr<const Element>& candidate) const;
 
-  void setSmoothing(Radians sigma) { _smoothingSigma = sigma; }
+  void setSmoothing(Radians sigma) { _smoothing = sigma; }
 
 protected:
   virtual Histogram* _createHistogram(const OsmMap& map, const ConstElementPtr& e) const;
 
-  int _bins;
-  Radians _smoothingSigma;
+  Radians _smoothing;
+  unsigned int _bins;
 };
 
 }

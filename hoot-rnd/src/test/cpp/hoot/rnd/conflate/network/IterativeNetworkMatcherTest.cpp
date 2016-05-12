@@ -139,7 +139,6 @@ public:
   }
 };
 
-/// @todo disabled.
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(IterativeNetworkMatcherTest, "slow");
+/// @todo CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(IterativeNetworkMatcherTest, "slow");
 
 }

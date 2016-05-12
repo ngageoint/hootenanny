@@ -43,22 +43,26 @@ DESTDIR = ../lib/
 
 cppunit {
 SOURCES += \
+    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreatorTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreatorTest.cpp \
+    src/test/cpp/hoot/rnd/visitors/MatchCandidateCountVisitorRndTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/IterativeNetworkMatcherTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/VagabondNetworkMatcherTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/NetworkMergerTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/OsmNetworkExtractorTest.cpp \
 
 HEADERS += \
 
 }
 
 SOURCES += \
-    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreatorTest.cpp \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.cpp \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatch.cpp \
-    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchTest.cpp \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMerger.cpp \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreator.cpp \
-    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreatorTest.cpp \
     src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.cpp \
-    src/test/cpp/hoot/rnd/visitors/MatchCandidateCountVisitorRndTest.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatch.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMerger.cpp \
@@ -68,14 +72,11 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/OsmNetwork.cpp \
     src/main/cpp/hoot/rnd/conflate/network/IterativeNetworkMatcher.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkVertex.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/OsmNetworkExtractorTest.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkDetails.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/IterativeNetworkMatcherTest.cpp \
     src/main/cpp/hoot/rnd/conflate/network/DebugNetworkMapCreator.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkEdgeScore.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatcher.cpp \
     src/main/cpp/hoot/rnd/conflate/network/VagabondNetworkMatcher.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/VagabondNetworkMatcherTest.cpp \
     src/main/cpp/hoot/rnd/conflate/network/IterativeEdgeMatcher.cpp \
     src/main/cpp/hoot/rnd/conflate/network/EdgeMatch.cpp \
     src/main/cpp/hoot/rnd/conflate/network/EdgeString.cpp \
@@ -85,7 +86,6 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/EdgeLinkCreator.cpp \
     src/main/cpp/hoot/rnd/conflate/network/EdgePair.cpp \
     src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeLinks.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/NetworkMergerTest.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h \

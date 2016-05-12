@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMWRITER_H
 #define OSMWRITER_H
@@ -97,6 +97,11 @@ public:
 
   virtual void write(boost::shared_ptr<const OsmMap> map);
 
+  /**
+   * Remove any invalid characters from the string s and print an error if one is found.
+   */
+  QString removeInvalidCharacters(const QString& s);
+
 protected:
   bool _includeIds;
   bool _includeDebug;
@@ -106,11 +111,6 @@ protected:
   int _precision;
   auto_ptr<QIODevice> _fp;
   int _encodingErrorCount;
-
-  /**
-   * Remove any invalid characters from the string s and print an error if one is found.
-   */
-  QString _e(const QString& s);
 
   static QString _typeName(ElementType e);
 

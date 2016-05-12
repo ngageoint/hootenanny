@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCH_CANDIDATE_COUNT_VISITOR_H
 #define MATCH_CANDIDATE_COUNT_VISITOR_H
@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * Calculates a count of all elements that are candidates for matches given the provided set
+ * Calculates a count of all elements that are candidates for matches given a set
  * of match creators.
  */
 class MatchCandidateCountVisitor : public ElementConstOsmMapVisitor, public SingleStatistic,
@@ -57,14 +57,11 @@ public:
 
 private:
 
-  vector< shared_ptr<MatchCreator> > _matchCreators;
-  QStringList _matchCreatorDescriptions;
+  QMap<QString, shared_ptr<MatchCreator> > _matchCreatorsByName;
   long _candidateCount;
   QMap<QString, long> _matchCandidateCountsByMatchCreator;
 
-  static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
-                                      const MatchCreator::Description& m2);
-
+  void _setupCreators(const vector< shared_ptr<MatchCreator> >& matchCreators);
 };
 
 }

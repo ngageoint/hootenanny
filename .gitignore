@@ -61,6 +61,9 @@ hoot-core/src/proto/
 hoot-core/src/test/resources/cmd/**/*.stripped
 hoot-core/src/test/resources/cmd/**/*.first
 hoot-core/src/test/resources/cmd/**/*.failed
+hoot-core-test/src/test/resources/cmd/**/*.stripped
+hoot-core-test/src/test/resources/cmd/**/*.first
+hoot-core-test/src/test/resources/cmd/**/*.failed
 test-files/cmd/**/*.stripped
 test-files/cmd/**/*.first
 test-files/cmd/**/*.failed
@@ -71,6 +74,8 @@ hoot-streaming/tmp
 hootenanny-*.tar.gz
 HOOT_VERSION_FILE
 HootConfig.h
+.idea/*
+*.iml
 ingest/processed
 ingest/upload
 **/lib*.a
@@ -93,6 +98,7 @@ Output.osm
 /output.pgm
 plugins/*_schema.js
 plugins/etds*_rules.js
+plugins/emgcp*_rules.js
 plugins-local
 translations-local
 **/*.pro.user*
@@ -164,3 +170,6 @@ Vagrant.marker
 test-files/services-system/node_modules
 vagrant*.lock
 vagrant*-*
+MingsSuperAwesomePrompt.sh
+id_rsa.pub
+coverage/

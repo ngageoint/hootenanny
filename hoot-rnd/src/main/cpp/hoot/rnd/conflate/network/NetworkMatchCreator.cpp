@@ -116,7 +116,7 @@ vector<MatchCreator::Description> NetworkMatchCreator::getAllCreators() const
 {
   vector<Description> result;
 
-  result.push_back(Description(className(), "Network Match Creator", true));
+  result.push_back(Description(className(), "Network Match Creator", Highway, true));
 
   return result;
 }
