@@ -122,6 +122,9 @@ private:
     }
   };
 
+  IndexedEdgeLinks _links;
+  IndexedEdgeMatchSetPtr _pr;
+
   EdgeScoreMap _edge12Scores, _edge21Scores;
   VertexScoreMap _vertex12Scores, _vertex21Scores;
   /// P modifies the aggressiveness of the algorithm. Higher is more aggressive.

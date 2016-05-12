@@ -5,13 +5,12 @@
 namespace hoot
 {
 
-EdgeMatchSetFinder::EdgeMatchSetFinder(NetworkDetailsPtr details, EdgeMatchSetPtr matchSet,
-    ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2, ConstMatchScoreProviderPtr scoreProvider) :
+EdgeMatchSetFinder::EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMatchSetPtr matchSet,
+    ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2) :
   _details(details),
   _matchSet(matchSet),
   _n1(n1),
-  _n2(n2),
-  _scoreProvider(scoreProvider)
+  _n2(n2)
 {
 }
 
@@ -26,8 +25,6 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
   em->getString1()->addFirstEdge(e1, false);
   em->getString2()->addFirstEdge(e2, reversed);
 
-  LOG_VAR(em);
-
   _addEdgeMatches(em);
 }
 
@@ -38,8 +35,12 @@ void EdgeMatchSetFinder::_addEdgeMatches(EdgeMatchPtr em)
   ConstNetworkVertexPtr from2 = em->getString2()->getFrom();
   ConstNetworkVertexPtr to1 = em->getString1()->getTo();
   ConstNetworkVertexPtr to2 = em->getString2()->getTo();
-  bool fromMatch = _scoreProvider->getVertexMatchScore(from1, from2) > 0;
-  bool toMatch = _scoreProvider->getVertexMatchScore(to1, to2) > 0;
+  bool fromMatch = _details->isCandidateMatch(from1, from2);
+  bool toMatch = _details->isCandidateMatch(to1, to2);
+
+//  LOG_VAR(em);
+//  LOG_VAR(fromMatch);
+//  LOG_VAR(toMatch);
 
   /// @todo Possibly continue to evaluate matches even if we find an end point. This may make
   /// the search space too large, but would avoid missing matches.

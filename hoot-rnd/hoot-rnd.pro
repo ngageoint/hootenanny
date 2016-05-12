@@ -78,9 +78,14 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/network/VagabondNetworkMatcherTest.cpp \
     src/main/cpp/hoot/rnd/conflate/network/IterativeEdgeMatcher.cpp \
     src/main/cpp/hoot/rnd/conflate/network/EdgeMatch.cpp \
-    src/main/cpp/hoot/rnd/conflate/network/EdgeMatchSet.cpp \
     src/main/cpp/hoot/rnd/conflate/network/EdgeString.cpp \
-    src/main/cpp/hoot/rnd/conflate/network/EdgeMatchSetFinder.cpp
+    src/main/cpp/hoot/rnd/conflate/network/EdgeMatchSetFinder.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/InvertedEdgeMatchSet.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeMatchSet.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/EdgeLinkCreator.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/EdgePair.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeLinks.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/NetworkMergerTest.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h \
@@ -105,10 +110,15 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/VagabondNetworkMatcher.h \
     src/main/cpp/hoot/rnd/conflate/network/IterativeEdgeMatcher.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeMatch.h \
-    src/main/cpp/hoot/rnd/conflate/network/EdgeMatchSet.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeString.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeMatchSetFinder.h \
-    src/main/cpp/hoot/rnd/conflate/network/MatchScoreProvider.h
+    src/main/cpp/hoot/rnd/conflate/network/MatchScoreProvider.h \
+    src/main/cpp/hoot/rnd/conflate/network/EdgeMatchSet.h \
+    src/main/cpp/hoot/rnd/conflate/network/InvertedEdgeMatchSet.h \
+    src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeMatchSet.h \
+    src/main/cpp/hoot/rnd/conflate/network/EdgeLinkCreator.h \
+    src/main/cpp/hoot/rnd/conflate/network/EdgePair.h \
+    src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeLinks.h
 
 FORMS +=
 

@@ -29,8 +29,8 @@ void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edg
 {
   if (edgeScore->getScore() >= 1e-6)
   {
-    ConstNodePtr n1 = _getMedianNode(map, edgeScore->getE1()->getMembers());
-    ConstNodePtr n2 = _getMedianNode(map, edgeScore->getE2()->getMembers());
+    ConstNodePtr n1 = _getMedianNode(map, edgeScore->getEdgeMatch()->getString1()->getMembers());
+    ConstNodePtr n2 = _getMedianNode(map, edgeScore->getEdgeMatch()->getString2()->getMembers());
 
     WayPtr w(new Way(Status::Invalid, map->createNextWayId(), -1));
     w->addNode(n1->getId());

@@ -33,6 +33,7 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/conflate/MergerFactory.h>
+#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 
 // Standard
@@ -49,6 +50,11 @@ HOOT_FACTORY_REGISTER(MergerCreator, NetworkMergerCreator)
 NetworkMergerCreator::NetworkMergerCreator()
 {
   _map = 0;
+  _sublineMatcher.reset(
+    Factory::getInstance().constructObject<SublineStringMatcher>(
+      ConfigOptions().getHighwaySublineStringMatcher()));
+
+  _minSplitSize = ConfigOptions(conf()).getWayMergerMinSplitSize();
 }
 
 bool NetworkMergerCreator::createMergers(const MatchSet& matches,
@@ -76,7 +82,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
     }
     else
     {
-      mergers.push_back(new NetworkMerger(m->getMatchPairs()));
+      mergers.push_back(new HighwaySnapMerger(_minSplitSize, m->getMatchPairs(), _sublineMatcher));
     }
     result = true;
   }

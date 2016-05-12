@@ -1,5 +1,7 @@
 #include "NetworkEdge.h"
 
+#include <hoot/core/util/ElementConverter.h>
+
 namespace hoot
 {
 
@@ -13,6 +15,16 @@ NetworkEdge::NetworkEdge(NetworkVertexPtr from, NetworkVertexPtr to, bool direct
   _directed(directed)
 {
 
+}
+
+Meters NetworkEdge::calculateLength(const ConstElementProviderPtr& provider) const
+{
+  if (_members.size() != 1)
+  {
+    throw NotImplementedException("Edges with multiple members are not yet supported.");
+  }
+
+  return ElementConverter(provider).calculateLength(_members[0]);
 }
 
 QString NetworkEdge::toString() const

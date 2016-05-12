@@ -1,7 +1,7 @@
 #ifndef NETWORKEDGESCORE_H
 #define NETWORKEDGESCORE_H
 
-#include "NetworkEdge.h"
+#include "EdgeMatch.h"
 
 namespace hoot
 {
@@ -9,18 +9,14 @@ namespace hoot
 class NetworkEdgeScore
 {
 public:
-  NetworkEdgeScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2, double score12,
-    double score21) :
-    _e1(e1),
-    _e2(e2),
+  NetworkEdgeScore(ConstEdgeMatchPtr em, double score12, double score21) :
+    _em(em),
     _score12(score12),
     _score21(score21)
   {
   }
 
-  ConstNetworkEdgePtr getE1() const { return _e1; }
-
-  ConstNetworkEdgePtr getE2() const { return _e2; }
+  ConstEdgeMatchPtr getEdgeMatch() const { return _em; }
 
   double getScore() const { return _score12 * _score21; }
 
@@ -34,12 +30,12 @@ public:
 
   QString toString() const
   {
-    return QString("e1: %1 e2: %2 score: %3").arg(_e1->toString()).arg(_e2->toString()).
+    return QString("em: %1 score: %3").arg(_em->toString()).
       arg(getScore());
   }
 
 private:
-  ConstNetworkEdgePtr _e1, _e2;
+  ConstEdgeMatchPtr _em;
   double _score12, _score21;
   QString _uid;
 

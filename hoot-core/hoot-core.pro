@@ -489,7 +489,11 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.cpp \
     src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.cpp \
     src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.cpp \
-    src/main/cpp/hoot/core/filters/WaterwayCriterion.cpp
+    src/main/cpp/hoot/core/filters/WaterwayCriterion.cpp \
+    src/main/cpp/hoot/core/algorithms/linearreference/WayMapping.cpp \
+    src/main/cpp/hoot/core/algorithms/linearreference/WayMatchStringMapping.cpp \
+    src/main/cpp/hoot/core/algorithms/WayMatchStringMerger.cpp \
+    src/main/cpp/hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -973,5 +977,9 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h \
     src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.h \
     src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.h \
-    src/main/cpp/hoot/core/filters/WaterwayCriterion.h
+    src/main/cpp/hoot/core/filters/WaterwayCriterion.h \
+    src/main/cpp/hoot/core/algorithms/linearreference/WayMapping.h \
+    src/main/cpp/hoot/core/algorithms/linearreference/WayMatchStringMapping.h \
+    src/main/cpp/hoot/core/algorithms/WayMatchStringMerger.h \
+    src/main/cpp/hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h
 

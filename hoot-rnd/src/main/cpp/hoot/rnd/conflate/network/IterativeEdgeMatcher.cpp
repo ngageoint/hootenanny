@@ -62,9 +62,10 @@ QList<NetworkEdgeScorePtr> IterativeEdgeMatcher::getAllEdgeScores() const
     {
       ConstNetworkEdgePtr e2 = jt.key();
 
-      NetworkEdgeScorePtr p(new NetworkEdgeScore(e1, e2, jt.value().score,
-        _edge21Scores[e2][e1].score));
-      result.append(p);
+throw NotImplementedException();
+//      NetworkEdgeScorePtr p(new NetworkEdgeScore(e1, e2, jt.value().score,
+//        _edge21Scores[e2][e1].score));
+//      result.append(p);
     }
   }
 
@@ -74,22 +75,6 @@ QList<NetworkEdgeScorePtr> IterativeEdgeMatcher::getAllEdgeScores() const
 QList<NetworkVertexScorePtr> IterativeEdgeMatcher::getAllVertexScores() const
 {
   QList<NetworkVertexScorePtr> result;
-
-  for (VertexScoreMap::const_iterator it = _vertex12Scores.begin(); it != _vertex12Scores.end();
-    ++it)
-  {
-    ConstNetworkVertexPtr v1 = it.key();
-
-    for (QHash<ConstNetworkVertexPtr, double>::const_iterator jt = it.value().begin();
-      jt != it.value().end(); ++jt)
-    {
-      ConstNetworkVertexPtr v2 = jt.key();
-
-      NetworkVertexScorePtr p(new NetworkVertexScore(v1, v2, jt.value(), _vertex21Scores[v2][v1]));
-      result.append(p);
-    }
-  }
-
   return result;
 }
 

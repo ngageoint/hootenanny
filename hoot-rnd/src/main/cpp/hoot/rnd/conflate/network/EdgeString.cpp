@@ -36,6 +36,18 @@ void EdgeString::appendEdge(ConstNetworkEdgePtr e)
   _edges.append(EdgeEntry(e, reversed));
 }
 
+Meters EdgeString::calculateLength(const ConstElementProviderPtr& provider) const
+{
+  Meters result = 0.0;
+
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    result += _edges[i].e->calculateLength(provider);
+  }
+
+  return result;
+}
+
 shared_ptr<EdgeString> EdgeString::clone() const
 {
   EdgeStringPtr result(new EdgeString());
@@ -59,6 +71,22 @@ bool EdgeString::contains(ConstNetworkEdgePtr e) const
   return false;
 }
 
+ConstNetworkEdgePtr EdgeString::getEdgeAtOffset(ConstOsmMapPtr map, Meters offset) const
+{
+  Meters d = 0.0;
+  foreach (EdgeEntry ee, _edges)
+  {
+    d += ee.e->calculateLength(map);
+
+    if (d >= offset)
+    {
+      return ee.e;
+    }
+  }
+
+  return getLastEdge();
+}
+
 ConstNetworkVertexPtr EdgeString::getFrom() const
 {
   if (_edges.front().reversed)
@@ -69,6 +97,18 @@ ConstNetworkVertexPtr EdgeString::getFrom() const
   {
     return _edges.front().e->getFrom();
   }
+}
+
+QList<ConstElementPtr> EdgeString::getMembers() const
+{
+  QList<ConstElementPtr> result;
+
+  foreach (const EdgeEntry& e, _edges)
+  {
+    result += e.e->getMembers();
+  }
+
+  return result;
 }
 
 ConstNetworkVertexPtr EdgeString::getTo() const

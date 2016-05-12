@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/conflate/MergerCreator.h>
 
 namespace hoot
@@ -55,6 +56,8 @@ public:
 
 private:
   const OsmMap* _map;
+  Meters _minSplitSize;
+  shared_ptr<SublineStringMatcher> _sublineMatcher;
 
   /**
    * Returns true if one or more matches are conflicting matches.

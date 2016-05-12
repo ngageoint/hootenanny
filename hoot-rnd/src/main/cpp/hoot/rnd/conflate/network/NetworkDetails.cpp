@@ -6,6 +6,7 @@
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
+#include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/Factory.h>
 
 namespace hoot
@@ -53,6 +54,9 @@ double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNet
 
   ConstWayPtr w1 = dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
   ConstWayPtr w2 = dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
+
+  //LOG_VAR(ElementConverter(_map).convertToGeometry(w1)->toString());
+  //LOG_VAR(ElementConverter(_map).convertToGeometry(w2)->toString());
 
   // calculated the shared sublines
   WaySublineMatchString sublineMatch = _sublineMatcher->findMatch(_map, w1, w2,
@@ -148,7 +152,16 @@ bool NetworkDetails::isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
   ConstWayPtr w1 = dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
   ConstWayPtr w2 = dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
 
-  return !DirectionFinder::isSimilarDirection(_map, w1, w2);
+  // calculated the shared sublines
+  WaySublineMatchString sublineMatch = _sublineMatcher->findMatch(_map, w1, w2,
+    ConfigOptions().getSearchRadiusHighway());
+
+  if (sublineMatch.getReverseVector2().size() != 1)
+  {
+    throw NotImplementedException();
+  }
+
+  return sublineMatch.getReverseVector2()[0];
 }
 
 }

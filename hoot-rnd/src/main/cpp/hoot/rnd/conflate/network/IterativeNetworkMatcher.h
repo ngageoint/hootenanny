@@ -4,7 +4,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
-#include <hoot/rnd/conflate/network/EdgeMatchSet.h>
+#include <hoot/rnd/conflate/network/IndexedEdgeMatchSet.h>
 #include <hoot/rnd/conflate/network/MatchScoreProvider.h>
 #include <hoot/rnd/conflate/network/NetworkMatcher.h>
 #include <hoot/rnd/conflate/network/NetworkEdgeScore.h>
@@ -28,7 +28,6 @@ class IterativeNetworkMatcherTest;
  * The approach seems to work well most of the time, but suffers from a greedy mentality.
  */
 class IterativeNetworkMatcher :
-  public enable_shared_from_this<IterativeNetworkMatcher>,
   public NetworkMatcher,
   public MatchScoreProvider
 {
@@ -143,7 +142,7 @@ private:
     }
   };
 
-  EdgeMatchSetPtr _edgeMatches;
+  IndexedEdgeMatchSetPtr _edgeMatches;
   EdgeScoreMap _edge12Scores, _edge21Scores;
   VertexScoreMap _vertex12Scores, _vertex21Scores;
   /// P modifies the aggressiveness of the algorithm. Higher is more aggressive.

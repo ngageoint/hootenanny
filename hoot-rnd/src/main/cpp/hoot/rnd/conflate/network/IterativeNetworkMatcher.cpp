@@ -13,7 +13,7 @@ IterativeNetworkMatcher::IterativeNetworkMatcher() :
   _p(.5),
   _dampening(1)
 {
-  _edgeMatches.reset(new EdgeMatchSet());
+  _edgeMatches.reset(new IndexedEdgeMatchSet());
 }
 
 bool greaterThan(const double& v1, const double& v2)
@@ -74,9 +74,10 @@ QList<NetworkEdgeScorePtr> IterativeNetworkMatcher::getAllEdgeScores() const
     {
       ConstNetworkEdgePtr e2 = jt.key();
 
-      NetworkEdgeScorePtr p(new NetworkEdgeScore(e1, e2, jt.value().score,
-        _edge21Scores[e2][e1].score));
-      result.append(p);
+throw NotImplementedException();
+//      NetworkEdgeScorePtr p(new NetworkEdgeScore(e1, e2, jt.value().score,
+//        _edge21Scores[e2][e1].score));
+//      result.append(p);
     }
   }
 
@@ -287,7 +288,7 @@ double IterativeNetworkMatcher::_scoreVertices(ConstNetworkVertexPtr /*e1*/,
 
 void IterativeNetworkMatcher::_seedEdgeScores()
 {
-  EdgeMatchSetFinder finder(_details1, _edgeMatches, _n1, _n2, shared_from_this());
+  EdgeMatchSetFinder finder(_details1, _edgeMatches, _n1, _n2);
 
   // go through all the n1 edges
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();

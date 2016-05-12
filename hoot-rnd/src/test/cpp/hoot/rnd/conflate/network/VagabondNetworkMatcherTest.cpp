@@ -68,19 +68,24 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB1.osm", true,
-//      Status::Unknown1);
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB2.osm", false,
-//      Status::Unknown2);
-
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/DcGisRoads.osm", true,
+    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB1.osm", true,
       Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "tmp/dcperb3.osm", false,
+    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB2.osm", false,
       Status::Unknown2);
+
+//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/DcGisRoads.osm", true,
+//      Status::Unknown1);
+//    OsmMapReaderFactory::getInstance().read(map, "tmp/dcperb3.osm", false,
+//      Status::Unknown2);
 
 //    OsmMapReaderFactory::getInstance().read(map, "tmp/sub1.osm", true,
 //      Status::Unknown1);
 //    OsmMapReaderFactory::getInstance().read(map, "tmp/sub2.osm", false,
+//      Status::Unknown2);
+
+//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestD1.osm", true,
+//      Status::Unknown1);
+//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestD2.osm", true,
 //      Status::Unknown2);
 
     MapCleaner().apply(map);
@@ -98,15 +103,15 @@ public:
     one.setCriterion(c2);
     OsmNetworkPtr network2 = one.extractNetwork(map);
 
-    VagabondNetworkMatcher uut;
-    uut.matchNetworks(map, network1, network2);
+    VagabondNetworkMatcherPtr uut = VagabondNetworkMatcher::create();
+    uut->matchNetworks(map, network1, network2);
 
-    writeDebugMap(map, uut, 0);
+    writeDebugMap(map, *uut, 0);
     for (int i = 1; i <= 20; ++i)
     {
       LOG_VAR(i);
-      uut.iterate();
-      writeDebugMap(map, uut, i);
+      uut->iterate();
+      writeDebugMap(map, *uut, i);
     }
 
     TestUtils::resetEnvironment();

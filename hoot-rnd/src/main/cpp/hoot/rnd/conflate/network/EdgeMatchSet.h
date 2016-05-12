@@ -1,5 +1,5 @@
-#ifndef EDGEMATCHSET_H
-#define EDGEMATCHSET_H
+#ifndef __EDGE_MATCH_SET_H__
+#define __EDGE_MATCH_SET_H__
 
 #include "EdgeMatch.h"
 
@@ -9,19 +9,12 @@ namespace hoot
 class EdgeMatchSet
 {
 public:
-  EdgeMatchSet();
-  
-  void addEdgeMatch(const EdgeMatchPtr& em, double score);
+  virtual ~EdgeMatchSet() {}
 
-  /**
-   * Returns true if the specified element (or the reversed equivalent) is contained in this set.
-   */
-  bool contains(const EdgeMatchPtr &em) const;
+  virtual bool contains(const EdgeMatchPtr &em) const = 0;
 
-  QString toString() const;
+  virtual QString toString() const = 0;
 
-private:
-  QHash<EdgeMatchPtr, double> _matches;
 };
 
 typedef shared_ptr<EdgeMatchSet> EdgeMatchSetPtr;
@@ -29,4 +22,4 @@ typedef shared_ptr<const EdgeMatchSet> ConstEdgeMatchSetPtr;
 
 }
 
-#endif // EDGEMATCHSET_H
+#endif // __EDGE_MATCH_SET_H__

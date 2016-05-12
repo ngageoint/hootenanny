@@ -6,6 +6,8 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 
+#include "EdgeMatch.h"
+
 namespace hoot
 {
 
@@ -15,7 +17,7 @@ namespace hoot
 class NetworkMatch : public Match
 {
 public:
-  NetworkMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
+  NetworkMatch(const ConstOsmMapPtr& map, ConstEdgeMatchPtr edgeMatch,
     double score, ConstMatchThresholdPtr mt);
 
   /**
@@ -64,9 +66,14 @@ public:
 
   virtual MatchType getType() const { return _threshold->getType(getClassification()); }
 
+protected:
+  void _discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeMatch);
+
+  ConstWayPtr _toWay(ConstNetworkEdgePtr edge) const;
+
 private:
   MatchClassification _classification;
-  ElementId _eid1, _eid2;
+  ConstEdgeMatchPtr _edgeMatch;
   set< pair<ElementId, ElementId> > _pairs;
 };
 

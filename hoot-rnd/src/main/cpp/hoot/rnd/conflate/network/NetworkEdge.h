@@ -3,6 +3,7 @@
 
 // hoot
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/OsmMap.h>
 #include <hoot/rnd/conflate/network/NetworkVertex.h>
 
 // Qt
@@ -24,6 +25,8 @@ public:
   NetworkEdge(NetworkVertexPtr from, NetworkVertexPtr to, bool directed);
 
   void addMember(ConstElementPtr e) { _members.append(e); }
+
+  Meters calculateLength(const ConstElementProviderPtr& provider) const;
 
   ConstNetworkVertexPtr getFrom() const { return _from; }
 

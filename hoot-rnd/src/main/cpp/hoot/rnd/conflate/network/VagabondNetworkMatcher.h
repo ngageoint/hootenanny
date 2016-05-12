@@ -4,71 +4,12 @@
 // hoot
 #include <hoot/rnd/conflate/network/NetworkMatcher.h>
 
+#include "EdgeMatchSet.h"
+#include "IndexedEdgeLinks.h"
+#include "IndexedEdgeMatchSet.h"
+
 namespace hoot
 {
-
-class NetworkEdgePair
-{
-public:
-  ConstNetworkEdgePtr e1;
-  ConstNetworkEdgePtr e2;
-  bool reversed;
-  static int count;
-  int id;
-
-  NetworkEdgePair(ConstNetworkEdgePtr ep1, ConstNetworkEdgePtr ep2) : e1(ep1), e2(ep2)
-  {
-    count++;
-    id = count;
-  }
-  ConstNetworkVertexPtr getFrom1() { return e1->getFrom(); }
-  ConstNetworkVertexPtr getTo1() { return e1->getTo(); }
-  /**
-   * Returns from for the second edge accounting for the reversal. E.g. getFrom1() will always
-   * match to getFrom2().
-   */
-  ConstNetworkVertexPtr getFrom2()
-  {
-    if (reversed)
-    {
-      return e2->getTo();
-    }
-    else
-    {
-      return e2->getFrom();
-    }
-  }
-
-  /**
-   * Returns from for the second edge accounting for the reversal. E.g. getTo1() will always
-   * match to getTo2().
-   */
-  ConstNetworkVertexPtr getTo2()
-  {
-    if (reversed)
-    {
-      return e2->getFrom();
-    }
-    else
-    {
-      return e2->getTo();
-    }
-  }
-
-  QString toString() const
-  {
-    return QString::number(id) + " " + e1->toString() + ", " + e2->toString() +
-      (reversed ? "(rev)" : "");
-  }
-};
-
-typedef shared_ptr<NetworkEdgePair> NetworkEdgePairPtr;
-
-inline uint qHash(const NetworkEdgePairPtr& v) { return qHash(v->e1) ^ qHash(v->e2); }
-inline bool operator==(const NetworkEdgePairPtr& v1, const NetworkEdgePairPtr& v2)
-{
-  return *(v1->e1) == *(v2->e1) && *(v1->e2) == *(v2->e2);
-}
 
 /**
  * Start a random location in one of the networks, then recursively traverse the graph starting at
@@ -95,7 +36,11 @@ inline bool operator==(const NetworkEdgePairPtr& v1, const NetworkEdgePairPtr& v
 class VagabondNetworkMatcher : public NetworkMatcher
 {
 public:
-  VagabondNetworkMatcher();
+
+  /**
+   * Use this instead of a constructor. To simplify life a shared pointer should always be used.
+   */
+  static shared_ptr<VagabondNetworkMatcher> create();
 
   virtual void iterate();
 
@@ -109,18 +54,25 @@ public:
 
   virtual QList<NetworkVertexScorePtr> getAllVertexScores() const;
 
+protected:
+  /**
+   * Use create instead.
+   */
+  VagabondNetworkMatcher();
+
 private:
-  // links in the form {from, [to]}
-  typedef QMultiHash<NetworkEdgePairPtr, NetworkEdgePairPtr> LinkHash;
-  typedef QHash<NetworkEdgePairPtr, double> PrHash;
-  LinkHash _links;
-  QHash<NetworkEdgePairPtr, double> _pr;
+
+  IndexedEdgeLinks _links;
+  IndexedEdgeMatchSetPtr _pr;
   double _dampen;
 
   void _calculateEdgeLinks();
-  void _calculateEdgePairs();
-  QSet<NetworkEdgePairPtr> _getConnectedEdges(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
+  void _calculateEdgeMatches();
+  QSet<EdgeMatchPtr> _getConnectedEdges(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 };
+
+typedef shared_ptr<VagabondNetworkMatcher> VagabondNetworkMatcherPtr;
+typedef shared_ptr<const VagabondNetworkMatcher> ConstVagabondNetworkMatcherPtr;
 
 }
 

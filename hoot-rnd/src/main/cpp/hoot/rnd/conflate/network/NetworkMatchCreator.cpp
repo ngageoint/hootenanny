@@ -72,11 +72,7 @@ Match* NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, ElementId
 const Match* NetworkMatchCreator::_createMatch(const ConstOsmMapPtr& map, NetworkEdgeScorePtr e,
   ConstMatchThresholdPtr mt)
 {
-  assert(e->getE1()->getMembers().size() == 1);
-  assert(e->getE2()->getMembers().size() == 1);
-
-  return new NetworkMatch(map, e->getE1()->getMembers()[0]->getElementId(),
-    e->getE2()->getMembers()[0]->getElementId(), e->getScore(), mt);
+  return new NetworkMatch(map, e->getEdgeMatch(), e->getScore(), mt);
 }
 
 void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
@@ -97,8 +93,8 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   OsmNetworkPtr n2 = e2.extractNetwork(map);
 
   // call class to derive final graph node and graph edge matches
-  IterativeNetworkMatcherPtr matcher = IterativeNetworkMatcher::create();
-  //VagabondNetworkMatcher matcher;
+  //IterativeNetworkMatcherPtr matcher = IterativeNetworkMatcher::create();
+  VagabondNetworkMatcherPtr matcher = VagabondNetworkMatcher::create();
   matcher->matchNetworks(map, n1, n2);
 
   for (size_t i = 0; i < 10; ++i)
@@ -108,6 +104,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   // convert graph edge matches into NetworkMatch objects.
   QList<NetworkEdgeScorePtr> edgeMatch = matcher->getAllEdgeScores();
+  LOG_VAR(edgeMatch);
 
   for (int i = 0; i < edgeMatch.size(); i++)
   {

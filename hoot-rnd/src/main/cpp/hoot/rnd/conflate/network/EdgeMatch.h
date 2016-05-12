@@ -35,6 +35,12 @@ public:
   bool contains(ConstNetworkEdgePtr e) const;
 
   /**
+   * Returns true if any of the edges in this edge match overlap with other. Overlapping vertexes
+   * are ignored.
+   */
+  bool overlaps(const shared_ptr<const EdgeMatch>& other) const;
+
+  /**
    * Reverse both edge strings that make up this EdgeMatch.
    */
   void reverse() const { _edges1->reverse(); _edges2->reverse(); }

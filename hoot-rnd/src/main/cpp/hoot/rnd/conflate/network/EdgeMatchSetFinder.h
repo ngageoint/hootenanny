@@ -1,7 +1,7 @@
 #ifndef EDGEMATCHSETFINDER_H
 #define EDGEMATCHSETFINDER_H
 
-#include "EdgeMatchSet.h"
+#include "IndexedEdgeMatchSet.h"
 #include "MatchScoreProvider.h"
 #include "NetworkDetails.h"
 
@@ -11,8 +11,8 @@ namespace hoot
 class EdgeMatchSetFinder
 {
 public:
-  EdgeMatchSetFinder(NetworkDetailsPtr details, EdgeMatchSetPtr matchSet,
-    ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2, ConstMatchScoreProviderPtr scoreProvider);
+  EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMatchSetPtr matchSet,
+    ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
 
   /**
    * Evaluate edges e1 and e2 for match. If the end vertices don't match then recursively search
@@ -23,9 +23,8 @@ public:
 private:
 
   NetworkDetailsPtr _details;
-  EdgeMatchSetPtr _matchSet;
+  IndexedEdgeMatchSetPtr _matchSet;
   ConstOsmNetworkPtr _n1, _n2;
-  ConstMatchScoreProviderPtr _scoreProvider;
 
   void _addEdgeMatches(EdgeMatchPtr em);
 
@@ -35,7 +34,7 @@ private:
   void _addEdgeNeighborsToStart(EdgeMatchPtr em, QList<ConstNetworkEdgePtr> neighbors1,
     QList<ConstNetworkEdgePtr> neighbors2);
 
-  #warning replace with a real method
+  /// @todo replace with a real method
   double _scoreMatch(EdgeMatchPtr /*em*/) const { return 1.0; }
 };
 

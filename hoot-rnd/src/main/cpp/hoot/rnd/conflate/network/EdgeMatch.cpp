@@ -34,6 +34,27 @@ bool EdgeMatch::contains(ConstNetworkEdgePtr e) const
   return getString1()->contains(e) || getString2()->contains(e);
 }
 
+bool EdgeMatch::overlaps(const shared_ptr<const EdgeMatch> &other) const
+{
+  foreach (const EdgeString::EdgeEntry& ee, _edges1->getAllEdges())
+  {
+    if (other->contains(ee.e))
+    {
+      return true;
+    }
+  }
+
+  foreach (const EdgeString::EdgeEntry& ee, _edges2->getAllEdges())
+  {
+    if (other->contains(ee.e))
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 QString EdgeMatch::toString() const
 {
   return QString("s1: %1 s2: %2").arg(_edges1->toString()).arg(_edges2->toString());
