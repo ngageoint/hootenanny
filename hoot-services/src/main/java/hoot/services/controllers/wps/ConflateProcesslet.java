@@ -26,8 +26,6 @@
  */
 package hoot.services.controllers.wps;
 
-import hoot.services.HootProperties;
-
 import java.io.IOException;
 
 import org.deegree.services.wps.ProcessletException;
@@ -40,55 +38,54 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.HootProperties;
+
+
 public class ConflateProcesslet extends JobProcesslet {
-  private static final Logger log = LoggerFactory.getLogger(ConflateProcesslet.class);
-  
-  private String makefilePath = null;
+    private static final Logger log = LoggerFactory.getLogger(ConflateProcesslet.class);
 
-	public ConflateProcesslet() throws Exception
-	{
-    try {
-    	makefilePath = HootProperties.getProperty("ConflateMakefilePath");
-    	this.setProcessScriptName(makefilePath);
-		} catch (IOException e) {
-			log.error(e.getMessage());
-		}
-	}
-	
-	@Override
-	public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info) 
-			throws ProcessletException {
-		
-		JSONArray args = parseRequestParams(in);
-		
-		try {		
-			@SuppressWarnings("unused")
-      String confOutputName = null;
-			for(int i=0; i<args.size(); i++)
-			{
-				JSONObject arg = (JSONObject)args.get(i);
-				Object val = arg.get("OUTPUT_NAME");
-				
-				if (val != null)
-				{
-					confOutputName = val.toString();
-					break;
-				}
-			}
-			JSONObject conflationCommand = _createPostBody(args);
+    private String makefilePath = null;
 
-			
-			JSONArray jobArgs = new JSONArray();
-			jobArgs.add(conflationCommand);
-			
-			
-			postChainJobRquest( jobIdStr,  jobArgs.toJSONString());	
-			
-			((LiteralOutput)out.getParameter("jobId")).setValue(jobIdStr);
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-		
+    public ConflateProcesslet() throws Exception {
+        try {
+            makefilePath = HootProperties.getProperty("ConflateMakefilePath");
+            this.setProcessScriptName(makefilePath);
+        }
+        catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
 
-	}
+    @Override
+    public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info)
+            throws ProcessletException {
+
+        JSONArray args = parseRequestParams(in);
+
+        try {
+            @SuppressWarnings("unused")
+            String confOutputName = null;
+            for (int i = 0; i < args.size(); i++) {
+                JSONObject arg = (JSONObject) args.get(i);
+                Object val = arg.get("OUTPUT_NAME");
+
+                if (val != null) {
+                    confOutputName = val.toString();
+                    break;
+                }
+            }
+            JSONObject conflationCommand = _createPostBody(args);
+
+            JSONArray jobArgs = new JSONArray();
+            jobArgs.add(conflationCommand);
+
+            postChainJobRquest(jobIdStr, jobArgs.toJSONString());
+
+            ((LiteralOutput) out.getParameter("jobId")).setValue(jobIdStr);
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+    }
 }

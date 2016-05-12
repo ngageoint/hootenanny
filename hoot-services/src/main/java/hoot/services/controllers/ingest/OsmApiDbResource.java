@@ -46,82 +46,69 @@ import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.utils.ResourceErrorHandler;
 
+
 @Path("/apidb")
-public class OsmApiDbResource extends JobControllerBase 
-{
-	private static final Logger log = LoggerFactory.getLogger(OsmApiDbResource.class);
+public class OsmApiDbResource extends JobControllerBase {
+    private static final Logger log = LoggerFactory.getLogger(OsmApiDbResource.class);
 
-	public OsmApiDbResource()
-	{
-		if (processScriptName ==  null)
-		{
-			processScriptName = "ExportFromOsmApiDbToHootServicesDb";
-		}
-		
-		throw new UnsupportedOperationException("OSM API DB support not yet enabled.");
-	}
-	
-	//@GET
-	@POST
-	@Path("/bybbox")
-  @Consumes(MediaType.TEXT_PLAIN)
-  @Produces(MediaType.TEXT_PLAIN)
-  public Response exportByBoundingBox(
-    @QueryParam("exportDbName")
-    String exportDbName,
-    @QueryParam("bbox")
-    String bbox,
-    @QueryParam("outputLayerName")
-    String outputLayerName)
-    throws Exception
-  {
-		log.debug(exportDbName);
-		log.debug(bbox);
-		log.debug(outputLayerName);
-		
-		String jobId = UUID.randomUUID().toString();
-		try
-		{
-			String tmpLoc = HootProperties.getProperty("osmTempOutputPath");
-			String dbname = HootProperties.getProperty("MapEditDbName");
-	  	String userid = HootProperties.getProperty("MapEditDbUserId");
-	  	String pwd = HootProperties.getProperty("MapEditDbPassword");
-	  	String host = HootProperties.getProperty("MapEditDbHostAddr");
-	  	String port = HootProperties.getProperty("MapEditDbHostPort");
-	  	
-			String[] coords = bbox.split(",");
-			JSONArray jobArgs = new JSONArray();
-			JSONObject param = new JSONObject();
-			param.put("exportDbName", exportDbName);
-			param.put("minx", coords[0]);
-			param.put("miny", coords[1]);
-			param.put("maxx", coords[2]);
-			param.put("maxy", coords[3]);
-			param.put("outputLayerName", outputLayerName);
-			
-			param.put("MapEditDbName", dbname);
-			param.put("MapEditDbUserId", userid);
-			param.put("MapEditDbPassword", pwd);
-			param.put("MapEditDbHostAddr", host);
-			param.put("MapEditDbHostPort", port);
-			param.put("TempPath", tmpLoc);
-			
-			JSONArray commandArgs = parseParams(param.toJSONString());
-			JSONObject command = _createMakeScriptJobReq(commandArgs);
-			jobArgs.add(command);
+    public OsmApiDbResource() {
+        if (processScriptName == null) {
+            processScriptName = "ExportFromOsmApiDbToHootServicesDb";
+        }
 
-			postChainJobRquest(jobId,  jobArgs.toJSONString());
-		}
-		catch (Exception ex)
-		{
-		  ResourceErrorHandler.handleError(
-			"Error running osm api db ingest job: " + ex.toString(),
-		    Status.INTERNAL_SERVER_ERROR,
-			log);
-		}
-		JSONObject res = new JSONObject();
-		res.put("jobid", jobId);
-		
-		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
-  }
+        throw new UnsupportedOperationException("OSM API DB support not yet enabled.");
+    }
+
+    // @GET
+    @POST
+    @Path("/bybbox")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response exportByBoundingBox(@QueryParam("exportDbName") String exportDbName,
+            @QueryParam("bbox") String bbox, @QueryParam("outputLayerName") String outputLayerName) throws Exception {
+        log.debug(exportDbName);
+        log.debug(bbox);
+        log.debug(outputLayerName);
+
+        String jobId = UUID.randomUUID().toString();
+        try {
+            String tmpLoc = HootProperties.getProperty("osmTempOutputPath");
+            String dbname = HootProperties.getProperty("MapEditDbName");
+            String userid = HootProperties.getProperty("MapEditDbUserId");
+            String pwd = HootProperties.getProperty("MapEditDbPassword");
+            String host = HootProperties.getProperty("MapEditDbHostAddr");
+            String port = HootProperties.getProperty("MapEditDbHostPort");
+
+            String[] coords = bbox.split(",");
+            JSONArray jobArgs = new JSONArray();
+            JSONObject param = new JSONObject();
+            param.put("exportDbName", exportDbName);
+            param.put("minx", coords[0]);
+            param.put("miny", coords[1]);
+            param.put("maxx", coords[2]);
+            param.put("maxy", coords[3]);
+            param.put("outputLayerName", outputLayerName);
+
+            param.put("MapEditDbName", dbname);
+            param.put("MapEditDbUserId", userid);
+            param.put("MapEditDbPassword", pwd);
+            param.put("MapEditDbHostAddr", host);
+            param.put("MapEditDbHostPort", port);
+            param.put("TempPath", tmpLoc);
+
+            JSONArray commandArgs = parseParams(param.toJSONString());
+            JSONObject command = _createMakeScriptJobReq(commandArgs);
+            jobArgs.add(command);
+
+            postChainJobRquest(jobId, jobArgs.toJSONString());
+        }
+        catch (Exception ex) {
+            ResourceErrorHandler.handleError("Error running osm api db ingest job: " + ex.toString(),
+                    Status.INTERNAL_SERVER_ERROR, log);
+        }
+        JSONObject res = new JSONObject();
+        res.put("jobid", jobId);
+
+        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+    }
 }

@@ -37,133 +37,131 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-
-//import javax.xml.transform.TransformerConfigurationException;
-//import javax.xml.transform.TransformerFactory;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+//import javax.xml.transform.TransformerConfigurationException;
+//import javax.xml.transform.TransformerFactory;
+
+
 /**
  * General XML utilities
  */
 @SuppressWarnings("deprecation")
-public class XmlDocumentBuilder
-{
-  /**
-   * Creates a new XML DOM
-   * 
-   * @return XML document
-   * @throws IOException
-   * @throws ParserConfigurationException 
-   */
-  public static Document create() throws IOException, ParserConfigurationException
-  {
-  	return XmlDocumentBuilder.getSecureDocBuilderFactory().newDocumentBuilder().newDocument();
-  }
+public class XmlDocumentBuilder {
+    /**
+     * Creates a new XML DOM
+     * 
+     * @return XML document
+     * @throws IOException
+     * @throws ParserConfigurationException
+     */
+    public static Document create() throws IOException, ParserConfigurationException {
+        return XmlDocumentBuilder.getSecureDocBuilderFactory().newDocumentBuilder().newDocument();
+    }
 
-  /**
-   * Parses an XML string into a DOM
-   * 
-   * @param xml an XML string
-   * @return an XML DOM
-   * @throws SAXException
-   * @throws IOException
-   * @throws ParserConfigurationException
-   */
-  public static Document parse(String xml) throws SAXException, IOException,
-    ParserConfigurationException
-  {
-  	DocumentBuilderFactory domFactory = getSecureDocBuilderFactory();
-  	//DocumentBuilderFactory domFactory = getNormalDocBuilderFactory();
-    domFactory.setNamespaceAware(false);
-    domFactory.setValidating(false);
-    domFactory.setFeature("http://xml.org/sax/features/namespaces", false);
-    domFactory.setFeature("http://xml.org/sax/features/validation", false);
-    domFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
-    domFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-    
-    DocumentBuilder builder;
-    builder = domFactory.newDocumentBuilder();
-    
-    InputSource is = new InputSource();
-    is.setCharacterStream(new StringReader(xml));
-    
-    //#6760: formerly line 132
-    return builder.parse(is);
-  }
-  
-  /**
-   * Returns a string representation of an XML DOM
-   * 
-   * @param document an XML DOM
-   * @return an XML string
-   * @throws IOException
-   */
-  public static String toString(Document document) throws IOException
-  {
-    StringWriter writer = new StringWriter();
-    write(document, writer);
-    return writer.toString();
-  }
+    /**
+     * Parses an XML string into a DOM
+     * 
+     * @param xml
+     *            an XML string
+     * @return an XML DOM
+     * @throws SAXException
+     * @throws IOException
+     * @throws ParserConfigurationException
+     */
+    public static Document parse(String xml) throws SAXException, IOException, ParserConfigurationException {
+        DocumentBuilderFactory domFactory = getSecureDocBuilderFactory();
+        // DocumentBuilderFactory domFactory = getNormalDocBuilderFactory();
+        domFactory.setNamespaceAware(false);
+        domFactory.setValidating(false);
+        domFactory.setFeature("http://xml.org/sax/features/namespaces", false);
+        domFactory.setFeature("http://xml.org/sax/features/validation", false);
+        domFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+        domFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 
-  /**
-   * Writes an XML DOM to a writer
-   * 
-   * @param document XML DOM to write
-   * @param out writer to write the XML DOM to
-   * @throws IOException if unable to write the XML DOM
-   */
-  public static void write(Document document, Writer out) throws IOException
-  {
-    // happy to replace this code w/ the non-deprecated code, but I couldn't get the transformer 
-    // approach to work. 
-    OutputFormat format = new OutputFormat(document);
-    format.setIndenting(true);
-    format.setIndent(2);
-    XMLSerializer serializer = new XMLSerializer(out, format);
-    serializer.serialize(document);
-  }
-  
-  /**
-   * Returns a secure TransformerFactory, as identified by HP Fortify
-   * 
-   * @return a TransformerFactory
-   * @throws TransformerConfigurationException
-   * //TODO: could not get this code to run in JDK 1.7
-   */
-  /*public static TransformerFactory getSecureTransformerFactory() 
-    throws TransformerConfigurationException
-  {
-  	TransformerFactory transformerFactory = TransformerFactory.newInstance();
-  	transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-  	transformerFactory.setFeature(XMLConstants.ACCESS_EXTERNAL_DTD, false);
-  	return transformerFactory;
-  }*/
-  
-  /**
-   * Returns a secure DocumentBuilderFactory, as identified by HP Fortify
-   * 
-   * @return a DocumentBuilderFactory
-   * @throws ParserConfigurationException
-   */
-  public static DocumentBuilderFactory getSecureDocBuilderFactory() 
-    throws ParserConfigurationException
-  {
-  	DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-  	docBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-  	docBuilderFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
-  	docBuilderFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-  	docBuilderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-    return docBuilderFactory;
-  }
-  
-  @SuppressWarnings("unused")
-  private static DocumentBuilderFactory getNormalDocBuilderFactory() 
-  {
-  	DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-    return docBuilderFactory;
-  }
+        DocumentBuilder builder;
+        builder = domFactory.newDocumentBuilder();
+
+        InputSource is = new InputSource();
+        is.setCharacterStream(new StringReader(xml));
+
+        // #6760: formerly line 132
+        return builder.parse(is);
+    }
+
+    /**
+     * Returns a string representation of an XML DOM
+     * 
+     * @param document
+     *            an XML DOM
+     * @return an XML string
+     * @throws IOException
+     */
+    public static String toString(Document document) throws IOException {
+        StringWriter writer = new StringWriter();
+        write(document, writer);
+        return writer.toString();
+    }
+
+    /**
+     * Writes an XML DOM to a writer
+     * 
+     * @param document
+     *            XML DOM to write
+     * @param out
+     *            writer to write the XML DOM to
+     * @throws IOException
+     *             if unable to write the XML DOM
+     */
+    public static void write(Document document, Writer out) throws IOException {
+        // happy to replace this code w/ the non-deprecated code, but I couldn't
+        // get the transformer
+        // approach to work.
+        OutputFormat format = new OutputFormat(document);
+        format.setIndenting(true);
+        format.setIndent(2);
+        XMLSerializer serializer = new XMLSerializer(out, format);
+        serializer.serialize(document);
+    }
+
+    /**
+     * Returns a secure TransformerFactory, as identified by HP Fortify
+     * 
+     * @return a TransformerFactory
+     * @throws TransformerConfigurationException
+     *             //TODO: could not get this code to run in JDK 1.7
+     */
+    /*
+     * public static TransformerFactory getSecureTransformerFactory() throws
+     * TransformerConfigurationException { TransformerFactory transformerFactory
+     * = TransformerFactory.newInstance();
+     * transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING,
+     * true); transformerFactory.setFeature(XMLConstants.ACCESS_EXTERNAL_DTD,
+     * false); return transformerFactory; }
+     */
+
+    /**
+     * Returns a secure DocumentBuilderFactory, as identified by HP Fortify
+     * 
+     * @return a DocumentBuilderFactory
+     * @throws ParserConfigurationException
+     */
+    public static DocumentBuilderFactory getSecureDocBuilderFactory() throws ParserConfigurationException {
+        DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+        docBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        docBuilderFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        docBuilderFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        docBuilderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        return docBuilderFactory;
+    }
+
+    @SuppressWarnings("unused")
+    private static DocumentBuilderFactory getNormalDocBuilderFactory() {
+        DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+        return docBuilderFactory;
+    }
 }

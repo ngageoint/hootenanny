@@ -33,9 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import hoot.services.HootProperties;
-import hoot.services.UnitTest;
-
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -44,135 +41,121 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import hoot.services.HootProperties;
+import hoot.services.UnitTest;
+
+
 public class MultipartSerializerTest {
-	private static String homeFolder = null;
-	private MultipartSerializer _ms = new MultipartSerializer();
-	@BeforeClass
-	public static void oneTimeSetup() throws Exception
-	{
-		homeFolder = HootProperties.getProperty("homeFolder");
-		org.junit.Assert.assertNotNull(homeFolder);
-		org.junit.Assert.assertTrue(homeFolder.length() > 0);
-	}
+    private static String homeFolder = null;
+    private MultipartSerializer _ms = new MultipartSerializer();
 
-	@Test
-	@Category(UnitTest.class)
-	public void TestserializeFGDB() throws Exception
-	{
-		String jobId = "123-456-789";
-		String wkdirpath = homeFolder + "/upload/" + jobId;
-		File workingDir = new File(wkdirpath);
-		FileUtils.forceMkdir(workingDir);
-		org.junit.Assert.assertTrue(workingDir.exists());
+    @BeforeClass
+    public static void oneTimeSetup() throws Exception {
+        homeFolder = HootProperties.getProperty("homeFolder");
+        org.junit.Assert.assertNotNull(homeFolder);
+        org.junit.Assert.assertTrue(homeFolder.length() > 0);
+    }
 
+    @Test
+    @Category(UnitTest.class)
+    public void TestserializeFGDB() throws Exception {
+        String jobId = "123-456-789";
+        String wkdirpath = homeFolder + "/upload/" + jobId;
+        File workingDir = new File(wkdirpath);
+        FileUtils.forceMkdir(workingDir);
+        org.junit.Assert.assertTrue(workingDir.exists());
 
-		List<FileItem> fileItemsList = new ArrayList<FileItem>();
+        List<FileItem> fileItemsList = new ArrayList<FileItem>();
 
-		FileItemFactory factory = new DiskFileItemFactory(16, null);
-    String textFieldName = "textField";
+        FileItemFactory factory = new DiskFileItemFactory(16, null);
+        String textFieldName = "textField";
 
-    FileItem item = factory.createItem(
-            textFieldName,
-            "application/octet-stream",
-            true,
-            "fgdbTest.gdb/dummy1.gdbtable"
-    );
+        FileItem item = factory.createItem(textFieldName, "application/octet-stream", true,
+                "fgdbTest.gdb/dummy1.gdbtable");
 
-    String textFieldValue = "0123456789";
-    byte[] testFieldValueBytes = textFieldValue.getBytes();
+        String textFieldValue = "0123456789";
+        byte[] testFieldValueBytes = textFieldValue.getBytes();
 
-    OutputStream os = item.getOutputStream();
-    os.write(testFieldValueBytes);
-    os.close();
+        OutputStream os = item.getOutputStream();
+        os.write(testFieldValueBytes);
+        os.close();
 
-    File out = new File(wkdirpath + "/buffer.tmp");
-    item.write(out);
-    fileItemsList.add(item);
-    org.junit.Assert.assertTrue(out.exists());
-    
-		Map<String,String> uploadedFiles = new HashMap<String, String>();
-    Map<String,String> uploadedFilesPaths = new HashMap<String, String>();
+        File out = new File(wkdirpath + "/buffer.tmp");
+        item.write(out);
+        fileItemsList.add(item);
+        org.junit.Assert.assertTrue(out.exists());
 
-		_ms._serializeFGDB(fileItemsList, jobId,
-				uploadedFiles, uploadedFilesPaths );
-		
-		org.junit.Assert.assertEquals("GDB", uploadedFiles.get("fgdbTest"));
-		org.junit.Assert.assertEquals("fgdbTest.gdb", uploadedFilesPaths.get("fgdbTest"));
+        Map<String, String> uploadedFiles = new HashMap<String, String>();
+        Map<String, String> uploadedFilesPaths = new HashMap<String, String>();
 
-		File fgdbpath = new File(wkdirpath + "/fgdbTest.gdb");
-		org.junit.Assert.assertTrue(fgdbpath.exists());
+        _ms._serializeFGDB(fileItemsList, jobId, uploadedFiles, uploadedFilesPaths);
 
-		File content = new File(wkdirpath + "/fgdbTest.gdb/dummy1.gdbtable");
-		org.junit.Assert.assertTrue(content.exists());
+        org.junit.Assert.assertEquals("GDB", uploadedFiles.get("fgdbTest"));
+        org.junit.Assert.assertEquals("fgdbTest.gdb", uploadedFilesPaths.get("fgdbTest"));
 
-		FileUtils.forceDelete(workingDir);
-	}
-	
-	@Test
-	@Category(UnitTest.class)
-	public void TestserializeUploadedFiles() throws Exception
-	{
-		//homeFolder + "/upload/" + jobId + "/" + relPath;
-		// Create dummy FGDB
+        File fgdbpath = new File(wkdirpath + "/fgdbTest.gdb");
+        org.junit.Assert.assertTrue(fgdbpath.exists());
 
-		String jobId = "123-456-789-testosm";
-		String wkdirpath = homeFolder + "/upload/" + jobId;
-		File workingDir = new File(wkdirpath);
-		FileUtils.forceMkdir(workingDir);
-		org.junit.Assert.assertTrue(workingDir.exists());
+        File content = new File(wkdirpath + "/fgdbTest.gdb/dummy1.gdbtable");
+        org.junit.Assert.assertTrue(content.exists());
 
+        FileUtils.forceDelete(workingDir);
+    }
 
-		List<FileItem> fileItemsList = new ArrayList<FileItem>();
+    @Test
+    @Category(UnitTest.class)
+    public void TestserializeUploadedFiles() throws Exception {
+        // homeFolder + "/upload/" + jobId + "/" + relPath;
+        // Create dummy FGDB
 
-		FileItemFactory factory = new DiskFileItemFactory(16, null);
-    String textFieldName = "textField";
+        String jobId = "123-456-789-testosm";
+        String wkdirpath = homeFolder + "/upload/" + jobId;
+        File workingDir = new File(wkdirpath);
+        FileUtils.forceMkdir(workingDir);
+        org.junit.Assert.assertTrue(workingDir.exists());
 
-    FileItem item = factory.createItem(
-            textFieldName,
-            "application/octet-stream",
-            true,
-            "dummy1.osm"
-    );
+        List<FileItem> fileItemsList = new ArrayList<FileItem>();
 
-    String textFieldValue = "0123456789";
-    byte[] testFieldValueBytes = textFieldValue.getBytes();
+        FileItemFactory factory = new DiskFileItemFactory(16, null);
+        String textFieldName = "textField";
 
-    OutputStream os = item.getOutputStream();
-    os.write(testFieldValueBytes);
-    os.close();
+        FileItem item = factory.createItem(textFieldName, "application/octet-stream", true, "dummy1.osm");
 
-    File out = new File(wkdirpath + "/buffer.tmp");
-    item.write(out);
-    fileItemsList.add(item);
-    org.junit.Assert.assertTrue(out.exists());
+        String textFieldValue = "0123456789";
+        byte[] testFieldValueBytes = textFieldValue.getBytes();
 
+        OutputStream os = item.getOutputStream();
+        os.write(testFieldValueBytes);
+        os.close();
 
-    Map<String,String> uploadedFiles = new HashMap<String, String>();
-    Map<String,String> uploadedFilesPaths = new HashMap<String, String>();
+        File out = new File(wkdirpath + "/buffer.tmp");
+        item.write(out);
+        fileItemsList.add(item);
+        org.junit.Assert.assertTrue(out.exists());
 
-		_ms._serializeUploadedFiles(fileItemsList,
-				uploadedFiles, uploadedFilesPaths, wkdirpath);
+        Map<String, String> uploadedFiles = new HashMap<String, String>();
+        Map<String, String> uploadedFilesPaths = new HashMap<String, String>();
 
-		org.junit.Assert.assertEquals("OSM", uploadedFiles.get("dummy1"));
-		org.junit.Assert.assertEquals("dummy1.osm", uploadedFilesPaths.get("dummy1"));
+        _ms._serializeUploadedFiles(fileItemsList, uploadedFiles, uploadedFilesPaths, wkdirpath);
 
+        org.junit.Assert.assertEquals("OSM", uploadedFiles.get("dummy1"));
+        org.junit.Assert.assertEquals("dummy1.osm", uploadedFilesPaths.get("dummy1"));
 
+        File content = new File(wkdirpath + "/dummy1.osm");
+        org.junit.Assert.assertTrue(content.exists());
 
-		File content = new File(wkdirpath + "/dummy1.osm");
-		org.junit.Assert.assertTrue(content.exists());
+        FileUtils.forceDelete(workingDir);
+    }
 
-		FileUtils.forceDelete(workingDir);
-	}
-	
-	@Test
-	@Category(UnitTest.class)
-	public void TestValidatePath() throws Exception
-	{
-		boolean isValid = _ms._validatePath("/projects/hoot/upload/123456", "/projects/hoot/upload/123456/DcGisRoads.gdb");
-		org.junit.Assert.assertTrue(isValid);
-		isValid = _ms._validatePath("/projects/hoot/upload/123456", "/projects/hoot/upload/123456/../DcGisRoads.gdb");
-		org.junit.Assert.assertFalse(isValid);
-		isValid = _ms._validatePath("/projects/hoot/upload/123456", "\0//DcGisRoads.gdb");
-		org.junit.Assert.assertFalse(isValid);
-	}
+    @Test
+    @Category(UnitTest.class)
+    public void TestValidatePath() throws Exception {
+        boolean isValid = _ms._validatePath("/projects/hoot/upload/123456",
+                "/projects/hoot/upload/123456/DcGisRoads.gdb");
+        org.junit.Assert.assertTrue(isValid);
+        isValid = _ms._validatePath("/projects/hoot/upload/123456", "/projects/hoot/upload/123456/../DcGisRoads.gdb");
+        org.junit.Assert.assertFalse(isValid);
+        isValid = _ms._validatePath("/projects/hoot/upload/123456", "\0//DcGisRoads.gdb");
+        org.junit.Assert.assertFalse(isValid);
+    }
 }

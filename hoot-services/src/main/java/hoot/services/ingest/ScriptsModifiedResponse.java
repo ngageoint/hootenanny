@@ -28,15 +28,20 @@ package hoot.services.ingest;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 @XmlRootElement
-public class ScriptsModifiedResponse
-{
-  private String[] scriptsModified;
-  public String[] getScriptsModified() { return scriptsModified; }
-  public void setScriptsModified(String[] scriptsModified) { this.scriptsModified = scriptsModified; }
-  
-  public ScriptsModifiedResponse()
-  {
-    
-  }
+public class ScriptsModifiedResponse {
+    private String[] scriptsModified;
+
+    public String[] getScriptsModified() {
+        return scriptsModified;
+    }
+
+    public void setScriptsModified(String[] scriptsModified) {
+        this.scriptsModified = scriptsModified;
+    }
+
+    public ScriptsModifiedResponse() {
+
+    }
 }

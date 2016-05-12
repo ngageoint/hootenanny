@@ -26,9 +26,6 @@
  */
 package hoot.services.controllers.info;
 
-import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
-
 import java.io.File;
 
 import javax.ws.rs.GET;
@@ -42,59 +39,54 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.HootProperties;
+import hoot.services.utils.ResourceErrorHandler;
+
+
 @Path("/document")
-public class DocsResource
-{
-	private static final Logger log = LoggerFactory.getLogger(DocsResource.class);
+public class DocsResource {
+    private static final Logger log = LoggerFactory.getLogger(DocsResource.class);
 
-	protected static String _docName = null;
-	protected static String _homeFolder = null;
+    protected static String _docName = null;
+    protected static String _homeFolder = null;
 
-	public DocsResource()
-	{
-		try
-		{
-			if (_docName == null)
-			{
-				_docName = HootProperties.getProperty("documentName");
-			}
+    public DocsResource() {
+        try {
+            if (_docName == null) {
+                _docName = HootProperties.getProperty("documentName");
+            }
 
-			if (_homeFolder == null)
-			{
-				_homeFolder = HootProperties.getProperty("homeFolder");
-			}
+            if (_homeFolder == null) {
+                _homeFolder = HootProperties.getProperty("homeFolder");
+            }
 
-		}
-		catch (Exception ex)
-		{
-			log.error(ex.getMessage());
-		}
-	}
+        }
+        catch (Exception ex) {
+            log.error(ex.getMessage());
+        }
+    }
 
-	/**
-	 * REST end point for user document
-	 * @return Octet stream of retrieved file
-	 */
-	@GET
-	@Path("/export")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response exportDoc()
-	{
-		File out = null;
-		try
-		{
-			String documentPath = _homeFolder + "/" + "docs" + "/" + _docName;
-			out = new File(documentPath);
-		}
-		catch (Exception ex)
-		{
-			ResourceErrorHandler.handleError(
-			    "Error exporting document file: " + ex.toString(),
-			    Status.INTERNAL_SERVER_ERROR, log);
-		}
-		ResponseBuilder rBuild = Response.ok(out, "application/pdf");
-		rBuild.header("Content-Disposition", "attachment; filename=" + _docName);
+    /**
+     * REST end point for user document
+     * 
+     * @return Octet stream of retrieved file
+     */
+    @GET
+    @Path("/export")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response exportDoc() {
+        File out = null;
+        try {
+            String documentPath = _homeFolder + "/" + "docs" + "/" + _docName;
+            out = new File(documentPath);
+        }
+        catch (Exception ex) {
+            ResourceErrorHandler.handleError("Error exporting document file: " + ex.toString(),
+                    Status.INTERNAL_SERVER_ERROR, log);
+        }
+        ResponseBuilder rBuild = Response.ok(out, "application/pdf");
+        rBuild.header("Content-Disposition", "attachment; filename=" + _docName);
 
-		return rBuild.build();
-	}
+        return rBuild.build();
+    }
 }
