@@ -30,12 +30,10 @@ ln -s ../../vagrant/VagrantfileLocal.ubuntu1404 VagrantfileLocal
 # Grab the latest version of the software that the VagrantProvision script will try to download
 cp -R ../../software.ubuntu1404 software
 
-# Error out on any warnings. This only applies to Ubuntu 14.04, not CentOS (yet)
-# See: https://github.com/ngageoint/hootenanny/issues/348
+# Turning off ccache for the configure tests
 cp LocalConfig.pri.orig LocalConfig.pri
-echo "QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri
-sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri                 
-sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri   
+#sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri                 
+#sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri   
 
 
 # Setup the database config. We need to do this since we are not running the VagrantBuild.sh script
@@ -56,13 +54,13 @@ if [ "`date +%F`" != "`test -e ../BuildDate.txt && cat ../BuildDate.txt`" ]; the
     REBUILD_VAGRANT=true
 fi
 
-# We are going to run a stack of configure tests, we don't neem Tomcat, Mapnik or Hadoop. Just the basic nfs and
-# software dependencies
+# We are going to run a stack of configure tests, we don't neem Tomcat, Mapnik or Hadoop. 
+# Just the basic nfs and software dependencies
 if [ $REBUILD_VAGRANT == 'true' ]; then
     vagrant destroy -f
-    time -p vagrant up --provision-with nfs,hoot --provider vsphere
+    time -p vagrant up --provision-with nfs,hoot,hadoop --provider vsphere
 else
-    time -p vagrant up --provision-with nfs --provider vsphere
+    time -p vagrant up --provision-with nfs,hadoop --provider vsphere
 fi
 
 date +%F > ../BuildDate.txt

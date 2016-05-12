@@ -1,0 +1,6 @@
+
+|                    | amenity=restaurant | building=yes | name=<NULL> | name=<SIMILAR> | 
+| amenity=restaurant |                  4 |              |             |                | 
+|       building=yes |                    |           28 |             |                | 
+|        name=<NULL> |                    |              |           4 |                | 
+|     name=<SIMILAR> |                    |              |             |             24 | 
