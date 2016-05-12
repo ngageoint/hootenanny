@@ -252,15 +252,6 @@ void VagabondNetworkMatcher::_calculateEdgeMatches()
     while (iit.next())
     {
       NetworkEdgePtr e2 = _index2Edge[iit.getId()];
-      //LOG_VAR(e2);
-
-      #warning remove me
-      if (e1->getMembers()[0]->getId() == -83670)
-      {
-        LOG_VAR(e1);
-        LOG_VAR(e2);
-        LOG_VAR(_details1->getPartialEdgeMatchScore(e1, e2));
-      }
 
       if (_details1->getPartialEdgeMatchScore(e1, e2) > 0)
       {

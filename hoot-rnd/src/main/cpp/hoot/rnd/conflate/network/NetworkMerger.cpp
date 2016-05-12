@@ -58,8 +58,6 @@ void NetworkMerger::apply(const OsmMapPtr& /*map*/,
   WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(matchString));
 
   /******************
-   * Hope you had a good trip!
-   *
    * At the beginning the merger should identify where the primary way should be broken into bits
    * then each way in the secondary will match 1 or more bits in the primary. This mapping can be
    * created at the beginning in the merger and used throughout the rests of the operations.

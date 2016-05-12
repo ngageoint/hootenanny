@@ -40,7 +40,6 @@ private:
   set< pair<ElementId, ElementId> > _pairs;
   ConstEdgeMatchPtr _edgeMatch;
 
-  /// @todo
   WaySublineMatchStringPtr _createMatchString() const { return WaySublineMatchStringPtr(); }
 };
 
