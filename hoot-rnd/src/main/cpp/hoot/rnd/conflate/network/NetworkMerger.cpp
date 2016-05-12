@@ -44,8 +44,8 @@ NetworkMerger::NetworkMerger(const set< pair<ElementId, ElementId> >& pairs,
   assert(_pairs.size() == 1);
 }
 
-void NetworkMerger::apply(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced) const
+void NetworkMerger::apply(const OsmMapPtr& /*map*/,
+  vector< pair<ElementId, ElementId> >& /*replaced*/) const
 {
   // put the matched edges into a format where we can map any point on one edge to the
   // corresponding point on the other edge.

@@ -93,7 +93,7 @@ Radians Histogram::_getBinAngle(size_t i)
 
 Radians Histogram::getBinCenter(size_t bin) const
 {
-  assert(bin >= 0 && bin < _bins.size());
+  assert(bin < _bins.size());
 
   Radians binSize = 2.0 * M_PI / (double)_bins.size();
   return bin * binSize + binSize / 2.0;

@@ -233,7 +233,6 @@ void IterativeNetworkMatcher::_normalizeGlobalScores(VertexScoreMap& t)
   }
 }
 
-#warning
 /// @todo this method will need to be redefined to take advantage of the new match strings
 void IterativeNetworkMatcher::_normalizeScores(EdgeScoreMap& t)
 {
@@ -317,8 +316,7 @@ void IterativeNetworkMatcher::_seedEdgeScores()
 
       if (score > 0)
       {
-
-        #warning remove this
+        /// @todo remove this
         _edge12Scores[e1][e2] = DirectedEdgeScore(score, reversed);
         _edge21Scores[e2][e1] = DirectedEdgeScore(score, reversed);
       }
@@ -355,7 +353,6 @@ void IterativeNetworkMatcher::_seedVertexScores()
   }
 }
 
-#warning
 /// @todo modify this method to take a EdgeMatchSet or just one half of the set. -- dunno how
 /// that will work yet.
 void IterativeNetworkMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexScoreMap& vm)
@@ -402,9 +399,8 @@ void IterativeNetworkMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexSc
   }
 }
 
-#warning
 /// @todo modify this to use the EdgeMatchSet rather than the vertices
-void IterativeNetworkMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &em)
+void IterativeNetworkMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &/*em*/)
 {
   CostFunction cost;
   if (&vm == &_vertex12Scores)

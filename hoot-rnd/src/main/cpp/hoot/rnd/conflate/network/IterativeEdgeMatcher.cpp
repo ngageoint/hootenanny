@@ -9,11 +9,6 @@ IterativeEdgeMatcher::IterativeEdgeMatcher() :
 {
 }
 
-static bool greaterThan(const double& v1, const double& v2)
-{
-  return v1 > v2;
-}
-
 double IterativeEdgeMatcher::_aggregateScores(QList<double> pairs)
 {
   //qSort(pairs.begin(), pairs.end(), greaterThan);
@@ -35,7 +30,7 @@ double IterativeEdgeMatcher::_aggregateScores(QList<double> pairs)
   return result;
 }
 
-double IterativeEdgeMatcher::_calculateEdgeVertexScore(const VertexScoreMap& vm,
+double IterativeEdgeMatcher::_calculateEdgeVertexScore(const VertexScoreMap& /*vm*/,
   ConstNetworkVertexPtr from1, ConstNetworkVertexPtr from2,
   ConstNetworkVertexPtr to1, ConstNetworkVertexPtr to2) const
 {
