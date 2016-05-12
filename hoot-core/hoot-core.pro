@@ -163,7 +163,6 @@ SOURCES += \
     src/main/cpp/hoot/core/manipulators/WayTagMerger.cpp \
     src/main/cpp/hoot/core/conflate/RubberSheet.cpp \
     src/main/cpp/hoot/core/conflate/NodeMatcher.cpp \
-    src/main/cpp/hoot/core/cmd/AttributeConflateCmd.cpp \
     src/main/cpp/hoot/core/cmd/CleanupCmd.cpp \
     src/main/cpp/hoot/core/util/Settings.cpp \
     src/main/cpp/hoot/core/cmd/Ogr2OsmCmd.cpp \
@@ -326,7 +325,6 @@ SOURCES += \
     src/main/cpp/hoot/core/index/metric-hybrid/FqTree.cpp \
     src/main/cpp/hoot/core/index/metric-hybrid/RFqHybridTree.cpp \
     src/main/cpp/hoot/core/index/metric-hybrid/RTree.cpp \
-    src/main/cpp/hoot/core/cmd/ConflateRoadsCmd.cpp \
     src/main/cpp/hoot/core/schema/AverageTagMerger.cpp \
     src/main/cpp/hoot/core/schema/TagMergerFactory.cpp \
     src/main/cpp/hoot/core/schema/GeneralizeTagMerger.cpp \
@@ -421,15 +419,12 @@ SOURCES += \
     src/main/cpp/hoot/core/perty/PermuteGridCalculator.cpp \
     src/main/cpp/hoot/core/perty/DirectSequentialSimulation.cpp \
     src/main/cpp/hoot/core/cmd/AccuracyDistributionCmd.cpp \
-    src/main/cpp/hoot/core/cmd/ReviewedTagCmd.cpp \
-    src/main/cpp/hoot/core/cmd/TileConflateCmd.cpp \
     src/main/cpp/hoot/core/PositiveIdGenerator.cpp \
     src/main/cpp/hoot/core/util/ElementConverter.cpp \
     src/main/cpp/hoot/core/io/PartialOsmMapWriter.cpp \
     src/main/cpp/hoot/core/cmd/PaintNodesCmd.cpp \
     src/main/cpp/hoot/core/visitors/TransliterateNameVisitor.cpp \
     src/main/cpp/hoot/core/conflate/extractors/LengthScoreExtractor.cpp \
-    src/main/cpp/hoot/core/cmd/RollInitiativeCmd.cpp \
     src/main/cpp/hoot/core/algorithms/SingleAssignmentProblemSolver.cpp \
     src/main/cpp/hoot/core/conflate/extractors/Histogram.cpp \
     src/main/cpp/hoot/core/conflate/extractors/SampledAngleHistogramExtractor.cpp \
