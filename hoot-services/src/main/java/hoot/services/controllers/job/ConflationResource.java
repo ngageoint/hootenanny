@@ -257,14 +257,5 @@ public class ConflationResource extends JobControllerBase {
             ResourceErrorHandler.handleError("OSM_API_DB not allowed as secondary input type.", Status.BAD_REQUEST,
                     log);
         }
-
-        // will let the core actually validate the content of this setting
-        // during conflation...just
-        // want to see that it is present
-        if (oneLayerIsOsmApiDb(inputParams) && (inputParams.get("ADV_OPTIONS") == null
-                || !inputParams.get("ADV_OPTIONS").toString().contains("convert.bounding.box"))) {
-            ResourceErrorHandler.handleError("OSM_API_DB input must be used with the convert.bounding.box setting.",
-                    Status.BAD_REQUEST, log);
-        }
     }
 }
