@@ -26,10 +26,6 @@
  */
 package hoot.services.controllers.job;
 
-import hoot.services.db.DbUtils;
-import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
-
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -50,264 +46,225 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.HootProperties;
+import hoot.services.db.DbUtils;
+import hoot.services.utils.ResourceErrorHandler;
+
+
 @Path("/conflation")
-public class ConflationResource extends JobControllerBase 
-{
-	private static final Logger log = LoggerFactory.getLogger(ConflationResource.class);
-	protected static String _tileServerPath = null;
-	protected static String _homeFolder = null;
-	protected static String _confAdvOptsScript = null;
-	protected static String _rptStorePath = null;
+public class ConflationResource extends JobControllerBase {
+    private static final Logger log = LoggerFactory.getLogger(ConflationResource.class);
+    protected static String _tileServerPath = null;
+    protected static String _homeFolder = null;
+    protected static String _confAdvOptsScript = null;
+    protected static String _rptStorePath = null;
 
-	public ConflationResource()
-	{
-		try
-		{
-			if (processScriptName ==  null)
-			{
-				processScriptName = HootProperties.getProperty("ConflateMakefilePath");
-			}
-			if (_tileServerPath == null)
-			{
-				_tileServerPath = HootProperties.getProperty("tileServerPath");
-			}
-			if (_homeFolder == null)
-			{
-				_homeFolder = HootProperties.getProperty("homeFolder");
-			}
-			if (_confAdvOptsScript == null)
-			{
-				_confAdvOptsScript = HootProperties.getProperty("confAdvOptsScript");
-			}
-			if (_rptStorePath ==  null)
-			{
-				_rptStorePath = HootProperties.getProperty("reportDataPath");
-			}
-		}
-		catch (Exception ex)
-		{
-			log.error(ex.getMessage());
-		}
-	}
+    public ConflationResource() {
+        try {
+            if (processScriptName == null) {
+                processScriptName = HootProperties.getProperty("ConflateMakefilePath");
+            }
+            if (_tileServerPath == null) {
+                _tileServerPath = HootProperties.getProperty("tileServerPath");
+            }
+            if (_homeFolder == null) {
+                _homeFolder = HootProperties.getProperty("homeFolder");
+            }
+            if (_confAdvOptsScript == null) {
+                _confAdvOptsScript = HootProperties.getProperty("confAdvOptsScript");
+            }
+            if (_rptStorePath == null) {
+                _rptStorePath = HootProperties.getProperty("reportDataPath");
+            }
+        }
+        catch (Exception ex) {
+            log.error(ex.getMessage());
+        }
+    }
 
-	/**
-	 * Conflate service operates like a standard ETL service. The conflate service specifies the 
-	 * input files, conflation type, match threshold, miss threshold, and output file name. The 
-	 * conflation type can be specified as the average of the two input datasets or based on a 
-	 * single input file that is intended to be the reference dataset. It has two fronts, WPS and 
-	 * standard rest end point.
-	 * 
-	 * POST hoot-services/conflation/execute
-	 * 
-	 * @param Conflation parameters in json format
-	 * <INPUT1_TYPE>
-	 * 	Conflation input type [OSM] | [OGR] | [DB] | [OSM_API_DB]
-	 * </INPUT1_TYPE>
-	 * <INPUT1>
-	 * 	Conlfation input 1
-	 * </INPUT1>
-	 * <INPUT2_TYPE>
-	 * 	Conflation input type [OSM] | [OGR] | [DB]
-	 * </INPUT2_TYPE>
-	 * <INPUT2>
-	 * 	 Conlfation input 2
-	 * </INPUT2>
-	 * <OUTPUT_NAME>
-	 * 	 Conflation operation output name
-	 * </OUTPUT_NAME>
-	 * <CONFLATION_TYPE>
-	 * 	 [Average] | [Reference]
-	 * </CONFLATION_TYPE>
-	 * <REFERENCE_LAYER>
-	 * 	The reference layer which will be dominant tags. Default is 1 and if 2 selected, layer 2 tags will be dominant with layer 1 as geometry snap layer.
-	 * </REFERENCE_LAYER>
-	 * <AUTO_TUNNING>
-	 * 	Not used. Always false
-	 * </AUTO_TUNNING>
-	 * <COLLECT_STATS>
-	 * 	true to collect conflation statistics
-	 * </COLLECT_STATS>
-	 * <GENERATE_REPORT>
-	 * 	true to generate conflation report
-	 * </GENERATE_REPORT>
-	 * <TIME_STAMP>
-	 * 	Time stamp used in generated report if GENERATE_REPORT is true
-	 * </TIME_STAMP>
-	 * <USER_EMAIL>
-	 * 	Email address of the user requesting the conflation job.
-	 * </USER_EMAIL>
-	 * <ADV_OPTIONS>
-	 * Advanced options list for hoot-core command
-	 * </ADV_OPTIONS>
-	 * @return Job ID
-	 * @throws Exception 
-	 */
-	@POST
-	@Path("/execute")
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response process(String params) throws Exception
-	{
-		//log.debug("Conflation resource raw request: " + params);
-		
-		String jobId = UUID.randomUUID().toString();
-	
-		JSONParser pars = new JSONParser();
-		JSONObject oParams = (JSONObject)pars.parse(params);
-		
-		validateOsmApiDbConflateParams(oParams);
-		
-		oParams.put("IS_BIG", "false");
-		String confOutputName = oParams.get("OUTPUT_NAME").toString();
-		String input1Name = oParams.get("INPUT1").toString();
-		String input2Name = oParams.get("INPUT2").toString();
+    /**
+     * Conflate service operates like a standard ETL service. The conflate
+     * service specifies the input files, conflation type, match threshold, miss
+     * threshold, and output file name. The conflation type can be specified as
+     * the average of the two input datasets or based on a single input file
+     * that is intended to be the reference dataset. It has two fronts, WPS and
+     * standard rest end point.
+     * 
+     * POST hoot-services/conflation/execute
+     * 
+     * @param Conflation
+     *            parameters in json format <INPUT1_TYPE> Conflation input type
+     *            [OSM] | [OGR] | [DB] | [OSM_API_DB] </INPUT1_TYPE>
+     *            <INPUT1> Conlfation input 1 </INPUT1> <INPUT2_TYPE> Conflation
+     *            input type [OSM] | [OGR] | [DB] </INPUT2_TYPE>
+     *            <INPUT2> Conlfation input 2 </INPUT2> <OUTPUT_NAME> Conflation
+     *            operation output name </OUTPUT_NAME>
+     *            <CONFLATION_TYPE> [Average] | [Reference] </CONFLATION_TYPE>
+     *            <REFERENCE_LAYER> The reference layer which will be dominant
+     *            tags. Default is 1 and if 2 selected, layer 2 tags will be
+     *            dominant with layer 1 as geometry snap
+     *            layer. </REFERENCE_LAYER> <AUTO_TUNNING> Not used. Always
+     *            false </AUTO_TUNNING> <COLLECT_STATS> true to collect
+     *            conflation statistics </COLLECT_STATS> <GENERATE_REPORT> true
+     *            to generate conflation report </GENERATE_REPORT>
+     *            <TIME_STAMP> Time stamp used in generated report if
+     *            GENERATE_REPORT is true </TIME_STAMP> <USER_EMAIL> Email
+     *            address of the user requesting the conflation
+     *            job. </USER_EMAIL> <ADV_OPTIONS> Advanced options list for
+     *            hoot-core command </ADV_OPTIONS>
+     * @return Job ID
+     * @throws Exception
+     */
+    @POST
+    @Path("/execute")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response process(String params) throws Exception {
+        // log.debug("Conflation resource raw request: " + params);
 
-		Object oTunn = oParams.get("AUTO_TUNNING");
-		if (oTunn != null)
-		{
-			String autoTune = oTunn.toString();
-			if (autoTune.equalsIgnoreCase("true"))
-			{
-				javax.management.MBeanServer mBeanServer = 
-					java.lang.management.ManagementFactory.getPlatformMBeanServer();
-	    	Object attribute = 
-	    		mBeanServer.getAttribute(new javax.management.ObjectName(
-	    		  "java.lang","type","OperatingSystem"), "TotalPhysicalMemorySize");
-	    	long totalMemSize = Long.parseLong(attribute.toString());
+        String jobId = UUID.randomUUID().toString();
 
-	    	Long input1Size = Long.parseLong(oParams.get("INPUT1_ESTIMATE").toString());
+        JSONParser pars = new JSONParser();
+        JSONObject oParams = (JSONObject) pars.parse(params);
 
-	    	Long input2Size = Long.parseLong(oParams.get("INPUT2_ESTIMATE").toString());
+        validateOsmApiDbConflateParams(oParams);
 
-	    	if ((input1Size + input2Size) > (totalMemSize/2))
-	    	{
-	    		oParams.put("IS_BIG", "true");
-	    		processScriptName = "makebigconflate";
-	    	}
-			}
-		}
+        oParams.put("IS_BIG", "false");
+        String confOutputName = oParams.get("OUTPUT_NAME").toString();
+        String input1Name = oParams.get("INPUT1").toString();
+        String input2Name = oParams.get("INPUT2").toString();
 
-		JSONArray commandArgs = parseParams(oParams.toJSONString());
-		JSONObject conflationCommand = _createMakeScriptJobReq(commandArgs);
+        Object oTunn = oParams.get("AUTO_TUNNING");
+        if (oTunn != null) {
+            String autoTune = oTunn.toString();
+            if (autoTune.equalsIgnoreCase("true")) {
+                javax.management.MBeanServer mBeanServer = java.lang.management.ManagementFactory
+                        .getPlatformMBeanServer();
+                Object attribute = mBeanServer.getAttribute(
+                        new javax.management.ObjectName("java.lang", "type", "OperatingSystem"),
+                        "TotalPhysicalMemorySize");
+                long totalMemSize = Long.parseLong(attribute.toString());
 
-		// add map tags
-		// WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
-		Map<String, String> tags = new HashMap<String, String>();
-		tags.put("input1", input1Name);
-		tags.put("input2", input2Name);
-		//System.out.println(params);
-		//Need to reformat the list of hoot command options to json properties
-		tags.put("params", DbUtils.escapeJson(params));
-		//Hack alert!
-		//Write stats file name to tags, if the file exists
-		//when this updateMapsTagsCommand job is run, the
-		//file will be read and its contents placed in the
-		//stats tag.
-		if (oParams.get("COLLECT_STATS") != null && 
-				oParams.get("COLLECT_STATS").toString().equalsIgnoreCase("true")) 
-		{
-			String statsName = _homeFolder + "/" + _rptStorePath + "/" + confOutputName + "-stats.csv";
-			tags.put("stats", statsName);
-		}
-		
-		//osm api db related input params have already been validated by this point, so just check to 
-		//see if any osm api db input is present
-		if (oneLayerIsOsmApiDb(oParams))
-		{
-			//write a timestamp representing the time the osm api db data was queried out from the source;
-			//to be used during export of conflated data back into the osm api db at a later time
-			final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-			tags.put("osm_api_db_export_time", now.toString());
-		}
+                Long input1Size = Long.parseLong(oParams.get("INPUT1_ESTIMATE").toString());
 
-		JSONArray mapTagsArgs = new JSONArray();
-		JSONObject param = new JSONObject();
-		param.put("value", tags);
-		param.put("paramtype", Map.class.getName());
-		param.put("isprimitivetype", "false");
-		mapTagsArgs.add(param);
+                Long input2Size = Long.parseLong(oParams.get("INPUT2_ESTIMATE").toString());
 
-		param = new JSONObject();
-		param.put("value", confOutputName);
-		param.put("paramtype", String.class.getName());
-		param.put("isprimitivetype", "false");
-		mapTagsArgs.add(param);
+                if ((input1Size + input2Size) > (totalMemSize / 2)) {
+                    oParams.put("IS_BIG", "true");
+                    processScriptName = "makebigconflate";
+                }
+            }
+        }
 
-		JSONObject updateMapsTagsCommand = 
-			_createReflectionJobReq(mapTagsArgs, "hoot.services.controllers.osm.MapResource",
-				"updateTagsDirect");
+        JSONArray commandArgs = parseParams(oParams.toJSONString());
+        JSONObject conflationCommand = _createMakeScriptJobReq(commandArgs);
 
-		Object oUserEmail = oParams.get("USER_EMAIL");
-		String userEmail = (oUserEmail ==  null)? null : oUserEmail.toString();
-//	  Density Raster
-		JSONArray rasterTilesArgs = new JSONArray();
-		JSONObject rasterTilesparam = new JSONObject();
-		rasterTilesparam.put("value", confOutputName);
-		rasterTilesparam.put("paramtype", String.class.getName());
-		rasterTilesparam.put("isprimitivetype", "false");
-		rasterTilesArgs.add(rasterTilesparam);
+        // add map tags
+        // WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
+        Map<String, String> tags = new HashMap<String, String>();
+        tags.put("input1", input1Name);
+        tags.put("input2", input2Name);
+        // System.out.println(params);
+        // Need to reformat the list of hoot command options to json properties
+        tags.put("params", DbUtils.escapeJson(params));
+        // Hack alert!
+        // Write stats file name to tags, if the file exists
+        // when this updateMapsTagsCommand job is run, the
+        // file will be read and its contents placed in the
+        // stats tag.
+        if (oParams.get("COLLECT_STATS") != null && oParams.get("COLLECT_STATS").toString().equalsIgnoreCase("true")) {
+            String statsName = _homeFolder + "/" + _rptStorePath + "/" + confOutputName + "-stats.csv";
+            tags.put("stats", statsName);
+        }
 
-		rasterTilesparam = new JSONObject();
-		rasterTilesparam.put("value", userEmail);
-		rasterTilesparam.put("paramtype", String.class.getName());
-		rasterTilesparam.put("isprimitivetype", "false");
-		rasterTilesArgs.add(rasterTilesparam);
+        // osm api db related input params have already been validated by this
+        // point, so just check to
+        // see if any osm api db input is present
+        if (oneLayerIsOsmApiDb(oParams)) {
+            // write a timestamp representing the time the osm api db data was
+            // queried out from the source;
+            // to be used during export of conflated data back into the osm api
+            // db at a later time
+            final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+            tags.put("osm_api_db_export_time", now.toString());
+        }
 
-		JSONObject ingestOSMResource = 
-			_createReflectionJobReq(
-				rasterTilesArgs,
-				"hoot.services.controllers.ingest.RasterToTilesService", 
-				"ingestOSMResourceDirect");
+        JSONArray mapTagsArgs = new JSONArray();
+        JSONObject param = new JSONObject();
+        param.put("value", tags);
+        param.put("paramtype", Map.class.getName());
+        param.put("isprimitivetype", "false");
+        mapTagsArgs.add(param);
 
-		JSONArray jobArgs = new JSONArray();
-		jobArgs.add(conflationCommand);
-		jobArgs.add(updateMapsTagsCommand);
-		jobArgs.add(ingestOSMResource);
+        param = new JSONObject();
+        param.put("value", confOutputName);
+        param.put("paramtype", String.class.getName());
+        param.put("isprimitivetype", "false");
+        mapTagsArgs.add(param);
 
-		log.debug(jobArgs.toJSONString());
-		postChainJobRquest(jobId, jobArgs.toJSONString());
-		
-		JSONObject res = new JSONObject();
-		res.put("jobid", jobId);
-		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
-	}
-	
-	private static boolean oneLayerIsOsmApiDb(final JSONObject inputParams)
-	{
-		return inputParams.get("INPUT1_TYPE").toString().toUpperCase().equals("OSM_API_DB") ||
-			inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB");
-	}
-	
-	private static void validateOsmApiDbConflateParams(final JSONObject inputParams)
-	{
-	  //default REFERENCE_LAYER = 1
-		if (inputParams.get("REFERENCE_LAYER") != null)
-		{
-			if ((inputParams.get("INPUT1_TYPE").toString().toUpperCase().equals("OSM_API_DB") &&
-					 inputParams.get("REFERENCE_LAYER").toString().toUpperCase().equals("2")) ||
-					(inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB") &&
-					 inputParams.get("REFERENCE_LAYER").toString().toUpperCase().equals("1")))
-			{
-				ResourceErrorHandler.handleError(
-					"OSM_API_DB not allowed as secondary input type.", Status.BAD_REQUEST, log);
-			}
-		}
-		else if (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB"))
-		{
-			ResourceErrorHandler.handleError(
-				"OSM_API_DB not allowed as secondary input type.", Status.BAD_REQUEST, log);
-		}
-			
-		//will let the core actually validate the content of this setting during conflation...just 
-		//want to see that it is present
-		if (oneLayerIsOsmApiDb(inputParams) && 
-				(inputParams.get("ADV_OPTIONS") == null || 
-				!inputParams.get("ADV_OPTIONS").toString().contains("convert.bounding.box")))
-		{
-			ResourceErrorHandler.handleError(
-			  "OSM_API_DB input must be used with the convert.bounding.box setting.", 
-			  Status.BAD_REQUEST, 
-			  log);
-		}
-	}
+        JSONObject updateMapsTagsCommand = _createReflectionJobReq(mapTagsArgs,
+                "hoot.services.controllers.osm.MapResource", "updateTagsDirect");
+
+        Object oUserEmail = oParams.get("USER_EMAIL");
+        String userEmail = (oUserEmail == null) ? null : oUserEmail.toString();
+        // Density Raster
+        JSONArray rasterTilesArgs = new JSONArray();
+        JSONObject rasterTilesparam = new JSONObject();
+        rasterTilesparam.put("value", confOutputName);
+        rasterTilesparam.put("paramtype", String.class.getName());
+        rasterTilesparam.put("isprimitivetype", "false");
+        rasterTilesArgs.add(rasterTilesparam);
+
+        rasterTilesparam = new JSONObject();
+        rasterTilesparam.put("value", userEmail);
+        rasterTilesparam.put("paramtype", String.class.getName());
+        rasterTilesparam.put("isprimitivetype", "false");
+        rasterTilesArgs.add(rasterTilesparam);
+
+        JSONObject ingestOSMResource = _createReflectionJobReq(rasterTilesArgs,
+                "hoot.services.controllers.ingest.RasterToTilesService", "ingestOSMResourceDirect");
+
+        JSONArray jobArgs = new JSONArray();
+        jobArgs.add(conflationCommand);
+        jobArgs.add(updateMapsTagsCommand);
+        jobArgs.add(ingestOSMResource);
+
+        log.debug(jobArgs.toJSONString());
+        postChainJobRquest(jobId, jobArgs.toJSONString());
+
+        JSONObject res = new JSONObject();
+        res.put("jobid", jobId);
+        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+    }
+
+    private static boolean oneLayerIsOsmApiDb(final JSONObject inputParams) {
+        return inputParams.get("INPUT1_TYPE").toString().toUpperCase().equals("OSM_API_DB")
+                || inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB");
+    }
+
+    private static void validateOsmApiDbConflateParams(final JSONObject inputParams) {
+        // default REFERENCE_LAYER = 1
+        if (inputParams.get("REFERENCE_LAYER") != null) {
+            if ((inputParams.get("INPUT1_TYPE").toString().toUpperCase().equals("OSM_API_DB")
+                    && inputParams.get("REFERENCE_LAYER").toString().toUpperCase().equals("2"))
+                    || (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB")
+                            && inputParams.get("REFERENCE_LAYER").toString().toUpperCase().equals("1"))) {
+                ResourceErrorHandler.handleError("OSM_API_DB not allowed as secondary input type.", Status.BAD_REQUEST,
+                        log);
+            }
+        }
+        else if (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB")) {
+            ResourceErrorHandler.handleError("OSM_API_DB not allowed as secondary input type.", Status.BAD_REQUEST,
+                    log);
+        }
+
+        // will let the core actually validate the content of this setting
+        // during conflation...just
+        // want to see that it is present
+        if (oneLayerIsOsmApiDb(inputParams) && (inputParams.get("ADV_OPTIONS") == null
+                || !inputParams.get("ADV_OPTIONS").toString().contains("convert.bounding.box"))) {
+            ResourceErrorHandler.handleError("OSM_API_DB input must be used with the convert.bounding.box setting.",
+                    Status.BAD_REQUEST, log);
+        }
+    }
 }

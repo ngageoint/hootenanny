@@ -31,35 +31,31 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 
+
 /**
  * Job classes making database calls should subclass this
  */
-public abstract class DbClientAbstract
-{
-  @SuppressWarnings("unused")
-  private static final Logger log = LoggerFactory.getLogger(DbClientAbstract.class);
-  
-  private ClassPathXmlApplicationContext appContext;
-  protected PlatformTransactionManager transactionManager;
-  protected boolean simulateFailure = false;
-  protected long testDelayMilliseconds = -1;
-  
-  public DbClientAbstract() throws Exception
-  {
-    baseInit();
-  }
-  
-  public DbClientAbstract(final boolean simulateFailure, final long testDelayMilliseconds) 
-    throws Exception
-  {
-    baseInit();
-    this.simulateFailure = simulateFailure;
-    this.testDelayMilliseconds = testDelayMilliseconds;
-  }
-  
-  protected void baseInit() throws Exception
-  {
-    appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
-    transactionManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
-  }
+public abstract class DbClientAbstract {
+    @SuppressWarnings("unused")
+    private static final Logger log = LoggerFactory.getLogger(DbClientAbstract.class);
+
+    private ClassPathXmlApplicationContext appContext;
+    protected PlatformTransactionManager transactionManager;
+    protected boolean simulateFailure = false;
+    protected long testDelayMilliseconds = -1;
+
+    public DbClientAbstract() throws Exception {
+        baseInit();
+    }
+
+    public DbClientAbstract(final boolean simulateFailure, final long testDelayMilliseconds) throws Exception {
+        baseInit();
+        this.simulateFailure = simulateFailure;
+        this.testDelayMilliseconds = testDelayMilliseconds;
+    }
+
+    protected void baseInit() throws Exception {
+        appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
+        transactionManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
+    }
 }

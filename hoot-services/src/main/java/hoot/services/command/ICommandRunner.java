@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
+
 /**
  *
  */
@@ -37,43 +38,40 @@ public interface ICommandRunner {
 
     /**
      * Runs a process using Runtime.exec(). The command to run is passed as a
-     * String. Collects all output on System.out and System.err, passing
-     * it to the CommandResult. Waits for all output and process
-     * completion then returns the process exit status.
+     * String. Collects all output on System.out and System.err, passing it to
+     * the CommandResult. Waits for all output and process completion then
+     * returns the process exit status.
      */
-    public abstract CommandResult exec( String cmd ) throws IOException,
-        InterruptedException;
-
+    public abstract CommandResult exec(String cmd) throws IOException, InterruptedException;
 
     /**
-     * Runs a process using Runtime.exec() with the given environment.  System environment
-     * inclusion can be controlled via the useSysEnv argument.  The command to run is passed as a
-     * String. Collects all output on System.out and System.err, passing
-     * it to the CommandResult. Waits for all output and process
-     * completion then returns the process exit status.
+     * Runs a process using Runtime.exec() with the given environment. System
+     * environment inclusion can be controlled via the useSysEnv argument. The
+     * command to run is passed as a String. Collects all output on System.out
+     * and System.err, passing it to the CommandResult. Waits for all output and
+     * process completion then returns the process exit status.
      */
-    public abstract CommandResult exec( String cmd, Map<String,String> env, boolean includeSysEnv ) throws IOException,
-        InterruptedException;
+    public abstract CommandResult exec(String cmd, Map<String, String> env, boolean includeSysEnv)
+            throws IOException, InterruptedException;
 
     /**
      * Runs a process using Runtime.exec(). The command to run is passed as a
-     * String[]. Collects all output on System.out and System.err, passing
-     * it to the CommandResult. Waits for all output and process
-     * completion then returns the process exit status.
+     * String[]. Collects all output on System.out and System.err, passing it to
+     * the CommandResult. Waits for all output and process completion then
+     * returns the process exit status.
      */
 
-    public abstract CommandResult exec( String[] cmd ) throws IOException,
-        InterruptedException;
+    public abstract CommandResult exec(String[] cmd) throws IOException, InterruptedException;
 
     /**
      * Runs a process using Runtime.exec(). The command to run is passed as a
-     * String[]. Collects all output on System.out and System.err, passing
-     * it to the CommandResult. Waits for all output and process
-     * completion then returns the process exit status.
+     * String[]. Collects all output on System.out and System.err, passing it to
+     * the CommandResult. Waits for all output and process completion then
+     * returns the process exit status.
      */
 
-    public abstract CommandResult exec( String[] cmd, Map<String,String> env, boolean includeSysEnv ) throws IOException,
-        InterruptedException;
+    public abstract CommandResult exec(String[] cmd, Map<String, String> env, boolean includeSysEnv)
+            throws IOException, InterruptedException;
 
     /**
      * Runs a process using Runtime.exec(). The command to run is passed as a
@@ -84,8 +82,8 @@ public interface ICommandRunner {
      * <p>
      * Note that if one of the Writers blocks, this may block the child process.
      */
-    public abstract CommandResult exec( String[] pCmd, Writer pOut, Writer pErr ) throws IOException,
-        InterruptedException;
+    public abstract CommandResult exec(String[] pCmd, Writer pOut, Writer pErr)
+            throws IOException, InterruptedException;
 
     /**
      * Runs a process using Runtime.exec(). The command to run is passed as a
@@ -96,9 +94,7 @@ public interface ICommandRunner {
      * <p>
      * Note that if one of the Writers blocks, this may block the child process.
      */
-    public abstract CommandResult exec( String pCmd, Writer pOut, Writer pErr ) throws IOException,
-        InterruptedException;
-
+    public abstract CommandResult exec(String pCmd, Writer pOut, Writer pErr) throws IOException, InterruptedException;
 
     /**
      * Terminates the command process

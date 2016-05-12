@@ -27,12 +27,10 @@
 package hoot.services.controllers.wps;
 
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 
 import java.util.LinkedList;
-
-import hoot.services.IntegrationTest;
-import hoot.services.wps.WpsUtils;
 
 import org.apache.http.ProtocolVersion;
 import org.apache.http.message.BasicHttpResponse;
@@ -49,35 +47,35 @@ import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
+import hoot.services.IntegrationTest;
+import hoot.services.wps.WpsUtils;
+
+
 public class CustomScriptGetScriptProcessletTest {
 
-  
-	@SuppressWarnings("unused")
-  @Test
-	@Category(IntegrationTest.class)
-	public void testProcess() throws Exception
-	{
-		CustomScriptGetScriptProcesslet processlet = Mockito.spy(new CustomScriptGetScriptProcesslet());
+    @SuppressWarnings("unused")
+    @Test
+    @Category(IntegrationTest.class)
+    public void testProcess() throws Exception {
+        CustomScriptGetScriptProcesslet processlet = Mockito.spy(new CustomScriptGetScriptProcesslet());
 
-		new BasicHttpResponse(
-        new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1), 200, "OK"));
+        new BasicHttpResponse(new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1), 200, "OK"));
 
-		doReturn("Test Script Content").when(processlet).getRequest(anyString());
+        doReturn("Test Script Content").when(processlet).getRequest(anyString());
 
-		LinkedList<ProcessletInput> allInputs = new LinkedList<ProcessletInput>();
-		
-		
-		allInputs.add(WpsUtils.createLiteralInput("NAME", String.valueOf("testName")));
-		ProcessletInputs in = new ProcessletInputs(allInputs);
-    
-    ProcessDefinition def = new ProcessDefinition();
-    def.setOutputParameters(new OutputParameters());		
-		LinkedList<ProcessletOutput> allOutputs = new LinkedList<ProcessletOutput>();    
-    allOutputs.add(WpsUtils.createLiteralOutput("SCRIPT"));   
-    final ProcessletOutputs out = new ProcessletOutputs(def, allOutputs);
-    
-    processlet.process(in, out, new ProcessExecution(null, null, null, null, out));
-    
-    verify(processlet).getRequest(Matchers.matches("testName"));
-	}	
+        LinkedList<ProcessletInput> allInputs = new LinkedList<ProcessletInput>();
+
+        allInputs.add(WpsUtils.createLiteralInput("NAME", String.valueOf("testName")));
+        ProcessletInputs in = new ProcessletInputs(allInputs);
+
+        ProcessDefinition def = new ProcessDefinition();
+        def.setOutputParameters(new OutputParameters());
+        LinkedList<ProcessletOutput> allOutputs = new LinkedList<ProcessletOutput>();
+        allOutputs.add(WpsUtils.createLiteralOutput("SCRIPT"));
+        final ProcessletOutputs out = new ProcessletOutputs(def, allOutputs);
+
+        processlet.process(in, out, new ProcessExecution(null, null, null, null, out));
+
+        verify(processlet).getRequest(Matchers.matches("testName"));
+    }
 }

@@ -38,39 +38,41 @@ import hoot.services.controllers.services.P2PResource;
 
 public class HootServletContext implements ServletContextListener {
 
-	private TranslatorResource transRes;
-	private P2PResource p2PRes;
+    private TranslatorResource transRes;
+    private P2PResource p2PRes;
 
     @Override
-	public void contextInitialized(ServletContextEvent sce) {
-		transRes = new TranslatorResource();
-		transRes.startTranslationService();
-		
-		p2PRes = new P2PResource();
-		p2PRes.startP2PService();
-		
-		// Doing this to make sure we create ingest folder
+    public void contextInitialized(ServletContextEvent sce) {
+        transRes = new TranslatorResource();
+        transRes.startTranslationService();
+
+        p2PRes = new P2PResource();
+        p2PRes.startP2PService();
+
+        // Doing this to make sure we create ingest folder
         BasemapResource bRes = new BasemapResource();
-		bRes.createTileServerPath();
+        bRes.createTileServerPath();
 
         // Bridge/route all JUL log records to the SLF4J API.
-        // Some third-party components use Java Util Logging (JUL).  We want to route those calls
+        // Some third-party components use Java Util Logging (JUL). We want to
+        // route those calls
         // through SLF4J.
         initSLF4JBridgeHandler();
-	}
+    }
 
     private void initSLF4JBridgeHandler() {
         // Optionally remove existing handlers attached to j.u.l root logger
-        SLF4JBridgeHandler.removeHandlersForRootLogger();  // (since SLF4J 1.6.5)
+        SLF4JBridgeHandler.removeHandlersForRootLogger(); // (since SLF4J 1.6.5)
 
-        // add SLF4JBridgeHandler to j.u.l's root logger, should be done once during
+        // add SLF4JBridgeHandler to j.u.l's root logger, should be done once
+        // during
         // the initialization phase of your application
         SLF4JBridgeHandler.install();
     }
-	
-	@Override
+
+    @Override
     public void contextDestroyed(ServletContextEvent sce) {
-		transRes.stopTranslationService();
-		p2PRes.stopP2PService();
-	}
+        transRes.stopTranslationService();
+        p2PRes.stopP2PService();
+    }
 }

@@ -66,7 +66,6 @@ public class AboutResource {
 
     private static ClassPathXmlApplicationContext appContext;
 
-
     public AboutResource() {
         appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
     }
@@ -78,8 +77,8 @@ public class AboutResource {
             buildInfo = BuildInfo.getInstance();
         }
         catch (Exception e) {
-            log.warn("About Resource unable to find the services build.info file.  " +
-                     "Web Services version information will be unavailable.");
+            log.warn("About Resource unable to find the services build.info file.  "
+                    + "Web Services version information will be unavailable.");
 
             buildInfo = new Properties();
             buildInfo.setProperty("name", "unknown");
@@ -114,18 +113,16 @@ public class AboutResource {
             log.debug("Returning response: " + versionInfo + " ...");
         }
         catch (Exception e) {
-            ResourceErrorHandler.handleError(
-                    "Error retrieving services version info: " + e.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR,
-                    log);
+            ResourceErrorHandler.handleError("Error retrieving services version info: " + e.getMessage(),
+                    Status.INTERNAL_SERVER_ERROR, log);
         }
 
         return versionInfo;
     }
 
     /**
-     * Service method endpoint for retrieving withDetails information about the Hootenanny Services
-     * environment.
+     * Service method endpoint for retrieving withDetails information about the
+     * Hootenanny Services environment.
      * <p>
      * GET hoot-services/info/about/servicesVersionDetail
      *
@@ -182,10 +179,8 @@ public class AboutResource {
             log.debug("Returning response: " + servicesDetail + " ...");
         }
         catch (Exception e) {
-            ResourceErrorHandler.handleError(
-                    "Error retrieving services version info: " + e.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR,
-                    log);
+            ResourceErrorHandler.handleError("Error retrieving services version info: " + e.getMessage(),
+                    Status.INTERNAL_SERVER_ERROR, log);
         }
 
         return servicesDetail;
@@ -207,7 +202,8 @@ public class AboutResource {
         command.put("params", params);
         command.put("caller", AboutResource.class.getSimpleName());
 
-        JobExecutionManager jobExecutionManager = ((JobExecutionManager) appContext.getBean("jobExecutionManagerNative"));
+        JobExecutionManager jobExecutionManager = ((JobExecutionManager) appContext
+                .getBean("jobExecutionManagerNative"));
 
         String output = jobExecutionManager.execWithResult(command).get("stdout").toString();
 
@@ -240,7 +236,8 @@ public class AboutResource {
     }
 
     /**
-     * Service method endpoint for retrieving the Hootenanny core (command line application) version.
+     * Service method endpoint for retrieving the Hootenanny core (command line
+     * application) version.
      * <p>
      * GET hoot-services/info/about/coreVersionInfo</URL>
      *
@@ -264,18 +261,16 @@ public class AboutResource {
             log.debug("Returning response: " + versionInfo + " ...");
         }
         catch (Exception e) {
-            ResourceErrorHandler.handleError(
-                    "Error retrieving core version info: " + e.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR,
-                    log);
+            ResourceErrorHandler.handleError("Error retrieving core version info: " + e.getMessage(),
+                    Status.INTERNAL_SERVER_ERROR, log);
         }
 
         return versionInfo;
     }
 
     /**
-     * Service method endpoint for retrieving withDetails environment information about the Hootenanny
-     * core (command line application)
+     * Service method endpoint for retrieving withDetails environment
+     * information about the Hootenanny core (command line application)
      * <p>
      * GET hoot-services/info/about/coreVersionDetail</URL>
      *
@@ -291,7 +286,8 @@ public class AboutResource {
 
             String versionStr = getCoreInfo(true);
 
-            //get rid of the first line that has the hoot core version info in it; call coreVersionInfo for that
+            // get rid of the first line that has the hoot core version info in
+            // it; call coreVersionInfo for that
             String[] versionInfoParts = versionStr.split(System.lineSeparator());
             List<String> versionInfoPartsModified = new ArrayList<>();
 
@@ -300,15 +296,14 @@ public class AboutResource {
             }
 
             coreDetail = new CoreDetail();
-            coreDetail.setEnvironmentInfo(versionInfoPartsModified.toArray(new String[versionInfoPartsModified.size()]));
+            coreDetail
+                    .setEnvironmentInfo(versionInfoPartsModified.toArray(new String[versionInfoPartsModified.size()]));
 
             log.debug("Returning response: " + coreDetail + " ...");
         }
         catch (Exception e) {
-            ResourceErrorHandler.handleError(
-                    "Error retrieving core version info: " + e.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR,
-                    log);
+            ResourceErrorHandler.handleError("Error retrieving core version info: " + e.getMessage(),
+                    Status.INTERNAL_SERVER_ERROR, log);
         }
 
         return coreDetail;

@@ -28,51 +28,55 @@ package hoot.services.info;
 
 import java.io.File;
 
-import hoot.services.UnitTest;
-
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import hoot.services.UnitTest;
+
+
 public class ErrorLogTest {
-	@Ignore
-	@BeforeClass
-  public static void oneTimeSetup() {
-      // one-time setup code
-		// Disable due to test server is getting permission denied error when verifying errLogPath line#48
-	/*	ErrorLog log = new ErrorLog();
-		org.junit.Assert.assertNotNull(log._errLogPath);
-		org.junit.Assert.assertTrue(log._errLogPath.length() > 0);
+    @Ignore
+    @BeforeClass
+    public static void oneTimeSetup() {
+        // one-time setup code
+        // Disable due to test server is getting permission denied error when
+        // verifying errLogPath line#48
+        /*
+         * ErrorLog log = new ErrorLog();
+         * org.junit.Assert.assertNotNull(log._errLogPath);
+         * org.junit.Assert.assertTrue(log._errLogPath.length() > 0);
+         * 
+         * File logFile = new File(log._errLogPath);
+         * org.junit.Assert.assertTrue(logFile.exists());
+         * ///<<<===================
+         * 
+         * org.junit.Assert.assertNotNull(log._tempOutputPath);
+         * org.junit.Assert.assertTrue(log._tempOutputPath.length() > 0);
+         */
+    }
 
-		File logFile = new File(log._errLogPath); 
-		org.junit.Assert.assertTrue(logFile.exists()); ///<<<===================
+    @Ignore
+    @Test
+    @Category(UnitTest.class)
+    public void testgenerateExportLog() throws Exception {
+        ErrorLog log = new ErrorLog();
+        String path = log.generateExportLog();
 
-		org.junit.Assert.assertNotNull(log._tempOutputPath);
-		org.junit.Assert.assertTrue(log._tempOutputPath.length() > 0);*/
-  }
+        File logFile = new File(path);
+        org.junit.Assert.assertTrue(logFile.exists());
 
-	@Ignore
-	@Test
-	@Category(UnitTest.class)
-	public void testgenerateExportLog() throws Exception
-	{
-		ErrorLog log = new ErrorLog();
-		String path = log.generateExportLog();
+    }
 
-		File logFile = new File(path);
-		org.junit.Assert.assertTrue(logFile.exists());
+    @Ignore
+    @Test
+    @Category(UnitTest.class)
+    public void testgetErrorLog() throws Exception {
+        ErrorLog log = new ErrorLog();
+        String logStr = log.getErrorlog(100);
 
-	}
-	@Ignore
-	@Test
-	@Category(UnitTest.class)
-	public void testgetErrorLog() throws Exception
-	{
-		ErrorLog log = new ErrorLog();
-		String logStr = log.getErrorlog(100);
+        org.junit.Assert.assertTrue(logStr.length() <= 100);
 
-		org.junit.Assert.assertTrue(logStr.length() <= 100);
-
-	}
+    }
 }
