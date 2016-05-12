@@ -8,9 +8,8 @@ inputfile2=$HOOT_HOME/test-files/diamond.osm
 outputfile=$HOOT_HOME/test-output/cmd/slow/UnionPolygonCmdTest/union.osm
 comparefile=$HOOT_HOME/hoot-core-test/src/test/resources/cmd/slow/UnionPolygonCmdTest/union.osm
 
-# Run the command. Note that we sanitize output to remove timestamps
-hoot union-polygons $outputfile $inputfile1 $inputfile2  | \
-              sed "s/^[0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}\.[0-9]\{3\} //g"
+# Run the command.
+hoot union-polygons $outputfile $inputfile1 $inputfile2
 
 # Checking output
 hoot is-match $comparefile $outputfile || diff $comparefile $outputfile

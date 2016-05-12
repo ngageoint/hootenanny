@@ -7,10 +7,7 @@ mkdir -p $HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest
 hoot derive-rubber-sheet \
   --ref $HOOT_HOME/test-files/DcGisRoads.osm \
         $HOOT_HOME/test-files/DcTigerRoads.osm \
-  $HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.rs |\
-  sed "s/^[0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}\.[0-9]\{3\} //g" |\
-  sed "s/RMSE: [0-9]\+\.[0-9]\+//g"
-
+  $HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.rs 
 
 # Compare to known-good
 goodfile=$HOOT_HOME/hoot-core-test/src/test/resources/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.rs
@@ -25,9 +22,7 @@ fi
 hoot apply-rubber-sheet \
   $HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.rs \
   $HOOT_HOME/test-files/DcTigerRoads.osm \
-  $HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.osm |\
-  sed "s/^[0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}\.[0-9]\{3\} //g" |\
-  sed "s/RMSE: [0-9]\+\.[0-9]\+//g"
+  $HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.osm 
 
 goodfile=$HOOT_HOME/hoot-core-test/src/test/resources/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.osm
 testfile=$HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.osm

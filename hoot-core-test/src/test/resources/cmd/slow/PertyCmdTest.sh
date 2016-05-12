@@ -8,13 +8,12 @@ inputfile=$HOOT_HOME/test-files/DcGisRoads.osm
 testfile=$HOOT_HOME/hoot-core-test/src/test/resources/cmd/slow/PertyCmdTest/p_out.osm
 outputfile=$HOOT_HOME/test-output/cmd/slow/PertyCmdTest/p_out.osm
 
-# Run the command. Note that we sanitize output to remove timestamps,
-# and number of nodes reprojected, because this is variable
+# Run the command. Note that we sanitize output to remove 
+# number of nodes reprojected, because this is variable
 hoot perty -D perty.search.distance=20 \
            -D perty.way.generalize.probability=0.7 \
            $inputfile \
-           $outputfile | \
-           sed "s/^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]\.[0-9]\{3\} //g" | \
+           $outputfile |\
            sed "s/^Reprojecting.*$//g"
 
 
