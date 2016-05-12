@@ -28,6 +28,7 @@ package hoot.services.info;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 /**
  * Information about the hoot version
  */
@@ -36,7 +37,6 @@ public class VersionInfo {
     private String name;
     private String version;
     private String builtBy;
-
 
     public VersionInfo() {
     }
@@ -67,8 +67,7 @@ public class VersionInfo {
 
     @Override
     public String toString() {
-        return "Name: " + name + System.lineSeparator() +
-               "Version: " + version + System.lineSeparator() +
-               "Built By: " + builtBy;
+        return "Name: " + name + System.lineSeparator() + "Version: " + version + System.lineSeparator() + "Built By: "
+                + builtBy;
     }
 }

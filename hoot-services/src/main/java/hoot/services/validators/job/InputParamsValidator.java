@@ -26,87 +26,80 @@
  */
 package hoot.services.validators.job;
 
-import hoot.services.geo.BoundingBox;
-import hoot.services.utils.InputParamsValidatorAbstract;
-import hoot.services.utils.ReflectUtils;
-
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import hoot.services.geo.BoundingBox;
+import hoot.services.utils.InputParamsValidatorAbstract;
+import hoot.services.utils.ReflectUtils;
+
+
 /**
  * Validates Jersey service input parameters
  */
-public class InputParamsValidator extends InputParamsValidatorAbstract
-{
-  private Map<String, Object> inputParams;
-  
-  public InputParamsValidator(final Map<String, Object> inputParams)
-  {
-    this.inputParams = inputParams;
-  }
-  
-  /**
-   * Parses and validates a set of input parameters to a Jersey service method
-   * 
-   * @param name name of the parameter
-   * @param type type of the parameter
-   * @param rangeMin minimum allowable value for numeric parameters
-   * @param rangeMax maximum allowable value for numeric parameters
-   * @param optional if true; the parameter is considered optional and must not be present
-   * @param defaultValue a default value to assign to the parameter, if it has no value
-   * @return a parameter value
-   * @throws Exception
-   */
-  public Object validateAndParseInputParam(final String name, final Object type, 
-    final Object rangeMin, final Object rangeMax, final boolean optional, final Object defaultValue) 
-    throws Exception
-  {
-    Object paramValue = null;
-    
-    //special case
-    if (name.equals("geospatialBounds"))
-    {
-      if (inputParams.get("geospatialBounds") == null && defaultValue != null)
-      {
-        return new BoundingBox((String)defaultValue);
-      }
-      return new BoundingBox((String)inputParams.get("geospatialBounds"));
-    }
-    
-    Object param = inputParams.get(name);
-    if ((param == null || StringUtils.trimToNull(String.valueOf(param).trim()) == null) && !optional)
-    {
-      throw new Exception(
-        "Invalid input parameter value.  Required parameter: " + name + " not sent to: " + 
-        ReflectUtils.getCallingClassName());
-    }
-    
-    if (param == null  && defaultValue != null)
-    {
-      if (!type.getClass().equals(defaultValue.getClass()))
-      {
-        throw new Exception(
-          "Invalid input parameter value.  Mismatching input parameter type: " + type.toString() + 
-          " and default value type: " + defaultValue.toString() + "for parameter: " + name + 
-          " sent to: " + ReflectUtils.getCallingClassName());
-      }
-      return defaultValue;
-    }
-    
-    if (param != null)
-    {
-      if (StringUtils.trimToNull(String.valueOf(param).trim()) == null)
-      {
-        throw new Exception(
-          "Invalid input parameter: " + name + " sent to: " + ReflectUtils.getCallingClassName());
-      }
-      
-      return validateAndParseParamValueString(
-        String.valueOf(param).trim(),name, type, rangeMin, rangeMax);
-    }
-    
-    return paramValue;
-  }
-}
+public class InputParamsValidator extends InputParamsValidatorAbstract {
+    private Map<String, Object> inputParams;
 
+    public InputParamsValidator(final Map<String, Object> inputParams) {
+        this.inputParams = inputParams;
+    }
+
+    /**
+     * Parses and validates a set of input parameters to a Jersey service method
+     * 
+     * @param name
+     *            name of the parameter
+     * @param type
+     *            type of the parameter
+     * @param rangeMin
+     *            minimum allowable value for numeric parameters
+     * @param rangeMax
+     *            maximum allowable value for numeric parameters
+     * @param optional
+     *            if true; the parameter is considered optional and must not be
+     *            present
+     * @param defaultValue
+     *            a default value to assign to the parameter, if it has no value
+     * @return a parameter value
+     * @throws Exception
+     */
+    public Object validateAndParseInputParam(final String name, final Object type, final Object rangeMin,
+            final Object rangeMax, final boolean optional, final Object defaultValue) throws Exception {
+        Object paramValue = null;
+
+        // special case
+        if (name.equals("geospatialBounds")) {
+            if (inputParams.get("geospatialBounds") == null && defaultValue != null) {
+                return new BoundingBox((String) defaultValue);
+            }
+            return new BoundingBox((String) inputParams.get("geospatialBounds"));
+        }
+
+        Object param = inputParams.get(name);
+        if ((param == null || StringUtils.trimToNull(String.valueOf(param).trim()) == null) && !optional) {
+            throw new Exception("Invalid input parameter value.  Required parameter: " + name + " not sent to: "
+                    + ReflectUtils.getCallingClassName());
+        }
+
+        if (param == null && defaultValue != null) {
+            if (!type.getClass().equals(defaultValue.getClass())) {
+                throw new Exception("Invalid input parameter value.  Mismatching input parameter type: "
+                        + type.toString() + " and default value type: " + defaultValue.toString() + "for parameter: "
+                        + name + " sent to: " + ReflectUtils.getCallingClassName());
+            }
+            return defaultValue;
+        }
+
+        if (param != null) {
+            if (StringUtils.trimToNull(String.valueOf(param).trim()) == null) {
+                throw new Exception(
+                        "Invalid input parameter: " + name + " sent to: " + ReflectUtils.getCallingClassName());
+            }
+
+            return validateAndParseParamValueString(String.valueOf(param).trim(), name, type, rangeMin, rangeMax);
+        }
+
+        return paramValue;
+    }
+}

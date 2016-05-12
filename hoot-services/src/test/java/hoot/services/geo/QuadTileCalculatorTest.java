@@ -26,19 +26,18 @@
  */
 package hoot.services.geo;
 
-import hoot.services.UnitTest;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-public class QuadTileCalculatorTest
-{
-  @Test
-  @Category(UnitTest.class)
-  public void testTileFromPoint()
-  {
-    Assert.assertEquals(1329332431L, QuadTileCalculator.tileForPoint(38, -104));
-    Assert.assertEquals(3851856485L, QuadTileCalculator.tileForPoint(38, 104));
-  }
+import hoot.services.UnitTest;
+
+
+public class QuadTileCalculatorTest {
+    @Test
+    @Category(UnitTest.class)
+    public void testTileFromPoint() {
+        Assert.assertEquals(1329332431L, QuadTileCalculator.tileForPoint(38, -104));
+        Assert.assertEquals(3851856485L, QuadTileCalculator.tileForPoint(38, 104));
+    }
 }

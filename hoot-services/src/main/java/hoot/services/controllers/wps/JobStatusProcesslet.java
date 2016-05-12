@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.wps;
 
-
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -43,70 +42,68 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-
 public class JobStatusProcesslet extends BaseProcesslet {
-	private static final Logger log = LoggerFactory.getLogger(JobStatusProcesslet.class);
+    private static final Logger log = LoggerFactory.getLogger(JobStatusProcesslet.class);
 
-	public JobStatusProcesslet() throws Exception {
-		super();
-		
-	}
+    public JobStatusProcesslet() throws Exception {
+        super();
 
-	
-	@Override
-	public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info) 
-			throws ProcessletException {
+    }
 
-		
-		try {		
-			String jobId = ((LiteralInput) in.getParameter("jobid")).getValue().trim();
-			String strStatus = getJobStatusRquest(jobId);
-			((LiteralOutput)out.getParameter("status")).setValue(strStatus);
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
+    @Override
+    public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info)
+            throws ProcessletException {
 
-	}
-	
-	
-	private static String getJobStatusRquest(String jobId) throws Exception{
-		String ret = "";
-		
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		HttpGet httpget = new HttpGet(coreJobServerUrl + "/hoot-services/job/status/" + 
-				jobId );
-		CloseableHttpResponse response = httpclient.execute(httpget);
-		try {
-		    HttpEntity entity = response.getEntity();
-		    if (entity != null) {
-		        entity.getContentLength();
-		        ret = EntityUtils.toString(entity);
-		    }
-		} finally {
-		    response.close();
-		    httpclient.close();
-		}
-		
-		
-		return ret;
-	}
-	
+        try {
+            String jobId = ((LiteralInput) in.getParameter("jobid")).getValue().trim();
+            String strStatus = getJobStatusRquest(jobId);
+            ((LiteralOutput) out.getParameter("status")).setValue(strStatus);
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+        }
 
-	/* (non-Javadoc)
-	 * @see hoot.services.controllers.wps.BaseProcesslet#destroy()
-	 */
-	@Override
-	public void destroy() {
-		//
-	}
+    }
 
+    private static String getJobStatusRquest(String jobId) throws Exception {
+        String ret = "";
 
-	/* (non-Javadoc)
-	 * @see hoot.services.controllers.wps.BaseProcesslet#init()
-	 */
-	@Override
-	public void init() {
-		//
-	}
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpGet httpget = new HttpGet(coreJobServerUrl + "/hoot-services/job/status/" + jobId);
+        CloseableHttpResponse response = httpclient.execute(httpget);
+        try {
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                entity.getContentLength();
+                ret = EntityUtils.toString(entity);
+            }
+        }
+        finally {
+            response.close();
+            httpclient.close();
+        }
+
+        return ret;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see hoot.services.controllers.wps.BaseProcesslet#destroy()
+     */
+    @Override
+    public void destroy() {
+        //
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see hoot.services.controllers.wps.BaseProcesslet#init()
+     */
+    @Override
+    public void init() {
+        //
+    }
 
 }

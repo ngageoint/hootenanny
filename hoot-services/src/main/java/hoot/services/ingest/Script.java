@@ -28,33 +28,49 @@ package hoot.services.ingest;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 /**
  * 
  */
 @XmlRootElement
-public class Script
-{
-  private String name;
-  public String getName() { return name; }
-  public void setName(String name) { this.name = name; }
-  
-  private String description;
-  public String getDescription() { return description; }
-  public void setDescription(String description) { this.description = description; }
-  
-  private String content;
-  public String getContent() { return content; }
-  public void setContent(String content) { this.content = content; }
-  
-  public Script()
-  {
-    
-  }
-  
-  public Script(final String name, final String description, final String content)
-  {
-    this.name = name;
-    this.description = description;
-    this.content = content;
-  }
+public class Script {
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    private String content;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Script() {
+
+    }
+
+    public Script(final String name, final String description, final String content) {
+        this.name = name;
+        this.description = description;
+        this.content = content;
+    }
 }

@@ -26,74 +26,73 @@
  */
 package hoot.services.models.osm;
 
-import hoot.services.db2.Users;
-
 import java.sql.Connection;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import hoot.services.db2.Users;
+
+
 /**
  * Represents the model for an OSM user
  */
-public class User extends Users
-{
-	@SuppressWarnings("unused")
-  private static final long serialVersionUID = 4395123526768281005L;
+public class User extends Users {
+    @SuppressWarnings("unused")
+    private static final long serialVersionUID = 4395123526768281005L;
 
-  @SuppressWarnings("unused")
-  private Connection conn;
+    @SuppressWarnings("unused")
+    private Connection conn;
 
-  public User(final Users user, Connection conn)
-  {
-    super();
+    public User(final Users user, Connection conn) {
+        super();
 
-    setDisplayName(user.getDisplayName());
-    setEmail(user.getEmail());
-    setId(user.getId());
+        setDisplayName(user.getDisplayName());
+        setEmail(user.getEmail());
+        setId(user.getId());
 
-    this.conn = conn;
-  }
+        this.conn = conn;
+    }
 
-  /**
-   * Returns an XML representation of the user's details
-   *
-   * @param parentXml XML node this node should be attached under
-   * @return an XML node
-   */
-  private Element detailsToXml(final Element parentXml, final long changesetsCount)
-  {
-    Document doc = parentXml.getOwnerDocument();
+    /**
+     * Returns an XML representation of the user's details
+     *
+     * @param parentXml
+     *            XML node this node should be attached under
+     * @return an XML node
+     */
+    private Element detailsToXml(final Element parentXml, final long changesetsCount) {
+        Document doc = parentXml.getOwnerDocument();
 
-    Element userElement = doc.createElement("user");
-    userElement.setAttribute("id", String.valueOf(getId()));
-    userElement.setAttribute("display_name", getDisplayName());
-    //account_created attribute not supported yet
+        Element userElement = doc.createElement("user");
+        userElement.setAttribute("id", String.valueOf(getId()));
+        userElement.setAttribute("display_name", getDisplayName());
+        // account_created attribute not supported yet
 
-    //img element not supported
-    //roles element not supported
-    Element changesetsElement = doc.createElement("changesets");
-    changesetsElement.setAttribute("count", String.valueOf(changesetsCount));
-    //traces element not supported
-    //blocks element not supported
-    //home element not supported
-    //description element not supported
-    //languages element not supported
-    //messages element not supported
+        // img element not supported
+        // roles element not supported
+        Element changesetsElement = doc.createElement("changesets");
+        changesetsElement.setAttribute("count", String.valueOf(changesetsCount));
+        // traces element not supported
+        // blocks element not supported
+        // home element not supported
+        // description element not supported
+        // languages element not supported
+        // messages element not supported
 
-    userElement.appendChild(changesetsElement);
+        userElement.appendChild(changesetsElement);
 
-    return userElement;
-  }
+        return userElement;
+    }
 
-  /**
-   * Returns an XML representation of the user
-   *
-   * @param parentXml XML node this node should be attached under
-   * @return an XML node
-   */
-  public Element toXml(final Element parentXml, final long changesetsCount)
-  {
-    return detailsToXml(parentXml, changesetsCount);
-  }
+    /**
+     * Returns an XML representation of the user
+     *
+     * @param parentXml
+     *            XML node this node should be attached under
+     * @return an XML node
+     */
+    public Element toXml(final Element parentXml, final long changesetsCount) {
+        return detailsToXml(parentXml, changesetsCount);
+    }
 }

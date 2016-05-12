@@ -36,6 +36,7 @@ import org.apache.commons.lang3.StringUtils;
 import hoot.services.HootProperties;
 import hoot.services.controllers.info.AboutResource;
 
+
 public class ErrorLog {
 
     private static String errLogPath = null;
@@ -55,7 +56,7 @@ public class ErrorLog {
     public String getErrorlog(long maxLength) throws IOException {
         File file = new File(errLogPath);
 
-        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")){
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
             StringBuilder builder = new StringBuilder();
             long length = file.length();
 
@@ -95,13 +96,15 @@ public class ErrorLog {
 
         ServicesDetail sd = about.getServicesVersionDetail();
         if (sd != null) {
-            data += System.lineSeparator() + "************ SERVICE DETAIL PROPERTY ***********" + System.lineSeparator();
+            data += System.lineSeparator() + "************ SERVICE DETAIL PROPERTY ***********"
+                    + System.lineSeparator();
             for (ServicesDetail.Property prop : sd.getProperties()) {
                 String str = prop.getName() + " : " + prop.getValue() + System.lineSeparator();
                 data += str;
             }
 
-            data += System.lineSeparator() + "************ SERVICE DETAIL RESOURCE ***********" + System.lineSeparator();
+            data += System.lineSeparator() + "************ SERVICE DETAIL RESOURCE ***********"
+                    + System.lineSeparator();
             for (ServicesDetail.ServicesResource res : sd.getResources()) {
                 String str = res.getType() + " : " + res.getUrl() + System.lineSeparator();
                 data += str;
@@ -115,7 +118,7 @@ public class ErrorLog {
 
         String logStr = getErrorlog(maxSize);
 
-        try (RandomAccessFile raf = new RandomAccessFile(outputPath, "rw")){
+        try (RandomAccessFile raf = new RandomAccessFile(outputPath, "rw")) {
             raf.writeBytes(data + System.lineSeparator() + logStr);
             return outputPath;
         }
