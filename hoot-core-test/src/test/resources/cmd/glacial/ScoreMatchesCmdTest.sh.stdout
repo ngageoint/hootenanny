@@ -28,16 +28,10 @@ INFO  ...ighway/HighwayRfClassifier.cpp( 324) extractorNames: [4]{EdgeDistanceRm
 INFO  ...ighway/HighwayRfClassifier.cpp( 325) missingExtractors: [0]{}
 INFO  ...ighway/HighwayRfClassifier.cpp( 326) _rfFactorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 992.35
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 992.35
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 6
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 64         
@@ -86,16 +80,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0 Miss: 1 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.7
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.7
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 29
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -144,16 +132,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.22 Miss: 1 Review: 0.33
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -202,16 +184,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0 Miss: 0.8 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -260,16 +236,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.136667 Miss: 1.85667 Review: 0.223333
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -318,16 +288,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.0416667 Miss: 0.471667 Review: 0.0633333
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 8
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1054.29
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1054.29
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 7
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 48         
@@ -376,16 +340,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0 Miss: 0.9 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -434,16 +392,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.005 Miss: 0.405 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1054.29
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1054.29
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 7
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 48         
@@ -492,16 +444,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.11 Miss: 0.9 Review: 0.17
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 8
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: -1
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: -1
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -550,16 +496,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.0683333 Miss: 1.32833 Review: 0.116667
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -608,16 +548,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.0208333 Miss: 0.635833 Review: 0.0366667
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1054.29
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1054.29
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 7
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 48         
@@ -666,16 +600,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0 Miss: 0.85 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -724,16 +652,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.0025 Miss: 0.6025 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1054.29
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1054.29
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 7
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 48         
@@ -782,16 +704,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.055 Miss: 0.85 Review: 0.09
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 8
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: -1
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: -1
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -840,16 +756,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.0341667 Miss: 1.06417 Review: 0.0633333
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -898,16 +808,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.0104167 Miss: 0.717917 Review: 0.0233333
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1054.29
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1054.29
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 7
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 48         
@@ -956,16 +860,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0 Miss: 0.825 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1014,16 +912,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.00125 Miss: 0.70125 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1054.29
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1054.29
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 7
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 48         
@@ -1072,16 +964,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.0275 Miss: 0.825 Review: 0.05
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 8
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: -1
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: -1
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1130,16 +1016,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.0170833 Miss: 0.932083 Review: 0.0366667
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1188,16 +1068,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.00520833 Miss: 0.758958 Review: 0.0166667
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1246,16 +1120,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0 Miss: 0.8125 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1304,16 +1172,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.000625 Miss: 0.750625 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1362,16 +1224,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.01375 Miss: 0.8125 Review: 0.03
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1420,16 +1276,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.00854167 Miss: 0.866042 Review: 0.0233333
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1478,16 +1328,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.00260417 Miss: 0.779479 Review: 0.0133333
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1536,16 +1380,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0 Miss: 0.80625 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1594,16 +1432,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.0003125 Miss: 0.775313 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1652,16 +1484,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.006875 Miss: 0.80625 Review: 0.02
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1710,16 +1536,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.00427083 Miss: 0.833021 Review: 0.0166667
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1768,16 +1588,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.00130208 Miss: 0.78974 Review: 0.0116667
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1826,16 +1640,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0 Miss: 0.803125 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1884,16 +1692,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.00015625 Miss: 0.787656 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -1942,16 +1744,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.0034375 Miss: 0.803125 Review: 0.015
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2000,16 +1796,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.00213542 Miss: 0.81651 Review: 0.0133333
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2058,16 +1848,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.000651042 Miss: 0.79487 Review: 0.0108333
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2116,16 +1900,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0 Miss: 0.801563 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2174,16 +1952,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.793828 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2232,16 +2004,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.00171875 Miss: 0.801563 Review: 0.0125
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2290,16 +2056,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.00106771 Miss: 0.808255 Review: 0.0116667
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2348,16 +2108,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.000325521 Miss: 0.797435 Review: 0.0104167
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2406,16 +2160,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0 Miss: 0.800781 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2464,16 +2212,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.796914 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2522,16 +2264,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.000859375 Miss: 0.800781 Review: 0.01125
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2580,16 +2316,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.000533854 Miss: 0.804128 Review: 0.0108333
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2638,16 +2368,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.00016276 Miss: 0.798717 Review: 0.0102083
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2696,16 +2420,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0 Miss: 0.800391 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2754,16 +2472,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.798457 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2812,16 +2524,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.000429688 Miss: 0.800391 Review: 0.010625
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2870,16 +2576,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.000266927 Miss: 0.802064 Review: 0.0104167
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2928,16 +2628,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.799359 Review: 0.0101042
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -2986,16 +2680,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0 Miss: 0.800195 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3044,16 +2732,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.799229 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3102,16 +2784,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.000214844 Miss: 0.800195 Review: 0.0103125
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3160,16 +2836,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.000133464 Miss: 0.801032 Review: 0.0102083
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3218,16 +2888,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.799679 Review: 0.0100521
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3276,16 +2940,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0 Miss: 0.800098 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3334,16 +2992,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.799614 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3392,16 +3044,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0.000107422 Miss: 0.800098 Review: 0.0101562
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3450,16 +3096,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.800516 Review: 0.0101042
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3508,16 +3148,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.79984 Review: 0.010026
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3566,16 +3200,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0 Miss: 0.800049 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3624,16 +3252,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.799807 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3682,16 +3304,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.800049 Review: 0.0100781
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3740,16 +3356,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.800258 Review: 0.0100521
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3798,16 +3408,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.79992 Review: 0.010013
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3856,16 +3460,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match: 0 Miss: 0.800024 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 6 mean: 3.875
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 31
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 28
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3914,16 +3512,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.799904 Review: 0.01
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -3972,16 +3564,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.800024 Review: 0.0100391
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
@@ -4030,16 +3616,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.800129 Review: 0.010026
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 47         
@@ -4088,16 +3668,10 @@ INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDupl
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
 INFO  ...lygon/BuildingMatchCreator.cpp( 201) *threshold: Thresholds; Match:  Miss: 0.79996 Review: 0.0100065
 INFO  ...ighway/HighwayMatchCreator.cpp(  89) neighbor counts, max: 2 mean: 1.25
-INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 10
 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 189) CM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 190) CM Score: 1072.57
 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-INFO  ...conflate/UnifyingConflator.cpp( 198) GM took: s.
-INFO  ...conflate/UnifyingConflator.cpp( 199) GM Score: 1072.57
-INFO  ...conflate/UnifyingConflator.cpp( 222) Post constraining match count: 8
 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 46         
