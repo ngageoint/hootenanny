@@ -29,19 +29,16 @@ package hoot.services.geo;
 /**
  * Just a simple container for geo-coordinates
  */
-public class Coordinates
-{
-  public double lat;
-  public double lon;
-  
-  public Coordinates()
-  {
-    
-  }
-  
-  public Coordinates(final double lat, final double lon)
-  {
-    this.lat = lat;
-    this.lon = lon;
-  }
+public class Coordinates {
+    public double lat;
+    public double lon;
+
+    public Coordinates() {
+
+    }
+
+    public Coordinates(final double lat, final double lon) {
+        this.lat = lat;
+        this.lon = lon;
+    }
 }

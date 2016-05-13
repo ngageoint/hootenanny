@@ -33,29 +33,27 @@ import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
 
+
 /**
- * Jersey filter for supporting CORS: http://en.wikipedia.org/wiki/Cross-origin_resource_sharing
+ * Jersey filter for supporting CORS:
+ * http://en.wikipedia.org/wiki/Cross-origin_resource_sharing
  */
-public class CorsResponseFilter implements ContainerResponseFilter
-{
-  /**
-   * Returns a CORS aware filter
-   */
-  @Override
-  public ContainerResponse filter(final ContainerRequest req, ContainerResponse contResp)
-  {
-    ResponseBuilder resp = Response.fromResponse(contResp.getResponse());
-    resp
-      .header("Access-Control-Allow-Origin", "*")
-      .header("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
+public class CorsResponseFilter implements ContainerResponseFilter {
+    /**
+     * Returns a CORS aware filter
+     */
+    @Override
+    public ContainerResponse filter(final ContainerRequest req, ContainerResponse contResp) {
+        ResponseBuilder resp = Response.fromResponse(contResp.getResponse());
+        resp.header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Methods",
+                "GET, POST, PUT, OPTIONS");
 
-    String reqHead = req.getHeaderValue("Access-Control-Request-Headers");
-    if (null != reqHead && !reqHead.equals(""))
-    {
-      resp.header("Access-Control-Allow-Headers", reqHead);
+        String reqHead = req.getHeaderValue("Access-Control-Request-Headers");
+        if (null != reqHead && !reqHead.equals("")) {
+            resp.header("Access-Control-Allow-Headers", reqHead);
+        }
+
+        contResp.setResponse(resp.build());
+        return contResp;
     }
-
-    contResp.setResponse(resp.build());
-    return contResp;
-  }
 }

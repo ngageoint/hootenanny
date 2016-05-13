@@ -28,6 +28,7 @@ package hoot.services.info;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 /**
  * Represents details about the web services
  */
@@ -37,14 +38,16 @@ public class ServicesDetail {
     private String classPath;
     private ServicesResource[] resources;
 
-    public ServicesDetail() {}
+    public ServicesDetail() {
+    }
 
     @XmlRootElement
     public static class Property {
         private String name;
         private String value;
 
-        public Property() {}
+        public Property() {
+        }
 
         public String getName() {
             return name;
@@ -68,7 +71,8 @@ public class ServicesDetail {
         private String type;
         private String url;
 
-        public ServicesResource() {}
+        public ServicesResource() {
+        }
 
         public String getType() {
             return type;

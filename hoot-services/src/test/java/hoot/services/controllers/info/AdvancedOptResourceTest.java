@@ -29,34 +29,35 @@ package hoot.services.controllers.info;
 import java.util.Iterator;
 import java.util.Map;
 
-import hoot.services.UnitTest;
-
 import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import hoot.services.UnitTest;
+
+
 public class AdvancedOptResourceTest {
-	
-	@Test
-  @Category(UnitTest.class)
-	public void testGetOptions() throws Exception
-	{
-		AdvancedOptResource adv = new AdvancedOptResource();
-		adv._doc = new JSONObject();
-		
-		adv._parseAsciidoc();
-		
-		JSONObject opt = (JSONObject) adv._doc.get("javascript.translator.path");
-		Assert.assertEquals("A list of paths to include in the javascript translator search path.", opt.get("Description").toString());
-		JSONObject defList = (JSONObject)opt.get("Default List");
-		Iterator it = defList.entrySet().iterator();
-		
-		while (it.hasNext()) {
-	      Map.Entry pair = (Map.Entry)it.next();
-	      Assert.assertTrue(pair.getKey().toString().length() > 0);
-	      Assert.assertTrue(pair.getValue().toString().length() == 0);
-	  }
-	}
+
+    @Test
+    @Category(UnitTest.class)
+    public void testGetOptions() throws Exception {
+        AdvancedOptResource adv = new AdvancedOptResource();
+        adv._doc = new JSONObject();
+
+        adv._parseAsciidoc();
+
+        JSONObject opt = (JSONObject) adv._doc.get("javascript.translator.path");
+        Assert.assertEquals("A list of paths to include in the javascript translator search path.",
+                opt.get("Description").toString());
+        JSONObject defList = (JSONObject) opt.get("Default List");
+        Iterator it = defList.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            Assert.assertTrue(pair.getKey().toString().length() > 0);
+            Assert.assertTrue(pair.getValue().toString().length() == 0);
+        }
+    }
 
 }

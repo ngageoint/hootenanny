@@ -5,5 +5,4 @@
 NOTE: Complete me.
 
 This refers to the conflation implemented circa 2012 in the initial software design. See
-+conflate.enable.old.roads+ configuration option and the +conflate-roads+
-command in <<hootuser>> for usage details.
++conflate.enable.old.roads+ configuration option for usage details.

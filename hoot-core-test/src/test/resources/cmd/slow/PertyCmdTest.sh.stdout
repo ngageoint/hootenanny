@@ -1,0 +1,8 @@
+
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::PertyWaySplitVisitor
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::PertyWayGeneralizeVisitor
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::PertyRemoveRandomElementVisitor
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::PertyDuplicatePoiOp
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::PertyRemoveTagVisitor
+INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::PertyNameVisitor
+

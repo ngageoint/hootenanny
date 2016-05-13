@@ -26,28 +26,33 @@
  */
 package hoot.services.models.osm;
 
-import hoot.services.models.osm.Element.ElementType;
-
 import java.util.Map;
 
+import hoot.services.models.osm.Element.ElementType;
+
+
 /**
- * All OSM element models that want to be serializable to/from XML should implement this
+ * All OSM element models that want to be serializable to/from XML should
+ * implement this
  */
-public interface XmlSerializable
-{
-  void fromXml(final org.w3c.dom.Node xml) throws Exception;
-  org.w3c.dom.Element toXml(final org.w3c.dom.Element parentXml, final long modifyingUserId, 
-    final String modifyingUserDisplayName, final boolean multiLayerUniqueElementIds, 
-    final boolean addChildren) throws Exception;
-  org.w3c.dom.Element toChangesetResponseXml(final org.w3c.dom.Element parentXml) throws Exception;
-  
-  void setElementCache(Map<ElementType, Map<Long, Element>> parsedElementIdsToElementsByType);
-  
-  long getId() throws Exception;
-  void setId(long id) throws Exception;
-  
-  long getOldId();
-  void setOldId(long id);
-  
-  void setRequestChangesetId(long id);
+public interface XmlSerializable {
+    void fromXml(final org.w3c.dom.Node xml) throws Exception;
+
+    org.w3c.dom.Element toXml(final org.w3c.dom.Element parentXml, final long modifyingUserId,
+            final String modifyingUserDisplayName, final boolean multiLayerUniqueElementIds, final boolean addChildren)
+            throws Exception;
+
+    org.w3c.dom.Element toChangesetResponseXml(final org.w3c.dom.Element parentXml) throws Exception;
+
+    void setElementCache(Map<ElementType, Map<Long, Element>> parsedElementIdsToElementsByType);
+
+    long getId() throws Exception;
+
+    void setId(long id) throws Exception;
+
+    long getOldId();
+
+    void setOldId(long id);
+
+    void setRequestChangesetId(long id);
 }

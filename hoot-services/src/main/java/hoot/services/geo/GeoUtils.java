@@ -29,19 +29,20 @@ package hoot.services.geo;
 /**
  * Various geospatial utilities for hoot services
  */
-public class GeoUtils
-{
-	public static final double DEFAULT_COORD_VALUE = -181.0;
-  
-  /**
-   * Determines if a pair of coordinates lie within world boundaries
-   * 
-   * @param lat latitude coordinate
-   * @param lon longitude coordinate
-   * @return true if both coordinates lie within world boundaries; false otherwise
-   */
-  public static boolean coordsInWorld(final double lat, final double lon)
-  {
-    return lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180;
-  }
+public class GeoUtils {
+    public static final double DEFAULT_COORD_VALUE = -181.0;
+
+    /**
+     * Determines if a pair of coordinates lie within world boundaries
+     * 
+     * @param lat
+     *            latitude coordinate
+     * @param lon
+     *            longitude coordinate
+     * @return true if both coordinates lie within world boundaries; false
+     *         otherwise
+     */
+    public static boolean coordsInWorld(final double lat, final double lon) {
+        return lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180;
+    }
 }
