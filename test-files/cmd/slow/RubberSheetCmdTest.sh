@@ -6,7 +6,7 @@ mkdir -p $HOOT_HOME/test-output/cmd/slow/RubberSheetCmdTest
 input1=$HOOT_HOME/test-files/DcGisRoads.osm
 input2=$HOOT_HOME/test-files/DcTigerRoads.osm
 outputfile=$HOOT_HOME/test-output/cmd/slow/RubberSheetCmdTest/out.osm
-comparefile=$HOOT_HOME/hoot-core-test/src/test/resources/cmd/slow/RubberSheetCmdTest/out.osm
+comparefile=$HOOT_HOME/test-files/cmd/slow/RubberSheetCmdTest/out.osm
 
 # Run the command.
 hoot rubber-sheet $input1 $input2 $outputfile | \

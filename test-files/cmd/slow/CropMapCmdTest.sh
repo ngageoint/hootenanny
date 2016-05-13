@@ -4,7 +4,7 @@ set -e
 mkdir -p $HOOT_HOME/test-output/cmd/slow/CropMapCmdTest
 
 inputfile=$HOOT_HOME/test-files/DcGisRoads.osm
-comparefile=$HOOT_HOME/hoot-core-test/src/test/resources/cmd/slow/CropMapCmdTest/cropped.osm
+comparefile=$HOOT_HOME/test-files/cmd/slow/CropMapCmdTest/cropped.osm
 outputfile=$HOOT_HOME/test-output/cmd/slow/CropMapCmdTest/cropped.osm
 
 # Run the command.

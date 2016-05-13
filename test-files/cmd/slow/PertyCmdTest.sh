@@ -5,7 +5,7 @@ mkdir -p $HOOT_HOME/test-output/cmd/slow/PertyCmdTest
 
 # Compare to known-good
 inputfile=$HOOT_HOME/test-files/DcGisRoads.osm
-testfile=$HOOT_HOME/hoot-core-test/src/test/resources/cmd/slow/PertyCmdTest/p_out.osm
+testfile=$HOOT_HOME/test-files/cmd/slow/PertyCmdTest/p_out.osm
 outputfile=$HOOT_HOME/test-output/cmd/slow/PertyCmdTest/p_out.osm
 
 # Run the command. Note that we sanitize output to remove 

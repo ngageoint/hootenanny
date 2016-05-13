@@ -7,10 +7,10 @@ mkdir -p $HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest
 hoot derive-rubber-sheet \
   --ref $HOOT_HOME/test-files/DcGisRoads.osm \
         $HOOT_HOME/test-files/DcTigerRoads.osm \
-  $HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.rs 
+        $HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.rs 
 
 # Compare to known-good
-goodfile=$HOOT_HOME/hoot-core-test/src/test/resources/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.rs
+goodfile=$HOOT_HOME/test-files/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.rs
 testfile=$HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.rs
 cmp $goodfile $testfile
 if [ "$?" = "1" ]; then
@@ -24,6 +24,6 @@ hoot apply-rubber-sheet \
   $HOOT_HOME/test-files/DcTigerRoads.osm \
   $HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.osm 
 
-goodfile=$HOOT_HOME/hoot-core-test/src/test/resources/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.osm
+goodfile=$HOOT_HOME/test-files/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.osm
 testfile=$HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.osm
 hoot is-match $goodfile $testfile || diff $goodfile $testfile
