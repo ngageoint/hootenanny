@@ -306,9 +306,8 @@ public class ExportJobResource extends JobControllerBase {
         // external database will
         // just always enforce it.
         if (!tags.containsKey("osm_api_db_export_time")) {
-            ResourceErrorHandler.handleError(
-                    "Error exporting data.  Map with ID: " + String.valueOf(map.getId()) + " and name: "
-                            + map.getDisplayName() + " has no osm_api_db_export_time tag.", Status.CONFLICT,
+            ResourceErrorHandler.handleError("Error exporting data.  Map with ID: " + String.valueOf(map.getId())
+                    + " and name: " + map.getDisplayName() + " has no osm_api_db_export_time tag.", Status.CONFLICT,
                     log);
         }
         JSONObject arg = new JSONObject();
