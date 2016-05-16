@@ -26,13 +26,24 @@
  */
 package hoot.services.controllers.job;
 
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 import java.io.File;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import hoot.services.HootProperties;
+import hoot.services.UnitTest;
+import hoot.services.geo.BoundingBox;
+import hoot.services.models.osm.Map;
+
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
@@ -40,12 +51,15 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-import hoot.services.UnitTest;
+import com.sun.jersey.api.client.ClientResponse.Status;
 
 
 public class ExportJobResourceTest {
+
+    private static final Logger log = LoggerFactory.getLogger(ExportJobResourceTest.class);
 
     @Test
     @Category(UnitTest.class)
@@ -135,5 +149,207 @@ public class ExportJobResourceTest {
             expected = "[{\"description\":\"LTDS 4.0\",\"name\":\"TDS\"},{\"description\":\"MGCP\",\"name\":\"MGCP\"}]";
         }
         Assert.assertEquals(expected, result);
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testExportToOsmApiDb() throws Exception {
+        final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader()
+                .getResource("hoot/services/controllers/job/ExportResourceTestProcessOsmApiDbInputInput.json")
+                .getPath()));
+
+        ExportJobResource spy = Mockito.spy(new ExportJobResource());
+
+        Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
+        final List<Long> mapIds = new ArrayList<>();
+        mapIds.add(new Long(1));
+        Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
+        java.util.Map<String, String> mapTags = new HashMap<>();
+        final String exportTime = "2016-05-04 10:15";
+        mapTags.put("osm_api_db_export_time", exportTime);
+        Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
+        final BoundingBox mapBounds = new BoundingBox(0, 0, 0, 0);
+        final String mapBoundsStr = mapBounds.toServicesString();
+        Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
+
+        final String commandArgs = spy.addExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null)
+                .toString();
+        log.debug(commandArgs);
+
+        Assert.assertTrue(commandArgs.contains("{\"input\":\"MyTestMap\"}"));
+        Assert.assertTrue(commandArgs.contains("{\"outputtype\":\"osm_api_db\"}"));
+        Assert.assertTrue(commandArgs.contains("{\"removereview\":\"false\"}"));
+        Assert.assertTrue(commandArgs.contains("{\"inputtype\":\"db\"}"));
+        Assert.assertTrue(commandArgs.contains("{\"temppath\":"));
+        Assert.assertTrue(commandArgs.contains("{\"changesetuserid\":\"1\"}"));
+        Assert.assertTrue(commandArgs.contains("{\"changesetsourcedatatimestamp\":\"" + exportTime + "\"}"));
+        Assert.assertTrue(commandArgs.contains("{\"changesetaoi\":\"" + mapBoundsStr + "\"}"));
+    }
+
+    @Test(expected = WebApplicationException.class)
+    @Category(UnitTest.class)
+    public void testExportToOsmApiDbWithTranslation() throws Exception {
+        try {
+            final String inputParams = FileUtils
+                    .readFileToString(new File(
+                            Thread.currentThread()
+                                    .getContextClassLoader()
+                                    .getResource(
+                                            "hoot/services/controllers/job/ExportResourceTestExportToOsmApiDbWithTranslationInput.json")
+                                    .getPath()));
+
+            ExportJobResource spy = Mockito.spy(new ExportJobResource());
+
+            Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
+            final List<Long> mapIds = new ArrayList<>();
+            mapIds.add(new Long(1));
+            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
+            java.util.Map<String, String> mapTags = new HashMap<>();
+            final String exportTime = "2016-05-04 10:15";
+            mapTags.put("osm_api_db_export_time", exportTime);
+            Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
+            final BoundingBox mapBounds = new BoundingBox(0, 0, 0, 0);
+            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
+
+            spy.addExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+        }
+        catch (WebApplicationException e) {
+            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e.getResponse().getEntity().toString()
+                    .contains("Custom translation not allowed when exporting to OSM API database."));
+            throw e;
+        }
+    }
+
+    @Test(expected = WebApplicationException.class)
+    @Category(UnitTest.class)
+    public void testExportToOsmApiDbNoTimestampTag() throws Exception {
+        try {
+            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+                    .getContextClassLoader()
+                    .getResource("hoot/services/controllers/job/ExportResourceTestProcessOsmApiDbInputInput.json")
+                    .getPath()));
+
+            ExportJobResource spy = Mockito.spy(new ExportJobResource());
+
+            Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
+            final List<Long> mapIds = new ArrayList<>();
+            mapIds.add(new Long(1));
+            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
+            java.util.Map<String, String> mapTags = new HashMap<>();
+            // add no map tags
+            Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
+            final BoundingBox mapBounds = new BoundingBox(0, 0, 0, 0);
+            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
+
+            spy.addExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+        }
+        catch (WebApplicationException e) {
+            Assert.assertEquals(Status.CONFLICT.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e.getResponse().getEntity().toString().contains("has no osm_api_db_export_time tag"));
+            throw e;
+        }
+    }
+
+    @Test(expected = WebApplicationException.class)
+    @Category(UnitTest.class)
+    public void testExportToOsmApiDbBadInputType() throws Exception {
+        try {
+            final String inputParams = FileUtils.readFileToString(new File(Thread
+                    .currentThread()
+                    .getContextClassLoader()
+                    .getResource(
+                            "hoot/services/controllers/job/ExportResourceTestExportToOsmApiDbBadInputTypeInput.json")
+                    .getPath()));
+
+            ExportJobResource spy = Mockito.spy(new ExportJobResource());
+
+            Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
+            final List<Long> mapIds = new ArrayList<>();
+            mapIds.add(new Long(1));
+            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
+            java.util.Map<String, String> mapTags = new HashMap<>();
+            final String exportTime = "2016-05-04 10:15";
+            mapTags.put("osm_api_db_export_time", exportTime);
+            Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
+            final BoundingBox mapBounds = new BoundingBox(0, 0, 0, 0);
+            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
+
+            spy.addExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+        }
+        catch (WebApplicationException e) {
+            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e
+                    .getResponse()
+                    .getEntity()
+                    .toString()
+                    .contains(
+                            "When exporting to an OSM API database, the input type must be a Hootenanny API database."));
+            throw e;
+        }
+    }
+
+    @Test(expected = WebApplicationException.class)
+    @Category(UnitTest.class)
+    public void testExportToOsmApiDbMultipleMapsWithSameName() throws Exception {
+        try {
+            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+                    .getContextClassLoader()
+                    .getResource("hoot/services/controllers/job/ExportResourceTestProcessOsmApiDbInputInput.json")
+                    .getPath()));
+
+            ExportJobResource spy = Mockito.spy(new ExportJobResource());
+
+            Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
+            final List<Long> mapIds = new ArrayList<>();
+            // add two map id's
+            mapIds.add(new Long(1));
+            mapIds.add(new Long(2));
+            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
+            java.util.Map<String, String> mapTags = new HashMap<>();
+            final String exportTime = "2016-05-04 10:15";
+            mapTags.put("osm_api_db_export_time", exportTime);
+            Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
+            final BoundingBox mapBounds = new BoundingBox(0, 0, 0, 0);
+            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
+
+            spy.addExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+        }
+        catch (WebApplicationException e) {
+            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e.getResponse().getEntity().toString().contains("Multiple maps with name"));
+            throw e;
+        }
+    }
+
+    @Test(expected = WebApplicationException.class)
+    @Category(UnitTest.class)
+    public void testExportToOsmApiDbMissingMap() throws Exception {
+        try {
+            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+                    .getContextClassLoader()
+                    .getResource("hoot/services/controllers/job/ExportResourceTestProcessOsmApiDbInputInput.json")
+                    .getPath()));
+
+            ExportJobResource spy = Mockito.spy(new ExportJobResource());
+
+            Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
+            final List<Long> mapIds = new ArrayList<>();
+            // add no map id's
+            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
+            java.util.Map<String, String> mapTags = new HashMap<>();
+            final String exportTime = "2016-05-04 10:15";
+            mapTags.put("osm_api_db_export_time", exportTime);
+            Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
+            final BoundingBox mapBounds = new BoundingBox(0, 0, 0, 0);
+            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
+
+            spy.addExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+        }
+        catch (WebApplicationException e) {
+            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e.getResponse().getEntity().toString().contains("No map exists with name"));
+            throw e;
+        }
     }
 }

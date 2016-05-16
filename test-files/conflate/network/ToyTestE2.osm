@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-39784' visible='true' lat='0.35377709573' lon='6.72225643502' />
+  <node id='-39786' action='modify' visible='true' lat='0.35535420443' lon='6.72128011093' />
+  <node id='-39788' action='modify' visible='true' lat='0.35775741717' lon='6.72016431198' />
+  <node id='-39790' action='modify' visible='true' lat='0.35896975193' lon='6.71920944557' />
+  <node id='-39792' action='modify' visible='true' lat='0.35457101443' lon='6.72185946808' />
+  <node id='-39794' action='modify' visible='true' lat='0.35311527807' lon='6.71358846723' />
+  <node id='-39796' action='modify' visible='true' lat='0.35181711347' lon='6.71506904661' />
+  <node id='-39798' action='modify' visible='true' lat='0.35086226501' lon='6.71564840376' />
+  <node id='-39800' action='modify' visible='true' lat='0.35106852216' lon='6.71683343626' />
+  <node id='-39802' action='modify' visible='true' lat='0.35502497442' lon='6.71663545668' />
+  <node id='-39804' action='modify' visible='true' lat='0.35584035027' lon='6.71668910086' />
+  <node id='-39806' action='modify' visible='true' lat='0.35647333937' lon='6.7167910248' />
+  <node id='-39808' action='modify' visible='true' lat='0.35655380409' lon='6.71585225164' />
+  <node id='-39810' action='modify' visible='true' lat='0.35587790048' lon='6.71577178537' />
+  <way id='-39812' action='modify' visible='true'>
+    <nd ref='-39784' />
+    <nd ref='-39792' />
+    <nd ref='-39786' />
+    <nd ref='-39788' />
+    <nd ref='-39790' />
+    <tag k='highway' v='primary' />
+  </way>
+  <way id='-39814' action='modify' visible='true'>
+    <nd ref='-39794' />
+    <nd ref='-39796' />
+    <nd ref='-39798' />
+    <nd ref='-39800' />
+    <tag k='highway' v='primary' />
+  </way>
+  <way id='-39816' action='modify' visible='true'>
+    <nd ref='-39804' />
+    <nd ref='-39806' />
+    <nd ref='-39808' />
+    <nd ref='-39810' />
+    <nd ref='-39804' />
+    <tag k='highway' v='primary' />
+  </way>
+  <way id='-39818' action='modify' visible='true'>
+    <nd ref='-39802' />
+    <nd ref='-39804' />
+    <tag k='highway' v='primary' />
+  </way>
+</osm>

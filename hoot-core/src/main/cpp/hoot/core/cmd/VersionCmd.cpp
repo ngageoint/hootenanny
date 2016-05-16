@@ -41,7 +41,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/Version.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/algorithms/IntegerProgrammingSolver.h>
+#include <hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h>
 
 // Qt
 #include <Qt>

@@ -79,7 +79,6 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmWriter.cpp \
     src/main/cpp/hoot/core/WorkingMap.cpp \
     src/main/cpp/hoot/core/manipulators/WayMerger.cpp \
-    src/main/cpp/hoot/core/DistanceUtils.cpp \
     src/main/cpp/hoot/core/algorithms/WayDiscretizer.cpp \
     src/main/cpp/hoot/core/algorithms/DirectionFinder.cpp \
     src/main/cpp/hoot/core/algorithms/MaximalNearestSubline.cpp \
@@ -282,7 +281,7 @@ SOURCES += \
     src/main/cpp/hoot/core/ops/FindIntersectionsOp.cpp \
     src/main/cpp/hoot/core/cmd/FindIntersectionsCmd.cpp \
     src/main/cpp/hoot/core/visitors/FindIntersectionsVisitor.cpp \
-    src/main/cpp/hoot/core/algorithms/IntegerProgrammingSolver.cpp \
+    src/main/cpp/hoot/core/algorithms/optimizer/IntegerProgrammingSolver.cpp \
     src/main/cpp/hoot/core/conflate/match-graph/ConstrainedMatches.cpp \
     src/main/cpp/hoot/core/conflate/point/CustomPoiMatch.cpp \
     src/main/cpp/hoot/core/conflate/point/CustomPoiMatchCreator.cpp \
@@ -425,7 +424,7 @@ SOURCES += \
     src/main/cpp/hoot/core/cmd/PaintNodesCmd.cpp \
     src/main/cpp/hoot/core/visitors/TransliterateNameVisitor.cpp \
     src/main/cpp/hoot/core/conflate/extractors/LengthScoreExtractor.cpp \
-    src/main/cpp/hoot/core/algorithms/SingleAssignmentProblemSolver.cpp \
+    src/main/cpp/hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.cpp \
     src/main/cpp/hoot/core/conflate/extractors/Histogram.cpp \
     src/main/cpp/hoot/core/conflate/extractors/SampledAngleHistogramExtractor.cpp \
     src/main/cpp/hoot/core/conflate/point/PoiRfClassifier.cpp \
@@ -486,9 +485,15 @@ SOURCES += \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp \
+    src/main/cpp/hoot/core/visitors/MedianNodeVisitor.cpp \
+    src/main/cpp/hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.cpp \
     src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.cpp \
     src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.cpp \
     src/main/cpp/hoot/core/filters/WaterwayCriterion.cpp \
+    src/main/cpp/hoot/core/algorithms/linearreference/WayMapping.cpp \
+    src/main/cpp/hoot/core/algorithms/linearreference/WayMatchStringMapping.cpp \
+    src/main/cpp/hoot/core/algorithms/WayMatchStringMerger.cpp \
+    src/main/cpp/hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.cpp \
     src/main/cpp/hoot/core/io/ElementComparer.cpp \
     src/main/cpp/hoot/core/cmd/ApplyChangesetCmd.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbChangesetWriter.cpp \
@@ -518,7 +523,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmWriter.h \
     src/main/cpp/hoot/core/Units.h \
     src/main/cpp/hoot/core/manipulators/WayMerger.h \
-    src/main/cpp/hoot/core/DistanceUtils.h \
     src/main/cpp/hoot/core/algorithms/WayDiscretizer.h \
     src/main/cpp/hoot/core/algorithms/Distance.h \
     src/main/cpp/hoot/core/algorithms/DirectionFinder.h \
@@ -741,7 +745,7 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/FindIntersectionsOp.h \
     src/main/cpp/hoot/core/cmd/FindIntersectionsCmd.h \
     src/main/cpp/hoot/core/visitors/FindIntersectionsVisitor.h \
-    src/main/cpp/hoot/core/algorithms/IntegerProgrammingSolver.h \
+    src/main/cpp/hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h \
     src/main/cpp/hoot/core/conflate/match-graph/ConstrainedMatches.h \
     src/main/cpp/hoot/core/conflate/point/CustomPoiMatch.h \
     src/main/cpp/hoot/core/conflate/point/CustomPoiMatchCreator.h \
@@ -914,7 +918,7 @@ HEADERS += \
     src/main/cpp/hoot/core/elements/ElementProvider.h \
     src/main/cpp/hoot/core/io/EnvelopeProvider.h \
     src/main/cpp/hoot/core/visitors/TransliterateNameVisitor.h \
-    src/main/cpp/hoot/core/algorithms/SingleAssignmentProblemSolver.h \
+    src/main/cpp/hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h \
     src/main/cpp/hoot/core/conflate/extractors/Histogram.h \
     src/main/cpp/hoot/core/conflate/extractors/SampledAngleHistogramExtractor.h \
     src/main/cpp/hoot/core/algorithms/StringDistanceConsumer.h \
@@ -977,9 +981,15 @@ HEADERS += \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h \
+    src/main/cpp/hoot/core/visitors/MedianNodeVisitor.h \
+    src/main/cpp/hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h \
     src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.h \
     src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.h \
     src/main/cpp/hoot/core/filters/WaterwayCriterion.h \
+    src/main/cpp/hoot/core/algorithms/linearreference/WayMapping.h \
+    src/main/cpp/hoot/core/algorithms/linearreference/WayMatchStringMapping.h \
+    src/main/cpp/hoot/core/algorithms/WayMatchStringMerger.h \
+    src/main/cpp/hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h \
     src/main/cpp/hoot/core/io/ElementComparer.h \
     src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.h \
     src/main/cpp/hoot/core/ops/FindIntersectionsOp.h \
