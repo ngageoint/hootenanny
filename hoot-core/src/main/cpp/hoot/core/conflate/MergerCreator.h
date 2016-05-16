@@ -57,6 +57,12 @@ public:
       this->description = description;
     }
 
+    QString toString() const
+    {
+      return QString("%1 %2").arg(QString::fromStdString(className)).
+        arg(experimental ? "(experimental)" : "");
+    }
+
     bool experimental;
     string className;
     QString description;

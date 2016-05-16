@@ -1,6 +1,5 @@
 package hoot.services.exceptions.osm;
 
-
 public class OSMAPIPreconditionException extends Exception {
 
     public OSMAPIPreconditionException(String message, Throwable t) {

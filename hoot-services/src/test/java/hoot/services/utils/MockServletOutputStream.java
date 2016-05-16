@@ -31,20 +31,20 @@ import java.io.IOException;
 
 import javax.servlet.ServletOutputStream;
 
+
 /**
  * Used for mocking servlet response output with Mockito
  */
-public class MockServletOutputStream extends ServletOutputStream
-{
-  public ByteArrayOutputStream baos = new ByteArrayOutputStream();
-  
-  /*
-   * (non-Javadoc)
-   * @see java.io.OutputStream#write(int)
-   */
-  @Override
-  public void write(int i) throws IOException
-  {
-    baos.write(i);
-  }
+public class MockServletOutputStream extends ServletOutputStream {
+    public ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.io.OutputStream#write(int)
+     */
+    @Override
+    public void write(int i) throws IOException {
+        baos.write(i);
+    }
 }

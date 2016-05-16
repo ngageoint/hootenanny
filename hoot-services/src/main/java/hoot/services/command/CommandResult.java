@@ -34,7 +34,7 @@ public class CommandResult {
     private String stderr;
 
     public CommandResult(String cmdString, int result, String stdoutString, String stderrString) {
-        
+
         this.command = cmdString;
         this.exitStatus = result;
         this.stdout = stdoutString;
@@ -44,12 +44,15 @@ public class CommandResult {
     public String getCommand() {
         return command;
     }
+
     public int getExitStatus() {
         return exitStatus;
     }
+
     public String getStderr() {
         return stderr;
     }
+
     public String getStdout() {
         return stdout;
     }

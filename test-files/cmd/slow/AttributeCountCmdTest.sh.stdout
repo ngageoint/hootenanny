@@ -1,0 +1,10 @@
+{
+  "jakarta_raya_coastline.shp":{
+    "jakarta_raya_coastline":{
+      "NATURAL":[
+        "shoreline",
+        "water"
+        ]
+      }
+  }
+}

@@ -45,101 +45,99 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 public class LTDSTranslateProcesslet extends BaseProcesslet {
 
-  private static final Logger log = LoggerFactory.getLogger(LTDSTranslateProcesslet.class);
-  
-  public LTDSTranslateProcesslet() throws Exception {
-		
-	}
-	
-	/* (non-Javadoc)
-	 * @see hoot.services.wps.WPSProcesslet#destroy()
-	 */
-	@Override
-	public void destroy() {
-		//
-	}
+    private static final Logger log = LoggerFactory.getLogger(LTDSTranslateProcesslet.class);
 
-	/* (non-Javadoc)
-	 * @see hoot.services.wps.WPSProcesslet#init()
-	 */
-	@Override
-	public void init() {
-		//
-	}
-	
-	@Override
-	public void process(ProcessletInputs in, ProcessletOutputs out,
-			ProcessletExecutionInfo info) throws ProcessletException {
-		JSONArray args = parseRequestParams(in);
-		
-		try {		
-			String commandStr = "";
-			String osmId = "";
-			String translation = "";
-			for(int i=0; i<args.size(); i++)
-			{
-				JSONObject oParam = (JSONObject)args.get(i);
-				if(oParam.containsKey("OSM_INPUT"))
-				{
-					commandStr = oParam.get("OSM_INPUT").toString();	
-				}
-				
-				if(oParam.containsKey("ELEMENT_ID"))
-				{
-					osmId = oParam.get("ELEMENT_ID").toString();	
-				}
-				
-				if(oParam.containsKey("TRANSLATION"))
-				{
-					translation = oParam.get("TRANSLATION").toString();	
-				}
-			}
-			String res = postJobRquest(osmId, translation, commandStr);
-			
-			((LiteralOutput)out.getParameter("OGR")).setValue(res);
-			
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-	}
-	
-	
-	/**
-	 * Post Job request to jobExecutioner Servlet
-	 * 
-	 * @param jobId
-	 * @param requestParams
-	 * @throws Exception 
-	 */
-	private static String postJobRquest(String osmId, String translation, String requestParams) throws Exception{
-		String ret = "";
-		CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
-		try{
-			httpclient.start();
-			// Execute request
-			
-	    final HttpPost request1 = new HttpPost(coreJobServerUrl + "/hoot-services/ogr/ltds/translate/" + 
-	    			osmId + "?translation=" + translation);
-	    StringEntity se = new StringEntity( requestParams);  
-	    request1.setEntity(se);
-	    Future<HttpResponse> future = httpclient.execute(request1, null);
-	    HttpResponse response1 = future.get();
-	    HttpEntity entity = response1.getEntity();
-	    ret = EntityUtils.toString(entity, "UTF-8");
-		    
-			
-		} catch (Exception ee){
-			log.error(ee.getMessage());
-		}
-		finally
-		{
-			httpclient.close();
-		}
-		return ret;
-	}
-	
+    public LTDSTranslateProcesslet() throws Exception {
 
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see hoot.services.wps.WPSProcesslet#destroy()
+     */
+    @Override
+    public void destroy() {
+        //
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see hoot.services.wps.WPSProcesslet#init()
+     */
+    @Override
+    public void init() {
+        //
+    }
+
+    @Override
+    public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info)
+            throws ProcessletException {
+        JSONArray args = parseRequestParams(in);
+
+        try {
+            String commandStr = "";
+            String osmId = "";
+            String translation = "";
+            for (int i = 0; i < args.size(); i++) {
+                JSONObject oParam = (JSONObject) args.get(i);
+                if (oParam.containsKey("OSM_INPUT")) {
+                    commandStr = oParam.get("OSM_INPUT").toString();
+                }
+
+                if (oParam.containsKey("ELEMENT_ID")) {
+                    osmId = oParam.get("ELEMENT_ID").toString();
+                }
+
+                if (oParam.containsKey("TRANSLATION")) {
+                    translation = oParam.get("TRANSLATION").toString();
+                }
+            }
+            String res = postJobRquest(osmId, translation, commandStr);
+
+            ((LiteralOutput) out.getParameter("OGR")).setValue(res);
+
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    /**
+     * Post Job request to jobExecutioner Servlet
+     * 
+     * @param jobId
+     * @param requestParams
+     * @throws Exception
+     */
+    private static String postJobRquest(String osmId, String translation, String requestParams) throws Exception {
+        String ret = "";
+        CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
+        try {
+            httpclient.start();
+            // Execute request
+
+            final HttpPost request1 = new HttpPost(
+                    coreJobServerUrl + "/hoot-services/ogr/ltds/translate/" + osmId + "?translation=" + translation);
+            StringEntity se = new StringEntity(requestParams);
+            request1.setEntity(se);
+            Future<HttpResponse> future = httpclient.execute(request1, null);
+            HttpResponse response1 = future.get();
+            HttpEntity entity = response1.getEntity();
+            ret = EntityUtils.toString(entity, "UTF-8");
+
+        }
+        catch (Exception ee) {
+            log.error(ee.getMessage());
+        }
+        finally {
+            httpclient.close();
+        }
+        return ret;
+    }
 
 }

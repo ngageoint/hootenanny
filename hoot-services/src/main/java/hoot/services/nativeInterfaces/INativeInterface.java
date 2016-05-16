@@ -26,32 +26,32 @@
  */
 package hoot.services.nativeInterfaces;
 
-import org.json.simple.*;
+import org.json.simple.JSONObject;
+
 
 /**
  * @author Jong Choi
  *
- * Abstract class for Native Interface.
+ *         Abstract class for Native Interface.
  */
 public interface INativeInterface {
-	/**
-	 * Performs execution. All required meta data should be in command parameter.
-	 *
-	 * @param command
-	 * @throws NativeInterfaceException
-	 */
-	public abstract JSONObject exec(JSONObject command)  throws NativeInterfaceException;
+    /**
+     * Performs execution. All required meta data should be in command
+     * parameter.
+     *
+     * @param command
+     * @throws NativeInterfaceException
+     */
+    public abstract JSONObject exec(JSONObject command) throws NativeInterfaceException;
 
+    /**
+     * Terminates job
+     *
+     * @param jobId
+     * @throws NativeInterfaceException
+     */
+    public abstract void terminate(String jobId) throws NativeInterfaceException;
 
-	/**
-	 * Terminates job
-	 *
-	 * @param jobId
-	 * @throws NativeInterfaceException
-	 */
-	public abstract void terminate(String jobId)  throws NativeInterfaceException;
-
-
-	public abstract String getJobProgress(String jobId);
+    public abstract String getJobProgress(String jobId);
 
 }

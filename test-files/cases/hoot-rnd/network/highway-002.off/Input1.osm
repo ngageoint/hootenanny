@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-99735' action='modify' visible='true' lat='30.00958315298' lon='-90.00960964125' />
+  <node id='-99736' action='modify' visible='true' lat='30.00899320148' lon='-90.00951576394' />
+  <node id='-99738' action='modify' visible='true' lat='30.00864015796' lon='-90.00944066208' />
+  <node id='-99740' action='modify' visible='true' lat='30.00854725156' lon='-90.00915098351' />
+  <node id='-99742' action='modify' visible='true' lat='30.00864944859' lon='-90.00855016869' />
+  <node id='-99744' action='modify' visible='true' lat='30.00899320148' lon='-90.007809879' />
+  <node id='-99752' action='modify' visible='true' lat='30.01042394394' lon='-90.00969010752' />
+  <node id='-99754' action='modify' visible='true' lat='30.00966909051' lon='-90.00871110123' />
+  <node id='-99758' action='modify' visible='true' lat='30.00946702107' lon='-90.01049477023' />
+  <node id='-99760' action='modify' visible='true' lat='30.01048862035' lon='-90.00878885114' />
+  <node id='-99762' action='modify' visible='true' lat='30.01034497493' lon='-90.01061278742' />
+  <way id='-99737' action='modify' visible='true'>
+    <nd ref='-99735' />
+    <nd ref='-99736' />
+    <nd ref='-99738' />
+    <nd ref='-99740' />
+    <nd ref='-99742' />
+    <nd ref='-99744' />
+    <tag k='error:circular' v='100' />
+    <tag k='highway' v='road' />
+  </way>
+  <way id='-99755' action='modify' visible='true'>
+    <nd ref='-99735' />
+    <nd ref='-99754' />
+    <tag k='error:circular' v='100' />
+    <tag k='highway' v='road' />
+  </way>
+  <way id='-99763' action='modify' visible='true'>
+    <nd ref='-99752' />
+    <nd ref='-99762' />
+    <tag k='error:circular' v='100' />
+    <tag k='highway' v='road' />
+  </way>
+  <way id='-99764' action='modify' visible='true'>
+    <nd ref='-99760' />
+    <nd ref='-99752' />
+    <tag k='error:circular' v='100' />
+    <tag k='highway' v='road' />
+  </way>
+  <way id='-99808' action='modify' visible='true'>
+    <nd ref='-99758' />
+    <nd ref='-99735' />
+    <tag k='error:circular' v='100' />
+    <tag k='highway' v='road' />
+  </way>
+  <way id='-99815' action='modify' visible='true'>
+    <nd ref='-99752' />
+    <nd ref='-99735' />
+    <tag k='error:circular' v='100' />
+    <tag k='highway' v='road' />
+  </way>
+</osm>

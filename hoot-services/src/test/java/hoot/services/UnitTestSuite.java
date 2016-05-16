@@ -29,11 +29,11 @@ package hoot.services;
 import org.junit.experimental.categories.Categories;
 import org.junit.runner.RunWith;
 
+
 @RunWith(Categories.class)
 @Categories.ExcludeCategory(hoot.services.IntegrationTest.class)
 @Categories.IncludeCategory(hoot.services.UnitTest.class)
-@org.junit.runners.Suite.SuiteClasses({AllTests.class})
-public class UnitTestSuite 
-{
-	//
+@org.junit.runners.Suite.SuiteClasses({ AllTests.class })
+public class UnitTestSuite {
+    //
 }

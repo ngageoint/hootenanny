@@ -56,6 +56,7 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.geo.GeoUtils;
 import hoot.services.geo.QuadTileCalculator;
 
+
 /**
  * Represents the model for an OSM node
  */
@@ -97,7 +98,8 @@ public class Node extends Element {
      * the bbox.
      *
      * @return a bounding box
-     * @throws Exception if the element has invalid coordinates
+     * @throws Exception
+     *             if the element has invalid coordinates
      */
     @Override
     public BoundingBox getBounds() throws Exception {
@@ -106,43 +108,40 @@ public class Node extends Element {
             nodeRecord = (CurrentNodes) record;
         }
         else {
-            nodeRecord =
-                    new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
-                            .from(currentNodes)
-                            .where(currentNodes.id.eq(getId()))
-                            .singleResult(currentNodes);
+            nodeRecord = new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(currentNodes)
+                    .where(currentNodes.id.eq(getId())).singleResult(currentNodes);
 
         }
-        return new BoundingBox(nodeRecord.getLongitude(), nodeRecord.getLatitude(),
-                               nodeRecord.getLongitude(), nodeRecord.getLatitude());
+        return new BoundingBox(nodeRecord.getLongitude(), nodeRecord.getLatitude(), nodeRecord.getLongitude(),
+                nodeRecord.getLatitude());
     }
 
     /**
      * Returns the nodes specified in the collection of nodes IDs
      *
-     * @param mapId   ID of the map the nodes belong to
-     * @param nodeIds a collection of node IDs
-     * @param dbConn  JDBC Connection
+     * @param mapId
+     *            ID of the map the nodes belong to
+     * @param nodeIds
+     *            a collection of node IDs
+     * @param dbConn
+     *            JDBC Connection
      * @return a collection of node records
      */
     static List<CurrentNodes> getNodes(long mapId, Set<Long> nodeIds, Connection dbConn) {
-        //This seems redundant when compared to Element::getElementRecords
+        // This seems redundant when compared to Element::getElementRecords
 
         if (!nodeIds.isEmpty()) {
-            return
-                    new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
-                            .from(currentNodes)
-                            .where(currentNodes.id.in(nodeIds))
-                            .list(currentNodes);
+            return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(currentNodes)
+                    .where(currentNodes.id.in(nodeIds)).list(currentNodes);
         }
         return new ArrayList<>();
     }
 
-
     /**
      * Populates the element model object based on osm diff data
      *
-     * @param xml XML data to construct the element from
+     * @param xml
+     *            XML data to construct the element from
      * @throws Exception
      */
     @Override
@@ -154,15 +153,18 @@ public class Node extends Element {
         assert (record != null);
         CurrentNodes nodeRecord = (CurrentNodes) record;
 
-        // set these props at the very beginning, b/c they will be needed regardless of whether
+        // set these props at the very beginning, b/c they will be needed
+        // regardless of whether
         // following checks fail
         nodeRecord.setChangesetId(parseChangesetId(xmlAttributes));
         nodeRecord.setVersion(parseVersion());
         nodeRecord.setTimestamp(parseTimestamp(xmlAttributes));
         nodeRecord.setVisible(true);
 
-        // Lat/lon are required here on a delete request as well, b/c it keeps from having to do a
-        // round trip to the db to get the node lat/long before it is deleted, so that can be used
+        // Lat/lon are required here on a delete request as well, b/c it keeps
+        // from having to do a
+        // round trip to the db to get the node lat/long before it is deleted,
+        // so that can be used
         // to update the changeset bounds (rails port does it this way).
         double latitude = Double.parseDouble(xmlAttributes.getNamedItem("lat").getNodeValue());
         double longitude = Double.parseDouble(xmlAttributes.getNamedItem("lon").getNodeValue());
@@ -170,8 +172,10 @@ public class Node extends Element {
             throw new Exception("Coordinates for node with ID: " + getId() + " not within world boundary.");
         }
 
-        // If the node is being deleted, we still need to make sure that the coords passed in match
-        // what's on the server, since we'll be relying on them to compute the changeset bounds.
+        // If the node is being deleted, we still need to make sure that the
+        // coords passed in match
+        // what's on the server, since we'll be relying on them to compute the
+        // changeset bounds.
         nodeRecord.setLatitude(latitude);
         nodeRecord.setLongitude(longitude);
 
@@ -187,69 +191,67 @@ public class Node extends Element {
     @Override
     public void checkAndFailIfUsedByOtherObjects() throws Exception {
         if (!super.getVisible()) {
-            throw new OSMAPIAlreadyDeletedException("Node with ID = " + super.getId() + " has been already deleted " +
-                                                    "from map with ID = " + getMapId());
+            throw new OSMAPIAlreadyDeletedException("Node with ID = " + super.getId() + " has been already deleted "
+                    + "from map with ID = " + getMapId());
         }
 
         // From the Rails port of OSM API:
-        // ways = Way.joins(:way_nodes).where(:visible => true, :current_way_nodes => { :node_id => id }).order(:id)
+        // ways = Way.joins(:way_nodes).where(:visible => true,
+        // :current_way_nodes => { :node_id => id }).order(:id)
         SQLQuery owningWaysQuery = new SQLQuery(super.getDbConnection(), DbUtils.getConfiguration(super.getMapId()))
-                .distinct()
-                .from(currentWays)
-                .join(currentWayNodes)
-                .on(currentWays.id.eq(currentWayNodes.wayId))
-                .where(currentWays.visible.eq(true)
-                        .and(currentWayNodes.nodeId.eq(super.getId())));
+                .distinct().from(currentWays).join(currentWayNodes).on(currentWays.id.eq(currentWayNodes.wayId))
+                .where(currentWays.visible.eq(true).and(currentWayNodes.nodeId.eq(super.getId())));
 
         Set<Long> owningWayIds = new TreeSet<>(owningWaysQuery.list(currentWayNodes.wayId));
 
         if (!owningWayIds.isEmpty()) {
-            throw new OSMAPIPreconditionException("Node with ID = " + super.getId() +
-                    " is still used by other way(s): " + StringUtils.join(owningWayIds) +
-                    " in map with ID = " + getMapId());
+            throw new OSMAPIPreconditionException("Node with ID = " + super.getId() + " is still used by other way(s): "
+                    + StringUtils.join(owningWayIds) + " in map with ID = " + getMapId());
         }
 
         // From the Rails port of OSM API:
-        // rels = Relation.joins(:relation_members).where(:visible => true, :current_relation_members => { :member_type => "Node", :member_id => id }).
-        SQLQuery owningRelationsQuery =
-                new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
-                        .distinct()
-                        .from(currentRelations)
-                        .join(currentRelationMembers)
-                        .on(currentRelations.id.eq(currentRelationMembers.relationId))
-                        .where(currentRelations.visible.eq(true)
-                                .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node))
-                                .and(currentRelationMembers.memberId.eq(super.getId())));
+        // rels = Relation.joins(:relation_members).where(:visible => true,
+        // :current_relation_members => { :member_type => "Node", :member_id =>
+        // id }).
+        SQLQuery owningRelationsQuery = new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).distinct()
+                .from(currentRelations).join(currentRelationMembers)
+                .on(currentRelations.id.eq(currentRelationMembers.relationId))
+                .where(currentRelations.visible.eq(true)
+                        .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node))
+                        .and(currentRelationMembers.memberId.eq(super.getId())));
 
         Set<Long> owningRelationsIds = new TreeSet<>(owningRelationsQuery.list(currentRelationMembers.relationId));
 
         if (!owningRelationsIds.isEmpty()) {
-            throw new OSMAPIPreconditionException("Node with ID = " + super.getId() +
-                    " is still used by other relation(s): " + StringUtils.join(owningRelationsIds) +
-                    " in map with ID = " + getMapId());
+            throw new OSMAPIPreconditionException(
+                    "Node with ID = " + super.getId() + " is still used by other relation(s): "
+                            + StringUtils.join(owningRelationsIds) + " in map with ID = " + getMapId());
         }
     }
 
     /**
      * Returns an XML representation of the element; does not add tags
      *
-     * @param parentXml                  XML node this element should be attached under
-     * @param modifyingUserId            ID of the user which created this element
-     * @param modifyingUserDisplayName   user display name of the user which created this element
-     * @param multiLayerUniqueElementIds if true, IDs are prepended with <map id>_<first letter of the
-     *                                   element type>_; this setting activated is not compatible with standard OSM clients (specific
-     *                                   to Hootenanny iD)
-     * @param addChildren                ignored by Node
+     * @param parentXml
+     *            XML node this element should be attached under
+     * @param modifyingUserId
+     *            ID of the user which created this element
+     * @param modifyingUserDisplayName
+     *            user display name of the user which created this element
+     * @param multiLayerUniqueElementIds
+     *            if true, IDs are prepended with <map id>_<first letter of the
+     *            element type>_; this setting activated is not compatible with
+     *            standard OSM clients (specific to Hootenanny iD)
+     * @param addChildren
+     *            ignored by Node
      * @return an XML node
      * @throws Exception
      */
     @Override
     public org.w3c.dom.Element toXml(org.w3c.dom.Element parentXml, long modifyingUserId,
-                                     String modifyingUserDisplayName, boolean multiLayerUniqueElementIds,
-                                     boolean addChildren)
-    throws Exception {
+            String modifyingUserDisplayName, boolean multiLayerUniqueElementIds, boolean addChildren) throws Exception {
         org.w3c.dom.Element element = super.toXml(parentXml, modifyingUserId, modifyingUserDisplayName,
-                                                  multiLayerUniqueElementIds, addChildren);
+                multiLayerUniqueElementIds, addChildren);
         CurrentNodes nodeRecord = (CurrentNodes) record;
         if (nodeRecord.getVisible()) {
             element.setAttribute("lat", String.valueOf(nodeRecord.getLatitude()));
@@ -333,7 +335,8 @@ public class Node extends Element {
     }
 
     /**
-     * Returns the generated table identifier for records related to this element
+     * Returns the generated table identifier for records related to this
+     * element
      *
      * @return a table
      */
@@ -343,8 +346,8 @@ public class Node extends Element {
     }
 
     /**
-     * Returns the table field in the related record table that can be joined with
-     * the parent element record table
+     * Returns the table field in the related record table that can be joined
+     * with the parent element record table
      *
      * @return a table field
      */
@@ -365,41 +368,51 @@ public class Node extends Element {
     /**
      * Inserts a new node into the services database
      *
-     * @param changesetId corresponding changeset ID for the node to be inserted
-     * @param mapId       corresponding map ID for the node to be inserted
-     * @param latitude    latitude coordinate for the node to be inserted
-     * @param longitude   longitude coordinate for the node to be inserted
-     * @param tags        element tags
-     * @param conn        JDBC Connection
+     * @param changesetId
+     *            corresponding changeset ID for the node to be inserted
+     * @param mapId
+     *            corresponding map ID for the node to be inserted
+     * @param latitude
+     *            latitude coordinate for the node to be inserted
+     * @param longitude
+     *            longitude coordinate for the node to be inserted
+     * @param tags
+     *            element tags
+     * @param conn
+     *            JDBC Connection
      * @return ID of the newly created node
      * @throws Exception
      */
-    public static long insertNew(long changesetId, long mapId, double latitude,
-                                 double longitude, java.util.Map<String, String> tags, Connection conn)
-    throws Exception {
-        long nextNodeId =
-                new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .uniqueResult(SQLExpressions.nextval(Long.class, "current_nodes_id_seq"));
+    public static long insertNew(long changesetId, long mapId, double latitude, double longitude,
+            java.util.Map<String, String> tags, Connection conn) throws Exception {
+        long nextNodeId = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                .uniqueResult(SQLExpressions.nextval(Long.class, "current_nodes_id_seq"));
         insertNew(nextNodeId, changesetId, mapId, latitude, longitude, tags, conn);
         return nextNodeId;
     }
 
     /**
-     * Inserts a new node into the services database with the specified ID; useful
-     * for testing
+     * Inserts a new node into the services database with the specified ID;
+     * useful for testing
      *
-     * @param nodeId      ID to assign to the new node
-     * @param changesetId corresponding changeset ID for the node to be inserted
-     * @param mapId       corresponding map ID for the node to be inserted
-     * @param latitude    latitude coordinate for the node to be inserted
-     * @param longitude   longitude coordinate for the node to be inserted
-     * @param tags        element tags
-     * @param conn        JDBC Connection
+     * @param nodeId
+     *            ID to assign to the new node
+     * @param changesetId
+     *            corresponding changeset ID for the node to be inserted
+     * @param mapId
+     *            corresponding map ID for the node to be inserted
+     * @param latitude
+     *            latitude coordinate for the node to be inserted
+     * @param longitude
+     *            longitude coordinate for the node to be inserted
+     * @param tags
+     *            element tags
+     * @param conn
+     *            JDBC Connection
      * @throws Exception
      */
     public static void insertNew(long nodeId, long changesetId, long mapId, double latitude, double longitude,
-                                 java.util.Map<String, String> tags, Connection conn)
-    throws Exception {
+            java.util.Map<String, String> tags, Connection conn) throws Exception {
         // querydsl does not support hstore so using jdbc
 
         String strKv = "";
@@ -427,17 +440,13 @@ public class Node extends Element {
 
             stmt = conn.createStatement();
 
-            String sql =
-                    "INSERT INTO current_nodes_"
-                            + mapId
-                            + "(\n"
-                            + "            id, latitude, longitude, changeset_id,  visible, \"timestamp\", tile, version, tags)\n"
-                            + " VALUES(" + nodeId + "," + latitude + "," + longitude + ","
-                            + changesetId + "," + "true" + "," + "CURRENT_TIMESTAMP" + ","
-                            + QuadTileCalculator.tileForPoint(latitude, longitude) + "," + "1"
-                            + "," + strTags +
+            String sql = "INSERT INTO current_nodes_" + mapId + "(\n"
+                    + "            id, latitude, longitude, changeset_id,  visible, \"timestamp\", tile, version, tags)\n"
+                    + " VALUES(" + nodeId + "," + latitude + "," + longitude + "," + changesetId + "," + "true" + ","
+                    + "CURRENT_TIMESTAMP" + "," + QuadTileCalculator.tileForPoint(latitude, longitude) + "," + "1" + ","
+                    + strTags +
 
-                            ")";
+                    ")";
             stmt.executeUpdate(sql);
         }
         catch (Exception e) {

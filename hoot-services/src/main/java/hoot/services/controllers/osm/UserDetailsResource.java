@@ -28,8 +28,6 @@ package hoot.services.controllers.osm;
 
 import java.sql.Connection;
 
-import hoot.services.db.DbUtils;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -41,62 +39,66 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import hoot.services.db.DbUtils;
+
+
 /**
  * Service endpoint for authenticated OSM user detail information
  */
 @Path("api/0.6/user/details")
-public class UserDetailsResource
-{
-  private static final Logger log = LoggerFactory.getLogger(UserDetailsResource.class);
+public class UserDetailsResource {
+    private static final Logger log = LoggerFactory.getLogger(UserDetailsResource.class);
 
-  @SuppressWarnings("unused")
-  private ClassPathXmlApplicationContext appContext;
+    @SuppressWarnings("unused")
+    private ClassPathXmlApplicationContext appContext;
 
-  public UserDetailsResource()
-  {
-    appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
-  }
-
-	/**
-   * Service method endpoint for retrieving OSM user detail information for the authenticated user
-   * associated with the request
-   * 
-   * The Hootenanny user services implements the methods of the OSM User service v0.6 and OSM User 
-   * Details service v0.6.  Hootenanny has no authentication mechanism implemented yet. This 
-   * service exists for now only to avoid modifications to the iD editor. In the future the 
-   * Hootenanny OSM services will likely support OAuth 2.0 and this service will have purpose.  The 
-   * service methods first attempt to parse the request user identification data as a numerical 
-   * user ID, and then, if unsuccessful, attempts to parse it as a user name string.
-   * 
-   * GET hoot-services/osm/user/test
-   *
-   * @return XML response with user detail information
-   * @throws Exception
-   * //TODO: update to get actual logged in user once security is implemented
-   */
-  @GET
-  @Consumes(MediaType.TEXT_PLAIN)
-  @Produces(MediaType.TEXT_XML)
-  public Response getDetails() throws Exception
-  {
-    log.debug("Retrieving logged in user details...");
-
-    //For now, we're just grabbing the first user in the db, since we don't have any authentication 
-    //in place to get the correct user.  Worst case, for now, you see incorrect user information 
-    //from iD editor...not a big deal since authentication doesn't exist anyway.  When hoot gets
-    //user authentication, then this obviously has to be updated.
-    Connection conn = DbUtils.createConnection();
-    long userId = -1;
-    try
-    {
-      log.debug("Initializing database connection...");
-      userId = DbUtils.getTestUserId(conn);
+    public UserDetailsResource() {
+        appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
     }
-    finally
-    {
-    	DbUtils.closeConnection(conn);
+
+    /**
+     * Service method endpoint for retrieving OSM user detail information for
+     * the authenticated user associated with the request
+     * 
+     * The Hootenanny user services implements the methods of the OSM User
+     * service v0.6 and OSM User Details service v0.6. Hootenanny has no
+     * authentication mechanism implemented yet. This service exists for now
+     * only to avoid modifications to the iD editor. In the future the
+     * Hootenanny OSM services will likely support OAuth 2.0 and this service
+     * will have purpose. The service methods first attempt to parse the request
+     * user identification data as a numerical user ID, and then, if
+     * unsuccessful, attempts to parse it as a user name string.
+     * 
+     * GET hoot-services/osm/user/test
+     *
+     * @return XML response with user detail information
+     * @throws Exception
+     *             //TODO: update to get actual logged in user once security is
+     *             implemented
+     */
+    @GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_XML)
+    public Response getDetails() throws Exception {
+        log.debug("Retrieving logged in user details...");
+
+        // For now, we're just grabbing the first user in the db, since we don't
+        // have any authentication
+        // in place to get the correct user. Worst case, for now, you see
+        // incorrect user information
+        // from iD editor...not a big deal since authentication doesn't exist
+        // anyway. When hoot gets
+        // user authentication, then this obviously has to be updated.
+        Connection conn = DbUtils.createConnection();
+        long userId = -1;
+        try {
+            log.debug("Initializing database connection...");
+            userId = DbUtils.getTestUserId(conn);
+        }
+        finally {
+            DbUtils.closeConnection(conn);
+        }
+        assert (userId != -1);
+        return (new UserResource()).get(String.valueOf(userId));
     }
-    assert(userId != -1);
-    return (new UserResource()).get(String.valueOf(userId));
-  }
 }

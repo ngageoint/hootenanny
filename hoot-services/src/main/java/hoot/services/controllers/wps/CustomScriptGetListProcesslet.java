@@ -40,66 +40,60 @@ import org.deegree.services.wps.output.LiteralOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CustomScriptGetListProcesslet  extends BaseProcesslet {
-  private static final Logger log = LoggerFactory.getLogger(CustomScriptGetListProcesslet.class);
-  
 
+public class CustomScriptGetListProcesslet extends BaseProcesslet {
+    private static final Logger log = LoggerFactory.getLogger(CustomScriptGetListProcesslet.class);
 
-	public CustomScriptGetListProcesslet() throws Exception
-	{
+    public CustomScriptGetListProcesslet() throws Exception {
 
-	}
+    }
 
-	
-	@Override
-	public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info) 
-			throws ProcessletException {
-		String resp = "";
-		
-		try {		
-			resp = getRequest( );
-			
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			((LiteralOutput)out.getParameter("SCRIPT_LIST")).setValue("Failed: " + e.getMessage());
-			return;
-		}
-		((LiteralOutput)out.getParameter("SCRIPT_LIST")).setValue(resp);
+    @Override
+    public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info)
+            throws ProcessletException {
+        String resp = "";
 
-	}
-	
-	protected String getRequest() throws Exception
-	{
-		String ret = "";
-		
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		HttpGet httpget = new HttpGet(coreJobServerUrl + "/hoot-services/ingest/customscript/getlist" );
-		CloseableHttpResponse response = httpclient.execute(httpget);
-		try {
-			
-			if(response.getStatusLine().getStatusCode() != 200)
-			{
-				String reason = response.getStatusLine().getReasonPhrase();
-				if(reason == null)
-				{
-					reason = "Unkown reason.";
-				}
-				throw new Exception(reason);			
-			}
-			
-			
-			HttpEntity entity = response.getEntity();
-			if (entity != null) {
-			    entity.getContentLength();
-			    ret = EntityUtils.toString(entity);
-			}
-		} finally {
-		    response.close();
-		    httpclient.close();
-		}
-		
-		
-		return ret;
-	}
-	
+        try {
+            resp = getRequest();
+
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+            ((LiteralOutput) out.getParameter("SCRIPT_LIST")).setValue("Failed: " + e.getMessage());
+            return;
+        }
+        ((LiteralOutput) out.getParameter("SCRIPT_LIST")).setValue(resp);
+
+    }
+
+    protected String getRequest() throws Exception {
+        String ret = "";
+
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpGet httpget = new HttpGet(coreJobServerUrl + "/hoot-services/ingest/customscript/getlist");
+        CloseableHttpResponse response = httpclient.execute(httpget);
+        try {
+
+            if (response.getStatusLine().getStatusCode() != 200) {
+                String reason = response.getStatusLine().getReasonPhrase();
+                if (reason == null) {
+                    reason = "Unkown reason.";
+                }
+                throw new Exception(reason);
+            }
+
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                entity.getContentLength();
+                ret = EntityUtils.toString(entity);
+            }
+        }
+        finally {
+            response.close();
+            httpclient.close();
+        }
+
+        return ret;
+    }
+
 }

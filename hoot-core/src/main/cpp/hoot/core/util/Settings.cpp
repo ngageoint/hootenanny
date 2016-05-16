@@ -491,6 +491,11 @@ void Settings::parseCommonArguments(QStringList& args)
       Log::getInstance().setLevel(Log::Error);
       args = args.mid(1);
     }
+    else if (args[0] == "--fatal")
+    {
+      Log::getInstance().setLevel(Log::Fatal);
+      args = args.mid(1);
+    }
     else if (args[0] == "--define" || args[0] == "-D")
     {
       if (args.size() < 2)

@@ -147,25 +147,6 @@ if [ ! -f bin/osmosis ]; then
     ln -s $HOME/bin/osmosis_src/bin/osmosis $HOME/bin/osmosis
 fi
 
-# Moved to standard deps  install
-#sudo apt-get install -y postgresql-9.5  postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.2
-
-
-# Hoot Baseline is PostgreSQL 9.1 and PostGIS 1.5, so we need a deb file and
-# then remove 9.5
-#if  ! dpkg -l | grep  postgresql-9.1-postgis-[0-9]; then
-#    echo "### Installing PostgreSQL 9.1..."
-#    if [ ! -f postgresql-9.1-postgis_1.5.3-2_amd64.deb ]; then
-#      wget --quiet http://launchpadlibrarian.net/86690107/postgresql-9.1-postgis_1.5.3-2_amd64.deb
-#    fi
-#    sudo dpkg -i postgresql-9.1-postgis_1.5.3-2_amd64.deb
-#    sudo apt-get -f -q -y install
-    # fixes missing dependency of postgis 1.5 by installing postgresql 9.1. 9.1 is installed listening on the default port, 5432. It unfortunately also installs postgres 9.5 but we remove that cleanly in the following steps, while leaving postgres 9.1 untouched
-#    echo "### Removing PostgreSQL 9.5..."
-#    sudo apt-get purge -y postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts
-#    sudo apt-get -q -y install postgresql-contrib-9.1
-#fi
-
 if ! ogrinfo --formats | grep --quiet FileGDB; then
     if [ ! -f gdal-1.10.1.tar.gz ]; then
         echo "### Downloading GDAL source..."
@@ -207,6 +188,8 @@ if ! grep --quiet NODE_PATH ~/.profile; then
     echo "### Installing node js dependencies..."
     sudo npm config set registry http://registry.npmjs.org/
     sudo npm install --silent -g xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
+    # Change tmp ownership from root to vagrant to avoid non-sudo npm install troubles later
+    sudo chown vagrant:vagrant $HOME/tmp
     echo 'Adding NODE_PATH to user environment...'
     echo 'export NODE_PATH=/usr/local/lib/node_modules' >> ~/.profile
     source ~/.profile

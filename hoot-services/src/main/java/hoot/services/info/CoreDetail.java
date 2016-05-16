@@ -28,18 +28,23 @@ package hoot.services.info;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 /**
  * Represents details about the core environment
  */
 @XmlRootElement
-public class CoreDetail 
-{
-  private String[] environmentInfo;
-  public String[] getEnvironmentInfo() { return environmentInfo; }
-  public void setEnvironmentInfo(String[] environmentInfo) { this.environmentInfo = environmentInfo; }
-	
-  public CoreDetail()
-  {
-	  
-  }
+public class CoreDetail {
+    private String[] environmentInfo;
+
+    public CoreDetail() {
+
+    }
+
+    public String[] getEnvironmentInfo() {
+        return environmentInfo;
+    }
+
+    public void setEnvironmentInfo(String[] environmentInfo) {
+        this.environmentInfo = environmentInfo;
+    }
 }
