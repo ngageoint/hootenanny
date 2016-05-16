@@ -120,8 +120,7 @@ public class Map extends Maps {
      */
     private static Vector<Range> getTileRanges(final BoundingBox bounds) throws NumberFormatException, IOException {
         log.debug("Retrieving tile ranges...");
-        final int queryDimensions = Integer.parseInt(HootProperties.getInstance().getProperty("mapQueryDimensions",
-                HootProperties.getDefault("mapQueryDimensions")));
+        int queryDimensions = Integer.parseInt(HootProperties.getPropertyOrDefault("mapQueryDimensions"));
         ZCurveRanger ranger = new ZCurveRanger(new ZValue(queryDimensions, 16,
                 // use y, x ordering here
                 new double[] { -1 * BoundingBox.LAT_LIMIT, -1 * BoundingBox.LON_LIMIT },
@@ -162,9 +161,8 @@ public class Map extends Maps {
 
     private static void validateQueryBounds(final BoundingBox bounds) throws Exception {
         log.debug("Checking request bounds size...");
-        final double maxQueryAreaDegrees = Double.parseDouble(HootProperties.getInstance()
-                .getProperty("maxQueryAreaDegrees", HootProperties.getDefault("maxQueryAreaDegrees")));
-        final double requestedArea = bounds.getArea();
+        double maxQueryAreaDegrees = Double.parseDouble(HootProperties.getPropertyOrDefault("maxQueryAreaDegrees"));
+        double requestedArea = bounds.getArea();
         if (requestedArea > maxQueryAreaDegrees) {
             throw new Exception("The maximum bbox size is: " + maxQueryAreaDegrees + ", and your request was too "
                     + "large at " + requestedArea + " degrees.  Request a smaller area.");
@@ -189,8 +187,7 @@ public class Map extends Maps {
         // those that belong to ways that cross the query bounds but fall
         // outside of the query bounds,
         // even though those nodes are returned as well in the query.
-        final long maxQueryNodes = Long.parseLong(
-                HootProperties.getInstance().getProperty("maxQueryNodes", HootProperties.getDefault("maxQueryNodes")));
+        long maxQueryNodes = Long.parseLong(HootProperties.getPropertyOrDefault("maxQueryNodes"));
         if (nodeCount > maxQueryNodes) {
             throw new Exception("The maximum number of nodes that may be returned in a map query is " + maxQueryNodes
                     + ".  This query returned " + nodeCount + " nodes.  Please "

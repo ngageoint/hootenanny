@@ -75,7 +75,7 @@ public class ExportJobResource extends JobControllerBase {
                 tempOutputPath = HootProperties.getProperty("tempOutputPath");
             }
 
-            wfsStoreDb = HootProperties.getInstance().getProperty("wfsStoreDb");
+            wfsStoreDb = HootProperties.getProperty("wfsStoreDb");
             homeFolder = HootProperties.getProperty("homeFolder");
             translationExtPath = HootProperties.getProperty("translationExtPath");
         }

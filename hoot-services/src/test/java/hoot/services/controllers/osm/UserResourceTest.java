@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.osm;
 
-import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -58,7 +57,7 @@ import hoot.services.utils.XmlUtils;
 public class UserResourceTest extends OsmResourceTestAbstract {
     private static final Logger log = LoggerFactory.getLogger(UserResourceTest.class);
 
-    public UserResourceTest() throws IOException {
+    public UserResourceTest() {
         super("hoot.services.controllers.osm");
     }
 
@@ -165,25 +164,33 @@ public class UserResourceTest extends OsmResourceTestAbstract {
 
             QChangesets changesets = QChangesets.changesets;
 
-            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                    .where(changesets.id.eq(changesetId)).singleResult(changesets);
+            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                    .from(changesets)
+                    .where(changesets.id.eq(changesetId))
+                    .singleResult(changesets);
 
             Assert.assertNotNull(changeset);
             Assert.assertEquals(userId, (long) changeset.getUserId());
 
             changesetId = Changeset.insertNew(mapId, userId, conn);
             changesetIds.add(changesetId);
+
             (new Changeset(mapId, changesetId, conn)).setBounds(originalBounds);
 
-            changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                    .where(changesets.id.eq(changesetId)).singleResult(changesets);
+            changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                    .from(changesets)
+                    .where(changesets.id.eq(changesetId))
+                    .singleResult(changesets);
 
             Assert.assertNotNull(changeset);
             Assert.assertEquals(userId, (long) changeset.getUserId());
 
             Document responseData = null;
             try {
-                responseData = resource().path("user/" + userId).accept(MediaType.TEXT_XML).get(Document.class);
+                responseData = resource()
+                        .path("user/" + userId)
+                        .accept(MediaType.TEXT_XML)
+                        .get(Document.class);
             }
             catch (UniformInterfaceException e) {
                 ClientResponse r = e.getResponse();
@@ -263,11 +270,8 @@ public class UserResourceTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testGetDetails() throws Exception {
-        // authentication doesn't exist yet, so this just looks for the first
-        // user from a select
-        // This test is essentially the same as testGet now but will change
-        // after authentication is
-        // implemented.
+        // Authentication doesn't exist yet, so this just looks for the first user from a select.
+        // This test is essentially the same as testGet now but will change after authentication is implemented.
         try {
             Document responseData = null;
             try {

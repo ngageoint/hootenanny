@@ -50,22 +50,17 @@ public class HGISFilterResource extends HGISResource {
 
     private static final Logger log = LoggerFactory.getLogger(HGISFilterResource.class);
 
-    public HGISFilterResource() throws Exception {
-        try {
-            processScriptName = HootProperties.getProperty("hgisFilterScript");
-        }
-        catch (Exception e) {
-            log.error("failed to retrieve parameter:" + e.getMessage());
-        }
+    public HGISFilterResource() {
+        processScriptName = HootProperties.getProperty("hgisFilterScript");
     }
 
     /**
      * This resource produces layer that filters Non HGIS POIs.
-     * 
+     * <p>
      * POST hoot-services/job/filter/custom/HGIS/filternonhgispois
-     * 
+     * <p>
      * { "source":"AllDataTypesA", "output":"AllDataTypesAtest1" }
-     * 
+     *
      * @param request
      * @return Job ID
      * @throws Exception
@@ -77,8 +72,9 @@ public class HGISFilterResource extends HGISResource {
     public FilterNonHgisPoisResponse filterNonHgisPois(FilterNonHgisPoisRequest request) throws Exception {
         FilterNonHgisPoisResponse resp = new FilterNonHgisPoisResponse();
         try {
-            final String src = request.getSource();
-            final String output = request.getOutput();
+            String src = request.getSource();
+            String output = request.getOutput();
+
             if (src == null) {
                 throw new InvalidResourceParamException("Invalid or empty sourceMap.");
             }
@@ -87,16 +83,15 @@ public class HGISFilterResource extends HGISResource {
                 throw new InvalidResourceParamException("Invalid or empty outputMap.");
             }
 
-            if (!_mapExists(src)) {
+            if (!mapExists(src)) {
                 throw new InvalidResourceParamException("sourceMap does not exist.");
             }
 
             String jobId = UUID.randomUUID().toString();
-            String argStr = createBashPostBody(_createParamObj(src, output));
+            String argStr = createBashPostBody(createParamObj(src, output));
             postJobRquest(jobId, argStr);
 
             resp.setJobId(jobId);
-
         }
         catch (InvalidResourceParamException rpex) {
             ResourceErrorHandler.handleError(rpex.getMessage(), Status.BAD_REQUEST, log);

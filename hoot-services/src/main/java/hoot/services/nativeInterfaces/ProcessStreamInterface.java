@@ -26,7 +26,6 @@
  */
 package hoot.services.nativeInterfaces;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +50,7 @@ import hoot.services.command.ICommandRunner;
 
 /**
  * @author Jong Choi
- *
+ *         <p>
  *         The purpose of this class is to run command line execution in a
  *         separate process. It inherit from INativeInterface so it can be
  *         switched out with any other class implementing INativeInterface if
@@ -61,7 +60,6 @@ import hoot.services.command.ICommandRunner;
  *         --ogr2osm target input output if the "exectype" is "hoot" 2. make
  *         file script based execution where format is make -f [some makefile]
  *         [any argument make file uses] when "exectype" is "make"
- *
  */
 public class ProcessStreamInterface implements INativeInterface {
 
@@ -78,21 +76,11 @@ public class ProcessStreamInterface implements INativeInterface {
     public ProcessStreamInterface() {
         // for make file script based call
         if (coreScriptPath == null) {
-            try {
-                coreScriptPath = HootProperties.getProperty("coreScriptPath");
-            }
-            catch (IOException e) {
-                log.error(e.getMessage());
-            }
+            coreScriptPath = HootProperties.getProperty("coreScriptPath");
         }
         // for make file script based call
         if (coreScriptOutputPath == null) {
-            try {
-                coreScriptOutputPath = HootProperties.getProperty("coreScriptOutputPath");
-            }
-            catch (IOException e) {
-                log.error(e.getMessage());
-            }
+            coreScriptOutputPath = HootProperties.getProperty("coreScriptOutputPath");
         }
 
         if (_jobProcesses == null) {
