@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,4 +24,47 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef NETWORKMERGERCREATOR_H
+#define NETWORKMERGERCREATOR_H
 
+// hoot
+#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/algorithms/SublineStringMatcher.h>
+#include <hoot/core/conflate/MergerCreator.h>
+
+namespace hoot
+{
+
+class NetworkMergerCreator : public MergerCreator, public ConstOsmMapConsumer
+{
+public:
+
+  static string className() { return "hoot::NetworkMergerCreator"; }
+
+  NetworkMergerCreator();
+
+  /**
+   *
+   */
+  virtual bool createMergers(const MatchSet& matches, vector<Merger*>& mergers) const;
+
+  virtual vector<Description> getAllCreators() const;
+
+  virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
+
+  virtual void setOsmMap(const OsmMap* map) { _map = map; }
+
+private:
+  const OsmMap* _map;
+  Meters _minSplitSize;
+  shared_ptr<SublineStringMatcher> _sublineMatcher;
+
+  /**
+   * Returns true if one or more matches are conflicting matches.
+   */
+  bool _isConflictingSet(const MatchSet& matches) const;
+};
+
+}
+
+#endif // NETWORKMERGERCREATOR_H

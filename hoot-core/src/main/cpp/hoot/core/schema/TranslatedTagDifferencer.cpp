@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/algorithms/SingleAssignmentProblemSolver.h>
+#include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/ScriptTranslator.h>

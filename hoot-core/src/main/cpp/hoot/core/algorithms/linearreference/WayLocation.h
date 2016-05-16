@@ -175,6 +175,9 @@ inline bool operator>=(const WayLocation& a, const WayLocation& b)
   return a.compareTo(b) >= 0;
 }
 
+typedef shared_ptr<WayLocation> WayLocationPtr;
+typedef shared_ptr<const WayLocation> ConstWayLocationPtr;
+
 }
 
 #endif

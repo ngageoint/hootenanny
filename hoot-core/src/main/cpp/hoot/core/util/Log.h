@@ -36,10 +36,14 @@
 #include <QVariant>
 
 // Standard
+#include <deque>
+#include <set>
 #include <string>
+#include <vector>
 
 // Tgs
-#include <tgs/StreamUtils.h>
+#include <tgs/HashMap.h>
+#include <tgs/TgsException.h>
 
 #if HOOT_HAVE_LIBLOG4CXX
 # include <log4cxx/logger.h>

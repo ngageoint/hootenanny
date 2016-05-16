@@ -75,6 +75,7 @@ public:
 
   const MatchCollection& getMatches() const { return _matches; }
 
+  /// @todo move reverse vector into the way subline string, but keep the interface identical
   vector<bool> getReverseVector1() const;
   vector<bool> getReverseVector2() const;
 
@@ -129,6 +130,7 @@ private:
 HOOT_DEFINE_EXCEPTION(OverlappingMatchesException)
 
 typedef boost::shared_ptr<WaySublineMatchString> WaySublineMatchStringPtr;
+typedef boost::shared_ptr<const WaySublineMatchString> ConstWaySublineMatchStringPtr;
 
 }
 

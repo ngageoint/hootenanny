@@ -26,10 +26,9 @@
  */
 
 // Hoot
-#include <hoot/core/algorithms/SingleAssignmentProblemSolver.h>
+#include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/core/util/Log.h>
-
-#include "../TestUtils.h"
+#include "../../TestUtils.h"
 
 namespace hoot
 {

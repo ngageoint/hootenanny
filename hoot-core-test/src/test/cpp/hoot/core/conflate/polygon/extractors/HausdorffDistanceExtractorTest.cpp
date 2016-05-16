@@ -85,22 +85,24 @@ public:
     shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w1->setTag("highway", "track");
     w1->setTag("name", "w1");
-    w1->addNode(createNode(-104.9, 38.855)->getId());
-    w1->addNode(createNode(-104.899, 38.8549)->getId());
+    w1->addNode(createNode(0, 0)->getId());
+    w1->addNode(createNode(10, 0)->getId());
     _map->addWay(w1);
 
     shared_ptr<Way> w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w2->setTag("highway", "road");
     w2->setTag("name", "w2");
-    w2->addNode(createNode(-104.91, 38.8548)->getId());
-    w2->addNode(createNode(-104.8993, 38.8548)->getId());
+    w2->addNode(createNode(-1, 1)->getId());
+    w2->addNode(createNode(9, 0)->getId());
     _map->addWay(w2);
 
     HausdorffDistanceExtractor uut;
     const OsmMap* constMap = const_cast<const OsmMap*>(_map.get());
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00012935,
-                                 uut.distance(*constMap, boost::const_pointer_cast<const Way>(w1), boost::const_pointer_cast<const Way>(w2)),
-                                 0.000001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      sqrt(2.0),
+      uut.distance(*constMap, boost::const_pointer_cast<const Way>(w1),
+        boost::const_pointer_cast<const Way>(w2)),
+      0.000001);
   }
 };
 

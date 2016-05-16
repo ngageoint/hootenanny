@@ -29,7 +29,7 @@
 #define SINGLEASSIGNMENTPROBLEMSOLVER_H
 
 // hoot
-#include <hoot/core/algorithms/IntegerProgrammingSolver.h>
+#include <hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h>
 #include <hoot/core/util/Log.h>
 
 // standard

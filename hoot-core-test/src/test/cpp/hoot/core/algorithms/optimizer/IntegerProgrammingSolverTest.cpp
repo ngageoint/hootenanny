@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/algorithms/IntegerProgrammingSolver.h>
+#include <hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
