@@ -20,6 +20,11 @@ module Helpers
     yield
     page.driver.options[:resynchronize] = true
   end
+  def include_hidden_fields
+    Capybara.ignore_hidden_elements = false
+    yield
+    Capybara.ignore_hidden_elements = true
+  end
 end
 
 World(Capybara::DSL, Helpers)
