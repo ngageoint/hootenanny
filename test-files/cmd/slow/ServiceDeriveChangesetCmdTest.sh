@@ -2,9 +2,9 @@
 set -e
 
 source $HOOT_HOME/conf/DatabaseConfig.sh
-export DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
-export AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
-export PGPASSWORD=$DB_PASSWORD
+export DB_URL="osmapidb://$DB_USER_OSMAPI:$DB_PASSWORD_OSMAPI@$DB_HOST_OSMAPI:$DB_PORT_OSMAPI/$DB_NAME_OSMAPI"
+export AUTH="-h $DB_HOST_OSMAPI -p $DB_PORT_OSMAPI -U $DB_USER_OSMAPI"
+export PGPASSWORD=$DB_PASSWORD_OSMAPI
 
 mkdir -p test-output/cmd/ServiceDeriveChangesetCmdTest
 
