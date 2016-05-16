@@ -46,12 +46,12 @@ endif
 # This is also depending on some extra input validation present in ConflationResource.
 ifeq "$(REFERENCE_LAYER)" "1"
 	ifeq "$(INPUT1_TYPE)" "OSM_API_DB"
-		HOOT_OPTS+= -D conflate.use.data.source.ids=true -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D hootapi.db.writer.osmapidb.url="$(OP_INPUT1)"
+		HOOT_OPTS+= -D convert.bounding.box=$(conflateaoi) -D conflate.use.data.source.ids=true -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D hootapi.db.writer.osmapidb.url="$(OP_INPUT1)"
 	endif
 endif
 ifeq "$(REFERENCE_LAYER)" "2"
 	ifeq "$(INPUT2_TYPE)" "OSM_API_DB"
-		HOOT_OPTS+= -D conflate.use.data.source.ids=true -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D hootapi.db.writer.osmapidb.url="$(OP_INPUT2)"
+		HOOT_OPTS+= -D convert.bounding.box=$(conflateaoi) -D conflate.use.data.source.ids=true -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D hootapi.db.writer.osmapidb.url="$(OP_INPUT2)"
 	endif
 endif
 
