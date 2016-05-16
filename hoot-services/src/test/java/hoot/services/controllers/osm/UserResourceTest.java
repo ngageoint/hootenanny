@@ -33,26 +33,27 @@ import java.util.Set;
 import javax.ws.rs.core.MediaType;
 import javax.xml.xpath.XPath;
 
-import hoot.services.db2.Changesets;
-import org.junit.Assert;
 import org.apache.xpath.XPathAPI;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
+import com.mysema.query.sql.SQLQuery;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.UniformInterfaceException;
+
 import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
+import hoot.services.db2.Changesets;
 import hoot.services.db2.QChangesets;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.utils.XmlUtils;
 
-import com.mysema.query.sql.SQLQuery;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class UserResourceTest extends OsmResourceTestAbstract {
     private static final Logger log = LoggerFactory.getLogger(UserResourceTest.class);
@@ -67,11 +68,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
         try {
             Document responseData = null;
             try {
-                responseData =
-                        resource()
-                                .path("user/" + userId)
-                                .accept(MediaType.TEXT_XML)
-                                .get(Document.class);
+                responseData = resource().path("user/" + userId).accept(MediaType.TEXT_XML).get(Document.class);
             }
             catch (UniformInterfaceException e) {
                 ClientResponse r = e.getResponse();
@@ -112,11 +109,8 @@ public class UserResourceTest extends OsmResourceTestAbstract {
         try {
             Document responseData = null;
             try {
-                responseData =
-                        resource()
-                                .path("user/" + "user-with-id-" + userId)
-                                .accept(MediaType.TEXT_XML)
-                                .get(Document.class);
+                responseData = resource().path("user/" + "user-with-id-" + userId).accept(MediaType.TEXT_XML)
+                        .get(Document.class);
             }
             catch (UniformInterfaceException e) {
                 ClientResponse r = e.getResponse();
@@ -159,9 +153,10 @@ public class UserResourceTest extends OsmResourceTestAbstract {
             double originalMinLat = 38.90089748801109;
             double originalMaxLon = -77.9224564416296;
             double originalMaxLat = 39.00085678801109;
-            BoundingBox originalBounds = new BoundingBox(originalMinLon, originalMinLat, originalMaxLon, originalMaxLat);
+            BoundingBox originalBounds = new BoundingBox(originalMinLon, originalMinLat, originalMaxLon,
+                    originalMaxLat);
 
-            //link some changesets to the user
+            // link some changesets to the user
             Set<Long> changesetIds = new LinkedHashSet<>();
 
             long changesetId = Changeset.insertNew(mapId, userId, conn);
@@ -170,9 +165,8 @@ public class UserResourceTest extends OsmResourceTestAbstract {
 
             QChangesets changesets = QChangesets.changesets;
 
-            Changesets changeset =
-                    new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                            .where(changesets.id.eq(changesetId)).singleResult(changesets);
+            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
+                    .where(changesets.id.eq(changesetId)).singleResult(changesets);
 
             Assert.assertNotNull(changeset);
             Assert.assertEquals(userId, (long) changeset.getUserId());
@@ -181,20 +175,15 @@ public class UserResourceTest extends OsmResourceTestAbstract {
             changesetIds.add(changesetId);
             (new Changeset(mapId, changesetId, conn)).setBounds(originalBounds);
 
-            changeset =
-                    new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                            .where(changesets.id.eq(changesetId)).singleResult(changesets);
+            changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
+                    .where(changesets.id.eq(changesetId)).singleResult(changesets);
 
             Assert.assertNotNull(changeset);
             Assert.assertEquals(userId, (long) changeset.getUserId());
 
             Document responseData = null;
             try {
-                responseData =
-                        resource()
-                                .path("user/" + userId)
-                                .accept(MediaType.TEXT_XML)
-                                .get(Document.class);
+                responseData = resource().path("user/" + userId).accept(MediaType.TEXT_XML).get(Document.class);
             }
             catch (UniformInterfaceException e) {
                 ClientResponse r = e.getResponse();
@@ -232,13 +221,10 @@ public class UserResourceTest extends OsmResourceTestAbstract {
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testGetInvalidUserId() throws Exception {
-        //TODO: change this to something randomly generated and very large
+        // TODO: change this to something randomly generated and very large
         try {
             long invalidUserId = 999999;
-            resource()
-                    .path("user/" + invalidUserId)
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            resource().path("user/" + invalidUserId).accept(MediaType.TEXT_XML).get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -252,10 +238,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
     @Category(UnitTest.class)
     public void testGetEmptyUserId() throws Exception {
         try {
-            resource()
-                    .path("user/")
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            resource().path("user/").accept(MediaType.TEXT_XML).get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -268,10 +251,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
     @Category(UnitTest.class)
     public void testGetMissingUserId() throws Exception {
         try {
-            resource()
-                    .path("user")
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            resource().path("user").accept(MediaType.TEXT_XML).get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -283,17 +263,15 @@ public class UserResourceTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testGetDetails() throws Exception {
-        //authentication doesn't exist yet, so this just looks for the first user from a select
-        //This test is essentially the same as testGet now but will change after authentication is
-        //implemented.
+        // authentication doesn't exist yet, so this just looks for the first
+        // user from a select
+        // This test is essentially the same as testGet now but will change
+        // after authentication is
+        // implemented.
         try {
             Document responseData = null;
             try {
-                responseData =
-                        resource()
-                                .path("api/0.6/user/details")
-                                .accept(MediaType.TEXT_XML)
-                                .get(Document.class);
+                responseData = resource().path("api/0.6/user/details").accept(MediaType.TEXT_XML).get(Document.class);
             }
             catch (UniformInterfaceException e) {
                 ClientResponse r = e.getResponse();
@@ -313,17 +291,21 @@ public class UserResourceTest extends OsmResourceTestAbstract {
             }
 
             try {
-                //probably need a better check than this
+                // probably need a better check than this
                 Assert.assertTrue(XPathAPI.selectNodeList(responseData, "//osm/user").getLength() >= 1);
-                Assert.assertEquals(DbUtils.getTestUserId(conn), Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
-                //TODO: fix
-                //Assert.assertEquals(
-                //"user-with-id-" + String.valueOf(DbUtils.getTestUserId(conn)),
-                //xpath.evaluate("//osm/user/@display_name", responseData));
-                //TODO: can't test this from here if clearing out maps after every test...need a different
-                //test for it
-                //Assert.assertTrue(
-                //Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)) > 0);
+                Assert.assertEquals(DbUtils.getTestUserId(conn),
+                        Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
+                // TODO: fix
+                // Assert.assertEquals(
+                // "user-with-id-" +
+                // String.valueOf(DbUtils.getTestUserId(conn)),
+                // xpath.evaluate("//osm/user/@display_name", responseData));
+                // TODO: can't test this from here if clearing out maps after
+                // every test...need a different
+                // test for it
+                // Assert.assertTrue(
+                // Long.parseLong(xpath.evaluate("//osm/user/changesets/@count",
+                // responseData)) > 0);
             }
             catch (Exception e) {
                 Assert.fail("Error parsing user from response document: " + e.getMessage());

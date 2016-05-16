@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 
+
 public class DataDefinitionManager {
     private static final Logger logger = LoggerFactory.getLogger(DataDefinitionManager.class);
     private static final String POSTGRESQL_DRIVER = "org.postgresql.Driver";
@@ -82,7 +83,7 @@ public class DataDefinitionManager {
     void createDb(String dbname) throws SQLException {
         try (Connection conn = DriverManager.getConnection(dbUrl + dbName, dbUser, dbPassword)) {
             String sql = "CREATE DATABASE \"" + dbname + "\"";
-            try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.execute();
             }
         }
@@ -104,24 +105,22 @@ public class DataDefinitionManager {
             // TODO: re-evaluate what this if block is supposed to to.
             if (force) {
                 String columnName = null;
-                String sql = "SELECT column_name " +
-                             "FROM information_schema.columns " +
-                             "WHERE table_name='pg_stat_activity' AND column_name LIKE '%pid'";
+                String sql = "SELECT column_name " + "FROM information_schema.columns "
+                        + "WHERE table_name='pg_stat_activity' AND column_name LIKE '%pid'";
 
                 try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                    //Get the column name from the db as it's version dependent
+                    // Get the column name from the db as it's version dependent
                     try (ResultSet rs = stmt.executeQuery()) {
                         rs.next();
                         columnName = rs.getString("column_name");
                     }
                 }
 
-                String forceSql = "SELECT pg_terminate_backend(" + columnName + ") " +
-                                  "FROM pg_stat_activity " +
-                                  "WHERE datname = ?";
+                String forceSql = "SELECT pg_terminate_backend(" + columnName + ") " + "FROM pg_stat_activity "
+                        + "WHERE datname = ?";
                 try (PreparedStatement stmt = conn.prepareStatement(forceSql)) {
                     stmt.setString((int) 1, dbname);
-                    //Get the column name from the db as it's version dependent
+                    // Get the column name from the db as it's version dependent
                     try (ResultSet rs = stmt.executeQuery()) {
                     }
                 }
@@ -137,10 +136,9 @@ public class DataDefinitionManager {
     public List<String> getTablesList(String dbName, String filter_prefix) throws SQLException {
         List<String> tblList = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(dbUrl + dbName, dbUser, dbPassword)) {
-            String sql = "SELECT table_name " +
-                         "FROM information_schema.tables " +
-                         "WHERE table_schema='public' AND table_name LIKE " +
-                         "'" + filter_prefix.replace('-', '_') + "_%'";
+            String sql = "SELECT table_name " + "FROM information_schema.tables "
+                    + "WHERE table_schema='public' AND table_name LIKE " + "'" + filter_prefix.replace('-', '_')
+                    + "_%'";
 
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 try (ResultSet rs = stmt.executeQuery()) {

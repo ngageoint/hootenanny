@@ -28,45 +28,43 @@ package hoot.services.models.dataset;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 /**
  * Model class for the Hootenanny folder record
  */
 @XmlRootElement
-public class LinkRecord
-{
-  private long id;
-  public long getId()
-  {
-    return id;
-  }
-  public void setId(long id)
-  {
-    this.id = id;
-  }
-  
-  private long mapId;
-  public long getMapId()
-  {
-    return mapId;
-  }
-  public void setMapId(long mapId)
-  {
-    this.mapId = mapId;
-  }
-  
-  private long folderId;
-  public long getFolderId()
-  {
-    return folderId;
-  }
-  public void setFolderId(long folderId)
-  {
-    this.folderId = folderId;
-  }
-  
-  
-  public LinkRecord()
-  {
-    
-  }
+public class LinkRecord {
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    private long mapId;
+
+    public long getMapId() {
+        return mapId;
+    }
+
+    public void setMapId(long mapId) {
+        this.mapId = mapId;
+    }
+
+    private long folderId;
+
+    public long getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(long folderId) {
+        this.folderId = folderId;
+    }
+
+    public LinkRecord() {
+
+    }
 }
