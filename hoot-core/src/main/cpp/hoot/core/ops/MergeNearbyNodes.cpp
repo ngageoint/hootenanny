@@ -28,7 +28,6 @@
 #include "MergeNearbyNodes.h"
 
 // Hoot
-#include <hoot/core/DistanceUtils.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/index/ClosePointHash.h>

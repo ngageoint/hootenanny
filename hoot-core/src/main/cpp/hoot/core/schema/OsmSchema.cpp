@@ -43,6 +43,7 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/OsmSchemaLoaderFactory.h>
 #include <hoot/core/util/ConfPath.h>
@@ -1745,6 +1746,17 @@ bool OsmSchema::isMultiLineString(const Relation& r) const
   return r.getType() == "multilinestring";
 }
 
+bool OsmSchema::isOneWay(const Element& e) const
+{
+  bool result = false;
+  QString oneway = e.getTags()["oneway"].toLower();
+  if (e.getTags().isTrue("oneway") || oneway == "-1" || oneway == "reverse")
+  {
+    result = true;
+  }
+  return result;
+}
+
 bool OsmSchema::isPoi(const Element& e)
 {
   bool result = false;
@@ -1756,6 +1768,17 @@ bool OsmSchema::isPoi(const Element& e)
     result = hasCategory(e.getTags(), "poi") || e.getTags().getNames().size() > 0;
   }
 
+  return result;
+}
+
+bool OsmSchema::isReversed(const Element& e) const
+{
+  bool result = false;
+  QString oneway = e.getTags()["oneway"].toLower();
+  if (oneway == "-1" || oneway == "reverse")
+  {
+    result = true;
+  }
   return result;
 }
 

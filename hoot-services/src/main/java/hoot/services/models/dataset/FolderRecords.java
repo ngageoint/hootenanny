@@ -28,24 +28,23 @@ package hoot.services.models.dataset;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 /**
  * Model class for a set of Hootenanny map layers
  */
 @XmlRootElement
-public class FolderRecords
-{
-  private FolderRecord[] folders;
-  public FolderRecord[] getFolders()
-  {
-    return folders;
-  }
-  public void setFolders(FolderRecord[] folders)
-  {
-    this.folders = folders;
-  }
-  
-  public FolderRecords()
-  {
-    
-  }
+public class FolderRecords {
+    private FolderRecord[] folders;
+
+    public FolderRecord[] getFolders() {
+        return folders;
+    }
+
+    public void setFolders(FolderRecord[] folders) {
+        this.folders = folders;
+    }
+
+    public FolderRecords() {
+
+    }
 }

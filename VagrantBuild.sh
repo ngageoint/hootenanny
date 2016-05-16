@@ -24,6 +24,12 @@ echo "Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
 make -s clean && make -sj$(nproc)
 
+
+# Make sure that these directories exist. This is done by VagrantProvision.sh but will be wiped out if the user
+# runs "VeryClean.sh"
+mkdir -p $HOOT_HOME/ingest/processed
+mkdir -p $HOOT_HOME/upload
+
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
 sudo -u tomcat6 scripts/CopyWebAppsToTomcat.sh #&> /dev/null
 

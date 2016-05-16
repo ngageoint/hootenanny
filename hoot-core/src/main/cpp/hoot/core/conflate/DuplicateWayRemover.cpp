@@ -197,12 +197,12 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
   else
   {
     bool rev1 = false, rev2 = false;
-    if (w1->isOneWay() == false)
+    if (OsmSchema::getInstance().isOneWay(*w1) == false)
     {
       w1->reverseOrder();
       rev1 = true;
     }
-    else if (w2->isOneWay() == false)
+    else if (OsmSchema::getInstance().isOneWay(*w2) == false)
     {
       w2->reverseOrder();
       rev2 = true;

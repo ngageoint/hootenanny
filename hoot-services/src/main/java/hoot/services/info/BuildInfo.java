@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+
 /**
  * Services build info file
  */
@@ -43,7 +44,8 @@ public class BuildInfo {
      * Returns the build info for the services
      *
      * @return a set of build info properties
-     * @throws IOException if unable to read from the file
+     * @throws IOException
+     *             if unable to read from the file
      */
     public static synchronized Properties getInstance() throws IOException {
         if ((info == null) || (info.isEmpty())) {

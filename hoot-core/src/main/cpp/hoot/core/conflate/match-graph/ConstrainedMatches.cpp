@@ -27,7 +27,6 @@
 #include "ConstrainedMatches.h"
 
 // hoot
-#include <hoot/core/algorithms/IntegerProgrammingSolver.h>
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>

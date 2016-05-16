@@ -28,6 +28,7 @@ package hoot.services.info;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 /**
  * Represents details about the core environment
  */

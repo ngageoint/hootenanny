@@ -1,0 +1,4 @@
+14:12:51.073 INFO  ...oot/core/cmd/PaintNodesCmd.cpp(  91) nodeCount: 4324
+14:12:51.074 INFO  ...oot/core/cmd/PaintNodesCmd.cpp( 207) Envelope: -77.0551,-77.0281,38.8845,38.9031
+14:12:51.092 INFO  ...oot/core/cmd/PaintNodesCmd.cpp( 133) count: 4324
+14:12:51.185 INFO  ...oot/core/cmd/PaintNodesCmd.cpp( 253) maxValue: 3

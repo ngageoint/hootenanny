@@ -38,12 +38,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import hoot.services.db.DbUtils;
-import hoot.services.db.DbUtils.EntityChangeType;
-import hoot.services.db.postgres.PostgresUtils;
-import hoot.services.db2.*;
-import hoot.services.geo.BoundingBox;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.joda.time.format.DateTimeFormat;
@@ -60,9 +54,24 @@ import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.types.path.NumberPath;
 
+import hoot.services.db.DbUtils;
+import hoot.services.db.DbUtils.EntityChangeType;
+import hoot.services.db.postgres.PostgresUtils;
+import hoot.services.db2.CurrentNodes;
+import hoot.services.db2.QChangesets;
+import hoot.services.db2.QCurrentNodes;
+import hoot.services.db2.QCurrentRelationMembers;
+import hoot.services.db2.QCurrentRelations;
+import hoot.services.db2.QCurrentWayNodes;
+import hoot.services.db2.QCurrentWays;
+import hoot.services.db2.QUsers;
+import hoot.services.geo.BoundingBox;
+
+
 /**
- * Data common across all OSM elements.  Since all elements are to be serializable to XML and the
- * services database, we implement as much of those related interfaces as possible here.
+ * Data common across all OSM elements. Since all elements are to be
+ * serializable to XML and the services database, we implement as much of those
+ * related interfaces as possible here.
  */
 public abstract class Element implements XmlSerializable, DbSerializable {
     private static final Logger log = LoggerFactory.getLogger(Element.class);
@@ -79,16 +88,19 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         dbNodeCache = cache;
     }
 
-    //order in the enum here is important, since the request diff writer methods use this to determine
-    //the order for creating/updating/deleting elements; i.e. create nodes before referencing them
-    //in a way, etc.
+    // order in the enum here is important, since the request diff writer
+    // methods use this to determine
+    // the order for creating/updating/deleting elements; i.e. create nodes
+    // before referencing them
+    // in a way, etc.
     public enum ElementType {
-        Node,
-        Way,
-        Relation,
-        //Technically, changeset doesn't inherit from Element and thus doesn't implement
-        //XmlSerializable or DbSerializable, so giving it an element type is a little bit confusing.
-        //It helps the code clean up a little bit in places, so leaving as is for now.
+        Node, Way, Relation,
+        // Technically, changeset doesn't inherit from Element and thus doesn't
+        // implement
+        // XmlSerializable or DbSerializable, so giving it an element type is a
+        // little bit confusing.
+        // It helps the code clean up a little bit in places, so leaving as is
+        // for now.
         Changeset
     }
 
@@ -102,7 +114,8 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     }
 
     /**
-     * The corresponding changeset ID parsed for this element from the changeset upload request
+     * The corresponding changeset ID parsed for this element from the changeset
+     * upload request
      */
     private long requestChangesetId = -1;
 
@@ -152,8 +165,9 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     /*
      * see ChangesetDiffDbWriter::parsedElementIdsToElementsByType
      *
-     * This cache is ignored by elements which don't have related element (e.g. Node).
-    */
+     * This cache is ignored by elements which don't have related element (e.g.
+     * Node).
+     */
     protected Map<ElementType, Map<Long, Element>> parsedElementIdsToElementsByType;
 
     @Override
@@ -216,7 +230,7 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      */
     @Override
     public long getId() throws Exception {
-        return (Long) MethodUtils.invokeMethod(record, "getId", new Object[]{});
+        return (Long) MethodUtils.invokeMethod(record, "getId", new Object[] {});
     }
 
     /**
@@ -224,10 +238,11 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      */
     @Override
     public void setId(long id) throws Exception {
-        MethodUtils.invokeMethod(record, "setId", new Object[]{id});
+        MethodUtils.invokeMethod(record, "setId", new Object[] { id });
     }
 
-    //We will keep track of map id internally since we do not have map id column in table any longer
+    // We will keep track of map id internally since we do not have map id
+    // column in table any longer
     private long _mapId = -1;
 
     /**
@@ -252,10 +267,11 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      */
     @SuppressWarnings("unchecked")
     public Map<String, String> getTags() throws Exception {
-        Object oTags = MethodUtils.invokeMethod(record, "getTags", new Object[]{});
+        Object oTags = MethodUtils.invokeMethod(record, "getTags", new Object[] {});
 
         if (oTags instanceof PGobject) {
-            return PostgresUtils.postgresObjToHStore((PGobject) MethodUtils.invokeMethod(record, "getTags", new Object[]{}));
+            return PostgresUtils
+                    .postgresObjToHStore((PGobject) MethodUtils.invokeMethod(record, "getTags", new Object[] {}));
         }
 
         return (Map<String, String>) oTags;
@@ -264,13 +280,14 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     /**
      * Sets tags on an element
      *
-     * @param tags string map with tag key/value pairs
+     * @param tags
+     *            string map with tag key/value pairs
      * @throws NoSuchMethodException
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public void setTags(Map<String, String> tags) throws NoSuchMethodException,
-            IllegalAccessException, InvocationTargetException {
+    public void setTags(Map<String, String> tags)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         MethodUtils.invokeMethod(record, "setTags", tags);
     }
 
@@ -278,7 +295,7 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      * Returns the visibility of the element associated services database record
      */
     public boolean getVisible() throws Exception {
-        return (Boolean) MethodUtils.invokeMethod(record, "getVisible", new Object[]{});
+        return (Boolean) MethodUtils.invokeMethod(record, "getVisible", new Object[] {});
     }
 
     /**
@@ -295,41 +312,49 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     /**
      * Returns an XML representation of the element
      *
-     * @param parentXml                  XML node this element should be attached under
-     * @param modifyingUserId            ID of the user which created this element
-     * @param modifyingUserDisplayName   user display name of the user which created this element
-     * @param multiLayerUniqueElementIds if true, IDs are prepended with
-     *                                   <map id>_<first letter of the element type>_; this setting activated is not compatible with
-     *                                   standard OSM clients (specific to Hootenanny iD)
-     * @param addChildren                if true, element children are added to the element xml (way nodes for ways
-     *                                   relation member for relations); parameter is ignored by the Node element
+     * @param parentXml
+     *            XML node this element should be attached under
+     * @param modifyingUserId
+     *            ID of the user which created this element
+     * @param modifyingUserDisplayName
+     *            user display name of the user which created this element
+     * @param multiLayerUniqueElementIds
+     *            if true, IDs are prepended with <map id>_<first letter of the
+     *            element type>_; this setting activated is not compatible with
+     *            standard OSM clients (specific to Hootenanny iD)
+     * @param addChildren
+     *            if true, element children are added to the element xml (way
+     *            nodes for ways relation member for relations); parameter is
+     *            ignored by the Node element
      * @return an XML element
      */
     @Override
     public org.w3c.dom.Element toXml(org.w3c.dom.Element parentXml, long modifyingUserId,
-                                    String modifyingUserDisplayName, boolean multiLayerUniqueElementIds,
-                                    boolean addChildren)
-    throws Exception {
+            String modifyingUserDisplayName, boolean multiLayerUniqueElementIds, boolean addChildren) throws Exception {
         Document doc = parentXml.getOwnerDocument();
         org.w3c.dom.Element element = doc.createElement(toString());
         String id = String.valueOf(getId());
         if (multiLayerUniqueElementIds) {
-            //hoot custom id unique across map layers
+            // hoot custom id unique across map layers
             id = getMapId() + "_" + elementType.toString().toLowerCase().charAt(0) + "_" + id;
         }
         element.setAttribute("id", id);
-        element.setAttribute("visible", String.valueOf(MethodUtils.invokeMethod(record, "getVisible", new Object[]{})));
-        element.setAttribute("version", String.valueOf(MethodUtils.invokeMethod(record, "getVersion", new Object[]{})));
-        element.setAttribute("changeset", String.valueOf(MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{})));
-        element.setAttribute("timestamp", String.valueOf(MethodUtils.invokeMethod(record, "getTimestamp", new Object[]{})));
+        element.setAttribute("visible",
+                String.valueOf(MethodUtils.invokeMethod(record, "getVisible", new Object[] {})));
+        element.setAttribute("version",
+                String.valueOf(MethodUtils.invokeMethod(record, "getVersion", new Object[] {})));
+        element.setAttribute("changeset",
+                String.valueOf(MethodUtils.invokeMethod(record, "getChangesetId", new Object[] {})));
+        element.setAttribute("timestamp",
+                String.valueOf(MethodUtils.invokeMethod(record, "getTimestamp", new Object[] {})));
         element.setAttribute("user", modifyingUserDisplayName);
         element.setAttribute("uid", String.valueOf(modifyingUserId));
         return element;
     }
 
     /*
-     * This ensures that the changeset ID specified in the element XML is the same as
-     * what was specified in the changeset request
+     * This ensures that the changeset ID specified in the element XML is the
+     * same as what was specified in the changeset request
      */
     long parseChangesetId(NamedNodeMap xmlAttributes) throws Exception {
         long elementChangesetId = -1;
@@ -342,23 +367,24 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         }
 
         if (elementChangesetId != requestChangesetId) {
-            throw new Exception("Invalid changeset ID: " + elementChangesetId + " for " + toString() +
-                                ".  Expected changeset ID: " + requestChangesetId);
+            throw new Exception("Invalid changeset ID: " + elementChangesetId + " for " + toString()
+                    + ".  Expected changeset ID: " + requestChangesetId);
         }
 
         return elementChangesetId;
     }
 
     /*
-     * If a new element is being created, it always gets a newly assigned version = 1.  Otherwise, the
-     * version passed in the changeset request must match the existing version the server to ensure
-     * data integrity.
+     * If a new element is being created, it always gets a newly assigned
+     * version = 1. Otherwise, the version passed in the changeset request must
+     * match the existing version the server to ensure data integrity.
      */
     long parseVersion() throws Exception {
         long version = 1;
 
-        //version passed in the request can be ignored if it is a create request, since we've already
-        //done version error checking at this point
+        // version passed in the request can be ignored if it is a create
+        // request, since we've already
+        // done version error checking at this point
         if (entityChangeType != EntityChangeType.CREATE) {
             version++;
         }
@@ -366,8 +392,9 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         return version;
     }
 
-    //is this timestamp even actually honored from the xml in the rails port?...don't think so;
-    //if not, remove this
+    // is this timestamp even actually honored from the xml in the rails
+    // port?...don't think so;
+    // if not, remove this
     Timestamp parseTimestamp(NamedNodeMap xmlAttributes) {
         Timestamp timestamp = null;
         org.w3c.dom.Node timestampXml = xmlAttributes.getNamedItem("timestamp");
@@ -375,8 +402,8 @@ public abstract class Element implements XmlSerializable, DbSerializable {
 
         if (timestampXml != null) {
             try {
-                timestamp =
-                        new Timestamp(Element.getTimeFormatter().parseDateTime(timestampXml.getNodeValue()).getMillis());
+                timestamp = new Timestamp(
+                        Element.getTimeFormatter().parseDateTime(timestampXml.getNodeValue()).getMillis());
             }
             catch (IllegalArgumentException e) {
                 //
@@ -391,9 +418,11 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     }
 
     /**
-     * Returns an XML representation of the element's data suitable for a changeset upload response
+     * Returns an XML representation of the element's data suitable for a
+     * changeset upload response
      *
-     * @param parent XML node this element should be attached under
+     * @param parent
+     *            XML node this element should be attached under
      * @throws Exception
      */
     @Override
@@ -403,8 +432,10 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         entityElement.setAttribute("old_id", String.valueOf(getOldId()));
 
         if (getEntityChangeType() != EntityChangeType.DELETE) {
-            entityElement.setAttribute("new_id", String.valueOf(MethodUtils.invokeMethod(record, "getId", new Object[]{})));
-            entityElement.setAttribute("new_version", String.valueOf(MethodUtils.invokeMethod(record, "getVersion", new Object[]{})));
+            entityElement.setAttribute("new_id",
+                    String.valueOf(MethodUtils.invokeMethod(record, "getId", new Object[] {})));
+            entityElement.setAttribute("new_version",
+                    String.valueOf(MethodUtils.invokeMethod(record, "getVersion", new Object[] {})));
         }
 
         return entityElement;
@@ -413,10 +444,14 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     /**
      * Returns a set of elements from the services database
      *
-     * @param mapId       ID of the map owning the records
-     * @param elementType type of elements to be returned
-     * @param elementIds  IDs of the elements to be returned
-     * @param dbConn      JDBC Connection
+     * @param mapId
+     *            ID of the map owning the records
+     * @param elementType
+     *            type of elements to be returned
+     * @param elementIds
+     *            IDs of the elements to be returned
+     * @param dbConn
+     *            JDBC Connection
      * @return a set of element records
      * @throws InvocationTargetException
      * @throws NoSuchMethodException
@@ -426,29 +461,32 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      */
     @SuppressWarnings("rawtypes")
     static List<?> getElementRecords(long mapId, ElementType elementType, Set<Long> elementIds, Connection dbConn)
-    throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
+            throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException,
+            InvocationTargetException {
         Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
 
         if (!elementIds.isEmpty()) {
-            return
-                    new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
-                            .from(prototype.getElementTable())
-                            .where(prototype.getElementIdField().in(elementIds))
-                            .orderBy(prototype.getElementIdField().asc())
-                            .list(prototype.getElementTable());
+            return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
+                    .where(prototype.getElementIdField().in(elementIds)).orderBy(prototype.getElementIdField().asc())
+                    .list(prototype.getElementTable());
         }
 
         return new ArrayList();
     }
 
     /**
-     * Returns a set of elements from the services database with user information joined to it
+     * Returns a set of elements from the services database with user
+     * information joined to it
      *
-     * @param mapId       ID of the map owning the records
-     * @param elementType type of elements to be returned
-     * @param elementIds  IDs of the elements to be returned
-     * @param dbConn      JDBC Connection
-     * @return a set of  element records
+     * @param mapId
+     *            ID of the map owning the records
+     * @param elementType
+     *            type of elements to be returned
+     * @param elementIds
+     *            IDs of the elements to be returned
+     * @param dbConn
+     *            JDBC Connection
+     * @return a set of element records
      * @throws InvocationTargetException
      * @throws NoSuchMethodException
      * @throws ClassNotFoundException
@@ -456,49 +494,52 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      * @throws InstantiationException
      */
     @SuppressWarnings("rawtypes")
-    public static List<?> getElementRecordsWithUserInfo(long mapId, ElementType elementType, Set<Long> elementIds, Connection dbConn)
-    throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
+    public static List<?> getElementRecordsWithUserInfo(long mapId, ElementType elementType, Set<Long> elementIds,
+            Connection dbConn) throws InstantiationException, IllegalAccessException, ClassNotFoundException,
+            NoSuchMethodException, InvocationTargetException {
         Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
 
         QChangesets changesets = QChangesets.changesets;
         QUsers users = QUsers.users;
 
         if (!elementIds.isEmpty()) {
-            return
-                    new SQLQuery(dbConn, DbUtils.getConfiguration("" + mapId))
-                            .from(prototype.getElementTable())
-                            .join(QChangesets.changesets)
-                            .on(prototype.getChangesetIdField().eq(changesets.id))
-                            .join(users)
-                            .on(changesets.userId.eq(users.id))
-                            .where(prototype.getElementIdField().in(elementIds))
-                            .orderBy(prototype.getElementIdField().asc())
-                            .list(prototype.getElementTable(), users, changesets);
+            return new SQLQuery(dbConn, DbUtils.getConfiguration("" + mapId)).from(prototype.getElementTable())
+                    .join(QChangesets.changesets).on(prototype.getChangesetIdField().eq(changesets.id)).join(users)
+                    .on(changesets.userId.eq(users.id)).where(prototype.getElementIdField().in(elementIds))
+                    .orderBy(prototype.getElementIdField().asc()).list(prototype.getElementTable(), users, changesets);
         }
 
         return new ArrayList();
     }
 
     /**
-     * Removes all records related (e.g. way nodes for ways, relation members for relations, etc.)
-     * to all of the elements with the passed in IDs
+     * Removes all records related (e.g. way nodes for ways, relation members
+     * for relations, etc.) to all of the elements with the passed in IDs
      *
-     * @param mapId                ID of the map owning the elements
-     * @param relatedRecordTable   services database table for the related record type
-     * @param joinField            services database table field which joins the related record to the parent
-     *                             record
-     * @param elementIds           IDs of the elements for which related records are to be deleted
-     * @param warnOnNothingRemoved if true, a warning will be logged if no related records were
-     *                             removed
-     * @param dbConn               JDBC Connection
+     * @param mapId
+     *            ID of the map owning the elements
+     * @param relatedRecordTable
+     *            services database table for the related record type
+     * @param joinField
+     *            services database table field which joins the related record
+     *            to the parent record
+     * @param elementIds
+     *            IDs of the elements for which related records are to be
+     *            deleted
+     * @param warnOnNothingRemoved
+     *            if true, a warning will be logged if no related records were
+     *            removed
+     * @param dbConn
+     *            JDBC Connection
      */
-    public static void removeRelatedRecords(long mapId, RelationalPathBase<?> relatedRecordTable, NumberPath<Long> joinField,
-                                            Set<Long> elementIds, boolean warnOnNothingRemoved, Connection dbConn) {
+    public static void removeRelatedRecords(long mapId, RelationalPathBase<?> relatedRecordTable,
+            NumberPath<Long> joinField, Set<Long> elementIds, boolean warnOnNothingRemoved, Connection dbConn) {
         log.debug("Removing related records...");
 
         long recordsProcessed = 0;
         if ((relatedRecordTable != null) && (joinField != null)) {
-            SQLDeleteClause sqldelete = new SQLDeleteClause(dbConn, DbUtils.getConfiguration(mapId), relatedRecordTable);
+            SQLDeleteClause sqldelete = new SQLDeleteClause(dbConn, DbUtils.getConfiguration(mapId),
+                    relatedRecordTable);
 
             recordsProcessed = 0;
 
@@ -518,7 +559,8 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         }
         else {
             if (relatedRecordTable != null) {
-                log.debug("Removed " + recordsProcessed + " related records for element record type " + relatedRecordTable);
+                log.debug("Removed " + recordsProcessed + " related records for element record type "
+                        + relatedRecordTable);
             }
         }
     }
@@ -526,10 +568,14 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     /**
      * Determines whether the specified elements exist in the services database
      *
-     * @param mapId       ID of the map owning the elements
-     * @param elementType the type of element to check existence for
-     * @param elementIds  a collection of element IDs
-     * @param dbConn      JDBC Connection
+     * @param mapId
+     *            ID of the map owning the elements
+     * @param elementType
+     *            the type of element to check existence for
+     * @param elementIds
+     *            a collection of element IDs
+     * @param dbConn
+     *            JDBC Connection
      * @return true if element exist for every input element ID; false otherwise
      * @throws InvocationTargetException
      * @throws NoSuchMethodException
@@ -538,15 +584,12 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      * @throws InstantiationException
      */
     public static boolean allElementsExist(long mapId, ElementType elementType, Set<Long> elementIds, Connection dbConn)
-    throws Exception {
+            throws Exception {
         Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
 
         if (!elementIds.isEmpty()) {
-            return
-                    new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
-                            .from(prototype.getElementTable())
-                            .where(prototype.getElementIdField().in(elementIds))
-                            .count() == elementIds.size();
+            return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
+                    .where(prototype.getElementIdField().in(elementIds)).count() == elementIds.size();
         }
 
         return elementIds.isEmpty();
@@ -555,28 +598,31 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     /**
      * Determines whether all elements in the input list are visible
      *
-     * @param mapId       ID of the map owning the elements
-     * @param elementType the type of element to check visibility for
-     * @param elementIds  a collection of element IDs
-     * @param dbConn      JDBC Connection
-     * @return true if every node associated with the corresponding input node ID is visible
+     * @param mapId
+     *            ID of the map owning the elements
+     * @param elementType
+     *            the type of element to check visibility for
+     * @param elementIds
+     *            a collection of element IDs
+     * @param dbConn
+     *            JDBC Connection
+     * @return true if every node associated with the corresponding input node
+     *         ID is visible
      * @throws InvocationTargetException
      * @throws NoSuchMethodException
      * @throws ClassNotFoundException
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    public static boolean allElementsVisible(long mapId, ElementType elementType, Set<Long> elementIds, Connection dbConn)
-    throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
+    public static boolean allElementsVisible(long mapId, ElementType elementType, Set<Long> elementIds,
+            Connection dbConn) throws InstantiationException, IllegalAccessException, ClassNotFoundException,
+            NoSuchMethodException, InvocationTargetException {
         Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
 
         if (!elementIds.isEmpty()) {
-            return
-                    new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
-                            .from(prototype.getElementTable())
-                            .where(prototype.getElementIdField().in(elementIds)
-                                        .and(prototype.getElementVisibilityField().eq(true)))
-                            .count() == elementIds.size();
+            return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable()).where(
+                    prototype.getElementIdField().in(elementIds).and(prototype.getElementVisibilityField().eq(true)))
+                    .count() == elementIds.size();
         }
 
         return elementIds.isEmpty();
@@ -585,7 +631,8 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     /**
      * Returns the database relation member type given an element string type
      *
-     * @param elementTypeStr an element type string
+     * @param elementTypeStr
+     *            an element type string
      * @return a database relation member type
      */
     public static DbUtils.nwr_enum elementEnumFromString(final String elementTypeStr) {
@@ -595,7 +642,9 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     /**
      * Returns the database relation member type given an element type
      *
-     * @param elementType the element type for which to retrive the database relation member type
+     * @param elementType
+     *            the element type for which to retrive the database relation
+     *            member type
      * @return a database relation member type
      */
     public static DbUtils.nwr_enum elementEnumForElementType(final ElementType elementType) {
@@ -622,7 +671,8 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     /**
      * Returns the element type given a database relation member type
      *
-     * @param typeEnum a database relation member type
+     * @param typeEnum
+     *            a database relation member type
      * @return an element type
      */
     public static ElementType elementTypeForElementEnum(final Object typeEnum) {
@@ -630,23 +680,25 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     }
 
     /**
-     * Returns an element type given an element type string or element string abbreviation
+     * Returns an element type given an element type string or element string
+     * abbreviation
      *
-     * @param elementTypeStr an element type string
+     * @param elementTypeStr
+     *            an element type string
      * @return an element type
      */
     public static ElementType elementTypeFromString(final String elementTypeStr) {
         if (!StringUtils.isEmpty(elementTypeStr)) {
-            if (elementTypeStr.toLowerCase(Locale.ENGLISH).equals("node") ||
-                    elementTypeStr.toLowerCase(Locale.ENGLISH).equals("n")) {
+            if (elementTypeStr.toLowerCase(Locale.ENGLISH).equals("node")
+                    || elementTypeStr.toLowerCase(Locale.ENGLISH).equals("n")) {
                 return ElementType.Node;
             }
-            else if (elementTypeStr.toLowerCase(Locale.ENGLISH).equals("way") ||
-                    elementTypeStr.toLowerCase(Locale.ENGLISH).equals("w")) {
+            else if (elementTypeStr.toLowerCase(Locale.ENGLISH).equals("way")
+                    || elementTypeStr.toLowerCase(Locale.ENGLISH).equals("w")) {
                 return ElementType.Way;
             }
-            else if (elementTypeStr.toLowerCase(Locale.ENGLISH).equals("relation") ||
-                    elementTypeStr.toLowerCase(Locale.ENGLISH).equals("r")) {
+            else if (elementTypeStr.toLowerCase(Locale.ENGLISH).equals("relation")
+                    || elementTypeStr.toLowerCase(Locale.ENGLISH).equals("r")) {
                 return ElementType.Relation;
             }
         }
@@ -662,15 +714,15 @@ public abstract class Element implements XmlSerializable, DbSerializable {
 
         Map<String, String> tags = new HashMap<>();
         try {
-            //using xpath api here to get the tags is *very* slow, since it ends up being called many
-            //times...just check each child for a tag instead
+            // using xpath api here to get the tags is *very* slow, since it
+            // ends up being called many
+            // times...just check each child for a tag instead
             final NodeList tagXmlNodes = elementXml.getChildNodes();
             for (int i = 0; i < tagXmlNodes.getLength(); i++) {
                 org.w3c.dom.Node tagXmlNode = tagXmlNodes.item(i);
                 if (tagXmlNode.getNodeName().equals("tag")) {
                     NamedNodeMap nodeTagAttributes = tagXmlNode.getAttributes();
-                    tags.put(
-                            nodeTagAttributes.getNamedItem("k").getNodeValue(),
+                    tags.put(nodeTagAttributes.getNamedItem("k").getNodeValue(),
                             nodeTagAttributes.getNamedItem("v").getNodeValue());
                 }
             }
@@ -693,7 +745,8 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         for (Map.Entry<String, String> tagEntry : tags.entrySet()) {
             org.w3c.dom.Element tagElement = doc.createElement("tag");
             tagElement.setAttribute("k", tagEntry.getKey());
-            tagElement.setAttribute("v", hoot.services.utils.StringUtils.encodeURIComponentForJavaScript(tagEntry.getValue()));
+            tagElement.setAttribute("v",
+                    hoot.services.utils.StringUtils.encodeURIComponentForJavaScript(tagEntry.getValue()));
             elementXml.appendChild(tagElement);
         }
         return elementXml;
