@@ -35,6 +35,8 @@ import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
@@ -42,6 +44,9 @@ import hoot.services.UnitTest;
 
 public class ProcessStreamInterfaceTest {
 
+    @SuppressWarnings("unused")
+    private static final Logger log = LoggerFactory.getLogger(ProcessStreamInterfaceTest.class);
+    
     @Test
     @Category(UnitTest.class)
     public void testcreateCmd() throws Exception {
@@ -118,7 +123,14 @@ public class ProcessStreamInterfaceTest {
         String pwd = HootProperties.getProperty("dbPassword");
         String host = HootProperties.getProperty("dbHost");
         String dbUrl = "hootapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
-        expected += ",DB_URL=" + dbUrl + "}";
+        expected += ",DB_URL=" + dbUrl;
+        
+        dbname = HootProperties.getProperty("osmApiDbName");
+        userid = HootProperties.getProperty("osmApiDbUserId");
+        pwd = HootProperties.getProperty("osmApiDbPassword");
+        host = HootProperties.getProperty("osmApiDbHost");
+        String osmApiDbUrl = "osmapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
+        expected += ",OSM_API_DB_URL=" + osmApiDbUrl + "}";
 
         Assert.assertEquals(expected, commandStr);
     }

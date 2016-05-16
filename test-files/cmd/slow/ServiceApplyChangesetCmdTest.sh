@@ -4,9 +4,9 @@ set -e
 # clean out the database
 source scripts/SetupOsmApiDB.sh force
 source conf/DatabaseConfig.sh
-export DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
-export AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
-export PGPASSWORD=$DB_PASSWORD
+export DB_URL="osmapidb://$DB_USER_OSMAPI:$DB_PASSWORD_OSMAPI@$DB_HOST_OSMAPI:$DB_PORT_OSMAPI/$DB_NAME_OSMAPI"
+export AUTH="-h $DB_HOST_OSMAPI -p $DB_PORT_OSMAPI -U $DB_USER_OSMAPI"
+export PGPASSWORD=$DB_PASSWORD_OSMAPI
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
 
 rm -rf test-output/cmd/ServiceApplyChangesetCmdTest

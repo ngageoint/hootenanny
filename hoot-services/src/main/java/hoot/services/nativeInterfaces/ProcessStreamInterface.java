@@ -74,6 +74,7 @@ public class ProcessStreamInterface implements INativeInterface {
     protected static Map<String, ICommandRunner> _progProcesses = null;
 
     private static String dbUrl = null;
+    private static String osmApiDbUrl = null;
 
     public ProcessStreamInterface() {
         // for make file script based call
@@ -111,6 +112,13 @@ public class ProcessStreamInterface implements INativeInterface {
                 String pwd = HootProperties.getProperty("dbPassword");
                 String host = HootProperties.getProperty("dbHost");
                 dbUrl = "hootapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
+            }
+            if (osmApiDbUrl == null) {
+                String dbname = HootProperties.getProperty("osmApiDbName");
+                String userid = HootProperties.getProperty("osmApiDbUserId");
+                String pwd = HootProperties.getProperty("osmApiDbPassword");
+                String host = HootProperties.getProperty("osmApiDbHost");
+                osmApiDbUrl = "osmapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
             }
 
         }
@@ -407,6 +415,7 @@ public class ProcessStreamInterface implements INativeInterface {
             String jobid = cmd.get("jobId").toString();
             execCmd.add("jobid=" + jobid);
             execCmd.add("DB_URL=" + dbUrl);
+            execCmd.add("OSM_API_DB_URL=" + osmApiDbUrl);
         }
         catch (Exception ex) {
             log.error("Failed to parse job params. Reason: " + ex.getMessage());
