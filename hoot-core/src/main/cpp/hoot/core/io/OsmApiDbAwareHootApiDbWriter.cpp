@@ -162,7 +162,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
 {
   bool countChange = true;
 
-  LOG_VARD(n->getId());
+  //LOG_VARD(n->getId());
 
   Tags t = n->getTags();
   _addElementTags(n, t);
@@ -170,9 +170,9 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
   if (n->getId() < 1)
   {
     bool alreadyThere = _nodeRemap.count(n->getId()) != 0;
-    LOG_VARD(alreadyThere);
+    //LOG_VARD(alreadyThere);
     long nodeId = _getRemappedElementId(n->getElementId());
-    LOG_VARD(nodeId);
+    //LOG_VARD(nodeId);
     if (alreadyThere)
     {
       _hootdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, t);
@@ -204,9 +204,9 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
   if (w->getId() < 1)
   {
     bool alreadyThere = _wayRemap.count(w->getId()) != 0;
-    LOG_VARD(alreadyThere);
+    //LOG_VARD(alreadyThere);
     wayId = _getRemappedElementId(w->getElementId());
-    LOG_VARD(wayId);
+    //LOG_VARD(wayId);
     if (alreadyThere)
     {
       _hootdb.updateWay(wayId, w->getVersion() + 1, tags);
@@ -251,7 +251,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Relation>
   if (r->getId() < 1)
   {
     relationId = _getRemappedElementId(r->getElementId());
-    LOG_VARD(relationId);
+    //LOG_VARD(relationId);
 
     //LOG_DEBUG("Inserting relation with source ID = " <<
               //QString::number(r->getId()) << " which maps to DB ID = " <<
