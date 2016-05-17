@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -442,8 +442,10 @@ unsigned int PostgresqlDumpfileWriter::_convertDegreesToNanodegrees(const double
 
 void PostgresqlDumpfileWriter::_writeNodeToTables(
   const ConstNodePtr& node,
-  const ElementIdDatatype nodeDbId )
+  const ElementIdDatatype nodeDbId)
 {
+  //LOG_DEBUG("Writing node with ID: " << nodeDbId);
+
   const double nodeY = node->getY();
   const double nodeX = node->getX();
   const int nodeYNanodegrees = _convertDegreesToNanodegrees(nodeY);
@@ -464,7 +466,7 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
   }
 
   QString outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n").arg(
-    QString::number(nodeDbId), 
+    QString::number(nodeDbId),
     QString::number(nodeYNanodegrees),
     QString::number(nodeXNanodegrees),
     QString::number(changesetId),
@@ -521,6 +523,8 @@ void PostgresqlDumpfileWriter::_createWayTables()
 
 void PostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId )
 {
+  //LOG_DEBUG("Writing way with ID: " << wayDbId);
+
   const int changesetId = _getChangesetId();
   const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 
@@ -585,6 +589,8 @@ void PostgresqlDumpfileWriter::_createRelationTables()
 
 void PostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype relationDbId )
 {
+  //LOG_DEBUG("Writing relation with ID: " << relationDbId);
+
   const int changesetId = _getChangesetId();
   const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 

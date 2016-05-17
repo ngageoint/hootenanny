@@ -335,7 +335,6 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
   bool countChange = true;
 
   //LOG_DEBUG("Inside writePartial for Node");
-  //LOG_VARD(n->getId());
 
   Tags t = n->getTags();
   _addElementTags(n, t);
@@ -343,9 +342,7 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
   if (_remapIds)
   {
     bool alreadyThere = _nodeRemap.count(n->getId()) != 0;
-    //LOG_VARD(alreadyThere);
     long nodeId = _getRemappedElementId(n->getElementId());
-    //LOG_VARD(nodeId);
     if (alreadyThere)
     {
       _hootdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, t);
@@ -363,7 +360,6 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
                           "HootApiDbWriter.");
     }
 
-    //LOG_DEBUG("Inserted node " << QString::number(n->getId()) << ", no remapping" );
     _hootdb.insertNode(n->getId(), n->getY(), n->getX(), t);
   }
 
@@ -386,9 +382,7 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
   if (_remapIds)
   {
     bool alreadyThere = _wayRemap.count(w->getId()) != 0;
-    //LOG_VARD(alreadyThere);
     wayId = _getRemappedElementId(w->getElementId());
-    //LOG_VARD(wayId);
     if (alreadyThere)
     {
       _hootdb.updateWay(wayId, w->getVersion() + 1, tags);
@@ -439,12 +433,6 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
   if (_remapIds)
   {
     relationId = _getRemappedElementId(r->getElementId());
-    //LOG_VARD(relationId);
-
-    /*LOG_DEBUG("Inserting relation with source ID = " <<
-              QString::number(r->getId()) << " which maps to DB ID = " <<
-              QString::number(relationId) );*/
-
     _hootdb.insertRelation(relationId, tags);
   }
   else
