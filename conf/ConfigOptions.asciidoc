@@ -1610,6 +1610,15 @@ specified email address to the database.
 If the `postgresql.dumpfile.writer.user.email` field is set, the user that is added to the
 database will be assigned the user id set by this field.
 
+=== preserve.accuracy.tag
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, then the OSM "accuracy" tag is still used to populate circular error by OSM readers but
+it is not dropped from output.  Useful in preserving an original tag state for elements when
+constructing an I/O chain whose final target is a non-hoot data store (e.g. OSM API database).
+
 === reader.add.source.datetime
 
 * Data Type: bool

@@ -155,8 +155,6 @@ void HootApiDbReader::read(shared_ptr<OsmMap> map)
 void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
 {
   LOG_DEBUG("IN HootApiDbReader::read(,)...");
-  shared_ptr<Element> element;
-  QStringList tags;
 
   // contact the DB and select all
   shared_ptr<QSqlQuery> elementResultsIterator = _database.selectElements(elementType);

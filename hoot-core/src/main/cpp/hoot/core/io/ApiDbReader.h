@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -85,6 +85,9 @@ public:
           double tv = tags.getLength("error:circular").value();
           element->setCircularError(tv);
           ok = true;
+          /*LOG_DEBUG(
+            "Set circular error from error:circular tag to " << tv << " for element with ID: " <<
+            element->getId());*/
         }
         catch (const HootException& e)
         {
@@ -109,6 +112,9 @@ public:
           double tv = tags.getLength("accuracy").value();
           element->setCircularError(tv);
           ok = true;
+          /*LOG_DEBUG(
+            "Set circular error from accuracy tag to " << tv << " for element with ID: " <<
+            element->getId());*/
         }
         catch (const HootException& e)
         {

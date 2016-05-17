@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -605,6 +605,13 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
           if (circularError > 0 && ok)
           {
             _element->setCircularError(circularError);
+            if (key == "accuracy" && ConfigOptions().getPreserveAccuracyTag())
+            {
+              _element->setTag(key, value);
+            }
+            /*LOG_DEBUG(
+              "Set circular error from accuracy or error:circular tag to " << circularError <<
+              " for element with ID: " << _element->getId());*/
           }
           else
           {

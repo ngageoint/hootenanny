@@ -155,8 +155,6 @@ set<long> HootApiDbWriter::_openDb(QString& urlStr)
   _hootdb.open(url);
   _open = true;
 
-  //LOG_DEBUG("DB opened");
-
   // create the user before we have a transaction so we can make sure the user gets added.
   if (_createUserIfNotFound)
   {
@@ -166,8 +164,6 @@ set<long> HootApiDbWriter::_openDb(QString& urlStr)
   {
     _hootdb.setUserId(_hootdb.getUserId(_userEmail, true));
   }
-
-  //LOG_DEBUG("DB user set");
 
   // start the transaction. We'll close it when finalizePartial is called.
   _hootdb.transaction();
@@ -256,11 +252,6 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     if (_relationRemap.count(eid.getId()) == 1)
     {
       retVal = _relationRemap.at(eid.getId());
-      /*
-      LOG_DEBUG("Returning established relation ID mapping, source ID = " <<
-        QString::number(eid.getId()) << ", database ID = " <<
-        QString::number(_relationRemap.at(eid.getId())) );
-      */
     }
     else
     {
@@ -270,12 +261,6 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
       {
         _sourceRelationIds.insert(eid.getId());
       }
-
-      /*
-      LOG_DEBUG("Established new relation ID mapping, source ID = " <<
-        QString::number(eid.getId()) << ", database ID = " <<
-        QString::number(_relationRemap.at(eid.getId())) );
-      */
     }
 
     break;
@@ -286,6 +271,9 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
 
     break;
   }
+
+  //LOG_DEBUG("Remapped ID for element type " << eid.getType().toString() << " from " <<
+            //eid.getId() << " to " << retVal);
 
   return retVal;
 }
@@ -332,10 +320,6 @@ void HootApiDbWriter::_startNewChangeSet()
 
 void HootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
 {
-  bool countChange = true;
-
-  //LOG_DEBUG("Inside writePartial for Node");
-
   Tags t = n->getTags();
   _addElementTags(n, t);
 
@@ -363,18 +347,13 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
     _hootdb.insertNode(n->getId(), n->getY(), n->getX(), t);
   }
 
-  if (countChange)
-  {
-    _countChange();
-    _nodesWritten++;
-  }
+  _countChange();
+  _nodesWritten++;
 }
 
 void HootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
 {
   long wayId;
-
-  //LOG_DEBUG("Inside writePartial for Way " << QString::number(w->getId()));
 
   Tags tags = w->getTags();
   _addElementTags(w, tags);
@@ -420,8 +399,6 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
 {
   long relationId;
 
-  //LOG_DEBUG("Inside writePartial for Relation");
-
   Tags tags = r->getTags();
   _addElementTags(r, tags);
 
@@ -466,8 +443,6 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
   //LOG_DEBUG("All members added to relation " << QString::number(relationId));
 
   _countChange();
-
-  //LOG_DEBUG("Leaving relation write cleanly");
 
   _relationsWritten++;
 }

@@ -1218,7 +1218,7 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
 
   _updateNode->finish();
 
-  //LOG_DEBUG("Updated node with ID: " << QString::number(id));
+  LOG_DEBUG("Updated node with ID: " << QString::number(id));
 }
 
 void HootApiDb::updateRelation(const long id, const long version, const Tags& tags)
@@ -1334,7 +1334,7 @@ void HootApiDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
   const long mapId = _currMapId;
   double start = Tgs::Time::getTime();
 
-  LOG_DEBUG("Inserting nodes into way " << QString::number(wayId));
+  //LOG_DEBUG("Inserting nodes into way " << QString::number(wayId));
 
   _checkLastMapId(mapId);
 

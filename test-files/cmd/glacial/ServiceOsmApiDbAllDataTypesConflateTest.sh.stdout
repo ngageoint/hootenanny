@@ -1,7 +1,7 @@
-reference dataset:  test-files/ToyTestA.osm
-secondary dataset:  test-files/ToyTestB.osm
-AOI:  -104.904,35.852,-104.895,38.856
-TEST_NAME:  ServiceOsmApiDbToyConflateTest
+reference dataset:  test-files/conflate/unified/AllDataTypesA.osm
+secondary dataset:  test-files/conflate/unified/AllDataTypesB.osm
+AOI:  -180,-90,180,90
+TEST_NAME:  ServiceOsmApiDbAllDataTypesConflateTest
 
 STEP 1: Cleaning out the osm api db and initializing it for use...
  setval 
@@ -18,12 +18,12 @@ STEP 2: Writing the reference dataset to the osm api db...
 
  setval 
 --------
-     37
+    118
 (1 row)
 
  setval 
 --------
-      5
+     15
 (1 row)
 
  setval 
@@ -32,12 +32,38 @@ STEP 2: Writing the reference dataset to the osm api db...
 (1 row)
 
 
-STEP 5: Writing the secondary dataset to the hoot api db...
+STEP 4: Writing the secondary dataset to the hoot api db...
 
-STEP 7: Conflating the two datasets...
+STEP 6: Conflating the two datasets...
 
-STEP 9: Writing a SQL changeset file that is the difference between the cropped reference input dataset and the conflated output...
+STEP 8: Writing a SQL changeset file that is the difference between the cropped reference input dataset and the conflated output...
 
-STEP 10: Executing the changeset SQL on the osm api db...
+STEP 9: Executing the changeset SQL on the osm api db...
 
-STEP 12: Reading the entire contents of the osm api db, writing it into a file, and verifying it...
+STEP 11: Reading the entire contents of the osm api db, writing it into a file, and verifying it...
+14:41:24.558 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 561) Missing way (38) in relation (2).
+14:41:24.558 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 561) Missing way (39) in relation (2).
+14:41:24.558 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (237) in relation (3).
+14:41:24.558 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (238) in relation (3).
+14:41:24.558 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (239) in relation (4).
+14:41:24.558 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (238) in relation (4).
+14:41:24.558 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (240) in relation (5).
+14:41:24.558 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (241) in relation (5).
+14:41:24.558 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (240) in relation (6).
+14:41:24.558 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (242) in relation (6).
+14:41:24.558 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (243) in relation (7).
+14:41:24.558 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (242) in relation (7).
+14:41:24.558 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 545) Found 10 missing nodes, no longer reporting missing nodes.
+14:41:24.565 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 561) Missing way (38) in relation (2).
+14:41:24.565 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 561) Missing way (39) in relation (2).
+14:41:24.565 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (237) in relation (3).
+14:41:24.565 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (238) in relation (3).
+14:41:24.565 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (239) in relation (4).
+14:41:24.565 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (238) in relation (4).
+14:41:24.565 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (240) in relation (5).
+14:41:24.565 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (241) in relation (5).
+14:41:24.565 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (240) in relation (6).
+14:41:24.565 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (242) in relation (6).
+14:41:24.565 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (243) in relation (7).
+14:41:24.565 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 541) Missing node (242) in relation (7).
+14:41:24.565 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 545) Found 10 missing nodes, no longer reporting missing nodes.

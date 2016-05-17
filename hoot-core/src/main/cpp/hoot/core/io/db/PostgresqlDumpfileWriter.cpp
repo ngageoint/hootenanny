@@ -236,7 +236,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 
   _writeNodeToTables(n, nodeDbId);
 
-  _writeTagsToTables( n->getTags(), nodeDbId,
+  _writeTagsToTables(/*t*/n->getTags(), nodeDbId,
     "current_node_tags", "%1\t%2\t%3\n",
     "node_tags", "%1\t1\t%2\t%3\n");
 
@@ -271,7 +271,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 
   _writeWaynodesToTables( _idMappings.wayIdMap->at( w->getId() ), w->getNodeIds() );
 
-  _writeTagsToTables( w->getTags(), wayDbId,
+  _writeTagsToTables(/*t*/w->getTags(), wayDbId,
     "current_way_tags", "%1\t%2\t%3\n",
     "way_tags", "%1\t1\t%2\t%3\n");
 
@@ -306,7 +306,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 
   _writeRelationMembersToTables( r );
 
-  _writeTagsToTables( r->getTags(), relationDbId,
+  _writeTagsToTables(/*t*/r->getTags(), relationDbId,
     "current_relation_tags", "%1\t%2\t%3\n",
     "relation_tags", "%1\t1\t%2\t%3\n");
 
@@ -501,7 +501,9 @@ void PostgresqlDumpfileWriter::_writeTagsToTables(
   for ( Tags::const_iterator it = tags.begin(); it != tags.end(); ++it )
   {
     const QString key = _escapeCopyToData( it.key() );
+    //LOG_VARD(key);
     const QString value = _escapeCopyToData( it.value() );
+    //LOG_VARD(value);
 
     currentTable << currentTableFormatString.arg(nodeDbIdString, key, value );
     historicalTable << historicalTableFormatString.arg(nodeDbIdString, key, value );
@@ -713,7 +715,7 @@ void PostgresqlDumpfileWriter::_createTable(const QString &tableName, const QStr
 void PostgresqlDumpfileWriter::_incrementChangesInChangeset()
 {
   _changesetData.changesInChangeset++;
-  if ( _changesetData.changesInChangeset == _maxChangesInChangeset )
+  if ( _changesetData.changesInChangeset == ConfigOptions().getChangesetMaxSize() )
   {
     //LOG_DEBUG("Changeset " + QString::number(_changesetData.changesetId) + " hit max edits" );
     _writeChangesetToTable();
