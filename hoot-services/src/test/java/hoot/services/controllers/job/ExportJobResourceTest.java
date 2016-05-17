@@ -91,7 +91,7 @@ public class ExportJobResourceTest {
     @Test
     @Category(UnitTest.class)
     public void testProcessForWFS() throws Exception {
-        String wfsStoreDb = HootProperties.getInstance().getProperty("wfsStoreDb");
+        String wfsStoreDb = HootProperties.getProperty("wfsStoreDb");
         String userid = HootProperties.getProperty("dbUserId");
         String pwd = HootProperties.getProperty("dbPassword");
         String host = HootProperties.getProperty("dbHost");

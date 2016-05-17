@@ -139,7 +139,7 @@ public class AboutResource {
             servicesDetail = new ServicesDetail();
 
             List<Property> properties = new ArrayList<>();
-            Properties props = HootProperties.getInstance();
+            Map<String, String> props = HootProperties.getProperties();
 
             for (Object o : props.entrySet()) {
                 Property prop = new Property();

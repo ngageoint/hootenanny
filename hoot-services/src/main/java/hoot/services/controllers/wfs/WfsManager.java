@@ -65,39 +65,24 @@ import hoot.services.utils.XmlDocumentBuilder;
 public class WfsManager {
     private static final Logger log = LoggerFactory.getLogger(WfsManager.class);
 
-    @SuppressWarnings("unused")
-    private String coreJobServerUrl = null;
-    private String wfsStoreConnName = null;
-    private String wfsStoreDb = null;
-
-    public WfsManager() {
-        try {
-            coreJobServerUrl = HootProperties.getInstance().getProperty("coreJobServerUrl");
-
-            wfsStoreConnName = HootProperties.getInstance().getProperty("wfsStoreConnName");
-
-            wfsStoreDb = HootProperties.getInstance().getProperty("wfsStoreDb");
-        }
-        catch (Exception e) {
-            log.error("WFS error: " + e.getMessage());
-        }
-    }
+    private static final String coreJobServerUrl = HootProperties.getProperty("coreJobServerUrl");
+    private static final String wfsStoreConnName = HootProperties.getProperty("wfsStoreConnName");
+    private static final String wfsStoreDb = HootProperties.getProperty("wfsStoreDb");
 
     public void createWfsResource(String wfsJobName) throws Exception {
-
         DataDefinitionManager ddlMan = new DataDefinitionManager();
 
         List<String> tblsList = ddlMan.getTablesList(wfsStoreDb, wfsJobName);
-        _createWFSDatasourceFeature(wfsJobName, wfsStoreConnName, tblsList);
-        _createService(wfsJobName);
+        createWFSDatasourceFeature(wfsJobName, wfsStoreConnName, tblsList);
+        createService(wfsJobName);
     }
 
     public void removeWfsResource(String wfsJobName) throws Exception {
-        _removeFeatureStore(wfsJobName);
-        _removeService(wfsJobName);
+        removeFeatureStore(wfsJobName);
+        removeService(wfsJobName);
     }
 
-    void _createWFSDatasourceFeature(String wfsDatasetName, String connectionName, List<String> features)
+    void createWFSDatasourceFeature(String wfsDatasetName, String connectionName, List<String> features)
             throws Exception {
         DocumentBuilderFactory dbFactory = XmlDocumentBuilder.getSecureDocBuilderFactory();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -138,8 +123,8 @@ public class WfsManager {
          */
 
         try {
-            FeatureStore newFeatureStore = _createFeatureStore(wfsDatasetName, content);
-            _addToWfsStore(newFeatureStore);
+            FeatureStore newFeatureStore = createFeatureStore(wfsDatasetName, content);
+            addToWfsStore(newFeatureStore);
         }
         catch (Exception ex) {
             log.error(ex.getMessage());
@@ -148,7 +133,7 @@ public class WfsManager {
 
     }
 
-    private void _removeFeatureStore(String name) throws Exception {
+    private void removeFeatureStore(String name) throws Exception {
         try {
             // get current workspace
             DeegreeWorkspace wksp = OGCFrontController.getServiceWorkspace();
@@ -170,7 +155,7 @@ public class WfsManager {
         }
     }
 
-    FeatureStore _createFeatureStore(String name, String content) throws Exception {
+    FeatureStore createFeatureStore(String name, String content) throws Exception {
         // get current workspace
         DeegreeWorkspace wksp = OGCFrontController.getServiceWorkspace();
 
@@ -206,7 +191,7 @@ public class WfsManager {
         }
     }
 
-    void _addToWfsStore(FeatureStore fstore) throws Exception {
+    void addToWfsStore(FeatureStore fstore) throws Exception {
         try {
             if (fstore == null) {
                 throw new Exception("fstore argument can not be null");
@@ -234,7 +219,7 @@ public class WfsManager {
         }
     }
 
-    private void _removeService(String wfsResourceName) throws Exception {
+    private void removeService(String wfsResourceName) throws Exception {
         DeegreeWorkspace wksp = OGCFrontController.getServiceWorkspace();
 
         WebServicesConfiguration wsMan = wksp.getSubsystemManager(WebServicesConfiguration.class);
@@ -248,7 +233,7 @@ public class WfsManager {
         }
     }
 
-    private void _createService(String wfsResourceName) throws Exception {
+    private void createService(String wfsResourceName) throws Exception {
         DeegreeWorkspace wksp = OGCFrontController.getServiceWorkspace();
 
         WebServicesConfiguration wsMan = wksp.getSubsystemManager(WebServicesConfiguration.class);
@@ -304,8 +289,7 @@ public class WfsManager {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error retrieving WFS services: " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            ResourceErrorHandler.handleError("Error retrieving WFS services: " + ex, Status.INTERNAL_SERVER_ERROR, log);
         }
         return services;
     }

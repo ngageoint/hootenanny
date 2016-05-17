@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
+import hoot.services.controllers.wps.ETLProcessletTest;
 
 
 public class ProcessStreamInterfaceTest {
@@ -50,7 +51,6 @@ public class ProcessStreamInterfaceTest {
     @Test
     @Category(UnitTest.class)
     public void testcreateCmd() throws Exception {
-        java.util.UUID.randomUUID().toString();
         JSONArray args = new JSONArray();
         JSONObject translation = new JSONObject();
         translation.put("translation", "/test/loc/translation.js");
@@ -80,14 +80,12 @@ public class ProcessStreamInterfaceTest {
 
         String expected = "{hoot,--ogr2osm,/test/loc/translation.js,/test/loc/out.osm,/test/loc/out.osm}";
         Assert.assertEquals(expected, commandStr);
-
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     @Category(UnitTest.class)
     public void testcreateScriptCmd() throws Exception {
-        hoot.services.controllers.wps.ETLProcessletTest etlTest = new hoot.services.controllers.wps.ETLProcessletTest();
+        ETLProcessletTest etlTest = new ETLProcessletTest();
         String sParam = etlTest.generateJobParam();
         JSONParser parser = new JSONParser();
         JSONObject command = (JSONObject) parser.parse(sParam);
@@ -102,20 +100,18 @@ public class ProcessStreamInterfaceTest {
         String[] ret = (String[]) method.invoke(ps, command);
         String commandStr = ArrayUtils.toString(ret);
 
-        String expected = "";
-
         String coreScriptPath = HootProperties.getProperty("coreScriptPath");
 
         HootProperties.getProperty("coreScriptOutputPath");
 
-        String ETLMakefile = HootProperties.getInstance().getProperty("ETLMakefile",
-                HootProperties.getDefault("ETLMakefile"));
+        String ETLMakefile = HootProperties.getPropertyOrDefault("ETLMakefile");
         String makePath = coreScriptPath + "/" + ETLMakefile;
 
         // [make, -f, /project/hoot/scripts/makeetl,
         // translation=/test/file/test.js, INPUT_TYPE=OSM,
         // INPUT=/test/file/INPUT.osm, jobid=123-456-789]
-        expected = "{make,-f," + makePath + ",translation=/test/file/test.js,INPUT_TYPE=OSM,INPUT=/test/file/INPUT.osm";
+        String expected = "{make,-f," + makePath
+                + ",translation=/test/file/test.js,INPUT_TYPE=OSM,INPUT=/test/file/INPUT.osm";
         expected += ",jobid=123-456-789";
 
         String dbname = HootProperties.getProperty("dbName");

@@ -43,16 +43,15 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author Jong Choi
- * 
+ *         <p>
  *         WPS processlet for osm2ogr operation.
- * 
  */
 public class OSM2OgrProcesslet extends BaseProcesslet {
 
     private static final Logger log = LoggerFactory.getLogger(OSM2OgrProcesslet.class);
 
     /**
-     * 
+     *
      */
     public OSM2OgrProcesslet() throws Exception {
 
@@ -60,7 +59,7 @@ public class OSM2OgrProcesslet extends BaseProcesslet {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see hoot.services.wps.WPSProcesslet#destroy()
      */
     @Override
@@ -70,7 +69,7 @@ public class OSM2OgrProcesslet extends BaseProcesslet {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see hoot.services.wps.WPSProcesslet#init()
      */
     @Override
@@ -80,11 +79,11 @@ public class OSM2OgrProcesslet extends BaseProcesslet {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see hoot.services.wps.WPSProcesslet#process(org.deegree.services.wps.
      * ProcessletInputs, org.deegree.services.wps.ProcessletOutputs,
      * org.deegree.services.wps.ProcessletExecutionInfo)
-     * 
+     *
      * Process osm2ogr operation. For param filter see OSM2OgrProcesslet.xml
      */
     @Override
@@ -104,7 +103,8 @@ public class OSM2OgrProcesslet extends BaseProcesslet {
             CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
             httpclient.start();
             // Execute request
-            final HttpPost request1 = new HttpPost(coreJobServerUrl + "/hoot-services/job/" + jobIdStr);
+
+            HttpPost request1 = new HttpPost(coreJobServerUrl + "/hoot-services/job/" + jobIdStr);
             StringEntity se = new StringEntity(commandStr);
             request1.setEntity(se);
             httpclient.execute(request1, null);
@@ -115,5 +115,4 @@ public class OSM2OgrProcesslet extends BaseProcesslet {
             log.error(e.getMessage());
         }
     }
-
 }

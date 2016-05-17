@@ -56,27 +56,22 @@ import hoot.services.utils.ResourceErrorHandler;
 @Path("/review/custom/HGIS")
 public class HGISReviewResource extends HGISResource {
 
-    private static final Logger log = LoggerFactory.getLogger(HGISReviewResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(HGISReviewResource.class);
 
-    public HGISReviewResource() throws Exception {
-        try {
-            processScriptName = HootProperties.getProperty("hgisPrepareForValidationScript");
-        }
-        catch (Exception e) {
-            log.error("failed to retrieve parameter:" + e.getMessage());
-        }
+    public HGISReviewResource() {
+        processScriptName = HootProperties.getProperty("hgisPrepareForValidationScript");
     }
 
     /**
      * This resource prepares existing map for 30% of random HGIS specific
      * validation.
-     * 
+     * <p>
      * POST hoot-services/job/review/custom/HGIS/preparevalidation
-     * 
+     * <p>
      * { "sourceMap":"AllDataTypesA", //Name of source layer
      * "outputMap":"AllDataTypesAtest1" //Name of new output layer with
      * reviewables }
-     * 
+     *
      * @param request
      * @return Job ID
      * @throws Exception
@@ -89,8 +84,8 @@ public class HGISReviewResource extends HGISResource {
             throws Exception {
         PrepareForValidationResponse res = new PrepareForValidationResponse();
         try {
-            final String src = request.getSourceMap();
-            final String output = request.getOutputMap();
+            String src = request.getSourceMap();
+            String output = request.getOutputMap();
             if (src == null) {
                 throw new InvalidResourceParamException("Invalid or empty sourceMap.");
             }
@@ -99,15 +94,15 @@ public class HGISReviewResource extends HGISResource {
                 throw new InvalidResourceParamException("Invalid or empty outputMap.");
             }
 
-            if (!_mapExists(src)) {
+            if (!mapExists(src)) {
                 throw new InvalidResourceParamException("sourceMap does not exist.");
             }
 
             String jobId = UUID.randomUUID().toString();
-            JSONObject validationCommand = _createBashPostBody(_createParamObj(src, output));
+            JSONObject validationCommand = _createBashPostBody(createParamObj(src, output));
             // postJobRquest( jobId, argStr);
 
-            JSONObject updateMapTagCommand = _createUpdateMapTagCommand(output);
+            JSONObject updateMapTagCommand = createUpdateMapTagCommand(output);
 
             // with new relation based review process
             // we will no longer need to run prepare review
@@ -120,18 +115,17 @@ public class HGISReviewResource extends HGISResource {
             postChainJobRquest(jobId, jobArgs.toJSONString());
 
             res.setJobId(jobId);
-
         }
         catch (InvalidResourceParamException rpex) {
-            ResourceErrorHandler.handleError(rpex.getMessage(), Status.BAD_REQUEST, log);
+            ResourceErrorHandler.handleError(rpex.getMessage(), Status.BAD_REQUEST, logger);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError(ex.getMessage(), Status.INTERNAL_SERVER_ERROR, log);
+            ResourceErrorHandler.handleError(ex.getMessage(), Status.INTERNAL_SERVER_ERROR, logger);
         }
         return res;
     }
 
-    private JSONObject _createUpdateMapTagCommand(final String mapName) throws Exception {
+    private JSONObject createUpdateMapTagCommand(final String mapName) throws Exception {
         JSONArray reviewArgs = new JSONArray();
         JSONObject param = new JSONObject();
         param.put("value", mapName);
@@ -158,18 +152,16 @@ public class HGISReviewResource extends HGISResource {
         catch (SQLException | ReviewMapTagUpdateException se) {
             assert (jobStatusManager != null);
             jobStatusManager.setFailed(jobId);
-            log.error(se.getMessage());
+            logger.error(se.getMessage());
             throw se;
         }
         catch (Exception e) {
             assert (jobStatusManager != null);
             jobStatusManager.setFailed(jobId);
-            log.error(e.getMessage());
+            logger.error(e.getMessage());
             throw e;
         }
 
         return jobId;
-
     }
-
 }

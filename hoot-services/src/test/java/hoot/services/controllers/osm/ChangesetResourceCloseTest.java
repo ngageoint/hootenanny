@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.osm;
 
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.LinkedHashSet;
@@ -59,6 +58,7 @@ import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
 import hoot.services.db.postgres.PostgresUtils;
+import hoot.services.db2.Changesets;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelationMembers;
 import hoot.services.db2.CurrentRelations;
@@ -72,20 +72,23 @@ import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.QuadTileCalculator;
+import hoot.services.models.osm.Changeset;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.XmlUtils;
 
 
 public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
     private static final Logger log = LoggerFactory.getLogger(ChangesetResourceCloseTest.class);
-    private QCurrentNodes currentNodesTbl = QCurrentNodes.currentNodes;
-    private QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
-    private QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
-    private QCurrentRelations currentRelationsTbl = QCurrentRelations.currentRelations;
-    private QCurrentRelationMembers currentRelationMembersTbl = QCurrentRelationMembers.currentRelationMembers;
 
-    public ChangesetResourceCloseTest() throws NumberFormatException, IOException {
+    private final QCurrentNodes currentNodesTbl = QCurrentNodes.currentNodes;
+    private final QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
+    private final QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
+    private final QCurrentRelations currentRelationsTbl = QCurrentRelations.currentRelations;
+    private final QCurrentRelationMembers currentRelationMembersTbl = QCurrentRelationMembers.currentRelationMembers;
+
+    public ChangesetResourceCloseTest() {
         super("hoot.services.controllers.osm");
     }
 
@@ -93,13 +96,15 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
     @Category(UnitTest.class)
     public void testClose() throws Exception {
         try {
-            final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            final long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
+            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
+            long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
 
             // close the changeset via the service
             try {
-                ClientResponse response = resource().path("api/0.6/changeset/" + changesetId + "/close")
-                        .queryParam("mapId", String.valueOf(mapId)).put(ClientResponse.class, "");
+                ClientResponse response = resource()
+                        .path("api/0.6/changeset/" + changesetId + "/close")
+                        .queryParam("mapId", String.valueOf(mapId))
+                        .put(ClientResponse.class, "");
                 Assert.assertEquals(200, response.getStatus());
             }
             catch (UniformInterfaceException e) {
@@ -115,12 +120,11 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         }
     }
 
-    @SuppressWarnings("null")
     @Test(expected = Exception.class)
     @Category(UnitTest.class)
     public void testCloseClosedChangeset() throws Exception {
-        final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        final long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
+        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
+        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
 
         // close the changeset
         OsmTestUtils.closeChangeset(mapId, changesetId);
@@ -142,7 +146,9 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             // and no
             // data in the
             // system should be modified.
-            response = resource().path("api/0.6/changeset/" + changesetId + "/close").put(ClientResponse.class, "");
+            response = resource()
+                    .path("api/0.6/changeset/" + changesetId + "/close")
+                    .put(ClientResponse.class, "");
         }
         catch (Exception e) {
             Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(response.getStatus()));
@@ -156,18 +162,17 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         }
     }
 
-    @SuppressWarnings("null")
     @Test(expected = Exception.class)
     @Category(UnitTest.class)
     public void testCloseNonExistingChangeset() throws Exception {
         // Try to close a changeset that doesn't exist. A failure should occur
-        // and
-        // no data in
-        // system should be modified.
+        // and no data in system should be modified.
         ClientResponse response = null;
         try {
             // close a changeset that doesn't exist
-            response = resource().path("api/0.6/changeset/1/close").put(ClientResponse.class, "");
+            response = resource()
+                    .path("api/0.6/changeset/1/close")
+                    .put(ClientResponse.class, "");
         }
         catch (Exception e) {
             Assert.assertEquals(404, response.getStatus());
@@ -180,35 +185,44 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testChangesetMaxElementsExceededUploadedToEmptyChangeset() throws Exception {
-        Properties hootProps = HootProperties.getInstance();
-        // lower the max allowed elements per changeset from the default
-        final int maximumChangesetElements = 2;
-        hootProps.setProperty("maximumChangesetElements", String.valueOf(maximumChangesetElements));
-        HootProperties.setProperties(hootProps);
-        Assert.assertEquals(maximumChangesetElements,
-                Integer.parseInt(HootProperties.getInstance().getProperty("maximumChangesetElements")));
+        Map<String, String> originalHootProperties = HootProperties.getProperties();
 
         try {
-            final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            final long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 0);
+            Properties hootProps = new Properties();
+            // lower the max allowed elements per changeset from the default
+            int maximumChangesetElements = 2;
+            hootProps.setProperty("maximumChangesetElements", String.valueOf(maximumChangesetElements));
+            HootCustomPropertiesSetter.setProperties(hootProps);
+
+            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
+            long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 0);
 
             // Now create a new changeset with a number of elements larger than
-            // the
-            // max allowed. A failure
-            // should occur and no data in the system should be modified.
+            // the max allowed. A failure should occur and no data in the system should be modified.
             try {
-                resource().path("api/0.6/changeset/" + changesetId + "/upload").queryParam("mapId", "" + mapId)
-                        .type(MediaType.TEXT_XML).accept(MediaType.TEXT_XML).post(Document.class,
-                                "<osmChange version=\"0.3\" generator=\"iD\">" + "<create>" + "<node id=\"-1\" lon=\""
-                                        + originalBounds.getMinLon() + "\" lat=\"" + originalBounds.getMinLat()
-                                        + "\" version=\"0\" changeset=\"" + changesetId + "\">"
-                                        + "<tag k=\"key 1\" v=\"val 1\"/>" + "<tag k=\"key 2\" v=\"val 2\"/>"
-                                        + "</node>" + "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon()
-                                        + "\" lat=\"" + originalBounds.getMaxLat() + "\" version=\"0\" changeset=\""
-                                        + changesetId + "\">" + "</node>" + "<node id=\"-3\" lon=\""
-                                        + originalBounds.getMinLon() + "\" lat=\"" + originalBounds.getMinLat()
-                                        + "\" version=\"0\" changeset=\"" + changesetId + "\">" + "</node>"
-                                        + "</create>" + "<modify/>" + "<delete if-unused=\"true\"/>" + "</osmChange>");
+                resource()
+                        .path("api/0.6/changeset/" + changesetId + "/upload")
+                        .queryParam("mapId", String.valueOf(mapId))
+                        .type(MediaType.TEXT_XML)
+                        .accept(MediaType.TEXT_XML)
+                        .post(Document.class,
+                            "<osmChange version=\"0.3\" generator=\"iD\">" +
+                                "<create>" +
+                                    "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() +
+                                          "\" lat=\"" + originalBounds.getMinLat() +
+                                          "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                        "<tag k=\"key 1\" v=\"val 1\"/>" + "<tag k=\"key 2\" v=\"val 2\"/>" +
+                                    "</node>" +
+                                    "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon() +
+                                          "\" lat=\"" + originalBounds.getMaxLat() + "\" version=\"0\" changeset=\"" +
+                                          changesetId + "\">" + "</node>" + "<node id=\"-3\" lon=\"" +
+                                          originalBounds.getMinLon() + "\" lat=\"" + originalBounds.getMinLat() +
+                                          "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                    "</node>" +
+                                "</create>" +
+                                "<modify/>" +
+                                "<delete if-unused=\"true\"/>" +
+                            "</osmChange>");
             }
             catch (UniformInterfaceException e) {
                 ClientResponse r = e.getResponse();
@@ -217,11 +231,13 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
                 try {
                     QChangesets changesets = QChangesets.changesets;
-                    hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                            .from(changesets).where(changesets.id.eq(changesetId)).singleResult(changesets);
+                    Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                            .from(changesets)
+                            .where(changesets.id.eq(changesetId))
+                            .singleResult(changesets);
 
                     Assert.assertNotNull(changeset);
-                    final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+                    Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
                     Thread.sleep(1000);
                     Assert.assertTrue(changeset.getCreatedAt().before(now));
                     Assert.assertTrue(changeset.getClosedAt().after(changeset.getCreatedAt()));
@@ -229,17 +245,14 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                     Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                     // make sure the changeset bounds wasn't updated
-                    hoot.services.models.osm.Changeset hootChangeset = new hoot.services.models.osm.Changeset(mapId,
-                            changesetId, conn);
+                    Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                     BoundingBox changesetBounds = hootChangeset.getBounds();
                     BoundingBox defaultBounds = new BoundingBox();
                     // a change the size of the expansion factor is made
-                    // automatically, so
-                    // the changeset's
-                    // bounds should be no larger than that
+                    // automatically, so the changeset's bounds should be no larger than that
                     defaultBounds.expand(originalBounds,
                             Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
-                    Assert.assertTrue(changesetBounds.equals(defaultBounds));
+                    Assert.assertEquals(defaultBounds, changesetBounds);
                 }
                 catch (Exception e2) {
                     Assert.fail("Error checking changeset: " + e2.getMessage());
@@ -253,75 +266,94 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             throw e;
         }
         finally {
-            // set this back to default now that this test is over
-            HootProperties.getInstance().setProperty("maximumChangesetElements",
-                    HootProperties.getDefault("maximumChangesetElements"));
-            Assert.assertEquals(Integer.parseInt(HootProperties.getDefault("maximumChangesetElements")),
-                    Integer.parseInt(HootProperties.getInstance().getProperty("maximumChangesetElements")));
+            // restore original properties since they are at defined at the class level
+            Properties hootProps = new Properties();
+            hootProps.putAll(originalHootProperties);
+            HootCustomPropertiesSetter.setProperties(hootProps);
         }
     }
 
     @Test
     @Category(UnitTest.class)
     public void testChangesetAutoCloseWhenMaxElementsUploadedToEmptyChangeset() throws Exception {
-        Properties hootProps = HootProperties.getInstance();
-        // lower the max allowed elements per changeset from the default to the
-        // number of elements
-        // we're uploading
-        final int maximumChangesetElements = 12;
-        hootProps.setProperty("maximumChangesetElements", String.valueOf(maximumChangesetElements));
-        HootProperties.setProperties(hootProps);
-        Assert.assertEquals(maximumChangesetElements,
-                Integer.parseInt(HootProperties.getInstance().getProperty("maximumChangesetElements")));
-
+        Map<String, String> originalHootProperties = HootProperties.getProperties();
         try {
-            final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            final long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 0);
+            Properties hootProps = new Properties();
+
+            // lower the max allowed elements per changeset from the default to the
+            // number of elements we're uploading
+            int maximumChangesetElements = 12;
+            hootProps.setProperty("maximumChangesetElements", String.valueOf(maximumChangesetElements));
+            HootCustomPropertiesSetter.setProperties(hootProps);
+
+            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
+            long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 0);
 
             // Now create a new changeset with a number of elements equal to the
-            // max
-            // allowed. The elements
-            // should be written and the changeset closed.
+            // max allowed. The elements should be written and the changeset closed.
             Document responseData = null;
             try {
                 responseData = resource().path("api/0.6/changeset/" + changesetId + "/upload")
-                        .queryParam("mapId", "" + mapId).type(MediaType.TEXT_XML).accept(MediaType.TEXT_XML)
-                        .post(Document.class, "<osmChange version=\"0.3\" generator=\"iD\">" + "<create>"
-                                + "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() + "\" lat=\""
-                                + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">"
-                                + "<tag k=\"key 1\" v=\"val 1\"/>" + "<tag k=\"key 2\" v=\"val 2\"/>" + "</node>"
-                                + "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon() + "\" lat=\""
-                                + originalBounds.getMaxLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">"
-                                + "</node>" + "<node id=\"-3\" lon=\"" + originalBounds.getMinLon() + "\" lat=\""
-                                + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">"
-                                + "</node>" + "<node id=\"-4\" lon=\"" + originalBounds.getMinLon() + "\" lat=\""
-                                + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">"
-                                + "<tag k=\"key 3\" v=\"val 3\"/>" + "</node>" + "<node id=\"-5\" lon=\""
-                                + originalBounds.getMinLon() + "\" lat=\"" + originalBounds.getMinLat()
-                                + "\" version=\"0\" changeset=\"" + changesetId + "\">"
-                                + "<tag k=\"key 4\" v=\"val 4\"/>" + "</node>"
-                                + "<way id=\"-6\" version=\"0\" changeset=\"" + changesetId + "\" >"
-                                + "<nd ref=\"-1\"></nd>" + "<nd ref=\"-2\"></nd>" + "<nd ref=\"-5\"></nd>"
-                                + "<tag k=\"key 1\" v=\"val 1\"/>" + "<tag k=\"key 2\" v=\"val 2\"/>" + "</way>"
-                                + "<way id=\"-7\" version=\"0\" changeset=\"" + changesetId + "\" >"
-                                + "<nd ref=\"-3\"></nd>" + "<nd ref=\"-2\"></nd>" + "</way>"
-                                + "<way id=\"-8\" version=\"0\" changeset=\"" + changesetId + "\" >"
-                                + "<nd ref=\"-1\"></nd>" + "<nd ref=\"-2\"></nd>" + "<tag k=\"key 3\" v=\"val 3\"/>"
-                                + "</way>" + "<relation id=\"-9\" version=\"0\" changeset=\"" + changesetId + "\" >"
-                                + "<member type=\"node\" role=\"role1\" ref=\"-1\"></member>"
-                                + "<member type=\"way\" role=\"role3\" ref=\"-7\"></member>"
-                                + "<member type=\"way\" role=\"role2\" ref=\"-6\"></member>"
-                                + "<member type=\"node\" ref=\"-3\"></member>" + "<tag k=\"key 1\" v=\"val 1\"/>"
-                                + "</relation>" + "<relation id=\"-10\" version=\"0\" changeset=\"" + changesetId
-                                + "\" >" + "<member type=\"node\" role=\"role1\" ref=\"-5\"></member>"
-                                + "<member type=\"relation\" role=\"role1\" ref=\"-9\"></member>"
-                                + "<tag k=\"key 2\" v=\"val 2\"/>" + "<tag k=\"key 3\" v=\"val 3\"/>" + "</relation>"
-                                + "<relation id=\"-11\" version=\"0\" changeset=\"" + changesetId + "\" >"
-                                + "<member type=\"way\" role=\"\" ref=\"-7\"></member>"
-                                + "<tag k=\"key 4\" v=\"val 4\"/>" + "</relation>"
-                                + "<relation id=\"-12\" version=\"0\" changeset=\"" + changesetId + "\" >"
-                                + "<member type=\"node\" role=\"role1\" ref=\"-3\"></member>" + "</relation>"
-                                + "</create>" + "<modify/>" + "<delete if-unused=\"true\"/>" + "</osmChange>");
+                        .queryParam("mapId", String.valueOf(mapId))
+                        .type(MediaType.TEXT_XML)
+                        .accept(MediaType.TEXT_XML)
+                        .post(Document.class,
+                            "<osmChange version=\"0.3\" generator=\"iD\">" +
+                                "<create>" +
+                                    "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
+                                           originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                        "<tag k=\"key 1\" v=\"val 1\"/>" + "<tag k=\"key 2\" v=\"val 2\"/>" +
+                                    "</node>" +
+                                    "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon() + "\" lat=\"" +
+                                           originalBounds.getMaxLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                    "</node>" +
+                                    "<node id=\"-3\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
+                                           originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                    "</node>" +
+                                    "<node id=\"-4\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
+                                           originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                        "<tag k=\"key 3\" v=\"val 3\"/>" + "</node>" + "<node id=\"-5\" lon=\""
+                                               + originalBounds.getMinLon() + "\" lat=\"" + originalBounds.getMinLat() +
+                                            "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                        "<tag k=\"key 4\" v=\"val 4\"/>" +
+                                    "</node>" +
+                                    "<way id=\"-6\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                        "<nd ref=\"-1\"></nd>" +
+                                        "<nd ref=\"-2\"></nd>" +
+                                        "<nd ref=\"-5\"></nd>" +
+                                        "<tag k=\"key 1\" v=\"val 1\"/>" +
+                                        "<tag k=\"key 2\" v=\"val 2\"/>" +
+                                    "</way>" +
+                                    "<way id=\"-7\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                        "<nd ref=\"-3\"></nd>" + "<nd ref=\"-2\"></nd>" +
+                                    "</way>" +
+                                    "<way id=\"-8\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                        "<nd ref=\"-1\"></nd>" +
+                                        "<nd ref=\"-2\"></nd>" +
+                                        "<tag k=\"key 3\" v=\"val 3\"/>" +
+                                    "</way>" +
+                                    "<relation id=\"-9\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                        "<member type=\"node\" role=\"role1\" ref=\"-1\"></member>" +
+                                        "<member type=\"way\" role=\"role3\" ref=\"-7\"></member>" +
+                                        "<member type=\"way\" role=\"role2\" ref=\"-6\"></member>" +
+                                        "<member type=\"node\" ref=\"-3\"></member>" + "<tag k=\"key 1\" v=\"val 1\"/>" +
+                                    "</relation>" +
+                                    "<relation id=\"-10\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                        "<member type=\"node\" role=\"role1\" ref=\"-5\"></member>" +
+                                        "<member type=\"relation\" role=\"role1\" ref=\"-9\"></member>" +
+                                        "<tag k=\"key 2\" v=\"val 2\"/>" + "<tag k=\"key 3\" v=\"val 3\"/>" +
+                                    "</relation>" +
+                                    "<relation id=\"-11\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                        "<member type=\"way\" role=\"\" ref=\"-7\"></member>" +
+                                        "<tag k=\"key 4\" v=\"val 4\"/>" +
+                                    "</relation>" +
+                                    "<relation id=\"-12\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                        "<member type=\"node\" role=\"role1\" ref=\"-3\"></member>" +
+                                    "</relation>" +
+                                "</create>" +
+                                "<modify/>" +
+                                "<delete if-unused=\"true\"/>" +
+                            "</osmChange>");
             }
             catch (UniformInterfaceException e) {
                 ClientResponse r = e.getResponse();
@@ -330,9 +362,9 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             Assert.assertNotNull(responseData);
 
             XPath xpath = XmlUtils.createXPath();
-            Set<Long> nodeIds = new LinkedHashSet<Long>();
-            Set<Long> wayIds = new LinkedHashSet<Long>();
-            Set<Long> relationIds = new LinkedHashSet<Long>();
+            Set<Long> nodeIds = new LinkedHashSet<>();
+            Set<Long> wayIds = new LinkedHashSet<>();
+            Set<Long> relationIds = new LinkedHashSet<>();
             try {
                 NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
                 Assert.assertEquals(5, returnedNodes.getLength());
@@ -456,11 +488,8 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             }
 
             // changes have actually occurred with the upload of the
-            // changeset...what's actually being
-            // done here is to compare the state of the default test data set
-            // with the
-            // dataset we uploaded
-            // here, and they should match each other
+            // changeset...what's actually being done here is to compare the state of the
+            // default test data set with the dataset we uploaded here, and they should match each other
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             OsmTestUtils.verifyTestChangesetClosed(changesetId);
         }
@@ -469,62 +498,74 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             throw e;
         }
         finally {
-            // set this back to default now that this test is over
-            HootProperties.getInstance().setProperty("maximumChangesetElements",
-                    HootProperties.getDefault("maximumChangesetElements"));
-            Assert.assertEquals(Integer.parseInt(HootProperties.getDefault("maximumChangesetElements")),
-                    Integer.parseInt(HootProperties.getInstance().getProperty("maximumChangesetElements")));
+            // restore original properties since they are at defined at the class level
+            Properties hootProps = new Properties();
+            hootProps.putAll(originalHootProperties);
+            HootCustomPropertiesSetter.setProperties(hootProps);
         }
     }
 
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testChangesetMaxElementsExceededUploadedToExistingChangeset() throws Exception {
-        Properties hootProps = HootProperties.getInstance();
-        // lower the max allowed elements per changeset from the default
-        final int maximumChangesetElements = 16;
-        hootProps.setProperty("maximumChangesetElements", String.valueOf(maximumChangesetElements));
-        HootProperties.setProperties(hootProps);
-        Assert.assertEquals(maximumChangesetElements,
-                Integer.parseInt(HootProperties.getInstance().getProperty("maximumChangesetElements")));
+        Map<String, String> originalHootProperties = HootProperties.getProperties();
 
         try {
-            final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            final long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-            final Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
-            final Long[] nodeIdsArr = nodeIds.toArray(new Long[] {});
-            final Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-            final Long[] wayIdsArr = wayIds.toArray(new Long[] {});
-            final Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-            final Long[] relationIdsArr = relationIds.toArray(new Long[] {});
+            Properties hootProps = new Properties();
+            // lower the max allowed elements per changeset from the default
+            int maximumChangesetElements = 16;
+            hootProps.setProperty("maximumChangesetElements", String.valueOf(maximumChangesetElements));
+            HootCustomPropertiesSetter.setProperties(hootProps);
 
-            final BoundingBox updatedBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
-            // Now update an existing changeset with a number of elements larger
-            // than
-            // the max allowed. A
-            // failure should occur and no data in the system should be
-            // modified.
+            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
+            long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
+            Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+            Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
+            Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+            Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
+            Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+            Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
+
+            BoundingBox updatedBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+            // Now update an existing changeset with a number of elements larger than
+            // the max allowed. A failure should occur and no data in the system should be modified.
             try {
-                resource().path("api/0.6/changeset/" + changesetId + "/upload").queryParam("mapId", "" + mapId)
-                        .type(MediaType.TEXT_XML).accept(MediaType.TEXT_XML)
-                        .post(Document.class, "<osmChange version=\"0.3\" generator=\"iD\">" + "<create/>" + "<modify>"
-                                + "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" lat=\""
-                                + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">"
-                                + "</node>" + "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + originalBounds.getMaxLon()
-                                + "\" lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\""
-                                + changesetId + "\">" + "</node>" + "<way id=\"" + wayIdsArr[0]
-                                + "\" version=\"1\" changeset=\"" + changesetId + "\" >" + "<nd ref=\"" + nodeIdsArr[0]
-                                + "\"></nd>" + "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" + "</way>" + "<way id=\""
-                                + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" + "<nd ref=\""
-                                + nodeIdsArr[0] + "\"></nd>" + "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" + "</way>"
-                                + "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId
-                                + "\" >" + "<member type=\"way\" role=\"role4\" ref=\"" + wayIdsArr[1] + "\"></member>"
-                                + "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[0] + "\"></member>"
-                                + "<member type=\"node\" ref=\"" + nodeIdsArr[2] + "\"></member>" + "</relation>"
-                                + "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId
-                                + "\" >" + "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0]
-                                + "\"></member>" + "<member type=\"node\" ref=\"" + nodeIdsArr[4] + "\"></member>"
-                                + "</relation>" + "</modify>" + "<delete if-unused=\"true\"/>" + "</osmChange>");
+                resource()
+                        .path("api/0.6/changeset/" + changesetId + "/upload")
+                        .queryParam("mapId", String.valueOf(mapId))
+                        .type(MediaType.TEXT_XML)
+                        .accept(MediaType.TEXT_XML)
+                        .post(Document.class,
+                            "<osmChange version=\"0.3\" generator=\"iD\">" +
+                                "<create/>" +
+                                "<modify>" +
+                                    "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" lat=\"" +
+                                            updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                    "</node>" +
+                                    "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + originalBounds.getMaxLon() +
+                                            "\" lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" +
+                                            changesetId + "\">" +
+                                    "</node>" +
+                                    "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                        "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                                    "</way>" +
+                                    "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                        "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                                    "</way>" +
+                                    "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                        "<member type=\"way\" role=\"role4\" ref=\"" + wayIdsArr[1] + "\"></member>" +
+                                        "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[0] + "\"></member>" +
+                                        "<member type=\"node\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
+                                    "</relation>" +
+                                    "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                        "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0] + "\"></member>" +
+                                        "<member type=\"node\" ref=\"" + nodeIdsArr[4] + "\"></member>" +
+                                    "</relation>" +
+                                "</modify>" +
+                                "<delete if-unused=\"true\"/>" +
+                            "</osmChange>");
             }
             catch (UniformInterfaceException e) {
                 ClientResponse r = e.getResponse();
@@ -541,72 +582,86 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             throw e;
         }
         finally {
-            // set this back to default now that this test is over
-            HootProperties.getInstance().setProperty("maximumChangesetElements",
-                    HootProperties.getDefault("maximumChangesetElements"));
-            Assert.assertEquals(Integer.parseInt(HootProperties.getDefault("maximumChangesetElements")),
-                    Integer.parseInt(HootProperties.getInstance().getProperty("maximumChangesetElements")));
+            // restore original properties since they are at defined at the class level
+            Properties hootProps = new Properties();
+            hootProps.putAll(originalHootProperties);
+            HootCustomPropertiesSetter.setProperties(hootProps);
         }
     }
 
     @Test
     @Category(UnitTest.class)
     public void testChangesetAutoCloseWhenMaxElementsUploadedToExistingChangeset() throws Exception {
-        Properties hootProps = HootProperties.getInstance();
-        // lower the max allowed elements per changeset from the default to the
-        // sum
-        // of number of
-        // elements existing currently in changeset + what we're adding
-        final int maximumChangesetElements = 18;
-        hootProps.setProperty("maximumChangesetElements", String.valueOf(maximumChangesetElements));
-        HootProperties.setProperties(hootProps);
-        Assert.assertEquals(maximumChangesetElements,
-                Integer.parseInt(HootProperties.getInstance().getProperty("maximumChangesetElements")));
-
+        Map<String, String> originalHootProperties = HootProperties.getProperties();
         try {
-            final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            final long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-            final Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
-            final Long[] nodeIdsArr = nodeIds.toArray(new Long[] {});
-            final Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-            final Long[] wayIdsArr = wayIds.toArray(new Long[] {});
-            final Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-            final Long[] relationIdsArr = relationIds.toArray(new Long[] {});
+            Properties hootProps = new Properties();
 
-            final BoundingBox updatedBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+            // lower the max allowed elements per changeset from the default to the
+            // sum of number of elements existing currently in changeset + what we're adding
+            int maximumChangesetElements = 18;
+            hootProps.setProperty("maximumChangesetElements", String.valueOf(maximumChangesetElements));
+            HootCustomPropertiesSetter.setProperties(hootProps);
+
+            Assert.assertEquals(maximumChangesetElements,
+                    Integer.parseInt(HootProperties.getProperty("maximumChangesetElements")));
+
+            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
+            long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
+            Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+            Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
+            Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+            Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
+            Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+            Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
+
+            BoundingBox updatedBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+
             // Now update an existing changeset with a number of elements that,
-            // when
-            // combined with the
-            // existing elements, are equal to the max allowed. The elements
-            // should be
-            // written and the
-            // changeset closed.
+            // when combined with the existing elements, are equal to the max allowed. The elements
+            // should be written and the changeset closed.
             Document responseData = null;
             try {
-                responseData = resource().path("api/0.6/changeset/" + changesetId + "/upload")
-                        .queryParam("mapId", "" + mapId).type(MediaType.TEXT_XML).accept(MediaType.TEXT_XML)
-                        .post(Document.class, "<osmChange version=\"0.3\" generator=\"iD\">" + "<create/>" + "<modify>"
-                                + "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" "
-                                + "lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId
-                                + "\">" + "<tag k=\"key 1b\" v=\"val 1b\"></tag>"
-                                + "<tag k=\"key 2b\" v=\"val 2b\"></tag>" + "</node>" + "<node id=\"" + nodeIdsArr[1]
-                                + "\" lon=\"" + originalBounds.getMaxLon() + "\" " + "lat=\""
-                                + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">"
-                                + "<tag k=\"key 3b\" v=\"val 3b\"></tag>" + "</node>" + "<way id=\"" + wayIdsArr[0]
-                                + "\" version=\"1\" changeset=\"" + changesetId + "\" >" + "<nd ref=\"" + nodeIdsArr[0]
-                                + "\"></nd>" + "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>"
-                                + "<tag k=\"key 2\" v=\"val 2\"></tag>" + "</way>" + "<way id=\"" + wayIdsArr[1]
-                                + "\" version=\"1\" changeset=\"" + changesetId + "\" >" + "<nd ref=\"" + nodeIdsArr[4]
-                                + "\"></nd>" + "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" + "</way>" + "<relation id=\""
-                                + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >"
-                                + "<member type=\"way\" role=\"role4\" ref=\"" + wayIdsArr[1] + "\"></member>"
-                                + "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[0] + "\"></member>"
-                                + "<member type=\"node\" ref=\"" + nodeIdsArr[2] + "\"></member>" + "</relation>"
-                                + "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId
-                                + "\" >" + "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0]
-                                + "\"></member>" + "<member type=\"node\" ref=\"" + nodeIdsArr[4] + "\"></member>"
-                                + "<tag k=\"key 2\" v=\"val 2\"></tag>" + "<tag k=\"key 3\" v=\"val 3\"></tag>"
-                                + "</relation>" + "</modify>" + "<delete if-unused=\"true\"/>" + "</osmChange>");
+                responseData = resource()
+                        .path("api/0.6/changeset/" + changesetId + "/upload")
+                        .queryParam("mapId", String.valueOf(mapId))
+                        .type(MediaType.TEXT_XML)
+                        .accept(MediaType.TEXT_XML)
+                        .post(Document.class,
+                            "<osmChange version=\"0.3\" generator=\"iD\">" +
+                                "<create/>" +
+                                "<modify>" +
+                                    "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" " +
+                                        "lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                        "<tag k=\"key 1b\" v=\"val 1b\"></tag>" +
+                                        "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
+                                    "</node>" +
+                                    "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + originalBounds.getMaxLon() + "\" " + "lat=\"" +
+                                         updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                         "<tag k=\"key 3b\" v=\"val 3b\"></tag>" + "" +
+                                    "</node>" +
+                                    "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                        "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
+                                        "<tag k=\"key 2\" v=\"val 2\"></tag>" +
+                                    "</way>" +
+                                    "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                        "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
+                                        "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
+                                    "</way>" +
+                                    "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                        "<member type=\"way\" role=\"role4\" ref=\"" + wayIdsArr[1] + "\"></member>" +
+                                        "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[0] + "\"></member>" +
+                                        "<member type=\"node\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
+                                    "</relation>" +
+                                    "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                        "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0] + "\"></member>" +
+                                        "<member type=\"node\" ref=\"" + nodeIdsArr[4] + "\"></member>" +
+                                        "<tag k=\"key 2\" v=\"val 2\"></tag>" +
+                                        "<tag k=\"key 3\" v=\"val 3\"></tag>" +
+                                    "</relation>" +
+                                "</modify>" +
+                                "<delete if-unused=\"true\"/>" +
+                            "</osmChange>");
             }
             catch (UniformInterfaceException e) {
                 ClientResponse r = e.getResponse();
@@ -674,17 +729,18 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.fail("Error parsing response document: " + e.getMessage());
             }
 
-            final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+            Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
             QChangesets changesets = QChangesets.changesets;
-            hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                    .from(changesets).where(changesets.id.eq(changesetId)).singleResult(changesets);
+            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                    .from(changesets)
+                    .where(changesets.id.eq(changesetId))
+                    .singleResult(changesets);
 
             try {
-                final Map<Long, CurrentNodes> nodes =
-
-                        new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentNodesTbl)
-                                .map(currentNodesTbl.id, currentNodesTbl);
+                Map<Long, CurrentNodes> nodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                        .from(currentNodesTbl)
+                        .map(currentNodesTbl.id, currentNodesTbl);
                 Assert.assertEquals(5, nodes.size());
 
                 CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
@@ -698,7 +754,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Thread.sleep(1000);
                 Assert.assertTrue(nodeRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(2), nodeRecord.getVersion());
-                Assert.assertEquals(new Boolean(true), nodeRecord.getVisible());
+                Assert.assertTrue(nodeRecord.getVisible());
                 Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(2, tags.size());
@@ -715,7 +771,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                         nodeRecord.getTile());
                 Assert.assertTrue(nodeRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(2), nodeRecord.getVersion());
-                Assert.assertEquals(new Boolean(true), nodeRecord.getVisible());
+                Assert.assertEquals(true, nodeRecord.getVisible());
                 tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
@@ -738,10 +794,12 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             }
 
             try {
-                final Map<Long, CurrentWays> ways =
-
-                        new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWaysTbl).map(currentWaysTbl.id,
+                Map<Long, CurrentWays> ways =
+                        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                                .from(currentWaysTbl)
+                                .map(currentWaysTbl.id,
                                 currentWaysTbl);
+
                 Assert.assertEquals(3, ways.size());
 
                 CurrentWays wayRecord = ways.get(wayIdsArr[0]);
@@ -749,10 +807,14 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(wayIdsArr[0], wayRecord.getId());
                 Assert.assertTrue(wayRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
-                Assert.assertEquals(new Boolean(true), wayRecord.getVisible());
+                Assert.assertTrue(wayRecord.getVisible());
+
                 List<CurrentWayNodes> wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentWayNodesTbl).where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
-                        .orderBy(currentWayNodesTbl.sequenceId.asc()).list(currentWayNodesTbl);
+                        .from(currentWayNodesTbl)
+                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
+                        .orderBy(currentWayNodesTbl.sequenceId.asc())
+                        .list(currentWayNodesTbl);
+
                 Assert.assertEquals(2, wayNodes.size());
                 CurrentWayNodes wayNode = wayNodes.get(0);
                 Assert.assertEquals(nodeIdsArr[0], wayNode.getNodeId());
@@ -762,6 +824,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(nodeIdsArr[4], wayNode.getNodeId());
                 Assert.assertEquals(new Long(2), wayNode.getSequenceId());
                 Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
+
                 // verify the previously existing tags
                 Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) wayRecord.getTags());
                 Assert.assertNotNull(tags);
@@ -773,10 +836,14 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(wayIdsArr[1], wayRecord.getId());
                 Assert.assertTrue(wayRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
-                Assert.assertEquals(new Boolean(true), wayRecord.getVisible());
-                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWayNodesTbl)
-                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1])).orderBy(currentWayNodesTbl.sequenceId.asc())
+                Assert.assertTrue(wayRecord.getVisible());
+
+                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                        .from(currentWayNodesTbl)
+                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
+                        .orderBy(currentWayNodesTbl.sequenceId.asc())
                         .list(currentWayNodesTbl);
+
                 Assert.assertEquals(2, wayNodes.size());
                 wayNode = wayNodes.get(0);
                 Assert.assertEquals(nodeIdsArr[4], wayNode.getNodeId());
@@ -787,7 +854,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayNode.getSequenceId());
                 Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
                 // verify the way with no tags
-                Assert.assertTrue(wayRecord.getTags() == null
+                Assert.assertTrue((wayRecord.getTags() == null)
                         || StringUtils.isEmpty(((PGobject) wayRecord.getTags()).getValue()));
 
                 // verify the created ways
@@ -796,10 +863,14 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(wayIdsArr[2], wayRecord.getId());
                 Assert.assertTrue(wayRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(1), wayRecord.getVersion());
-                Assert.assertEquals(new Boolean(true), wayRecord.getVisible());
-                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWayNodesTbl)
-                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[2])).orderBy(currentWayNodesTbl.sequenceId.asc())
+                Assert.assertEquals(true, wayRecord.getVisible());
+
+                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                        .from(currentWayNodesTbl)
+                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[2]))
+                        .orderBy(currentWayNodesTbl.sequenceId.asc())
                         .list(currentWayNodesTbl);
+
                 Assert.assertEquals(2, wayNodes.size());
                 wayNode = wayNodes.get(0);
                 Assert.assertEquals(nodeIdsArr[0], wayNode.getNodeId());
@@ -820,10 +891,11 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             }
 
             try {
-                final Map<Long, CurrentRelations> relations =
-
-                        new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationsTbl)
+                Map<Long, CurrentRelations> relations =
+                        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                                .from(currentRelationsTbl)
                                 .map(currentRelationsTbl.id, currentRelationsTbl);
+
                 Assert.assertEquals(4, relations.size());
 
                 CurrentRelations relationRecord = relations.get(relationIdsArr[0]);
@@ -831,11 +903,14 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(relationIdsArr[0], relationRecord.getId());
                 Assert.assertTrue(relationRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
-                Assert.assertEquals(new Boolean(true), relationRecord.getVisible());
+                Assert.assertTrue(relationRecord.getVisible());
+
                 List<CurrentRelationMembers> members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
                         .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                        .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                        .list(currentRelationMembersTbl);
+
                 Assert.assertEquals(3, members.size());
                 CurrentRelationMembers member = members.get(0);
                 Assert.assertEquals(relationRecord.getId(), member.getRelationId());
@@ -859,18 +934,22 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
                 Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
                 Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
-                Assert.assertTrue(relationRecord.getTags() == null
-                        || StringUtils.trimToNull(((PGobject) relationRecord.getTags()).getValue()) == null);
+                Assert.assertTrue((relationRecord.getTags() == null)
+                        || (StringUtils.trimToNull(((PGobject) relationRecord.getTags()).getValue()) == null));
 
                 relationRecord = relations.get(relationIdsArr[1]);
                 Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
                 Assert.assertEquals(relationIdsArr[1], relationRecord.getId());
                 Assert.assertTrue(relationRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
-                Assert.assertEquals(new Boolean(true), relationRecord.getVisible());
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationMembersTbl)
+                Assert.assertTrue(relationRecord.getVisible());
+
+                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                        .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                        .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                        .list(currentRelationMembersTbl);
+
                 Assert.assertEquals(2, members.size());
                 member = members.get(0);
                 Assert.assertEquals(relationRecord.getId(), member.getRelationId());
@@ -897,10 +976,14 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(relationIdsArr[2], relationRecord.getId());
                 Assert.assertTrue(relationRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(1), relationRecord.getVersion());
-                Assert.assertEquals(new Boolean(true), relationRecord.getVisible());
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationMembersTbl)
+                Assert.assertTrue(relationRecord.getVisible());
+
+                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                        .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[2]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                        .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                        .list(currentRelationMembersTbl);
+
                 Assert.assertEquals(1, members.size());
                 member = members.get(0);
                 Assert.assertEquals(relationRecord.getId(), member.getRelationId());
@@ -919,21 +1002,23 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(relationIdsArr[3], relationRecord.getId());
                 Assert.assertTrue(relationRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(1), relationRecord.getVersion());
-                Assert.assertEquals(new Boolean(true), relationRecord.getVisible());
-                members =
+                Assert.assertTrue(relationRecord.getVisible());
 
-                        new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationMembersTbl)
+                members =
+                        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                                .from(currentRelationMembersTbl)
                                 .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[3]))
-                                .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                                .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                                .list(currentRelationMembersTbl);
+
                 Assert.assertEquals(1, members.size());
                 member = members.get(0);
                 Assert.assertEquals(relationRecord.getId(), member.getRelationId());
                 Assert.assertEquals(DbUtils.nwr_enum.node, member.getMemberType());
                 Assert.assertEquals("role1", member.getMemberRole());
                 Assert.assertEquals(new Integer(1), member.getSequenceId());
-
                 Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
-                Assert.assertTrue(relationRecord.getTags() == null
+                Assert.assertTrue((relationRecord.getTags() == null)
                         || StringUtils.isEmpty(((PGobject) relationRecord.getTags()).getValue()));
             }
             catch (Exception e) {
@@ -951,10 +1036,9 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
                 expandedBounds.expand(updatedBounds,
                         Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
-                hoot.services.models.osm.Changeset hootChangeset = new hoot.services.models.osm.Changeset(mapId,
-                        changesetId, conn);
+                Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
-                Assert.assertTrue(changesetBounds.equals(expandedBounds));
+                Assert.assertEquals(changesetBounds, expandedBounds);
             }
             catch (Exception e) {
                 Assert.fail("Error checking changeset: " + e.getMessage());
@@ -965,67 +1049,71 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             throw e;
         }
         finally {
-            // set this back to default now that this test is over
-            HootProperties.getInstance().setProperty("maximumChangesetElements",
-                    HootProperties.getDefault("maximumChangesetElements"));
-            Assert.assertEquals(Integer.parseInt(HootProperties.getDefault("maximumChangesetElements")),
-                    Integer.parseInt(HootProperties.getInstance().getProperty("maximumChangesetElements")));
+            // restore original hoot properties since they are shared at the class level
+            Properties hootProps = new Properties();
+            hootProps.putAll(originalHootProperties);
+            HootCustomPropertiesSetter.setProperties(hootProps);
         }
     }
 
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testChangesetAutoCloseWhenNoElementsAddedToItBeforeExpiration() throws Exception {
+        Map<String, String> originalHootProperties = HootProperties.getProperties();
         try {
             // A changeset is created, but no elements are added to it. It
-            // should
-            // auto-close once
-            // changesetIdleTimeoutMinutes time has passed, since that's when
-            // the
-            // changeset is set to
-            // auto-close upon its creation.
+            // should auto-close once changesetIdleTimeoutMinutes time has passed, since that's when
+            // the changeset is set to auto-close upon its creation.
 
             // set these props at the beginning, since they are read by
             // OsmResourceTestUtils.createTestChangeset
-            Properties hootProps = HootProperties.getInstance();
-            // Toggle the var that allows for testing changeset auto-closing.
-            // This
-            // will change the service
-            // to temporarily interpret changesetIdleTimeoutMinutes as a value
-            // in
-            // seconds instead of
-            // minutes to enable a faster runtime for this test.
-            hootProps.setProperty("testChangesetAutoClose", String.valueOf(true));
-            // set the timeout to one second
-            final int changesetIdleTimeoutSeconds = 1;
-            hootProps.setProperty("changesetIdleTimeoutMinutes", String.valueOf(changesetIdleTimeoutSeconds));
-            HootProperties.setProperties(hootProps);
-            Assert.assertEquals(true,
-                    Boolean.parseBoolean(HootProperties.getInstance().getProperty("testChangesetAutoClose")));
-            Assert.assertEquals(changesetIdleTimeoutSeconds,
-                    Integer.parseInt(HootProperties.getInstance().getProperty("changesetIdleTimeoutMinutes")));
+            Properties hootProps = new Properties();
 
-            final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            final long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 0);
+            // Toggle the var that allows for testing changeset auto-closing.
+            // This will change the service
+            // to temporarily interpret changesetIdleTimeoutMinutes as a value
+            // in seconds instead of minutes to enable a faster runtime for this test.
+            hootProps.setProperty("testChangesetAutoClose", String.valueOf(true));
+
+            // set the timeout to one second
+            int changesetIdleTimeoutSeconds = 1;
+            hootProps.setProperty("changesetIdleTimeoutMinutes", String.valueOf(changesetIdleTimeoutSeconds));
+            HootCustomPropertiesSetter.setProperties(hootProps);
+
+            Assert.assertTrue(Boolean.parseBoolean(HootProperties.getProperty("testChangesetAutoClose")));
+            Assert.assertEquals(changesetIdleTimeoutSeconds,
+                    Integer.parseInt(HootProperties.getProperty("changesetIdleTimeoutMinutes")));
+
+            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
+            long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 0);
 
             // pause long enough for the changeset to expire
             Thread.sleep(2000);
 
             // Access the changeset with a create request. This will trigger
-            // closing
-            // the changeset, and
+            // closing the changeset, and
             // No data in the system should be modified by the create request.
             try {
-                resource().path("api/0.6/changeset/" + changesetId + "/upload").queryParam("mapId", "" + mapId)
-                        .type(MediaType.TEXT_XML).accept(MediaType.TEXT_XML).post(Document.class,
-                                "<osmChange version=\"0.3\" generator=\"iD\">" + "<create>" + "<node id=\"-1\" lon=\""
-                                        + originalBounds.getMinLon() + "\" lat=\"" + originalBounds.getMinLat()
-                                        + "\" version=\"0\" changeset=\"" + changesetId + "\">"
-                                        + "<tag k=\"key 1\" v=\"val 1\"/>" + "<tag k=\"key 2\" v=\"val 2\"/>"
-                                        + "</node>" + "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon()
-                                        + "\" lat=\"" + originalBounds.getMaxLat() + "\" version=\"0\" changeset=\""
-                                        + changesetId + "\">" + "</node>" + "</create>" + "<modify/>"
-                                        + "<delete if-unused=\"true\"/>" + "</osmChange>");
+                resource()
+                        .path("api/0.6/changeset/" + changesetId + "/upload")
+                        .queryParam("mapId", String.valueOf(mapId))
+                        .type(MediaType.TEXT_XML)
+                        .accept(MediaType.TEXT_XML)
+                        .post(Document.class,
+                            "<osmChange version=\"0.3\" generator=\"iD\">" +
+                                "<create>" +
+                                    "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() +
+                                          "\" lat=\"" + originalBounds.getMinLat() +
+                                          "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                        "<tag k=\"key 1\" v=\"val 1\"/>" + "<tag k=\"key 2\" v=\"val 2\"/>" +
+                                    "</node>" +
+                                    "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon() + "\" lat=\"" +
+                                         originalBounds.getMaxLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                    "</node>" +
+                                "</create>" +
+                                "<modify/>" +
+                                "<delete if-unused=\"true\"/>" +
+                            "</osmChange>");
             }
             catch (UniformInterfaceException e) {
                 ClientResponse r = e.getResponse();
@@ -1043,82 +1131,78 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             throw e;
         }
         finally {
-            // set these back to default now that this test is over
-            HootProperties.getInstance().setProperty("testChangesetAutoClose",
-                    HootProperties.getDefault("testChangesetAutoClose"));
-            Assert.assertEquals(Boolean.parseBoolean(HootProperties.getDefault("testChangesetAutoClose")),
-                    Boolean.parseBoolean(HootProperties.getInstance().getProperty("testChangesetAutoClose")));
-            HootProperties.getInstance().setProperty("changesetIdleTimeoutMinutes",
-                    HootProperties.getDefault("changesetIdleTimeoutMinutes"));
-            Assert.assertEquals(Integer.parseInt(HootProperties.getDefault("changesetIdleTimeoutMinutes")),
-                    Integer.parseInt(HootProperties.getInstance().getProperty("changesetIdleTimeoutMinutes")));
+            // restore original hoot properties since they are shared at the class level
+            Properties hootProps = new Properties();
+            hootProps.putAll(originalHootProperties);
+            HootCustomPropertiesSetter.setProperties(hootProps);
         }
     }
 
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testChangesetAutoCloseWhenLengthBetweenUpdatesCausesExpiration() throws Exception {
+        Map<String, String> originalHootProperties = HootProperties.getProperties();
         try {
             // A changeset is created and elements are added to it. After that,
-            // a time
-            // longer than
-            // changesetMaxOpenTimeHours passes before attempting to add any
-            // more
-            // elements to it. A
-            // changeset's expiration increases from changesetIdleTimeoutMinutes
-            // to
-            // changesetMaxOpenTimeHours after a single element is written to
-            // it. The
-            // changeset should
-            // auto-close.
+            // a time longer than changesetMaxOpenTimeHours passes before attempting to add any
+            // more elements to it. A changeset's expiration increases from changesetIdleTimeoutMinutes
+            // to changesetMaxOpenTimeHours after a single element is written to it. The changeset should auto-close.
 
             // set these props at the beginning, since they are read by
             // OsmResourceTestUtils.createTestChangeset
-            Properties hootProps = HootProperties.getInstance();
-            // Toggle the var that allows for testing changeset auto-closing.
-            // This
-            // will change the service
-            // to temporarily interpret changesetIdleTimeoutMinutes as a value
-            // in
-            // seconds instead of
-            // minutes to enable a faster runtime for this test.
-            hootProps.setProperty("testChangesetAutoClose", String.valueOf(true));
-            // set the timeout to one second
-            final int changesetIdleTimeoutSeconds = 1;
-            hootProps.setProperty("changesetIdleTimeoutMinutes", String.valueOf(changesetIdleTimeoutSeconds));
-            final int changesetMaxOpenTimeSeconds = 2;
-            hootProps.setProperty("changesetMaxOpenTimeHours", String.valueOf(changesetMaxOpenTimeSeconds));
-            HootProperties.setProperties(hootProps);
-            Assert.assertEquals(true,
-                    Boolean.parseBoolean(HootProperties.getInstance().getProperty("testChangesetAutoClose")));
-            Assert.assertEquals(changesetIdleTimeoutSeconds,
-                    Integer.parseInt(HootProperties.getInstance().getProperty("changesetIdleTimeoutMinutes")));
-            Assert.assertEquals(changesetMaxOpenTimeSeconds,
-                    Integer.parseInt(HootProperties.getInstance().getProperty("changesetMaxOpenTimeHours")));
+            Properties hootProps = new Properties();
 
-            final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            final long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-            final Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
-            final Long[] nodeIdsArr = nodeIds.toArray(new Long[] {});
-            final Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-            final Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+            // Toggle the var that allows for testing changeset auto-closing.
+            // This will change the service
+            // to temporarily interpret changesetIdleTimeoutMinutes as a value
+            // in seconds instead of minutes to enable a faster runtime for this test.
+            hootProps.setProperty("testChangesetAutoClose", String.valueOf(true));
+
+            // set the timeout to one second
+            int changesetIdleTimeoutSeconds = 1;
+            hootProps.setProperty("changesetIdleTimeoutMinutes", String.valueOf(changesetIdleTimeoutSeconds));
+            int changesetMaxOpenTimeSeconds = 2;
+            hootProps.setProperty("changesetMaxOpenTimeHours", String.valueOf(changesetMaxOpenTimeSeconds));
+            HootCustomPropertiesSetter.setProperties(hootProps);
+
+            Assert.assertTrue(Boolean.parseBoolean(HootProperties.getProperty("testChangesetAutoClose")));
+            Assert.assertEquals(changesetIdleTimeoutSeconds,
+                    Integer.parseInt(HootProperties.getProperty("changesetIdleTimeoutMinutes")));
+            Assert.assertEquals(changesetMaxOpenTimeSeconds,
+                    Integer.parseInt(HootProperties.getProperty("changesetMaxOpenTimeHours")));
+
+            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
+            long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
+            Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+            Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
+            Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+            Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
             // pause long enough for the changeset to expire
             Thread.sleep(3000);
 
-            final BoundingBox updateBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+            BoundingBox updateBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+
             // Access the changeset with an update request. This will trigger
-            // closing
-            // the changeset, and
-            // No data in the system should be modified by the update request.
+            // closing the changeset, and No data in the system should be modified by the update request.
             try {
-                resource().path("api/0.6/changeset/" + changesetId + "/upload").queryParam("mapId", "" + mapId)
-                        .type(MediaType.TEXT_XML).accept(MediaType.TEXT_XML)
-                        .post(Document.class, "<osmChange version=\"0.3\" generator=\"iD\">" + "<create/>" + "<modify>"
-                                + "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updateBounds.getMinLon() + "\" "
-                                + "lat=\"" + updateBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId
-                                + "\">" + "<tag k=\"key 1\" v=\"val 1\"></tag>" + "<tag k=\"key 2\" v=\"val 2\"></tag>"
-                                + "</node>" + "</modify>" + "<delete if-unused=\"true\"/>" + "</osmChange>");
+                resource()
+                        .path("api/0.6/changeset/" + changesetId + "/upload")
+                        .queryParam("mapId", String.valueOf(mapId))
+                        .type(MediaType.TEXT_XML)
+                        .accept(MediaType.TEXT_XML)
+                        .post(Document.class,
+                            "<osmChange version=\"0.3\" generator=\"iD\">" +
+                                "<create/>" +
+                                "<modify>" +
+                                    "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updateBounds.getMinLon() + "\" "
+                                           + "lat=\"" + updateBounds.getMinLat() + "\" version=\"1\" changeset=\"" +
+                                           changesetId + "\">" +
+                                        "<tag k=\"key 1\" v=\"val 1\"></tag>" + "<tag k=\"key 2\" v=\"val 2\"></tag>" +
+                                    "</node>" +
+                                "</modify>" +
+                                "<delete if-unused=\"true\"/>" +
+                            "</osmChange>");
             }
             catch (UniformInterfaceException e) {
                 ClientResponse r = e.getResponse();
@@ -1138,19 +1222,10 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             throw e;
         }
         finally {
-            // set these back to default now that this test is over
-            HootProperties.getInstance().setProperty("testChangesetAutoClose",
-                    HootProperties.getDefault("testChangesetAutoClose"));
-            Assert.assertEquals(Boolean.parseBoolean(HootProperties.getDefault("testChangesetAutoClose")),
-                    Boolean.parseBoolean(HootProperties.getInstance().getProperty("testChangesetAutoClose")));
-            HootProperties.getInstance().setProperty("changesetIdleTimeoutMinutes",
-                    HootProperties.getDefault("changesetIdleTimeoutMinutes"));
-            Assert.assertEquals(Integer.parseInt(HootProperties.getDefault("changesetIdleTimeoutMinutes")),
-                    Integer.parseInt(HootProperties.getInstance().getProperty("changesetIdleTimeoutMinutes")));
-            HootProperties.getInstance().setProperty("changesetMaxOpenTimeHours",
-                    HootProperties.getDefault("changesetMaxOpenTimeHours"));
-            Assert.assertEquals(Integer.parseInt(HootProperties.getDefault("changesetMaxOpenTimeHours")),
-                    Integer.parseInt(HootProperties.getInstance().getProperty("changesetMaxOpenTimeHours")));
+            // restore original hoot properties since they are shared at the class level
+            Properties hootProps = new Properties();
+            hootProps.putAll(originalHootProperties);
+            HootCustomPropertiesSetter.setProperties(hootProps);
         }
     }
 
@@ -1159,7 +1234,9 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
     public void testClosePreflight() throws Exception {
         try {
             String changeSetId = "1";
-            resource().path("api/0.6/changeset/" + changeSetId + "/close").queryParam("mapId", "1")
+            resource()
+                    .path("api/0.6/changeset/" + changeSetId + "/close")
+                    .queryParam("mapId", "1")
                     .options(String.class);
         }
         catch (UniformInterfaceException e) {

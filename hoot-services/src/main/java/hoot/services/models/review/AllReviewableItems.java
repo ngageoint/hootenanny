@@ -37,52 +37,52 @@ import hoot.services.geo.BoundingBox;
 
 public class AllReviewableItems extends ReviewQueryMapper {
 
-    private long _mapId;
-    private boolean _overflow = false;
-    private Map<Long, ReviewableItemBboxInfo> _reviewableItems;
+    private long mapId;
+    private boolean overflow;
+    private Map<Long, ReviewableItemBboxInfo> reviewableItems;
 
-    public AllReviewableItems(final long mapid, final Map<Long, ReviewableItemBboxInfo> reviewableItems) {
-        _mapId = mapid;
-        _reviewableItems = reviewableItems;
+    public AllReviewableItems(long mapid, Map<Long, ReviewableItemBboxInfo> reviewableItems) {
+        mapId = mapid;
+        this.reviewableItems = reviewableItems;
     }
 
     public long getMapId() {
-        return _mapId;
+        return mapId;
     }
 
-    public void setMapId(final long mapid) {
-        _mapId = mapid;
+    public void setMapId(long mapid) {
+        mapId = mapid;
     }
 
     public Map<Long, ReviewableItemBboxInfo> getReviewableItems() {
-        return _reviewableItems;
+        return reviewableItems;
     }
 
     public void setReviewableItems(Map<Long, ReviewableItemBboxInfo> reviewableItems) {
-        _reviewableItems = reviewableItems;
+        this.reviewableItems = reviewableItems;
     }
 
     public boolean getOverFlow() {
-        return _overflow;
+        return overflow;
     }
 
-    public void setOverFlow(final boolean isOverFlow) {
-        _overflow = isOverFlow;
+    public void setOverFlow(boolean isOverFlow) {
+        overflow = isOverFlow;
     }
 
     @Override
     public String toString() {
         JSONObject o = new JSONObject();
-        o.put("mapid", _mapId);
-        o.put("reviewableItems", _reviewableItems);
+        o.put("mapid", mapId);
+        o.put("reviewableItems", reviewableItems);
         return o.toJSONString();
     }
 
     public JSONObject toGeoJson() {
         JSONArray features = new JSONArray();
 
-        if (_reviewableItems != null) {
-            Iterator it = _reviewableItems.entrySet().iterator();
+        if (reviewableItems != null) {
+            Iterator it = reviewableItems.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
                 Long relId = (Long) pair.getKey();
@@ -118,5 +118,4 @@ public class AllReviewableItems extends ReviewQueryMapper {
         return geojson;
 
     }
-
 }

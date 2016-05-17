@@ -26,7 +26,6 @@
  */
 package hoot.services.db;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -60,7 +59,7 @@ public class DataDefinitionManager {
         }
     }
 
-    public DataDefinitionManager() throws IOException {
+    public DataDefinitionManager() {
         dbName = HootProperties.getProperty("dbName");
         dbUser = HootProperties.getProperty("dbUserId");
         dbPassword = HootProperties.getProperty("dbPassword");

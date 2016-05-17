@@ -42,44 +42,42 @@ import org.apache.log4j.xml.DOMConfigurator;
  * be run in an actual J2EE container for stability reasons (see
  * configureAndWatch documentation for details).
  */
-@SuppressWarnings("serial")
 public class DynamicLogPropsChangeScanner extends HttpServlet {
-    private static final Logger log = Logger.getLogger(DynamicLogPropsChangeScanner.class);
+    private static final Logger logger = Logger.getLogger(DynamicLogPropsChangeScanner.class);
 
     @Override
     public void init() {
         try {
-            if (Boolean.parseBoolean(HootProperties.getInstance().getProperty("autoScanForLogPropsChanges",
-                    HootProperties.getDefault("autoScanForLogPropsChanges")))) {
-                configureLogging(ConfigFileType.xml);
+            if (Boolean.parseBoolean(HootProperties.getPropertyOrDefault("autoScanForLogPropsChanges"))) {
+                configureLogging(ConfigFileType.XML);
             }
         }
         catch (Exception e) {
-            log.error("Error configuring logging properties change scanning: " + e.getMessage());
+            logger.error("Error configuring logging properties change scanning: " + e.getMessage());
         }
     }
 
-    private static enum ConfigFileType {
-        xml, properties
+    private enum ConfigFileType {
+        XML, PROPERTIES
     }
 
     private void configureLogging(ConfigFileType configFileType) throws Exception {
-        log.info("Configuring dynamic log properties for file type: " + configFileType.toString() + " ...");
-        final URL configFile = getClass().getResource("/log4j." + configFileType);
-        if (configFile != null && "file".equals(configFile.getProtocol())) {
-            final int scanDelayMinutes = Integer
-                    .parseInt(HootProperties.getInstance().getProperty("logPropsDynamicChangeScanInterval",
-                            HootProperties.getDefault("logPropsDynamicChangeScanInterval")));
+        logger.info("Configuring dynamic log properties for file type: " + configFileType + " ...");
+        URL configFile = getClass().getResource("/log4j." + configFileType);
+
+        if ((configFile != null) && "file".equals(configFile.getProtocol())) {
+            int scanDelayMinutes = Integer
+                    .parseInt(HootProperties.getPropertyOrDefault("logPropsDynamicChangeScanInterval"));
             if (scanDelayMinutes >= 1) {
-                final long scanDelayMillis = scanDelayMinutes * 60 * 1000;
+                long scanDelayMillis = scanDelayMinutes * 60 * 1000;
                 switch (configFileType) {
-                    case xml:
+                    case XML:
 
                         DOMConfigurator.configureAndWatch(configFile.getPath(), scanDelayMillis);
 
                     break;
 
-                    case properties:
+                    case PROPERTIES:
 
                         PropertyConfigurator.configureAndWatch(configFile.getPath(), scanDelayMillis);
 
@@ -90,10 +88,10 @@ public class DynamicLogPropsChangeScanner extends HttpServlet {
                         throw new Exception("Invalid file type.");
                 }
 
-                log.info("Configured dynamic log properties for file type: " + configFileType.toString());
+                logger.info("Configured dynamic log properties for file type: " + configFileType);
             }
             else {
-                log.error("Invalid log properties file change scan interval: " + String.valueOf(scanDelayMinutes));
+                logger.error("Invalid log properties file change scan interval: " + scanDelayMinutes);
             }
         }
     }
