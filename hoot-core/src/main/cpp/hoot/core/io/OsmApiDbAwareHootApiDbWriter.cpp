@@ -124,6 +124,9 @@ long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     break;
   }
 
+  //LOG_DEBUG("Remapped ID for element type " << eid.getType().toString() << " from " <<
+            //eid.getId() << " to " << retVal);
+
   return retVal;
 }
 
@@ -160,19 +163,13 @@ vector<long> OsmApiDbAwareHootApiDbWriter::_remapNodes(const vector<long>& nids)
 
 void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
 {
-  bool countChange = true;
-
-  //LOG_VARD(n->getId());
-
   Tags t = n->getTags();
   _addElementTags(n, t);
 
   if (n->getId() < 1)
   {
     bool alreadyThere = _nodeRemap.count(n->getId()) != 0;
-    //LOG_VARD(alreadyThere);
     long nodeId = _getRemappedElementId(n->getElementId());
-    //LOG_VARD(nodeId);
     if (alreadyThere)
     {
       _hootdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, t);
@@ -187,11 +184,8 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
     _hootdb.insertNode(n->getId(), n->getY(), n->getX(), t);
   }
 
-  if (countChange)
-  {
-    _countChange();
-    _nodesWritten++;
-  }
+  _countChange();
+  _nodesWritten++;
 }
 
 void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
@@ -204,9 +198,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
   if (w->getId() < 1)
   {
     bool alreadyThere = _wayRemap.count(w->getId()) != 0;
-    //LOG_VARD(alreadyThere);
     wayId = _getRemappedElementId(w->getElementId());
-    //LOG_VARD(wayId);
     if (alreadyThere)
     {
       _hootdb.updateWay(wayId, w->getVersion() + 1, tags);
@@ -251,12 +243,6 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Relation>
   if (r->getId() < 1)
   {
     relationId = _getRemappedElementId(r->getElementId());
-    //LOG_VARD(relationId);
-
-    //LOG_DEBUG("Inserting relation with source ID = " <<
-              //QString::number(r->getId()) << " which maps to DB ID = " <<
-              //QString::number(relationId) );
-
     _hootdb.insertRelation(relationId, tags);
   }
   else
@@ -279,7 +265,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Relation>
     }
 
     _hootdb.insertRelationMember(relationId, relationMemberElementId.getType(),
-                              relationMemberElementId.getId(), e.role, i);
+                                 relationMemberElementId.getId(), e.role, i);
   }
 
   _countChange();
