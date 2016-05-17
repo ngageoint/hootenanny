@@ -67,6 +67,7 @@ Feature: Translation Assistant
         Then I press "Save Translation"
         Then I wait
         Then I accept the alert
+        Then I select the "x" div
 
     Scenario: Build an TDS translation mapping for gdb
         Then I click on the "Translation Assistant" option in the "settingsSidebar"
@@ -120,6 +121,7 @@ Feature: Translation Assistant
         Then I press "Save Translation"
         Then I wait
         Then I accept the alert
+        Then I select the "x" div
 
     Scenario: Test an invalid dataset
         Then I click on the "Translation Assistant" option in the "settingsSidebar"
