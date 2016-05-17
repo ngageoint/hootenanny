@@ -216,6 +216,12 @@ void PostgresqlDumpfileWriter::finalizePartial()
 
 void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 {
+  Tags t = n->getTags();
+  if (n->getCircularError() >= 0.0)
+  {
+    t["error:circular"] = QString::number(n->getCircularError());
+  }
+
   if ( _writeStats.nodesWritten == 0 )
   {
     _createNodeTables();
@@ -236,7 +242,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 
   _writeNodeToTables(n, nodeDbId);
 
-  _writeTagsToTables(/*t*/n->getTags(), nodeDbId,
+  _writeTagsToTables(t, nodeDbId,
     "current_node_tags", "%1\t%2\t%3\n",
     "node_tags", "%1\t1\t%2\t%3\n");
 
@@ -248,6 +254,12 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 
 void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 {
+  Tags t = w->getTags();
+  if (w->getCircularError() >= 0.0)
+  {
+    t["error:circular"] = QString::number(w->getCircularError());
+  }
+
   if ( _writeStats.waysWritten == 0 )
   {
     _createWayTables();
@@ -271,7 +283,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 
   _writeWaynodesToTables( _idMappings.wayIdMap->at( w->getId() ), w->getNodeIds() );
 
-  _writeTagsToTables(/*t*/w->getTags(), wayDbId,
+  _writeTagsToTables(t, wayDbId,
     "current_way_tags", "%1\t%2\t%3\n",
     "way_tags", "%1\t1\t%2\t%3\n");
 
@@ -283,6 +295,12 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 
 void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 {
+  Tags t = r->getTags();
+  if (r->getCircularError() >= 0.0)
+  {
+    t["error:circular"] = QString::number(r->getCircularError());
+  }
+
   if ( _writeStats.relationsWritten == 0 )
   {
     _createRelationTables();
@@ -306,7 +324,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 
   _writeRelationMembersToTables( r );
 
-  _writeTagsToTables(/*t*/r->getTags(), relationDbId,
+  _writeTagsToTables(t, relationDbId,
     "current_relation_tags", "%1\t%2\t%3\n",
     "relation_tags", "%1\t1\t%2\t%3\n");
 

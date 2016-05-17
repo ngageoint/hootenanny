@@ -605,10 +605,6 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
           if (circularError > 0 && ok)
           {
             _element->setCircularError(circularError);
-            if (key == "accuracy" && ConfigOptions().getPreserveAccuracyTag())
-            {
-              _element->setTag(key, value);
-            }
             /*LOG_DEBUG(
               "Set circular error from accuracy or error:circular tag to " << circularError <<
               " for element with ID: " << _element->getId());*/
