@@ -21,19 +21,23 @@ Feature: Translation Assistant
         Then I press "Ignore"
         Then I should see "FCC"
         Then I click the "plus" classed link under "add-mapping"
+        And I fill input under "lookup" with "high"
+        Then I press the down arrow key on "[placeholder='Search tag']"
+        Then I press the down arrow key on "[placeholder='Search tag']"
+        And I should see element "[placeholder='Search tag']" with value "aeroway:runway_highend:slope:closure"
         And I fill input under "lookup" with "highway"
         Then I press enter in the "[placeholder='Search tag']" input
         Then I select the "linktag" div
         Then I select the "maptag" div
         Then I select the first "combobox-caret" div
         Then I press the down arrow key on "[id='preset-input-665334034']"
-        And I should see input "preset-input-665334034" with value "crossing"
+        And I should see element "[id='preset-input-665334034']" with value "crossing"
         Then I press the down arrow key on "[id='preset-input-665334034']"
         Then I press the down arrow key on "[id='preset-input-665334034']"
         Then I press the down arrow key on "[id='preset-input-665334034']"
         Then I press the down arrow key on "[id='preset-input-665334034']"
         Then I press enter in the "[id='preset-input-665334034']" input
-        And I should see input "preset-input-665334034" with value "primary"
+        And I should see element "[id='preset-input-665334034']" with value "primary"
         Then I type "secondary" in input "preset-input-665334065"
         Then I press enter in the "[id='preset-input-665334065']" input
         Then I type "roa" in input "preset-input-665334096"
@@ -48,7 +52,7 @@ Feature: Translation Assistant
         Then I select the "backarrow" div
         Then I should see "FCC"
         And I should see "A20"
-        And I should see input "preset-input-665334034" with value "primary"
+        And I should see element "[id='preset-input-665334034']" with value "primary"
         Then I select the "forwardarrow" div
         Then I press the right arrow key
         And I should see "LEN"
@@ -69,10 +73,10 @@ Feature: Translation Assistant
         When I choose "TDSv61" radio button
         Then I upload a zipped folder of shapefiles
         And I wait
-        And I should see input "preset-input-layer" with value "cali-test"
+        And I should see element "[id='preset-input-layer']" with value "cali-test"
         Then I type "cali-fake" in input "preset-input-layer"
         Then I press tab in the "[id='preset-input-layer']" input
-        And I should see input "preset-input-layer" with value "cali-fake-points"
+        And I should see element "[id='preset-input-layer']" with value "cali-fake-points"
         And I should see "1 of 3 Attributes"
         Then I press "Ignore"
         And I should see "name"

@@ -264,10 +264,10 @@ Then(/^I accept the alert$/) do
   page.driver.browser.switch_to.alert.accept
 end
 
-Then(/^I should see input "([^"]*)" with value "([^"]*)"$/) do |id, value|
+Then(/^I should see element "([^"]*)" with value "([^"]*)"$/) do |id, value|
   # expect(page).to have_selector("input[value='" + value + "']")
   # page.should have_xpath("//input[@value='" + value + "']")
-  find_field(id).value.should eq value
+  find(id).value.should eq value
 end
 
 Then(/^I choose "([^"]*)" radio button$/) do |text|
