@@ -1013,6 +1013,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
     }
 
+    @Ignore
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testGetMapNodeLimitExceeded() throws Exception {
