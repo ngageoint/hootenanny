@@ -46,16 +46,16 @@
 namespace hoot
 {
 
-class OsmApiDbReaderTest : public CppUnit::TestFixture
+class ServiceOsmApiDbReaderTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(OsmApiDbReaderTest);
+  CPPUNIT_TEST_SUITE(ServiceOsmApiDbReaderTest);
   CPPUNIT_TEST(runReadOsmApiTest);
   CPPUNIT_TEST(runReadBoundingBoxTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  static QString userEmail() { return "OsmApiDbReaderTest@hoottestcpp.org"; }
+  static QString userEmail() { return "ServiceOsmApiDbReaderTest@hoottestcpp.org"; }
 
   void tearDown()
   {
@@ -246,6 +246,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiDbReaderTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbReaderTest, "slow");
 
 }

@@ -103,9 +103,9 @@ private:
 
 };
 
-class OsmChangesetSqlFileWriterTest : public CppUnit::TestFixture
+class ServiceOsmApiDbChangesetSqlFileWriterTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(OsmChangesetSqlFileWriterTest);
+    CPPUNIT_TEST_SUITE(ServiceOsmApiDbChangesetSqlFileWriterTest);
     CPPUNIT_TEST(runBasicTest);
     CPPUNIT_TEST_SUITE_END();
 
@@ -122,7 +122,7 @@ public:
 
   void runBasicTest()
   {
-    QDir().mkdir("test-output/io/OsmChangesetSqlFileWriterTest");
+    QDir().mkdir("test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest");
     shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
 
     //clear out the db so we get consistent next id results
@@ -130,15 +130,16 @@ public:
     database.deleteData();
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
 
-    OsmChangesetSqlFileWriter changesetWriter(ServicesDbTestUtils::getOsmApiDbUrl());
-    changesetWriter.write(
-      "test-output/io/OsmChangesetSqlFileWriterTest/changeset.osc.sql", changesetProvider);
+    OsmChangesetSqlFileWriter(ServicesDbTestUtils::getOsmApiDbUrl())
+      .write(
+        "test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.osc.sql",
+        changesetProvider);
     HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/OsmChangesetSqlFileWriterTest/changeset.osc.sql"),
-      TestUtils::readFile("test-output/io/OsmChangesetSqlFileWriterTest/changeset.osc.sql"));
+      TestUtils::readFile("test-files/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.osc.sql"),
+      TestUtils::readFile("test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.osc.sql"));
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangesetSqlFileWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbChangesetSqlFileWriterTest, "quick");
 
 }
