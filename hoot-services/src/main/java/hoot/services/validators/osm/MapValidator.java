@@ -43,7 +43,7 @@ public class MapValidator {
 
     private Connection conn;
 
-    public MapValidator(final Connection conn) {
+    public MapValidator(Connection conn) {
         this.conn = conn;
     }
 
@@ -51,15 +51,16 @@ public class MapValidator {
      * Determines whether a maps data has been prepared for review; more or less
      * a wrapper with a more identifiable name around ModelDaoUtils map
      * functionality
-     * 
+     *
      * @param mapIdStr
      *            map ID; may be a map ID or unique map name
      * @return the map's numeric ID
      * @throws Exception
      *             if the map doesn't exist
      */
-    public long verifyMapExists(final String mapIdStr) throws Exception {
+    public long verifyMapExists(String mapIdStr) throws Exception {
         log.debug("Checking maps table for map with ID: " + mapIdStr + " ...");
+
         // this will throw if it doesn't find the map
         QMaps maps = QMaps.maps;
         return ModelDaoUtils.getRecordIdForInputString(mapIdStr, conn, maps, maps.id, maps.displayName);

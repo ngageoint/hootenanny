@@ -26,7 +26,6 @@
  */
 package hoot.services.nativeInterfaces;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +50,7 @@ import hoot.services.command.ICommandRunner;
 
 /**
  * @author Jong Choi
- *
+ *         <p>
  *         The purpose of this class is to run command line execution in a
  *         separate process. It inherit from INativeInterface so it can be
  *         switched out with any other class implementing INativeInterface if
@@ -61,7 +60,6 @@ import hoot.services.command.ICommandRunner;
  *         --ogr2osm target input output if the "exectype" is "hoot" 2. make
  *         file script based execution where format is make -f [some makefile]
  *         [any argument make file uses] when "exectype" is "make"
- *
  */
 public class ProcessStreamInterface implements INativeInterface {
 
@@ -74,25 +72,16 @@ public class ProcessStreamInterface implements INativeInterface {
     protected static Map<String, ICommandRunner> _progProcesses = null;
 
     private static String dbUrl = null;
+    private static String osmApiDbUrl = null;
 
     public ProcessStreamInterface() {
         // for make file script based call
         if (coreScriptPath == null) {
-            try {
-                coreScriptPath = HootProperties.getProperty("coreScriptPath");
-            }
-            catch (IOException e) {
-                log.error(e.getMessage());
-            }
+            coreScriptPath = HootProperties.getProperty("coreScriptPath");
         }
         // for make file script based call
         if (coreScriptOutputPath == null) {
-            try {
-                coreScriptOutputPath = HootProperties.getProperty("coreScriptOutputPath");
-            }
-            catch (IOException e) {
-                log.error(e.getMessage());
-            }
+            coreScriptOutputPath = HootProperties.getProperty("coreScriptOutputPath");
         }
 
         if (_jobProcesses == null) {
@@ -111,6 +100,13 @@ public class ProcessStreamInterface implements INativeInterface {
                 String pwd = HootProperties.getProperty("dbPassword");
                 String host = HootProperties.getProperty("dbHost");
                 dbUrl = "hootapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
+            }
+            if (osmApiDbUrl == null) {
+                String dbname = HootProperties.getProperty("osmApiDbName");
+                String userid = HootProperties.getProperty("osmApiDbUserId");
+                String pwd = HootProperties.getProperty("osmApiDbPassword");
+                String host = HootProperties.getProperty("osmApiDbHost");
+                osmApiDbUrl = "osmapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
             }
 
         }
@@ -407,6 +403,7 @@ public class ProcessStreamInterface implements INativeInterface {
             String jobid = cmd.get("jobId").toString();
             execCmd.add("jobid=" + jobid);
             execCmd.add("DB_URL=" + dbUrl);
+            execCmd.add("OSM_API_DB_URL=" + osmApiDbUrl);
         }
         catch (Exception ex) {
             log.error("Failed to parse job params. Reason: " + ex.getMessage());

@@ -26,8 +26,6 @@
  */
 package hoot.services.writers.osm;
 
-import java.io.IOException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -40,39 +38,30 @@ import hoot.services.HootProperties;
 public class OsmResponseHeaderGenerator {
     /**
      * Creates an OSM data header for a web response
-     * 
+     *
      * @param document
      *            owning XML document
      * @return an XML Element
-     * @throws IOException
-     *             if unable to read settings from config file
      */
-    public static Element getOsmDataHeader(Document document) throws IOException {
+    public static Element getOsmDataHeader(Document document) {
         Element osmElement = getOsmHeader(document);
-        osmElement.setAttribute("copyright",
-                HootProperties.getInstance().getProperty("copyright", HootProperties.getDefault("copyright")));
-        osmElement.setAttribute("attribution",
-                HootProperties.getInstance().getProperty("attribution", HootProperties.getDefault("attribution")));
-        osmElement.setAttribute("license",
-                HootProperties.getInstance().getProperty("license", HootProperties.getDefault("license")));
+        osmElement.setAttribute("copyright", HootProperties.getPropertyOrDefault("copyright"));
+        osmElement.setAttribute("attribution", HootProperties.getPropertyOrDefault("attribution"));
+        osmElement.setAttribute("license", HootProperties.getPropertyOrDefault("license"));
         return osmElement;
     }
 
     /**
      * Creates an OSM header for a web response
-     * 
+     *
      * @param document
      *            owning XML document
      * @return an XML Element
-     * @throws IOException
-     *             if unable to read settings from config file
      */
-    public static Element getOsmHeader(Document document) throws IOException {
+    public static Element getOsmHeader(Document document) {
         Element osmElement = document.createElement("osm");
-        osmElement.setAttribute("version",
-                HootProperties.getInstance().getProperty("osmVersion", HootProperties.getDefault("osmVersion")));
-        osmElement.setAttribute("generator",
-                HootProperties.getInstance().getProperty("generator", HootProperties.getDefault("generator")));
+        osmElement.setAttribute("version", HootProperties.getPropertyOrDefault("osmVersion"));
+        osmElement.setAttribute("generator", HootProperties.getProperty("generator"));
         return osmElement;
     }
 }

@@ -40,26 +40,16 @@ import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.job.Executable;
 
-//import java.util.List;
-
 
 public class ResourcesCleanUtil implements Executable {
+    private static final Logger logger = LoggerFactory.getLogger(ResourcesCleanUtil.class);
 
-    private static String _ingestPath = null;
-    // remove data
-    // remove file store
-    private static final Logger log = LoggerFactory.getLogger(ResourcesCleanUtil.class);
+    private static final String ingestPath;
 
     static {
-        try {
-            _ingestPath = HootProperties.getProperty("tileServerPath");
-        }
-        catch (Exception ex) {
-            log.error("failed get hoot home value:" + ex.getMessage());
-        }
+        ingestPath = HootProperties.getProperty("tileServerPath");
     }
 
-    @SuppressWarnings("unused")
     private ClassPathXmlApplicationContext appContext;
 
     private String finalStatusDetail;
@@ -85,7 +75,7 @@ public class ResourcesCleanUtil implements Executable {
         res.put("result", "success");
         Connection conn = DbUtils.createConnection();
         try {
-            log.debug("Initializing database connection...");
+            logger.debug("Initializing database connection...");
 
             // List<Long> ids = DbUtils.getMapIdsByName( conn, mapId);
             // int nMapCnt = ids.size();
@@ -97,7 +87,7 @@ public class ResourcesCleanUtil implements Executable {
             // _deleteIngestResource(mapId, nMapCnt);
         }
         catch (Exception e) {
-            log.error(e.getMessage());
+            logger.error(e.getMessage());
             throw e;
         }
         finally {
@@ -108,28 +98,28 @@ public class ResourcesCleanUtil implements Executable {
     }
 
     // TODO: Change mapName to mapId
-    protected void _deleteIngestResource(final String mapName, final int nMapCnt)
+    protected void _deleteIngestResource(String mapName, int nMapCnt)
             throws NullPointerException, FileNotFoundException, IOException, Exception {
 
         Connection conn = DbUtils.createConnection();
         try {
-            log.debug("Initializing database connection...");
+            logger.debug("Initializing database connection...");
 
             // we will not delete resource for layer with duplicate names
             if (nMapCnt == 1) {
                 // This block is to check if we have file path manipulation by
                 // validating
                 // the new path is within container path
-                final String basePath = _ingestPath;
-                final String newPath = _ingestPath + "/" + mapName;
+                String basePath = ingestPath;
+                String newPath = ingestPath + "/" + mapName;
 
                 // Fortify fix
-                if (!hoot.services.utils.FileUtils.validateFilePath(_ingestPath, newPath)) {
+                if (!hoot.services.utils.FileUtils.validateFilePath(ingestPath, newPath)) {
                     throw new Exception("Map name can not contain path.");
                 }
 
                 // Fortify fix
-                if (!hoot.services.utils.FileUtils.validateFilePath(_ingestPath, newPath)) {
+                if (!hoot.services.utils.FileUtils.validateFilePath(ingestPath, newPath)) {
                     throw new Exception("Map name can not contain path.");
                 }
 
@@ -153,21 +143,20 @@ public class ResourcesCleanUtil implements Executable {
             }
         }
         catch (NullPointerException npe) {
-            log.error(npe.getMessage());
+            logger.error(npe.getMessage());
             throw npe;
         }
         catch (FileNotFoundException fne) {
-            log.error(fne.getMessage());
+            logger.error(fne.getMessage());
             throw fne;
         }
         catch (IOException ioe) {
-            log.error(ioe.getMessage());
+            logger.error(ioe.getMessage());
             throw ioe;
         }
         finally {
             DbUtils.closeConnection(conn);
         }
-
     }
 
     /**
@@ -183,5 +172,4 @@ public class ResourcesCleanUtil implements Executable {
     public void destroy() {
         //
     }
-
 }

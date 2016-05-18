@@ -28,69 +28,50 @@ package hoot.services;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 
 
 /**
  * Services configuration file
  */
-public class HootProperties {
-    private static Properties properties;
-    private static Properties localProperties;
+public final class HootProperties {
+    private static final Properties properties;
 
-    private HootProperties() {
-    }
-
-    /**
-     * Returns the properties read from the services configuration file
-     *
-     * @return a set of properties
-     * @throws IOException
-     *             if unable to read from the services configuration file
-     */
-    public synchronized static Properties getInstance() throws IOException {
-        if (properties == null) {
-            properties = new Properties();
-            InputStream propsStrm = null;
-            try {
-                propsStrm = HootProperties.class.getClassLoader().getResourceAsStream("conf/hoot-services.conf");
-                properties.load(propsStrm);
+    static {
+        try {
+            Properties appProperties = new Properties();
+            try (InputStream propsStrm = HootProperties.class.getClassLoader()
+                    .getResourceAsStream("conf/hoot-services.conf")) {
+                appProperties.load(propsStrm);
             }
-            finally {
-                if (propsStrm != null) {
-                    propsStrm.close();
-                }
-            }
-        }
 
-        // This block of code checks for the local.conf and if there is one then
-        // it overrides the
-        // properties.
-        if (localProperties == null) {
-            localProperties = new Properties();
-            InputStream inRes = null;
-            try {
-                inRes = HootProperties.class.getClassLoader().getResourceAsStream("conf/local.conf");
-                if (inRes != null) {
-                    localProperties.load(inRes);
-
+            // This block of code checks for the local.conf and if there is one
+            // then it overrides the global properties.
+            Properties localProperties = new Properties();
+            try (InputStream in = HootProperties.class.getClassLoader().getResourceAsStream("conf/local.conf")) {
+                if (in != null) {
+                    localProperties.load(in);
                     Enumeration<?> enumeration = localProperties.propertyNames();
                     while (enumeration.hasMoreElements()) {
                         String key = (String) enumeration.nextElement();
                         String value = localProperties.getProperty(key);
-                        properties.setProperty(key, value);
+                        appProperties.setProperty(key, value);
                     }
                 }
             }
-            finally {
-                if (inRes != null) {
-                    inRes.close();
-                }
-            }
+
+            properties = appProperties;
         }
-        return properties;
+        catch (IOException ioe) {
+            throw new RuntimeException("Error loading Hootenanny's configuation!", ioe);
+        }
+    }
+
+    private HootProperties() {
     }
 
     /**
@@ -98,62 +79,58 @@ public class HootProperties {
      * local properties and if it does not find it then uses environmental
      * variable.
      *
-     * @param prop
-     * @throws Exception
+     * @param key
      */
-    public synchronized static String getProperty(String prop) throws IOException {
-        String sFullProp = "";
-        String sProp = HootProperties.getInstance().getProperty(prop, "");
+    public static String getProperty(String key) {
+        StringBuilder sFullProp = new StringBuilder();
+        String sProp = properties.getProperty(key, "");
         String[] parts = sProp.split("\\$");
         if (parts.length > 1) {
-            for (int i = 0; i < parts.length; i++) {
-                String part = parts[i];
+            for (String part : parts) {
                 if (part.startsWith("(")) {
-                    int iClosure = part.indexOf(")");
+                    int iClosure = part.indexOf(')');
                     String token = part.substring(1, iClosure);
-                    // check to see if the local prop exists
-                    String sToken = HootProperties.getInstance().getProperty(token, "");
+
+                    // check to see if the local key exists
+                    String sToken = properties.getProperty(token, "");
+
                     // nested call of property so resolve it.
-                    if (sToken.indexOf("$") > -1) {
+                    if (sToken.contains("$")) {
                         sToken = HootProperties.getProperty(token);
                     }
 
-                    if (sToken == null || sToken.length() == 0) {
+                    if ((sToken == null) || (sToken.isEmpty())) {
                         // if not get it from env
                         Map<String, String> env = System.getenv();
                         sToken = env.get(token);
                     }
-                    if (sToken != null && sToken.length() > 0) {
-                        sFullProp += sToken;
+
+                    if ((sToken != null) && (!sToken.isEmpty())) {
+                        sFullProp.append(sToken);
                     }
 
-                    if (iClosure + 1 < part.length()) {
-                        sFullProp += part.substring(iClosure + 1);
+                    if ((iClosure + 1) < part.length()) {
+                        sFullProp.append(part.substring(iClosure + 1));
                     }
-
                 }
                 else {
-                    sFullProp += part;
+                    sFullProp.append(part);
                 }
             }
         }
         else {
-            sFullProp = sProp;
+            sFullProp.append(sProp);
         }
 
-        return sFullProp;
+        return sFullProp.toString();
     }
 
-    /**
-     * Set the properties manually
-     *
-     * This is useful for testing.
-     *
-     * @param props
-     *            a set of Hootenanny properties
-     */
-    public static void setProperties(Properties props) {
-        properties = props;
+    public static String getPropertyOrDefault(String key) {
+        String value = getProperty(key);
+        if ((value == null) || value.isEmpty()) {
+            value = getDefault(key);
+        }
+        return value;
     }
 
     /**
@@ -165,90 +142,75 @@ public class HootProperties {
      * @return a property value
      */
     public static String getDefault(String key) {
-        if (key.equals("osmVersion")) {
-            return "0.6";
+        switch (key) {
+            case "osmVersion":
+                return "0.6";
+            case "generator":
+                return "Hootenanny server";
+            case "copyright":
+                return "?";
+            case "attribution":
+                return "?";
+            case "license":
+                return "?";
+            case "maxQueryAreaDegrees":
+                return "0.25";
+            case "maxQueryNodes":
+                return "50000";
+            case "mapQueryDimensions":
+                return "2";
+            case "maximumChangesetElements":
+                return "50000";
+            case "maximumWayNodes":
+                return "2000";
+            case "changesetBoundsExpansionFactorDeegrees":
+                return "0.1";
+            case "changesetIdleTimeoutMinutes":
+                return "60";
+            case "changesetMaxOpenTimeHours":
+                return "24";
+            case "debugSql":
+                return "false";
+            case "testChangesetAutoClose":
+                return "false";
+            case "coreScriptPath":
+                return "/project/hoot/scripts";
+            case "coreScriptOutputPath":
+                return "";
+            case "coreJobServerUrl":
+                return "http://localhost:8080";
+            case "ETLMakefile":
+                return "makeetl";
+            case "grizzlyPort":
+                return "9998";
+            case "maxRecordBatchSize":
+                return "5000";
+            case "testJobStatusPollerTimeout":
+                return "250";
+            case "servicesTestClearEntireDb":
+                return "false";
+            case "logPropsDynamicChangeScanInterval":
+                return "1";
+            case "autoScanForLogPropsChanges":
+                return "true";
+            case "maxWarningsDisplayed":
+                return "10";
+            case "seedRandomQueries":
+                return "false";
+            case "randomQuerySeed":
+                return "0.1";
+            default:
+                return null;
         }
-        else if (key.equals("generator")) {
-            return "Hootenanny server";
+    }
+
+    public static Map<String, String> getProperties() {
+        Map<String, String> props = new TreeMap<>();
+
+        for (Map.Entry<Object, Object> property : properties.entrySet()) {
+            props.put((String) property.getKey(), (String) property.getValue());
         }
-        else if (key.equals("copyright")) {
-            return "?";
-        }
-        else if (key.equals("attribution")) {
-            return "?";
-        }
-        else if (key.equals("license")) {
-            return "?";
-        }
-        else if (key.equals("maxQueryAreaDegrees")) {
-            return "0.25";
-        }
-        else if (key.equals("maxQueryNodes")) {
-            return "50000";
-        }
-        else if (key.equals("mapQueryDimensions")) {
-            return "2";
-        }
-        else if (key.equals("maximumChangesetElements")) {
-            return "50000";
-        }
-        else if (key.equals("maximumWayNodes")) {
-            return "2000";
-        }
-        else if (key.equals("changesetBoundsExpansionFactorDeegrees")) {
-            return "0.1";
-        }
-        else if (key.equals("changesetIdleTimeoutMinutes")) {
-            return "60";
-        }
-        else if (key.equals("changesetMaxOpenTimeHours")) {
-            return "24";
-        }
-        else if (key.equals("debugSql")) {
-            return "false";
-        }
-        else if (key.equals("testChangesetAutoClose")) {
-            return "false";
-        }
-        else if (key.equals("coreScriptPath")) {
-            return "/project/hoot/scripts";
-        }
-        else if (key.equals("coreScriptOutputPath")) {
-            return "";
-        }
-        else if (key.equals("coreJobServerUrl")) {
-            return "http://localhost:8080";
-        }
-        else if (key.equals("ETLMakefile")) {
-            return "makeetl";
-        }
-        else if (key.equals("grizzlyPort")) {
-            return "9998";
-        }
-        else if (key.equals("maxRecordBatchSize")) {
-            return "5000";
-        }
-        else if (key.equals("testJobStatusPollerTimeout")) {
-            return "250";
-        }
-        else if (key.equals("servicesTestClearEntireDb")) {
-            return "false";
-        }
-        else if (key.equals("logPropsDynamicChangeScanInterval")) {
-            return "1";
-        }
-        else if (key.equals("autoScanForLogPropsChanges")) {
-            return "true";
-        }
-        else if (key.equals("maxWarningsDisplayed")) {
-            return "10";
-        }
-        else if (key.equals("seedRandomQueries")) {
-            return "false";
-        }
-        else if (key.equals("randomQuerySeed")) {
-            return "0.1";
-        }
-        return null;
+
+        return Collections.unmodifiableMap(props);
     }
 }
