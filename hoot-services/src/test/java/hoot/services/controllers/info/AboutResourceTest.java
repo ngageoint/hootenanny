@@ -28,6 +28,7 @@ package hoot.services.controllers.info;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.ws.rs.core.MediaType;
@@ -51,6 +52,7 @@ import hoot.services.info.BuildInfo;
 import hoot.services.info.CoreDetail;
 import hoot.services.info.ServicesDetail;
 import hoot.services.info.VersionInfo;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 //Use PowerMock here instead of Mockito, so we can mock a static method.
@@ -94,30 +96,38 @@ public class AboutResourceTest extends JerseyTest {
 
     @Test
     @Category(UnitTest.class)
-    public void getServicesVersionDetail() throws IOException {
-        Properties hootProps = HootProperties.getInstance();
-        hootProps.clear();
-        hootProps.setProperty("testProp1", "testVal1");
-        HootProperties.setProperties(hootProps);
-
-        mockBuildInfo();
-
-        ServicesDetail responseData = null;
+    public void getServicesVersionDetail() throws Exception {
+        Map<String, String> originalHootProperties = HootProperties.getProperties();
         try {
-            responseData = resource().path("/about/servicesVersionDetail").accept(MediaType.APPLICATION_JSON)
-                    .get(ServicesDetail.class);
-        }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
-        }
+            Properties hootProps = new Properties();
+            hootProps.setProperty("testProp1", "testVal1");
+            HootCustomPropertiesSetter.setProperties(hootProps);
 
-        Assert.assertNotNull(StringUtils.trimToNull(responseData.getClassPath()));
-        Assert.assertEquals(1, responseData.getProperties().length);
-        Assert.assertEquals("testProp1", responseData.getProperties()[0].getName());
-        Assert.assertEquals("testVal1", responseData.getProperties()[0].getValue());
-        // not sure of a better way to test this one yet...
-        Assert.assertTrue(responseData.getResources().length > 0);
+            mockBuildInfo();
+
+            ServicesDetail responseData = null;
+            try {
+                responseData = resource().path("/about/servicesVersionDetail").accept(MediaType.APPLICATION_JSON)
+                        .get(ServicesDetail.class);
+            }
+            catch (UniformInterfaceException e) {
+                ClientResponse r = e.getResponse();
+                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            }
+
+            Assert.assertNotNull(StringUtils.trimToNull(responseData.getClassPath()));
+            Assert.assertEquals(1, responseData.getProperties().length);
+            Assert.assertEquals("testProp1", responseData.getProperties()[0].getName());
+            Assert.assertEquals("testVal1", responseData.getProperties()[0].getValue());
+            // not sure of a better way to test this one yet...
+            Assert.assertTrue(responseData.getResources().length > 0);
+        }
+        finally {
+            // restore original properties since the are shared at the class level.
+            Properties hootProps = new Properties();
+            hootProps.putAll(originalHootProperties);
+            HootCustomPropertiesSetter.setProperties(hootProps);
+        }
     }
 
     @Test

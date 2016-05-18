@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.osm;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -63,10 +62,10 @@ import hoot.services.utils.XmlUtils;
 
 
 public class ElementResourceTest extends OsmResourceTestAbstract {
-    @SuppressWarnings("unused")
+
     private static final Logger log = LoggerFactory.getLogger(ElementResourceTest.class);
 
-    public ElementResourceTest() throws IOException {
+    public ElementResourceTest() {
         super("hoot.services.controllers.osm");
     }
 
@@ -169,8 +168,11 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         Document responseData = null;
         try {
-            responseData = resource().path("api/0.6/node/" + nodeIdsArr[0]).queryParam("mapId", String.valueOf(mapId))
-                    .accept(MediaType.TEXT_XML).get(Document.class);
+            responseData = resource()
+                    .path("api/0.6/node/" + nodeIdsArr[0])
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -196,8 +198,11 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         Document responseData = null;
         try {
-            responseData = resource().path("api/0.6/way/" + wayIdsArr[0]).queryParam("mapId", String.valueOf(mapId))
-                    .accept(MediaType.TEXT_XML).get(Document.class);
+            responseData = resource()
+                    .path("api/0.6/way/" + wayIdsArr[0])
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -222,8 +227,11 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         Document responseData = null;
         try {
-            responseData = resource().path("api/0.6/relation/" + relationIdsArr[0])
-                    .queryParam("mapId", String.valueOf(mapId)).accept(MediaType.TEXT_XML).get(Document.class);
+            responseData = resource()
+                    .path("api/0.6/relation/" + relationIdsArr[0])
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -250,7 +258,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         String uniqueElementId = mapId + "_n_" + nodeIdsArr[0];
 
         try {
-            responseData = resource().path("api/0.6/element/" + uniqueElementId).accept(MediaType.TEXT_XML)
+            responseData = resource()
+                    .path("api/0.6/element/" + uniqueElementId)
+                    .accept(MediaType.TEXT_XML)
                     .get(Document.class);
         }
         catch (UniformInterfaceException e) {
@@ -278,7 +288,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Document responseData = null;
         String uniqueElementId = mapId + "_w_" + wayIdsArr[0];
         try {
-            responseData = resource().path("api/0.6/element/" + uniqueElementId).accept(MediaType.TEXT_XML)
+            responseData = resource()
+                    .path("api/0.6/element/" + uniqueElementId)
+                    .accept(MediaType.TEXT_XML)
                     .get(Document.class);
         }
         catch (UniformInterfaceException e) {
@@ -307,7 +319,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         String uniqueElementId = mapId + "_r_" + relationIdsArr[0];
 
         try {
-            responseData = resource().path("api/0.6/element/" + uniqueElementId).accept(MediaType.TEXT_XML)
+            responseData = resource()
+                    .path("api/0.6/element/" + uniqueElementId)
+                    .accept(MediaType.TEXT_XML)
                     .get(Document.class);
         }
         catch (UniformInterfaceException e) {
@@ -335,8 +349,11 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         Document responseData = null;
         try {
-            responseData = resource().path("api/0.6/way/" + wayIdsArr[0] + "/full")
-                    .queryParam("mapId", String.valueOf(mapId)).accept(MediaType.TEXT_XML).get(Document.class);
+            responseData = resource()
+                    .path("api/0.6/way/" + wayIdsArr[0] + "/full")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -369,8 +386,11 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         Document responseData = null;
         try {
-            responseData = resource().path("api/0.6/relation/" + relationIdsArr[0] + "/full")
-                    .queryParam("mapId", String.valueOf(mapId)).accept(MediaType.TEXT_XML).get(Document.class);
+            responseData = resource()
+                    .path("api/0.6/relation/" + relationIdsArr[0] + "/full")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -404,7 +424,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Document responseData = null;
         String uniqueElementId = mapId + "_w_" + wayIdsArr[0];
         try {
-            responseData = resource().path("api/0.6/element/" + uniqueElementId + "/full").accept(MediaType.TEXT_XML)
+            responseData = resource()
+                    .path("api/0.6/element/" + uniqueElementId + "/full")
+                    .accept(MediaType.TEXT_XML)
                     .get(Document.class);
         }
         catch (UniformInterfaceException e) {
@@ -439,7 +461,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Document responseData = null;
         String uniqueElementId = mapId + "_r_" + relationIdsArr[0];
         try {
-            responseData = resource().path("api/0.6/element/" + uniqueElementId + "/full").accept(MediaType.TEXT_XML)
+            responseData = resource()
+                    .path("api/0.6/element/" + uniqueElementId + "/full")
+                    .accept(MediaType.TEXT_XML)
                     .get(Document.class);
         }
         catch (UniformInterfaceException e) {
@@ -471,8 +495,11 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         try {
-            resource().path("api/0.6/node/" + nodeIdsArr[nodeIdsArr.length - 1] + 1)
-                    .queryParam("mapId", String.valueOf(mapId)).accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/node/" + nodeIdsArr[nodeIdsArr.length - 1] + 1)
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -497,7 +524,10 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         String uniqueElementId = mapId + "_n_" + nodeIdsArr[nodeIdsArr.length - 1] + 1;
         try {
-            resource().path("api/0.6/element/" + uniqueElementId).accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/element/" + uniqueElementId)
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -519,8 +549,11 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         try {
-            resource().path("api/0.6/way/" + wayIdsArr[wayIdsArr.length - 1] + 1)
-                    .queryParam("mapId", String.valueOf(mapId)).accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/way/" + wayIdsArr[wayIdsArr.length - 1] + 1)
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -544,7 +577,10 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         String uniqueElementId = mapId + "_w_" + wayIdsArr[wayIdsArr.length - 1] + 1;
         try {
-            resource().path("api/0.6/element/" + uniqueElementId).accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/element/" + uniqueElementId)
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -567,8 +603,11 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         try {
-            resource().path("api/0.6/way/" + wayIdsArr[wayIdsArr.length - 1] + 1 + "/full")
-                    .queryParam("mapId", String.valueOf(mapId)).accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/way/" + wayIdsArr[wayIdsArr.length - 1] + 1 + "/full")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -591,7 +630,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         String uniqueElementId = mapId + "_w_" + wayIdsArr[wayIdsArr.length - 1] + 1;
         try {
-            resource().path("api/0.6/element/" + uniqueElementId + "/full").accept(MediaType.TEXT_XML)
+            resource()
+                    .path("api/0.6/element/" + uniqueElementId + "/full")
+                    .accept(MediaType.TEXT_XML)
                     .get(Document.class);
         }
         catch (UniformInterfaceException e) {
@@ -614,8 +655,11 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         try {
-            resource().path("api/0.6/relation/" + relationIdsArr[relationIdsArr.length - 1] + 1)
-                    .queryParam("mapId", String.valueOf(mapId)).accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/relation/" + relationIdsArr[relationIdsArr.length - 1] + 1)
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -639,7 +683,10 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         String uniqueElementId = mapId + "_r_" + relationIdsArr[relationIdsArr.length - 1] + 1;
         try {
-            resource().path("api/0.6/element/" + uniqueElementId).accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/element/" + uniqueElementId)
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -662,8 +709,11 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         try {
-            resource().path("api/0.6/relation/" + relationIdsArr[relationIdsArr.length - 1] + 1 + "/full")
-                    .queryParam("mapId", String.valueOf(mapId)).accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/relation/" + relationIdsArr[relationIdsArr.length - 1] + 1 + "/full")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -687,7 +737,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         String uniqueElementId = mapId + "_r_" + relationIdsArr[relationIdsArr.length - 1] + 1;
         try {
-            resource().path("api/0.6/element/" + uniqueElementId + "/full").accept(MediaType.TEXT_XML)
+            resource()
+                    .path("api/0.6/element/" + uniqueElementId + "/full")
+                    .accept(MediaType.TEXT_XML)
                     .get(Document.class);
         }
         catch (UniformInterfaceException e) {
@@ -701,9 +753,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
     }
 
     // Technically, could test these map params for each element type, but the
-    // map ID checking code
-    // should always be the same for all element types.
-
+    // map ID checking code should always be the same for all element types.
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testGetElementMapDoesntExist() throws Exception {
@@ -715,10 +765,11 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         try {
-            resource().path("api/0.6/node/" + nodeIdsArr[0])
-                    .queryParam("mapId",
-                            String.valueOf((int) RandomNumberGenerator.nextDouble(mapId + 10 ^ 4, Integer.MAX_VALUE)))
-                    .accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/node/" + nodeIdsArr[0])
+                    .queryParam("mapId", String.valueOf((int) RandomNumberGenerator.nextDouble(mapId + 10 ^ 4, Integer.MAX_VALUE)))
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -743,12 +794,14 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         String uniqueElementId = ((int) RandomNumberGenerator.nextDouble(mapId + 10 ^ 4, Integer.MAX_VALUE)) + "_n_"
                 + nodeIdsArr[0];
         try {
-            resource().path("api/0.6/element/" + uniqueElementId).accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/element/" + uniqueElementId)
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
             Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            // log.error(r.getEntity(String.class));
             Assert.assertTrue(r.getEntity(String.class).contains("No map exists"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
@@ -767,10 +820,11 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         try {
-            resource().path("api/0.6/way/" + wayIdsArr[0] + "/full")
-                    .queryParam("mapId",
-                            String.valueOf((int) RandomNumberGenerator.nextDouble(mapId + 10 ^ 4, Integer.MAX_VALUE)))
-                    .accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/way/" + wayIdsArr[0] + "/full")
+                    .queryParam("mapId", String.valueOf((int) RandomNumberGenerator.nextDouble(mapId + 10 ^ 4, Integer.MAX_VALUE)))
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -794,7 +848,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         String uniqueElementId = ((int) RandomNumberGenerator.nextDouble(mapId + 10 ^ 4, Integer.MAX_VALUE)) + "_w_"
                 + wayIdsArr[0];
         try {
-            resource().path("api/0.6/element/" + uniqueElementId + "/full").accept(MediaType.TEXT_XML)
+            resource()
+                    .path("api/0.6/element/" + uniqueElementId + "/full")
+                    .accept(MediaType.TEXT_XML)
                     .get(Document.class);
         }
         catch (UniformInterfaceException e) {
@@ -819,7 +875,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         try {
             resource()
                     // invalid element type
-                    .path("api/0.6/blah/" + nodeIdsArr[0]).accept(MediaType.TEXT_XML).get(Document.class);
+                    .path("api/0.6/blah/" + nodeIdsArr[0])
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -842,7 +900,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         try {
             resource()
                     // invalid element type
-                    .path("api/0.6/blah/" + nodeIdsArr[0] + "/full").accept(MediaType.TEXT_XML).get(Document.class);
+                    .path("api/0.6/blah/" + nodeIdsArr[0] + "/full")
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -866,7 +926,10 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         // invalid element ID format
         String uniqueElementId = mapId + "__" + nodeIdsArr[0];
         try {
-            resource().path("api/0.6/element/" + uniqueElementId).accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/element/" + uniqueElementId)
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -890,7 +953,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         // invalid element ID format
         String uniqueElementId = mapId + "__" + nodeIdsArr[0];
         try {
-            resource().path("api/0.6/element/" + uniqueElementId + "/full").accept(MediaType.TEXT_XML)
+            resource()
+                    .path("api/0.6/element/" + uniqueElementId + "/full")
+                    .accept(MediaType.TEXT_XML)
                     .get(Document.class);
         }
         catch (UniformInterfaceException e) {
@@ -918,8 +983,11 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         try {
-            resource().path("api/0.6/node/" + nodeIdsArr[0] + "/full").queryParam("mapId", String.valueOf(mapId))
-                    .accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/node/" + nodeIdsArr[0] + "/full")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -944,7 +1012,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         String uniqueElementId = mapId + "_n_" + nodeIdsArr[0];
         try {
-            resource().path("api/0.6/element/" + uniqueElementId + "/full").accept(MediaType.TEXT_XML)
+            resource()
+                    .path("api/0.6/element/" + uniqueElementId + "/full")
+                    .accept(MediaType.TEXT_XML)
                     .get(Document.class);
         }
         catch (UniformInterfaceException e) {

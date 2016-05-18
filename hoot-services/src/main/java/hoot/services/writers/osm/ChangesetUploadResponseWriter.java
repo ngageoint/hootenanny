@@ -33,6 +33,7 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import hoot.services.HootProperties;
 import hoot.services.models.osm.XmlSerializable;
@@ -44,7 +45,7 @@ import hoot.services.utils.XmlDocumentBuilder;
  * Writes an HTTP response for a changeset upload request
  */
 public class ChangesetUploadResponseWriter {
-    private static final Logger log = LoggerFactory.getLogger(ChangesetUploadResponseWriter.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChangesetUploadResponseWriter.class);
 
     /**
      * Writes a changeset upload response to an XML document
@@ -56,20 +57,19 @@ public class ChangesetUploadResponseWriter {
      *            changeset request
      * @return a changeset upload response XML document
      */
-    public Document writeResponse(final long changesetId, final List<XmlSerializable> changesetDiffElements) {
+    public Document writeResponse(long changesetId, List<XmlSerializable> changesetDiffElements) {
         Document responseDoc = null;
         try {
-            log.debug("Building response...");
+            logger.debug("Building response...");
 
             responseDoc = XmlDocumentBuilder.create();
 
-            org.w3c.dom.Element osmElement = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
+            Element osmElement = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
 
-            org.w3c.dom.Element diffResultXmlElement = responseDoc.createElement("diffResult");
-            diffResultXmlElement.setAttribute("generator",
-                    HootProperties.getInstance().getProperty("generator", HootProperties.getDefault("generator")));
-            diffResultXmlElement.setAttribute("version",
-                    HootProperties.getInstance().getProperty("osmVersion", HootProperties.getDefault("osmVersion")));
+            Element diffResultXmlElement = responseDoc.createElement("diffResult");
+
+            diffResultXmlElement.setAttribute("generator", HootProperties.getPropertyOrDefault("generator"));
+            diffResultXmlElement.setAttribute("version", HootProperties.getPropertyOrDefault("osmVersion"));
 
             for (XmlSerializable element : changesetDiffElements) {
                 diffResultXmlElement.appendChild(element.toChangesetResponseXml(diffResultXmlElement));
@@ -80,7 +80,7 @@ public class ChangesetUploadResponseWriter {
         }
         catch (Exception e) {
             ResourceErrorHandler.handleError("Error creating response for changeset with ID: " + changesetId
-                    + " - data: (" + e.getMessage() + ") ", Status.BAD_REQUEST, log);
+                    + " - data: (" + e.getMessage() + ") ", Status.BAD_REQUEST, logger);
         }
 
         return responseDoc;

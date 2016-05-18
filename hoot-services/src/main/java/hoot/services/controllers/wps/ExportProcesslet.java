@@ -28,12 +28,12 @@ package hoot.services.controllers.wps;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.deegree.services.wps.Processlet;
 import org.deegree.services.wps.ProcessletException;
 import org.deegree.services.wps.ProcessletExecutionInfo;
@@ -51,31 +51,21 @@ import hoot.services.nativeInterfaces.NativeInterfaceException;
 
 /**
  * @author Jong Choi
- * 
+ *         <p>
  *         WPS processlet for ETL operation. The operation is done using make
  *         file. See hoot-services.conf for dependencies. Please note that the
- *         arguments used by the make file is driven by ETLProcesslet.xml
- *
+ *         arguments used by the make file is driven by ETLProcesslet.XML
  */
 public class ExportProcesslet implements Processlet {
+    private static final Logger logger = LoggerFactory.getLogger(ExportProcesslet.class);
 
-    private static final Logger log = LoggerFactory.getLogger(ExportProcesslet.class);
-    private String tempOutputPath = null;
-    private String delPath = null;
+    private final String tempOutputPath = HootProperties.getProperty("tempOutputPath");
+    private String delPath;
 
     /**
-     * 
+     *
      */
-    public ExportProcesslet() throws Exception {
-        try {
-            if (tempOutputPath == null) {
-                tempOutputPath = HootProperties.getProperty("tempOutputPath");
-            }
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-        }
-
+    public ExportProcesslet() {
     }
 
     /*
@@ -85,7 +75,6 @@ public class ExportProcesslet implements Processlet {
      */
     @Override
     public void destroy() {
-
         try {
             if (delPath != null) {
                 File workfolder = new File(delPath);
@@ -95,7 +84,7 @@ public class ExportProcesslet implements Processlet {
             }
         }
         catch (Exception ex) {
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
         }
     }
 
@@ -116,7 +105,7 @@ public class ExportProcesslet implements Processlet {
      * @see hoot.services.wps.WPSProcesslet#process(org.deegree.services.wps.
      * ProcessletInputs, org.deegree.services.wps.ProcessletOutputs,
      * org.deegree.services.wps.ProcessletExecutionInfo)
-     * 
+     *
      * Process osm2ogr operation. For param filter see OSM2OgrProcesslet.xml
      */
     @Override
@@ -127,7 +116,7 @@ public class ExportProcesslet implements Processlet {
         try {
             String workingFolder = tempOutputPath + "/" + args.get("id");
             String outputFilePath = workingFolder + "/" + args.get("outputname") + ".zip";
-            String remove = args.get("removecache").toString();
+            String remove = args.get("removecache");
             if (remove.equalsIgnoreCase("true")) {
                 delPath = tempOutputPath + "/" + args.get("id");
             }
@@ -137,45 +126,26 @@ public class ExportProcesslet implements Processlet {
                 throw new NativeInterfaceException("Missing output file",
                         NativeInterfaceException.HttpCode.SERVER_ERROR);
             }
-            FileInputStream fIn = null;
-            try {
-                fIn = new FileInputStream(fOut);
 
-                org.apache.commons.io.IOUtils.copy(fIn,
-                        ((ComplexOutput) out.getParameter("BinaryOutput")).getBinaryOutputStream());
-            }
-            finally {
-                try {
-                    if (fIn != null) {
-                        fIn.close();
-                    }
-                }
-                catch (IOException e) {
-                    log.error(e.getMessage());
-                }
+            try (FileInputStream fIn = new FileInputStream(fOut)) {
+                ;
+                IOUtils.copy(fIn, ((ComplexOutput) out.getParameter("BinaryOutput")).getBinaryOutputStream());
             }
         }
         catch (Exception ex) {
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
         }
     }
 
     protected Map<String, String> parseRequestParams(ProcessletInputs in) {
-        Map<String, String> commandArgs = new HashMap<String, String>();
+        Map<String, String> commandArgs = new HashMap<>();
         List<ProcessletInput> params = in.getParameters();
 
-        for (int i = 0; i < params.size(); i++) {
-            ProcessletInput input = params.get(i);
+        for (ProcessletInput input : params) {
             String id = input.getIdentifier().getCode();
             String value = ((LiteralInput) in.getParameter(id)).getValue().trim();
-            try {
-                commandArgs.put(id, value);
-            }
-            catch (Exception e) {
-                log.error(e.getMessage());
-            }
+            commandArgs.put(id, value);
         }
         return commandArgs;
     }
-
 }

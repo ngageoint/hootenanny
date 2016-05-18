@@ -43,35 +43,26 @@ import hoot.services.HootProperties;
 
 /**
  * @author Jong Choi
- * 
+ *         <p>
  *         Base class for WPS processlet
- * 
  */
 public abstract class BaseProcesslet implements Processlet {
     private static final Logger log = LoggerFactory.getLogger(BaseProcesslet.class);
 
-    protected static String coreJobServerUrl = null;
+    protected static final String coreJobServerUrl = HootProperties.getPropertyOrDefault("coreJobServerUrl");
 
-    @SuppressWarnings("unused")
     private ClassPathXmlApplicationContext appContext;
 
     /**
      * @throws Exception
-     * 
      */
     public BaseProcesslet() throws Exception {
-        // see hoot-service.conf. This one is used to for job server location.
-        if (coreJobServerUrl == null) {
-            coreJobServerUrl = HootProperties.getInstance().getProperty("coreJobServerUrl",
-                    HootProperties.getDefault("coreJobServerUrl"));
-        }
-
         appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.deegree.services.wps.Processlet#destroy()
      */
     @Override
@@ -81,7 +72,7 @@ public abstract class BaseProcesslet implements Processlet {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.deegree.services.wps.Processlet#init()
      */
     @Override
@@ -97,9 +88,9 @@ public abstract class BaseProcesslet implements Processlet {
         JSONArray commandArgs = new JSONArray();
         List<ProcessletInput> params = in.getParameters();
 
-        for (int i = 0; i < params.size(); i++) {
+        for (ProcessletInput param : params) {
             JSONObject commandArg = new JSONObject();
-            ProcessletInput input = params.get(i);
+            ProcessletInput input = param;
             String id = input.getIdentifier().getCode();
             String value = ((LiteralInput) in.getParameter(id)).getValue().trim();
             try {
@@ -114,8 +105,8 @@ public abstract class BaseProcesslet implements Processlet {
     }
 
     public String getParameterValue(String key, JSONArray args) {
-        for (int i = 0; i < args.size(); i++) {
-            JSONObject o = (JSONObject) args.get(i);
+        for (Object arg : args) {
+            JSONObject o = (JSONObject) arg;
             if (o.containsKey(key)) {
                 return o.get(key).toString();
             }

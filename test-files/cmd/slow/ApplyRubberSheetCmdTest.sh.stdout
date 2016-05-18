@@ -1,50 +1,0 @@
-16:15:21.959 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
-Reprojecting 0 / 7487         Reprojecting 1000 / 7487         Reprojecting 2000 / 7487         Reprojecting 3000 / 7487         Reprojecting 4000 / 7487         Reprojecting 5000 / 7487         Reprojecting 6000 / 7487         Reprojecting 7000 / 7487         
-16:15:22.008 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
-16:15:22.008 INFO  ...nflate/DuplicateWayRemover.cpp(  64) Removing duplicate ways...
-16:15:22.258 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
-16:15:22.259 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
-16:15:22.259 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
-16:15:22.259 INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
-  Intersection splitter todo: 0       
-16:15:22.314 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
-16:15:22.336 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
-16:15:22.336 INFO  ...e/splitter/DualWaySplitter.cpp(  83) Assuming drives on right.
-16:15:22.336 INFO  ...e/splitter/DualWaySplitter.cpp( 246) Splitting divided ways...
-
-16:15:22.350 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ImpliedDividedMarker
-16:15:22.367 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateNameRemover
-16:15:22.374 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
-16:15:22.400 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmptyAreasVisitor
-16:15:22.416 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
-16:15:22.441 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
-16:15:22.648 INFO  .../core/conflate/RubberSheet.cpp( 325) Found 237 potential ties.
-16:15:22.648 INFO  .../core/conflate/RubberSheet.cpp( 363) Found 173 confident ties.
-16:15:22.664 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: DelaunayInterpolator RMSE: 1.92269
-16:15:23.229 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: IDW, p: 0 RMSE: 1.51816
-16:15:23.608 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: Kernel estimation, sigma: 3176.88 RMSE: 1.51809
-16:15:23.609 INFO  .../core/conflate/RubberSheet.cpp( 258) Best candidate: Kernel estimation, sigma: 3176.88
-16:15:23.609 INFO  .../core/conflate/RubberSheet.cpp( 372) Kernel estimation, sigma: 3176.88
-16:15:24.865 WARN  ...re/cmd/ApplyRubberSheetCmd.cpp(  66) has way -1108: 0
-16:15:24.865 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
-Reprojecting 0 / 3163         Reprojecting 1000 / 3163         Reprojecting 2000 / 3163         Reprojecting 3000 / 3163         
-16:15:24.912 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
-16:15:24.912 INFO  ...nflate/DuplicateWayRemover.cpp(  64) Removing duplicate ways...
-16:15:25.143 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
-16:15:25.143 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
-16:15:25.144 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
-16:15:25.144 INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
-  Intersection splitter todo: 0       
-16:15:25.184 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
-16:15:25.194 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
-16:15:25.195 INFO  ...e/splitter/DualWaySplitter.cpp(  83) Assuming drives on right.
-16:15:25.195 INFO  ...e/splitter/DualWaySplitter.cpp( 246) Splitting divided ways...
-
-16:15:25.200 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ImpliedDividedMarker
-16:15:25.208 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateNameRemover
-16:15:25.212 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
-16:15:25.224 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmptyAreasVisitor
-16:15:25.233 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
-16:15:25.245 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
-16:15:25.269 WARN  .../core/conflate/RubberSheet.cpp( 137) No appropriate interpolator was specified, skipping rubber sheet transform.
-Reprojecting 0 / 3163         Reprojecting 1000 / 3163         Reprojecting 2000 / 3163         Reprojecting 3000 / 3163         

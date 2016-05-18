@@ -179,7 +179,7 @@ public class JobProcesslet extends BaseProcesslet {
         return command;
     }
 
-    protected JSONObject _createReflectionJobReq(JSONArray args, String className, String methodName) {
+    protected JSONObject createReflectionJobReq(JSONArray args, String className, String methodName) {
         this.getClass().getSimpleName();
 
         JSONObject command = new JSONObject();
@@ -191,7 +191,7 @@ public class JobProcesslet extends BaseProcesslet {
         return command;
     }
 
-    protected JSONObject _createReflectionSycJobReq(JSONArray args, String className, String methodName) {
+    protected JSONObject createReflectionSycJobReq(JSONArray args, String className, String methodName) {
         this.getClass().getSimpleName();
 
         JSONObject command = new JSONObject();

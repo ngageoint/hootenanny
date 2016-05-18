@@ -26,8 +26,6 @@
  */
 package hoot.services.controllers.ogr;
 
-import java.io.IOException;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -48,69 +46,40 @@ import hoot.services.utils.ResourceErrorHandler;
 public class TranslatorResource extends ServerControllerBase {
     private static final Logger log = LoggerFactory.getLogger(TranslatorResource.class);
 
-    private static String homeFolder = null;
-    private static String translationServerPort = null;
-    private static String translationServerThreadCount = null;
-    private static String translationServerScript = null;
-
+    private static final String homeFolder;
+    private static final String translationServerPort;
+    private static final String translationServerThreadCount;
+    private static final String translationServerScript;
     private static final Object procLock = new Object();
     private static final Object portLock = new Object();
 
-    private static String currentPort = null;
-    private static Process transProc = null;
+    private static String currentPort;
+    private static Process transProc;
+
+    static {
+        homeFolder = HootProperties.getProperty("homeFolder");
+        translationServerPort = HootProperties.getProperty("translationServerPort");
+        translationServerThreadCount = HootProperties.getProperty("translationServerThreadCount");
+        translationServerScript = HootProperties.getProperty("translationServerScript");
+    }
 
     public TranslatorResource() {
-        if (homeFolder == null) {
-            try {
-                homeFolder = HootProperties.getProperty("homeFolder");
-            }
-            catch (IOException e) {
-                log.error(e.getMessage());
-            }
-        }
-
-        if (translationServerPort == null) {
-            try {
-                translationServerPort = HootProperties.getProperty("translationServerPort");
-            }
-            catch (IOException e) {
-                log.error(e.getMessage());
-            }
-        }
-
-        if (translationServerThreadCount == null) {
-            try {
-                translationServerThreadCount = HootProperties.getProperty("translationServerThreadCount");
-            }
-            catch (IOException e) {
-                log.error(e.getMessage());
-            }
-        }
-
-        if (translationServerScript == null) {
-            try {
-                translationServerScript = HootProperties.getProperty("translationServerScript");
-            }
-            catch (IOException e) {
-                log.error(e.getMessage());
-            }
-        }
     }
 
     public void startTranslationService() {
         // set default default port and threadcount
-        String currPort = translationServerPort;
-        String currThreadCnt = translationServerThreadCount;
         try {
             // Make sure to wipe out previosuly running servers.
             stopServer(homeFolder + "/scripts/" + translationServerScript);
 
             // Probably an overkill but just in-case using synch lock
+            String currPort = translationServerPort;
             synchronized (portLock) {
                 currentPort = currPort;
             }
 
             synchronized (procLock) {
+                String currThreadCnt = translationServerThreadCount;
                 transProc = startServer(currPort, currThreadCnt, homeFolder + "/scripts/" + translationServerScript);
             }
         }
@@ -142,9 +111,9 @@ public class TranslatorResource extends ServerControllerBase {
 
     /**
      * Gets current status of translation server.
-     * 
+     * <p>
      * GET hoot-services/ogr/translationserver/status
-     * 
+     *
      * @return JSON containing state and port it is running
      */
     @GET
@@ -163,6 +132,7 @@ public class TranslatorResource extends ServerControllerBase {
         JSONObject res = new JSONObject();
         res.put("isRunning", isRunning);
         res.put("port", currentPort);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 }

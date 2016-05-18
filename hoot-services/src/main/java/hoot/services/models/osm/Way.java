@@ -377,8 +377,7 @@ public class Way extends Element {
     private void validateWayNodesSize(NodeList wayNodesXml) throws Exception {
         if (entityChangeType != EntityChangeType.DELETE) {
             CurrentWays wayRecord = (CurrentWays) record;
-            long maximumWayNodes = Long.parseLong(HootProperties.getInstance().getProperty("maximumWayNodes",
-                    HootProperties.getDefault("maximumWayNodes")));
+            long maximumWayNodes = Long.parseLong(HootProperties.getPropertyOrDefault("maximumWayNodes"));
 
             long numWayNodes = wayNodesXml.getLength();
             if (numWayNodes < 2) {

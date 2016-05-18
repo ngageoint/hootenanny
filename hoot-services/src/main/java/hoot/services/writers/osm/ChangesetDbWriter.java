@@ -141,8 +141,7 @@ public class ChangesetDbWriter {
      */
     public ChangesetDbWriter(Connection conn) throws Exception {
         this.conn = conn;
-        maxRecordBatchSize = Integer.parseInt(HootProperties.getInstance().getProperty("maxRecordBatchSize",
-                HootProperties.getDefault("maxRecordBatchSize")));
+        maxRecordBatchSize = Integer.parseInt(HootProperties.getPropertyOrDefault("maxRecordBatchSize"));
     }
 
     private void initParsedElementCache() {
@@ -414,10 +413,8 @@ public class ChangesetDbWriter {
             // type relation, for which
             // no bounds is being calculated
             if (elementBounds != null) {
-                diffBounds.expand(element.getBounds(),
-                        Double.parseDouble(
-                                HootProperties.getInstance().getProperty("changesetBoundsExpansionFactorDeegrees",
-                                        HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"))));
+                diffBounds.expand(element.getBounds(), Double
+                        .parseDouble(HootProperties.getPropertyOrDefault("changesetBoundsExpansionFactorDeegrees")));
             }
         }
 
@@ -672,10 +669,9 @@ public class ChangesetDbWriter {
         // per OSM docs.
         BoundingBox newChangesetBounds = changeset.getBounds();
         newChangesetBounds.expand(diffBounds,
-                Double.parseDouble(HootProperties.getInstance().getProperty("changesetBoundsExpansionFactorDeegrees",
-                        HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"))));
-        changeset.setBounds(newChangesetBounds);
+                Double.parseDouble(HootProperties.getPropertyOrDefault("changesetBoundsExpansionFactorDeegrees")));
 
+        changeset.setBounds(newChangesetBounds);
         changeset.updateExpiration();
 
         return changesetDiffElements;

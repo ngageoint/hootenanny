@@ -26,13 +26,13 @@
  */
 package hoot.services.controllers.osm;
 
-import java.io.IOException;
 import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -75,6 +75,7 @@ import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.XmlUtils;
 
 
@@ -83,7 +84,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
     protected static QMaps maps = QMaps.maps;
 
-    public MapResourceTest() throws IOException {
+    public MapResourceTest() {
         super("hoot.services.controllers.osm");
     }
 
@@ -428,8 +429,11 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             // Query an empty map. No elements should be returned.
             Document responseData = null;
             try {
-                responseData = resource().path("api/0.6/map").queryParam("mapId", String.valueOf(mapId))
-                        .queryParam("bbox", queryBounds.toServicesString()).accept(MediaType.TEXT_XML)
+                responseData = resource()
+                        .path("api/0.6/map")
+                        .queryParam("mapId", String.valueOf(mapId))
+                        .queryParam("bbox", queryBounds.toServicesString())
+                        .accept(MediaType.TEXT_XML)
                         .get(Document.class);
             }
             catch (UniformInterfaceException e) {
@@ -493,8 +497,11 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             // one of the relations should be returned.
             Document responseData = null;
             try {
-                responseData = resource().path("api/0.6/map").queryParam("mapId", String.valueOf(mapId))
-                        .queryParam("bbox", queryBounds.toServicesString()).accept(MediaType.TEXT_XML)
+                responseData = resource()
+                        .path("api/0.6/map")
+                        .queryParam("mapId", String.valueOf(mapId))
+                        .queryParam("bbox", queryBounds.toServicesString())
+                        .accept(MediaType.TEXT_XML)
                         .get(Document.class);
             }
             catch (UniformInterfaceException e) {
@@ -625,18 +632,17 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             // create a way completely outside the query bounds
             /* long oobWayId = */
-            OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<Long>(oobNodeIds), null, conn);
+            OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<>(oobNodeIds), null, conn);
 
             // create a way with some nodes inside the query bounds and some
             // outside; The way and the
             // out of bounds nodes it owns should be returned by the query since
             // at least one of the added
             // way nodes is within the bounds.
-            Set<Long> partiallyOobNodeIds = new LinkedHashSet<Long>();
+            Set<Long> partiallyOobNodeIds = new LinkedHashSet<>();
             partiallyOobNodeIds.add(nodeIdsArr[0]);
             partiallyOobNodeIds.add(oobNodeIdsArr[0]);
-            wayIds.add(OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<Long>(partiallyOobNodeIds), null,
-                    conn));
+            wayIds.add(OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<>(partiallyOobNodeIds), null, conn));
             Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
 
             // Query the elements back out geospatially. All but one of the
@@ -644,8 +650,11 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             // one of the relations should be returned.
             Document responseData = null;
             try {
-                responseData = resource().path("api/0.6/map").queryParam("mapId", String.valueOf(mapId))
-                        .queryParam("bbox", queryBounds.toServicesString()).accept(MediaType.TEXT_XML)
+                responseData = resource()
+                        .path("api/0.6/map")
+                        .queryParam("mapId", String.valueOf(mapId))
+                        .queryParam("bbox", queryBounds.toServicesString())
+                        .accept(MediaType.TEXT_XML)
                         .get(Document.class);
             }
             catch (UniformInterfaceException e) {
@@ -773,8 +782,11 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             // one of the relations should be returned.
             Document responseData = null;
             try {
-                responseData = resource().path("api/0.6/map").queryParam("mapId", String.valueOf(mapId))
-                        .queryParam("bbox", queryBounds.toServicesString()).accept(MediaType.TEXT_XML)
+                responseData = resource()
+                        .path("api/0.6/map")
+                        .queryParam("mapId", String.valueOf(mapId))
+                        .queryParam("bbox", queryBounds.toServicesString())
+                        .accept(MediaType.TEXT_XML)
                         .get(Document.class);
             }
             catch (UniformInterfaceException e) {
@@ -853,64 +865,81 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
             Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
-            // make one of the nodes invisible, so it shouldn't be returned in a
-            // map query
-            CurrentNodes invisibleNode = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentNodes)
-                    .where(currentNodes.id.eq(nodeIdsArr[3])).singleResult(currentNodes);
+            // make one of the nodes invisible, so it shouldn't be returned in a map query
+            CurrentNodes invisibleNode = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                    .from(currentNodes)
+                    .where(currentNodes.id.eq(nodeIdsArr[3]))
+                    .singleResult(currentNodes);
+
+            Assert.assertNotNull(invisibleNode);
 
             invisibleNode.setVisible(false);
 
             int success = (int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentNodes)
-                    .where(currentNodes.id.eq(invisibleNode.getId())).set(currentNodes.visible, false).execute();
-
-            Assert.assertEquals(1, success);
-
-            Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentNodes)
-                    .where(currentNodes.id.eq(nodeIdsArr[3])).singleResult(currentNodes.visible)
-
-            );
-
-            // make one of the ways invisible, so it shouldn't be returned in a
-            // map query
-            CurrentWays invisibleWay = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWays)
-                    .where(currentWays.id.eq(wayIdsArr[0])).singleResult(currentWays);
-            invisibleWay.setVisible(false);
-
-            success = (int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentWays)
-                    .where(currentWays.id.eq(invisibleWay.getId())).set(currentWays.visible, false).execute();
-
-            Assert.assertEquals(1, success);
-
-            Assert.assertEquals(false,
-
-                    new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWays)
-                            .where(currentWays.id.eq(wayIdsArr[0])).singleResult(currentWays.visible));
-
-            // make one of the relations invisible, so it shouldn't be returned
-            // in a map query
-            CurrentRelations invisibleRelation = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                    .from(currentRelations).where(currentRelations.id.eq(relationIdsArr[0]))
-                    .singleResult(currentRelations);
-            invisibleRelation.setVisible(false);
-
-            success = (int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentRelations)
-                    .where(currentRelations.id.eq(invisibleRelation.getId())).set(currentRelations.visible, false)
+                    .where(currentNodes.id.eq(invisibleNode.getId()))
+                    .set(currentNodes.visible, false)
                     .execute();
 
             Assert.assertEquals(1, success);
 
-            Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelations)
-                    .where(currentRelations.id.eq(relationIdsArr[0])).singleResult(currentRelations.visible)
+            Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                    .from(currentNodes)
+                    .where(currentNodes.id.eq(nodeIdsArr[3]))
+                    .singleResult(currentNodes.visible));
 
-            );
+            // make one of the ways invisible, so it shouldn't be returned in a map query
+            CurrentWays invisibleWay = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                    .from(currentWays)
+                    .where(currentWays.id.eq(wayIdsArr[0]))
+                    .singleResult(currentWays);
+
+            Assert.assertNotNull(invisibleWay);
+
+            invisibleWay.setVisible(false);
+
+            success = (int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentWays)
+                    .where(currentWays.id.eq(invisibleWay.getId()))
+                    .set(currentWays.visible, false)
+                    .execute();
+
+            Assert.assertEquals(1, success);
+
+            Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                    .from(currentWays)
+                    .where(currentWays.id.eq(wayIdsArr[0]))
+                    .singleResult(currentWays.visible));
+
+            // make one of the relations invisible, so it shouldn't be returned in a map query
+            CurrentRelations invisibleRelation = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                    .from(currentRelations)
+                    .where(currentRelations.id.eq(relationIdsArr[0]))
+                    .singleResult(currentRelations);
+
+            Assert.assertNotNull(invisibleRelation);
+
+            invisibleRelation.setVisible(false);
+
+            success = (int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentRelations)
+                    .where(currentRelations.id.eq(invisibleRelation.getId()))
+                    .set(currentRelations.visible, false)
+                    .execute();
+
+            Assert.assertEquals(1, success);
+
+            Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                    .from(currentRelations)
+                    .where(currentRelations.id.eq(relationIdsArr[0]))
+                    .singleResult(currentRelations.visible));
 
             // Query the elements back out geospatially and ensure the invisible
-            // node and way do not
-            // come back in the results.
+            // node and way do not come back in the results.
             Document responseData = null;
             try {
-                responseData = resource().path("api/0.6/map").queryParam("mapId", String.valueOf(mapId))
-                        .queryParam("bbox", queryBounds.toServicesString()).accept(MediaType.TEXT_XML)
+                responseData = resource()
+                        .path("api/0.6/map")
+                        .queryParam("mapId", String.valueOf(mapId))
+                        .queryParam("bbox", queryBounds.toServicesString())
+                        .accept(MediaType.TEXT_XML)
                         .get(Document.class);
             }
             catch (UniformInterfaceException e) {
@@ -988,6 +1017,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
     @Category(UnitTest.class)
     public void testGetMapNodeLimitExceeded() throws Exception {
         QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
+        Map<String, String> originalHootProperties = HootProperties.getProperties();
         try {
             BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
             BoundingBox queryBounds = OsmTestUtils.createTestQueryBounds();
@@ -997,22 +1027,24 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
             // use a lower number of max query nodes than default for efficiency
-            Properties hootProps = HootProperties.getInstance();
+            Properties hootProps = new Properties();
             hootProps.setProperty("maxQueryNodes", "3");
-            HootProperties.setProperties(hootProps);
+            HootCustomPropertiesSetter.setProperties(hootProps);
+
             long maxQueryNumberOfNodes = 3;
 
-            Assert.assertEquals(maxQueryNumberOfNodes,
-                    Long.parseLong(HootProperties.getInstance().getProperty("maxQueryNodes")));
-
             Assert.assertTrue(maxQueryNumberOfNodes < new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                    .from(currentNodes).count());
+                    .from(currentNodes)
+                    .count());
 
             try {
                 // try to run a query that returns more than the maximum allowed
                 // results size
-                resource().path("api/0.6/map").queryParam("mapId", String.valueOf(mapId))
-                        .queryParam("bbox", queryBounds.toServicesString()).accept(MediaType.TEXT_XML)
+                resource()
+                        .path("api/0.6/map")
+                        .queryParam("mapId", String.valueOf(mapId))
+                        .queryParam("bbox", queryBounds.toServicesString())
+                        .accept(MediaType.TEXT_XML)
                         .get(Document.class);
             }
             catch (UniformInterfaceException e) {
@@ -1027,17 +1059,15 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
                 throw e;
             }
-            finally {
-                // set this back to default now that this test is over
-                hootProps.setProperty("maxQueryNodes", HootProperties.getDefault("maxQueryNodes"));
-                HootProperties.setProperties(hootProps);
-                Assert.assertEquals(Long.parseLong(HootProperties.getDefault("maxQueryNodes")),
-                        Long.parseLong(hootProps.getProperty("maxQueryNodes")));
-            }
         }
         catch (Exception e) {
             log.error(e.getMessage());
             throw e;
+        }
+        finally {
+            Properties hootProps = new Properties();
+            hootProps.putAll(originalHootProperties);
+            HootCustomPropertiesSetter.setProperties(hootProps);
         }
     }
 
@@ -1053,8 +1083,12 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         try {
             // try to query nodes from a map that doesn't exist
-            resource().path("api/0.6/map").queryParam("mapId", "-1").queryParam("bbox", queryBounds.toServicesString())
-                    .accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/map")
+                    .queryParam("mapId", "-1")
+                    .queryParam("bbox", queryBounds.toServicesString())
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -1079,7 +1113,10 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         try {
             // try to query nodes from a map that doesn't exist
-            resource().path("api/0.6/map").queryParam("bbox", queryBounds.toServicesString()).accept(MediaType.TEXT_XML)
+            resource()
+                    .path("api/0.6/map")
+                    .queryParam("bbox", queryBounds.toServicesString())
+                    .accept(MediaType.TEXT_XML)
                     .get(Document.class);
         }
         catch (UniformInterfaceException e) {
@@ -1103,8 +1140,12 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         try {
             // try to query nodes from a map that doesn't exist
-            resource().path("api/0.6/map").queryParam("mapId", "").queryParam("bbox", queryBounds.toServicesString())
-                    .accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/map")
+                    .queryParam("mapId", "")
+                    .queryParam("bbox", queryBounds.toServicesString())
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -1140,10 +1181,12 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), maps).populate(map).execute();
 
         try {
-            // try to query nodes from a map name that is linked to multiple map
-            // IDs
-            resource().path("api/0.6/map").queryParam("mapId", duplicatedMapName)
-                    .queryParam("bbox", queryBounds.toServicesString()).accept(MediaType.TEXT_XML).get(Document.class);
+            // try to query nodes from a map name that is linked to multiple map IDs
+            resource().path("api/0.6/map")
+                    .queryParam("mapId", duplicatedMapName)
+                    .queryParam("bbox", queryBounds.toServicesString())
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -1170,8 +1213,12 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         try {
             // try to query nodes without specifying a bounds
-            resource().path("api/0.6/map").queryParam("mapId", String.valueOf(mapId)).queryParam("bbox", "")
-                    .accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/map")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .queryParam("bbox", "")
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -1198,8 +1245,12 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         try {
             // try to query nodes with an invalid bounds
-            resource().path("api/0.6/map").queryParam("mapId", String.valueOf(mapId))
-                    .queryParam("bbox", "-181,-90,180,90").accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/map")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .queryParam("bbox", "-181,-90,180,90")
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -1228,8 +1279,12 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         try {
             // try to query nodes with a bounds that's too large
-            resource().path("api/0.6/map").queryParam("mapId", String.valueOf(mapId))
-                    .queryParam("bbox", queryBounds.toServicesString()).accept(MediaType.TEXT_XML).get(Document.class);
+            resource()
+                    .path("api/0.6/map")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .queryParam("bbox", queryBounds.toServicesString())
+                    .accept(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -1314,7 +1369,9 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), maps).where(maps.id.eq(mapId)).execute();
 
         Assert.assertNull(/* mapDao.findById(mapId) */
-                new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(maps).where(maps.id.eq(mapId))
+                new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                        .from(maps)
+                        .where(maps.id.eq(mapId))
                         .singleResult(maps));
 
         // query out the layers
