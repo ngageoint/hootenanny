@@ -49,6 +49,7 @@ node_modules:
 	npm config set registry http://registry.npmjs.org/
 	npm install --silent xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
 	mkdir -p node_modules
+	rm -rf $(HOME)/tmp
 
 tmp/rules-lib-doxygen: RulesLib.dox ../rules/lib/*
 	mkdir -p tmp

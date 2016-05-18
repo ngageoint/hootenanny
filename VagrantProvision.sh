@@ -184,24 +184,24 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
     cd ~
 fi
 
-if ! grep --quiet NODE_PATH ~/.profile; then
-    echo "### Installing node js dependencies..."
-    sudo npm config set registry http://registry.npmjs.org/
-    sudo npm install --silent -g xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
-    # Change tmp ownership from root to vagrant to avoid non-sudo npm install troubles later
-    sudo chown vagrant:vagrant $HOME/tmp
-    echo 'Adding NODE_PATH to user environment...'
-    echo 'export NODE_PATH=/usr/local/lib/node_modules' >> ~/.profile
-    source ~/.profile
-fi
+# if ! grep --quiet NODE_PATH ~/.profile; then
+#     echo "### Installing node js dependencies..."
+#     sudo npm config set registry http://registry.npmjs.org/
+# #    sudo npm install --silent -g xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
+#     # Change tmp ownership from root to vagrant to avoid non-sudo npm install troubles later
+# #    sudo chown vagrant:vagrant $HOME/tmp
+#     echo 'Adding NODE_PATH to user environment...'
+#     echo 'export NODE_PATH=/usr/local/lib/node_modules' >> ~/.profile
+#     source ~/.profile
+# fi
 
 # Module needed for OSM API db test
-if [ ! -d $HOME/.cpan ]; then
-    echo "### Installing Perl XML::Simple module..."
-    (echo y;echo o conf prerequisites_policy follow;echo o conf commit)|sudo cpan
-    sudo perl -MCPAN -e 'install XML::Simple' > /dev/null
-    sudo chown -R vagrant:vagrant $HOME/.cpan
-fi
+#if [ ! -d $HOME/.cpan ]; then
+#    echo "### Installing Perl XML::Simple module..."
+#    (echo y;echo o conf prerequisites_policy follow;echo o conf commit)|sudo cpan
+#    sudo perl -MCPAN -e 'install XML::Simple' > /dev/null
+#    sudo chown -R vagrant:vagrant $HOME/.cpan
+#fi
 
 # NOTE: These have been changed to pg9.5
 if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
@@ -356,6 +356,10 @@ if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
     echo "Removing services local.conf..."
     rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
+
+# Clean out tomcat logfile. We restart tomcat after provisioning
+sudo service tomcat6 stop
+sudo rm /var/log/tomcat6/catalina.out
 
 cd ~
 # hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
@@ -522,7 +526,10 @@ sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
 sudo chmod a+x /etc/init.d/node-mapnik-server
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-mapnik-server
-sudo npm install --quiet
+#sudo npm install --quiet
+npm install --silent
+# Clean up after the npm install
+rm -rf $HOME/tmp
 
 cd $HOOT_HOME
 
