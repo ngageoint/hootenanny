@@ -16,6 +16,10 @@ When(/^I click the "([^"]*)" link$/) do |linkText|
   find('a', :text=> linkText).click
 end
 
+When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent|
+  find('div.' + parent).find('a.' + classed).click
+end
+
 Then(/^I should see "([^"]*)"$/) do |text|
   page.should have_content(text)
 end
@@ -27,6 +31,14 @@ end
 When(/^I select the "([^"]*)" div$/) do |cls|
   find('div.' + cls).click
   sleep 1
+end
+
+When(/^I select the first "([^"]*)" div$/) do |cls|
+  all('div.' + cls).first.click
+end
+
+When(/^I select the last "([^"]*)" div$/) do |cls|
+  all('div.' + cls).last.click
 end
 
 When(/^I click the "([^"]*)" Dataset$/) do |dataset|
@@ -55,7 +67,7 @@ When(/^I click second "([^"]*)"$/) do |text|
 end
 
 When(/^I click the "([^"]*)" key$/) do |arg1|
-  find("body").native.send_key(arg1)
+  find("body").native.send_keys(arg1)
 end
 
 Then(/^I should see options in this order:$/) do |table|
@@ -103,9 +115,37 @@ When(/^I fill "([^"]*)" input with "([^"]*)"$/) do |el, value|
   sleep 1
 end
 
-When(/^I append "([^"]*)" input with "([^"]*)"$/) do |el, value|
-  find('input.' + el).native.send_keys(value)
+When(/^I fill input under "([^"]*)" with "([^"]*)"$/) do |parent, value|
+  all('div.' + parent).last.find('input[type="text"]').set(value)
   sleep 1
+end
+
+When(/^I press enter in the "([^"]*)" input$/) do |selector|
+  find('input' + selector).native.send_keys(:enter)
+end
+
+When(/^I press tab in the "([^"]*)" input$/) do |selector|
+  find('input' + selector).native.send_keys(:tab)
+end
+
+When(/^I press escape in the "([^"]*)" input$/) do |selector|
+  find('input' + selector).native.send_keys(:escape)
+end
+
+When(/^I press the left arrow key$/) do
+  find('body').native.send_keys(:arrow_left)
+end
+
+When(/^I press the right arrow key$/) do
+  find('body').native.send_keys(:arrow_right)
+end
+
+When(/^I press the up arrow key on "([^"]*)"$/) do |target|
+  find(target).native.send_keys(:arrow_up)
+end
+
+When(/^I press the down arrow key on "([^"]*)"$/) do |target|
+  find(target).native.send_keys(:arrow_down)
 end
 
 When(/^I press "([^"]*)"$/) do |button|
@@ -177,4 +217,63 @@ Then(/^I resize the window$/) do
     window = Capybara.current_session.driver.browser.manage.window
     window.resize_to(1920, 1080) # width, height
   end
+end
+
+When(/^I upload a shapefile/) do
+  include_hidden_fields do
+    # Seems to be a bug where only the last file in the array gets attached.
+    # Then can't be attached separately because then each file gets uploaded
+    # individually.
+    page.attach_file('taFiles', [ENV['HOOT_HOME'] + '/test-files/translation_assistant/cali-test.shp', ENV['HOOT_HOME'] + '/test-files/translation_assistant/cali-test.dbf', ENV['HOOT_HOME'] + '/test-files/translation_assistant/cali-test.shx', ENV['HOOT_HOME'] + '/test-files/translation_assistant/cali-test.prj'])
+    # page.execute_script("var event = document.createEvent('Event'); event.initEvent('change', true, true); d3.select('input[name=taFiles]').node().dispatchEvent(event);")
+    puts page.driver.browser.manage.logs.get("browser")
+  end
+end
+
+When(/^I upload a zipped shapefile/) do
+  include_hidden_fields do
+    page.attach_file('taFiles', ENV['HOOT_HOME'] + '/test-files/translation_assistant/cali-test.zip')
+  end
+end
+
+When(/^I upload a zipped folder of shapefiles/) do
+  include_hidden_fields do
+    page.attach_file('taFiles', ENV['HOOT_HOME'] + '/test-files/translation_assistant/calizip.zip')
+  end
+end
+
+When(/^I upload an invalid dataset/) do
+  include_hidden_fields do
+    page.attach_file('taFiles', ENV['HOOT_HOME'] + '/test-files/translation_assistant/cali-test.shx')
+  end
+end
+
+Then(/^I take a screenshot/) do
+  screenshot_and_save_page
+end
+
+Then(/^I type "([^"]*)" in input "([^"]*)"$/) do |text, id|
+  page.fill_in id, :with => text
+end
+
+Then(/^I click the "([^"]*)" with text "([^"]*)"$/) do |el, text|
+  page.find(el, :text => text)
+end
+
+Then(/^I accept the alert$/) do
+  page.driver.browser.switch_to.alert.accept
+end
+
+Then(/^I should see element "([^"]*)" with value "([^"]*)"$/) do |id, value|
+  # expect(page).to have_selector("input[value='" + value + "']")
+  # page.should have_xpath("//input[@value='" + value + "']")
+  find(id).value.should eq value
+end
+
+Then(/^I choose "([^"]*)" radio button$/) do |text|
+  choose(text)
+end
+
+Then(/^I POST coverage info$/) do
+  page.execute_script("(function () { if (window.__coverage__) { d3.xhr('http://localhost:8880/coverage/client').header('Content-Type', 'application/json').post(JSON.stringify(window.__coverage__),function(err, data){});}}())");
 end
