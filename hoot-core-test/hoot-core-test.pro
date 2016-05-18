@@ -175,14 +175,10 @@ SOURCES += \
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
     src/test/cpp/hoot/core/io/HootApiDbTest.cpp \
-    src/test/cpp/hoot/core/io/OsmApiDbTest.cpp \
     src/test/cpp/hoot/core/io/ServicesDbTestUtils.cpp \
-    src/test/cpp/hoot/core/io/OsmApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/HootApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/HootApiDbWriterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmChangesetSqlFileWriterTest.cpp \
     src/test/cpp/hoot/core/io/PostgresqlDumpfileWriterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmApiDbChangesetWriterTest.cpp \
 
 HEADERS += \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.h \
@@ -220,5 +216,9 @@ SOURCES += \
     src/test/cpp/hoot/core/ops/ReprojectToPlanarOpTest.cpp \
     src/test/cpp/hoot/core/ops/WaySplitterOpTest.cpp \
     src/test/cpp/hoot/core/ops/TrivialOpTest.cpp \
-    src/test/cpp/hoot/core/conflate/extractors/HistogramTest.cpp
+    src/test/cpp/hoot/core/conflate/extractors/HistogramTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbReaderTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetSqlFileWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbTest.cpp
 

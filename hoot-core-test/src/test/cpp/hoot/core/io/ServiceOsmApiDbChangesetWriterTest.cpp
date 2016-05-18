@@ -47,9 +47,9 @@
 namespace hoot
 {
 
-class OsmApiDbChangesetWriterTest : public CppUnit::TestFixture
+class ServiceOsmApiDbChangesetWriterTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(OsmApiDbChangesetWriterTest);
+  CPPUNIT_TEST_SUITE(ServiceOsmApiDbChangesetWriterTest);
   CPPUNIT_TEST(runSqlChangesetWriteTest);
   CPPUNIT_TEST(runConflictWithConflictsTest);
   CPPUNIT_TEST(runConflictNonIntersectingBoundsTest);
@@ -59,7 +59,7 @@ class OsmApiDbChangesetWriterTest : public CppUnit::TestFixture
 
 public:
 
-  static QString userEmail() { return "OsmApiDbTest@hoottestcpp.org"; }
+  static QString userEmail() { return "ServiceOsmApiDbChangesetWriterTest@hoottestcpp.org"; }
 
   long mapId;
 
@@ -271,6 +271,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiDbChangesetWriterTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbChangesetWriterTest, "slow");
 
 }
