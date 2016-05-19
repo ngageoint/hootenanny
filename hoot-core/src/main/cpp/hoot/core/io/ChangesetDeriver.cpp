@@ -33,12 +33,12 @@
 namespace hoot
 {
 
-ChangesetDeriver::ChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to) :
-  _from(from),
-  _to(to)
+ChangesetDeriver::ChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to,
+                                   bool ignoreVersion) :
+_from(from),
+_to(to),
+_ignoreVersion(ignoreVersion)
 {
-  LOG_INFO("Changeset deriver initialization...");
-
   if (_from->getProjection()->IsGeographic() == false ||
       _to->getProjection()->IsGeographic() == false)
   {
@@ -121,7 +121,7 @@ Change ChangesetDeriver::_nextChange()
   {
     // while the elements are exactly the same there is nothing to do.
     while (_fromE.get() && _toE.get() && _fromE->getElementId() == _toE->getElementId() &&
-            ElementComparer().isSame(_fromE, _toE))
+            ElementComparer(_ignoreVersion).isSame(_fromE, _toE))
     {
       LOG_DEBUG("skipping identical elements - 'from' element: " << _fromE->getElementId() <<
                 " 'to' element: " << _toE->getElementId());

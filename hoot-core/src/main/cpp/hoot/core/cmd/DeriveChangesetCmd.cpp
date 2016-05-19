@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -59,16 +59,16 @@ public:
 
     LOG_INFO("Deriving changeset for inputs " << args[0] << ", " << args[1] << "...");
 
+    //use the same unknown1 status for both so they pass comparison correctly
     OsmMapPtr map1(new OsmMap());
-    loadMap(map1, args[0], true);
+    loadMap(map1, args[0], true, Status::Unknown1);
 
     OsmMapPtr map2(new OsmMap());
-    loadMap(map2, args[1], true);
+    loadMap(map2, args[1], true, Status::Unknown1);
 
     ElementSorterPtr sorted1(new ElementSorter(map1));
     ElementSorterPtr sorted2(new ElementSorter(map2));
-
-    ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
+    ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2, true));
 
     if (args[2].endsWith(".osc"))
     {
@@ -82,8 +82,7 @@ public:
           QString("SQL changeset writing requires a target database URL for configuration purposes."));
       }
 
-      OsmChangesetSqlFileWriter(QUrl(args[3]))
-        .write(args[2], delta);
+      OsmChangesetSqlFileWriter(QUrl(args[3])).write(args[2], delta);
     }
     else
     {

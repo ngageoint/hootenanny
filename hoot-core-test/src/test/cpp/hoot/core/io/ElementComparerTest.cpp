@@ -87,7 +87,7 @@ public:
     NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.01, 15.0));
     node2->setTag("key1", "value1");
 
-    CPPUNIT_ASSERT(ElementComparer(10000).isSame(node1, node2));
+    CPPUNIT_ASSERT(ElementComparer(false, 10000).isSame(node1, node2));
   }
 
   void runNodeOutsideOfDistanceThresholdTest()

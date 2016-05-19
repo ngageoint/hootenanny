@@ -75,6 +75,8 @@ private:
 
   void _deleteAll(const QString tableName, const QString idFieldName, const long id);
 
+  QString _getVisibleStr(const bool visible) const { return visible ? "true" : "false"; }
+
   long _changesetId;
   long _nodeId;
   long _wayId;
