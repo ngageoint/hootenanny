@@ -64,7 +64,7 @@ clean-db: services-clean-db
 # start over as close to a new build as is reasonable
 clean-all: clean clean-db clean-ccache
 
-clean-coverage: services-clean-coverage
+clean-coverage: services-clean-coverage ui-clean-coverage
 	rm -rf coverage
 	rm -f `find . -name *.gcda`
 
@@ -423,7 +423,7 @@ coverage/core/tbs/index.html:
 	lcov -r coverage/core/tbs/Tbs.info $(IGNORED) -o coverage/core/tbs/TbsTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 	genhtml coverage/core/tbs/TbsTrimmed.info --output-directory coverage/core/tbs/ 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 
-coverage: services-coverage coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html
+coverage: services-coverage ui-coverage coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html
 
 conf/WordsAbridged.sqlite: conf/WordsAbridged.sqlite.gz
 	gunzip -c $^ > $@
