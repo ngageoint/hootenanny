@@ -1234,6 +1234,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
     // TODO: why were these two tests disabled?
 
+    @Ignore
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testGetMapBoundsOutsideWorld() throws Exception {
@@ -1263,6 +1264,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
     }
 
+    @Ignore
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testGetMapBoundsTooLarge() throws Exception {
