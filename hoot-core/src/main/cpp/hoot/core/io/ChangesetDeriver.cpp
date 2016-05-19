@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -92,6 +92,10 @@ Change ChangesetDeriver::_nextChange()
     //OSM expects created elements to have version = 0
     _toE->setVersion(0);
     result.e = _toE;
+    if (_toE->getTags().contains("note"))
+    {
+      result.note = _toE->getTags().get("note");
+    }
 
     LOG_DEBUG("run out of 'from'' elements:");
     LOG_VARD(result.toString());
@@ -103,6 +107,10 @@ Change ChangesetDeriver::_nextChange()
   {
     result.type = Change::Delete;
     result.e = _fromE;
+    if (_fromE->getTags().contains("note"))
+    {
+      result.note = _fromE->getTags().get("note");
+    }
 
     LOG_DEBUG("run out of 'to' elements:");
     LOG_VARD(result.toString());
@@ -112,9 +120,8 @@ Change ChangesetDeriver::_nextChange()
   else
   {
     // while the elements are exactly the same there is nothing to do.
-    while (_fromE.get() && _toE.get() &&
-        _fromE->getElementId() == _toE->getElementId() &&
-        ElementComparer().isSame(_fromE, _toE))
+    while (_fromE.get() && _toE.get() && _fromE->getElementId() == _toE->getElementId() &&
+            ElementComparer().isSame(_fromE, _toE))
     {
       LOG_DEBUG("skipping identical elements - 'from' element: " << _fromE->getElementId() <<
                 " 'to' element: " << _toE->getElementId());
@@ -134,6 +141,10 @@ Change ChangesetDeriver::_nextChange()
       //OSM expects created elements to have version = 0
       _toE->setVersion(0);
       result.e = _toE;
+      if (_toE->getTags().contains("note"))
+      {
+        result.note = _toE->getTags().get("note");
+      }
 
       LOG_DEBUG("'from' element null; 'to' element not null: " << _toE->getElementId());
       LOG_VARD(result.toString());
@@ -145,6 +156,10 @@ Change ChangesetDeriver::_nextChange()
     {
       result.type = Change::Delete;
       result.e = _fromE;
+      if (_fromE->getTags().contains("note"))
+      {
+        result.note = _fromE->getTags().get("note");
+      }
 
       LOG_DEBUG("'to' element null; 'from' element not null: " << _fromE->getElementId());
       LOG_VARD(result.toString());
@@ -155,6 +170,10 @@ Change ChangesetDeriver::_nextChange()
     {
       result.type = Change::Modify;
       result.e = _toE;
+      if (_toE->getTags().contains("note"))
+      {
+        result.note = _toE->getTags().get("note");
+      }
 
       LOG_DEBUG(
         "'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<
@@ -167,6 +186,10 @@ Change ChangesetDeriver::_nextChange()
     {
       result.type = Change::Delete;
       result.e = _fromE;
+      if (_fromE->getTags().contains("note"))
+      {
+        result.note = _fromE->getTags().get("note");
+      }
 
       LOG_DEBUG(
         "'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
@@ -178,9 +201,13 @@ Change ChangesetDeriver::_nextChange()
     else
     {
       result.type = Change::Create;
-      //OSM expects created elements to have version = 0
+      //for xml changeset OSM rails port expects created elements to have version = 0
       _toE->setVersion(0);
       result.e = _toE;
+      if (_toE->getTags().contains("note"))
+      {
+        result.note = _toE->getTags().get("note");
+      }
 
       LOG_DEBUG(
         "'from' element id: " << _fromE->getElementId() << " greater than 'to' element id: " <<
@@ -206,6 +233,17 @@ Change ChangesetDeriver::readNextChange()
   _next.e.reset();
 
   return result;
+}
+
+//for debugging purposes only
+QString ChangesetDeriver::toString()
+{
+  QString out = "";
+  while (hasMoreChanges())
+  {
+    out += readNextChange().toString() + "\n";
+  }
+  return out;
 }
 
 }

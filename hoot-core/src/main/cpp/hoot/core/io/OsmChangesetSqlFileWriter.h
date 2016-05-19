@@ -51,13 +51,19 @@ private:
   void _updateExistingElement(const ConstElementPtr updatedElement);
   void _deleteExistingElement(const ConstElementPtr removedElement);
 
+  QString _getInsertValuesStr(const long id, const long version, const bool visible,
+                              const ConstElementPtr element) const;
   void _create(const ConstNodePtr node);
+  QString _getInsertValuesStr(const long id, const long version, const bool visible,
+                              const ConstNodePtr node) const;
   void _create(const ConstWayPtr way);
   void _create(const ConstRelationPtr relation);
+  QString _getInsertValuesWayOrRelationStr(const long id, const long version,
+                                           const bool visible) const;
 
-  void _createTags(const Tags& tags, ElementId eid);
+  void _createTags(const Tags& tags, ElementId eid, const long version);
   QStringList _tagTableNamesForElement(ElementId eid) const;
-  void _deleteAllTags(ElementId eid);
+  void _deleteCurrentTags(ElementId eid);
 
   void _createWayNodes(const long wayId, const std::vector<long>& nodeIds);
 
@@ -82,6 +88,8 @@ private:
   Tgs::BigMap<long, long> _idMappingsRelation;
 
   friend class OsmChangeWriterSqlTest;
+
+  //QMap<ElementType::Type, QList<long> > _deletedElements;
 
 };
 

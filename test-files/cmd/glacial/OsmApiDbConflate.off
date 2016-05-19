@@ -23,14 +23,14 @@ echo "secondary dataset: " $SEC_DATASET
 echo "AOI: " $AOI
 echo "TEST_NAME: " $TEST_NAME
 
-RUN_DEBUG_STEPS=false
+RUN_DEBUG_STEPS=true
 
 source conf/DatabaseConfig.sh
 export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
-export AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
+export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD
 export HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
-export HOOT_OPTS="--error -D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=OsmApiDbAwareHootApiDbWriterTest@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=OsmApiDbAwareHootApiDbWriterTest@hoottestcpp.org"
+export HOOT_OPTS="--debug -D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=OsmApiDbAwareHootApiDbWriterTest@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=OsmApiDbAwareHootApiDbWriterTest@hoottestcpp.org"
 
 rm -rf test-output/cmd/glacial/$TEST_NAME
 mkdir -p test-output/cmd/glacial/$TEST_NAME
@@ -38,14 +38,14 @@ mkdir -p test-output/cmd/glacial/$TEST_NAME
 echo ""
 echo "STEP 1: Cleaning out the osm api db and initializing it for use..."
 source scripts/SetupOsmApiDB.sh force
-psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
+psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
 
 echo ""
 echo "STEP 2: Writing the reference dataset to the osm api db..."
 cp $REF_DATASET test-output/cmd/glacial/$TEST_NAME/2-ref-raw.osm
 # By default, all of these element ID's will be written starting at 1 by the postgres dump file writer.
 hoot convert $HOOT_OPTS -D preserve.accuracy.tag=true test-output/cmd/glacial/$TEST_NAME/2-ref-raw.osm test-output/cmd/glacial/$TEST_NAME/2-ref-ToBeAppliedToOsmApiDb.sql
-psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-output/cmd/glacial/$TEST_NAME/2-ref-ToBeAppliedToOsmApiDb.sql
+psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-output/cmd/glacial/$TEST_NAME/2-ref-ToBeAppliedToOsmApiDb.sql
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""

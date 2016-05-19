@@ -358,28 +358,48 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId,
   // setup base sql query string
   QString sql =  "SELECT ";
 
-  if(elementType == ElementType::Node)
+  //TODO: This logic seems inconsistent.  _elementTypeToElementTableName is used for one element
+  //type but not others.
+  if (elementType == ElementType::Node)
   {
     sql += _elementTypeToElementTableName(elementType) +
-      " where (latitude between "+QString::number(minLat)+" and "+QString::number(maxLat)+") and (longitude between "+
-      QString::number(minLon)+" and "+QString::number(maxLon)+")";
+      " where (latitude between "+ QString::number(minLat)+" and "+QString::number(maxLat) +
+      ") and (longitude between "+ QString::number(minLon)+" and "+QString::number(maxLon) + ")";
 
     // if requesting a specific id then append this string
-    if (elementId > -1) { sql += " AND (id = :elementId) "; }
+    if (elementId > -1)
+    {
+      sql += " AND (id = :elementId) ";
+    }
+    sql += " AND visible = true ";
   }
   else if (elementType == ElementType::Way)
   {
     sql += "* FROM current_ways ";
 
     // if requesting a specific id then append this string
-    if (elementId > -1) { sql += " WHERE id = :elementId "; }
+    if (elementId > -1)
+    {
+      sql += " WHERE id = :elementId AND visible = true ";
+    }
+    else
+    {
+      sql += " WHERE visible = true ";
+    }
   }
-  else if(elementType == ElementType::Relation)
+  else if (elementType == ElementType::Relation)
   {
     sql += "* FROM current_relations ";
 
     // if requesting a specific id then append this string
-    if(elementId > -1) { sql += " WHERE id = :elementId "; }
+    if (elementId > -1)
+    {
+      sql += " WHERE id = :elementId AND visible = true ";
+    }
+    else
+    {
+      sql += " WHERE visible = true ";
+    }
   }
   else
   {
@@ -424,7 +444,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
   QString sql =  "SELECT " + _elementTypeToElementTableName(elementType);
 
   // sort them in descending order, set limit and offset
-  sql += " ORDER BY id DESC";
+  sql += " WHERE visible = true ORDER BY id DESC";
 
   // let's see what that sql query string looks like
   LOG_DEBUG(QString("The sql query= "+sql));
