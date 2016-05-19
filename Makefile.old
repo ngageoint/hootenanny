@@ -127,7 +127,7 @@ endif
 plugins-test:
 	echo Running plugins tests...
 	# Only run the plugins tests if mocha is installed.
-	cd plugins; (command -v mocha &> /dev/null) && mocha test || echo Skipping mocha tests
+	cd plugins; (command -v mocha &> /dev/null) && mocha --reporter dot || echo Skipping mocha tests
 
 pp-test-all:
 ifneq ($(HADOOP_HOME),)
