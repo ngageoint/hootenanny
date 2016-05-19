@@ -1452,4 +1452,54 @@ QString HootApiDb::_getRenderDBName(long mapId)
   return (dbName + "_renderdb_" + mapIdNumber);
 }
 
+void HootApiDb::lockProcess(const QString mapName)
+{
+  //create a lock table with mapName
+  QSqlQuery lockTableSql(_db);
+  QString sqlStr = QString("CREATE TABLE IF NOT EXISTS \"%1\"(id BIGINT)").arg(mapName);
+  if (lockTableSql.exec(sqlStr) == false)
+  {
+    QString error = QString("Error executing query: %1 (%2)").arg(lockTableSql.lastError().text()).
+        arg(sqlStr);
+    LOG_WARN(error);
+  }
+  else
+  {
+    try
+    {
+      commit();
+      //commit will stop transaction, re-start here
+      transaction();
+    }
+    catch ( const HootException& e )
+    {
+      LOG_VAR("Caught Exception while creating table, ignoring . . .");
+      _db.rollback();
+    }
+
+    //lock table
+    sqlStr = QString("LOCK TABLE \"%1\" IN ACCESS EXCLUSIVE MODE").arg(mapName);
+    if (lockTableSql.exec(sqlStr) == false)
+    {
+      QString error = QString("Error executing query: %1 (%2)").arg(lockTableSql.lastError().text()).
+          arg(sqlStr);
+      LOG_WARN(error);
+    }
+  }
+}
+
+void HootApiDb::dropLockTable(const QString mapName)
+{
+  // Since _openDb executes an explicit LOCK on the "lock table"
+  // we'll need to start a clean transaction to delete it.
+  QSqlQuery dropSql(_db);
+
+  QString sqlStr = QString("DROP TABLE IF EXISTS \"%1\"").arg(mapName);
+  if (dropSql.exec(sqlStr) == false)
+  {
+    QString error = QString("Error executing query: %1 (%2)").arg(dropSql.lastError().text()).arg(sqlStr);
+    LOG_WARN(error);
+  }
+}
+
 }

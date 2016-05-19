@@ -62,6 +62,10 @@ public:
 
   virtual void commit();
 
+  virtual void lockProcess(const QString mapName);
+
+  virtual void dropLockTable(const QString mapName);
+
   //reading
 
   /**
