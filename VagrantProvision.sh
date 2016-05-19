@@ -181,7 +181,7 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
     cd ~
 fi
 
-if ! mocha --version; then
+if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
     sudo npm install --silent -g mocha
     # Clean up after the npm install
