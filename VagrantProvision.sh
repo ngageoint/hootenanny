@@ -181,6 +181,13 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
     cd ~
 fi
 
+if ! mocha --version; then
+    echo "### Installing mocha for plugins test..."
+    sudo npm install --silent -g mocha
+    # Clean up after the npm install
+    sudo rm -rf $HOME/tmp
+fi
+
 # NOTE: These have been changed to pg9.5
 if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
     echo "### Creating Services Database..."
