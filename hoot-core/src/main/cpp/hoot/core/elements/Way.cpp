@@ -323,7 +323,9 @@ QString Way::toString() const
   ss << endl;
   ss << "tags: " << getTags().toString().toStdString();
   ss << "cached envelope: " << GeometryUtils::toString(_cachedEnvelope).toStdString() << endl;
-  ss << "status: " << getStatusString().toStdString();
+  ss << "status: " << getStatusString().toStdString() << endl;
+  ss << "version: " << getVersion() << endl;
+  ss << "visible: " << getVisible();
   return QString::fromStdString(ss.str());
 }
 

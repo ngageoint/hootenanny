@@ -669,7 +669,7 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
   _updateChangesetEnvelope(envelopeNode);
 
-  //LOG_DEBUG("Inserted node with ID: " << QString::number(id));
+  LOG_DEBUG("Inserted node with ID: " << QString::number(id));
 
   return true;
 }
@@ -708,7 +708,7 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
 
   _lazyFlushBulkInsert();
 
-  //LOG_DEBUG("Inserted relation with ID: " << QString::number(relationId));
+  LOG_DEBUG("Inserted relation with ID: " << QString::number(relationId));
 
   return true;
 }
@@ -1250,7 +1250,7 @@ void HootApiDb::updateRelation(const long id, const long version, const Tags& ta
 
   _updateRelation->finish();
 
-  //LOG_DEBUG("Updated relation with ID: " << QString::number(id));
+  LOG_DEBUG("Updated relation with ID: " << QString::number(id));
 }
 
 void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
@@ -1282,7 +1282,7 @@ void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
 
   _updateWay->finish();
 
-  //LOG_DEBUG("Updated way with ID: " << QString::number(id));
+  LOG_DEBUG("Updated way with ID: " << QString::number(id));
 }
 
 bool HootApiDb::insertWay(const Tags &tags, long &assignedId)
@@ -1324,7 +1324,7 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags)
 
   _lazyFlushBulkInsert();
 
-  //LOG_DEBUG("Inserted way with ID: " << QString::number(wayId));
+  LOG_DEBUG("Inserted way with ID: " << QString::number(wayId));
 
   return true;
 }

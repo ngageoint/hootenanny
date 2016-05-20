@@ -227,7 +227,9 @@ QString Relation::toString() const
   }
   ss << endl;
   ss << "tags: " << getTags().toString().toUtf8().data();
-  ss << "status: " << getStatusString().toUtf8().data();
+  ss << "status: " << getStatusString().toStdString() << endl;
+  ss << "version: " << getVersion() << endl;
+  ss << "visible: " << getVisible();
   return QString::fromUtf8(ss.str().data());
 }
 

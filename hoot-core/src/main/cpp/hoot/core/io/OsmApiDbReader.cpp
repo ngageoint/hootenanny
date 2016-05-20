@@ -522,7 +522,7 @@ ElementId OsmApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
-  //LOG_DEBUG("Reading node with ID: " << nodeId);
+  LOG_DEBUG("Reading node with ID: " << nodeId);
   double lat = resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
   double lon = resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
 
@@ -534,9 +534,9 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
       lat,
       ConfigOptions().getCircularErrorDefaultValue(),
       resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
-      resultIterator.value(ApiDb::NODES_TIMESTAMP).toUInt(),
-      resultIterator.value(ApiDb::NODES_VERSION).toLongLong()));
-
+      resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
+      resultIterator.value(ApiDb::NODES_TIMESTAMP).toUInt()));
+  //LOG_VARD(result);
   return result;
 }
 
@@ -544,11 +544,12 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
 {
   const long wayId = resultIterator.value(0).toLongLong();
   const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
-  /*LOG_DEBUG("Reading way with ID: " << wayId);
+  LOG_DEBUG("Reading way with ID: " << wayId);
   if (newWayId != wayId)
   {
     LOG_VARD(newWayId);
-  }*/
+  }
+
   shared_ptr<Way> way(
     new Way(
       _status,
@@ -569,7 +570,7 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
   //add nodes to the map if the map does not contain the node for way. Since query nodes in bounding box
   //may not contain all nodes for the way which will cause problem when cropping map later
   _addNodesForWay(nodeIds, map);
-
+  //LOG_VARD(way);
   return way;
 }
 
@@ -610,11 +611,11 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
 {
   const long relationId = resultIterator.value(0).toLongLong();
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
-  /*LOG_DEBUG("Reading relation with ID: " << relationId);
+  LOG_DEBUG("Reading relation with ID: " << relationId);
   if (newRelationId != relationId)
   {
     LOG_VARD(newRelationId);
-  }*/
+  }
 
   shared_ptr<Relation> relation(
     new Relation(
@@ -633,7 +634,7 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
     members[i].setElementId(_mapElementId(map, members[i].getElementId()));
   }
   relation->setMembers(members);
-
+  //LOG_VARD(relation);
   return relation;
 }
 

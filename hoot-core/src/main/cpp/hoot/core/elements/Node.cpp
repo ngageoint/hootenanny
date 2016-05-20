@@ -95,8 +95,14 @@ shared_ptr<geos::geom::Point> Node::toPoint() const
 
 QString Node::toString() const
 {
-  return QString("Node(%1): x: %2 y: %3 tags:\n%4").arg(getId()).arg(getX()).arg(getY()).
-    arg(getTags().toString());
+  return
+    QString("Node(%1): x: %2 y: %3 tags:\n%4\n version: %5\n visible: %6")
+      .arg(getId())
+      .arg(getX())
+      .arg(getY())
+      .arg(getTags().toString())
+      .arg(getVersion())
+      .arg(getVisible());
 }
 
 void Node::visitRo(const ElementProvider& map, ElementVisitor& filter) const

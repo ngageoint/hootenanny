@@ -273,23 +273,10 @@ void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
 
 void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
 {
-  ElementPtr changeElement;
-  switch (element->getElementType().getEnum())
-  {
-    case ElementType::Node:
-      changeElement.reset(new Node(*dynamic_pointer_cast<const Node>(element)));
-      break;
-    case ElementType::Way:
-      changeElement.reset(new Way(*dynamic_pointer_cast<const Way>(element)));
-      break;
-   case ElementType::Relation:
-      changeElement.reset(new Relation(*dynamic_pointer_cast<const Relation>(element)));
-      break;
-    default:
-      throw HootException("Unknown element type");
-  }
-  const QString elementIdStr = QString::number(changeElement->getId());
-  const QString elementTypeStr = changeElement->getElementType().toString().toLower();
+  const QString elementIdStr = QString::number(element->getId());
+  const QString elementTypeStr = element->getElementType().toString().toLower();
+  ElementPtr changeElement = _getChangeElement(element);
+
   long currentVersion = -1;
   if (_changeElementIdsToVersionsByElementType[element->getElementType().getEnum()]
         .contains(changeElement->getId()))
@@ -302,21 +289,18 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
   {
     currentVersion = changeElement->getVersion();
   }
-  //TODO: hack - not sure why the version would ever be less than 1 by this point
-  if (currentVersion < 1)
-  {
-    currentVersion = 2;
-  }
   const long newVersion = currentVersion + 1;
+
+  changeElement->setVersion(newVersion);
+  _changeElementIdsToVersionsByElementType[element->getElementType().getEnum()][changeElement->getId()] = newVersion;
+  changeElement->setVisible(false);
+  changeElement->setChangeset(_changesetId);
+
   QString note = "";
   if (changeElement->getTags().contains("note"))
   {
     note = changeElement->getTags().get("note");
   }
-  changeElement->setVersion(newVersion);
-  _changeElementIdsToVersionsByElementType[element->getElementType().getEnum()][changeElement->getId()] = newVersion;
-  changeElement->setVisible(false);
-  changeElement->setChangeset(_changesetId);
   LOG_VARD(changeElement->getId());
   LOG_VARD(note);
   LOG_VARD(changeElement->getVersion());

@@ -60,7 +60,7 @@ long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
 {
   long retVal = -1;
 
-  switch(eid.getType().getEnum())
+  switch (eid.getType().getEnum())
   {
     case ElementType::Node:
 

@@ -3,12 +3,12 @@ INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (1, -1, now()
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 0, 0, 1, true, now(), 3221225472, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 0, 0, 1, true, now(), 3221225472, 1);
 /* delete relation*/
-INSERT INTO relations (relation_id, changeset_id, visible, "timestamp", version) VALUES (1, 1, false, now(), 3);
+INSERT INTO relations (relation_id, changeset_id, visible, "timestamp", version) VALUES (1, 1, false, now(), 1);
 DELETE FROM current_relation_tags WHERE relation_id = 1;
 DELETE FROM relation_tags WHERE relation_id = 1;
 DELETE FROM current_relation_members WHERE relation_id=1;
 DELETE FROM current_relation_members WHERE member_type = 'Relation' AND member_id = 1;
-UPDATE current_relations SET changeset_id=1, visible=false, version=3 WHERE id=1;
+UPDATE current_relations SET changeset_id=1, visible=false, version=1 WHERE id=1;
 /* modify node */
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (3, 1, true, now(), 1);
 UPDATE current_ways SET changeset_id=1, visible=true, "timestamp"=now(), version=1 WHERE id=3;
