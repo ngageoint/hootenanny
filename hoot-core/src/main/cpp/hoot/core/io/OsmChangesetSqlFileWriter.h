@@ -9,10 +9,6 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/ElementType.h>
 
-// tgs
-#include <tgs/BigContainers/BigMap.h>
-
-
 // Qt
 #include <QUrl>
 #include <QFile>
@@ -39,7 +35,7 @@ public:
    * @param path SQL file output path
    * @param changesetProvider changeset data
    */
-  void write(const QString path, const ChangeSetProviderPtr changesetProvider);
+  void write(const QString path, ChangeSetProviderPtr changesetProvider);
 
 private:
 
@@ -47,31 +43,28 @@ private:
 
   long _getNextId(const ElementType type);
 
-  void _createNewElement(const ConstElementPtr newElement);
-  void _updateExistingElement(const ConstElementPtr updatedElement);
-  void _deleteExistingElement(const ConstElementPtr removedElement);
+  void _createNewElement(ElementPtr newElement);
+  void _updateExistingElement(ElementPtr updatedElement);
+  void _deleteExistingElement(ElementPtr removedElement);
 
-  QString _getInsertValuesStr(const long id, const long version, const bool visible,
-                              const ConstElementPtr element) const;
-  void _create(const ConstNodePtr node);
-  QString _getInsertValuesStr(const long id, const long version, const bool visible,
-                              const ConstNodePtr node) const;
-  void _create(const ConstWayPtr way);
-  void _create(const ConstRelationPtr relation);
-  QString _getInsertValuesWayOrRelationStr(const long id, const long version,
-                                           const bool visible) const;
+  QString _getInsertValuesStr(const ConstElementPtr element) const;
+  void _create(NodePtr node);
+  QString _getInsertValuesStr(const ConstNodePtr node) const;
+  void _create(WayPtr way);
+  void _create(RelationPtr relation);
+  QString _getInsertValuesWayOrRelationStr(const ConstElementPtr element) const;
 
-  void _createTags(const Tags& tags, ElementId eid, const long version);
-  QStringList _tagTableNamesForElement(ElementId eid) const;
-  void _deleteCurrentTags(ElementId eid);
+  void _createTags(const ConstElementPtr element);
+  QStringList _tagTableNamesForElement(const ElementId& eid) const;
+  void _deleteCurrentTags(const ElementId& eid);
 
-  void _createWayNodes(const long wayId, const std::vector<long>& nodeIds);
+  void _createWayNodes(const ConstWayPtr way);
 
-  void _createRelationMembers(const long relationId, const vector<RelationData::Entry>& members);
+  void _createRelationMembers(const RelationPtr relation);
 
-  void _modify(const ConstNodePtr node);
-  void _modify(const ConstWayPtr way);
-  void _modify(const ConstRelationPtr relation);
+  void _modify(NodePtr node);
+  void _modify(WayPtr way);
+  void _modify(RelationPtr relation);
 
   void _deleteAll(const QString tableName, const QString idFieldName, const long id);
 
@@ -85,13 +78,12 @@ private:
   OsmApiDb _db;
   QFile _outputSql;
 
-  Tgs::BigMap<long, long> _idMappingsNode;
-  Tgs::BigMap<long, long> _idMappingsWay;
-  Tgs::BigMap<long, long> _idMappingsRelation;
+  //having to keep track of element versions with this may go away with some changeset
+  //derivation scrutiny (e.g. changeset with an element modify immediately followed by the same
+  //element being deleted)
+  QMap<ElementType::Type, QMap<long, long> > _changeElementIdsToVersionsByElementType;
 
   friend class OsmChangeWriterSqlTest;
-
-  //QMap<ElementType::Type, QList<long> > _deletedElements;
 
 };
 

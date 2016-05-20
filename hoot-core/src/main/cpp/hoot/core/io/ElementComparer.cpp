@@ -38,7 +38,7 @@ ElementComparer::ElementComparer(bool ignoreVersion, Meters threshold) :
 _ignoreVersion(ignoreVersion),
 _threshold(threshold)
 {
-  //LOG_VARD(_threshold);
+
 }
 
 bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2)
@@ -49,13 +49,12 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2)
       (e1->getVersion() != e2->getVersion() && !_ignoreVersion) ||
       fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
   {
-    /*LOG_DEBUG("node compare failed on id, tags, status, version, or circular error");
-    if (e1->getElementId() != e2->getElementId())
-    {
-      LOG_VARD(e1->getElementId());
-      LOG_VARD(e2->getElementId());
-    }
-    else if (!(e1->getTags() == e2->getTags()))
+    LOG_DEBUG(
+      e1->getElementType().toString() <<
+      " compare failed on id, tags, status, version, or circular error");
+    LOG_VARD(e1->getElementId());
+    LOG_VARD(e2->getElementId());
+    if (!(e1->getTags() == e2->getTags()))
     {
       LOG_VARD(e1->getTags());
       LOG_VARD(e2->getTags());
@@ -74,7 +73,7 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2)
     {
       LOG_VARD(fabs(e1->getCircularError() - e2->getCircularError()));
       LOG_VARD(_threshold);
-    }*/
+    }
     return false;
   }
   switch (e1->getElementType().getEnum())
@@ -96,7 +95,7 @@ bool ElementComparer::_compareNode(const shared_ptr<const Element>& re,
   shared_ptr<const Node> rn = dynamic_pointer_cast<const Node>(re);
   shared_ptr<const Node> n = dynamic_pointer_cast<const Node>(e);
 
-  LOG_VARD(GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()));
+  //LOG_VARD(GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()));
   return (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) <= _threshold);
 }
 

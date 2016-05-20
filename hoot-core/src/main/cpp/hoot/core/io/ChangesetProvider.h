@@ -80,7 +80,7 @@ public:
       ", Note: " + note;
   }
 
-  ConstElementPtr e;
+  ElementPtr e;
   ChangeType type;
   QString note;
 

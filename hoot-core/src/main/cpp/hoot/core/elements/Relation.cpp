@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -78,10 +78,10 @@ private:
 };
 
 Relation::Relation(Status s, long id, Meters circularError, QString type, long changeset,
-                   long version, unsigned int timestamp, QString user, long uid) :
+                   long version, unsigned int timestamp, QString user, long uid, bool visible) :
 Element(s)
 {
-  _relationData.reset(new RelationData(id, changeset, version, timestamp, user, uid));
+  _relationData.reset(new RelationData(id, changeset, version, timestamp, user, uid, visible));
   _relationData->setCircularError(circularError);
   _relationData->setType(type);
 }

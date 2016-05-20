@@ -89,15 +89,13 @@ Change ChangesetDeriver::_nextChange()
   if (!_fromE.get() && _toE.get())
   {
     result.type = Change::Create;
-    //OSM expects created elements to have version = 0
-    _toE->setVersion(0);
     result.e = _toE;
     if (_toE->getTags().contains("note"))
     {
       result.note = _toE->getTags().get("note");
     }
 
-    LOG_DEBUG("run out of 'from'' elements:");
+    LOG_DEBUG("run out of 'from'' elements, setting result to 'to' element:");
     LOG_VARD(result.toString());
 
     _toE = _to->readNextElement();
@@ -112,7 +110,7 @@ Change ChangesetDeriver::_nextChange()
       result.note = _fromE->getTags().get("note");
     }
 
-    LOG_DEBUG("run out of 'to' elements:");
+    LOG_DEBUG("run out of 'to' elements, setting result to 'from' element:");
     LOG_VARD(result.toString());
 
     _fromE = _from->readNextElement();
@@ -125,21 +123,20 @@ Change ChangesetDeriver::_nextChange()
     {
       LOG_DEBUG("skipping identical elements - 'from' element: " << _fromE->getElementId() <<
                 " 'to' element: " << _toE->getElementId());
-
-      _fromE = _from->readNextElement();
+      LOG_VARD(_fromE->toString());
       _toE = _to->readNextElement();
+      LOG_VARD(_toE->toString());
+      _fromE = _from->readNextElement();
     }
 
     if (!_fromE.get() && !_toE.get())
     {
       // pass
-      LOG_DEBUG("both null elements");
+      LOG_DEBUG("both are null elements");
     }
     else if (!_fromE.get() && _toE.get())
     {
       result.type = Change::Create;
-      //OSM expects created elements to have version = 0
-      _toE->setVersion(0);
       result.e = _toE;
       if (_toE->getTags().contains("note"))
       {
@@ -178,6 +175,8 @@ Change ChangesetDeriver::_nextChange()
       LOG_DEBUG(
         "'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<
         _toE->getElementId());
+      LOG_VARD(_fromE->toString());
+      LOG_VARD(_toE->toString());
       LOG_VARD(result.toString());
 
       _toE = _to->readNextElement();
@@ -194,6 +193,8 @@ Change ChangesetDeriver::_nextChange()
       LOG_DEBUG(
         "'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
         _toE->getElementId());
+      LOG_VARD(_fromE->toString());
+      LOG_VARD(_toE->toString());
       LOG_VARD(result.toString());
 
       _fromE = _from->readNextElement();
@@ -201,8 +202,6 @@ Change ChangesetDeriver::_nextChange()
     else
     {
       result.type = Change::Create;
-      //for xml changeset OSM rails port expects created elements to have version = 0
-      _toE->setVersion(0);
       result.e = _toE;
       if (_toE->getTags().contains("note"))
       {
@@ -212,6 +211,8 @@ Change ChangesetDeriver::_nextChange()
       LOG_DEBUG(
         "'from' element id: " << _fromE->getElementId() << " greater than 'to' element id: " <<
         _toE->getElementId());
+      LOG_VARD(_fromE->toString());
+      LOG_VARD(_toE->toString());
       LOG_VARD(result.toString());
 
       _toE = _to->readNextElement();
@@ -233,17 +234,6 @@ Change ChangesetDeriver::readNextChange()
   _next.e.reset();
 
   return result;
-}
-
-//for debugging purposes only
-QString ChangesetDeriver::toString()
-{
-  QString out = "";
-  while (hasMoreChanges())
-  {
-    out += readNextChange().toString() + "\n";
-  }
-  return out;
 }
 
 }

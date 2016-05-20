@@ -78,7 +78,7 @@
         <node id="-1" version="0" lat="38.8549321187910905" lon="-104.8979050333482093"/>
     </create>
     <delete>
-        <way id="-1669801" version="0">
+        <way id="-1669801" version="1">
             <nd ref="-1669731"/>
             <nd ref="-1669791"/>
             <nd ref="-1669793"/>
@@ -86,7 +86,7 @@
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="15"/>
         </way>
-        <way id="-1669799" version="0">
+        <way id="-1669799" version="3">
             <nd ref="-1669729"/>
             <nd ref="-1669779"/>
             <nd ref="-1669781"/>
@@ -94,7 +94,7 @@
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="15"/>
         </way>
-        <way id="-1669797" version="0">
+        <way id="-1669797" version="1">
             <nd ref="-1669789"/>
             <nd ref="-1669787"/>
             <nd ref="-1669785"/>
@@ -129,7 +129,7 @@
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="15"/>
         </way>
-        <way id="-1669795" version="0">
+        <way id="-1669795" version="2">
             <nd ref="-1669725"/>
             <nd ref="-1669727"/>
             <nd ref="-1669729"/>

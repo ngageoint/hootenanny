@@ -370,12 +370,12 @@ DELETE FROM current_way_nodes WHERE way_id=-1669801;
 DELETE FROM current_relation_members WHERE member_type = 'Way' AND member_id = -1669801;
 UPDATE current_ways SET changeset_id=1, visible=false, version=2 WHERE id=-1669801;
 /* delete way - note: 3*/
-INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (-1669799, 1, false, now(), 2);
+INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (-1669799, 1, false, now(), 4);
 DELETE FROM current_way_tags WHERE way_id = -1669799;
 DELETE FROM way_tags WHERE way_id = -1669799;
 DELETE FROM current_way_nodes WHERE way_id=-1669799;
 DELETE FROM current_relation_members WHERE member_type = 'Way' AND member_id = -1669799;
-UPDATE current_ways SET changeset_id=1, visible=false, version=2 WHERE id=-1669799;
+UPDATE current_ways SET changeset_id=1, visible=false, version=4 WHERE id=-1669799;
 /* delete way - note: 0*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (-1669797, 1, false, now(), 2);
 DELETE FROM current_way_tags WHERE way_id = -1669797;
@@ -384,12 +384,12 @@ DELETE FROM current_way_nodes WHERE way_id=-1669797;
 DELETE FROM current_relation_members WHERE member_type = 'Way' AND member_id = -1669797;
 UPDATE current_ways SET changeset_id=1, visible=false, version=2 WHERE id=-1669797;
 /* delete way - note: 2*/
-INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (-1669795, 1, false, now(), 2);
+INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (-1669795, 1, false, now(), 3);
 DELETE FROM current_way_tags WHERE way_id = -1669795;
 DELETE FROM way_tags WHERE way_id = -1669795;
 DELETE FROM current_way_nodes WHERE way_id=-1669795;
 DELETE FROM current_relation_members WHERE member_type = 'Way' AND member_id = -1669795;
-UPDATE current_ways SET changeset_id=1, visible=false, version=2 WHERE id=-1669795;
+UPDATE current_ways SET changeset_id=1, visible=false, version=3 WHERE id=-1669795;
 /* create way  - note: 1*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (1, 1, true, now(), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (1, 1, true, now(), 1);

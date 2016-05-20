@@ -65,9 +65,6 @@ public:
    */
   virtual Change readNextChange();
 
-  //for debugging purposes only
-  QString toString();
-
 private:
 
   Change _nextChange();
