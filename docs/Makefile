@@ -3,7 +3,7 @@ SHELL=/bin/bash
 
 # If the silent flag is passed to make then make a2x quiet
 ifneq (,$(findstring s,$(MAKEFLAGS)))
-	A2X_QUIET=""
+»···A2X_QUIET=""
 else
 	A2X_QUIET=-v
 endif
@@ -26,7 +26,7 @@ all: \
 	Hootenanny\ -\ User\ Interface\ Guide.pdf \
 	Hootenanny\ -\ Installation\ Instructions.pdf \
 	Hootenanny\ -\ Developer\ Guide.pdf \
-	Hootenanny\ -\ Algorithms.pdf \
+  Hootenanny\ -\ Algorithms.pdf \
 
 # A generic dep for all asciidoc documents. Make sure the environment is setup
 # properly.
@@ -128,3 +128,5 @@ Hootenanny\ -\ Installation\ Instructions.pdf: \
 	install/* \
 	styles/*
 	$(call buildAsciidoc)
+
+
