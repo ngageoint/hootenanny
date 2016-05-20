@@ -32,8 +32,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.ws.rs.core.MediaType;
@@ -41,7 +39,6 @@ import javax.xml.xpath.XPath;
 
 import org.apache.xpath.XPathAPI;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
@@ -1017,7 +1014,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
     @Category(UnitTest.class)
     public void testGetMapNodeLimitExceeded() throws Exception {
         QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-        Map<String, String> originalHootProperties = HootProperties.getProperties();
+        String originalMaxQueryNodes = HootProperties.getPropertyOrDefault("maxQueryNodes");
         try {
             BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
             BoundingBox queryBounds = OsmTestUtils.createTestQueryBounds();
@@ -1027,9 +1024,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
             // use a lower number of max query nodes than default for efficiency
-            Properties hootProps = new Properties();
-            hootProps.setProperty("maxQueryNodes", "3");
-            HootCustomPropertiesSetter.setProperties(hootProps);
+            HootCustomPropertiesSetter.setProperty("maxQueryNodes", "3");
 
             long maxQueryNumberOfNodes = 3;
 
@@ -1065,9 +1060,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             throw e;
         }
         finally {
-            Properties hootProps = new Properties();
-            hootProps.putAll(originalHootProperties);
-            HootCustomPropertiesSetter.setProperties(hootProps);
+            HootCustomPropertiesSetter.setProperty("maxQueryNodes", originalMaxQueryNodes);
         }
     }
 
@@ -1231,9 +1224,6 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
     }
 
-    // TODO: why were these two tests disabled?
-
-    @Ignore
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testGetMapBoundsOutsideWorld() throws Exception {
@@ -1255,7 +1245,10 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
             Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Error parsing bounding box from bbox param"));
+
+            // "bbox" of "-181,-90,180,90" should be corrected to "-180,-90,180,90" on the server side
+            // Therefore, the call should not fail because of invalid coordiates
+            Assert.assertFalse(r.getEntity(String.class).contains("Error parsing bounding box from bbox param"));
 
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
@@ -1263,14 +1256,15 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Ignore
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testGetMapBoundsTooLarge() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        BoundingBox queryBounds = new BoundingBox(-79.02265434416296, 37.90089748801109, -77.9224564416296,
-                39.00085678801109);
+        BoundingBox queryBounds = new BoundingBox(-79.02265434416296, 37.90089748801109,
+                                                  -77.9224564416296, 39.00085678801109);
+
         Assert.assertTrue(queryBounds.getArea() > Double.parseDouble(HootProperties.getDefault("maxQueryAreaDegrees")));
+
         long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
         Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
 
@@ -1366,6 +1360,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
     public void testGetDeletedLayer() throws Exception {
         // delete the only existing map
         QMaps maps = QMaps.maps;
+
         new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), maps).where(maps.id.eq(mapId)).execute();
 
         Assert.assertNull(/* mapDao.findById(mapId) */

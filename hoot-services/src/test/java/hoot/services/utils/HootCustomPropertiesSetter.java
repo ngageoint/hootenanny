@@ -18,9 +18,14 @@ public class HootCustomPropertiesSetter {
 
         Field modifiersField = Field.class.getDeclaredField("modifiers");
         modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+        int origFieldModifiers = field.getModifiers();
+        modifiersField.setInt(field, origFieldModifiers & ~Modifier.FINAL);
 
         field.set(null, newProperties);
+
+        // restore
+        modifiersField.setInt(field, origFieldModifiers);
+        field.setAccessible(false);
     }
 
     public static void setProperty(String key, String value) throws Exception {
@@ -29,5 +34,7 @@ public class HootCustomPropertiesSetter {
 
         Properties properties = (Properties) propertiesField.get(null);
         properties.setProperty(key, value);
+
+        propertiesField.setAccessible(false);
     }
 }

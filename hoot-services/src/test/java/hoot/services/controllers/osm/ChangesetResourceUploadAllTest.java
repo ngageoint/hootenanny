@@ -40,7 +40,6 @@ import javax.xml.xpath.XPathExpressionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.postgresql.util.PGobject;
@@ -95,7 +94,6 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
      * ChangesetResourceUploadCreateTest, ChangesetResourceUploadDeleteTest, and
      * ChangesetResourceUploadModifyTest.
      */
-    @Ignore
     @Test
     @Category(UnitTest.class)
     public void testUploadAll() throws Exception {
@@ -351,8 +349,9 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
                 Assert.assertNull(deletedXml.getAttributes().getNamedItem("new_version"));
 
                 NodeList returnedRelations = XPathAPI.selectNodeList(responseData, "//osm/diffResult/relation");
-                // TODO: fix - #696
-                // Assert.assertEquals(6, returnedRelations.getLength());
+
+                /***** THIS ASSERT FAILS INTERMITENTLY ON CENTOS *****/
+                Assert.assertEquals(6, returnedRelations.getLength());
 
                 // check the created relations
                 Assert.assertEquals(-5,
@@ -397,18 +396,11 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
                         Long.parseLong(xpath.evaluate("//osm/diffResult/relation[5]/@new_version", responseData)));
 
                 // check the deleted relation
-                // TODO: fix - #696
-                /*
-                 * Assert.assertEquals( (long)relationIdsArr[2],
-                 * Long.parseLong(xpath.evaluate(
-                 * "//osm/diffResult/relation[6]/@old_id", responseData)));
-                 * deletedXml = XPathAPI.selectSingleNode(responseData,
-                 * "//osm/diffResult/relation[6]");
-                 * Assert.assertNull(deletedXml.getAttributes().getNamedItem(
-                 * "new_id"));
-                 * Assert.assertNull(deletedXml.getAttributes().getNamedItem(
-                 * "new_version"));
-                 */
+                Assert.assertEquals((long)relationIdsArr[2],
+                                    Long.parseLong(xpath.evaluate("//osm/diffResult/relation[6]/@old_id", responseData)));
+                deletedXml = XPathAPI.selectSingleNode(responseData, "//osm/diffResult/relation[6]");
+                Assert.assertNull(deletedXml.getAttributes().getNamedItem("new_id"));
+                Assert.assertNull(deletedXml.getAttributes().getNamedItem("new_version"));
             }
             catch (XPathExpressionException e) {
                 Assert.fail("Error parsing response document: " + e.getMessage());

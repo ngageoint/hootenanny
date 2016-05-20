@@ -475,10 +475,6 @@ public class JobResource {
                 String key = (String) mEntry.getKey();
                 String val = (String) mEntry.getValue();
                 paramsMap.put(key, val);
-                if (!validator.validateField(key, val)) {
-                    log.error("Invalid parameter: " + key);
-                }
-
             }
 
         }
@@ -732,7 +728,7 @@ public class JobResource {
             if (jobThreadExecutor == null) {
                 int threadpoolSize = 5;
                 try {
-                    Integer.parseInt(HootProperties.getProperty("internalJobThreadSize"));
+                    threadpoolSize = Integer.parseInt(HootProperties.getProperty("internalJobThreadSize"));
                 }
                 catch (Exception ex) {
                     log.error("Failed to get internalJobThreadSize. Setting threadpool size to 5.");
