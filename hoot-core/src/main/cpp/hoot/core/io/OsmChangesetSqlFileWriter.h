@@ -51,33 +51,23 @@ private:
   QString _getInsertValuesNodeStr(ConstNodePtr node) const;
   QString _getInsertValuesWayOrRelationStr(ConstElementPtr element) const;
 
+  void _createTags(ConstElementPtr element);
+  QStringList _tagTableNamesForElement(const ElementId& eid) const;
+  void _deleteCurrentTags(const ElementId& eid);
+  void _createWayNodes(ConstWayPtr way);
+  void _createRelationMembers(ConstRelationPtr relation);
+
   void _updateExistingElement(ConstElementPtr updatedElement);
   QString _getUpdateValuesStr(ConstElementPtr element) const;
   QString _getUpdateValuesNodeStr(ConstNodePtr node) const;
   QString _getUpdateValuesWayOrRelationStr(ConstElementPtr element) const;
 
   void _deleteExistingElement(ConstElementPtr removedElement);
-
-  void _createTags(ConstElementPtr element);
-  QStringList _tagTableNamesForElement(const ElementId& eid) const;
-  void _deleteCurrentTags(const ElementId& eid);
-
-  void _createWayNodes(ConstWayPtr way);
-
-  void _createRelationMembers(ConstRelationPtr relation);
-
-  void _modify(ConstNodePtr node);
-  void _modify(ConstWayPtr way);
-  void _modify(ConstRelationPtr relation);
-
   void _deleteAll(const QString tableName, const QString idFieldName, const long id);
 
   QString _getVisibleStr(const bool visible) const { return visible ? "true" : "false"; }
 
   long _changesetId;
-  long _nodeId;
-  long _wayId;
-  long _relationId;
 
   OsmApiDb _db;
   QFile _outputSql;

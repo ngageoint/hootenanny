@@ -201,23 +201,74 @@ QString OsmChangesetSqlFileWriter::_getUpdateValuesWayOrRelationStr(ConstElement
 
 void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
 {
-  switch (element->getElementType().getEnum())
+  const QString elementTypeStr = element->getElementType().toString().toLower();
+  ElementPtr changeElement = _getChangeElement(element);
+
+  //if another parsed change previously modified the element with this id, we want to get the
+  //modified version
+  long currentVersion = -1;
+  if (_changeElementIdsToVersionsByElementType[element->getElementType().getEnum()]
+        .contains(changeElement->getId()))
   {
-    case ElementType::Node:
-      _modify(dynamic_pointer_cast<const Node>(element));
-      break;
+    currentVersion =
+      _changeElementIdsToVersionsByElementType[element->getElementType().getEnum()]
+        .value(changeElement->getId());
+  }
+  else
+  {
+    currentVersion = changeElement->getVersion();
+  }
+  const long newVersion = currentVersion + 1;
+
+  changeElement->setVersion(newVersion);
+  _changeElementIdsToVersionsByElementType[element->getElementType().getEnum()][changeElement->getId()] = newVersion;
+  changeElement->setChangeset(_changesetId);
+  changeElement->setVisible(true);
+
+  QString note = "";
+  if (changeElement->getTags().contains("note"))
+  {
+    note = changeElement->getTags().get("note");
+  }
+  LOG_VARD(changeElement->getId());
+  LOG_VARD(note);
+  LOG_VARD(changeElement->getVersion());
+  QString commentStr = "/* modify node ";
+  if (!note.isEmpty())
+  {
+    commentStr += " - note: " + note;
+  }
+  commentStr += "*/\n";
+  _outputSql.write((commentStr).toUtf8());
+
+  //<element-name> table contains all version of all elements of that type in a history, so insert
+  //into that table.
+  _outputSql.write(
+    ("INSERT INTO " + elementTypeStr + "s (" + elementTypeStr + "_id, " +
+     _getInsertValuesStr(changeElement)).toUtf8());
+  //current_<element-name> contains the single latest version of the element, so update that record
+  _outputSql.write(
+    ("UPDATE current_" + elementTypeStr + "s SET " + _getUpdateValuesStr(changeElement)).toUtf8());
+
+  _deleteCurrentTags(changeElement->getElementId());
+  _createTags(changeElement);
+
+  switch (changeElement->getElementType().getEnum())
+  {
     case ElementType::Way:
-      _modify(dynamic_pointer_cast<const Way>(element));
+      _deleteAll("current_way_nodes", "way_id", changeElement->getId());
+      _deleteAll("way_nodes", "way_id", changeElement->getId());
+      _createWayNodes(dynamic_pointer_cast<const Way>(changeElement));
       break;
-   case ElementType::Relation:
-      _modify(dynamic_pointer_cast<const Relation>(element));
+    case ElementType::Relation:
+      _deleteAll("current_relation_members", "relation_id", changeElement->getId());
+      _deleteAll("relation_members", "relation_id", changeElement->getId());
+      _createRelationMembers(dynamic_pointer_cast<const Relation>(changeElement));
       break;
     default:
-      throw HootException("Unknown element type");
+      //node
+      break;
   }
-
-  //ElementPtr changeElement = _getChangeElement(element);
-
 }
 
 void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
@@ -369,160 +420,6 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesWayOrRelationStr(ConstElement
       .arg(element->getChangeset())
       .arg(_getVisibleStr(element->getVisible()))
       .arg(element->getVersion());
-}
-
-/*
- * For modify:
- *
-   - <element-name> table contains all version of all elements of that type in a history, so insert
-into that table.
-
-   - current_<element-name> contains the single latest version of the element, so update that record.
-
-  //The changeset deriver will start versions at 0 to keep the xml changeset writing happy, but
-  //we always want 1 to be the starting point for sql writing.
-*/
-
-void OsmChangesetSqlFileWriter::_modify(ConstNodePtr node)
-{
-  NodePtr changeNode(new Node(*node.get()));
-  //if another parsed change previously modified the element with this id, we want to get the
-  //modified version
-  long currentVersion = -1;
-  if (_changeElementIdsToVersionsByElementType[ElementType::Node].contains(changeNode->getId()))
-  {
-    currentVersion =
-      _changeElementIdsToVersionsByElementType[ElementType::Node].value(changeNode->getId());
-  }
-  else
-  {
-    currentVersion = changeNode->getVersion();
-  }
-  const long newVersion = currentVersion + 1;
-  QString note = "";
-  if (changeNode->getTags().contains("note"))
-  {
-    note = changeNode->getTags().get("note");
-  }
-  changeNode->setVersion(newVersion);
-  _changeElementIdsToVersionsByElementType[ElementType::Node][changeNode->getId()] = newVersion;
-  changeNode->setChangeset(_changesetId);
-  changeNode->setVisible(true);
-  LOG_VARD(changeNode->getId());
-  LOG_VARD(note);
-  LOG_VARD(changeNode->getVersion());
-  QString commentStr = "/* modify node ";
-  if (!note.isEmpty())
-  {
-    commentStr += " - note: " + note;
-  }
-  commentStr += "*/\n";
-  _outputSql.write((commentStr).toUtf8());
-
-  _outputSql.write(("INSERT INTO nodes (node_id, " + _getInsertValuesStr(changeNode)).toUtf8());
-  _outputSql.write(("UPDATE current_nodes SET " + _getUpdateValuesStr(changeNode)).toUtf8());
-
-  _deleteCurrentTags(changeNode->getElementId());
-  _createTags(changeNode);
-}
-
-void OsmChangesetSqlFileWriter::_modify(ConstWayPtr way)
-{
-  WayPtr changeWay(new Way(*way.get()));
-  //if another parsed change previously modified the element with this id, we want to get the
-  //modified version
-  long currentVersion = -1;
-  if (_changeElementIdsToVersionsByElementType[ElementType::Way].contains(changeWay->getId()))
-  {
-    currentVersion =
-      _changeElementIdsToVersionsByElementType[ElementType::Way].value(changeWay->getId());
-  }
-  else
-  {
-    currentVersion = changeWay->getVersion();
-  }
-  const long newVersion = currentVersion + 1;
-  QString note = "";
-  if (changeWay->getTags().contains("note"))
-  {
-    note = changeWay->getTags().get("note");
-  }
-  changeWay->setVersion(newVersion);
-  _changeElementIdsToVersionsByElementType[ElementType::Way][changeWay->getId()] = newVersion;
-  changeWay->setChangeset(_changesetId);
-  changeWay->setVisible(true);
-  LOG_VARD(changeWay->getId());
-  LOG_VARD(note);
-  LOG_VARD(changeWay->getVersion());
-  QString commentStr = "/* modify way ";
-  if (!note.isEmpty())
-  {
-    commentStr += " - note: " + note;
-  }
-  commentStr += "*/\n";
-  _outputSql.write((commentStr).toUtf8());
-
-  _outputSql.write(
-  ("INSERT INTO ways (way_id, " + _getInsertValuesWayOrRelationStr(changeWay)).toUtf8());
-  _outputSql.write(
-  ("UPDATE current_ways SET " + _getUpdateValuesWayOrRelationStr(changeWay)).toUtf8());
-
-  _deleteAll("current_way_nodes", "way_id", changeWay->getId());
-  _deleteAll("way_nodes", "way_id", changeWay->getId());
-  _createWayNodes(changeWay);
-
-  _deleteCurrentTags(changeWay->getElementId());
-  _createTags(changeWay);
-}
-
-void OsmChangesetSqlFileWriter::_modify(ConstRelationPtr relation)
-{
-  RelationPtr changeRelation(new Relation(*relation.get()));
-  //if another parsed change previously modified the element with this id, we want to get the
-  //modified version
-  long currentVersion = -1;
-  if (_changeElementIdsToVersionsByElementType[ElementType::Relation].contains(changeRelation->getId()))
-  {
-    currentVersion =
-      _changeElementIdsToVersionsByElementType[ElementType::Relation].value(changeRelation->getId());
-  }
-  else
-  {
-    currentVersion = changeRelation->getVersion();
-  }
-  const long newVersion = currentVersion + 1;
-  QString note = "";
-  if (changeRelation->getTags().contains("note"))
-  {
-    note = changeRelation->getTags().get("note");
-  }
-  changeRelation->setVersion(newVersion);
-  _changeElementIdsToVersionsByElementType[ElementType::Relation][changeRelation->getId()] = newVersion;
-  changeRelation->setChangeset(_changesetId);
-  changeRelation->setVisible(true);
-  LOG_VARD(changeRelation->getId());
-  LOG_VARD(note);
-  LOG_VARD(changeRelation->getVersion());
-  QString commentStr = "/* modify relation ";
-  if (!note.isEmpty())
-  {
-    commentStr += " - note: " + note;
-  }
-  commentStr += "*/\n";
-  _outputSql.write((commentStr).toUtf8());
-
-  _outputSql.write(
-    ("INSERT INTO relations (relation_id, " +
-     _getInsertValuesWayOrRelationStr(changeRelation)).toUtf8());
-  _outputSql.write(
-    ("UPDATE current_relations SET " + _getUpdateValuesWayOrRelationStr(changeRelation)).toUtf8());
-
-  _deleteAll("current_relation_members", "relation_id", changeRelation->getId());
-  _deleteAll("relation_members", "relation_id", changeRelation->getId());
-  _createRelationMembers(changeRelation);
-
-  _deleteCurrentTags(changeRelation->getElementId());
-  _createTags(changeRelation);
 }
 
 void OsmChangesetSqlFileWriter::_createTags(ConstElementPtr element)
