@@ -233,7 +233,7 @@ void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
   LOG_VARD(changeElement->getId());
   LOG_VARD(note);
   LOG_VARD(changeElement->getVersion());
-  QString commentStr = "/* modify node ";
+  QString commentStr = "/* modify  " + elementTypeStr;
   if (!note.isEmpty())
   {
     commentStr += " - note: " + note;
