@@ -47,7 +47,6 @@ clean:
 
 node_modules:
 	npm install --silent xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
-	rm -rf $(HOME)/tmp
 
 tmp/rules-lib-doxygen: RulesLib.dox ../rules/lib/*
 	mkdir -p tmp
