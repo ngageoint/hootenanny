@@ -77,21 +77,81 @@ void OsmChangesetSqlFileWriter::_createChangeSet()
     .toUtf8());
 }
 
+// If osm.changeset.file.writer.generate.new.ids is false, then these create methods assume
+// you've already set the ID correctly in terms of the OSM API target db for the element to be
+// created.
+
 void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
 {
+  const QString elementTypeStr = element->getElementType().toString().toLower();
+  ElementPtr changeElement;
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      _create(dynamic_pointer_cast<const Node>(element));
+      changeElement.reset(new Node(*dynamic_pointer_cast<const Node>(element)));
       break;
     case ElementType::Way:
-      _create(dynamic_pointer_cast<const Way>(element));
+      changeElement.reset(new Way(*dynamic_pointer_cast<const Way>(element)));
       break;
-    case ElementType::Relation:
-      _create(dynamic_pointer_cast<const Relation>(element));
+   case ElementType::Relation:
+      changeElement.reset(new Relation(*dynamic_pointer_cast<const Relation>(element)));
       break;
     default:
       throw HootException("Unknown element type");
+  }
+
+  long id;
+  if (ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
+  {
+    id = _db.getNextId(element->getElementType().getEnum());
+  }
+  else
+  {
+    id = changeElement->getId();
+  }
+
+  changeElement->setId(id);
+  changeElement->setVersion(1);
+  changeElement->setVisible(true);
+  changeElement->setChangeset(_changesetId);
+  //changeElement an element is being created, we're starting fresh so overwriting the map entry is ok
+  _changeElementIdsToVersionsByElementType[changeElement->getElementType().getEnum()].insert(
+    changeElement->getId(), changeElement->getVersion());
+
+  QString note = "";
+  if (changeElement->getTags().contains("note"))
+  {
+    note = changeElement->getTags().get("note");
+  }
+  LOG_VARD(changeElement->getId());
+  LOG_VARD(note);
+  LOG_VARD(changeElement->getVersion());
+  QString commentStr = "/* create " + elementTypeStr;
+  if (!note.isEmpty())
+  {
+    commentStr += " - note: " + note;
+  }
+  commentStr += "*/\n";
+  _outputSql.write((commentStr).toUtf8());
+
+  const QString values = _getInsertValuesStr(changeElement);
+  _outputSql.write(
+    ("INSERT INTO " + elementTypeStr + "s (" + elementTypeStr + "_id, " + values).toUtf8());
+  _outputSql.write(("INSERT INTO current_" + elementTypeStr + "s (id, " + values).toUtf8());
+
+  _createTags(changeElement);
+
+  switch (changeElement->getElementType().getEnum())
+  {
+    case ElementType::Way:
+      _createWayNodes(dynamic_pointer_cast<const Way>(changeElement));
+      break;
+    case ElementType::Relation:
+      _createRelationMembers(dynamic_pointer_cast<const Relation>(changeElement));
+      break;
+    default:
+      //node
+      break;
   }
 }
 
@@ -267,138 +327,6 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesWayOrRelationStr(ConstElement
       .arg(element->getChangeset())
       .arg(_getVisibleStr(element->getVisible()))
       .arg(element->getVersion());
-}
-
-// If osm.changeset.file.writer.generate.new.ids is false, then these create methods assume
-// you've already set the ID correctly in terms of the OSM API target db for the element to be
-// created.
-
-void OsmChangesetSqlFileWriter::_create(ConstNodePtr node)
-{
-  NodePtr changeNode(new Node(*node.get()));
-  long id;
-  if (ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
-  {
-    id = _db.getNextId(ElementType::Node);
-  }
-  else
-  {
-    id = changeNode->getId();
-  }
-  changeNode->setId(id);
-  changeNode->setVersion(1);
-  changeNode->setVisible(true);
-  changeNode->setChangeset(_changesetId);
-  //if an element is being created, we're starting fresh so overwriting the map entry is ok
-  _changeElementIdsToVersionsByElementType[ElementType::Node].insert(
-    changeNode->getId(), changeNode->getVersion());
-  QString note = "";
-  if (changeNode->getTags().contains("note"))
-  {
-    note = changeNode->getTags().get("note");
-  }
-  LOG_VARD(changeNode->getId());
-  LOG_VARD(note);
-  LOG_VARD(changeNode->getVersion());
-  QString commentStr = "/* create node ";
-  if (!note.isEmpty())
-  {
-    commentStr += " - note: " + note;
-  }
-  commentStr += "*/\n";
-  _outputSql.write((commentStr).toUtf8());
-
-  const QString values = _getInsertValuesStr(dynamic_pointer_cast<const Node>(changeNode));
-  _outputSql.write(("INSERT INTO nodes (node_id, " + values).toUtf8());
-  _outputSql.write(("INSERT INTO current_nodes (id, " + values).toUtf8());
-
-  _createTags(changeNode);
-}
-
-void OsmChangesetSqlFileWriter::_create(ConstWayPtr way)
-{
-  WayPtr changeWay(new Way(*way.get()));
-  long id;
-  if (ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
-  {
-    id = _db.getNextId(ElementType::Way);
-  }
-  else
-  {
-    id = changeWay->getId();
-  }
-  QString note = "";
-  if (changeWay->getTags().contains("note"))
-  {
-    note = changeWay->getTags().get("note");
-  }
-  changeWay->setId(id);
-  changeWay->setVersion(1);
-  changeWay->setVisible(true);
-  changeWay->setChangeset(_changesetId);
-  //if an element is being created, we're starting fresh so overwriting the map entry is ok
-  _changeElementIdsToVersionsByElementType[ElementType::Way].insert(
-    changeWay->getId(), changeWay->getVersion());
-  LOG_VARD(changeWay->getId());
-  LOG_VARD(note);
-  LOG_VARD(changeWay->getVersion());
-  QString commentStr = "/* create way ";
-  if (!note.isEmpty())
-  {
-    commentStr += " - note: " + note;
-  }
-  commentStr += "*/\n";
-  _outputSql.write((commentStr).toUtf8());
-
-  const QString values = _getInsertValuesWayOrRelationStr(changeWay);
-  _outputSql.write(("INSERT INTO ways (way_id, " + values).toUtf8());
-  _outputSql.write(("INSERT INTO current_ways (id, " + values).toUtf8());
-
-  _createWayNodes(changeWay);
-  _createTags(changeWay);
-}
-
-void OsmChangesetSqlFileWriter::_create(ConstRelationPtr relation)
-{
-  RelationPtr changeRelation(new Relation(*relation.get()));
-  long id;
-  if (ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
-  {
-    id = _db.getNextId(ElementType::Relation);
-  }
-  else
-  {
-    id = changeRelation->getId();
-  }
-  QString note = "";
-  if (changeRelation->getTags().contains("note"))
-  {
-    note = changeRelation->getTags().get("note");
-  }
-  changeRelation->setId(id);
-  changeRelation->setVersion(1);
-  changeRelation->setVisible(true);
-  changeRelation->setChangeset(_changesetId);
-  //if an element is being created, we're starting fresh so overwriting the map entry is ok
-  _changeElementIdsToVersionsByElementType[ElementType::Relation].insert(
-    changeRelation->getId(), changeRelation->getVersion());
-  LOG_VARD(changeRelation->getId());
-  LOG_VARD(note);
-  LOG_VARD(changeRelation->getVersion());
-  QString commentStr = "/* create relation ";
-  if (!note.isEmpty())
-  {
-    commentStr += " - note: " + note;
-  }
-  commentStr += "*/\n";
-  _outputSql.write((commentStr).toUtf8());
-
-  const QString values = _getInsertValuesWayOrRelationStr(changeRelation);
-  _outputSql.write(("INSERT INTO relations (relation_id, " + values).toUtf8());
-  _outputSql.write(("INSERT INTO current_relations (id, " + values).toUtf8());
-
-  _createRelationMembers(changeRelation);
-  _createTags(changeRelation);
 }
 
 /*

@@ -48,10 +48,7 @@ private:
   void _deleteExistingElement(ConstElementPtr removedElement);
 
   QString _getInsertValuesStr(ConstElementPtr element) const;
-  void _create(ConstNodePtr node);
   QString _getInsertValuesStr(ConstNodePtr node) const;
-  void _create(ConstWayPtr way);
-  void _create(ConstRelationPtr relation);
   QString _getInsertValuesWayOrRelationStr(ConstElementPtr element) const;
 
   void _createTags(ConstElementPtr element);
