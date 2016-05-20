@@ -68,7 +68,7 @@ public:
 
     ElementSorterPtr sorted1(new ElementSorter(map1));
     ElementSorterPtr sorted2(new ElementSorter(map2));
-    ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2, true));
+    ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2/*, true*/));
 
     if (args[2].endsWith(".osc"))
     {
