@@ -77,43 +77,43 @@ void OsmChangesetSqlFileWriter::_createChangeSet()
     .toUtf8());
 }
 
-void OsmChangesetSqlFileWriter::_createNewElement(ElementPtr element)
+void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
 {
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      _create(dynamic_pointer_cast<Node>(element));
+      _create(dynamic_pointer_cast<const Node>(element));
       break;
     case ElementType::Way:
-      _create(dynamic_pointer_cast<Way>(element));
+      _create(dynamic_pointer_cast<const Way>(element));
       break;
     case ElementType::Relation:
-      _create(dynamic_pointer_cast<Relation>(element));
+      _create(dynamic_pointer_cast<const Relation>(element));
       break;
     default:
       throw HootException("Unknown element type");
   }
 }
 
-void OsmChangesetSqlFileWriter::_updateExistingElement(ElementPtr element)
+void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
 {
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      _modify(dynamic_pointer_cast<Node>(element));
+      _modify(dynamic_pointer_cast<const Node>(element));
       break;
     case ElementType::Way:
-      _modify(dynamic_pointer_cast<Way>(element));
+      _modify(dynamic_pointer_cast<const Way>(element));
       break;
    case ElementType::Relation:
-      _modify(dynamic_pointer_cast<Relation>(element));
+      _modify(dynamic_pointer_cast<const Relation>(element));
       break;
     default:
       throw HootException("Unknown element type");
   }
 }
 
-void OsmChangesetSqlFileWriter::_deleteExistingElement(ElementPtr element)
+void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
 {
   const ElementType::Type elementType = element->getElementType().getEnum();
   if (elementType != ElementType::Node && elementType != ElementType::Way &&
@@ -122,16 +122,32 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ElementPtr element)
     throw HootException("Unknown element type");
   }
 
-  const QString elementIdStr = QString::number(element->getId());
-  const QString elementTypeStr = element->getElementType().toString().toLower();
-  long currentVersion = -1;
-  if (_changeElementIdsToVersionsByElementType[elementType].contains(element->getId()))
+  ElementPtr changeElement;
+  switch (element->getElementType().getEnum())
   {
-    currentVersion = _changeElementIdsToVersionsByElementType[elementType].value(element->getId());
+    case ElementType::Node:
+      changeElement.reset(new Node(*dynamic_pointer_cast<const Node>(element)));
+      break;
+    case ElementType::Way:
+      changeElement.reset(new Way(*dynamic_pointer_cast<const Way>(element)));
+      break;
+   case ElementType::Relation:
+      changeElement.reset(new Relation(*dynamic_pointer_cast<const Relation>(element)));
+      break;
+    default:
+      throw HootException("Unknown element type");
+  }
+  const QString elementIdStr = QString::number(changeElement->getId());
+  const QString elementTypeStr = changeElement->getElementType().toString().toLower();
+  long currentVersion = -1;
+  if (_changeElementIdsToVersionsByElementType[elementType].contains(changeElement->getId()))
+  {
+    currentVersion =
+      _changeElementIdsToVersionsByElementType[elementType].value(changeElement->getId());
   }
   else
   {
-    currentVersion = element->getVersion();
+    currentVersion = changeElement->getVersion();
   }
   //TODO: hack - not sure why the version would ever be less than 1 by this point
   if (currentVersion < 1)
@@ -140,17 +156,17 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ElementPtr element)
   }
   const long newVersion = currentVersion + 1;
   QString note = "";
-  if (element->getTags().contains("note"))
+  if (changeElement->getTags().contains("note"))
   {
-    note = element->getTags().get("note");
+    note = changeElement->getTags().get("note");
   }
-  element->setVersion(newVersion);
-  _changeElementIdsToVersionsByElementType[elementType][element->getId()] = newVersion;
-  element->setVisible(false);
-  element->setChangeset(_changesetId);
-  LOG_VARD(element->getId());
+  changeElement->setVersion(newVersion);
+  _changeElementIdsToVersionsByElementType[elementType][changeElement->getId()] = newVersion;
+  changeElement->setVisible(false);
+  changeElement->setChangeset(_changesetId);
+  LOG_VARD(changeElement->getId());
   LOG_VARD(note);
-  LOG_VARD(element->getVersion());
+  LOG_VARD(changeElement->getVersion());
   QString commentStr = "/* delete " + elementTypeStr;
   if (!note.isEmpty())
   {
@@ -162,11 +178,11 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ElementPtr element)
   //OSM API DB keeps history for all elements, so the existing element in the master table is not
   //modified and a new record is added with the updated version and visible set to false
   _outputSql.write(("INSERT INTO " + elementTypeStr + "s (" + elementTypeStr + "_id, " +
-                    _getInsertValuesStr(element)).toUtf8());
+                    _getInsertValuesStr(changeElement)).toUtf8());
 
-  _deleteCurrentTags(element->getElementId());
+  _deleteCurrentTags(changeElement->getElementId());
 
-  switch (element->getElementType().getEnum())
+  switch (changeElement->getElementType().getEnum())
   {
     case ElementType::Node:
 
@@ -206,14 +222,14 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ElementPtr element)
   //in the current table, the element isn't deleted but set to be invisible
   const QString values =
     QString("changeset_id=%1, visible=%2, version=%3 WHERE id=%4;\n")
-      .arg(element->getChangeset())
-      .arg(_getVisibleStr(element->getVisible()))
-      .arg(element->getVersion())
-      .arg(element->getId());
+      .arg(changeElement->getChangeset())
+      .arg(_getVisibleStr(changeElement->getVisible()))
+      .arg(changeElement->getVersion())
+      .arg(changeElement->getId());
   _outputSql.write(("UPDATE current_" + elementTypeStr + "s SET " + values).toUtf8());
 }
 
-QString OsmChangesetSqlFileWriter::_getInsertValuesStr(const ConstElementPtr element) const
+QString OsmChangesetSqlFileWriter::_getInsertValuesStr(ConstElementPtr element) const
 {
   switch (element->getElementType().getEnum())
   {
@@ -228,7 +244,7 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesStr(const ConstElementPtr ele
   }
 }
 
-QString OsmChangesetSqlFileWriter::_getInsertValuesStr(const ConstNodePtr node) const
+QString OsmChangesetSqlFileWriter::_getInsertValuesStr(ConstNodePtr node) const
 {
   return
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
@@ -242,7 +258,7 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesStr(const ConstNodePtr node) 
       .arg(node->getVersion());
 }
 
-QString OsmChangesetSqlFileWriter::_getInsertValuesWayOrRelationStr(const ConstElementPtr element) const
+QString OsmChangesetSqlFileWriter::_getInsertValuesWayOrRelationStr(ConstElementPtr element) const
 {
   return
     QString("changeset_id, visible, \"timestamp\", "
@@ -257,8 +273,9 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesWayOrRelationStr(const ConstE
 // you've already set the ID correctly in terms of the OSM API target db for the element to be
 // created.
 
-void OsmChangesetSqlFileWriter::_create(NodePtr node)
+void OsmChangesetSqlFileWriter::_create(ConstNodePtr node)
 {
+  NodePtr changeNode(new Node(*node.get()));
   long id;
   if (ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
   {
@@ -266,23 +283,23 @@ void OsmChangesetSqlFileWriter::_create(NodePtr node)
   }
   else
   {
-    id = node->getId();
+    id = changeNode->getId();
   }
-  node->setId(id);
-  node->setVersion(1);
-  node->setVisible(true);
-  node->setChangeset(_changesetId);
+  changeNode->setId(id);
+  changeNode->setVersion(1);
+  changeNode->setVisible(true);
+  changeNode->setChangeset(_changesetId);
   //if an element is being created, we're starting fresh so overwriting the map entry is ok
   _changeElementIdsToVersionsByElementType[ElementType::Node].insert(
-    node->getId(), node->getVersion());
+    changeNode->getId(), changeNode->getVersion());
   QString note = "";
-  if (node->getTags().contains("note"))
+  if (changeNode->getTags().contains("note"))
   {
-    note = node->getTags().get("note");
+    note = changeNode->getTags().get("note");
   }
-  LOG_VARD(node->getId());
+  LOG_VARD(changeNode->getId());
   LOG_VARD(note);
-  LOG_VARD(node->getVersion());
+  LOG_VARD(changeNode->getVersion());
   QString commentStr = "/* create node ";
   if (!note.isEmpty())
   {
@@ -291,15 +308,16 @@ void OsmChangesetSqlFileWriter::_create(NodePtr node)
   commentStr += "*/\n";
   _outputSql.write((commentStr).toUtf8());
 
-  const QString values = _getInsertValuesStr(dynamic_pointer_cast<const Node>(node));
+  const QString values = _getInsertValuesStr(dynamic_pointer_cast<const Node>(changeNode));
   _outputSql.write(("INSERT INTO nodes (node_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_nodes (id, " + values).toUtf8());
 
-  _createTags(node);
+  _createTags(changeNode);
 }
 
-void OsmChangesetSqlFileWriter::_create(WayPtr way)
+void OsmChangesetSqlFileWriter::_create(ConstWayPtr way)
 {
+  WayPtr changeWay(new Way(*way.get()));
   long id;
   if (ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
   {
@@ -307,23 +325,23 @@ void OsmChangesetSqlFileWriter::_create(WayPtr way)
   }
   else
   {
-    id = way->getId();
+    id = changeWay->getId();
   }
   QString note = "";
-  if (way->getTags().contains("note"))
+  if (changeWay->getTags().contains("note"))
   {
-    note = way->getTags().get("note");
+    note = changeWay->getTags().get("note");
   }
-  way->setId(id);
-  way->setVersion(1);
-  way->setVisible(true);
-  way->setChangeset(_changesetId);
+  changeWay->setId(id);
+  changeWay->setVersion(1);
+  changeWay->setVisible(true);
+  changeWay->setChangeset(_changesetId);
   //if an element is being created, we're starting fresh so overwriting the map entry is ok
   _changeElementIdsToVersionsByElementType[ElementType::Way].insert(
-    way->getId(), way->getVersion());
-  LOG_VARD(way->getId());
+    changeWay->getId(), changeWay->getVersion());
+  LOG_VARD(changeWay->getId());
   LOG_VARD(note);
-  LOG_VARD(way->getVersion());
+  LOG_VARD(changeWay->getVersion());
   QString commentStr = "/* create way ";
   if (!note.isEmpty())
   {
@@ -332,16 +350,17 @@ void OsmChangesetSqlFileWriter::_create(WayPtr way)
   commentStr += "*/\n";
   _outputSql.write((commentStr).toUtf8());
 
-  const QString values = _getInsertValuesWayOrRelationStr(way);
+  const QString values = _getInsertValuesWayOrRelationStr(changeWay);
   _outputSql.write(("INSERT INTO ways (way_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_ways (id, " + values).toUtf8());
 
-  _createWayNodes(way);
-  _createTags(way);
+  _createWayNodes(changeWay);
+  _createTags(changeWay);
 }
 
-void OsmChangesetSqlFileWriter::_create(RelationPtr relation)
+void OsmChangesetSqlFileWriter::_create(ConstRelationPtr relation)
 {
+  RelationPtr changeRelation(new Relation(*relation.get()));
   long id;
   if (ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
   {
@@ -349,23 +368,23 @@ void OsmChangesetSqlFileWriter::_create(RelationPtr relation)
   }
   else
   {
-    id = relation->getId();
+    id = changeRelation->getId();
   }
   QString note = "";
-  if (relation->getTags().contains("note"))
+  if (changeRelation->getTags().contains("note"))
   {
-    note = relation->getTags().get("note");
+    note = changeRelation->getTags().get("note");
   }
-  relation->setId(id);
-  relation->setVersion(1);
-  relation->setVisible(true);
-  relation->setChangeset(_changesetId);
+  changeRelation->setId(id);
+  changeRelation->setVersion(1);
+  changeRelation->setVisible(true);
+  changeRelation->setChangeset(_changesetId);
   //if an element is being created, we're starting fresh so overwriting the map entry is ok
   _changeElementIdsToVersionsByElementType[ElementType::Relation].insert(
-    relation->getId(), relation->getVersion());
-  LOG_VARD(relation->getId());
+    changeRelation->getId(), changeRelation->getVersion());
+  LOG_VARD(changeRelation->getId());
   LOG_VARD(note);
-  LOG_VARD(relation->getVersion());
+  LOG_VARD(changeRelation->getVersion());
   QString commentStr = "/* create relation ";
   if (!note.isEmpty())
   {
@@ -374,12 +393,12 @@ void OsmChangesetSqlFileWriter::_create(RelationPtr relation)
   commentStr += "*/\n";
   _outputSql.write((commentStr).toUtf8());
 
-  const QString values = _getInsertValuesWayOrRelationStr(relation);
+  const QString values = _getInsertValuesWayOrRelationStr(changeRelation);
   _outputSql.write(("INSERT INTO relations (relation_id, " + values).toUtf8());
   _outputSql.write(("INSERT INTO current_relations (id, " + values).toUtf8());
 
-  _createRelationMembers(relation);
-  _createTags(relation);
+  _createRelationMembers(changeRelation);
+  _createTags(changeRelation);
 }
 
 /*
@@ -394,31 +413,33 @@ into that table.
   //we always want 1 to be the starting point for sql writing.
 */
 
-void OsmChangesetSqlFileWriter::_modify(NodePtr node)
+void OsmChangesetSqlFileWriter::_modify(ConstNodePtr node)
 {
+  NodePtr changeNode(new Node(*node.get()));
   //if another parsed change previously modified the element with this id, we want to get the
   //modified version
   long currentVersion = -1;
-  if (_changeElementIdsToVersionsByElementType[ElementType::Node].contains(node->getId()))
+  if (_changeElementIdsToVersionsByElementType[ElementType::Node].contains(changeNode->getId()))
   {
-    currentVersion = _changeElementIdsToVersionsByElementType[ElementType::Node].value(node->getId());
+    currentVersion =
+      _changeElementIdsToVersionsByElementType[ElementType::Node].value(changeNode->getId());
   }
   else
   {
-    currentVersion = node->getVersion();
+    currentVersion = changeNode->getVersion();
   }
   const long newVersion = currentVersion + 1;
   QString note = "";
-  if (node->getTags().contains("note"))
+  if (changeNode->getTags().contains("note"))
   {
-    note = node->getTags().get("note");
+    note = changeNode->getTags().get("note");
   }
-  node->setVersion(newVersion);
-  _changeElementIdsToVersionsByElementType[ElementType::Node][node->getId()] = newVersion;
-  node->setChangeset(_changesetId);
-  LOG_VARD(node->getId());
+  changeNode->setVersion(newVersion);
+  _changeElementIdsToVersionsByElementType[ElementType::Node][changeNode->getId()] = newVersion;
+  changeNode->setChangeset(_changesetId);
+  LOG_VARD(changeNode->getId());
   LOG_VARD(note);
-  LOG_VARD(node->getVersion());
+  LOG_VARD(changeNode->getVersion());
   QString commentStr = "/* modify node ";
   if (!note.isEmpty())
   {
@@ -430,53 +451,55 @@ void OsmChangesetSqlFileWriter::_modify(NodePtr node)
   QString values =
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
       "tile, version) VALUES (%1, %2, %3, %4, true, now(), %5, %6);\n")
-      .arg(node->getId())
-      .arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
-      .arg(node->getChangeset())
-      .arg(HootApiDb::tileForPoint(node->getY(), node->getX()))
-      .arg(node->getVersion());
+      .arg(changeNode->getId())
+      .arg((qlonglong)HootApiDb::round(changeNode->getY() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)HootApiDb::round(changeNode->getX() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg(changeNode->getChangeset())
+      .arg(HootApiDb::tileForPoint(changeNode->getY(), changeNode->getX()))
+      .arg(changeNode->getVersion());
   _outputSql.write(("INSERT INTO nodes (node_id, " + values).toUtf8());
 
   values =
     QString("latitude=%2, longitude=%3, changeset_id=%4, visible=true, \"timestamp\"=now(), tile=%5, version=%6 WHERE id=%1;\n")
-      .arg(node->getId())
-      .arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
-      .arg(node->getChangeset())
-      .arg(HootApiDb::tileForPoint(node->getY(), node->getX()))
-      .arg(node->getVersion());
+      .arg(changeNode->getId())
+      .arg((qlonglong)HootApiDb::round(changeNode->getY() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)HootApiDb::round(changeNode->getX() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg(changeNode->getChangeset())
+      .arg(HootApiDb::tileForPoint(changeNode->getY(), changeNode->getX()))
+      .arg(changeNode->getVersion());
   _outputSql.write(("UPDATE current_nodes SET " + values).toUtf8());
 
-  _deleteCurrentTags(ElementId::node(node->getId()));
-  _createTags(node);
+  _deleteCurrentTags(changeNode->getElementId());
+  _createTags(changeNode);
 }
 
-void OsmChangesetSqlFileWriter::_modify(WayPtr way)
+void OsmChangesetSqlFileWriter::_modify(ConstWayPtr way)
 {
+  WayPtr changeWay(new Way(*way.get()));
   //if another parsed change previously modified the element with this id, we want to get the
   //modified version
   long currentVersion = -1;
-  if (_changeElementIdsToVersionsByElementType[ElementType::Way].contains(way->getId()))
+  if (_changeElementIdsToVersionsByElementType[ElementType::Way].contains(changeWay->getId()))
   {
-    currentVersion = _changeElementIdsToVersionsByElementType[ElementType::Way].value(way->getId());
+    currentVersion =
+      _changeElementIdsToVersionsByElementType[ElementType::Way].value(changeWay->getId());
   }
   else
   {
-    currentVersion = way->getVersion();
+    currentVersion = changeWay->getVersion();
   }
   const long newVersion = currentVersion + 1;
   QString note = "";
-  if (way->getTags().contains("note"))
+  if (changeWay->getTags().contains("note"))
   {
-    note = way->getTags().get("note");
+    note = changeWay->getTags().get("note");
   }
-  way->setVersion(newVersion);
-  _changeElementIdsToVersionsByElementType[ElementType::Way][way->getId()] = newVersion;
-  way->setChangeset(_changesetId);
-  LOG_VARD(way->getId());
+  changeWay->setVersion(newVersion);
+  _changeElementIdsToVersionsByElementType[ElementType::Way][changeWay->getId()] = newVersion;
+  changeWay->setChangeset(_changesetId);
+  LOG_VARD(changeWay->getId());
   LOG_VARD(note);
-  LOG_VARD(way->getVersion());
+  LOG_VARD(changeWay->getVersion());
   QString commentStr = "/* modify way ";
   if (!note.isEmpty())
   {
@@ -488,52 +511,53 @@ void OsmChangesetSqlFileWriter::_modify(WayPtr way)
   QString values =
     QString("changeset_id, visible, \"timestamp\", "
       "version) VALUES (%1, %2, true, now(), %3);\n")
-      .arg(way->getId())
-      .arg(way->getChangeset())
-      .arg(way->getVersion());
+      .arg(changeWay->getId())
+      .arg(changeWay->getChangeset())
+      .arg(changeWay->getVersion());
   _outputSql.write(("INSERT INTO ways (way_id, " + values).toUtf8());
 
   values =
     QString("changeset_id=%2, visible=true, \"timestamp\"=now(), version=%3 WHERE id=%1;\n")
-      .arg(way->getId())
-      .arg(way->getChangeset())
-      .arg(way->getVersion());
+      .arg(changeWay->getId())
+      .arg(changeWay->getChangeset())
+      .arg(changeWay->getVersion());
   _outputSql.write(("UPDATE current_ways SET " + values).toUtf8());
 
-  _deleteAll("current_way_nodes", "way_id", way->getId());
-  _deleteAll("way_nodes", "way_id", way->getId());
-  _createWayNodes(way);
+  _deleteAll("current_way_nodes", "way_id", changeWay->getId());
+  _deleteAll("way_nodes", "way_id", changeWay->getId());
+  _createWayNodes(changeWay);
 
-  _deleteCurrentTags(ElementId::way(way->getId()));
-  _createTags(way);
+  _deleteCurrentTags(changeWay->getElementId());
+  _createTags(changeWay);
 }
 
-void OsmChangesetSqlFileWriter::_modify(RelationPtr relation)
+void OsmChangesetSqlFileWriter::_modify(ConstRelationPtr relation)
 {
+  RelationPtr changeRelation(new Relation(*relation.get()));
   //if another parsed change previously modified the element with this id, we want to get the
   //modified version
   long currentVersion = -1;
-  if (_changeElementIdsToVersionsByElementType[ElementType::Relation].contains(relation->getId()))
+  if (_changeElementIdsToVersionsByElementType[ElementType::Relation].contains(changeRelation->getId()))
   {
     currentVersion =
-      _changeElementIdsToVersionsByElementType[ElementType::Relation].value(relation->getId());
+      _changeElementIdsToVersionsByElementType[ElementType::Relation].value(changeRelation->getId());
   }
   else
   {
-    currentVersion = relation->getVersion();
+    currentVersion = changeRelation->getVersion();
   }
   const long newVersion = currentVersion + 1;
   QString note = "";
-  if (relation->getTags().contains("note"))
+  if (changeRelation->getTags().contains("note"))
   {
-    note = relation->getTags().get("note");
+    note = changeRelation->getTags().get("note");
   }
-  relation->setVersion(newVersion);
-  _changeElementIdsToVersionsByElementType[ElementType::Relation][relation->getId()] = newVersion;
-  relation->setChangeset(_changesetId);
-  LOG_VARD(relation->getId());
+  changeRelation->setVersion(newVersion);
+  _changeElementIdsToVersionsByElementType[ElementType::Relation][changeRelation->getId()] = newVersion;
+  changeRelation->setChangeset(_changesetId);
+  LOG_VARD(changeRelation->getId());
   LOG_VARD(note);
-  LOG_VARD(relation->getVersion());
+  LOG_VARD(changeRelation->getVersion());
   QString commentStr = "/* modify relation ";
   if (!note.isEmpty())
   {
@@ -545,27 +569,27 @@ void OsmChangesetSqlFileWriter::_modify(RelationPtr relation)
   QString values =
     QString("changeset_id, visible, \"timestamp\", "
       "version) VALUES (%1, %2, true, now(), %3);\n")
-      .arg(relation->getId())
-      .arg(relation->getChangeset())
-      .arg(relation->getVersion());
+      .arg(changeRelation->getId())
+      .arg(changeRelation->getChangeset())
+      .arg(changeRelation->getVersion());
   _outputSql.write(("INSERT INTO relations (relation_id, " + values).toUtf8());
 
   values =
     QString("changeset_id=%2, visible=true, \"timestamp\"=now(), version=%3 WHERE id=%1;\n")
-      .arg(relation->getId())
-      .arg(relation->getChangeset())
-      .arg(relation->getVersion());
+      .arg(changeRelation->getId())
+      .arg(changeRelation->getChangeset())
+      .arg(changeRelation->getVersion());
   _outputSql.write(("UPDATE current_relations SET " + values).toUtf8());
 
-  _deleteAll("current_relation_members", "relation_id", relation->getId());
-  _deleteAll("relation_members", "relation_id", relation->getId());
-  _createRelationMembers(relation);
+  _deleteAll("current_relation_members", "relation_id", changeRelation->getId());
+  _deleteAll("relation_members", "relation_id", changeRelation->getId());
+  _createRelationMembers(changeRelation);
 
-  _deleteCurrentTags(ElementId::relation(relation->getId()));
-  _createTags(relation);
+  _deleteCurrentTags(changeRelation->getElementId());
+  _createTags(changeRelation);
 }
 
-void OsmChangesetSqlFileWriter::_createTags(const ConstElementPtr element)
+void OsmChangesetSqlFileWriter::_createTags(ConstElementPtr element)
 {
   QStringList tableNames = _tagTableNamesForElement(element->getElementId());
   const Tags tags = element->getTags();
@@ -605,7 +629,7 @@ QStringList OsmChangesetSqlFileWriter::_tagTableNamesForElement(const ElementId&
   return tableNames;
 }
 
-void OsmChangesetSqlFileWriter::_createWayNodes(const ConstWayPtr way)
+void OsmChangesetSqlFileWriter::_createWayNodes(ConstWayPtr way)
 {
   //LOG_DEBUG("way nodes create");
   //LOG_VARD(way->getId());
@@ -631,7 +655,7 @@ void OsmChangesetSqlFileWriter::_createWayNodes(const ConstWayPtr way)
   }
 }
 
-void OsmChangesetSqlFileWriter::_createRelationMembers(const RelationPtr relation)
+void OsmChangesetSqlFileWriter::_createRelationMembers(ConstRelationPtr relation)
 {
   //LOG_DEBUG("relation members create");
   //LOG_VARD(relation->getId());

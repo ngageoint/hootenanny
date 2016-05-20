@@ -43,28 +43,28 @@ private:
 
   long _getNextId(const ElementType type);
 
-  void _createNewElement(ElementPtr newElement);
-  void _updateExistingElement(ElementPtr updatedElement);
-  void _deleteExistingElement(ElementPtr removedElement);
+  void _createNewElement(ConstElementPtr newElement);
+  void _updateExistingElement(ConstElementPtr updatedElement);
+  void _deleteExistingElement(ConstElementPtr removedElement);
 
-  QString _getInsertValuesStr(const ConstElementPtr element) const;
-  void _create(NodePtr node);
-  QString _getInsertValuesStr(const ConstNodePtr node) const;
-  void _create(WayPtr way);
-  void _create(RelationPtr relation);
-  QString _getInsertValuesWayOrRelationStr(const ConstElementPtr element) const;
+  QString _getInsertValuesStr(ConstElementPtr element) const;
+  void _create(ConstNodePtr node);
+  QString _getInsertValuesStr(ConstNodePtr node) const;
+  void _create(ConstWayPtr way);
+  void _create(ConstRelationPtr relation);
+  QString _getInsertValuesWayOrRelationStr(ConstElementPtr element) const;
 
-  void _createTags(const ConstElementPtr element);
+  void _createTags(ConstElementPtr element);
   QStringList _tagTableNamesForElement(const ElementId& eid) const;
   void _deleteCurrentTags(const ElementId& eid);
 
-  void _createWayNodes(const ConstWayPtr way);
+  void _createWayNodes(ConstWayPtr way);
 
-  void _createRelationMembers(const RelationPtr relation);
+  void _createRelationMembers(ConstRelationPtr relation);
 
-  void _modify(NodePtr node);
-  void _modify(WayPtr way);
-  void _modify(RelationPtr relation);
+  void _modify(ConstNodePtr node);
+  void _modify(ConstWayPtr way);
+  void _modify(ConstRelationPtr relation);
 
   void _deleteAll(const QString tableName, const QString idFieldName, const long id);
 
