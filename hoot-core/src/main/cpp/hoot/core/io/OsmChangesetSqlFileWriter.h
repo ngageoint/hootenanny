@@ -43,13 +43,20 @@ private:
 
   long _getNextId(const ElementType type);
 
-  void _createNewElement(ConstElementPtr newElement);
-  void _updateExistingElement(ConstElementPtr updatedElement);
-  void _deleteExistingElement(ConstElementPtr removedElement);
+  //clones the input so local element version tracking can be done
+  ElementPtr _getChangeElement(ConstElementPtr element);
 
+  void _createNewElement(ConstElementPtr newElement);
   QString _getInsertValuesStr(ConstElementPtr element) const;
-  QString _getInsertValuesStr(ConstNodePtr node) const;
+  QString _getInsertValuesNodeStr(ConstNodePtr node) const;
   QString _getInsertValuesWayOrRelationStr(ConstElementPtr element) const;
+
+  void _updateExistingElement(ConstElementPtr updatedElement);
+  QString _getUpdateValuesStr(ConstElementPtr element) const;
+  QString _getUpdateValuesNodeStr(ConstNodePtr node) const;
+  QString _getUpdateValuesWayOrRelationStr(ConstElementPtr element) const;
+
+  void _deleteExistingElement(ConstElementPtr removedElement);
 
   void _createTags(ConstElementPtr element);
   QStringList _tagTableNamesForElement(const ElementId& eid) const;

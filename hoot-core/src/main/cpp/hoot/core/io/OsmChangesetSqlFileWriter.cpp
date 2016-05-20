@@ -77,13 +77,8 @@ void OsmChangesetSqlFileWriter::_createChangeSet()
     .toUtf8());
 }
 
-// If osm.changeset.file.writer.generate.new.ids is false, then these create methods assume
-// you've already set the ID correctly in terms of the OSM API target db for the element to be
-// created.
-
-void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
+ElementPtr OsmChangesetSqlFileWriter::_getChangeElement(ConstElementPtr element)
 {
-  const QString elementTypeStr = element->getElementType().toString().toLower();
   ElementPtr changeElement;
   switch (element->getElementType().getEnum())
   {
@@ -99,6 +94,17 @@ void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
     default:
       throw HootException("Unknown element type");
   }
+  return changeElement;
+}
+
+// If osm.changeset.file.writer.generate.new.ids is false, then these create methods assume
+// you've already set the ID correctly in terms of the OSM API target db for the element to be
+// created.
+
+void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
+{
+  const QString elementTypeStr = element->getElementType().toString().toLower();
+  ElementPtr changeElement = _getChangeElement(element);
 
   long id;
   if (ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
@@ -155,6 +161,44 @@ void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
   }
 }
 
+QString OsmChangesetSqlFileWriter::_getUpdateValuesStr(ConstElementPtr element) const
+{
+  switch (element->getElementType().getEnum())
+  {
+    case ElementType::Node:
+      return _getUpdateValuesNodeStr(dynamic_pointer_cast<const Node>(element));
+    case ElementType::Way:
+      return _getUpdateValuesWayOrRelationStr(element);
+    case ElementType::Relation:
+      return _getUpdateValuesWayOrRelationStr(element);
+    default:
+      throw HootException("Unknown element type");
+  }
+}
+
+QString OsmChangesetSqlFileWriter::_getUpdateValuesNodeStr(ConstNodePtr node) const
+{
+  return
+    QString("latitude=%2, longitude=%3, changeset_id=%4, visible=%5, \"timestamp\"=now(), tile=%6, version=%7 WHERE id=%1;\n")
+      .arg(node->getId())
+      .arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg(node->getChangeset())
+      .arg(_getVisibleStr(node->getVisible()))
+      .arg(HootApiDb::tileForPoint(node->getY(), node->getX()))
+      .arg(node->getVersion());
+}
+
+QString OsmChangesetSqlFileWriter::_getUpdateValuesWayOrRelationStr(ConstElementPtr element) const
+{
+  return
+    QString("changeset_id=%2, visible=%3, \"timestamp\"=now(), version=%4 WHERE id=%1;\n")
+      .arg(element->getId())
+      .arg(element->getChangeset())
+      .arg(_getVisibleStr(element->getVisible()))
+      .arg(element->getVersion());
+}
+
 void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
 {
   switch (element->getElementType().getEnum())
@@ -171,17 +215,13 @@ void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
     default:
       throw HootException("Unknown element type");
   }
+
+  //ElementPtr changeElement = _getChangeElement(element);
+
 }
 
 void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
 {
-  const ElementType::Type elementType = element->getElementType().getEnum();
-  if (elementType != ElementType::Node && elementType != ElementType::Way &&
-      elementType != ElementType::Relation)
-  {
-    throw HootException("Unknown element type");
-  }
-
   ElementPtr changeElement;
   switch (element->getElementType().getEnum())
   {
@@ -200,10 +240,12 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
   const QString elementIdStr = QString::number(changeElement->getId());
   const QString elementTypeStr = changeElement->getElementType().toString().toLower();
   long currentVersion = -1;
-  if (_changeElementIdsToVersionsByElementType[elementType].contains(changeElement->getId()))
+  if (_changeElementIdsToVersionsByElementType[element->getElementType().getEnum()]
+        .contains(changeElement->getId()))
   {
     currentVersion =
-      _changeElementIdsToVersionsByElementType[elementType].value(changeElement->getId());
+      _changeElementIdsToVersionsByElementType[element->getElementType().getEnum()]
+        .value(changeElement->getId());
   }
   else
   {
@@ -221,7 +263,7 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
     note = changeElement->getTags().get("note");
   }
   changeElement->setVersion(newVersion);
-  _changeElementIdsToVersionsByElementType[elementType][changeElement->getId()] = newVersion;
+  _changeElementIdsToVersionsByElementType[element->getElementType().getEnum()][changeElement->getId()] = newVersion;
   changeElement->setVisible(false);
   changeElement->setChangeset(_changesetId);
   LOG_VARD(changeElement->getId());
@@ -294,7 +336,7 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesStr(ConstElementPtr element) 
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      return _getInsertValuesStr(dynamic_pointer_cast<const Node>(element));
+      return _getInsertValuesNodeStr(dynamic_pointer_cast<const Node>(element));
     case ElementType::Way:
       return _getInsertValuesWayOrRelationStr(element);
     case ElementType::Relation:
@@ -304,7 +346,7 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesStr(ConstElementPtr element) 
   }
 }
 
-QString OsmChangesetSqlFileWriter::_getInsertValuesStr(ConstNodePtr node) const
+QString OsmChangesetSqlFileWriter::_getInsertValuesNodeStr(ConstNodePtr node) const
 {
   return
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
@@ -365,6 +407,7 @@ void OsmChangesetSqlFileWriter::_modify(ConstNodePtr node)
   changeNode->setVersion(newVersion);
   _changeElementIdsToVersionsByElementType[ElementType::Node][changeNode->getId()] = newVersion;
   changeNode->setChangeset(_changesetId);
+  changeNode->setVisible(true);
   LOG_VARD(changeNode->getId());
   LOG_VARD(note);
   LOG_VARD(changeNode->getVersion());
@@ -376,26 +419,8 @@ void OsmChangesetSqlFileWriter::_modify(ConstNodePtr node)
   commentStr += "*/\n";
   _outputSql.write((commentStr).toUtf8());
 
-  QString values =
-    QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
-      "tile, version) VALUES (%1, %2, %3, %4, true, now(), %5, %6);\n")
-      .arg(changeNode->getId())
-      .arg((qlonglong)HootApiDb::round(changeNode->getY() * HootApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)HootApiDb::round(changeNode->getX() * HootApiDb::COORDINATE_SCALE, 7))
-      .arg(changeNode->getChangeset())
-      .arg(HootApiDb::tileForPoint(changeNode->getY(), changeNode->getX()))
-      .arg(changeNode->getVersion());
-  _outputSql.write(("INSERT INTO nodes (node_id, " + values).toUtf8());
-
-  values =
-    QString("latitude=%2, longitude=%3, changeset_id=%4, visible=true, \"timestamp\"=now(), tile=%5, version=%6 WHERE id=%1;\n")
-      .arg(changeNode->getId())
-      .arg((qlonglong)HootApiDb::round(changeNode->getY() * HootApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)HootApiDb::round(changeNode->getX() * HootApiDb::COORDINATE_SCALE, 7))
-      .arg(changeNode->getChangeset())
-      .arg(HootApiDb::tileForPoint(changeNode->getY(), changeNode->getX()))
-      .arg(changeNode->getVersion());
-  _outputSql.write(("UPDATE current_nodes SET " + values).toUtf8());
+  _outputSql.write(("INSERT INTO nodes (node_id, " + _getInsertValuesStr(changeNode)).toUtf8());
+  _outputSql.write(("UPDATE current_nodes SET " + _getUpdateValuesStr(changeNode)).toUtf8());
 
   _deleteCurrentTags(changeNode->getElementId());
   _createTags(changeNode);
@@ -425,6 +450,7 @@ void OsmChangesetSqlFileWriter::_modify(ConstWayPtr way)
   changeWay->setVersion(newVersion);
   _changeElementIdsToVersionsByElementType[ElementType::Way][changeWay->getId()] = newVersion;
   changeWay->setChangeset(_changesetId);
+  changeWay->setVisible(true);
   LOG_VARD(changeWay->getId());
   LOG_VARD(note);
   LOG_VARD(changeWay->getVersion());
@@ -436,20 +462,10 @@ void OsmChangesetSqlFileWriter::_modify(ConstWayPtr way)
   commentStr += "*/\n";
   _outputSql.write((commentStr).toUtf8());
 
-  QString values =
-    QString("changeset_id, visible, \"timestamp\", "
-      "version) VALUES (%1, %2, true, now(), %3);\n")
-      .arg(changeWay->getId())
-      .arg(changeWay->getChangeset())
-      .arg(changeWay->getVersion());
-  _outputSql.write(("INSERT INTO ways (way_id, " + values).toUtf8());
-
-  values =
-    QString("changeset_id=%2, visible=true, \"timestamp\"=now(), version=%3 WHERE id=%1;\n")
-      .arg(changeWay->getId())
-      .arg(changeWay->getChangeset())
-      .arg(changeWay->getVersion());
-  _outputSql.write(("UPDATE current_ways SET " + values).toUtf8());
+  _outputSql.write(
+  ("INSERT INTO ways (way_id, " + _getInsertValuesWayOrRelationStr(changeWay)).toUtf8());
+  _outputSql.write(
+  ("UPDATE current_ways SET " + _getUpdateValuesWayOrRelationStr(changeWay)).toUtf8());
 
   _deleteAll("current_way_nodes", "way_id", changeWay->getId());
   _deleteAll("way_nodes", "way_id", changeWay->getId());
@@ -483,6 +499,7 @@ void OsmChangesetSqlFileWriter::_modify(ConstRelationPtr relation)
   changeRelation->setVersion(newVersion);
   _changeElementIdsToVersionsByElementType[ElementType::Relation][changeRelation->getId()] = newVersion;
   changeRelation->setChangeset(_changesetId);
+  changeRelation->setVisible(true);
   LOG_VARD(changeRelation->getId());
   LOG_VARD(note);
   LOG_VARD(changeRelation->getVersion());
@@ -494,20 +511,11 @@ void OsmChangesetSqlFileWriter::_modify(ConstRelationPtr relation)
   commentStr += "*/\n";
   _outputSql.write((commentStr).toUtf8());
 
-  QString values =
-    QString("changeset_id, visible, \"timestamp\", "
-      "version) VALUES (%1, %2, true, now(), %3);\n")
-      .arg(changeRelation->getId())
-      .arg(changeRelation->getChangeset())
-      .arg(changeRelation->getVersion());
-  _outputSql.write(("INSERT INTO relations (relation_id, " + values).toUtf8());
-
-  values =
-    QString("changeset_id=%2, visible=true, \"timestamp\"=now(), version=%3 WHERE id=%1;\n")
-      .arg(changeRelation->getId())
-      .arg(changeRelation->getChangeset())
-      .arg(changeRelation->getVersion());
-  _outputSql.write(("UPDATE current_relations SET " + values).toUtf8());
+  _outputSql.write(
+    ("INSERT INTO relations (relation_id, " +
+     _getInsertValuesWayOrRelationStr(changeRelation)).toUtf8());
+  _outputSql.write(
+    ("UPDATE current_relations SET " + _getUpdateValuesWayOrRelationStr(changeRelation)).toUtf8());
 
   _deleteAll("current_relation_members", "relation_id", changeRelation->getId());
   _deleteAll("relation_members", "relation_id", changeRelation->getId());
