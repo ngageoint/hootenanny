@@ -36,12 +36,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class ErrorLogTest {
     private static final File testFolder = new File(FileUtils.getTempDirectory(), "ErrorLogTest");
+    private static String originalErrorLogPath = null;
+    private static String originaltempOutputPath = null;
 
     @BeforeClass
     public static void beforeClass() throws Exception {
@@ -49,6 +52,8 @@ public class ErrorLogTest {
         File dest = new File(testFolder, "catalina.out");
         FileUtils.copyURLToFile(inputUrl, dest);
 
+        originalErrorLogPath = HootProperties.getPropertyOrDefault("ErrorLogPath");
+        originaltempOutputPath = HootProperties.getPropertyOrDefault("tempOutputPath");
         HootCustomPropertiesSetter.setProperty("ErrorLogPath", dest.getAbsolutePath());
         HootCustomPropertiesSetter.setProperty("tempOutputPath", FileUtils.getTempDirectory().getAbsolutePath());
     }
@@ -56,6 +61,8 @@ public class ErrorLogTest {
     @AfterClass
     public static void afterClass() throws Exception {
         FileUtils.deleteQuietly(testFolder);
+        HootCustomPropertiesSetter.setProperty("ErrorLogPath", originalErrorLogPath);
+        HootCustomPropertiesSetter.setProperty("tempOutputPath", originaltempOutputPath);
     }
 
     @Test

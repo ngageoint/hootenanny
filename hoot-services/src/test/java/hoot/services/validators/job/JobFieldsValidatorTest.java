@@ -40,12 +40,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class JobFieldsValidatorTest {
     private static final File testFolder = new File(FileUtils.getTempDirectory(), "JobFieldsValidatorTest");
+    private static String originalHomeFolderDir = null;
 
     @BeforeClass
     public static void beforeClass() throws Exception {
@@ -53,12 +55,14 @@ public class JobFieldsValidatorTest {
         File dest = new File(new File(testFolder, "scripts"), "services_fields_metadata.json");
         FileUtils.copyURLToFile(inputUrl, dest);
 
+        originalHomeFolderDir = HootProperties.getPropertyOrDefault("homeFolder");
         HootCustomPropertiesSetter.setProperty("homeFolder", testFolder.getAbsolutePath());
     }
 
     @AfterClass
     public static void afterClass() throws Exception {
         FileUtils.deleteQuietly(testFolder);
+        HootCustomPropertiesSetter.setProperty("homeFolder", originalHomeFolderDir);
     }
 
     @Test
