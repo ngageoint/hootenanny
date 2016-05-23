@@ -132,7 +132,7 @@ void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
   LOG_VARD(changeElement->getId());
   LOG_VARD(note);
   LOG_VARD(changeElement->getVersion());
-  QString commentStr = "/* create " + elementTypeStr;
+  QString commentStr = "/* create " + elementTypeStr + " " + QString::number(changeElement->getId());
   if (!note.isEmpty())
   {
     commentStr += " - note: " + note;
@@ -233,7 +233,7 @@ void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
   LOG_VARD(changeElement->getId());
   LOG_VARD(note);
   LOG_VARD(changeElement->getVersion());
-  QString commentStr = "/* modify  " + elementTypeStr;
+  QString commentStr = "/* modify  " + elementTypeStr + " " + QString::number(changeElement->getId());
   if (!note.isEmpty())
   {
     commentStr += " - note: " + note;
@@ -304,7 +304,7 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
   LOG_VARD(changeElement->getId());
   LOG_VARD(note);
   LOG_VARD(changeElement->getVersion());
-  QString commentStr = "/* delete " + elementTypeStr;
+  QString commentStr = "/* delete " + elementTypeStr + " " + QString::number(changeElement->getId());
   if (!note.isEmpty())
   {
     commentStr += " - note: " + note;

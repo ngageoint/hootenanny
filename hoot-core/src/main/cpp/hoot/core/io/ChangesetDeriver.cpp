@@ -134,6 +134,7 @@ Change ChangesetDeriver::_nextChange()
       // pass
       LOG_DEBUG("both are null elements");
     }
+    // if we've run out of "from" elements, create all the remaining elements in "to"
     else if (!_fromE.get() && _toE.get())
     {
       result.type = Change::Create;
