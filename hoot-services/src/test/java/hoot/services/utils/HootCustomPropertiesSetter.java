@@ -1,7 +1,6 @@
 package hoot.services.utils;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Properties;
 
 import hoot.services.HootProperties;
@@ -13,28 +12,21 @@ import hoot.services.HootProperties;
 public class HootCustomPropertiesSetter {
 
     public static void setProperties(Properties newProperties) throws Exception {
-        Field field = HootProperties.class.getDeclaredField("properties");
-        field.setAccessible(true);
-
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-        int origFieldModifiers = field.getModifiers();
-        modifiersField.setInt(field, origFieldModifiers & ~Modifier.FINAL);
-
-        field.set(null, newProperties);
-
-        // restore
-        modifiersField.setInt(field, origFieldModifiers);
-        field.setAccessible(false);
+        Properties currentProperties = getHootProperties();
+        currentProperties.clear();
+        currentProperties.putAll(newProperties);
     }
 
     public static void setProperty(String key, String value) throws Exception {
+        Properties currentProperties = getHootProperties();
+        currentProperties.setProperty(key, value);
+    }
+
+    private static Properties getHootProperties() throws Exception {
         Field propertiesField = HootProperties.class.getDeclaredField("properties");
         propertiesField.setAccessible(true);
 
-        Properties properties = (Properties) propertiesField.get(null);
-        properties.setProperty(key, value);
-
-        propertiesField.setAccessible(false);
+        Properties currentProperties = (Properties) propertiesField.get(null);
+        return currentProperties;
     }
 }
