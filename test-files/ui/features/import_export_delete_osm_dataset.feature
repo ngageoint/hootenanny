@@ -24,11 +24,29 @@ Feature: Import Export Delete OSM Dataset
         And I wait 30 seconds
         Then the download file "dcpoi_clip.zip" should exist
 
-    Scenario: Delete Dataset
+    Scenario: Create Folder
+        And I press "Add Folder"
+        Then I type "CucumberOsm" in input ""
+        And I press "Add Folder" big loud span
+
+    Scenario: Move Dataset
         When I click the "dcpoi_clip" Dataset
+        And I context click the "dcpoi_clip" Dataset
+        And I click the "Move" context menu item
+        And I select the "CucumberOsm" option in the "root" combobox
+        And I press "Update" big loud span
+
+    Scenario: Rename Dataset
+        When I click the "CucumberOsm" Dataset
         And I click the "dcpoi_clip" Dataset
         And I context click the "dcpoi_clip" Dataset
+        And I click the "Rename" context menu item
+        Then I type "dcpoi_clip_rename" in input "dcpoi_clip"
+        And I press "Update" big loud span
+
+    Scenario: Delete Folder and Dataset
+        When I context click the "CucumberOsm" Dataset
         And I click the "Delete" context menu item
         And I wait
         And I accept the alert
-        Then I wait 30 "seconds" to not see "dcpoi_clip"
+        Then I wait 30 "seconds" to not see "CucumberOsm"

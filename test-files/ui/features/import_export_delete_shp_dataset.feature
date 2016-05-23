@@ -12,14 +12,14 @@ Feature: Import Export Delete MGCP Shapefile Dataset
         And I select "/test-files/MGCPv3.zip" dataset
         Then I should see element "[id='importDatasetLayerName']" with value "MGCPv3"
         Then I type "mgcp_shp_cucumber" in input "importDatasetLayerName"
-        Then I type "CucumberImportTest" in input "importDatasetNewFolderName"
+        Then I type "CucumberShp" in input "importDatasetNewFolderName"
         And I select the "Multinational Geospatial Co-production Program (MGCP) TRD3&4" option in the "Select Data Translation Schema" combobox
         When I press "Import" big loud span
         Then I wait 60 "seconds" to not see "Import"
-        Then I wait 10 "seconds" to see "CucumberImportTest"
+        Then I wait 10 "seconds" to see "CucumberShp"
 
     Scenario: Export Dataset
-        When I click the "CucumberImportTest" Dataset
+        When I click the "CucumberShp" Dataset
         Then I click the "mgcp_shp_cucumber" Dataset
         And I context click the "mgcp_shp_cucumber" Dataset
         And I click the "Export" context menu item
@@ -31,9 +31,9 @@ Feature: Import Export Delete MGCP Shapefile Dataset
         Then the download file "mgcp_shp_cucumber.zip" should exist
 
     Scenario: Delete Dataset
-        And I context click the "CucumberImportTest" Dataset
+        And I context click the "CucumberShp" Dataset
         And I click the "Delete" context menu item
         And I wait
         And I accept the alert
         Then I wait 30 "seconds" to not see "mgcp_shp_cucumber"
-        Then I wait 1 "seconds" to not see "CucumberImportTest"
+        Then I wait 1 "seconds" to not see "CucumberShp"
