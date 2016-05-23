@@ -40,7 +40,6 @@ import javax.xml.xpath.XPathExpressionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.postgresql.util.PGobject;
@@ -78,7 +77,7 @@ import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.utils.XmlUtils;
 
-@Ignore
+
 public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
     private static final Logger logger = LoggerFactory.getLogger(ChangesetResourceUploadAllTest.class);
 
@@ -172,89 +171,89 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
         Document responseData = null;
         try {
             responseData = resource()
-            .path("api/0.6/changeset/" + changesetId + "/upload")
-            .queryParam("mapId", String.valueOf(mapId))
-            .type(MediaType.TEXT_XML)
-            .accept(MediaType.TEXT_XML)
-            .post(Document.class,
-                "<osmChange version=\"0.3\" generator=\"iD\">" +
-                    "<create>" +
-                        "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
-                             originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                            "<tag k=\"key 4\" v=\"val 4\"/>" + "<tag k=\"key 5\" v=\"val 5\"/>" +
-                        "</node>" +
-                        "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon() + "\" lat=\"" +
-                             originalBounds.getMaxLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                        "</node>" +
-                        "<way id=\"-3\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                            "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                            "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
-                            "<tag k=\"key 4\" v=\"val 4\"/>" +
-                        "</way>" +
-                        "<way id=\"-4\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                            "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                            "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
-                            "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
-                        "</way>" +
-                        "<relation id=\"-5\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                            "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[1] + "\"></member>" +
-                            "<member type=\"node\" role=\"role3\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
-                            "<member type=\"node\" role=\"\" ref=\"" + nodeIdsArr[4] + "\"></member>" +
-                        "</relation>" +
-                        "<relation id=\"-6\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                            "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                            "<member type=\"relation\" ref=\"-5\"></member>" +
-                            "<tag k=\"key 4\" v=\"val 4\"></tag>" +
-                        "</relation>" +
-                        "<relation id=\"-7\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                            "<member type=\"relation\" role=\"role2\" ref=\"" + relationIdsArr[1] + "\"></member>" +
-                            "<tag k=\"key 1\" v=\"val 1\"></tag>" +
-                        "</relation>" +
-                    "</create>" +
-                    "<modify>" +
-                        "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" " +
-                            "lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                            "<tag k=\"key 1b\" v=\"val 1b\"></tag>" +
-                            "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
-                        "</node>" +
-                        "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + updatedBounds.getMinLon() + "\" " +
-                            "lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                            "<tag k=\"key 5b\" v=\"val 5b\"></tag>" +
-                        "</node>" +
-                        "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                            "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                            "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
-                            "<tag k=\"key 2\" v=\"val 2\"></tag>" +
-                        "</way>" +
-                        "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                            "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
-                            "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
-                        "</way>" +
-                        "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                            "<member type=\"way\" role=\"role4\" ref=\"" + wayIdsArr[1] + "\"></member>" +
-                            "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[0] + "\"></member>" +
-                            "<member type=\"node\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
-                        "</relation>" +
-                        "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                            "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0] + "\"></member>" +
-                            "<member type=\"node\" ref=\"" + nodeIdsArr[4] + "\"></member>" +
-                            "<tag k=\"key 2\" v=\"val 2\"></tag>" + "<tag k=\"key 3\" v=\"val 3\"></tag>" +
-                        "</relation>" +
-                    "</modify>" +
-                    "<delete if-unused=\"true\">" +
-                        "<node id=\"" + nodeIdsArr[3] +
-                            "\" lon=\"" + originalBounds.getMinLon() + "\" " + "lat=\"" + originalBounds.getMinLat() +
-                            "\" version=\"1\" " + "changeset=\"" + changesetId + "\">" +
-                        "</node>" +
-                        "<way id=\"" + wayIdsArr[2] + "\" version=\"1\" " + "changeset=\"" + changesetId + "\">" +
-                            "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                            "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                        "</way>" +
-                        "<relation id=\"" + relationIdsArr[2] + "\" version=\"1\" " + "changeset=\"" + changesetId + "\">" +
-                            "<member type=\"way\" ref=\"" + wayIdsArr[1] + "\"></member>" +
-                        "</relation>" +
-                    "</delete>" +
-                "</osmChange>");
+                .path("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .type(MediaType.TEXT_XML)
+                .accept(MediaType.TEXT_XML)
+                .post(Document.class,
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create>" +
+                            "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
+                                 originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                "<tag k=\"key 4\" v=\"val 4\"/>" + "<tag k=\"key 5\" v=\"val 5\"/>" +
+                            "</node>" +
+                            "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon() + "\" lat=\"" +
+                                 originalBounds.getMaxLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                            "</node>" +
+                            "<way id=\"-3\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
+                                "<tag k=\"key 4\" v=\"val 4\"/>" +
+                            "</way>" +
+                            "<way id=\"-4\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
+                            "</way>" +
+                            "<relation id=\"-5\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[1] + "\"></member>" +
+                                "<member type=\"node\" role=\"role3\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
+                                "<member type=\"node\" role=\"\" ref=\"" + nodeIdsArr[4] + "\"></member>" +
+                            "</relation>" +
+                            "<relation id=\"-6\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                                "<member type=\"relation\" ref=\"-5\"></member>" +
+                                "<tag k=\"key 4\" v=\"val 4\"></tag>" +
+                            "</relation>" +
+                            "<relation id=\"-7\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"relation\" role=\"role2\" ref=\"" + relationIdsArr[1] + "\"></member>" +
+                                "<tag k=\"key 1\" v=\"val 1\"></tag>" +
+                            "</relation>" +
+                        "</create>" +
+                        "<modify>" +
+                            "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" " +
+                                "lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                "<tag k=\"key 1b\" v=\"val 1b\"></tag>" +
+                                "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
+                            "</node>" +
+                            "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + updatedBounds.getMinLon() + "\" " +
+                                "lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                "<tag k=\"key 5b\" v=\"val 5b\"></tag>" +
+                            "</node>" +
+                            "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
+                                "<tag k=\"key 2\" v=\"val 2\"></tag>" +
+                            "</way>" +
+                            "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
+                            "</way>" +
+                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"way\" role=\"role4\" ref=\"" + wayIdsArr[1] + "\"></member>" +
+                                "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[0] + "\"></member>" +
+                                "<member type=\"node\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
+                            "</relation>" +
+                            "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0] + "\"></member>" +
+                                "<member type=\"node\" ref=\"" + nodeIdsArr[4] + "\"></member>" +
+                                "<tag k=\"key 2\" v=\"val 2\"></tag>" + "<tag k=\"key 3\" v=\"val 3\"></tag>" +
+                            "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\">" +
+                            "<node id=\"" + nodeIdsArr[3] +
+                                "\" lon=\"" + originalBounds.getMinLon() + "\" " + "lat=\"" + originalBounds.getMinLat() +
+                                "\" version=\"1\" " + "changeset=\"" + changesetId + "\">" +
+                            "</node>" +
+                            "<way id=\"" + wayIdsArr[2] + "\" version=\"1\" " + "changeset=\"" + changesetId + "\">" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                            "</way>" +
+                            "<relation id=\"" + relationIdsArr[2] + "\" version=\"1\" " + "changeset=\"" + changesetId + "\">" +
+                                "<member type=\"way\" ref=\"" + wayIdsArr[1] + "\"></member>" +
+                            "</relation>" +
+                        "</delete>" +
+                    "</osmChange>");
         }
         catch (UniformInterfaceException e) {
             ClientResponse r = e.getResponse();
@@ -362,7 +361,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             NodeList returnedRelations = XPathAPI.selectNodeList(responseData, "//osm/diffResult/relation");
 
             /* **** THIS ASSERT FAILS INTERMITENTLY ON CentOS **** */
-            Assert.assertEquals(6, returnedRelations.getLength());
+            Assert.assertEquals(xml, 6, returnedRelations.getLength());
 
             // check the created relations
             Assert.assertEquals(-5,
@@ -738,7 +737,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             relationRecord = relations.get(relationIdsArr[3]);
             Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
             Assert.assertEquals(relationIdsArr[3], relationRecord.getId());
-//            Assert.assertTrue(relationRecord.getTimestamp().before(now));
+            Assert.assertTrue(relationRecord.getTimestamp().before(now));
             Assert.assertEquals(new Long(1), relationRecord.getVersion());
             Assert.assertTrue(relationRecord.getVisible());
 
