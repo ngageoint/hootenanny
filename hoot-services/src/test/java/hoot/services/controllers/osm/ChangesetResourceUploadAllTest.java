@@ -40,6 +40,7 @@ import javax.xml.xpath.XPathExpressionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.postgresql.util.PGobject;
@@ -75,7 +76,7 @@ import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.XmlUtils;
 
-
+@Ignore
 public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
     private static final Logger log = LoggerFactory.getLogger(ChangesetResourceUploadAllTest.class);
     private final QCurrentNodes currentNodesTbl = QCurrentNodes.currentNodes;
