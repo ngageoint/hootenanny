@@ -14,7 +14,7 @@ aclocal.m4
 autom4te.cache
 bin/
 callgrind.*
-conf/DatabaseConfig.sh
+conf/DatabaseConfigLocal.sh
 conf/LocalHoot.json
 conf/*.rf
 conf/words*.sqlite

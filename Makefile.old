@@ -154,10 +154,6 @@ tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 	/bin/sed -r -e 's/^(#[ \t]*define) /\1 TGS_/' config.h >> tgs/src/main/cpp/tgs/TgsConfig.h
 	echo "#endif" >> tgs/src/main/cpp/tgs/TgsConfig.h
 
-conf/DatabaseConfig.sh: conf/DatabaseConfig.sh.orig
-	# This will copy conf/DatabaseConfig.sh.orig to conf/DatabaseConfig.sh if necessary
-	if [ ! -f conf/DatabaseConfig.sh ]; then echo "Using default database configuration. You can safely customize: conf/DatabaseConfig.sh"; cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh; else echo; echo; echo "Check your conf/DatabaseConfig.sh to see if it needs updating with conf/DatabaseConfig.sh.orig, if not just 'touch conf/DatabaseConfig.sh'"; echo; echo; false; fi
-
 # We now have different versions of the NFDD Schema that are built from Excel files:
 # LTDSv40.csv.gz - Local TDS v4.0
 # SUTDSv40.csv.gz - Specialized Urban TDS v4.0
@@ -221,7 +217,7 @@ plugins/etds61_osm_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build osmapi db
-osmapidb: conf/DatabaseConfig.sh
+osmapidb:
 ifeq ($(BUILD_SERVICES),services)
 	scripts/SetupOsmApiDB.sh
 endif
@@ -247,7 +243,7 @@ qt-make: HOOT_VERSION_FILE Makefile.qmake hoot-core/src/main/cpp/hoot/core/HootC
 	  || true \
 	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 
-services-build:	HOOT_VERSION_FILE conf/DatabaseConfig.sh
+services-build:	HOOT_VERSION_FILE
 ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile build
 endif
