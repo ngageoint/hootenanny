@@ -179,6 +179,10 @@ services:SOURCES += \
     src/test/cpp/hoot/core/io/HootApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/HootApiDbWriterTest.cpp \
     src/test/cpp/hoot/core/io/PostgresqlDumpfileWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetSqlFileWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbReaderTest.cpp \
 
 HEADERS += \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.h \
@@ -217,8 +221,4 @@ SOURCES += \
     src/test/cpp/hoot/core/ops/WaySplitterOpTest.cpp \
     src/test/cpp/hoot/core/ops/TrivialOpTest.cpp \
     src/test/cpp/hoot/core/conflate/extractors/HistogramTest.cpp \
-    src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetWriterTest.cpp \
-    src/test/cpp/hoot/core/io/ServiceOsmApiDbReaderTest.cpp \
-    src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetSqlFileWriterTest.cpp \
-    src/test/cpp/hoot/core/io/ServiceOsmApiDbTest.cpp
 
