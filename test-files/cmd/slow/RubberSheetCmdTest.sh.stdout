@@ -1,0 +1,31 @@
+16:30:09.712 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
+Reprojecting 0 / 7487         Reprojecting 1000 / 7487         Reprojecting 2000 / 7487         Reprojecting 3000 / 7487         Reprojecting 4000 / 7487         Reprojecting 5000 / 7487         Reprojecting 6000 / 7487         Reprojecting 7000 / 7487         
+16:30:09.762 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
+16:30:09.762 INFO  ...nflate/DuplicateWayRemover.cpp(  64) Removing duplicate ways...
+16:30:10.014 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
+16:30:10.014 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
+16:30:10.015 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
+16:30:10.015 INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
+  Intersection splitter todo: 0       
+16:30:10.071 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
+16:30:10.092 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
+16:30:10.092 INFO  ...e/splitter/DualWaySplitter.cpp(  83) Assuming drives on right.
+16:30:10.092 INFO  ...e/splitter/DualWaySplitter.cpp( 246) Splitting divided ways...
+
+16:30:10.106 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ImpliedDividedMarker
+16:30:10.123 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateNameRemover
+16:30:10.129 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
+16:30:10.155 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmptyAreasVisitor
+16:30:10.170 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+16:30:10.194 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
+16:30:10.403 INFO  .../core/conflate/RubberSheet.cpp( 325) Found 237 potential ties.
+16:30:10.404 INFO  .../core/conflate/RubberSheet.cpp( 363) Found 173 confident ties.
+16:30:10.420 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: DelaunayInterpolator 
+16:30:10.974 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: IDW, p: 0 
+16:30:11.347 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: Kernel estimation, sigma: 3176.88 
+16:30:11.347 INFO  .../core/conflate/RubberSheet.cpp( 258) Best candidate: Kernel estimation, sigma: 3176.88
+16:30:11.347 INFO  .../core/conflate/RubberSheet.cpp( 372) Kernel estimation, sigma: 3176.88
+16:30:11.756 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: Kernel estimation, sigma: 3177.26 
+16:30:11.756 INFO  .../core/conflate/RubberSheet.cpp( 258) Best candidate: Kernel estimation, sigma: 3177.26
+16:30:11.757 INFO  .../core/conflate/RubberSheet.cpp( 376) Kernel estimation, sigma: 3177.26
+Reprojecting 0 / 7500         Reprojecting 1000 / 7500         Reprojecting 2000 / 7500         Reprojecting 3000 / 7500         Reprojecting 4000 / 7500         Reprojecting 5000 / 7500         Reprojecting 6000 / 7500         Reprojecting 7000 / 7500         

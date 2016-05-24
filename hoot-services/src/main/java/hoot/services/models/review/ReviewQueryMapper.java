@@ -29,8 +29,7 @@ package hoot.services.models.review;
 /**
  * 
  */
-public abstract class ReviewQueryMapper 
-{
-	@Override
-  public abstract String toString();
+public abstract class ReviewQueryMapper {
+    @Override
+    public abstract String toString();
 }

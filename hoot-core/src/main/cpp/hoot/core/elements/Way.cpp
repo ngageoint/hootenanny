@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -49,10 +49,10 @@ namespace hoot
 {
 
 Way::Way(Status s, long id, Meters circularError, long changeset, long version,
-         unsigned int timestamp, QString user, long uid)
+         unsigned int timestamp, QString user, long uid, bool visible)
 : Element(s)
 {
-  _wayData.reset(new WayData(id, changeset, version, timestamp, user, uid));
+  _wayData.reset(new WayData(id, changeset, version, timestamp, user, uid, visible));
   _getElementData().setCircularError(circularError);
 }
 
@@ -323,7 +323,9 @@ QString Way::toString() const
   ss << endl;
   ss << "tags: " << getTags().toString().toStdString();
   ss << "cached envelope: " << GeometryUtils::toString(_cachedEnvelope).toStdString() << endl;
-  ss << "status: " << getStatusString().toStdString();
+  ss << "status: " << getStatusString().toStdString() << endl;
+  ss << "version: " << getVersion() << endl;
+  ss << "visible: " << getVisible();
   return QString::fromStdString(ss.str());
 }
 

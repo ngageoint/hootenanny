@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -149,17 +149,23 @@ public:
     HOOT_STR_EQUALS("way(-4)\n"
                     "nodes: [2]{-1, -6}\n"
                     "tags: cached envelope: 0,-1,0,-1\n"
-                    "status: conflated",
+                    "status: conflated\n"
+                    "version: 0\n"
+                    "visible: 1",
                     map->getWay(-4)->toString());
     HOOT_STR_EQUALS("way(-5)\n"
                     "nodes: [2]{-6, -2}\n"
                     "tags: cached envelope: 0,-1,0,-1\n"
-                    "status: unknown1",
+                    "status: unknown1\n"
+                    "version: 0\n"
+                    "visible: 1",
                     map->getWay(-5)->toString());
     HOOT_STR_EQUALS("way(-7)\n"
                     "nodes: [2]{-1, -4}\n"
                     "tags: cached envelope: 0,-1,0,-1\n"
-                    "status: unknown2",
+                    "status: unknown2\n"
+                    "version: 0\n"
+                    "visible: 1",
                     map->getWay(-7)->toString());
   }
 
@@ -200,7 +206,9 @@ public:
     HOOT_STR_EQUALS("way(-4)\n"
                     "nodes: [2]{-1, -2}\n"
                     "tags: cached envelope: 0,-1,0,-1\n"
-                    "status: conflated", map->getWay(-4)->toString());
+                    "status: conflated\n"
+                    "version: 0\n"
+                    "visible: 1", map->getWay(-4)->toString());
   }
 
   /**

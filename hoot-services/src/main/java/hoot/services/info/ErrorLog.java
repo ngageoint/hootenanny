@@ -36,116 +36,91 @@ import org.apache.commons.lang3.StringUtils;
 import hoot.services.HootProperties;
 import hoot.services.controllers.info.AboutResource;
 
-public class ErrorLog
-{
 
-	private static String _errLogPath = null;
-	private static String _tempOutputPath = null;
+public class ErrorLog {
 
-	public ErrorLog() throws IOException
-	{
-		// ErrorLogPath
-		if (_errLogPath == null)
-		{
-			_errLogPath = HootProperties.getProperty("ErrorLogPath");
-		}
+    private static String errLogPath = null;
+    private static String tempOutputPath = null;
 
-		if (_tempOutputPath == null)
-		{
-			_tempOutputPath = HootProperties.getProperty("tempOutputPath");
-		}
-	}
+    public ErrorLog() throws IOException {
+        // ErrorLogPath
+        if (errLogPath == null) {
+            errLogPath = HootProperties.getProperty("ErrorLogPath");
+        }
 
-	public String getErrorlog(long maxLength) throws Exception
-	{
-		RandomAccessFile randomAccessFile = null;
-		try
-		{
-			File file = new File(_errLogPath);
-			randomAccessFile = new RandomAccessFile(file, "r");
-			StringBuilder builder = new StringBuilder();
-			long length = file.length();
+        if (tempOutputPath == null) {
+            tempOutputPath = HootProperties.getProperty("tempOutputPath");
+        }
+    }
 
-			long startOffset = 0;
-			if (length > maxLength)
-			{
-				startOffset = length - maxLength;
-			}
-			for (long seek = startOffset; seek < length; seek++)
-			{
-				randomAccessFile.seek(seek);
-				char c = (char) randomAccessFile.read();
-				builder.append(c);
-			}
-			return builder.toString();
-		}
-		finally
-		{
-			if (randomAccessFile != null)
-			{
-				randomAccessFile.close();
-			}
-		}
-	}
+    public String getErrorlog(long maxLength) throws IOException {
+        File file = new File(errLogPath);
 
-	public String generateExportLog() throws Exception
-	{
-		String fileId = UUID.randomUUID().toString();
-		String outputPath = _tempOutputPath + "/" + fileId;
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
+            StringBuilder builder = new StringBuilder();
+            long length = file.length();
 
-		String data = "";
+            long startOffset = 0;
+            if (length > maxLength) {
+                startOffset = length - maxLength;
+            }
+            for (long seek = startOffset; seek < length; seek++) {
+                randomAccessFile.seek(seek);
+                char c = (char) randomAccessFile.read();
+                builder.append(c);
+            }
+            return builder.toString();
+        }
+    }
 
-		AboutResource about = new AboutResource();
-		VersionInfo vInfo = about.getCoreVersionInfo();
-		data = "\n************ CORE VERSION INFO ***********\n";
-		data += vInfo.toString();
-		CoreDetail cd = about.getCoreVersionDetail();
-		data += "\n************ CORE ENVIRONMENT ***********\n";
-		if (cd != null)
-		{
-			data += StringUtils.join(cd.getEnvironmentInfo(), '\n');
-		}
+    public String generateExportLog() throws IOException {
+        String fileId = UUID.randomUUID().toString();
+        String outputPath = tempOutputPath + File.pathSeparator + fileId;
 
-		data = "\n************ SERVICE VERSION INFO ***********\n";
-		data += about.getServicesVersionInfo().toString();
-		ServicesDetail sd = about.getServicesVersionDetail();
-		if (sd != null)
-		{
-			data += "\n************ SERVICE DETAIL PROPERTY ***********\n";
-			for (ServicesDetail.Property prop : sd.getProperties())
-			{
-				String str = prop.getName() + " : " + prop.getValue() + "\n";
-				data += str;
-			}
+        String data = "";
 
-			data += "\n************ SERVICE DETAIL RESOURCE ***********\n";
-			for (ServicesDetail.ServicesResource res : sd.getResources())
-			{
-				String str = res.getType() + " : " + res.getUrl() + "\n";
-				data += str;
-			}
-		}
+        AboutResource about = new AboutResource();
 
-		data += "\n************ CATALINA LOG ***********\n";
+        VersionInfo vInfo = about.getCoreVersionInfo();
+        data = System.lineSeparator() + "************ CORE VERSION INFO ***********" + System.lineSeparator();
+        data += vInfo.toString();
 
-		// 5MB Max
-		int maxSize = 5000000;
+        CoreDetail cd = about.getCoreVersionDetail();
+        data += System.lineSeparator() + "************ CORE ENVIRONMENT ***********" + System.lineSeparator();
+        if (cd != null) {
+            data += StringUtils.join(cd.getEnvironmentInfo(), System.lineSeparator());
+        }
 
-		String logStr = getErrorlog(maxSize);
+        data = System.lineSeparator() + "************ SERVICE VERSION INFO ***********" + System.lineSeparator();
+        data += about.getServicesVersionInfo().toString();
 
-		RandomAccessFile raf = null;
-		try
-		{
-			raf = new RandomAccessFile(outputPath, "rw");
-			raf.writeBytes(data + "\n" + logStr);
-			return outputPath;
-		}
-		finally
-		{
-			if (raf != null)
-			{
-				raf.close();
-			}
-		}
-	}
+        ServicesDetail sd = about.getServicesVersionDetail();
+        if (sd != null) {
+            data += System.lineSeparator() + "************ SERVICE DETAIL PROPERTY ***********"
+                    + System.lineSeparator();
+            for (ServicesDetail.Property prop : sd.getProperties()) {
+                String str = prop.getName() + " : " + prop.getValue() + System.lineSeparator();
+                data += str;
+            }
+
+            data += System.lineSeparator() + "************ SERVICE DETAIL RESOURCE ***********"
+                    + System.lineSeparator();
+            for (ServicesDetail.ServicesResource res : sd.getResources()) {
+                String str = res.getType() + " : " + res.getUrl() + System.lineSeparator();
+                data += str;
+            }
+        }
+
+        data += System.lineSeparator() + "************ CATALINA LOG ***********" + System.lineSeparator();
+
+        // 5MB Max
+        int maxSize = 5000000;
+
+        String logStr = getErrorlog(maxSize);
+
+        try (RandomAccessFile raf = new RandomAccessFile(outputPath, "rw")) {
+            raf.writeBytes(data + System.lineSeparator() + logStr);
+            return outputPath;
+        }
+    }
 }

@@ -9,8 +9,8 @@ set -e
 source $HOOT_HOME/conf/DatabaseConfig.sh
 
 # setup db, user, and password to avoid password prompt
-export AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
-export PGPASSWORD=$DB_PASSWORD
+export AUTH="-h $DB_HOST_OSMAPI -p $DB_PORT_OSMAPI -U $DB_USER_OSMAPI"
+export PGPASSWORD=$DB_PASSWORD_OSMAPI
 do_create="true"
 
 # see if old db osmapi_test exists
@@ -24,7 +24,7 @@ if [ "$flag" = "1" ]; then
                     file_name text;  
                     file_time text;  
             BEGIN  
-              SELECT INTO db_oid oid FROM pg_database WHERE datname='osmapi_test'; 
+              SELECT INTO db_oid oid FROM pg_database WHERE datname='$DB_NAME_OSMAPI'; 
               SELECT INTO data_dir setting FROM pg_settings WHERE name='data_directory';  
               file_name := data_dir || '/base/' || db_oid || '/PG_VERSION'; 
               SELECT INTO file_time modification FROM pg_stat_file(file_name); 
@@ -61,9 +61,9 @@ fi
 # create the osm apu db from the blank osm api db script
 if [ "$do_create" = "true" ]; then
   #echo "Creating osm api db"
-  #echo "DB_HOST: " $DB_HOST
-  #echo "DB_PORT: " $DB_PORT
-  #echo "DB_USER: " $DB_USER
+  #echo "DB_HOST_OSMAPI: " $DB_HOST_OSMAPI
+  #echo "DB_PORT_OSMAPI: " $DB_PORT_OSMAPI
+  #echo "DB_USER_OSMAPI: " $DB_USER_OSMAPI
   #echo "PGPASSWORD: " $PGPASSWORD
   #echo "DB_NAME_OSMAPI: " $DB_NAME_OSMAPI
   createdb $AUTH $DB_NAME_OSMAPI

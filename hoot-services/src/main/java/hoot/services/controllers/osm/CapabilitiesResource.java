@@ -26,9 +26,6 @@
  */
 package hoot.services.controllers.osm;
 
-import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.writers.osm.CapabilitiesResponseWriter;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -43,46 +40,43 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
+import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.writers.osm.CapabilitiesResponseWriter;
+
+
 /**
  * Service endpoint for OSM capabilities
  */
 @Path("/api/capabilities")
-public class CapabilitiesResource
-{
-  private static final Logger log = LoggerFactory.getLogger(CapabilitiesResource.class);
+public class CapabilitiesResource {
+    private static final Logger log = LoggerFactory.getLogger(CapabilitiesResource.class);
 
-  /**
-   * The Hootenanny Capabilities Service implements the OSM Capabilities Service v0.6 with some 
-   * differences. The Hootenanny API does not support the following capabilities properties: 
-   * tracepoints.
-   * 
-   * GET hoot-services/osm/api/capabilities
-   * 
-   * @return Capability OSM XML
-   */
-  @GET
-  @Consumes(MediaType.TEXT_PLAIN)
-  @Produces(MediaType.TEXT_XML)
-  public Response get()
-  {
-    try
-    {
-      log.info("Retrieving capabilities...");
+    /**
+     * The Hootenanny Capabilities Service implements the OSM Capabilities
+     * Service v0.6 with some differences. The Hootenanny API does not support
+     * the following capabilities properties: tracepoints.
+     * 
+     * GET hoot-services/osm/api/capabilities
+     * 
+     * @return Capability OSM XML
+     */
+    @GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_XML)
+    public Response get() {
+        try {
+            log.info("Retrieving capabilities...");
 
-      Document responseDoc = (new CapabilitiesResponseWriter()).writeResponse();
-      log.debug("Returning response: " +
-        StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100) + " ...");
-      return
-        Response
-          .ok(new DOMSource(responseDoc), MediaType.TEXT_XML)
-          .header("Content-type", MediaType.TEXT_XML)
-          .build();
+            Document responseDoc = (new CapabilitiesResponseWriter()).writeResponse();
+            log.debug("Returning response: " + StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100)
+                    + " ...");
+            return Response.ok(new DOMSource(responseDoc), MediaType.TEXT_XML)
+                    .header("Content-type", MediaType.TEXT_XML).build();
+        }
+        catch (Exception e) {
+            final String message = "Error retrieving capabilities: " + e.getMessage();
+            log.error(message);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build();
+        }
     }
-    catch (Exception e)
-    {
-      final String message = "Error retrieving capabilities: " + e.getMessage();
-      log.error(message);
-      return Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build();
-    }
-  }
 }

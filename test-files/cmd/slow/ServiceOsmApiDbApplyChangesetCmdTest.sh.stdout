@@ -1,0 +1,20 @@
+ setval 
+--------
+      1
+(1 row)
+
+17:32:59.370 INFO  ...core/cmd/ApplyChangesetCmd.cpp(  57) Applying changeset test-files/cmd/slow/ServiceOsmApiDbApplyChangesetCmdTest/changeset.osc.sql to osmapidb://hoot:hoottest@localhost:5432/osmapi_test...
+17:32:59.390 INFO  ...OsmApiDbSqlChangesetWriter.cpp(  65) Executing changeset SQL queries against OSM API database...
+17:32:59.399 INFO  ...OsmApiDbSqlChangesetWriter.cpp( 135) Changeset SQL queries execute finished against OSM API database.
+Changeset(s) Created: 1
+Node(s) Created: 1
+Node(s) Modified: 0
+Node(s) Deleted: 0
+Way(s) Created: 0
+Way(s) Modified: 0
+Way(s) Deleted: 0
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+17:32:59.505 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp(  78) Converting osmapidb://hoot:hoottest@localhost:5432/osmapi_test to test-output/cmd/ServiceOsmApiDbApplyChangesetCmdTest/output.osm...
+17:32:59.526 INFO  ...oot/core/io/OsmApiDbReader.cpp( 112) Executing OSM API read query against all element types...

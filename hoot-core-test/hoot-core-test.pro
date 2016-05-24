@@ -98,7 +98,7 @@ SOURCES += \
     src/test/cpp/hoot/core/algorithms/ExpectationIntersectionTest.cpp \
     src/test/cpp/hoot/core/conflate/point/PlacesPoiMatchTest.cpp \
     src/test/cpp/hoot/core/conflate/point/PlacesPoiMergerTest.cpp \
-    src/test/cpp/hoot/core/algorithms/IntegerProgrammingSolverTest.cpp \
+    src/test/cpp/hoot/core/algorithms/optimizer/IntegerProgrammingSolverTest.cpp \
     src/test/cpp/hoot/core/elements/NodeTest.cpp \
     src/test/cpp/hoot/core/perty/PertyNameVisitorTest.cpp \
     src/test/cpp/hoot/core/perty/PertyDuplicatePoiOpTest.cpp \
@@ -146,7 +146,7 @@ SOURCES += \
     src/test/cpp/hoot/core/conflate/DuplicateNameRemoverTest.cpp \
     src/test/cpp/hoot/core/conflate/NoInformationElementRemoverTest.cpp \
     src/test/cpp/hoot/core/perty/PertyMatchScorerTest.cpp \
-    src/test/cpp/hoot/core/algorithms/SingleAssignmentProblemSolverTest.cpp \
+    src/test/cpp/hoot/core/algorithms/optimizer/SingleAssignmentProblemSolverTest.cpp \
     src/test/cpp/hoot/core/conflate/extractors/SampledAngleHistogramExtractorTest.cpp \
     src/test/cpp/hoot/core/conflate/extractors/WeightedMetricDistanceExtractorTest.cpp \
     src/test/cpp/hoot/core/io/ArffWriterTest.cpp \
@@ -175,14 +175,14 @@ SOURCES += \
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
     src/test/cpp/hoot/core/io/HootApiDbTest.cpp \
-    src/test/cpp/hoot/core/io/OsmApiDbTest.cpp \
     src/test/cpp/hoot/core/io/ServicesDbTestUtils.cpp \
-    src/test/cpp/hoot/core/io/OsmApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/HootApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/HootApiDbWriterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmChangesetSqlFileWriterTest.cpp \
     src/test/cpp/hoot/core/io/PostgresqlDumpfileWriterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmApiDbChangesetWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbSqlChangesetWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetSqlFileWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbReaderTest.cpp \
 
 HEADERS += \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.h \
@@ -214,10 +214,11 @@ SOURCES += \
     src/test/cpp/hoot/core/schema/TagAncestorDifferencerTest.cpp \
     src/test/cpp/hoot/core/elements/RelationTest.cpp \
     src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp \
+    src/test/cpp/hoot/core/visitors/MedianNodeVisitorTest.cpp \
     src/test/cpp/hoot/core/ops/BuildingOutlineRemoveOpTest.cpp \
     src/test/cpp/hoot/core/ops/ReprojectToGeographicOpTest.cpp \
     src/test/cpp/hoot/core/ops/ReprojectToPlanarOpTest.cpp \
     src/test/cpp/hoot/core/ops/WaySplitterOpTest.cpp \
     src/test/cpp/hoot/core/ops/TrivialOpTest.cpp \
-    src/test/cpp/hoot/core/conflate/extractors/HistogramTest.cpp
+    src/test/cpp/hoot/core/conflate/extractors/HistogramTest.cpp \
 

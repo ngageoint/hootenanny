@@ -1,0 +1,53 @@
+reference dataset:  test-files/conflate/unified/AllDataTypesA.osm
+secondary dataset:  test-files/conflate/unified/AllDataTypesB.osm
+AOI:  -180,-90,180,90
+TEST_NAME:  ServiceOsmApiDbAllDataTypesConflateTest
+
+STEP 1: Cleaning out the osm api db and initializing it for use...
+ setval 
+--------
+      1
+(1 row)
+
+
+STEP 2: Writing the reference dataset to the osm api db...
+ setval 
+--------
+      2
+(1 row)
+
+ setval 
+--------
+    118
+(1 row)
+
+ setval 
+--------
+     15
+(1 row)
+
+ setval 
+--------
+      1
+(1 row)
+
+
+STEP 4: Writing the secondary dataset to the hoot api db...
+
+STEP 6: Conflating the two datasets...
+
+STEP 8: Writing a SQL changeset file that is the difference between the cropped reference input dataset and the conflated #output...
+
+STEP 9: Executing the changeset SQL on the osm api db...
+Changeset(s) Created: 1
+Node(s) Created: 144
+Node(s) Modified: 0
+Node(s) Deleted: 117
+Way(s) Created: 23
+Way(s) Modified: 0
+Way(s) Deleted: 14
+Relation(s) Created: 9
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+
+STEP 11: Reading the entire contents of the osm api db, writing it into a file, and verifying it...

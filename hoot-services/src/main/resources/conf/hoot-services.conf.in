@@ -122,16 +122,16 @@ cleanDataMakePath=makecleandata
 # Custom Script Service folder location
 customScriptPath=customscript
 
-# Db Name
+# hoot api db Name
 dbName=${DB_NAME}
 
-# Db server user id
+# hoot api db server user id
 dbUserId=${DB_USER}
 
-# Db server user password
+# hoot api db server user password
 dbPassword=${DB_PASSWORD}
 
-# Db server user host
+# hoot api db server user host
 dbHost=${DB_HOST}:${DB_PORT}
 
 # WFS Store Connection Name
@@ -139,6 +139,18 @@ wfsStoreConnName=WFS_Connection
 
 # WFS Store db name
 wfsStoreDb=${WFS_DB_NAME}
+
+# osm api db Name
+osmApiDbName=${DB_NAME_OSMAPI}
+
+# osm api db server user id
+osmApiDbUserId=${DB_USER_OSMAPI}
+
+# osm api db server user password
+osmApiDbPassword=${DB_PASSWORD_OSMAPI}
+
+# osm api db server user host
+osmApiDbHost=${DB_HOST_OSMAPI}:${DB_PORT_OSMAPI}
 
 # Translation extension install folder
 translationExtPath=$(homeFolder)/plugins-local/script/utp
@@ -247,11 +259,3 @@ hgisPrepareForValidationScript=custom/HGIS/PrepareForValidation.sh
 
 # HGIS filter script name
 hgisFilterScript=custom/HGIS/RemoveNonHgisPois.sh
-
-# Map Edit
-HootToMapEdit=makeexporttomapedit
-MapEditDbName=osmapi_test
-MapEditDbUserId=hoot
-MapEditDbPassword=hoottest
-MapEditDbHostAddr=localhost
-MapEditDbHostPort=5432

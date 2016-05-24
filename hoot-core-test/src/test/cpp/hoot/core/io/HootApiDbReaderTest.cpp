@@ -205,8 +205,7 @@ public:
 
     //I would rather this return: "URL does not contain valid map ID." from
     //HootApiDbReader::open
-    CPPUNIT_ASSERT_EQUAL(
-      QString("An unsupported URL was passed in.").toStdString(), exceptionMsg.toStdString());
+    CPPUNIT_ASSERT(exceptionMsg.contains("An unsupported URL was passed in"));
   }
 
   void runUrlInvalidMapIdTest()

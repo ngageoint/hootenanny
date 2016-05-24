@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -47,7 +47,7 @@ shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
   QString writerOverride = ConfigOptions().getOsmMapWriterFactoryWriter();
 
   shared_ptr<OsmMapWriter> writer;
-  if (writerOverride != "")
+  if (writerOverride != "" && url != ConfigOptions().getDebugMapFilename())
   {
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(writerOverride));
   }

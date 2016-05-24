@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OsmApiDbChangesetWriter.h>
+#include <hoot/core/io/OsmApiDbSqlChangesetWriter.h>
 
 // Qt
 #include <QFile>
@@ -54,6 +54,8 @@ public:
       throw HootException(QString("%1 takes two or four parameters.").arg(getName()));
     }
 
+    LOG_INFO("Applying changeset " << args[0] << " to " << args[1] << "...");
+
     if (args[0].endsWith(".osc"))
     {
       throw HootException(
@@ -62,7 +64,7 @@ public:
     else if (args[0].endsWith(".osc.sql"))
     {
       QUrl url(args[1]);
-      OsmApiDbChangesetWriter changesetWriter(url);
+      OsmApiDbSqlChangesetWriter changesetWriter(url);
 
       if (args.size() == 4)
       {
@@ -74,6 +76,7 @@ public:
 
       QFile changesetSqlFile(args[0]);
       changesetWriter.write(changesetSqlFile);
+      cout << changesetWriter.getChangesetStats();
     }
     else
     {

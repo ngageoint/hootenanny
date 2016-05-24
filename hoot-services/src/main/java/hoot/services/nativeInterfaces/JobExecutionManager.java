@@ -26,9 +26,10 @@
  */
 package hoot.services.nativeInterfaces;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.json.simple.JSONObject;
+
 
 /**
  * @author Jong Choi
@@ -40,108 +41,85 @@ import org.json.simple.JSONObject;
  *         manages the job status tracking through jobStatusManager memeber.
  *
  */
-public class JobExecutionManager
-{
-  @SuppressWarnings("unused")
-  private static final Logger log = LoggerFactory.getLogger(JobExecutionManager.class);
+public class JobExecutionManager {
+    @SuppressWarnings("unused")
+    private static final Logger log = LoggerFactory.getLogger(JobExecutionManager.class);
 
-  private INativeInterface nativeInterface;
+    private INativeInterface nativeInterface;
 
-  public INativeInterface getNativeInterface()
-  {
-    return nativeInterface;
-  }
-
-  /**
-   * @param nativeInterface
-   */
-  public void setNativeInterface(INativeInterface nativeInterface)
-  {
-    this.nativeInterface = nativeInterface;
-  }
-
-  public JobExecutionManager()
-  {
-
-  }
-
-  /**
-   * Execute job using associated Native Interface class.
-   *
-   * @param command
-   * @throws NativeInterfaceException
-   */
-  public JSONObject exec(JSONObject command) throws Exception
-  {
-  	return execWithResult(command);
-  }
-
-
-  public void terminate(String jobId) throws Exception
-  {
-  	try
-    {
-      getNativeInterface().terminate(jobId);
+    public INativeInterface getNativeInterface() {
+        return nativeInterface;
     }
-    catch (NativeInterfaceException ne)
-    {
-      throw ne;
-    }
-    catch (Exception e)
-    {
-      throw new NativeInterfaceException(e.getMessage(),
-          NativeInterfaceException.HttpCode.SERVER_ERROR);
-    }
-  }
 
-  public JSONObject execWithResult(JSONObject command) throws Exception
-  {
-  	JSONObject ret = null;
-    try
-    {
-      ret = getNativeInterface().exec(command);
+    /**
+     * @param nativeInterface
+     */
+    public void setNativeInterface(INativeInterface nativeInterface) {
+        this.nativeInterface = nativeInterface;
     }
-    catch (NativeInterfaceException ne)
-    {
-      throw ne;
-    }
-    catch (Exception e)
-    {
-      throw new NativeInterfaceException(e.getMessage(),
-          NativeInterfaceException.HttpCode.SERVER_ERROR);
-    }
-    return ret;
-  }
 
+    public JobExecutionManager() {
 
-  public String getProgress(String jobId) throws Exception
-  {
-  	String progress = "";
-  	try
-    {
-  		progress = getNativeInterface().getJobProgress(jobId);
     }
-    catch (Exception e)
-    {
-      throw new NativeInterfaceException(e.getMessage(),
-          NativeInterfaceException.HttpCode.SERVER_ERROR);
+
+    /**
+     * Execute job using associated Native Interface class.
+     *
+     * @param command
+     * @throws NativeInterfaceException
+     */
+    public JSONObject exec(JSONObject command) throws Exception {
+        return execWithResult(command);
     }
-    return progress;
-  }
 
-  /**
-   * See CoreServiceContext.xml
-   */
-  public void destroy()
-  {
-  	//
-  }
+    public void terminate(String jobId) throws Exception {
+        try {
+            getNativeInterface().terminate(jobId);
+        }
+        catch (NativeInterfaceException ne) {
+            throw ne;
+        }
+        catch (Exception e) {
+            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR);
+        }
+    }
 
-  /**
-   * See CoreServiceContext.xml
-   */
-  public void init()
-  {
-  	//
-  }
+    public JSONObject execWithResult(JSONObject command) throws Exception {
+        JSONObject ret = null;
+        try {
+            ret = getNativeInterface().exec(command);
+        }
+        catch (NativeInterfaceException ne) {
+            throw ne;
+        }
+        catch (Exception e) {
+            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR);
+        }
+        return ret;
+    }
+
+    public String getProgress(String jobId) throws Exception {
+        String progress = "";
+        try {
+            progress = getNativeInterface().getJobProgress(jobId);
+        }
+        catch (Exception e) {
+            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR);
+        }
+        return progress;
+    }
+
+    /**
+     * See CoreServiceContext.xml
+     */
+    public void destroy() {
+        //
+    }
+
+    /**
+     * See CoreServiceContext.xml
+     */
+    public void init() {
+        //
+    }
 }

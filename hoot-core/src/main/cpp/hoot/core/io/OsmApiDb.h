@@ -104,10 +104,18 @@ public:
   shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
   /**
+   * Gets the next sequence ID for the given element type
+   *
+   * @param type element type
+   * @return an element ID
+   */
+  long getNextId(const ElementType type);
+
+  /**
    * Gets the next sequence ID for the given database table
    *
-   * @param table database table name
-   * @return an ID
+   * @param tableName database table name
+   * @return an element ID
    */
   long getNextId(const QString tableName);
 
@@ -142,6 +150,7 @@ private:
   // Osm Api DB table strings
   static QString _getWayNodesTableName() { return "current_way_nodes"; }
   static QString _getRelationMembersTableName() { return "current_relation_members"; }
+
 };
 
 }

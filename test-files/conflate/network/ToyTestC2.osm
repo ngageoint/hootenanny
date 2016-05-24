@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-505937' action='modify' visible='true' lat='38.85323760673' lon='-104.89849613502' />
+  <node id='-505936' action='modify' visible='true' lat='38.85357303993' lon='-104.89807204136' />
+  <node id='-505935' action='modify' visible='true' lat='38.85341587196' lon='-104.89827861024' />
+  <node id='-505933' action='modify' visible='true' lat='38.85324022167' lon='-104.89897294899' />
+  <node id='-505931' action='modify' visible='true' lat='38.85324283661' lon='-104.898734542' />
+  <way id='-505940' visible='true'>
+    <nd ref='-505933' />
+    <nd ref='-505931' />
+    <nd ref='-505937' />
+    <tag k='highway' v='road' />
+    <tag k='note' v='2' />
+  </way>
+  <way id='-505938' visible='true'>
+    <nd ref='-505937' />
+    <nd ref='-505935' />
+    <nd ref='-505936' />
+    <tag k='highway' v='road' />
+    <tag k='note' v='2' />
+  </way>
+</osm>
