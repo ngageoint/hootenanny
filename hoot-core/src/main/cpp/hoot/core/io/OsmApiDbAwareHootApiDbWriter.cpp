@@ -71,7 +71,6 @@ long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
       else
       {
         retVal = _osmApiDb.getNextId(ElementType::Node);
-        LOG_DEBUG("New node; created new ID: " << retVal);
         _nodeRemap[eid.getId()] = retVal;
         if (_outputMappingFile.length() > 0)
         {
@@ -90,7 +89,7 @@ long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
       else
       {
         retVal = _osmApiDb.getNextId(ElementType::Way);
-        LOG_DEBUG("New way; created new ID: " << retVal);
+
         _wayRemap[eid.getId()] = retVal;
         if ( _outputMappingFile.length() > 0 )
         {
@@ -109,7 +108,6 @@ long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
       else
       {
         retVal = _osmApiDb.getNextId(ElementType::Relation);
-        LOG_DEBUG("New relation; created new ID: " << retVal);
         _relationRemap[eid.getId()] = retVal;
         if ( _outputMappingFile.length() > 0 )
         {
@@ -131,40 +129,6 @@ long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
             //eid.getId() << " to " << retVal);
 
   return retVal;
-}
-
-vector<long> OsmApiDbAwareHootApiDbWriter::_remapNodes(const vector<long>& nids)
-{
-  vector<long> result(nids.size()); // Creates the vector and fills nids.size number of zeroes
-
-  for (size_t i = 0; i < nids.size(); i++)
-  {
-    // This is only called when adding nodes for a way.  If a way has a node we
-    //    did not successfully create a mapping for when importing nodes,
-    //    we can't continue
-    if (_nodeRemap.count(nids[i]) == 1)
-    {
-      result[i] = _nodeRemap.at(nids[i]);
-    }
-    else
-    {
-      //TODO: This isn't good, but haven't figured out how to get around it yet.
-      if (ConfigOptions().getHootapiDbWriterOsmapidbUrl().isEmpty())
-      {
-        throw HootException(QString("Requested ID remap for node " +  QString::number(nids[i])
-          + QString(" but it did not exist in mapping table")));
-      }
-      else
-      {
-        result[i] = nids[i];
-        LOG_DEBUG("Didn't find way node in remap...using ID: " << result[i]);
-      }
-      //result[i] = _osmApiDb.getNextId(ElementType::Node);
-      //LOG_DEBUG("Retrieved new node id for way node: " << result[i]);
-    }
-  }
-
-  return result;
 }
 
 void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Node>& n)

@@ -59,8 +59,6 @@ protected:
 
   virtual long _getRemappedElementId(const ElementId& eid);
 
-  virtual vector<long> _remapNodes(const vector<long>& nids);
-
 private:
 
   OsmApiDb _osmApiDb;
