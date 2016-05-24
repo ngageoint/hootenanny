@@ -50,15 +50,7 @@ vagrant plugin install vagrant-vmware-workstation
 
 # Vagrant Provisioning
 
-The initialization of the vagrant vm will take about an hour to download required software from the internet and set it up as a running system. Once it is complete, uncomment the `#, group: "tomcat6"` portion of the in Vagrantfile to allow the webapp to write to shared folders.
-
-    # argument is a set of non-required options.
-    config.vm.synced_folder ".", "/home/vagrant/hoot", group: "tomcat6", mount_options: ["dmode=775,fmode=775"]
-    # UNCOMMENT group after inital provisioning, then run vagrant reload
-
-Then issue the reload command for the changes to take effect on the vm:
-
-    vagrant reload
+The initialization of the vagrant vm will take about an hour to download required software from the internet and set it up as a running system. ~~Once it is complete, uncomment the `#, group: "tomcat6"` portion of the in Vagrantfile to allow the webapp to write to shared folders.~~  The previous workaround step is no longer needed as the provision script adds vagrant and tomcat6 users to each others group.
 
 You should be able to log into the running VM by typing:
 
