@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.osm;
 
+import static org.hamcrest.Matchers.*;
+
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.LinkedHashSet;
@@ -279,8 +281,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(-1,
                     Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData)));
             long newId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData));
-
-            Assert.assertTrue(newId > 0);
+            Assert.assertThat(newId, is(greaterThan(0L)));
             createdNodeIds.add(newId);
             Assert.assertEquals(1,
                     Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
@@ -288,7 +289,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(-2,
                     Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@old_id", responseData)));
             newId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData));
-            Assert.assertTrue(newId > 0);
+            Assert.assertThat(newId, is(greaterThan(0L)));
             createdNodeIds.add(newId);
             Assert.assertEquals(1,
                     Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_version", responseData)));
@@ -323,7 +324,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(-3,
                     Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@old_id", responseData)));
             newId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_id", responseData));
-            Assert.assertTrue(newId > 0);
+            Assert.assertThat(newId, is(greaterThan(0L)));
             createdWayIds.add(newId);
             Assert.assertEquals(1,
                     Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_version", responseData)));
@@ -331,7 +332,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(-4,
                     Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@old_id", responseData)));
             newId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_id", responseData));
-            Assert.assertTrue(newId > 0);
+            Assert.assertThat(newId, is(greaterThan(0L)));
             createdWayIds.add(newId);
             Assert.assertEquals(1,
                     Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_version", responseData)));
@@ -367,23 +368,21 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(-5,
                     Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@old_id", responseData)));
             newId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_id", responseData));
-            Assert.assertTrue(newId > 0);
+            Assert.assertThat(newId, is(greaterThan(0L)));
             createdRelationIds.add(newId);
             Assert.assertEquals(1,
                     Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_version", responseData)));
-
             Assert.assertEquals(-6,
                     Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@old_id", responseData)));
             newId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_id", responseData));
-            Assert.assertTrue(newId > 0);
+            Assert.assertThat(newId, is(greaterThan(0L)));
             createdRelationIds.add(newId);
             Assert.assertEquals(1,
                     Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_version", responseData)));
-
             Assert.assertEquals(-7,
                     Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@old_id", responseData)));
             newId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_id", responseData));
-            Assert.assertTrue(newId > 0);
+            Assert.assertThat(newId, is(greaterThan(0L)));
             createdRelationIds.add(newId);
             Assert.assertEquals(1,
                     Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_version", responseData)));
@@ -396,7 +395,6 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
                     Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_id", responseData)));
             Assert.assertEquals(2,
                     Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_version", responseData)));
-
             Assert.assertEquals((long) relationIdsArr[1],
                     Long.parseLong(xpath.evaluate("//osm/diffResult/relation[5]/@old_id", responseData)));
             Assert.assertEquals(
