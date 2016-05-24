@@ -84,7 +84,6 @@
             <nd ref="-1669793"/>
             <tag k="note" v="1"/>
             <tag k="highway" v="road"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-1669799" version="3">
             <nd ref="-1669729"/>
@@ -92,7 +91,6 @@
             <nd ref="-1669781"/>
             <tag k="note" v="3"/>
             <tag k="highway" v="road"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-1669797" version="1">
             <nd ref="-1669789"/>
@@ -127,7 +125,6 @@
             <nd ref="-1669777"/>
             <tag k="note" v="0"/>
             <tag k="highway" v="road"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-1669795" version="2">
             <nd ref="-1669725"/>
@@ -136,7 +133,6 @@
             <nd ref="-1669735"/>
             <tag k="note" v="2"/>
             <tag k="highway" v="road"/>
-            <tag k="error:circular" v="15"/>
         </way>
     </delete>
     <create>
@@ -229,7 +225,6 @@
             <nd ref="-7"/>
             <tag k="note" v="3"/>
             <tag k="highway" v="road"/>
-            <tag k="error:circular" v="15"/>
         </way>
     </create>
 </osmChange>

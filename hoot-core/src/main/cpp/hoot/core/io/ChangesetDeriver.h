@@ -41,7 +41,7 @@ class ChangesetDeriver : public ChangeSetProvider
 
 public:
 
-  ChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to, bool ignoreVersion = false);
+  ChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to);
 
   /**
    * @see ChangeSetProvider
@@ -73,8 +73,6 @@ private:
   ElementInputStreamPtr _to;
   Change _next;
   ElementPtr _fromE, _toE;
-
-  bool _ignoreVersion;
 
 };
 

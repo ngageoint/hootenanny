@@ -34,8 +34,7 @@
 namespace hoot
 {
 
-ElementComparer::ElementComparer(bool ignoreVersion, Meters threshold) :
-_ignoreVersion(ignoreVersion),
+ElementComparer::ElementComparer(Meters threshold) :
 _threshold(threshold)
 {
 
@@ -46,10 +45,10 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2)
   if (e1->getElementId() != e2->getElementId() ||
       !(e1->getTags() == e2->getTags()) ||
       e1->getStatus() != e2->getStatus() ||
-      (e1->getVersion() != e2->getVersion() && !_ignoreVersion) ||
+      (e1->getVersion() != e2->getVersion()) ||
       fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
   {
-    if (!(e1->getTags() == e2->getTags()))
+    /*if (!(e1->getTags() == e2->getTags()))
     {
       LOG_DEBUG("compare failed on tags:");
     }
@@ -57,7 +56,7 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2)
     {
       LOG_DEBUG("compare failed on status:");
     }
-    else if (e1->getVersion() != e2->getVersion() && !_ignoreVersion)
+    else if (e1->getVersion() != e2->getVersion())
     {
       LOG_DEBUG("compare failed on version:");
     }
@@ -68,7 +67,7 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2)
       LOG_VARD(_threshold);
     }
     LOG_VARD(e1);
-    LOG_VARD(e2);
+    LOG_VARD(e2);*/
     return false;
   }
   switch (e1->getElementType().getEnum())

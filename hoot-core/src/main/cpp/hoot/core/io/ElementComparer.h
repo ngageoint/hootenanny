@@ -44,7 +44,7 @@ public:
   /**
    * Defaults to 5cm threshold
    */
-  ElementComparer(bool ignoreVersion = false, Meters threshold = 0.05);
+  ElementComparer(Meters threshold = 0.05);
 
   bool isSame(ElementPtr e1, ElementPtr e2);
 
@@ -56,7 +56,6 @@ private:
 
   bool _compareRelation(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e);
 
-  bool _ignoreVersion;
   Meters _threshold;
 
 };

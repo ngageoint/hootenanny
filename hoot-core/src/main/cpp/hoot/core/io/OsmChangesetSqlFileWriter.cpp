@@ -125,13 +125,13 @@ void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
     changeElement->getId(), changeElement->getVersion());
 
   QString note = "";
-  if (changeElement->getTags().contains("note"))
+  /*if (changeElement->getTags().contains("note"))
   {
     note = changeElement->getTags().get("note");
-  }
-  LOG_VARD(changeElement->getId());
-  LOG_VARD(note);
-  LOG_VARD(changeElement->getVersion());
+  }*/
+  //LOG_VARD(changeElement->getId());
+  //LOG_VARD(note);
+  //LOG_VARD(changeElement->getVersion());
   QString commentStr = "/* create " + elementTypeStr + " " + QString::number(changeElement->getId());
   if (!note.isEmpty())
   {
@@ -226,14 +226,14 @@ void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
   changeElement->setVisible(true);
 
   QString note = "";
-  if (changeElement->getTags().contains("note"))
+  /*if (changeElement->getTags().contains("note"))
   {
     note = changeElement->getTags().get("note");
-  }
-  LOG_VARD(changeElement->getId());
-  LOG_VARD(note);
-  LOG_VARD(changeElement->getVersion());
-  QString commentStr = "/* modify  " + elementTypeStr + " " + QString::number(changeElement->getId());
+  }*/
+  //LOG_VARD(changeElement->getId());
+  //LOG_VARD(note);
+  //LOG_VARD(changeElement->getVersion());
+  QString commentStr = "/* modify " + elementTypeStr + " " + QString::number(changeElement->getId());
   if (!note.isEmpty())
   {
     commentStr += " - note: " + note;
@@ -297,13 +297,13 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
   changeElement->setChangeset(_changesetId);
 
   QString note = "";
-  if (changeElement->getTags().contains("note"))
+  /*if (changeElement->getTags().contains("note"))
   {
     note = changeElement->getTags().get("note");
-  }
-  LOG_VARD(changeElement->getId());
-  LOG_VARD(note);
-  LOG_VARD(changeElement->getVersion());
+  }*/
+  //LOG_VARD(changeElement->getId());
+  //LOG_VARD(note);
+  //LOG_VARD(changeElement->getVersion());
   QString commentStr = "/* delete " + elementTypeStr + " " + QString::number(changeElement->getId());
   if (!note.isEmpty())
   {
