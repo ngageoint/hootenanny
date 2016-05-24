@@ -137,7 +137,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
   _addElementTags(n, t);
 
   const long nodeId = _getRemappedElementId(n->getElementId());
-  bool alreadyThere = _nodeRemap.count(nodeId) != 0;
+  const bool alreadyThere = _nodeRemap.count(nodeId) != 0;
   if (alreadyThere)
   {
     _hootdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, t);
@@ -157,7 +157,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
   _addElementTags(w, tags);
 
   const long wayId = _getRemappedElementId(w->getElementId());
-  bool alreadyThere = _wayRemap.count(wayId) != 0;
+  const bool alreadyThere = _wayRemap.count(wayId) != 0;
   if (alreadyThere)
   {
     _hootdb.updateWay(wayId, w->getVersion() + 1, tags);
@@ -190,7 +190,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const shared_ptr<const Relation>
   }
 
   const long relationId = _getRemappedElementId(r->getElementId());
-  bool alreadyThere = _relationRemap.count(r->getId()) != 0;
+  const bool alreadyThere = _relationRemap.count(relationId) != 0;
   if (alreadyThere)
   {
     _hootdb.updateRelation(relationId, r->getVersion() + 1, tags);
