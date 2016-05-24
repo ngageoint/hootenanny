@@ -82,6 +82,8 @@ private:
 
   void _execNoPrepare(const QString sql);
   void _initChangesetStats();
+  void _execTransaction(const QString changesetInsertStatement,
+                        const QString elementSqlStatements);
 
   OsmApiDb _db;
 

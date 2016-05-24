@@ -59,39 +59,48 @@ void OsmApiDbSqlChangesetWriter::_initChangesetStats()
   _changesetStats.clear();
 }
 
-//TODO: make this work with multiple changesets in one file
 void OsmApiDbSqlChangesetWriter::write(const QString sql)
 {
   LOG_INFO("Executing changeset SQL queries against OSM API database...");
 
-  QString changesetInsertStatement;
+  _db.transaction();
+
+  QString changesetInsertStatement = "";
   QString elementSqlStatements = "";
 
   const QStringList sqlParts = sql.split(";");
+
+  if (!sqlParts[0].toUpper().startsWith("INSERT INTO CHANGESETS"))
+  {
+    throw HootException(
+      "The first SQL statement in a changeset SQL file must create a changeset.");
+  }
+
   for (int i = 0; i < sqlParts.size(); i++)
   {
     const QString sqlStatement = sqlParts[i];
-    if (i == 0)
+    QString changesetStatType;
+    if (sqlStatement.toUpper().startsWith("INSERT INTO CHANGESETS"))
     {
-      if (!sqlStatement.toUpper().startsWith("INSERT INTO CHANGESETS"))
+      //flush
+      if (!changesetInsertStatement.isEmpty())
       {
-        throw HootException(
-          "The first SQL statement in a changeset SQL file must create a changeset.");
-      }
-      else
-      {
-        changesetInsertStatement = sqlStatement + ";";
+        if (elementSqlStatements.trimmed().isEmpty())
+        {
+          throw HootException("No element SQL statements changeset.");
+        }
 
-        const QString changesetStatType = "changeset-create";
-        if (_changesetStats.contains(changesetStatType))
-        {
-          _changesetStats[changesetStatType] = _changesetStats[changesetStatType] + 1;
-        }
-        else
-        {
-          _changesetStats[changesetStatType] = 1;
-        }
+        //had problems here when trying to prepare these queries (should they be?); the changeset writing
+        //needs to be done before the element writing, hence the separate queries
+        _execNoPrepare(changesetInsertStatement);
+        _execNoPrepare(elementSqlStatements);
+
+        changesetInsertStatement = "";
+        elementSqlStatements = "";
       }
+
+      changesetInsertStatement = sqlStatement + ";";
+      changesetStatType = "changeset-create";
     }
     else
     {
@@ -105,31 +114,35 @@ void OsmApiDbSqlChangesetWriter::write(const QString sql)
       {
         const QStringList statementParts = sqlStatement.trimmed().split(" ");
         assert(statementParts.length() >= 3);
-        const QString changesetStatType =
-          statementParts[2] + "-" + statementParts[1]; //e.g. "node-create"
+        changesetStatType = statementParts[2] + "-" + statementParts[1]; //e.g. "node-create"
         LOG_VARD(changesetStatType);
-        if (_changesetStats.contains(changesetStatType))
-        {
-          _changesetStats[changesetStatType] = _changesetStats[changesetStatType] + 1;
-        }
-        else
-        {
-          _changesetStats[changesetStatType] = 1;
-        }
       }
+    }
+    if (_changesetStats.contains(changesetStatType))
+    {
+      _changesetStats[changesetStatType] = _changesetStats[changesetStatType] + 1;
+    }
+    else
+    {
+      _changesetStats[changesetStatType] = 1;
     }
   }
 
-  if (elementSqlStatements.trimmed().isEmpty())
+  //flush
+  if (!changesetInsertStatement.isEmpty())
   {
-    throw HootException("No element SQL statements in sql file");
+    if (elementSqlStatements.trimmed().isEmpty())
+    {
+      throw HootException("No element SQL statements changeset.");
+    }
+
+    _execNoPrepare(changesetInsertStatement);
+    _execNoPrepare(elementSqlStatements);
+
+    changesetInsertStatement = "";
+    elementSqlStatements = "";
   }
 
-  _db.transaction();
-  //had problems here when trying to prepare these queries (should they be?); the changeset writing
-  //needs to be done before the element writing, hence the separate queries
-  _execNoPrepare(changesetInsertStatement);
-  _execNoPrepare(elementSqlStatements);
   _db.commit();
 
   LOG_INFO("Changeset SQL queries execute finished against OSM API database.");
