@@ -62,7 +62,7 @@ void OsmApiDbChangesetWriter::write(const QString sql)
   const QStringList sqlParts = sql.split(";");
   for (int i = 0; i < sqlParts.size(); i++)
   {
-    const QString sqlStatement = sqlParts[i];
+    QString sqlStatement = sqlParts[i];
     if (i == 0)
     {
       if (!sqlStatement.toUpper().startsWith("INSERT INTO CHANGESETS"))
@@ -78,6 +78,18 @@ void OsmApiDbChangesetWriter::write(const QString sql)
     else
     {
       elementSqlStatements += sqlStatement + ";";
+      //LOG_VARD(sqlStatement);
+      //The sql changeset is made up of one or more sql statements for each changeset operation type.
+      //Each operation starts with a comment header, which can be used to determine its type.
+      if (sqlStatement.startsWith("\n/*"))
+      {
+        sqlStatement.replace("\n", " ");
+        const QStringList statementParts = sqlStatement.split(" ");
+        assert(statementParts.length() >= 4);
+        //e.g. "node-create"
+        const QString key = statementParts[3] + "-" + statementParts[2];
+        _changesetStats.setStat(key, _changesetStats.getStat(key) + 1);
+      }
     }
   }
 

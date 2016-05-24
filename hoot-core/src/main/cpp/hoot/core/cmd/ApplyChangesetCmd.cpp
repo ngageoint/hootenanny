@@ -76,6 +76,7 @@ public:
 
       QFile changesetSqlFile(args[0]);
       changesetWriter.write(changesetSqlFile);
+      cout << changesetWriter.getChangesetStats();
     }
     else
     {

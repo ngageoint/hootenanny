@@ -27,7 +27,9 @@
 #ifndef OSMAPIDBCHANGESETWRITER_H
 #define OSMAPIDBCHANGESETWRITER_H
 
+// hoot
 #include "OsmApiDb.h"
+#include "ChangesetStats.h"
 
 namespace hoot
 {
@@ -70,11 +72,15 @@ public:
    */
   bool conflictExistsInTarget(const QString boundsStr, const QString timeStr);
 
+  QString getChangesetStats() const { return _changesetStats.toString(); }
+
 private:
 
   void _execNoPrepare(const QString sql);
 
   OsmApiDb _db;
+
+  ChangesetStats _changesetStats;
 };
 
 }
