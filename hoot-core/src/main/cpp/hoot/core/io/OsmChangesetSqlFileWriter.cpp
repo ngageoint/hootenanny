@@ -16,10 +16,6 @@ OsmChangesetSqlFileWriter::OsmChangesetSqlFileWriter(QUrl url) :
 _changesetId(0)
 {
   _db.open(url);
-
-  _changeElementIdsToVersionsByElementType[ElementType::Node] = QMap<long, long>();
-  _changeElementIdsToVersionsByElementType[ElementType::Way] = QMap<long, long>();
-  _changeElementIdsToVersionsByElementType[ElementType::Relation] = QMap<long, long>();
 }
 
 void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr changesetProvider)
@@ -120,9 +116,6 @@ void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
   changeElement->setVersion(1);
   changeElement->setVisible(true);
   changeElement->setChangeset(_changesetId);
-  //changeElement an element is being created, we're starting fresh so overwriting the map entry is ok
-  _changeElementIdsToVersionsByElementType[changeElement->getElementType().getEnum()].insert(
-    changeElement->getId(), changeElement->getVersion());
 
   QString note = "";
   /*if (changeElement->getTags().contains("note"))
@@ -206,22 +199,10 @@ void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
 
   //if another parsed change previously modified the element with this id, we want to get the
   //modified version
-  long currentVersion = -1;
-  if (_changeElementIdsToVersionsByElementType[element->getElementType().getEnum()]
-        .contains(changeElement->getId()))
-  {
-    currentVersion =
-      _changeElementIdsToVersionsByElementType[element->getElementType().getEnum()]
-        .value(changeElement->getId());
-  }
-  else
-  {
-    currentVersion = changeElement->getVersion();
-  }
+  const long currentVersion = changeElement->getVersion();
   const long newVersion = currentVersion + 1;
 
   changeElement->setVersion(newVersion);
-  _changeElementIdsToVersionsByElementType[element->getElementType().getEnum()][changeElement->getId()] = newVersion;
   changeElement->setChangeset(_changesetId);
   changeElement->setVisible(true);
 
@@ -277,22 +258,10 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
   const QString elementTypeStr = element->getElementType().toString().toLower();
   ElementPtr changeElement = _getChangeElement(element);
 
-  long currentVersion = -1;
-  if (_changeElementIdsToVersionsByElementType[element->getElementType().getEnum()]
-        .contains(changeElement->getId()))
-  {
-    currentVersion =
-      _changeElementIdsToVersionsByElementType[element->getElementType().getEnum()]
-        .value(changeElement->getId());
-  }
-  else
-  {
-    currentVersion = changeElement->getVersion();
-  }
+  const long currentVersion = changeElement->getVersion();
   const long newVersion = currentVersion + 1;
 
   changeElement->setVersion(newVersion);
-  _changeElementIdsToVersionsByElementType[element->getElementType().getEnum()][changeElement->getId()] = newVersion;
   changeElement->setVisible(false);
   changeElement->setChangeset(_changesetId);
 
