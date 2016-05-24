@@ -6,21 +6,21 @@
 * *You cannot resolve any Hootenanny commands by typing 'hoot' at the command line?* --> Hootenanny Core has been installed incorrectly by the InstallHoot.sh script.  The script is designed to clear existing
 Hootenanny installations from the install target path when run, but its possible this did not occur.  The following commands will completely clean Hootenanny core from the system (paths are dependent upon the
 settings used in the UpdateHoot-CentOS6.sh script):
- ** sudo rm -rf $HOOT_CORE_INSTALL_DIR/hootenanny-$NEW_VERSION
- ** sudo rm -f $HOOT_CORE_INSTALL_DIR/hoot 
- ** sudo rm -f $HOOT_CORE_INSTALL_DIR/bin/hoot
+	** sudo rm -rf $HOOT_CORE_INSTALL_DIR/hootenanny-$NEW_VERSION
+	** sudo rm -f $HOOT_CORE_INSTALL_DIR/hoot 
+	** sudo rm -f $HOOT_CORE_INSTALL_DIR/bin/hoot
 
 * *Don't think the correct version of Hootenanny core is installed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision" logo from within the UI.  Or as a sanity check, type 'hoot --version' from the command line.  The version displayed should match the version you installed.  Finally, the core version used by the services can be found by navigating to the following URLs:
-  ** +http://localhost/hoot-services/info/about/coreVersionInfo+
-  ** +http://localhost/hoot-services/info/about/coreVersionDetail+
+	** +http://localhost/hoot-services/info/about/coreVersionInfo+
+	** +http://localhost/hoot-services/info/about/coreVersionDetail+
 
 * *qmake step fails during hoot compilation?* --> Do you have QT_HOME/bin on your path?
 
 * *Not sure if hoot is using the correct version of a dependency library?* --> run: +ldd /usr/local/bin/hoot.bin+ to see a list of the libraries its using. You can use +yum list installed | grep <library name>+ to see the libraries installed on your system.
 
 * *Problems reading/writing from the database when using hoot?* --> Verify the database credentials in:
-  **  +/usr/local/hootenanny-X.Y.Z/conf/DatabaseConfigLocal.sh+
-  **  +/usr/local/hootenanny-X.Y.Z/conf/DatabaseConfigDefault.sh+
+	**  +/usr/local/hootenanny-X.Y.Z/conf/DatabaseConfigLocal.sh+
+	**  +/usr/local/hootenanny-X.Y.Z/conf/DatabaseConfigDefault.sh+
 
 * *"PostgreSQL" and "FileGDB" formats do not show when running ogrinfo --formats* --> Possibly you have compiled GDAL incorrectly. Re-compile with the steps listed in INSTALL-CentOS6.5-PG9.1.txt that were run during the hoot core installation.
 
@@ -119,19 +119,19 @@ tail -f /var/log/tomcat6/catalina.out | grep -i -e ERROR -e SEVERE
 --------------------------------------
 
 * *Not sure the correct version of Hootenanny services are deployed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision| logo from within the UI.  Or as a sanity check, verify the services version by navigating to the following URLs:
-  ** +http://localhost/hoot-services/info/about/servicesVersionInfo+
-  ** +http://localhost/hoot-services/info/about/servicesVersionDetail+
+	** +http://localhost/hoot-services/info/about/servicesVersionInfo+
+	** +http://localhost/hoot-services/info/about/servicesVersionDetail+
 
 * *Can't hit the service URL's above?* --> The install script should handle this installation correctly, but perhaps the Hootenanny web application was installed to the incorrect location.  It should exist at: /var/lib/tomcat6/webapps/hoot-services .  Although UpdateHoot-CentOS6.sh will clean out any previously existing Hootenanny web applications, as a manual alternative, the following commands will clean out any previously existing
 installations:
-  ** sudo rm -f /var/lib/tomcat6/webapps/hoot*-services*.war
-  ** sudo rm -rf /var/lib/tomcat6/webapps/hoot*-services*
+	** sudo rm -f /var/lib/tomcat6/webapps/hoot*-services*.war
+	** sudo rm -rf /var/lib/tomcat6/webapps/hoot*-services*
 
 * *Do you want to see more granular services log output or redirect it to a file?* --> Edit +/var/lib/tomcat6/webapps/hoot-services/WEB-INF/class/log4j.xml+ . See the log4j documentation for details on how to edit the file. Restart Tomcat after any changes made to the file.
 
 * *Problems reading/writing from the database when using hoot?* --> Verify the database credentials in:
-  **  +$HOOT_HOME/conf/DatabaseConfigLocal.sh+
-  **  +$HOOT_HOME/conf/DatabaseConfigDefault.sh+
+	**  +$HOOT_HOME/conf/DatabaseConfigLocal.sh+
+	**  +$HOOT_HOME/conf/DatabaseConfigDefault.sh+
 	**  +/var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml+ 
 	**  +/var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf+ 
 	**  +/var/lib/tomcat6/webapps/hoot-services/WEB-INF/workspace/jdbc/WFS_Connection.xml+ 
