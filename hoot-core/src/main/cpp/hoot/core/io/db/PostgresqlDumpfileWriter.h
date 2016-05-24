@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -108,7 +108,7 @@ public:
 
   virtual void writePartial(const ConstRelationPtr& r);
 
-protected:
+private:
 
   std::map<QString, QStringList> _outputSections;
 
@@ -195,8 +195,6 @@ protected:
 
   std::list<QString> _createSectionNameList();
 
-  const static unsigned int  _maxChangesInChangeset  = 50000;     /// Max changes in one changeset
-
   bool _dataWritten;
 
   void _closeSectionTempFilesAndConcat();
@@ -250,6 +248,7 @@ protected:
   void _writeChangesetToTable();
 
   void _writeSequenceUpdates();
+
 };
 
 }

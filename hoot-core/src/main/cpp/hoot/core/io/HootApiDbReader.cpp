@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -48,6 +48,7 @@ _status(Status::Invalid),
 _useDataSourceIds(true),
 _open(false)
 {
+  LOG_VARD(_useDataSourceIds);
   setConfiguration(conf());
 }
 
@@ -73,7 +74,7 @@ void HootApiDbReader::open(QString urlStr)
 {
   if (!isSupported(urlStr))
   {
-    throw HootException("An unsupported URL was passed in.");
+    throw HootException("An unsupported URL was passed in to HootApiDbReader: " + urlStr);
   }
   initializePartial();
 
@@ -154,8 +155,6 @@ void HootApiDbReader::read(shared_ptr<OsmMap> map)
 void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
 {
   LOG_DEBUG("IN HootApiDbReader::read(,)...");
-  shared_ptr<Element> element;
-  QStringList tags;
 
   // contact the DB and select all
   shared_ptr<QSqlQuery> elementResultsIterator = _database.selectElements(elementType);
@@ -250,6 +249,7 @@ ElementId HootApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
   ElementId result;
   if (_useDataSourceIds)
   {
+    //LOG_VARD(oldId);
     result = oldId;
   }
   else
@@ -353,7 +353,7 @@ shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
 shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
-
+  LOG_DEBUG("Reading node with ID: " << nodeId);
   shared_ptr<Node> result(
     new Node(
       _status,
@@ -368,6 +368,7 @@ shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator,
 
   result->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::NODES_TAGS)));
   ApiDbReader::addTagsToElement(result);
+  //LOG_VARD(result);
   return result;
 }
 
@@ -375,6 +376,11 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
 {
   const long wayId = resultIterator.value(0).toLongLong();
   const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
+  LOG_DEBUG("Reading way with ID: " << wayId);
+  if (newWayId != wayId)
+  {
+    LOG_VARD(newWayId);
+  }
   shared_ptr<Way> way(
     new Way(
       _status,
@@ -389,14 +395,14 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
   way->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::WAYS_TAGS)));
   ApiDbReader::addTagsToElement(way);
 
-  //TODO: read these out in batch at the same time the element results are read
+  // These could be read out in batch at the same time the element results are read...
   vector<long> nodeIds = _database.selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
     nodeIds[i] = _mapElementId(map, ElementId::node(nodeIds[i])).getId();
   }
   way->addNodes(nodeIds);
-
+  //LOG_VARD(way);
   return way;
 }
 
@@ -405,13 +411,17 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
 {
   const long relationId = resultIterator.value(0).toLongLong();
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
-
+  LOG_DEBUG("Reading relation with ID: " << relationId);
+  if (newRelationId != relationId)
+  {
+    LOG_VARD(newRelationId);
+  }
   shared_ptr<Relation> relation(
     new Relation(
       _status,
       newRelationId,
       ConfigOptions().getCircularErrorDefaultValue(),
-      "",/*"collection"*///TODO: services db doesn't support relation "type" yet
+      "",/*"collection"*/ //services db doesn't support relation "type" yet
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
@@ -420,14 +430,14 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
   relation->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
   ApiDbReader::addTagsToElement(relation);
 
-  //TODO: read these out in batch at the same time the element results are read
+  // These could be read out in batch at the same time the element results are read...
   vector<RelationData::Entry> members = _database.selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
   {
     members[i].setElementId(_mapElementId(map, members[i].getElementId()));
   }
   relation->setMembers(members);
-
+  //LOG_VARD(relation);
   return relation;
 }
 

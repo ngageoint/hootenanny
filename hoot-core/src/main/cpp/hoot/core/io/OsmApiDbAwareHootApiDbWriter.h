@@ -24,42 +24,47 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTCOMPARER_H
-#define ELEMENTCOMPARER_H
+#ifndef OSMAPIDBAWAREHOOTAPIDBWRITER_H
+#define OSMAPIDBAWAREHOOTAPIDBWRITER_H
 
-// Hoot
-#include <hoot/core/elements/Element.h>
+#include "HootApiDbWriter.h"
+#include "OsmApiDb.h"
 
 namespace hoot
 {
 
 /**
- * Compares two elements of the same type for similarity
+ * Writer that doesn't allow hoot api db element ID's to clash with a specified osm api db's
+ * id's.
  */
-class ElementComparer
+class OsmApiDbAwareHootApiDbWriter : public HootApiDbWriter
 {
-
 public:
 
-  /**
-   * Defaults to 5cm threshold
-   */
-  ElementComparer(Meters threshold = 0.05);
+  static std::string className() { return "hoot::OsmApiDbAwareHootApiDbWriter"; }
 
-  bool isSame(ElementPtr e1, ElementPtr e2);
+  OsmApiDbAwareHootApiDbWriter();
+
+  virtual ~OsmApiDbAwareHootApiDbWriter();
+
+  virtual void open(QString urlStr);
+
+  virtual void writePartial(const shared_ptr<const Node>& n);
+
+  virtual void writePartial(const shared_ptr<const Way>& w);
+
+  virtual void writePartial(const shared_ptr<const Relation>& r);
+
+protected:
+
+  virtual long _getRemappedElementId(const ElementId& eid);
 
 private:
 
-  bool _compareNode(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e);
-
-  bool _compareWay(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e);
-
-  bool _compareRelation(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e);
-
-  Meters _threshold;
+  OsmApiDb _osmApiDb;
 
 };
 
 }
 
-#endif // ELEMENTCOMPARER_H
+#endif // OSMAPIDBAWAREHOOTAPIDBWRITER_H
