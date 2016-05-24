@@ -29,13 +29,12 @@
 
 // hoot
 #include "OsmApiDb.h"
-#include "ChangesetStats.h"
 
 namespace hoot
 {
 
 /**
- * Writes OSM changesets from a .osc.sql file to an OSM API database
+ * Writes OSM changesets from a .osc.sql executable SQL file to an OSM API database
  */
 class OsmApiDbSqlChangesetWriter
 {
@@ -72,15 +71,21 @@ public:
    */
   bool conflictExistsInTarget(const QString boundsStr, const QString timeStr);
 
-  QString getChangesetStats() const { return _changesetStats.toString(); }
+  /**
+   * Writes a summary of the contents of a changeset
+   *
+   * @return a summary string
+   */
+  QString getChangesetStats() const;
 
 private:
 
   void _execNoPrepare(const QString sql);
+  void _initChangesetStats();
 
   OsmApiDb _db;
 
-  ChangesetStats _changesetStats;
+  QMap<QString, long> _changesetStats;
 };
 
 }

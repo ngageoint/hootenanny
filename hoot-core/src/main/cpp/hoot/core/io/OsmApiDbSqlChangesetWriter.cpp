@@ -45,6 +45,8 @@ OsmApiDbSqlChangesetWriter::OsmApiDbSqlChangesetWriter(const QUrl targetDatabase
     throw HootException("Unsupported URL: " + targetDatabaseUrl.toString());
   }
   _db.open(targetDatabaseUrl);
+
+  _initChangesetStats();
 }
 
 OsmApiDbSqlChangesetWriter::~OsmApiDbSqlChangesetWriter()
@@ -52,6 +54,12 @@ OsmApiDbSqlChangesetWriter::~OsmApiDbSqlChangesetWriter()
   _db.close();
 }
 
+void OsmApiDbSqlChangesetWriter::_initChangesetStats()
+{
+  _changesetStats.clear();
+}
+
+//TODO: make this work with multiple changesets in one file
 void OsmApiDbSqlChangesetWriter::write(const QString sql)
 {
   LOG_INFO("Executing changeset SQL queries against OSM API database...");
@@ -73,6 +81,16 @@ void OsmApiDbSqlChangesetWriter::write(const QString sql)
       else
       {
         changesetInsertStatement = sqlStatement + ";";
+
+        const QString changesetStatType = "changeset-create";
+        if (_changesetStats.contains(changesetStatType))
+        {
+          _changesetStats[changesetStatType] = _changesetStats[changesetStatType] + 1;
+        }
+        else
+        {
+          _changesetStats[changesetStatType] = 1;
+        }
       }
     }
     else
@@ -87,9 +105,17 @@ void OsmApiDbSqlChangesetWriter::write(const QString sql)
       {
         const QStringList statementParts = sqlStatement.trimmed().split(" ");
         assert(statementParts.length() >= 3);
-        const QString key = statementParts[2] + "-" + statementParts[1]; //e.g. "node-create"
-        LOG_VARD(key);
-        _changesetStats.setStat(key, _changesetStats.getStat(key) + 1);
+        const QString changesetStatType =
+          statementParts[2] + "-" + statementParts[1]; //e.g. "node-create"
+        LOG_VARD(changesetStatType);
+        if (_changesetStats.contains(changesetStatType))
+        {
+          _changesetStats[changesetStatType] = _changesetStats[changesetStatType] + 1;
+        }
+        else
+        {
+          _changesetStats[changesetStatType] = 1;
+        }
       }
     }
   }
@@ -127,6 +153,21 @@ void OsmApiDbSqlChangesetWriter::write(QFile& changesetSqlFile)
   }
 }
 
+QString OsmApiDbSqlChangesetWriter::getChangesetStats() const
+{
+  return
+    "Changeset(s) Created: " + QString::number(_changesetStats["changeset-create"]) + "\n" +
+    "Node(s) Created: " + QString::number(_changesetStats["node-create"]) + "\n" +
+    "Node(s) Modified: " + QString::number(_changesetStats["node-modify"]) + "\n" +
+    "Node(s) Deleted: " + QString::number(_changesetStats["node-delete"]) + "\n" +
+    "Way(s) Created: " + QString::number(_changesetStats["way-create"]) + "\n" +
+    "Way(s) Modified: " + QString::number(_changesetStats["way-modify"]) + "\n" +
+    "Way(s) Deleted: " + QString::number(_changesetStats["way-delete"]) + "\n" +
+    "Relation(s) Created: " + QString::number(_changesetStats["relation-create"]) + "\n" +
+    "Relation(s) Modified: " + QString::number(_changesetStats["relation-modify"]) + "\n" +
+    "Relation(s) Deleted: " + QString::number(_changesetStats["relation-delete"]) + "\n";
+}
+
 bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr, const QString timeStr)
 {
   LOG_INFO("Checking for OSM API DB conflicts for changesets within " << boundsStr << " and " <<
@@ -144,7 +185,6 @@ bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr,
   }
 
   shared_ptr<QSqlQuery> changesetItr = _db.getChangesetsCreatedAfterTime(timeStr);
-
   while (changesetItr->next())
   {
     shared_ptr<Envelope> changesetBounds(
@@ -152,9 +192,10 @@ bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr,
                    changesetItr->value(1).toDouble(),
                    changesetItr->value(2).toDouble(),
                    changesetItr->value(3).toDouble()));
-    LOG_VARD(changesetBounds->toString());
+    //LOG_VARD(changesetBounds->toString());
     if (changesetBounds->intersects(bounds))
     {
+      LOG_DEBUG("Conflict exists at bounds " << changesetBounds->toString());
       return true;
     }
   }
