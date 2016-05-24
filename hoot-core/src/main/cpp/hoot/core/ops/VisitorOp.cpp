@@ -33,6 +33,18 @@
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(OsmMapOperation, VisitorOp)
+
+void VisitorOp::addVisitor(const ElementVisitorPtr& e)
+{
+  if (_visitor)
+  {
+    throw IllegalArgumentException("The visitor can only be set once on the VisitorOp.");
+  }
+
+  _visitor = e;
+}
+
 void VisitorOp::apply(shared_ptr<OsmMap>& map)
 {
   map->visitRw(*_visitor);

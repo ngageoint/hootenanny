@@ -40,6 +40,14 @@
 //
 // Again, please keep the configuration options in alphabetical order.
 //
+=== add.ref.visitor.information.only
+
+* Data Type: bool
+* Default Value: `true`
+
+Typically REF1/2 values are only applied to elements with informational tags (e.g. name=foo),
+however setting this to false will apply REF1/2 values to all elements.
+
 === add.ref1.visitor.prefix
 
 * Data Type: string
