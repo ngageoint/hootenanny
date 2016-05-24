@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "OsmApiDbChangesetWriter.h"
+#include "OsmApiDbSqlChangesetWriter.h"
 
 // hoot
 #include <hoot/core/util/GeometryUtils.h>
@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-OsmApiDbChangesetWriter::OsmApiDbChangesetWriter(const QUrl targetDatabaseUrl)
+OsmApiDbSqlChangesetWriter::OsmApiDbSqlChangesetWriter(const QUrl targetDatabaseUrl)
 {
   if (!_db.isSupported(targetDatabaseUrl))
   {
@@ -47,13 +47,12 @@ OsmApiDbChangesetWriter::OsmApiDbChangesetWriter(const QUrl targetDatabaseUrl)
   _db.open(targetDatabaseUrl);
 }
 
-OsmApiDbChangesetWriter::~OsmApiDbChangesetWriter()
+OsmApiDbSqlChangesetWriter::~OsmApiDbSqlChangesetWriter()
 {
   _db.close();
 }
 
-//TODO: this won't work for multiple changesets
-void OsmApiDbChangesetWriter::write(const QString sql)
+void OsmApiDbSqlChangesetWriter::write(const QString sql)
 {
   LOG_INFO("Executing changeset SQL queries against OSM API database...");
 
@@ -110,7 +109,7 @@ void OsmApiDbChangesetWriter::write(const QString sql)
   LOG_INFO("Changeset SQL queries execute finished against OSM API database.");
 }
 
-void OsmApiDbChangesetWriter::write(QFile& changesetSqlFile)
+void OsmApiDbSqlChangesetWriter::write(QFile& changesetSqlFile)
 {
   if (!changesetSqlFile.fileName().endsWith(".osc.sql"))
   {
@@ -128,7 +127,7 @@ void OsmApiDbChangesetWriter::write(QFile& changesetSqlFile)
   }
 }
 
-bool OsmApiDbChangesetWriter::conflictExistsInTarget(const QString boundsStr, const QString timeStr)
+bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr, const QString timeStr)
 {
   LOG_INFO("Checking for OSM API DB conflicts for changesets within " << boundsStr << " and " <<
            "created after " << timeStr << "...");
@@ -162,7 +161,7 @@ bool OsmApiDbChangesetWriter::conflictExistsInTarget(const QString boundsStr, co
   return false;
 }
 
-void OsmApiDbChangesetWriter::_execNoPrepare(const QString sql)
+void OsmApiDbSqlChangesetWriter::_execNoPrepare(const QString sql)
 {
   QSqlQuery q(_db.getDB());
   LOG_VARD(sql);

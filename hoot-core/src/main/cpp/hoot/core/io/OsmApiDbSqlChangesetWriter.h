@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMAPIDBCHANGESETWRITER_H
-#define OSMAPIDBCHANGESETWRITER_H
+#ifndef OSMAPIDBSQLCHANGESETWRITER_H
+#define OSMAPIDBSQLCHANGESETWRITER_H
 
 // hoot
 #include "OsmApiDb.h"
@@ -37,14 +37,14 @@ namespace hoot
 /**
  * Writes OSM changesets from a .osc.sql file to an OSM API database
  */
-class OsmApiDbChangesetWriter
+class OsmApiDbSqlChangesetWriter
 {
 
 public:
 
-  OsmApiDbChangesetWriter(const QUrl targetDatabaseUrl);
+  OsmApiDbSqlChangesetWriter(const QUrl targetDatabaseUrl);
 
-  ~OsmApiDbChangesetWriter();
+  ~OsmApiDbSqlChangesetWriter();
 
   /**
    * Executes changeset SQL against an OSM API database.
@@ -85,4 +85,4 @@ private:
 
 }
 
-#endif // OSMAPIDBCHANGESETWRITER_H
+#endif // OSMAPIDBSQLCHANGESETWRITER_H
