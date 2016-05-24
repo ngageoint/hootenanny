@@ -71,6 +71,14 @@ void OsmChangesetSqlFileWriter::_createChangeSet()
       .arg(_changesetId)
       .arg(ConfigOptions().getChangesetUserId())
     .toUtf8());
+  //this will go away if user authentication is tied in at some point
+  _outputSql.write(
+    QString("INSERT INTO changeset_tags (changeset_id, k, v) VALUES "
+            "(%1, '%2', '%3');\n")
+      .arg(_changesetId)
+      .arg("written_by")
+      .arg("Hootenanny")
+    .toUtf8());
 }
 
 ElementPtr OsmChangesetSqlFileWriter::_getChangeElement(ConstElementPtr element)
