@@ -72,11 +72,6 @@ private:
   OsmApiDb _db;
   QFile _outputSql;
 
-  //having to keep track of element versions with this may go away with some changeset
-  //derivation scrutiny (e.g. changeset with an element modify immediately followed by the same
-  //element being deleted)
-  //QMap<ElementType::Type, QMap<long, long> > _changeElementIdsToVersionsByElementType;
-
   friend class OsmChangeWriterSqlTest;
 
 };
