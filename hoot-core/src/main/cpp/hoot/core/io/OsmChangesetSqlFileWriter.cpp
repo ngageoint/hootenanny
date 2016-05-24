@@ -90,6 +90,7 @@ ElementPtr OsmChangesetSqlFileWriter::_getChangeElement(ConstElementPtr element)
     default:
       throw HootException("Unknown element type");
   }
+
   return changeElement;
 }
 
@@ -378,7 +379,14 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesWayOrRelationStr(ConstElement
 void OsmChangesetSqlFileWriter::_createTags(ConstElementPtr element)
 {
   QStringList tableNames = _tagTableNamesForElement(element->getElementId());
-  const Tags tags = element->getTags();
+
+  Tags tags = element->getTags();
+  if (element->getElementType().getEnum() == ElementType::Relation &&
+      !tags.contains("type"))
+  {
+    ConstRelationPtr tmp = dynamic_pointer_cast<const Relation>(element);
+    tags.appendValue("type", tmp->getType());
+  }
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
