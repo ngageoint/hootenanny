@@ -52,6 +52,7 @@ OsmApiDbChangesetWriter::~OsmApiDbChangesetWriter()
   _db.close();
 }
 
+//TODO: this won't work for multiple changesets
 void OsmApiDbChangesetWriter::write(const QString sql)
 {
   LOG_INFO("Executing changeset SQL queries against OSM API database...");
