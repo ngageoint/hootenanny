@@ -1,4 +1,4 @@
-# UI Tests
+## UI Tests
 
 These functional tests exercise the entire system through the user interface using Cucumber and Capybara.  A separate feature in its own file should be written for each piece of UI functionality to be tested, though each feature contains multiple scenarios that are combined when the UI workflow makes sense.
 
@@ -28,6 +28,7 @@ To generate the coverage reports from the local directory:
 `make coverage`
 
 Individual tests can be run from the  local directory like so:
+
 `xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format progress features/settings.feature`
 
 To measure live code coverage while running tests, steps from the `$HOOT_HOME/scripts/CoverHootUI.sh` script can be used:
@@ -59,8 +60,8 @@ To measure live code coverage while running tests, steps from the `$HOOT_HOME/sc
     node app.js
     ```
     
-4. Then you should be able to run individual cucumber tests to gauge coverage on the files it's hitting as described above,
-and then hit the istanbul middleware url to get the live coverage stats:
+4. Then you should be able to run individual cucumber tests as described above,
+and to gauge coverage on the source files the tests are hitting, open the istanbul middleware url to get the live coverage stats:
 
     http://localhost:8880/coverage
 
