@@ -674,7 +674,7 @@ public class Map extends Maps {
      *             see MapResourceTest::testReadTransactionWithoutFailure
      */
     public java.util.Map<ElementType, java.util.Map<Long, Tuple>> query(final BoundingBox bounds) throws Exception {
-        validateQueryBounds(bounds);
+        //validateQueryBounds(bounds);
 
         // get the intersecting tile ranges for the nodes
         final Vector<Range> tileIdRanges = getTileRanges(bounds);
