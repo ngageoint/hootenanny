@@ -59,19 +59,19 @@ The REF1 values are typically used when training a model. See the
 https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/Manual_Conflation[developer
 documentation] for details.
 
-=== attribute.score.extractor.use.weight
-
-* Data Type: bool
-* Default Value: `false`
-
-Determines whether the AttributeScoreExtractor uses weighting when extracting scores.
-
 === attribute.count.values
 
 * Data Type: int
 * Default Value: `30`
 
 The maximum number of values returned for each attribute by the attribute-count command.
+
+=== attribute.score.extractor.use.weight
+
+* Data Type: bool
+* Default Value: `false`
+
+Determines whether the AttributeScoreExtractor uses weighting when extracting scores.
 
 === big.perty.op.max.distance
 
