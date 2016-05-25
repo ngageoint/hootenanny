@@ -548,6 +548,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(nodeIdsArr[4], wayNode.getNodeId());
             Assert.assertEquals(new Long(2), wayNode.getSequenceId());
             Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
+
             // verify the previously existing tags
             Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) wayRecord.getTags());
             Assert.assertNotNull(tags);
@@ -602,6 +603,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(nodeIdsArr[4], wayNode.getNodeId());
             Assert.assertEquals(new Long(2), wayNode.getSequenceId());
             Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
+
             // verify the created tags
             tags = PostgresUtils.postgresObjToHStore((PGobject) wayRecord.getTags());
             Assert.assertNotNull(tags);
@@ -690,8 +692,8 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(DbUtils.nwr_enum.node, member.getMemberType());
             Assert.assertEquals("", member.getMemberRole());
             Assert.assertEquals(new Integer(3), member.getSequenceId());
-
             Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
+
             // verify tags that should no longer exist
             Assert.assertTrue((relationRecord.getTags() == null)
                     || StringUtils.isEmpty(((PGobject) relationRecord.getTags()).getValue()));
