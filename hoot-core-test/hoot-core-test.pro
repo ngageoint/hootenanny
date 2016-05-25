@@ -220,5 +220,6 @@ SOURCES += \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetWriterTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetSqlFileWriterTest.cpp \
-    src/test/cpp/hoot/core/io/ServiceOsmApiDbTest.cpp
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbTest.cpp \
+    src/test/cpp/hoot/core/util/OsmJsonReaderTest.cpp
 
