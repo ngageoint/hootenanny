@@ -41,6 +41,9 @@ public:
 private:
 
   void _createChangeSet();
+  void _collectChangesetBoundsInfo(ConstElementPtr element);
+  void _updateChangesetBounds();
+  void _resetChangesetVars();
 
   long _getNextId(const ElementType type);
 
@@ -67,10 +70,6 @@ private:
   void _deleteAll(const QString tableName, const QString idFieldName, const long id);
 
   QString _getVisibleStr(const bool visible) const { return visible ? "true" : "false"; }
-
-  void _collectChangesetBoundsInfo(ConstElementPtr element);
-  void _updateChangesetBounds();
-  void _resetChangesetVars();
 
   long _changesetId;
 

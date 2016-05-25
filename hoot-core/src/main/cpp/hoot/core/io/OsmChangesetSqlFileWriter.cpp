@@ -223,13 +223,13 @@ void OsmChangesetSqlFileWriter::_updateChangesetBounds()
     }
     if (query.first())
     {
-      const double minLon = (double)query.value(0).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
+      const double minLon = (double)query.value(0).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
       //LOG_VARD(minLon);
-      const double maxLon = (double)query.value(1).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
+      const double maxLon = (double)query.value(1).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
       //LOG_VARD(maxLon);
-      const double minLat = (double)query.value(2).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
+      const double minLat = (double)query.value(2).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
       //LOG_VARD(minLat);
-      const double maxLat = (double)query.value(3).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
+      const double maxLat = (double)query.value(3).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
       //LOG_VARD(maxLat);
       query.finish();
 
@@ -244,10 +244,10 @@ void OsmChangesetSqlFileWriter::_updateChangesetBounds()
   _outputSql.write(
     QString("UPDATE changesets SET min_lat=%2, max_lat=%3, min_lon=%4, max_lon=%5 WHERE id=%1;\n")
       .arg(_changesetId)
-      .arg((qlonglong)HootApiDb::round(_changesetBounds.getMinY() * HootApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)HootApiDb::round(_changesetBounds.getMaxY() * HootApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)HootApiDb::round(_changesetBounds.getMinX() * HootApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)HootApiDb::round(_changesetBounds.getMaxX() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)ApiDb::round(_changesetBounds.getMinY() * ApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)ApiDb::round(_changesetBounds.getMaxY() * ApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)ApiDb::round(_changesetBounds.getMinX() * ApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)ApiDb::round(_changesetBounds.getMaxX() * ApiDb::COORDINATE_SCALE, 7))
     .toUtf8());
 
   _resetChangesetVars();
