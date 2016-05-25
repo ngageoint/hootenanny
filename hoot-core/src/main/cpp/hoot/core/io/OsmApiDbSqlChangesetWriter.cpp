@@ -115,7 +115,7 @@ void OsmApiDbSqlChangesetWriter::write(const QString sql)
         const QStringList statementParts = sqlStatement.trimmed().split(" ");
         assert(statementParts.length() >= 3);
         changesetStatType = statementParts[2] + "-" + statementParts[1]; //e.g. "node-create"
-        LOG_VARD(changesetStatType);
+        //LOG_VARD(changesetStatType);
       }
     }
     if (_changesetStats.contains(changesetStatType))

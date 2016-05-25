@@ -14,6 +14,7 @@
 #include <QFile>
 #include <QSqlDatabase>
 #include <QString>
+#include <QSet>
 
 namespace hoot
 {
@@ -67,12 +68,26 @@ private:
 
   QString _getVisibleStr(const bool visible) const { return visible ? "true" : "false"; }
 
+  void _collectChangesetBoundsInfo(ConstElementPtr element);
+  void _updateChangesetBounds();
+  void _resetChangesetVars();
+
   long _changesetId;
 
   OsmApiDb _db;
   QFile _outputSql;
 
-  friend class OsmChangeWriterSqlTest;
+  Envelope _changesetBounds;
+  //use sets for id uniqueness
+  QSet<long> _nodeIdsUsedInChangesetBoundsCalculation;
+  QSet<long> _nodeIdsNotUsedInChangesetBoundsCalculation;
+  QSet<long> _wayIdsUsedInChangesetBoundsCalculation;
+  QSet<long> _wayIdsNotUsedInChangesetBoundsCalculation;
+  //TODO: This is in place b/c some tests invoke changeset bounds writing successfull, but other
+  //tests need to be rewritten to handle it.  These tests can be updated at a later time: #765
+  bool _writeChangesetBounds;
+
+  friend class ServiceOsmApiDbChangesetSqlFileWriterTest;
 
 };
 

@@ -546,3 +546,4 @@ INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (9, -8, 1, 
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (9, -8, 2);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (9, -7, 1, 3);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (9, -7, 3);
+UPDATE changesets SET min_lat=388532424, max_lat=388549614, min_lon=-1049024316, max_lon=-1048961823 WHERE id=1;

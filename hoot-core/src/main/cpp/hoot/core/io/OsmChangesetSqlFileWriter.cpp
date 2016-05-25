@@ -13,7 +13,8 @@ namespace hoot
 {
 
 OsmChangesetSqlFileWriter::OsmChangesetSqlFileWriter(QUrl url) :
-_changesetId(0)
+_changesetId(0),
+_writeChangesetBounds(true)
 {
   _db.open(url);
 }
@@ -21,6 +22,8 @@ _changesetId(0)
 void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr changesetProvider)
 {
   LOG_DEBUG("Writing changeset to " << path);
+
+  _resetChangesetVars();
 
   _outputSql.setFileName(path);
   if (_outputSql.open(QIODevice::WriteOnly | QIODevice::Text) == false)
@@ -48,17 +51,213 @@ void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr c
       default:
         throw IllegalArgumentException("Unexpected change type.");
     }
+
+    if (_writeChangesetBounds)
+    {
+      _collectChangesetBoundsInfo(change.e);
+    }
+
     changes++;
 
     if (changes > ConfigOptions().getChangesetMaxSize())
     {
+      if (_writeChangesetBounds)
+      {
+        _updateChangesetBounds();
+      }
       _createChangeSet();
       changes = 0;
     }
   }
 
+  if (_writeChangesetBounds)
+  {
+    _updateChangesetBounds();
+  }
+
   _outputSql.close();
   _db.close();
+}
+
+void OsmChangesetSqlFileWriter::_resetChangesetVars()
+{
+  _changesetBounds.init();
+  _nodeIdsUsedInChangesetBoundsCalculation.clear();
+  _nodeIdsNotUsedInChangesetBoundsCalculation.clear();
+  _wayIdsUsedInChangesetBoundsCalculation.clear();
+  _wayIdsNotUsedInChangesetBoundsCalculation.clear();
+}
+
+/*
+ * This is collecting the bounds info for every node involved in the changeset.  I believe it
+ * handles all cases, but that may still need to be proven with more granular unit tests.  Since
+ * the ChangesetDeriver directly feeds this logic, not every combination of possible changeset will
+ * be encountered here (deleting an element after creating or modifying it in the same changeset...
+ * ChangesetDeriver shouldn't do that...right?).
+ */
+void OsmChangesetSqlFileWriter::_collectChangesetBoundsInfo(ConstElementPtr element)
+{
+  if (element->getElementType().getEnum() == ElementType::Node)
+  {
+    ConstNodePtr node = dynamic_pointer_cast<const Node>(element);
+    //We have the node coords directly here, so add them to the changeset bounds and record
+    //the node as having been parsed
+    _changesetBounds.expandToInclude(node->getX(), node->getY());
+    _nodeIdsUsedInChangesetBoundsCalculation.insert(element->getId());
+    //If we previously recorded this node as not being used in the changeset calculation when
+    //parsing a way or relation that referenced it, that reference can now be removed.
+    if (_nodeIdsNotUsedInChangesetBoundsCalculation.contains(element->getId()))
+    {
+      _nodeIdsNotUsedInChangesetBoundsCalculation.remove(element->getId());
+    }
+  }
+  else if (element->getElementType().getEnum() == ElementType::Way)
+  {
+    ConstWayPtr way = dynamic_pointer_cast<const Way>(element);
+    const vector<long> wayNodeIds = way->getNodeIds();
+    for (vector<long>::const_iterator itr = wayNodeIds.begin(); itr != wayNodeIds.end(); itr++)
+    {
+      const long wayNodeId = *itr;
+      //From the way, we only have the node id's and not their coords, so if we haven't already
+      //parsed the node's coords, add each way node id to a collection of unparsed nodes.
+      if (!_nodeIdsUsedInChangesetBoundsCalculation.contains(wayNodeId))
+      {
+        _nodeIdsNotUsedInChangesetBoundsCalculation.insert(wayNodeId);
+      }
+      _wayIdsUsedInChangesetBoundsCalculation.insert(element->getId());
+      //If we previously recorded this way as not being used in the changeset calculation when
+      //parsing a relation that referenced it, that reference can now be removed.
+      _wayIdsNotUsedInChangesetBoundsCalculation.remove(element->getId());
+    }
+  }
+  else
+  {
+    ConstRelationPtr relation = dynamic_pointer_cast<const Relation>(element);
+    const vector<RelationData::Entry> members = relation->getMembers();
+    for (vector<RelationData::Entry>::const_iterator itr = members.begin(); itr != members.end(); itr++)
+    {
+      const RelationData::Entry member = *itr;
+      if (member.getElementId().getType().getEnum() == ElementType::Node &&
+          !_nodeIdsUsedInChangesetBoundsCalculation.contains(member.getElementId().getId()))
+      {
+        //From the relation, we only have the node id's and not their coords, so if we haven't
+        //already parsed the node's coords, add its id to a collection of unparsed nodes.
+        if (!_nodeIdsUsedInChangesetBoundsCalculation.contains(member.getElementId().getId()))
+        {
+          _nodeIdsNotUsedInChangesetBoundsCalculation.insert(member.getElementId().getId());
+        }
+      }
+      else if (member.getElementId().getType().getEnum() == ElementType::Way)
+      {
+        //From the relation, we only have the way id's and not their way nodecoords, so if we
+        //haven't already parsed the way, add its id to a collection of unparsed ways.
+        if (!_wayIdsUsedInChangesetBoundsCalculation.contains(member.getElementId().getId()))
+        {
+          _wayIdsNotUsedInChangesetBoundsCalculation.insert(member.getElementId().getId());
+        }
+      }
+    }
+  }
+}
+
+void OsmChangesetSqlFileWriter::_updateChangesetBounds()
+{
+  LOG_VARD(_nodeIdsUsedInChangesetBoundsCalculation.size());
+  LOG_VARD(_changesetBounds.toString());
+
+  //Query against current tables and just take the information from the most recent way/node .  This
+  //will be accurate, assuming each feature was referenced only once in the changeset (hopefully
+  //that's true).  If for some reason that's not true, then the bounds calculation would be
+  //incorrect in that it wouldn't be grabbing the bounds of every change in the changeset.
+
+  QString valuesStr = "";
+  QSqlQuery query(_db.getDB());
+
+  LOG_VARD(_wayIdsNotUsedInChangesetBoundsCalculation.size());
+  if (_wayIdsNotUsedInChangesetBoundsCalculation.size() > 0)
+  {
+    //get the node id's of any ways whose node id's couldn't previously be parsed and add them to
+    //the unparsed nodes collection
+
+    query.clear();
+    valuesStr += "(";
+    for (QSet<long>::const_iterator itr = _wayIdsNotUsedInChangesetBoundsCalculation.begin();
+         itr != _wayIdsNotUsedInChangesetBoundsCalculation.end(); itr++)
+    {
+      //LOG_VARD(*itr);
+      valuesStr += QString::number(*itr) + ",";
+    }
+    valuesStr.chop(1);
+    valuesStr += ")";
+    //LOG_VARD(valuesStr);
+    query.prepare("select node_id from current_way_nodes where way_id in " + valuesStr);
+    if (query.exec() == false)
+    {
+      LOG_ERROR(query.executedQuery());
+      LOG_ERROR(query.lastError().text());
+      throw HootException("Could not execute query: " + query.lastError().text());
+    }
+    while (query.next())
+    {
+      //LOG_VARD(query.value(0));
+      _nodeIdsNotUsedInChangesetBoundsCalculation.insert(query.value(0).toLongLong());
+    }
+    query.finish();
+  }
+
+  LOG_VARD(_nodeIdsNotUsedInChangesetBoundsCalculation.size());
+  if (_nodeIdsNotUsedInChangesetBoundsCalculation.size() > 0)
+  {
+    //get the bounds for all nodes in the unparsed nodes collection and add that to the changeset
+    //bounds calculated from the nodes that were already parsed
+
+    valuesStr += "(";
+    for (QSet<long>::const_iterator itr = _nodeIdsNotUsedInChangesetBoundsCalculation.begin();
+         itr != _nodeIdsNotUsedInChangesetBoundsCalculation.end(); itr++)
+    {
+      //LOG_VARD(*itr);
+      valuesStr += QString::number(*itr) + ",";
+    }
+    valuesStr.chop(1);
+    valuesStr += ")";
+    //LOG_VARD(valuesStr);
+    //query.clear();
+    query.prepare(
+      QString("select min(min_lon), max(max_lon), min(min_lat), max(max_lat) from current_nodes ") +
+      QString("where id in " + valuesStr));
+    if (query.exec() == false)
+    {
+      LOG_ERROR(query.executedQuery());
+      LOG_ERROR(query.lastError().text());
+      throw HootException("Could not execute query: " + query.lastError().text());
+    }
+    const double minLon = (double)query.value(0).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
+    //LOG_VARD(minLon);
+    const double maxLon = (double)query.value(1).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
+    //LOG_VARD(maxLon);
+    const double minLat = (double)query.value(2).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
+    //LOG_VARD(minLat);
+    const double maxLat = (double)query.value(3).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
+    //LOG_VARD(maxLat);
+    query.finish();
+
+    //expand the changeset bounds to include the nodes
+    shared_ptr<Envelope> queryEnv(new Envelope(minLon, maxLon, minLat, maxLat));
+    _changesetBounds.expandToInclude(queryEnv.get());
+  }
+
+  //update the changeset's bounds
+  //LOG_VARD(_changesetBounds.toString());
+  _outputSql.write(
+    QString("UPDATE changesets SET min_lat=%2, max_lat=%3, min_lon=%4, max_lon=%5 WHERE id=%1;\n")
+      .arg(_changesetId)
+      .arg((qlonglong)HootApiDb::round(_changesetBounds.getMinY() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)HootApiDb::round(_changesetBounds.getMaxY() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)HootApiDb::round(_changesetBounds.getMinX() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)HootApiDb::round(_changesetBounds.getMaxX() * HootApiDb::COORDINATE_SCALE, 7))
+    .toUtf8());
+
+  _resetChangesetVars();
 }
 
 void OsmChangesetSqlFileWriter::_createChangeSet()
@@ -71,7 +270,6 @@ void OsmChangesetSqlFileWriter::_createChangeSet()
       .arg(_changesetId)
       .arg(ConfigOptions().getChangesetUserId())
     .toUtf8());
-  //this will go away if user authentication is tied in at some point
   _outputSql.write(
     QString("INSERT INTO changeset_tags (changeset_id, k, v) VALUES "
             "(%1, '%2', '%3');\n")
