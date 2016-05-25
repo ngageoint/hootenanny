@@ -126,6 +126,10 @@ When(/^I fill input under "([^"]*)" with "([^"]*)"$/) do |parent, value|
   sleep 1
 end
 
+When(/^I append "([^"]*)" input with "([^"]*)"$/) do |el, value|
+  find('input.' + el).native.send_keys(value)
+end
+
 When(/^I press enter in the "([^"]*)" input$/) do |selector|
   find('input' + selector).native.send_keys(:enter)
 end
