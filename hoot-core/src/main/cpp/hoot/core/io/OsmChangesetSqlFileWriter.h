@@ -83,9 +83,6 @@ private:
   QSet<long> _nodeIdsNotUsedInChangesetBoundsCalculation;
   QSet<long> _wayIdsUsedInChangesetBoundsCalculation;
   QSet<long> _wayIdsNotUsedInChangesetBoundsCalculation;
-  //TODO: This is in place b/c some tests invoke changeset bounds writing successfull, but other
-  //tests need to be rewritten to handle it.  These tests can be updated at a later time: #765
-  bool _writeChangesetBounds;
 
   friend class ServiceOsmApiDbChangesetSqlFileWriterTest;
 

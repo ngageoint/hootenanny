@@ -34,7 +34,10 @@ namespace hoot
 {
 
 /**
- * Writes OSM changesets from a .osc.sql executable SQL file to an OSM API database
+ * Writes OSM changesets from a .osc.sql executable SQL file to an OSM API database.
+ *
+ * This class expects incoming changesets to have been written by the OsmChangesetSqlFileWriter
+ * and is coupled to its output format in certain parts of the SQL parsing logic.
  */
 class OsmApiDbSqlChangesetWriter
 {
@@ -88,6 +91,7 @@ private:
   OsmApiDb _db;
 
   QMap<QString, long> _changesetStats;
+  QString _changesetBoundsStr;
 };
 
 }

@@ -13,8 +13,7 @@ namespace hoot
 {
 
 OsmChangesetSqlFileWriter::OsmChangesetSqlFileWriter(QUrl url) :
-_changesetId(0),
-_writeChangesetBounds(true)
+_changesetId(0)
 {
   _db.open(url);
 }
@@ -52,28 +51,19 @@ void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr c
         throw IllegalArgumentException("Unexpected change type.");
     }
 
-    if (_writeChangesetBounds)
-    {
-      _collectChangesetBoundsInfo(change.e);
-    }
+    _collectChangesetBoundsInfo(change.e);
 
     changes++;
 
     if (changes > ConfigOptions().getChangesetMaxSize())
     {
-      if (_writeChangesetBounds)
-      {
-        _updateChangesetBounds();
-      }
+      _updateChangesetBounds();
       _createChangeSet();
       changes = 0;
     }
   }
 
-  if (_writeChangesetBounds)
-  {
-    _updateChangesetBounds();
-  }
+  _updateChangesetBounds();
 
   _outputSql.close();
   _db.close();
@@ -223,7 +213,7 @@ void OsmChangesetSqlFileWriter::_updateChangesetBounds()
     //LOG_VARD(valuesStr);
     //query.clear();
     query.prepare(
-      QString("select min(min_lon), max(max_lon), min(min_lat), max(max_lat) from current_nodes ") +
+      QString("select min(longitude), max(longitude), min(latitude), max(latitude) from current_nodes ") +
       QString("where id in " + valuesStr));
     if (query.exec() == false)
     {
@@ -231,19 +221,22 @@ void OsmChangesetSqlFileWriter::_updateChangesetBounds()
       LOG_ERROR(query.lastError().text());
       throw HootException("Could not execute query: " + query.lastError().text());
     }
-    const double minLon = (double)query.value(0).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
-    //LOG_VARD(minLon);
-    const double maxLon = (double)query.value(1).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
-    //LOG_VARD(maxLon);
-    const double minLat = (double)query.value(2).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
-    //LOG_VARD(minLat);
-    const double maxLat = (double)query.value(3).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
-    //LOG_VARD(maxLat);
-    query.finish();
+    if (query.first())
+    {
+      const double minLon = (double)query.value(0).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
+      //LOG_VARD(minLon);
+      const double maxLon = (double)query.value(1).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
+      //LOG_VARD(maxLon);
+      const double minLat = (double)query.value(2).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
+      //LOG_VARD(minLat);
+      const double maxLat = (double)query.value(3).toLongLong() / (double)HootApiDb::COORDINATE_SCALE;
+      //LOG_VARD(maxLat);
+      query.finish();
 
-    //expand the changeset bounds to include the nodes
-    shared_ptr<Envelope> queryEnv(new Envelope(minLon, maxLon, minLat, maxLat));
-    _changesetBounds.expandToInclude(queryEnv.get());
+      //expand the changeset bounds to include the nodes
+      shared_ptr<Envelope> queryEnv(new Envelope(minLon, maxLon, minLat, maxLat));
+      _changesetBounds.expandToInclude(queryEnv.get());
+    }
   }
 
   //update the changeset's bounds

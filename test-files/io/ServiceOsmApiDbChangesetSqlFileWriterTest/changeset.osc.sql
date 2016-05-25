@@ -23,3 +23,4 @@ INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (3, 1, 1, 1
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (3, 1, 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (3, 2, 1, 2);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (3, 2, 2);
+UPDATE changesets SET min_lat=0, max_lat=0, min_lon=0, max_lon=0 WHERE id=1;

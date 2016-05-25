@@ -131,7 +131,6 @@ public:
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
 
     OsmChangesetSqlFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
-    writer._writeChangesetBounds = false;
     writer
       .write(
         "test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.osc.sql",
