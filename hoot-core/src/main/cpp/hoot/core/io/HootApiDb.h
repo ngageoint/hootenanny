@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -277,18 +277,6 @@ public:
    */
   QString execToString(QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
                         QVariant v3 = QVariant());
-
-  static long round(double x);
-  static long round(double x, int precision);
-
-  /**
-   * Calculates the QuadTile for a point.
-   * http://wiki.openstreetmap.org/wiki/QuadTiles
-   *
-   * The code was taken from quad_tile.h and quad_tile.c in the openstreetmap-website
-   * https://github.com/openstreetmap/openstreetmap-website
-   */
-  static unsigned int tileForPoint(double lat, double lon);
 
 private:
 
