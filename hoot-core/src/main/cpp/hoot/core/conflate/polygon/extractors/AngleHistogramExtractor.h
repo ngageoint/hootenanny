@@ -76,6 +76,8 @@ public:
   virtual double extract(const OsmMap& map, const shared_ptr<const Element>& target,
     const shared_ptr<const Element>& candidate) const;
 
+  void setSmoothing(Radians sigma) { _smoothing = sigma; }
+
 protected:
   virtual Histogram* _createHistogram(const OsmMap& map, const ConstElementPtr& e) const;
 

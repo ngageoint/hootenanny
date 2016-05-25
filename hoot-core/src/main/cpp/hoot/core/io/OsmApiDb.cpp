@@ -58,6 +58,8 @@
 namespace hoot
 {
 
+const QString OsmApiDb::TIME_FORMAT = "yyyy-MM-dd hh:mm:ss.zzz";
+
 OsmApiDb::OsmApiDb()
 {
   _init();
@@ -149,7 +151,7 @@ void OsmApiDb::open(const QUrl& url)
 {
   if (!isSupported(url))
   {
-    throw HootException("An unsupported URL was passed in.");
+    throw HootException("An unsupported URL was passed into OsmApiDb: " + url.toString());
   }
   ApiDb::open(url);
 }
@@ -180,6 +182,7 @@ void OsmApiDb::_resetQueries()
   {
     itr.value().reset();
   }
+  _selectChangesetsCreatedAfterTime.reset();
 }
 
 void OsmApiDb::rollback()
@@ -355,28 +358,48 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId,
   // setup base sql query string
   QString sql =  "SELECT ";
 
-  if(elementType == ElementType::Node)
+  //TODO: This logic seems inconsistent.  _elementTypeToElementTableName is used for one element
+  //type but not others.
+  if (elementType == ElementType::Node)
   {
     sql += _elementTypeToElementTableName(elementType) +
-      " where (latitude between "+QString::number(minLat)+" and "+QString::number(maxLat)+") and (longitude between "+
-      QString::number(minLon)+" and "+QString::number(maxLon)+")";
+      " where (latitude between "+ QString::number(minLat)+" and "+QString::number(maxLat) +
+      ") and (longitude between "+ QString::number(minLon)+" and "+QString::number(maxLon) + ")";
 
     // if requesting a specific id then append this string
-    if (elementId > -1) { sql += " AND (id = :elementId) "; }
+    if (elementId > -1)
+    {
+      sql += " AND (id = :elementId) ";
+    }
+    sql += " AND visible = true ";
   }
   else if (elementType == ElementType::Way)
   {
     sql += "* FROM current_ways ";
 
     // if requesting a specific id then append this string
-    if (elementId > -1) { sql += " WHERE id = :elementId "; }
+    if (elementId > -1)
+    {
+      sql += " WHERE id = :elementId AND visible = true ";
+    }
+    else
+    {
+      sql += " WHERE visible = true ";
+    }
   }
-  else if(elementType == ElementType::Relation)
+  else if (elementType == ElementType::Relation)
   {
     sql += "* FROM current_relations ";
 
     // if requesting a specific id then append this string
-    if(elementId > -1) { sql += " WHERE id = :elementId "; }
+    if (elementId > -1)
+    {
+      sql += " WHERE id = :elementId AND visible = true ";
+    }
+    else
+    {
+      sql += " WHERE visible = true ";
+    }
   }
   else
   {
@@ -421,7 +444,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
   QString sql =  "SELECT " + _elementTypeToElementTableName(elementType);
 
   // sort them in descending order, set limit and offset
-  sql += " ORDER BY id DESC";
+  sql += " WHERE visible = true ORDER BY id DESC";
 
   // let's see what that sql query string looks like
   LOG_DEBUG(QString("The sql query= "+sql));
@@ -509,6 +532,21 @@ QString OsmApiDb::extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType
   return tag;
 }
 
+long OsmApiDb::getNextId(const ElementType type)
+{
+  switch (type.getEnum())
+  {
+    case ElementType::Node:
+      return getNextId("current_" + type.toString().toLower() + "s");
+    case ElementType::Way:
+      return getNextId("current_" + type.toString().toLower() + "s");
+    case ElementType::Relation:
+      return getNextId("current_" + type.toString().toLower() + "s");
+    default:
+      throw HootException("Unknown element type");
+  }
+}
+
 long OsmApiDb::getNextId(const QString tableName)
 {
   long result;
@@ -546,68 +584,26 @@ long OsmApiDb::getNextId(const QString tableName)
   return result;
 }
 
-void OsmApiDb::writeChangeset(const QString sql, const QUrl targetDatabaseUrl)
+shared_ptr<QSqlQuery> OsmApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
 {
-  LOG_INFO("Executing changeset SQL queries against OSM API database...");
+  LOG_VARD(timeStr);
+  _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
+  _selectChangesetsCreatedAfterTime->prepare(
+    QString("SELECT min_lon, max_lon, min_lat, max_lat FROM changesets ") +
+    QString("WHERE created_at > :createdAt"));
+  _selectChangesetsCreatedAfterTime->bindValue(":createdAt", "'" + timeStr + "'");
 
-  QString changesetInsertStatement;
-  QString elementSqlStatements = "";
-
-  const QStringList sqlParts = sql.split(";");
-  for (int i = 0; i < sqlParts.size(); i++)
+  if (_selectChangesetsCreatedAfterTime->exec() == false)
   {
-    const QString sqlStatement = sqlParts[i];
-    if (i == 0)
-    {
-      if (!sqlStatement.toUpper().startsWith("INSERT INTO CHANGESETS"))
-      {
-        throw HootException(
-          "The first SQL statement in a changeset SQL file must create a changeset.");
-      }
-      else
-      {
-        changesetInsertStatement = sqlStatement + ";";
-      }
-    }
-    else
-    {
-      elementSqlStatements += sqlStatement + ";";
-    }
+    LOG_ERROR(_selectChangesetsCreatedAfterTime->executedQuery());
+    LOG_ERROR(_selectChangesetsCreatedAfterTime->lastError().text());
+    throw HootException(
+      "Could not execute changesets query: " + _selectChangesetsCreatedAfterTime->lastError().text());
   }
+  LOG_VARD(_selectChangesetsCreatedAfterTime->executedQuery());
+  LOG_VARD(_selectChangesetsCreatedAfterTime->numRowsAffected());
 
-  if (elementSqlStatements.trimmed().isEmpty())
-  {
-    throw HootException("No element SQL statements in sql file");
-  }
-
-  open(targetDatabaseUrl);
-  transaction();
-
-  _execNoPrepare(changesetInsertStatement);
-  _execNoPrepare(elementSqlStatements);
-
-  commit();
-  close();
-
-  LOG_INFO("Changeset SQL queries execute finished against OSM API database.");
-}
-
-void OsmApiDb::writeChangeset(QFile& changesetSqlFile, const QUrl targetDatabaseUrl)
-{
-  if (!changesetSqlFile.fileName().endsWith(".osc.sql"))
-  {
-    throw HootException("Invalid file type: " + changesetSqlFile.fileName());
-  }
-
-  if (changesetSqlFile.open(QIODevice::ReadOnly))
-  {
-    writeChangeset(changesetSqlFile.readAll(), targetDatabaseUrl);
-    changesetSqlFile.close();
-  }
-  else
-  {
-    throw HootException("Unable to open changeset file: " + changesetSqlFile.fileName());
-  }
+  return _selectChangesetsCreatedAfterTime;
 }
 
 }

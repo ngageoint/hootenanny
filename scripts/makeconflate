@@ -7,8 +7,7 @@ HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.
 HOOT_OPTS+= -D hootapi.db.writer.email=test@test.com -D hootapi.db.reader.email=test@test.com
 
 #DB_URL=hootapidb://hoot:hoottest@localhost:5432/hoot
-
-
+#OSM_API_DB_URL="osmapidb://hoot:hoottest@localhost:5432/osmapi_test"
 
 OUTPUT_DIR=$(HOOT_HOME)/test-out/$(jobid)
 
@@ -24,7 +23,6 @@ OP_CMD=
 OP_CONFLATE_TYPE=--conflate
 HOOT_OPTS+= $(ADV_OPTIONS)
 
-
 ifeq "$(REFERENCE_LAYER)" "2"
 	HOOT_OPTS+= -D tag.merger.default=hoot::OverwriteTag1Merger
 endif
@@ -37,7 +35,6 @@ ifeq "$(CONFLATION_TYPE)" "Reference"
 	OP_REPORT_CONF_TYPE=reference
 endif
 
-
 ifeq "$(INPUT1_TYPE)" "DB"
 	OP_INPUT1=$(DB_URL)/$(INPUT1)
 endif
@@ -46,6 +43,17 @@ ifeq "$(INPUT2_TYPE)" "DB"
 	OP_INPUT2=$(DB_URL)/$(INPUT2)
 endif
 
+# This is also depending on some extra input validation present in ConflationResource.
+ifeq "$(REFERENCE_LAYER)" "1"
+	ifeq "$(INPUT1_TYPE)" "OSM_API_DB"
+		HOOT_OPTS+= -D convert.bounding.box=$(conflateaoi) -D conflate.use.data.source.ids=true -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D hootapi.db.writer.osmapidb.url="$(OP_INPUT1)"
+	endif
+endif
+ifeq "$(REFERENCE_LAYER)" "2"
+	ifeq "$(INPUT2_TYPE)" "OSM_API_DB"
+		HOOT_OPTS+= -D convert.bounding.box=$(conflateaoi) -D conflate.use.data.source.ids=true -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D hootapi.db.writer.osmapidb.url="$(OP_INPUT2)"
+	endif
+endif
 
 ifeq "$(GENERATE_REPORT)" "true"
 	HOOT_OPTS+= -D stats.format=asciidoc -D stats.output=$(HOOT_HOME)/data/reports/$(jobid)/reportBody -D conflate.stats.types=$(OP_REPORT_CONF_TYPE)
@@ -58,7 +66,6 @@ ifeq "$(COLLECT_STATS)" "true"
 	# don't include non-error log messages in stdout because we are redirecting to file
 	HOOT_OPTS+= --error
 endif
-
 
 ###
 # Conflate

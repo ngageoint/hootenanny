@@ -64,7 +64,7 @@ clean-db: services-clean-db
 # start over as close to a new build as is reasonable
 clean-all: clean clean-db clean-ccache
 
-clean-coverage: services-clean-coverage
+clean-coverage: services-clean-coverage ui-clean-coverage
 	rm -rf coverage
 	rm -f `find . -name *.gcda`
 
@@ -127,7 +127,7 @@ endif
 plugins-test:
 	echo Running plugins tests...
 	# Only run the plugins tests if mocha is installed.
-	cd plugins; (command -v mocha &> /dev/null) && mocha test || echo Skipping mocha tests
+	cd plugins; (command -v mocha &> /dev/null) && mocha --reporter dot || echo Skipping mocha tests
 
 pp-test-all:
 ifneq ($(HADOOP_HOME),)
@@ -290,12 +290,34 @@ endif
 ui-test: services-build build
 ifeq ($(BUILD_UI_TESTS),uitests)
 ifeq ($(BUILD_SERVICES),services)
-	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile test && $(MAKE) -f Makefile clean
+	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile test
 else
 	echo "UI tests must specify both --with-services and --with-uitests."
 endif
 else
 	echo "UI tests must specify both --with-services and --with-uitests."
+endif
+
+ui-coverage: services-build build
+ifeq ($(BUILD_UI_TESTS),uitests)
+ifeq ($(BUILD_SERVICES),services)
+	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile coverage
+else
+	echo "UI coverage must specify both --with-services and --with-uitests."
+endif
+else
+	echo "UI coverage must specify both --with-services and --with-uitests."
+endif
+
+ui-clean-coverage:
+ifeq ($(BUILD_UI_TESTS),uitests)
+ifeq ($(BUILD_SERVICES),services)
+	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile clean-coverage
+else
+	echo "UI clean coverage must specify both --with-services and --with-uitests."
+endif
+else
+	echo "UI clean coverage must specify both --with-services and --with-uitests."
 endif
 
 FORCE: vagrant
@@ -401,7 +423,7 @@ coverage/core/tbs/index.html:
 	lcov -r coverage/core/tbs/Tbs.info $(IGNORED) -o coverage/core/tbs/TbsTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 	genhtml coverage/core/tbs/TbsTrimmed.info --output-directory coverage/core/tbs/ 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 
-coverage: services-coverage coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html
+coverage: services-coverage ui-coverage coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html
 
 conf/WordsAbridged.sqlite: conf/WordsAbridged.sqlite.gz
 	gunzip -c $^ > $@

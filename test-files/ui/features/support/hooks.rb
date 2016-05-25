@@ -12,6 +12,9 @@ end
 
 After do
   # Do something after each scenario.
+
+  # If running instrumented code, POST the coverage data to istanbul-middleware
+  page.execute_script("(function () { if (window.__coverage__) { d3.xhr('http://localhost:8880/coverage/client').header('Content-Type', 'application/json').post(JSON.stringify(window.__coverage__),function(err, data){});}}())");
 end
 
 After do |scenario|

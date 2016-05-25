@@ -26,55 +26,48 @@
  */
 package hoot.services.nativeInterfaces;
 
-
 /**
  * @author Jong Choi
  *
- * This class provides the custom exception where it associates Http error code with exception.
- * It defaults to Http 500 error. Since we doe not need to track all http status code, add as
- * needed.
+ *         This class provides the custom exception where it associates Http
+ *         error code with exception. It defaults to Http 500 error. Since we
+ *         doe not need to track all http status code, add as needed.
  *
  */
 public class NativeInterfaceException extends Exception {
-  private static final long serialVersionUID = 2099436655304473111L;
+    private static final long serialVersionUID = 2099436655304473111L;
 
-  // add more as needed
-	 public enum HttpCode {
-	        BAD_RQUEST(400),
-	        USER_CANCEL(1001),
-	        SERVER_ERROR(500);
+    // add more as needed
+    public enum HttpCode {
+        BAD_RQUEST(400), USER_CANCEL(1001), SERVER_ERROR(500);
 
-	        private int value;
+        private int value;
 
-	        private HttpCode(int value) {
-	                this.value = value;
-	        }
+        private HttpCode(int value) {
+            this.value = value;
+        }
 
-	        public int toInt()
-	        {
-	        	return value;
-	        }
-	}
+        public int toInt() {
+            return value;
+        }
+    }
 
+    private NativeInterfaceException.HttpCode exceptionCode = NativeInterfaceException.HttpCode.SERVER_ERROR;
 
-	private NativeInterfaceException.HttpCode exceptionCode = NativeInterfaceException.HttpCode.SERVER_ERROR;
+    public NativeInterfaceException.HttpCode getExceptionCode() {
+        return exceptionCode;
+    }
 
-	public NativeInterfaceException.HttpCode getExceptionCode() {
-		return exceptionCode;
-	}
+    public void setExceptionCode(NativeInterfaceException.HttpCode exceptionCode) {
+        this.exceptionCode = exceptionCode;
+    }
 
-	public void setExceptionCode(NativeInterfaceException.HttpCode exceptionCode) {
-		this.exceptionCode = exceptionCode;
-	}
+    public NativeInterfaceException(String message) {
+        super(message);
+    }
 
-	public NativeInterfaceException(String message)
-	{
-		super(message);
-	}
-
-	public NativeInterfaceException(String message, NativeInterfaceException.HttpCode exceptCode)
-	{
-		super(message);
-		exceptionCode = exceptCode;
-	}
+    public NativeInterfaceException(String message, NativeInterfaceException.HttpCode exceptCode) {
+        super(message);
+        exceptionCode = exceptCode;
+    }
 }

@@ -28,21 +28,22 @@ package hoot.services.utils;
 
 import java.util.Random;
 
+
 /**
  * Generates random numbers
  */
-public class RandomNumberGenerator
-{
-  /**
-   * Generates a random number within the specified range
-   * 
-   * @param min random number range minimum
-   * @param max random number range maximum
-   * @return a double precision number
-   */
-  public static double nextDouble(double min, double max)
-  {
-    Random r = new Random(System.currentTimeMillis());
-    return min + (max - min) * r.nextDouble();
-  }
+public class RandomNumberGenerator {
+    /**
+     * Generates a random number within the specified range
+     * 
+     * @param min
+     *            random number range minimum
+     * @param max
+     *            random number range maximum
+     * @return a double precision number
+     */
+    public static double nextDouble(double min, double max) {
+        Random r = new Random(System.currentTimeMillis());
+        return min + (max - min) * r.nextDouble();
+    }
 }

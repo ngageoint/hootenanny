@@ -32,9 +32,9 @@ import org.junit.extensions.cpsuite.ClasspathSuite;
 import org.junit.extensions.cpsuite.ClasspathSuite.SuiteTypes;
 import org.junit.runner.RunWith;
 
+
 @RunWith(ClasspathSuite.class)
-@SuiteTypes({TEST_CLASSES})
-public class AllTests 
-{
-	//
+@SuiteTypes({ TEST_CLASSES })
+public class AllTests {
+    //
 }

@@ -26,8 +26,6 @@
  */
 package hoot.services.controllers.wps;
 
-import hoot.services.HootProperties;
-
 import java.util.List;
 
 import org.deegree.services.wps.Processlet;
@@ -40,101 +38,80 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import hoot.services.HootProperties;
+
+
 /**
  * @author Jong Choi
- * 
+ *         <p>
  *         Base class for WPS processlet
- * 
  */
-public abstract class BaseProcesslet implements Processlet
-{
-  private static final Logger log = LoggerFactory.getLogger(BaseProcesslet.class);
+public abstract class BaseProcesslet implements Processlet {
+    private static final Logger log = LoggerFactory.getLogger(BaseProcesslet.class);
 
-  protected static String coreJobServerUrl = null;
+    protected static final String coreJobServerUrl = HootProperties.getPropertyOrDefault("coreJobServerUrl");
 
-  @SuppressWarnings("unused")
-  private ClassPathXmlApplicationContext appContext;
+    private ClassPathXmlApplicationContext appContext;
 
-  /**
-   * @throws Exception
-   * 
-   */
-  public BaseProcesslet() throws Exception
-  {
-    // see hoot-service.conf. This one is used to for job server location.
-    if (coreJobServerUrl == null)
-    {
-      coreJobServerUrl = 
-        HootProperties.getInstance().getProperty(
-          "coreJobServerUrl", HootProperties.getDefault("coreJobServerUrl"));
+    /**
+     * @throws Exception
+     */
+    public BaseProcesslet() throws Exception {
+        appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
     }
 
-    appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.deegree.services.wps.Processlet#destroy()
-   */
-  @Override
-  public void destroy()
-  {
-  	//
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.deegree.services.wps.Processlet#init()
-   */
-  @Override
-  public void init()
-  {
-  	//
-  }
-  
-  /**
-   * Parses WPS xml to JSON format.
-   */
-  @SuppressWarnings("unchecked")
-  protected JSONArray parseRequestParams(ProcessletInputs in)
-  {
-    JSONArray commandArgs = new JSONArray();
-    List<ProcessletInput> params = in.getParameters();
-
-    for (int i = 0; i < params.size(); i++)
-    {
-      JSONObject commandArg = new JSONObject();
-      ProcessletInput input = params.get(i);
-      String id = input.getIdentifier().getCode();
-      String value = ((LiteralInput) in.getParameter(id)).getValue().trim();
-      try
-      {
-        commandArg.put(id, value);
-        commandArgs.add(commandArg);
-      }
-      catch (Exception e)
-      {
-        log.error(e.getMessage());
-      }
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.deegree.services.wps.Processlet#destroy()
+     */
+    @Override
+    public void destroy() {
+        //
     }
-    return commandArgs;
-  }
-  
-  
-  public String getParameterValue(String key, JSONArray args)
-  {
-  	for(int i=0; i<args.size(); i++)
-  	{
-  		JSONObject o = (JSONObject)args.get(i);
-  		if(o.containsKey(key))
-  		{
-  			return o.get(key).toString();
-  		}
-  	}
-  	return null;
-  }
-  
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.deegree.services.wps.Processlet#init()
+     */
+    @Override
+    public void init() {
+        //
+    }
+
+    /**
+     * Parses WPS xml to JSON format.
+     */
+    @SuppressWarnings("unchecked")
+    protected JSONArray parseRequestParams(ProcessletInputs in) {
+        JSONArray commandArgs = new JSONArray();
+        List<ProcessletInput> params = in.getParameters();
+
+        for (ProcessletInput param : params) {
+            JSONObject commandArg = new JSONObject();
+            ProcessletInput input = param;
+            String id = input.getIdentifier().getCode();
+            String value = ((LiteralInput) in.getParameter(id)).getValue().trim();
+            try {
+                commandArg.put(id, value);
+                commandArgs.add(commandArg);
+            }
+            catch (Exception e) {
+                log.error(e.getMessage());
+            }
+        }
+        return commandArgs;
+    }
+
+    public String getParameterValue(String key, JSONArray args) {
+        for (Object arg : args) {
+            JSONObject o = (JSONObject) arg;
+            if (o.containsKey(key)) {
+                return o.get(key).toString();
+            }
+        }
+        return null;
+    }
 
 }

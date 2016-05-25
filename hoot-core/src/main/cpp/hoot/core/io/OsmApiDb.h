@@ -39,7 +39,10 @@ namespace hoot
 
 class OsmApiDb : public ApiDb
 {
+
 public:
+
+  static const QString TIME_FORMAT;
 
   OsmApiDb();
 
@@ -101,28 +104,29 @@ public:
   shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
   /**
+   * Gets the next sequence ID for the given element type
+   *
+   * @param type element type
+   * @return an element ID
+   */
+  long getNextId(const ElementType type);
+
+  /**
    * Gets the next sequence ID for the given database table
    *
-   * @param table database table name
-   * @return an ID
+   * @param tableName database table name
+   * @return an element ID
    */
   long getNextId(const QString tableName);
 
   /**
-   * Executes changeset SQL against an OSM API database.
+   * Returns all changesets created after the specified time.
    *
-   * @param changesetSqlFile The file containing the change SQL to be executed.
-   * @param targetDatabaseUrl The OSM API database to write the changeset to.
+   * @param timeStr time string for which to search for changesets created after; should be of the
+   * format specified by the TIME_FORMAT constant
+   * @return a SQL results iterator
    */
-  void writeChangeset(QFile& changesetSqlFile, const QUrl targetDatabaseUrl);
-
-  /**
-   * xecutes changeset SQL against an OSM API database.
-   *
-   * @param sql The SQL to be executed.
-   * @param targetDatabaseUrl The OSM API database to write the changeset to.
-   */
-  void writeChangeset(const QString sql, const QUrl targetDatabaseUrl);
+  shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
 
 private:
 
@@ -133,6 +137,7 @@ private:
   shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
   shared_ptr<QSqlQuery> _selectNodeById;
+  shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
 
   QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
 
@@ -145,6 +150,7 @@ private:
   // Osm Api DB table strings
   static QString _getWayNodesTableName() { return "current_way_nodes"; }
   static QString _getRelationMembersTableName() { return "current_relation_members"; }
+
 };
 
 }

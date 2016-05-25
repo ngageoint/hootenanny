@@ -26,233 +26,171 @@
  */
 package hoot.services.validators.job;
 
-
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import hoot.services.HootProperties;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.HootProperties;
+
+
 public class JobFieldsValidator {
-	private String _resourceName = null;
-	private JSONObject _metaData = null;
-	private String _metaDataPath = null;
+    private String _resourceName = null;
+    private JSONObject _metaData = null;
+    private String _metaDataPath = null;
 
-	private static final Logger log = LoggerFactory.getLogger(JobFieldsValidator.class);
+    private static final Logger log = LoggerFactory.getLogger(JobFieldsValidator.class);
 
-	public JobFieldsValidator(String resourceName)
-	{
+    public JobFieldsValidator(String resourceName) {
 
-		_resourceName = resourceName;
+        _resourceName = resourceName;
 
-		try
-		{
+        try {
 
-			if (_metaDataPath ==  null)
-			{
-				_metaDataPath = HootProperties.getProperty("homeFolder");
-				_metaDataPath += "/scripts/services_fields_metadata.json";
-				_loadFieldsMetaData();
-			}
+            if (_metaDataPath == null) {
+                _metaDataPath = HootProperties.getProperty("homeFolder");
+                _metaDataPath += "/scripts/services_fields_metadata.json";
+                _loadFieldsMetaData();
+            }
 
-		}
-		catch (Exception ex)
-		{
-			log.error(ex.getMessage());
-		}
-	}
+        }
+        catch (Exception ex) {
+            log.error(ex.getMessage());
+        }
+    }
 
-	// validate required fields list.
+    // validate required fields list.
 
+    // TODO: If this isn't to be used anymore, get rid of it.
+    public boolean validateField(String fieldName, String fieldValue) {
+        /*
+         * String resourceName = _resourceName; boolean isValid = true;
+         * 
+         * Object resMeta = _metaData.get(resourceName); if(resMeta != null) {
+         * Object fieldMeta = ((JSONObject)resMeta).get(fieldName); if(fieldMeta
+         * != null) { JSONObject field = (JSONObject)fieldMeta;
+         * 
+         * // first check if the field is required field. String requiredStr =
+         * _getFieldValueStr(field, "required", "false"); boolean required =
+         * Boolean.parseBoolean(requiredStr); if(required == false) { // if
+         * optional we just say valid. if(fieldValue == null ||
+         * fieldValue.length() == 0) { return true; } } else { // When empty
+         * value then it is invalid if(fieldValue == null || fieldValue.length()
+         * == 0) { return false; } }
+         * 
+         * 
+         * // get the field type. If none specified we treat as String String
+         * fieldDataType = _getFieldValueStr(field, "type", "String"); String
+         * valueRange = _getFieldValueStr(field, "value_range", null); String
+         * maxRangeStr = _getFieldValueStr(field, "max_value_range", null);
+         * String minRangeStr = _getFieldValueStr(field, "min_value_range",
+         * null);
+         * 
+         * 
+         * if(fieldDataType.equalsIgnoreCase("double") ||
+         * fieldDataType.equalsIgnoreCase("float")) { boolean isMinValid =
+         * _validateDoubleStr(minRangeStr, fieldValue, "<"); boolean isMaxValid
+         * = _validateDoubleStr(maxRangeStr, fieldValue, ">"); isValid =
+         * isMinValid && isMaxValid;
+         * 
+         * } else if(fieldDataType.equalsIgnoreCase("int")) { boolean isMinValid
+         * = _validateIntStr(minRangeStr, fieldValue, "<"); boolean isMaxValid =
+         * _validateIntStr(maxRangeStr, fieldValue, ">");
+         * 
+         * isValid = isMinValid && isMaxValid; } else { // treat it as String
+         * if(valueRange != null && valueRange.length() > 0) { boolean
+         * isValInList = false; String[] valList = valueRange.split(",");
+         * for(int i=0; i< valList.length; i++) {
+         * if(valList[i].equalsIgnoreCase(fieldValue)) { isValInList = true;
+         * break; }
+         * 
+         * }
+         * 
+         * isValid = isValInList; } else { isValid = true; } } } else { //
+         * nothing to check with so we pass isValid = true; }
+         * 
+         * } else { // nothing to check with so we pass isValid = true; }
+         * 
+         * return isValid;
+         */
+        return true;
+    }
 
-	//TODO: If this isn't to be used anymore, get rid of it.
-	public boolean validateField( String fieldName, String fieldValue)
-	{
-	/*
-		String resourceName = _resourceName;
-		boolean isValid = true;
+    private void _loadFieldsMetaData() throws Exception {
 
-		Object resMeta = _metaData.get(resourceName);
-		if(resMeta != null)
-		{
-			Object fieldMeta  = ((JSONObject)resMeta).get(fieldName);
-			if(fieldMeta != null)
-			{
-				JSONObject field = (JSONObject)fieldMeta;
+        FileReader fReader = new FileReader(_metaDataPath);
+        JSONParser parser = new JSONParser();
+        _metaData = (JSONObject) parser.parse(fReader);
+        fReader.close();
+    }
 
-				// first check if the field is required field.
-				String requiredStr = _getFieldValueStr(field, "required", "false");
-				boolean required = Boolean.parseBoolean(requiredStr);
-				if(required == false)
-				{
-					// if optional we just say valid.
-					if(fieldValue ==  null || fieldValue.length() == 0)
-					{
-						return true;
-					}
-				}
-				else
-				{
-				// When empty value then it is invalid
-					if(fieldValue ==  null || fieldValue.length() == 0)
-					{
-						return false;
-					}
-				}
+    public boolean validateRequiredExists(Map<String, String> fields, List<String> missingList) {
 
+        String resourceName = _resourceName;
+        boolean isValid = true;
 
-				// get the field type. If none specified we treat as String
-				String fieldDataType = _getFieldValueStr(field, "type", "String");
-				String valueRange = _getFieldValueStr(field, "value_range", null);
-				String maxRangeStr = _getFieldValueStr(field, "max_value_range", null);
-				String minRangeStr = _getFieldValueStr(field, "min_value_range", null);
+        Object resMeta = _metaData.get(resourceName);
+        if (resMeta != null) {
+            // get the list of required fields
+            List<String> reqList = new ArrayList<String>();
+            JSONObject o = (JSONObject) resMeta;
+            Iterator iter = o.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry mEntry = (Map.Entry) iter.next();
+                String key = (String) mEntry.getKey();
+                JSONObject val = (JSONObject) mEntry.getValue();
 
+                Object oReq = val.get("required");
+                Boolean isReq = false;
+                if (oReq != null) {
+                    isReq = oReq.toString().equalsIgnoreCase("true");
+                }
 
-				if(fieldDataType.equalsIgnoreCase("double") ||
-						fieldDataType.equalsIgnoreCase("float"))
-				{
-					boolean isMinValid = _validateDoubleStr(minRangeStr, fieldValue, "<");
-					boolean isMaxValid = _validateDoubleStr(maxRangeStr, fieldValue, ">");
-					isValid = isMinValid && isMaxValid;
+                if (isReq) {
+                    reqList.add(key);
+                }
+            }
 
-				}
-				else if(fieldDataType.equalsIgnoreCase("int"))
-				{
-					boolean isMinValid = _validateIntStr(minRangeStr, fieldValue, "<");
-					boolean isMaxValid = _validateIntStr(maxRangeStr, fieldValue, ">");
+            // check for empty field val
+            iter = fields.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry mEntry = (Map.Entry) iter.next();
+                Object key = mEntry.getKey();
+                Object val = mEntry.getValue();
 
-					isValid = isMinValid && isMaxValid;
-				}
-				else
-				{
-					// treat it as String
-					if(valueRange != null && valueRange.length() > 0)
-					{
-						boolean isValInList = false;
-						String[] valList = valueRange.split(",");
-						for(int i=0;  i< valList.length; i++)
-						{
-							if(valList[i].equalsIgnoreCase(fieldValue))
-							{
-								isValInList = true;
-								break;
-							}
+                if (val == null) {
+                    return false;
+                }
 
-						}
+                if (key == null) {
+                    return true;
+                }
 
-						isValid = isValInList;
-					}
-					else
-					{
-						isValid = true;
-					}
-				}
-			}
-			else
-			{
-			// nothing to check with so we pass
-				isValid = true;
-			}
+            }
 
-		}
-		else
-		{
-			// nothing to check with so we pass
-			isValid = true;
-		}
+            // now see if all required fields exists
+            for (int i = 0; i < reqList.size(); i++) {
+                String key = reqList.get(i);
+                if (fields.get(key) == null) {
+                    missingList.add(key);
+                    isValid = false;
+                }
+            }
 
-		return isValid;*/
-		return true;
-	}
-	private void _loadFieldsMetaData() throws Exception
-	{
+        }
+        else {
+            // nothing to check with so we pass
+            isValid = true;
+        }
 
-		FileReader fReader = new FileReader(_metaDataPath);
-		JSONParser parser = new JSONParser();
-		_metaData = (JSONObject)parser.parse(fReader);
-		fReader.close();
-	}
+        return isValid;
 
-	public boolean validateRequiredExists(Map<String,String> fields, List<String>missingList)
-	{
-
-		String resourceName = _resourceName;
-		boolean isValid = true;
-
-		Object resMeta = _metaData.get(resourceName);
-		if(resMeta != null)
-		{
-			// get the list of required fields
-			List<String> reqList = new ArrayList<String>();
-			JSONObject o = (JSONObject)resMeta;
-    	Iterator iter = o.entrySet().iterator();
-    	while (iter.hasNext()) {
-  			Map.Entry mEntry = (Map.Entry) iter.next();
-  			String key = (String)mEntry.getKey();
-  			JSONObject val = (JSONObject)mEntry.getValue();
-
-  			Object oReq = val.get("required");
-  			Boolean isReq = false;
-  			if(oReq != null)
-  			{
-  				isReq = oReq.toString().equalsIgnoreCase("true");
-  			}
-
-  			if(isReq)
-  			{
-  				reqList.add(key);
-  			}
-  		}
-
-    	// check for empty field val
-    	iter = fields.entrySet().iterator();
-    	while(iter.hasNext())
-    	{
-    		Map.Entry mEntry = (Map.Entry) iter.next();
-  			Object key = mEntry.getKey();
-  			Object val = mEntry.getValue();
-
-  			if(val == null)
-  			{
-  				return false;
-  			}
-
-  			if(key == null)
-  			{
-  				return true;
-  			}
-
-    	}
-
-
-    	// now see if all required fields exists
-    	for(int i=0; i<reqList.size(); i++)
-    	{
-    		String key = reqList.get(i);
-    		if(fields.get(key) == null)
-    		{
-    			missingList.add(key);
-    			isValid = false;
-    		}
-    	}
-
-		}
-		else
-		{
-			// nothing to check with so we pass
-			isValid = true;
-		}
-
-		return isValid;
-
-	}
-
+    }
 
 }

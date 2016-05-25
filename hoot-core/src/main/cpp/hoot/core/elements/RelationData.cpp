@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,14 +30,14 @@ namespace hoot
 {
 
 RelationData::RelationData(long id, long changeset, long version, unsigned int timestamp,
-  QString user, long uid) :
-ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid)
+                           QString user, long uid, bool visible) :
+ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid, visible)
 {
 }
 
 RelationData::RelationData(const RelationData& rd) :
-ElementData(rd.getId(), rd.getTags(), rd.getCircularError(), rd._changeset, rd._version,
-            rd._timestamp),
+ElementData(rd.getId(), rd.getTags(), rd.getCircularError(), rd.getChangeset(), rd.getVersion(),
+            rd.getTimestamp(), rd.getUser(), rd.getUid(), rd.getVisible()),
 _type(rd._type),
 _members(rd._members)
 {

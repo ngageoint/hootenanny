@@ -150,10 +150,10 @@ QUrl ServicesDbTestUtils::getOsmApiDbUrl()
   Settings s = _readDbConfig();
   QUrl result;
   result.setScheme("osmapidb");
-  result.setHost(s.get("DB_HOST").toString());
-  result.setPort(s.get("DB_PORT").toInt());
-  result.setUserName(s.get("DB_USER").toString());
-  result.setPassword(s.get("DB_PASSWORD").toString());
+  result.setHost(s.get("DB_HOST_OSMAPI").toString());
+  result.setPort(s.get("DB_PORT_OSMAPI").toInt());
+  result.setUserName(s.get("DB_USER_OSMAPI").toString());
+  result.setPassword(s.get("DB_PASSWORD_OSMAPI").toString());
   result.setPath("/" + s.get("DB_NAME_OSMAPI").toString());
   return result;
 }
