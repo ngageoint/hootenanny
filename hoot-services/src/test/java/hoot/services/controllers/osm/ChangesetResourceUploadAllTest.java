@@ -102,6 +102,9 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadAll() throws Exception {
+        DbUtils.deleteMapRelatedTablesByMapId(mapId);
+        DbUtils.createMap(mapId);
+
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
         long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
         Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
