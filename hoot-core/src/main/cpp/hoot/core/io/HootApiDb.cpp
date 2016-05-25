@@ -937,16 +937,6 @@ void HootApiDb::rollback()
   _inTransaction = false;
 }
 
-long HootApiDb::round(double x)
-{
-  return (long)(x + 0.5);
-}
-
-long HootApiDb::round(double x, int precision)
-{
-  return (long)(floor(x * (10 * (precision - 1)) + 0.5) / (10 * (precision - 1)));
-}
-
 set<long> HootApiDb::selectMapIds(QString name)
 {
   const long userId = _currUserId;
@@ -980,23 +970,6 @@ set<long> HootApiDb::selectMapIds(QString name)
   }
 
   return result;
-}
-
-unsigned int HootApiDb::tileForPoint(double lat, double lon)
-{
-  int lonInt = round((lon + 180.0) * 65535.0 / 360.0);
-  int latInt = round((lat + 90.0) * 65535.0 / 180.0);
-
-  unsigned int tile = 0;
-  int          i;
-
-  for (i = 15; i >= 0; i--)
-  {
-    tile = (tile << 1) | ((lonInt >> i) & 1);
-    tile = (tile << 1) | ((latInt >> i) & 1);
-  }
-
-  return tile;
 }
 
 void HootApiDb::transaction()
@@ -1384,6 +1357,7 @@ void HootApiDb::_updateChangesetEnvelope(const ConstNodePtr node)
   //LOG_DEBUG("Changeset bounding box updated to include X=" + QString::number(nodeX) + ", Y=" + QString::number(nodeY));
 }
 
+//TODO: this isn't being called anywhere...
 void HootApiDb::_updateChangesetEnvelopeWayIds(const std::vector<long>& wayIds)
 {
   QString idListString;

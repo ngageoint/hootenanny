@@ -208,15 +208,15 @@ bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr,
   shared_ptr<QSqlQuery> changesetItr = _db.getChangesetsCreatedAfterTime(timeStr);
   while (changesetItr->next())
   {
-    shared_ptr<Envelope> changesetBounds(
-      new Envelope(changesetItr->value(0).toDouble(),
-                   changesetItr->value(1).toDouble(),
-                   changesetItr->value(2).toDouble(),
-                   changesetItr->value(3).toDouble()));
+    Envelope changesetBounds(
+      changesetItr->value(0).toDouble(),
+      changesetItr->value(1).toDouble(),
+      changesetItr->value(2).toDouble(),
+      changesetItr->value(3).toDouble());
     //LOG_VARD(changesetBounds->toString());
-    if (changesetBounds->intersects(bounds))
+    if (changesetBounds.intersects(bounds))
     {
-      LOG_DEBUG("Conflict exists at bounds " << changesetBounds->toString());
+      LOG_DEBUG("Conflict exists at bounds " << changesetBounds.toString());
       return true;
     }
   }

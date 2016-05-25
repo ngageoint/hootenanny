@@ -51,6 +51,7 @@
 #include <hoot/core/elements/RelationData.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
+#include <hoot/core/io/ApiDb.h>
 
 namespace hoot
 {
@@ -221,6 +222,13 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
   {
     t["error:circular"] = QString::number(n->getCircularError());
   }
+
+  //Since we're only creating elements, the changeset bounds is simply the combined bounds
+  //of all the nodes involved in the changeset.
+  //LOG_VARD(n->getX());
+  //LOG_VARD(n->getY());
+  _changesetData.changesetBounds.expandToInclude(n->getX(), n->getY());
+  //LOG_VARD(_changesetData.changesetBounds.toString());
 
   if ( _writeStats.nodesWritten == 0 )
   {
@@ -437,22 +445,7 @@ PostgresqlDumpfileWriter::ElementIdDatatype PostgresqlDumpfileWriter::_establish
   return dbIdentifier;
 }
 
-unsigned int PostgresqlDumpfileWriter::_tileForPoint(const double lat, const double lon) const
-{
-  const int lonInt = round((lon + 180.0) * 65535.0 / 360.0);
-  const int latInt = round((lat + 90.0) * 65535.0 / 180.0);
-
-  unsigned int tile = 0;
-
-  for (int i = 15; i >= 0; i--)
-  {
-    tile = (tile << 1) | ((lonInt >> i) & 1);
-    tile = (tile << 1) | ((latInt >> i) & 1);
-  }
-
-  return tile;
-}
-
+//TODO: This should use ApiDb::COORDINATE_SCALE instead.
 unsigned int PostgresqlDumpfileWriter::_convertDegreesToNanodegrees(const double degrees) const
 {
   return ( round(degrees * 10000000.0) );
@@ -470,7 +463,7 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
   const int nodeXNanodegrees = _convertDegreesToNanodegrees(nodeX);
   const int changesetId = _getChangesetId();
   const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
-  const QString tileNumberString(QString::number(_tileForPoint(nodeY, nodeX)));
+  const QString tileNumberString(QString::number(ApiDb::tileForPoint(nodeY, nodeX)));
 
   if ( (nodeYNanodegrees < -900000000) || (nodeYNanodegrees > 900000000) )
   {
@@ -739,6 +732,7 @@ void PostgresqlDumpfileWriter::_incrementChangesInChangeset()
     _writeChangesetToTable();
     _changesetData.changesetId++;
     _changesetData.changesInChangeset = 0;
+    _changesetData.changesetBounds.init();
   }
 }
 
@@ -803,17 +797,30 @@ void PostgresqlDumpfileWriter::_writeChangesetToTable()
 {
   if ( _changesetData.changesetId == _configData.startingChangesetId )
   {
-    _createTable( "changesets", "COPY changesets (id, user_id, created_at, closed_at, num_changes) FROM stdin;\n" );
+    _createTable(
+      "changesets", "COPY changesets (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) FROM stdin;\n" );
   }
 
   QStringList changesetsStream  = _outputSections["changesets"];
   const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
-  const QString changesetFormat("%1\t%2\t%3\t%4\t%5\n");
+  const QString changesetFormat("%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n");
 
   changesetsStream << changesetFormat.arg(
     QString::number(_changesetData.changesetId),
     QString::number(_configData.changesetUserId),
     datestring,
+    QString::number(
+      (qlonglong)ApiDb::round(
+        _changesetData.changesetBounds.getMinY() * ApiDb::COORDINATE_SCALE, 7)),
+    QString::number(
+      (qlonglong)ApiDb::round(
+        _changesetData.changesetBounds.getMaxY() * ApiDb::COORDINATE_SCALE, 7)),
+    QString::number(
+      (qlonglong)ApiDb::round(
+        _changesetData.changesetBounds.getMinX() * ApiDb::COORDINATE_SCALE, 7)),
+    QString::number(
+      (qlonglong)ApiDb::round(
+        _changesetData.changesetBounds.getMaxX() * ApiDb::COORDINATE_SCALE, 7)),
     datestring,
     QString::number(_changesetData.changesInChangeset) );
   _outputSections["changesets"] = changesetsStream;
