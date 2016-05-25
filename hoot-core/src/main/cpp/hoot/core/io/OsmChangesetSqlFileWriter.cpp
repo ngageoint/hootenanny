@@ -1,7 +1,7 @@
 #include "OsmChangesetSqlFileWriter.h"
 
 // hoot
-#include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 
@@ -183,11 +183,11 @@ QString OsmChangesetSqlFileWriter::_getUpdateValuesNodeStr(ConstNodePtr node) co
   return
     QString("latitude=%2, longitude=%3, changeset_id=%4, visible=%5, \"timestamp\"=now(), tile=%6, version=%7 WHERE id=%1;\n")
       .arg(node->getId())
-      .arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)ApiDb::round(node->getY() * ApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)ApiDb::round(node->getX() * ApiDb::COORDINATE_SCALE, 7))
       .arg(node->getChangeset())
       .arg(_getVisibleStr(node->getVisible()))
-      .arg(HootApiDb::tileForPoint(node->getY(), node->getX()))
+      .arg(ApiDb::tileForPoint(node->getY(), node->getX()))
       .arg(node->getVersion());
 }
 
@@ -365,11 +365,11 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesNodeStr(ConstNodePtr node) co
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
       "tile, version) VALUES (%1, %2, %3, %4, %5, now(), %6, %7);\n")
       .arg(node->getId())
-      .arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)ApiDb::round(node->getY() * ApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)ApiDb::round(node->getX() * ApiDb::COORDINATE_SCALE, 7))
       .arg(node->getChangeset())
       .arg(_getVisibleStr(node->getVisible()))
-      .arg(HootApiDb::tileForPoint(node->getY(), node->getX()))
+      .arg(ApiDb::tileForPoint(node->getY(), node->getX()))
       .arg(node->getVersion());
 }
 
