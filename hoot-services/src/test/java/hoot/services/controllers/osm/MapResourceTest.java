@@ -39,6 +39,7 @@ import javax.xml.xpath.XPath;
 
 import org.apache.xpath.XPathAPI;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
@@ -1224,6 +1225,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
     }
 
+    @Ignore
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testGetMapBoundsOutsideWorld() throws Exception {
@@ -1256,6 +1258,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
     }
 
+    @Ignore
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testGetMapBoundsTooLarge() throws Exception {
