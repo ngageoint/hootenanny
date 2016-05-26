@@ -56,10 +56,30 @@ OsmJsonReader::OsmJsonReader()
   // Do nothing
 }
 
+// We allow the use of single quotes, for ease of coding
+// test strings into c++. Single quotes within string literals
+// should be escaped as \'
+void scrubQuotes(QString &jsonStr)
+{
+  // Detect if they are using single quotes or doubles
+  if (jsonStr.indexOf("\"node\"", Qt::CaseInsensitive) > -1)
+    return; // No need to scrub
+  else
+  {
+    // Convert single quotes to double quotes
+    // First change escaped singles
+    jsonStr.replace("\\'", "\"\"\"");
+    // Replace singles with doubles
+    jsonStr.replace("'", "\"");
+    // Revert escaped singles
+    jsonStr.replace("\"\"\"", "'");
+  }
+}
+
 // Throws HootException on error
 void OsmJsonReader::_loadJSON(QString jsonStr)
 {
-  jsonStr.replace("'", "\"");
+  scrubQuotes(jsonStr);
 
   // Convert string to stringstream
   stringstream ss(jsonStr.toUtf8().constData(), ios::in);
@@ -76,7 +96,8 @@ void OsmJsonReader::_loadJSON(QString jsonStr)
   catch (pt::json_parser::json_parser_error e)
   {
     QString reason = QString::fromStdString(e.message());
-    throw HootException("Error parsing JSON " + reason);
+    QString line = QString::number(e.line());
+    throw HootException("Error parsing JSON " + reason + "(line " + line + ")");
   }
   catch (std::exception e)
   {
@@ -144,6 +165,81 @@ void OsmJsonReader::parseOverpassNode(const pt::ptree &item, OsmMapPtr pMap)
   NodePtr pNode(new Node(s, id, lon, lat, circErr));
 
   // Add tags
+  addTags(item, pNode);
+
+  // Add node to map
+  pMap->addNode(pNode);
+}
+
+void OsmJsonReader::parseOverpassWay(const pt::ptree &item, OsmMapPtr pMap)
+{
+  // Get info we need to construct our way
+  long id = item.get("id", -1l); // default to -1
+  Meters circErr = 15.0; // Appears to be default used (e.g., see PbfReader)
+  Status s;
+
+  // Construct Way
+  WayPtr pWay(new Way(s, id, circErr));
+
+  // Add nodes
+  if (item.not_found() != item.find("nodes"))
+  {
+    pt::ptree nodes = item.get_child("nodes");
+    pt::ptree::const_iterator nodeIt = nodes.begin();
+    while (nodeIt != nodes.end())
+    {
+      string k = nodeIt->first;
+      long v = nodeIt->second.get_value<long>();
+      pWay->addNode(v);
+      ++nodeIt;
+    }
+  }
+
+  // Add tags
+  addTags(item, pWay);
+
+  // Add way to map
+  pMap->addWay(pWay);
+}
+
+void OsmJsonReader::parseOverpassRelation(const pt::ptree &item, OsmMapPtr pMap)
+{
+  // Get info we need to construct our way
+  long id = item.get("id", -1l); // default to -1
+  Meters circErr = 15.0; // Appears to be default used (e.g., see PbfReader)
+  Status s;
+
+  // Construct Relation
+  RelationPtr pRelation(new Relation(s, id, circErr));
+
+  // Add members
+  if (item.not_found() != item.find("members"))
+  {
+    pt::ptree members = item.get_child("members");
+    pt::ptree::const_iterator memberIt = members.begin();
+    while (memberIt != members.end())
+    {
+      string typeStr = memberIt->second.get("type", string(""));
+      long ref = memberIt->second.get("ref", -1l); // default -1 ?
+      string role = memberIt->second.get("role", string(""));
+
+      pRelation->addElement(QString::fromStdString(role),
+                            ElementType::fromString(QString::fromStdString(typeStr)),
+                            ref);
+      ++memberIt;
+    }
+  }
+
+  // Add tags
+  addTags(item, pRelation);
+
+  // Add relation to map
+  pMap->addRelation(pRelation);
+}
+
+void OsmJsonReader::addTags(const boost::property_tree::ptree &item, hoot::ElementPtr pElement)
+{
+  // Find tags and add them
   if (item.not_found() != item.find("tags"))
   {
     pt::ptree tags = item.get_child("tags");
@@ -153,25 +249,19 @@ void OsmJsonReader::parseOverpassNode(const pt::ptree &item, OsmMapPtr pMap)
       string k = tagIt->first;
       string v = tagIt->second.get_value<string>();
 
-      pNode->setTag(QString::fromStdString(k), QString::fromStdString(v));
+      // If we are "error:circular", need to set it on the element object,
+      // rather than add it as a tag
+      if (k == "error:circular")
+      {
+        pElement->setCircularError(Meters(QString::fromStdString(v).toInt()));
+      }
+      else
+      {
+        pElement->setTag(QString::fromStdString(k), QString::fromStdString(v));
+      }
       ++tagIt;
     }
   }
-
-  // Add node & return
-  pMap->addNode(pNode);
-}
-
-void OsmJsonReader::parseOverpassWay(const pt::ptree &item, OsmMapPtr pMap)
-{
-  (void) item;
-  (void) pMap;
-}
-
-void OsmJsonReader::parseOverpassRelation(const pt::ptree &item, OsmMapPtr pMap)
-{
-  (void) item;
-  (void) pMap;
 }
 
 } // namespace hoot

@@ -86,6 +86,8 @@ private:
                         OsmMapPtr pMap);
   void parseOverpassRelation(const boost::property_tree::ptree &item,
                              OsmMapPtr pMap);
+  void addTags(const boost::property_tree::ptree &item,
+               hoot::ElementPtr pElement);
 
 };
 
