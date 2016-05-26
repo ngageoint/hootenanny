@@ -26,11 +26,9 @@
  */
 package hoot.services.db;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -75,12 +73,12 @@ public class DataDefinitionManagerTest {
         spy.createTable(createTblSql, "wfdbtest");
 
         List<String> tbls = spy.getTablesList("wfdbtest", "test");
-        Assert.assertTrue(tbls.size() > 0);
+        Assert.assertTrue(!tbls.isEmpty());
 
         spy.deleteTables(tbls, "wfdbtest");
 
         tbls = spy.getTablesList("wfdbtest", "TEST");
-        Assert.assertTrue(tbls.size() == 0);
+        Assert.assertTrue(tbls.isEmpty());
 
         spy.deleteDb("wfdbtest", true);
 
@@ -88,43 +86,44 @@ public class DataDefinitionManagerTest {
         Assert.assertTrue(!exists);
     }
 
-    // TODO: This test assumes a map with ID = 1234 doesn't exit, which is no
-    // longer true when
-    // running the tests. The test needs to be updated.
-    @Ignore
     @Test
     @Category(UnitTest.class)
     public void createMap() throws Exception {
         String dbname = HootProperties.getProperty("dbName");
-        DataDefinitionManager spy = new DataDefinitionManager();
-        List<String> tables = new ArrayList<String>();
-        tables.add("changesets_1234");
-        tables.add("current_nodes_1234");
-        tables.add("current_relation_members_1234");
-        tables.add("current_relations_1234");
-        tables.add("current_way_nodes_1234");
-        tables.add("current_ways_1234");
-        spy.deleteTables(tables, dbname);
 
-        DbUtils.createMap(1234);
+        DataDefinitionManager ddm = new DataDefinitionManager();
 
-        List<String> tbls = spy.getTablesList(dbname, "changesets");
-        Assert.assertTrue(tbls.size() > 0);
+        try {
+            try {
+                // just in case the tables exist.
+                DbUtils.deleteMapRelatedTablesByMapId(1234);
+            }
+            catch (Exception ignored) {
+                // exception can be currently thrown while trying to delete non-existent tables.
+            }
 
-        tbls = spy.getTablesList(dbname, "current_nodes");
-        Assert.assertTrue(tbls.size() > 0);
+            DbUtils.createMap(1234);
 
-        tbls = spy.getTablesList(dbname, "current_relation_members");
-        Assert.assertTrue(tbls.size() > 0);
+            List<String> tbls = ddm.getTablesList(dbname, "changesets");
+            Assert.assertTrue(!tbls.isEmpty());
 
-        tbls = spy.getTablesList(dbname, "current_relations");
-        Assert.assertTrue(tbls.size() > 0);
+            tbls = ddm.getTablesList(dbname, "current_nodes");
+            Assert.assertTrue(!tbls.isEmpty());
 
-        tbls = spy.getTablesList(dbname, "current_way_nodes");
-        Assert.assertTrue(tbls.size() > 0);
+            tbls = ddm.getTablesList(dbname, "current_relation_members");
+            Assert.assertTrue(!tbls.isEmpty());
 
-        tbls = spy.getTablesList(dbname, "current_ways");
-        Assert.assertTrue(tbls.size() > 0);
+            tbls = ddm.getTablesList(dbname, "current_relations");
+            Assert.assertTrue(!tbls.isEmpty());
 
+            tbls = ddm.getTablesList(dbname, "current_way_nodes");
+            Assert.assertTrue(!tbls.isEmpty());
+
+            tbls = ddm.getTablesList(dbname, "current_ways");
+            Assert.assertTrue(!tbls.isEmpty());
+        }
+        finally {
+            DbUtils.deleteMapRelatedTablesByMapId(1234);
+        }
     }
 }
