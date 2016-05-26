@@ -14,6 +14,7 @@ Feature: Conflate feature
     Then I wait 30 "seconds" to see "DcTigerRoadsCucumber"
     Then I should see "Conflate"
     And I press "Conflate"
+    Then I fill "saveAs" input with "Merged_AllDataTypesCucumber"
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
     Then I wait 5 "minutes" to see "Merged_RoadsCucumber"

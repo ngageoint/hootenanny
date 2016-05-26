@@ -12,12 +12,21 @@ When(/^I click Get Started$/) do
   el.click unless el.nil?
 end
 
+When(/^I click the "([^"]*)" icon$/) do |cls|
+  find('._icon.' + cls).click
+end
+
 When(/^I click the "([^"]*)" link$/) do |linkText|
   find('a', :text=> linkText).click
 end
 
 When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent|
   find('div.' + parent).find('a.' + classed).click
+end
+
+When(/^I click the link-button with id "([^"]*)" classed "([^"]*)"$/) do |id, classed|
+  element = page.driver.browser.find_element(:id, id)
+  element.find('a.' + classed).click
 end
 
 Then(/^I should see "([^"]*)"$/) do |text|
@@ -166,9 +175,18 @@ When(/^I hover over "([^"]*)"$/) do |el|
   find(el).hover
 end
 
+When(/^I click on "([^"]*)"$/) do |el|
+  find(el).click
+end
+
 When(/^I press "([^"]*)" big loud span$/) do |txt|
   find('span.big.loud', :text=>txt).click
 end
+
+When(/^I press "([^"]*)" big loud link$/) do |cls|
+  find('a.big.loud.' + cls).click
+end
+
 
 When(/^I wait ([0-9]+) seconds$/) do |seconds|
   sleep Float(seconds)
