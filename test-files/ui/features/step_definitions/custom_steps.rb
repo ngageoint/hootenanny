@@ -312,3 +312,21 @@ Then(/^the download file "([^"]*)" should exist$/) do |file|
   expect( File.exists?(name) ).to be true
   File.delete(name)
 end
+
+When(/^I click the "([^"]*)" classed element under "([^"]*)" with text "([^"]*)"$/) do |classed, el, text|
+  find(el, :text => text).find('.' + classed).click
+end
+
+When(/^I select "([^"]*)" basemap/) do |file|
+  include_hidden_fields do
+    page.attach_file('basemapfileuploader', ENV['HOOT_HOME'] + file)
+  end
+end
+
+When(/^I click the map background button$/) do
+  find('div.background-control').find('button').click
+end
+
+When(/^I click the "([^"]*)" map layer$/) do |text|
+  find('label', :text => text).click
+end
