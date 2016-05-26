@@ -129,7 +129,13 @@ public class ConflationResource extends JobControllerBase {
             JSONParser pars = new JSONParser();
             JSONObject oParams = (JSONObject) pars.parse(params);
 
-            validateOsmApiDbConflateParams(oParams);
+            final boolean osmApiDbEnabled = Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"));
+            final boolean conflatingOsmApiDbData = oneLayerIsOsmApiDb(oParams);
+            if (conflatingOsmApiDbData && !osmApiDbEnabled) {
+                ResourceErrorHandler.handleError(
+                        "Attempted to conflate an OSM API database data source but OSM API database"
+                                + "support is disabled.", Status.INTERNAL_SERVER_ERROR, log);
+            }
 
             oParams.put("IS_BIG", "false");
             String confOutputName = oParams.get("OUTPUT_NAME").toString();
@@ -160,20 +166,6 @@ public class ConflationResource extends JobControllerBase {
             JSONArray commandArgs = parseParams(oParams.toJSONString());
             JSONObject conflationCommand = _createMakeScriptJobReq(commandArgs);
 
-            final boolean conflatingOsmApiDbData = oneLayerIsOsmApiDb(oParams);
-
-            if (conflatingOsmApiDbData) {
-                String secondaryParameterKey = null;
-                if (firstLayerIsOsmApiDb(oParams)) {
-                    secondaryParameterKey = "INPUT2";
-                }
-                else {
-                    secondaryParameterKey = "INPUT1";
-                }
-                Map secondaryMap = getSecondaryMap(getParameterValue(secondaryParameterKey, commandArgs), conn);
-                setAoi(secondaryMap, commandArgs);
-            }
-
             // add map tags
             // WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
             java.util.Map<String, String> tags = new HashMap<String, String>();
@@ -198,7 +190,19 @@ public class ConflationResource extends JobControllerBase {
             // this
             // point, so just check to
             // see if any osm api db input is present
-            if (conflatingOsmApiDbData) {
+            if (conflatingOsmApiDbData && osmApiDbEnabled) {
+                validateOsmApiDbConflateParams(oParams);
+
+                String secondaryParameterKey = null;
+                if (firstLayerIsOsmApiDb(oParams)) {
+                    secondaryParameterKey = "INPUT2";
+                }
+                else {
+                    secondaryParameterKey = "INPUT1";
+                }
+                Map secondaryMap = getSecondaryMap(getParameterValue(secondaryParameterKey, commandArgs), conn);
+                setAoi(secondaryMap, commandArgs);
+
                 // write a timestamp representing the time the osm api db data
                 // was
                 // queried out from the source;

@@ -211,10 +211,6 @@ public class ExportJobResource extends JobControllerBase {
                 postJobRquest(jobId, argStr);
             }
         }
-        catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error exporting data: " + ex.toString(), Status.INTERNAL_SERVER_ERROR,
-                    log);
-        }
         finally {
             DbUtils.closeConnection(conn);
         }
@@ -225,6 +221,13 @@ public class ExportJobResource extends JobControllerBase {
 
     protected JSONArray getExportToOsmApiDbCommandArgs(final JSONArray inputCommandArgs, Connection conn)
             throws Exception {
+        if (!Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"))) {
+            log.debug("test2");
+            ResourceErrorHandler.handleError(
+                    "Attempted to export to an OSM API database but OSM API database support is disabled",
+                    Status.INTERNAL_SERVER_ERROR, log);
+        }
+        
         JSONArray commandArgs = new JSONArray();
         commandArgs.addAll(inputCommandArgs);
 
