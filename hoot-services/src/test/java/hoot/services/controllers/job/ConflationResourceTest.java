@@ -118,9 +118,9 @@ public class ConflationResourceTest {
             // detailed
             // level
             verify(spy).postChainJobRquest(Matchers.matches(jobId),
-            // wasn't able to get the mockito matcher to take the timestamp
-            // regex...validated the
-            // regex externally, and it looks correct
+                    // wasn't able to get the mockito matcher to take the timestamp
+                    // regex...validated the
+                    // regex externally, and it looks correct
                     /*
                      * Matchers.matches("\"osm_api_db_export_time\":\"" +
                      * DbUtils.TIME_STAMP_REGEX + "\"")
@@ -147,7 +147,7 @@ public class ConflationResourceTest {
                     .getContextClassLoader()
                     .getResource(
                             "hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondaryInput.json")
-                    .getPath()));
+                            .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
             Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
@@ -175,7 +175,7 @@ public class ConflationResourceTest {
                     .getContextClassLoader()
                     .getResource(
                             "hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondary2Input.json")
-                    .getPath()));
+                            .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
             Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
@@ -288,6 +288,20 @@ public class ConflationResourceTest {
                             "Attempted to conflate an OSM API database data source but OSM API database"
                                     + "support is disabled"));
             throw e;
+        }
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testOsmApiDbEnabled() throws Exception {
+        try {
+            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
+            ConflationResource spy = Mockito.spy(new ConflationResource());
+            Assert.assertTrue(Boolean.parseBoolean(((JSONObject) (new JSONParser()).parse(spy.isOsmApiDbEnabled()
+                    .getEntity().toString())).get("enabled").toString()));
+        }
+        finally {
+            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
         }
     }
 }

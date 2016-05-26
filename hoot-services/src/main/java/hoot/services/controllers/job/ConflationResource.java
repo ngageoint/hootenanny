@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -83,6 +84,16 @@ public class ConflationResource extends JobControllerBase {
         catch (Exception ex) {
             log.error(ex.getMessage());
         }
+    }
+    
+    @GET
+    @Path("/osmapidb/enabled")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response isOsmApiDbEnabled()
+    {
+        JSONObject res = new JSONObject();
+        res.put("enabled", String.valueOf(Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"))));
+        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
     /**
