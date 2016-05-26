@@ -36,9 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class CoreDetail {
     private String[] environmentInfo;
 
-    public CoreDetail() {
-
-    }
+    public CoreDetail() {}
 
     public String[] getEnvironmentInfo() {
         return environmentInfo;
