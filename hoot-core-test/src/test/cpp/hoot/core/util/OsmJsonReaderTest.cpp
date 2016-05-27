@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/util/OsmJsonReader.h>
+#include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/io/OsmReader.h>
@@ -324,6 +324,6 @@ public:
 }; // class OsmJsonReaderTest
 } // namespace hoot
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "current");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "quick");
 
