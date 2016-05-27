@@ -71,26 +71,32 @@ Feature: Review Bookmarks
     	Then I click the "trash" button
     	And I accept the alert
 
-
-    #Scenario: Filter Bookmarks
+	Scenario: Filter Bookmarks
+		Then I select the "sprocket" div
+    	And I click on the "Review Bookmarks" option in the "settingsSidebar"
+    	Then I select the "reviewBookmarksFilterByMapIdDiv" div
+    	Then I click the "mergedBookmarkTest" link under "reviewBookmarksFilterByMapIdDiv"
+    	And I should see "Cucumber Bookmark"
+    	Then I select the "reviewBookmarksFilterByCreatorDiv" div
+    	Then I click the "cucumber@hootenanny.digitalglobe.com" link under "reviewBookmarksFilterByCreatorDiv"
+    	And I should see "Cucumber Bookmark"
+    	Then I select the "btnClearFilters" div
 
     Scenario: Delete Bookmark
-    	Then I select the "sprocket" div
-    	And I click on the "Review Bookmarks" option in the "settingsSidebar"
-#    	And I click the "trash" classed button under "reviewBookmarksContent"
-#    	And I accept the alert
+       	Then I click on the "trash" button in the "reviewBookmarksContent"
+    	And I accept the alert
 
     Scenario: Delete Layer with active bookmark
     	Then I click on the "Datasets" option in the "settingsSidebar"
-    	Then I press "refresh" big loud link
-    	And I click the link-button with id "utilDataset" classed "refresh"
+    	And I click on "#btnDatasetRefresh"
     	And I wait
+    	When I click the "mergedBookmarkTest" Dataset
         When I context click the "mergedBookmarkTest" Dataset
-        And I click the "Delete" context menu item
+        And I click the "Delete (1)" context menu item
         And I wait
         And I accept the alert
         And I wait
         And I accept the alert        
         Then I wait 30 "seconds" to not see "mergedBookmarkTest"   	
         Then I click on the "Review Bookmarks" option in the "settingsSidebar"
-        And I wait 5 "seconds" to not see "Cucumber"
+        And I should not see "Cucumber Bookmark"

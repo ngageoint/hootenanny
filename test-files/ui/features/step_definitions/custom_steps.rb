@@ -20,13 +20,12 @@ When(/^I click the "([^"]*)" link$/) do |linkText|
   find('a', :text=> linkText).click
 end
 
-When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent|
-  find('div.' + parent).find('a.' + classed).click
+When(/^I click the "([^"]*)" link under "([^"]*)"$/) do |linkText, parent|
+  find('#' + parent).find('a', :text=> linkText).click
 end
 
-When(/^I click the link-button with id "([^"]*)" classed "([^"]*)"$/) do |id, classed|
-  element = page.driver.browser.find_element(:id, id)
-  element.find('a.' + classed).click
+When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent|
+  find('div.' + parent).find('a.' + classed).click
 end
 
 Then(/^I should see "([^"]*)"$/) do |text|
@@ -38,8 +37,13 @@ Then(/^I should not see "([^"]*)"$/) do |text|
 end
 
 When(/^I select the "([^"]*)" div$/) do |cls|
-  find('div.' + cls).click
-  sleep 1
+  begin
+    find('div.' + cls).click
+    sleep 1
+  rescue Capybara::ElementNotFound
+    find('#' + cls).click
+    sleep 1    
+  end  
 end
 
 When(/^I select the first "([^"]*)" div$/) do |cls|
@@ -108,6 +112,11 @@ end
 When(/^I click the "([^"]*)" button and accept the alert$/) do |el|
   find('button.' + el).click
   page.driver.browser.switch_to.alert.accept
+end
+
+When(/^I click on the "([^"]*)" button in the "([^"]*)"$/) do |button,div|
+  elements = all('#' + div  + ' button.' + button)
+  elements[0].click
 end
 
 When(/^I click the "([^"]*)" at "([^"]*)","([^"]*)"$/) do |el, x, y|
