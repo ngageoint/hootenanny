@@ -30,6 +30,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/io/OsmReader.h>
+#include <hoot-core-test/src/test/cpp/hoot/core/TestUtils.h>
 using namespace hoot;
 
 // CPP Unit
@@ -40,8 +41,6 @@ using namespace hoot;
 
 // Qt
 #include <QDir>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
@@ -58,14 +57,13 @@ public:
 
   void nodeTest()
   {
-    cout << "nodeTest..." << endl;
     QString testJsonStr =
      "{                                      \n"
      " 'version': 0.6,                       \n"
      " 'generator': 'Overpass API',          \n"
      " 'osm3s': {                            \n"
      "   'timestamp_osm_base': 'date',       \n"
-     "   'copyright': 'The data included in this document is from www.openstreetmap.org. It has there been collected by a large group of contributors. For individual attribution of each item please refer to http://www.openstreetmap.org/api/0.6/[node|way|relation]/#id/history'\n"
+     "   'copyright': 'c 1999'               \n"
      " },                                    \n"
      " 'elements': [                         \n"
      " {                                     \n"
@@ -100,9 +98,11 @@ public:
 
     OsmJsonReader uut;
     OsmMapPtr pMap = uut.loadFromString(testJsonStr);
-    OsmWriter writer;
-    writer.write(pMap, "/tmp/NodeTest.osm");
 
+    // Need to test read from file, too
+    OsmMapPtr pMap2 = uut.loadFromFile("test-files/nodes.json");
+
+    // Test against osm xml
     QString testOsmStr =
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
       "<osm version=\"0.6\">\n"
@@ -121,11 +121,11 @@ public:
     reader.readFromString(testOsmStr, pTestMap);
 
     CPPUNIT_ASSERT(TestUtils::compareMaps(pMap, pTestMap));
+    CPPUNIT_ASSERT(TestUtils::compareMaps(pMap2, pTestMap));
   }
 
   void wayTest()
   {
-    cout << "wayTest..." << endl;
     QString testJsonStr = "{\"elements\": [\n"
                           "{\"type\":\"node\",\"id\":-1,\"lat\":0,\"lon\":0},\n"
                           "{\"type\":\"node\",\"id\":-2,\"lat\":0,\"lon\":20},\n"
@@ -136,9 +136,8 @@ public:
                           "}\n";
     OsmJsonReader uut;
     OsmMapPtr pMap = uut.loadFromString(testJsonStr);
-    OsmWriter writer;
-    writer.write(pMap, "/tmp/WayTest.osm");
 
+    // Test against osm xml
     QString testOsmStr =
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
       "<osm version=\"0.6\">\n"
@@ -172,7 +171,6 @@ public:
 
   void relationTest()
   {
-    cout << "relationTest..." << endl;
     QString testJsonStr =
       "{                                       \n"
       " 'version': 0.6,                        \n"
@@ -182,6 +180,64 @@ public:
       "   'copyright': 'blah blah blah'        \n"
       " },                                     \n"
       " 'elements': [                          \n"
+      " {                                      \n"
+      "   'type': 'node',                      \n"
+      "   'id': -1,                            \n"
+      "   'lat': 0,                            \n"
+      "   'lon': 0                             \n"
+      " },                                     \n"
+      " {                                      \n"
+      "   'type': 'node',                      \n"
+      "   'id': -2,                            \n"
+      "   'lat': 0,                            \n"
+      "   'lon': 20                            \n"
+      " },                                     \n"
+      " {                                      \n"
+      "   'type': 'node',                      \n"
+      "   'id': -3,                            \n"
+      "   'lat': 20,                           \n"
+      "   'lon': 21                            \n"
+      " },                                     \n"
+      " {                                      \n"
+      "   'type': 'node',                      \n"
+      "   'id': -4,                            \n"
+      "   'lat': 20,                           \n"
+      "   'lon': 0                             \n"
+      " },                                     \n"
+      " {                                      \n"
+      "   'type': 'node',                      \n"
+      "   'id': -5,                            \n"
+      "   'lat': 0,                            \n"
+      "   'lon': 0                             \n"
+      " },                                     \n"
+      " {                                      \n"
+      "   'type': 'way',                       \n"
+      "   'id': -1,                            \n"
+      "   'nodes': [-1,-2,-3,-4,-5],           \n"
+      "   'tags': {                            \n"
+      "     'note': 'w1',                      \n"
+      "     'alt_name': 'bar',                 \n"
+      "     'name': 'foo',                     \n"
+      "     'area': 'yes',                     \n"
+      "     'amenity': 'bar',                  \n"
+      "     'error:circular': '5'              \n"
+      "   }                                    \n"
+      " },                                     \n"
+      " {                                      \n"
+      "   'type': 'relation',                  \n"
+      "   'id': 1745069,                       \n"
+      "   'members': [                         \n"
+      "     {                                  \n"
+      "       'type': 'way',                   \n"
+      "       'ref': -1,                       \n"
+      "       'role': ''                       \n"
+      "     }                                  \n"
+      "   ]                                    \n"
+      " },                                     \n"
+      " {                                      \n"
+      "   'type': 'relation',                  \n"
+      "   'id': 172789                         \n"
+      " },                                     \n"
       " {                                      \n"
       "   'type': 'relation',                  \n"
       "   'id': 1,                             \n"
@@ -205,7 +261,6 @@ public:
       "     'ref': '636',                      \n"
       "     'route': 'bus',                    \n"
       "     'to': 'Gielgen',                   \n"
-      "     'type': 'route_master',            \n"
       "     'via': 'Ramersdorf'                \n"
       "   }                                    \n"
       " }                                      \n"
@@ -215,27 +270,49 @@ public:
     OsmJsonReader uut;
     OsmMapPtr pMap = uut.loadFromString(testJsonStr);
 
-    OsmWriter writer;
-    writer.write(pMap, "/tmp/RelationTest.osm");
-
+    // Test against osm xml
     QString testOsmStr =
-      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-      "<osm version=\"0.6\">\n"
-      "    <relation visible=\"true\" id=\"1\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\">\n"
-      "        <member type=\"relation\" ref=\"1745069\" role=\"\"/>\n"
-      "        <member type=\"relation\" ref=\"172789\" role=\"\"/>\n"
-      "        <tag k=\"network\" v=\"VRS\"/>\n"
-      "        <tag k=\"route\" v=\"bus\"/>\n"
-      "        <tag k=\"operator\" v=\"SWB\"/>\n"
-      "        <tag k=\"via\" v=\"Ramersdorf\"/>\n"
-      "        <tag k=\"from\" v=\"Konrad-Adenauer-Platz\"/>\n"
-      "        <tag k=\"type\" v=\"route_master\"/>\n"
-      "        <tag k=\"to\" v=\"Gielgen\"/>\n"
-      "        <tag k=\"name\" v=\"VRS 636\"/>\n"
-      "        <tag k=\"ref\" v=\"636\"/>\n"
-      "        <tag k=\"error:circular\" v=\"15\"/>\n"
-      "    </relation>\n"
-      "</osm>\n";
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>                                                                       \n"
+      "<osm version=\"0.6\">                                                                                            \n"
+      "  <node visible=\"true\" id=\"-5\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\" lat=\"0.00\" lon=\"0.00\"/>  \n"
+      "  <node visible=\"true\" id=\"-4\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\" lat=\"20.0\" lon=\"0.00\"/>  \n"
+      "  <node visible=\"true\" id=\"-3\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\" lat=\"20.0\" lon=\"21.0\"/>  \n"
+      "  <node visible=\"true\" id=\"-2\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\" lat=\"0.00\" lon=\"20.0\"/>  \n"
+      "  <node visible=\"true\" id=\"-1\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\" lat=\"0.00\" lon=\"0.00\"/>  \n"
+      "  <way  visible=\"true\" id=\"-1\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\">                             \n"
+      "      <nd ref=\"-1\"/>                                                                                           \n"
+      "      <nd ref=\"-2\"/>                                                                                           \n"
+      "      <nd ref=\"-3\"/>                                                                                           \n"
+      "      <nd ref=\"-4\"/>                                                                                           \n"
+      "      <nd ref=\"-5\"/>                                                                                           \n"
+      "      <tag k=\"note\" v=\"w1\"/>                                                                                 \n"
+      "      <tag k=\"alt_name\" v=\"bar\"/>                                                                            \n"
+      "      <tag k=\"name\" v=\"foo\"/>                                                                                \n"
+      "      <tag k=\"area\" v=\"yes\"/>                                                                                \n"
+      "      <tag k=\"amenity\" v=\"bar\"/>                                                                             \n"
+      "      <tag k=\"error:circular\" v=\"5\"/>                                                                        \n"
+      "  </way>                                                                                                         \n"
+      "  <relation visible=\"true\" id=\"1\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\">                          \n"
+      "      <member type=\"relation\" ref=\"1745069\" role=\"\"/>                                                      \n"
+      "      <member type=\"relation\" ref=\"172789\" role=\"\"/>                                                       \n"
+      "      <tag k=\"network\" v=\"VRS\"/>                                                                             \n"
+      "      <tag k=\"route\" v=\"bus\"/>                                                                               \n"
+      "      <tag k=\"operator\" v=\"SWB\"/>                                                                            \n"
+      "      <tag k=\"via\" v=\"Ramersdorf\"/>                                                                          \n"
+      "      <tag k=\"from\" v=\"Konrad-Adenauer-Platz\"/>                                                              \n"
+      "      <tag k=\"to\" v=\"Gielgen\"/>                                                                              \n"
+      "      <tag k=\"name\" v=\"VRS 636\"/>                                                                            \n"
+      "      <tag k=\"ref\" v=\"636\"/>                                                                                 \n"
+      "      <tag k=\"error:circular\" v=\"15\"/>                                                                       \n"
+      "  </relation>                                                                                                    \n"
+      "  <relation visible=\"true\" id=\"172789\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\">                     \n"
+      "      <tag k=\"error:circular\" v=\"15\"/>                                                                       \n"
+      "  </relation>                                                                                                    \n"
+      "  <relation visible=\"true\" id=\"1745069\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\">                    \n"
+      "      <member type=\"way\" ref=\"-1\" role=\"\"/>                                                                \n"
+      "      <tag k=\"error:circular\" v=\"15\"/>                                                                       \n"
+      "  </relation>                                                                                                    \n"
+      "</osm>                                                                                                           \n";
 
     OsmMapPtr pTestMap(new OsmMap());
     OsmReader reader;

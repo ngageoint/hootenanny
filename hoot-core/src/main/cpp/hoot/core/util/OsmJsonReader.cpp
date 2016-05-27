@@ -38,7 +38,8 @@
 namespace pt = boost::property_tree;
 
 // Qt
-#include <QStringList>
+#include <QFile>
+#include <QTextStream>
 
 // Standard
 #include <fstream>
@@ -51,34 +52,23 @@ namespace hoot
 {
 
 // Default constructor
-OsmJsonReader::OsmJsonReader()
+OsmJsonReader::OsmJsonReader():
+  _propTree(),
+  _version(""),
+  _generator(""),
+  _timestamp_base(""),
+  _copyright("")
 {
-  // Do nothing
-}
-
-// We allow the use of single quotes, for ease of coding
-// test strings into c++. Single quotes within string literals
-// should be escaped as \'
-void scrubQuotes(QString &jsonStr)
-{
-  // Detect if they are using single quotes or doubles
-  if (jsonStr.indexOf("\"node\"", Qt::CaseInsensitive) > -1)
-    return; // No need to scrub
-  else
-  {
-    // Convert single quotes to double quotes
-    // First change escaped singles
-    jsonStr.replace("\\'", "\"\"\"");
-    // Replace singles with doubles
-    jsonStr.replace("'", "\"");
-    // Revert escaped singles
-    jsonStr.replace("\"\"\"", "'");
-  }
+  // Do nothing special
 }
 
 // Throws HootException on error
 void OsmJsonReader::_loadJSON(QString jsonStr)
 {
+  // Clear out anything that might be hanging around
+  _propTree.clear();
+
+  // Handle single or double quotes
   scrubQuotes(jsonStr);
 
   // Convert string to stringstream
@@ -112,13 +102,27 @@ OsmMapPtr OsmJsonReader::loadFromString(QString jsonStr)
   return _parseOverpassJson();
 }
 
+OsmMapPtr OsmJsonReader::loadFromFile(QString path)
+{
+  QFile infile(path);
+  if (!infile.open(QFile::ReadOnly | QFile::Text))
+  {
+    throw HootException("Unable to read JSON file: " + path);
+  }
+
+  QTextStream instream(&infile);
+  QString jsonStr = instream.readAll();
+  _loadJSON(jsonStr);
+  return _parseOverpassJson();
+}
+
 OsmMapPtr OsmJsonReader::_parseOverpassJson()
 {
   // Overpass has 4 top level items: version, generator, osm3s, elements
-  _version = _propTree.get("version", string(""));
-  _generator = _propTree.get("generator", string(""));
-  _timestamp_base = _propTree.get("osm3s.timestamp_osm_base", string(""));
-  _copyright = _propTree.get("osm3s.copyright", string(""));
+  _version = QString::fromStdString(_propTree.get("version", string("")));
+  _generator = QString::fromStdString(_propTree.get("generator", string("")));
+  _timestamp_base = QString::fromStdString(_propTree.get("osm3s.timestamp_osm_base", string("")));
+  _copyright = QString::fromStdString(_propTree.get("osm3s.copyright", string("")));
 
   // Make a map, and iterate through all of our elements, adding them
   OsmMapPtr pMap(new OsmMap());
@@ -261,6 +265,26 @@ void OsmJsonReader::addTags(const boost::property_tree::ptree &item, hoot::Eleme
       }
       ++tagIt;
     }
+  }
+}
+
+// We allow the use of single quotes, for ease of coding
+// test strings into c++. Single quotes within string literals
+// should be escaped as \'
+void OsmJsonReader::scrubQuotes(QString &jsonStr)
+{
+  // Detect if they are using single quotes or doubles
+  if (jsonStr.indexOf("\"node\"", Qt::CaseInsensitive) > -1)
+    return; // No need to scrub
+  else
+  {
+    // Convert single quotes to double quotes
+    // First change escaped singles
+    jsonStr.replace("\\'", "\"\"\"");
+    // Replace singles with doubles
+    jsonStr.replace("'", "\"");
+    // Revert escaped singles
+    jsonStr.replace("\"\"\"", "'");
   }
 }
 
