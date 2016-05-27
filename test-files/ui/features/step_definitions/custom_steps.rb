@@ -42,8 +42,8 @@ When(/^I select the "([^"]*)" div$/) do |cls|
     sleep 1
   rescue Capybara::ElementNotFound
     find('#' + cls).click
-    sleep 1    
-  end  
+    sleep 1
+  end
 end
 
 When(/^I select the first "([^"]*)" div$/) do |cls|
@@ -308,6 +308,7 @@ Then(/^I click the "([^"]*)" with text "([^"]*)"$/) do |el, text|
 end
 
 Then(/^I accept the alert$/) do
+  sleep 1
   page.driver.browser.switch_to.alert.accept
 end
 
