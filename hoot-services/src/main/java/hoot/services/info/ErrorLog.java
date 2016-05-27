@@ -69,12 +69,10 @@ public final class ErrorLog {
         String fileId = UUID.randomUUID().toString();
         String outputPath = tempOutputPath + File.separator + fileId;
 
-        String data = "";
-
         AboutResource about = new AboutResource();
 
         VersionInfo vInfo = about.getCoreVersionInfo();
-        data = System.lineSeparator() + "************ CORE VERSION INFO ***********" + System.lineSeparator();
+        String data = System.lineSeparator() + "************ CORE VERSION INFO ***********" + System.lineSeparator();
         data += vInfo.toString();
 
         CoreDetail cd = about.getCoreVersionDetail();
@@ -83,24 +81,8 @@ public final class ErrorLog {
             data += StringUtils.join(cd.getEnvironmentInfo(), System.lineSeparator());
         }
 
-        data = System.lineSeparator() + "************ SERVICE VERSION INFO ***********" + System.lineSeparator();
+        data += System.lineSeparator() + "************ SERVICE VERSION INFO ***********" + System.lineSeparator();
         data += about.getServicesVersionInfo().toString();
-
-        ServicesDetail sd = about.getServicesVersionDetail();
-        if (sd != null) {
-            data += System.lineSeparator() + "************ SERVICE DETAIL PROPERTY ***********" + System.lineSeparator();
-            for (ServicesDetail.Property prop : sd.getProperties()) {
-                String str = prop.getName() + " : " + prop.getValue() + System.lineSeparator();
-                data += str;
-            }
-
-            data += System.lineSeparator() + "************ SERVICE DETAIL RESOURCE ***********" + System.lineSeparator();
-            for (ServicesDetail.ServicesResource res : sd.getResources()) {
-                String str = res.getType() + " : " + res.getUrl() + System.lineSeparator();
-                data += str;
-            }
-        }
-
         data += System.lineSeparator() + "************ CATALINA LOG ***********" + System.lineSeparator();
 
         // 5MB Max

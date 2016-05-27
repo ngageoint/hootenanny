@@ -34,11 +34,10 @@ import java.util.Properties;
 /**
  * Services build info file
  */
-public class BuildInfo {
+public final class BuildInfo {
     private static Properties info;
 
-    private BuildInfo() {
-    }
+    private BuildInfo() {}
 
     /**
      * Returns the build info for the services

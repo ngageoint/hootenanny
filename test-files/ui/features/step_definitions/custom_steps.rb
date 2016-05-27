@@ -92,6 +92,12 @@ When(/^I select the "([^"]*)" option in the "([^"]*)" combobox$/) do |opt, cb|
   page.find('div.combobox').find('a', :text=> opt).click
 end
 
+When(/^I select the "([^"]*)" option in "([^"]*)"$/) do |opt, el|
+  combobox = page.find(el)
+  combobox.find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt).click
+end
+
 When(/^I click the "([^"]*)" button$/) do |el|
   find('button.' + el).click
 end
@@ -329,4 +335,9 @@ end
 
 When(/^I click the "([^"]*)" map layer$/) do |text|
   find('label', :text => text).click
+end
+
+When(/^I should see stats "([^"]*)" "([^"]*)" "([^"]*)" "([^"]*)"$/) do |type, row, column, value|
+  # And I should see stats "count" "buildings" "merged" "4"
+  find('table.' + type).find('td.key', :text => row).find(:xpath,"..").all('td', :text => value).first()
 end

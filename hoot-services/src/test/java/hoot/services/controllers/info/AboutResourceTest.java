@@ -28,12 +28,10 @@ package hoot.services.controllers.info;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -46,13 +44,10 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.test.framework.JerseyTest;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.info.BuildInfo;
 import hoot.services.info.CoreDetail;
-import hoot.services.info.ServicesDetail;
 import hoot.services.info.VersionInfo;
-import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 //Use PowerMock here instead of Mockito, so we can mock a static method.
@@ -81,7 +76,9 @@ public class AboutResourceTest extends JerseyTest {
 
         VersionInfo responseData = null;
         try {
-            responseData = resource().path("/about/servicesVersionInfo").accept(MediaType.APPLICATION_JSON)
+            responseData = resource()
+                    .path("/about/servicesVersionInfo")
+                    .accept(MediaType.APPLICATION_JSON)
                     .get(VersionInfo.class);
         }
         catch (UniformInterfaceException e) {
@@ -96,48 +93,14 @@ public class AboutResourceTest extends JerseyTest {
 
     @Test
     @Category(UnitTest.class)
-    public void getServicesVersionDetail() throws Exception {
-        Map<String, String> originalHootProperties = HootProperties.getProperties();
-        try {
-            Properties hootProps = new Properties();
-            hootProps.setProperty("testProp1", "testVal1");
-            HootCustomPropertiesSetter.setProperties(hootProps);
-
-            mockBuildInfo();
-
-            ServicesDetail responseData = null;
-            try {
-                responseData = resource().path("/about/servicesVersionDetail").accept(MediaType.APPLICATION_JSON)
-                        .get(ServicesDetail.class);
-            }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
-            }
-
-            Assert.assertNotNull(StringUtils.trimToNull(responseData.getClassPath()));
-            Assert.assertEquals(1, responseData.getProperties().length);
-            Assert.assertEquals("testProp1", responseData.getProperties()[0].getName());
-            Assert.assertEquals("testVal1", responseData.getProperties()[0].getValue());
-            // not sure of a better way to test this one yet...
-            Assert.assertTrue(responseData.getResources().length > 0);
-        }
-        finally {
-            // restore original properties since the are shared at the class level.
-            Properties hootProps = new Properties();
-            hootProps.putAll(originalHootProperties);
-            HootCustomPropertiesSetter.setProperties(hootProps);
-        }
-    }
-
-    @Test
-    @Category(UnitTest.class)
     public void getCoreVersionInfo() throws IOException {
         mockBuildInfo();
 
         VersionInfo responseData = null;
         try {
-            responseData = resource().path("/about/coreVersionInfo").accept(MediaType.APPLICATION_JSON)
+            responseData = resource()
+                    .path("/about/coreVersionInfo")
+                    .accept(MediaType.APPLICATION_JSON)
                     .get(VersionInfo.class);
         }
         catch (UniformInterfaceException e) {
@@ -157,7 +120,9 @@ public class AboutResourceTest extends JerseyTest {
 
         CoreDetail responseData = null;
         try {
-            responseData = resource().path("/about/coreVersionDetail").accept(MediaType.APPLICATION_JSON)
+            responseData = resource()
+                    .path("/about/coreVersionDetail")
+                    .accept(MediaType.APPLICATION_JSON)
                     .get(CoreDetail.class);
         }
         catch (UniformInterfaceException e) {
@@ -165,8 +130,7 @@ public class AboutResourceTest extends JerseyTest {
             Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
         }
 
-        // not a great way to test this, but haven't thought of anything better
-        // yet
+        // not a great way to test this, but haven't thought of anything better yet
         String firstEnvInfo = responseData.getEnvironmentInfo()[0];
         Assert.assertFalse(firstEnvInfo.contains("Built"));
         Assert.assertTrue(firstEnvInfo.contains("VersionCmd"));
@@ -183,7 +147,9 @@ public class AboutResourceTest extends JerseyTest {
 
         VersionInfo responseData = null;
         try {
-            responseData = resource().path("/about/servicesVersionInfo").accept(MediaType.APPLICATION_JSON)
+            responseData = resource()
+                    .path("/about/servicesVersionInfo")
+                    .accept(MediaType.APPLICATION_JSON)
                     .get(VersionInfo.class);
         }
         catch (UniformInterfaceException e) {
@@ -209,21 +175,21 @@ public class AboutResourceTest extends JerseyTest {
         Assert.assertEquals("Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", returnValue);
 
         returnValue = (String) privateMethod.invoke(aboutResource,
-                "This is just a line\nHootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", true);
+                "This is just a line" + System.lineSeparator() +
+                        "Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", true);
         Assert.assertEquals("Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", returnValue);
 
         returnValue = (String) privateMethod.invoke(aboutResource,
-                "14:27:08.974 WARN ...rc/main/cpp/hoot/core/Hoot.cpp( 135) \n "
-                        + "Cannot load library HootHadoop: (libhdfs.so.0: cannot open shared object file: No such file or directory)\n"
-                        + "Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant",
+                "14:27:08.974 WARN ...rc/main/cpp/hoot/core/Hoot.cpp( 135) " + System.lineSeparator() + " "
+                        + "Cannot load library HootHadoop: (libhdfs.so.0: cannot open shared object file: No such file or directory)" + System.lineSeparator() +
+                        "Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant",
                 true);
         Assert.assertEquals("Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", returnValue);
 
         returnValue = (String) privateMethod.invoke(aboutResource,
-                "14:27:08.974 WARN ...rc/main/cpp/hoot/core/Hoot.cpp( 135) \n "
+                "14:27:08.974 WARN ...rc/main/cpp/hoot/core/Hoot.cpp( 135) " + System.lineSeparator() + " "
                         + "Cannot load library HootHadoop: (libhdfs.so.0: cannot open shared object file: No such file or directory)",
                 true);
         Assert.assertEquals("Unable to determine!", returnValue);
-
     }
 }
