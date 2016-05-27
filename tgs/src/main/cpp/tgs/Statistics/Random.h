@@ -32,9 +32,8 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <boost/random/linear_congruential.hpp>
+#include <boost/random/additive_combine.hpp>
 #include <boost/random/uniform_int.hpp>
-#include <boost/random/uniform_real.hpp>
 #include <boost/random/variate_generator.hpp>
 #include <boost/shared_ptr.hpp>
 
@@ -44,7 +43,7 @@
 
 namespace Tgs
 {
-  typedef boost::minstd_rand random_type;
+  typedef boost::ecuyer1988 random_type;
   typedef boost::uniform_int<> number_type;
   typedef boost::variate_generator<random_type&, number_type> generator_type;
 
@@ -90,7 +89,7 @@ namespace Tgs
     unsigned int _seed;
     bool _is_single;
 
-#ifdef NEW_RAND
+#if defined(NEW_RAND)
     boost::shared_ptr<random_type> _gen;
     boost::shared_ptr<generator_type> _rnd;
 #endif

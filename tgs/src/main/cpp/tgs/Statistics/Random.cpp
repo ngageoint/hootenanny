@@ -80,8 +80,8 @@ namespace Tgs
 
   int Random::generateInt()
   {
-#ifdef NEW_RAND
-    return _rnd->operator ()();
+#if defined(NEW_RAND)
+    return (*_rnd)();
 #else
     if (_is_single)
       return rand();
@@ -92,7 +92,7 @@ namespace Tgs
 
   void Random::seed(unsigned int s)
   {
-#ifdef NEW_RAND
+#if defined(NEW_RAND)
     _gen.reset(new random_type(s));
     _rnd.reset(new generator_type(*_gen, number_type(0, RAND_MAX)));
 #else
