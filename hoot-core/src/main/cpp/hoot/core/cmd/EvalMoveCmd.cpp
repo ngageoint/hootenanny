@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Boost
@@ -245,7 +245,7 @@ public:
     compareMaps(map, map2, pointCount).print();
     cout << endl;
 
-    Log::getInstance().setLevel(Log::Warn);
+    DisableLog disableLog(std::max(Log::Warn, Log::getInstance().getLevel()));
     shared_ptr<OsmMap> mapReproject(new OsmMap(map));
     MapProjector::projectToPlanar(mapReproject);
     MapProjector::projectToWgs84(mapReproject);
@@ -253,7 +253,6 @@ public:
     compareMaps(map, mapReproject, pointCount).print();
     cout << endl;
 
-    Log::getInstance().setLevel(Log::Warn);
     OGREnvelope e1 = map->calculateBounds();
     e1.MinX = (e1.MinX + e1.MaxX) / 2.0;
     e1.MinY = (e1.MinY + e1.MaxY) / 2.0;

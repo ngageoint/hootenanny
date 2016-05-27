@@ -26,8 +26,6 @@
  */
 package hoot.services.controllers.job;
 
-import hoot.services.utils.ResourceErrorHandler;
-
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -44,73 +42,66 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.utils.ResourceErrorHandler;
+
+
 @Path("/cancel")
-public class JobCancellationResource  extends JobControllerBase {
-	private static final Logger log = LoggerFactory.getLogger(JobCancellationResource.class);
+public class JobCancellationResource extends JobControllerBase {
+    private static final Logger log = LoggerFactory.getLogger(JobCancellationResource.class);
 
-	public JobCancellationResource()
-	{
+    public JobCancellationResource() {
 
-	}
+    }
 
-	/**
-	 * Cancel job.
-	 * 
-	 * @param args - json containing following parameters
-	 * 				jobid: Target job id
-	 * 				mpaid: Target map id.
-	 * 
-	 * Example:
-	 * 	{"jobid":"123", "mapid":"45"}
-	 * 
-	 * @return json containing cancel job id 
-	 * Example:
-	 *  {"jobid":"321"}
-	 */
-	@POST
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response process(String args)
-	{
-		String jobId = UUID.randomUUID().toString();
-		try
-		{
-			JSONParser parser = new JSONParser();
-			JSONObject command = (JSONObject)parser.parse(args);
-			String cancelJobId = command.get("jobid").toString();
-			String cancelMapId = command.get("mapid").toString();
+    /**
+     * Cancel job.
+     * 
+     * @param args
+     *            - json containing following parameters jobid: Target job id
+     *            mpaid: Target map id.
+     * 
+     *            Example: {"jobid":"123", "mapid":"45"}
+     * 
+     * @return json containing cancel job id Example: {"jobid":"321"}
+     */
+    @POST
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response process(String args) {
+        String jobId = UUID.randomUUID().toString();
+        try {
+            JSONParser parser = new JSONParser();
+            JSONObject command = (JSONObject) parser.parse(args);
+            String cancelJobId = command.get("jobid").toString();
+            String cancelMapId = command.get("mapid").toString();
 
-			JSONArray cancelArgs = new JSONArray();
-			JSONObject param = new JSONObject();
-			param.put("value", cancelJobId);
-			param.put("paramtype", String.class.getName());
-			param.put("isprimitivetype", "false");
-			cancelArgs.add(param);
+            JSONArray cancelArgs = new JSONArray();
+            JSONObject param = new JSONObject();
+            param.put("value", cancelJobId);
+            param.put("paramtype", String.class.getName());
+            param.put("isprimitivetype", "false");
+            cancelArgs.add(param);
 
-			param = new JSONObject();
-			param.put("value", cancelMapId);
-			param.put("paramtype", String.class.getName());
-			param.put("isprimitivetype", "false");
-			cancelArgs.add(param);
+            param = new JSONObject();
+            param.put("value", cancelMapId);
+            param.put("paramtype", String.class.getName());
+            param.put("isprimitivetype", "false");
+            cancelArgs.add(param);
 
-			JSONObject jobCancellationCommand = _createReflectionJobReq(cancelArgs, "hoot.services.controllers.job.JobResource",
-			"terminateJob");
+            JSONObject jobCancellationCommand = _createReflectionJobReq(cancelArgs,
+                    "hoot.services.controllers.job.JobResource", "terminateJob");
 
-			JSONArray jobArgs = new JSONArray();
-			jobArgs.add(jobCancellationCommand);
-			postChainJobRquest( jobId,  jobArgs.toJSONString());
+            JSONArray jobArgs = new JSONArray();
+            jobArgs.add(jobCancellationCommand);
+            postChainJobRquest(jobId, jobArgs.toJSONString());
 
-		}
-		catch (Exception ex)
-		{
-		  ResourceErrorHandler.handleError(
-			"Error process data clean request: " + ex.toString(),
-		    Status.INTERNAL_SERVER_ERROR,
-			log);
-		}
-		JSONObject res = new JSONObject();
-		res.put("jobid", jobId);
-		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
-	}
+        }
+        catch (Exception ex) {
+            ResourceErrorHandler.handleError("Error process data clean request: " + ex.toString(),
+                    Status.INTERNAL_SERVER_ERROR, log);
+        }
+        JSONObject res = new JSONObject();
+        res.put("jobid", jobId);
+        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+    }
 }
-

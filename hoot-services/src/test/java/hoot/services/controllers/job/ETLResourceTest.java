@@ -22,15 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.verify;
 
 import javax.ws.rs.core.Response;
-
-import hoot.services.UnitTest;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -39,26 +38,26 @@ import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
+import hoot.services.UnitTest;
+
+
 public class ETLResourceTest {
 
-	@Test
-	@Category(UnitTest.class)
-	public void testProcess() throws Exception
-	{
-		String params = "{\"TRANSLATION\":\"translations/MGCP.js\",\"INPUT_TYPE\":\"OSM\",\"INPUT\":\"test-files/ToyTestA.osm\",\"INPUT_NAME\":\"ToyTestA\"}";
-		
-		
-		String jobArgs = ",\"exec\":\"makeetl\",\"params\":[{\"INPUT\":\"test-files\\/ToyTestA.osm\"},{\"INPUT_TYPE\":\"OSM\"},";
-		jobArgs += "{\"TRANSLATION\":\"translations\\/MGCP.js\"},{\"INPUT_NAME\":\"ToyTestA\"}],\"exectype\":\"make\"}";
+    @Test
+    @Category(UnitTest.class)
+    public void testProcess() throws Exception {
+        String params = "{\"TRANSLATION\":\"translations/MGCP.js\",\"INPUT_TYPE\":\"OSM\",\"INPUT\":\"test-files/ToyTestA.osm\",\"INPUT_NAME\":\"ToyTestA\"}";
 
-		
-		ETLResource spy = Mockito.spy(new ETLResource());
-		Mockito.doNothing().when((JobControllerBase)spy).postJobRquest(anyString(), anyString());
-		Response resp = spy.process(params);		
-		String result = resp.getEntity().toString();
-		JSONParser parser = new JSONParser();
-		JSONObject o = (JSONObject)parser.parse(result);
-		String jobId = o.get("jobid").toString();
-		verify(spy).postJobRquest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
-	}
+        String jobArgs = ",\"exec\":\"makeetl\",\"params\":[{\"INPUT\":\"test-files\\/ToyTestA.osm\"},{\"INPUT_TYPE\":\"OSM\"},";
+        jobArgs += "{\"TRANSLATION\":\"translations\\/MGCP.js\"},{\"INPUT_NAME\":\"ToyTestA\"}],\"exectype\":\"make\"}";
+
+        ETLResource spy = Mockito.spy(new ETLResource());
+        Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
+        Response resp = spy.process(params);
+        String result = resp.getEntity().toString();
+        JSONParser parser = new JSONParser();
+        JSONObject o = (JSONObject) parser.parse(result);
+        String jobId = o.get("jobid").toString();
+        verify(spy).postJobRquest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
+    }
 }

@@ -22,28 +22,25 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
 /**
  * Various utilities related to reflection
  */
-public class ReflectUtils
-{
-  /**
-   * Returns the name of the class that calls a method
-   * 
-   * @return class name string
-   */
-  public static String getCallingClassName()
-  {
-    final StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-    final StackTraceElement stackTraceElement = stackTrace[stackTrace.length - 2];
-    if (stackTraceElement != null)
-    {
-      return stackTraceElement.getClassName();
+public class ReflectUtils {
+    /**
+     * Returns the name of the class that calls a method
+     * 
+     * @return class name string
+     */
+    public static String getCallingClassName() {
+        final StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        final StackTraceElement stackTraceElement = stackTrace[stackTrace.length - 2];
+        if (stackTraceElement != null) {
+            return stackTraceElement.getClassName();
+        }
+        return null;
     }
-    return null;
-  }
 }

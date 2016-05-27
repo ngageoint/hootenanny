@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
@@ -42,91 +42,82 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ReportsDeleteReportProcesslet extends BaseProcesslet{
-	private static final Logger log = LoggerFactory.getLogger(ReportsDeleteReportProcesslet.class);
-	
-	public ReportsDeleteReportProcesslet() throws Exception
-	{
-		
-	}
-	
-	@Override
-	public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info) 
-			throws ProcessletException {
-		String resp = "";
-		JSONArray args = parseRequestParams(in);
-		try {		
-			String id = null;
-			for(int i=0; i<args.size(); i++)
-			{
-				JSONObject arg = (JSONObject)args.get(i);
-				Object val = arg.get("id");
-				
-				if(val != null)
-				{
-					id = val.toString();
-					break;
-				}
-								
-			}
-			resp = getRequest( id );
-			
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			((LiteralOutput)out.getParameter("DELETED")).setValue("Failed: " + e.getMessage());
-			return;
-		}
-		((LiteralOutput)out.getParameter("DELETED")).setValue(resp);
 
-	}
-	
-	protected String getRequest(final String sId) throws Exception
-	{
-		String ret = "";
-		
-		CloseableHttpClient httpclient = null;
-		CloseableHttpResponse response = null;
-		try {
-			httpclient = HttpClients.createDefault();
-			HttpGet httpget = new HttpGet(coreJobServerUrl + "/hoot-services/info/reports/delete?id=" + sId  );
-			response = httpclient.execute(httpget);
-			if(response.getStatusLine().getStatusCode() != 200)
-			{
-				String reason = response.getStatusLine().getReasonPhrase();
-				if(reason == null)
-				{
-					reason = "Unkown reason.";
-				}
-				throw new Exception(reason);			
-			}
-			
-			
-			HttpEntity entity = response.getEntity();
-			if (entity != null) {
-			    entity.getContentLength();
-			    ret = EntityUtils.toString(entity);
-			}
-		} 
-		catch(Exception ex)
-		{
-			throw ex;
-		}
-		finally {
-		
-			// make sure to clean up resource
-			if(httpclient != null)
-			{
-				httpclient.close();
-			}
-			
-			if(response != null)
-			{
-		    response.close();
-			}
-		}
-		
-		
-		return ret;
-	}
+public class ReportsDeleteReportProcesslet extends BaseProcesslet {
+    private static final Logger log = LoggerFactory.getLogger(ReportsDeleteReportProcesslet.class);
+
+    public ReportsDeleteReportProcesslet() throws Exception {
+
+    }
+
+    @Override
+    public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info)
+            throws ProcessletException {
+        String resp = "";
+        JSONArray args = parseRequestParams(in);
+        try {
+            String id = null;
+            for (int i = 0; i < args.size(); i++) {
+                JSONObject arg = (JSONObject) args.get(i);
+                Object val = arg.get("id");
+
+                if (val != null) {
+                    id = val.toString();
+                    break;
+                }
+
+            }
+            resp = getRequest(id);
+
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+            ((LiteralOutput) out.getParameter("DELETED")).setValue("Failed: " + e.getMessage());
+            return;
+        }
+        ((LiteralOutput) out.getParameter("DELETED")).setValue(resp);
+
+    }
+
+    protected String getRequest(final String sId) throws Exception {
+        String ret = "";
+
+        CloseableHttpClient httpclient = null;
+        CloseableHttpResponse response = null;
+        try {
+            httpclient = HttpClients.createDefault();
+            HttpGet httpget = new HttpGet(coreJobServerUrl + "/hoot-services/info/reports/delete?id=" + sId);
+            response = httpclient.execute(httpget);
+            if (response.getStatusLine().getStatusCode() != 200) {
+                String reason = response.getStatusLine().getReasonPhrase();
+                if (reason == null) {
+                    reason = "Unkown reason.";
+                }
+                throw new Exception(reason);
+            }
+
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                entity.getContentLength();
+                ret = EntityUtils.toString(entity);
+            }
+        }
+        catch (Exception ex) {
+            throw ex;
+        }
+        finally {
+
+            // make sure to clean up resource
+            if (httpclient != null) {
+                httpclient.close();
+            }
+
+            if (response != null) {
+                response.close();
+            }
+        }
+
+        return ret;
+    }
 
 }

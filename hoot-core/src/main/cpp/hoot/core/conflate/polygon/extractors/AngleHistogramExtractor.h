@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ANGLE_HISTOGRAM_EXTRACTOR_H
 #define ANGLE_HISTOGRAM_EXTRACTOR_H
@@ -58,11 +58,13 @@ class Histogram;
 class AngleHistogramExtractor : public FeatureExtractor
 {
 public:
-  AngleHistogramExtractor();
+  AngleHistogramExtractor(Radians smoothing = 0.0, unsigned int bins = 16);
 
   static string className() { return "hoot::AngleHistogramExtractor"; }
 
   virtual string getClassName() const { return AngleHistogramExtractor::className(); }
+
+  virtual string getName() const;
 
   virtual DataFrame::FactorType getFactorType() const { return DataFrame::Numerical; }
 
@@ -74,8 +76,13 @@ public:
   virtual double extract(const OsmMap& map, const shared_ptr<const Element>& target,
     const shared_ptr<const Element>& candidate) const;
 
+  void setSmoothing(Radians sigma) { _smoothing = sigma; }
+
 protected:
   virtual Histogram* _createHistogram(const OsmMap& map, const ConstElementPtr& e) const;
+
+  Radians _smoothing;
+  unsigned int _bins;
 };
 
 }

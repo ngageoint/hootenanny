@@ -27,14 +27,22 @@
 #ifndef OSMAPIDB_H
 #define OSMAPIDB_H
 
+// Hoot
 #include <hoot/core/io/ApiDb.h>
+
+// Qt
+#include <QFile>
+
 
 namespace hoot
 {
 
 class OsmApiDb : public ApiDb
 {
+
 public:
+
+  static const QString TIME_FORMAT;
 
   OsmApiDb();
 
@@ -95,6 +103,23 @@ public:
 
   shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
+  /**
+   * Gets the next sequence ID for the given database table
+   *
+   * @param table database table name
+   * @return an ID
+   */
+  long getNextId(const QString tableName);
+
+  /**
+   * Returns all changesets created after the specified time.
+   *
+   * @param timeStr time string for which to search for changesets created after; should be of the
+   * format specified by the TIME_FORMAT constant
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
+
 private:
 
   bool _inTransaction;
@@ -104,6 +129,9 @@ private:
   shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
   shared_ptr<QSqlQuery> _selectNodeById;
+  shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
+
+  QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
 
   void _resetQueries();
 

@@ -22,28 +22,32 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.review;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 /**
  * Represents a request to mark all reviews resolved
  */
 @XmlRootElement
-public class ReviewResolverRequest
-{
-  private String mapId;
-  public String getMapId() { return mapId; }
-  public void setMapId(String id) { this.mapId = id; }
-  
-  public ReviewResolverRequest()
-  {
-  }
-  
-  public ReviewResolverRequest(final String mapId)
-  {
-  	this.mapId = mapId;
-  }
+public class ReviewResolverRequest {
+    private String mapId;
+
+    public String getMapId() {
+        return mapId;
+    }
+
+    public void setMapId(String id) {
+        this.mapId = id;
+    }
+
+    public ReviewResolverRequest() {
+    }
+
+    public ReviewResolverRequest(final String mapId) {
+        this.mapId = mapId;
+    }
 }

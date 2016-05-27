@@ -33,6 +33,7 @@
 // Hoot
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
@@ -121,7 +122,7 @@ void DirectedGraph::deriveEdges(shared_ptr<const OsmMap> map)
 
 bool DirectedGraph::isOneWay(shared_ptr<Way> way)
 {
-  return way->isOneWay();
+  return OsmSchema::getInstance().isOneWay(*way);
 }
 
 }

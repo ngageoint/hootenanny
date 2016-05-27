@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ProbabilityOfMatch.h"
@@ -37,6 +37,7 @@ using namespace geos::geom;
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/filters/ParallelWayFilter.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
@@ -86,7 +87,7 @@ double ProbabilityOfMatch::attributeScore(const ConstOsmMapPtr& map,
 //    score *= .5;
 //  }
   score = TagComparator::getInstance().compareTags(w1->getTags(), w2->getTags());
-  if (w1->isOneWay() && w2->isOneWay())
+  if (OsmSchema::getInstance().isOneWay(*w1) && OsmSchema::getInstance().isOneWay(*w2))
   {
     if (DirectionFinder::isSimilarDirection(map, w1, w2) == false)
     {

@@ -22,50 +22,49 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.dataset;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 /**
  * Model class for the Hootenanny folder record
  */
 @XmlRootElement
-public class FolderRecord
-{
-  private long id;
-  public long getId()
-  {
-    return id;
-  }
-  public void setId(long id)
-  {
-    this.id = id;
-  }
-  
-  private long parentId;
-  public long getParentId()
-  {
-    return parentId;
-  }
-  public void setParentId(long parentId)
-  {
-    this.parentId = parentId;
-  }
-  
-  private String name;
-  public String getName()
-  {
-    return name;
-  }
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-  
-  public FolderRecord()
-  {
-    
-  }
+public class FolderRecord {
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    private long parentId;
+
+    public long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(long parentId) {
+        this.parentId = parentId;
+    }
+
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public FolderRecord() {
+
+    }
 }

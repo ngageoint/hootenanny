@@ -22,16 +22,29 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Histogram.h"
+
+// hoot
+#include <tgs/Statistics/Normal.h>
+#include <hoot/core/algorithms/WayHeading.h>
 
 // geos
 #include <geos/geom/Geometry.h>
 
+// hoot
+#include <hoot/core/util/Log.h>
+
+// Qt
+#include <QStringList>
+
 // Standard
 #include <assert.h>
 #include <math.h>
+
+// Tgs
+#include <tgs/Statistics/Normal.h>
 
 namespace hoot
 {
@@ -41,18 +54,49 @@ Histogram::Histogram(int bins)
   _bins.resize(bins, 0.0);
 }
 
-void Histogram::addAngle(double theta, double length)
+void Histogram::addAngle(Radians theta, double length)
 {
   _bins[getBin(theta)] += length;
 }
 
-int Histogram::getBin(double theta)
+double Histogram::diff(Histogram& other)
 {
+  assert(_bins.size() == other._bins.size());
+  double diff = 0.0;
+  for (size_t i = 0; i < _bins.size(); i++)
+  {
+    diff += fabs(_bins[i] - other._bins[i]);
+  }
+
+  return diff / 2.0;
+}
+
+size_t Histogram::getBin(Radians theta)
+{
+//  const double c2pi = 2 * M_PI;
+//  // bring theta into 0 - 2pi if it is outside those bounds.
+//  theta = theta - c2pi * floor(theta / c2pi);
+//  return std::max<size_t>(0,
+//    std::min<size_t>(_bins.size() - 1, (theta / c2pi) * _bins.size()));
   while (theta < 0.0)
   {
     theta += 2 * M_PI;
   }
   return (theta / (2 * M_PI)) * _bins.size();
+
+}
+
+Radians Histogram::_getBinAngle(size_t i)
+{
+  return 2 * M_PI / _bins.size() * i + M_PI / _bins.size();
+}
+
+Radians Histogram::getBinCenter(size_t bin) const
+{
+  assert(bin < _bins.size());
+
+  Radians binSize = 2.0 * M_PI / (double)_bins.size();
+  return bin * binSize + binSize / 2.0;
 }
 
 void Histogram::normalize()
@@ -74,16 +118,32 @@ void Histogram::normalize()
   }
 }
 
-double Histogram::diff(Histogram& other)
+void Histogram::smooth(Radians sigma)
 {
-  assert(_bins.size() == other._bins.size());
-  double diff = 0.0;
-  for (size_t i = 0; i < _bins.size(); i++)
-  {
-    diff += fabs(_bins[i] - other._bins[i]);
-  }
+  vector<double> old = _bins;
 
-  return diff / 2.0;
+  // this is quite inefficient and can be reworked to cache the normal curve and reuse it as needed.
+  for (size_t i = 0; i < _bins.size(); ++i)
+  {
+    _bins[i] = 0.0;
+    Radians center = getBinCenter(i);
+    for (size_t j = 0; j < old.size(); ++j)
+    {
+      Radians rawDiff = fabs(getBinCenter(j) - center);
+      Radians diff = std::min(rawDiff, 2 * M_PI - rawDiff);
+      _bins[i] += old[j] * Tgs::Normal::normal(diff, sigma);
+    }
+  }
+}
+
+QString Histogram::toString() const
+{
+  QStringList l;
+  for (size_t i = 0; i < _bins.size(); ++i)
+  {
+    l << QString::fromUtf8("%1°: %2").arg(toDegrees(getBinCenter(i))).arg(_bins[i]);
+  }
+  return l.join(", ");
 }
 
 }

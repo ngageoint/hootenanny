@@ -22,22 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 
 import java.util.LinkedList;
-
-
-
-
-
-import hoot.services.IntegrationTest;
-import hoot.services.wps.WpsUtils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
@@ -58,48 +52,49 @@ import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
+import hoot.services.IntegrationTest;
+import hoot.services.wps.WpsUtils;
+
+
 public class CustomScriptSaveProcessletTest {
 
-	@SuppressWarnings("unused")
-  private JSONParser _parser = new JSONParser();
-  
-	@Test
-	@Category(IntegrationTest.class)
-	public void testProcess() throws Exception
-	{
-		CustomScriptSaveProcesslet processlet = Mockito.spy(new CustomScriptSaveProcesslet());
+    @SuppressWarnings("unused")
+    private JSONParser _parser = new JSONParser();
 
-		HttpResponse mockResp = new BasicHttpResponse(
-        new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1), 200, "OK"));
-		
-		StringEntity se = new StringEntity( "[{\"NAME\":\"testName\",\"DESCRIPTION\":\"test description\"}]");  
-		mockResp.setEntity(se);
+    @Test
+    @Category(IntegrationTest.class)
+    public void testProcess() throws Exception {
+        CustomScriptSaveProcesslet processlet = Mockito.spy(new CustomScriptSaveProcesslet());
 
-		doReturn(mockResp).when(processlet).postRequest(anyString(), anyString(), anyString());
+        HttpResponse mockResp = new BasicHttpResponse(
+                new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1), 200, "OK"));
 
-		LinkedList<ProcessletInput> allInputs = new LinkedList<ProcessletInput>();
-		
-		
-		allInputs.add(WpsUtils.createLiteralInput("NAME", String.valueOf("testName")));
-		allInputs.add(WpsUtils.createLiteralInput("DESCRIPTION", String.valueOf("test description")));
-		allInputs.add(WpsUtils.createLiteralInput("SCRIPT", String.valueOf("test script")));		
-		ProcessletInputs in = new ProcessletInputs(allInputs);
-    
-    ProcessDefinition def = new ProcessDefinition();
-    def.setOutputParameters(new OutputParameters());		
-		LinkedList<ProcessletOutput> allOutputs = new LinkedList<ProcessletOutput>();    
-    allOutputs.add(WpsUtils.createLiteralOutput("SAVEDITEM"));   
-    final ProcessletOutputs out = new ProcessletOutputs(def, allOutputs);
-    
-    processlet.process(in, out, new ProcessExecution(null, null, null, null, out));
-    
-    verify(processlet).postRequest(Matchers.matches("testName"), Matchers.matches("test description"), Matchers.matches("test script"));
-		
+        StringEntity se = new StringEntity("[{\"NAME\":\"testName\",\"DESCRIPTION\":\"test description\"}]");
+        mockResp.setEntity(se);
 
-    final String responseStr = 
-        ((LiteralOutputImpl)out.getParameter("SAVEDITEM")).getValue();
-    
-    assertTrue(responseStr.equals("[{\"NAME\":\"testName\",\"DESCRIPTION\":\"test description\"}]"));
-    
-	}	
+        doReturn(mockResp).when(processlet).postRequest(anyString(), anyString(), anyString());
+
+        LinkedList<ProcessletInput> allInputs = new LinkedList<ProcessletInput>();
+
+        allInputs.add(WpsUtils.createLiteralInput("NAME", String.valueOf("testName")));
+        allInputs.add(WpsUtils.createLiteralInput("DESCRIPTION", String.valueOf("test description")));
+        allInputs.add(WpsUtils.createLiteralInput("SCRIPT", String.valueOf("test script")));
+        ProcessletInputs in = new ProcessletInputs(allInputs);
+
+        ProcessDefinition def = new ProcessDefinition();
+        def.setOutputParameters(new OutputParameters());
+        LinkedList<ProcessletOutput> allOutputs = new LinkedList<ProcessletOutput>();
+        allOutputs.add(WpsUtils.createLiteralOutput("SAVEDITEM"));
+        final ProcessletOutputs out = new ProcessletOutputs(def, allOutputs);
+
+        processlet.process(in, out, new ProcessExecution(null, null, null, null, out));
+
+        verify(processlet).postRequest(Matchers.matches("testName"), Matchers.matches("test description"),
+                Matchers.matches("test script"));
+
+        final String responseStr = ((LiteralOutputImpl) out.getParameter("SAVEDITEM")).getValue();
+
+        assertTrue(responseStr.equals("[{\"NAME\":\"testName\",\"DESCRIPTION\":\"test description\"}]"));
+
+    }
 }

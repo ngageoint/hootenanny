@@ -42,6 +42,8 @@
 #include <QVariant>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlRecord>
+#include <QFile>
+#include <QTextStream>
 
 // Standard
 #include <math.h>
@@ -55,6 +57,8 @@
 
 namespace hoot
 {
+
+const QString OsmApiDb::TIME_FORMAT = "yyyy-MM-dd hh:mm:ss.zzz";
 
 OsmApiDb::OsmApiDb()
 {
@@ -173,6 +177,12 @@ void OsmApiDb::_resetQueries()
   _selectNodeById.reset();
   _selectUserByEmail.reset();
   _insertUser.reset();
+  for (QHash<QString, shared_ptr<QSqlQuery> >::iterator itr = _seqQueries.begin();
+       itr != _seqQueries.end(); ++itr)
+  {
+    itr.value().reset();
+  }
+  _selectChangesetsCreatedAfterTime.reset();
 }
 
 void OsmApiDb::rollback()
@@ -500,6 +510,65 @@ QString OsmApiDb::extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType
   if(val1!="" || val2!="") tag = "\""+val1+"\"=>\""+val2+"\"";
 
   return tag;
+}
+
+long OsmApiDb::getNextId(const QString tableName)
+{
+  long result;
+  if (_seqQueries[tableName].get() == 0)
+  {
+    _seqQueries[tableName].reset(new QSqlQuery(_db));
+    _seqQueries[tableName]->setForwardOnly(true);
+    _seqQueries[tableName]->prepare(QString("SELECT NEXTVAL('%1_id_seq')").arg(tableName.toLower()));
+  }
+
+  shared_ptr<QSqlQuery> query = _seqQueries[tableName];
+  if (query->exec() == false)
+  {
+    throw HootException("Error reserving IDs. type: " +
+      tableName + " Error: " + query->lastError().text());
+  }
+
+  if (query->next())
+  {
+    bool ok;
+    result = query->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Did not retrieve starting reserved ID.");
+    }
+  }
+  else
+  {
+    throw HootException("Error retrieving sequence value. type: " +
+      tableName + " Error: " + query->lastError().text());
+  }
+
+  query->finish();
+
+  return result;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
+{
+  LOG_VARD(timeStr);
+  _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
+  _selectChangesetsCreatedAfterTime->prepare(
+    QString("SELECT min_lon, max_lon, min_lat, max_lat FROM changesets ") +
+    QString("WHERE created_at > :createdAt"));
+  _selectChangesetsCreatedAfterTime->bindValue(":createdAt", "'" + timeStr + "'");
+
+  if (_selectChangesetsCreatedAfterTime->exec() == false)
+  {
+    LOG_ERROR(_selectChangesetsCreatedAfterTime->executedQuery());
+    LOG_ERROR(_selectChangesetsCreatedAfterTime->lastError().text());
+    throw HootException(
+      "Could not execute changesets query: " + _selectChangesetsCreatedAfterTime->lastError().text());
+  }
+  LOG_VARD(_selectChangesetsCreatedAfterTime->executedQuery());
+  LOG_VARD(_selectChangesetsCreatedAfterTime->numRowsAffected());
+
+  return _selectChangesetsCreatedAfterTime;
 }
 
 }

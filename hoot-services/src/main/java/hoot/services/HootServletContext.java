@@ -26,36 +26,53 @@
  */
 package hoot.services;
 
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+import org.slf4j.bridge.SLF4JBridgeHandler;
+
 import hoot.services.controllers.ingest.BasemapResource;
 import hoot.services.controllers.ogr.TranslatorResource;
 import hoot.services.controllers.services.P2PResource;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 
 public class HootServletContext implements ServletContextListener {
 
-	private TranslatorResource _transRes = null;
-	private P2PResource _P2PRes = null;
-	private BasemapResource _BRes = null;
-	@Override
-  public void contextInitialized(ServletContextEvent arg0) 
-	{
-		_transRes = new TranslatorResource();
-		_transRes.startTranslationService();
-		
-		_P2PRes = new P2PResource();
-		_P2PRes.startP2PService();
-		
-		// Doing this to make sure we create ingest folder
-		_BRes = new BasemapResource();
-		_BRes.createTileServerPath();
-	}
-	
-	@Override
-  public void contextDestroyed(ServletContextEvent arg0) 
-	{
-		_transRes.stopTranslationService();
-		_P2PRes.stopP2PService();
-	}
+    private TranslatorResource transRes;
+    private P2PResource p2PRes;
+
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        transRes = new TranslatorResource();
+        transRes.startTranslationService();
+
+        p2PRes = new P2PResource();
+        p2PRes.startP2PService();
+
+        // Doing this to make sure we create ingest folder
+        BasemapResource bRes = new BasemapResource();
+        bRes.createTileServerPath();
+
+        // Bridge/route all JUL log records to the SLF4J API.
+        // Some third-party components use Java Util Logging (JUL). We want to
+        // route those calls
+        // through SLF4J.
+        initSLF4JBridgeHandler();
+    }
+
+    private void initSLF4JBridgeHandler() {
+        // Optionally remove existing handlers attached to j.u.l root logger
+        SLF4JBridgeHandler.removeHandlersForRootLogger(); // (since SLF4J 1.6.5)
+
+        // add SLF4JBridgeHandler to j.u.l's root logger, should be done once
+        // during
+        // the initialization phase of your application
+        SLF4JBridgeHandler.install();
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        transRes.stopTranslationService();
+        p2PRes.stopP2PService();
+    }
 }

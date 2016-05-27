@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
@@ -44,79 +44,71 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CustomScriptDeleteScriptProcesslet  extends BaseProcesslet {
-  private static final Logger log = LoggerFactory.getLogger(CustomScriptDeleteScriptProcesslet.class);
-  
 
+public class CustomScriptDeleteScriptProcesslet extends BaseProcesslet {
+    private static final Logger log = LoggerFactory.getLogger(CustomScriptDeleteScriptProcesslet.class);
 
-	public CustomScriptDeleteScriptProcesslet() throws Exception
-	{
+    public CustomScriptDeleteScriptProcesslet() throws Exception {
 
-	}
+    }
 
-	
-	@Override
-	public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info) 
-			throws ProcessletException {
-		String resp = "";
-		JSONArray args = parseRequestParams(in);
-		try {		
-			String scriptName = null;
-			for(int i=0; i<args.size(); i++)
-			{
-				JSONObject arg = (JSONObject)args.get(i);
-				Object val = arg.get("NAME");
-				
-				if(val != null)
-				{
-					scriptName = val.toString();
-					break;
-				}
-								
-			}
-			resp = getRequest( scriptName );
-			
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			((LiteralOutput)out.getParameter("DELETED")).setValue("Failed: " + e.getMessage());
-			return;
-		}
-		((LiteralOutput)out.getParameter("DELETED")).setValue(resp);
+    @Override
+    public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info)
+            throws ProcessletException {
+        String resp = "";
+        JSONArray args = parseRequestParams(in);
+        try {
+            String scriptName = null;
+            for (int i = 0; i < args.size(); i++) {
+                JSONObject arg = (JSONObject) args.get(i);
+                Object val = arg.get("NAME");
 
-	}
-	
-	protected String getRequest(String scriptName) throws Exception
-	{
-		String ret = "";
-		
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		HttpGet httpget = new HttpGet(coreJobServerUrl + "/hoot-services/ingest/customscript/deletescript?SCRIPT_NAME=" 
-				+ URLEncoder.encode(scriptName, "UTF-8"));
-		CloseableHttpResponse response = httpclient.execute(httpget);
-		try {
-			
-			if(response.getStatusLine().getStatusCode() != 200)
-			{
-				String reason = response.getStatusLine().getReasonPhrase();
-				if(reason == null)
-				{
-					reason = "Unkown reason.";
-				}
-				throw new Exception(reason);			
-			}
-			
-			
-			HttpEntity entity = response.getEntity();
-			if (entity != null) {
-			    entity.getContentLength();
-			    ret = EntityUtils.toString(entity);
-			}
-		} finally {
-		    response.close();
-		}
-		
-		
-		return ret;
-	}
-	
+                if (val != null) {
+                    scriptName = val.toString();
+                    break;
+                }
+
+            }
+            resp = getRequest(scriptName);
+
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+            ((LiteralOutput) out.getParameter("DELETED")).setValue("Failed: " + e.getMessage());
+            return;
+        }
+        ((LiteralOutput) out.getParameter("DELETED")).setValue(resp);
+
+    }
+
+    protected String getRequest(String scriptName) throws Exception {
+        String ret = "";
+
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpGet httpget = new HttpGet(coreJobServerUrl + "/hoot-services/ingest/customscript/deletescript?SCRIPT_NAME="
+                + URLEncoder.encode(scriptName, "UTF-8"));
+        CloseableHttpResponse response = httpclient.execute(httpget);
+        try {
+
+            if (response.getStatusLine().getStatusCode() != 200) {
+                String reason = response.getStatusLine().getReasonPhrase();
+                if (reason == null) {
+                    reason = "Unkown reason.";
+                }
+                throw new Exception(reason);
+            }
+
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                entity.getContentLength();
+                ret = EntityUtils.toString(entity);
+            }
+        }
+        finally {
+            response.close();
+        }
+
+        return ret;
+    }
+
 }

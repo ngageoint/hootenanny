@@ -22,26 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.geo;
 
 /**
  * Just a simple container for geo-coordinates
  */
-public class Coordinates
-{
-  public double lat;
-  public double lon;
-  
-  public Coordinates()
-  {
-    
-  }
-  
-  public Coordinates(final double lat, final double lon)
-  {
-    this.lat = lat;
-    this.lon = lon;
-  }
+public class Coordinates {
+    public double lat;
+    public double lon;
+
+    public Coordinates() {
+
+    }
+
+    public Coordinates(final double lat, final double lon) {
+        this.lat = lat;
+        this.lon = lon;
+    }
 }

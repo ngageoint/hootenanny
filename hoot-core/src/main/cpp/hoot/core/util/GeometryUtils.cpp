@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GeometryUtils.h"
@@ -175,6 +175,8 @@ Geometry* GeometryUtils::validateGeometry(const Geometry* g)
 {
   switch (g->getGeometryTypeId())
   {
+  case GEOS_POINT:
+    return GeometryFactory::getDefaultInstance()->createGeometry(g);
   case GEOS_GEOMETRYCOLLECTION:
   case GEOS_MULTIPOINT:
   case GEOS_MULTILINESTRING:
@@ -185,7 +187,7 @@ Geometry* GeometryUtils::validateGeometry(const Geometry* g)
   case GEOS_POLYGON:
     return validatePolygon(dynamic_cast<const Polygon*>(g));
   default:
-    LOG_WARN("Got an unrecognized geometry.");
+    LOG_WARN("Got an unrecognized geometry. " << g->getGeometryTypeId());
     return GeometryFactory::getDefaultInstance()->createGeometry(g);
   }
 }
@@ -279,5 +281,40 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   return result;
 }
 
+Envelope GeometryUtils::envelopeFromConfigString(const QString boundsStr)
+{
+  const QString errMsg = "Invalid envelope string: " + boundsStr;
+  if (boundsStr.contains(","))
+  {
+    const QStringList bboxParts = boundsStr.split(",");
+    if (bboxParts.size() == 4)
+    {
+      bool parseSuccess = true;
+      bool ok;
+      const double minLat = bboxParts[1].toDouble(&ok);
+      parseSuccess = parseSuccess && ok;
+      const double minLon = bboxParts[0].toDouble(&ok);
+      parseSuccess = parseSuccess && ok;
+      const double maxLat = bboxParts[3].toDouble(&ok);
+      parseSuccess = parseSuccess && ok;
+      const double maxLon = bboxParts[2].toDouble(&ok);
+      parseSuccess = parseSuccess && ok;
+
+      if (!parseSuccess)
+      {
+        throw HootException(errMsg);
+      }
+      return Envelope(minLon, maxLon, minLat, maxLat);
+    }
+    else
+    {
+      throw HootException(errMsg);
+    }
+  }
+  else
+  {
+    throw HootException(errMsg);
+  }
+}
 
 }

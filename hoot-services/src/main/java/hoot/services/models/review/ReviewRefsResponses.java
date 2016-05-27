@@ -22,40 +22,41 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.review;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 /**
  * Collection of review references
  */
 @XmlRootElement
-public class ReviewRefsResponses
-{
-	private ReviewRefsResponse[] reviewRefsResponses;
-  public ReviewRefsResponse[] getReviewRefsResponses() { return reviewRefsResponses; }
-  public void setReviewRefsResponses(ReviewRefsResponse[] responses) 
-  { this.reviewRefsResponses = responses; }
-  
-  public ReviewRefsResponses()
-  {
-  }
-  
-  public ReviewRefsResponses(final ReviewRefsResponse[] reviewRefsResponses)
-  {
-  	this.reviewRefsResponses = reviewRefsResponses;
-  }
-  
-  @Override
-  public String toString()
-  {
-  	String str = "";
-  	for (ReviewRefsResponse refs : reviewRefsResponses)
-  	{
-  		str += refs.toString();
-  	}
-  	return str;
-  }
+public class ReviewRefsResponses {
+    private ReviewRefsResponse[] reviewRefsResponses;
+
+    public ReviewRefsResponse[] getReviewRefsResponses() {
+        return reviewRefsResponses;
+    }
+
+    public void setReviewRefsResponses(ReviewRefsResponse[] responses) {
+        this.reviewRefsResponses = responses;
+    }
+
+    public ReviewRefsResponses() {
+    }
+
+    public ReviewRefsResponses(final ReviewRefsResponse[] reviewRefsResponses) {
+        this.reviewRefsResponses = reviewRefsResponses;
+    }
+
+    @Override
+    public String toString() {
+        String str = "";
+        for (ReviewRefsResponse refs : reviewRefsResponses) {
+            str += refs.toString();
+        }
+        return str;
+    }
 }

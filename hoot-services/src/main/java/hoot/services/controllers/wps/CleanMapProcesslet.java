@@ -22,16 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
 import java.util.List;
 import java.util.UUID;
-
-
-import hoot.services.job.JobExecutioner;
-
 
 import org.deegree.services.wps.ProcessletException;
 import org.deegree.services.wps.ProcessletExecutionInfo;
@@ -44,59 +40,58 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CleanMapProcesslet  extends BaseProcesslet 
-{
-	private static final Logger log = LoggerFactory.getLogger(CleanMapProcesslet.class);
-	public CleanMapProcesslet() throws Exception
-	{
-		super();
-	}
-	
-  /*
-   * (non-Javadoc)
-   * @see hoot.services.wps.WPSProcesslet#process(org.deegree.services.wps.ProcessletInputs, org.deegree.services.wps.ProcessletOutputs, org.deegree.services.wps.ProcessletExecutionInfo)
-   */
-  @Override
-  public void process(ProcessletInputs inputParams, ProcessletOutputs outputParams, 
-    ProcessletExecutionInfo processletExecInfo) throws ProcessletException
-  {
-    
-    try
-    {
-    	String mapId = null;
-      List<ProcessletInput> params = inputParams.getParameters();
+import hoot.services.job.JobExecutioner;
 
-      for (int i = 0; i < params.size(); i++)
-      {
-        ProcessletInput input = params.get(i);
-        String id = input.getIdentifier().getCode();
-        String value = ((LiteralInput) inputParams.getParameter(id)).getValue().trim();
-        if(id.equalsIgnoreCase("mapId"))
-      	{
-      		mapId = value;
-      		break;
-      	}
-      }
-    	
-      if(mapId == null)
-      {
-      	throw new Exception("Invalid mapId parameter.");
-      }
-    	
-      JSONObject command = new JSONObject();
-      command.put("mapId", mapId);
-      command.put("execImpl", "ResourcesCleanUtil");
-      
-      final String jobId = UUID.randomUUID().toString();
-      
-      (new JobExecutioner(jobId, command)).start();
 
-      ((LiteralOutput)outputParams.getParameter("jobId")).setValue(jobId);
-    }
-    catch (Exception e)
-    {
-    	log.error(e.getMessage());
+public class CleanMapProcesslet extends BaseProcesslet {
+    private static final Logger log = LoggerFactory.getLogger(CleanMapProcesslet.class);
+
+    public CleanMapProcesslet() throws Exception {
+        super();
     }
 
-  }
+    /*
+     * (non-Javadoc)
+     * 
+     * @see hoot.services.wps.WPSProcesslet#process(org.deegree.services.wps.
+     * ProcessletInputs, org.deegree.services.wps.ProcessletOutputs,
+     * org.deegree.services.wps.ProcessletExecutionInfo)
+     */
+    @Override
+    public void process(ProcessletInputs inputParams, ProcessletOutputs outputParams,
+            ProcessletExecutionInfo processletExecInfo) throws ProcessletException {
+
+        try {
+            String mapId = null;
+            List<ProcessletInput> params = inputParams.getParameters();
+
+            for (int i = 0; i < params.size(); i++) {
+                ProcessletInput input = params.get(i);
+                String id = input.getIdentifier().getCode();
+                String value = ((LiteralInput) inputParams.getParameter(id)).getValue().trim();
+                if (id.equalsIgnoreCase("mapId")) {
+                    mapId = value;
+                    break;
+                }
+            }
+
+            if (mapId == null) {
+                throw new Exception("Invalid mapId parameter.");
+            }
+
+            JSONObject command = new JSONObject();
+            command.put("mapId", mapId);
+            command.put("execImpl", "ResourcesCleanUtil");
+
+            final String jobId = UUID.randomUUID().toString();
+
+            (new JobExecutioner(jobId, command)).start();
+
+            ((LiteralOutput) outputParams.getParameter("jobId")).setValue(jobId);
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+    }
 }

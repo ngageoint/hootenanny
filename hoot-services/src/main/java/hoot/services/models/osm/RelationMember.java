@@ -35,105 +35,118 @@ import org.apache.commons.lang3.StringUtils;
 import hoot.services.db2.CurrentRelationMembers;
 import hoot.services.models.osm.Element.ElementType;
 
+
 /**
  * Represents the model for a member of an OSM relation
  */
-public class RelationMember
-{
-  /**
-   * element type
-   */
-  private ElementType type;
-  public ElementType getType() { return type; }
+public class RelationMember {
+    /**
+     * element type
+     */
+    private ElementType type;
 
-  /**
-   * member ID
-   */
-  private long id;
-  public long getId() { return id; }
-
-  /**
-   * original member ID from the changeset upload request
-   */
-  private long oldId;
-  public long getOldId() { return oldId; }
-  public void setOldId(long elementId) { oldId = elementId; }
-
-  /**
-   * member's role
-   */
-  private String role = "";
-  public String getRole() { return role; }
-
-  public RelationMember(final long id, final ElementType type, final String role)
-  {
-    this.id = id;
-    this.type = type;
-    this.role = role;
-  }
-
-  public RelationMember(final long id, final ElementType type)
-  {
-    this.id = id;
-    this.type = type;
-  }
-
-  public RelationMember(final CurrentRelationMembers record)
-  {
-    this.id = record.getMemberId();
-    this.type = Element.elementTypeForElementEnum(record.getMemberType());
-    this.role = record.getMemberRole();
-    if (StringUtils.isEmpty(this.role))
-    {
-      this.role = "";
+    public ElementType getType() {
+        return type;
     }
-  }
 
-  /**
-   * Creates a relation member database record
-   *
-   * @param id the member's ID
-   * @param sequenceId the member's sequence ordering (1..n)
-   * @param role the member's role
-   * @param elementType the member's element type
-   * @param relationId the owning relation ID
-   * @param dbConn JDBC Connection
-   * @return a relation member database record
-   * @throws Exception
-   */
-  public static CurrentRelationMembers createRecord(final long id, final int sequenceId, 
-  	final String role, final Object elementType, final long relationId, Connection dbConn) 
-  	throws Exception
-  {
-    CurrentRelationMembers memberRecord = new CurrentRelationMembers();
-    memberRecord.setMemberId(id);
-    memberRecord.setSequenceId(sequenceId);
-    if (!StringUtils.isEmpty(role))
-    {
-      memberRecord.setMemberRole(role);
-    }
-    else
-    {
-      memberRecord.setMemberRole("");
-    }
-    memberRecord.setMemberType(elementType);
-    memberRecord.setRelationId(relationId);
-    return memberRecord;
-  }
+    /**
+     * member ID
+     */
+    private long id;
 
-  /**
-   * Transforms a list of relation member database records into a list of RelationMember objects
-   *
-   * @param records a list of relation member database records
-   * @return a list of RelationMember objects
-   */
-  public static List<RelationMember> fromRecords(final List<CurrentRelationMembers> records)
-  {
-    List<RelationMember> members = new ArrayList<RelationMember>();
-    for (CurrentRelationMembers memberRecord : records)
-    {
-      members.add(new RelationMember(memberRecord));
+    public long getId() {
+        return id;
     }
-    return members;
-  }
+
+    /**
+     * original member ID from the changeset upload request
+     */
+    private long oldId;
+
+    public long getOldId() {
+        return oldId;
+    }
+
+    public void setOldId(long elementId) {
+        oldId = elementId;
+    }
+
+    /**
+     * member's role
+     */
+    private String role = "";
+
+    public String getRole() {
+        return role;
+    }
+
+    public RelationMember(final long id, final ElementType type, final String role) {
+        this.id = id;
+        this.type = type;
+        this.role = role;
+    }
+
+    public RelationMember(final long id, final ElementType type) {
+        this.id = id;
+        this.type = type;
+    }
+
+    public RelationMember(final CurrentRelationMembers record) {
+        this.id = record.getMemberId();
+        this.type = Element.elementTypeForElementEnum(record.getMemberType());
+        this.role = record.getMemberRole();
+        if (StringUtils.isEmpty(this.role)) {
+            this.role = "";
+        }
+    }
+
+    /**
+     * Creates a relation member database record
+     *
+     * @param id
+     *            the member's ID
+     * @param sequenceId
+     *            the member's sequence ordering (1..n)
+     * @param role
+     *            the member's role
+     * @param elementType
+     *            the member's element type
+     * @param relationId
+     *            the owning relation ID
+     * @param dbConn
+     *            JDBC Connection
+     * @return a relation member database record
+     * @throws Exception
+     */
+    public static CurrentRelationMembers createRecord(final long id, final int sequenceId, final String role,
+            final Object elementType, final long relationId, Connection dbConn) throws Exception {
+        CurrentRelationMembers memberRecord = new CurrentRelationMembers();
+        memberRecord.setMemberId(id);
+        memberRecord.setSequenceId(sequenceId);
+        if (!StringUtils.isEmpty(role)) {
+            memberRecord.setMemberRole(role);
+        }
+        else {
+            memberRecord.setMemberRole("");
+        }
+        memberRecord.setMemberType(elementType);
+        memberRecord.setRelationId(relationId);
+        return memberRecord;
+    }
+
+    /**
+     * Transforms a list of relation member database records into a list of
+     * RelationMember objects
+     *
+     * @param records
+     *            a list of relation member database records
+     * @return a list of RelationMember objects
+     */
+    public static List<RelationMember> fromRecords(final List<CurrentRelationMembers> records) {
+        List<RelationMember> members = new ArrayList<RelationMember>();
+        for (CurrentRelationMembers memberRecord : records) {
+            members.add(new RelationMember(memberRecord));
+        }
+        return members;
+    }
 }

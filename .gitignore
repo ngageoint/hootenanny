@@ -61,6 +61,9 @@ hoot-core/src/proto/
 hoot-core/src/test/resources/cmd/**/*.stripped
 hoot-core/src/test/resources/cmd/**/*.first
 hoot-core/src/test/resources/cmd/**/*.failed
+hoot-core-test/src/test/resources/cmd/**/*.stripped
+hoot-core-test/src/test/resources/cmd/**/*.first
+hoot-core-test/src/test/resources/cmd/**/*.failed
 test-files/cmd/**/*.stripped
 test-files/cmd/**/*.first
 test-files/cmd/**/*.failed
@@ -95,6 +98,7 @@ Output.osm
 /output.pgm
 plugins/*_schema.js
 plugins/etds*_rules.js
+plugins/emgcp*_rules.js
 plugins-local
 translations-local
 **/*.pro.user*

@@ -105,7 +105,6 @@ public:
   static int maximumChangeSetEdits() { return 50000; }
 
   static const Status DEFAULT_ELEMENT_STATUS;
-  static const Meters DEFAULT_ELEMENT_CIRCULAR_ERROR = 0.0;
 
   ApiDb();
 

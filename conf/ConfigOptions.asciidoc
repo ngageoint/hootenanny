@@ -119,12 +119,12 @@ Path to the RF building model. A new model can be created with `build-model`. Se
 
 Training a model is typically done during research. While all the tools are available to do limited training, the documentation is not. Please contact the developers if you would like to dig deeper.
 
-=== changeset.api.url
+=== changeset.max.size
 
-* Data Type: string
-* Default Value: ``
+* Data Type: long
+* Default Value: `50000`
 
-The DB URL for a OSM API DB. Used by changeset writing.
+The maximum allowed size of an OSM changeset written to the OSM API database.
 
 === changeset.user.id
 
@@ -132,6 +132,13 @@ The DB URL for a OSM API DB. Used by changeset writing.
 * Default Value: `-1`
 
 The DB user ID for a OSM API DB. Used by changeset writing.
+
+=== circular.error.default.value
+
+* Data Type: double
+* Default Value: `15`
+
+Set the circular error on items to this value, in meters, by default.
 
 === conflate.add.score.tags
 
@@ -386,14 +393,14 @@ Size of the cache used when streaming I/O is used with nodes.
 === element.cache.size.relation
 
 * Data Type: long
-* Default Value: `20000`
+* Default Value: `200000`
 
 Size of the cache used when streaming I/O is used with relations.
 
 === element.cache.size.way
 
 * Data Type: long
-* Default Value: `20000`
+* Default Value: `200000`
 
 Size of the cache used when streaming I/O is used with ways.
 
@@ -508,6 +515,7 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+
 === highway.matcher.heading.delta
 
 * Data Type: double
@@ -522,6 +530,17 @@ The distance around a point on a highway to look when calculating the heading.  
 * Default Value: `${way.matcher.max.angle}`
 
 Sets that maximum angle that is still considered a highway match. Units in degrees.
+
+=== highway.max.enum.diff
+
+* Data Type: double
+* Default Value: `0.6`
+
+If two highways have significantly different enumerated types then they will not be considered
+for match. For example:
+
+* "highway=primary" vs "highway=secondary" has a diff of 0.2.
+* "highway=primary" vs "highway=footway" has a diff of 0.67.
 
 === highway.miss.threshold
 
@@ -1676,13 +1695,6 @@ a new map is written.
 If this value is set to a non-empty string, the system will attempt to open a file with the specified name
 and output all the ID mappings (source to destination) used for nodes, ways, and relations that were
 written to the database.
-
-=== set.circular.error.visitor.value
-
-* Data Type: double
-* Default Value: `15`
-
-Set the circular error on visited items to this value.
 
 === set.tag.visitor.key
 

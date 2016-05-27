@@ -22,62 +22,46 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.writers.osm;
-
-import java.io.IOException;
-
-import hoot.services.HootProperties;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import hoot.services.HootProperties;
+
+
 /**
  * Generates an OSM XML response header
  */
-public class OsmResponseHeaderGenerator
-{
-  /**
-   * Creates an OSM data header for a web response
-   * 
-   * @param document owning XML document
-   * @return an XML Element
-   * @throws IOException if unable to read settings from config file
-   */
-  public static Element getOsmDataHeader(Document document) throws IOException
-  {
-    Element osmElement = getOsmHeader(document);
-    osmElement.setAttribute(
-      "copyright", 
-      HootProperties.getInstance().getProperty("copyright", HootProperties.getDefault("copyright")));
-    osmElement.setAttribute(
-      "attribution", 
-      HootProperties.getInstance().getProperty(
-        "attribution", HootProperties.getDefault("attribution")));
-    osmElement.setAttribute(
-      "license", 
-      HootProperties.getInstance().getProperty("license", HootProperties.getDefault("license")));
-    return osmElement;
-  }
-  
-  /**
-  * Creates an OSM header for a web response
-  * 
-  * @param document owning XML document
-  * @return an XML Element
-  * @throws IOException if unable to read settings from config file
-  */
- public static Element getOsmHeader(Document document) throws IOException
- {
-   Element osmElement = document.createElement("osm");
-   osmElement.setAttribute(
-     "version", 
-     HootProperties.getInstance().getProperty(
-       "osmVersion", HootProperties.getDefault("osmVersion")));
-   osmElement.setAttribute(
-     "generator", 
-     HootProperties.getInstance().getProperty("generator", HootProperties.getDefault("generator")));
-   return osmElement;
- }
+public class OsmResponseHeaderGenerator {
+    /**
+     * Creates an OSM data header for a web response
+     *
+     * @param document
+     *            owning XML document
+     * @return an XML Element
+     */
+    public static Element getOsmDataHeader(Document document) {
+        Element osmElement = getOsmHeader(document);
+        osmElement.setAttribute("copyright", HootProperties.getPropertyOrDefault("copyright"));
+        osmElement.setAttribute("attribution", HootProperties.getPropertyOrDefault("attribution"));
+        osmElement.setAttribute("license", HootProperties.getPropertyOrDefault("license"));
+        return osmElement;
+    }
+
+    /**
+     * Creates an OSM header for a web response
+     *
+     * @param document
+     *            owning XML document
+     * @return an XML Element
+     */
+    public static Element getOsmHeader(Document document) {
+        Element osmElement = document.createElement("osm");
+        osmElement.setAttribute("version", HootProperties.getPropertyOrDefault("osmVersion"));
+        osmElement.setAttribute("generator", HootProperties.getProperty("generator"));
+        return osmElement;
+    }
 }

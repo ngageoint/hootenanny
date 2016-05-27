@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -36,6 +36,8 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
+#include "../TestUtils.h"
+
 namespace hoot
 {
 
@@ -43,6 +45,7 @@ class GeometryUtilsTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(GeometryUtilsTest);
   CPPUNIT_TEST(calculateDestinationTest);
+  CPPUNIT_TEST(envelopeFromConfigStringTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -59,6 +62,43 @@ public:
     dest = GeometryUtils::calculateDestination(start, 23, 200000);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-103.087, dest.x, 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(39.652, dest.y, 1e-3);
+  }
+
+  void envelopeFromConfigStringTest()
+  {
+    HOOT_STR_EQUALS("Env[1:3,2:4]", GeometryUtils::envelopeFromConfigString("1,2,3,4").toString());
+
+    QString exceptionMsg;
+
+    try
+    {
+      GeometryUtils::envelopeFromConfigString("-10,-10,10,");
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid envelope string"));
+
+    try
+    {
+      GeometryUtils::envelopeFromConfigString("-10,-10,a,10");
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid envelope string"));
+
+    try
+    {
+      GeometryUtils::envelopeFromConfigString(" ");
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid envelope string"));
   }
 
 };

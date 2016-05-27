@@ -22,53 +22,51 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 /**
  * Model class for the Hootenanny map layer
  */
 @XmlRootElement
-public class MapLayer
-{
-  private long id;
-  public long getId()
-  {
-    return id;
-  }
-  public void setId(long id)
-  {
-    this.id = id;
-  }
-  
-  private String name;
-  public String getName()
-  {
-    return name;
-  }
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-  
-  private java.sql.Timestamp date;
-  public String getDate()
-  {
-	  return String.format("%1$TD",date);
-	  //Use below to include time stamp
-	  //return String.format("%1$TD %1$TT", date);
-  }
-  public void setDate(java.sql.Timestamp date)
-  {
-    this.date = date;
-  }
-  
-  
-  public MapLayer()
-  {
-    
-  }
+public class MapLayer {
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    private java.sql.Timestamp date;
+
+    public String getDate() {
+        return String.format("%1$TD", date);
+        // Use below to include time stamp
+        // return String.format("%1$TD %1$TT", date);
+    }
+
+    public void setDate(java.sql.Timestamp date) {
+        this.date = date;
+    }
+
+    public MapLayer() {
+
+    }
 }

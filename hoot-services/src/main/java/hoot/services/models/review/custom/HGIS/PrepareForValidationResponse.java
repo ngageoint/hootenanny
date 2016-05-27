@@ -22,23 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.review.custom.HGIS;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 @XmlRootElement
 public class PrepareForValidationResponse {
-	private String jobId;
-	
-	public String getJobId()
-	{
-		return this.jobId;
-	}
-	
-	public void setJobId(String id)
-	{
-		this.jobId = id;
-	}
+    private String jobId;
+
+    public String getJobId() {
+        return this.jobId;
+    }
+
+    public void setJobId(String id) {
+        this.jobId = id;
+    }
 }

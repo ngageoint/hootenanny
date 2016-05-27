@@ -28,9 +28,6 @@ package hoot.services.nativeInterfaces;
 
 import java.lang.reflect.Method;
 
-import hoot.services.HootProperties;
-import hoot.services.UnitTest;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -38,91 +35,99 @@ import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import hoot.services.HootProperties;
+import hoot.services.UnitTest;
+import hoot.services.controllers.wps.ETLProcessletTest;
+
 
 public class ProcessStreamInterfaceTest {
 
+    @SuppressWarnings("unused")
+    private static final Logger log = LoggerFactory.getLogger(ProcessStreamInterfaceTest.class);
+    
+    @Test
+    @Category(UnitTest.class)
+    public void testcreateCmd() throws Exception {
+        JSONArray args = new JSONArray();
+        JSONObject translation = new JSONObject();
+        translation.put("translation", "/test/loc/translation.js");
+        args.add(translation);
 
-	@Test
-	@Category(UnitTest.class)
-	public void testcreateCmd() throws Exception
-	{
-		java.util.UUID.randomUUID().toString();
-		JSONArray args = new JSONArray();
-		JSONObject translation = new JSONObject();
-		translation.put("translation", "/test/loc/translation.js");
-		args.add(translation);
+        JSONObject output = new JSONObject();
+        output.put("output", "/test/loc/out.osm");
+        args.add(output);
 
-		JSONObject output = new JSONObject();
-		output.put("output", "/test/loc/out.osm");
-		args.add(output);
+        JSONObject input = new JSONObject();
+        input.put("input", "/test/loc/input.shp");
+        args.add(output);
 
+        JSONObject command = new JSONObject();
+        command.put("exectype", "hoot");
+        command.put("exec", "ogr2osm");
+        command.put("params", args);
 
-		JSONObject input = new JSONObject();
-		input.put("input", "/test/loc/input.shp");
-		args.add(output);
+        ProcessStreamInterface ps = new ProcessStreamInterface();
 
+        Class<?>[] cArg = new Class[1];
+        cArg[0] = JSONObject.class;
+        Method method = ProcessStreamInterface.class.getDeclaredMethod("createCmdArray", cArg);
+        method.setAccessible(true);
+        String[] ret = (String[]) method.invoke(ps, command);
+        String commandStr = ArrayUtils.toString(ret);
 
-		JSONObject command = new JSONObject();
-		command.put("exectype", "hoot");
-		command.put("exec", "ogr2osm");
-		command.put("params", args);
+        String expected = "{hoot,--ogr2osm,/test/loc/translation.js,/test/loc/out.osm,/test/loc/out.osm}";
+        Assert.assertEquals(expected, commandStr);
+    }
 
+    @Test
+    @Category(UnitTest.class)
+    public void testcreateScriptCmd() throws Exception {
+        ETLProcessletTest etlTest = new ETLProcessletTest();
+        String sParam = etlTest.generateJobParam();
+        JSONParser parser = new JSONParser();
+        JSONObject command = (JSONObject) parser.parse(sParam);
 
-		ProcessStreamInterface ps = new ProcessStreamInterface();
+        ProcessStreamInterface ps = new ProcessStreamInterface();
 
-		Class<?>[] cArg = new Class[1];
-		cArg[0] = JSONObject.class;
-		Method method = ProcessStreamInterface.class.getDeclaredMethod("createCmdArray", cArg);
-		method.setAccessible(true);
-		String[] ret = (String[])method.invoke(ps, command);
-		String commandStr = ArrayUtils.toString(ret);
+        Class<?>[] cArg = new Class[1];
+        cArg[0] = JSONObject.class;
+        Method method = ProcessStreamInterface.class.getDeclaredMethod("createScriptCmdArray", cArg);
+        method.setAccessible(true);
+        command.put("jobId", "123-456-789");
+        String[] ret = (String[]) method.invoke(ps, command);
+        String commandStr = ArrayUtils.toString(ret);
 
-		String expected = "{hoot,--ogr2osm,/test/loc/translation.js,/test/loc/out.osm,/test/loc/out.osm}";
-		Assert.assertEquals(expected, commandStr);
+        String coreScriptPath = HootProperties.getProperty("coreScriptPath");
 
-	}
+        HootProperties.getProperty("coreScriptOutputPath");
 
-	@SuppressWarnings("unchecked")
-  @Test
-	@Category(UnitTest.class)
-	public void testcreateScriptCmd() throws Exception
-	{
-		hoot.services.controllers.wps.ETLProcessletTest etlTest = new hoot.services.controllers.wps.ETLProcessletTest();
-		String sParam = etlTest.generateJobParam();
-		JSONParser parser=new JSONParser();
-		JSONObject command = (JSONObject)parser.parse(sParam);
+        String ETLMakefile = HootProperties.getPropertyOrDefault("ETLMakefile");
+        String makePath = coreScriptPath + "/" + ETLMakefile;
 
-		ProcessStreamInterface ps = new ProcessStreamInterface();
+        // [make, -f, /project/hoot/scripts/makeetl,
+        // translation=/test/file/test.js, INPUT_TYPE=OSM,
+        // INPUT=/test/file/INPUT.osm, jobid=123-456-789]
+        String expected = "{make,-f," + makePath
+                + ",translation=/test/file/test.js,INPUT_TYPE=OSM,INPUT=/test/file/INPUT.osm";
+        expected += ",jobid=123-456-789";
 
-		Class<?>[] cArg = new Class[1];
-		cArg[0] = JSONObject.class;
-		Method method = ProcessStreamInterface.class.getDeclaredMethod("createScriptCmdArray", cArg);
-		method.setAccessible(true);
-		command.put("jobId", "123-456-789");
-		String[] ret = (String[])method.invoke(ps, command);
-		String commandStr = ArrayUtils.toString(ret);
+        String dbname = HootProperties.getProperty("dbName");
+        String userid = HootProperties.getProperty("dbUserId");
+        String pwd = HootProperties.getProperty("dbPassword");
+        String host = HootProperties.getProperty("dbHost");
+        String dbUrl = "hootapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
+        expected += ",DB_URL=" + dbUrl;
+        
+        dbname = HootProperties.getProperty("osmApiDbName");
+        userid = HootProperties.getProperty("osmApiDbUserId");
+        pwd = HootProperties.getProperty("osmApiDbPassword");
+        host = HootProperties.getProperty("osmApiDbHost");
+        String osmApiDbUrl = "osmapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
+        expected += ",OSM_API_DB_URL=" + osmApiDbUrl + "}";
 
-		String expected = "";
-
-  	String coreScriptPath = HootProperties.getProperty("coreScriptPath");
-
-  	HootProperties.getProperty("coreScriptOutputPath");
-
-  	String ETLMakefile = HootProperties.getInstance().getProperty("ETLMakefile",
-	          HootProperties.getDefault("ETLMakefile"));
-  	String makePath = coreScriptPath + "/" + ETLMakefile;
-
-  	//[make, -f, /project/hoot/scripts/makeetl, translation=/test/file/test.js, INPUT_TYPE=OSM, INPUT=/test/file/INPUT.osm,  jobid=123-456-789]
-  	expected = "{make,-f," + makePath + ",translation=/test/file/test.js,INPUT_TYPE=OSM,INPUT=/test/file/INPUT.osm";
-  	expected += ",jobid=123-456-789";
-
-  	String dbname = HootProperties.getProperty("dbName");
-  	String userid = HootProperties.getProperty("dbUserId");
-  	String pwd = HootProperties.getProperty("dbPassword");
-  	String host = HootProperties.getProperty("dbHost");
-  	String dbUrl = "hootapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
-  	expected += ",DB_URL=" + dbUrl + "}";
-
-		Assert.assertEquals(expected, commandStr);
-	}
+        Assert.assertEquals(expected, commandStr);
+    }
 }

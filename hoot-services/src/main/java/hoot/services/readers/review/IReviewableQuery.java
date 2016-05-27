@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.readers.review;
 
@@ -30,10 +30,10 @@ import java.sql.SQLException;
 
 import hoot.services.models.review.ReviewQueryMapper;
 
+
 /**
  *
  */
-public interface IReviewableQuery 
-{
-	public ReviewQueryMapper execQuery()  throws SQLException, Exception;
+public interface IReviewableQuery {
+    public ReviewQueryMapper execQuery() throws SQLException, Exception;
 }

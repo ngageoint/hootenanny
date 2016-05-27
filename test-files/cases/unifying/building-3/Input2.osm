@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-47654' visible='true' lat='39.59420939167' lon='-104.80436632168'>
+    <tag k='hoot:id' v='-193' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-47655' visible='true' lat='39.59442625158' lon='-104.80417672973'>
+    <tag k='hoot:id' v='-194' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-47656' visible='true' lat='39.59423221906' lon='-104.8038923418'>
+    <tag k='hoot:id' v='-195' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-47657' visible='true' lat='39.594038186' lon='-104.80415303073'>
+    <tag k='hoot:id' v='-196' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <way id='-47653' action='modify' visible='true'>
+    <nd ref='-47654' />
+    <nd ref='-47655' />
+    <nd ref='-47656' />
+    <nd ref='-47657' />
+    <nd ref='-47654' />
+    <tag k='REF2' v='Cheddar&apos;s' />
+    <tag k='amenity' v='cafe' />
+    <tag k='building' v='restaurant' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:id' v='-19' />
+    <tag k='hoot:status' v='2' />
+    <tag k='name' v='Cheddar&apos;s' />
+  </way>
+</osm>

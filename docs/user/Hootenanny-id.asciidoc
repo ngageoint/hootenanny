@@ -70,6 +70,8 @@ The _All Tags_ section shown below contains all of the feature tags for a layer 
 .Displaying all OSM feature tags in Hootenanny. Note check boxes are shown for tags that a user might copy/paste into a matching feature.
 image::user/images/id/hoot_alltags_OSM.png[scaledwidth="25%"]
 
+NOTE: You can check all/none tags for a selected feature by clicking on the bold check that appears just above the "All Tags" table.
+
 [[ModifyLayerGeometry]]
 ==== Modifying Layer Geometry
 
@@ -92,9 +94,9 @@ To add a new point, click on the Point button appearing in the Map Viewer or use
 .Adding a new point in Hootenanny. In this example a new Point is added to the Haiti OSM roads data indicating that the feature represents a Hospital Grounds `amenity=hospital`. DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_adddata.png[scaledwidth="75%"]
 
-To add a new linear feature, click on the Line button or use the 2 shortcut key and begin digitizing on the map. A pop-up message will appear if you would like to snap to an existing linear feature. Click on a single location to begin the linear feature and then continue clicking until feature has been completed. Double-click to complete the process and edit any attribution as needed. Repeat process for a new Area feature (shortcut = 3). Click Save to save all edits or step back/forward using the undo/redo buttons as needed.
+To add a new linear feature, click on the Line button or use the 2 shortcut key and begin digitizing on the map. Click on a single location to begin the linear feature and then continue clicking until feature has been completed. Double-click to complete the process and edit any attribution as needed. Repeat process for a new Area feature (shortcut = 3). Click Save to save all edits or step back/forward using the undo/redo buttons as needed.  
 
-NOTE: clicking the i key will display the length or area of a selected feature but note that the recommended tool for measuring is discussed <<Hoot_measure,here>>.
+NOTE: Line snapping is disabled by default. To enable it click on the <<MapData, Map Data>> button and check the enable line snap option.
 
 ==== Copying Features/Tags in Hootenanny
 
@@ -159,7 +161,7 @@ http://(hosted_imagery_service_name)/OSM/{zoom}/{x}/{y}.png
 
 [[Hoot-iD_Background]]
 .Background Settings in Hootenanny with the Custom Basemap URL options displayed.
-image::user/images/id/hoot_background.png[scaledwidth="75%"]
+image::user/images/id/hoot_background_new.png[]
 
 NOTE: The DigitalGlobe GBM/EGD basemap is not enabled by default due to user access restrictions. If an account has been set up with a valid UUID, you will need to edit the _dgservices.js_ file located in $TOMCAT6_HOME/webapps/hootenanny-id/js/id/services/ adding in your UUID account credentials for the egd/gbm_connectId = 'enteruuidhere' parameters.  You will also need to set dg.enabled = true.
 
@@ -172,15 +174,34 @@ image::user/images/id/hoot_image_carousel.png[]
 
 NOTE: The image carousel thumbnails do not appear, only the image acquisition date and sensor type (e.g. WV02, WV01, WV03_VNIR, etc...).
 
+[[MapData]]
 ==== Map Data
 
-The Map data settings (shortcut key = F) allow users to add map overlay information such as a photo overlay from link:$$http://www.mapillary.com/map$$[Mapillary] or a local GPX file, modify the display settings for vector data, and filter existing Map Features. _Mapillary_ is a crowd source platform that allows users to upload street level photos (not commonly used for conflation but part of the core OSM iD interface) when available. Users can also drag and drop a local GPX (GPS generated dataset) or use the file browser to add.
+The Map Data options, which can be accessed by clicking on the map data button located above the help menu (shortcut key = F), allow users to incorporate different overlay layers like the mapillary and traffic sign photos, change the default map fill and line width values, and provides a filtering capability for different map feature types (e.g. Points, Roads, Buildings, etc.).  
 
-Fill Areas allows users to select from three different options for displaying relevant vector data. The first option is _No Fill_ or Wireframe (shortcut key = W) which makes it easier to display background imagery. _Partial Fill_ displays fill areas around their inner edges only. _Full Fill_ displays features with complete fill turned. Users can adjust the _Line Width_ by unchecking the _use default value_ and setting the width value accordingly. To filter out different features of interest, simply check or uncheck the boxes next to each associated map feature found in _Map Features_ such as Points, Major Roads, Buildings, etc.  
+.Map Data options.
+image::user/images/id/hoot_mapdata.png[scaledwidth="25%"]
+
+===== Data Layers
+
+Within the Data Layers menu, users can overlay link:$$https://www.mapillary.com$$[mapillary] traffic sign and street view photos. Mapillary is a service for crowdsourcing street level photos using smartphones and computer vision.  Checking the boxes displays icons representing locations for crowdsourced street level photos and traffic signals.  When a user clicks on each icon, a photo will appear in the lower left or right corner of the map providing the visual representation from vantage point represented.  
+
+.Mapillary traffic sign and street view photos displayed in Hootenanny/iD Editor. 
+image::user/images/id/hoot_mapillary.png[]
+
+It is also possible to overlay a local GPX file (GPS generated dataset) using the file browser to add the dataset into the map.  Although these features found in Data Layers are not the primary tools used when conflating data, they can utilized since they are inherited from the base iD Editor version that Hootenanny has been developed from.
+
+===== Fill Areas and Line Width
+
+Fill Areas allows users to select from three different options for displaying relevant vector data. The first option is _No Fill_ or Wireframe (shortcut key = W) which makes it easier to display background imagery. _Partial Fill_ displays fill areas around their inner edges only. _Full Fill_ displays features with complete fill turned. To make the lines from map layers appear thicker/thinner, users can unchecking the _Use Default Value_ appearing under the Line Width option and nudge the width value up/down accordingly. 
+
+===== Map Features
+
+To filter out different features of interest, simply check or uncheck the boxes next to each associated map feature e.g. Points, Major Roads, Buildings, etc.  Note that this will not impact conflation since this only impacts the display of features on the map, not the actual data contained within a given layer.  We have also provided some additional enhancements to aid in the editing of feature geometry by adding two additional options; Highlight Edited Layer and Enable Line Snap.  Highlight Edited Layer turns on a gold halo around any feature geometry that is actively being edited on the map.  Once the Save button is clicked, the highlighting will dissappear as it is only intended to show active edits, not saved changes to a layer.  Finally the enable line snap option is provided to set the default behavior when adding new line/area geometry onto the map.  When enable line snap is checked, this feature is enabled and any new line segment that is added close to an existing feature geometry will be snapped to that feature.
 
 [[Hoot-iD_MapData]]
-.Map Data options shown with DcGisRoads displayed on DigitalGlobe GBM. The default line width is used in this figure.
-image::user/images/id/hoot_mapdata.png[scaledwidth="75%"]
+.Map features and edited layer highlighting.  When Highlight Edited Layer is checked, a gold halo appears around the edited feature geometry until the changes are saved and committed to the Hootenanny database.
+image::user/images/id/hoot_enable_editedfeatures.png[scaledwidth="75%"]
 
 ==== Tools
 
@@ -193,12 +214,10 @@ image::user/images/id/hoot_tools.png[scaledwidth="75%"]
 [[Hoot_measure]]
 ===== Measurement Tools
 
-There are two measurement tools currently provided; Measure linear distance or length of an object and measure the area of an object. To measure the length of an object on the map, click on the Tools button and select Measurement Tools | Measure Length.  The cursor will then change into crosshairs indicating that you are able to measure a feature by drawing a line.  To continue a drawing, left click to add nodes as needed.  To complete the measurement double-click. To measure an area/perimeter of a feature, select the Measure Area option and click on the screen to add nodes and double click to complete the measurement.  The measurement values will appear with the perimeter value listed above the area.
+There are two measurement tools currently provided; Measure linear distance or length of an object and measure the area of an object. To measure the length of an object on the map, click on the Tools button and select Measurement Tools | Measure Length.  The cursor will then change into crosshairs indicating that you are able to measure a feature by drawing a line.  To continue a drawing, left click to add nodes as needed.  To complete the measurement double-click. To measure an area/perimeter of a feature, select the Measure Area option and click on the screen to add nodes and double click to complete the measurement.  The measurement values will appear with the perimeter value listed above the area.  This value will remain on the map until the user clicks the Clear button appearing in the place of Tools once a new measurement has been added.  Users can zoom and pan on the map while capturing a measurement.
 
 .Measuring area in Hootenanny.
 image::user/images/id/hoot_measure_area.png[scaledwidth="75%"]
-
-NOTE: The pan/zoom functions are disabled when measuring an object due to the way that measurements are captured on the screen. Clicking on the map after completing the measurement will cause the value to disappear from the screen. It is also possible to display the measurement of a selected layer geometry by clicking the `i` key.
 
 ===== Clip Tools
 
@@ -224,13 +243,13 @@ The following table provides all of the available shortcut keys for accessing Ho
 
 |======
 | *Shortcut* | *Action*
-| 1 | Create new Point feature
-| 2 | Create new Line feature
-| 3 | Create new Area feature
-| 6 | Measure Length
-| 7 | Measure Area
-| 8 | Clip to Bounding Box
-| 9 | Clip to Visual Extent
+| 1 | Create new point feature
+| 2 | Create new line feature
+| 3 | Create new area feature
+| 6 | Measure length
+| 7 | Measure area
+| 8 | Clip to bounding box
+| 9 | Clip to visual extent
 | Ctrl + z | Undo
 | Ctrl + y | Redo
 | Ctrl + s | Save
@@ -239,31 +258,33 @@ The following table provides all of the available shortcut keys for accessing Ho
 | Ctrl + Shift + v | Pastes selected tags using the overwrite option
 | Ctrl + Alt + v | Pastes selected tags using the append option
 | Ctrl + Backspace | Deletes object permanently
-| Shift + Left mouse click | selects multiple features geometry/tags within layer
+| Shift + Left mouse click | Selects multiple features geometry/tags within layer
+| Shift + R | Shows review relations for a selected feature within a layer (in review mode) 
 | Alt + b | Switches b/w layers during post-conflation conflict review
 | Alt + n | Toggles layer visibility on/off
-| + | Zoom in 1 level
-| - | Zoom out 1 level
-| / | Toggles display of overview map and map-in-map results during Conflict Review
+| + | Zoom in one level
+| - | Zoom out one level
+| / | Toggles display of overview map and map-in-map results (in review mode)
 | a | Continue drawing a line at the selected node
 | b | Display background layer switcher
-| c | Open Image carousel
+| c | Open image carousel
 | d | Disconnect lines/areas from selected node
-| f | Displays Map datasettings
+| f | Displays map data settings
 | h | Display in-editor help/documentation
 | i | Display feature info such as length and centroid coords
-| m | Move selected feature / Merge during POI Review
-| n | Advances to next review during Conflict Review
+| m | Move selected feature or Merge (for POIs only in review mode) 
+| n | Advances to next review (in review mode) 
 | o | Make feature a circle (must be poly or closed loop line)
-| p | Steps back to previous review during Conflict Review
-| r | rotate object around center / Resolved during Conflict Review
+| p | Steps back to previous review (in review mode) 
+| r | rotate object around center or resolved (in review mode) 
 | s | Straighten a line or square corner of area
+| t | In review mode with a feature selected, toggles between input/conflated layers
 | x | Split line into two at selected node
-| ↓,↑,←,→ | pan map in direction
+| ↓,↑,←,→ | Pan map in direction
 | v | Make line go in opposite direction
 | w | Toggles Wireframe vector display on/off
-| Enter/Esc | stops drawing feature
-| F11 | sets browser to full screen
+| Enter/Esc | Stops drawing feature
+| F11 | Sets browser to full screen
 |======
 
 
@@ -364,6 +385,24 @@ Clicking on any of the highlighted fields in the review table (I) selects the fe
 ==== Review Text
 
 When features are flagged as needing review, a number of different review notes may appear to provide some guidance to the user.  The review notes are general and don't provide the specific reasons why a pair of features are being reviewed against one another but do provide some context for understanding why a review may have occurred.  For example, the Review Note: The feature pair with a review score of 0.375 met the review threshold of 0.25 provides the review score and the threshold value which could be compared against other features with similar score and threshold values. Often when conflating POI data, review notes such as _Somewhat similar (200m) - very similar names and generic type, very close together, generic type to place match_ or _Somewhat similar (26m) - very close together, similar POI type_ will appear.  Those provide an indication of the reasons for being flagged and the distance between the POIs in the particular review.  Any specific questions regarding the reviews and required action can be addressed to Hootenanny.Help@digitalglobe.com.
+
+[[ReviewRelations]]
+==== Viewing Review Relations
+
+After conflating two input datasets and entering review mode, users are presented with a review containing Feature A against Feature B, reflective of the pairwise manner that conflation occurs.  In some cases, Feature A or B (highlighted by either blue/red) may represent a relation such as the case with road reviews involving one or more multiline strings.  However in other cases such as with Pois, the relations represent associated Pois that are also reviewed against the same set of features (listed in the tag `hoot:score:uuid` for a selected feature).  In order to view all of the associated review relations for a given feature, click on either the blue/red highlighted feature and select the palette option "Show Review Relations" or Shift-R. This will display a line between the feature and all of the associated review relations.  Users can scroll through each review pair by clicking on the letter icon, i.e. A-Z, above each line.  
+
+[[LatviaHotelReview]]
+.The review relations of the selected Latvia Geonames Poi, Gutnebergs Hotel.  Clicking on each letter will display the associated review feature pair/table.
+image::user/images/id/hoot_reviewrelations.png[]
+
+[[ToggleInputs]]
+==== Toggle Conflated Layer with Inputs
+
+When evaluating the conflated output in review mode, it may be useful to toggle between the input dataset view where only the input layers are shown and the conflated dataset view where both input and merged features are displayed. For example if a user was trying to make a decision about whether to edit, resolve, or merge a set of reviewed/conflated features, they would likely need to know how the data looked prior to conflation.  To provide some additional context of the pre/post conflation results during review mode, click on the "Toggle Conflated Layer" icon (shortcut = T) as shown in <<ToggleLayerView>> when any feature has been selected. Note that you will need to toggle back to the merged layer view before advancing to the next review.
+
+[[ToggleLayerView]]
+.Toggling between the conflated layer (B) and input layer view (A) in review mode.  DigitalGlobe GBM with OpenStreetMap data from openstreetmap.org (orange), MGCP data (pink) from GEOINT New Zealand Data Service over Apia, Western Samoa.  
+image::user/images/id/hoot_toggle.png[]
 
 [[MapInMap]]
 ==== Map-in-Map

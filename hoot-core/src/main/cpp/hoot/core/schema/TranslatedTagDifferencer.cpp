@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TranslatedTagDifferencer.h"
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/algorithms/SingleAssignmentProblemSolver.h>
+#include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/ScriptTranslator.h>

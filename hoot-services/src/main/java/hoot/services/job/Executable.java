@@ -22,29 +22,30 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.job;
 
-import org.json.simple.*;
+import org.json.simple.JSONObject;
+
 
 /**
  * Interface for classes executing commands
  */
-public interface Executable 
-{
-	/**
-	 * Performs execution. All required meta data should be in command parameter.
-	 * 
-	 * @param command
-	 * @throws Exception
-	 */
-	void exec(JSONObject command) throws Exception;
-	
-	/**
-	 * Returns the final job status detail
-	 * 
-	 * @return a status detail string
-	 */
-	String getFinalStatusDetail();
+public interface Executable {
+    /**
+     * Performs execution. All required meta data should be in command
+     * parameter.
+     * 
+     * @param command
+     * @throws Exception
+     */
+    void exec(JSONObject command) throws Exception;
+
+    /**
+     * Returns the final job status detail
+     * 
+     * @return a status detail string
+     */
+    String getFinalStatusDetail();
 }

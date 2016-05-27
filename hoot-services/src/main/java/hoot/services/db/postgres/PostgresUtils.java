@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.db.postgres;
 
@@ -34,57 +34,51 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.postgresql.util.PGobject;
 
+
 /**
  * Postgres specific utilities
  */
-public class PostgresUtils
-{
-  /**
-   * Converts an hstore Postgres object to a string map
-   * 
-   * @param postgresObj a Postgres object containing an hstore
-   * @return a string map with the hstore's data
-   * @throws Exception
-   */
-  public static Map<String, String> postgresObjToHStore(final PGobject postgresObj) throws Exception
-  {
-    //type = hstore
-    //value = "key 1"=>"val 1", "key 2"=>"val 2"
-    
-    Map<String, String> hstore = new HashMap<String, String>();
- 
-    if (postgresObj != null && postgresObj.getValue() != null &&
-        StringUtils.trimToNull(postgresObj.getValue()) != null)
-    {
-    	String tagsStr = postgresObj.getValue();
-    	hstore = _parseTags(tagsStr);
-    }
-    return hstore;
-  }
-  
-  protected static final Map<String, String> _parseTags(final String tagsStr) throws Exception
-  {
-  	Map<String, String> tagsMap = new HashMap<String, String>();
-  	
+public class PostgresUtils {
+    /**
+     * Converts an hstore Postgres object to a string map
+     * 
+     * @param postgresObj
+     *            a Postgres object containing an hstore
+     * @return a string map with the hstore's data
+     * @throws Exception
+     */
+    public static Map<String, String> postgresObjToHStore(final PGobject postgresObj) throws Exception {
+        // type = hstore
+        // value = "key 1"=>"val 1", "key 2"=>"val 2"
 
-  	if(tagsStr != null && tagsStr.length() > 0)
-  	{
-  		Pattern regex = Pattern.compile("(\"[^\"]*\")=>(\"(?:\\\\.|[^\"\\\\]+)*\"|[^,\"]*)");
-    	Matcher regexMatcher = regex.matcher(tagsStr);
-    	while (regexMatcher.find()) {
-    	    String key = regexMatcher.group(1);
-    	    key = StringUtils.removeStart(key, "\"");
-          key = StringUtils.removeEnd(key, "\"");
-    	    String val = regexMatcher.group(2);
-    	    val = StringUtils.removeStart(val, "\"");
-          val = StringUtils.removeEnd(val, "\"");
-          tagsMap.put(key, val);
-    	} 
-  	}
-  	
-  	return tagsMap;
-  }
+        Map<String, String> hstore = new HashMap<String, String>();
+
+        if (postgresObj != null && postgresObj.getValue() != null
+                && StringUtils.trimToNull(postgresObj.getValue()) != null) {
+            String tagsStr = postgresObj.getValue();
+            hstore = _parseTags(tagsStr);
+        }
+        return hstore;
+    }
+
+    protected static final Map<String, String> _parseTags(final String tagsStr) throws Exception {
+        Map<String, String> tagsMap = new HashMap<String, String>();
+
+        if (tagsStr != null && tagsStr.length() > 0) {
+            Pattern regex = Pattern.compile("(\"[^\"]*\")=>(\"(?:\\\\.|[^\"\\\\]+)*\"|[^,\"]*)");
+            Matcher regexMatcher = regex.matcher(tagsStr);
+            while (regexMatcher.find()) {
+                String key = regexMatcher.group(1);
+                key = StringUtils.removeStart(key, "\"");
+                key = StringUtils.removeEnd(key, "\"");
+                String val = regexMatcher.group(2);
+                val = StringUtils.removeStart(val, "\"");
+                val = StringUtils.removeEnd(val, "\"");
+                tagsMap.put(key, val);
+            }
+        }
+
+        return tagsMap;
+    }
 
 }
-
-

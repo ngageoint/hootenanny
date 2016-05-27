@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYSUBLINEMATCHSTRING_H
 #define WAYSUBLINEMATCHSTRING_H
@@ -75,6 +75,7 @@ public:
 
   const MatchCollection& getMatches() const { return _matches; }
 
+  /// @todo move reverse vector into the way subline string, but keep the interface identical
   vector<bool> getReverseVector1() const;
   vector<bool> getReverseVector2() const;
 
@@ -129,6 +130,7 @@ private:
 HOOT_DEFINE_EXCEPTION(OverlappingMatchesException)
 
 typedef boost::shared_ptr<WaySublineMatchString> WaySublineMatchStringPtr;
+typedef boost::shared_ptr<const WaySublineMatchString> ConstWaySublineMatchStringPtr;
 
 }
 
