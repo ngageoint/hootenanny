@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -104,10 +104,18 @@ public:
   shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
   /**
+   * Gets the next sequence ID for the given element type
+   *
+   * @param type element type
+   * @return an element ID
+   */
+  long getNextId(const ElementType type);
+
+  /**
    * Gets the next sequence ID for the given database table
    *
-   * @param table database table name
-   * @return an ID
+   * @param tableName database table name
+   * @return an element ID
    */
   long getNextId(const QString tableName);
 
@@ -142,6 +150,7 @@ private:
   // Osm Api DB table strings
   static QString _getWayNodesTableName() { return "current_way_nodes"; }
   static QString _getRelationMembersTableName() { return "current_relation_members"; }
+
 };
 
 }

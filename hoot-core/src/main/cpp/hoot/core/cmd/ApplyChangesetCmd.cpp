@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OsmApiDbChangesetWriter.h>
+#include <hoot/core/io/OsmApiDbSqlChangesetWriter.h>
 
 // Qt
 #include <QFile>
@@ -54,6 +54,8 @@ public:
       throw HootException(QString("%1 takes two or four parameters.").arg(getName()));
     }
 
+    LOG_INFO("Applying changeset " << args[0] << " to " << args[1] << "...");
+
     if (args[0].endsWith(".osc"))
     {
       throw HootException(
@@ -62,7 +64,7 @@ public:
     else if (args[0].endsWith(".osc.sql"))
     {
       QUrl url(args[1]);
-      OsmApiDbChangesetWriter changesetWriter(url);
+      OsmApiDbSqlChangesetWriter changesetWriter(url);
 
       if (args.size() == 4)
       {
@@ -74,6 +76,7 @@ public:
 
       QFile changesetSqlFile(args[0]);
       changesetWriter.write(changesetSqlFile);
+      cout << changesetWriter.getChangesetStats();
     }
     else
     {

@@ -47,6 +47,12 @@ When(/^I click the "([^"]*)" Dataset$/) do |dataset|
   parent.find('rect').click
 end
 
+When(/^I context click the "([^"]*)" Dataset$/) do |dataset|
+  text = page.find('text',:text=>dataset, :match => :prefer_exact)
+  parent = text.find(:xpath,"..")
+  parent.find('rect').context_click
+end
+
 When(/^I click first "([^"]*)"$/) do |text|
   Capybara.ignore_hidden_elements = false
   elements = all('a', :text => text)
@@ -83,7 +89,13 @@ end
 When(/^I select the "([^"]*)" option in the "([^"]*)" combobox$/) do |opt, cb|
   combobox = page.find(:css, 'input[placeholder="' + cb + '"]')
   combobox.find(:xpath, '..').find('.combobox-caret').click
-  find('a', :text=> opt).click
+  page.find('div.combobox').find('a', :text=> opt).click
+end
+
+When(/^I select the "([^"]*)" option in "([^"]*)"$/) do |opt, el|
+  combobox = page.find(el)
+  combobox.find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt).click
 end
 
 When(/^I click the "([^"]*)" button$/) do |el|
@@ -118,6 +130,10 @@ end
 When(/^I fill input under "([^"]*)" with "([^"]*)"$/) do |parent, value|
   all('div.' + parent).last.find('input[type="text"]').set(value)
   sleep 1
+end
+
+When(/^I append "([^"]*)" input with "([^"]*)"$/) do |el, value|
+  find('input.' + el).native.send_keys(value)
 end
 
 When(/^I press enter in the "([^"]*)" input$/) do |selector|
@@ -158,6 +174,10 @@ end
 
 When(/^I press "([^"]*)" big loud span$/) do |txt|
   find('span.big.loud', :text=>txt).click
+end
+
+When(/^I wait ([0-9]+) seconds$/) do |seconds|
+  sleep Float(seconds)
 end
 
 When(/^I wait$/) do
@@ -248,6 +268,12 @@ When(/^I upload an invalid dataset/) do
   end
 end
 
+When(/^I select "([^"]*)" dataset/) do |file|
+  include_hidden_fields do
+    page.attach_file('ingestfileuploader', ENV['HOOT_HOME'] + file)
+  end
+end
+
 Then(/^I take a screenshot/) do
   screenshot_and_save_page
 end
@@ -276,4 +302,42 @@ end
 
 Then(/^I POST coverage info$/) do
   page.execute_script("(function () { if (window.__coverage__) { d3.xhr('http://localhost:8880/coverage/client').header('Content-Type', 'application/json').post(JSON.stringify(window.__coverage__),function(err, data){});}}())");
+end
+
+Then(/^I click the "([^"]*)" context menu item$/) do |text|
+  find('div.context-menu').find('li', :text => text).click
+end
+
+Then(/^the download file should exists$/) do
+  expect( DownloadHelpers::download_exists ).to be true
+end
+
+Then(/^the download file "([^"]*)" should exist$/) do |file|
+  name = ENV['HOME'] + '/Downloads/' + file
+  # puts name
+  expect( File.exists?(name) ).to be true
+  File.delete(name)
+end
+
+When(/^I click the "([^"]*)" classed element under "([^"]*)" with text "([^"]*)"$/) do |classed, el, text|
+  find(el, :text => text).find('.' + classed).click
+end
+
+When(/^I select "([^"]*)" basemap/) do |file|
+  include_hidden_fields do
+    page.attach_file('basemapfileuploader', ENV['HOOT_HOME'] + file)
+  end
+end
+
+When(/^I click the map background button$/) do
+  find('div.background-control').find('button').click
+end
+
+When(/^I click the "([^"]*)" map layer$/) do |text|
+  find('label', :text => text).click
+end
+
+When(/^I should see stats "([^"]*)" "([^"]*)" "([^"]*)" "([^"]*)"$/) do |type, row, column, value|
+  # And I should see stats "count" "buildings" "merged" "4"
+  find('table.' + type).find('td.key', :text => row).find(:xpath,"..").all('td', :text => value).first()
 end
