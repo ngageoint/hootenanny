@@ -47,11 +47,30 @@ When(/^I click the "([^"]*)" Dataset$/) do |dataset|
   parent.find('rect').click
 end
 
+When(/^I click the "([^"]*)" Dataset and the "([^"]*)" Dataset$/) do |d1, d2|
+  text1 = page.find('text',:text=>d1, :match => :prefer_exact)
+  parent1 = text1.find(:xpath,"..")
+  rect1 = parent1.find('rect')
+
+  text2 = page.find('text',:text=>d2, :match => :prefer_exact)
+  parent2 = text2.find(:xpath,"..")
+  rect2 = parent2.find('rect')
+
+  rect1n = rect1.native
+  rect1n.send_key :control
+
+end
+
 When(/^I context click the "([^"]*)" Dataset$/) do |dataset|
   text = page.find('text',:text=>dataset, :match => :prefer_exact)
   parent = text.find(:xpath,"..")
   parent.find('rect').context_click
 end
+
+When(/^I context click "([^"]*)"$/) do |txt|
+  page.find('a',:text=>txt, :match => :prefer_exact).context_click
+end
+
 
 When(/^I click first "([^"]*)"$/) do |text|
   Capybara.ignore_hidden_elements = false
@@ -340,4 +359,30 @@ end
 When(/^I should see stats "([^"]*)" "([^"]*)" "([^"]*)" "([^"]*)"$/) do |type, row, column, value|
   # And I should see stats "count" "buildings" "merged" "4"
   find('table.' + type).find('td.key', :text => row).find(:xpath,"..").all('td', :text => value).first()
+end
+
+Then(/^I click the first "([^"]*)" list item$/) do |cls|
+  all('li.' + cls).first.click
+end
+
+When(/^I select in row ([0-9]*) the "([^"]*)" dataset$/) do |rowNum, file|
+  include_hidden_fields do
+    page.attach_file('ingestfileuploader-' + rowNum, ENV['HOOT_HOME'] + file)
+  end
+end
+
+When(/^I select in row ([0-9]*) the "([^"]*)" option in the "([^"]*)" combobox$/) do |rowNum, opt, cb|
+  combobox = find(:xpath, "//input[@row='" + rowNum + "'][@placeholder='" + cb + "']")
+  combobox.find(:xpath, '..').find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt).click
+end
+
+When(/^I should see row ([0-9]*) input "([^"]*)" with value "([^"]*)"$/) do |rowNum, placeholder, value|
+  el = find(:xpath , "//input[@placeholder='" + placeholder + "'][@row='" + rowNum + "']")
+  el.value.should eq value
+end
+
+When(/^I fill row ([0-9]*) input "([^"]*)" with value "([^"]*)"$/) do |rowNum, placeholder, value|
+  el = find(:xpath , "//input[@placeholder='" + placeholder + "'][@row='" + rowNum + "']")
+  el.set(value)
 end
