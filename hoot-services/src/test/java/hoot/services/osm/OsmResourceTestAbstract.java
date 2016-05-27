@@ -34,7 +34,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +48,6 @@ import hoot.services.review.ReviewTestUtils;
 /*
  * Base class for tests that need to read/write OSM data to the services database
  */
-@Ignore
 public abstract class OsmResourceTestAbstract extends JerseyTest {
     private static final Logger log = LoggerFactory.getLogger(OsmResourceTestAbstract.class);
 

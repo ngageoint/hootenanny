@@ -1,0 +1,60 @@
+Listening for transport dt_socket at address: 8585
+May 16, 2016 3:40:33 PM org.apache.coyote.http11.Http11Protocol init
+INFO: Initializing Coyote HTTP/1.1 on http-8080
+May 16, 2016 3:40:33 PM org.apache.catalina.startup.Catalina load
+INFO: Initialization processed in 521 ms
+May 16, 2016 3:40:33 PM org.apache.catalina.core.StandardService start
+INFO: Starting service Catalina
+May 16, 2016 3:40:33 PM org.apache.catalina.core.StandardEngine start
+INFO: Starting Servlet Engine: Apache Tomcat/6.0.39
+May 16, 2016 3:40:34 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor ROOT.xml
+May 16, 2016 3:40:34 PM org.apache.catalina.startup.HostConfig deployWAR
+INFO: Deploying web application archive hoot-services.war
+org.deegree.commons.config.DeegreeWorkspace@268b61c3
+May 16, 2016 3:40:40 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory hootenanny-id
+May 16, 2016 3:40:40 PM org.apache.coyote.http11.Http11Protocol start
+INFO: Starting Coyote HTTP/1.1 on http-8080
+May 16, 2016 3:40:40 PM org.apache.catalina.startup.Catalina start
+INFO: Server startup in 6635 ms
+Listening for transport dt_socket at address: 8585
+May 17, 2016 3:37:02 PM org.apache.coyote.http11.Http11Protocol init
+INFO: Initializing Coyote HTTP/1.1 on http-8080
+May 17, 2016 3:37:02 PM org.apache.catalina.startup.Catalina load
+INFO: Initialization processed in 709 ms
+May 17, 2016 3:37:02 PM org.apache.catalina.core.StandardService start
+INFO: Starting service Catalina
+May 17, 2016 3:37:02 PM org.apache.catalina.core.StandardEngine start
+INFO: Starting Servlet Engine: Apache Tomcat/6.0.39
+May 17, 2016 3:37:03 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor ROOT.xml
+May 17, 2016 3:37:03 PM org.apache.catalina.startup.HostConfig deployWAR
+INFO: Deploying web application archive hoot-services.war
+org.deegree.commons.config.DeegreeWorkspace@6b173cef
+May 17, 2016 3:37:09 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory hootenanny-id
+May 17, 2016 3:37:10 PM org.apache.coyote.http11.Http11Protocol start
+INFO: Starting Coyote HTTP/1.1 on http-8080
+May 17, 2016 3:37:10 PM org.apache.catalina.startup.Catalina start
+INFO: Server startup in 7460 ms
+Listening for transport dt_socket at address: 8585
+May 18, 2016 7:09:06 PM org.apache.coyote.http11.Http11Protocol init
+INFO: Initializing Coyote HTTP/1.1 on http-8080
+May 18, 2016 7:09:06 PM org.apache.catalina.startup.Catalina load
+INFO: Initialization processed in 668 ms
+May 18, 2016 7:09:06 PM org.apache.catalina.core.StandardService start
+INFO: Starting service Catalina
+May 18, 2016 7:09:06 PM org.apache.catalina.core.StandardEngine start
+INFO: Starting Servlet Engine: Apache Tomcat/6.0.39
+May 18, 2016 7:09:06 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor ROOT.xml
+May 18, 2016 7:09:06 PM org.apache.catalina.startup.HostConfig deployWAR
+INFO: Deploying web application archive hoot-services.war
+org.deegree.commons.config.DeegreeWorkspace@5c465262
+May 18, 2016 11:08:45 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory hootenanny-id
+May 18, 2016 11:08:45 PM org.apache.coyote.http11.Http11Protocol start
+INFO: Starting Coyote HTTP/1.1 on http-8080
+May 18, 2016 11:08:45 PM org.apache.catalina.startup.Catalina start
+INFO: Server startup in 7368 ms

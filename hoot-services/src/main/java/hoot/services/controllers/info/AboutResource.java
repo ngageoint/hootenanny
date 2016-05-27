@@ -26,11 +26,8 @@
  */
 package hoot.services.controllers.info;
 
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.ws.rs.GET;
@@ -45,15 +42,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import hoot.services.HootProperties;
 import hoot.services.info.BuildInfo;
 import hoot.services.info.CoreDetail;
-import hoot.services.info.ServicesDetail;
-import hoot.services.info.ServicesDetail.Property;
-import hoot.services.info.ServicesDetail.ServicesResource;
 import hoot.services.info.VersionInfo;
 import hoot.services.nativeInterfaces.JobExecutionManager;
-import hoot.services.utils.ClassLoaderUtil;
 import hoot.services.utils.ResourceErrorHandler;
 
 
@@ -64,10 +56,13 @@ import hoot.services.utils.ResourceErrorHandler;
 public class AboutResource {
     private static final Logger log = LoggerFactory.getLogger(AboutResource.class);
 
-    private static ClassPathXmlApplicationContext appContext;
+    private static final ClassPathXmlApplicationContext appContext;
+
+    static {
+        appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
+    }
 
     public AboutResource() {
-        appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
     }
 
     private static Properties getBuildInfo() {
@@ -78,7 +73,7 @@ public class AboutResource {
         }
         catch (Exception e) {
             log.warn("About Resource unable to find the services build.info file.  "
-                    + "Web Services version information will be unavailable.");
+                    + "Web Services version information will be unavailable.", e);
 
             buildInfo = new Properties();
             buildInfo.setProperty("name", "unknown");
@@ -110,7 +105,7 @@ public class AboutResource {
             versionInfo.setVersion(buildInfo.getProperty("version"));
             versionInfo.setBuiltBy(buildInfo.getProperty("user"));
 
-            log.debug("Returning response: " + versionInfo + " ...");
+            log.debug("Returning response: {} ...", versionInfo);
         }
         catch (Exception e) {
             ResourceErrorHandler.handleError("Error retrieving services version info: " + e.getMessage(),
@@ -118,72 +113,6 @@ public class AboutResource {
         }
 
         return versionInfo;
-    }
-
-    /**
-     * Service method endpoint for retrieving withDetails information about the
-     * Hootenanny Services environment.
-     * <p>
-     * GET hoot-services/info/about/servicesVersionDetail
-     *
-     * @return JSON Array containing Hoot service configuration detail
-     */
-    @GET
-    @Path("/servicesVersionDetail")
-    @Produces(MediaType.APPLICATION_JSON)
-    public ServicesDetail getServicesVersionDetail() {
-        ServicesDetail servicesDetail = null;
-        try {
-            log.debug("Retrieving services version...");
-
-            servicesDetail = new ServicesDetail();
-
-            List<Property> properties = new ArrayList<>();
-            Map<String, String> props = HootProperties.getProperties();
-
-            for (Object o : props.entrySet()) {
-                Property prop = new Property();
-
-                @SuppressWarnings("rawtypes")
-                Map.Entry parsedProp = (Map.Entry) o;
-
-                prop.setName((String) parsedProp.getKey());
-                prop.setValue((String) parsedProp.getValue());
-                properties.add(prop);
-            }
-
-            servicesDetail.setProperties(properties.toArray(new Property[properties.size()]));
-            servicesDetail.setClassPath(System.getProperty("java.class.path", null));
-
-            List<ServicesResource> resources = new ArrayList<>();
-
-            for (String url : ClassLoaderUtil.getMostJars()) {
-                ServicesResource servicesResource = new ServicesResource();
-                servicesResource.setType("jar");
-                servicesResource.setUrl(url);
-                resources.add(servicesResource);
-            }
-
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            Enumeration<URL> urls = classLoader.getResources("");
-            while (urls.hasMoreElements()) {
-                URL resource = urls.nextElement();
-                ServicesResource servicesResource = new ServicesResource();
-                servicesResource.setType(resource.getProtocol());
-                servicesResource.setUrl(resource.toString());
-                resources.add(servicesResource);
-            }
-
-            servicesDetail.setResources(resources.toArray(new ServicesResource[resources.size()]));
-
-            log.debug("Returning response: " + servicesDetail + " ...");
-        }
-        catch (Exception e) {
-            ResourceErrorHandler.handleError("Error retrieving services version info: " + e.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, log);
-        }
-
-        return servicesDetail;
     }
 
     private static String getCoreInfo(boolean withDetails) throws Exception {
@@ -258,7 +187,7 @@ public class AboutResource {
             versionInfo.setVersion(versionInfoParts[1]);
             versionInfo.setBuiltBy(versionInfoParts[4]);
 
-            log.debug("Returning response: " + versionInfo + " ...");
+            log.debug("Returning response: {} ...", versionInfo);
         }
         catch (Exception e) {
             ResourceErrorHandler.handleError("Error retrieving core version info: " + e.getMessage(),
@@ -296,10 +225,9 @@ public class AboutResource {
             }
 
             coreDetail = new CoreDetail();
-            coreDetail
-                    .setEnvironmentInfo(versionInfoPartsModified.toArray(new String[versionInfoPartsModified.size()]));
+            coreDetail.setEnvironmentInfo(versionInfoPartsModified.toArray(new String[versionInfoPartsModified.size()]));
 
-            log.debug("Returning response: " + coreDetail + " ...");
+            log.debug("Returning response: {} ...", coreDetail);
         }
         catch (Exception e) {
             ResourceErrorHandler.handleError("Error retrieving core version info: " + e.getMessage(),
