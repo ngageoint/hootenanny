@@ -37,23 +37,15 @@ import hoot.services.HootProperties;
 import hoot.services.controllers.info.AboutResource;
 
 
-public class ErrorLog {
+public final class ErrorLog {
 
-    private static String errLogPath = null;
-    private static String tempOutputPath = null;
+    private static final String errLogPath = HootProperties.getProperty("ErrorLogPath");
+    private static final String tempOutputPath = HootProperties.getProperty("tempOutputPath");
 
-    public ErrorLog() throws IOException {
-        // ErrorLogPath
-        if (errLogPath == null) {
-            errLogPath = HootProperties.getProperty("ErrorLogPath");
-        }
-
-        if (tempOutputPath == null) {
-            tempOutputPath = HootProperties.getProperty("tempOutputPath");
-        }
+    private ErrorLog() {
     }
 
-    public String getErrorlog(long maxLength) throws IOException {
+    public static String getErrorlog(long maxLength) throws IOException {
         File file = new File(errLogPath);
 
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
@@ -73,16 +65,14 @@ public class ErrorLog {
         }
     }
 
-    public String generateExportLog() throws IOException {
+    public static String generateExportLog() throws IOException {
         String fileId = UUID.randomUUID().toString();
-        String outputPath = tempOutputPath + File.pathSeparator + fileId;
-
-        String data = "";
+        String outputPath = tempOutputPath + File.separator + fileId;
 
         AboutResource about = new AboutResource();
 
         VersionInfo vInfo = about.getCoreVersionInfo();
-        data = System.lineSeparator() + "************ CORE VERSION INFO ***********" + System.lineSeparator();
+        String data = System.lineSeparator() + "************ CORE VERSION INFO ***********" + System.lineSeparator();
         data += vInfo.toString();
 
         CoreDetail cd = about.getCoreVersionDetail();
@@ -91,26 +81,8 @@ public class ErrorLog {
             data += StringUtils.join(cd.getEnvironmentInfo(), System.lineSeparator());
         }
 
-        data = System.lineSeparator() + "************ SERVICE VERSION INFO ***********" + System.lineSeparator();
+        data += System.lineSeparator() + "************ SERVICE VERSION INFO ***********" + System.lineSeparator();
         data += about.getServicesVersionInfo().toString();
-
-        ServicesDetail sd = about.getServicesVersionDetail();
-        if (sd != null) {
-            data += System.lineSeparator() + "************ SERVICE DETAIL PROPERTY ***********"
-                    + System.lineSeparator();
-            for (ServicesDetail.Property prop : sd.getProperties()) {
-                String str = prop.getName() + " : " + prop.getValue() + System.lineSeparator();
-                data += str;
-            }
-
-            data += System.lineSeparator() + "************ SERVICE DETAIL RESOURCE ***********"
-                    + System.lineSeparator();
-            for (ServicesDetail.ServicesResource res : sd.getResources()) {
-                String str = res.getType() + " : " + res.getUrl() + System.lineSeparator();
-                data += str;
-            }
-        }
-
         data += System.lineSeparator() + "************ CATALINA LOG ***********" + System.lineSeparator();
 
         // 5MB Max

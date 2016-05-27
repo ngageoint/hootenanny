@@ -105,6 +105,12 @@ When(/^I select the "([^"]*)" option in the "([^"]*)" combobox$/) do |opt, cb|
   page.find('div.combobox').find('a', :text=> opt).click
 end
 
+When(/^I select the "([^"]*)" option in "([^"]*)"$/) do |opt, el|
+  combobox = page.find(el)
+  combobox.find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt).click
+end
+
 When(/^I click the "([^"]*)" button$/) do |el|
   find('button.' + el).click
 end
@@ -339,4 +345,27 @@ Then(/^the download file "([^"]*)" should exist$/) do |file|
   # puts name
   expect( File.exists?(name) ).to be true
   File.delete(name)
+end
+
+When(/^I click the "([^"]*)" classed element under "([^"]*)" with text "([^"]*)"$/) do |classed, el, text|
+  find(el, :text => text).find('.' + classed).click
+end
+
+When(/^I select "([^"]*)" basemap/) do |file|
+  include_hidden_fields do
+    page.attach_file('basemapfileuploader', ENV['HOOT_HOME'] + file)
+  end
+end
+
+When(/^I click the map background button$/) do
+  find('div.background-control').find('button').click
+end
+
+When(/^I click the "([^"]*)" map layer$/) do |text|
+  find('label', :text => text).click
+end
+
+When(/^I should see stats "([^"]*)" "([^"]*)" "([^"]*)" "([^"]*)"$/) do |type, row, column, value|
+  # And I should see stats "count" "buildings" "merged" "4"
+  find('table.' + type).find('td.key', :text => row).find(:xpath,"..").all('td', :text => value).first()
 end

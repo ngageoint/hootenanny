@@ -28,16 +28,14 @@ package hoot.services.controllers.ogr;
 
 //import hoot.services.HootProperties;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
 
 
-//TODO: clean up ignored tests
 public class TranslatorResourceTest {
-    @Ignore
+
     @Test
     @Category(UnitTest.class)
     public void testExecOsmConversion() throws Exception {
