@@ -47,6 +47,5 @@ Feature: Import Export Delete OSM Dataset
     Scenario: Delete Folder and Dataset
         When I context click the "CucumberOsm" Dataset
         And I click the "Delete" context menu item
-        And I wait
         And I accept the alert
         Then I wait 30 "seconds" to not see "CucumberOsm"
