@@ -18,13 +18,11 @@ Feature: Basemap Ingest
         Then I select the "sprocket" div
         And I click the map background button
         And I click the "RomanColosseumCucumber" map layer
-        And I wait
         And I accept the alert
         Then I select the "sprocket" div
         When I click the "openeye" classed element under "span.fill-white.small" with text "RomanColosseumCucumber"
 
     Scenario: Delete Map
         When I click the "trash" classed element under "span.fill-white.small" with text "RomanColosseumCucumber"
-        And I wait
         And I accept the alert
         Then I wait 30 "seconds" to not see "RomanColosseumCucumber"

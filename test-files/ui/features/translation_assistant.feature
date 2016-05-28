@@ -119,7 +119,7 @@ Feature: Translation Assistant
         Then I press the left arrow key
         Then I press "Save Translation"
         Then I accept the alert
-        Then I select the "x" div
+        Then I close the modal
 
     Scenario: Test an invalid dataset
         Then I click on the "Translation Assistant" option in the "settingsSidebar"

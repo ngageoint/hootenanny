@@ -38,12 +38,16 @@ end
 
 When(/^I select the "([^"]*)" div$/) do |cls|
   begin
-    find('div.' + cls).click
-    sleep 1
+    el = find('div.' + cls)
   rescue Capybara::ElementNotFound
-    find('#' + cls).click
-    sleep 1
+    el = find('#' + cls)
   end
+  el.click
+  sleep 1
+end
+
+Then(/^I close the modal$/) do
+  find('div.modal').find('div.x').click
 end
 
 When(/^I select the first "([^"]*)" div$/) do |cls|
