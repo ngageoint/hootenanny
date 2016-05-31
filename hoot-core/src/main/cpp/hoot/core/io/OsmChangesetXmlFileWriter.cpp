@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmChangesetXmlFileWriter.h"
 
@@ -38,6 +38,7 @@
 namespace hoot
 {
 
+//TODO: this writer isn't set up to honor ConfigOptions().getChangesetMaxSize()
 OsmChangesetXmlFileWriter::OsmChangesetXmlFileWriter()
 {
   _precision = ConfigOptions().getWriterPrecision();
@@ -74,15 +75,15 @@ void OsmChangesetXmlFileWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
 
   while (cs->hasMoreChanges())
   {
-    Change c = cs->readNextChange();
-
-    if (c.type != last)
+    _change = cs->readNextChange();
+    LOG_VARD(_change.toString());
+    if (_change.type != last)
     {
       if (last != Change::Unknown)
       {
         writer.writeEndElement();
       }
-      switch (c.type)
+      switch (_change.type)
       {
         case Change::Create:
           writer.writeStartElement("create");
@@ -96,19 +97,19 @@ void OsmChangesetXmlFileWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
         default:
           throw IllegalArgumentException("Unexepected change type.");
       }
-      last = c.type;
+      last = _change.type;
     }
 
-    switch (c.e->getElementType().getEnum())
+    switch (_change.e->getElementType().getEnum())
     {
       case ElementType::Node:
-        writeNode(writer, dynamic_pointer_cast<const Node>(c.e));
+        writeNode(writer, dynamic_pointer_cast<const Node>(_change.e));
         break;
       case ElementType::Way:
-        writeWay(writer, dynamic_pointer_cast<const Way>(c.e));
+        writeWay(writer, dynamic_pointer_cast<const Way>(_change.e));
         break;
       case ElementType::Relation:
-        writeRelation(writer, dynamic_pointer_cast<const Relation>(c.e));
+        writeRelation(writer, dynamic_pointer_cast<const Relation>(_change.e));
         break;
       default:
         throw IllegalArgumentException("Unexpected element type.");
@@ -131,7 +132,17 @@ void OsmChangesetXmlFileWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr
   {
     writer.writeAttribute("timestamp", OsmUtils::toTimeString(n->getTimestamp()));
   }
-  writer.writeAttribute("version", QString::number(n->getVersion()));
+  long version = -1;
+  if (_change.type == Change::Create)
+  {
+    //for xml changeset OSM rails port expects created elements to have version = 0
+    version = 0;
+  }
+  else
+  {
+    version = n->getVersion();
+  }
+  writer.writeAttribute("version", QString::number(version));
 
   writer.writeAttribute("lat", QString::number(n->getY(), 'f', _precision));
   writer.writeAttribute("lon", QString::number(n->getX(), 'f', _precision));
@@ -165,11 +176,17 @@ void OsmChangesetXmlFileWriter::writeWay(QXmlStreamWriter& writer, ConstWayPtr w
 {
   writer.writeStartElement("way");
   writer.writeAttribute("id", QString::number(w->getId()));
-  if (w->getTimestamp() != 0)
+  long version = -1;
+  if (_change.type == Change::Create)
   {
-    writer.writeAttribute("timestamp", OsmUtils::toTimeString(w->getTimestamp()));
+    //for xml changeset OSM rails port expects created elements to have version = 0
+    version = 0;
   }
-  writer.writeAttribute("version", QString::number(w->getVersion()));
+  else
+  {
+    version = w->getVersion();
+  }
+  writer.writeAttribute("version", QString::number(version));
 
   for (size_t j = 0; j < w->getNodeCount(); j++)
   {
@@ -209,7 +226,17 @@ void OsmChangesetXmlFileWriter::writeRelation(QXmlStreamWriter& writer, ConstRel
   {
     writer.writeAttribute("timestamp", OsmUtils::toTimeString(r->getTimestamp()));
   }
-  writer.writeAttribute("version", QString::number(r->getVersion()));
+  long version = -1;
+  if (_change.type == Change::Create)
+  {
+    //for xml changeset OSM rails port expects created elements to have version = 0
+    version = 0;
+  }
+  else
+  {
+    version = r->getVersion();
+  }
+  writer.writeAttribute("version", QString::number(version));
 
   const vector<RelationData::Entry>& members = r->getMembers();
   for (size_t j = 0; j < members.size(); j++)

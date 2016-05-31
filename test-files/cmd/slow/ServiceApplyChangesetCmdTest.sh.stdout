@@ -1,8 +1,0 @@
- setval 
---------
-      1
-(1 row)
-
-13:51:13.039 INFO  .../cpp/hoot/core/io/OsmApiDb.cpp( 551) Executing changeset SQL queries against OSM API database...
-13:51:13.079 INFO  .../cpp/hoot/core/io/OsmApiDb.cpp( 603) Changeset SQL queries execute finished against OSM API database.
-13:51:13.186 INFO  ...oot/core/io/OsmApiDbReader.cpp( 111) Executing OSM API read query against all element types...

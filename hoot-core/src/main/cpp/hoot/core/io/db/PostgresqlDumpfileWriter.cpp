@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -216,6 +216,12 @@ void PostgresqlDumpfileWriter::finalizePartial()
 
 void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 {
+  Tags t = n->getTags();
+  if (n->getCircularError() >= 0.0)
+  {
+    t["error:circular"] = QString::number(n->getCircularError());
+  }
+
   if ( _writeStats.nodesWritten == 0 )
   {
     _createNodeTables();
@@ -236,7 +242,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 
   _writeNodeToTables(n, nodeDbId);
 
-  _writeTagsToTables( n->getTags(), nodeDbId,
+  _writeTagsToTables(t, nodeDbId,
     "current_node_tags", "%1\t%2\t%3\n",
     "node_tags", "%1\t1\t%2\t%3\n");
 
@@ -248,6 +254,12 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 
 void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 {
+  Tags t = w->getTags();
+  if (w->getCircularError() >= 0.0)
+  {
+    t["error:circular"] = QString::number(w->getCircularError());
+  }
+
   if ( _writeStats.waysWritten == 0 )
   {
     _createWayTables();
@@ -271,7 +283,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 
   _writeWaynodesToTables( _idMappings.wayIdMap->at( w->getId() ), w->getNodeIds() );
 
-  _writeTagsToTables( w->getTags(), wayDbId,
+  _writeTagsToTables(t, wayDbId,
     "current_way_tags", "%1\t%2\t%3\n",
     "way_tags", "%1\t1\t%2\t%3\n");
 
@@ -283,6 +295,12 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 
 void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 {
+  Tags t = r->getTags();
+  if (r->getCircularError() >= 0.0)
+  {
+    t["error:circular"] = QString::number(r->getCircularError());
+  }
+
   if ( _writeStats.relationsWritten == 0 )
   {
     _createRelationTables();
@@ -306,7 +324,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 
   _writeRelationMembersToTables( r );
 
-  _writeTagsToTables( r->getTags(), relationDbId,
+  _writeTagsToTables(t, relationDbId,
     "current_relation_tags", "%1\t%2\t%3\n",
     "relation_tags", "%1\t1\t%2\t%3\n");
 
@@ -442,8 +460,10 @@ unsigned int PostgresqlDumpfileWriter::_convertDegreesToNanodegrees(const double
 
 void PostgresqlDumpfileWriter::_writeNodeToTables(
   const ConstNodePtr& node,
-  const ElementIdDatatype nodeDbId )
+  const ElementIdDatatype nodeDbId)
 {
+  //LOG_DEBUG("Writing node with ID: " << nodeDbId);
+
   const double nodeY = node->getY();
   const double nodeX = node->getX();
   const int nodeYNanodegrees = _convertDegreesToNanodegrees(nodeY);
@@ -464,7 +484,7 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
   }
 
   QString outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n").arg(
-    QString::number(nodeDbId), 
+    QString::number(nodeDbId),
     QString::number(nodeYNanodegrees),
     QString::number(nodeXNanodegrees),
     QString::number(changesetId),
@@ -499,7 +519,9 @@ void PostgresqlDumpfileWriter::_writeTagsToTables(
   for ( Tags::const_iterator it = tags.begin(); it != tags.end(); ++it )
   {
     const QString key = _escapeCopyToData( it.key() );
+    //LOG_VARD(key);
     const QString value = _escapeCopyToData( it.value() );
+    //LOG_VARD(value);
 
     currentTable << currentTableFormatString.arg(nodeDbIdString, key, value );
     historicalTable << historicalTableFormatString.arg(nodeDbIdString, key, value );
@@ -521,6 +543,8 @@ void PostgresqlDumpfileWriter::_createWayTables()
 
 void PostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId )
 {
+  //LOG_DEBUG("Writing way with ID: " << wayDbId);
+
   const int changesetId = _getChangesetId();
   const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 
@@ -585,6 +609,8 @@ void PostgresqlDumpfileWriter::_createRelationTables()
 
 void PostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype relationDbId )
 {
+  //LOG_DEBUG("Writing relation with ID: " << relationDbId);
+
   const int changesetId = _getChangesetId();
   const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 
@@ -707,7 +733,7 @@ void PostgresqlDumpfileWriter::_createTable(const QString &tableName, const QStr
 void PostgresqlDumpfileWriter::_incrementChangesInChangeset()
 {
   _changesetData.changesInChangeset++;
-  if ( _changesetData.changesInChangeset == _maxChangesInChangeset )
+  if ( _changesetData.changesInChangeset == ConfigOptions().getChangesetMaxSize() )
   {
     //LOG_DEBUG("Changeset " + QString::number(_changesetData.changesetId) + " hit max edits" );
     _writeChangesetToTable();

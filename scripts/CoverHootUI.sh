@@ -25,7 +25,7 @@ make ui-test -s
 cd $HOOT_HOME/hoot-ui
 mkdir -p cucumber-coverage
 wget http://localhost:8880/coverage/download -O cucumber-coverage/coverage.zip -q
-unzip -q cucumber-coverage/coverage.zip -d cucumber-coverage
+unzip -oq cucumber-coverage/coverage.zip -d cucumber-coverage
 
 # generate combined mocha/cucumber report
 npm run combine

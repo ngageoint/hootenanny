@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -669,6 +669,8 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
   _updateChangesetEnvelope(envelopeNode);
 
+  LOG_DEBUG("Inserted node with ID: " << QString::number(id));
+
   return true;
 }
 
@@ -705,6 +707,9 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
   _relationBulkInsert->insert(v);
 
   _lazyFlushBulkInsert();
+
+  LOG_DEBUG("Inserted relation with ID: " << QString::number(relationId));
+
   return true;
 }
 
@@ -871,7 +876,7 @@ void HootApiDb::open(const QUrl& url)
 {
   if (!isSupported(url))
   {
-    throw HootException("An unsupported URL was passed in.");
+    throw HootException("An unsupported URL was passed into HootApiDb: " + url.toString());
   }
 
   _resetQueries();
@@ -1212,6 +1217,8 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
   }
 
   _updateNode->finish();
+
+  LOG_DEBUG("Updated node with ID: " << QString::number(id));
 }
 
 void HootApiDb::updateRelation(const long id, const long version, const Tags& tags)
@@ -1242,6 +1249,8 @@ void HootApiDb::updateRelation(const long id, const long version, const Tags& ta
   }
 
   _updateRelation->finish();
+
+  LOG_DEBUG("Updated relation with ID: " << QString::number(id));
 }
 
 void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
@@ -1272,6 +1281,8 @@ void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
   }
 
   _updateWay->finish();
+
+  LOG_DEBUG("Updated way with ID: " << QString::number(id));
 }
 
 bool HootApiDb::insertWay(const Tags &tags, long &assignedId)
@@ -1313,7 +1324,8 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags)
 
   _lazyFlushBulkInsert();
 
-  LOG_DEBUG("Inserted way " << QString::number(wayId));
+  LOG_DEBUG("Inserted way with ID: " << QString::number(wayId));
+
   return true;
 }
 
@@ -1322,7 +1334,7 @@ void HootApiDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
   const long mapId = _currMapId;
   double start = Tgs::Time::getTime();
 
-  LOG_DEBUG("Inserting nodes into way " << QString::number(wayId));
+  //LOG_DEBUG("Inserting nodes into way " << QString::number(wayId));
 
   _checkLastMapId(mapId);
 

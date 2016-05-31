@@ -12,8 +12,20 @@ When(/^I click Get Started$/) do
   el.click unless el.nil?
 end
 
+When(/^I click the "([^"]*)" icon$/) do |cls|
+  find('._icon.' + cls).click
+end
+
 When(/^I click the "([^"]*)" link$/) do |linkText|
   find('a', :text=> linkText).click
+end
+
+When(/^I click the "([^"]*)" link under "([^"]*)"$/) do |linkText, parent|
+  find('#' + parent).find('a', :text=> linkText).click
+end
+
+When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent|
+  find('div.' + parent).find('a.' + classed).click
 end
 
 Then(/^I should see "([^"]*)"$/) do |text|
@@ -25,14 +37,37 @@ Then(/^I should not see "([^"]*)"$/) do |text|
 end
 
 When(/^I select the "([^"]*)" div$/) do |cls|
-  find('div.' + cls).click
+  begin
+    el = find('div.' + cls)
+  rescue Capybara::ElementNotFound
+    el = find('#' + cls)
+  end
+  el.click
   sleep 1
+end
+
+Then(/^I close the modal$/) do
+  find('div.modal').find('div.x').click
+end
+
+When(/^I select the first "([^"]*)" div$/) do |cls|
+  all('div.' + cls).first.click
+end
+
+When(/^I select the last "([^"]*)" div$/) do |cls|
+  all('div.' + cls).last.click
 end
 
 When(/^I click the "([^"]*)" Dataset$/) do |dataset|
   text = page.find('text',:text=>dataset, :match => :prefer_exact)
   parent = text.find(:xpath,"..")
   parent.find('rect').click
+end
+
+When(/^I context click the "([^"]*)" Dataset$/) do |dataset|
+  text = page.find('text',:text=>dataset, :match => :prefer_exact)
+  parent = text.find(:xpath,"..")
+  parent.find('rect').context_click
 end
 
 When(/^I click first "([^"]*)"$/) do |text|
@@ -55,7 +90,7 @@ When(/^I click second "([^"]*)"$/) do |text|
 end
 
 When(/^I click the "([^"]*)" key$/) do |arg1|
-  find("body").native.send_key(arg1)
+  find("body").native.send_keys(arg1)
 end
 
 Then(/^I should see options in this order:$/) do |table|
@@ -71,7 +106,13 @@ end
 When(/^I select the "([^"]*)" option in the "([^"]*)" combobox$/) do |opt, cb|
   combobox = page.find(:css, 'input[placeholder="' + cb + '"]')
   combobox.find(:xpath, '..').find('.combobox-caret').click
-  find('a', :text=> opt).click
+  page.find('div.combobox').find('a', :text=> opt).click
+end
+
+When(/^I select the "([^"]*)" option in "([^"]*)"$/) do |opt, el|
+  combobox = page.find(el)
+  combobox.find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt).click
 end
 
 When(/^I click the "([^"]*)" button$/) do |el|
@@ -81,6 +122,11 @@ end
 When(/^I click the "([^"]*)" button and accept the alert$/) do |el|
   find('button.' + el).click
   page.driver.browser.switch_to.alert.accept
+end
+
+When(/^I click on the "([^"]*)" button in the "([^"]*)"$/) do |button,div|
+  elements = all('#' + div  + ' button.' + button)
+  elements[0].click
 end
 
 When(/^I click the "([^"]*)" at "([^"]*)","([^"]*)"$/) do |el, x, y|
@@ -103,9 +149,41 @@ When(/^I fill "([^"]*)" input with "([^"]*)"$/) do |el, value|
   sleep 1
 end
 
+When(/^I fill input under "([^"]*)" with "([^"]*)"$/) do |parent, value|
+  all('div.' + parent).last.find('input[type="text"]').set(value)
+  sleep 1
+end
+
 When(/^I append "([^"]*)" input with "([^"]*)"$/) do |el, value|
   find('input.' + el).native.send_keys(value)
-  sleep 1
+end
+
+When(/^I press enter in the "([^"]*)" input$/) do |selector|
+  find('input' + selector).native.send_keys(:enter)
+end
+
+When(/^I press tab in the "([^"]*)" input$/) do |selector|
+  find('input' + selector).native.send_keys(:tab)
+end
+
+When(/^I press escape in the "([^"]*)" input$/) do |selector|
+  find('input' + selector).native.send_keys(:escape)
+end
+
+When(/^I press the left arrow key$/) do
+  find('body').native.send_keys(:arrow_left)
+end
+
+When(/^I press the right arrow key$/) do
+  find('body').native.send_keys(:arrow_right)
+end
+
+When(/^I press the up arrow key on "([^"]*)"$/) do |target|
+  find(target).native.send_keys(:arrow_up)
+end
+
+When(/^I press the down arrow key on "([^"]*)"$/) do |target|
+  find(target).native.send_keys(:arrow_down)
 end
 
 When(/^I press "([^"]*)"$/) do |button|
@@ -116,8 +194,21 @@ When(/^I hover over "([^"]*)"$/) do |el|
   find(el).hover
 end
 
+When(/^I click on "([^"]*)"$/) do |el|
+  find(el).click
+end
+
 When(/^I press "([^"]*)" big loud span$/) do |txt|
   find('span.big.loud', :text=>txt).click
+end
+
+When(/^I press "([^"]*)" big loud link$/) do |cls|
+  find('a.big.loud.' + cls).click
+end
+
+
+When(/^I wait ([0-9]+) seconds$/) do |seconds|
+  sleep Float(seconds)
 end
 
 When(/^I wait$/) do
@@ -177,4 +268,108 @@ Then(/^I resize the window$/) do
     window = Capybara.current_session.driver.browser.manage.window
     window.resize_to(1920, 1080) # width, height
   end
+end
+
+When(/^I upload a shapefile/) do
+  include_hidden_fields do
+    # Seems to be a bug where only the last file in the array gets attached.
+    # Then can't be attached separately because then each file gets uploaded
+    # individually.
+    page.attach_file('taFiles', [ENV['HOOT_HOME'] + '/test-files/translation_assistant/cali-test.shp', ENV['HOOT_HOME'] + '/test-files/translation_assistant/cali-test.dbf', ENV['HOOT_HOME'] + '/test-files/translation_assistant/cali-test.shx', ENV['HOOT_HOME'] + '/test-files/translation_assistant/cali-test.prj'])
+    # page.execute_script("var event = document.createEvent('Event'); event.initEvent('change', true, true); d3.select('input[name=taFiles]').node().dispatchEvent(event);")
+    puts page.driver.browser.manage.logs.get("browser")
+  end
+end
+
+When(/^I upload a zipped shapefile/) do
+  include_hidden_fields do
+    page.attach_file('taFiles', ENV['HOOT_HOME'] + '/test-files/translation_assistant/cali-test.zip')
+  end
+end
+
+When(/^I upload a zipped folder of shapefiles/) do
+  include_hidden_fields do
+    page.attach_file('taFiles', ENV['HOOT_HOME'] + '/test-files/translation_assistant/calizip.zip')
+  end
+end
+
+When(/^I upload an invalid dataset/) do
+  include_hidden_fields do
+    page.attach_file('taFiles', ENV['HOOT_HOME'] + '/test-files/translation_assistant/cali-test.shx')
+  end
+end
+
+When(/^I select "([^"]*)" dataset/) do |file|
+  include_hidden_fields do
+    page.attach_file('ingestfileuploader', ENV['HOOT_HOME'] + file)
+  end
+end
+
+Then(/^I take a screenshot/) do
+  screenshot_and_save_page
+end
+
+Then(/^I type "([^"]*)" in input "([^"]*)"$/) do |text, id|
+  page.fill_in id, :with => text
+end
+
+Then(/^I click the "([^"]*)" with text "([^"]*)"$/) do |el, text|
+  page.find(el, :text => text)
+end
+
+Then(/^I accept the alert$/) do
+  sleep 1
+  page.driver.browser.switch_to.alert.accept
+end
+
+Then(/^I should see element "([^"]*)" with value "([^"]*)"$/) do |id, value|
+  # expect(page).to have_selector("input[value='" + value + "']")
+  # page.should have_xpath("//input[@value='" + value + "']")
+  find(id).value.should eq value
+end
+
+Then(/^I choose "([^"]*)" radio button$/) do |text|
+  choose(text)
+end
+
+Then(/^I POST coverage info$/) do
+  page.execute_script("(function () { if (window.__coverage__) { d3.xhr('http://localhost:8880/coverage/client').header('Content-Type', 'application/json').post(JSON.stringify(window.__coverage__),function(err, data){});}}())");
+end
+
+Then(/^I click the "([^"]*)" context menu item$/) do |text|
+  find('div.context-menu').find('li', :text => text).click
+end
+
+Then(/^the download file should exists$/) do
+  expect( DownloadHelpers::download_exists ).to be true
+end
+
+Then(/^the download file "([^"]*)" should exist$/) do |file|
+  name = ENV['HOME'] + '/Downloads/' + file
+  # puts name
+  expect( File.exists?(name) ).to be true
+  File.delete(name)
+end
+
+When(/^I click the "([^"]*)" classed element under "([^"]*)" with text "([^"]*)"$/) do |classed, el, text|
+  find(el, :text => text).find('.' + classed).click
+end
+
+When(/^I select "([^"]*)" basemap/) do |file|
+  include_hidden_fields do
+    page.attach_file('basemapfileuploader', ENV['HOOT_HOME'] + file)
+  end
+end
+
+When(/^I click the map background button$/) do
+  find('div.background-control').find('button').click
+end
+
+When(/^I click the "([^"]*)" map layer$/) do |text|
+  find('label', :text => text).click
+end
+
+When(/^I should see stats "([^"]*)" "([^"]*)" "([^"]*)" "([^"]*)"$/) do |type, row, column, value|
+  # And I should see stats "count" "buildings" "merged" "4"
+  find('table.' + type).find('td.key', :text => row).find(:xpath,"..").all('td', :text => value).first()
 end

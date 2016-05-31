@@ -33,7 +33,7 @@ Feature: Manage Tab
         Then I click on the "Log" option in the "settingsSidebar"
         And I should see "Export Full Log"
         And I should see "Refresh"
-        And I should see "Error Log"
+        And I should see "Server Log"
         And I should see "UI Log"
         Then I click on the "Reports" option in the "settingsSidebar"
         Then I click on the "About" option in the "settingsSidebar"
