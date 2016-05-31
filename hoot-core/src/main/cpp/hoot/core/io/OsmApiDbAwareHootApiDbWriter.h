@@ -34,8 +34,8 @@ namespace hoot
 {
 
 /**
- * Writer that doesn't allow hoot api db element ID's to clash with a specified osm api db's
- * id's.
+ * Hoot api db writer that doesn't allow hoot api db element id's to clash with a specified osm api
+ * db's id's (osm api db is the id master reference).
  */
 class OsmApiDbAwareHootApiDbWriter : public HootApiDbWriter
 {
