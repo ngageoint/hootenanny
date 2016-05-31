@@ -24,7 +24,6 @@ Feature: Bulk Import and Multiselect Delete Datasets
     	Then I wait 2 "minutes" to see "dcpoi_clip_bulkImport"
     	And I wait 2 "minutes" to see "mapcruzinpoi_clip_bulkImport"
 
-"""
 	Scenario: Multiselect Delete
     	When I click the "dcpoi_clip_bulkImport" Dataset and the "mapcruzinpoi_clip_bulkImport" Dataset
     	And I context click the "mapcruzinpoi_clip_bulkImport" Dataset
@@ -32,5 +31,5 @@ Feature: Bulk Import and Multiselect Delete Datasets
         And I wait
         And I accept the alert
         Then I wait 30 "seconds" to not see "dcpoi_clip_bulkImport"    	
-        Then I wait 5 "seconds" to not see "mapcruzinpoi_clip_bulkImport"   
-"""
+        Then I should not see "mapcruzinpoi_clip_bulkImport"  
+

@@ -50,15 +50,12 @@ end
 When(/^I click the "([^"]*)" Dataset and the "([^"]*)" Dataset$/) do |d1, d2|
   text1 = page.find('text',:text=>d1, :match => :prefer_exact)
   parent1 = text1.find(:xpath,"..")
-  rect1 = parent1.find('rect')
+  rect1 = parent1.find('rect').click
 
   text2 = page.find('text',:text=>d2, :match => :prefer_exact)
   parent2 = text2.find(:xpath,"..")
-  rect2 = parent2.find('rect')
 
-  rect1n = rect1.native
-  rect1n.send_key :control
-
+  page.driver.browser.action.key_down(:control).click(parent2.native).key_up(:control).perform
 end
 
 When(/^I context click the "([^"]*)" Dataset$/) do |dataset|
