@@ -44,7 +44,7 @@ echo ""
 echo "STEP 2: Writing the reference dataset to the osm api db..."
 cp $REF_DATASET test-output/cmd/glacial/$TEST_NAME/2-ref-raw.osm
 # By default, all of these element ID's will be written starting at 1 by the postgres dump file writer.
-hoot convert $HOOT_OPTS -D preserve.accuracy.tag=true test-output/cmd/glacial/$TEST_NAME/2-ref-raw.osm test-output/cmd/glacial/$TEST_NAME/2-ref-ToBeAppliedToOsmApiDb.sql
+hoot convert $HOOT_OPTS test-output/cmd/glacial/$TEST_NAME/2-ref-raw.osm test-output/cmd/glacial/$TEST_NAME/2-ref-ToBeAppliedToOsmApiDb.sql
 psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-output/cmd/glacial/$TEST_NAME/2-ref-ToBeAppliedToOsmApiDb.sql
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
