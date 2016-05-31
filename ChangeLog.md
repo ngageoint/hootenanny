@@ -1,3 +1,51 @@
+# Hootenanny Change Log: 0.2.25
+* [hootenanny-ui #446:](https://github.com/ngageoint/hootenanny-ui/issues/446) Cancel button in Advanced Conflation dialogue doesn't work until an option has been set
+* [hootenanny-ui #442:](https://github.com/ngageoint/hootenanny-ui/pull/442) #339
+* [hootenanny-ui #441:](https://github.com/ngageoint/hootenanny-ui/issues/441) Not getting 'delete bookmark' warning in UI in bulk delete
+* [hootenanny-ui #431:](https://github.com/ngageoint/hootenanny-ui/issues/431) GoTo Review failing for ways
+* [hootenanny-ui #427:](https://github.com/ngageoint/hootenanny-ui/pull/427) 423
+* [hootenanny-ui #425:](https://github.com/ngageoint/hootenanny-ui/issues/425) "No Members in Review Relation" following conflation job
+* [hootenanny-ui #424:](https://github.com/ngageoint/hootenanny-ui/issues/424) Return of Batman Mode
+* [hootenanny-ui #423:](https://github.com/ngageoint/hootenanny-ui/issues/423) End of review error messages
+* [hootenanny-ui #374:](https://github.com/ngageoint/hootenanny-ui/issues/374) Remove offsetTop, offsetLeft, offsetWidth, and offsetHeight
+* [hootenanny-ui #299:](https://github.com/ngageoint/hootenanny-ui/issues/299) Add cucumber tests for dataset export
+* [hootenanny-ui #249:](https://github.com/ngageoint/hootenanny-ui/issues/249) Update conflation stats UI when waterways are included
+* [hootenanny-ui #25:](https://github.com/ngageoint/hootenanny-ui/issues/25) Write dataset ingest cucumber test
+* [hootenanny #751:](https://github.com/ngageoint/hootenanny/pull/751) Add cucumber test for import and export dataset
+* [hootenanny #748:](https://github.com/ngageoint/hootenanny/issues/748) Modify the apply-changeset cmd to list how many features are written to the osm api db by a changeset (holy grail)
+* [hootenanny #744:](https://github.com/ngageoint/hootenanny/pull/744) 741 - Prefix osm api db related tests with ServiceOsmApiDb
+* [hootenanny #741:](https://github.com/ngageoint/hootenanny/issues/741) Prefix all tests using an OSM API DB with "ServiceOsmApiDb" to allow preventing them from being run with the rpm jobs (holy grail)
+* [hootenanny #738:](https://github.com/ngageoint/hootenanny/pull/738) Add cucumber/capybara test for Translation Assistant
+* [hootenanny #736:](https://github.com/ngageoint/hootenanny/pull/736) 720 - completely separate hoot api and osm api db credentials
+* [hootenanny #728:](https://github.com/ngageoint/hootenanny/pull/728) 705 Hootenanny Service's Configuration Properties Need To Be Read-Only At Runtime
+* [hootenanny #727:](https://github.com/ngageoint/hootenanny/pull/727) Fix ApplyRubberSheetCmdTest on CentOS rpms build
+* [hootenanny #726:](https://github.com/ngageoint/hootenanny/issues/726) Fix ApplyRubberSheetCmdTest on CentOS rpms build 
+* [hootenanny #725:](https://github.com/ngageoint/hootenanny/pull/725) Added mkdir commands into VagrantBuild.sh
+* [hootenanny #724:](https://github.com/ngageoint/hootenanny/issues/724) Rebuild ingest & processed directories if needed
+* [hootenanny #723:](https://github.com/ngageoint/hootenanny/issues/723) Add verbose error messages to services-system.child test
+* [hootenanny #722:](https://github.com/ngageoint/hootenanny/pull/722) Modify PrintNamesCmdTest.sh to sort the output
+* [hootenanny #720:](https://github.com/ngageoint/hootenanny/issues/720) Separate shared credentials between osm api db and hoot api db (holy grail)
+* [hootenanny #719:](https://github.com/ngageoint/hootenanny/issues/719) Modify PrintNamesCmdTest.sh to sort the output
+* [hootenanny #718:](https://github.com/ngageoint/hootenanny/pull/718) 82 Incremental merge of Network Conflation into Develop
+* [hootenanny #715:](https://github.com/ngageoint/hootenanny/issues/715) Hootenanny Service's Code Needs To Be Reformatted
+* [hootenanny #714:](https://github.com/ngageoint/hootenanny/issues/714) Create a functional cucumber test for Translation Assistant
+* [hootenanny #712:](https://github.com/ngageoint/hootenanny/pull/712) 671 - Modify the export web service to allow exporting from hoot api db to mapedit db (holy grail)
+* [hootenanny #710:](https://github.com/ngageoint/hootenanny/pull/710) Improve test coverage for core/cmd
+* [hootenanny #709:](https://github.com/ngageoint/hootenanny/pull/709) 699 Fix resource deallocation in DataDefinitionManager.java
+* [hootenanny #705:](https://github.com/ngageoint/hootenanny/issues/705) Hootenanny Service's Configuration Properties Need To Be Read-Only At Runtime
+* [hootenanny #702:](https://github.com/ngageoint/hootenanny/issues/702) Review Error When Deleting Last Element
+* [hootenanny #700:](https://github.com/ngageoint/hootenanny/issues/700) Remove -werror flag from configure test builds
+* [hootenanny #699:](https://github.com/ngageoint/hootenanny/issues/699) Fix resource deallocation in DataDefinitionManager.java
+* [hootenanny #671:](https://github.com/ngageoint/hootenanny/issues/671) Modify the export web service to allow exporting from hoot api db to mapedit db (holy grail)
+* [hootenanny #670:](https://github.com/ngageoint/hootenanny/pull/670) 645 - Hoot api db writer is causing ID clashes with osm api db source data during conflation (holy grail)
+* [hootenanny #665:](https://github.com/ngageoint/hootenanny/pull/665) test fixes
+* [hootenanny #657:](https://github.com/ngageoint/hootenanny/issues/657) Hoot Services: Improve parsing of Hoot version in AboutResource.java
+* [hootenanny #653:](https://github.com/ngageoint/hootenanny/issues/653) Enable --with-uitests in the release script
+* [hootenanny #645:](https://github.com/ngageoint/hootenanny/issues/645) Hoot api db writer is causing ID clashes with osm api db source data during conflation (holy grail)
+* [hootenanny #499:](https://github.com/ngageoint/hootenanny/issues/499) Create a hoot vagrant box with all dependencies loaded to speed up provision
+* [hootenanny #213:](https://github.com/ngageoint/hootenanny/issues/213) Add Jenkins pull request project to build nightly tests
+* [hootenanny #152:](https://github.com/ngageoint/hootenanny/issues/152) Improve test coverage for commands
+
 # Hootenanny Change Log: 0.2.23
 * [hootenanny-ui #297:](https://github.com/ngageoint/hootenanny-ui/issues/297) Merge VersionInfo.js and About.js
 * [hootenanny-ui #290:](https://github.com/ngageoint/hootenanny-ui/issues/290) Export hangs after resolving all reviews with cropped Haiti Port Au Prince data

@@ -1,4 +1,5 @@
 INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (1, 1, now(), now());
+INSERT INTO changeset_tags (changeset_id, k, v) VALUES (1, 'written_by', 'Hootenanny');
 /* delete node -1669793*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669793, 388549321, -1048979050, 1, false, now(), 1329019012, 4);
 DELETE FROM current_node_tags WHERE node_id = -1669793;

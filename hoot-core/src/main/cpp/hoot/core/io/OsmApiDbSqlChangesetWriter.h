@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,25 +24,26 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMAPIDBCHANGESETWRITER_H
-#define OSMAPIDBCHANGESETWRITER_H
+#ifndef OSMAPIDBSQLCHANGESETWRITER_H
+#define OSMAPIDBSQLCHANGESETWRITER_H
 
+// hoot
 #include "OsmApiDb.h"
 
 namespace hoot
 {
 
 /**
- * Writes OSM changesets from a .osc.sql file to an OSM API database
+ * Writes OSM changesets from a .osc.sql executable SQL file to an OSM API database
  */
-class OsmApiDbChangesetWriter
+class OsmApiDbSqlChangesetWriter
 {
 
 public:
 
-  OsmApiDbChangesetWriter(const QUrl targetDatabaseUrl);
+  OsmApiDbSqlChangesetWriter(const QUrl targetDatabaseUrl);
 
-  ~OsmApiDbChangesetWriter();
+  ~OsmApiDbSqlChangesetWriter();
 
   /**
    * Executes changeset SQL against an OSM API database.
@@ -70,13 +71,25 @@ public:
    */
   bool conflictExistsInTarget(const QString boundsStr, const QString timeStr);
 
+  /**
+   * Writes a summary of the contents of a changeset
+   *
+   * @return a summary string
+   */
+  QString getChangesetStats() const;
+
 private:
 
   void _execNoPrepare(const QString sql);
+  void _initChangesetStats();
+  void _execTransaction(const QString changesetInsertStatement,
+                        const QString elementSqlStatements);
 
   OsmApiDb _db;
+
+  QMap<QString, long> _changesetStats;
 };
 
 }
 
-#endif // OSMAPIDBCHANGESETWRITER_H
+#endif // OSMAPIDBSQLCHANGESETWRITER_H

@@ -12,8 +12,16 @@ When(/^I click Get Started$/) do
   el.click unless el.nil?
 end
 
+When(/^I click the "([^"]*)" icon$/) do |cls|
+  find('._icon.' + cls).click
+end
+
 When(/^I click the "([^"]*)" link$/) do |linkText|
   find('a', :text=> linkText).click
+end
+
+When(/^I click the "([^"]*)" link under "([^"]*)"$/) do |linkText, parent|
+  find('#' + parent).find('a', :text=> linkText).click
 end
 
 When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent|
@@ -29,8 +37,17 @@ Then(/^I should not see "([^"]*)"$/) do |text|
 end
 
 When(/^I select the "([^"]*)" div$/) do |cls|
-  find('div.' + cls).click
+  begin
+    el = find('div.' + cls)
+  rescue Capybara::ElementNotFound
+    el = find('#' + cls)
+  end
+  el.click
   sleep 1
+end
+
+Then(/^I close the modal$/) do
+  find('div.modal').find('div.x').click
 end
 
 When(/^I select the first "([^"]*)" div$/) do |cls|
@@ -92,6 +109,12 @@ When(/^I select the "([^"]*)" option in the "([^"]*)" combobox$/) do |opt, cb|
   page.find('div.combobox').find('a', :text=> opt).click
 end
 
+When(/^I select the "([^"]*)" option in "([^"]*)"$/) do |opt, el|
+  combobox = page.find(el)
+  combobox.find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt).click
+end
+
 When(/^I click the "([^"]*)" button$/) do |el|
   find('button.' + el).click
 end
@@ -99,6 +122,11 @@ end
 When(/^I click the "([^"]*)" button and accept the alert$/) do |el|
   find('button.' + el).click
   page.driver.browser.switch_to.alert.accept
+end
+
+When(/^I click on the "([^"]*)" button in the "([^"]*)"$/) do |button,div|
+  elements = all('#' + div  + ' button.' + button)
+  elements[0].click
 end
 
 When(/^I click the "([^"]*)" at "([^"]*)","([^"]*)"$/) do |el, x, y|
@@ -124,6 +152,10 @@ end
 When(/^I fill input under "([^"]*)" with "([^"]*)"$/) do |parent, value|
   all('div.' + parent).last.find('input[type="text"]').set(value)
   sleep 1
+end
+
+When(/^I append "([^"]*)" input with "([^"]*)"$/) do |el, value|
+  find('input.' + el).native.send_keys(value)
 end
 
 When(/^I press enter in the "([^"]*)" input$/) do |selector|
@@ -162,9 +194,18 @@ When(/^I hover over "([^"]*)"$/) do |el|
   find(el).hover
 end
 
+When(/^I click on "([^"]*)"$/) do |el|
+  find(el).click
+end
+
 When(/^I press "([^"]*)" big loud span$/) do |txt|
   find('span.big.loud', :text=>txt).click
 end
+
+When(/^I press "([^"]*)" big loud link$/) do |cls|
+  find('a.big.loud.' + cls).click
+end
+
 
 When(/^I wait ([0-9]+) seconds$/) do |seconds|
   sleep Float(seconds)
@@ -277,6 +318,7 @@ Then(/^I click the "([^"]*)" with text "([^"]*)"$/) do |el, text|
 end
 
 Then(/^I accept the alert$/) do
+  sleep 1
   page.driver.browser.switch_to.alert.accept
 end
 
@@ -307,4 +349,27 @@ Then(/^the download file "([^"]*)" should exist$/) do |file|
   # puts name
   expect( File.exists?(name) ).to be true
   File.delete(name)
+end
+
+When(/^I click the "([^"]*)" classed element under "([^"]*)" with text "([^"]*)"$/) do |classed, el, text|
+  find(el, :text => text).find('.' + classed).click
+end
+
+When(/^I select "([^"]*)" basemap/) do |file|
+  include_hidden_fields do
+    page.attach_file('basemapfileuploader', ENV['HOOT_HOME'] + file)
+  end
+end
+
+When(/^I click the map background button$/) do
+  find('div.background-control').find('button').click
+end
+
+When(/^I click the "([^"]*)" map layer$/) do |text|
+  find('label', :text => text).click
+end
+
+When(/^I should see stats "([^"]*)" "([^"]*)" "([^"]*)" "([^"]*)"$/) do |type, row, column, value|
+  # And I should see stats "count" "buildings" "merged" "4"
+  find('table.' + type).find('td.key', :text => row).find(:xpath,"..").all('td', :text => value).first()
 end

@@ -53,6 +53,12 @@ or on the [releases](https://github.com/ngageoint/hootenanny/releases) under eac
 Instructions to launch a Hootenanny virtual machine using [Vagrant](https://www.vagrantup.com/) may
 be found [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
 
+Optional file download:
+* https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
+
+If you're compiling manually on CentOS, you'll need:
+** https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/geos-3.3.8-patched.tgz
+
 Additional instructions for setting up a Hootenanny development environment may be found in the Hootenanny
 Developer's Guide.
 

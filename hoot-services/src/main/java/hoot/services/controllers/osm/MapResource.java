@@ -405,7 +405,7 @@ public class MapResource {
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
-    public Response get(@QueryParam("mapId") final String mapId, @QueryParam("bbox") final String BBox,
+        public Response get(@QueryParam("mapId") final String mapId, @QueryParam("bbox") final String BBox,
             @QueryParam("extent") final String extent, @QueryParam("autoextent") final String auto,
             @DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") final boolean multiLayerUniqueElementIds)
             throws Exception {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmChangesetXmlFileWriter.h"
 
@@ -38,6 +38,7 @@
 namespace hoot
 {
 
+//TODO: this writer isn't set up to honor ConfigOptions().getChangesetMaxSize()
 OsmChangesetXmlFileWriter::OsmChangesetXmlFileWriter()
 {
   _precision = ConfigOptions().getWriterPrecision();

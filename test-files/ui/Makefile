@@ -29,12 +29,10 @@ else
 	$(HOOT_HOME)/scripts/VerifyTomcatStarted.sh $(TOMCAT_PORT)
 endif
 	echo Running user interface tests...
-	rm -f tmp/TestRun.log*
-	mkdir -p tmp
 ifneq (,$(findstring s,$(MAKEFLAGS)))
-	TOMCAT_PORT=$(TOMCAT_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber &> tmp/TestRun.log.tmp && mv tmp/TestRun.log.tmp tmp/TestRun.log
+	TOMCAT_PORT=$(TOMCAT_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format progress --strict
 else
-	TOMCAT_PORT=$(TOMCAT_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber
+	TOMCAT_PORT=$(TOMCAT_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format pretty --strict
 endif
 	echo ""
 
@@ -46,7 +44,12 @@ endif
 	true
 
 clean:
-	rm -rf tmp
+	#Remove test datasets from db
+	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -t -A -c "SELECT display_name FROM maps WHERE display_name like '%Cucumber%'" \
+	| while read mapname; do \
+ 	   echo hoot delete-map $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
+	done; \
+	true
 
 coverage:
 	echo Running user interface coverage report...
