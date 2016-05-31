@@ -2,7 +2,7 @@
 
 # Completely clears an OSM API database and then loads data from a Hootenanny compatible data file 
 # into it for testing purposes.  This script is meant to be used for one time dataset loading into 
-# a clean database only.
+# an OSM API database whose contents can be completely lost only.
 
 set -e
 
@@ -18,6 +18,6 @@ source scripts/SetupOsmApiDB.sh force
 # load dummy user
 psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
 
-hoot convert -D preserve.accuracy.tag=true $DATASET_TO_LOAD $OUTPUT_SQL_SCRIPT
+hoot convert $DATASET_TO_LOAD $OUTPUT_SQL_SCRIPT
 psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f $OUTPUT_SQL_SCRIPT
 
