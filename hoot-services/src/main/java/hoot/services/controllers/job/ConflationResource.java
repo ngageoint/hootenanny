@@ -30,11 +30,9 @@ import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -84,16 +82,6 @@ public class ConflationResource extends JobControllerBase {
         catch (Exception ex) {
             log.error(ex.getMessage());
         }
-    }
-    
-    @GET
-    @Path("/osmapidb/enabled")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response isOsmApiDbEnabled()
-    {
-        JSONObject res = new JSONObject();
-        res.put("enabled", String.valueOf(Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"))));
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
     /**
@@ -211,7 +199,14 @@ public class ConflationResource extends JobControllerBase {
                 else {
                     secondaryParameterKey = "INPUT1";
                 }
-                Map secondaryMap = getSecondaryMap(getParameterValue(secondaryParameterKey, commandArgs), conn);
+                log.debug(commandArgs.toJSONString());
+
+                final long secondaryMapId = Long.parseLong(getParameterValue(secondaryParameterKey, commandArgs));
+                if (!mapExists(secondaryMapId, conn)) {
+                    ResourceErrorHandler.handleError("No secondary map exists with ID: " + secondaryMapId,
+                            Status.BAD_REQUEST, log);
+                }
+                Map secondaryMap = new Map(secondaryMapId, conn);
                 setAoi(secondaryMap, commandArgs);
 
                 // write a timestamp representing the time the osm api db data
@@ -302,33 +297,14 @@ public class ConflationResource extends JobControllerBase {
         }
     }
 
-    private Map getSecondaryMap(final String mapName, Connection conn) throws Exception {
-        List<Long> mapIds = getMapIdsByName(mapName, conn);
-        // we don't expect the services to try to conflate a map that has
-        // multiple
-        // name entries, but check for it anyway
-        if (mapIds.size() > 1) {
-            ResourceErrorHandler.handleError("Error conflating data.  Multiple maps with name: " + mapName,
-                    Status.BAD_REQUEST, log);
-        }
-        // this may be checked somewhere else down the line...not sure
-        else if (mapIds.size() == 0) {
-            ResourceErrorHandler.handleError("Error conflating data.  No map exists with name: " + mapName,
-                    Status.BAD_REQUEST, log);
-        }
-        Map secondaryMap = new Map(mapIds.get(0), conn);
-        secondaryMap.setDisplayName(mapName);
-        return secondaryMap;
-    }
-
-    // adding this to satisfy the mock
-    protected List<Long> getMapIdsByName(final String mapName, Connection conn) throws Exception {
-        return DbUtils.getMapIdsByName(conn, mapName);
-    }
-
     // adding this to satisfy the mock
     protected BoundingBox getMapBounds(final Map map) throws Exception {
         return map.getBounds();
+    }
+
+    // adding this to satisfy the mock
+    protected boolean mapExists(final long id, Connection conn) {
+        return Map.mapExists(id, conn);
     }
 
     private void setAoi(final Map secondaryMap, JSONArray commandArgs) throws Exception {

@@ -227,7 +227,7 @@ public class ExportJobResource extends JobControllerBase {
                     "Attempted to export to an OSM API database but OSM API database support is disabled",
                     Status.INTERNAL_SERVER_ERROR, log);
         }
-        
+
         JSONArray commandArgs = new JSONArray();
         commandArgs.addAll(inputCommandArgs);
 
@@ -254,7 +254,8 @@ public class ExportJobResource extends JobControllerBase {
         // expect the UI to get
         // the value from there and pass it in instead
         arg = new JSONObject();
-        arg.put("changesetuserid", "1");
+        arg.put("changesetuserid", "1"); // TODO: Maybe need to link this with a
+                                         // default in core...
         commandArgs.add(arg);
 
         final Map conflatedMap = getConflatedMap(commandArgs, conn);

@@ -56,6 +56,7 @@ import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QCurrentWays;
+import hoot.services.db2.QMaps;
 import hoot.services.db2.QUsers;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.zindex.Range;
@@ -70,7 +71,7 @@ import hoot.services.models.osm.Element.ElementType;
 
 /**
  * Represents the model for an Hootenanny OSM map
- *
+ * 
  * When modifying the node query by bounds, make sure it is using the index on
  * the tile id. The index scan only seems to trigger if the number of rows
  * returned by the query is <= 1% of the total rows. The execution plan can be
@@ -124,9 +125,9 @@ public class Map extends Maps {
         log.debug("Retrieving tile ranges...");
         int queryDimensions = Integer.parseInt(HootProperties.getPropertyOrDefault("mapQueryDimensions"));
         ZCurveRanger ranger = new ZCurveRanger(new ZValue(queryDimensions, 16,
-                // use y, x ordering here
-                new double[] { -1 * BoundingBox.LAT_LIMIT, -1 * BoundingBox.LON_LIMIT },
-                new double[] { BoundingBox.LAT_LIMIT, BoundingBox.LON_LIMIT }));
+        // use y, x ordering here
+                new double[] { -1 * BoundingBox.LAT_LIMIT, -1 * BoundingBox.LON_LIMIT }, new double[] {
+                        BoundingBox.LAT_LIMIT, BoundingBox.LON_LIMIT }));
         return ranger.decomposeRange(bounds.toZIndexBox(), 1);
     }
 
@@ -652,9 +653,9 @@ public class Map extends Maps {
 
     /**
      * Executes a geospatial query for elements against the services database
-     *
+     * 
      * Bounds calculation:
-     *
+     * 
      * - All nodes that are inside a given bounding box and any relations that
      * reference them. - All ways that reference at least one node that is
      * inside a given bounding box, any relations that reference them [the
@@ -663,7 +664,7 @@ public class Map extends Maps {
      * relations included due to the above rules. (Does not apply recursively;
      * e.g. don't return every node and way the relations themselves
      * reference...only the ones in the query bounds).
-     *
+     * 
      * @param bounds
      *            geospatial bounds the returned nodes should fall within
      * @return a collection of elements mapped to their IDs, grouped by element
@@ -674,7 +675,7 @@ public class Map extends Maps {
      *             see MapResourceTest::testReadTransactionWithoutFailure
      */
     public java.util.Map<ElementType, java.util.Map<Long, Tuple>> query(final BoundingBox bounds) throws Exception {
-        //validateQueryBounds(bounds);
+        // validateQueryBounds(bounds);
 
         // get the intersecting tile ranges for the nodes
         final Vector<Range> tileIdRanges = getTileRanges(bounds);
@@ -753,9 +754,9 @@ public class Map extends Maps {
 
     /**
      * Executes a geospatial query for element IDs against the services database
-     *
+     * 
      * Bounds calculation: see query
-     *
+     * 
      * - All nodes that are inside a given bounding box and any relations that
      * reference them. - All ways that reference at least one node that is
      * inside a given bounding box, any relations that reference them [the
@@ -764,7 +765,7 @@ public class Map extends Maps {
      * relations included due to the above rules. (Does not apply recursively;
      * e.g. don't return every node and way the relations themselves
      * reference...only the ones in the query bounds).
-     *
+     * 
      * @param bounds
      *            geospatial bounds the returned nodes should fall within
      * @return a collection of element IDs, grouped by element type
@@ -781,8 +782,8 @@ public class Map extends Maps {
         final Vector<Range> tileIdRanges = getTileRanges(bounds);
         java.util.Map<ElementType, Set<Long>> elementIdsByType = new HashMap<ElementType, Set<Long>>();
         if (tileIdRanges.size() > 0) {
-            BooleanExpression combinedGeospatialCondition = getTileWhereCondition(tileIdRanges)
-                    .and(getGeospatialWhereCondition(bounds));
+            BooleanExpression combinedGeospatialCondition = getTileWhereCondition(tileIdRanges).and(
+                    getGeospatialWhereCondition(bounds));
             validateNodeCount(combinedGeospatialCondition);
             elementIdsByType = retrieveElementIds(combinedGeospatialCondition);
         }
@@ -794,7 +795,7 @@ public class Map extends Maps {
     /**
      * Converts a set of map layer database records into an object returnable by
      * a web service
-     *
+     * 
      * @param mapLayerRecords
      *            set of map layer records
      * @return map layers web service object
@@ -816,7 +817,7 @@ public class Map extends Maps {
     /**
      * Converts a set of folder database records into an object returnable by a
      * web service
-     *
+     * 
      * @param folderRecordSet
      *            set of map layer records
      * @return folders web service object
@@ -838,7 +839,7 @@ public class Map extends Maps {
     /**
      * Converts a set of database records into an object returnable by a web
      * service
-     *
+     * 
      * @param linkRecordSet
      *            set of map layer records
      * @return folders web service object
@@ -859,7 +860,7 @@ public class Map extends Maps {
 
     /**
      * Return the map's bounds
-     *
+     * 
      * @return a bounding box
      * @throws Exception
      */
@@ -873,5 +874,9 @@ public class Map extends Maps {
                     nodeResults.get(0, Double.class), nodeResults.get(2, Double.class));
         }
         return bounds;
+    }
+
+    public static boolean mapExists(final long id, Connection conn) {
+        return new SQLQuery(conn, DbUtils.getConfiguration()).from(QMaps.maps).where(QMaps.maps.id.eq(id)).count() > 0;
     }
 }

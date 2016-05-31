@@ -28,6 +28,7 @@ package hoot.services.controllers.job;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.verify;
 
 import java.io.File;
@@ -102,12 +103,9 @@ public class ConflationResourceTest {
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
             Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
-            final List<Long> mapIds = new ArrayList<>();
-            mapIds.add(new Long(1));
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
+            Mockito.doReturn(true).when(spy).mapExists(anyLong(), any(Connection.class));
             final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
-
             final String jobId = ((JSONObject) (new JSONParser())
                     .parse(spy.process(inputParams).getEntity().toString())).get("jobid").toString();
 
@@ -118,9 +116,9 @@ public class ConflationResourceTest {
             // detailed
             // level
             verify(spy).postChainJobRquest(Matchers.matches(jobId),
-                    // wasn't able to get the mockito matcher to take the timestamp
-                    // regex...validated the
-                    // regex externally, and it looks correct
+            // wasn't able to get the mockito matcher to take the timestamp
+            // regex...validated the
+            // regex externally, and it looks correct
                     /*
                      * Matchers.matches("\"osm_api_db_export_time\":\"" +
                      * DbUtils.TIME_STAMP_REGEX + "\"")
@@ -147,7 +145,7 @@ public class ConflationResourceTest {
                     .getContextClassLoader()
                     .getResource(
                             "hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondaryInput.json")
-                            .getPath()));
+                    .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
             Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
@@ -175,7 +173,7 @@ public class ConflationResourceTest {
                     .getContextClassLoader()
                     .getResource(
                             "hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondary2Input.json")
-                            .getPath()));
+                    .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
             Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
@@ -194,53 +192,19 @@ public class ConflationResourceTest {
 
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
-    public void testConflateOsmApiDbMultipleMapsWithSameName() throws Exception {
-        try {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
-            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
-                    .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
-                    .getPath()));
-
-            ConflationResource spy = Mockito.spy(new ConflationResource());
-
-            Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
-            final List<Long> mapIds = new ArrayList<>();
-            // add two map id's
-            mapIds.add(new Long(1));
-            mapIds.add(new Long(2));
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
-            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
-            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
-
-            spy.process(inputParams);
-        }
-        catch (WebApplicationException e) {
-            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            Assert.assertTrue(e.getResponse().getEntity().toString().contains("Multiple maps with name"));
-            throw e;
-        }
-        finally {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
-        }
-    }
-
-    @Test(expected = WebApplicationException.class)
-    @Category(UnitTest.class)
     public void testConflateOsmApiDbMissingMap() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
-            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+            final String inputParams = FileUtils.readFileToString(new File(Thread
+                    .currentThread()
                     .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
+                    .getResource(
+                            "hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbMissingMapInput.json")
                     .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
             Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
-            final List<Long> mapIds = new ArrayList<>();
-            // add no map id's
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
             final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
@@ -248,7 +212,7 @@ public class ConflationResourceTest {
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            Assert.assertTrue(e.getResponse().getEntity().toString().contains("No map exists with name"));
+            Assert.assertTrue(e.getResponse().getEntity().toString().contains("No secondary map exists with ID"));
             throw e;
         }
         finally {
@@ -272,7 +236,6 @@ public class ConflationResourceTest {
             Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
             final List<Long> mapIds = new ArrayList<>();
             mapIds.add(new Long(1));
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
             final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
@@ -288,20 +251,6 @@ public class ConflationResourceTest {
                             "Attempted to conflate an OSM API database data source but OSM API database"
                                     + "support is disabled"));
             throw e;
-        }
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testOsmApiDbEnabled() throws Exception {
-        try {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
-            ConflationResource spy = Mockito.spy(new ConflationResource());
-            Assert.assertTrue(Boolean.parseBoolean(((JSONObject) (new JSONParser()).parse(spy.isOsmApiDbEnabled()
-                    .getEntity().toString())).get("enabled").toString()));
-        }
-        finally {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
         }
     }
 }
