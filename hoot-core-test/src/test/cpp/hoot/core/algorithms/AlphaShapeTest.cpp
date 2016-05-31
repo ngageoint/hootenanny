@@ -106,7 +106,7 @@ public:
     writer.write(map, "test-output/algorithms/AlphaDonut.osm");
 
     shared_ptr<Geometry> g = uut.toGeometry();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3357.2, g->getArea(), 0.1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3241.5, g->getArea(), 0.1);
   }
 
   void runTest()

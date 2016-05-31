@@ -106,22 +106,22 @@ public:
     shared_ptr<DelaunayInterpolator> di = buildRandom();
     DelaunayInterpolator& uut = *di;
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.022, uut.estimateError(), 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.025, uut.estimateError(), 0.001);
 
     vector<double> d(2);
     d[0] = 0.0;
     d[1] = 0.0;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.987, uut.interpolate(d)[0], 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.903, uut.interpolate(d)[0], 0.001);
     d[0] = 0.5;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.595, uut.interpolate(d)[0], 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.568, uut.interpolate(d)[0], 0.001);
     d[0] = 1.0;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.121, uut.interpolate(d)[0], 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.057, uut.interpolate(d)[0], 0.001);
     d[0] = 1.5;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.105, uut.interpolate(d)[0], 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.047, uut.interpolate(d)[0], 0.001);
     d[0] = 2.0;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.062, uut.interpolate(d)[0], 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.036, uut.interpolate(d)[0], 0.001);
     d[0] = 0.1;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.950, uut.interpolate(d)[0], 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.917, uut.interpolate(d)[0], 0.001);
 
 //    // write out as a .pgm image
 //    ofstream fs;
@@ -218,7 +218,7 @@ public:
     dep.push_back("h");
     uut.setDependentColumns(dep);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0028, uut.estimateError(), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0029, uut.estimateError(), 0.0001);
   }
 
 };

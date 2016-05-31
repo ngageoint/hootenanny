@@ -39,7 +39,7 @@
 
 #include "../TgsExport.h"
 
-#define NEW_RAND
+//#define NEW_RAND
 
 namespace Tgs
 {
