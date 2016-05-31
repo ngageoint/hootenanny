@@ -1787,13 +1787,14 @@ This is most useful when debugging and testing.
 
 Email address of the DG writer user.  Can be set here for debugging and testing.
 
-=== hootapi.db.writer.osmapidb.url
+=== osmapidb.id.aware.url
 
 * Data Type: string
 * Default Value: ``
 
-This is required when using the OsmApiDbAwareHootApiDbWriter.  It makes that Hoot API database writer
-use a specified OSM API database for determining new element ID's.
+This is required when using the OsmApiDbAwareHootApiDbReader or OsmApiDbAwareHootApiDbWriter.  It
+makes Hoot API database reading/writing use the specified OSM API database as master for determining
+the sequencing of element ID's.
 
 === hootapi.db.writer.overwrite.map
 
