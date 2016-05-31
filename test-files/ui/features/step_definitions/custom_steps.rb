@@ -12,8 +12,16 @@ When(/^I click Get Started$/) do
   el.click unless el.nil?
 end
 
+When(/^I click the "([^"]*)" icon$/) do |cls|
+  find('._icon.' + cls).click
+end
+
 When(/^I click the "([^"]*)" link$/) do |linkText|
   find('a', :text=> linkText).click
+end
+
+When(/^I click the "([^"]*)" link under "([^"]*)"$/) do |linkText, parent|
+  find('#' + parent).find('a', :text=> linkText).click
 end
 
 When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent|
@@ -29,8 +37,17 @@ Then(/^I should not see "([^"]*)"$/) do |text|
 end
 
 When(/^I select the "([^"]*)" div$/) do |cls|
-  find('div.' + cls).click
+  begin
+    el = find('div.' + cls)
+  rescue Capybara::ElementNotFound
+    el = find('#' + cls)
+  end
+  el.click
   sleep 1
+end
+
+Then(/^I close the modal$/) do
+  find('div.modal').find('div.x').click
 end
 
 When(/^I select the first "([^"]*)" div$/) do |cls|
@@ -107,6 +124,11 @@ When(/^I click the "([^"]*)" button and accept the alert$/) do |el|
   page.driver.browser.switch_to.alert.accept
 end
 
+When(/^I click on the "([^"]*)" button in the "([^"]*)"$/) do |button,div|
+  elements = all('#' + div  + ' button.' + button)
+  elements[0].click
+end
+
 When(/^I click the "([^"]*)" at "([^"]*)","([^"]*)"$/) do |el, x, y|
   find('#' + el).click_at(x,y)
   sleep 3
@@ -172,9 +194,18 @@ When(/^I hover over "([^"]*)"$/) do |el|
   find(el).hover
 end
 
+When(/^I click on "([^"]*)"$/) do |el|
+  find(el).click
+end
+
 When(/^I press "([^"]*)" big loud span$/) do |txt|
   find('span.big.loud', :text=>txt).click
 end
+
+When(/^I press "([^"]*)" big loud link$/) do |cls|
+  find('a.big.loud.' + cls).click
+end
+
 
 When(/^I wait ([0-9]+) seconds$/) do |seconds|
   sleep Float(seconds)
@@ -287,6 +318,7 @@ Then(/^I click the "([^"]*)" with text "([^"]*)"$/) do |el, text|
 end
 
 Then(/^I accept the alert$/) do
+  sleep 1
   page.driver.browser.switch_to.alert.accept
 end
 

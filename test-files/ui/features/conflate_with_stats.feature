@@ -25,3 +25,6 @@ Feature: Conflate feature with stats
     And I should see stats "featurecounts" "buildings" "merged" "4"
     And I should see stats "featurepercents" "roads" "unmatched" "20.0%"
     And I should see stats "featurecounts" "waterways" "review" "0"
+    Then I click the "trash" button
+    And I accept the alert
+    And I wait 5 "seconds" to not see "Merged_AllDataTypes"
