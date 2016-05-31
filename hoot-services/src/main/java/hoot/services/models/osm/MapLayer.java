@@ -66,6 +66,16 @@ public class MapLayer {
         this.date = date;
     }
 
+    private boolean canExportToMapEdit = false;
+
+    public boolean getCanExportToMapEdit() {
+        return canExportToMapEdit;
+    }
+
+    public void setCanExportToMapEdit(boolean canExport) {
+        this.canExportToMapEdit = canExport;
+    }
+
     public MapLayer() {
 
     }

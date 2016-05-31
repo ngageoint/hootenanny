@@ -141,16 +141,6 @@ public class MapResource {
             SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
 
             final List<Maps> mapLayerRecords = query.from(maps).orderBy(maps.displayName.asc()).list(maps);
-
-            if (Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"))) {
-                // add a MapEdit dummy record for the UI for conflation
-                // involving MapEdit data
-                Maps mapEditLayerRecord = new Maps();
-                mapEditLayerRecord.setDisplayName("MapEdit");
-                mapEditLayerRecord.setId(new Long(-1));
-                mapLayerRecords.add(mapEditLayerRecord);
-            }
-
             mapLayers = Map.mapLayerRecordsToLayers(mapLayerRecords);
         }
         catch (Exception e) {

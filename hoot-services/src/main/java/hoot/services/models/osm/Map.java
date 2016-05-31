@@ -37,6 +37,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 import org.json.simple.JSONObject;
+import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +48,7 @@ import com.mysema.query.types.expr.BooleanExpression;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.FolderMapMappings;
 import hoot.services.db2.Folders;
 import hoot.services.db2.Maps;
@@ -799,15 +801,35 @@ public class Map extends Maps {
      * @param mapLayerRecords
      *            set of map layer records
      * @return map layers web service object
+     * @throws Exception
      */
-    public static MapLayers mapLayerRecordsToLayers(List<Maps> mapLayerRecords) {
+    public static MapLayers mapLayerRecordsToLayers(List<Maps> mapLayerRecords) throws Exception {
         MapLayers mapLayers = new MapLayers();
         List<MapLayer> mapLayerList = new ArrayList<MapLayer>();
+
+        boolean osmApiDbEnabled = Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"));
+        if (osmApiDbEnabled) {
+            // add a MapEdit dummy record for the UI for conflation
+            // involving MapEdit data
+            MapLayer mapLayer = new MapLayer();
+            mapLayer.setId(-1); // using id = -1 to identify the MapEdit source
+                                // layer in the ui
+            mapLayer.setName("MapEdit");
+            mapLayerList.add(mapLayer);
+        }
+
         for (Maps mapLayerRecord : mapLayerRecords) {
             MapLayer mapLayer = new MapLayer();
             mapLayer.setId(mapLayerRecord.getId());
             mapLayer.setName(mapLayerRecord.getDisplayName());
             mapLayer.setDate(mapLayerRecord.getCreatedAt());
+            if (osmApiDbEnabled) {
+                java.util.Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) mapLayerRecord
+                        .getTags());
+                if (tags.containsKey("osm_api_db_export_time")) {
+                    mapLayer.setCanExportToMapEdit(true);
+                }
+            }
             mapLayerList.add(mapLayer);
         }
         mapLayers.setLayers(mapLayerList.toArray(new MapLayer[] {}));
