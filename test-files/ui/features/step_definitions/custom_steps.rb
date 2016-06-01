@@ -334,7 +334,7 @@ Then(/^I click the "([^"]*)" with text "([^"]*)"$/) do |el, text|
 end
 
 Then(/^I accept the alert$/) do
-  sleep 1
+  sleep 2
   page.driver.browser.switch_to.alert.accept
 end
 
@@ -414,4 +414,17 @@ end
 When(/^I fill row ([0-9]*) input "([^"]*)" with value "([^"]*)"$/) do |rowNum, placeholder, value|
   el = find(:xpath , "//input[@placeholder='" + placeholder + "'][@row='" + rowNum + "']")
   el.set(value)
+end
+
+When(/^I delete any existing "([^"]*)" basemap if necessary$/) do |text|
+  begin
+    find('span.fill-white.small', :text => text).find('.trash').click
+    sleep 2
+    page.driver.browser.switch_to.alert.accept
+    oldTimeout = Capybara.default_max_wait_time
+    Capybara.default_max_wait_time = 30
+    page.should have_no_content(text)
+    Capybara.default_max_wait_time = oldTimeout
+  rescue Capybara::ElementNotFound
+  end
 end
