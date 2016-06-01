@@ -237,7 +237,8 @@ public class ExportJobResource extends JobControllerBase {
                     Status.BAD_REQUEST, log);
         }
 
-        if (StringUtils.trimToNull(getParameterValue("translation", commandArgs)) != null) {
+        final String translation = getParameterValue("translation", commandArgs);
+        if (StringUtils.trimToNull(translation) != null && !translation.toUpperCase().equals("NONE")) {
             ResourceErrorHandler.handleError("Custom translation not allowed when exporting to OSM API database.",
                     Status.BAD_REQUEST, log);
         }

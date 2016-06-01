@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -51,7 +51,10 @@ public:
     if (args.size() != 2 && args.size() != 4)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two or four parameters.").arg(getName()));
+      throw HootException(
+        QString("%1 takes two or four parameters and was given %2 parameters")
+          .arg(getName())
+          .arg(args.size()));
     }
 
     LOG_INFO("Applying changeset " << args[0] << " to " << args[1] << "...");
