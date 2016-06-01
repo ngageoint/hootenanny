@@ -164,7 +164,6 @@ public class ExportJobResourceTest {
                     .getPath()));
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
-
             Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
             final List<Long> mapIds = new ArrayList<>();
             mapIds.add(new Long(1));
@@ -186,7 +185,6 @@ public class ExportJobResourceTest {
             Assert.assertTrue(commandArgs.contains("{\"removereview\":\"false\"}"));
             Assert.assertTrue(commandArgs.contains("{\"inputtype\":\"db\"}"));
             Assert.assertTrue(commandArgs.contains("{\"temppath\":"));
-            Assert.assertTrue(commandArgs.contains("{\"changesetuserid\":\"1\"}"));
             Assert.assertTrue(commandArgs.contains("{\"changesetsourcedatatimestamp\":\"" + exportTime + "\"}"));
             Assert.assertTrue(commandArgs.contains("{\"changesetaoi\":\"" + mapBoundsStr + "\"}"));
         }

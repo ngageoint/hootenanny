@@ -1,4 +1,4 @@
-INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (1, -1, now(), now());
+INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (1, 1, now(), now());
 INSERT INTO changeset_tags (changeset_id, k, v) VALUES (1, 'written_by', 'Hootenanny');
 /* create node 1*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 0, 0, 1, true, now(), 3221225472, 1);
