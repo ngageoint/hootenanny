@@ -313,9 +313,6 @@ source ./SetupEnv.sh
 # Create empty ChangeLog file
 touch ChangeLog
 
-# Make sure DatabaseConfig.sh file exists for clean and make
-cp ${HOOT_HOME}/conf/DatabaseConfig.sh.orig ${HOOT_HOME}/conf/DatabaseConfig.sh
-
 echo "Configuring Hoot..."
 aclocal && autoconf && autoheader && automake
 
