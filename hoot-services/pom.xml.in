@@ -619,18 +619,6 @@
             <version>${hamcrest.version}</version>
             <scope>test</scope>
         </dependency>
-         <dependency>
-             <groupId>org.hamcrest</groupId>
-             <artifactId>hamcrest-core</artifactId>
-             <version>1.3</version>
-             <scope>test</scope>
-         </dependency>
-         <dependency>
-             <groupId>org.hamcrest</groupId>
-             <artifactId>hamcrest-library</artifactId>
-             <version>1.3</version>
-             <scope>test</scope>
-         </dependency>
         <!-- Mockito allows for using mock object in unit testing -->
         <dependency>
             <groupId>org.mockito</groupId>
