@@ -24,40 +24,34 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMAPIDBAWAREHOOTAPIDBWRITER_H
-#define OSMAPIDBAWAREHOOTAPIDBWRITER_H
+#ifndef OSMAPIDBAWAREHOOTAPIDBREADER_H
+#define OSMAPIDBAWAREHOOTAPIDBREADER_H
 
-#include "HootApiDbWriter.h"
+#include "HootApiDbReader.h"
 #include "OsmApiDb.h"
 
 namespace hoot
 {
 
 /**
- * Hoot api db writer that doesn't allow hoot api db element id's to clash with a specified osm api
+ * Hoot api db reader that doesn't allow hoot api db element id's to clash with a specified osm api
  * db's id's (osm api db is the id master reference).
  */
-class OsmApiDbAwareHootApiDbWriter : public HootApiDbWriter
+class OsmApiDbAwareHootApiDbReader : public HootApiDbReader
 {
 public:
 
-  static std::string className() { return "hoot::OsmApiDbAwareHootApiDbWriter"; }
+  static std::string className() { return "hoot::OsmApiDbAwareHootApiDbReader"; }
 
-  OsmApiDbAwareHootApiDbWriter();
+  OsmApiDbAwareHootApiDbReader();
 
-  virtual ~OsmApiDbAwareHootApiDbWriter();
+  virtual ~OsmApiDbAwareHootApiDbReader();
 
   virtual void open(QString urlStr);
 
-  virtual void writePartial(const shared_ptr<const Node>& n);
-
-  virtual void writePartial(const shared_ptr<const Way>& w);
-
-  virtual void writePartial(const shared_ptr<const Relation>& r);
-
 protected:
 
-  virtual long _getRemappedElementId(const ElementId& eid);
+  virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 
 private:
 
@@ -67,4 +61,4 @@ private:
 
 }
 
-#endif // OSMAPIDBAWAREHOOTAPIDBWRITER_H
+#endif // OSMAPIDBAWAREHOOTAPIDBREADER_H
