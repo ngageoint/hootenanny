@@ -181,7 +181,6 @@ public class ExportJobResourceTest {
         Assert.assertTrue(commandArgs.contains("{\"removereview\":\"false\"}"));
         Assert.assertTrue(commandArgs.contains("{\"inputtype\":\"db\"}"));
         Assert.assertTrue(commandArgs.contains("{\"temppath\":"));
-        Assert.assertTrue(commandArgs.contains("{\"changesetuserid\":\"1\"}"));
         Assert.assertTrue(commandArgs.contains("{\"changesetsourcedatatimestamp\":\"" + exportTime + "\"}"));
         Assert.assertTrue(commandArgs.contains("{\"changesetaoi\":\"" + mapBoundsStr + "\"}"));
     }

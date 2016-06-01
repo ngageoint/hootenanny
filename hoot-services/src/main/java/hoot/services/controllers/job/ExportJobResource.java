@@ -247,13 +247,6 @@ public class ExportJobResource extends JobControllerBase {
         arg.put("temppath", HootProperties.getProperty("tempOutputPath"));
         commandArgs.add(arg);
 
-        // hardcoding this for now; if mapedit user auth is tied in, then we'd
-        // expect the UI to get
-        // the value from there and pass it in instead
-        arg = new JSONObject();
-        arg.put("changesetuserid", "1");
-        commandArgs.add(arg);
-
         final Map conflatedMap = getConflatedMap(commandArgs, conn);
 
         checkMapForExportTag(conflatedMap, commandArgs, conn);
