@@ -29,14 +29,11 @@
 #define OSM_JSON_READER_H
 
 // Qt
-#include <QHash>
-#include <QRegExp>
+#include <QUrl>
+#include <QFile>
 #include <QString>
-#include <QStringList>
-#include <QVariant>
 
 // Standard
-#include <set>
 #include <string>
 
 // Boost
@@ -44,6 +41,7 @@
 
 // Hoot
 #include "hoot/core/OsmMap.h"
+#include "hoot/core/io/OsmMapReader.h"
 
 namespace hoot
 {
@@ -104,12 +102,60 @@ namespace hoot
  * Be careful if you want to use it with large datasets.
  */
 
-class OsmJsonReader
+class OsmJsonReader : public OsmMapReader
 {
 public:
 
-  // Default consructor
+  // Statics first
+  static std::string className() { return "hoot::OsmJsonReader"; }
+
+  // Basic constructor / destructor
   OsmJsonReader();
+  virtual ~OsmJsonReader();
+
+  /**
+   * @brief isSupported returns true if the URL is likely supported. This isn't
+   *        an exhaustive check - it just looks to see if the URL appears to be
+   *        a file, or web address
+   * @param url
+   * @return
+   */
+  virtual bool isSupported(QString url);
+
+  /**
+   * @brief open Specifies the URL to read from. Can be a file (file://some/path/to/a/file)
+   *        or a json provider like:
+   *    http://overpass-api.de/api/interpreter?data=[out:json];way(35.2097,-120.6207,35.2241,-120.5955);out;
+   * @param url
+   */
+  virtual void open(QString url);
+
+  /**
+   * @brief close close internal filehandle, if needed
+   */
+  void close();
+
+  /**
+   * @brief read Reads the data specified by the last call to open(...)
+   *        and adds the elements to the provided map. Input data source
+   *        will likely be closed after this call
+   * @param map
+   */
+  virtual void read(shared_ptr<OsmMap> map);
+
+  /**
+   * @brief setDefaultStatus Sets the default status to use for elements
+   *        in the map
+   * @param status
+   */
+  virtual void setDefaultStatus(Status status) { _defaultStatus = status; }
+
+  /**
+   * @brief setUseDataSourceIds Sets whether the reader should use the element IDs
+   *        from the data being read, or self-generate unique IDs
+   * @param useDataSourceIds true to use source IDs
+   */
+  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceIds = useDataSourceIds; }
 
   /**
    * @brief loadFromString - Builds a map from the JSON string. Throws a
@@ -153,18 +199,10 @@ public:
 
 private:
 
-  /**
-   * @brief _loadJSON Loads JSON into a boost property tree
-   * @param jsonStr String to load
-   */
-  void _loadJSON(QString jsonStr);
-
-  /**
-   * @brief _parseOverpassJson Traverses our property tree to build
-   *        the OSM map object
-   * @return Pointer to the map we built
-   */
-  OsmMapPtr _parseOverpassJson();
+  // Items to conform to OsmMapReader ifc
+  Status _defaultStatus;
+  bool _useDataSourceIds;
+  Meters _defaultCircErr;
 
   // Our property tree that holds JSON
   boost::property_tree::ptree _propTree;
@@ -175,48 +213,66 @@ private:
   QString _timestamp_base;
   QString _copyright;
 
+  QUrl _url;
+  bool _isFile;
+  bool _isWeb;
+  QFile _file;
+
   /**
-   * @brief parseOverpassNode Reads node info out of the property tree and
+   * @brief _loadJSON Loads JSON into a boost property tree
+   * @param jsonStr String to load
+   */
+  void _loadJSON(QString jsonStr);
+
+  /**
+   * @brief parseOverpassJson Traverses our property tree and adds
+   *        elements to the map
+   * @param pMap Append elements to this map
+   */
+  void _parseOverpassJson(OsmMapPtr pMap);
+
+  /**
+   * @brief _parseOverpassNode Reads node info out of the property tree and
    *        builds a Node object. Adds the node to the map.
    * @param item Property Tree (likely a sub-tree)
    * @param pMap Map to which we add the node
    */
-  void parseOverpassNode(const boost::property_tree::ptree &item,
-                         OsmMapPtr pMap);
+  void _parseOverpassNode(const boost::property_tree::ptree &item,
+                          OsmMapPtr pMap);
 
   /**
-   * @brief parseOverpassWay Reads way info out of the property tree and
+   * @brief _parseOverpassWay Reads way info out of the property tree and
    *        builds a Way object. Adds the way to the map.
    * @param item Property Tree (or sub-tree)
    * @param pMap Map to which we add the way
    */
-  void parseOverpassWay(const boost::property_tree::ptree &item,
-                        OsmMapPtr pMap);
+  void _parseOverpassWay(const boost::property_tree::ptree &item,
+                         OsmMapPtr pMap);
 
   /**
-   * @brief parseOverpassRelation Reads relation info out of the property tree
+   * @brief _parseOverpassRelation Reads relation info out of the property tree
    *        and builds a Relation object. Adds relation to the map.
    * @param item Property Tree (likely a subtree)
    * @param pMap Map to which we add the Relation
    */
-  void parseOverpassRelation(const boost::property_tree::ptree &item,
-                             OsmMapPtr pMap);
+  void _parseOverpassRelation(const boost::property_tree::ptree &item,
+                              OsmMapPtr pMap);
 
   /**
-   * @brief addTags Reads tags from the given ptree, and adds them to the
+   * @brief _addTags Reads tags from the given ptree, and adds them to the
    *        supplied map element
    * @param item Property Tree (subtree)
    * @param pElement Element to which we will add the tags
    */
-  void addTags(const boost::property_tree::ptree &item,
-               hoot::ElementPtr pElement);
+  void _addTags(const boost::property_tree::ptree &item,
+                hoot::ElementPtr pElement);
 
   /**
-   * @brief scrubQuotes Converts single quotes to double quotes, and escaped
-   *        apostrophes to regular apostrophes
+   * @brief _scrubQuotes Converts single quotes to double quotes, and escaped
+   *         apostrophes to regular apostrophes
    * @param jsonStr proper JSON string
    */
-  void scrubQuotes(QString &jsonStr);
+  void _scrubQuotes(QString &jsonStr);
 
 };
 

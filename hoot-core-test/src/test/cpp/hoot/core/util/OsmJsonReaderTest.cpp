@@ -51,6 +51,7 @@ class OsmJsonReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(nodeTest);
   CPPUNIT_TEST(wayTest);
   CPPUNIT_TEST(relationTest);
+  CPPUNIT_TEST(urlTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -321,9 +322,37 @@ public:
 
     CPPUNIT_ASSERT(TestUtils::compareMaps(pMap, pTestMap));
   }
+
+  // Try hitting the network to get some data...
+  void urlTest()
+  {
+    OsmMapPtr pMap(new OsmMap());
+    QString urlNodes = "http://overpass-api.de/api/interpreter?data=[out:json];node(35.20,-120.61,35.23,-120.58);out;";
+    QString urlWays  = "http://overpass-api.de/api/interpreter?data=[out:json];way(35.21,-120.62,35.22,-120.59);out;";
+    OsmJsonReader uut;
+
+    // Get Nodes
+    CPPUNIT_ASSERT(uut.isSupported(urlNodes));
+    uut.open(urlNodes);
+    uut.read(pMap);
+
+    // Get Ways
+    CPPUNIT_ASSERT(uut.isSupported(urlWays));
+    uut.open(urlWays);
+    uut.read(pMap);
+
+    QString fname = QDir::currentPath() + "/test-files/nodes.json";
+    QString urlFile = "file://" + fname;
+    OsmMapPtr pMap2(new OsmMap());
+    CPPUNIT_ASSERT(uut.isSupported(urlFile));
+    uut.open(urlFile);
+    uut.read(pMap2);
+
+    // Not failure == success in this case!
+  }
 }; // class OsmJsonReaderTest
 } // namespace hoot
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "slow");
 

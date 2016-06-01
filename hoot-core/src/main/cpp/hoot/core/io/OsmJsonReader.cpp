@@ -31,6 +31,7 @@
 #include <hoot/core/Hoot.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/Factory.h>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -38,8 +39,12 @@
 namespace pt = boost::property_tree;
 
 // Qt
-#include <QFile>
+#include <QTextCodec>
+#include <QEventLoop>
 #include <QTextStream>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkAccessManager>
 
 // Standard
 #include <fstream>
@@ -51,15 +56,120 @@ using namespace std;
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
+
 // Default constructor
 OsmJsonReader::OsmJsonReader():
+  _defaultStatus(Status::Invalid),
+  _useDataSourceIds(true),
+  _defaultCircErr(15.0),
   _propTree(),
   _version(""),
   _generator(""),
   _timestamp_base(""),
-  _copyright("")
+  _copyright(""),
+  _url(""),
+  _isFile(false),
+  _isWeb(false)
 {
   // Do nothing special
+}
+
+OsmJsonReader::~OsmJsonReader()
+{
+  close();
+}
+
+bool OsmJsonReader::isSupported(QString url)
+{
+  QUrl myUrl(url);
+
+  // Is it a file?
+  if (myUrl.isLocalFile())
+  {
+    QString filename = myUrl.toLocalFile();
+
+    if (QFile::exists(filename))
+      return true;
+  }
+
+  // Is it a web address?
+  if ("http" == myUrl.scheme() || "https" == myUrl.scheme())
+  {
+    return true;
+  }
+
+  // Default to not supported
+  return false;
+}
+
+/**
+ * Opens the specified URL for reading.
+ */
+void OsmJsonReader::open(QString url)
+{
+  try
+  {
+    // Bail out if unsupported
+    if (!isSupported(url))
+      return;
+
+    // Handle files or URLs
+    _url = QUrl(url);
+    if (_url.isLocalFile())
+    {
+      _isFile = true;
+      _file.setFileName(_url.toLocalFile());
+      _file.open(QFile::ReadOnly | QFile::Text);
+    }
+    else
+    {
+      _isWeb = true;
+    }
+  }
+  catch (std::exception ex)
+  {
+    ostringstream oss;
+    oss << "Exception opening URL (" << url << "): " << ex.what();
+    throw HootException(QString::fromStdString(oss.str()));
+  }
+}
+
+void OsmJsonReader::close()
+{
+  if (_isFile)
+    _file.close();
+}
+
+/**
+ * Reads the specified map. When this method is complete
+ * the input will likely be closed.
+ */
+void OsmJsonReader::read(shared_ptr<OsmMap> map)
+{
+  if (_isFile)
+  {
+    QTextStream instream(&_file);
+    QString jsonStr = instream.readAll();
+    _loadJSON(jsonStr);
+    _parseOverpassJson(map);
+  }
+  else
+  {
+    boost::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
+    QNetworkRequest request(_url);
+    boost::shared_ptr<QNetworkReply> pReply(pNAM->get(request));
+
+    // Wait for finished signal from reply object
+    QEventLoop loop;
+    QObject::connect(pReply.get(), SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+
+    QByteArray data = pReply->readAll();
+    QString jsonStr = QString::fromAscii(data.data());
+    _loadJSON(jsonStr);
+    _parseOverpassJson(map);
+  }
 }
 
 // Throws HootException on error
@@ -69,7 +179,7 @@ void OsmJsonReader::_loadJSON(QString jsonStr)
   _propTree.clear();
 
   // Handle single or double quotes
-  scrubQuotes(jsonStr);
+  _scrubQuotes(jsonStr);
 
   // Convert string to stringstream
   stringstream ss(jsonStr.toUtf8().constData(), ios::in);
@@ -99,7 +209,9 @@ void OsmJsonReader::_loadJSON(QString jsonStr)
 OsmMapPtr OsmJsonReader::loadFromString(QString jsonStr)
 {
   _loadJSON(jsonStr);
-  return _parseOverpassJson();
+  OsmMapPtr pMap(new OsmMap());
+  _parseOverpassJson(pMap);
+  return pMap;
 }
 
 OsmMapPtr OsmJsonReader::loadFromFile(QString path)
@@ -113,10 +225,12 @@ OsmMapPtr OsmJsonReader::loadFromFile(QString path)
   QTextStream instream(&infile);
   QString jsonStr = instream.readAll();
   _loadJSON(jsonStr);
-  return _parseOverpassJson();
+  OsmMapPtr pMap(new OsmMap());
+  _parseOverpassJson(pMap);
+  return pMap;
 }
 
-OsmMapPtr OsmJsonReader::_parseOverpassJson()
+void OsmJsonReader::_parseOverpassJson(OsmMapPtr pMap)
 {
   // Overpass has 4 top level items: version, generator, osm3s, elements
   _version = QString::fromStdString(_propTree.get("version", string("")));
@@ -125,7 +239,6 @@ OsmMapPtr OsmJsonReader::_parseOverpassJson()
   _copyright = QString::fromStdString(_propTree.get("osm3s.copyright", string("")));
 
   // Make a map, and iterate through all of our elements, adding them
-  OsmMapPtr pMap(new OsmMap());
   pt::ptree elements = _propTree.get_child("elements");
   pt::ptree::const_iterator elementIt = elements.begin();
   while (elementIt != elements.end())
@@ -135,15 +248,15 @@ OsmMapPtr OsmJsonReader::_parseOverpassJson()
 
     if ("node" == typeStr)
     {
-      parseOverpassNode(elementIt->second, pMap);
+      _parseOverpassNode(elementIt->second, pMap);
     }
     else if ("way" == typeStr)
     {
-      parseOverpassWay(elementIt->second, pMap);
+      _parseOverpassWay(elementIt->second, pMap);
     }
     else if ("relation" == typeStr)
     {
-      parseOverpassRelation(elementIt->second, pMap);
+      _parseOverpassRelation(elementIt->second, pMap);
     }
     else
     {
@@ -152,38 +265,41 @@ OsmMapPtr OsmJsonReader::_parseOverpassJson()
     }
     ++elementIt;
   }
-
-  return pMap;
 }
 
-void OsmJsonReader::parseOverpassNode(const pt::ptree &item, OsmMapPtr pMap)
+void OsmJsonReader::_parseOverpassNode(const pt::ptree &item, OsmMapPtr pMap)
 {
   // Get info we need to construct our node
-  long id = item.get("id", -1l); // default to -1
+  long id = -1;
+  if (_useDataSourceIds)
+    id = item.get("id", id);
+  else
+    id = pMap->createNextNodeId();
+
   double lat = item.get("lat", 0.0);
   double lon = item.get("lon", 0.0);
-  Meters circErr = 15.0; // Appears to be default used (e.g., see PbfReader)
-  Status s;
 
   // Construct node
-  NodePtr pNode(new Node(s, id, lon, lat, circErr));
+  NodePtr pNode(new Node(_defaultStatus, id, lon, lat, _defaultCircErr));
 
   // Add tags
-  addTags(item, pNode);
+  _addTags(item, pNode);
 
   // Add node to map
   pMap->addNode(pNode);
 }
 
-void OsmJsonReader::parseOverpassWay(const pt::ptree &item, OsmMapPtr pMap)
+void OsmJsonReader::_parseOverpassWay(const pt::ptree &item, OsmMapPtr pMap)
 {
   // Get info we need to construct our way
-  long id = item.get("id", -1l); // default to -1
-  Meters circErr = 15.0; // Appears to be default used (e.g., see PbfReader)
-  Status s;
+  long id = -1;
+  if (_useDataSourceIds)
+    id = item.get("id", id);
+  else
+    id = pMap->createNextWayId();
 
   // Construct Way
-  WayPtr pWay(new Way(s, id, circErr));
+  WayPtr pWay(new Way(_defaultStatus, id, _defaultCircErr));
 
   // Add nodes
   if (item.not_found() != item.find("nodes"))
@@ -200,21 +316,23 @@ void OsmJsonReader::parseOverpassWay(const pt::ptree &item, OsmMapPtr pMap)
   }
 
   // Add tags
-  addTags(item, pWay);
+  _addTags(item, pWay);
 
   // Add way to map
   pMap->addWay(pWay);
 }
 
-void OsmJsonReader::parseOverpassRelation(const pt::ptree &item, OsmMapPtr pMap)
+void OsmJsonReader::_parseOverpassRelation(const pt::ptree &item, OsmMapPtr pMap)
 {
-  // Get info we need to construct our way
-  long id = item.get("id", -1l); // default to -1
-  Meters circErr = 15.0; // Appears to be default used (e.g., see PbfReader)
-  Status s;
+  // Get info we need to construct our relation
+  long id = -1;
+  if (_useDataSourceIds)
+    id = item.get("id", id);
+  else
+    id = pMap->createNextRelationId();
 
   // Construct Relation
-  RelationPtr pRelation(new Relation(s, id, circErr));
+  RelationPtr pRelation(new Relation(_defaultStatus, id, _defaultCircErr));
 
   // Add members
   if (item.not_found() != item.find("members"))
@@ -235,13 +353,13 @@ void OsmJsonReader::parseOverpassRelation(const pt::ptree &item, OsmMapPtr pMap)
   }
 
   // Add tags
-  addTags(item, pRelation);
+  _addTags(item, pRelation);
 
   // Add relation to map
   pMap->addRelation(pRelation);
 }
 
-void OsmJsonReader::addTags(const boost::property_tree::ptree &item, hoot::ElementPtr pElement)
+void OsmJsonReader::_addTags(const boost::property_tree::ptree &item, hoot::ElementPtr pElement)
 {
   // Find tags and add them
   if (item.not_found() != item.find("tags"))
@@ -271,7 +389,7 @@ void OsmJsonReader::addTags(const boost::property_tree::ptree &item, hoot::Eleme
 // We allow the use of single quotes, for ease of coding
 // test strings into c++. Single quotes within string literals
 // should be escaped as \'
-void OsmJsonReader::scrubQuotes(QString &jsonStr)
+void OsmJsonReader::_scrubQuotes(QString &jsonStr)
 {
   // Detect if they are using single quotes or doubles
   if (jsonStr.indexOf("\"node\"", Qt::CaseInsensitive) > -1)

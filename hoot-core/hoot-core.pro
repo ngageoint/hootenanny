@@ -5,6 +5,7 @@ QT += \
     sql \
     testlib \
     xml \
+    network \
 
 TARGET = HootCore
 TEMPLATE = lib
