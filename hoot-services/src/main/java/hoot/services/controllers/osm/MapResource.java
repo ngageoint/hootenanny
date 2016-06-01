@@ -79,7 +79,6 @@ import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.mysema.query.types.expr.NumberExpression;
 import com.mysema.query.types.template.NumberTemplate;
 
-import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.FolderMapMappings;
 import hoot.services.db2.Folders;
@@ -518,8 +517,6 @@ public class MapResource {
         String bbox = "";
         long nodeCnt = 0;
         try {
-            log.info("Retrieving map data for map with ID: " + mapId + " ...");
-
             JSONParser parser = new JSONParser();
             JSONArray paramsArray = (JSONArray) parser.parse(params);
 
@@ -535,6 +532,7 @@ public class MapResource {
                 }
                 if (mapIdNum != -1) // not MapEdit
                 {
+                    log.info("Retrieving node count for map with ID: " + mapId + " ...");
                     bbox = (String) param.get("tile");
                     String[] coords = bbox.split(",");
                     if (coords.length == 4) {
@@ -601,7 +599,7 @@ public class MapResource {
         Connection conn = DbUtils.createConnection();
         JSONObject ret = new JSONObject();
         try {
-            log.info("Retrieving map data for map with ID: " + mapId + " ...");
+            log.info("Retrieving MBR for map with ID: " + mapId + " ...");
 
             long mapIdNum = -2;
             try {
@@ -1118,35 +1116,48 @@ public class MapResource {
     @Path("/tags")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMapTags(@QueryParam("mapid") final String mapId) throws Exception {
+    public Response getTags(@QueryParam("mapid") final String mapId) throws Exception {
         Connection conn = DbUtils.createConnection();
         JSONObject ret = new JSONObject();
         try {
-            log.info("Retrieving map tags for map with ID: " + mapId + " ...");
+            // log.debug(mapId);
 
-            if (!StringUtils.isEmpty(mapId) && Long.parseLong(mapId) != -1) // MapEdit
-            {
-                QMaps maps = QMaps.maps;
-                long mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
-                assert (mapIdNum != -1);
-
+            if (!StringUtils.isEmpty(mapId)) {
+                long mapIdNum = -2;
                 try {
-                    java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapIdNum, conn);
-                    ret.putAll(tags);
-                    Object oInput1 = ret.get("input1");
-                    if (oInput1 != null) {
-                        String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput1.toString()));
-                        ret.put("input1Name", dispName);
-                    }
-
-                    Object oInput2 = ret.get("input2");
-                    if (oInput2 != null) {
-                        String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput2.toString()));
-                        ret.put("input2Name", dispName);
-                    }
+                    mapIdNum = Long.parseLong(mapId);
                 }
-                catch (Exception e) {
-                    throw new Exception("Error getting map tags. :" + e.getMessage());
+                catch (NumberFormatException e) {
+                    // a map name string could also be passed in here
+                }
+                if (mapIdNum != -1) // MapEdit
+                {
+                    QMaps maps = QMaps.maps;
+                    mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
+                    log.info("Retrieving map tags for map with ID: " + mapIdNum + " ...");
+                    assert (mapIdNum > 0);
+
+                    try {
+                        java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapIdNum, conn);
+                        if (tags != null) {
+                            log.debug(tags.toString());
+                        }
+                        ret.putAll(tags);
+                        Object oInput1 = ret.get("input1");
+                        if (oInput1 != null) {
+                            String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput1.toString()));
+                            ret.put("input1Name", dispName);
+                        }
+
+                        Object oInput2 = ret.get("input2");
+                        if (oInput2 != null) {
+                            String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput2.toString()));
+                            ret.put("input2Name", dispName);
+                        }
+                    }
+                    catch (Exception e) {
+                        throw new Exception("Error getting map tags. :" + e.getMessage());
+                    }
                 }
             }
         }
