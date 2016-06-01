@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -409,6 +409,11 @@ long ApiDb::round(double x)
 long ApiDb::round(double x, int precision)
 {
   return (long)(floor(x * (10 * (precision - 1)) + 0.5) / (10 * (precision - 1)));
+}
+
+long ApiDb::round2(double x, int precision)
+{
+  return (long)(floor(x * (pow(10, precision - 1)) + 0.5) / (pow(10, precision - 1)));
 }
 
 }
