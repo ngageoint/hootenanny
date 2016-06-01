@@ -35,8 +35,16 @@ namespace Tgs
 {
   boost::shared_ptr<Random> Random::_instance;
 
-  Random::Random()
+  Random::Random(unsigned int s)
+    : _is_single(false)
   {
+    seed(s);
+  }
+
+  Random::Random()
+    : _is_single(true)
+  {
+    seed(0);
   }
 
   double Random::generateGaussian(double mean, double sigma)
@@ -72,12 +80,18 @@ namespace Tgs
 
   int Random::generateInt()
   {
-    return rand();
+    if (_is_single)
+      return rand();
+    else
+      return rand_r(&_seed);
   }
 
   void Random::seed(unsigned int s)
   {
-    srand(s);
+    if (_is_single)
+      srand(s);
+    else
+      _seed = s;
   }
 
   void Random::seed()

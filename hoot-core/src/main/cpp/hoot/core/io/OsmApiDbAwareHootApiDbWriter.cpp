@@ -46,14 +46,14 @@ OsmApiDbAwareHootApiDbWriter::~OsmApiDbAwareHootApiDbWriter()
 
 void OsmApiDbAwareHootApiDbWriter::open(QString urlStr)
 {
-  if (!_osmApiDb.isSupported(ConfigOptions().getHootapiDbWriterOsmapidbUrl()))
+  if (!_osmApiDb.isSupported(ConfigOptions().getOsmapidbIdAwareUrl()))
   {
     throw HootException(
       "The OsmApiDbAwareHootApiDbWriter requires a valid OSM API DB URL for element id sequencing.");
   }
 
   HootApiDbWriter::open(urlStr);
-  _osmApiDb.open(ConfigOptions().getHootapiDbWriterOsmapidbUrl());
+  _osmApiDb.open(ConfigOptions().getOsmapidbIdAwareUrl());
 }
 
 long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)

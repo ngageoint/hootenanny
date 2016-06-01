@@ -19,9 +19,14 @@ Feature: Conflate feature with stats
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
     Then I wait 3 "minutes" to see "Merged_AllDataTypes"
+    And I wait 30 "seconds" to not see "Please wait while panning to review item."
     Then I click the "info" button
+    And I wait 5 seconds
     When I press "Statistics"
     And I should see stats "featurepercents" "pois" "review" "68.8%"
     And I should see stats "featurecounts" "buildings" "merged" "4"
     And I should see stats "featurepercents" "roads" "unmatched" "20.0%"
     And I should see stats "featurecounts" "waterways" "review" "0"
+    Then I click the "trash" button
+    And I accept the alert
+    And I wait 5 "seconds" to not see "Merged_AllDataTypes"

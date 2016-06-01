@@ -9,7 +9,6 @@ source ./SetupEnv.sh
 
 echo "### Configuring Hoot..."
 echo HOOT_HOME: $HOOT_HOME
-cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
 
 aclocal && autoconf && autoheader && automake && ./configure --quiet --with-rnd --with-services --with-uitests
 

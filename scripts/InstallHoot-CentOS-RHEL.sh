@@ -546,7 +546,9 @@ if [ "$INSTALL_HOOT_APPLICATION" == "true" ]; then
       if [ "$clear" == "y" ]; then
         echo "Clearing the hoot database..."
         export HOOT_HOME=hootenanny-$HOOT_VERSION
-        cp hootenanny-$HOOT_VERSION/conf/DatabaseConfig.sh.orig hootenanny-$HOOT_VERSION/conf/DatabaseConfig.sh
+        if [-e hootenanny-$HOOT_VERSION/conf/DatabaseConfigLocal.sh ]; then
+          rm hootenanny-$HOOT_VERSION/conf/DatabaseConfigLocal.sh
+        fi
         hootenanny-$HOOT_VERSION/scripts/DeleteAllTables.sh
         export HOOT_HOME=
         echo "Database cleared."
@@ -613,7 +615,6 @@ if [ "$INSTALL_HOOT_APPLICATION" == "true" ]; then
     # to the target install dir instead
     sudo cp -R docs $TEMP_DIR
     source ./SetupEnv.sh
-    touch conf/DatabaseConfig.sh
     ./configure -q --prefix=$HOOT_CORE_INSTALL_DIR/hootenanny-$HOOT_VERSION $CORE_CONFIGURATION_OPTIONS
     if [ "$REMOVE_EXISTING_CORE_INSTALL" == "true" ]; then
       # This is here in case a previous install was stopped short and you want a clean build.
