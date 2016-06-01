@@ -64,10 +64,10 @@ function getRawDbSchema()
 // hoot --convert -D "convert.ops=hoot::TranslationOp"  \ 
 //      -D translation.script=$HOOT_HOME/translations/OSM_to_englishTDS.js <input>.osm <output>.osm
 //
-function translateAttributes(attrs, layerName)
+function translateAttributes(attrs, layerName, geometryType)
 {
     // We use the temp var because etds.toEnglish returns "attrs" and "tableName"
-    var output = etds.toEnglish(attrs,'','');
+    var output = etds.toEnglish(attrs,'',geometryType);
 
     // Make sure the returned value isn't NULL. This does occur
     if (output)

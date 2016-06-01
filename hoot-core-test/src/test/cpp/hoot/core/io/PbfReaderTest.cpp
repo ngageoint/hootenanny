@@ -77,6 +77,7 @@ class PbfReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runReadMapPartialMultipleBlobsTest);
   CPPUNIT_TEST(runHasMoreElementsTest);
   CPPUNIT_TEST(runReadNextElementTest);
+  CPPUNIT_TEST(runReadSortTypeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -351,7 +352,7 @@ public:
     CPPUNIT_ASSERT(!reader.isSupported("test-files/fileDoesntExist.osm"));
   }
 
-  //TODO: in the future might try to support dir urls with this interface, but for now we don't
+  //in the future might try to support dir urls with this interface, but for now we don't
   void runIsSupportedUrlIsDirTest()
   {
     PbfReader reader(false);
@@ -553,6 +554,63 @@ public:
     }
 
     CPPUNIT_ASSERT_EQUAL(40, numberOfElements);
+  }
+
+  void runReadSortTypeTest()
+  {
+    OsmMap::resetCounters();
+
+    //This pbf file contains Sort.Type_then_ID in the header. Test to read it.
+    shared_ptr<OsmMap> map(new OsmMap());
+    PbfReader reader(true);
+    reader.open("test-files/PbfPartialReaderTest4_with_sorttype.osm.pbf");
+    reader.read(map);
+
+    CPPUNIT_ASSERT_EQUAL(true, reader.getSortedTypeThenId());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getWay(-1)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getWay(-2)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWay(-3)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWay(-4)->getNodeCount());
+
+    //The test is for #161 - PbfReader should be more permissive when the file is unsorted
+    //This file doesn't have Sort.Type_then_ID in the header. Before changes, when permissive
+    //set to false, the nodes count with ways are all zeros. Now the ways contain valid nodes.
+    shared_ptr<OsmMap> map1(new OsmMap());
+    PbfReader reader1(true);
+    reader1.open("test-files/PbfPartialReaderTest4_without_sorttype.osm.pbf");
+    reader1.setPermissive(false);
+
+    //Suppress the warning from the OsmReader about missing nodes for ways by temporarily changing
+    //the log level.  We expect the nodes to be missing since we're doing partial map reads and
+    //don't need to see the messages.
+    Log::WarningLevel loglLevel = Log::getInstance().getLevel();
+    Log::getInstance().setLevel(Log::Error);
+    reader1.read(map1);
+
+    CPPUNIT_ASSERT_EQUAL(false, reader1.getSortedTypeThenId());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map1->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map1->getWay(-1)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map1->getWay(-2)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map1->getWay(-3)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map1->getWay(-4)->getNodeCount());
+
+
+    //test the pbf file that the sorted flag isn't set and values are out of order
+    shared_ptr<OsmMap> map2(new OsmMap());
+    PbfReader reader2(true);
+    reader2.open("test-files/PbfTest_withoursoretype_unsorted.osm.pbf");
+    reader2.setPermissive(false);
+
+    reader2.read(map2);
+    Log::getInstance().setLevel(loglLevel);
+
+    CPPUNIT_ASSERT_EQUAL(false, reader2.getSortedTypeThenId());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map2->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map2->getWay(-1)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map2->getWay(-2)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map2->getWay(-3)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map2->getWay(-4)->getNodeCount());
   }
 };
 

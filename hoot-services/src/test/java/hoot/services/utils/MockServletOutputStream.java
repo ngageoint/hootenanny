@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -31,19 +31,20 @@ import java.io.IOException;
 
 import javax.servlet.ServletOutputStream;
 
+
 /**
  * Used for mocking servlet response output with Mockito
  */
-public class MockServletOutputStream extends ServletOutputStream
-{
-  public ByteArrayOutputStream baos = new ByteArrayOutputStream();
-  
-  /*
-   * (non-Javadoc)
-   * @see java.io.OutputStream#write(int)
-   */
-  public void write(int i) throws IOException
-  {
-    baos.write(i);
-  }
+public class MockServletOutputStream extends ServletOutputStream {
+    public ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.io.OutputStream#write(int)
+     */
+    @Override
+    public void write(int i) throws IOException {
+        baos.write(i);
+    }
 }

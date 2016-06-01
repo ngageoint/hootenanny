@@ -38,6 +38,7 @@ using namespace geos::operation::distance;
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ElementConverter.h>
@@ -71,7 +72,7 @@ shared_ptr<Way> WayAverager::average()
 
   if (DirectionFinder::isSimilarDirection(_map.shared_from_this(), _w1, _w2) == false)
   {
-    if (_w1->isOneWay() == true)
+    if (OsmSchema::getInstance().isOneWay(*_w1) == true)
     {
       _w2->reverseOrder();
     }

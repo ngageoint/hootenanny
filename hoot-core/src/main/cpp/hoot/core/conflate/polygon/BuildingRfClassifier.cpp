@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingRfClassifier.h"
 
@@ -154,6 +154,11 @@ void BuildingRfClassifier::_createAllExtractors() const
     _extractors.push_back(shared_ptr<FeatureExtractor>(
       new EdgeDistanceExtractor(new QuantileAggregator(q))));
   }
+
+  for (double r = 0.0; r <= 1.0; r += 0.05)
+  {
+    _extractors.push_back(shared_ptr<FeatureExtractor>(new AngleHistogramExtractor(r)));
+  }
 }
 
 void BuildingRfClassifier::_createBestExtractors() const
@@ -161,7 +166,8 @@ void BuildingRfClassifier::_createBestExtractors() const
   _extractors.clear();
 
   // this set was determined with experimentation using the Jakarta building data and weka.
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new AngleHistogramExtractor()));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new AngleHistogramExtractor(0.0)));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new AngleHistogramExtractor(0.3)));
   //_extractors.push_back(shared_ptr<FeatureExtractor>(new CentroidDistanceExtractor()));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new CompactnessExtractor()));
   //_extractors.push_back(shared_ptr<FeatureExtractor>(new OverlapExtractor()));

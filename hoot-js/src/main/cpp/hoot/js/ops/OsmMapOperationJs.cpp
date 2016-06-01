@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmMapOperationJs.h"
 
@@ -81,8 +81,8 @@ Handle<Value> OsmMapOperationJs::applyAndGetResult(const Arguments& args)
   op->getMapOp()->apply(map);
   any result = op->getMapOp()->getResult();
 
-  //TODO: I'm sure there's a better way to do this...initially just supporting a small number of
-  //returned types here.
+  /// I'm sure there's a better way to do this...initially just supporting a small number of
+  /// returned types here.
   if (result.type() == typeid(double))
   {
     return scope.Close(Number::New(any_cast<double>(result)));

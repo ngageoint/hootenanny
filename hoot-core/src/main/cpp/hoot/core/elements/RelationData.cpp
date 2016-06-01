@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,32 +22,26 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RelationData.h"
 
 namespace hoot
 {
 
-RelationData::RelationData(long id) : ElementData(id)
-{
-}
-
-RelationData::RelationData(long id, long changeset, long version, unsigned int timestamp) :
-ElementData(id, changeset, version, timestamp)
-{
-}
-
 RelationData::RelationData(long id, long changeset, long version, unsigned int timestamp,
-  QString user, long uid) : ElementData(id, changeset, version, timestamp, user, uid)
+                           QString user, long uid, bool visible) :
+ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid, visible)
 {
 }
 
 RelationData::RelationData(const RelationData& rd) :
-  ElementData(rd.getId(), rd.getTags(), rd.getCircularError())
+ElementData(rd.getId(), rd.getTags(), rd.getCircularError(), rd.getChangeset(), rd.getVersion(),
+            rd.getTimestamp(), rd.getUser(), rd.getUid(), rd.getVisible()),
+_type(rd._type),
+_members(rd._members)
 {
-  _members = rd._members;
-  _type = rd._type;
+
 }
 
 void RelationData::addElement(const QString& role, ElementId eid)

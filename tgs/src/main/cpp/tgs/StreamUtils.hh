@@ -237,6 +237,25 @@ std::ostream& operator<<(std::ostream& o, const QList<T>& l)
   return o;
 }
 
+template<class T>
+std::ostream& operator<<(std::ostream& o, const QSet<T>& l)
+{
+  o << "[";
+  int i = 0;
+  foreach (const T& t, l)
+  {
+    if (i != 0)
+    {
+      o << ", ";
+    }
+    o << t;
+    ++i;
+  }
+  o << "]";
+  return o;
+}
+
+
 // If the class has a "QString toString() const" method then automagically call it.
 #define HAS_MEM_FUNC(func, name)                                        \
     template<typename T, typename Sign>                                 \
@@ -261,6 +280,14 @@ HAS_MEM_FUNC(toString, has_to_string);
 
 template<typename T>
 typename enable_if< has_to_string<T, QString(T::*)() const>::value, std::ostream& >::type
+operator<<(std::ostream& o, const T& t)
+{
+  o << t.toString();
+  return o;
+}
+
+template<typename T>
+typename enable_if< has_to_string<T, std::string(T::*)() const>::value, std::ostream& >::type
 operator<<(std::ostream& o, const T& t)
 {
   o << t.toString();

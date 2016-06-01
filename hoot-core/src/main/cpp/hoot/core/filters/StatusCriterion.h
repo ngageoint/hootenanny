@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STATUSCRITERION_H
 #define STATUSCRITERION_H
@@ -58,6 +58,8 @@ public:
   {
     _status = Status::fromString(ConfigOptions(conf).getStatusCriterionStatus());
   }
+
+  virtual ElementCriterion* clone() { return new StatusCriterion(_status); }
 
 private:
   Status _status;

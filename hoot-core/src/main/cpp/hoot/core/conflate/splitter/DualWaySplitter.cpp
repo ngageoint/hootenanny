@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DualWaySplitter.h"
@@ -106,12 +106,12 @@ shared_ptr<Way> DualWaySplitter::_createOneWay(shared_ptr<const Way> w, Meters b
   const LineString* newLs = dynamic_cast<const LineString*>(g.get());
 
   shared_ptr<Way> result(new Way(w->getStatus(), _result->createNextWayId(),
-    w->getCircularError()));
+    w->getRawCircularError()));
 
   // This sometimes happens if the buffer builder returns a multilinestring. See #2275
   if (newLs == 0)
   {
-    /// @todo MultiLineString not handled properly See #2275
+    /// @todo MultiLineString not handled properly See r2275
     LOG_WARN("Inappropriate handling of geometry.");
     auto_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
 

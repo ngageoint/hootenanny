@@ -22,15 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ogr;
-
-import hoot.services.HootProperties;
-import hoot.services.nodeJs.ServerControllerBase;
-import hoot.services.utils.ResourceErrorHandler;
-
-import java.io.IOException;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -39,182 +33,106 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.HootProperties;
+import hoot.services.nodeJs.ServerControllerBase;
+import hoot.services.utils.ResourceErrorHandler;
+
+
 @Path("")
-public class TranslatorResource extends ServerControllerBase{
+public class TranslatorResource extends ServerControllerBase {
+    private static final Logger log = LoggerFactory.getLogger(TranslatorResource.class);
 
+    private static final String homeFolder;
+    private static final String translationServerPort;
+    private static final String translationServerThreadCount;
+    private static final String translationServerScript;
+    private static final Object procLock = new Object();
+    private static final Object portLock = new Object();
 
+    private static String currentPort;
+    private static Process transProc;
 
-  private static final Logger log = LoggerFactory.getLogger(TranslatorResource.class);
-
-
-  private static String homeFolder = null;
-  private static String translationServerPort = null;
-  private static String translationServerThreadCount = null;
-  private static String translationServerScript = null;
-  
-  private static final Object procLock = new Object();
-  private static final Object portLock = new Object();
-  
-  private static String currentPort = null;
-  private static Process transProc = null;
-
-
-  private static MultiThreadedHttpConnectionManager connectionManager = 
-  		new MultiThreadedHttpConnectionManager();
-	@SuppressWarnings("unused")
-  private static org.apache.commons.httpclient.HttpClient mclient = new org.apache.commons.httpclient.HttpClient(connectionManager);;
-	
-	
-  public TranslatorResource()
-  {
-
-    if(homeFolder ==  null){
-	    try {
-	    	homeFolder = HootProperties.getProperty("homeFolder");
-			} catch (IOException e) {
-				log.error(e.getMessage());
-			}
+    static {
+        homeFolder = HootProperties.getProperty("homeFolder");
+        translationServerPort = HootProperties.getProperty("translationServerPort");
+        translationServerThreadCount = HootProperties.getProperty("translationServerThreadCount");
+        translationServerScript = HootProperties.getProperty("translationServerScript");
     }
 
-    if(translationServerPort ==  null){
-	    try {
-	    	translationServerPort = HootProperties.getProperty("translationServerPort");
-			} catch (IOException e) {
-				log.error(e.getMessage());
-			}
+    public TranslatorResource() {
     }
 
-    if(translationServerThreadCount ==  null){
-	    try {
-	    	translationServerThreadCount = HootProperties.getProperty("translationServerThreadCount");
-			} catch (IOException e) {
-				log.error(e.getMessage());
-			}
+    public void startTranslationService() {
+        // set default default port and threadcount
+        try {
+            // Make sure to wipe out previosuly running servers.
+            stopServer(homeFolder + "/scripts/" + translationServerScript);
+
+            // Probably an overkill but just in-case using synch lock
+            String currPort = translationServerPort;
+            synchronized (portLock) {
+                currentPort = currPort;
+            }
+
+            synchronized (procLock) {
+                String currThreadCnt = translationServerThreadCount;
+                transProc = startServer(currPort, currThreadCnt, homeFolder + "/scripts/" + translationServerScript);
+            }
+        }
+        catch (Exception ex) {
+            ResourceErrorHandler.handleError("Error starting translation service request: " + ex.toString(),
+                    Status.INTERNAL_SERVER_ERROR, log);
+        }
     }
 
-    if(translationServerScript ==  null){
-	    try {
-	    	translationServerScript = HootProperties.getProperty("translationServerScript");
-			} catch (IOException e) {
-				log.error(e.getMessage());
-			}
+    public void stopTranslationService() {
+        // This also gets called automatically from HootServletContext when
+        // service exits but
+        // should not be reliable since there are many path where it will not be
+        // invoked.
+        try {
+            // Destroy the reference to the process directly here via the Java
+            // API vs having the base
+            // class kill it with a unix command. Killing it via command causes
+            // the stxxl temp files
+            // created by hoot threads not to be cleaned up.
+            // stopServer(homeFolder + "/scripts/" + translationServerScript);
+            transProc.destroy();
+        }
+        catch (Exception ex) {
+            ResourceErrorHandler.handleError("Error starting translation service request: " + ex.toString(),
+                    Status.INTERNAL_SERVER_ERROR, log);
+        }
     }
-    
-    // Use this with synchronized if needing configuration
-    /*
-    if(mclient == null)
-    {
-	    HttpConnectionManagerParams params = new HttpConnectionManagerParams();
-	    params.setDefaultMaxConnectionsPerHost(2);
-	    params.setMaxTotalConnections(3);
-	
-	    connectionManager.setParams(params);
-	    mclient = new org.apache.commons.httpclient.HttpClient(connectionManager);
-    }*/
-  }
 
+    /**
+     * Gets current status of translation server.
+     * <p>
+     * GET hoot-services/ogr/translationserver/status
+     *
+     * @return JSON containing state and port it is running
+     */
+    @GET
+    @Path("/translationserver/status")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response isTranslationServiceRunning() {
+        boolean isRunning = false;
+        try {
+            isRunning = getStatus(transProc);
+        }
+        catch (Exception ex) {
+            ResourceErrorHandler.handleError("Error starting translation service request: " + ex.toString(),
+                    Status.INTERNAL_SERVER_ERROR, log);
+        }
 
+        JSONObject res = new JSONObject();
+        res.put("isRunning", isRunning);
+        res.put("port", currentPort);
 
-  public void startTranslationService() {
-
-  	// set default default port and threadcount
-  	String currPort = translationServerPort;
-  	String currThreadCnt = translationServerThreadCount;
-		try
-		{
-			// Make sure to wipe out previosuly running servers.
-			stopServer(homeFolder + "/scripts/" + translationServerScript);
-			
-	
-			// Probably an overkill but just in-case using synch lock
-			synchronized(portLock)
-			{
-				currentPort = currPort;
-			}
-
-			synchronized(procLock)
-			{
-				transProc = startServer(currPort, currThreadCnt, homeFolder + "/scripts/" + translationServerScript);
-			}
-
-		}
-		catch (Exception ex)
-		{
-		  ResourceErrorHandler.handleError(
-			"Error starting translation service request: " + ex.toString(),
-		    Status.INTERNAL_SERVER_ERROR,
-			log);
-		}
-  	
-  }
-
- 
-  
-  
- 
-  public void stopTranslationService() {
-  	// This also gets called automatically from HootServletContext when service exits but
-  	// should not be reliable since there are many path where it will not be invoked.
-		try
-		{  
-			stopServer(homeFolder + "/scripts/" + translationServerScript);
-		}
-		catch (Exception ex)
-		{
-		  ResourceErrorHandler.handleError(
-			"Error starting translation service request: " + ex.toString(),
-		    Status.INTERNAL_SERVER_ERROR,
-			log);
-		}
-  
-  }
-  
-  /**
-	 * <NAME>Translation Service Node Server status</NAME>
-	 * <DESCRIPTION>
-	 *  Gets current status of translation server.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON containing state and port it is running
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/ogr/translationserver/status</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>{"isRunning":"true","port":"8094"}</OUTPUT>
-	 * </EXAMPLE>
-   * @return
-   */  
-  @GET
-  @Path("/translationserver/status")
-  @Produces(MediaType.TEXT_PLAIN)
-  public Response isTranslationServiceRunning() {
-  	boolean isRunning = false;
-  	
-  	
-		try
-		{
-			isRunning = getStatus(transProc);
-		}
-		catch (Exception ex)
-		{
-		  ResourceErrorHandler.handleError(
-			"Error starting translation service request: " + ex.toString(),
-		    Status.INTERNAL_SERVER_ERROR,
-			log);
-		}
-  	
-  	JSONObject res = new JSONObject();
-		res.put("isRunning", isRunning);
-		res.put("port", currentPort);
-		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
-  }
+        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+    }
 }

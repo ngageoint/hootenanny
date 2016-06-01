@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementIdJs.h"
 
@@ -115,7 +115,7 @@ Handle<Value> ElementIdJs::toJSON(const Arguments& args)
 
   Handle<Object> result = Object::New();
   result->Set(String::NewSymbol("type"), String::New(eid.getType().toString().toUtf8().data()));
-  result->Set(String::NewSymbol("id"), Integer::New(eid.getId()));
+  result->Set(String::NewSymbol("id"), v8::Integer::New(eid.getId()));
 
   return scope.Close(result);
 }

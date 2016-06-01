@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -75,10 +75,11 @@ public:
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
+    LOG_INFO("Converting " << args[0] << " to " << args[1] << "...");
+
     OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
     OsmMapWriterFactory writerFactory = OsmMapWriterFactory::getInstance();
 
-        // Is there a streaming reader and writer?
     if (readerFactory.hasElementInputStream(args[0]) &&
         writerFactory.hasElementOutputStream(args[1]) &&
         ConfigOptions().getConvertOps().size() == 0)

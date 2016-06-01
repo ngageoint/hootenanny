@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include <vector>
 
@@ -71,9 +71,16 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
 
   if (tags.getNonDebugCount() > 0)
   {
+    GeometryTypeId gtype = ElementConverter::getGeometryType(e, false);
+
+    // If we don't know what it is, no point in translating it.
+    if (gtype == ElementConverter::UNKNOWN_GEOMETRY)
+    {
+      return;
+    }
+
     if (_toOgr)
     {
-      GeometryTypeId gtype = ElementConverter::getGeometryType(e, false);
 
       vector<Tags> allTags = _togr->translateToOgrTags(tags, e->getElementType(), gtype);
 
@@ -94,7 +101,31 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
       {
         layerName = tags[OsmSchema::layerNameKey()].toUtf8();
       }
-      _t.translateToOsm(tags, layerName.data());
+
+      QByteArray geomType;
+
+      switch (gtype)
+      {
+      case GEOS_POINT:
+      case GEOS_MULTIPOINT:
+        geomType = "Point";
+        break;
+      case GEOS_LINESTRING:
+      case GEOS_MULTILINESTRING:
+        geomType = "Line";
+        break;
+      case GEOS_POLYGON:
+      case GEOS_MULTIPOLYGON:
+        geomType = "Area";
+        break;
+      case GEOS_GEOMETRYCOLLECTION:
+        geomType = "Collection";
+        break;
+      default:
+        throw InternalErrorException("Unexpected geometry type.");
+      }
+
+      _t.translateToOsm(tags, layerName.data(), geomType);
 
       if (tags.contains(_circularErrorKey))
       {

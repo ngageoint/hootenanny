@@ -12,11 +12,10 @@ var os = require('os');
 var serverPort = 8096;
 
 var HOOT_HOME = process.env.HOOT_HOME;
-hoot = require(HOOT_HOME + '/lib/HootJs');
+//Moving hoot init to the request handler allows stxxl temp file cleanup to happen properly.
+//hoot = require(HOOT_HOME + '/lib/HootJs');
 
 var nCPU = os.cpus().length;
-
-
 
 // Argument parser
 process.argv.forEach(function (val, index, array) {
@@ -38,7 +37,6 @@ process.argv.forEach(function (val, index, array) {
 		if(nThreadCnt > 0){
 			nCPU = nThreadCnt;
 		}
-  		
   	}
   }
 });
@@ -55,7 +53,6 @@ if(cluster.isMaster){
     	cluster.fork();
 	})
 } else {
-
 	// We create child process http server
 	// and we all listen on serverPort
 	http.createServer(
@@ -89,16 +86,16 @@ var mergeP2P = function(request, response)
 		request.on('end', function(data){
 			postHandler(alldata, response);
 		});
-	} else if(request.method === "GET"){
-
+	} 
+	else if(request.method === "GET"){
 	}	
 }
-
 
 // This is where all interesting things happen interfacing with hoot core lib directly
 var postHandler = function(data, response)
 {
-
+	var hoot = require(HOOT_HOME + '/lib/HootJs');
+	
 	var result = {};
 	/*var input = "<?xml version='1.0' encoding='UTF-8'?>\
 	<osm version='0.6' upload='true' generator='JOSM'>\
@@ -127,6 +124,3 @@ var postHandler = function(data, response)
     response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
 	response.end(JSON.stringify(result));
 }
-
-
-

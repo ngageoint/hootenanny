@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementJs.h"
 
@@ -105,7 +105,7 @@ Handle<Value> ElementJs::getId(const Arguments& args) {
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
 
-  return scope.Close(Integer::New(e->getId()));
+  return scope.Close(v8::Integer::New(e->getId()));
 }
 
 Handle<Value> ElementJs::getStatusString(const Arguments& args)

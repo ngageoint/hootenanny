@@ -181,7 +181,7 @@ translate = {
                     // If these tags are used to find an FCODE, ignore them
                     if ((col in fCodeList) && (value in fCodeList[col])) continue;
 
-                    logWarn('Lookup value not found for column:: (' + col + '=' + value + ')');
+                    logVerbose('Lookup value not found for column:: (' + col + '=' + value + ')');
                 }
             }
             else
@@ -212,7 +212,7 @@ translate = {
                     }
                     else
                     {
-                        if (config.getOgrDebugLookupcolumn() == 'true') logWarn('Column not found:: (' + col + '=' + value + ')');
+                        if (config.getOgrDebugLookupcolumn() == 'true') logVerbose('Column not found:: (' + col + '=' + value + ')');
                     }
 
                 } // End col in ignoreList
@@ -325,7 +325,7 @@ translate = {
                     // If these tags are used to find an FCODE, ignore them
                     if ((tAttrib in fCodeList) && (value in fCodeList[tAttrib])) continue;
                         
-                    logWarn('Lookup value not found for column:: (' + tAttrib + '=' + value + ')');
+                    logVerbose('Lookup value not found for column:: (' + tAttrib + '=' + value + ')');
 
                     // The following is used for export. If we have an attribute value that can't
                     // find a rule for, we add it to the OTH Field.
@@ -337,7 +337,7 @@ translate = {
                         othVal = '(' + otherVal[0] + endChar + ':' + value + ')';
                         outList.OTH = translate.appendValue(outList.OTH,othVal,' ');
 
-                        logWarn('Adding to OTH field:: ' + othVal);
+                        logVerbose('Adding to OTH field:: ' + othVal);
 
                         // Set the output attribute to "other"
                         outList[otherVal[0] + endChar] = otherVal[1];
@@ -352,7 +352,7 @@ translate = {
 //                 // ignoreList is the list of fields that get handled later
 //                 if (!(col in ignoreList))
 //                 {
-//                     if (getHootConfig('ogr.debug.lookupcolumn') == 'true') logWarn('Column not found:: (' + col + '=' + value + ')');
+//                     if (getHootConfig('ogr.debug.lookupcolumn') == 'true') logVerbose('Column not found:: (' + col + '=' + value + ')');
 //                 }
 //             }
         } // End col in inList
@@ -453,7 +453,7 @@ translate = {
             }
             else
             {
-                logWarn('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is not set. Skipping it.');
+                logVerbose('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is not set. Skipping it.');
                 continue
             } // End !attrsi[]
 
@@ -463,7 +463,7 @@ translate = {
 
             if (tValue !== '999')
             {
-                logWarn('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is :' + tValue + ':. Skipping it.');
+                logVerbose('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is :' + tValue + ':. Skipping it.');
                 continue;
             }
 
@@ -627,10 +627,36 @@ translate = {
         return result;
     },
 
+
     isNumber : function(n)
     {
         return !isNaN(parseFloat(n)) && isFinite(n);
     },
+
+
+    // Chop a datetime field down to a single value and get it to 20 characters long for export to MGCP & TDS
+    chopDateTime : function(rawDateTime)
+    {
+        var finalDateTime = '';
+
+        var tmpList = rawDateTime.split(';');
+
+        // NOTE: This is a workaround untill we can get the "reference dataset" datetime
+        // Sort the list so we grab the earliest date.
+        tmpList.sort();
+
+        finalDateTime = tmpList[0];
+
+        // Try chopping the milliseconds off the datetime
+        if (finalDateTime.length > 20)
+        {
+            finalDateTime = finalDateTime.replace(/\.\d\d\dZ$/,'Z');
+        }
+
+        return finalDateTime;
+    },
+
+
 
     // applySimpleTxtBiased - Apply 0ne2one rules for Text Attributes
     // The "direction is either "forward" or "backward" - convert to or from
@@ -664,7 +690,7 @@ translate = {
 
     // applySimpleNumBiased - Apply 0ne2one rules for Number Attributes
     // The "direction is either "forward" or "backward" - convert to or from
-    applySimpleNumBiased : function(attrs, tags, rules, direction)
+    applySimpleNumBiased : function(attrs, tags, rules, direction, intList)
     {
         if (direction == 'forward')
         {
@@ -673,17 +699,14 @@ translate = {
             {
                 if (i in attrs)
                 {
-                    // Sanity checking :-)
-                    // if (translate.isOK(attrs[i])) tags[rules[i]] = attrs[i];
-
-                    // Just checking it is a number
+                    // Just checking it is a number. Dont care if it is an Int or a Real
                     if (translate.isNumber(attrs[i]))
                     {
                         tags[rules[i]] = attrs[i];
                     }
                     else
                     {
-                        logWarn('Expected a number for:: ' + i + ' got ' + attrs[i] + ' instead. Dropping ' + i);
+                        logVerbose('Expected a number for:: ' + i + '. Got ' + attrs[i] + ' instead. Skipping ' + i);
                     }
                 }
             }
@@ -698,15 +721,27 @@ translate = {
                     // Strip out anything that is not a number. Get rid of 125m etc
                     var tNum = tags[rules[i]].replace(/-[^0-9\\.]+/g, '');
 
-                    // if (translate.isOK(tNum)) attrs[i] = tNum;
-
                     if (translate.isNumber(tNum))
                     {
+                        // Now check the Integer attributes
+                        if (intList.indexOf(i) > -1)
+                        {
+                            // Quick bitwise or to strip off anything after the decimal
+                            var tInt = tNum | 0;
+
+                                // Back to a string for a comparison
+                                if ((tInt + '') !== tNum)
+                                {
+                                    hoot.logVerbose('Converting ' + i + ' from ' + tNum + ' to ' + tInt);
+                                }
+                                tNum = tInt;
+                        } // End in intList
+
                         attrs[i] = tNum;
                     }
                     else
                     {
-                        logWarn('Expected a number for:: ' + rules[i] + ' got ' + tags[rules[i]] + ' instead. Dropping ' + i);
+                        logVerbose('Expected a number for:: ' + rules[i] + '. Got ' + tags[rules[i]] + ' instead. Skipping ' + i);
                     }
                 }
             }

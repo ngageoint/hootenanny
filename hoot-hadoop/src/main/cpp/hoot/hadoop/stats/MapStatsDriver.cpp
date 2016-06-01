@@ -17,20 +17,17 @@
 #include "MapStatsDriver.h"
 
 // Hoot
-#include <hoot/core/schema/JsonSchemaLoader.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/hadoop/PbfInputFormat.h>
 #include <hoot/hadoop/PbfRecordReader.h>
+#include <hoot/core/util/UuidHelper.h>
 
 // Pretty Pipes
 #include <pp/Hdfs.h>
 #include <pp/mapreduce/Job.h>
-
-// Qt
-#include <QUuid>
 
 #include "MapStatsMapper.h"
 
@@ -51,7 +48,7 @@ const MapStats& MapStatsDriver::calculateStats(const QString& input)
   // set the name
   job.setName(("MapStatsDriver " + input).toStdString());
 
-  QString tmp = "tmp/" + QUuid::createUuid().toString().replace("{", "").replace("}", "") +
+  QString tmp = "tmp/" + UuidHelper::createUuid().toString().replace("{", "").replace("}", "") +
       "-MapStatsDriver.stats";
 
   // set the input/output

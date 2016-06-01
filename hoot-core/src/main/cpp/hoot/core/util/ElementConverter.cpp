@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <ogr_spatialref.h>
@@ -89,7 +89,7 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
   }
 }
 
-shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Element>& e,
+shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Element>& e, bool throwError,
                                                          const bool statsFlag) const
 {
   switch(e->getElementType().getEnum())
@@ -97,14 +97,15 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const 
   case ElementType::Node:
     return convertToGeometry(dynamic_pointer_cast<const Node>(e));
   case ElementType::Way:
-    return convertToGeometry(dynamic_pointer_cast<const Way>(e), statsFlag);
+    return convertToGeometry(dynamic_pointer_cast<const Way>(e), throwError, statsFlag);
   case ElementType::Relation:
-    return convertToGeometry(dynamic_pointer_cast<const Relation>(e), statsFlag);
+    return convertToGeometry(dynamic_pointer_cast<const Relation>(e), throwError, statsFlag);
   default:
     LOG_WARN(e->toString());
     throw HootException("Unexpected element type: " + e->getElementType().toString());
   }
 }
+
 
 shared_ptr<Point> ElementConverter::convertToGeometry(const shared_ptr<const Node>& n) const
 {
@@ -116,9 +117,9 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const WayPtr& w) const
   return convertToGeometry((ConstWayPtr)w);
 }
 
-shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Way>& e, const bool statsFlag) const
+shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Way>& e, bool throwError, const bool statsFlag) const
 {
-  GeometryTypeId gid = getGeometryType(e, true, statsFlag);
+  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
   if (gid == GEOS_POLYGON)
   {
     return convertToPolygon(e);
@@ -135,9 +136,9 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const 
   }
 }
 
-shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Relation>& e, const bool statsFlag) const
+shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Relation>& e, bool throwError, const bool statsFlag) const
 {
-  GeometryTypeId gid = getGeometryType(e, true, statsFlag);
+  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
 
   if (gid == GEOS_MULTIPOLYGON)
   {
@@ -307,7 +308,6 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
 
       // We are going to throw an error so we save the type of relation
       relationType = r->getType();
-
       break;
 
     }
@@ -330,7 +330,7 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
   }
   else
   {
-    return GeometryTypeId(-1);
+    return GeometryTypeId(UNKNOWN_GEOMETRY);
   }
 }
 

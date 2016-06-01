@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENT_H
 #define ELEMENT_H
@@ -98,9 +98,17 @@ public:
 
   long getId() const { return _getElementData().getId(); }
 
+  void setId(long id) { _getElementData().setId(id); }
+
   long getChangeset() const { return _getElementData().getChangeset(); }
 
+  void setChangeset(bool changeset) { _getElementData().setChangeset(changeset); }
+
+  Meters getRawCircularError() const { return _getElementData().getRawCircularError(); }
+
   long getVersion() const { return _getElementData().getVersion(); }
+
+  void setVersion(long version) { _getElementData().setVersion(version); }
 
   unsigned int getTimestamp() const { return _getElementData().getTimestamp(); }
 
@@ -112,6 +120,8 @@ public:
 
   Tags& getTags() { return _getElementData().getTags(); }
 
+  bool hasCircularError() const { return _getElementData().hasCircularError(); }
+
   void removeTag(QString k) { _getElementData().getTags().remove(k); }
 
   void setCircularError(Meters circularError) { _getElementData().setCircularError(circularError); }
@@ -119,6 +129,10 @@ public:
   void setTags(const Tags& tags) { _getElementData().setTags(tags); }
 
   void setTag(QString k, QString v) { _getElementData().setTag(k, v); }
+
+  bool getVisible() const { return _getElementData().getVisible(); }
+
+  void setVisible(bool visible) { _getElementData().setVisible(visible); }
 
   Status getStatus() const { return _status; }
 

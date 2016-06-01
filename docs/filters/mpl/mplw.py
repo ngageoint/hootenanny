@@ -4,7 +4,8 @@ import os, sys
 from optparse import *
 
 #from matplotlib.pyplot import barh, title, grid , savefig, yticks, xlabel
-
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib.pyplot import *
 from numpy  import *
 

@@ -26,7 +26,7 @@
  */
 
 //
-// Convert MapEdit RenderDb to FGDB & Shapefile
+// Convert RenderDb to FGDB & Shapefile
 //
 
 hoot.require('config');
@@ -62,7 +62,7 @@ function initialize()
 
 // IMPORT
 // translateAttributes - takes 'attrs' and returns OSM 'tags'
-function translateToOsm(attrs, layerName)
+function translateToOsm(attrs, layerName, geometryType)
 {
     return attrs;
 } // End of Translate Attributes
@@ -113,7 +113,7 @@ function translateToOgr(tags, elementType, geometryType)
     }
 
     // Debug:
-    if (config.getOgrDebugDumpattrs() == 'true')
+    if (config.getOgrDebugDumptags() == 'true')
     {
         for (var i in tags) print('Out Tags :' + i + ': :' + tags[i] + ':');
         print('');

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMatchCreator.h"
 
@@ -176,7 +176,7 @@ vector<MatchCreator::Description> PoiPolygonMatchCreator::getAllCreators() const
 {
   vector<Description> result;
 
-  result.push_back(Description(className(), "POI to Polygon Match Creator", true));
+  result.push_back(Description(className(), "POI to Polygon Match Creator", MatchCreator::POI, true));
 
   return result;
 }
@@ -192,8 +192,8 @@ shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()
   {
     ConfigOptions config;
     _matchThreshold.reset(
-      new MatchThreshold(config.getPoiMatchThreshold(), config.getPoiMissThreshold(),
-                         config.getPoiReviewThreshold()));
+      new MatchThreshold(config.getPoiPolygonMatchThreshold(), config.getPoiPolygonMissThreshold(),
+                         config.getPoiPolygonReviewThreshold()));
   }
   return _matchThreshold;
 }

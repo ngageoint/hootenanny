@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -70,6 +70,7 @@ class HighwaySnapMergerTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runTagsTest);
   CPPUNIT_TEST(runTagsSplitTest);
   CPPUNIT_TEST(runTagsNoRelationTest);
+  CPPUNIT_TEST(reviewMarkingTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -148,17 +149,23 @@ public:
     HOOT_STR_EQUALS("way(-4)\n"
                     "nodes: [2]{-1, -6}\n"
                     "tags: cached envelope: 0,-1,0,-1\n"
-                    "status: conflated",
+                    "status: conflated\n"
+                    "version: 0\n"
+                    "visible: 1",
                     map->getWay(-4)->toString());
     HOOT_STR_EQUALS("way(-5)\n"
                     "nodes: [2]{-6, -2}\n"
                     "tags: cached envelope: 0,-1,0,-1\n"
-                    "status: unknown1",
+                    "status: unknown1\n"
+                    "version: 0\n"
+                    "visible: 1",
                     map->getWay(-5)->toString());
     HOOT_STR_EQUALS("way(-7)\n"
                     "nodes: [2]{-1, -4}\n"
                     "tags: cached envelope: 0,-1,0,-1\n"
-                    "status: unknown2",
+                    "status: unknown2\n"
+                    "version: 0\n"
+                    "visible: 1",
                     map->getWay(-7)->toString());
   }
 
@@ -199,7 +206,9 @@ public:
     HOOT_STR_EQUALS("way(-4)\n"
                     "nodes: [2]{-1, -2}\n"
                     "tags: cached envelope: 0,-1,0,-1\n"
-                    "status: conflated", map->getWay(-4)->toString());
+                    "status: conflated\n"
+                    "version: 0\n"
+                    "visible: 1", map->getWay(-4)->toString());
   }
 
   /**
@@ -454,7 +463,39 @@ public:
       "}\n"
       "").replace("'", "\"");
     HOOT_STR_EQUALS(expected, json);
+  }
 
+  //simple test to make sure review note/type strings don't get interchanged
+  void reviewMarkingTest()
+  {
+    OsmMapPtr map = createMap();
+
+    Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
+    WayPtr w1 = createWay(map, w1c, Status::Unknown1);
+
+    Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
+    WayPtr w2 = createWay(map, w2c, Status::Unknown2);
+
+    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    sublineMatcher->setMinSplitSize(5.0);
+    sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
+
+    set< pair<ElementId, ElementId> > pairs;
+    pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
+
+    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+
+    vector< pair<ElementId, ElementId> > replaced;
+    merger.apply(map, replaced);
+
+    merger._markNeedsReview(map, w1, w2, "a review note", "a review type");
+
+    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelationMap().size());
+    //will throw an exception on failure
+    ConstRelationPtr reviewRelation =
+      dynamic_pointer_cast<Relation>(
+        TestUtils::getElementWithTag(map, "hoot:review:note", "a review note"));
+    HOOT_STR_EQUALS("a review type", reviewRelation->getTags().get("hoot:review:type"));
   }
 };
 

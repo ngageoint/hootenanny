@@ -45,7 +45,6 @@ using namespace hoot;
 namespace hoot
 {
 
-//TODO: make this test more robust
 class SampledAngleHistogramExtractorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(SampledAngleHistogramExtractorTest);

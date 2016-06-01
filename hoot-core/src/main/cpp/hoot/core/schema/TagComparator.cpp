@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TagComparator.h"
@@ -56,8 +56,7 @@ struct Entry
   }
 };
 
-TagComparator::TagComparator() :
-_caseSensitive(true)
+TagComparator::TagComparator()
 {
   setCaseSensitive(ConfigOptions().getDuplicateNameCaseSensitive());
 }
@@ -199,7 +198,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   _addDefaults(t1);
   _addDefaults(t2);
 
-  /// @todo #7255 go through and use the cleaned tag vertices rather than tags directly.
+  /// @todo r7255 go through and use the cleaned tag vertices rather than tags directly.
   vector<SchemaVertex> v1 = schema.getUniqueSchemaVertices(t1);
   vector<SchemaVertex> v2 = schema.getUniqueSchemaVertices(t2);
 
@@ -418,6 +417,50 @@ double TagComparator::compareTags(const Tags &t1, const Tags &t2, bool strict)
     }
     //return (nameScore * nameWeight + enumScore * enumWeight) / (nameWeight + enumWeight);
   }
+}
+
+bool TagComparator::nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2)
+{
+  const Qt::CaseSensitivity caseSensitivity =
+    _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
+  Tags t1Filtered;
+  for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); it1++)
+  {
+    QString key = it1.key();
+    QString value = it1.value();
+    if (!Tags::getNameKeys().contains(key, caseSensitivity) &&
+        //Metadata keys are controlled by hoot and, therefore, should always be lower case, so no
+        //case check needed.
+        !OsmSchema::getInstance().isMetaData(key, value))
+    {
+      if (!_caseSensitive)
+      {
+        key = key.toUpper();
+        value = value.toUpper();
+      }
+      t1Filtered.insert(key, value);
+    }
+  }
+
+  Tags t2Filtered;
+  for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); it2++)
+  {
+    QString key = it2.key();
+    QString value = it2.value();
+    if (!Tags::getNameKeys().contains(key, caseSensitivity) &&
+        !OsmSchema::getInstance().isMetaData(key, value))
+    {
+      if (!_caseSensitive)
+      {
+        key = key.toUpper();
+        value = value.toUpper();
+      }
+      t2Filtered.insert(key, value);
+    }
+  }
+
+  return t1Filtered == t2Filtered;
 }
 
 TagComparator& TagComparator::getInstance()

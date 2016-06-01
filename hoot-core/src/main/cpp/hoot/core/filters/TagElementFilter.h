@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGELEMENTFILTER_H
 #define TAGELEMENTFILTER_H
@@ -39,6 +39,8 @@ class TagElementFilter : public BaseElementFilter
 {
 public:
   TagElementFilter(FilterType type, QString k, QString v) { _type = type; _k = k; _v = v; }
+
+  virtual ElementCriterion* clone() { return new TagElementFilter(_type, _k, _v); }
 
 protected:
   virtual bool isFiltered(const Element& e) const;

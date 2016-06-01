@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef _HOOT_FACTORY_H
@@ -203,9 +203,9 @@ public:
  * It is very unusual to register the base class, so you have to call this method to do it.
  * Otherwise you'll get a nasty exception.
  */
-#define HOOT_FACTORY_REGISTER_BASE(Base, ClassName)      \
-  static hoot::AutoRegister<Base, ClassName> ClassName##AutoRegister(Base::className(), \
-    ClassName::className(), true);
+#define HOOT_FACTORY_REGISTER_BASE(Base)      \
+  static hoot::AutoRegister<Base, Base> Base##AutoRegister(Base::className(), \
+    Base::className(), true);
 
 }
 

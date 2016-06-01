@@ -41,9 +41,7 @@
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-
-// Qt
-#include <QUuid>
+#include <hoot/core/util/UuidHelper.h>
 
 namespace hoot
 {
@@ -68,7 +66,7 @@ LocalTileWorker2::LocalTileWorker2()
 {
   _mapPart = 0;
   _workDir = QDir::tempPath() + "/" +
-      QUuid::createUuid().toString().replace("{", "").replace("}", "") +
+      UuidHelper::createUuid().toString().replace("{", "").replace("}", "") +
       "-LocalTileWorker2/";
   QDir().mkdir(_workDir);
 }
@@ -218,7 +216,7 @@ shared_ptr<OsmMap> LocalTileWorker2::_readAllParts(QString dir)
     reader.read(dregs, map);
   }
   QDir d(dir);
-  Q_FOREACH(QFileInfo info, d.entryList(filters, QDir::Files))
+  Q_FOREACH(QFileInfo info, d.entryList(filters, QDir::Files, QDir::Name))
   {
     LOG_INFO(info.filePath() << " " << d.absoluteFilePath(info.filePath()) << " " << d.absolutePath() <<
              " " << info.absoluteFilePath());

@@ -8,15 +8,14 @@ else
 	A2X_QUIET=-v
 endif
 
-
 define buildAsciidoc
 	mkdir -p tmp
 	git log --simplify-by-decoration --no-merges "--pretty=%h|$$|%ct|$$|%s|$$|%aN" `find $(filter-out tmp/asciidoc-config,$^) || true` | node ParseRevisions.js > $(patsubst %.asciidoc,%-docinfo.xml,$<)
 	@REVNUMBER=`$$HOOT_HOME/scripts/GitVersion.sh` ; \
 	REVDATE=`date -d @$$(git log -n 1 "--pretty=%at" ../.) "+%B %e, %Y"`; \
-	a2x -a docinfo --dblatex-opts "-P latex.output.revhistory=0 -P latex.unicode.use=1 -s styles/nga.sty --param doc.publisher.show=0" -a HasLatexMath -a "revdate=v$$REVNUMBER, $$REVDATE" $(A2X_QUIET) -f pdf $< 
-	a2x -a docinfo --dblatex-opts "-P latex.output.revhistory=0 -P latex.unicode.use=1 -s styles/nga.sty --param doc.publisher.show=0" -a "revdate=v$$REVNUMBER, $$REVDATE" $(A2X_QUIET) -f text $< 
-	#a2x --dblatex-opts "-P latex.output.revhistory=0 -s styles/nga.sty --param doc.publisher.show=0" -a HasLatexMath -a authorinitials=DG -a revnumber=$$REVNUMBER -a "revdate=v$$REVNUMBER, $$REVDATE" -a "revremark=foo" $(A2X_QUIET) -f pdf $< 
+	a2x -a docinfo --dblatex-opts "-P latex.output.revhistory=0 -P latex.unicode.use=1 -s styles/nga.sty --param doc.publisher.show=0" -a HasLatexMath -a "revdate=v$$REVNUMBER, $$REVDATE" $(A2X_QUIET) -f pdf $<
+	a2x -a docinfo --dblatex-opts "-P latex.output.revhistory=0 -P latex.unicode.use=1 -s styles/nga.sty --param doc.publisher.show=0" -a "revdate=v$$REVNUMBER, $$REVDATE" $(A2X_QUIET) -f text $<
+	#a2x --dblatex-opts "-P latex.output.revhistory=0 -s styles/nga.sty --param doc.publisher.show=0" -a HasLatexMath -a authorinitials=DG -a revnumber=$$REVNUMBER -a "revdate=v$$REVNUMBER, $$REVDATE" -a "revremark=foo" $(A2X_QUIET) -f pdf $<
 	asciidoc -a authorinitials=DG -a revnumber=$$REVNUMBER -a "revdate=$$REVDATE" -b html $<
 	#a2x --dblatex-opts "-s styles/dg.sty --param doc.publisher.show=0" -a HasLatexMath -a authorinitials=DG -a revnumber=$$REVNUMBER -a revdate=$$REVDATE $(A2X_QUIET) -f pdf $<
 	@mv $(patsubst %.asciidoc,%.pdf,$<) "$@"
@@ -27,8 +26,7 @@ all: \
 	Hootenanny\ -\ User\ Interface\ Guide.pdf \
 	Hootenanny\ -\ Installation\ Instructions.pdf \
 	Hootenanny\ -\ Developer\ Guide.pdf \
-        Hootenanny\ -\ Algorithms.pdf \
-	# Hootenanny\ -\ Web\ Architecture\ Guide.pdf \
+  Hootenanny\ -\ Algorithms.pdf \
 
 # A generic dep for all asciidoc documents. Make sure the environment is setup
 # properly.
@@ -48,9 +46,7 @@ clean:
 	rm -rf tmp *.pdf *.png *.html *-docinfo.xml restDocs wpsDocs
 
 node_modules:
-	npm config set registry http://registry.npmjs.org/
 	npm install --silent xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
-	mkdir -p node_modules
 
 tmp/rules-lib-doxygen: RulesLib.dox ../rules/lib/*
 	mkdir -p tmp
@@ -116,23 +112,13 @@ Hootenanny\ -\ Developer\ Guide.pdf: \
 	../HOOT_VERSION_FILE \
 	docinfo.xml \
 	styles/* \
+	developer/* \
 	tmp/RulesLib.asciidoc \
 	tmp/RulesTemplate.asciidoc \
 	tmp/rules-lib-doxygen \
 	tmp/rules-template-doxygen \
 	user/*.asciidoc
 	$(call buildAsciidoc)
-
-# Hootenanny\ -\ Web\ Architecture\ Guide.pdf: \
-#	HootenannyWebArchitecture.asciidoc \
-#	tmp/asciidoc-config \
-#	../HOOT_VERSION_FILE \
-#	docinfo.xml \
-#	styles/* \
-#	../hoot-services/src/main/webapp/WEB-INF/workspace/processes/*.xml
-#	$$HOOT_HOME/scripts/makeWpsDocs.sh $(A2X_QUIET)
-#	$$HOOT_HOME/scripts/makeRestDocs.sh $(A2X_QUIET)
-#	$(call buildAsciidoc)
 
 Hootenanny\ -\ Installation\ Instructions.pdf: \
 	HootenannyInstallDocs.asciidoc \

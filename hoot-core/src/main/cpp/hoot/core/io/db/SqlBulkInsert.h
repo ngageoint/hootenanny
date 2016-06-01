@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SQLBULKINSERT_H
 #define SQLBULKINSERT_H
@@ -38,6 +38,9 @@ class QSqlDatabase;
 namespace hoot
 {
 
+/**
+ * This is designed for combining multiple insert SQL operations into a single insert SQL statement.
+ */
 class SqlBulkInsert : public BulkInsert
 {
 public:

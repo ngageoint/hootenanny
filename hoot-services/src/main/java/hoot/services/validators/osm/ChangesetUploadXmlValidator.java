@@ -22,11 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.validators.osm;
-
-import hoot.services.utils.XmlDocumentBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
@@ -34,57 +32,53 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
+import hoot.services.utils.XmlDocumentBuilder;
+
+
 /**
  * OSM changeset validator
  */
-public class ChangesetUploadXmlValidator
-{
-  private static final Logger log = LoggerFactory.getLogger(ChangesetUploadXmlValidator.class);
-  
-  /**
-   * Validates a changeset
-   * 
-   * @param changesetXml an OSM changeset for reviewed items
-   */
-  public Document parseAndValidate(final String changesetXml) throws Exception
-  {
-    Document changesetDiffDoc = null;
-    try
-    {
-      log.debug("Parsing changeset diff XML: " + StringUtils.abbreviate(changesetXml, 1000));
-      changesetDiffDoc = XmlDocumentBuilder.parse(changesetXml);
+public class ChangesetUploadXmlValidator {
+    private static final Logger log = LoggerFactory.getLogger(ChangesetUploadXmlValidator.class);
+
+    /**
+     * Validates a changeset
+     * 
+     * @param changesetXml
+     *            an OSM changeset for reviewed items
+     */
+    public Document parseAndValidate(final String changesetXml) throws Exception {
+        Document changesetDiffDoc = null;
+        try {
+            log.debug("Parsing changeset diff XML: " + StringUtils.abbreviate(changesetXml, 1000));
+            changesetDiffDoc = XmlDocumentBuilder.parse(changesetXml);
+        }
+        catch (Exception e) {
+            throw new Exception("Error parsing changeset diff data: " + changesetXml + " (" + e.getMessage() + ")");
+        }
+
+        if (XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange").getLength() > 1) {
+            throw new Exception("Only one changeset may be uploaded at a time.");
+        }
+
+        if (!changesetHasElements(changesetDiffDoc)) {
+            throw new Exception("No items in uploaded changeset.");
+        }
+
+        return changesetDiffDoc;
     }
-    catch (Exception e)
-    {
-      throw new Exception(
-        "Error parsing changeset diff data: " + changesetXml +  " (" + e.getMessage() + ")");
+
+    /**
+     * Determines whether a changeset DOM has any elements in it. (Strangely, I
+     * couldn't figure out how to do this correctly with XPath).
+     * 
+     * @param changesetDiffDoc
+     *            the changeset to check for elements
+     * @return true if the changeset has elements; false otherwise
+     */
+    public static boolean changesetHasElements(final Document changesetDiffDoc) {
+        return changesetDiffDoc.getElementsByTagName("node").getLength()
+                + changesetDiffDoc.getElementsByTagName("way").getLength()
+                + changesetDiffDoc.getElementsByTagName("relation").getLength() > 0;
     }
-    
-    if (XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange").getLength() > 1)
-    {
-      throw new Exception("Only one changeset may be uploaded at a time.");
-    }
-     
-    if (!changesetHasElements(changesetDiffDoc))
-    {
-      throw new Exception("No items in uploaded changeset.");
-    }
-    
-    return changesetDiffDoc;
-  }
-  
-  /**
-   * Determines whether a changeset DOM has any elements in it.  (Strangely, I couldn't figure out 
-   * how to do this correctly with XPath).
-   * 
-   * @param changesetDiffDoc the changeset to check for elements
-   * @return true if the changeset has elements; false otherwise
-   */
-  public static boolean changesetHasElements(final Document changesetDiffDoc)
-  {
-    return 
-      changesetDiffDoc.getElementsByTagName("node").getLength() +
-      changesetDiffDoc.getElementsByTagName("way").getLength() +
-      changesetDiffDoc.getElementsByTagName("relation").getLength() > 0;
-  }
 }

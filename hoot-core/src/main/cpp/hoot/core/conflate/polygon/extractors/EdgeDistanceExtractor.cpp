@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "EdgeDistanceExtractor.h"
 
@@ -113,8 +113,7 @@ double EdgeDistanceExtractor::distance(const OsmMap &map,
   const shared_ptr<const Element>& target, const shared_ptr<const Element> &candidate) const
 {
   double d1 = _oneDistance(map, target, candidate);
-  // See #5619 this should swap target<->candidate. Right?
-  double d2 = _oneDistance(map, target, candidate);
+  double d2 = _oneDistance(map, candidate, target);
 
   return min(d1, d2);
 }

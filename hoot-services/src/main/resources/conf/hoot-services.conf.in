@@ -21,7 +21,7 @@ homeFolder=$(HOOT_HOME)
 # prevents the services tests from taking a long time to run; may need to increase to as much as
 # 2000 or more in some continuous integration environments where postgres seems to respond more
 # slowly to queries
-testJobStatusPollerTimeout=2000
+testJobStatusPollerTimeout=250
 
 # determines whether the system automatically scans for changes to the log4j props file
 autoScanForLogPropsChanges=true
@@ -122,16 +122,16 @@ cleanDataMakePath=makecleandata
 # Custom Script Service folder location
 customScriptPath=customscript
 
-# Db Name
+# hoot api db Name
 dbName=${DB_NAME}
 
-# Db server user id
+# hoot api db server user id
 dbUserId=${DB_USER}
 
-# Db server user password
+# hoot api db server user password
 dbPassword=${DB_PASSWORD}
 
-# Db server user host
+# hoot api db server user host
 dbHost=${DB_HOST}:${DB_PORT}
 
 # WFS Store Connection Name
@@ -139,6 +139,18 @@ wfsStoreConnName=WFS_Connection
 
 # WFS Store db name
 wfsStoreDb=${WFS_DB_NAME}
+
+# osm api db Name
+osmApiDbName=${DB_NAME_OSMAPI}
+
+# osm api db server user id
+osmApiDbUserId=${DB_USER_OSMAPI}
+
+# osm api db server user password
+osmApiDbPassword=${DB_PASSWORD_OSMAPI}
+
+# osm api db server user host
+osmApiDbHost=${DB_HOST_OSMAPI}:${DB_PORT_OSMAPI}
 
 # Translation extension install folder
 translationExtPath=$(homeFolder)/plugins-local/script/utp

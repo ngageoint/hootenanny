@@ -22,66 +22,96 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.info;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 /**
  * Represents details about the web services
  */
 @XmlRootElement
-public class ServicesDetail 
-{
-  @XmlRootElement
-  public static class Property
-  {
-	public Property()
-	{
-		
-	}
-	  
-	private String name;
-	public String getName() { return name; }
-	public void setName(String name) { this.name = name; }
-	
-	private String value;
-	public String getValue() { return value; }
-	public void setValue(String value) { this.value = value; }
-  }
-  
-  @XmlRootElement
-  public static class ServicesResource
-  {
-	public ServicesResource()
-	{
-		
-	}
-	  
-	private String type;
-	public String getType() { return type; }
-	public void setType(String type) { this.type = type; }
-	
-	private String url;
-	public String getUrl() { return url; }
-	public void setUrl(String url) { this.url = url; }
-  }
-	
-  private Property[] properties;
-  public Property[] getProperties() { return properties; }
-  public void setProperties(Property[] properties) { this.properties = properties; }
-  
-  private String classPath;
-  public String getClassPath() { return classPath; }
-  public void setClassPath(String classPath) { this.classPath = classPath; }
-  
-  private ServicesResource[] resources;
-  public ServicesResource[] getResources() { return resources; }
-  public void setResources(ServicesResource[] resources) { this.resources = resources; }
-	
-  public ServicesDetail()
-  {
-	  
-  }
+public class ServicesDetail {
+    private Property[] properties;
+    private String classPath;
+    private ServicesResource[] resources;
+
+    public ServicesDetail() {
+    }
+
+    @XmlRootElement
+    public static class Property {
+        private String name;
+        private String value;
+
+        public Property() {
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+    }
+
+    @XmlRootElement
+    public static class ServicesResource {
+        private String type;
+        private String url;
+
+        public ServicesResource() {
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+    }
+
+    public Property[] getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Property[] properties) {
+        this.properties = properties;
+    }
+
+    public String getClassPath() {
+        return classPath;
+    }
+
+    public void setClassPath(String classPath) {
+        this.classPath = classPath;
+    }
+
+    public ServicesResource[] getResources() {
+        return resources;
+    }
+
+    public void setResources(ServicesResource[] resources) {
+        this.resources = resources;
+    }
 }

@@ -149,7 +149,7 @@ etds61_osm = {
         tags = {}; // The final OSM+ tags
 
         // pre processing
-        tds61.applyToOsmPreProcessing(nAttrs, '');
+        tds61.applyToOsmPreProcessing(nAttrs, '', geometryType);
         
         // Debug:
         // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After PreProc:' + i + ': :' + tags[i] + ':');
@@ -161,7 +161,8 @@ etds61_osm = {
         // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After one2one:' + i + ': :' + tags[i] + ':');
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(nAttrs, tags, tds61.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(nAttrs, tags, tds61.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(nAttrs, tags, tds61.rules.txtBiased, 'forward');
 
         // Debug:
@@ -171,7 +172,7 @@ etds61_osm = {
         // if (nAttrs.OTH) translate.processOTH(nAttrs, tags, tds61.lookup);
 
         // post processing
-        tds61.applyToOsmPostProcessing(nAttrs, tags, '');
+        tds61.applyToOsmPostProcessing(nAttrs, tags, '', geometryType);
 
         // If we have a second FCODE, re run the translation with it
         if (fCode2 !== '')
@@ -189,7 +190,8 @@ etds61_osm = {
             // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After 2nd one2one:' + i + ': :' + tags[i] + ':');
 
             // apply the simple number and text biased rules
-            translate.applySimpleNumBiased(nAttrs, tags, tds61.rules.numBiased, 'forward');
+            // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+            translate.applySimpleNumBiased(nAttrs, tags, tds61.rules.numBiased, 'forward',[]);
             translate.applySimpleTxtBiased(nAttrs, tags, tds61.rules.txtBiased, 'forward');
 
             // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After 2nd Simple:' + i + ': :' + tags[i] + ':');

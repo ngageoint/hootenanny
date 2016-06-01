@@ -1,0 +1,7 @@
+Reprojecting 0 / 8         
+15:19:45.042 INFO  .../core/ops/CalculateStatsOp.cpp(  92) Calculating map statistics...
+15:19:45.042 INFO  .../core/ops/CalculateStatsOp.cpp( 523) Map statistics calculated.
+Stat Name	test-output/cmd/slow/RemoveNonHgisPoisTest.osm
+Node Count	8
+Way Count	0
+Relation Count	0

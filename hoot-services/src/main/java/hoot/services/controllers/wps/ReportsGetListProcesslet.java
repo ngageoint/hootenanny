@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
@@ -40,72 +40,67 @@ import org.deegree.services.wps.output.LiteralOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 public class ReportsGetListProcesslet extends BaseProcesslet {
-	private static final Logger log = LoggerFactory.getLogger(ReportsGetListProcesslet.class);
-	
-	public ReportsGetListProcesslet() throws Exception
-	{
-		
-	}
+    private static final Logger log = LoggerFactory.getLogger(ReportsGetListProcesslet.class);
 
-	@Override
-	public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info) 
-			throws ProcessletException {
-		String resp = "";
-		
-		try {		
-			resp = getRequest( );
-			
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			((LiteralOutput)out.getParameter("REPORTS_LIST")).setValue("Failed: " + e.getMessage());
-			return;
-		}
-		((LiteralOutput)out.getParameter("REPORTS_LIST")).setValue(resp);
+    public ReportsGetListProcesslet() throws Exception {
 
-	}
-	
-	// Issue http request to rest end point
-	protected String getRequest() throws Exception
-	{
-		String ret = "";
-		
-		CloseableHttpClient httpclient = null;
-		CloseableHttpResponse response = null;
-		try {
-			httpclient = HttpClients.createDefault();
-			HttpGet httpget = new HttpGet(coreJobServerUrl + "/hoot-services/info/reports/list" );
-			response = httpclient.execute(httpget);
-			if(response.getStatusLine().getStatusCode() != 200)
-			{
-				String reason = response.getStatusLine().getReasonPhrase();
-				if(reason == null)
-				{
-					reason = "Unkown reason.";
-				}
-				throw new Exception(reason);			
-			}
-			
-			
-			HttpEntity entity = response.getEntity();
-			if (entity != null) {
-			    entity.getContentLength();
-			    ret = EntityUtils.toString(entity);
-			}
-		} finally {
-			// make sure to clean up resource
-			if(httpclient != null)
-			{
-				httpclient.close();
-			}
-			
-			if(response != null)
-			{
-		    response.close();
-			}
-		}
-		
-		
-		return ret;
-	}
+    }
+
+    @Override
+    public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info)
+            throws ProcessletException {
+        String resp = "";
+
+        try {
+            resp = getRequest();
+
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+            ((LiteralOutput) out.getParameter("REPORTS_LIST")).setValue("Failed: " + e.getMessage());
+            return;
+        }
+        ((LiteralOutput) out.getParameter("REPORTS_LIST")).setValue(resp);
+
+    }
+
+    // Issue http request to rest end point
+    protected String getRequest() throws Exception {
+        String ret = "";
+
+        CloseableHttpClient httpclient = null;
+        CloseableHttpResponse response = null;
+        try {
+            httpclient = HttpClients.createDefault();
+            HttpGet httpget = new HttpGet(coreJobServerUrl + "/hoot-services/info/reports/list");
+            response = httpclient.execute(httpget);
+            if (response.getStatusLine().getStatusCode() != 200) {
+                String reason = response.getStatusLine().getReasonPhrase();
+                if (reason == null) {
+                    reason = "Unkown reason.";
+                }
+                throw new Exception(reason);
+            }
+
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                entity.getContentLength();
+                ret = EntityUtils.toString(entity);
+            }
+        }
+        finally {
+            // make sure to clean up resource
+            if (httpclient != null) {
+                httpclient.close();
+            }
+
+            if (response != null) {
+                response.close();
+            }
+        }
+
+        return ret;
+    }
 }

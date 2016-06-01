@@ -31,9 +31,6 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
 
-// Qt
-#include <QUuid>
-
 namespace hoot
 {
 

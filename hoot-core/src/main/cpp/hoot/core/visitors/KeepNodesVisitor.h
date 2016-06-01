@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef KEEPPOISVISITOR_H
 #define KEEPPOISVISITOR_H
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
@@ -38,7 +38,7 @@ using namespace std;
 /**
  * Removes all elements that are not Nodes w/ meaningful tags.
  */
-class KeepNodesVisitor : public ElementVisitor, public OsmMapConsumer
+class KeepNodesVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

@@ -22,12 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ConstrainedMatches.h"
 
 // hoot
-#include <hoot/core/algorithms/IntegerProgrammingSolver.h>
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
@@ -35,9 +34,8 @@
 namespace hoot
 {
 
-// See ticket #5273/#5274
-//double ConstrainedMatches::EPSILON = 1e-9;
-double ConstrainedMatches::EPSILON = 0;
+//  Set EPSILON to non-zero so that no matches are dropped
+double ConstrainedMatches::EPSILON = 1e-9;
 
 ConstrainedMatches::ConstrainedMatches(const ConstOsmMapPtr &map) :
   _map(map)

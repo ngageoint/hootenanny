@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GeneticAlgorithm.h"
@@ -38,6 +38,9 @@ using namespace std;
 #include "Genome.h"
 #include "../Statistics/Random.h"
 #include "../Statistics/Distribution.h"
+
+// Tgs
+#include <tgs/Statistics/Random.h>
 
 namespace Tgs
 {
@@ -67,7 +70,7 @@ namespace Tgs
       shared_ptr<Genome> g = _seed->clone();
 
       shared_ptr<CalculatorGenome> cg = dynamic_pointer_cast<CalculatorGenome>(g);
-      // use a ramped grow method, see page 12 in 
+      // use a ramped grow method, see page 12 in
       // http://www.lulu.com/items/volume_63/2167000/2167025/2/print/book.pdf
       if (cg)
       {
@@ -105,20 +108,20 @@ namespace Tgs
       double score = _population[i]->getScore();
       if (score > -numeric_limits<double>::infinity())
       {
-        sum += Distribution::calculationGaussian(0, sigma, 
+        sum += Distribution::calculationGaussian(0, sigma,
           (double)i / (double)_population.size());
       }
     }
 
 
-    double pick = Random::generateUniform() * sum;
+    double pick = Random::instance()->generateUniform() * sum;
     double s = 0;
     for (unsigned int i = 0; i < _population.size(); i++)
     {
       double score = _population[i]->getScore();
       if (score > -numeric_limits<double>::infinity())
       {
-        s += Distribution::calculationGaussian(0, sigma, 
+        s += Distribution::calculationGaussian(0, sigma,
           (double)i / (double)_population.size());
         if (pick <= s)
         {
@@ -128,7 +131,7 @@ namespace Tgs
     }
 
     cout << "Shouldn't be here. :( " << sum << endl;
-    return rand() % _population.size();
+    return Tgs::Random::instance()->generateInt(_population.size());
   }
 
   int GeneticAlgorithm::_selectMateRoulette()
@@ -146,7 +149,7 @@ namespace Tgs
     }
     if (popMin == popMax)
     {
-      return rand() % _population.size();
+      return Tgs::Random::instance()->generateInt(_population.size());
     }
     if (popMin > 0)
     {
@@ -162,7 +165,7 @@ namespace Tgs
       }
     }
 
-    double pick = (double)rand() / (double)RAND_MAX * popSum;
+    double pick = Tgs::Random::instance()->generateUniform() * popSum;
     double s = 0;
     for (unsigned int i = 0; i < _population.size(); i++)
     {
@@ -178,7 +181,7 @@ namespace Tgs
     }
 
     cout << "Shouldn't be here. :( " << popSum << endl;
-    return rand() % _population.size();
+    return Tgs::Random::instance()->generateInt(_population.size());
   }
 
   int GeneticAlgorithm::_selectMateTournament()
@@ -255,8 +258,8 @@ namespace Tgs
 //         cout.flush();
 //       }
       // choose the act of 'god'
-      double act = (double)rand() / (double)RAND_MAX; 
-      //double mutate = (double)rand() / (double)RAND_MAX;
+      double act = Tgs::Random::instance()->generateUniform();
+      //double mutate = Tgs::Random::instance()->generateUniform();
       // if they get a free pass, randomly select a genome and pass it on to the next gen
       if (act < _mutationProb)
       {

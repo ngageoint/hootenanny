@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Log.h"
@@ -133,19 +133,21 @@ QString Log::getLevelString(WarningLevel l)
   switch(l)
   {
   case None:
-    return "NONE ";
+    return "NONE";
   case Debug:
     return "DEBUG";
+  case Verbose:
+    return "VERBOSE";
   case Info:
-    return "INFO ";
+    return "INFO";
   case Warn:
-    return "WARN ";
+    return "WARN";
   case Error:
     return "ERROR";
   case Fatal:
     return "FATAL";
   default:
-    return "UNK  ";
+    return "UNK";
   }
 }
 
@@ -154,6 +156,11 @@ void Log::log(WarningLevel level, const QString& str, const QString& filename,
 {
   log(level, string(str.toUtf8().data()), string(filename.toUtf8().data()),
       string(functionName.toUtf8().data()), lineNumber);
+}
+
+string Log::ellipsisStr(const string& str, uint count)
+{
+  return (str.length() <= count) ? str : ("..." + str.substr(str.length() - count + 3));
 }
 
 }

@@ -22,36 +22,32 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.review.custom.HGIS;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import hoot.services.db2.QMaps;
 import hoot.services.exceptions.review.custom.HGIS.ReviewMapTagUpdateException;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.writers.review.custom.HGIS.HGISValidationDbWriter;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class HGISValidationMarker {
-	private long mapId;
-  private Connection conn;
-  
-  public HGISValidationMarker(final Connection cn, final String mapName) throws Exception
-  {
-  	this.conn = cn;
-  	
-  	QMaps maps = QMaps.maps;
-    this.mapId =
-      ModelDaoUtils.getRecordIdForInputString(mapName, conn,
-      		maps, maps.id, maps.displayName);
-  }
-  
-  
-  public void updateValidationMapTag() throws SQLException, ReviewMapTagUpdateException
-  {
-  	HGISValidationDbWriter writer = new HGISValidationDbWriter(conn, mapId);
-  	writer.updateMapTagWithReviewType();
-  }
+    private long mapId;
+    private Connection conn;
+
+    public HGISValidationMarker(final Connection cn, final String mapName) throws Exception {
+        this.conn = cn;
+
+        QMaps maps = QMaps.maps;
+        this.mapId = ModelDaoUtils.getRecordIdForInputString(mapName, conn, maps, maps.id, maps.displayName);
+    }
+
+    public void updateValidationMapTag() throws SQLException, ReviewMapTagUpdateException {
+        HGISValidationDbWriter writer = new HGISValidationDbWriter(conn, mapId);
+        writer.updateMapTagWithReviewType();
+    }
 }

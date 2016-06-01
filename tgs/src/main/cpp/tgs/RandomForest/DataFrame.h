@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __DATA_FRAME_H__
@@ -136,7 +136,7 @@ namespace Tgs
      * @param modelDoc the main XML doc object
      * @param parentNode the node to add the data to
      */
-    void exportData(QDomDocument & modelDoc, QDomElement & parentNode);
+    void exportData(QDomDocument & modelDoc, QDomElement & parentNode) const;
 
     /**
     *  Export the data frame as XML through to the file stream
@@ -144,7 +144,7 @@ namespace Tgs
     * @param fileStream the output file stream
     * @param tabDepth set of tabs to indent the exported content
     */
-    void exportData(std::ostream & fileStream, std::string tabDepth = "") const;
+    void exportData(std::ostream & fileStream) const;
 
     /**
      * @brief getActiveFactorCount

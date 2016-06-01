@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WeightedWordDistance.h"
 
@@ -69,7 +69,7 @@ WeightedWordDistance::WeightedWordDistance()
   {
     LOG_WARN("Unable to locate words.sqlite. This should be downloaded during the make "
       "process. It can be manually downloaded from "
-      "https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/words1.sqlite "
+      "https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2 "
       "or similar. You can also override the default name with the " +
       ConfigOptions().getWeightedWordDistanceDictionaryKey() + " config option.");
     dictPath = ConfPath::search(ConfigOptions().getWeightedWordDistanceAbridgedDictionary());

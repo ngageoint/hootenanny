@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Relation.h"
 
@@ -77,36 +77,20 @@ private:
   long _thisId;
 };
 
+Relation::Relation(Status s, long id, Meters circularError, QString type, long changeset,
+                   long version, unsigned int timestamp, QString user, long uid, bool visible) :
+Element(s)
+{
+  _relationData.reset(new RelationData(id, changeset, version, timestamp, user, uid, visible));
+  _relationData->setCircularError(circularError);
+  _relationData->setType(type);
+}
+
 Relation::Relation(const Relation& from) :
-  Element(from.getStatus())
+Element(from.getStatus()),
+_relationData(from._relationData)
 {
-  _relationData = from._relationData;
-}
 
-Relation::Relation(Status s, long id, Meters circularError, QString type) :
-  Element(s)
-{
-  _relationData.reset(new RelationData(id));
-  _relationData->setCircularError(circularError);
-  _relationData->setType(type);
-}
-
-Relation::Relation(Status s, long id, long changeset, long version, unsigned int timestamp,
-                   Meters circularError, QString type) :
-  Element(s)
-{
-  _relationData.reset(new RelationData(id, changeset, version, timestamp));
-  _relationData->setCircularError(circularError);
-  _relationData->setType(type);
-}
-
-Relation::Relation(Status s, long id, long changeset, long version, unsigned int timestamp,
-                   QString user, long uid, Meters circularError, QString type) :
-  Element(s)
-{
-  _relationData.reset(new RelationData(id, changeset, version, timestamp, user, uid));
-  _relationData->setCircularError(circularError);
-  _relationData->setType(type);
 }
 
 void Relation::addElement(const QString& role, const shared_ptr<const Element>& e)
@@ -243,7 +227,9 @@ QString Relation::toString() const
   }
   ss << endl;
   ss << "tags: " << getTags().toString().toUtf8().data();
-  ss << "status: " << getStatusString().toUtf8().data();
+  ss << "status: " << getStatusString().toStdString() << endl;
+  ss << "version: " << getVersion() << endl;
+  ss << "visible: " << getVisible();
   return QString::fromUtf8(ss.str().data());
 }
 

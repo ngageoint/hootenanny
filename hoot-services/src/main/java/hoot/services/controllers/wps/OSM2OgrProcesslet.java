@@ -22,10 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.deegree.services.wps.ProcessletException;
 import org.deegree.services.wps.ProcessletExecutionInfo;
 import org.deegree.services.wps.ProcessletInputs;
@@ -35,85 +39,80 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.http.impl.nio.client.HttpAsyncClients;
+
 
 /**
  * @author Jong Choi
- * 
- * WPS processlet for osm2ogr operation.
- *
+ *         <p>
+ *         WPS processlet for osm2ogr operation.
  */
 public class OSM2OgrProcesslet extends BaseProcesslet {
-	
-  private static final Logger log = LoggerFactory.getLogger(OSM2OgrProcesslet.class);
-  
-  /**
-	 * 
-	 */
-	public OSM2OgrProcesslet() throws Exception {
-		
-	}
-	
-	/* (non-Javadoc)
-	 * @see hoot.services.wps.WPSProcesslet#destroy()
-	 */
-	@Override
-	public void destroy() {
-		// TODO Auto-generated method stub
 
-	}
+    private static final Logger log = LoggerFactory.getLogger(OSM2OgrProcesslet.class);
 
-	/* (non-Javadoc)
-	 * @see hoot.services.wps.WPSProcesslet#init()
-	 */
-	@Override
-	public void init() {
-		// TODO Auto-generated method stub
+    /**
+     *
+     */
+    public OSM2OgrProcesslet() throws Exception {
 
+    }
 
-	}
-	
-	/* (non-Javadoc)
-	 * @see hoot.services.wps.WPSProcesslet#process(org.deegree.services.wps.ProcessletInputs, org.deegree.services.wps.ProcessletOutputs, org.deegree.services.wps.ProcessletExecutionInfo)
-	 * 
-	 * Process osm2ogr operation. For param filter see OSM2OgrProcesslet.xml
-	 */
-	@Override
-	public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info)
-			throws ProcessletException {
-		String jobIdStr = java.util.UUID.randomUUID().toString();
-		JSONArray args = parseRequestParams(in);
-		JSONObject command = new JSONObject();
-		try {
-			command.put("exectype", "hoot");
-			command.put("exec", "osm2ogr");
-			command.put("params", args);
-			String commandStr = command.toString();
-			
-			
-			// Async call to internal Native Interface servlet.
-			
-			CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
-			try{
-				httpclient.start();
-				// Execute request
-			    final HttpPost request1 = new HttpPost(coreJobServerUrl + "/hoot-services/job/" + jobIdStr);
-			    StringEntity se = new StringEntity( commandStr);  
-			    request1.setEntity(se);
-			    httpclient.execute(request1, null);
-				
-			} catch (Exception ee){
-				
-			}
-			
-			((LiteralOutput)out.getParameter("jobId")).setValue(jobIdStr);
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-	}
-	
+    /*
+     * (non-Javadoc)
+     *
+     * @see hoot.services.wps.WPSProcesslet#destroy()
+     */
+    @Override
+    public void destroy() {
+        //
+    }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see hoot.services.wps.WPSProcesslet#init()
+     */
+    @Override
+    public void init() {
+        //
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see hoot.services.wps.WPSProcesslet#process(org.deegree.services.wps.
+     * ProcessletInputs, org.deegree.services.wps.ProcessletOutputs,
+     * org.deegree.services.wps.ProcessletExecutionInfo)
+     *
+     * Process osm2ogr operation. For param filter see OSM2OgrProcesslet.xml
+     */
+    @Override
+    public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info)
+            throws ProcessletException {
+        String jobIdStr = java.util.UUID.randomUUID().toString();
+        JSONArray args = parseRequestParams(in);
+        JSONObject command = new JSONObject();
+        try {
+            command.put("exectype", "hoot");
+            command.put("exec", "osm2ogr");
+            command.put("params", args);
+            String commandStr = command.toString();
+
+            // Async call to internal Native Interface servlet.
+
+            CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
+            httpclient.start();
+            // Execute request
+
+            HttpPost request1 = new HttpPost(coreJobServerUrl + "/hoot-services/job/" + jobIdStr);
+            StringEntity se = new StringEntity(commandStr);
+            request1.setEntity(se);
+            httpclient.execute(request1, null);
+
+            ((LiteralOutput) out.getParameter("jobId")).setValue(jobIdStr);
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
 }

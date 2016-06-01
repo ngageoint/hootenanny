@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPCONSUMER_H
 #define OSMMAPCONSUMER_H
@@ -31,17 +31,12 @@ namespace hoot
 {
 class OsmMap;
 
-/**
- * @todo this should be broken out into a const and non-const version.
- */
 class OsmMapConsumer
 {
 public:
   virtual ~OsmMapConsumer() {}
 
-  virtual void setOsmMap(OsmMap* map) { setOsmMap((const OsmMap*)map); }
-
-  virtual void setOsmMap(const OsmMap* map) = 0;
+  virtual void setOsmMap(OsmMap* map) = 0;
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DATACONVERTJS_H
 #define DATACONVERTJS_H
@@ -181,9 +181,6 @@ inline void toCpp(v8::Handle<v8::Value> v, QVariantMap& m)
   }
 }
 
-/**
- * @todo This method is completely untested and prepared for Matt to bang his head against.
- */
 inline void toCpp(v8::Handle<v8::Value> v, QVariant& qv)
 {
   if (v.IsEmpty() || v->IsUndefined() || v->IsNull())

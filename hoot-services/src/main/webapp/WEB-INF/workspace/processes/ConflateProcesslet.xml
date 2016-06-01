@@ -9,18 +9,10 @@
 	<JavaClass>hoot.services.controllers.wps.ConflateProcesslet</JavaClass>
 	<Title>Conflate Service</Title>
 	<Abstract><![CDATA[
-	<DESCRIPTION>
 	Conflate service operates like a standard ETL service. The conflate service specifies the input files,
 	conflation type, match threshold, miss threshold, and output file name. The conflation type can be specified as the average of
 	the two input datasets or based on a single input file that is intended to be the reference dataset. It has two fronts,
 	WPS and standard rest end point.
-	</DESCRIPTION>
-	<EXAMPLE>
-	<URL>http://localhost:8080/hoot-services/ogc</URL>
-	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	<INPUT></INPUT>
-	 <OUTPUT></OUTPUT>
-	 </EXAMPLE>
 	]]></Abstract>
 	<!-- deegree doesn't honor optional input parameters for HTTP GET requests (only POSTs), so
     don't make any of them optional; by default input params are required -->

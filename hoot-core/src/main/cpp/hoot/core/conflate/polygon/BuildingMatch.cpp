@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMatch.h"
 
@@ -37,16 +37,17 @@
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/Soundex.h>
 #include <hoot/core/conflate/MatchType.h>
-#include <hoot/core/conflate/polygon/extractors/BufferedOverlapExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/CentroidDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/CompactnessExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/SmallerOverlapExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/index/ElementToRelationMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
 
 // Standard
 #include <sstream>
@@ -66,9 +67,54 @@ BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, shared_ptr<const Buildin
   Match(mt),
   _eid1(eid1),
   _eid2(eid2),
-  _rf(rf)
+  _rf(rf),
+  _explainText("")
 {
   _p = _rf->classify(map, _eid1, _eid2);
+
+  MatchType type = getType();
+  QStringList description;
+  if (type != MatchType::Match)
+  {
+    ConstElementPtr element1 = map->getElement(eid1);
+    ConstElementPtr element2 = map->getElement(eid2);
+    //  Get the overlap
+    double overlap = OverlapExtractor().extract(*map, element1, element2);
+
+    //If the buildings aren't matched and they overlap at all, then make them be reviewed.
+    if (getType() == MatchType::Miss && overlap > 0.0)
+    {
+      _p.clear();
+      _p.setReviewP(1.0);
+      description.append("Unmatched buildings are overlapping.");
+    }
+    //  Add extra explanation text to reviews
+    else if (getType() == MatchType::Review)
+    {
+      //  Deal with the overlap first
+      if (overlap >= 0.75)        description.append("Large building overlap.");
+      else if (overlap >= 0.5)    description.append("Medium building overlap.");
+      else if (overlap >= 0.25)   description.append("Small building overlap.");
+      else                        description.append("Very little building overlap.");
+      //  Next check the Angle Histogram
+      double angle = AngleHistogramExtractor(0.0).extract(*map, element1, element2);
+      if (angle >= 0.75)          description.append("Very similar building orientation.");
+      else if (angle >= 0.5)      description.append("Similar building orientation.");
+      else if (angle >= 0.25)     description.append("Semi-similar building orientation.");
+      else                        description.append("Building orientation not similar.");
+      //  Finally the edge distance
+      double edge = EdgeDistanceExtractor(new QuantileAggregator(0.4)).extract(*map, element1, element2);
+      if (edge >= 90)             description.append("Building edges very close to each other.");
+      else if (edge >= 70)        description.append("Building edges somewhat close to each other.");
+      else                        description.append("Building edges not very close to each other.");
+    }
+  }
+  //  Join the string descriptions together or generate the default
+  if (description.length() > 0)
+    _explainText = description.join(" ");
+  else
+    _explainText = mt->getTypeDetail(_p);
+  //LOG_DEBUG(toString());
 }
 
 map<QString, double> BuildingMatch::getFeatures(const shared_ptr<const OsmMap>& m) const
@@ -105,6 +151,10 @@ QString BuildingMatch::toString() const
 {
   stringstream ss;
   ss << "BuildingMatch: " << _eid1 << ", " << _eid2 << " p: " << _p.toString();
+  //if (getType() == MatchType::Review)
+  //{
+    //ss << " note: " << _explainText;
+  //}
   return QString::fromStdString(ss.str());
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SmallWayMerger.h"
@@ -138,7 +138,8 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
       _diff->diff(_map, w1, w2) == 0.0)
   {
     // if both ways are one way
-    if (w1->isOneWay() && w2->isOneWay())
+    if (OsmSchema::getInstance().isOneWay(*w1) &&
+        OsmSchema::getInstance().isOneWay(*w2))
     {
       // if they the beginning of one isn't equal to the end of the other
       if (w1->getNodeId(0) != w2->getLastNodeId() &&

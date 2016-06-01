@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __WAY_LOCATION_H__
 #define __WAY_LOCATION_H__
@@ -174,6 +174,9 @@ inline bool operator>=(const WayLocation& a, const WayLocation& b)
 {
   return a.compareTo(b) >= 0;
 }
+
+typedef shared_ptr<WayLocation> WayLocationPtr;
+typedef shared_ptr<const WayLocation> ConstWayLocationPtr;
 
 }
 

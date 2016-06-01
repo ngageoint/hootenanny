@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Way.h"
@@ -45,31 +45,22 @@ using namespace geos::geom;
 
 #include <tgs/StreamUtils.h>
 
-namespace hoot {
-
-Way::Way(Status s, long id, Meters circularError) : Element(s)
+namespace hoot
 {
-  _wayData.reset(new WayData(id));
+
+Way::Way(Status s, long id, Meters circularError, long changeset, long version,
+         unsigned int timestamp, QString user, long uid, bool visible)
+: Element(s)
+{
+  _wayData.reset(new WayData(id, changeset, version, timestamp, user, uid, visible));
   _getElementData().setCircularError(circularError);
 }
 
-Way::Way(Status s, long id, long changeset, long version, unsigned int timestamp,
-         Meters circularError) : Element(s)
+Way::Way(const Way& from) :
+Element(from.getStatus()),
+_wayData(from._wayData)
 {
-  _wayData.reset(new WayData(id, changeset, version, timestamp));
-  _getElementData().setCircularError(circularError);
-}
 
-Way::Way(Status s, long id, long changeset, long version, unsigned int timestamp,
-         QString user, long uid, Meters circularError) : Element(s)
-{
-  _wayData.reset(new WayData(id, changeset, version, timestamp, user, uid));
-  _getElementData().setCircularError(circularError);
-}
-
-Way::Way(const Way& way) : Element(way._status)
-{
-  _wayData = way._wayData;
 }
 
 Way::~Way()
@@ -332,7 +323,9 @@ QString Way::toString() const
   ss << endl;
   ss << "tags: " << getTags().toString().toStdString();
   ss << "cached envelope: " << GeometryUtils::toString(_cachedEnvelope).toStdString() << endl;
-  ss << "status: " << getStatusString().toStdString();
+  ss << "status: " << getStatusString().toStdString() << endl;
+  ss << "version: " << getVersion() << endl;
+  ss << "visible: " << getVisible();
   return QString::fromStdString(ss.str());
 }
 

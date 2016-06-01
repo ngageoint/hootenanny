@@ -22,27 +22,47 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
 
+// hoot
+#include <hoot/core/Units.h>
+
+// standard
 #include <vector>
+
+// hoot
+#include <hoot/core/Units.h>
+
+// Qt
+#include <QString>
 
 using namespace std;
 
 namespace hoot
 {
 
+/**
+ * A class for storing a histogram of angle values.
+ */
 class Histogram
 {
 public:
 
   Histogram(int bins);
 
-  void addAngle(double theta, double length);
+  const vector<double>& getAllBins() const { return _bins; }
 
-  int getBin(double theta);
+  void addAngle(Radians theta, double length);
+
+  size_t getBin(Radians theta);
+
+  /**
+   * Returns the angle of the center of the specified bin.
+   */
+  Radians getBinCenter(size_t bin) const;
 
   /**
    * Normalize all the bins so the sum of the bins is 1.0.
@@ -54,9 +74,18 @@ public:
    */
   double diff(Histogram& other);
 
+  /**
+   * Smooth the histogram with a gaussian filter with the specified sigma.
+   */
+  void smooth(Radians sigma);
+
+  QString toString() const;
+
 private:
 
   vector<double> _bins;
+
+  Radians _getBinAngle(size_t i);
 
 };
 

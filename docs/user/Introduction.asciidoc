@@ -117,7 +117,6 @@ Vertical conflation is most applicable when both data sets provide value and the
 See also:
 
 * <<conflate,conflate command>>
-* <<conflate-roads,conflate-roads command>>
 * <<unify,unify command>>
 
 ===== Horizontal Conflation
@@ -136,7 +135,6 @@ As demonstrated in <<UnsupportedHorizontalConflation>> two vector layers that do
 See also:
 
 * <<conflate,conflate command>>
-* <<conflate-roads,conflate-roads command>>
 * <<unify,unify command>>
 
 [[CookieCutter]]
@@ -160,7 +158,6 @@ See also:
 
 * <<alpha-shape,alpha-shape command>>
 * <<conflate,conflate command>>
-* <<conflate-roads,conflate-roads command>>
 * <<cookie-cutter,cookie-cutter command>>
 * <<crop-map,crop-map command>>
 * <<unify,unify command>>
@@ -178,14 +175,13 @@ Each review flags one or more features. The features are referenced using the <<
 
 Reviewable items are flagged with several `hoot:review` tags during the conflation process. The user can then edit the resulting output file with an editor of their choosing to resolve the reviewable items. It is worth noting that this review process should occur before the data is exported as exporting the data using the `osm2ogr` command or similar will likely strip the review tags.
 
-The legacy road conflation algorithm (circa 2012, see <<hootalgo>>) do not generate reviewable items. This applies when using the `conflate-roads` command or when `conflate.enable.old.roads` is set to `true`.
+The legacy road conflation algorithm (circa 2012, see <<hootalgo>>) do not generate reviewable items. This applies when `conflate.enable.old.roads` is set to `true`.
 
 NOTE: Add directions for removing reviewable items from the output using config options.
 
 See also:
 
 * <<conflate,conflate command>>
-* <<conflate-roads,conflate-roads command>>
 * <<osm2ogr,osm2ogr command>>
 * <<unify,unify command>>
 

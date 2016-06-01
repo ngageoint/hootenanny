@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.info;
 
@@ -36,118 +36,63 @@ import org.apache.commons.lang3.StringUtils;
 import hoot.services.HootProperties;
 import hoot.services.controllers.info.AboutResource;
 
-public class ErrorLog {
 
-	private static String _errLogPath = null;
-	private static String _tempOutputPath = null;
-	public ErrorLog() {
-		//ErrorLogPath
-		if(_errLogPath == null)
-		{
-			try {
-	      _errLogPath = HootProperties.getProperty("ErrorLogPath");
-      } catch (IOException e) {
+public final class ErrorLog {
 
-      }
-		}
+    private static final String errLogPath = HootProperties.getProperty("ErrorLogPath");
+    private static final String tempOutputPath = HootProperties.getProperty("tempOutputPath");
 
-		if(_tempOutputPath ==  null){
-	    try {
-	    	_tempOutputPath = HootProperties.getProperty("tempOutputPath");
-			} catch (IOException e) {
-
-			}
+    private ErrorLog() {
     }
-	}
 
-	public String getErrorlog(long maxLength) throws Exception
-	{
-		RandomAccessFile randomAccessFile = null;
-    try
-    {
-    	File file = new File(_errLogPath);
-  		randomAccessFile = new RandomAccessFile(file, "r");
-      StringBuilder builder = new StringBuilder();
-      long length = file.length();
+    public static String getErrorlog(long maxLength) throws IOException {
+        File file = new File(errLogPath);
 
-      long startOffset = 0;
-      if(length > maxLength)
-      {
-      	startOffset = length - maxLength;
-      }
-      for(long seek = startOffset; seek < length; seek++)
-      {
-      	randomAccessFile.seek(seek);
-      	char c = (char)randomAccessFile.read();
-        builder.append(c);
-      }
-      return builder.toString();
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
+            StringBuilder builder = new StringBuilder();
+            long length = file.length();
+
+            long startOffset = 0;
+            if (length > maxLength) {
+                startOffset = length - maxLength;
+            }
+            for (long seek = startOffset; seek < length; seek++) {
+                randomAccessFile.seek(seek);
+                char c = (char) randomAccessFile.read();
+                builder.append(c);
+            }
+            return builder.toString();
+        }
     }
-    finally
-    {
-    	randomAccessFile.close();
+
+    public static String generateExportLog() throws IOException {
+        String fileId = UUID.randomUUID().toString();
+        String outputPath = tempOutputPath + File.separator + fileId;
+
+        AboutResource about = new AboutResource();
+
+        VersionInfo vInfo = about.getCoreVersionInfo();
+        String data = System.lineSeparator() + "************ CORE VERSION INFO ***********" + System.lineSeparator();
+        data += vInfo.toString();
+
+        CoreDetail cd = about.getCoreVersionDetail();
+        data += System.lineSeparator() + "************ CORE ENVIRONMENT ***********" + System.lineSeparator();
+        if (cd != null) {
+            data += StringUtils.join(cd.getEnvironmentInfo(), System.lineSeparator());
+        }
+
+        data += System.lineSeparator() + "************ SERVICE VERSION INFO ***********" + System.lineSeparator();
+        data += about.getServicesVersionInfo().toString();
+        data += System.lineSeparator() + "************ CATALINA LOG ***********" + System.lineSeparator();
+
+        // 5MB Max
+        int maxSize = 5000000;
+
+        String logStr = getErrorlog(maxSize);
+
+        try (RandomAccessFile raf = new RandomAccessFile(outputPath, "rw")) {
+            raf.writeBytes(data + System.lineSeparator() + logStr);
+            return outputPath;
+        }
     }
-	}
-
-	public String generateExportLog() throws Exception
-	{
-		String fileId = UUID.randomUUID().toString();
-		String outputPath = _tempOutputPath + "/" + fileId;
-
-
-		String data = "";
-
-		AboutResource about = new AboutResource();
-		VersionInfo vInfo = about.getCoreVersionInfo();
-		data = "\n************ CORE VERSION INFO ***********\n";
-		data += vInfo.toString();
-		CoreDetail cd = about.getCoreVersionDetail();
-		data += "\n************ CORE ENVIRONMENT ***********\n";
-		if(cd != null)
-		{
-			data += StringUtils.join(cd.getEnvironmentInfo(), '\n');
-		}
-
-		data = "\n************ SERVICE VERSION INFO ***********\n";
-		data += about.getServicesVersionInfo().toString();
-		ServicesDetail sd = about.getServicesVersionDetail();
-		if(sd != null)
-		{
-			data += "\n************ SERVICE DETAIL PROPERTY ***********\n";
-			for( ServicesDetail.Property prop : sd.getProperties())
-			{
-				String str = prop.getName() + " : " + prop.getValue() + "\n";
-				data += str;
-			}
-
-			data += "\n************ SERVICE DETAIL RESOURCE ***********\n";
-			for( ServicesDetail.ServicesResource res : sd.getResources())
-			{
-				String str = res.getType() + " : " + res.getUrl() + "\n";
-				data += str;
-			}
-		}
-
-
-		data += "\n************ CATALINA LOG ***********\n";
-
-
-
-		// 5MB Max
-		int maxSize = 5000000;
-
-		String logStr = getErrorlog(maxSize);
-
-		RandomAccessFile raf = null;
-		try
-		{
-		  raf = new RandomAccessFile(outputPath, "rw");
-			raf.writeBytes(data + "\n" + logStr);
-			return outputPath;
-		}
-		finally
-		{
-			raf.close();
-		}
-	}
 }

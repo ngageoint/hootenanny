@@ -44,7 +44,7 @@
 #include <pp/Hdfs.h>
 
 // Qt
-#include <QUuid>
+//#include <QUuid>
 
 #include "ConflateMapper.h"
 
@@ -158,7 +158,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   _validate(map);
   map = DualWaySplitter::splitAll(map, DualWaySplitter::Left, 12.5);
   _validate(map);
-  map = UnlikelyIntersectionRemover::removeIntersections(map);
+  UnlikelyIntersectionRemover::removeIntersections(map);
   _validate(map);
   map = ImpliedDividedMarker::markDivided(map);
   DuplicateNameRemover::removeDuplicates(map);

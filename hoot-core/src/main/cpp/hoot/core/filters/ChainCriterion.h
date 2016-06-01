@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHAINFILTER_H
 #define CHAINFILTER_H
@@ -49,6 +49,11 @@ public:
     _filters.push_back(shared_ptr<ElementCriterion>(child1));
     _filters.push_back(shared_ptr<ElementCriterion>(child2));
   }
+  ChainCriterion(ElementCriterion* child1, ElementCriterionPtr child2)
+  {
+    _filters.push_back(shared_ptr<ElementCriterion>(child1));
+    _filters.push_back(child2);
+  }
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2, ElementCriterion* child3)
   {
     _filters.push_back(shared_ptr<ElementCriterion>(child1));
@@ -74,7 +79,15 @@ public:
     return true;
   }
 
+  virtual ElementCriterion* clone() { return new ChainCriterion(_filters); }
+
 protected:
+  ChainCriterion(vector< shared_ptr<ElementCriterion> > filters)
+  {
+    for (size_t i = 0; i < filters.size(); i++)
+      _filters.push_back(shared_ptr<ElementCriterion>(filters[i]->clone()));
+  }
+
   vector< shared_ptr<ElementCriterion> > _filters;
 };
 

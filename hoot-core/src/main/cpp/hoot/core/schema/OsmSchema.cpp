@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/HootConfig.h>
@@ -36,9 +36,6 @@
 #include <boost/graph/properties.hpp>
 #if HOOT_HAVE_BOOST_PROPERTY_MAP_PROPERTY_MAP_HPP
 # include <boost/property_map/property_map.hpp>
-#elif HOOT_HAVE_BOOST_PROPERTY_MAP_HPP
-// use the old include file so it works on boost releases < 1.40 (e.g. RHEL 5)
-# include <boost/property_map.hpp>
 #else
 # error "Boost properties include not found during configure."
 #endif
@@ -46,7 +43,7 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/schema/JsonSchemaLoader.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/OsmSchemaLoaderFactory.h>
 #include <hoot/core/util/ConfPath.h>
@@ -1749,6 +1746,17 @@ bool OsmSchema::isMultiLineString(const Relation& r) const
   return r.getType() == "multilinestring";
 }
 
+bool OsmSchema::isOneWay(const Element& e) const
+{
+  bool result = false;
+  QString oneway = e.getTags()["oneway"].toLower();
+  if (e.getTags().isTrue("oneway") || oneway == "-1" || oneway == "reverse")
+  {
+    result = true;
+  }
+  return result;
+}
+
 bool OsmSchema::isPoi(const Element& e)
 {
   bool result = false;
@@ -1763,6 +1771,17 @@ bool OsmSchema::isPoi(const Element& e)
   return result;
 }
 
+bool OsmSchema::isReversed(const Element& e) const
+{
+  bool result = false;
+  QString oneway = e.getTags()["oneway"].toLower();
+  if (oneway == "-1" || oneway == "reverse")
+  {
+    result = true;
+  }
+  return result;
+}
+
 void OsmSchema::loadDefault()
 {
   QString path = ConfPath::search("schema.json");
@@ -1770,15 +1789,7 @@ void OsmSchema::loadDefault()
   delete d;
   d = new OsmSchemaData();
 
-#warning remove me
-  if (path.contains("old"))
-  {
-    JsonSchemaLoader(*this).load(path);
-  }
-  else
-  {
-    OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
-  }
+  OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
 }
 
 double OsmSchema::score(const QString& kvp1, const QString& kvp2)

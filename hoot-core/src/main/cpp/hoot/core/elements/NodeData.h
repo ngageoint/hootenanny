@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,14 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef _ELEMENTS_NODE_DATA_H_
 #define _ELEMENTS_NODE_DATA_H_
 
 #include "ElementData.h"
 
-namespace hoot {
+namespace hoot
+{
 
 class NodeData : public ElementData
 {
@@ -37,10 +38,9 @@ public:
 
   NodeData() {}
 
-  NodeData(const NodeData& nd) : ElementData(nd.getId(), nd.getTags(), nd.getCircularError()),
-    _x(nd._x), _y(nd._y) {}
+  NodeData(const NodeData& nd);
 
-  NodeData(long id, double x, double y) : ElementData(id), _x(x), _y(y) {}
+  NodeData(long id, double x, double y);
 
   virtual ~NodeData() {}
 
@@ -48,18 +48,10 @@ public:
 
   double getY() const { return _y; }
 
-  void init(long id, double x, double y) { _id = id; _x = x; _y = y;
-    _changeset = CHANGESET_EMPTY; _version = VERSION_EMPTY; _timestamp = TIMESTAMP_EMPTY;
-    _user = USER_EMPTY; _uid = UID_EMPTY; }
-
-  void init(long id, double x, double y, long changeset, long version, long timestamp) {
-   _id = id; _x = x; _y = y; _changeset = changeset; _version = version; _timestamp = timestamp;
-   _user = USER_EMPTY; _uid = UID_EMPTY; }
-
-  void init(long id, double x, double y, long changeset, long version, long timestamp,
-            QString user, long uid) {
-   _id = id; _x = x; _y = y; _changeset = changeset; _version = version; _timestamp = timestamp;
-   _user = user; _uid = uid; }
+  void init(long id, double x, double y, long changeset = ElementData::CHANGESET_EMPTY,
+            long version = ElementData::VERSION_EMPTY, long timestamp = ElementData::TIMESTAMP_EMPTY,
+            QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
+            bool visible = ElementData::VISIBLE_EMPTY);
 
   void setX(double x) { _x = x; }
 
@@ -73,6 +65,6 @@ protected:
 
 };
 
-} // hoot
+}
 
 #endif

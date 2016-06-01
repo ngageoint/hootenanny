@@ -4,7 +4,6 @@ TAR=tar
 EXCLUDE_DIRS=grep -E -v ".*/$$"
 confdir=$(prefix)/conf
 plugindir=$(prefix)/plugins
-UNINSTALL_MANIFEST=$(confdir)/HootUninstallManifest.txt
 
 always:
 
@@ -25,6 +24,9 @@ clean-db:
 clean-all:
 	$(MAKE) -f Makefile.old clean-all
 
+clean-coverage:
+	$(MAKE) -f Makefile.old clean-coverage
+
 coverage:
 	$(MAKE) -f Makefile.old coverage
 
@@ -44,16 +46,34 @@ tmp/schema.png:
 	$(MAKE) -f Makefile.old tmp/schema.png
 
 help:
-	@echo "help       - This help message."
-	@echo "build      - Build all source and populated/upgrade the DB if necessary."
-	@echo "clean      - Clean out all binaries. This will not modify the DB."
-	@echo "clean-all  - Clean out all binaries and remove all tables from the DB defined in liquibase.properties"
-	@echo "clean-db   - Remove all tables from the DB defined in liquibase.properties"
-	@echo "check      - Run all the tests that should be run before commit."
-	@echo "test-all   - Run all tests. Could take hours."
-	@echo "dist       - Make a distributable tarball."
-	@echo "coverage   - If configure was run with '--with-coverage' then it creates coverage reports."
-	@echo "eclipse    - Builds eclipse project files."
+	@echo "help                    - This help message."
+	@echo "archive                 - Make a distributable tarball."
+	@echo "build                   - Build all source and populated/upgrade the DB if necessary."
+	@echo "check                   - Run all the tests that should be run before commit."
+	@echo "clean                   - Clean out all binaries. This will not modify the DB."
+	@echo "clean-all               - Clean out all binaries and remove all tables from the DB defined in liquibase.properties"
+	@echo "clean-coverage          - Remove all test code coverage report output."
+	@echo "clean-db                - Remove all tables from the DB defined in liquibase.properties"
+	@echo "coverage                - If configured '--with-coverage', then creates test coverage reports."
+	@echo "docs                    - Build all project documentation."
+	@echo "dist                    - Make a distributable tarball."
+	@echo "eclipse                 - If configured '--with-services', then, builds Eclipse IDE project files."
+	@echo "osmapidb                - If configured '--with-services', then builds a clean copy of an OSM API database."
+	@echo "pp-test                 - Run the pretty-pipes tests.  Should take less than five minutes."
+	@echo "plugins-test            - Run the mocha plugins tests.  Should take less than five minutes."
+	@echo "services-build          - If configured '--with-services', then builds just the web services source."
+	@echo "services-clean          - If configured '--with-services', then cleans just the web services binaries. This will not modify the DB."
+	@echo "services-clean-coverage - If configured '--with-services', then removes just the web services test code coverage report output."
+	@echo "services-coverage       - If configured '--with-coverage' and '--with-coverage', then creates just the web services coverage report."
+	@echo "services-docs           - If configure '--with-services', then builds just the web services documentation."
+	@echo "services-test           - If configure '--with-services', then runs the web services slow tests.  Should take five to ten minutes."
+	@echo "services-test-all       - If configure '--with-services', then runs the web services glacial tests.  Should take five to ten minutes."
+	@echo "test                    - Run slow tests.  Should take five to ten minutes."
+	@echo "test-all                - Run all tests.  Could take hours."
+	@echo "test-quick              - Run quick tests.  Should take less than five minutes."
+	@echo "ui-test                 - Run user interface tests.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
+	@echo "ui-coverage             - Generate coverage reports for mocha and cucumber user interface tests.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
+	@echo "ui-clean-coverage       - Removes the coverage reports for mocha and cucumber user interface tests."
 
 test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test
@@ -67,33 +87,84 @@ test-all-no-core:
 test-quick:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-quick
 
+services-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old services-test
+
+services-test-all:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old services-test-all
+
+ui-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-test
+
+ui-coverage:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-coverage
+
+ui-clean-coverage:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-clean-coverage
+
+pp-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old pp-test
+
+plugins-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old plugins-test
+
+services-build:
+	$(MAKE) -f Makefile.old services-build
+
+services-docs:
+	$(MAKE) -f Makefile.old services-docs
+
+services-clean:
+	$(MAKE) -f Makefile.old services-clean
+
+services-clean-db:
+	$(MAKE) -f Makefile.old services-clean-db
+
+services-clean-coverage:
+	$(MAKE) -f Makefile.old services-clean-coverage
+
+services-coverage:
+	$(MAKE) -f Makefile.old services-coverage
+
 conf/DatabaseConfig.sh:
 	$(MAKE) -f Makefile.old conf/DatabaseConfig.sh
 
 # Use some tar fanciness to grab all the files in conf, plugins, translations and scripts
 install-other:
 	mkdir -p tmp
-	$(TAR) cf tmp/other.tar conf plugins scripts translations
-	cat tmp/other.tar | $(TAR) --list | $(EXCLUDE_DIRS) >> $(UNINSTALL_MANIFEST)
-	cat tmp/other.tar | $(TAR) x -C $(prefix)
+	$(TAR) cf tmp/other.tar conf plugins scripts translations rules report
+	mkdir -p $(localstatedir)
+	cat tmp/other.tar | $(TAR) xv -C $(localstatedir)
 	rm -f tmp/other.tar
+	mkdir -p $(docdir)
+	cp INSTALL LICENSE AUTHORS COPYING GPLv3 README* docs/*.pdf $(docdir)
+	mkdir -p $(sysconfdir)/profile.d/
+	mkdir -p $(sysconfdir)/asciidoc/filters/
+	cp -R docs/filters/* $(sysconfdir)/asciidoc/filters/
+	echo "export HOOT_HOME=$(localstatedir)" > $(sysconfdir)/profile.d/hootenanny.sh
+	mkdir -p $(includedir)
+	export HOOT_HOME=`pwd`; \
+	cd $$HOOT_HOME/hoot-core/src/main/cpp/; \
+	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -); \
+	cd $$HOOT_HOME/hoot-js/src/main/cpp; \
+	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -); \
+	cd $$HOOT_HOME/hoot-rnd/src/main/cpp/; \
+	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -)
 
 install-data-local: install-other
 
 install-exec-local:
 	mkdir -p $(bindir) $(libdir) $(confdir)
 	$(INSTALL) bin/* $(bindir)
-	$(INSTALL) lib/* $(libdir)
-	ls bin/* lib/* >> $(UNINSTALL_MANIFEST)
+	rm $(bindir)/HootEnv.sh
+	mkdir -p $(localstatedir)/bin/
+	cp bin/HootEnv.sh $(localstatedir)/bin/
+	cp -l $(localstatedir)/bin/HootEnv.sh $(bindir)
+	cp -a lib/* $(libdir)
 	test $(HAS_HADOOP) && $(INSTALL) pretty-pipes/bin/* $(bindir) || true
 	test $(HAS_HADOOP) && $(INSTALL) pretty-pipes/lib/* $(libdir) || true
-	test $(HAS_HADOOP) && (cd pretty-pipes ; ls bin/* >> $(UNINSTALL_MANIFEST)) || true
-	test $(HAS_HADOOP) && (cd pretty-pipes ; ls lib/* >> $(UNINSTALL_MANIFEST)) || true
 
 # Clean out all install files and then remove the empty directories.
 uninstall-local:
-	cd $(prefix) && test -f $(UNINSTALL_MANIFEST) && xargs -a $(UNINSTALL_MANIFEST) -d "\n" rm -f || true
-	rm -f $(UNINSTALL_MANIFEST)
-	find $(confdir) $(plugindir) $(bindir) $(libdir) -depth -type d -empty -exec rmdir {} \;
 
 SUBDIRS=stub

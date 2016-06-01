@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchCandidateCountVisitor.h"
 
@@ -31,51 +31,58 @@ namespace hoot
 
 MatchCandidateCountVisitor::MatchCandidateCountVisitor(
   const vector< shared_ptr<MatchCreator> >& matchCreators) :
-_matchCreators(matchCreators),
 _candidateCount(0)
 {
-  for (size_t i = 0; i < _matchCreators.size(); ++i)
-  {
-    vector<MatchCreator::Description> matchCreatorDescriptions = _matchCreators[i]->getAllCreators();
-    sort(matchCreatorDescriptions.begin(), matchCreatorDescriptions.end(), _matchDescriptorCompare);
-    //TODO: Grabbing the first element doesn't seem right here, but its behavior has been expected
-    //so far.
-    LOG_VARD(matchCreatorDescriptions.at(0).className);
-     _matchCreatorDescriptions.append(
-       QString::fromStdString(matchCreatorDescriptions.at(0).className));
-  }
+  _setupCreators(matchCreators);
+}
 
+void MatchCandidateCountVisitor::_setupCreators(const vector< shared_ptr<MatchCreator> >& matchCreators)
+{
+  LOG_VARD(matchCreators.size());
+  for (size_t i = 0; i < matchCreators.size(); i++)
+  {
+    shared_ptr<MatchCreator> matchCreator = matchCreators[i];
+    QString matchCreatorName;
+    const QString matchCreatorDescription = matchCreator->getDescription();
+    if (matchCreatorDescription.isEmpty())
+    {
+      matchCreatorName = QString::fromStdString(matchCreator->getAllCreators().at(0).className);
+    }
+    else
+    {
+      matchCreatorName = matchCreatorDescription;
+    }
+     LOG_DEBUG("Appending: " + matchCreatorName);
+    _matchCreatorsByName.insert(matchCreatorName, matchCreator);
+  }
+  LOG_VARD(_matchCreatorsByName.size());
 }
 
 void MatchCandidateCountVisitor::visit(const shared_ptr<const Element>& e)
 {
-  for (size_t i = 0; i < _matchCreators.size(); ++i)
+  for (QMap<QString, shared_ptr<MatchCreator> >::const_iterator iterator = _matchCreatorsByName.begin();
+       iterator != _matchCreatorsByName.end(); ++iterator)
   {
-    shared_ptr<MatchCreator> matchCreator = _matchCreators[i];
+    const QString matchCreatorName = iterator.key();
+    //LOG_VARD(matchCreatorName);
+    shared_ptr<MatchCreator> matchCreator = iterator.value();
     if (matchCreator->isMatchCandidate(e, _map->shared_from_this()))
     {
-     _candidateCount++;
-
-     const QString matchCreatorName = _matchCreatorDescriptions.at(i);
-     LOG_VARD(matchCreatorName);
-     if (_matchCandidateCountsByMatchCreator.contains(matchCreatorName))
-     {
-       _matchCandidateCountsByMatchCreator[matchCreatorName] =
-         _matchCandidateCountsByMatchCreator[matchCreatorName] + 1;
-     }
-     else
-     {
-       _matchCandidateCountsByMatchCreator[matchCreatorName] = 1;
-     }
-     //LOG_VARD(_matchCandidateCountsByMatchCreator[matchCreatorName]);
+      //LOG_DEBUG("is match candidate");
+      if (_matchCandidateCountsByMatchCreator.contains(matchCreatorName))
+      {
+        _matchCandidateCountsByMatchCreator[matchCreatorName] =
+          _matchCandidateCountsByMatchCreator[matchCreatorName] + 1;
+      }
+      else
+      {
+        _matchCandidateCountsByMatchCreator[matchCreatorName] = 1;
+      }
+      //LOG_VARD(_matchCandidateCountsByMatchCreator[matchCreatorName]);
+      _candidateCount++;
     }
   }
-}
-
-bool MatchCandidateCountVisitor::_matchDescriptorCompare(const MatchCreator::Description& m1,
-                                                         const MatchCreator::Description& m2)
-{
-  return m1.className > m2.className;
+  //LOG_VARD(_matchCandidateCountsByMatchCreator.size());
 }
 
 }

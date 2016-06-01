@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MapCropper.h"
@@ -120,8 +120,8 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
     throw HootException("If the node bounds is set the projection must be geographic.");
   }
 
-  // @todo visit the elements from the most senior (e.g. relation that has no parents) to the
-  // most junior (nodes).
+  /// @todo visit the elements from the most senior (e.g. relation that has no parents) to the
+  /// most junior (nodes).
 
   // go through all the ways
   const WayMap ways = result->getWays();
@@ -381,7 +381,7 @@ shared_ptr<Way> MapCropper::_reintroduceWay(shared_ptr<OsmMap> map, shared_ptr<c
 {
   // create a new way
   shared_ptr<Way> newWay(new Way(w->getStatus(), map->createNextWayId(),
-    w->getCircularError()));
+    w->getRawCircularError()));
   newWay->setTags(w->getTags());
 
   // for each point on the linestring

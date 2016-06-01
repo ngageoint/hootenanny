@@ -52,7 +52,6 @@ mgcp.rules = {
         ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
         ['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
         ['F_CODE','AK190','man_made','recreational_pier'], // Recreational Pier - NFDD BB081
-        ['F_CODE','AL015',undefined,undefined], // General Building - NFDD AL013 - to stop warnings
         ['F_CODE','AL210','route:protection','yes'], // Protection Shed - NFDD AL211
         ['F_CODE','AT030','power','line'], // Power Line - NFDD AT005
         ['F_CODE','AT050','use','communication'], // Communication Station - No replacement code
@@ -208,13 +207,13 @@ mgcp.rules = {
 
         // BOT - Bridge Opening Type
         ['BOT','-32768',undefined,undefined], // Null
-        ['BOT','0','bridge','yes'], // Unk
-        ['BOT','4','bridge','bascule'],
-        ['BOT','10','bridge','swing'],
-        ['BOT','11','bridge','lift'],
-        ['BOT','12','bridge','retractable'],
+        ['BOT','0',undefined,undefined], // Unk
+        ['BOT','4','bridge:movable','bascule'],
+        ['BOT','10','bridge:movable','swing'],
+        ['BOT','11','bridge:movable','lift'],
+        ['BOT','12','bridge:movable','retractable'],
         ['BOT','13',undefined,undefined], // In data but not in any spec!
-        ['BOT','17','bridge','fixed'],
+        ['BOT','17','bridge:movable','no'],
         // ['BOT','998',undefined,undefined], // NA
 
         // BSC - Bridge Structure
@@ -355,7 +354,7 @@ mgcp.rules = {
         ['FAC','1001','solid_construction','yes'], // Solid Face 
 
         // FFN - Feature Function from MGCP v4
-        ['FFN','0','building','yes'], // Good default?
+        ['FFN','0',undefined,undefined], // Good default?
         ['FFN','2','use','agriculture'], // Farm?
         ['FFN','99','industrial','manufacturing'],
         ['FFN','105','use','oil-mill'],
@@ -484,7 +483,7 @@ mgcp.rules = {
 
         // FUC - Functional Use
         // ['FUC','0','use','unknown'], 
-        ['FUC','0',undefined, undefined], 
+        ['FUC','0',undefined,undefined], 
         ['FUC','1','use','industrial'], 
         ['FUC','2','use','commercial'], 
         ['FUC','3','use','institute'],
@@ -542,7 +541,7 @@ mgcp.rules = {
         ['HWT','3','building','chapel'],
         ['HWT','4','building','church'],
         ['HWT','5','building','marabout'],
-        ['HWT','6','building','minaret'],
+        ['HWT','6','tower:type','minaret'], // Fixed in pre/post processing
         ['HWT','7','building','religious_community'],
         ['HWT','9','building','mosque'],
         ['HWT','11','building','pagoda'],
@@ -849,7 +848,7 @@ mgcp.rules = {
         // RIR - Railway in Road
         //['RIR','0','railway:in_road','unknown'], 
         ['RIR','0',undefined,undefined], 
-        ['RIR', '-999999',undefined,undefined], // In data, not in spec
+        ['RIR','-999999',undefined,undefined], // In data, not in spec
         ['RIR','1000','railway:in_road','separated'],
         ['RIR','1001','railway:in_road','yes'],
 
@@ -871,7 +870,7 @@ mgcp.rules = {
         // RRC - Railway Use
         ['RRC','-32768',undefined,undefined], // Null
         ['RRC','-999999',undefined,undefined], 
-        ['RRC','0','railway','yes'],
+        ['RRC','0','railway','rail'],
         ['RRC','2','railway','carline'],
         ['RRC','6','railway','subway'],
         ['RRC','8','railway','logging'],
@@ -894,11 +893,10 @@ mgcp.rules = {
         ['RST','0',undefined,undefined], 
         ['RST','1','surface','paved'], 
         ['RST','2','surface','unpaved'], 
-        ['RST','3','surface','gravel'], // DIGEST FACC from Data: Loose/Light
         ['RST','5','surface','grass'], // DIGEST FACC from Data: Grass/Sod
         ['RST','6','surface','ground'], // DIGEST FACC from Data: Natural
         ['RST','8','surface','earth'], // Temporary - same as ground?
-        ['RST','999','surface','Other'], 
+        ['RST','999','surface','Other'],
 
         // RTA - Linear Feature Arrangement
         ['RTA','-32768',undefined,undefined], // Null
@@ -1165,7 +1163,7 @@ mgcp.rules = {
         ['TOS','999','tower:shape','other'], // Other
 
         // TRE - Foliage Type 
-        // ['TRE','0','wood','unknown'], // Unknown 
+        // ['TRE','0','wood','unknown'], // Unknown
         ['TRE','0',undefined,undefined], // Unknown 
         ['TRE','1','wood','deciduous'], // Deciduous 
         ['TRE','2','wood','evergreen'], // Evergreen 
@@ -1188,7 +1186,7 @@ mgcp.rules = {
         ['TRS','13','transport:type','road'],
         ['TRS','14','transport:type','road_and_railway'],
         // ['TRS','998',undefined,undefined],
-        ['TRS','999', 'transport:type','other'],
+        ['TRS','999','transport:type','other'],
 
         // TTC - Tower Type
         //['TTC','0','tower:type','unknown'],
@@ -1253,7 +1251,7 @@ mgcp.rules = {
         ['VSP','999','vegetation:type','other'], // Other 
 
         // WCC - Watercourse Channel Type
-        ['WCC','0','waterway','yes'], 
+        ['WCC','0','waterway','yes'],
         ['WCC','1','waterway','stream'],
         ['WCC','2','waterway','braided_stream'],
         ['WCC','3','waterway','gorge'],
@@ -1292,8 +1290,8 @@ mgcp.rules = {
         // WTC - Road Weather Restriction
         ['WTC','-999999',undefined,undefined], // In data, not in spec
         // ['WTC','0','seasonal','unknown'], 
-        ['WTC','0',undefined,undefined], 
-        ['WTC','1','seasonal','no'], 
+        ['WTC','0',undefined,undefined],
+        ['WTC','1','seasonal','no'],
         ['WTC','2','seasonal','fair'], // possibly seasonal=
         ['WTC','3','seasonal','winter'],
         ['WTC','5','seasonal','not_winter'],
@@ -1446,11 +1444,11 @@ mgcp.rules = {
 
         // CUS - Communications Facility Type
         ['CUS','-32768',undefined,undefined], // Null
-        ['CUS','0',undefined,undefined], 
+        ['CUS','0',undefined,undefined],
         ['CUS','2',undefined,undefined], // In data but not in Spec
         ['CUS','4','building','ground_station'],
         // ['CUS','998',undefined,undefined], // NA
-        ['CUS','999','building','communications'], 
+        ['CUS','999','building','communications'],
 
         // DDC - Dwelling Type
         ['DDC','-32768',undefined,undefined], // Null
@@ -1524,7 +1522,7 @@ mgcp.rules = {
         ['ICF','5','building','warehouse'],
         ['ICF','10','product','oil'],
         ['ICF','11','building','aeration'],
-        ['ICF','12','product','woodword'],
+        ['ICF','12','product','woodwork'],
         ['ICF','13','product','lumber'],
         ['ICF','14','man_made','kiln'],
         ['ICF','18','building','processing'],
@@ -1649,16 +1647,16 @@ mgcp.rules = {
         ['MIN','9','mine:type','below_surface'],
 
         // NVS - Navigability Information
-        // ['NVS','0','navigation','unknown'], 
-        ['NVS','0',undefined,undefined], 
+        // ['NVS','0','navigation','unknown'],
+        ['NVS','0',undefined,undefined],
         ['NVS','3','navigation','yes'],
         ['NVS','999','navigation','other'],
 
         // OWO - Waterbody Overhead Obstruction
         ['OWO','-32768',undefined,undefined],  // Null
-        ['OWO','-999999',undefined,undefined], 
-        // ['OWO','0','pipeline:obstruction','unknown'], 
-        ['OWO','0',undefined,undefined], 
+        ['OWO','-999999',undefined,undefined],
+        // ['OWO','0','pipeline:obstruction','unknown'],
+        ['OWO','0',undefined,undefined],
         ['OWO','2',undefined,undefined], // In data but not in spec!
         ['OWO','1000','waterway:overhead_obstruction','no'], // Feature does not cross navigable water
         ['OWO','1001','waterway:overhead_obstruction','yes'],
@@ -1682,10 +1680,10 @@ mgcp.rules = {
         ['PSF','4','amenity','health_office'],
         ['PSF','5','amenity','post_office'],
         ['PSF','6','amenity','fire_station'],
-        ['PSF','8','amenity','motor_vehicle_station'],   
+        ['PSF','8','amenity','motor_vehicle_station'],
         ['PSF','9','amenity','water_police'],
         ['PSF','10','amenity','rescue_station'],
-        ['PSF','12','amenity','clinic'],                                           
+        ['PSF','12','amenity','clinic'],
         ['PSF','13','amenity','sanatorium'],
         ['PSF','16','amenity','fire_and_police'],
         ['PSF','19','amenity','public_service_outbuilding'],
@@ -1698,7 +1696,7 @@ mgcp.rules = {
         ['RES','1','amenity','astronomical_station'], // ??
         ['RES','2','man_made','observatory'],
         ['RES','3','building','research_centre'],
-        ['RES','4','monitoring:weather','yes'], 
+        ['RES','4','monitoring:weather','yes'],
         // ['RES','998',undefined,undefined],
         ['RES','999','building','research'],
 
@@ -1912,7 +1910,7 @@ mgcp.rules = {
         ['TFC','15','railway','station'],
         ['TFC','16','amenity','weighbridge'],
         ['TFC','17','aeroway','terminal'],
-        ['TFC','18','public_transport','station'], 
+        ['TFC','18','public_transport','station'],
         ['TFC','19','building','pilot_office'],
         ['TFC','20','building','pilot_lookout_station'],
         ['TFC','21','building','transportation_outbuilding'],
@@ -2169,10 +2167,10 @@ mgcp.rules = {
         ['FFN','860','building','hospital'],
         ['FFN','841','amenity','ranger_station'],
         ['FFN','860','amenity','health_office'],
-        ['FFN','343','amenity','motor_vehicle_station'],   
+        ['FFN','343','amenity','motor_vehicle_station'],
         ['FFN','841','amenity','water_police'],
         ['FFN','841','amenity','rescue_station'],
-        ['FFN','860','amenity','clinic'],                                           
+        ['FFN','860','amenity','clinic'],
         ['FFN','860','amenity','sanatorium'],
         ['FFN','841','amenity','fire_and_police'],
         ['FFN','811','amenity','public_service_outbuilding'],
@@ -2272,16 +2270,17 @@ mgcp.rules = {
         ['RST','1','surface','concrete'],
         ['RST','1','surface','paving_stones'],
         ['RST','1','surface','compacted'],
+        ['RST','1','surface','metal'],
+        ['RST','1','surface','pebblestone'],
+        ['RST','1','surface','wood'],
+        ['RST','2','surface','sand'],
         ['RST','2','surface','dirt'],
         ['RST','2','surface','fine_gravel'],
+        ['RST','2','surface','gravel'], // DIGEST FACC from Data: Loose/Light
+        ['RST','2','surface','mud'],
         ['RST','5','surface','grass_paver'],
         ['RST','999','surface','ice'],
-        ['RST','1','surface','metal'],
-        ['RST','2','surface','mud'],
-        ['RST','1','surface','pebblestone'],
-        ['RST','1','surface','sand'],
         ['RST','999','surface','snow'],
-        ['RST','1','surface','wood'],
 
         // Building 
         ['FFN','563','building','detached'],
@@ -2327,6 +2326,20 @@ mgcp.rules = {
       ], // End one2oneOut
 
     // ##### End of One2One Rules #####
+    // ##### Start of txtLength #####
+    // This list is for validateing the lengths of text attributes prior to export
+    txtLength : {
+        'CCN':254, 'F_CODE':5, 'IKO':255, 'NA2':80, 'NAM':80, 'NFI':18, 'NFN':18, 'SDP':254, 'SDV':20,
+        'TEXT':254, 'TXT':254, 'UID':36, 'VOI':11
+    },
+    // ##### End of txtLength #####
+
+    // ##### Start of intList #####
+    // This list is for validateing the integer attributes prior to export
+    intList : ['LTN','NOS'],
+    // ##### End of intList#####
+
+
 
 } // End of mgcp.rules
 

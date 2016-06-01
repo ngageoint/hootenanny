@@ -288,6 +288,12 @@
         "import": "width.json"
     },
     {
+        "import": "divider.json"
+    },
+    {
+        "import": "is_divided.json"
+    },
+    {
         "import": "wikipedia.json"
     }
 ]

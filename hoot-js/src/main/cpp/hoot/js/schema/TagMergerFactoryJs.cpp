@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagMergerFactoryJs.h"
 
@@ -53,8 +53,8 @@ void TagMergerFactoryJs::Init(Handle<Object> exports)
 Handle<Value> TagMergerFactoryJs::mergeTags(const Arguments& args) {
   HandleScope scope;
 
-  Tags& t1 = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject())->getTags();
-  Tags& t2 = ObjectWrap::Unwrap<TagsJs>(args[1]->ToObject())->getTags();
+  Tags t1 = toCpp<Tags>(args[0]->ToObject());
+  Tags t2 = toCpp<Tags>(args[1]->ToObject());
 
   return scope.Close(TagsJs::New(TagMergerFactory::mergeTags(t1, t2, ElementType::Unknown)));
 }

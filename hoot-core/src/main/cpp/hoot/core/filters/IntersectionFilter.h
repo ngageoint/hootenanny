@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INTERSECTIONFILTER_H
 #define INTERSECTIONFILTER_H
@@ -43,7 +43,11 @@ public:
 
   virtual bool isSatisfied(const shared_ptr<const Element>& e) const;
 
+  virtual ElementCriterion* clone() { return new IntersectionFilter(_nids); }
+
 protected:
+  IntersectionFilter(std::set<long> ids) : _nids(ids) { }
+
 //  virtual bool isFiltered(const Element& e) const;
 
   std::set<long> _nids;

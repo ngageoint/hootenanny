@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Node.h"
@@ -40,37 +40,28 @@ using namespace geos::geom;
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
-namespace hoot {
-
-Node::Node(const Node& from) : Element(from.getStatus())
+namespace hoot
 {
-  _nodeData = from._nodeData;
-}
 
-Node::Node(Status s, long id, const Coordinate& c, Meters circularError) : Element(s)
+Node::Node(Status s, long id, const Coordinate& c, Meters circularError) :
+Element(s)
 {
   _nodeData.init(id, c.x, c.y);
   _getElementData().setCircularError(circularError);
 }
 
-Node::Node(Status s, long id, double x, double y, Meters circularError) : Element(s)
+Node::Node(Status s, long id, double x, double y, Meters circularError, long changeset,
+           long version, unsigned int timestamp, QString user, long uid, bool visible) :
+Element(s)
 {
-  _nodeData.init(id, x, y);
+  _nodeData.init(id, x, y, changeset, version, timestamp, user, uid, visible);
   _getElementData().setCircularError(circularError);
 }
 
-Node::Node(Status s, long id, double x, double y, long changeset, long version, unsigned int timestamp,
-           Meters circularError) : Element(s)
+Node::Node(const Node& from) :
+Element(from.getStatus()),
+_nodeData(from._nodeData)
 {
-  _nodeData.init(id, x, y, changeset, version, timestamp);
-  _getElementData().setCircularError(circularError);
-}
-
-Node::Node(Status s, long id, double x, double y, long changeset, long version, unsigned int timestamp,
-           QString user, long uid, Meters circularError) : Element(s)
-{
-  _nodeData.init(id, x, y, changeset, version, timestamp, user, uid);
-  _getElementData().setCircularError(circularError);
 }
 
 void Node::clear()
@@ -104,8 +95,14 @@ shared_ptr<geos::geom::Point> Node::toPoint() const
 
 QString Node::toString() const
 {
-  return QString("Node(%1): x: %2 y: %3 tags:\n%4").arg(getId()).arg(getX()).arg(getY()).
-    arg(getTags().toString());
+  return
+    QString("Node(%1): x: %2 y: %3 tags:\n%4\n version: %5\n visible: %6")
+      .arg(getId())
+      .arg(getX())
+      .arg(getY())
+      .arg(getTags().toString())
+      .arg(getVersion())
+      .arg(getVisible());
 }
 
 void Node::visitRo(const ElementProvider& map, ElementVisitor& filter) const

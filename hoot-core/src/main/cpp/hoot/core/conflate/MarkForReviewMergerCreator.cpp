@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MarkForReviewMergerCreator.h"
 
@@ -57,7 +57,6 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
     const Match* match = (*it);
-    //MatchType type = _mt.getType(*(*it));
     MatchType type = match->getType();
     if (type == MatchType::Review)
     {

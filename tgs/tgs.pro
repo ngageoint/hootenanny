@@ -3,9 +3,6 @@ QT += xml
 TEMPLATE = lib
 win32:CONFIG += dll
 
-# ln doesn't work when you're using samba as a working directory
-unix:QMAKE_LN_SHLIB = cp
-
 TARGET=Tgs
 
 # Include the shared settings.
@@ -156,7 +153,7 @@ HEADERS += src/main/cpp/tgs/HashMap.h \
     src/main/cpp/tgs/System/Timer.h \
     src/main/cpp/tgs/BigContainers/BigMapHybrid.h \
     src/main/cpp/tgs/System/DisableCerr.h \
-    src/main/cpp/tgs/LruCache.h
+    src/main/cpp/tgs/LruCache.h \
 
 win32:HEADERS += src/main/cpp/tgs/RStarTree/FilePageStore.h \
     src/main/cpp/tgs/SpinImage/GroundPlaneRemover.h \
@@ -236,7 +233,7 @@ SOURCES += src/main/cpp/tgs/StreamUtils.cpp \
     src/main/cpp/tgs/BigContainers/BigMap.cpp \
     src/main/cpp/tgs/BigContainers/BasicBloomFilter.cpp \
     src/main/cpp/tgs/System/DisableCout.cpp \
-    src/main/cpp/tgs/System/DisableCerr.cpp
+    src/main/cpp/tgs/System/DisableCerr.cpp \
 
 cppunit:SOURCES += \
     src/test/cpp/tgs/ProbablePath/ProbablePathCalculatorTest.cpp \

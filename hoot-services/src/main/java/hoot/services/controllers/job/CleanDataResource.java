@@ -22,12 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
-
-import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
 
 import java.util.UUID;
 
@@ -44,94 +41,66 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.HootProperties;
+import hoot.services.utils.ResourceErrorHandler;
+
 
 @Path("/cleandata")
-public class CleanDataResource  extends JobControllerBase {
-	private static final Logger log = LoggerFactory.getLogger(CleanDataResource.class);
-	@SuppressWarnings("unused")
-  private String homeFolder = null;
-	public CleanDataResource()
-	{
-		try
-		{
-			if (processScriptName ==  null)
-			{
-				processScriptName = HootProperties.getProperty("cleanDataMakePath");
-			}
+public class CleanDataResource extends JobControllerBase {
+    private static final Logger log = LoggerFactory.getLogger(CleanDataResource.class);
+    @SuppressWarnings("unused")
+    private String homeFolder = null;
 
-			homeFolder = HootProperties.getProperty("homeFolder");
-		}
-		catch (Exception ex)
-		{
-			log.error(ex.getMessage());
-		}
-	}
+    public CleanDataResource() {
+        try {
+            if (processScriptName == null) {
+                processScriptName = HootProperties.getProperty("cleanDataMakePath");
+            }
 
-	/**
-	 * <NAME>Data Cleaning Service</NAME>
-	 * <DESCRIPTION>Clean Data service represents REST and WPS end points for hoot --cleanup which is defined as
-	 * --cleanup (input) (output).
-	 * Removes common erroneous data scenarios from input and writes to output. * input - Input (e.g. .osm file).
-	 * output - Output file (e.g. .osm file).
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * 	<INPUT_TYPE>
-	 * 	[OMS|DB]
-	 * 	</INPUT_TYPE>
-	 * 	<INPUT>
-	 * 	When DB Type then name of the map record. If OSM then the relative (to HOOT_HOME) path of osm file.
-	 * 	</INPUT>
-	 * 	<OUTPUT_TYPE>
-	 * 	[OMS|DB]
-	 * 	</OUTPUT_TYPE>
-	 * 	<OUTPUT>
-	 * 	When DB Type then name of the map record. If OSM then the relative (to HOOT_HOME) path of output osm file.
-	 * 	</OUTPUT>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * Job Id
-	 * </OUTPUT>
-	 * <URL>http://localhost:8080/hoot-services/job/cleandata/execute</URL>
-	 * <EXAMPLE>
-	 * 	
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>{
-   * "INPUT_TYPE":"DB",
-   * "INPUT":"DcGisRoads",
-   * "OUTPUT_TYPE":"DB",
-   * "OUTPUT":"DcGisRoadsOUt5"
-	 * }</INPUT>
-	 * <OUTPUT>{"jobid":"0df81145-5f3b-46f4-9937-64ade48fd604"}</OUTPUT>
-	 * </EXAMPLE>
-	 * @param params
-	 * @return
-	 */
-	@POST
-	@Path("/execute")
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response process(String params)
-	{
-		String jobId = UUID.randomUUID().toString();
-		try
-		{
+            homeFolder = HootProperties.getProperty("homeFolder");
+        }
+        catch (Exception ex) {
+            log.error(ex.getMessage());
+        }
+    }
 
-			JSONArray commandArgs = parseParams(params);
-			String argStr = createPostBody(commandArgs);
-			postJobRquest( jobId,  argStr);
-		}
-		catch (Exception ex)
-		{
-		  ResourceErrorHandler.handleError(
-			"Error process data clean request: " + ex.toString(),
-		    Status.INTERNAL_SERVER_ERROR,
-			log);
-		}
-		JSONObject res = new JSONObject();
-		res.put("jobid", jobId);
-		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
-	}
+    /**
+     * Clean Data service represents REST and WPS end points for hoot --cleanup
+     * which is defined as --cleanup (input) (output). Removes common erroneous
+     * data scenarios from input and writes to output. * input - Input (e.g.
+     * .osm file). output - Output file (e.g. .osm file).
+     * 
+     * When DB Type then name of the map record. If OSM then the relative (to
+     * HOOT_HOME) path of osm file.
+     * 
+     * POST hoot-services/job/cleandata/execute
+     * 
+     * { "INPUT_TYPE":"DB", "INPUT":"DcGisRoads", "OUTPUT_TYPE":"DB",
+     * "OUTPUT":"DcGisRoadsOUt5" }
+     * 
+     * @param params
+     *            [OMS|DB]
+     * @return Job Id
+     */
+    @POST
+    @Path("/execute")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response process(String params) {
+        String jobId = UUID.randomUUID().toString();
+        try {
 
-
+            JSONArray commandArgs = parseParams(params);
+            String argStr = createPostBody(commandArgs);
+            postJobRquest(jobId, argStr);
+        }
+        catch (Exception ex) {
+            ResourceErrorHandler.handleError("Error process data clean request: " + ex.toString(),
+                    Status.INTERNAL_SERVER_ERROR, log);
+        }
+        JSONObject res = new JSONObject();
+        res.put("jobid", jobId);
+        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+    }
 
 }

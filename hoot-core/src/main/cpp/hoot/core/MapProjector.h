@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __MAP_PROJECTOR_H__
 #define __MAP_PROJECTOR_H__
@@ -36,6 +36,7 @@
 
 // GEOS
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/Geometry.h>
 
 // Hoot
@@ -178,6 +179,20 @@ private:
   size_t _findBestScore(vector<PlanarTestResult>& results);
 
   static bool _scoreLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
+};
+
+class ReprojectCoordinateFilter : public CoordinateFilter
+{
+public:
+
+  ReprojectCoordinateFilter(OGRCoordinateTransformation* t);
+
+  virtual void filter_rw(Coordinate* c) const;
+
+  void project(Coordinate* c) const;
+
+private:
+  OGRCoordinateTransformation* _transform;
 };
 
 }

@@ -22,296 +22,141 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.db;
 
-import hoot.services.HootProperties;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.HootProperties;
+
+
 public class DataDefinitionManager {
-	private static final Logger log = LoggerFactory.getLogger(DataDefinitionManager.class);
-	private static final String POSTGRESQL_DRIVER = "org.postgresql.Driver";
-	private String DB_URL = null;
-	private String userid = null;
-	private String pwd = null;
+    private static final Logger logger = LoggerFactory.getLogger(DataDefinitionManager.class);
+    private static final String POSTGRESQL_DRIVER = "org.postgresql.Driver";
 
-  private String db_name = null;
+    private final String dbUrl;
+    private final String dbUser;
+    private final String dbPassword;
+    private final String dbName;
 
-	public DataDefinitionManager() throws Exception
-	{
-		try {
-			db_name = HootProperties.getProperty("dbName");
-			userid = HootProperties.getProperty("dbUserId");
-			pwd = HootProperties.getProperty("dbPassword");
-			String host = HootProperties.getProperty("dbHost");
-			DB_URL = "jdbc:postgresql://" + host + "/";
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			throw e;
-		}
+    static {
+        try {
+            Class.forName(POSTGRESQL_DRIVER);
+        }
+        catch (ClassNotFoundException e) {
+            String message = "Critical error!  Failed to load " + POSTGRESQL_DRIVER + " JDBC driver!";
+            throw new RuntimeException(message, e);
+        }
+    }
 
-	}
+    public DataDefinitionManager() {
+        dbName = HootProperties.getProperty("dbName");
+        dbUser = HootProperties.getProperty("dbUserId");
+        dbPassword = HootProperties.getProperty("dbPassword");
+        String host = HootProperties.getProperty("dbHost");
+        dbUrl = "jdbc:postgresql://" + host + "/";
+    }
 
-	public boolean checkDbExists(String dbname) throws Exception
-	{
-		boolean exists = false;
-		Connection conn = null;
-	  Statement stmt = null;
-		try
-		{
-			Class.forName(POSTGRESQL_DRIVER);
-			conn = DriverManager.getConnection(DB_URL + db_name, userid, pwd);
-			stmt = conn.createStatement();
-			String sql = "SELECT 1 FROM pg_database WHERE datname = '" + dbname + "'";
-			ResultSet rs = stmt.executeQuery(sql);
+    boolean checkDbExists(String dbName) throws SQLException {
+        try (Connection conn = DriverManager.getConnection(dbUrl + this.dbName, dbUser, dbPassword)) {
+            String sql = "SELECT 1 FROM pg_database WHERE datname = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString((int) 1, dbName);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    return rs.next();
+                }
+            }
+        }
+    }
 
+    void createDb(String dbname) throws SQLException {
+        try (Connection conn = DriverManager.getConnection(dbUrl + dbName, dbUser, dbPassword)) {
+            String sql = "CREATE DATABASE \"" + dbname + "\"";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.execute();
+            }
+        }
+    }
 
-	    //STEP 5: Extract data from result set
-	    while(rs.next()){
-	    	exists = true;
-	    }
-	    rs.close();
+    public void deleteTables(List<String> tables, String dbname) throws SQLException {
+        try (Connection conn = DriverManager.getConnection(dbUrl + dbname, dbUser, dbPassword)) {
+            for (String tblName : tables) {
+                String sql = "DROP TABLE \"" + tblName + "\"";
+                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.execute();
+                }
+            }
+        }
+    }
 
-		}
-		catch (Exception e)
-		{
-			log.error(e.getMessage());
-			throw e;
-		}
-		finally{
-      //finally block used to close resources
-      try{
-         if(stmt!=null)
-            stmt.close();
-      }catch(SQLException se2){
-      	log.equals(se2.getMessage());
-      }// nothing we can do
-      try{
-         if(conn!=null)
-            conn.close();
-      }catch(SQLException se){
-      	log.equals(se.getMessage());
-      }//end finally try
-		}//end try
-		return exists;
-	}
-	public void createDb(String dbname) throws Exception
-	{
-		Connection conn = null;
-	  Statement stmt = null;
-		try
-		{
-			Class.forName(POSTGRESQL_DRIVER);
-			conn = DriverManager.getConnection(DB_URL + db_name, userid, pwd);
+    void deleteDb(String dbname, boolean force) throws SQLException {
+        try (Connection conn = DriverManager.getConnection(dbUrl + dbName, dbUser, dbPassword)) {
+            // TODO: re-evaluate what this if block is supposed to to.
+            if (force) {
+                String columnName = null;
+                String sql = "SELECT column_name " + "FROM information_schema.columns "
+                        + "WHERE table_name='pg_stat_activity' AND column_name LIKE '%pid'";
 
-			stmt = conn.createStatement();
-			String sql = "CREATE DATABASE \"" + dbname + "\"";
-			stmt.executeUpdate(sql);
+                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    // Get the column name from the db as it's version dependent
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        rs.next();
+                        columnName = rs.getString("column_name");
+                    }
+                }
 
-		}
-		catch (Exception e)
-		{
-			log.error(e.getMessage());
-			throw e;
-		}
-		finally{
-      //finally block used to close resources
-      try{
-         if(stmt!=null)
-            stmt.close();
-      }catch(SQLException se2){
-      	log.equals(se2.getMessage());
-      }// nothing we can do
-      try{
-         if(conn!=null)
-            conn.close();
-      }catch(SQLException se){
-      	log.equals(se.getMessage());
-      }//end finally try
-   }//end try
-	}
-  
-	public void deleteTables(List<String> tables, String dbname) throws Exception
-	{
-		Connection conn = null;
-		try
-		{
-			Class.forName(POSTGRESQL_DRIVER);
-			conn = DriverManager.getConnection(DB_URL + dbname, userid, pwd);
-			for(int i=0; i<tables.size(); i++)
-			{
-				String tblName = tables.get(i);
+                String forceSql = "SELECT pg_terminate_backend(" + columnName + ") " + "FROM pg_stat_activity "
+                        + "WHERE datname = ?";
+                try (PreparedStatement stmt = conn.prepareStatement(forceSql)) {
+                    stmt.setString((int) 1, dbname);
+                    // Get the column name from the db as it's version dependent
+                    try (ResultSet rs = stmt.executeQuery()) {
+                    }
+                }
+            }
 
-				String sql = "DROP TABLE \"" + tblName + "\"";
-				PreparedStatement stmt = null;
-				try
-				{
-					stmt = conn.prepareStatement(sql);
-					stmt.execute();
-				}
-				catch (Exception e)
-				{
-					log.error(e.getMessage());
-				}
-				finally
-				{
-					try
-					{
-		         if (stmt!=null)
-		         {
-		        	 stmt.close();
-		         }  
-		      }
-					catch(SQLException se2)
-					{
-		      	log.equals(se2.getMessage());
-		      }
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			log.error(e.getMessage());
-		}
-		finally{
-      try{
-         if(conn!=null)
-            conn.close();
-      }catch(SQLException se){
-      	log.equals(se.getMessage());
-      }//end finally try
-		}//end try
-	}
+            String sql = "DROP DATABASE \"" + dbname + "\"";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.executeUpdate();
+            }
+        }
+    }
 
-	public void deleteDb(String dbname, boolean force) throws Exception
-	{
-		Connection conn = null;
-	  Statement stmt = null;
-		try
-		{
-			Class.forName(POSTGRESQL_DRIVER);
-			conn = DriverManager.getConnection(DB_URL + db_name, userid, pwd);
-			stmt = conn.createStatement();
-			if(force)
-			{
-				String forceSql = "select pg_terminate_backend(procpid) from pg_stat_activity where datname='" + dbname + "'";
-				stmt.executeQuery(forceSql);
-			}
-			String sql = "DROP DATABASE \"" + dbname + "\"";
-			stmt.executeUpdate(sql);
-		}
-		catch (Exception e)
-		{
-			log.error(e.getMessage());
-			throw e;
-		}
-		finally{
-      //finally block used to close resources
-      try{
-         if(stmt!=null)
-            stmt.close();
-      }catch(SQLException se2){
-      	log.equals(se2.getMessage());
-      }// nothing we can do
-      try{
-         if(conn!=null)
-            conn.close();
-      }catch(SQLException se){
-      	log.equals(se.getMessage());
-      }//end finally try
-		}//end try
-	}
+    public List<String> getTablesList(String dbName, String filter_prefix) throws SQLException {
+        List<String> tblList = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(dbUrl + dbName, dbUser, dbPassword)) {
+            String sql = "SELECT table_name " + "FROM information_schema.tables "
+                    + "WHERE table_schema='public' AND table_name LIKE " + "'" + filter_prefix.replace('-', '_')
+                    + "_%'";
 
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        // Retrieve by column name
+                        tblList.add(rs.getString("table_name"));
+                    }
+                }
+            }
+        }
 
-	public List<String> getTablesList(String dbName, String filter_prefix) throws Exception
-	{
-		List<String> tblList = new ArrayList<String>();
-		Connection conn = null;
-	  Statement stmt = null;
-		try
-		{
-			Class.forName(POSTGRESQL_DRIVER);
-			conn = DriverManager.getConnection(DB_URL + dbName, userid, pwd);
-			stmt = conn.createStatement();
-			filter_prefix = filter_prefix.replace('-', '_');
-			String sql = "SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_name LIKE " +
-						"'" + filter_prefix + "_%'";
-      ResultSet rs = stmt.executeQuery(sql);
-      //STEP 5: Extract data from result set
-      while(rs.next()){
-         //Retrieve by column name
-         String tblName = rs.getString("table_name");
-         tblList.add(tblName);
-      }
-      rs.close();
+        return tblList;
+    }
 
-		}
-		catch (Exception e)
-		{
-			log.error(e.getMessage());
-			throw e;
-		}
-		finally{
-      //finally block used to close resources
-      try{
-         if(stmt!=null)
-            stmt.close();
-      }catch(SQLException se2){
-      	log.equals(se2.getMessage());
-      }// nothing we can do
-      try{
-         if(conn!=null)
-            conn.close();
-      }catch(SQLException se){
-      	log.equals(se.getMessage());
-      }//end finally try
-		}//end try
-		return tblList;
-	}
-
-
-
-	public void createTable(String createTblSql, String dbname) throws Exception
-	{
-		Connection conn = null;
-	  Statement stmt = null;
-		try
-		{
-			Class.forName(POSTGRESQL_DRIVER);
-			conn = DriverManager.getConnection(DB_URL + dbname, userid, pwd);
-			stmt = conn.createStatement();
-
-			stmt.executeUpdate(createTblSql);
-
-		}
-		catch (Exception e)
-		{
-			log.error(e.getMessage());
-			throw e;
-		}
-		finally{
-      //finally block used to close resources
-      try{
-         if(stmt!=null)
-            stmt.close();
-      }catch(SQLException se2){
-      	log.equals(se2.getMessage());
-      }// nothing we can do
-      try{
-         if(conn!=null)
-            conn.close();
-      }catch(SQLException se){
-      	log.equals(se.getMessage());
-      }//end finally try
-		}//end try
-	}
-
+    void createTable(String createTblSql, String dbname) throws SQLException {
+        try (Connection conn = DriverManager.getConnection(dbUrl + dbname, dbUser, dbPassword)) {
+            try (PreparedStatement stmt = conn.prepareStatement(createTblSql)) {
+                stmt.executeUpdate();
+            }
+        }
+    }
 }

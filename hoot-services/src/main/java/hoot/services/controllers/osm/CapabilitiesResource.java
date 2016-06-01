@@ -22,12 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
-
-import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.writers.osm.CapabilitiesResponseWriter;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -43,63 +40,43 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
+import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.writers.osm.CapabilitiesResponseWriter;
+
+
 /**
  * Service endpoint for OSM capabilities
  */
 @Path("/api/capabilities")
-public class CapabilitiesResource
-{
-  private static final Logger log = LoggerFactory.getLogger(CapabilitiesResource.class);
+public class CapabilitiesResource {
+    private static final Logger log = LoggerFactory.getLogger(CapabilitiesResource.class);
 
-	/**
-	 * <NAME>Capabilities Service</NAME>
-	 * <DESCRIPTION>
-	 * The Hootenanny Capabilities Service implements the OSM
-	 * Capabilities Service v0.6 with some differences. The Hootenanny API does not support the following
-	 * capabilities properties: tracepoints.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	Capability OSM XML
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/api/capabilities</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * Capability OSM XML
-	 * </OUTPUT>
-	 * </EXAMPLE>
-   *
-   * Service method endpoint for retrieving OSM capabilities
-   *
-   * @return Response containing requested capabilities data
-   */
-  @GET
-  @Consumes(MediaType.TEXT_PLAIN)
-  @Produces(MediaType.TEXT_XML)
-  public Response get()
-  {
-    try
-    {
-      log.info("Retrieving capabilities...");
+    /**
+     * The Hootenanny Capabilities Service implements the OSM Capabilities
+     * Service v0.6 with some differences. The Hootenanny API does not support
+     * the following capabilities properties: tracepoints.
+     * 
+     * GET hoot-services/osm/api/capabilities
+     * 
+     * @return Capability OSM XML
+     */
+    @GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_XML)
+    public Response get() {
+        try {
+            log.info("Retrieving capabilities...");
 
-      Document responseDoc = (new CapabilitiesResponseWriter()).writeResponse();
-      log.debug("Returning response: " +
-        StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100) + " ...");
-      return
-        Response
-          .ok(new DOMSource(responseDoc), MediaType.TEXT_XML)
-          .header("Content-type", MediaType.TEXT_XML)
-          .build();
+            Document responseDoc = (new CapabilitiesResponseWriter()).writeResponse();
+            log.debug("Returning response: " + StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100)
+                    + " ...");
+            return Response.ok(new DOMSource(responseDoc), MediaType.TEXT_XML)
+                    .header("Content-type", MediaType.TEXT_XML).build();
+        }
+        catch (Exception e) {
+            final String message = "Error retrieving capabilities: " + e.getMessage();
+            log.error(message);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build();
+        }
     }
-    catch (Exception e)
-    {
-      final String message = "Error retrieving capabilities: " + e.getMessage();
-      log.error(message);
-      return Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build();
-    }
-  }
 }

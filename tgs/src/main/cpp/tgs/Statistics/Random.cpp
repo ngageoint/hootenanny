@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Random.h"
@@ -33,33 +33,55 @@
 
 namespace Tgs
 {
+  boost::shared_ptr<Random> Random::_instance;
+
+  Random::Random()
+  {
+  }
+
   double Random::generateGaussian(double mean, double sigma)
   {
     double x, y, r2;
-
     do
     {
       // choose x,y in uniform square (-1,-1) to (+1,+1)
-
-      x = -1 + 2 * ((double)rand() / (double)RAND_MAX);
-      y = -1 + 2 * ((double)rand() / (double)RAND_MAX);
-
-      // see if it is in the unit circle 
+      x = -1 + 2 * generateUniform();
+      y = -1 + 2 * generateUniform();
+      // see if it is in the unit circle
       r2 = x * x + y * y;
     }
     while (r2 > 1.0 || r2 == 0);
-
-    /* Box-Muller transform */
+    // Box-Muller transform
     return mean + sigma * y * sqrt (-2.0 * log (r2) / r2);
   }
 
   double Random::generateUniform()
   {
-    return (double)rand() / (double)RAND_MAX;
+    return (double)generateInt() / (double)RAND_MAX;
   }
 
   bool Random::coinToss()
   {
-    return rand() % 2 == 1;
+    return (generateInt() % 2) == 1;
+  }
+
+  int Random::generateInt(int max)
+  {
+    return generateInt() % max;
+  }
+
+  int Random::generateInt()
+  {
+    return rand();
+  }
+
+  void Random::seed(unsigned int s)
+  {
+    srand(s);
+  }
+
+  void Random::seed()
+  {
+    seed(0);
   }
 }

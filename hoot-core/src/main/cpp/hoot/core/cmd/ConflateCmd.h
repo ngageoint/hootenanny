@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFLATECMD_H
@@ -52,6 +52,8 @@
 
 // Tgs
 #include <tgs/System/Timer.h>
+
+#include <QFileInfo>
 
 namespace hoot
 {
@@ -83,10 +85,23 @@ public:
 
     QList<SingleStat> stats;
     bool displayStats = false;
-    if (args.endsWith("--stats"))
+    QString outputStatsFile;
+    if (args.contains("--stats"))
     {
-      displayStats = true;
-      args.pop_back();
+      if (args.endsWith("--stats"))
+      {
+        displayStats = true;
+        //remove "--stats" from args list
+        args.pop_back();
+      }
+      else if (args.size() == 5)
+      {
+        displayStats = true;
+        outputStatsFile = args[4];
+        //remove "--stats" and stats output file name from args list
+        args.pop_back();
+        args.pop_back();
+      }
     }
 
     if (args.size() < 2 || args.size() > 3)
@@ -94,6 +109,7 @@ public:
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
     }
+
 
     QString input1 = args[0];
     QString input2, output;
@@ -108,7 +124,7 @@ public:
       output = args[1];
     }
 
-    ConfigOptions configOptions;
+    LOG_INFO("Conflating " << input1 << " with " << input2 << " and writing the output to " << output);
 
     double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
     LOG_VAR(bytesRead);
@@ -116,12 +132,12 @@ public:
 
     // read input 1
     shared_ptr<OsmMap> map(new OsmMap());
-    loadMap(map, input1, false, Status::Unknown1);
+    loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown1);
 
     // read input 2
     if (!input2.isEmpty())
     {
-      loadMap(map, input2, false, Status::Unknown2);
+      loadMap(map, input2, ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown2);
     }
     double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
     LOG_VAR(inputBytes);
@@ -218,10 +234,19 @@ public:
 
     if (displayStats)
     {
-      allStats.append(stats);
-      MapStatsWriter().writeStats(allStats, args);
-      QString statsMsg = MapStatsWriter().statsToString( allStats, "\t" );
-      cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" << statsMsg << endl;
+      if (outputStatsFile.isEmpty())
+      {
+        allStats.append(stats);
+        MapStatsWriter().writeStats(allStats, args);
+        QString statsMsg = MapStatsWriter().statsToString( allStats, "\t" );
+        cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" << statsMsg << endl;
+      }
+      else
+      {
+        allStats.append(stats);
+        MapStatsWriter().writeStatsToJson(allStats, outputStatsFile);
+        cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: " << outputStatsFile << endl;
+      }
     }
 
     return 0;

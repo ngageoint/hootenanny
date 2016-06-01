@@ -42,6 +42,7 @@
 #include <QVariant>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlRecord>
+#include <QDateTime>
 
 // Standard
 #include <math.h>
@@ -471,16 +472,13 @@ QString ServicesDb::_escapeTags(const Tags& tags) const
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    if (it.value().isEmpty() == false && it.key().isEmpty() == false)
-    {
-      // this doesn't appear to be working, but I think it is implementing the spec as described here:
-      // http://www.postgresql.org/docs/9.0/static/hstore.html
-      // The spec described above does seem to work on the psql command line. Curious.
-      QString k = QString(it.key()).replace(f1, "\\\\").replace(f2, "\\\"");
-      QString v = QString(it.value()).replace(f1, "\\\\").replace(f2, "\\\"");
+    // this doesn't appear to be working, but I think it is implementing the spec as described here:
+    // http://www.postgresql.org/docs/9.0/static/hstore.html
+    // The spec described above does seem to work on the psql command line. Curious.
+    QString k = QString(it.key()).replace(f1, "\\\\").replace(f2, "\\\"");
+    QString v = QString(it.value()).replace(f1, "\\\\").replace(f2, "\\\"");
 
-      l << QString("\"%1\"=>\"%2\"").arg(k).arg(v);
-    }
+    l << QString("\"%1\"=>\"%2\"").arg(k).arg(v);
   }
   return l.join(",");
 }
@@ -816,7 +814,7 @@ bool ServicesDb::insertNode(const long id, const double lat, const double lon, c
 {
   bool retVal = false;
 
-  switch ( _connectionType )
+  switch (_connectionType )
   {
   case DBTYPE_SERVICES:
     _insertNode_Services(id, lat, lon, tags);
@@ -869,7 +867,7 @@ void ServicesDb::_insertNode_Services(const long id, const double lat, const dou
   v.append(lon);
   v.append((qlonglong)_currChangesetId);
   v.append(OsmUtils::currentTimeAsString());
-  v.append(_tileForPoint(lat, lon));
+  v.append(tileForPoint(lat, lon));
   v.append((qlonglong)1);
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
@@ -1415,12 +1413,12 @@ void ServicesDb::rollback()
   _inTransaction = false;
 }
 
-long ServicesDb::_round(double x)
+long ServicesDb::round(double x)
 {
   return (long)(x + 0.5);
 }
 
-long ServicesDb::_round(double x, int precision)
+long ServicesDb::round(double x, int precision)
 {
   return (long)(floor(x * (10 * (precision - 1)) + 0.5) / (10 * (precision - 1)));
   //return (long)(ceil(x * (10 * (precision - 1))) / (10 * (precision - 1)));
@@ -1461,10 +1459,10 @@ LOG_DEBUG("userId = "+QString::number(userId));
   return result;
 }
 
-unsigned int ServicesDb::_tileForPoint(double lat, double lon)
+unsigned int ServicesDb::tileForPoint(double lat, double lon)
 {
-  int lonInt = _round((lon + 180.0) * 65535.0 / 360.0);
-  int latInt = _round((lat + 90.0) * 65535.0 / 180.0);
+  int lonInt = round((lon + 180.0) * 65535.0 / 360.0);
+  int latInt = round((lat + 90.0) * 65535.0 / 180.0);
 
   unsigned int tile = 0;
   int          i;
@@ -2061,25 +2059,25 @@ Tags ServicesDb::unescapeTags(const QVariant &v)
   return result;
 }
 
-void ServicesDb::updateNode(const long id, const double lat, const double lon, const long version,
-                            const Tags& tags)
+void ServicesDb::updateNode(const long id, const double lat, const double lon, const Tags& tags,
+                            const long version)
 {
   switch ( _connectionType )
   {
   case DBTYPE_SERVICES:
-    _updateNode_Services(id, lat, lon, _currChangesetId, version, tags);
+    _updateNode_Services(id, lat, lon, _currChangesetId, tags, version);
     break;
   default:
     throw HootException("UpdateNode on unsupported database type");
   }
 }
 
-void ServicesDb::updateRelation(const long id, const long version, const Tags& tags)
+void ServicesDb::updateRelation(const long id, const Tags& tags, const long version)
 {
   switch ( _connectionType )
   {
   case DBTYPE_SERVICES:
-    _updateRelation_Services(id, _currChangesetId, version, tags);
+    _updateRelation_Services(id, _currChangesetId, tags, version);
     break;
   case DBTYPE_OSMAPI:
     /*
@@ -2093,12 +2091,12 @@ void ServicesDb::updateRelation(const long id, const long version, const Tags& t
   }
 }
 
-void ServicesDb::updateWay(const long id, const long version, const Tags& tags)
+void ServicesDb::updateWay(const long id, const Tags& tags, const long version)
 {
   switch ( _connectionType )
   {
   case DBTYPE_SERVICES:
-    _updateWay_Services(id, _currChangesetId, version, tags);
+    _updateWay_Services(id, _currChangesetId, tags, version);
     break;
   default:
     throw HootException("UpdateWay on unsupported database type");
@@ -2184,6 +2182,7 @@ void ServicesDb::_insertWay_Services(long wayId, long changeSetId, const Tags& t
   QList<QVariant> v;
   v.append((qlonglong)wayId);
   v.append((qlonglong)changeSetId);
+  //v.append(QDateTime::currentDateTime());
   v.append(OsmUtils::currentTimeAsString());
   v.append((qlonglong)1);
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
@@ -2268,6 +2267,7 @@ void ServicesDb::_insertRelation_Services(long relationId, long changeSetId, con
   QList<QVariant> v;
   v.append((qlonglong)relationId);
   v.append((qlonglong)changeSetId);
+  //v.append(QDateTime::currentDateTime());
   v.append(OsmUtils::currentTimeAsString());
   v.append((qlonglong)1);
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
@@ -2282,7 +2282,7 @@ void ServicesDb::_insertRelation_Services(long relationId, long changeSetId, con
 
 
 void ServicesDb::_updateNode_Services(long id, double lat, double lon, long changeSetId,
-                                      long version, const Tags& tags)
+                            const Tags& tags, const long version)
 {
   const long mapId = _currMapId;
   _flushBulkInserts();
@@ -2295,7 +2295,8 @@ void ServicesDb::_updateNode_Services(long id, double lat, double lon, long chan
     _updateNode->prepare(
       "UPDATE " + _getNodesTableName(mapId) +
       " SET latitude=:latitude, longitude=:longitude, changeset_id=:changeset_id, "
-      " timestamp=:timestamp, tile=:tile, version=:version, tags=:tags "
+      " timestamp=:timestamp, tile=:tile, version=:version, "
+      "    tags=:tags "
       "WHERE id=:id");
   }
 
@@ -2306,7 +2307,7 @@ void ServicesDb::_updateNode_Services(long id, double lat, double lon, long chan
   _updateNode->bindValue(":longitude", lon);
   _updateNode->bindValue(":changeset_id", (qlonglong)changeSetId);
   _updateNode->bindValue(":timestamp", OsmUtils::currentTimeAsString());
-  _updateNode->bindValue(":tile", (qlonglong)_tileForPoint(lat, lon));
+  _updateNode->bindValue(":tile", (qlonglong)tileForPoint(lat, lon));
   _updateNode->bindValue(":version", (qlonglong)version);
   _updateNode->bindValue(":tags", _escapeTags(tags));
 
@@ -2321,7 +2322,8 @@ void ServicesDb::_updateNode_Services(long id, double lat, double lon, long chan
   _updateNode->finish();
 }
 
-void ServicesDb::_updateRelation_Services(long id, long changeSetId, long version, const Tags& tags)
+void ServicesDb::_updateRelation_Services(long id, long changeSetId, const Tags& tags,
+                                          const long version)
 {
   const long mapId = _currMapId;
   _flushBulkInserts();
@@ -2338,8 +2340,9 @@ void ServicesDb::_updateRelation_Services(long id, long changeSetId, long versio
 
   _updateRelation->bindValue(":id", (qlonglong)id);
   _updateRelation->bindValue(":changeset_id", (qlonglong)changeSetId);
-  _updateRelation->bindValue(":timestamp", OsmUtils::currentTimeAsString());
-  _updateRelation->bindValue(":version", (qlonglong)version);
+  //_updateNode->bindValue(":timestamp", QDateTime::currentDateTime());
+  _updateNode->bindValue(":timestamp", OsmUtils::currentTimeAsString());
+  _updateNode->bindValue(":version", (qlonglong)version);
   _updateRelation->bindValue(":tags", _escapeTags(tags));
 
   if (_updateRelation->exec() == false)
@@ -2353,7 +2356,8 @@ void ServicesDb::_updateRelation_Services(long id, long changeSetId, long versio
   _updateRelation->finish();
 }
 
-void ServicesDb::_updateWay_Services(long id, long changeSetId, long version, const Tags& tags)
+void ServicesDb::_updateWay_Services(long id, long changeSetId, const Tags& tags,
+                                     const long version)
 {
   const long mapId = _currMapId;
   _flushBulkInserts();
@@ -2370,8 +2374,9 @@ void ServicesDb::_updateWay_Services(long id, long changeSetId, long version, co
 
   _updateWay->bindValue(":id", (qlonglong)id);
   _updateWay->bindValue(":changeset_id", (qlonglong)changeSetId);
-  _updateWay->bindValue(":timestamp", OsmUtils::currentTimeAsString());
-  _updateWay->bindValue(":version", (qlonglong)version);
+  //_updateNode->bindValue(":timestamp", QDateTime::currentDateTime());
+  _updateNode->bindValue(":timestamp", OsmUtils::currentTimeAsString());
+  _updateNode->bindValue(":version", (qlonglong)version);
   _updateWay->bindValue(":tags", _escapeTags(tags));
 
   if (_updateWay->exec() == false)

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHTHRESHOLD_H
 #define MATCHTHRESHOLD_H
@@ -57,6 +57,14 @@ public:
 
   MatchType getType(const Match& m) const { return getType(m.getClassification()); }
   MatchType getType(const MatchClassification& mc) const;
+
+  /**
+   * Returns human readable information about the match type
+   *
+   * @param mc match classification
+   * @return match type information
+   */
+  QString getTypeDetail(const MatchClassification& mc) const;
 
   QString toString() const;
 

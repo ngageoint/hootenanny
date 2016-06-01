@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MergeNearbyNodes.h"
 
 // Hoot
-#include <hoot/core/DistanceUtils.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/index/ClosePointHash.h>

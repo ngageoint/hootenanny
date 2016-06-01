@@ -2,8 +2,7 @@
 	"id": "horizontal_conflation_options",
 	"elem_type": "group",
 	"description": "Cookie Cutter and Horizontal conflation options.",
-	"name": "Cookie Cutter and Horizontal Conflation Options",
-	"required":"true",
+	"name": "Cookie Cutter & Horizontal Options",
 	"members": [
       {
         "id": "reference_override_conflate_enable_old_roads",
@@ -87,12 +86,12 @@
 					}
       },
       {
-        "id": "horizontal_override_osm_writer_include_debug",
+        "id": "horizontal_override_writer_include_debug",
         "elem_type": "bool",
-        "description": "Osm Writer Include Debug",
-        "name": "Osm Writer Include Debug",
+        "description": " Writer Include Debug",
+        "name": "Writer Include Debug",
         "defaultvalue": "false",
-        "hoot_key": "osm.writer.include.debug",
+        "hoot_key": "writer.include.debug",
 		"required":"true"
       },
  
@@ -131,7 +130,6 @@
 				"name":"Cookie Cutter Alpha Shape Buffer",
 				"defaultvalue":"0",
 				"hoot_key":"cookie.cutter.alpha.shape.buffer",
-				"required":"true"
 			},
 			{
 				"id":"horizontal_cookie_cutter_output_buffer",

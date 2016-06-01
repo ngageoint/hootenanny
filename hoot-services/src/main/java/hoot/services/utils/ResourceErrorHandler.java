@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -32,24 +32,21 @@ import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 
+
 /**
  * Handles errors that occur in the service controllers
  */
-public class ResourceErrorHandler
-{
-  /**
-   * Performs post request error processing
-   * 
-   * @param message error message
-   * @param log logger
-   */
-  public static void handleError(final String message, Status httpStatus, Logger log)
-  {
-    log.error(message);
-    throw new WebApplicationException(
-      Response
-        .status(httpStatus)
-        .entity(message)
-        .build());
-  }
+public class ResourceErrorHandler {
+    /**
+     * Performs post request error processing
+     * 
+     * @param message
+     *            error message
+     * @param log
+     *            logger
+     */
+    public static void handleError(final String message, Status httpStatus, Logger log) {
+        log.error(message);
+        throw new WebApplicationException(Response.status(httpStatus).entity(message).build());
+    }
 }

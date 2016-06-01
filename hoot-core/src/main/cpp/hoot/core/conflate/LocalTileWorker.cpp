@@ -48,9 +48,7 @@
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-
-// Qt
-#include <QUuid>
+#include <hoot/core/util/UuidHelper.h>
 
 #include "TileBoundsCalculator.h"
 
@@ -75,9 +73,12 @@ protected:
 
 LocalTileWorker::LocalTileWorker()
 {
+  //LOG_VARD(ConfigOptions().getUuidHelperRepeatable());
+  LOG_VARD(Settings::getInstance().get(ConfigOptions().getUuidHelperRepeatableKey()));
+
   _mapPart = 0;
   _workDir = QDir::tempPath() + "/" +
-      QUuid::createUuid().toString().replace("{", "").replace("}", "") +
+      UuidHelper::createUuid().toString().replace("{", "").replace("}", "") +
       "-LocalTileWorker/";
   QDir().mkdir(_workDir);
 }
@@ -214,7 +215,7 @@ shared_ptr<OsmMap> LocalTileWorker::_readAllParts(QString dir)
     reader.read(dregs, map);
   }
   QDir d(dir);
-  Q_FOREACH(QFileInfo info, d.entryList(filters, QDir::Files))
+  Q_FOREACH(QFileInfo info, d.entryList(filters, QDir::Files, QDir::Name))
   {
     LOG_INFO(info.filePath() << " " << d.absoluteFilePath(info.filePath()) << " " << d.absolutePath() <<
              " " << info.absoluteFilePath());

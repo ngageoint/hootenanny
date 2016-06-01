@@ -1,0 +1,29 @@
+16:22:18.378 INFO  ...re/ops/FindIntersectionsOp.cpp(  66) 0 Relations found.
+16:22:18.381 INFO  ...re/ops/FindIntersectionsOp.cpp(  69) 0 Relations found, after removal
+Reprojecting 0 / 4324         Reprojecting 1000 / 4324         Reprojecting 2000 / 4324         Reprojecting 3000 / 4324         Reprojecting 4000 / 4324         
+16:22:18.427 INFO  ...nflate/DuplicateWayRemover.cpp(  64) Removing duplicate ways...
+16:22:18.662 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
+16:22:18.663 INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
+  Intersection splitter todo: 0       
+16:22:18.684 INFO  ...re/ops/FindIntersectionsOp.cpp(  84) Assuming drives on right.
+16:22:18.759 INFO  ...re/ops/FindIntersectionsOp.cpp( 102) 224 Intersections found.
+16:22:18.778 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
+16:22:18.778 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
+16:22:18.778 INFO  ...nflate/DuplicateWayRemover.cpp(  64) Removing duplicate ways...
+16:22:18.779 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
+16:22:18.779 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
+16:22:18.779 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
+16:22:18.779 INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
+
+16:22:18.779 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
+16:22:18.779 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
+16:22:18.779 INFO  ...e/splitter/DualWaySplitter.cpp(  83) Assuming drives on right.
+16:22:18.779 INFO  ...e/splitter/DualWaySplitter.cpp( 246) Splitting divided ways...
+
+16:22:18.780 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ImpliedDividedMarker
+16:22:18.781 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateNameRemover
+16:22:18.781 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
+16:22:18.781 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmptyAreasVisitor
+16:22:18.781 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+16:22:18.781 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
+Reprojecting 0 / 206         
