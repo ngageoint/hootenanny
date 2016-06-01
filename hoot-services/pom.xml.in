@@ -17,6 +17,8 @@
         <!-- Change to skip unit tests on these modules.  A better way to change these is to use the
         command line.  e.g.  mvn -Dmaven.skip.tests=true -->
         <skip.hoot.services.tests>false</skip.hoot.services.tests>
+        <skip.hoot.services.integrationTests>false</skip.hoot.services.integrationTests>
+        <redirect-test-output-to-file>false</redirect-test-output-to-file>
 
         <spring.version>3.2.4.RELEASE</spring.version>
         <deegree.version>3.3.6</deegree.version>
@@ -142,7 +144,7 @@
                         <exclude>**/*AllTests.class</exclude>
                         <exclude>**/*Suite.class</exclude>
                     </excludes>
-                    <!--redirectTestOutputToFile>${redirect-test-output-to-file}</redirectTestOutputToFile-->
+                    <redirectTestOutputToFile>${redirect-test-output-to-file}</redirectTestOutputToFile>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -165,8 +167,8 @@
                 <configuration>
                     <groups>hoot.services.IntegrationTest</groups>
                     <printSummary>false</printSummary>
-                    <!--skipTests>${skip.hoot.services.integrationTests}</skipTests-->
-                    <!--redirectTestOutputToFile>${redirect-test-output-to-file}</redirectTestOutputToFile-->
+                    <skipTests>${skip.hoot.services.integrationTests}</skipTests>
+                    <redirectTestOutputToFile>${redirect-test-output-to-file}</redirectTestOutputToFile>
                 </configuration>
                 <executions>
                     <execution>
