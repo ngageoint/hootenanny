@@ -713,7 +713,7 @@
                     <!-- outputDirectory>../../../coverage/services</outputDirectory -->
                     <formats>
                         <format>html</format>
-                        <!-- format>xml</format -->
+                        <format>xml</format>
                     </formats>
                     <quiet>true</quiet>
                 </configuration>
