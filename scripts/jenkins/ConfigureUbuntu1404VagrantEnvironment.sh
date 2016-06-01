@@ -11,6 +11,7 @@ set -x
 
 cd $HOOT_HOME
 
+# Database cleaning comes later
 scripts/jenkins/VeryClean.sh
 
 # Maintain vagrant state in the parent directory so very clean will still work.
@@ -58,6 +59,9 @@ if [ $REBUILD_VAGRANT == 'true' ]; then
 else
     time -p vagrant up --provision-with nfs,build,EGD,tomcat,mapnik,hadoop --provider vsphere
 fi
+
+# Clean out the Database
+vagrant ssh -c "cd hoot; source ./SetupEnv.sh; cd hoot-services; make clean-db &> /dev/null"
 
 date +%F > ../BuildDate.txt
 
