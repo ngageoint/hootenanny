@@ -31,22 +31,13 @@
 // Standard Includes
 #include <stdlib.h>
 #include <vector>
-
-#include <boost/random/additive_combine.hpp>
-#include <boost/random/uniform_int.hpp>
-#include <boost/random/variate_generator.hpp>
+//  Boost Includes
 #include <boost/shared_ptr.hpp>
 
-#include "../TgsExport.h"
-
-//#define NEW_RAND
+#include "tgs/TgsExport.h"
 
 namespace Tgs
 {
-  typedef boost::ecuyer1988 random_type;
-  typedef boost::uniform_int<> number_type;
-  typedef boost::variate_generator<random_type&, number_type> generator_type;
-
   class TGS_EXPORT Random
   {
   public:
@@ -89,10 +80,6 @@ namespace Tgs
     unsigned int _seed;
     bool _is_single;
 
-#if defined(NEW_RAND)
-    boost::shared_ptr<random_type> _gen;
-    boost::shared_ptr<generator_type> _rnd;
-#endif
   };
 }
 

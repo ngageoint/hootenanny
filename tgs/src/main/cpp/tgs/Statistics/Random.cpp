@@ -80,27 +80,18 @@ namespace Tgs
 
   int Random::generateInt()
   {
-#if defined(NEW_RAND)
-    return (*_rnd)();
-#else
     if (_is_single)
       return rand();
     else
       return rand_r(&_seed);
-#endif
   }
 
   void Random::seed(unsigned int s)
   {
-#if defined(NEW_RAND)
-    _gen.reset(new random_type(s));
-    _rnd.reset(new generator_type(*_gen, number_type(0, RAND_MAX)));
-#else
     if (_is_single)
       srand(s);
     else
       _seed = s;
-#endif
   }
 
   void Random::seed()
