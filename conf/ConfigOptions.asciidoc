@@ -137,7 +137,7 @@ The maximum allowed size of an OSM changeset written to the OSM API database.
 === changeset.user.id
 
 * Data Type: double
-* Default Value: `-1`
+* Default Value: `1`
 
 The DB user ID for a OSM API DB. Used by changeset writing.
 
