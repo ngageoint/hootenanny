@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 import hoot.services.HootProperties;
 import hoot.services.utils.ResourceErrorHandler;
 
-//import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.JSONParser;
 
 
 @Path("/clipdataset")
@@ -69,15 +69,15 @@ public class ClipDatasetResource extends JobControllerBase {
     /**
      * This service will clip a dataset to a bounding box and create a new
      * output dataset within those dimensions.
-     * 
+     *
      * POST hoot-services/job/clipdataset/execute
-     * 
+     *
      * { "BBOX" :
      * "{"LR":[-77.04813267598544,38.89292259454727],"UL":[-77.04315011486628,38.89958152667718]}",
      * //The upper left and lower right of the bounding box to clip the dataset
      * "INPUT_NAME" : "DcRoads", //The name of the dataset to be clipped
      * "OUTPUT_NAME" : "DcRoads_Clip" //The output name of the new dataset. }
-     * 
+     *
      * @param params
      *            JSON input params; see description
      * @return a job id
@@ -89,15 +89,34 @@ public class ClipDatasetResource extends JobControllerBase {
     public Response process(String params) {
         String jobId = UUID.randomUUID().toString();
         try {
-            // JSONParser pars = new JSONParser();
-            // JSONObject oParams = (JSONObject)pars.parse(params);
-            // String clipOutputName = oParams.get("OUTPUT_NAME").toString();
+            JSONParser pars = new JSONParser();
+            JSONObject oParams = (JSONObject)pars.parse(params);
+            String clipOutputName = oParams.get("OUTPUT_NAME").toString();
 
             JSONArray commandArgs = parseParams(params);
             JSONObject clipCommand = _createMakeScriptJobReq(commandArgs);
 
+            // Density Raster
+            JSONArray rasterTilesArgs = new JSONArray();
+            JSONObject rasterTilesparam = new JSONObject();
+            rasterTilesparam.put("value", clipOutputName);
+            rasterTilesparam.put("paramtype", String.class.getName());
+            rasterTilesparam.put("isprimitivetype", "false");
+            rasterTilesArgs.add(rasterTilesparam);
+
+            rasterTilesparam = new JSONObject();
+            rasterTilesparam.put("value", null);
+            rasterTilesparam.put("paramtype", String.class.getName());
+            rasterTilesparam.put("isprimitivetype", "false");
+            rasterTilesArgs.add(rasterTilesparam);
+
+            JSONObject ingestOSMResource = _createReflectionJobReq(rasterTilesArgs,
+                           "hoot.services.controllers.ingest.RasterToTilesService",
+                           "ingestOSMResourceDirect");
+
             JSONArray jobArgs = new JSONArray();
             jobArgs.add(clipCommand);
+            jobArgs.add(ingestOSMResource);
 
             postChainJobRquest(jobId, jobArgs.toJSONString());
         }
