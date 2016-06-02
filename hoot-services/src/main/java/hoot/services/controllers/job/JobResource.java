@@ -74,9 +74,9 @@ import hoot.services.validators.job.JobFieldsValidator;
 
 /**
  * @author Jong Choi
- *
+ * 
  *         Servlet class for handling job execution internally.
- *
+ * 
  */
 @Path("")
 public class JobResource {
@@ -359,7 +359,7 @@ public class JobResource {
 
     /**
      * Processes requested job. Parameter is in String in JSON format
-     *
+     * 
      * @throws SQLException
      */
     @POST
@@ -384,7 +384,7 @@ public class JobResource {
      * process job worker thread. Spawns this thread to return right away to
      * client while keeping open thread count low. Job Status will be updated
      * while running as thread.
-     *
+     * 
      */
     public class processJobWorkerThread implements Runnable {
         private String jobId;
@@ -413,9 +413,9 @@ public class JobResource {
                 JSONParser parser = new JSONParser();
                 command = (JSONObject) parser.parse(params);
 
-                log.debug(JsonUtils.objectToJson(command));
+                //log.debug(JsonUtils.objectToJson(command));
                 JSONObject result = _processJob(jobId, command);
-                log.debug(JsonUtils.objectToJson(result));
+                //log.debug(JsonUtils.objectToJson(result));
 
                 String warnings = null;
                 Object oWarn = result.get("warnings");
@@ -423,24 +423,20 @@ public class JobResource {
                     warnings = oWarn.toString();
                 }
                 String statusDetail = "";
-                if (warnings != null)
-                {
-                  statusDetail += "WARNINGS: " + warnings;
+                if (warnings != null) {
+                    statusDetail += "WARNINGS: " + warnings;
                 }
-                
+
                 Map<String, String> params = paramsToMap(command);
-                if (params.containsKey("writeStdOutToStatusDetail") && 
-                    Boolean.parseBoolean(params.get("writeStdOutToStatusDetail").toString()))
-                {
+                if (params.containsKey("writeStdOutToStatusDetail")
+                        && Boolean.parseBoolean(params.get("writeStdOutToStatusDetail").toString())) {
                     statusDetail += "INFO: " + result.get("stdout").toString();
                 }
-                
-                if (StringUtils.trimToNull(statusDetail) != null)
-                {
+
+                if (StringUtils.trimToNull(statusDetail) != null) {
                     jobStatusManager.setComplete(jobId, statusDetail);
                 }
-                else
-                {
+                else {
                     jobStatusManager.setComplete(jobId);
                 }
             }
@@ -475,9 +471,8 @@ public class JobResource {
         }
 
     }
-    
-    private static Map<String, String> paramsToMap(JSONObject command)
-    {
+
+    private static Map<String, String> paramsToMap(JSONObject command) {
         JSONArray paramsList = (JSONArray) command.get("params");
 
         Map<String, String> paramsMap = new HashMap<String, String>();
@@ -501,9 +496,9 @@ public class JobResource {
 
         String resourceName = command.get("caller").toString();
         JobFieldsValidator validator = new JobFieldsValidator(resourceName);
-        
+
         Map<String, String> paramsMap = paramsToMap(command);
-        
+
         List<String> missingList = new ArrayList<String>();
         if (!validator.validateRequiredExists(paramsMap, missingList)) {
             log.error("Missing following required field(s): " + missingList.toString());
@@ -515,7 +510,7 @@ public class JobResource {
 
     /**
      * Raw call to terminate job
-     *
+     * 
      * @throws Exception
      */
     protected void _terminateJob(String childId) throws Exception {
@@ -528,10 +523,10 @@ public class JobResource {
     public String terminateJob(String jobId, String mapId) throws Exception {
         /*
          * Example job status
-         *
+         * 
          * {"jobId":"dae4be8a-4964-4a9a-8d7d-4e8e738a5b58","statusDetail":
-         * "{\"chainjobstatus\":\"dae4be8a-4964-4a9a-8d7d-4e8e738a5b58\",
-         * \"children\":[{\"id\":\"e16282c6-2432-4a45-a582-b0dd3f2f0d9f\",\"detail\":\"success\",\"status\":\"complete\"
+         * "{\"chainjobstatus\":\"dae4be8a-4964-4a9a-8d7d-4e8e738a5b58\", \
+         * "children\":[{\"id\":\"e16282c6-2432-4a45-a582-b0dd3f2f0d9f\",\"detail\":\"success\",\"status\":\"complete\"
          * }, {\
          * "id\":\"66d53cfc-29b6-49eb-9459-9a74794d34b2\",\"detail\":\"success\",\"status\":\"complete\"
          * }, {\
