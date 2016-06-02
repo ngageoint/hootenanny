@@ -89,7 +89,7 @@ bool OsmJsonReader::isSupported(QString url)
   {
     QString filename = myUrl.toLocalFile();
 
-    if (QFile::exists(filename))
+    if (QFile::exists(filename) && url.endsWith(".json", Qt::CaseInsensitive))
       return true;
   }
 
@@ -110,6 +110,9 @@ void OsmJsonReader::open(QString url)
 {
   try
   {
+    _isFile = false;
+    _isWeb = false;
+
     // Bail out if unsupported
     if (!isSupported(url))
       return;
@@ -131,7 +134,7 @@ void OsmJsonReader::open(QString url)
   {
     ostringstream oss;
     oss << "Exception opening URL (" << url << "): " << ex.what();
-    throw HootException(QString::fromStdString(oss.str()));
+    throw HootException(QString("Exception opening URL (%1): %2").arg(url).arg(ex.what()));
   }
 }
 
@@ -156,6 +159,7 @@ void OsmJsonReader::read(shared_ptr<OsmMap> map)
   }
   else
   {
+    // Do HTTP GET request
     boost::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
     QNetworkRequest request(_url);
     boost::shared_ptr<QNetworkReply> pReply(pNAM->get(request));
@@ -165,8 +169,17 @@ void OsmJsonReader::read(shared_ptr<OsmMap> map)
     QObject::connect(pReply.get(), SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
 
+    // Check error status on our reply
+    if (QNetworkReply::NoError != pReply->error())
+    {
+      QString errMsg = pReply->errorString();
+      throw HootException(QString("Network error for GET request (%1): %2").arg(_url.toString()).arg(errMsg));
+    }
+
     QByteArray data = pReply->readAll();
     QString jsonStr = QString::fromAscii(data.data());
+
+    // This will throw a hoot exception if JSON is invalid
     _loadJSON(jsonStr);
     _parseOverpassJson(map);
   }
@@ -197,7 +210,7 @@ void OsmJsonReader::_loadJSON(QString jsonStr)
   {
     QString reason = QString::fromStdString(e.message());
     QString line = QString::number(e.line());
-    throw HootException("Error parsing JSON " + reason + "(line " + line + ")");
+    throw HootException(QString("Error parsing JSON: %1 (line %2)").arg(reason).arg(line));
   }
   catch (std::exception e)
   {

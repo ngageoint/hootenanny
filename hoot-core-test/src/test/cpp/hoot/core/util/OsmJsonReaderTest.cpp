@@ -347,7 +347,6 @@ public:
     CPPUNIT_ASSERT(uut.isSupported(urlFile));
     uut.open(urlFile);
     uut.read(pMap2);
-
     // Not failure == success in this case!
   }
 }; // class OsmJsonReaderTest
