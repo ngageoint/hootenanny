@@ -172,3 +172,4 @@ vagrant*-*
 MingsSuperAwesomePrompt.sh
 id_rsa.pub
 coverage/
+hoot-services/db.properties
