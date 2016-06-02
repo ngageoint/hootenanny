@@ -51,6 +51,7 @@ class ServiceOsmApiDbTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbTest);
   CPPUNIT_TEST(runOpenTest);
   CPPUNIT_TEST(runSelectElementsTest);
+  CPPUNIT_TEST(runToOsmApiCoordConvertTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -326,6 +327,19 @@ public:
     }
     LOG_VARD(ctr);
     CPPUNIT_ASSERT_EQUAL(ids.size(), ctr);
+  }
+
+  void runToOsmApiCoordConvertTest()
+  {
+    //convert precision from 0.01 nanodegrees to 100 nanodegrees
+
+    double hootApiCoordValue = 38.85433192782;
+    long osmApiDbCoordValue = OsmApiDb::toOsmApiDbCoord(hootApiCoordValue);
+    CPPUNIT_ASSERT_EQUAL(osmApiDbCoordValue, (long)388543319);
+
+    hootApiCoordValue = 38.85433199782;
+    osmApiDbCoordValue = OsmApiDb::toOsmApiDbCoord(hootApiCoordValue);
+    CPPUNIT_ASSERT_EQUAL(osmApiDbCoordValue, (long)388543320);
   }
 };
 

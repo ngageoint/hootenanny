@@ -406,14 +406,4 @@ long ApiDb::round(double x)
   return (long)(x + 0.5);
 }
 
-long ApiDb::round(double x, int precision)
-{
-  return (long)(floor(x * (10 * (precision - 1)) + 0.5) / (10 * (precision - 1)));
-}
-
-long ApiDb::round2(double x, int precision)
-{
-  return (long)(floor(x * (pow(10, precision - 1)) + 0.5) / (pow(10, precision - 1)));
-}
-
 }

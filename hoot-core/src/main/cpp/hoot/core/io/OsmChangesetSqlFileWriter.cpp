@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -108,10 +108,10 @@ void OsmChangesetSqlFileWriter::_updateChangesetBounds()
   _outputSql.write(
     QString("UPDATE changesets SET min_lat=%2, max_lat=%3, min_lon=%4, max_lon=%5 WHERE id=%1;\n")
       .arg(_changesetId)
-      .arg((qlonglong)ApiDb::round(_changesetBounds.getMinY() * ApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)ApiDb::round(_changesetBounds.getMaxY() * ApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)ApiDb::round(_changesetBounds.getMinX() * ApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)ApiDb::round(_changesetBounds.getMaxX() * ApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMinY()))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMaxY()))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMinX()))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMaxX()))
     .toUtf8());
 
    _changesetBounds.init();
@@ -238,8 +238,8 @@ QString OsmChangesetSqlFileWriter::_getUpdateValuesNodeStr(ConstNodePtr node) co
   return
     QString("latitude=%2, longitude=%3, changeset_id=%4, visible=%5, \"timestamp\"=now(), tile=%6, version=%7 WHERE id=%1;\n")
       .arg(node->getId())
-      .arg((qlonglong)ApiDb::round(node->getY() * ApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)ApiDb::round(node->getX() * ApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(node->getY()))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(node->getX()))
       .arg(node->getChangeset())
       .arg(_getVisibleStr(node->getVisible()))
       .arg(ApiDb::tileForPoint(node->getY(), node->getX()))
@@ -420,8 +420,8 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesNodeStr(ConstNodePtr node) co
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
       "tile, version) VALUES (%1, %2, %3, %4, %5, now(), %6, %7);\n")
       .arg(node->getId())
-      .arg((qlonglong)ApiDb::round(node->getY() * ApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)ApiDb::round(node->getX() * ApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(node->getY()))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(node->getX()))
       .arg(node->getChangeset())
       .arg(_getVisibleStr(node->getVisible()))
       .arg(ApiDb::tileForPoint(node->getY(), node->getX()))

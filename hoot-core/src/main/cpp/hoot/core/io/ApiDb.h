@@ -191,13 +191,6 @@ public:
   QSqlDatabase getDB() { return _db; }
 
   static long round(double x);
-  /**
-   * Valid for precisions of two or greater only.
-   */
-  static long round(double x, int precision);
-
-  //currently, for testing purposes only
-  static long round2(double x, int precision);
 
   /**
    * Calculates the QuadTile for a point.
