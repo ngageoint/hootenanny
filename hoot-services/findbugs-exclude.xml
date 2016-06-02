@@ -1,0 +1,17 @@
+<FindBugsFilter>
+
+    <!-- Match all XYZ violations. -->
+<!--
+    <Match>
+        <Bug code="XYZ" />
+    </Match>
+-->
+
+    <!-- All bugs in test classes, except for JUnit-specific bugs -->
+<!--
+    <Match>
+        <Class name="~.*\.*Test" />
+    </Match>
+-->
+
+</FindBugsFilter>

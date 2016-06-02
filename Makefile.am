@@ -126,9 +126,6 @@ services-clean-coverage:
 services-coverage:
 	$(MAKE) -f Makefile.old services-coverage
 
-conf/DatabaseConfig.sh:
-	$(MAKE) -f Makefile.old conf/DatabaseConfig.sh
-
 # Use some tar fanciness to grab all the files in conf, plugins, translations and scripts
 install-other:
 	mkdir -p tmp

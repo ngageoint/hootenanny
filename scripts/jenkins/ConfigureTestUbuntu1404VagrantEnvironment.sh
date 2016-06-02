@@ -11,6 +11,7 @@ set -x
 
 cd $HOOT_HOME
 
+# Just wipe out the files. Db cleaning comes later
 scripts/jenkins/VeryClean.sh
 
 # Maintain vagrant state in the parent directory so very clean will still work.
@@ -35,10 +36,6 @@ cp LocalConfig.pri.orig LocalConfig.pri
 #sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri                 
 #sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri   
 
-
-# Setup the database config. We need to do this since we are not running the VagrantBuild.sh script
-cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
-
 # Make sure we are not running
 vagrant halt
 
@@ -62,6 +59,9 @@ if [ $REBUILD_VAGRANT == 'true' ]; then
 else
     time -p vagrant up --provision-with nfs,hadoop --provider vsphere
 fi
+
+# Clean out the Database
+vagrant ssh -c "cd hoot; source ./SetupEnv.sh; cd hoot-services; make clean-db &> /dev/null"
 
 date +%F > ../BuildDate.txt
 
