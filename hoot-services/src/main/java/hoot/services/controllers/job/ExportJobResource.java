@@ -250,6 +250,10 @@ public class ExportJobResource extends JobControllerBase {
         JSONObject arg = new JSONObject();
         arg.put("temppath", HootProperties.getProperty("tempOutputPath"));
         commandArgs.add(arg);
+        
+        arg = new JSONObject();
+        arg.put("writeStdOutToStatusDetail", "true");
+        commandArgs.add(arg);
 
         final Map conflatedMap = getConflatedMap(commandArgs, conn);
 

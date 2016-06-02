@@ -51,6 +51,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -66,6 +67,7 @@ import hoot.services.job.JobStatusManager;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.nativeInterfaces.JobExecutionManager;
 import hoot.services.nativeInterfaces.NativeInterfaceException;
+import hoot.services.utils.JsonUtils;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.validators.job.JobFieldsValidator;
 
@@ -411,19 +413,35 @@ public class JobResource {
                 JSONParser parser = new JSONParser();
                 command = (JSONObject) parser.parse(params);
 
+                log.debug(JsonUtils.objectToJson(command));
                 JSONObject result = _processJob(jobId, command);
+                log.debug(JsonUtils.objectToJson(result));
 
                 String warnings = null;
                 Object oWarn = result.get("warnings");
                 if (oWarn != null) {
                     warnings = oWarn.toString();
                 }
-
-                if (warnings == null) {
-                    jobStatusManager.setComplete(jobId);
+                String statusDetail = "";
+                if (warnings != null)
+                {
+                  statusDetail += "WARNINGS: " + warnings;
                 }
-                else {
-                    jobStatusManager.setComplete(jobId, "WARNINGS: " + warnings);
+                
+                Map<String, String> params = paramsToMap(command);
+                if (params.containsKey("writeStdOutToStatusDetail") && 
+                    Boolean.parseBoolean(params.get("writeStdOutToStatusDetail").toString()))
+                {
+                    statusDetail += "INFO: " + result.get("stdout").toString();
+                }
+                
+                if (StringUtils.trimToNull(statusDetail) != null)
+                {
+                    jobStatusManager.setComplete(jobId, statusDetail);
+                }
+                else
+                {
+                    jobStatusManager.setComplete(jobId);
                 }
             }
             catch (ParseException e) {
@@ -457,13 +475,9 @@ public class JobResource {
         }
 
     }
-
-    protected JSONObject _processJob(String jobId, JSONObject command) throws Exception {
-        log.debug("processing Job: " + jobId);
-        command.put("jobId", jobId);
-
-        String resourceName = command.get("caller").toString();
-        JobFieldsValidator validator = new JobFieldsValidator(resourceName);
+    
+    private static Map<String, String> paramsToMap(JSONObject command)
+    {
         JSONArray paramsList = (JSONArray) command.get("params");
 
         Map<String, String> paramsMap = new HashMap<String, String>();
@@ -478,6 +492,18 @@ public class JobResource {
             }
 
         }
+        return paramsMap;
+    }
+
+    protected JSONObject _processJob(String jobId, JSONObject command) throws Exception {
+        log.debug("processing Job: " + jobId);
+        command.put("jobId", jobId);
+
+        String resourceName = command.get("caller").toString();
+        JobFieldsValidator validator = new JobFieldsValidator(resourceName);
+        
+        Map<String, String> paramsMap = paramsToMap(command);
+        
         List<String> missingList = new ArrayList<String>();
         if (!validator.validateRequiredExists(paramsMap, missingList)) {
             log.error("Missing following required field(s): " + missingList.toString());
