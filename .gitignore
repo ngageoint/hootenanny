@@ -144,7 +144,6 @@ customscript/
 */buildInfo.json/*
 **/buildInfo.json/*.*
 scripts/MakeHootRelease.sh
-hoot-services/pom.xml
 hoot-services/src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml
 BigReport.asciidoc
 BigReport.pdf
