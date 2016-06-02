@@ -95,6 +95,8 @@ Feature: Review Bookmarks
         And I click the "Delete (1)" context menu item
         And I accept the alert
         And I accept the alert
-        Then I wait 30 "seconds" to not see "mergedBookmarkTest"
+        #Then I wait 30 "seconds" to not see "mergedBookmarkTest"
         Then I click on the "Review Bookmarks" option in the "settingsSidebar"
         And I should not see "Cucumber Bookmark"
+        Then I click on the "Datasets" option in the "settingsSidebar"
+        And I should not see "mergedBookmarkTest"
