@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -285,9 +285,10 @@ void OsmChangesetSqlFileWriter::_createChangeSet()
   _changesetId = _db.getNextId("changesets");
   _outputSql.write(
     QString("INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES "
-            "(%1, %2, now(), now());\n")
+            "(%1, %2, %3, %3);\n")
       .arg(_changesetId)
       .arg(ConfigOptions().getChangesetUserId())
+      .arg(OsmApiDb::TIMESTAMP_FUNCTION)
     .toUtf8());
   _outputSql.write(
     QString("INSERT INTO changeset_tags (changeset_id, k, v) VALUES "
@@ -398,24 +399,26 @@ QString OsmChangesetSqlFileWriter::_getUpdateValuesStr(ConstElementPtr element) 
 QString OsmChangesetSqlFileWriter::_getUpdateValuesNodeStr(ConstNodePtr node) const
 {
   return
-    QString("latitude=%2, longitude=%3, changeset_id=%4, visible=%5, \"timestamp\"=now(), tile=%6, version=%7 WHERE id=%1;\n")
+    QString("latitude=%2, longitude=%3, changeset_id=%4, visible=%5, \"timestamp\"=%8, tile=%6, version=%7 WHERE id=%1;\n")
       .arg(node->getId())
       .arg((qlonglong)ApiDb::round(node->getY() * ApiDb::COORDINATE_SCALE, 7))
       .arg((qlonglong)ApiDb::round(node->getX() * ApiDb::COORDINATE_SCALE, 7))
       .arg(node->getChangeset())
       .arg(_getVisibleStr(node->getVisible()))
       .arg(ApiDb::tileForPoint(node->getY(), node->getX()))
-      .arg(node->getVersion());
+      .arg(node->getVersion())
+      .arg(OsmApiDb::TIMESTAMP_FUNCTION);
 }
 
 QString OsmChangesetSqlFileWriter::_getUpdateValuesWayOrRelationStr(ConstElementPtr element) const
 {
   return
-    QString("changeset_id=%2, visible=%3, \"timestamp\"=now(), version=%4 WHERE id=%1;\n")
+    QString("changeset_id=%2, visible=%3, \"timestamp\"=%5, version=%4 WHERE id=%1;\n")
       .arg(element->getId())
       .arg(element->getChangeset())
       .arg(_getVisibleStr(element->getVisible()))
-      .arg(element->getVersion());
+      .arg(element->getVersion())
+      .arg(OsmApiDb::TIMESTAMP_FUNCTION);
 }
 
 void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
@@ -580,25 +583,27 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesNodeStr(ConstNodePtr node) co
 {
   return
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
-      "tile, version) VALUES (%1, %2, %3, %4, %5, now(), %6, %7);\n")
+      "tile, version) VALUES (%1, %2, %3, %4, %5, %8, %6, %7);\n")
       .arg(node->getId())
       .arg((qlonglong)ApiDb::round(node->getY() * ApiDb::COORDINATE_SCALE, 7))
       .arg((qlonglong)ApiDb::round(node->getX() * ApiDb::COORDINATE_SCALE, 7))
       .arg(node->getChangeset())
       .arg(_getVisibleStr(node->getVisible()))
       .arg(ApiDb::tileForPoint(node->getY(), node->getX()))
-      .arg(node->getVersion());
+      .arg(node->getVersion())
+      .arg(OsmApiDb::TIMESTAMP_FUNCTION);
 }
 
 QString OsmChangesetSqlFileWriter::_getInsertValuesWayOrRelationStr(ConstElementPtr element) const
 {
   return
     QString("changeset_id, visible, \"timestamp\", "
-      "version) VALUES (%1, %2, %3, now(), %4);\n")
+      "version) VALUES (%1, %2, %3, %5, %4);\n")
       .arg(element->getId())
       .arg(element->getChangeset())
       .arg(_getVisibleStr(element->getVisible()))
-      .arg(element->getVersion());
+      .arg(element->getVersion())
+      .arg(OsmApiDb::TIMESTAMP_FUNCTION);
 }
 
 void OsmChangesetSqlFileWriter::_createTags(ConstElementPtr element)
