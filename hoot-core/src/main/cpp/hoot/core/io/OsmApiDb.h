@@ -129,6 +129,16 @@ public:
    */
   shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
 
+  /**
+   * Converts a node coordinate from how its stored in a Hootenanny API database (0.01 nanodegrees
+   * as double precision floating point) to how its stored in an OSM API database (100 nanodegrees
+   * as 64 bit int)
+   *
+   * @param x the coordinate to convert
+   * @return a converted coordinate
+   */
+  static long toOsmApiDbCoord(const double x);
+
 private:
 
   bool _inTransaction;

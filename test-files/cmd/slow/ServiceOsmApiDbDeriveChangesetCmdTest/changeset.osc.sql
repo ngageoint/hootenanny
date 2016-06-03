@@ -1,7 +1,11 @@
 INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (1, 1, (now() at time zone 'utc'), (now() at time zone 'utc'));
 INSERT INTO changeset_tags (changeset_id, k, v) VALUES (1, 'written_by', 'Hootenanny');
 /* delete node -1669793*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669793, 388549321, -1048979050, 1, false, (now() at time zone 'utc'), 1329019012, 4);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669793, 388549321, -1048979049, 1, false, now(), 1329019012, 4);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669793;
 DELETE FROM node_tags WHERE node_id = -1669793;
 DELETE FROM current_way_nodes WHERE node_id=-1669793;
@@ -15,14 +19,22 @@ DELETE FROM current_way_nodes WHERE node_id=-1669791;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669791;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669791;
 /* delete node -1669789*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669789, 388540541, -1049024316, 1, false, (now() at time zone 'utc'), 1329018926, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669789, 388540541, -1049024315, 1, false, now(), 1329018926, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669789;
 DELETE FROM node_tags WHERE node_id = -1669789;
 DELETE FROM current_way_nodes WHERE node_id=-1669789;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669789;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669789;
 /* delete node -1669787*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669787, 388541298, -1049023065, 1, false, (now() at time zone 'utc'), 1329018926, 4);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669787, 388541299, -1049023064, 1, false, now(), 1329018926, 4);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669787;
 DELETE FROM node_tags WHERE node_id = -1669787;
 DELETE FROM current_way_nodes WHERE node_id=-1669787;
@@ -36,35 +48,55 @@ DELETE FROM current_way_nodes WHERE node_id=-1669785;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669785;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=3 WHERE id=-1669785;
 /* delete node -1669783*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669783, 388548207, -1049008079, 1, false, (now() at time zone 'utc'), 1329018926, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669783, 388548207, -1049008078, 1, false, now(), 1329018926, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669783;
 DELETE FROM node_tags WHERE node_id = -1669783;
 DELETE FROM current_way_nodes WHERE node_id=-1669783;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669783;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669783;
 /* delete node -1669781*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669781, 388549289, -1049005253, 1, false, (now() at time zone 'utc'), 1329018926, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669781, 388549290, -1049005252, 1, false, now(), 1329018926, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669781;
 DELETE FROM node_tags WHERE node_id = -1669781;
 DELETE FROM current_way_nodes WHERE node_id=-1669781;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669781;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669781;
 /* delete node -1669779*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669779, 388548514, -1049005693, 1, false, (now() at time zone 'utc'), 1329018926, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669779, 388548514, -1049005692, 1, false, now(), 1329018926, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669779;
 DELETE FROM node_tags WHERE node_id = -1669779;
 DELETE FROM current_way_nodes WHERE node_id=-1669779;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669779;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669779;
 /* delete node -1669777*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669777, 388549073, -1048961823, 1, false, (now() at time zone 'utc'), 1329019012, 3);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669777, 388549073, -1048961822, 1, false, now(), 1329019012, 3);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669777;
 DELETE FROM node_tags WHERE node_id = -1669777;
 DELETE FROM current_way_nodes WHERE node_id=-1669777;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669777;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=3 WHERE id=-1669777;
 /* delete node -1669775*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669775, 388549019, -1048964394, 1, false, (now() at time zone 'utc'), 1329019012, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669775, 388549019, -1048964393, 1, false, now(), 1329019012, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669775;
 DELETE FROM node_tags WHERE node_id = -1669775;
 DELETE FROM current_way_nodes WHERE node_id=-1669775;
@@ -78,21 +110,33 @@ DELETE FROM current_way_nodes WHERE node_id=-1669773;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669773;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669773;
 /* delete node -1669771*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669771, 388547197, -1048973219, 1, false, (now() at time zone 'utc'), 1329019012, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669771, 388547197, -1048973218, 1, false, now(), 1329019012, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669771;
 DELETE FROM node_tags WHERE node_id = -1669771;
 DELETE FROM current_way_nodes WHERE node_id=-1669771;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669771;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669771;
 /* delete node -1669769*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669769, 388546042, -1048977759, 1, false, (now() at time zone 'utc'), 1329019012, 3);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669769, 388546043, -1048977758, 1, false, now(), 1329019012, 3);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669769;
 DELETE FROM node_tags WHERE node_id = -1669769;
 DELETE FROM current_way_nodes WHERE node_id=-1669769;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669769;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=3 WHERE id=-1669769;
 /* delete node -1669767*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669767, 388544293, -1048980654, 1, false, (now() at time zone 'utc'), 1329019012, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669767, 388544293, -1048980653, 1, false, now(), 1329019012, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669767;
 DELETE FROM node_tags WHERE node_id = -1669767;
 DELETE FROM current_way_nodes WHERE node_id=-1669767;
@@ -106,21 +150,33 @@ DELETE FROM current_way_nodes WHERE node_id=-1669765;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669765;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669765;
 /* delete node -1669763*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669763, 388541767, -1048987070, 1, false, (now() at time zone 'utc'), 1329019012, 3);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669763, 388541768, -1048987069, 1, false, now(), 1329019012, 3);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669763;
 DELETE FROM node_tags WHERE node_id = -1669763;
 DELETE FROM current_way_nodes WHERE node_id=-1669763;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669763;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=3 WHERE id=-1669763;
 /* delete node -1669761*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669761, 388541335, -1048988900, 1, false, (now() at time zone 'utc'), 1329019012, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669761, 388541335, -1048988899, 1, false, now(), 1329019012, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669761;
 DELETE FROM node_tags WHERE node_id = -1669761;
 DELETE FROM current_way_nodes WHERE node_id=-1669761;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669761;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669761;
 /* delete node -1669759*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669759, 388539585, -1048989155, 1, false, (now() at time zone 'utc'), 1329019012, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669759, 388539585, -1048989154, 1, false, now(), 1329019012, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669759;
 DELETE FROM node_tags WHERE node_id = -1669759;
 DELETE FROM current_way_nodes WHERE node_id=-1669759;
@@ -134,21 +190,33 @@ DELETE FROM current_way_nodes WHERE node_id=-1669757;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669757;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=5 WHERE id=-1669757;
 /* delete node -1669755*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669755, 388536194, -1048987070, 1, false, (now() at time zone 'utc'), 1329019009, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669755, 388536194, -1048987069, 1, false, now(), 1329019009, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669755;
 DELETE FROM node_tags WHERE node_id = -1669755;
 DELETE FROM current_way_nodes WHERE node_id=-1669755;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669755;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669755;
 /* delete node -1669753*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669753, 388535508, -1048988321, 1, false, (now() at time zone 'utc'), 1329019009, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669753, 388535509, -1048988320, 1, false, now(), 1329019009, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669753;
 DELETE FROM node_tags WHERE node_id = -1669753;
 DELETE FROM current_way_nodes WHERE node_id=-1669753;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669753;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669753;
 /* delete node -1669751*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669751, 388535689, -1048990568, 1, false, (now() at time zone 'utc'), 1329019009, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669751, 388535689, -1048990567, 1, false, now(), 1329019009, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669751;
 DELETE FROM node_tags WHERE node_id = -1669751;
 DELETE FROM current_way_nodes WHERE node_id=-1669751;
@@ -176,7 +244,11 @@ DELETE FROM current_way_nodes WHERE node_id=-1669745;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669745;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669745;
 /* delete node -1669743*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669743, 388532424, -1048996868, 1, false, (now() at time zone 'utc'), 1329018923, 6);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669743, 388532424, -1048996867, 1, false, now(), 1329018923, 6);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669743;
 DELETE FROM node_tags WHERE node_id = -1669743;
 DELETE FROM current_way_nodes WHERE node_id=-1669743;
@@ -197,35 +269,55 @@ DELETE FROM current_way_nodes WHERE node_id=-1669739;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669739;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=4 WHERE id=-1669739;
 /* delete node -1669737*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669737, 388539525, -1048996840, 1, false, (now() at time zone 'utc'), 1329018926, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669737, 388539526, -1048996839, 1, false, now(), 1329018926, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669737;
 DELETE FROM node_tags WHERE node_id = -1669737;
 DELETE FROM current_way_nodes WHERE node_id=-1669737;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669737;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669737;
 /* delete node -1669735*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669735, 388542618, -1048997171, 1, false, (now() at time zone 'utc'), 1329018926, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669735, 388542618, -1048997170, 1, false, now(), 1329018926, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669735;
 DELETE FROM node_tags WHERE node_id = -1669735;
 DELETE FROM current_way_nodes WHERE node_id=-1669735;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669735;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669735;
 /* delete node -1669733*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669733, 388545785, -1048997171, 1, false, (now() at time zone 'utc'), 1329018926, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669733, 388545785, -1048997170, 1, false, now(), 1329018926, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669733;
 DELETE FROM node_tags WHERE node_id = -1669733;
 DELETE FROM current_way_nodes WHERE node_id=-1669733;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669733;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669733;
 /* delete node -1669731*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669731, 388549614, -1048997124, 1, false, (now() at time zone 'utc'), 1329018926, 2);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669731, 388549614, -1048997123, 1, false, now(), 1329018926, 2);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669731;
 DELETE FROM node_tags WHERE node_id = -1669731;
 DELETE FROM current_way_nodes WHERE node_id=-1669731;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669731;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669731;
 /* delete node -1669729*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669729, 388542599, -1049005795, 1, false, (now() at time zone 'utc'), 1329018926, 3);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (-1669729, 388542600, -1049005794, 1, false, now(), 1329018926, 3);
+>>>>>>> 595
 DELETE FROM current_node_tags WHERE node_id = -1669729;
 DELETE FROM node_tags WHERE node_id = -1669729;
 DELETE FROM current_way_nodes WHERE node_id=-1669729;
@@ -253,11 +345,19 @@ DELETE FROM current_way_nodes WHERE node_id=-1669723;
 DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = -1669723;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=-1669723;
 /* create node 1*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 388532641, -1048997533, 1, true, (now() at time zone 'utc'), 1329018923, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 388532641, -1048997533, 1, true, (now() at time zone 'utc'), 1329018923, 1);
 /* create node 2*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (2, 388541669, -1048997069, 1, true, (now() at time zone 'utc'), 1329018926, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (2, 388541669, -1048997069, 1, true, (now() at time zone 'utc'), 1329018926, 1);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 388532642, -1048997532, 1, true, now(), 1329018923, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 388532642, -1048997532, 1, true, now(), 1329018923, 1);
+/* create node 2*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (2, 388541670, -1048997069, 1, true, now(), 1329018926, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (2, 388541670, -1048997069, 1, true, now(), 1329018926, 1);
+>>>>>>> 595
 /* create node 3*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (3, 388540851, -1049014476, 1, true, (now() at time zone 'utc'), 1329018926, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (3, 388540851, -1049014476, 1, true, (now() at time zone 'utc'), 1329018926, 1);
@@ -265,6 +365,7 @@ INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "time
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (4, 388542471, -1049010788, 1, true, (now() at time zone 'utc'), 1329018926, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (4, 388542471, -1049010788, 1, true, (now() at time zone 'utc'), 1329018926, 1);
 /* create node 5*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (5, 388542599, -1049005795, 1, true, (now() at time zone 'utc'), 1329018926, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (5, 388542599, -1049005795, 1, true, (now() at time zone 'utc'), 1329018926, 1);
 /* create node 6*/
@@ -279,6 +380,22 @@ INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "time
 /* create node 9*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (9, 388539525, -1048996840, 1, true, (now() at time zone 'utc'), 1329018926, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (9, 388539525, -1048996840, 1, true, (now() at time zone 'utc'), 1329018926, 1);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (5, 388542600, -1049005794, 1, true, now(), 1329018926, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (5, 388542600, -1049005794, 1, true, now(), 1329018926, 1);
+/* create node 6*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (6, 388549614, -1048997123, 1, true, now(), 1329018926, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (6, 388549614, -1048997123, 1, true, now(), 1329018926, 1);
+/* create node 7*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (7, 388545785, -1048997170, 1, true, now(), 1329018926, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (7, 388545785, -1048997170, 1, true, now(), 1329018926, 1);
+/* create node 8*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (8, 388542618, -1048997170, 1, true, now(), 1329018926, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (8, 388542618, -1048997170, 1, true, now(), 1329018926, 1);
+/* create node 9*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (9, 388539525, -1048996839, 1, true, now(), 1329018926, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (9, 388539525, -1048996839, 1, true, now(), 1329018926, 1);
+>>>>>>> 595
 /* create node 10*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (10, 388536248, -1048996934, 1, true, (now() at time zone 'utc'), 1329018923, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (10, 388536248, -1048996934, 1, true, (now() at time zone 'utc'), 1329018923, 1);
@@ -286,8 +403,13 @@ INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "time
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (11, 388532583, -1048997542, 1, true, (now() at time zone 'utc'), 1329018923, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (11, 388532583, -1048997542, 1, true, (now() at time zone 'utc'), 1329018923, 1);
 /* create node 12*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (12, 388532424, -1048996868, 1, true, (now() at time zone 'utc'), 1329018923, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (12, 388532424, -1048996868, 1, true, (now() at time zone 'utc'), 1329018923, 1);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (12, 388532424, -1048996867, 1, true, now(), 1329018923, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (12, 388532424, -1048996867, 1, true, now(), 1329018923, 1);
+>>>>>>> 595
 /* create node 13*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (13, 388533001, -1048994528, 1, true, (now() at time zone 'utc'), 1329018923, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (13, 388533001, -1048994528, 1, true, (now() at time zone 'utc'), 1329018923, 1);
@@ -295,6 +417,7 @@ INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "time
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (14, 388533470, -1048993671, 1, true, (now() at time zone 'utc'), 1329018923, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (14, 388533470, -1048993671, 1, true, (now() at time zone 'utc'), 1329018923, 1);
 /* create node 15*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (15, 388535165, -1048992698, 1, true, (now() at time zone 'utc'), 1329018923, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (15, 388535165, -1048992698, 1, true, (now() at time zone 'utc'), 1329018923, 1);
 /* create node 16*/
@@ -306,10 +429,24 @@ INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "time
 /* create node 18*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (18, 388536194, -1048987070, 1, true, (now() at time zone 'utc'), 1329019009, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (18, 388536194, -1048987070, 1, true, (now() at time zone 'utc'), 1329019009, 1);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (15, 388535166, -1048992698, 1, true, now(), 1329018923, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (15, 388535166, -1048992698, 1, true, now(), 1329018923, 1);
+/* create node 16*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (16, 388535689, -1048990567, 1, true, now(), 1329019009, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (16, 388535689, -1048990567, 1, true, now(), 1329019009, 1);
+/* create node 17*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (17, 388535509, -1048988320, 1, true, now(), 1329019009, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (17, 388535509, -1048988320, 1, true, now(), 1329019009, 1);
+/* create node 18*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (18, 388536194, -1048987069, 1, true, now(), 1329019009, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (18, 388536194, -1048987069, 1, true, now(), 1329019009, 1);
+>>>>>>> 595
 /* create node 19*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (19, 388537204, -1048987232, 1, true, (now() at time zone 'utc'), 1329019009, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (19, 388537204, -1048987232, 1, true, (now() at time zone 'utc'), 1329019009, 1);
 /* create node 20*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (20, 388539585, -1048989155, 1, true, (now() at time zone 'utc'), 1329019012, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (20, 388539585, -1048989155, 1, true, (now() at time zone 'utc'), 1329019012, 1);
 /* create node 21*/
@@ -318,10 +455,21 @@ INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "time
 /* create node 22*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (22, 388541767, -1048987070, 1, true, (now() at time zone 'utc'), 1329019012, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (22, 388541767, -1048987070, 1, true, (now() at time zone 'utc'), 1329019012, 1);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (20, 388539585, -1048989154, 1, true, now(), 1329019012, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (20, 388539585, -1048989154, 1, true, now(), 1329019012, 1);
+/* create node 21*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (21, 388541335, -1048988899, 1, true, now(), 1329019012, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (21, 388541335, -1048988899, 1, true, now(), 1329019012, 1);
+/* create node 22*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (22, 388541768, -1048987069, 1, true, now(), 1329019012, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (22, 388541768, -1048987069, 1, true, now(), 1329019012, 1);
+>>>>>>> 595
 /* create node 23*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (23, 388542327, -1048983109, 1, true, (now() at time zone 'utc'), 1329019012, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (23, 388542327, -1048983109, 1, true, (now() at time zone 'utc'), 1329019012, 1);
 /* create node 24*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (24, 388544293, -1048980654, 1, true, (now() at time zone 'utc'), 1329019012, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (24, 388544293, -1048980654, 1, true, (now() at time zone 'utc'), 1329019012, 1);
 /* create node 25*/
@@ -330,10 +478,21 @@ INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "time
 /* create node 26*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (26, 388547197, -1048973219, 1, true, (now() at time zone 'utc'), 1329019012, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (26, 388547197, -1048973219, 1, true, (now() at time zone 'utc'), 1329019012, 1);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (24, 388544293, -1048980653, 1, true, now(), 1329019012, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (24, 388544293, -1048980653, 1, true, now(), 1329019012, 1);
+/* create node 25*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (25, 388546043, -1048977758, 1, true, now(), 1329019012, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (25, 388546043, -1048977758, 1, true, now(), 1329019012, 1);
+/* create node 26*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (26, 388547197, -1048973218, 1, true, now(), 1329019012, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (26, 388547197, -1048973218, 1, true, now(), 1329019012, 1);
+>>>>>>> 595
 /* create node 27*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (27, 388548604, -1048968586, 1, true, (now() at time zone 'utc'), 1329019012, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (27, 388548604, -1048968586, 1, true, (now() at time zone 'utc'), 1329019012, 1);
 /* create node 28*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (28, 388549019, -1048964394, 1, true, (now() at time zone 'utc'), 1329019012, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (28, 388549019, -1048964394, 1, true, (now() at time zone 'utc'), 1329019012, 1);
 /* create node 29*/
@@ -348,21 +507,50 @@ INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "time
 /* create node 32*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (32, 388548207, -1049008079, 1, true, (now() at time zone 'utc'), 1329018926, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (32, 388548207, -1049008079, 1, true, (now() at time zone 'utc'), 1329018926, 1);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (28, 388549019, -1048964393, 1, true, now(), 1329019012, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (28, 388549019, -1048964393, 1, true, now(), 1329019012, 1);
+/* create node 29*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (29, 388549073, -1048961822, 1, true, now(), 1329019012, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (29, 388549073, -1048961822, 1, true, now(), 1329019012, 1);
+/* create node 30*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (30, 388548514, -1049005692, 1, true, now(), 1329018926, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (30, 388548514, -1049005692, 1, true, now(), 1329018926, 1);
+/* create node 31*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (31, 388549290, -1049005252, 1, true, now(), 1329018926, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (31, 388549290, -1049005252, 1, true, now(), 1329018926, 1);
+/* create node 32*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (32, 388548207, -1049008078, 1, true, now(), 1329018926, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (32, 388548207, -1049008078, 1, true, now(), 1329018926, 1);
+>>>>>>> 595
 /* create node 33*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (33, 388543319, -1049017876, 1, true, (now() at time zone 'utc'), 1329018926, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (33, 388543319, -1049017876, 1, true, (now() at time zone 'utc'), 1329018926, 1);
 /* create node 34*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (34, 388541298, -1049023065, 1, true, (now() at time zone 'utc'), 1329018926, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (34, 388541298, -1049023065, 1, true, (now() at time zone 'utc'), 1329018926, 1);
 /* create node 35*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (35, 388540541, -1049024316, 1, true, (now() at time zone 'utc'), 1329018926, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (35, 388540541, -1049024316, 1, true, (now() at time zone 'utc'), 1329018926, 1);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (34, 388541299, -1049023064, 1, true, now(), 1329018926, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (34, 388541299, -1049023064, 1, true, now(), 1329018926, 1);
+/* create node 35*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (35, 388540541, -1049024315, 1, true, now(), 1329018926, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (35, 388540541, -1049024315, 1, true, now(), 1329018926, 1);
+>>>>>>> 595
 /* create node 36*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (36, 388549524, -1048987388, 1, true, (now() at time zone 'utc'), 1329019012, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (36, 388549524, -1048987388, 1, true, (now() at time zone 'utc'), 1329019012, 1);
 /* create node 37*/
+<<<<<<< HEAD
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (37, 388549321, -1048979050, 1, true, (now() at time zone 'utc'), 1329019012, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (37, 388549321, -1048979050, 1, true, (now() at time zone 'utc'), 1329019012, 1);
+=======
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (37, 388549321, -1048979049, 1, true, now(), 1329019012, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (37, 388549321, -1048979049, 1, true, now(), 1329019012, 1);
+>>>>>>> 595
 /* delete way -1669801*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (-1669801, 1, false, (now() at time zone 'utc'), 2);
 DELETE FROM current_way_tags WHERE way_id = -1669801;
@@ -546,4 +734,4 @@ INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (9, -8, 1, 
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (9, -8, 2);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (9, -7, 1, 3);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (9, -7, 3);
-UPDATE changesets SET min_lat=388532424, max_lat=388549614, min_lon=-1049024316, max_lon=-1048961823 WHERE id=1;
+UPDATE changesets SET min_lat=388532424, max_lat=388549614, min_lon=-1049024315, max_lon=-1048961822 WHERE id=1;

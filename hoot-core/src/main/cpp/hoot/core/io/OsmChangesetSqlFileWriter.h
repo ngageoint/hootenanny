@@ -67,9 +67,7 @@ public:
 private:
 
   void _createChangeSet();
-  void _collectChangesetBoundsInfo(ConstElementPtr element);
   void _updateChangesetBounds();
-  void _resetChangesetVars();
 
   long _getNextId(const ElementType type);
 
@@ -97,17 +95,11 @@ private:
 
   QString _getVisibleStr(const bool visible) const { return visible ? "true" : "false"; }
 
-  long _changesetId;
-
   OsmApiDb _db;
   QFile _outputSql;
 
+  long _changesetId;
   Envelope _changesetBounds;
-  //use sets for id uniqueness
-  QSet<long> _nodeIdsUsedInChangesetBoundsCalculation;
-  QSet<long> _nodeIdsNotUsedInChangesetBoundsCalculation;
-  QSet<long> _wayIdsUsedInChangesetBoundsCalculation;
-  QSet<long> _wayIdsNotUsedInChangesetBoundsCalculation;
 
   friend class ServiceOsmApiDbChangesetSqlFileWriterTest;
 

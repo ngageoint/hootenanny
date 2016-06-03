@@ -607,4 +607,10 @@ shared_ptr<QSqlQuery> OsmApiDb::getChangesetsCreatedAfterTime(const QString time
   return _selectChangesetsCreatedAfterTime;
 }
 
+long OsmApiDb::toOsmApiDbCoord(const double x)
+{
+  return round(x * COORDINATE_SCALE);
+}
+
+
 }

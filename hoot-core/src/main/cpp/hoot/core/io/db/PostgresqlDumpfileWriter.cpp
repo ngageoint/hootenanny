@@ -51,7 +51,7 @@
 #include <hoot/core/elements/RelationData.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
-#include <hoot/core/io/ApiDb.h>
+#include <hoot/core/io/OsmApiDb.h>
 
 namespace hoot
 {
@@ -809,18 +809,10 @@ void PostgresqlDumpfileWriter::_writeChangesetToTable()
     QString::number(_changesetData.changesetId),
     QString::number(_configData.changesetUserId),
     datestring,
-    QString::number(
-      (qlonglong)ApiDb::round(
-        _changesetData.changesetBounds.getMinY() * ApiDb::COORDINATE_SCALE, 7)),
-    QString::number(
-      (qlonglong)ApiDb::round(
-        _changesetData.changesetBounds.getMaxY() * ApiDb::COORDINATE_SCALE, 7)),
-    QString::number(
-      (qlonglong)ApiDb::round(
-        _changesetData.changesetBounds.getMinX() * ApiDb::COORDINATE_SCALE, 7)),
-    QString::number(
-      (qlonglong)ApiDb::round(
-        _changesetData.changesetBounds.getMaxX() * ApiDb::COORDINATE_SCALE, 7)),
+    QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetData.changesetBounds.getMinY())),
+    QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetData.changesetBounds.getMaxY())),
+    QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetData.changesetBounds.getMinX())),
+    QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetData.changesetBounds.getMaxX())),
     datestring,
     QString::number(_changesetData.changesInChangeset) );
   _outputSections["changesets"] = changesetsStream;
