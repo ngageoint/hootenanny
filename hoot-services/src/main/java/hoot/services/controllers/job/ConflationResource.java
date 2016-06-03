@@ -27,8 +27,6 @@
 package hoot.services.controllers.job;
 
 import java.sql.Connection;
-import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -40,6 +38,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -209,14 +210,12 @@ public class ConflationResource extends JobControllerBase {
                 Map secondaryMap = new Map(secondaryMapId, conn);
                 setAoi(secondaryMap, commandArgs);
 
-                // write a timestamp representing the time the osm api db data
-                // was
-                // queried out from the source;
-                // to be used during export of conflated data back into the osm
-                // api
-                // db at a later time
-                final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-                tags.put("osm_api_db_export_time", now.toString());
+                // write a timestamp representing the time the osm api db data was queried out 
+                // from the source; to be used during export of conflated data back into the osm 
+                // api db at a later time; timestamp must be 24 hour utc to match rails port
+                final String now = 
+                  DateTimeFormat.forPattern(DbUtils.OSM_API_TIMESTAMP_FORMAT).withZone(DateTimeZone.UTC).print(new DateTime());
+                tags.put("osm_api_db_export_time", now);
             }
 
             JSONArray mapTagsArgs = new JSONArray();

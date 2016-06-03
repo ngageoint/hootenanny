@@ -257,7 +257,7 @@ public class ExportJobResource extends JobControllerBase {
 
         final Map conflatedMap = getConflatedMap(commandArgs, conn);
 
-        checkMapForExportTag(conflatedMap, commandArgs, conn);
+        addMapForExportTag(conflatedMap, commandArgs, conn);
 
         setAoi(conflatedMap, commandArgs);
 
@@ -299,7 +299,7 @@ public class ExportJobResource extends JobControllerBase {
         return map.getBounds();
     }
 
-    private void checkMapForExportTag(final Map map, JSONArray commandArgs, Connection conn) throws Exception {
+    private void addMapForExportTag(final Map map, JSONArray commandArgs, Connection conn) throws Exception {
         final java.util.Map<String, String> tags = getMapTags(map.getId(), conn);
         // Technically, you don't have to have this tag to export the data, but
         // since it helps to detect
