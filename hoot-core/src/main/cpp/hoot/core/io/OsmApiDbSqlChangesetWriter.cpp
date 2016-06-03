@@ -208,6 +208,10 @@ bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr,
   shared_ptr<QSqlQuery> changesetItr = _db.getChangesetsCreatedAfterTime(timeStr);
   while (changesetItr->next())
   {
+    LOG_VARD(changesetItr->value(0).toLongLong());
+    LOG_VARD(changesetItr->value(1).toLongLong());
+    LOG_VARD(changesetItr->value(2).toLongLong());
+    LOG_VARD(changesetItr->value(3).toLongLong());
     Envelope changesetBounds(
       changesetItr->value(0).toLongLong() / (double)ApiDb::COORDINATE_SCALE,
       changesetItr->value(1).toLongLong() / (double)ApiDb::COORDINATE_SCALE,
@@ -224,7 +228,7 @@ bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr,
       return true;
     }
   }
-  LOG_DEBUG("No conflicts exist for input bounds " << boundsStr << " and input time " << timeStr);
+  LOG_INFO("No conflicts exist for input bounds " << boundsStr << " and input time " << timeStr);
   return false;
 }
 

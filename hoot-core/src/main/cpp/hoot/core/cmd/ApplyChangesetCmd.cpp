@@ -73,8 +73,10 @@ public:
       {
         if (changesetWriter.conflictExistsInTarget(args[2], args[3]))
         {
-          cout << "The changeset will not be written because conflicts exist in the target database.";
-          return 1;
+          //Don't like throwing an exception here from the command line, but this error needs to
+          //bubble up to the web service.
+          throw HootException(
+            "The changeset will not be written because conflicts exist in the target database.");
         }
       }
 
