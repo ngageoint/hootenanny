@@ -177,7 +177,7 @@ QString OsmApiDbSqlChangesetWriter::getChangesetStats() const
   LOG_VARD(_changesetBoundsStr);
   return
     "Changeset(s) Created: " + QString::number(_changesetStats["changeset-create"]) + "\n" +
-    "Changeset Bounds: " + _changesetBoundsStr + "\n" +
+    "Changeset Details: " + _changesetBoundsStr + "\n" +
     "Node(s) Created: " + QString::number(_changesetStats["node-create"]) + "\n" +
     "Node(s) Modified: " + QString::number(_changesetStats["node-modify"]) + "\n" +
     "Node(s) Deleted: " + QString::number(_changesetStats["node-delete"]) + "\n" +

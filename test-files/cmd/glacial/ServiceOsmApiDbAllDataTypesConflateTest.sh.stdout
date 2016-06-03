@@ -40,7 +40,7 @@ STEP 8: Writing a SQL changeset file that is the difference between the cropped 
 
 STEP 9: Executing the changeset SQL on the osm api db...
 Changeset(s) Created: 1
-Changeset Bounds: min_lat=388467218, max_lat=395944194, min_lon=-1049197585, max_lon=-1047145693
+Changeset Details: min_lat=388467218, max_lat=395944194, min_lon=-1049197585, max_lon=-1047145693, num_changes=307
 Node(s) Created: 144
 Node(s) Modified: 0
 Node(s) Deleted: 117

@@ -89,29 +89,31 @@ void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr c
 
     if (changes > ConfigOptions().getChangesetMaxSize())
     {
-      _updateChangesetBounds();
+      _updateChangeset(changes);
       _createChangeSet();
       changes = 0;
     }
   }
 
-  _updateChangesetBounds();
+  _updateChangeset(changes);
 
   _outputSql.close();
   _db.close();
 }
 
-void OsmChangesetSqlFileWriter::_updateChangesetBounds()
+void OsmChangesetSqlFileWriter::_updateChangeset(const int numChanges)
 {
   //update the changeset's bounds
   LOG_VARD(_changesetBounds.toString());
+  LOG_VARD(numChanges);
   _outputSql.write(
-    QString("UPDATE changesets SET min_lat=%2, max_lat=%3, min_lon=%4, max_lon=%5 WHERE id=%1;\n")
+    QString("UPDATE changesets SET min_lat=%2, max_lat=%3, min_lon=%4, max_lon=%5, num_changes=%6 WHERE id=%1;\n")
       .arg(_changesetId)
       .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMinY()))
       .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMaxY()))
       .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMinX()))
       .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMaxX()))
+      .arg(numChanges)
     .toUtf8());
 
    _changesetBounds.init();

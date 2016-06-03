@@ -67,7 +67,7 @@ public:
 private:
 
   void _createChangeSet();
-  void _updateChangesetBounds();
+  void _updateChangeset(const int numChanges);
 
   long _getNextId(const ElementType type);
 
