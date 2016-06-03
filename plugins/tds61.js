@@ -515,13 +515,13 @@ tds61 = {
             // pre processing
             tds61.applyToNfddPreProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType);
 
-            // one 2 one - we call the version that knows about OTH fields
-            translate.applyNfddOne2One(newfeatures[i]['tags'], newfeatures[i]['attrs'], tds61.lookup, tds61.fcodeLookup, tds61.ignoreList);
-
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
             translate.applySimpleNumBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.numBiased, 'backward',tds61.rules.intList);
             translate.applySimpleTxtBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.txtBiased, 'backward');
+
+            // one 2 one - we call the version that knows about OTH fields
+            translate.applyNfddOne2One(newfeatures[i]['tags'], newfeatures[i]['attrs'], tds61.lookup, tds61.fcodeLookup, tds61.ignoreList);
 
             // post processing
             tds61.applyToNfddPostProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType);
@@ -1070,24 +1070,39 @@ tds61 = {
 
     applyToNfddPreProcessing: function(tags, attrs, geometryType)
     {
-        // initial cleanup
-        for (var val in tags)
+        // Remove Hoot assigned tags for the source of the data
+        if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
+        if (tags.source) delete tags.source;
+        if (tags.area) delete tags.area;
+
+        // Initial cleanup
+        for (var i in tags)
         {
             // Remove empty tags
-            if (tags[val] == '')
+            if (tags[i] == '')
             {
-                delete tags[val];
+                delete tags[i];
+                continue;
+            }
+
+            // Wipe out tags we don't need that Hoot assigned
+            if ((i.indexOf('hoot:') !== -1) || (i.indexOf('error:') !== -1))
+            {
+                // Debug
+                // print('Pre: Dropped ' + i);
+                delete tags[i];
                 continue;
             }
 
             // Convert "abandoned:XXX" and "disused:XXX"features
-            if ((val.indexOf('abandoned:') !== -1) || (val.indexOf('disused:') !== -1))
+            if ((i.indexOf('abandoned:') !== -1) || (i.indexOf('disused:') !== -1))
             {
                 // Hopeing there is only one ':' in the tag name...
-                var tList = val.split(':');
-                tags[tList[1]] = tags[val];
+                var tList = i.split(':');
+                tags[tList[1]] = tags[i];
                 tags.condition = 'abandoned';
-                delete tags[val];
+                delete tags[i];
+                continue;
             }
 
         } // End Cleanup loop
@@ -1127,7 +1142,7 @@ tds61 = {
             ["t.leisure == 'sports_centre'","t.facility = 'yes'; t.use = 'recreation'; delete t.leisure"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
             ["t.man_made == 'embankment'","t.embankment = 'yes'; delete t.man_made"],
-            ["t.median == 'yes'","t.divider = 'yes'"],
+            ["t.median == 'yes'","t.is_divided = 'yes'"],
             ["t.natural == 'desert' && t.surface","t.desert_surface = t.surface; delete t.surface"],
             ["t.natural == 'wood'","t.landuse = 'forest'; delete t.natural"],
             ["t.power == 'pole'","t['cable:type'] = 'power'; t['tower:shape'] = 'pole'"],
@@ -1202,7 +1217,13 @@ tds61 = {
             }
 
             // If we don't have a Feature Function then assign one.
-            if (!(attrs.FFN)) attrs.FFN = facilityList[tags.amenity];
+            if (!(attrs.FFN))
+            {
+                attrs.FFN = facilityList[tags.amenity];
+                // Debug
+                // print('PreDropped: amenity = ' + tags.amenity);
+                delete tags.amenity;
+            }
         }
 
         // Fix up water features from OSM
@@ -1495,7 +1516,7 @@ tds61 = {
 
 // #####################################################################################################
 
-    applyToNfddPostProcessing : function (tags, attrs, geometryType)
+    applyToNfddPostProcessing : function (tags, attrs, geometryType, notUsedTags)
     {
         // Shoreline Construction (BB081) covers a lot of features
         if (attrs.PWC) attrs.F_CODE = 'BB081';
@@ -1551,9 +1572,9 @@ tds61 = {
         }
 
         // Sort out the UUID
-        if (tags.uuid)
+        if (attrs.UFI)
         {
-            var str = tags['uuid'].split(';'); 
+            var str = attrs['UFI'].split(';');
             attrs.UFI = str[0].replace('{','').replace('}','');
         }
         else
@@ -1627,6 +1648,7 @@ tds61 = {
             if (tags.access == 'private' && !(attrs.CAA))
             {
                 attrs.CAA = '3';
+                delete notUsedTags.access;
             }
 
             // Fix up RLE
@@ -1805,7 +1827,7 @@ tds61 = {
     {
         var tableName = ''; // The final table name
         var returnData = []; // The array of features to return
-        attrs = {}; // The output
+        attrs = {}; // The output attributes
         attrs.F_CODE = ''; // Initial setup
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
@@ -1848,17 +1870,6 @@ tds61 = {
             tds61.lookup = translate.createBackwardsLookup(tds61.rules.one2one);
             // translate.dumpOne2OneLookup(tds61.lookup);
             
-            // Build a list of things to ignore and flip it backwards
-            tds61.ignoreList = translate.flipList(translate.joinList(tds61.rules.numBiased, tds61.rules.txtBiased));
-            
-            // Add some more features to ignore
-            tds61.ignoreList.uuid = '';
-            tds61.ignoreList.source = '';
-            tds61.ignoreList.area = '';
-            tds61.ignoreList['note:extra'] = '';
-            tds61.ignoreList['hoot:status'] = '';
-            tds61.ignoreList['error:circular'] = '';
-
             // Make the fuzzy lookup table
             tds61.fuzzy = schemaTools.generateToOgrTable(tds61.rules.fuzzyTable);
 
@@ -1867,47 +1878,39 @@ tds61 = {
 //             {
 //                 for (var v1 in tds61.fuzzy[k1])
 //                 {
-//                     print(JSON.stringify([k1, v1, tds61.fuzzy[k1][v1][0], tds61.fuzzy[k1][v1][1], tds61.fuzy[k1][v1][2]]));
+//                     print(JSON.stringify([k1, v1, tds61.fuzzy[k1][v1][0], tds61.fuzzy[k1][v1][1], tds61.fuzzy[k1][v1][2]]));
 //                 }
 //             }
         } // End tds61.lookup Undefined
 
-        // pre processing
+        // Pre Processing
         tds61.applyToNfddPreProcessing(tags, attrs, geometryType);
 
-        // Fuzzy processing
-        // We do this BEFORE the one2one so we don't introduce errors by matching things too broadly
-        var usedList = translate.applyOne2OneUsed(tags, attrs, tds61.fuzzy);
+        // Make a copy of the input tags so we can remove them as they get translated. What is left is
+        // the not used tags.
+        // not in v8 yet: // var tTags = Object.assign({},tags);
+        var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
-        // If we used any of the tags, add them to the lookup list as things to ignore.
-        if (usedList.length > 0)
-        {
-            for (var i in usedList)
-            {
-                row = usedList[i];
+        // Apply the simple number and text biased rules
+        // NOTE: These are BACKWARD, not forward!
+        // NOTE: These deletes tags as they are used
+        translate.applySimpleNumBiased(attrs, notUsedTags, tds61.rules.numBiased, 'backward',tds61.rules.intList);
+        translate.applySimpleTxtBiased(attrs, notUsedTags, tds61.rules.txtBiased, 'backward');
 
-                if (!(row[0] in tds61.lookup))
-                {
-                    tds61.lookup[row[0]] = {};
-                }
-                if (!(tds61.lookup[row[0]][row[1]]))
-                {
-                    tds61.lookup[row[0]][row[1]] = [undefined,undefined];
-                }
-            }
-        } // End usedList > 0
+        // Apply the fuzzy rules
+        // NOTE: This deletes tags as they are used
+        translate.applyOne2OneQuiet(notUsedTags, attrs, tds61.fuzzy);
 
-        // one 2 one - we call the version that knows about the OTH field
-        translate.applyNfddOne2One(tags, attrs, tds61.lookup, tds61.fcodeLookup, tds61.ignoreList);
+        // one 2 one: we call the version that knows about the OTH field
+        // NOTE: This deletes tags as they are used
+        translate.applyNfddOne2One(notUsedTags, attrs, tds61.lookup, tds61.fcodeLookup);
 
-        // apply the simple number and text biased rules
-        // Note: These are BACKWARD, not forward!
-        translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'backward',tds61.rules.intList);
-        translate.applySimpleTxtBiased(attrs, tags, tds61.rules.txtBiased, 'backward');
+        // Post Processing.
+        // We send the original list of tags and the list of tags we haven't used yet.
+        // tds61.applyToNfddPostProcessing(tags, attrs, geometryType);
+        tds61.applyToNfddPostProcessing(tags, attrs, geometryType, notUsedTags);
 
-        // post processing
-        // tds61.applyToNfddPostProcessing(attrs, tableName, geometryType);
-        tds61.applyToNfddPostProcessing(tags, attrs, geometryType);
+        for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
 
         // Now check for invalid feature geometry
         // E.g. If the spec says a runway is a polygon and we have a line, throw error and 

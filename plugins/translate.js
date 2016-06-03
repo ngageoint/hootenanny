@@ -238,7 +238,13 @@ translate = {
                     row = lookup[col][value];
 
                     // Drop all of the undefined values
-                    if (row[0]) outList[row[0]] = row[1];
+                    if (row[0])
+                    {
+                        outList[row[0]] = row[1];
+                        // Debug
+                        // print('Fuzzy: ' + col);
+                        delete inList[col];
+                    }
                 }
             }
         } // End for col in inList
@@ -280,14 +286,14 @@ translate = {
 
     // Apply one to one translations - For NFDD export
     // This version populates the OTH field for values that are not in the rules
-    applyNfddOne2One : function(inList, outList, lookup, fCodeList, ignoreList) 
+    applyNfddOne2One : function(inList, outList, lookup, fCodeList)
     { 
-        endChar = '',
-        tAttrib = '',
-        row = [],
-        otherVal = '',
-        othVal = '',
-        value = '';
+        var endChar = '',
+            tAttrib = '',
+            row = [],
+            otherVal = '',
+            othVal = '',
+            value = '';
 
         for (var col in inList)
         {
@@ -315,7 +321,20 @@ translate = {
                     // print('row[0]=' + row[0] + '  row[0]+endChar=' + row[0] + endChar);
 
                     // Drop all of the undefined values
-                    if (row[0]) outList[row[0] + endChar] = row[1];
+                    if (row[0])
+                    {
+                        outList[row[0] + endChar] = row[1];
+                        // Debug
+                        // print('Used:' + col + ' = ' + inList[col]);
+                        delete inList[col];
+                    }
+                    else
+                    {
+                        // Debug
+                        // print('UsedUndef:' + col + ' = ' + inList[col]);
+                        delete inList[col];
+                    }
+
                 }
                 // there may be situations where this error is inappropriate. Though we haven't run
                 // into them yet.
@@ -323,7 +342,13 @@ translate = {
                 else if (value !== '')
                 {
                     // If these tags are used to find an FCODE, ignore them
-                    if ((tAttrib in fCodeList) && (value in fCodeList[tAttrib])) continue;
+                    if ((tAttrib in fCodeList) && (value in fCodeList[tAttrib]))
+                    {
+                        // Debug
+                        // print('UsedFCode:' + col + ' = ' + inList[col]);
+                        delete inList[col];
+                        continue;
+                    }
                         
                     logVerbose('Lookup value not found for column:: (' + tAttrib + '=' + value + ')');
 
@@ -341,21 +366,36 @@ translate = {
 
                         // Set the output attribute to "other"
                         outList[otherVal[0] + endChar] = otherVal[1];
+
+                        // Debug
+                        // print('UsedOTH:' + col + ' = ' + inList[col]);
+                        delete inList[col];
+
                     } // End if otherVal
+                    else
+                    {
+                        logVerbose('Could not add ::' + tAttrib + '=' + value + ':: to the OTH field');
+                    }
                 } // End value != ''
             } // End tAttrib in lookup
-
-            // This would only be useful to see what tags could not be mapped to an output.
-            // Not really needed at the moment
-//             else
-//             {
-//                 // ignoreList is the list of fields that get handled later
-//                 if (!(col in ignoreList))
+            else
+            {
+                // If we didn't find the tag, check if it is used to find an FCODE. If so, mark it as used
+                if ((tAttrib in fCodeList) && (value in fCodeList[tAttrib]))
+                {
+                    // Debug
+                    // print('UsedX:' + col + ' = ' + inList[col]);
+                    delete inList[col];
+                }
+//                 else
 //                 {
-//                     if (getHootConfig('ogr.debug.lookupcolumn') == 'true') logVerbose('Column not found:: (' + col + '=' + value + ')');
+//                     // Debug
+//                     print('Totally NF:' + col + ' = ' + inList[col]);
 //                 }
-//             }
+            }
+
         } // End col in inList
+
     }, // End applyNfddOne2One
 
 
@@ -522,29 +562,6 @@ translate = {
     }, // End processOTH
 
 
-
-    // This hasn't been used in a long while.
-//     applyBiased : function(attrs, tags, biased, layerName)
-//     {
-//         // make attrs and tags a bit more convenient
-//         var a = attrs;
-//         var t = tags;
-//         // make isEmpty & isNumber a bit more convenient.
-//         var isEmpty = translate.isEmpty;
-//         var isNumber = translate.isNumber;
-//         var isUnknown = translate.isUnknown;
-//         var isOK = translate.isOK;
-//
-//         for (var bi in biased)
-//         {
-//             if (eval(biased[bi].con))
-//             {
-//                 eval(biased[bi].res);
-//             }
-//         }
-//     },
-
-
     addName : function(attrs, names, col)
     {
         // if (col in attrs && attrs[col] !== '' && attrs[col] !== 'N_A' && attrs[col] !== 'UNK')
@@ -595,6 +612,7 @@ translate = {
             result = false;
         }
 
+        // Debug
         // print('### isOK: ' + v + ' : ' + result);
         return result;
     },
@@ -623,6 +641,7 @@ translate = {
         // Clean out some of the Text Fields
         else if (v in  dropList) result = true;
 
+        // Debug
         // print('## isUnknown: ' + v + ' : ' + result);
         return result;
     },
@@ -683,7 +702,13 @@ translate = {
             // convert Tags to Attrs
             for (var i in rules)
             {
-                if (rules[i] in tags) attrs[i] = tags[rules[i]];
+                if (rules[i] in tags)
+                {
+                    attrs[i] = tags[rules[i]];
+                    // Debug
+                    // print('UsedTxt: ' + rules[i]);
+                    delete tags[rules[i]];
+                }
             }
         }
     }, // End applySimpleTxtBiased
@@ -738,6 +763,9 @@ translate = {
                         } // End in intList
 
                         attrs[i] = tNum;
+                        // Debug
+                        // print ('UsedNum: ' + rules[i]);
+                        delete tags[rules[i]];
                     }
                     else
                     {
