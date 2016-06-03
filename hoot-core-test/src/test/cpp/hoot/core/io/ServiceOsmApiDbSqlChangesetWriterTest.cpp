@@ -105,10 +105,10 @@ public:
       QString("VALUES (1, 1, '%1', '%2', %3, %4, %5, %6)")
         .arg(createdAt.toString(OsmApiDb::TIME_FORMAT))
         .arg(createdAt.toString(OsmApiDb::TIME_FORMAT))
-        .arg(bounds.getMinY())
-        .arg(bounds.getMaxY())
-        .arg(bounds.getMinX())
-        .arg(bounds.getMaxX());
+        .arg(OsmApiDb::toOsmApiDbCoord(bounds.getMinY()))
+        .arg(OsmApiDb::toOsmApiDbCoord(bounds.getMaxY()))
+        .arg(OsmApiDb::toOsmApiDbCoord(bounds.getMinX()))
+        .arg(OsmApiDb::toOsmApiDbCoord(bounds.getMaxX()));
     QSqlQuery q(db.getDB());
     LOG_VARD(sql);
     if (q.exec(sql) == false)

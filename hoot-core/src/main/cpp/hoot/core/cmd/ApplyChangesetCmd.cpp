@@ -74,6 +74,7 @@ public:
         if (changesetWriter.conflictExistsInTarget(args[2], args[3]))
         {
           cout << "The changeset will not be written because conflicts exist in the target database.";
+          return 1;
         }
       }
 
