@@ -367,6 +367,11 @@ Then(/^the download file "([^"]*)" should exist$/) do |file|
   File.delete(name)
 end
 
+Then "the downloaded file content should be:" do |content|
+  page.response_headers["Content-Disposition"].should == "attachment"
+  page.source.should == content
+end
+
 When(/^I click the "([^"]*)" classed element under "([^"]*)" with text "([^"]*)"$/) do |classed, el, text|
   find(el, :text => text).find('.' + classed).click
 end
