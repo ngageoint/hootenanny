@@ -32,6 +32,9 @@ import java.util.concurrent.Future;
 
 import javax.ws.rs.core.Response.Status;
 
+import hoot.services.HootProperties;
+import hoot.services.utils.ResourceErrorHandler;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
@@ -43,9 +46,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 public class JobControllerBase {
@@ -59,8 +59,8 @@ public class JobControllerBase {
             if (coreJobServerUrl == null) {
                 coreJobServerUrl = HootProperties.getProperty("coreJobServerUrl");
 
-                jobResConnectionTimeout = Integer
-                        .parseInt(HootProperties.getProperty("internalJobRequestWaitTimeMilli"));
+                jobResConnectionTimeout = Integer.parseInt(HootProperties
+                        .getProperty("internalJobRequestWaitTimeMilli"));
 
             }
 
@@ -72,11 +72,15 @@ public class JobControllerBase {
 
     /**
      * Post Job request to jobExecutioner Servlet
-     *
+     * 
      * @param jobId
      * @param requestParams
      */
     public void postJobRquest(String jobId, String requestParams) throws Exception {
+
+        log.debug(jobId);
+        log.debug(requestParams);
+
         // Request should come back immediately but if something is wrong then
         // timeout and clean up.
         // To make UI responsive
@@ -216,7 +220,7 @@ public class JobControllerBase {
         return command;
     }
 
-    public JSONArray parseParams(String params) throws Exception {
+    public static JSONArray parseParams(String params) throws Exception {
         JSONParser parser = new JSONParser();
         JSONObject command = (JSONObject) parser.parse(params);
         Iterator iter = command.entrySet().iterator();

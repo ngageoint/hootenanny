@@ -27,8 +27,18 @@
 package hoot.services.controllers.job;
 
 import java.io.File;
+import java.sql.Connection;
 import java.util.List;
 import java.util.UUID;
+
+import hoot.services.HootProperties;
+import hoot.services.controllers.wfs.WfsManager;
+import hoot.services.db.DataDefinitionManager;
+import hoot.services.db.DbUtils;
+import hoot.services.geo.BoundingBox;
+import hoot.services.models.osm.Map;
+import hoot.services.nativeInterfaces.NativeInterfaceException;
+import hoot.services.utils.ResourceErrorHandler;
 
 import javax.annotation.PreDestroy;
 import javax.ws.rs.Consumes;
@@ -44,16 +54,11 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import hoot.services.HootProperties;
-import hoot.services.controllers.wfs.WfsManager;
-import hoot.services.db.DataDefinitionManager;
-import hoot.services.nativeInterfaces.NativeInterfaceException;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/export")
@@ -109,18 +114,21 @@ public class ExportJobResource extends JobControllerBase {
      * //[db | file] db means input from hoot db will be used. file mean a file
      * path will be specified. "input":"ToyTestA", //Input name. for inputtype =
      * db then specify name from hoot db. For inputtype=file, specify full path
-     * to a file. "outputtype":"gdb", //[gdb | shp | wfs]. gdb will produce file
-     * gdb, shp will output shapefile. if outputtype = wfs then a wfs front end
-     * will be created "removereview" : "false" //? }
+     * to a file. "outputtype":"gdb", //[gdb | shp | wfs | osm_api_db]. gdb will
+     * produce file gdb, shp will output shapefile. if outputtype = wfs then a
+     * wfs front end will be created. osm_api_db will derive and apply a
+     * changeset to an OSM API database "removereview" : "false" //? }
      * 
      * @param params
      * @return Job ID
+     * @throws Exception
      */
     @POST
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response process(String params) {
+    public Response process(String params) throws Exception {
+        Connection conn = DbUtils.createConnection();
         String jobId = UUID.randomUUID().toString();
         jobId = "ex_" + jobId.replace("-", "");
         try {
@@ -174,6 +182,10 @@ public class ExportJobResource extends JobControllerBase {
 
                 postChainJobRquest(jobId, jobArgs.toJSONString());
             }
+            else if (type != null && type.equalsIgnoreCase("osm_api_db")) {
+                commandArgs = addExportToOsmApiDbCommandArgs(commandArgs, conn);
+                postJobRquest(jobId, createPostBody(commandArgs));
+            }
             else {
                 // replace with with getParameterValue
                 boolean paramFound = false;
@@ -203,9 +215,113 @@ public class ExportJobResource extends JobControllerBase {
             ResourceErrorHandler.handleError("Error exporting data: " + ex.toString(), Status.INTERNAL_SERVER_ERROR,
                     log);
         }
+        finally {
+            DbUtils.closeConnection(conn);
+        }
         JSONObject res = new JSONObject();
         res.put("jobid", jobId);
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+    }
+
+    protected JSONArray addExportToOsmApiDbCommandArgs(final JSONArray inputCommandArgs, Connection conn)
+            throws Exception {
+        JSONArray commandArgs = new JSONArray();
+        commandArgs.addAll(inputCommandArgs);
+
+        if (!getParameterValue("inputtype", commandArgs).equalsIgnoreCase("db")) {
+            ResourceErrorHandler.handleError(
+                    "When exporting to an OSM API database, the input type must be a Hootenanny API database.",
+                    Status.BAD_REQUEST, log);
+        }
+
+        if (StringUtils.trimToNull(getParameterValue("translation", commandArgs)) != null) {
+            ResourceErrorHandler.handleError("Custom translation not allowed when exporting to OSM API database.",
+                    Status.BAD_REQUEST, log);
+        }
+
+        // ignoring outputname, since we're only going to have a single mapedit
+        // connection
+        // configured in the core for now
+
+        JSONObject arg = new JSONObject();
+        arg.put("temppath", HootProperties.getProperty("tempOutputPath"));
+        commandArgs.add(arg);
+
+        // hardcoding this for now; if mapedit user auth is tied in, then we'd
+        // expect the UI to get
+        // the value from there and pass it in instead
+        arg = new JSONObject();
+        arg.put("changesetuserid", "1");
+        commandArgs.add(arg);
+
+        final Map conflatedMap = getConflatedMap(commandArgs, conn);
+
+        checkMapForExportTag(conflatedMap, commandArgs, conn);
+
+        setAoi(conflatedMap, commandArgs);
+
+        return commandArgs;
+    }
+
+    private Map getConflatedMap(final JSONArray commandArgs, Connection conn) throws Exception {
+        final String conflatedMapName = getParameterValue("input", commandArgs);
+        List<Long> mapIds = getMapIdsByName(conflatedMapName, conn);
+        // we don't expect the services to try to export a map that has multiple
+        // name entries, but
+        // check for it anyway
+        if (mapIds.size() > 1) {
+            ResourceErrorHandler.handleError("Error exporting data.  Multiple maps with name: " + conflatedMapName,
+                    Status.BAD_REQUEST, log);
+        }
+        // this may be checked somewhere else down the line...not sure
+        else if (mapIds.size() == 0) {
+            ResourceErrorHandler.handleError("Error exporting data.  No map exists with name: " + conflatedMapName,
+                    Status.BAD_REQUEST, log);
+        }
+        Map conflatedMap = new Map(mapIds.get(0), conn);
+        conflatedMap.setDisplayName(conflatedMapName);
+        return conflatedMap;
+    }
+
+    // adding this to satisfy the mock...don't love adding it
+    protected List<Long> getMapIdsByName(final String conflatedMapName, Connection conn) throws Exception {
+        return DbUtils.getMapIdsByName(conn, conflatedMapName);
+    }
+
+    // adding this to satisfy the mock...don't love adding it
+    protected java.util.Map<String, String> getMapTags(final long mapId, final Connection conn) throws Exception {
+        return DbUtils.getMapsTableTags(mapId, conn);
+    }
+
+    // adding this to satisfy the mock...don't love adding it
+    protected BoundingBox getMapBounds(final Map conflatedMap) throws Exception {
+        return conflatedMap.getBounds();
+    }
+
+    private void checkMapForExportTag(final Map conflatedMap, JSONArray commandArgs, Connection conn) throws Exception {
+        final java.util.Map<String, String> tags = getMapTags(conflatedMap.getId(), conn);
+        // Technically, you don't have to have this tag to export the data, but
+        // since it helps to detect
+        // conflicts, and we want to be as safe as possible when writing to this
+        // external database will
+        // just always enforce it.
+        if (!tags.containsKey("osm_api_db_export_time")) {
+            ResourceErrorHandler.handleError(
+                    "Error exporting data.  Map with ID: " + String.valueOf(conflatedMap.getId()) + " and name: "
+                            + conflatedMap.getDisplayName() + " has no osm_api_db_export_time tag.", Status.CONFLICT,
+                    log);
+        }
+        JSONObject arg = new JSONObject();
+        arg.put("changesetsourcedatatimestamp", tags.get("osm_api_db_export_time"));
+        commandArgs.add(arg);
+    }
+
+    private void setAoi(final Map conflatedMap, JSONArray commandArgs) throws Exception {
+        final BoundingBox bounds = getMapBounds(conflatedMap);
+        JSONObject arg = new JSONObject();
+        arg.put("changesetaoi", String.valueOf(bounds.getMinLon()) + "," + String.valueOf(bounds.getMinLat()) + ","
+                + String.valueOf(bounds.getMaxLon()) + "," + String.valueOf(bounds.getMaxLat()));
+        commandArgs.add(arg);
     }
 
     /**
