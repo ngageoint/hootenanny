@@ -61,7 +61,7 @@ else
 fi
 
 # Clean out the Database
-vagrant ssh -c "cd hoot; source ./SetupEnv.sh; cd hoot-services; make clean-db &> /dev/null"
+#vagrant ssh -c "cd hoot; source ./SetupEnv.sh; cd hoot-services; make clean-db &> /dev/null"
 
 date +%F > ../BuildDate.txt
 
