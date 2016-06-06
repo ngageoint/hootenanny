@@ -14,4 +14,3 @@ export PGPASSWORD=$DB_PASSWORD
 source scripts/SetupOsmApiDB.sh force
 # load dummy user
 psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
-

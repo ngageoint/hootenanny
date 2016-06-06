@@ -612,5 +612,4 @@ long OsmApiDb::toOsmApiDbCoord(const double x)
   return round(x * COORDINATE_SCALE);
 }
 
-
 }
