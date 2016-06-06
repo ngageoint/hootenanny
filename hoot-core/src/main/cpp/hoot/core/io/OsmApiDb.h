@@ -43,6 +43,7 @@ class OsmApiDb : public ApiDb
 public:
 
   static const QString TIME_FORMAT;
+  static const QString TIMESTAMP_FUNCTION;
 
   OsmApiDb();
 

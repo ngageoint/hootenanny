@@ -58,7 +58,8 @@
 namespace hoot
 {
 
-const QString OsmApiDb::TIME_FORMAT = "yyyy-MM-dd hh:mm:ss.zzz";
+const QString OsmApiDb::TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.zzz";
+const QString OsmApiDb::TIMESTAMP_FUNCTION = "(now() at time zone 'utc')";
 
 OsmApiDb::OsmApiDb()
 {
@@ -610,6 +611,5 @@ long OsmApiDb::toOsmApiDbCoord(const double x)
 {
   return round(x * COORDINATE_SCALE);
 }
-
 
 }

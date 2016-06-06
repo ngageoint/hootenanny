@@ -177,7 +177,7 @@ QString OsmApiDbSqlChangesetWriter::getChangesetStats() const
   LOG_VARD(_changesetBoundsStr);
   return
     "Changeset(s) Created: " + QString::number(_changesetStats["changeset-create"]) + "\n" +
-    "Changeset Bounds: " + _changesetBoundsStr + "\n" +
+    "Changeset Details: " + _changesetBoundsStr + "\n" +
     "Node(s) Created: " + QString::number(_changesetStats["node-create"]) + "\n" +
     "Node(s) Modified: " + QString::number(_changesetStats["node-modify"]) + "\n" +
     "Node(s) Deleted: " + QString::number(_changesetStats["node-delete"]) + "\n" +
@@ -208,18 +208,27 @@ bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr,
   shared_ptr<QSqlQuery> changesetItr = _db.getChangesetsCreatedAfterTime(timeStr);
   while (changesetItr->next())
   {
+    LOG_VARD(changesetItr->value(0).toLongLong());
+    LOG_VARD(changesetItr->value(1).toLongLong());
+    LOG_VARD(changesetItr->value(2).toLongLong());
+    LOG_VARD(changesetItr->value(3).toLongLong());
     Envelope changesetBounds(
-      changesetItr->value(0).toDouble(),
-      changesetItr->value(1).toDouble(),
-      changesetItr->value(2).toDouble(),
-      changesetItr->value(3).toDouble());
-    //LOG_VARD(changesetBounds->toString());
+      changesetItr->value(0).toLongLong() / (double)ApiDb::COORDINATE_SCALE,
+      changesetItr->value(1).toLongLong() / (double)ApiDb::COORDINATE_SCALE,
+      changesetItr->value(2).toLongLong() / (double)ApiDb::COORDINATE_SCALE,
+      changesetItr->value(3).toLongLong() / (double)ApiDb::COORDINATE_SCALE);
+    LOG_VARD(changesetBounds.toString());
     if (changesetBounds.intersects(bounds))
     {
-      LOG_DEBUG("Conflict exists at bounds " << changesetBounds.toString());
+      //logging as info instead of error since I couldn't get the log output disabled in the test
+      //with the log disabler
+      LOG_INFO(
+        "Conflict exists at bounds " << changesetBounds.toString() << "for input bounds " <<
+        boundsStr << " and input time " << timeStr);
       return true;
     }
   }
+  LOG_INFO("No conflicts exist for input bounds " << boundsStr << " and input time " << timeStr);
   return false;
 }
 
