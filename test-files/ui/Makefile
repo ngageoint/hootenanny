@@ -21,6 +21,7 @@ $(shell $(HOOT_HOME)/scripts/ReplaceEnvironmentVariables.sh DbSettings.inc.in Db
 HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
 HOOT_OPTS+= -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true
 HOOT_OPTS+= -D hootapi.db.writer.email=test@test.com -D hootapi.db.reader.email=test@test.com
+HOOT_OPTS+= -D reader.add.source.datetime=false
 
 test: load-data
 ifneq (,$(findstring s,$(MAKEFLAGS)))
@@ -72,5 +73,16 @@ load-data:
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcTigerRoads.osm $(DB_URL)/DcTigerRoadsCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesA.osm $(DB_URL)/AllDataTypesACucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesB.osm $(DB_URL)/AllDataTypesBCucumber
-
+	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestA.osm $(DB_URL)/ToyTestACucumber
+	# MapEdit conflation
+	source $(HOOT_HOME)/scripts/SetupOsmApiDB.sh force
+	psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/test-files/servicesdb/users.sql
+	hoot convert $(HOOT_OPTS) -D postgresql.dumpfile.writer.start.id.changeset=1 $(HOOT_HOME)/test-files/DcGisRoads.osm $(HOOT_HOME)/tmp/DcGisRoadsCucumber.sql
+	psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/tmp/DcGisRoadsCucumber.sql
+	# These hardcoded element starting id's are a little kludgy.  See #796.
+	hoot convert $(HOOT_OPTS) -D postgresql.dumpfile.writer.start.id.changeset=2 -D postgresql.dumpfile.writer.start.id.node=4325 -D postgresql.dumpfile.writer.start.id.way=375 $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesA.osm $(HOOT_HOME)/tmp/AllDataTypesACucumber.sql
+	psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/tmp/AllDataTypesACucumber.sql
+	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/generic/rivers/Haiti_osm_waterway_ss_REF2-cropped-2.osm $(DB_URL)/HaitiRiversCucumber
+	# Write a dummy changeset record in order for the export conflicts test to work.
+	psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/test-files/ui/conflict_changeset.sql
 
