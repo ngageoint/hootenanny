@@ -350,7 +350,7 @@ public class ReviewResource {
     public ReviewableStatistics getReviewableSstatistics(@QueryParam("mapId") String mapId) {
 
         ReviewableStatistics ret;
-        if (Long.parseLong(mapId) == -1) // MapEdit
+        if (Long.parseLong(mapId) == -1) // OSM API db
         {
             ret = new ReviewableStatistics();
         }

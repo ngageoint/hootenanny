@@ -140,9 +140,8 @@ wfsStoreConnName=WFS_Connection
 # WFS Store db name
 wfsStoreDb=${WFS_DB_NAME}
 
-# Enable access to the single configured OSM API database...usually MapEdit.  Since many
-# environments will not have access to such a database, this is disabled by default.
-osmApiDbEnabled=false
+# Enable access to a single OSM API database configured by DatabaseConfig.sh.
+osmApiDbEnabled=true
 
 # osm api db Name
 osmApiDbName=${DB_NAME_OSMAPI}

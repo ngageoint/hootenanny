@@ -421,7 +421,7 @@ public class MapResource {
             catch (NumberFormatException e) {
                 //
             }
-            if (mapIdNum == -1) // MapEdit
+            if (mapIdNum == -1) // OSM API db
             {
                 responseDoc = MapQueryResponseWriter.writeEmptyResponse();
             }
@@ -530,7 +530,7 @@ public class MapResource {
                 catch (NumberFormatException e) {
                     //
                 }
-                if (mapIdNum != -1) // not MapEdit
+                if (mapIdNum != -1) // not OSM API db
                 {
                     log.info("Retrieving node count for map with ID: " + mapId + " ...");
                     bbox = (String) param.get("tile");
@@ -608,7 +608,7 @@ public class MapResource {
             catch (NumberFormatException e) {
                 //
             }
-            if (mapIdNum == -1) // MapEdit
+            if (mapIdNum == -1) // OSM API db
             {
                 // arbitrarily returning roughly CONUS bounds here...not quite
                 // sure what else to
@@ -1130,7 +1130,7 @@ public class MapResource {
                 catch (NumberFormatException e) {
                     // a map name string could also be passed in here
                 }
-                if (mapIdNum != -1) // MapEdit
+                if (mapIdNum != -1) // OSM API db
                 {
                     QMaps maps = QMaps.maps;
                     mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);

@@ -136,7 +136,7 @@
                     parallelism, but haven't been able to get them to work...so forking instead. -->
                     <!-- parallel>methods</parallel>
                     <useUnlimitedThreads>true</useUnlimitedThreads -->
-                    <forkCount>4</forkCount>
+                    <forkCount>16</forkCount>
                     <reuseForks>true</reuseForks>
                     <printSummary>false</printSummary>
                     <groups>hoot.services.UnitTest</groups>

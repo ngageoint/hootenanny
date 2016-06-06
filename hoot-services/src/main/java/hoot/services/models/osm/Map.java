@@ -26,7 +26,6 @@
  */
 package hoot.services.models.osm;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,7 +122,7 @@ public class Map extends Maps {
     /*
      * Retrieves all ranges of quad tiles that fall within the bounds
      */
-    private static Vector<Range> getTileRanges(final BoundingBox bounds) throws NumberFormatException, IOException {
+    private static Vector<Range> getTileRanges(final BoundingBox bounds) throws NumberFormatException {
         log.debug("Retrieving tile ranges...");
         int queryDimensions = Integer.parseInt(HootProperties.getPropertyOrDefault("mapQueryDimensions"));
         ZCurveRanger ranger = new ZCurveRanger(new ZValue(queryDimensions, 16,
@@ -792,8 +791,6 @@ public class Map extends Maps {
         return elementIdsByType;
     }
 
-    // TODO: use reflection to collapse the next few methods into one
-
     /**
      * Converts a set of map layer database records into an object returnable by
      * a web service
@@ -806,17 +803,9 @@ public class Map extends Maps {
     public static MapLayers mapLayerRecordsToLayers(List<Maps> mapLayerRecords) throws Exception {
         MapLayers mapLayers = new MapLayers();
         List<MapLayer> mapLayerList = new ArrayList<MapLayer>();
-
-        boolean osmApiDbEnabled = Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"));
-        if (osmApiDbEnabled) {
-            // add a MapEdit dummy record for the UI for conflation
-            // involving MapEdit data
-            MapLayer mapLayer = new MapLayer();
-            mapLayer.setId(-1); // using id = -1 to identify the MapEdit source
-                                // layer in the ui
-            mapLayer.setName("MapEdit");
-            mapLayerList.add(mapLayer);
-        }
+        
+        final boolean osmApiDbEnabled = 
+          Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"));
 
         for (Maps mapLayerRecord : mapLayerRecords) {
             MapLayer mapLayer = new MapLayer();
@@ -827,15 +816,27 @@ public class Map extends Maps {
                 java.util.Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) mapLayerRecord
                         .getTags());
                 if (tags.containsKey("osm_api_db_export_time")) {
-                    mapLayer.setCanExportToMapEdit(true);
+                    mapLayer.setCanExportToOsmApiDb(true);
                 }
             }
             mapLayerList.add(mapLayer);
         }
+        
+        if (osmApiDbEnabled) {
+            // add a OSM API db dummy record for the UI for conflation
+            // involving OSM API db data
+            MapLayer mapLayer = new MapLayer();
+            mapLayer.setId(-1); // using id = -1 to identify the OSM API db source
+                                // layer in the ui
+            mapLayer.setName(
+              "OSM_API_Database_" + HootProperties.getProperty("osmApiDbName"));
+            mapLayerList.add(mapLayer);
+        }
+        
         mapLayers.setLayers(mapLayerList.toArray(new MapLayer[] {}));
         return mapLayers;
     }
-
+    
     /**
      * Converts a set of folder database records into an object returnable by a
      * web service

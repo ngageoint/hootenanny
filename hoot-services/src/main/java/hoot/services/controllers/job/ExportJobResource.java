@@ -243,7 +243,7 @@ public class ExportJobResource extends JobControllerBase {
                     Status.BAD_REQUEST, log);
         }
 
-        // ignoring outputname, since we're only going to have a single mapedit
+        // ignoring outputname, since we're only going to have a single OSM API db
         // connection
         // configured in the core for now
 
