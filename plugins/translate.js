@@ -171,7 +171,19 @@ translate = {
                     row = lookup[col][value];
 
                     // Drop all of the undefined values
-                    if (row[0]) outList[row[0]] = row[1];
+                    if (row[0])
+                    {
+                        outList[row[0] + endChar] = row[1];
+                        // Debug
+                        // print('Used:' + col + ' = ' + inList[col]);
+                        delete inList[col];
+                    }
+                    else
+                    {
+                        // Debug
+                        // print('UsedUndef:' + col + ' = ' + inList[col]);
+                        delete inList[col];
+                    }
                 }
                 // there may be situations where this error is inappropriate. Though we haven't run
                 // into them yet.
@@ -179,44 +191,33 @@ translate = {
                 else if (value !== '')
                 {
                     // If these tags are used to find an FCODE, ignore them
-                    if ((col in fCodeList) && (value in fCodeList[col])) continue;
+                    if ((col in fCodeList) && (value in fCodeList[col]))
+                    {
+                        // Debug
+                        // print('UsedFCode:' + col + ' = ' + inList[col]);
+                        delete inList[col];
+                        continue;
+                    }
 
                     logVerbose('Lookup value not found for column:: (' + col + '=' + value + ')');
                 }
-            }
+            } // End col in lookup
             else
             {
-                // ignoreList is the list of fields that get handled later
-                if (!(col in ignoreList))
-                {
-                    // Debug:
-                    // print('Col::  :' + col + ':  Value :' + value + ':');
-
-                    endChar = col.charAt(col.length - 1) // Going to look for a 2 or a 3
-                    tAttrib = col.slice(0,-1);
-
-                    if (tAttrib in lookup)
+                    // If these tags are used to find an FCODE, ignore them
+                    if ((col in fCodeList) && (value in fCodeList[col]))
                     {
-                        if (value in lookup[tAttrib])
-                        {
-                            row = lookup[tAttrib][value];
-
-                            // Drop all of the undefined values
-                            if (row[0])
-                            {
-                                outList[row[0] + endChar] = row[1];
-                                // Debug:
-                                // print ('one2one: Setting :' + row[0] + endChar + ': to :' + row[1] + ':');
-                            }
-                        }
+                        // Debug
+                        // print('UsedFCode:' + col + ' = ' + inList[col]);
+                        delete inList[col];
+                        continue;
                     }
                     else
                     {
                         if (config.getOgrDebugLookupcolumn() == 'true') logVerbose('Column not found:: (' + col + '=' + value + ')');
                     }
 
-                } // End col in ignoreList
-            } // End col in lookuo
+            } // End !col in lookup
         } // End for col in inList
     }, // End applyOne2One
 
@@ -297,7 +298,7 @@ translate = {
 
         for (var col in inList)
         {
-            value = inList[col];
+            var value = inList[col];
 
             endChar = col.charAt(col.length - 1) // Going to look for a 2 or a 3
 
@@ -387,15 +388,12 @@ translate = {
                     // print('UsedX:' + col + ' = ' + inList[col]);
                     delete inList[col];
                 }
-//                 else
-//                 {
-//                     // Debug
-//                     print('Totally NF:' + col + ' = ' + inList[col]);
-//                 }
-            }
-
-        } // End col in inList
-
+                else
+                {
+                    if (config.getOgrDebugLookupcolumn() == 'true') logVerbose('Column not found:: (' + col + '=' + value + ')');
+                }
+            } // End !col in lookup
+        } // End for col in inList
     }, // End applyNfddOne2One
 
 

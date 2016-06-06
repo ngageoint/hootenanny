@@ -521,10 +521,10 @@ tds61 = {
             translate.applySimpleTxtBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.txtBiased, 'backward');
 
             // one 2 one - we call the version that knows about OTH fields
-            translate.applyNfddOne2One(newfeatures[i]['tags'], newfeatures[i]['attrs'], tds61.lookup, tds61.fcodeLookup, tds61.ignoreList);
+            translate.applyNfddOne2One(newfeatures[i]['tags'], newfeatures[i]['attrs'], tds61.lookup, tds61.fcodeLookup);
 
             // post processing
-            tds61.applyToNfddPostProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType);
+            tds61.applyToNfddPostProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType, {});
 
             returnData.push({attrs: newfeatures[i]['attrs'],tableName: ''});
         }
@@ -1158,6 +1158,7 @@ tds61 = {
             ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
             ["t.social_facility == 'shelter'","t.social_facility = t['social_facility:for']; delete t.amenity; delete t['social_facility:for']"],
             ["t['tower:type'] == 'minaret' && t.man_made == 'tower'","delete t.man_made"],
+            ["t.tunnel == 'building_passage'","t.tunnel = 'yes'"],
             ["t.use == 'islamic_prayer_hall' && t.amenity == 'place_of_worship'","delete t.amenity"],
             ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
             ["t.wetland && t.natural == 'wetland'","delete t.natural"],
@@ -1893,7 +1894,7 @@ tds61 = {
 
         // Apply the simple number and text biased rules
         // NOTE: These are BACKWARD, not forward!
-        // NOTE: These deletes tags as they are used
+        // NOTE: These delete tags as they are used
         translate.applySimpleNumBiased(attrs, notUsedTags, tds61.rules.numBiased, 'backward',tds61.rules.intList);
         translate.applySimpleTxtBiased(attrs, notUsedTags, tds61.rules.txtBiased, 'backward');
 
@@ -1910,7 +1911,15 @@ tds61 = {
         // tds61.applyToNfddPostProcessing(tags, attrs, geometryType);
         tds61.applyToNfddPostProcessing(tags, attrs, geometryType, notUsedTags);
 
-        for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
+        // Debug
+//         for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
+
+        // If we have unused tags, add them to the memo field.
+        if (Object.keys(notUsedTags).length > 0)
+        {
+            var tStr = JSON.stringify(notUsedTags) + ';;';
+            attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';;');
+        }
 
         // Now check for invalid feature geometry
         // E.g. If the spec says a runway is a polygon and we have a line, throw error and 
@@ -1926,14 +1935,6 @@ tds61 = {
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
             if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
-
-            for (var i in tags)
-            {
-                // Clean out all of the source: hoot: and error: tags to save space
-                // if (i.indexOf('source:') !== -1) delete tags[i];
-                if (i.indexOf('hoot:') !== -1) delete tags[i];
-                if (i.indexOf('error:') !== -1) delete tags[i];
-            }
 
             // Convert all of the Tags to a string so we can jam it into an attribute
             var str = JSON.stringify(tags);

@@ -303,16 +303,21 @@ mgcp = {
             // pre processing
             mgcp.applyToMgcpPreProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType);
 
-            // one 2 one - we call the version that knows about OTH fields
-            translate.applyOne2One(newfeatures[i]['tags'], newfeatures[i]['attrs'], mgcp.lookup, mgcp.fcodeLookup, mgcp.ignoreList);
+            var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
-            translate.applySimpleTxtBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], mgcp.rules.txtBiased, 'backward');
+//             translate.applySimpleNumBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
+//             translate.applySimpleTxtBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], mgcp.rules.txtBiased, 'backward');
+            translate.applySimpleNumBiased(newfeatures[i]['attrs'], notUsedTags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
+            translate.applySimpleTxtBiased(newfeatures[i]['attrs'], notUsedTags, mgcp.rules.txtBiased, 'backward');
+
+            // one 2 one - we call the version that knows about OTH fields
+//             translate.applyOne2One(newfeatures[i]['tags'], newfeatures[i]['attrs'], mgcp.lookup, mgcp.fcodeLookup);
+            translate.applyOne2One(notUsedTags, newfeatures[i]['attrs'], mgcp.lookup, mgcp.fcodeLookup);
 
             // post processing
-            mgcp.applyToMgcpPostProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType);
+            mgcp.applyToMgcpPostProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType,notUsedTags);
 
             returnData.push({attrs: newfeatures[i]['attrs'],tableName: ''});
         }
@@ -727,24 +732,39 @@ mgcp = {
     // ##### Start of the xxToMgcpxx Block #####
     applyToMgcpPreProcessing: function(tags, attrs, geometryType)
     {
+        // Remove Hoot assigned tags for the source of the data
+        if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
+        if (tags.source) delete tags.source;
+        if (tags.area) delete tags.area;
+
         // initial cleanup
-        for (var val in tags)
+        for (var i in tags)
         {
             // Remove empty tags
-            if (tags[val] == '')
+            if (tags[i] == '')
             {
-                delete tags[val];
+                delete tags[i];
                 continue;
             }
 
             // Convert "abandoned:XXX" features
-            if (val.indexOf('abandoned:') !== -1)
+            if (i.indexOf('abandoned:') !== -1)
             {
                 // Hopeing there is only one ':' in the tag name...
-                var tList = val.split(':');
-                tags[tList[1]] = tags[val];
+                var tList = i.split(':');
+                tags[tList[1]] = tags[i];
                 tags.condition = 'abandoned';
-                delete tags[val];
+                delete tags[i];
+                continue;
+            }
+
+            // Wipe out tags we don't need that Hoot assigned
+            if ((i.indexOf('hoot:') !== -1) || (i.indexOf('error:') !== -1))
+            {
+                // Debug
+                // print('Pre: Dropped ' + i);
+                delete tags[i];
+                continue;
             }
 
         }
@@ -753,30 +773,31 @@ mgcp = {
         {
             // See ToOsmPostProcessing for more details about rulesList.
             var rulesList = [
+            ["t.amenity == 'marketplace'","t.facility = 'yes'"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
-            ["t.waterway == 'riverbank'","t.waterway = 'river'"],
             ["t.landuse == 'allotments'","t.landuse = 'farmland'"],
-            ["t.leisure == 'stadium' && t.building","delete t.building"],
-            ["t.natural == 'wood'","t.landuse = 'forest'"],
-            ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
-            ["t.water == 'pond'","a.F_CODE = 'BH170'; t.natural = 'other_pool_type'"],
-            ["t.water == 'river'","t.waterway = 'river'"],
-            ["t.rapids == 'yes'","t.waterway = 'rapids'"],
-            ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
-            ["t.landuse == 'retail'","t.landuse = 'built_up_area'; t.use = 'commercial'"],
-            ["t.amenity == 'marketplace'","t.facility = 'yes'"],
-            ["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
             ["t.landuse == 'construction'","t.landuse = 'built_up_area'; t.condition = 'construction'"],
             ["t.landuse == 'military'","t.military = 'installation'; delete t.landuse"],
             ["t.landuse == 'farm'","t.landuse = 'farmland'"],
             ["t.landuse == 'farmyard'","t.facility = 'yes'; t.use = 'agriculture'; delete t.landuse"],
             ["t.landuse == 'grass' || t.landuse == 'meadow'","t.natural = 'grassland'; t['grassland:type'] = 'grassland'; delete t.landuse"],
-            ["t.natural == 'scrub'","t.natural = 'grassland'; t['grassland:type'] = 'grassland_with_trees'"],
-            ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
+            ["t.landuse == 'retail'","t.landuse = 'built_up_area'; t.use = 'commercial'"],
+            ["t.leisure == 'stadium' && t.building","delete t.building"],
             ["t.man_made == 'water_tower'","a.F_CODE = 'AL241'"],
+            ["t.natural == 'scrub'","t.natural = 'grassland'; t['grassland:type'] = 'grassland_with_trees'"],
+            ["t.natural == 'wood'","t.landuse = 'forest'"],
+            ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
+            ["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
+            ["t.rapids == 'yes'","t.waterway = 'rapids'"],
             ["t.resource","t.product = t.resource; delete t.resource"],
-            ["(t.shop || t.office) && !(t.building)","a.F_CODE = 'AL015'"]
+            ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
+            ["(t.shop || t.office) && !(t.building)","a.F_CODE = 'AL015'"],
+            ["t.tunnel == 'building_passage'","t.tunnel = 'yes'"],
+            ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
+            ["t.water == 'pond'","a.F_CODE = 'BH170'; t.natural = 'other_pool_type'"],
+            ["t.water == 'river'","t.waterway = 'river'"],
+            ["t.waterway == 'riverbank'","t.waterway = 'river'"]
             ];
 
             mgcp.mgcpPreRules = translate.buildComplexRules(rulesList);
@@ -940,7 +961,7 @@ mgcp = {
     }, // End applyToMgcpPreProcessing
 
 
-    applyToMgcpPostProcessing : function (tags, attrs, geometryType)
+    applyToMgcpPostProcessing : function (tags, attrs, geometryType, notUsedTags)
     {
         // Gross generalisation. If we don't have an FCODE but we do have an FFN then we either have a
         // Building or a Facility.
@@ -964,6 +985,9 @@ mgcp = {
                 {
                     // print('Added FCODE from Map: ' + fcodeMap[i]);
                     attrs.F_CODE = fcodeMap[i];
+                    // Debug
+                    print('Broke: ' + attrs.F_CODE);
+                    break;
                 }
             }
         } // End !fcode
@@ -1069,6 +1093,7 @@ mgcp = {
                 if (tags.bridge) attrs.LOC = '45'; // Above Surface
                 if (tags.tunnel) attrs.LOC = '40'; // Below Surface
                 if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
+                if (attrs.RST == '6') attrs.RST = '2'; // Move 'ground' to 'unpaved'
                 break;
 
             case 'AP050': // Trail
@@ -1309,33 +1334,30 @@ mgcp = {
 
             // Debug
             // translate.dumpOne2OneLookup(mgcp.lookup);
-
-            // Build a list of things to ignore and flip is backwards
-            mgcp.ignoreList = translate.flipList(translate.joinList(mgcp.rules.numBiased, mgcp.rules.txtBiased));
-
-            // Add some features to ignore
-            mgcp.ignoreList.uuid = '';
-            mgcp.ignoreList.source = '';
-            mgcp.ignoreList.area = '';
-            mgcp.ignoreList['note:extra'] = '';
-            mgcp.ignoreList['hoot:status'] = '';
-            mgcp.ignoreList['error:circular'] = '';
-            mgcp.ignoreList['source:ingest:datetime'] = '';
         }
 
         // pre processing
         mgcp.applyToMgcpPreProcessing(tags,attrs, geometryType);
 
-        // one 2 one
-        translate.applyOne2One(tags, attrs, mgcp.lookup, mgcp.fcodeLookup, mgcp.ignoreList);
+        // Make a copy of the input tags so we can remove them as they get translated. What is left is
+        // the not used tags.
+        // not in v8 yet: // var tTags = Object.assign({},tags);
+        var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
-        translate.applySimpleTxtBiased(attrs, tags,  mgcp.rules.txtBiased,'backward');
+        translate.applySimpleNumBiased(attrs, notUsedTags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
+        translate.applySimpleTxtBiased(attrs, notUsedTags,  mgcp.rules.txtBiased,'backward');
+
+        // one 2 one
+        translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup, mgcp.ignoreList);
 
         // post processing
         // mgcp.applyToMgcpPostProcessing(attrs, tableName, geometryType);
-        mgcp.applyToMgcpPostProcessing(tags, attrs, geometryType);
+        mgcp.applyToMgcpPostProcessing(tags, attrs, geometryType, notUsedTags);
+
+        // Debug
+        for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
+
 
         // Set the tablename: [P,A,L]<fcode>
         // tableName = geometryType.toString().substring(0,1) + attrs.F_CODE;
