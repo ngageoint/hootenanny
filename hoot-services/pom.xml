@@ -9,6 +9,7 @@
     <name>hoot-services</name>
     <url>http://hootenanny.org</url>
 
+
     <properties>
         <revision>${user.name}</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -245,9 +246,9 @@
                 </executions>
                 <configuration>
                     <jdbcDriver>org.postgresql.Driver</jdbcDriver>
-                    <jdbcUrl>jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}</jdbcUrl>
-                    <jdbcUser>${DB_USER}</jdbcUser>
-                    <jdbcPassword>${DB_PASSWORD}</jdbcPassword>
+                    <jdbcUrl>jdbc:postgresql://localhost:5432/hoot</jdbcUrl>
+                    <jdbcUser>hoot</jdbcUser>
+                    <jdbcPassword>hoottest</jdbcPassword>
                     <packageName>hoot.services.db2</packageName>
                     <tableNamePattern>changesets,current_nodes,current_relation_members,current_relations,current_way_nodes,current_ways,databasechangelog,databasechangeloglock,folder_map_mappings,folders,job_status,maps,users,review_bookmarks</tableNamePattern>
                     <targetFolder>src/main/java</targetFolder>
@@ -313,6 +314,24 @@
                              </goals>
                          </execution>
                     -->
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>db.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
