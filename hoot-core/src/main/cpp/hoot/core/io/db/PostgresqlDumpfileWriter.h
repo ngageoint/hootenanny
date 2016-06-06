@@ -27,7 +27,7 @@
 #ifndef POSTGRESQLDUMPFILEWRITER_H
 #define POSTGRESQLDUMPFILEWRITER_H
 
-/**
+/*
  * This file is part of Hootenanny.
  *
  * Hootenanny is free software: you can redistribute it and/or modify
@@ -45,7 +45,13 @@
  *
  * --------------------------------------------------------------------
  *
- * @copyright Copyright ...
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <string>
@@ -167,6 +173,7 @@ private:
   {
     qint64        changesetId;
     unsigned int  changesInChangeset;
+    Envelope changesetBounds;
   };
 
   _ChangesetData _changesetData;
@@ -204,8 +211,6 @@ private:
   void _zeroWriteStats();
 
   ElementIdDatatype _establishNewIdMapping(const ElementId& sourceId);
-
-  unsigned int _tileForPoint(const double lat, const double lon) const;
 
   unsigned int _convertDegreesToNanodegrees(const double degrees) const;
 
@@ -248,7 +253,6 @@ private:
   void _writeChangesetToTable();
 
   void _writeSequenceUpdates();
-
 };
 
 }

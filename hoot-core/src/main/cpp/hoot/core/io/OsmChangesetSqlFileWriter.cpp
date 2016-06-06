@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,7 +27,7 @@
 #include "OsmChangesetSqlFileWriter.h"
 
 // hoot
-#include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 
@@ -47,6 +47,8 @@ _changesetId(0)
 void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr changesetProvider)
 {
   LOG_DEBUG("Writing changeset to " << path);
+
+   _changesetBounds.init();
 
   _outputSql.setFileName(path);
   if (_outputSql.open(QIODevice::WriteOnly | QIODevice::Text) == false)
@@ -74,17 +76,45 @@ void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr c
       default:
         throw IllegalArgumentException("Unexpected change type.");
     }
+
+    //TODO: This logic is ok for calculating the changeset bounds, except that for the fact the
+    //OsmApiDbReader has a bug: see #774.
+    if (change.e->getElementType().getEnum() == ElementType::Node)
+    {
+      ConstNodePtr node = dynamic_pointer_cast<const Node>(change.e);
+      _changesetBounds.expandToInclude(node->getX(), node->getY());
+    }
+
     changes++;
 
     if (changes > ConfigOptions().getChangesetMaxSize())
     {
+      _updateChangesetBounds();
       _createChangeSet();
       changes = 0;
     }
   }
 
+  _updateChangesetBounds();
+
   _outputSql.close();
   _db.close();
+}
+
+void OsmChangesetSqlFileWriter::_updateChangesetBounds()
+{
+  //update the changeset's bounds
+  LOG_VARD(_changesetBounds.toString());
+  _outputSql.write(
+    QString("UPDATE changesets SET min_lat=%2, max_lat=%3, min_lon=%4, max_lon=%5 WHERE id=%1;\n")
+      .arg(_changesetId)
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMinY()))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMaxY()))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMinX()))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMaxX()))
+    .toUtf8());
+
+   _changesetBounds.init();
 }
 
 void OsmChangesetSqlFileWriter::_createChangeSet()
@@ -97,7 +127,6 @@ void OsmChangesetSqlFileWriter::_createChangeSet()
       .arg(_changesetId)
       .arg(ConfigOptions().getChangesetUserId())
     .toUtf8());
-  //this will go away if user authentication is tied in at some point
   _outputSql.write(
     QString("INSERT INTO changeset_tags (changeset_id, k, v) VALUES "
             "(%1, '%2', '%3');\n")
@@ -209,11 +238,11 @@ QString OsmChangesetSqlFileWriter::_getUpdateValuesNodeStr(ConstNodePtr node) co
   return
     QString("latitude=%2, longitude=%3, changeset_id=%4, visible=%5, \"timestamp\"=now(), tile=%6, version=%7 WHERE id=%1;\n")
       .arg(node->getId())
-      .arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(node->getY()))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(node->getX()))
       .arg(node->getChangeset())
       .arg(_getVisibleStr(node->getVisible()))
-      .arg(HootApiDb::tileForPoint(node->getY(), node->getX()))
+      .arg(ApiDb::tileForPoint(node->getY(), node->getX()))
       .arg(node->getVersion());
 }
 
@@ -391,11 +420,11 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesNodeStr(ConstNodePtr node) co
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
       "tile, version) VALUES (%1, %2, %3, %4, %5, now(), %6, %7);\n")
       .arg(node->getId())
-      .arg((qlonglong)HootApiDb::round(node->getY() * HootApiDb::COORDINATE_SCALE, 7))
-      .arg((qlonglong)HootApiDb::round(node->getX() * HootApiDb::COORDINATE_SCALE, 7))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(node->getY()))
+      .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(node->getX()))
       .arg(node->getChangeset())
       .arg(_getVisibleStr(node->getVisible()))
-      .arg(HootApiDb::tileForPoint(node->getY(), node->getX()))
+      .arg(ApiDb::tileForPoint(node->getY(), node->getX()))
       .arg(node->getVersion());
 }
 

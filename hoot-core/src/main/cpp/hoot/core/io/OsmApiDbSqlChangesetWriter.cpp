@@ -79,6 +79,7 @@ void OsmApiDbSqlChangesetWriter::write(const QString sql)
   for (int i = 0; i < sqlParts.size(); i++)
   {
     const QString sqlStatement = sqlParts[i];
+    //LOG_VARD(sqlStatement);
     QString changesetStatType;
     if (sqlStatement.toUpper().startsWith("INSERT INTO CHANGESETS"))
     {
@@ -105,7 +106,6 @@ void OsmApiDbSqlChangesetWriter::write(const QString sql)
     else
     {
       elementSqlStatements += sqlStatement + ";";
-      //LOG_VARD(sqlStatement);
 
       //The sql changeset is made up of one or more sql statements for each changeset operation type.
       //Each operation starts with a comment header (e.g. /* node create 1 */), which can be used
@@ -115,7 +115,13 @@ void OsmApiDbSqlChangesetWriter::write(const QString sql)
         const QStringList statementParts = sqlStatement.trimmed().split(" ");
         assert(statementParts.length() >= 3);
         changesetStatType = statementParts[2] + "-" + statementParts[1]; //e.g. "node-create"
-        LOG_VARD(changesetStatType);
+        //LOG_VARD(changesetStatType);
+      }
+      else if (sqlStatement.contains("UPDATE changesets"))
+      {
+        //some tight coupling here to OsmChangesetSqlFileWriter
+        changesetStatType = "";
+        _changesetBoundsStr = sqlStatement.split("SET")[1].split("WHERE")[0].trimmed();
       }
     }
     if (_changesetStats.contains(changesetStatType))
@@ -168,8 +174,10 @@ void OsmApiDbSqlChangesetWriter::write(QFile& changesetSqlFile)
 
 QString OsmApiDbSqlChangesetWriter::getChangesetStats() const
 {
+  LOG_VARD(_changesetBoundsStr);
   return
     "Changeset(s) Created: " + QString::number(_changesetStats["changeset-create"]) + "\n" +
+    "Changeset Bounds: " + _changesetBoundsStr + "\n" +
     "Node(s) Created: " + QString::number(_changesetStats["node-create"]) + "\n" +
     "Node(s) Modified: " + QString::number(_changesetStats["node-modify"]) + "\n" +
     "Node(s) Deleted: " + QString::number(_changesetStats["node-delete"]) + "\n" +
@@ -200,15 +208,15 @@ bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr,
   shared_ptr<QSqlQuery> changesetItr = _db.getChangesetsCreatedAfterTime(timeStr);
   while (changesetItr->next())
   {
-    shared_ptr<Envelope> changesetBounds(
-      new Envelope(changesetItr->value(0).toDouble(),
-                   changesetItr->value(1).toDouble(),
-                   changesetItr->value(2).toDouble(),
-                   changesetItr->value(3).toDouble()));
+    Envelope changesetBounds(
+      changesetItr->value(0).toDouble(),
+      changesetItr->value(1).toDouble(),
+      changesetItr->value(2).toDouble(),
+      changesetItr->value(3).toDouble());
     //LOG_VARD(changesetBounds->toString());
-    if (changesetBounds->intersects(bounds))
+    if (changesetBounds.intersects(bounds))
     {
-      LOG_DEBUG("Conflict exists at bounds " << changesetBounds->toString());
+      LOG_DEBUG("Conflict exists at bounds " << changesetBounds.toString());
       return true;
     }
   }

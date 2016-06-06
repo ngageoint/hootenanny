@@ -40,6 +40,7 @@
 #include <QFile>
 #include <QSqlDatabase>
 #include <QString>
+#include <QSet>
 
 namespace hoot
 {
@@ -66,6 +67,7 @@ public:
 private:
 
   void _createChangeSet();
+  void _updateChangesetBounds();
 
   long _getNextId(const ElementType type);
 
@@ -93,12 +95,13 @@ private:
 
   QString _getVisibleStr(const bool visible) const { return visible ? "true" : "false"; }
 
-  long _changesetId;
-
   OsmApiDb _db;
   QFile _outputSql;
 
-  friend class OsmChangeWriterSqlTest;
+  long _changesetId;
+  Envelope _changesetBounds;
+
+  friend class ServiceOsmApiDbChangesetSqlFileWriterTest;
 
 };
 
