@@ -43,7 +43,7 @@ MultiLineStringSplitter::MultiLineStringSplitter()
 }
 
 auto_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFactory(
-    const WaySublineString& string) const
+    const WaySublineCollection& string) const
 {
   auto_ptr<FindNodesInWayFactory> nfPtr;
 
@@ -65,7 +65,7 @@ auto_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFactory(
 }
 
 ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
-  const WaySublineString& string, const vector<bool> &reverse, GeometryConverter::NodeFactory *nf)
+  const WaySublineCollection& string, const vector<bool> &reverse, GeometryConverter::NodeFactory *nf)
   const
 {
   assert(reverse.size() == string.getSublines().size());
@@ -118,7 +118,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
 }
 
 
-void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineString& string,
+void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollection& string,
   const vector<bool> &reverse, ElementPtr& match, ElementPtr &scraps,
   GeometryConverter::NodeFactory *nf) const
 {
@@ -130,9 +130,9 @@ void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineString
   }
 
   // rename the matches to the positive subline string
-  const WaySublineString& positive = string;
+  const WaySublineCollection& positive = string;
   // create an inversion of the WaySublineString
-  WaySublineString negative = string.invert();
+  WaySublineCollection negative = string.invert();
 
   // create all the sublines that fall within the positive WaySublineString and put them into
   // the match element.

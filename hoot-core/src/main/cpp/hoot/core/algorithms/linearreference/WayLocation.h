@@ -116,13 +116,25 @@ public:
 
   const shared_ptr<const Way>& getWay() const { return _way; }
 
+  /**
+   * Returns the node at this WayLocation. If isNode() returns false this will thrown an exception.
+   */
+  ConstNodePtr getNode() const;
+
   int getSegmentIndex() const { return _segmentIndex; }
 
   double getSegmentFraction() const { return _segmentFraction; }
 
-  bool isNode() const { return _segmentFraction <= 0.0 || _segmentFraction >= 1.0; }
+  /**
+   * Returns true if this way location is at one extreme or the other (isFirst() || isLast())
+   */
+  bool isExtreme() const { return isFirst() || isLast(); }
+
   bool isFirst() const { return _segmentIndex == 0 && _segmentFraction == 0.0; }
+
   bool isLast() const { return _segmentIndex == (int)_way->getNodeCount() - 1; }
+
+  bool isNode() const { return _segmentFraction <= 0.0 || _segmentFraction >= 1.0; }
 
   bool isValid() const { return _segmentIndex != -1; }
 
@@ -173,6 +185,12 @@ inline bool operator<=(const WayLocation& a, const WayLocation& b)
 inline bool operator>=(const WayLocation& a, const WayLocation& b)
 {
   return a.compareTo(b) >= 0;
+}
+
+// This could be made much more efficient if necessary.
+inline uint qHash(const WayLocation& wl)
+{
+  return qHash(wl.toString());
 }
 
 typedef shared_ptr<WayLocation> WayLocationPtr;

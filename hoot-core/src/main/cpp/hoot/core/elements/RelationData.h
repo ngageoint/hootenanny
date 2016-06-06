@@ -99,6 +99,7 @@ public:
   void removeElement(ElementId eid);
 
   void replaceElement(ElementId from, ElementId to);
+  void replaceElement(ElementId from, const QList<ElementId> &to);
 
   /**
    * See Relation::replaceElements for a description.

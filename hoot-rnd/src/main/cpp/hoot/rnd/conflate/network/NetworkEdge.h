@@ -2,6 +2,7 @@
 #define NETWORKEDGE_H
 
 // hoot
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/rnd/conflate/network/NetworkVertex.h>

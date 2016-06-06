@@ -38,6 +38,7 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/index/KnnWayIterator.h>
+#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/ElementConverter.h>
@@ -66,14 +67,17 @@ class OsmMapTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runCopyTest);
   CPPUNIT_TEST(runFindWayNeighbors);
   CPPUNIT_TEST(runNnTest);
-  CPPUNIT_TEST(runRemoveTest);
-  CPPUNIT_TEST(runReplaceNodeTest);
   CPPUNIT_TEST(runAppendTest);
   CPPUNIT_TEST(runAppendDuplicateNodeTest);
   CPPUNIT_TEST(runAppendDuplicateWayTest);
   CPPUNIT_TEST(runAppendDuplicateRelationTest);
   CPPUNIT_TEST(runAppendSameMapTest);
   CPPUNIT_TEST(runAppendDifferentCoordinateSystemsTest);
+  CPPUNIT_TEST(runRemoveTest);
+  CPPUNIT_TEST(runReplaceListTest1);
+  CPPUNIT_TEST(runReplaceListTest2);
+  CPPUNIT_TEST(runReplaceListTest3);
+  CPPUNIT_TEST(runReplaceNodeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -447,6 +451,114 @@ public:
 
     map->removeWay(map->findWays("note", "3")[0]);
     _checkKnnWayIterator(map);
+  }
+
+  /**
+   * Test to verify ways get replaced in a relation properly and the replaced way (w1) is removed.
+   */
+  void runReplaceListTest1()
+  {
+    shared_ptr<OsmMap> map(new OsmMap());
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
+    WayPtr w1(new Way(Status::Unknown1, 1, 15));
+    WayPtr w2(new Way(Status::Unknown1, 2, 15));
+    WayPtr w3(new Way(Status::Unknown1, 3, 15));
+    map->addElement(r1);
+    map->addElement(w1);
+    map->addElement(w2);
+    map->addElement(w3);
+
+    r1->addElement("foo", w2->getElementId());
+    r1->addElement("bar", w1->getElementId());
+    r1->addElement("lucky", w1->getElementId());
+
+    QList<ElementPtr> newWays;
+    newWays.append(w2);
+    newWays.append(w3);
+
+    map->replace(w1, newWays);
+
+    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
+      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"error:circular\":\"15\"},\n"
+      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"error:circular\":\"15\"},\n"
+      "{\"type\":\"relation\",\"id\":1,\"members\":[\n"
+      "{\"type\":\"way\",\"ref\":2,\"role\":\"foo\"},\n"
+      "{\"type\":\"way\",\"ref\":2,\"role\":\"bar\"},\n"
+      "{\"type\":\"way\",\"ref\":3,\"role\":\"bar\"},\n"
+      "{\"type\":\"way\",\"ref\":2,\"role\":\"lucky\"},\n"
+      "{\"type\":\"way\",\"ref\":3,\"role\":\"lucky\"}],\"tags\":{\"error:circular\":\"15\"}]\n"
+      "}\n",
+      OsmJsonWriter().toString(map));
+  }
+
+  /**
+   * Verify a way is replaced by nodes.
+   */
+  void runReplaceListTest2()
+  {
+    shared_ptr<OsmMap> map(new OsmMap());
+    WayPtr w1(new Way(Status::Unknown1, 1, 15));
+    NodePtr n1(new Node(Status::Unknown1, 1, 0, 0, 15));
+    NodePtr n2(new Node(Status::Unknown1, 2, 0, 0, 15));
+    NodePtr n3(new Node(Status::Unknown1, 3, 0, 0, 15));
+    map->addElement(w1);
+    map->addElement(n1);
+
+    w1->addNode(1);
+
+    QList<ElementPtr> newNodes;
+    newNodes.append(n2);
+    newNodes.append(n3);
+
+    map->replace(w1, newNodes);
+
+    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
+      "{\"type\":\"node\",\"id\":3,\"lat\":0,\"lon\":0},\n"
+      "{\"type\":\"node\",\"id\":2,\"lat\":0,\"lon\":0},\n"
+      "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0}]\n"
+      "}\n",
+      OsmJsonWriter().toString(map));
+  }
+
+  /**
+   * Verify a way is replaced by nodes.
+   */
+  void runReplaceListTest3()
+  {
+    shared_ptr<OsmMap> map(new OsmMap());
+    WayPtr w1(new Way(Status::Unknown1, 1, 15));
+    WayPtr w2(new Way(Status::Unknown1, 2, 15));
+    NodePtr n1(new Node(Status::Unknown1, 1, 0, 0, 15));
+    NodePtr n2(new Node(Status::Unknown1, 2, 0, 0, 15));
+    NodePtr n3(new Node(Status::Unknown1, 3, 0, 0, 15));
+    map->addElement(w1);
+    map->addElement(n1);
+
+    w1->addNode(1);
+
+    QList<ElementPtr> badNodes;
+    badNodes.append(n2);
+    badNodes.append(n3);
+
+    // we can't replace a node that is part of a way with multiple nodes.
+    CPPUNIT_ASSERT_THROW(map->replace(n1, badNodes), HootException);
+
+    QList<ElementPtr> badWay;
+    badWay.append(w2);
+    badWay.append(n2);
+
+    // we can't replace a node that is part of a way with a way.
+    CPPUNIT_ASSERT_THROW(map->replace(n1, badWay), HootException);
+
+    QList<ElementPtr> newNode;
+    newNode.append(n2);
+
+    map->replace(n1, newNode);
+
+    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
+      "{\"type\":\"way\",\"id\":1,\"nodes\":[2],\"tags\":{\"error:circular\":\"15\"}]\n"
+      "}\n",
+      OsmJsonWriter().toString(map));
   }
 
   void runReplaceNodeTest()

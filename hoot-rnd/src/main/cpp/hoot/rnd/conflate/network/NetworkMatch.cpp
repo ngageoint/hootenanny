@@ -9,9 +9,11 @@
 namespace hoot
 {
 
-NetworkMatch::NetworkMatch(const ConstOsmMapPtr& map, ConstEdgeMatchPtr edgeMatch, double score,
+NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr &details, ConstEdgeMatchPtr edgeMatch,
+  double score,
   ConstMatchThresholdPtr mt) :
   Match(mt),
+  _details(details),
   _edgeMatch(edgeMatch)
 {
   double p;
@@ -38,7 +40,7 @@ NetworkMatch::NetworkMatch(const ConstOsmMapPtr& map, ConstEdgeMatchPtr edgeMatc
   LOG_VAR(p);
 
   // find all the match pairs
-  _discoverWayPairs(map, edgeMatch);
+  _discoverWayPairs(details->getMap(), edgeMatch);
 }
 
 void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeMatch)

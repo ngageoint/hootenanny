@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef WAYSUBLINESTRING_H
-#define WAYSUBLINESTRING_H
+#ifndef WAYSUBLINECOLLECTION_H
+#define WAYSUBLINECOLLECTION_H
 
 // Standard
 #include <deque>
@@ -39,13 +39,13 @@ using namespace std;
 /**
  * Contains a continuous string of ways. Each way subline must touch the next subline end to start.
  */
-class WaySublineString
+class WaySublineCollection
 {
 public:
 
   typedef vector<WaySubline> SublineCollection;
 
-  WaySublineString();
+  WaySublineCollection();
 
   void addSubline(const WaySubline& subline);
 
@@ -54,7 +54,7 @@ public:
    * WaySublineString. This will only include sublines on the ways that are in this subline. If
    * the subline is empty then it will not be included.
    */
-  WaySublineString invert() const;
+  WaySublineCollection invert() const;
 
   /**
    * Return the sum of the lengths of all thes sublines.
@@ -65,7 +65,7 @@ public:
 
   QString toString() const;
 
-  bool touches(const WaySublineString& other) const;
+  bool touches(const WaySublineCollection& other) const;
 
 private:
   SublineCollection _sublines;
@@ -74,4 +74,4 @@ private:
 
 }
 
-#endif // WAYSUBLINESTRING_H
+#endif // WAYSUBLINECOLLECTION_H

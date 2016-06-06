@@ -7,6 +7,7 @@
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 
 #include "EdgeMatch.h"
+#include "NetworkDetails.h"
 
 namespace hoot
 {
@@ -17,13 +18,17 @@ namespace hoot
 class NetworkMatch : public Match
 {
 public:
-  NetworkMatch(const ConstOsmMapPtr& map, ConstEdgeMatchPtr edgeMatch,
+  NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
     double score, ConstMatchThresholdPtr mt);
 
   /**
    * Classifies the match and returns a classification object.
    */
   virtual const MatchClassification& getClassification() const { return _classification; }
+
+  ConstNetworkDetailsPtr getNetworkDetails() const { return _details; }
+
+  ConstEdgeMatchPtr getEdgeMatch() const { return _edgeMatch; }
 
   /**
    * This may require modification if the network matcher ever matches things besides lines. E.g.
@@ -73,6 +78,7 @@ protected:
 
 private:
   MatchClassification _classification;
+  ConstNetworkDetailsPtr _details;
   ConstEdgeMatchPtr _edgeMatch;
   set< pair<ElementId, ElementId> > _pairs;
 };

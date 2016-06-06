@@ -53,7 +53,7 @@ class Histogram;
  * A histogram is built up in this way for both input lines, normalized and the difference
  * calculated. 16 bins are used in the histogram.
  *
- * 0 means the histograms have effectively no difference. 1 means they're completely different.
+ * 1 means the histograms have effectively no difference. 0 means they're completely different.
  */
 class AngleHistogramExtractor : public FeatureExtractor
 {

@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/conflate/MatchCreator.h>
 #include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/rnd/conflate/network/NetworkDetails.h>
 #include <hoot/rnd/conflate/network/NetworkEdgeScore.h>
 
 namespace hoot
@@ -64,7 +65,7 @@ private:
   shared_ptr<MatchThreshold> _matchThreshold;
   ElementCriterionPtr _userCriterion;
 
-  const Match* _createMatch(const ConstOsmMapPtr& map, NetworkEdgeScorePtr e,
+  const Match* _createMatch(const NetworkDetailsPtr &map, NetworkEdgeScorePtr e,
     ConstMatchThresholdPtr mt);
 };
 
