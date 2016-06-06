@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wfs;
 
@@ -45,18 +45,18 @@ public class WfsManagerTest {
     @Category(UnitTest.class)
     public void createWFSDatasourceFeatureTest() throws Exception {
         WfsManager spy = Mockito.spy(new WfsManager());
-        Mockito.doReturn(null).when(spy)._createFeatureStore(anyString(), anyString());
-        Mockito.doNothing().when(spy)._addToWfsStore(null);
-        List<String> features = new ArrayList<String>();
+        Mockito.doReturn(null).when(spy).createFeatureStore(anyString(), anyString());
+        Mockito.doNothing().when(spy).addToWfsStore(null);
+        List<String> features = new ArrayList<>();
         features.add("feat1");
         features.add("feat2");
-        spy._createWFSDatasourceFeature("testdb", "testconn", features);
+        spy.createWFSDatasourceFeature("testdb", "testconn", features);
         String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><SQLFeatureStore xmlns=\"http://www.deegree.org/datasource/feature/sql\" "
                 + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" configVersion=\"3.2.0\" "
                 + "xsi:schemaLocation=\"http://www.deegree.org/datasource/feature/sql  "
                 + "http://schemas.deegree.org/datasource/feature/sql/3.2.0/sql.xsd\">"
                 + "<JDBCConnId>testconn</JDBCConnId><FeatureTypeMapping table=\"feat1\"/>"
                 + "<FeatureTypeMapping table=\"feat2\"/></SQLFeatureStore>";
-        verify(spy)._createFeatureStore(Matchers.matches("testdb"), Matchers.startsWith(content));
+        verify(spy).createFeatureStore(Matchers.matches("testdb"), Matchers.startsWith(content));
     }
 }

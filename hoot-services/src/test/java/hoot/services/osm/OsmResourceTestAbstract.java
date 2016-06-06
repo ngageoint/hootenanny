@@ -26,7 +26,6 @@
  */
 package hoot.services.osm;
 
-import java.io.IOException;
 import java.sql.Connection;
 
 import org.joda.time.format.DateTimeFormat;
@@ -35,7 +34,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +48,6 @@ import hoot.services.review.ReviewTestUtils;
 /*
  * Base class for tests that need to read/write OSM data to the services database
  */
-@Ignore
 public abstract class OsmResourceTestAbstract extends JerseyTest {
     private static final Logger log = LoggerFactory.getLogger(OsmResourceTestAbstract.class);
 
@@ -68,10 +65,9 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
 
     protected static Connection conn = null;
 
-    public OsmResourceTestAbstract(final String... controllerGroup) throws NumberFormatException, IOException {
+    public OsmResourceTestAbstract(final String... controllerGroup) throws NumberFormatException {
         super(controllerGroup);
-        final int grizzlyPort = Integer.parseInt(
-                HootProperties.getInstance().getProperty("grizzlyPort", HootProperties.getDefault("grizzlyPort")));
+        final int grizzlyPort = Integer.parseInt(HootProperties.getPropertyOrDefault("grizzlyPort"));
         asyncTestResource = client().asyncResource("http://localhost:" + String.valueOf(grizzlyPort));
     }
 
@@ -98,7 +94,6 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
             OsmTestUtils.userId = userId;
 
             OsmTestUtils.mapId = mapId;
-
         }
         catch (Exception e) {
             log.error(e.getMessage() + " ");
@@ -111,8 +106,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
         try {
             // no need to clear out each map, if we're clearing the whole db out
             // before each run
-            if (!Boolean.parseBoolean(HootProperties.getInstance().getProperty("servicesTestClearEntireDb",
-                    HootProperties.getDefault("servicesTestClearEntireDb")))) {
+            if (!Boolean.parseBoolean(HootProperties.getPropertyOrDefault("servicesTestClearEntireDb"))) {
                 DbUtils.deleteOSMRecord(conn, mapId);
             }
         }

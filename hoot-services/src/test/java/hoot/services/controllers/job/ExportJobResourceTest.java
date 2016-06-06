@@ -91,7 +91,7 @@ public class ExportJobResourceTest {
     @Test
     @Category(UnitTest.class)
     public void testProcessForWFS() throws Exception {
-        String wfsStoreDb = HootProperties.getInstance().getProperty("wfsStoreDb");
+        String wfsStoreDb = HootProperties.getProperty("wfsStoreDb");
         String userid = HootProperties.getProperty("dbUserId");
         String pwd = HootProperties.getProperty("dbPassword");
         String host = HootProperties.getProperty("dbHost");
@@ -168,11 +168,11 @@ public class ExportJobResourceTest {
         final String exportTime = "2016-05-04 10:15";
         mapTags.put("osm_api_db_export_time", exportTime);
         Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
-        final BoundingBox mapBounds = new BoundingBox(0, 0, 0, 0);
+        final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
         final String mapBoundsStr = mapBounds.toServicesString();
         Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-        final String commandArgs = spy.addExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null)
+        final String commandArgs = spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null)
                 .toString();
         log.debug(commandArgs);
 
@@ -181,7 +181,6 @@ public class ExportJobResourceTest {
         Assert.assertTrue(commandArgs.contains("{\"removereview\":\"false\"}"));
         Assert.assertTrue(commandArgs.contains("{\"inputtype\":\"db\"}"));
         Assert.assertTrue(commandArgs.contains("{\"temppath\":"));
-        Assert.assertTrue(commandArgs.contains("{\"changesetuserid\":\"1\"}"));
         Assert.assertTrue(commandArgs.contains("{\"changesetsourcedatatimestamp\":\"" + exportTime + "\"}"));
         Assert.assertTrue(commandArgs.contains("{\"changesetaoi\":\"" + mapBoundsStr + "\"}"));
     }
@@ -208,10 +207,10 @@ public class ExportJobResourceTest {
             final String exportTime = "2016-05-04 10:15";
             mapTags.put("osm_api_db_export_time", exportTime);
             Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
-            final BoundingBox mapBounds = new BoundingBox(0, 0, 0, 0);
+            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.addExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -239,10 +238,10 @@ public class ExportJobResourceTest {
             java.util.Map<String, String> mapTags = new HashMap<>();
             // add no map tags
             Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
-            final BoundingBox mapBounds = new BoundingBox(0, 0, 0, 0);
+            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.addExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.CONFLICT.getStatusCode(), e.getResponse().getStatus());
@@ -272,10 +271,10 @@ public class ExportJobResourceTest {
             final String exportTime = "2016-05-04 10:15";
             mapTags.put("osm_api_db_export_time", exportTime);
             Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
-            final BoundingBox mapBounds = new BoundingBox(0, 0, 0, 0);
+            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.addExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -310,10 +309,10 @@ public class ExportJobResourceTest {
             final String exportTime = "2016-05-04 10:15";
             mapTags.put("osm_api_db_export_time", exportTime);
             Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
-            final BoundingBox mapBounds = new BoundingBox(0, 0, 0, 0);
+            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.addExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -341,10 +340,10 @@ public class ExportJobResourceTest {
             final String exportTime = "2016-05-04 10:15";
             mapTags.put("osm_api_db_export_time", exportTime);
             Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
-            final BoundingBox mapBounds = new BoundingBox(0, 0, 0, 0);
+            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.addExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());

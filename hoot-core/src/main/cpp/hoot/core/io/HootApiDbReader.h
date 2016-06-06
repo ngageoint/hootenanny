@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -103,6 +103,14 @@ public:
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
+protected:
+
+  Tgs::BigMap<long, long> _nodeIdMap;
+  Tgs::BigMap<long, long> _relationIdMap;
+  Tgs::BigMap<long, long> _wayIdMap;
+
+  virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);
+
 private:
 
   Status _status;
@@ -116,15 +124,9 @@ private:
 
   shared_ptr<Element> _nextElement;
 
-  Tgs::BigMap<long, long> _nodeIdMap;
-  Tgs::BigMap<long, long> _relationIdMap;
-  Tgs::BigMap<long, long> _wayIdMap;
-
   const ElementType _getCurrentSelectElementType() const;
 
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
-
-  ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 
   //get element from QSqlQuery iterator
   shared_ptr<Element> _getElementUsingIterator();

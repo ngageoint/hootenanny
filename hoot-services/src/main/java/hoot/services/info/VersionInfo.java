@@ -67,7 +67,8 @@ public class VersionInfo {
 
     @Override
     public String toString() {
-        return "Name: " + name + System.lineSeparator() + "Version: " + version + System.lineSeparator() + "Built By: "
-                + builtBy;
+        return "Name: " + name + System.lineSeparator() +
+               "Version: " + version + System.lineSeparator() +
+               "Built By: " + builtBy;
     }
 }

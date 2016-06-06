@@ -191,9 +191,8 @@ public class Changeset extends Changesets {
                 .where(changesets.id.eq(getId())).singleResult(changesets);
 
         final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-        return changesetRecord.getClosedAt().after(now)
-                && changesetRecord.getNumChanges() < Integer.parseInt(HootProperties.getInstance().getProperty(
-                        "maximumChangesetElements", HootProperties.getDefault("maximumChangesetElements")));
+        return changesetRecord.getClosedAt().after(now) && changesetRecord.getNumChanges() < Integer
+                .parseInt(HootProperties.getPropertyOrDefault("maximumChangesetElements"));
     }
 
     /**
@@ -230,8 +229,8 @@ public class Changeset extends Changesets {
                 .where(changesets.id.eq(getId())).singleResult(changesets);
 
         if (isOpen()) {
-            final int maximumChangesetElements = Integer.parseInt(HootProperties.getInstance()
-                    .getProperty("maximumChangesetElements", HootProperties.getDefault("maximumChangesetElements")));
+            final int maximumChangesetElements = Integer
+                    .parseInt(HootProperties.getPropertyOrDefault("maximumChangesetElements"));
             Timestamp newClosedAt = null;
             assert (changesetRecord.getNumChanges() <= maximumChangesetElements);
             if (changesetRecord.getNumChanges() == maximumChangesetElements) {
@@ -249,18 +248,17 @@ public class Changeset extends Changesets {
                 final DateTime createdAt = new DateTime(changesetRecord.getCreatedAt().getTime());
                 final DateTime closedAt = new DateTime(changesetRecord.getClosedAt().getTime());
 
-                final int changesetIdleTimeout = Integer.parseInt(HootProperties.getInstance().getProperty(
-                        "changesetIdleTimeoutMinutes", HootProperties.getDefault("changesetIdleTimeoutMinutes")));
-                final int changesetMaxOpenTime = Integer.parseInt(HootProperties.getInstance().getProperty(
-                        "changesetMaxOpenTimeHours", HootProperties.getDefault("changesetMaxOpenTimeHours")));
+                final int changesetIdleTimeout = Integer
+                        .parseInt(HootProperties.getPropertyOrDefault("changesetIdleTimeoutMinutes"));
+                final int changesetMaxOpenTime = Integer
+                        .parseInt(HootProperties.getPropertyOrDefault("changesetMaxOpenTimeHours"));
                 // The testChangesetAutoClose option = true causes
                 // changesetIdleTimeoutMinutes and
                 // changesetMaxOpenTimeHours to be interpreted in seconds rather
                 // than minutes and hours,
                 // respectively. This enables faster running of auto-close
                 // related unit tests.
-                if (Boolean.parseBoolean(HootProperties.getInstance().getProperty("testChangesetAutoClose",
-                        HootProperties.getDefault("testChangesetAutoClose")))) {
+                if (Boolean.parseBoolean(HootProperties.getPropertyOrDefault("testChangesetAutoClose"))) {
                     final int changesetMaxOpenTimeSeconds = changesetMaxOpenTime;
                     final int changesetIdleTimeoutSeconds = changesetIdleTimeout;
                     if (Seconds.secondsBetween(createdAt, closedAt)
@@ -320,8 +318,8 @@ public class Changeset extends Changesets {
      */
     public void updateNumChanges(final int numChanges) throws Exception {
         log.debug("Updating num changes...");
-        final int maximumChangesetElements = Integer.parseInt(HootProperties.getInstance()
-                .getProperty("maximumChangesetElements", HootProperties.getDefault("maximumChangesetElements")));
+        int maximumChangesetElements = Integer
+                .parseInt(HootProperties.getPropertyOrDefault("maximumChangesetElements"));
         Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
                 .where(changesets.id.eq(getId())).singleResult(changesets);
         final int currentNumChanges = changeset.getNumChanges();
@@ -394,14 +392,13 @@ public class Changeset extends Changesets {
         final DateTime now = new DateTime();
 
         Timestamp closedAt = null;
-        final int changesetIdleTimeout = Integer.parseInt(HootProperties.getInstance()
-                .getProperty("changesetIdleTimeoutMinutes", HootProperties.getDefault("changesetIdleTimeoutMinutes")));
+        final int changesetIdleTimeout = Integer
+                .parseInt(HootProperties.getPropertyOrDefault("changesetIdleTimeoutMinutes"));
         // The testChangesetAutoClose option = true causes
         // changesetIdleTimeoutMinutes to be interpreted
         // in seconds rather than minutes and enables faster running of
         // auto-close related unit tests.
-        if (Boolean.parseBoolean(HootProperties.getInstance().getProperty("testChangesetAutoClose",
-                HootProperties.getDefault("testChangesetAutoClose")))) {
+        if (Boolean.parseBoolean(HootProperties.getPropertyOrDefault("testChangesetAutoClose"))) {
             closedAt = new Timestamp(now.plusSeconds(changesetIdleTimeout).getMillis());
         }
         else {
@@ -478,7 +475,7 @@ public class Changeset extends Changesets {
         Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
                 .where(changesets.id.eq(getId())).singleResult(changesets);
         return (newChangeCount + changeset.getNumChanges()) > Integer
-                .parseInt(HootProperties.getInstance().getProperty("maximumChangesetElements"));
+                .parseInt(HootProperties.getProperty("maximumChangesetElements"));
     }
 
     private void writeTags(final long mapId, final String tagsStr) throws Exception {

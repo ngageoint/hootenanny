@@ -26,8 +26,6 @@
  */
 package hoot.services.controllers.wps;
 
-import java.io.IOException;
-
 import org.deegree.services.wps.ProcessletException;
 import org.deegree.services.wps.ProcessletExecutionInfo;
 import org.deegree.services.wps.ProcessletInputs;
@@ -44,16 +42,9 @@ import hoot.services.HootProperties;
 public class ConflateProcesslet extends JobProcesslet {
     private static final Logger log = LoggerFactory.getLogger(ConflateProcesslet.class);
 
-    private String makefilePath = null;
-
     public ConflateProcesslet() throws Exception {
-        try {
-            makefilePath = HootProperties.getProperty("ConflateMakefilePath");
-            this.setProcessScriptName(makefilePath);
-        }
-        catch (IOException e) {
-            log.error(e.getMessage());
-        }
+        String makefilePath = HootProperties.getProperty("ConflateMakefilePath");
+        this.setProcessScriptName(makefilePath);
     }
 
     @Override
@@ -63,10 +54,9 @@ public class ConflateProcesslet extends JobProcesslet {
         JSONArray args = parseRequestParams(in);
 
         try {
-            @SuppressWarnings("unused")
             String confOutputName = null;
-            for (int i = 0; i < args.size(); i++) {
-                JSONObject arg = (JSONObject) args.get(i);
+            for (Object arg1 : args) {
+                JSONObject arg = (JSONObject) arg1;
                 Object val = arg.get("OUTPUT_NAME");
 
                 if (val != null) {
@@ -86,6 +76,5 @@ public class ConflateProcesslet extends JobProcesslet {
         catch (Exception e) {
             log.error(e.getMessage());
         }
-
     }
 }

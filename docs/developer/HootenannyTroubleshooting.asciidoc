@@ -6,13 +6,14 @@ This is similar, but not identical to, the troubleshooting section in the Hooten
 === Core
 
 * *Don't think the correct version of Hootenanny core is installed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision| logo from within the UI.  Or as a sanity check, type 'hoot --version' from the command line.  The version displayed should match the version you installed.  Finally, the core version used by the services can be found by navigating to the following URLs:
-  ** +http://localhost/hoot-services/info/about/coreVersionInfo+
-  ** +http://localhost/hoot-services/info/about/coreVersionDetail+
+	** +http://localhost/hoot-services/info/about/coreVersionInfo+
+	** +http://localhost/hoot-services/info/about/coreVersionDetail+
 
 * *Not sure if hoot is using the correct version of a dependency library?* --> run: +ldd /usr/local/bin/hoot.bin+ to see a list of the libraries its using.  You can use +dpkg -l | grep <library name>+ to see the libraries installed on your system.
 
 * *Problems reading/writing from the database when using hoot?* --> Verify the database credentials in:
-	**  +/usr/local/hootenanny-X.Y.Z/conf/DatabaseConfig.sh+ 
+	**  +/usr/local/hootenanny-X.Y.Z/conf/DatabaseConfigLocal.sh+
+	**  +/usr/local/hootenanny-X.Y.Z/conf/DatabaseConfigDefault.sh+
 
 * *"PostgreSQL" and "FileGDB" formats do not show when running ogrinfo --formats* --> Possibly you have compiled GDAL incorrectly. Re-compile with the steps listed in scripts/InstallHoot-CentOS-RHEL.sh that were run during the hoot core installation.
 
@@ -32,28 +33,28 @@ This is similar, but not identical to, the troubleshooting section in the Hooten
 
 * *Unable to delete one of the databases?* --> try (from link:$$http://stackoverflow.com/questions/11388786/how-does-one-drop-a-template-database-from-postgresql$$[here]):
 
--------------------------------------- 
+--------------------------------------
 psql -U hoot
 postgres=# UPDATE pg_database SET datistemplate='false' WHERE datname='database name';
 UPDATE 1
 postgres=# DROP DATABASE database name;
 DROP DATABASE
--------------------------------------- 
+--------------------------------------
 
 OR
 
--------------------------------------- 
+--------------------------------------
 # check and see if anything is holding onto the database
 SELECT * FROM pg_stat_activity WHERE datname='database name';
 dropdb 'database name'
--------------------------------------- 
+--------------------------------------
 
 * *Want to clear data out of the hoot database?* -->
 
--------------------------------------- 
+--------------------------------------
 export HOOT_HOME=/usr/local/hoot
 $HOOT_HOME/scripts/DeleteAllTables.sh
--------------------------------------- 
+--------------------------------------
 
 To re-create the hoot database, recompile Hootenanny using the --with-services option.
 
@@ -75,22 +76,23 @@ delete from databasechangeloglock *;
 === Services
 
 * *Need to monitor the Tomcat log for errors?* -->
--------------------------------------- 
+--------------------------------------
 tail -f /var/log/tomcat6/catalina.out | grep -i -e ERROR -e SEVERE
--------------------------------------- 
+--------------------------------------
 In some cases, you may need to execute the following instead:
--------------------------------------- 
+--------------------------------------
 tail -f /usr/share/tomcat6/logs/catalina.out | grep -i -e ERROR -e SEVERE
--------------------------------------- 
+--------------------------------------
 
 * *Not sure the correct version of Hootenanny services are deployed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision| logo from within the UI.  Or as a sanity check, verify the services version by navigating to the following URLs:
-  ** +http://localhost/hoot-services/info/about/servicesVersionInfo+
-  ** +http://localhost/hoot-services/info/about/servicesVersionDetail+
+	** +http://localhost/hoot-services/info/about/servicesVersionInfo+
+	** +http://localhost/hoot-services/info/about/servicesVersionDetail+
 
 * *Do you want to see more granular services log output or redirect it to a file?* --> Edit +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/class/log4j.xml+ . See the log4j documentation for details on how to edit the file. Restart Tomcat after any changes made to the file.
 
 * *Problems reading/writing from the database when using hoot?* --> Verify the database credentials in:
-	**  +$HOOT_HOME/conf/DatabaseConfig.sh+ 
+	**  +$HOOT_HOME/conf/DatabaseConfigLocal.sh+
+	**  +$HOOT_HOME/conf/DatabaseConfigDefault.sh+
 	**  +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml+ 
 	**  +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf+ 
 	**  +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/workspace/jdbc/WFS_Connection.xml+ 
@@ -106,19 +108,19 @@ tail -f /usr/share/tomcat6/logs/catalina.out | grep -i -e ERROR -e SEVERE
 
 * *Seeing this WFS error?* -->
 
--------------------------------------- 
+--------------------------------------
 2014-09-11 10:26:27 ERROR AbstractResourceManager:268 - Could not create resource web services: Error initializing WFS/FeatureStores: Cannot add feature store 'ex_601e0eb1bb994c3c949ddbed78424c6b': no such feature store has been configured.
 2014-09-11 10:26:27 ERROR AbstractResourceManager:270 - Cause was: Cannot add feature store 'ex_601e0eb1bb994c3c949ddbed78424c6b': no such feature store has been configured.
--------------------------------------- 
+--------------------------------------
 
 You're seeing expired WFS links. To remove them:
 
--------------------------------------- 
+--------------------------------------
 cd $HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/workspace
 sudo rm -f datasources/feature/ex_*.xml 
 sudo rm -f datasources/feature/*.properties
 sudo rm -f services/ex_*.xml
--------------------------------------- 
+--------------------------------------
 
 * *Seeing this error: "--ogr2osm Unable to open /path/to/file.shp"* --> Possibly you do not have the Postgres extension installed for GDAL. See related troubleshooting tip in the "Core" section.
 

@@ -80,7 +80,7 @@ public class ExportJobResource extends JobControllerBase {
                 tempOutputPath = HootProperties.getProperty("tempOutputPath");
             }
 
-            wfsStoreDb = HootProperties.getInstance().getProperty("wfsStoreDb");
+            wfsStoreDb = HootProperties.getProperty("wfsStoreDb");
             homeFolder = HootProperties.getProperty("homeFolder");
             translationExtPath = HootProperties.getProperty("translationExtPath");
         }
@@ -183,7 +183,7 @@ public class ExportJobResource extends JobControllerBase {
                 postChainJobRquest(jobId, jobArgs.toJSONString());
             }
             else if (type != null && type.equalsIgnoreCase("osm_api_db")) {
-                commandArgs = addExportToOsmApiDbCommandArgs(commandArgs, conn);
+                commandArgs = getExportToOsmApiDbCommandArgs(commandArgs, conn);
                 postJobRquest(jobId, createPostBody(commandArgs));
             }
             else {
@@ -223,7 +223,7 @@ public class ExportJobResource extends JobControllerBase {
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
-    protected JSONArray addExportToOsmApiDbCommandArgs(final JSONArray inputCommandArgs, Connection conn)
+    protected JSONArray getExportToOsmApiDbCommandArgs(final JSONArray inputCommandArgs, Connection conn)
             throws Exception {
         JSONArray commandArgs = new JSONArray();
         commandArgs.addAll(inputCommandArgs);
@@ -247,13 +247,6 @@ public class ExportJobResource extends JobControllerBase {
         arg.put("temppath", HootProperties.getProperty("tempOutputPath"));
         commandArgs.add(arg);
 
-        // hardcoding this for now; if mapedit user auth is tied in, then we'd
-        // expect the UI to get
-        // the value from there and pass it in instead
-        arg = new JSONObject();
-        arg.put("changesetuserid", "1");
-        commandArgs.add(arg);
-
         final Map conflatedMap = getConflatedMap(commandArgs, conn);
 
         checkMapForExportTag(conflatedMap, commandArgs, conn);
@@ -264,51 +257,50 @@ public class ExportJobResource extends JobControllerBase {
     }
 
     private Map getConflatedMap(final JSONArray commandArgs, Connection conn) throws Exception {
-        final String conflatedMapName = getParameterValue("input", commandArgs);
-        List<Long> mapIds = getMapIdsByName(conflatedMapName, conn);
+        final String mapName = getParameterValue("input", commandArgs);
+        List<Long> mapIds = getMapIdsByName(mapName, conn);
         // we don't expect the services to try to export a map that has multiple
         // name entries, but
         // check for it anyway
         if (mapIds.size() > 1) {
-            ResourceErrorHandler.handleError("Error exporting data.  Multiple maps with name: " + conflatedMapName,
+            ResourceErrorHandler.handleError("Error exporting data.  Multiple maps with name: " + mapName,
                     Status.BAD_REQUEST, log);
         }
         // this may be checked somewhere else down the line...not sure
         else if (mapIds.size() == 0) {
-            ResourceErrorHandler.handleError("Error exporting data.  No map exists with name: " + conflatedMapName,
+            ResourceErrorHandler.handleError("Error exporting data.  No map exists with name: " + mapName,
                     Status.BAD_REQUEST, log);
         }
         Map conflatedMap = new Map(mapIds.get(0), conn);
-        conflatedMap.setDisplayName(conflatedMapName);
+        conflatedMap.setDisplayName(mapName);
         return conflatedMap;
     }
 
-    // adding this to satisfy the mock...don't love adding it
+    // adding this to satisfy the mock
     protected List<Long> getMapIdsByName(final String conflatedMapName, Connection conn) throws Exception {
         return DbUtils.getMapIdsByName(conn, conflatedMapName);
     }
 
-    // adding this to satisfy the mock...don't love adding it
+    // adding this to satisfy the mock
     protected java.util.Map<String, String> getMapTags(final long mapId, final Connection conn) throws Exception {
         return DbUtils.getMapsTableTags(mapId, conn);
     }
 
-    // adding this to satisfy the mock...don't love adding it
-    protected BoundingBox getMapBounds(final Map conflatedMap) throws Exception {
-        return conflatedMap.getBounds();
+    // adding this to satisfy the mock
+    protected BoundingBox getMapBounds(final Map map) throws Exception {
+        return map.getBounds();
     }
 
-    private void checkMapForExportTag(final Map conflatedMap, JSONArray commandArgs, Connection conn) throws Exception {
-        final java.util.Map<String, String> tags = getMapTags(conflatedMap.getId(), conn);
+    private void checkMapForExportTag(final Map map, JSONArray commandArgs, Connection conn) throws Exception {
+        final java.util.Map<String, String> tags = getMapTags(map.getId(), conn);
         // Technically, you don't have to have this tag to export the data, but
         // since it helps to detect
         // conflicts, and we want to be as safe as possible when writing to this
         // external database will
         // just always enforce it.
         if (!tags.containsKey("osm_api_db_export_time")) {
-            ResourceErrorHandler.handleError(
-                    "Error exporting data.  Map with ID: " + String.valueOf(conflatedMap.getId()) + " and name: "
-                            + conflatedMap.getDisplayName() + " has no osm_api_db_export_time tag.", Status.CONFLICT,
+            ResourceErrorHandler.handleError("Error exporting data.  Map with ID: " + String.valueOf(map.getId())
+                    + " and name: " + map.getDisplayName() + " has no osm_api_db_export_time tag.", Status.CONFLICT,
                     log);
         }
         JSONObject arg = new JSONObject();

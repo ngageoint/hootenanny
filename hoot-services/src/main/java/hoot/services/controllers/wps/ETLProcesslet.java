@@ -22,11 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
-
-import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,31 +34,21 @@ import hoot.services.HootProperties;
 
 /**
  * @author Jong Choi
- * 
+ *         <p>
  *         WPS processlet for ETL operation. The operation is done using make
  *         file. See hoot-services.conf for dependencies. Please note that the
- *         arguments used by the make file is driven by ETLProcesslet.xml
- *
+ *         arguments used by the make file is driven by ETLProcesslet.XML
  */
 public class ETLProcesslet extends JobProcesslet {
 
-    private static final Logger log = LoggerFactory.getLogger(ETLProcesslet.class);
-
-    private String makefileName = null;
+    private static final Logger logger = LoggerFactory.getLogger(ETLProcesslet.class);
 
     /**
      * Constructor. Configures the makefile name through hoot-services.conf so
      * it can modified externally.
      */
     public ETLProcesslet() throws Exception {
-        try {
-            makefileName = HootProperties.getInstance().getProperty("ETLMakefile",
-                    HootProperties.getDefault("ETLMakefile"));
-            this.setProcessScriptName(makefileName);
-        }
-        catch (IOException e) {
-            log.error(e.getMessage());
-        }
+        String makefileName = HootProperties.getPropertyOrDefault("ETLMakefile");
+        this.setProcessScriptName(makefileName);
     }
-
 }

@@ -22,11 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.job;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -56,20 +55,18 @@ public class JobStatusWebPoller {
     private Connection conn;
     private int jobStatusPollDelayMs;
 
-    public JobStatusWebPoller(final WebResource webResource, Connection conn)
-            throws NumberFormatException, IOException {
+    public JobStatusWebPoller(final WebResource webResource, Connection conn) throws NumberFormatException {
         this.webResource = webResource;
         this.conn = conn;
         // increase this to something long when debugging in debugger to the
         // poller from polling and changing
         // program flow while you're trying to debug service code
-        this.jobStatusPollDelayMs = Integer.parseInt(HootProperties.getInstance()
-                .getProperty("testJobStatusPollerTimeout", HootProperties.getDefault("testJobStatusPollerTimeout")));
+        this.jobStatusPollDelayMs = Integer.parseInt(HootProperties.getPropertyOrDefault("testJobStatusPollerTimeout"));
     }
 
     /**
      * Queries the job service for a job's status
-     * 
+     *
      * @param jobId
      *            ID of the job to query
      * @return a hoot job status
@@ -85,7 +82,7 @@ public class JobStatusWebPoller {
 
     /**
      * Queries the job service for a job's status
-     * 
+     *
      * @param jobId
      *            ID of the job to query
      * @return a hoot job status object
@@ -101,7 +98,7 @@ public class JobStatusWebPoller {
     /**
      * Queries the job service for a job's status until the job completes or
      * fails
-     * 
+     *
      * @param jobId
      *            ID of the job to query
      * @param jobShouldFail
@@ -135,10 +132,10 @@ public class JobStatusWebPoller {
     /**
      * Unit test method which verifies the status of a particular job in the
      * services database
-     * 
+     * <p>
      * Method has test assertions which fail if the job does not exist, does not
      * have the specified status, or has improperly marked timestamps.
-     * 
+     *
      * @param jobId
      *            ID of the job to verify
      * @param status

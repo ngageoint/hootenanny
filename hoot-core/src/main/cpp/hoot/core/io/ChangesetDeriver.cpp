@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,11 +34,9 @@ namespace hoot
 {
 
 ChangesetDeriver::ChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to) :
-  _from(from),
-  _to(to)
+_from(from),
+_to(to)
 {
-  LOG_INFO("Changeset deriver initialization...");
-
   if (_from->getProjection()->IsGeographic() == false ||
       _to->getProjection()->IsGeographic() == false)
   {
@@ -89,12 +87,16 @@ Change ChangesetDeriver::_nextChange()
   if (!_fromE.get() && _toE.get())
   {
     result.type = Change::Create;
-    //OSM expects created elements to have version = 0
-    _toE->setVersion(0);
     result.e = _toE;
 
-    LOG_DEBUG("run out of 'from'' elements:");
-    LOG_VARD(result.toString());
+    /*if (_toE->getTags().contains("note"))
+    {
+      result.note = _toE->getTags().get("note");
+    }*/
+    /*LOG_DEBUG(
+      "run out of from elements; 'from' element null; 'to' element not null: " <<
+        _toE->getElementId() << "; creating 'to' element...");
+    LOG_VARD(result.toString());*/
 
     _toE = _to->readNextElement();
   }
@@ -104,39 +106,52 @@ Change ChangesetDeriver::_nextChange()
     result.type = Change::Delete;
     result.e = _fromE;
 
-    LOG_DEBUG("run out of 'to' elements:");
-    LOG_VARD(result.toString());
+    /*if (_fromE->getTags().contains("note"))
+    {
+      result.note = _fromE->getTags().get("note");
+    }*/
+    /*LOG_DEBUG(
+      "run out of 'to' elements; to' element null; 'from' element not null: " <<
+      _fromE->getElementId() << "; deleting 'from' element...");
+    LOG_VARD(result.toString());*/
 
     _fromE = _from->readNextElement();
   }
   else
   {
     // while the elements are exactly the same there is nothing to do.
-    while (_fromE.get() && _toE.get() &&
-        _fromE->getElementId() == _toE->getElementId() &&
-        ElementComparer().isSame(_fromE, _toE))
+    while (_fromE.get() && _toE.get() && _fromE->getElementId() == _toE->getElementId() &&
+           ElementComparer().isSame(_fromE, _toE))
     {
-      LOG_DEBUG("skipping identical elements - 'from' element: " << _fromE->getElementId() <<
+      /*LOG_DEBUG("skipping identical elements - 'from' element: " << _fromE->getElementId() <<
                 " 'to' element: " << _toE->getElementId());
+      LOG_VARD(_fromE->toString());
+      LOG_VARD(_toE->toString());*/
 
-      _fromE = _from->readNextElement();
       _toE = _to->readNextElement();
+      _fromE = _from->readNextElement();
     }
 
     if (!_fromE.get() && !_toE.get())
     {
       // pass
-      LOG_DEBUG("both null elements");
+      //LOG_DEBUG("both are null elements; skipping");
     }
+    // if we've run out of "from" elements, create all the remaining elements in "to"
     else if (!_fromE.get() && _toE.get())
     {
       result.type = Change::Create;
-      //OSM expects created elements to have version = 0
-      _toE->setVersion(0);
       result.e = _toE;
 
-      LOG_DEBUG("'from' element null; 'to' element not null: " << _toE->getElementId());
-      LOG_VARD(result.toString());
+      /*if (_toE->getTags().contains("note"))
+      {
+        result.note = _toE->getTags().get("note");
+      }*/
+      /*LOG_DEBUG(
+        "run out of from elements; 'from' element null; 'to' element not null: " <<
+          _toE->getElementId() << "; creating 'to' element...");
+      LOG_VARD(_toE->toString());
+      LOG_VARD(result.toString());*/
 
       _toE = _to->readNextElement();
     }
@@ -146,8 +161,15 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Delete;
       result.e = _fromE;
 
-      LOG_DEBUG("'to' element null; 'from' element not null: " << _fromE->getElementId());
-      LOG_VARD(result.toString());
+      /*if (_fromE->getTags().contains("note"))
+      {
+        result.note = _fromE->getTags().get("note");
+      }*/
+      /*LOG_DEBUG(
+        "run out of 'to' elements; to' element null; 'from' element not null: " <<
+        _fromE->getElementId() << "; deleting 'from' element...");
+      LOG_VARD(_fromE->toString());
+      LOG_VARD(result.toString());*/
 
       _fromE = _from->readNextElement();
     }
@@ -156,10 +178,16 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Modify;
       result.e = _toE;
 
-      LOG_DEBUG(
+      /*if (_toE->getTags().contains("note"))
+      {
+        result.note = _toE->getTags().get("note");
+      }*/
+      /*LOG_DEBUG(
         "'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<
-        _toE->getElementId());
-      LOG_VARD(result.toString());
+        _toE->getElementId() << " modifying 'to' element...");
+      LOG_VARD(_fromE->toString());
+      LOG_VARD(_toE->toString());
+      LOG_VARD(result.toString());*/
 
       _toE = _to->readNextElement();
     }
@@ -168,24 +196,34 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Delete;
       result.e = _fromE;
 
-      LOG_DEBUG(
+      /*if (_fromE->getTags().contains("note"))
+      {
+        result.note = _fromE->getTags().get("note");
+      }*/
+      /*LOG_DEBUG(
         "'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
-        _toE->getElementId());
-      LOG_VARD(result.toString());
+        _toE->getElementId() << " deleting 'from' element...");
+      LOG_VARD(_fromE->toString());
+      LOG_VARD(_toE->toString());
+      LOG_VARD(result.toString());*/
 
       _fromE = _from->readNextElement();
     }
     else
     {
       result.type = Change::Create;
-      //OSM expects created elements to have version = 0
-      _toE->setVersion(0);
       result.e = _toE;
 
-      LOG_DEBUG(
+      /*if (_toE->getTags().contains("note"))
+      {
+        result.note = _toE->getTags().get("note");
+      }*/
+      /*LOG_DEBUG(
         "'from' element id: " << _fromE->getElementId() << " greater than 'to' element id: " <<
-        _toE->getElementId());
-      LOG_VARD(result.toString());
+        _toE->getElementId() << " creating 'to' element...");
+      LOG_VARD(_fromE->toString());
+      LOG_VARD(_toE->toString());
+      LOG_VARD(result.toString());*/
 
       _toE = _to->readNextElement();
     }

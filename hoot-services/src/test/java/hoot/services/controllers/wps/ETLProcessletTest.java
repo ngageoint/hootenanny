@@ -48,8 +48,7 @@ public class ETLProcessletTest {
     public void testParseParam() throws Exception {
         String ret = generateJobParam();
         String expected = "";
-        String ETLMakefile = HootProperties.getInstance().getProperty("ETLMakefile",
-                HootProperties.getDefault("ETLMakefile"));
+        String ETLMakefile = HootProperties.getPropertyOrDefault("ETLMakefile");
 
         expected = "{\"caller\":\"ETLProcesslet\",\"exec\":\"" + ETLMakefile
                 + "\",\"params\":[{\"translation\":\"\\/test\\/file\\/test.js\"},";

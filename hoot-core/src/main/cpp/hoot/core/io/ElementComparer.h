@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- *
+ * Compares two elements of the same type for similarity
  */
 class ElementComparer
 {
@@ -50,16 +50,13 @@ public:
 
 private:
 
+  bool _compareNode(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e);
+
+  bool _compareWay(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e);
+
+  bool _compareRelation(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e);
+
   Meters _threshold;
-
-  bool _compareNode(const shared_ptr<const Element>& re,
-                    const shared_ptr<const Element>& e);
-
-  bool _compareWay(const shared_ptr<const Element>& re,
-                   const shared_ptr<const Element>& e);
-
-  bool _compareRelation(const shared_ptr<const Element>& re,
-                        const shared_ptr<const Element>& e);
 
 };
 

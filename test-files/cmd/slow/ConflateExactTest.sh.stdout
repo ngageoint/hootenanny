@@ -1,3 +1,0 @@
-15:31:08.128 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:31:08.129 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:score = 0.2
-15:31:08.129 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:score = 0.1

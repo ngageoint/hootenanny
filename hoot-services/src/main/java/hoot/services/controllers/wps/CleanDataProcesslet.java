@@ -22,11 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
-
-import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,27 +34,22 @@ import hoot.services.HootProperties;
 
 /**
  * @author Jong Choi
- * 
- *
  */
 public class CleanDataProcesslet extends JobProcesslet {
 
     private static final Logger log = LoggerFactory.getLogger(CleanDataProcesslet.class);
 
-    private String makefileName = null;
+    private static final String makefileName;
+
+    static {
+        makefileName = HootProperties.getProperty("cleanDataMakePath");
+    }
 
     /**
      * Constructor. Configures the makefile name through hoot-services.conf so
      * it can modified externally.
      */
     public CleanDataProcesslet() throws Exception {
-        try {
-            makefileName = HootProperties.getProperty("cleanDataMakePath");
-            this.setProcessScriptName(makefileName);
-        }
-        catch (IOException e) {
-            log.error(e.getMessage());
-        }
+        this.setProcessScriptName(makefileName);
     }
-
 }

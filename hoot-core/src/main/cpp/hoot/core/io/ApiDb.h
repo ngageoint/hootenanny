@@ -190,6 +190,17 @@ public:
    */
   QSqlDatabase getDB() { return _db; }
 
+  static long round(double x);
+
+  /**
+   * Calculates the QuadTile for a point.
+   * http://wiki.openstreetmap.org/wiki/QuadTiles
+   *
+   * The code was taken from quad_tile.h and quad_tile.c in the openstreetmap-website
+   * https://github.com/openstreetmap/openstreetmap-website
+   */
+  static unsigned int tileForPoint(double lat, double lon);
+
 protected:
 
   virtual QSqlQuery _exec(const QString& sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),

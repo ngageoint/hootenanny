@@ -5,6 +5,7 @@ QT += script \
     sql \
     testlib \
     xml \
+    network \
 
 TARGET = HootCoreTest
 TEMPLATE = lib
@@ -175,14 +176,14 @@ SOURCES += \
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
     src/test/cpp/hoot/core/io/HootApiDbTest.cpp \
-    src/test/cpp/hoot/core/io/OsmApiDbTest.cpp \
     src/test/cpp/hoot/core/io/ServicesDbTestUtils.cpp \
-    src/test/cpp/hoot/core/io/OsmApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/HootApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/HootApiDbWriterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmChangesetSqlFileWriterTest.cpp \
     src/test/cpp/hoot/core/io/PostgresqlDumpfileWriterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmApiDbChangesetWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbSqlChangesetWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetSqlFileWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbReaderTest.cpp \
 
 HEADERS += \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.h \
@@ -222,5 +223,6 @@ SOURCES += \
     src/test/cpp/hoot/core/ops/TrivialOpTest.cpp \
     src/test/cpp/hoot/core/conflate/extractors/HistogramTest.cpp \
     src/test/cpp/hoot/core/algorithms/WayMatchStringMergerTest.cpp \
-    src/test/cpp/hoot/core/algorithms/linearreference/WayMatchStringMappingConverterTest.cpp
+    src/test/cpp/hoot/core/algorithms/linearreference/WayMatchStringMappingConverterTest.cpp \
+    src/test/cpp/hoot/core/util/OsmJsonReaderTest.cpp
 

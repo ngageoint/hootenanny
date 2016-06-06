@@ -43,9 +43,9 @@ import hoot.services.models.review.ReviewableItem;
  *
  */
 public class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
-    private static final Logger log = LoggerFactory.getLogger(RandomReviewableQuery.class);
+    private static final Logger logger = LoggerFactory.getLogger(RandomReviewableQuery.class);
 
-    public RandomReviewableQuery(final Connection c, final long mapid) {
+    public RandomReviewableQuery(Connection c, long mapid) {
         super(c, mapid);
 
         try {
@@ -54,28 +54,20 @@ public class RandomReviewableQuery extends ReviewableQueryBase implements IRevie
             // a more centralized location. Given that this is the only class
             // using random() in a SQL
             // query so far, no harm is done for the time being.
-            if (Boolean.parseBoolean(HootProperties.getInstance().getProperty("seedRandomQueries",
-                    HootProperties.getDefault("seedRandomQueries")))) {
-                final double seed = Double.parseDouble(HootProperties.getInstance().getProperty("randomQuerySeed",
-                        HootProperties.getDefault("randomQuerySeed")));
-                if (seed >= -1.0 && seed <= 1.0) {
-                    Statement stmt = null;
-                    try {
-                        stmt = getConnection().createStatement();
+            if (Boolean.parseBoolean(HootProperties.getPropertyOrDefault("seedRandomQueries"))) {
+                double seed = Double.parseDouble(HootProperties.getPropertyOrDefault("randomQuerySeed"));
+
+                if ((seed >= -1.0) && (seed <= 1.0)) {
+                    try (Statement stmt = getConnection().createStatement()) {
                         // After executing this, all subsequent calls to
                         // random() will be seeded.
                         stmt.executeQuery("select setseed(" + seed + ");");
-                    }
-                    finally {
-                        if (stmt != null) {
-                            stmt.close();
-                        }
                     }
                 }
             }
         }
         catch (Exception e) {
-            log.error("Unable to seed random review query.");
+            logger.error("Unable to seed random review query.");
         }
     }
 

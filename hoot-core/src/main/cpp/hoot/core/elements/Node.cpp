@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -51,10 +51,10 @@ Element(s)
 }
 
 Node::Node(Status s, long id, double x, double y, Meters circularError, long changeset,
-           long version, unsigned int timestamp, QString user, long uid) :
+           long version, unsigned int timestamp, QString user, long uid, bool visible) :
 Element(s)
 {
-  _nodeData.init(id, x, y, changeset, version, timestamp, user, uid);
+  _nodeData.init(id, x, y, changeset, version, timestamp, user, uid, visible);
   _getElementData().setCircularError(circularError);
 }
 
@@ -95,8 +95,14 @@ shared_ptr<geos::geom::Point> Node::toPoint() const
 
 QString Node::toString() const
 {
-  return QString("Node(%1): x: %2 y: %3 tags:\n%4").arg(getId()).arg(getX()).arg(getY()).
-    arg(getTags().toString());
+  return
+    QString("Node(%1): x: %2 y: %3 tags:\n%4\n version: %5\n visible: %6")
+      .arg(getId())
+      .arg(getX())
+      .arg(getY())
+      .arg(getTags().toString())
+      .arg(getVersion())
+      .arg(getVisible());
 }
 
 void Node::visitRo(const ElementProvider& map, ElementVisitor& filter) const

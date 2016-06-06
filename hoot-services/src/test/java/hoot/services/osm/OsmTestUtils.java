@@ -1230,8 +1230,7 @@ public class OsmTestUtils {
             sequenceCtr++;
         }
 
-        final int maxRecordBatchSize = Integer.parseInt(HootProperties.getInstance().getProperty("maxRecordBatchSize",
-                HootProperties.getDefault("maxRecordBatchSize")));
+        int maxRecordBatchSize = Integer.parseInt(HootProperties.getPropertyOrDefault("maxRecordBatchSize"));
         DbUtils.batchRecords(mapId, wayNodeRecords, QCurrentWayNodes.currentWayNodes, null, RecordBatchType.INSERT,
                 conn, maxRecordBatchSize);
     }
@@ -1288,8 +1287,7 @@ public class OsmTestUtils {
             sequenceCtr++;
         }
 
-        final int maxRecordBatchSize = Integer.parseInt(HootProperties.getInstance().getProperty("maxRecordBatchSize",
-                HootProperties.getDefault("maxRecordBatchSize")));
+        int maxRecordBatchSize = Integer.parseInt(HootProperties.getPropertyOrDefault("maxRecordBatchSize"));
         DbUtils.batchRecords(mapId, memberRecords, QCurrentRelationMembers.currentRelationMembers, null,
                 RecordBatchType.INSERT, conn, maxRecordBatchSize);
     }

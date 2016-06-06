@@ -64,7 +64,7 @@ clean-db: services-clean-db
 # start over as close to a new build as is reasonable
 clean-all: clean clean-db clean-ccache
 
-clean-coverage: services-clean-coverage
+clean-coverage: services-clean-coverage ui-clean-coverage
 	rm -rf coverage
 	rm -f `find . -name *.gcda`
 
@@ -127,7 +127,7 @@ endif
 plugins-test:
 	echo Running plugins tests...
 	# Only run the plugins tests if mocha is installed.
-	cd plugins; (command -v mocha &> /dev/null) && mocha test || echo Skipping mocha tests
+	cd plugins; (command -v mocha &> /dev/null) && mocha --reporter dot || echo Skipping mocha tests
 
 pp-test-all:
 ifneq ($(HADOOP_HOME),)
@@ -153,10 +153,6 @@ tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 	echo "#define __TGS_CONFIG_H__" >> tgs/src/main/cpp/tgs/TgsConfig.h
 	/bin/sed -r -e 's/^(#[ \t]*define) /\1 TGS_/' config.h >> tgs/src/main/cpp/tgs/TgsConfig.h
 	echo "#endif" >> tgs/src/main/cpp/tgs/TgsConfig.h
-
-conf/DatabaseConfig.sh: conf/DatabaseConfig.sh.orig
-	# This will copy conf/DatabaseConfig.sh.orig to conf/DatabaseConfig.sh if necessary
-	if [ ! -f conf/DatabaseConfig.sh ]; then echo "Using default database configuration. You can safely customize: conf/DatabaseConfig.sh"; cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh; else echo; echo; echo "Check your conf/DatabaseConfig.sh to see if it needs updating with conf/DatabaseConfig.sh.orig, if not just 'touch conf/DatabaseConfig.sh'"; echo; echo; false; fi
 
 # We now have different versions of the NFDD Schema that are built from Excel files:
 # LTDSv40.csv.gz - Local TDS v4.0
@@ -221,7 +217,7 @@ plugins/etds61_osm_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build osmapi db
-osmapidb: conf/DatabaseConfig.sh
+osmapidb:
 ifeq ($(BUILD_SERVICES),services)
 	scripts/SetupOsmApiDB.sh
 endif
@@ -247,7 +243,7 @@ qt-make: HOOT_VERSION_FILE Makefile.qmake hoot-core/src/main/cpp/hoot/core/HootC
 	  || true \
 	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 
-services-build:	HOOT_VERSION_FILE conf/DatabaseConfig.sh
+services-build:	HOOT_VERSION_FILE
 ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile build
 endif
@@ -423,7 +419,7 @@ coverage/core/tbs/index.html:
 	lcov -r coverage/core/tbs/Tbs.info $(IGNORED) -o coverage/core/tbs/TbsTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 	genhtml coverage/core/tbs/TbsTrimmed.info --output-directory coverage/core/tbs/ 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 
-coverage: services-coverage coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html
+coverage: services-coverage ui-coverage coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html
 
 conf/WordsAbridged.sqlite: conf/WordsAbridged.sqlite.gz
 	gunzip -c $^ > $@
