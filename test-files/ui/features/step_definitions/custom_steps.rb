@@ -367,6 +367,13 @@ Then(/^the download file "([^"]*)" should exist$/) do |file|
   File.delete(name)
 end
 
+Then(/^the log file "([^"]*)" should exist$/) do |file|
+  name = ENV['HOME'] + '/Downloads/' + file
+  # puts name
+  expect(!Dir.glob(name).empty?).to be true
+  File.delete(Dir[ENV['HOME'] + '/Downloads/' + file].last)
+end
+
 Then "the downloaded file content should be:" do |content|
   page.response_headers["Content-Disposition"].should == "attachment"
   page.source.should == content

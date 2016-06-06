@@ -12,9 +12,8 @@ Feature: Log Export
     	And I should see "UI Log"
     	And I click the "Refresh" link under "utilErrorLog"
 
-===
+
     Scenario: Export Full Log
     	When I click the "Export Full Log" link under "utilErrorLog"
     	And I wait 30 seconds
-    	Then the download file "hootlog" should exist
-===
+    	Then the log file "hootlog*.logger" should exist
