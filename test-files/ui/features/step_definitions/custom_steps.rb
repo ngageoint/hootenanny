@@ -28,6 +28,14 @@ When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent
   find('div.' + parent).find('a.' + classed).click
 end
 
+When(/^I select a way map feature$/) do
+  find('div.layer-data').all('path[class*=" w309"]').last.click
+end
+
+When(/^I select a node map feature$/) do
+  find('div.layer-data').first('g.node').click
+end
+
 Then(/^I should see "([^"]*)"$/) do |text|
   page.should have_content(text)
 end
@@ -127,6 +135,12 @@ end
 
 When(/^I select the "([^"]*)" option in "([^"]*)"$/) do |opt, el|
   combobox = page.find(el)
+  combobox.find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt).click
+end
+
+When(/^I select the "([^"]*)" option labelled "([^"]*)"$/) do |opt, lbl|
+  combobox = page.find('label', :text=> lbl).find(:xpath,"..")
   combobox.find('.combobox-caret').click
   page.find('div.combobox').find('a', :text=> opt).click
 end
