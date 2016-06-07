@@ -60,8 +60,9 @@ else
     time -p vagrant up --provision-with nfs,build,EGD,tomcat,mapnik,hadoop --provider vsphere
 fi
 
+# Disableing this until it gets moved earlier into the build.
 # Clean out the Database
-vagrant ssh -c "cd hoot; source ./SetupEnv.sh; cd hoot-services; make clean-db &> /dev/null"
+#vagrant ssh -c "cd hoot; source ./SetupEnv.sh; cd hoot-services; make clean-db &> /dev/null"
 
 date +%F > ../BuildDate.txt
 
