@@ -55,6 +55,8 @@ mgcp = {
     // Add the empty Review layers
     mgcp.rawSchema = translate.addReviewFeature(mgcp.rawSchema);
 
+    // Add the empty "extra" feature layers
+    mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
 
     // This function dumps the schema to the screen for debugging
     // translate.dumpSchema(mgcp.rawSchema);
@@ -78,7 +80,7 @@ mgcp = {
                 {
                     if (attrList.indexOf(val) == -1)
                     {
-                        hoot.logWarn('Validate: Dropping ' + val + '  from ' + attrs.FCODE);
+                        hoot.logWarn('Validate: Dropping ' + val + ' from ' + attrs.FCODE);
                         delete attrs[val];
 
                         // Since we deleted the attribute, Skip the text check
@@ -574,14 +576,15 @@ mgcp = {
         // #
         // #####
 
-        // If we have a House of Worship type then tag it _before_ the complex rules
         if (attrs.HWT && attrs.HWT !== '0') tags.amenity = 'place_of_worship';
 
-        // Add UUID
-        tags.source = 'mgcp';
-        if (attrs.UID)
+        // Add the LayerName to the source
+        tags.source = 'mgcp:' + layerName.toLowerCase();
+
+        // If we have a UID, store it
+        if (tags.uuid)
         {
-            tags.uuid = '{' + attrs.UID + '}'
+            tags.uuid = '{' + tags['uuid'].toString().toLowerCase()  + '}'
         }
         else
         {
@@ -736,6 +739,8 @@ mgcp = {
         if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
         if (tags.source) delete tags.source;
         if (tags.area) delete tags.area;
+        if (tags['error:circular']) delete tags['error:circular'];
+        if (tags['hoot:status']) delete tags['hoot:status'];
 
         // initial cleanup
         for (var i in tags)
@@ -757,16 +762,6 @@ mgcp = {
                 delete tags[i];
                 continue;
             }
-
-            // Wipe out tags we don't need that Hoot assigned
-            if ((i.indexOf('hoot:') !== -1) || (i.indexOf('error:') !== -1))
-            {
-                // Debug
-                // print('Pre: Dropped ' + i);
-                delete tags[i];
-                continue;
-            }
-
         }
 
         if (mgcp.mgcpPreRules == undefined)
@@ -886,6 +881,7 @@ mgcp = {
             case 'quarter':
             case 'village':
             case 'hamlet':
+            case 'yes':  // We set this as a default when going to OSM
                 attrs.F_CODE = 'AL020'; // Built Up Area
                 delete tags.place;
                 break;
@@ -908,6 +904,13 @@ mgcp = {
                 break;
 
         } // End switch
+
+        // Capitals are important
+        if (tags.capital)
+        {
+            if (!(tags['place:importance'])) tags['place:importance'] = 'first';
+            delete tags.capital;
+        }
 
         // Built-up-areas & Settlements vs Buildings
         // If we have a BUA or a Settlement, change the settlement:type tag to a building so we can
@@ -1213,7 +1216,8 @@ mgcp = {
         if (config.getOgrDebugDumptags() == 'true')
         {
             print('In Layername: ' + layerName);
-            for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+            var kList = Object.keys(attrs).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
 
         // Set up the fcode translation rules
@@ -1239,13 +1243,6 @@ mgcp = {
             mgcp.rules.one2one.push.apply(mgcp.rules.one2one,mgcp.rules.one2oneIn);
 
             mgcp.lookup = translate.createLookup(mgcp.rules.one2one);
-
-            // Build an Object with both the SimpleText & SimpleNum lists
-            mgcp.ignoreList = translate.joinList(mgcp.rules.numBiased, mgcp.rules.txtBiased);
-
-            // Add features to ignore
-            mgcp.ignoreList.F_CODE = '';
-            mgcp.ignoreList.UID = '';
         }
 
         // pre processing
@@ -1255,18 +1252,30 @@ mgcp = {
         if (attrs.F_CODE)
         {
             var ftag = mgcp.fcodeLookup['F_CODE'][attrs.F_CODE];
-            tags[ftag[0]] = ftag[1];
-            // Debug: Dump out the tags from the FCODE
-            // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+            if (ftag)
+            {
+                tags[ftag[0]] = ftag[1];
+                // Debug: Dump out the tags from the FCODE
+                // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+            }
+            else
+            {
+                hoot.logVerbose('Translation for FCODE ' + attrs.F_CODE + ' not found');
+            }
         }
 
-        // one 2 one
-        translate.applyOne2One(attrs, tags, mgcp.lookup, {'k':'v'}, mgcp.ignoreList);
+        // Make a copy of the input attributes so we can remove them as they get translated. Looking at what
+        // isn't used in the translation - this should end up empty.
+        // not in v8 yet: // var tTags = Object.assign({},tags);
+        var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
-        translate.applySimpleNumBiased(attrs, tags, mgcp.rules.numBiased, 'forward',[]);
-        translate.applySimpleTxtBiased(attrs, tags,  mgcp.rules.txtBiased,'forward');
+        translate.applySimpleNumBiased(notUsedAttrs, tags, mgcp.rules.numBiased, 'forward',[]);
+        translate.applySimpleTxtBiased(notUsedAttrs, tags,  mgcp.rules.txtBiased,'forward');
+
+        // one 2 one
+        translate.applyOne2One(notUsedAttrs, tags, mgcp.lookup, {'k':'v'});
 
         // post processing
         mgcp.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
@@ -1277,7 +1286,8 @@ mgcp = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+            var kList = Object.keys(tags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
         }
 
@@ -1310,7 +1320,8 @@ mgcp = {
         if (config.getOgrDebugDumptags() == 'true')
         {
             print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
-            for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+            var kList = Object.keys(tags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
         }
 
         // Set up the fcode translation rules
@@ -1356,8 +1367,7 @@ mgcp = {
         mgcp.applyToMgcpPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
-
+        // for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
 
         // Set the tablename: [P,A,L]<fcode>
         // tableName = geometryType.toString().substring(0,1) + attrs.F_CODE;
@@ -1386,9 +1396,9 @@ mgcp = {
 
             var str = JSON.stringify(tags);
 
+            // Shapefiles can't handle fields > 254 chars.
             // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
             // A nicer thing would be to arrange the tags until they fit neatly
-            // Apparently Shape & FGDB can't handle fields > 254 chars.
             if (str.length < 255 || config.getOgrSplitO2s() == 'false')
             {
                 // return {attrs:{tag1:str}, tableName: tableName};
@@ -1409,6 +1419,8 @@ mgcp = {
                          tag3:str.substring(506,759),
                          tag4:str.substring(759,1012)};
              }
+
+             returnData.push({attrs: attrs, tableName: tableName});
         }
         else // We have a feature
         {
@@ -1432,6 +1444,33 @@ mgcp = {
                 returnData[i]['tableName'] = layerNameLookup[gFcode.toUpperCase()];
 
             } // End returnData loop
+
+            // If we have unused tags, throw them into the "extra" layer
+            if (Object.keys(notUsedTags).length > 0)
+            {
+                var extraFeature = {};
+                extraFeature.tags = JSON.stringify(notUsedTags);
+                extraFeature.uuid = attrs.UID;
+
+                var extraName = 'extra_' + geometryType.toString().charAt(0);
+
+                returnData.push({attrs: extraFeature, tableName: extraName});
+            } // End notUsedTags
+
+            // Look for Review tags and push them to a review layer if found
+            if (tags['hoot:review:needs'] == 'yes')
+            {
+                var reviewAttrs = {};
+
+                // Note: Some of these may be "undefined"
+                reviewAttrs.note = tags['hoot:review:note'];
+                reviewAttrs.score = tags['hoot:review:score'];
+                reviewAttrs.uuid = tags.uuid;
+                reviewAttrs.source = tags['hoot:review:source'];
+
+                var reviewTable = 'review_' + geometryType.toString().charAt(0);
+                returnData.push({attrs: reviewAttrs, tableName: reviewTable});
+            } // End ReviewTags
         } // End else We have a feature
 
         // Debug:
@@ -1440,25 +1479,11 @@ mgcp = {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
                 print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['FCODE'] + '  Geom: ' + geometryType);
-
-                for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
+                // for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
+                var kList = Object.keys(returnData[i]['attrs']).sort()
+                for (var j = 0, kLen = kList.length; j < kLen; j++) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
             }
             print('');
-        }
-
-        // Look for Review tags and push them to a review layer if found
-        if (tags['hoot:review:needs'] == 'yes')
-        {
-            var reviewAttrs = {};
-
-            // Note: Some of these may be "undefined"
-            reviewAttrs.note = tags['hoot:review:note'];
-            reviewAttrs.score = tags['hoot:review:score'];
-            reviewAttrs.uuid = tags.uuid;
-            reviewAttrs.source = tags['hoot:review:source'];
-
-            var reviewTable = 'review_' + geometryType.toString().charAt(0);
-            returnData.push({attrs: reviewAttrs, tableName: reviewTable});
         }
 
         return returnData;

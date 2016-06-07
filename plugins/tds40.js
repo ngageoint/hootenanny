@@ -628,7 +628,8 @@ tds = {
             }
         } // End in attrs loop
 
-
+        // Drop the FCSUBTYPE since we don't use it
+        if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
 
         // Drop all of the XXX Closure default values IFF the associated attributes are
         // not set.
@@ -809,11 +810,13 @@ tds = {
             }
        } // End if AP030
 
+        // Add the LayerName to the source
+        tags.source = 'tdsv40:' + layerName.toLowerCase();
+
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
-        tags.source = 'tdsv40';
-        if (attrs.UFI)
+        if (tags.uuid)
         {
-            tags.uuid = '{' + attrs['UFI'].toString().toLowerCase() + '}';
+            tags.uuid = '{' + tags['uuid'].toString().toLowerCase() + '}';
         }
         else
         {
@@ -1001,6 +1004,10 @@ tds = {
         }
 
 
+        if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
+        if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
+
+
     /* Putting this on hold as it will impact conflation
         // Tweek the "abandoned" tag. Should this be extended to "destroyed" as well?
         if (tags.condition == 'abandoned')
@@ -1035,6 +1042,8 @@ tds = {
         if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
         if (tags.source) delete tags.source;
         if (tags.area) delete tags.area;
+        if (tags['error:circular']) delete tags['error:circular'];
+        if (tags['hoot:status']) delete tags['hoot:status'];
 
         // Initial cleanup
         for (var i in tags)
@@ -1042,15 +1051,6 @@ tds = {
             // Remove empty tags
             if (tags[i] == '')
             {
-                delete tags[i];
-                continue;
-            }
-
-            // Wipe out tags we don't need that Hoot assigned
-            if ((i.indexOf('hoot:') !== -1) || (i.indexOf('error:') !== -1))
-            {
-                // Debug
-                //print('Pre: Dropped ' + i);
                 delete tags[i];
                 continue;
             }
@@ -1557,7 +1557,13 @@ tds = {
         tags = {};  // The final output Tag list
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            print('In Layername: ' + layerName);
+            var kList = Object.keys(attrs).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+        }
+
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
@@ -1579,14 +1585,6 @@ tds = {
             tds.rules.one2one.push.apply(tds.rules.one2one,tds.rules.one2oneIn);
 
             tds.lookup = translate.createLookup(tds.rules.one2one);
-
-            // Build an Object with both the SimpleText & SimpleNum lists
-            tds.ignoreList = translate.joinList(tds.rules.numBiased, tds.rules.txtBiased);
-
-            // Add features to ignore
-            tds.ignoreList.F_CODE = '';
-            tds.ignoreList.FCSUBTYPE = '';
-            tds.ignoreList.UFI = '';
         }
 
         // pre processing
@@ -1596,18 +1594,30 @@ tds = {
         if (attrs.F_CODE)
         {
             var ftag = tds.fcodeLookup['F_CODE'][attrs.F_CODE];
-            tags[ftag[0]] = ftag[1];
-            // Debug: Dump out the tags from the FCODE
-            // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+            if (ftag)
+            {
+                tags[ftag[0]] = ftag[1];
+                // Debug: Dump out the tags from the FCODE
+                // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+            }
+            else
+            {
+                hoot.logVerbose('Translation for F_CODE ' + attrs.F_CODE + ' not found');
+            }
         }
 
-        // one 2 one
-        translate.applyOne2One(attrs, tags, tds.lookup, {'k':'v'}, tds.ignoreList);
+        // Make a copy of the input attributes so we can remove them as they get translated. Looking at what
+        // isn't used in the translation - this should end up empty.
+        // not in v8 yet: // var tTags = Object.assign({},tags);
+        var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
-        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'forward',[]);
-        translate.applySimpleTxtBiased(attrs, tags, tds.rules.txtBiased, 'forward');
+        translate.applySimpleNumBiased(notUsedAttrs, tags, tds.rules.numBiased, 'forward',[]);
+        translate.applySimpleTxtBiased(notUsedAttrs, tags, tds.rules.txtBiased, 'forward');
+
+        // one 2 one
+        translate.applyOne2One(notUsedAttrs, tags, tds.lookup, {'k':'v'});
 
         // Crack open the OTH field and populate the appropriate attributes
         // The OTH format is _supposed_ to be (<attr>:<value>) but anything is possible
@@ -1619,15 +1629,13 @@ tds = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+            var kList = Object.keys(tags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
         }
 
         // Debug: Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
-
-        if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
-        if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
         return tags;
     }, // End of toOsm
@@ -1654,7 +1662,8 @@ tds = {
         if (config.getOgrDebugDumptags() == 'true')
         {
             print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
-            for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+            var kList = Object.keys(tags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
         }
 
         // The Nuke Option: If we have a relation, drop the feature and carry on
@@ -1708,7 +1717,14 @@ tds = {
         tds.applyToNfddPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
+        // for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
+
+        // If we have unused tags, add them to the memo field.
+        if (Object.keys(notUsedTags).length > 0)
+        {
+            var tStr = JSON.stringify(notUsedTags) + ';;';
+            attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';;');
+        }
 
         // Now check for invalid feature geometry
         // E.g. If the spec says a runway is a polygon and we have a line, throw error and
@@ -1727,9 +1743,9 @@ tds = {
             // Convert all of the Tags to a string so we can jam it into an attribute
             var str = JSON.stringify(tags);
 
+            // Shapefiles can't handle fields > 254 chars.
             // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
             // A nicer thing would be to arrange the tags until they fit neatly
-            // Apparently Shape & FGDB can't handle fields > 254 chars.
             if (str.length < 255 || config.getOgrSplitO2s() == 'false')
             {
                 // return {attrs:{tag1:str}, tableName: tableName};
@@ -1750,6 +1766,8 @@ tds = {
                          tag3:str.substring(506,759),
                          tag4:str.substring(759,1012)};
             }
+
+            returnData.push({attrs: attrs, tableName: tableName});
         }
         else // We have a feature
         {
@@ -1781,13 +1799,29 @@ tds = {
                 if (config.getOgrTdsStructure() == 'true')
                 {
                     returnData[i]['tableName'] = tds.rules.thematicGroupList[gFcode];
-                    tds61.validateTDSAttrs(gFcode, returnData[i]['attrs']);
+                    tds.validateTDSAttrs(gFcode, returnData[i]['attrs']);
                 }
                 else
                 {
                     returnData[i]['tableName'] = layerNameLookup[gFcode.toUpperCase()];
                 }
             } // End returnData loop
+
+            // Look for Review tags and push them to a review layer if found
+            if (tags['hoot:review:needs'] == 'yes')
+            {
+                var reviewAttrs = {};
+
+                // Note: Some of these may be "undefined"
+                reviewAttrs.note = tags['hoot:review:note'];
+                reviewAttrs.score = tags['hoot:review:score'];
+                reviewAttrs.uuid = tags.uuid;
+                reviewAttrs.source = tags['hoot:review:source'];
+
+                var reviewTable = 'review_' + geometryType.toString().charAt(0);
+                returnData.push({attrs: reviewAttrs, tableName: reviewTable});
+            } // End ReviewTags
+
         } // End else We have a feature
 
         // Debug:
@@ -1796,25 +1830,11 @@ tds = {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
                 print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
-
-                for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
+                // for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
+                var kList = Object.keys(returnData[i]['attrs']).sort()
+                for (var j = 0, kLen = kList.length; j < kLen; j++) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
             }
             print('');
-        }
-
-        // Look for Review tags and push them to a review layer if found
-        if (tags['hoot:review:needs'] == 'yes')
-        {
-            var reviewAttrs = {};
-
-            // Note: Some of these may be "undefined"
-            reviewAttrs.note = tags['hoot:review:note'];
-            reviewAttrs.score = tags['hoot:review:score'];
-            reviewAttrs.uuid = tags.uuid;
-            reviewAttrs.source = tags['hoot:review:source'];
-
-            var reviewTable = 'review_' + geometryType.toString().charAt(0);
-            returnData.push({attrs: reviewAttrs, tableName: reviewTable});
         }
 
         return returnData;

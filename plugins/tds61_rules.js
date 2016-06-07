@@ -3761,7 +3761,7 @@ tds61.rules = {
 //      ['ZI016_ROC','16','surface','wood_plank'], // Wood Plank
 //      ['ZI016_ROC','17','surface','ice'], // Ice
 //      ['ZI016_ROC','18','surface','snow'], // Snow
-     ['ZI016_ROC','999','surface','other'], // Other
+//      ['ZI016_ROC','999','surface','other'], // Other
 
      // ZI016_WTC - Route Pavement Information : Road Weather Restriction
      // ['ZI016_WTC','-999999',undefined,undefined], // No Information
@@ -4489,6 +4489,9 @@ tds61.rules = {
      ['FFN','640','shop','bureau_de_change'], // Financial Services
      ['FFN','760','amenity','office'], // Business and Personal Support Services 
      ['FFN','815','building','palace'], // Palace
+
+     // Added to give something for the OTH value to use
+     ['ZI016_ROC','999','surface','other'], // Other
 
    ], // End one2oneOut
 

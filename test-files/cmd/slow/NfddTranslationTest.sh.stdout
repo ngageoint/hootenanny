@@ -1,63 +1,1682 @@
-11:08:38.558 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/AIRCRAFT_HANGAR_P.shp AIRCRAFT_HANGAR_P
+01:17:29.263 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/AIRCRAFT_HANGAR_P.shp AIRCRAFT_HANGAR_P
 Loading test-files/NFDD_TDSv4/AIRCRAFT_HANGAR_P.shp AIRCRAFT_HANGAR_P 0 / 2   
-11:08:38.571 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/BUILDING_P.shp BUILDING_P
+01:17:29.275 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/BUILDING_P.shp BUILDING_P
 Loading test-files/NFDD_TDSv4/BUILDING_P.shp BUILDING_P 0 / 38   
-11:08:38.580 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/BUILDING_S.shp BUILDING_S
+01:17:29.288 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/BUILDING_S.shp BUILDING_S
 Loading test-files/NFDD_TDSv4/BUILDING_S.shp BUILDING_S 0 / 9   
-11:08:38.609 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/BUILDING_SUPERSTRUCTURE_P.shp BUILDING_SUPERSTRUCTURE_P
+01:17:29.407 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/BUILDING_SUPERSTRUCTURE_P.shp BUILDING_SUPERSTRUCTURE_P
 Loading test-files/NFDD_TDSv4/BUILDING_SUPERSTRUCTURE_P.shp BUILDING_SUPERSTRUCTURE_P 0 / 4   
-11:08:38.610 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/BUILT-UP_AREA_P.shp BUILT-UP_AREA_P
+01:17:29.409 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/BUILT-UP_AREA_P.shp BUILT-UP_AREA_P
 Loading test-files/NFDD_TDSv4/BUILT-UP_AREA_P.shp BUILT-UP_AREA_P 0 / 5   
-11:08:38.612 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/BUILT-UP_AREA_S.shp BUILT-UP_AREA_S
+01:17:29.411 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/BUILT-UP_AREA_S.shp BUILT-UP_AREA_S
 Loading test-files/NFDD_TDSv4/BUILT-UP_AREA_S.shp BUILT-UP_AREA_S 0 / 8   
-11:08:38.614 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/CART_TRACK_C.shp CART_TRACK_C
+01:17:29.414 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/CART_TRACK_C.shp CART_TRACK_C
 Loading test-files/NFDD_TDSv4/CART_TRACK_C.shp CART_TRACK_C 0 / 4   
-11:08:38.616 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/CONTROL_TOWER_P.shp CONTROL_TOWER_P
+01:17:29.415 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/CONTROL_TOWER_P.shp CONTROL_TOWER_P
 Loading test-files/NFDD_TDSv4/CONTROL_TOWER_P.shp CONTROL_TOWER_P 0 / 5   
-11:08:38.617 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/FACILITY_P.shp FACILITY_P
+01:17:29.417 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/FACILITY_P.shp FACILITY_P
 Loading test-files/NFDD_TDSv4/FACILITY_P.shp FACILITY_P 0 / 6   
-11:08:38.619 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/FACILITY_S.shp FACILITY_S
+01:17:29.420 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/FACILITY_S.shp FACILITY_S
 Loading test-files/NFDD_TDSv4/FACILITY_S.shp FACILITY_S 0 / 4   
-11:08:38.620 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/HUT_P.shp HUT_P
+01:17:29.422 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/HUT_P.shp HUT_P
 Loading test-files/NFDD_TDSv4/HUT_P.shp HUT_P 0 / 5   
-11:08:38.621 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/PYLON_P.shp PYLON_P
+01:17:29.423 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/PYLON_P.shp PYLON_P
 Loading test-files/NFDD_TDSv4/PYLON_P.shp PYLON_P 0 / 3   
-11:08:38.623 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/RAILWAY_C.shp RAILWAY_C
+01:17:29.425 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/RAILWAY_C.shp RAILWAY_C
 Loading test-files/NFDD_TDSv4/RAILWAY_C.shp RAILWAY_C 0 / 7   
-11:08:38.624 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/RIVER_C.shp RIVER_C
+01:17:29.427 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/RIVER_C.shp RIVER_C
 Loading test-files/NFDD_TDSv4/RIVER_C.shp RIVER_C 0 / 16   
-11:08:38.628 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/ROAD_C.shp ROAD_C
+01:17:29.432 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/ROAD_C.shp ROAD_C
 Loading test-files/NFDD_TDSv4/ROAD_C.shp ROAD_C 0 / 7   
-11:08:38.630 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/SHED_P.shp SHED_P
+01:17:29.435 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/SHED_P.shp SHED_P
 Loading test-files/NFDD_TDSv4/SHED_P.shp SHED_P 0 / 3   
-11:08:38.632 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/SHED_S.shp SHED_S
+01:17:29.436 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/SHED_S.shp SHED_S
 Loading test-files/NFDD_TDSv4/SHED_S.shp SHED_S 0 / 2   
-11:08:38.633 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/STADIUM_S.shp STADIUM_S
+01:17:29.438 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/STADIUM_S.shp STADIUM_S
 Loading test-files/NFDD_TDSv4/STADIUM_S.shp STADIUM_S 0 / 2   
-11:08:38.634 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/TOWER_P.shp TOWER_P
+01:17:29.439 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/TOWER_P.shp TOWER_P
 Loading test-files/NFDD_TDSv4/TOWER_P.shp TOWER_P 0 / 6   
-11:08:38.636 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/TRAIL_C.shp TRAIL_C
+01:17:29.442 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/TRAIL_C.shp TRAIL_C
 Loading test-files/NFDD_TDSv4/TRAIL_C.shp TRAIL_C 0 / 7   
-11:08:38.638 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/TRANSPORTATION_STATION_P.shp TRANSPORTATION_STATION_P
+01:17:29.444 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/NFDD_TDSv4/TRANSPORTATION_STATION_P.shp TRANSPORTATION_STATION_P
 Loading test-files/NFDD_TDSv4/TRANSPORTATION_STATION_P.shp TRANSPORTATION_STATION_P 0 / 3   
 Reprojecting 0 / 294         
-11:08:38.685 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-11:08:38.685 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 0 1    MergeNearbyNodes 279 elapsed: 0ms        
-11:08:38.685 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+01:17:29.506 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+01:17:29.506 INFO  .../core/ops/MergeNearbyNodes.cpp(  72) MergeNearbyNodes start
+MergeNearbyNodes 0 1    MergeNearbyNodes 279 elapsed: 1ms        
+01:17:29.508 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 66        Ways: 66 / 66        
 Relations: 0 / 0        
 Combining Parts: 0 / 13        Combining Parts: 13 / 13        
 Reprojecting 0 / 279         
-11:08:39.144 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: FacilityPnt not found.  Creating layer...
-11:08:39.148 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: StructurePnt not found.  Creating layer...
-11:08:39.149 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: AeronauticPnt not found.  Creating layer...
-11:08:39.151 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: SettlementPnt not found.  Creating layer...
-11:08:39.169 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: TransportationGroundPnt not found.  Creating layer...
-11:08:39.175 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: UtilityInfrastructurePnt not found.  Creating layer...
-11:08:39.178 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: TransportationGroundCrv not found.  Creating layer...
-11:08:39.183 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: RecreationSrf not found.  Creating layer...
-11:08:39.184 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: StructureSrf not found.  Creating layer...
-11:08:39.190 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: HydrographyCrv not found.  Creating layer...
-11:08:39.202 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: FacilitySrf not found.  Creating layer...
-11:08:39.206 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: SettlementSrf not found.  Creating layer...
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv40:facility_p
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv40
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv40:facility_p
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv40
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv40:facility_p
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv40
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv40:facility_p
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv40
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv40:facility_p
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv40
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv40:facility_p
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv40
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv40:control_tower_p
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv40
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv40:control_tower_p
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv40
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv40:control_tower_p
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv40
+01:17:29.682 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+4c4
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.446Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.491Z"/>
+8a9
+>         <tag k="source" v="tdsv40"/>
+10d10
+<         <tag k="source" v="tdsv40:transportation_station_p"/>
+16c16
+<         <tag k="source" v="tdsv40:transportation_station_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+29c29
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.445Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.491Z"/>
+40c40
+<         <tag k="source" v="tdsv40:transportation_station_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+52c52
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.445Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.491Z"/>
+75c75
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.442Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.488Z"/>
+79a80
+>         <tag k="source" v="tdsv40"/>
+81d81
+<         <tag k="source" v="tdsv40:tower_p"/>
+86c86
+<         <tag k="source" v="tdsv40:tower_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+96c96
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.442Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.488Z"/>
+107c107
+<         <tag k="source" v="tdsv40:tower_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+119c119
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.442Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.488Z"/>
+132c132
+<         <tag k="source" v="tdsv40:tower_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+137d136
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+138a138
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+140d139
+<         <tag k="security:resource_owner" v="USA"/>
+141a141
+>         <tag k="security:resource_owner" v="USA"/>
+146c146
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.442Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.488Z"/>
+151d150
+<         <tag k="uuid" v="{3df8f982-d64a-4196-83d0-2c6c01dc6ec9}"/>
+152a152
+>         <tag k="uuid" v="{3df8f982-d64a-4196-83d0-2c6c01dc6ec9}"/>
+158c158
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.441Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.488Z"/>
+160d159
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+161a161
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+165d164
+<         <tag k="uuid" v="{59302be3-1415-48eb-96cc-c3d482af34e1}"/>
+167c166,167
+<         <tag k="source" v="tdsv40:tower_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{59302be3-1415-48eb-96cc-c3d482af34e1}"/>
+179c179
+<         <tag k="source" v="tdsv40:tower_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+190c190
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.440Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.486Z"/>
+215c215
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.436Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.483Z"/>
+219a220
+>         <tag k="source" v="tdsv40"/>
+221d221
+<         <tag k="source" v="tdsv40:shed_p"/>
+226c226
+<         <tag k="source" v="tdsv40:shed_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+239c239
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.436Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.483Z"/>
+249c249
+<         <tag k="source" v="tdsv40:shed_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+260c260
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.436Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.483Z"/>
+339c339
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.425Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.473Z"/>
+342a343
+>         <tag k="source" v="tdsv40"/>
+344d344
+<         <tag k="source" v="tdsv40:pylon_p"/>
+350,351c350
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.424Z"/>
+<         <tag k="note" v="Google Fibre"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.473Z"/>
+353a353
+>         <tag k="note" v="Google Fibre"/>
+358a359
+>         <tag k="source" v="tdsv40"/>
+360d360
+<         <tag k="source" v="tdsv40:pylon_p"/>
+370,371c370
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.424Z"/>
+<         <tag k="note" v="Excel Energy"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.473Z"/>
+372a372
+>         <tag k="note" v="Excel Energy"/>
+376a377
+>         <tag k="source" v="tdsv40"/>
+378d378
+<         <tag k="source" v="tdsv40:pylon_p"/>
+390c390
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.423Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.472Z"/>
+394a395
+>         <tag k="source" v="tdsv40"/>
+396d396
+<         <tag k="source" v="tdsv40:hut_p"/>
+401d400
+<         <tag k="addr:full" v="Third village from the left"/>
+403c402,403
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.423Z"/>
+---
+>         <tag k="addr:full" v="Third village from the left"/>
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.472Z"/>
+408a409
+>         <tag k="source" v="tdsv40"/>
+410d410
+<         <tag k="source" v="tdsv40:hut_p"/>
+418c418
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.423Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.472Z"/>
+420d419
+<         <tag k="note" v="Yes, a memo"/>
+421a421
+>         <tag k="note" v="Yes, a memo"/>
+425a426
+>         <tag k="source" v="tdsv40"/>
+427d427
+<         <tag k="source" v="tdsv40:hut_p"/>
+435c435
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.423Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.472Z"/>
+437d436
+<         <tag k="note" v="On the beach"/>
+438a438
+>         <tag k="note" v="On the beach"/>
+442a443
+>         <tag k="source" v="tdsv40"/>
+444d444
+<         <tag k="source" v="tdsv40:hut_p"/>
+451c451
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.422Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.472Z"/>
+457a458
+>         <tag k="source" v="tdsv40"/>
+459d459
+<         <tag k="source" v="tdsv40:hut_p"/>
+483c483
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.419Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.469Z"/>
+486a487
+>         <tag k="source" v="tdsv40"/>
+488d488
+<         <tag k="source" v="tdsv40:facility_p"/>
+495c495
+<         <tag k="source" v="tdsv40:facility_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+505c505
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.419Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.469Z"/>
+518c518
+<         <tag k="source" v="tdsv40:facility_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+532c532
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.419Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.469Z"/>
+538c538
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.419Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.469Z"/>
+544a545
+>         <tag k="source" v="tdsv40"/>
+546d546
+<         <tag k="source" v="tdsv40:facility_p"/>
+554c554
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.418Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.469Z"/>
+558d557
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+559a559
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+562a563
+>         <tag k="source" v="tdsv40"/>
+564d564
+<         <tag k="source" v="tdsv40:facility_p"/>
+572c572
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.418Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.469Z"/>
+579a580
+>         <tag k="source" v="tdsv40"/>
+581d581
+<         <tag k="source" v="tdsv40:facility_p"/>
+590c590
+<         <tag k="source" v="tdsv40:control_tower_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+606c606
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.417Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.467Z"/>
+614c614
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.417Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.467Z"/>
+618a619
+>         <tag k="source" v="tdsv40"/>
+620d620
+<         <tag k="source" v="tdsv40:control_tower_p"/>
+625d624
+<         <tag k="addr:full" v="The other side of the airfield"/>
+627c626,627
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.417Z"/>
+---
+>         <tag k="addr:full" v="The other side of the airfield"/>
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.467Z"/>
+634a635
+>         <tag k="source" v="tdsv40"/>
+636d636
+<         <tag k="source" v="tdsv40:control_tower_p"/>
+646c646
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.417Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.467Z"/>
+649d648
+<         <tag k="note" v="A good tower"/>
+651c650
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+---
+>         <tag k="note" v="A good tower"/>
+652a652
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+655a656
+>         <tag k="source" v="tdsv40"/>
+657d657
+<         <tag k="source" v="tdsv40:control_tower_p"/>
+712c712
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.411Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.462Z"/>
+715a716
+>         <tag k="source" v="tdsv40"/>
+717d717
+<         <tag k="source" v="tdsv40:built-up_area_p"/>
+723c723
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.410Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.462Z"/>
+725d724
+<         <tag k="note" v="No More Information"/>
+727a727
+>         <tag k="note" v="No More Information"/>
+730a731
+>         <tag k="source" v="tdsv40"/>
+732d732
+<         <tag k="source" v="tdsv40:built-up_area_p"/>
+739c739
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.410Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.462Z"/>
+745a746
+>         <tag k="source" v="tdsv40"/>
+747,748d747
+<         <tag k="source" v="tdsv40:built-up_area_p"/>
+<         <tag k="name" v="Industrial Estate"/>
+749a749
+>         <tag k="name" v="Industrial Estate"/>
+755c755
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.410Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.461Z"/>
+757d756
+<         <tag k="note" v="Lots of houses"/>
+759a759
+>         <tag k="note" v="Lots of houses"/>
+762a763
+>         <tag k="source" v="tdsv40"/>
+764,765d764
+<         <tag k="source" v="tdsv40:built-up_area_p"/>
+<         <tag k="name" v="Residential Area"/>
+766a766
+>         <tag k="name" v="Residential Area"/>
+772c772
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.410Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.461Z"/>
+778a779
+>         <tag k="source" v="tdsv40"/>
+780d780
+<         <tag k="source" v="tdsv40:built-up_area_p"/>
+787c787
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.409Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.460Z"/>
+791a792
+>         <tag k="source" v="tdsv40"/>
+793d793
+<         <tag k="source" v="tdsv40:building_superstructure_p"/>
+800c800
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.409Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.460Z"/>
+804a805
+>         <tag k="security:classification" v="U"/>
+807c808
+<         <tag k="security:classification" v="U"/>
+---
+>         <tag k="source" v="tdsv40"/>
+809d809
+<         <tag k="source" v="tdsv40:building_superstructure_p"/>
+816c816
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.408Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.460Z"/>
+820a821
+>         <tag k="security:classification" v="U"/>
+823c824
+<         <tag k="security:classification" v="U"/>
+---
+>         <tag k="source" v="tdsv40"/>
+825d825
+<         <tag k="source" v="tdsv40:building_superstructure_p"/>
+832c832
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.408Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.460Z"/>
+836a837
+>         <tag k="security:classification" v="U"/>
+839c840
+<         <tag k="security:classification" v="U"/>
+---
+>         <tag k="source" v="tdsv40"/>
+841d841
+<         <tag k="source" v="tdsv40:building_superstructure_p"/>
+884c884
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.288Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.430Z"/>
+888a889
+>         <tag k="source" v="tdsv40"/>
+890d890
+<         <tag k="source" v="tdsv40:building_p"/>
+895c895
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.288Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.430Z"/>
+898d897
+<         <tag k="note" v="We are on a Mission"/>
+899a899
+>         <tag k="note" v="We are on a Mission"/>
+906d905
+<         <tag k="uuid" v="{54698b56-a6c0-454d-a77f-fbc9a92cb6e6}"/>
+908c907,908
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{54698b56-a6c0-454d-a77f-fbc9a92cb6e6}"/>
+917c917
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+929c929
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.287Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.430Z"/>
+937c937
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.287Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.430Z"/>
+939d938
+<         <tag k="note" v="Closed for a long time"/>
+941a941
+>         <tag k="note" v="Closed for a long time"/>
+947a948
+>         <tag k="source" v="tdsv40"/>
+949d949
+<         <tag k="source" v="tdsv40:building_p"/>
+956c956
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+969c969
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.287Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.430Z"/>
+979c979
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+991c991
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.286Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.429Z"/>
+1000c1000
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.286Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.429Z"/>
+1004a1005
+>         <tag k="source" v="tdsv40"/>
+1006d1006
+<         <tag k="source" v="tdsv40:building_p"/>
+1015d1014
+<         <tag k="building:levels" v="1"/>
+1017c1016,1017
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.286Z"/>
+---
+>         <tag k="building:levels" v="1"/>
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.429Z"/>
+1023d1022
+<         <tag k="uuid" v="{ada3fb8e-d49a-412a-a427-1df9fdbdde9b}"/>
+1025c1024,1025
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{ada3fb8e-d49a-412a-a427-1df9fdbdde9b}"/>
+1035c1035
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.285Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.429Z"/>
+1038d1037
+<         <tag k="security:resource_owner" v="USA"/>
+1040a1040
+>         <tag k="security:resource_owner" v="USA"/>
+1043a1044
+>         <tag k="source" v="tdsv40"/>
+1045d1045
+<         <tag k="source" v="tdsv40:building_p"/>
+1055c1055
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+1065c1065
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.285Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.429Z"/>
+1076c1076
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.285Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.429Z"/>
+1083a1084
+>         <tag k="source" v="tdsv40"/>
+1085d1085
+<         <tag k="source" v="tdsv40:building_p"/>
+1093c1093
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.285Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.428Z"/>
+1096d1095
+<         <tag k="security:resource_owner" v="USA"/>
+1098a1098
+>         <tag k="security:resource_owner" v="USA"/>
+1101d1100
+<         <tag k="uuid" v="{e68c306d-bd66-4a9c-896c-3a313a9c0a64}"/>
+1104c1103,1104
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{e68c306d-bd66-4a9c-896c-3a313a9c0a64}"/>
+1112c1112
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.284Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.428Z"/>
+1115d1114
+<         <tag k="security:resource_owner" v="USA"/>
+1116a1116
+>         <tag k="security:resource_owner" v="USA"/>
+1118a1119
+>         <tag k="source" v="tdsv40"/>
+1120d1120
+<         <tag k="source" v="tdsv40:building_p"/>
+1129d1128
+<         <tag k="building:levels" v="3"/>
+1131c1130,1131
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.284Z"/>
+---
+>         <tag k="building:levels" v="3"/>
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.428Z"/>
+1136a1137
+>         <tag k="source" v="tdsv40"/>
+1138d1138
+<         <tag k="source" v="tdsv40:building_p"/>
+1146c1146
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.284Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.428Z"/>
+1154d1153
+<         <tag k="uuid" v="{08b347f2-0039-4bde-a17d-a456214f56e1}"/>
+1156c1155,1156
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{08b347f2-0039-4bde-a17d-a456214f56e1}"/>
+1166c1166
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.284Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.428Z"/>
+1170d1169
+<         <tag k="security:resource_owner" v="USA"/>
+1171a1171
+>         <tag k="security:resource_owner" v="USA"/>
+1173a1174
+>         <tag k="source" v="tdsv40"/>
+1175d1175
+<         <tag k="source" v="tdsv40:building_p"/>
+1183c1183
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.283Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.428Z"/>
+1187d1186
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+1188a1188
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+1192d1191
+<         <tag k="uuid" v="{34788650-9dc2-45b0-95ee-42f28c23f8f4}"/>
+1194c1193,1194
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{34788650-9dc2-45b0-95ee-42f28c23f8f4}"/>
+1202c1202
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.283Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.427Z"/>
+1208a1209
+>         <tag k="source" v="tdsv40"/>
+1210d1210
+<         <tag k="source" v="tdsv40:building_p"/>
+1219c1219
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.283Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.427Z"/>
+1226a1227
+>         <tag k="source" v="tdsv40"/>
+1228,1229d1228
+<         <tag k="source" v="tdsv40:building_p"/>
+<         <tag k="name" v="Government Office"/>
+1230a1230
+>         <tag k="name" v="Government Office"/>
+1236c1236
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.282Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.427Z"/>
+1243d1242
+<         <tag k="uuid" v="{cdde649e-ab52-416b-aa26-6188d3641214}"/>
+1245c1244,1245
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{cdde649e-ab52-416b-aa26-6188d3641214}"/>
+1255c1255
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+1266c1266
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.281Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.427Z"/>
+1277,1278c1277
+<         <tag k="source" v="tdsv40:building_p"/>
+<         <tag k="material:vertical3" v="mirrors"/>
+---
+>         <tag k="source" v="tdsv40"/>
+1279a1279
+>         <tag k="material:vertical3" v="mirrors"/>
+1282d1281
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+1283a1283
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+1293c1293
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.281Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.427Z"/>
+1302c1302
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.281Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.427Z"/>
+1307a1308
+>         <tag k="source" v="tdsv40"/>
+1309d1309
+<         <tag k="source" v="tdsv40:building_p"/>
+1317c1317
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.281Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.426Z"/>
+1325d1324
+<         <tag k="uuid" v="{440884fb-8904-4333-9319-57451ac9fa38}"/>
+1327c1326,1327
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{440884fb-8904-4333-9319-57451ac9fa38}"/>
+1334c1334
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.280Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.426Z"/>
+1342d1341
+<         <tag k="uuid" v="{c9e03c34-8ab5-4f9c-b31f-5f4d316bc61d}"/>
+1344c1343,1344
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{c9e03c34-8ab5-4f9c-b31f-5f4d316bc61d}"/>
+1352c1352
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.280Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.426Z"/>
+1359d1358
+<         <tag k="uuid" v="{4ac17181-16e9-4be0-bd7b-8cc68bbeea59}"/>
+1361c1360,1361
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{4ac17181-16e9-4be0-bd7b-8cc68bbeea59}"/>
+1366c1366
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.280Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.426Z"/>
+1368d1367
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+1369a1369
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+1371d1370
+<         <tag k="security:resource_owner" v="USA"/>
+1372a1372
+>         <tag k="security:resource_owner" v="USA"/>
+1375d1374
+<         <tag k="uuid" v="{cd706b59-6f0f-467b-8ff7-2bc5b22a8cea}"/>
+1377c1376,1377
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{cd706b59-6f0f-467b-8ff7-2bc5b22a8cea}"/>
+1385c1385
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+1395c1395
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.279Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.426Z"/>
+1407c1407
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.279Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.426Z"/>
+1415a1416
+>         <tag k="source" v="tdsv40"/>
+1417d1417
+<         <tag k="source" v="tdsv40:building_p"/>
+1423d1422
+<         <tag k="building:levels" v="5"/>
+1425c1424,1425
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.279Z"/>
+---
+>         <tag k="building:levels" v="5"/>
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.425Z"/>
+1432d1431
+<         <tag k="uuid" v="{19ab50f6-8ce7-4edd-892b-a59887739903}"/>
+1434c1433,1434
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{19ab50f6-8ce7-4edd-892b-a59887739903}"/>
+1443c1443
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.279Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.425Z"/>
+1451a1452
+>         <tag k="source" v="tdsv40"/>
+1453d1453
+<         <tag k="source" v="tdsv40:building_p"/>
+1461d1460
+<         <tag k="building:levels" v="1"/>
+1463c1462,1463
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.278Z"/>
+---
+>         <tag k="building:levels" v="1"/>
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.425Z"/>
+1472d1471
+<         <tag k="uuid" v="{ac05fed0-e5d2-40ea-9916-b979e1e2ff49}"/>
+1474c1473,1474
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{ac05fed0-e5d2-40ea-9916-b979e1e2ff49}"/>
+1482c1482
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.278Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.425Z"/>
+1486d1485
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+1487a1487
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+1491d1490
+<         <tag k="uuid" v="{5f4211f0-ea5a-44df-8cd9-675bfdf37d00}"/>
+1493c1492,1493
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{5f4211f0-ea5a-44df-8cd9-675bfdf37d00}"/>
+1501c1501
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+1513c1513
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.278Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.425Z"/>
+1521c1521
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.277Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.424Z"/>
+1531d1530
+<         <tag k="uuid" v="{5dc03ed7-7f8b-4006-a53f-40f4267664c8}"/>
+1533c1532,1533
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{5dc03ed7-7f8b-4006-a53f-40f4267664c8}"/>
+1539d1538
+<         <tag k="building:levels" v="1"/>
+1541c1540,1541
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.277Z"/>
+---
+>         <tag k="building:levels" v="1"/>
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.423Z"/>
+1543d1542
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+1544a1544
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+1548d1547
+<         <tag k="uuid" v="{01e8c028-8afb-4c30-88e4-fed176b8fd9a}"/>
+1550c1549,1550
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{01e8c028-8afb-4c30-88e4-fed176b8fd9a}"/>
+1559c1559
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.277Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.423Z"/>
+1567d1566
+<         <tag k="uuid" v="{fb58f307-c7ed-4023-90d2-535b440bb474}"/>
+1569c1568,1569
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{fb58f307-c7ed-4023-90d2-535b440bb474}"/>
+1577c1577
+<         <tag k="source" v="tdsv40:building_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+1586c1586
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.276Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.422Z"/>
+1597c1597
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.275Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.421Z"/>
+1601a1602
+>         <tag k="source" v="tdsv40"/>
+1603d1603
+<         <tag k="source" v="tdsv40:aircraft_hangar_p"/>
+1608c1608
+<         <tag k="source" v="tdsv40:aircraft_hangar_p"/>
+---
+>         <tag k="source" v="tdsv40"/>
+1621c1621
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.274Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.421Z"/>
+1632c1632
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.444Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.490Z"/>
+1635a1636
+>         <tag k="source" v="tdsv40"/>
+1637d1637
+<         <tag k="source" v="tdsv40:trail_c"/>
+1645c1645
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.444Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.490Z"/>
+1648d1647
+<         <tag k="security:resource_owner" v="USA"/>
+1649a1649
+>         <tag k="security:resource_owner" v="USA"/>
+1652a1653
+>         <tag k="source" v="tdsv40"/>
+1654d1654
+<         <tag k="source" v="tdsv40:trail_c"/>
+1662c1662
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.444Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.490Z"/>
+1665d1664
+<         <tag k="security:resource_owner" v="USA"/>
+1666a1666
+>         <tag k="security:resource_owner" v="USA"/>
+1671a1672
+>         <tag k="source" v="tdsv40"/>
+1673d1673
+<         <tag k="source" v="tdsv40:trail_c"/>
+1682c1682
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.444Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.489Z"/>
+1689a1690
+>         <tag k="source" v="tdsv40"/>
+1691d1691
+<         <tag k="source" v="tdsv40:trail_c"/>
+1700c1700
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.443Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.489Z"/>
+1703d1702
+<         <tag k="security:resource_owner" v="USA"/>
+1704a1704
+>         <tag k="security:resource_owner" v="USA"/>
+1710a1711
+>         <tag k="source" v="tdsv40"/>
+1712d1712
+<         <tag k="source" v="tdsv40:trail_c"/>
+1722c1722
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.443Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.489Z"/>
+1725d1724
+<         <tag k="security:resource_owner" v="USA"/>
+1726a1726
+>         <tag k="security:resource_owner" v="USA"/>
+1729a1730
+>         <tag k="source" v="tdsv40"/>
+1731d1731
+<         <tag k="source" v="tdsv40:trail_c"/>
+1740c1740
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.443Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.489Z"/>
+1748a1749
+>         <tag k="source" v="tdsv40"/>
+1750d1750
+<         <tag k="source" v="tdsv40:trail_c"/>
+1763c1763
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.439Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.485Z"/>
+1768a1769
+>         <tag k="source" v="tdsv40"/>
+1770d1770
+<         <tag k="source" v="tdsv40:stadium_s"/>
+1782c1782
+<         <tag k="source" v="tdsv40:stadium_s"/>
+---
+>         <tag k="source" v="tdsv40"/>
+1794c1794
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.438Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.485Z"/>
+1808c1808
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.437Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.484Z"/>
+1812a1813
+>         <tag k="source" v="tdsv40"/>
+1814d1814
+<         <tag k="source" v="tdsv40:shed_s"/>
+1825c1825
+<         <tag k="source" v="tdsv40:shed_s"/>
+---
+>         <tag k="source" v="tdsv40"/>
+1829d1828
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+1830a1830
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+1832d1831
+<         <tag k="security:resource_owner" v="USA"/>
+1833a1833
+>         <tag k="security:resource_owner" v="USA"/>
+1840c1840
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.437Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.484Z"/>
+1854c1854
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.435Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.482Z"/>
+1857a1858
+>         <tag k="source" v="tdsv40"/>
+1859d1859
+<         <tag k="source" v="tdsv40:road_c"/>
+1869c1869
+<         <tag k="source" v="tdsv40:road_c"/>
+---
+>         <tag k="source" v="tdsv40"/>
+1879c1879
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.434Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.481Z"/>
+1883d1882
+<         <tag k="uuid" v="{c87f3ed7-5656-4f80-b556-5b85df1cb9be}"/>
+1884a1884
+>         <tag k="uuid" v="{c87f3ed7-5656-4f80-b556-5b85df1cb9be}"/>
+1894d1893
+<         <tag k="width:minimum_traveled_way" v="4"/>
+1895a1895
+>         <tag k="width:minimum_traveled_way" v="4"/>
+1897c1897
+<         <tag k="source" v="tdsv40:road_c"/>
+---
+>         <tag k="source" v="tdsv40"/>
+1899d1898
+<         <tag k="ref" v="470"/>
+1900a1900
+>         <tag k="ref" v="470"/>
+1902,1904d1901
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+<         <tag k="name" v="back"/>
+<         <tag k="lanes" v="1"/>
+1906c1903,1905
+<         <tag k="security:resource_owner" v="USA"/>
+---
+>         <tag k="lanes" v="1"/>
+>         <tag k="name" v="back"/>
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+1907a1907
+>         <tag k="security:resource_owner" v="USA"/>
+1913c1913
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.434Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.481Z"/>
+1916d1915
+<         <tag k="uuid" v="{632db716-7256-4b2c-b27d-593bf9a2093e}"/>
+1917a1917
+>         <tag k="uuid" v="{632db716-7256-4b2c-b27d-593bf9a2093e}"/>
+1926d1925
+<         <tag k="width:minimum_traveled_way" v="4"/>
+1928c1927,1928
+<         <tag k="source" v="tdsv40:road_c"/>
+---
+>         <tag k="width:minimum_traveled_way" v="4"/>
+>         <tag k="source" v="tdsv40"/>
+1937c1937
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.434Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.481Z"/>
+1949d1948
+<         <tag k="width:minimum_traveled_way" v="4"/>
+1951c1950,1951
+<         <tag k="source" v="tdsv40:road_c"/>
+---
+>         <tag k="width:minimum_traveled_way" v="4"/>
+>         <tag k="source" v="tdsv40"/>
+1960c1960
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.434Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.481Z"/>
+1973c1973
+<         <tag k="source" v="tdsv40:road_c"/>
+---
+>         <tag k="source" v="tdsv40"/>
+1982d1981
+<         <tag k="security:resource_owner" v="USA"/>
+1983a1983
+>         <tag k="security:resource_owner" v="USA"/>
+1987c1987
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.433Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.481Z"/>
+1998d1997
+<         <tag k="width:minimum_traveled_way" v="4"/>
+1999a1999
+>         <tag k="width:minimum_traveled_way" v="4"/>
+2001c2001
+<         <tag k="source" v="tdsv40:road_c"/>
+---
+>         <tag k="source" v="tdsv40"/>
+2003d2002
+<         <tag k="ref" v="1"/>
+2005c2004
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+---
+>         <tag k="ref" v="1"/>
+2007d2005
+<         <tag k="name" v="Beach"/>
+2009c2007,2008
+<         <tag k="security:resource_owner" v="USA"/>
+---
+>         <tag k="name" v="Beach"/>
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2010a2010
+>         <tag k="security:resource_owner" v="USA"/>
+2015c2015
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.433Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.480Z"/>
+2018d2017
+<         <tag k="uuid" v="{d9d0703d-83d7-4874-ac98-1b323e5de301}"/>
+2019a2019
+>         <tag k="uuid" v="{d9d0703d-83d7-4874-ac98-1b323e5de301}"/>
+2027c2027
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.432Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.479Z"/>
+2031a2032
+>         <tag k="source" v="tdsv40"/>
+2033d2033
+<         <tag k="source" v="tdsv40:river_c"/>
+2041c2041
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.432Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.479Z"/>
+2043d2042
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2044a2044
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2047a2048
+>         <tag k="source" v="tdsv40"/>
+2049d2049
+<         <tag k="source" v="tdsv40:river_c"/>
+2057c2057
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.432Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.479Z"/>
+2060d2059
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2061a2061
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2066a2067
+>         <tag k="source" v="tdsv40"/>
+2068d2068
+<         <tag k="source" v="tdsv40:river_c"/>
+2076c2076
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.431Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.478Z"/>
+2079d2078
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2080a2080
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2084a2085
+>         <tag k="source" v="tdsv40"/>
+2086d2086
+<         <tag k="source" v="tdsv40:river_c"/>
+2095c2095
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.431Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.478Z"/>
+2097d2096
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2098a2098
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2102a2103
+>         <tag k="source" v="tdsv40"/>
+2104d2104
+<         <tag k="source" v="tdsv40:river_c"/>
+2112c2112
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.431Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.478Z"/>
+2115d2114
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2116a2116
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2121a2122
+>         <tag k="source" v="tdsv40"/>
+2123d2123
+<         <tag k="source" v="tdsv40:river_c"/>
+2132c2132
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.430Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.478Z"/>
+2135d2134
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2136a2136
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2141a2142
+>         <tag k="source" v="tdsv40"/>
+2143d2143
+<         <tag k="source" v="tdsv40:river_c"/>
+2151c2151
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.430Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.478Z"/>
+2154d2153
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2155a2155
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2158a2159
+>         <tag k="source" v="tdsv40"/>
+2160d2160
+<         <tag k="source" v="tdsv40:river_c"/>
+2168c2168
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.430Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.477Z"/>
+2170d2169
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2171a2171
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2177a2178
+>         <tag k="source" v="tdsv40"/>
+2179d2179
+<         <tag k="source" v="tdsv40:river_c"/>
+2188c2188
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.430Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.477Z"/>
+2191d2190
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2192a2192
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2196a2197
+>         <tag k="source" v="tdsv40"/>
+2198d2198
+<         <tag k="source" v="tdsv40:river_c"/>
+2207c2207
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.429Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.477Z"/>
+2210d2209
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2211a2211
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2216a2217
+>         <tag k="source" v="tdsv40"/>
+2218d2218
+<         <tag k="source" v="tdsv40:river_c"/>
+2226c2226
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.429Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.477Z"/>
+2228d2227
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2229a2229
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2233a2234
+>         <tag k="source" v="tdsv40"/>
+2235d2235
+<         <tag k="source" v="tdsv40:river_c"/>
+2243c2243
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.429Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.477Z"/>
+2246d2245
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2247a2247
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2251a2252
+>         <tag k="source" v="tdsv40"/>
+2253d2253
+<         <tag k="source" v="tdsv40:river_c"/>
+2261c2261
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.429Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.477Z"/>
+2263d2262
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2264a2264
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2269a2270
+>         <tag k="source" v="tdsv40"/>
+2271d2271
+<         <tag k="source" v="tdsv40:river_c"/>
+2279c2279
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.428Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.476Z"/>
+2282d2281
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2283a2283
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2287a2288
+>         <tag k="source" v="tdsv40"/>
+2289d2289
+<         <tag k="source" v="tdsv40:river_c"/>
+2297,2298c2297
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.428Z"/>
+<         <tag k="note" v="Very long river"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.476Z"/>
+2299a2299
+>         <tag k="note" v="Very long river"/>
+2306a2307
+>         <tag k="source" v="tdsv40"/>
+2308d2308
+<         <tag k="source" v="tdsv40:river_c"/>
+2317c2317
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.427Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.475Z"/>
+2320a2321
+>         <tag k="source" v="tdsv40"/>
+2322d2322
+<         <tag k="source" v="tdsv40:railway_c"/>
+2331c2331
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.427Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.475Z"/>
+2334d2333
+<         <tag k="security:resource_owner" v="USA"/>
+2335a2335
+>         <tag k="security:resource_owner" v="USA"/>
+2337d2336
+<         <tag k="uuid" v="{2df4f57e-69bd-468a-9113-35434c475dc9}"/>
+2339c2338,2339
+<         <tag k="source" v="tdsv40:railway_c"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{2df4f57e-69bd-468a-9113-35434c475dc9}"/>
+2349c2349
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.427Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.475Z"/>
+2351d2350
+<         <tag k="gauge" v="3"/>
+2353c2352
+<         <tag k="note" v="A very long train"/>
+---
+>         <tag k="gauge" v="3"/>
+2354a2354
+>         <tag k="note" v="A very long train"/>
+2356d2355
+<         <tag k="security:resource_owner" v="USA"/>
+2357a2357
+>         <tag k="security:resource_owner" v="USA"/>
+2360d2359
+<         <tag k="uuid" v="{18ab8349-3fb0-48eb-917b-49995b451fc5}"/>
+2362c2361,2362
+<         <tag k="source" v="tdsv40:railway_c"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{18ab8349-3fb0-48eb-917b-49995b451fc5}"/>
+2372c2372
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.426Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.475Z"/>
+2374d2373
+<         <tag k="gauge" v="4"/>
+2375a2375
+>         <tag k="gauge" v="4"/>
+2378d2377
+<         <tag k="security:resource_owner" v="USA"/>
+2380a2380
+>         <tag k="security:resource_owner" v="USA"/>
+2382a2383
+>         <tag k="source" v="tdsv40"/>
+2384d2384
+<         <tag k="source" v="tdsv40:railway_c"/>
+2393c2393
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.426Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.475Z"/>
+2395d2394
+<         <tag k="gauge" v="2"/>
+2396a2396
+>         <tag k="gauge" v="2"/>
+2399d2398
+<         <tag k="security:resource_owner" v="USA"/>
+2400a2400
+>         <tag k="security:resource_owner" v="USA"/>
+2402a2403
+>         <tag k="source" v="tdsv40"/>
+2404d2404
+<         <tag k="source" v="tdsv40:railway_c"/>
+2413c2413
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.426Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.474Z"/>
+2416d2415
+<         <tag k="gauge" v="1"/>
+2417a2417
+>         <tag k="gauge" v="1"/>
+2419d2418
+<         <tag k="security:resource_owner" v="USA"/>
+2420a2420
+>         <tag k="security:resource_owner" v="USA"/>
+2423d2422
+<         <tag k="uuid" v="{cbcf9671-3825-46a9-8ef0-f1676648b43e}"/>
+2425c2424,2425
+<         <tag k="source" v="tdsv40:railway_c"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{cbcf9671-3825-46a9-8ef0-f1676648b43e}"/>
+2435c2435
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.426Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.474Z"/>
+2440d2439
+<         <tag k="security:resource_owner" v="USA"/>
+2441a2441
+>         <tag k="security:resource_owner" v="USA"/>
+2443a2444
+>         <tag k="source" v="tdsv40"/>
+2445d2445
+<         <tag k="source" v="tdsv40:railway_c"/>
+2457c2457
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.421Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.471Z"/>
+2460a2461
+>         <tag k="source" v="tdsv40"/>
+2462d2462
+<         <tag k="source" v="tdsv40:facility_s"/>
+2476c2476
+<         <tag k="source" v="tdsv40:facility_s"/>
+---
+>         <tag k="source" v="tdsv40"/>
+2480d2479
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2481a2481
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2483d2482
+<         <tag k="security:resource_owner" v="USA"/>
+2484a2484
+>         <tag k="security:resource_owner" v="USA"/>
+2491c2491
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.421Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.471Z"/>
+2510c2510
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.421Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.471Z"/>
+2512d2511
+<         <tag k="note" v="Hospital"/>
+2513a2513
+>         <tag k="note" v="Hospital"/>
+2516a2517
+>         <tag k="source" v="tdsv40"/>
+2518d2518
+<         <tag k="source" v="tdsv40:facility_s"/>
+2532c2532
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.420Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.470Z"/>
+2537a2538
+>         <tag k="source" v="tdsv40"/>
+2539d2539
+<         <tag k="source" v="tdsv40:facility_s"/>
+2549c2549
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.415Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.466Z"/>
+2552a2553
+>         <tag k="source" v="tdsv40"/>
+2554d2554
+<         <tag k="source" v="tdsv40:cart_track_c"/>
+2563c2563
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.415Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.465Z"/>
+2568a2569
+>         <tag k="source" v="tdsv40"/>
+2570d2570
+<         <tag k="source" v="tdsv40:cart_track_c"/>
+2580c2580,2581
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.415Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.465Z"/>
+>         <tag k="condition" v="abandoned"/>
+2583d2583
+<         <tag k="condition" v="abandoned"/>
+2588a2589
+>         <tag k="source" v="tdsv40"/>
+2590d2590
+<         <tag k="source" v="tdsv40:cart_track_c"/>
+2600,2601c2600
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.415Z"/>
+<         <tag k="width:minimum_traveled_way" v="4"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.465Z"/>
+2602a2602
+>         <tag k="width:minimum_traveled_way" v="4"/>
+2607a2608
+>         <tag k="source" v="tdsv40"/>
+2609d2609
+<         <tag k="source" v="tdsv40:cart_track_c"/>
+2622c2622
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.413Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.464Z"/>
+2625a2626
+>         <tag k="source" v="tdsv40"/>
+2627d2627
+<         <tag k="source" v="tdsv40:built-up_area_s"/>
+2639c2639
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.413Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.464Z"/>
+2643a2644
+>         <tag k="source" v="tdsv40"/>
+2645d2645
+<         <tag k="source" v="tdsv40:built-up_area_s"/>
+2657c2657
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.413Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.464Z"/>
+2663a2664
+>         <tag k="source" v="tdsv40"/>
+2665,2666d2665
+<         <tag k="source" v="tdsv40:built-up_area_s"/>
+<         <tag k="name" v="Defence"/>
+2667a2667
+>         <tag k="name" v="Defence"/>
+2679c2679
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.413Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.464Z"/>
+2684a2685
+>         <tag k="source" v="tdsv40"/>
+2686d2686
+<         <tag k="source" v="tdsv40:built-up_area_s"/>
+2699c2699
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.412Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.463Z"/>
+2705a2706
+>         <tag k="source" v="tdsv40"/>
+2707,2708d2707
+<         <tag k="source" v="tdsv40:built-up_area_s"/>
+<         <tag k="name" v="Residential"/>
+2709a2709
+>         <tag k="name" v="Residential"/>
+2721c2721
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.412Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.463Z"/>
+2723d2722
+<         <tag k="note" v="Small suburb"/>
+2724a2724
+>         <tag k="note" v="Small suburb"/>
+2727a2728
+>         <tag k="source" v="tdsv40"/>
+2729,2730d2729
+<         <tag k="source" v="tdsv40:built-up_area_s"/>
+<         <tag k="name" v="Residential"/>
+2731a2731
+>         <tag k="name" v="Residential"/>
+2743c2743
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.412Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.463Z"/>
+2749a2750
+>         <tag k="source" v="tdsv40"/>
+2751d2751
+<         <tag k="source" v="tdsv40:built-up_area_s"/>
+2764c2764
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.412Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.463Z"/>
+2769a2770
+>         <tag k="source" v="tdsv40"/>
+2771,2772d2771
+<         <tag k="source" v="tdsv40:built-up_area_s"/>
+<         <tag k="name" v="Manufacturing"/>
+2773a2773
+>         <tag k="name" v="Manufacturing"/>
+2786c2786
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.407Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.459Z"/>
+2790a2791
+>         <tag k="source" v="tdsv40"/>
+2792d2792
+<         <tag k="source" v="tdsv40:building_s"/>
+2804c2804
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.407Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.459Z"/>
+2806d2805
+<         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2807a2807
+>         <tag k="security:dissemination_control:non_ic" v="DS"/>
+2811d2810
+<         <tag k="uuid" v="{e8cbc330-a431-4cf6-adcf-73a9c8f10fe9}"/>
+2813c2812,2813
+<         <tag k="source" v="tdsv40:building_s"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{e8cbc330-a431-4cf6-adcf-73a9c8f10fe9}"/>
+2828c2828
+<         <tag k="source" v="tdsv40:building_s"/>
+---
+>         <tag k="source" v="tdsv40"/>
+2835d2834
+<         <tag k="security:resource_owner" v="USA"/>
+2836a2836
+>         <tag k="security:resource_owner" v="USA"/>
+2840c2840
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.406Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.459Z"/>
+2858c2858
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.406Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.458Z"/>
+2864a2865
+>         <tag k="source" v="tdsv40"/>
+2866d2866
+<         <tag k="source" v="tdsv40:building_s"/>
+2879c2879
+<         <tag k="source" v="tdsv40:building_s"/>
+---
+>         <tag k="source" v="tdsv40"/>
+2894c2894
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.406Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.458Z"/>
+2906c2906
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.405Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.458Z"/>
+2910d2909
+<         <tag k="security:resource_owner" v="USA"/>
+2911a2911
+>         <tag k="security:resource_owner" v="USA"/>
+2913a2914
+>         <tag k="source" v="tdsv40"/>
+2915d2915
+<         <tag k="source" v="tdsv40:building_s"/>
+2929c2929
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.405Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.457Z"/>
+2935a2936
+>         <tag k="source" v="tdsv40"/>
+2937d2937
+<         <tag k="source" v="tdsv40:building_s"/>
+2950c2950
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.405Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.457Z"/>
+2957a2958
+>         <tag k="source" v="tdsv40"/>
+2959d2959
+<         <tag k="source" v="tdsv40:building_s"/>
+2973c2973
+<         <tag k="source:ingest:datetime" v="2016-06-07T07:17:29.289Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-02-03T23:34:50.431Z"/>
+2980d2979
+<         <tag k="uuid" v="{69d80b50-1eb2-4fe6-8db6-ea346395b285}"/>
+2983c2982,2983
+<         <tag k="source" v="tdsv40:building_s"/>
+---
+>         <tag k="source" v="tdsv40"/>
+>         <tag k="uuid" v="{69d80b50-1eb2-4fe6-8db6-ea346395b285}"/>

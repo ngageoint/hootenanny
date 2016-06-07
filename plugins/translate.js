@@ -155,7 +155,7 @@ translate = {
 
 
     // Apply one to one translations - used for import and export
-    applyOne2One : function(inList, outList, lookup, fCodeList, ignoreList) 
+    applyOne2One : function(inList, outList, lookup, fCodeList)
     { 
         var endChar = '',
             tAttrib = '',
@@ -173,9 +173,9 @@ translate = {
                     // Drop all of the undefined values
                     if (row[0])
                     {
-                        outList[row[0] + endChar] = row[1];
+                        outList[row[0]] = row[1];
                         // Debug
-                        // print('Used:' + col + ' = ' + inList[col]);
+                        // print('Used:' + col + ' = ' + inList[col] + ' - ' + row[0] + ' = ' + row[1]);
                         delete inList[col];
                     }
                     else
@@ -204,19 +204,41 @@ translate = {
             } // End col in lookup
             else
             {
-                    // If these tags are used to find an FCODE, ignore them
-                    if ((col in fCodeList) && (value in fCodeList[col]))
-                    {
-                        // Debug
-                        // print('UsedFCode:' + col + ' = ' + inList[col]);
-                        delete inList[col];
-                        continue;
-                    }
-                    else
-                    {
-                        if (config.getOgrDebugLookupcolumn() == 'true') logVerbose('Column not found:: (' + col + '=' + value + ')');
-                    }
+                // If these tags are used to find an FCODE, ignore them
+                if ((col in fCodeList) && (value in fCodeList[col]))
+                {
+                    // Debug
+                    // print('UsedFCode:' + col + ' = ' + inList[col]);
+                    delete inList[col];
+                    continue;
+                }
 
+                // Debug:
+                // print('Col::  :' + col + ':  Value :' + value + ':');
+
+                endChar = col.charAt(col.length - 1) // Going to look for a 2 or a 3
+                tAttrib = col.slice(0,-1);
+
+                if (tAttrib in lookup)
+                {
+                    if (value in lookup[tAttrib])
+                    {
+                        row = lookup[tAttrib][value];
+
+                        // Drop all of the undefined values
+                        if (row[0])
+                        {
+                            outList[row[0] + endChar] = row[1];
+                            delete inList[col];
+                            // Debug:
+                            // print ('one2one: Setting :' + row[0] + endChar + ': to :' + row[1] + ':');
+                        }
+                    }
+                }
+                else
+                {
+                    if (config.getOgrDebugLookupcolumn() == 'true') logVerbose('Column not found:: (' + col + '=' + value + ')');
+                }
             } // End !col in lookup
         } // End for col in inList
     }, // End applyOne2One
@@ -250,39 +272,6 @@ translate = {
             }
         } // End for col in inList
     }, // End applyOne2OneQuiet
-
-
-    // Apply one to one translations and:
-    // * Don't report errors
-    // * Send back the tags that were used.
-    applyOne2OneUsed : function(inList, outList, lookup)
-    {
-        var endChar = '',
-            tAttrib = '',
-            row = [];
-            used = [];
-
-        for (var col in inList)
-        {
-            var value = inList[col];
-            if (col in lookup)
-            {
-                if (value in lookup[col])
-                {
-                    row = lookup[col][value];
-
-                    // Drop all of the undefined values
-                    if (row[0])
-                    {
-                        outList[row[0]] = row[1];
-                        used.push([col,value]);
-                    }
-                }
-            } // End col in lookup
-        } // End for col in inList
-
-        return used;
-    }, // End applyOne2OneUsed
 
 
     // Apply one to one translations - For NFDD export
@@ -686,12 +675,11 @@ translate = {
             {
                 if (i in attrs)
                 {
-                    // Sanity checking :-)
-                    // if (!(translate.isUnknown(attrs[i]))) tags[rules[i]] = attrs[i];
-
-                    // Skipping the sanity checking since we drop unwanted values
-                    // before we get here
                     tags[rules[i]] = attrs[i];
+
+                    // Debug
+                    // print('UsedTxt: ' + attrs[i]);
+                    delete attrs[i];
                 }
             }
         }
@@ -726,6 +714,10 @@ translate = {
                     if (translate.isNumber(attrs[i]))
                     {
                         tags[rules[i]] = attrs[i];
+
+                        // Debug
+                        // print('UsedNum: ' + attrs[i]);
+                        delete attrs[i];
                     }
                     else
                     {
@@ -960,9 +952,9 @@ translate = {
 
         return schema;
 
-    }, // End addEmptyFeature
+    }, // End addReviewFeature
 
-        // addEmptyFeature - Add o2s features to a schema
+    // addEmptyFeature - Add o2s features to a schema
     addEmptyFeature: function(schema)
     {
         schema.push({ name: "o2s_A",
@@ -1052,8 +1044,59 @@ translate = {
 
         return schema;
 
-    }, // End addReviewFeature
+    }, // End addEmptyFeature
 
+    // addExtraFeature - Add features to hold "extra" tag values to a schema
+    addExtraFeature: function(schema)
+    {
+        schema.push({ name: "extra_A",
+                      desc: "extra tag values",
+                      geom: "Area",
+                      columns:[ { name:'tags',
+                                  desc:'Tag List',
+                                  type:'String',
+                                },
+                                { name:'uuid',
+                                  desc:'Feature uuid',
+                                  type:'String',
+                                  defValue: '',
+                                }
+                              ]
+                    });
+        schema.push({ name: "extra_L",
+                      desc: "extra tag values",
+                      geom: "Line",
+                      columns:[ { name:'tags',
+                                  desc:'Tag List',
+                                  type:'String',
+                                  // length:'254'
+                                },
+                                { name:'uuid',
+                                  desc:'Feature uuid',
+                                  type:'String',
+                                  defValue: '',
+                                }
+                              ]
+                    });
+        schema.push({ name: "extra_P",
+                      desc: "extra tag values",
+                      geom: "Point",
+                      columns:[ { name:'tags',
+                                  desc:'Tag List',
+                                  type:'String',
+                                  // length:'254'
+                                },
+                                { name:'uuid',
+                                  desc:'Feature uuid',
+                                  type:'String',
+                                  defValue: '',
+                                }
+                              ]
+                    });
+
+        return schema;
+
+    }, // End addExtraFeature
     
     // addEtds - Add the eLTDS specific fields to each element in the schema
     addEtds: function(schema)
