@@ -806,6 +806,17 @@ public class Map extends Maps {
         
         final boolean osmApiDbEnabled = 
           Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"));
+        
+        if (osmApiDbEnabled) {
+            // add a OSM API db dummy record for the UI for conflation
+            // involving OSM API db data
+            MapLayer mapLayer = new MapLayer();
+            mapLayer.setId(-1); // using id = -1 to identify the OSM API db source
+                                // layer in the ui
+            mapLayer.setName(
+              "OSM_API_DB_" + HootProperties.getProperty("osmApiDbName"));
+            mapLayerList.add(mapLayer);
+        }
 
         for (Maps mapLayerRecord : mapLayerRecords) {
             MapLayer mapLayer = new MapLayer();
@@ -820,18 +831,7 @@ public class Map extends Maps {
                 }
             }
             mapLayerList.add(mapLayer);
-        }
-        
-        if (osmApiDbEnabled) {
-            // add a OSM API db dummy record for the UI for conflation
-            // involving OSM API db data
-            MapLayer mapLayer = new MapLayer();
-            mapLayer.setId(-1); // using id = -1 to identify the OSM API db source
-                                // layer in the ui
-            mapLayer.setName(
-              "OSM_API_Database_" + HootProperties.getProperty("osmApiDbName"));
-            mapLayerList.add(mapLayer);
-        }
+        } 
         
         mapLayers.setLayers(mapLayerList.toArray(new MapLayer[] {}));
         return mapLayers;
