@@ -988,8 +988,6 @@ mgcp = {
                 {
                     // print('Added FCODE from Map: ' + fcodeMap[i]);
                     attrs.F_CODE = fcodeMap[i];
-                    // Debug
-                    print('Broke: ' + attrs.F_CODE);
                     break;
                 }
             }
