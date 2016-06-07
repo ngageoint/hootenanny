@@ -45,6 +45,9 @@ tds61 = {
         // Add the Very ESRI specific FCSubtype attribute
         if (config.getOgrTdsAddFcsubtype() == 'true') tds61.rawSchema = translate.addFCSubtype(tds61.rawSchema);
 
+        // Add empty "extra" feature layers if needed
+        if (config.getOgrTdsExtra() == 'file') tds61.rawSchema = translate.addExtraFeature(tds61.rawSchema);
+
      /* 
         // This has been removed since we no longer have text enumerations in the schema
 
@@ -1913,9 +1916,9 @@ tds61 = {
         // for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
 
         // If we have unused tags, add them to the memo field.
-        if (Object.keys(notUsedTags).length > 0)
+        if (Object.keys(notUsedTags).length > 0 && config.getOgrTdsExtra() == 'note')
         {
-            var tStr = JSON.stringify(notUsedTags) + ';;';
+            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '<\\OSM>';
             attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';;');
         }
 
@@ -1999,6 +2002,18 @@ tds61 = {
                     returnData[i]['tableName'] = layerNameLookup[gFcode.toUpperCase()];
                 }
             } // End returnData loop
+
+            // If we have unused tags, throw them into the "extra" layer
+            if (Object.keys(notUsedTags).length > 0 && config.getOgrTdsExtra() == 'file')
+            {
+                var extraFeature = {};
+                extraFeature.tags = JSON.stringify(notUsedTags);
+                extraFeature.uuid = attrs.UID;
+
+                var extraName = 'extra_' + geometryType.toString().charAt(0);
+
+                returnData.push({attrs: extraFeature, tableName: extraName});
+            } // End notUsedTags
 
             // Look for Review tags and push them to a review layer if found
             if (tags['hoot:review:needs'] == 'yes')

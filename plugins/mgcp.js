@@ -52,11 +52,11 @@ mgcp = {
     // We can drop features but this is a nice way to see what we would drop
     mgcp.rawSchema = translate.addEmptyFeature(mgcp.rawSchema);
 
-    // Add the empty Review layers
+    // Add empty Review layers
     mgcp.rawSchema = translate.addReviewFeature(mgcp.rawSchema);
 
-    // Add the empty "extra" feature layers
-    mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
+    // Add empty "extra" feature layers if needed
+    if (config.getOgrMgcpExtra() == 'file') mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
 
     // This function dumps the schema to the screen for debugging
     // translate.dumpSchema(mgcp.rawSchema);
@@ -1367,6 +1367,14 @@ mgcp = {
         // Debug
         // for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
 
+        // If we have unused tags, add them to the TXT field.
+        // NOTE: We are not checking if this is longer than 255 characters
+        if (Object.keys(notUsedTags).length > 0 && config.getOgrMgcpExtra() == 'note')
+        {
+            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '<\\OSM>';
+            attrs.TXT = translate.appendValue(attrs.TXT,tStr,';');
+        }
+
         // Set the tablename: [P,A,L]<fcode>
         // tableName = geometryType.toString().substring(0,1) + attrs.F_CODE;
         tableName = geometryType.toString().charAt(0) + attrs.F_CODE;
@@ -1444,7 +1452,7 @@ mgcp = {
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer
-            if (Object.keys(notUsedTags).length > 0)
+            if (Object.keys(notUsedTags).length > 0 && config.getOgrMgcpExtra() == 'file')
             {
                 var extraFeature = {};
                 extraFeature.tags = JSON.stringify(notUsedTags);
