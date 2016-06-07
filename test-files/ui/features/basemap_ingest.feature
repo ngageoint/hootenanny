@@ -11,7 +11,7 @@ Feature: Basemap Ingest
         And I press "New Basemap"
         And I select "/test-files/gdal2tiles/RomanColosseum_WV2naturalcolor_clip.tif" basemap
         And I type "RomanColosseumCucumber" in input "Save As"
-        When I press "Publish" big loud span
+        When I press "big.loud" span with text "Publish"
         Then I wait 30 "seconds" to see "RomanColosseumCucumber"
 
     Scenario: Add Basemap To Map
