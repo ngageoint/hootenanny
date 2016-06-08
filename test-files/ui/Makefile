@@ -76,13 +76,13 @@ load-data:
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestA.osm $(DB_URL)/ToyTestACucumber
 	# MapEdit conflation
 	source $(HOOT_HOME)/scripts/SetupOsmApiDB.sh force
-	psql --quiet -w $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/test-files/servicesdb/users.sql
+	PGPASSWORD=$(PGPASSWORD) psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/test-files/servicesdb/users.sql
 	hoot convert $(HOOT_OPTS) -D postgresql.dumpfile.writer.start.id.changeset=1 $(HOOT_HOME)/test-files/DcGisRoads.osm $(HOOT_HOME)/tmp/DcGisRoadsCucumber.sql
-	psql --quiet -w $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/tmp/DcGisRoadsCucumber.sql
+	PGPASSWORD=$(PGPASSWORD) psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/tmp/DcGisRoadsCucumber.sql
 	# These hardcoded element starting id's are a little kludgy.  See #796.
 	hoot convert $(HOOT_OPTS) -D postgresql.dumpfile.writer.start.id.changeset=2 -D postgresql.dumpfile.writer.start.id.node=4325 -D postgresql.dumpfile.writer.start.id.way=375 $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesA.osm $(HOOT_HOME)/tmp/AllDataTypesACucumber.sql
-	psql --quiet -w $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/tmp/AllDataTypesACucumber.sql
+	PGPASSWORD=$(PGPASSWORD) psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/tmp/AllDataTypesACucumber.sql
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/generic/rivers/Haiti_osm_waterway_ss_REF2-cropped-2.osm $(DB_URL)/HaitiRiversCucumber
 	# Write a dummy changeset record in order for the export conflicts test to work.
-	psql --quiet -w $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/test-files/ui/conflict_changeset.sql
+	PGPASSWORD=$(PGPASSWORD) psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/test-files/ui/conflict_changeset.sql
 
