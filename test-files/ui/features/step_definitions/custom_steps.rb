@@ -32,12 +32,19 @@ When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent
   find('div.' + parent).find('a.' + classed).click
 end
 
+Then (/^I should (not )?see an element "([^"]*)"$/) do |negate, selector|
+  expectation = negate ? :should_not : :should
+  page.send(expectation, have_css(selector))
+end
+
 Then(/^I should see "([^"]*)"$/) do |text|
-  page.should have_content(text)
+  #page.should have_content(text)
+  expect(page).to have_content(text)
 end
 
 Then(/^I should not see "([^"]*)"$/) do |text|
-  page.should have_no_content(text)
+  #page.should have_no_content(text)
+  expect(page).to have_no_content(text)
 end
 
 Then (/^I should( not)? see a link "([^"]*)"$/) do |negate, txt|
