@@ -11,9 +11,9 @@ Feature: Conflate and Export OSM API Database Dataset
     And I press "Add Secondary Dataset"
     And I click the "OSM_API_DB_osmapi_test" Dataset
     And I press "Add Layer"
-    #Then I wait 30 "seconds" to see "OSM_API_DB_osmapi_test"
+    Then I wait 30 "seconds" to see "OSM_API_DB_osmapi_test"
     Then I should see "Conflate"
-    Then I wait 30 "seconds" to see "Conflate"
+    #Then I wait 30 "seconds" to see "Conflate"
     And I press "Conflate"
     And I scroll element into view and press "conflate2"
     And I wait 30 seconds
@@ -31,9 +31,9 @@ Feature: Conflate and Export OSM API Database Dataset
     And I press "Add Secondary Dataset"
     And I click the "AllDataTypesBCucumber" Dataset
     And I press "Add Layer"
-    #Then I wait 30 "seconds" to see "AllDataTypesBCucumber"
+    Then I wait 30 "seconds" to see "AllDataTypesBCucumber"
     Then I should see "Conflate"
-    Then I wait 30 "seconds" to see "Conflate"
+    #Then I wait 30 "seconds" to see "Conflate"
     And I press "Conflate"
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
