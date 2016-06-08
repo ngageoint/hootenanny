@@ -40,6 +40,11 @@ Then(/^I should not see "([^"]*)"$/) do |text|
   page.should have_no_content(text)
 end
 
+Then(/^I should see an alert containing "([^"]*)"$/) do |text|
+  alertText = page.driver.browser.switch_to.alert.text
+  expect(alertText).to include text
+end
+
 Then (/^I should( not)? see a link "([^"]*)"$/) do |negate, txt|
   expectation = negate ? :should_not : :should
   if negate
