@@ -1,0 +1,14 @@
+
+[[HootConfiguringOsmApiDatabaseConflation]]
+== Configuring OSM API Database Conflation
+
+By default, Hootenanny is configured with an empty test OSM API database.  To conflate against a production OSM API database:
+
+* Create a custom OSM API database configuration file $HOOT_HOME/conf/DatabaseConfigLocal.sh by copying the file 
+$HOOT_HOME/conf/DatabaseConfigDefault.sh
+* Fill in the following settings with your production OSM API database information:
+** database server name: DB_HOST_OSMAPI
+** database name: DB_NAME_OSMAPI
+** database port: DB_PORT_OSMAPI
+** database username for conflating data: DB_USER_OSMAPI
+** database password: DB_PASSWORD_OSMAPI
