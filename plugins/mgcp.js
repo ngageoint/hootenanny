@@ -1278,6 +1278,9 @@ mgcp = {
         // post processing
         mgcp.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
+        // Debug
+        // for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
+
         // Debug: Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
