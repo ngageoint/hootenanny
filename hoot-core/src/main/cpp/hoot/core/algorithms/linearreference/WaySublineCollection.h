@@ -37,7 +37,8 @@ namespace hoot
 using namespace std;
 
 /**
- * Contains a continuous string of ways. Each way subline must touch the next subline end to start.
+ * Contains a continuous collection of ways. Each way subline must touch the next subline end to
+ * start.
  */
 class WaySublineCollection
 {
@@ -50,8 +51,8 @@ public:
   void addSubline(const WaySubline& subline);
 
   /**
-   * Create a new WaySublineString that represents the negative of the sublines on this
-   * WaySublineString. This will only include sublines on the ways that are in this subline. If
+   * Create a new WaySublineCollection that represents the negative of the sublines on this
+   * WaySublineCollection. This will only include sublines on the ways that are in this subline. If
    * the subline is empty then it will not be included.
    */
   WaySublineCollection invert() const;
