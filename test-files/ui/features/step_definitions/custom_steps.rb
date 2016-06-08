@@ -28,12 +28,12 @@ When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent
   find('div.' + parent).find('a.' + classed).click
 end
 
-When(/^I select a way map feature$/) do
-  find('div.layer-data').all('path[class*=" w309"]').last.click
+When(/^I select a way map feature with id "([^"]*)"$/) do |id|
+  find('div.layer-data').all('path[class*=" ' + id + '"]').last.click
 end
 
-When(/^I select a node map feature$/) do
-  find('div.layer-data').first('g.node').click
+When(/^I select a node map feature with id "([^"]*)"$/) do |id|
+  find('div.layer-data').all('g[class*=" ' + id + '"]').last.click
 end
 
 Then(/^I should see "([^"]*)"$/) do |text|
