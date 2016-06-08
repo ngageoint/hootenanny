@@ -305,6 +305,20 @@ When(/^I wait ([0-9]*) "([^"]*)" to not see "([^"]*)"$/) do |timeout, unit, text
   Capybara.default_max_wait_time = oldTimeout
 end
 
+When(/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)" element with text "([^"]*)"$/) do |timeout, unit, el, text|
+  if unit == "seconds"
+    multiplier = 1
+  elsif unit == "minutes"
+    multiplier = 60
+  else
+    throw :badunits
+  end
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout) * multiplier
+  page.find(el, :text => text)
+  Capybara.default_max_wait_time = oldTimeout
+end
+
 When(/^I close the UI alert$/) do
   find('#alerts').all('.x')[0].click
 end
