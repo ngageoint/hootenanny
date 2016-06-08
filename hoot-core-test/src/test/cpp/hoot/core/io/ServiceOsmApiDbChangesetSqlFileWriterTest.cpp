@@ -130,7 +130,8 @@ public:
     database.deleteData();
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
 
-    OsmChangesetSqlFileWriter(ServicesDbTestUtils::getOsmApiDbUrl())
+    OsmChangesetSqlFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
+    writer
       .write(
         "test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.osc.sql",
         changesetProvider);

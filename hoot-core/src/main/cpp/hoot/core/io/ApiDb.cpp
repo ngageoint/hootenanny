@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -368,6 +368,23 @@ QSqlQuery ApiDb::_exec(const QString& sql, QVariant v1, QVariant v2, QVariant v3
   return q;
 }
 
+unsigned int ApiDb::tileForPoint(double lat, double lon)
+{
+  int lonInt = round((lon + 180.0) * 65535.0 / 360.0);
+  int latInt = round((lat + 90.0) * 65535.0 / 180.0);
+
+  unsigned int tile = 0;
+  int          i;
+
+  for (i = 15; i >= 0; i--)
+  {
+    tile = (tile << 1) | ((lonInt >> i) & 1);
+    tile = (tile << 1) | ((latInt >> i) & 1);
+  }
+
+  return tile;
+}
+
 QSqlQuery ApiDb::_execNoPrepare(const QString& sql) const
 {
   // inserting strings in this fashion is safe b/c it is private and we closely control the table
@@ -382,6 +399,11 @@ QSqlQuery ApiDb::_execNoPrepare(const QString& sql) const
   LOG_VARD(q.numRowsAffected());
 
   return q;
+}
+
+long ApiDb::round(double x)
+{
+  return (long)(x + 0.5);
 }
 
 }

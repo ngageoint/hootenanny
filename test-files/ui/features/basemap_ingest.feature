@@ -7,6 +7,7 @@ Feature: Basemap Ingest
 
     Scenario: Basemap Ingest
         When I click on the "Basemaps" option in the "settingsSidebar"
+        When I delete any existing "RomanColosseumCucumber" basemap if necessary
         And I press "New Basemap"
         And I select "/test-files/gdal2tiles/RomanColosseum_WV2naturalcolor_clip.tif" basemap
         And I type "RomanColosseumCucumber" in input "Save As"

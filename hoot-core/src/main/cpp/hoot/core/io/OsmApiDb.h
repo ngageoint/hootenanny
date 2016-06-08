@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -43,6 +43,7 @@ class OsmApiDb : public ApiDb
 public:
 
   static const QString TIME_FORMAT;
+  static const QString TIMESTAMP_FUNCTION;
 
   OsmApiDb();
 
@@ -127,6 +128,16 @@ public:
    * @return a SQL results iterator
    */
   shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
+
+  /**
+   * Converts a node coordinate from how its stored in a Hootenanny API database (0.01 nanodegrees
+   * as double precision floating point) to how its stored in an OSM API database (100 nanodegrees
+   * as 64 bit int)
+   *
+   * @param x the coordinate to convert
+   * @return a converted coordinate
+   */
+  static long toOsmApiDbCoord(const double x);
 
 private:
 
