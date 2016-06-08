@@ -124,7 +124,7 @@ mgcp.rules = {
         'SDP':'source:description', // Source Description
         'SDV':'source:datetime', // Source Date and Time
         'TIER_NOTE':'source:commercial_distribution_restriction', // Commercial Distribution Restriction       
-        'TXT':'source:text', // Associated Text
+        'TXT':'note', // Associated Text
         'UID':'uuid', // Universally Unique Identifier
         'UPD_DATE':'source:update:datetime', // Review Source Date and Time
         'UPD_INFO':'source:update:description', // Review Source Description

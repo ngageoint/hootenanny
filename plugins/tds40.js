@@ -1006,10 +1006,28 @@ tds = {
             tags.amenity = 'place_of_worship';
         }
 
-
+        // Fords & Roads
         if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
         if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
+        // Unpack the TXT field
+        if (tags.note)
+        {
+            var tObj = translate.unpackMemo(tags.note);
+
+            if (tObj.tags !== '')
+            {
+                var tTags = JSON.parse(tObj.tags)
+                for (i in tTags)
+                {
+                    print('Memo: Add: ' + i + ' = ' + tTags[i]);
+                    if (tags[tTags[i]]) print('Overwrite:' + i + ' = ' + tTags[i]);
+                    tags[i] = tTags[i];
+                }
+
+                tags.note = tObj.text;
+            }
+        } // End unpack tags.note
 
     /* Putting this on hold as it will impact conflation
         // Tweek the "abandoned" tag. Should this be extended to "destroyed" as well?
@@ -1725,8 +1743,8 @@ tds = {
         // If we have unused tags, add them to the memo field.
         if (Object.keys(notUsedTags).length > 0 && config.getOgrTdsExtra() == 'note')
         {
-            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '<\\OSM>';
-            attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';;');
+            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+            attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
         }
 
         // Now check for invalid feature geometry

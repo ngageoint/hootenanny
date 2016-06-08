@@ -549,6 +549,36 @@ translate = {
     }, // End processOTH
 
 
+    // Unpack <OSM>XXX</OSM> from TXT/MEMO fields
+    unpackMemo : function(rawMemo)
+    {
+        var tgs = '';
+        var txt = '';
+
+        var sIndex = rawMemo.indexOf('<OSM>');
+
+        if (sIndex > -1)
+        {
+            var eIndex = rawMemo.indexOf('</OSM>');
+
+            if (eIndex > -1)
+            {
+                tgs = rawMemo.slice(sIndex + 5, eIndex);
+                txt = rawMemo.substring(0,sIndex) + rawMemo.substring(eIndex + 6);
+
+                // If the </OSM> tag was at the end, remove the ';' delimiter from the text
+                if (txt.charAt(txt.length - 1) == ';') txt = txt.slice(0,-1);
+            }
+            else
+            {
+                hoot.logWarn('Missing OSM end tag in: ' + rawMemo);
+            }
+        }
+
+        return {tags:tgs,text:txt};
+    },
+
+
     addName : function(attrs, names, col)
     {
         // if (col in attrs && attrs[col] !== '' && attrs[col] !== 'N_A' && attrs[col] !== 'UNK')

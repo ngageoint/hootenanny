@@ -730,6 +730,26 @@ mgcp = {
                 break;
         } // End switch TRS
 
+        // Unpack the TXT field
+        if (tags.note)
+        {
+            var tObj = translate.unpackMemo(tags.note);
+
+            if (tObj.tags !== '')
+            {
+                var tTags = JSON.parse(tObj.tags)
+                for (i in tTags)
+                {
+                    print('Memo: Add: ' + i + ' = ' + tTags[i]);
+                    if (tags[tTags[i]]) print('Overwrite:' + i + ' = ' + tTags[i]);
+                    tags[i] = tTags[i];
+                }
+
+                tags.note = tObj.text;
+            }
+
+        } // End process tags.note
+
     }, // End of applyToOsmPostProcessing
 
     // ##### Start of the xxToMgcpxx Block #####
@@ -1374,7 +1394,7 @@ mgcp = {
         // NOTE: We are not checking if this is longer than 255 characters
         if (Object.keys(notUsedTags).length > 0 && config.getOgrMgcpExtra() == 'note')
         {
-            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '<\\OSM>';
+            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.TXT = translate.appendValue(attrs.TXT,tStr,';');
         }
 

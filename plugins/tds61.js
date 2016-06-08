@@ -1066,8 +1066,29 @@ tds61 = {
             tags.amenity = 'place_of_worship';
         }
 
+        // Fords and Roads
         if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
         if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
+
+        // Unpack the MEMO field
+        if (tags.note)
+        {
+            var tObj = translate.unpackMemo(tags.note);
+
+            if (tObj.tags !== '')
+            {
+                var tTags = JSON.parse(tObj.tags)
+                for (i in tTags)
+                {
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+                    tags[i] = tTags[i];
+                }
+
+                tags.note = tObj.text;
+            }
+
+        } // End process tags.note
+
 
     }, // End of applyToOsmPostProcessing
   
@@ -1514,7 +1535,6 @@ tds61 = {
        // Debug
        // for (var i in tags) print('End PreProc Tags: ' + i + ': :' + tags[i] + ':');
 
-
     }, // End applyToNfddPreProcessing
 
 // #####################################################################################################
@@ -1917,8 +1937,8 @@ tds61 = {
         // If we have unused tags, add them to the memo field.
         if (Object.keys(notUsedTags).length > 0 && config.getOgrTdsExtra() == 'note')
         {
-            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '<\\OSM>';
-            attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';;');
+            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+            attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
         }
 
         // Now check for invalid feature geometry
