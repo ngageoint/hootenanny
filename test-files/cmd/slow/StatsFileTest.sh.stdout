@@ -1,8 +1,8 @@
 ****Quick Stats****
 Reprojecting 0 / 117         
-18:41:53.673 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
-18:41:53.673 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
-18:41:53.673 INFO  ...oot/core/io/MapStatsWriter.cpp( 221) Writing stats to file: test-output/StatsAllDataTypesA.txt
+18:31:28.997 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
+18:31:28.998 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
+18:31:28.998 INFO  ...oot/core/io/MapStatsWriter.cpp( 221) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -14,11 +14,11 @@ Minimum Relation ID	9.2233720368547758e+18
 Maximum Relation ID	-9.2233720368547758e+18
 ****JSON Stats****
 Reprojecting 0 / 117         
-18:41:53.952 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
-18:41:55.734 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
+18:31:29.268 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
+18:31:30.072 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
 Reprojecting 0 / 116         
-18:41:55.794 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
-18:41:57.066 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
+18:31:30.095 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
+18:31:30.672 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
 {
     "Node Count":
     [
