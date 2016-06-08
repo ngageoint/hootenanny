@@ -16,6 +16,10 @@ When(/^I click the "([^"]*)" icon$/) do |cls|
   find('._icon.' + cls).click
 end
 
+When(/^I click the "([^"]*)" icon under the "([^"]*)" link$/) do |cls, txt|
+  parent = find('a', :text=> txt).find('._icon.' + cls).click
+end
+
 When(/^I click the "([^"]*)" link$/) do |linkText|
   find('a', :text=> linkText).click
 end
@@ -42,6 +46,15 @@ end
 
 Then(/^I should not see "([^"]*)"$/) do |text|
   page.should have_no_content(text)
+end
+
+Then (/^I should( not)? see a link "([^"]*)"$/) do |negate, txt|
+  expectation = negate ? :should_not : :should
+  if negate
+    page.should_not have_selector('a', :text=> txt)
+  else
+    page.should have_selector('a', :text=> txt)
+  end
 end
 
 When(/^I select the "([^"]*)" div$/) do |cls|
@@ -176,6 +189,17 @@ end
 
 When(/^I fill "([^"]*)" input with "([^"]*)"$/) do |el, value|
   find('input.' + el).set(value)
+  sleep 1
+end
+
+When(/^I fill "([^"]*)" textarea with: (.*)$/) do |el, value|
+  find('textarea.' + el).set(value)
+  sleep 1
+end
+
+When(/^I add to "([^"]*)" textarea with: (.*)$/) do |el, value|
+  txt = find('textarea.' + el).value + "\n" + value
+  find('textarea.' + el).set(txt)
   sleep 1
 end
 
