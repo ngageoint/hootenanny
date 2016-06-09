@@ -26,8 +26,9 @@
  */
 package hoot.services.job;
 
+import static hoot.services.job.JobStatusManager.JOB_STATUS.*;
+
 import java.sql.Connection;
-import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,6 @@ import com.mysema.query.sql.SQLQuery;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.JobStatus;
 import hoot.services.db2.QJobStatus;
-import hoot.services.nativeInterfaces.JobExecutionManager;
 
 
 /**
@@ -47,79 +47,28 @@ import hoot.services.nativeInterfaces.JobExecutionManager;
  *
  */
 public class JobStatusManager {
+    private static final Logger logger = LoggerFactory.getLogger(JobStatusManager.class);
+
+    private final Connection connection;
+
     public enum JOB_STATUS {
-        RUNNING(0) {
-            @Override
-            public String toString() {
-                return "running";
-            }
-        },
-        COMPLETE(1) {
-            @Override
-            public String toString() {
-                return "complete";
-            }
-        },
-        FAILED(2) {
-            @Override
-            public String toString() {
-                return "failed";
-            }
-        },
-        UNKNOWN(3) {
-            @Override
-            public String toString() {
-                return "unknown";
-            }
-        };
-        private int value;
+        RUNNING, COMPLETE, FAILED, UNKNOWN;
 
-        @Override
-        public abstract String toString();
-
-        private JOB_STATUS(int value) {
-            this.value = value;
-        }
-
-        public int toInt() {
-            return this.value;
-        }
-
-        public static JOB_STATUS fromInteger(int x) {
-            switch (x) {
-                case 0:
-                    return RUNNING;
-                case 1:
-                    return COMPLETE;
-                case 2:
-                    return FAILED;
-                default:
-                    return UNKNOWN;
-            }
-        }
-
-        public static JOB_STATUS fromString(String statusStr) {
-            if (statusStr.toLowerCase(Locale.ENGLISH).equals("running")) {
-                return RUNNING;
-            }
-            else if (statusStr.toLowerCase(Locale.ENGLISH).equals("complete")) {
-                return COMPLETE;
-            }
-            else if (statusStr.toLowerCase(Locale.ENGLISH).equals("failed")) {
-                return FAILED;
+        public static JOB_STATUS fromInteger(int value) {
+            if ((value >= 0) && (value < JOB_STATUS.values().length)) {
+                return JOB_STATUS.values()[value];
             }
             return UNKNOWN;
         }
+
+        @Override
+        public String toString() {
+            return this.name().toLowerCase();
+        }
     }
 
-    private static final Logger log = LoggerFactory.getLogger(JobExecutionManager.class);
-    private Connection conn;
-
-    /**
-     * Constructor
-     */
     public JobStatusManager(Connection conn) {
-        this.conn = conn;
+        this.connection = conn;
     }
 
     /**
@@ -127,21 +76,23 @@ public class JobStatusManager {
      *
      * @param jobId
      */
-    public void addJob(String jobId) {
+    public void addJob(String jobId) throws Exception {
         try {
-            updateJob(jobId, JOB_STATUS.RUNNING.toInt(), null);
+            this.updateJob(jobId, RUNNING, null);
         }
         catch (Exception e) {
-            log.error(jobId + " failed to add job status.");
+            logger.error("Error adding a new job with ID = {} ", jobId, e);
+            throw e;
         }
     }
 
-    public void updateJob(String jobId, String statusDetail) {
+    public void updateJob(String jobId, String statusDetail) throws Exception {
         try {
-            updateJob(jobId, JOB_STATUS.RUNNING.toInt(), statusDetail);
+            this.updateJob(jobId, RUNNING, statusDetail);
         }
         catch (Exception e) {
-            log.error(jobId + " failed to add job status.");
+            logger.error("Error updating RUNNING job with ID = {} with new status detail", jobId, e);
+            throw e;
         }
     }
 
@@ -150,8 +101,14 @@ public class JobStatusManager {
      *
      * @param jobId
      */
-    public void setComplete(String jobId) {
-        setComplete(jobId, null);
+    public void setComplete(String jobId) throws Exception {
+        try {
+            this.updateJob(jobId, COMPLETE, null);
+        }
+        catch (Exception e) {
+            logger.error("Error setting job with ID = {} status to COMPLETE", jobId, e);
+            throw e;
+        }
     }
 
     /**
@@ -161,12 +118,13 @@ public class JobStatusManager {
      * @param statusDetail
      *            final job status detail message
      */
-    public void setComplete(String jobId, String statusDetail) {
+    public void setComplete(String jobId, String statusDetail) throws Exception {
         try {
-            updateJob(jobId, JOB_STATUS.COMPLETE.toInt(), statusDetail);
+            this.updateJob(jobId, COMPLETE, statusDetail);
         }
         catch (Exception e) {
-            log.error(jobId + " failed to update job status.");
+            logger.error("Error setting job with ID = {} status to COMPLETE with status detail = '{}'", jobId, statusDetail, e);
+            throw e;
         }
     }
 
@@ -176,12 +134,12 @@ public class JobStatusManager {
      * @param jobId
      */
     public void setFailed(String jobId) {
-        log.error("Job with ID: " + jobId + " failed.");
+        logger.error("Job with ID: {} failed.", jobId);
         try {
-            updateJob(jobId, JOB_STATUS.FAILED.toInt(), null);
+            this.updateJob(jobId, FAILED, null);
         }
         catch (Exception e) {
-            log.error(jobId + " failed to update job status.");
+            logger.error("Error setting job with ID: {} status to FAILED", jobId, e);
         }
     }
 
@@ -195,12 +153,12 @@ public class JobStatusManager {
      *            detail on the job failure
      */
     public void setFailed(String jobId, String statusDetail) {
-        log.error("Job with ID: " + jobId + " failed: " + statusDetail);
+        logger.error("Job with ID: {} failed: {}", jobId, statusDetail);
         try {
-            updateJob(jobId, JOB_STATUS.FAILED.toInt(), statusDetail);
+            this.updateJob(jobId, FAILED, statusDetail);
         }
         catch (Exception e) {
-            log.error(jobId + " failed to update job status.");
+            logger.error("Error setting job with ID: {} status to FAILED with status detal = '{}'", jobId, statusDetail, e);
         }
     }
 
@@ -210,16 +168,15 @@ public class JobStatusManager {
      * @param jobId
      *            ID of the job to retrieve the status for
      * @return a job status record
-     * @throws Exception
      */
-    public JobStatus getJobStatusObj(String jobId) throws Exception {
+    public JobStatus getJobStatusObj(String jobId) {
         try {
             QJobStatus jobStatusTbl = QJobStatus.jobStatus;
-            SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+            SQLQuery query = new SQLQuery(connection, DbUtils.getConfiguration());
             return query.from(jobStatusTbl).where(jobStatusTbl.jobId.eq(jobId)).singleResult(jobStatusTbl);
         }
         catch (Exception e) {
-            log.error(jobId + " failed to fetch job status.");
+            logger.error("{} failed to fetch job status.", jobId, e);
         }
         return null;
     }
@@ -228,14 +185,14 @@ public class JobStatusManager {
      * Updates job. This one should be used to any storage behavior like add or
      * update Since the serialization routine can change.
      */
-    private boolean updateJob(String jobId, int status, String statusDetail) throws Exception {
+    private void updateJob(String jobId, JOB_STATUS jobStatus, String statusDetail) throws Exception {
         try {
-            boolean isComplete = (status != 0);
-            DbUtils.updateJobStatus(jobId, status, isComplete, statusDetail, conn);
+            boolean isComplete = (jobStatus != RUNNING);
+            DbUtils.updateJobStatus(jobId, jobStatus.ordinal(), isComplete, statusDetail, connection);
         }
         catch (Exception e) {
-            log.error(e.getMessage());
+            logger.error("Failed to update job status of job with ID = {} and status detail = {}", jobId, statusDetail, e);
+            throw e;
         }
-        return true;
     }
 }
