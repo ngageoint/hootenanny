@@ -12,6 +12,8 @@ namespace hoot
 /**
  * This criterion is satisified for all highway intersections with 3 or more interacting ways.
  * Multilinestring relations are not handled.
+ *
+ * This class assumes that IntersectionSplitter was applied to the map before being called.
  */
 class IntersectionCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {

@@ -41,7 +41,8 @@ bool IntersectionCriterion::isSatisfied(const shared_ptr<const Element>& e) cons
   }
 
   bool result = false;
-  if (hwids.size() >= 3) // two or more roads intersting
+  // three or more ways meeting at a node is an intersection
+  if (hwids.size() >= 3)
   {
     result = true;
   }
