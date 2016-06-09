@@ -34,7 +34,7 @@
 #include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
-#include <hoot/core/algorithms/linearreference/WaySublineString.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/ops/CopySubsetOp.h>
@@ -226,8 +226,8 @@ bool HighwayMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sh
   // split the shared line based on the matching subline
   ElementPtr matchShared, scrapsShared;
   ElementPtr match2, scraps2;
-  WaySublineString string1 = match.getSublineString1();
-  WaySublineString string2 = match.getSublineString2();
+  WaySublineCollection string1 = match.getSublineString1();
+  WaySublineCollection string2 = match.getSublineString2();
 
   if (sharedEid == _eid1)
   {

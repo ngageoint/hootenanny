@@ -32,7 +32,7 @@
 namespace hoot
 {
 class SublineStringMatcher;
-class WaySublineString;
+class WaySublineCollection;
 
 class HighwaySnapMerger : public MergerBase
 {
@@ -86,7 +86,7 @@ private:
    * appropriately and the match and scrap are added to the replaced list and added to the map.
    * The original elements are deleted.
    */
-  void _splitElement(const OsmMapPtr& map, const WaySublineString& s, const vector<bool>& reverse,
+  void _splitElement(const OsmMapPtr& map, const WaySublineCollection& s, const vector<bool>& reverse,
     vector< pair<ElementId, ElementId> >& replaced,
     const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
 
