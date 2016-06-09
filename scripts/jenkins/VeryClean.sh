@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # By doing the clean db in hoot-services we don't need to run configure.
-cd $HOOT_HOME/hoot-services/
-make clean-db &> /dev/null
+#cd $HOOT_HOME/hoot-services/
+#make clean-db &> /dev/null
 
 # Clean sometimes refuses to delete these directories. Odd.
 cd $HOOT_HOME

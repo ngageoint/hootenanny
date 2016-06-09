@@ -52,9 +52,9 @@ import hoot.services.utils.ResourceErrorHandler;
 
 @Path("/logging")
 public class ErrorLogResource {
-    private static final Logger log = LoggerFactory.getLogger(ErrorLogResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(ErrorLogResource.class);
 
-    private String _exportLogPath = null;
+    private String exportLogPath;
 
     public ErrorLogResource() {
 
@@ -63,21 +63,21 @@ public class ErrorLogResource {
     @PreDestroy
     public void PreDestroy() {
         try {
-            if (_exportLogPath != null && _exportLogPath.length() > 0) {
-                FileUtils.forceDelete(new File(_exportLogPath));
+            if ((exportLogPath != null) && (!exportLogPath.isEmpty())) {
+                FileUtils.forceDelete(new File(exportLogPath));
             }
         }
         catch (Exception ex) {
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
         }
     }
 
     /**
-     * Service method endpoint for retrieving the Hootenanny tomcat log.
+     * Service method endpoint for retrieving the Hootenanny tomcat logger.
      * 
      * GET hoot-services/info/logging/debuglog
      * 
-     * @return JSON containing debug log
+     * @return JSON containing debug logger
      */
     @GET
     @Path("/debuglog")
@@ -85,16 +85,14 @@ public class ErrorLogResource {
     public Response getDebugLog() {
         String logStr = null;
         try {
-            ErrorLog logging = new ErrorLog();
             // 50k Length
-            logStr = logging.getErrorlog(50000);
+            logStr = ErrorLog.getErrorlog(50000);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting error log: " + ex.toString(), Status.INTERNAL_SERVER_ERROR,
-                    log);
+            ResourceErrorHandler.handleError("Error getting error logger: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
         }
         JSONObject res = new JSONObject();
-        res.put("log", logStr);
+        res.put("logger", logStr);
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
@@ -110,22 +108,20 @@ public class ErrorLogResource {
     @Path("/export")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response exportLog() throws IOException {
-        ErrorLog logging = new ErrorLog();
         File out = null;
         try {
-            String outputPath = logging.generateExportLog();
+            String outputPath = ErrorLog.generateExportLog();
             out = new File(outputPath);
-            _exportLogPath = outputPath;
+            exportLogPath = outputPath;
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error exporting log file: " + ex.toString(), Status.INTERNAL_SERVER_ERROR,
-                    log);
+            ResourceErrorHandler.handleError("Error exporting logger file: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
         }
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         Date dd = new Date();
         String dtStr = dateFormat.format(dd);
         ResponseBuilder rBuild = Response.ok(out, MediaType.APPLICATION_OCTET_STREAM);
-        rBuild.header("Content-Disposition", "attachment; filename=hootlog_" + dtStr + ".log");
+        rBuild.header("Content-Disposition", "attachment; filename=hootlog_" + dtStr + ".logger");
 
         return rBuild.build();
     }

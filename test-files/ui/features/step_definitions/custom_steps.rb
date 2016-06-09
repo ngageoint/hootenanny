@@ -12,25 +12,70 @@ When(/^I click Get Started$/) do
   el.click unless el.nil?
 end
 
+When(/^I click the "([^"]*)" icon$/) do |cls|
+  find('._icon.' + cls).click
+end
+
+When(/^I click the "([^"]*)" icon under the "([^"]*)" link$/) do |cls, txt|
+  parent = find('a', :text=> txt).find('._icon.' + cls).click
+end
+
 When(/^I click the "([^"]*)" link$/) do |linkText|
   find('a', :text=> linkText).click
+end
+
+When(/^I click the "([^"]*)" link under "([^"]*)"$/) do |linkText, parent|
+  find('#' + parent).find('a', :text=> linkText).click
 end
 
 When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent|
   find('div.' + parent).find('a.' + classed).click
 end
 
+When(/^I select a way map feature with id "([^"]*)"$/) do |id|
+  find('div.layer-data').all('path[class*=" ' + id + '"]').last.click
+end
+
+When(/^I select a node map feature with id "([^"]*)"$/) do |id|
+  find('div.layer-data').all('g[class*=" ' + id + '"]').last.click
+end
+
+Then (/^I should (not )?see an element "([^"]*)"$/) do |negate, selector|
+  expectation = negate ? :should_not : :should
+  page.send(expectation, have_css(selector))
+end
+
 Then(/^I should see "([^"]*)"$/) do |text|
-  page.should have_content(text)
+  #page.should have_content(text)
+  expect(page).to have_content(text)
 end
 
 Then(/^I should not see "([^"]*)"$/) do |text|
-  page.should have_no_content(text)
+  #page.should have_no_content(text)
+  expect(page).to have_no_content(text)
+end
+
+Then (/^I should( not)? see a link "([^"]*)"$/) do |negate, txt|
+  expectation = negate ? :should_not : :should
+  if negate
+    page.should_not have_selector('a', :text=> txt)
+  else
+    page.should have_selector('a', :text=> txt)
+  end
 end
 
 When(/^I select the "([^"]*)" div$/) do |cls|
-  find('div.' + cls).click
+  begin
+    el = find('div.' + cls)
+  rescue Capybara::ElementNotFound
+    el = find('#' + cls)
+  end
+  el.click
   sleep 1
+end
+
+Then(/^I close the modal$/) do
+  find('div.modal').find('div.x').click
 end
 
 When(/^I select the first "([^"]*)" div$/) do |cls|
@@ -47,11 +92,27 @@ When(/^I click the "([^"]*)" Dataset$/) do |dataset|
   parent.find('rect').click
 end
 
+When(/^I click the "([^"]*)" Dataset and the "([^"]*)" Dataset$/) do |d1, d2|
+  text1 = page.find('text',:text=>d1, :match => :prefer_exact)
+  parent1 = text1.find(:xpath,"..")
+  rect1 = parent1.find('rect').click
+
+  text2 = page.find('text',:text=>d2, :match => :prefer_exact)
+  parent2 = text2.find(:xpath,"..")
+
+  page.driver.browser.action.key_down(:control).click(parent2.native).key_up(:control).perform
+end
+
 When(/^I context click the "([^"]*)" Dataset$/) do |dataset|
   text = page.find('text',:text=>dataset, :match => :prefer_exact)
   parent = text.find(:xpath,"..")
   parent.find('rect').context_click
 end
+
+When(/^I context click "([^"]*)"$/) do |txt|
+  page.find('a',:text=>txt, :match => :prefer_exact).context_click
+end
+
 
 When(/^I click first "([^"]*)"$/) do |text|
   Capybara.ignore_hidden_elements = false
@@ -92,6 +153,18 @@ When(/^I select the "([^"]*)" option in the "([^"]*)" combobox$/) do |opt, cb|
   page.find('div.combobox').find('a', :text=> opt).click
 end
 
+When(/^I select the "([^"]*)" option labelled "([^"]*)"$/) do |opt, lbl|
+  combobox = page.find('label', :text=> lbl).find(:xpath,"..")
+  combobox.find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt).click
+end
+
+When(/^I select the "([^"]*)" option in "([^"]*)"$/) do |opt, el|
+  combobox = page.find(el)
+  combobox.find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt).click
+end
+
 When(/^I click the "([^"]*)" button$/) do |el|
   find('button.' + el).click
 end
@@ -99,6 +172,11 @@ end
 When(/^I click the "([^"]*)" button and accept the alert$/) do |el|
   find('button.' + el).click
   page.driver.browser.switch_to.alert.accept
+end
+
+When(/^I click on the "([^"]*)" button in the "([^"]*)"$/) do |button,div|
+  elements = all('#' + div  + ' button.' + button)
+  elements[0].click
 end
 
 When(/^I click the "([^"]*)" at "([^"]*)","([^"]*)"$/) do |el, x, y|
@@ -121,9 +199,24 @@ When(/^I fill "([^"]*)" input with "([^"]*)"$/) do |el, value|
   sleep 1
 end
 
+When(/^I fill "([^"]*)" textarea with: (.*)$/) do |el, value|
+  find('textarea.' + el).set(value)
+  sleep 1
+end
+
+When(/^I add to "([^"]*)" textarea with: (.*)$/) do |el, value|
+  txt = find('textarea.' + el).value + "\n" + value
+  find('textarea.' + el).set(txt)
+  sleep 1
+end
+
 When(/^I fill input under "([^"]*)" with "([^"]*)"$/) do |parent, value|
   all('div.' + parent).last.find('input[type="text"]').set(value)
   sleep 1
+end
+
+When(/^I append "([^"]*)" input with "([^"]*)"$/) do |el, value|
+  find('input.' + el).native.send_keys(value)
 end
 
 When(/^I press enter in the "([^"]*)" input$/) do |selector|
@@ -162,9 +255,18 @@ When(/^I hover over "([^"]*)"$/) do |el|
   find(el).hover
 end
 
+When(/^I click on "([^"]*)"$/) do |el|
+  find(el).click
+end
+
 When(/^I press "([^"]*)" big loud span$/) do |txt|
   find('span.big.loud', :text=>txt).click
 end
+
+When(/^I press "([^"]*)" big loud link$/) do |cls|
+  find('a.big.loud.' + cls).click
+end
+
 
 When(/^I wait ([0-9]+) seconds$/) do |seconds|
   sleep Float(seconds)
@@ -207,6 +309,20 @@ When(/^I wait ([0-9]*) "([^"]*)" to not see "([^"]*)"$/) do |timeout, unit, text
   oldTimeout = Capybara.default_max_wait_time
   Capybara.default_max_wait_time = Float(timeout) * multiplier
   page.should have_no_content(text)
+  Capybara.default_max_wait_time = oldTimeout
+end
+
+When(/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)" element with text "([^"]*)"$/) do |timeout, unit, el, text|
+  if unit == "seconds"
+    multiplier = 1
+  elsif unit == "minutes"
+    multiplier = 60
+  else
+    throw :badunits
+  end
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout) * multiplier
+  page.find(el, :text => text)
   Capybara.default_max_wait_time = oldTimeout
 end
 
@@ -277,6 +393,7 @@ Then(/^I click the "([^"]*)" with text "([^"]*)"$/) do |el, text|
 end
 
 Then(/^I accept the alert$/) do
+  sleep 2
   page.driver.browser.switch_to.alert.accept
 end
 
@@ -307,4 +424,78 @@ Then(/^the download file "([^"]*)" should exist$/) do |file|
   # puts name
   expect( File.exists?(name) ).to be true
   File.delete(name)
+end
+
+Then(/^the log file "([^"]*)" should exist$/) do |file|
+  name = ENV['HOME'] + '/Downloads/' + file
+  # puts name
+  expect(!Dir.glob(name).empty?).to be true
+  File.delete(Dir[ENV['HOME'] + '/Downloads/' + file].last)
+end
+
+Then "the downloaded file content should be:" do |content|
+  page.response_headers["Content-Disposition"].should == "attachment"
+  page.source.should == content
+end
+
+When(/^I click the "([^"]*)" classed element under "([^"]*)" with text "([^"]*)"$/) do |classed, el, text|
+  find(el, :text => text).find('.' + classed).click
+end
+
+When(/^I select "([^"]*)" basemap/) do |file|
+  include_hidden_fields do
+    page.attach_file('basemapfileuploader', ENV['HOOT_HOME'] + file)
+  end
+end
+
+When(/^I click the map background button$/) do
+  find('div.background-control').find('button').click
+end
+
+When(/^I click the "([^"]*)" map layer$/) do |text|
+  find('label', :text => text).click
+end
+
+When(/^I should see stats "([^"]*)" "([^"]*)" "([^"]*)" "([^"]*)"$/) do |type, row, column, value|
+  # And I should see stats "count" "buildings" "merged" "4"
+  find('table.' + type).find('td.key', :text => row).find(:xpath,"..").all('td', :text => value).first()
+end
+
+Then(/^I click the first "([^"]*)" list item$/) do |cls|
+  all('li.' + cls).first.click
+end
+
+When(/^I select in row ([0-9]*) the "([^"]*)" dataset$/) do |rowNum, file|
+  include_hidden_fields do
+    page.attach_file('ingestfileuploader-' + rowNum, ENV['HOOT_HOME'] + file)
+  end
+end
+
+When(/^I select in row ([0-9]*) the "([^"]*)" option in the "([^"]*)" combobox$/) do |rowNum, opt, cb|
+  combobox = find(:xpath, "//input[@row='" + rowNum + "'][@placeholder='" + cb + "']")
+  combobox.find(:xpath, '..').find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt).click
+end
+
+When(/^I should see row ([0-9]*) input "([^"]*)" with value "([^"]*)"$/) do |rowNum, placeholder, value|
+  el = find(:xpath , "//input[@placeholder='" + placeholder + "'][@row='" + rowNum + "']")
+  el.value.should eq value
+end
+
+When(/^I fill row ([0-9]*) input "([^"]*)" with value "([^"]*)"$/) do |rowNum, placeholder, value|
+  el = find(:xpath , "//input[@placeholder='" + placeholder + "'][@row='" + rowNum + "']")
+  el.set(value)
+end
+
+When(/^I delete any existing "([^"]*)" basemap if necessary$/) do |text|
+  begin
+    find('span.fill-white.small', :text => text).find('.trash').click
+    sleep 2
+    page.driver.browser.switch_to.alert.accept
+    oldTimeout = Capybara.default_max_wait_time
+    Capybara.default_max_wait_time = 30
+    page.should have_no_content(text)
+    Capybara.default_max_wait_time = oldTimeout
+  rescue Capybara::ElementNotFound
+  end
 end

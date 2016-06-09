@@ -80,6 +80,7 @@ public class ResourcesCleanUtil implements Executable {
             // List<Long> ids = DbUtils.getMapIdsByName( conn, mapId);
             // int nMapCnt = ids.size();
 
+            DbUtils.deleteBookmarksById(conn, mapId);
             DbUtils.deleteRenderDb(conn, mapId);
             DbUtils.deleteOSMRecordByName(conn, mapId);
             // Modify when core implements broad casting map id when conflation

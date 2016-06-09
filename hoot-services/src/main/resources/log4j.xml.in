@@ -60,38 +60,7 @@
         <level value="error"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>
-
     <logger name="hoot.services.command.CommandRunner" additivity="false">
-        <level value="error"/>
-        <appender-ref ref="ConsoleAppender" />
-    </logger>
-
-    <logger name="hoot.services.db.DbClientAbstract" additivity="false">
-        <level value="error"/>
-        <appender-ref ref="ConsoleAppender" />
-    </logger>
-
-    <logger name="hoot.services.controllers.wps.BaseProcesslet" additivity="false">
-        <level value="error"/>
-        <appender-ref ref="ConsoleAppender" />
-    </logger>
-
-    <logger name="hoot.services.controllers.osm.MapResource" additivity="false">
-        <level value="error"/>
-        <appender-ref ref="ConsoleAppender" />
-    </logger>
-
-    <logger name="hoot.services.models.osm.Map" additivity="false">
-        <level value="error"/>
-        <appender-ref ref="ConsoleAppender" />
-    </logger>
-
-    <logger name="hoot.services.models.osm.ModelDaoUtils" additivity="false">
-        <level value="error"/>
-        <appender-ref ref="ConsoleAppender" />
-    </logger>
-
-    <logger name="hoot.services.writers.osm.MapQueryResponseWriter" additivity="false">
         <level value="error"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>

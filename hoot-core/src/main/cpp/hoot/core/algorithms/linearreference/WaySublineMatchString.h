@@ -22,19 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYSUBLINEMATCHSTRING_H
 #define WAYSUBLINEMATCHSTRING_H
 
 #include "WaySublineMatch.h"
-#include "WaySublineString.h"
+#include "WaySublineCollection.h"
 
 namespace hoot
 {
 
 /**
  * Contains multiple WaySublineMatches. The matches must not overlap.
+ *
+ * @todo this i a brittle way of handling the problem. Changing any way will break the matches.
+ * In the future we should entertain switching to WayMatchStringMapping.
  */
 class WaySublineMatchString
 {
@@ -82,12 +85,12 @@ public:
   /**
    * Returns the string of sublines that represent the first match.
    */
-  WaySublineString getSublineString1() const;
+  WaySublineCollection getSublineString1() const;
 
   /**
    * Returns the string of sublines that represent the second match.
    */
-  WaySublineString getSublineString2() const;
+  WaySublineCollection getSublineString2() const;
 
   /**
    * Returns true if there is no match.

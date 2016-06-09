@@ -338,6 +338,13 @@ public:
   void replace(const shared_ptr<const Element>& from, const shared_ptr<Element>& to);
 
   /**
+   * Similar to above, but from is replaced with a collection of elements. This makes sense in the
+   * context of a relation, but may not make sense in other cases (e.g. replace a single node
+   * that is part of a way with multiple nodes).
+   */
+  void replace(const shared_ptr<const Element>& from, const QList<ElementPtr> &to);
+
+  /**
    * Intelligently replaces all instances of oldNode with newNode. This looks at all the ways
    * for references to oldNode and replaces those references with newNode. Finally, oldNode is
    * removed from this OsmMap entirely.
@@ -416,6 +423,11 @@ protected:
   vector< shared_ptr<Element> > _replaceTmpArray;
 
   void _copy(boost::shared_ptr<const OsmMap> from);
+
+  /**
+   * Returns true if there is a node in l.
+   */
+  bool _listContainsNode(const QList<ElementPtr> l) const;
 
   void _replaceNodeInRelations(long oldId, long newId);
 

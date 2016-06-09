@@ -1,5 +1,0 @@
-This tests the user interface using Cucumber.  A separate feature in its own file should be written for each piece of UI functionality 
-to be tested.
-
-Hoot on Vagrant is pre-configured for the Cucumber dependencies.  If you're running hoot outside of Vagrant, you'll need to go through
-the Cucumber dependency setup steps listed in the Developer's Guide.

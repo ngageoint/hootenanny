@@ -112,4 +112,25 @@ void RelationData::replaceElement(ElementId from, ElementId to)
   }
 }
 
+void RelationData::replaceElement(ElementId from, const QList<ElementId>& to)
+{
+  vector<Entry> newCopy;
+  for (size_t i = 0; i < _members.size(); i++)
+  {
+    Entry& e = _members[i];
+    if (e.getElementId() == from)
+    {
+      for (int i = 0; i < to.size(); ++i)
+      {
+        newCopy.push_back(Entry(e.role, to[i]));
+      }
+    }
+    else
+    {
+      newCopy.push_back(e);
+    }
+  }
+  _members = newCopy;
+}
+
 }

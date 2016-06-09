@@ -1,3 +1,29 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ */
 #include "EdgeMatchSetFinder.h"
 
 #include "EdgeMatch.h"
@@ -25,11 +51,19 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
   em->getString1()->addFirstEdge(e1, false);
   em->getString2()->addFirstEdge(e2, reversed);
 
+  _steps = 0;
   _addEdgeMatches(em);
+
+  LOG_VAR(_steps);
 }
 
 void EdgeMatchSetFinder::_addEdgeMatches(EdgeMatchPtr em)
 {
+  _steps++;
+  if (_steps % 10 == 0)
+  {
+    LOG_VAR(_steps);
+  }
   // if both the start and end have a valid matched vertex pair then add the match
   ConstNetworkVertexPtr from1 = em->getString1()->getFrom();
   ConstNetworkVertexPtr from2 = em->getString2()->getFrom();
@@ -43,10 +77,14 @@ void EdgeMatchSetFinder::_addEdgeMatches(EdgeMatchPtr em)
 //  LOG_VAR(toMatch);
 
   /// @todo Possibly continue to evaluate matches even if we find an end point. This may make
-  /// the search space too large, but would avoid missing matches.
+  /// the search space very large, but would avoid missing matches.
   if (fromMatch && toMatch)
   {
-    _matchSet->addEdgeMatch(em, _scoreMatch(em));
+    double score = _scoreMatch(em);
+    if (score > 0)
+    {
+      _matchSet->addEdgeMatch(em, score);
+    }
   }
   // if the end of the match isn't terminated.
   else if (!toMatch)
@@ -130,6 +168,11 @@ void EdgeMatchSetFinder::_addEdgeNeighborsToStart(EdgeMatchPtr em,
       _addEdgeMatches(next);
     }
   }
+}
+
+double EdgeMatchSetFinder::_scoreMatch(EdgeMatchPtr em) const
+{
+  return _details->getEdgeStringMatchScore(em->getString1(), em->getString2());
 }
 
 }

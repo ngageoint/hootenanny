@@ -105,10 +105,10 @@ public:
       QString("VALUES (1, 1, '%1', '%2', %3, %4, %5, %6)")
         .arg(createdAt.toString(OsmApiDb::TIME_FORMAT))
         .arg(createdAt.toString(OsmApiDb::TIME_FORMAT))
-        .arg(bounds.getMinY())
-        .arg(bounds.getMaxY())
-        .arg(bounds.getMinX())
-        .arg(bounds.getMaxX());
+        .arg(OsmApiDb::toOsmApiDbCoord(bounds.getMinY()))
+        .arg(OsmApiDb::toOsmApiDbCoord(bounds.getMaxY()))
+        .arg(OsmApiDb::toOsmApiDbCoord(bounds.getMinX()))
+        .arg(OsmApiDb::toOsmApiDbCoord(bounds.getMaxX()));
     QSqlQuery q(db.getDB());
     LOG_VARD(sql);
     if (q.exec(sql) == false)
@@ -116,6 +116,12 @@ public:
       throw HootException(QString("Error executing query: %1 (%2)").arg(q.lastError().text()).arg(sql));
     }
     LOG_VARD(q.numRowsAffected());
+  }
+
+  //This may get pushed up into OsmApiDb later.
+  QDateTime now()
+  {
+    return QDateTime::currentDateTime().toUTC();
   }
 
   void runSqlChangesetWriteTest()
@@ -180,13 +186,13 @@ public:
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
 
     //grab the current time
-    const QDateTime startTime = QDateTime::currentDateTime();
+    const QDateTime startTime = now();
 
     //define an aoi
     const QString aoi = "-10,-10,10,10";
 
     //write a changeset with an intersecting aoi and some created time in the future
-    insertChangeset(startTime.toUTC().addSecs(60 * 60), "-15,-15,5,5");
+    insertChangeset(startTime.addSecs(60 * 60), "-15,-15,5,5");
 
     //changeset writer should detect a conflict when passed the same aoi and the current time,
     //since a changeset was written intersecting with the aoi after the specified time
@@ -203,7 +209,7 @@ public:
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
 
     //grab the current time
-    const QDateTime startTime = QDateTime::currentDateTime().toUTC();
+    const QDateTime startTime = now();
 
     //define an aoi
     const QString aoi = "-10,-10,10,10";
@@ -228,7 +234,7 @@ public:
     const QString aoi = "-10,-10,10,10";
 
     //write a changeset with an intersecting aoi and the current time
-    insertChangeset(QDateTime::currentDateTime().toUTC(), "-15,-15,5,5");
+    insertChangeset(now(), "-15,-15,5,5");
 
     //wait just a sec to make sure time passes
     sleep(1);
@@ -238,7 +244,7 @@ public:
     CPPUNIT_ASSERT(
       !OsmApiDbSqlChangesetWriter(ServicesDbTestUtils::getOsmApiDbUrl())
         .conflictExistsInTarget(
-            aoi, QDateTime::currentDateTime().toUTC().toString(OsmApiDb::TIME_FORMAT)));
+            aoi, now().toString(OsmApiDb::TIME_FORMAT)));
   }
 
   //Bounds error checking tests are covered in GeometryUtilsTest.

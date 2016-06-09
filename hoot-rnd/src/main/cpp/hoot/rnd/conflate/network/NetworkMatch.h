@@ -1,3 +1,29 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ */
 #ifndef NETWORKMATCH_H
 #define NETWORKMATCH_H
 
@@ -7,6 +33,7 @@
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 
 #include "EdgeMatch.h"
+#include "NetworkDetails.h"
 
 namespace hoot
 {
@@ -17,13 +44,17 @@ namespace hoot
 class NetworkMatch : public Match
 {
 public:
-  NetworkMatch(const ConstOsmMapPtr& map, ConstEdgeMatchPtr edgeMatch,
+  NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
     double score, ConstMatchThresholdPtr mt);
 
   /**
    * Classifies the match and returns a classification object.
    */
   virtual const MatchClassification& getClassification() const { return _classification; }
+
+  ConstNetworkDetailsPtr getNetworkDetails() const { return _details; }
+
+  ConstEdgeMatchPtr getEdgeMatch() const { return _edgeMatch; }
 
   /**
    * This may require modification if the network matcher ever matches things besides lines. E.g.
@@ -73,6 +104,7 @@ protected:
 
 private:
   MatchClassification _classification;
+  ConstNetworkDetailsPtr _details;
   ConstEdgeMatchPtr _edgeMatch;
   set< pair<ElementId, ElementId> > _pairs;
 };

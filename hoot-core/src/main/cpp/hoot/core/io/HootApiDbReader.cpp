@@ -247,9 +247,9 @@ void HootApiDbReader::close()
 ElementId HootApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 {
   ElementId result;
+  //LOG_VARD(oldId);
   if (_useDataSourceIds)
   {
-    //LOG_VARD(oldId);
     result = oldId;
   }
   else
@@ -298,6 +298,7 @@ ElementId HootApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
         QString::number(oldId.getType().getEnum()));
     }
   }
+  //LOG_VARD(result);
 
   return result;
 }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMergerCreator.h"
 
@@ -33,7 +33,6 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/conflate/MergerFactory.h>
-#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 
 // Standard
@@ -70,19 +69,26 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
     set< pair<ElementId, ElementId> > eids;
     if (matches.size() != 1)
     {
+      QStringList scores;
       // go through all the matches
       for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
       {
         set< pair<ElementId, ElementId> > s = (*it)->getMatchPairs();
         eids.insert(s.begin(), s.end());
+
+        const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*it);
+        scores << QString::number(m->getProbability());
       }
 
-      mergers.push_back(new MarkForReviewMerger(eids, "A complex road situation was found.",
+      mergers.push_back(new MarkForReviewMerger(eids, "A complex road situation was found. " +
+        scores.join(", "),
         m->getMatchName(), 1.0));
     }
     else
     {
-      mergers.push_back(new HighwaySnapMerger(_minSplitSize, m->getMatchPairs(), _sublineMatcher));
+      LOG_INFO("Here");
+      mergers.push_back(new NetworkMerger(m->getMatchPairs(), m->getEdgeMatch(),
+        m->getNetworkDetails()));
     }
     result = true;
   }

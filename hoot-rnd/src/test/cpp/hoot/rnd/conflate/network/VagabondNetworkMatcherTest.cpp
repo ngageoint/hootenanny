@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -68,14 +68,14 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB1.osm", true,
-      Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB2.osm", false,
-      Status::Unknown2);
+//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB1.osm", true,
+//      Status::Unknown1);
+//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB2.osm", false,
+//      Status::Unknown2);
 
 //    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/DcGisRoads.osm", true,
 //      Status::Unknown1);
-//    OsmMapReaderFactory::getInstance().read(map, "tmp/dcperb3.osm", false,
+//    OsmMapReaderFactory::getInstance().read(map, "tmp/dcperb.osm", false,
 //      Status::Unknown2);
 
 //    OsmMapReaderFactory::getInstance().read(map, "tmp/sub1.osm", true,
@@ -87,6 +87,11 @@ public:
 //      Status::Unknown1);
 //    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestD2.osm", true,
 //      Status::Unknown2);
+
+    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/highway-002/Input1.osm", true,
+      Status::Unknown1);
+    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/highway-002/Input2.osm", true,
+      Status::Unknown2);
 
     MapCleaner().apply(map);
     MapProjector::projectToPlanar(map);

@@ -33,7 +33,6 @@ Feature: Import Export Delete MGCP Shapefile Dataset
     Scenario: Delete Dataset
         And I context click the "CucumberShp" Dataset
         And I click the "Delete" context menu item
-        And I wait
         And I accept the alert
         Then I wait 30 "seconds" to not see "mgcp_shp_cucumber"
-        Then I wait 1 "seconds" to not see "CucumberShp"
+        Then I wait 10 "seconds" to not see "CucumberShp"

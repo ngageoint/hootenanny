@@ -58,7 +58,8 @@
 namespace hoot
 {
 
-const QString OsmApiDb::TIME_FORMAT = "yyyy-MM-dd hh:mm:ss.zzz";
+const QString OsmApiDb::TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.zzz";
+const QString OsmApiDb::TIMESTAMP_FUNCTION = "(now() at time zone 'utc')";
 
 OsmApiDb::OsmApiDb()
 {
@@ -604,6 +605,16 @@ shared_ptr<QSqlQuery> OsmApiDb::getChangesetsCreatedAfterTime(const QString time
   LOG_VARD(_selectChangesetsCreatedAfterTime->numRowsAffected());
 
   return _selectChangesetsCreatedAfterTime;
+}
+
+long OsmApiDb::toOsmApiDbCoord(const double x)
+{
+  return round(x * COORDINATE_SCALE);
+}
+
+double OsmApiDb::fromOsmApiDbCoord(const long x)
+{
+  return (double)x / COORDINATE_SCALE;
 }
 
 }
