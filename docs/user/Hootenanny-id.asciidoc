@@ -428,6 +428,11 @@ image::user/images/id/hoot_sharereview.png[scaledwidth="25%"]
 
 === Conflating OSM API Database Data (MapEdit, etc.)
 
+IMPORTANT:  This section describes conflating data sourced from an OSM API database.  This feature is currently in the prototype phase and is
+not recommended to be used with production OSM API databases where data loss/corruption would be a significant detriment to the 
+applications using the database.  At this time, it is recommended to only use this feature with OSM API test databases.  At which time this 
+feature is deemed stable enough to leave the prototype phase, this documentation will be updated.
+
 Hootenanny uses a custom OSM database schema which differs from the public OSM API database schema used by OpenStreetMap, MapEdit, etc.  Hootenanny's OSM database schema differs in order to support its primary function, conflation, which has different needs than the
 primary function of map editing supported by the public OSM database schema.
 
@@ -436,13 +441,16 @@ Hootenanny dataset can be conflated with that OSM API database data.  The result
 back into the OSM API database.
 
 A pre-requisite for conflating OSM API database data is that Hootenanny has been properly configured with a valid OSM API database connection.  
-Hootenanny supports only a single OSM API database connection at one time.  For system administration details on how to configure Hootenanny
-to conflate OSM API database data, see the "Configuring OSM API Database Conflation" section of the Hootenanny Installation Guide.
+Hootenanny supports only a single OSM API database connection at one time.  By default, Hootenanny is configured only with an empty test OSM
+API database which has limited utility outside of application testing.  For details on how to configure Hootenanny to conflate you OSM API 
+database data, have you system administrator follow the instructions in the  the "Configuring OSM API Database Conflation" section of the 
+Hootenanny Installation Guide.
 
 After Hootenanny has been configured with an OSM API database connection, follow these steps to conflate data from an OSM API database:
 
-* When an OSM API Database is configured with Hootenanny, the first layer listed in the iD Editor layers list will always be named 
-"OSM_API_DB_<database-name>".  Select this layer as the reference layer for your conflation job.
+* When an OSM API database is configured with Hootenanny, the first layer listed in the iD Editor layers list will always be named 
+"OSM_API_DB_<database-name>".  Select this layer as the reference layer for your conflation job.  You will not see the data from the OSM API
+database displayed on the iD Editor map due to a limitation described later in this section.
 * Select any other layer stored within Hootenanny as the secondary layer for the conflation job.  You should first verify that your OSM 
 API database contains data within the AOI of your selected secondary dataset, or no data conflation will actually occur.
 * Conflate the two layers.
@@ -455,8 +463,8 @@ When you are ready to export your conflated layer back into your OSM API databas
 * Select "OSM API Database" as the export file type.  NOTE: The translation selection is ignored, since the output will be OSM data.
 * Click the "Export" button.
 
-Hootenanny will export an OSM changeset that is the difference between the data currently stored in the OSM API database and the conflated 
-dataset over the geospatial bounds that the original conflation job occurred within.  
+Hootenanny will export an OSM changeset with the geospatial bounds of the original conflation job that is the difference between the data 
+originally exported from the OSM API database for conflation and the resulting conflated data.  
 
 IMPORTANT: If any changeset with an overlapping geospatial bounds is written to the target OSM API database after the conflation job began which 
 created the conflated dataset stored in Hootenanny's database, Hootenanny will detect this conflict and not allow the changeset to be 
@@ -464,6 +472,10 @@ written back into the OSM API database.
 
 When such a conflict occurs, the only recourse is to execute the conflation job again.  Given this workflow, its best to find a "sweet spot" 
 between the size of the OSM API database AOI you are conflating and the editing activity within that AOI.  This will help to avoid conflicts.
+
+IMPORTANT: Hooteannny writes all OSM API database OSM changesets from a single user account configured as described in the "Configuring OSM API 
+Database Conflation" section of the Hootenanny Installation Guide, since no user authentication exists in Hootenanny.  Therefore, data edited in 
+an OSM API database by Hootenanny will always show up as being edited by a single user.
 
 Hootenanny only allows dataset layers which were the result of a conflation job originally run with OSM API database reference data to 
 be exported back into an OSM API database.  Datasets not meeting this qualification will be unavailable for export to an OSM API database when
@@ -474,7 +486,7 @@ data.  Therefore, whenever an OSM API database layer is selected within iD Edito
 OSM data.
 
 There exists no mechanism in Hootenanny's iD Editor to upload data directly into an OSM API database from a file.  This can, however, be done 
-from the command line, as explained in the "Hootenanny OSM API Database Conflation Testing Notes" section of the Hooteanny Developer's Guide.
+from the command line as explained in the "Hootenanny OSM API Database Conflation Testing Notes" section of the Hootenanny Developer's Guide.
 
 === Conflation Examples
 

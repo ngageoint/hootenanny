@@ -7,14 +7,17 @@ limitations involved with conflating this type of data.
 
 === Manually Writing Data into an OSM API Database for Testing Purposes
 
-Hootenanny ships with an empty OSM API database, which can be used for testing.  To manually populate this database with a dataset, clean out 
-the test database completely, initialize it with a dummy user, and then use the convert command in conjunction with the psql prompt.  e.g.:
+Hootenanny ships with an empty OSM API database, which can be used for testing.  To manually populate this database with a dataset:
 
 -------------------------------
 cd $HOOT_HOME
+# clean out the test database completely
 source scripts/SetupOsmApiDB.sh force
+# initialize with a dummy user
 psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
+# generate a sql script to be imported
 hoot convert $HOOT_OPTS dataset1.osm output.sql
+# import the data into the osm api db
 psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f output.sql
 --------------------------------
 
