@@ -30,5 +30,6 @@ Feature: Bulk Import and Multiselect Delete Datasets
     	And I click the "Delete" context menu item
         And I wait
         And I accept the alert
-        Then I wait 30 "seconds" to not see "dcpoi_clip_bulkImport"
-        Then I wait 30 "seconds" to not see "mapcruzinpoi_clip_bulkImport"
+        Then I wait 30 "seconds" to not see "dcpoi_clip_bulkImport"    	
+        Then I wait 30 "seconds" to not see "mapcruzinpoi_clip_bulkImport"  
+
