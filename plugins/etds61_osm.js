@@ -29,8 +29,6 @@
     "English" TDS to OSM+ conversion script
 
     This script is the same as the standard "etds_osm" script but uses "tds61" instead of "tds"
-
-    MattJ, Sept 14, Updated May 16
 */
 
 // For the new fuzy rules
@@ -43,7 +41,6 @@ hoot.require('fcode_common')
 
 // For the TDS to TDS "English" translation
 hoot.require('etds61')
-hoot.require('etds61_rules')
 
 // NOTE: This include has "etds_osm_rules" NOT "etds_osm.rules"
 // This was renamed so the include will work.
@@ -68,18 +65,22 @@ etds61_osm = {
         }
 
         // Debug:
-        // if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            var kList = Object.keys(attrs).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+        }
 
         // Go through the attrs and turn them back into TDS
-        var nAttrs = {}; // the "new" NFDD attrs
+        var nAttrs = {}; // the "new" TDS attrs
         var fCode2 = ''; // The second FCODE - if we have one
 
 		if (attrs['Feature Code'])
         {
-            if (attrs['Feature Code'].indexOf(';') > -1)
+            if (attrs['Feature Code'].indexOf(' & ') > -1)
             {
                 // Two FCODE's
-                var tList = attrs['Feature Code'].split(';');
+                var tList = attrs['Feature Code'].split(' & ');
                 var fcode = tList[0].split(':');
                 attrs['Feature Code'] = fcode[0];
 
@@ -94,7 +95,7 @@ etds61_osm = {
             }
 		}
 
-        // Translate the single values
+        // Translate the single values from "English" to TDS
         for (var val in attrs)
         {
             if (val in etds61_osm_rules.singleValues)
@@ -108,16 +109,37 @@ etds61_osm = {
             }
         }
 
+        // Use a lookup table to convert the remaining attribute names from "English" to TDS
         translate.applyOne2One(attrs, nAttrs, etds61_osm_rules.enumValues, {'k':'v'});
 
         var tags = {};
 
+        // Now convert the attributes to tags.
         tags = tds61.toOsm(nAttrs,'',geometryType);
+
+        // Check if we have a second FCODE and if it can add any tags
+        if (fCode2 !== '')
+        {
+            var ftag = tds61.fcodeLookup['F_CODE'][fCode2];
+            if (ftag)
+            {
+                if (!(tags[ftag[0]]))
+                {
+                    tags[ftag[0]] = ftag[1];
+                }
+                else
+                {
+                    // Debug: Dump out the tags from the FCODE
+                    print('fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
+                }
+            }
+        }
 
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            for (var i in tags) print('eOut Tags: ' + i + ': :' + tags[i] + ':');
+            var kList = Object.keys(tags).sort()
+            for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');
             print('');
         }
 

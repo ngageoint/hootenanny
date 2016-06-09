@@ -32,29 +32,29 @@
 */
 
 // For the OSM+ to TDS translation
-hoot.require('tds40')
-hoot.require('tds40_rules')
+hoot.require('mgcp')
+hoot.require('mgcp_rules')
 hoot.require('fcode_common')
 
 // For the TDS to TDS "English" translation
-hoot.require('etds40')
+hoot.require('emgcp')
 
 // NOTE: This include has "etds_osm_rules" NOT "etds_osm.rules"
 // This was renamed so the include will work.
-hoot.require('etds40_osm_rules')
+hoot.require('emgcp_osm_rules')
 
 // Common translation scripts
 hoot.require('translate');
 hoot.require('config');
 
 
-etds40_osm = {
+emgcp_osm = {
     // This function converts the OSM+ to TDS and then translated the TDS into "English"
     toOSM : function(attrs, elementType, geometryType)
     {
         // Strip out the junk - this is also done in the toOsmPreProcessing but this
         // means that there is less to convert later
-        var ignoreList = { '-999999':1, '-999999.0':1, 'noinformation':1, 'No Information':1, 'noInformation':1 };
+        var ignoreList = { '-32767':1, '-32767.0':1, 'UNK':1, 'Unknown':1 };
 
         for (var col in attrs)
         {
@@ -95,11 +95,11 @@ etds40_osm = {
         // Translate the single values from "English" to TDS
         for (var val in attrs)
         {
-            if (val in etds40_osm_rules.singleValues)
+            if (val in emgcp_osm_rules.singleValues)
             {
-                nAttrs[etds40_osm_rules.singleValues[val]] = attrs[val];
+                nAttrs[emgcp_osm_rules.singleValues[val]] = attrs[val];
                 // Debug
-                // print('Single: ' + etds40_osm_rules.singleValues[val] + ' = ' + attrs[val])
+                // print('Single: ' + emgcp_osm_rules.singleValues[val] + ' = ' + attrs[val])
 
                 // Cleanup used attrs
                 delete attrs[val];
@@ -107,17 +107,17 @@ etds40_osm = {
         }
 
         // Use a lookup table to convert the remaining attribute names from "English" to TDS
-        translate.applyOne2One(attrs, nAttrs, etds40_osm_rules.enumValues, {'k':'v'});
+        translate.applyOne2One(attrs, nAttrs, emgcp_osm_rules.enumValues, {'k':'v'});
 
         var tags = {};
 
         // Now convert the attributes to tags.
-        tags = tds.toOsm(nAttrs,'',geometryType);
+        tags = mgcp.toOsm(nAttrs,'',geometryType);
 
         // Check if we have a second FCODE and if it can add any tags
         if (fCode2 !== '')
         {
-            var ftag = tds.fcodeLookup['F_CODE'][fCode2];
+            var ftag = mgcp.fcodeLookup['FCODE'][fCode2];
             if (ftag)
             {
                 if (!(tags[ftag[0]]))
@@ -144,6 +144,6 @@ etds40_osm = {
 
     } // End of toOSM
 
-} // End of etds40_osm
+} // End of emgcp_osm
 
-exports.toOSM = etds40_osm.toOSM;
+exports.toOSM = emgcp_osm.toOSM;

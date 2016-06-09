@@ -26,11 +26,11 @@
  */
 
 /*
-    OSM+ to "English" NFDD conversion script
+    OSM+ to "English" TDS conversion script
 */
 
 etds40 = {
-    // This function converts the OSM+ to NFDD and then translated the NFDD into "English"
+    // This function converts the OSM+ to TDS and then translates the TDS into "English"
     toEnglish : function(tags, elementType, geometryType)
     {
         var tdsData = [];
@@ -61,29 +61,29 @@ etds40 = {
                 var tFCODE = tdsData[fNum]['attrs']['F_CODE'];
 
                 // Go through the list of possible attributes and add the missing ones
-                var tmpList = etds.rules.fcodeLookup[tFCODE]['enum'];
+                var tmpList = etds40.rules.fcodeLookup[tFCODE]['enum'];
 
                 for (var i=0, elen = tmpList.length; i < elen; i++)
                 {
                     // If we don't find one, add it with it's default value
                     if (!(tdsData[fNum]['attrs'][tmpList[i]]))
                     {
-                        tdsData[fNum]['attrs'][tmpList[i]] = etds.rules.engDefault[tmpList[i]];
+                        tdsData[fNum]['attrs'][tmpList[i]] = etds40.rules.engDefault[tmpList[i]];
                     }
                 }
 
                 // Translate the single values
                 for (var val in tdsData[fNum]['attrs'])
                 {
-                    if (val in etds.rules.engSingle)
+                    if (val in etds40.rules.engSingle)
                     {
                         if (tdsData[fNum]['attrs'][val] == undefined)
                         {
-                            eAttrs[etds.rules.engSingle[val]] = etds.rules.engDefault[val];
+                            eAttrs[etds40.rules.engSingle[val]] = etds40.rules.engDefault[val];
                         }
                         else
                         {
-                            eAttrs[etds.rules.engSingle[val]] = tdsData[fNum]['attrs'][val];
+                            eAttrs[etds40.rules.engSingle[val]] = tdsData[fNum]['attrs'][val];
                         }
 
                         // Cleanup used attrs so we don't translate them again
@@ -92,18 +92,18 @@ etds40 = {
                 }
 
                 // Apply the English one2one rules
-                translate.applyOne2One(tdsData[fNum]['attrs'], eAttrs, etds.rules.engEnum, {'k':'v'});
+                translate.applyOne2One(tdsData[fNum]['attrs'], eAttrs, etds40.rules.engEnum, {'k':'v'});
 
                 // Find an FCODE
-                if (tFCODE in etds.rules.fcodeLookup)
+                if (tFCODE in etds40.rules.fcodeLookup)
                 {
                     if (eAttrs['Feature Code'] !== 'Not found')
                     {
-                        eAttrs['Feature Code'] = eAttrs['Feature Code'] + ' & ' + tFCODE + ':' + etds.rules.fcodeLookup[tFCODE]['desc'];
+                        eAttrs['Feature Code'] = eAttrs['Feature Code'] + ' & ' + tFCODE + ':' + etds40.rules.fcodeLookup[tFCODE]['desc'];
                     }
                     else
                     {
-                        eAttrs['Feature Code'] = tFCODE + ':' + etds.rules.fcodeLookup[tFCODE]['desc'];
+                        eAttrs['Feature Code'] = tFCODE + ':' + etds40.rules.fcodeLookup[tFCODE]['desc'];
                     }
                 }
             } // End for tdsData
