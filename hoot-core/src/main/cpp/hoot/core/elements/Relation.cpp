@@ -193,11 +193,24 @@ void Relation::removeElement(ElementId eid)
 }
 
 void Relation::replaceElement(const shared_ptr<const Element>& from,
-  const shared_ptr<const Element>& to)
+  const shared_ptr<const Element> &to)
 {
   _preGeometryChange();
   _makeWritable();
   _relationData->replaceElement(from->getElementId(), to->getElementId());
+  _postGeometryChange();
+}
+
+void Relation::replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to)
+{
+  _preGeometryChange();
+  _makeWritable();
+  QList<ElementId> copy;
+  for (int i = 0; i < to.size(); ++i)
+  {
+    copy.append(to[i]->getElementId());
+  }
+  _relationData->replaceElement(from->getElementId(), copy);
   _postGeometryChange();
 }
 

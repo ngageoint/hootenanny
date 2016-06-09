@@ -29,7 +29,7 @@
 #define __MULTI_LINE_STRING_LOCATION_H__
 
 // Hoot
-#include <hoot/core/algorithms/linearreference/WaySublineString.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 
 namespace hoot
 {
@@ -63,7 +63,7 @@ class MultiLineStringLocation
     /**
      * Returns the collection of way sublines up to and including _wayLocation
      */
-    WaySublineString getWaySublineString() const { return _waySublineString; }
+    WaySublineCollection getWaySublineString() const { return _waySublineString; }
 
     /**
      * Returns the location along the selected way in the multi-line string
@@ -78,7 +78,7 @@ class MultiLineStringLocation
   private:
 
     WayLocation _wayLocation;
-    WaySublineString _waySublineString;
+    WaySublineCollection _waySublineString;
 };
 
 }
