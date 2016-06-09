@@ -153,6 +153,12 @@ When(/^I select the "([^"]*)" option in the "([^"]*)" combobox$/) do |opt, cb|
   page.find('div.combobox').find('a', :text=> opt).click
 end
 
+When(/^I select the "([^"]*)" option labelled "([^"]*)"$/) do |opt, lbl|
+  combobox = page.find('label', :text=> lbl).find(:xpath,"..")
+  combobox.find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt).click
+end
+
 When(/^I select the "([^"]*)" option in "([^"]*)"$/) do |opt, el|
   combobox = page.find(el)
   combobox.find('.combobox-caret').click
@@ -303,6 +309,20 @@ When(/^I wait ([0-9]*) "([^"]*)" to not see "([^"]*)"$/) do |timeout, unit, text
   oldTimeout = Capybara.default_max_wait_time
   Capybara.default_max_wait_time = Float(timeout) * multiplier
   page.should have_no_content(text)
+  Capybara.default_max_wait_time = oldTimeout
+end
+
+When(/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)" element with text "([^"]*)"$/) do |timeout, unit, el, text|
+  if unit == "seconds"
+    multiplier = 1
+  elsif unit == "minutes"
+    multiplier = 60
+  else
+    throw :badunits
+  end
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout) * multiplier
+  page.find(el, :text => text)
   Capybara.default_max_wait_time = oldTimeout
 end
 
