@@ -39,6 +39,7 @@
 namespace pt = boost::property_tree;
 
 // Qt
+#include <QTextStream>
 #include <QTextCodec>
 #include <QEventLoop>
 #include <QTextStream>
@@ -78,6 +79,17 @@ OsmJsonReader::OsmJsonReader():
 OsmJsonReader::~OsmJsonReader()
 {
   close();
+}
+
+void writeString(QString fileName, QString str)
+{
+  QFile file(fileName);
+  if (file.open(QIODevice::ReadWrite))
+  {
+      QTextStream stream(&file);
+      stream << str;
+      file.close();
+  }
 }
 
 bool OsmJsonReader::isSupported(QString url)
@@ -193,6 +205,9 @@ void OsmJsonReader::_loadJSON(QString jsonStr)
 
   // Handle single or double quotes
   _scrubQuotes(jsonStr);
+
+  // Handle IDs
+  _scrubIDs(jsonStr);
 
   // Convert string to stringstream
   stringstream ss(jsonStr.toUtf8().constData(), ios::in);
@@ -417,6 +432,13 @@ void OsmJsonReader::_scrubQuotes(QString &jsonStr)
     // Revert escaped singles
     jsonStr.replace("\"\"\"", "'");
   }
+}
+
+// Make sure we have quotes around IDs
+void OsmJsonReader::_scrubIDs(QString &jsonStr)
+{
+  QRegExp rx("\"id\"\\s*:\\s*(-?\\d)+\\s*,");
+  jsonStr.replace(rx, "\"id\": \"\\1\",");
 }
 
 } // namespace hoot
