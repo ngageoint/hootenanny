@@ -40,7 +40,7 @@
         <nd ref="-40"/>
         <nd ref="-36"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2016-06-06T23:01:11.209Z"/>
+        <tag k="source:ingest:datetime" v="2016-06-09T06:31:36.536Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="military" v="barracks"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
@@ -62,7 +62,7 @@
         <nd ref="-35"/>
         <nd ref="-31"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2016-06-06T23:01:11.209Z"/>
+        <tag k="source:ingest:datetime" v="2016-06-09T06:31:36.536Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -84,7 +84,7 @@
         <nd ref="-30"/>
         <nd ref="-26"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2016-06-06T23:01:11.209Z"/>
+        <tag k="source:ingest:datetime" v="2016-06-09T06:31:36.535Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -105,7 +105,7 @@
         <nd ref="-25"/>
         <nd ref="-21"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2016-06-06T23:01:11.208Z"/>
+        <tag k="source:ingest:datetime" v="2016-06-09T06:31:36.535Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="controlling_authority" v="international"/>
@@ -126,7 +126,7 @@
         <nd ref="-20"/>
         <nd ref="-16"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2016-06-06T23:01:11.208Z"/>
+        <tag k="source:ingest:datetime" v="2016-06-09T06:31:36.534Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="controlling_authority" v="joint_military_civilian"/>
@@ -148,14 +148,14 @@
         <nd ref="-15"/>
         <nd ref="-11"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2016-06-06T23:01:11.208Z"/>
+        <tag k="source:ingest:datetime" v="2016-06-09T06:31:36.534Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="note" v="Prison"/>
         <tag k="controlling_authority" v="military"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="condition" v="construction"/>
         <tag k="building" v="yes"/>
-        <tag k="source:text" v="Prison"/>
         <tag k="uuid" v="{2144e43d-52f7-439b-a7af-0f87139c196b}"/>
         <tag k="source" v="mgcp:aal015"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -171,14 +171,14 @@
         <nd ref="-10"/>
         <nd ref="-6"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2016-06-06T23:01:11.207Z"/>
+        <tag k="source:ingest:datetime" v="2016-06-09T06:31:36.534Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="note" v="Sports Centre"/>
         <tag k="controlling_authority" v="national"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="leisure" v="sports_centre"/>
         <tag k="building" v="yes"/>
-        <tag k="source:text" v="Sports Centre"/>
         <tag k="uuid" v="{2101f750-eb73-4c93-85bc-1193f8522ec0}"/>
         <tag k="source" v="mgcp:aal015"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -193,12 +193,12 @@
         <nd ref="-5"/>
         <nd ref="-1"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2016-06-06T23:01:11.093Z"/>
+        <tag k="source:ingest:datetime" v="2016-06-09T06:31:36.410Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="note" v="Community Centre"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="building" v="yes"/>
-        <tag k="source:text" v="Community Centre"/>
         <tag k="uuid" v="{f9f1e2e7-7699-4dd7-8271-586970f42122}"/>
         <tag k="source" v="mgcp:aal015"/>
         <tag k="source:accuracy:horizontal" v="25"/>
