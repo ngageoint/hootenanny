@@ -131,6 +131,8 @@ public class ConflationResource extends JobControllerBase {
 
             final boolean osmApiDbEnabled = Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"));
             final boolean conflatingOsmApiDbData = oneLayerIsOsmApiDb(oParams);
+            //Since we're not returning the osm api db layer to the hoot ui, this exception
+            //shouldn't actually ever occur, but will leave this check here anyway.
             if (conflatingOsmApiDbData && !osmApiDbEnabled) {
                 ResourceErrorHandler.handleError(
                         "Attempted to conflate an OSM API database data source but OSM API database"
@@ -200,8 +202,10 @@ public class ConflationResource extends JobControllerBase {
                 else {
                     secondaryParameterKey = "INPUT1";
                 }
-                log.debug(commandArgs.toJSONString());
+                //log.debug(commandArgs.toJSONString());
 
+                //Record the aoi of the conflation job (equal to that of the secondary layer), as
+                //we'll need it to detect conflicts at export time.
                 final long secondaryMapId = Long.parseLong(getParameterValue(secondaryParameterKey, commandArgs));
                 if (!mapExists(secondaryMapId, conn)) {
                     ResourceErrorHandler.handleError("No secondary map exists with ID: " + secondaryMapId,
@@ -211,8 +215,9 @@ public class ConflationResource extends JobControllerBase {
                 setAoi(secondaryMap, commandArgs);
 
                 // write a timestamp representing the time the osm api db data was queried out 
-                // from the source; to be used during export of conflated data back into the osm 
-                // api db at a later time; timestamp must be 24 hour utc to match rails port
+                // from the source; to be used conflict detection during export of conflated 
+                // data back into the osm api db at a later time; timestamp must be 24 hour utc 
+                // to match rails port
                 final String now = 
                   DateTimeFormat.forPattern(DbUtils.OSM_API_TIMESTAMP_FORMAT).withZone(DateTimeZone.UTC).print(new DateTime());
                 tags.put("osm_api_db_export_time", now);

@@ -826,6 +826,9 @@ public class Map extends Maps {
             if (osmApiDbEnabled) {
                 java.util.Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) mapLayerRecord
                         .getTags());
+                //This tag, set during conflation, is what indicates whether a conflated dataset
+                //had any osm api db source data in it.  That is the requirement to export back
+                //into an osm api db.
                 if (tags.containsKey("osm_api_db_export_time")) {
                     mapLayer.setCanExportToOsmApiDb(true);
                 }

@@ -222,7 +222,6 @@ public class ExportJobResource extends JobControllerBase {
     protected JSONArray getExportToOsmApiDbCommandArgs(final JSONArray inputCommandArgs, Connection conn)
             throws Exception {
         if (!Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"))) {
-            log.debug("test2");
             ResourceErrorHandler.handleError(
                     "Attempted to export to an OSM API database but OSM API database support is disabled",
                     Status.INTERNAL_SERVER_ERROR, log);
@@ -251,14 +250,16 @@ public class ExportJobResource extends JobControllerBase {
         arg.put("temppath", HootProperties.getProperty("tempOutputPath"));
         commandArgs.add(arg);
 
+        // This option allows the job executor return std out to the client.  This is the only way
+        // I've found to get the conflation summary text back from hoot command line to the UI.
         arg = new JSONObject();
         arg.put("writeStdOutToStatusDetail", "true");
         commandArgs.add(arg);
 
         final Map conflatedMap = getConflatedMap(commandArgs, conn);
-
+        //pass the export timestamp to the export bash script
         addMapForExportTag(conflatedMap, commandArgs, conn);
-
+        //pass the export aoi to the export bash script
         setAoi(conflatedMap, commandArgs);
 
         return commandArgs;
@@ -301,11 +302,6 @@ public class ExportJobResource extends JobControllerBase {
 
     private void addMapForExportTag(final Map map, JSONArray commandArgs, Connection conn) throws Exception {
         final java.util.Map<String, String> tags = getMapTags(map.getId(), conn);
-        // Technically, you don't have to have this tag to export the data, but
-        // since it helps to detect
-        // conflicts, and we want to be as safe as possible when writing to this
-        // external database will
-        // just always enforce it.
         if (!tags.containsKey("osm_api_db_export_time")) {
             ResourceErrorHandler.handleError("Error exporting data.  Map with ID: " + String.valueOf(map.getId())
                     + " and name: " + map.getDisplayName() + " has no osm_api_db_export_time tag.", Status.CONFLICT,

@@ -63,6 +63,13 @@ public class MapQueryResponseWriter {
         this.conn = conn;
     }
 
+    /**
+     * Writes a map query response with no element data
+     * 
+     * @return a XML document response
+     * @throws IOException
+     * @throws ParserConfigurationException
+     */
     public static Document writeEmptyResponse() throws IOException, ParserConfigurationException {
         Document responseDoc = XmlDocumentBuilder.create();
         org.w3c.dom.Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);

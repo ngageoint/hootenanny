@@ -421,8 +421,10 @@ public class MapResource {
             catch (NumberFormatException e) {
                 //
             }
-            if (mapIdNum == -1) // OSM API db
+            if (mapIdNum == -1)
             {
+                // OSM API database data can't be displayed on a hoot map, due to differences
+                // between the display code, so we return no data here.
                 responseDoc = MapQueryResponseWriter.writeEmptyResponse();
             }
             else {
@@ -530,7 +532,9 @@ public class MapResource {
                 catch (NumberFormatException e) {
                     //
                 }
-                if (mapIdNum != -1) // not OSM API db
+                // OSM API database data can't be displayed on a hoot map, due to differences
+                // between the display code, so we return a zero count if its that layer.
+                if (mapIdNum != -1)
                 {
                     log.info("Retrieving node count for map with ID: " + mapId + " ...");
                     bbox = (String) param.get("tile");
@@ -610,9 +614,9 @@ public class MapResource {
             }
             if (mapIdNum == -1) // OSM API db
             {
-                // arbitrarily returning roughly CONUS bounds here...not quite
-                // sure what else to
-                // return
+                // OSM API database data can't be displayed on a hoot map, due to differences
+                // between the display code, so we arbitrarily returning roughly a CONUS bounds 
+                // here...not quite sure what else to return...
                 ret.put("minlon", -110);
                 ret.put("maxlon", -75);
                 ret.put("minlat", 20);
@@ -1130,7 +1134,7 @@ public class MapResource {
                 catch (NumberFormatException e) {
                     // a map name string could also be passed in here
                 }
-                if (mapIdNum != -1) // OSM API db
+                if (mapIdNum != -1) // not OSM API db
                 {
                     QMaps maps = QMaps.maps;
                     mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
