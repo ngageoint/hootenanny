@@ -1,5 +1,5 @@
 #!/bin/bash
-# Runs the initial nightly tests
+# Runs all tests that are appropriate for a pull request
 
 set -x
 set -e
@@ -9,13 +9,10 @@ cd $HOOT_HOME
 hoot --version --debug
 
 export HOOT_TEST_DIFF=--diff
-make -sj`nproc` test-all
+time -p make -sj`nproc` ui-test
 
 # This is done in VagrantBuild.sh
 # cd $HOOT_HOME/docs
 # make -sj`nproc`
 
-make -sj`nproc` archive
-
-make -sj`nproc` coverage
-
+time -p make -sj`nproc` archive
