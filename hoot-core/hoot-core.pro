@@ -497,7 +497,7 @@ SOURCES += \
     src/main/cpp/hoot/core/io/ElementComparer.cpp \
     src/main/cpp/hoot/core/cmd/ApplyChangesetCmd.cpp \
     src/main/cpp/hoot/core/algorithms/linearreference/WayString.cpp \
-    src/main/cpp/hoot/core/algorithms/linearreference/WaySublineCollection.cpp
+    src/main/cpp/hoot/core/algorithms/linearreference/WaySublineCollection.cpp \
     src/main/cpp/hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbWriter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbSqlChangesetWriter.cpp \
