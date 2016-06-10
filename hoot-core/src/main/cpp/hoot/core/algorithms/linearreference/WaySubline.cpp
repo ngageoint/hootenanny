@@ -67,12 +67,6 @@ WaySubline::WaySubline(const WayLocation& start, const WayLocation& end) :
   _end(end)
 {
   assert(_start.getWay() == _end.getWay());
-  if (_start > _end)
-  {
-    LOG_VARW(start);
-    LOG_VARW(end);
-    throw IllegalArgumentException("Start must be <= end.");
-  }
 }
 
 WaySubline& WaySubline::operator=(const WaySubline& from)
@@ -82,9 +76,14 @@ WaySubline& WaySubline::operator=(const WaySubline& from)
   return *this;
 }
 
+Meters WaySubline::calculateLength() const
+{
+  return fabs(_start.calculateDistanceOnWay() - _end.calculateDistanceOnWay());
+}
+
 bool WaySubline::contains(const WayLocation& wl) const
 {
-  return wl >= _start && wl <= _end;
+  return wl >= getFormer() && wl <= getLatter();
 }
 
 bool WaySubline::contains(const WaySubline& other) const
@@ -208,6 +207,16 @@ bool WaySubline::touches(const WaySubline& other) const
   }
 
   return touches;
+}
+
+void WaySubline::visitRo(const ElementProvider& ep, ElementVisitor& visitor) const
+{
+  visitor.visit(_start.getWay());
+
+  for (int i = getFormer().getSegmentIndex(); i <= getLatter().getSegmentIndex(); ++i)
+  {
+    visitor.visit(ep.getNode(_start.getWay()->getNodeId(i)));
+  }
 }
 
 }

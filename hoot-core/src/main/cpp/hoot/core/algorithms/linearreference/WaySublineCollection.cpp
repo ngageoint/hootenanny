@@ -24,16 +24,16 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "WaySublineString.h"
+#include "WaySublineCollection.h"
 
 namespace hoot
 {
 
-WaySublineString::WaySublineString()
+WaySublineCollection::WaySublineCollection()
 {
 }
 
-void WaySublineString::addSubline(const WaySubline& subline)
+void WaySublineCollection::addSubline(const WaySubline& subline)
 {
   if (_sublines.size() == 0)
   {
@@ -58,7 +58,7 @@ bool compareSublines(const WaySubline& ws1, const WaySubline& ws2)
   return ws1.getStart() < ws2.getStart();
 }
 
-Meters WaySublineString::getLength() const
+Meters WaySublineCollection::getLength() const
 {
   Meters result = 0;
   for (size_t i = 0; i < _sublines.size(); i++)
@@ -69,9 +69,9 @@ Meters WaySublineString::getLength() const
   return result;
 }
 
-WaySublineString WaySublineString::invert() const
+WaySublineCollection WaySublineCollection::invert() const
 {
-  WaySublineString result;
+  WaySublineCollection result;
   if (_sublines.size() == 0)
   {
     return result;
@@ -126,7 +126,7 @@ WaySublineString WaySublineString::invert() const
   return result;
 }
 
-QString WaySublineString::toString() const
+QString WaySublineCollection::toString() const
 {
   QStringList l;
   for (size_t i = 0; i < _sublines.size(); i++)
@@ -136,7 +136,7 @@ QString WaySublineString::toString() const
   return l.join("\n");
 }
 
-bool WaySublineString::touches(const WaySublineString& other) const
+bool WaySublineCollection::touches(const WaySublineCollection& other) const
 {
   bool result = false;
   for (size_t i = 0; i < _sublines.size() && result == false; i++)
