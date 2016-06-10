@@ -81,17 +81,6 @@ OsmJsonReader::~OsmJsonReader()
   close();
 }
 
-void writeString(QString fileName, QString str)
-{
-  QFile file(fileName);
-  if (file.open(QIODevice::ReadWrite))
-  {
-      QTextStream stream(&file);
-      stream << str;
-      file.close();
-  }
-}
-
 bool OsmJsonReader::isSupported(QString url)
 {
   QUrl myUrl(url);
@@ -434,11 +423,26 @@ void OsmJsonReader::_scrubQuotes(QString &jsonStr)
   }
 }
 
+namespace // anonymous
+{
+  // Used for debug
+  void writeString(QString fileName, QString str)
+  {
+    QFile file(fileName);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    {
+        QTextStream stream(&file);
+        stream << str;
+        file.close();
+    }
+  }
+}
+
 // Make sure we have quotes around IDs
 void OsmJsonReader::_scrubIDs(QString &jsonStr)
 {
-  QRegExp rx("\"id\"\\s*:\\s*(-?\\d)+\\s*,");
-  jsonStr.replace(rx, "\"id\": \"\\1\",");
+  QRegExp rx("\"id\"\\s*:\\s*(-?\\d+)(\\s*,?)");
+  jsonStr.replace(rx, "\"id\": \"\\1\"\\2");
 }
 
 } // namespace hoot

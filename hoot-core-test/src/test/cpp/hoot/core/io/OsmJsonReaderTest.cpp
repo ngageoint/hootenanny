@@ -271,6 +271,11 @@ public:
     OsmJsonReader uut;
     OsmMapPtr pMap = uut.loadFromString(testJsonStr);
 
+    // Useful for debug
+    //OsmWriter writer;
+    //writer.setIncludeIds(true);
+    //writer.write(pMap, "/tmp/test.osm");
+
     // Test against osm xml
     QString testOsmStr =
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>                                                                       \n"
