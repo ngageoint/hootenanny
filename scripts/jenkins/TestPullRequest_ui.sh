@@ -9,7 +9,7 @@ cd $HOOT_HOME
 hoot --version --debug
 
 export HOOT_TEST_DIFF=--diff
-time -p make -sj`nproc` test-ui
+time -p make -sj`nproc` ui-test
 
 # This is done in VagrantBuild.sh
 # cd $HOOT_HOME/docs
