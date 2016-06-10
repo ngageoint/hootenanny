@@ -33,7 +33,6 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/conflate/MergerFactory.h>
-#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 
 // Standard
@@ -70,19 +69,26 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
     set< pair<ElementId, ElementId> > eids;
     if (matches.size() != 1)
     {
+      QStringList scores;
       // go through all the matches
       for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
       {
         set< pair<ElementId, ElementId> > s = (*it)->getMatchPairs();
         eids.insert(s.begin(), s.end());
+
+        const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*it);
+        scores << QString::number(m->getProbability());
       }
 
-      mergers.push_back(new MarkForReviewMerger(eids, "A complex road situation was found.",
+      mergers.push_back(new MarkForReviewMerger(eids, "A complex road situation was found. " +
+        scores.join(", "),
         m->getMatchName(), 1.0));
     }
     else
     {
-      mergers.push_back(new HighwaySnapMerger(_minSplitSize, m->getMatchPairs(), _sublineMatcher));
+      LOG_INFO("Here");
+      mergers.push_back(new NetworkMerger(m->getMatchPairs(), m->getEdgeMatch(),
+        m->getNetworkDetails()));
     }
     result = true;
   }

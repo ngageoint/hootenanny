@@ -4,7 +4,18 @@
 set -x
 set -e
 
-$HOOT_HOME/scripts/jenkins/TestPullRequest.sh
+cd $HOOT_HOME
+
+hoot --version --debug
+
+export HOOT_TEST_DIFF=--diff
+make -sj`nproc` test-all
+
+# This is done in VagrantBuild.sh
+# cd $HOOT_HOME/docs
+# make -sj`nproc`
+
+make -sj`nproc` archive
 
 make -sj`nproc` coverage
 

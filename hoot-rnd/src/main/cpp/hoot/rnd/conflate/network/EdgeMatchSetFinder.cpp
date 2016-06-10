@@ -51,11 +51,19 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
   em->getString1()->addFirstEdge(e1, false);
   em->getString2()->addFirstEdge(e2, reversed);
 
+  _steps = 0;
   _addEdgeMatches(em);
+
+  LOG_VAR(_steps);
 }
 
 void EdgeMatchSetFinder::_addEdgeMatches(EdgeMatchPtr em)
 {
+  _steps++;
+  if (_steps % 10 == 0)
+  {
+    LOG_VAR(_steps);
+  }
   // if both the start and end have a valid matched vertex pair then add the match
   ConstNetworkVertexPtr from1 = em->getString1()->getFrom();
   ConstNetworkVertexPtr from2 = em->getString2()->getFrom();
@@ -69,10 +77,14 @@ void EdgeMatchSetFinder::_addEdgeMatches(EdgeMatchPtr em)
 //  LOG_VAR(toMatch);
 
   /// @todo Possibly continue to evaluate matches even if we find an end point. This may make
-  /// the search space too large, but would avoid missing matches.
+  /// the search space very large, but would avoid missing matches.
   if (fromMatch && toMatch)
   {
-    _matchSet->addEdgeMatch(em, _scoreMatch(em));
+    double score = _scoreMatch(em);
+    if (score > 0)
+    {
+      _matchSet->addEdgeMatch(em, score);
+    }
   }
   // if the end of the match isn't terminated.
   else if (!toMatch)
@@ -156,6 +168,11 @@ void EdgeMatchSetFinder::_addEdgeNeighborsToStart(EdgeMatchPtr em,
       _addEdgeMatches(next);
     }
   }
+}
+
+double EdgeMatchSetFinder::_scoreMatch(EdgeMatchPtr em) const
+{
+  return _details->getEdgeStringMatchScore(em->getString1(), em->getString2());
 }
 
 }

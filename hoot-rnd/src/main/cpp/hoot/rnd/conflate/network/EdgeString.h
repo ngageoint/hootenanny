@@ -27,6 +27,9 @@
 #ifndef EDGESTRING_H
 #define EDGESTRING_H
 
+// hoot
+#include <hoot/core/algorithms/linearreference/WayString.h>
+
 #include "NetworkEdge.h"
 #include "NetworkVertex.h"
 

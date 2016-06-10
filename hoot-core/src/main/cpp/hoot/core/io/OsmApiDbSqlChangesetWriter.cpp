@@ -121,7 +121,25 @@ void OsmApiDbSqlChangesetWriter::write(const QString sql)
       {
         //some tight coupling here to OsmChangesetSqlFileWriter
         changesetStatType = "";
-        _changesetBoundsStr = sqlStatement.split("SET")[1].split("WHERE")[0].trimmed();
+        _changesetDetailsStr = sqlStatement.split("SET")[1].split("WHERE")[0].trimmed();
+        //need to do some extra processing here to convert the coords in the string from ints to
+        //decimals
+        const QRegExp regex(
+          "min_lat=(-*[0-9]+), max_lat=(-*[0-9]+), min_lon=(-*[0-9]+), max_lon=(-*[0-9]+)");
+        const int pos = regex.indexIn(_changesetDetailsStr);
+        const QStringList captures = regex.capturedTexts();
+        if (pos > -1)
+        {
+          //first capture is the whole string...skip it
+          for (int i = 1; i < 5; i++)
+          {
+            const QString oldCoordStr = captures.at(i);
+            const double newCoord = OsmApiDb::fromOsmApiDbCoord(oldCoordStr.toLong());
+            _changesetDetailsStr=
+              _changesetDetailsStr.replace(
+                oldCoordStr, QString::number(newCoord, ConfigOptions().getWriterPrecision()));
+          }
+        }
       }
     }
     if (_changesetStats.contains(changesetStatType))
@@ -174,10 +192,10 @@ void OsmApiDbSqlChangesetWriter::write(QFile& changesetSqlFile)
 
 QString OsmApiDbSqlChangesetWriter::getChangesetStats() const
 {
-  LOG_VARD(_changesetBoundsStr);
+  //LOG_VARD(_changesetDetailsStr);
   return
     "Changeset(s) Created: " + QString::number(_changesetStats["changeset-create"]) + "\n" +
-    "Changeset Details: " + _changesetBoundsStr + "\n" +
+    "Changeset Details: " + _changesetDetailsStr + "\n" +
     "Node(s) Created: " + QString::number(_changesetStats["node-create"]) + "\n" +
     "Node(s) Modified: " + QString::number(_changesetStats["node-modify"]) + "\n" +
     "Node(s) Deleted: " + QString::number(_changesetStats["node-delete"]) + "\n" +

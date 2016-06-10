@@ -574,6 +574,19 @@ boost::shared_ptr<OGRSpatialReference> OsmMap::getWgs84()
   return _wgs84;
 }
 
+bool OsmMap::_listContainsNode(const QList<ElementPtr> l) const
+{
+  for (int i = 0; i < l.size(); ++i)
+  {
+    if (l[i]->getElementType() == ElementType::Node)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 void OsmMap::removeElement(ElementId eid)
 {
   switch (eid.getType().getEnum())
@@ -751,8 +764,56 @@ void OsmMap::replace(const shared_ptr<const Element>& from, const shared_ptr<Ele
   }
 }
 
+void OsmMap::replace(const shared_ptr<const Element>& from, const QList<ElementPtr>& to)
+{
+  const shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
+
+  // do some error checking before we add the new element.
+  if (from->getElementType() == ElementType::Node &&
+    (_listContainsNode(to) == false || to.size() > 1))
+  {
+    if (n2w->getWaysByNode(from->getId()).size() != 0)
+    {
+      throw HootException("Trying to replace a node with multiple nodes or a non-node when the "
+        "node is part of a way.");
+    }
+  }
+
+  if (from->getElementType() == ElementType::Node && to.size() == 1 &&
+    to[0]->getElementType() == ElementType::Node)
+  {
+    replaceNode(from->getId(), to[0]->getId());
+  }
+  else
+  {
+    for (int i = 0; i < to.size(); ++i)
+    {
+      if (!containsElement(to[i]))
+      {
+        addElement(to[i]);
+      }
+    }
+
+    // create a copy of the set b/c we may modify it with replace commands.
+    const set<long> rids = getIndex().getElementToRelationMap()->getRelationByElement(from.get());
+    for (set<long>::const_iterator it = rids.begin(); it != rids.end(); it++)
+    {
+      const shared_ptr<Relation>& r = getRelation(*it);
+      r->replaceElement(from, to);
+    }
+
+    removeElementNoCheck(from->getElementType(), from->getId());
+  }
+}
+
 void OsmMap::replaceNode(long oldId, long newId)
 {
+  // nothing to do
+  if (oldId == newId)
+  {
+    return;
+  }
+
   for (size_t i = 0; i < _listeners.size(); i++)
   {
     _listeners[i]->replaceNodePre(oldId, newId);

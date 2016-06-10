@@ -238,8 +238,8 @@ map<QString, double> HighwayRfClassifier::getFeatures(const shared_ptr<const Osm
   // split the shared line based on the matching subline
   ElementPtr match1, scraps1;
   ElementPtr match2, scraps2;
-  WaySublineString string1 = copiedMatch.getSublineString1();
-  WaySublineString string2 = copiedMatch.getSublineString2();
+  WaySublineCollection string1 = copiedMatch.getSublineString1();
+  WaySublineCollection string2 = copiedMatch.getSublineString2();
 
   MultiLineStringSplitter().split(copiedMap, string1, copiedMatch.getReverseVector1(), match1,
     scraps1);
