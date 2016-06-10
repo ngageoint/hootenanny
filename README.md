@@ -33,8 +33,7 @@ it is important to note that conflation occurs between similar feature types (e.
 polyline to Transportation polyline, etc.).
 
 ## Supported Data Formats
-_Import:_ Hootenanny can ingest shapefiles, openstreetmap (.osm), ESRI File Geodatabase (.gdb), and geonames.org (.geonames).  Additionally, 
-.zip files containing shapefiles and/or .gdb files can be uploaded.
+_Import:_ Hootenanny can ingest shapefiles, openstreetmap (.osm), ESRI File Geodatabase (.gdb), .zip files containing shapefiles and/or .gdb files, and geonames.org (.geonames).  OSM API database sources can be set as a conflation reference layer to be conflated with other datasets in Hootenanny, but OSM API database cannot be directly ingested into Hootenanny (experimental feature).
 
 _Export:_ There are currently four options for exporting data from Hootenanny: File Geodatabase (FGDB), Shapefile, OSM and Web 
 Feature Service (WFS). Note that .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the relevant 
