@@ -47,6 +47,16 @@ Then(/^I should not see "([^"]*)"$/) do |text|
   expect(page).to have_no_content(text)
 end
 
+Then(/^I should see checkbox "([^"]*)" (un)?checked$/) do |text, unchk|
+  lbl = find('label', :text=> text, :match => :prefer_exact)
+  cbox = lbl.find('input')#[@type='checkbox']
+  if unchk
+    expect(cbox).to_not be_checked
+  else
+    expect(cbox).to be_checked
+  end
+end
+
 Then (/^I should( not)? see a link "([^"]*)"$/) do |negate, txt|
   expectation = negate ? :should_not : :should
   if negate
@@ -146,6 +156,12 @@ When(/^I select the "([^"]*)" option in the "([^"]*)" combobox$/) do |opt, cb|
 end
 
 When(/^I select the "([^"]*)" option in "([^"]*)"$/) do |opt, el|
+  combobox = page.find(el)
+  combobox.find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt).click
+end
+
+When(/^The value of "([^"]*)" option in "([^"]*)"$/) do |opt, el|
   combobox = page.find(el)
   combobox.find('.combobox-caret').click
   page.find('div.combobox').find('a', :text=> opt).click
@@ -370,9 +386,12 @@ Then(/^I accept the alert$/) do
 end
 
 Then(/^I should see element "([^"]*)" with value "([^"]*)"$/) do |id, value|
-  # expect(page).to have_selector("input[value='" + value + "']")
-  # page.should have_xpath("//input[@value='" + value + "']")
   find(id).value.should eq value
+end
+
+Then(/^I should see element "([^"]*)" with no value and placeholder "([^"]*)"$/) do |id, value|
+  find(id).value.should eq ""
+  page.find(:css, 'input[placeholder="' + value + '"]')
 end
 
 Then(/^I choose "([^"]*)" radio button$/) do |text|
