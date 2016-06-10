@@ -16,3 +16,5 @@ time -p make -sj`nproc` test-all
 # make -sj`nproc`
 
 time -p make -sj`nproc` archive
+
+time -p make -sj`nproc` coverage
