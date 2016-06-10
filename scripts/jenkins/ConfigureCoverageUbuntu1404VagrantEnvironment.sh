@@ -38,6 +38,12 @@ echo "QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri
 sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri                 
 sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri   
 
+# Add --with-coverage to the standard build.
+# NOTE: We will reset this file in the Jenkins job
+if ! grep --quiet "with-coverage" VagrantBuild.sh; then
+    sed -i s/"--with-uitests"/"--with-uitests --with-coverage"/g VagrantBuild.sh
+fi
+
 # Make sure we are not running
 vagrant halt
 
