@@ -612,4 +612,9 @@ long OsmApiDb::toOsmApiDbCoord(const double x)
   return round(x * COORDINATE_SCALE);
 }
 
+double OsmApiDb::fromOsmApiDbCoord(const long x)
+{
+  return (double)x / COORDINATE_SCALE;
+}
+
 }
