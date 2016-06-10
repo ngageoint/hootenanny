@@ -1,5 +1,5 @@
 #!/bin/bash
-# Runs all tests that are appropriate for a pull request
+# Runs all tests that are appropriate for the Develop branch
 
 set -x
 set -e
@@ -16,3 +16,5 @@ time -p make -sj`nproc` test-all
 # make -sj`nproc`
 
 time -p make -sj`nproc` archive
+
+time -p make -sj`nproc` coverage
