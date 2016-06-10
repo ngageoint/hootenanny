@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# Completely clears an OSM API database and then loads data from a Hootenanny compatible data file 
-# into it for testing purposes.  This script is meant to be used for one time dataset loading into 
-# an OSM API database whose contents can be completely lost only.
+# Completely clears an OSM API database and initializes it with a dummy user.
 
 set -e
 
