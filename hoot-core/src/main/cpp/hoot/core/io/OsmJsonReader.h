@@ -275,12 +275,12 @@ private:
   void _scrubQuotes(QString &jsonStr);
 
   /**
-   * @brief _scrubIDs Ensures that we have quotes around ID numbers. This
-   *        makes the boost json parser happier when ID numbers exceed
-   *        2^31.
+   * @brief _scrubBigInts Ensures that we have quotes around big integers.
+   *        Numbers > 2^31 seem to cause trouble with the boost property_tree
+   *        json parser in boost 1.41
    * @param jsonStr string upon which we operate
    */
-  void _scrubIDs(QString &jsonStr);
+  void _scrubBigInts(QString &jsonStr);
 
 };
 

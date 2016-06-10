@@ -59,6 +59,21 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 
+namespace // anonymous
+{
+  // Used for debug
+  void writeString(QString fileName, QString str)
+  {
+    QFile file(fileName);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    {
+        QTextStream stream(&file);
+        stream << str;
+        file.close();
+    }
+  }
+}
+
 // Default constructor
 OsmJsonReader::OsmJsonReader():
   _defaultStatus(Status::Invalid),
@@ -196,7 +211,7 @@ void OsmJsonReader::_loadJSON(QString jsonStr)
   _scrubQuotes(jsonStr);
 
   // Handle IDs
-  _scrubIDs(jsonStr);
+  _scrubBigInts(jsonStr);
 
   // Convert string to stringstream
   stringstream ss(jsonStr.toUtf8().constData(), ios::in);
@@ -423,26 +438,13 @@ void OsmJsonReader::_scrubQuotes(QString &jsonStr)
   }
 }
 
-namespace // anonymous
+void OsmJsonReader::_scrubBigInts(QString &jsonStr)
 {
-  // Used for debug
-  void writeString(QString fileName, QString str)
-  {
-    QFile file(fileName);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate))
-    {
-        QTextStream stream(&file);
-        stream << str;
-        file.close();
-    }
-  }
-}
-
-// Make sure we have quotes around IDs
-void OsmJsonReader::_scrubIDs(QString &jsonStr)
-{
-  QRegExp rx("\"id\"\\s*:\\s*(-?\\d+)(\\s*,?)");
-  jsonStr.replace(rx, "\"id\": \"\\1\"\\2");
+  // Boost 1.41 property tree json parser has trouble with
+  // integers bigger than 2^31. So we put quotes around big
+  // numbers, and that makes it all better
+  QRegExp rx("([^\"\\d\\.])(-?\\d{8,})([^\"\\d\\.])");
+  writeString("/tmp/out.json", jsonStr);
 }
 
 } // namespace hoot
