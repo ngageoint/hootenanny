@@ -44,6 +44,13 @@ function getDbSchema()
     return mgcp.getDbSchema();
 }
 
+// Layer name filter - Filter out all layers that match this regexp
+function layerNameFilter()
+{
+    // Drop all of the "SRC_*", "o2s_*" and "extra_*" layers
+    return "^(?!SRC_|o2s_|extra_)";
+}
+
 
 // IMPORT
 // translateAttributes - takes 'attrs' and returns OSM 'tags'

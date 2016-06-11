@@ -28,36 +28,33 @@
 /*
     "English" TDS to OSM+ conversion script
 
-    This script is the same as the standard "etds_osm" script but uses "tds61" instead of "tds"
+    Based on tds/__init__.js script
 */
 
-// For the new fuzy rules
-hoot.require('SchemaTools')
-
-// For the OSM+ to TDS61 translation
-hoot.require('tds61')
-hoot.require('tds61_rules')
+// For the OSM+ to TDS translation
+hoot.require('mgcp')
+hoot.require('mgcp_rules')
 hoot.require('fcode_common')
 
 // For the TDS to TDS "English" translation
-hoot.require('etds61')
+hoot.require('emgcp')
 
 // NOTE: This include has "etds_osm_rules" NOT "etds_osm.rules"
 // This was renamed so the include will work.
-hoot.require('etds61_osm_rules')
+hoot.require('emgcp_osm_rules')
 
 // Common translation scripts
 hoot.require('translate');
 hoot.require('config');
 
 
-etds61_osm = {
-    // This function converts the "English" TDS to TDS and then to OSM+
+emgcp_osm = {
+    // This function converts the OSM+ to TDS and then translated the TDS into "English"
     toOSM : function(attrs, elementType, geometryType)
     {
-        // Strip out the junk - this is also done in the toOsmPreProcessing but this 
+        // Strip out the junk - this is also done in the toOsmPreProcessing but this
         // means that there is less to convert later
-        var ignoreList = { '-999999':1, '-999999.0':1, 'noinformation':1, 'No Information':1, 'noInformation':1 };
+        var ignoreList = { '-32767':1, '-32767.0':1, 'UNK':1, 'Unknown':1 };
 
         for (var col in attrs)
         {
@@ -75,7 +72,7 @@ etds61_osm = {
         var nAttrs = {}; // the "new" TDS attrs
         var fCode2 = ''; // The second FCODE - if we have one
 
-		if (attrs['Feature Code'])
+        if (attrs['Feature Code'])
         {
             if (attrs['Feature Code'].indexOf(' & ') > -1)
             {
@@ -93,16 +90,16 @@ etds61_osm = {
                 var fcode = attrs['Feature Code'].split(':');
                 attrs['Feature Code'] = fcode[0];
             }
-		}
+        }
 
         // Translate the single values from "English" to TDS
         for (var val in attrs)
         {
-            if (val in etds61_osm_rules.singleValues)
+            if (val in emgcp_osm_rules.singleValues)
             {
-                nAttrs[etds61_osm_rules.singleValues[val]] = attrs[val];
+                nAttrs[emgcp_osm_rules.singleValues[val]] = attrs[val];
                 // Debug
-                // print('Single: ' + etds61_osm_rules.singleValues[val] + ' = ' + attrs[val])
+                // print('Single: ' + emgcp_osm_rules.singleValues[val] + ' = ' + attrs[val])
 
                 // Cleanup used attrs
                 delete attrs[val];
@@ -110,17 +107,17 @@ etds61_osm = {
         }
 
         // Use a lookup table to convert the remaining attribute names from "English" to TDS
-        translate.applyOne2One(attrs, nAttrs, etds61_osm_rules.enumValues, {'k':'v'});
+        translate.applyOne2One(attrs, nAttrs, emgcp_osm_rules.enumValues, {'k':'v'});
 
         var tags = {};
 
         // Now convert the attributes to tags.
-        tags = tds61.toOsm(nAttrs,'',geometryType);
+        tags = mgcp.toOsm(nAttrs,'',geometryType);
 
         // Check if we have a second FCODE and if it can add any tags
         if (fCode2 !== '')
         {
-            var ftag = tds61.fcodeLookup['F_CODE'][fCode2];
+            var ftag = mgcp.fcodeLookup['FCODE'][fCode2];
             if (ftag)
             {
                 if (!(tags[ftag[0]]))
@@ -147,6 +144,6 @@ etds61_osm = {
 
     } // End of toOSM
 
-} // End of etds61_osm
+} // End of emgcp_osm
 
-exports.toOSM = etds61_osm.toOSM;
+exports.toOSM = emgcp_osm.toOSM;

@@ -30,15 +30,14 @@
 //
 
 // For the OSM+ to NFDD translation
-hoot.require('SchemaTools')
-hoot.require('tds61')
-hoot.require('tds61_schema')
-hoot.require('tds61_rules')
+hoot.require('mgcp')
+hoot.require('mgcp_schema')
+hoot.require('mgcp_rules')
 hoot.require('fcode_common')
 
 // The main translation functions
-hoot.require('etds61')
-hoot.require('etds61_rules')
+hoot.require('emgcp')
+hoot.require('emgcp_rules')
 
 hoot.require('config')
 hoot.require('translate')
@@ -47,20 +46,20 @@ hoot.require('translate')
 // we don't need to expose it to the main Hoot program
 function getDbSchema()
 {
-     return tds61.getDbSchema();
+     return mgcp.getDbSchema();
 }
 
 // Get raw schema directly from plugins/schema
 function getRawDbSchema()
 {
-     return tds61.schema.getDbSchema();
+     return mgcp.schema.getDbSchema();
 }
 
 
 function initialize()
 {
-    // Turn off the TDS structure so we just get the raw feature
-    hoot.Settings.set({"ogr.tds.structure":"false"});
+    // Make sure the MGCP translator exports extra tags to the TXT field
+    hoot.Settings.set({"ogr.mgcp.extra":"note"});
 }
 
 
@@ -75,7 +74,7 @@ function initialize()
 function translateAttributes(attrs, layerName, geometryType)
 {
     // We use the temp var because etds.toEnglish returns "attrs" and "tableName"
-    var output = etds61.toEnglish(attrs,layerName,geometryType);
+    var output = emgcp.toEnglish(attrs,layerName,geometryType);
 
     // Make sure the returned value isn't NULL. This does occur
     if (output)
@@ -94,7 +93,7 @@ function translateAttributes(attrs, layerName, geometryType)
 //    This version converts OSM+ tags to NFDD "English" attributes
 function translateToOgr(tags, elementType, geometryType)
 {
-        return etds61.toEnglish(tags, elementType, geometryType)
+        return emgcp.toEnglish(tags, elementType, geometryType)
 } // End of translateToOgr
 
 

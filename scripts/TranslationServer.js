@@ -15,7 +15,7 @@ var serverPort = 8233;
 var util = require('util');
 var nCPU = os.cpus().length;
 
-var availableTrans = {'TDSv40':{'isvailable':'true'}, 'TDSv61':{'isvailable':'true'}};
+var availableTrans = {'TDSv40':{'isvailable':'true'}, 'TDSv61':{'isvailable':'true'}, 'MGCP':{'isvailable':'true'}};
 var HOOT_HOME = process.env.HOOT_HOME;
 //Moving hoot init to the request handler allows stxxl temp file cleanup to happen properly.
 //hoot = require(HOOT_HOME + '/lib/HootJs');
@@ -126,7 +126,13 @@ var populateOsmToTdsmap = function()
 					    	'translation.script':HOOT_HOME + '/translations/OSM_to_englishTDS61.js',
 					    	'translation.direction':'toogr'});
 	}
-} 
+
+	if(!osmToTdsMap['MGCP']) {
+        osmToTdsMap['MGCP'] = new hoot.TranslationOp({
+                            'translation.script':HOOT_HOME + '/translations/OSM_to_englishMGCP.js',
+                            'translation.direction':'toogr'});
+    }
+}
 
 // OSM to TDS request handler
 var osmtotds = function(request, response)
@@ -156,7 +162,8 @@ var osmtotds = function(request, response)
 		// TODO: In the future we should get this from caller
 		var schemaMap = {};
 		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_full_schema.js');
-		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
+        schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
+		schemaMap['MGCP'] = require(HOOT_HOME + '/plugins/mgcp_schema.js');
 		
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(trns){
@@ -205,6 +212,13 @@ var populateTdsToOsmMap = function()
 					    	'translation.script':HOOT_HOME + '/translations/englishTDS61_to_OSM.js',
 					    	'translation.direction':'toosm'});
 	}
+
+	if(!tdsToOsmMap['MGCP'])
+    {
+        tdsToOsmMap['MGCP'] = new hoot.TranslationOp({
+                            'translation.script':HOOT_HOME + '/translations/englishMGCP_to_OSM.js',
+                            'translation.direction':'toosm'});
+    }
 }
 // TDS to OSM handler
 var tdstoosm = function(request, response)
@@ -239,8 +253,9 @@ var tdstoosm = function(request, response)
 		logWarn = hoot.logWarn;
 
 		var translationsMap = {};
-		translationsMap['TDSv40'] = require(HOOT_HOME + '/plugins/etds_osm.js'); 
-		translationsMap['TDSv61'] = require(HOOT_HOME + '/plugins/etds61_osm.js');
+		translationsMap['TDSv40'] = require(HOOT_HOME + '/plugins/etds40_osm.js');
+        translationsMap['TDSv61'] = require(HOOT_HOME + '/plugins/etds61_osm.js');
+		translationsMap['MGCP'] = require(HOOT_HOME + '/plugins/emgcp_osm.js');
 
 		var transScript = translationsMap[translation];
 		if(transScript) {
@@ -286,7 +301,8 @@ var getTaginfoKeyFields = function(request, response)
 		// TODO: In the future we should get this from caller		
 		var schemaMap = {};
 		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_full_schema.js');
-		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
+        schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
+		schemaMap['MGCP'] = require(HOOT_HOME + '/plugins/mgcp_schema.js');
 		
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(trns){
@@ -367,7 +383,8 @@ var getTaginfoKeys = function(request, response)
 		// TODO: In the future we should get this from caller
 		var schemaMap = {};
 		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_full_schema.js');
-		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
+        schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
+		schemaMap['MGCP'] = require(HOOT_HOME + '/plugins/mgcp_schema.js');
 		
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(trns){
@@ -485,7 +502,8 @@ var getFilteredSchema = function(request, response) {
 		// TODO: In the future we should get this from caller
 		var schemaMap = {};
 		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_full_schema.js');
-		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
+        schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
+		schemaMap['MGCP'] = require(HOOT_HOME + '/plugins/mgcp_schema.js');
 
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(translation){

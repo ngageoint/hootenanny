@@ -26,27 +26,25 @@
  */
 
 /*
-    OSM+ to "English" TDSv61 conversion script
-
-    This script is the same as the standard "etds" script but uses "tds61" instead of "tds"
+    OSM+ to "English" MGCP conversion script
 */
 
-etds61 = {
-    // This function converts the OSM+ to TDS and then translates the TDS into "English"
+emgcp = {
+    // This function converts the OSM+ to MGCP and then translates the MGCP into "English"
     toEnglish : function(tags, elementType, geometryType)
     {
-        var tdsData = [];
+        var mgcpData = [];
 
-        tdsData = tds61.toNfdd(tags, elementType, geometryType)
+        mgcpData = mgcp.toMgcp(tags, elementType, geometryType)
 
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            for (var i = 0, fLen = tdsData.length; i < fLen; i++)
+            for (var i = 0, fLen = mgcpData.length; i < fLen; i++)
             {
-                print('eTableName ' + i + ': ' + tdsData[i]['tableName'] + '  FCode: ' + tdsData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
-                var kList = Object.keys(tdsData[i]['attrs']).sort()
-                for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Attrs:' + kList[j] + ': :' + tdsData[i]['attrs'][kList[j]] + ':');
+                print('eTableName ' + i + ': ' + mgcpData[i]['tableName'] + '  FCode: ' + mgcpData[i]['attrs']['FCODE'] + '  Geom: ' + geometryType);
+                var kList = Object.keys(mgcpData[i]['attrs']).sort()
+                for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Attrs:' + kList[j] + ': :' + mgcpData[i]['attrs'][kList[j]] + ':');
             }
             print('');
         }
@@ -56,59 +54,60 @@ etds61 = {
         // Add a default value for the FCODE
         eAttrs['Feature Code'] = 'Not found';
 
-        if (tdsData.length > 0)
+        if (mgcpData.length > 0)
         {
-            for (var fNum = 0, fLen = tdsData.length; fNum < fLen; fNum++)
+            for (var fNum = 0, fLen = mgcpData.length; fNum < fLen; fNum++)
             {
-                var tFCODE = tdsData[fNum]['attrs']['F_CODE'];
+                var tFCODE = mgcpData[fNum]['attrs']['FCODE'];
 
                 // Go through the list of possible attributes and add the missing ones
-                var tmpList = etds61.rules.fcodeLookup[tFCODE]['enum'];
+                var tmpList = emgcp.rules.fcodeLookup[tFCODE]['enum'];
 
                 for (var i=0, elen = tmpList.length; i < elen; i++)
                 {
                     // If we don't find one, add it with it's default value
-                    if (!(tdsData[fNum]['attrs'][tmpList[i]]))
+                    if (!(mgcpData[fNum]['attrs'][tmpList[i]]))
                     {
-                        tdsData[fNum]['attrs'][tmpList[i]] = etds61.rules.engDefault[tmpList[i]];
+                        mgcpData[fNum]['attrs'][tmpList[i]] = emgcp.rules.engDefault[tmpList[i]];
                     }
                 }
 
                 // Translate the single values
-                for (var val in tdsData[fNum]['attrs'])
+                for (var val in mgcpData[fNum]['attrs'])
                 {
-                    if (val in etds61.rules.engSingle)
+                    if (val in emgcp.rules.engSingle)
                     {
-                        if (tdsData[fNum]['attrs'][val] == undefined)
+                        if (mgcpData[fNum]['attrs'][val] == undefined)
                         {
-                            eAttrs[etds61.rules.engSingle[val]] = etds61.rules.engDefault[val];
+                            eAttrs[emgcp.rules.engSingle[val]] = emgcp.rules.engDefault[val];
                         }
                         else
                         {
-                            eAttrs[etds61.rules.engSingle[val]] = tdsData[fNum]['attrs'][val];
+                            eAttrs[emgcp.rules.engSingle[val]] = mgcpData[fNum]['attrs'][val];
                         }
 
+                        //print('Single: ' + emgcp.rules.engSingle[val] + ' = ' + eAttrs[emgcp.rules.engSingle[val]]);
                         // Cleanup used attrs so we don't translate them again
-                        delete tdsData[fNum]['attrs'][val];
+                        delete mgcpData[fNum]['attrs'][val];
                     }
                 }
 
                 // Apply the English one2one rules
-                translate.applyOne2One(tdsData[fNum]['attrs'], eAttrs, etds61.rules.engEnum, {'k':'v'});
+                translate.applyOne2One(mgcpData[fNum]['attrs'], eAttrs, emgcp.rules.engEnum, {'k':'v'});
 
                 // Find an FCODE
-                if (tFCODE in etds61.rules.fcodeLookup)
+                if (tFCODE in emgcp.rules.fcodeLookup)
                 {
                     if (eAttrs['Feature Code'] !== 'Not found')
                     {
-                        eAttrs['Feature Code'] = eAttrs['Feature Code'] + ' & ' + tFCODE + ':' + etds61.rules.fcodeLookup[tFCODE]['desc'];
+                        eAttrs['Feature Code'] = eAttrs['Feature Code'] + ' & ' + tFCODE + ':' + emgcp.rules.fcodeLookup[tFCODE]['desc'];
                     }
                     else
                     {
-                        eAttrs['Feature Code'] = tFCODE + ':' + etds61.rules.fcodeLookup[tFCODE]['desc'];
+                        eAttrs['Feature Code'] = tFCODE + ':' + emgcp.rules.fcodeLookup[tFCODE]['desc'];
                     }
                 }
-            } // End for tdsData
+            } // End for mgcpData
 
         }
         else
@@ -133,4 +132,4 @@ etds61 = {
         return {attrs: eAttrs, tableName: ''};
     } // End of toEnglish
 
-} // End of etds61
+} // End of emgcp
