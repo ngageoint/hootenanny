@@ -444,7 +444,7 @@ void OsmJsonReader::_scrubBigInts(QString &jsonStr)
   // integers bigger than 2^31. So we put quotes around big
   // numbers, and that makes it all better
   QRegExp rx("([^\"\\d\\.])(-?\\d{8,})([^\"\\d\\.])");
-  writeString("/tmp/out.json", jsonStr);
+  jsonStr.replace(rx, "\\1\"\\2\"\\3");
 }
 
 } // namespace hoot
