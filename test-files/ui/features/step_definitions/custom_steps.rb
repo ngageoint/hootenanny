@@ -143,6 +143,16 @@ Then(/^I should see options in this order:$/) do |table|
   actual_order.should == expected_order
 end
 
+Then(/^I should see these tags in the table:$/) do |table|
+  include_hidden_fields do
+    expected = table.raw
+    keys = page.all('ul.tag-list input.key').map(&:value)
+    values = page.all('ul.tag-list input.value').map(&:value)
+    actual = keys.zip(values)
+    actual.should == expected
+  end
+end
+
 Then(/^I click on the "([^"]*)" option in the "([^"]*)"$/) do |label,div|
   find('#' + div).find('label', :text => label).click
 end
@@ -389,7 +399,7 @@ Then(/^I type "([^"]*)" in input "([^"]*)"$/) do |text, id|
 end
 
 Then(/^I click the "([^"]*)" with text "([^"]*)"$/) do |el, text|
-  page.find(el, :text => text)
+  page.find(el, :text => text).click
 end
 
 Then(/^I accept the alert$/) do
