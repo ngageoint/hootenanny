@@ -4,7 +4,7 @@
 #   * .../[jenkins workspaces]/[this project workspace]/hootenanny
 # * Configure LocalConfig.pri for tests
 # * Destroy vagrant instance if necessary
-# * Get Hoot read to run the configure tests
+# * Get Hoot ready to run the configure tests
 #
 set -e
 set -x
@@ -39,9 +39,6 @@ cp LocalConfig.pri.orig LocalConfig.pri
 # Make sure we are not running
 vagrant halt
 
-# # This causes grief....
-#touch Vagrant.marker
-
 REBUILD_VAGRANT=false
 
 [ -f Vagrant.marker ] && [ Vagrant.marker -ot VagrantProvision.sh ] && REBUILD_VAGRANT=true
@@ -65,4 +62,3 @@ fi
 #vagrant ssh -c "cd hoot; source ./SetupEnv.sh; cd hoot-services; make clean-db &> /dev/null"
 
 date +%F > ../BuildDate.txt
-

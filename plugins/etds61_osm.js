@@ -26,24 +26,21 @@
  */
 
 /*
-    "English" NFDD to OSM+ conversion script
+    "English" TDS to OSM+ conversion script
 
     This script is the same as the standard "etds_osm" script but uses "tds61" instead of "tds"
-
-    MattJ, Sept 14
 */
 
 // For the new fuzy rules
 hoot.require('SchemaTools')
 
-// For the OSM+ to NFDD translation
+// For the OSM+ to TDS61 translation
 hoot.require('tds61')
 hoot.require('tds61_rules')
 hoot.require('fcode_common')
 
-// For the NFDD to NFDD "English" translation
+// For the TDS to TDS "English" translation
 hoot.require('etds61')
-hoot.require('etds61_rules')
 
 // NOTE: This include has "etds_osm_rules" NOT "etds_osm.rules"
 // This was renamed so the include will work.
@@ -55,40 +52,12 @@ hoot.require('config');
 
 
 etds61_osm = {
-    // This function converts the OSM+ to NFDD and then translated the NFDD into "English"
+    // This function converts the "English" TDS to TDS and then to OSM+
     toOSM : function(attrs, elementType, geometryType)
     {
-        // Build the NFDD lookup table
-        if (tds61.lookup == undefined)
-        {
-            // Add "other" rules to the NFDD one2one rules
-            tds61.rules.one2one.push.apply(tds61.rules.one2one,tds61.rules.one2oneIn);
-
-            // Add the FCODE rules for Export to the FCODE lookup
-            fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds61.rules.fcodeOne2oneIn);
-
-            // Add the common FCODE rules to the NFDD rules - to get rid of warnings
-            tds61.rules.one2one.push.apply(tds61.rules.one2one,fcodeCommon.one2one);
-
-            // Create the Lookup tables
-            tds61.lookup = translate.createLookup(tds61.rules.one2one);
-
-            // translate.dumpOne2OneLookup(tds61.lookup);
-            
-            // Build an Object with both the SimpleText & SimpleNum lists
-            tds61.ignoreList = translate.joinList(tds61.rules.numBiased, tds61.rules.txtBiased);
-            
-            // Add features to ignore
-            tds61.ignoreList.F_CODE = '';
-            tds61.ignoreList.FCSUBTYPE = '';
-            tds61.ignoreList.UFI = '';
-        }
-
-        // ##### Convert the English to NFDD #####
         // Strip out the junk - this is also done in the toOsmPreProcessing but this 
         // means that there is less to convert later
-        var ignoreList = { '-999999':1, '-999999.0':1, 'noinformation':1, 'No Information':1, 
-              'noInformation':1 };
+        var ignoreList = { '-999999':1, '-999999.0':1, 'noinformation':1, 'No Information':1, 'noInformation':1 };
 
         for (var col in attrs)
         {
@@ -96,18 +65,22 @@ etds61_osm = {
         }
 
         // Debug:
-        // if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            var kList = Object.keys(attrs).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+        }
 
-        // Go through the attrs and turn them back into NFDD
-        var nAttrs = {}; // the "new" NFDD attrs
+        // Go through the attrs and turn them back into TDS
+        var nAttrs = {}; // the "new" TDS attrs
         var fCode2 = ''; // The second FCODE - if we have one
 
 		if (attrs['Feature Code'])
         {
-            if (attrs['Feature Code'].indexOf(';') > -1)
+            if (attrs['Feature Code'].indexOf(' & ') > -1)
             {
                 // Two FCODE's
-                var tList = attrs['Feature Code'].split(';');
+                var tList = attrs['Feature Code'].split(' & ');
                 var fcode = tList[0].split(':');
                 attrs['Feature Code'] = fcode[0];
 
@@ -122,90 +95,53 @@ etds61_osm = {
             }
 		}
 
-        // Translate the single values
+        // Translate the single values from "English" to TDS
         for (var val in attrs)
         {
             if (val in etds61_osm_rules.singleValues)
             {
                 nAttrs[etds61_osm_rules.singleValues[val]] = attrs[val];
+                // Debug
+                // print('Single: ' + etds61_osm_rules.singleValues[val] + ' = ' + attrs[val])
 
                 // Cleanup used attrs
                 delete attrs[val];
             }
-              // Debug:
-//             else
-//             {
-//                 print('Single: Didnt find: ' + val);
-//             }
-
         }
 
-        // Debug:
-        // if (config.getOgrDebugDumptags() == 'true') for (var i in nAttrs) print('Single nAttrs:' + i + ': :' + nAttrs[i] + ':');
+        // Use a lookup table to convert the remaining attribute names from "English" to TDS
+        translate.applyOne2One(attrs, nAttrs, etds61_osm_rules.enumValues, {'k':'v'});
 
-        translate.applyOne2One(attrs, nAttrs, etds61_osm_rules.enumValues, {'k':'v'}, tds61.ignoreList);
+        var tags = {};
 
-        // Convert the NFDD to OSM+
-        tags = {}; // The final OSM+ tags
+        // Now convert the attributes to tags.
+        tags = tds61.toOsm(nAttrs,'',geometryType);
 
-        // pre processing
-        tds61.applyToOsmPreProcessing(nAttrs, '', geometryType);
-        
-        // Debug:
-        // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After PreProc:' + i + ': :' + tags[i] + ':');
-
-        // one 2 one
-        translate.applyOne2One(nAttrs, tags, tds61.lookup, {'k':'v'}, tds61.ignoreList);
-
-        // Debug:
-        // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After one2one:' + i + ': :' + tags[i] + ':');
-
-        // apply the simple number and text biased rules
-        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
-        translate.applySimpleNumBiased(nAttrs, tags, tds61.rules.numBiased, 'forward',[]);
-        translate.applySimpleTxtBiased(nAttrs, tags, tds61.rules.txtBiased, 'forward');
-
-        // Debug:
-        // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After Simple:' + i + ': :' + tags[i] + ':');
-
-        // Crack open the OTH field and populate the appropriate attributes
-        // if (nAttrs.OTH) translate.processOTH(nAttrs, tags, tds61.lookup);
-
-        // post processing
-        tds61.applyToOsmPostProcessing(nAttrs, tags, '', geometryType);
-
-        // If we have a second FCODE, re run the translation with it
+        // Check if we have a second FCODE and if it can add any tags
         if (fCode2 !== '')
         {
-            nAttrs.F_CODE = fCode2;
-
-            // pre processing
-            tds61.applyToOsmPreProcessing(nAttrs, '');
-
-            // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After 2nd PreProc:' + i + ': :' + tags[i] + ':');
-
-            // one 2 one
-            translate.applyOne2One(nAttrs, tags, tds61.lookup, {'k':'v'}, tds61.ignoreList);
-
-            // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After 2nd one2one:' + i + ': :' + tags[i] + ':');
-
-            // apply the simple number and text biased rules
-            // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
-            translate.applySimpleNumBiased(nAttrs, tags, tds61.rules.numBiased, 'forward',[]);
-            translate.applySimpleTxtBiased(nAttrs, tags, tds61.rules.txtBiased, 'forward');
-
-            // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After 2nd Simple:' + i + ': :' + tags[i] + ':');
-
-            // post processing
-            tds61.applyToOsmPostProcessing(nAttrs, tags, '');
+            var ftag = tds61.fcodeLookup['F_CODE'][fCode2];
+            if (ftag)
+            {
+                if (!(tags[ftag[0]]))
+                {
+                    tags[ftag[0]] = ftag[1];
+                }
+                else
+                {
+                    // Debug: Dump out the tags from the FCODE
+                    print('fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
+                }
+            }
         }
 
         // Debug:
-//         if (config.getOgrDebugDumptags() == 'true')
-//         {
-//             for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
-//             print('');
-//         }
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            var kList = Object.keys(tags).sort()
+            for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');
+            print('');
+        }
 
         return {attrs: tags, tableName: ''};
 

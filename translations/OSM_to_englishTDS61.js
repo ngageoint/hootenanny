@@ -57,6 +57,13 @@ function getRawDbSchema()
 }
 
 
+function initialize()
+{
+    // Turn off the TDS structure so we just get the raw feature
+    hoot.Settings.set({"ogr.tds.structure":"false"});
+}
+
+
 // IMPORT
 // translateAttributes - Normally takes 'attrs' and returns OSM 'tags'.  This version
 //    converts OSM+ tags to NFDD "English" Attributes

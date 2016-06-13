@@ -28,12 +28,11 @@
 #define NETWORKMERGER_H
 
 // hoot
+#include <hoot/core/algorithms/linearreference/WayMatchStringMapping.h>
 #include <hoot/core/conflate/MergerBase.h>
 
 #include "EdgeMatch.h"
-
-// hoot
-#include <hoot/core/algorithms/linearreference/WayMatchStringMapping.h>
+#include "NetworkDetails.h"
 
 namespace hoot
 {
@@ -51,10 +50,10 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  NetworkMerger(const set< pair<ElementId, ElementId> >& pairs, ConstEdgeMatchPtr edgeMatch);
+  NetworkMerger(const set< pair<ElementId, ElementId> >& pairs, ConstEdgeMatchPtr edgeMatch,
+    ConstNetworkDetailsPtr details);
 
-  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
-    const;
+  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced) const;
 
   virtual QString toString() const;
 
@@ -65,6 +64,7 @@ protected:
 private:
   set< pair<ElementId, ElementId> > _pairs;
   ConstEdgeMatchPtr _edgeMatch;
+  ConstNetworkDetailsPtr _details;
 
   WaySublineMatchStringPtr _createMatchString() const { return WaySublineMatchStringPtr(); }
 };

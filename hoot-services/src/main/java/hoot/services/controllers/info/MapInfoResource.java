@@ -93,8 +93,11 @@ public class MapInfoResource {
         try {
             String[] mapids = mapIds.split(",");
             for (String mapId : mapids) {
-                for (String table : maptables) {
-                    nsize += DbUtils.getTableSizeInByte(table + "_" + mapId);
+                if (Long.parseLong(mapId) != -1) // skips OSM API db layer
+                {
+                    for (String table : maptables) {
+                        nsize += DbUtils.getTableSizeInByte(table + "_" + mapId);
+                    }
                 }
             }
 
@@ -140,7 +143,10 @@ public class MapInfoResource {
                 long nsize = 0;
                 try {
                     for (String table : maptables) {
-                        nsize += DbUtils.getTableSizeInByte(table + "_" + mapId);
+                        if (Long.parseLong(mapId) != -1) // skips OSM API db layer
+                        {
+                            nsize += DbUtils.getTableSizeInByte(table + "_" + mapId);
+                        }
                     }
                 }
                 finally {

@@ -29,11 +29,19 @@
 
 #include "WayLocation.h"
 
+// hoot
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/GeometryConverter.h>
 
 namespace hoot
 {
 
+/**
+ * Represents a section of a way.
+ *
+ * If the start is after the end the WaySubline is considered to be backwards. This can be handy
+ * when representing strings of ways.
+ */
 class WaySubline
 {
 public:
@@ -47,6 +55,8 @@ public:
 
   WaySubline& operator=(const WaySubline& from);
 
+  Meters calculateLength() const;
+
   bool contains(const WayLocation& wl) const;
 
   /**
@@ -54,23 +64,42 @@ public:
    */
   bool contains(const WaySubline& other) const;
 
+  /**
+   * Ensures that start <= end by swapping start/end if necessary.
+   */
+  void ensureForwards() { if (isBackwards()) { WayLocation s = _end; _end = _start; _start = s; } }
+
   WaySubline expand(Meters d) const;
 
   ElementId getElementId() const { return _start.getWay()->getElementId(); }
 
   const WayLocation& getEnd() const { return _end; }
 
+  /**
+   * Returns the way location that is closer to the beginning of the way regardless of the
+   * isBackwards() result.
+   */
+  const WayLocation& getFormer() const { return isBackwards() ? _end : _start; }
+
   Meters getLength() const;
 
   const ConstOsmMapPtr& getMap() const { return _start.getMap(); }
+
+  /**
+   * Returns the way location that is closer to the end of the way regardless of the
+   * isBackwards() result.
+   */
+  const WayLocation& getLatter() const { return isBackwards() ? _start : _end; }
 
   const WayLocation& getStart() const { return _start; }
 
   const ConstWayPtr& getWay() const { return _start.getWay(); }
 
-  bool isZeroLength() const { return _start == _end; }
+  bool isBackwards() const { return _end < _start; }
 
   bool isValid() const { return _start.isValid() && _end.isValid(); }
+
+  bool isZeroLength() const { return _start == _end; }
 
   /**
    * Returns true if the two sublines have interior points in common. If they only touch at one
@@ -97,6 +126,11 @@ public:
    * Returns true if the two sublines have any points in common.
    */
   bool touches(const WaySubline& other) const;
+
+  /**
+   * Visit the way and all nodes on the way that intersect the WaySubline.
+   */
+  void visitRo(const ElementProvider& ep, ElementVisitor& visitor) const;
 
 private:
 

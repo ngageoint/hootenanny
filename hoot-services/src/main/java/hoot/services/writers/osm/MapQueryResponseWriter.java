@@ -31,6 +31,7 @@ import java.sql.Connection;
 import java.util.Map;
 
 import javax.ws.rs.core.Response.Status;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,8 +64,22 @@ public class MapQueryResponseWriter {
     }
 
     /**
+     * Writes a map query response with no element data
+     * 
+     * @return a XML document response
+     * @throws IOException
+     * @throws ParserConfigurationException
+     */
+    public static Document writeEmptyResponse() throws IOException, ParserConfigurationException {
+        Document responseDoc = XmlDocumentBuilder.create();
+        org.w3c.dom.Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
+        responseDoc.appendChild(elementRootXml);
+        return responseDoc;
+    }
+
+    /**
      * Writes the query response to an XML document
-     *
+     * 
      * @param results
      *            query results; a mapping of element IDs to records, grouped by
      *            element type
@@ -115,9 +130,8 @@ public class MapQueryResponseWriter {
             }
         }
         catch (Exception e) {
-            ResourceErrorHandler.handleError(
-                    "Error creating response for map query for map with ID: " + mapId + ". (" + e.getMessage() + ") ",
-                    Status.INTERNAL_SERVER_ERROR, log);
+            ResourceErrorHandler.handleError("Error creating response for map query for map with ID: " + mapId + ". ("
+                    + e.getMessage() + ") ", Status.INTERNAL_SERVER_ERROR, log);
         }
 
         // System.out.println(XmlDocumentBuilder.toString(responseDoc));

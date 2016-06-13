@@ -36,8 +36,8 @@ hoot.require('tds40_rules')
 hoot.require('fcode_common')
 
 // The main translation functions
-hoot.require('etds')
-hoot.require('etds_rules')
+hoot.require('etds40')
+hoot.require('etds40_rules')
 
 hoot.require('config')
 hoot.require('translate')
@@ -56,6 +56,13 @@ function getRawDbSchema()
 }
 
 
+function initialize()
+{
+    // Turn off the TDS structure so we just get the raw feature
+    hoot.Settings.set({"ogr.tds.structure":"false"});
+}
+
+
 // IMPORT
 // translateAttributes - Normally takes 'attrs' and returns OSM 'tags'.  This version
 //    converts OSM+ tags to NFDD "English" Attributes
@@ -67,7 +74,7 @@ function getRawDbSchema()
 function translateAttributes(attrs, layerName, geometryType)
 {
     // We use the temp var because etds.toEnglish returns "attrs" and "tableName"
-    var output = etds.toEnglish(attrs,'',geometryType);
+    var output = etds40.toEnglish(attrs,layerName,geometryType);
 
     // Make sure the returned value isn't NULL. This does occur
     if (output)
@@ -86,7 +93,7 @@ function translateAttributes(attrs, layerName, geometryType)
 //    This version converts OSM+ tags to NFDD "English" attributes
 function translateToOgr(tags, elementType, geometryType)
 {
-        return etds.toEnglish(tags, elementType, geometryType)
+        return etds40.toEnglish(tags, elementType, geometryType)
 } // End of translateToOgr
 
 

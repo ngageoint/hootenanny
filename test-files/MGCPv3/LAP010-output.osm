@@ -10,16 +10,16 @@
         <nd ref="-7"/>
         <nd ref="-9"/>
         <nd ref="-9"/>
-        <tag k="source:ingest:datetime" v="2016-03-31T01:19:56.994Z"/>
+        <tag k="source:ingest:datetime" v="2016-06-09T06:31:39.412Z"/>
         <tag k="source:name" v="imagery_(other)"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="seasonal" v="fair"/>
-        <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{1d717c8a-7883-47a2-befe-7e18a2fe3a72}"/>
+        <tag k="source" v="mgcp:lap010"/>
         <tag k="name" v="Dirt"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="highway" v="track"/>
         <tag k="error:circular" v="28.65"/>
     </way>
@@ -27,16 +27,16 @@
         <nd ref="-4"/>
         <nd ref="-6"/>
         <nd ref="-6"/>
-        <tag k="source:ingest:datetime" v="2016-03-31T01:19:56.994Z"/>
+        <tag k="source:ingest:datetime" v="2016-06-09T06:31:39.412Z"/>
         <tag k="source:name" v="imagery_(other)"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="width:minimum_traveled_way" v="4"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="seasonal" v="no"/>
-        <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{1d1127be-1934-40af-9e2d-af265f9405ad}"/>
+        <tag k="source" v="mgcp:lap010"/>
         <tag k="name" v="Kokoda"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="highway" v="track"/>
         <tag k="error:circular" v="28.65"/>
     </way>
@@ -44,15 +44,15 @@
         <nd ref="-1"/>
         <nd ref="-3"/>
         <nd ref="-3"/>
-        <tag k="source:ingest:datetime" v="2016-03-31T01:19:56.993Z"/>
+        <tag k="source:ingest:datetime" v="2016-06-09T06:31:39.411Z"/>
         <tag k="source:name" v="imagery_(other)"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="width:minimum_traveled_way" v="2.5"/>
-        <tag k="source" v="mgcp"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="uuid" v="{1c362077-a802-41f3-97e5-193db7df1a0b}"/>
+        <tag k="source" v="mgcp:lap010"/>
         <tag k="name" v="Jinglemoney"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="highway" v="track"/>
         <tag k="error:circular" v="28.65"/>
     </way>

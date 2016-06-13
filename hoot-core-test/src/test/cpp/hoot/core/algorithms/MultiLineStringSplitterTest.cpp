@@ -109,7 +109,7 @@ public:
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr w1 = createWay(map, w1c, Status::Unknown1);
 
-    WaySublineString string;
+    WaySublineCollection string;
     string.addSubline(WaySubline(WayLocation(map, w1, 30), WayLocation(map, w1, 70)));
     ElementPtr match;
     ElementPtr scraps;

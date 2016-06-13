@@ -51,6 +51,7 @@ private:
   NetworkDetailsPtr _details;
   IndexedEdgeMatchSetPtr _matchSet;
   ConstOsmNetworkPtr _n1, _n2;
+  int _steps;
 
   void _addEdgeMatches(EdgeMatchPtr em);
 
@@ -61,7 +62,7 @@ private:
     QList<ConstNetworkEdgePtr> neighbors2);
 
   /// @todo replace with a real method
-  double _scoreMatch(EdgeMatchPtr /*em*/) const { return 1.0; }
+  double _scoreMatch(EdgeMatchPtr em) const;
 };
 
 }
