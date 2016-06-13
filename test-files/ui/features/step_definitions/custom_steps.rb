@@ -45,6 +45,11 @@ Then (/^I should (not )?see an element "([^"]*)"$/) do |negate, selector|
   page.send(expectation, have_css(selector))
 end
 
+Then (/^I should (not )?see the element (.*)$/) do |negate, selector|
+  expectation = negate ? :should_not : :should
+  page.send(expectation, have_css(selector))
+end
+
 Then(/^I should see "([^"]*)"$/) do |text|
   #page.should have_content(text)
   expect(page).to have_content(text)
@@ -498,4 +503,10 @@ When(/^I delete any existing "([^"]*)" basemap if necessary$/) do |text|
     Capybara.default_max_wait_time = oldTimeout
   rescue Capybara::ElementNotFound
   end
+end
+
+Then(/^I open the wfs export url$/) do
+  url = find('input.wfsfileExportOutputName').value
+  visit url
+  # need a way to check the WFS GetCapabilities response is valid
 end
