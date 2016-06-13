@@ -498,6 +498,10 @@ def readFeatures(xmlDoc,funcList):
     geoList = {'L':'Line', 'A':'Area', 'P':'Point','_':'None' }
     typeList = {'CodeList':'enumeration','CharacterString':'String','Real':'Real','Integer':'Integer',
                 'GM_Surface':'none', 'GM_Curve':'none','GM_Point':'none' }
+
+    # These attributes have non-standard defaults
+    customDefVal = {'ACC':'1', 'TXT':'N_A', 'SDP':'N_A', 'CON':'998'}
+
     tSchema = {}
 
     for feature in itemList:
@@ -601,6 +605,8 @@ def readFeatures(xmlDoc,funcList):
                             aDefVal = '-32767.0'
                         if aType == 'Integer':
                             aDefVal = '-32767'
+                        if aType == 'enumeration':
+                            aDefVal = '0'
 
                         continue
 
@@ -658,6 +664,10 @@ def readFeatures(xmlDoc,funcList):
 
                 # Now build a feature
                 if aType != 'none':
+                    # Sort out custom default values
+                    if aName in customDefVal:
+                        aDefVal = customDefVal[aName]
+
                     tSchema[rawfCode]['columns'][aName] = {}
                     tSchema[rawfCode]['columns'][aName] = { 'name':aName,
                                                             'desc':aDesc,

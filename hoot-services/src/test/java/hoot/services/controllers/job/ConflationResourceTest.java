@@ -28,6 +28,7 @@ package hoot.services.controllers.job;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.verify;
 
 import java.io.File;
@@ -54,6 +55,7 @@ import org.slf4j.LoggerFactory;
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class ConflationResourceTest {
@@ -91,36 +93,43 @@ public class ConflationResourceTest {
     @Test
     @Category(UnitTest.class)
     public void testProcessOsmApiDbInput() throws Exception {
-        final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader()
-                .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
-                .getPath()));
+        try {
+            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
+            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+                    .getContextClassLoader()
+                    .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
+                    .getPath()));
 
-        ConflationResource spy = Mockito.spy(new ConflationResource());
+            ConflationResource spy = Mockito.spy(new ConflationResource());
 
-        Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
-        final List<Long> mapIds = new ArrayList<>();
-        mapIds.add(new Long(1));
-        Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
-        final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
-        Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
+            Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
+            Mockito.doReturn(true).when(spy).mapExists(anyLong(), any(Connection.class));
+            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
+            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
+            final String jobId = ((JSONObject) (new JSONParser())
+                    .parse(spy.process(inputParams).getEntity().toString())).get("jobid").toString();
 
-        final String jobId = ((JSONObject) (new JSONParser()).parse(spy.process(inputParams).getEntity().toString()))
-                .get("jobid").toString();
+            // just checking that the request made it the command runner w/o
+            // error
+            // and that the map tag
+            // got added; testProcess checks the generated input at a more
+            // detailed
+            // level
+            verify(spy).postChainJobRquest(Matchers.matches(jobId),
+            // wasn't able to get the mockito matcher to take the timestamp
+            // regex...validated the
+            // regex externally, and it looks correct
+                    /*
+                     * Matchers.matches("\"osm_api_db_export_time\":\"" +
+                     * DbUtils.TIME_STAMP_REGEX + "\"")
+                     */
+                    AdditionalMatchers.and(Matchers.contains("osm_api_db_export_time"),
+                            Matchers.contains("\"conflateaoi\":\"0.0,0.0,0.0,0.0\"")));
+        }
+        finally {
+            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
+        }
 
-        // just checking that the request made it the command runner w/o error
-        // and that the map tag
-        // got added; testProcess checks the generated input at a more detailed
-        // level
-        verify(spy).postChainJobRquest(Matchers.matches(jobId),
-        // wasn't able to get the mockito matcher to take the timestamp
-        // regex...validated the
-        // regex externally, and it looks correct
-                /*
-                 * Matchers.matches("\"osm_api_db_export_time\":\"" +
-                 * DbUtils.TIME_STAMP_REGEX + "\"")
-                 */
-                AdditionalMatchers.and(Matchers.contains("osm_api_db_export_time"),
-                        Matchers.contains("\"conflateaoi\":\"0.0,0.0,0.0,0.0\"")));
     }
 
     // An OSM API DB input must always be a reference layer. Default ref layer =
@@ -130,6 +139,7 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testOsmApiDbInputAsSecondary() throws Exception {
         try {
+            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
             final String inputParams = FileUtils.readFileToString(new File(Thread
                     .currentThread()
                     .getContextClassLoader()
@@ -142,10 +152,14 @@ public class ConflationResourceTest {
             spy.process(inputParams);
         }
         catch (WebApplicationException e) {
+
             Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
             Assert.assertTrue(e.getResponse().getEntity().toString()
                     .contains("OSM_API_DB not allowed as secondary input type"));
             throw e;
+        }
+        finally {
+            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
         }
     }
 
@@ -153,6 +167,7 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testOsmApiDbInputAsSecondary2() throws Exception {
         try {
+            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
             final String inputParams = FileUtils.readFileToString(new File(Thread
                     .currentThread()
                     .getContextClassLoader()
@@ -170,34 +185,8 @@ public class ConflationResourceTest {
                     .contains("OSM_API_DB not allowed as secondary input type"));
             throw e;
         }
-    }
-
-    @Test(expected = WebApplicationException.class)
-    @Category(UnitTest.class)
-    public void testConflateOsmApiDbMultipleMapsWithSameName() throws Exception {
-        try {
-            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
-                    .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
-                    .getPath()));
-
-            ConflationResource spy = Mockito.spy(new ConflationResource());
-
-            Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
-            final List<Long> mapIds = new ArrayList<>();
-            // add two map id's
-            mapIds.add(new Long(1));
-            mapIds.add(new Long(2));
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
-            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
-            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
-
-            spy.process(inputParams);
-        }
-        catch (WebApplicationException e) {
-            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            Assert.assertTrue(e.getResponse().getEntity().toString().contains("Multiple maps with name"));
-            throw e;
+        finally {
+            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
         }
     }
 
@@ -205,17 +194,17 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testConflateOsmApiDbMissingMap() throws Exception {
         try {
-            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
+            final String inputParams = FileUtils.readFileToString(new File(Thread
+                    .currentThread()
                     .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
+                    .getResource(
+                            "hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbMissingMapInput.json")
                     .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
             Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
-            final List<Long> mapIds = new ArrayList<>();
-            // add no map id's
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
             final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
@@ -223,7 +212,44 @@ public class ConflationResourceTest {
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            Assert.assertTrue(e.getResponse().getEntity().toString().contains("No map exists with name"));
+            Assert.assertTrue(e.getResponse().getEntity().toString().contains("No secondary map exists with ID"));
+            throw e;
+        }
+        finally {
+            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
+        }
+    }
+
+    @Test(expected = WebApplicationException.class)
+    @Category(UnitTest.class)
+    public void testConflateOsmApiDbNotEnabled() throws Exception {
+        try {
+
+            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
+            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+                    .getContextClassLoader()
+                    .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
+                    .getPath()));
+
+            ConflationResource spy = Mockito.spy(new ConflationResource());
+
+            Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
+            final List<Long> mapIds = new ArrayList<>();
+            mapIds.add(new Long(1));
+            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
+            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
+
+            spy.process(inputParams);
+        }
+        catch (WebApplicationException e) {
+            Assert.assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e
+                    .getResponse()
+                    .getEntity()
+                    .toString()
+                    .contains(
+                            "Attempted to conflate an OSM API database data source but OSM API database"
+                                    + "support is disabled"));
             throw e;
         }
     }

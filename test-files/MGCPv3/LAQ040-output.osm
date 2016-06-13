@@ -9,30 +9,30 @@
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-6"/>
-        <tag k="source:ingest:datetime" v="2016-04-28T02:06:59.710Z"/>
+        <tag k="source:ingest:datetime" v="2016-06-09T06:31:44.439Z"/>
         <tag k="bridge" v="yes"/>
-        <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{0d2eae0f-4e9f-4622-bedb-7550a298e0d3}"/>
+        <tag k="source" v="mgcp:laq040"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-4"/>
         <tag k="width" v="5"/>
-        <tag k="source:ingest:datetime" v="2016-04-28T02:06:59.710Z"/>
+        <tag k="source:ingest:datetime" v="2016-06-09T06:31:44.439Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="condition" v="functional"/>
         <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="condition" v="functional"/>
         <tag k="bridge" v="yes"/>
-        <tag k="bridge:movable" v="no"/>
         <tag k="source:copyright" v="Copyright 2014 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="bridge:movable" v="no"/>
         <tag k="bridge:span_count" v="1"/>
         <tag k="transport:type" v="road"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="uuid" v="{C287D07A-D796-4083-AE87-1451E24C2E96}"/>
+        <tag k="uuid" v="{c287d07a-d796-4083-ae87-1451e24c2e96}"/>
+        <tag k="source" v="mgcp:laq040"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="bridge:structure" v="deck"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="source:datetime" v="2013-01-01T00:00:00Z"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="15"/>
@@ -42,7 +42,7 @@
         <nd ref="-2"/>
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="bridge" v="movable"/>
-        <tag k="source" v="mgcp"/>
+        <tag k="source" v="mgcp:laq040"/>
         <tag k="condition" v="construction"/>
         <tag k="name" v="Troll"/>
         <tag k="material" v="part_metal"/>
@@ -53,12 +53,12 @@
         <tag k="transport:type" v="road"/>
         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="width" v="5"/>
-        <tag k="source:ingest:datetime" v="2016-04-28T02:06:59.710Z"/>
+        <tag k="source:ingest:datetime" v="2016-06-09T06:31:44.438Z"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="bridge:structure" v="girder"/>
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2013-01-01T00:00:00Z"/>
-        <tag k="uuid" v="{94B89763-543B-4B0E-967F-FECB55396E37}"/>
+        <tag k="uuid" v="{94b89763-543b-4b0e-967f-fecb55396e37}"/>
         <tag k="error:circular" v="15"/>
     </way>
 </osm>

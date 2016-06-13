@@ -33,12 +33,25 @@ it is important to note that conflation occurs between similar feature types (e.
 polyline to Transportation polyline, etc.).
 
 ## Supported Data Formats
-_Import:_ Hootenanny can ingest shapefiles, openstreetmap (.osm), ESRI File Geodatabase (.gdb), and geonames.org (.geonames).  Additionally, 
-.zip files containing shapefiles and/or .gdb files can be uploaded.
+_Import:_ Hootenanny can ingest from:
+* Shapefile (.shp)
+* OpenStreetMap (.osm)
+* ESRI File Geodatabase (.gdb)
+* .zip files containing shapefiles and/or .gdb files
+* geonames.org (.geonames)
+* OSM API database sources (MapEdit, etc.; experimental feature; see documentation for workflow)
 
-_Export:_ There are currently four options for exporting data from Hootenanny: File Geodatabase (FGDB), Shapefile, OSM and Web 
-Feature Service (WFS). Note that .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the relevant 
-associated files, while WFS is exported as WFS Get Capabilities service URL that can be added into an OGC-enabled third party application
+_Export:_ Hootenanny can export to: 
+* Shapefile (.shp)
+* OpenStreetMap (.osm)
+* ESRI File Geodatabase (.gdb)
+* Web Feature Service (WFS)
+* OSM API database (MapEdit, etc.; experimental feature; see documentation for workflow)
+
+Note that .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the relevant 
+associated files, while WFS is exported as WFS Get Capabilities service URL that can be added into 
+an OGC-enabled third party application, and OSM API database export is done with an OSM changeset
+representing the before/after difference of conflated data.
 
 ## Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database structure to support translation between various 
