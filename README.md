@@ -33,7 +33,7 @@ it is important to note that conflation occurs between similar feature types (e.
 polyline to Transportation polyline, etc.).
 
 ## Supported Data Formats
-_Import:_ Hootenanny can ingest:
+_Import:_ Hootenanny can ingest from:
 * Shapefile (.shp)
 * OpenStreetMap (.osm)
 * ESRI File Geodatabase (.gdb)
@@ -41,7 +41,7 @@ _Import:_ Hootenanny can ingest:
 * geonames.org (.geonames)
 * OSM API database sources (MapEdit, etc.; experimental feature; see documentation for workflow)
 
-_Export:_ The options for exporting data from Hootenanny are: 
+_Export:_ Hootenanny can export to: 
 * Shapefile (.shp)
 * OpenStreetMap (.osm)
 * ESRI File Geodatabase (.gdb)
