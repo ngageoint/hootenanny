@@ -488,6 +488,9 @@ OSM data.
 There exists no mechanism in Hootenanny's iD Editor to upload data directly into an OSM API database from a file.  This can, however, be done 
 from the command line as explained in the "Hootenanny OSM API Database Conflation Testing Notes" section of the Hootenanny Developer's Guide.
 
+For more detailed information on the workflow involved with conflating data sourced from an OSM
+API database, see: https://github.com/ngageoint/hootenanny/wiki/MapEdit-Enhanced-Conflation-Workflow--(aka-%22Holy-Grail%22)
+
 === Conflation Examples
 
 The following conflation examples are provided as guidance to help users better understand potential conflation and review issues that may arise keeping in mind that each scenario will vary tremendously from one to another depending on the characteristics of the source input data.
