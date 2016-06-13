@@ -57,7 +57,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-ProbabilityOfMatch ProbabilityOfMatch::_default;
+auto_ptr<ProbabilityOfMatch> ProbabilityOfMatch::_default;
 bool ProbabilityOfMatch::debug = false;
 
 ProbabilityOfMatch::ProbabilityOfMatch()
@@ -155,6 +155,15 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const shared
   }
 
   return p;
+}
+
+ProbabilityOfMatch& ProbabilityOfMatch::getInstance()
+{
+  if (!_default.get())
+  {
+    _default.reset(new ProbabilityOfMatch());
+  }
+  return *_default;
 }
 
 double ProbabilityOfMatch::lengthScore(const ConstOsmMapPtr &map, const shared_ptr<const Way>& w1,
