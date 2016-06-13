@@ -72,7 +72,7 @@ public:
   static bool debug;
 
 private:
-  static auto_ptr<ProbabilityOfMatch> _default;
+  static shared_ptr<ProbabilityOfMatch> _theInstance;
   double _parallelExp;
   double _dMax;
 
