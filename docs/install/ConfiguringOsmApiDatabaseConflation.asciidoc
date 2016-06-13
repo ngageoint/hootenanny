@@ -12,3 +12,5 @@ $HOOT_HOME/conf/DatabaseConfigDefault.sh
 ** database port: DB_PORT_OSMAPI
 ** database username for conflating data: DB_USER_OSMAPI
 ** database password: DB_PASSWORD_OSMAPI
+
+WARNING: If you are running Hootenanny inside Vagrant, there is a risk that your configured OSM API database can be deleted when re-installing Hootenanny.  A fix will be available in: https://github.com/ngageoint/hootenanny/issues/812.

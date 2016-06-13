@@ -903,6 +903,30 @@ Attribute columns and values that do not match a one2one rule.
 
 Debugging: Print out which attributes are dropped during export validation.
 
+=== ogr.mgcp.extra
+
+* Data Type: string
+* Default Value: `file`
+
+When exporting to MGCP:
+- "file" Save the unused tags in a new layer (extra_[PLA]).
+- "note" Add unused tags to the "TXT" field.
+- "none" Don't save the unused tags, just drop them.
+
+NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of 255 characters. Extra text will be truncated.
+
+=== ogr.tds.extra
+
+* Data Type: string
+* Default Value: `note`
+
+When exporting to TDSv40 and TDSv61:
+- "note" Add unused tags to the "ZI006_MEM" field.
+- "file" Save the unused tags in a new layer (extra_[PLA]).
+- "none" Don't save the unused tags, just drop them.
+
+NOTE: If exporting to Shapefile, this field will be truncated to 255 characters.
+
 === ogr.import.filter
 
 * Data Type: string

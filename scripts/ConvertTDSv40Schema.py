@@ -282,7 +282,7 @@ def printToEnglish(schema):
     print '    TDSv40 "To English" Lookup Tables\n'
     print '    Huge piles of Ugly JSON!'
     print '*/\n'
-    print 'etds.rules = {'
+    print 'etds40.rules = {'
     print '    // Tables built from %s' % (main_csv_file)
 
     # Dump out the Enumerated Values
@@ -301,7 +301,7 @@ def printToEnglish(schema):
     print '    // FCode Lookup Table'
     print '    fcodeLookup : %s ,  // End of fcodeLookup\n' % (fList)
 
-    print '} // End of etds.rules\n'
+    print '} // End of etds40.rules\n'
 # End printToEnglish
 
 
@@ -335,7 +335,7 @@ def printFromEnglish(schema):
     print '    TDSv40 "From English" Lookup Tables\n'
     print '    Huge piles of Ugly JSON!'
     print '*/\n'
-    print 'etds_osm_rules = {'
+    print 'etds40_osm_rules = {'
     print '    // Tables built from %s' % (main_csv_file)
 
     # Dump out the Enumerated Values
@@ -346,7 +346,7 @@ def printFromEnglish(schema):
     print '    // Single Values'
     print '    singleValues : %s , // End of singleValues\n' % (sList)
 
-    print '} // End of etds_osm_rules\n'
+    print '} // End of etds40_osm_rules\n'
 # End printFromEnglish
 
 

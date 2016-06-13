@@ -48,6 +48,9 @@ tds = {
         // Add the eLTDS attributes
         if (config.getOgrTdsAddEtds() == 'true') tds.rawSchema = translate.addEtds(tds.rawSchema);
 
+        // Add empty "extra" feature layers if needed
+        if (config.getOgrTdsExtra() == 'file') tds61.rawSchema = translate.addExtraFeature(tds61.rawSchema);
+
      /*
         // This has been removed since we no longer have text enumerations in the schema
 
@@ -425,80 +428,112 @@ tds = {
     }, // End validateTDSAttrs
 
 
-    // Sort out if we need to return two features or one.
-    // This is generally for Roads/Railways & bridges but can also be for other features.
-    twoFeatures: function(geometryType, tags, attrs)
+    // Sort out if we need to return more than one feature.
+    // This is generally for Roads, Railways, bridges, tunnels etc.
+    manyFeatures: function(geometryType, tags, attrs)
     {
-        var newAttrs = {};
+        var newfeatures = [];
 
-        // Sort out Roads, Railways and Bridges.
-        if (geometryType == 'Line' && tags.bridge && (tags.highway || tags.railway))
+        // Add the first feature to the structure that we return
+        var returnData = [{attrs:attrs, tableName:''}];
+
+        // Sort out Roads, Railways, Bridges, Tunnels, Embankments and Cuttings.
+        if (geometryType == 'Line' && (tags.highway || tags.railway))
         {
-            if (attrs.F_CODE !== 'AQ040') // Not a Bridge
-            {
-                newAttrs.F_CODE = 'AQ040';
+            // var tagList = ['bridge','tunnel','embankment','ford','cutting'];
+            var tagList = ['bridge','tunnel','embankment','cutting'];
 
-                if (tags.highway)
-                {
-                    newAttrs.TRS = '13'; // Road
-                }
-                else if (tags.railway)
-                {
-                    newAttrs.TRS = '12'; // Railway
-                }
-            }
-            else // A Bridge
+            // 1. Look at the fcodes
+            // Bridge, Tunnel, Ford, Embankment, Cut
+            if (['AQ040','AQ130','BH070','DB090','DB070'].indexOf(attrs.F_CODE) > -1)
             {
-                if (tags.railway)
+                var nTags = JSON.parse(JSON.stringify(tags));
+                delete nTags.uuid;
+
+                // Roads can go over a Ford, Railways can't
+                tagList.push('ford');
+
+                for (var i in tagList)
                 {
-                    newAttrs.F_CODE = 'AN010'; // Railway
-                    attrs.TRS = '12'; // Railway
-                }
-                else
-                {
-                    if (tags.highway == 'track')
+                    if (nTags[tagList[i]] && nTags[tagList[i]] !== 'no')
                     {
-                        newAttrs.F_CODE = 'AP010';
+                        delete nTags[tagList[i]];
                     }
-                    else
-                    {   // The default is to make it a road
-                        newAttrs.F_CODE = 'AP030';
-                    }
+                } // End for tag list
 
-                    attrs.TRS = '13'; // Road
+                newfeatures.push({attrs: {}, tags: nTags});
+            }
+            // Now look for road type features
+            // Road, Cart Track, Trail
+            else if (['AP030','AP010','AP050'].indexOf(attrs.F_CODE) > -1)
+            {
+                // Roads can go over a Ford, Railways can't
+                tagList.push('ford');
+
+                for (var i in tagList)
+                {
+                    if (tags[tagList[i]] && tags[tagList[i]] !== 'no') // We have one of these...
+                    {
+                        var nTags = JSON.parse(JSON.stringify(tags));
+                        delete nTags.uuid;
+
+                        if (nTags.highway) // Paranoid.....
+                        {
+                            delete nTags.highway;
+                        }
+
+                        newfeatures.push({attrs: {'TRS':'13'}, tags: nTags});
+                        break;
+                    }
                 }
             }
+            // Now look for Railways
+            else if(['AN010','AN050'].indexOf(attrs.F_CODE) > -1)
+            {
+                for (var i in tagList)
+                {
+                    if (tags[tagList[i]] && tags[tagList[i]] !== 'no') // We have one of these...
+                    {
+                        var nTags = JSON.parse(JSON.stringify(tags));
+                        delete nTags.uuid;
 
-            // Remove the uuid from the tag list so we get a new one for the second feature
-            delete tags.uuid;
-        } // End sort out Road, Railway & Bridge
+                        if (nTags.railway) // Paranoid.....
+                        {
+                            delete nTags.railway;
+                        }
+                        newfeatures.push({attrs: {'TRS':'12'}, tags: nTags});
+                        break;
+                    }
+                }
+
+            } // End Railway
 
 
-        // If we are making a second feature, process it.
-        if (newAttrs.F_CODE)
+        } // End sort out Road, Railway, Bridge and Tunnel
+
+        // Loop through the new features and process them.
+        // Note: This is the same as we did for the main feature.
+        for (var i = 0, nFeat = newfeatures.length; i < nFeat; i++)
         {
-            // Now go make a second feature
             // pre processing
-            tds.applyToNfddPreProcessing(tags, newAttrs, geometryType);
-
-            // one 2 one - we call the version that knows about OTH fields
-            translate.applyNfddOne2One(tags, newAttrs, tds.lookup, tds.fcodeLookup, tds.ignoreList);
+            tds.applyToNfddPreProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType);
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newAttrs, tags, tds.rules.numBiased, 'backward',tds.rules.intList);
-            translate.applySimpleTxtBiased(newAttrs, tags, tds.rules.txtBiased, 'backward');
+            translate.applySimpleNumBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds.rules.numBiased, 'backward',tds.rules.intList);
+            translate.applySimpleTxtBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds.rules.txtBiased, 'backward');
+
+            // one 2 one - we call the version that knows about OTH fields
+            translate.applyNfddOne2One(newfeatures[i]['tags'], newfeatures[i]['attrs'], tds.lookup, tds.fcodeLookup);
 
             // post processing
-            tds.applyToNfddPostProcessing(tags, newAttrs, geometryType);
+            tds.applyToNfddPostProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType, {});
+
+            returnData.push({attrs: newfeatures[i]['attrs'],tableName: ''});
         }
 
-        // Debug:
-        // for (var i in newAttrs) print('twoFeatures: New Attrs:' + i + ': :' + newAttrs[i] + ':');
-
-        // Return the new attributes
-        return newAttrs;
-    }, // End twoFeatures
+        return returnData;
+    }, // End manyFeatures
 
 
     // ##### Start of the xxToOsmxx Block #####
@@ -596,7 +631,8 @@ tds = {
             }
         } // End in attrs loop
 
-
+        // Drop the FCSUBTYPE since we don't use it
+        if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
 
         // Drop all of the XXX Closure default values IFF the associated attributes are
         // not set.
@@ -777,11 +813,13 @@ tds = {
             }
        } // End if AP030
 
+        // Add the LayerName to the source
+        tags.source = 'tdsv40:' + layerName.toLowerCase();
+
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
-        tags.source = 'tdsv40';
-        if (attrs.UFI)
+        if (tags.uuid)
         {
-            tags.uuid = '{' + attrs['UFI'].toString().toLowerCase() + '}';
+            tags.uuid = '{' + tags['uuid'].toString().toLowerCase() + '}';
         }
         else
         {
@@ -968,6 +1006,28 @@ tds = {
             tags.amenity = 'place_of_worship';
         }
 
+        // Fords & Roads
+        if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
+        if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
+
+        // Unpack the TXT field
+        if (tags.note)
+        {
+            var tObj = translate.unpackMemo(tags.note);
+
+            if (tObj.tags !== '')
+            {
+                var tTags = JSON.parse(tObj.tags)
+                for (i in tTags)
+                {
+                    print('Memo: Add: ' + i + ' = ' + tTags[i]);
+                    if (tags[tTags[i]]) print('Overwrite:' + i + ' = ' + tTags[i]);
+                    tags[i] = tTags[i];
+                }
+
+                tags.note = tObj.text;
+            }
+        } // End unpack tags.note
 
     /* Putting this on hold as it will impact conflation
         // Tweek the "abandoned" tag. Should this be extended to "destroyed" as well?
@@ -999,24 +1059,31 @@ tds = {
 
     applyToNfddPreProcessing: function(tags, attrs, geometryType)
     {
-        // initial cleanup
-        for (var val in tags)
+        // Remove Hoot assigned tags for the source of the data
+        if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
+        if (tags.source) delete tags.source;
+        if (tags.area) delete tags.area;
+        if (tags['error:circular']) delete tags['error:circular'];
+        if (tags['hoot:status']) delete tags['hoot:status'];
+
+        // Initial cleanup
+        for (var i in tags)
         {
             // Remove empty tags
-            if (tags[val] == '')
+            if (tags[i] == '')
             {
-                delete tags[val];
+                delete tags[i];
                 continue;
             }
 
             // Convert "abandoned:XXX" features
-            if (val.indexOf('abandoned:') !== -1)
+            if (i.indexOf('abandoned:') !== -1)
             {
                 // Hopeing there is only one ':' in the tag name...
-                var tList = val.split(':');
-                tags[tList[1]] = tags[val];
+                var tList = i.split(':');
+                tags[tList[1]] = tags[i];
                 tags.condition = 'abandoned';
-                delete tags[val];
+                delete tags[i];
             }
         }
 
@@ -1055,7 +1122,7 @@ tds = {
             // ["t.landuse == 'meadow'","a.F_CODE = 'EB010'; t['grassland:type'] = 'meadow';"],
             ["t.leisure == 'sports_centre'","t.facility = 'yes'; t.use = 'recreation'; delete t.leisure"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
-            ["t.median == 'yes'","t.divider = 'yes'"],
+            ["t.median == 'yes'","t.is_divided = 'yes'"],
             ["t.natural == 'desert' && t.surface","t.desert_surface = t.surface; delete t.surface"],
             ["t.natural == 'wood'","t.landuse = 'forest'; delete t.natural"],
             ["t.power == 'pole'","t['cable:type'] = 'power';t['tower:shape'] = 'pole'"],
@@ -1071,8 +1138,9 @@ tds = {
             ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
             ["t.social_facility == 'shelter'","t.social_facility = t['social_facility:for']; delete t.amenity; delete t['social_facility:for']"],
             ["t['tower:type'] == 'minaret' && t.man_made == 'tower'","delete t.man_made"],
-            ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
+            ["t.tunnel == 'building_passage'","t.tunnel = 'yes'"],
             ["t.use == 'islamic_prayer_hall' && t.amenity == 'place_of_worship'","delete t.amenity"],
+            ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
             ["t.wetland && t.natural == 'wetland'","delete t.natural"],
             ["t.water == 'river'","t.waterway = 'river'"],
             ["t.waterway == 'riverbank'","t.waterway = 'river'"]
@@ -1130,7 +1198,13 @@ tds = {
             }
 
             // If we don't have a Feature Function then assign one.
-            if (!(attrs.FFN)) attrs.FFN = facilityList[tags.amenity];
+            if (!(attrs.FFN))
+            {
+                attrs.FFN = facilityList[tags.amenity];
+                // Debug
+                // print('PreDropped: amenity = ' + tags.amenity);
+                delete tags.amenity;
+            }
         }
 
         // Fix up water features from OSM
@@ -1328,7 +1402,7 @@ tds = {
 
     }, // End applyToNfddPreProcessing
 
-    applyToNfddPostProcessing : function (tags, attrs, geometryType)
+    applyToNfddPostProcessing : function (tags, attrs, geometryType, notUsedTags)
     {
         // Shoreline Construction (BB081) covers a lot of features
         if (attrs.PWC) attrs.F_CODE = 'BB081';
@@ -1379,9 +1453,9 @@ tds = {
         }
 
         // Sort out the UUID
-        if (tags.uuid)
+        if (attrs.UFI)
         {
-            var str = tags['uuid'].split(';');
+            var str = attrs['UFI'].split(';');
             attrs.UFI = str[0].replace('{','').replace('}','');
         }
         else
@@ -1471,7 +1545,6 @@ tds = {
                 attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
                 attrs.TRS = '999';
             }
-
         }
 
         // Fix HGT and LMC to keep GAIT happy
@@ -1505,7 +1578,13 @@ tds = {
         tags = {};  // The final output Tag list
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            print('In Layername: ' + layerName);
+            var kList = Object.keys(attrs).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+        }
+
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
@@ -1527,14 +1606,6 @@ tds = {
             tds.rules.one2one.push.apply(tds.rules.one2one,tds.rules.one2oneIn);
 
             tds.lookup = translate.createLookup(tds.rules.one2one);
-
-            // Build an Object with both the SimpleText & SimpleNum lists
-            tds.ignoreList = translate.joinList(tds.rules.numBiased, tds.rules.txtBiased);
-
-            // Add features to ignore
-            tds.ignoreList.F_CODE = '';
-            tds.ignoreList.FCSUBTYPE = '';
-            tds.ignoreList.UFI = '';
         }
 
         // pre processing
@@ -1544,18 +1615,30 @@ tds = {
         if (attrs.F_CODE)
         {
             var ftag = tds.fcodeLookup['F_CODE'][attrs.F_CODE];
-            tags[ftag[0]] = ftag[1];
-            // Debug: Dump out the tags from the FCODE
-            // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+            if (ftag)
+            {
+                tags[ftag[0]] = ftag[1];
+                // Debug: Dump out the tags from the FCODE
+                // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+            }
+            else
+            {
+                hoot.logVerbose('Translation for F_CODE ' + attrs.F_CODE + ' not found');
+            }
         }
 
-        // one 2 one
-        translate.applyOne2One(attrs, tags, tds.lookup, {'k':'v'}, tds.ignoreList);
+        // Make a copy of the input attributes so we can remove them as they get translated. Looking at what
+        // isn't used in the translation - this should end up empty.
+        // not in v8 yet: // var tTags = Object.assign({},tags);
+        var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
-        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'forward',[]);
-        translate.applySimpleTxtBiased(attrs, tags, tds.rules.txtBiased, 'forward');
+        translate.applySimpleNumBiased(notUsedAttrs, tags, tds.rules.numBiased, 'forward',[]);
+        translate.applySimpleTxtBiased(notUsedAttrs, tags, tds.rules.txtBiased, 'forward');
+
+        // one 2 one
+        translate.applyOne2One(notUsedAttrs, tags, tds.lookup, {'k':'v'});
 
         // Crack open the OTH field and populate the appropriate attributes
         // The OTH format is _supposed_ to be (<attr>:<value>) but anything is possible
@@ -1567,15 +1650,13 @@ tds = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+            var kList = Object.keys(tags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
         }
 
         // Debug: Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
-
-        if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
-        if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
         return tags;
     }, // End of toOsm
@@ -1587,10 +1668,8 @@ tds = {
     toNfdd : function(tags, elementType, geometryType)
     {
         var tableName = ''; // The final table name
+        var returnData = []; // The array of features to return
         attrs = {}; // The output
-        var tableName2 = ''; // The second table name - will populate if appropriate
-        var attrs2 = {}; // The second feature - will populate if appropriate
-
         attrs.F_CODE = ''; // Initial setup
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
@@ -1604,7 +1683,8 @@ tds = {
         if (config.getOgrDebugDumptags() == 'true')
         {
             print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
-            for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+            var kList = Object.keys(tags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
         }
 
         // The Nuke Option: If we have a relation, drop the feature and carry on
@@ -1633,32 +1713,39 @@ tds = {
             tds.lookup = translate.createBackwardsLookup(tds.rules.one2one);
             // translate.dumpOne2OneLookup(tds.lookup);
 
-            // Build a list of things to ignore and flip is backwards
-            tds.ignoreList = translate.flipList(translate.joinList(tds.rules.numBiased, tds.rules.txtBiased));
-
-            // Add some more features to ignore
-            tds.ignoreList.uuid = '';
-            tds.ignoreList.source = '';
-            tds.ignoreList.area = '';
-            tds.ignoreList['note:extra'] = '';
-            tds.ignoreList['hoot:status'] = '';
-            tds.ignoreList['error:circular'] = '';
         }
 
-        // pre processing
+        // Pre Processing
         tds.applyToNfddPreProcessing(tags, attrs, geometryType);
 
-        // one 2 one - we call the version that knows about OTH fields
-        translate.applyNfddOne2One(tags, attrs, tds.lookup, tds.fcodeLookup, tds.ignoreList);
+        // Make a copy of the input tags so we can remove them as they get translated. What is left is
+        // the not used tags.
+        // not in v8 yet: // var tTags = Object.assign({},tags);
+        var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
-        // apply the simple number and text biased rules
-        // Note: These are BACKWARD, not forward!
-        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'backward',tds.rules.intList);
-        translate.applySimpleTxtBiased(attrs, tags, tds.rules.txtBiased, 'backward');
+        // Apply the simple number and text biased rules
+        // NOTE: These are BACKWARD, not forward!
+        // NOTE: These delete tags as they are used
+        translate.applySimpleNumBiased(attrs, notUsedTags, tds.rules.numBiased, 'backward',tds.rules.intList);
+        translate.applySimpleTxtBiased(attrs, notUsedTags, tds.rules.txtBiased, 'backward');
+
+        // one 2 one - we call the version that knows about OTH fields
+        // NOTE: This deletes tags as they are used
+        translate.applyNfddOne2One(notUsedTags, attrs, tds.lookup, tds.fcodeLookup);
 
         // post processing
         // tds.applyToNfddPostProcessing(attrs, tableName, geometryType);
-        tds.applyToNfddPostProcessing(tags, attrs, geometryType);
+        tds.applyToNfddPostProcessing(tags, attrs, geometryType, notUsedTags);
+
+        // Debug
+        // for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
+
+        // If we have unused tags, add them to the memo field.
+        if (Object.keys(notUsedTags).length > 0 && config.getOgrTdsExtra() == 'note')
+        {
+            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+            attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
+        }
 
         // Now check for invalid feature geometry
         // E.g. If the spec says a runway is a polygon and we have a line, throw error and
@@ -1674,20 +1761,12 @@ tds = {
             // Dump out what attributes we have converted before they get wiped out
             if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
 
-            for (var i in tags)
-            {
-                // Clean out all of the source: hoot: and error: tags to save space
-                // if (i.indexOf('source:') !== -1) delete tags[i];
-                if (i.indexOf('hoot:') !== -1) delete tags[i];
-                if (i.indexOf('error:') !== -1) delete tags[i];
-            }
-
             // Convert all of the Tags to a string so we can jam it into an attribute
             var str = JSON.stringify(tags);
 
+            // Shapefiles can't handle fields > 254 chars.
             // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
             // A nicer thing would be to arrange the tags until they fit neatly
-            // Apparently Shape & FGDB can't handle fields > 254 chars.
             if (str.length < 255 || config.getOgrSplitO2s() == 'false')
             {
                 // return {attrs:{tag1:str}, tableName: tableName};
@@ -1708,91 +1787,87 @@ tds = {
                          tag3:str.substring(506,759),
                          tag4:str.substring(759,1012)};
             }
+
+            returnData.push({attrs: attrs, tableName: tableName});
         }
         else // We have a feature
         {
-            // Check if we need to make a second feature.
-            attrs2 = tds.twoFeatures(geometryType,tags,attrs);
+            // Check if we need to make more features.
+            // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
+            returnData = tds.manyFeatures(geometryType,tags,attrs);
 
-            // If we have a second feature, we need another layer name
-            if (attrs2.F_CODE)
+            // Debug: Add the first feature
+            //returnData.push({attrs: attrs, tableName: ''});
+
+
+            // Now go through the features and clean them up.
+            var gType = geometryType.toString().charAt(0);
+            for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
-                // Repeat the feature validation and adding attributes
-                var gFcode2 = geometryType.toString().charAt(0) + attrs2.F_CODE;
 
                 // Validate attrs: remove all that are not supposed to be part of a feature
-                tds.validateAttrs(geometryType,attrs2);
+                tds.validateAttrs(geometryType,returnData[i]['attrs']);
 
                 // Now set the FCSubtype.
                 // NOTE: If we export to shapefile, GAIT _will_ complain about this
-                if (config.getOgrTdsAddFcsubtype() == 'true') attrs2.FCSUBTYPE = tds.rules.subtypeList[attrs2.F_CODE];
+                if (config.getOgrTdsAddFcsubtype() == 'true')
+                {
+                    returnData[i]['attrs']['FCSUBTYPE'] = tds.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
+                }
 
-                // If we are using the TDS structure, fill the rest of the unused attrs in the schema
+                var gFcode = gType + returnData[i]['attrs']['F_CODE'];
+                // If we are using the TDS structre, fill the rest of the unused attrs in the schema
                 if (config.getOgrTdsStructure() == 'true')
                 {
-                    tableName2 = tds.rules.thematicGroupList[gFcode2];
-                    tds.validateTDSAttrs(gFcode2, attrs2);
+                    returnData[i]['tableName'] = tds.rules.thematicGroupList[gFcode];
+                    tds.validateTDSAttrs(gFcode, returnData[i]['attrs']);
                 }
                 else
                 {
-                    tableName2 = layerNameLookup[gFcode2.toUpperCase()];
+                    returnData[i]['tableName'] = layerNameLookup[gFcode.toUpperCase()];
                 }
-            } // End if attrs2.F_CODE
+            } // End returnData loop
 
-            // Validate attrs: remove all that are not supposed to be part of a feature
-            tds.validateAttrs(geometryType,attrs);
-
-            // Now set the FCSubtype.
-            // NOTE: If we export to shapefile, GAIT _will_ complain about this
-            if (config.getOgrTdsAddFcsubtype() == 'true') attrs.FCSUBTYPE = tds.rules.subtypeList[attrs.F_CODE];
-
-            // If we are using the TDS structre, fill the rest of the unused attrs in the schema
-            if (config.getOgrTdsStructure() == 'true')
+            // If we have unused tags, throw them into the "extra" layer
+            if (Object.keys(notUsedTags).length > 0 && config.getOgrTdsExtra() == 'file')
             {
-                tableName = tds.rules.thematicGroupList[gFcode];
-                tds.validateTDSAttrs(gFcode, attrs);
-            }
-            else
+                var extraFeature = {};
+                extraFeature.tags = JSON.stringify(notUsedTags);
+                extraFeature.uuid = attrs.UID;
+
+                var extraName = 'extra_' + geometryType.toString().charAt(0);
+
+                returnData.push({attrs: extraFeature, tableName: extraName});
+            } // End notUsedTags
+
+            // Look for Review tags and push them to a review layer if found
+            if (tags['hoot:review:needs'] == 'yes')
             {
-                tableName = layerNameLookup[gFcode.toUpperCase()];
-            }
+                var reviewAttrs = {};
+
+                // Note: Some of these may be "undefined"
+                reviewAttrs.note = tags['hoot:review:note'];
+                reviewAttrs.score = tags['hoot:review:score'];
+                reviewAttrs.uuid = tags.uuid;
+                reviewAttrs.source = tags['hoot:review:source'];
+
+                var reviewTable = 'review_' + geometryType.toString().charAt(0);
+                returnData.push({attrs: reviewAttrs, tableName: reviewTable});
+            } // End ReviewTags
 
         } // End else We have a feature
 
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            print('TableName: ' + tableName + '  FCode: ' + attrs.F_CODE + '  Geom: ' + geometryType);
-
-            if (tableName2 !== '') print('TableName2: ' + tableName2 + '  FCode: ' + attrs2.F_CODE + '  Geom: ' + geometryType);
-
-            for (var i in attrs) print('Out Attrs:' + i + ': :' + attrs[i] + ':');
-
-            if (attrs2.F_CODE) for (var i in attrs2) print('2Out Attrs:' + i + ': :' + attrs2[i] + ':');
-
+            for (var i = 0, fLen = returnData.length; i < fLen; i++)
+            {
+                print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+                // for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
+                var kList = Object.keys(returnData[i]['attrs']).sort()
+                for (var j = 0, kLen = kList.length; j < kLen; j++) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
+            }
             print('');
-        }
-
-        var returnData = [{attrs:attrs, tableName: tableName}];
-
-        if (attrs2.F_CODE)
-        {
-            returnData.push({attrs: attrs2, tableName: tableName2});
-        }
-
-        // Look for Review tags and push them to a review layer if found
-        if (tags['hoot:review:needs'] == 'yes')
-        {
-            var reviewAttrs = {};
-
-            // Note: Some of these may be "undefined"
-            reviewAttrs.note = tags['hoot:review:note'];
-            reviewAttrs.score = tags['hoot:review:score'];
-            reviewAttrs.uuid = tags.uuid;
-            reviewAttrs.source = tags['hoot:review:source'];
-
-            var reviewTable = 'review_' + geometryType.toString().charAt(0);
-            returnData.push({attrs: reviewAttrs, tableName: reviewTable});
         }
 
         return returnData;

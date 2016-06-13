@@ -45,6 +45,10 @@ Then (/^I should (not )?see an element "([^"]*)"$/) do |negate, selector|
   page.send(expectation, have_css(selector))
 end
 
+Then (/^I should (not )?see the element (.*)$/) do |negate, selector|
+  expectation = negate ? :should_not : :should
+  page.send(expectation, have_css(selector))
+end
 Then(/^I should see "([^"]*)"$/) do |text|
   #page.should have_content(text)
   expect(page).to have_content(text)
@@ -59,7 +63,6 @@ Then(/^I should see an alert containing "([^"]*)"$/) do |text|
   alertText = page.driver.browser.switch_to.alert.text
   expect(alertText).to include text
 end
-
 Then (/^I should( not)? see a link "([^"]*)"$/) do |negate, txt|
   expectation = negate ? :should_not : :should
   if negate
@@ -148,6 +151,15 @@ Then(/^I should see options in this order:$/) do |table|
   actual_order.should == expected_order
 end
 
+Then(/^I should see these tags in the table:$/) do |table|
+  include_hidden_fields do
+    expected = table.raw
+    keys = page.all('ul.tag-list input.key').map(&:value)
+    values = page.all('ul.tag-list input.value').map(&:value)
+    actual = keys.zip(values)
+    actual.should == expected
+  end
+end
 Then(/^I click on the "([^"]*)" option in the "([^"]*)"$/) do |label,div|
   find('#' + div).find('label', :text => label).click
 end
@@ -394,7 +406,7 @@ Then(/^I type "([^"]*)" in input "([^"]*)"$/) do |text, id|
 end
 
 Then(/^I click the "([^"]*)" with text "([^"]*)"$/) do |el, text|
-  page.find(el, :text => text)
+  page.find(el, :text => text).click
 end
 
 Then(/^I accept the alert$/) do
@@ -503,4 +515,10 @@ When(/^I delete any existing "([^"]*)" basemap if necessary$/) do |text|
     Capybara.default_max_wait_time = oldTimeout
   rescue Capybara::ElementNotFound
   end
+end
+
+Then(/^I open the wfs export url$/) do
+  url = find('input.wfsfileExportOutputName').value
+  visit url
+  # need a way to check the WFS GetCapabilities response is valid
 end

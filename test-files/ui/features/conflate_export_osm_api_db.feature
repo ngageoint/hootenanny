@@ -15,6 +15,8 @@ Feature: Conflate and Export OSM API Database Dataset
     Then I wait 30 "seconds" to see "Conflate"
     And I press "Conflate"
     And I scroll element into view and press "conflate2"
+    # I couldn't figure out how to do a "wait to see" step def for an alert...if possible, would speed this
+    # and the other ones like it in this file up quite a bit.
     And I wait 30 seconds
     Then I should see an alert containing "OSM API database not allowed as secondary layer input"
     Then I accept the alert
