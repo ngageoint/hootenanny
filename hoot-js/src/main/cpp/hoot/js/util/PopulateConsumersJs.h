@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -43,6 +43,8 @@
 #include <hoot/js/util/JsFunctionConsumer.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
 #include <hoot/js/algorithms/aggregator/ValueAggregatorJs.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/js/OsmMapJs.h>
 
 // node.js
 // #include <nodejs/node.h>
@@ -102,6 +104,10 @@ public:
         {
           populateValueAggregatorConsumer<T>(consumer, v);
         }
+        else if (str(obj->Get(baseClass())) == QString::fromStdString(OsmMap::className()))
+        {
+          populateOsmMapConsumer<T>(consumer, v);
+        }
         else
         {
           throw IllegalArgumentException("Unexpected object passed to consumer " +
@@ -156,6 +162,29 @@ public:
     else
     {
       c->addCriterion(obj->getCriterion());
+    }
+  }
+
+  template <typename T>
+  static void populateOsmMapConsumer(T* consumer, const v8::Local<v8::Value>& v)
+  {
+    OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(v->ToObject());
+    ConstOsmMapConsumer* constOsmMapConsumer = dynamic_cast<ConstOsmMapConsumer*>(consumer);
+    if (constOsmMapConsumer == 0)
+    {
+      OsmMapConsumer* osmMapConsumer = dynamic_cast<OsmMapConsumer*>(consumer);
+      if (osmMapConsumer == 0)
+      {
+        throw IllegalArgumentException("Object does not accept an OsmMap as an argument.");
+      }
+      else
+      {
+        osmMapConsumer->setOsmMap(obj->getMap().get());
+      }
+    }
+    else
+    {
+      constOsmMapConsumer->setOsmMap(obj->getConstMap().get());
     }
   }
 
