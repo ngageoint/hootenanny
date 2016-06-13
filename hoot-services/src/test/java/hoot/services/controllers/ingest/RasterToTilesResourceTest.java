@@ -26,8 +26,11 @@
  */
 package hoot.services.controllers.ingest;
 
+import java.lang.reflect.Method;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -41,13 +44,14 @@ public class RasterToTilesResourceTest {
     @Category(UnitTest.class)
     public void TestIngestOSMResource() throws Exception {
         String processScriptName = HootProperties.getProperty("RasterToTiles");
-        org.junit.Assert.assertNotNull(processScriptName);
-        org.junit.Assert.assertTrue(processScriptName.length() > 0);
+        Assert.assertNotNull(processScriptName);
+        Assert.assertTrue(!processScriptName.isEmpty());
 
         RasterToTilesService rts = new RasterToTilesService();
 
-        org.junit.Assert.assertNotNull(RasterToTilesService._tileServerPath);
-        org.junit.Assert.assertTrue(RasterToTilesService._tileServerPath.length() > 0);
+        String tileServerPath = HootProperties.getProperty("tileServerPath");
+        Assert.assertNotNull(tileServerPath);
+        Assert.assertTrue(!tileServerPath.isEmpty());
 
         JSONObject oExpected = new JSONObject();
         oExpected.put("caller", "RasterToTilesService");
@@ -55,7 +59,7 @@ public class RasterToTilesResourceTest {
 
         JSONArray params = new JSONArray();
         JSONObject param = new JSONObject();
-        param.put("RASTER_OUTPUT_DIR", RasterToTilesService._tileServerPath);
+        param.put("RASTER_OUTPUT_DIR", tileServerPath);
         params.add(param);
 
         param = new JSONObject();
@@ -79,19 +83,26 @@ public class RasterToTilesResourceTest {
         oExpected.put("exectype", "make");
         oExpected.put("erroraswarning", "true");
 
-        String actual = rts._createCommand("test", "0-1 2-3", 500, 1);
+        Method createCommandMethod = RasterToTilesService.class.
+                getDeclaredMethod("createCommand", String.class, String.class, int.class, long.class);
 
-        org.junit.Assert.assertEquals(oExpected.toString(), actual);
+        createCommandMethod.setAccessible(true);
+
+        String actual = (String) createCommandMethod.invoke(rts, "test", "0-1 2-3", 500, 1);
+
+        Assert.assertEquals(oExpected.toString(), actual);
     }
 
     @Test
     @Category(UnitTest.class)
     public void TestGetZoomInfo() throws Exception {
         RasterToTilesService rts = new RasterToTilesService();
-        JSONObject oActual = rts._getZoomInfo(0.025);
+        Method getZoomInfoMethod = RasterToTilesService.class.getDeclaredMethod("getZoomInfo", double.class);
+        getZoomInfoMethod.setAccessible(true);
 
-        org.junit.Assert.assertEquals("0-1 2-3 4-5 6-7 8-9 10-11 12-13 14-15 16-17",
-                oActual.get("zoomlist").toString());
-        org.junit.Assert.assertEquals(500, oActual.get("rastersize"));
+        JSONObject oActual = (JSONObject) getZoomInfoMethod.invoke(rts, 0.025);
+
+        Assert.assertEquals("0-1 2-3 4-5 6-7 8-9 10-11 12-13 14-15 16-17", oActual.get("zoomlist").toString());
+        Assert.assertEquals(500, oActual.get("rastersize"));
     }
 }

@@ -516,7 +516,6 @@ public class FileUploadResourceTest {
                 Assert.assertEquals("ZIP", oJ.get("INPUT_TYPE").toString());
                 nP++;
             }
-
         }
 
         Assert.assertEquals(3, nP);
@@ -705,7 +704,6 @@ public class FileUploadResourceTest {
                 Assert.assertEquals("OSM", oJ.get("INPUT_TYPE").toString());
                 nP++;
             }
-
         }
 
         Assert.assertEquals(3, nP);

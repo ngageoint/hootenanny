@@ -57,8 +57,7 @@ import hoot.services.models.osm.Map;
 
 
 public class ConflationResourceTest {
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(ConflationResourceTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConflationResourceTest.class);
 
     @Test
     @Category(UnitTest.class)
@@ -91,36 +90,36 @@ public class ConflationResourceTest {
     @Test
     @Category(UnitTest.class)
     public void testProcessOsmApiDbInput() throws Exception {
-        final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader()
-                .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
-                .getPath()));
+        String inputParams = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader()
+            .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
+            .getPath()));
 
         ConflationResource spy = Mockito.spy(new ConflationResource());
 
         Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
-        final List<Long> mapIds = new ArrayList<>();
-        mapIds.add(new Long(1));
+
+        List<Long> mapIds = new ArrayList<>();
+        mapIds.add(1L);
         Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
-        final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
+
+        BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
         Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-        final String jobId = ((JSONObject) (new JSONParser()).parse(spy.process(inputParams).getEntity().toString()))
-                .get("jobid").toString();
+        String jobId = ((JSONObject) (new JSONParser()).parse(spy.process(inputParams).getEntity().toString())).get("jobid").toString();
 
         // just checking that the request made it the command runner w/o error
-        // and that the map tag
-        // got added; testProcess checks the generated input at a more detailed
-        // level
+        // and that the map tag got added; testProcess checks the generated input at a more detailed level
         verify(spy).postChainJobRquest(Matchers.matches(jobId),
+
         // wasn't able to get the mockito matcher to take the timestamp
         // regex...validated the
         // regex externally, and it looks correct
-                /*
-                 * Matchers.matches("\"osm_api_db_export_time\":\"" +
-                 * DbUtils.TIME_STAMP_REGEX + "\"")
-                 */
-                AdditionalMatchers.and(Matchers.contains("osm_api_db_export_time"),
-                        Matchers.contains("\"conflateaoi\":\"0.0,0.0,0.0,0.0\"")));
+        /*
+         * Matchers.matches("\"osm_api_db_export_time\":\"" +
+         * DbUtils.TIME_STAMP_REGEX + "\"")
+         */
+        AdditionalMatchers.and(Matchers.contains("osm_api_db_export_time"),
+                Matchers.contains("\"conflateaoi\":\"0.0,0.0,0.0,0.0\"")));
     }
 
     // An OSM API DB input must always be a reference layer. Default ref layer =
@@ -130,12 +129,11 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testOsmApiDbInputAsSecondary() throws Exception {
         try {
-            final String inputParams = FileUtils.readFileToString(new File(Thread
-                    .currentThread()
-                    .getContextClassLoader()
-                    .getResource(
-                            "hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondaryInput.json")
-                    .getPath()));
+            String inputParams = FileUtils.readFileToString(new File(Thread
+                .currentThread()
+                .getContextClassLoader()
+                .getResource("hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondaryInput.json")
+                .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
             Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
@@ -153,12 +151,11 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testOsmApiDbInputAsSecondary2() throws Exception {
         try {
-            final String inputParams = FileUtils.readFileToString(new File(Thread
-                    .currentThread()
-                    .getContextClassLoader()
-                    .getResource(
-                            "hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondary2Input.json")
-                    .getPath()));
+            String inputParams = FileUtils.readFileToString(new File(Thread
+                .currentThread()
+                .getContextClassLoader()
+                .getResource("hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondary2Input.json")
+                .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
             Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
@@ -176,20 +173,23 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testConflateOsmApiDbMultipleMapsWithSameName() throws Exception {
         try {
-            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
-                    .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
-                    .getPath()));
+            String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+                .getContextClassLoader()
+                .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
+                .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
             Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
-            final List<Long> mapIds = new ArrayList<>();
+
+            List<Long> mapIds = new ArrayList<>();
             // add two map id's
-            mapIds.add(new Long(1));
-            mapIds.add(new Long(2));
+            mapIds.add(1L);
+            mapIds.add(2L);
+
             Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
-            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
+
+            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
             spy.process(inputParams);
@@ -205,18 +205,20 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testConflateOsmApiDbMissingMap() throws Exception {
         try {
-            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
-                    .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
-                    .getPath()));
+            String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+                .getContextClassLoader()
+                .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
+                .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
             Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
-            final List<Long> mapIds = new ArrayList<>();
+            List<Long> mapIds = new ArrayList<>();
+
             // add no map id's
             Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
-            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
+
+            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
             spy.process(inputParams);

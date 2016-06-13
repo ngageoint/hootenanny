@@ -49,7 +49,7 @@ import hoot.services.writers.osm.CapabilitiesResponseWriter;
  */
 @Path("/api/capabilities")
 public class CapabilitiesResource {
-    private static final Logger log = LoggerFactory.getLogger(CapabilitiesResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(CapabilitiesResource.class);
 
     /**
      * The Hootenanny Capabilities Service implements the OSM Capabilities
@@ -65,17 +65,18 @@ public class CapabilitiesResource {
     @Produces(MediaType.TEXT_XML)
     public Response get() {
         try {
-            log.info("Retrieving capabilities...");
+            logger.info("Retrieving capabilities...");
 
             Document responseDoc = (new CapabilitiesResponseWriter()).writeResponse();
-            log.debug("Returning response: " + StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100)
-                    + " ...");
+
+            logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100));
+
             return Response.ok(new DOMSource(responseDoc), MediaType.TEXT_XML)
-                    .header("Content-type", MediaType.TEXT_XML).build();
+                           .header("Content-type", MediaType.TEXT_XML).build();
         }
         catch (Exception e) {
-            final String message = "Error retrieving capabilities: " + e.getMessage();
-            log.error(message);
+            String message = "Error retrieving capabilities: " + e.getMessage();
+            logger.error(message);
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build();
         }
     }

@@ -26,13 +26,13 @@
  */
 package hoot.services.controllers.info;
 
-import static org.junit.Assert.*;
 
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -41,30 +41,30 @@ import hoot.services.UnitTest;
 
 
 public class ReportsResourceTest {
-    static ReportsResource _rps = null;
+    private static ReportsResource rps;
 
     @BeforeClass
     public static void oneTimeSetup() {
-        _rps = new ReportsResource();
-        assertNotNull(ReportsResource._homeFolder);
-        assertNotNull(ReportsResource._rptStorePath);
+        rps = new ReportsResource();
+        Assert.assertNotNull(ReportsResource._homeFolder);
+        Assert.assertNotNull(ReportsResource._rptStorePath);
     }
 
     @Test
     @Category(UnitTest.class)
     public void testGetMetaData() throws Exception {
         String storePath = ReportsResource._homeFolder + "/" + ReportsResource._rptStorePath;
-        File f = new File(storePath);
+        File dir = new File(storePath);
         File fWks = new File(storePath + "/123_test");
         if (fWks.exists()) {
             FileUtils.forceDelete(fWks);
         }
-        FileUtils.forceMkdir(f);
-        JSONObject res = _rps._getMetaData("123_test");
-        assertNull(res.get("name"));
+        FileUtils.forceMkdir(dir);
+        JSONObject res = rps._getMetaData("123_test");
+        Assert.assertNull(res.get("name"));
 
         FileUtils.forceMkdir(fWks);
-        String currTime = "" + System.currentTimeMillis();
+        String currTime = String.valueOf(System.currentTimeMillis());
         JSONObject metaData = new JSONObject();
         metaData.put("name", "Test Report1");
         metaData.put("description", "This is test report 1");
@@ -73,23 +73,21 @@ public class ReportsResourceTest {
         File meta = new File(storePath + "/123_test/meta.data");
         FileUtils.write(meta, metaData.toJSONString());
 
-        res = _rps._getMetaData("123_test");
+        res = rps._getMetaData("123_test");
 
-        org.junit.Assert.assertEquals("Test Report1", res.get("name").toString());
-        org.junit.Assert.assertEquals("This is test report 1", res.get("description").toString());
-        org.junit.Assert.assertEquals(currTime, res.get("created").toString());
-        org.junit.Assert.assertEquals("reportpath", storePath + "/123_test/report.pdf",
-                res.get("reportpath").toString());
+        Assert.assertEquals("Test Report1", res.get("name").toString());
+        Assert.assertEquals("This is test report 1", res.get("description").toString());
+        Assert.assertEquals(currTime, res.get("created").toString());
+        Assert.assertEquals("reportpath", storePath + "/123_test/report.pdf", res.get("reportpath").toString());
 
         FileUtils.forceDelete(fWks);
-
     }
 
     @Test
     @Category(UnitTest.class)
     public void testGetReportsList() throws Exception {
         String storePath = ReportsResource._homeFolder + "/" + ReportsResource._rptStorePath;
-        File f = new File(storePath);
+        File file = new File(storePath);
         File fWks1 = new File(storePath + "/123_test1");
         if (fWks1.exists()) {
             FileUtils.forceDelete(fWks1);
@@ -104,10 +102,10 @@ public class ReportsResourceTest {
         if (fWks3.exists()) {
             FileUtils.forceDelete(fWks3);
         }
-        FileUtils.forceMkdir(f);
+        FileUtils.forceMkdir(file);
 
         FileUtils.forceMkdir(fWks1);
-        String currTime = "" + System.currentTimeMillis();
+        String currTime = String.valueOf(System.currentTimeMillis());
         JSONObject metaData = new JSONObject();
         metaData.put("name", "Test Report1");
         metaData.put("description", "This is test report 1");
@@ -117,7 +115,7 @@ public class ReportsResourceTest {
         FileUtils.write(meta, metaData.toJSONString());
 
         FileUtils.forceMkdir(fWks2);
-        currTime = "" + System.currentTimeMillis();
+        currTime = String.valueOf(System.currentTimeMillis());
         metaData = new JSONObject();
         metaData.put("name", "Test Report2");
         metaData.put("description", "This is test report 2");
@@ -127,7 +125,7 @@ public class ReportsResourceTest {
         FileUtils.write(meta, metaData.toJSONString());
 
         FileUtils.forceMkdir(fWks3);
-        currTime = "" + System.currentTimeMillis();
+        currTime = String.valueOf(System.currentTimeMillis());
         metaData = new JSONObject();
         metaData.put("name", "Test Report3");
         metaData.put("description", "This is test report 3");
@@ -136,7 +134,7 @@ public class ReportsResourceTest {
         meta = new File(storePath + "/123_test3/meta.data");
         FileUtils.write(meta, metaData.toJSONString());
 
-        JSONArray out = _rps._getReportsList();
+        JSONArray out = rps._getReportsList();
 
         int nCount1 = 0;
         int nCount2 = 0;
@@ -154,12 +152,11 @@ public class ReportsResourceTest {
             if (jo.get("name").toString().equals("Test Report3")) {
                 nCount3++;
             }
-
         }
 
-        assertEquals(1, nCount1);
-        assertEquals(1, nCount2);
-        assertEquals(1, nCount3);
+        Assert.assertEquals(1, nCount1);
+        Assert.assertEquals(1, nCount2);
+        Assert.assertEquals(1, nCount3);
 
         FileUtils.forceDelete(fWks1);
         FileUtils.forceDelete(fWks2);
@@ -170,15 +167,15 @@ public class ReportsResourceTest {
     @Category(UnitTest.class)
     public void testGetReportFile() throws Exception {
         String storePath = ReportsResource._homeFolder + "/" + ReportsResource._rptStorePath;
-        File f = new File(storePath);
+        File dir = new File(storePath);
         File fWks = new File(storePath + "/123_test_file");
         if (fWks.exists()) {
             FileUtils.forceDelete(fWks);
         }
-        FileUtils.forceMkdir(f);
+        FileUtils.forceMkdir(dir);
 
         FileUtils.forceMkdir(fWks);
-        String currTime = "" + System.currentTimeMillis();
+        String currTime = String.valueOf(System.currentTimeMillis());
         JSONObject metaData = new JSONObject();
         metaData.put("name", "Test Report1");
         metaData.put("description", "This is test report 1");
@@ -187,13 +184,13 @@ public class ReportsResourceTest {
         File meta = new File(storePath + "/123_test_file/meta.data");
         FileUtils.write(meta, metaData.toJSONString());
 
-        File fout = _rps._getReportFile("123_test_file");
+        File fout = rps._getReportFile("123_test_file");
 
-        assertNotNull(fout);
+        Assert.assertNotNull(fout);
 
-        fout = _rps._getReportFile("123_test_file_not_there");
+        fout = rps._getReportFile("123_test_file_not_there");
 
-        assertNull(fout);
+        Assert.assertNull(fout);
 
         FileUtils.forceDelete(fWks);
     }
@@ -202,15 +199,15 @@ public class ReportsResourceTest {
     @Category(UnitTest.class)
     public void testDeleteReport() throws Exception {
         String storePath = ReportsResource._homeFolder + "/" + ReportsResource._rptStorePath;
-        File f = new File(storePath);
+        File dir = new File(storePath);
         File fWks = new File(storePath + "/123_test_del");
         if (fWks.exists()) {
             FileUtils.forceDelete(fWks);
         }
-        FileUtils.forceMkdir(f);
+        FileUtils.forceMkdir(dir);
 
         FileUtils.forceMkdir(fWks);
-        String currTime = "" + System.currentTimeMillis();
+        String currTime = String.valueOf(System.currentTimeMillis());
         JSONObject metaData = new JSONObject();
         metaData.put("name", "Test Report1");
         metaData.put("description", "This is test report 1");
@@ -219,10 +216,11 @@ public class ReportsResourceTest {
         File meta = new File(storePath + "/123_test_del/meta.data");
         FileUtils.write(meta, metaData.toJSONString());
 
-        boolean isDel = _rps._deleteReport("123_test_del_not_exist");
-        assertFalse(isDel);
-        isDel = _rps._deleteReport("123_test_del");
-        assertTrue(isDel);
+        boolean isDel = rps._deleteReport("123_test_del_not_exist");
+        Assert.assertFalse(isDel);
 
+        isDel = rps._deleteReport("123_test_del");
+
+        Assert.assertTrue(isDel);
     }
 }

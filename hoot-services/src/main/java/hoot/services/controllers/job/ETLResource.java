@@ -47,21 +47,10 @@ import hoot.services.utils.ResourceErrorHandler;
 
 @Path("/etl")
 public class ETLResource extends JobControllerBase {
-    private static final Logger log = LoggerFactory.getLogger(ETLResource.class);
-    @SuppressWarnings("unused")
-    private String homeFolder = null;
+    private static final Logger logger = LoggerFactory.getLogger(ETLResource.class);
 
     public ETLResource() {
-        try {
-            if (processScriptName == null) {
-                processScriptName = HootProperties.getProperty("ETLMakefile");
-            }
-
-            homeFolder = HootProperties.getProperty("homeFolder");
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-        }
+        super(HootProperties.getProperty("ETLMakefile"));
     }
 
     /**
@@ -95,18 +84,17 @@ public class ETLResource extends JobControllerBase {
     public Response process(String params) {
         String jobId = UUID.randomUUID().toString();
         try {
-
             JSONArray commandArgs = parseParams(params);
             String argStr = createPostBody(commandArgs);
             postJobRquest(jobId, argStr);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error processing ETL request: " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            ResourceErrorHandler.handleError("Error processing ETL request: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
         }
+
         JSONObject res = new JSONObject();
         res.put("jobid", jobId);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
-
 }

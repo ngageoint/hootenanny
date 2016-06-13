@@ -81,11 +81,11 @@ public class JobResourceTest {
         JobResource spy = Mockito.spy(real);
 
         Mockito.doReturn(mockRet).when(spy).getJobStatusObj(Matchers.anyString());
-        Mockito.doNothing().when(spy)._terminateJob(Matchers.anyString());
+        Mockito.doNothing().when(spy).terminateJob(Matchers.anyString());
 
         spy.terminateJob("1234", null);
 
-        Mockito.verify(spy)._terminateJob(Matchers.matches("66d53cfc-29b6-49eb-9459-9a74794d34b2"));
+        Mockito.verify(spy).terminateJob(Matchers.matches("66d53cfc-29b6-49eb-9459-9a74794d34b2"));
     }
 
     /**
@@ -112,11 +112,9 @@ public class JobResourceTest {
         JobResource real = new JobResource();
         JobResource spy = Mockito.spy(real);
 
-        Mockito.doReturn(null).when(spy)._createDbConnection();
-        Mockito.doNothing().when(spy)._closeDbConnection(Matchers.any(Connection.class));
-        Mockito.doReturn(new JSONObject()).when(spy)._processJob(Matchers.anyString(), Matchers.any(JSONObject.class));
-        Mockito.doReturn(mockJobStatusManager).when(spy)._createJobStatusMananger(Matchers.any(Connection.class));
-        Mockito.doReturn(mockChild).when(spy)._execReflection(Matchers.anyString(),
+        Mockito.doReturn(new JSONObject()).when(spy).processJob(Matchers.anyString(), Matchers.any(JSONObject.class));
+        Mockito.doReturn(mockJobStatusManager).when(spy).createJobStatusMananger(Matchers.any(Connection.class));
+        Mockito.doReturn(mockChild).when(spy).execReflection(Matchers.anyString(),
                          Matchers.any(JSONObject.class), Matchers.any(JobStatusManager.class));
 
         String jobStr = "[{\"caller\":\"FileUploadResource\",\"exec\":\"makeetl\","
@@ -237,12 +235,12 @@ public class JobResourceTest {
         Mockito.doNothing().when(spy)._closeDbConnection(Matchers.any(Connection.class));
 
         // so I use this to avoid actual call
-        Mockito.doReturn(new JSONObject()).when(spy)._processJob(Matchers.anyString(), Matchers.any(JSONObject.class));
-        Mockito.doReturn(mockJobStatusManager).when(spy)._createJobStatusMananger(Matchers.any(Connection.class));
+        Mockito.doReturn(new JSONObject()).when(spy).processJob(Matchers.anyString(), Matchers.any(JSONObject.class));
+        Mockito.doReturn(mockJobStatusManager).when(spy).createJobStatusMananger(Matchers.any(Connection.class));
 
         // failure point
         Mockito.doThrow(new Exception("Mock failure for testing Process Chain Job failure. (Not real failure!!!)"))
-               .when(spy)._execReflection(Matchers.anyString(),
+               .when(spy).execReflection(Matchers.anyString(),
                                           Matchers.any(JSONObject.class),
                                           Matchers.any(JobStatusManager.class));
 

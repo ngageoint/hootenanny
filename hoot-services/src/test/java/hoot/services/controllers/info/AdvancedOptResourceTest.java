@@ -43,9 +43,9 @@ public class AdvancedOptResourceTest {
     @Category(UnitTest.class)
     public void testGetOptions() throws Exception {
         AdvancedOptResource adv = new AdvancedOptResource();
-        adv._doc = new JSONObject();
+        adv.doc = new JSONObject();
 
-        adv._parseAsciidoc();
+        adv.parseAsciidoc();
 
         JSONObject opt = (JSONObject) adv._doc.get("javascript.translator.path");
         Assert.assertEquals("A list of paths to include in the javascript translator search path.",
@@ -55,9 +55,8 @@ public class AdvancedOptResourceTest {
 
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
-            Assert.assertTrue(pair.getKey().toString().length() > 0);
-            Assert.assertTrue(pair.getValue().toString().length() == 0);
+            Assert.assertTrue(!pair.getKey().toString().isEmpty());
+            Assert.assertTrue(pair.getValue().toString().isEmpty());
         }
     }
-
 }

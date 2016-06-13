@@ -31,6 +31,7 @@ import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -39,15 +40,15 @@ import hoot.services.UnitTest;
 
 
 public class BasemapResourceTest {
-    @SuppressWarnings("unused")
+
     @BeforeClass
     public static void oneTimeSetup() {
         new BasemapResource();
-        org.junit.Assert.assertNotNull(BasemapResource._tileServerPath);
-        org.junit.Assert.assertTrue(BasemapResource._tileServerPath.length() > 0);
+        Assert.assertNotNull(BasemapResource._tileServerPath);
+        Assert.assertTrue(BasemapResource._tileServerPath.length() > 0);
 
-        org.junit.Assert.assertNotNull(BasemapResource._ingestStagingPath);
-        org.junit.Assert.assertTrue(BasemapResource._ingestStagingPath.length() > 0);
+        Assert.assertNotNull(BasemapResource._ingestStagingPath);
+        Assert.assertTrue(BasemapResource._ingestStagingPath.length() > 0);
     }
 
     @Test
@@ -79,7 +80,8 @@ public class BasemapResourceTest {
                 break;
             }
         }
-        org.junit.Assert.assertTrue(found);
+
+        Assert.assertTrue(found);
         FileUtils.forceDelete(f);
         FileUtils.forceDelete(f2);
     }
@@ -92,12 +94,12 @@ public class BasemapResourceTest {
         FileUtils.touch(f);
         mapRes._toggleBaseMap("controltest", false);
         f = new File(BasemapResource._ingestStagingPath + "/BASEMAP/controltest.disabled");
-        org.junit.Assert.assertTrue(f.exists());
+        Assert.assertTrue(f.exists());
 
         mapRes._toggleBaseMap("controltest", true);
 
         f = new File(BasemapResource._ingestStagingPath + "/BASEMAP/controltest.enabled");
-        org.junit.Assert.assertTrue(f.exists());
+        Assert.assertTrue(f.exists());
 
         FileUtils.forceDelete(f);
     }
@@ -111,16 +113,16 @@ public class BasemapResourceTest {
         File dir = new File(BasemapResource._tileServerPath + "/BASEMAP/" + testMapName);
         FileUtils.forceMkdir(dir);
 
-        org.junit.Assert.assertTrue(dir.exists());
+        Assert.assertTrue(dir.exists());
 
         File controlFile = new File(BasemapResource._ingestStagingPath + "/BASEMAP/" + testMapName + ".enabled");
         FileUtils.touch(controlFile);
-        org.junit.Assert.assertTrue(controlFile.exists());
+        Assert.assertTrue(controlFile.exists());
 
         mapRes._deleteBaseMap(testMapName);
 
-        org.junit.Assert.assertFalse(dir.exists());
+        Assert.assertFalse(dir.exists());
 
-        org.junit.Assert.assertFalse(controlFile.exists());
+        Assert.assertFalse(controlFile.exists());
     }
 }

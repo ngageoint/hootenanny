@@ -37,7 +37,6 @@ import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import hoot.services.db.DbUtils;
 
@@ -47,13 +46,9 @@ import hoot.services.db.DbUtils;
  */
 @Path("api/0.6/user/details")
 public class UserDetailsResource {
-    private static final Logger log = LoggerFactory.getLogger(UserDetailsResource.class);
-
-    @SuppressWarnings("unused")
-    private ClassPathXmlApplicationContext appContext;
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailsResource.class);
 
     public UserDetailsResource() {
-        appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
     }
 
     /**
@@ -80,24 +75,22 @@ public class UserDetailsResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response getDetails() throws Exception {
-        log.debug("Retrieving logged in user details...");
+        logger.debug("Retrieving logged in user details...");
 
         // For now, we're just grabbing the first user in the db, since we don't
-        // have any authentication
-        // in place to get the correct user. Worst case, for now, you see
-        // incorrect user information
-        // from iD editor...not a big deal since authentication doesn't exist
-        // anyway. When hoot gets
-        // user authentication, then this obviously has to be updated.
+        // have any authentication in place to get the correct user. Worst case, for now, you see
+        // incorrect user information from iD editor...not a big deal since authentication doesn't exist
+        // anyway. When hoot gets user authentication, then this obviously has to be updated.
         Connection conn = DbUtils.createConnection();
         long userId = -1;
         try {
-            log.debug("Initializing database connection...");
+            logger.debug("Initializing database connection...");
             userId = DbUtils.getTestUserId(conn);
         }
         finally {
             DbUtils.closeConnection(conn);
         }
+
         assert (userId != -1);
         return (new UserResource()).get(String.valueOf(userId));
     }

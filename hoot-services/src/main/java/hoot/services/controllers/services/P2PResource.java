@@ -43,52 +43,39 @@ import hoot.services.utils.ResourceErrorHandler;
 
 
 public class P2PResource extends ServerControllerBase {
-    private static final Logger log = LoggerFactory.getLogger(P2PResource.class);
-
-    private static String homeFolder = null;
-    private static String P2PServerPort = null;
-    private static String P2PServerThreadCount = null;
-    private static String P2PServerScript = null;
-
+    private static final Logger logger = LoggerFactory.getLogger(P2PResource.class);
+    private static final String homeFolder = HootProperties.getProperty("homeFolder");
+    private static final String P2PServerPort = HootProperties.getProperty("P2PServerPort");
+    private static final String P2PServerThreadCount = HootProperties.getProperty("P2PServerThreadCount");
+    private static final String P2PServerScript = HootProperties.getProperty("P2PServerScript");
     private static final Object procLock = new Object();
     private static final Object portLock = new Object();
 
-    private static String currentPort = null;
-    private static Process _P2PProc = null;
+    private static String currentPort;
+    private static Process _P2PProc;
 
     public P2PResource() {
-        try {
-            homeFolder = HootProperties.getProperty("homeFolder");
-            P2PServerPort = HootProperties.getProperty("P2PServerPort");
-            P2PServerThreadCount = HootProperties.getProperty("P2PServerThreadCount");
-            P2PServerScript = HootProperties.getProperty("P2PServerScript");
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
-        }
     }
 
     public void startP2PService() {
         // set default default port and threadcount
-        String currPort = P2PServerPort;
-        String currThreadCnt = P2PServerThreadCount;
         try {
             // Make sure to wipe out previosuly running servers.
             stopServer(homeFolder + "/scripts/" + P2PServerScript);
 
             // Probably an overkill but just in-case using synch lock
+            String currPort = P2PServerPort;
             synchronized (portLock) {
                 currentPort = currPort;
             }
 
             synchronized (procLock) {
+                String currThreadCnt = P2PServerThreadCount;
                 _P2PProc = startServer(currPort, currThreadCnt, homeFolder + "/scripts/" + P2PServerScript);
             }
-
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error starting P2P service request: " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            ResourceErrorHandler.handleError("Error starting P2P service request: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
         }
     }
 
@@ -105,25 +92,21 @@ public class P2PResource extends ServerControllerBase {
     @Produces(MediaType.TEXT_PLAIN)
     public Response stopP2PService() {
         // This also gets called automatically from HootServletContext when
-        // service exits but
-        // should not be reliable since there are many path where it will not be
-        // invoked.
+        // service exits but should not be reliable since there are many path where it will not be invoked.
         try {
             // Destroy the reference to the process directly here via the Java
-            // API vs having the base
-            // class kill it with a unix command. Killing it via command causes
-            // the stxxl temp files
-            // created hoot threads not to be cleaned up.
+            // API vs having the base class kill it with a unix command. Killing it via command causes
+            // the stxxl temp files created hoot threads not to be cleaned up.
             // stopServer(homeFolder + "/scripts/" + P2PServerScript);
             _P2PProc.destroy();
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error starting P2P service request: " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            ResourceErrorHandler.handleError("Error starting P2P service request: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
         }
 
         JSONObject res = new JSONObject();
         res.put("isRunning", "false");
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
@@ -144,13 +127,13 @@ public class P2PResource extends ServerControllerBase {
             isRunning = getStatus(_P2PProc);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error starting P2P service request: " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            ResourceErrorHandler.handleError("Error starting P2P service request: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
         }
 
         JSONObject res = new JSONObject();
         res.put("isRunning", isRunning);
         res.put("port", currentPort);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 }
