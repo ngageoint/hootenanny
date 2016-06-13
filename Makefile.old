@@ -12,7 +12,7 @@ SHELL=/bin/bash
 
 # If you're adding another schema file be sure and update the archive target
 # too.
-SCHEMA_FILES=plugins/tds40_schema.js plugins/tds61_schema.js plugins/mgcp_schema.js plugins/etds_rules.js plugins/etds61_rules.js plugins/etds61_osm_rules.js plugins/tds40_full_schema.js plugins/tds61_full_schema.js plugins/emgcp_rules.js plugins/emgcp_osm_rules.js
+SCHEMA_FILES=plugins/tds61_schema.js plugins/tds61_full_schema.js plugins/etds61_rules.js plugins/etds61_osm_rules.js plugins/tds40_schema.js plugins/tds40_full_schema.js plugins/etds40_rules.js plugins/etds40_osm_rules.js plugins/mgcp_schema.js plugins/emgcp_rules.js plugins/emgcp_osm_rules.js
 
 -include Makefile.inc
 
@@ -84,6 +84,11 @@ docs: always HOOT_VERSION_FILE services-docs
 
 test-quick: build pp-test
 	bin/HootTest $(HOOT_TEST_DIFF) --quick
+
+test-all-core: services-test-all pp-test plugins-test
+	# Don't run services tests at the same time as glacial -- that may stomp
+	# on each other's DB changes.
+	bin/HootTest $(HOOT_TEST_DIFF) --glacial
 
 test-all-no-core: services-test-all pp-test plugins-test
 	$(MAKE) ui-test
@@ -179,20 +184,25 @@ plugins/emgcp_osm_rules.js: scripts/ConvertMGCPSchema_XML.py conf/mgcp/MGCP_Feat
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
+#### TDSv40
 plugins/tds40_schema.js: scripts/ConvertTDSv40Schema.py conf/nfdd/LTDSv40.csv.gz
 	mkdir -p $(@D)
 	$^ > $@ || (rm -f $@ ; exit -1)
 
-#### TDSv40
 plugins/tds40_full_schema.js: scripts/ConvertTDSv40Schema.py conf/nfdd/TDSv40.csv.gz
 	mkdir -p $(@D)
 	$< --fullschema $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS40 "To English" rules
 # This need to be full TDS so we have access to the full range of attributes
-plugins/etds_rules.js: scripts/ConvertTDSv40Schema.py conf/nfdd/TDSv40.csv.gz
+plugins/etds40_rules.js: scripts/ConvertTDSv40Schema.py conf/nfdd/TDSv40.csv.gz
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
+
+# Build the TDS40 "From English" rules
+plugins/etds40_osm_rules.js: scripts/ConvertTDSv40Schema.py conf/nfdd/TDSv40.csv.gz
+	mkdir -p $(@D)
+	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 #### TDSv61
 # TDSv61 is built from the TDSv60 spec with NGA's extensions
@@ -348,7 +358,8 @@ archive: js-make services-build docs
 	# TDSv40
 	cp plugins/tds40_schema.js $(HOOT_TARNAME)/plugins/tds40_schema.js
 	cp plugins/tds40_full_schema.js $(HOOT_TARNAME)/plugins/tds61_full_schema.js
-	cp plugins/etds_rules.js $(HOOT_TARNAME)/plugins/etds_rules.js
+	cp plugins/etds40_rules.js $(HOOT_TARNAME)/plugins/etds40_osm_rules.js
+	cp plugins/etds40_osm_rules.js $(HOOT_TARNAME)/plugins/etds40_osm_rules.js
 	# TDSv61
 	cp plugins/tds61_schema.js $(HOOT_TARNAME)/plugins/tds61_schema.js
 	cp plugins/tds61_full_schema.js $(HOOT_TARNAME)/plugins/tds61_full_schema.js

@@ -44,8 +44,8 @@ WaySublineMatchString::WaySublineMatchString(const MatchCollection& m)
       if (i != j && m[i].overlaps(m[j]))
       {
         LOG_VAR(m);
-        throw OverlappingMatchesException("The match collection must not contain overlapping "
-                                          "matches.");
+        throw OverlappingMatchesException(QString("The match collection must not contain "
+          "overlapping matches.").arg(hoot::toString(m[i])).arg(hoot::toString(m[j])));
       }
     }
   }
@@ -118,9 +118,9 @@ vector<bool> WaySublineMatchString::getReverseVector2() const
   return result;
 }
 
-WaySublineString WaySublineMatchString::getSublineString1() const
+WaySublineCollection WaySublineMatchString::getSublineString1() const
 {
-  WaySublineString result;
+  WaySublineCollection result;
 
   for (size_t i = 0; i < _matches.size(); i++)
   {
@@ -130,9 +130,9 @@ WaySublineString WaySublineMatchString::getSublineString1() const
   return result;
 }
 
-WaySublineString WaySublineMatchString::getSublineString2() const
+WaySublineCollection WaySublineMatchString::getSublineString2() const
 {
-  WaySublineString result;
+  WaySublineCollection result;
 
   for (size_t i = 0; i < _matches.size(); i++)
   {
@@ -179,10 +179,10 @@ void WaySublineMatchString::removeEmptyMatches()
 
 bool WaySublineMatchString::touches(const WaySublineMatchString& other) const
 {
-  WaySublineString wss1 = getSublineString1();
-  WaySublineString wss2 = getSublineString2();
-  WaySublineString owss1 = other.getSublineString1();
-  WaySublineString owss2 = other.getSublineString2();
+  WaySublineCollection wss1 = getSublineString1();
+  WaySublineCollection wss2 = getSublineString2();
+  WaySublineCollection owss1 = other.getSublineString1();
+  WaySublineCollection owss2 = other.getSublineString2();
   return wss1.touches(owss1) ||
       wss2.touches(owss2) ||
       wss1.touches(owss2) ||

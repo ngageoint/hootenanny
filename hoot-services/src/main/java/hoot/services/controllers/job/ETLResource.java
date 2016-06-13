@@ -66,8 +66,8 @@ public class ETLResource extends JobControllerBase {
 
     /**
      * For ETL service, there are 2 types of services are available: Standard
-     * REST endpoint and WPS endpoint. Both are accessed by POST. Both ETL
-     * services ends up at hoot command shell and use makeetl make file. makeetl
+     * REST endpoint. Accessed by POST. ETL
+     * service ends up at hoot command shell and use makeetl make file. makeetl
      * make file handles 2 types of ETL formats: OGR and OSM. For OGR, it
      * translates the INPUT shapefile into hoot db using provided translation
      * file. Also, multiple inputs can be listed using semicolon as a separator.

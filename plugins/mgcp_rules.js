@@ -124,7 +124,8 @@ mgcp.rules = {
         'SDP':'source:description', // Source Description
         'SDV':'source:datetime', // Source Date and Time
         'TIER_NOTE':'source:commercial_distribution_restriction', // Commercial Distribution Restriction       
-        'TXT':'source:text', // Associated Text
+        'TXT':'note', // Associated Text
+        'UID':'uuid', // Universally Unique Identifier
         'UPD_DATE':'source:update:datetime', // Review Source Date and Time
         'UPD_INFO':'source:update:description', // Review Source Description
         'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
@@ -2030,7 +2031,7 @@ mgcp.rules = {
         ['UPD_NAME','83','source:review_source:type','spot_5m_stereoscopic_imagery'], // DFDD
         ['UPD_NAME','84','source:review_source:type','spot_10m_multispectral_monoscopic_imagery'], // DFDD
 		['UPD_NAME','85','source:review_source:type','spot_hrg_digital_terrain_model'],
-		['UPD_NAME','92','source:review_source:type','vector_data'],
+//             ['UPD_NAME','92','source:review_source:type','vector_data'],
 		['UPD_NAME','93','source:review_source:type','1:25k_vector_data'],
 		['UPD_NAME','94','source:review_source:type','1:50k_vector_data'],
 		['UPD_NAME','95','source:review_source:type','1:100k_vector_data'],
@@ -2119,6 +2120,7 @@ mgcp.rules = {
         ['FFN','610','building','communications'],
 
         // DDC - Dwelling Type
+        ['FFN','550','social_facility','senior'], // Not good
         ['FFN','563','building','residential'],
         ['FFN','563','building','apartments'],
 

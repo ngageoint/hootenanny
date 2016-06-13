@@ -170,6 +170,36 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
   map->addElement(r);
 }
 
+void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString& note,
+   const QString& reviewType, double score, vector<QString> choices)
+{
+  if (note.isEmpty())
+  {
+    throw IllegalArgumentException("You must specify a review note.");
+  }
+
+  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
+  r->getTags().set(_reviewNeedsKey, true);
+  r->getTags().appendValueIfUnique(_reviewNoteKey, note);
+  r->getTags().appendValueIfUnique(_reviewTypeKey, reviewType);
+  r->getTags().set(_reviewScoreKey, score);
+  set<ElementId>::iterator it = ids.begin();
+  while (it != ids.end())
+  {
+    r->addElement(_revieweeKey, *it);
+    it++;
+  }
+  r->setCircularError(-1);
+
+  for (unsigned int i = 0; i < choices.size(); i++)
+  {
+    r->getTags()[_reviewChoicesKey + ":" + QString::number(i+1)] = choices[i];
+  }
+
+  map->addElement(r);
+
+}
+
 void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString& note,
   const QString &reviewType, double score, vector<QString> choices)
 {

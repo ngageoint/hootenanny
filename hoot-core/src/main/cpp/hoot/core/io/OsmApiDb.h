@@ -131,13 +131,23 @@ public:
 
   /**
    * Converts a node coordinate from how its stored in a Hootenanny API database (0.01 nanodegrees
-   * as double precision floating point) to how its stored in an OSM API database (100 nanodegrees
-   * as 64 bit int)
+   * as a double precision floating point number) to how its stored in an OSM API database
+   * (100 nanodegrees as a 64 bit integer)
    *
    * @param x the coordinate to convert
    * @return a converted coordinate
    */
   static long toOsmApiDbCoord(const double x);
+
+  /**
+   * Converts a node coordinate from how its stored in an OSMAPI database (100 nanodegrees
+   * as a 64 bit integer) to how its stored in an OSM API database (0.01 nanodegrees
+   * as a double precision floating point number)
+   *
+   * @param x the coordinate to convert
+   * @return a converted coordinate
+   */
+  static double fromOsmApiDbCoord(const long x);
 
 private:
 

@@ -83,23 +83,23 @@ Feature: Advanced Conflation Options
 	 	And I should see "►"
 	 	And I should see element ".ConfType" with value "Reference"
 
-	# Scenario: I can view default Average Advanced Options
-	# 	When I select the "Average" option in "#containerofConfType"
-	# 	Then I click the "►" link
-	# 	And I should see "Advanced Conflation Options"
-	# 	And I should see "Cleaning Options"
-	# 	And I should see "Rubber Sheeting Options"
-	# 	And I should see "General Conflation Options"
-	# 	And I should see "Road Options"
-	# 	And I should see "Building Options"
-	# 	And I should see "POI Options"
-	# 	And I should see "Waterway Options"
-	# 	And I should not see "Cookie Cutter & Horizontal Options"
-	# 	Then I click on "#hoot_cleaning_options_label"
-	# 	And I should see "Enabled"
-	#  	Then I press "big.loud-red" span with text "Cancel"
-	#  	And I should see "►"
-	#  	And I should see element ".ConfType" with value "Average"
+	Scenario: I can view default Average Advanced Options 
+		When I select the "Average" option in "#containerofConfType"
+		Then I click the "►" link
+		And I should see "Advanced Conflation Options"
+		And I should see "Cleaning Options"
+		And I should see "Rubber Sheeting Options"
+		And I should see "General Conflation Options"
+		And I should see "Road Options"
+		Then I click on "#hoot_road_options_label"
+		And I should see checkbox "Enabled" checked
+		And I should see element "#hoot_road_opt_engine" with no value and placeholder "Greedy"
+		And I should see "Building Options"
+		And I should see "POI Options"
+		And I should see "Waterway Options"
+	 	Then I press "big.loud-red" span with text "Cancel"
+	 	And I should see "►"
+	 	And I should see element ".ConfType" with value "Average"
 
 	# Scenario: I can view and change Horizontal Advanced Options
 	#  	When I select the "Cookie Cutter & Horizontal" option in "#containerofConfType"

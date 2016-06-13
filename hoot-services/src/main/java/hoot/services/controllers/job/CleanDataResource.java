@@ -65,7 +65,7 @@ public class CleanDataResource extends JobControllerBase {
     }
 
     /**
-     * Clean Data service represents REST and WPS end points for hoot --cleanup
+     * Clean Data service represents REST end point for hoot --cleanup
      * which is defined as --cleanup (input) (output). Removes common erroneous
      * data scenarios from input and writes to output. * input - Input (e.g.
      * .osm file). output - Output file (e.g. .osm file).

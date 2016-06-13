@@ -43,7 +43,7 @@ $(HOME)/.asciidoc/filters/gnuplot/gnuplot-filter.conf: filters/gnuplot/gnuplot-f
 	cp filters/gnuplot/* $(HOME)/.asciidoc/filters/gnuplot/
 
 clean:
-	rm -rf tmp *.pdf *.png *.html *-docinfo.xml restDocs wpsDocs
+	rm -rf tmp *.pdf *.png *.html *-docinfo.xml restDocs
 
 node_modules:
 	npm install --silent xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler

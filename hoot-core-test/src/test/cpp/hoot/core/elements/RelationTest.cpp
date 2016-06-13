@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/visitors/CountVisitor.h>
 
 #include "../TestUtils.h"
@@ -42,6 +43,8 @@ class RelationTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runCircularVisitRo2Test);
   CPPUNIT_TEST(runCircularVisitRw1Test);
   CPPUNIT_TEST(runCircularVisitRw2Test);
+  CPPUNIT_TEST(runReplaceTest1);
+  CPPUNIT_TEST(runReplaceTest2);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -120,6 +123,80 @@ public:
     r2->visitRw(*map, v);
 
     LOG_VAR(v.getCount());
+  }
+
+  /**
+   * Test to verify we can replace one way in a relation with multiple other ways.
+   */
+  void runReplaceTest1()
+  {
+    shared_ptr<OsmMap> map(new OsmMap());
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
+    WayPtr w1(new Way(Status::Unknown1, 1, 15));
+    WayPtr w2(new Way(Status::Unknown1, 2, 15));
+    WayPtr w3(new Way(Status::Unknown1, 3, 15));
+    map->addElement(r1);
+    map->addElement(w1);
+    map->addElement(w2);
+    map->addElement(w3);
+
+    r1->addElement("foo", w1->getElementId());
+
+    QList<ElementPtr> newWays;
+    newWays.append(w2);
+    newWays.append(w3);
+
+    r1->replaceElement(w1, newWays);
+
+    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
+      "{\"type\":\"way\",\"id\":1,\"nodes\":[],\"tags\":{\"error:circular\":\"15\"},\n"
+      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"error:circular\":\"15\"},\n"
+      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"error:circular\":\"15\"},\n"
+      "{\"type\":\"relation\",\"id\":1,\"members\":[\n"
+      "{\"type\":\"way\",\"ref\":2,\"role\":\"foo\"},\n"
+      "{\"type\":\"way\",\"ref\":3,\"role\":\"foo\"}],\"tags\":{\"error:circular\":\"15\"}]\n"
+      "}\n",
+      OsmJsonWriter().toString(map));
+  }
+
+  /**
+   * Test to verify we can replace multiple ways in a relation with multiple other ways and that
+   * only the expected way (w1) gets replaced.
+   */
+  void runReplaceTest2()
+  {
+    shared_ptr<OsmMap> map(new OsmMap());
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
+    WayPtr w1(new Way(Status::Unknown1, 1, 15));
+    WayPtr w2(new Way(Status::Unknown1, 2, 15));
+    WayPtr w3(new Way(Status::Unknown1, 3, 15));
+    map->addElement(r1);
+    map->addElement(w1);
+    map->addElement(w2);
+    map->addElement(w3);
+
+    r1->addElement("foo", w2->getElementId());
+    r1->addElement("bar", w1->getElementId());
+    r1->addElement("lucky", w1->getElementId());
+
+    QList<ElementPtr> newWays;
+    newWays.append(w2);
+    newWays.append(w3);
+
+    r1->replaceElement(w1, newWays);
+
+    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
+      "{\"type\":\"way\",\"id\":1,\"nodes\":[],\"tags\":{\"error:circular\":\"15\"},\n"
+      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"error:circular\":\"15\"},\n"
+      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"error:circular\":\"15\"},\n"
+      "{\"type\":\"relation\",\"id\":1,\"members\":[\n"
+      "{\"type\":\"way\",\"ref\":2,\"role\":\"foo\"},\n"
+      "{\"type\":\"way\",\"ref\":2,\"role\":\"bar\"},\n"
+      "{\"type\":\"way\",\"ref\":3,\"role\":\"bar\"},\n"
+      "{\"type\":\"way\",\"ref\":2,\"role\":\"lucky\"},\n"
+      "{\"type\":\"way\",\"ref\":3,\"role\":\"lucky\"}],\"tags\":{\"error:circular\":\"15\"}]\n"
+      "}\n",
+      OsmJsonWriter().toString(map));
   }
 };
 

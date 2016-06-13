@@ -31,7 +31,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/algorithms/linearreference/WaySublineString.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 
 #include "../../TestUtils.h"
 
@@ -71,14 +71,14 @@ public:
 
 
     {
-      WaySublineString uut;
+      WaySublineCollection uut;
       uut.addSubline(WaySubline(WayLocation(map, w1, 0.0), WayLocation(map, w1, 30.0)));
 
       HOOT_STR_EQUALS("", uut.invert());
     }
 
     {
-      WaySublineString uut;
+      WaySublineCollection uut;
       uut.addSubline(WaySubline(WayLocation(map, w1, 0.0), WayLocation(map, w1, 20.0)));
 
       HOOT_STR_EQUALS("start: way: -1 index: 2 fraction: 0 end: way: -1 index: 3 fraction: 0",
@@ -86,7 +86,7 @@ public:
     }
 
     {
-      WaySublineString uut;
+      WaySublineCollection uut;
       uut.addSubline(WaySubline(WayLocation(map, w1, 20.0), WayLocation(map, w1, 30.0)));
 
       HOOT_STR_EQUALS("start: way: -1 index: 0 fraction: 0 end: way: -1 index: 2 fraction: 0",
@@ -94,7 +94,7 @@ public:
     }
 
     {
-      WaySublineString uut;
+      WaySublineCollection uut;
       uut.addSubline(WaySubline(WayLocation(map, w1, 10.0), WayLocation(map, w1, 20.0)));
 
       HOOT_STR_EQUALS("start: way: -1 index: 0 fraction: 0 end: way: -1 index: 1 fraction: 0\n"
@@ -103,7 +103,7 @@ public:
     }
 
     {
-      WaySublineString uut;
+      WaySublineCollection uut;
       uut.addSubline(WaySubline(WayLocation(map, w1, 10.0), WayLocation(map, w1, 20.0)));
       uut.addSubline(WaySubline(WayLocation(map, w2, 10.0), WayLocation(map, w2, 20.0)));
 
@@ -115,7 +115,7 @@ public:
     }
 
     {
-      WaySublineString uut;
+      WaySublineCollection uut;
       uut.addSubline(WaySubline(WayLocation(map, w1, 10.0), WayLocation(map, w1, 30.0)));
       uut.addSubline(WaySubline(WayLocation(map, w2, 0.0), WayLocation(map, w2, 20.0)));
 
