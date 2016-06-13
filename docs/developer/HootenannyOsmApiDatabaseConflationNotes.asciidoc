@@ -2,32 +2,18 @@
 == Hootenanny OSM API Database Conflation Testing Notes
 
 Testing Hootenanny conflation with OSM API database (MapEdit) data without access to a complete, production OSM API database is a little 
-cumbersome, but possible.  First, read the "Conflating OSM API Database Data" in the web user inteface document for details on the workflow and 
+cumbersome, but possible.  First, read the "Conflating OSM API Database Data" in the web user interface document for details on the workflow and 
 limitations involved with conflating this type of data.
 
 === Manually Writing Data into an OSM API Database for Testing Purposes
 
-Hootenanny ships with an empty OSM API database, which can be used for testing.  To manually populate this database with a dataset:
+Hootenanny ships with an empty OSM API database, which can be used for testing.  To manually populate this database with a dataset from the
+command line, use one or more of the following scripts in the "scripts" directory after reading their documentation:
 
--------------------------------
-cd $HOOT_HOME
-# clean out the test database completely
-source scripts/SetupOsmApiDB.sh force
-# initialize with a dummy user
-psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
-# generate a sql script to be imported
-hoot convert $HOOT_OPTS dataset1.osm output.sql
-# import the data into the osm api db
-psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f output.sql
---------------------------------
-
-Unfortunately, if you need to write a subsequent dataset, you'll need to manually determine the next element ID sequences by examining your database contents and finding out how many nodes/ways/relation were written by your initial write operation (this will be fixed in https://github.com/ngageoint/hootenanny/issues/796).  So, if your previous write operation wrote two nodes, one way, and one relation, your next set of 
-write commands would look like this:
-
---------------------
-hoot convert $HOOT_OPTS -D postgresql.dumpfile.writer.start.id.changeset=2 -D postgresql.dumpfile.writer.start.id.node=3 -D postgresql.dumpfile.writer.start.id.way=2 -D postgresql.dumpfile.writer.start.id.relation=2 dataset2.osm output.sql
-psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f output.sql
---------------------
+* CleanAndInitializeOsmApiDb.sh
+* CLeanAndLoadOsmApiDbData.sh
+* LoadOsmApiDbData.sh
+* LoadOsmApiDbDataAutoCalcIds.sh
 
 === Testing the Changeset Conflict Detection for OSM API Database Export
 
