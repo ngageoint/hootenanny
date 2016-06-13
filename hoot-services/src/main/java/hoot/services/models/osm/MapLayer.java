@@ -66,6 +66,16 @@ public class MapLayer {
         this.date = date;
     }
 
+    private boolean canExportToOsmApiDb = false;
+
+    public boolean getCanExportToOsmApiDb() {
+        return canExportToOsmApiDb;
+    }
+
+    public void setCanExportToOsmApiDb(boolean canExport) {
+        this.canExportToOsmApiDb = canExport;
+    }
+
     public MapLayer() {
 
     }

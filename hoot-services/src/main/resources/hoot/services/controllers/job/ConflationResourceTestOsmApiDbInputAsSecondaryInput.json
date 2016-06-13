@@ -1,8 +1,8 @@
 {  
    "INPUT1_TYPE":"DB",
-   "INPUT1":"Layer1",
+   "INPUT1":"1",
    "INPUT2_TYPE":"OSM_API_DB",
-   "INPUT2":"Layer2",
+   "INPUT2":"-1",
    "OUTPUT_NAME":"OutputLayer",
    "CONFLATION_TYPE":"Reference",
    "MATCH_THRESHOLD":"0.6",

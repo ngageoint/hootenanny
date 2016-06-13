@@ -49,7 +49,6 @@ Then (/^I should (not )?see the element (.*)$/) do |negate, selector|
   expectation = negate ? :should_not : :should
   page.send(expectation, have_css(selector))
 end
-
 Then(/^I should see "([^"]*)"$/) do |text|
   #page.should have_content(text)
   expect(page).to have_content(text)
@@ -60,6 +59,10 @@ Then(/^I should not see "([^"]*)"$/) do |text|
   expect(page).to have_no_content(text)
 end
 
+Then(/^I should see an alert containing "([^"]*)"$/) do |text|
+  alertText = page.driver.browser.switch_to.alert.text
+  expect(alertText).to include text
+end
 Then (/^I should( not)? see a link "([^"]*)"$/) do |negate, txt|
   expectation = negate ? :should_not : :should
   if negate
@@ -157,7 +160,6 @@ Then(/^I should see these tags in the table:$/) do |table|
     actual.should == expected
   end
 end
-
 Then(/^I click on the "([^"]*)" option in the "([^"]*)"$/) do |label,div|
   find('#' + div).find('label', :text => label).click
 end
