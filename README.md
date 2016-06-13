@@ -34,17 +34,17 @@ polyline to Transportation polyline, etc.).
 
 ## Supported Data Formats
 _Import:_ Hootenanny can ingest:
-* shapefiles
-* openstreetmap (.osm)
+* Shapefile (.shp)
+* OpenStreetMap (.osm)
 * ESRI File Geodatabase (.gdb)
 * .zip files containing shapefiles and/or .gdb files
 * geonames.org (.geonames)
 * OSM API database sources (MapEdit, etc.; experimental feature; see documentation for workflow)
 
 _Export:_ The options for exporting data from Hootenanny are: 
-* File Geodatabase (FGDB)
-* Shapefile, 
-* OSM
+* Shapefile (.shp)
+* OpenStreetMap (.osm)
+* ESRI File Geodatabase (.gdb)
 * Web Feature Service (WFS)
 * OSM API database (MapEdit, etc.; experimental feature; see documentation for workflow)
 
