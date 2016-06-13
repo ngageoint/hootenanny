@@ -442,9 +442,9 @@ back into the OSM API database.
 
 A pre-requisite for conflating OSM API database data is that Hootenanny has been properly configured with a valid OSM API database connection.  
 Hootenanny supports only a single OSM API database connection at one time.  By default, Hootenanny is configured only with an empty test OSM
-API database which has limited utility outside of application testing.  For details on how to configure Hootenanny to conflate you OSM API 
-database data, have you system administrator follow the instructions in the  the "Configuring OSM API Database Conflation" section of the 
-Hootenanny Installation Guide.
+API database which has limited utility outside of application testing.  For details on how to configure Hootenanny to conflate your OSM API 
+database data, have you system administrator follow the instructions in the "Configuring OSM API Database Conflation" section of the 
+Hootenanny Installation Guide.  The documentation also describes how to disable OSM API database conflation completely, if that is desired.
 
 After Hootenanny has been configured with an OSM API database connection, follow these steps to conflate data from an OSM API database:
 
