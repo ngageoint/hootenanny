@@ -49,7 +49,9 @@ _Export:_ Hootenanny can export to:
 * OSM API database (MapEdit, etc.; experimental feature; see documentation for workflow)
 
 Note that .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the relevant 
-associated files, while WFS is exported as WFS Get Capabilities service URL that can be added into an OGC-enabled third party application
+associated files, while WFS is exported as WFS Get Capabilities service URL that can be added into 
+an OGC-enabled third party application, and OSM API database export is done with an OSM changeset
+representing the before/after difference of conflated data.
 
 ## Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database structure to support translation between various 
