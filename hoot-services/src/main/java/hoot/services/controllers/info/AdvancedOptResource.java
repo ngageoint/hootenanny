@@ -141,6 +141,7 @@ public class AdvancedOptResource {
         }
 
         assert (template != null);
+
         return Response.ok(template.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
@@ -174,7 +175,7 @@ public class AdvancedOptResource {
             int iEnd = sDefVal.indexOf('}');
             String depKey = sDefVal.substring(iStart, iEnd).trim();
 
-            if ((depKey != null) && (!depKey.isEmpty())) {
+            if (!depKey.isEmpty()) {
                 // now find the dep value
                 JSONObject oDep = (JSONObject) doc.get(depKey);
                 return oDep.get("Default Value").toString();
@@ -183,6 +184,7 @@ public class AdvancedOptResource {
         catch (Exception ignored) {
             logger.debug(ignored.getMessage());
         }
+
         return "";
     }
 
@@ -241,10 +243,9 @@ public class AdvancedOptResource {
                         oAttrib = curOpt.get("override");
                         if (oAttrib != null) {
                             JSONObject override = (JSONObject) oAttrib;
-                            Iterator it = override.entrySet().iterator();
 
-                            while (it.hasNext()) {
-                                Map.Entry pair = (Map.Entry) it.next();
+                            for (Object o1 : override.entrySet()) {
+                                Map.Entry pair = (Map.Entry) o1;
                                 curOpt.put(pair.getKey(), pair.getValue());
                             }
                             // remove override element
@@ -322,9 +323,8 @@ public class AdvancedOptResource {
                         if (oAttrib != null) {
                             JSONObject override = (JSONObject) oAttrib;
 
-                            Iterator it = override.entrySet().iterator();
-                            while (it.hasNext()) {
-                                Map.Entry pair = (Map.Entry) it.next();
+                            for (Object o1 : override.entrySet()) {
+                                Map.Entry pair = (Map.Entry) o1;
                                 curOpt.put(pair.getKey(), pair.getValue());
                             }
                             // remove override element
@@ -335,7 +335,7 @@ public class AdvancedOptResource {
 
                 // now check for members and if one exist then recurse
                 Object oValMembers = curOpt.get("members");
-                if ((oValMembers != null) && (oValMembers instanceof JSONArray)) {
+                if ((oValMembers instanceof JSONArray)) {
                     generateRule((JSONArray) oValMembers, curOpt);
                 }
             }

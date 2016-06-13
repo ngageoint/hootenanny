@@ -75,7 +75,7 @@ public class CustomScriptResource {
     private static final String jsHeaderScriptPath;
     private static final String defaultTranslationsConfig;
     private static final String defaultFOUOTranslationsConfig;
-    private static boolean fouoTranslationsExist = false;
+    private static final boolean fouoTranslationsExist;
     private static final String headerStart = "/*<<<";
     private static final String headerEnd = ">>>*/\n";
 
@@ -92,6 +92,7 @@ public class CustomScriptResource {
             logger.info("FOUO translations are present.");
         }
         else {
+            fouoTranslationsExist = false;
             logger.info("FOUO translations are not present.");
         }
     }
@@ -197,9 +198,8 @@ public class CustomScriptResource {
     @Path("/getlist")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getScriptsList() {
-
         JSONArray retList = new JSONArray();
-        Map<String, JSONObject> sortedScripts = new TreeMap<String, JSONObject>();
+        Map<String, JSONObject> sortedScripts = new TreeMap<>();
         JSONArray filesList = new JSONArray();
 
         try {

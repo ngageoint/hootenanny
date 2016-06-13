@@ -128,6 +128,5 @@ public class HGISReviewResource extends HGISResource {
 
         return createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.custom.HGIS.HGISReviewResource",
                 "updateMapsTag");
-
     }
 }

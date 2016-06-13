@@ -105,7 +105,7 @@ import hoot.services.writers.osm.MapQueryResponseWriter;
 public class MapResource {
     private static final Logger logger = LoggerFactory.getLogger(MapResource.class);
 
-    private static QMaps maps = QMaps.maps;
+    private static final QMaps maps = QMaps.maps;
 
     public MapResource() {
     }
@@ -130,7 +130,6 @@ public class MapResource {
 
             logger.debug("Initializing database connection...");
 
-            QMaps maps = QMaps.maps;
             SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
 
             List<Maps> mapLayerRecords = query.from(maps).orderBy(maps.displayName.asc()).list(maps);
@@ -227,7 +226,6 @@ public class MapResource {
             logger.debug("Initializing database connection...");
 
             QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
-            QMaps maps = QMaps.maps;
             SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
 
             new SQLDeleteClause(conn, configuration, folderMapMappings)
@@ -446,7 +444,6 @@ public class MapResource {
                 bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
             }
 
-            QMaps maps = QMaps.maps;
             long mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
             assert (mapIdNum != -1);
 
@@ -542,7 +539,6 @@ public class MapResource {
                     bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
                 }
 
-                QMaps maps = QMaps.maps;
                 long mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
                 assert (mapIdNum != -1);
 
@@ -583,7 +579,6 @@ public class MapResource {
 
             logger.debug("Initializing database connection...");
 
-            QMaps maps = QMaps.maps;
             long mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
             assert (mapIdNum != -1);
 
@@ -731,7 +726,6 @@ public class MapResource {
             logger.debug("Initializing database connection...");
 
             if (_inputType.toLowerCase(Locale.ENGLISH).equals("dataset")) {
-                QMaps maps = QMaps.maps;
                 Configuration configuration = DbUtils.getConfiguration();
 
                 new SQLUpdateClause(conn, configuration, maps).where(maps.id.eq(_mapId)).set(maps.displayName, _modName)
@@ -785,7 +779,7 @@ public class MapResource {
     public Response addFolder(@QueryParam("folderName") String folderName,
                               @QueryParam("parentId") String parentId) throws Exception {
         Long _parentId = Long.parseLong(parentId);
-        Long newId = (long) -1;
+        Long newId = -1L;
         NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('folders_id_seq')");
         Connection conn = DbUtils.createConnection();
 
@@ -947,7 +941,7 @@ public class MapResource {
             throws Exception {
         Long _folderId = Long.parseLong(folderId);
         Long _mapId = Long.parseLong(mapId);
-        Long newId = (long) -1;
+        Long newId = -1L;
         NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('folder_map_mappings_id_seq')");
         Connection conn = DbUtils.createConnection();
 
@@ -1078,7 +1072,6 @@ public class MapResource {
 
             logger.debug("Initializing database connection...");
 
-            QMaps maps = QMaps.maps;
             long mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
             assert (mapIdNum != -1);
 

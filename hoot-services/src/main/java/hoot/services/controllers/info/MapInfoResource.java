@@ -178,6 +178,7 @@ public class MapInfoResource {
 
         JSONObject res = new JSONObject();
         res.put("layers", retval);
+
         /*
          * res.put("conflate_threshold", conflateThreshold);
          * res.put("ingest_threshold", ingestThreshold);
@@ -201,6 +202,7 @@ public class MapInfoResource {
         res.put("conflate_threshold", conflateThreshold);
         res.put("ingest_threshold", ingestThreshold);
         res.put("export_threshold", exportThreshold);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 }

@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.job;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.Future;
 
@@ -192,7 +191,6 @@ public class JobControllerBase {
     }
 
     protected JSONObject _createBashPostBody(JSONArray args) {
-
         String resourceName = this.getClass().getSimpleName();
 
         JSONObject command = new JSONObject();
@@ -212,12 +210,10 @@ public class JobControllerBase {
     protected static JSONArray parseParams(String params) throws Exception {
         JSONParser parser = new JSONParser();
         JSONObject command = (JSONObject) parser.parse(params);
-        Iterator iter = command.entrySet().iterator();
-
         JSONArray commandArgs = new JSONArray();
 
-        while (iter.hasNext()) {
-            Map.Entry mEntry = (Map.Entry) iter.next();
+        for (Object o : command.entrySet()) {
+            Map.Entry mEntry = (Map.Entry) o;
             String key = (String) mEntry.getKey();
             String val = (String) mEntry.getValue();
 
