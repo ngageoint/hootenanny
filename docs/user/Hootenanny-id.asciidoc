@@ -463,8 +463,9 @@ When you are ready to export your conflated layer back into your OSM API databas
 * Select "OSM API Database" as the export file type.  NOTE: The translation selection is ignored, since the output will be OSM data.
 * Click the "Export" button.
 
-Hootenanny will export an OSM changeset with the geospatial bounds of the original conflation job that is the difference between the data 
-originally exported from the OSM API database for conflation and the resulting conflated data.  
+Hootenanny will export an OSM changeset to the target OSM API database with the geospatial bounds of the original conflation 
+job that is the difference between the data originally exported from the OSM API database for conflation and the 
+resulting conflated data.  
 
 IMPORTANT: If any changeset with an overlapping geospatial bounds is written to the target OSM API database after the conflation job began which 
 created the conflated dataset stored in Hootenanny's database, Hootenanny will detect this conflict and not allow the changeset to be 
@@ -481,7 +482,10 @@ Hootenanny only allows dataset layers which were the result of a conflation job 
 be exported back into an OSM API database.  Datasets not meeting this qualification will be unavailable for export to an OSM API database when
 using the iD Editor export feature.
 
-There is no way to directly view OSM data from an OSM API database within Hootenanny, since the two systems use different logic to display OSM 
+There is no way to ingest data from an OSM API database into a Hootenanny data layer.  OSM API database can only be streamed
+into Hootenanny during a conflation job.
+
+There is also no way to directly view OSM data from an OSM API database within Hootenanny, since the two systems use different logic to display OSM 
 data.  Therefore, whenever an OSM API database layer is selected within iD Editor, Hootenanny will zoom to an arbitrary location and display no 
 OSM data.
 

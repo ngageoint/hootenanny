@@ -39,17 +39,14 @@ _Import:_ Hootenanny can ingest:
 * ESRI File Geodatabase (.gdb)
 * .zip files containing shapefiles and/or .gdb files
 * geonames.org (.geonames)
-* OSM API database sources (MapEdit, etc.) can be set as a conflation reference layer to be 
-conflated with other datasets in Hootenanny (experimental feature), but OSM API database data 
-cannot be directly ingested into Hootenanny.
+* OSM API database sources (MapEdit, etc.; experimental feature; see documentation for workflow)
 
 _Export:_ The options for exporting data from Hootenanny are: 
 * File Geodatabase (FGDB)
 * Shapefile, 
 * OSM
 * Web Feature Service (WFS)
-* OSM API database (MapEdit, etc.; experimental feature) - output of a conflation job containing 
-OSM API database data only
+* OSM API database (MapEdit, etc.; experimental feature; see documentation for workflow)
 
 Note that .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the relevant 
 associated files, while WFS is exported as WFS Get Capabilities service URL that can be added into an OGC-enabled third party application
