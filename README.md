@@ -15,8 +15,7 @@ and user-friendly conflation experience without the extra overhead of thick desk
 benefits which include its open license allowing users to easily customize and add functionality, a robust editing capability 
 originally targeted for interactive editing of OSM features, and a web service based architecture for integrating into SOA environments.  
 A REST API is in place to connect the web browser based User Interface (UI) with the core conflation algorithms and database. 
-The translation and conflation operations are also exposed through node.js service endpoints, Open Geospatial Consortium (OGC) 
-Web Processing Service (WPS) and the resulting vector data is accessible via a Web Feature Service (WFS) for additional open 
+The translation and conflation operations are also exposed through node.js service endpoints and the resulting vector data is accessible via an Open Geospatial Consortium (OGC) Web Feature Service (WFS) for additional open 
 interoperability. The application is primarily supported in either the Chrome or Chromium browser with limited supported in Firefox.  
 
 If you have any support questions please create an Issue in this repo or contact us via email: Hootenanny.Help@DigitalGlobe.com.

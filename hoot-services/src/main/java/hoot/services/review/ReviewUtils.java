@@ -32,7 +32,6 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
 import org.deegree.commons.ows.exception.OWSException;
-import org.deegree.services.wps.ProcessletException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,19 +45,16 @@ public class ReviewUtils {
     private static final Logger log = LoggerFactory.getLogger(ReviewUtils.class);
 
     /**
-     * Handles all thrown exceptions from both WPS and non-WPS review services
+     * Handles all thrown exceptions from review services
      *
      * @param e
      *            a thrown exception
      * @param errorMessageStart
      *            text to prepend to the error message
-     * @param throwWpsError
-     *            if true; throws a deegree ProcessletException; otherwise a
-     *            Jersey WebApplicationException is thrown
      * @throws Exception
      *             //TODO: go through and clean out these message text checks
      */
-    public static void handleError(final Exception e, final String errorMessageStart, final boolean throwWpsError)
+    public static void handleError(final Exception e, final String errorMessageStart)
             throws Exception {
         Status status = null;
         if (!StringUtils.isEmpty(e.getMessage())) {
@@ -109,9 +105,6 @@ public class ReviewUtils {
         }
         final String exceptionCode = status.getStatusCode() + ": " + status.getReasonPhrase();
         log.error(exceptionCode + " " + message);
-        if (throwWpsError) {
-            throw new ProcessletException(new OWSException(message, exceptionCode));
-        }
         ResourceErrorHandler.handleError(message, status, log);
     }
 }

@@ -160,7 +160,7 @@ public class ReviewResource {
             transactionManager.rollback(transactionStatus);
             conn.rollback();
             ReviewUtils
-                    .handleError(e, "Error setting all records to reviewed for map ID: " + request.getMapId(), false);
+                    .handleError(e, "Error setting all records to reviewed for map ID: " + request.getMapId());
         }
         finally {
             conn.setAutoCommit(true);

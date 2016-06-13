@@ -77,7 +77,7 @@ testChangesetAutoClose=false
 
 # ETL
 
-# the folder location of the make file script for some processlet like ETLProcesslet
+# the folder location of the make file script for some endpoints
 coreScriptPath=$(homeFolder)/scripts
 
 # intermediate file output location (working folder)
