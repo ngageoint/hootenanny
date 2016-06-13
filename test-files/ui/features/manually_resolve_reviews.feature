@@ -53,7 +53,7 @@ Feature: Manually resolve reviews feature
     And I press "Previous"
     Then I wait 5 "seconds" to see "Please resolve or undo the current feature changes before proceeding to the next review."
     And I press "Resolved"
-    Then I wait 10 "seconds" to see "There are no more available features to review."
+    Then I wait 30 "seconds" to see "There are no more available features to review."
     Then I should not see "Reviews remaining:"
     Then I should not see "Hide Table"
     Then I should not see "name"
