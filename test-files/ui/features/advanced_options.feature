@@ -131,7 +131,7 @@ Feature: Advanced Conflation Options
 		And I should see "Cookie Cutter & Horizontal Options"
 		Then I click on "#horizontal_conflation_options_label"
 		And I should see element "#horizontal_cookie_cutter_alpha_shape_buffer" with no value and placeholder "0"
-		Then I fill "#horizontal_cookie_cutter_alpha_shape_buffer" with "5"
+		Then I fill "horizontal_cookie_cutter_alpha_shape_buffer" with "5"
 		Then I click on "#horizontal_conflation_options_label"
 	 	Then I press "big.loud" span with text "Apply"
 		And I should see "►"
