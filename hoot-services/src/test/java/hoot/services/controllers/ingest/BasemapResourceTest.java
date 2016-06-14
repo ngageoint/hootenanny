@@ -27,6 +27,7 @@
 package hoot.services.controllers.ingest;
 
 import java.io.File;
+import java.lang.reflect.Method;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
@@ -36,42 +37,47 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 
 
 public class BasemapResourceTest {
+    private static final String tileServerPath = HootProperties.getProperty("tileServerPath");
+    private static final String ingestStagingPath = HootProperties.getProperty("ingestStagingPath");
+
 
     @BeforeClass
     public static void oneTimeSetup() {
-        new BasemapResource();
-        Assert.assertNotNull(BasemapResource._tileServerPath);
-        Assert.assertTrue(BasemapResource._tileServerPath.length() > 0);
+        Assert.assertNotNull(tileServerPath);
+        Assert.assertTrue(!tileServerPath.isEmpty());
 
-        Assert.assertNotNull(BasemapResource._ingestStagingPath);
-        Assert.assertTrue(BasemapResource._ingestStagingPath.length() > 0);
+        Assert.assertNotNull(ingestStagingPath);
+        Assert.assertTrue(!ingestStagingPath.isEmpty());
     }
 
     @Test
     @Category(UnitTest.class)
     public void TestgetBasemapList() throws Exception {
-        BasemapResource mapRes = new BasemapResource();
-        File f = new File(BasemapResource._tileServerPath + "/BASEMAP/TestMap");
+        File f = new File(tileServerPath + "/BASEMAP/TestMap");
         FileUtils.forceMkdir(f);
 
         JSONObject cont = new JSONObject();
         cont.put("jobid", "123-456-789");
         cont.put("path", "/projects/hoot/ingest/processed/BASEMAP/TestMap");
 
-        File file = new File(BasemapResource._ingestStagingPath + "/BASEMAP/TestMap.enabled");
+        File file = new File(ingestStagingPath + "/BASEMAP/TestMap.enabled");
         FileUtils.writeStringToFile(file, cont.toJSONString());
 
-        File f2 = new File(BasemapResource._tileServerPath + "/BASEMAP/TestMap2");
+        File f2 = new File(tileServerPath + "/BASEMAP/TestMap2");
         FileUtils.forceMkdir(f2);
 
-        File file2 = new File(BasemapResource._ingestStagingPath + "/BASEMAP/TestMap2.enabled");
+        File file2 = new File(ingestStagingPath + "/BASEMAP/TestMap2.enabled");
         FileUtils.writeStringToFile(file2, cont.toJSONString());
 
-        JSONArray res = mapRes._getBasemapList();
+        Method getBasemapListHelperMethod = BasemapResource.class.getDeclaredMethod("getBasemapListHelper");
+        getBasemapListHelperMethod.setAccessible(true);
+        JSONArray res = (JSONArray) getBasemapListHelperMethod.invoke(null);
+
         boolean found = false;
         for (Object oMap : res) {
             JSONObject map = (JSONObject) oMap;
@@ -89,19 +95,21 @@ public class BasemapResourceTest {
     @Test
     @Category(UnitTest.class)
     public void TestToggleBasemap() throws Exception {
-        BasemapResource mapRes = new BasemapResource();
-        File f = new File(BasemapResource._ingestStagingPath + "/BASEMAP/controltest.enabled");
-        FileUtils.touch(f);
-        mapRes._toggleBaseMap("controltest", false);
-        f = new File(BasemapResource._ingestStagingPath + "/BASEMAP/controltest.disabled");
-        Assert.assertTrue(f.exists());
+        File file = new File(ingestStagingPath + "/BASEMAP/controltest.enabled");
+        FileUtils.touch(file);
 
-        mapRes._toggleBaseMap("controltest", true);
+        Method toggleBaseMapMethod = BasemapResource.class.getDeclaredMethod("toggleBaseMap", String.class, boolean.class);
+        toggleBaseMapMethod.setAccessible(true);
 
-        f = new File(BasemapResource._ingestStagingPath + "/BASEMAP/controltest.enabled");
-        Assert.assertTrue(f.exists());
+        toggleBaseMapMethod.invoke(null, "controltest", false);
+        file = new File(ingestStagingPath + "/BASEMAP/controltest.disabled");
+        Assert.assertTrue(file.exists());
 
-        FileUtils.forceDelete(f);
+        toggleBaseMapMethod.invoke(null, "controltest", true);
+        file = new File(ingestStagingPath + "/BASEMAP/controltest.enabled");
+        Assert.assertTrue(file.exists());
+
+        FileUtils.forceDelete(file);
     }
 
     @Test
@@ -109,20 +117,20 @@ public class BasemapResourceTest {
     public void TestDeleteBasemap() throws Exception {
         String testMapName = "testmap";
 
-        BasemapResource mapRes = new BasemapResource();
-        File dir = new File(BasemapResource._tileServerPath + "/BASEMAP/" + testMapName);
+        File dir = new File(tileServerPath + "/BASEMAP/" + testMapName);
         FileUtils.forceMkdir(dir);
 
         Assert.assertTrue(dir.exists());
 
-        File controlFile = new File(BasemapResource._ingestStagingPath + "/BASEMAP/" + testMapName + ".enabled");
+        File controlFile = new File(ingestStagingPath + "/BASEMAP/" + testMapName + ".enabled");
         FileUtils.touch(controlFile);
         Assert.assertTrue(controlFile.exists());
 
-        mapRes._deleteBaseMap(testMapName);
+        Method deleteBaseMapMethod = BasemapResource.class.getDeclaredMethod("deleteBaseMap", String.class);
+        deleteBaseMapMethod.setAccessible(true);
+        deleteBaseMapMethod.invoke(null, testMapName);
 
         Assert.assertFalse(dir.exists());
-
         Assert.assertFalse(controlFile.exists());
     }
 }

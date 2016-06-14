@@ -132,11 +132,15 @@ public class BasemapResource extends JobControllerBase {
         JSONArray jobsArr = new JSONArray();
         try {
             File uploadDir = new File(homeFolder + "/upload/");
-            uploadDir.mkdir();
+            if (!uploadDir.mkdir()) {
+                throw new IOException("Error creating " + uploadDir.getAbsolutePath() + " directory!");
+            }
 
             String repFolderPath = homeFolder + "/upload/" + groupId;
             File dir = new File(repFolderPath);
-            dir.mkdir();
+            if (!dir.mkdir()) {
+                throw new IOException("Error creating " + dir.getAbsolutePath() + " directory!");
+            }
 
             if (!ServletFileUpload.isMultipartContent(request)) {
                 throw new ServletException("Content type is not multipart/form-data");
@@ -260,8 +264,8 @@ public class BasemapResource extends JobControllerBase {
         }
 
         // sort the list
-        for (Object o : filesList) {
-            JSONObject cO = (JSONObject) o;
+        for (Object file : filesList) {
+            JSONObject cO = (JSONObject) file;
             String sName = cO.get("name").toString();
             sortedScripts.put(sName.toUpperCase(), cO);
         }
@@ -271,16 +275,13 @@ public class BasemapResource extends JobControllerBase {
         return Response.ok(retList.toString(), MediaType.TEXT_PLAIN).build();
     }
 
-    private JSONArray getBasemapListHelper() throws Exception {
+    private static JSONArray getBasemapListHelper() throws Exception {
         JSONArray filesList = new JSONArray();
         File basmapDir = new File(ingestStagingPath + "/BASEMAP");
-        if (basmapDir.exists()) {
 
-            String[] exts = new String[4];
-            exts[0] = "processing";
-            exts[1] = "enabled";
-            exts[2] = "disabled";
-            exts[3] = "failed";
+        if (basmapDir.exists()) {
+            String[] exts = {"processing", "enabled", "disabled", "failed"};
+
             List<File> files = (List<File>) FileUtils.listFiles(basmapDir, exts, false);
 
             for (File file : files) {
@@ -305,8 +306,8 @@ public class BasemapResource extends JobControllerBase {
                             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
                             Document doc = dBuilder.parse(fXmlFile);
                             doc.getDocumentElement().normalize();
-                            NodeList l = doc.getElementsByTagName("BoundingBox");
-                            Node prop = l.item(0);
+                            NodeList nodeList = doc.getElementsByTagName("BoundingBox");
+                            Node prop = nodeList.item(0);
                             NamedNodeMap attr = prop.getAttributes();
                             if (attr != null) {
                                 jsonExtent.put("minx", Double.parseDouble(attr.getNamedItem("minx").getNodeValue()));
@@ -341,6 +342,7 @@ public class BasemapResource extends JobControllerBase {
         // for file path manipulation
         String fileExt = "enabled";
         String targetExt = ".disabled";
+
         if (enable) {
             fileExt = "disabled";
             targetExt = ".enabled";
@@ -351,9 +353,9 @@ public class BasemapResource extends JobControllerBase {
 
         if ((sourceFile != null) && sourceFile.exists()) {
             // if the source file exist then just swap the extension
-            boolean res = sourceFile.renameTo(new File(ingestStagingPath + "/BASEMAP/", bmName + targetExt));
+            boolean renamed = sourceFile.renameTo(new File(ingestStagingPath + "/BASEMAP/", bmName + targetExt));
 
-            if (!res) {
+            if (!renamed) {
                 throw new Exception("Failed to rename file:" + bmName + fileExt + " to " + bmName + targetExt);
             }
         }
@@ -428,7 +430,7 @@ public class BasemapResource extends JobControllerBase {
     @GET
     @Path("/delete")
     @Produces(MediaType.TEXT_PLAIN)
-    public static Response deleteBasemap(@QueryParam("NAME") String bmName) {
+    public Response deleteBasemap(@QueryParam("NAME") String bmName) {
         try {
             deleteBaseMap(bmName);
         }

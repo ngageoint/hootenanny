@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.job;
 
-import java.sql.Connection;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
@@ -112,8 +111,8 @@ public class JobResourceTest {
         JobResource real = new JobResource();
         JobResource spy = Mockito.spy(real);
 
-        Mockito.doReturn(new JSONObject()).when(spy).processJob(Matchers.anyString(), Matchers.any(JSONObject.class));
-        Mockito.doReturn(mockJobStatusManager).when(spy).createJobStatusMananger(Matchers.any(Connection.class));
+        Mockito.doReturn(new JSONObject()).when(spy).processJob(Matchers.anyString(), Matchers.any(String.class));
+        //Mockito.doReturn(mockJobStatusManager).when(spy).createJobStatusMananger(Matchers.any(Connection.class));
         Mockito.doReturn(mockChild).when(spy).execReflection(Matchers.anyString(),
                          Matchers.any(JSONObject.class), Matchers.any(JobStatusManager.class));
 
@@ -149,9 +148,9 @@ public class JobResourceTest {
             }
         }
 
-        Mockito.verify(spy)._execReflection(Matchers.matches("test_job_id_1234"),
-                                    Matchers.argThat(new validParam2Matcher()),
-                                    Matchers.any(JobStatusManager.class));
+        Mockito.verify(spy).execReflection(Matchers.matches("test_job_id_1234"),
+                                           Matchers.argThat(new validParam2Matcher()),
+                                           Matchers.any(JobStatusManager.class));
 
         ArgumentCaptor<String> argCaptor = ArgumentCaptor.forClass(String.class);
 
@@ -231,12 +230,12 @@ public class JobResourceTest {
         JobResource real = new JobResource();
         JobResource spy = Mockito.spy(real);
 
-        Mockito.doReturn(null).when(spy)._createDbConnection();
-        Mockito.doNothing().when(spy)._closeDbConnection(Matchers.any(Connection.class));
+        //Mockito.doReturn(null).when(spy).createDbConnection();
+        //Mockito.doNothing().when(spy).closeDbConnection(Matchers.any(Connection.class));
 
         // so I use this to avoid actual call
-        Mockito.doReturn(new JSONObject()).when(spy).processJob(Matchers.anyString(), Matchers.any(JSONObject.class));
-        Mockito.doReturn(mockJobStatusManager).when(spy).createJobStatusMananger(Matchers.any(Connection.class));
+        Mockito.doReturn(new JSONObject()).when(spy).processJob(Matchers.anyString(), Matchers.anyString());
+        //Mockito.doReturn(mockJobStatusManager).when(spy).createJobStatusMananger(Matchers.any(Connection.class));
 
         // failure point
         Mockito.doThrow(new Exception("Mock failure for testing Process Chain Job failure. (Not real failure!!!)"))
@@ -367,7 +366,7 @@ public class JobResourceTest {
 
         mockProgressInfo.put("status", mockProgDetail);
 
-        Mockito.doReturn(mockProgressInfo.toJSONString()).when(spy)._getProgressText(Matchers.anyString());
+        //Mockito.doReturn(mockProgressInfo.toJSONString()).when(spy).getProgressText(Matchers.anyString());
 
         Response resp = spy.getJobStatus("child-id-1234");
         String respStr = resp.getEntity().toString();

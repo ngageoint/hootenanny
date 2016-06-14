@@ -77,7 +77,7 @@ public class CustomScriptResource {
     private static final String defaultFOUOTranslationsConfig;
     private static final boolean fouoTranslationsExist;
     private static final String headerStart = "/*<<<";
-    private static final String headerEnd = ">>>*/\n";
+    private static final String headerEnd = ">>>*/" + System.lineSeparator();
 
     static {
         jsHeaderScriptPath = HootProperties.getProperty("dummyjsHeaderScriptPath");
@@ -142,7 +142,6 @@ public class CustomScriptResource {
      *            Script description.
      * @return Script
      */
-    @SuppressWarnings("unchecked")
     @POST
     @Path("/save")
     @Consumes(MediaType.TEXT_PLAIN)
@@ -193,7 +192,6 @@ public class CustomScriptResource {
      * @return JSON Array containing JSON of name and description of all
      *         available scripts
      */
-    @SuppressWarnings("unchecked")
     @GET
     @Path("/getlist")
     @Produces(MediaType.TEXT_PLAIN)
@@ -477,7 +475,6 @@ public class CustomScriptResource {
      * @return JSON Array containing JSON of name and description of deleted
      *         scripts
      */
-    @SuppressWarnings("unchecked")
     @GET
     @Path("/deletescript")
     @Produces(MediaType.TEXT_PLAIN)
@@ -550,8 +547,12 @@ public class CustomScriptResource {
                         String foundScriptName = header.get("NAME").toString();
                         if (scriptNames.contains(foundScriptName)) {
                             scriptsDeleted.add(foundScriptName);
-                            f.delete();
-                            logger.debug("Deleted script: {}", foundScriptName);
+                            if (!f.delete()) {
+                                logger.error("Error deleting {} script!", f.getAbsolutePath());
+                            }
+                            else {
+                                logger.debug("Deleted script: {}", foundScriptName);
+                            }
                         }
                     }
                 }
@@ -597,9 +598,8 @@ public class CustomScriptResource {
         if (!uploadDirExists()) {
             FileUtils.forceMkdir(getUploadDir());
         }
+        String[] exts = { "js" };
         File scriptsDir = new File(scriptFolder);
-        String[] exts = new String[1];
-        exts[0] = "js";
         return (List<File>) FileUtils.listFiles(scriptsDir, exts, false);
     }
 
@@ -608,6 +608,7 @@ public class CustomScriptResource {
             logger.error("Invalid input script name: {}", name);
             return null;
         }
+
         if (StringUtils.trimToNull(content) == null) {
             logger.error("Invalid input script content.");
             return null;
@@ -627,12 +628,12 @@ public class CustomScriptResource {
             fScript.createNewFile();
         }
 
-        String header = headerStart;
         JSONObject oHeader = new JSONObject();
         oHeader.put("NAME", name);
         oHeader.put("DESCRIPTION", description);
         oHeader.put("CANEXPORT", canExport);
 
+        String header = headerStart;
         header += oHeader.toString();
         header += headerEnd;
 

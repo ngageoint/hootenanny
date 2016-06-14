@@ -26,9 +26,12 @@
  */
 package hoot.services.controllers.job;
 
-import static org.mockito.Mockito.*;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.verify;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,12 +40,8 @@ import java.util.List;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-import hoot.services.HootProperties;
-import hoot.services.UnitTest;
-import hoot.services.geo.BoundingBox;
-import hoot.services.models.osm.Map;
-
 import org.apache.commons.io.FileUtils;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
@@ -54,6 +53,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sun.jersey.api.client.ClientResponse.Status;
+
+import hoot.services.HootProperties;
+import hoot.services.UnitTest;
+import hoot.services.geo.BoundingBox;
 
 
 public class ExportJobResourceTest {
@@ -163,19 +166,17 @@ public class ExportJobResourceTest {
 
         List<Long> mapIds = new ArrayList<>();
         mapIds.add(1L);
-        Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
-        java.util.Map<String, String> mapTags = new HashMap<>();
 
+        java.util.Map<String, String> mapTags = new HashMap<>();
         String exportTime = "2016-05-04 10:15";
         mapTags.put("osm_api_db_export_time", exportTime);
-        Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
+        //Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
 
         BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
         String mapBoundsStr = mapBounds.toServicesString();
 
-        Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
-
-        String commandArgs = spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+        Method getExportToOsmApiDbCommandArgsMethod = getGetExportToOsmApiDbCommandArgsMethod();
+        String commandArgs = getExportToOsmApiDbCommandArgsMethod.invoke(spy, ExportJobResource.parseParams(inputParams), null).toString();
 
         logger.debug(commandArgs);
 
@@ -205,15 +206,16 @@ public class ExportJobResourceTest {
             Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
             List<Long> mapIds = new ArrayList<>();
             mapIds.add(new Long(1));
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
+
             java.util.Map<String, String> mapTags = new HashMap<>();
             String exportTime = "2016-05-04 10:15";
             mapTags.put("osm_api_db_export_time", exportTime);
-            Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
-            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
-            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
+            //Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
+
+            Method getExportToOsmApiDbCommandArgsMethod = getGetExportToOsmApiDbCommandArgsMethod();
+            getExportToOsmApiDbCommandArgsMethod.invoke(spy, ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -238,15 +240,16 @@ public class ExportJobResourceTest {
             List<Long> mapIds = new ArrayList<>();
             mapIds.add(1L);
 
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
+            //Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
             java.util.Map<String, String> mapTags = new HashMap<>();
             // add no map tags
 
-            Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
+            //Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
-            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
+            //Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+            Method getExportToOsmApiDbCommandArgsMethod = getGetExportToOsmApiDbCommandArgsMethod();
+            getExportToOsmApiDbCommandArgsMethod.invoke(spy, ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.CONFLICT.getStatusCode(), e.getResponse().getStatus());
@@ -271,17 +274,18 @@ public class ExportJobResourceTest {
             List<Long> mapIds = new ArrayList<>();
             mapIds.add(1L);
 
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
+            //Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
             java.util.Map<String, String> mapTags = new HashMap<>();
 
             String exportTime = "2016-05-04 10:15";
             mapTags.put("osm_api_db_export_time", exportTime);
 
-            Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
+            //Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
-            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
+            //Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+            Method getExportToOsmApiDbCommandArgsMethod = getGetExportToOsmApiDbCommandArgsMethod();
+            getExportToOsmApiDbCommandArgsMethod.invoke(spy, ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -311,15 +315,20 @@ public class ExportJobResourceTest {
             // add two map id's
             mapIds.add(1L);
             mapIds.add(2L);
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
+
+            //Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
             java.util.Map<String, String> mapTags = new HashMap<>();
             String exportTime = "2016-05-04 10:15";
             mapTags.put("osm_api_db_export_time", exportTime);
-            Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
-            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
-            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+            //Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
+
+            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
+
+            //Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
+
+            Method getExportToOsmApiDbCommandArgsMethod = getGetExportToOsmApiDbCommandArgsMethod();
+            getExportToOsmApiDbCommandArgsMethod.invoke(spy, ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -341,16 +350,18 @@ public class ExportJobResourceTest {
 
             Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
             List<Long> mapIds = new ArrayList<>();
+
             // add no map id's
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
+            //Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
             java.util.Map<String, String> mapTags = new HashMap<>();
             String exportTime = "2016-05-04 10:15";
             mapTags.put("osm_api_db_export_time", exportTime);
-            Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
+            //Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
-            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
+            //Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
+            Method getExportToOsmApiDbCommandArgsMethod = getGetExportToOsmApiDbCommandArgsMethod();
+            getExportToOsmApiDbCommandArgsMethod.invoke(spy, ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -358,4 +369,13 @@ public class ExportJobResourceTest {
             throw e;
         }
     }
+
+    private static Method getGetExportToOsmApiDbCommandArgsMethod() throws NoSuchMethodException {
+        Method getExportToOsmApiDbCommandArgsMethod =
+                ExportJobResource.class.getDeclaredMethod("getExportToOsmApiDbCommandArgs", JSONArray.class, Connection.class);
+
+        getExportToOsmApiDbCommandArgsMethod.setAccessible(true);
+        return getExportToOsmApiDbCommandArgsMethod;
+    }
+
 }

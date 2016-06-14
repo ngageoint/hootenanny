@@ -239,9 +239,7 @@ public class ExportJobResource extends JobControllerBase {
         commandArgs.add(arg);
 
         Map conflatedMap = getConflatedMap(commandArgs, conn);
-
         checkMapForExportTag(conflatedMap, commandArgs, conn);
-
         setAoi(conflatedMap, commandArgs);
 
         return commandArgs;
@@ -249,7 +247,7 @@ public class ExportJobResource extends JobControllerBase {
 
     private Map getConflatedMap(JSONArray commandArgs, Connection conn) throws Exception {
         String mapName = getParameterValue("input", commandArgs);
-        List<Long> mapIds = getMapIdsByName(mapName, conn);
+        List<Long> mapIds = DbUtils.getMapIdsByName(conn, mapName);
 
         // we don't expect the services to try to export a map that has multiple
         // name entries, but check for it anyway
@@ -269,23 +267,8 @@ public class ExportJobResource extends JobControllerBase {
         return conflatedMap;
     }
 
-    // adding this to satisfy the mock
-    private static List<Long> getMapIdsByName(String conflatedMapName, Connection conn) throws Exception {
-        return DbUtils.getMapIdsByName(conn, conflatedMapName);
-    }
-
-    // adding this to satisfy the mock
-    private static java.util.Map<String, String> getMapTags(long mapId, Connection conn) throws Exception {
-        return DbUtils.getMapsTableTags(mapId, conn);
-    }
-
-    // adding this to satisfy the mock
-    private static BoundingBox getMapBounds(Map map) throws Exception {
-        return map.getBounds();
-    }
-
     private static void checkMapForExportTag(Map map, JSONArray commandArgs, Connection conn) throws Exception {
-        java.util.Map<String, String> tags = getMapTags(map.getId(), conn);
+        java.util.Map<String, String> tags = DbUtils.getMapsTableTags(map.getId(), conn);
         // Technically, you don't have to have this tag to export the data, but
         // since it helps to detect conflicts, and we want to be as safe as possible when writing to this
         // external database will just always enforce it.
@@ -300,7 +283,7 @@ public class ExportJobResource extends JobControllerBase {
     }
 
     private static void setAoi(Map conflatedMap, JSONArray commandArgs) throws Exception {
-        BoundingBox bounds = getMapBounds(conflatedMap);
+        BoundingBox bounds = conflatedMap.getBounds();
         JSONObject arg = new JSONObject();
         arg.put("changesetaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
         commandArgs.add(arg);
