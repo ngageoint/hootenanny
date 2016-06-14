@@ -60,6 +60,27 @@ Then(/^I should not see "([^"]*)"$/) do |text|
   expect(page).to have_no_content(text)
 end
 
+Then(/^I should see (checkbox )?"([^"]*)" (not )?enabled$/) do |cbox, text,state|
+  lbl = find('label', :text=> text, :match => :prefer_exact)
+  if cbox
+    el = lbl.find('input')
+  else
+    el = lbl.find(:xpath, '..').find('input')
+  end
+
+  if state
+    el[:disabled].should eq "true"
+  else
+    el[:disabled].should_not be
+  end
+
+  # if state
+  #   el = lbl.find('input')[:disabled].should eq "true"
+  # else
+  #   el = lbl.find('input')[:disabled].should_not be
+  # end
+end
+
 Then(/^I should see checkbox "([^"]*)" (un)?checked$/) do |text, unchk|
   lbl = find('label', :text=> text, :match => :prefer_exact)
   cbox = lbl.find('input')#[@type='checkbox']
@@ -67,6 +88,16 @@ Then(/^I should see checkbox "([^"]*)" (un)?checked$/) do |text, unchk|
     expect(cbox).to_not be_checked
   else
     expect(cbox).to be_checked
+  end
+end
+
+Then(/^I (un)?check the "([^"]*)" checkbox$/) do |unchk,text|
+  lbl = find('label', :text=> text, :match => :prefer_exact)
+  cbox = lbl.find('input')
+  if unchk
+    cbox.set(false)
+  else
+    cbox.set(true)
   end
 end
 
