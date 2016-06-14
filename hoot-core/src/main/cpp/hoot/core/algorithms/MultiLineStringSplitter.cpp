@@ -131,14 +131,14 @@ void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollec
 
   // rename the matches to the positive subline string
   const WaySublineCollection& positive = string;
-  // create an inversion of the WaySublineString
+  // create an inversion of the WaySublineCollection
   WaySublineCollection negative = string.invert();
 
-  // create all the sublines that fall within the positive WaySublineString and put them into
+  // create all the sublines that fall within the positive WaySublineCollection and put them into
   // the match element.
   match = createSublines(map, positive, reverse, nf);
 
-  // create all the sublines that fall within the negative WaySublineString and put them into
+  // create all the sublines that fall within the negative WaySublineCollection and put them into
   // the scraps element.
   vector<bool> reverseNegative(negative.getSublines().size(), false);
   scraps = createSublines(map, negative, reverseNegative, nf);

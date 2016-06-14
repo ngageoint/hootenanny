@@ -16,6 +16,10 @@ When(/^I click the "([^"]*)" icon$/) do |cls|
   find('._icon.' + cls).click
 end
 
+When(/^I click the "([^"]*)" icon under the "([^"]*)" link$/) do |cls, txt|
+  parent = find('a', :text=> txt).find('._icon.' + cls).click
+end
+
 When(/^I click the "([^"]*)" link$/) do |linkText|
   find('a', :text=> linkText).click
 end
@@ -28,12 +32,36 @@ When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent
   find('div.' + parent).find('a.' + classed).click
 end
 
+When(/^I select a way map feature with id "([^"]*)"$/) do |id|
+  find('div.layer-data').all('path[class*=" ' + id + '"]').last.click
+end
+
+When(/^I select a node map feature with id "([^"]*)"$/) do |id|
+  find('div.layer-data').all('g[class*=" ' + id + '"]').last.click
+end
+
+Then (/^I should (not )?see an element "([^"]*)"$/) do |negate, selector|
+  expectation = negate ? :should_not : :should
+  page.send(expectation, have_css(selector))
+end
+
 Then(/^I should see "([^"]*)"$/) do |text|
-  page.should have_content(text)
+  #page.should have_content(text)
+  expect(page).to have_content(text)
 end
 
 Then(/^I should not see "([^"]*)"$/) do |text|
-  page.should have_no_content(text)
+  #page.should have_no_content(text)
+  expect(page).to have_no_content(text)
+end
+
+Then (/^I should( not)? see a link "([^"]*)"$/) do |negate, txt|
+  expectation = negate ? :should_not : :should
+  if negate
+    page.should_not have_selector('a', :text=> txt)
+  else
+    page.should have_selector('a', :text=> txt)
+  end
 end
 
 When(/^I select the "([^"]*)" div$/) do |cls|
@@ -125,6 +153,12 @@ When(/^I select the "([^"]*)" option in the "([^"]*)" combobox$/) do |opt, cb|
   page.find('div.combobox').find('a', :text=> opt).click
 end
 
+When(/^I select the "([^"]*)" option labelled "([^"]*)"$/) do |opt, lbl|
+  combobox = page.find('label', :text=> lbl).find(:xpath,"..")
+  combobox.find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt).click
+end
+
 When(/^I select the "([^"]*)" option in "([^"]*)"$/) do |opt, el|
   combobox = page.find(el)
   combobox.find('.combobox-caret').click
@@ -162,6 +196,17 @@ end
 
 When(/^I fill "([^"]*)" input with "([^"]*)"$/) do |el, value|
   find('input.' + el).set(value)
+  sleep 1
+end
+
+When(/^I fill "([^"]*)" textarea with: (.*)$/) do |el, value|
+  find('textarea.' + el).set(value)
+  sleep 1
+end
+
+When(/^I add to "([^"]*)" textarea with: (.*)$/) do |el, value|
+  txt = find('textarea.' + el).value + "\n" + value
+  find('textarea.' + el).set(txt)
   sleep 1
 end
 
@@ -267,6 +312,20 @@ When(/^I wait ([0-9]*) "([^"]*)" to not see "([^"]*)"$/) do |timeout, unit, text
   Capybara.default_max_wait_time = oldTimeout
 end
 
+When(/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)" element with text "([^"]*)"$/) do |timeout, unit, el, text|
+  if unit == "seconds"
+    multiplier = 1
+  elsif unit == "minutes"
+    multiplier = 60
+  else
+    throw :badunits
+  end
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout) * multiplier
+  page.find(el, :text => text)
+  Capybara.default_max_wait_time = oldTimeout
+end
+
 When(/^I close the UI alert$/) do
   find('#alerts').all('.x')[0].click
 end
@@ -365,6 +424,18 @@ Then(/^the download file "([^"]*)" should exist$/) do |file|
   # puts name
   expect( File.exists?(name) ).to be true
   File.delete(name)
+end
+
+Then(/^the log file "([^"]*)" should exist$/) do |file|
+  name = ENV['HOME'] + '/Downloads/' + file
+  # puts name
+  expect(!Dir.glob(name).empty?).to be true
+  File.delete(Dir[ENV['HOME'] + '/Downloads/' + file].last)
+end
+
+Then "the downloaded file content should be:" do |content|
+  page.response_headers["Content-Disposition"].should == "attachment"
+  page.source.should == content
 end
 
 When(/^I click the "([^"]*)" classed element under "([^"]*)" with text "([^"]*)"$/) do |classed, el, text|

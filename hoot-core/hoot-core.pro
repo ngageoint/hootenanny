@@ -5,7 +5,6 @@ QT += \
     sql \
     testlib \
     xml \
-    network \
 
 TARGET = HootCore
 TEMPLATE = lib
@@ -337,7 +336,6 @@ SOURCES += \
     src/main/cpp/hoot/core/algorithms/SublineMatcher.cpp \
     src/main/cpp/hoot/core/algorithms/MaximalNearestSublineMatcher.cpp \
     src/main/cpp/hoot/core/util/UuidHelper.cpp \
-    src/main/cpp/hoot/core/algorithms/linearreference/WaySublineString.cpp \
     src/main/cpp/hoot/core/algorithms/SublineStringMatcher.cpp \
     src/main/cpp/hoot/core/algorithms/MaximalSublineStringMatcher.cpp \
     src/main/cpp/hoot/core/ops/CopySubsetOp.cpp \
@@ -502,7 +500,7 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbWriter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbSqlChangesetWriter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.cpp \
-    src/main/cpp/hoot/core/io/OsmJsonReader.cpp
+    src/main/cpp/hoot/core/algorithms/linearreference/WaySublineCollection.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1005,5 +1003,4 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbWriter.h \
     src/main/cpp/hoot/core/io/OsmApiDbSqlChangesetWriter.h \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.h \
-    src/main/cpp/hoot/core/io/OsmJsonReader.h
 

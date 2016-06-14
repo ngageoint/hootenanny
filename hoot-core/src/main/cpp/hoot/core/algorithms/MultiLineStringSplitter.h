@@ -42,7 +42,7 @@ public:
   MultiLineStringSplitter();
 
   /**
-   * Given a WaySublineString, extract all the matching sub-elements.
+   * Given a WaySublineCollection, extract all the matching sub-elements.
    *
    * @param map - Map that contains the data. The resulting match will be added to map if it isn't
    *  already in map.
