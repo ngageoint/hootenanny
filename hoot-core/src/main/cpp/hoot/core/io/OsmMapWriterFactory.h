@@ -48,7 +48,7 @@ public:
 
   shared_ptr<OsmMapWriter> createWriter(QString url);
 
-  static OsmMapWriterFactory& getInstance() { return _theInstance; }
+  static OsmMapWriterFactory& getInstance();
 
   bool hasElementOutputStream(QString url);
 
@@ -59,7 +59,7 @@ public:
   static void write(const shared_ptr<const OsmMap>& map, QString url);
 
 private:
-  static OsmMapWriterFactory _theInstance;
+  static shared_ptr<OsmMapWriterFactory> _theInstance;
 };
 
 }

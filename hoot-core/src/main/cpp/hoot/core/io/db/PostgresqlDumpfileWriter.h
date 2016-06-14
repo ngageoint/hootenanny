@@ -67,18 +67,16 @@
 #include <QtCore/QTextStream>
 #include <QtCore/Q_INT64>
 
-
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Settings.h>
-#include <tgs/BigContainers/BigMap.h>
-
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/RelationData.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/io/OsmApiDb.h>
 
 #include <tgs/BigContainers/BigMap.h>
 
@@ -253,6 +251,9 @@ private:
   void _writeChangesetToTable();
 
   void _writeSequenceUpdates();
+
+  //this is used for the optional id sequence queries only
+  OsmApiDb _db;
 };
 
 }

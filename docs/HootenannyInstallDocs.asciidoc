@@ -6,4 +6,5 @@ DigitalGlobe, Inc.
 include::install/HootenannyInstall.asciidoc[]
 include::install/Tuning.asciidoc[]
 include::install/HootenannyTroubleshooting.asciidoc[]
+include::install/ConfiguringOsmApiDatabaseConflation.asciidoc[]
 include::References.asciidoc[]

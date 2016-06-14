@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-TagMergerFactory TagMergerFactory::_theInstance;
+shared_ptr<TagMergerFactory> TagMergerFactory::_theInstance;
 
 TagMergerFactory::TagMergerFactory()
 {
@@ -42,6 +42,15 @@ TagMergerFactory::TagMergerFactory()
 TagMergerFactory::~TagMergerFactory()
 {
   reset();
+}
+
+TagMergerFactory& TagMergerFactory::getInstance()
+{
+  if (!_theInstance.get())
+  {
+      _theInstance.reset(new TagMergerFactory());
+  }
+  return *_theInstance;
 }
 
 shared_ptr<const TagMerger> TagMergerFactory::getDefaultPtr()

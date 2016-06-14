@@ -59,6 +59,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -119,7 +120,7 @@ public class MapResource {
      * Returns a list of all map layers in the services database
      * 
      * GET hoot-services/osm/api/0.6/map/layers
-     *
+     * 
      * @return a JSON object containing a list of map layers
      * @throws Exception
      */
@@ -139,7 +140,6 @@ public class MapResource {
             SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
 
             final List<Maps> mapLayerRecords = query.from(maps).orderBy(maps.displayName.asc()).list(maps);
-
             mapLayers = Map.mapLayerRecordsToLayers(mapLayerRecords);
         }
         catch (Exception e) {
@@ -158,16 +158,16 @@ public class MapResource {
 
     /**
      * <NAME>Map Service - List Folders </NAME> <DESCRIPTION> Returns a list of
-     * all folders in the services database. </DESCRIPTION>
-     * <PARAMETERS> </PARAMETERS> <OUTPUT> a JSON object containing a list of
-     * folders </OUTPUT>
-     * <EXAMPLE> <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/
-     * folders</URL> <REQUEST_TYPE>GET</REQUEST_TYPE> <INPUT> </INPUT>
-     * <OUTPUT> { "folders": [ { "id": 1, "name": "layer 1", "parentid":0, }, {
-     * "id": 2, "name": "layer 2", "parentid":1, } ] } </OUTPUT> </EXAMPLE>
-     *
+     * all folders in the services database. </DESCRIPTION> <PARAMETERS>
+     * </PARAMETERS> <OUTPUT> a JSON object containing a list of folders
+     * </OUTPUT> <EXAMPLE>
+     * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/ folders</URL>
+     * <REQUEST_TYPE>GET</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT> { "folders": [
+     * { "id": 1, "name": "layer 1", "parentid":0, }, { "id": 2, "name":
+     * "layer 2", "parentid":1, } ] } </OUTPUT> </EXAMPLE>
+     * 
      * Returns a list of all folders in the services database
-     *
+     * 
      * @return a JSON object containing a list of folders
      * @throws Exception
      */
@@ -209,7 +209,7 @@ public class MapResource {
      * Returns a list of all folders in the services database
      * 
      * GET hoot-services/osm/api/0.6/map/links
-     *
+     * 
      * @return a JSON object containing a list of folders
      * @throws Exception
      */
@@ -230,14 +230,14 @@ public class MapResource {
             QMaps maps = QMaps.maps;
             SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
 
-            new SQLDeleteClause(conn, configuration, folderMapMappings)
-                    .where(new SQLSubQuery().from(maps).where(folderMapMappings.mapId.eq(maps.id)).notExists())
-                    .execute();
+            new SQLDeleteClause(conn, configuration, folderMapMappings).where(
+                    new SQLSubQuery().from(maps).where(folderMapMappings.mapId.eq(maps.id)).notExists()).execute();
 
             try {
-                SQLInsertClause insertMissing = new SQLInsertClause(conn, configuration, folderMapMappings)
-                        .columns(folderMapMappings.mapId, folderMapMappings.folderId)
-                        .select(new SQLSubQuery().from(maps)
+                SQLInsertClause insertMissing = new SQLInsertClause(conn, configuration, folderMapMappings).columns(
+                        folderMapMappings.mapId, folderMapMappings.folderId).select(
+                        new SQLSubQuery()
+                                .from(maps)
                                 .where(maps.id.notIn(new SQLSubQuery().distinct().from(folderMapMappings)
                                         .list(folderMapMappings.mapId)))
                                 .list(maps.id, NumberTemplate.create(Long.class, "0")));
@@ -388,7 +388,7 @@ public class MapResource {
 
     /**
      * GET hoot-services/osm/api/0.6/map?mapId=dc-admin&bbox
-     *
+     * 
      * @param mapId
      *            ID of the map to query
      * @param BBox
@@ -405,7 +405,7 @@ public class MapResource {
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
-        public Response get(@QueryParam("mapId") final String mapId, @QueryParam("bbox") final String BBox,
+    public Response get(@QueryParam("mapId") final String mapId, @QueryParam("bbox") final String BBox,
             @QueryParam("extent") final String extent, @QueryParam("autoextent") final String auto,
             @DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") final boolean multiLayerUniqueElementIds)
             throws Exception {
@@ -414,73 +414,87 @@ public class MapResource {
         try {
             log.info("Retrieving map data for map with ID: " + mapId + " and bounds " + BBox + " ...");
 
-            log.debug("Initializing database connection...");
-            String bbox = BBox;
-            String[] Coords = bbox.split(",");
-            if (Coords.length == 4) {
-                String sMinX = Coords[0];
-                String sMinY = Coords[1];
-                String sMaxX = Coords[2];
-                String sMaxY = Coords[3];
-
-                double minX = Double.parseDouble(sMinX);
-                double minY = Double.parseDouble(sMinY);
-                double maxX = Double.parseDouble(sMaxX);
-                double maxY = Double.parseDouble(sMaxY);
-
-                minX = minX > 180 ? 180 : minX;
-                minX = minX < -180 ? -180 : minX;
-
-                maxX = maxX > 180 ? 180 : maxX;
-                maxX = maxX < -180 ? -180 : maxX;
-
-                minY = minY > 90 ? 90 : minY;
-                minY = minY < -90 ? -90 : minY;
-
-                maxY = maxY > 90 ? 90 : maxY;
-                maxY = maxY < -90 ? -90 : maxY;
-
-                bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
-            }
-
-            QMaps maps = QMaps.maps;
-            long mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
-            assert (mapIdNum != -1);
-
-            BoundingBox queryBounds = null;
+            long mapIdNum = -2;
             try {
-                queryBounds = new BoundingBox(bbox);
-                log.debug("Query bounds area: " + queryBounds.getArea());
+                mapIdNum = Long.parseLong(mapId);
             }
-            catch (Exception e) {
-                throw new Exception(
-                        "Error parsing bounding box from bbox param: " + bbox + " (" + e.getMessage() + ")");
+            catch (NumberFormatException e) {
+                //
             }
+            if (mapIdNum == -1)
+            {
+                // OSM API database data can't be displayed on a hoot map, due to differences
+                // between the display code, so we return no data here.
+                responseDoc = MapQueryResponseWriter.writeEmptyResponse();
+            }
+            else {
+                String bbox = BBox;
+                String[] Coords = bbox.split(",");
+                if (Coords.length == 4) {
+                    String sMinX = Coords[0];
+                    String sMinY = Coords[1];
+                    String sMaxX = Coords[2];
+                    String sMaxY = Coords[3];
 
-            boolean doDefault = true;
-            if (auto != null && extent != null) {
-                if (auto.equalsIgnoreCase("manual")) {
-                    if (extent.length() > 0) {
-                        String[] coords = extent.split(",");
-                        if (coords.length == 4) {
-                            String maxlon = coords[0].trim();
-                            String maxlat = coords[1].trim();
-                            String minlon = coords[2].trim();
-                            String minlat = coords[3].trim();
-                            responseDoc = _generateExtentOSM(maxlon, maxlat, minlon, minlat);
-                            doDefault = false;
-                        }
-                    }
+                    double minX = Double.parseDouble(sMinX);
+                    double minY = Double.parseDouble(sMinY);
+                    double maxX = Double.parseDouble(sMaxX);
+                    double maxY = Double.parseDouble(sMaxY);
 
+                    minX = minX > 180 ? 180 : minX;
+                    minX = minX < -180 ? -180 : minX;
+
+                    maxX = maxX > 180 ? 180 : maxX;
+                    maxX = maxX < -180 ? -180 : maxX;
+
+                    minY = minY > 90 ? 90 : minY;
+                    minY = minY < -90 ? -90 : minY;
+
+                    maxY = maxY > 90 ? 90 : maxY;
+                    maxY = maxY < -90 ? -90 : maxY;
+
+                    bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
                 }
-            }
 
-            if (doDefault) {
-                final java.util.Map<ElementType, java.util.Map<Long, Tuple>> results = (new Map(mapIdNum, conn))
-                        .query(queryBounds);
+                QMaps maps = QMaps.maps;
+                mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
+                assert (mapIdNum != -1);
 
-                responseDoc = (new MapQueryResponseWriter(mapIdNum, conn)).writeResponse(results, queryBounds,
-                        multiLayerUniqueElementIds);
+                BoundingBox queryBounds = null;
+                try {
+                    queryBounds = new BoundingBox(bbox);
+                    log.debug("Query bounds area: " + queryBounds.getArea());
+                }
+                catch (Exception e) {
+                    throw new Exception("Error parsing bounding box from bbox param: " + bbox + " (" + e.getMessage()
+                            + ")");
+                }
+
+                boolean doDefault = true;
+                if (auto != null && extent != null) {
+                    if (auto.equalsIgnoreCase("manual")) {
+                        if (extent.length() > 0) {
+                            String[] coords = extent.split(",");
+                            if (coords.length == 4) {
+                                String maxlon = coords[0].trim();
+                                String maxlat = coords[1].trim();
+                                String minlon = coords[2].trim();
+                                String minlat = coords[3].trim();
+                                responseDoc = _generateExtentOSM(maxlon, maxlat, minlon, minlat);
+                                doDefault = false;
+                            }
+                        }
+
+                    }
+                }
+
+                if (doDefault) {
+                    final java.util.Map<ElementType, java.util.Map<Long, Tuple>> results = (new Map(mapIdNum, conn))
+                            .query(queryBounds);
+
+                    responseDoc = (new MapQueryResponseWriter(mapIdNum, conn)).writeResponse(results, queryBounds,
+                            multiLayerUniqueElementIds);
+                }
             }
         }
         catch (Exception e) {
@@ -505,58 +519,68 @@ public class MapResource {
         String bbox = "";
         long nodeCnt = 0;
         try {
-            log.info("Retrieving map data for map with ID: " + mapId + " ...");
-
-            log.debug("Initializing database connection...");
             JSONParser parser = new JSONParser();
             JSONArray paramsArray = (JSONArray) parser.parse(params);
 
             for (int i = 0; i < paramsArray.size(); i++) {
                 JSONObject param = (JSONObject) paramsArray.get(i);
                 mapId = (String) param.get("mapId");
-                bbox = (String) param.get("tile");
-                String[] coords = bbox.split(",");
-                if (coords.length == 4) {
-                    String sMinX = coords[0];
-                    String sMinY = coords[1];
-                    String sMaxX = coords[2];
-                    String sMaxY = coords[3];
-
-                    double minX = Double.parseDouble(sMinX);
-                    double minY = Double.parseDouble(sMinY);
-                    double maxX = Double.parseDouble(sMaxX);
-                    double maxY = Double.parseDouble(sMaxY);
-
-                    minX = minX > 180 ? 180 : minX;
-                    minX = minX < -180 ? -180 : minX;
-
-                    maxX = maxX > 180 ? 180 : maxX;
-                    maxX = maxX < -180 ? -180 : maxX;
-
-                    minY = minY > 90 ? 90 : minY;
-                    minY = minY < -90 ? -90 : minY;
-
-                    maxY = maxY > 90 ? 90 : maxY;
-                    maxY = maxY < -90 ? -90 : maxY;
-
-                    bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
-                }
-
-                QMaps maps = QMaps.maps;
-                long mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
-                assert (mapIdNum != -1);
-
-                BoundingBox queryBounds = null;
+                long mapIdNum = -2;
                 try {
-                    queryBounds = new BoundingBox(bbox);
-                    log.debug("Query bounds area: " + queryBounds.getArea());
+                    mapIdNum = Long.parseLong(mapId);
                 }
-                catch (Exception e) {
-                    throw new Exception(
-                            "Error parsing bounding box from bbox param: " + bbox + " (" + e.getMessage() + ")");
+                catch (NumberFormatException e) {
+                    //
                 }
-                Map currMap = new Map(mapIdNum, conn);
-                nodeCnt += currMap.getNodesCount(queryBounds);
+                // OSM API database data can't be displayed on a hoot map, due to differences
+                // between the display code, so we return a zero count if its that layer.
+                if (mapIdNum != -1)
+                {
+                    log.info("Retrieving node count for map with ID: " + mapId + " ...");
+                    bbox = (String) param.get("tile");
+                    String[] coords = bbox.split(",");
+                    if (coords.length == 4) {
+                        String sMinX = coords[0];
+                        String sMinY = coords[1];
+                        String sMaxX = coords[2];
+                        String sMaxY = coords[3];
+
+                        double minX = Double.parseDouble(sMinX);
+                        double minY = Double.parseDouble(sMinY);
+                        double maxX = Double.parseDouble(sMaxX);
+                        double maxY = Double.parseDouble(sMaxY);
+
+                        minX = minX > 180 ? 180 : minX;
+                        minX = minX < -180 ? -180 : minX;
+
+                        maxX = maxX > 180 ? 180 : maxX;
+                        maxX = maxX < -180 ? -180 : maxX;
+
+                        minY = minY > 90 ? 90 : minY;
+                        minY = minY < -90 ? -90 : minY;
+
+                        maxY = maxY > 90 ? 90 : maxY;
+                        maxY = maxY < -90 ? -90 : maxY;
+
+                        bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
+                    }
+
+                    QMaps maps = QMaps.maps;
+                    mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
+                    assert (mapIdNum != -1);
+
+                    BoundingBox queryBounds = null;
+                    try {
+                        queryBounds = new BoundingBox(bbox);
+                        log.debug("Query bounds area: " + queryBounds.getArea());
+                    }
+                    catch (Exception e) {
+                        throw new Exception("Error parsing bounding box from bbox param: " + bbox + " ("
+                                + e.getMessage() + ")");
+                    }
+                    Map currMap = new Map(mapIdNum, conn);
+                    nodeCnt += currMap.getNodesCount(queryBounds);
+                }
             }
 
             ret.put("nodescount", nodeCnt);
@@ -579,50 +603,70 @@ public class MapResource {
         Connection conn = DbUtils.createConnection();
         JSONObject ret = new JSONObject();
         try {
-            log.info("Retrieving map data for map with ID: " + mapId + " ...");
+            log.info("Retrieving MBR for map with ID: " + mapId + " ...");
 
-            log.debug("Initializing database connection...");
-
-            QMaps maps = QMaps.maps;
-            long mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
-            assert (mapIdNum != -1);
-
-            BoundingBox queryBounds = null;
+            long mapIdNum = -2;
             try {
-                queryBounds = new BoundingBox("-180,-90,180,90");
-                log.debug("Query bounds area: " + queryBounds.getArea());
+                mapIdNum = Long.parseLong(mapId);
             }
-            catch (Exception e) {
-                throw new Exception("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
-                        + e.getMessage() + ")");
+            catch (NumberFormatException e) {
+                //
             }
-
-            Map currMap = new Map(mapIdNum, conn);
-            final JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
-
-            if (extents.get("minlat") == null || extents.get("maxlat") == null || extents.get("minlon") == null
-                    || extents.get("maxlon") == null) {
-                throw new Exception("Map is empty.");
-
+            if (mapIdNum == -1) // OSM API db
+            {
+                // OSM API database data can't be displayed on a hoot map, due to differences
+                // between the display code, so we arbitrarily returning roughly a CONUS bounds 
+                // here...not quite sure what else to return...
+                ret.put("minlon", -110);
+                ret.put("maxlon", -75);
+                ret.put("minlat", 20);
+                ret.put("maxlat", 50);
+                ret.put("firstlon", 0);
+                ret.put("firstlat", 0);
+                ret.put("nodescount", 0);
             }
-            final JSONObject anode = currMap.retrieveANode(queryBounds);
-            long nodeCnt = currMap.getNodesCount(queryBounds);
+            else {
+                QMaps maps = QMaps.maps;
+                mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
+                assert (mapIdNum != -1);
 
-            double dMinLon = (Double) extents.get("minlon");
-            double dMaxLon = (Double) extents.get("maxlon");
-            double dMinLat = (Double) extents.get("minlat");
-            double dMaxLat = (Double) extents.get("maxlat");
+                BoundingBox queryBounds = null;
+                try {
+                    queryBounds = new BoundingBox("-180,-90,180,90");
+                    log.debug("Query bounds area: " + queryBounds.getArea());
+                }
+                catch (Exception e) {
+                    throw new Exception("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
+                            + e.getMessage() + ")");
+                }
 
-            double dFirstLon = (Double) anode.get("lon");
-            double dFirstLat = (Double) anode.get("lat");
+                Map currMap = new Map(mapIdNum, conn);
+                final JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
 
-            ret.put("minlon", dMinLon);
-            ret.put("maxlon", dMaxLon);
-            ret.put("minlat", dMinLat);
-            ret.put("maxlat", dMaxLat);
-            ret.put("firstlon", dFirstLon);
-            ret.put("firstlat", dFirstLat);
-            ret.put("nodescount", nodeCnt);
+                if (extents.get("minlat") == null || extents.get("maxlat") == null || extents.get("minlon") == null
+                        || extents.get("maxlon") == null) {
+                    throw new Exception("Map is empty.");
+
+                }
+                final JSONObject anode = currMap.retrieveANode(queryBounds);
+                long nodeCnt = currMap.getNodesCount(queryBounds);
+
+                double dMinLon = (Double) extents.get("minlon");
+                double dMaxLon = (Double) extents.get("maxlon");
+                double dMinLat = (Double) extents.get("minlat");
+                double dMaxLat = (Double) extents.get("maxlat");
+
+                double dFirstLon = (Double) anode.get("lon");
+                double dFirstLat = (Double) anode.get("lat");
+
+                ret.put("minlon", dMinLon);
+                ret.put("maxlon", dMaxLon);
+                ret.put("minlat", dMinLat);
+                ret.put("maxlat", dMaxLat);
+                ret.put("firstlon", dFirstLon);
+                ret.put("firstlat", dFirstLat);
+                ret.put("nodescount", nodeCnt);
+            }
         }
         catch (Exception e) {
             handleError(e, mapId, "-180,-90,180,90");
@@ -667,14 +711,12 @@ public class MapResource {
         }
         else {
             if (mapId != null) {
-                ResourceErrorHandler.handleError(
-                        "Error querying map with ID: " + mapId + " - data: (" + e.getMessage() + ") " + requestSnippet,
-                        Status.INTERNAL_SERVER_ERROR, log);
+                ResourceErrorHandler.handleError("Error querying map with ID: " + mapId + " - data: (" + e.getMessage()
+                        + ") " + requestSnippet, Status.INTERNAL_SERVER_ERROR, log);
             }
             else {
-                ResourceErrorHandler.handleError(
-                        "Error listing layers for map - data: (" + e.getMessage() + ") " + requestSnippet,
-                        Status.INTERNAL_SERVER_ERROR, log);
+                ResourceErrorHandler.handleError("Error listing layers for map - data: (" + e.getMessage() + ") "
+                        + requestSnippet, Status.INTERNAL_SERVER_ERROR, log);
             }
         }
     }
@@ -743,8 +785,8 @@ public class MapResource {
                 QMaps maps = QMaps.maps;
                 Configuration configuration = DbUtils.getConfiguration();
 
-                new SQLUpdateClause(conn, configuration, maps).where(maps.id.eq(_mapId)).set(maps.displayName, _modName)
-                        .execute();
+                new SQLUpdateClause(conn, configuration, maps).where(maps.id.eq(_mapId))
+                        .set(maps.displayName, _modName).execute();
 
                 log.debug("Renamed map with id " + mapId + " " + _modName + "...");
             }
@@ -774,9 +816,8 @@ public class MapResource {
     /**
      * Adds new dataset folder
      * 
-     * POST
-     * hoot-services/osm/api/0.6/map/addfolder?folderName={foldername}&parentId=
-     * {parentId}
+     * POST hoot-services/osm/api/0.6/map/addfolder?folderName={foldername}&
+     * parentId= {parentId}
      * 
      * @param folderName
      *            Display name of folder
@@ -810,9 +851,9 @@ public class MapResource {
                 newId = ids.get(0);
                 final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
-                new SQLInsertClause(conn, configuration, folders).columns(folders.id, folders.createdAt,
-                        folders.displayName, folders.publicCol, folders.userId, folders.parentId)
-                        .values(newId, now, folderName, true, userId, _parentId).execute();
+                new SQLInsertClause(conn, configuration, folders)
+                        .columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId,
+                                folders.parentId).values(newId, now, folderName, true, userId, _parentId).execute();
             }
         }
         catch (Exception e) {
@@ -963,7 +1004,7 @@ public class MapResource {
 
         /*
          * long _mapId = 0;
-         *
+         * 
          * try { _mapId = ModelDaoUtils.getRecordIdForInputString(mapId, conn,
          * maps, maps.id, maps.displayName); } catch (Exception e){ _mapId = 0;
          * }
@@ -972,8 +1013,8 @@ public class MapResource {
         try {
 
             // Delete any existing to avoid duplicate entries
-            new SQLDeleteClause(conn, configuration, folderMapMappings)
-                    .where(folderMapMappings.mapId.eq(Long.parseLong(mapId))).execute();
+            new SQLDeleteClause(conn, configuration, folderMapMappings).where(
+                    folderMapMappings.mapId.eq(Long.parseLong(mapId))).execute();
 
             if (updateType.equalsIgnoreCase("new") || updateType.equalsIgnoreCase("update")) {
                 List<Long> ids = query.from().list(expression);
@@ -1059,9 +1100,8 @@ public class MapResource {
             if (jobStatusManager != null) {
                 jobStatusManager.setFailed(jobId, sqlEx.getMessage());
             }
-            ResourceErrorHandler.handleError(
-                    "Failure update map tags resource " + sqlEx.getMessage() + " SQLState: " + sqlEx.getSQLState(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            ResourceErrorHandler.handleError("Failure update map tags resource " + sqlEx.getMessage() + " SQLState: "
+                    + sqlEx.getSQLState(), Status.INTERNAL_SERVER_ERROR, log);
         }
         catch (Exception ex) {
             if (jobStatusManager != null) {
@@ -1080,37 +1120,50 @@ public class MapResource {
     @Path("/tags")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMapTags(@QueryParam("mapid") final String mapId) throws Exception {
+    public Response getTags(@QueryParam("mapid") final String mapId) throws Exception {
         Connection conn = DbUtils.createConnection();
         JSONObject ret = new JSONObject();
         try {
-            log.info("Retrieving map tags for map with ID: " + mapId + " ...");
+            // log.debug(mapId);
 
-            log.debug("Initializing database connection...");
-
-            QMaps maps = QMaps.maps;
-            long mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
-            assert (mapIdNum != -1);
-
-            try {
-                java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapIdNum, conn);
-                ret.putAll(tags);
-                Object oInput1 = ret.get("input1");
-                if (oInput1 != null) {
-                    String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput1.toString()));
-                    ret.put("input1Name", dispName);
+            if (!StringUtils.isEmpty(mapId)) {
+                long mapIdNum = -2;
+                try {
+                    mapIdNum = Long.parseLong(mapId);
                 }
+                catch (NumberFormatException e) {
+                    // a map name string could also be passed in here
+                }
+                if (mapIdNum != -1) // not OSM API db
+                {
+                    QMaps maps = QMaps.maps;
+                    mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
+                    log.info("Retrieving map tags for map with ID: " + mapIdNum + " ...");
+                    assert (mapIdNum > 0);
 
-                Object oInput2 = ret.get("input2");
-                if (oInput2 != null) {
-                    String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput2.toString()));
-                    ret.put("input2Name", dispName);
+                    try {
+                        java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapIdNum, conn);
+                        if (tags != null) {
+                            log.debug(tags.toString());
+                        }
+                        ret.putAll(tags);
+                        Object oInput1 = ret.get("input1");
+                        if (oInput1 != null) {
+                            String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput1.toString()));
+                            ret.put("input1Name", dispName);
+                        }
+
+                        Object oInput2 = ret.get("input2");
+                        if (oInput2 != null) {
+                            String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput2.toString()));
+                            ret.put("input2Name", dispName);
+                        }
+                    }
+                    catch (Exception e) {
+                        throw new Exception("Error getting map tags. :" + e.getMessage());
+                    }
                 }
             }
-            catch (Exception e) {
-                throw new Exception("Error getting map tags. :" + e.getMessage());
-            }
-
         }
         catch (Exception e) {
             handleError(e, mapId, "");
@@ -1131,14 +1184,14 @@ public class MapResource {
         }
         catch (Exception e) {
             if (e.getMessage().startsWith("Multiple records exist")) {
-                ResourceErrorHandler.handleError(
-                        e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), Status.NOT_FOUND,
-                        log);
+                ResourceErrorHandler
+                        .handleError(e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"),
+                                Status.NOT_FOUND, log);
             }
             else if (e.getMessage().startsWith("No record exists")) {
-                ResourceErrorHandler.handleError(
-                        e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), Status.NOT_FOUND,
-                        log);
+                ResourceErrorHandler
+                        .handleError(e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"),
+                                Status.NOT_FOUND, log);
             }
             ResourceErrorHandler.handleError("Error requesting map with ID: " + mapId + " (" + e.getMessage() + ")",
                     Status.BAD_REQUEST, log);

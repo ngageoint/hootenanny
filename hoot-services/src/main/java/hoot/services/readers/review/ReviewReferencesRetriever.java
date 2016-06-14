@@ -175,7 +175,7 @@ public class ReviewReferencesRetriever {
         if (StringUtils.trimToNull(queryElementInfo.getType()) == null || !Element.allElementsExist(mapIdNum,
                 Element.elementTypeFromString(queryElementInfo.getType()), elementIds, conn)) {
             ReviewUtils.handleError(new Exception("Element with ID: " + queryElementInfo + " and type: "
-                    + queryElementInfo.getType() + " does not exist."), "", false);
+                    + queryElementInfo.getType() + " does not exist."), "");
         }
 
         // select all unresolved review relation id's from current relation
@@ -243,7 +243,7 @@ public class ReviewReferencesRetriever {
         if (StringUtils.trimToNull(queryElementInfo.getType()) == null || !Element.allElementsExist(mapIdNum,
                 Element.elementTypeFromString(queryElementInfo.getType()), elementIds, conn)) {
             ReviewUtils.handleError(new Exception("Element with ID: " + queryElementInfo + " and type: "
-                    + queryElementInfo.getType() + " does not exist."), "", false);
+                    + queryElementInfo.getType() + " does not exist."), "");
         }
 
         // select all review relation id's from current relation members where

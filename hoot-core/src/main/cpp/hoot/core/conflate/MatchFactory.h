@@ -103,7 +103,7 @@ private:
                                    const Envelope& bounds) const;
   static void _setMatchCreators(QStringList matchCreatorsList);
 
-  static MatchFactory _theInstance;
+  static shared_ptr<MatchFactory> _theInstance;
 
   vector< shared_ptr<MatchCreator> > _creators;
 
