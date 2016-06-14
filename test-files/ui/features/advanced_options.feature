@@ -116,23 +116,31 @@ Feature: Advanced Conflation Options
 		And I should see checkbox "Small Way Merger" enabled
 		And I should see "Small Way Merger Threshold" enabled
 		# Test select all checkbox
-		# Test small way merger checkbox / value
-		Then I click on "#hoot_cleaning_options_label"
-		And I should see "Rubber Sheeting Options"
-		And I should see "General Conflation Options"
-		And I should see "Road Options"
-		Then I click on "#hoot_road_options_label"
-		And I should see checkbox "Enabled" checked
-		And I should see element "#hoot_road_opt_engine" with no value and placeholder "Unify"
-		Then I click on "#hoot_road_options_label"
-		And I should see "Building Options"
-		And I should see "POI Options"
-		And I should see "Waterway Options"
-		And I should see "Cookie Cutter & Horizontal Options"
-		Then I click on "#horizontal_conflation_options_label"
-		And I should see element "#horizontal_cookie_cutter_alpha_shape_buffer" with no value and placeholder "0"
-		Then I fill "horizontal_cookie_cutter_alpha_shape_buffer" with "5"
-		Then I click on "#horizontal_conflation_options_label"
-	 	Then I press "big.loud" span with text "Apply"
-		And I should see "►"
-		And I should see element ".ConfType" with value "Advanced Conflation"
+		Then I should see checkbox "Select All" unchecked
+		Then I should see checkbox "Small Way Merger" checked
+		Then I check the "Select All" checkbox
+		Then I uncheck the "Select All" checkbox
+		And I should see checkbox "Select All" unchecked
+		And I should see checkbox "Small Way Merger" unchecked
+		Then I check the "Select All" checkbox
+		Then I should see checkbox "Small Way Merger" checked
+		# # Test small way merger checkbox / value
+		# Then I click on "#hoot_cleaning_options_label"
+		# And I should see "Rubber Sheeting Options"
+		# And I should see "General Conflation Options"
+		# And I should see "Road Options"
+		# Then I click on "#hoot_road_options_label"
+		# And I should see checkbox "Enabled" checked
+		# And I should see element "#hoot_road_opt_engine" with no value and placeholder "Unify"
+		# Then I click on "#hoot_road_options_label"
+		# And I should see "Building Options"
+		# And I should see "POI Options"
+		# And I should see "Waterway Options"
+		# And I should see "Cookie Cutter & Horizontal Options"
+		# Then I click on "#horizontal_conflation_options_label"
+		# And I should see element "#horizontal_cookie_cutter_alpha_shape_buffer" with no value and placeholder "0"
+		# Then I fill "horizontal_cookie_cutter_alpha_shape_buffer" with "5"
+		# Then I click on "#horizontal_conflation_options_label"
+	 # 	Then I press "big.loud" span with text "Apply"
+		# And I should see "►"
+		# And I should see element ".ConfType" with value "Advanced Conflation"

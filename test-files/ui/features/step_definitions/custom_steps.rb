@@ -83,7 +83,7 @@ end
 
 Then(/^I should see checkbox "([^"]*)" (un)?checked$/) do |text, unchk|
   lbl = find('label', :text=> text, :match => :prefer_exact)
-  cbox = lbl.find('input')#[@type='checkbox']
+  cbox = lbl.find('input')
   if unchk
     expect(cbox).to_not be_checked
   else
