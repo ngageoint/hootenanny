@@ -145,6 +145,7 @@ MatchFactory& MatchFactory::getInstance()
   {
     _theInstance.reset(new MatchFactory());
   }
+
   if (_theInstance->_creators.size() == 0)
   {
     //only get the match creators that are specified in the config
