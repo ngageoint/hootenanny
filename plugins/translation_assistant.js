@@ -1,7 +1,7 @@
 //Used for two-step translation
 //from custom->TDSvXX->OSM
 if (typeof hoot !== 'undefined') {
-    hoot.require('etds_osm')
+    hoot.require('etds40_osm')
     hoot.require('etds61_osm')
 }
 
@@ -84,7 +84,7 @@ translation_assistant = {
             switch(schema) {
             case 'TDSv40':
             default:
-                osmplus = etds_osm.toOSM(tags, '', '');
+                osmplus = etds40_osm.toOSM(tags, '', '');
                 break;
             case 'TDSv61':
                 osmplus = etds61_osm.toOSM(tags, '', '');

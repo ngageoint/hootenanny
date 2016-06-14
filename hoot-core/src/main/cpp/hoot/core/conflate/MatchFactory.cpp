@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-MatchFactory MatchFactory::_theInstance;
+shared_ptr<MatchFactory> MatchFactory::_theInstance;
 
 MatchFactory::~MatchFactory()
 {
@@ -129,7 +129,7 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
     {
       args.removeFirst();
       shared_ptr<MatchCreator> mc(Factory::getInstance().constructObject<MatchCreator>(className));
-      _theInstance.registerCreator(mc);
+      _theInstance->registerCreator(mc);
 
       if (args.size() > 0)
       {
@@ -141,12 +141,17 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
 
 MatchFactory& MatchFactory::getInstance()
 {
-  if (_theInstance._creators.size() == 0)
+  if (!_theInstance.get())
+  {
+    _theInstance.reset(new MatchFactory());
+  }
+
+  if (_theInstance->_creators.size() == 0)
   {
     //only get the match creators that are specified in the config
     _setMatchCreators(ConfigOptions(conf()).getMatchCreators().split(";"));
   }
-  return _theInstance;
+  return *_theInstance;
 }
 
 }

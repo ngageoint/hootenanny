@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-MergerFactory MergerFactory::_theInstance;
+shared_ptr<MergerFactory> MergerFactory::_theInstance;
 
 MergerFactory::MergerFactory()
 {
@@ -109,12 +109,17 @@ vector<MergerCreator::Description> MergerFactory::getAllAvailableCreators() cons
 
 MergerFactory &MergerFactory::getInstance()
 {
-  if (_theInstance._creators.size() == 0)
+  if (!_theInstance.get())
   {
-    _theInstance.registerDefaultCreators();
+    _theInstance.reset(new MergerFactory());
   }
 
-  return _theInstance;
+  if (_theInstance->_creators.size() == 0)
+  {
+    _theInstance->registerDefaultCreators();
+  }
+
+  return *_theInstance;
 }
 
 bool MergerFactory::isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2)

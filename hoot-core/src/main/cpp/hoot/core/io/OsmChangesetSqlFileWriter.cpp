@@ -44,6 +44,11 @@ _changesetId(0)
   _db.open(url);
 }
 
+OsmChangesetSqlFileWriter::~OsmChangesetSqlFileWriter()
+{
+  _db.close();
+}
+
 void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr changesetProvider)
 {
   LOG_DEBUG("Writing changeset to " << path);
@@ -98,7 +103,6 @@ void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr c
   _updateChangeset(changes);
 
   _outputSql.close();
-  _db.close();
 }
 
 void OsmChangesetSqlFileWriter::_updateChangeset(const int numChanges)

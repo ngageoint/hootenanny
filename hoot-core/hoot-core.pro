@@ -5,6 +5,7 @@ QT += \
     sql \
     testlib \
     xml \
+    network \
 
 TARGET = HootCore
 TEMPLATE = lib
@@ -495,12 +496,14 @@ SOURCES += \
     src/main/cpp/hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.cpp \
     src/main/cpp/hoot/core/io/ElementComparer.cpp \
     src/main/cpp/hoot/core/cmd/ApplyChangesetCmd.cpp \
+    src/main/cpp/hoot/core/filters/IntersectionCriterion.cpp \
     src/main/cpp/hoot/core/algorithms/linearreference/WayString.cpp \
+    src/main/cpp/hoot/core/algorithms/linearreference/WaySublineCollection.cpp \
     src/main/cpp/hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbWriter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbSqlChangesetWriter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.cpp \
-    src/main/cpp/hoot/core/algorithms/linearreference/WaySublineCollection.cpp
+    src/main/cpp/hoot/core/io/OsmJsonReader.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -996,6 +999,7 @@ HEADERS += \
     src/main/cpp/hoot/core/io/ElementComparer.h \
     src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.h \
     src/main/cpp/hoot/core/ops/FindIntersectionsOp.h \
+    src/main/cpp/hoot/core/filters/IntersectionCriterion.h \
     src/main/cpp/hoot/core/algorithms/linearreference/WayString.h \
     src/main/cpp/hoot/core/algorithms/linearreference/WaySublineCollection.h \
     src/main/cpp/hoot/core/visitors/ExtractNodesVisitor.h \
@@ -1003,4 +1007,5 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbWriter.h \
     src/main/cpp/hoot/core/io/OsmApiDbSqlChangesetWriter.h \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.h \
+    src/main/cpp/hoot/core/io/OsmJsonReader.h
 

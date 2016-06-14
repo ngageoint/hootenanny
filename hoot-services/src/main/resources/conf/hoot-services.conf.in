@@ -77,7 +77,7 @@ testChangesetAutoClose=false
 
 # ETL
 
-# the folder location of the make file script for some processlet like ETLProcesslet
+# the folder location of the make file script for some endpoints
 coreScriptPath=$(homeFolder)/scripts
 
 # intermediate file output location (working folder)
@@ -139,6 +139,9 @@ wfsStoreConnName=WFS_Connection
 
 # WFS Store db name
 wfsStoreDb=${WFS_DB_NAME}
+
+# Enable access to a single OSM API database configured by DatabaseConfig.sh.
+osmApiDbEnabled=true
 
 # osm api db Name
 osmApiDbName=${DB_NAME_OSMAPI}

@@ -40,6 +40,10 @@ public class ReviewableStatistics extends ReviewQueryMapper {
     private long _totalCount = 0;
     private long _unreviewedCount = 0;
 
+    public ReviewableStatistics() {
+
+    }
+
     public ReviewableStatistics(final long nTotal, final long nUnreviewed) {
         _totalCount = nTotal;
         _unreviewedCount = nUnreviewed;

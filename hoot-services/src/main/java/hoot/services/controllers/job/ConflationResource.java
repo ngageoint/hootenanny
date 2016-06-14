@@ -27,10 +27,7 @@
 package hoot.services.controllers.job;
 
 import java.sql.Connection;
-import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -41,6 +38,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -90,8 +90,7 @@ public class ConflationResource extends JobControllerBase {
      * service specifies the input files, conflation type, match threshold, miss
      * threshold, and output file name. The conflation type can be specified as
      * the average of the two input datasets or based on a single input file
-     * that is intended to be the reference dataset. It has two fronts, WPS and
-     * standard rest end point.
+     * that is intended to be the reference dataset.
      * 
      * POST hoot-services/conflation/execute
      * 
@@ -129,7 +128,15 @@ public class ConflationResource extends JobControllerBase {
             JSONParser pars = new JSONParser();
             JSONObject oParams = (JSONObject) pars.parse(params);
 
-            validateOsmApiDbConflateParams(oParams);
+            final boolean osmApiDbEnabled = Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"));
+            final boolean conflatingOsmApiDbData = oneLayerIsOsmApiDb(oParams);
+            //Since we're not returning the osm api db layer to the hoot ui, this exception
+            //shouldn't actually ever occur, but will leave this check here anyway.
+            if (conflatingOsmApiDbData && !osmApiDbEnabled) {
+                ResourceErrorHandler.handleError(
+                        "Attempted to conflate an OSM API database data source but OSM API database"
+                                + "support is disabled.", Status.INTERNAL_SERVER_ERROR, log);
+            }
 
             oParams.put("IS_BIG", "false");
             String confOutputName = oParams.get("OUTPUT_NAME").toString();
@@ -160,20 +167,6 @@ public class ConflationResource extends JobControllerBase {
             JSONArray commandArgs = parseParams(oParams.toJSONString());
             JSONObject conflationCommand = _createMakeScriptJobReq(commandArgs);
 
-            final boolean conflatingOsmApiDbData = oneLayerIsOsmApiDb(oParams);
-
-            if (conflatingOsmApiDbData) {
-                String secondaryParameterKey = null;
-                if (firstLayerIsOsmApiDb(oParams)) {
-                    secondaryParameterKey = "INPUT2";
-                }
-                else {
-                    secondaryParameterKey = "INPUT1";
-                }
-                Map secondaryMap = getSecondaryMap(getParameterValue(secondaryParameterKey, commandArgs), conn);
-                setAoi(secondaryMap, commandArgs);
-            }
-
             // add map tags
             // WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
             java.util.Map<String, String> tags = new HashMap<String, String>();
@@ -198,15 +191,35 @@ public class ConflationResource extends JobControllerBase {
             // this
             // point, so just check to
             // see if any osm api db input is present
-            if (conflatingOsmApiDbData) {
-                // write a timestamp representing the time the osm api db data
-                // was
-                // queried out from the source;
-                // to be used during export of conflated data back into the osm
-                // api
-                // db at a later time
-                final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-                tags.put("osm_api_db_export_time", now.toString());
+            if (conflatingOsmApiDbData && osmApiDbEnabled) {
+                validateOsmApiDbConflateParams(oParams);
+
+                String secondaryParameterKey = null;
+                if (firstLayerIsOsmApiDb(oParams)) {
+                    secondaryParameterKey = "INPUT2";
+                }
+                else {
+                    secondaryParameterKey = "INPUT1";
+                }
+                //log.debug(commandArgs.toJSONString());
+
+                //Record the aoi of the conflation job (equal to that of the secondary layer), as
+                //we'll need it to detect conflicts at export time.
+                final long secondaryMapId = Long.parseLong(getParameterValue(secondaryParameterKey, commandArgs));
+                if (!mapExists(secondaryMapId, conn)) {
+                    ResourceErrorHandler.handleError("No secondary map exists with ID: " + secondaryMapId,
+                            Status.BAD_REQUEST, log);
+                }
+                Map secondaryMap = new Map(secondaryMapId, conn);
+                setAoi(secondaryMap, commandArgs);
+
+                // write a timestamp representing the time the osm api db data was queried out 
+                // from the source; to be used conflict detection during export of conflated 
+                // data back into the osm api db at a later time; timestamp must be 24 hour utc 
+                // to match rails port
+                final String now = 
+                  DateTimeFormat.forPattern(DbUtils.OSM_API_TIMESTAMP_FORMAT).withZone(DateTimeZone.UTC).print(new DateTime());
+                tags.put("osm_api_db_export_time", now);
             }
 
             JSONArray mapTagsArgs = new JSONArray();
@@ -287,33 +300,14 @@ public class ConflationResource extends JobControllerBase {
         }
     }
 
-    private Map getSecondaryMap(final String mapName, Connection conn) throws Exception {
-        List<Long> mapIds = getMapIdsByName(mapName, conn);
-        // we don't expect the services to try to conflate a map that has
-        // multiple
-        // name entries, but check for it anyway
-        if (mapIds.size() > 1) {
-            ResourceErrorHandler.handleError("Error conflating data.  Multiple maps with name: " + mapName,
-                    Status.BAD_REQUEST, log);
-        }
-        // this may be checked somewhere else down the line...not sure
-        else if (mapIds.size() == 0) {
-            ResourceErrorHandler.handleError("Error conflating data.  No map exists with name: " + mapName,
-                    Status.BAD_REQUEST, log);
-        }
-        Map secondaryMap = new Map(mapIds.get(0), conn);
-        secondaryMap.setDisplayName(mapName);
-        return secondaryMap;
-    }
-
-    // adding this to satisfy the mock
-    protected List<Long> getMapIdsByName(final String mapName, Connection conn) throws Exception {
-        return DbUtils.getMapIdsByName(conn, mapName);
-    }
-
     // adding this to satisfy the mock
     protected BoundingBox getMapBounds(final Map map) throws Exception {
         return map.getBounds();
+    }
+
+    // adding this to satisfy the mock
+    protected boolean mapExists(final long id, Connection conn) {
+        return Map.mapExists(id, conn);
     }
 
     private void setAoi(final Map secondaryMap, JSONArray commandArgs) throws Exception {

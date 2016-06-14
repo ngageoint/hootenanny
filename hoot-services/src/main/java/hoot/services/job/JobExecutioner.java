@@ -40,18 +40,14 @@ import hoot.services.db.DbUtils;
  * Thread class for executing async jobs
  */
 public class JobExecutioner extends Thread {
-    private static final Logger log = LoggerFactory.getLogger(JobExecutioner.class);
+    private static final Logger logger = LoggerFactory.getLogger(JobExecutioner.class);
 
-    private ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext(
-            "hoot/spring/CoreServiceContext.xml");
-    @SuppressWarnings("unused")
-    private ClassPathXmlApplicationContext dbAppContext = new ClassPathXmlApplicationContext("db/spring-database.xml");
+    private final ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
 
-    private JSONObject command;
+    private final JSONObject command;
+    private final String jobId;
 
-    private String jobId;
-
-    public JobExecutioner(final String jobId, final JSONObject command) {
+    public JobExecutioner(String jobId, JSONObject command) {
         this.command = command;
         this.jobId = jobId;
     }
@@ -59,34 +55,33 @@ public class JobExecutioner extends Thread {
     /**
      * execImpl command parameter tells executioner which job bean to execute
      */
-    @SuppressWarnings("unchecked")
     @Override
     public void run() {
-        log.debug("Handling job exec request...");
+        logger.debug("Handling job exec request...");
 
-        Connection conn = DbUtils.createConnection();
-        JobStatusManager jobStatusManager = null;
+        Connection connection = DbUtils.createConnection();
+        JobStatusManager jobStatusManager = new JobStatusManager(connection);
+
+        command.put("jobId", jobId);
+
         try {
-
-            jobStatusManager = new JobStatusManager(conn);
-
-            command.put("jobId", jobId);
             jobStatusManager.addJob(jobId);
+
             Executable executable = (Executable) appContext.getBean((String) command.get("execImpl"));
             executable.exec(command);
+
             jobStatusManager.setComplete(jobId, executable.getFinalStatusDetail());
         }
         catch (Exception e) {
-            if (jobStatusManager != null) {
-                jobStatusManager.setFailed(jobId, e.getMessage());
-            }
+            logger.error("Error executing job with ID = {}", jobId, e);
+            jobStatusManager.setFailed(jobId, e.getMessage());
         }
         finally {
             try {
-                DbUtils.closeConnection(conn);
+                DbUtils.closeConnection(connection);
             }
             catch (Exception e) {
-                //
+                logger.error("Error closing DB connection", e);
             }
         }
     }
