@@ -98,7 +98,7 @@ public:
   void reset() { _creators.clear(); }
 
 private:
-  static MergerFactory _theInstance;
+  static shared_ptr<MergerFactory> _theInstance;
 
   vector<MergerCreator*> _creators;
 };

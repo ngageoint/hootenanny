@@ -44,7 +44,7 @@ public:
 
   ~TagMergerFactory();
 
-  static TagMergerFactory& getInstance() { return _theInstance; }
+  static TagMergerFactory& getInstance();
 
   /**
    * Returns the default TagMerger.
@@ -72,7 +72,7 @@ private:
   QHash<QString, shared_ptr<const TagMerger> > _mergers;
   shared_ptr<const TagMerger> _default;
 
-  static TagMergerFactory _theInstance;
+  static shared_ptr<TagMergerFactory> _theInstance;
 };
 
 }

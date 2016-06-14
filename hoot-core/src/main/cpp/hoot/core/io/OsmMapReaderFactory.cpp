@@ -37,10 +37,19 @@
 namespace hoot
 {
 
-OsmMapReaderFactory OsmMapReaderFactory::_theInstance;
+shared_ptr<OsmMapReaderFactory> OsmMapReaderFactory::_theInstance;
 
 OsmMapReaderFactory::OsmMapReaderFactory()
 {
+}
+
+OsmMapReaderFactory& OsmMapReaderFactory::getInstance()
+{
+  if (!_theInstance.get())
+  {
+    _theInstance.reset(new OsmMapReaderFactory());
+  }
+  return *_theInstance;
 }
 
 bool OsmMapReaderFactory::hasReader(QString url)
