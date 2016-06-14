@@ -32,7 +32,9 @@
 #include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/rnd/conflate/network/EdgeString.h>
+#include <hoot/rnd/conflate/network/LegacyVertexMatcher.h>
 #include <hoot/rnd/conflate/network/OsmNetwork.h>
+#include <hoot/rnd/conflate/network/SearchRadiusProvider.h>
 
 namespace hoot
 {
@@ -43,10 +45,10 @@ namespace hoot
  * The advantage is that we don't link concepts such as OsmMap and ElementIds directly to the
  * network algorithms.
  */
-class NetworkDetails
+class NetworkDetails : public SearchRadiusProvider
 {
 public:
-  NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr network);
+  NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
 
   Meters calculateLength(ConstNetworkEdgePtr e);
 
@@ -58,9 +60,15 @@ public:
 
   double getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
-  Envelope getEnvelope(ConstNetworkEdgePtr e);
+  /**
+   * Returns a score matching v1 to v2. This does not consider any neighboring vertices. 0 means
+   * no match and larger scores are better.
+   */
+  double getVertexMatchScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 
-  Envelope getEnvelope(ConstNetworkVertexPtr v);
+  virtual Envelope getEnvelope(ConstNetworkEdgePtr e) const;
+
+  virtual Envelope getEnvelope(ConstNetworkVertexPtr v) const;
 
   Meters getSearchRadius(ConstNetworkEdgePtr e1) const;
 
@@ -69,6 +77,8 @@ public:
   Meters getSearchRadius(ConstNetworkVertexPtr v1) const;
 
   Meters getSearchRadius(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const;
+
+  bool hasConfidentTiePoint(ConstNetworkVertexPtr v);
 
   bool isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
@@ -81,8 +91,9 @@ public:
 private:
   shared_ptr<HighwayClassifier> _classifier;
   ConstOsmMapPtr _map;
-  ConstOsmNetworkPtr _network;
+  ConstOsmNetworkPtr _n1, _n2;
   shared_ptr<SublineStringMatcher> _sublineMatcher;
+  LegacyVertexMatcherPtr _vertexMatcher;
 
   class SublineCache
   {
@@ -94,6 +105,8 @@ private:
   QHash< ElementId, QHash<ElementId, SublineCache> > _sublineCache;
 
   const SublineCache& _getSublineCache(ConstWayPtr w1, ConstWayPtr w2);
+
+  LegacyVertexMatcherPtr _getVertexMatcher();
 };
 
 typedef shared_ptr<NetworkDetails> NetworkDetailsPtr;

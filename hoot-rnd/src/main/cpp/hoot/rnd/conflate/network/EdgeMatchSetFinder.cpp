@@ -89,20 +89,30 @@ void EdgeMatchSetFinder::_addEdgeMatches(EdgeMatchPtr em)
   // if the end of the match isn't terminated.
   else if (!toMatch)
   {
-    // get all the neighboring edges to 1 and 2
-    QList<ConstNetworkEdgePtr> neighbors1 = _n1->getEdgesFromVertex(to1);
-    QList<ConstNetworkEdgePtr> neighbors2 = _n2->getEdgesFromVertex(to2);
+    // if neither of the vertices has a tie point then we need to keep searching.
+    if (_details->hasConfidentTiePoint(to1) == false &&
+      _details->hasConfidentTiePoint(to2) == false)
+    {
+      // get all the neighboring edges to 1 and 2
+      QList<ConstNetworkEdgePtr> neighbors1 = _n1->getEdgesFromVertex(to1);
+      QList<ConstNetworkEdgePtr> neighbors2 = _n2->getEdgesFromVertex(to2);
 
-    _addEdgeNeighborsToEnd(em, neighbors1, neighbors2);
+      _addEdgeNeighborsToEnd(em, neighbors1, neighbors2);
+    }
   }
   // if the beginning of the match isn't terminated
   else if (!fromMatch)
   {
-    // get all the neighboring edges to 1 and 2
-    QList<ConstNetworkEdgePtr> neighbors1 = _n1->getEdgesFromVertex(from1);
-    QList<ConstNetworkEdgePtr> neighbors2 = _n2->getEdgesFromVertex(from2);
+    // if neither of the vertices has a tie point then we need to keep searching.
+    if (_details->hasConfidentTiePoint(from1) == false &&
+      _details->hasConfidentTiePoint(from2) == false)
+    {
+      // get all the neighboring edges to 1 and 2
+      QList<ConstNetworkEdgePtr> neighbors1 = _n1->getEdgesFromVertex(from1);
+      QList<ConstNetworkEdgePtr> neighbors2 = _n2->getEdgesFromVertex(from2);
 
-    _addEdgeNeighborsToStart(em, neighbors1, neighbors2);
+      _addEdgeNeighborsToStart(em, neighbors1, neighbors2);
+    }
   }
 }
 

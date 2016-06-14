@@ -110,9 +110,8 @@ public:
   static WayPtr createWay(OsmMapPtr map, Status s, Coordinate c[], Meters ce = 15,
                           const QString& note = "");
 
-  static WayPtr createWay(
-    OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
-    Meters circularError = 15);
+  static WayPtr createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
+    Meters circularError = 15, Tags tags = Tags());
 
   static RelationPtr createRelation(
     OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,

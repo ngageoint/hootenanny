@@ -3,6 +3,9 @@
 namespace hoot
 {
 
+// if the difference is smaller than this we consider it to be equivalent.
+Meters WayString::_epsilon = 1e-9;
+
 WayString::WayString()
 {
 }
@@ -36,7 +39,7 @@ void WayString::append(const WaySubline& subline)
   _sublines.append(subline);
 }
 
-WayLocation WayString::calculateLocationFromStart(Meters distance) const
+WayLocation WayString::calculateLocationFromStart(Meters distance, ElementId preferredEid) const
 {
   if (distance <= 0.0)
   {
@@ -61,14 +64,14 @@ WayLocation WayString::calculateLocationFromStart(Meters distance) const
         offset += distance - soFar;
       }
       // if the offset isn't expected (while allowing for floating point rounding)
-      if (offset < _sublines[i].getFormer().calculateDistanceOnWay() - 1e-9 ||
-        offset > _sublines[i].getLatter().calculateDistanceOnWay() + 1e-9)
+      if (offset < _sublines[i].getFormer().calculateDistanceOnWay() - _epsilon ||
+        offset > _sublines[i].getLatter().calculateDistanceOnWay() + _epsilon)
       {
         throw InternalErrorException("Expected offset to be in the bounds of the subline. "
           "Logic error?");
       }
       WayLocation result(map, w, offset);
-      return result;
+      return _changeToPreferred(i, result, preferredEid);
     }
     soFar += ls;
   }
@@ -102,6 +105,33 @@ Meters WayString::calculateLength() const
   for (int i = 0; i < _sublines.size(); ++i)
   {
     result += _sublines[i].getLength();
+  }
+
+  return result;
+}
+
+WayLocation WayString::_changeToPreferred(int index, const WayLocation& wl, ElementId preferredEid)
+  const
+{
+  WayLocation result = wl;
+
+  if (preferredEid.isNull() || wl.getWay()->getElementId() == preferredEid)
+  {
+    result = wl;
+  }
+  else if (index >= 1 &&
+    _sublines[index - 1].getWay()->getElementId() == preferredEid &&
+    fabs(calculateDistanceOnString(wl) - calculateDistanceOnString(_sublines[index - 1].getEnd()))
+      < _epsilon)
+  {
+    result = _sublines[index - 1].getEnd();
+  }
+  else if (index < _sublines.size() - 1 &&
+    _sublines[index + 1].getWay()->getElementId() == preferredEid &&
+    fabs(calculateDistanceOnString(wl) - calculateDistanceOnString(_sublines[index + 1].getStart()))
+      < _epsilon)
+  {
+    result = _sublines[index + 1].getStart();
   }
 
   return result;

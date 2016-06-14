@@ -31,7 +31,8 @@ public:
 
   Meters calculateLength() const;
 
-  WayLocation calculateLocationFromStart(Meters distance) const;
+  WayLocation calculateLocationFromStart(Meters distance,
+    ElementId preferredEid = ElementId()) const;
 
   int getSize() { return _sublines.size(); }
 
@@ -48,6 +49,9 @@ public:
 
 private:
   QList<WaySubline> _sublines;
+  static Meters _epsilon;
+
+  WayLocation _changeToPreferred(int index, const WayLocation& wl, ElementId preferredEid) const;
 };
 
 typedef boost::shared_ptr<WayString> WayStringPtr;

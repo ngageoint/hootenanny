@@ -41,9 +41,10 @@
 namespace hoot
 {
 
-NetworkDetails::NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr network) :
+NetworkDetails::NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2) :
   _map(map),
-  _network(network)
+  _n1(n1),
+  _n2(n2)
 {
   _sublineMatcher.reset(
     Factory::getInstance().constructObject<SublineStringMatcher>(
@@ -128,7 +129,7 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
   return c.getMatchP();
 }
 
-Envelope NetworkDetails::getEnvelope(ConstNetworkEdgePtr e)
+Envelope NetworkDetails::getEnvelope(ConstNetworkEdgePtr e) const
 {
   auto_ptr<Envelope> env(e->getMembers()[0]->getEnvelope(_map));
   for (int i = 1; i < e->getMembers().size(); ++i)
@@ -140,7 +141,7 @@ Envelope NetworkDetails::getEnvelope(ConstNetworkEdgePtr e)
   return *env;
 }
 
-Envelope NetworkDetails::getEnvelope(ConstNetworkVertexPtr v)
+Envelope NetworkDetails::getEnvelope(ConstNetworkVertexPtr v) const
 {
   auto_ptr<Envelope> env(v->getElement()->getEnvelope(_map));
 
@@ -231,6 +232,22 @@ const NetworkDetails::SublineCache& NetworkDetails::_getSublineCache(ConstWayPtr
   return _sublineCache[e1][e2];
 }
 
+LegacyVertexMatcherPtr NetworkDetails::_getVertexMatcher()
+{
+  if (!_vertexMatcher)
+  {
+    _vertexMatcher.reset(new LegacyVertexMatcher(_map));
+    _vertexMatcher->identifyVertexMatches(_n1, _n2, *this);
+  }
+
+  return _vertexMatcher;
+}
+
+bool NetworkDetails::hasConfidentTiePoint(ConstNetworkVertexPtr v)
+{
+  return _getVertexMatcher()->hasConfidentTiePoint(v);
+}
+
 bool NetworkDetails::isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
 {
   Meters ce = getSearchRadius(e1, e2);
@@ -259,7 +276,15 @@ bool NetworkDetails::isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVert
   Meters ce = getSearchRadius(v1, v2);
 
   double d = EuclideanDistanceExtractor().distance(*_map, v1->getElement(), v2->getElement());
-  return d <= ce;
+  bool result = d <= ce;
+  if (result != _getVertexMatcher()->isCandidateMatch(v1, v2, *this))
+  {
+    LOG_VAR(result);
+    LOG_VAR(_getVertexMatcher()->isCandidateMatch(v1, v2, *this));
+    LOG_VAR(v1);
+    LOG_VAR(v2);
+  }
+  return _getVertexMatcher()->isCandidateMatch(v1, v2, *this);
 }
 
 bool NetworkDetails::isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)

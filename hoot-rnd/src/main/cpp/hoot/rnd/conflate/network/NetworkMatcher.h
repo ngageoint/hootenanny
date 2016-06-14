@@ -72,7 +72,7 @@ protected:
   deque<NetworkVertexPtr> _index2Vertex;
   ConstOsmMapPtr _map;
   OsmNetworkPtr _n1, _n2;
-  NetworkDetailsPtr _details1, _details2;
+  NetworkDetailsPtr _details;
 
   void _createEdge2Index();
 

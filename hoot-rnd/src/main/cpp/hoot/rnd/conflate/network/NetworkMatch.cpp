@@ -142,6 +142,7 @@ bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map
 
 QString NetworkMatch::toString() const
 {
+  LOG_VAR(_threshold->toString());
   return QString("Network Match (%1) pairs: %2 score:%3").arg(getMatchName()).
     arg(hoot::toString(_pairs)).arg(getScore());
 }

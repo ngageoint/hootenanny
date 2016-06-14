@@ -97,7 +97,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   VagabondNetworkMatcherPtr matcher = VagabondNetworkMatcher::create();
   matcher->matchNetworks(map, n1, n2);
 
-  NetworkDetailsPtr details(new NetworkDetails(map, n1));
+  NetworkDetailsPtr details(new NetworkDetails(map, n1, n2));
 
   for (size_t i = 0; i < 10; ++i)
   {
@@ -138,8 +138,8 @@ shared_ptr<MatchThreshold> NetworkMatchCreator::getMatchThreshold()
   {
     ConfigOptions config;
     _matchThreshold.reset(
-      new MatchThreshold(config.getPoiMatchThreshold(), config.getPoiMissThreshold(),
-                         config.getPoiReviewThreshold()));
+      new MatchThreshold(config.getNetworkMatchThreshold(), config.getNetworkMissThreshold(),
+                         config.getNetworkReviewThreshold()));
   }
   return _matchThreshold;
 }
