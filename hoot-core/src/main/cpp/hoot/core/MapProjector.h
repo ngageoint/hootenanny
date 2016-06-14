@@ -96,7 +96,7 @@ public:
     Radians maxAngleError = toRadians(2.0), Meters maxDistanceError = 10.0,
     Meters testDistance = 1000.0, bool warnOnFail = true);
 
-  static MapProjector& getInstance() { return _theInstance; }
+  static MapProjector& getInstance();
 
   //static bool isGeographic(const shared_ptr<const OsmMap>& map);
   static bool isGeographic(const ConstElementProviderPtr& provider );
@@ -163,7 +163,7 @@ private:
 
   MapProjector() {}
 
-  static MapProjector _theInstance;
+  static shared_ptr<MapProjector> _theInstance;
 
   static bool _angleLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 
