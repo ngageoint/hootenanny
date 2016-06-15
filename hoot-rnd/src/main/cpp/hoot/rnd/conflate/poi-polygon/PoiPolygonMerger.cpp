@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -60,9 +60,9 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map,
   // Get all the building parts for each status
   vector<ElementId> buildings1 = _getBuildingParts(map, Status::Unknown1);
   vector<ElementId> buildings2 = _getBuildingParts(map, Status::Unknown2);
-  LOG_VAR(buildings1);
-  LOG_VAR(buildings2);
-  LOG_VAR(_pairs);
+  LOG_VARD(buildings1);
+  LOG_VARD(buildings2);
+  LOG_VARD(_pairs);
 
   // Merge all the building parts together into a single building entity using the typical building
   // merge process.
