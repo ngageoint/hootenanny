@@ -28,10 +28,13 @@ package hoot.services.controllers.ingest;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -39,20 +42,61 @@ import org.junit.experimental.categories.Category;
 
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class BasemapResourceTest {
-    private static final String tileServerPath = HootProperties.getProperty("tileServerPath");
-    private static final String ingestStagingPath = HootProperties.getProperty("ingestStagingPath");
+    private static final File homeFolder;
+    private static final String tileServerPath;
+    private static final String ingestStagingPath;
+    private static Map<String, String> originalHootProperties;
+
+    static {
+        try {
+            originalHootProperties = HootProperties.getProperties();
+
+            homeFolder = new File(FileUtils.getTempDirectory(), "RasterToTilesResourceTest");
+            FileUtils.forceMkdir(homeFolder);
+            Assert.assertTrue(homeFolder.exists());
+            HootCustomPropertiesSetter.setProperty("homeFolder", homeFolder.getAbsolutePath());
+
+            //tileServerPath=$(homeFolder)/ingest/processed
+
+            File processedFolder = new File(homeFolder, "ingest/processed");
+            FileUtils.forceMkdir(processedFolder);
+            Assert.assertTrue(processedFolder.exists());
+            tileServerPath = processedFolder.getAbsolutePath();
+            Assert.assertNotNull(tileServerPath);
+            Assert.assertTrue(!tileServerPath.isEmpty());
+            HootCustomPropertiesSetter.setProperty("tileServerPath", processedFolder.getAbsolutePath());
+
+            //ingestStagingPath=$(homeFolder)/ingest/upload
+            File ingestStagingFolder = new File(homeFolder, "/ingest/upload");
+            FileUtils.forceMkdir(ingestStagingFolder);
+            Assert.assertTrue(ingestStagingFolder.exists());
+            ingestStagingPath = ingestStagingFolder.getAbsolutePath();
+            Assert.assertNotNull(ingestStagingPath);
+            Assert.assertTrue(!ingestStagingPath.isEmpty());
+            HootCustomPropertiesSetter.setProperty("ingestStagingPath", ingestStagingFolder.getAbsolutePath());
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
     @BeforeClass
     public static void oneTimeSetup() {
-        Assert.assertNotNull(tileServerPath);
-        Assert.assertTrue(!tileServerPath.isEmpty());
+    }
 
-        Assert.assertNotNull(ingestStagingPath);
-        Assert.assertTrue(!ingestStagingPath.isEmpty());
+    @AfterClass
+    public static void oneTimeTearDown() throws Exception {
+        FileUtils.deleteDirectory(homeFolder);
+        Properties origProperties = new Properties();
+        for (Map.Entry<String, String> entry : originalHootProperties.entrySet()) {
+            origProperties.setProperty(entry.getKey(), entry.getValue());
+        }
+        HootCustomPropertiesSetter.setProperties(origProperties);
     }
 
     @Test

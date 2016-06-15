@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.ws.rs.WebApplicationException;
@@ -69,11 +70,11 @@ import hoot.services.utils.HootCustomPropertiesSetter;
 public class CustomScriptResourceTest {
     private static File homefolder;
     private static File customScriptFolder;
-    private static Properties originalHootProperties;
+    private static Map<String, String> originalHootProperties;
 
     static {
         try {
-            originalHootProperties = HootCustomPropertiesSetter.getHootProperties();
+            originalHootProperties = HootProperties.getProperties();
 
             homefolder = new File(FileUtils.getTempDirectory(), "CustomScriptResourceTest");
             FileUtils.forceMkdir(homefolder);
@@ -145,7 +146,11 @@ public class CustomScriptResourceTest {
     @AfterClass
     public static void oneTimeTearDown() throws Exception {
         FileUtils.deleteDirectory(homefolder);
-        HootCustomPropertiesSetter.setProperties(originalHootProperties);
+        Properties origProperties = new Properties();
+        for (Map.Entry<String, String> entry : originalHootProperties.entrySet()) {
+            origProperties.setProperty(entry.getKey(), entry.getValue());
+        }
+        HootCustomPropertiesSetter.setProperties(origProperties);
     }
 
     @Before

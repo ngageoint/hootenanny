@@ -26,19 +26,63 @@
  */
 package hoot.services.controllers.ingest;
 
+import java.io.File;
 import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class RasterToTilesResourceTest {
+    private static final File homeFolder;
+    private static final String tileServerPath;
+    private static Map<String, String> originalHootProperties;
+
+    static {
+        try {
+            originalHootProperties = HootProperties.getProperties();
+
+            homeFolder = new File(FileUtils.getTempDirectory(), "RasterToTilesResourceTest");
+            FileUtils.forceMkdir(homeFolder);
+            Assert.assertTrue(homeFolder.exists());
+            HootCustomPropertiesSetter.setProperty("homeFolder", homeFolder.getAbsolutePath());
+
+            //tileServerPath=$(homeFolder)/ingest/processed
+
+            File processedFolder = new File(homeFolder, "ingest/processed");
+            FileUtils.forceMkdir(processedFolder);
+            Assert.assertTrue(processedFolder.exists());
+            tileServerPath = processedFolder.getAbsolutePath();
+            Assert.assertNotNull(tileServerPath);
+            Assert.assertTrue(!tileServerPath.isEmpty());
+            HootCustomPropertiesSetter.setProperty("tileServerPath", processedFolder.getAbsolutePath());
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @AfterClass
+    public static void oneTimeTearDown() throws Exception {
+        FileUtils.deleteDirectory(homeFolder);
+        Properties origProperties = new Properties();
+        for (Map.Entry<String, String> entry : originalHootProperties.entrySet()) {
+            origProperties.setProperty(entry.getKey(), entry.getValue());
+        }
+        HootCustomPropertiesSetter.setProperties(origProperties);
+    }
 
     @Test
     @Category(UnitTest.class)
@@ -48,10 +92,6 @@ public class RasterToTilesResourceTest {
         Assert.assertTrue(!processScriptName.isEmpty());
 
         RasterToTilesService rts = new RasterToTilesService();
-
-        String tileServerPath = HootProperties.getProperty("tileServerPath");
-        Assert.assertNotNull(tileServerPath);
-        Assert.assertTrue(!tileServerPath.isEmpty());
 
         JSONObject oExpected = new JSONObject();
         oExpected.put("caller", "RasterToTilesService");
@@ -90,7 +130,10 @@ public class RasterToTilesResourceTest {
 
         String actual = (String) createCommandMethod.invoke(rts, "test", "0-1 2-3", 500, 1);
 
-        Assert.assertEquals(oExpected.toString(), actual);
+        JSONParser parser = new JSONParser();
+        JSONObject actualObj = (JSONObject) parser.parse(actual);
+
+        Assert.assertEquals(oExpected, actualObj);
     }
 
     @Test

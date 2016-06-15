@@ -48,11 +48,13 @@ public class HootCustomPropertiesSetter {
         currentProperties.setProperty(key, value);
     }
 
-    public static Properties getHootProperties() throws Exception {
+    private static Properties getHootProperties() throws Exception {
         Field propertiesField = HootProperties.class.getDeclaredField("properties");
         propertiesField.setAccessible(true);
 
         Properties currentProperties = (Properties) propertiesField.get(null);
         return currentProperties;
     }
+
+
 }

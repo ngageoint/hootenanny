@@ -27,10 +27,14 @@
 package hoot.services.controllers.ingest;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -38,6 +42,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -49,30 +54,51 @@ import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class FileUploadResourceTest {
-    private static final String homeFolder;
+    private static final File homeFolder;
+    private static Map<String, String> originalHootProperties;
 
     static {
         try {
-            homeFolder = new File(FileUtils.getTempDirectory(), "FileUploadResourceTest").getAbsolutePath();
-            HootCustomPropertiesSetter.setProperty("homefolder", homeFolder);
+            originalHootProperties = HootProperties.getProperties();
+
+            homeFolder = new File(FileUtils.getTempDirectory(), "FileUploadResourceTest");
+            FileUtils.forceMkdir(homeFolder);
+            Assert.assertTrue(homeFolder.exists());
+            HootCustomPropertiesSetter.setProperty("homeFolder", homeFolder.getAbsolutePath());
+
+            copyResourcesInfoTestFolder(new String[]
+                    {"ogr.zip", "zip1.zip", "osm.zip", "osm1.osm", "osm2.osm",
+                     "fgdb_ogr.zip", "TransportationGroundCrv.shp",  "DcGisRoads.zip" });
+
+            String command = "/usr/bin/unzip " + new File(homeFolder, "DcGisRoads.zip").getAbsolutePath() +
+                    " -d " + homeFolder.getAbsolutePath();
+            Process p = Runtime.getRuntime().exec(command);
         }
         catch (Exception e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void copyResourcesInfoTestFolder(String[] resources) throws IOException {
+        for (String resource : resources) {
+            URL inputUrl = FileUploadResourceTest.class.getResource("/hoot/services/controllers/ingest/FileUploadResourceTest/" + resource);
+            File dest = new File(homeFolder, resource);
+            FileUtils.copyURLToFile(inputUrl, dest);
         }
     }
 
     @BeforeClass
     public static void oneTimeSetup() throws Exception {
-        String processScriptName = HootProperties.getProperty("ETLMakefile");
+    }
 
-        Assert.assertNotNull(processScriptName);
-        Assert.assertFalse(processScriptName.isEmpty());
-
-        File file = new File(homeFolder);
-        FileUtils.forceMkdir(file);
-
-        Assert.assertNotNull(homeFolder);
-        Assert.assertFalse(homeFolder.isEmpty());
+    @AfterClass
+    public static void oneTimeTearDown() throws Exception {
+        FileUtils.deleteDirectory(homeFolder);
+        Properties origProperties = new Properties();
+        for (Map.Entry<String, String> entry : originalHootProperties.entrySet()) {
+            origProperties.setProperty(entry.getKey(), entry.getValue());
+        }
+        HootCustomPropertiesSetter.setProperties(origProperties);
     }
 
     @Test
@@ -84,7 +110,7 @@ public class FileUploadResourceTest {
         FileUtils.forceMkdir(workingDir);
         Assert.assertTrue(workingDir.exists());
 
-        File srcFile = new File(homeFolder, "test-files/service/FileUploadResourceTest/fgdb_ogr.zip");
+        File srcFile = new File(homeFolder, "fgdb_ogr.zip");
         File destFile = new File(wkdirpath, "fgdb_ogr.zip");
         FileUtils.copyFile(srcFile, destFile);
         Assert.assertTrue(destFile.exists());
@@ -155,7 +181,7 @@ public class FileUploadResourceTest {
         FileUtils.forceMkdir(workingDir);
         Assert.assertTrue(workingDir.exists());
 
-        File srcFile = new File(homeFolder, "test-files/service/FileUploadResourceTest/" + input);
+        File srcFile = new File(homeFolder, input);
         File destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
         Assert.assertTrue(destFile.exists());
@@ -243,7 +269,7 @@ public class FileUploadResourceTest {
         Assert.assertTrue(workingDir.exists());
 
         String input = "fgdb_ogr.zip";
-        File srcFile = new File(homeFolder, "test-files/service/FileUploadResourceTest/" + input);
+        File srcFile = new File(homeFolder, input);
         File destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
         Assert.assertTrue(destFile.exists());
@@ -280,7 +306,7 @@ public class FileUploadResourceTest {
 
         // shape
         input = "TransportationGroundCrv.shp";
-        srcFile = new File(homeFolder, "test-files/service/FileUploadResourceTest/" + input);
+        srcFile = new File(homeFolder, input);
         destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
         Assert.assertTrue(destFile.exists());
@@ -304,7 +330,7 @@ public class FileUploadResourceTest {
         Method createNativeRequestMethod = getCreateNativeRequestMethod();
 
         // Test zip containing fgdb + shp
-        JSONArray resA = (JSONArray) createNativeRequestMethod.invoke(results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+        JSONArray resA = (JSONArray) createNativeRequestMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
                 geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "fgdb_ogr", inputsList,
                 "test@test.com", "false", null);
 
@@ -352,7 +378,7 @@ public class FileUploadResourceTest {
         Assert.assertTrue(workingDir.exists());
 
         String input = "osm.zip";
-        File srcFile = new File(homeFolder, "test-files/service/FileUploadResourceTest/" + input);
+        File srcFile = new File(homeFolder, input);
         File destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
 
@@ -389,7 +415,7 @@ public class FileUploadResourceTest {
 
         // osm
         input = "osm1.osm";
-        srcFile = new File(homeFolder, "test-files/service/FileUploadResourceTest/" + input);
+        srcFile = new File(homeFolder, input);
         destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
         Assert.assertTrue(destFile.exists());
@@ -460,7 +486,7 @@ public class FileUploadResourceTest {
         Assert.assertTrue(workingDir.exists());
 
         String input = "ogr.zip";
-        File srcFile = new File(homeFolder, "test-files/service/FileUploadResourceTest/" + input);
+        File srcFile = new File(homeFolder, input);
         File destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
         Assert.assertTrue(destFile.exists());
@@ -496,7 +522,7 @@ public class FileUploadResourceTest {
 
         // shape
         input = "zip1.zip";
-        srcFile = new File(homeFolder, "test-files/service/FileUploadResourceTest/" + input);
+        srcFile = new File(homeFolder, input);
         destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
         Assert.assertTrue(destFile.exists());
@@ -562,7 +588,7 @@ public class FileUploadResourceTest {
         Assert.assertTrue(workingDir.exists());
 
         String input = "TransportationGroundCrv.shp";
-        File srcFile = new File(homeFolder, "test-files/service/FileUploadResourceTest/" + input);
+        File srcFile = new File(homeFolder, input);
         File destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
         Assert.assertTrue(destFile.exists());
@@ -596,7 +622,7 @@ public class FileUploadResourceTest {
         // shape 2
         // shape
         input = "TransportationGroundCrv2.shp";
-        srcFile = new File(homeFolder + "/test-files/service/FileUploadResourceTest/TransportationGroundCrv.shp");
+        srcFile = new File(homeFolder, "TransportationGroundCrv.shp");
         destFile = new File(wkdirpath + "/" + input);
         FileUtils.copyFile(srcFile, destFile);
         Assert.assertTrue(destFile.exists());
@@ -658,7 +684,7 @@ public class FileUploadResourceTest {
         Assert.assertTrue(workingDir.exists());
 
         String input = "osm1.osm";
-        File srcFile = new File(homeFolder, "test-files/service/FileUploadResourceTest/" + input);
+        File srcFile = new File(homeFolder, input);
         File destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
         Assert.assertTrue(destFile.exists());
@@ -692,7 +718,7 @@ public class FileUploadResourceTest {
         // shape 2
         // shape
         input = "osm2.osm";
-        srcFile = new File(homeFolder, "test-files/service/FileUploadResourceTest/" + input);
+        srcFile = new File(homeFolder, input);
         destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
         Assert.assertTrue(destFile.exists());
@@ -755,7 +781,7 @@ public class FileUploadResourceTest {
         Assert.assertTrue(workingDir.exists());
 
         String input = "DcGisRoads.gdb";
-        File srcDir = new File(homeFolder, "test-files/service/FileUploadResourceTest/" + input);
+        File srcDir = new File(homeFolder, input);
         File destDir = new File(wkdirpath, input);
         FileUtils.copyDirectory(srcDir, destDir);
         Assert.assertTrue(destDir.exists());
@@ -793,7 +819,7 @@ public class FileUploadResourceTest {
         int osmZipCnt = 0;
         int fgdbZipCnt = 0;
         int geonamesZipCnt = 0;
-        JSONArray resA = (JSONArray) createNativeRequestMethod.invoke(results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
+        JSONArray resA = (JSONArray) createNativeRequestMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
                 shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "fgdb", inputsList, "test@test.com",
                 "false", null);
 
