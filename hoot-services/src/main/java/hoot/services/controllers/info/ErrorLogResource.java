@@ -60,7 +60,7 @@ public class ErrorLogResource {
     }
 
     @PreDestroy
-    public void PreDestroy() throws Exception {
+    public void preDestroy() throws Exception {
         if ((exportLogPath != null) && (!exportLogPath.isEmpty())) {
             FileUtils.forceDelete(new File(exportLogPath));
         }

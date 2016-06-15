@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,37 +22,24 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.utils;
 
-import java.lang.reflect.Field;
-import java.util.Properties;
+//
+// GeoNames Conversion
+//
 
-import hoot.services.HootProperties;
+hoot.require('geonames')
+hoot.require('geonames_rules')
+hoot.require('config')
 
 
-/**
- * Created by dmylov on 5/10/16.
- */
-public class HootCustomPropertiesSetter {
+// IMPORT
+// translateAttributes - takes 'attrs' and returns OSM 'tags'
+function translateAttributes(attrs, layerName, geometryType)
+{
+    return geonames.toOsm(attrs, layerName, geometryType);
 
-    public static void setProperties(Properties newProperties) throws Exception {
-        Properties currentProperties = getHootProperties();
-        currentProperties.clear();
-        currentProperties.putAll(newProperties);
-    }
+} // End of Translate Attributes
 
-    public static void setProperty(String key, String value) throws Exception {
-        Properties currentProperties = getHootProperties();
-        currentProperties.setProperty(key, value);
-    }
 
-    public static Properties getHootProperties() throws Exception {
-        Field propertiesField = HootProperties.class.getDeclaredField("properties");
-        propertiesField.setAccessible(true);
-
-        Properties currentProperties = (Properties) propertiesField.get(null);
-        return currentProperties;
-    }
-}

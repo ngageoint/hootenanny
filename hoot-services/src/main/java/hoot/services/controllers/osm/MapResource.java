@@ -1026,7 +1026,9 @@ public class MapResource {
                         String stats = FileUtils.readFileToString(statsFile, "UTF-8");
                         tags.put(statsKey, stats);
 
-                        statsFile.delete();
+                        if (!statsFile.delete()) {
+                            logger.error("Error deleting {} file", statsFile.getAbsolutePath());
+                        }
                     }
                     else {
                         logger.error("Can't find {}", statsName);

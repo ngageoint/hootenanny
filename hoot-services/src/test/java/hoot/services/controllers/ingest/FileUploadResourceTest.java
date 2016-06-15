@@ -45,10 +45,21 @@ import org.junit.experimental.categories.Category;
 
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class FileUploadResourceTest {
-    private static String homeFolder = null;
+    private static final String homeFolder;
+
+    static {
+        try {
+            homeFolder = new File(FileUtils.getTempDirectory(), "FileUploadResourceTest").getAbsolutePath();
+            HootCustomPropertiesSetter.setProperty("homefolder", homeFolder);
+        }
+        catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
 
     @BeforeClass
     public static void oneTimeSetup() throws Exception {
@@ -57,7 +68,9 @@ public class FileUploadResourceTest {
         Assert.assertNotNull(processScriptName);
         Assert.assertFalse(processScriptName.isEmpty());
 
-        homeFolder = HootProperties.getProperty("homeFolder");
+        File file = new File(homeFolder);
+        FileUtils.forceMkdir(file);
+
         Assert.assertNotNull(homeFolder);
         Assert.assertFalse(homeFolder.isEmpty());
     }

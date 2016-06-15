@@ -80,10 +80,9 @@ public class CustomScriptResource {
     private static final String headerEnd = ">>>*/" + System.lineSeparator();
 
     static {
-        jsHeaderScriptPath = HootProperties.getProperty("dummyjsHeaderScriptPath");
         homeFolder = HootProperties.getProperty("homeFolder");
-        String homeFolder = HootProperties.getProperty("homeFolder");
-        scriptFolder = homeFolder + "/" + HootProperties.getProperty("customScriptPath");
+        jsHeaderScriptPath = HootProperties.getProperty("dummyjsHeaderScriptPath");
+        scriptFolder = HootProperties.getProperty("customScriptPath");
         defaultTranslationsConfig = HootProperties.getProperty("defaultTranslationsConfig");
         defaultFOUOTranslationsConfig = HootProperties.getProperty("defaultFOUOTranslationsConfig");
 
@@ -203,8 +202,7 @@ public class CustomScriptResource {
         try {
             File scriptsDir = new File(scriptFolder);
             if (scriptsDir.exists()) {
-                String[] exts = new String[1];
-                exts[0] = "js";
+                String[] exts = { "js" };
                 List<File> files = (List<File>) FileUtils.listFiles(scriptsDir, exts, false);
 
                 for (File file : files) {
@@ -224,9 +222,11 @@ public class CustomScriptResource {
 
             List<String> configFiles = new ArrayList<>();
             configFiles.add(defaultTranslationsConfig);
+
             if (fouoTranslationsExist) {
                 configFiles.add(defaultFOUOTranslationsConfig);
             }
+
             filesList.addAll(getDefaultList(configFiles));
 
             // sort the list
@@ -274,8 +274,7 @@ public class CustomScriptResource {
 
                         Object oCanExport = oTrans.get("CANEXPORT");
 
-                        // If the CANEXPORT is not available then try to
-                        // determine
+                        // If the CANEXPORT is not available then try to determine
                         if (oCanExport == null) {
                             // Get the script
                             if (oTrans.get("PATH") != null) {
@@ -351,14 +350,12 @@ public class CustomScriptResource {
             File scriptsDir = new File(scriptFolder);
 
             if (scriptsDir.exists()) {
-                String[] exts = new String[1];
-                exts[0] = "js";
+                String[] exts = { "js" };
                 List<File> files = (List<File>) FileUtils.listFiles(scriptsDir, exts, false);
 
                 for (File file : files) {
                     try {
-                        File f = file;
-                        String content = FileUtils.readFileToString(f, "UTF-8");
+                        String content = FileUtils.readFileToString(file, "UTF-8");
                         JSONObject oScript = getScriptObject(content);
 
                         if (oScript != null) {
@@ -422,17 +419,18 @@ public class CustomScriptResource {
             // See Bug #6483 Read vulnerability in services script API
             boolean bPathValidated = false;
             List<String> configFiles = new ArrayList<>();
+
             configFiles.add(defaultTranslationsConfig);
             if (fouoTranslationsExist) {
                 configFiles.add(defaultFOUOTranslationsConfig);
             }
+
             JSONArray defList = getDefaultList(configFiles);
 
             for (Object aDefList : defList) {
                 JSONObject item = (JSONObject) aDefList;
 
                 Object oPath = item.get("PATH");
-
                 if ((oPath != null) && scriptPath.equals(oPath.toString())) {
                     bPathValidated = true;
                     break;
@@ -444,9 +442,9 @@ public class CustomScriptResource {
                     break;
                 }
             }
-            if (bPathValidated) {
-                File scriptFile = new File(homeFolder + "/" + scriptPath);
 
+            if (bPathValidated) {
+                File scriptFile = new File(homeFolder, scriptPath);
                 if (scriptFile.exists()) {
                     script = FileUtils.readFileToString(scriptFile);
                 }
@@ -454,7 +452,6 @@ public class CustomScriptResource {
             else {
                 throw new Exception("Invalid script path.");
             }
-
         }
         catch (Exception ex) {
             ResourceErrorHandler.handleError("Error getting script: " + scriptPath + " Error: " + ex.getMessage(),
@@ -488,15 +485,16 @@ public class CustomScriptResource {
 
             for (File file : files) {
                 try {
-                    File f = file;
-                    String content = FileUtils.readFileToString(f, "UTF-8");
+                    String content = FileUtils.readFileToString(file, "UTF-8");
                     JSONObject oScript = getScriptObject(content);
 
                     if (oScript != null) {
                         JSONObject header = (JSONObject) oScript.get("HEADER");
                         if (header.get("NAME").toString().equalsIgnoreCase(scriptName)) {
                             delArr.add(header);
-                            f.delete();
+                            if (!file.delete()) {
+                                logger.error("Error deleting {} file!", file.getAbsolutePath());
+                            }
                             break;
                         }
                     }
@@ -537,28 +535,26 @@ public class CustomScriptResource {
             response = new ScriptsModifiedResponse();
             List<String> scriptsDeleted = new ArrayList<>();
             for (File file : files) {
-                File f = null;
                 try {
-                    f = file;
-                    String content = FileUtils.readFileToString(f, "UTF-8");
+                    String content = FileUtils.readFileToString(file, "UTF-8");
                     JSONObject oScript = getScriptObject(content);
                     if (oScript != null) {
                         JSONObject header = (JSONObject) oScript.get("HEADER");
                         String foundScriptName = header.get("NAME").toString();
                         if (scriptNames.contains(foundScriptName)) {
                             scriptsDeleted.add(foundScriptName);
-                            if (!f.delete()) {
-                                logger.error("Error deleting {} script!", f.getAbsolutePath());
+                            if (file.delete()) {
+                                logger.debug("Deleted script: {}", foundScriptName);
                             }
                             else {
-                                logger.debug("Deleted script: {}", foundScriptName);
+                                logger.error("Error deleting {} script!", file.getAbsolutePath());
                             }
                         }
                     }
                 }
                 catch (Exception e) {
-                    assert (f != null);
-                    logger.error("Failed to read file header for script: {}{}", f.getName(), e.getMessage());
+                    assert (file != null);
+                    logger.error("Failed to read file header for script: {}{}", file.getName(), e.getMessage());
                 }
             }
             response.setScriptsModified(scriptsDeleted.toArray(new String[scriptsDeleted.size()]));
@@ -615,6 +611,7 @@ public class CustomScriptResource {
         }
 
         boolean canExport = validateExport(content);
+
         if (!uploadDirExists()) {
             FileUtils.forceMkdir(getUploadDir());
         }
@@ -622,10 +619,12 @@ public class CustomScriptResource {
         if (!hoot.services.utils.FileUtils.validateFilePath(scriptFolder, scriptFolder + "/" + name + ".js")) {
             throw new Exception("Script name can not contain path.");
         }
-        File fScript = new File(scriptFolder + "/" + name + ".js");
 
+        File fScript = new File(scriptFolder, name + ".js");
         if (!fScript.exists()) {
-            fScript.createNewFile();
+            if (!fScript.createNewFile()) {
+                logger.error("File {} should not have existed before we tried to create it!", fScript.getAbsolutePath());
+            }
         }
 
         JSONObject oHeader = new JSONObject();
@@ -658,41 +657,27 @@ public class CustomScriptResource {
             scope.put("scope", scope, scope);
             scope.put("APP_ROOT", scope, homeFolder);
 
-            FileReader frHeader = new FileReader(jsHeaderScriptPath);
-            BufferedReader jsHeader = new BufferedReader(frHeader);
-            context.evaluateReader(scope, jsHeader, "jsHeader", 1, null);
+            try (FileReader frHeader = new FileReader(jsHeaderScriptPath);
+                 BufferedReader jsHeader = new BufferedReader(frHeader)) {
+                context.evaluateReader(scope, jsHeader, "jsHeader", 1, null);
+            }
 
-            StringReader sr = new StringReader(script);
-            BufferedReader translation_script = new BufferedReader(sr);
-            context.evaluateReader(scope, translation_script, "translation_script", 1, null);
+            try (StringReader sr = new StringReader(script);
+                 BufferedReader translation_script = new BufferedReader(sr)) {
+                context.evaluateReader(scope, translation_script, "translation_script", 1, null);
+            }
 
             // call getDbSchema call any required preloading functions
             Object getSchemaObj = scope.get("getDbSchema", scope);
             Object translateToOgr = scope.get("translateToOgr", scope);
 
-            boolean getDbSchemaExist = false;
-            if (getSchemaObj != null) {
-                // If not exist then will return Tag instead of function
-                if (getSchemaObj instanceof Function) {
-                    getDbSchemaExist = true;
-                }
-            }
+            // If not exist then will return Tag instead of function
+            boolean getDbSchemaExist = (getSchemaObj instanceof Function);
 
-            boolean translateToOgrExist = false;
-            if (translateToOgr != null) {
-                // If not exist then will return Tag instead of function
-                if (translateToOgr instanceof Function) {
-                    translateToOgrExist = true;
-                }
-            }
+            // If not exist then will return Tag instead of function
+            boolean translateToOgrExist = (translateToOgr instanceof Function);
 
             canExport = getDbSchemaExist && translateToOgrExist;
-
-            frHeader.close();
-            jsHeader.close();
-            sr.close();
-            translation_script.close();
-
         }
         catch (Exception ex) {
             logger.error(ex.getMessage());
@@ -703,6 +688,7 @@ public class CustomScriptResource {
         finally {
             Context.exit();
         }
+
         return canExport;
     }
 }
