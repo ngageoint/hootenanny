@@ -27,6 +27,9 @@
 #ifndef SCRIPTTRANSLATORFACTORY_H
 #define SCRIPTTRANSLATORFACTORY_H
 
+// Boost Includes
+#include <boost/shared_ptr.hpp>
+
 // Qt
 #include <QString>
 
@@ -37,13 +40,14 @@
 namespace hoot
 {
 using namespace std;
+using namespace boost;
 class ScriptTranslator;
 
 class ScriptTranslatorFactory
 {
 public:
 
-  static ScriptTranslatorFactory& getInstance() { return _theInstance; }
+  static ScriptTranslatorFactory& getInstance();
 
   ScriptTranslator* createTranslator(QString scriptPath);
 
@@ -55,7 +59,7 @@ public:
 
 private:
 
-  static ScriptTranslatorFactory _theInstance;
+  static shared_ptr<ScriptTranslatorFactory> _theInstance;
 
   ScriptTranslatorFactory();
 

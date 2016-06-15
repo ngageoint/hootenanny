@@ -71,6 +71,7 @@ clean-coverage:
 load-data:
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcGisRoads.osm $(DB_URL)/DcGisRoadsCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcTigerRoads.osm $(DB_URL)/DcTigerRoadsCucumber
+	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcOsmRoads.osm $(DB_URL)/DcOsmRoadsCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesA.osm $(DB_URL)/AllDataTypesACucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesB.osm $(DB_URL)/AllDataTypesBCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestA.osm $(DB_URL)/ToyTestACucumber
