@@ -130,6 +130,7 @@ exports.init = function(map) {
  * early on. E.g. no need to check nodes for a polygon to polygon match.
  */
 exports.isMatchCandidate = function(map, e) {
+    //hoot.debug(e.getElementId());
     return isPoi(e);
 };
 
@@ -253,7 +254,6 @@ function additiveScore(map, e1, e2) {
         }
     }
 
-
     if (isSuperClose(e1, e2)) {
         score += 0.5;
         reason.push("very close together");
@@ -364,7 +364,13 @@ exports.matchScore = function(map, e1, e2) {
     if (e1.getStatusString() == e2.getStatusString()) {
         return result;
     }
-
+    if (!isPoi(e1) || !isPoi(e2))
+    {
+      //hoot.debug("Both elements are not POI's.  Returning miss.");
+      //hoot.debug(e1.getElementId());
+      //hoot.debug(e2.getElementId());
+      return result;
+    }
     var additiveResult = additiveScore(map, e1, e2);
     var score = additiveResult.score;
     var reasons = additiveResult.reasons;
