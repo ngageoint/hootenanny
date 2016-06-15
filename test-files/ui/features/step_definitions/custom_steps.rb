@@ -73,12 +73,17 @@ Then(/^I should see (checkbox )?"([^"]*)" (not )?enabled$/) do |cbox, text,state
   else
     el[:disabled].should_not be
   end
+end
 
-  # if state
-  #   el = lbl.find('input')[:disabled].should eq "true"
-  # else
-  #   el = lbl.find('input')[:disabled].should_not be
-  # end
+Then(/^I should see "([^"]*)" combobox (not )?enabled$/) do |text,state|
+  lbl = find('label', :text=> text, :match => :prefer_exact)
+  el = lbl.find(:xpath,"..").find('.combobox-input')
+
+  if state
+    el[:disabled].should eq "true"
+  else
+    el[:disabled].should_not be
+  end
 end
 
 Then(/^I should see checkbox "([^"]*)" (un)?checked$/) do |text, unchk|
