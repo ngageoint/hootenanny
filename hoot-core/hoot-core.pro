@@ -1003,4 +1003,5 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbWriter.h \
     src/main/cpp/hoot/core/io/OsmApiDbSqlChangesetWriter.h \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.h \
+    src/main/cpp/hoot/core/visitors/WorstCircularErrorVisitor.h
 

@@ -240,24 +240,6 @@ geos::geom::Envelope OsmMap::calculateEnvelope() const
   return *e;
 }
 
-double OsmMap::calculateMaxCircularError() const
-{
-  double acc = 0.0;
-  for (WayMap::const_iterator it = _ways.begin(); it != _ways.end(); ++it)
-  {
-    const shared_ptr<const Way>& w = it->second;
-    acc = max(acc, w->getCircularError());
-  }
-
-  for (NodeMap::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
-  {
-    const shared_ptr<const Node>& n = it->second;
-    acc = max(acc, n->getCircularError());
-  }
-
-  return acc;
-}
-
 void OsmMap::clear()
 {
   _srs = getWgs84();
@@ -933,6 +915,13 @@ bool OsmMap::validate(bool strict) const
 
 void OsmMap::visitRo(ElementVisitor& visitor) const
 {
+  visitNodesRo(visitor);
+  visitWaysRo(visitor);
+  visitRelationsRo(visitor);
+}
+
+void OsmMap::visitNodesRo(ElementVisitor& visitor) const
+{
   ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
   if (consumer != 0)
   {
@@ -948,6 +937,15 @@ void OsmMap::visitRo(ElementVisitor& visitor) const
       visitor.visit(it->second);
     }
   }
+}
+
+void OsmMap::visitWaysRo(ElementVisitor& visitor) const
+{
+  ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
 
   // make a copy so we can iterate through even if there are changes.
   const WayMap& allWays = getWays();
@@ -957,6 +955,15 @@ void OsmMap::visitRo(ElementVisitor& visitor) const
     {
       visitor.visit(it->second);
     }
+  }
+}
+
+void OsmMap::visitRelationsRo(ElementVisitor& visitor) const
+{
+  ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
   }
 
   // make a copy so we can iterate through even if there are changes.
