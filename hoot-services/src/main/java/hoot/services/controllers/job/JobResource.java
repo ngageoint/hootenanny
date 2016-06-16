@@ -157,7 +157,7 @@ public class JobResource {
             JobStatusManager jobStatusManager = null;
             JSONObject childJobInfo = null;
             try {
-                jobStatusManager = new JobStatusManager(conn);
+                jobStatusManager = createJobStatusMananger(conn);
 
                 JSONParser parser = new JSONParser();
                 JSONArray chain = (JSONArray) parser.parse(jobs);
@@ -403,7 +403,7 @@ public class JobResource {
             Connection conn = DbUtils.createConnection();
             JobStatusManager jobStatusManager = null;
             try {
-                jobStatusManager = new JobStatusManager(conn);
+                jobStatusManager = createJobStatusMananger(conn);
 
                 JSONParser parser = new JSONParser();
                 JSONObject command = (JSONObject) parser.parse(params);
@@ -475,14 +475,14 @@ public class JobResource {
      *
      * @throws Exception
      */
-    public static void terminateJob(String childId) throws Exception {
+    public void terminateJob(String childId) throws Exception {
         jobExecMan.terminate(childId);
     }
 
     /**
      * Terminate Job and its children jobs
      */
-    public static String terminateJob(String jobId, String mapId) throws Exception {
+    public String terminateJob(String jobId, String mapId) throws Exception {
         /*
          * Example job status
          *
@@ -534,7 +534,7 @@ public class JobResource {
         return jobId;
     }
 
-    private static String getProgressText(String jobId) throws Exception {
+    public String getProgressText(String jobId) throws Exception {
         return jobExecMan.getProgress(jobId);
     }
 
@@ -552,7 +552,7 @@ public class JobResource {
     @GET
     @Path("/status/{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public static Response getJobStatus(@PathParam("jobId") String jobId) {
+    public Response getJobStatus(@PathParam("jobId") String jobId) {
         String outStr = "unknown";
         try {
             JSONObject status = getJobStatusObj(jobId);
@@ -652,12 +652,12 @@ public class JobResource {
     /**
      * Return job status
      */
-    public static JSONObject getJobStatusObj(String jobId) throws Exception {
+    protected JSONObject getJobStatusObj(String jobId) throws Exception {
         JSONObject status = new JSONObject();
         Connection conn = DbUtils.createConnection();
 
         try {
-            JobStatusManager jobStatusManager = new JobStatusManager(conn);
+            JobStatusManager jobStatusManager = createJobStatusMananger(conn);
 
             status.put("jobId", jobId);
             JobStatus jobStatusObj = jobStatusManager.getJobStatusObj(jobId);
@@ -704,10 +704,14 @@ public class JobResource {
         return child;
     }
 
-    private static void initJob(String jobId) throws Exception {
+    private void initJob(String jobId) throws Exception {
         Connection conn = DbUtils.createConnection();
-        JobStatusManager jobStatusManager = new JobStatusManager(conn);
+        JobStatusManager jobStatusManager = createJobStatusMananger(conn);
         jobStatusManager.addJob(jobId);
         DbUtils.closeConnection(conn);;
+    }
+
+    protected JobStatusManager createJobStatusMananger(Connection conn) {
+        return new JobStatusManager(conn);
     }
 }

@@ -63,19 +63,13 @@ import hoot.services.utils.ResourceErrorHandler;
 
 @Path("/export")
 public class ExportJobResource extends JobControllerBase {
-    private static final Logger logger = LoggerFactory.getLogger(ExportJobResource.class);
-    private static final String tempOutputPath;
-    private static final String wfsStoreDb;
-    private static final String homeFolder;
-    private static final String translationExtPath;
-    private String delPath;
+    private static final Logger log = LoggerFactory.getLogger(ExportJobResource.class);
+    private static final String tempOutputPath = HootProperties.getProperty("tempOutputPath");
+    private final String wfsStoreDb = HootProperties.getProperty("wfsStoreDb");
+    private final String homeFolder = HootProperties.getProperty("homeFolder");
+    private final String translationExtPath = HootProperties.getProperty("translationExtPath");
 
-    static {
-        tempOutputPath = HootProperties.getProperty("tempOutputPath");
-        wfsStoreDb = HootProperties.getProperty("wfsStoreDb");
-        homeFolder = HootProperties.getProperty("homeFolder");
-        translationExtPath = HootProperties.getProperty("translationExtPath");
-    }
+    private String delPath;
 
     public ExportJobResource() {
         super(HootProperties.getProperty("ExportScript"));
@@ -92,15 +86,15 @@ public class ExportJobResource extends JobControllerBase {
             }
         }
         catch (Exception ex) {
-            logger.error(ex.getMessage());
+            log.error(ex.getMessage());
         }
     }
 
     /**
      * Asynchronous export service.
-     * 
+     *
      * POST hoot-services/job/export/execute
-     * 
+     *
      * { "translation":"MGCP.js", //Translation script name. "inputtype":"db",
      * //[db | file] db means input from hoot db will be used. file mean a file
      * path will be specified. "input":"ToyTestA", //Input name. for inputtype =
@@ -109,7 +103,7 @@ public class ExportJobResource extends JobControllerBase {
      * produce file gdb, shp will output shapefile. if outputtype = wfs then a
      * wfs front end will be created. osm_api_db will derive and apply a
      * changeset to an OSM API database "removereview" : "false" //? }
-     * 
+     *
      * @param params
      * @return Job ID
      * @throws Exception
@@ -153,8 +147,8 @@ public class ExportJobResource extends JobControllerBase {
                 commandArgs.add(arg);
 
                 JSONObject osm2orgCommand = _createPostBody(commandArgs);
-
-                // this may need change in the future if we decided to use user defined ouputname..
+                // this may need change in the future if we decided to use user
+                // defined ouputname..
                 String outname = jobId;
 
                 JSONArray wfsArgs = new JSONArray();
@@ -164,7 +158,7 @@ public class ExportJobResource extends JobControllerBase {
                 param.put("isprimitivetype", "false");
                 wfsArgs.add(param);
 
-                JSONObject createWfsResCommand = super.createReflectionSycJobReq(wfsArgs,
+                JSONObject createWfsResCommand = createReflectionSycJobReq(wfsArgs,
                         "hoot.services.controllers.wfs.WfsManager", "createWfsResource");
 
                 JSONArray jobArgs = new JSONArray();
@@ -203,32 +197,30 @@ public class ExportJobResource extends JobControllerBase {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error exporting data: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            ResourceErrorHandler.handleError("Error exporting data: " + ex, Status.INTERNAL_SERVER_ERROR, log);
         }
         finally {
             DbUtils.closeConnection(conn);
         }
-
         JSONObject res = new JSONObject();
         res.put("jobid", jobId);
-
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
-    private JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, Connection conn)
-            throws Exception {
+    protected JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, Connection conn)
+    throws Exception {
         JSONArray commandArgs = new JSONArray();
         commandArgs.addAll(inputCommandArgs);
 
         if (!getParameterValue("inputtype", commandArgs).equalsIgnoreCase("db")) {
             ResourceErrorHandler.handleError(
                     "When exporting to an OSM API database, the input type must be a Hootenanny API database.",
-                    Status.BAD_REQUEST, logger);
+                    Status.BAD_REQUEST, log);
         }
 
         if (StringUtils.trimToNull(getParameterValue("translation", commandArgs)) != null) {
             ResourceErrorHandler.handleError("Custom translation not allowed when exporting to OSM API database.",
-                    Status.BAD_REQUEST, logger);
+                    Status.BAD_REQUEST, log);
         }
 
         // ignoring outputname, since we're only going to have a single mapedit
@@ -239,7 +231,9 @@ public class ExportJobResource extends JobControllerBase {
         commandArgs.add(arg);
 
         Map conflatedMap = getConflatedMap(commandArgs, conn);
+
         checkMapForExportTag(conflatedMap, commandArgs, conn);
+
         setAoi(conflatedMap, commandArgs);
 
         return commandArgs;
@@ -247,43 +241,56 @@ public class ExportJobResource extends JobControllerBase {
 
     private Map getConflatedMap(JSONArray commandArgs, Connection conn) throws Exception {
         String mapName = getParameterValue("input", commandArgs);
-        List<Long> mapIds = DbUtils.getMapIdsByName(conn, mapName);
+        List<Long> mapIds = getMapIdsByName(mapName, conn);
 
         // we don't expect the services to try to export a map that has multiple
         // name entries, but check for it anyway
         if (mapIds.size() > 1) {
             ResourceErrorHandler.handleError("Error exporting data.  Multiple maps with name: " + mapName,
-                    Status.BAD_REQUEST, logger);
+                    Status.BAD_REQUEST, log);
         }
         // this may be checked somewhere else down the line...not sure
         else if (mapIds.isEmpty()) {
             ResourceErrorHandler.handleError("Error exporting data.  No map exists with name: " + mapName,
-                    Status.BAD_REQUEST, logger);
+                    Status.BAD_REQUEST, log);
         }
 
         Map conflatedMap = new Map(mapIds.get(0), conn);
         conflatedMap.setDisplayName(mapName);
-
         return conflatedMap;
     }
 
-    private static void checkMapForExportTag(Map map, JSONArray commandArgs, Connection conn) throws Exception {
-        java.util.Map<String, String> tags = DbUtils.getMapsTableTags(map.getId(), conn);
+    // adding this to satisfy the mock
+    protected List<Long> getMapIdsByName(String conflatedMapName, Connection conn) throws Exception {
+        return DbUtils.getMapIdsByName(conn, conflatedMapName);
+    }
+
+    // adding this to satisfy the mock
+    protected java.util.Map<String, String> getMapTags(long mapId, Connection conn) throws Exception {
+        return DbUtils.getMapsTableTags(mapId, conn);
+    }
+
+    // adding this to satisfy the mock
+    protected BoundingBox getMapBounds(Map map) throws Exception {
+        return map.getBounds();
+    }
+
+    private void checkMapForExportTag(Map map, JSONArray commandArgs, Connection conn) throws Exception {
+        java.util.Map<String, String> tags = getMapTags(map.getId(), conn);
         // Technically, you don't have to have this tag to export the data, but
         // since it helps to detect conflicts, and we want to be as safe as possible when writing to this
         // external database will just always enforce it.
         if (!tags.containsKey("osm_api_db_export_time")) {
             ResourceErrorHandler.handleError("Error exporting data.  Map with ID: " + map.getId()
-                    + " and name: " + map.getDisplayName() + " has no osm_api_db_export_time tag.", Status.CONFLICT,
-                    logger);
+                            + " and name: " + map.getDisplayName() + " has no osm_api_db_export_time tag.", Status.CONFLICT, log);
         }
         JSONObject arg = new JSONObject();
         arg.put("changesetsourcedatatimestamp", tags.get("osm_api_db_export_time"));
         commandArgs.add(arg);
     }
 
-    private static void setAoi(Map conflatedMap, JSONArray commandArgs) throws Exception {
-        BoundingBox bounds = conflatedMap.getBounds();
+    private void setAoi(Map conflatedMap, JSONArray commandArgs) throws Exception {
+        BoundingBox bounds = getMapBounds(conflatedMap);
         JSONObject arg = new JSONObject();
         arg.put("changesetaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
         commandArgs.add(arg);
@@ -291,10 +298,10 @@ public class ExportJobResource extends JobControllerBase {
 
     /**
      * To retrieve the output from job make Get request.
-     * 
+     *
      * GET hoot-services/job/export/[job id from export job]?outputname=[user
      * defined name]&removecache=[true | false]
-     * 
+     *
      * @param id
      *            ?
      * @param outputname
@@ -314,6 +321,7 @@ public class ExportJobResource extends JobControllerBase {
         File out = null;
         try {
             File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(tempOutputPath, id);
+
             if (folder != null) {
                 String workingFolder = tempOutputPath + "/" + id;
 
@@ -322,6 +330,7 @@ public class ExportJobResource extends JobControllerBase {
                 }
 
                 out = hoot.services.utils.FileUtils.getFileFromFolder(workingFolder, outputname, "zip");
+
                 if ((out == null) || !out.exists()) {
                     throw new NativeInterfaceException("Missing output file",
                             NativeInterfaceException.HttpCode.SERVER_ERROR);
@@ -333,7 +342,7 @@ public class ExportJobResource extends JobControllerBase {
             return Response.status(nStat).entity(ne.getMessage()).build();
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error exporting data: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            ResourceErrorHandler.handleError("Error exporting data: " + ex, Status.INTERNAL_SERVER_ERROR, log);
         }
 
         String outFileName = id;
@@ -349,12 +358,12 @@ public class ExportJobResource extends JobControllerBase {
 
     /**
      * Removes specified WFS resource.
-     * 
+     *
      * GET
      * hoot-services/job/export/wfs/remove/ex_eed379c0b9f7469d80ab32c71550883b
-     * 
+     *
      * //TODO: should be an HTTP DELETE
-     * 
+     *
      * @param id
      *            id of the wfs resource to remove
      * @return Removed id
@@ -373,28 +382,26 @@ public class ExportJobResource extends JobControllerBase {
             dbMan.deleteTables(tbls, wfsStoreDb);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error removing WFS resource: " + ex,  Status.INTERNAL_SERVER_ERROR, logger);
+            ResourceErrorHandler.handleError("Error removing WFS resource: " + ex, Status.INTERNAL_SERVER_ERROR, log);
         }
 
         ret.put("id", id);
-
         return Response.ok(ret.toString(), MediaType.TEXT_PLAIN).build();
     }
 
     /**
      * Lists all wfs resources.
-     * 
+     *
      * GET hoot-services/job/export/wfs/resources
-     * 
+     *
      * @return List of wfs resources
      */
     @GET
     @Path("/wfs/resources")
     @Produces(MediaType.TEXT_PLAIN)
-    public static Response getWfsResources() {
+    public Response getWfsResources() {
         JSONArray srvList = new JSONArray();
         try {
-            WfsManager wfsMan = new WfsManager();
             List<String> list = WfsManager.getAllWfsServices();
 
             for (String wfsResource : list) {
@@ -404,7 +411,7 @@ public class ExportJobResource extends JobControllerBase {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error retrieving WFS resource list: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            ResourceErrorHandler.handleError("Error retrieving WFS resource list: " + ex, Status.INTERNAL_SERVER_ERROR, log);
         }
 
         return Response.ok(srvList.toString(), MediaType.TEXT_PLAIN).build();
@@ -413,9 +420,9 @@ public class ExportJobResource extends JobControllerBase {
     /**
      * Based on the existence of translation script extension, it will send the
      * list of available translations script for export.
-     * 
+     *
      * GET hoot-services/job/export/resources
-     * 
+     *
      * @return List of translation script resources
      */
     @GET
@@ -423,7 +430,6 @@ public class ExportJobResource extends JobControllerBase {
     @Produces(MediaType.TEXT_PLAIN)
     public Response getExportResources() {
         String transExtPath = homeFolder + "/" + "/plugins-local/script/utp";
-
         if ((translationExtPath != null) && (!translationExtPath.isEmpty())) {
             transExtPath = translationExtPath;
         }
@@ -440,8 +446,8 @@ public class ExportJobResource extends JobControllerBase {
             o.put("description", "MGCP");
             srvList.add(o);
 
-            File file = new File(transExtPath);
-            if (file.exists() && file.isDirectory()) {
+            File f = new File(transExtPath);
+            if (f.exists() && f.isDirectory()) {
                 o = new JSONObject();
                 o.put("name", "UTP");
                 o.put("description", "UTP");
@@ -449,8 +455,7 @@ public class ExportJobResource extends JobControllerBase {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error retrieving exported resource list: " + ex,
-                    Status.INTERNAL_SERVER_ERROR, logger);
+            ResourceErrorHandler.handleError("Error retrieving exported resource list: " + ex, Status.INTERNAL_SERVER_ERROR, log);
         }
 
         return Response.ok(srvList.toString(), MediaType.APPLICATION_JSON).build();

@@ -59,11 +59,8 @@ import hoot.services.utils.ResourceErrorHandler;
 
 @Path("/conflation")
 public class ConflationResource extends JobControllerBase {
-    private static final Logger logger = LoggerFactory.getLogger(ConflationResource.class);
-
-    private static final String tileServerPath = HootProperties.getProperty("tileServerPath");
+    private static final Logger log = LoggerFactory.getLogger(ConflationResource.class);
     private static final String homeFolder = HootProperties.getProperty("homeFolder");
-    private static final String confAdvOptsScript = HootProperties.getProperty("confAdvOptsScript");
     private static final String rptStorePath = HootProperties.getProperty("reportDataPath");
 
     public ConflationResource() {
@@ -77,9 +74,9 @@ public class ConflationResource extends JobControllerBase {
      * the average of the two input datasets or based on a single input file
      * that is intended to be the reference dataset. It has two fronts, WPS and
      * standard rest end point.
-     * 
+     *
      * POST hoot-services/conflation/execute
-     * 
+     *
      * @param params
      *            parameters in json format <INPUT1_TYPE> Conflation input type
      *            [OSM] | [OGR] | [DB] | [OSM_API_DB] </INPUT1_TYPE> <INPUT1>
@@ -106,7 +103,7 @@ public class ConflationResource extends JobControllerBase {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public Response process(String params) throws Exception {
-        // logger.debug("Conflation resource raw request: " + params);
+        // log.debug("Conflation resource raw request: " + params);
 
         Connection conn = DbUtils.createConnection();
         String jobId = UUID.randomUUID().toString();
@@ -128,10 +125,9 @@ public class ConflationResource extends JobControllerBase {
                     MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
                     Object attribute = mBeanServer.getAttribute(new ObjectName("java.lang", "type",
                             "OperatingSystem"), "TotalPhysicalMemorySize");
+
                     long totalMemSize = Long.parseLong(attribute.toString());
-
                     Long input1Size = Long.parseLong(oParams.get("INPUT1_ESTIMATE").toString());
-
                     Long input2Size = Long.parseLong(oParams.get("INPUT2_ESTIMATE").toString());
 
                     if ((input1Size + input2Size) > (totalMemSize / 2)) {
@@ -147,7 +143,13 @@ public class ConflationResource extends JobControllerBase {
             boolean conflatingOsmApiDbData = oneLayerIsOsmApiDb(oParams);
 
             if (conflatingOsmApiDbData) {
-                String secondaryParameterKey = firstLayerIsOsmApiDb(oParams) ? "INPUT2" : "INPUT1";
+                String secondaryParameterKey = null;
+                if (firstLayerIsOsmApiDb(oParams)) {
+                    secondaryParameterKey = "INPUT2";
+                }
+                else {
+                    secondaryParameterKey = "INPUT1";
+                }
                 Map secondaryMap = getSecondaryMap(getParameterValue(secondaryParameterKey, commandArgs), conn);
                 setAoi(secondaryMap, commandArgs);
             }
@@ -157,16 +159,15 @@ public class ConflationResource extends JobControllerBase {
             java.util.Map<String, String> tags = new HashMap<String, String>();
             tags.put("input1", input1Name);
             tags.put("input2", input2Name);
+
             // System.out.println(params);
             // Need to reformat the list of hoot command options to json
             // properties
             tags.put("params", DbUtils.escapeJson(params));
-
             // Hack alert!
             // Write stats file name to tags, if the file exists
             // when this updateMapsTagsCommand job is run, the
-            // file will be read and its contents placed in the
-            // stats tag.
+            // file will be read and its contents placed in the stats tag.
             if ((oParams.get("COLLECT_STATS") != null)
                     && oParams.get("COLLECT_STATS").toString().equalsIgnoreCase("true")) {
                 String statsName = homeFolder + "/" + rptStorePath + "/" + confOutputName + "-stats.csv";
@@ -174,8 +175,7 @@ public class ConflationResource extends JobControllerBase {
             }
 
             // osm api db related input params have already been validated by
-            // this
-            // point, so just check to
+            // this point, so just check to
             // see if any osm api db input is present
             if (conflatingOsmApiDbData) {
                 // write a timestamp representing the time the osm api db data
@@ -204,7 +204,6 @@ public class ConflationResource extends JobControllerBase {
 
             Object oUserEmail = oParams.get("USER_EMAIL");
             String userEmail = (oUserEmail == null) ? null : oUserEmail.toString();
-
             // Density Raster
             JSONArray rasterTilesArgs = new JSONArray();
             JSONObject rasterTilesparam = new JSONObject();
@@ -227,7 +226,7 @@ public class ConflationResource extends JobControllerBase {
             jobArgs.add(updateMapsTagsCommand);
             jobArgs.add(ingestOSMResource);
 
-            logger.debug(jobArgs.toJSONString());
+            log.debug(jobArgs.toJSONString());
             postChainJobRquest(jobId, jobArgs.toJSONString());
         }
         finally {
@@ -236,6 +235,7 @@ public class ConflationResource extends JobControllerBase {
 
         JSONObject res = new JSONObject();
         res.put("jobid", jobId);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
@@ -254,30 +254,29 @@ public class ConflationResource extends JobControllerBase {
             if ((inputParams.get("INPUT1_TYPE").toString().toUpperCase().equals("OSM_API_DB") && inputParams
                     .get("REFERENCE_LAYER").toString().toUpperCase().equals("2"))
                     || (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB") && inputParams
-                            .get("REFERENCE_LAYER").toString().toUpperCase().equals("1"))) {
+                    .get("REFERENCE_LAYER").toString().toUpperCase().equals("1"))) {
                 ResourceErrorHandler.handleError("OSM_API_DB not allowed as secondary input type.", Status.BAD_REQUEST,
-                        logger);
+                        log);
             }
         }
         else if (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB")) {
             ResourceErrorHandler
-                    .handleError("OSM_API_DB not allowed as secondary input type.", Status.BAD_REQUEST, logger);
+                    .handleError("OSM_API_DB not allowed as secondary input type.", Status.BAD_REQUEST, log);
         }
     }
 
-    private static Map getSecondaryMap(String mapName, Connection conn) throws Exception {
+    private Map getSecondaryMap(String mapName, Connection conn) throws Exception {
         List<Long> mapIds = getMapIdsByName(mapName, conn);
-
         // we don't expect the services to try to conflate a map that has
         // multiple name entries, but check for it anyway
         if (mapIds.size() > 1) {
             ResourceErrorHandler.handleError("Error conflating data.  Multiple maps with name: " + mapName,
-                    Status.BAD_REQUEST, logger);
+                    Status.BAD_REQUEST, log);
         }
         // this may be checked somewhere else down the line...not sure
         else if (mapIds.isEmpty()) {
             ResourceErrorHandler.handleError("Error conflating data.  No map exists with name: " + mapName,
-                    Status.BAD_REQUEST, logger);
+                    Status.BAD_REQUEST, log);
         }
 
         Map secondaryMap = new Map(mapIds.get(0), conn);
@@ -286,16 +285,18 @@ public class ConflationResource extends JobControllerBase {
         return secondaryMap;
     }
 
-    public static List<Long> getMapIdsByName(String mapName, Connection conn) throws Exception {
+    // adding this to satisfy the mock
+    protected List<Long> getMapIdsByName(String mapName, Connection conn) throws Exception {
         return DbUtils.getMapIdsByName(conn, mapName);
     }
 
-    public static BoundingBox getMapBounds(Map map) throws Exception {
+    // adding this to satisfy the mock
+    protected BoundingBox getMapBounds(Map map) throws Exception {
         return map.getBounds();
     }
 
-    private static void setAoi(Map secondaryMap, JSONArray commandArgs) throws Exception {
-        BoundingBox bounds = getMapBounds(secondaryMap);
+    private void setAoi(Map secondaryMap, JSONArray commandArgs) throws Exception {
+        final BoundingBox bounds = getMapBounds(secondaryMap);
         JSONObject arg = new JSONObject();
         arg.put("conflateaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
         commandArgs.add(arg);
