@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -78,11 +78,20 @@ void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
     RelationPtr r = it->second;
     if (ReviewMarker::isReviewUid(map, r->getElementId()))
     {
-      int64_t hv = _calculateHilbertValue(map,
-        ReviewMarker::getReviewElements(map, r->getElementId()));
+      const set<ElementId> eids = ReviewMarker::getReviewElements(map, r->getElementId());
+      //LOG_VARD(eids.size());
+      if (eids.size() > 0)
+      {
+        int64_t hv = _calculateHilbertValue(map, eids);
 
-      pair<ElementId, int64_t> p(r->getElementId(), hv);
-      reviewOrder.push_back(p);
+        pair<ElementId, int64_t> p(r->getElementId(), hv);
+        reviewOrder.push_back(p);
+      }
+      else
+      {
+        throw HootException(
+          "No review elements returned for relation with ID: " + r->getElementId().toString());
+      }
     }
   }
 
@@ -112,6 +121,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr
       env->expandToInclude(te.get());
     }
   }
+  //LOG_VARD(env->toString());
 
   if (_mapEnvelope.get() == 0)
   {
