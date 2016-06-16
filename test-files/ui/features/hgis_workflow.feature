@@ -12,7 +12,7 @@ Feature: HGIS Imagery Validation Workflow
         And I context click the "BrazilMergedCucumber" Dataset
         And I click the "Filter non-HGIS POIs" context menu item
         Then I append "FilterName" input with "BrazilFilterCucumber"
-        And I press "Run" big loud span
+        And I press "big.loud" span with text "Run"
         And I wait 1 "minutes" to not see "Output Name"
 
     Scenario: Prepare for Validation
@@ -20,7 +20,7 @@ Feature: HGIS Imagery Validation Workflow
         And I context click the "BrazilFilterCucumber" Dataset
         And I click the "Prepare for Validation" context menu item
         Then I append "ValidationName" input with "BrazilValidateCucumber"
-        And I press "Run" big loud span
+        And I press "big.loud" span with text "Run"
         And I wait 1 "minutes" to not see "Output Name"
 
     Scenario: Add dataset to map and validate features
