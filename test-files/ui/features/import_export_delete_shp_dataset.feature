@@ -14,7 +14,7 @@ Feature: Import Export Delete MGCP Shapefile Dataset
         Then I type "mgcp_shp_cucumber" in input "importDatasetLayerName"
         Then I type "CucumberShp" in input "importDatasetNewFolderName"
         And I select the "Multinational Geospatial Co-production Program (MGCP) TRD3&4" option in the "Select Data Translation Schema" combobox
-        When I press "Import" big loud span
+        When I press "big.loud" span with text "Import"
         Then I wait 60 "seconds" to not see "Import"
         Then I wait 10 "seconds" to see "CucumberShp"
 
@@ -26,7 +26,7 @@ Feature: Import Export Delete MGCP Shapefile Dataset
         Then I should see element "[id='fileExportOutputName']" with value "mgcp_shp_cucumber"
         When I select the "Shapefile" option in the "File Geodatabase" combobox
         And I select the "Multinational Geospatial Co-production Program (MGCP) TRD3&4" option in the "NSG Topographic Data Store (TDS) v6.1" combobox
-        And I press "Export" big loud span
+        And I press "big.loud" span with text "Export"
         And I wait 3 "minutes" to not see "Output Name"
         Then the download file "mgcp_shp_cucumber.zip" should exist
 

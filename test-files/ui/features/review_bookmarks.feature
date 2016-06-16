@@ -25,13 +25,13 @@ Feature: Review Bookmarks
         And I should see "Description"
         And I should see "Note (Optional)"
         And I should see "Creator Email"
-        Then I press "Save" big loud span
+        Then I press "big.loud" span with text "Save"
         And I accept the alert
         Then I type "Cucumber Bookmark 1" in input "reviewBookmarkTitle"
         Then I type "Bookmark for cucumber testing" in input "reviewBookmarkDescription"
         Then I type "This is a review bookmark" in input "reviewBookmarkNote"
         Then I type "cucumber@hootenanny.digitalglobe.com" in input "reviewBookmarkCreatorEmail"
-        Then I press "Save" big loud span
+        Then I press "big.loud" span with text "Save"
 
     Scenario: Create Bookmark without Note
         Then I click the "Bookmark Review" link
@@ -43,7 +43,7 @@ Feature: Review Bookmarks
         Then I type "Cucumber Bookmark 2" in input "reviewBookmarkTitle"
         Then I type "Bookmark for cucumber testing" in input "reviewBookmarkDescription"
         Then I type "cucumber@hootenanny.digitalglobe.com" in input "reviewBookmarkCreatorEmail"
-        Then I press "Save" big loud span
+        Then I press "big.loud" span with text "Save"
 
     Scenario: Add new comment to bookmark
         Then I select the "sprocket" div
@@ -52,7 +52,7 @@ Feature: Review Bookmarks
         Then I should see "Cucumber Bookmark 1"
         And I should see "User cucumber@hootenanny.digitalglobe.com commented"
         Then I type "I will review this bookmark" in input "bmkNoteTextNew"
-        And I press "comment" big loud span
+        And I press "big.loud" span with text "comment"
 
     Scenario: Reload review
         Then I click the "reload" icon

@@ -52,7 +52,7 @@ Feature: Conflate and Export OSM API Database Dataset
     And I click the "Export" context menu item
     Then I should see element "[id='fileExportOutputName']" with value "osmapi_test_AllDataTypesBCucumber"
     When I select the "OSM API Database" option in the "File Geodatabase" combobox
-    And I press "Export" big loud span
+    And I press "big.loud" span with text "Export"
     And I wait 30 seconds
     Then I should see an alert containing "Successful export to an OSM API database"
     Then I accept the alert   
@@ -88,7 +88,7 @@ Feature: Conflate and Export OSM API Database Dataset
     And I click the "Export" context menu item
     Then I should see element "[id='fileExportOutputName']" with value "osmapi_test_DcTigerRoadsCucumber"
     When I select the "OSM API Database" option in the "File Geodatabase" combobox
-    And I press "Export" big loud span
+    And I press "big.loud" span with text "Export"
     And I wait 30 seconds
     # A conflicting changeset record has already been written to the OSM API database.
     Then I should see an alert containing "The changeset will not be written because conflicts exist in the target OSM API database"
