@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+    <node visible="true" id="1" timestamp="2016-06-09T15:26:43Z" version="1" changeset="1569" lat="-22.9042299859459000" lon="-43.2419500000000028">
+        <tag k="ele" v="19"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="alt_name" v="Viaduto de Mangueira"/>
+        <tag k="is_in:country_code" v="BR"/>
+        <tag k="uuid" v="GeoNames.org:7538614"/>
+        <tag k="source" v="geonames"/>
+        <tag k="name" v="Viaduto de Mangueira"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="2" timestamp="2016-06-09T15:26:43Z" version="1" changeset="1569" lat="-22.9044580859459010" lon="-43.2452145999999971">
+        <tag k="brand" v="Volkswagen"/>
+        <tag k="shop" v="car"/>
+        <tag k="source" v="survey"/>
+        <tag k="name" v="Recreio"/>
+        <tag k="source:datetime" v="2012-11-29T13:01:10.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="3" timestamp="2016-06-09T15:26:43Z" version="1" changeset="1569" lat="-22.9044125859458987" lon="-43.2434584000000015">
+        <tag k="name" v="Colégio Maria Imaculada"/>
+        <tag k="amenity" v="school"/>
+        <tag k="source:datetime" v="2010-04-06T21:57:04.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="4" timestamp="2016-06-09T15:26:43Z" version="1" changeset="1569" lat="-22.9022678859457010" lon="-43.2448960999999983">
+        <tag k="addr:city" v="Rio de Janeiro"/>
+        <tag k="source" v="geonames"/>
+        <tag k="opening_hours" v="Mo-Fr 04:20-23:30; Sa 06:00-21:05; Su 06:00-21:50; PH 06:10-19:15"/>
+        <tag k="railway" v="station"/>
+        <tag k="ele" v="23"/>
+        <tag k="name" v="São Francisco Xavier"/>
+        <tag k="addr:housenumber" v="s/n"/>
+        <tag k="alt_name" v="Estacao Sao Francisco Xavier;Estação São Francisco Xavier"/>
+        <tag k="addr:country" v="BR"/>
+        <tag k="is_in:country_code" v="BR"/>
+        <tag k="start_date" v="1861"/>
+        <tag k="addr:street" v="Rua Vinte e Quatro de Maio"/>
+        <tag k="addr:postcode" v="20950-090"/>
+        <tag k="source:datetime" v="2011-06-01T21:52:36.000Z"/>
+        <tag k="uuid" v="GeoNames.org:3449103"/>
+        <tag k="operator" v="SuperVia"/>
+        <tag k="IPP:FONTE" v="http://www.supervia.com.br/"/>
+        <tag k="IPP:RAMAL" v="Deodoro, Santa Cruz e Japeri"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="5" timestamp="2016-06-09T15:26:43Z" version="1" changeset="1569" lat="-22.9056301859461016" lon="-43.2440860000000029">
+        <tag k="name" v="Policlínica Piquet Carneiro - UERJ"/>
+        <tag k="amenity" v="hospital"/>
+        <tag k="source:datetime" v="2010-04-06T22:12:58.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="6" timestamp="2016-06-09T15:26:43Z" version="1" changeset="1569" lat="-22.9047616859459993" lon="-43.2440313999999972">
+        <tag k="place" v="suburb"/>
+        <tag k="name" v="São Francisco Xavier"/>
+        <tag k="source:datetime" v="2012-02-01T08:03:21.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="7" timestamp="2016-06-09T15:26:43Z" version="1" changeset="1569" lat="-22.9027250859457006" lon="-43.2409030000000030">
+        <tag k="IPP:COD_INEP" v="33126577"/>
+        <tag k="IPP:ENDERECO" v="RUA VISCONDE DE NITEROI1098"/>
+        <tag k="IPP:CHAVE" v="18786"/>
+        <tag k="IPP:ENDNOVO" v="http://webapp.sme.rio.rj.gov.br/jcartela/publico/pesquisa.do?idSetor=18786&amp;cmd=load"/>
+        <tag k="IPP:CODBAIRRO" v="011"/>
+        <tag k="IPP:FLG_VALIDA" v="N"/>
+        <tag k="source" v="IPP"/>
+        <tag k="IPP:BAIRRO" v="Mangueira"/>
+        <tag k="name" v="Creche Municipal Vovô Luc¡ola"/>
+        <tag k="IPP:CRE" v="01"/>
+        <tag k="amenity" v="school"/>
+        <tag k="IPP:DESIGNACAO" v="0107603"/>
+        <tag k="IPP:COD_SMA" v="018786"/>
+        <tag k="source:datetime" v="2010-11-08T11:04:56.000Z"/>
+        <tag k="IPP:CODATIVIDA" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+</osm>
