@@ -411,8 +411,10 @@ public class BasemapResource extends JobControllerBase {
         File dir = new File(controlFolder);
         FileFilter fileFilter = new WildcardFileFilter(bmName + ".*");
         File[] files = dir.listFiles(fileFilter);
-        for (File curFile : files) {
-            FileUtils.forceDelete(curFile);
+        if (files != null) {
+            for (File curFile : files) {
+                FileUtils.forceDelete(curFile);
+            }
         }
     }
 

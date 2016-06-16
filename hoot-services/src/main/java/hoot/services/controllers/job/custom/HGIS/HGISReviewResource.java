@@ -49,11 +49,10 @@ import hoot.services.utils.ResourceErrorHandler;
 
 @Path("/review/custom/HGIS")
 public class HGISReviewResource extends HGISResource {
-
     private static final Logger logger = LoggerFactory.getLogger(HGISReviewResource.class);
 
     public HGISReviewResource() {
-        processScriptName = HootProperties.getProperty("hgisPrepareForValidationScript");
+        super(HootProperties.getProperty("hgisPrepareForValidationScript"));
     }
 
     /**

@@ -189,7 +189,7 @@ public class TunningService implements Executable {
         //
     }
 
-    private class JobSink implements Sink {
+    private static class JobSink implements Sink {
         @Override
         public void release() {
         }

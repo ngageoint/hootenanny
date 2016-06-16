@@ -242,18 +242,19 @@ public class ReviewResource {
     @Path("/random")
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewableItem getRandomReviewable(@QueryParam("mapid") String mapId) {
-        ReviewableItem ret = new ReviewableItem(-1, -1, -1);
         try (Connection conn = DbUtils.createConnection()) {
             long nMapId = Long.parseLong(mapId);
             ReviewableReader reader = new ReviewableReader(conn);
-            ret = reader.getRandomReviewableItem(nMapId);
+            ReviewableItem ret = reader.getRandomReviewableItem(nMapId);
+            return ret;
         }
         catch (Exception ex) {
             ResourceErrorHandler.handleError(
                     "Error getting random reviewable item: " + mapId + " (" + ex.getMessage() + ")", Status.BAD_REQUEST,
                     logger);
+
+            return new ReviewableItem(-1, -1, -1);
         }
-        return ret;
     }
 
     /**
@@ -277,8 +278,6 @@ public class ReviewResource {
     public ReviewableItem getNextReviewable(@QueryParam("mapid") String mapId,
                                             @QueryParam("offsetseqid") String offsetSeqId,
                                             @QueryParam("direction") String direction) {
-
-        ReviewableItem ret = new ReviewableItem(-1, -1, -1);
         try (Connection conn = DbUtils.createConnection()) {
             long nMapId = Long.parseLong(mapId);
             long nOffsetSeqId = Long.parseLong(offsetSeqId);
@@ -290,20 +289,22 @@ public class ReviewResource {
             }
 
             ReviewableReader reader = new ReviewableReader(conn);
-            ret = reader.getReviewableItem(nMapId, nextSequence);
+            ReviewableItem ret = reader.getReviewableItem(nMapId, nextSequence);
 
             // get random if we can not find immediate next sequence item
             if (ret.getResultCount() < 1) {
                 ret = getRandomReviewable(mapId);
             }
+
+            return ret;
         }
         catch (Exception ex) {
             ResourceErrorHandler.handleError(
                     "Error getting next reviewable item: " + mapId + " (" + ex.getMessage() + ")", Status.BAD_REQUEST,
                     logger);
-        }
 
-        return ret;
+            return new ReviewableItem(-1, -1, -1);
+        }
     }
 
     /**
@@ -323,19 +324,19 @@ public class ReviewResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewableItem getReviewable(@QueryParam("mapid") String mapId,
                                         @QueryParam("offsetseqid") String offsetSeqId) {
-
-        ReviewableItem ret = new ReviewableItem(-1, -1, -1);
         try (Connection conn = DbUtils.createConnection()) {
             long nMapId = Long.parseLong(mapId);
             long nOffsetSeqId = Long.parseLong(offsetSeqId);
             ReviewableReader reader = new ReviewableReader(conn);
-            ret = reader.getReviewableItem(nMapId, nOffsetSeqId);
+            ReviewableItem ret = reader.getReviewableItem(nMapId, nOffsetSeqId);
+            return ret;
         }
         catch (Exception ex) {
             ResourceErrorHandler.handleError("Error getting reviewable item: " + mapId + " (" + ex.getMessage() + ")",
                     Status.BAD_REQUEST, logger);
+
+            return new ReviewableItem(-1, -1, -1);
         }
-        return ret;
     }
 
     /**
@@ -351,18 +352,18 @@ public class ReviewResource {
     @Path("/statistics")
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewableStatistics getReviewableSstatistics(@QueryParam("mapId") String mapId) {
-        ReviewableStatistics ret = new ReviewableStatistics(-1, -1);
         try (Connection conn = DbUtils.createConnection()) {
             long nMapId = Long.parseLong(mapId);
             ReviewableReader reader = new ReviewableReader(conn);
-            ret = reader.getReviewablesStatistics(nMapId);
+            ReviewableStatistics ret = reader.getReviewablesStatistics(nMapId);
+            return ret;
         }
         catch (Exception ex) {
             ResourceErrorHandler.handleError(
                     "Error getting reviewables statistics: " + mapId + " (" + ex.getMessage() + ")", Status.BAD_REQUEST,
                     logger);
+            return new ReviewableStatistics(-1, -1);
         }
-        return ret;
     }
 
     /**

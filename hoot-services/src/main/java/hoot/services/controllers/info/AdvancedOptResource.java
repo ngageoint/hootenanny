@@ -123,7 +123,7 @@ public class AdvancedOptResource {
                     template = aveTemplate;
                 }
                 else {
-                    if ((doc == null) || (this.template == null) || doForce) {
+                    if ((this.template == null) || doForce) {
                         try (FileReader fr = new FileReader(homeFolder + "/" + templatePath)) {
                             this.template = (JSONArray)par.parse(fr);
                             generateRule(this.template, null);

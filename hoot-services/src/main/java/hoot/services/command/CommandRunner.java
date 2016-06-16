@@ -182,10 +182,8 @@ public class CommandRunner implements ICommandRunner {
         closeQuietly(is);
         closeQuietly(es);
 
-        if (process != null) {
-            process.destroy();
-            process = null;
-        }
+        process.destroy();
+        process = null;
         // System.gc();
     }
 
@@ -311,8 +309,8 @@ public class CommandRunner implements ICommandRunner {
         Map<String, String> env = builder.environment();
         if (!useSysEnv)
             env.clear();
-        for (String name : pEnv.keySet()) {
-            env.put(name, pEnv.get(name));
+        for (Map.Entry<String, String> entry : pEnv.entrySet()) {
+            env.put(entry.getKey(), entry.getValue());
         }
 
         logExec(pCmdString, env);
@@ -347,8 +345,8 @@ public class CommandRunner implements ICommandRunner {
         Map<String, String> env = builder.environment();
         if (!useSysEnv)
             env.clear();
-        for (String name : pEnv.keySet()) {
-            env.put(name, pEnv.get(name));
+        for (Map.Entry<String, String> entry : pEnv.entrySet()) {
+            env.put(entry.getKey(), entry.getValue());
         }
         builder.directory(dir);
 
@@ -588,7 +586,7 @@ public class CommandRunner implements ICommandRunner {
                     _log.debug("ENVVARS will be written to " + envvarFile.getAbsolutePath());
                 }
                 for (String key : env.keySet()) {
-                    _log.debug(String.format("  %s", new Object[] { key + "=" + env.get(key) }));
+                    _log.debug(String.format("  %s", key + "=" + env.get(key)));
                     if (_log.isDebugEnabled() && writer != null)
                         writer.write(String.format("  %s%n", new Object[] { key + "=" + env.get(key) }));
                 }

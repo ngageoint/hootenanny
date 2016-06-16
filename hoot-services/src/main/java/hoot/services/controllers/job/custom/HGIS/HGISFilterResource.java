@@ -47,11 +47,10 @@ import hoot.services.utils.ResourceErrorHandler;
 
 @Path("/filter/custom/HGIS")
 public class HGISFilterResource extends HGISResource {
-
-    private static final Logger log = LoggerFactory.getLogger(HGISFilterResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(HGISFilterResource.class);
 
     public HGISFilterResource() {
-        processScriptName = HootProperties.getProperty("hgisFilterScript");
+        super(HootProperties.getProperty("hgisFilterScript"));
     }
 
     /**
@@ -71,6 +70,7 @@ public class HGISFilterResource extends HGISResource {
     @Produces(MediaType.APPLICATION_JSON)
     public FilterNonHgisPoisResponse filterNonHgisPois(FilterNonHgisPoisRequest request) throws Exception {
         FilterNonHgisPoisResponse resp = new FilterNonHgisPoisResponse();
+
         try {
             String src = request.getSource();
             String output = request.getOutput();
@@ -94,11 +94,12 @@ public class HGISFilterResource extends HGISResource {
             resp.setJobId(jobId);
         }
         catch (InvalidResourceParamException rpex) {
-            ResourceErrorHandler.handleError(rpex.getMessage(), Status.BAD_REQUEST, log);
+            ResourceErrorHandler.handleError(rpex.getMessage(), Status.BAD_REQUEST, logger);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError(ex.getMessage(), Status.INTERNAL_SERVER_ERROR, log);
+            ResourceErrorHandler.handleError(ex.getMessage(), Status.INTERNAL_SERVER_ERROR, logger);
         }
+
         return resp;
     }
 }

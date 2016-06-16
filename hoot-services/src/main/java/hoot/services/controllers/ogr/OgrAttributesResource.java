@@ -65,12 +65,10 @@ import hoot.services.utils.ResourceErrorHandler;
 @Path("/info")
 public class OgrAttributesResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(OgrAttributesResource.class);
-    private final String homeFolder;
+    private static final String homeFolder = HootProperties.getProperty("homeFolder");
 
     public OgrAttributesResource() {
-        super(null);
-        processScriptName = HootProperties.getProperty("GetOgrAttributeScript");
-        homeFolder = HootProperties.getProperty("homeFolder");
+        super(HootProperties.getProperty("GetOgrAttributeScript"));
     }
 
     /**

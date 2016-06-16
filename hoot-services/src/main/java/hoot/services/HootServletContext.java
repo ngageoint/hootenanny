@@ -50,7 +50,6 @@ public class HootServletContext implements ServletContextListener {
         p2PRes.startP2PService();
 
         // Doing this to make sure we create ingest folder
-        BasemapResource bRes = new BasemapResource();
         BasemapResource.createTileServerPath();
 
         // Bridge/route all JUL log records to the SLF4J API.

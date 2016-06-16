@@ -58,8 +58,8 @@ public class HGISResource extends JobControllerBase {
         dbHost = HootProperties.getProperty("dbHost");
     }
 
-    public HGISResource() {
-        super(null);
+    public HGISResource(String processName) {
+        super(processName);
     }
 
     /**
