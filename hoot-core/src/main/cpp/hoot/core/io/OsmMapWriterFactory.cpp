@@ -36,10 +36,19 @@
 namespace hoot
 {
 
-OsmMapWriterFactory OsmMapWriterFactory::_theInstance;
+shared_ptr<OsmMapWriterFactory> OsmMapWriterFactory::_theInstance;
 
 OsmMapWriterFactory::OsmMapWriterFactory()
 {
+}
+
+OsmMapWriterFactory& OsmMapWriterFactory::getInstance()
+{
+  if (!_theInstance.get())
+  {
+    _theInstance.reset(new OsmMapWriterFactory());
+  }
+  return *_theInstance;
 }
 
 shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)

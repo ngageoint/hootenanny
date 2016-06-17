@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -162,12 +162,50 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
   r->addElement(_revieweeKey, e2->getElementId());
   r->setCircularError(-1);
 
+  //LOG_VARD(r->getId());
+  //LOG_VARD(e1->getElementId());
+  //LOG_VARD(e2->getElementId());
+
   for (unsigned int i = 0; i < choices.size(); i++)
   {
     r->getTags()[_reviewChoicesKey + ":" + QString::number(i+1)] = choices[i];
   }
 
   map->addElement(r);
+}
+
+void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString& note,
+   const QString& reviewType, double score, vector<QString> choices)
+{
+  if (note.isEmpty())
+  {
+    throw IllegalArgumentException("You must specify a review note.");
+  }
+
+  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
+  r->getTags().set(_reviewNeedsKey, true);
+  r->getTags().appendValueIfUnique(_reviewNoteKey, note);
+  r->getTags().appendValueIfUnique(_reviewTypeKey, reviewType);
+  r->getTags().set(_reviewScoreKey, score);
+  set<ElementId>::iterator it = ids.begin();
+  while (it != ids.end())
+  {
+    ElementId id = *it;
+    r->addElement(_revieweeKey, id);
+    it++;
+  }
+  r->setCircularError(-1);
+
+  //LOG_VARD(r->getId());
+  //LOG_VARD(ids);
+
+  for (unsigned int i = 0; i < choices.size(); i++)
+  {
+    r->getTags()[_reviewChoicesKey + ":" + QString::number(i+1)] = choices[i];
+  }
+
+  map->addElement(r);
+
 }
 
 void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString& note,
@@ -186,6 +224,9 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
   r->getTags().set(_reviewScoreKey, score);
   r->addElement(_revieweeKey, e->getElementId());
   r->setCircularError(-1);
+
+  //LOG_VARD(r->getId());
+  //LOG_VARD(e->getElementId());
 
   for (unsigned int i = 0; i < choices.size(); i++)
   {

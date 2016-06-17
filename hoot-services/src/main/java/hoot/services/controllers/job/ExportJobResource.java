@@ -208,7 +208,13 @@ public class ExportJobResource extends JobControllerBase {
     }
 
     protected JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, Connection conn)
-    throws Exception {
+            throws Exception {
+        if (!Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"))) {
+            ResourceErrorHandler.handleError(
+                    "Attempted to export to an OSM API database but OSM API database support is disabled",
+                    Status.INTERNAL_SERVER_ERROR, log);
+        }
+
         JSONArray commandArgs = new JSONArray();
         commandArgs.addAll(inputCommandArgs);
 
@@ -218,7 +224,8 @@ public class ExportJobResource extends JobControllerBase {
                     Status.BAD_REQUEST, log);
         }
 
-        if (StringUtils.trimToNull(getParameterValue("translation", commandArgs)) != null) {
+        String translation = getParameterValue("translation", commandArgs);
+        if ((StringUtils.trimToNull(translation) != null) && !translation.toUpperCase().equals("NONE")) {
             ResourceErrorHandler.handleError("Custom translation not allowed when exporting to OSM API database.",
                     Status.BAD_REQUEST, log);
         }
@@ -230,10 +237,18 @@ public class ExportJobResource extends JobControllerBase {
         arg.put("temppath", HootProperties.getProperty("tempOutputPath"));
         commandArgs.add(arg);
 
+        // This option allows the job executor return std out to the client.  This is the only way
+        // I've found to get the conflation summary text back from hoot command line to the UI.
+        arg = new JSONObject();
+        arg.put("writeStdOutToStatusDetail", "true");
+        commandArgs.add(arg);
+
         Map conflatedMap = getConflatedMap(commandArgs, conn);
 
-        checkMapForExportTag(conflatedMap, commandArgs, conn);
+        //pass the export timestamp to the export bash script
+        addMapForExportTag(conflatedMap, commandArgs, conn);
 
+        //pass the export aoi to the export bash script
         setAoi(conflatedMap, commandArgs);
 
         return commandArgs;
@@ -275,14 +290,12 @@ public class ExportJobResource extends JobControllerBase {
         return map.getBounds();
     }
 
-    private void checkMapForExportTag(Map map, JSONArray commandArgs, Connection conn) throws Exception {
+    private void addMapForExportTag(Map map, JSONArray commandArgs, Connection conn) throws Exception {
         java.util.Map<String, String> tags = getMapTags(map.getId(), conn);
-        // Technically, you don't have to have this tag to export the data, but
-        // since it helps to detect conflicts, and we want to be as safe as possible when writing to this
-        // external database will just always enforce it.
         if (!tags.containsKey("osm_api_db_export_time")) {
             ResourceErrorHandler.handleError("Error exporting data.  Map with ID: " + map.getId()
-                            + " and name: " + map.getDisplayName() + " has no osm_api_db_export_time tag.", Status.CONFLICT, log);
+                    + " and name: " + map.getDisplayName() + " has no osm_api_db_export_time tag.", Status.CONFLICT,
+                    log);
         }
         JSONObject arg = new JSONObject();
         arg.put("changesetsourcedatatimestamp", tags.get("osm_api_db_export_time"));

@@ -51,7 +51,6 @@
 #include <hoot/core/elements/RelationData.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
-#include <hoot/core/io/OsmApiDb.h>
 
 namespace hoot
 {
@@ -79,6 +78,10 @@ PostgresqlDumpfileWriter::PostgresqlDumpfileWriter():
 
 PostgresqlDumpfileWriter::~PostgresqlDumpfileWriter()
 {
+  if (ConfigOptions().getPostgresqlDumpfileWriterAutoCalcIds())
+  {
+    _db.close();
+  }
   close();
 }
 
@@ -348,16 +351,28 @@ void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
 
   _configData.addUserEmail        = confOptions.getPostgresqlDumpfileWriterUserEmail();
   _configData.addUserId           = confOptions.getPostgresqlDumpfileWriterUserId();
-  _configData.startingChangesetId = confOptions.getPostgresqlDumpfileWriterStartIdChangeset();
-  _configData.startingNodeId      = confOptions.getPostgresqlDumpfileWriterStartIdNode();
-  _configData.startingWayId       = confOptions.getPostgresqlDumpfileWriterStartIdWay();
-  _configData.startingRelationId  = confOptions.getPostgresqlDumpfileWriterStartIdRelation();
   _configData.changesetUserId     = confOptions.getPostgresqlDumpfileWriterChangesetUserId();
+  if (!confOptions.getPostgresqlDumpfileWriterAutoCalcIds())
+  {
+    _configData.startingChangesetId = confOptions.getPostgresqlDumpfileWriterStartIdChangeset();
+    _configData.startingNodeId      = confOptions.getPostgresqlDumpfileWriterStartIdNode();
+    _configData.startingWayId       = confOptions.getPostgresqlDumpfileWriterStartIdWay();
+    _configData.startingRelationId  = confOptions.getPostgresqlDumpfileWriterStartIdRelation();
+  }
+  else
+  {
+    _db.open(ConfigOptions().getPostgresqlDumpfileWriterIdAwareUrl());
+    _configData.startingChangesetId = _db.getNextId("changesets");
+    _configData.startingNodeId      = _db.getNextId(ElementType::Node);
+    _configData.startingWayId       = _db.getNextId(ElementType::Way);
+    _configData.startingRelationId  = _db.getNextId(ElementType::Relation);
+  }
 
+  LOG_DEBUG("Changeset user ID: " << QString::number(_configData.changesetUserId));
+  LOG_DEBUG("Starting changeset ID: " << QString::number(_configData.startingChangesetId));
   LOG_DEBUG("Starting node ID: " << QString::number(_configData.startingNodeId));
-
-  // TODO: needs to be a config value
-  _configData.maxMapElements      = 1000000000;
+  LOG_DEBUG("Starting way ID: " << QString::number(_configData.startingWayId));
+  LOG_DEBUG("Starting relation ID: " << QString::number(_configData.startingRelationId));
 }
 
 std::list<QString> PostgresqlDumpfileWriter::_createSectionNameList()

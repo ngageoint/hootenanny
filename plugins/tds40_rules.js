@@ -46,7 +46,6 @@ tds.rules = {
      ['F_CODE','AK120','leisure','playground'], // Park
      ['F_CODE','AK120','landuse','recreation_ground'], // Park
      ['F_CODE','AK120','leisure','common'], // Park - close but not great
-     ['F_CODE','AL013','building','yes'], // To fix amenity, shop etc
      ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
      ['F_CODE','AL020','landuse','industrial'], // From OSM - Map to BUA
      ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
@@ -71,7 +70,6 @@ tds.rules = {
      ['F_CODE','AP030','highway','residential'],
      ['F_CODE','AP030','highway','unclassified'],
      ['F_CODE','AP030','highway','service'],
-     ['F_CODE','AP030','highway','road'],
      ['F_CODE','AP030','highway','yes'], // Just in case...
      ['F_CODE','AP040','barrier','lift_gate'], // Gate
      ['F_CODE','AP050','highway','footway'], // Trail
@@ -114,7 +112,7 @@ tds.rules = {
      'RTN3':'ref:3', // Route Designation [3]
      'RTN':'ref', // Route Designation
      'SSE':'seasonal_ice_limit', // Seasonal Ice Limit
-//      'UFI':'source_ref', // Unique Feature Identifier. Handled in pre-processing
+     'UFI':'uuid', // Unique Feature Identifier. Handled in pre-processing
      'URI':'source_ref', // Unique Resource Identifier
      'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
      'WAD':'well:description', // Water Well Construction Description
@@ -4248,7 +4246,6 @@ tds.rules = {
      ['FFN','852','isced:level','2'], // Secondary Education
      ['FFN','852','isced:level','3'], // Secondary Education
      // ['FFN','852','isced:level','2,3'], // Secondary Education
-     ['FFN','855','building','university'],
      ['FFN','857','building','college'], // Vocational Education
 
      ['FFN','572','amenity','cafe'], // Restaurant
@@ -4276,10 +4273,10 @@ tds.rules = {
      ['FFN','843','amenity','jail'], // Imprisonment
      ['FFN','980','building','cemetery_building'], // Death care services
      ['ZI014_PPO','-999999','product','unknown'], // Unknown
-     [undefined,undefined,'amenity','school'], //  converted in pre processing
-     [undefined,undefined,'amenity','hospital'], //  converted in pre processing
-     [undefined,undefined,'amenity','university'], //  converted in pre processing
-     [undefined,undefined,'amenity','college'], //  converted in pre processing
+//      [undefined,undefined,'amenity','school'], //  converted in pre processing
+//      [undefined,undefined,'amenity','hospital'], //  converted in pre processing
+//      [undefined,undefined,'amenity','university'], //  converted in pre processing
+//      [undefined,undefined,'amenity','college'], //  converted in pre processing
      [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
 
      // From UFD

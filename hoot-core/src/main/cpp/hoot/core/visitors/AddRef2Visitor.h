@@ -28,22 +28,28 @@
 #define ADDREF2VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 using namespace std;
 
-class AddRef2Visitor : public ElementVisitor, public ConstOsmMapConsumer
+class AddRef2Visitor :
+    public ElementVisitor,
+    public ConstOsmMapConsumer,
+    public Configurable
 {
 public:
 
   static string className() { return "hoot::AddRef2Visitor"; }
 
-  AddRef2Visitor() {}
+  AddRef2Visitor();
 
   virtual ~AddRef2Visitor() {}
+
+  virtual void setConfiguration(const Settings& conf);
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
@@ -60,6 +66,7 @@ public:
 
 private:
   OsmMap* _map;
+  bool _informationOnly;
 };
 
 }

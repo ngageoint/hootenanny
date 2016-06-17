@@ -35,6 +35,7 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/schema/OverwriteTagMerger.h>
 #include <hoot/core/visitors/CountNodesVisitor.h>
+#include <hoot/core/conflate/ReviewMarker.h>
 
 namespace hoot
 {
@@ -76,82 +77,102 @@ BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :
 void BuildingMerger::apply(const OsmMapPtr& map,
   vector< pair<ElementId, ElementId> >& replaced) const
 {
-  //LOG_VAR(_pairs);
-  // use node count as a surrogate for complexity of the geometry.
-  CountNodesVisitor count1;
-  shared_ptr<Element> e1 = _buildBuilding1(map);
-  e1->visitRo(*map, count1);
-
-  CountNodesVisitor count2;
-  shared_ptr<Element> e2 = _buildBuilding2(map);
-  e2->visitRo(*map, count2);
-
-  shared_ptr<Element> keeper;
-  shared_ptr<Element> scrap;
-  // keep the more complex building geometry.
-  if (count1.getCount() >= count2.getCount())
+  //check if it is many to many
+  set<ElementId> firstPairs;
+  set<ElementId> secondPairs;
+  set<ElementId> combined;
+  set< pair<ElementId, ElementId> >::iterator sit = _pairs.begin();
+  while (sit != _pairs.end())
   {
-    keeper = e1;
-    scrap = e2;
+    firstPairs.insert(sit->first);
+    secondPairs.insert(sit->second);
+    combined.insert(sit->first);
+    combined.insert(sit->second);
+    sit++;
+  }
+  if (firstPairs.size() > 1 && secondPairs.size() > 1) //it is many to many
+  {
+    QString note = "Merging multiple buildings from each data source is error prone and requires a human eye.";
+    ReviewMarker::mark(map, combined, note, "Building", 1);
   }
   else
   {
-    keeper = e2;
-    scrap = e1;
-  }
+    // use node count as a surrogate for complexity of the geometry.
+    CountNodesVisitor count1;
+    shared_ptr<Element> e1 = _buildBuilding1(map);
+    e1->visitRo(*map, count1);
 
-  // use the default tag merging mechanism
-  Tags newTags = TagMergerFactory::mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
+    CountNodesVisitor count2;
+    shared_ptr<Element> e2 = _buildBuilding2(map);
+    e2->visitRo(*map, count2);
 
-  QStringList ref1;
-  e1->getTags().readValues("REF1", ref1);
-  QStringList ref2;
-  e2->getTags().readValues("REF2", ref2);
-
-  ref1.sort();
-  ref2.sort();
-
-  if (ref1.size() != 0 || ref2.size() != 0)
-  {
-    if (ref1 == ref2)
+    shared_ptr<Element> keeper;
+    shared_ptr<Element> scrap;
+    // keep the more complex building geometry.
+    if (count1.getCount() >= count2.getCount())
     {
-      newTags["hoot:building:match"] = "true";
+      keeper = e1;
+      scrap = e2;
     }
     else
     {
-      newTags["hoot:building:match"] = "false";
+      keeper = e2;
+      scrap = e1;
     }
-  }
 
-  keeper->setTags(newTags);
-  keeper->setStatus(Status::Conflated);
+    // use the default tag merging mechanism
+    Tags newTags = TagMergerFactory::mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
 
-  // remove the duplicate element.
-  DeletableBuildingPart filter;
-  ReplaceElementOp(scrap->getElementId(), keeper->getElementId()).apply(map);
-  RecursiveElementRemover(scrap->getElementId(), &filter).apply(map);
-  scrap->getTags().clear();
+    QStringList ref1;
+    e1->getTags().readValues("REF1", ref1);
+    QStringList ref2;
+    e2->getTags().readValues("REF2", ref2);
 
-  // if we created a relation, we now need to make sure the building part information is added
-  // properly
-  /// @todo synchronize building parts See ticket r2880
-  //_synchronizeParts(keeper);
+    ref1.sort();
+    ref2.sort();
 
-  set< pair<ElementId, ElementId> > replacedSet;
-  for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
-    it != _pairs.end(); ++it)
-  {
-    // if we replaced the second group of buildings
-    if (it->second != keeper->getElementId())
+    if (ref1.size() != 0 || ref2.size() != 0)
     {
-      replacedSet.insert(pair<ElementId, ElementId>(it->second, keeper->getElementId()));
+      if (ref1 == ref2)
+      {
+        newTags["hoot:building:match"] = "true";
+      }
+      else
+      {
+        newTags["hoot:building:match"] = "false";
+      }
     }
-    if (it->first != keeper->getElementId())
+
+    keeper->setTags(newTags);
+    keeper->setStatus(Status::Conflated);
+
+    // remove the duplicate element.
+    DeletableBuildingPart filter;
+    ReplaceElementOp(scrap->getElementId(), keeper->getElementId()).apply(map);
+    RecursiveElementRemover(scrap->getElementId(), &filter).apply(map);
+    scrap->getTags().clear();
+
+    // if we created a relation, we now need to make sure the building part information is added
+    // properly
+    /// @todo synchronize building parts See ticket #2880
+    //_synchronizeParts(keeper);
+
+    set< pair<ElementId, ElementId> > replacedSet;
+    for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
+      it != _pairs.end(); ++it)
     {
-      replacedSet.insert(pair<ElementId, ElementId>(it->first, keeper->getElementId()));
+      // if we replaced the second group of buildings
+      if (it->second != keeper->getElementId())
+      {
+        replacedSet.insert(pair<ElementId, ElementId>(it->second, keeper->getElementId()));
+      }
+      if (it->first != keeper->getElementId())
+      {
+        replacedSet.insert(pair<ElementId, ElementId>(it->first, keeper->getElementId()));
+      }
     }
+    replaced.insert(replaced.end(), replacedSet.begin(), replacedSet.end());
   }
-  replaced.insert(replaced.end(), replacedSet.begin(), replacedSet.end());
 }
 
 shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const set<ElementId>& eid)

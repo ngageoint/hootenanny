@@ -54,7 +54,7 @@ public:
   shared_ptr<OsmMapReader> createReader(QString url, bool useFileId = true,
                                         Status defaultStatus = Status::Invalid);
 
-  static OsmMapReaderFactory& getInstance() { return _theInstance; }
+  static OsmMapReaderFactory& getInstance();
 
   /**
    * Returns true if a partial reader is available for the given URL.
@@ -70,7 +70,7 @@ public:
 
 private:
 
-  static OsmMapReaderFactory _theInstance;
+  static shared_ptr<OsmMapReaderFactory> _theInstance;
 };
 
 }

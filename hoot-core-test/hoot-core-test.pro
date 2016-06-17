@@ -5,6 +5,7 @@ QT += script \
     sql \
     testlib \
     xml \
+    network \
 
 TARGET = HootCoreTest
 TEMPLATE = lib
@@ -171,6 +172,7 @@ SOURCES += \
     src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
     src/test/cpp/hoot/core/io/ChangesetDeriverTest.cpp \
     src/test/cpp/hoot/core/io/ElementComparerTest.cpp \
+    src/test/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitorTest.cpp \
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
@@ -223,4 +225,5 @@ SOURCES += \
     src/test/cpp/hoot/core/conflate/extractors/HistogramTest.cpp \
     src/test/cpp/hoot/core/algorithms/WayMatchStringMergerTest.cpp \
     src/test/cpp/hoot/core/algorithms/linearreference/WayMatchStringMappingConverterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmJsonReaderTest.cpp
 

@@ -55,6 +55,7 @@ class OsmChangesetSqlFileWriter
 public:
 
   OsmChangesetSqlFileWriter(QUrl url);
+  ~OsmChangesetSqlFileWriter();
 
   /**
    * Write a SQL changeset to the specified output path

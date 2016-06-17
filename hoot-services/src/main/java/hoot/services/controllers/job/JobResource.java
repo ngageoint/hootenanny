@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.job;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -50,6 +49,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -112,8 +112,6 @@ public class JobResource {
      * Constructor. execManager is the one that handles the execution through
      * configured Native Interface.
      *
-     * @throws IOException
-     * @throws NumberFormatException
      */
     public JobResource() {
     }
@@ -408,19 +406,31 @@ public class JobResource {
                 JSONParser parser = new JSONParser();
                 JSONObject command = (JSONObject) parser.parse(params);
 
+                //log.debug(JsonUtils.objectToJson(command));
                 JSONObject result = processJob(jobId, command);
+                //log.debug(JsonUtils.objectToJson(result));
 
                 String warnings = null;
                 Object oWarn = result.get("warnings");
                 if (oWarn != null) {
                     warnings = oWarn.toString();
                 }
+                String statusDetail = "";
+                if (warnings != null) {
+                    statusDetail += "WARNINGS: " + warnings;
+                }
 
-                if (warnings == null) {
-                    jobStatusManager.setComplete(jobId);
+                Map<String, String> params = paramsToMap(command);
+                if (params.containsKey("writeStdOutToStatusDetail")
+                        && Boolean.parseBoolean(params.get("writeStdOutToStatusDetail"))) {
+                    statusDetail += "INFO: " + result.get("stdout");
+                }
+
+                if (StringUtils.trimToNull(statusDetail) != null) {
+                    jobStatusManager.setComplete(jobId, statusDetail);
                 }
                 else {
-                    jobStatusManager.setComplete(jobId, "WARNINGS: " + warnings);
+                    jobStatusManager.setComplete(jobId);
                 }
             }
             catch (Exception e) {
@@ -441,15 +451,10 @@ public class JobResource {
         }
     }
 
-    private static JSONObject processJob(String jobId, JSONObject command) throws Exception {
-        logger.debug("processing Job: {}", jobId);
-        command.put("jobId", jobId);
-
-        String resourceName = command.get("caller").toString();
-        JobFieldsValidator validator = new JobFieldsValidator(resourceName);
+    private static Map<String, String> paramsToMap(JSONObject command) {
         JSONArray paramsList = (JSONArray) command.get("params");
 
-        Map<String, String> paramsMap = new HashMap<>();
+        Map<String, String> paramsMap = new HashMap<String, String>();
         for (Object aParamsList : paramsList) {
             JSONObject o = (JSONObject) aParamsList;
             for (Object o1 : o.entrySet()) {
@@ -459,14 +464,23 @@ public class JobResource {
                 paramsMap.put(key, val);
             }
         }
+        return paramsMap;
+    }
 
-        List<String> missingList = new ArrayList<>();
+    protected JSONObject processJob(String jobId, JSONObject command) throws Exception {
+        logger.debug("processing Job: {}", jobId);
+        command.put("jobId", jobId);
+
+        String resourceName = command.get("caller").toString();
+        JobFieldsValidator validator = new JobFieldsValidator(resourceName);
+
+        Map<String, String> paramsMap = paramsToMap(command);
+
+        List<String> missingList = new ArrayList<String>();
         if (!validator.validateRequiredExists(paramsMap, missingList)) {
             logger.error("Missing following required field(s): {}", missingList);
         }
-
         logger.debug("calling native request Job: {}", jobId);
-
         return jobExecMan.exec(command);
     }
 
@@ -487,8 +501,8 @@ public class JobResource {
          * Example job status
          *
          * {"jobId":"dae4be8a-4964-4a9a-8d7d-4e8e738a5b58","statusDetail":
-         * "{\"chainjobstatus\":\"dae4be8a-4964-4a9a-8d7d-4e8e738a5b58\",
-         * \"children\":[{\"id\":\"e16282c6-2432-4a45-a582-b0dd3f2f0d9f\",\"detail\":\"success\",\"status\":\"complete\"
+         * "{\"chainjobstatus\":\"dae4be8a-4964-4a9a-8d7d-4e8e738a5b58\", \
+         * "children\":[{\"id\":\"e16282c6-2432-4a45-a582-b0dd3f2f0d9f\",\"detail\":\"success\",\"status\":\"complete\"
          * }, {\
          * "id\":\"66d53cfc-29b6-49eb-9459-9a74794d34b2\",\"detail\":\"success\",\"status\":\"complete\"
          * }, {\
@@ -680,7 +694,7 @@ public class JobResource {
         return status;
     }
 
-    private static void setJobInfo(JSONObject jobInfo, JSONObject child, JSONArray children, String stat, String detail) {
+    protected void setJobInfo(JSONObject jobInfo, JSONObject child, JSONArray children, String stat, String detail) {
         for (Object aChildren : children) {
             JSONObject c = (JSONObject) aChildren;
             if (c.get("id").toString().equals(child.get("id").toString())) {
@@ -704,14 +718,22 @@ public class JobResource {
         return child;
     }
 
-    private void initJob(String jobId) throws Exception {
-        Connection conn = DbUtils.createConnection();
-        JobStatusManager jobStatusManager = createJobStatusMananger(conn);
-        jobStatusManager.addJob(jobId);
-        DbUtils.closeConnection(conn);;
-    }
-
     protected JobStatusManager createJobStatusMananger(Connection conn) {
         return new JobStatusManager(conn);
+    }
+
+    protected Connection createDbConnection() {
+        return DbUtils.createConnection();
+    }
+
+    protected void closeDbConnection(Connection conn) throws Exception {
+        DbUtils.closeConnection(conn);
+    }
+
+    protected void initJob(String jobId) throws Exception {
+        Connection conn = createDbConnection();
+        JobStatusManager jobStatusManager = createJobStatusMananger(conn);
+        jobStatusManager.addJob(jobId);
+        closeDbConnection(conn);
     }
 }

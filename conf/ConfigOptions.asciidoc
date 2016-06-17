@@ -40,6 +40,14 @@
 //
 // Again, please keep the configuration options in alphabetical order.
 //
+=== add.ref.visitor.information.only
+
+* Data Type: bool
+* Default Value: `true`
+
+Typically REF1/2 values are only applied to elements with informational tags (e.g. name=foo),
+however setting this to false will apply REF1/2 values to all elements.
+
 === add.ref1.visitor.prefix
 
 * Data Type: string
@@ -51,19 +59,19 @@ The REF1 values are typically used when training a model. See the
 https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/Manual_Conflation[developer
 documentation] for details.
 
-=== attribute.score.extractor.use.weight
-
-* Data Type: bool
-* Default Value: `false`
-
-Determines whether the AttributeScoreExtractor uses weighting when extracting scores.
-
 === attribute.count.values
 
 * Data Type: int
 * Default Value: `30`
 
 The maximum number of values returned for each attribute by the attribute-count command.
+
+=== attribute.score.extractor.use.weight
+
+* Data Type: bool
+* Default Value: `false`
+
+Determines whether the AttributeScoreExtractor uses weighting when extracting scores.
 
 === big.perty.op.max.distance
 
@@ -220,6 +228,7 @@ See also:
 * Data Type: list
 * Default Value:
 ** `hoot::RemoveMissingElementsVisitor` - Remove non-existent element references from relations or ways with negative IDs.
+** `hoot::RemoveEmptyReviewRelationsVisitor` - Remove empty review relations
 ** `hoot::RemoveDuplicateReviewsOp` - Checks if there are any duplicate reviews
 ** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
 ** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews. By processing reviews in sorted order the results are a little more logically ordered.
@@ -903,6 +912,30 @@ Attribute columns and values that do not match a one2one rule.
 
 Debugging: Print out which attributes are dropped during export validation.
 
+=== ogr.mgcp.extra
+
+* Data Type: string
+* Default Value: `file`
+
+When exporting to MGCP:
+- "file" Save the unused tags in a new layer (extra_[PLA]).
+- "note" Add unused tags to the "TXT" field.
+- "none" Don't save the unused tags, just drop them.
+
+NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of 255 characters. Extra text will be truncated.
+
+=== ogr.tds.extra
+
+* Data Type: string
+* Default Value: `note`
+
+When exporting to TDSv40 and TDSv61:
+- "note" Add unused tags to the "ZI006_MEM" field.
+- "file" Save the unused tags in a new layer (extra_[PLA]).
+- "none" Don't save the unused tags, just drop them.
+
+NOTE: If exporting to Shapefile, this field will be truncated to 255 characters.
+
 === ogr.import.filter
 
 * Data Type: string
@@ -1558,6 +1591,29 @@ Maximum number of elements (nodes, ways, and relations) that can be held in memo
 system starts using disk-based storage.  Note that this limit applies to each element type
 individually, so worst case is that three times this value of elements can be stored in memory
 at the same time.
+
+=== postgresql.dumpfile.writer.auto.calc.ids
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, then the OSM API database ingest operation will check the ID sequences of the target
+database (one time only) to determine the starting changeset and element ID's to use for the entire
+write operation.  Enabling this setting precludes a user from having to specify the
+"postgresql.dumpfile.writer.start.id.*" configuration options (it overrides them).  This setting
+must be used in conjunction with the "postgresql.dumpfile.writer.id.aware.url" setting.  IMPORTANT:
+This setting should only be enabled in situations where a single user is writing to the target OSM
+API database (testing environment).  Since the command does not continuallly check for the next
+available ID (for performance reasons), ID conflict errors may occur if multiple users are writing
+to the database simultaneously when this option is enabled.
+
+=== postgresql.dumpfile.writer.id.aware.url
+
+* Data Type: string
+* Default Value: ``
+
+This is required when "postgresql.dumpfile.writer.auto.calc.ids" is set to true.  It should point
+to the eventual target OSM API database.
 
 === postgresql.dumpfile.writer.changeset.user.id
 

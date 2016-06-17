@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.math.util.MathUtils;
-import org.deegree.services.wps.input.BoundingBoxInput;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -82,14 +81,6 @@ public class BoundingBox {
         return "minLon: " + minLon + ", minLat: " + minLat + ", maxLon: " + maxLon + ", maxLat: " + maxLat;
     }
 
-    /**
-     * Returns XML that can be as bounding box input for a WPS request
-     */
-    public String toWpsXml() {
-        return "<wps:BoundingBoxData>" + "<ows:LowerCorner>" + minLon + " " + minLat + "</ows:LowerCorner>"
-                + "<ows:UpperCorner>" + maxLon + " " + maxLat + "</ows:UpperCorner>" + "</wps:BoundingBoxData>";
-    }
-
     private static final double BOUNDS_ERROR = 0.0000001;
 
     @Override
@@ -123,12 +114,6 @@ public class BoundingBox {
         String[] bboxParts = bbox.split(",");
         validateAndSetCoords(Double.parseDouble(bboxParts[0]), Double.parseDouble(bboxParts[1]),
                 Double.parseDouble(bboxParts[2]), Double.parseDouble(bboxParts[3]));
-    }
-
-    public BoundingBox(final BoundingBoxInput wpsInput) throws Exception {
-        // ignore CRS here for now and always assuming 4326
-        validateAndSetCoords(wpsInput.getLower()[0], wpsInput.getLower()[1], wpsInput.getUpper()[0],
-                wpsInput.getUpper()[1]);
     }
 
     /**

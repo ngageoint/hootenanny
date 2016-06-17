@@ -1080,7 +1080,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             // try to query nodes from a map that doesn't exist
             resource()
                     .path("api/0.6/map")
-                    .queryParam("mapId", "-1")
+                    .queryParam("mapId", "-2") //-1 is now a valid id for an osm api db layer
                     .queryParam("bbox", queryBounds.toServicesString())
                     .accept(MediaType.TEXT_XML)
                     .get(Document.class);

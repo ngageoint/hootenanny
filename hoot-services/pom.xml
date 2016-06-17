@@ -574,17 +574,6 @@
         <!-- deegree provides OGC compliant services -->
         <dependency>
             <groupId>org.deegree</groupId>
-            <artifactId>deegree-services-wps</artifactId>
-            <version>${deegree.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.deegree</groupId>
             <artifactId>deegree-services-wfs</artifactId>
             <version>${deegree.version}</version>
             <exclusions>

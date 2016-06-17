@@ -69,6 +69,7 @@ private:
   OsmMap* _map;
   int _count;
   QString _prefix;
+  bool _informationOnly;
 };
 
 }
