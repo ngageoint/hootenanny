@@ -582,6 +582,7 @@
         "description": "Automatically calculates the search radius to be used during conflation of waterways using rubber sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a pre-conflation operation on the input data to be conflated.",
         "name": "Waterway Auto Calc Search Radius",
         "defaultvalue": "true",
+        "disabled": "false",
         "hoot_key": "waterway.auto.calc.search.radius",
 "onchange": "true"
       },
@@ -593,6 +594,7 @@
         "maxvalue": "",
         "name": "Search Radius Waterway",
         "defaultvalue": "-1",
+        "disabled": "true",
 		"override":{
 						"defaultvalue": "-1"
 					},
