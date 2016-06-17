@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,57 +22,32 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMMAPREADERFACTORY_H
-#define OSMMAPREADERFACTORY_H
+#ifndef REMOVEEMPTYREVIEWRELATIONSVISITOR_H
+#define REMOVEEMPTYREVIEWRELATIONSVISITOR_H
 
-// Qt
-#include <QString>
-
-// tgs
-#include <tgs/SharedPtr.h>
-
-// hoot
-#include <hoot/core/elements/Element.h>
+#include "ElementOsmMapVisitor.h"
 
 namespace hoot
 {
-class OsmMap;
-class OsmMapReader;
+using namespace std;
 
 /**
- * A factory for constructing readers based on the URL.
+ * Remove all empty review relations
  */
-class OsmMapReaderFactory
+class RemoveEmptyReviewRelationsVisitor : public ElementOsmMapVisitor
 {
-
 public:
 
-  OsmMapReaderFactory();
+  static string className() { return "hoot::RemoveEmptyReviewRelationsVisitor"; }
 
-  shared_ptr<OsmMapReader> createReader(QString url, bool useFileId = true,
-                                        Status defaultStatus = Status::Invalid);
+  RemoveEmptyReviewRelationsVisitor();
 
-  static OsmMapReaderFactory& getInstance();
+  virtual void visit(const ElementPtr& e);
 
-  /**
-   * Returns true if a partial reader is available for the given URL.
-   */
-  bool hasPartialReader(QString url);
-
-  bool hasElementInputStream(QString url);
-
-  bool hasReader(QString url);
-
-  static void read(shared_ptr<OsmMap> map, QString url, bool useFileId = true,
-                   Status defaultStatus = Status::Invalid);
-
-private:
-
-  static shared_ptr<OsmMapReaderFactory> _theInstance;
 };
 
 }
 
-#endif // OSMMAPREADERFACTORY_H
+#endif // REMOVEEMPTYREVIEWRELATIONSVISITOR_H

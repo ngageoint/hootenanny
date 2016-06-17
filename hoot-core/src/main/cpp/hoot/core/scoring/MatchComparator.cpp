@@ -507,8 +507,9 @@ bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOs
 
   if (eid1.isNull() || eid2.isNull())
   {
-    /// @todo Change this back to LOG_WARN after addressing r5560
-    LOG_INFO("Couldn't find an expected element.");
+    //So far this message is ok, change from LOG_INFO to LOG_DEBUG.
+    //More information please see issue 167. https://github.com/ngageoint/hootenanny/issues/167
+    LOG_DEBUG("No actual element exists.");
     return false;
   }
 

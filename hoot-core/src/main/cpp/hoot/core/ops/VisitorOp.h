@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitorConsumer.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
 
@@ -46,11 +47,15 @@ class OsmMap;
  *
  * Yes, it is that simple.
  */
-class VisitorOp : public OsmMapOperation
+class VisitorOp :
+  public OsmMapOperation,
+  public ElementVisitorConsumer
 {
 public:
 
   static string className() { return "hoot::VisitorOp"; }
+
+  VisitorOp() {}
 
   VisitorOp(const shared_ptr<ElementVisitor>& v) { _visitor = v; }
 
@@ -60,6 +65,8 @@ public:
   VisitorOp(ElementVisitor* v) { _visitor.reset(v); }
 
   virtual ~VisitorOp() {}
+
+  virtual void addVisitor(const ElementVisitorPtr& e);
 
   virtual void apply(shared_ptr<OsmMap>& map);
 

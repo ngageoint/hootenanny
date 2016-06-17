@@ -49,6 +49,7 @@ Then (/^I should (not )?see the element (.*)$/) do |negate, selector|
   expectation = negate ? :should_not : :should
   page.send(expectation, have_css(selector))
 end
+
 Then(/^I should see "([^"]*)"$/) do |text|
   #page.should have_content(text)
   expect(page).to have_content(text)
@@ -59,10 +60,57 @@ Then(/^I should not see "([^"]*)"$/) do |text|
   expect(page).to have_no_content(text)
 end
 
+Then(/^I should see (checkbox )?"([^"]*)" (not )?enabled$/) do |cbox, text,state|
+  lbl = find('label', :text=> text, :match => :prefer_exact)
+  if cbox
+    el = lbl.find('input')
+  else
+    el = lbl.find(:xpath, '..').find('input')
+  end
+
+  if state
+    el[:disabled].should eq "true"
+  else
+    el[:disabled].should_not be
+  end
+end
+
+Then(/^I should see "([^"]*)" combobox (not )?enabled$/) do |text,state|
+  lbl = find('label', :text=> text, :match => :prefer_exact)
+  el = lbl.find(:xpath,"..").find('.combobox-input')
+
+  if state
+    el[:disabled].should eq "true"
+  else
+    el[:disabled].should_not be
+  end
+end
+
+Then(/^I should see checkbox "([^"]*)" (un)?checked$/) do |text, unchk|
+  lbl = find('label', :text=> text, :match => :prefer_exact)
+  cbox = lbl.find('input')
+  if unchk
+    expect(cbox).to_not be_checked
+  else
+    expect(cbox).to be_checked
+  end
+end
+
+Then(/^I (un)?check the "([^"]*)" checkbox$/) do |unchk,text|
+  lbl = find('label', :text=> text, :match => :prefer_exact)
+  cbox = lbl.find('input')
+  if unchk
+    cbox.set(false)
+  else
+    cbox.set(true)
+  end
+end
+
 Then(/^I should see an alert containing "([^"]*)"$/) do |text|
   alertText = page.driver.browser.switch_to.alert.text
   expect(alertText).to include text
 end
+
 Then (/^I should( not)? see a link "([^"]*)"$/) do |negate, txt|
   expectation = negate ? :should_not : :should
   if negate
@@ -182,6 +230,12 @@ When(/^I select the "([^"]*)" option in "([^"]*)"$/) do |opt, el|
   page.find('div.combobox').find('a', :text=> opt).click
 end
 
+When(/^The value of "([^"]*)" option in "([^"]*)"$/) do |opt, el|
+  combobox = page.find(el)
+  combobox.find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt).click
+end
+
 When(/^I click the "([^"]*)" button$/) do |el|
   find('button.' + el).click
 end
@@ -276,8 +330,8 @@ When(/^I click on "([^"]*)"$/) do |el|
   find(el).click
 end
 
-When(/^I press "([^"]*)" big loud span$/) do |txt|
-  find('span.big.loud', :text=>txt).click
+When(/^I press "([^"]*)" span with text "([^"]*)"$/) do |cls,txt|
+  find('span.' + cls, :text=>txt).click
 end
 
 When(/^I press "([^"]*)" big loud link$/) do |cls|
@@ -418,6 +472,11 @@ Then(/^I should see element "([^"]*)" with value "([^"]*)"$/) do |id, value|
   # expect(page).to have_selector("input[value='" + value + "']")
   # page.should have_xpath("//input[@value='" + value + "']")
   find(id).value.should eq value
+end
+
+Then(/^I should see element "([^"]*)" with no value and placeholder "([^"]*)"$/) do |id, value|
+  find(id).value.should eq ""
+  page.find(:css, 'input[placeholder="' + value + '"]')
 end
 
 Then(/^I choose "([^"]*)" radio button$/) do |text|

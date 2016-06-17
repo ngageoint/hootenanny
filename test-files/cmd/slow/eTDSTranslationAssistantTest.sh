@@ -14,7 +14,7 @@ do
     hoot --ogr2osm $TA_IN/cali-translation-$schema.js $TA_OUT/$TA_FILE-$schema.osm $TA_IN/$TA_FILE.shp
 
     # Uncomment this line to update the input files when there is a schema change
-    cp $TA_OUT/$TA_FILE-$schema.osm $TA_IN/$TA_FILE-$schema.osm
+    #cp $TA_OUT/$TA_FILE-$schema.osm $TA_IN/$TA_FILE-$schema.osm
 
     hoot --is-match --ignore-uuid $TA_OUT/$TA_FILE-$schema.osm $TA_IN/$TA_FILE-$schema.osm
 done
@@ -23,7 +23,7 @@ done
 hoot --ogr2osm $TA_IN/cali-translation-tdsv61-fcode.js $TA_OUT/$TA_FILE-tdsv61-fcode.osm $TA_IN/$TA_FILE.shp
 
 # Uncomment this line to update the input files when there is a schema change
-cp $TA_OUT/$TA_FILE-tdsv61-fcode.osm $TA_IN/$TA_FILE-tdsv61.osm
+#cp $TA_OUT/$TA_FILE-tdsv61-fcode.osm $TA_IN/$TA_FILE-tdsv61.osm
 
 hoot --is-match --ignore-uuid $TA_OUT/$TA_FILE-tdsv61-fcode.osm $TA_IN/$TA_FILE-tdsv61.osm
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,57 +22,38 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMMAPREADERFACTORY_H
-#define OSMMAPREADERFACTORY_H
 
-// Qt
-#include <QString>
+#include "RemoveEmptyReviewRelationsVisitor.h"
 
-// tgs
-#include <tgs/SharedPtr.h>
-
-// hoot
-#include <hoot/core/elements/Element.h>
+//hoot
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/Factory.h>
 
 namespace hoot
 {
-class OsmMap;
-class OsmMapReader;
 
-/**
- * A factory for constructing readers based on the URL.
- */
-class OsmMapReaderFactory
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveEmptyReviewRelationsVisitor)
+
+RemoveEmptyReviewRelationsVisitor::RemoveEmptyReviewRelationsVisitor()
 {
-
-public:
-
-  OsmMapReaderFactory();
-
-  shared_ptr<OsmMapReader> createReader(QString url, bool useFileId = true,
-                                        Status defaultStatus = Status::Invalid);
-
-  static OsmMapReaderFactory& getInstance();
-
-  /**
-   * Returns true if a partial reader is available for the given URL.
-   */
-  bool hasPartialReader(QString url);
-
-  bool hasElementInputStream(QString url);
-
-  bool hasReader(QString url);
-
-  static void read(shared_ptr<OsmMap> map, QString url, bool useFileId = true,
-                   Status defaultStatus = Status::Invalid);
-
-private:
-
-  static shared_ptr<OsmMapReaderFactory> _theInstance;
-};
-
 }
 
-#endif // OSMMAPREADERFACTORY_H
+void RemoveEmptyReviewRelationsVisitor::visit(const ElementPtr& e)
+{
+  if (e->getElementType() == ElementType::Relation)
+  {
+    Relation* r = dynamic_cast<Relation*>(e.get());
+    assert(r != 0);
+
+    //LOG_VARD(r->getId());
+    if (r->getType() == Relation::REVIEW && r->getMembers().size() == 0)
+    {
+      //LOG_DEBUG("Removing review relation with ID: " << r->getId());
+      _map->removeRelation(r->getId());
+    }
+  }
+}
+
+}

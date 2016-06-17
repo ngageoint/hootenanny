@@ -142,7 +142,9 @@ public class Relation extends Element {
         SQLQuery owningRelationsQuery = new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).distinct()
                 .from(currentRelationMembers).join(currentRelations)
                 .on(currentRelationMembers.relationId.eq(currentRelations.id))
-                .where(currentRelations.visible.eq(true).and(currentRelationMembers.memberId.eq(super.getId())));
+                .where(currentRelations.visible.eq(true)
+                        .and(currentRelationMembers.memberId.eq(super.getId()))
+                        .and(currentRelationMembers.memberType.eq(nwr_enum.relation)));
 
         Set<Long> owningRelationsIds = new TreeSet<>(owningRelationsQuery.list(currentRelationMembers.relationId));
 
