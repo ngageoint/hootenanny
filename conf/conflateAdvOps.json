@@ -207,8 +207,6 @@
         "defaultvalue": "30",
         "hoot_key": "unify.optimizer.time.limit"
       },
-     
-     
       {
         "id": "ogr_split_o2s",
         "elem_type": "checkbox",
@@ -240,6 +238,30 @@
         "description": "If checked, the duplicate name remover will only remove duplicate names when their case also matches; Will ignore case when removing otherwise",
         "name": "Duplicate Name Case Sensitive",
         "defaultvalue": "true"
+      },
+      {
+        "id": "element_cache_size_node",
+        "elem_type": "int",
+        "description":"Size of the cache used when streaming I/O is used with nodes.",
+        "name": "Element Cache Size Node",
+        "defaultvalue": "2000000",
+        "hoot_key": "element.cache.size.node"
+      },
+      {
+        "id": "element_cache_size_relation",
+        "elem_type": "int",
+        "description":"Size of the cache used when streaming I/O is used with relations.",
+        "name": "Element Cache Size Node",
+        "defaultvalue": "200000",
+        "hoot_key": "element.cache.size.relation"
+      },
+      {
+        "id": "element_cache_size_way",
+        "elem_type": "int",
+        "description":"Size of the cache used when streaming I/O is used with ways.",
+        "name": "Element Cache Size Way",
+        "defaultvalue": "200000",
+        "hoot_key": "element.cache.size.way"
       }
     ]
   },
