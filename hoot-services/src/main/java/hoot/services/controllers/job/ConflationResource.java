@@ -77,6 +77,8 @@ public class ConflationResource extends JobControllerBase {
      *
      * that is intended to be the reference dataset.
      *
+     * that is intended to be the reference dataset.
+     *
      * POST hoot-services/conflation/execute
      *
      * @param params

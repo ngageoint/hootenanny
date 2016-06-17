@@ -224,17 +224,17 @@ public class ExportJobResource extends JobControllerBase {
                     Status.BAD_REQUEST, log);
         }
 
-        String translation = getParameterValue("translation", commandArgs);
-        if ((StringUtils.trimToNull(translation) != null) && !translation.toUpperCase().equals("NONE")) {
+        final String translation = getParameterValue("translation", commandArgs);
+        if (StringUtils.trimToNull(translation) != null && !translation.toUpperCase().equals("NONE")) {
             ResourceErrorHandler.handleError("Custom translation not allowed when exporting to OSM API database.",
                     Status.BAD_REQUEST, log);
         }
 
         // ignoring outputname, since we're only going to have a single mapedit
         // connection configured in the core for now
-
+        // configured in the core for now
         JSONObject arg = new JSONObject();
-        arg.put("temppath", HootProperties.getProperty("tempOutputPath"));
+        arg.put("temppath", HootProperties.getProperty("tempOutputPath\n"));
         commandArgs.add(arg);
 
         // This option allows the job executor return std out to the client.  This is the only way
@@ -244,10 +244,8 @@ public class ExportJobResource extends JobControllerBase {
         commandArgs.add(arg);
 
         Map conflatedMap = getConflatedMap(commandArgs, conn);
-
         //pass the export timestamp to the export bash script
         addMapForExportTag(conflatedMap, commandArgs, conn);
-
         //pass the export aoi to the export bash script
         setAoi(conflatedMap, commandArgs);
 

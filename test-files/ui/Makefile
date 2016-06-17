@@ -23,7 +23,7 @@ HOOT_OPTS+= -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite
 HOOT_OPTS+= -D hootapi.db.writer.email=test@test.com -D hootapi.db.reader.email=test@test.com
 HOOT_OPTS+= -D reader.add.source.datetime=false
 
-test: load-data
+test: clean load-data
 ifneq (,$(findstring s,$(MAKEFLAGS)))
 	$(HOOT_HOME)/scripts/VerifyTomcatStarted.sh $(TOMCAT_PORT) --quiet 2> >( $(FILTER) >&2 )
 else
@@ -75,6 +75,8 @@ load-data:
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesA.osm $(DB_URL)/AllDataTypesACucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesB.osm $(DB_URL)/AllDataTypesBCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestA.osm $(DB_URL)/ToyTestACucumber
+	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/Merged_Brazil_daba15e4.osm $(DB_URL)/BrazilMergedCucumber
+
 	# MapEdit conflation
 	source $(HOOT_HOME)/scripts/SetupOsmApiDB.sh force
 	PGPASSWORD=$(PGPASSWORD) psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/test-files/servicesdb/users.sql

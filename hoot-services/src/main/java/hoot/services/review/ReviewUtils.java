@@ -31,6 +31,7 @@ import java.sql.SQLException;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
+import org.deegree.commons.ows.exception.OWSException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
