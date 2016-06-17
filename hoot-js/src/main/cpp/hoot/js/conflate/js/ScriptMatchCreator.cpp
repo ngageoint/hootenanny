@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -469,9 +469,15 @@ void ScriptMatchCreator::setArguments(QStringList args)
 
 Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
-  Match* result = new ScriptMatch(_script, ScriptMatchVisitor::getPlugin(_script), map,
-    eid1, eid2, getMatchThreshold());
-  return result;
+  if (isMatchCandidate(map->getElement(eid1), map) && isMatchCandidate(map->getElement(eid2), map))
+  {
+    return new ScriptMatch(_script, ScriptMatchVisitor::getPlugin(_script), map,
+      eid1, eid2, getMatchThreshold());
+  }
+  else
+  {
+    return 0;
+  }
 }
 
 void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,

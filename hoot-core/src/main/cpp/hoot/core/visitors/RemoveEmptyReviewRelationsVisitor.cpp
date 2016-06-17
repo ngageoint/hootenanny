@@ -47,10 +47,10 @@ void RemoveEmptyReviewRelationsVisitor::visit(const ElementPtr& e)
     Relation* r = dynamic_cast<Relation*>(e.get());
     assert(r != 0);
 
-    LOG_VARD(r->getId());
+    //LOG_VARD(r->getId());
     if (r->getType() == Relation::REVIEW && r->getMembers().size() == 0)
     {
-      LOG_DEBUG("Removing review relation with ID: " << r->getId());
+      //LOG_DEBUG("Removing review relation with ID: " << r->getId());
       _map->removeRelation(r->getId());
     }
   }
