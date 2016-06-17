@@ -65,6 +65,8 @@ Feature: Translation Assistant
         Then I press enter in the "[placeholder='Search tag']" input
         Then I press "Next"
         Then I press "Save Translation"
+        And I wait 5 seconds
+        Then the download file pattern "*-translation.js" should exist
         Then I accept the alert
         Then I select the "x" div
 
@@ -118,6 +120,8 @@ Feature: Translation Assistant
         Then I press the left arrow key
         Then I press the left arrow key
         Then I press "Save Translation"
+        And I wait 5 seconds
+        Then the download file pattern "*-translation.js" should exist
         Then I accept the alert
         Then I close the modal
 

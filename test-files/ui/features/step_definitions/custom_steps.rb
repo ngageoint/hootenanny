@@ -508,6 +508,13 @@ Then(/^the download file "([^"]*)" should exist$/) do |file|
   File.delete(name)
 end
 
+Then(/^the download file pattern "([^"]*)" should exist$/) do |file|
+  name = ENV['HOME'] + '/Downloads/' + file
+  # puts name
+  expect( Dir.glob(name).empty? ).to be false
+  File.delete(*Dir.glob(name))
+end
+
 Then(/^the log file "([^"]*)" should exist$/) do |file|
   name = ENV['HOME'] + '/Downloads/' + file
   # puts name
