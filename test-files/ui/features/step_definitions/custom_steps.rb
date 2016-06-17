@@ -33,11 +33,17 @@ When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent
 end
 
 When(/^I select a way map feature with id "([^"]*)"$/) do |id|
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = 10
   find('div.layer-data').all('path[class*=" ' + id + '"]').last.click
+  Capybara.default_max_wait_time = oldTimeout
 end
 
 When(/^I select a node map feature with id "([^"]*)"$/) do |id|
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = 10
   find('div.layer-data').all('g[class*=" ' + id + '"]').last.click
+  Capybara.default_max_wait_time = oldTimeout
 end
 
 Then (/^I should (not )?see an element "([^"]*)"$/) do |negate, selector|
