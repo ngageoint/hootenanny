@@ -761,7 +761,6 @@ mgcp = {
         if (tags.area) delete tags.area;
         if (tags['error:circular']) delete tags['error:circular'];
         if (tags['hoot:status']) delete tags['hoot:status'];
-        if (tags.hoot) delete tags.hoot; // Added by the UI
 
         // initial cleanup
         for (var i in tags)
@@ -1376,6 +1375,8 @@ mgcp = {
         // the not used tags.
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedTags = (JSON.parse(JSON.stringify(tags)));
+
+        if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
 
         // apply the simple number and text biased rules
         translate.applySimpleNumBiased(attrs, notUsedTags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);

@@ -1065,7 +1065,6 @@ tds = {
         if (tags.area) delete tags.area;
         if (tags['error:circular']) delete tags['error:circular'];
         if (tags['hoot:status']) delete tags['hoot:status'];
-        if (tags.hoot) delete tags.hoot; // Added by the UI
 
         // Initial cleanup
         for (var i in tags)
@@ -1723,6 +1722,8 @@ tds = {
         // the not used tags.
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedTags = (JSON.parse(JSON.stringify(tags)));
+
+        if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
 
         // Apply the simple number and text biased rules
         // NOTE: These are BACKWARD, not forward!
