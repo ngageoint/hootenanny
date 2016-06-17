@@ -504,7 +504,8 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmApiDbSqlChangesetWriter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.cpp \
     src/main/cpp/hoot/core/io/OsmJsonReader.cpp \
-    src/main/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.cpp
+    src/main/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
