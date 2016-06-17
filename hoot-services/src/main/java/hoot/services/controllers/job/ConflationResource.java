@@ -115,8 +115,9 @@ public class ConflationResource extends JobControllerBase {
             JSONParser pars = new JSONParser();
             JSONObject oParams = (JSONObject) pars.parse(params);
 
-            final boolean osmApiDbEnabled = Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"));
-            final boolean conflatingOsmApiDbData = oneLayerIsOsmApiDb(oParams);
+            boolean osmApiDbEnabled = Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"));
+            boolean conflatingOsmApiDbData = oneLayerIsOsmApiDb(oParams);
+
             //Since we're not returning the osm api db layer to the hoot ui, this exception
             //shouldn't actually ever occur, but will leave this check here anyway.
             if (conflatingOsmApiDbData && !osmApiDbEnabled) {
@@ -189,7 +190,7 @@ public class ConflationResource extends JobControllerBase {
 
                 //Record the aoi of the conflation job (equal to that of the secondary layer), as
                 //we'll need it to detect conflicts at export time.
-                final long secondaryMapId = Long.parseLong(getParameterValue(secondaryParameterKey, commandArgs));
+                long secondaryMapId = Long.parseLong(getParameterValue(secondaryParameterKey, commandArgs));
                 if (!mapExists(secondaryMapId, conn)) {
                     ResourceErrorHandler.handleError("No secondary map exists with ID: " + secondaryMapId,
                             Status.BAD_REQUEST, log);
@@ -201,8 +202,7 @@ public class ConflationResource extends JobControllerBase {
                 // from the source; to be used conflict detection during export of conflated
                 // data back into the osm api db at a later time; timestamp must be 24 hour utc
                 // to match rails port
-                final String now =
-                  DateTimeFormat.forPattern(DbUtils.OSM_API_TIMESTAMP_FORMAT).withZone(DateTimeZone.UTC).print(new DateTime());
+                String now = DateTimeFormat.forPattern(DbUtils.OSM_API_TIMESTAMP_FORMAT).withZone(DateTimeZone.UTC).print(new DateTime());
                 tags.put("osm_api_db_export_time", now);
             }
 
@@ -296,7 +296,7 @@ public class ConflationResource extends JobControllerBase {
     }
 
     private void setAoi(Map secondaryMap, JSONArray commandArgs) throws Exception {
-        final BoundingBox bounds = getMapBounds(secondaryMap);
+        BoundingBox bounds = getMapBounds(secondaryMap);
         JSONObject arg = new JSONObject();
         arg.put("conflateaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
         commandArgs.add(arg);
