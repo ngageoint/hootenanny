@@ -100,8 +100,6 @@ HighwayMatch::HighwayMatch(const shared_ptr<HighwayClassifier>& classifier,
         _explainText = description.join(" ");
       else
         _explainText = mt->getTypeDetail(_c);
-      //  WTF?! This has to run or the whole thing gets screwed up?!
-      getFeatures(map);
     }
     else
     {
