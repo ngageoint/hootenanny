@@ -400,7 +400,7 @@ bool TileBoundsCalculator::_isDone(vector<PixelBox> &boxes)
 
 void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map)
 {
-  _envelope = map->calculateBounds();
+  _envelope = CalculateBoundsVisitor::getBounds(map);
 
   renderImage(map, _r1, _r2);
 
@@ -413,7 +413,7 @@ void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map)
 
 void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2)
 {
-  _envelope = map->calculateBounds();
+  _envelope = CalculateBoundsVisitor::getBounds(map);
 
   int w = ceil((_envelope.MaxX - _envelope.MinX) / _pixelSize) + 1;
   int h = ceil((_envelope.MaxY - _envelope.MinY) / _pixelSize) + 1;

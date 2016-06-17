@@ -208,38 +208,6 @@ void OsmMap::addWay(const shared_ptr<Way>& w)
 //# endif
 }
 
-OGREnvelope OsmMap::calculateBounds() const
-{
-  OGREnvelope result;
-
-  bool first = true;
-  for (NodeMap::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
-  {
-    const shared_ptr<const Node>& n = it->second;
-    if (first)
-    {
-      result.MinX = result.MaxX = n->getX();
-      result.MinY = result.MaxY = n->getY();
-      first = false;
-    }
-    else
-    {
-      result.MinX = min(n->getX(), result.MinX);
-      result.MinY = min(n->getY(), result.MinY);
-      result.MaxX = max(n->getX(), result.MaxX);
-      result.MaxY = max(n->getY(), result.MaxY);
-    }
-  }
-
-  return result;
-}
-
-geos::geom::Envelope OsmMap::calculateEnvelope() const
-{
-  auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(calculateBounds()));
-  return *e;
-}
-
 void OsmMap::clear()
 {
   _srs = getWgs84();

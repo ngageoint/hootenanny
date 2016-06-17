@@ -147,7 +147,7 @@ OGREnvelope LocalTileWorker2::calculateEnvelope()
     reader.read(_in2, map);
   }
 
-  return map->calculateBounds();
+  return CalculateBoundsVisitor::getBounds(map);
 }
 
 void LocalTileWorker2::calculateNodeDensity(cv::Mat& r1, cv::Mat& r2)

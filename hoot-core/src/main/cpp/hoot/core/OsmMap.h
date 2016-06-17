@@ -128,17 +128,6 @@ public:
 
   void addWay(const shared_ptr<Way>& w);
 
-  /**
-   * Calculates the bounds of the map by determining the extent of all the nodes.
-   * This is slow every time and there is no caching.
-   */
-  OGREnvelope calculateBounds() const;
-
-  /**
-   * Similar to above, but it returns a geos Envelope.
-   */
-  geos::geom::Envelope calculateEnvelope() const;
-
   void clear();
 
   /**
