@@ -49,6 +49,9 @@ Feature: Advanced Conflation Options
 		And I should see checkbox "OGR TDS Add FCSubtype" checked
 		And I should see checkbox "OGR TDS Structure" checked
 		And I should see checkbox "Duplicate Name Case Sensitive" checked
+		And I should see element "#element_cache_size_node" with no value and placeholder "2000000"
+		And I should see element "#element_cache_size_relation" with no value and placeholder "200000"
+		And I should see element "#element_cache_size_way" with no value and placeholder "200000"
 		Then I click on "#hoot_general_conflation_options_label"
 		And I should see "Road Options"
 		Then I click on "#hoot_road_options_label"
@@ -75,6 +78,7 @@ Feature: Advanced Conflation Options
 		And I should see element "#waterway_way_matcher_heading_delta" with no value and placeholder "150.0"
 		And I should see checkbox "Waterway Auto Calc Search Radius" checked
 		And I should see element "#search_radius_waterway" with no value and placeholder "-1"
+		And I should see "Search Radius Waterway" not enabled
 		And I should see element "#waterway_rubber_sheet_minimum_ties" with no value and placeholder "5"
 		And I should see checkbox "Waterway Rubber Sheet Ref" checked
 		And I click on "#hoot_waterway_options_label"
@@ -107,7 +111,7 @@ Feature: Advanced Conflation Options
 	 	And I should see "►"
 	 	And I should see element ".ConfType" with value "Cookie Cutter & Horizontal"
 
-	Scenario: I can view and change Horizontal Advanced Options
+	Scenario: I can view and change Average Advanced Options
 		When I select the "Average" option in "#containerofConfType"
 		Then I click the "►" link
 		And I should see "Advanced Conflation Options"
@@ -196,7 +200,7 @@ Feature: Advanced Conflation Options
 	 	And I should not see "Cookie Cutter & Horizontal Options"
 	    Then I press "big.loud" span with text "Apply"
 		And I should see "►"
-		And I should see element ".ConfType" with value "Advanced Conflation"
+		And I should see element ".ConfType" with value "Custom Average"
 		And I scroll element into view and press "conflate2"
 		Then I wait 30 "seconds" to see "Conflating …"
 	    Then I wait 3 "minutes" to see "Merged_AllDataTypes_Advanced"

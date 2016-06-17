@@ -251,7 +251,7 @@
         "id": "element_cache_size_relation",
         "elem_type": "int",
         "description":"Size of the cache used when streaming I/O is used with relations.",
-        "name": "Element Cache Size Node",
+        "name": "Element Cache Size Relation",
         "defaultvalue": "200000",
         "hoot_key": "element.cache.size.relation"
       },
