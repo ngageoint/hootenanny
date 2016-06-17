@@ -48,7 +48,7 @@ _outputBuffer(outputBuffer)
 
 void CookieCutter::cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap)
 {
-  OGREnvelope env = CalculateBoundsVisitor::getBounds(CutterShapeMap);
+  OGREnvelope env = CalculateBoundsVisitor::getBounds(cutterShapeMap);
   env.Merge(CalculateBoundsVisitor::getBounds(doughMap));
 
   // reproject the dough and cutter into the same planar projection.

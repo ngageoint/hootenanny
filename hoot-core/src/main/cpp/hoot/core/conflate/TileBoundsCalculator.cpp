@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/visitors/CalculateBoundsVisitor.h>
 
 // Qt
 #include <QImage>

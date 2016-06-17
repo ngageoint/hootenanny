@@ -36,6 +36,7 @@
 #include <hoot/core/proto/OsmFormat.pb.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/CalculateBoundsVisitor.h>
 using namespace hoot::pb;
 
 // Qt

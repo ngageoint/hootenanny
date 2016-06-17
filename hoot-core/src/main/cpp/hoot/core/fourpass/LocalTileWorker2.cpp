@@ -42,6 +42,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
+#include <hoot/core/visitors/CalculateBoundsVisitor.h>
 
 namespace hoot
 {
