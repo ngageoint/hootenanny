@@ -1065,6 +1065,7 @@ tds = {
         if (tags.area) delete tags.area;
         if (tags['error:circular']) delete tags['error:circular'];
         if (tags['hoot:status']) delete tags['hoot:status'];
+        if (tags.hoot) delete tags.hoot; // Added by the UI
 
         // Initial cleanup
         for (var i in tags)
