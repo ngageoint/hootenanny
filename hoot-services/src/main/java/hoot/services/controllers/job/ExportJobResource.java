@@ -234,7 +234,7 @@ public class ExportJobResource extends JobControllerBase {
         // connection configured in the core for now
         // configured in the core for now
         JSONObject arg = new JSONObject();
-        arg.put("temppath", HootProperties.getProperty("tempOutputPath\n"));
+        arg.put("temppath", HootProperties.getProperty("tempOutputPath"));
         commandArgs.add(arg);
 
         // This option allows the job executor return std out to the client.  This is the only way

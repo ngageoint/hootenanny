@@ -132,14 +132,18 @@ public class BasemapResource extends JobControllerBase {
         JSONArray jobsArr = new JSONArray();
         try {
             File uploadDir = new File(homeFolder + "/upload/");
-            if (!uploadDir.mkdir()) {
-                throw new IOException("Error creating " + uploadDir.getAbsolutePath() + " directory!");
+            if (!uploadDir.exists()) {
+                if (!uploadDir.mkdir()) {
+                    throw new IOException("Error creating " + uploadDir.getAbsolutePath() + " directory!");
+                }
             }
 
             String repFolderPath = homeFolder + "/upload/" + groupId;
             File dir = new File(repFolderPath);
-            if (!dir.mkdir()) {
-                throw new IOException("Error creating " + dir.getAbsolutePath() + " directory!");
+            if (!dir.exists()) {
+                if (!dir.mkdir()) {
+                    throw new IOException("Error creating " + dir.getAbsolutePath() + " directory!");
+                }
             }
 
             if (!ServletFileUpload.isMultipartContent(request)) {

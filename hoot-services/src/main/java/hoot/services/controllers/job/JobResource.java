@@ -400,11 +400,12 @@ public class JobResource {
             logger.debug("Processing job: {}", jobId);
             Connection conn = DbUtils.createConnection();
             JobStatusManager jobStatusManager = null;
+            JSONObject command = null;
             try {
                 jobStatusManager = createJobStatusMananger(conn);
 
                 JSONParser parser = new JSONParser();
-                JSONObject command = (JSONObject) parser.parse(params);
+                command = (JSONObject) parser.parse(params);
 
                 //log.debug(JsonUtils.objectToJson(command));
                 JSONObject result = processJob(jobId, command);
@@ -436,7 +437,7 @@ public class JobResource {
             catch (Exception e) {
                 if (jobStatusManager != null) {
                     jobStatusManager.setFailed(jobId, e.getMessage());
-                    logger.error(e.getMessage());
+                    logger.error("Error processing {}", command, e);
                 }
             }
             finally {
