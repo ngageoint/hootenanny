@@ -83,7 +83,7 @@ public class RasterToTilesService extends JobControllerBase {
      * This function executes directly. This should be used when called from
      * JobResource it prevents the thread race condition when threadpool maxes out.
      */
-    private String ingestOSMResourceDirect(String name, String userEmail, String jobId) throws Exception {
+    public String ingestOSMResourceDirect(String name, String userEmail, String jobId) throws Exception {
         // _zoomLevels
         Connection conn = DbUtils.createConnection();
 
