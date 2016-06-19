@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.job.custom.HGIS;
 
+import java.sql.Connection;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -41,9 +42,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
+import hoot.services.db.DbUtils;
 import hoot.services.exceptions.osm.InvalidResourceParamException;
+import hoot.services.job.JobStatusManager;
 import hoot.services.models.review.custom.HGIS.PrepareForValidationRequest;
 import hoot.services.models.review.custom.HGIS.PrepareForValidationResponse;
+import hoot.services.review.custom.HGIS.HGISValidationMarker;
 import hoot.services.utils.ResourceErrorHandler;
 
 
@@ -127,5 +131,28 @@ public class HGISReviewResource extends HGISResource {
 
         return createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.custom.HGIS.HGISReviewResource",
                 "updateMapsTag");
+    }
+
+    // Warning: do not remove this method even though it will appear as unused in your IDE of choice.
+    // The method is invoked relectively
+    public String updateMapsTag(String mapName) throws Exception {
+        String jobId = UUID.randomUUID().toString();
+        JobStatusManager jobStatusManager = null;
+        try (Connection conn = DbUtils.createConnection()) {
+            jobStatusManager = new JobStatusManager(conn);
+            jobStatusManager.addJob(jobId);
+
+            HGISValidationMarker marker = new HGISValidationMarker(conn, mapName);
+            marker.updateValidationMapTag();
+            jobStatusManager.setComplete(jobId);
+        }
+        catch (Exception e) {
+            assert (jobStatusManager != null);
+            jobStatusManager.setFailed(jobId);
+            logger.error(e.getMessage());
+            throw e;
+        }
+
+        return jobId;
     }
 }
