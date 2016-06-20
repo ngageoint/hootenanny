@@ -1723,6 +1723,8 @@ tds = {
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
+        if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
+
         // Apply the simple number and text biased rules
         // NOTE: These are BACKWARD, not forward!
         // NOTE: These delete tags as they are used
