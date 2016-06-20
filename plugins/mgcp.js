@@ -1376,6 +1376,8 @@ mgcp = {
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
+        if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
+
         // apply the simple number and text biased rules
         translate.applySimpleNumBiased(attrs, notUsedTags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
         translate.applySimpleTxtBiased(attrs, notUsedTags,  mgcp.rules.txtBiased,'backward');

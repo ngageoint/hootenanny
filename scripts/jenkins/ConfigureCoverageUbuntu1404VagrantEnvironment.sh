@@ -12,24 +12,27 @@ set -x
 cd $HOOT_HOME
 
 # Just wipe out the files. Db cleaning comes later
-scripts/jenkins/VeryClean.sh
+rm -rf docs/node_modules hoot-core/tmp/ hoot-core-test/tmp tgs/tmp
+
+git clean -d -f || echo "It is ok if this fails, it sometimes mysteriously doesn't clean"
+
 
 # Maintain vagrant state in the parent directory so very clean will still work.
-mkdir -p ../vagrant-hootenanny
-ln -s ../vagrant-hootenanny .vagrant
+# mkdir -p ../vagrant-hootenanny
+# ln -s ../vagrant-hootenanny .vagrant
 
 # Update hoot-ui
 git submodule update --init
 
 # Jenkins Vagrant setup
-ln -s ../../vagrant/VSphereDummy.box VSphereDummy.box
-ln -s ../../vagrant/VagrantfileLocal.ubuntu1404 VagrantfileLocal
+[ -e VSphereDummy.box ] || ln -s ../vagrant/VSphereDummy.box VSphereDummy.box
+[ -e VagrantfileLocal ] || ln -s ../vagrant/VagrantfileLocal.ubuntu1404 VagrantfileLocal
 
 # Copy words1.sqlite Db so we don't have to download it again
 ( [ -e $WORDS_HOME/words1.sqlite ] &&  cp $WORDS_HOME/words1.sqlite conf )
 
 # Grab the latest version of the software that the VagrantProvision script will try to download
-cp -R ../../software.ubuntu1404 software
+cp -R ../software.ubuntu1404 software
 
 # Error out on any warnings. This only applies to Ubuntu 14.04, not CentOS (yet)
 # See: https://github.com/ngageoint/hootenanny/issues/348
