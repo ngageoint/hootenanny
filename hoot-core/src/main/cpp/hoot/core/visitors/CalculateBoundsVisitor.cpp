@@ -40,10 +40,14 @@ CalculateBoundsVisitor::CalculateBoundsVisitor():
 void CalculateBoundsVisitor::visit(const shared_ptr<const Element>& e)
 {
   // TRICKY: We will be in trouble if our element is NOT a node
-  const Node * pNode = dynamic_cast<const Node *>(e.get());
-  //const shared_ptr<const Node> n(e.get());
+  if (e->getElementType() != ElementType::Node)
+  {
+    throw HootException("CalculateBoundsVisitor attempted to visit "
+                        "element that is not a node!");
+  }
 
-  // Note: OGREnvelope takes care of initializing & merging logic
+  // Merge node. OGREnvelope takes care of initializing & merging logic
+  const Node * pNode = dynamic_cast<const Node *>(e.get());
   _envelope.Merge(pNode->getX(), pNode->getY());
 }
 
