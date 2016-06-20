@@ -12,7 +12,7 @@
 				"description":"Enable cleaning options",
 				"name":"Enabled",
 				"defaultvalue":"true",
-				"onchange": "var e = d3.select('#hoot_enable_cleaning_options').property('checked');d3.select('#hoot_cleaning_options_group').selectAll('input').property('disabled',!e);d3.select('#hoot_enable_cleaning_options').property('disabled',false);"
+				"onchange": "true"
 			},    
 			{
 				"id":"hoot_checkall_cleaning_options",
@@ -20,7 +20,7 @@
 				"description":"Select or deselect all cleaning options",
 				"name":"Select All",
 				"defaultvalue":"false",
-				"onchange":"var checked=d3.select('#'+this.id).property('checked');d3.select('#hoot_cleaning_options_group').selectAll('#checkbox_container').selectAll('input:not([id*=enable])').property('checked',checked);d3.select('#hoot_cleaning_options_group').selectAll('#checkplus_container').selectAll('input').property('checked',checked);"
+				"onchange":"true"
 			},
 			{
         "id": "reproject_to_planar_option",
@@ -40,7 +40,7 @@
         "description": "Remove duplicate ways (lines) that are exact duplicates. If the lines partially overlap with exactly the same geometry then only the partial overlap is removed from the more complex geometry.",
         "name": "Remove Duplicate Way",
         "hoot_val": "hoot::DuplicateWayRemover",
-		"onchange":"if(d3.select('#duplicate_way_remover').property('checked')){d3.selectAll('.duplicate_way_remover_child').style('display','inline-block');}else{d3.selectAll('.duplicate_way_remover_child').style('display','none');}",
+		"onchange":"true",
         "defaultvalue": "true"
       },
       {
@@ -102,7 +102,7 @@
         "description": "Merge any ludicrously small ways that have essentially the same attributes. Things like `UUID` are ignored. See `small.way.merger.threshold` for setting the threshold value.",
         "name": "Small Way Merger",
         "hoot_val": "hoot::SmallWayMerger",
-		"onchange":"if(d3.select('#small_way_merger').property('checked')){d3.selectAll('.small_way_merger_child').style('display','inline-block');}else{d3.selectAll('.small_way_merger_child').style('display','none');}",
+		"onchange":"true",
         "defaultvalue": "true",
         "members": [
           {
@@ -169,7 +169,7 @@
         "description": "Enable rubber sheeting options",
         "name": "Enabled",
         "defaultvalue": "false",
-        "onchange": "var e = d3.select('#hoot_enable_rubber_sheeting_options').property('checked');d3.select('#hoot_rubber_sheeting_options_group').selectAll('input').property('disabled',!e);d3.select('#hoot_enable_rubber_sheeting_options').property('disabled',false);"
+        "onchange": "true"
       },
       {
         "id": "rubber_sheet_ref",
@@ -255,7 +255,7 @@
         "description": "Enable road options",
         "name": "Enabled",
         "defaultvalue": "true",
-        "onchange": "var e = d3.select('#hoot_enable_road_options').property('checked');d3.select('#hoot_road_options_group').selectAll('input').property('disabled',!e);d3.select('#hoot_enable_road_options').property('disabled',false);"
+        "onchange": "true"
 			},
       {
         "id": "hoot_road_opt_engine",
@@ -263,7 +263,7 @@
         "description": "A list of road engines",
         "name": "Engines",
         "defaultvalue": "Unify",
-        "onchange": "d3.selectAll('.hoot_road_opt_engine_group').style('display','none');var selval='.' + d3.selectAll('#hoot_road_opt_engine').value() + '_engine_group';d3.selectAll(selval).style('display','inline-block');d3.select('#conflate_enable_old_roads').value(d3.selectAll('#hoot_road_opt_engine').value()=='Greedy');",
+        "onchange": "true",
         "members": [
           {
             "id": "hoot_road_opt_engine_unify",
@@ -393,7 +393,7 @@
         "description": "Enable building options",
         "name": "Enabled",
         "defaultvalue": "true",
-        "onchange": "var e = d3.select('#hoot_enable_building_options').property('checked');d3.select('#hoot_building_options_group').selectAll('input').property('disabled',!e);d3.select('#hoot_enable_building_options').property('disabled',false);"
+        "onchange": "true"
 			},
       {
         "id": "building_match_creator",
@@ -431,7 +431,7 @@
         "description": "Enable POI options",
         "name": "Enabled",
         "defaultvalue": "true",
-        "onchange": "var e = d3.select('#hoot_enable_poi_options').property('checked');d3.select('#hoot_poi_options_group').selectAll('input').property('disabled',!e);d3.select('#hoot_enable_poi_options').property('disabled',false);"
+        "onchange": "true"
 			},
 			{
 				"id": "hoot_poi_options_list",
@@ -521,7 +521,7 @@
         "description": "Enable waterway options",
         "name": "Enabled",
         "defaultvalue": "true",
-        "onchange": "var e = d3.select('#hoot_enable_waterway_options').property('checked');d3.select('#hoot_waterway_options_group').selectAll('input').property('disabled',!e);d3.select('#hoot_enable_waterway_options').property('disabled',false);if(e==true){var f=d3.select('#waterway_auto_calc_search_radius').property('checked');d3.select('#search_radius_waterway').property('disabled',f);d3.select('#waterway_rubber_sheet_minimum_ties').property('disabled',!f);d3.select('#waterway_rubber_sheet_ref').property('disabled',!f);}"
+        "onchange": "true"
 			},
 		   {
 		    "id": "waterway_match_creator",
@@ -583,7 +583,7 @@
         "name": "Waterway Auto Calc Search Radius",
         "defaultvalue": "true",
         "hoot_key": "waterway.auto.calc.search.radius",
-"onchange": "var e = d3.select('#waterway_auto_calc_search_radius').property('checked');d3.select('#search_radius_waterway').property('disabled',e);d3.select('#waterway_rubber_sheet_minimum_ties').property('disabled',!e);d3.select('#waterway_rubber_sheet_ref').property('disabled',!e);"
+"onchange": "true"
       },
       {
         "id": "search_radius_waterway",

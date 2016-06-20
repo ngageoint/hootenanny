@@ -22,80 +22,79 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.job;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 /**
  * Web service returnable job status
  */
 @XmlRootElement
-public class JobStatus
-{
-  private String id = "";
-  public String getId()
-  {
-    return id;
-  }
-  public void setId(String id)
-  {
-    this.id = id;
-  }
-  
-  private String status = "";
-  public String getStatus()
-  {
-    return status;
-  }
-  public void setStatus(String status)
-  {
-    this.status = status;
-  }
-  
-  private double percentComplete = 0.0;
-  public double getPercentComplete()
-  {
-    return percentComplete;
-  }
-  public void setPercentComplete(double percentComplete)
-  {
-    this.percentComplete = percentComplete;
-  }
-  
-  private String statusDetail = "";
-  public String getStatusDetail()
-  {
-    return statusDetail;
-  }
-  public void setStatusDetail(String statusDetail)
-  {
-    this.statusDetail = statusDetail;
-  }
-  
-  private String startTime = "";
-  public String getStartTime()
-  {
-    return startTime;
-  }
-  public void setStartTime(String startTime)
-  {
-    this.startTime = startTime;
-  }
-  
-  private String endTime = "";
-  public String getEndTime()
-  {
-    return endTime;
-  }
-  public void setEndTime(String endTime)
-  {
-    this.endTime = endTime;
-  }
+public class JobStatus {
+    private String id = "";
 
-  public JobStatus()
-  {
-    
-  }
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String status = "";
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    private double percentComplete = 0.0;
+
+    public double getPercentComplete() {
+        return percentComplete;
+    }
+
+    public void setPercentComplete(double percentComplete) {
+        this.percentComplete = percentComplete;
+    }
+
+    private String statusDetail = "";
+
+    public String getStatusDetail() {
+        return statusDetail;
+    }
+
+    public void setStatusDetail(String statusDetail) {
+        this.statusDetail = statusDetail;
+    }
+
+    private String startTime = "";
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    private String endTime = "";
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public JobStatus() {
+
+    }
 }

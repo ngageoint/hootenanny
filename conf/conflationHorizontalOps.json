@@ -86,12 +86,12 @@
 					}
       },
       {
-        "id": "horizontal_override_osm_writer_include_debug",
+        "id": "horizontal_override_writer_include_debug",
         "elem_type": "bool",
-        "description": "Osm Writer Include Debug",
-        "name": "Osm Writer Include Debug",
+        "description": " Writer Include Debug",
+        "name": "Writer Include Debug",
         "defaultvalue": "false",
-        "hoot_key": "osm.writer.include.debug",
+        "hoot_key": "writer.include.debug",
 		"required":"true"
       },
  

@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ANGLE_HISTOGRAM_EXTRACTOR_H
 #define ANGLE_HISTOGRAM_EXTRACTOR_H
@@ -53,7 +53,7 @@ class Histogram;
  * A histogram is built up in this way for both input lines, normalized and the difference
  * calculated. 16 bins are used in the histogram.
  *
- * 0 means the histograms have effectively no difference. 1 means they're completely different.
+ * 1 means the histograms have effectively no difference. 0 means they're completely different.
  */
 class AngleHistogramExtractor : public FeatureExtractor
 {
@@ -75,6 +75,8 @@ public:
 
   virtual double extract(const OsmMap& map, const shared_ptr<const Element>& target,
     const shared_ptr<const Element>& candidate) const;
+
+  void setSmoothing(Radians sigma) { _smoothing = sigma; }
 
 protected:
   virtual Histogram* _createHistogram(const OsmMap& map, const ConstElementPtr& e) const;

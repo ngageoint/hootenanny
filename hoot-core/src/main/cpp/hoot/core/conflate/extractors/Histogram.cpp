@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Histogram.h"
 
@@ -33,9 +33,18 @@
 // geos
 #include <geos/geom/Geometry.h>
 
+// hoot
+#include <hoot/core/util/Log.h>
+
+// Qt
+#include <QStringList>
+
 // Standard
 #include <assert.h>
 #include <math.h>
+
+// Tgs
+#include <tgs/Statistics/Normal.h>
 
 namespace hoot
 {
@@ -82,6 +91,14 @@ Radians Histogram::_getBinAngle(size_t i)
   return 2 * M_PI / _bins.size() * i + M_PI / _bins.size();
 }
 
+Radians Histogram::getBinCenter(size_t bin) const
+{
+  assert(bin < _bins.size());
+
+  Radians binSize = 2.0 * M_PI / (double)_bins.size();
+  return bin * binSize + binSize / 2.0;
+}
+
 void Histogram::normalize()
 {
   double sum = 0.0;
@@ -103,19 +120,30 @@ void Histogram::normalize()
 
 void Histogram::smooth(Radians sigma)
 {
-  vector<double> copy(_bins.size(), 0.0);
+  vector<double> old = _bins;
 
-  for (size_t i = 0; i < copy.size(); ++i)
+  // this is quite inefficient and can be reworked to cache the normal curve and reuse it as needed.
+  for (size_t i = 0; i < _bins.size(); ++i)
   {
-    for (size_t j = 0; j < _bins.size(); j++)
+    _bins[i] = 0.0;
+    Radians center = getBinCenter(i);
+    for (size_t j = 0; j < old.size(); ++j)
     {
-      double diff = WayHeading::deltaMagnitude(_getBinAngle(i), _getBinAngle(j));
-      double weight = Tgs::Normal::normal(diff, sigma);
-      copy[i] += _bins[j] * weight;
+      Radians rawDiff = fabs(getBinCenter(j) - center);
+      Radians diff = std::min(rawDiff, 2 * M_PI - rawDiff);
+      _bins[i] += old[j] * Tgs::Normal::normal(diff, sigma);
     }
   }
+}
 
-  _bins = copy;
+QString Histogram::toString() const
+{
+  QStringList l;
+  for (size_t i = 0; i < _bins.size(); ++i)
+  {
+    l << QString::fromUtf8("%1°: %2").arg(toDegrees(getBinCenter(i))).arg(_bins[i]);
+  }
+  return l.join(", ");
 }
 
 }

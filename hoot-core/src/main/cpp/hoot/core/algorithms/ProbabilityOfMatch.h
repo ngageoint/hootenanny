@@ -47,7 +47,7 @@ class ProbabilityOfMatch
 public:
   ProbabilityOfMatch();
 
-  static ProbabilityOfMatch& getInstance() { return _default; }
+  static ProbabilityOfMatch& getInstance();
 
   double attributeScore(const ConstOsmMapPtr &map, const shared_ptr<const Way>& w1,
     const shared_ptr<const Way> &w2);
@@ -72,7 +72,7 @@ public:
   static bool debug;
 
 private:
-  static ProbabilityOfMatch _default;
+  static shared_ptr<ProbabilityOfMatch> _theInstance;
   double _parallelExp;
   double _dMax;
 

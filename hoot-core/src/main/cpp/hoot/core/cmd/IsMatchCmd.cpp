@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -75,7 +75,6 @@ public:
     loadMap(map2, args[1], true, Status::Unknown1);
 
     int result;
-    // if (MapComparator().isMatch(map1, map2))
 
     if (mapCompare.isMatch(map1, map2))
     {

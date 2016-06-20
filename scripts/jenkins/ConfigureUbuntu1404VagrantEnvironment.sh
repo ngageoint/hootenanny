@@ -11,6 +11,7 @@ set -x
 
 cd $HOOT_HOME
 
+# Just wipe out the files. Db cleaning comes later
 scripts/jenkins/VeryClean.sh
 
 # Maintain vagrant state in the parent directory so very clean will still work.
@@ -40,9 +41,6 @@ sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri
 # Make sure we are not running
 vagrant halt
 
-# This causes grief....
-touch Vagrant.marker
-
 REBUILD_VAGRANT=false
 
 [ -f Vagrant.marker ] && [ Vagrant.marker -ot VagrantProvision.sh ] && REBUILD_VAGRANT=true
@@ -52,12 +50,15 @@ if [ "`date +%F`" != "`test -e ../BuildDate.txt && cat ../BuildDate.txt`" ]; the
     REBUILD_VAGRANT=true
 fi
 
-if [ $REBUILD_VAGRANT ]; then
+if [ $REBUILD_VAGRANT == 'true' ]; then
     vagrant destroy -f
     time -p vagrant up --provider vsphere
 else
     time -p vagrant up --provision-with nfs,build,EGD,tomcat,mapnik,hadoop --provider vsphere
 fi
 
-date +%F > ../BuildDate.txt
+# Disableing this until it gets moved earlier into the build.
+# Clean out the Database
+#vagrant ssh -c "cd hoot; source ./SetupEnv.sh; cd hoot-services; make clean-db &> /dev/null"
 
+date +%F > ../BuildDate.txt

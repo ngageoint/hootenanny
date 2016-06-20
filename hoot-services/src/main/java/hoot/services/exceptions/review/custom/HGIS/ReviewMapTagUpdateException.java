@@ -22,15 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.exceptions.review.custom.HGIS;
 
 @SuppressWarnings("serial")
 public class ReviewMapTagUpdateException extends Exception {
 
-	public ReviewMapTagUpdateException(final String msg)
-	{
-		super(msg);
-	}
+    public ReviewMapTagUpdateException(final String msg) {
+        super(msg);
+    }
 }

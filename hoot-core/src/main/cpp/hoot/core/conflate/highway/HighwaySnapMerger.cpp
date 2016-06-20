@@ -442,7 +442,7 @@ void HighwaySnapMerger::_snapEnds(WayPtr snapee, WayPtr middle, WayPtr snapTo) c
   snapee->replaceNode(middle->getLastNodeId(), snapTo->getLastNodeId());
 }
 
-void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineString& s,
+void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineCollection& s,
   const vector<bool>& reverse, vector< pair<ElementId, ElementId> >& replaced,
   const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const
 {

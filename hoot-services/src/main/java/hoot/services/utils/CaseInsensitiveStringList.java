@@ -22,35 +22,31 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
 import java.util.ArrayList;
 
+
 /**
  * A case insensitive string list
  */
-public class CaseInsensitiveStringList extends ArrayList<String>
-{
-  private static final long serialVersionUID = 3844206959038395792L;
+public class CaseInsensitiveStringList extends ArrayList<String> {
+    private static final long serialVersionUID = 3844206959038395792L;
 
-  public CaseInsensitiveStringList()
-  {
-    
-  }
+    public CaseInsensitiveStringList() {
 
-  @Override
-  public boolean contains(Object o)
-  {
-    String paramStr = (String) o;
-    for (String s : this)
-    {
-      if (paramStr.equalsIgnoreCase(s))
-      {
-        return true;
-      }
     }
-    return false;
-  }
+
+    @Override
+    public boolean contains(Object o) {
+        String paramStr = (String) o;
+        for (String s : this) {
+            if (paramStr.equalsIgnoreCase(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

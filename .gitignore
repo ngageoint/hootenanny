@@ -12,9 +12,10 @@ plugins/config.js
 *.kate-swp
 aclocal.m4
 autom4te.cache
+BuildDate.txt
 bin/
 callgrind.*
-conf/DatabaseConfig.sh
+conf/DatabaseConfigLocal.sh
 conf/LocalHoot.json
 conf/*.rf
 conf/words*.sqlite
@@ -61,6 +62,9 @@ hoot-core/src/proto/
 hoot-core/src/test/resources/cmd/**/*.stripped
 hoot-core/src/test/resources/cmd/**/*.first
 hoot-core/src/test/resources/cmd/**/*.failed
+hoot-core-test/src/test/resources/cmd/**/*.stripped
+hoot-core-test/src/test/resources/cmd/**/*.first
+hoot-core-test/src/test/resources/cmd/**/*.failed
 test-files/cmd/**/*.stripped
 test-files/cmd/**/*.first
 test-files/cmd/**/*.failed
@@ -141,7 +145,6 @@ customscript/
 */buildInfo.json/*
 **/buildInfo.json/*.*
 scripts/MakeHootRelease.sh
-hoot-services/pom.xml
 hoot-services/src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml
 BigReport.asciidoc
 BigReport.pdf
@@ -170,3 +173,4 @@ vagrant*-*
 MingsSuperAwesomePrompt.sh
 id_rsa.pub
 coverage/
+hoot-services/db.properties

@@ -104,10 +104,10 @@ public:
 
   static bool compareMaps(const QString& map1, const QString map2);
 
-  static NodePtr createNode(OsmMapPtr map, Status status, double x, double y, double circularError,
-                            Tags tags = Tags());
+  static NodePtr createNode(OsmMapPtr map, Status status, double x, double y,
+    double circularError = 15.0, Tags tags = Tags());
 
-  static WayPtr createWay(OsmMapPtr map, Status s, Coordinate c[], Meters ce,
+  static WayPtr createWay(OsmMapPtr map, Status s, Coordinate c[], Meters ce = 15,
                           const QString& note = "");
 
   static WayPtr createWay(

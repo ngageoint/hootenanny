@@ -93,6 +93,10 @@ void CopySubsetOp::apply(shared_ptr<OsmMap> &map)
 
   for (set<ElementId>::const_iterator it = _eids.begin(); it != _eids.end(); ++it)
   {
+    if (_from->containsElement(*it) == false)
+    {
+      throw IllegalArgumentException("Unable to find element: " + hoot::toString(*it));
+    }
     _from->getElement(*it)->visitRo(*_from, v);
   }
 }

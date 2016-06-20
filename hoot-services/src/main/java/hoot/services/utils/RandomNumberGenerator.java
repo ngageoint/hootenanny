@@ -22,27 +22,28 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
 import java.util.Random;
 
+
 /**
  * Generates random numbers
  */
-public class RandomNumberGenerator
-{
-  /**
-   * Generates a random number within the specified range
-   * 
-   * @param min random number range minimum
-   * @param max random number range maximum
-   * @return a double precision number
-   */
-  public static double nextDouble(double min, double max)
-  {
-    Random r = new Random(System.currentTimeMillis());
-    return min + (max - min) * r.nextDouble();
-  }
+public class RandomNumberGenerator {
+    /**
+     * Generates a random number within the specified range
+     * 
+     * @param min
+     *            random number range minimum
+     * @param max
+     *            random number range maximum
+     * @return a double precision number
+     */
+    public static double nextDouble(double min, double max) {
+        Random r = new Random(System.currentTimeMillis());
+        return min + (max - min) * r.nextDouble();
+    }
 }

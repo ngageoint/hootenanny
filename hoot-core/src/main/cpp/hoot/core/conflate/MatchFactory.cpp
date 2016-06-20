@@ -31,10 +31,13 @@
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
 
+//Qt
+#include <QString>
+
 namespace hoot
 {
 
-MatchFactory MatchFactory::_theInstance;
+shared_ptr<MatchFactory> MatchFactory::_theInstance;
 
 MatchFactory::~MatchFactory()
 {
@@ -122,25 +125,33 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
     QStringList args = c.split(",");
     QString className = args[0];
     //LOG_VARD(className);
-    args.removeFirst();
-    shared_ptr<MatchCreator> mc(Factory::getInstance().constructObject<MatchCreator>(className));
-    _theInstance.registerCreator(mc);
-
-    if (args.size() > 0)
+    if (className.length() > 0)
     {
-      mc->setArguments(args);
+      args.removeFirst();
+      shared_ptr<MatchCreator> mc(Factory::getInstance().constructObject<MatchCreator>(className));
+      _theInstance->registerCreator(mc);
+
+      if (args.size() > 0)
+      {
+        mc->setArguments(args);
+      }
     }
   }
 }
 
 MatchFactory& MatchFactory::getInstance()
 {
-  if (_theInstance._creators.size() == 0)
+  if (!_theInstance.get())
+  {
+    _theInstance.reset(new MatchFactory());
+  }
+
+  if (_theInstance->_creators.size() == 0)
   {
     //only get the match creators that are specified in the config
     _setMatchCreators(ConfigOptions(conf()).getMatchCreators().split(";"));
   }
-  return _theInstance;
+  return *_theInstance;
 }
 
 }

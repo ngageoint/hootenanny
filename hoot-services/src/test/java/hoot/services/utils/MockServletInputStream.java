@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -32,48 +32,47 @@ import java.io.StringReader;
 
 import javax.servlet.ServletInputStream;
 
+
 /**
  * Used for mocking POST request input with Mockito
  */
-public class MockServletInputStream extends ServletInputStream
-{
-  private Reader inputReader;
-  private StringBuilder charactersRead = new StringBuilder();
-   
-  @Override 
-  public int read() throws IOException
-  {  
-    int read = inputReader.read();
-    if( read >= 0 )
-    {
-      charactersRead.append((char)read);
-    }
-    return read;
-  }
-   
-  /** If you use this constructor, the object will get it's input from the
-   *  string.
-   * @param inputString
-   */
-  public MockServletInputStream(String inputString)
-  {   
-    inputReader = new StringReader(inputString);
-  }
-   
-  /** This constructor causes the input stream to read from the indicated
-   *  reader.
-   * @param inputReader
-   */
-  public MockServletInputStream(Reader inputReader)
-  {   
-    this.inputReader = inputReader;
-  }
-   
+public class MockServletInputStream extends ServletInputStream {
+    private Reader inputReader;
+    private StringBuilder charactersRead = new StringBuilder();
 
-  /** Return the characters that have been read by this input stream (so far).
-   */
-  public String getInput()
-  {
-    return charactersRead.toString();
-  }
+    @Override
+    public int read() throws IOException {
+        int read = inputReader.read();
+        if (read >= 0) {
+            charactersRead.append((char) read);
+        }
+        return read;
+    }
+
+    /**
+     * If you use this constructor, the object will get it's input from the
+     * string.
+     * 
+     * @param inputString
+     */
+    public MockServletInputStream(String inputString) {
+        inputReader = new StringReader(inputString);
+    }
+
+    /**
+     * This constructor causes the input stream to read from the indicated
+     * reader.
+     * 
+     * @param inputReader
+     */
+    public MockServletInputStream(Reader inputReader) {
+        this.inputReader = inputReader;
+    }
+
+    /**
+     * Return the characters that have been read by this input stream (so far).
+     */
+    public String getInput() {
+        return charactersRead.toString();
+    }
 }

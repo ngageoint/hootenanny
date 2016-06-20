@@ -185,7 +185,8 @@ The advantage to this method is that you're using the package manager to keep th
 
 These are the steps to load projects into Eclipse.
 
-Hoot Services (hoot-services) - Web services that expose OSM data editing, core Hootenanny functionality via WPS, and Hootenanny data via WFS
+Hoot Services (hoot-services) - Web services that expose OSM data editing and core Hootenanny 
+functionality via REST, as well as Hootenanny data via WFS.
 
 * cd to $HOOT_HOME and 'make eclipse'.  This will create the hoot-services Eclipse .project file(s). Verify in $HOOT_HOME/hoot-service a .project dir.
 * In Eclipse, import the hoot-services project:
@@ -241,7 +242,7 @@ where "/home/bwitham/workspace" should be replaced by your Eclipse workspace dir
  sudo service tomcat6 stop
  ------
 * Launch hoot-services in debug mode by right-click on the project and select "Debug as"->"Debug on Server"   You should see the Tomcat server startup logging in the console view.  The only error you should see at this time is the one described in #2738, which will eventually be fixed.
-* hoot-services should start and load all the WPS services.  If you see class not found errors, your Tomcat debug environment probably is not set up properly...see the troubleshooting guide.
+* hoot-services should start and load all the REST/Node.js services.  If you see class not found errors, your Tomcat debug environment probably is not set up properly...see the troubleshooting guide.
 * From a browser, you should be able to navigate to http://localhost:8080/hoot-services/info/about/servicesVersionInfo and see some diagnostic XML.
 * From a browser, you should be able to navigate to http://localhost:8080/hoot-ui/#background=Bing&map=17.20/47.43525/6.77106 and see the user interface (substitute any map coordinates and zoom level that you want).
 * Debug the services (debugging the UI not covered in these instructions) by settting a breakpoint anywhere in the hoot-services classes to capture incoming requests. For example:

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMSCHEMA_H
@@ -243,6 +243,7 @@ public:
 
 class OsmSchemaData;
 class Relation;
+class Way;
 
 /**
  * This class is reentrant, but not thread safe.
@@ -398,7 +399,17 @@ public:
 
   bool isMultiLineString(const Relation& r) const;
 
+  /**
+   * Returns true if this is a unidirectional way (e.g. oneway=true)
+   */
+  bool isOneWay(const Element &e) const;
+
   bool isPoi(const Element& e);
+
+  /**
+   * Returns true if this is a reversed unidirectional way. (E.g. oneway=reverse)
+   */
+  bool isReversed(const Element& e) const;
 
   /**
    * Return true if this tag can contain free-form text.

@@ -39,7 +39,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
-#include <hoot/core/algorithms/linearreference/WaySublineString.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 
 #include "../../TestUtils.h"
 
@@ -94,10 +94,10 @@ public:
     CPPUNIT_ASSERT_EQUAL(-3L, nodeIds.at(2));
     CPPUNIT_ASSERT_EQUAL(-4L, nodeIds.at(3));
 
-    WaySublineString waySublineString = multiLineStringLocation.getWaySublineString();
-    CPPUNIT_ASSERT_EQUAL((size_t)1, waySublineString.getSublines().size());
-    CPPUNIT_ASSERT_EQUAL(50.0, waySublineString.getLength());
-    WaySubline subline = waySublineString.getSublines().at(0);
+    WaySublineCollection waySublineCollection = multiLineStringLocation.getWaySublineString();
+    CPPUNIT_ASSERT_EQUAL((size_t)1, waySublineCollection.getSublines().size());
+    CPPUNIT_ASSERT_EQUAL(50.0, waySublineCollection.getLength());
+    WaySubline subline = waySublineCollection.getSublines().at(0);
     HOOT_STR_EQUALS("Way:-1", subline.getElementId());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way, 0, 0.0), subline.getStart());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way, 0, 0.5), subline.getEnd());
@@ -136,10 +136,10 @@ public:
     CPPUNIT_ASSERT_EQUAL(-1L, nodeIds.at(0));
     CPPUNIT_ASSERT_EQUAL(-2L, nodeIds.at(1));
 
-    WaySublineString waySublineString = multiLineStringLocation.getWaySublineString();
-    CPPUNIT_ASSERT_EQUAL((size_t)1, waySublineString.getSublines().size());
-    CPPUNIT_ASSERT_EQUAL(50.0, waySublineString.getLength());
-    WaySubline subline = waySublineString.getSublines().at(0);
+    WaySublineCollection waySublineCollection = multiLineStringLocation.getWaySublineString();
+    CPPUNIT_ASSERT_EQUAL((size_t)1, waySublineCollection.getSublines().size());
+    CPPUNIT_ASSERT_EQUAL(50.0, waySublineCollection.getLength());
+    WaySubline subline = waySublineCollection.getSublines().at(0);
     HOOT_STR_EQUALS("Way:-1", subline.getElementId());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way1, 0, 0.0), subline.getStart());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way1, 0, 0.5), subline.getEnd());
@@ -178,10 +178,10 @@ public:
     CPPUNIT_ASSERT_EQUAL(-3L, nodeIds.at(0));
     CPPUNIT_ASSERT_EQUAL(-4L, nodeIds.at(1));
 
-    WaySublineString waySublineString = multiLineStringLocation.getWaySublineString();
-    CPPUNIT_ASSERT_EQUAL((size_t)2, waySublineString.getSublines().size());
-    CPPUNIT_ASSERT_EQUAL(150.0, waySublineString.getLength());
-    WaySubline subline = waySublineString.getSublines().at(1);
+    WaySublineCollection waySublineCollection = multiLineStringLocation.getWaySublineString();
+    CPPUNIT_ASSERT_EQUAL((size_t)2, waySublineCollection.getSublines().size());
+    CPPUNIT_ASSERT_EQUAL(150.0, waySublineCollection.getLength());
+    WaySubline subline = waySublineCollection.getSublines().at(1);
     HOOT_STR_EQUALS("Way:-2", subline.getElementId());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way2, 0, 0.0), subline.getStart());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way2, 0, 0.5), subline.getEnd());
@@ -224,10 +224,10 @@ public:
     CPPUNIT_ASSERT_EQUAL(-3L, nodeIds.at(0));
     CPPUNIT_ASSERT_EQUAL(-4L, nodeIds.at(1));
 
-    WaySublineString waySublineString = multiLineStringLocation.getWaySublineString();
-    CPPUNIT_ASSERT_EQUAL((size_t)2, waySublineString.getSublines().size());
-    CPPUNIT_ASSERT_EQUAL(102.5, waySublineString.getLength());
-    WaySubline subline = waySublineString.getSublines().at(1);
+    WaySublineCollection waySublineCollection = multiLineStringLocation.getWaySublineString();
+    CPPUNIT_ASSERT_EQUAL((size_t)2, waySublineCollection.getSublines().size());
+    CPPUNIT_ASSERT_EQUAL(102.5, waySublineCollection.getLength());
+    WaySubline subline = waySublineCollection.getSublines().at(1);
     HOOT_STR_EQUALS("Way:-2", subline.getElementId());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way2, 0, 0.0), subline.getStart());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way2, 0, 0.5), subline.getEnd());
@@ -265,10 +265,10 @@ public:
     CPPUNIT_ASSERT_EQUAL(-3L, nodeIds.at(2));
     CPPUNIT_ASSERT_EQUAL(-4L, nodeIds.at(3));
 
-    WaySublineString waySublineString = multiLineStringLocation.getWaySublineString();
-    CPPUNIT_ASSERT_EQUAL((size_t)1, waySublineString.getSublines().size());
-    CPPUNIT_ASSERT_EQUAL(0.0, waySublineString.getLength());
-    WaySubline subline = waySublineString.getSublines().at(0);
+    WaySublineCollection waySublineCollection = multiLineStringLocation.getWaySublineString();
+    CPPUNIT_ASSERT_EQUAL((size_t)1, waySublineCollection.getSublines().size());
+    CPPUNIT_ASSERT_EQUAL(0.0, waySublineCollection.getLength());
+    WaySubline subline = waySublineCollection.getSublines().at(0);
     HOOT_STR_EQUALS("Way:-1", subline.getElementId());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way, 0, 0.0), subline.getStart());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way, 0, 0.0), subline.getEnd());
@@ -306,10 +306,10 @@ public:
     CPPUNIT_ASSERT_EQUAL(-3L, nodeIds.at(2));
     CPPUNIT_ASSERT_EQUAL(-4L, nodeIds.at(3));
 
-    WaySublineString waySublineString = multiLineStringLocation.getWaySublineString();
-    CPPUNIT_ASSERT_EQUAL((size_t)1, waySublineString.getSublines().size());
-    CPPUNIT_ASSERT_EQUAL(100.0, waySublineString.getLength());
-    WaySubline subline = waySublineString.getSublines().at(0);
+    WaySublineCollection waySublineCollection = multiLineStringLocation.getWaySublineString();
+    CPPUNIT_ASSERT_EQUAL((size_t)1, waySublineCollection.getSublines().size());
+    CPPUNIT_ASSERT_EQUAL(100.0, waySublineCollection.getLength());
+    WaySubline subline = waySublineCollection.getSublines().at(0);
     HOOT_STR_EQUALS("Way:-1", subline.getElementId());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way, 0, 0.0), subline.getStart());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way, 0, 1.0), subline.getEnd());

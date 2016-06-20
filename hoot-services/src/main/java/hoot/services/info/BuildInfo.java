@@ -30,42 +30,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+
 /**
  * Services build info file
  */
-public class BuildInfo
-{
-  private static Properties info = null;
+public final class BuildInfo {
+    private static Properties info;
 
-  private BuildInfo()
-  {
-  }
+    private BuildInfo() {}
 
-  /**
-   * Returns the build info for the services
-   * 
-   * @return a set of build info properties
-   * @throws IOException if unable to read from the file
-   */
-  public synchronized static Properties getInstance() throws IOException
-  {
-  	if (info == null || info.size() == 0)
-    {
-	    info = new Properties();
-	    InputStream buildInfoStrm = null;
-	    try
-	    {
-	    	buildInfoStrm = BuildInfo.class.getClassLoader().getResourceAsStream("build.info");
-        info.load(buildInfoStrm);
-	    }
-	    finally
-	    {
-	    	if (buildInfoStrm != null)
-	    	{
-	    		buildInfoStrm.close();
-	    	}
-	    }
+    /**
+     * Returns the build info for the services
+     *
+     * @return a set of build info properties
+     * @throws IOException
+     *             if unable to read from the file
+     */
+    public static synchronized Properties getInstance() throws IOException {
+        if ((info == null) || (info.isEmpty())) {
+            info = new Properties();
+            try (InputStream buildInfoStrm = BuildInfo.class.getClassLoader().getResourceAsStream("build.info")) {
+                info.load(buildInfoStrm);
+            }
+        }
+        return info;
     }
-  	return info;
-  }
 }

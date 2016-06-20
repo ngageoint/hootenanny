@@ -26,10 +26,6 @@
  */
 package hoot.services.writers.osm;
 
-import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
-import hoot.services.utils.XmlDocumentBuilder;
-
 import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
@@ -37,89 +33,70 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import hoot.services.HootProperties;
+import hoot.services.utils.ResourceErrorHandler;
+import hoot.services.utils.XmlDocumentBuilder;
+
+
 /**
  * Writes the response to a capabilities request
  */
-public class CapabilitiesResponseWriter
-{
-  private static final Logger log = LoggerFactory.getLogger(CapabilitiesResponseWriter.class);
-  
-  /**
-   * Writes the capabilities response to an XML document
-   * 
-   * @return an XML document
-   */
-  public Document writeResponse()
-  {
-    Document responseDoc = null;
-    try
-    {
-      log.debug("Building response...");   
-      
-      responseDoc = XmlDocumentBuilder.create();
-      
-      Element osmElement = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
-      Element apiElement = responseDoc.createElement("api");
-      
-      Element versionElement = responseDoc.createElement("version");
-      versionElement.setAttribute(
-        "minimum", 
-        HootProperties.getInstance().getProperty(
-          "osmVersion", HootProperties.getDefault("osmVersion")));
-      versionElement.setAttribute(
-        "maximum", 
-        HootProperties.getInstance().getProperty(
-          "osmVersion", HootProperties.getDefault("osmVersion")));
-      apiElement.appendChild(versionElement);
-      
-      Element areaElement = responseDoc.createElement("area");
-      areaElement.setAttribute(
-        "maximum", 
-        HootProperties.getInstance().getProperty(
-          "maxQueryAreaDegrees", HootProperties.getDefault("maxQueryAreaDegrees")));
-      apiElement.appendChild(areaElement);
-      
-      Element wayNodesElement = responseDoc.createElement("waynodes");
-      wayNodesElement.setAttribute(
-        "maximum", 
-        HootProperties.getInstance().getProperty(
-          "maximumWayNodes", HootProperties.getDefault("maximumWayNodes")));
-      apiElement.appendChild(wayNodesElement);
-      
-      Element changesetsElement = responseDoc.createElement("changesets");
-      changesetsElement.setAttribute(
-        "maximum_elements", 
-        HootProperties.getInstance().getProperty(
-          "maximumChangesetElements", HootProperties.getDefault("maximumChangesetElements")));
-      apiElement.appendChild(changesetsElement);
-      
-      Element timeoutElement = responseDoc.createElement("timeout");
-      timeoutElement.setAttribute(
-        "seconds", 
-        String.valueOf(
-          Integer.parseInt(
-            HootProperties.getInstance().getProperty(
-              "changesetIdleTimeoutMinutes", 
-              HootProperties.getDefault("changesetIdleTimeoutMinutes"))) * 60));
-      apiElement.appendChild(timeoutElement);
-      
-      Element statusElement = responseDoc.createElement("status");
-      statusElement.setAttribute("database", "online");
-      statusElement.setAttribute("api", "online");
-      statusElement.setAttribute("gpx", "offline");
-      apiElement.appendChild(statusElement);
-      
-      osmElement.appendChild(apiElement);
-      responseDoc.appendChild(osmElement);
+public class CapabilitiesResponseWriter {
+    private static final Logger log = LoggerFactory.getLogger(CapabilitiesResponseWriter.class);
+
+    /**
+     * Writes the capabilities response to an XML document
+     *
+     * @return an XML document
+     */
+    public Document writeResponse() {
+        Document responseDoc = null;
+        try {
+            log.debug("Building response...");
+
+            responseDoc = XmlDocumentBuilder.create();
+
+            Element osmElement = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
+            Element apiElement = responseDoc.createElement("api");
+
+            Element versionElement = responseDoc.createElement("version");
+            versionElement.setAttribute("minimum", HootProperties.getPropertyOrDefault("osmVersion"));
+            versionElement.setAttribute("maximum", HootProperties.getPropertyOrDefault("osmVersion"));
+            apiElement.appendChild(versionElement);
+
+            Element areaElement = responseDoc.createElement("area");
+            areaElement.setAttribute("maximum", HootProperties.getPropertyOrDefault("maxQueryAreaDegrees"));
+            apiElement.appendChild(areaElement);
+
+            Element wayNodesElement = responseDoc.createElement("waynodes");
+            wayNodesElement.setAttribute("maximum", HootProperties.getPropertyOrDefault("maximumWayNodes"));
+            apiElement.appendChild(wayNodesElement);
+
+            Element changesetsElement = responseDoc.createElement("changesets");
+            changesetsElement.setAttribute("maximum_elements",
+                    HootProperties.getPropertyOrDefault("maximumChangesetElements"));
+            apiElement.appendChild(changesetsElement);
+
+            Element timeoutElement = responseDoc.createElement("timeout");
+            timeoutElement.setAttribute("seconds", String.valueOf(
+                    Integer.parseInt(HootProperties.getPropertyOrDefault("changesetIdleTimeoutMinutes")) * 60));
+            apiElement.appendChild(timeoutElement);
+
+            Element statusElement = responseDoc.createElement("status");
+            statusElement.setAttribute("database", "online");
+            statusElement.setAttribute("api", "online");
+            statusElement.setAttribute("gpx", "offline");
+            apiElement.appendChild(statusElement);
+
+            osmElement.appendChild(apiElement);
+            responseDoc.appendChild(osmElement);
+        }
+        catch (Exception e) {
+            ResourceErrorHandler.handleError(
+                    "Error creating response for capabilities query. (" + e.getMessage() + ") ",
+                    Status.INTERNAL_SERVER_ERROR, log);
+        }
+
+        return responseDoc;
     }
-    catch (Exception e)
-    {
-      ResourceErrorHandler.handleError(
-        "Error creating response for capabilities query. (" + e.getMessage() + ") ", 
-        Status.INTERNAL_SERVER_ERROR,
-        log);
-    }
-    
-    return responseDoc;
-  }
 }

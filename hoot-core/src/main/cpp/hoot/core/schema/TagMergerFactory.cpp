@@ -33,11 +33,10 @@
 namespace hoot
 {
 
-TagMergerFactory TagMergerFactory::_theInstance;
+shared_ptr<TagMergerFactory> TagMergerFactory::_theInstance;
 
 TagMergerFactory::TagMergerFactory()
 {
-  _default = 0;
 }
 
 TagMergerFactory::~TagMergerFactory()
@@ -45,19 +44,28 @@ TagMergerFactory::~TagMergerFactory()
   reset();
 }
 
-const TagMerger& TagMergerFactory::getDefault()
+TagMergerFactory& TagMergerFactory::getInstance()
 {
-  if (_default == 0)
+  if (!_theInstance.get())
+  {
+      _theInstance.reset(new TagMergerFactory());
+  }
+  return *_theInstance;
+}
+
+shared_ptr<const TagMerger> TagMergerFactory::getDefaultPtr()
+{
+  if (!_default)
   {
     QString defaultName = ConfigOptions().getTagMergerDefault();
     LOG_DEBUG("Default tag merger is: " << defaultName);
-    _default = &getMerger(defaultName);
+    _default = getMergerPtr(defaultName);
   }
 
-  return *_default;
+  return _default;
 }
 
-const TagMerger& TagMergerFactory::getMerger(const QString& name)
+shared_ptr<const TagMerger> TagMergerFactory::getMergerPtr(const QString& name)
 {
   shared_ptr<const TagMerger> result;
   QHash<QString, shared_ptr<const TagMerger> >::const_iterator it = _mergers.find(name);
@@ -71,7 +79,7 @@ const TagMerger& TagMergerFactory::getMerger(const QString& name)
     result = it.value();
   }
 
-  return *result;
+  return result;
 }
 
 Tags TagMergerFactory::mergeTags(const Tags& t1, const Tags& t2, ElementType et)
@@ -81,7 +89,7 @@ Tags TagMergerFactory::mergeTags(const Tags& t1, const Tags& t2, ElementType et)
 
 void TagMergerFactory::reset()
 {
-  _default = 0;
+  _default.reset();
   _mergers.clear();
 }
 

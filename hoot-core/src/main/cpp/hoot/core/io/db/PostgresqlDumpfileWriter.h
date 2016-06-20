@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,7 +27,7 @@
 #ifndef POSTGRESQLDUMPFILEWRITER_H
 #define POSTGRESQLDUMPFILEWRITER_H
 
-/**
+/*
  * This file is part of Hootenanny.
  *
  * Hootenanny is free software: you can redistribute it and/or modify
@@ -45,7 +45,13 @@
  *
  * --------------------------------------------------------------------
  *
- * @copyright Copyright ...
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <string>
@@ -61,18 +67,16 @@
 #include <QtCore/QTextStream>
 #include <QtCore/Q_INT64>
 
-
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Settings.h>
-#include <tgs/BigContainers/BigMap.h>
-
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/RelationData.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/io/OsmApiDb.h>
 
 #include <tgs/BigContainers/BigMap.h>
 
@@ -108,7 +112,7 @@ public:
 
   virtual void writePartial(const ConstRelationPtr& r);
 
-protected:
+private:
 
   std::map<QString, QStringList> _outputSections;
 
@@ -167,6 +171,7 @@ protected:
   {
     qint64        changesetId;
     unsigned int  changesInChangeset;
+    Envelope changesetBounds;
   };
 
   _ChangesetData _changesetData;
@@ -195,8 +200,6 @@ protected:
 
   std::list<QString> _createSectionNameList();
 
-  const static unsigned int  _maxChangesInChangeset  = 50000;     /// Max changes in one changeset
-
   bool _dataWritten;
 
   void _closeSectionTempFilesAndConcat();
@@ -206,8 +209,6 @@ protected:
   void _zeroWriteStats();
 
   ElementIdDatatype _establishNewIdMapping(const ElementId& sourceId);
-
-  unsigned int _tileForPoint(const double lat, const double lon) const;
 
   unsigned int _convertDegreesToNanodegrees(const double degrees) const;
 
@@ -250,6 +251,9 @@ protected:
   void _writeChangesetToTable();
 
   void _writeSequenceUpdates();
+
+  //this is used for the optional id sequence queries only
+  OsmApiDb _db;
 };
 
 }

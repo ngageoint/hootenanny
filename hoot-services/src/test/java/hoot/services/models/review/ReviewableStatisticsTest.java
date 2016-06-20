@@ -22,24 +22,24 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.review;
-
-import hoot.services.UnitTest;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import hoot.services.UnitTest;
+
+
 public class ReviewableStatisticsTest {
-	@Test
-  @Category(UnitTest.class)
-  public void testToString() throws Exception
-  {
-		ReviewableStatistics o =  new ReviewableStatistics(5, 3);
-		String expected = "{\"totalCount\":5,\"unreviewedCount\":3}";
-		String actual = o.toString();
-		
-		org.junit.Assert.assertEquals(expected, actual);
-  }
+    @Test
+    @Category(UnitTest.class)
+    public void testToString() throws Exception {
+        ReviewableStatistics o = new ReviewableStatistics(5, 3);
+        String expected = "{\"totalCount\":5,\"unreviewedCount\":3}";
+        String actual = o.toString();
+
+        org.junit.Assert.assertEquals(expected, actual);
+    }
 }

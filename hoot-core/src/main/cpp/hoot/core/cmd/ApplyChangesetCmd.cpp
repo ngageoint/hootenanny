@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OsmApiDb.h>
+#include <hoot/core/io/OsmApiDbSqlChangesetWriter.h>
 
 // Qt
 #include <QFile>
@@ -48,25 +48,45 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 2)
+    if (args.size() != 2 && args.size() != 4)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      throw HootException(
+        QString("%1 takes two or four parameters and was given %2 parameters")
+          .arg(getName())
+          .arg(args.size()));
     }
+
+    LOG_INFO("Applying changeset " << args[0] << " to " << args[1] << "...");
 
     if (args[0].endsWith(".osc"))
     {
       throw HootException(
-        "XML changeset file writing is not supported by the apply-changeset command.");
+        "XML changeset file writing is not currently supported by the apply-changeset command.");
     }
     else if (args[0].endsWith(".osc.sql"))
     {
+      QUrl url(args[1]);
+      OsmApiDbSqlChangesetWriter changesetWriter(url);
+
+      if (args.size() == 4)
+      {
+        if (changesetWriter.conflictExistsInTarget(args[2], args[3]))
+        {
+          //Don't like throwing an exception here from the command line, but this error needs to
+          //bubble up to the web service.
+          throw HootException(
+            "The changeset will not be written because conflicts exist in the target OSM API database.");
+        }
+      }
+
       QFile changesetSqlFile(args[0]);
-      OsmApiDb().writeChangeset(changesetSqlFile, QUrl(args[1]));
+      changesetWriter.write(changesetSqlFile);
+      cout << changesetWriter.getChangesetStats();
     }
     else
     {
-      throw HootException("Invalid source file format: " + args[0]);
+      throw HootException("Invalid changeset file format: " + args[0]);
     }
 
     return 0;

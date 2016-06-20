@@ -22,34 +22,32 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.readers.review;
-
-import hoot.services.UnitTest;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import hoot.services.UnitTest;
+
+
 public class ReviewableStatisticsQueryTest {
 
-	@Test
-  @Category(UnitTest.class)
-  public void testGetQuery() throws Exception
-  {
-		String expected = "select count(*) as totalcnt from current_relations_10 where tags->'type' = 'review'";
-		
-		ReviewableStatisticsQuery q = new ReviewableStatisticsQuery(null, 10);
-		String actual = q._getTotalReviewableCountQueryString();
-		org.junit.Assert.assertEquals(expected, actual);
-		
-		expected = "select count(*) as remaining from current_relations_10 where tags->'hoot:review:needs' = 'yes'";
-		
-		actual = q._getUnreviewedCountQueryString();
-		org.junit.Assert.assertEquals(expected, actual);
-		
-		
-		
-  }
-	
+    @Test
+    @Category(UnitTest.class)
+    public void testGetQuery() throws Exception {
+        String expected = "select count(*) as totalcnt from current_relations_10 where tags->'type' = 'review'";
+
+        ReviewableStatisticsQuery q = new ReviewableStatisticsQuery(null, 10);
+        String actual = q._getTotalReviewableCountQueryString();
+        org.junit.Assert.assertEquals(expected, actual);
+
+        expected = "select count(*) as remaining from current_relations_10 where tags->'hoot:review:needs' = 'yes'";
+
+        actual = q._getUnreviewedCountQueryString();
+        org.junit.Assert.assertEquals(expected, actual);
+
+    }
+
 }

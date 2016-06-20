@@ -22,57 +22,62 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.info;
 
 import java.io.File;
+import java.net.URL;
 
-import hoot.services.UnitTest;
-
+import org.apache.commons.io.FileUtils;
+import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import hoot.services.HootProperties;
+import hoot.services.UnitTest;
+import hoot.services.utils.HootCustomPropertiesSetter;
+
+
 public class ErrorLogTest {
-	@Ignore
-	@BeforeClass
-  public static void oneTimeSetup() {
-      // one-time setup code
-		// Disable due to test server is getting permission denied error when verifying errLogPath line#48
-	/*	ErrorLog log = new ErrorLog();
-		org.junit.Assert.assertNotNull(log._errLogPath);
-		org.junit.Assert.assertTrue(log._errLogPath.length() > 0);
+    private static final File testFolder = new File(FileUtils.getTempDirectory(), "ErrorLogTest");
+    private static String originalErrorLogPath = null;
+    private static String originaltempOutputPath = null;
 
-		File logFile = new File(log._errLogPath); 
-		org.junit.Assert.assertTrue(logFile.exists()); ///<<<===================
+    @BeforeClass
+    public static void beforeClass() throws Exception {
+        URL inputUrl = ErrorLogTest.class.getResource("/hoot/services/info/catalina.out");
+        File dest = new File(testFolder, "catalina.out");
+        FileUtils.copyURLToFile(inputUrl, dest);
 
-		org.junit.Assert.assertNotNull(log._tempOutputPath);
-		org.junit.Assert.assertTrue(log._tempOutputPath.length() > 0);*/
-  }
+        originalErrorLogPath = HootProperties.getPropertyOrDefault("ErrorLogPath");
+        originaltempOutputPath = HootProperties.getPropertyOrDefault("tempOutputPath");
+        HootCustomPropertiesSetter.setProperty("ErrorLogPath", dest.getAbsolutePath());
+        HootCustomPropertiesSetter.setProperty("tempOutputPath", FileUtils.getTempDirectory().getAbsolutePath());
+    }
 
-	@Ignore
-	@Test
-	@Category(UnitTest.class)
-	public void testgenerateExportLog() throws Exception
-	{
-		ErrorLog log = new ErrorLog();
-		String path = log.generateExportLog();
+    @AfterClass
+    public static void afterClass() throws Exception {
+        FileUtils.deleteQuietly(testFolder);
+        HootCustomPropertiesSetter.setProperty("ErrorLogPath", originalErrorLogPath);
+        HootCustomPropertiesSetter.setProperty("tempOutputPath", originaltempOutputPath);
+    }
 
-		File logFile = new File(path);
-		org.junit.Assert.assertTrue(logFile.exists());
+    @Test
+    @Category(UnitTest.class)
+    public void testGenerateExportLog() throws Exception {
+        String path = ErrorLog.generateExportLog();
 
-	}
-	@Ignore
-	@Test
-	@Category(UnitTest.class)
-	public void testgetErrorLog() throws Exception
-	{
-		ErrorLog log = new ErrorLog();
-		String logStr = log.getErrorlog(100);
+        File logFile = new File(path);
+        Assert.assertTrue(logFile.exists());
+    }
 
-		org.junit.Assert.assertTrue(logStr.length() <= 100);
-
-	}
+    @Test
+    @Category(UnitTest.class)
+    public void testGetErrorLog() throws Exception {
+        String logStr = ErrorLog.getErrorlog(100);
+        Assert.assertTrue(logStr.length() <= 100);
+    }
 }

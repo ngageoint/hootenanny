@@ -50,7 +50,7 @@ using namespace boost;
 namespace hoot
 {
 
-MapProjector MapProjector::_theInstance;
+shared_ptr<MapProjector> MapProjector::_theInstance;
 
 class DisableCplErrors
 {
@@ -97,6 +97,15 @@ void ReprojectCoordinateFilter::project(Coordinate* c) const
   }
 }
 
+
+MapProjector& MapProjector::getInstance()
+{
+  if (!_theInstance.get())
+  {
+    _theInstance.reset(new MapProjector());
+  }
+  return *_theInstance;
+}
 
 bool MapProjector::_angleLessThan(const MapProjector::PlanarTestResult& p1,
   const MapProjector::PlanarTestResult& p2)

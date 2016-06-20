@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,14 +30,14 @@ namespace hoot
 {
 
 RelationData::RelationData(long id, long changeset, long version, unsigned int timestamp,
-  QString user, long uid) :
-ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid)
+                           QString user, long uid, bool visible) :
+ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid, visible)
 {
 }
 
 RelationData::RelationData(const RelationData& rd) :
-ElementData(rd.getId(), rd.getTags(), rd.getCircularError(), rd._changeset, rd._version,
-            rd._timestamp),
+ElementData(rd.getId(), rd.getTags(), rd.getCircularError(), rd.getChangeset(), rd.getVersion(),
+            rd.getTimestamp(), rd.getUser(), rd.getUid(), rd.getVisible()),
 _type(rd._type),
 _members(rd._members)
 {
@@ -110,6 +110,27 @@ void RelationData::replaceElement(ElementId from, ElementId to)
       e.setElementId(to);
     }
   }
+}
+
+void RelationData::replaceElement(ElementId from, const QList<ElementId>& to)
+{
+  vector<Entry> newCopy;
+  for (size_t i = 0; i < _members.size(); i++)
+  {
+    Entry& e = _members[i];
+    if (e.getElementId() == from)
+    {
+      for (int i = 0; i < to.size(); ++i)
+      {
+        newCopy.push_back(Entry(e.role, to[i]));
+      }
+    }
+    else
+    {
+      newCopy.push_back(e);
+    }
+  }
+  _members = newCopy;
 }
 
 }

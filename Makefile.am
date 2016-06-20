@@ -72,6 +72,8 @@ help:
 	@echo "test-all                - Run all tests.  Could take hours."
 	@echo "test-quick              - Run quick tests.  Should take less than five minutes."
 	@echo "ui-test                 - Run user interface tests.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
+	@echo "ui-coverage             - Generate coverage reports for mocha and cucumber user interface tests.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
+	@echo "ui-clean-coverage       - Removes the coverage reports for mocha and cucumber user interface tests."
 
 test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test
@@ -81,6 +83,9 @@ test-all:
 
 test-all-no-core:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-all-no-core
+
+test-all-core:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-all-core
 
 test-quick:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-quick
@@ -93,6 +98,12 @@ services-test-all:
 
 ui-test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-test
+
+ui-coverage:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-coverage
+
+ui-clean-coverage:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-clean-coverage
 
 pp-test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old pp-test
@@ -117,9 +128,6 @@ services-clean-coverage:
 
 services-coverage:
 	$(MAKE) -f Makefile.old services-coverage
-
-conf/DatabaseConfig.sh:
-	$(MAKE) -f Makefile.old conf/DatabaseConfig.sh
 
 # Use some tar fanciness to grab all the files in conf, plugins, translations and scripts
 install-other:

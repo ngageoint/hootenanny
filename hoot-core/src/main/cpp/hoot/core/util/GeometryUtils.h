@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef GEOMETRYUTILS_H
@@ -105,6 +105,14 @@ public:
    * - Removes linear rings less than 3 points
    */
   static Geometry* validatePolygon(const Polygon* p);
+
+  /**
+   * Converts a bounds in the format used in the hoot options config to an envelope
+   *
+   * @param boundsStr bounds string in the format used in the hoot options config to an envelope
+   * @return
+   */
+  static Envelope envelopeFromConfigString(const QString boundsStr);
 
 };
 

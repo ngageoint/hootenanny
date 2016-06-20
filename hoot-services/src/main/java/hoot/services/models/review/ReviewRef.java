@@ -22,39 +22,41 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.review;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import hoot.services.models.osm.ElementInfo;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Element information
  */
 @XmlRootElement
-public class ReviewRef extends ElementInfo
-{
-	private long reviewRelationId = -1;
-  public long getReviewRelationId() { return reviewRelationId; }
-  public void setReviewRelationId(long id) { this.reviewRelationId = id; }
-  
-  public ReviewRef()
-  {
-  	super();
-  }
-  
-  public ReviewRef(final String mapId, final long elementId, final String elementType, 
-  	final long reviewRelationId)
-  {
-  	super(mapId, elementId, elementType);
-  	this.reviewRelationId = reviewRelationId;
-  }
-  
-  @Override
-  public String toString()
-  {
-  	return super.toString() + ", review relation id: " + reviewRelationId;
-  }
+public class ReviewRef extends ElementInfo {
+    private long reviewRelationId = -1;
+
+    public long getReviewRelationId() {
+        return reviewRelationId;
+    }
+
+    public void setReviewRelationId(long id) {
+        this.reviewRelationId = id;
+    }
+
+    public ReviewRef() {
+        super();
+    }
+
+    public ReviewRef(final String mapId, final long elementId, final String elementType, final long reviewRelationId) {
+        super(mapId, elementId, elementType);
+        this.reviewRelationId = reviewRelationId;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", review relation id: " + reviewRelationId;
+    }
 }

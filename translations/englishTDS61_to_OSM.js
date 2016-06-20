@@ -32,6 +32,13 @@
 hoot.require('etds61_osm')
 
 
+function initialize()
+{
+    // Turn off the TDS structure so we just get the raw feature
+    hoot.Settings.set({"ogr.tds.structure":"false"});
+}
+
+
 // IMPORT
 // translateAttributes - Normally takes 'attrs' and returns OSM 'tags'.  This version
 //    converts OSM+ tags to NFDD "English" Attributes
@@ -44,7 +51,7 @@ function translateAttributes(attrs, layerName, geometryType)
 {
 
     // We use the temp var because nfdd_e.toEnglish returns "attrs" and "tableName"
-    var output = etds61_osm.toOSM(attrs, '', '');
+    var output = etds61_osm.toOSM(attrs, layerName, geometryType);
 
     // Make sure the returned value isn't NULL. This does occur
     if (output)

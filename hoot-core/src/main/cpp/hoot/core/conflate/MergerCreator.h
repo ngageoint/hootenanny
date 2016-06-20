@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MERGECREATOR_H
 #define MERGECREATOR_H
@@ -55,6 +55,12 @@ public:
       this->className = className;
       this->experimental = experimental;
       this->description = description;
+    }
+
+    QString toString() const
+    {
+      return QString("%1 %2").arg(QString::fromStdString(className)).
+        arg(experimental ? "(experimental)" : "");
     }
 
     bool experimental;

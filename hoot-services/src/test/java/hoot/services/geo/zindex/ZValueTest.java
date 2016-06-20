@@ -22,72 +22,68 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.geo.zindex;
-
-import hoot.services.UnitTest;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-public class ZValueTest
-{
-  // recreate the wikipedia example output.
-  // http://en.wikipedia.org/wiki/Z-order_curve
-  @Test
-  @Category(UnitTest.class)
-  public void testBasics() throws Exception
-  {
-    ZValue zv = new ZValue(2, 3, new double[] { 0, 0 }, new double[] { 7, 7 });
+import hoot.services.UnitTest;
 
-    Assert.assertEquals(0x00, zv.calculate(new double[] { 0, 0 }));
-    Assert.assertEquals(0x01, zv.calculate(new double[] { 1, 0 }));
-    Assert.assertEquals(0x02, zv.calculate(new double[] { 0, 1 }));
-    Assert.assertEquals(0x03, zv.calculate(new double[] { 1, 1 }));
-    Assert.assertEquals(0x3b, zv.calculate(new double[] { 5, 7 }));
-    Assert.assertEquals(0x3e, zv.calculate(new double[] { 6, 7 }));
-    Assert.assertEquals(0x3f, zv.calculate(new double[] { 7, 7 }));
-  }
 
-  @Test
-  @Category(UnitTest.class)
-  public void testDecompose()
-  {
-    ZValue zv = new ZValue(2, 3, new double[] { 0, 0 }, new double[] { 7, 7 });
-    
-    long[] ll = new long[2];
+public class ZValueTest {
+    // recreate the wikipedia example output.
+    // http://en.wikipedia.org/wiki/Z-order_curve
+    @Test
+    @Category(UnitTest.class)
+    public void testBasics() throws Exception {
+        ZValue zv = new ZValue(2, 3, new double[] { 0, 0 }, new double[] { 7, 7 });
 
-    zv.decompose(37, ll);
-    Assert.assertEquals(3, ll[0]);
-    Assert.assertEquals(4, ll[1]);
+        Assert.assertEquals(0x00, zv.calculate(new double[] { 0, 0 }));
+        Assert.assertEquals(0x01, zv.calculate(new double[] { 1, 0 }));
+        Assert.assertEquals(0x02, zv.calculate(new double[] { 0, 1 }));
+        Assert.assertEquals(0x03, zv.calculate(new double[] { 1, 1 }));
+        Assert.assertEquals(0x3b, zv.calculate(new double[] { 5, 7 }));
+        Assert.assertEquals(0x3e, zv.calculate(new double[] { 6, 7 }));
+        Assert.assertEquals(0x3f, zv.calculate(new double[] { 7, 7 }));
+    }
 
-    zv.decompose(25, ll);
-    Assert.assertEquals(5, ll[0]);
-    Assert.assertEquals(2, ll[1]);
-  }
-  
-  @Test
-  @Category(UnitTest.class)
-  public void testGeographic() throws Exception
-  {
-    ZValue zv = new ZValue(2, 4, new double[] { -180, -90 }, new double[] { 180, 90 });
+    @Test
+    @Category(UnitTest.class)
+    public void testDecompose() {
+        ZValue zv = new ZValue(2, 3, new double[] { 0, 0 }, new double[] { 7, 7 });
 
-    Assert.assertEquals(0x0, zv.calculate(new double[] { -180, -90 }));
-    Assert.assertEquals(0xC0, zv.calculate(new double[] { 0, 0 }));
-    Assert.assertEquals(0xFF, zv.calculate(new double[] { 180, 90 }));
-    Assert.assertEquals(0xEA, zv.calculate(new double[] { 0, 90 }));
-  }
+        long[] ll = new long[2];
 
-  // this test simply looks right. I haven't done thorough testing of the ins/outs
-  public void test4D() throws Exception
-  {
-    ZValue zv = new ZValue(4, 4, new double[] { -180, -90, -180, -90 }, new double[] { 180, 90,
-        180, 90 });
+        zv.decompose(37, ll);
+        Assert.assertEquals(3, ll[0]);
+        Assert.assertEquals(4, ll[1]);
 
-    Assert.assertEquals(0x0, zv.calculate(new double[] { -180, -90, -180, -90 }));
-    Assert.assertEquals(0xFFFF, zv.calculate(new double[] { 180, 90, 180, 90 }));
-    Assert.assertEquals(0xF000, zv.calculate(new double[] { 0, 0, 0, 0 }));
-  }
+        zv.decompose(25, ll);
+        Assert.assertEquals(5, ll[0]);
+        Assert.assertEquals(2, ll[1]);
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testGeographic() throws Exception {
+        ZValue zv = new ZValue(2, 4, new double[] { -180, -90 }, new double[] { 180, 90 });
+
+        Assert.assertEquals(0x0, zv.calculate(new double[] { -180, -90 }));
+        Assert.assertEquals(0xC0, zv.calculate(new double[] { 0, 0 }));
+        Assert.assertEquals(0xFF, zv.calculate(new double[] { 180, 90 }));
+        Assert.assertEquals(0xEA, zv.calculate(new double[] { 0, 90 }));
+    }
+
+    // this test simply looks right. I haven't done thorough testing of the
+    // ins/outs
+    public void test4D() throws Exception {
+        ZValue zv = new ZValue(4, 4, new double[] { -180, -90, -180, -90 }, new double[] { 180, 90, 180, 90 });
+
+        Assert.assertEquals(0x0, zv.calculate(new double[] { -180, -90, -180, -90 }));
+        Assert.assertEquals(0xFFFF, zv.calculate(new double[] { 180, 90, 180, 90 }));
+        Assert.assertEquals(0xF000, zv.calculate(new double[] { 0, 0, 0, 0 }));
+    }
 }

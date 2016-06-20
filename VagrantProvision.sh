@@ -29,9 +29,6 @@ if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
 fi
 
 echo "### Installing dependencies from repos..."
-#sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server htop unzip >> Ubuntu_upgrade.txt 2>&1
-
-# Added postgres9.5
 sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server htop unzip postgresql-9.5  postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.2 >> Ubuntu_upgrade.txt 2>&1
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
@@ -113,7 +110,7 @@ if [ $? -eq 1 ]; then
    sudo gem install selenium-cucumber
 fi
 
-# Make sure that we are in ~ before trying to wget & install stuff 
+# Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
 if  ! dpkg -l | grep google-chrome-stable; then
@@ -146,25 +143,6 @@ if [ ! -f bin/osmosis ]; then
     tar -zxf osmosis-latest.tgz -C $HOME/bin/osmosis_src
     ln -s $HOME/bin/osmosis_src/bin/osmosis $HOME/bin/osmosis
 fi
-
-# Moved to standard deps  install
-#sudo apt-get install -y postgresql-9.5  postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.2
-
-
-# Hoot Baseline is PostgreSQL 9.1 and PostGIS 1.5, so we need a deb file and
-# then remove 9.5
-#if  ! dpkg -l | grep  postgresql-9.1-postgis-[0-9]; then
-#    echo "### Installing PostgreSQL 9.1..."
-#    if [ ! -f postgresql-9.1-postgis_1.5.3-2_amd64.deb ]; then
-#      wget --quiet http://launchpadlibrarian.net/86690107/postgresql-9.1-postgis_1.5.3-2_amd64.deb
-#    fi
-#    sudo dpkg -i postgresql-9.1-postgis_1.5.3-2_amd64.deb
-#    sudo apt-get -f -q -y install
-    # fixes missing dependency of postgis 1.5 by installing postgresql 9.1. 9.1 is installed listening on the default port, 5432. It unfortunately also installs postgres 9.5 but we remove that cleanly in the following steps, while leaving postgres 9.1 untouched
-#    echo "### Removing PostgreSQL 9.5..."
-#    sudo apt-get purge -y postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts
-#    sudo apt-get -q -y install postgresql-contrib-9.1
-#fi
 
 if ! ogrinfo --formats | grep --quiet FileGDB; then
     if [ ! -f gdal-1.10.1.tar.gz ]; then
@@ -203,21 +181,11 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
     cd ~
 fi
 
-if ! grep --quiet NODE_PATH ~/.profile; then
-    echo "### Installing node js dependencies..."
-    sudo npm config set registry http://registry.npmjs.org/
-    sudo npm install --silent -g xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
-    echo 'Adding NODE_PATH to user environment...'
-    echo 'export NODE_PATH=/usr/local/lib/node_modules' >> ~/.profile
-    source ~/.profile
-fi
-
-# Module needed for OSM API db test
-if [ ! -d $HOME/.cpan ]; then
-    echo "### Installing Perl XML::Simple module..."
-    (echo y;echo o conf prerequisites_policy follow;echo o conf commit)|sudo cpan
-    sudo perl -MCPAN -e 'install XML::Simple' > /dev/null
-    sudo chown -R vagrant:vagrant $HOME/.cpan
+if ! mocha --version &>/dev/null; then
+    echo "### Installing mocha for plugins test..."
+    sudo npm install --silent -g mocha
+    # Clean up after the npm install
+    sudo rm -rf $HOME/tmp
 fi
 
 # NOTE: These have been changed to pg9.5
@@ -307,6 +275,7 @@ sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
 # Hoot Settings
 #--------------
 HOOT_HOME=/home/vagrant/hoot
+HADOOP_HOME=/home/vagrant/hadoop
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
 GDAL_DATA=/usr/local/share/gdal
 GDAL_LIB_DIR=/usr/local/lib
@@ -372,6 +341,10 @@ if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
     echo "Removing services local.conf..."
     rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
+
+# Clean out tomcat logfile. We restart tomcat after provisioning
+sudo service tomcat6 stop
+sudo rm /var/log/tomcat6/catalina.out
 
 cd ~
 # hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
@@ -511,7 +484,7 @@ EOT
   sudo mkdir -p $HOME/hadoop/dfs/name/current
   # this could perhaps be more strict
   sudo chmod -R 777 $HOME/hadoop
-  echo 'Y' | hadoop namenode -format 
+  echo 'Y' | hadoop namenode -format
 
   cd /lib
   sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so libjvm.so
@@ -538,17 +511,17 @@ sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
 sudo chmod a+x /etc/init.d/node-mapnik-server
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-mapnik-server
-sudo npm install --quiet
+npm install --silent
+# Clean up after the npm install
+rm -rf $HOME/tmp
 
 cd $HOOT_HOME
 
 rm -rf $HOOT_HOME/ingest
 mkdir -p $HOOT_HOME/ingest/processed
-#sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
 
 rm -rf $HOOT_HOME/upload
 mkdir -p $HOOT_HOME/upload
-#sudo chown -R vagrant:tomcat6 $HOOT_HOME/upload
 
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'

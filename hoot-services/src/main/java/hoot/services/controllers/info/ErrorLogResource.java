@@ -49,97 +49,80 @@ import org.slf4j.LoggerFactory;
 import hoot.services.info.ErrorLog;
 import hoot.services.utils.ResourceErrorHandler;
 
+
 @Path("/logging")
 public class ErrorLogResource {
-	private static final Logger log = LoggerFactory.getLogger(ErrorLogResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(ErrorLogResource.class);
 
-	private String _exportLogPath = null;
-	public ErrorLogResource()
-	{
+    private String exportLogPath;
 
-	}
+    public ErrorLogResource() {
 
-	@PreDestroy
-	public void PreDestroy()
-	{
-		try
-		{
-			if(_exportLogPath != null && _exportLogPath.length() > 0)
-			{
-				FileUtils.forceDelete(new File(_exportLogPath));
-			}
-		}
-		catch (Exception ex)
-		{
-			log.error(ex.getMessage());
-		}
-	}
-	
-	/**
-	 * Service method endpoint for retrieving the Hootenanny tomcat log.
-	 * 
-	 * GET hoot-services/info/logging/debuglog
-	 * 
-	 * @return JSON containing debug log
-	 */
-	@GET
-  @Path("/debuglog")
-  @Produces(MediaType.TEXT_PLAIN)
-  public Response getDebugLog()
-	{
-		String logStr = null;
-		try
-		{
-			ErrorLog logging = new ErrorLog();
-			// 50k Length
-			logStr = logging.getErrorlog(50000);
-		}
-		catch (Exception ex)
-		{
-			ResourceErrorHandler.handleError(
-					"Error getting error log: " + ex.toString(),
-				    Status.INTERNAL_SERVER_ERROR,
-					log);
-		}
-		JSONObject res = new JSONObject();
-		res.put("log", logStr);
-		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
-	}
+    }
 
-	/**
-	 * Service method endpoint for exporting logging information.
-	 * 
-	 * GET hoot-services/info/logging/export
-	 * 
-	 * @return Binary octet stream
-	 * @throws IOException 
-	 */
-	@GET
-  @Path("/export")
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  public Response exportLog() throws IOException
-	{
-		ErrorLog logging = new ErrorLog();
-		File out = null;
-		try
-		{
-			String outputPath = logging.generateExportLog();
-			out = new File(outputPath);
-			_exportLogPath = outputPath;
-		}
-		catch (Exception ex)
-		{
-			ResourceErrorHandler.handleError(
-					"Error exporting log file: " + ex.toString(),
-				    Status.INTERNAL_SERVER_ERROR,
-					log);
-		}
-		DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-		Date dd = new Date();
-		String dtStr = dateFormat.format(dd);
-		ResponseBuilder rBuild = Response.ok(out, MediaType.APPLICATION_OCTET_STREAM);
-		rBuild.header("Content-Disposition", "attachment; filename=hootlog_" + dtStr + ".log" );
+    @PreDestroy
+    public void PreDestroy() {
+        try {
+            if ((exportLogPath != null) && (!exportLogPath.isEmpty())) {
+                FileUtils.forceDelete(new File(exportLogPath));
+            }
+        }
+        catch (Exception ex) {
+            logger.error(ex.getMessage());
+        }
+    }
 
-		return rBuild.build();
-	}
+    /**
+     * Service method endpoint for retrieving the Hootenanny tomcat logger.
+     * 
+     * GET hoot-services/info/logging/debuglog
+     * 
+     * @return JSON containing debug logger
+     */
+    @GET
+    @Path("/debuglog")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getDebugLog() {
+        String logStr = null;
+        try {
+            // 50k Length
+            logStr = ErrorLog.getErrorlog(50000);
+        }
+        catch (Exception ex) {
+            ResourceErrorHandler.handleError("Error getting error logger: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+        }
+        JSONObject res = new JSONObject();
+        res.put("logger", logStr);
+        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+    }
+
+    /**
+     * Service method endpoint for exporting logging information.
+     * 
+     * GET hoot-services/info/logging/export
+     * 
+     * @return Binary octet stream
+     * @throws IOException
+     */
+    @GET
+    @Path("/export")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response exportLog() throws IOException {
+        File out = null;
+        try {
+            String outputPath = ErrorLog.generateExportLog();
+            out = new File(outputPath);
+            exportLogPath = outputPath;
+        }
+        catch (Exception ex) {
+            ResourceErrorHandler.handleError("Error exporting logger file: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+        }
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date dd = new Date();
+        String dtStr = dateFormat.format(dd);
+        ResponseBuilder rBuild = Response.ok(out, MediaType.APPLICATION_OCTET_STREAM);
+        rBuild.header("Content-Disposition", "attachment; filename=hootlog_" + dtStr + ".logger");
+
+        return rBuild.build();
+    }
 }
