@@ -82,7 +82,7 @@ public class ClipDatasetResource extends JobControllerBase {
             String clipOutputName = oParams.get("OUTPUT_NAME").toString();
 
             JSONArray commandArgs = parseParams(params);
-            JSONObject clipCommand = _createMakeScriptJobReq(commandArgs);
+            JSONObject clipCommand = createMakeScriptJobReq(commandArgs);
 
             // Density Raster
             JSONArray rasterTilesArgs = new JSONArray();

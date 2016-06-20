@@ -202,7 +202,7 @@ public class JobControllerBase {
         return command;
     }
 
-    protected JSONObject _createMakeScriptJobReq(JSONArray args) {
+    protected JSONObject createMakeScriptJobReq(JSONArray args) {
         JSONObject command = _createPostBody(args);
         return command;
     }

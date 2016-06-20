@@ -165,6 +165,7 @@ public class RasterToTilesService extends JobControllerBase {
         return jobId;
     }
 
+    // This method may appear unused in your IDE since it's currently invoked reflectively.
     public String ingestOSMResource(String name) throws Exception {
         // _zoomLevels
         Connection conn = DbUtils.createConnection();

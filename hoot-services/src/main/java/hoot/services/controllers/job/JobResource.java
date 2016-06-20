@@ -259,8 +259,8 @@ public class JobResource {
             parameters[i] = param.get("value");
         }
 
-        Class<?> c = Class.forName(className);
-        Object instance = c.newInstance();
+        Class<?> clazz = Class.forName(className);
+        Object instance = clazz.newInstance();
 
         JSONObject childJobInfo = null;
         String currentChildJobId = childJobId;
@@ -280,19 +280,19 @@ public class JobResource {
             Class<?>[] newParamTypes = new Class[paramsList.size() + 1];
             System.arraycopy(paramTypes, 0, newParamTypes, 0, paramsList.size());
             newParamTypes[parameters.length] = String.class;
-            Method m = c.getDeclaredMethod(methodName, newParamTypes);
+            Method method = clazz.getDeclaredMethod(methodName, newParamTypes);
             // This will blow if the method is not designed to handle job id
-            m.invoke(instance, newParams);
+            method.invoke(instance, newParams);
         }
         else {
-            Method m = c.getDeclaredMethod(methodName, paramTypes);
-            Object oReflectJobId = m.invoke(instance, parameters);
+            Method method = clazz.getDeclaredMethod(methodName, paramTypes);
+            Object oReflectJobId = method.invoke(instance, parameters);
             if (oReflectJobId != null) {
                 currentChildJobId = oReflectJobId.toString();
             }
+            
             // Updating job status info. Looks like we need to wait till job is
-            // done to get job id.
-            // With this we can not canel..
+            // done to get job id. With this we can not canel..
             childJobInfo = createChildInfo(currentChildJobId, JobStatusManager.JOB_STATUS.RUNNING.toString());
             setJobInfo(jobInfo, childJobInfo, childrenInfo, JOB_STATUS.RUNNING.toString(), "processing");
             jobStatusManager.updateJob(jobId, jobInfo.toString());
@@ -455,7 +455,7 @@ public class JobResource {
     private static Map<String, String> paramsToMap(JSONObject command) {
         JSONArray paramsList = (JSONArray) command.get("params");
 
-        Map<String, String> paramsMap = new HashMap<String, String>();
+        Map<String, String> paramsMap = new HashMap<>();
         for (Object aParamsList : paramsList) {
             JSONObject o = (JSONObject) aParamsList;
             for (Object o1 : o.entrySet()) {
@@ -477,7 +477,7 @@ public class JobResource {
 
         Map<String, String> paramsMap = paramsToMap(command);
 
-        List<String> missingList = new ArrayList<String>();
+        List<String> missingList = new ArrayList<>();
         if (!validator.validateRequiredExists(paramsMap, missingList)) {
             logger.error("Missing following required field(s): {}", missingList);
         }

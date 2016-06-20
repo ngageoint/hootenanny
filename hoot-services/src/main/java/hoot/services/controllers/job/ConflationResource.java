@@ -59,7 +59,7 @@ import hoot.services.utils.ResourceErrorHandler;
 
 @Path("/conflation")
 public class ConflationResource extends JobControllerBase {
-    private static final Logger log = LoggerFactory.getLogger(ConflationResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConflationResource.class);
     private static final String homeFolder = HootProperties.getProperty("homeFolder");
     private static final String rptStorePath = HootProperties.getProperty("reportDataPath");
 
@@ -107,7 +107,7 @@ public class ConflationResource extends JobControllerBase {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public Response process(String params) throws Exception {
-        // log.debug("Conflation resource raw request: " + params);
+        // logger.debug("Conflation resource raw request: " + params);
 
         Connection conn = DbUtils.createConnection();
         String jobId = UUID.randomUUID().toString();
@@ -123,7 +123,7 @@ public class ConflationResource extends JobControllerBase {
             if (conflatingOsmApiDbData && !osmApiDbEnabled) {
                 ResourceErrorHandler.handleError(
                         "Attempted to conflate an OSM API database data source but OSM API database"
-                                + "support is disabled.", Status.INTERNAL_SERVER_ERROR, log);
+                                + "support is disabled.", Status.INTERNAL_SERVER_ERROR, logger);
             }
 
             oParams.put("IS_BIG", "false");
@@ -151,11 +151,11 @@ public class ConflationResource extends JobControllerBase {
             }
 
             JSONArray commandArgs = parseParams(oParams.toJSONString());
-            JSONObject conflationCommand = _createMakeScriptJobReq(commandArgs);
+            JSONObject conflationCommand = createMakeScriptJobReq(commandArgs);
 
             // add map tags
             // WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
-            java.util.Map<String, String> tags = new HashMap<String, String>();
+            java.util.Map<String, String> tags = new HashMap<>();
             tags.put("input1", input1Name);
             tags.put("input2", input2Name);
 
@@ -179,21 +179,16 @@ public class ConflationResource extends JobControllerBase {
             if (conflatingOsmApiDbData && osmApiDbEnabled) {
                 validateOsmApiDbConflateParams(oParams);
 
-                String secondaryParameterKey = null;
-                if (firstLayerIsOsmApiDb(oParams)) {
-                    secondaryParameterKey = "INPUT2";
-                }
-                else {
-                    secondaryParameterKey = "INPUT1";
-                }
-                //log.debug(commandArgs.toJSONString());
+                String secondaryParameterKey = (firstLayerIsOsmApiDb(oParams)) ? "INPUT2" : "INPUT1";
+
+                //logger.debug(commandArgs.toJSONString());
 
                 //Record the aoi of the conflation job (equal to that of the secondary layer), as
                 //we'll need it to detect conflicts at export time.
                 long secondaryMapId = Long.parseLong(getParameterValue(secondaryParameterKey, commandArgs));
                 if (!mapExists(secondaryMapId, conn)) {
                     ResourceErrorHandler.handleError("No secondary map exists with ID: " + secondaryMapId,
-                            Status.BAD_REQUEST, log);
+                            Status.BAD_REQUEST, logger);
                 }
                 Map secondaryMap = new Map(secondaryMapId, conn);
                 setAoi(secondaryMap, commandArgs);
@@ -246,7 +241,7 @@ public class ConflationResource extends JobControllerBase {
             jobArgs.add(updateMapsTagsCommand);
             jobArgs.add(ingestOSMResource);
 
-            log.debug(jobArgs.toJSONString());
+            logger.debug(jobArgs.toJSONString());
             postChainJobRquest(jobId, jobArgs.toJSONString());
         }
         finally {
@@ -276,22 +271,22 @@ public class ConflationResource extends JobControllerBase {
                     || (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB") && inputParams
                     .get("REFERENCE_LAYER").toString().toUpperCase().equals("1"))) {
                 ResourceErrorHandler.handleError("OSM_API_DB not allowed as secondary input type.", Status.BAD_REQUEST,
-                        log);
+                        logger);
             }
         }
         else if (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB")) {
             ResourceErrorHandler
-                    .handleError("OSM_API_DB not allowed as secondary input type.", Status.BAD_REQUEST, log);
+                    .handleError("OSM_API_DB not allowed as secondary input type.", Status.BAD_REQUEST, logger);
         }
     }
 
     // adding this to satisfy the mock
-    protected BoundingBox getMapBounds(Map map) throws Exception {
+    BoundingBox getMapBounds(Map map) throws Exception {
         return map.getBounds();
     }
 
     // adding this to satisfy the mock
-    protected boolean mapExists(final long id, Connection conn) {
+    boolean mapExists(long id, Connection conn) {
         return Map.mapExists(id, conn);
     }
 

@@ -322,7 +322,7 @@ public class FileUploadResource extends JobControllerBase {
 
         JSONArray commandArgs = parseParams(param.toJSONString());
 
-        JSONObject etlCommand = _createMakeScriptJobReq(commandArgs);
+        JSONObject etlCommand = createMakeScriptJobReq(commandArgs);
 
         // Density Raster
         String internalJobId = UUID.randomUUID().toString();
