@@ -504,7 +504,8 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmApiDbSqlChangesetWriter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.cpp \
     src/main/cpp/hoot/core/io/OsmJsonReader.cpp \
-    src/main/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.cpp
+    src/main/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.cpp \
+    src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1009,5 +1010,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmApiDbSqlChangesetWriter.h \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.h \
     src/main/cpp/hoot/core/io/OsmJsonReader.h \
-    src/main/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.h
+    src/main/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.h \
+    src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.h
 
