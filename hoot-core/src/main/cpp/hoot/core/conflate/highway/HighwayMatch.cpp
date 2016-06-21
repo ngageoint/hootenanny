@@ -33,10 +33,14 @@
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/algorithms/aggregator/RmseAggregator.h>
+#include <hoot/core/algorithms/aggregator/SigmaAggregator.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/GeometryConverter.h>
 
@@ -73,13 +77,29 @@ HighwayMatch::HighwayMatch(const shared_ptr<HighwayClassifier>& classifier,
     {
       // calculate the match score
       _c = _classifier->classify(map, eid1, eid2, _sublineMatch);
-      stringstream ss;
-      ss << mt->getTypeDetail(_c);
-      _explainText = QString::fromUtf8(ss.str().data());
 
-      stringstream ss2;
-      ss2 << toString() << " features: " << getFeatures(map);
-      //LOG_DEBUG(QString::fromUtf8(ss2.str().data()));
+      MatchType type = getType();
+      QStringList description;
+      if (type != MatchType::Match)
+      {
+        //  Check the Angle Histogram
+        double angle = AngleHistogramExtractor().extract(*map, e1, e2);
+        if (angle >= 0.75)          description.append("Very similar highway orientation.");
+        else if (angle >= 0.5)      description.append("Similar highway orientation.");
+        else if (angle >= 0.25)     description.append("Semi-similar highway orientation.");
+        else                        description.append("Highway orientation not similar.");
+        //  Use the average of the edge distance extractors
+        double edge = (EdgeDistanceExtractor(new RmseAggregator()).extract(*map, e1, e2) +
+                       EdgeDistanceExtractor(new SigmaAggregator()).extract(*map, e1, e2)) / 2.0;
+        if (edge >= 90)             description.append("Highway edges very close to each other.");
+        else if (edge >= 70)        description.append("Highway edges somewhat close to each other.");
+        else                        description.append("Highway edges not very close to each other.");
+      }
+
+      if (description.length() > 0)
+        _explainText = description.join(" ");
+      else
+        _explainText = mt->getTypeDetail(_c);
     }
     else
     {

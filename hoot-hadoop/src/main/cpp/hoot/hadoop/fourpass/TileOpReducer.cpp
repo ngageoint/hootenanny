@@ -27,6 +27,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/visitors/CalculateBoundsVisitor.h>
 #include <hoot/hadoop/Debug.h>
 
 // Pretty Pipes
@@ -131,7 +132,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   }
   LOG_INFO("Got map. Node count: " << map->getNodeMap().size() << " way count: " <<
     map->getWays().size());
-  Envelope* e = GeometryUtils::toEnvelope(map->calculateBounds());
+  Envelope* e = GeometryUtils::toEnvelope(CalculateBoundsVisitor::getBounds(map));
   LOG_INFO("Map envelope: " << e->toString());
   delete e;
 
@@ -207,7 +208,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 
 void TileOpReducer::_emitMap(shared_ptr<OsmMap> map)
 {
-  Envelope* e = GeometryUtils::toEnvelope(map->calculateBounds());
+  Envelope* e = GeometryUtils::toEnvelope(CalculateBoundsVisitor::getBounds(map));
   _stats.expandEnvelope(*e);
   delete e;
   // write the map out to the working directory.
@@ -217,7 +218,7 @@ void TileOpReducer::_emitMap(shared_ptr<OsmMap> map)
 
 const Envelope& TileOpReducer::_getContainingEnvelope(const shared_ptr<OsmMap>& map)
 {
-  shared_ptr<Envelope> e(GeometryUtils::toEnvelope(map->calculateBounds()));
+  shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateBoundsVisitor::getBounds(map)));
 
   for (size_t i = 0; i < _envelopes.size(); i++)
   {

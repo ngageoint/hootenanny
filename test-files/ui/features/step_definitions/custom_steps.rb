@@ -33,11 +33,17 @@ When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent
 end
 
 When(/^I select a way map feature with id "([^"]*)"$/) do |id|
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = 10
   find('div.layer-data').all('path[class*=" ' + id + '"]').last.click
+  Capybara.default_max_wait_time = oldTimeout
 end
 
 When(/^I select a node map feature with id "([^"]*)"$/) do |id|
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = 10
   find('div.layer-data').all('g[class*=" ' + id + '"]').last.click
+  Capybara.default_max_wait_time = oldTimeout
 end
 
 Then (/^I should (not )?see an element "([^"]*)"$/) do |negate, selector|
@@ -476,7 +482,8 @@ end
 
 Then(/^I should see element "([^"]*)" with no value and placeholder "([^"]*)"$/) do |id, value|
   find(id).value.should eq ""
-  page.find(:css, 'input[placeholder="' + value + '"]')
+  #page.find(:css, 'input[placeholder="' + value + '"]')
+  find(id, 'input[placeholder="' + value + '"]')
 end
 
 Then(/^I choose "([^"]*)" radio button$/) do |text|
@@ -500,6 +507,13 @@ Then(/^the download file "([^"]*)" should exist$/) do |file|
   # puts name
   expect( File.exists?(name) ).to be true
   File.delete(name)
+end
+
+Then(/^the download file pattern "([^"]*)" should exist$/) do |file|
+  name = ENV['HOME'] + '/Downloads/' + file
+  # puts name
+  expect( Dir.glob(name).empty? ).to be false
+  File.delete(*Dir.glob(name))
 end
 
 Then(/^the log file "([^"]*)" should exist$/) do |file|

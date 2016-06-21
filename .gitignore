@@ -12,6 +12,7 @@ plugins/config.js
 *.kate-swp
 aclocal.m4
 autom4te.cache
+BuildDate.txt
 bin/
 callgrind.*
 conf/DatabaseConfigLocal.sh

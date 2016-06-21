@@ -41,6 +41,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/OpenCv.h>
+#include <hoot/core/visitors/CalculateBoundsVisitor.h>
 
 // Qt
 #include <QDebug>
@@ -172,8 +173,8 @@ void BaseComparator::_init(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2)
 
   // determine the world bounds by looking at all the nodes.
   _worldBounds = OGREnvelope();
-  _worldBounds.Merge(_map1->calculateBounds());
-  _worldBounds.Merge(_map2->calculateBounds());
+  _worldBounds.Merge(CalculateBoundsVisitor::getBounds(_map1));
+  _worldBounds.Merge(CalculateBoundsVisitor::getBounds(_map2));
 
   _mapP1.reset(new OsmMap(_map1));
   MapProjector::projectToOrthographic(_mapP1, _worldBounds);
@@ -224,8 +225,8 @@ void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool g
 void BaseComparator::_updateBounds()
 {
   _projectedBounds = OGREnvelope();
-  _projectedBounds.Merge(_mapP1->calculateBounds());
-  _projectedBounds.Merge(_mapP2->calculateBounds());
+  _projectedBounds.Merge(CalculateBoundsVisitor::getBounds(_mapP1));
+  _projectedBounds.Merge(CalculateBoundsVisitor::getBounds(_mapP2));
   _projectedBounds.MinX -= _sigma * 2;
   _projectedBounds.MinY -= _sigma * 2;
   _projectedBounds.MaxX += _sigma * 2;
