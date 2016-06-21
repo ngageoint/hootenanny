@@ -128,23 +128,6 @@ public:
 
   void addWay(const shared_ptr<Way>& w);
 
-  /**
-   * Calculates the bounds of the map by determining the extent of all the nodes. This is slow
-   * every time and there is no caching.
-   */
-  OGREnvelope calculateBounds() const;
-
-  /**
-   * Similar to above, but it returns a geos Envelope.
-   */
-  geos::geom::Envelope calculateEnvelope() const;
-
-  /**
-   * This traverses all nodes and ways to calculate the maximum circular error. This is not cached
-   * and has the potential to be quite expensive.
-   */
-  double calculateMaxCircularError() const;
-
   void clear();
 
   /**
@@ -271,7 +254,7 @@ public:
 
   static boost::shared_ptr<OGRSpatialReference> getWgs84();
 
-  bool isEmpty() const { return _ways.size() == 0 && _nodes.size() == 0; }
+  bool isEmpty() const { return _nodes.size() == 0 && _ways.size() == 0 && _relations.size() == 0;}
 
   void registerListener(shared_ptr<OsmMapListener> l) { _listeners.push_back(l); }
 
@@ -371,9 +354,10 @@ public:
   bool validate(bool strict = true) const;
 
   /**
-   * Calls the visitRo method on all elements. See Element::visitRo for a more thorough description.
-   *  - The order will always be nodes, ways, relations, but the IDs will not be in any specific
-   *    order.
+   * Calls the visitRo method on all elements. See Element::visitRo for a more
+   * thorough description.
+   *  - The order will always be nodes, ways, relations, but the IDs will not
+   *    be in any specific order.
    *  - Unlike Element::visitRo, elements will not be visited multiple times.
    *  - Modifying the OsmMap while traversing will result in undefined behaviour.
    *  - This should be slightly faster than visitRw.
@@ -382,17 +366,22 @@ public:
    * elements.
    */
   void visitRo(ElementVisitor& visitor) const;
+  void visitNodesRo(ElementVisitor& visitor) const;
+  void visitWaysRo(ElementVisitor& visitor) const;
+  void visitRelationsRo(ElementVisitor& visitor) const;
+
 
   /**
-   * Calls the visitRw method on all elements. See Element::visitRw for a more thorough description.
-   *  - The order will always be nodes, ways, relations, but the IDs will not be in any specific
-   *    order.
+   * Calls the visitRw method on all elements. See Element::visitRw for a more
+   * thorough description.
+   *  - The order will always be nodes, ways, relations, but the IDs will not
+   *    be in any specific order.
    *  - Elements that are added during the traversal may or may not be visited.
    *  - Elements may be deleted during traversal.
    *  - The visitor is guaranteed to not visit deleted elements.
    *
-   * If the visitor implements OsmMapConsumer then setOsmMap will be called before visiting any
-   * elements.
+   * If the visitor implements OsmMapConsumer then setOsmMap will be called before
+   * visiting any elements.
    */
   void visitRw(ElementVisitor& visitor);
 

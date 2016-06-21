@@ -36,6 +36,7 @@
 #include <hoot/core/proto/OsmFormat.pb.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/CalculateBoundsVisitor.h>
 using namespace hoot::pb;
 
 // Qt
@@ -547,7 +548,7 @@ void PbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
 
   if (includeBounds)
   {
-    const OGREnvelope& env = _map->calculateBounds();
+    const OGREnvelope& env = CalculateBoundsVisitor::getBounds(_map);
     _d->headerBlock.mutable_bbox()->set_bottom(env.MinY);
     _d->headerBlock.mutable_bbox()->set_left(env.MinX);
     _d->headerBlock.mutable_bbox()->set_right(env.MaxX);

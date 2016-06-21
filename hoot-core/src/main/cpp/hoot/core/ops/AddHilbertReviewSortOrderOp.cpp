@@ -31,6 +31,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/visitors/CalculateBoundsVisitor.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
@@ -67,7 +68,8 @@ void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
 
   const RelationMap& relations = map->getRelationMap();
 
-  Envelope e = map->calculateEnvelope();
+  Envelope e = CalculateBoundsVisitor::getGeosBounds(map);
+
 
   vector< pair<ElementId, int64_t> > reviewOrder;
   // reserves at least as much as we need.
@@ -125,7 +127,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr
 
   if (_mapEnvelope.get() == 0)
   {
-    _mapEnvelope.reset(new Envelope(map->calculateEnvelope()));
+    _mapEnvelope.reset(new Envelope(CalculateBoundsVisitor::getGeosBounds(map)));
   }
 
   Coordinate center;

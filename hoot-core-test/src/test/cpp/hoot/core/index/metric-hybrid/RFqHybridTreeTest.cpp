@@ -38,6 +38,7 @@
 #include <hoot/core/index/metric-hybrid/RFqHybridTree.h>
 #include <hoot/core/io/PbfReader.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/visitors/CalculateBoundsVisitor.h>
 
 // Qt
 #include <QStringList>
@@ -491,7 +492,7 @@ public:
     }
     LOG_INFO("Key count: " << keys.size());
 
-    Envelope bounds = map->calculateEnvelope();
+    Envelope bounds = CalculateBoundsVisitor::getGeosBounds(map);
 
 //    OptimizeFunction::TestRun best;
 //    best.score = -1e12;
