@@ -55,4 +55,6 @@ public class HootCustomPropertiesSetter {
         Properties currentProperties = (Properties) propertiesField.get(null);
         return currentProperties;
     }
+
+
 }

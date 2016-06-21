@@ -43,17 +43,17 @@ public class CorsResponseFilter implements ContainerResponseFilter {
      * Returns a CORS aware filter
      */
     @Override
-    public ContainerResponse filter(final ContainerRequest req, ContainerResponse contResp) {
-        ResponseBuilder resp = Response.fromResponse(contResp.getResponse());
-        resp.header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Methods",
-                "GET, POST, PUT, OPTIONS");
+    public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
+        ResponseBuilder resp = Response.fromResponse(response.getResponse());
+        resp.header("Access-Control-Allow-Origin", "*")
+            .header("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
 
-        String reqHead = req.getHeaderValue("Access-Control-Request-Headers");
-        if (null != reqHead && !reqHead.equals("")) {
+        String reqHead = request.getHeaderValue("Access-Control-Request-Headers");
+        if ((reqHead != null) && !reqHead.isEmpty()) {
             resp.header("Access-Control-Allow-Headers", reqHead);
         }
 
-        contResp.setResponse(resp.build());
-        return contResp;
+        response.setResponse(resp.build());
+        return response;
     }
 }

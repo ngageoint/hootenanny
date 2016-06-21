@@ -47,8 +47,7 @@ import hoot.services.utils.ResourceErrorHandler;
 
 @Path("/tunning")
 public class TunningServiceResource {
-
-    private static final Logger log = LoggerFactory.getLogger(TunningServiceResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(TunningServiceResource.class);
 
     public TunningServiceResource() {
     }
@@ -69,19 +68,19 @@ public class TunningServiceResource {
             command.put("inputtype", inputtype);
             command.put("execImpl", "TunningService");
 
-            final String jobId = UUID.randomUUID().toString();
+            String jobId = UUID.randomUUID().toString();
 
             (new JobExecutioner(jobId, command)).start();
 
             JSONObject res = new JSONObject();
             res.put("jobId", jobId);
+
             return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
         }
         catch (Exception e) {
-            ResourceErrorHandler.handleError("Tuning Service error: " + e.toString(), Status.INTERNAL_SERVER_ERROR,
-                    log);
+            ResourceErrorHandler.handleError("Tuning Service error: " + e, Status.INTERNAL_SERVER_ERROR, logger);
         }
+
         return null;
     }
-
 }

@@ -47,10 +47,10 @@ import hoot.services.utils.ResourceErrorHandler;
 
 @Path("/cancel")
 public class JobCancellationResource extends JobControllerBase {
-    private static final Logger log = LoggerFactory.getLogger(JobCancellationResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(JobCancellationResource.class);
 
     public JobCancellationResource() {
-
+        super(null);
     }
 
     /**
@@ -88,7 +88,7 @@ public class JobCancellationResource extends JobControllerBase {
             param.put("isprimitivetype", "false");
             cancelArgs.add(param);
 
-            JSONObject jobCancellationCommand = _createReflectionJobReq(cancelArgs,
+            JSONObject jobCancellationCommand = createReflectionJobReq(cancelArgs,
                     "hoot.services.controllers.job.JobResource", "terminateJob");
 
             JSONArray jobArgs = new JSONArray();
@@ -97,11 +97,13 @@ public class JobCancellationResource extends JobControllerBase {
 
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error process data clean request: " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            ResourceErrorHandler.handleError("Error process data clean request: " + ex,
+                    Status.INTERNAL_SERVER_ERROR, logger);
         }
+
         JSONObject res = new JSONObject();
         res.put("jobid", jobId);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 }
