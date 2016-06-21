@@ -505,6 +505,7 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.cpp \
     src/main/cpp/hoot/core/io/OsmJsonReader.cpp \
     src/main/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.cpp \
+    src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.cpp
 
 HEADERS += \
@@ -1011,6 +1012,7 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.h \
     src/main/cpp/hoot/core/io/OsmJsonReader.h \
     src/main/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.h \
+    src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.h \
     src/main/cpp/hoot/core/visitors/WorstCircularErrorVisitor.h \
-    src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.h \
+    src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.h
 
