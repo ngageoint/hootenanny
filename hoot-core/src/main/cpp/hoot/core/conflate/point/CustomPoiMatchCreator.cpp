@@ -32,6 +32,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 #include "CustomPoiMatch.h"
 
@@ -140,25 +141,6 @@ private:
   Meters _worstCircularError;
 };
 
-class WorstCircularErrorVisitor : public ElementConstOsmMapVisitor
-{
-public:
-  Meters _worst;
-
-  WorstCircularErrorVisitor()
-  {
-    _worst = -1;
-  }
-
-  Meters getWorstCircularError() { return _worst; }
-
-  virtual void visit(const shared_ptr<const Element>& e)
-  {
-    _worst = max(_worst, e->getCircularError());
-  }
-};
-
-
 CustomPoiMatchCreator::CustomPoiMatchCreator()
 {
 }
@@ -170,9 +152,8 @@ CustomPoiMatchCreator::~CustomPoiMatchCreator()
 void CustomPoiMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,
   ConstMatchThresholdPtr threshold)
 {
-  WorstCircularErrorVisitor wav;
-  map->visitRo(wav);
-  CustomPoiMatchVisitor v(map, matches, wav.getWorstCircularError(), threshold);
+  Meters worstErr = WorstCircularErrorVisitor::getWorstCircularError(map);
+  CustomPoiMatchVisitor v(map, matches, worstErr, threshold);
   map->visitRo(v);
 }
 
