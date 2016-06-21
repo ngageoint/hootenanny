@@ -23,7 +23,7 @@ HOOT_OPTS+= -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite
 HOOT_OPTS+= -D hootapi.db.writer.email=test@test.com -D hootapi.db.reader.email=test@test.com
 HOOT_OPTS+= -D reader.add.source.datetime=false
 
-test: clean load-data
+test: load-data
 ifneq (,$(findstring s,$(MAKEFLAGS)))
 	$(HOOT_HOME)/scripts/VerifyTomcatStarted.sh $(TOMCAT_PORT) --quiet 2> >( $(FILTER) >&2 )
 else
@@ -68,7 +68,7 @@ clean-coverage:
 	rm -rf $(HOOT_HOME)/hoot-ui/mocha-coverage
 	rm -rf $(HOOT_HOME)/hoot-ui/cucumber-coverage
 	rm -rf $(HOOT_HOME)/hoot-ui/combined-coverage
-load-data:
+load-data: clean
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcGisRoads.osm $(DB_URL)/DcGisRoadsCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcTigerRoads.osm $(DB_URL)/DcTigerRoadsCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcOsmRoads.osm $(DB_URL)/DcOsmRoadsCucumber
