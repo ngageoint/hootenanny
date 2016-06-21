@@ -49,7 +49,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.time.StopWatch;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -57,19 +58,17 @@ import org.apache.log4j.Logger;
  * the contents of System.out and/or system.err.
  */
 public class CommandRunner implements ICommandRunner {
+    private static final Logger logger = LoggerFactory.getLogger(CommandRunner.class);
 
-    private static final Logger _log = Logger.getLogger(CommandRunner.class);
+    private final MutableBoolean sigInterrupt;
+    private final List<CharPump> outputList = new ArrayList<>();
+
     private Process process;
-    private MutableBoolean sig_interrupt;
-    private List<CharPump> _outputList = new ArrayList<CharPump>();
-
-    private int _processState = -1;
-
-    private StringWriter _out = null;
-    private StringWriter _err = null;
+    private int processState = -1;
+    private StringWriter out;
 
     public CommandRunner() {
-        sig_interrupt = new MutableBoolean(false);
+        sigInterrupt = new MutableBoolean(false);
     }
 
     public void terminate() {
@@ -80,22 +79,22 @@ public class CommandRunner implements ICommandRunner {
 
     @Override
     public int getProcessState() {
-        return _processState;
+        return processState;
     }
 
     @Override
     public void terminateClean() throws Exception {
-        sig_interrupt.setValue(true);
+        sigInterrupt.setValue(true);
 
-        if (_outputList.size() > 1) {
-            CharPump p1 = _outputList.get(0);
+        if (outputList.size() > 1) {
+            CharPump p1 = outputList.get(0);
             if (p1 != null) {
                 synchronized (p1) {
                     p1.wait(1000);
                 }
             }
 
-            CharPump p2 = _outputList.get(1);
+            CharPump p2 = outputList.get(1);
 
             if (p2 != null) {
                 synchronized (p2) {
@@ -108,23 +107,22 @@ public class CommandRunner implements ICommandRunner {
 
     @Override
     public String getStdOut() {
-        return _out.toString();
+        return out.toString();
     }
 
     @Override
-    public CommandResult exec(String pCmd) throws IOException, InterruptedException {
-        StringWriter out = new StringWriter();
-        StringWriter err = new StringWriter();
-
-        CommandResult result = exec(pCmd, out, err);
-        return result;
+    public CommandResult exec(String cmd) throws IOException, InterruptedException {
+        try (StringWriter out = new StringWriter();
+             StringWriter err = new StringWriter()) {
+            CommandResult result = exec(cmd, out, err);
+            return result;
+        }
     }
 
     @Override
-    public CommandResult exec(String pCmd, Map<String, String> env, boolean includeSysEnv)
+    public CommandResult exec(String cmd, Map<String, String> env, boolean includeSysEnv)
             throws IOException, InterruptedException {
-
-        CommandResult result = exec(pCmd.split(" "), env, includeSysEnv);
+        CommandResult result = exec(cmd.split(" "), env, includeSysEnv);
         return result;
     }
 
@@ -133,21 +131,22 @@ public class CommandRunner implements ICommandRunner {
     }
 
     public CommandResult exec(String[] pCmd, String[] pEnv, File dir) throws IOException, InterruptedException {
-        Map<String, String> env = new HashMap<String, String>();
-        for (int i = 0; i < pEnv.length; i++) {
-            StringTokenizer st = new StringTokenizer(pEnv[i], "=");
+        Map<String, String> env = new HashMap<>();
+        for (String aPEnv : pEnv) {
+            StringTokenizer st = new StringTokenizer(aPEnv, "=");
             env.put(st.nextToken(), st.nextToken());
         }
         return exec(pCmd, env, dir);
     }
 
     @Override
-    public CommandResult exec(String[] pCmd) throws IOException, InterruptedException {
-        _out = new StringWriter();
-        _err = new StringWriter();
+    public CommandResult exec(String[] cmd) throws IOException, InterruptedException {
+        out = new StringWriter();
 
-        CommandResult result = exec(pCmd, _out, _err);
-        return result;
+        try (StringWriter err = new StringWriter()) {
+            CommandResult result = exec(cmd, out, err);
+            return result;
+        }
     }
 
     public CommandResult exec(String[] pCmd, Map<String, String> pEnv) throws IOException, InterruptedException {
@@ -157,11 +156,11 @@ public class CommandRunner implements ICommandRunner {
     @Override
     public CommandResult exec(String[] pCmd, Map<String, String> pEnv, boolean useSysEnv)
             throws IOException, InterruptedException {
-        StringWriter out = new StringWriter();
-        StringWriter err = new StringWriter();
-
-        CommandResult result = exec(pCmd, pEnv, useSysEnv, out, err);
-        return result;
+        try (StringWriter out = new StringWriter();
+             StringWriter err = new StringWriter()) {
+            CommandResult result = exec(pCmd, pEnv, useSysEnv, out, err);
+            return result;
+        }
     }
 
     // TRAC 1801
@@ -182,35 +181,39 @@ public class CommandRunner implements ICommandRunner {
         closeQuietly(is);
         closeQuietly(es);
 
-        if (process != null) {
-            process.destroy();
-            process = null;
-        }
+        process.destroy();
+        process = null;
         // System.gc();
     }
 
     public CommandResult exec(String[] pCmd, String[] pEnv, Writer pOut, Writer pErr)
             throws IOException, InterruptedException {
 
-        int out = 0;
         String pCmdString = ArrayUtils.toString(pCmd);
-        if (_log.isInfoEnabled())
-            _log.info("Executing '" + pCmdString + "' with Environment '" + ArrayUtils.toString(pEnv) + "'");
+        if (logger.isInfoEnabled()) {
+            logger.info("Executing '{}' with Environment '{}'", pCmdString, ArrayUtils.toString(pEnv));
+        }
+
         StopWatch clock = new StopWatch();
         clock.start();
+
+        int out = 0;
         try {
             process = Runtime.getRuntime().exec(pCmd, pEnv);
-            out = handleProcess(process, pCmdString, pOut, pErr, _outputList, sig_interrupt);
+            out = handleProcess(process, pCmdString, pOut, pErr, outputList, sigInterrupt);
         }
         finally {
             this.cleanUpProcess();
             clock.stop();
-            if (_log.isInfoEnabled())
-                _log.info("'" + pCmdString + "' completed in " + clock.getTime() + " ms");
+            if (logger.isInfoEnabled()) {
+                logger.info("'{}' completed in {} ms", pCmdString, clock.getTime());
+            }
         }
-        if (sig_interrupt.getValue() == true) {
+
+        if (sigInterrupt.getValue()) {
             out = -9999;
         }
+
         CommandResult result = new CommandResult(pCmdString, out, pOut.toString(), pErr.toString());
         return result;
     }
@@ -218,26 +221,31 @@ public class CommandRunner implements ICommandRunner {
     public CommandResult exec(String[] pCmd, String[] pEnv, File dir, Writer pOut, Writer pErr)
             throws IOException, InterruptedException {
 
-        int out = 0;
         String pCmdString = ArrayUtils.toString(pCmd);
-        if (_log.isInfoEnabled())
-            _log.info("Executing '" + pCmdString + "' with Environment '" + ArrayUtils.toString(pEnv) + "'");
+        if (logger.isInfoEnabled()) {
+            logger.info("Executing '{}' with Environment '{}'", pCmdString, ArrayUtils.toString(pEnv));
+        }
+
         StopWatch clock = new StopWatch();
         clock.start();
+
+        int out = 0;
         try {
             process = Runtime.getRuntime().exec(pCmd, pEnv, dir);
-            out = handleProcess(process, pCmdString, pOut, pErr, _outputList, sig_interrupt);
+            out = handleProcess(process, pCmdString, pOut, pErr, outputList, sigInterrupt);
         }
         finally {
             this.cleanUpProcess();
             clock.stop();
-            if (_log.isInfoEnabled())
-                _log.info("'" + pCmdString + "' completed in " + clock.getTime() + " ms");
+            if (logger.isInfoEnabled()) {
+                logger.info("'{}' completed in {} ms", pCmdString, clock.getTime());
+            }
         }
 
-        if (sig_interrupt.getValue() == true) {
+        if (sigInterrupt.getValue()) {
             out = -9999;
         }
+
         CommandResult result = new CommandResult(pCmdString, out, pOut.toString(), pErr.toString());
         return result;
     }
@@ -249,19 +257,19 @@ public class CommandRunner implements ICommandRunner {
 
     public CommandResult exec(String[] pCmd, Map<String, String> pEnv, boolean useSysEnv, File dir)
             throws IOException, InterruptedException {
-        StringWriter out = new StringWriter();
-        StringWriter err = new StringWriter();
-
-        CommandResult result = exec(pCmd, pEnv, useSysEnv, dir, out, err);
-        return result;
+        try (StringWriter out = new StringWriter();
+             StringWriter err = new StringWriter()) {
+            CommandResult result = exec(pCmd, pEnv, useSysEnv, dir, out, err);
+            return result;
+        }
     }
 
     public CommandResult exec(String pCmd, File dir) throws IOException, InterruptedException {
-        StringWriter out = new StringWriter();
-        StringWriter err = new StringWriter();
-
-        CommandResult result = exec(pCmd.split(" "), dir, out, err);
-        return result;
+        try (StringWriter out = new StringWriter();
+             StringWriter err = new StringWriter()) {
+            CommandResult result = exec(pCmd.split(" "), dir, out, err);
+            return result;
+        }
     }
 
     public CommandResult exec(String[] pCmd, File dir) throws IOException, InterruptedException {
@@ -281,21 +289,23 @@ public class CommandRunner implements ICommandRunner {
         clock.start();
         try {
             process = Runtime.getRuntime().exec(pCmd);
-            out = handleProcess(process, pCmdString, pOut, pErr, _outputList, sig_interrupt);
+            out = handleProcess(process, pCmdString, pOut, pErr, outputList, sigInterrupt);
         }
         catch (Exception e) {
-            // System.out.println(e.fillInStackTrace().toString());
+            logger.error("Error occurred: ", e);
         }
         finally {
             this.cleanUpProcess();
             clock.stop();
-            if (_log.isInfoEnabled())
-                _log.info("'" + pCmdString + "' completed in " + clock.getTime() + " ms");
+            if (logger.isInfoEnabled()) {
+                logger.info("'{}' completed in {} ms", pCmdString, clock.getTime());
+            }
         }
 
-        if (sig_interrupt.getValue() == true) {
+        if (sigInterrupt.getValue()) {
             out = -9999;
         }
+
         CommandResult result = new CommandResult(pCmdString, out, pOut.toString(), pErr.toString());
         return result;
     }
@@ -309,10 +319,11 @@ public class CommandRunner implements ICommandRunner {
         builder.command(pCmd);
 
         Map<String, String> env = builder.environment();
-        if (!useSysEnv)
+        if (!useSysEnv) {
             env.clear();
-        for (String name : pEnv.keySet()) {
-            env.put(name, pEnv.get(name));
+        }
+        for (Map.Entry<String, String> entry : pEnv.entrySet()) {
+            env.put(entry.getKey(), entry.getValue());
         }
 
         logExec(pCmdString, env);
@@ -321,18 +332,20 @@ public class CommandRunner implements ICommandRunner {
         clock.start();
         try {
             process = builder.start();
-            out = handleProcess(process, pCmdString, pOut, pErr, _outputList, sig_interrupt);
+            out = handleProcess(process, pCmdString, pOut, pErr, outputList, sigInterrupt);
         }
         finally {
             this.cleanUpProcess();
             clock.stop();
-            if (_log.isInfoEnabled())
-                _log.info("'" + pCmdString + "' completed in " + clock.getTime() + " ms");
+            if (logger.isInfoEnabled()) {
+                logger.info("'{}' completed in {} ms", pCmdString, clock.getTime());
+            }
         }
 
-        if (sig_interrupt.getValue() == true) {
+        if (sigInterrupt.getValue()) {
             out = -9999;
         }
+
         CommandResult result = new CommandResult(pCmdString, out, pOut.toString(), pErr.toString());
         return result;
     }
@@ -345,10 +358,11 @@ public class CommandRunner implements ICommandRunner {
         ProcessBuilder builder = new ProcessBuilder();
         builder.command(pCmd);
         Map<String, String> env = builder.environment();
-        if (!useSysEnv)
+        if (!useSysEnv) {
             env.clear();
-        for (String name : pEnv.keySet()) {
-            env.put(name, pEnv.get(name));
+        }
+        for (Map.Entry<String, String> entry : pEnv.entrySet()) {
+            env.put(entry.getKey(), entry.getValue());
         }
         builder.directory(dir);
 
@@ -358,24 +372,27 @@ public class CommandRunner implements ICommandRunner {
         clock.start();
         try {
             process = builder.start();
-            out = handleProcess(process, pCmdString, pOut, pErr, _outputList, sig_interrupt);
+            out = handleProcess(process, pCmdString, pOut, pErr, outputList, sigInterrupt);
         }
         finally {
             this.cleanUpProcess();
             clock.stop();
-            if (_log.isInfoEnabled())
-                _log.info("'" + pCmdString + "' completed in " + clock.getTime() + " ms");
+            if (logger.isInfoEnabled()) {
+                logger.info("'{}' completed in {} ms", pCmdString, clock.getTime());
+            }
         }
-        if (sig_interrupt.getValue() == true) {
+
+        if (sigInterrupt.getValue()) {
             out = -9999;
         }
+
         CommandResult result = new CommandResult(pCmdString, out, pOut.toString(), pErr.toString());
         return result;
     }
 
     @Override
-    public CommandResult exec(String pCmdString, Writer pOut, Writer pErr) throws IOException, InterruptedException {
-        return exec(pCmdString.split(" "), pOut, pErr);
+    public CommandResult exec(String pCmd, Writer pOut, Writer pErr) throws IOException, InterruptedException {
+        return exec(pCmd.split(" "), pOut, pErr);
     }
 
     public CommandResult exec(String pCmdString, File dir, Writer pOut, Writer pErr)
@@ -396,17 +413,20 @@ public class CommandRunner implements ICommandRunner {
         clock.start();
         try {
             process = Runtime.getRuntime().exec(pCmd, null, dir);
-            out = handleProcess(process, pCmdString, pOut, pErr, _outputList, sig_interrupt);
+            out = handleProcess(process, pCmdString, pOut, pErr, outputList, sigInterrupt);
         }
         finally {
             this.cleanUpProcess();
             clock.stop();
-            if (_log.isInfoEnabled())
-                _log.info("'" + pCmd + "' completed in " + clock.getTime() + " ms");
+            if (logger.isInfoEnabled()) {
+                logger.info("'{}' completed in {} ms", pCmdString, clock.getTime());
+            }
         }
-        if (sig_interrupt.getValue() == true) {
+
+        if (sigInterrupt.getValue()) {
             out = -9999;
         }
+
         CommandResult result = new CommandResult(pCmdString, out, pOut.toString(), pErr.toString());
         return result;
     }
@@ -416,59 +436,56 @@ public class CommandRunner implements ICommandRunner {
     private int handleProcess(Process pProcess, String pOrigCmd, Writer pOut, Writer pErr, List<CharPump> stdOutErrList,
             MutableBoolean interrupt) throws InterruptedException {
 
-        _processState = 0;
+        processState = 0;
         int res = handleProcessStatic(pProcess, pOrigCmd, pOut, pErr, stdOutErrList, interrupt);
-        _processState = 1;
+        processState = 1;
         return res;
     }
 
     private static int handleProcessStatic(Process pProcess, String pOrigCmd, Writer pOut, Writer pErr,
             List<CharPump> stdOutErrList, MutableBoolean interrupt) throws InterruptedException {
 
-        CharPump outpump = new CharPump(new BufferedReader(new InputStreamReader(pProcess.getInputStream())), pOut,
-                interrupt);
+        CharPump outpump = new CharPump(new BufferedReader(new InputStreamReader(pProcess.getInputStream())), pOut, interrupt);
         stdOutErrList.add(outpump);
-        CharPump errpump = new CharPump(new BufferedReader(new InputStreamReader(pProcess.getErrorStream())), pErr,
-                interrupt);
+
+        CharPump errpump = new CharPump(new BufferedReader(new InputStreamReader(pProcess.getErrorStream())), pErr, interrupt);
         stdOutErrList.add(errpump);
+
         outpump.start();
         errpump.start();
         outpump.join();
         errpump.join();
 
-        if (_log.isInfoEnabled())
-            _log.info("Waiting for '" + pOrigCmd + "' to complete.");
-        int status = pProcess.waitFor();
+        if (logger.isInfoEnabled()) {
+            logger.info("Waiting for '{}' to complete.", pOrigCmd);
+        }
 
+        int status = pProcess.waitFor();
         return status;
     }
 
     /** Inner class, copies from Reader to Writer. */
     public static class CharPump extends Thread {
+        private static final Logger pumpLog = LoggerFactory.getLogger(CharPump.class);
 
-        private static Logger pumpLog = Logger.getLogger(CharPump.class);
-
-        private Reader iIn;
-
-        private Writer iOut;
+        private final Reader iIn;
+        private final Writer iOut;
+        private final MutableBoolean interruptSig;
 
         private int bufSize;
 
-        private MutableBoolean interrupt_sig;
-
         public CharPump(Reader pIn, Writer pOut, MutableBoolean pInterrupt) {
-            interrupt_sig = pInterrupt;
+            interruptSig = pInterrupt;
             iIn = pIn;
             iOut = pOut;
             String bufSizeString = System.getProperty("ew.util.os.charPumpBuffer", "1024");
             try {
                 bufSize = Integer.parseInt(bufSizeString);
             }
-            catch (NumberFormatException e) {
-                e.printStackTrace();
+            catch (NumberFormatException ignored) {
                 bufSize = 1024;
             }
-            pumpLog.debug("CharPump will use buffer size = " + bufSize);
+            pumpLog.debug("CharPump will use buffer size = {}", bufSize);
         }
 
         @Override
@@ -478,34 +495,43 @@ public class CommandRunner implements ICommandRunner {
             synchronized (this) {
                 try {
                     while (ok) {
-                        ok = !interrupt_sig.getValue();
+                        ok = !interruptSig.getValue();
+                        //?????????????????
                         if (pumpLog.isDebugEnabled()) {
                             System.currentTimeMillis();
                         }
 
                         int n = iIn.read(buf, 0, buf.length);
-                        if (0 > n) {
+
+                        if (n < 0) {
                             pumpLog.debug("CharPump has encountered EOF");
                             break;
                         }
+
+                        //????????
                         if (pumpLog.isDebugEnabled()) {
                             System.currentTimeMillis();
                         }
+
+                        //????????
                         if (pumpLog.isDebugEnabled()) {
                             System.currentTimeMillis();
                         }
+
                         iOut.write(buf, 0, n);
+
+                        //?????????
                         if (pumpLog.isDebugEnabled()) {
                             System.currentTimeMillis();
                         }
+
                         iOut.flush();
                     }
                     iOut.flush();
 
                 }
                 catch (Exception e) {
-                    _log.error(e);
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
                 finally {
                     try {
@@ -516,8 +542,7 @@ public class CommandRunner implements ICommandRunner {
                             iOut.close();
                         }
                     }
-                    catch (IOException ioe) {
-                        ioe.printStackTrace();
+                    catch (IOException ignored) {
                     }
                     notifyAll();
                 }
@@ -540,11 +565,11 @@ public class CommandRunner implements ICommandRunner {
      * System.err.println(e.toString()); } }
      */
     public CommandResult exec(String[] pCmd, File dir, String[] env) throws IOException, InterruptedException {
-        StringWriter out = new StringWriter();
-        StringWriter err = new StringWriter();
-
-        CommandResult result = exec(pCmd, dir, out, err, env);
-        return result;
+        try (StringWriter out = new StringWriter();
+             StringWriter err = new StringWriter()) {
+            CommandResult result = exec(pCmd, dir, out, err, env);
+            return result;
+        }
     }
 
     private CommandResult exec(String[] pCmd, File dir, StringWriter pOut, StringWriter pErr, String[] env)
@@ -552,21 +577,26 @@ public class CommandRunner implements ICommandRunner {
 
         int out = 0;
         String pCmdString = ArrayUtils.toString(pCmd);
-        if (_log.isDebugEnabled())
-            _log.debug("Executing '" + pCmdString + "' with Environment '" + ArrayUtils.toString(env) + "'");
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("Executing '{}' with Environment '{}'", pCmdString, ArrayUtils.toString(env));
+        }
+
         StopWatch clock = new StopWatch();
         clock.start();
+
         try {
             process = Runtime.getRuntime().exec(pCmd, env, dir);
-            out = handleProcess(process, pCmdString, pOut, pErr, _outputList, sig_interrupt);
+            out = handleProcess(process, pCmdString, pOut, pErr, outputList, sigInterrupt);
         }
         finally {
             this.cleanUpProcess();
             clock.stop();
-            if (_log.isInfoEnabled())
-                _log.info("'" + pCmd + "' completed in " + clock.getTime() + " ms");
+            if (logger.isInfoEnabled()) {
+                logger.info("'{}' completed in {} ms", pCmdString, clock.getTime());
+            }
         }
-        if (sig_interrupt.getValue() == true) {
+        if (sigInterrupt.getValue()) {
             out = -9999;
         }
         CommandResult result = new CommandResult(pCmdString, out, pOut.toString(), pErr.toString());
@@ -574,29 +604,31 @@ public class CommandRunner implements ICommandRunner {
     }
 
     private static void logExec(String pCmdString, Map<String, String> unsortedEnv) throws IOException {
-        if (_log.isInfoEnabled()) {
-            TreeMap<String, String> env = new TreeMap<String, String>();
+        if (logger.isInfoEnabled()) {
+            Map<String, String> env = new TreeMap<>();
             env.putAll(unsortedEnv);
 
-            _log.info("Executing '" + pCmdString + "'");
-            _log.debug("Enviroment:");
+            logger.info("Executing '{}'", pCmdString);
+            logger.debug("Enviroment:");
             FileWriter writer = null;
             try {
-                if (_log.isDebugEnabled()) {
+                if (logger.isDebugEnabled()) {
                     File envvarFile = File.createTempFile("envvars", ".txt");
                     writer = new FileWriter(envvarFile);
-                    _log.debug("ENVVARS will be written to " + envvarFile.getAbsolutePath());
+                    logger.debug("ENVVARS will be written to {}", envvarFile.getAbsolutePath());
                 }
-                for (String key : env.keySet()) {
-                    _log.debug(String.format("  %s", new Object[] { key + "=" + env.get(key) }));
-                    if (_log.isDebugEnabled() && writer != null)
-                        writer.write(String.format("  %s%n", new Object[] { key + "=" + env.get(key) }));
+                for (Map.Entry<String, String> entry : env.entrySet()) {
+                    logger.debug(String.format("  %s", entry.getKey() + "=" + entry.getValue()));
+                    if (logger.isDebugEnabled() && (writer != null)) {
+                        writer.write(String.format("  %s%n", new Object[]{entry.getKey() + "=" + entry.getValue()}));
+                    }
                 }
-                if (_log.isDebugEnabled() && writer != null)
+                if (logger.isDebugEnabled() && (writer != null)) {
                     writer.close();
+                }
             }
             catch (Exception e) {
-                _log.error("Unable to log exec call: " + ExceptionUtils.getStackTrace(e));
+                logger.error("Unable to log exec call: {}", ExceptionUtils.getStackTrace(e));
             }
             finally {
                 if (writer != null) {

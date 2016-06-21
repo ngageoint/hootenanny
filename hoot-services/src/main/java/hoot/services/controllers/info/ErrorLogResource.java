@@ -57,18 +57,12 @@ public class ErrorLogResource {
     private String exportLogPath;
 
     public ErrorLogResource() {
-
     }
 
     @PreDestroy
-    public void PreDestroy() {
-        try {
-            if ((exportLogPath != null) && (!exportLogPath.isEmpty())) {
-                FileUtils.forceDelete(new File(exportLogPath));
-            }
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
+    public void preDestroy() throws Exception {
+        if ((exportLogPath != null) && (!exportLogPath.isEmpty())) {
+            FileUtils.forceDelete(new File(exportLogPath));
         }
     }
 
@@ -117,9 +111,11 @@ public class ErrorLogResource {
         catch (Exception ex) {
             ResourceErrorHandler.handleError("Error exporting logger file: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
         }
+
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         Date dd = new Date();
         String dtStr = dateFormat.format(dd);
+
         ResponseBuilder rBuild = Response.ok(out, MediaType.APPLICATION_OCTET_STREAM);
         rBuild.header("Content-Disposition", "attachment; filename=hootlog_" + dtStr + ".logger");
 

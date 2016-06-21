@@ -47,21 +47,10 @@ import hoot.services.utils.ResourceErrorHandler;
 
 @Path("/cleandata")
 public class CleanDataResource extends JobControllerBase {
-    private static final Logger log = LoggerFactory.getLogger(CleanDataResource.class);
-    @SuppressWarnings("unused")
-    private String homeFolder = null;
+    private static final Logger logger = LoggerFactory.getLogger(CleanDataResource.class);
 
     public CleanDataResource() {
-        try {
-            if (processScriptName == null) {
-                processScriptName = HootProperties.getProperty("cleanDataMakePath");
-            }
-
-            homeFolder = HootProperties.getProperty("homeFolder");
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-        }
+        super(HootProperties.getProperty("cleanDataMakePath"));
     }
 
     /**
@@ -89,18 +78,17 @@ public class CleanDataResource extends JobControllerBase {
     public Response process(String params) {
         String jobId = UUID.randomUUID().toString();
         try {
-
             JSONArray commandArgs = parseParams(params);
             String argStr = createPostBody(commandArgs);
             postJobRquest(jobId, argStr);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error process data clean request: " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            ResourceErrorHandler.handleError("Error process data clean request: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
         }
+
         JSONObject res = new JSONObject();
         res.put("jobid", jobId);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
-
 }

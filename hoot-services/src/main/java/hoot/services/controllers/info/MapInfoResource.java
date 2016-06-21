@@ -46,31 +46,41 @@ import hoot.services.utils.ResourceErrorHandler;
 
 @Path("/map")
 public class MapInfoResource {
-    private static final Logger log = LoggerFactory.getLogger(MapInfoResource.class);
-    protected static Long conflateThreshold = null;
-    protected static Long ingestThreshold = null;
-    protected static Long exportThreshold = null;
+    private static final Logger logger = LoggerFactory.getLogger(MapInfoResource.class);
+    private static final Long conflateThreshold;
+    private static final Long ingestThreshold;
+    private static final Long exportThreshold;
+
+    static {
+        try {
+            String value = HootProperties.getProperty("conflateSizeThreshold");
+            conflateThreshold = Long.parseLong(value);
+        }
+        catch (NumberFormatException nfe) {
+            logger.error("Invalid value specified for conflateSizeThreshold!");
+            throw nfe;
+        }
+
+        try {
+            String value = HootProperties.getProperty("ingestSizeThreshold");
+            ingestThreshold = Long.parseLong(value);
+        }
+        catch (NumberFormatException nfe) {
+            logger.error("Invalid value specified for ingestSizeThreshold!");
+            throw nfe;
+        }
+
+        try {
+            String value = HootProperties.getProperty("exportSizeThreshold");
+            exportThreshold = Long.parseLong(value);
+        }
+        catch (NumberFormatException nfe) {
+            logger.error("Invalid value specified for exportSizeThreshold!");
+            throw nfe;
+        }
+    }
 
     public MapInfoResource() {
-        try {
-            if (conflateThreshold == null) {
-                String s = HootProperties.getProperty("conflateSizeThreshold");
-                conflateThreshold = Long.parseLong(s);
-            }
-
-            if (ingestThreshold == null) {
-                String s = HootProperties.getProperty("ingestSizeThreshold");
-                ingestThreshold = Long.parseLong(s);
-            }
-
-            if (exportThreshold == null) {
-                String s = HootProperties.getProperty("exportSizeThreshold");
-                exportThreshold = Long.parseLong(s);
-            }
-        }
-        catch (Exception ex) {
-            log.error("Failed obtain map info config: " + ex.getMessage());
-        }
     }
 
     /**
@@ -85,10 +95,16 @@ public class MapInfoResource {
     @GET
     @Path("/size")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getMapSize(@QueryParam("mapid") final String mapIds) {
+    public Response getMapSize(@QueryParam("mapid") String mapIds) {
         long nsize = 0;
-        String[] maptables = { "changesets", "current_nodes", "current_relation_members", "current_relations",
-                "current_way_nodes", "current_ways" };
+        String[] maptables = {
+                "changesets",
+                "current_nodes",
+                "current_relation_members",
+                "current_relations",
+                "current_way_nodes",
+                "current_ways"
+        };
 
         try {
             String[] mapids = mapIds.split(",");
@@ -100,15 +116,15 @@ public class MapInfoResource {
                     }
                 }
             }
-
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting map size: " + ex.toString(), Status.INTERNAL_SERVER_ERROR,
-                    log);
+            ResourceErrorHandler.handleError("Error getting map size: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
         }
+
         JSONObject res = new JSONObject();
         res.put("mapid", mapIds);
         res.put("size_byte", nsize);
+
         /*
          * res.put("conflate_threshold", conflateThreshold);
          * res.put("ingest_threshold", ingestThreshold);
@@ -130,9 +146,15 @@ public class MapInfoResource {
     @GET
     @Path("/sizes")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getMapSizes(@QueryParam("mapid") final String mapIds) {
-        String[] maptables = { "changesets", "current_nodes", "current_relation_members", "current_relations",
-                "current_way_nodes", "current_ways" };
+    public Response getMapSizes(@QueryParam("mapid") String mapIds) {
+        String[] maptables = {
+                "changesets",
+                "current_nodes",
+                "current_relation_members",
+                "current_relations",
+                "current_way_nodes",
+                "current_ways"
+        };
 
         JSONArray retval = new JSONArray();
 
@@ -157,11 +179,12 @@ public class MapInfoResource {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting map size: " + ex.toString(), Status.INTERNAL_SERVER_ERROR,
-                    log);
+            ResourceErrorHandler.handleError("Error getting map size: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
         }
+
         JSONObject res = new JSONObject();
         res.put("layers", retval);
+
         /*
          * res.put("conflate_threshold", conflateThreshold);
          * res.put("ingest_threshold", ingestThreshold);
@@ -185,6 +208,7 @@ public class MapInfoResource {
         res.put("conflate_threshold", conflateThreshold);
         res.put("ingest_threshold", ingestThreshold);
         res.put("export_threshold", exportThreshold);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 }

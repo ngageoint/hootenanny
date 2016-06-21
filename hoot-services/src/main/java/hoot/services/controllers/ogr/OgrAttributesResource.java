@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -65,20 +64,11 @@ import hoot.services.utils.ResourceErrorHandler;
 
 @Path("/info")
 public class OgrAttributesResource extends JobControllerBase {
-    private static final Logger log = LoggerFactory.getLogger(OgrAttributesResource.class);
-    private String homeFolder = null;
+    private static final Logger logger = LoggerFactory.getLogger(OgrAttributesResource.class);
+    private static final String homeFolder = HootProperties.getProperty("homeFolder");
 
     public OgrAttributesResource() {
-        try {
-            if (processScriptName == null) {
-                processScriptName = HootProperties.getProperty("GetOgrAttributeScript");
-            }
-
-            homeFolder = HootProperties.getProperty("homeFolder");
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-        }
+        super(HootProperties.getProperty("GetOgrAttributeScript"));
     }
 
     /**
@@ -105,48 +95,40 @@ public class OgrAttributesResource extends JobControllerBase {
     @POST
     @Path("/upload")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response processUpload(@QueryParam("INPUT_TYPE") final String inputType,
-            @Context HttpServletRequest request) {
+    public Response processUpload(@QueryParam("INPUT_TYPE") String inputType,
+                                  @Context HttpServletRequest request) {
         JSONObject res = new JSONObject();
         String jobId = UUID.randomUUID().toString();
 
         try {
-            log.debug("Starting file upload for ogr attribute Process");
-            Map<String, String> uploadedFiles = new HashMap<String, String>();
-            Map<String, String> uploadedFilesPaths = new HashMap<String, String>();
+            logger.debug("Starting file upload for ogr attribute Process");
+            Map<String, String> uploadedFiles = new HashMap<>();
+            Map<String, String> uploadedFilesPaths = new HashMap<>();
 
             MultipartSerializer ser = new MultipartSerializer();
             ser.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, request);
 
-            List<String> filesList = new ArrayList<String>();
-            List<String> zipList = new ArrayList<String>();
+            List<String> filesList = new ArrayList<>();
+            List<String> zipList = new ArrayList<>();
 
-            Iterator it = uploadedFiles.entrySet().iterator();
-            while (it.hasNext()) {
-
-                Map.Entry pairs = (Map.Entry) it.next();
+            for (Object o : uploadedFiles.entrySet()) {
+                Map.Entry pairs = (Map.Entry) o;
                 String fName = pairs.getKey().toString();
                 String ext = pairs.getValue().toString();
 
-                String inputFileName = "";
-
-                inputFileName = uploadedFilesPaths.get(fName);
+                String inputFileName = uploadedFilesPaths.get(fName);
 
                 // If it is zip file then we crack open to see if it contains
-                // FGDB.
-                // If so then we add the folder location and desired output name
-                // which is fgdb name in the
-                // zip
+                // FGDB. If so then we add the folder location and desired output name
+                // which is fgdb name in the zip
                 if (ext.equalsIgnoreCase("ZIP")) {
                     zipList.add(fName);
                     String zipFilePath = homeFolder + "/upload/" + jobId + "/" + inputFileName;
-                    ZipInputStream zis = null;
-                    try {
-                        zis = new ZipInputStream(new FileInputStream(zipFilePath));
+                    try (FileInputStream in = new FileInputStream(zipFilePath);
+                         ZipInputStream zis = new ZipInputStream(in)) {
                         ZipEntry ze = zis.getNextEntry();
 
                         while (ze != null) {
-
                             String zipName = ze.getName();
                             if (ze.isDirectory()) {
                                 if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")
@@ -166,16 +148,6 @@ public class OgrAttributesResource extends JobControllerBase {
                             ze = zis.getNextEntry();
                         }
                     }
-                    finally {
-                        if (zis != null) {
-                            try {
-                                zis.closeEntry();
-                            }
-                            finally {
-                                zis.close();
-                            }
-                        }
-                    }
                 }
                 else {
                     filesList.add("\"" + inputFileName + "\"");
@@ -184,8 +156,10 @@ public class OgrAttributesResource extends JobControllerBase {
 
             String mergeFilesList = StringUtils.join(filesList.toArray(), ' ');
             String mergedZipList = StringUtils.join(zipList.toArray(), ';');
+
             JSONArray params = new JSONArray();
             JSONObject param = new JSONObject();
+
             param.put("INPUT_FILES", mergeFilesList);
             params.add(param);
             param = new JSONObject();
@@ -194,12 +168,13 @@ public class OgrAttributesResource extends JobControllerBase {
 
             String argStr = createPostBody(params);
             postJobRquest(jobId, argStr);
-
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Failed upload: " + ex.toString(), Status.INTERNAL_SERVER_ERROR, log);
+            ResourceErrorHandler.handleError("Failed upload: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
         }
+
         res.put("jobId", jobId);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
@@ -221,22 +196,23 @@ public class OgrAttributesResource extends JobControllerBase {
     @GET
     @Path("/{id}")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getAttributes(@PathParam("id") String id, @QueryParam("deleteoutput") String doDelete) {
+    public Response getAttributes(@PathParam("id") String id,
+                                  @QueryParam("deleteoutput")
+                                  String doDelete) {
         String script = "";
         try {
-            File f = new File(homeFolder + "/tmp/" + id + ".out");
-            script = FileUtils.readFileToString(f, "UTF-8");
+            File file = new File(homeFolder + "/tmp/" + id + ".out");
+            script = FileUtils.readFileToString(file, "UTF-8");
 
-            if (doDelete != null && doDelete.equalsIgnoreCase("true")) {
-                FileUtils.deleteQuietly(f);
+            if ("true".equalsIgnoreCase(doDelete)) {
+                FileUtils.deleteQuietly(file);
             }
-
         }
         catch (Exception ex) {
             ResourceErrorHandler.handleError("Error getting attribute: " + id + " Error: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+                    Status.INTERNAL_SERVER_ERROR, logger);
         }
+
         return Response.ok(script, MediaType.TEXT_PLAIN).build();
     }
-
 }
