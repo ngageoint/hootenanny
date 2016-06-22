@@ -29,15 +29,18 @@ package hoot.services.utils;
 /**
  * Various utilities related to reflection
  */
-public class ReflectUtils {
+public final class ReflectUtils {
+    private ReflectUtils() {
+    }
+
     /**
      * Returns the name of the class that calls a method
      * 
      * @return class name string
      */
     public static String getCallingClassName() {
-        final StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        final StackTraceElement stackTraceElement = stackTrace[stackTrace.length - 2];
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        StackTraceElement stackTraceElement = stackTrace[stackTrace.length - 2];
         if (stackTraceElement != null) {
             return stackTraceElement.getClassName();
         }

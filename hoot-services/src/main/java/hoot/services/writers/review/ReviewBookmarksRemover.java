@@ -40,13 +40,13 @@ import hoot.services.models.review.ReviewBookmarkDelRequest;
 
 
 public class ReviewBookmarksRemover {
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(ReviewBookmarksRemover.class);
 
-    private Connection _conn;
+    private static final Logger logger = LoggerFactory.getLogger(ReviewBookmarksRemover.class);
 
-    public ReviewBookmarksRemover(final Connection cn) {
-        _conn = cn;
+    private final Connection conn;
+
+    public ReviewBookmarksRemover(Connection cn) {
+        conn = cn;
     }
 
     /**
@@ -57,8 +57,8 @@ public class ReviewBookmarksRemover {
      * @return - total numbers of removed
      * @throws Exception
      */
-    public long remove(final ReviewBookmarkDelRequest request) throws Exception {
-        return _createDelClause(request).execute();
+    public long remove(ReviewBookmarkDelRequest request) throws Exception {
+        return createDelClause(request).execute();
     }
 
     /**
@@ -69,10 +69,10 @@ public class ReviewBookmarksRemover {
      * @return - toal numbers of removed
      * @throws Exception
      */
-    protected SQLDeleteClause _createDelClause(final ReviewBookmarkDelRequest request) throws Exception {
+    protected SQLDeleteClause createDelClause(ReviewBookmarkDelRequest request) throws Exception {
         QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
         Configuration configuration = DbUtils.getConfiguration();
-        return new SQLDeleteClause(_conn, configuration, reviewBookmarks)
+        return new SQLDeleteClause(conn, configuration, reviewBookmarks)
                 .where(reviewBookmarks.id.eq(request.getBookmarkId()));
     }
 }

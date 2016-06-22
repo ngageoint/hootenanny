@@ -44,7 +44,7 @@ public class ReviewBookmarksRetrieverTest {
         Connection conn = null;
 
         ReviewBookmarkRetriever r = new ReviewBookmarkRetriever(conn);
-        SQLQuery q = r._getQuery(1, 2);
+        SQLQuery q = r.getQuery(1, 2);
 
         String actual = q.toString();
         String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n"
@@ -60,7 +60,7 @@ public class ReviewBookmarksRetrieverTest {
         Connection conn = null;
 
         ReviewBookmarkRetriever r = new ReviewBookmarkRetriever(conn);
-        SQLQuery q = r._getAllQuery("createdAt", true, -1, -1, null, null);
+        SQLQuery q = r.getAllQuery("createdAt", true, -1, -1, null, null);
 
         String actual = q.toString();
         String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n"
@@ -76,7 +76,7 @@ public class ReviewBookmarksRetrieverTest {
         Connection conn = null;
 
         ReviewBookmarkRetriever r = new ReviewBookmarkRetriever(conn);
-        SQLQuery q = r._getAllQuery("createdAt", false, -1, -1, null, null);
+        SQLQuery q = r.getAllQuery("createdAt", false, -1, -1, null, null);
 
         String actual = q.toString();
         String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n"
@@ -92,7 +92,7 @@ public class ReviewBookmarksRetrieverTest {
         Connection conn = null;
 
         ReviewBookmarkRetriever r = new ReviewBookmarkRetriever(conn);
-        SQLQuery q = r._getAllQuery("id", true, 100, -1, null, null);
+        SQLQuery q = r.getAllQuery("id", true, 100, -1, null, null);
 
         String actual = q.toString();
         String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n"
@@ -108,7 +108,7 @@ public class ReviewBookmarksRetrieverTest {
         Connection conn = null;
 
         ReviewBookmarkRetriever r = new ReviewBookmarkRetriever(conn);
-        SQLQuery q = r._getAllQuery("id", true, 100, 123, null, null);
+        SQLQuery q = r.getAllQuery("id", true, 100, 123, null, null);
 
         String actual = q.toString();
         String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n"
@@ -124,7 +124,7 @@ public class ReviewBookmarksRetrieverTest {
         Connection conn = null;
 
         ReviewBookmarkRetriever r = new ReviewBookmarkRetriever(conn);
-        SQLQuery q = r._getAllQuery("createdAt", true, -1, -1, "createdBy", (long) 10);
+        SQLQuery q = r.getAllQuery("createdAt", true, -1, -1, "createdBy", (long) 10);
 
         String actual = q.toString();
         String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n"
@@ -141,7 +141,7 @@ public class ReviewBookmarksRetrieverTest {
         Connection conn = null;
 
         ReviewBookmarkRetriever r = new ReviewBookmarkRetriever(conn);
-        SQLQuery q = r._getAllQuery("createdAt", true, -1, -1, "createdByMe", (long) 10);
+        SQLQuery q = r.getAllQuery("createdAt", true, -1, -1, "createdByMe", (long) 10);
 
         String actual = q.toString();
         String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n"
@@ -157,7 +157,7 @@ public class ReviewBookmarksRetrieverTest {
         Connection conn = null;
 
         ReviewBookmarkRetriever r = new ReviewBookmarkRetriever(conn);
-        SQLQuery q = r._getAllQuery("createdAt", true, -1, -1, "mapId", (long) 10);
+        SQLQuery q = r.getAllQuery("createdAt", true, -1, -1, "mapId", (long) 10);
 
         String actual = q.toString();
         String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n"

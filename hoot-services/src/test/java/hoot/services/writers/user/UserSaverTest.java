@@ -42,7 +42,7 @@ public class UserSaverTest {
     public void testInsert() throws Exception {
         Connection conn = null;
         UserSaver saver = new UserSaver(conn);
-        SQLInsertClause cl = saver._createInsertClause("test@test.com");
+        SQLInsertClause cl = saver.createInsertClause("test@test.com");
 
         String actual = cl.toString();
 

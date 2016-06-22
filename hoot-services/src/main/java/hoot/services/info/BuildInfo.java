@@ -35,7 +35,19 @@ import java.util.Properties;
  * Services build info file
  */
 public final class BuildInfo {
-    private static Properties info;
+    private static final Properties INFO;
+
+    static {
+        INFO = new Properties();
+        try {
+            try (InputStream buildInfoStrm = BuildInfo.class.getClassLoader().getResourceAsStream("build.info")) {
+                INFO.load(buildInfoStrm);
+            }
+        }
+        catch (IOException ioe) {
+            throw new RuntimeException("Error reading build.info as resource stream!", ioe);
+        }
+    }
 
     private BuildInfo() {}
 
@@ -43,16 +55,8 @@ public final class BuildInfo {
      * Returns the build info for the services
      *
      * @return a set of build info properties
-     * @throws IOException
-     *             if unable to read from the file
      */
-    public static synchronized Properties getInstance() throws IOException {
-        if ((info == null) || (info.isEmpty())) {
-            info = new Properties();
-            try (InputStream buildInfoStrm = BuildInfo.class.getClassLoader().getResourceAsStream("build.info")) {
-                info.load(buildInfoStrm);
-            }
-        }
-        return info;
+    public static synchronized Properties getInstance() {
+        return INFO;
     }
 }

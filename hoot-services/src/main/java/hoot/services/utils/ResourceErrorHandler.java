@@ -45,7 +45,7 @@ public class ResourceErrorHandler {
      * @param log
      *            logger
      */
-    public static void handleError(final String message, Status httpStatus, Logger log) {
+    public static void handleError(String message, Status httpStatus, Logger log) {
         log.error(message);
         throw new WebApplicationException(Response.status(httpStatus).entity(message).build());
     }

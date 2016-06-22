@@ -44,7 +44,7 @@ public class ReviewBookmarksRemoverTest {
         Connection conn = null;
         ReviewBookmarkDelRequest request = new ReviewBookmarkDelRequest(1);
         ReviewBookmarksRemover remover = new ReviewBookmarksRemover(conn);
-        SQLDeleteClause del = remover._createDelClause(request);
+        SQLDeleteClause del = remover.createDelClause(request);
 
         String actual = del.toString();
         String expected = "delete from \"review_bookmarks\"\n" + "where \"review_bookmarks\".\"id\" = ?";

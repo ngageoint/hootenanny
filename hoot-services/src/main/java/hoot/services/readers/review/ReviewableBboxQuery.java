@@ -27,7 +27,6 @@
 package hoot.services.readers.review;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,40 +53,33 @@ import hoot.services.models.review.ReviewableItemBbox;
  *
  */
 public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuery {
-    private static final Logger log = LoggerFactory.getLogger(ReviewableBboxQuery.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReviewableBboxQuery.class);
 
-    private Long _relationId = null;
+    private final Long relationId;
 
-    public ReviewableBboxQuery(final Connection c, final long mapid, final long relationid) {
-        super(c, mapid);
-        _relationId = relationid;
+    public ReviewableBboxQuery(Connection connection, long mapid, long relationid) {
+        super(connection, mapid);
+        relationId = relationid;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see hoot.services.readers.review.IReviewableQuery#execQuery() Main entry
-     * point
-     */
     @Override
-    public ReviewQueryMapper execQuery() throws SQLException, Exception {
+    public ReviewQueryMapper execQuery() throws Exception {
         BoundingBox currBbox = new BoundingBox();
-        ReviewableItemBbox ret = new ReviewableItemBbox(currBbox, getMapId(), _relationId);
+        ReviewableItemBbox ret = new ReviewableItemBbox(currBbox, getMapId(), relationId);
         List<BoundingBox> membersBboxList = new ArrayList<>();
 
         try {
-            // do recursive bbox retrieval since relation may contain other
-            // relation
+            // do recursive bbox retrieval since relation may contain other relation
             List<Long> relIds = new ArrayList<>();
-            relIds.add(_relationId);
-            _getRelationMembersBboxRecursive(membersBboxList, relIds);
+            relIds.add(relationId);
+            getRelationMembersBboxRecursive(membersBboxList, relIds);
 
             for (BoundingBox bbx : membersBboxList) {
                 currBbox.add(bbx);
             }
         }
         catch (Exception ex) {
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
             throw ex;
         }
 
@@ -104,33 +96,33 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
      *            - relation ids of relation members
      * @throws Exception
      */
-    private void _getRelationMembersBboxRecursive(final List<BoundingBox> membersBboxList, final List<Long> relIds)
+    private void getRelationMembersBboxRecursive(List<BoundingBox> membersBboxList, List<Long> relIds)
             throws Exception {
         try {
             for (Long relId : relIds) {
-                BoundingBox nodeMemBbox = _getRelationNodeMembersBbox(relId);
+                BoundingBox nodeMemBbox = getRelationNodeMembersBbox(relId);
                 if (nodeMemBbox != null) {
                     membersBboxList.add(nodeMemBbox);
                 }
 
-                BoundingBox wayMemBbox = _getRelationWayMembersBbox(relId);
+                BoundingBox wayMemBbox = getRelationWayMembersBbox(relId);
                 if (wayMemBbox != null) {
                     membersBboxList.add(wayMemBbox);
                 }
-                List<Long> memRelationIds = _getRelationMembers(relId);
-                if (memRelationIds.size() > 0) {
-                    _getRelationMembersBboxRecursive(membersBboxList, memRelationIds);
-                }
 
+                List<Long> memRelationIds = getRelationMembers(relId);
+                if (!memRelationIds.isEmpty()) {
+                    getRelationMembersBboxRecursive(membersBboxList, memRelationIds);
+                }
             }
         }
         catch (Exception ex) {
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
             throw ex;
         }
     }
 
-    private static boolean _validateTuple(final Tuple tup) {
+    private static boolean validateTuple(Tuple tup) {
         boolean ret = true;
         try {
             int nCols = tup.size();
@@ -143,7 +135,7 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
             }
         }
         catch (Exception ex) {
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
         }
         return ret;
     }
@@ -156,16 +148,14 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
      * @return - BoundingBox
      * @throws Exception
      */
-    private static BoundingBox _resultSetToBbox(final Tuple tup) {
+    private static BoundingBox resultSetToBbox(Tuple tup) {
         BoundingBox bbox = null;
-        double minLon = -1, minLat = -1, maxLon = -1, maxLat = -1;
         try {
-
-            if (_validateTuple(tup)) {
-                minLat = tup.get(0, Double.class);
-                maxLat = tup.get(1, Double.class);
-                minLon = tup.get(2, Double.class);
-                maxLon = tup.get(3, Double.class);
+            if (validateTuple(tup)) {
+                double minLat = tup.get(0, Double.class);
+                double maxLat = tup.get(1, Double.class);
+                double minLon = tup.get(2, Double.class);
+                double maxLon = tup.get(3, Double.class);
 
                 bbox = new BoundingBox(minLon, minLat, maxLon, maxLat);
             }
@@ -173,7 +163,7 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
         catch (Exception ex) {
             // we will not throw error since ret will be null and null ret
             // will be handled gracefully by caller.
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
 
         }
         return bbox;
@@ -187,21 +177,20 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
      * @return - BoundingBox
      * @throws Exception
      */
-    protected BoundingBox _getRelationWayMembersBbox(final long relationId) throws Exception {
+    private BoundingBox getRelationWayMembersBbox(long relationId) throws Exception {
         BoundingBox bbox = null;
 
         try {
             QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-            SQLQuery sql = _getRelationWayMembersBboxQuery(relationId);
+            SQLQuery sql = getRelationWayMembersBboxQuery(relationId);
             List<Tuple> tups = sql.list(currentNodes.latitude.min(), currentNodes.latitude.max(),
                     currentNodes.longitude.min(), currentNodes.longitude.min());
-            for (int i = 0; i < tups.size(); i++) {
-                Tuple tup = tups.get(i);
-                bbox = _resultSetToBbox(tup);
+            for (Tuple tup : tups) {
+                bbox = resultSetToBbox(tup);
             }
         }
         catch (Exception ex) {
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
             throw ex;
         }
 
@@ -215,7 +204,7 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
      *            - container relation id
      * @return - com.mysema.query.sql.SQLQuery object
      */
-    protected SQLQuery _getRelationWayMembersBboxQuery(final long relationId) {
+    protected SQLQuery getRelationWayMembersBboxQuery(long relationId) {
 
         QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
         ListSubQuery<Long> sub = new SQLSubQuery().from(currentRelationMembers)
@@ -241,20 +230,20 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
      * @return - BoundingBox
      * @throws Exception
      */
-    protected BoundingBox _getRelationNodeMembersBbox(final long relationId) throws Exception {
+    private BoundingBox getRelationNodeMembersBbox(long relationId) throws Exception {
         BoundingBox bbox = null;
         try {
             QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-            SQLQuery sql = _getRelationNodeMembersBboxQuery(relationId);
+            SQLQuery sql = getRelationNodeMembersBboxQuery(relationId);
             List<Tuple> tups = sql.list(currentNodes.latitude.min(), currentNodes.latitude.max(),
                     currentNodes.longitude.min(), currentNodes.longitude.min());
-            for (int i = 0; i < tups.size(); i++) {
-                Tuple tup = tups.get(i);
-                bbox = _resultSetToBbox(tup);
+
+            for (Tuple tup : tups) {
+                bbox = resultSetToBbox(tup);
             }
         }
         catch (Exception ex) {
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
             throw ex;
         }
 
@@ -268,7 +257,7 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
      *            - container relation id
      * @return - com.mysema.query.sql.SQLQuery object
      */
-    protected SQLQuery _getRelationNodeMembersBboxQuery(final long relationId) {
+    protected SQLQuery getRelationNodeMembersBboxQuery(long relationId) {
         QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
         ListSubQuery<Long> sub = new SQLSubQuery().from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(relationId)
@@ -288,14 +277,14 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
      * @return - List of relation member ids
      * @throws Exception
      */
-    private List<Long> _getRelationMembers(final long relationId) throws Exception {
+    private List<Long> getRelationMembers(long relationId) throws Exception {
         List<Long> relMemberIds = new ArrayList<>();
         try {
             QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
-            relMemberIds = _getRelationMembersQuery(relationId).list(currentRelationMembers.memberId);
+            relMemberIds = getRelationMembersQuery(relationId).list(currentRelationMembers.memberId);
         }
         catch (Exception ex) {
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
             throw ex;
         }
 
@@ -309,12 +298,10 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
      *            - container relation id
      * @return - com.mysema.query.sql.SQLQuery object
      */
-    protected SQLQuery _getRelationMembersQuery(final long relationId) {
-
+    protected SQLQuery getRelationMembersQuery(long relationId) {
         QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
         return new SQLQuery(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
                 .from(currentRelationMembers).where(currentRelationMembers.relationId.eq(relationId)
                         .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.relation)));
     }
-
 }

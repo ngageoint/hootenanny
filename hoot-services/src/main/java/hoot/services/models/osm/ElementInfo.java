@@ -68,7 +68,7 @@ public class ElementInfo {
     public ElementInfo() {
     }
 
-    public ElementInfo(final String mapId, final long elementId, final String elementType) {
+    public ElementInfo(String mapId, long elementId, String elementType) {
         this.mapId = mapId;
         this.id = elementId;
         this.type = elementType;

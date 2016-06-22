@@ -40,12 +40,12 @@ public class ReviewableStatisticsQueryTest {
         String expected = "select count(*) as totalcnt from current_relations_10 where tags->'type' = 'review'";
 
         ReviewableStatisticsQuery q = new ReviewableStatisticsQuery(null, 10);
-        String actual = q._getTotalReviewableCountQueryString();
+        String actual = q.getTotalReviewableCountQueryString();
         org.junit.Assert.assertEquals(expected, actual);
 
         expected = "select count(*) as remaining from current_relations_10 where tags->'hoot:review:needs' = 'yes'";
 
-        actual = q._getUnreviewedCountQueryString();
+        actual = q.getUnreviewedCountQueryString();
         org.junit.Assert.assertEquals(expected, actual);
 
     }

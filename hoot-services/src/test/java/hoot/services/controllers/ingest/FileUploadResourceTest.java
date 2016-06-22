@@ -890,7 +890,7 @@ public class FileUploadResourceTest {
          * Map<String,String> uploadedFilesPaths = new HashMap<String,
          * String>();
          * 
-         * res._serializeFGDB(fileItemsList, jobId, uploadedFiles,
+         * res.serializeFGDB(fileItemsList, jobId, uploadedFiles,
          * uploadedFilesPaths );
          * 
          * org.junit.Assert.assertEquals("GDB", uploadedFiles.get("fgdbTest"));
@@ -946,7 +946,7 @@ public class FileUploadResourceTest {
          * Map<String,String> uploadedFilesPaths = new HashMap<String,
          * String>();
          * 
-         * res._serializeUploadedFiles(fileItemsList, jobId, uploadedFiles,
+         * res.serializeUploadedFiles(fileItemsList, jobId, uploadedFiles,
          * uploadedFilesPaths, wkdirpath);
          * 
          * org.junit.Assert.assertEquals("OSM", uploadedFiles.get("dummy1"));

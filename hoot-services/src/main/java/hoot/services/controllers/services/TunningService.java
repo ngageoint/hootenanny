@@ -33,7 +33,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -87,9 +86,6 @@ public class TunningService implements Executable {
         String inputtype = command.get("inputtype").toString();
         Connection conn = DbUtils.createConnection();
         long starttime = new Date().getTime();
-
-        //?????
-        UUID.randomUUID().toString();
 
         try {
             String tempOutputPath = "";

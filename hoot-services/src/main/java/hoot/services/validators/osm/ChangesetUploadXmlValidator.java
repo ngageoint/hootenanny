@@ -39,7 +39,7 @@ import hoot.services.utils.XmlDocumentBuilder;
  * OSM changeset validator
  */
 public class ChangesetUploadXmlValidator {
-    private static final Logger log = LoggerFactory.getLogger(ChangesetUploadXmlValidator.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChangesetUploadXmlValidator.class);
 
     /**
      * Validates a changeset
@@ -47,10 +47,10 @@ public class ChangesetUploadXmlValidator {
      * @param changesetXml
      *            an OSM changeset for reviewed items
      */
-    public Document parseAndValidate(final String changesetXml) throws Exception {
+    public Document parseAndValidate(String changesetXml) throws Exception {
         Document changesetDiffDoc = null;
         try {
-            log.debug("Parsing changeset diff XML: " + StringUtils.abbreviate(changesetXml, 1000));
+            logger.debug("Parsing changeset diff XML: {}", StringUtils.abbreviate(changesetXml, 1000));
             changesetDiffDoc = XmlDocumentBuilder.parse(changesetXml);
         }
         catch (Exception e) {
@@ -76,9 +76,9 @@ public class ChangesetUploadXmlValidator {
      *            the changeset to check for elements
      * @return true if the changeset has elements; false otherwise
      */
-    public static boolean changesetHasElements(final Document changesetDiffDoc) {
-        return changesetDiffDoc.getElementsByTagName("node").getLength()
+    private static boolean changesetHasElements(Document changesetDiffDoc) {
+        return (changesetDiffDoc.getElementsByTagName("node").getLength()
                 + changesetDiffDoc.getElementsByTagName("way").getLength()
-                + changesetDiffDoc.getElementsByTagName("relation").getLength() > 0;
+                + changesetDiffDoc.getElementsByTagName("relation").getLength()) > 0;
     }
 }

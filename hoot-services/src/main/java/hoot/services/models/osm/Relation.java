@@ -66,7 +66,7 @@ import hoot.services.geo.Coordinates;
  * Represents the model for an OSM relation
  */
 public class Relation extends Element {
-    private static final Logger log = LoggerFactory.getLogger(Relation.class);
+    private static final Logger logger = LoggerFactory.getLogger(Relation.class);
 
     private List<RelationMember> membersCache = new ArrayList<>();
 
@@ -104,7 +104,7 @@ public class Relation extends Element {
      */
     @Override
     public void fromXml(org.w3c.dom.Node xml) throws Exception {
-        log.debug("Parsing relation...");
+        logger.debug("Parsing relation...");
 
         NamedNodeMap xmlAttributes = xml.getAttributes();
 
@@ -122,8 +122,7 @@ public class Relation extends Element {
         setRecord(relationRecord);
 
         // if we're deleting the relation, all the relation members will get
-        // deleted automatically...and
-        // no new ones need to be parsed
+        // deleted automatically...and no new ones need to be parsed
         if (entityChangeType != EntityChangeType.DELETE) {
             parseMembersXml(xml);
         }
@@ -204,6 +203,7 @@ public class Relation extends Element {
         if (elementWithTags == null) {
             return element;
         }
+
         return elementWithTags;
     }
 
@@ -223,8 +223,7 @@ public class Relation extends Element {
         BoundingBox bounds = null;
         BoundingBox dbBounds = null;
 
-        // members don't get parsed for a delete request...we'll get the members
-        // from the database
+        // members don't get parsed for a delete request...we'll get the members from the database
         if (entityChangeType != EntityChangeType.DELETE) {
             for (RelationMember member : members) {
                 if (member.getType() == ElementType.Node) {
@@ -274,7 +273,7 @@ public class Relation extends Element {
 
             // compute a bounds for the elements parsed from the request data
             if (!coordsToComputeBoundsFrom.isEmpty()) {
-                bounds = new BoundingBox(coordsToComputeBoundsFrom);
+                bounds = new BoundingBox(new HashSet<>(coordsToComputeBoundsFrom));
             }
 
             dbBounds = getBoundsForNodesAndWays(idsOfNodesToRetrieveFromTheDb,
@@ -284,9 +283,7 @@ public class Relation extends Element {
             dbBounds = getBoundsForNodesAndWays();
         }
 
-        // add to the bounds the bounds calculated for the elements retrieved
-        // from
-        // the database
+        // add to the bounds the bounds calculated for the elements retrieved from the database
         if (dbBounds != null) {
             if (bounds == null) {
                 bounds = new BoundingBox(dbBounds);
@@ -379,14 +376,13 @@ public class Relation extends Element {
     }
 
     private RelationMember parseMember(org.w3c.dom.Node nodeXml) throws Exception {
-        log.debug("Parsing relation member...");
+        logger.debug("Parsing relation member...");
 
         NamedNodeMap memberXmlAttributes = nodeXml.getAttributes();
 
         long parsedMemberId = Long.parseLong(memberXmlAttributes.getNamedItem("ref").getNodeValue());
         long actualMemberId = parsedMemberId;
-        ElementType elementType = Element
-                .elementTypeFromString(memberXmlAttributes.getNamedItem("type").getNodeValue());
+        ElementType elementType = Element.elementTypeFromString(memberXmlAttributes.getNamedItem("type").getNodeValue());
 
         if (elementType == null) {
             throw new Exception(
@@ -400,12 +396,8 @@ public class Relation extends Element {
         Map<Long, Element> parsedElements = parsedElementIdsToElementsByType.get(elementType);
 
         // if this is an element created within the same request that is
-        // referencing
-        // this relation, it
-        // won't exist in the database, but it will be in the element cache
-        // created
-        // when parsing the
-        // element from the request
+        // referencing this relation, it won't exist in the database, but it will be in the element cache
+        // created when parsing the element from the request
         if (parsedMemberId < 0) {
             if (elementType == ElementType.Relation) {
                 if (!parsedElements.containsKey(parsedMemberId)) {
@@ -441,7 +433,7 @@ public class Relation extends Element {
         // the db and its info up
         // to date
         else {
-            memberElement = ElementFactory.getInstance().create(getMapId(), elementType, conn);
+            memberElement = ElementFactory.create(getMapId(), elementType, conn);
         }
         assert (actualMemberId > 0);
 
@@ -457,7 +449,7 @@ public class Relation extends Element {
     // relations of size = 0 are allowed; see
     // http://wiki.openstreetmap.org/wiki/Empty_relations
     private void parseMembersXml(org.w3c.dom.Node xml) throws Exception {
-        log.debug("Parsing relation members...");
+        logger.debug("Parsing relation members...");
 
         assert (parsedElementIdsToElementsByType != null);
 

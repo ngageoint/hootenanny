@@ -36,14 +36,12 @@ import hoot.services.writers.review.custom.HGIS.HGISValidationDbWriter;
 
 
 public class HGISValidationMarker {
-    private long mapId;
-    private Connection conn;
+    private final long mapId;
+    private final Connection conn;
 
-    public HGISValidationMarker(final Connection cn, final String mapName) throws Exception {
+    public HGISValidationMarker(Connection cn, String mapName) throws Exception {
         this.conn = cn;
-
-        QMaps maps = QMaps.maps;
-        this.mapId = ModelDaoUtils.getRecordIdForInputString(mapName, conn, maps, maps.id, maps.displayName);
+        this.mapId = ModelDaoUtils.getRecordIdForInputString(mapName, conn, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
     }
 
     public void updateValidationMapTag() throws SQLException, ReviewMapTagUpdateException {

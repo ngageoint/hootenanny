@@ -28,7 +28,6 @@ package hoot.services.readers.review;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.slf4j.Logger;
@@ -42,41 +41,38 @@ import hoot.services.models.review.ReviewableStatistics;
  * 
  */
 public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IReviewableQuery {
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(ReviewableStatisticsQuery.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReviewableStatisticsQuery.class);
 
-    public ReviewableStatisticsQuery(final Connection c, final long mapid) {
-        super(c, mapid);
+    public ReviewableStatisticsQuery(Connection connection, long mapid) {
+        super(connection, mapid);
     }
 
-    protected long getTotalReviewablesCount() throws SQLException, Exception {
+    private long getTotalReviewablesCount() throws Exception {
         long recordCount = 0;
 
-        try (Statement stmt = getConnection().createStatement();
-                ResultSet rs = stmt.executeQuery(_getTotalReviewableCountQueryString())) {
-            if (rs == null) {
-                throw new SQLException("Error executing getTotalReviewablesCount");
-            }
-
-            while (rs.next()) {
-                recordCount = rs.getLong("totalcnt");
+        try (Connection connection = getConnection()) {
+            try (Statement stmt = connection.createStatement()) {
+                try (ResultSet rs = stmt.executeQuery(getTotalReviewableCountQueryString())) {
+                    while (rs.next()) {
+                        recordCount = rs.getLong("totalcnt");
+                    }
+                }
             }
         }
 
         return recordCount;
     }
 
-    protected long getRemainingReviewablesCount() throws SQLException, Exception {
+    private long getRemainingReviewablesCount() throws Exception {
         long recordCount = 0;
 
-        try (Statement stmt = getConnection().createStatement();
-                ResultSet rs = stmt.executeQuery(_getUnreviewedCountQueryString())) {
-            if (rs == null) {
-                throw new SQLException("Error executing getRemainingReviewablesCount");
-            }
-
-            while (rs.next()) {
-                recordCount = rs.getLong("remaining");
+        try (Connection connection = getConnection()) {
+            try (Statement stmt = connection.createStatement()) {
+                try (ResultSet rs = stmt.executeQuery(getUnreviewedCountQueryString())) {
+                    while (rs.next()) {
+                        recordCount = rs.getLong("remaining");
+                    }
+                }
             }
         }
 
@@ -84,7 +80,7 @@ public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IR
     }
 
     @Override
-    public ReviewQueryMapper execQuery() throws SQLException, Exception {
+    public ReviewQueryMapper execQuery() throws Exception {
         long nTotal = getTotalReviewablesCount();
         long nUnReviewed = getRemainingReviewablesCount();
 
@@ -92,11 +88,11 @@ public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IR
         return ret;
     }
 
-    protected String _getTotalReviewableCountQueryString() {
+    protected String getTotalReviewableCountQueryString() {
         return "select count(*) as totalcnt from current_relations_" + getMapId() + " where tags->'type' = 'review'";
     }
 
-    protected String _getUnreviewedCountQueryString() {
+    protected String getUnreviewedCountQueryString() {
         return "select count(*) as remaining from current_relations_" + getMapId()
                 + " where tags->'hoot:review:needs' = 'yes'";
     }

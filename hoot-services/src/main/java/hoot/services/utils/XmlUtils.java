@@ -43,7 +43,10 @@ import org.w3c.dom.NodeList;
 /**
  * Various xml utilities
  */
-public class XmlUtils {
+public final class XmlUtils {
+    private XmlUtils() {
+    }
+
     /**
      * Creates an XPATH instance for querying with
      * 
@@ -61,7 +64,7 @@ public class XmlUtils {
      * @throws TransformerFactoryConfigurationError
      * @throws TransformerException
      */
-    public static String nodeListToString(final NodeList nodeList)
+    public static String nodeListToString(NodeList nodeList)
             throws TransformerFactoryConfigurationError, TransformerException {
         String result = "";
         for (int i = 0; i < nodeList.getLength(); i++) {

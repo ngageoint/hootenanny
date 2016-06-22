@@ -53,12 +53,12 @@ import hoot.services.utils.XmlDocumentBuilder;
  * Writes the response for a map query
  */
 public class MapQueryResponseWriter {
-    private static final Logger log = LoggerFactory.getLogger(MapQueryResponseWriter.class);
+    private static final Logger logger = LoggerFactory.getLogger(MapQueryResponseWriter.class);
 
-    private long mapId;
-    private Connection conn;
+    private final long mapId;
+    private final Connection conn;
 
-    public MapQueryResponseWriter(final long mapId, Connection conn) {
+    public MapQueryResponseWriter(long mapId, Connection conn) {
         this.mapId = mapId;
         this.conn = conn;
     }
@@ -92,31 +92,30 @@ public class MapQueryResponseWriter {
      * @return an XML document
      * @throws IOException
      */
-    public Document writeResponse(final Map<ElementType, Map<Long, Tuple>> results, final BoundingBox queryBounds,
-            final boolean multiLayerUniqueElementIds) throws Exception {
+    public Document writeResponse(Map<ElementType, Map<Long, Tuple>> results, BoundingBox queryBounds,
+            boolean multiLayerUniqueElementIds) throws Exception {
         Document responseDoc = null;
         try {
-            log.debug("Building response...");
+            logger.debug("Building response...");
 
             responseDoc = XmlDocumentBuilder.create();
             org.w3c.dom.Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
             responseDoc.appendChild(elementRootXml);
 
-            if (results.size() > 0) {
+            if (!results.isEmpty()) {
                 elementRootXml.appendChild(queryBounds.toXml(elementRootXml));
 
                 for (ElementType elementType : ElementType.values()) {
-                    if (!elementType.equals(ElementType.Changeset)) {
-                        final Map<Long, Tuple> resultsForType = results.get(elementType);
+                    if (elementType != ElementType.Changeset) {
+                        Map<Long, Tuple> resultsForType = results.get(elementType);
                         if (resultsForType != null) {
                             for (Map.Entry<Long, Tuple> entry : resultsForType.entrySet()) {
                                 Tuple record = entry.getValue();
 
-                                Element element = ElementFactory.getInstance().create(elementType, record, conn, mapId);
+                                Element element = ElementFactory.create(elementType, record, conn, mapId);
 
                                 // the query that sent this in should have
-                                // already handled filtering out invisible
-                                // elements
+                                // already handled filtering out invisible elements
 
                                 Users usersTable = record.get(QUsers.users);
                                 assert (element.getVisible());
@@ -131,7 +130,7 @@ public class MapQueryResponseWriter {
         }
         catch (Exception e) {
             ResourceErrorHandler.handleError("Error creating response for map query for map with ID: " + mapId + ". ("
-                    + e.getMessage() + ") ", Status.INTERNAL_SERVER_ERROR, log);
+                    + e.getMessage() + ") ", Status.INTERNAL_SERVER_ERROR, logger);
         }
 
         // System.out.println(XmlDocumentBuilder.toString(responseDoc));

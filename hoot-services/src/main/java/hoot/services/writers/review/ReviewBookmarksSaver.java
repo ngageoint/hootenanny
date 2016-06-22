@@ -29,7 +29,6 @@ package hoot.services.writers.review;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -51,12 +50,12 @@ import hoot.services.readers.review.ReviewBookmarkRetriever;
 
 
 public class ReviewBookmarksSaver {
-    private static final Logger log = LoggerFactory.getLogger(ReviewBookmarksSaver.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReviewBookmarksSaver.class);
 
-    private Connection _conn;
+    private final Connection conn;
 
-    public ReviewBookmarksSaver(final Connection cn) {
-        _conn = cn;
+    public ReviewBookmarksSaver(Connection cn) {
+        conn = cn;
     }
 
     /**
@@ -68,20 +67,13 @@ public class ReviewBookmarksSaver {
      * @return - numbers of saved tags
      * @throws Exception
      */
-    public long save(final ReviewBookmarkSaveRequest request) throws Exception {
+    public long save(ReviewBookmarkSaveRequest request) throws Exception {
         long nSaved = 0;
-        ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(_conn);
+        ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
 
         if (request.getBookmarkId() > -1) {
             List<ReviewBookmarks> res = retriever.retrieve(request.getBookmarkId());
-            if (res.size() == 0) {
-                // insert
-                nSaved = insert(request);
-            }
-            else {
-                // update
-                nSaved = update(request, res.get(0));
-            }
+            nSaved = res.isEmpty() ? insert(request) : update(request, res.get(0));
         }
         else {
             // insert
@@ -99,25 +91,24 @@ public class ReviewBookmarksSaver {
      * @return - total numbers of inserted
      * @throws Exception
      */
-    public long insert(final ReviewBookmarkSaveRequest request) throws Exception {
+    public long insert(ReviewBookmarkSaveRequest request) throws Exception {
         long nInserted = 0;
+
         try {
-            SQLInsertClause cl = _createInsertClause(request);
+            SQLInsertClause cl = createInsertClause(request);
             if (cl != null) {
                 nInserted = cl.execute();
             }
             else {
                 throw new Exception("Invalid insert clause.");
             }
-
         }
         catch (Exception ex) {
-            String err = ex.getMessage();
-            log.error(err);
+            logger.error(ex.getMessage());
             throw ex;
         }
-        return nInserted;
 
+        return nInserted;
     }
 
     /**
@@ -130,17 +121,17 @@ public class ReviewBookmarksSaver {
      * @return total numbers of updated
      * @throws Exception
      */
-    public long update(final ReviewBookmarkSaveRequest request, final ReviewBookmarks reviewBookmarksDto)
-            throws Exception {
+    public long update(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto) throws Exception {
         long nUpdated = 0;
 
         try {
-            nUpdated = _getUpdateQuery(request, reviewBookmarksDto).execute();
+            nUpdated = getUpdateQuery(request, reviewBookmarksDto).execute();
         }
         catch (Exception ex) {
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
             throw ex;
         }
+
         return nUpdated;
     }
 
@@ -152,24 +143,25 @@ public class ReviewBookmarksSaver {
      * @return - SQLInsertClause
      * @throws Exception
      */
-    protected SQLInsertClause _createInsertClause(final ReviewBookmarkSaveRequest request) throws Exception {
+    protected SQLInsertClause createInsertClause(ReviewBookmarkSaveRequest request) throws Exception {
         SQLInsertClause cl = null;
         try {
             Configuration configuration = DbUtils.getConfiguration();
 
-            final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+            Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
             QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
-            cl = new SQLInsertClause(_conn, configuration, reviewBookmarks)
+            cl = new SQLInsertClause(conn, configuration, reviewBookmarks)
                     .columns(reviewBookmarks.mapId, reviewBookmarks.relationId, reviewBookmarks.createdAt,
                             reviewBookmarks.createdBy, reviewBookmarks.detail)
-                    .values(request.getMapId(), request.getRelationId(), now, request.getUserid(),
-                            _jasonToHStore(request.getDetail()));
+                    .values(request.getMapId(), request.getRelationId(), now, request.getUserId(),
+                            jasonToHStore(request.getDetail()));
         }
         catch (Exception ex) {
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
             throw ex;
         }
+
         return cl;
     }
 
@@ -183,25 +175,25 @@ public class ReviewBookmarksSaver {
      * @return - SQLUpdateClause
      * @throws Exception
      */
-    protected SQLUpdateClause _getUpdateQuery(final ReviewBookmarkSaveRequest request,
-            final ReviewBookmarks reviewBookmarksDto) throws Exception {
+    protected SQLUpdateClause getUpdateQuery(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto)
+            throws Exception {
         SQLUpdateClause res = null;
 
         try {
-            final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+            Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
             reviewBookmarksDto.setLastModifiedAt(now);
-            reviewBookmarksDto.setLastModifiedBy(request.getUserid());
+            reviewBookmarksDto.setLastModifiedBy(request.getUserId());
 
-            reviewBookmarksDto.setDetail(_jasonToHStore(request.getDetail()));
+            reviewBookmarksDto.setDetail(jasonToHStore(request.getDetail()));
 
             Configuration configuration = DbUtils.getConfiguration();
             QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
-            res = new SQLUpdateClause(_conn, configuration, reviewBookmarks).populate(reviewBookmarksDto)
+            res = new SQLUpdateClause(conn, configuration, reviewBookmarks).populate(reviewBookmarksDto)
                     .where(reviewBookmarks.id.eq(reviewBookmarksDto.getId()));
         }
         catch (Exception ex) {
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
             throw ex;
         }
         return res;
@@ -216,14 +208,14 @@ public class ReviewBookmarksSaver {
      * @return - Expression Object for QueryDSL consumption
      * @throws Exception
      */
-    protected Object _jasonToHStore(final JSONObject tags) throws Exception {
+    private Object jasonToHStore(JSONObject tags) throws Exception {
         String hstoreStr = "";
 
         if (tags != null) {
-            Iterator it = tags.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pairs = (Map.Entry) it.next();
-                if (hstoreStr.length() > 0) {
+            for (Object it : tags.entrySet()) {
+                Map.Entry pairs = (Map.Entry) it;
+
+                if (!hstoreStr.isEmpty()) {
                     hstoreStr += ",";
                 }
 
@@ -244,14 +236,15 @@ public class ReviewBookmarksSaver {
                 else {
                     jsonStr = oVal.toString();
                 }
+
                 jsonStr = jsonStr.replace("\\", "\\\\");
                 jsonStr = jsonStr.replace("'", "''");
                 jsonStr = jsonStr.replace("\"", "\\\"");
                 hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + jsonStr + "\"";
             }
         }
+
         hstoreStr = "'" + hstoreStr + "'";
         return Expressions.template(Object.class, hstoreStr);
     }
-
 }

@@ -26,7 +26,6 @@
  */
 package hoot.services.models.review;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
@@ -82,9 +81,8 @@ public class AllReviewableItems extends ReviewQueryMapper {
         JSONArray features = new JSONArray();
 
         if (reviewableItems != null) {
-            Iterator it = reviewableItems.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry) it.next();
+            for (Object it : reviewableItems.entrySet()) {
+                Map.Entry pair = (Map.Entry) it;
                 Long relId = (Long) pair.getKey();
                 ReviewableItemBboxInfo info = (ReviewableItemBboxInfo) pair.getValue();
 
@@ -94,7 +92,7 @@ public class AllReviewableItems extends ReviewQueryMapper {
                 JSONObject geometry = new JSONObject();
                 geometry.put("type", "Point");
                 BoundingBox bbx = info.getBbox();
-                double[] coords = new double[] { bbx.getCenterX(), bbx.getCenterY() };
+                double[] coords = { bbx.getCenterX(), bbx.getCenterY() };
                 geometry.put("coordinates", coords);
                 feature.put("geometry", geometry);
 
@@ -116,6 +114,5 @@ public class AllReviewableItems extends ReviewQueryMapper {
         geojson.put("features", features);
 
         return geojson;
-
     }
 }

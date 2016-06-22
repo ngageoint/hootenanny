@@ -42,7 +42,7 @@ public interface INativeInterface {
      * @param command
      * @throws NativeInterfaceException
      */
-    public abstract JSONObject exec(JSONObject command) throws NativeInterfaceException;
+    JSONObject exec(JSONObject command) throws NativeInterfaceException;
 
     /**
      * Terminates job
@@ -50,8 +50,7 @@ public interface INativeInterface {
      * @param jobId
      * @throws NativeInterfaceException
      */
-    public abstract void terminate(String jobId) throws NativeInterfaceException;
+    void terminate(String jobId) throws NativeInterfaceException;
 
-    public abstract String getJobProgress(String jobId);
-
+    String getJobProgress(String jobId);
 }

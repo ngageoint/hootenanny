@@ -32,25 +32,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/**
- * 
- */
 public class ReviewableQueryBase {
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(ReviewableQueryBase.class);
-    private Connection _conn;
-    private long _mapId = -1;
+    private static final Logger logger = LoggerFactory.getLogger(ReviewableQueryBase.class);
+
+    private final Connection conn;
+    private long mapId = -1;
 
     protected Connection getConnection() {
-        return _conn;
+        return conn;
     }
 
     protected long getMapId() {
-        return _mapId;
+        return mapId;
     }
 
-    public ReviewableQueryBase(final Connection c, final long mapid) {
-        _conn = c;
-        _mapId = mapid;
+    public ReviewableQueryBase(Connection connection, long mapid) {
+        conn = connection;
+        mapId = mapid;
     }
 }

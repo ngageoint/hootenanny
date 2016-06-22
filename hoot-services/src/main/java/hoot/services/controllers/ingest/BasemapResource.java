@@ -183,7 +183,6 @@ public class BasemapResource extends JobControllerBase {
                 String jobId = UUID.randomUUID().toString();
                 Map.Entry pairs = (Map.Entry) o;
                 String fName = pairs.getKey().toString();
-                pairs.getValue().toString();
 
                 logger.debug("Preparing Basemap Ingest for :{}", fName);
                 String bmName = inputName;

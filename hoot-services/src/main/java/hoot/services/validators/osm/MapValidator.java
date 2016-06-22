@@ -39,9 +39,9 @@ import hoot.services.models.osm.ModelDaoUtils;
  * Verifies map data exists
  */
 public class MapValidator {
-    private static final Logger log = LoggerFactory.getLogger(MapValidator.class);
+    private static final Logger logger = LoggerFactory.getLogger(MapValidator.class);
 
-    private Connection conn;
+    private final Connection conn;
 
     public MapValidator(Connection conn) {
         this.conn = conn;
@@ -59,7 +59,7 @@ public class MapValidator {
      *             if the map doesn't exist
      */
     public long verifyMapExists(String mapIdStr) throws Exception {
-        log.debug("Checking maps table for map with ID: " + mapIdStr + " ...");
+        logger.debug("Checking maps table for map with ID: {} ...", mapIdStr);
 
         // this will throw if it doesn't find the map
         QMaps maps = QMaps.maps;

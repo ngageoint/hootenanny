@@ -51,9 +51,10 @@ public abstract class InputParamsValidatorAbstract {
      * @return a parameter value
      * @throws Exception
      */
-    protected Object validateAndParseParamValueString(final String paramValueStr, final String name, final Object type,
-            final Object rangeMin, final Object rangeMax) throws Exception {
+    protected Object validateAndParseParamValueString(String paramValueStr, String name, Object type,
+            Object rangeMin, Object rangeMax) throws Exception {
         Object paramValue = null;
+
         if (type instanceof String) {
             paramValue = paramValueStr;
         }
@@ -77,11 +78,11 @@ public abstract class InputParamsValidatorAbstract {
                     errorParsingVal = true;
                 }
 
-                if (!errorParsingVal && paramValue != null) {
-                    if (rangeMin != null && ((Long) paramValue < (Long) rangeMin)) {
+                if (!errorParsingVal && (paramValue != null)) {
+                    if ((rangeMin != null) && ((Long) paramValue < (Long) rangeMin)) {
                         valueBelowMin = true;
                     }
-                    if (rangeMax != null && ((Long) paramValue > (Long) rangeMax)) {
+                    if ((rangeMax != null) && ((Long) paramValue > (Long) rangeMax)) {
                         valueAboveMax = true;
                     }
                 }
@@ -94,11 +95,11 @@ public abstract class InputParamsValidatorAbstract {
                     errorParsingVal = true;
                 }
 
-                if (!errorParsingVal && paramValue != null) {
-                    if (rangeMin != null && ((Integer) paramValue < (Integer) rangeMin)) {
+                if (!errorParsingVal && (paramValue != null)) {
+                    if ((rangeMin != null) && ((Integer) paramValue < (Integer) rangeMin)) {
                         valueBelowMin = true;
                     }
-                    if (rangeMax != null && ((Integer) paramValue > (Integer) rangeMax)) {
+                    if ((rangeMax != null) && ((Integer) paramValue > (Integer) rangeMax)) {
                         valueAboveMax = true;
                     }
                 }
@@ -111,11 +112,11 @@ public abstract class InputParamsValidatorAbstract {
                     errorParsingVal = true;
                 }
 
-                if (!errorParsingVal && paramValue != null) {
-                    if (rangeMin != null && ((Double) paramValue < (Double) rangeMin)) {
+                if (!errorParsingVal && (paramValue != null)) {
+                    if ((rangeMin != null) && ((Double) paramValue < (Double) rangeMin)) {
                         valueBelowMin = true;
                     }
-                    if (rangeMax != null && ((Double) paramValue > (Double) rangeMax)) {
+                    if ((rangeMax != null) && ((Double) paramValue > (Double) rangeMax)) {
                         valueAboveMax = true;
                     }
                 }
@@ -128,12 +129,12 @@ public abstract class InputParamsValidatorAbstract {
             if (valueBelowMin) {
                 throw new Exception("Invalid input parameter: " + name + " sent to "
                         + ReflectUtils.getCallingClassName()
-                        + " is out of the allowable range.  Minimum allowed value = " + String.valueOf(rangeMin));
+                        + " is out of the allowable range.  Minimum allowed value = " + rangeMin);
             }
             if (valueAboveMax) {
                 throw new Exception("Invalid input parameter: " + name + " sent to "
                         + ReflectUtils.getCallingClassName()
-                        + " is out of the allowable range.  Maximum allowed value = " + String.valueOf(rangeMax));
+                        + " is out of the allowable range.  Maximum allowed value = " + rangeMax);
             }
         }
 

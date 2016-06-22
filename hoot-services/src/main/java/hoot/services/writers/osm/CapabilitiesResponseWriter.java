@@ -42,7 +42,7 @@ import hoot.services.utils.XmlDocumentBuilder;
  * Writes the response to a capabilities request
  */
 public class CapabilitiesResponseWriter {
-    private static final Logger log = LoggerFactory.getLogger(CapabilitiesResponseWriter.class);
+    private static final Logger logger = LoggerFactory.getLogger(CapabilitiesResponseWriter.class);
 
     /**
      * Writes the capabilities response to an XML document
@@ -52,7 +52,7 @@ public class CapabilitiesResponseWriter {
     public Document writeResponse() {
         Document responseDoc = null;
         try {
-            log.debug("Building response...");
+            logger.debug("Building response...");
 
             responseDoc = XmlDocumentBuilder.create();
 
@@ -94,7 +94,7 @@ public class CapabilitiesResponseWriter {
         catch (Exception e) {
             ResourceErrorHandler.handleError(
                     "Error creating response for capabilities query. (" + e.getMessage() + ") ",
-                    Status.INTERNAL_SERVER_ERROR, log);
+                    Status.INTERNAL_SERVER_ERROR, logger);
         }
 
         return responseDoc;

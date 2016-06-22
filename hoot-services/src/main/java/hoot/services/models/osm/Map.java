@@ -33,7 +33,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Vector;
 
 import org.json.simple.JSONObject;
 import org.postgresql.util.PGobject;
@@ -47,6 +46,7 @@ import com.mysema.query.types.expr.BooleanExpression;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db.DbUtils.nwr_enum;
 import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.FolderMapMappings;
 import hoot.services.db2.Folders;
@@ -89,32 +89,23 @@ import hoot.services.models.osm.Element.ElementType;
  * writing elements at the same time it queries elements out.
  */
 public class Map extends Maps {
-    private static final Logger log = LoggerFactory.getLogger(Map.class);
+    private static final Logger logger = LoggerFactory.getLogger(Map.class);
 
-    private static QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
+    private static final QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
 
-    private Connection conn;
-
-    public static long testDelayMilliseconds = -1;
+    private final Connection conn;
 
     // I want to retrieve nodes, ways, and relations with one query and return a
-    // single
-    // set of records. However, there is no type information in the records and
-    // the fields between
-    // them aren't unique (way and relation have the same database field names),
-    // so there is no
-    // way for the response writer to know what type of element to write.
-    // Instead, I'm doing
-    // separate queries for each element type and returning them in a collection
-    // grouped by element
-    // type.
+    // single set of records. However, there is no type information in the records and
+    // the fields between them aren't unique (way and relation have the same database field names),
+    // so there is no way for the response writer to know what type of element to write.
+    // Instead, I'm doing separate queries for each element type and returning them in a collection
+    // grouped by element type.
     private java.util.Map<ElementType, java.util.Map<Long, Tuple>> elementIdsToRecordsByType;
 
     private BoundingBox bounds;
 
-    public Map(final long id, Connection conn) {
-        super();
-
+    public Map(long id, Connection conn) {
         setId(id);
         this.conn = conn;
     }
@@ -122,8 +113,8 @@ public class Map extends Maps {
     /*
      * Retrieves all ranges of quad tiles that fall within the bounds
      */
-    private static Vector<Range> getTileRanges(final BoundingBox bounds) throws NumberFormatException {
-        log.debug("Retrieving tile ranges...");
+    private static List<Range> getTileRanges(BoundingBox bounds) {
+        logger.debug("Retrieving tile ranges...");
         int queryDimensions = Integer.parseInt(HootProperties.getPropertyOrDefault("mapQueryDimensions"));
         ZCurveRanger ranger = new ZCurveRanger(new ZValue(queryDimensions, 16,
         // use y, x ordering here
@@ -135,21 +126,18 @@ public class Map extends Maps {
     /*
      * Returns the SQL where condition for the calculated tile ranges
      */
-    private static BooleanExpression getTileWhereCondition(final Vector<Range> tileIdRanges) {
-        List<BooleanExpression> tileConditions = new ArrayList<BooleanExpression>();
+    private static BooleanExpression getTileWhereCondition(List<Range> tileIdRanges) {
+        List<BooleanExpression> tileConditions = new ArrayList<>();
         for (Range range : tileIdRanges) {
             QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
             tileConditions.add(currentNodes.tile.goe(range.getMin()).and(currentNodes.tile.loe(range.getMax())));
         }
+
         BooleanExpression combinedTileCondition = null;
         for (BooleanExpression tileCondition : tileConditions) {
-            if (combinedTileCondition == null) {
-                combinedTileCondition = tileCondition;
-            }
-            else {
-                combinedTileCondition = combinedTileCondition.or(tileCondition);
-            }
+            combinedTileCondition = (combinedTileCondition == null) ? tileCondition : combinedTileCondition.or(tileCondition);
         }
+
         return combinedTileCondition;
     }
 
@@ -157,14 +145,14 @@ public class Map extends Maps {
      * Returns the geospatial where condition to apply with the tile conditions
      * to ensure nodes that fall outside the bounding box are not returned
      */
-    private static BooleanExpression getGeospatialWhereCondition(final BoundingBox bounds) {
+    private static BooleanExpression getGeospatialWhereCondition(BoundingBox bounds) {
         QCurrentNodes nodes = QCurrentNodes.currentNodes;
         return nodes.longitude.goe(bounds.getMinLon()).and(nodes.latitude.goe(bounds.getMinLat()))
                 .and(nodes.longitude.loe(bounds.getMaxLon())).and(nodes.latitude.loe(bounds.getMaxLat()));
     }
 
-    private static void validateQueryBounds(final BoundingBox bounds) throws Exception {
-        log.debug("Checking request bounds size...");
+    private static void validateQueryBounds(BoundingBox bounds) throws Exception {
+        logger.debug("Checking request bounds size...");
         double maxQueryAreaDegrees = Double.parseDouble(HootProperties.getPropertyOrDefault("maxQueryAreaDegrees"));
         double requestedArea = bounds.getArea();
         if (requestedArea > maxQueryAreaDegrees) {
@@ -179,18 +167,16 @@ public class Map extends Maps {
      * actual map queries returning XML. If you're just doing a node count
      * check, then getNodeCount should be used.
      */
-    private void validateNodeCount(final BooleanExpression combinedGeospatialCondition) throws Exception {
-        log.debug("Retrieving node count...");
+    private void validateNodeCount(BooleanExpression combinedGeospatialCondition) throws Exception {
+        logger.debug("Retrieving node count...");
 
         QCurrentNodes curr_nodes = QCurrentNodes.currentNodes;
-        final long nodeCount = new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(curr_nodes)
+        long nodeCount = new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(curr_nodes)
                 .where(combinedGeospatialCondition.and(curr_nodes.visible.eq(true))).count();
 
         // The max node count only applies to the nodes falling within the query
-        // bounds, not
-        // those that belong to ways that cross the query bounds but fall
-        // outside of the query bounds,
-        // even though those nodes are returned as well in the query.
+        // bounds, not those that belong to ways that cross the query bounds but fall
+        // outside of the query bounds, even though those nodes are returned as well in the query.
         long maxQueryNodes = Long.parseLong(HootProperties.getPropertyOrDefault("maxQueryNodes"));
         if (nodeCount > maxQueryNodes) {
             throw new Exception("The maximum number of nodes that may be returned in a map query is " + maxQueryNodes
@@ -199,13 +185,15 @@ public class Map extends Maps {
         }
     }
 
-    public JSONObject retrieveNodesMBR(final BoundingBox bounds) throws Exception {
+    public JSONObject retrieveNodesMBR(BoundingBox bounds) throws Exception {
         JSONObject ret = new JSONObject();
+
         // get the intersecting tile ranges for the nodes
-        final Vector<Range> tileIdRanges = getTileRanges(bounds);
-        if (tileIdRanges.size() > 0) {
+        List<Range> tileIdRanges = getTileRanges(bounds);
+        if (!tileIdRanges.isEmpty()) {
             BooleanExpression combinedGeospatialCondition = getTileWhereCondition(tileIdRanges).and(
                     getGeospatialWhereCondition(bounds));
+
             List<Tuple> geospatialQueryNodeResults = new SQLQuery(conn, DbUtils.getConfiguration(getId()))
                     .from(currentnodes)
                     .where(combinedGeospatialCondition.and(currentnodes.visible.eq(true)))
@@ -225,11 +213,12 @@ public class Map extends Maps {
         return ret;
     }
 
-    public long getNodesCount(final BoundingBox bounds) throws Exception {
+    public long getNodesCount(BoundingBox bounds) throws Exception {
         long ret = 0;
+
         // get the intersecting tile ranges for the nodes
-        final Vector<Range> tileIdRanges = getTileRanges(bounds);
-        if (tileIdRanges.size() > 0) {
+        List<Range> tileIdRanges = getTileRanges(bounds);
+        if (!tileIdRanges.isEmpty()) {
             BooleanExpression combinedGeospatialCondition = getTileWhereCondition(tileIdRanges).and(
                     getGeospatialWhereCondition(bounds));
             ret = new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentnodes)
@@ -239,15 +228,17 @@ public class Map extends Maps {
         return ret;
     }
 
-    public JSONObject retrieveANode(final BoundingBox bounds) throws Exception {
+    public JSONObject retrieveANode(BoundingBox bounds) throws Exception {
         JSONObject ret = new JSONObject();
+
         // get the intersecting tile ranges for the nodes
-        final Vector<Range> tileIdRanges = getTileRanges(bounds);
-        if (tileIdRanges.size() > 0) {
+        List<Range> tileIdRanges = getTileRanges(bounds);
+        if (!tileIdRanges.isEmpty()) {
             BooleanExpression combinedGeospatialCondition = getTileWhereCondition(tileIdRanges).and(
                     getGeospatialWhereCondition(bounds));
 
             QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
+
             List<Tuple> geospatialQueryNodeResults = new SQLQuery(conn, DbUtils.getConfiguration(getId()))
                     .from(currentnodes).where(combinedGeospatialCondition.and(currentnodes.visible.eq(true))).limit(1)
                     .list(currentnodes.longitude, currentnodes.latitude);
@@ -262,18 +253,15 @@ public class Map extends Maps {
     }
 
     private java.util.Map<ElementType, java.util.Map<Long, Tuple>> retrieveElements(
-            final BooleanExpression combinedGeospatialCondition) {
-        // There is probably a way to get all this information by executing
-        // fewer queries...
+            BooleanExpression combinedGeospatialCondition) {
+        // There is probably a way to get all this information by executing fewer queries...
 
         // JDBC prepared statement number of parameters has a hard limit: 32767
-        int nQueryPageSize = 32000;
-        elementIdsToRecordsByType = new HashMap<ElementType, java.util.Map<Long, Tuple>>();
+        elementIdsToRecordsByType = new HashMap<>();
 
         // if the limit hasn't been exceeded, query out all nodes which fall
-        // within the geospatial
-        // bounds, are visible, and belong to this map; join in user info
-        log.debug("Retrieving node records within the query bounds...");
+        // within the geospatial bounds, are visible, and belong to this map; join in user info
+        logger.debug("Retrieving node records within the query bounds...");
 
         QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
         QChangesets changesets = QChangesets.changesets;
@@ -287,54 +275,49 @@ public class Map extends Maps {
 
         elementIdsToRecordsByType.put(ElementType.Node, geospatialQueryNodeResults);
 
-        List<Long> wayIds = new ArrayList<Long>();
-        if (geospatialQueryNodeResults.size() > 0) {
+        List<Long> wayIds = new ArrayList<>();
+        if (!geospatialQueryNodeResults.isEmpty()) {
             // get all ways which have way nodes with IDs in the previously
-            // queried node results, are
-            // visible, and belong to this map; join in user info
-            log.debug("Retrieving way IDs within the query bounds...");
+            // queried node results, are visible, and belong to this map; join in user info
+            logger.debug("Retrieving way IDs within the query bounds...");
             QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
 
-            List<Long> nodesList = new ArrayList<Long>(geospatialQueryNodeResults.keySet());
+            List<Long> nodesList = new ArrayList<>(geospatialQueryNodeResults.keySet());
 
             int totalNodeCnt = nodesList.size();
+            int nQueryPageSize = 32000;
             int pageCnt = (int) Math.floor(totalNodeCnt / nQueryPageSize);
 
             for (int i = 0; i <= pageCnt; i++) {
                 try {
-                    List<Long> pageWayIds = null;
                     List<Long> pageList = null;
                     int iStart = i * nQueryPageSize;
                     int iEnd = iStart + nQueryPageSize;
 
-                    if (i < pageCnt) {
-                        pageList = nodesList.subList(iStart, iEnd);
-                    }
-                    else {
-                        pageList = nodesList.subList(iStart, totalNodeCnt);
-                    }
+                    pageList = nodesList.subList(iStart, (i < pageCnt) ? iEnd : totalNodeCnt);
 
-                    if (pageList == null || pageList.size() == 0) {
+                    if ((pageList == null) || (pageList.isEmpty())) {
                         continue;
                     }
-                    pageWayIds = new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentWayNodes)
+                    List<Long> pageWayIds = new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentWayNodes)
                             .where(currentWayNodes.nodeId.in(pageList)).list(currentWayNodes.wayId);
+
                     // TODO: should this be an assert instead? Regardless, fix
                     // the error handling.
-                    if (wayIds.addAll(pageWayIds) == false) {
+                    if (!wayIds.addAll(pageWayIds)) {
                         // error
                     }
                 }
                 catch (Exception ex) {
-                    ex.getMessage();
+                    logger.error(ex.getMessage());
                 }
             }
 
-            if (wayIds.size() > 0) {
+            if (!wayIds.isEmpty()) {
                 // from the way results, filter down those that are visible and
                 // belong to this map; join in
                 // user info
-                log.debug("Retrieving ways within the query bounds...");
+                logger.debug("Retrieving ways within the query bounds...");
                 QCurrentWays currentWays = QCurrentWays.currentWays;
 
                 java.util.Map<Long, Tuple> wayResults = null;
@@ -347,13 +330,9 @@ public class Map extends Maps {
                         int iStart = i * nQueryPageSize;
                         int iEnd = iStart + nQueryPageSize;
 
-                        if (i < wayPageCnt) {
-                            pageList = wayIds.subList(iStart, iEnd);
-                        }
-                        else {
-                            pageList = wayIds.subList(iStart, totalWayCnt);
-                        }
-                        if (pageList == null || pageList.size() == 0) {
+                        pageList = wayIds.subList(iStart, (i < wayPageCnt) ? iEnd : totalWayCnt);
+
+                        if ((pageList == null) || (pageList.isEmpty())) {
                             continue;
                         }
 
@@ -376,15 +355,15 @@ public class Map extends Maps {
                         }
                     }
                     catch (Exception ex) {
-                        ex.getMessage();
+                        logger.error(ex.getMessage());
                     }
                 }
 
                 elementIdsToRecordsByType.put(ElementType.Way, wayResults);
 
                 // retrieve all way nodes for the previously retrieved ways
-                log.debug("Retrieving additional way nodes IDs within the query bounds...");
-                Set<Long> wayNodeIds = new HashSet<Long>();
+                logger.debug("Retrieving additional way nodes IDs within the query bounds...");
+                Set<Long> wayNodeIds = new HashSet<>();
                 for (int i = 0; i <= wayPageCnt; i++) {
                     try {
                         List<Long> pageList = null;
@@ -398,11 +377,11 @@ public class Map extends Maps {
                             pageList = wayIds.subList(iStart, totalWayCnt);
                         }
 
-                        if (pageList == null || pageList.size() == 0) {
+                        if ((pageList == null) || (pageList.isEmpty())) {
                             continue;
                         }
 
-                        wayNodeIds.addAll(new HashSet<Long>(new SQLQuery(conn, DbUtils.getConfiguration(getId()))
+                        wayNodeIds.addAll(new HashSet<>(new SQLQuery(conn, DbUtils.getConfiguration(getId()))
                                 .from(currentWayNodes).where(currentWayNodes.wayId.in(pageList))
                                 .list(currentWayNodes.nodeId)));
                     }
@@ -411,34 +390,31 @@ public class Map extends Maps {
                     }
                 }
 
-                assert (wayNodeIds.size() > 0);
-                final long numWayNodes = wayNodeIds.size();
-                log.debug("Found " + numWayNodes + " way nodes.");
+                assert (!wayNodeIds.isEmpty());
+
+                long numWayNodes = wayNodeIds.size();
+                logger.debug("Found {} way nodes.", numWayNodes);
 
                 // retrieve all corresponding nodes to the IDs in the wayNodeIds
-                // collection that don't
-                // fall within the query bounds (all the way nodes referenced by
-                // all the ways minus the
-                // nodes falling within the query bounds that have already been
-                // added); join in user info;
+                // collection that don't fall within the query bounds (all the way nodes referenced by
+                // all the ways minus the nodes falling within the query bounds that have already been
+                // added);
+                // join in user info;
                 // add the resulting nodes to the nodes collection
-                final Set<Long> geospatialQueryNodeResultIds = new HashSet<Long>(geospatialQueryNodeResults.keySet());
-                final long numGeospatialQueryNodeResults = geospatialQueryNodeResultIds.size();
-                log.debug("There were " + numGeospatialQueryNodeResults + " nodes returned in the geospatial query.");
+                Set<Long> geospatialQueryNodeResultIds = new HashSet<>(geospatialQueryNodeResults.keySet());
+                long numGeospatialQueryNodeResults = geospatialQueryNodeResultIds.size();
+                logger.debug("There were {} nodes returned in the geospatial query.", numGeospatialQueryNodeResults);
                 Set<Long> additionalNodeIds = new HashSet<Long>(wayNodeIds);
                 additionalNodeIds.removeAll(geospatialQueryNodeResultIds);
                 assert (wayNodeIds.size() == numWayNodes);
                 assert (geospatialQueryNodeResultIds.size() == numGeospatialQueryNodeResults);
-                log.debug("Subtracting the geospatial query nodes from the way nodes collection results "
-                        + "in a total of " + additionalNodeIds.size() + " nodes remaining to be added to the nodes "
-                        + "collection.");
-                if (additionalNodeIds.size() > 0) {
-                    log.debug("Retrieving nodes falling outside of the query bounds but belonging to a "
-                            + "retrieved way...");
+                logger.debug("Subtracting the geospatial query nodes from the way nodes collection results in a total of {} nodes remaining to be added to the nodes collection.", additionalNodeIds.size());
+                if (!additionalNodeIds.isEmpty()) {
+                    logger.debug("Retrieving nodes falling outside of the query bounds but belonging to a " + "retrieved way...");
 
                     java.util.Map<Long, Tuple> additionalNodeResults = null;
 
-                    List<Long> additionalNodeIdsList = new ArrayList<Long>(additionalNodeIds);
+                    List<Long> additionalNodeIdsList = new ArrayList<>(additionalNodeIds);
 
                     int totalANILCnt = additionalNodeIdsList.size();
                     int anilPageCnt = (int) Math.floor(totalANILCnt / nQueryPageSize);
@@ -449,14 +425,9 @@ public class Map extends Maps {
                             int iStart = i * nQueryPageSize;
                             int iEnd = iStart + nQueryPageSize;
 
-                            if (i < anilPageCnt) {
-                                pageList = additionalNodeIdsList.subList(iStart, iEnd);
-                            }
-                            else {
-                                pageList = additionalNodeIdsList.subList(iStart, totalANILCnt);
-                            }
+                            pageList = additionalNodeIdsList.subList(iStart, (i < anilPageCnt) ? iEnd : totalANILCnt);
 
-                            if (pageList == null || pageList.size() == 0) {
+                            if ((pageList == null) || (pageList.isEmpty())) {
                                 continue;
                             }
 
@@ -500,30 +471,31 @@ public class Map extends Maps {
              * retrieve all relations that reference the nodes or ways
              * previously retrieved
              */
-            log.debug("Retrieving relations IDs within the query bounds...");
+            logger.debug("Retrieving relations IDs within the query bounds...");
 
             QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
 
-            Set<Long> relationIds = new HashSet<Long>();
+            Set<Long> relationIds = new HashSet<>();
 
             Set<Long> nodesset = elementIdsToRecordsByType.get(ElementType.Node).keySet();
             Set<Long> wayset = elementIdsToRecordsByType.get(ElementType.Way).keySet();
 
-            if (nodesset != null && nodesset.size() == 0) {
-                nodesset = new HashSet<Long>();
-                nodesset.add(new Long(-1));
+            if ((nodesset != null) && (nodesset.isEmpty())) {
+                nodesset = new HashSet<>();
+                nodesset.add(-1L);
             }
 
-            if (wayset != null && wayset.size() == 0) {
-                wayset = new HashSet<Long>();
-                wayset.add(new Long(-1));
+            if ((wayset != null) && (wayset.isEmpty())) {
+                wayset = new HashSet<>();
+                wayset.add(-1L);
             }
-            if (elementIdsToRecordsByType.get(ElementType.Node).keySet().size() > 0) {
-                List<Long> nodessetList = new ArrayList<Long>(nodesset);
+
+            if (!elementIdsToRecordsByType.get(ElementType.Node).keySet().isEmpty()) {
+                List<Long> nodessetList = new ArrayList<>(nodesset);
 
                 int totalNodeSetCnt = nodessetList.size();
                 int nodesetPageCnt = (int) Math.floor(totalNodeSetCnt / nQueryPageSize);
-                Set<Long> nodeSetRelationIds = new HashSet<Long>();
+                Set<Long> nodeSetRelationIds = new HashSet<>();
                 for (int i = 0; i <= nodesetPageCnt; i++) {
                     try {
                         List<Long> pageList = null;
@@ -537,27 +509,27 @@ public class Map extends Maps {
                             pageList = nodessetList.subList(iStart, totalNodeSetCnt);
                         }
 
-                        if (pageList == null || pageList.size() == 0) {
+                        if ((pageList == null) || (pageList.isEmpty())) {
                             continue;
                         }
-                        nodeSetRelationIds.addAll(new HashSet<Long>(new SQLQuery(conn, DbUtils
+                        nodeSetRelationIds.addAll(new HashSet<>(new SQLQuery(conn, DbUtils
                                 .getConfiguration(getId()))
                                 .from(currentRelationMembers)
                                 .where(currentRelationMembers.memberId.in(pageList).and(
-                                        currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node)))
+                                        currentRelationMembers.memberType.eq(nwr_enum.node)))
                                 .list(currentRelationMembers.relationId)));
                     }
                     catch (Exception ex) {
-                        ex.getMessage();
+                        logger.error(ex.getMessage());
                     }
                 }
 
                 relationIds.addAll(nodeSetRelationIds);
 
-                List<Long> waysetList = new ArrayList<Long>(wayset);
+                List<Long> waysetList = new ArrayList<>(wayset);
                 int totalWaySetCnt = waysetList.size();
                 int waysetPageCnt = (int) Math.floor(totalWaySetCnt / nQueryPageSize);
-                Set<Long> waySetRelationIds = new HashSet<Long>();
+                Set<Long> waySetRelationIds = new HashSet<>();
 
                 for (int i = 0; i <= waysetPageCnt; i++) {
                     try {
@@ -565,40 +537,35 @@ public class Map extends Maps {
                         int iStart = i * nQueryPageSize;
                         int iEnd = iStart + nQueryPageSize;
 
-                        if (i < waysetPageCnt) {
-                            pageList = waysetList.subList(iStart, iEnd);
-                        }
-                        else {
-                            pageList = waysetList.subList(iStart, totalWaySetCnt);
-                        }
+                        pageList = waysetList.subList(iStart, (i < waysetPageCnt) ? iEnd : totalWaySetCnt);
 
-                        if (pageList == null || pageList.size() == 0) {
+                        if ((pageList == null) || (pageList.isEmpty())) {
                             continue;
                         }
 
-                        waySetRelationIds.addAll(new HashSet<Long>(
+                        waySetRelationIds.addAll(new HashSet<>(
                                 new SQLQuery(conn, DbUtils.getConfiguration(getId()))
                                         .from(currentRelationMembers)
                                         .where(currentRelationMembers.memberId.in(pageList).and(
-                                                currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way)))
+                                                currentRelationMembers.memberType.eq(nwr_enum.way)))
                                         .list(currentRelationMembers.relationId)));
                     }
                     catch (Exception ex) {
-                        ex.getMessage();
+                        logger.error(ex.getMessage());
                     }
                 }
 
                 relationIds.addAll(waySetRelationIds);
             }
 
-            if (relationIds.size() > 0) {
-                log.debug("Retrieving relations within the query bounds...");
+            if (!relationIds.isEmpty()) {
+                logger.debug("Retrieving relations within the query bounds...");
 
                 QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
 
                 java.util.Map<Long, Tuple> relationResults = null;
 
-                List<Long> relationIdsList = new ArrayList<Long>(relationIds);
+                List<Long> relationIdsList = new ArrayList<>(relationIds);
 
                 int totalRelationIdsListCnt = relationIdsList.size();
                 int relationIdsPageCnt = (int) Math.floor(totalRelationIdsListCnt / nQueryPageSize);
@@ -609,14 +576,9 @@ public class Map extends Maps {
                         int iStart = i * nQueryPageSize;
                         int iEnd = iStart + nQueryPageSize;
 
-                        if (i < relationIdsPageCnt) {
-                            pageList = relationIdsList.subList(iStart, iEnd);
-                        }
-                        else {
-                            pageList = relationIdsList.subList(iStart, totalRelationIdsListCnt);
-                        }
+                        pageList = relationIdsList.subList(iStart, (i < relationIdsPageCnt) ? iEnd : totalRelationIdsListCnt);
 
-                        if (pageList == null || pageList.size() == 0) {
+                        if ((pageList == null) || (pageList.isEmpty())) {
                             continue;
                         }
 
@@ -675,13 +637,13 @@ public class Map extends Maps {
      *             number allowed //TODO: get the readonly transaction working;
      *             see MapResourceTest::testReadTransactionWithoutFailure
      */
-    public java.util.Map<ElementType, java.util.Map<Long, Tuple>> query(final BoundingBox bounds) throws Exception {
+    public java.util.Map<ElementType, java.util.Map<Long, Tuple>> query(BoundingBox bounds) throws Exception {
         // validateQueryBounds(bounds);
 
         // get the intersecting tile ranges for the nodes
-        final Vector<Range> tileIdRanges = getTileRanges(bounds);
-        java.util.Map<ElementType, java.util.Map<Long, Tuple>> elementIdsToRecordsByType = new HashMap<ElementType, java.util.Map<Long, Tuple>>();
-        if (tileIdRanges.size() > 0) {
+        List<Range> tileIdRanges = getTileRanges(bounds);
+        java.util.Map<ElementType, java.util.Map<Long, Tuple>> elementIdsToRecordsByType = new HashMap<>();
+        if (!tileIdRanges.isEmpty()) {
             BooleanExpression combinedGeospatialCondition = getTileWhereCondition(tileIdRanges).and(
                     getGeospatialWhereCondition(bounds));
             validateNodeCount(combinedGeospatialCondition);
@@ -691,30 +653,27 @@ public class Map extends Maps {
         return elementIdsToRecordsByType;
     }
 
-    private java.util.Map<ElementType, Set<Long>> retrieveElementIds(final BooleanExpression combinedGeospatialCondition) {
-        java.util.Map<ElementType, Set<Long>> elementIdsByType = new HashMap<ElementType, Set<Long>>();
+    private java.util.Map<ElementType, Set<Long>> retrieveElementIds(BooleanExpression combinedGeospatialCondition) {
+        java.util.Map<ElementType, Set<Long>> elementIdsByType = new HashMap<>();
 
         // if the limit hasn't been exceeded, query out all nodes which fall
-        // within the geospatial
-        // bounds, are visible, and belong to this map
-        log.debug("Retrieving IDs of nodes within the query bounds...");
+        // within the geospatial bounds, are visible, and belong to this map
+        logger.debug("Retrieving IDs of nodes within the query bounds...");
 
         QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
 
-        Set<Long> nodeIds = new HashSet<Long>(new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentnodes)
+        Set<Long> nodeIds = new HashSet<>(new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentnodes)
                 .where(combinedGeospatialCondition.and(currentnodes.visible.eq(true))).list(currentnodes.id));
 
         elementIdsByType.put(ElementType.Node, nodeIds);
 
-        Set<Long> wayIds = null;
-        if (nodeIds.size() > 0) {
+        if (!nodeIds.isEmpty()) {
             // get all ways which have way nodes that belong to the previously
-            // queried node results, are
-            // visible, and belong to this map; join in user info
-            log.debug("Retrieving IDs of ways within the query bounds...");
+            // queried node results, are visible, and belong to this map; join in user info
+            logger.debug("Retrieving IDs of ways within the query bounds...");
             QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
 
-            wayIds = new HashSet<Long>(new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentWayNodes)
+            Set<Long> wayIds = new HashSet<>(new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentWayNodes)
                     .where(currentWayNodes.nodeId.in(nodeIds)).list(currentWayNodes.wayId));
 
             elementIdsByType.put(ElementType.Way, wayIds);
@@ -723,7 +682,7 @@ public class Map extends Maps {
              * retrieve all relations that reference the nodes or ways
              * previously retrieved
              */
-            log.debug("Retrieving relations IDs within the query bounds...");
+            logger.debug("Retrieving relations IDs within the query bounds...");
 
             QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
 
@@ -731,20 +690,21 @@ public class Map extends Maps {
             Set<Long> waysIds = elementIdsByType.get(ElementType.Way);
 
             // if the Set is empty the in statement blows up..
-            if (nodesIds.size() == 0) {
-                nodesIds.add((long) -1);
+            if (nodesIds.isEmpty()) {
+                nodesIds.add(-1L);
             }
 
-            if (waysIds.size() == 0) {
-                waysIds.add((long) -1);
+            if (waysIds.isEmpty()) {
+                waysIds.add(-1L);
             }
-            Set<Long> relationIds = new HashSet<Long>(new SQLQuery(conn, DbUtils.getConfiguration(getId()))
+
+            Set<Long> relationIds = new HashSet<>(new SQLQuery(conn, DbUtils.getConfiguration(getId()))
                     .from(currentRelationMembers)
                     .where(currentRelationMembers.memberId
                             .in(nodesIds)
-                            .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node))
+                            .and(currentRelationMembers.memberType.eq(nwr_enum.node))
                             .or(currentRelationMembers.memberId.in(waysIds).and(
-                                    currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way))))
+                                    currentRelationMembers.memberType.eq(nwr_enum.way))))
                     .list(currentRelationMembers.relationId));
 
             elementIdsByType.put(ElementType.Relation, relationIds);
@@ -774,20 +734,23 @@ public class Map extends Maps {
      *             if the number of nodes requested is larger than the maximum
      *             number allowed //TODO: see query
      */
-    public java.util.Map<ElementType, Set<Long>> queryForElementIds(final BoundingBox bounds) throws Exception {
+    public java.util.Map<ElementType, Set<Long>> queryForElementIds(BoundingBox bounds) throws Exception {
         // TODO: add transaction; verify that no other writes are seen during
         // this transaction
 
         validateQueryBounds(bounds);
+
         // get the intersecting tile ranges for the nodes
-        final Vector<Range> tileIdRanges = getTileRanges(bounds);
-        java.util.Map<ElementType, Set<Long>> elementIdsByType = new HashMap<ElementType, Set<Long>>();
-        if (tileIdRanges.size() > 0) {
+        List<Range> tileIdRanges = getTileRanges(bounds);
+        java.util.Map<ElementType, Set<Long>> elementIdsByType = new HashMap<>();
+
+        if (!tileIdRanges.isEmpty()) {
             BooleanExpression combinedGeospatialCondition = getTileWhereCondition(tileIdRanges).and(
                     getGeospatialWhereCondition(bounds));
             validateNodeCount(combinedGeospatialCondition);
             elementIdsByType = retrieveElementIds(combinedGeospatialCondition);
         }
+
         return elementIdsByType;
     }
 
@@ -802,19 +765,15 @@ public class Map extends Maps {
      */
     public static MapLayers mapLayerRecordsToLayers(List<Maps> mapLayerRecords) throws Exception {
         MapLayers mapLayers = new MapLayers();
-        List<MapLayer> mapLayerList = new ArrayList<MapLayer>();
+        List<MapLayer> mapLayerList = new ArrayList<>();
         
-        final boolean osmApiDbEnabled = 
-          Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"));
+        boolean osmApiDbEnabled = Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"));
         
         if (osmApiDbEnabled) {
-            // add a OSM API db dummy record for the UI for conflation
-            // involving OSM API db data
+            // add a OSM API db dummy record for the UI for conflation involving OSM API db data
             MapLayer mapLayer = new MapLayer();
-            mapLayer.setId(-1); // using id = -1 to identify the OSM API db source
-                                // layer in the ui
-            mapLayer.setName(
-              "OSM_API_DB_" + HootProperties.getProperty("osmApiDbName"));
+            mapLayer.setId(-1); // using id = -1 to identify the OSM API db source layer in the ui
+            mapLayer.setName("OSM_API_DB_" + HootProperties.getProperty("osmApiDbName"));
             mapLayerList.add(mapLayer);
         }
 
@@ -823,9 +782,9 @@ public class Map extends Maps {
             mapLayer.setId(mapLayerRecord.getId());
             mapLayer.setName(mapLayerRecord.getDisplayName());
             mapLayer.setDate(mapLayerRecord.getCreatedAt());
+
             if (osmApiDbEnabled) {
-                java.util.Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) mapLayerRecord
-                        .getTags());
+                java.util.Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) mapLayerRecord.getTags());
                 //This tag, set during conflation, is what indicates whether a conflated dataset
                 //had any osm api db source data in it.  That is the requirement to export back
                 //into an osm api db.
@@ -833,10 +792,12 @@ public class Map extends Maps {
                     mapLayer.setCanExportToOsmApiDb(true);
                 }
             }
+
             mapLayerList.add(mapLayer);
         } 
         
-        mapLayers.setLayers(mapLayerList.toArray(new MapLayer[] {}));
+        mapLayers.setLayers(mapLayerList.toArray(new MapLayer[mapLayerList.size()]));
+
         return mapLayers;
     }
     
@@ -850,7 +811,8 @@ public class Map extends Maps {
      */
     public static FolderRecords mapFolderRecordsToFolders(List<Folders> folderRecordSet) {
         FolderRecords folderRecords = new FolderRecords();
-        List<FolderRecord> folderRecordList = new ArrayList<FolderRecord>();
+        List<FolderRecord> folderRecordList = new ArrayList<>();
+
         for (Folders folderRecord : folderRecordSet) {
             FolderRecord folder = new FolderRecord();
             folder.setId(folderRecord.getId());
@@ -858,7 +820,9 @@ public class Map extends Maps {
             folder.setParentId(folderRecord.getParentId());
             folderRecordList.add(folder);
         }
-        folderRecords.setFolders(folderRecordList.toArray(new FolderRecord[] {}));
+
+        folderRecords.setFolders(folderRecordList.toArray(new FolderRecord[folderRecordList.size()]));
+
         return folderRecords;
     }
 
@@ -872,7 +836,8 @@ public class Map extends Maps {
      */
     public static LinkRecords mapLinkRecordsToLinks(List<FolderMapMappings> linkRecordSet) {
         LinkRecords linkRecords = new LinkRecords();
-        List<LinkRecord> linkRecordList = new ArrayList<LinkRecord>();
+        List<LinkRecord> linkRecordList = new ArrayList<>();
+
         for (FolderMapMappings linkRecord : linkRecordSet) {
             LinkRecord link = new LinkRecord();
             link.setId(linkRecord.getId());
@@ -880,7 +845,9 @@ public class Map extends Maps {
             link.setMapId(linkRecord.getMapId());
             linkRecordList.add(link);
         }
-        linkRecords.setLinks(linkRecordList.toArray(new LinkRecord[] {}));
+
+        linkRecords.setLinks(linkRecordList.toArray(new LinkRecord[linkRecordList.size()]));
+
         return linkRecords;
     }
 
@@ -892,17 +859,18 @@ public class Map extends Maps {
      */
     public BoundingBox getBounds() throws Exception {
         if (bounds == null) {
-            final Tuple nodeResults = new SQLQuery(conn, DbUtils.getConfiguration(getId()))
+            Tuple nodeResults = new SQLQuery(conn, DbUtils.getConfiguration(getId()))
                     .from(currentnodes)
                     .list(currentnodes.longitude.max(), currentnodes.longitude.min(), currentnodes.latitude.max(),
                             currentnodes.latitude.min()).get(0);
+
             bounds = new BoundingBox(nodeResults.get(1, Double.class), nodeResults.get(3, Double.class),
                     nodeResults.get(0, Double.class), nodeResults.get(2, Double.class));
         }
         return bounds;
     }
 
-    public static boolean mapExists(final long id, Connection conn) {
+    public static boolean mapExists(long id, Connection conn) {
         return new SQLQuery(conn, DbUtils.getConfiguration()).from(QMaps.maps).where(QMaps.maps.id.eq(id)).count() > 0;
     }
 }

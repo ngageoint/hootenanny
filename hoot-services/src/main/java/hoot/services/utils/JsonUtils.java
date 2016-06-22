@@ -43,8 +43,8 @@ import org.slf4j.LoggerFactory;
  * Various JSON utilities
  */
 public class JsonUtils {
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(JsonUtils.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(JsonUtils.class);
 
     /**
      * Converts a POJO to JSON
@@ -54,7 +54,7 @@ public class JsonUtils {
      * @return JSON string
      * @throws IOException
      */
-    public static String objectToJson(final Object obj) throws IOException {
+    public static String objectToJson(Object obj) throws IOException {
         StringWriter writer = new StringWriter();
         JsonGenerator jsonGenerator = new JsonFactory().createJsonGenerator(writer);
         jsonGenerator.setCodec(new ObjectMapper());
@@ -78,12 +78,12 @@ public class JsonUtils {
      * @throws JsonMappingException
      * @throws IOException
      */
-    public static String getTopLevelValueAsString(final String fieldName, final String json, final boolean retainQuotes)
-            throws JsonParseException, JsonMappingException, IOException {
+    public static String getTopLevelValueAsString(String fieldName, String json, boolean retainQuotes)
+            throws IOException {
         JsonNode root = (new ObjectMapper()).readTree(json).path(fieldName);
         if (root != null) {
             String value = root.toString();
-            if (!retainQuotes && value != null) {
+            if (!retainQuotes && (value != null)) {
                 value = value.replaceAll("\"", "");
             }
             return value;

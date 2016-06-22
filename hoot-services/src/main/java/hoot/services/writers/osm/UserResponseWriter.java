@@ -44,7 +44,7 @@ import hoot.services.utils.XmlDocumentBuilder;
  * Writes the response to a user get request
  */
 public class UserResponseWriter {
-    private static final Logger log = LoggerFactory.getLogger(UserResponseWriter.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserResponseWriter.class);
 
     /**
      * Writes the user response to an XML document
@@ -55,24 +55,22 @@ public class UserResponseWriter {
      *            JDBC Connection
      * @return an XML document
      */
-    public Document writeResponse(final User user, Connection conn) {
+    public Document writeResponse(User user, Connection conn) {
         Document responseDoc = null;
         try {
-            log.debug("Building response...");
+            logger.debug("Building response...");
 
             responseDoc = XmlDocumentBuilder.create();
 
             Element osmElement = OsmResponseHeaderGenerator.getOsmHeader(responseDoc);
-
-            Element userElement = user.toXml(osmElement,
-                    /* user.numChangesetsModified() */-1);
+            Element userElement = user.toXml(osmElement, /* user.numChangesetsModified() */-1);
             osmElement.appendChild(userElement);
 
             responseDoc.appendChild(osmElement);
         }
         catch (Exception e) {
             ResourceErrorHandler.handleError("Error creating response for user query. (" + e.getMessage() + ") ",
-                    Status.INTERNAL_SERVER_ERROR, log);
+                    Status.INTERNAL_SERVER_ERROR, logger);
         }
 
         return responseDoc;

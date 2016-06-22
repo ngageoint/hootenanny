@@ -41,69 +41,67 @@ import hoot.services.db2.Users;
 
 
 public class UserSaver {
-    private static final Logger log = LoggerFactory.getLogger(UserSaver.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserSaver.class);
 
-    private Connection _conn;
+    private final Connection conn;
 
-    public UserSaver(final Connection cn) {
-        _conn = cn;
+    public UserSaver(Connection cn) {
+        conn = cn;
     }
 
-    public Users getOrSaveByEmail(final String userEmail) throws Exception {
+    public Users getOrSaveByEmail(String userEmail) throws Exception {
         Users ret = null;
 
         try {
             QUsers users = QUsers.users;
 
-            ret = (new SQLQuery(_conn, DbUtils.getConfiguration())).from(users)
+            ret = (new SQLQuery(conn, DbUtils.getConfiguration())).from(users)
                     .where(users.email.equalsIgnoreCase(userEmail)).singleResult(users);
+
             // none then create
             if (ret == null) {
                 long nCreated = insert(userEmail);
                 if (nCreated > 0) {
 
-                    ret = (new SQLQuery(_conn, DbUtils.getConfiguration())).from(users)
+                    ret = (new SQLQuery(conn, DbUtils.getConfiguration())).from(users)
                             .where(users.email.equalsIgnoreCase(userEmail)).singleResult(users);
                 }
             }
         }
         catch (Exception ex) {
-            log.error("Failed to save user by email: " + ex.getMessage());
+            logger.error("Failed to save user by email: {}", ex.getMessage());
             throw ex;
         }
         return ret;
     }
 
-    public long insert(final String email) throws Exception {
+    public long insert(String email) throws Exception {
         long nInserted = 0;
         try {
-            SQLInsertClause cl = _createInsertClause(email);
+            SQLInsertClause cl = createInsertClause(email);
             if (cl != null) {
                 nInserted = cl.execute();
             }
             else {
                 throw new Exception("Invalid insert clause.");
             }
-
         }
         catch (Exception ex) {
-            String err = ex.getMessage();
-            log.error(err);
+            logger.error(ex.getMessage());
             throw ex;
         }
         return nInserted;
     }
 
-    protected SQLInsertClause _createInsertClause(final String email) throws Exception {
+    protected SQLInsertClause createInsertClause(String email) throws Exception {
         SQLInsertClause cl = null;
         try {
             Configuration configuration = DbUtils.getConfiguration();
             QUsers users = QUsers.users;
-            cl = new SQLInsertClause(_conn, configuration, users).columns(users.email, users.displayName).values(email,
-                    email);
+            cl = new SQLInsertClause(conn, configuration, users).columns(users.email, users.displayName).values(email, email);
         }
         catch (Exception ex) {
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
             throw ex;
         }
         return cl;

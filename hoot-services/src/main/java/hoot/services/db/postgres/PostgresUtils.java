@@ -38,7 +38,11 @@ import org.postgresql.util.PGobject;
 /**
  * Postgres specific utilities
  */
-public class PostgresUtils {
+public final class PostgresUtils {
+
+    private PostgresUtils() {
+    }
+
     /**
      * Converts an hstore Postgres object to a string map
      * 
@@ -47,24 +51,24 @@ public class PostgresUtils {
      * @return a string map with the hstore's data
      * @throws Exception
      */
-    public static Map<String, String> postgresObjToHStore(final PGobject postgresObj) throws Exception {
+    public static Map<String, String> postgresObjToHStore(PGobject postgresObj) throws Exception {
         // type = hstore
         // value = "key 1"=>"val 1", "key 2"=>"val 2"
 
-        Map<String, String> hstore = new HashMap<String, String>();
+        Map<String, String> hstore = new HashMap<>();
 
-        if (postgresObj != null && postgresObj.getValue() != null
-                && StringUtils.trimToNull(postgresObj.getValue()) != null) {
+        if ((postgresObj != null) && (postgresObj.getValue() != null)
+                && (StringUtils.trimToNull(postgresObj.getValue()) != null)) {
             String tagsStr = postgresObj.getValue();
-            hstore = _parseTags(tagsStr);
+            hstore = parseTags(tagsStr);
         }
         return hstore;
     }
 
-    protected static final Map<String, String> _parseTags(final String tagsStr) throws Exception {
-        Map<String, String> tagsMap = new HashMap<String, String>();
+    static Map<String, String> parseTags(String tagsStr) throws Exception {
+        Map<String, String> tagsMap = new HashMap<>();
 
-        if (tagsStr != null && tagsStr.length() > 0) {
+        if ((tagsStr != null) && (!tagsStr.isEmpty())) {
             Pattern regex = Pattern.compile("(\"[^\"]*\")=>(\"(?:\\\\.|[^\"\\\\]+)*\"|[^,\"]*)");
             Matcher regexMatcher = regex.matcher(tagsStr);
             while (regexMatcher.find()) {

@@ -42,8 +42,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class JobExecutionManager {
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(JobExecutionManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(JobExecutionManager.class);
 
     private INativeInterface nativeInterface;
 

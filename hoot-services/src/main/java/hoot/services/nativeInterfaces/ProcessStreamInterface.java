@@ -62,63 +62,39 @@ import hoot.services.command.ICommandRunner;
  *         [any argument make file uses] when "exectype" is "make"
  */
 public class ProcessStreamInterface implements INativeInterface {
+    private static final Logger logger = LoggerFactory.getLogger(ProcessStreamInterface.class);
 
-    private static final Logger log = LoggerFactory.getLogger(ProcessStreamInterface.class);
-    private static String coreScriptPath = null;
-    private static String coreScriptOutputPath = null;
+    private static final String CORE_SCRIPT_PATH = HootProperties.getProperty("coreScriptPath");
+
     // This contains the command runner objects for the executing processes.
     // Used for job cancellation and tracking
-    protected static Map<String, ICommandRunner> _jobProcesses = null;
-    protected static Map<String, ICommandRunner> _progProcesses = null;
+    private static final Map<String, ICommandRunner> JOB_PROCESSES = new ConcurrentHashMap<>();
+    private static final Map<String, ICommandRunner> PROG_PROCESSES = new ConcurrentHashMap<>();
 
-    private static String dbUrl = null;
-    private static String osmApiDbUrl = null;
+    private static final String DB_URL;
+    private static final String OSM_API_DB_URL;
+
+    static {
+        String dbname = HootProperties.getProperty("dbName");
+        String userid = HootProperties.getProperty("dbUserId");
+        String pwd = HootProperties.getProperty("dbPassword");
+        String host = HootProperties.getProperty("dbHost");
+        DB_URL = "hootapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
+
+        String osmApiDbName = HootProperties.getProperty("osmApiDbName");
+        String osmApiDbUserId = HootProperties.getProperty("osmApiDbUserId");
+        String osmApiDbPassword = HootProperties.getProperty("osmApiDbPassword");
+        String osmApiDbHost = HootProperties.getProperty("osmApiDbHost");
+        OSM_API_DB_URL = "osmapidb://" + osmApiDbUserId + ":" + osmApiDbPassword + "@" + osmApiDbHost + "/" + osmApiDbName;
+    }
 
     public ProcessStreamInterface() {
-        // for make file script based call
-        if (coreScriptPath == null) {
-            coreScriptPath = HootProperties.getProperty("coreScriptPath");
-        }
-        // for make file script based call
-        if (coreScriptOutputPath == null) {
-            coreScriptOutputPath = HootProperties.getProperty("coreScriptOutputPath");
-        }
-
-        if (_jobProcesses == null) {
-            _jobProcesses = new ConcurrentHashMap<String, ICommandRunner>();
-        }
-
-        if (_progProcesses == null) {
-            _progProcesses = new ConcurrentHashMap<String, ICommandRunner>();
-        }
-
-        try {
-
-            if (dbUrl == null) {
-                String dbname = HootProperties.getProperty("dbName");
-                String userid = HootProperties.getProperty("dbUserId");
-                String pwd = HootProperties.getProperty("dbPassword");
-                String host = HootProperties.getProperty("dbHost");
-                dbUrl = "hootapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
-            }
-            if (osmApiDbUrl == null) {
-                String dbname = HootProperties.getProperty("osmApiDbName");
-                String userid = HootProperties.getProperty("osmApiDbUserId");
-                String pwd = HootProperties.getProperty("osmApiDbPassword");
-                String host = HootProperties.getProperty("osmApiDbHost");
-                osmApiDbUrl = "osmapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
-            }
-
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-        }
     }
 
     @Override
     public String getJobProgress(String jobId) {
         String stdStr = "";
-        Object oCmdRunner = _progProcesses.get(jobId);
+        Object oCmdRunner = PROG_PROCESSES.get(jobId);
         if (oCmdRunner != null) {
             ICommandRunner cmdRunner = (ICommandRunner) oCmdRunner;
             stdStr = cmdRunner.getStdOut();
@@ -141,51 +117,53 @@ public class ProcessStreamInterface implements INativeInterface {
      * JSONObject)
      */
     @Override
-    public JSONObject exec(JSONObject cmd) throws NativeInterfaceException {
-        log.debug("Executing command : " + cmd.toJSONString());
+    public JSONObject exec(JSONObject command) throws NativeInterfaceException {
+        logger.debug("Executing command : {}", command.toJSONString());
         String[] commandArr = null;
         JSONObject ret = new JSONObject();
         CommandResult res = null;
         boolean addedToQ = false;
         try {
-            String exec = cmd.get("exectype").toString();
+            String exec = command.get("exectype").toString();
 
             if (exec.equalsIgnoreCase("hoot")) {
-                commandArr = createCmdArray(cmd);
+                commandArr = createCmdArray(command);
             }
             else if (exec.equalsIgnoreCase("make")) {
-                commandArr = createScriptCmdArray(cmd);
+                commandArr = createScriptCmdArray(command);
             }
             else if (exec.equalsIgnoreCase("bash")) {
-                commandArr = createBashScriptCmdArray(cmd);
+                commandArr = createBashScriptCmdArray(command);
             }
             else {
-                log.error("Failed to parse params: " + cmd.toJSONString());
+                logger.error("Failed to parse params: {}", command.toJSONString());
                 throw new NativeInterfaceException("Failed to parse params.",
                         NativeInterfaceException.HttpCode.BAD_RQUEST);
             }
-            String commandStr = ArrayUtils.toString(commandArr);
-            log.debug("Native call: " + commandStr);
-            if (commandArr == null || commandArr.length == 0) {
-                throw new NativeInterfaceException("Failed to parse params.",
-                        NativeInterfaceException.HttpCode.BAD_RQUEST);
-            }
-            ICommandRunner cmdRunner = new CommandRunner();
-            addedToQ = addToProcessQ(cmd, cmdRunner);
 
-            log.debug("Start: " + new Date().getTime());
+            String commandStr = ArrayUtils.toString(commandArr);
+            logger.debug("Native call: {}", commandStr);
+            if ((commandArr == null) || (commandArr.length == 0)) {
+                throw new NativeInterfaceException("Failed to parse params.",
+                        NativeInterfaceException.HttpCode.BAD_RQUEST);
+            }
+
+            ICommandRunner cmdRunner = new CommandRunner();
+            addedToQ = addToProcessQ(command, cmdRunner);
+
+            logger.debug("Start: {}", new Date().getTime());
             res = cmdRunner.exec(commandArr);
-            log.debug("End: " + new Date().getTime());
+            logger.debug("End: {}", new Date().getTime());
             if (res != null) {
                 if (res.getExitStatus() == 0) {
                     String stdOut = res.getStdout();
-                    log.debug("stdout: " + stdOut);
+                    logger.debug("stdout: {}", stdOut);
                     ret.put("stdout", stdOut);
 
                     String warnings = "";
                     List<String> stdLines = IOUtils.readLines(new StringReader(stdOut));
                     for (String ln : stdLines) {
-                        if (ln.indexOf(" WARN ") > -1) {
+                        if (ln.contains(" WARN ")) {
                             warnings += ln;
                             warnings += "\n";
                         }
@@ -196,7 +174,8 @@ public class ProcessStreamInterface implements INativeInterface {
                             break;
                         }
                     }
-                    if (warnings.length() > 0) {
+
+                    if (!warnings.isEmpty()) {
                         System.out.println(stdOut);
                         ret.put("warnings", warnings);
                     }
@@ -208,8 +187,8 @@ public class ProcessStreamInterface implements INativeInterface {
                     }
 
                     boolean doThrowException = true;
-                    if (cmd.containsKey("throwerror")) {
-                        doThrowException = Boolean.parseBoolean(cmd.get("throwerror").toString());
+                    if (command.containsKey("throwerror")) {
+                        doThrowException = Boolean.parseBoolean(command.get("throwerror").toString());
                     }
 
                     if (doThrowException) {
@@ -223,7 +202,7 @@ public class ProcessStreamInterface implements INativeInterface {
             }
         }
         catch (Exception e) {
-            if (res != null && res.getExitStatus() == -9999) {
+            if ((res != null) && (res.getExitStatus() == -9999)) {
                 throw new NativeInterfaceException("Failed to execute." + e.getMessage(),
                         NativeInterfaceException.HttpCode.USER_CANCEL);
             }
@@ -232,7 +211,7 @@ public class ProcessStreamInterface implements INativeInterface {
         }
         finally {
             if (addedToQ) {
-                removeFromProcessQ(cmd);
+                removeFromProcessQ(command);
             }
         }
 
@@ -251,21 +230,16 @@ public class ProcessStreamInterface implements INativeInterface {
     private static boolean addToProcessQ(JSONObject cmd, ICommandRunner cmdRunner) throws Exception {
 
         boolean success = false;
-        if (_jobProcesses != null) {
-            if (cmd.containsKey("jobId")) {
-                _jobProcesses.put(cmd.get("jobId").toString(), cmdRunner);
-                success = true;
-            }
-
+        if (cmd.containsKey("jobId")) {
+            JOB_PROCESSES.put(cmd.get("jobId").toString(), cmdRunner);
+            success = true;
         }
 
-        if (_progProcesses != null) {
-            if (cmd.containsKey("jobId")) {
-                _progProcesses.put(cmd.get("jobId").toString(), cmdRunner);
-                success = true;
-            }
-
+        if (cmd.containsKey("jobId")) {
+            PROG_PROCESSES.put(cmd.get("jobId").toString(), cmdRunner);
+            success = true;
         }
+
         return success;
     }
 
@@ -278,28 +252,24 @@ public class ProcessStreamInterface implements INativeInterface {
     private static void removeFromProcessQ(JSONObject cmd) {
         String jobId = "";
         try {
-            if (_jobProcesses != null) {
-                if (cmd.containsKey("jobId")) {
-                    jobId = cmd.get("jobId").toString();
-                    _jobProcesses.remove(jobId);
-                }
-
+            if (cmd.containsKey("jobId")) {
+                jobId = cmd.get("jobId").toString();
+                JOB_PROCESSES.remove(jobId);
             }
         }
         catch (Exception ex) {
-            log.error("failed to remove from Q:" + jobId);
+            logger.error("failed to remove from Q:{}", jobId);
         }
     }
 
     private static void removeFromProgressProcessQ(String jobId) {
-
         try {
-            if (_progProcesses.containsKey(jobId)) {
-                _progProcesses.remove(jobId);
+            if (PROG_PROCESSES.containsKey(jobId)) {
+                PROG_PROCESSES.remove(jobId);
             }
         }
         catch (Exception ex) {
-            log.error("failed to remove from Q:" + jobId);
+            logger.error("failed to remove from Q:{}", jobId);
         }
     }
 
@@ -313,11 +283,9 @@ public class ProcessStreamInterface implements INativeInterface {
     @Override
     public void terminate(String jobId) throws NativeInterfaceException {
         try {
-            if (_jobProcesses != null) {
-                ICommandRunner cmdRunner = _jobProcesses.get(jobId);
-                if (cmdRunner != null) {
-                    cmdRunner.terminateClean();
-                }
+            ICommandRunner cmdRunner = JOB_PROCESSES.get(jobId);
+            if (cmdRunner != null) {
+                cmdRunner.terminateClean();
             }
         }
         catch (Exception e) {
@@ -345,30 +313,29 @@ public class ProcessStreamInterface implements INativeInterface {
      * "exectype" is "hoot"
      */
     private static String[] createCmdArray(JSONObject cmd) {
-        ArrayList<String> execCmd = new ArrayList<String>();
+        List<String> execCmd = new ArrayList<>();
         try {
             execCmd.add("hoot");
-            execCmd.add("--" + (String) cmd.get("exec"));
+            execCmd.add("--" + cmd.get("exec"));
             JSONArray params = (JSONArray) cmd.get("params");
-            int nParams = params.size();
-            for (int i = 0; i < nParams; i++) {
-                JSONObject param = (JSONObject) params.get(i);
-                Iterator iter = param.entrySet().iterator();
 
+            for (Object o : params) {
+                JSONObject param = (JSONObject) o;
+                Iterator iter = param.entrySet().iterator();
                 String arg = "";
                 while (iter.hasNext()) {
                     Map.Entry mEntry = (Map.Entry) iter.next();
                     arg = (String) mEntry.getValue();
                 }
                 execCmd.add(arg);
-
             }
         }
         catch (Exception ex) {
-            log.error("Failed to parse job params. Reason: " + ex.getMessage());
+            logger.error("Failed to parse job params. Reason: {}", ex.getMessage());
         }
 
         Object[] objectArray = execCmd.toArray();
+
         return Arrays.copyOf(objectArray, objectArray.length, String[].class);
     }
 
@@ -377,16 +344,16 @@ public class ProcessStreamInterface implements INativeInterface {
      * output looks like make -f [some makefile] [any argument make file uses]
      */
     private static String[] createScriptCmdArray(JSONObject cmd) {
-        ArrayList<String> execCmd = new ArrayList<String>();
+        List<String> execCmd = new ArrayList<>();
 
         try {
             execCmd.add("make");
             execCmd.add("-f");
-            execCmd.add(coreScriptPath + "/" + (String) cmd.get("exec"));
+            execCmd.add(CORE_SCRIPT_PATH + "/" + cmd.get("exec"));
             JSONArray params = (JSONArray) cmd.get("params");
-            int nParams = params.size();
-            for (int i = 0; i < nParams; i++) {
-                JSONObject param = (JSONObject) params.get(i);
+
+            for (Object o : params) {
+                JSONObject param = (JSONObject) o;
                 Iterator iter = param.entrySet().iterator();
 
                 String arg = "";
@@ -398,35 +365,34 @@ public class ProcessStreamInterface implements INativeInterface {
                 }
 
                 execCmd.add(key + "=" + arg + "");
-
             }
+
             String jobid = cmd.get("jobId").toString();
             execCmd.add("jobid=" + jobid);
-            execCmd.add("DB_URL=" + dbUrl);
-            execCmd.add("OSM_API_DB_URL=" + osmApiDbUrl);
+            execCmd.add("DB_URL=" + DB_URL);
+            execCmd.add("OSM_API_DB_URL=" + OSM_API_DB_URL);
         }
         catch (Exception ex) {
-            log.error("Failed to parse job params. Reason: " + ex.getMessage());
+            logger.error("Failed to parse job params. Reason: {}", ex.getMessage());
         }
 
         Object[] objectArray = execCmd.toArray();
+
         return Arrays.copyOf(objectArray, objectArray.length, String[].class);
     }
 
     private static String[] createBashScriptCmdArray(JSONObject cmd) {
-        ArrayList<String> execCmd = new ArrayList<String>();
+        List<String> execCmd = new ArrayList<>();
 
         try {
             execCmd.add("bash");
-            execCmd.add(coreScriptPath + "/" + (String) cmd.get("exec"));
+            execCmd.add(CORE_SCRIPT_PATH + "/" + cmd.get("exec"));
             JSONArray params = (JSONArray) cmd.get("params");
-            int nParams = params.size();
-            for (int i = 0; i < nParams; i++) {
-                JSONObject param = (JSONObject) params.get(i);
+            for (Object o : params) {
+                JSONObject param = (JSONObject) o;
                 Iterator iter = param.entrySet().iterator();
 
                 String arg = "";
-                @SuppressWarnings("unused")
                 String key = "";
                 while (iter.hasNext()) {
                     Map.Entry mEntry = (Map.Entry) iter.next();
@@ -434,18 +400,19 @@ public class ProcessStreamInterface implements INativeInterface {
                     arg = (String) mEntry.getValue();
                 }
                 execCmd.add(arg);
-
             }
+
             if (cmd.get("jobId") != null) {
                 String jobid = cmd.get("jobId").toString();
                 execCmd.add(jobid);
             }
         }
         catch (Exception ex) {
-            log.error("Failed to parse job params. Reason: " + ex.getMessage());
+            logger.error("Failed to parse job params. Reason: {}", ex.getMessage());
         }
 
         Object[] objectArray = execCmd.toArray();
+
         return Arrays.copyOf(objectArray, objectArray.length, String[].class);
     }
 }

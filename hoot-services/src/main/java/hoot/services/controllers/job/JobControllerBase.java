@@ -149,8 +149,6 @@ public class JobControllerBase {
     }
 
     protected JSONObject createReflectionJobReq(JSONArray args, String className, String methodName) {
-        this.getClass().getSimpleName();
-
         JSONObject command = new JSONObject();
         command.put("exectype", "reflection");
         command.put("class", className);
@@ -162,8 +160,6 @@ public class JobControllerBase {
 
     protected JSONObject createReflectionJobReq(JSONArray args, String className, String methodName,
             String internalJobId) {
-        this.getClass().getSimpleName();
-
         JSONObject command = new JSONObject();
         command.put("exectype", "reflection");
         command.put("class", className);
@@ -175,8 +171,6 @@ public class JobControllerBase {
     }
 
     protected JSONObject createReflectionSycJobReq(JSONArray args, String className, String methodName) {
-        this.getClass().getSimpleName();
-
         JSONObject command = new JSONObject();
         command.put("exectype", "reflection_sync");
         command.put("class", className);

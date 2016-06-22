@@ -42,9 +42,9 @@ public class QuadTileCalculator {
      *            points longitude
      * @return tile integer
      */
-    public static long tileForPoint(final double latitude, final double longitude) {
-        int lonInt = (int) MathUtils.round(((longitude + 180.0) * 65535.0 / 360.0), 0);
-        int latInt = (int) MathUtils.round(((latitude + 90.0) * 65535.0 / 180.0), 0);
+    public static long tileForPoint(double latitude,double longitude) {
+        int lonInt = (int) MathUtils.round((((longitude + 180.0) * 65535.0) / 360.0), 0);
+        int latInt = (int) MathUtils.round((((latitude + 90.0) * 65535.0) / 180.0), 0);
 
         // use a long here, because java doesn't have unsigned int
         long tileUnsigned = 0;

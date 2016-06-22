@@ -31,63 +31,59 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/**
- *
- */
 public class ReviewableItem extends ReviewQueryMapper {
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(ReviewableItem.class);
-    private long _sortOrder;
-    private long _mapId;
-    private long _relationId;
-    private long _resultCount = 0;
+    private static final Logger logger = LoggerFactory.getLogger(ReviewableItem.class);
 
-    public ReviewableItem(final long sortOrder, final long mapid, final long relationid) {
-        _sortOrder = sortOrder;
-        _mapId = mapid;
-        _relationId = relationid;
+    private long sortOrder;
+    private long mapId;
+    private long relationId;
+    private long resultCount = 0;
+
+    public ReviewableItem(long sortOrder, long mapid, long relationid) {
+        this.sortOrder = sortOrder;
+        this.mapId = mapid;
+        this.relationId = relationid;
     }
 
     public long getRelationId() {
-        return _relationId;
+        return relationId;
     }
 
-    public void setRelationId(final long relid) {
-        _relationId = relid;
+    public void setRelationId(long relid) {
+        relationId = relid;
     }
 
     public long getSortOrder() {
-        return _sortOrder;
+        return sortOrder;
     }
 
-    public void setSortOrder(final long sortOrder) {
-        _sortOrder = sortOrder;
+    public void setSortOrder(long sortOrder) {
+        this.sortOrder = sortOrder;
     }
 
     public long getMapId() {
-        return _mapId;
+        return mapId;
     }
 
-    public void setMapId(final long mapId) {
-        _mapId = mapId;
+    public void setMapId(long mapId) {
+        this.mapId = mapId;
     }
 
     public long getResultCount() {
-        return _resultCount;
+        return resultCount;
     }
 
-    public void setResultCount(final long cnt) {
-        _resultCount = cnt;
+    public void setResultCount(long cnt) {
+        resultCount = cnt;
     }
 
     @Override
     public String toString() {
         JSONObject o = new JSONObject();
-        o.put("sortorder", _sortOrder);
-        o.put("mapid", _mapId);
-        o.put("relationid", _relationId);
+        o.put("sortorder", sortOrder);
+        o.put("mapid", mapId);
+        o.put("relationid", relationId);
 
         return o.toJSONString();
     }
-
 }

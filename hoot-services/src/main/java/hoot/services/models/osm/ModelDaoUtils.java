@@ -42,7 +42,7 @@ import hoot.services.db.DbUtils;
 
 
 public class ModelDaoUtils {
-    private static final Logger log = LoggerFactory.getLogger(ModelDaoUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModelDaoUtils.class);
 
     /**
      * Returns the record ID associated with the record request input string for
@@ -62,11 +62,10 @@ public class ModelDaoUtils {
      *             if the requested record doesn't exist or if multiple reccords
      *             of the same type exist with the requested input name
      */
-    public static long getRecordIdForInputString(final String requestStr, Connection dbConn,
+    public static long getRecordIdForInputString(String requestStr, Connection dbConn,
             RelationalPathBase<?> table, NumberPath<Long> idField, StringPath nameField) throws Exception {
         // There must be a way to implement this generically for all DAO's but
-        // haven't been able to
-        // figured out how to do it yet.
+        // haven't been able to figured out how to do it yet.
 
         if (StringUtils.isEmpty(requestStr)) {
             throw new Exception("No record exists with ID: " + requestStr + ".  Please specify a valid record.");
@@ -83,36 +82,37 @@ public class ModelDaoUtils {
 
         String requestStrType = parsedAsNum ? "ID" : "name";
 
+        logger.debug("Verifying record with {}: {} has previously been created ...", requestStrType, requestStr);
+
         boolean recordExists = false;
         boolean multipleRecordsExist = false;
-        log.debug("Verifying record with " + requestStrType + ": " + requestStr + " has previously been "
-                + "created ...");
         if (idNum != -1) {
             recordExists = new SQLQuery(dbConn, DbUtils.getConfiguration()).from(table)
-                    .where(idField.eq(new Long(idNum))).exists();
+                    .where(idField.eq(idNum)).exists();
         }
         else if (!StringUtils.isEmpty(requestStr)) {
             // input wasn't parsed as a numeric ID, so let's try it as a name
 
             // there has to be a better way to do this against the generated
-            // code but haven't been
-            // able to get it to work yet
-
+            // code but haven't been able to get it to work yet
             List<Long> records = new SQLQuery(dbConn, DbUtils.getConfiguration()).from(table)
                     .where(nameField.eq(requestStr)).list(idField);
 
             if (records.size() == 1) {
                 return records.get(0);
             }
+
             if (records.size() > 1) {
                 recordExists = true;
                 multipleRecordsExist = true;
             }
         }
+
         if (multipleRecordsExist) {
             throw new Exception("Multiple records exist with " + requestStrType + ": " + requestStr
                     + ".  Please specify " + "a single, valid record.");
         }
+
         if (!recordExists) {
             throw new Exception("No record exists with " + requestStrType + ": " + requestStr + ".  Please specify a "
                     + "valid record.");

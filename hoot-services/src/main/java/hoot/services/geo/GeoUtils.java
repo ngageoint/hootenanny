@@ -42,7 +42,7 @@ public class GeoUtils {
      * @return true if both coordinates lie within world boundaries; false
      *         otherwise
      */
-    public static boolean coordsInWorld(final double lat, final double lon) {
-        return lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180;
+    public static boolean coordsInWorld(double lat, double lon) {
+        return (lat >= -90) && (lat <= 90) && (lon >= -180) && (lon <= 180);
     }
 }

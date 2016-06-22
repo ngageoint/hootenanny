@@ -40,7 +40,7 @@ public class UsersRetrieverTest {
     public void testRetrieveAll() throws Exception {
         Connection conn = null;
         UsersRetriever r = new UsersRetriever(conn);
-        String actual = r._getAllQuery().toString();
+        String actual = r.getAllQuery().toString();
 
         String expected = "from \"users\" \"users\"\n" + "order by \"users\".\"display_name\" asc";
 

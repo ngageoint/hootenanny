@@ -29,7 +29,6 @@ package hoot.services.models.osm;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,9 +60,9 @@ import hoot.services.geo.QuadTileCalculator;
  * Represents the model for an OSM node
  */
 public class Node extends Element {
-    private static final Logger log = LoggerFactory.getLogger(Node.class);
+    private static final Logger logger = LoggerFactory.getLogger(Node.class);
 
-    public Node(final Long mapId, Connection dbConnection) throws Exception {
+    public Node(Long mapId, Connection dbConnection) throws Exception {
         super(dbConnection);
         super.elementType = ElementType.Node;
         super.record = new CurrentNodes();
@@ -104,14 +103,15 @@ public class Node extends Element {
     @Override
     public BoundingBox getBounds() throws Exception {
         CurrentNodes nodeRecord;
+
         if (record != null) {
             nodeRecord = (CurrentNodes) record;
         }
         else {
             nodeRecord = new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(currentNodes)
                     .where(currentNodes.id.eq(getId())).singleResult(currentNodes);
-
         }
+
         return new BoundingBox(nodeRecord.getLongitude(), nodeRecord.getLatitude(), nodeRecord.getLongitude(),
                 nodeRecord.getLatitude());
     }
@@ -134,6 +134,7 @@ public class Node extends Element {
             return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(currentNodes)
                     .where(currentNodes.id.in(nodeIds)).list(currentNodes);
         }
+
         return new ArrayList<>();
     }
 
@@ -146,7 +147,7 @@ public class Node extends Element {
      */
     @Override
     public void fromXml(org.w3c.dom.Node xml) throws Exception {
-        log.debug("Parsing node...");
+        logger.debug("Parsing node...");
 
         NamedNodeMap xmlAttributes = xml.getAttributes();
 
@@ -154,18 +155,15 @@ public class Node extends Element {
         CurrentNodes nodeRecord = (CurrentNodes) record;
 
         // set these props at the very beginning, b/c they will be needed
-        // regardless of whether
-        // following checks fail
+        // regardless of whether following checks fail
         nodeRecord.setChangesetId(parseChangesetId(xmlAttributes));
         nodeRecord.setVersion(parseVersion());
         nodeRecord.setTimestamp(parseTimestamp(xmlAttributes));
         nodeRecord.setVisible(true);
 
         // Lat/lon are required here on a delete request as well, b/c it keeps
-        // from having to do a
-        // round trip to the db to get the node lat/long before it is deleted,
-        // so that can be used
-        // to update the changeset bounds (rails port does it this way).
+        // from having to do a round trip to the db to get the node lat/long before it is deleted,
+        // so that can be used to update the changeset bounds (rails port does it this way).
         double latitude = Double.parseDouble(xmlAttributes.getNamedItem("lat").getNodeValue());
         double longitude = Double.parseDouble(xmlAttributes.getNamedItem("lon").getNodeValue());
         if (!GeoUtils.coordsInWorld(latitude, longitude)) {
@@ -173,9 +171,8 @@ public class Node extends Element {
         }
 
         // If the node is being deleted, we still need to make sure that the
-        // coords passed in match
-        // what's on the server, since we'll be relying on them to compute the
-        // changeset bounds.
+        // coords passed in match what's on the server, since we'll be relying on them
+        // to compute the changeset bounds.
         nodeRecord.setLatitude(latitude);
         nodeRecord.setLongitude(longitude);
 
@@ -196,8 +193,7 @@ public class Node extends Element {
         }
 
         // From the Rails port of OSM API:
-        // ways = Way.joins(:way_nodes).where(:visible => true,
-        // :current_way_nodes => { :node_id => id }).order(:id)
+        // ways = Way.joins(:way_nodes).where(:visible => true, :current_way_nodes => { :node_id => id }).order(:id)
         SQLQuery owningWaysQuery = new SQLQuery(super.getDbConnection(), DbUtils.getConfiguration(super.getMapId()))
                 .distinct().from(currentWays).join(currentWayNodes).on(currentWays.id.eq(currentWayNodes.wayId))
                 .where(currentWays.visible.eq(true).and(currentWayNodes.nodeId.eq(super.getId())));
@@ -211,8 +207,7 @@ public class Node extends Element {
 
         // From the Rails port of OSM API:
         // rels = Relation.joins(:relation_members).where(:visible => true,
-        // :current_relation_members => { :member_type => "Node", :member_id =>
-        // id }).
+        // :current_relation_members => { :member_type => "Node", :member_id => id }).
         SQLQuery owningRelationsQuery = new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).distinct()
                 .from(currentRelations).join(currentRelationMembers)
                 .on(currentRelations.id.eq(currentRelationMembers.relationId))
@@ -417,9 +412,8 @@ public class Node extends Element {
 
         String strKv = "";
         if (tags != null) {
-            Iterator it = tags.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pairs = (Map.Entry) it.next();
+            for (Object it : tags.entrySet()) {
+                Map.Entry pairs = (Map.Entry) it;
                 String key = "\"" + pairs.getKey() + "\"";
                 String val = "\"" + pairs.getValue() + "\"";
                 if (strKv.length() > 0) {
@@ -429,33 +423,19 @@ public class Node extends Element {
                 strKv += key + "=>" + val;
             }
         }
+
         String strTags = "'";
         strTags += strKv;
         strTags += "'";
-
-        String POSTGRESQL_DRIVER = "org.postgresql.Driver";
-        Statement stmt = null;
-        try {
-            Class.forName(POSTGRESQL_DRIVER);
-
-            stmt = conn.createStatement();
-
+        
+        try (Statement stmt = conn.createStatement()){
             String sql = "INSERT INTO current_nodes_" + mapId + "(\n"
                     + "            id, latitude, longitude, changeset_id,  visible, \"timestamp\", tile, version, tags)\n"
                     + " VALUES(" + nodeId + "," + latitude + "," + longitude + "," + changesetId + "," + "true" + ","
                     + "CURRENT_TIMESTAMP" + "," + QuadTileCalculator.tileForPoint(latitude, longitude) + "," + "1" + ","
-                    + strTags +
+                    + strTags + ")";
 
-                    ")";
             stmt.executeUpdate(sql);
-        }
-        catch (Exception e) {
-            throw new Exception("Error inserting node.");
-        }
-        finally {
-            if (stmt != null) {
-                stmt.close();
-            }
         }
     }
 }

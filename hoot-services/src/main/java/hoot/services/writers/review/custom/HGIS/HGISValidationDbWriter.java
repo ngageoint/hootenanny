@@ -31,21 +31,20 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import hoot.services.db.DbUtils;
 import hoot.services.exceptions.review.custom.HGIS.ReviewMapTagUpdateException;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-
 
 public class HGISValidationDbWriter {
-    // private static final Logger log =
-    // LoggerFactory.getLogger(HGISValidationDbWriter.class);
+    private static final Logger log = LoggerFactory.getLogger(HGISValidationDbWriter.class);
 
-    private Connection conn;
-    private long mapId;
+    private final Connection conn;
+    private final long mapId;
 
-    public HGISValidationDbWriter(final Connection cn, final long mapid) {
+    public HGISValidationDbWriter(Connection cn, long mapid) {
         this.conn = cn;
         this.mapId = mapid;
     }
@@ -53,10 +52,11 @@ public class HGISValidationDbWriter {
     public void updateMapTagWithReviewType() throws SQLException, ReviewMapTagUpdateException {
         Map<String, String> tags = new HashMap<>();
         tags.put("reviewtype", "hgisvalidation");
-        final long resCnt = DbUtils.updateMapsTableTags(tags, this.mapId, conn);
+
+        long resCnt = DbUtils.updateMapsTableTags(tags, this.mapId, conn);
+
         if (resCnt < 1) {
             throw new ReviewMapTagUpdateException("Failed to update maps table for mapid:" + this.mapId);
         }
-
     }
 }

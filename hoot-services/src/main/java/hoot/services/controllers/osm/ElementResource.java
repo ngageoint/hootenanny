@@ -287,7 +287,7 @@ public class ElementResource {
 
         assert (elementRecords.size() == 1);
 
-        Element element = ElementFactory.getInstance().create(elementType, elementRecords.get(0), dbConn,
+        Element element = ElementFactory.create(elementType, elementRecords.get(0), dbConn,
                 Long.parseLong(mapId));
 
         Users usersTable = elementRecords.get(0).get(QUsers.users);
@@ -383,7 +383,7 @@ public class ElementResource {
         elementDoc.appendChild(elementRootXml);
 
         for (Tuple elementRecord : elementRecords) {
-            Element element = ElementFactory.getInstance().create(elementType, elementRecord, dbConn,
+            Element element = ElementFactory.create(elementType, elementRecord, dbConn,
                     Long.parseLong(mapId));
             Users usersTable = elementRecord.get(QUsers.users);
 

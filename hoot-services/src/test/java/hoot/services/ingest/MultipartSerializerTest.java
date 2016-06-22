@@ -88,7 +88,7 @@ public class MultipartSerializerTest {
         Map<String, String> uploadedFiles = new HashMap<String, String>();
         Map<String, String> uploadedFilesPaths = new HashMap<String, String>();
 
-        _ms._serializeFGDB(fileItemsList, jobId, uploadedFiles, uploadedFilesPaths);
+        _ms.serializeFGDB(fileItemsList, jobId, uploadedFiles, uploadedFilesPaths);
 
         org.junit.Assert.assertEquals("GDB", uploadedFiles.get("fgdbTest"));
         org.junit.Assert.assertEquals("fgdbTest.gdb", uploadedFilesPaths.get("fgdbTest"));
@@ -136,7 +136,7 @@ public class MultipartSerializerTest {
         Map<String, String> uploadedFiles = new HashMap<String, String>();
         Map<String, String> uploadedFilesPaths = new HashMap<String, String>();
 
-        _ms._serializeUploadedFiles(fileItemsList, uploadedFiles, uploadedFilesPaths, wkdirpath);
+        _ms.serializeUploadedFiles(fileItemsList, uploadedFiles, uploadedFilesPaths, wkdirpath);
 
         org.junit.Assert.assertEquals("OSM", uploadedFiles.get("dummy1"));
         org.junit.Assert.assertEquals("dummy1.osm", uploadedFilesPaths.get("dummy1"));
@@ -150,12 +150,12 @@ public class MultipartSerializerTest {
     @Test
     @Category(UnitTest.class)
     public void TestValidatePath() throws Exception {
-        boolean isValid = _ms._validatePath("/projects/hoot/upload/123456",
+        boolean isValid = _ms.validatePath("/projects/hoot/upload/123456",
                 "/projects/hoot/upload/123456/DcGisRoads.gdb");
         org.junit.Assert.assertTrue(isValid);
-        isValid = _ms._validatePath("/projects/hoot/upload/123456", "/projects/hoot/upload/123456/../DcGisRoads.gdb");
+        isValid = _ms.validatePath("/projects/hoot/upload/123456", "/projects/hoot/upload/123456/../DcGisRoads.gdb");
         org.junit.Assert.assertFalse(isValid);
-        isValid = _ms._validatePath("/projects/hoot/upload/123456", "\0//DcGisRoads.gdb");
+        isValid = _ms.validatePath("/projects/hoot/upload/123456", "\0//DcGisRoads.gdb");
         org.junit.Assert.assertFalse(isValid);
     }
 }

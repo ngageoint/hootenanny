@@ -41,35 +41,35 @@ import hoot.services.db2.Users;
 
 
 public class UsersRetriever {
-    private static final Logger log = LoggerFactory.getLogger(UsersRetriever.class);
-    private Connection _conn;
+    private static final Logger logger = LoggerFactory.getLogger(UsersRetriever.class);
+    private final Connection conn;
 
-    public UsersRetriever(final Connection cn) {
-        _conn = cn;
+    public UsersRetriever(Connection cn) {
+        conn = cn;
     }
 
     public List<Users> retrieveAll() throws Exception {
         List<Users> res = new ArrayList<>();
         try {
             QUsers users = QUsers.users;
-            SQLQuery query = _getAllQuery();
+            SQLQuery query = getAllQuery();
             res = query.list(users);
         }
         catch (Exception ex) {
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
             throw ex;
         }
         return res;
     }
 
-    protected SQLQuery _getAllQuery() throws Exception {
-        SQLQuery query = new SQLQuery(this._conn, DbUtils.getConfiguration());
+    protected SQLQuery getAllQuery() throws Exception {
+        SQLQuery query = new SQLQuery(this.conn, DbUtils.getConfiguration());
         try {
             QUsers users = QUsers.users;
             query.from(users).orderBy(users.displayName.asc());
         }
         catch (Exception ex) {
-            log.error(ex.getMessage());
+            logger.error(ex.getMessage());
             throw ex;
         }
 

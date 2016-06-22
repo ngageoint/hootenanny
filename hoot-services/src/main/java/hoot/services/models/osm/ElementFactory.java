@@ -40,22 +40,8 @@ import hoot.services.models.osm.Element.ElementType;
 /**
  * Factory for creating the different OSM element types
  */
-public class ElementFactory {
+public final class ElementFactory {
     private ElementFactory() {
-    }
-
-    private static ElementFactory instance;
-
-    /**
-     * Singleton instance access
-     *
-     * @return an ElementFactory
-     */
-    public static ElementFactory getInstance() {
-        if (instance == null) {
-            instance = new ElementFactory();
-        }
-        return instance;
     }
 
     /**
@@ -72,11 +58,11 @@ public class ElementFactory {
      * @throws InvocationTargetException
      * @throws NoSuchMethodException
      */
-    public Element create(final long mapId, final ElementType elementType, Connection conn)
+    public static Element create(long mapId, ElementType elementType, Connection conn)
             throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException,
             InvocationTargetException {
         return (Element) ConstructorUtils.invokeConstructor(
-                Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType.toString()),
+                Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType),
                 new Object[] { new Long(mapId), conn }, new Class<?>[] { Long.class, Connection.class });
     }
 
@@ -96,32 +82,33 @@ public class ElementFactory {
      * @throws IllegalAccessException
      * @throws NoSuchMethodException
      */
-    public Element create(final ElementType elementType, final Object record, Connection conn, final long mapId)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException,
-            ClassNotFoundException, Exception {
-        Object oRec = record;
-        Object oElem = oRec;
-        if (oRec instanceof Tuple) {
+    public static Element create(ElementType elementType, Object record, Connection conn, long mapId)
+            throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException,
+            InvocationTargetException {
+        Object oElem = record;
+
+        if (record instanceof Tuple) {
             // This was forced since we are using reflection which need to be
             // refactored to something more solid.
 
-            Tuple tRec = (Tuple) oRec;
+            Tuple tRec = (Tuple) record;
             Object[] tRecs = tRec.toArray();
             if (tRecs.length > 0) {
                 // assume first record is good.
                 oElem = tRecs[0];
             }
             else {
-                throw new Exception(
+                throw new IllegalArgumentException(
                         "Bad Record type. Tuple is empty. Please make sure the first object is tuple is DTO "
                                 + "that supports setVersion.");
             }
         }
-        Long oMapId = new Long(mapId);
+
+        Long oMapId = mapId;
         ClassUtils.getPackageName(ElementFactory.class);
-        elementType.toString();
+
         return (Element) ConstructorUtils.invokeConstructor(
-                Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType.toString()),
+                Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType),
                 new Object[] { oMapId, conn, oElem },
                 new Class<?>[] { Long.class, Connection.class, oElem.getClass() });
     }

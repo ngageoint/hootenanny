@@ -539,7 +539,7 @@ public class JobResource {
 
                         if (mapId != null) {
                             ResourcesCleanUtil clean = new ResourcesCleanUtil();
-                            clean.deleteLayers(mapId);
+                            ResourcesCleanUtil.deleteLayers(mapId);
                         }
                     }
                 }

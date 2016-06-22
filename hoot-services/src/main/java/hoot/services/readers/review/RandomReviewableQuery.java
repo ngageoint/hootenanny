@@ -28,7 +28,6 @@ package hoot.services.readers.review;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.slf4j.Logger;
@@ -39,9 +38,6 @@ import hoot.services.models.review.ReviewQueryMapper;
 import hoot.services.models.review.ReviewableItem;
 
 
-/**
- *
- */
 public class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(RandomReviewableQuery.class);
 
@@ -52,16 +48,17 @@ public class RandomReviewableQuery extends ReviewableQueryBase implements IRevie
             // TODO: Since this code will affect all subsequent calls to
             // random(), it is better moved to
             // a more centralized location. Given that this is the only class
-            // using random() in a SQL
-            // query so far, no harm is done for the time being.
+            // using random() in a SQL query so far, no harm is done for the time being.
             if (Boolean.parseBoolean(HootProperties.getPropertyOrDefault("seedRandomQueries"))) {
                 double seed = Double.parseDouble(HootProperties.getPropertyOrDefault("randomQuerySeed"));
 
                 if ((seed >= -1.0) && (seed <= 1.0)) {
-                    try (Statement stmt = getConnection().createStatement()) {
-                        // After executing this, all subsequent calls to
-                        // random() will be seeded.
-                        stmt.executeQuery("select setseed(" + seed + ");");
+                    try (Connection connection = getConnection()) {
+                        try (Statement stmt = connection.createStatement()) {
+                            // After executing this, all subsequent calls to
+                            // random() will be seeded.
+                            stmt.executeQuery("select setseed(" + seed + ");");
+                        }
                     }
                 }
             }
@@ -72,38 +69,37 @@ public class RandomReviewableQuery extends ReviewableQueryBase implements IRevie
     }
 
     @Override
-    public ReviewQueryMapper execQuery() throws SQLException, Exception {
+    public ReviewQueryMapper execQuery() throws Exception {
         ReviewableItem ret = new ReviewableItem(-1, getMapId(), -1);
 
-        long relId = -1;
-        String seqId = "-1";
+        try (Connection connection = getConnection()){
+            try (Statement stmt = connection.createStatement()) {
+                try (ResultSet rs = stmt.executeQuery(getQueryString())) {
+                    long nResCnt = 0;
+                    long relId = -1;
+                    String seqId = "-1";
 
-        try (Statement stmt = getConnection().createStatement(); ResultSet rs = stmt.executeQuery(_getQueryString())) {
-            long nResCnt = 0;
+                    while (rs.next()) {
+                        relId = rs.getLong("relid");
+                        seqId = rs.getString("seq");
+                        nResCnt++;
+                    }
 
-            if (rs == null) {
-                throw new SQLException("Error executing ReviewQueryMapper::execQuery");
+                    ret.setRelationId(relId);
+                    long nSeq = -1;
+                    if (seqId != null) {
+                        nSeq = Long.parseLong(seqId);
+                    }
+                    ret.setSortOrder(nSeq);
+                    ret.setResultCount(nResCnt);
+                }
             }
-
-            while (rs.next()) {
-                relId = rs.getLong("relid");
-                seqId = rs.getString("seq");
-                nResCnt++;
-            }
-
-            ret.setRelationId(relId);
-            long nSeq = -1;
-            if (seqId != null) {
-                nSeq = Long.parseLong(seqId);
-            }
-            ret.setSortOrder(nSeq);
-            ret.setResultCount(nResCnt);
         }
 
         return ret;
     }
 
-    protected String _getQueryString() {
+    protected String getQueryString() {
         return "select id as relid, tags->'hoot:review:sort_order' as seq from current_relations_" + getMapId()
                 + " where tags->'hoot:review:needs' = 'yes' order by random() limit 1";
     }

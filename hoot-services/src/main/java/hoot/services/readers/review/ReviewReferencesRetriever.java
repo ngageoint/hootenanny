@@ -56,62 +56,18 @@ import hoot.services.review.ReviewUtils;
  * Retrieves element references to reviews for a query element
  */
 public class ReviewReferencesRetriever {
-    private static final Logger log = LoggerFactory.getLogger(ReviewReferencesRetriever.class);
-
+    private static final Logger logger = LoggerFactory.getLogger(ReviewReferencesRetriever.class);
     private static final QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
 
-    private Connection conn;
+    private final Connection conn;
 
-    public ReviewReferencesRetriever(final Connection conn) throws Exception {
+    public ReviewReferencesRetriever(Connection conn) throws Exception {
         this.conn = conn;
     }
 
-    // would like to do this with QueryDSL, rather than straight JDBC, but don't
-    // know how to
-    // do the tags part of the query with QueryDSL
-    private List<Long> getUnresolvedReviewRelations(final ElementInfo queryElementInfo, final long mapId)
-            throws SQLException {
-        final String currentRelationMembersTableName = "current_relation_members_" + mapId;
-        final String currentRelationsTableName = "current_relations_" + mapId;
-        String sql = "";
-        sql += "select relation_id from " + currentRelationMembersTableName;
-        sql += " join " + currentRelationsTableName + " on " + currentRelationMembersTableName + ".relation_id = "
-                + currentRelationsTableName + ".id";
-        sql += " where " + currentRelationMembersTableName + ".member_id = " + queryElementInfo.getId() + " and "
-                + currentRelationMembersTableName + ".member_type = '"
-                + Element.elementTypeFromString(queryElementInfo.getType()).toString().toLowerCase() + "' and "
-                + currentRelationsTableName + ".tags->'hoot:review:needs' = 'yes'";
-
-        Statement stmt = null;
-        ResultSet rs = null;
-        List<Long> relationIds = new ArrayList<Long>();
-        try {
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(sql);
-
-            if (rs == null) {
-                throw new SQLException("Error executing getUnresolvedReviewRelations");
-            }
-
-            while (rs.next()) {
-                relationIds.add(rs.getLong(1));
-            }
-        }
-        finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (rs != null) {
-                rs.close();
-            }
-        }
-
-        return relationIds;
-    }
-
-    private List<Long> getAllReviewRelations(final ElementInfo queryElementInfo, final long mapId) throws SQLException {
-        final String currentRelationMembersTableName = "current_relation_members_" + mapId;
-        final String currentRelationsTableName = "current_relations_" + mapId;
+    private List<Long> getAllReviewRelations(ElementInfo queryElementInfo, long mapId) throws SQLException {
+        String currentRelationMembersTableName = "current_relation_members_" + mapId;
+        String currentRelationsTableName = "current_relations_" + mapId;
         String sql = "";
         sql += "select relation_id from " + currentRelationMembersTableName;
         sql += " join " + currentRelationsTableName + " on " + currentRelationMembersTableName + ".relation_id = "
@@ -120,25 +76,12 @@ public class ReviewReferencesRetriever {
                 + currentRelationMembersTableName + ".member_type = '"
                 + Element.elementTypeFromString(queryElementInfo.getType()).toString().toLowerCase() + "'";
 
-        Statement stmt = null;
-        ResultSet rs = null;
-        List<Long> relationIds = new ArrayList<Long>();
-        try {
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(sql);
-            if (rs == null) {
-                throw new SQLException("Error executing getAllReviewRelations");
-            }
-            while (rs.next()) {
-                relationIds.add(rs.getLong(1));
-            }
-        }
-        finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (stmt != null) {
-                stmt.close();
+        List<Long> relationIds = new ArrayList<>();
+        try (Statement stmt = conn.createStatement()) {
+            try (ResultSet rs = stmt.executeQuery(sql)){
+                while (rs.next()) {
+                    relationIds.add(rs.getLong(1));
+                }
             }
         }
 
@@ -160,117 +103,41 @@ public class ReviewReferencesRetriever {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    public List<ReviewRef> getUnresolvedReferences(final ElementInfo queryElementInfo)
-            throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException,
-            InvocationTargetException, Exception {
-        log.debug("requestingElementInfo: " + queryElementInfo.toString());
-        List<ReviewRef> references = new ArrayList<ReviewRef>();
+    public List<ReviewRef> getAllReferences(ElementInfo queryElementInfo) throws Exception {
+        logger.debug("requestingElementInfo: {}", queryElementInfo);
+        List<ReviewRef> references = new ArrayList<>();
 
-        final long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId(), conn);
+        long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId(), conn);
         assert (mapIdNum != -1);
 
         // check for query element existence
-        Set<Long> elementIds = new HashSet<Long>();
+        Set<Long> elementIds = new HashSet<>();
         elementIds.add(queryElementInfo.getId());
-        if (StringUtils.trimToNull(queryElementInfo.getType()) == null || !Element.allElementsExist(mapIdNum,
-                Element.elementTypeFromString(queryElementInfo.getType()), elementIds, conn)) {
-            ReviewUtils.handleError(new Exception("Element with ID: " + queryElementInfo + " and type: "
-                    + queryElementInfo.getType() + " does not exist."), "");
-        }
-
-        // select all unresolved review relation id's from current relation
-        // members where member id =
-        // requesting element's member id and the element type = the requesting
-        // element type
-        final List<Long> unresolvedReviewRelationIds = getUnresolvedReviewRelations(queryElementInfo, mapIdNum);
-
-        if (unresolvedReviewRelationIds.size() > 0) {
-            // select all relation members in the group of remaining unresolved
-            // relation id's where the
-            // member's id is not equal to the requesting element's id and the
-            // member's type is not = to
-            // the requesting element's type
-            final List<CurrentRelationMembers> referencedMembers = new SQLQuery(conn,
-                    DbUtils.getConfiguration(mapIdNum))
-                            .from(currentRelationMembers)
-                            .where(currentRelationMembers.relationId.in(unresolvedReviewRelationIds)
-                                    .and(currentRelationMembers.memberId.ne(queryElementInfo.getId())
-                                            .or(currentRelationMembers.memberType
-                                                    .ne(Element.elementEnumFromString(queryElementInfo.getType())))))
-                            .orderBy(currentRelationMembers.relationId.asc(), currentRelationMembers.memberId.asc(),
-                                    currentRelationMembers.sequenceId.asc())
-                            .list(currentRelationMembers);
-
-            // return all elements corresponding to the filtered down set of
-            // relation members
-            for (CurrentRelationMembers member : referencedMembers) {
-                references.add(new ReviewRef(queryElementInfo.getMapId(), member.getMemberId(),
-                        Element.elementTypeForElementEnum(member.getMemberType()).toString().toLowerCase(),
-                        member.getRelationId()));
-            }
-        }
-
-        return references;
-    }
-
-    /**
-     * Retrieves all other unresolved element references to reviews for a given
-     * element
-     * 
-     * @param queryElementInfo
-     *            element whose review references are to be retrieved
-     * @return a list containing all features the input feature needs to be
-     *         reviewed with
-     * @throws Exception
-     * @throws InvocationTargetException
-     * @throws NoSuchMethodException
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     */
-    public List<ReviewRef> getAllReferences(final ElementInfo queryElementInfo)
-            throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException,
-            InvocationTargetException, Exception {
-        log.debug("requestingElementInfo: " + queryElementInfo.toString());
-        List<ReviewRef> references = new ArrayList<ReviewRef>();
-
-        final long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId(), conn);
-        assert (mapIdNum != -1);
-
-        // check for query element existence
-        Set<Long> elementIds = new HashSet<Long>();
-        elementIds.add(queryElementInfo.getId());
-        if (StringUtils.trimToNull(queryElementInfo.getType()) == null || !Element.allElementsExist(mapIdNum,
+        if ((StringUtils.trimToNull(queryElementInfo.getType()) == null) || !Element.allElementsExist(mapIdNum,
                 Element.elementTypeFromString(queryElementInfo.getType()), elementIds, conn)) {
             ReviewUtils.handleError(new Exception("Element with ID: " + queryElementInfo + " and type: "
                     + queryElementInfo.getType() + " does not exist."), "");
         }
 
         // select all review relation id's from current relation members where
-        // member id =
-        // requesting element's member id and the element type = the requesting
-        // element type
-        final List<Long> allReviewRelationIds = getAllReviewRelations(queryElementInfo, mapIdNum);
+        // member id = requesting element's member id and the element type = the requesting element type
+        List<Long> allReviewRelationIds = getAllReviewRelations(queryElementInfo, mapIdNum);
 
-        if (allReviewRelationIds.size() > 0) {
-            // select all relation members where the
-            // member's id is not equal to the requesting element's id and the
-            // member's type is not = to
-            // the requesting element's type
-            final List<CurrentRelationMembers> referencedMembers = new SQLQuery(conn,
+        if (!allReviewRelationIds.isEmpty()) {
+            // select all relation members where themember's id is not equal to the requesting element's id and the
+            // member's type is not = to the requesting element's type
+            List<CurrentRelationMembers> referencedMembers = new SQLQuery(conn,
                     DbUtils.getConfiguration(mapIdNum)).from(currentRelationMembers)
                             .where(currentRelationMembers.relationId.in(allReviewRelationIds))
                             .orderBy(currentRelationMembers.relationId.asc(), currentRelationMembers.memberId.asc(),
                                     currentRelationMembers.sequenceId.asc())
                             .list(currentRelationMembers);
 
-            // return all elements corresponding to the filtered down set of
-            // relation members
+            // return all elements corresponding to the filtered down set of relation members
             for (CurrentRelationMembers member : referencedMembers) {
                 references.add(new ReviewRef(queryElementInfo.getMapId(), member.getMemberId(),
                         Element.elementTypeForElementEnum(member.getMemberType()).toString().toLowerCase(),
                         member.getRelationId()));
-
             }
         }
 

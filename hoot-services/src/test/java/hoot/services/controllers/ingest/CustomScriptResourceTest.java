@@ -26,7 +26,9 @@
  */
 package hoot.services.controllers.ingest;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -36,6 +38,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Scanner;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -567,6 +570,36 @@ public class CustomScriptResourceTest {
         Assert.assertTrue(file.exists());
     }
 
+    /**
+     * Removes the first line from a file
+     *
+     * @param file
+     *            file to modify
+     * @throws IOException
+     */
+    private static void removeFirstLineFromFile(File file) throws IOException {
+        try (Scanner fileScanner = new Scanner(file)) {
+            fileScanner.nextLine();
+            try (FileWriter fileStream = new FileWriter(file.getAbsolutePath())) {
+                try (BufferedWriter out = new BufferedWriter(fileStream)) {
+                    while (fileScanner.hasNextLine()) {
+                        String next = fileScanner.nextLine();
+                        if (next.equals(System.lineSeparator())) {
+                            out.newLine();
+                        }
+                        else {
+                            out.write(next);
+                        }
+
+                        out.newLine();
+                    }
+                }
+            }
+        }
+    }
+
+
+
     @Test
     @Category(UnitTest.class)
     public void testDeleteMultipleScriptToBeDeletedHasNoHeader() throws Exception {
@@ -582,7 +615,7 @@ public class CustomScriptResourceTest {
         Assert.assertTrue(file.exists());
 
         // remove the header (on the first line) from the second script
-        hoot.services.utils.FileUtils.removeFirstLineFromFile(file);
+        removeFirstLineFromFile(file);
 
         String content = FileUtils.readFileToString(file, "UTF-8");
         Assert.assertFalse(content.contains("*<<<"));

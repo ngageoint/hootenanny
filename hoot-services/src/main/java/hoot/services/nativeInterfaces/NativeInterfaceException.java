@@ -41,9 +41,9 @@ public class NativeInterfaceException extends Exception {
     public enum HttpCode {
         BAD_RQUEST(400), USER_CANCEL(1001), SERVER_ERROR(500);
 
-        private int value;
+        private final int value;
 
-        private HttpCode(int value) {
+        HttpCode(int value) {
             this.value = value;
         }
 

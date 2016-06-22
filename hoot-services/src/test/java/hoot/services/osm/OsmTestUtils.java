@@ -1406,7 +1406,7 @@ public class OsmTestUtils {
      */
     public static long getTagCountForElementType(final long mapId, final ElementType elementType, Connection dbConn)
             throws Exception {
-        final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
+        final Element prototype = ElementFactory.create(mapId, elementType, dbConn);
         List<?> records = new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
                 .list(prototype.getElementTable());
         long tagCount = 0;
