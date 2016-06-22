@@ -103,7 +103,8 @@ public class ReportsResource {
     @Path("/list")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getReport() {
-        JSONArray reps = new JSONArray();
+        JSONArray reps = null;
+
         try {
             reps = getReportsList();
         }

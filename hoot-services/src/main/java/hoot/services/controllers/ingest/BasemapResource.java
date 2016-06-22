@@ -256,7 +256,7 @@ public class BasemapResource extends JobControllerBase {
     public Response getBasemapList() {
         JSONArray retList = new JSONArray();
         Map<String, JSONObject> sortedScripts = new TreeMap<>();
-        JSONArray filesList = new JSONArray();
+        JSONArray filesList = null;
 
         try {
             filesList = getBasemapListHelper();

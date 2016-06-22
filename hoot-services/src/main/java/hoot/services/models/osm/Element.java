@@ -82,6 +82,8 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     protected static final QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
     protected static final QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
 
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormat.forPattern(DbUtils.TIMESTAMP_DATE_FORMAT);
+
     protected Map<Long, CurrentNodes> dbNodeCache;
 
     public void setDbNodeCache(Map<Long, CurrentNodes> cache) {
@@ -91,16 +93,12 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     // order in the enum here is important, since the request diff writer
     // methods use this to determine
     // the order for creating/updating/deleting elements; i.e. create nodes
-    // before referencing them
-    // in a way, etc.
+    // before referencing them in a way, etc.
     public enum ElementType {
         Node, Way, Relation,
         // Technically, changeset doesn't inherit from Element and thus doesn't
-        // implement
-        // XmlSerializable or DbSerializable, so giving it an element type is a
-        // little bit confusing.
-        // It helps the code clean up a little bit in places, so leaving as is
-        // for now.
+        // implement XmlSerializable or DbSerializable, so giving it an element type is a
+        // little bit confusing. It helps the code clean up a little bit in places, so leaving as is for now.
         Changeset
     }
 
@@ -141,10 +139,8 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         conn = connection;
     }
 
-    private static DateTimeFormatter timeFormatter;
-
     public static DateTimeFormatter getTimeFormatter() {
-        return timeFormatter;
+        return TIME_FORMATTER;
     }
 
     /**
@@ -222,7 +218,6 @@ public abstract class Element implements XmlSerializable, DbSerializable {
 
     public Element(Connection conn) {
         this.conn = conn;
-        timeFormatter = DateTimeFormat.forPattern(DbUtils.TIMESTAMP_DATE_FORMAT);
     }
 
     /**

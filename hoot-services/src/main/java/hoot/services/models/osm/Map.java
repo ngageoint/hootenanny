@@ -386,7 +386,7 @@ public class Map extends Maps {
                                 .list(currentWayNodes.nodeId)));
                     }
                     catch (Exception ex) {
-                        ex.getMessage();
+                        logger.error(ex.getMessage());
                     }
                 }
 
@@ -452,7 +452,7 @@ public class Map extends Maps {
                             }
                         }
                         catch (Exception ex) {
-                            ex.getMessage();
+                            logger.error(ex.getMessage());
                         }
                     }
 
@@ -603,7 +603,7 @@ public class Map extends Maps {
                         }
                     }
                     catch (Exception ex) {
-                        ex.getMessage();
+                        logger.error(ex.getMessage());
                     }
                 }
 

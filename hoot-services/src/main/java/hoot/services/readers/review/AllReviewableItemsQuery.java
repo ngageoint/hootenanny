@@ -93,8 +93,6 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
 
     @Override
     public ReviewQueryMapper execQuery() throws Exception {
-
-        AllReviewableItems ret = new AllReviewableItems(getMapId(), new HashMap<Long, ReviewableItemBboxInfo>());
         try {
             // get counts for each element types of all review relation members
             Map<Long, ReviewableItemBboxInfo> allReviewables = new HashMap<>();
@@ -166,15 +164,15 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
                 isPastLimit = combineBbox(allReviewables, reviewRelationWithRelationMembers);
             }
 
-            ret = new AllReviewableItems(getMapId(), allReviewables);
+            AllReviewableItems ret = new AllReviewableItems(getMapId(), allReviewables);
             ret.setOverFlow(isPastLimit);
+
+            return ret;
         }
         catch (Exception ex) {
             logger.error(ex.getMessage());
             throw ex;
         }
-
-        return ret;
     }
 
     /**

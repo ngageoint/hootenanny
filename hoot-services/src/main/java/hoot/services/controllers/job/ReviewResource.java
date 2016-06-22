@@ -347,14 +347,12 @@ public class ReviewResource {
     @Path("/statistics")
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewableStatistics getReviewableSstatistics(@QueryParam("mapId") String mapId) {
-
-        ReviewableStatistics ret;
+        ReviewableStatistics ret = null;
         if (Long.parseLong(mapId) == -1) // OSM API db
         {
             ret = new ReviewableStatistics();
         }
         else {
-            ret = new ReviewableStatistics(-1, -1);
             try (Connection conn = DbUtils.createConnection()) {
                 long nMapId = Long.parseLong(mapId);
                 ReviewableReader reader = new ReviewableReader(conn);

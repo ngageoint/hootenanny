@@ -63,7 +63,7 @@ public final class ElementFactory {
             InvocationTargetException {
         return (Element) ConstructorUtils.invokeConstructor(
                 Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType),
-                new Object[] { new Long(mapId), conn }, new Class<?>[] { Long.class, Connection.class });
+                new Object[] { Long.valueOf(mapId), conn }, new Class<?>[] { Long.class, Connection.class });
     }
 
     /**

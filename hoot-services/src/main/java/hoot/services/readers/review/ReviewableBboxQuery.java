@@ -278,17 +278,15 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
      * @throws Exception
      */
     private List<Long> getRelationMembers(long relationId) throws Exception {
-        List<Long> relMemberIds = new ArrayList<>();
         try {
             QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
-            relMemberIds = getRelationMembersQuery(relationId).list(currentRelationMembers.memberId);
+            List<Long> relMemberIds = getRelationMembersQuery(relationId).list(currentRelationMembers.memberId);
+            return relMemberIds;
         }
         catch (Exception ex) {
             logger.error(ex.getMessage());
             throw ex;
         }
-
-        return relMemberIds;
     }
 
     /**

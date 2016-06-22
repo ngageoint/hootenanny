@@ -427,14 +427,14 @@ public class Node extends Element {
         String strTags = "'";
         strTags += strKv;
         strTags += "'";
-        
-        try (Statement stmt = conn.createStatement()){
-            String sql = "INSERT INTO current_nodes_" + mapId + "(\n"
-                    + "            id, latitude, longitude, changeset_id,  visible, \"timestamp\", tile, version, tags)\n"
-                    + " VALUES(" + nodeId + "," + latitude + "," + longitude + "," + changesetId + "," + "true" + ","
-                    + "CURRENT_TIMESTAMP" + "," + QuadTileCalculator.tileForPoint(latitude, longitude) + "," + "1" + ","
-                    + strTags + ")";
 
+        String sql = "INSERT INTO current_nodes_" + mapId + "(\n"
+                + "            id, latitude, longitude, changeset_id,  visible, \"timestamp\", tile, version, tags)\n"
+                + " VALUES(" + nodeId + "," + latitude + "," + longitude + "," + changesetId + "," + "true" + ","
+                + "CURRENT_TIMESTAMP" + "," + QuadTileCalculator.tileForPoint(latitude, longitude) + "," + "1" + ","
+                + strTags + ")";
+
+        try (Statement stmt = conn.createStatement()){
             stmt.executeUpdate(sql);
         }
     }

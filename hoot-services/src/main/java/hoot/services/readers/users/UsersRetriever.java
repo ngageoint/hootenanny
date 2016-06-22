@@ -27,7 +27,6 @@
 package hoot.services.readers.users;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -49,17 +48,15 @@ public class UsersRetriever {
     }
 
     public List<Users> retrieveAll() throws Exception {
-        List<Users> res = new ArrayList<>();
         try {
-            QUsers users = QUsers.users;
             SQLQuery query = getAllQuery();
-            res = query.list(users);
+            List<Users> res = query.list(QUsers.users);
+            return res;
         }
         catch (Exception ex) {
             logger.error(ex.getMessage());
             throw ex;
         }
-        return res;
     }
 
     protected SQLQuery getAllQuery() throws Exception {

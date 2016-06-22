@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.osm;
 
+
 import java.sql.Connection;
 import java.util.HashSet;
 import java.util.List;
@@ -233,8 +234,7 @@ public class ElementResource {
             ResourceErrorHandler.handleError("Invalid element type: null", Status.BAD_REQUEST, logger);
         }
         else if (elementType == ElementType.Node) {
-            ResourceErrorHandler.handleError("Get Full Element Request Invalid for type = Node", Status.BAD_REQUEST,
-                    logger);
+            ResourceErrorHandler.handleError("Get Full Element Request Invalid for type = Node", Status.BAD_REQUEST, logger);
         }
 
         Connection conn = DbUtils.createConnection();
@@ -258,9 +258,8 @@ public class ElementResource {
             boolean multiLayerUniqueElementIds, boolean addChildren, Connection dbConn) throws Exception {
         long mapIdNum = -1;
         try {
-            QMaps maps = QMaps.maps;
             // input mapId may be a map ID or a map name
-            mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, dbConn, maps, maps.id, maps.displayName);
+            mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, dbConn, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
         }
         catch (Exception e) {
             if (e.getMessage().startsWith("Multiple records exist")
@@ -319,8 +318,10 @@ public class ElementResource {
     @Path("{elementType: nodes|ways|relations}")
     @Consumes({ MediaType.TEXT_PLAIN })
     @Produces({ MediaType.TEXT_XML })
-    public Response getElements(@QueryParam("mapId") String mapId, @QueryParam("elementIds") String elementIds,
-            @PathParam("elementType") String elemType) throws Exception {
+    public Response getElements(@QueryParam("mapId") String mapId,
+                                @QueryParam("elementIds") String elementIds,
+                                @PathParam("elementType") String elemType)
+            throws Exception {
         String elementType = elemType.substring(0, elemType.length() - 1);
         String[] elemIds = elementIds.split(",");
 
@@ -333,7 +334,6 @@ public class ElementResource {
         Document elementDoc = null;
         try {
             logger.debug("Initializing database connection...");
-
             elementDoc = getElementsXml(mapId, elemIds, elementTypeVal, false, true, conn);
         }
         finally {
@@ -349,9 +349,8 @@ public class ElementResource {
             boolean multiLayerUniqueElementIds, boolean addChildren, Connection dbConn) throws Exception {
         long mapIdNum = -1;
         try {
-            QMaps maps = QMaps.maps;
             // input mapId may be a map ID or a map name
-            mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, dbConn, maps, maps.id, maps.displayName);
+            mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, dbConn, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
         }
         catch (Exception e) {
             if (e.getMessage().startsWith("Multiple records exist") || e.getMessage().startsWith("No record exists")) {

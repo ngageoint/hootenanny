@@ -157,20 +157,22 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public UserSaveResponse getSaveUser(@QueryParam("userEmail") String userEmail) throws Exception {
-        UserSaveResponse response = new UserSaveResponse();
+        UserSaveResponse response = null;
         try (Connection conn = DbUtils.createConnection()) {
             UserSaver saver = new UserSaver(conn);
-            Users user = saver.getOrSaveByEmail(userEmail);
-            if (user == null) {
-                throw new Exception("SQL Insert failed.");
+            try {
+                Users user = saver.getOrSaveByEmail(userEmail);
+                if (user == null) {
+                    throw new Exception("SQL Insert failed.");
+                }
+                response = new UserSaveResponse(user);
             }
+            catch (Exception ex) {
+                ResourceErrorHandler.handleError("Error saving user: " + " (" + ex.getMessage() + ")", Status.BAD_REQUEST,
+                        logger);
+            }
+        }
 
-            response = new UserSaveResponse(user);
-        }
-        catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error saving user: " + " (" + ex.getMessage() + ")", Status.BAD_REQUEST,
-                    logger);
-        }
         return response;
     }
 
@@ -186,16 +188,19 @@ public class UserResource {
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public UsersGetResponse getAllUsers() throws Exception {
-        UsersGetResponse response = new UsersGetResponse();
         try (Connection conn = DbUtils.createConnection()) {
             UsersRetriever retreiver = new UsersRetriever(conn);
-            List<Users> res = retreiver.retrieveAll();
-            response = new UsersGetResponse(res);
+            List<Users> res = null;
+            try {
+                res = retreiver.retrieveAll();
+            }
+            catch (Exception ex) {
+                ResourceErrorHandler.handleError("Error getting all users: " + " (" + ex.getMessage() + ")",
+                        Status.BAD_REQUEST, logger);
+            }
+
+            UsersGetResponse response = new UsersGetResponse(res);
+            return response;
         }
-        catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting all users: " + " (" + ex.getMessage() + ")",
-                    Status.BAD_REQUEST, logger);
-        }
-        return response;
     }
 }
