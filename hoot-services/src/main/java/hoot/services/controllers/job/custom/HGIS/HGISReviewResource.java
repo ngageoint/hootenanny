@@ -27,7 +27,6 @@
 package hoot.services.controllers.job.custom.HGIS;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -45,7 +44,6 @@ import org.slf4j.LoggerFactory;
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.exceptions.osm.InvalidResourceParamException;
-import hoot.services.exceptions.review.custom.HGIS.ReviewMapTagUpdateException;
 import hoot.services.job.JobStatusManager;
 import hoot.services.models.review.custom.HGIS.PrepareForValidationRequest;
 import hoot.services.models.review.custom.HGIS.PrepareForValidationResponse;
@@ -55,11 +53,10 @@ import hoot.services.utils.ResourceErrorHandler;
 
 @Path("/review/custom/HGIS")
 public class HGISReviewResource extends HGISResource {
-
     private static final Logger logger = LoggerFactory.getLogger(HGISReviewResource.class);
 
     public HGISReviewResource() {
-        processScriptName = HootProperties.getProperty("hgisPrepareForValidationScript");
+        super(HootProperties.getProperty("hgisPrepareForValidationScript"));
     }
 
     /**
@@ -100,14 +97,11 @@ public class HGISReviewResource extends HGISResource {
 
             String jobId = UUID.randomUUID().toString();
             JSONObject validationCommand = _createBashPostBody(createParamObj(src, output));
-            // postJobRquest( jobId, argStr);
 
             JSONObject updateMapTagCommand = createUpdateMapTagCommand(output);
 
-            // with new relation based review process
-            // we will no longer need to run prepare review
-            // Instead core will take care of generation relation review for
-            // POI validation
+            // with new relation based review process we will no longer need to run prepare review
+            // Instead core will take care of generation relation review for POI validation
             JSONArray jobArgs = new JSONArray();
             jobArgs.add(validationCommand);
             jobArgs.add(updateMapTagCommand);
@@ -122,23 +116,26 @@ public class HGISReviewResource extends HGISResource {
         catch (Exception ex) {
             ResourceErrorHandler.handleError(ex.getMessage(), Status.INTERNAL_SERVER_ERROR, logger);
         }
+
         return res;
     }
 
-    private JSONObject createUpdateMapTagCommand(final String mapName) throws Exception {
+    private JSONObject createUpdateMapTagCommand(String mapName) throws Exception {
         JSONArray reviewArgs = new JSONArray();
         JSONObject param = new JSONObject();
+
         param.put("value", mapName);
         param.put("paramtype", String.class.getName());
         param.put("isprimitivetype", "false");
         reviewArgs.add(param);
 
-        return _createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.custom.HGIS.HGISReviewResource",
+        return createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.custom.HGIS.HGISReviewResource",
                 "updateMapsTag");
-
     }
 
-    public String updateMapsTag(final String mapName) throws SQLException, ReviewMapTagUpdateException, Exception {
+    // Warning: do not remove this method even though it will appear as unused in your IDE of choice.
+    // The method is invoked relectively
+    public String updateMapsTag(String mapName) throws Exception {
         String jobId = UUID.randomUUID().toString();
         JobStatusManager jobStatusManager = null;
         try (Connection conn = DbUtils.createConnection()) {
@@ -148,12 +145,6 @@ public class HGISReviewResource extends HGISResource {
             HGISValidationMarker marker = new HGISValidationMarker(conn, mapName);
             marker.updateValidationMapTag();
             jobStatusManager.setComplete(jobId);
-        }
-        catch (SQLException | ReviewMapTagUpdateException se) {
-            assert (jobStatusManager != null);
-            jobStatusManager.setFailed(jobId);
-            logger.error(se.getMessage());
-            throw se;
         }
         catch (Exception e) {
             assert (jobStatusManager != null);

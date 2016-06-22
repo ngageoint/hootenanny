@@ -69,15 +69,14 @@ import hoot.services.writers.osm.ChangesetDbWriter;
  */
 @Path("/api/0.6/changeset")
 public class ChangesetResource {
-    private static final Logger log = LoggerFactory.getLogger(ChangesetResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChangesetResource.class);
 
-    private QMaps maps = QMaps.maps;
+    private final QMaps maps = QMaps.maps;
 
-    private ClassPathXmlApplicationContext appContext;
-    private PlatformTransactionManager transactionManager;
+    private final PlatformTransactionManager transactionManager;
 
     public ChangesetResource() {
-        appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
+        ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext(new String[]{"db/spring-database.xml"});
         transactionManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
     }
 
@@ -93,8 +92,7 @@ public class ChangesetResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
     public Response createPreflight() {
-        log.debug("Handling changeset create pre-flight request...");
-
+        logger.debug("Handling changeset create pre-flight request...");
         return Response.ok().build();
     }
 
@@ -120,22 +118,22 @@ public class ChangesetResource {
     @Path("/create")
     @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response create(final String changesetData, @QueryParam("mapId") final String mapId) throws Exception {
+    public Response create(String changesetData, @QueryParam("mapId") String mapId) throws Exception {
         Document changesetDoc = null;
         try {
-            log.debug("Parsing changeset XML...");
+            logger.debug("Parsing changeset XML...");
             changesetDoc = XmlDocumentBuilder.parse(changesetData);
         }
         catch (Exception e) {
             ResourceErrorHandler.handleError("Error parsing changeset XML: "
                     + StringUtils.abbreviate(changesetData, 100) + " (" + e.getMessage() + ")", Status.BAD_REQUEST,
-                    log);
+                    logger);
         }
 
         Connection conn = DbUtils.createConnection();
         long changesetId = -1;
         try {
-            log.debug("Initializing database connection...");
+            logger.debug("Initializing database connection...");
 
             long mapIdNum = -1;
             try {
@@ -143,38 +141,34 @@ public class ChangesetResource {
                 mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
             }
             catch (Exception e) {
-                if (e.getMessage().startsWith("Multiple records exist")) {
+                if (e.getMessage().startsWith("Multiple records exist")
+                        || e.getMessage().startsWith("No record exists")) {
                     ResourceErrorHandler.handleError(
                             e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), Status.NOT_FOUND,
-                            log);
-                }
-                else if (e.getMessage().startsWith("No record exists")) {
-                    ResourceErrorHandler.handleError(
-                            e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), Status.NOT_FOUND,
-                            log);
+                            logger);
                 }
                 ResourceErrorHandler.handleError("Error requesting map with ID: " + mapId + " (" + e.getMessage() + ")",
-                        Status.BAD_REQUEST, log);
+                        Status.BAD_REQUEST, logger);
             }
 
             long userId = -1;
             try {
                 assert (mapIdNum != -1);
-                log.debug("Retrieving user ID associated with map having ID: " + String.valueOf(mapIdNum) + " ...");
+                logger.debug("Retrieving user ID associated with map having ID: {} ...", mapIdNum);
 
                 SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
                 userId = query.from(maps).where(maps.id.eq(mapIdNum)).singleResult(maps.userId);
 
-                log.debug("Retrieved user ID: " + userId);
+                logger.debug("Retrieved user ID: {}", userId);
             }
             catch (Exception e) {
                 ResourceErrorHandler.handleError(
                         "Error locating user associated with map for changeset data: "
                                 + StringUtils.abbreviate(changesetData, 100) + " (" + e.getMessage() + ")",
-                        Status.BAD_REQUEST, log);
+                        Status.BAD_REQUEST, logger);
             }
 
-            log.debug("Intializing transaction...");
+            logger.debug("Intializing transaction...");
             TransactionStatus transactionStatus = transactionManager
                     .getTransaction(new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
             conn.setAutoCommit(false);
@@ -183,15 +177,15 @@ public class ChangesetResource {
                 changesetId = Changeset.createChangeset(changesetDoc, mapIdNum, userId, conn);
             }
             catch (Exception e) {
-                log.error("Rolling back the database transaction...");
+                logger.error("Rolling back the database transaction...");
                 transactionManager.rollback(transactionStatus);
                 conn.rollback();
 
                 ResourceErrorHandler.handleError("Error creating changeset: (" + e.getMessage() + ") "
-                        + StringUtils.abbreviate(changesetData, 100), Status.BAD_REQUEST, log);
+                        + StringUtils.abbreviate(changesetData, 100), Status.BAD_REQUEST, logger);
             }
 
-            log.debug("Committing the database transaction...");
+            logger.debug("Committing the database transaction...");
             transactionManager.commit(transactionStatus);
             conn.commit();
         }
@@ -200,7 +194,8 @@ public class ChangesetResource {
             DbUtils.closeConnection(conn);
         }
 
-        log.debug("Returning ID: " + changesetId + " for new changeset...");
+        logger.debug("Returning ID: {} for new changeset...", changesetId);
+
         return Response.ok(String.valueOf(changesetId), MediaType.TEXT_PLAIN)
                 .header("Content-type", MediaType.TEXT_PLAIN).build();
     }
@@ -219,8 +214,7 @@ public class ChangesetResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
     public Response uploadPreflight() {
-        log.debug("Handling changeset upload pre-flight request...");
-
+        logger.debug("Handling changeset upload pre-flight request...");
         return Response.ok().build();
     }
 
@@ -242,13 +236,14 @@ public class ChangesetResource {
     @Path("/{changesetId}/upload")
     @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.TEXT_XML)
-    public Response upload(final String changeset, @PathParam("changesetId") final long changesetId,
-            @QueryParam("mapId") final String mapId) throws Exception {
-        log.debug("Intializing database connection...");
+    public Response upload(String changeset,
+                           @PathParam("changesetId") long changesetId,
+                           @QueryParam("mapId") String mapId) throws Exception {
+        logger.debug("Intializing database connection...");
         Connection conn = DbUtils.createConnection();
         Document changesetUploadResponse = null;
         try {
-            log.debug("Intializing changeset upload transaction...");
+            logger.debug("Intializing changeset upload transaction...");
             TransactionStatus transactionStatus = transactionManager
                     .getTransaction(new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
             conn.setAutoCommit(false);
@@ -257,6 +252,7 @@ public class ChangesetResource {
                 if (mapId == null) {
                     throw new Exception("Invalid map id.");
                 }
+
                 long mapid = Long.parseLong(mapId);
                 Document changesetDoc = null;
                 try {
@@ -269,13 +265,13 @@ public class ChangesetResource {
                 changesetUploadResponse = (new ChangesetDbWriter(conn)).write(mapid, changesetId, changesetDoc);
             }
             catch (Exception e) {
-                log.error("Rolling back transaction for changeset upload...");
+                logger.error("Rolling back transaction for changeset upload...");
                 transactionManager.rollback(transactionStatus);
                 conn.rollback();
                 handleError(e, changesetId, StringUtils.abbreviate(changeset, 100));
             }
 
-            log.debug("Committing changeset upload transaction...");
+            logger.debug("Committing changeset upload transaction...");
             transactionManager.commit(transactionStatus);
             conn.commit();
         }
@@ -284,10 +280,11 @@ public class ChangesetResource {
             DbUtils.closeConnection(conn);
         }
 
-        log.debug("Returning changeset upload response: "
-                + StringUtils.abbreviate(XmlDocumentBuilder.toString(changesetUploadResponse), 100) + " ...");
+        logger.debug("Returning changeset upload response: {} ...",
+                StringUtils.abbreviate(XmlDocumentBuilder.toString(changesetUploadResponse), 100));
+
         return Response.ok(new DOMSource(changesetUploadResponse), MediaType.TEXT_XML)
-                .header("Content-type", MediaType.TEXT_XML).build();
+                       .header("Content-type", MediaType.TEXT_XML).build();
     }
 
     /**
@@ -301,7 +298,7 @@ public class ChangesetResource {
     @Path("/{changesetId}/close")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response closePreflight() {
-        log.info("Handling changeset close pre-flight request...");
+        logger.info("Handling changeset close pre-flight request...");
 
         return Response.ok().build();
     }
@@ -319,13 +316,14 @@ public class ChangesetResource {
     @Path("/{changesetId}/close")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public String close(@PathParam("changesetId") final long changesetId, @QueryParam("mapId") final String mapId)
+    public String close(@PathParam("changesetId") long changesetId,
+                        @QueryParam("mapId") String mapId)
             throws Exception {
-        log.info("Closing changeset with ID: " + changesetId + " ...");
+        logger.info("Closing changeset with ID: {} ...", changesetId);
 
         Connection conn = DbUtils.createConnection();
         try {
-            log.debug("Intializing database connection...");
+            logger.debug("Intializing database connection...");
             if (mapId == null) {
                 throw new Exception("Invalid map id.");
             }
@@ -341,7 +339,7 @@ public class ChangesetResource {
     }
 
     // TODO: clean up these message...some are obsolete now
-    public static void handleError(final Exception e, final long changesetId, final String changesetDiffSnippet) {
+    public static void handleError(Exception e, long changesetId, String changesetDiffSnippet) {
         String message = e.getMessage();
         if (e instanceof SQLException) {
             SQLException sqlException = (SQLException) e;
@@ -357,36 +355,31 @@ public class ChangesetResource {
         }
 
         // To make the error checking code cleaner and simpler, if an element is
-        // referenced in an
-        // update or delete changeset that doesn't exist in the database, we're
-        // not differentiating
-        // between whether it was an element, relation member, or way node
-        // reference. Previously, we'd
-        // throw a 412 if the non-existing element was a relation member or way
-        // node reference and a 404
-        // otherwise. Now, we're always throwing a 404. This shouldn't be a big
-        // deal, b/c the hoot UI
-        // doesn't differentiate between the two types of failures.
+        // referenced in an update or delete changeset that doesn't exist in the database, we're
+        // not differentiating between whether it was an element, relation member, or way node
+        // reference. Previously, we'd throw a 412 if the non-existing element was a relation member or way
+        // node reference and a 404 otherwise. Now, we're always throwing a 404. This shouldn't be a big
+        // deal, b/c the hoot UI doesn't differentiate between the two types of failures.
         if (!StringUtils.isEmpty(e.getMessage())) {
             if (e.getMessage().contains("Invalid changeset ID") || e.getMessage().contains("Invalid version")
                     || e.getMessage().contains("references itself")
                     || e.getMessage().contains("Changeset maximum element threshold exceeded")
                     || e.getMessage().contains("was closed at")) {
-                ResourceErrorHandler.handleError(message, Status.CONFLICT, log); // 409
+                ResourceErrorHandler.handleError(message, Status.CONFLICT, logger); // 409
             }
             else if (e.getMessage().contains("to be updated does not exist")
                     || e.getMessage().contains("Element(s) being referenced don't exist.")) {
-                ResourceErrorHandler.handleError(message, Status.NOT_FOUND, log); // 404
+                ResourceErrorHandler.handleError(message, Status.NOT_FOUND, logger); // 404
             }
             else if (e.getMessage().contains("exist specified for") || e.getMessage().contains("exist for")
                     || e.getMessage().contains("still used by") || e.getMessage()
                             .contains("One or more features in the changeset are involved in an unresolved review")) {
-                ResourceErrorHandler.handleError(message, Status.PRECONDITION_FAILED, log); // 412
+                ResourceErrorHandler.handleError(message, Status.PRECONDITION_FAILED, logger); // 412
             }
         }
 
         // 400
         ResourceErrorHandler.handleError("Error uploading changeset with ID: " + changesetId + " - data: (" + message
-                + ") " + changesetDiffSnippet, Status.BAD_REQUEST, log);
+                + ") " + changesetDiffSnippet, Status.BAD_REQUEST, logger);
     }
 }

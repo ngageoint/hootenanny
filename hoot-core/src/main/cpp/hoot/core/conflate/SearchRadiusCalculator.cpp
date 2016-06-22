@@ -97,12 +97,12 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
     return;
   }
 
-  RubberSheet rubberSheet;
-  rubberSheet.setReference(_rubberSheetRef);
-  rubberSheet.setMinimumTies(_minTies);
+  shared_ptr<RubberSheet> rubberSheet(new RubberSheet());
+  rubberSheet->setReference(_rubberSheetRef);
+  rubberSheet->setMinimumTies(_minTies);
   try
   {
-    rubberSheet.calculateTransform(mapWithOnlyUnknown1And2);
+    rubberSheet->calculateTransform(mapWithOnlyUnknown1And2);
   }
   catch (const HootException& e)
   {
@@ -115,7 +115,10 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
     try
     {
       MapCleaner().apply(mapWithOnlyUnknown1And2);
-      rubberSheet.calculateTransform(mapWithOnlyUnknown1And2);
+      rubberSheet.reset(new RubberSheet());
+      rubberSheet->setReference(_rubberSheetRef);
+      rubberSheet->setMinimumTies(_minTies);
+      rubberSheet->calculateTransform(mapWithOnlyUnknown1And2);
     }
     catch (const HootException& e)
     {
@@ -130,7 +133,7 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
   vector<double> tiePointDistances;
   try
   {
-    tiePointDistances = rubberSheet.calculateTiePointDistances();
+    tiePointDistances = rubberSheet->calculateTiePointDistances();
   }
   catch (const HootException& /*e*/)
   {

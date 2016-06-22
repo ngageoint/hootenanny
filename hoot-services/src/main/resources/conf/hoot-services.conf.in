@@ -120,7 +120,7 @@ tempOutputPath=$(homeFolder)/tmp
 cleanDataMakePath=makecleandata
 
 # Custom Script Service folder location
-customScriptPath=customscript
+customScriptPath=$(homeFolder)/customscript
 
 # hoot api db Name
 dbName=${DB_NAME}

@@ -44,7 +44,6 @@ import javax.xml.transform.dom.DOMSource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.w3c.dom.Document;
 
 import com.mysema.query.sql.SQLQuery;
@@ -68,13 +67,10 @@ import hoot.services.writers.user.UserSaver;
  */
 @Path("/user/{userId}")
 public class UserResource {
-    private static final Logger log = LoggerFactory.getLogger(UserResource.class);
-
-    @SuppressWarnings("unused")
-    private ClassPathXmlApplicationContext appContext;
+    private static final Logger logger = LoggerFactory.getLogger(UserResource.class);
 
     public UserResource() {
-        appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
+
     }
 
     /**
@@ -95,13 +91,13 @@ public class UserResource {
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
-    public Response get(@PathParam("userId") final String userId) throws Exception {
-        log.debug("Retrieving user with ID: " + userId.trim() + " ...");
+    public Response get(@PathParam("userId") String userId) throws Exception {
+        logger.debug("Retrieving user with ID: {} ...", userId.trim());
 
         Connection conn = DbUtils.createConnection();
         Document responseDoc = null;
         try {
-            log.debug("Initializing database connection...");
+            logger.debug("Initializing database connection...");
 
             long userIdNum = -1;
             try {
@@ -110,19 +106,16 @@ public class UserResource {
                 userIdNum = ModelDaoUtils.getRecordIdForInputString(userId, conn, users, users.id, users.displayName);
             }
             catch (Exception e) {
-                if (e.getMessage().startsWith("Multiple records exist")) {
+                if (e.getMessage().startsWith("Multiple records exist") ||
+                        e.getMessage().startsWith("No record exists")) {
                     ResourceErrorHandler.handleError(
                             e.getMessage().replaceAll("records", "users").replaceAll("record", "user"),
-                            Status.NOT_FOUND, log);
+                            Status.NOT_FOUND, logger);
                 }
-                else if (e.getMessage().startsWith("No record exists")) {
-                    ResourceErrorHandler.handleError(
-                            e.getMessage().replaceAll("records", "users").replaceAll("record", "user"),
-                            Status.NOT_FOUND, log);
-                }
+
                 ResourceErrorHandler.handleError(
                         "Error requesting user with ID: " + userId + " (" + e.getMessage() + ")", Status.BAD_REQUEST,
-                        log);
+                        logger);
             }
 
             assert (userIdNum != -1);
@@ -135,7 +128,7 @@ public class UserResource {
 
             if (user == null) {
                 ResourceErrorHandler.handleError(
-                        "No user exists with ID: " + userId + ".  Please request a valid user.", Status.NOT_FOUND, log);
+                        "No user exists with ID: " + userId + ".  Please request a valid user.", Status.NOT_FOUND, logger);
             }
 
             responseDoc = (new UserResponseWriter()).writeResponse(new User(user, conn), conn);
@@ -144,8 +137,8 @@ public class UserResource {
             DbUtils.closeConnection(conn);
         }
 
-        log.debug("Returning response: " + StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100)
-                + " ...");
+        logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100));
+
         return Response.ok(new DOMSource(responseDoc), MediaType.APPLICATION_XML)
                 .header("Content-type", MediaType.APPLICATION_XML).build();
     }
@@ -163,7 +156,7 @@ public class UserResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public UserSaveResponse getSaveUser(@QueryParam("userEmail") final String userEmail) throws Exception {
+    public UserSaveResponse getSaveUser(@QueryParam("userEmail") String userEmail) throws Exception {
         UserSaveResponse response = new UserSaveResponse();
         try (Connection conn = DbUtils.createConnection()) {
             UserSaver saver = new UserSaver(conn);
@@ -176,7 +169,7 @@ public class UserResource {
         }
         catch (Exception ex) {
             ResourceErrorHandler.handleError("Error saving user: " + " (" + ex.getMessage() + ")", Status.BAD_REQUEST,
-                    log);
+                    logger);
         }
         return response;
     }
@@ -201,7 +194,7 @@ public class UserResource {
         }
         catch (Exception ex) {
             ResourceErrorHandler.handleError("Error getting all users: " + " (" + ex.getMessage() + ")",
-                    Status.BAD_REQUEST, log);
+                    Status.BAD_REQUEST, logger);
         }
         return response;
     }

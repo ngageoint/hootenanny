@@ -46,13 +46,15 @@ public class CleanDataResourceTest {
     @Test
     @Category(UnitTest.class)
     public void testProcess() throws Exception {
-        String params = "{\"INPUT_TYPE\":\"DB\",\"INPUT\":\"DcGisRoads\",\"OUTPUT_TYPE\":\"DB\",\"OUTPUT\":\"DcGisRoadsOUt5\"}";
 
         String jobArgs = ",\"exec\":\"makecleandata\",\"params\":[{\"INPUT\":\"DcGisRoads\"},{\"INPUT_TYPE\":\"DB\"},";
         jobArgs += "{\"OUTPUT\":\"DcGisRoadsOUt5\"},{\"OUTPUT_TYPE\":\"DB\"}],\"exectype\":\"make\"}";
 
         CleanDataResource spy = Mockito.spy(new CleanDataResource());
         Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
+
+        String params = "{\"INPUT_TYPE\":\"DB\",\"INPUT\":\"DcGisRoads\",\"OUTPUT_TYPE\":\"DB\",\"OUTPUT\":\"DcGisRoadsOUt5\"}";
+
         Response resp = spy.process(params);
         String result = resp.getEntity().toString();
         JSONParser parser = new JSONParser();

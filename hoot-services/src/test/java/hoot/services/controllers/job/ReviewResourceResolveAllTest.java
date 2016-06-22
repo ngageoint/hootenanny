@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.job;
 
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -48,8 +47,8 @@ import hoot.services.utils.RandomNumberGenerator;
 
 
 public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract {
-    public ReviewResourceResolveAllTest() throws NumberFormatException, IOException {
-        super(new String[] { "hoot.services.controllers.job" });
+    public ReviewResourceResolveAllTest() {
+        super("hoot.services.controllers.job");
     }
 
     @Test
@@ -58,9 +57,11 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract {
         ReviewTestUtils testUtils = new ReviewTestUtils();
         /* final long changesetId = */ testUtils.populateReviewDataForAllDataTypes(mapId, userId);
 
-        final ReviewResolverResponse response = resource().path("/review/resolveall").type(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .put(ReviewResolverResponse.class, new ReviewResolverRequest(String.valueOf(mapId)));
+        ReviewResolverResponse response =
+                resource()
+                        .path("/review/resolveall").type(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .put(ReviewResolverResponse.class, new ReviewResolverRequest(String.valueOf(mapId)));
 
         Statement stmt = null;
         ResultSet rs = null;
