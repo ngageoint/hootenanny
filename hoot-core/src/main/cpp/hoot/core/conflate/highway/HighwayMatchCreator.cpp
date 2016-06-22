@@ -47,6 +47,8 @@
 
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
+#include <tgs/RStarTree/IntersectionIterator.h>
+#include <tgs/RStarTree/MemoryPageStore.h>
 
 namespace hoot
 {
@@ -56,7 +58,37 @@ HOOT_FACTORY_REGISTER(MatchCreator, HighwayMatchCreator)
 using namespace Tgs;
 
 /**
- * Searches the specified map for any building match potentials.
+ * This visitor creates an index of input elements.
+ * Also, only elements that are match candidates are indexed.
+ */
+class HMVIndexElementsVisitor : public ElementVisitor
+{
+public:
+  shared_ptr<HilbertRTree>& _index;
+  deque<ElementId>& _indexToEid;
+  HighwayMatchVisitor& _hmv;
+  std::vector<Box> _boxes;
+  std::vector<int> _fids;
+
+  HMVIndexElementsVisitor(shared_ptr<HilbertRTree>& index,
+                       deque<ElementId>& indexToEid,
+                       HighwayMatchVisitor& hmv) :
+    _index(index),
+    _indexToEid(indexToEid),
+    _hmv(hmv)
+  {
+  }
+
+  void finalizeIndex()
+  {
+    _index->bulkInsert(_boxes, _fids);
+  }
+
+  virtual void visit(const ConstElementPtr& e);
+};
+
+/**
+ * Searches the specified map for any highway match potentials.
  */
 class HighwayMatchVisitor : public ElementVisitor
 {
@@ -95,6 +127,7 @@ public:
     env->expandBy(getSearchRadius(e));
 
     // find other nearby candidates
+    //set<ElementId> neighbors = findNeighbors(*env);
     set<ElementId> neighbors = _map->findElements(*env);
     ElementId from(e->getElementType(), e->getId());
 
@@ -177,6 +210,45 @@ public:
     return OsmSchema::getInstance().isLinearHighway(element->getTags(), element->getElementType());
   }
 
+  shared_ptr<HilbertRTree>& getIndex()
+  {
+    if (!_index)
+    {
+      // No tuning was done, I just copied these settings from OsmMapIndex.
+      // 10 children - 368
+      shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+      _index.reset(new HilbertRTree(mps, 2));
+
+      HMVIndexElementsVisitor iev(_index, _indexToEid, *this);
+      _map->visitRo(iev);
+      iev.finalizeIndex();
+    }
+
+    return _index;
+  }
+
+  set<ElementId> findNeighbors(const Envelope& env)
+  {
+    set<ElementId> result;
+
+    vector<double> min(2), max(2);
+    min[0] = env.getMinX();
+    min[1] = env.getMinY();
+    max[0] = env.getMaxX();
+    max[1] = env.getMaxY();
+    IntersectionIterator it(getIndex().get(), min, max);
+
+    while (it.next())
+    {
+      // map the tree id to an element id and push into result.
+      result.insert(_indexToEid[it.getId()]);
+    }
+
+    return result;
+  }
+
+  ConstOsmMapPtr getMap() { return _map; }
+
 private:
 
   const ConstOsmMapPtr& _map;
@@ -192,6 +264,8 @@ private:
   Meters _searchRadius;
   ConstMatchThresholdPtr _threshold;
   shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
+  shared_ptr<HilbertRTree> _index;
+  deque<ElementId> _indexToEid;
 };
 
 HighwayMatchCreator::HighwayMatchCreator()
@@ -251,4 +325,23 @@ shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
   return _matchThreshold;
 }
 
+void HMVIndexElementsVisitor::visit(const ConstElementPtr& e)
+{
+  if (_hmv.isMatchCandidate(e))
+  {
+    _fids.push_back((int)_indexToEid.size());
+    _indexToEid.push_back(e->getElementId());
+
+    Box b(2);
+    Meters searchRadius = _hmv.getSearchRadius(e);
+    ConstOsmMapPtr map = _hmv.getMap();
+    auto_ptr<Envelope> env(e->getEnvelope(map));
+    env->expandBy(searchRadius);
+    b.setBounds(0, env->getMinX(), env->getMaxX());
+    b.setBounds(1, env->getMinY(), env->getMaxY());
+
+    _boxes.push_back(b);
+  }
 }
+
+} // end namespace hoot

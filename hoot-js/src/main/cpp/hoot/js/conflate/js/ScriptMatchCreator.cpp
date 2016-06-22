@@ -30,17 +30,22 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/MatchType.h>
+#include <hoot/core/filters/ArbitraryCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/SettingsJs.h>
 
 // Qt
 #include <QFileInfo>
+
+// Boost
+#include <boost/bind.hpp>
 
 // Standard
 #include <deque>
@@ -88,21 +93,6 @@ public:
 };
 
 class ScriptMatchVisitor;
-class SmWorstCircularErrorVisitor : public ElementVisitor
-{
-public:
-  Meters _worst;
-  ScriptMatchVisitor& _smv;
-
-  SmWorstCircularErrorVisitor(ScriptMatchVisitor& smv) : _smv(smv)
-  {
-    _worst = -1;
-  }
-
-  Meters getWorstCircularError() { return _worst; }
-
-  virtual void visit(const ConstElementPtr& e);
-};
 
 /**
  * Searches the specified map for any match potentials.
@@ -147,7 +137,10 @@ public:
       _getSearchRadius = Persistent<Function>::New(Handle<Function>::Cast(value));
     }
 
-    SmWorstCircularErrorVisitor v(*this);
+    boost::function<bool (ConstElementPtr e)> f = boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
+    shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
+    WorstCircularErrorVisitor v(pCrit);
+
     map->visitRo(v);
     _worstCircularError = v.getWorstCircularError();
   }
@@ -429,14 +422,6 @@ void IndexElementsVisitor::visit(const ConstElementPtr& e)
     b.setBounds(1, env->getMinY(), env->getMaxY());
 
     _boxes.push_back(b);
-  }
-}
-
-void SmWorstCircularErrorVisitor::visit(const ConstElementPtr& e)
-{
-  if (_smv.isMatchCandidate(e))
-  {
-    _worst = max(_worst, _smv.getSearchRadius(e));
   }
 }
 
