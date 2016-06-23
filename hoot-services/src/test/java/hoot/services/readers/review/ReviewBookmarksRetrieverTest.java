@@ -120,32 +120,20 @@ public class ReviewBookmarksRetrieverTest {
 
     @Test
     @Category(UnitTest.class)
-    public void testRetrieveAllOrderByCreatedAtWithFilterBy() throws Exception {
+    public void testRetrieveAllOrderByCreatedAtWithFilterByCreator() throws Exception {
         Connection conn = null;
 
         ReviewBookmarkRetriever r = new ReviewBookmarkRetriever(conn);
-        SQLQuery q = r._getAllQuery("createdAt", true, -1, -1, "createdBy", (long) 10);
+        SQLQuery q = r._getAllQuery("createdAt", true, -1, -1, new Long[]{(long) 1,(long) 2} ,null);
 
         String actual = q.toString();
         String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n"
                 + "where \"review_bookmarks\".\"created_by\" = ?\n"
                 + "order by \"review_bookmarks\".\"created_at\" asc";
-
-        org.junit.Assert.assertEquals(expected, actual);
-
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testRetrieveAllOrderByCreatedAtWithFilterByNonExistCol() throws Exception {
-        Connection conn = null;
-
-        ReviewBookmarkRetriever r = new ReviewBookmarkRetriever(conn);
-        SQLQuery q = r._getAllQuery("createdAt", true, -1, -1, "createdByMe", (long) 10);
-
-        String actual = q.toString();
-        String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n"
-                + "order by \"review_bookmarks\".\"created_at\" asc";
+        
+//        from "review_bookmarks" "review_bookmarks"
+//        where "review_bookmarks"."created_by" in (?, ?)
+//        order by "review_bookmarks"."created_at" asc
 
         org.junit.Assert.assertEquals(expected, actual);
 
@@ -157,7 +145,7 @@ public class ReviewBookmarksRetrieverTest {
         Connection conn = null;
 
         ReviewBookmarkRetriever r = new ReviewBookmarkRetriever(conn);
-        SQLQuery q = r._getAllQuery("createdAt", true, -1, -1, "mapId", (long) 10);
+        SQLQuery q = r._getAllQuery("createdAt", true, -1, -1, null, new Long[]{1L,2L});
 
         String actual = q.toString();
         String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n"
