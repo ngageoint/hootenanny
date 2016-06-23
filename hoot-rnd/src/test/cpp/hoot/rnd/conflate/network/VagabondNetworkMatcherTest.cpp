@@ -68,10 +68,10 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB1.osm", true,
-//      Status::Unknown1);
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB2.osm", false,
-//      Status::Unknown2);
+    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB1.osm", true,
+      Status::Unknown1);
+    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB2.osm", false,
+      Status::Unknown2);
 
 //    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/DcGisRoads.osm", true,
 //      Status::Unknown1);
@@ -88,10 +88,10 @@ public:
 //    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestD2.osm", true,
 //      Status::Unknown2);
 
-    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/highway-002/Input1.osm", true,
-      Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/highway-002/Input2.osm", true,
-      Status::Unknown2);
+//    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/highway-002/Input1.osm", true,
+//      Status::Unknown1);
+//    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/highway-002/Input2.osm", true,
+//      Status::Unknown2);
 
     MapCleaner().apply(map);
     MapProjector::projectToPlanar(map);

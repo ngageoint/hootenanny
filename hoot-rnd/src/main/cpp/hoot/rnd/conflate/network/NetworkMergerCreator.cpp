@@ -69,7 +69,9 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
     set< pair<ElementId, ElementId> > eids;
     if (matches.size() != 1)
     {
+      double sum = 0.0;
       QStringList scores;
+      LOG_VAR(matches.size());
       // go through all the matches
       for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
       {
@@ -78,15 +80,15 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
 
         const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*it);
         scores << QString::number(m->getProbability());
+        sum += m->getScore();
       }
 
       mergers.push_back(new MarkForReviewMerger(eids, "A complex road situation was found. " +
         scores.join(", "),
-        m->getMatchName(), 1.0));
+        m->getMatchName(), sum / matches.size()));
     }
     else
     {
-      LOG_INFO("Here");
       mergers.push_back(new NetworkMerger(m->getMatchPairs(), m->getEdgeMatch(),
         m->getNetworkDetails()));
     }

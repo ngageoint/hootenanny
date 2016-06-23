@@ -71,10 +71,82 @@ QList<NetworkVertexScorePtr> VagabondNetworkMatcher::getAllVertexScores() const
 void VagabondNetworkMatcher::iterate()
 {
   iteratePageRank();
+  LOG_VAR(_pr);
 }
 
 void VagabondNetworkMatcher::iteratePageRank()
 {
+  // assign a new PR to all edge pairs based on
+  // PR(A) = (1 - _damping) / N + d * (PR(B) / L(B) + PR(C) / L(C) + ...)
+  // where A is the edge being traversed into
+  // B, C, ... are edges that traverse into A and L is the number of outbound edges for that edge
+  // ###
+  // ### And then a bit of experimentation that isn't documented. Read the code.
+  // ###
+
+  IndexedEdgeMatchSetPtr newHash = _pr->clone();
+
+  double sum = 0.0;
+
+  for (IndexedEdgeMatchSet::MatchHash::iterator it = newHash->getAllMatches().begin();
+    it != newHash->getAllMatches().end(); ++it)
+  {
+    sum += it.value();
+    it.value() = 0;
+  }
+
+  LOG_VAR(sum);
+  LOG_VAR(_links.size());
+
+  // add this weight to all edges at the end.
+  double allWeight = (1 - _dampen) / _pr->getSize();
+
+  /// @todo this is much less efficient then some iterator approaches, but it is easy to write &
+  /// read. if this works and it is a bottle neck, please fix it.
+  for (IndexedEdgeMatchSet::MatchHash::iterator it = newHash->getAllMatches().begin();
+    it != newHash->getAllMatches().end(); ++it)
+  {
+    EdgeMatchPtr from = it.key();
+    QList<EdgeMatchPtr> values = _links.values(from);
+
+    if (values.size() != 0)
+    {
+      double contribution = (_pr->getScore(from) / (values.size())) * _dampen;
+
+      //LOG_VAR(from);
+      foreach (EdgeMatchPtr to, values)
+      {
+        newHash->setScore(to, newHash->getScore(to) + contribution);
+//        LOG_VAR(to);
+//        LOG_VAR(newHash[to]);
+//        LOG_VAR(contribution);
+      }
+    }
+    else
+    {
+      allWeight += _pr->getScore(from) / (double)_pr->getSize();
+    }
+  }
+  LOG_VAR(allWeight);
+
+  for (IndexedEdgeMatchSet::MatchHash::iterator it = newHash->getAllMatches().begin();
+    it != newHash->getAllMatches().end(); ++it)
+  {
+    it.value() = it.value() + allWeight;
+  }
+
+  _pr = newHash;
+}
+
+void VagabondNetworkMatcher::iteratePageRankBleeding()
+{
+  throw NotImplementedException("@todo assign half the weight to one end of the way and half to "
+    "the other. If an end connects to nothing then distribute the weight evenly across the graph."
+    "Another possible option is to store weights in two directions (inbound & outbound). The "
+    "weights can only be applied to one side or the other.");
+
+#warning For Wednesday, assign half the weight to one end of the way and half to the other. If an end connects to nothing then distribute the weight evenly across the graph.
+
   // assign a new PR to all edge pairs based on
   // PR(A) = (1 - _damping) / N + d * (PR(B) / L(B) + PR(C) / L(C) + ...)
   // where A is the edge being traversed into
@@ -207,8 +279,7 @@ void VagabondNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1,
   _map = map;
   _n1 = n1;
   _n2 = n2;
-  _details1.reset(new NetworkDetails(map, n1));
-  _details2.reset(new NetworkDetails(map, n2));
+  _details.reset(new NetworkDetails(map, n1, n2));
 
   // calculate all the candidate edge pairs.
   LOG_INFO("Calculating edge index...");
@@ -262,7 +333,7 @@ void VagabondNetworkMatcher::_calculateEdgeLinks()
 
 void VagabondNetworkMatcher::_calculateEdgeMatches()
 {
-  EdgeMatchSetFinder finder(_details1, _pr, _n1, _n2);
+  EdgeMatchSetFinder finder(_details, _pr, _n1, _n2);
 
   // go through all the n1 edges
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();
@@ -272,8 +343,8 @@ void VagabondNetworkMatcher::_calculateEdgeMatches()
   {
     NetworkEdgePtr e1 = it.value();
     // find all the n2 edges that are in range of this one
-    Envelope env = _details1->getEnvelope(it.value());
-    env.expandBy(_details1->getSearchRadius(it.value()));
+    Envelope env = _details->getEnvelope(it.value());
+    env.expandBy(_details->getSearchRadius(it.value()));
     IntersectionIterator iit = _createIterator(env, _edge2Index);
     //LOG_VAR(e1);
 
@@ -281,7 +352,7 @@ void VagabondNetworkMatcher::_calculateEdgeMatches()
     {
       NetworkEdgePtr e2 = _index2Edge[iit.getId()];
 
-      if (_details1->getPartialEdgeMatchScore(e1, e2) > 0)
+      if (_details->getPartialEdgeMatchScore(e1, e2) > 0)
       {
         // add all the EdgeMatches that are seeded with this edge pair.
         finder.addEdgeMatches(e1, e2);
@@ -308,7 +379,7 @@ double VagabondNetworkMatcher::_calculateLinkWeight(QHash<ConstNetworkEdgePtr, i
   {
     ConstNetworkEdgePtr e = str->getAllEdges()[i].e;
     double w = 1.0 / counts[e];
-    double l = _details1->calculateLength(e);
+    double l = _details->calculateLength(e);
     result += w * l;
   }
 

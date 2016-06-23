@@ -858,6 +858,40 @@ Possible values include:
   `hoot::SplitMatchCreator` is specified in `match.creators`. Note that the
   script name is not specified in this parameter.
 
+=== network.match.threshold
+
+* Data Type: double
+* Default Value: `0.15`
+
+The threshold at which a network match is called a match.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== network.miss.threshold
+
+* Data Type: double
+* Default Value: `0.85`
+
+The threshold at which a network miss is called a miss.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== network.review.threshold
+
+* Data Type: double
+* Default Value: `0.5`
+
+The threshold at which a network review is called a review. Reviews are also declared in some
+other situations when the relationship is not clear.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
 === node.matcher.strictness
 
 * Data Type: double

@@ -72,6 +72,8 @@ public:
 
   virtual void iteratePageRank();
 
+  virtual void iteratePageRankBleeding();
+
   virtual void iterateVoting();
 
   virtual void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);

@@ -42,6 +42,11 @@ public:
   NodeMatcher();
 
   /**
+   * Returns the degree of a node (number of ways incident to the node)
+   */
+  int getDegree(ElementId nid);
+
+  /**
    * Returns a score for the confidence that two nodes represent the same intersection. 0 means
    * they're not the same. There is no upper bound, but if the score doubles it is reasonable to
    * say that we're twice as confident. The reasonable range is about 0 to 5.
@@ -70,6 +75,9 @@ private:
   double _calculateAngleScore(const vector<Radians>& theta1, const vector<Radians>& theta2,
     vector<bool>& exclude, size_t depth);
 };
+
+typedef shared_ptr<NodeMatcher> NodeMatcherPtr;
+typedef shared_ptr<const NodeMatcher> ConstNodeMatcherPtr;
 
 }
 

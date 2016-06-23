@@ -98,7 +98,7 @@ WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters ce, 
 }
 
 WayPtr TestUtils::createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status status,
-                            Meters circularError)
+                            Meters circularError, Tags tags)
 {
   WayPtr way(new Way(status, map->createNextWayId(), circularError));
   foreach (NodePtr node, nodes)
@@ -106,6 +106,7 @@ WayPtr TestUtils::createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status s
     map->addNode(node);
     way->addNode(node->getId());
   }
+  way->setTags(tags);
   map->addWay(way);
   return way;
 }

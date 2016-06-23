@@ -142,6 +142,10 @@ double NodeMatcher::_calculateAngleScore(const vector<Radians>& theta1,
   return max;
 }
 
+int NodeMatcher::getDegree(ElementId nid)
+{
+  return (int)_map->getIndex().getNodeToWayMap()->at(nid.getId()).size();
+}
 
 double NodeMatcher::scorePair(long nid1, long nid2)
 {
