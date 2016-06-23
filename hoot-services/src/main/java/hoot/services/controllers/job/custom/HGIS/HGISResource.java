@@ -58,6 +58,10 @@ public class HGISResource extends JobControllerBase {
         dbHost = HootProperties.getProperty("dbHost");
     }
 
+    public HGISResource(String processName) {
+        super(processName);
+    }
+
     /**
      * Checks for the existence of map
      *
@@ -84,7 +88,6 @@ public class HGISResource extends JobControllerBase {
      * @return output looks like
      *         postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois
      */
-    @SuppressWarnings("static-method")
     static String generateDbMapParam(String mapName) {
         return "hootapidb://" + dbUserId + ":" + dbPassword + "@" + dbHost + "/" + dbName + "/" + mapName;
     }

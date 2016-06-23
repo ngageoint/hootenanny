@@ -46,13 +46,13 @@ public class ETLResourceTest {
     @Test
     @Category(UnitTest.class)
     public void testProcess() throws Exception {
-        String params = "{\"TRANSLATION\":\"translations/MGCP.js\",\"INPUT_TYPE\":\"OSM\",\"INPUT\":\"test-files/ToyTestA.osm\",\"INPUT_NAME\":\"ToyTestA\"}";
 
         String jobArgs = ",\"exec\":\"makeetl\",\"params\":[{\"INPUT\":\"test-files\\/ToyTestA.osm\"},{\"INPUT_TYPE\":\"OSM\"},";
         jobArgs += "{\"TRANSLATION\":\"translations\\/MGCP.js\"},{\"INPUT_NAME\":\"ToyTestA\"}],\"exectype\":\"make\"}";
 
         ETLResource spy = Mockito.spy(new ETLResource());
         Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
+        String params = "{\"TRANSLATION\":\"translations/MGCP.js\",\"INPUT_TYPE\":\"OSM\",\"INPUT\":\"test-files/ToyTestA.osm\",\"INPUT_NAME\":\"ToyTestA\"}";
         Response resp = spy.process(params);
         String result = resp.getEntity().toString();
         JSONParser parser = new JSONParser();

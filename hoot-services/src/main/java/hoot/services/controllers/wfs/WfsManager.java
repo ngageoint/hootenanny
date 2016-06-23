@@ -63,16 +63,14 @@ import hoot.services.utils.XmlDocumentBuilder;
 
 
 public class WfsManager {
-    private static final Logger log = LoggerFactory.getLogger(WfsManager.class);
-
+    private static final Logger logger = LoggerFactory.getLogger(WfsManager.class);
     private static final String coreJobServerUrl = HootProperties.getProperty("coreJobServerUrl");
     private static final String wfsStoreConnName = HootProperties.getProperty("wfsStoreConnName");
     private static final String wfsStoreDb = HootProperties.getProperty("wfsStoreDb");
 
     public void createWfsResource(String wfsJobName) throws Exception {
-        DataDefinitionManager ddlMan = new DataDefinitionManager();
-
-        List<String> tblsList = ddlMan.getTablesList(wfsStoreDb, wfsJobName);
+        DataDefinitionManager dataDefinitionManager = new DataDefinitionManager();
+        List<String> tblsList = dataDefinitionManager.getTablesList(wfsStoreDb, wfsJobName);
         createWFSDatasourceFeature(wfsJobName, wfsStoreConnName, tblsList);
         createService(wfsJobName);
     }
@@ -82,7 +80,7 @@ public class WfsManager {
         removeService(wfsJobName);
     }
 
-    void createWFSDatasourceFeature(String wfsDatasetName, String connectionName, List<String> features)
+    public void createWFSDatasourceFeature(String wfsDatasetName, String connectionName, List<String> features)
             throws Exception {
         DocumentBuilderFactory dbFactory = XmlDocumentBuilder.getSecureDocBuilderFactory();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -93,8 +91,8 @@ public class WfsManager {
         root.setAttribute("configVersion", "3.2.0");
         root.setAttribute("xmlns", "http://www.deegree.org/datasource/feature/sql");
         root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        root.setAttribute("xsi:schemaLocation", "http://www.deegree.org/datasource/feature/sql"
-                + "  http://schemas.deegree.org/datasource/feature/sql/3.2.0/sql.xsd");
+        root.setAttribute("xsi:schemaLocation", "http://www.deegree.org/datasource/feature/sql" +
+                          "  http://schemas.deegree.org/datasource/feature/sql/3.2.0/sql.xsd");
 
         Element elem = doc.createElement("JDBCConnId");
         elem.appendChild(doc.createTextNode(connectionName));
@@ -107,55 +105,41 @@ public class WfsManager {
         }
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
+
         // Fortify may require this, but it doesn't work.
         // TransformerFactory transformerFactory =
         // XmlDocumentBuilder.getSecureTransformerFactory();
         Transformer transformer = transformerFactory.newTransformer();
-        // transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
-        // "yes");
-        StringWriter writer = new StringWriter();
-        transformer.transform(new DOMSource(doc), new StreamResult(writer));
-        String content = writer.getBuffer().toString();
-        /*
-         * _putRequest(coreJobServerUrl +
-         * "/hoot-services/config/upload/datasources/feature/" + wfsDatasetName
-         * + ".xml", content);
-         */
+        // transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,"yes");
 
-        try {
-            FeatureStore newFeatureStore = createFeatureStore(wfsDatasetName, content);
-            addToWfsStore(newFeatureStore);
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-            throw ex;
+        String content;
+
+        try (StringWriter writer = new StringWriter()) {
+            transformer.transform(new DOMSource(doc), new StreamResult(writer));
+            content = writer.getBuffer().toString();
         }
 
+        FeatureStore newFeatureStore = createFeatureStore(wfsDatasetName, content);
+        addToWfsStore(newFeatureStore);
     }
 
-    private void removeFeatureStore(String name) throws Exception {
-        try {
-            // get current workspace
-            DeegreeWorkspace wksp = OGCFrontController.getServiceWorkspace();
+    public void removeFeatureStore(String name) throws Exception {
+        // get current workspace
+        DeegreeWorkspace workspace = OGCFrontController.getServiceWorkspace();
 
-            FeatureStoreManager fsMan = wksp.getSubsystemManager(FeatureStoreManager.class);
-            if (fsMan == null) {
-                throw new Exception("Failed to get FeatureStoreManager.");
-            }
-
-            FeatureStore fStore = fsMan.get(name);
-            if (fStore != null) {
-                fsMan.deactivate(name);
-                fsMan.deleteResource(name);
-            }
+        FeatureStoreManager featureStoreManager = workspace.getSubsystemManager(FeatureStoreManager.class);
+        if (featureStoreManager == null) {
+            throw new Exception("Failed to get FeatureStoreManager.");
         }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-            throw ex;
+
+        FeatureStore featureStore = featureStoreManager.get(name);
+        if (featureStore != null) {
+            featureStoreManager.deactivate(name);
+            featureStoreManager.deleteResource(name);
         }
     }
 
-    FeatureStore createFeatureStore(String name, String content) throws Exception {
+    public FeatureStore createFeatureStore(String name, String content) throws Exception {
         // get current workspace
         DeegreeWorkspace wksp = OGCFrontController.getServiceWorkspace();
 
@@ -164,117 +148,99 @@ public class WfsManager {
             throw new Exception("Failed to get FeatureStoreManager.");
         }
 
-        InputStream stream = new ByteArrayInputStream(content.getBytes("UTF-8"));
-        ResourceState<?> resStatus = fsMan.createResource(name, stream);
+        ResourceState<?> resourceState;
+        try (InputStream stream = new ByteArrayInputStream(content.getBytes("UTF-8"))) {
+            resourceState = fsMan.createResource(name, stream);
+        }
 
-        if (resStatus.getType() == StateType.deactivated) {
+        if (resourceState.getType() == StateType.deactivated) {
             ResourceState<FeatureStore> fsActivationState = fsMan.activate(name);
             if (fsActivationState.getType() == StateType.init_ok) {
                 return fsActivationState.getResource();
             }
             else if (fsActivationState.getType() == StateType.init_error) {
                 if (fsActivationState.getLastException() != null) {
-                    log.error("Error encountered during [" + name + "] resource activation.",
-                            fsActivationState.getLastException());
+                    logger.error("Error encountered during [{}] resource activation.", name, fsActivationState.getLastException());
                     throw new Exception("Error encountered during [" + name + "] resource activation",
                             fsActivationState.getLastException());
                 }
             }
         }
 
-        if (resStatus.getLastException() != null) {
-            log.error("Error encountered during [" + name + "] resource creation.", resStatus.getLastException());
-            throw new Exception("Failed to create [" + name + "] resource!", resStatus.getLastException());
+        if (resourceState.getLastException() != null) {
+            logger.error("Error encountered during [{}] resource creation.", name, resourceState.getLastException());
+            throw new Exception("Failed to create [" + name + "] resource!", resourceState.getLastException());
         }
         else {
             throw new Exception("Failed to create [" + name + "] resource!");
         }
     }
 
-    void addToWfsStore(FeatureStore fstore) throws Exception {
-        try {
-            if (fstore == null) {
-                throw new Exception("fstore argument can not be null");
-            }
-            DeegreeWorkspace wksp = OGCFrontController.getServiceWorkspace();
+    public void addToWfsStore(FeatureStore fstore) throws Exception {
+        if (fstore == null) {
+            throw new Exception("fstore argument can not be null");
+        }
+        DeegreeWorkspace workspace = OGCFrontController.getServiceWorkspace();
+        WebServicesConfiguration wsConfig = workspace.getSubsystemManager(WebServicesConfiguration.class);
 
-            WebServicesConfiguration wsConfig = wksp.getSubsystemManager(WebServicesConfiguration.class);
-
-            Map<String, List<OWS>> all = wsConfig.getAll();
-            List<OWS> owsList = all.get("WFS");
-            if (owsList != null) {
-                for (OWS curows : owsList) {
-                    if (curows instanceof WebFeatureService) {
-                        WebFeatureService wfsows = (WebFeatureService) curows;
-                        WfsFeatureStoreManager wfsStoreMan = wfsows.getStoreManager();
-                        wfsStoreMan.addStore(fstore);
-                        break;
-                    }
+        Map<String, List<OWS>> all = wsConfig.getAll();
+        List<OWS> owsList = all.get("WFS");
+        if (owsList != null) {
+            for (OWS curows : owsList) {
+                if (curows instanceof WebFeatureService) {
+                    WebFeatureService wfsows = (WebFeatureService) curows;
+                    WfsFeatureStoreManager wfsStoreMan = wfsows.getStoreManager();
+                    wfsStoreMan.addStore(fstore);
+                    break;
                 }
             }
         }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-            throw ex;
-        }
     }
 
-    private void removeService(String wfsResourceName) throws Exception {
-        DeegreeWorkspace wksp = OGCFrontController.getServiceWorkspace();
-
-        WebServicesConfiguration wsMan = wksp.getSubsystemManager(WebServicesConfiguration.class);
-        try {
-            wsMan.deactivate(wfsResourceName);
-            wsMan.deleteResource(wfsResourceName);
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-            throw ex;
-        }
+    private static void removeService(String wfsResourceName) throws Exception {
+        DeegreeWorkspace workspace = OGCFrontController.getServiceWorkspace();
+        WebServicesConfiguration webServicesConfiguration = workspace.getSubsystemManager(WebServicesConfiguration.class);
+        webServicesConfiguration.deactivate(wfsResourceName);
+        webServicesConfiguration.deleteResource(wfsResourceName);
     }
 
-    private void createService(String wfsResourceName) throws Exception {
-        DeegreeWorkspace wksp = OGCFrontController.getServiceWorkspace();
+    private static void createService(String wfsResourceName) throws Exception {
+        DeegreeWorkspace deegreeWorkspace = OGCFrontController.getServiceWorkspace();
+        WebServicesConfiguration webServicesConfiguration = deegreeWorkspace.getSubsystemManager(WebServicesConfiguration.class);
+        String content = "<deegreeWFS configVersion=\"3.1.0\" xmlns=\"http://www.deegree.org/services/wfs\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
+                + "  xsi:schemaLocation=\"http://www.deegree.org/services/wfs http://schemas.deegree.org/services/wfs/3.1.0/wfs_configuration.xsd\">\n"
+                + "  <SupportedVersions>\n" + "    <Version>1.0.0</Version>\n" + "    <Version>1.1.0</Version>\n"
+                + "    <Version>2.0.0</Version>\n" + "  </SupportedVersions>\n"
+                + "  <!-- [0..n] FeatureStoreId: If ommited all featurestores will be published as feature types  -->\n"
+                + "  <FeatureStoreId>" + wfsResourceName + "</FeatureStoreId>\n" + "  <!--  \n"
+                + "  <FeatureStoreId>MyStore2</FeatureStoreId>\n" + "   -->\n"
+                + "  <EnableTransactions>false</EnableTransactions>\n" + "  <QueryCRS>EPSG:26912</QueryCRS>\n"
+                + "  <QueryCRS>EPSG:4326</QueryCRS>\n" + "  <QueryMaxFeatures>-1</QueryMaxFeatures>\n"
+                + "</deegreeWFS>";
 
-        WebServicesConfiguration wsMan = wksp.getSubsystemManager(WebServicesConfiguration.class);
-        try {
-            String content = "<deegreeWFS configVersion=\"3.1.0\" xmlns=\"http://www.deegree.org/services/wfs\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
-                    + "  xsi:schemaLocation=\"http://www.deegree.org/services/wfs http://schemas.deegree.org/services/wfs/3.1.0/wfs_configuration.xsd\">\n"
-                    + "  <SupportedVersions>\n" + "    <Version>1.0.0</Version>\n" + "    <Version>1.1.0</Version>\n"
-                    + "    <Version>2.0.0</Version>\n" + "  </SupportedVersions>\n"
-                    + "  <!-- [0..n] FeatureStoreId: If ommited all featurestores will be published as feature types  -->\n"
-                    +
+        ResourceState<?> resourceState;
+        try (InputStream stream = new ByteArrayInputStream(content.getBytes("UTF-8"))) {
+            resourceState = webServicesConfiguration.createResource(wfsResourceName, stream);
+        }
 
-                    "  <FeatureStoreId>" + wfsResourceName + "</FeatureStoreId>\n" + "  <!--  \n"
-                    + "  <FeatureStoreId>MyStore2</FeatureStoreId>\n" + "   -->\n"
-                    + "  <EnableTransactions>false</EnableTransactions>\n" + "  <QueryCRS>EPSG:26912</QueryCRS>\n"
-                    + "  <QueryCRS>EPSG:4326</QueryCRS>\n" + "  <QueryMaxFeatures>-1</QueryMaxFeatures>\n"
-                    + "</deegreeWFS>";
-            InputStream stream = new ByteArrayInputStream(content.getBytes("UTF-8"));
-            ResourceState<?> resStatus = wsMan.createResource(wfsResourceName, stream);
+        if (resourceState.getType() == StateType.init_error) {
+            throw new Exception("Failed to create WFS Service resource.");
+        }
 
-            if (resStatus.getType() == StateType.init_error) {
-                throw new Exception("Failed to create WFS Service resource.");
-            }
-            if (resStatus.getType() == StateType.deactivated) {
-                ResourceState<OWS> owsResStat = wsMan.activate(wfsResourceName);
-                if (owsResStat.getType() == StateType.init_error) {
-                    throw new Exception("Failed to activate WFS Service resource.");
-                }
+        if (resourceState.getType() == StateType.deactivated) {
+            ResourceState<OWS> owsResStat = webServicesConfiguration.activate(wfsResourceName);
+            if (owsResStat.getType() == StateType.init_error) {
+                throw new Exception("Failed to activate WFS Service resource.");
             }
         }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-            throw ex;
-        }
     }
 
-    public List<String> getAllWfsServices() throws Exception {
+    public static List<String> getAllWfsServices() throws Exception {
         List<String> services = new ArrayList<>();
-        try {
-            DeegreeWorkspace wksp = OGCFrontController.getServiceWorkspace();
 
-            WebServicesConfiguration wsConfig = wksp.getSubsystemManager(WebServicesConfiguration.class);
+        try {
+            DeegreeWorkspace deegreeWorkspace = OGCFrontController.getServiceWorkspace();
+            WebServicesConfiguration wsConfig = deegreeWorkspace.getSubsystemManager(WebServicesConfiguration.class);
 
             Map<String, List<OWS>> all = wsConfig.getAll();
             List<OWS> owsList = all.get("WFS");
@@ -289,8 +255,9 @@ public class WfsManager {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error retrieving WFS services: " + ex, Status.INTERNAL_SERVER_ERROR, log);
+            ResourceErrorHandler.handleError("Error retrieving WFS services: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
         }
+
         return services;
     }
 }
