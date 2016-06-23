@@ -36,14 +36,19 @@
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/filters/ArbitraryCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/Units.h>
+#include <hoot/core/visitors/IndexElementsVisitor.h>
 
 // Standard
 #include <fstream>
+
+// Boost
+#include <boost/bind.hpp>
 
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
@@ -56,36 +61,6 @@ namespace hoot
 HOOT_FACTORY_REGISTER(MatchCreator, HighwayMatchCreator)
 
 using namespace Tgs;
-
-/**
- * This visitor creates an index of input elements.
- * Also, only elements that are match candidates are indexed.
- */
-class HMVIndexElementsVisitor : public ElementVisitor
-{
-public:
-  shared_ptr<HilbertRTree>& _index;
-  deque<ElementId>& _indexToEid;
-  HighwayMatchVisitor& _hmv;
-  std::vector<Box> _boxes;
-  std::vector<int> _fids;
-
-  HMVIndexElementsVisitor(shared_ptr<HilbertRTree>& index,
-                       deque<ElementId>& indexToEid,
-                       HighwayMatchVisitor& hmv) :
-    _index(index),
-    _indexToEid(indexToEid),
-    _hmv(hmv)
-  {
-  }
-
-  void finalizeIndex()
-  {
-    _index->bulkInsert(_boxes, _fids);
-  }
-
-  virtual void visit(const ConstElementPtr& e);
-};
 
 /**
  * Searches the specified map for any highway match potentials.
@@ -127,8 +102,7 @@ public:
     env->expandBy(getSearchRadius(e));
 
     // find other nearby candidates
-    //set<ElementId> neighbors = findNeighbors(*env);
-    set<ElementId> neighbors = _map->findElements(*env);
+    set<ElementId> neighbors = findNeighbors(*env);
     ElementId from(e->getElementType(), e->getId());
 
     _elementsEvaluated++;
@@ -219,9 +193,19 @@ public:
       shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
-      HMVIndexElementsVisitor iev(_index, _indexToEid, *this);
-      _map->visitRo(iev);
-      iev.finalizeIndex();
+      // Only index elements satisfy isMatchCandidate(e)
+      boost::function<bool (ConstElementPtr e)> f = boost::bind(&HighwayMatchVisitor::isMatchCandidate, _1);
+      shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
+
+      // Instantiate our visitor
+      IndexElementsVisitor v(_index,
+                             _indexToEid,
+                             pCrit,
+                             boost::bind(&HighwayMatchVisitor::getSearchRadius, this, _1),
+                             getMap());
+
+      getMap()->visitRo(v);
+      v.finalizeIndex();
     }
 
     return _index;
@@ -264,6 +248,8 @@ private:
   Meters _searchRadius;
   ConstMatchThresholdPtr _threshold;
   shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
+
+  // Used for finding neighbors
   shared_ptr<HilbertRTree> _index;
   deque<ElementId> _indexToEid;
 };
@@ -323,25 +309,6 @@ shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
                          config.getHighwayReviewThreshold()));
   }
   return _matchThreshold;
-}
-
-void HMVIndexElementsVisitor::visit(const ConstElementPtr& e)
-{
-  if (_hmv.isMatchCandidate(e))
-  {
-    _fids.push_back((int)_indexToEid.size());
-    _indexToEid.push_back(e->getElementId());
-
-    Box b(2);
-    Meters searchRadius = _hmv.getSearchRadius(e);
-    ConstOsmMapPtr map = _hmv.getMap();
-    auto_ptr<Envelope> env(e->getEnvelope(map));
-    env->expandBy(searchRadius);
-    b.setBounds(0, env->getMinX(), env->getMaxX());
-    b.setBounds(1, env->getMinY(), env->getMaxY());
-
-    _boxes.push_back(b);
-  }
 }
 
 } // end namespace hoot

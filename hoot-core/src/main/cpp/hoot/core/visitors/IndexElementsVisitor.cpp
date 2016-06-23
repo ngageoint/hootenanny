@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "RemoveElementsVisitor.h"
+#include "IndexElementsVisitor.h"
 
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
@@ -36,50 +36,42 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, RemoveElementsVisitor)
-
-RemoveElementsVisitor::RemoveElementsVisitor()
-{
-  setConfiguration(conf());
-}
-
-RemoveElementsVisitor::RemoveElementsVisitor(const shared_ptr<ElementCriterion>& filter) :
+IndexElementsVisitor::IndexElementsVisitor(shared_ptr<HilbertRTree>& index,
+                                           deque<ElementId>& indexToEid,
+                                           const shared_ptr<ElementCriterion>& filter,
+                                           boost::function<Meters (const ConstElementPtr& e)> getSearchRadius,
+                                           ConstOsmMapPtr pMap):
+  _pMap(pMap),
   _filter(filter),
-  _recursive(false)
+  _getSearchRadius(getSearchRadius),
+  _index(index),
+  _indexToEid(indexToEid)
 {
+  //_getSearchRadius = getSearchRadius;
 }
 
-void RemoveElementsVisitor::setConfiguration(const Settings& conf)
+void IndexElementsVisitor::setOsmMap(OsmMap* map)
 {
-  ConfigOptions configOptions(conf);
-  QString filterName = configOptions.getRemoveElementsVisitorFilter();
-  if (filterName.isEmpty() == false)
-  {
-    ElementCriterion* ef = Factory::getInstance().constructObject<ElementCriterion>(filterName);
-    _filter.reset(ef);
-  }
-  _recursive = configOptions.getRemoveElementsVisitorRecursive();
+  // Do nothing
+  (void) map;
 }
 
-void RemoveElementsVisitor::visit(const ConstElementPtr& e)
+void IndexElementsVisitor::visit(const ConstElementPtr& e)
 {
-  assert(_filter);
-  ElementType type = e->getElementType();
-  long id = e->getId();
-  const shared_ptr<Element>& ee = _map->getElement(type, id);
-
-  if (_filter->isSatisfied(ee))
+  if (_filter->isSatisfied(e))
   {
-    if (_recursive)
-    {
-      RecursiveElementRemover(ee->getElementId()).apply(_map->shared_from_this());
-    }
-    else
-    {
-      _map->removeElement(ElementId(type, id));
-    }
+    _fids.push_back((int)_indexToEid.size());
+    _indexToEid.push_back(e->getElementId());
+
+    Box b(2);
+    Meters searchRadius = _getSearchRadius(e);
+    auto_ptr<Envelope> env(e->getEnvelope(_pMap));
+    env->expandBy(searchRadius);
+    b.setBounds(0, env->getMinX(), env->getMaxX());
+    b.setBounds(1, env->getMinY(), env->getMaxY());
+
+    _boxes.push_back(b);
   }
 }
 
-}
-
+} // End namespace hoot

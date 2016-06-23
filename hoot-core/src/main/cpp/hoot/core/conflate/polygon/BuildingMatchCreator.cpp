@@ -157,6 +157,55 @@ public:
     return OsmSchema::getInstance().isBuilding(element->getTags(), element->getElementType());
   }
 
+  shared_ptr<HilbertRTree>& getIndex()
+  {
+    if (!_index)
+    {
+      // No tuning was done, I just copied these settings from OsmMapIndex.
+      // 10 children - 368
+      shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+      _index.reset(new HilbertRTree(mps, 2));
+
+      // Only index elements that isMatchCandidate(e)
+      boost::function<bool (ConstElementPtr e)> f = boost::bind(&BuildingMatchVisitor::isMatchCandidate, _1);
+      shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
+
+      // Instantiate our visitor
+      IndexElementsVisitor v(_index,
+                             _indexToEid,
+                             pCrit,
+                             boost::bind(&BuildingMatchVisitor::getSearchRadius, this, _1),
+                             getMap());
+
+      getMap()->visitRo(v);
+      v.finalizeIndex();
+    }
+
+    return _index;
+  }
+
+  set<ElementId> findNeighbors(const Envelope& env)
+  {
+    set<ElementId> result;
+
+    vector<double> min(2), max(2);
+    min[0] = env.getMinX();
+    min[1] = env.getMinY();
+    max[0] = env.getMaxX();
+    max[1] = env.getMaxY();
+    IntersectionIterator it(getIndex().get(), min, max);
+
+    while (it.next())
+    {
+      // map the tree id to an element id and push into result.
+      result.insert(_indexToEid[it.getId()]);
+    }
+
+    return result;
+  }
+
+  ConstOsmMapPtr getMap() { return _map; }
+
 private:
   const ConstOsmMapPtr& _map;
   vector<const Match*>& _result;
@@ -170,6 +219,10 @@ private:
   size_t _maxGroupSize;
   /// reject any manipulation with a miss score >= _rejectScore
   double _rejectScore;
+
+  // Used for finding neighbors
+  shared_ptr<HilbertRTree> _index;
+  deque<ElementId> _indexToEid;
 };
 
 BuildingMatchCreator::BuildingMatchCreator()

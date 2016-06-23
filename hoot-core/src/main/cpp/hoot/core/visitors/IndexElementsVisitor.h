@@ -24,63 +24,78 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVEELEMENTSVISITOR_H
-#define REMOVEELEMENTSVISITOR_H
+#ifndef INDEXELEMENTVISITOR_H
+#define INDEXELEMENTVISITOR_H
 
 // hoot
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/filters/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
 
+// TGS
+#include <tgs/RStarTree/HilbertRTree.h>
+
+// Standard
+#include <deque>
+
+// Boost
+#include <boost/function.hpp>
+
+// This class was extracted from ScriptMatchCreator so that it could
+// be used by the other match creators (highway, building, etc). It is
+// used to build an index of input elements (which can be filterd by
+// various criteria, if need be). The evelope plus the search
+// radius is created as the index box for each element. This is more
+// efficient than using the OsmMapIndex index.
+
 namespace hoot
 {
 
-/**
- * Removes any elements where isFiltered() == true
- */
-class RemoveElementsVisitor :
+class IndexElementsVisitor :
     public ElementVisitor,
-    public ConstOsmMapConsumer,
-    public ElementCriterionConsumer,
-    public Configurable
+    public ElementCriterionConsumer
 {
 public:
 
-  static std::string className() { return "hoot::RemoveElementsVisitor"; }
+  static std::string className() { return "hoot::CreateIndexVisitor"; }
 
-  /**
-   * Loads the filter from the config setting.
-   */
-  RemoveElementsVisitor();
+  explicit IndexElementsVisitor(shared_ptr<Tgs::HilbertRTree>& index,
+                                deque<ElementId>& indexToEid,
+                                const shared_ptr<ElementCriterion>& filter,
+                                boost::function<Meters (const ConstElementPtr& e)> getSearchRadius,
+                                ConstOsmMapPtr pMap);
 
-  RemoveElementsVisitor(const shared_ptr<ElementCriterion>& filter);
-
-  virtual void addCriterion(const ElementCriterionPtr& e)
+  void addCriterion(const ElementCriterionPtr& e)
   {
     assert(_filter.get() == 0);
     _filter = e;
   }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e);
 
-  virtual void setConfiguration(const Settings& conf);
+  void setOsmMap(OsmMap* map);
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
-
-  void setRecursive(bool recursive) { _recursive = recursive; }
+  void finalizeIndex()
+  {
+    _index->bulkInsert(_boxes, _fids);
+  }
 
 private:
 
-  OsmMap* _map;
+  ConstOsmMapPtr _pMap;
   shared_ptr<ElementCriterion> _filter;
-  bool _recursive;
+  boost::function<Meters (const ConstElementPtr& e)> _getSearchRadius;
+
+  shared_ptr<Tgs::HilbertRTree>& _index;
+  deque<ElementId>& _indexToEid;
+  std::vector<Tgs::Box> _boxes;
+  std::vector<int> _fids;
 };
 
 
 }
 
-#endif // REMOVEELEMENTSVISITOR_H
+#endif // INDEXELEMENTVISITOR_H
