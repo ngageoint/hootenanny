@@ -33,17 +33,25 @@
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/filters/ArbitraryCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/visitors/IndexElementsVisitor.h>
 
 // Standard
 #include <fstream>
 
+// Boost
+#include <boost/bind.hpp>
+#include <boost/function.hpp>
+
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
+#include <tgs/RStarTree/IntersectionIterator.h>
+#include <tgs/RStarTree/MemoryPageStore.h>
 
 //Qt
 #include <QFile>
@@ -91,7 +99,10 @@ public:
     env->expandBy(e->getCircularError());
 
     // find other nearby candidates
-    set<ElementId> neighbors = _map->findElements(*env);
+    set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
+                                                                   getIndex(),
+                                                                   _indexToEid,
+                                                                   getMap());
     ElementId from(e->getElementType(), e->getId());
 
     _elementsEvaluated++;
@@ -144,6 +155,11 @@ public:
     }
   }
 
+  Meters getSearchRadius(const shared_ptr<const Element>& e) const
+  {
+    return e->getCircularError();
+  }
+
   virtual void visit(const ConstElementPtr& e)
   {
     if (e->getStatus() == _matchStatus && isMatchCandidate(e))
@@ -182,26 +198,6 @@ public:
     }
 
     return _index;
-  }
-
-  set<ElementId> findNeighbors(const Envelope& env)
-  {
-    set<ElementId> result;
-
-    vector<double> min(2), max(2);
-    min[0] = env.getMinX();
-    min[1] = env.getMinY();
-    max[0] = env.getMaxX();
-    max[1] = env.getMaxY();
-    IntersectionIterator it(getIndex().get(), min, max);
-
-    while (it.next())
-    {
-      // map the tree id to an element id and push into result.
-      result.insert(_indexToEid[it.getId()]);
-    }
-
-    return result;
   }
 
   ConstOsmMapPtr getMap() { return _map; }

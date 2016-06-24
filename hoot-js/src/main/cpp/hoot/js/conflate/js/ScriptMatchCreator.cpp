@@ -135,7 +135,10 @@ public:
     env->expandBy(searchRadius);
 
     // find other nearby candidates
-    set<ElementId> neighbors = findNeighbors(*env);
+    set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
+                                                                   getIndex(),
+                                                                   _indexToEid,
+                                                                   getMap());
     ElementId from = e->getElementId();
 
     _elementsEvaluated++;
@@ -163,26 +166,6 @@ public:
 
     _neighborCountSum += neighborCount;
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
-  }
-
-  set<ElementId> findNeighbors(const Envelope& env)
-  {
-    set<ElementId> result;
-
-    vector<double> min(2), max(2);
-    min[0] = env.getMinX();
-    min[1] = env.getMinY();
-    max[0] = env.getMaxX();
-    max[1] = env.getMaxY();
-    IntersectionIterator it(getIndex().get(), min, max);
-
-    while (it.next())
-    {
-      // map the tree id to an element id and push into result.
-      result.insert(_indexToEid[it.getId()]);
-    }
-
-    return result;
   }
 
   ConstOsmMapPtr getMap() const { return _map.lock(); }

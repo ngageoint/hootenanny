@@ -102,7 +102,10 @@ public:
     env->expandBy(getSearchRadius(e));
 
     // find other nearby candidates
-    set<ElementId> neighbors = findNeighbors(*env);
+    set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
+                                                                   getIndex(),
+                                                                   _indexToEid,
+                                                                   getMap());
     ElementId from(e->getElementType(), e->getId());
 
     _elementsEvaluated++;
@@ -209,26 +212,6 @@ public:
     }
 
     return _index;
-  }
-
-  set<ElementId> findNeighbors(const Envelope& env)
-  {
-    set<ElementId> result;
-
-    vector<double> min(2), max(2);
-    min[0] = env.getMinX();
-    min[1] = env.getMinY();
-    max[0] = env.getMaxX();
-    max[1] = env.getMaxY();
-    IntersectionIterator it(getIndex().get(), min, max);
-
-    while (it.next())
-    {
-      // map the tree id to an element id and push into result.
-      result.insert(_indexToEid[it.getId()]);
-    }
-
-    return result;
   }
 
   ConstOsmMapPtr getMap() { return _map; }

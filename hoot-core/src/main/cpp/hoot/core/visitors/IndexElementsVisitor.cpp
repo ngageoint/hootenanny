@@ -26,12 +26,16 @@
  */
 #include "IndexElementsVisitor.h"
 
+// Hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
+
+// TGS
+#include <tgs/RStarTree/IntersectionIterator.h>
 
 namespace hoot
 {
@@ -58,7 +62,7 @@ void IndexElementsVisitor::setOsmMap(OsmMap* map)
 
 void IndexElementsVisitor::visit(const ConstElementPtr& e)
 {
-  if (_filter->isSatisfied(e))
+  if (!_filter || _filter->isSatisfied(e))
   {
     _fids.push_back((int)_indexToEid.size());
     _indexToEid.push_back(e->getElementId());
@@ -72,6 +76,39 @@ void IndexElementsVisitor::visit(const ConstElementPtr& e)
 
     _boxes.push_back(b);
   }
+}
+
+set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
+                                                   const shared_ptr<Tgs::HilbertRTree>& index,
+                                                   const deque<ElementId>& indexToEid,
+                                                   ConstOsmMapPtr pMap)
+{
+  const ElementToRelationMap& e2r = *(pMap->getIndex()).getElementToRelationMap();
+
+  set<ElementId> result;
+  vector<double> min(2), max(2);
+  min[0] = env.getMinX();
+  min[1] = env.getMinY();
+  max[0] = env.getMaxX();
+  max[1] = env.getMaxY();
+  IntersectionIterator it(index.get(), min, max);
+
+  while (it.next())
+  {
+    ElementId eid = indexToEid[it.getId()];
+
+    // Map the tree id to an element id and push into result.
+    result.insert(eid);
+
+    // Check for relations that contain this element
+    const set<long>& relations = e2r.getRelationByElement(eid);
+    for (set<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
+    {
+      result.insert(ElementId(ElementType::Relation, *it));
+    }
+  }
+
+  return result;
 }
 
 } // End namespace hoot

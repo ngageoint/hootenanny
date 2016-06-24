@@ -83,6 +83,11 @@ public:
     _index->bulkInsert(_boxes, _fids);
   }
 
+  static set<ElementId> findNeighbors(const Envelope& env,
+                                      const shared_ptr<Tgs::HilbertRTree>& index,
+                                      const deque<ElementId>& indexToEid,
+                                      ConstOsmMapPtr pMap);
+
 private:
 
   ConstOsmMapPtr _pMap;
