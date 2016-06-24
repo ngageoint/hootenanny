@@ -585,7 +585,7 @@ When(/^I delete any existing "([^"]*)" basemap if necessary$/) do |text|
     oldTimeout = Capybara.default_max_wait_time
     Capybara.default_max_wait_time = 30
     page.should have_no_content(text)
-    Capybara.default_maFx_wait_time = oldTimeout
+    Capybara.default_max_wait_time = oldTimeout
   rescue Capybara::ElementNotFound
   end
 end
