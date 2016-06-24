@@ -65,7 +65,7 @@ import hoot.services.utils.ResourceErrorHandler;
 @Path("/info")
 public class OgrAttributesResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(OgrAttributesResource.class);
-    private static final String homeFolder = HootProperties.getProperty("homeFolder");
+    private static final String HOME_FOLDER = HootProperties.getProperty("homeFolder");
 
     public OgrAttributesResource() {
         super(HootProperties.getProperty("GetOgrAttributeScript"));
@@ -123,7 +123,7 @@ public class OgrAttributesResource extends JobControllerBase {
                 // which is fgdb name in the zip
                 if (ext.equalsIgnoreCase("ZIP")) {
                     zipList.add(fName);
-                    String zipFilePath = homeFolder + "/upload/" + jobId + "/" + inputFileName;
+                    String zipFilePath = HOME_FOLDER + "/upload/" + jobId + "/" + inputFileName;
                     try (FileInputStream in = new FileInputStream(zipFilePath);
                          ZipInputStream zis = new ZipInputStream(in)) {
                         ZipEntry ze = zis.getNextEntry();
@@ -201,7 +201,7 @@ public class OgrAttributesResource extends JobControllerBase {
                                   String doDelete) {
         String script = "";
         try {
-            File file = new File(homeFolder + "/tmp/" + id + ".out");
+            File file = new File(HOME_FOLDER + "/tmp/" + id + ".out");
             script = FileUtils.readFileToString(file, "UTF-8");
 
             if ("true".equalsIgnoreCase(doDelete)) {

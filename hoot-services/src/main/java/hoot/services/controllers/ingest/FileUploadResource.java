@@ -60,7 +60,7 @@ import hoot.services.utils.ResourceErrorHandler;
 @Path("/ingest")
 public class FileUploadResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(FileUploadResource.class);
-    private static final String homeFolder = HootProperties.getProperty("homeFolder");
+    private static final String HOME_FOLDER = HootProperties.getProperty("homeFolder");
 
     public FileUploadResource() {
         super(HootProperties.getProperty("ETLMakefile"));
@@ -307,7 +307,6 @@ public class FileUploadResource extends JobControllerBase {
             if (oRq != null) {
                 JSONObject jsonReq = (JSONObject) oRq;
                 String rawInput = jsonReq.get("name").toString();
-                String fgdbInput = "";
                 List<String> fgdbInputs = new ArrayList<>();
                 String[] cls = fgdbFeatureClasses.split(",");
 
@@ -315,7 +314,7 @@ public class FileUploadResource extends JobControllerBase {
                     fgdbInputs.add(rawInput + "\\;" + cl);
                 }
 
-                fgdbInput = StringUtils.join(fgdbInputs.toArray(), ' ');
+                String fgdbInput = StringUtils.join(fgdbInputs.toArray(), ' ');
                 param.put("INPUT", fgdbInput);
             }
         }
@@ -415,7 +414,7 @@ public class FileUploadResource extends JobControllerBase {
         }
         else if (ext.equalsIgnoreCase("zip")) {
             // Check to see the type of zip (osm, ogr or fgdb)
-            String zipFilePath = homeFolder + "/upload/" + jobId + "/" + inputFileName;
+            String zipFilePath = HOME_FOLDER + "/upload/" + jobId + "/" + inputFileName;
 
             JSONObject res = getZipContentType(zipFilePath, reqList, fName);
 

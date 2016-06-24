@@ -46,10 +46,10 @@ import hoot.services.utils.ResourceErrorHandler;
 public class TranslatorResource extends ServerControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(TranslatorResource.class);
 
-    private static final String homeFolder;
-    private static final String translationServerPort;
-    private static final String translationServerThreadCount;
-    private static final String translationServerScript;
+    private static final String HOME_FOLDER;
+    private static final String TRANSLATION_SERVER_PORT;
+    private static final String TRANSLATION_SERVER_THREAD_COUNT;
+    private static final String TRANSLATION_SERVER_SCRIPT;
     private static final Object procLock = new Object();
     private static final Object portLock = new Object();
 
@@ -57,10 +57,10 @@ public class TranslatorResource extends ServerControllerBase {
     private static Process transProc;
 
     static {
-        homeFolder = HootProperties.getProperty("homeFolder");
-        translationServerPort = HootProperties.getProperty("translationServerPort");
-        translationServerThreadCount = HootProperties.getProperty("translationServerThreadCount");
-        translationServerScript = HootProperties.getProperty("translationServerScript");
+        HOME_FOLDER = HootProperties.getProperty("homeFolder");
+        TRANSLATION_SERVER_PORT = HootProperties.getProperty("translationServerPort");
+        TRANSLATION_SERVER_THREAD_COUNT = HootProperties.getProperty("translationServerThreadCount");
+        TRANSLATION_SERVER_SCRIPT = HootProperties.getProperty("translationServerScript");
     }
 
     public TranslatorResource() {
@@ -70,17 +70,17 @@ public class TranslatorResource extends ServerControllerBase {
         // set default default port and threadcount
         try {
             // Make sure to wipe out previosuly running servers.
-            stopServer(homeFolder + "/scripts/" + translationServerScript);
+            stopServer(HOME_FOLDER + "/scripts/" + TRANSLATION_SERVER_SCRIPT);
 
             // Probably an overkill but just in-case using synch lock
-            String currPort = translationServerPort;
+            String currPort = TRANSLATION_SERVER_PORT;
             synchronized (portLock) {
                 currentPort = currPort;
             }
 
             synchronized (procLock) {
-                String currThreadCnt = translationServerThreadCount;
-                transProc = startServer(currPort, currThreadCnt, homeFolder + "/scripts/" + translationServerScript);
+                String currThreadCnt = TRANSLATION_SERVER_THREAD_COUNT;
+                transProc = startServer(currPort, currThreadCnt, HOME_FOLDER + "/scripts/" + TRANSLATION_SERVER_SCRIPT);
             }
         }
         catch (Exception ex) {

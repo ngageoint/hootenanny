@@ -271,8 +271,8 @@ public class ZCurveRanger {
         LongBox result = new LongBox(box);
 
         for (int i = 0; i < result.getDimensions(); i++) {
-            result.min[i] = Math.max(0, result.min[i]);
-            result.max[i] = Math.min(zv.getMaxDimensionRange(), result.max[i]);
+            result.getMin()[i] = Math.max(0, result.getMin()[i]);
+            result.getMax()[i] = Math.min(zv.getMaxDimensionRange(), result.getMax()[i]);
         }
 
         return result;

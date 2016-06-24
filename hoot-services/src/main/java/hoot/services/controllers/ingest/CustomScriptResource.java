@@ -70,28 +70,28 @@ import hoot.services.utils.ResourceErrorHandler;
 @Path("/customscript")
 public class CustomScriptResource {
     private static final Logger logger = LoggerFactory.getLogger(CustomScriptResource.class);
-    private static final String scriptFolder;
-    private static final String homeFolder;
-    private static final String jsHeaderScriptPath;
-    private static final String defaultTranslationsConfig;
-    private static final String defaultFOUOTranslationsConfig;
-    private static final boolean fouoTranslationsExist;
-    private static final String headerStart = "/*<<<";
-    private static final String headerEnd = ">>>*/" + System.lineSeparator();
+    private static final String SCRIPT_FOLDER;
+    private static final String HOME_FOLDER;
+    private static final String JS_HEADER_SCRIPT_PATH;
+    private static final String DEFAULT_TRANSLATIONS_CONFIG;
+    private static final String DEFAULT_FOUO_TRANSLATIONS_CONFIG;
+    private static final boolean FOUO_TRANSLATIONS_EXIST;
+    private static final String HEADER_START = "/*<<<";
+    private static final String HEADER_END = ">>>*/" + System.lineSeparator();
 
     static {
-        homeFolder = HootProperties.getProperty("homeFolder");
-        jsHeaderScriptPath = HootProperties.getProperty("dummyjsHeaderScriptPath");
-        scriptFolder = HootProperties.getProperty("customScriptPath");
-        defaultTranslationsConfig = HootProperties.getProperty("defaultTranslationsConfig");
-        defaultFOUOTranslationsConfig = HootProperties.getProperty("defaultFOUOTranslationsConfig");
+        HOME_FOLDER = HootProperties.getProperty("homeFolder");
+        JS_HEADER_SCRIPT_PATH = HootProperties.getProperty("dummyjsHeaderScriptPath");
+        SCRIPT_FOLDER = HootProperties.getProperty("customScriptPath");
+        DEFAULT_TRANSLATIONS_CONFIG = HootProperties.getProperty("defaultTranslationsConfig");
+        DEFAULT_FOUO_TRANSLATIONS_CONFIG = HootProperties.getProperty("defaultFOUOTranslationsConfig");
 
-        if ((new File(defaultFOUOTranslationsConfig)).exists()) {
-            fouoTranslationsExist = true;
+        if ((new File(DEFAULT_FOUO_TRANSLATIONS_CONFIG)).exists()) {
+            FOUO_TRANSLATIONS_EXIST = true;
             logger.info("FOUO translations are present.");
         }
         else {
-            fouoTranslationsExist = false;
+            FOUO_TRANSLATIONS_EXIST = false;
             logger.info("FOUO translations are not present.");
         }
     }
@@ -101,7 +101,7 @@ public class CustomScriptResource {
      * @return a directory
      */
     private File getUploadDir() {
-        return new File(scriptFolder);
+        return new File(SCRIPT_FOLDER);
     }
 
     private boolean uploadDirExists() {
@@ -200,7 +200,7 @@ public class CustomScriptResource {
         JSONArray filesList = new JSONArray();
 
         try {
-            File scriptsDir = new File(scriptFolder);
+            File scriptsDir = new File(SCRIPT_FOLDER);
             if (scriptsDir.exists()) {
                 String[] exts = { "js" };
                 List<File> files = (List<File>) FileUtils.listFiles(scriptsDir, exts, false);
@@ -221,10 +221,10 @@ public class CustomScriptResource {
             }
 
             List<String> configFiles = new ArrayList<>();
-            configFiles.add(defaultTranslationsConfig);
+            configFiles.add(DEFAULT_TRANSLATIONS_CONFIG);
 
-            if (fouoTranslationsExist) {
-                configFiles.add(defaultFOUOTranslationsConfig);
+            if (FOUO_TRANSLATIONS_EXIST) {
+                configFiles.add(DEFAULT_FOUO_TRANSLATIONS_CONFIG);
             }
 
             filesList.addAll(getDefaultList(configFiles));
@@ -278,7 +278,7 @@ public class CustomScriptResource {
                         if (oCanExport == null) {
                             // Get the script
                             if (oTrans.get("PATH") != null) {
-                                File fScript = new File(homeFolder + "/" + oTrans.get("PATH"));
+                                File fScript = new File(HOME_FOLDER + "/" + oTrans.get("PATH"));
                                 if (fScript.exists()) {
                                     String sScript = FileUtils.readFileToString(fScript);
                                     boolean canExport = validateExport(sScript);
@@ -294,7 +294,7 @@ public class CustomScriptResource {
                             JSONObject jsTrans = (JSONObject) oTrans;
                             if (jsTrans.get("FOUO_PATH") != null) {
                                 // See if FOUO folder exists
-                                File fouoPath = new File(homeFolder + "/" + jsTrans.get("FOUO_PATH"));
+                                File fouoPath = new File(HOME_FOLDER + "/" + jsTrans.get("FOUO_PATH"));
                                 if (fouoPath.exists()) {
                                     filesList.add(jsTrans);
                                 }
@@ -347,7 +347,7 @@ public class CustomScriptResource {
     public Response getScript(@QueryParam("SCRIPT_NAME") String scriptName) {
         String script = "";
         try {
-            File scriptsDir = new File(scriptFolder);
+            File scriptsDir = new File(SCRIPT_FOLDER);
 
             if (scriptsDir.exists()) {
                 String[] exts = { "js" };
@@ -420,9 +420,9 @@ public class CustomScriptResource {
             boolean bPathValidated = false;
             List<String> configFiles = new ArrayList<>();
 
-            configFiles.add(defaultTranslationsConfig);
-            if (fouoTranslationsExist) {
-                configFiles.add(defaultFOUOTranslationsConfig);
+            configFiles.add(DEFAULT_TRANSLATIONS_CONFIG);
+            if (FOUO_TRANSLATIONS_EXIST) {
+                configFiles.add(DEFAULT_FOUO_TRANSLATIONS_CONFIG);
             }
 
             JSONArray defList = getDefaultList(configFiles);
@@ -444,7 +444,7 @@ public class CustomScriptResource {
             }
 
             if (bPathValidated) {
-                File scriptFile = new File(homeFolder, scriptPath);
+                File scriptFile = new File(HOME_FOLDER, scriptPath);
                 if (scriptFile.exists()) {
                     script = FileUtils.readFileToString(scriptFile);
                 }
@@ -569,14 +569,14 @@ public class CustomScriptResource {
 
     private JSONObject getScriptObject(String content) throws Exception {
         JSONObject script = new JSONObject();
-        if (content.startsWith(headerStart)) {
-            int iHeader = content.indexOf(headerEnd);
+        if (content.startsWith(HEADER_START)) {
+            int iHeader = content.indexOf(HEADER_END);
             if (iHeader > 0) {
                 String header = content.substring(0, iHeader);
-                header = header.replace(headerStart, "");
-                header = header.replace(headerEnd, "");
+                header = header.replace(HEADER_START, "");
+                header = header.replace(HEADER_END, "");
 
-                String body = content.substring(iHeader + headerEnd.length());
+                String body = content.substring(iHeader + HEADER_END.length());
 
                 JSONParser parser = new JSONParser();
                 JSONObject jHeader = (JSONObject) parser.parse(header);
@@ -595,7 +595,7 @@ public class CustomScriptResource {
             FileUtils.forceMkdir(getUploadDir());
         }
         String[] exts = { "js" };
-        File scriptsDir = new File(scriptFolder);
+        File scriptsDir = new File(SCRIPT_FOLDER);
         return (List<File>) FileUtils.listFiles(scriptsDir, exts, false);
     }
 
@@ -616,11 +616,11 @@ public class CustomScriptResource {
             FileUtils.forceMkdir(getUploadDir());
         }
 
-        if (!hoot.services.utils.FileUtils.validateFilePath(scriptFolder, scriptFolder + "/" + name + ".js")) {
+        if (!hoot.services.utils.FileUtils.validateFilePath(SCRIPT_FOLDER, SCRIPT_FOLDER + "/" + name + ".js")) {
             throw new Exception("Script name can not contain path.");
         }
 
-        File fScript = new File(scriptFolder, name + ".js");
+        File fScript = new File(SCRIPT_FOLDER, name + ".js");
         if (!fScript.exists()) {
             if (!fScript.createNewFile()) {
                 logger.error("File {} should not have existed before we tried to create it!", fScript.getAbsolutePath());
@@ -632,9 +632,9 @@ public class CustomScriptResource {
         oHeader.put("DESCRIPTION", description);
         oHeader.put("CANEXPORT", canExport);
 
-        String header = headerStart;
+        String header = HEADER_START;
         header += oHeader.toString();
-        header += headerEnd;
+        header += HEADER_END;
 
         FileUtils.writeStringToFile(fScript, header + content);
 
@@ -655,9 +655,9 @@ public class CustomScriptResource {
 
             scope.put("context", scope, context);
             scope.put("scope", scope, scope);
-            scope.put("APP_ROOT", scope, homeFolder);
+            scope.put("APP_ROOT", scope, HOME_FOLDER);
 
-            try (FileReader frHeader = new FileReader(jsHeaderScriptPath);
+            try (FileReader frHeader = new FileReader(JS_HEADER_SCRIPT_PATH);
                  BufferedReader jsHeader = new BufferedReader(frHeader)) {
                 context.evaluateReader(scope, jsHeader, "jsHeader", 1, null);
             }

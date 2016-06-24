@@ -34,7 +34,8 @@ import java.util.Arrays;
  */
 final class LongBox {
 
-    long[] min, max;
+    private long[] min;
+    private long[] max;
 
     private static String toBinary(long v, int bits) {
         String format = String.format("%%%ds", bits);
@@ -43,18 +44,18 @@ final class LongBox {
 
     public LongBox(long[] min, long[] max) {
         assert (min.length == max.length);
-        this.min = min;
-        this.max = max;
+        this.setMin(min);
+        this.setMax(max);
     }
 
     public LongBox(LongBox box) {
-        min = Arrays.copyOf(box.min, box.min.length);
-        max = Arrays.copyOf(box.max, box.max.length);
+        setMin(Arrays.copyOf(box.getMin(), box.getMin().length));
+        setMax(Arrays.copyOf(box.getMax(), box.getMax().length));
     }
 
     public long calculateVolume() {
         long result = 1;
-        for (int i = 0; i < min.length; i++) {
+        for (int i = 0; i < getMin().length; i++) {
             result *= getWidth(i);
         }
         return result;
@@ -67,7 +68,7 @@ final class LongBox {
     public boolean edgeOverlaps(LongBox b) {
         boolean result = false;
 
-        for (int i = 0; i < min.length; i++) {
+        for (int i = 0; i < getMin().length; i++) {
             result = result || (b.getMin()[i] == getMax()[i]) || (b.getMin()[i] == b.getMin()[i])
                     || (b.getMax()[i] == b.getMax()[i]);
         }
@@ -76,16 +77,16 @@ final class LongBox {
     }
 
     public LongBox expand(int size) {
-        for (int i = 0; i < min.length; i++) {
-            min[i] -= size;
-            max[i] += size;
+        for (int i = 0; i < getMin().length; i++) {
+            getMin()[i] -= size;
+            getMax()[i] += size;
         }
 
         return this;
     }
 
     public int getDimensions() {
-        return min.length;
+        return getMin().length;
     }
 
     public long[] getMax() {
@@ -97,13 +98,13 @@ final class LongBox {
     }
 
     public long getWidth(int d) {
-        return (max[d] - min[d]) + 1;
+        return (getMax()[d] - getMin()[d]) + 1;
     }
 
     public boolean in(long[] p) {
         boolean result = true;
-        for (int i = 0; i < min.length; i++) {
-            result = result && (p[i] >= min[i]) && (p[i] <= max[i]);
+        for (int i = 0; i < getMin().length; i++) {
+            result = result && (p[i] >= getMin()[i]) && (p[i] <= getMax()[i]);
         }
         return result;
     }
@@ -112,7 +113,7 @@ final class LongBox {
         assert (b.getDimensions() == getDimensions());
 
         boolean result = true;
-        for (int i = 0; i < min.length; i++) {
+        for (int i = 0; i < getMin().length; i++) {
             result = result && (b.getMin()[i] <= getMax()[i]);
             result = result && (b.getMax()[i] >= getMin()[i]);
         }
@@ -122,8 +123,8 @@ final class LongBox {
 
     public String toBinaryString(int bits) {
         String result = "{ ";
-        for (int i = 0; i < min.length; i++) {
-            result += String.format("(%s : %s) ", toBinary(min[i], bits), toBinary(max[i], bits));
+        for (int i = 0; i < getMin().length; i++) {
+            result += String.format("(%s : %s) ", toBinary(getMin()[i], bits), toBinary(getMax()[i], bits));
         }
         result += "}";
         return result;
@@ -132,10 +133,18 @@ final class LongBox {
     @Override
     public String toString() {
         String result = "{ ";
-        for (int i = 0; i < min.length; i++) {
-            result += String.format("(%d : %d) ", min[i], max[i]);
+        for (int i = 0; i < getMin().length; i++) {
+            result += String.format("(%d : %d) ", getMin()[i], getMax()[i]);
         }
         result += "}";
         return result;
+    }
+
+    public void setMin(long[] min) {
+        this.min = min;
+    }
+
+    public void setMax(long[] max) {
+        this.max = max;
     }
 }

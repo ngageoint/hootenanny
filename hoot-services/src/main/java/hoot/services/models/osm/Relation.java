@@ -217,9 +217,9 @@ public class Relation extends Element {
      * @throws Exception
      */
     private BoundingBox parseNodesAndWayMembersBounds(List<RelationMember> members) throws Exception {
-        List<Coordinates> coordsToComputeBoundsFrom = new ArrayList<Coordinates>();
-        Set<Long> idsOfNodesToRetrieveFromTheDb = new HashSet<Long>();
-        Set<Long> idsOfWaysForWhichToRetrieveNodesFromTheDb = new HashSet<Long>();
+        List<Coordinates> coordsToComputeBoundsFrom = new ArrayList<>();
+        Set<Long> idsOfNodesToRetrieveFromTheDb = new HashSet<>();
+        Set<Long> idsOfWaysForWhichToRetrieveNodesFromTheDb = new HashSet<>();
         BoundingBox bounds = null;
         BoundingBox dbBounds = null;
 
@@ -361,6 +361,7 @@ public class Relation extends Element {
     private void checkForCircularReference(long parsedRelationMemberId) throws Exception {
         long relationId = 0;
         boolean circularRefFound = false;
+
         if ((parsedRelationMemberId > 0) && (parsedRelationMemberId == getId())) {
             relationId = getId();
             circularRefFound = true;
@@ -369,6 +370,7 @@ public class Relation extends Element {
             relationId = oldId;
             circularRefFound = true;
         }
+
         if (circularRefFound) {
             throw new Exception(
                     "Relation with ID: " + relationId + " contains a relation member that references itself.");
@@ -382,6 +384,7 @@ public class Relation extends Element {
 
         long parsedMemberId = Long.parseLong(memberXmlAttributes.getNamedItem("ref").getNodeValue());
         long actualMemberId = parsedMemberId;
+
         ElementType elementType = Element.elementTypeFromString(memberXmlAttributes.getNamedItem("type").getNodeValue());
 
         if (elementType == null) {
@@ -415,26 +418,21 @@ public class Relation extends Element {
         // TODO: these comments need updating
 
         // The element is referenced somewhere else in this request, so get its
-        // info from the request,
-        // not the database, b/c the database either won't have it or will have
-        // outdated info for it.
-        // Only get info from the request if the element is being
-        // created/modified, because if it is
-        // being deleted, we can just get the info from the database since the
-        // element's bounds won't be
-        // changing and its geo info isn't in the request (not required for a
-        // delete).
+        // info from the request, not the database, b/c the database either won't have it or will have
+        // outdated info for it. Only get info from the request if the element is being
+        // created/modified, because if it is being deleted, we can just get the info from the database since the
+        // element's bounds won't be changing and its geo info isn't in the request (not required for a delete).
         if (parsedElements.containsKey(parsedMemberId)
                 && (parsedElements.get(parsedMemberId).getEntityChangeType() != EntityChangeType.DELETE)) {
             memberElement = parsedElements.get(parsedMemberId);
             actualMemberId = memberElement.getId();
         }
         // element not referenced in this request, so should already exist in
-        // the db and its info up
-        // to date
+        // the db and its info up to date
         else {
             memberElement = ElementFactory.create(getMapId(), elementType, conn);
         }
+
         assert (actualMemberId > 0);
 
         // role is allowed to be empty
@@ -443,6 +441,7 @@ public class Relation extends Element {
         RelationMember member = new RelationMember(actualMemberId,
                 Element.elementTypeFromString(memberXmlAttributes.getNamedItem("type").getNodeValue()), role);
         member.setOldId(parsedMemberId);
+
         return member;
     }
 

@@ -43,19 +43,19 @@ import hoot.services.validators.osm.MapValidator;
  * Base code for HGIS specific Rest endpoint.
  */
 public class HGISResource extends JobControllerBase {
-    private static final String dbName;
-    private static final String dbUserId;
-    private static final String dbPassword;
-    private static final String dbHost;
+    private static final String DB_NAME;
+    private static final String DB_USER_ID;
+    private static final String DB_PASSWORD;
+    private static final String DB_HOST;
 
     private static final Logger log = LoggerFactory.getLogger(HGISResource.class);
 
     // Load just once during class load
     static {
-        dbName = HootProperties.getProperty("dbName");
-        dbUserId = HootProperties.getProperty("dbUserId");
-        dbPassword = HootProperties.getProperty("dbPassword");
-        dbHost = HootProperties.getProperty("dbHost");
+        DB_NAME = HootProperties.getProperty("dbName");
+        DB_USER_ID = HootProperties.getProperty("dbUserId");
+        DB_PASSWORD = HootProperties.getProperty("dbPassword");
+        DB_HOST = HootProperties.getProperty("dbHost");
     }
 
     public HGISResource(String processName) {
@@ -89,7 +89,7 @@ public class HGISResource extends JobControllerBase {
      *         postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois
      */
     static String generateDbMapParam(String mapName) {
-        return "hootapidb://" + dbUserId + ":" + dbPassword + "@" + dbHost + "/" + dbName + "/" + mapName;
+        return "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + "/" + DB_NAME + "/" + mapName;
     }
 
     /**

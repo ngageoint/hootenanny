@@ -43,7 +43,7 @@ import hoot.services.HootProperties;
 public class JobFieldsValidator {
     private static final Logger logger = LoggerFactory.getLogger(JobFieldsValidator.class);
     private static final String META_DATA_PATH;
-    private static final JSONObject META_DATA;
+    private static final JSONObject metaData;
     private final String resourceName;
 
     static {
@@ -51,7 +51,7 @@ public class JobFieldsValidator {
         try {
             try (FileReader fReader = new FileReader(META_DATA_PATH)) {
                 JSONParser parser = new JSONParser();
-                META_DATA = (JSONObject) parser.parse(fReader);
+                metaData = (JSONObject) parser.parse(fReader);
             }
         }
         catch (Exception e) {
@@ -66,7 +66,7 @@ public class JobFieldsValidator {
     public boolean validateRequiredExists(Map<String, String> fields, List<String> missingList) {
         boolean isValid = true;
 
-        Object resMeta = META_DATA.get(this.resourceName);
+        Object resMeta = metaData.get(this.resourceName);
         if (resMeta != null) {
             // get the list of required fields
             List<String> reqList = new ArrayList<>();

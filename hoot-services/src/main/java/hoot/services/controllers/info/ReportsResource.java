@@ -57,8 +57,8 @@ import hoot.services.utils.ResourceErrorHandler;
 @Path("/reports")
 public class ReportsResource {
     private static final Logger logger = LoggerFactory.getLogger(ReportsResource.class);
-    private static final String rptStorePath = HootProperties.getProperty("reportDataPath");
-    private static final String homeFolder = HootProperties.getProperty("homeFolder");
+    private static final String RPT_STORE_PATH = HootProperties.getProperty("reportDataPath");
+    private static final String HOME_FOLDER = HootProperties.getProperty("homeFolder");
 
     public ReportsResource() {
     }
@@ -148,8 +148,8 @@ public class ReportsResource {
     private static JSONObject getMetaData(String id) throws Exception {
         JSONObject res = new JSONObject();
 
-        String metaDataPath = homeFolder + "/" + rptStorePath + "/" + id + "/meta.data";
-        File metaFolder = hoot.services.utils.FileUtils.getSubFolderFromFolder(homeFolder + "/" + rptStorePath, id);
+        String metaDataPath = HOME_FOLDER + "/" + RPT_STORE_PATH + "/" + id + "/meta.data";
+        File metaFolder = hoot.services.utils.FileUtils.getSubFolderFromFolder(HOME_FOLDER + "/" + RPT_STORE_PATH, id);
 
         if (metaFolder != null) {
             File file = new File(metaDataPath);
@@ -171,7 +171,7 @@ public class ReportsResource {
         // sort by name
         Map<String, JSONObject> sorted = new TreeMap<>();
 
-        String storePath = homeFolder + "/" + rptStorePath;
+        String storePath = HOME_FOLDER + "/" + RPT_STORE_PATH;
         File dir = new File(storePath);
         if (dir.exists()) {
             List<File> files = (List<File>) FileUtils.listFilesAndDirs(dir, new NotFileFilter(TrueFileFilter.INSTANCE),
@@ -221,7 +221,7 @@ public class ReportsResource {
     private static boolean deleteReport(String id) throws Exception {
         boolean deleted = false;
 
-        File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(homeFolder + "/" + rptStorePath, id);
+        File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(HOME_FOLDER + "/" + RPT_STORE_PATH, id);
         if ((folder != null) && folder.exists()) {
             FileUtils.forceDelete(folder);
             deleted = true;

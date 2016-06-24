@@ -68,8 +68,8 @@ public class ProcessStreamInterface implements INativeInterface {
 
     // This contains the command runner objects for the executing processes.
     // Used for job cancellation and tracking
-    private static final Map<String, ICommandRunner> JOB_PROCESSES = new ConcurrentHashMap<>();
-    private static final Map<String, ICommandRunner> PROG_PROCESSES = new ConcurrentHashMap<>();
+    private static final Map<String, ICommandRunner> jobProcesses = new ConcurrentHashMap<>();
+    private static final Map<String, ICommandRunner> progProcesses = new ConcurrentHashMap<>();
 
     private static final String DB_URL;
     private static final String OSM_API_DB_URL;
@@ -94,7 +94,7 @@ public class ProcessStreamInterface implements INativeInterface {
     @Override
     public String getJobProgress(String jobId) {
         String stdStr = "";
-        Object oCmdRunner = PROG_PROCESSES.get(jobId);
+        Object oCmdRunner = progProcesses.get(jobId);
         if (oCmdRunner != null) {
             ICommandRunner cmdRunner = (ICommandRunner) oCmdRunner;
             stdStr = cmdRunner.getStdOut();
@@ -231,12 +231,12 @@ public class ProcessStreamInterface implements INativeInterface {
 
         boolean success = false;
         if (cmd.containsKey("jobId")) {
-            JOB_PROCESSES.put(cmd.get("jobId").toString(), cmdRunner);
+            jobProcesses.put(cmd.get("jobId").toString(), cmdRunner);
             success = true;
         }
 
         if (cmd.containsKey("jobId")) {
-            PROG_PROCESSES.put(cmd.get("jobId").toString(), cmdRunner);
+            progProcesses.put(cmd.get("jobId").toString(), cmdRunner);
             success = true;
         }
 
@@ -254,7 +254,7 @@ public class ProcessStreamInterface implements INativeInterface {
         try {
             if (cmd.containsKey("jobId")) {
                 jobId = cmd.get("jobId").toString();
-                JOB_PROCESSES.remove(jobId);
+                jobProcesses.remove(jobId);
             }
         }
         catch (Exception ex) {
@@ -264,8 +264,8 @@ public class ProcessStreamInterface implements INativeInterface {
 
     private static void removeFromProgressProcessQ(String jobId) {
         try {
-            if (PROG_PROCESSES.containsKey(jobId)) {
-                PROG_PROCESSES.remove(jobId);
+            if (progProcesses.containsKey(jobId)) {
+                progProcesses.remove(jobId);
             }
         }
         catch (Exception ex) {
@@ -283,7 +283,7 @@ public class ProcessStreamInterface implements INativeInterface {
     @Override
     public void terminate(String jobId) throws NativeInterfaceException {
         try {
-            ICommandRunner cmdRunner = JOB_PROCESSES.get(jobId);
+            ICommandRunner cmdRunner = jobProcesses.get(jobId);
             if (cmdRunner != null) {
                 cmdRunner.terminateClean();
             }

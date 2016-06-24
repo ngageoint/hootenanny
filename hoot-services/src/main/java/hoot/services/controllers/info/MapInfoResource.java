@@ -47,14 +47,14 @@ import hoot.services.utils.ResourceErrorHandler;
 @Path("/map")
 public class MapInfoResource {
     private static final Logger logger = LoggerFactory.getLogger(MapInfoResource.class);
-    private static final Long conflateThreshold;
-    private static final Long ingestThreshold;
-    private static final Long exportThreshold;
+    private static final Long CONFLATE_THRESHOLD;
+    private static final Long INGEST_THRESHOLD;
+    private static final Long EXPORT_THRESHOLD;
 
     static {
         try {
             String value = HootProperties.getProperty("conflateSizeThreshold");
-            conflateThreshold = Long.parseLong(value);
+            CONFLATE_THRESHOLD = Long.parseLong(value);
         }
         catch (NumberFormatException nfe) {
             logger.error("Invalid value specified for conflateSizeThreshold!");
@@ -63,7 +63,7 @@ public class MapInfoResource {
 
         try {
             String value = HootProperties.getProperty("ingestSizeThreshold");
-            ingestThreshold = Long.parseLong(value);
+            INGEST_THRESHOLD = Long.parseLong(value);
         }
         catch (NumberFormatException nfe) {
             logger.error("Invalid value specified for ingestSizeThreshold!");
@@ -72,7 +72,7 @@ public class MapInfoResource {
 
         try {
             String value = HootProperties.getProperty("exportSizeThreshold");
-            exportThreshold = Long.parseLong(value);
+            EXPORT_THRESHOLD = Long.parseLong(value);
         }
         catch (NumberFormatException nfe) {
             logger.error("Invalid value specified for exportSizeThreshold!");
@@ -125,11 +125,6 @@ public class MapInfoResource {
         res.put("mapid", mapIds);
         res.put("size_byte", nsize);
 
-        /*
-         * res.put("conflate_threshold", conflateThreshold);
-         * res.put("ingest_threshold", ingestThreshold);
-         * res.put("export_threshold", exportThreshold);
-         */
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
@@ -185,11 +180,6 @@ public class MapInfoResource {
         JSONObject res = new JSONObject();
         res.put("layers", retval);
 
-        /*
-         * res.put("conflate_threshold", conflateThreshold);
-         * res.put("ingest_threshold", ingestThreshold);
-         * res.put("export_threshold", exportThreshold);
-         */
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
@@ -205,9 +195,9 @@ public class MapInfoResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response getThresholds() {
         JSONObject res = new JSONObject();
-        res.put("conflate_threshold", conflateThreshold);
-        res.put("ingest_threshold", ingestThreshold);
-        res.put("export_threshold", exportThreshold);
+        res.put("conflate_threshold", CONFLATE_THRESHOLD);
+        res.put("ingest_threshold", INGEST_THRESHOLD);
+        res.put("export_threshold", EXPORT_THRESHOLD);
 
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }

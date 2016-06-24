@@ -64,14 +64,13 @@ import hoot.services.utils.XmlDocumentBuilder;
 
 public class WfsManager {
     private static final Logger logger = LoggerFactory.getLogger(WfsManager.class);
-    private static final String coreJobServerUrl = HootProperties.getProperty("coreJobServerUrl");
-    private static final String wfsStoreConnName = HootProperties.getProperty("wfsStoreConnName");
-    private static final String wfsStoreDb = HootProperties.getProperty("wfsStoreDb");
+    private static final String WFS_STORE_CONN_NAME = HootProperties.getProperty("wfsStoreConnName");
+    private static final String WFS_STORE_DB = HootProperties.getProperty("wfsStoreDb");
 
     public void createWfsResource(String wfsJobName) throws Exception {
         DataDefinitionManager dataDefinitionManager = new DataDefinitionManager();
-        List<String> tblsList = dataDefinitionManager.getTablesList(wfsStoreDb, wfsJobName);
-        createWFSDatasourceFeature(wfsJobName, wfsStoreConnName, tblsList);
+        List<String> tblsList = dataDefinitionManager.getTablesList(WFS_STORE_DB, wfsJobName);
+        createWFSDatasourceFeature(wfsJobName, WFS_STORE_CONN_NAME, tblsList);
         createService(wfsJobName);
     }
 

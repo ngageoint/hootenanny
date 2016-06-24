@@ -60,8 +60,8 @@ import hoot.services.utils.ResourceErrorHandler;
 @Path("/conflation")
 public class ConflationResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ConflationResource.class);
-    private static final String homeFolder = HootProperties.getProperty("homeFolder");
-    private static final String rptStorePath = HootProperties.getProperty("reportDataPath");
+    private static final String HOME_FOLDER = HootProperties.getProperty("homeFolder");
+    private static final String RPT_STORE_PATH = HootProperties.getProperty("reportDataPath");
 
     public ConflationResource() {
         super(HootProperties.getProperty("ConflateMakefilePath"));
@@ -159,17 +159,16 @@ public class ConflationResource extends JobControllerBase {
             tags.put("input1", input1Name);
             tags.put("input2", input2Name);
 
-            // System.out.println(params);
-            // Need to reformat the list of hoot command options to json
-            // properties
+            // Need to reformat the list of hoot command options to json properties
             tags.put("params", DbUtils.escapeJson(params));
+
             // Hack alert!
             // Write stats file name to tags, if the file exists
             // when this updateMapsTagsCommand job is run, the
             // file will be read and its contents placed in the stats tag.
             if ((oParams.get("COLLECT_STATS") != null)
                     && oParams.get("COLLECT_STATS").toString().equalsIgnoreCase("true")) {
-                String statsName = homeFolder + "/" + rptStorePath + "/" + confOutputName + "-stats.csv";
+                String statsName = HOME_FOLDER + "/" + RPT_STORE_PATH + "/" + confOutputName + "-stats.csv";
                 tags.put("stats", statsName);
             }
 
@@ -219,6 +218,7 @@ public class ConflationResource extends JobControllerBase {
 
             Object oUserEmail = oParams.get("USER_EMAIL");
             String userEmail = (oUserEmail == null) ? null : oUserEmail.toString();
+
             // Density Raster
             JSONArray rasterTilesArgs = new JSONArray();
             JSONObject rasterTilesparam = new JSONObject();

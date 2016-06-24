@@ -55,12 +55,12 @@ import hoot.services.utils.ResourceErrorHandler;
 @Path("/advancedopts")
 public class AdvancedOptResource {
     private static final Logger logger = LoggerFactory.getLogger(AdvancedOptResource.class);
-    private static final String asciidocPath = HootProperties.getProperty("configAsciidocPath");
-    private static final String templatePath = HootProperties.getProperty("advOptTemplate");
-    private static final String homeFolder = HootProperties.getProperty("homeFolder");
-    private static final String refOverridePath = HootProperties.getProperty("advOptRefOverride");
-    private static final String horzOverridePath = HootProperties.getProperty("advOptHorizontalOverride");
-    private static final String aveOverridePath = HootProperties.getProperty("advOptAverageOverride");
+    private static final String ASCIIDOC_PATH = HootProperties.getProperty("configAsciidocPath");
+    private static final String TEMPLATE_PATH = HootProperties.getProperty("advOptTemplate");
+    private static final String HOME_FOLDER = HootProperties.getProperty("homeFolder");
+    private static final String REF_OVERRIDE_PATH = HootProperties.getProperty("advOptRefOverride");
+    private static final String HORZ_OVERRIDE_PATH = HootProperties.getProperty("advOptHorizontalOverride");
+    private static final String AVE_OVERRIDE_PATH = HootProperties.getProperty("advOptAverageOverride");
 
     private JSONObject doc;
     private JSONArray template;
@@ -72,7 +72,7 @@ public class AdvancedOptResource {
     private JSONObject aveOverride;
 
     static {
-        File file = new File(homeFolder + "/" + asciidocPath);
+        File file = new File(HOME_FOLDER + "/" + ASCIIDOC_PATH);
         if (!file.exists()) {
             throw new RuntimeException("Missing required file: " + file.getAbsolutePath());
         }
@@ -124,7 +124,7 @@ public class AdvancedOptResource {
                 }
                 else {
                     if ((this.template == null) || doForce) {
-                        try (FileReader fr = new FileReader(homeFolder + "/" + templatePath)) {
+                        try (FileReader fr = new FileReader(HOME_FOLDER + "/" + TEMPLATE_PATH)) {
                             this.template = (JSONArray)par.parse(fr);
                             generateRule(this.template, null);
                         }
@@ -155,15 +155,15 @@ public class AdvancedOptResource {
         if ((horzOverride == null) || (refOverride == null) || doForce) {
             JSONParser par = new JSONParser();
 
-            try (FileReader frRef = new FileReader(homeFolder + File.separator + refOverridePath)){
+            try (FileReader frRef = new FileReader(HOME_FOLDER + File.separator + REF_OVERRIDE_PATH)){
                 refOverride = (JSONObject) par.parse(frRef);
             }
 
-            try (FileReader frHrz = new FileReader(homeFolder + File.separator + horzOverridePath)){
+            try (FileReader frHrz = new FileReader(HOME_FOLDER + File.separator + HORZ_OVERRIDE_PATH)){
                 horzOverride = (JSONObject) par.parse(frHrz);
             }
 
-            try (FileReader frAve = new FileReader(homeFolder + File.separator + aveOverridePath)) {
+            try (FileReader frAve = new FileReader(HOME_FOLDER + File.separator + AVE_OVERRIDE_PATH)) {
                 aveOverride = (JSONObject) par.parse(frAve);
             }
         }
@@ -431,7 +431,7 @@ public class AdvancedOptResource {
     }
 
     private void parseAsciidoc() throws Exception {
-        try (FileInputStream fstream = new FileInputStream(homeFolder + "/" + asciidocPath);
+        try (FileInputStream fstream = new FileInputStream(HOME_FOLDER + "/" + ASCIIDOC_PATH);
              InputStreamReader istream = new InputStreamReader(fstream);
              BufferedReader br = new BufferedReader(istream)) {
 

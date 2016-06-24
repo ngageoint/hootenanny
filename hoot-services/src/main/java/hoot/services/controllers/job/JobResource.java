@@ -78,7 +78,7 @@ import hoot.services.validators.job.JobFieldsValidator;
 public class JobResource {
     private static final Logger logger = LoggerFactory.getLogger(JobResource.class);
     private static final ClassPathXmlApplicationContext appContext;
-    private static final long chainJosStatusPingInterval;
+    private static final long CHAIN_JOS_STATUS_PING_INTERVAL;
 
     // Thread pool for chain and job processor
     private static final ExecutorService jobThreadExecutor;
@@ -94,7 +94,7 @@ public class JobResource {
 
         Long value = Long.parseLong(HootProperties.getProperty("chainJosStatusPingInterval"));
 
-        chainJosStatusPingInterval = (value < 1000) ? 1000 : value;
+        CHAIN_JOS_STATUS_PING_INTERVAL = (value < 1000) ? 1000 : value;
 
         int threadpoolSize = 5;
         try {
@@ -342,7 +342,7 @@ public class JobResource {
                 }
                 if (!isDone) {
                     try {
-                        Thread.sleep(chainJosStatusPingInterval);
+                        Thread.sleep(CHAIN_JOS_STATUS_PING_INTERVAL);
                     }
                     catch (InterruptedException e) {
                         //

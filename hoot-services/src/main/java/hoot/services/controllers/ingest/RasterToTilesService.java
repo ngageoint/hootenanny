@@ -54,12 +54,12 @@ import hoot.services.utils.ResourceErrorHandler;
 
 public class RasterToTilesService extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(RasterToTilesService.class);
-    private static final String tileServerPath;
+    private static final String TILE_SERVER_PATH;
     private static final ClassPathXmlApplicationContext appContext;
 
     static {
-        tileServerPath = HootProperties.getProperty("tileServerPath");
-        File dir = new File(tileServerPath);
+        TILE_SERVER_PATH = HootProperties.getProperty("tileServerPath");
+        File dir = new File(TILE_SERVER_PATH);
         try {
             FileUtils.forceMkdir(dir);
         }
@@ -223,7 +223,7 @@ public class RasterToTilesService extends JobControllerBase {
             throws Exception {
         JSONArray commandArgs = new JSONArray();
         JSONObject arg = new JSONObject();
-        arg.put("RASTER_OUTPUT_DIR", tileServerPath);
+        arg.put("RASTER_OUTPUT_DIR", TILE_SERVER_PATH);
         commandArgs.add(arg);
 
         arg = new JSONObject();

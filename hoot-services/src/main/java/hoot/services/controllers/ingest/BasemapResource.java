@@ -74,15 +74,15 @@ import hoot.services.utils.ResourceErrorHandler;
 @Path("/basemap")
 public class BasemapResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(BasemapResource.class);
-    private static final String tileServerPath;
-    private static final String ingestStagingPath;
-    private static final String homeFolder;
+    private static final String TILE_SERVER_PATH;
+    private static final String INGEST_STAGING_PATH;
+    private static final String HOME_FOLDER;
     private static final Map<String, String> basemapRasterExt;
 
     static {
-        homeFolder = HootProperties.getProperty("homeFolder");
-        tileServerPath = HootProperties.getProperty("tileServerPath");
-        ingestStagingPath = HootProperties.getProperty("ingestStagingPath");
+        HOME_FOLDER = HootProperties.getProperty("homeFolder");
+        TILE_SERVER_PATH = HootProperties.getProperty("tileServerPath");
+        INGEST_STAGING_PATH = HootProperties.getProperty("ingestStagingPath");
 
         basemapRasterExt = new HashMap<>();
         String extStr = HootProperties.getProperty("BasemapRasterExtensions");
@@ -99,7 +99,7 @@ public class BasemapResource extends JobControllerBase {
 
     public static void createTileServerPath() {
         try {
-            File file = new File(tileServerPath);
+            File file = new File(TILE_SERVER_PATH);
             if (!file.exists()) {
                 FileUtils.forceMkdir(file);
             }
@@ -131,14 +131,14 @@ public class BasemapResource extends JobControllerBase {
         String groupId = UUID.randomUUID().toString();
         JSONArray jobsArr = new JSONArray();
         try {
-            File uploadDir = new File(homeFolder + "/upload/");
+            File uploadDir = new File(HOME_FOLDER + "/upload/");
             if (!uploadDir.exists()) {
                 if (!uploadDir.mkdir()) {
                     throw new IOException("Error creating " + uploadDir.getAbsolutePath() + " directory!");
                 }
             }
 
-            String repFolderPath = homeFolder + "/upload/" + groupId;
+            String repFolderPath = HOME_FOLDER + "/upload/" + groupId;
             File dir = new File(repFolderPath);
             if (!dir.exists()) {
                 if (!dir.mkdir()) {
@@ -204,7 +204,7 @@ public class BasemapResource extends JobControllerBase {
                     commandArgs.add(arg);
 
                     arg = new JSONObject();
-                    arg.put("RASTER_OUTPUT_DIR", tileServerPath + "/BASEMAP");
+                    arg.put("RASTER_OUTPUT_DIR", TILE_SERVER_PATH + "/BASEMAP");
                     commandArgs.add(arg);
 
                     arg = new JSONObject();
@@ -217,7 +217,7 @@ public class BasemapResource extends JobControllerBase {
                     commandArgs.add(arg);
 
                     arg = new JSONObject();
-                    arg.put("JOB_PROCESSOR_DIR", ingestStagingPath + "/BASEMAP");
+                    arg.put("JOB_PROCESSOR_DIR", INGEST_STAGING_PATH + "/BASEMAP");
                     commandArgs.add(arg);
 
                     String argStr = createBashPostBody(commandArgs);
@@ -280,7 +280,7 @@ public class BasemapResource extends JobControllerBase {
 
     private static JSONArray getBasemapListHelper() throws Exception {
         JSONArray filesList = new JSONArray();
-        File basmapDir = new File(ingestStagingPath + "/BASEMAP");
+        File basmapDir = new File(INGEST_STAGING_PATH + "/BASEMAP");
 
         if (basmapDir.exists()) {
             String[] exts = {"processing", "enabled", "disabled", "failed"};
@@ -301,7 +301,7 @@ public class BasemapResource extends JobControllerBase {
                     // Check for tilemapresource.xml in processed folder
                     JSONObject jsonExtent = new JSONObject();
 
-                    String XmlPath = tileServerPath + "/BASEMAP/" + name + "/tilemapresource.xml";
+                    String XmlPath = TILE_SERVER_PATH + "/BASEMAP/" + name + "/tilemapresource.xml";
                     File fXmlFile = new File(XmlPath);
                     if (fXmlFile.exists()) {
                         try {
@@ -352,11 +352,11 @@ public class BasemapResource extends JobControllerBase {
         }
 
         // We first verify that file exits in the folder first and then try to get the source file
-        File sourceFile = hoot.services.utils.FileUtils.getFileFromFolder(ingestStagingPath + "/BASEMAP/", bmName, fileExt);
+        File sourceFile = hoot.services.utils.FileUtils.getFileFromFolder(INGEST_STAGING_PATH + "/BASEMAP/", bmName, fileExt);
 
         if ((sourceFile != null) && sourceFile.exists()) {
             // if the source file exist then just swap the extension
-            boolean renamed = sourceFile.renameTo(new File(ingestStagingPath + "/BASEMAP/", bmName + targetExt));
+            boolean renamed = sourceFile.renameTo(new File(INGEST_STAGING_PATH + "/BASEMAP/", bmName + targetExt));
 
             if (!renamed) {
                 throw new Exception("Failed to rename file:" + bmName + fileExt + " to " + bmName + targetExt);
@@ -404,9 +404,9 @@ public class BasemapResource extends JobControllerBase {
     }
 
     private static void deleteBaseMap(String bmName) throws Exception {
-        String controlFolder = ingestStagingPath + "/BASEMAP/";
+        String controlFolder = INGEST_STAGING_PATH + "/BASEMAP/";
 
-        File tileDir = hoot.services.utils.FileUtils.getSubFolderFromFolder(tileServerPath + "/BASEMAP/", bmName);
+        File tileDir = hoot.services.utils.FileUtils.getSubFolderFromFolder(TILE_SERVER_PATH + "/BASEMAP/", bmName);
         if ((tileDir != null) && tileDir.exists()) {
             FileUtils.forceDelete(tileDir);
         }

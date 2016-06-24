@@ -35,13 +35,13 @@ import java.util.Properties;
  * Services build info file
  */
 public final class BuildInfo {
-    private static final Properties INFO;
+    private static final Properties info;
 
     static {
-        INFO = new Properties();
+        info = new Properties();
         try {
             try (InputStream buildInfoStrm = BuildInfo.class.getClassLoader().getResourceAsStream("build.info")) {
-                INFO.load(buildInfoStrm);
+                info.load(buildInfoStrm);
             }
         }
         catch (IOException ioe) {
@@ -57,6 +57,6 @@ public final class BuildInfo {
      * @return a set of build info properties
      */
     public static synchronized Properties getInstance() {
-        return INFO;
+        return info;
     }
 }

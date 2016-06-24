@@ -65,11 +65,11 @@ import hoot.services.utils.ResourceErrorHandler;
 public class TunningService implements Executable {
 
     private static final Logger logger = LoggerFactory.getLogger(TunningService.class);
+    private static final String TEMP_PATH = HootProperties.getProperty("tempOutputPath");
+    private static final String CORE_SCRIPT_PATH = HootProperties.getProperty("coreScriptPath");
 
     private String finalStatusDetail;
     private Double totalSize = 0.0;
-    private final String tempPath = HootProperties.getProperty("tempOutputPath");
-    private final String coreScriptPath = HootProperties.getProperty("coreScriptPath");
 
     @Override
     public String getFinalStatusDetail() {
@@ -97,7 +97,7 @@ public class TunningService implements Executable {
                 // if the count is greater than threshold then just use it and tell it too big
                 ICommandRunner cmdRunner = new CommandRunner();
 
-                String commandArr = "make -f " + coreScriptPath + "/makeconvert INPUT=" + input + " OUTPUT=" + tempPath
+                String commandArr = "make -f " + CORE_SCRIPT_PATH + "/makeconvert INPUT=" + input + " OUTPUT=" + TEMP_PATH
                         + "/" + input + ".osm";
                 CommandResult result = cmdRunner.exec(commandArr);
 
@@ -109,10 +109,10 @@ public class TunningService implements Executable {
                     throw new Exception(err);
                 }
 
-                tempOutputPath = tempPath + "/" + input + ".osm";
+                tempOutputPath = TEMP_PATH + "/" + input + ".osm";
 
                 // fortify fix
-                if (!FileUtils.validateFilePath(tempPath, tempOutputPath)) {
+                if (!FileUtils.validateFilePath(TEMP_PATH, tempOutputPath)) {
                     throw new Exception("input can not contain path.");
                 }
             }

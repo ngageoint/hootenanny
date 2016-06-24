@@ -86,8 +86,8 @@ import hoot.services.models.osm.Element.ElementType;
 public final class DbUtils {
     private static final Logger logger = LoggerFactory.getLogger(DbUtils.class);
 
-    private static final SQLTemplates TEMPLATES = PostgresTemplates.builder().quote().build();
-    private static final BasicDataSource DBCP_DATASOURCE;
+    private static final SQLTemplates templates = PostgresTemplates.builder().quote().build();
+    private static final BasicDataSource dbcpDatasource;
 
     public static final String TIMESTAMP_DATE_FORMAT = "YYYY-MM-dd HH:mm:ss";
     public static final String OSM_API_TIMESTAMP_FORMAT = "YYYY-MM-dd HH:mm:ss.SSS";
@@ -95,7 +95,7 @@ public final class DbUtils {
 
     static {
         ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext(new String[]{"db/spring-database.xml"});
-        DBCP_DATASOURCE = appContext.getBean("dataSource", org.apache.commons.dbcp.BasicDataSource.class);
+        dbcpDatasource = appContext.getBean("dataSource", org.apache.commons.dbcp.BasicDataSource.class);
     }
 
     private DbUtils() {
@@ -157,7 +157,7 @@ public final class DbUtils {
     }
 
     public static Configuration getConfiguration(String mapId) {
-        Configuration configuration = new Configuration(TEMPLATES);
+        Configuration configuration = new Configuration(templates);
         configuration.register("current_relation_members", "member_type", new EnumAsObjectType<nwr_enum>(nwr_enum.class));
 
         if ((mapId != null) && (!mapId.isEmpty())) {
@@ -180,7 +180,7 @@ public final class DbUtils {
 
     public static Connection createConnection() {
         try {
-            return DBCP_DATASOURCE.getConnection();
+            return dbcpDatasource.getConnection();
         }
         catch (Exception e) {
             logger.error("Error creating JDBC connection!", e);

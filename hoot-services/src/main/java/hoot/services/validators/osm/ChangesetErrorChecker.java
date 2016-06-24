@@ -54,7 +54,7 @@ import hoot.services.models.osm.ElementFactory;
  *
  */
 public class ChangesetErrorChecker {
-    private static final Logger log = LoggerFactory.getLogger(ChangesetErrorChecker.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChangesetErrorChecker.class);
 
     private final Document changesetDoc;
     private final long mapId;
@@ -70,7 +70,7 @@ public class ChangesetErrorChecker {
      * @throws Exception
      */
     public void checkForVersionErrors() throws Exception {
-        log.debug("Checking for element version errors...");
+        logger.debug("Checking for element version errors...");
 
         for (ElementType elementType : ElementType.values()) {
             if (elementType != ElementType.Changeset) {
@@ -119,11 +119,10 @@ public class ChangesetErrorChecker {
      *             //TODO: is this check actually necessary?
      */
     public void checkForElementVisibilityErrors() throws Exception {
-        log.debug("Checking for element visibility errors...");
+        logger.debug("Checking for element visibility errors...");
 
         // if a child element is referenced and is invisible, then fail.
-        // elements are created visible
-        // by default with a create changeset, which is why we can skip checking
+        // elements are created visible by default with a create changeset, which is why we can skip checking
         // negative id's (elements being created). we're also skipping checking anything in the delete
         // sections, b/c since the elements are being deleted, they're visibility no longer is important.
 
@@ -183,7 +182,7 @@ public class ChangesetErrorChecker {
     }
 
     public Map<Long, CurrentNodes> checkForElementExistenceErrors() throws Exception {
-        log.debug("Checking for element existence errors...");
+        logger.debug("Checking for element existence errors...");
 
         // if an element is referenced (besides in its own create change) and doesn't exist in the db, then fail
 
