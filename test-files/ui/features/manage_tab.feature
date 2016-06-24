@@ -40,10 +40,13 @@ Feature: Manage Tab
         And I should see "Hootenanny Core - Version:"
         And I should see "Hootenanny Web Services - Version:"
         And I should see "Hootenanny iD "
-        
+
 
     Scenario: Testing Click Events of Dataset Tab
         When I click on the "Datasets" option in the "settingsSidebar"
+        When I delete any existing "ManageTabTest" folder if necessary
+        When I delete any existing "TestFolder" folder if necessary
+        When I delete any existing "TestSubFolder" folder if necessary
         And I press "Add Folder"
         Then I fill "NewFolderName" input with "ManageTabTest"
         And I press "big.loud" span with text "Add Folder"
@@ -57,17 +60,18 @@ Feature: Manage Tab
         When I click the "AllDataTypesBCucumber" Dataset and the "AllDataTypesACucumber" Dataset
         And I context click the "AllDataTypesACucumber" Dataset
         And I should see "Delete (2)"
-        Then I click the "Move (2)" context menu item     
-        And I press "big.loud" span with text "Update"   
+        Then I click the "Move (2)" context menu item
+        And I press "big.loud" span with text "Update"
         Then I click the "ManageTabTest" Dataset
         And I context click the "ManageTabTest" Dataset
         And I click the "Rename/Move ManageTabTest" context menu item
         Then I fill "fileOutputName" input with "TestFolder"
-        And I press "big.loud" span with text "Update"   
+        And I press "big.loud" span with text "Update"
         Then I context click the "TestFolder" Dataset
         And I click the "Add Folder" context menu item
         Then I fill "NewFolderName" input with "TestSubFolder"
-        And I press "big.loud" span with text "Add Folder"   
+        And I press "big.loud" span with text "Add Folder"
+        And I wait
         And I click the "TestSubFolder" Dataset
         And I context click the "TestSubFolder" Dataset
         And I click the "Add Dataset" context menu item
@@ -84,16 +88,17 @@ Feature: Manage Tab
         And I click the "Delete" context menu item
         And I accept the alert
         And I should see "TestFolder"
+        And I wait
         And I click the "TestFolder" Dataset
         And I context click the "TestFolder" Dataset
         And I click the "Delete" context menu item
         And I accept the alert
 
-        
 
 
 
 
 
 
-        
+
+
