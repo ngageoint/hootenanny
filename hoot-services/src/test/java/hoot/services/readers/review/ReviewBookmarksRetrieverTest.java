@@ -128,12 +128,8 @@ public class ReviewBookmarksRetrieverTest {
 
         String actual = q.toString();
         String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n"
-                + "where \"review_bookmarks\".\"created_by\" = ?\n"
+                + "where \"review_bookmarks\".\"created_by\" in (?, ?)\n"
                 + "order by \"review_bookmarks\".\"created_at\" asc";
-        
-//        from "review_bookmarks" "review_bookmarks"
-//        where "review_bookmarks"."created_by" in (?, ?)
-//        order by "review_bookmarks"."created_at" asc
 
         org.junit.Assert.assertEquals(expected, actual);
 
@@ -149,10 +145,28 @@ public class ReviewBookmarksRetrieverTest {
 
         String actual = q.toString();
         String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n"
-                + "where \"review_bookmarks\".\"map_id\" = ?\n" + "order by \"review_bookmarks\".\"created_at\" asc";
+                + "where \"review_bookmarks\".\"map_id\" in (?, ?)\n"
+                + "order by \"review_bookmarks\".\"created_at\" asc";
 
         org.junit.Assert.assertEquals(expected, actual);
 
     }
+    
+    @Test
+    @Category(UnitTest.class)
+    public void testRetrieveAllOrderByCreatedAtWithCreatorAndMapIdFilter() throws Exception {
+        Connection conn = null;
+
+        ReviewBookmarkRetriever r = new ReviewBookmarkRetriever(conn);
+        SQLQuery q = r._getAllQuery("createdAt", true, -1, -1, new Long[]{1L,2L}, new Long[]{1L,2L});
+
+        String actual = q.toString();
+        String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n"
+        		+ "where \"review_bookmarks\".\"created_by\" in (?, ?) and \"review_bookmarks\".\"map_id\" in (?, ?)\n"
+                + "order by \"review_bookmarks\".\"created_at\" asc";
+
+        org.junit.Assert.assertEquals(expected, actual);
+
+    }    
 
 }
