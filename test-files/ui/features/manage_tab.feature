@@ -71,7 +71,7 @@ Feature: Manage Tab
         And I click the "Add Folder" context menu item
         Then I fill "NewFolderName" input with "TestSubFolder"
         And I press "big.loud" span with text "Add Folder"
-        And I wait
+        Then I wait 30 "seconds" to not see "Folder Name"
         And I click the "TestSubFolder" Dataset
         And I context click the "TestSubFolder" Dataset
         And I click the "Add Dataset" context menu item
@@ -81,7 +81,7 @@ Feature: Manage Tab
         Then I should see element "[id='importDatasetLayerName']" with value "dcpoi_clip_manage"
         And I should see element "#importDatasetPathName" with no value and placeholder "TestFolder/TestSubFolder"
         When I press "big.loud" span with text "Import"
-        Then I wait 30 "seconds" to see "TestSubFolder"
+        Then I wait 30 "seconds" to not see "Import Type"
         And I click the "TestSubFolder" Dataset
         And I should see "dcpoi_clip_manage"
         And I context click the "TestSubFolder" Dataset
@@ -93,12 +93,3 @@ Feature: Manage Tab
         And I context click the "TestFolder" Dataset
         And I click the "Delete" context menu item
         And I accept the alert
-
-
-
-
-
-
-
-
-
