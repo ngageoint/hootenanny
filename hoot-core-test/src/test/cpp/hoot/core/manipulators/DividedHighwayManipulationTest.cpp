@@ -71,7 +71,7 @@ public:
 
     MapProjector::projectToOrthographic(map);
 
-    long left = map->findWays("note", "0")[0];
+    long left = FindNodesVisitor::findNodesByTag(map, "note", "0")[0];
     long right = map->findWays("note", "1")[0];
     long mid = map->findWays("note", "2")[0];
 

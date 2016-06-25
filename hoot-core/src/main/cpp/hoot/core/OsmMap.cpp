@@ -379,40 +379,7 @@ std::vector<long> OsmMap::filterWays(const WayFilter& filter) const
   return result;
 }
 
-set<ElementId> OsmMap::findElements(const Envelope& e) const
-{
-  set<ElementId> result;
-
-  const ElementToRelationMap& e2r = *getIndex().getElementToRelationMap();
-
-  vector<long> wids = getIndex().findWays(e);
-  for (size_t i = 0; i < wids.size(); i++)
-  {
-    result.insert(ElementId(ElementType::Way, wids[i]));
-    const set<long>& relations = e2r.getRelationByElement(ElementId::way(wids[i]));
-
-    for (set<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
-    {
-      result.insert(ElementId(ElementType::Relation, *it));
-    }
-  }
-
-  vector<long> nodes = getIndex().findNodes(e);
-
-  for (size_t i = 0; i < nodes.size(); i++)
-  {
-    result.insert(ElementId(ElementType::Node, nodes[i]));
-    const set<long>& relations = e2r.getRelationByElement(ElementId::node(nodes[i]));
-
-    for (set<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
-    {
-      result.insert(ElementId(ElementType::Relation, *it));
-    }
-  }
-
-  return result;
-}
-
+/*
 std::vector<long> OsmMap::findWayByNode(long nodeId) const
 {
   std::vector<long> result;
@@ -429,7 +396,9 @@ std::vector<long> OsmMap::findWayByNode(long nodeId) const
 
   return result;
 }
+*/
 
+/*
 std::vector<long> OsmMap::findWays(QString key, QString value) const
 {
   std::vector<long> result;
@@ -446,7 +415,9 @@ std::vector<long> OsmMap::findWays(QString key, QString value) const
 
   return result;
 }
+*/
 
+/*
 std::vector<long> OsmMap::findNodes(QString key, QString value) const
 {
   std::vector<long> result;
@@ -460,6 +431,7 @@ std::vector<long> OsmMap::findNodes(QString key, QString value) const
   }
   return result;
 }
+*/
 
 ConstElementPtr OsmMap::getElement(const ElementId& eid) const
 {
