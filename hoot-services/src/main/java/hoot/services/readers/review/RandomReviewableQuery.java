@@ -28,6 +28,7 @@ package hoot.services.readers.review;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.slf4j.Logger;
@@ -41,35 +42,30 @@ import hoot.services.models.review.ReviewableItem;
 public class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(RandomReviewableQuery.class);
 
-    public RandomReviewableQuery(Connection c, long mapid) {
+    public RandomReviewableQuery(Connection c, long mapid) throws SQLException {
         super(c, mapid);
 
-        try {
-            // TODO: Since this code will affect all subsequent calls to
-            // random(), it is better moved to
-            // a more centralized location. Given that this is the only class
-            // using random() in a SQL query so far, no harm is done for the time being.
-            if (Boolean.parseBoolean(HootProperties.getPropertyOrDefault("seedRandomQueries"))) {
-                double seed = Double.parseDouble(HootProperties.getPropertyOrDefault("randomQuerySeed"));
+        // TODO: Since this code will affect all subsequent calls to
+        // random(), it is better moved to
+        // a more centralized location. Given that this is the only class
+        // using random() in a SQL query so far, no harm is done for the time being.
+        if (Boolean.parseBoolean(HootProperties.getPropertyOrDefault("seedRandomQueries"))) {
+            double seed = Double.parseDouble(HootProperties.getPropertyOrDefault("randomQuerySeed"));
 
-                if ((seed >= -1.0) && (seed <= 1.0)) {
-                    try (Connection connection = getConnection()) {
-                        try (Statement stmt = connection.createStatement()) {
-                            // After executing this, all subsequent calls to
-                            // random() will be seeded.
-                            stmt.executeQuery("select setseed(" + seed + ");");
+            if ((seed >= -1.0) && (seed <= 1.0)) {
+                try (Connection connection = getConnection()) {
+                    try (Statement stmt = connection.createStatement()) {
+                        // After executing this, all subsequent calls to random() will be seeded.
+                        try (ResultSet rs = stmt.executeQuery("select setseed(" + seed + ");")) {
                         }
                     }
                 }
             }
         }
-        catch (Exception e) {
-            logger.error("Unable to seed random review query.");
-        }
     }
 
     @Override
-    public ReviewQueryMapper execQuery() throws Exception {
+    public ReviewQueryMapper execQuery() throws SQLException {
         ReviewableItem ret = new ReviewableItem(-1, getMapId(), -1);
 
         try (Connection connection = getConnection()){

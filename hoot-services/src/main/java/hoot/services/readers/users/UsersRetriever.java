@@ -26,6 +26,7 @@
  */
 package hoot.services.readers.users;
 
+
 import java.sql.Connection;
 import java.util.List;
 
@@ -41,35 +42,22 @@ import hoot.services.db2.Users;
 
 public class UsersRetriever {
     private static final Logger logger = LoggerFactory.getLogger(UsersRetriever.class);
+
     private final Connection conn;
 
     public UsersRetriever(Connection cn) {
         conn = cn;
     }
 
-    public List<Users> retrieveAll() throws Exception {
-        try {
-            SQLQuery query = getAllQuery();
-            List<Users> res = query.list(QUsers.users);
-            return res;
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
+    public List<Users> retrieveAll() {
+        SQLQuery query = getAllQuery();
+        List<Users> res = query.list(QUsers.users);
+        return res;
     }
 
-    protected SQLQuery getAllQuery() throws Exception {
+    protected SQLQuery getAllQuery() {
         SQLQuery query = new SQLQuery(this.conn, DbUtils.getConfiguration());
-        try {
-            QUsers users = QUsers.users;
-            query.from(users).orderBy(users.displayName.asc());
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
-
+        query.from(QUsers.users).orderBy(QUsers.users.displayName.asc());
         return query;
     }
 }

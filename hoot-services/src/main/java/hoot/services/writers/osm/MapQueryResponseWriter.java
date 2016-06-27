@@ -26,7 +26,6 @@
  */
 package hoot.services.writers.osm;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.util.Map;
 
@@ -67,10 +66,9 @@ public class MapQueryResponseWriter {
      * Writes a map query response with no element data
      * 
      * @return a XML document response
-     * @throws IOException
      * @throws ParserConfigurationException
      */
-    public static Document writeEmptyResponse() throws IOException, ParserConfigurationException {
+    public static Document writeEmptyResponse() throws ParserConfigurationException {
         Document responseDoc = XmlDocumentBuilder.create();
         org.w3c.dom.Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
         responseDoc.appendChild(elementRootXml);
@@ -90,10 +88,9 @@ public class MapQueryResponseWriter {
      *            element type>_; this setting activated is not compatible with
      *            standard OSM clients (specific to Hootenanny iD)
      * @return an XML document
-     * @throws IOException
      */
     public Document writeResponse(Map<ElementType, Map<Long, Tuple>> results, BoundingBox queryBounds,
-            boolean multiLayerUniqueElementIds) throws Exception {
+            boolean multiLayerUniqueElementIds) {
         Document responseDoc = null;
         try {
             logger.debug("Building response...");
@@ -133,7 +130,6 @@ public class MapQueryResponseWriter {
                     + e.getMessage() + ") ", Status.INTERNAL_SERVER_ERROR, logger);
         }
 
-        // System.out.println(XmlDocumentBuilder.toString(responseDoc));
         return responseDoc;
     }
 }

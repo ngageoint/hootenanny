@@ -26,7 +26,6 @@
  */
 package hoot.services.readers.review;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -61,7 +60,7 @@ public class ReviewReferencesRetriever {
 
     private final Connection conn;
 
-    public ReviewReferencesRetriever(Connection conn) throws Exception {
+    public ReviewReferencesRetriever(Connection conn) {
         this.conn = conn;
     }
 
@@ -97,11 +96,6 @@ public class ReviewReferencesRetriever {
      * @return a list containing all features the input feature needs to be
      *         reviewed with
      * @throws Exception
-     * @throws InvocationTargetException
-     * @throws NoSuchMethodException
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
     public List<ReviewRef> getAllReferences(ElementInfo queryElementInfo) throws Exception {
         logger.debug("requestingElementInfo: {}", queryElementInfo);

@@ -32,8 +32,6 @@ import java.io.StringWriter;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,8 +72,6 @@ public class JsonUtils {
      *            if true, "'s are left in the parse value; otherwise they are
      *            removed
      * @return string value
-     * @throws JsonParseException
-     * @throws JsonMappingException
      * @throws IOException
      */
     public static String getTopLevelValueAsString(String fieldName, String json, boolean retainQuotes)

@@ -67,11 +67,11 @@ public class JobExecutionManager {
      * @param command
      * @throws NativeInterfaceException
      */
-    public JSONObject exec(JSONObject command) throws Exception {
+    public JSONObject exec(JSONObject command) throws NativeInterfaceException {
         return execWithResult(command);
     }
 
-    public void terminate(String jobId) throws Exception {
+    public void terminate(String jobId) throws NativeInterfaceException {
         try {
             getNativeInterface().terminate(jobId);
         }
@@ -83,7 +83,7 @@ public class JobExecutionManager {
         }
     }
 
-    public JSONObject execWithResult(JSONObject command) throws Exception {
+    public JSONObject execWithResult(JSONObject command) throws NativeInterfaceException {
         JSONObject ret = null;
         try {
             ret = getNativeInterface().exec(command);
@@ -97,7 +97,7 @@ public class JobExecutionManager {
         return ret;
     }
 
-    public String getProgress(String jobId) throws Exception {
+    public String getProgress(String jobId) throws NativeInterfaceException {
         String progress = "";
         try {
             progress = getNativeInterface().getJobProgress(jobId);

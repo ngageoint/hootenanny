@@ -53,10 +53,9 @@ public final class ReviewUtils {
      *            a thrown exception
      * @param errorMessageStart
      *            text to prepend to the error message
-     * @throws Exception
-     *             //TODO: go through and clean out these message text checks
+     * //TODO: go through and clean out these message text checks
      */
-    public static void handleError(Exception e, String errorMessageStart) throws Exception {
+    public static void handleError(Exception e, String errorMessageStart) {
         Status status = null;
         if (!StringUtils.isEmpty(e.getMessage())) {
             if (e.getMessage().contains("Invalid input parameter") || e.getMessage().contains("Invalid reviewed item")

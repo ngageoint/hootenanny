@@ -55,9 +55,8 @@ public class ReviewBookmarksRemover {
      * @param request
      *            - Request containing mapid and relationid
      * @return - total numbers of removed
-     * @throws Exception
      */
-    public long remove(ReviewBookmarkDelRequest request) throws Exception {
+    public long remove(ReviewBookmarkDelRequest request) {
         return createDelClause(request).execute();
     }
 
@@ -67,9 +66,8 @@ public class ReviewBookmarksRemover {
      * @param request
      *            - Request containing bookmarkid
      * @return - toal numbers of removed
-     * @throws Exception
      */
-    protected SQLDeleteClause createDelClause(ReviewBookmarkDelRequest request) throws Exception {
+    protected SQLDeleteClause createDelClause(ReviewBookmarkDelRequest request) {
         QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
         Configuration configuration = DbUtils.getConfiguration();
         return new SQLDeleteClause(conn, configuration, reviewBookmarks)

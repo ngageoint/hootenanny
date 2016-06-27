@@ -28,6 +28,7 @@ package hoot.services.readers.review;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.slf4j.Logger;
@@ -52,7 +53,7 @@ public class ReviewableQuery extends ReviewableQueryBase implements IReviewableQ
     }
 
     @Override
-    public ReviewQueryMapper execQuery() throws Exception {
+    public ReviewQueryMapper execQuery() throws SQLException {
         ReviewableItem ret = null;
         try (Connection connection = getConnection()) {
             try (Statement stmt = connection.createStatement()) {

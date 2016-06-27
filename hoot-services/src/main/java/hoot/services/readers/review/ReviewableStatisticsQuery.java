@@ -28,6 +28,7 @@ package hoot.services.readers.review;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IR
         super(connection, mapid);
     }
 
-    private long getTotalReviewablesCount() throws Exception {
+    private long getTotalReviewablesCount() throws SQLException {
         long recordCount = 0;
 
         try (Connection connection = getConnection()) {
@@ -63,7 +64,7 @@ public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IR
         return recordCount;
     }
 
-    private long getRemainingReviewablesCount() throws Exception {
+    private long getRemainingReviewablesCount() throws SQLException {
         long recordCount = 0;
 
         try (Connection connection = getConnection()) {
@@ -80,7 +81,7 @@ public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IR
     }
 
     @Override
-    public ReviewQueryMapper execQuery() throws Exception {
+    public ReviewQueryMapper execQuery() throws SQLException {
         long nTotal = getTotalReviewablesCount();
         long nUnReviewed = getRemainingReviewablesCount();
 

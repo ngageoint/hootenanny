@@ -27,6 +27,7 @@
 package hoot.services.readers.review;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
@@ -93,86 +94,80 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
 
     @Override
     public ReviewQueryMapper execQuery() throws Exception {
-        try {
-            // get counts for each element types of all review relation members
-            Map<Long, ReviewableItemBboxInfo> allReviewables = new HashMap<>();
-            long nNodeCnt = getReviewableRelationMembersCount(DbUtils.nwr_enum.node);
-            long nWayCnt = getReviewableRelationMembersCount(DbUtils.nwr_enum.way);
-            long nRelationCnt = getReviewableRelationMembersCount(DbUtils.nwr_enum.relation);
+        // get counts for each element types of all review relation members
+        Map<Long, ReviewableItemBboxInfo> allReviewables = new HashMap<>();
+        long nNodeCnt = getReviewableRelationMembersCount(DbUtils.nwr_enum.node);
+        long nWayCnt = getReviewableRelationMembersCount(DbUtils.nwr_enum.way);
+        long nRelationCnt = getReviewableRelationMembersCount(DbUtils.nwr_enum.relation);
 
-            boolean isPastLimit = false;
+        boolean isPastLimit = false;
 
-            // filter down to element type. Don't bother to run query on non
-            // existent element type
-            if ((nNodeCnt > 0) && !isPastLimit) {
-                // get the node members bbox grouped by review relation_id
-                Map<Long, ReviewableItemBboxInfo> reviewRelationWithNodeMembers = getReviewableRelatioWithNodeMembersCentroidInBbox();
-                // merge bbox
-                isPastLimit = combineBbox(allReviewables, reviewRelationWithNodeMembers);
-            }
+        // filter down to element type. Don't bother to run query on non
+        // existent element type
+        if ((nNodeCnt > 0) && !isPastLimit) {
+            // get the node members bbox grouped by review relation_id
+            Map<Long, ReviewableItemBboxInfo> reviewRelationWithNodeMembers = getReviewableRelatioWithNodeMembersCentroidInBbox();
+            // merge bbox
+            isPastLimit = combineBbox(allReviewables, reviewRelationWithNodeMembers);
+        }
 
-            if ((nWayCnt > 0) && !isPastLimit) {
-                // get the way members bbox grouped by review relation_id
-                Map<Long, ReviewableItemBboxInfo> reviewRelationWithWayMembers = getReviewableRelatioWithWayMembersCentroidInBbox();
-                isPastLimit = combineBbox(allReviewables, reviewRelationWithWayMembers);
-            }
+        if ((nWayCnt > 0) && !isPastLimit) {
+            // get the way members bbox grouped by review relation_id
+            Map<Long, ReviewableItemBboxInfo> reviewRelationWithWayMembers = getReviewableRelatioWithWayMembersCentroidInBbox();
+            isPastLimit = combineBbox(allReviewables, reviewRelationWithWayMembers);
+        }
 
-            if ((nRelationCnt > 0) && !isPastLimit) {
-                // for relation, we need do recursive calculation for bbox since
-                // relation can contain another relation
-                Map<Long, BoundingBox> relsBbox = new HashMap<>();
-                List<Tuple> rels = getReviewableRelationMembers();
+        if ((nRelationCnt > 0) && !isPastLimit) {
+            // for relation, we need do recursive calculation for bbox since
+            // relation can contain another relation
+            Map<Long, BoundingBox> relsBbox = new HashMap<>();
+            List<Tuple> rels = getReviewableRelationMembers();
 
-                // since multiple relation can contain same member
-                // we want have unique member relations bbox
-                for (Tuple rel : rels) {
-                    long relId = rel.get(Expressions.path(Long.class, currentRelMembersSubQPath, "member_id"));
-                    if (!relsBbox.containsKey(relId)) {
-                        ReviewableItemBbox bbxInfo = getRelationMemberBbox(relId);
-                        if (bbxInfo != null) {
-                            relsBbox.put(relId, bbxInfo.getBbox());
-                        }
+            // since multiple relation can contain same member
+            // we want have unique member relations bbox
+            for (Tuple rel : rels) {
+                long relId = rel.get(Expressions.path(Long.class, currentRelMembersSubQPath, "member_id"));
+                if (!relsBbox.containsKey(relId)) {
+                    ReviewableItemBbox bbxInfo = getRelationMemberBbox(relId);
+                    if (bbxInfo != null) {
+                        relsBbox.put(relId, bbxInfo.getBbox());
                     }
                 }
-
-                // now organize the reviews with relation members
-                Map<Long, ReviewableItemBboxInfo> reviewRelationWithRelationMembers = new HashMap<>();
-                for (Tuple rel : rels) {
-                    long relId = rel.get(Expressions.path(Long.class, currentRelMembersSubQPath, "relation_id"));
-                    long memId = rel.get(Expressions.path(Long.class, currentRelMembersSubQPath, "member_id"));
-                    String needReview = rel
-                            .get(Expressions.path(String.class, reviewableCurrentRelSubQPath, "needreview"));
-
-                    BoundingBox memBbox = relsBbox.get(memId);
-                    // we have relation member bbox and it is within the
-                    // requested bbox so if the relation member bbox exists in map (meaning
-                    // relation has multiple relation members) then expand the bbox else just add to the map
-                    if ((memBbox != null) && bbox.intersects(memBbox)) {
-                        ReviewableItemBboxInfo relBboxInfo = reviewRelationWithRelationMembers.get(relId);
-
-                        if (relBboxInfo != null) {
-                            BoundingBox relBbox = relBboxInfo.getBbox();
-                            relBbox.add(memBbox);
-                        }
-                        else {
-                            ReviewableItemBboxInfo newInfo = new ReviewableItemBboxInfo(memBbox, getMapId(), relId, needReview);
-                            reviewRelationWithRelationMembers.put(relId, newInfo);
-                        }
-                    }
-                }
-
-                isPastLimit = combineBbox(allReviewables, reviewRelationWithRelationMembers);
             }
 
-            AllReviewableItems ret = new AllReviewableItems(getMapId(), allReviewables);
-            ret.setOverFlow(isPastLimit);
+            // now organize the reviews with relation members
+            Map<Long, ReviewableItemBboxInfo> reviewRelationWithRelationMembers = new HashMap<>();
+            for (Tuple rel : rels) {
+                long relId = rel.get(Expressions.path(Long.class, currentRelMembersSubQPath, "relation_id"));
+                long memId = rel.get(Expressions.path(Long.class, currentRelMembersSubQPath, "member_id"));
+                String needReview = rel.get(Expressions.path(String.class, reviewableCurrentRelSubQPath, "needreview"));
 
-            return ret;
+                BoundingBox memBbox = relsBbox.get(memId);
+
+                // we have relation member bbox and it is within the
+                // requested bbox so if the relation member bbox exists in map (meaning
+                // relation has multiple relation members) then expand the bbox else just add to the map
+                if ((memBbox != null) && bbox.intersects(memBbox)) {
+                    ReviewableItemBboxInfo relBboxInfo = reviewRelationWithRelationMembers.get(relId);
+
+                    if (relBboxInfo != null) {
+                        BoundingBox relBbox = relBboxInfo.getBbox();
+                        relBbox.add(memBbox);
+                    }
+                    else {
+                        ReviewableItemBboxInfo newInfo = new ReviewableItemBboxInfo(memBbox, getMapId(), relId, needReview);
+                        reviewRelationWithRelationMembers.put(relId, newInfo);
+                    }
+                }
+            }
+
+            isPastLimit = combineBbox(allReviewables, reviewRelationWithRelationMembers);
         }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
+
+        AllReviewableItems ret = new AllReviewableItems(getMapId(), allReviewables);
+        ret.setOverFlow(isPastLimit);
+
+        return ret;
     }
 
     /**
@@ -181,18 +176,10 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
      * @param relId
      *            - target relation id
      * @return ReviewableItemBbox
-     * @throws Exception
      */
-    private ReviewableItemBbox getRelationMemberBbox(long relId) throws Exception {
-        ReviewableItemBbox ret = null;
-        try {
-            ReviewableBboxQuery bbq = new ReviewableBboxQuery(getConnection(), getMapId(), relId);
-            ret = (ReviewableItemBbox) bbq.execQuery();
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
+    private ReviewableItemBbox getRelationMemberBbox(long relId) {
+        ReviewableBboxQuery bbq = new ReviewableBboxQuery(getConnection(), getMapId(), relId);
+        ReviewableItemBbox ret = (ReviewableItemBbox) bbq.execQuery();
         return ret;
     }
 
@@ -203,35 +190,28 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
      *            - target map
      * @param reviewRelationWithMembers
      *            - list of member bbox
-     * @throws Exception
      */
     private static boolean combineBbox(Map<Long, ReviewableItemBboxInfo> allReviewables,
-            Map<Long, ReviewableItemBboxInfo> reviewRelationWithMembers) throws Exception {
+            Map<Long, ReviewableItemBboxInfo> reviewRelationWithMembers) {
         boolean isOverFlow = false;
-        try {
-            for (Object o : reviewRelationWithMembers.entrySet()) {
-                Map.Entry pair = (Map.Entry) o;
-                ReviewableItemBboxInfo currInfo = (ReviewableItemBboxInfo) pair.getValue();
-                Long currRelId = (Long) pair.getKey();
-                ReviewableItemBboxInfo info = allReviewables.get(currRelId);
-                if (info != null) {
-                    // expand bbox
-                    info.getBbox().add(currInfo.getBbox());
-                }
-                else {
-                    if (allReviewables.size() > MAX_RESULT_SIZE) {
-                        isOverFlow = true;
-                        break;
-                    }
-
-                    // just add
-                    allReviewables.put(currRelId, currInfo);
-                }
+        for (Object o : reviewRelationWithMembers.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
+            ReviewableItemBboxInfo currInfo = (ReviewableItemBboxInfo) pair.getValue();
+            Long currRelId = (Long) pair.getKey();
+            ReviewableItemBboxInfo info = allReviewables.get(currRelId);
+            if (info != null) {
+                // expand bbox
+                info.getBbox().add(currInfo.getBbox());
             }
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
+            else {
+                if (allReviewables.size() > MAX_RESULT_SIZE) {
+                    isOverFlow = true;
+                    break;
+                }
+
+                // just add
+                allReviewables.put(currRelId, currInfo);
+            }
         }
 
         return isOverFlow;
@@ -270,19 +250,9 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
      * @param type
      *            - [node|way|relation]
      * @return - result count
-     * @throws Exception
      */
-    private long getReviewableRelationMembersCount(DbUtils.nwr_enum type) throws Exception {
-        long recordCount = 0;
-
-        try {
-            recordCount = getReviewableRelationMembersCountByTypeQuery(type).count();
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
-
+    private long getReviewableRelationMembersCount(DbUtils.nwr_enum type) {
+        long recordCount = getReviewableRelationMembersCountByTypeQuery(type).count();
         return recordCount;
     }
 
@@ -292,23 +262,15 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
      * @param rs
      *            - source result set
      * @return - BoundingBox
-     * @throws Exception
      */
     private static BoundingBox resultSetToBbox(Tuple tup, Path bboxPath) throws Exception {
-        BoundingBox bbox = null;
-        double minLon = -1, minLat = -1, maxLon = -1, maxLat = -1;
-        try {
-            minLat = tup.get(Expressions.numberPath(Double.class, bboxPath, "minlat"));
-            maxLat = tup.get(Expressions.numberPath(Double.class, bboxPath, "maxlat"));
-            minLon = tup.get(Expressions.numberPath(Double.class, bboxPath, "minlon"));
-            maxLon = tup.get(Expressions.numberPath(Double.class, bboxPath, "maxlon"));
+        double minLat = tup.get(Expressions.numberPath(Double.class, bboxPath, "minlat"));
+        double maxLat = tup.get(Expressions.numberPath(Double.class, bboxPath, "maxlat"));
+        double minLon = tup.get(Expressions.numberPath(Double.class, bboxPath, "minlon"));
+        double maxLon = tup.get(Expressions.numberPath(Double.class, bboxPath, "maxlon"));
 
-            bbox = new BoundingBox(minLon, minLat, maxLon, maxLat);
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
+        BoundingBox bbox = new BoundingBox(minLon, minLat, maxLon, maxLat);
+
         return bbox;
     }
 
@@ -316,9 +278,8 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
      * Helper wraper function for create sql statement
      * 
      * @return - java,sql.Statement object
-     * @throws Exception
      */
-    protected Statement _createStatement() throws Exception {
+    protected Statement _createStatement() throws SQLException {
         return getConnection().createStatement();
     }
 
@@ -336,27 +297,21 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
     private Map<Long, ReviewableItemBboxInfo> getReviewableRelatioWithWayMembersCentroidInBbox() throws Exception {
         Map<Long, ReviewableItemBboxInfo> relationBboxMap = new HashMap<>();
 
-        try {
-            Path reviewRelWayMembersCentroidSubQPath = Expressions.path(Void.class, "reviewRelWayMembersCentroidSubQ");
-            List<Tuple> tups = getReviewableRelatioWithWayMembersCentroidInBboxQuery().list(
-                    Expressions.path(Long.class, reviewRelWayMembersCentroidSubQPath, "relation_id"),
-                    Expressions.path(String.class, reviewRelWayMembersCentroidSubQPath, "needreview"),
-                    Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "maxlat"),
-                    Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "minlat"),
-                    Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "maxlon"),
-                    Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "minlon"));
+        Path reviewRelWayMembersCentroidSubQPath = Expressions.path(Void.class, "reviewRelWayMembersCentroidSubQ");
+        List<Tuple> tups = getReviewableRelatioWithWayMembersCentroidInBboxQuery().list(
+                Expressions.path(Long.class, reviewRelWayMembersCentroidSubQPath, "relation_id"),
+                Expressions.path(String.class, reviewRelWayMembersCentroidSubQPath, "needreview"),
+                Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "maxlat"),
+                Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "minlat"),
+                Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "maxlon"),
+                Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "minlon"));
 
-            for (Tuple tup : tups) {
-                long relId = tup.get(Expressions.path(Long.class, reviewRelWayMembersCentroidSubQPath, "relation_id"));
-                String needReview = tup.get(Expressions.path(String.class, reviewRelWayMembersCentroidSubQPath, "needreview"));
-                BoundingBox bbox = resultSetToBbox(tup, reviewRelWayMembersCentroidSubQPath);
-                ReviewableItemBboxInfo info = new ReviewableItemBboxInfo(bbox, getMapId(), relId, needReview);
-                relationBboxMap.put(relId, info);
-            }
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
+        for (Tuple tup : tups) {
+            long relId = tup.get(Expressions.path(Long.class, reviewRelWayMembersCentroidSubQPath, "relation_id"));
+            String needReview = tup.get(Expressions.path(String.class, reviewRelWayMembersCentroidSubQPath, "needreview"));
+            BoundingBox bbox = resultSetToBbox(tup, reviewRelWayMembersCentroidSubQPath);
+            ReviewableItemBboxInfo info = new ReviewableItemBboxInfo(bbox, getMapId(), relId, needReview);
+            relationBboxMap.put(relId, info);
         }
 
         return relationBboxMap;
@@ -375,102 +330,95 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
      */
     protected SQLQuery getReviewableRelatioWithWayMembersCentroidInBboxQuery() throws Exception {
         SQLQuery sql = null;
-        try {
-            if (bbox == null) {
-                throw new Exception("Invalid Bounding box.");
-            }
-
-            QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
-            QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-
-            ListSubQuery<Tuple> reviewableCurrentRelSubQ = new SQLSubQuery().from(currentRelations)
-                    .where(Expressions.booleanTemplate("exist(tags,'hoot:review:needs')")).list(currentRelations.id,
-                            Expressions.stringTemplate("tags->'hoot:review:needs'").as("needreview"));
-
-            ListSubQuery<Tuple> currentRelMembersSubQ = new SQLSubQuery().from(currentRelationMembers)
-                    .where(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way))
-                    .list(currentRelationMembers.memberId, currentRelationMembers.relationId,
-                            currentRelationMembers.memberType);
-
-            Path reviewRelJoinRelMemberSubQPath = Expressions.path(Void.class, "reviewRelJoinRelMemberSubQ");
-            ListSubQuery<Tuple> reviewRelJoinRelMemberSubQ = new SQLSubQuery()
-                    .join(currentRelMembersSubQ, currentRelMembersSubQPath)
-                    .join(reviewableCurrentRelSubQ, reviewableCurrentRelSubQPath)
-                    .on(Expressions.path(Long.class, currentRelMembersSubQPath, "relation_id")
-                            .eq(Expressions.path(Long.class, reviewableCurrentRelSubQPath, "id")))
-                    .list(Expressions.path(Long.class, currentRelMembersSubQPath, "member_id"),
-                            Expressions.path(Long.class, currentRelMembersSubQPath, "relation_id"),
-                            Expressions.path(String.class, reviewableCurrentRelSubQPath, "needreview"));
-
-            QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
-
-            Path currentWayNodesSubQPath = Expressions.path(Void.class, "currentWayNodesSubQ");
-            ListSubQuery<Tuple> currentWayNodesSubQ = new SQLSubQuery().from(currentWayNodes)
-                    .list(currentWayNodes.nodeId, currentWayNodes.wayId);
-
-            Path reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath = Expressions.path(Void.class,
-                    "reviewRelJoinRelMemberJoinCurrentWayNodesSubQ");
-            ListSubQuery<Tuple> reviewRelJoinRelMemberJoinCurrentWayNodesSubQ = new SQLSubQuery()
-                    .join(currentWayNodesSubQ, currentWayNodesSubQPath)
-                    .join(reviewRelJoinRelMemberSubQ, reviewRelJoinRelMemberSubQPath)
-                    .on(Expressions.path(Long.class, currentWayNodesSubQPath, "way_id")
-                            .eq(Expressions.path(Long.class, reviewRelJoinRelMemberSubQPath, "member_id")))
-                    .list(Expressions.path(Long.class, currentWayNodesSubQPath, "node_id"),
-                            Expressions.path(Long.class, reviewRelJoinRelMemberSubQPath, "relation_id"),
-                            Expressions.path(String.class, reviewRelJoinRelMemberSubQPath, "needreview"));
-
-            QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-            Path currentNodeSubQPath = Expressions.path(Void.class, "currentNodeSubQ");
-            ListSubQuery<Tuple> currentNodesSubQ = new SQLSubQuery().from(currentNodes).list(currentNodes.id,
-                    currentNodes.latitude, currentNodes.longitude);
-
-            Path reviewRelWayMembersCentroidSubQPath = Expressions.path(Void.class, "reviewRelWayMembersCentroidSubQ");
-            ListSubQuery<Tuple> reviewRelWayMembersCentroidSubQ = new SQLSubQuery()
-                    .join(currentNodesSubQ, currentNodeSubQPath)
-                    .join(reviewRelJoinRelMemberJoinCurrentWayNodesSubQ,
-                            reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath)
-                    .on(Expressions.path(Long.class, currentNodeSubQPath, "id")
-                            .eq(Expressions.path(Long.class, reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath,
-                                    "node_id")))
-                    .groupBy(
-                            Expressions.path(Long.class, reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath,
-                                    "relation_id"),
-                            Expressions.path(String.class, reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath,
-                                    "needreview"))
-                    .list(Expressions.path(Long.class, reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath,
-                            "relation_id"),
-                            Expressions.path(String.class, reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath,
-                                    "needreview"),
-                            Expressions.numberPath(Double.class, currentNodeSubQPath, "latitude").max().as("maxlat"),
-                            Expressions.numberPath(Double.class, currentNodeSubQPath, "latitude").min().as("minlat"),
-                            Expressions.numberPath(Double.class, currentNodeSubQPath, "longitude").max().as("maxlon"),
-                            Expressions.numberPath(Double.class, currentNodeSubQPath, "longitude").min().as("minlon"),
-                            Expressions
-                                    .numberTemplate(Double.class,
-                                            "(((max(\"currentNodeSubQ\".\"latitude\") - min(\"currentNodeSubQ\".\"latitude\"))/2)+min(\"currentNodeSubQ\".\"latitude\"))")
-                                    .as("centlat"),
-                            Expressions
-                                    .numberTemplate(Double.class,
-                                            "(((max(\"currentNodeSubQ\".\"longitude\") - min(\"currentNodeSubQ\".\"longitude\"))/2)+min(\"currentNodeSubQ\".\"longitude\"))")
-                                    .as("centlon"));
-
-            sql = new SQLQuery(getConnection(), DbUtils.getConfiguration(getMapId()))
-                    .from(reviewRelWayMembersCentroidSubQ.as(reviewRelWayMembersCentroidSubQPath))
-                    .where(Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "centlat")
-                            .goe(bbox.getMinLat())
-                            .and(Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "centlat")
-                                    .loe(bbox.getMaxLat()))
-                            .and(Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "centlon")
-                                    .goe(bbox.getMinLon()))
-                            .and(Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "centlon")
-                                    .loe(bbox.getMaxLon())))
-                    .limit(MAX_RESULT_SIZE + 1);
-
+        if (bbox == null) {
+            throw new Exception("Invalid Bounding box.");
         }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
+
+        QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
+        QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
+
+        ListSubQuery<Tuple> reviewableCurrentRelSubQ = new SQLSubQuery().from(currentRelations)
+                .where(Expressions.booleanTemplate("exist(tags,'hoot:review:needs')")).list(currentRelations.id,
+                        Expressions.stringTemplate("tags->'hoot:review:needs'").as("needreview"));
+
+        ListSubQuery<Tuple> currentRelMembersSubQ = new SQLSubQuery().from(currentRelationMembers)
+                .where(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way))
+                .list(currentRelationMembers.memberId, currentRelationMembers.relationId,
+                        currentRelationMembers.memberType);
+
+        Path reviewRelJoinRelMemberSubQPath = Expressions.path(Void.class, "reviewRelJoinRelMemberSubQ");
+        ListSubQuery<Tuple> reviewRelJoinRelMemberSubQ = new SQLSubQuery()
+                .join(currentRelMembersSubQ, currentRelMembersSubQPath)
+                .join(reviewableCurrentRelSubQ, reviewableCurrentRelSubQPath)
+                .on(Expressions.path(Long.class, currentRelMembersSubQPath, "relation_id")
+                        .eq(Expressions.path(Long.class, reviewableCurrentRelSubQPath, "id")))
+                .list(Expressions.path(Long.class, currentRelMembersSubQPath, "member_id"),
+                        Expressions.path(Long.class, currentRelMembersSubQPath, "relation_id"),
+                        Expressions.path(String.class, reviewableCurrentRelSubQPath, "needreview"));
+
+        QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
+
+        Path currentWayNodesSubQPath = Expressions.path(Void.class, "currentWayNodesSubQ");
+        ListSubQuery<Tuple> currentWayNodesSubQ = new SQLSubQuery().from(currentWayNodes)
+                .list(currentWayNodes.nodeId, currentWayNodes.wayId);
+
+        Path reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath = Expressions.path(Void.class,
+                "reviewRelJoinRelMemberJoinCurrentWayNodesSubQ");
+        ListSubQuery<Tuple> reviewRelJoinRelMemberJoinCurrentWayNodesSubQ = new SQLSubQuery()
+                .join(currentWayNodesSubQ, currentWayNodesSubQPath)
+                .join(reviewRelJoinRelMemberSubQ, reviewRelJoinRelMemberSubQPath)
+                .on(Expressions.path(Long.class, currentWayNodesSubQPath, "way_id")
+                        .eq(Expressions.path(Long.class, reviewRelJoinRelMemberSubQPath, "member_id")))
+                .list(Expressions.path(Long.class, currentWayNodesSubQPath, "node_id"),
+                        Expressions.path(Long.class, reviewRelJoinRelMemberSubQPath, "relation_id"),
+                        Expressions.path(String.class, reviewRelJoinRelMemberSubQPath, "needreview"));
+
+        QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
+        Path currentNodeSubQPath = Expressions.path(Void.class, "currentNodeSubQ");
+        ListSubQuery<Tuple> currentNodesSubQ = new SQLSubQuery().from(currentNodes).list(currentNodes.id,
+                currentNodes.latitude, currentNodes.longitude);
+
+        Path reviewRelWayMembersCentroidSubQPath = Expressions.path(Void.class, "reviewRelWayMembersCentroidSubQ");
+        ListSubQuery<Tuple> reviewRelWayMembersCentroidSubQ = new SQLSubQuery()
+                .join(currentNodesSubQ, currentNodeSubQPath)
+                .join(reviewRelJoinRelMemberJoinCurrentWayNodesSubQ,
+                        reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath)
+                .on(Expressions.path(Long.class, currentNodeSubQPath, "id")
+                        .eq(Expressions.path(Long.class, reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath,
+                                "node_id")))
+                .groupBy(
+                        Expressions.path(Long.class, reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath,
+                                "relation_id"),
+                        Expressions.path(String.class, reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath,
+                                "needreview"))
+                .list(Expressions.path(Long.class, reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath,
+                        "relation_id"),
+                        Expressions.path(String.class, reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath,
+                                "needreview"),
+                        Expressions.numberPath(Double.class, currentNodeSubQPath, "latitude").max().as("maxlat"),
+                        Expressions.numberPath(Double.class, currentNodeSubQPath, "latitude").min().as("minlat"),
+                        Expressions.numberPath(Double.class, currentNodeSubQPath, "longitude").max().as("maxlon"),
+                        Expressions.numberPath(Double.class, currentNodeSubQPath, "longitude").min().as("minlon"),
+                        Expressions
+                                .numberTemplate(Double.class,
+                                        "(((max(\"currentNodeSubQ\".\"latitude\") - min(\"currentNodeSubQ\".\"latitude\"))/2)+min(\"currentNodeSubQ\".\"latitude\"))")
+                                .as("centlat"),
+                        Expressions
+                                .numberTemplate(Double.class,
+                                        "(((max(\"currentNodeSubQ\".\"longitude\") - min(\"currentNodeSubQ\".\"longitude\"))/2)+min(\"currentNodeSubQ\".\"longitude\"))")
+                                .as("centlon"));
+
+        sql = new SQLQuery(getConnection(), DbUtils.getConfiguration(getMapId()))
+                .from(reviewRelWayMembersCentroidSubQ.as(reviewRelWayMembersCentroidSubQPath))
+                .where(Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "centlat")
+                        .goe(bbox.getMinLat())
+                        .and(Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "centlat")
+                                .loe(bbox.getMaxLat()))
+                        .and(Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "centlon")
+                                .goe(bbox.getMinLon()))
+                        .and(Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "centlon")
+                                .loe(bbox.getMaxLon())))
+                .limit(MAX_RESULT_SIZE + 1);
 
         return sql;
     }
@@ -489,29 +437,22 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
     private Map<Long, ReviewableItemBboxInfo> getReviewableRelatioWithNodeMembersCentroidInBbox() throws Exception {
         Map<Long, ReviewableItemBboxInfo> relationBboxMap = new HashMap<>();
 
-        try {
-            Path reviewRelNodeMembersCentroidSubQPath = Expressions.path(Void.class,
-                    "reviewRelNodeMembersCentroidSubQ");
-            List<Tuple> tups = _getReviewableRelatioWithNodeMembersCentroidInBboxQuery().list(
-                    Expressions.path(Long.class, reviewRelNodeMembersCentroidSubQPath, "relation_id"),
-                    Expressions.path(String.class, reviewRelNodeMembersCentroidSubQPath, "needreview"),
-                    Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "maxlat"),
-                    Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "minlat"),
-                    Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "maxlon"),
-                    Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "minlon"));
+        Path reviewRelNodeMembersCentroidSubQPath = Expressions.path(Void.class,
+                "reviewRelNodeMembersCentroidSubQ");
+        List<Tuple> tups = _getReviewableRelatioWithNodeMembersCentroidInBboxQuery().list(
+                Expressions.path(Long.class, reviewRelNodeMembersCentroidSubQPath, "relation_id"),
+                Expressions.path(String.class, reviewRelNodeMembersCentroidSubQPath, "needreview"),
+                Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "maxlat"),
+                Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "minlat"),
+                Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "maxlon"),
+                Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "minlon"));
 
-            for (Tuple tup : tups) {
-                long relId = tup.get(Expressions.path(Long.class, reviewRelNodeMembersCentroidSubQPath, "relation_id"));
-                String needReview = tup.get(Expressions.path(String.class, reviewRelNodeMembersCentroidSubQPath, "needreview"));
-                BoundingBox bbox = resultSetToBbox(tup, reviewRelNodeMembersCentroidSubQPath);
-                ReviewableItemBboxInfo info = new ReviewableItemBboxInfo(bbox, getMapId(), relId, needReview);
-                relationBboxMap.put(relId, info);
-            }
-
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
+        for (Tuple tup : tups) {
+            long relId = tup.get(Expressions.path(Long.class, reviewRelNodeMembersCentroidSubQPath, "relation_id"));
+            String needReview = tup.get(Expressions.path(String.class, reviewRelNodeMembersCentroidSubQPath, "needreview"));
+            BoundingBox bbox = resultSetToBbox(tup, reviewRelNodeMembersCentroidSubQPath);
+            ReviewableItemBboxInfo info = new ReviewableItemBboxInfo(bbox, getMapId(), relId, needReview);
+            relationBboxMap.put(relId, info);
         }
 
         return relationBboxMap;
@@ -525,84 +466,74 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
      * ones that intersets.
      * 
      * @return - SQL query string
-     * 
-     * @throws Exception
      */
     protected SQLQuery _getReviewableRelatioWithNodeMembersCentroidInBboxQuery() throws Exception {
-        SQLQuery sql = null;
-        try {
-            if (bbox == null) {
-                throw new Exception("Invalid Bounding box.");
-            }
-
-            QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
-            QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-
-            ListSubQuery<Tuple> reviewableCurrentRelSubQ = new SQLSubQuery().from(currentRelations)
-                    .where(Expressions.booleanTemplate("exist(tags,'hoot:review:needs')")).list(currentRelations.id,
-                            Expressions.stringTemplate("tags->'hoot:review:needs'").as("needreview"));
-
-            ListSubQuery<Tuple> currentRelMembersSubQ = new SQLSubQuery().from(currentRelationMembers)
-                    .where(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node))
-                    .list(currentRelationMembers.memberId, currentRelationMembers.relationId,
-                            currentRelationMembers.memberType);
-
-            Path reviewRelJoinRelMemberSubQPath = Expressions.path(Void.class, "reviewRelJoinRelMemberSubQ");
-            ListSubQuery<Tuple> reviewRelJoinRelMemberSubQ = new SQLSubQuery()
-                    .join(currentRelMembersSubQ, currentRelMembersSubQPath)
-                    .join(reviewableCurrentRelSubQ, reviewableCurrentRelSubQPath)
-                    .on(Expressions.path(Long.class, currentRelMembersSubQPath, "relation_id")
-                            .eq(Expressions.path(Long.class, reviewableCurrentRelSubQPath, "id")))
-                    .list(Expressions.path(Long.class, currentRelMembersSubQPath, "member_id"),
-                            Expressions.path(Long.class, currentRelMembersSubQPath, "relation_id"),
-                            Expressions.path(String.class, reviewableCurrentRelSubQPath, "needreview"));
-
-            QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-            Path currentNodeSubQPath = Expressions.path(Void.class, "currentNodeSubQ");
-            ListSubQuery<Tuple> currentNodesSubQ = new SQLSubQuery().from(currentNodes).list(currentNodes.id,
-                    currentNodes.latitude, currentNodes.longitude);
-
-            Path reviewRelNodeMembersCentroidSubQPath = Expressions.path(Void.class,
-                    "reviewRelNodeMembersCentroidSubQ");
-            ListSubQuery<Tuple> reviewRelWayMembersCentroidSubQ = new SQLSubQuery()
-                    .join(currentNodesSubQ, currentNodeSubQPath)
-                    .join(reviewRelJoinRelMemberSubQ, reviewRelJoinRelMemberSubQPath)
-                    .on(Expressions.path(Long.class, currentNodeSubQPath, "id")
-                            .eq(Expressions.path(Long.class, reviewRelJoinRelMemberSubQPath, "member_id")))
-                    .groupBy(Expressions.path(Long.class, reviewRelJoinRelMemberSubQPath, "relation_id"),
-                            Expressions.path(String.class, reviewRelJoinRelMemberSubQPath, "needreview"))
-                    .list(Expressions.path(Long.class, reviewRelJoinRelMemberSubQPath, "relation_id"),
-                            Expressions.path(String.class, reviewRelJoinRelMemberSubQPath, "needreview"),
-                            Expressions.numberPath(Double.class, currentNodeSubQPath, "latitude").max().as("maxlat"),
-                            Expressions.numberPath(Double.class, currentNodeSubQPath, "latitude").min().as("minlat"),
-                            Expressions.numberPath(Double.class, currentNodeSubQPath, "longitude").max().as("maxlon"),
-                            Expressions.numberPath(Double.class, currentNodeSubQPath, "longitude").min().as("minlon"),
-                            Expressions
-                                    .numberTemplate(Double.class,
-                                            "(((max(\"currentNodeSubQ\".\"latitude\") - min(\"currentNodeSubQ\".\"latitude\"))/2)+min(\"currentNodeSubQ\".\"latitude\"))")
-                                    .as("centlat"),
-                            Expressions
-                                    .numberTemplate(Double.class,
-                                            "(((max(\"currentNodeSubQ\".\"longitude\") - min(\"currentNodeSubQ\".\"longitude\"))/2)+min(\"currentNodeSubQ\".\"longitude\"))")
-                                    .as("centlon"));
-
-            sql = new SQLQuery(getConnection(), DbUtils.getConfiguration(getMapId()))
-                    .from(reviewRelWayMembersCentroidSubQ.as(reviewRelNodeMembersCentroidSubQPath))
-                    .where(Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "centlat")
-                            .goe(bbox.getMinLat())
-                            .and(Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "centlat")
-                                    .loe(bbox.getMaxLat()))
-                            .and(Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "centlon")
-                                    .goe(bbox.getMinLon()))
-                            .and(Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "centlon")
-                                    .loe(bbox.getMaxLon())))
-                    .limit(MAX_RESULT_SIZE + 1);
-
+        if (bbox == null) {
+            throw new Exception("Invalid Bounding box.");
         }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
+
+        QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
+        QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
+
+        ListSubQuery<Tuple> reviewableCurrentRelSubQ = new SQLSubQuery().from(currentRelations)
+                .where(Expressions.booleanTemplate("exist(tags,'hoot:review:needs')")).list(currentRelations.id,
+                        Expressions.stringTemplate("tags->'hoot:review:needs'").as("needreview"));
+
+        ListSubQuery<Tuple> currentRelMembersSubQ = new SQLSubQuery().from(currentRelationMembers)
+                .where(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node))
+                .list(currentRelationMembers.memberId, currentRelationMembers.relationId,
+                        currentRelationMembers.memberType);
+
+        Path reviewRelJoinRelMemberSubQPath = Expressions.path(Void.class, "reviewRelJoinRelMemberSubQ");
+        ListSubQuery<Tuple> reviewRelJoinRelMemberSubQ = new SQLSubQuery()
+                .join(currentRelMembersSubQ, currentRelMembersSubQPath)
+                .join(reviewableCurrentRelSubQ, reviewableCurrentRelSubQPath)
+                .on(Expressions.path(Long.class, currentRelMembersSubQPath, "relation_id")
+                        .eq(Expressions.path(Long.class, reviewableCurrentRelSubQPath, "id")))
+                .list(Expressions.path(Long.class, currentRelMembersSubQPath, "member_id"),
+                        Expressions.path(Long.class, currentRelMembersSubQPath, "relation_id"),
+                        Expressions.path(String.class, reviewableCurrentRelSubQPath, "needreview"));
+
+        QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
+        Path currentNodeSubQPath = Expressions.path(Void.class, "currentNodeSubQ");
+        ListSubQuery<Tuple> currentNodesSubQ = new SQLSubQuery().from(currentNodes).list(currentNodes.id,
+                currentNodes.latitude, currentNodes.longitude);
+
+        Path reviewRelNodeMembersCentroidSubQPath = Expressions.path(Void.class,
+                "reviewRelNodeMembersCentroidSubQ");
+        ListSubQuery<Tuple> reviewRelWayMembersCentroidSubQ = new SQLSubQuery()
+                .join(currentNodesSubQ, currentNodeSubQPath)
+                .join(reviewRelJoinRelMemberSubQ, reviewRelJoinRelMemberSubQPath)
+                .on(Expressions.path(Long.class, currentNodeSubQPath, "id")
+                        .eq(Expressions.path(Long.class, reviewRelJoinRelMemberSubQPath, "member_id")))
+                .groupBy(Expressions.path(Long.class, reviewRelJoinRelMemberSubQPath, "relation_id"),
+                        Expressions.path(String.class, reviewRelJoinRelMemberSubQPath, "needreview"))
+                .list(Expressions.path(Long.class, reviewRelJoinRelMemberSubQPath, "relation_id"),
+                        Expressions.path(String.class, reviewRelJoinRelMemberSubQPath, "needreview"),
+                        Expressions.numberPath(Double.class, currentNodeSubQPath, "latitude").max().as("maxlat"),
+                        Expressions.numberPath(Double.class, currentNodeSubQPath, "latitude").min().as("minlat"),
+                        Expressions.numberPath(Double.class, currentNodeSubQPath, "longitude").max().as("maxlon"),
+                        Expressions.numberPath(Double.class, currentNodeSubQPath, "longitude").min().as("minlon"),
+                        Expressions
+                                .numberTemplate(Double.class,
+                                        "(((max(\"currentNodeSubQ\".\"latitude\") - min(\"currentNodeSubQ\".\"latitude\"))/2)+min(\"currentNodeSubQ\".\"latitude\"))")
+                                .as("centlat"),
+                        Expressions
+                                .numberTemplate(Double.class,
+                                        "(((max(\"currentNodeSubQ\".\"longitude\") - min(\"currentNodeSubQ\".\"longitude\"))/2)+min(\"currentNodeSubQ\".\"longitude\"))")
+                                .as("centlon"));
+
+        SQLQuery sql = new SQLQuery(getConnection(), DbUtils.getConfiguration(getMapId()))
+                .from(reviewRelWayMembersCentroidSubQ.as(reviewRelNodeMembersCentroidSubQPath))
+                .where(Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "centlat")
+                        .goe(bbox.getMinLat())
+                        .and(Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "centlat")
+                                .loe(bbox.getMaxLat()))
+                        .and(Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "centlon")
+                                .goe(bbox.getMinLon()))
+                        .and(Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "centlon")
+                                .loe(bbox.getMaxLon())))
+                .limit(MAX_RESULT_SIZE + 1);
 
         return sql;
     }
@@ -613,9 +544,8 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
      * 
      * @return - List of JSONObject containing relation_id, member_id,
      *         needreview
-     * @throws Exception
      */
-    private List<Tuple> getReviewableRelationMembers() throws Exception {
+    private List<Tuple> getReviewableRelationMembers() {
         return getReviewableRelationMembersQuery().list(
                 Expressions.path(Long.class, currentRelMembersSubQPath, "member_id"),
                 Expressions.path(Long.class, currentRelMembersSubQPath, "relation_id"),
@@ -651,5 +581,4 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
                         Expressions.path(Long.class, currentRelMembersSubQPath, "relation_id"),
                         Expressions.path(String.class, reviewableCurrentRelSubQPath, "needreview"));
     }
-
 }

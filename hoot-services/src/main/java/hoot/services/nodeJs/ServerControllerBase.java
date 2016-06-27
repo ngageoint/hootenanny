@@ -42,7 +42,7 @@ public class ServerControllerBase {
 
     private Process serverProc = null;
 
-    protected Process startServer(String currPort, String currThreadCnt, String serverScript) throws Exception {
+    protected Process startServer(String currPort, String currThreadCnt, String serverScript) throws IOException {
         List<String> command = new ArrayList<>();
         command.add("node");
         command.add(serverScript);
@@ -62,14 +62,19 @@ public class ServerControllerBase {
         new Thread() {
             @Override
             public void run() {
-                processStreamHandler(serverProc, true);
+                try {
+                    processStreamHandler(serverProc, true);
+                }
+                catch (IOException ignored) {
+                    logger.error("Error during a call to processStreamHandler()", ignored);
+                }
             }
         }.start();
 
         return serverProc;
     }
 
-    protected void stopServer(final String processSignature) throws Exception {
+    protected void stopServer(String processSignature) throws IOException {
         closeAllServers(processSignature);
     }
 
@@ -78,7 +83,7 @@ public class ServerControllerBase {
         return Integer.parseInt(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
     }
 
-    protected boolean getStatus(Process serverProc) throws Exception {
+    protected boolean getStatus(Process serverProc) {
         // We first get the server process ID
         Integer transServerPID = null;
         if (serverProc.getClass().getName().equals("java.lang.UNIXProcess")) {
@@ -119,30 +124,29 @@ public class ServerControllerBase {
         processStreamHandler(killProc, false);
     }
 
-    private static void processStreamHandler(Process proc, boolean doSendToStdout) {
-        try (InputStreamReader stdStream = new InputStreamReader(proc.getInputStream());
-             BufferedReader stdInput = new BufferedReader(stdStream);
-             InputStreamReader stdErrStream = new InputStreamReader(proc.getErrorStream());
-             BufferedReader stdError = new BufferedReader(stdErrStream)){
+    private static void processStreamHandler(Process proc, boolean doSendToStdout) throws IOException {
+        try (InputStreamReader stdStream = new InputStreamReader(proc.getInputStream())) {
+            try (BufferedReader stdInput = new BufferedReader(stdStream)) {
+                try (InputStreamReader stdErrStream = new InputStreamReader(proc.getErrorStream())) {
+                    try (BufferedReader stdError = new BufferedReader(stdErrStream)) {
+                        String s = null;
 
-            String s = null;
+                        while ((s = stdInput.readLine()) != null) {
+                            logger.info(s);
+                            if (doSendToStdout) {
+                                System.out.println(s);
+                            }
+                        }
 
-            while ((s = stdInput.readLine()) != null) {
-                logger.info(s);
-                if (doSendToStdout) {
-                    System.out.println(s);
+                        while ((s = stdError.readLine()) != null) {
+                            logger.error(s);
+                            if (doSendToStdout) {
+                                System.out.println(s);
+                            }
+                        }
+                    }
                 }
             }
-
-            while ((s = stdError.readLine()) != null) {
-                logger.error(s);
-                if (doSendToStdout) {
-                    System.out.println(s);
-                }
-            }
-        }
-        catch (Exception e) {
-            logger.error(e.getMessage());
         }
     }
 }

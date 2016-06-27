@@ -41,7 +41,6 @@ import hoot.services.db2.ReviewBookmarks;
 
 
 public class ReviewBookmarkRetriever {
-
     private static final Logger logger = LoggerFactory.getLogger(ReviewBookmarkRetriever.class);
 
     private final Connection conn;
@@ -52,36 +51,20 @@ public class ReviewBookmarkRetriever {
     }
 
     /**
-     * Retrieves all bookmarks for mapId+relationId using map id and relation
-     * id.
+     * Retrieves all bookmarks for mapId+relationId using map id and relation id.
      */
-    public List<ReviewBookmarks> retrieve(long mapId, long relationId) throws Exception {
-        List<ReviewBookmarks> res = null;
-        try {
-            SQLQuery query = getQuery(mapId, relationId);
-            res = query.list(reviewBookmarks);
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
+    public List<ReviewBookmarks> retrieve(long mapId, long relationId) {
+        SQLQuery query = getQuery(mapId, relationId);
+        List<ReviewBookmarks> res = query.list(reviewBookmarks);
         return res;
     }
 
     /**
-     * Retrieves all bookmarks for mapId+relationId using map id and relation
-     * id.
+     * Retrieves all bookmarks for mapId+relationId using map id and relation id.
      */
-    public List<ReviewBookmarks> retrieve(long boookMarkId) throws Exception {
-        List<ReviewBookmarks> res = null;
-        try {
-            SQLQuery query = getQuery(boookMarkId);
-            res = query.list(reviewBookmarks);
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
+    public List<ReviewBookmarks> retrieve(long boookMarkId) {
+        SQLQuery query = getQuery(boookMarkId);
+        List<ReviewBookmarks> res = query.list(reviewBookmarks);
         return res;
     }
 
@@ -97,21 +80,11 @@ public class ReviewBookmarkRetriever {
      * @param offset
      *            - offset row for paging
      * @return - list of Review tags
-     * @throws Exception
      */
     public List<ReviewBookmarks> retrieveAll(String orderByCol, boolean isAsc, long limit,
-            long offset, String filterCol, Object filterVal) throws Exception {
-
-        List<ReviewBookmarks> res = null;
-        try {
-            SQLQuery query = getAllQuery(orderByCol, isAsc, limit, offset, filterCol, filterVal);
-            res = query.list(reviewBookmarks);
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
-
+            long offset, String filterCol, Object filterVal) {
+        SQLQuery query = getAllQuery(orderByCol, isAsc, limit, offset, filterCol, filterVal);
+        List<ReviewBookmarks> res = query.list(reviewBookmarks);
         return res;
     }
 
@@ -119,20 +92,10 @@ public class ReviewBookmarkRetriever {
      * Get the total counts of all review tags
      * 
      * @return - numbers of toal count
-     * @throws Exception
      */
-    public long getbookmarksCount() throws Exception {
-        long res = -1;
-
-        try {
-            SQLQuery query = new SQLQuery(this.conn, DbUtils.getConfiguration());
-            res = query.from(reviewBookmarks).count();
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
-
+    public long getbookmarksCount() {
+        SQLQuery query = new SQLQuery(this.conn, DbUtils.getConfiguration());
+        long res = query.from(reviewBookmarks).count();
         return res;
     }
 
@@ -142,32 +105,17 @@ public class ReviewBookmarkRetriever {
      * @param mapId
      * @param relationId
      * @return - SQLQuery
-     * @throws Exception
      */
-    protected SQLQuery getQuery(long mapId, long relationId) throws Exception {
+    protected SQLQuery getQuery(long mapId, long relationId) {
         SQLQuery query = new SQLQuery(this.conn, DbUtils.getConfiguration());
-        try {
-            query.from(reviewBookmarks)
-                    .where(reviewBookmarks.mapId.eq(mapId).and(reviewBookmarks.relationId.eq(relationId)));
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
-
+        query.from(reviewBookmarks)
+             .where(reviewBookmarks.mapId.eq(mapId).and(reviewBookmarks.relationId.eq(relationId)));
         return query;
     }
 
-    protected SQLQuery getQuery(long bookmarkId) throws Exception {
+    protected SQLQuery getQuery(long bookmarkId) {
         SQLQuery query = new SQLQuery(this.conn, DbUtils.getConfiguration());
-        try {
-            query.from(reviewBookmarks).where(reviewBookmarks.id.eq(bookmarkId));
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
-
+        query.from(reviewBookmarks).where(reviewBookmarks.id.eq(bookmarkId));
         return query;
     }
 
@@ -179,37 +127,30 @@ public class ReviewBookmarkRetriever {
      * @param limit
      * @param offset
      * @return - SQLQuery
-     * @throws Exception
      */
     protected SQLQuery getAllQuery(String orderByCol, boolean isAsc, long limit, long offset,
-            String filterCol, Object filterVal) throws Exception {
+            String filterCol, Object filterVal) {
         QReviewBookmarks qReviewBookmarks = QReviewBookmarks.reviewBookmarks;
 
         SQLQuery query = new SQLQuery(this.conn, DbUtils.getConfiguration());
-        try {
-            if ((filterCol != null) && (filterVal != null) && filterCol.equalsIgnoreCase("createdBy")) {
-                query.from(reviewBookmarks).where(qReviewBookmarks.createdBy.eq((Long) filterVal))
-                        .orderBy(getSpecifier(orderByCol, isAsc));
-            }
-            else if ((filterCol != null) && (filterVal != null) && filterCol.equalsIgnoreCase("mapId")) {
-                query.from(reviewBookmarks).where(qReviewBookmarks.mapId.eq((Long) filterVal))
-                        .orderBy(getSpecifier(orderByCol, isAsc));
-            }
-            else {
-                query.from(reviewBookmarks).orderBy(getSpecifier(orderByCol, isAsc));
-            }
-
-            if (limit > -1) {
-                query.limit(limit);
-            }
-
-            if (offset > -1) {
-                query.offset(offset);
-            }
+        if ((filterCol != null) && (filterVal != null) && filterCol.equalsIgnoreCase("createdBy")) {
+            query.from(reviewBookmarks).where(qReviewBookmarks.createdBy.eq((Long) filterVal))
+                    .orderBy(getSpecifier(orderByCol, isAsc));
         }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
+        else if ((filterCol != null) && (filterVal != null) && filterCol.equalsIgnoreCase("mapId")) {
+            query.from(reviewBookmarks).where(qReviewBookmarks.mapId.eq((Long) filterVal))
+                    .orderBy(getSpecifier(orderByCol, isAsc));
+        }
+        else {
+            query.from(reviewBookmarks).orderBy(getSpecifier(orderByCol, isAsc));
+        }
+
+        if (limit > -1) {
+            query.limit(limit);
+        }
+
+        if (offset > -1) {
+            query.offset(offset);
         }
 
         return query;
@@ -224,40 +165,35 @@ public class ReviewBookmarkRetriever {
      *            - asc | dsc
      * @return - OrderSpecifier
      */
-    protected OrderSpecifier getSpecifier(String orderByCol, boolean isAsc) {
+    private OrderSpecifier getSpecifier(String orderByCol, boolean isAsc) {
         OrderSpecifier res = reviewBookmarks.id.asc();
-        try {
-            if (orderByCol != null) {
-                switch (orderByCol) {
-                    case "id":
-                        res = (isAsc) ? reviewBookmarks.id.asc() : reviewBookmarks.id.desc();
-                    break;
-                    case "createdAt":
-                        res = (isAsc) ? reviewBookmarks.createdAt.asc() : reviewBookmarks.createdAt.desc();
-                    break;
-                    case "createdBy":
-                        res = (isAsc) ? reviewBookmarks.createdBy.asc() : reviewBookmarks.createdBy.desc();
-                    break;
-                    case "lastModifiedAt":
-                        res = (isAsc) ? reviewBookmarks.lastModifiedAt.asc() : reviewBookmarks.lastModifiedAt.desc();
-                    break;
-                    case "lastModifiedBy":
-                        res = (isAsc) ? reviewBookmarks.lastModifiedBy.asc() : reviewBookmarks.lastModifiedBy.desc();
-                    break;
-                    case "mapId":
-                        res = (isAsc) ? reviewBookmarks.mapId.asc() : reviewBookmarks.mapId.desc();
-                    break;
-                    case "relationId":
-                        res = (isAsc) ? reviewBookmarks.relationId.asc() : reviewBookmarks.relationId.desc();
-                    break;
-                    default:
-                        res = reviewBookmarks.id.asc();
-                    break;
-                }
+        if (orderByCol != null) {
+            switch (orderByCol) {
+                case "id":
+                    res = (isAsc) ? reviewBookmarks.id.asc() : reviewBookmarks.id.desc();
+                break;
+                case "createdAt":
+                    res = (isAsc) ? reviewBookmarks.createdAt.asc() : reviewBookmarks.createdAt.desc();
+                break;
+                case "createdBy":
+                    res = (isAsc) ? reviewBookmarks.createdBy.asc() : reviewBookmarks.createdBy.desc();
+                break;
+                case "lastModifiedAt":
+                    res = (isAsc) ? reviewBookmarks.lastModifiedAt.asc() : reviewBookmarks.lastModifiedAt.desc();
+                break;
+                case "lastModifiedBy":
+                    res = (isAsc) ? reviewBookmarks.lastModifiedBy.asc() : reviewBookmarks.lastModifiedBy.desc();
+                break;
+                case "mapId":
+                    res = (isAsc) ? reviewBookmarks.mapId.asc() : reviewBookmarks.mapId.desc();
+                break;
+                case "relationId":
+                    res = (isAsc) ? reviewBookmarks.relationId.asc() : reviewBookmarks.relationId.desc();
+                break;
+                default:
+                    res = reviewBookmarks.id.asc();
+                break;
             }
-        }
-        catch (Exception ex) {
-            logger.warn("Defualting to reviewBookmarks.id asc order: {}", ex.getMessage());
         }
 
         return res;

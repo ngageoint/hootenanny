@@ -45,7 +45,7 @@ public class ReviewResolver {
 
     private final Connection conn;
 
-    public ReviewResolver(Connection conn) throws Exception {
+    public ReviewResolver(Connection conn) {
         this.conn = conn;
     }
 

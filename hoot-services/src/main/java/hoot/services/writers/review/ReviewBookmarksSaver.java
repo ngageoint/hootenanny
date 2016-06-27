@@ -89,25 +89,10 @@ public class ReviewBookmarksSaver {
      * @param request
      *            - request object containing inserted fields
      * @return - total numbers of inserted
-     * @throws Exception
      */
-    public long insert(ReviewBookmarkSaveRequest request) throws Exception {
-        long nInserted = 0;
-
-        try {
-            SQLInsertClause cl = createInsertClause(request);
-            if (cl != null) {
-                nInserted = cl.execute();
-            }
-            else {
-                throw new Exception("Invalid insert clause.");
-            }
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
-
+    public long insert(ReviewBookmarkSaveRequest request) {
+        SQLInsertClause cl = createInsertClause(request);
+        long nInserted = cl.execute();
         return nInserted;
     }
 
@@ -119,19 +104,9 @@ public class ReviewBookmarksSaver {
      * @param reviewBookmarksDto
      *            - Current review tag
      * @return total numbers of updated
-     * @throws Exception
      */
-    public long update(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto) throws Exception {
-        long nUpdated = 0;
-
-        try {
-            nUpdated = getUpdateQuery(request, reviewBookmarksDto).execute();
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
-
+    public long update(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto) {
+        long nUpdated = getUpdateQuery(request, reviewBookmarksDto).execute();
         return nUpdated;
     }
 
@@ -141,26 +116,17 @@ public class ReviewBookmarksSaver {
      * @param request
      *            - request object containing inserted fields
      * @return - SQLInsertClause
-     * @throws Exception
      */
-    protected SQLInsertClause createInsertClause(ReviewBookmarkSaveRequest request) throws Exception {
-        SQLInsertClause cl = null;
-        try {
-            Configuration configuration = DbUtils.getConfiguration();
+    protected SQLInsertClause createInsertClause(ReviewBookmarkSaveRequest request) {
+        Configuration configuration = DbUtils.getConfiguration();
+        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
-            Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-
-            QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
-            cl = new SQLInsertClause(conn, configuration, reviewBookmarks)
-                    .columns(reviewBookmarks.mapId, reviewBookmarks.relationId, reviewBookmarks.createdAt,
-                            reviewBookmarks.createdBy, reviewBookmarks.detail)
-                    .values(request.getMapId(), request.getRelationId(), now, request.getUserId(),
-                            jasonToHStore(request.getDetail()));
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
+        QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
+        SQLInsertClause cl = new SQLInsertClause(conn, configuration, reviewBookmarks)
+                .columns(reviewBookmarks.mapId, reviewBookmarks.relationId, reviewBookmarks.createdAt,
+                        reviewBookmarks.createdBy, reviewBookmarks.detail)
+                .values(request.getMapId(), request.getRelationId(), now, request.getUserId(),
+                        jasonToHStore(request.getDetail()));
 
         return cl;
     }
@@ -173,29 +139,19 @@ public class ReviewBookmarksSaver {
      * @param reviewBookmarksDto
      *            - Current review tag
      * @return - SQLUpdateClause
-     * @throws Exception
      */
-    protected SQLUpdateClause getUpdateQuery(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto)
-            throws Exception {
-        SQLUpdateClause res = null;
+    protected SQLUpdateClause getUpdateQuery(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto) {
+        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
-        try {
-            Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        reviewBookmarksDto.setLastModifiedAt(now);
+        reviewBookmarksDto.setLastModifiedBy(request.getUserId());
+        reviewBookmarksDto.setDetail(jasonToHStore(request.getDetail()));
 
-            reviewBookmarksDto.setLastModifiedAt(now);
-            reviewBookmarksDto.setLastModifiedBy(request.getUserId());
+        Configuration configuration = DbUtils.getConfiguration();
+        QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
+        SQLUpdateClause res = new SQLUpdateClause(conn, configuration, reviewBookmarks).populate(reviewBookmarksDto)
+                .where(reviewBookmarks.id.eq(reviewBookmarksDto.getId()));
 
-            reviewBookmarksDto.setDetail(jasonToHStore(request.getDetail()));
-
-            Configuration configuration = DbUtils.getConfiguration();
-            QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
-            res = new SQLUpdateClause(conn, configuration, reviewBookmarks).populate(reviewBookmarksDto)
-                    .where(reviewBookmarks.id.eq(reviewBookmarksDto.getId()));
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
         return res;
     }
 
@@ -206,9 +162,8 @@ public class ReviewBookmarksSaver {
      * @param tags
      *            - json containing tags kv
      * @return - Expression Object for QueryDSL consumption
-     * @throws Exception
      */
-    private Object jasonToHStore(JSONObject tags) throws Exception {
+    private Object jasonToHStore(JSONObject tags) {
         String hstoreStr = "";
 
         if (tags != null) {

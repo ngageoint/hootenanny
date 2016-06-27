@@ -40,7 +40,7 @@ public final class FileUtils {
     private FileUtils() {
     }
 
-    public static File getSubFolderFromFolder(String targetFolder, String subFolderName) throws Exception {
+    public static File getSubFolderFromFolder(String targetFolder, String subFolderName) {
         File ret = null;
 
         File folder = new File(targetFolder);
@@ -57,7 +57,7 @@ public final class FileUtils {
         return ret;
     }
 
-    public static File getFileFromFolder(String targetFolder, String fileName, String ext) throws Exception {
+    public static File getFileFromFolder(String targetFolder, String fileName, String ext) {
         File ret = null;
         String[] extension = { ext };
         File dir = new File(targetFolder);
@@ -74,7 +74,7 @@ public final class FileUtils {
         return ret;
     }
 
-    public static boolean validateFilePath(String expectedPath, String actualPath) throws Exception {
+    public static boolean validateFilePath(String expectedPath, String actualPath) {
         String path = FilenameUtils.getFullPathNoEndSeparator(actualPath);
         boolean isValid = expectedPath.equals(path);
         return isValid;

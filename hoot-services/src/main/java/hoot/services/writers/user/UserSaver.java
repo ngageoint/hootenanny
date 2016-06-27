@@ -26,6 +26,7 @@
  */
 package hoot.services.writers.user;
 
+
 import java.sql.Connection;
 
 import org.slf4j.Logger;
@@ -49,61 +50,34 @@ public class UserSaver {
         conn = cn;
     }
 
-    public Users getOrSaveByEmail(String userEmail) throws Exception {
-        Users ret = null;
+    public Users getOrSaveByEmail(String userEmail) {
+        Users ret = (new SQLQuery(conn, DbUtils.getConfiguration()))
+                .from(QUsers.users)
+                .where(QUsers.users.email.equalsIgnoreCase(userEmail)).singleResult(QUsers.users);
 
-        try {
-            QUsers users = QUsers.users;
-
-            ret = (new SQLQuery(conn, DbUtils.getConfiguration())).from(users)
-                    .where(users.email.equalsIgnoreCase(userEmail)).singleResult(users);
-
-            // none then create
-            if (ret == null) {
-                long nCreated = insert(userEmail);
-                if (nCreated > 0) {
-
-                    ret = (new SQLQuery(conn, DbUtils.getConfiguration())).from(users)
-                            .where(users.email.equalsIgnoreCase(userEmail)).singleResult(users);
-                }
+        // none then create
+        if (ret == null) {
+            long nCreated = insert(userEmail);
+            if (nCreated > 0) {
+                ret = (new SQLQuery(conn, DbUtils.getConfiguration()))
+                        .from(QUsers.users)
+                        .where(QUsers.users.email.equalsIgnoreCase(userEmail)).singleResult(QUsers.users);
             }
         }
-        catch (Exception ex) {
-            logger.error("Failed to save user by email: {}", ex.getMessage());
-            throw ex;
-        }
+
         return ret;
     }
 
-    public long insert(String email) throws Exception {
-        long nInserted = 0;
-        try {
-            SQLInsertClause cl = createInsertClause(email);
-            if (cl != null) {
-                nInserted = cl.execute();
-            }
-            else {
-                throw new Exception("Invalid insert clause.");
-            }
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
+    public long insert(String email) {
+        SQLInsertClause cl = createInsertClause(email);
+        long nInserted = cl.execute();
         return nInserted;
     }
 
-    protected SQLInsertClause createInsertClause(String email) throws Exception {
-        SQLInsertClause cl = null;
-        try {
-            Configuration configuration = DbUtils.getConfiguration();
-            QUsers users = QUsers.users;
-            cl = new SQLInsertClause(conn, configuration, users).columns(users.email, users.displayName).values(email, email);
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw ex;
-        }
+    protected SQLInsertClause createInsertClause(String email) {
+        Configuration configuration = DbUtils.getConfiguration();
+        SQLInsertClause cl = new SQLInsertClause(conn, configuration, QUsers.users).
+                                      columns(QUsers.users.email, QUsers.users.displayName).values(email, email);
         return cl;
     }
 }

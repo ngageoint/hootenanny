@@ -158,6 +158,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public UserSaveResponse getSaveUser(@QueryParam("userEmail") String userEmail) throws Exception {
         UserSaveResponse response = null;
+
         try (Connection conn = DbUtils.createConnection()) {
             UserSaver saver = new UserSaver(conn);
             try {
@@ -165,6 +166,7 @@ public class UserResource {
                 if (user == null) {
                     throw new Exception("SQL Insert failed.");
                 }
+
                 response = new UserSaveResponse(user);
             }
             catch (Exception ex) {

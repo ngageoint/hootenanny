@@ -109,13 +109,6 @@ public class ProcessStreamInterface implements INativeInterface {
         return stdStr;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * hoot.services.nativeInterfaces.INativeInterface#exec(org.json.simple.
-     * JSONObject)
-     */
     @Override
     public JSONObject exec(JSONObject command) throws NativeInterfaceException {
         logger.debug("Executing command : {}", command.toJSONString());
@@ -143,6 +136,7 @@ public class ProcessStreamInterface implements INativeInterface {
 
             String commandStr = ArrayUtils.toString(commandArr);
             logger.debug("Native call: {}", commandStr);
+
             if ((commandArr == null) || (commandArr.length == 0)) {
                 throw new NativeInterfaceException("Failed to parse params.",
                         NativeInterfaceException.HttpCode.BAD_RQUEST);
@@ -154,6 +148,7 @@ public class ProcessStreamInterface implements INativeInterface {
             logger.debug("Start: {}", new Date().getTime());
             res = cmdRunner.exec(commandArr);
             logger.debug("End: {}", new Date().getTime());
+
             if (res != null) {
                 if (res.getExitStatus() == 0) {
                     String stdOut = res.getStdout();
@@ -225,10 +220,8 @@ public class ProcessStreamInterface implements INativeInterface {
      * @param cmd
      * @param cmdRunner
      * @return true if successfully added
-     * @throws Exception
      */
-    private static boolean addToProcessQ(JSONObject cmd, ICommandRunner cmdRunner) throws Exception {
-
+    private static boolean addToProcessQ(JSONObject cmd, ICommandRunner cmdRunner) {
         boolean success = false;
         if (cmd.containsKey("jobId")) {
             jobProcesses.put(cmd.get("jobId").toString(), cmdRunner);
@@ -247,29 +240,18 @@ public class ProcessStreamInterface implements INativeInterface {
      * Remove from process queue if job exists
      *
      * @param cmd
-     * @throws Exception
      */
     private static void removeFromProcessQ(JSONObject cmd) {
         String jobId = "";
-        try {
-            if (cmd.containsKey("jobId")) {
-                jobId = cmd.get("jobId").toString();
-                jobProcesses.remove(jobId);
-            }
-        }
-        catch (Exception ex) {
-            logger.error("failed to remove from Q:{}", jobId);
+        if (cmd.containsKey("jobId")) {
+            jobId = cmd.get("jobId").toString();
+            jobProcesses.remove(jobId);
         }
     }
 
     private static void removeFromProgressProcessQ(String jobId) {
-        try {
-            if (progProcesses.containsKey(jobId)) {
-                progProcesses.remove(jobId);
-            }
-        }
-        catch (Exception ex) {
-            logger.error("failed to remove from Q:{}", jobId);
+        if (progProcesses.containsKey(jobId)) {
+            progProcesses.remove(jobId);
         }
     }
 
@@ -314,24 +296,19 @@ public class ProcessStreamInterface implements INativeInterface {
      */
     private static String[] createCmdArray(JSONObject cmd) {
         List<String> execCmd = new ArrayList<>();
-        try {
-            execCmd.add("hoot");
-            execCmd.add("--" + cmd.get("exec"));
-            JSONArray params = (JSONArray) cmd.get("params");
+        execCmd.add("hoot");
+        execCmd.add("--" + cmd.get("exec"));
+        JSONArray params = (JSONArray) cmd.get("params");
 
-            for (Object o : params) {
-                JSONObject param = (JSONObject) o;
-                Iterator iter = param.entrySet().iterator();
-                String arg = "";
-                while (iter.hasNext()) {
-                    Map.Entry mEntry = (Map.Entry) iter.next();
-                    arg = (String) mEntry.getValue();
-                }
-                execCmd.add(arg);
+        for (Object o : params) {
+            JSONObject param = (JSONObject) o;
+            Iterator iter = param.entrySet().iterator();
+            String arg = "";
+            while (iter.hasNext()) {
+                Map.Entry mEntry = (Map.Entry) iter.next();
+                arg = (String) mEntry.getValue();
             }
-        }
-        catch (Exception ex) {
-            logger.error("Failed to parse job params. Reason: {}", ex.getMessage());
+            execCmd.add(arg);
         }
 
         Object[] objectArray = execCmd.toArray();
@@ -346,35 +323,30 @@ public class ProcessStreamInterface implements INativeInterface {
     private static String[] createScriptCmdArray(JSONObject cmd) {
         List<String> execCmd = new ArrayList<>();
 
-        try {
-            execCmd.add("make");
-            execCmd.add("-f");
-            execCmd.add(CORE_SCRIPT_PATH + "/" + cmd.get("exec"));
-            JSONArray params = (JSONArray) cmd.get("params");
+        execCmd.add("make");
+        execCmd.add("-f");
+        execCmd.add(CORE_SCRIPT_PATH + "/" + cmd.get("exec"));
+        JSONArray params = (JSONArray) cmd.get("params");
 
-            for (Object o : params) {
-                JSONObject param = (JSONObject) o;
-                Iterator iter = param.entrySet().iterator();
+        for (Object o : params) {
+            JSONObject param = (JSONObject) o;
+            Iterator iter = param.entrySet().iterator();
 
-                String arg = "";
-                String key = "";
-                while (iter.hasNext()) {
-                    Map.Entry mEntry = (Map.Entry) iter.next();
-                    key = (String) mEntry.getKey();
-                    arg = (String) mEntry.getValue();
-                }
-
-                execCmd.add(key + "=" + arg + "");
+            String arg = "";
+            String key = "";
+            while (iter.hasNext()) {
+                Map.Entry mEntry = (Map.Entry) iter.next();
+                key = (String) mEntry.getKey();
+                arg = (String) mEntry.getValue();
             }
 
-            String jobid = cmd.get("jobId").toString();
-            execCmd.add("jobid=" + jobid);
-            execCmd.add("DB_URL=" + DB_URL);
-            execCmd.add("OSM_API_DB_URL=" + OSM_API_DB_URL);
+            execCmd.add(key + "=" + arg + "");
         }
-        catch (Exception ex) {
-            logger.error("Failed to parse job params. Reason: {}", ex.getMessage());
-        }
+
+        String jobid = cmd.get("jobId").toString();
+        execCmd.add("jobid=" + jobid);
+        execCmd.add("DB_URL=" + DB_URL);
+        execCmd.add("OSM_API_DB_URL=" + OSM_API_DB_URL);
 
         Object[] objectArray = execCmd.toArray();
 
@@ -384,31 +356,26 @@ public class ProcessStreamInterface implements INativeInterface {
     private static String[] createBashScriptCmdArray(JSONObject cmd) {
         List<String> execCmd = new ArrayList<>();
 
-        try {
-            execCmd.add("bash");
-            execCmd.add(CORE_SCRIPT_PATH + "/" + cmd.get("exec"));
-            JSONArray params = (JSONArray) cmd.get("params");
-            for (Object o : params) {
-                JSONObject param = (JSONObject) o;
-                Iterator iter = param.entrySet().iterator();
+        execCmd.add("bash");
+        execCmd.add(CORE_SCRIPT_PATH + "/" + cmd.get("exec"));
+        JSONArray params = (JSONArray) cmd.get("params");
+        for (Object o : params) {
+            JSONObject param = (JSONObject) o;
+            Iterator iter = param.entrySet().iterator();
 
-                String arg = "";
-                String key = "";
-                while (iter.hasNext()) {
-                    Map.Entry mEntry = (Map.Entry) iter.next();
-                    key = (String) mEntry.getKey();
-                    arg = (String) mEntry.getValue();
-                }
-                execCmd.add(arg);
+            String arg = "";
+            String key = "";
+            while (iter.hasNext()) {
+                Map.Entry mEntry = (Map.Entry) iter.next();
+                key = (String) mEntry.getKey();
+                arg = (String) mEntry.getValue();
             }
-
-            if (cmd.get("jobId") != null) {
-                String jobid = cmd.get("jobId").toString();
-                execCmd.add(jobid);
-            }
+            execCmd.add(arg);
         }
-        catch (Exception ex) {
-            logger.error("Failed to parse job params. Reason: {}", ex.getMessage());
+
+        if (cmd.get("jobId") != null) {
+            String jobid = cmd.get("jobId").toString();
+            execCmd.add(jobid);
         }
 
         Object[] objectArray = execCmd.toArray();
