@@ -27,6 +27,7 @@
 package hoot.services.controllers.info;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -35,6 +36,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -47,11 +49,11 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/reports")
@@ -83,7 +85,9 @@ public class ReportsResource {
             out = getReportFile(id);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error exporting report file: ", Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error exporting report file: " + ex.getMessage();
+            logger.error(message);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
         ResponseBuilder rBuild = Response.ok(out, "application/pdf");
@@ -109,7 +113,9 @@ public class ReportsResource {
             reps = getReportsList();
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting reports list: " + ex.getMessage(), Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error getting reports list: " + ex.getMessage();
+            logger.error(message);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
         return Response.ok(reps.toString(), MediaType.TEXT_PLAIN).build();
@@ -135,7 +141,9 @@ public class ReportsResource {
             isDeleted = deleteReport(id);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error exporting report file: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error exporting report file: " + ex.getMessage();
+            logger.error(message);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
         resp.put("id", id);
@@ -145,7 +153,7 @@ public class ReportsResource {
     }
 
     // Gets the meta data of the report
-    private static JSONObject getMetaData(String id) throws Exception {
+    private static JSONObject getMetaData(String id) throws IOException, ParseException {
         JSONObject res = new JSONObject();
 
         String metaDataPath = HOME_FOLDER + "/" + RPT_STORE_PATH + "/" + id + "/meta.data";
@@ -166,7 +174,7 @@ public class ReportsResource {
     // gets the list of meta data. This could get slow if there is large numbers of reports
     // One solution may be using Runtime to do bash to get folder count natively
     // and that should be the fastest way..
-    private static JSONArray getReportsList() throws Exception {
+    private static JSONArray getReportsList() {
         JSONArray res = new JSONArray();
         // sort by name
         Map<String, JSONObject> sorted = new TreeMap<>();
@@ -201,7 +209,7 @@ public class ReportsResource {
     }
 
     // retrieves the report file
-    private static File getReportFile(String id) throws Exception {
+    private static File getReportFile(String id) throws IOException, ParseException {
         File res = null;
 
         JSONObject meta = getMetaData(id);
@@ -218,7 +226,7 @@ public class ReportsResource {
     }
 
     // deletes requested report by deleting folder
-    private static boolean deleteReport(String id) throws Exception {
+    private static boolean deleteReport(String id) throws IOException {
         boolean deleted = false;
 
         File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(HOME_FOLDER + "/" + RPT_STORE_PATH, id);

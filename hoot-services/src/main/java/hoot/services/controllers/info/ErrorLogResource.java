@@ -36,6 +36,7 @@ import javax.annotation.PreDestroy;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -60,7 +61,7 @@ public class ErrorLogResource {
     }
 
     @PreDestroy
-    public void preDestroy() throws Exception {
+    public void preDestroy() throws IOException {
         if ((exportLogPath != null) && (!exportLogPath.isEmpty())) {
             FileUtils.forceDelete(new File(exportLogPath));
         }
@@ -83,10 +84,14 @@ public class ErrorLogResource {
             logStr = ErrorLog.getErrorlog(50000);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting error logger: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error getting error logger: " + ex;
+            logger.error(message);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
+
         JSONObject res = new JSONObject();
         res.put("logger", logStr);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
@@ -109,7 +114,9 @@ public class ErrorLogResource {
             exportLogPath = outputPath;
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error exporting logger file: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error exporting logger file: " + ex;
+            logger.error(message);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");

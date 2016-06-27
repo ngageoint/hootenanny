@@ -30,6 +30,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -41,7 +42,6 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/map")
@@ -109,8 +109,7 @@ public class MapInfoResource {
         try {
             String[] mapids = mapIds.split(",");
             for (String mapId : mapids) {
-                if (Long.parseLong(mapId) != -1) // skips OSM API db layer
-                {
+                if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
                     for (String table : maptables) {
                         nsize += DbUtils.getTableSizeInByte(table + "_" + mapId);
                     }
@@ -118,7 +117,9 @@ public class MapInfoResource {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting map size: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error getting map size: " + ex.getMessage();
+            logger.error(message);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
         JSONObject res = new JSONObject();
@@ -160,8 +161,7 @@ public class MapInfoResource {
                 long nsize = 0;
                 try {
                     for (String table : maptables) {
-                        if (Long.parseLong(mapId) != -1) // skips OSM API db layer
-                        {
+                        if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
                             nsize += DbUtils.getTableSizeInByte(table + "_" + mapId);
                         }
                     }
@@ -174,7 +174,9 @@ public class MapInfoResource {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting map size: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error getting map size: " + ex.getMessage();
+            logger.error(message);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
         JSONObject res = new JSONObject();

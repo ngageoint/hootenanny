@@ -30,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Map;
@@ -38,6 +39,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -45,11 +47,11 @@ import javax.ws.rs.core.Response.Status;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/advancedopts")
@@ -137,7 +139,9 @@ public class AdvancedOptResource {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting advanced options: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error getting advanced options: " + ex;
+            logger.error(message);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
         assert (template != null);
@@ -145,7 +149,7 @@ public class AdvancedOptResource {
         return Response.ok(template.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
-    private void getOverrides(String isForce) throws Exception {
+    private void getOverrides(String isForce) throws IOException, ParseException {
         // Force option should only be used to update options list by administrator
         boolean doForce = false;
         if (isForce != null) {
@@ -188,7 +192,7 @@ public class AdvancedOptResource {
         return "";
     }
 
-    private void generateRule(JSONArray a, JSONObject p) throws Exception {
+    private void generateRule(JSONArray a, JSONObject p) {
         // for each options in template apply the value
         for (Object o : a) {
             if (o instanceof JSONObject) {
@@ -348,7 +352,7 @@ public class AdvancedOptResource {
     // "Data Type:"
     // "Default Value:"
     // If line starts with "** " then list item field
-    private String parseLine(String line, String curOptName) throws Exception {
+    private String parseLine(String line, String curOptName) {
         String optName = curOptName;
         // If line starts with "=== " then it is option field
         if (line.startsWith("=== ")) {
@@ -430,7 +434,7 @@ public class AdvancedOptResource {
         return optName;
     }
 
-    private void parseAsciidoc() throws Exception {
+    private void parseAsciidoc() throws IOException {
         try (FileInputStream fstream = new FileInputStream(HOME_FOLDER + "/" + ASCIIDOC_PATH);
              InputStreamReader istream = new InputStreamReader(fstream);
              BufferedReader br = new BufferedReader(istream)) {
