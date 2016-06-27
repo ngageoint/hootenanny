@@ -373,7 +373,7 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      * version = 1. Otherwise, the version passed in the changeset request must
      * match the existing version the server to ensure data integrity.
      */
-    long parseVersion() throws Exception {
+    long parseVersion() {
         long version = 1;
 
         // version passed in the request can be ignored if it is a create

@@ -49,9 +49,8 @@ public final class PostgresUtils {
      * @param postgresObj
      *            a Postgres object containing an hstore
      * @return a string map with the hstore's data
-     * @throws Exception
      */
-    public static Map<String, String> postgresObjToHStore(PGobject postgresObj) throws Exception {
+    public static Map<String, String> postgresObjToHStore(PGobject postgresObj) {
         // type = hstore
         // value = "key 1"=>"val 1", "key 2"=>"val 2"
 
@@ -65,7 +64,7 @@ public final class PostgresUtils {
         return hstore;
     }
 
-    static Map<String, String> parseTags(String tagsStr) throws Exception {
+    static Map<String, String> parseTags(String tagsStr) {
         Map<String, String> tagsMap = new HashMap<>();
 
         if ((tagsStr != null) && (!tagsStr.isEmpty())) {

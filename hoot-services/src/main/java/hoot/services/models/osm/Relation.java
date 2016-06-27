@@ -70,7 +70,7 @@ public class Relation extends Element {
 
     private List<RelationMember> membersCache = new ArrayList<>();
 
-    public Relation(long mapId, Connection dbConn) throws Exception {
+    public Relation(long mapId, Connection dbConn) {
         super(dbConn);
         super.elementType = ElementType.Relation;
         super.record = new CurrentRelations();
@@ -78,7 +78,7 @@ public class Relation extends Element {
         setMapId(mapId);
     }
 
-    public Relation(long mapId, Connection dbConn, CurrentRelations record) throws Exception {
+    public Relation(long mapId, Connection dbConn, CurrentRelations record) {
         super(dbConn);
         super.elementType = ElementType.Relation;
 
@@ -300,7 +300,7 @@ public class Relation extends Element {
      * Retrieves geo info for the nodes/ways associated with the input IDs and
      * then computes the combined bounds for all the elements
      */
-    private BoundingBox getBoundsForNodesAndWays(Set<Long> dbNodeIds, Set<Long> dbWayIds) throws Exception {
+    private BoundingBox getBoundsForNodesAndWays(Set<Long> dbNodeIds, Set<Long> dbWayIds) {
         ArrayList<CurrentNodes> nodes = new ArrayList<>(Node.getNodes(getMapId(), dbNodeIds, conn));
         nodes.addAll(Way.getNodesForWays(getMapId(), dbWayIds, conn));
         BoundingBox bounds = null;

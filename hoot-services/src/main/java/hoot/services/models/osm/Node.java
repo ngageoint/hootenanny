@@ -62,7 +62,7 @@ import hoot.services.geo.QuadTileCalculator;
 public class Node extends Element {
     private static final Logger logger = LoggerFactory.getLogger(Node.class);
 
-    public Node(Long mapId, Connection dbConnection) throws Exception {
+    public Node(Long mapId, Connection dbConnection) {
         super(dbConnection);
         super.elementType = ElementType.Node;
         super.record = new CurrentNodes();
@@ -70,7 +70,7 @@ public class Node extends Element {
         setMapId(mapId);
     }
 
-    public Node(Long mapId, Connection dbConnection, CurrentNodes record) throws Exception {
+    public Node(Long mapId, Connection dbConnection, CurrentNodes record) {
         super(dbConnection);
         super.elementType = ElementType.Node;
 

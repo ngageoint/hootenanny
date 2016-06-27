@@ -185,7 +185,7 @@ public class Map extends Maps {
         }
     }
 
-    public JSONObject retrieveNodesMBR(BoundingBox bounds) throws Exception {
+    public JSONObject retrieveNodesMBR(BoundingBox bounds) {
         JSONObject ret = new JSONObject();
 
         // get the intersecting tile ranges for the nodes
@@ -213,7 +213,7 @@ public class Map extends Maps {
         return ret;
     }
 
-    public long getNodesCount(BoundingBox bounds) throws Exception {
+    public long getNodesCount(BoundingBox bounds) {
         long ret = 0;
 
         // get the intersecting tile ranges for the nodes

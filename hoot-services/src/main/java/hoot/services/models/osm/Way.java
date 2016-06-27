@@ -70,6 +70,7 @@ import hoot.services.geo.Coordinates;
  */
 public class Way extends Element {
     private static final Logger log = LoggerFactory.getLogger(Way.class);
+    private static final QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
 
     private final List<Long> wayNodeIdsCache = new ArrayList<>();
 
@@ -77,13 +78,10 @@ public class Way extends Element {
         return wayNodeIdsCache;
     }
 
-    private static final QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
-
-    // temp collection of way node coordinates used to calculate the way's
-    // bounds
+    // temp collection of way node coordinates used to calculate the way'sbounds
     private Map<Long, Coordinates> nodeCoordsCollection;
 
-    public Way(long mapId, Connection dbConn) throws Exception {
+    public Way(long mapId, Connection dbConn) {
         super(dbConn);
         super.elementType = ElementType.Way;
         super.record = new CurrentWays();
@@ -91,7 +89,7 @@ public class Way extends Element {
         setMapId(mapId);
     }
 
-    public Way(long mapId, Connection dbConn, CurrentWays record) throws Exception {
+    public Way(long mapId, Connection dbConn, CurrentWays record) {
         super(dbConn);
         super.elementType = ElementType.Way;
 

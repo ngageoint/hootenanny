@@ -106,21 +106,13 @@ public class RelationMember {
      * @throws Exception
      */
     public static CurrentRelationMembers createRecord(long id, int sequenceId, String role,
-            Object elementType, long relationId, Connection dbConn) throws Exception {
+            Object elementType, long relationId, Connection dbConn) {
         CurrentRelationMembers memberRecord = new CurrentRelationMembers();
         memberRecord.setMemberId(id);
         memberRecord.setSequenceId(sequenceId);
-
-        if (!StringUtils.isEmpty(role)) {
-            memberRecord.setMemberRole(role);
-        }
-        else {
-            memberRecord.setMemberRole("");
-        }
-
+        memberRecord.setMemberRole(StringUtils.isEmpty(role) ? "" : role);
         memberRecord.setMemberType(elementType);
         memberRecord.setRelationId(relationId);
-
         return memberRecord;
     }
 
