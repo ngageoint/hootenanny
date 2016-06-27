@@ -261,6 +261,11 @@ When(/^I click the "([^"]*)" at "([^"]*)","([^"]*)"$/) do |el, x, y|
   sleep 3
 end
 
+When(/^I double-click the "([^"]*)" at "([^"]*)","([^"]*)"$/) do |el, x, y|
+  find('#' + el).double_click_at(x,y)
+  sleep 3
+end
+
 When(/^I double-click the "([^"]*)"$/) do |el|
   find('#' + el).double_click
   sleep 1
@@ -467,6 +472,20 @@ end
 
 Then(/^I click the "([^"]*)" with text "([^"]*)"$/) do |el, text|
   page.find(el, :text => text).click
+end
+
+Then(/^I hover over the "([^"]*)" with text "([^"]*)"$/) do |el, text|
+  page.find(el, :text => text).hover
+end
+
+Then(/^I should see a measurement line$/) do
+  page.should have_css('line.measure-line-0')
+  page.should have_css('text.measure-label-text')
+end
+
+Then(/^I should see a measurement area$/) do
+  page.should have_css('polygon.measure-area')
+  page.should have_css('text.measure-label-text')
 end
 
 Then(/^I accept the alert$/) do
