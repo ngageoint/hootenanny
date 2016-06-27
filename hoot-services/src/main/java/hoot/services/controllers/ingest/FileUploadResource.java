@@ -26,7 +26,9 @@
  */
 package hoot.services.controllers.ingest;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -170,9 +172,43 @@ public class FileUploadResource extends JobControllerBase {
                 throw new Exception("Can not mix osm and ogr type.");
             }
 
-            if (osmZipCnt > 0) {
+            if (osmZipCnt > 1) {
                 // #6027
-                throw new Exception("Hootennany does not support zip files containing .osm data.");
+                throw new Exception("Hootennany does not support zip files containing multiple .osm data files.");
+            }
+
+            if ((osmZipCnt == 1) && ((shpZipCnt + fgdbZipCnt + shpCnt + fgdbCnt + osmCnt) == 0)) {
+                // we want to unzip the file and modify any necessary parameters for the ensuing makefile
+                byte[] buffer = new byte[2048];
+                String zipFilePath = homeFolder + "/upload/" + jobId + File.separator + inputsList.get(0);
+
+                try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFilePath))) {
+                    ZipEntry ze = zis.getNextEntry();
+
+                    while (ze != null) {
+                        String entryName = ze.getName();
+                        File file = new File(homeFolder + "/upload/" + jobId + File.separator + entryName);
+                        // for now assuming no subdirectories
+                        try (FileOutputStream fOutput = new FileOutputStream(file)) {
+                            int count = 0;
+                            while ((count = zis.read(buffer)) > 0) {
+                                // write 'count' bytes to the file output stream
+                                fOutput.write(buffer, 0, count);
+                            }
+                        }
+
+                        zipList = new ArrayList<>();
+                        reqList = new JSONArray();
+                        inputsList = new ArrayList<>();
+                        JSONObject zipStat = new JSONObject();
+                        buildNativeRequest(jobId, inputName, "OSM", entryName, reqList, zipStat);
+                        ze = zis.getNextEntry();
+                    }
+                }
+                // massage some variables to make it look like an osm file was uploaded
+                zipCnt = 0;
+                osmZipCnt = 0;
+                osmCnt = 1;
             }
 
             String batchJobId = UUID.randomUUID().toString();
