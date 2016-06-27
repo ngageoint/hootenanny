@@ -81,5 +81,5 @@ If you've updated the code, you must connect to the vm via ssh to build and rede
     cd hoot
     source ./SetupEnv.sh
     make -sj$(nproc)
-    scripts/CopyWebAppsToTomcat.sh
+    sudo -u tomcat6 scripts/vagrantDeployTomcat.sh 
 
