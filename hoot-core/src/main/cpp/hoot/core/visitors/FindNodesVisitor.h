@@ -31,7 +31,7 @@
 #include <hoot/core/filters/ElementCriterion.h>
 
 // For convenience functions
-#include <hoot/core/filters/HasTagCriterion.h>
+#include <hoot/core/filters/TagCriterion.h>
 
 namespace hoot
 {
@@ -68,7 +68,7 @@ public:
   // Convenience method for finding nodes that contain the given tag
   static vector<long> findNodesByTag(const ConstOsmMapPtr& map, const QString& key, const QString& value)
   {
-    HasTagCriterion crit(key, value);
+    TagCriterion crit(key, value);
     FindNodesVisitor v(&crit);
     map->visitNodesRo(v);
     return v.getIds();

@@ -37,6 +37,7 @@
 // Hoot
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/conflate/WayCleaner.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
 // Qt
@@ -66,23 +67,23 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/WayCleanerTest/DuplicateNodesTest.osm", map);
 
-    WayPtr cleanedWay(new Way(*map->getWay(map->findWays("note", "1")[0]).get()));
+    WayPtr cleanedWay(new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]).get()));
     WayCleaner::cleanWay(cleanedWay, map);
     CPPUNIT_ASSERT(!WayCleaner::hasDuplicateNodes(cleanedWay));
 
-    cleanedWay.reset(new Way(*map->getWay(map->findWays("note", "2")[0]).get()));
+    cleanedWay.reset(new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]).get()));
     WayCleaner::cleanWay(cleanedWay, map);
     CPPUNIT_ASSERT(!WayCleaner::hasDuplicateNodes(cleanedWay));
 
-    cleanedWay.reset(new Way(*map->getWay(map->findWays("note", "3")[0]).get()));
+    cleanedWay.reset(new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "3")[0]).get()));
     WayCleaner::cleanWay(cleanedWay, map);
     CPPUNIT_ASSERT(!WayCleaner::hasDuplicateNodes(cleanedWay));
 
-    cleanedWay.reset(new Way(*map->getWay(map->findWays("note", "4")[0]).get()));
+    cleanedWay.reset(new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "4")[0]).get()));
     WayCleaner::cleanWay(cleanedWay, map);
     CPPUNIT_ASSERT(!WayCleaner::hasDuplicateNodes(cleanedWay));
 
-    cleanedWay.reset(new Way(*map->getWay(map->findWays("note", "5")[0]).get()));
+    cleanedWay.reset(new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "5")[0]).get()));
     QString exceptionMsg = "";
     try
     {
@@ -103,19 +104,19 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/WayCleanerTest/DuplicateCoordsTest.osm", map);
 
-    WayPtr cleanedWay(new Way(*map->getWay(map->findWays("note", "1")[0]).get()));
+    WayPtr cleanedWay(new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]).get()));
     WayCleaner::cleanWay(cleanedWay, map);
     CPPUNIT_ASSERT(!WayCleaner::hasDuplicateCoords(cleanedWay, *map));
 
-    cleanedWay.reset(new Way(*map->getWay(map->findWays("note", "2")[0]).get()));
+    cleanedWay.reset(new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]).get()));
     WayCleaner::cleanWay(cleanedWay, map);
     CPPUNIT_ASSERT(!WayCleaner::hasDuplicateCoords(cleanedWay, *map));
 
-    cleanedWay.reset(new Way(*map->getWay(map->findWays("note", "3")[0]).get()));
+    cleanedWay.reset(new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "3")[0]).get()));
     WayCleaner::cleanWay(cleanedWay, map);
     CPPUNIT_ASSERT(!WayCleaner::hasDuplicateCoords(cleanedWay, *map));
 
-    cleanedWay.reset(new Way(*map->getWay(map->findWays("note", "4")[0]).get()));
+    cleanedWay.reset(new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "4")[0]).get()));
     QString exceptionMsg = "";
     try
     {

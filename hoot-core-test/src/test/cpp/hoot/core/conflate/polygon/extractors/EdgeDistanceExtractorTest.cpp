@@ -36,6 +36,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
 // CPP Unit
@@ -85,8 +86,8 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    vector<long> r1 = map->findWays("REF1", "Target");
-    vector<long> r2 = map->findWays("name", "Target Grocery");
+    vector<long> r1 = FindWaysVisitor::findWaysByTag(map, "REF1", "Target");
+    vector<long> r2 = FindWaysVisitor::findWaysByTag(map, "name", "Target Grocery");
 
     shared_ptr<const Way> w1 = map->getWay(r1[0]);
     shared_ptr<const Way> w2 = map->getWay(r2[0]);
@@ -122,8 +123,8 @@ public:
 
     EdgeDistanceExtractor uut2(new RmseAggregator());
 
-    vector<long> r1 = map->findWays("note", "1");
-    vector<long> r2 = map->findWays("note", "b");
+    vector<long> r1 = FindWaysVisitor::findWaysByTag(map, "note", "1");
+    vector<long> r2 = FindWaysVisitor::findWaysByTag(map, "note", "b");
 
     shared_ptr<const Way> w1 = map->getWay(r1[0]);
     shared_ptr<const Way> w2 = map->getWay(r2[0]);
@@ -131,8 +132,8 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.50153, uut2.distance(*map, w1, w2), 0.01);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.978273, uut2.extract(*map, w1, w2), 0.01);
 
-    vector<long> r3 = map->findWays("note", "25");
-    vector<long> r4 = map->findWays("note", "z");
+    vector<long> r3 = FindWaysVisitor::findWaysByTag(map, "note", "25");
+    vector<long> r4 = FindWaysVisitor::findWaysByTag(map, "note", "z");
 
     shared_ptr<const Way> w3 = map->getWay(r3[0]);
     shared_ptr<const Way> w4 = map->getWay(r4[0]);

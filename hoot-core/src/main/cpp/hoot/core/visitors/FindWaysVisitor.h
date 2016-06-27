@@ -32,7 +32,7 @@
 
 // For convenience functions
 #include <hoot/core/filters/ContainsNodeCriterion.h>
-#include <hoot/core/filters/HasTagCriterion.h>
+#include <hoot/core/filters/TagCriterion.h>
 
 namespace hoot
 {
@@ -79,7 +79,7 @@ public:
                                     const QString& key,
                                     const QString& value)
   {
-    HasTagCriterion crit(key, value);
+    TagCriterion crit(key, value);
     FindWaysVisitor v(&crit);
     map->visitWaysRo(v);
     return v.getIds();
