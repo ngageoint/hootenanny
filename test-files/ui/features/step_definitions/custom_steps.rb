@@ -412,6 +412,14 @@ When(/^I close the UI alert$/) do
   find('#alerts').all('.x')[0].click
 end
 
+When(/^I change the reference layer color to ([^"]*)$/) do |color|
+  page.first('div.big.data').click
+  swatch = find('a[data-color="' + color + '"')
+  rgb = swatch.native.css_value('background').split(")").first + ')'
+  swatch.click
+  expect(page.first('path.stroke.tag-hoot').native.css_value('stroke')).to eq(rgb)
+end
+
 When(/^I scroll element into view and press "([^"]*)"$/) do |id|
   Capybara.ignore_hidden_elements = false
   element = page.driver.browser.find_element(:id, id)
