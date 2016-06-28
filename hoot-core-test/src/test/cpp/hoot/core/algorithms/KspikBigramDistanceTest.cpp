@@ -125,7 +125,7 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(KskipBigramDistanceTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(KskipBigramDistanceTest, "quick");
 
 }
 
