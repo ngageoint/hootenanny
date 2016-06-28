@@ -38,6 +38,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/js/OsmMapJs.h>
@@ -111,11 +112,11 @@ public:
     }
 
     boost::function<bool (ConstElementPtr e)> f = boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
-    shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
-    WorstCircularErrorVisitor v(pCrit);
-
-    map->visitRo(v);
-    _worstCircularError = v.getWorstCircularError();
+    ArbitraryCriterion crit(f);
+    WorstCircularErrorVisitor worstV;
+    FilteredVisitor filteredV(crit, worstV);
+    map->visitRo(filteredV);
+    _worstCircularError = worstV.getWorstCircularError();
   }
 
   ~ScriptMatchVisitor()

@@ -42,15 +42,12 @@ namespace hoot
 
 class WorstCircularErrorVisitor :
     public ElementConstOsmMapVisitor,
-    public SingleStatistic,
-    public ElementCriterionConsumer
+    public SingleStatistic
 {
 public:
   static string className() { return "hoot::WorstCircularErrorVisitor"; }
 
   WorstCircularErrorVisitor(): _worst(-1) {}
-  WorstCircularErrorVisitor(const shared_ptr<ElementCriterion>& filter):
-    _filter(filter),_worst(-1) {}
 
   Meters getWorstCircularError() { return _worst; }
 
@@ -58,18 +55,9 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void addCriterion(const ElementCriterionPtr& e)
-  {
-    assert(_filter.get() == 0);
-    _filter = e;
-  }
-
   virtual void visit(const shared_ptr<const Element>& e)
   {
-    if (!_filter || _filter->isSatisfied(e))
-    {
-      _worst = max(_worst, e->getCircularError());
-    }
+    _worst = max(_worst, e->getCircularError());
   }
 
   // Convenient way to get worst circular error
@@ -93,7 +81,6 @@ public:
 private:
 
   const OsmMap* _map;
-  shared_ptr<ElementCriterion> _filter;
   Meters _worst;
 };
 
