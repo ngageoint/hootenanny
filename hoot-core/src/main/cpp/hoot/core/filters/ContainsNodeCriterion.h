@@ -46,7 +46,7 @@ public:
 
   explicit ContainsNodeCriterion(long nodeId): _nodeId(nodeId)
   {
-    // This space intentionall left blank
+    // This space intentionally left blank
   }
 
   bool isSatisfied(const shared_ptr<const Element>& e) const

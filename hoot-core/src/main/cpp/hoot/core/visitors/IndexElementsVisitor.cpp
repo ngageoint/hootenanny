@@ -51,12 +51,13 @@ IndexElementsVisitor::IndexElementsVisitor(shared_ptr<HilbertRTree>& index,
   _index(index),
   _indexToEid(indexToEid)
 {
-  //_getSearchRadius = getSearchRadius;
+  // This space intentionally left blank
 }
 
 void IndexElementsVisitor::setOsmMap(OsmMap* map)
 {
-  // Do nothing
+  // Do nothing with this map. We want to conform to the interface,
+  // but prefer to use the ptr supplied in the constructor
   (void) map;
 }
 
