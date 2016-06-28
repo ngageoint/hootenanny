@@ -76,8 +76,6 @@ public:
 
   void visit(const ConstElementPtr& e);
 
-  void setOsmMap(OsmMap* map);
-
   void finalizeIndex()
   {
     _index->bulkInsert(_boxes, _fids);

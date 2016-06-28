@@ -54,13 +54,6 @@ IndexElementsVisitor::IndexElementsVisitor(shared_ptr<HilbertRTree>& index,
   // This space intentionally left blank
 }
 
-void IndexElementsVisitor::setOsmMap(OsmMap* map)
-{
-  // Do nothing with this map. We want to conform to the interface,
-  // but prefer to use the ptr supplied in the constructor
-  (void) map;
-}
-
 void IndexElementsVisitor::visit(const ConstElementPtr& e)
 {
   if (!_filter || _filter->isSatisfied(e))
