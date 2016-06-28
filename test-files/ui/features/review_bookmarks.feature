@@ -30,7 +30,7 @@ Feature: Review Bookmarks
         Then I type "Cucumber Bookmark 1" in input "reviewBookmarkTitle"
         Then I type "Bookmark for cucumber testing" in input "reviewBookmarkDescription"
         Then I type "This is a review bookmark" in input "reviewBookmarkNote"
-        Then I type "cucumber@hootenanny.digitalglobe.com" in input "reviewBookmarkCreatorEmail"
+        Then I type "cucumber1@hootenanny.digitalglobe.com" in input "reviewBookmarkCreatorEmail"
         Then I press "big.loud" span with text "Save"
 
     Scenario: Create Bookmark without Note
@@ -42,7 +42,7 @@ Feature: Review Bookmarks
         And I should see "Creator Email"
         Then I type "Cucumber Bookmark 2" in input "reviewBookmarkTitle"
         Then I type "Bookmark for cucumber testing" in input "reviewBookmarkDescription"
-        Then I type "cucumber@hootenanny.digitalglobe.com" in input "reviewBookmarkCreatorEmail"
+        Then I type "cucumber2@hootenanny.digitalglobe.com" in input "reviewBookmarkCreatorEmail"
         Then I press "big.loud" span with text "Save"
 
     Scenario: Add new comment to bookmark
@@ -50,14 +50,14 @@ Feature: Review Bookmarks
         And I click on the "Review Bookmarks" option in the "settingsSidebar"
         And I click the "Cucumber Bookmark 1:" link
         Then I should see "Cucumber Bookmark 1"
-        And I should see "User cucumber@hootenanny.digitalglobe.com commented"
+        And I should see "User cucumber1@hootenanny.digitalglobe.com commented"
         Then I type "I will review this bookmark" in input "bmkNoteTextNew"
         And I press "big.loud" span with text "comment"
 
     Scenario: Reload review
         Then I click the "reload" icon
         And I should see "Cucumber Bookmark 1"
-        And I should see "User cucumber@hootenanny.digitalglobe.com commented"
+        And I should see "User cucumber1@hootenanny.digitalglobe.com commented"
 
     Scenario: Go to review
         Then I select the "loadReview" div
@@ -75,13 +75,39 @@ Feature: Review Bookmarks
     Scenario: Filter Bookmarks
         Then I select the "sprocket" div
         And I click on the "Review Bookmarks" option in the "settingsSidebar"
-        Then I select the "reviewBookmarksFilterByMapIdDiv" div
-        Then I click the "mergedBookmarkTest" link under "reviewBookmarksFilterByMapIdDiv"
-        And I should see "Cucumber Bookmark"
-        Then I select the "reviewBookmarksFilterByCreatorDiv" div
-        Then I click the "cucumber@hootenanny.digitalglobe.com" link under "reviewBookmarksFilterByCreatorDiv"
-        And I should see "Cucumber Bookmark"
-        Then I select the "btnClearFilters" div
+        And I should see "Cucumber Bookmark 1"
+        And I should see "Cucumber Bookmark 2"
+        Then I click on the "Sort By" label
+        And I should see "Created At (asc)"
+        Then I choose "Created At (dsc)" radio button
+        And I should see "Cucumber Bookmark 2" bookmark first and "Cucumber Bookmark 1" bookmark second
+        Then I choose "Review ID (asc)" radio button
+        And I should see "Cucumber Bookmark 1" bookmark first and "Cucumber Bookmark 2" bookmark second
+        Then I click on the "Filter By Creator" label
+        And I should see "cucumber1@hootenanny.digitalglobe.com"
+        And I should see "cucumber2@hootenanny.digitalglobe.com"
+        And I uncheck the "cucumber1@hootenanny.digitalglobe.com" checkbox
+        And I should not see "Cucumber Bookmark 1"
+        And I should see "Cucumber Bookmark 2"
+        And I check the "cucumber1@hootenanny.digitalglobe.com" checkbox
+        And I uncheck the "cucumber2@hootenanny.digitalglobe.com" checkbox
+        And I should see "Cucumber Bookmark 1"
+        And I should not see "Cucumber Bookmark 2"
+        And I check the "cucumber2@hootenanny.digitalglobe.com" checkbox
+        And I should see "Cucumber Bookmark 2"
+        Then I click on the "Filter By Layers" label
+        And I should see "mergedBookmarkTest"
+        Then I uncheck the "mergedBookmarkTest" checkbox
+        And I should not see "Cucumber Bookmark 1"
+        And I should not see "Cucumber Bookmark 2"
+        And I check the "mergedBookmarkTest" checkbox
+        And I should see "Cucumber Bookmark 1"
+        And I should see "Cucumber Bookmark 2"   
+        Then I uncheck the "mergedBookmarkTest" checkbox
+        And I press "big.loud" span with text "Reset"
+        And I should see "Cucumber Bookmark 1"
+        And I should see "Cucumber Bookmark 2"   
+        And I should see checkbox "mergedBookmarkTest" checked
 
     Scenario: Delete Bookmark
         Then I click on the "trash" button in the "reviewBookmarksContent"
