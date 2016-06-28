@@ -226,5 +226,6 @@ SOURCES += \
     src/test/cpp/hoot/core/conflate/extractors/HistogramTest.cpp \
     src/test/cpp/hoot/core/algorithms/WayMatchStringMergerTest.cpp \
     src/test/cpp/hoot/core/algorithms/linearreference/WayMatchStringMappingConverterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmJsonReaderTest.cpp
+    src/test/cpp/hoot/core/io/OsmJsonReaderTest.cpp \
+    src/test/cpp/hoot/core/algorithms/KspikBigramDistanceTest.cpp
 
