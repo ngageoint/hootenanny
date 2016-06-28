@@ -86,7 +86,7 @@ public class ReportsResource {
         }
         catch (Exception ex) {
             String message = "Error exporting report file: " + ex.getMessage();
-            logger.error(message);
+            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
@@ -114,7 +114,7 @@ public class ReportsResource {
         }
         catch (Exception ex) {
             String message = "Error getting reports list: " + ex.getMessage();
-            logger.error(message);
+            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
@@ -142,7 +142,7 @@ public class ReportsResource {
         }
         catch (Exception ex) {
             String message = "Error exporting report file: " + ex.getMessage();
-            logger.error(message);
+            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 

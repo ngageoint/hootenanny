@@ -80,7 +80,7 @@ public class TunningService implements Executable {
     }
 
     @Override
-    public void exec(JSONObject command) throws Exception {
+    public void exec(JSONObject command) {
         JSONObject res = new JSONObject();
         String input = command.get("input").toString();
         String inputtype = command.get("inputtype").toString();
@@ -144,7 +144,7 @@ public class TunningService implements Executable {
         finalStatusDetail = res.toString();
     }
 
-    private JobSink parseOsm(File inputOsmFile) throws Exception {
+    private JobSink parseOsm(File inputOsmFile) {
         CompressionMethod compression = CompressionMethod.None;
 
         RunnableSource reader = new XmlReader(inputOsmFile, false, compression);

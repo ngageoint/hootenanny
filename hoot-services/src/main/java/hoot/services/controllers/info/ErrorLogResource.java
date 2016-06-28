@@ -48,7 +48,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.info.ErrorLog;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/logging")
@@ -85,7 +84,7 @@ public class ErrorLogResource {
         }
         catch (Exception ex) {
             String message = "Error getting error logger: " + ex;
-            logger.error(message);
+            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
@@ -115,7 +114,7 @@ public class ErrorLogResource {
         }
         catch (Exception ex) {
             String message = "Error exporting logger file: " + ex;
-            logger.error(message);
+            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 

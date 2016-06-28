@@ -52,6 +52,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Function;
@@ -567,7 +568,7 @@ public class CustomScriptResource {
         return response;
     }
 
-    private JSONObject getScriptObject(String content) throws Exception {
+    private JSONObject getScriptObject(String content) throws ParseException {
         JSONObject script = new JSONObject();
         if (content.startsWith(HEADER_START)) {
             int iHeader = content.indexOf(HEADER_END);

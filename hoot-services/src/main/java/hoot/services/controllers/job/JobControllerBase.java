@@ -73,7 +73,7 @@ public class JobControllerBase {
      * @param jobId
      * @param requestParams
      */
-    public void postJobRquest(String jobId, String requestParams) throws Exception {
+    public void postJobRquest(String jobId, String requestParams) {
         logger.debug(jobId);
         logger.debug(requestParams);
 
@@ -103,7 +103,7 @@ public class JobControllerBase {
         }
     }
 
-    public void postChainJobRquest(String jobId, String requestParams) throws Exception {
+    public void postChainJobRquest(String jobId, String requestParams) {
         // Request should come back immediately but if something is wrong then
         // timeout and clean up.to make UI responsive
         RequestConfig requestConfig =

@@ -71,14 +71,12 @@ public class HGISReviewResource extends HGISResource {
      *
      * @param request
      * @return Job ID
-     * @throws Exception
      */
     @POST
     @Path("/preparevalidation")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public PrepareForValidationResponse prepareItemsForValidationReview(PrepareForValidationRequest request)
-            throws Exception {
+    public PrepareForValidationResponse prepareItemsForValidationReview(PrepareForValidationRequest request) {
         PrepareForValidationResponse res = new PrepareForValidationResponse();
         try {
             String src = request.getSourceMap();
@@ -120,7 +118,7 @@ public class HGISReviewResource extends HGISResource {
         return res;
     }
 
-    private JSONObject createUpdateMapTagCommand(String mapName) throws Exception {
+    private JSONObject createUpdateMapTagCommand(String mapName) {
         JSONArray reviewArgs = new JSONArray();
         JSONObject param = new JSONObject();
 
@@ -134,7 +132,7 @@ public class HGISReviewResource extends HGISResource {
     }
 
     // Warning: do not remove this method even though it will appear as unused in your IDE of choice.
-    // The method is invoked relectively
+    // The method is invoked reflectively
     public String updateMapsTag(String mapName) throws Exception {
         String jobId = UUID.randomUUID().toString();
         JobStatusManager jobStatusManager = null;
@@ -147,7 +145,6 @@ public class HGISReviewResource extends HGISResource {
             jobStatusManager.setComplete(jobId);
         }
         catch (Exception e) {
-            assert (jobStatusManager != null);
             jobStatusManager.setFailed(jobId);
             logger.error(e.getMessage());
             throw e;

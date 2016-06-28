@@ -450,7 +450,7 @@ public class FileUploadResource extends JobControllerBase {
     // returns the type of file in zip
     // throws error if there are mix of osm and ogr
     // zip does not allow fgdb so it needs to be expanded out
-    private JSONObject getZipContentType(String zipFilePath, JSONArray contentTypes, String fName) throws Exception {
+    private JSONObject getZipContentType(String zipFilePath, JSONArray contentTypes, String fName) throws Exception{
         JSONObject resultStat = new JSONObject();
         String[] extList = { "gdb", "osm", "shp", "geonames" };
 

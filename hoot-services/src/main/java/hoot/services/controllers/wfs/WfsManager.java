@@ -179,6 +179,7 @@ public class WfsManager {
         if (fstore == null) {
             throw new Exception("fstore argument can not be null");
         }
+
         DeegreeWorkspace workspace = OGCFrontController.getServiceWorkspace();
         WebServicesConfiguration wsConfig = workspace.getSubsystemManager(WebServicesConfiguration.class);
 
@@ -196,7 +197,7 @@ public class WfsManager {
         }
     }
 
-    private static void removeService(String wfsResourceName) throws Exception {
+    private static void removeService(String wfsResourceName) {
         DeegreeWorkspace workspace = OGCFrontController.getServiceWorkspace();
         WebServicesConfiguration webServicesConfiguration = workspace.getSubsystemManager(WebServicesConfiguration.class);
         webServicesConfiguration.deactivate(wfsResourceName);
@@ -234,7 +235,7 @@ public class WfsManager {
         }
     }
 
-    public static List<String> getAllWfsServices() throws Exception {
+    public static List<String> getAllWfsServices() {
         List<String> services = new ArrayList<>();
 
         try {

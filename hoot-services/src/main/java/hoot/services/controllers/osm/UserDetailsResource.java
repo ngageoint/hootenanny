@@ -67,14 +67,13 @@ public class UserDetailsResource {
      * GET hoot-services/osm/user/test
      *
      * @return XML response with user detail information
-     * @throws Exception
-     *             //TODO: update to get actual logged in user once security is
-     *             implemented
+     *
+     * //TODO: update to get actual logged in user once security is implemented
      */
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
-    public Response getDetails() throws Exception {
+    public Response getDetails() {
         logger.debug("Retrieving logged in user details...");
 
         // For now, we're just grabbing the first user in the db, since we don't
@@ -83,6 +82,7 @@ public class UserDetailsResource {
         // anyway. When hoot gets user authentication, then this obviously has to be updated.
         Connection conn = DbUtils.createConnection();
         long userId = -1;
+
         try {
             logger.debug("Initializing database connection...");
             userId = DbUtils.getTestUserId(conn);
@@ -91,7 +91,6 @@ public class UserDetailsResource {
             DbUtils.closeConnection(conn);
         }
 
-        assert (userId != -1);
         return (new UserResource()).get(String.valueOf(userId));
     }
 }

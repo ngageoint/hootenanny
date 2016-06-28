@@ -281,7 +281,7 @@ public class ConflationResource extends JobControllerBase {
     }
 
     // adding this to satisfy the mock
-    BoundingBox getMapBounds(Map map) throws Exception {
+    BoundingBox getMapBounds(Map map) throws Exception{
         return map.getBounds();
     }
 

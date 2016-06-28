@@ -26,10 +26,13 @@
  */
 package hoot.services.controllers.osm;
 
+import java.io.IOException;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -64,20 +67,26 @@ public class CapabilitiesResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response get() {
+        Document responseDoc = null;
+
         try {
             logger.info("Retrieving capabilities...");
 
-            Document responseDoc = (new CapabilitiesResponseWriter()).writeResponse();
+            responseDoc = (new CapabilitiesResponseWriter()).writeResponse();
 
-            logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100));
-
-            return Response.ok(new DOMSource(responseDoc), MediaType.TEXT_XML)
-                           .header("Content-type", MediaType.TEXT_XML).build();
+            try {
+                logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100));
+            }
+            catch (IOException ignored) {
+            }
         }
         catch (Exception e) {
             String message = "Error retrieving capabilities: " + e.getMessage();
-            logger.error(message);
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build();
+            logger.error(message, e);
+            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
+
+        return Response.ok(new DOMSource(responseDoc), MediaType.TEXT_XML)
+                .header("Content-type", MediaType.TEXT_XML).build();
     }
 }

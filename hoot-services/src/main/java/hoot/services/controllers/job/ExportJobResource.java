@@ -106,13 +106,12 @@ public class ExportJobResource extends JobControllerBase {
      *
      * @param params
      * @return Job ID
-     * @throws Exception
      */
     @POST
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response process(String params) throws Exception {
+    public Response process(String params) {
         Connection conn = DbUtils.createConnection();
         String jobId = UUID.randomUUID().toString();
         jobId = "ex_" + jobId.replace("-", "");

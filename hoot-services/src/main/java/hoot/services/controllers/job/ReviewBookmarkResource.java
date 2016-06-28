@@ -45,6 +45,7 @@ import javax.ws.rs.core.Response.Status;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,13 +84,12 @@ public class ReviewBookmarkResource {
      * @param request
      *            ReviewBookmarkSaveRequest class
      * @return json containing created/updated bookmark id
-     * @throws Exception
      */
     @POST
     @Path("/save")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ReviewBookmarksSaveResponse createReviewBookmark(ReviewBookmarkSaveRequest request) throws Exception {
+    public ReviewBookmarksSaveResponse createReviewBookmark(ReviewBookmarkSaveRequest request) {
         ReviewBookmarksSaveResponse response = new ReviewBookmarksSaveResponse();
 
         try (Connection conn = DbUtils.createConnection()) {
@@ -145,14 +145,13 @@ public class ReviewBookmarkResource {
      * @param relid
      *            relation id
      * @return json containing list of review bookmarks
-     * @throws Exception
      */
     @GET
     @Path("/get")
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewBookmarksGetResponse getReviewBookmark(@QueryParam("bookmarkId") String bookmarkid,
                                                         @QueryParam("mapId") String mapid,
-                                                        @QueryParam("relationId") String relid) throws Exception {
+                                                        @QueryParam("relationId") String relid) {
         ReviewBookmarksGetResponse response = new ReviewBookmarksGetResponse();
 
         try (Connection conn = DbUtils.createConnection()) {
@@ -201,9 +200,10 @@ public class ReviewBookmarkResource {
      * Helper function to handle JSON string conversion to Hstore friendly
      * format
      * 
-     * @throws Exception
+     * @throws ParseException
      */
-    private static void appendHstoreElement(String rawElem, JSONObject oBmkDetail, String elemName) throws Exception {
+    private static void appendHstoreElement(String rawElem, JSONObject oBmkDetail, String elemName)
+            throws ParseException {
         String bmkElem = rawElem;
         if ((bmkElem != null) && (!bmkElem.isEmpty())) {
             bmkElem = bmkElem.replace("\\\"", "\"");
@@ -239,7 +239,6 @@ public class ReviewBookmarkResource {
      * @param filterByVal
      *            ?
      * @return json containing list of review bookmarks
-     * @throws Exception
      */
     @GET
     @Path("/getall")
@@ -249,8 +248,7 @@ public class ReviewBookmarkResource {
                                                            @QueryParam("limit") String limitSize,
                                                            @QueryParam("offset") String offset,
                                                            @QueryParam("filterby") String filterBy,
-                                                           @QueryParam("filterbyval") String filterByVal)
-            throws Exception {
+                                                           @QueryParam("filterbyval") String filterByVal) {
         ReviewBookmarksGetResponse response = new ReviewBookmarksGetResponse();
 
         try (Connection conn = DbUtils.createConnection()) {
@@ -319,12 +317,11 @@ public class ReviewBookmarkResource {
      * GET hoot-services/job/review/bookmarks/stat
      * 
      * @return json stat info
-     * @throws Exception
      */
     @GET
     @Path("/stat")
     @Produces(MediaType.APPLICATION_JSON)
-    public ReviewBookmarksStatResponse getAllReviewBookmarkStat() throws Exception {
+    public ReviewBookmarksStatResponse getAllReviewBookmarkStat() {
         ReviewBookmarksStatResponse response = new ReviewBookmarksStatResponse();
         try (Connection conn = DbUtils.createConnection()) {
             ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
@@ -348,12 +345,11 @@ public class ReviewBookmarkResource {
      * @param bmkId
      *            id of the bookmark to delete
      * @return json containing total numbers of deleted
-     * @throws Exception
      */
     @DELETE
     @Path("/delete")
     @Produces(MediaType.APPLICATION_JSON)
-    public ReviewBookmarkDelResponse delReviewBookmark(@QueryParam("bookmarkId") String bmkId) throws Exception {
+    public ReviewBookmarkDelResponse delReviewBookmark(@QueryParam("bookmarkId") String bmkId) {
         ReviewBookmarkDelRequest request = new ReviewBookmarkDelRequest(Long.parseLong(bmkId));
         ReviewBookmarkDelResponse response = new ReviewBookmarkDelResponse();
 

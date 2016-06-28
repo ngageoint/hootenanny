@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.osm;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
 
@@ -36,6 +37,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -56,7 +58,6 @@ import hoot.services.models.osm.User;
 import hoot.services.models.user.UserSaveResponse;
 import hoot.services.models.user.UsersGetResponse;
 import hoot.services.readers.users.UsersRetriever;
-import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.writers.osm.UserResponseWriter;
 import hoot.services.writers.user.UserSaver;
@@ -86,12 +87,11 @@ public class UserResource {
      * @param userId
      *            ID of the user to retrieve information for
      * @return Response with the requested user's information
-     * @throws Exception
      */
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
-    public Response get(@PathParam("userId") String userId) throws Exception {
+    public Response get(@PathParam("userId") String userId) {
         logger.debug("Retrieving user with ID: {} ...", userId.trim());
 
         Connection conn = DbUtils.createConnection();
@@ -108,17 +108,17 @@ public class UserResource {
             catch (Exception e) {
                 if (e.getMessage().startsWith("Multiple records exist") ||
                         e.getMessage().startsWith("No record exists")) {
-                    ResourceErrorHandler.handleError(
-                            e.getMessage().replaceAll("records", "users").replaceAll("record", "user"),
-                            Status.NOT_FOUND, logger);
+                    String message = e.getMessage().replaceAll("records", "users").replaceAll("record", "user");
+                    logger.error(message, e);
+                    throw new WebApplicationException(e, Response.status(Status.NOT_FOUND).entity(message).build());
                 }
-
-                ResourceErrorHandler.handleError(
-                        "Error requesting user with ID: " + userId + " (" + e.getMessage() + ")", Status.BAD_REQUEST,
-                        logger);
+                else {
+                    String message = "Error requesting user with ID: " + userId + " (" + e.getMessage() + ")";
+                    logger.error(message, e);
+                    throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(message).build());
+                }
             }
 
-            assert (userIdNum != -1);
             QUsers usersTbl = QUsers.users;
 
             SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
@@ -127,8 +127,9 @@ public class UserResource {
             Users user = query.from(usersTbl).where(usersTbl.id.eq(userIdNum)).singleResult(usersTbl);
 
             if (user == null) {
-                ResourceErrorHandler.handleError(
-                        "No user exists with ID: " + userId + ".  Please request a valid user.", Status.NOT_FOUND, logger);
+                String message = "No user exists with ID: " + userId + ".  Please request a valid user.";
+                logger.error(message);
+                throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(message).build());
             }
 
             responseDoc = (new UserResponseWriter()).writeResponse(new User(user, conn), conn);
@@ -137,7 +138,11 @@ public class UserResource {
             DbUtils.closeConnection(conn);
         }
 
-        logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100));
+        try {
+            logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100));
+        }
+        catch (IOException ignored) {
+        }
 
         return Response.ok(new DOMSource(responseDoc), MediaType.APPLICATION_XML)
                 .header("Content-type", MediaType.APPLICATION_XML).build();
@@ -151,17 +156,15 @@ public class UserResource {
      * @param userEmail
      *            User email to save/get
      * @return Response with the requested user's information
-     * @throws Exception
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public UserSaveResponse getSaveUser(@QueryParam("userEmail") String userEmail) throws Exception {
+    public UserSaveResponse getSaveUser(@QueryParam("userEmail") String userEmail) {
         UserSaveResponse response = null;
-
-        try (Connection conn = DbUtils.createConnection()) {
-            UserSaver saver = new UserSaver(conn);
-            try {
+        try {
+            try (Connection conn = DbUtils.createConnection()) {
+                UserSaver saver = new UserSaver(conn);
                 Users user = saver.getOrSaveByEmail(userEmail);
                 if (user == null) {
                     throw new Exception("SQL Insert failed.");
@@ -169,10 +172,11 @@ public class UserResource {
 
                 response = new UserSaveResponse(user);
             }
-            catch (Exception ex) {
-                ResourceErrorHandler.handleError("Error saving user: " + " (" + ex.getMessage() + ")", Status.BAD_REQUEST,
-                        logger);
-            }
+        }
+        catch (Exception ex) {
+            String message = "Error saving user: " + " (" + ex.getMessage() + ")";
+            logger.error(message, ex);
+            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
         }
 
         return response;
@@ -184,25 +188,24 @@ public class UserResource {
      * GET hoot-services/osm/user/1/all
      *
      * @return JSONArray Object containing users detail
-     * @throws Exception
      */
     @GET
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
-    public UsersGetResponse getAllUsers() throws Exception {
-        try (Connection conn = DbUtils.createConnection()) {
-            UsersRetriever retreiver = new UsersRetriever(conn);
-            List<Users> res = null;
-            try {
-                res = retreiver.retrieveAll();
-            }
-            catch (Exception ex) {
-                ResourceErrorHandler.handleError("Error getting all users: " + " (" + ex.getMessage() + ")",
-                        Status.BAD_REQUEST, logger);
-            }
+    public UsersGetResponse getAllUsers() {
+        try {
+            try (Connection conn = DbUtils.createConnection()) {
+                UsersRetriever retriever = new UsersRetriever(conn);
+                List<Users> res = retriever.retrieveAll();
 
-            UsersGetResponse response = new UsersGetResponse(res);
-            return response;
+                UsersGetResponse response = new UsersGetResponse(res);
+                return response;
+            }
+        }
+        catch (Exception ex) {
+            String message = "Error getting all users: " + " (" + ex.getMessage() + ")";
+            logger.error(message, ex);
+            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
         }
     }
 }

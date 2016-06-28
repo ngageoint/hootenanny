@@ -43,6 +43,7 @@ import java.util.Map;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -208,9 +209,8 @@ public final class DbUtils {
      *            JDBC Connection
      * @return true if any OSM element records exist in the services database;
      *         false otherwise
-     * @throws Exception
      */
-    public static boolean elementDataExistsInServicesDb(Connection conn) throws Exception {
+    public static boolean elementDataExistsInServicesDb(Connection conn) {
         long recordCount = 0;
 
         QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
@@ -236,9 +236,8 @@ public final class DbUtils {
      * @param conn
      * @param mapName
      * @return List of map ids
-     * @throws Exception
      */
-    public static List<Long> getMapIdsByName(Connection conn, String mapName) throws Exception {
+    public static List<Long> getMapIdsByName(Connection conn, String mapName) {
         QMaps maps = QMaps.maps;
         SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
 
@@ -246,7 +245,7 @@ public final class DbUtils {
         return mapIds;
     }
 
-    public static String getDisplayNameById(Connection conn, long mapId) throws Exception {
+    public static String getDisplayNameById(Connection conn, long mapId) {
         QMaps maps = QMaps.maps;
         SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
 
@@ -491,9 +490,8 @@ public final class DbUtils {
      *            JDBC Connection
      * 
      * @return true if changeset data exists; false otherwise
-     * @throws Exception
      */
-    public static boolean changesetDataExistsInServicesDb(Connection conn) throws Exception {
+    public static boolean changesetDataExistsInServicesDb(Connection conn) {
         int recordCtr = 0;
         QChangesets changesets = QChangesets.changesets;
         SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
@@ -511,7 +509,7 @@ public final class DbUtils {
         return query.from(users).singleResult(users.id);
     }
 
-    public static long insertUser(Connection conn) throws Exception {
+    public static long insertUser(Connection conn) {
         Long newId = -1L;
         NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('users_id_seq')");
         Configuration configuration = getConfiguration();
@@ -531,7 +529,7 @@ public final class DbUtils {
         return newId;
     }
 
-    public static void deleteUser(Connection conn, long userId) throws Exception {
+    public static void deleteUser(Connection conn, long userId) {
         Configuration configuration = getConfiguration();
         QUsers users = QUsers.users;
         new SQLDeleteClause(conn, configuration, users).where(users.id.eq(userId)).execute();
@@ -657,9 +655,8 @@ public final class DbUtils {
      * @param jobId
      * @param status
      * @param conn
-     * @throws Exception
      */
-    public static void insertJobStatus(String jobId, int status, Connection conn) throws Exception {
+    public static void insertJobStatus(String jobId, int status, Connection conn) {
         Configuration configuration = getConfiguration();
         QJobStatus jobStatus = QJobStatus.jobStatus;
 
@@ -678,8 +675,7 @@ public final class DbUtils {
      * @param conn
      * @throws Exception
      */
-    public static void updateJobStatus(String jobId, int jobStatus, boolean isComplete, String statusDetail, Connection conn)
-            throws Exception {
+    public static void updateJobStatus(String jobId, int jobStatus, boolean isComplete, String statusDetail, Connection conn) {
         Configuration configuration = DbUtils.getConfiguration();
 
         QJobStatus jobStatusTbl = QJobStatus.jobStatus;
@@ -721,9 +717,8 @@ public final class DbUtils {
      * @param conn
      *            JDBC Connection
      * @return a numeric job status
-     * @throws Exception
      */
-    public static int getJobStatus(String jobId, Connection conn) throws Exception {
+    public static int getJobStatus(String jobId, Connection conn) {
         QJobStatus jobStatusTbl = QJobStatus.jobStatus;
         SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
         JobStatus stat = query.from(jobStatusTbl).where(jobStatusTbl.jobId.eq(jobId)).singleResult(jobStatusTbl);
@@ -842,9 +837,9 @@ public final class DbUtils {
      *
      * @param input
      * @return String
-     * @throws Exception
+     * @throws ParseException
      */
-    public static String escapeJson(String input) throws Exception {
+    public static String escapeJson(String input) throws ParseException {
         JSONParser parser = new JSONParser();
         JSONObject json = (JSONObject) parser.parse(input);
 
@@ -855,12 +850,11 @@ public final class DbUtils {
             String cleanup = advopts.replaceAll("-D \"", "'").replaceAll("=", "': '").replaceAll("\"", "',").replaceAll("'", "\"");
             // wrap with curly braces and remove trailing comma
             cleanup = "{" + cleanup.substring(0, cleanup.length() - 1) + "}";
-            // System.out.println(cleanup);
+
             JSONObject obj = (JSONObject) parser.parse(cleanup);
 
             json.put(key, obj);
         }
-        // System.out.println(JSONObject.escape(json.toString()).toString());
 
         return JSONObject.escape(json.toString());
     }
@@ -888,7 +882,7 @@ public final class DbUtils {
         return execResult;
     }
 
-    public static Map<String, String> getMapsTableTags(long mapId, Connection conn) throws Exception {
+    public static Map<String, String> getMapsTableTags(long mapId, Connection conn) {
         Map<String, String> tags = new HashMap<>();
         QMaps mp = QMaps.maps;
 

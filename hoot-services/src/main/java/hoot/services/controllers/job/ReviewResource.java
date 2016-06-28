@@ -99,7 +99,7 @@ public class ReviewResource {
         }
     }
 
-    public ReviewResource() throws Exception {
+    public ReviewResource() {
         ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext(new String[]{"db/spring-database.xml"});
         transactionManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
     }

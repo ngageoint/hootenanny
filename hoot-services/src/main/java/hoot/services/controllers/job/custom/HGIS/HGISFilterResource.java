@@ -62,13 +62,12 @@ public class HGISFilterResource extends HGISResource {
      *
      * @param request
      * @return Job ID
-     * @throws Exception
      */
     @POST
     @Path("/filternonhgispois")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public FilterNonHgisPoisResponse filterNonHgisPois(FilterNonHgisPoisRequest request) throws Exception {
+    public FilterNonHgisPoisResponse filterNonHgisPois(FilterNonHgisPoisRequest request) {
         FilterNonHgisPoisResponse resp = new FilterNonHgisPoisResponse();
 
         try {

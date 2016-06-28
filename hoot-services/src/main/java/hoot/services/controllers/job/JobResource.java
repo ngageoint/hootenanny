@@ -235,7 +235,7 @@ public class JobResource {
     // this function is currently used by WfsManager only and WfsManager does
     // not perform any job tracking. It is raw class.
     private JSONObject execReflectionSync(String jobId, String childJobId, JSONObject job,
-            JobStatusManager jobStatusManager) throws Exception {
+            JobStatusManager jobStatusManager) throws Exception{
         String className = job.get("class").toString();
         String methodName = job.get("method").toString();
 
@@ -667,7 +667,7 @@ public class JobResource {
     /**
      * Return job status
      */
-    protected JSONObject getJobStatusObj(String jobId) throws Exception {
+    protected JSONObject getJobStatusObj(String jobId) {
         JSONObject status = new JSONObject();
         Connection conn = DbUtils.createConnection();
 
@@ -727,7 +727,7 @@ public class JobResource {
         return DbUtils.createConnection();
     }
 
-    protected void closeDbConnection(Connection conn) throws Exception {
+    protected void closeDbConnection(Connection conn) {
         DbUtils.closeConnection(conn);
     }
 

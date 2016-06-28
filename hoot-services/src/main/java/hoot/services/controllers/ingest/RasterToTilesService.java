@@ -74,7 +74,7 @@ public class RasterToTilesService extends JobControllerBase {
         super(HootProperties.getProperty("RasterToTiles"));
     }
 
-    public String ingestOSMResourceDirect(String name, String userEmail) throws Exception {
+    public String ingestOSMResourceDirect(String name, String userEmail) {
         String jobId = UUID.randomUUID().toString();
         return ingestOSMResourceDirect(name, userEmail, jobId);
     }
@@ -83,7 +83,7 @@ public class RasterToTilesService extends JobControllerBase {
      * This function executes directly. This should be used when called from
      * JobResource it prevents the thread race condition when threadpool maxes out.
      */
-    public String ingestOSMResourceDirect(String name, String userEmail, String jobId) throws Exception {
+    public String ingestOSMResourceDirect(String name, String userEmail, String jobId) {
         // _zoomLevels
         Connection conn = DbUtils.createConnection();
 
@@ -166,7 +166,7 @@ public class RasterToTilesService extends JobControllerBase {
     }
 
     // This method may appear unused in your IDE since it's currently invoked reflectively.
-    public String ingestOSMResource(String name) throws Exception {
+    public String ingestOSMResource(String name) {
         // _zoomLevels
         Connection conn = DbUtils.createConnection();
         String jobId = UUID.randomUUID().toString();
@@ -219,8 +219,7 @@ public class RasterToTilesService extends JobControllerBase {
         return jobId;
     }
 
-    private JSONObject createCommandObj(String name, String zoomList, int rasterSize, String userEmail, long mapId)
-            throws Exception {
+    private JSONObject createCommandObj(String name, String zoomList, int rasterSize, String userEmail, long mapId) {
         JSONArray commandArgs = new JSONArray();
         JSONObject arg = new JSONObject();
         arg.put("RASTER_OUTPUT_DIR", TILE_SERVER_PATH);
@@ -254,11 +253,11 @@ public class RasterToTilesService extends JobControllerBase {
         return jsonArgs;
     }
 
-    private String createCommand(String name, String zoomList, int rasterSize, long mapId) throws Exception {
+    private String createCommand(String name, String zoomList, int rasterSize, long mapId) {
         return createCommandObj(name, zoomList, rasterSize, null, mapId).toJSONString();
     }
 
-    private JSONObject getZoomInfo(double maxDelta) throws Exception {
+    private JSONObject getZoomInfo(double maxDelta) {
         JSONObject zoomInfo = new JSONObject();
         int rasterSize = 500;
 

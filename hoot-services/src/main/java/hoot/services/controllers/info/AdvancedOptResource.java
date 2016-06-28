@@ -140,11 +140,9 @@ public class AdvancedOptResource {
         }
         catch (Exception ex) {
             String message = "Error getting advanced options: " + ex;
-            logger.error(message);
+            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
-
-        assert (template != null);
 
         return Response.ok(template.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
