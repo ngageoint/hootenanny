@@ -87,19 +87,19 @@ Feature: Review Bookmarks
         And I should see "cucumber1@hootenanny.digitalglobe.com"
         And I should see "cucumber2@hootenanny.digitalglobe.com"
         And I uncheck the "cucumber1@hootenanny.digitalglobe.com" checkbox
-        And I should not see "Cucumber Bookmark 1"
+        And I wait 30 "seconds" to not see "Cucumber Bookmark 1"
         And I should see "Cucumber Bookmark 2"
         And I check the "cucumber1@hootenanny.digitalglobe.com" checkbox
         And I uncheck the "cucumber2@hootenanny.digitalglobe.com" checkbox
         And I should see "Cucumber Bookmark 1"
-        And I should not see "Cucumber Bookmark 2"
+        And I wait 30 "seconds" to not see "Cucumber Bookmark 2"
         And I check the "cucumber2@hootenanny.digitalglobe.com" checkbox
         And I should see "Cucumber Bookmark 2"
         Then I click on the "Filter By Layers" label
         And I should see "mergedBookmarkTest"
         Then I uncheck the "mergedBookmarkTest" checkbox
-        And I should not see "Cucumber Bookmark 1"
-        And I should not see "Cucumber Bookmark 2"
+        And I wait 30 "seconds" to not see "Cucumber Bookmark 1"
+        And I wait 30 "seconds" to not see "Cucumber Bookmark 2"
         And I check the "mergedBookmarkTest" checkbox
         And I should see "Cucumber Bookmark 1"
         And I should see "Cucumber Bookmark 2"   
