@@ -135,7 +135,7 @@ public class ChangesetDbWriter {
      * @param conn
      *            JDBC Connection
      */
-    public ChangesetDbWriter(Connection conn) throws Exception {
+    public ChangesetDbWriter(Connection conn) {
         this.conn = conn;
         maxRecordBatchSize = Integer.parseInt(HootProperties.getPropertyOrDefault("maxRecordBatchSize"));
     }

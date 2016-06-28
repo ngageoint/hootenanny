@@ -65,9 +65,8 @@ public class ReviewBookmarksSaver {
      * @param request
      *            - request object containing inserted/updated fields
      * @return - numbers of saved tags
-     * @throws Exception
      */
-    public long save(ReviewBookmarkSaveRequest request) throws Exception {
+    public long save(ReviewBookmarkSaveRequest request) {
         long nSaved = 0;
         ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
 
