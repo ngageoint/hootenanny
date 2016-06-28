@@ -379,60 +379,6 @@ std::vector<long> OsmMap::filterWays(const WayFilter& filter) const
   return result;
 }
 
-/*
-std::vector<long> OsmMap::findWayByNode(long nodeId) const
-{
-  std::vector<long> result;
-
-  for (WayMap::const_iterator it = _ways.begin();
-    it != _ways.end(); ++it)
-  {
-    Way* w = it->second.get();
-    if (w->hasNode(nodeId))
-    {
-      result.push_back(w->getId());
-    }
-  }
-
-  return result;
-}
-*/
-
-/*
-std::vector<long> OsmMap::findWays(QString key, QString value) const
-{
-  std::vector<long> result;
-
-  for (WayMap::const_iterator it = _ways.begin();
-    it != _ways.end(); ++it)
-  {
-    Way* w = it->second.get();
-    if (w->getTags().contains(key) && w->getTags()[key] == value)
-    {
-      result.push_back(w->getId());
-    }
-  }
-
-  return result;
-}
-*/
-
-/*
-std::vector<long> OsmMap::findNodes(QString key, QString value) const
-{
-  std::vector<long> result;
-  for (NodeMap::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
-  {
-    NodePtr node = it->second;
-    if (node->getTags().contains(key) && node->getTags()[key] == value)
-    {
-      result.push_back(node->getId());
-    }
-  }
-  return result;
-}
-*/
-
 ConstElementPtr OsmMap::getElement(const ElementId& eid) const
 {
   return getElement(eid.getType(), eid.getId());
