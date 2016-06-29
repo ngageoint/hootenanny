@@ -42,6 +42,7 @@
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/RemoveDuplicateAreaVisitor.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 
 // Qt
 #include <QDebug>
@@ -84,13 +85,13 @@ public:
 //    writer.write(map, "test-output/visitors/RemoveDuplicateAreaVisitorTest.osm");
 
     // these "duplicates" should not be removed.
-    CPPUNIT_ASSERT_EQUAL(2ul, map->findWays("note", "tag difference").size());
-    CPPUNIT_ASSERT_EQUAL(2ul, map->findWays("note", "small difference").size());
-    CPPUNIT_ASSERT_EQUAL(2ul, map->findWays("note", "different name").size());
+    CPPUNIT_ASSERT_EQUAL(2ul, FindWaysVisitor::findWaysByTag(map, "note", "tag difference").size());
+    CPPUNIT_ASSERT_EQUAL(2ul, FindWaysVisitor::findWaysByTag(map, "note", "small difference").size());
+    CPPUNIT_ASSERT_EQUAL(2ul, FindWaysVisitor::findWaysByTag(map, "note", "different name").size());
 
     // these duplicates should be removed.
-    CPPUNIT_ASSERT_EQUAL(1ul, map->findWays("note", "double").size());
-    CPPUNIT_ASSERT_EQUAL(1ul, map->findWays("note", "triple").size());
+    CPPUNIT_ASSERT_EQUAL(1ul, FindWaysVisitor::findWaysByTag(map, "note", "double").size());
+    CPPUNIT_ASSERT_EQUAL(1ul, FindWaysVisitor::findWaysByTag(map, "note", "triple").size());
   }
 
 };

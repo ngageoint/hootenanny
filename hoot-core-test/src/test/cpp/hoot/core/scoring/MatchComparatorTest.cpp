@@ -34,6 +34,7 @@
 #include <hoot/core/scoring/MatchComparator.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/AddUuidVisitor.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
 
@@ -75,11 +76,11 @@ public:
     reader.read("test-files/ToyBuildingsTestB.osm", map);
 
     // introduce a false positive in the test data.
-    vector<long> wids = map->findWays("name", "Cheddar's Casual Cafe");
+    vector<long> wids = FindWaysVisitor::findWaysByTag(map, "name", "Cheddar's Casual Cafe");
     map->getWay(wids[0])->getTags()["REF1"] = "Bad REF1";
 
     // introduce a false negative in the test data.
-    wids = map->findWays("name", "Freddy's");
+    wids = FindWaysVisitor::findWaysByTag(map, "name", "Freddy's");
     map->getWay(wids[0])->getTags()["REF1"] = "Biondi";
 
     // add a uuid to all buildings.

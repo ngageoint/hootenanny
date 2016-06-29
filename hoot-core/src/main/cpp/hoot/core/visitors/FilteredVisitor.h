@@ -51,7 +51,7 @@ public:
   FilteredVisitor() : _criterion(0), _visitor(0) {}
 
   /**
-   * Calls the visit method on visitor whenever ElementFilter::isFiltered == false.
+   * Calls the visit method on visitor whenever ElementCriterion::isSatisfied == true.
    */
   FilteredVisitor(const ElementCriterion& criterion, ElementVisitor& visitor);
 
