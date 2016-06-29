@@ -1020,5 +1020,6 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/IndexElementsVisitor.h \
     src/main/cpp/hoot/core/visitors/FindWaysVisitor.h \
     src/main/cpp/hoot/core/filters/ContainsNodeCriterion.h \
-    src/main/cpp/hoot/core/visitors/FindNodesVisitor.h
+    src/main/cpp/hoot/core/visitors/FindNodesVisitor.h \
+    src/main/cpp/hoot/core/filters/UnknownCriterion.h
 
