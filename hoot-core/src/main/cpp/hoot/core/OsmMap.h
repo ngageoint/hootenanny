@@ -160,7 +160,7 @@ public:
 
   long createNextWayId() const { return _idGen->createWayId(); }
 
-  std::vector<long> filterNodes(const NodeFilter& filter) const;
+  //std::vector<long> filterNodes(const NodeFilter& filter) const;
 
   std::vector<long> filterNodes(const NodeFilter& filter, const Coordinate& c,
                                 Meters maxDistance) const;

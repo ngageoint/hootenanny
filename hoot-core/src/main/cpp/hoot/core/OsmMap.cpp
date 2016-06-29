@@ -310,6 +310,7 @@ shared_ptr<OsmMap> OsmMap::copyWays(const vector<long>& wIds) const
   return result;
 }
 
+/*
 std::vector<long> OsmMap::filterNodes(const NodeFilter& filter) const
 {
   std::vector<long> result;
@@ -325,6 +326,7 @@ std::vector<long> OsmMap::filterNodes(const NodeFilter& filter) const
 
   return result;
 }
+*/
 
 std::vector<long> OsmMap::filterNodes(const NodeFilter& filter, const Coordinate& from,
                                       Meters maxDistance) const
