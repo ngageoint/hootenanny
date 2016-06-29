@@ -66,6 +66,10 @@ Then(/^I should not see "([^"]*)"$/) do |text|
   expect(page).to have_no_content(text)
 end
 
+Then(/^I click on the "([^"]*)" label$/) do |txt|
+  find('label', :text=> txt, :match => :prefer_exact).click
+end
+
 Then(/^I should see (checkbox )?"([^"]*)" (not )?enabled$/) do |cbox, text,state|
   lbl = find('label', :text=> text, :match => :prefer_exact)
   if cbox
@@ -621,4 +625,10 @@ Then(/^I open the wfs export url$/) do
   url = find('input.wfsfileExportOutputName').value
   visit url
   # need a way to check the WFS GetCapabilities response is valid
+end
+
+Then(/^I should see "([^"]*)" bookmark first and "([^"]*)" bookmark second$/) do |rb1, rb2|
+  spans = find('#reviewBookmarksContent').all('span.strong')
+  expect(spans.first).to have_content(rb1)
+  expect(spans.last).to have_content(rb2)
 end

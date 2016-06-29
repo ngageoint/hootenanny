@@ -70,7 +70,7 @@ public class ReviewBookmarkRetriever {
 
     /**
      * Retrieves all review tags
-     * 
+     *
      * @param orderByCol
      *            - order by column to sort
      * @param isAsc
@@ -80,14 +80,22 @@ public class ReviewBookmarkRetriever {
      * @param offset
      *            - offset row for paging
      * @return - list of Review tags
+     * @throws Exception
      */
-    public List<ReviewBookmarks> retrieveAll(String orderByCol, boolean isAsc, long limit,
-            long offset, String filterCol, Object filterVal) {
-        SQLQuery query = getAllQuery(orderByCol, isAsc, limit, offset, filterCol, filterVal);
-        List<ReviewBookmarks> res = query.list(reviewBookmarks);
+    public List<ReviewBookmarks> retrieveAll(final String orderByCol, final boolean isAsc, final long limit,
+            final long offset, final Long[] creatorArray, final Long[] layerArray) throws Exception {
+
+        List<ReviewBookmarks> res = null;
+        try {
+            SQLQuery query = _getAllQuery(orderByCol, isAsc, limit, offset, creatorArray, layerArray);
+            res = query.list(_reviewBookmarks);
+        }
+        catch (Exception ex) {
+            log.error(ex.getMessage());
+            throw ex;
+        }
         return res;
     }
-
     /**
      * Get the total counts of all review tags
      * 
@@ -128,29 +136,41 @@ public class ReviewBookmarkRetriever {
      * @param offset
      * @return - SQLQuery
      */
-    protected SQLQuery getAllQuery(String orderByCol, boolean isAsc, long limit, long offset,
-            String filterCol, Object filterVal) {
-        QReviewBookmarks qReviewBookmarks = QReviewBookmarks.reviewBookmarks;
+    protected SQLQuery _getAllQuery(final String orderByCol, final boolean isAsc, final long limit, final long offset,
+            final Long[] creatorArray, final Long[] layerArray) throws Exception {
+        QReviewBookmarks b = QReviewBookmarks.reviewBookmarks;
 
-        SQLQuery query = new SQLQuery(this.conn, DbUtils.getConfiguration());
-        if ((filterCol != null) && (filterVal != null) && filterCol.equalsIgnoreCase("createdBy")) {
-            query.from(reviewBookmarks).where(qReviewBookmarks.createdBy.eq((Long) filterVal))
-                    .orderBy(getSpecifier(orderByCol, isAsc));
-        }
-        else if ((filterCol != null) && (filterVal != null) && filterCol.equalsIgnoreCase("mapId")) {
-            query.from(reviewBookmarks).where(qReviewBookmarks.mapId.eq((Long) filterVal))
-                    .orderBy(getSpecifier(orderByCol, isAsc));
-        }
-        else {
-            query.from(reviewBookmarks).orderBy(getSpecifier(orderByCol, isAsc));
-        }
+        SQLQuery query = new SQLQuery(this._conn, DbUtils.getConfiguration());
+        try {
+            if (creatorArray != null && layerArray != null) {
+            	query.from(_reviewBookmarks).where(b.createdBy.in(creatorArray))
+            		.where(b.mapId.in(layerArray))
+            		.orderBy(_getSpecifier(orderByCol, isAsc));
+            }
+            else if (creatorArray != null && layerArray == null) {
+            	query.from(_reviewBookmarks).where(b.createdBy.in(creatorArray))
+        			.orderBy(_getSpecifier(orderByCol, isAsc));
+            }
+            else if (creatorArray == null && layerArray != null) {
+            	query.from(_reviewBookmarks).where(b.mapId.in(layerArray))
+        			.orderBy(_getSpecifier(orderByCol, isAsc));
+            }
+            else {
+                query.from(_reviewBookmarks).orderBy(_getSpecifier(orderByCol, isAsc));
+            }
 
-        if (limit > -1) {
-            query.limit(limit);
-        }
+            if (limit > -1) {
+                query.limit(limit);
+            }
 
-        if (offset > -1) {
-            query.offset(offset);
+            if (offset > -1) {
+                query.offset(offset);
+            }
+
+        }
+        catch (Exception ex) {
+            log.error(ex.getMessage());
+            throw ex;
         }
 
         return query;

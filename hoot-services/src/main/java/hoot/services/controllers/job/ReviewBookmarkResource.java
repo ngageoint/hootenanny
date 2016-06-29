@@ -234,10 +234,10 @@ public class ReviewBookmarkResource {
      *            Limit count for paging
      * @param offset
      *            offset index for paging
-     * @param filterBy
+     * @param filterByCreatedVal
      *            ?
-     * @param filterByVal
-     *            ?
+     * @param filterByLayerVal
+     *            ?     *
      * @return json containing list of review bookmarks
      */
     @GET
@@ -249,6 +249,9 @@ public class ReviewBookmarkResource {
                                                            @QueryParam("offset") String offset,
                                                            @QueryParam("filterby") String filterBy,
                                                            @QueryParam("filterbyval") String filterByVal) {
+                                                           @QueryParam("createFilterVal") String filterByCreatedVal,
+                                                           @QueryParam("layerFilterVal") String filterByLayerVal)
+            throws Exception {
         ReviewBookmarksGetResponse response = new ReviewBookmarksGetResponse();
 
         try (Connection conn = DbUtils.createConnection()) {
@@ -268,22 +271,30 @@ public class ReviewBookmarkResource {
                 offsetCnt = Long.parseLong(offset);
             }
 
-            String filterByCol = null;
-            Long filterVal = null;
-
-            if ((filterBy != null) && (!filterBy.isEmpty()) && (filterByVal != null) && (!filterByVal.isEmpty())) {
-                if (filterBy.equalsIgnoreCase("createdBy")) {
-                    filterByCol = "createdBy";
-                    filterVal = Long.parseLong(filterByVal);
-                }
-                else if (filterBy.equalsIgnoreCase("mapId")) {
-                    filterByCol = "mapId";
-                    filterVal = Long.parseLong(filterByVal);
+            Long[] creatorArray = null;
+            if(filterByCreatedVal != null){
+            	String[] cA = filterByCreatedVal.split(",");
+                if(cA.length > 0){
+                	creatorArray = new Long[cA.length];
+                    for(int i = 0; i < creatorArray.length; i++){
+                    	creatorArray[i] = Long.valueOf(cA[i]);
+                    }
                 }
             }
 
+            Long[] layerArray = null;
+            if(filterByLayerVal != null){
+	            String[] lA = filterByLayerVal.split(",");
+	            if(lA.length > 0){
+	            	layerArray = new Long[lA.length];
+	                for(int i = 0; i < layerArray.length; i++){
+	                	layerArray[i] = Long.valueOf(lA[i]);
+	                }
+	            }
+            }
+
             ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
-            List<ReviewBookmarks> res = retriever.retrieveAll(orderByCol, isAsc, limit, offsetCnt, filterByCol, filterVal);
+            List<ReviewBookmarks> res = retriever.retrieveAll(orderByCol, isAsc, limit, offsetCnt, creatorArray, layerArray);
 
             for (ReviewBookmarks mk : res) {
                 Object oDetail = mk.getDetail();

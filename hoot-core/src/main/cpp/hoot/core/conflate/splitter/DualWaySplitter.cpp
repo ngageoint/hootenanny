@@ -53,6 +53,7 @@ using namespace geos::operation::buffer;
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 
 // Qt
 #include <QDebug>
@@ -451,7 +452,7 @@ void DualWaySplitter::_reconnectEnd(long centerNodeId, shared_ptr<Way> edge)
 
 void DualWaySplitter::_splitIntersectingWays(long nid)
 {
-  std::vector<long> wids = _result->findWayByNode(nid);
+  std::vector<long> wids = FindWaysVisitor::findWaysByNode(_result, nid);
 
   if (wids.size() == 1)
   {

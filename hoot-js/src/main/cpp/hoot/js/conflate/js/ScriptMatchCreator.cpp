@@ -30,17 +30,26 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/MatchType.h>
+#include <hoot/core/filters/ArbitraryCriterion.h>
+#include <hoot/core/filters/ChainCriterion.h>
+#include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
+#include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/SettingsJs.h>
 
 // Qt
 #include <QFileInfo>
+
+// Boost
+#include <boost/bind.hpp>
 
 // Standard
 #include <deque>
@@ -57,52 +66,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(MatchCreator, ScriptMatchCreator)
 
-/**
- * This visitor creates an index of only the Unknown2 input elements. The evelope plus the search
- * radius is created as the index box for each element. This is more efficient than using the
- * OsmMapIndex index. Also, only elements that are match candidates are indexed.
- */
-class IndexElementsVisitor : public ElementVisitor
-{
-public:
-  shared_ptr<HilbertRTree>& _index;
-  deque<ElementId>& _indexToEid;
-  ScriptMatchVisitor& _smv;
-  std::vector<Box> _boxes;
-  std::vector<int> _fids;
-
-  IndexElementsVisitor(shared_ptr<HilbertRTree>& index, deque<ElementId>& indexToEid,
-    ScriptMatchVisitor& smv) :
-    _index(index),
-    _indexToEid(indexToEid),
-    _smv(smv)
-  {
-  }
-
-  void finalizeIndex()
-  {
-    _index->bulkInsert(_boxes, _fids);
-  }
-
-  virtual void visit(const ConstElementPtr& e);
-};
-
 class ScriptMatchVisitor;
-class SmWorstCircularErrorVisitor : public ElementVisitor
-{
-public:
-  Meters _worst;
-  ScriptMatchVisitor& _smv;
-
-  SmWorstCircularErrorVisitor(ScriptMatchVisitor& smv) : _smv(smv)
-  {
-    _worst = -1;
-  }
-
-  Meters getWorstCircularError() { return _worst; }
-
-  virtual void visit(const ConstElementPtr& e);
-};
 
 /**
  * Searches the specified map for any match potentials.
@@ -147,9 +111,12 @@ public:
       _getSearchRadius = Persistent<Function>::New(Handle<Function>::Cast(value));
     }
 
-    SmWorstCircularErrorVisitor v(*this);
-    map->visitRo(v);
-    _worstCircularError = v.getWorstCircularError();
+    boost::function<bool (ConstElementPtr e)> f = boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
+    ArbitraryCriterion crit(f);
+    WorstCircularErrorVisitor worstV;
+    FilteredVisitor filteredV(crit, worstV);
+    map->visitRo(filteredV);
+    _worstCircularError = worstV.getWorstCircularError();
   }
 
   ~ScriptMatchVisitor()
@@ -169,7 +136,10 @@ public:
     env->expandBy(searchRadius);
 
     // find other nearby candidates
-    set<ElementId> neighbors = findNeighbors(*env);
+    set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
+                                                                   getIndex(),
+                                                                   _indexToEid,
+                                                                   getMap());
     ElementId from = e->getElementId();
 
     _elementsEvaluated++;
@@ -197,26 +167,6 @@ public:
 
     _neighborCountSum += neighborCount;
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
-  }
-
-  set<ElementId> findNeighbors(const Envelope& env)
-  {
-    set<ElementId> result;
-
-    vector<double> min(2), max(2);
-    min[0] = env.getMinX();
-    min[1] = env.getMinY();
-    max[0] = env.getMaxX();
-    max[1] = env.getMaxY();
-    IntersectionIterator it(getIndex().get(), min, max);
-
-    while (it.next())
-    {
-      // map the tree id to an element id and push into result.
-      result.insert(_indexToEid[it.getId()]);
-    }
-
-    return result;
   }
 
   ConstOsmMapPtr getMap() const { return _map.lock(); }
@@ -342,14 +292,29 @@ public:
       shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
-      IndexElementsVisitor iev(_index, _indexToEid, *this);
-      getMap()->visitRo(iev);
-      iev.finalizeIndex();
+      // Only index elements that have Status::Unknown2 and
+      // _smv.isMatchCandidate(e)
+      shared_ptr<StatusCriterion> pC1(new StatusCriterion(Status::Unknown2));
+      boost::function<bool (ConstElementPtr e)> f = boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
+      shared_ptr<ArbitraryCriterion> pC2(new ArbitraryCriterion(f));
+      shared_ptr<ChainCriterion> pCC(new ChainCriterion());
+      pCC->addCriterion(pC1);
+      pCC->addCriterion(pC2);
+
+      // Instantiate our visitor
+      IndexElementsVisitor v(_index,
+                             _indexToEid,
+                             pCC,
+                             boost::bind(&ScriptMatchVisitor::getSearchRadius, this, _1),
+                             getMap());
+
+      // Do the visiting
+      getMap()->visitRo(v);
+      v.finalizeIndex();
     }
 
     return _index;
   }
-
 
   bool isMatchCandidate(ConstElementPtr e)
   {
@@ -400,6 +365,8 @@ private:
   Meters _worstCircularError;
   shared_ptr<PluginContext> _script;
   Persistent<v8::Function> _getSearchRadius;
+
+  // Used for finding neighbors
   shared_ptr<HilbertRTree> _index;
   deque<ElementId> _indexToEid;
 
@@ -411,34 +378,6 @@ private:
   double _test;
 
 };
-
-
-void IndexElementsVisitor::visit(const ConstElementPtr& e)
-{
-  if (_smv.isMatchCandidate(e) && e->getStatus() == Status::Unknown2)
-  {
-    _fids.push_back((int)_indexToEid.size());
-    _indexToEid.push_back(e->getElementId());
-
-    Box b(2);
-    Meters searchRadius = _smv.getSearchRadius(e);
-    ConstOsmMapPtr map = _smv.getMap();
-    auto_ptr<Envelope> env(e->getEnvelope(map));
-    env->expandBy(searchRadius);
-    b.setBounds(0, env->getMinX(), env->getMaxX());
-    b.setBounds(1, env->getMinY(), env->getMaxY());
-
-    _boxes.push_back(b);
-  }
-}
-
-void SmWorstCircularErrorVisitor::visit(const ConstElementPtr& e)
-{
-  if (_smv.isMatchCandidate(e))
-  {
-    _worst = max(_worst, _smv.getSearchRadius(e));
-  }
-}
 
 ScriptMatchCreator::ScriptMatchCreator() :
 _worstCircularError(-1.0)

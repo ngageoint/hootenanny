@@ -32,6 +32,8 @@
 #include <hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/io/OsmReader.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/FindNodesVisitor.h>
 
 namespace hoot
 {
@@ -96,8 +98,8 @@ public:
     PoiPolygonMatchCreator uut;
 
     OsmMapPtr map = getTestMap1();
-    CPPUNIT_ASSERT(uut.isMatchCandidate(map->getNode(map->findNodes("name", "foo")[0]), map));
-    CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(map->findWays("name", "foo")[0]), map));
+    CPPUNIT_ASSERT(uut.isMatchCandidate(map->getNode(FindNodesVisitor::findNodesByTag(map, "name", "foo")[0]), map));
+    CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "foo")[0]), map));
 
     OsmReader reader;
     OsmMap::resetCounters();
@@ -105,10 +107,11 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);
-    CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(map->findWays("note", "1")[0]), map));
+    CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]), map));
   }
 };
 
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonMatchCreatorTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonMatchCreatorTest, "quick");
 
 }

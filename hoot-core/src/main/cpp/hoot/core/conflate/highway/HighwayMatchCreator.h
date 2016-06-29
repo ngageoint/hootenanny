@@ -36,6 +36,9 @@
 
 namespace hoot
 {
+
+class HighwayMatchVisitor;
+
 using namespace Tgs;
 
 class HighwayMatchCreator : public MatchCreator
