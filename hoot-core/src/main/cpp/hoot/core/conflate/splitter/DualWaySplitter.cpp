@@ -48,7 +48,7 @@ using namespace geos::operation::buffer;
 #include <hoot/core/filters/DistanceNodeFilter.h>
 #include <hoot/core/filters/InWayNodeFilter.h>
 #include <hoot/core/filters/OneWayFilter.h>
-#include <hoot/core/filters/TagFilter.h>
+#include <hoot/core/filters/TagCriterion.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/Factory.h>
@@ -249,11 +249,10 @@ shared_ptr<OsmMap> DualWaySplitter::splitAll()
   shared_ptr<OsmMap> result(new OsmMap(_map));
   _result = result;
 
-  shared_ptr<TagFilter> tf(new TagFilter(Filter::KeepMatches, "divider", "yes"));
-
+  TagCriterion tagCrit("divider", "yes");
   LOG_DEBUG("  filtering...");
 
-  vector<long> wayIds = _result->filterWays(*tf);
+  vector<long> wayIds = FindWaysVisitor::findWays(_result, &tagCrit);
   LOG_DEBUG("  filtered.");
 
   for (size_t i = 0; i < wayIds.size(); i++)
