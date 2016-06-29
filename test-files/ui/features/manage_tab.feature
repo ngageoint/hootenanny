@@ -40,4 +40,3 @@ Feature: Manage Tab
         And I should see "Hootenanny Core - Version:"
         And I should see "Hootenanny Web Services - Version:"
         And I should see "Hootenanny iD "
-        Then I select the "sprocket" div
