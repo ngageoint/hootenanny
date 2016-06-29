@@ -38,6 +38,7 @@
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/manipulators/WayMergeManipulation.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
 
@@ -72,8 +73,8 @@ public:
 
     MapProjector::projectToOrthographic(map);
 
-    long left = map->findWays("note", "3")[0];
-    long right = map->findWays("note", "4")[0];
+    long left = FindWaysVisitor::findWaysByTag(map, "note", "3")[0];
+    long right = FindWaysVisitor::findWaysByTag(map, "note", "4")[0];
 
     map->getWay(left)->setStatus(Status::Unknown1);
     map->getWay(right)->setStatus(Status::Unknown2);

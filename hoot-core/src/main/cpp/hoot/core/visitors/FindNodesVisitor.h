@@ -22,68 +22,64 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef FINDNODESVISITOR_H
+#define FINDNODESVISITOR_H
 
-#ifndef WORSTCIRCULARERRORVISITOR_H
-#define WORSTCIRCULARERRORVISITOR_H
-
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/filters/ElementCriterionConsumer.h>
-#include <hoot/core/visitors/SingleStatistic.h>
 
-/**
- * A visitor for finding the worst circular error among elements. Worst = greatest.
- */
+// For convenience functions
+#include <hoot/core/filters/TagCriterion.h>
+
 namespace hoot
 {
 
-class WorstCircularErrorVisitor :
-    public ElementConstOsmMapVisitor,
-    public SingleStatistic
+// Used to get a vector of IDs for the nodes that satisfy
+// the specified criterion
+class FindNodesVisitor :  public ElementConstOsmMapVisitor
 {
 public:
-  static string className() { return "hoot::WorstCircularErrorVisitor"; }
 
-  WorstCircularErrorVisitor(): _worst(-1) {}
-
-  Meters getWorstCircularError() { return _worst; }
-
-  virtual double getStat() const { return _worst; }
+  FindNodesVisitor (ElementCriterion* pCrit):
+    _pCrit(pCrit)
+  {
+    // This space intentionally left blank
+  }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual void visit(const shared_ptr<const Element>& e)
   {
-    _worst = max(_worst, e->getCircularError());
+    if (e->getElementType() == ElementType::Node)
+    {
+      ConstNodePtr pNode = dynamic_pointer_cast<const Node>(e);
+      if (_pCrit->isSatisfied(e))
+      {
+        _nodeIds.push_back(e->getId());
+      }
+    }
   }
 
-  // Convenient way to get worst circular error
-  static Meters getWorstCircularError(const OsmMapPtr& map)
-  {
-    WorstCircularErrorVisitor v;
-    map->visitNodesRo(v);
-    map->visitWaysRo(v);
-    return v.getWorstCircularError();
-  }
+  // Get matching IDs
+  vector<long> getIds() { return _nodeIds; }
 
-  // Handle const pointers to const
-  static Meters getWorstCircularError(const ConstOsmMapPtr& map)
+  // Convenience method for finding nodes that contain the given tag
+  static vector<long> findNodesByTag(const ConstOsmMapPtr& map, const QString& key, const QString& value)
   {
-    WorstCircularErrorVisitor v;
+    TagCriterion crit(key, value);
+    FindNodesVisitor v(&crit);
     map->visitNodesRo(v);
-    map->visitWaysRo(v);
-    return v.getWorstCircularError();
+    return v.getIds();
   }
 
 private:
-
   const OsmMap* _map;
-  Meters _worst;
+  vector<long> _nodeIds;
+  ElementCriterion * _pCrit;
 };
 
-} // end namespace hoot
+}
 
-#endif // WORSTCIRCULARERRORVISITOR_H
+#endif // FINDNODESVISITOR_H

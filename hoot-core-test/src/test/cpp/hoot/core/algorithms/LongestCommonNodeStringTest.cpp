@@ -33,6 +33,7 @@
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
 
@@ -69,8 +70,8 @@ public:
     reader.read("test-files/algorithms/LongestCommonNodeStringTest.osm", map);
 
     {
-      shared_ptr<Way> w1 = map->getWay(map->findWays("note", "1")[0]);
-      shared_ptr<Way> w2 = map->getWay(map->findWays("note", "2")[0]);
+      shared_ptr<Way> w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);
+      shared_ptr<Way> w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]);
 
       LongestCommonNodeString uut(w1, w2);
       CPPUNIT_ASSERT_EQUAL(2, uut.apply());
@@ -79,8 +80,8 @@ public:
     }
 
     {
-      shared_ptr<Way> w1 = map->getWay(map->findWays("note", "3")[0]);
-      shared_ptr<Way> w2 = map->getWay(map->findWays("note", "4")[0]);
+      shared_ptr<Way> w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "3")[0]);
+      shared_ptr<Way> w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "4")[0]);
 
       LongestCommonNodeString uut(w1, w2);
       CPPUNIT_ASSERT_EQUAL(4, uut.apply());

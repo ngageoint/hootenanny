@@ -174,28 +174,6 @@ public:
   std::vector<long> filterWays(const WayFilter& filter, shared_ptr<const Way> from,
                                Meters maxDistance, bool addError = false) const;
 
-  /**
-   * Returns a set of all element IDs that intersect with envelope e.
-   */
-  set<ElementId> findElements(const Envelope& e) const;
-
-  /**
-   * Does a very inefficient search for all the ways that contain the given node.
-   */
-  std::vector<long> findWayByNode(long nodeId) const;
-
-  /**
-   * Searches for all ways with a tag that exactly matches the key and value. This is horribly
-   * inefficient and appropriate mainly for testing.
-   */
-  std::vector<long> findWays(QString key, QString value) const;
-
-  /**
-   * Searches for all nodes with a tag that exactly matches the key and value. This is horribly
-   * inefficient and appropriate mainly for testing.
-   */
-  std::vector<long> findNodes(QString key, QString value) const;
-
   virtual ConstElementPtr getElement(const ElementId& id) const;
   ConstElementPtr getElement(ElementType type, long id) const;
   ElementPtr getElement(const ElementId& id);

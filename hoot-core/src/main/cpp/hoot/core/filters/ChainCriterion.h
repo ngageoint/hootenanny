@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CHAINFILTER_H
-#define CHAINFILTER_H
+#ifndef CHAINCRITERION_H
+#define CHAINCRITERION_H
 
 #include "ElementCriterion.h"
 #include "ElementCriterionConsumer.h"
@@ -37,13 +37,14 @@ namespace hoot
 {
 
 /**
- * Filters an element if any of the child filters return true.
+ * isSatisfied returns true if all the children are satisfied
  */
 class ChainCriterion : public ElementCriterion, public ElementCriterionConsumer
 {
 public:
 
   ChainCriterion() {}
+
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2)
   {
     _filters.push_back(shared_ptr<ElementCriterion>(child1));
@@ -92,4 +93,4 @@ protected:
 };
 
 }
-#endif // CHAINFILTER_H
+#endif // CHAINCRITERION_H
