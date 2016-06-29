@@ -65,6 +65,14 @@ public:
 
   vector<long> getIds() { return _wayIds; }
 
+  // Convenience method for finding ways that match the given criterion
+  static vector<long> findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit)
+  {
+    FindWaysVisitor v(pCrit);
+    map->visitWaysRo(v);
+    return v.getIds();
+  }
+
   // Convenience method for finding ways that contain the given node
   static vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId)
   {
