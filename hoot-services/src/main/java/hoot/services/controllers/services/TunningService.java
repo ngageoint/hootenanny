@@ -27,12 +27,10 @@
 package hoot.services.controllers.services;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -42,8 +40,11 @@ import javax.ws.rs.core.Response.Status;
 import org.json.simple.JSONObject;
 import org.openstreetmap.osmosis.core.container.v0_6.EntityContainer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
+import org.openstreetmap.osmosis.core.domain.v0_6.Node;
+import org.openstreetmap.osmosis.core.domain.v0_6.Relation;
 import org.openstreetmap.osmosis.core.domain.v0_6.RelationMember;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
+import org.openstreetmap.osmosis.core.domain.v0_6.Way;
 import org.openstreetmap.osmosis.core.domain.v0_6.WayNode;
 import org.openstreetmap.osmosis.core.task.v0_6.RunnableSource;
 import org.openstreetmap.osmosis.core.task.v0_6.Sink;
@@ -51,7 +52,6 @@ import org.openstreetmap.osmosis.xml.common.CompressionMethod;
 import org.openstreetmap.osmosis.xml.v0_6.XmlReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import hoot.services.HootProperties;
 import hoot.services.command.CommandResult;
@@ -59,40 +59,38 @@ import hoot.services.command.CommandRunner;
 import hoot.services.command.ICommandRunner;
 import hoot.services.db.DbUtils;
 import hoot.services.job.Executable;
+import hoot.services.utils.FileUtils;
 import hoot.services.utils.ResourceErrorHandler;
 
 
 public class TunningService implements Executable {
 
-    private static final Logger log = LoggerFactory.getLogger(TunningService.class);
-    @SuppressWarnings("unused")
-    private ClassPathXmlApplicationContext appContext;
+    private static final Logger logger = LoggerFactory.getLogger(TunningService.class);
+
     private String finalStatusDetail;
-    private Double totalSize = null;
-    private String tempPath = null;
-    private String coreScriptPath = null;
+    private Double totalSize = 0.0;
+    private final String tempPath = HootProperties.getProperty("tempOutputPath");
+    private final String coreScriptPath = HootProperties.getProperty("coreScriptPath");
 
     @Override
     public String getFinalStatusDetail() {
         return finalStatusDetail;
     }
 
-    public TunningService() throws IOException {
-        totalSize = new Double(0);
-        appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
-        tempPath = HootProperties.getProperty("tempOutputPath");
-        coreScriptPath = HootProperties.getProperty("coreScriptPath");
+    public TunningService() {
     }
 
     @Override
     public void exec(JSONObject command) throws Exception {
-
         JSONObject res = new JSONObject();
         String input = command.get("input").toString();
         String inputtype = command.get("inputtype").toString();
         Connection conn = DbUtils.createConnection();
         long starttime = new Date().getTime();
+
+        //?????
         UUID.randomUUID().toString();
+
         try {
             String tempOutputPath = "";
             if (inputtype.equalsIgnoreCase("db")) {
@@ -100,9 +98,7 @@ public class TunningService implements Executable {
                 DbUtils.getWayCountByName(conn, input);
                 DbUtils.getRelationCountByName(conn, input);
 
-                // if the count is greater than threshold then just use it and
-                // tell it too big
-
+                // if the count is greater than threshold then just use it and tell it too big
                 ICommandRunner cmdRunner = new CommandRunner();
 
                 String commandArr = "make -f " + coreScriptPath + "/makeconvert INPUT=" + input + " OUTPUT=" + tempPath
@@ -120,7 +116,7 @@ public class TunningService implements Executable {
                 tempOutputPath = tempPath + "/" + input + ".osm";
 
                 // fortify fix
-                if (!hoot.services.utils.FileUtils.validateFilePath(tempPath, tempOutputPath)) {
+                if (!FileUtils.validateFilePath(tempPath, tempOutputPath)) {
                     throw new Exception("input can not contain path.");
                 }
             }
@@ -133,9 +129,9 @@ public class TunningService implements Executable {
             JobSink sinkImplementation = parseOsm(outputFile);
 
             long endTime = new Date().getTime();
-            log.debug("Start:" + starttime + "  - End: " + endTime + " Diff:" + (endTime - starttime) + " TOTAL:"
-                    + totalSize + " NODES:" + sinkImplementation.getTotalNodes() + " Way:"
-                    + sinkImplementation.getTotalWay() + " Relations:" + sinkImplementation.getTotalRelation());
+            logger.debug("Start:{}  - End: {} Diff:{} TOTAL:{} NODES:{} Way:{} Relations:{}",
+                    starttime, endTime, endTime - starttime, totalSize, sinkImplementation.getTotalNodes(),
+                    sinkImplementation.getTotalWay(), sinkImplementation.getTotalRelation());
 
             res.put("EstimatedSize", totalSize * 15);
             res.put("NodeCount", sinkImplementation.getTotalNodes());
@@ -143,26 +139,23 @@ public class TunningService implements Executable {
             res.put("RelationCount", sinkImplementation.getTotalRelation());
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Tuning Service error: " + ex.toString(), Status.INTERNAL_SERVER_ERROR,
-                    log);
+            ResourceErrorHandler.handleError("Tuning Service error: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
         }
         finally {
             DbUtils.closeConnection(conn);
         }
 
         finalStatusDetail = res.toString();
-
     }
 
     private JobSink parseOsm(File inputOsmFile) throws Exception {
         CompressionMethod compression = CompressionMethod.None;
 
-        RunnableSource reader;
-        reader = new XmlReader(inputOsmFile, false, compression);
+        RunnableSource reader = new XmlReader(inputOsmFile, false, compression);
         Thread readerThread = new Thread(reader);
 
         JobSink sink = new JobSink();
-        Map<String, Object> sinkParam = new HashMap<String, Object>();
+        Map<String, Object> sinkParam = new HashMap<>();
         sink.initialize(sinkParam);
 
         reader.setSink(sink);
@@ -173,15 +166,13 @@ public class TunningService implements Executable {
             try {
                 readerThread.join();
             }
-            catch (InterruptedException e) {
-                //
+            catch (InterruptedException ignored) {
             }
         }
 
         totalSize = sink.getTotalSize();
 
         return sink;
-
     }
 
     /**
@@ -198,15 +189,13 @@ public class TunningService implements Executable {
         //
     }
 
-    public class JobSink implements Sink {
-
+    private static class JobSink implements Sink {
         @Override
         public void release() {
-            /**/ }
+        }
 
         @Override
         public void complete() {
-            //
         }
 
         private Double totalOSMsize = (double) 0;
@@ -215,101 +204,70 @@ public class TunningService implements Executable {
         private Double totalRelationCnt = (double) 0;
 
         @Override
-        public void initialize(Map<String, Object> arg0) {
-            //
+        public void initialize(Map<String, Object> metaData) {
         }
 
-        public double getTotalSize() {
-            return totalOSMsize.doubleValue();
+        double getTotalSize() {
+            return totalOSMsize;
         }
 
-        public double getTotalNodes() {
-            return totalNodeCnt.doubleValue();
+        double getTotalNodes() {
+            return totalNodeCnt;
         }
 
-        public double getTotalWay() {
-            return totalWayCnt.doubleValue();
+        double getTotalWay() {
+            return totalWayCnt;
         }
 
-        public double getTotalRelation() {
-            return totalRelationCnt.doubleValue();
+        double getTotalRelation() {
+            return totalRelationCnt;
+        }
+
+        double calcTagsByteSize(Collection<Tag> tags){
+            double totalBytes = 0;
+            for (Tag curTag : tags) {
+                String tagKey = curTag.getKey();
+                String tagVal = curTag.getValue();
+
+                totalBytes += tagKey.length();
+                totalBytes += tagVal.length();
+            }
+            return totalBytes;
         }
 
         @Override
-        public void process(EntityContainer arg0) {
+        public void process(EntityContainer entityContainer) {
+            Entity entity = entityContainer.getEntity();
 
-            Entity entity = arg0.getEntity();
-
-            if (entity instanceof org.openstreetmap.osmosis.core.domain.v0_6.Node) {
-
-                Double nByteSize = (double) 72;
-                Collection<Tag> t = entity.getTags();
-                for (Iterator iterator = t.iterator(); iterator.hasNext();) {
-                    Tag curTag = (Tag) iterator.next();
-                    String tagKey = curTag.getKey();
-                    String tagVal = curTag.getValue();
-
-                    nByteSize += tagKey.length();
-                    nByteSize += tagVal.length();
-
-                }
-
-                totalOSMsize += nByteSize.doubleValue();
+            if (entity instanceof Node) {
+                totalOSMsize += 72 + calcTagsByteSize(entity.getTags());
                 totalNodeCnt++;
-
             }
-            else if (entity instanceof org.openstreetmap.osmosis.core.domain.v0_6.Way) {
-                Double nByteSize = (double) 96;
-                Collection<Tag> t = entity.getTags();
-                for (Iterator iterator = t.iterator(); iterator.hasNext();) {
-                    Tag curTag = (Tag) iterator.next();
-                    String tagKey = curTag.getKey();
-                    String tagVal = curTag.getValue();
+            else if (entity instanceof Way) {
+                Double nByteSize = 96 + calcTagsByteSize(entity.getTags());
 
-                    nByteSize += tagKey.length();
-                    nByteSize += tagVal.length();
+                List<WayNode> wayNodes = ((Way) entity).getWayNodes();
 
-                }
-
-                List<org.openstreetmap.osmosis.core.domain.v0_6.WayNode> ways = ((org.openstreetmap.osmosis.core.domain.v0_6.Way) entity)
-                        .getWayNodes();
-
-                for (int i = 0; i < ways.size(); i++) {
-                    WayNode wn = ways.get(i);
-                    String wnID = "" + wn.getNodeId();
+                for (WayNode wayNode : wayNodes) {
+                    String wnID = String.valueOf(wayNode.getNodeId());
                     nByteSize += wnID.length();
                 }
 
-                totalOSMsize += nByteSize.doubleValue();
+                totalOSMsize += nByteSize;
                 totalWayCnt++;
-
             }
-            else if (entity instanceof org.openstreetmap.osmosis.core.domain.v0_6.Relation) {
-                Double nByteSize = (double) 64;
+            else if (entity instanceof Relation) {
+                Double nByteSize = 64 + calcTagsByteSize(entity.getTags());
 
-                Collection<Tag> t = entity.getTags();
-                for (Iterator iterator = t.iterator(); iterator.hasNext();) {
-                    Tag curTag = (Tag) iterator.next();
-                    String tagKey = curTag.getKey();
-                    String tagVal = curTag.getValue();
-
-                    nByteSize += tagKey.length();
-                    nByteSize += tagVal.length();
-
-                }
-
-                List<RelationMember> mems = ((org.openstreetmap.osmosis.core.domain.v0_6.Relation) entity).getMembers();
-                for (int i = 0; i < mems.size(); i++) {
-                    RelationMember m = mems.get(i);
-
-                    nByteSize += m.getMemberRole().length();
+                List<RelationMember> relationMembers = ((Relation) entity).getMembers();
+                for (RelationMember relationMember : relationMembers) {
+                    nByteSize += relationMember.getMemberRole().length();
                     nByteSize += 8;
                 }
-                totalOSMsize += nByteSize.doubleValue();
+
+                totalOSMsize += nByteSize;
                 totalRelationCnt++;
             }
-
         }
-
     }
 }

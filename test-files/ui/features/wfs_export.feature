@@ -12,7 +12,7 @@ Feature: WFS Export
         And I click the "Export" context menu item
         Then I should see element "[id='fileExportOutputName']" with value "AllDataTypesACucumber"
         When I select the "Web Feature Service (WFS)" option in the "File Geodatabase" combobox
-        And I press "Export" big loud span
+        And I press "big.loud" span with text "Export"
         And I wait 30 "seconds" to see "label" element with text "WFS Resources Url"
         Then I open the wfs export url
 

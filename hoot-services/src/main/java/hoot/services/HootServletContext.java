@@ -50,8 +50,7 @@ public class HootServletContext implements ServletContextListener {
         p2PRes.startP2PService();
 
         // Doing this to make sure we create ingest folder
-        BasemapResource bRes = new BasemapResource();
-        bRes.createTileServerPath();
+        BasemapResource.createTileServerPath();
 
         // Bridge/route all JUL log records to the SLF4J API.
         // Some third-party components use Java Util Logging (JUL). We want to
@@ -72,7 +71,7 @@ public class HootServletContext implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        transRes.stopTranslationService();
+        TranslatorResource.stopTranslationService();
         p2PRes.stopP2PService();
     }
 }

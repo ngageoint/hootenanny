@@ -26,16 +26,23 @@
  */
 package hoot.services.controllers.job;
 
+import java.io.File;
+import java.net.URL;
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.ArgumentCaptor;
@@ -43,11 +50,46 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
+import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.job.JobStatusManager;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class JobResourceTest {
+    private static final File homeFolder;
+    private static final Map<String, String> originalHootProperties;
+
+    static {
+        try {
+            originalHootProperties = HootProperties.getProperties();
+
+            homeFolder = new File(FileUtils.getTempDirectory(), "RasterToTilesResourceTest");
+            FileUtils.forceMkdir(homeFolder);
+            Assert.assertTrue(homeFolder.exists());
+            HootCustomPropertiesSetter.setProperty("homeFolder", homeFolder.getAbsolutePath());
+
+            URL inputUrl = JobResourceTest.class.getResource("/hoot/services/validators/job/services_fields_metadata.json");
+            File dest = new File(new File(homeFolder, "scripts"), "services_fields_metadata.json");
+            FileUtils.copyURLToFile(inputUrl, dest);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @BeforeClass
+    public static void beforeClass() throws Exception {
+    }
+
+    @AfterClass
+    public static void afterClass() throws Exception {
+        FileUtils.deleteDirectory(homeFolder);
+        Properties origProperties = new Properties();
+        for (Map.Entry<String, String> entry : originalHootProperties.entrySet()) {
+            origProperties.setProperty(entry.getKey(), entry.getValue());
+        }
+        HootCustomPropertiesSetter.setProperties(origProperties);
+    }
 
     @Test
     @Category(UnitTest.class)
@@ -81,11 +123,11 @@ public class JobResourceTest {
         JobResource spy = Mockito.spy(real);
 
         Mockito.doReturn(mockRet).when(spy).getJobStatusObj(Matchers.anyString());
-        Mockito.doNothing().when(spy)._terminateJob(Matchers.anyString());
+        Mockito.doNothing().when(spy).terminateJob(Matchers.anyString());
 
         spy.terminateJob("1234", null);
 
-        Mockito.verify(spy)._terminateJob(Matchers.matches("66d53cfc-29b6-49eb-9459-9a74794d34b2"));
+        Mockito.verify(spy).terminateJob(Matchers.matches("66d53cfc-29b6-49eb-9459-9a74794d34b2"));
     }
 
     /**
@@ -112,11 +154,9 @@ public class JobResourceTest {
         JobResource real = new JobResource();
         JobResource spy = Mockito.spy(real);
 
-        Mockito.doReturn(null).when(spy)._createDbConnection();
-        Mockito.doNothing().when(spy)._closeDbConnection(Matchers.any(Connection.class));
-        Mockito.doReturn(new JSONObject()).when(spy)._processJob(Matchers.anyString(), Matchers.any(JSONObject.class));
-        Mockito.doReturn(mockJobStatusManager).when(spy)._createJobStatusMananger(Matchers.any(Connection.class));
-        Mockito.doReturn(mockChild).when(spy)._execReflection(Matchers.anyString(),
+        Mockito.doReturn(Response.ok().build()).when(spy).processJob(Matchers.anyString(), Matchers.any(String.class));
+        Mockito.doReturn(mockJobStatusManager).when(spy).createJobStatusMananger(Matchers.any(Connection.class));
+        Mockito.doReturn(mockChild).when(spy).execReflection(Matchers.anyString(),
                          Matchers.any(JSONObject.class), Matchers.any(JobStatusManager.class));
 
         String jobStr = "[{\"caller\":\"FileUploadResource\",\"exec\":\"makeetl\","
@@ -151,9 +191,9 @@ public class JobResourceTest {
             }
         }
 
-        Mockito.verify(spy)._execReflection(Matchers.matches("test_job_id_1234"),
-                                    Matchers.argThat(new validParam2Matcher()),
-                                    Matchers.any(JobStatusManager.class));
+        Mockito.verify(spy).execReflection(Matchers.matches("test_job_id_1234"),
+                                           Matchers.argThat(new validParam2Matcher()),
+                                           Matchers.any(JobStatusManager.class));
 
         ArgumentCaptor<String> argCaptor = ArgumentCaptor.forClass(String.class);
 
@@ -233,16 +273,13 @@ public class JobResourceTest {
         JobResource real = new JobResource();
         JobResource spy = Mockito.spy(real);
 
-        Mockito.doReturn(null).when(spy)._createDbConnection();
-        Mockito.doNothing().when(spy)._closeDbConnection(Matchers.any(Connection.class));
-
         // so I use this to avoid actual call
-        Mockito.doReturn(new JSONObject()).when(spy)._processJob(Matchers.anyString(), Matchers.any(JSONObject.class));
-        Mockito.doReturn(mockJobStatusManager).when(spy)._createJobStatusMananger(Matchers.any(Connection.class));
+        Mockito.doReturn(Response.ok().build()).when(spy).processJob(Matchers.anyString(), Matchers.anyString());
+        Mockito.doReturn(mockJobStatusManager).when(spy).createJobStatusMananger(Matchers.any(Connection.class));
 
         // failure point
         Mockito.doThrow(new Exception("Mock failure for testing Process Chain Job failure. (Not real failure!!!)"))
-               .when(spy)._execReflection(Matchers.anyString(),
+               .when(spy).execReflection(Matchers.anyString(),
                                           Matchers.any(JSONObject.class),
                                           Matchers.any(JobStatusManager.class));
 
@@ -369,7 +406,7 @@ public class JobResourceTest {
 
         mockProgressInfo.put("status", mockProgDetail);
 
-        Mockito.doReturn(mockProgressInfo.toJSONString()).when(spy)._getProgressText(Matchers.anyString());
+        Mockito.doReturn(mockProgressInfo.toJSONString()).when(spy).getProgressText(Matchers.anyString());
 
         Response resp = spy.getJobStatus("child-id-1234");
         String respStr = resp.getEntity().toString();

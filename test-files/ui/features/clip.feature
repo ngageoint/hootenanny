@@ -11,6 +11,7 @@ Feature: Hootenanny Clip Dataset Test
         And I click the "DcGisRoadsCucumber" Dataset
         Then I click first "Add Layer"
         Then I wait 30 "seconds" to see "DcGisRoadsCucumber"
+        Then I change the reference layer color to blue
         Then I press "Tools"
         And I hover over ".tools-clip"
         And I should see "Clip to Visual Extent"
@@ -21,7 +22,7 @@ Feature: Hootenanny Clip Dataset Test
         And I click the "map" at "-100","-100"
         Then I wait 5 "seconds" to see "Clip Data to Bounding Box"
         And I fill "LayerName" input with "CucumberClip_BB"
-        And I press "Clip" big loud span
+        And I press "big.loud" span with text "Clip"
         Then I wait 15 "seconds" to see "has been submitted."
         Then I wait 15 "seconds" to see "Success:"
         Then I remove the first layer
@@ -33,6 +34,6 @@ Feature: Hootenanny Clip Dataset Test
         Then I click the "9" key
         Then I wait 5 "seconds" to see "Clip Data to Visual Extent"
         And I fill "LayerName" input with "CucumberClip_VE"
-        Then I press "Clip" big loud span
+        Then I press "big.loud" span with text "Clip"
         Then I wait 15 "seconds" to see "has been submitted."
         Then I wait 15 "seconds" to see "Success:"

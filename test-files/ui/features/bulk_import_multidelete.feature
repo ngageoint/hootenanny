@@ -10,7 +10,7 @@ Feature: Bulk Import and Multiselect Delete Datasets
     	And I context click "Add Dataset"
     	And I click the first "dataset-option" list item
     	And I should see "Bulk Add Data"
-		Then I press "Add Row" big loud span
+		Then I press "big.loud" span with text "Add Row"
     	Then I select in row 0 the "File (osm)" option in the "Select Import Type" combobox
     	And I select in row 0 the "/test-files/dcpoi_clip.osm" dataset
     	And I should see row 0 input "Save As" with value "dcpoi_clip"
@@ -19,7 +19,7 @@ Feature: Bulk Import and Multiselect Delete Datasets
     	And I select in row 1 the "/test-files/mapcruzinpoi_clip.osm" dataset
     	And I should see row 1 input "Save As" with value "mapcruzinpoi_clip"
     	Then I fill row 1 input "Save As" with value "mapcruzinpoi_clip_bulkImport"
-    	Then I press "Import" big loud span
+    	Then I press "big.loud" span with text "Import"
     	And I should see "Initializing...Starting bulk import process..."
     	Then I wait 2 "minutes" to see "dcpoi_clip_bulkImport"
     	And I wait 2 "minutes" to see "mapcruzinpoi_clip_bulkImport"

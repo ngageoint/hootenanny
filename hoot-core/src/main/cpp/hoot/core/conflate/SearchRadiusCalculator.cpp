@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -97,12 +97,12 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
     return;
   }
 
-  RubberSheet rubberSheet;
-  rubberSheet.setReference(_rubberSheetRef);
-  rubberSheet.setMinimumTies(_minTies);
+  shared_ptr<RubberSheet> rubberSheet(new RubberSheet());
+  rubberSheet->setReference(_rubberSheetRef);
+  rubberSheet->setMinimumTies(_minTies);
   try
   {
-    rubberSheet.calculateTransform(mapWithOnlyUnknown1And2);
+    rubberSheet->calculateTransform(mapWithOnlyUnknown1And2);
   }
   catch (const HootException& e)
   {
@@ -111,10 +111,14 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
     LOG_INFO(
       "An error occurred calculating the rubber sheet transform during automatic search radius " <<
       "calculation.  Cleaning the data and attempting to calculate the transform again...");
-    MapCleaner().apply(mapWithOnlyUnknown1And2);
+    LOG_DEBUG(e.getWhat());
     try
     {
-      rubberSheet.calculateTransform(mapWithOnlyUnknown1And2);
+      MapCleaner().apply(mapWithOnlyUnknown1And2);
+      rubberSheet.reset(new RubberSheet());
+      rubberSheet->setReference(_rubberSheetRef);
+      rubberSheet->setMinimumTies(_minTies);
+      rubberSheet->calculateTransform(mapWithOnlyUnknown1And2);
     }
     catch (const HootException& e)
     {
@@ -129,7 +133,7 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
   vector<double> tiePointDistances;
   try
   {
-    tiePointDistances = rubberSheet.calculateTiePointDistances();
+    tiePointDistances = rubberSheet->calculateTiePointDistances();
   }
   catch (const HootException& /*e*/)
   {

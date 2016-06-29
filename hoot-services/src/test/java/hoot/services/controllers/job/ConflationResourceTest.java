@@ -59,8 +59,7 @@ import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class ConflationResourceTest {
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(ConflationResourceTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConflationResourceTest.class);
 
     @Test
     @Category(UnitTest.class)
@@ -80,6 +79,7 @@ public class ConflationResourceTest {
                 + "\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection\"},{\"class\":\"hoot.services.controllers.ingest.RasterToTilesService\","
                 + "\"method\":\"ingestOSMResourceDirect\",\"params\":[{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\",\"paramtype\":\"java.lang.String\"},"
                 + "{\"isprimitivetype\":\"false\",\"value\":\"test@test.com\",\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection\"}]";
+
         ConflationResource spy = Mockito.spy(new ConflationResource());
         Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
         Response resp = spy.process(params);

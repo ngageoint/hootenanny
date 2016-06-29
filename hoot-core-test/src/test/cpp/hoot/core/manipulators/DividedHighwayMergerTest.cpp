@@ -45,6 +45,7 @@
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/manipulators/DividedHighwayManipulation.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
 
@@ -129,22 +130,22 @@ public:
 
     MapProjector::projectToOrthographic(map);
 
-    long n0 = map->findWays("note", "0")[0];
-    long n1 = map->findWays("note", "1")[0];
-    long n2 = map->findWays("note", "2")[0];
-    long n6 = map->findWays("note", "6")[0];
-    long n8 = map->findWays("note", "8")[0];
-    long n9 = map->findWays("note", "9")[0];
-    long n10 = map->findWays("note", "10")[0];
-    long n11 = map->findWays("note", "11")[0];
-    long n12 = map->findWays("note", "12")[0];
-    long n13 = map->findWays("note", "13")[0];
-    long n14 = map->findWays("note", "14")[0];
-    long n15 = map->findWays("note", "15")[0];
-    long n16 = map->findWays("note", "16")[0];
-    long n17 = map->findWays("note", "17")[0];
-    long n18 = map->findWays("note", "18")[0];
-    long n19 = map->findWays("note", "19")[0];
+    long n0  = FindWaysVisitor::findWaysByTag(map, "note", "0")[0];
+    long n1  = FindWaysVisitor::findWaysByTag(map, "note", "1")[0];
+    long n2  = FindWaysVisitor::findWaysByTag(map, "note", "2")[0];
+    long n6  = FindWaysVisitor::findWaysByTag(map, "note", "6")[0];
+    long n8  = FindWaysVisitor::findWaysByTag(map, "note", "8")[0];
+    long n9  = FindWaysVisitor::findWaysByTag(map, "note", "9")[0];
+    long n10 = FindWaysVisitor::findWaysByTag(map, "note", "10")[0];
+    long n11 = FindWaysVisitor::findWaysByTag(map, "note", "11")[0];
+    long n12 = FindWaysVisitor::findWaysByTag(map, "note", "12")[0];
+    long n13 = FindWaysVisitor::findWaysByTag(map, "note", "13")[0];
+    long n14 = FindWaysVisitor::findWaysByTag(map, "note", "14")[0];
+    long n15 = FindWaysVisitor::findWaysByTag(map, "note", "15")[0];
+    long n16 = FindWaysVisitor::findWaysByTag(map, "note", "16")[0];
+    long n17 = FindWaysVisitor::findWaysByTag(map, "note", "17")[0];
+    long n18 = FindWaysVisitor::findWaysByTag(map, "note", "18")[0];
+    long n19 = FindWaysVisitor::findWaysByTag(map, "note", "19")[0];
 
     ParallelWayFilter f1(map, map->getWay(n0));
 

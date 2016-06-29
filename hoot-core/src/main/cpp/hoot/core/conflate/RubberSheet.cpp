@@ -35,6 +35,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -274,9 +275,9 @@ void RubberSheet::calculateTransform(shared_ptr<OsmMap>& map)
 void RubberSheet::_findTies()
 {
   _nm.setMap(_map);
-  // The search radius is two times the max circular error which handles if both nodes are the worst
-  // circular error.
-  _searchRadius = _map->calculateMaxCircularError() * 2;
+  // The search radius is two times the max circular error which handles if
+  // both nodes are the worst circular error.
+  _searchRadius = WorstCircularErrorVisitor::getWorstCircularError(_map) * 2;
 
   shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
   // go through all the intersections w/ 2 or more roads intersecting

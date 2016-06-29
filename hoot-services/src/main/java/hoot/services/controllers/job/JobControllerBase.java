@@ -26,14 +26,10 @@
  */
 package hoot.services.controllers.job;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.Future;
 
 import javax.ws.rs.core.Response.Status;
-
-import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -47,27 +43,28 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.HootProperties;
+import hoot.services.utils.ResourceErrorHandler;
+
 
 public class JobControllerBase {
-    private static final Logger log = LoggerFactory.getLogger(JobControllerBase.class);
-    private String coreJobServerUrl = null;
-    protected String processScriptName = null;
-    private int jobResConnectionTimeout = 3000;
+    private static final Logger logger = LoggerFactory.getLogger(JobControllerBase.class);
+    private static final String coreJobServerUrl = HootProperties.getProperty("coreJobServerUrl");
+    protected String processScriptName;
+    private static int jobResConnectionTimeout;
 
-    public JobControllerBase() {
+    static {
         try {
-            if (coreJobServerUrl == null) {
-                coreJobServerUrl = HootProperties.getProperty("coreJobServerUrl");
-
-                jobResConnectionTimeout = Integer.parseInt(HootProperties
-                        .getProperty("internalJobRequestWaitTimeMilli"));
-
-            }
-
+            jobResConnectionTimeout = Integer.parseInt(HootProperties.getProperty("internalJobRequestWaitTimeMilli"));
         }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
+        catch (NumberFormatException nfe) {
+            jobResConnectionTimeout = 3000;
+            logger.error("internalJobRequestWaitTimeMilli is not a valid number!  Defaulting to {}", jobResConnectionTimeout);
         }
+    }
+
+    public JobControllerBase(String processScriptName) {
+        this.processScriptName = processScriptName;
     }
 
     /**
@@ -77,78 +74,69 @@ public class JobControllerBase {
      * @param requestParams
      */
     public void postJobRquest(String jobId, String requestParams) throws Exception {
+        logger.debug(jobId);
+        logger.debug(requestParams);
 
-        log.debug(jobId);
-        log.debug(requestParams);
-
-        // Request should come back immediately but if something is wrong then
-        // timeout and clean up.
-        // To make UI responsive
-        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(jobResConnectionTimeout)
+        // Request should come back immediately but if something is wrong then timeout and clean up to make UI responsive
+        RequestConfig requestConfig =
+                RequestConfig.custom()
+                .setConnectTimeout(jobResConnectionTimeout)
                 .setSocketTimeout(jobResConnectionTimeout).build();
-        CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom().setDefaultRequestConfig(requestConfig).build();
-        try {
+
+        try (CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom().setDefaultRequestConfig(requestConfig).build()) {
             httpclient.start();
-            final HttpPost request1 = new HttpPost(coreJobServerUrl + "/hoot-services/job/" + jobId);
-            log.debug("postJobRequest : " + coreJobServerUrl + "/hoot-services/job/" + jobId);
+
+            HttpPost httpPost = new HttpPost(coreJobServerUrl + "/hoot-services/job/" + jobId);
+            logger.debug("postJobRequest : {}/hoot-services/job/{}", coreJobServerUrl, jobId);
             StringEntity se = new StringEntity(requestParams);
-            request1.setEntity(se);
-            Future<HttpResponse> future = httpclient.execute(request1, null);
+            httpPost.setEntity(se);
+
+            Future<HttpResponse> future = httpclient.execute(httpPost, null);
+
             // wait for response
             HttpResponse r = future.get();
 
-            log.debug("postJobRequest Response: " + r.getStatusLine());
+            logger.debug("postJobRequest Response: {}", r.getStatusLine());
         }
         catch (Exception ee) {
-            ResourceErrorHandler.handleError("Failed upload: " + ee.toString(), Status.INTERNAL_SERVER_ERROR, log);
-        }
-        finally {
-            log.debug("postJobRequest Closing");
-            httpclient.close();
+            ResourceErrorHandler.handleError("Failed upload: " + ee, Status.INTERNAL_SERVER_ERROR, logger);
         }
     }
 
     public void postChainJobRquest(String jobId, String requestParams) throws Exception {
-
-        // log.debug(jobId);
-        // log.debug(requestParams);
-
         // Request should come back immediately but if something is wrong then
-        // timeout and clean up.
-        // To make UI responsive
-        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(jobResConnectionTimeout)
+        // timeout and clean up.to make UI responsive
+        RequestConfig requestConfig =
+                RequestConfig.custom()
+                .setConnectTimeout(jobResConnectionTimeout)
                 .setSocketTimeout(jobResConnectionTimeout).build();
-        CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom().setDefaultRequestConfig(requestConfig).build();
 
-        try {
+        try (CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom().setDefaultRequestConfig(requestConfig).build()) {
             httpclient.start();
-            final HttpPost request1 = new HttpPost(coreJobServerUrl + "/hoot-services/job/chain/" + jobId);
-            log.debug("postChainJobRquest : " + coreJobServerUrl + "/hoot-services/job/chain/" + jobId);
+
+            HttpPost httpPost = new HttpPost(coreJobServerUrl + "/hoot-services/job/chain/" + jobId);
+            logger.debug("postChainJobRquest : {}/hoot-services/job/chain/{}", coreJobServerUrl, jobId);
+
             StringEntity se = new StringEntity(requestParams);
-            request1.setEntity(se);
-            Future<HttpResponse> future = httpclient.execute(request1, null);
+            httpPost.setEntity(se);
+
+            Future<HttpResponse> future = httpclient.execute(httpPost, null);
+
             // wait till we get response
             HttpResponse r = future.get();
 
-            log.debug("postChainJobRquest Response x: " + r.getStatusLine());
-
+            logger.debug("postChainJobRquest Response x: {}", r.getStatusLine());
         }
         catch (Exception ee) {
-            ResourceErrorHandler.handleError("Failed upload: " + ee.toString(), Status.INTERNAL_SERVER_ERROR, log);
-        }
-        finally {
-            log.debug("Closing postChainJobRquest");
-            // Clean file handles and thread
-            httpclient.close();
+            ResourceErrorHandler.handleError("Failed upload: " + ee, Status.INTERNAL_SERVER_ERROR, logger);
         }
     }
 
-    public String createPostBody(JSONArray args) {
+    protected String createPostBody(JSONArray args) {
         return _createPostBody(args).toString();
     }
 
     protected JSONObject _createPostBody(JSONArray args) {
-
         String resourceName = this.getClass().getSimpleName();
 
         JSONObject command = new JSONObject();
@@ -160,7 +148,7 @@ public class JobControllerBase {
         return command;
     }
 
-    protected JSONObject _createReflectionJobReq(JSONArray args, String className, String methodName) {
+    protected JSONObject createReflectionJobReq(JSONArray args, String className, String methodName) {
         this.getClass().getSimpleName();
 
         JSONObject command = new JSONObject();
@@ -172,7 +160,7 @@ public class JobControllerBase {
         return command;
     }
 
-    protected JSONObject _createReflectionJobReq(JSONArray args, String className, String methodName,
+    protected JSONObject createReflectionJobReq(JSONArray args, String className, String methodName,
             String internalJobId) {
         this.getClass().getSimpleName();
 
@@ -186,7 +174,7 @@ public class JobControllerBase {
         return command;
     }
 
-    protected JSONObject _createReflectionSycJobReq(JSONArray args, String className, String methodName) {
+    protected JSONObject createReflectionSycJobReq(JSONArray args, String className, String methodName) {
         this.getClass().getSimpleName();
 
         JSONObject command = new JSONObject();
@@ -198,12 +186,11 @@ public class JobControllerBase {
         return command;
     }
 
-    public String createBashPostBody(JSONArray args) {
+    protected String createBashPostBody(JSONArray args) {
         return _createBashPostBody(args).toString();
     }
 
     protected JSONObject _createBashPostBody(JSONArray args) {
-
         String resourceName = this.getClass().getSimpleName();
 
         JSONObject command = new JSONObject();
@@ -215,20 +202,18 @@ public class JobControllerBase {
         return command;
     }
 
-    protected JSONObject _createMakeScriptJobReq(JSONArray args) {
+    protected JSONObject createMakeScriptJobReq(JSONArray args) {
         JSONObject command = _createPostBody(args);
         return command;
     }
 
-    public static JSONArray parseParams(String params) throws Exception {
+    protected static JSONArray parseParams(String params) throws Exception {
         JSONParser parser = new JSONParser();
         JSONObject command = (JSONObject) parser.parse(params);
-        Iterator iter = command.entrySet().iterator();
-
         JSONArray commandArgs = new JSONArray();
 
-        while (iter.hasNext()) {
-            Map.Entry mEntry = (Map.Entry) iter.next();
+        for (Object o : command.entrySet()) {
+            Map.Entry mEntry = (Map.Entry) o;
             String key = (String) mEntry.getKey();
             String val = (String) mEntry.getValue();
 
@@ -240,9 +225,9 @@ public class JobControllerBase {
         return commandArgs;
     }
 
-    public String getParameterValue(String key, JSONArray args) {
-        for (int i = 0; i < args.size(); i++) {
-            JSONObject o = (JSONObject) args.get(i);
+    String getParameterValue(String key, JSONArray args) {
+        for (Object arg : args) {
+            JSONObject o = (JSONObject) arg;
             if (o.containsKey(key)) {
                 return o.get(key).toString();
             }

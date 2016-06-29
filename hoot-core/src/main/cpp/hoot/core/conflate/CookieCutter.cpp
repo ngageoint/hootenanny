@@ -35,6 +35,7 @@
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/visitors/UnionPolygonsVisitor.h>
+#include <hoot/core/visitors/CalculateBoundsVisitor.h>
 
 namespace hoot
 {
@@ -47,8 +48,8 @@ _outputBuffer(outputBuffer)
 
 void CookieCutter::cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap)
 {
-  OGREnvelope env = cutterShapeMap->calculateBounds();
-  env.Merge(doughMap->calculateBounds());
+  OGREnvelope env = CalculateBoundsVisitor::getBounds(cutterShapeMap);
+  env.Merge(CalculateBoundsVisitor::getBounds(doughMap));
 
   // reproject the dough and cutter into the same planar projection.
   MapProjector::projectToPlanar(doughMap, env);

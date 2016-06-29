@@ -68,13 +68,15 @@ clean-coverage:
 	rm -rf $(HOOT_HOME)/hoot-ui/mocha-coverage
 	rm -rf $(HOOT_HOME)/hoot-ui/cucumber-coverage
 	rm -rf $(HOOT_HOME)/hoot-ui/combined-coverage
-load-data:
+load-data: clean
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcGisRoads.osm $(DB_URL)/DcGisRoadsCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcTigerRoads.osm $(DB_URL)/DcTigerRoadsCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcOsmRoads.osm $(DB_URL)/DcOsmRoadsCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesA.osm $(DB_URL)/AllDataTypesACucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesB.osm $(DB_URL)/AllDataTypesBCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestA.osm $(DB_URL)/ToyTestACucumber
+	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/Merged_Brazil_daba15e4.osm $(DB_URL)/BrazilMergedCucumber
+
 	# MapEdit conflation
 	source $(HOOT_HOME)/scripts/SetupOsmApiDB.sh force
 	PGPASSWORD=$(PGPASSWORD) psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/test-files/servicesdb/users.sql

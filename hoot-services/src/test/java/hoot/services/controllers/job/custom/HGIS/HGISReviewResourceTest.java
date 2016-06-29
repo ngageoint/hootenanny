@@ -45,8 +45,6 @@ import hoot.services.UnitTest;
 import hoot.services.models.review.custom.HGIS.PrepareForValidationRequest;
 
 
-//import hoot.services.models.review.custom.HGIS.PrepareForValidationResponse;
-
 public class HGISReviewResourceTest {
 
     @Test

@@ -128,23 +128,6 @@ public:
 
   void addWay(const shared_ptr<Way>& w);
 
-  /**
-   * Calculates the bounds of the map by determining the extent of all the nodes. This is slow
-   * every time and there is no caching.
-   */
-  OGREnvelope calculateBounds() const;
-
-  /**
-   * Similar to above, but it returns a geos Envelope.
-   */
-  geos::geom::Envelope calculateEnvelope() const;
-
-  /**
-   * This traverses all nodes and ways to calculate the maximum circular error. This is not cached
-   * and has the potential to be quite expensive.
-   */
-  double calculateMaxCircularError() const;
-
   void clear();
 
   /**
@@ -190,28 +173,6 @@ public:
    */
   std::vector<long> filterWays(const WayFilter& filter, shared_ptr<const Way> from,
                                Meters maxDistance, bool addError = false) const;
-
-  /**
-   * Returns a set of all element IDs that intersect with envelope e.
-   */
-  set<ElementId> findElements(const Envelope& e) const;
-
-  /**
-   * Does a very inefficient search for all the ways that contain the given node.
-   */
-  std::vector<long> findWayByNode(long nodeId) const;
-
-  /**
-   * Searches for all ways with a tag that exactly matches the key and value. This is horribly
-   * inefficient and appropriate mainly for testing.
-   */
-  std::vector<long> findWays(QString key, QString value) const;
-
-  /**
-   * Searches for all nodes with a tag that exactly matches the key and value. This is horribly
-   * inefficient and appropriate mainly for testing.
-   */
-  std::vector<long> findNodes(QString key, QString value) const;
 
   virtual ConstElementPtr getElement(const ElementId& id) const;
   ConstElementPtr getElement(ElementType type, long id) const;
@@ -271,7 +232,7 @@ public:
 
   static boost::shared_ptr<OGRSpatialReference> getWgs84();
 
-  bool isEmpty() const { return _ways.size() == 0 && _nodes.size() == 0; }
+  bool isEmpty() const { return _nodes.size() == 0 && _ways.size() == 0 && _relations.size() == 0;}
 
   void registerListener(shared_ptr<OsmMapListener> l) { _listeners.push_back(l); }
 
@@ -371,9 +332,10 @@ public:
   bool validate(bool strict = true) const;
 
   /**
-   * Calls the visitRo method on all elements. See Element::visitRo for a more thorough description.
-   *  - The order will always be nodes, ways, relations, but the IDs will not be in any specific
-   *    order.
+   * Calls the visitRo method on all elements. See Element::visitRo for a more
+   * thorough description.
+   *  - The order will always be nodes, ways, relations, but the IDs will not
+   *    be in any specific order.
    *  - Unlike Element::visitRo, elements will not be visited multiple times.
    *  - Modifying the OsmMap while traversing will result in undefined behaviour.
    *  - This should be slightly faster than visitRw.
@@ -382,17 +344,22 @@ public:
    * elements.
    */
   void visitRo(ElementVisitor& visitor) const;
+  void visitNodesRo(ElementVisitor& visitor) const;
+  void visitWaysRo(ElementVisitor& visitor) const;
+  void visitRelationsRo(ElementVisitor& visitor) const;
+
 
   /**
-   * Calls the visitRw method on all elements. See Element::visitRw for a more thorough description.
-   *  - The order will always be nodes, ways, relations, but the IDs will not be in any specific
-   *    order.
+   * Calls the visitRw method on all elements. See Element::visitRw for a more
+   * thorough description.
+   *  - The order will always be nodes, ways, relations, but the IDs will not
+   *    be in any specific order.
    *  - Elements that are added during the traversal may or may not be visited.
    *  - Elements may be deleted during traversal.
    *  - The visitor is guaranteed to not visit deleted elements.
    *
-   * If the visitor implements OsmMapConsumer then setOsmMap will be called before visiting any
-   * elements.
+   * If the visitor implements OsmMapConsumer then setOsmMap will be called before
+   * visiting any elements.
    */
   void visitRw(ElementVisitor& visitor);
 

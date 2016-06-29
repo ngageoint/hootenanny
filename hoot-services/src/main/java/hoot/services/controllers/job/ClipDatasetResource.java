@@ -38,32 +38,20 @@ import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.utils.ResourceErrorHandler;
 
-import org.json.simple.parser.JSONParser;
-
 
 @Path("/clipdataset")
 public class ClipDatasetResource extends JobControllerBase {
-
-    private static final Logger log = LoggerFactory.getLogger(ClipDatasetResource.class);
-    protected static String _tileServerPath = null;
+    private static final Logger logger = LoggerFactory.getLogger(ClipDatasetResource.class);
 
     public ClipDatasetResource() {
-        try {
-
-            if (processScriptName == null) {
-                processScriptName = HootProperties.getProperty("ClipDatasetMakefilePath");
-            }
-
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-        }
+        super(HootProperties.getProperty("ClipDatasetMakefilePath"));
     }
 
     /**
@@ -94,7 +82,7 @@ public class ClipDatasetResource extends JobControllerBase {
             String clipOutputName = oParams.get("OUTPUT_NAME").toString();
 
             JSONArray commandArgs = parseParams(params);
-            JSONObject clipCommand = _createMakeScriptJobReq(commandArgs);
+            JSONObject clipCommand = createMakeScriptJobReq(commandArgs);
 
             // Density Raster
             JSONArray rasterTilesArgs = new JSONArray();
@@ -110,7 +98,7 @@ public class ClipDatasetResource extends JobControllerBase {
             rasterTilesparam.put("isprimitivetype", "false");
             rasterTilesArgs.add(rasterTilesparam);
 
-            JSONObject ingestOSMResource = _createReflectionJobReq(rasterTilesArgs,
+            JSONObject ingestOSMResource = createReflectionJobReq(rasterTilesArgs,
                            "hoot.services.controllers.ingest.RasterToTilesService",
                            "ingestOSMResourceDirect");
 
@@ -121,13 +109,12 @@ public class ClipDatasetResource extends JobControllerBase {
             postChainJobRquest(jobId, jobArgs.toJSONString());
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error processing cookie cutter request: " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            ResourceErrorHandler.handleError("Error processing cookie cutter request: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
         }
 
         JSONObject res = new JSONObject();
         res.put("jobid", jobId);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
-
 }

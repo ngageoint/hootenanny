@@ -11,7 +11,7 @@ Feature: Import Export Delete OSM Dataset
         And I select the "File (osm)" option in the "Select Import Type" combobox
         And I select "/test-files/dcpoi_clip.osm" dataset
         Then I should see element "[id='importDatasetLayerName']" with value "dcpoi_clip"
-        When I press "Import" big loud span
+        When I press "big.loud" span with text "Import"
         Then I wait 30 "seconds" to see "dcpoi_clip"
 
     Scenario: Export Dataset
@@ -20,21 +20,21 @@ Feature: Import Export Delete OSM Dataset
         And I click the "Export" context menu item
         Then I should see element "[id='fileExportOutputName']" with value "dcpoi_clip"
         When I select the "Open Street Map (OSM)" option in the "File Geodatabase" combobox
-        And I press "Export" big loud span
+        And I press "big.loud" span with text "Export"
         And I wait 30 seconds
         Then the download file "dcpoi_clip.zip" should exist
 
     Scenario: Create Folder
         And I press "Add Folder"
         Then I type "CucumberOsm" in input ""
-        And I press "Add Folder" big loud span
+        And I press "big.loud" span with text "Add Folder"
 
     Scenario: Move Dataset
         When I click the "dcpoi_clip" Dataset
         And I context click the "dcpoi_clip" Dataset
         And I click the "Move" context menu item
         And I select the "CucumberOsm" option in the "root" combobox
-        And I press "Update" big loud span
+        And I press "big.loud" span with text "Update"
 
     Scenario: Rename Dataset
         When I click the "CucumberOsm" Dataset
@@ -42,7 +42,7 @@ Feature: Import Export Delete OSM Dataset
         And I context click the "dcpoi_clip" Dataset
         And I click the "Rename" context menu item
         Then I type "dcpoi_clip_rename" in input "dcpoi_clip"
-        And I press "Update" big loud span
+        And I press "big.loud" span with text "Update"
 
     Scenario: Delete Folder and Dataset
         When I context click the "CucumberOsm" Dataset

@@ -34,36 +34,20 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/document")
 public class DocsResource {
-    private static final Logger log = LoggerFactory.getLogger(DocsResource.class);
-
-    protected static String _docName = null;
-    protected static String _homeFolder = null;
+    private static final Logger logger = LoggerFactory.getLogger(DocsResource.class);
+    private static final String docName = HootProperties.getProperty("documentName");
+    private static final String homeFolder = HootProperties.getProperty("homeFolder");
 
     public DocsResource() {
-        try {
-            if (_docName == null) {
-                _docName = HootProperties.getProperty("documentName");
-            }
-
-            if (_homeFolder == null) {
-                _homeFolder = HootProperties.getProperty("homeFolder");
-            }
-
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-        }
     }
 
     /**
@@ -75,17 +59,11 @@ public class DocsResource {
     @Path("/export")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response exportDoc() {
-        File out = null;
-        try {
-            String documentPath = _homeFolder + "/" + "docs" + "/" + _docName;
-            out = new File(documentPath);
-        }
-        catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error exporting document file: " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
-        }
+        String documentPath = homeFolder + "/" + "docs" + "/" + docName;
+        File out = new File(documentPath);
+
         ResponseBuilder rBuild = Response.ok(out, "application/pdf");
-        rBuild.header("Content-Disposition", "attachment; filename=" + _docName);
+        rBuild.header("Content-Disposition", "attachment; filename=" + docName);
 
         return rBuild.build();
     }
