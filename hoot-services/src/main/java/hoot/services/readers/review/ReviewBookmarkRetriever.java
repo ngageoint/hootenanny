@@ -80,20 +80,11 @@ public class ReviewBookmarkRetriever {
      * @param offset
      *            - offset row for paging
      * @return - list of Review tags
-     * @throws Exception
      */
-    public List<ReviewBookmarks> retrieveAll(final String orderByCol, final boolean isAsc, final long limit,
-            final long offset, final Long[] creatorArray, final Long[] layerArray) throws Exception {
-
-        List<ReviewBookmarks> res = null;
-        try {
-            SQLQuery query = _getAllQuery(orderByCol, isAsc, limit, offset, creatorArray, layerArray);
-            res = query.list(_reviewBookmarks);
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-            throw ex;
-        }
+    public List<ReviewBookmarks> retrieveAll(String orderByCol, boolean isAsc, long limit,
+            long offset, Long[] creatorArray, Long[] layerArray) {
+        SQLQuery query = getAllQuery(orderByCol, isAsc, limit, offset, creatorArray, layerArray);
+        List<ReviewBookmarks> res = query.list(reviewBookmarks);
         return res;
     }
     /**
@@ -136,41 +127,34 @@ public class ReviewBookmarkRetriever {
      * @param offset
      * @return - SQLQuery
      */
-    protected SQLQuery _getAllQuery(final String orderByCol, final boolean isAsc, final long limit, final long offset,
-            final Long[] creatorArray, final Long[] layerArray) throws Exception {
+    protected SQLQuery getAllQuery(String orderByCol, boolean isAsc, long limit, long offset,
+            Long[] creatorArray, Long[] layerArray) {
         QReviewBookmarks b = QReviewBookmarks.reviewBookmarks;
 
-        SQLQuery query = new SQLQuery(this._conn, DbUtils.getConfiguration());
-        try {
-            if (creatorArray != null && layerArray != null) {
-            	query.from(_reviewBookmarks).where(b.createdBy.in(creatorArray))
-            		.where(b.mapId.in(layerArray))
-            		.orderBy(_getSpecifier(orderByCol, isAsc));
-            }
-            else if (creatorArray != null && layerArray == null) {
-            	query.from(_reviewBookmarks).where(b.createdBy.in(creatorArray))
-        			.orderBy(_getSpecifier(orderByCol, isAsc));
-            }
-            else if (creatorArray == null && layerArray != null) {
-            	query.from(_reviewBookmarks).where(b.mapId.in(layerArray))
-        			.orderBy(_getSpecifier(orderByCol, isAsc));
-            }
-            else {
-                query.from(_reviewBookmarks).orderBy(_getSpecifier(orderByCol, isAsc));
-            }
-
-            if (limit > -1) {
-                query.limit(limit);
-            }
-
-            if (offset > -1) {
-                query.offset(offset);
-            }
-
+        SQLQuery query = new SQLQuery(this.conn, DbUtils.getConfiguration());
+        if ((creatorArray != null) && (layerArray != null)) {
+            query.from(reviewBookmarks).where(b.createdBy.in(creatorArray))
+                    .where(b.mapId.in(layerArray))
+                    .orderBy(getSpecifier(orderByCol, isAsc));
         }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-            throw ex;
+        else if ((creatorArray != null) && (layerArray == null)) {
+            query.from(reviewBookmarks).where(b.createdBy.in(creatorArray))
+                    .orderBy(getSpecifier(orderByCol, isAsc));
+        }
+        else if ((creatorArray == null) && (layerArray != null)) {
+            query.from(reviewBookmarks).where(b.mapId.in(layerArray))
+                    .orderBy(getSpecifier(orderByCol, isAsc));
+        }
+        else {
+            query.from(reviewBookmarks).orderBy(getSpecifier(orderByCol, isAsc));
+        }
+
+        if (limit > -1) {
+            query.limit(limit);
+        }
+
+        if (offset > -1) {
+            query.offset(offset);
         }
 
         return query;

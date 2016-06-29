@@ -248,10 +248,9 @@ public class ReviewBookmarkResource {
                                                            @QueryParam("limit") String limitSize,
                                                            @QueryParam("offset") String offset,
                                                            @QueryParam("filterby") String filterBy,
-                                                           @QueryParam("filterbyval") String filterByVal) {
+                                                           @QueryParam("filterbyval") String filterByVal,
                                                            @QueryParam("createFilterVal") String filterByCreatedVal,
-                                                           @QueryParam("layerFilterVal") String filterByLayerVal)
-            throws Exception {
+                                                           @QueryParam("layerFilterVal") String filterByLayerVal) {
         ReviewBookmarksGetResponse response = new ReviewBookmarksGetResponse();
 
         try (Connection conn = DbUtils.createConnection()) {
@@ -273,24 +272,24 @@ public class ReviewBookmarkResource {
 
             Long[] creatorArray = null;
             if(filterByCreatedVal != null){
-            	String[] cA = filterByCreatedVal.split(",");
+                String[] cA = filterByCreatedVal.split(",");
                 if(cA.length > 0){
-                	creatorArray = new Long[cA.length];
+                    creatorArray = new Long[cA.length];
                     for(int i = 0; i < creatorArray.length; i++){
-                    	creatorArray[i] = Long.valueOf(cA[i]);
+                        creatorArray[i] = Long.valueOf(cA[i]);
                     }
                 }
             }
 
             Long[] layerArray = null;
             if(filterByLayerVal != null){
-	            String[] lA = filterByLayerVal.split(",");
-	            if(lA.length > 0){
-	            	layerArray = new Long[lA.length];
-	                for(int i = 0; i < layerArray.length; i++){
-	                	layerArray[i] = Long.valueOf(lA[i]);
-	                }
-	            }
+                String[] lA = filterByLayerVal.split(",");
+                if(lA.length > 0){
+                    layerArray = new Long[lA.length];
+                    for(int i = 0; i < layerArray.length; i++){
+                        layerArray[i] = Long.valueOf(lA[i]);
+                    }
+                }
             }
 
             ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
