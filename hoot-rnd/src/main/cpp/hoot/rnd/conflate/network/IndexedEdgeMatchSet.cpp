@@ -35,12 +35,62 @@ IndexedEdgeMatchSet::IndexedEdgeMatchSet()
 {
 }
 
-void IndexedEdgeMatchSet::addEdgeMatch(const EdgeMatchPtr& em, double score)
+void IndexedEdgeMatchSet::addEdgeMatch(const ConstEdgeMatchPtr &em, double score)
 {
   if (!contains(em))
   {
     _matches.insert(em, score);
+
+    // index it so we can quickly determine which match an edge is part of.
+    _addEdgeToMatchMapping(em->getString1(), em);
+    _addEdgeToMatchMapping(em->getString2(), em);
   }
+}
+
+void IndexedEdgeMatchSet::_addEdgeToMatchMapping(ConstEdgeStringPtr str,
+  const ConstEdgeMatchPtr &em)
+{
+  QList<EdgeString::EdgeEntry> e = str->getAllEdges();
+
+  foreach (const EdgeString::EdgeEntry& ee, e)
+  {
+    _edgeToMatch[ee.e].insert(em);
+  }
+}
+
+shared_ptr<IndexedEdgeLinks> IndexedEdgeMatchSet::calculateEdgeLinks()
+{
+  shared_ptr<IndexedEdgeLinks> result(new IndexedEdgeLinks());
+
+  for (QHash<ConstEdgeMatchPtr, double>::const_iterator it = getAllMatches().begin();
+    it != getAllMatches().end(); ++it)
+  {
+    ConstEdgeMatchPtr em = it.key();
+    ConstNetworkVertexPtr from1, from2, to1, to2;
+    from1 = em->getString1()->getFrom();
+    to1 = em->getString1()->getTo();
+    from2 = em->getString2()->getFrom();
+    to2 = em->getString2()->getTo();
+
+    // get all the edges that connect to from1/from2 and are also a proper pair.
+    QSet<ConstEdgeMatchPtr> fromLinks = getMatchesWithTermination(from1, from2);
+
+    // get all the edges that connect to to1/to2 and are also a proper pair.
+    QSet<ConstEdgeMatchPtr> toLinks = getMatchesWithTermination(to1, to2);
+
+    QSet<ConstEdgeMatchPtr> links = fromLinks | toLinks;
+
+    foreach(ConstEdgeMatchPtr other, links)
+    {
+      // if the other edge isn't part of this edge.
+      if (other->overlaps(em) == false)
+      {
+        result->insertMulti(em, other);
+      }
+    }
+  }
+
+  return result;
 }
 
 shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSet::clone() const
@@ -50,7 +100,7 @@ shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSet::clone() const
   return result;
 }
 
-bool IndexedEdgeMatchSet::contains(const EdgeMatchPtr& em) const
+bool IndexedEdgeMatchSet::contains(const ConstEdgeMatchPtr &em) const
 {
   bool result = false;
 
@@ -71,7 +121,7 @@ bool IndexedEdgeMatchSet::contains(const EdgeMatchPtr& em) const
   return result;
 }
 
-EdgeMatchPtr IndexedEdgeMatchSet::getMatch(const EdgeMatchPtr &em) const
+ConstEdgeMatchPtr IndexedEdgeMatchSet::getMatch(const ConstEdgeMatchPtr &em) const
 {
   MatchHash::const_iterator it = _matches.find(em);
 
@@ -83,14 +133,50 @@ EdgeMatchPtr IndexedEdgeMatchSet::getMatch(const EdgeMatchPtr &em) const
   return it.key();
 }
 
-QSet<EdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithTermination(ConstNetworkVertexPtr v1,
+QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatContain(ConstNetworkEdgePtr e) const
+{
+  return _edgeToMatch[e];
+}
+
+QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeStringPtr str) const
+{
+  QSet<ConstEdgeMatchPtr> result;
+
+  foreach (const EdgeString::EdgeEntry& ee, str->getAllEdges())
+  {
+    result.unite(getMatchesThatContain(ee.e));
+  }
+
+  return result;
+}
+
+QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeMatchPtr e) const
+{
+  QSet<ConstEdgeMatchPtr> result;
+
+  QSet<ConstEdgeMatchPtr> candidates = getMatchesThatOverlap(e->getString1());
+  candidates.unite(getMatchesThatOverlap(e->getString2()));
+
+  foreach (const ConstEdgeMatchPtr& em, candidates)
+  {
+    if (em->getString1()->overlaps(e->getString1()) ||
+      em->getString2()->overlaps(e->getString2()))
+    {
+      result.insert(em);
+    }
+  }
+
+  return result;
+}
+
+QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithTermination(ConstNetworkVertexPtr v1,
   ConstNetworkVertexPtr v2) const
 {
-  QSet<EdgeMatchPtr> result;
+  QSet<ConstEdgeMatchPtr> result;
 
   /// @todo replace this with an index. This will get quite slow w/ 100k edges.
 
-  foreach (const EdgeMatchPtr& em, _matches.keys())
+  foreach (const ConstEdgeMatchPtr& em, _matches.keys())
   {
     if (em->getString1()->getFrom() == v1 &&
       em->getString2()->getFrom() == v2)

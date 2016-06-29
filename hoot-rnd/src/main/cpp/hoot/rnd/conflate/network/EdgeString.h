@@ -68,9 +68,14 @@ public:
   shared_ptr<EdgeString> clone() const;
 
   /**
-   * Returns true if the specified edge is in this EdgeMatch.
+   * Returns true if the specified edge is in this string.
    */
   bool contains(ConstNetworkEdgePtr e) const;
+
+  /**
+   * Returns true if the specified vertex is in this string.
+   */
+  bool contains(ConstNetworkVertexPtr e) const;
 
   QList<EdgeEntry> getAllEdges() const { return _edges; }
 
@@ -95,6 +100,10 @@ public:
 
   ConstNetworkVertexPtr getTo() const;
 
+  bool overlaps(shared_ptr<const EdgeString> other) const;
+
+  bool overlaps(ConstNetworkEdgePtr e) const;
+
   void prependEdge(ConstNetworkEdgePtr e);
 
   /**
@@ -113,6 +122,22 @@ private:
 
 typedef shared_ptr<EdgeString> EdgeStringPtr;
 typedef shared_ptr<const EdgeString> ConstEdgeStringPtr;
+
+// needed for QSet
+inline bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2)
+{
+  return es1->toString() == es2->toString();
+}
+
+inline uint qHash(const hoot::EdgeStringPtr& es)
+{
+  return qHash(es->toString());
+}
+
+inline uint qHash(const hoot::ConstEdgeStringPtr& es)
+{
+  return qHash(es->toString());
+}
 
 }
 

@@ -76,16 +76,20 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
       for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
       {
         set< pair<ElementId, ElementId> > s = (*it)->getMatchPairs();
-        eids.insert(s.begin(), s.end());
+        set<ElementId> eids;
+        for (set< pair<ElementId, ElementId> >::const_iterator jt = s.begin(); jt != s.end(); ++jt)
+        {
+          eids.insert(jt->first);
+          eids.insert(jt->second);
+        }
 
         const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*it);
         scores << QString::number(m->getProbability());
         sum += m->getScore();
-      }
 
-      mergers.push_back(new MarkForReviewMerger(eids, "A complex road situation was found. " +
-        scores.join(", "),
-        m->getMatchName(), sum / matches.size()));
+        mergers.push_back(new MarkForReviewMerger(eids, "A complex road situation was found.",
+          m->getMatchName(), m->getScore()));
+      }
     }
     else
     {

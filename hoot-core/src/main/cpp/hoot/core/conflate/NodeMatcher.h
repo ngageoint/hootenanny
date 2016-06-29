@@ -73,7 +73,7 @@ private:
 
 
   double _calculateAngleScore(const vector<Radians>& theta1, const vector<Radians>& theta2,
-    vector<bool>& exclude, size_t depth);
+    vector<bool>& exclude, size_t depth, bool debug = false);
 };
 
 typedef shared_ptr<NodeMatcher> NodeMatcherPtr;

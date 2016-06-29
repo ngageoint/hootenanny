@@ -28,35 +28,55 @@
 #define __INDEXED_EDGE_MATCH_SET_H__
 
 #include "EdgeMatchSet.h"
+#include "IndexedEdgeLinks.h"
 
 namespace hoot
 {
 
+/**
+ * Contains an indexed set of EdgeMatches. This allows efficient retrieval of specific matches based
+ * on various criteria.
+ */
 class IndexedEdgeMatchSet : public EdgeMatchSet
 {
 public:
-  typedef QHash<EdgeMatchPtr, double> MatchHash;
+  typedef QHash<ConstEdgeMatchPtr, double> MatchHash;
 
   IndexedEdgeMatchSet();
   
-  void addEdgeMatch(const EdgeMatchPtr& em, double score);
+  /**
+   * The edge match should not be modified after it has been added to the index.
+   */
+  void addEdgeMatch(const ConstEdgeMatchPtr& em, double score);
 
-  QList<ConstEdgeMatchPtr> getIntersectingMatches(const ConstEdgeMatchPtr& em);
+  shared_ptr<IndexedEdgeLinks> calculateEdgeLinks();
 
   shared_ptr<IndexedEdgeMatchSet> clone() const;
 
   /**
    * Returns true if the specified element (or the reversed equivalent) is contained in this set.
    */
-  virtual bool contains(const EdgeMatchPtr &em) const;
+  virtual bool contains(const ConstEdgeMatchPtr &em) const;
 
   const MatchHash& getAllMatches() const { return _matches; }
   MatchHash& getAllMatches() { return _matches; }
 
+  QSet<ConstEdgeMatchPtr> getMatchesThatContain(ConstNetworkEdgePtr e) const;
+
+  /**
+   * Return all matches that overlap with e. This may include e.
+   */
+  QSet<ConstEdgeMatchPtr> getMatchesThatOverlap(ConstEdgeMatchPtr e) const;
+
+  /**
+   * Return all matches that overlap with str.
+   */
+  QSet<ConstEdgeMatchPtr> getMatchesThatOverlap(ConstEdgeStringPtr str) const;
+
   /**
    * Return all the edges that either start at v1/v2 or end at v1/v2.
    */
-  QSet<EdgeMatchPtr> getMatchesWithTermination(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2)
+  QSet<ConstEdgeMatchPtr> getMatchesWithTermination(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2)
     const;
 
   /**
@@ -65,21 +85,26 @@ public:
    *
    * An exception is thrown if the match doesn't exist.
    */
-  EdgeMatchPtr getMatch(const EdgeMatchPtr &em) const;
+  ConstEdgeMatchPtr getMatch(const ConstEdgeMatchPtr &em) const;
 
   /**
    * Return the score associated with an edge match.
    */
-  double getScore(EdgeMatchPtr em) const { return _matches[em]; }
+  double getScore(ConstEdgeMatchPtr em) const { return _matches[em]; }
 
   int getSize() const { return _matches.size(); }
 
-  void setScore(EdgeMatchPtr em, double score) { _matches[em] = score; }
+  void setScore(ConstEdgeMatchPtr em, double score) { _matches[em] = score; }
 
   virtual QString toString() const;
 
 private:
+  typedef QHash<ConstNetworkEdgePtr, QSet<ConstEdgeMatchPtr> > EdgeToMatchMap;
+
+  EdgeToMatchMap _edgeToMatch;
   MatchHash _matches;
+
+  void _addEdgeToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr &em);
 };
 
 typedef shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSetPtr;

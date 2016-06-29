@@ -78,6 +78,8 @@ public:
 
   Meters getSearchRadius(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const;
 
+  QList<ConstNetworkVertexPtr> getCandidateMatchesV2(ConstNetworkVertexPtr v2);
+
   bool hasConfidentTiePoint(ConstNetworkVertexPtr v);
 
   bool isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);

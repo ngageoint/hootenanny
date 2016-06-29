@@ -87,7 +87,9 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/EdgePair.cpp \
     src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeLinks.cpp \
     src/main/cpp/hoot/rnd/conflate/network/LegacyVertexMatcher.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.cpp
+    src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcher.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcherTest.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h \
@@ -123,7 +125,8 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeLinks.h \
     src/main/cpp/hoot/rnd/conflate/network/LegacyVertexMatcher.h \
     src/main/cpp/hoot/rnd/conflate/network/SearchRadiusProvider.h \
-    src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.h
+    src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.h \
+    src/main/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcher.h
 
 FORMS +=
 

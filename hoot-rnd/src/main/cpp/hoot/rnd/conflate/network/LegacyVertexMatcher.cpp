@@ -52,8 +52,18 @@ void LegacyVertexMatcher::_balanceVertexScores()
         _hasConfidentTie.insert(ties1[i]->v2);
         _finalScores[v1].clear();
         _finalScores[v1][ties1[i]->v2] = score;
-        LOG_INFO("high conf: " << v1->getElementId().getId() << ", " <<
-          ties1[i]->v2->getElementId().getId() << " " << score);
+      }
+    }
+  }
+
+  foreach (ConstNetworkVertexPtr v1, _finalScores.keys())
+  {
+    QMap<ConstNetworkVertexPtr, double> m = _finalScores[v1];
+    foreach (ConstNetworkVertexPtr v2, m.keys())
+    {
+      if (m[v2] > 0.0)
+      {
+        _finalCandidates[v2].append(v1);
       }
     }
   }
@@ -127,6 +137,12 @@ double LegacyVertexMatcher::_denominatorForTie(TiePointScorePtr tie)
   return sum;
 }
 
+QList<ConstNetworkVertexPtr> LegacyVertexMatcher::getCandidateMatchesV2(ConstNetworkVertexPtr v2)
+  const
+{
+  return _finalCandidates[v2];
+}
+
 void LegacyVertexMatcher::identifyVertexMatches(ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2,
   SearchRadiusProvider& srp)
 {
@@ -166,12 +182,6 @@ bool LegacyVertexMatcher::isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetwor
 {
   bool result = false;
   double score = scoreMatch(v1, v2);
-  if (v1->getElementId().getId() == -9)
-  {
-    LOG_VAR(v1);
-    LOG_VAR(v2);
-    LOG_VAR(score);
-  }
 
   if (score > 0)
   {
@@ -210,7 +220,9 @@ double LegacyVertexMatcher::_scoreSinglePair(ConstNetworkVertexPtr v1, ConstNetw
     _nodeMatcher->setMap(_map);
   }
 
-  return _nodeMatcher->scorePair(v1->getElementId().getId(), v2->getElementId().getId());
+  double score = _nodeMatcher->scorePair(v1->getElementId().getId(), v2->getElementId().getId());
+
+  return score;
 }
 
 double LegacyVertexMatcher::scoreMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2)

@@ -35,11 +35,6 @@ WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString
     // Take the shorter of the two steps
     if (dnext1 < dnext2)
     {
-      LOG_VAR(wstr1);
-      LOG_VAR(wstr2);
-      LOG_VAR(ws1.getEnd());
-      LOG_VAR(mapping->map1To2(ws1.getEnd()));
-      LOG_VAR(ws2.getEnd());
       sub1 = WaySubline(wl1, ws1.getEnd());
       sub2 = WaySubline(wl2, mapping->map1To2(ws1.getEnd(), ws2.getElementId()));
     }

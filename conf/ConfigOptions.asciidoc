@@ -868,6 +868,15 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== network.matcher
+
+* Data Type: string
+* Default Value: `hoot::IterativeNetworkMatcher`
+
+An internal option for manipulating the way network matching occurs. This should only be used for
+debug and test. The parameter must be a class that is registered with the factory and subclasses
+`NetworkMatcher`.
+
 === network.miss.threshold
 
 * Data Type: double

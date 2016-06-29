@@ -58,10 +58,22 @@ namespace hoot
  *
  * One notable benefit to this approach is that it is highly scalable. A hadoop implemenation
  * is very feasible, but would be outside the existing parallel conflation code.
+ *
+ * The biggest disadvantage as this implementation stands now is that supporting subgraphs can be
+ * created where the model will stagnate with each subgraph coming to its own internal solution, but
+ * the subgraph's do not interact and so the solution never converges to a meaningful solution.
+ * I've been calling these subgraphs "ghost graphs".
  */
 class VagabondNetworkMatcher : public NetworkMatcher
 {
 public:
+
+  static string className() { return "hoot::VagabondNetworkMatcher"; }
+
+  /**
+   * Use create instead.
+   */
+  VagabondNetworkMatcher();
 
   /**
    * Use this instead of a constructor. To simplify life a shared pointer should always be used.
@@ -82,15 +94,9 @@ public:
 
   virtual QList<NetworkVertexScorePtr> getAllVertexScores() const;
 
-protected:
-  /**
-   * Use create instead.
-   */
-  VagabondNetworkMatcher();
-
 private:
 
-  IndexedEdgeLinks _links;
+  IndexedEdgeLinksPtr _links;
   IndexedEdgeMatchSetPtr _pr;
   double _dampen;
 

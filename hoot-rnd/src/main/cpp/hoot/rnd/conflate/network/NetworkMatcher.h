@@ -51,6 +51,8 @@ class NetworkMatcher
 public:
   const static double EPSILON;
 
+  static string className() { return "hoot::NetworkMatcher"; }
+
   virtual ~NetworkMatcher();
 
   /**
@@ -81,6 +83,9 @@ protected:
   IntersectionIterator _createIterator(Envelope env, HilbertRTreePtr tree);
 
 };
+
+typedef shared_ptr<NetworkMatcher> NetworkMatcherPtr;
+typedef shared_ptr<const NetworkMatcher> ConstNetworkMatcherPtr;
 
 }
 

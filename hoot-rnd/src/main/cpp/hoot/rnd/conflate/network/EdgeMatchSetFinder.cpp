@@ -53,17 +53,11 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
 
   _steps = 0;
   _addEdgeMatches(em);
-
-  LOG_VAR(_steps);
 }
 
 void EdgeMatchSetFinder::_addEdgeMatches(EdgeMatchPtr em)
 {
   _steps++;
-  if (_steps % 10 == 0)
-  {
-    LOG_VAR(_steps);
-  }
   // if both the start and end have a valid matched vertex pair then add the match
   ConstNetworkVertexPtr from1 = em->getString1()->getFrom();
   ConstNetworkVertexPtr from2 = em->getString2()->getFrom();
@@ -71,10 +65,6 @@ void EdgeMatchSetFinder::_addEdgeMatches(EdgeMatchPtr em)
   ConstNetworkVertexPtr to2 = em->getString2()->getTo();
   bool fromMatch = _details->isCandidateMatch(from1, from2);
   bool toMatch = _details->isCandidateMatch(to1, to2);
-
-//  LOG_VAR(em);
-//  LOG_VAR(fromMatch);
-//  LOG_VAR(toMatch);
 
   /// @todo Possibly continue to evaluate matches even if we find an end point. This may make
   /// the search space very large, but would avoid missing matches.
@@ -89,8 +79,8 @@ void EdgeMatchSetFinder::_addEdgeMatches(EdgeMatchPtr em)
   // if the end of the match isn't terminated.
   else if (!toMatch)
   {
-    // if neither of the vertices has a tie point then we need to keep searching.
-    if (_details->hasConfidentTiePoint(to1) == false &&
+    // if either of the vertices doesn't have a tie point then we need to keep searching.
+    if (_details->hasConfidentTiePoint(to1) == false ||
       _details->hasConfidentTiePoint(to2) == false)
     {
       // get all the neighboring edges to 1 and 2
@@ -103,8 +93,8 @@ void EdgeMatchSetFinder::_addEdgeMatches(EdgeMatchPtr em)
   // if the beginning of the match isn't terminated
   else if (!fromMatch)
   {
-    // if neither of the vertices has a tie point then we need to keep searching.
-    if (_details->hasConfidentTiePoint(from1) == false &&
+    // if either of the vertices doesn't have a tie point then we need to keep searching.
+    if (_details->hasConfidentTiePoint(from1) == false ||
       _details->hasConfidentTiePoint(from2) == false)
     {
       // get all the neighboring edges to 1 and 2

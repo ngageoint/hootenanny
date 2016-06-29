@@ -55,6 +55,8 @@ public:
 
   Meters calculateLength(const ConstElementProviderPtr& provider) const;
 
+  Meters contains(const ConstNetworkVertexPtr& v) const;
+
   ConstNetworkVertexPtr getFrom() const { return _from; }
 
   QList<ConstElementPtr> getMembers() const { return _members; }

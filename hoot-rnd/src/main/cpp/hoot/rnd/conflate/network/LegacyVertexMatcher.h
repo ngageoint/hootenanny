@@ -53,6 +53,8 @@ public:
 
   LegacyVertexMatcher(ConstOsmMapPtr map);
 
+  QList<ConstNetworkVertexPtr> getCandidateMatchesV2(ConstNetworkVertexPtr v2) const;
+
   bool hasConfidentTiePoint(ConstNetworkVertexPtr v) const { return _hasConfidentTie.contains(v); }
 
   /**
@@ -91,6 +93,9 @@ private:
   // be kinda fun to optimize if it every becomes a bottle neck (doubtful).
   QMap< ConstNetworkVertexPtr, QList<TiePointScorePtr> > _scores1, _scores2;
   QMap< ConstNetworkVertexPtr, QMap<ConstNetworkVertexPtr, double> > _finalScores;
+  // Reverse of _finalScores to make getCandidateMatchesV2 faster.
+  // QMap< v2, QList<v1> >
+  QMap< ConstNetworkVertexPtr, QList<ConstNetworkVertexPtr> > _finalCandidates;
   QSet<ConstNetworkVertexPtr> _hasConfidentTie;
 
   double _confidentThreshold;

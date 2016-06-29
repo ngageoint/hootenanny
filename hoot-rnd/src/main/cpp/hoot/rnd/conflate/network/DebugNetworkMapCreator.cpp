@@ -53,7 +53,7 @@ void DebugNetworkMapCreator::addDebugElements(OsmMapPtr map, QList<NetworkEdgeSc
 
 void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edgeScore)
 {
-  if (edgeScore->getScore() >= 1e-6)
+  if (edgeScore->getScore() >= 1e-4)
   {
     ConstNodePtr n1 = _getMedianNode(map, edgeScore->getEdgeMatch()->getString1()->getMembers());
     ConstNodePtr n2 = _getMedianNode(map, edgeScore->getEdgeMatch()->getString2()->getMembers());

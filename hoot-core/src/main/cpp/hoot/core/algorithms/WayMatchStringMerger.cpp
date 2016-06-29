@@ -365,8 +365,9 @@ void WayMatchStringMerger::_splitPrimary()
     // push them all on. This will inevitably create some empty ways, but it is predictable.
     for (int i = 0; i < sm.size(); ++i)
     {
-      wls.push_back(sm.at(i)->start);
-      wls.push_back(sm.at(i)->end);
+      // make sure the split points are sorted.
+      wls.push_back(std::min(sm.at(i)->start, sm.at(i)->end));
+      wls.push_back(std::max(sm.at(i)->start, sm.at(i)->end));
     }
 
     LOG_VAR(w1.get());
@@ -397,8 +398,11 @@ void WayMatchStringMerger::_splitPrimary()
       // if this isn't empty
       if (w && ec.calculateLength(w) > 0.0)
       {
-        // only the last one should be non-empty
-        assert(i == sm.size() - 1);
+        // only the last split should be non-empty
+        if (i != sm.size() - 1)
+        {
+          throw InternalErrorException("Only the last split should be empty.");
+        }
         newWays.append(w);
         _scraps1.append(w);
         _replaced.push_back(pair<ElementId, ElementId>(w1->getElementId(), w->getElementId()));

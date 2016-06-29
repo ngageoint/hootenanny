@@ -37,7 +37,7 @@ class EdgeMatchSet
 public:
   virtual ~EdgeMatchSet() {}
 
-  virtual bool contains(const EdgeMatchPtr &em) const = 0;
+  virtual bool contains(const ConstEdgeMatchPtr &em) const = 0;
 
   virtual QString toString() const = 0;
 

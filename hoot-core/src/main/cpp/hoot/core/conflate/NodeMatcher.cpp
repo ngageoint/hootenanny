@@ -116,22 +116,27 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
 }
 
 double NodeMatcher::_calculateAngleScore(const vector<Radians>& theta1,
-  const vector<Radians>& theta2, vector<bool>& exclude, size_t depth)
+  const vector<Radians>& theta2, vector<bool>& exclude, size_t depth, bool debug)
 {
+  assert(theta1.size() <= theta2.size());
   if (depth == theta1.size())
   {
     return 1.0;
   }
-  //LOG_INFO("depth: " << depth << " exclude: " << exclude);
 
   double max = 0;
   for (int j = 0; j < (int)theta2.size(); j++)
   {
     if (exclude[j] == false)
     {
-      double r = pow(cos(WayHeading::deltaMagnitude(theta1[depth], theta2[j])), _strictness);
+      Radians m = WayHeading::deltaMagnitude(theta1[depth], theta2[j]);
+      double r = 0;
+      if (m < M_PI / 2.0)
+      {
+        r = pow(cos(WayHeading::deltaMagnitude(theta1[depth], theta2[j])), _strictness);
+      }
       exclude[j] = true;
-      double v = r * _calculateAngleScore(theta1, theta2, exclude, depth + 1);
+      double v = r * _calculateAngleScore(theta1, theta2, exclude, depth + 1, debug);
       exclude[j] = false;
       if (v > max)
       {
@@ -199,12 +204,21 @@ double NodeMatcher::scorePair(long nid1, long nid2)
   }
   else
   {
-    vector<bool> exclude(theta1.size(), false);
-    thetaScore = _calculateAngleScore(theta1, theta2, exclude, 0);
+    if (theta2.size() < theta1.size())
+    {
+      vector<bool> exclude(theta2.size(), false);
+      thetaScore = _calculateAngleScore(theta2, theta1, exclude, 0, nid1 == -2831);
+    }
+    else
+    {
+      vector<bool> exclude(theta1.size(), false);
+      thetaScore = _calculateAngleScore(theta1, theta2, exclude, 0, nid1 == -2831);
+    }
   }
 
   // simple stupid heuristic. Replace w/ some cosine fanciness later.
   int diff = abs((int)s1 - (int)s2);
+
   return (min(s1, s2) - diff) * thetaScore * distanceScore;
 }
 

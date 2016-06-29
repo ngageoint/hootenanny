@@ -30,20 +30,21 @@ namespace hoot
 {
 
 /// @todo This and qHash are effective, but inefficient, please come up with a better method.
-bool operator==(const hoot::EdgeMatchPtr& em1, const hoot::EdgeMatchPtr& em2)
+bool operator==(const hoot::ConstEdgeMatchPtr& em1, const hoot::ConstEdgeMatchPtr& em2)
 {
   return em1->toString() == em2->toString();
-}
-
-uint qHash(const hoot::EdgeMatchPtr& em)
-{
-  return qHash(em->toString());
 }
 
 EdgeMatch::EdgeMatch()
 {
   _edges1.reset(new EdgeString());
   _edges2.reset(new EdgeString());
+}
+
+EdgeMatch::EdgeMatch(ConstEdgeStringPtr es1, ConstEdgeStringPtr es2) :
+  _edges1(es1->clone()),
+  _edges2(es2->clone())
+{
 }
 
 shared_ptr<EdgeMatch> EdgeMatch::clone() const
@@ -58,6 +59,11 @@ shared_ptr<EdgeMatch> EdgeMatch::clone() const
 bool EdgeMatch::contains(ConstNetworkEdgePtr e) const
 {
   return getString1()->contains(e) || getString2()->contains(e);
+}
+
+bool EdgeMatch::contains(ConstNetworkVertexPtr v) const
+{
+  return getString1()->contains(v) || getString2()->contains(v);
 }
 
 bool EdgeMatch::overlaps(const shared_ptr<const EdgeMatch> &other) const

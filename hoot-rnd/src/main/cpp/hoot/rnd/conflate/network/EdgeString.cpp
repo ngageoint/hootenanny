@@ -81,14 +81,24 @@ shared_ptr<EdgeString> EdgeString::clone() const
   return result;
 }
 
-/**
- * Returns true if the specified edge is in this EdgeString.
- */
 bool EdgeString::contains(ConstNetworkEdgePtr e) const
 {
   for (int i = 0; i < _edges.size(); ++i)
   {
     if (_edges[i].e == e)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool EdgeString::contains(ConstNetworkVertexPtr v) const
+{
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    if (_edges[i].e->contains(v))
     {
       return true;
     }
@@ -147,6 +157,33 @@ ConstNetworkVertexPtr EdgeString::getTo() const
   {
     return _edges.back().e->getTo();
   }
+}
+
+bool EdgeString::overlaps(shared_ptr<const EdgeString> other) const
+{
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    if (other->overlaps(_edges[i].e))
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool EdgeString::overlaps(ConstNetworkEdgePtr e) const
+{
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    // poor man's equality. Should work.
+    if (_edges[i].e->toString() == e->toString())
+    {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 void EdgeString::prependEdge(ConstNetworkEdgePtr e)

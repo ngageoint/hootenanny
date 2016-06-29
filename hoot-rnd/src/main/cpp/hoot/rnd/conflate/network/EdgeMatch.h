@@ -45,6 +45,8 @@ class EdgeMatch
 public:
   EdgeMatch();
 
+  EdgeMatch(ConstEdgeStringPtr es1, ConstEdgeStringPtr es2);
+
   EdgeStringPtr getString1() { return _edges1; }
 
   EdgeStringPtr getString2() { return _edges2; }
@@ -59,6 +61,11 @@ public:
    * Returns true if the specified edge is in either the first or second edge string.
    */
   bool contains(ConstNetworkEdgePtr e) const;
+
+  /**
+   * Returns true if the specified vertex is in either the first or second edge string.
+   */
+  bool contains(ConstNetworkVertexPtr v) const;
 
   /**
    * Returns true if any of the edges in this edge match overlap with other. Overlapping vertexes
@@ -82,8 +89,17 @@ typedef shared_ptr<EdgeMatch> EdgeMatchPtr;
 typedef shared_ptr<const EdgeMatch> ConstEdgeMatchPtr;
 
 // needed for QSet
-bool operator==(const hoot::EdgeMatchPtr& em1, const hoot::EdgeMatchPtr& em2);
-uint qHash(const hoot::EdgeMatchPtr& em);
+bool operator==(const hoot::ConstEdgeMatchPtr& em1, const hoot::ConstEdgeMatchPtr& em2);
+
+inline uint qHash(const hoot::EdgeMatchPtr& em)
+{
+  return qHash(em->toString());
+}
+
+inline uint qHash(const hoot::ConstEdgeMatchPtr& em)
+{
+  return qHash(em->toString());
+}
 
 }
 

@@ -39,6 +39,7 @@
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/rnd/conflate/network/IterativeNetworkMatcher.h>
+#include <hoot/rnd/conflate/network/SingleSidedNetworkMatcher.h>
 #include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
 #include <hoot/rnd/conflate/network/NetworkMatch.h>
 #include <hoot/rnd/conflate/network/OsmNetworkExtractor.h>
@@ -94,19 +95,22 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   // call class to derive final graph node and graph edge matches
   //IterativeNetworkMatcherPtr matcher = IterativeNetworkMatcher::create();
-  VagabondNetworkMatcherPtr matcher = VagabondNetworkMatcher::create();
+  //VagabondNetworkMatcherPtr matcher = VagabondNetworkMatcher::create();
+  //SingleSidedNetworkMatcherPtr matcher = SingleSidedNetworkMatcher::create();
+  NetworkMatcherPtr matcher(
+    Factory::getInstance().constructObject<NetworkMatcher>(ConfigOptions().getNetworkMatcher()));
+
   matcher->matchNetworks(map, n1, n2);
 
   NetworkDetailsPtr details(new NetworkDetails(map, n1, n2));
 
-  for (size_t i = 0; i < 10; ++i)
+  for (size_t i = 0; i < 20; ++i)
   {
     matcher->iterate();
   }
 
   // convert graph edge matches into NetworkMatch objects.
   QList<NetworkEdgeScorePtr> edgeMatch = matcher->getAllEdgeScores();
-  LOG_VAR(edgeMatch);
 
   for (int i = 0; i < edgeMatch.size(); i++)
   {

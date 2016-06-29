@@ -53,6 +53,11 @@ Meters NetworkEdge::calculateLength(const ConstElementProviderPtr& provider) con
   return ElementConverter(provider).calculateLength(_members[0]);
 }
 
+Meters NetworkEdge::contains(const ConstNetworkVertexPtr& v) const
+{
+  return _from == v || _to == v;
+}
+
 QString NetworkEdge::toString() const
 {
   QString result;

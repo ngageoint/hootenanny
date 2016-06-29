@@ -49,9 +49,13 @@ NetworkDetails::NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstO
   _sublineMatcher.reset(
     Factory::getInstance().constructObject<SublineStringMatcher>(
       ConfigOptions().getHighwaySublineStringMatcher()));
+//  _classifier.reset(
+//    Factory::getInstance().constructObject<HighwayClassifier>(
+//      ConfigOptions().getConflateMatchHighwayClassifier()));
+
   _classifier.reset(
     Factory::getInstance().constructObject<HighwayClassifier>(
-      ConfigOptions().getConflateMatchHighwayClassifier()));
+      QString::fromAscii("hoot::HighwayExpertClassifier")));
 
 }
 
@@ -60,6 +64,11 @@ Meters NetworkDetails::calculateLength(ConstNetworkEdgePtr e)
   assert(e->getMembers().size() == 1);
 
   return ElementConverter(_map).calculateLength(e->getMembers()[0]);
+}
+
+QList<ConstNetworkVertexPtr> NetworkDetails::getCandidateMatchesV2(ConstNetworkVertexPtr v2)
+{
+  return _getVertexMatcher()->getCandidateMatchesV2(v2);
 }
 
 double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
@@ -122,9 +131,6 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
   MatchClassification c;
   // calculate the match score
   c = _classifier->classify(mapCopy, r1->getElementId(), r2->getElementId(), *matchString);
-  LOG_VARD(ws1->calculateLength());
-  LOG_VARD(ws2->calculateLength());
-  LOG_VARD(c);
 
   return c.getMatchP();
 }
@@ -232,6 +238,18 @@ const NetworkDetails::SublineCache& NetworkDetails::_getSublineCache(ConstWayPtr
   return _sublineCache[e1][e2];
 }
 
+double NetworkDetails::getVertexMatchScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2)
+{
+  double score = _getVertexMatcher()->scoreMatch(v1, v2);
+
+  if (score == 0.0 && isCandidateMatch(v1, v2))
+  {
+    score = 1.0;
+  }
+
+  return score;
+}
+
 LegacyVertexMatcherPtr NetworkDetails::_getVertexMatcher()
 {
   if (!_vertexMatcher)
@@ -273,17 +291,6 @@ bool NetworkDetails::isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePt
 
 bool NetworkDetails::isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2)
 {
-  Meters ce = getSearchRadius(v1, v2);
-
-  double d = EuclideanDistanceExtractor().distance(*_map, v1->getElement(), v2->getElement());
-  bool result = d <= ce;
-  if (result != _getVertexMatcher()->isCandidateMatch(v1, v2, *this))
-  {
-    LOG_VAR(result);
-    LOG_VAR(_getVertexMatcher()->isCandidateMatch(v1, v2, *this));
-    LOG_VAR(v1);
-    LOG_VAR(v2);
-  }
   return _getVertexMatcher()->isCandidateMatch(v1, v2, *this);
 }
 
