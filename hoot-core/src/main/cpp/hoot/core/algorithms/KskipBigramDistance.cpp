@@ -29,6 +29,10 @@
 //  Hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/Factory.h>
+#include <hoot/core/algorithms/string/StringTokenizer.h>
+
+//  Qt
+#include <QMap>
 
 //  Standard
 #include <cmath>
@@ -40,81 +44,71 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, KskipBigramDistance)
 
-KskipBigramDistance::KskipBigramDistance(unsigned k)
+KskipBigramDistance::KskipBigramDistance(int k)
  : _k(2)
 {
-  if (k >= 1)
+  if (k >= 0)
   {
     setK(k);
   }
 }
 
 
-void KskipBigramDistance::setK(unsigned k)
+void KskipBigramDistance::setK(int k)
 {
-  if (k < 1)
+  if (k < 0)
   {
-    throw IllegalArgumentException("Expected k to be >= 1.");
+    throw IllegalArgumentException("Expected k to be >= 0.");
   }
   _k = k;
 }
 
-BigramType KskipBigramDistance::getBigrams(const QString& str) const
+QSet<QString> KskipBigramDistance::getBigrams(const QString& str) const
 {
-  QStringList corpus = str.toLower().split(" ", QString::KeepEmptyParts, Qt::CaseInsensitive);
+  QStringList corpus = StringTokenizer().tokenize(str.toLower());
 
-  BigramType bigrams;
-
-  if (corpus.length() < 3)
+  //  Use a QMap to de-duplicate and sort on the fly
+  QMap<QString, int> bigrams;
+  //  Iterate all of the tokens making bi-grams within each token, don't create bi-grams between tokens
+  for (int tok = 0; tok < corpus.length(); tok++)
   {
-    //  Two or less tokens can only result in 1 'bi-gram'
-    bigrams.push_back(str.toLower());
-  }
-  else
-  {
-    //  Iterate the tokens to create k-skip bi-grams
-    for (int i = 0; i < corpus.length() - 1; i++)
+    QString token = corpus[tok].toLower();
+    if (token.length() < 3)
     {
-      for (int j = i + 1; j < corpus.length() && j <= i + (int)_k + 1; j++)
+      bigrams.insert(token, 1);
+    }
+    else
+    {
+      //  Iterate the token to create k-skip bi-grams from the letters
+      for (int i = 0; i < token.length() - 1; i++)
       {
-        bigrams.push_back(QString("%1 %2").arg(corpus[i]).arg(corpus[j]));
+        for (int j = i + 1; j < token.length() && j <= i + _k + 1; j++)
+          bigrams.insert(QString("%1%2").arg(token[i]).arg(token[j]), 1);
       }
     }
   }
 
-  return bigrams;
+  return QSet<QString>::fromList(bigrams.keys());
 }
 
 double KskipBigramDistance::score(const QString& s1, const QString& s2) const
 {
   //  Get both sets of bi-grams
-  BigramType grams1 = getBigrams(s1);
-  BigramType grams2 = getBigrams(s2);
-  //  Iterate the smaller set (set1) and check if they exist in larger set (set2)
-  BigramType* set1 = &grams1;
-  BigramType* set2 = &grams2;
-  if (grams1.length() < grams2.length())
-  {
-    set1 = &grams2;
-    set2 = &grams1;
-  }
-
-  double s = 0.0;
-  unsigned found = 0;
-  //  Iterate set for s1
-  for (BigramType::iterator it = set1->begin(); it != set1->end(); it++)
-  {
-    //  Check if the bi-gram is in set for s2
-    if (set2->contains(*it, Qt::CaseInsensitive))
-    {
-      found++;
-    }
-  }
-  //  Calculate the score using (f / s) ^ (1 / 8) where f is the number of matched bi-grams in set1 and s is the number of total bi-grams in set1
-  if (found > 0)
-    s = pow(found / (double)set1->length(), 0.125);
-
-  return s;
+  QSet<QString> grams1 = getBigrams(s1);
+  QSet<QString> grams2 = getBigrams(s2);
+  //  Validate bi-gram set size
+  if (grams1.count() == 0 || grams2.count() == 0)
+    return 0.0;
+  /**  To calculate the score use the following
+   *   intersection of sets 1 and 2
+   *   ----------------------------
+   *   union of sets 1 and 2
+   *
+   *   http://www.sis.uta.fi/infim/julkaisut/fire/Spire-llncs.pdf
+   *
+   *   Note:  QSet uses operator& for intersection and operator+ for union
+   */
+  return ((double)(grams1 & grams2).count() / (double)(grams1 + grams2).count());
 }
 
 }

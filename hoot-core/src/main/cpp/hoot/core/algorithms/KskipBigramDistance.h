@@ -33,16 +33,14 @@
 #include <hoot/core/util/HootException.h>
 
 //  Qt
+#include <QSet>
 #include <QString>
-#include <QStringList>
 
 //  Standard
 #include <vector>
 
 namespace hoot
 {
-
-typedef QStringList BigramType;
 
 /** Work based on:
  *  A Closer Look at Skip-gram Modelling
@@ -53,13 +51,13 @@ class KskipBigramDistance : public StringDistance
 {
 public:
 
-  KskipBigramDistance(unsigned k = 3);
+  KskipBigramDistance(int k = 2);
 
   static string className() { return "hoot::KskipBigramDistance"; }
 
   virtual ~KskipBigramDistance() {}
 
-  void setK(unsigned k);
+  void setK(int k);
 
   /**
    * Returns a value from 1 (very similar) to 0 (very dissimilar) describing the distance between
@@ -67,7 +65,7 @@ public:
    */
   virtual double compare(const QString& s1, const QString& s2) const { return score(s1, s2); }
 
-  BigramType getBigrams(const QString& str) const;
+  QSet<QString> getBigrams(const QString& str) const;
 
   double score(const QString& s1, const QString& s2) const;
 
@@ -75,9 +73,9 @@ public:
 
 private:
   /**
-   * @brief _k is a value 'k' >= 2 for k-skip bigrams
+   * @brief _k is a value 'k' >= 0 for k-skip bi-grams
    */
-  unsigned _k;
+  int _k;
 };
 
 }

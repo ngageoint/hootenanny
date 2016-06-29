@@ -36,6 +36,7 @@
 
 // Hoot
 #include <hoot/core/algorithms/KskipBigramDistance.h>
+#include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -45,6 +46,12 @@
 
 namespace hoot
 {
+
+#define GET_TEST_VALUES(v1, v2, v3) \
+{ \
+  std::cout << v2 << std::endl; \
+} \
+
 
 class KskipBigramDistanceTest : public CppUnit::TestFixture
 {
@@ -56,71 +63,78 @@ public:
 
   void runTest()
   {
+    KskipBigramDistance kskip0(0);
     KskipBigramDistance kskip1(1);
     KskipBigramDistance kskip2(2);
     KskipBigramDistance kskip3(3);
-    /** Test text taken from example in:
-     *  A Closer Look at Skip-gram Modelling
-     *  David Guthrie, Ben Allison, Wei Liu, Louise Guthrie, Yorick Wilks
-     *  http://homepages.inf.ed.ac.uk/ballison/pdf/lrec_skipgrams.pdf
-     */
-    HOOT_STR_EQUALS("insurgents killed | "
-                    "insurgents in | "
-                    "killed in | "
-                    "killed ongoing | "
-                    "in ongoing | "
-                    "in fighting | "
-                    "ongoing fighting",
-                    kskip1.getBigrams("Insurgents killed in ongoing fighting").join(" | "));
-    HOOT_STR_EQUALS("insurgents killed | "
-                    "insurgents in | "
-                    "insurgents ongoing | "
-                    "killed in | "
-                    "killed ongoing | "
-                    "killed fighting | "
-                    "in ongoing | "
-                    "in fighting | "
-                    "ongoing fighting",
-                    kskip2.getBigrams("Insurgents killed in ongoing fighting").join(" | "));
-    HOOT_STR_EQUALS("insurgents killed | "
-                    "insurgents in | "
-                    "insurgents ongoing | "
-                    "insurgents fighting | "
-                    "killed in | "
-                    "killed ongoing | "
-                    "killed fighting | "
-                    "in ongoing | "
-                    "in fighting | "
-                    "ongoing fighting",
-                    kskip3.getBigrams("Insurgents killed in ongoing fighting").join(" | "));
 
-    HOOT_STR_EQUALS("insurgents", kskip1.getBigrams("INSURGENTS").join(" | "));
-    HOOT_STR_EQUALS("insurgents", kskip2.getBigrams("INSURGENTS").join(" | "));
+    HOOT_STR_EQUALS("ai | ee | et | in | ma | re | st | tr",
+                    joinBigrams(kskip0.getBigrams("Main Street")));
+    HOOT_STR_EQUALS("ai | an | ee | et | in | ma | mi | re | sr | st | te | tr",
+                    joinBigrams(kskip1.getBigrams("Main Street")));
+    HOOT_STR_EQUALS("ai | an | ee | et | in | ma | mi | mn | re | rt | se | sr | st | te | tr",
+                    joinBigrams(kskip2.getBigrams("Main Street")));
+    HOOT_STR_EQUALS("ai | an | ee | et | in | ma | mi | mn | re | rt | se | sr | st | te | tr | tt",
+                    joinBigrams(kskip3.getBigrams("Main Street")));
 
-    HOOT_STR_EQUALS("insurgents killed", kskip1.getBigrams("INSURGENTS KILLED").join(" | "));
-    HOOT_STR_EQUALS("insurgents killed", kskip2.getBigrams("INSURGENTS KILLED").join(" | "));
+    HOOT_STR_EQUALS("ai | an | ee | es | et | in | ma | mi | re | sr | st | te | tr | we | ws",
+                    joinBigrams(kskip1.getBigrams("West Main Street")));
+    HOOT_STR_EQUALS("ai | an | ee | es | et | in | ma | mi | mn | re | rt | se | sr | st | te | tr | we | ws | wt",
+                    joinBigrams(kskip2.getBigrams("West Main Street")));
+
+    HOOT_STR_EQUALS("ay | gh | gw | ha | hg | hi | hw | ig | ih | wa | wy",
+                    joinBigrams(kskip1.getBigrams("HIGHWAY")));
+    HOOT_STR_EQUALS("ay | ga | gh | gw | ha | hg | hh | hi | hw | hy | ig | ih | iw | wa | wy",
+                    joinBigrams(kskip2.getBigrams("HIGHWAY")));
+
+    HOOT_STR_EQUALS("", joinBigrams(kskip1.getBigrams("")));
+    HOOT_STR_EQUALS("", joinBigrams(kskip1.getBigrams("a")));
+
+    //  Try some different languages
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.6666, kskip2.compare(te("хелло ворлд"), te("hello world")), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.2727, kskip2.compare(te("هالو وورلد"),  te("hello world")), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3684, kskip2.compare(te("הללו וורלד"),    te("hello world")), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.4210, kskip2.compare(te("الواثق"),      te("Al Wathiq")),   0.0001);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, kskip1.compare("Main Street", "MAIN STREET"), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, kskip2.compare("MAIN STREET", "Main Street"), 0.0001);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8716, kskip1.compare("Main Street", "West Main Street"), 0.0001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8716, kskip2.compare("Main Street", "West Main Street"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8000, kskip0.compare("Main Street", "West Main Street"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8000, kskip1.compare("Main Street", "West Main Street"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.7894, kskip2.compare("Main Street", "West Main Street"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8000, kskip3.compare("Main Street", "West Main Street"), 0.0001);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, kskip1.compare("Main Street", "Second Street"), 0.0001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, kskip2.compare("Main Street", "Second Street"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3333, kskip1.compare("Main Street", "Second Street"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3461, kskip2.compare("Main Street", "Second Street"), 0.0001);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8716, kskip1.compare("First Second Third Fourth Fifth Sixth", "First Second Third"), 0.0001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8408, kskip2.compare("First Second Third Fourth Fifth Sixth", "First Second Third"), 0.0001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8248, kskip3.compare("First Second Third Fourth Fifth Sixth", "First Second Third"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5641, kskip1.compare("First Second Third Fourth Fifth Sixth", "First Second Third"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.6041, kskip2.compare("First Second Third Fourth Fifth Sixth", "First Second Third"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.6226, kskip3.compare("First Second Third Fourth Fifth Sixth", "First Second Third"), 0.0001);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9291, kskip1.compare("First Second Third Fourth Fifth Sixth", "First Second Third Fourth"), 0.0001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9170, kskip2.compare("First Second Third Fourth Fifth Sixth", "First Second Third Fourth"), 0.0001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8995, kskip3.compare("First Second Third Fourth Fifth Sixth", "First Second Third Fourth"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.7435, kskip1.compare("First Second Third Fourth Fifth Sixth", "First Second Third Fourth"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.7916, kskip2.compare("First Second Third Fourth Fifth Sixth", "First Second Third Fourth"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8113, kskip3.compare("First Second Third Fourth Fifth Sixth", "First Second Third Fourth"), 0.0001);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9690, kskip1.compare("First Second Third Fourth Fifth Sixth", "First Second Third Fourth Fifth"), 0.0001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9646, kskip2.compare("First Second Third Fourth Fifth Sixth", "First Second Third Fourth Fifth"), 0.0001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9588, kskip3.compare("First Second Third Fourth Fifth Sixth", "First Second Third Fourth Fifth"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8717, kskip1.compare("First Second Third Fourth Fifth Sixth", "First Second Third Fourth Fifth"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8958, kskip2.compare("First Second Third Fourth Fifth Sixth", "First Second Third Fourth Fifth"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8867, kskip3.compare("First Second Third Fourth Fifth Sixth", "First Second Third Fourth Fifth"), 0.0001);
 
+    //  100% code coverage
+    HOOT_STR_EQUALS("1-skip bi-gram", kskip1.toString());
+    HOOT_STR_EQUALS("2-skip bi-gram", kskip2.toString());
+  }
+
+  QString te(const char* s)
+  {
+    QString result = Translator::getInstance().translateStreet(QString::fromUtf8(s));
+    return result;
+  }
+
+  QString joinBigrams(QSet<QString> bigrams)
+  {
+    QStringList list(bigrams.toList());
+    list.sort();
+    return list.join(" | ");
   }
 
 };
