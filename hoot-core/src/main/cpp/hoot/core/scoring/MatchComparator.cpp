@@ -379,6 +379,56 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
   conflated->visitRo(vc);
   //LOG_DEBUG("cUuids size: " << cUuids.size());
 
+  // go through all the reviews in the conflated map
+  set<ReviewMarker::ReviewUid> ruuid = ReviewMarker::getReviewUids(conflated);
+  for (set<ReviewMarker::ReviewUid>::iterator it = ruuid.begin(); it != ruuid.end(); it++)
+  {
+    set<QString> u1;
+    set<QString> u2;
+
+    set<ElementId> eids = ReviewMarker::getReviewElements(conflated, *it);
+    for (set<ElementId>::iterator eid = eids.begin(); eid != eids.end(); eid++)
+    {
+      ElementId p = *eid;
+      QString uuidStr = conflated->getElement(p)->getTags()["uuid"];
+      if (uuidStr.isEmpty())
+      {
+        LOG_WARN("Missing uuid for " + p.toString());
+        continue;
+      }
+
+      if (conflated->getElement(p)->getStatus() == Status::Unknown1)
+      {
+        u1.insert(uuidStr);
+      }
+      else if (conflated->getElement(p)->getStatus() == Status::Unknown2)
+      {
+        u2.insert(uuidStr);
+      }
+      else if (u1.size() == 0 && u2.size() > 0)
+      {
+        u1.insert(uuidStr);
+      }
+      else if (u2.size() == 0 && u1.size() > 0)
+      {
+        u2.insert(uuidStr);
+      }
+      else
+      {
+        u2.insert(uuidStr);
+      }
+    }
+
+    // create a match between all the combinations of ref1 uuid to ref2 uuid
+    for (set<QString>::const_iterator iit = u1.begin(); iit != u1.end(); ++iit)
+    {
+      for (set<QString>::const_iterator jt = u2.begin(); jt != u2.end(); ++jt)
+      {
+        _actual.insert(UuidPair(*iit, *jt));
+      }
+    }
+  }
+
   // read out all the uuids in in1 and in2
   set<QString> in1Uuids;
   GetTagValuesVisitor gtv1("uuid", in1Uuids);

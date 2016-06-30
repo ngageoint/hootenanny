@@ -95,6 +95,23 @@ QString ReviewMarker::getReviewType(const ConstOsmMapPtr &map, ReviewUid uid)
   return r->getTags()[_reviewTypeKey];
 }
 
+set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &map)
+{
+  set<ElementId> result;
+
+  const RelationMap& relations = map->getRelationMap();
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  {
+    shared_ptr<Relation> relation = it->second;
+    if (relation->getElementType() == ElementType::Relation || relation->getType() == Relation::REVIEW)
+    {
+      result.insert(relation->getElementId());
+    }
+  }
+
+  return result;
+}
+
 set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &map,
   ConstElementPtr e1)
 {
