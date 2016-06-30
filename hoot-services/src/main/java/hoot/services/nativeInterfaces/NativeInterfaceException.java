@@ -66,8 +66,17 @@ public class NativeInterfaceException extends Exception {
         super(message);
     }
 
+    public NativeInterfaceException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     public NativeInterfaceException(String message, NativeInterfaceException.HttpCode exceptCode) {
         super(message);
+        exceptionCode = exceptCode;
+    }
+
+    public NativeInterfaceException(String message, NativeInterfaceException.HttpCode exceptCode, Throwable cause) {
+        super(message, cause);
         exceptionCode = exceptCode;
     }
 }

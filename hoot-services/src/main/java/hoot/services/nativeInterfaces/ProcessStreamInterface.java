@@ -199,10 +199,10 @@ public class ProcessStreamInterface implements INativeInterface {
         catch (Exception e) {
             if ((res != null) && (res.getExitStatus() == -9999)) {
                 throw new NativeInterfaceException("Failed to execute." + e.getMessage(),
-                        NativeInterfaceException.HttpCode.USER_CANCEL);
+                        NativeInterfaceException.HttpCode.USER_CANCEL, e);
             }
             throw new NativeInterfaceException("Failed to execute." + e.getMessage(),
-                    NativeInterfaceException.HttpCode.SERVER_ERROR);
+                    NativeInterfaceException.HttpCode.SERVER_ERROR, e);
         }
         finally {
             if (addedToQ) {
@@ -272,7 +272,7 @@ public class ProcessStreamInterface implements INativeInterface {
         }
         catch (Exception e) {
             throw new NativeInterfaceException("Failed to execute." + e.getMessage(),
-                    NativeInterfaceException.HttpCode.SERVER_ERROR);
+                    NativeInterfaceException.HttpCode.SERVER_ERROR, e);
         }
     }
 
