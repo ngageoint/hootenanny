@@ -28,13 +28,13 @@ package hoot.services.review;
 
 import java.sql.SQLException;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import hoot.services.utils.ResourceErrorHandler;
 
 
 /**
@@ -108,7 +108,8 @@ public final class ReviewUtils {
         }
 
         String exceptionCode = status.getStatusCode() + ": " + status.getReasonPhrase();
-        logger.error("{} {}", exceptionCode, message);
-        ResourceErrorHandler.handleError(message, status, logger);
+        logger.error("{} {}", exceptionCode, message, e);
+
+        throw new WebApplicationException(e, Response.status(status).entity(message).build());
     }
 }

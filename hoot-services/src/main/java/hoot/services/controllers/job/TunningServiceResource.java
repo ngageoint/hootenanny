@@ -32,6 +32,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -42,7 +43,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.job.JobExecutioner;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/tunning")
@@ -78,9 +78,9 @@ public class TunningServiceResource {
             return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
         }
         catch (Exception e) {
-            ResourceErrorHandler.handleError("Tuning Service error: " + e, Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Tuning Service error: " + e.getMessage();
+            logger.error(message, e);
+            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
-
-        return null;
     }
 }

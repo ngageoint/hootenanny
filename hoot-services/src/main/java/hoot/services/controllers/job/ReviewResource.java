@@ -37,7 +37,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
@@ -71,7 +73,6 @@ import hoot.services.models.review.ReviewableStatistics;
 import hoot.services.readers.review.ReviewReferencesRetriever;
 import hoot.services.readers.review.ReviewableReader;
 import hoot.services.review.ReviewUtils;
-import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.writers.review.ReviewResolver;
 
 
@@ -133,7 +134,6 @@ public class ReviewResource {
         conn.setAutoCommit(false);
 
         long mapIdNum = MapResource.validateMap(request.getMapId(), conn);
-        assert (mapIdNum != -1);
 
         long userId = -1;
         try {
@@ -143,10 +143,11 @@ public class ReviewResource {
             logger.debug("Retrieved user ID: {}", userId);
         }
         catch (Exception e) {
-            ResourceErrorHandler.handleError("Error locating user associated with map having ID: " + request.getMapId()
-                    + " (" + e.getMessage() + ")", Status.BAD_REQUEST, logger);
+            String message = "Error locating user associated with map having ID: "
+                    + request.getMapId() + " (" + e.getMessage() + ")";
+            logger.error(message, e);
+            throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(message).build());
         }
-        assert (userId != -1);
 
         long changesetId = -1;
         try {
@@ -247,9 +248,9 @@ public class ReviewResource {
             return ret;
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting random reviewable item: " + mapId + " (" + ex.getMessage()
-                    + ")", Status.BAD_REQUEST, logger);
-            return new ReviewableItem(-1, -1, -1);
+            String message = "Error getting random reviewable item: " + mapId + " (" + ex.getMessage() + ")";
+            logger.error(message, ex);
+            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
         }
     }
 
@@ -295,10 +296,9 @@ public class ReviewResource {
             return ret;
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting next reviewable item: " + mapId + " (" + ex.getMessage()
-                    + ")", Status.BAD_REQUEST, logger);
-
-            return new ReviewableItem(-1, -1, -1);
+            String message = "Error getting next reviewable item: " + mapId + " (" + ex.getMessage() + ")";
+            logger.error(message, ex);
+            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
         }
     }
 
@@ -327,10 +327,9 @@ public class ReviewResource {
             return ret;
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting reviewable item: " + mapId + " (" + ex.getMessage() + ")",
-                    Status.BAD_REQUEST, logger);
-
-            return new ReviewableItem(-1, -1, -1);
+            String message = "Error getting reviewable item: " + mapId + " (" + ex.getMessage() + ")";
+            logger.error(message, ex);
+            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
         }
     }
 
@@ -348,8 +347,7 @@ public class ReviewResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewableStatistics getReviewableSstatistics(@QueryParam("mapId") String mapId) {
         ReviewableStatistics ret = null;
-        if (Long.parseLong(mapId) == -1) // OSM API db
-        {
+        if (Long.parseLong(mapId) == -1) { // OSM API db
             ret = new ReviewableStatistics();
         }
         else {
@@ -359,9 +357,9 @@ public class ReviewResource {
                 ret = reader.getReviewablesStatistics(nMapId);
             }
             catch (Exception ex) {
-                ResourceErrorHandler.handleError(
-                        "Error getting reviewables statistics: " + mapId + " (" + ex.getMessage() + ")",
-                        Status.BAD_REQUEST, logger);
+                String message = "Error getting reviewables statistics: " + mapId + " (" + ex.getMessage() + ")";
+                logger.error(message, ex);
+                throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
             }
         }
 
@@ -419,8 +417,9 @@ public class ReviewResource {
             ret.put("geojson", result.toGeoJson());
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting reviewable item: " + mapId + " (" + ex.getMessage() + ")",
-                    Status.BAD_REQUEST, logger);
+            String message = "Error getting reviewable item: " + mapId + " (" + ex.getMessage() + ")";
+            logger.error(message, ex);
+            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
         }
 
         return ret;
