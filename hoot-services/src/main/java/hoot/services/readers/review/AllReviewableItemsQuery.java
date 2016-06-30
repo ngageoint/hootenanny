@@ -178,7 +178,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
      * @return ReviewableItemBbox
      */
     private ReviewableItemBbox getRelationMemberBbox(long relId) {
-        ReviewableBboxQuery bbq = new ReviewableBboxQuery(getConnection(), getMapId(), relId);
+        ReviewableBboxQuery bbq = new ReviewableBboxQuery(super.getConnection(), getMapId(), relId);
         ReviewableItemBbox ret = (ReviewableItemBbox) bbq.execQuery();
         return ret;
     }
@@ -230,7 +230,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
         QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
         QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
 
-        return new SQLQuery(getConnection(),
+        return new SQLQuery(super.getConnection(),
                 DbUtils.getConfiguration(
                         getMapId()))
                                 .from(currentRelationMembers).where(
@@ -280,7 +280,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
      * @return - java,sql.Statement object
      */
     protected Statement _createStatement() throws SQLException {
-        return getConnection().createStatement();
+        return super.getConnection().createStatement();
     }
 
     /**
@@ -408,7 +408,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
                                         "(((max(\"currentNodeSubQ\".\"longitude\") - min(\"currentNodeSubQ\".\"longitude\"))/2)+min(\"currentNodeSubQ\".\"longitude\"))")
                                 .as("centlon"));
 
-        sql = new SQLQuery(getConnection(), DbUtils.getConfiguration(getMapId()))
+        sql = new SQLQuery(super.getConnection(), DbUtils.getConfiguration(getMapId()))
                 .from(reviewRelWayMembersCentroidSubQ.as(reviewRelWayMembersCentroidSubQPath))
                 .where(Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "centlat")
                         .goe(bbox.getMinLat())
@@ -523,7 +523,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
                                         "(((max(\"currentNodeSubQ\".\"longitude\") - min(\"currentNodeSubQ\".\"longitude\"))/2)+min(\"currentNodeSubQ\".\"longitude\"))")
                                 .as("centlon"));
 
-        SQLQuery sql = new SQLQuery(getConnection(), DbUtils.getConfiguration(getMapId()))
+        SQLQuery sql = new SQLQuery(super.getConnection(), DbUtils.getConfiguration(getMapId()))
                 .from(reviewRelWayMembersCentroidSubQ.as(reviewRelNodeMembersCentroidSubQPath))
                 .where(Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "centlat")
                         .goe(bbox.getMinLat())
@@ -572,7 +572,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
                 .list(currentRelationMembers.memberId, currentRelationMembers.relationId,
                         currentRelationMembers.memberType);
 
-        return new SQLQuery(getConnection(), DbUtils.getConfiguration(this.getMapId()))
+        return new SQLQuery(super.getConnection(), DbUtils.getConfiguration(this.getMapId()))
                 .join(currentRelMembersSubQ, currentRelMembersSubQPath)
                 .join(reviewableCurrentRelSubQ, reviewableCurrentRelSubQPath)
                 .on(Expressions.path(Long.class, currentRelMembersSubQPath, "relation_id")

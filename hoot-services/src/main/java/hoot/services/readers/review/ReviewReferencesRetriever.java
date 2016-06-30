@@ -76,6 +76,7 @@ public class ReviewReferencesRetriever {
                 + Element.elementTypeFromString(queryElementInfo.getType()).toString().toLowerCase() + "'";
 
         List<Long> relationIds = new ArrayList<>();
+
         try (Statement stmt = conn.createStatement()) {
             try (ResultSet rs = stmt.executeQuery(sql)){
                 while (rs.next()) {
@@ -102,7 +103,6 @@ public class ReviewReferencesRetriever {
         List<ReviewRef> references = new ArrayList<>();
 
         long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId(), conn);
-        assert (mapIdNum != -1);
 
         // check for query element existence
         Set<Long> elementIds = new HashSet<>();

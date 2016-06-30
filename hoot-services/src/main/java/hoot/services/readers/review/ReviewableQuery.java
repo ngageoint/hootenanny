@@ -55,21 +55,19 @@ public class ReviewableQuery extends ReviewableQueryBase implements IReviewableQ
     @Override
     public ReviewQueryMapper execQuery() throws SQLException {
         ReviewableItem ret = null;
-        try (Connection connection = getConnection()) {
-            try (Statement stmt = connection.createStatement()) {
-                try (ResultSet rs = stmt.executeQuery(getQueryString())) {
-                    long nResCnt = 0;
-                    long relid = -1;
+        try (Statement stmt = super.getConnection().createStatement()) {
+            try (ResultSet rs = stmt.executeQuery(getQueryString())) {
+                long nResCnt = 0;
+                long relid = -1;
 
-                    while (rs.next()) {
-                        // Retrieve by column name
-                        relid = rs.getLong("id");
-                        nResCnt++;
-                    }
-
-                    ret = new ReviewableItem(seqId, getMapId(), relid);
-                    ret.setResultCount(nResCnt);
+                while (rs.next()) {
+                    // Retrieve by column name
+                    relid = rs.getLong("id");
+                    nResCnt++;
                 }
+
+                ret = new ReviewableItem(seqId, getMapId(), relid);
+                ret.setResultCount(nResCnt);
             }
         }
 

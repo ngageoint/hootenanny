@@ -53,11 +53,9 @@ public class RandomReviewableQuery extends ReviewableQueryBase implements IRevie
             double seed = Double.parseDouble(HootProperties.getPropertyOrDefault("randomQuerySeed"));
 
             if ((seed >= -1.0) && (seed <= 1.0)) {
-                try (Connection connection = getConnection()) {
-                    try (Statement stmt = connection.createStatement()) {
-                        // After executing this, all subsequent calls to random() will be seeded.
-                        try (ResultSet rs = stmt.executeQuery("select setseed(" + seed + ");")) {
-                        }
+                try (Statement stmt = super.getConnection().createStatement()) {
+                    // After executing this, all subsequent calls to random() will be seeded.
+                    try (ResultSet rs = stmt.executeQuery("select setseed(" + seed + ");")) {
                     }
                 }
             }

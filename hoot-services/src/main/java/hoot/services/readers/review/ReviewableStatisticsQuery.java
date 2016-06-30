@@ -51,12 +51,10 @@ public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IR
     private long getTotalReviewablesCount() throws SQLException {
         long recordCount = 0;
 
-        try (Connection connection = getConnection()) {
-            try (Statement stmt = connection.createStatement()) {
-                try (ResultSet rs = stmt.executeQuery(getTotalReviewableCountQueryString())) {
-                    while (rs.next()) {
-                        recordCount = rs.getLong("totalcnt");
-                    }
+        try (Statement stmt = super.getConnection().createStatement()) {
+            try (ResultSet rs = stmt.executeQuery(getTotalReviewableCountQueryString())) {
+                while (rs.next()) {
+                    recordCount = rs.getLong("totalcnt");
                 }
             }
         }
@@ -67,12 +65,10 @@ public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IR
     private long getRemainingReviewablesCount() throws SQLException {
         long recordCount = 0;
 
-        try (Connection connection = getConnection()) {
-            try (Statement stmt = connection.createStatement()) {
-                try (ResultSet rs = stmt.executeQuery(getUnreviewedCountQueryString())) {
-                    while (rs.next()) {
-                        recordCount = rs.getLong("remaining");
-                    }
+        try (Statement stmt = super.getConnection().createStatement()) {
+            try (ResultSet rs = stmt.executeQuery(getUnreviewedCountQueryString())) {
+                while (rs.next()) {
+                    recordCount = rs.getLong("remaining");
                 }
             }
         }
@@ -82,8 +78,8 @@ public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IR
 
     @Override
     public ReviewQueryMapper execQuery() throws SQLException {
-        long nTotal = getTotalReviewablesCount();
-        long nUnReviewed = getRemainingReviewablesCount();
+        long nTotal = this.getTotalReviewablesCount();
+        long nUnReviewed = this.getRemainingReviewablesCount();
 
         ReviewableStatistics ret = new ReviewableStatistics(nTotal, nUnReviewed);
         return ret;
