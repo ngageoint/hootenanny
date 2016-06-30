@@ -248,7 +248,7 @@ public class ConflationResourceTest {
                     .getEntity()
                     .toString()
                     .contains(
-                            "Attempted to conflate an OSM API database data source but OSM API database"
+                            "Attempted to conflate an OSM API database data source but OSM API database "
                                     + "support is disabled"));
             throw e;
         }

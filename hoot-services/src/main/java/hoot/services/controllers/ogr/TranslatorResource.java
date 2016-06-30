@@ -29,6 +29,7 @@ package hoot.services.controllers.ogr;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -39,7 +40,6 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.nodeJs.ServerControllerBase;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("")
@@ -84,7 +84,9 @@ public class TranslatorResource extends ServerControllerBase {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error starting translation service request: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error starting translation service request: " + ex;
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
     }
 
@@ -99,7 +101,9 @@ public class TranslatorResource extends ServerControllerBase {
             transProc.destroy();
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error starting translation service request: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error starting translation service request: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
     }
 
@@ -119,7 +123,9 @@ public class TranslatorResource extends ServerControllerBase {
             isRunning = getStatus(transProc);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error starting translation service request: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error starting translation service request: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         JSONObject res = new JSONObject();

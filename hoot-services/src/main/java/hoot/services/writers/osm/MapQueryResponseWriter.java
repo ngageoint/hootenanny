@@ -29,6 +29,8 @@ package hoot.services.writers.osm;
 import java.sql.Connection;
 import java.util.Map;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -44,7 +46,6 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
-import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -125,9 +126,11 @@ public class MapQueryResponseWriter {
                 }
             }
         }
-        catch (Exception e) {
-            ResourceErrorHandler.handleError("Error creating response for map query for map with ID: " + mapId + ". ("
-                    + e.getMessage() + ") ", Status.INTERNAL_SERVER_ERROR, logger);
+        catch (Exception ex) {
+            String msg = "Error creating response for map query for map with ID: " + mapId + ". ("
+                    + ex.getMessage() + ") ";
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return responseDoc;

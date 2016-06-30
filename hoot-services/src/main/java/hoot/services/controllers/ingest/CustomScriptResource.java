@@ -43,6 +43,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -65,7 +66,6 @@ import hoot.services.ingest.ModifyScriptsRequest;
 import hoot.services.ingest.Script;
 import hoot.services.ingest.ScriptsModifiedResponse;
 import hoot.services.utils.CaseInsensitiveStringList;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/customscript")
@@ -150,14 +150,16 @@ public class CustomScriptResource {
                                 @QueryParam("SCRIPT_NAME") String scriptName,
                                 @QueryParam("SCRIPT_DESCRIPTION") String scriptDescription) {
         JSONArray saveArr = new JSONArray();
+
         try {
             saveArr.add(saveScript(scriptName, scriptDescription, script));
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError(
-                    "Error processing script save for: " + scriptName + " Error: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error processing script save for: " + scriptName + " Error: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
+
         return Response.ok(saveArr.toString(), MediaType.TEXT_PLAIN).build();
     }
 
@@ -168,6 +170,7 @@ public class CustomScriptResource {
     public ScriptsModifiedResponse saveScripts(ModifyScriptsRequest saveMultipleScriptsRequest) {
         ScriptsModifiedResponse response = null;
         List<String> scriptsModified = new ArrayList<>();
+
         try {
             response = new ScriptsModifiedResponse();
             for (Script script : saveMultipleScriptsRequest.getScripts()) {
@@ -175,12 +178,15 @@ public class CustomScriptResource {
                     scriptsModified.add(script.getName());
                 }
             }
+
             response.setScriptsModified(scriptsModified.toArray(new String[scriptsModified.size()]));
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error processing script save.  Error: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error processing script save.  Error: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
+
         return response;
     }
 
@@ -240,8 +246,9 @@ public class CustomScriptResource {
             retList.addAll(sortedScripts.values());
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting scripts list: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error getting scripts list: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return Response.ok(retList.toString(), MediaType.TEXT_PLAIN).build();
@@ -374,8 +381,9 @@ public class CustomScriptResource {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting script: " + scriptName + " Error: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error getting script: " + scriptName + " Error: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return Response.ok(script, MediaType.TEXT_PLAIN).build();
@@ -455,9 +463,11 @@ public class CustomScriptResource {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting script: " + scriptPath + " Error: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error getting script: " + scriptPath + " Error: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
+
         return Response.ok(script, MediaType.TEXT_PLAIN).build();
     }
 
@@ -501,13 +511,14 @@ public class CustomScriptResource {
                     }
                 }
                 catch (Exception e) {
-                    logger.error("Failed to read file header: {}", e.getMessage());
+                    logger.error("Failed to read file header: {}", e.getMessage(), e);
                 }
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error deleting script: " + scriptName + " Error: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error deleting script: " + scriptName + " Error: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return Response.ok(delArr.toString(), MediaType.TEXT_PLAIN).build();
@@ -554,15 +565,16 @@ public class CustomScriptResource {
                     }
                 }
                 catch (Exception e) {
-                    assert (file != null);
-                    logger.error("Failed to read file header for script: {}{}", file.getName(), e.getMessage());
+                    logger.error("Failed to read file header for script: {}{}", file.getName(), e.getMessage(), e);
                 }
             }
+
             response.setScriptsModified(scriptsDeleted.toArray(new String[scriptsDeleted.size()]));
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error deleting scripts:  Error: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error deleting scripts:  Error: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return response;

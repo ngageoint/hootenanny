@@ -39,6 +39,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -58,7 +59,6 @@ import hoot.services.db.DbUtils;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
 import hoot.services.nativeInterfaces.NativeInterfaceException;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/export")
@@ -196,42 +196,46 @@ public class ExportJobResource extends JobControllerBase {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error exporting data: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error exporting data: " + ex;
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
         finally {
             DbUtils.closeConnection(conn);
         }
+
         JSONObject res = new JSONObject();
         res.put("jobid", jobId);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
     protected JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, Connection conn)
             throws Exception {
         if (!Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"))) {
-            ResourceErrorHandler.handleError(
-                    "Attempted to export to an OSM API database but OSM API database support is disabled",
-                    Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Attempted to export to an OSM API database but OSM API database support is disabled";
+            logger.error(msg);
+            throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         JSONArray commandArgs = new JSONArray();
         commandArgs.addAll(inputCommandArgs);
 
         if (!getParameterValue("inputtype", commandArgs).equalsIgnoreCase("db")) {
-            ResourceErrorHandler.handleError(
-                    "When exporting to an OSM API database, the input type must be a Hootenanny API database.",
-                    Status.BAD_REQUEST, logger);
+            String msg = "When exporting to an OSM API database, the input type must be a Hootenanny API database.";
+            logger.error(msg);
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         String translation = getParameterValue("translation", commandArgs);
         if ((StringUtils.trimToNull(translation) != null) && !translation.toUpperCase().equals("NONE")) {
-            ResourceErrorHandler.handleError("Custom translation not allowed when exporting to OSM API database.",
-                    Status.BAD_REQUEST, logger);
+            String msg = "Custom translation not allowed when exporting to OSM API database.";
+            logger.error(msg);
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         // ignoring outputname, since we're only going to have a single mapedit
-        // connection configured in the core for now
-        // configured in the core for now
+        // connection configured in the core for now configured in the core for now
         JSONObject arg = new JSONObject();
         arg.put("temppath", HootProperties.getProperty("TEMP_OUTPUT_PATH"));
         commandArgs.add(arg);
@@ -260,13 +264,16 @@ public class ExportJobResource extends JobControllerBase {
         // we don't expect the services to try to export a map that has multiple
         // name entries, but check for it anyway
         if (mapIds.size() > 1) {
-            ResourceErrorHandler.handleError("Error exporting data.  Multiple maps with name: " + mapName,
-                    Status.BAD_REQUEST, logger);
+            String msg = "Error exporting data.  Multiple maps with name: " + mapName;
+            logger.error(msg);
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
+
         // this may be checked somewhere else down the line...not sure
-        else if (mapIds.isEmpty()) {
-            ResourceErrorHandler.handleError("Error exporting data.  No map exists with name: " + mapName,
-                    Status.BAD_REQUEST, logger);
+        if (mapIds.isEmpty()) {
+            String msg = "Error exporting data.  No map exists with name: " + mapName;
+            logger.error(msg);
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         Map conflatedMap = new Map(mapIds.get(0), conn);
@@ -291,11 +298,14 @@ public class ExportJobResource extends JobControllerBase {
 
     private void addMapForExportTag(Map map, JSONArray commandArgs, Connection conn) throws Exception {
         java.util.Map<String, String> tags = getMapTags(map.getId(), conn);
+
         if (!tags.containsKey("osm_api_db_export_time")) {
-            ResourceErrorHandler.handleError("Error exporting data.  Map with ID: " + map.getId()
-                    + " and name: " + map.getDisplayName() + " has no osm_api_db_export_time tag.", Status.CONFLICT,
-                    logger);
+            String msg = "Error exporting data.  Map with ID: " + map.getId()
+                    + " and name: " + map.getDisplayName() + " has no osm_api_db_export_time tag.";
+            logger.error(msg);
+            throw new WebApplicationException(Response.status(Status.CONFLICT).entity(msg).build());
         }
+
         JSONObject arg = new JSONObject();
         arg.put("changesetsourcedatatimestamp", tags.get("osm_api_db_export_time"));
         commandArgs.add(arg);
@@ -351,10 +361,13 @@ public class ExportJobResource extends JobControllerBase {
         }
         catch (NativeInterfaceException ne) {
             int nStat = ne.getExceptionCode().toInt();
+            logger.error(ne.getMessage(), ne);
             return Response.status(nStat).entity(ne.getMessage()).build();
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error exporting data: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error exporting data: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         String outFileName = id;
@@ -394,7 +407,9 @@ public class ExportJobResource extends JobControllerBase {
             dbMan.deleteTables(tbls, WFS_STORE_DB);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error removing WFS resource: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error removing WFS resource: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         ret.put("id", id);
@@ -423,7 +438,9 @@ public class ExportJobResource extends JobControllerBase {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error retrieving WFS resource list: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error retrieving WFS resource list: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return Response.ok(srvList.toString(), MediaType.TEXT_PLAIN).build();
@@ -467,7 +484,9 @@ public class ExportJobResource extends JobControllerBase {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error retrieving exported resource list: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error retrieving exported resource list: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return Response.ok(srvList.toString(), MediaType.APPLICATION_JSON).build();

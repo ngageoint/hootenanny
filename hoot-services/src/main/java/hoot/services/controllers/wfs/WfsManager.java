@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -58,7 +60,6 @@ import org.w3c.dom.Element;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DataDefinitionManager;
-import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -255,7 +256,9 @@ public class WfsManager {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error retrieving WFS services: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error retrieving WFS services: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return services;

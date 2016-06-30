@@ -28,6 +28,8 @@ package hoot.services.writers.osm;
 
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
@@ -37,7 +39,6 @@ import org.w3c.dom.Element;
 
 import hoot.services.HootProperties;
 import hoot.services.models.osm.XmlSerializable;
-import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -78,9 +79,11 @@ public class ChangesetUploadResponseWriter {
             osmElement.appendChild(diffResultXmlElement);
             responseDoc.appendChild(osmElement);
         }
-        catch (Exception e) {
-            ResourceErrorHandler.handleError("Error creating response for changeset with ID: " + changesetId
-                    + " - data: (" + e.getMessage() + ") ", Status.BAD_REQUEST, logger);
+        catch (Exception ex) {
+            String msg = "Error creating response for changeset with ID: " + changesetId
+                    + " - data: (" + ex.getMessage() + ") ";
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         return responseDoc;

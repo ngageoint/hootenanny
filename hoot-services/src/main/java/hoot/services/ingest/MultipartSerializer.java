@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.fileupload.FileItem;
@@ -46,7 +48,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 public class MultipartSerializer {
@@ -81,7 +82,9 @@ public class MultipartSerializer {
                 }
 
                 if (fileName == null) {
-                    ResourceErrorHandler.handleError("A valid file name was not specified.", Status.BAD_REQUEST, logger);
+                    String msg = "A valid file name was not specified.";
+                    logger.error(msg);
+                    throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
                 }
 
                 String uploadedPath = fgdbFolderPath + "/" + fileName;
@@ -120,8 +123,11 @@ public class MultipartSerializer {
             Map<String, String> uploadedFilesPaths, String repFolderPath) throws Exception {
         for (FileItem fileItem : fileItemsList) {
             String fileName = fileItem.getName();
+
             if (fileName == null) {
-                ResourceErrorHandler.handleError("A valid file name was not specified.", Status.BAD_REQUEST, logger);
+                String msg = "A valid file name was not specified.";
+                logger.error(msg);
+                throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
 
             String uploadedPath = repFolderPath + "/" + fileName;
@@ -179,8 +185,11 @@ public class MultipartSerializer {
             FileUtils.forceMkdir(dir);
 
             if (!ServletFileUpload.isMultipartContent(request)) {
-                ResourceErrorHandler.handleError("Content type is not multipart/form-data", Status.BAD_REQUEST, logger);
+                String msg = "Content type is not multipart/form-data";
+                logger.error(msg);
+                throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
+
             DiskFileItemFactory fileFactory = new DiskFileItemFactory();
             File filesDir = new File(repFolderPath);
             fileFactory.setRepository(filesDir);

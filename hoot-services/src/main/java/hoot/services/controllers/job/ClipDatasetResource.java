@@ -32,6 +32,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -43,7 +44,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/clipdataset")
@@ -109,7 +109,9 @@ public class ClipDatasetResource extends JobControllerBase {
             postChainJobRquest(jobId, jobArgs.toJSONString());
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error processing cookie cutter request: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error processing cookie cutter request: " + ex;
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         JSONObject res = new JSONObject();

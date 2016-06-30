@@ -43,6 +43,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -68,7 +69,6 @@ import org.w3c.dom.NodeList;
 
 import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/basemap")
@@ -193,51 +193,46 @@ public class BasemapResource extends JobControllerBase {
 
                 String inputFileName = uploadedFilesPaths.get(fName);
 
-                try {
-                    JSONArray commandArgs = new JSONArray();
-                    JSONObject arg = new JSONObject();
-                    arg.put("INPUT", "upload/" + groupId + "/" + inputFileName);
-                    commandArgs.add(arg);
+                JSONArray commandArgs = new JSONArray();
+                JSONObject arg = new JSONObject();
+                arg.put("INPUT", "upload/" + groupId + "/" + inputFileName);
+                commandArgs.add(arg);
 
-                    arg = new JSONObject();
-                    arg.put("INPUT_NAME", bmName);
-                    commandArgs.add(arg);
+                arg = new JSONObject();
+                arg.put("INPUT_NAME", bmName);
+                commandArgs.add(arg);
 
-                    arg = new JSONObject();
-                    arg.put("RASTER_OUTPUT_DIR", TILE_SERVER_PATH + "/BASEMAP");
-                    commandArgs.add(arg);
+                arg = new JSONObject();
+                arg.put("RASTER_OUTPUT_DIR", TILE_SERVER_PATH + "/BASEMAP");
+                commandArgs.add(arg);
 
-                    arg = new JSONObject();
-                    if ((projection != null) && (!projection.isEmpty())) {
-                        arg.put("PROJECTION", projection);
-                    }
-                    else {
-                        arg.put("PROJECTION", "auto");
-                    }
-                    commandArgs.add(arg);
-
-                    arg = new JSONObject();
-                    arg.put("JOB_PROCESSOR_DIR", INGEST_STAGING_PATH + "/BASEMAP");
-                    commandArgs.add(arg);
-
-                    String argStr = createBashPostBody(commandArgs);
-                    postJobRquest(jobId, argStr);
-
-                    JSONObject res = new JSONObject();
-                    res.put("jobid", jobId);
-                    res.put("name", bmName);
-
-                    jobsArr.add(res);
+                arg = new JSONObject();
+                if ((projection != null) && (!projection.isEmpty())) {
+                    arg.put("PROJECTION", projection);
                 }
-                catch (Exception ex) {
-                    ResourceErrorHandler.handleError("Error processing upload: " + ex.getMessage(),
-                            Status.INTERNAL_SERVER_ERROR, logger);
+                else {
+                    arg.put("PROJECTION", "auto");
                 }
+                commandArgs.add(arg);
+
+                arg = new JSONObject();
+                arg.put("JOB_PROCESSOR_DIR", INGEST_STAGING_PATH + "/BASEMAP");
+                commandArgs.add(arg);
+
+                String argStr = createBashPostBody(commandArgs);
+                postJobRquest(jobId, argStr);
+
+                JSONObject res = new JSONObject();
+                res.put("jobid", jobId);
+                res.put("name", bmName);
+
+                jobsArr.add(res);
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error processing upload: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error processing upload: " + ex.getMessage();
+            logger.error(message);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
         return Response.ok(jobsArr.toJSONString(), MediaType.APPLICATION_JSON).build();
@@ -262,8 +257,9 @@ public class BasemapResource extends JobControllerBase {
             filesList = getBasemapListHelper();
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting base map list: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error getting base map list: " + ex.getMessage();
+            logger.error(message);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
         // sort the list
@@ -392,8 +388,9 @@ public class BasemapResource extends JobControllerBase {
             toggleBaseMap(bmName, doEnable);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error enabling base map: " + bmName + " Error: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error enabling base map: " + bmName + " Error: " + ex.getMessage();
+            logger.error(message);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
         JSONObject resp = new JSONObject();
@@ -440,8 +437,9 @@ public class BasemapResource extends JobControllerBase {
             deleteBaseMap(bmName);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error deleting base map: " + bmName + " Error: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error deleting base map: " + bmName + " Error: " + ex.getMessage();
+            logger.error(message);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
         JSONObject resp = new JSONObject();

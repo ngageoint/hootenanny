@@ -45,6 +45,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -63,7 +64,6 @@ import hoot.services.db2.JobStatus;
 import hoot.services.job.JobStatusManager;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.nativeInterfaces.JobExecutionManager;
-import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.ResourcesCleanUtil;
 import hoot.services.validators.job.JobFieldsValidator;
 
@@ -215,19 +215,14 @@ public class JobResource {
                 if (jobStatusManager != null) {
                     if (childJobInfo != null) {
                         setJobInfo(jobInfo, childJobInfo, childrenInfo, JOB_STATUS.FAILED.toString(), ex.getMessage());
-                        logger.error(ex.getMessage());
+                        logger.error(ex.getMessage(), ex);
                     }
                     jobStatusManager.setFailed(jobId, jobInfo.toString());
                 }
             }
             finally {
                 logger.debug("End process chain Job: {}", jobId);
-                try {
-                    DbUtils.closeConnection(conn);
-                }
-                catch (Exception ex) {
-                    logger.error(ex.getMessage());
-                }
+                DbUtils.closeConnection(conn);
             }
         }
     }
@@ -655,10 +650,10 @@ public class JobResource {
 
             outStr = status.toJSONString();
         }
-        catch (Exception e) {
-            ResourceErrorHandler.handleError(
-                    "Error retrieving job status for job: " + jobId + " Error: " + e.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, logger);
+        catch (Exception ex) {
+            String msg = "Error retrieving job status for job: " + jobId + " Error: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return Response.ok(outStr, MediaType.APPLICATION_JSON).build();

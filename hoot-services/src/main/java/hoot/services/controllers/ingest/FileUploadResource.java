@@ -40,6 +40,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -54,7 +55,6 @@ import org.slf4j.LoggerFactory;
 import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.ingest.MultipartSerializer;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/ingest")
@@ -198,7 +198,9 @@ public class FileUploadResource extends JobControllerBase {
             resA.add(res);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Failed upload: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Failed upload: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return Response.ok(resA.toJSONString(), MediaType.APPLICATION_JSON).build();

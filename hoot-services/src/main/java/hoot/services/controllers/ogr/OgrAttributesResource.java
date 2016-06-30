@@ -44,6 +44,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -59,7 +60,6 @@ import org.slf4j.LoggerFactory;
 import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.ingest.MultipartSerializer;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/info")
@@ -170,7 +170,9 @@ public class OgrAttributesResource extends JobControllerBase {
             postJobRquest(jobId, argStr);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Failed upload: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Failed upload: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         res.put("jobId", jobId);
@@ -209,8 +211,9 @@ public class OgrAttributesResource extends JobControllerBase {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting attribute: " + id + " Error: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error getting attribute: " + id + " Error: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return Response.ok(script, MediaType.TEXT_PLAIN).build();

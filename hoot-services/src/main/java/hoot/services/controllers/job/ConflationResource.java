@@ -37,6 +37,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -54,7 +55,6 @@ import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/conflation")
@@ -121,9 +121,9 @@ public class ConflationResource extends JobControllerBase {
             //Since we're not returning the osm api db layer to the hoot ui, this exception
             //shouldn't actually ever occur, but will leave this check here anyway.
             if (conflatingOsmApiDbData && !osmApiDbEnabled) {
-                ResourceErrorHandler.handleError(
-                        "Attempted to conflate an OSM API database data source but OSM API database"
-                                + "support is disabled.", Status.INTERNAL_SERVER_ERROR, logger);
+                String msg = "Attempted to conflate an OSM API database data source but OSM API database support is disabled.";
+                logger.error(msg);
+                throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
 
             oParams.put("IS_BIG", "false");
@@ -186,8 +186,9 @@ public class ConflationResource extends JobControllerBase {
                 //we'll need it to detect conflicts at export time.
                 long secondaryMapId = Long.parseLong(getParameterValue(secondaryParameterKey, commandArgs));
                 if (!mapExists(secondaryMapId, conn)) {
-                    ResourceErrorHandler.handleError("No secondary map exists with ID: " + secondaryMapId,
-                            Status.BAD_REQUEST, logger);
+                    String msg = "No secondary map exists with ID: " + secondaryMapId;
+                    logger.error(msg);
+                    throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
                 }
                 Map secondaryMap = new Map(secondaryMapId, conn);
                 setAoi(secondaryMap, commandArgs);
@@ -270,13 +271,15 @@ public class ConflationResource extends JobControllerBase {
                     .get("REFERENCE_LAYER").toString().toUpperCase().equals("2"))
                     || (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB") && inputParams
                     .get("REFERENCE_LAYER").toString().toUpperCase().equals("1"))) {
-                ResourceErrorHandler.handleError("OSM_API_DB not allowed as secondary input type.", Status.BAD_REQUEST,
-                        logger);
+                String msg = "OSM_API_DB not allowed as secondary input type.";
+                logger.error(msg);
+                throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
         }
         else if (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB")) {
-            ResourceErrorHandler
-                    .handleError("OSM_API_DB not allowed as secondary input type.", Status.BAD_REQUEST, logger);
+            String msg = "OSM_API_DB not allowed as secondary input type.";
+            logger.error(msg);
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
     }
 

@@ -26,6 +26,8 @@
  */
 package hoot.services.writers.osm;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
@@ -34,7 +36,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -91,10 +92,10 @@ public class CapabilitiesResponseWriter {
             osmElement.appendChild(apiElement);
             responseDoc.appendChild(osmElement);
         }
-        catch (Exception e) {
-            ResourceErrorHandler.handleError(
-                    "Error creating response for capabilities query. (" + e.getMessage() + ") ",
-                    Status.INTERNAL_SERVER_ERROR, logger);
+        catch (Exception ex) {
+            String msg = "Error creating response for capabilities query. (" + ex.getMessage() + ") ";
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return responseDoc;

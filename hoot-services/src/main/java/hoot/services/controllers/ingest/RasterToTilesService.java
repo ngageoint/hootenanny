@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.util.UUID;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
@@ -49,7 +51,6 @@ import hoot.services.job.JobStatusManager;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.nativeInterfaces.JobExecutionManager;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 public class RasterToTilesService extends JobControllerBase {
@@ -94,7 +95,6 @@ public class RasterToTilesService extends JobControllerBase {
 
             QMaps maps = QMaps.maps;
             long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, conn, maps, maps.id, maps.displayName);
-            assert (mapIdNum != -1);
 
             BoundingBox queryBounds = null;
             try {
@@ -103,7 +103,7 @@ public class RasterToTilesService extends JobControllerBase {
             }
             catch (Exception e) {
                 throw new Exception("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
-                        + e.getMessage() + ")");
+                        + e.getMessage() + ")", e);
             }
 
             Map currMap = new Map(mapIdNum, conn);
@@ -131,6 +131,7 @@ public class RasterToTilesService extends JobControllerBase {
                 if (deltaLat > maxDelta) {
                     maxDelta = deltaLat;
                 }
+
                 JSONObject zoomInfo = getZoomInfo(maxDelta);
 
                 String zoomList = zoomInfo.get("zoomlist").toString();
@@ -142,10 +143,12 @@ public class RasterToTilesService extends JobControllerBase {
                 JobExecutionManager jobExecManager = (JobExecutionManager) appContext.getBean("jobExecutionManagerNative");
                 JSONObject res = jobExecManager.exec(argStr);
                 Object oRes = res.get("warnings");
+
                 if (oRes != null) {
                     warn = oRes.toString();
                 }
             }
+
             if (warn == null) {
                 jobStatusManager.setComplete(jobId);
             }
@@ -154,9 +157,10 @@ public class RasterToTilesService extends JobControllerBase {
             }
         }
         catch (Exception ex) {
-            assert (jobStatusManager != null);
             jobStatusManager.setFailed(jobId, ex.getMessage());
-            ResourceErrorHandler.handleError("Failure ingesting resource " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Failure ingesting resource: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
         finally {
             DbUtils.closeConnection(conn);
@@ -174,7 +178,6 @@ public class RasterToTilesService extends JobControllerBase {
         try {
             QMaps maps = QMaps.maps;
             long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, conn, maps, maps.id, maps.displayName);
-            assert (mapIdNum != -1);
 
             BoundingBox queryBounds = null;
             try {
@@ -183,7 +186,7 @@ public class RasterToTilesService extends JobControllerBase {
             }
             catch (Exception e) {
                 throw new Exception("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
-                        + e.getMessage() + ")");
+                        + e.getMessage() + ")", e);
             }
 
             Map currMap = new Map(mapIdNum, conn);
@@ -201,6 +204,7 @@ public class RasterToTilesService extends JobControllerBase {
             if (deltaLat > maxDelta) {
                 maxDelta = deltaLat;
             }
+
             JSONObject zoomInfo = getZoomInfo(maxDelta);
 
             String zoomList = zoomInfo.get("zoomlist").toString();
@@ -210,7 +214,9 @@ public class RasterToTilesService extends JobControllerBase {
             postJobRquest(jobId, argStr);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Failure ingesting resource " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Failure ingesting resource " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
         finally {
             DbUtils.closeConnection(conn);

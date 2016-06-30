@@ -29,6 +29,8 @@ package hoot.services.controllers.job;
 import java.util.Map;
 import java.util.concurrent.Future;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.http.HttpResponse;
@@ -44,7 +46,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 public class JobControllerBase {
@@ -98,8 +99,10 @@ public class JobControllerBase {
 
             logger.debug("postJobRequest Response: {}", r.getStatusLine());
         }
-        catch (Exception ee) {
-            ResourceErrorHandler.handleError("Failed upload: " + ee, Status.INTERNAL_SERVER_ERROR, logger);
+        catch (Exception ex) {
+            String msg = "Failed upload: " + ex;
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
     }
 
@@ -127,8 +130,10 @@ public class JobControllerBase {
 
             logger.debug("postChainJobRquest Response x: {}", r.getStatusLine());
         }
-        catch (Exception ee) {
-            ResourceErrorHandler.handleError("Failed upload: " + ee, Status.INTERNAL_SERVER_ERROR, logger);
+        catch (Exception ex) {
+            String msg = "Failed upload: " + ex;
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
     }
 

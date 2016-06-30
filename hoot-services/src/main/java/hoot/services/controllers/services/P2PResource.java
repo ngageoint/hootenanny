@@ -29,6 +29,7 @@ package hoot.services.controllers.services;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -39,7 +40,6 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.nodeJs.ServerControllerBase;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 public class P2PResource extends ServerControllerBase {
@@ -75,7 +75,9 @@ public class P2PResource extends ServerControllerBase {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error starting P2P service request: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error starting P2P service request: " + ex;
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
     }
 
@@ -100,7 +102,9 @@ public class P2PResource extends ServerControllerBase {
             _P2PProc.destroy();
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error starting P2P service request: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error starting P2P service request: " + ex;
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         JSONObject res = new JSONObject();
@@ -126,7 +130,9 @@ public class P2PResource extends ServerControllerBase {
             isRunning = getStatus(_P2PProc);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error starting P2P service request: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error starting P2P service request: " + ex.getMessage();
+            logger.error(message, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
         JSONObject res = new JSONObject();

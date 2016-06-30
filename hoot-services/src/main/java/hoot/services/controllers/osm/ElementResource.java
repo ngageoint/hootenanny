@@ -39,6 +39,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -59,7 +60,6 @@ import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.writers.osm.OsmResponseHeaderGenerator;
 
@@ -102,7 +102,9 @@ public class ElementResource {
                                @PathParam("elementType") String elementType) throws Exception {
         ElementType elementTypeVal = Element.elementTypeFromString(elementType);
         if (elementTypeVal == null) {
-            ResourceErrorHandler.handleError("Invalid element type: " + elementType, Status.BAD_REQUEST, logger);
+            String msg = "Invalid element type: " + elementType;
+            logger.error(msg);
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         Connection conn = DbUtils.createConnection();
@@ -116,6 +118,7 @@ public class ElementResource {
         }
 
         logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
+
         return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
                        .header("Content-type", MediaType.APPLICATION_XML).build();
     }
@@ -142,13 +145,18 @@ public class ElementResource {
             logger.debug("Initializing database connection...");
 
             if (!UNIQUE_ELEMENT_ID_PATTERN.matcher(elementId).matches()) {
-                ResourceErrorHandler.handleError("Invalid element ID: " + elementId, Status.BAD_REQUEST, logger);
+                String msg = "Invalid element ID: " + elementId;
+                logger.error(msg);
+                throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
 
             String[] elementIdParts = elementId.split("_");
             ElementType elementTypeVal = Element.elementTypeFromString(elementIdParts[1]);
+
             if (elementTypeVal == null) {
-                ResourceErrorHandler.handleError("Invalid element type: " + elementIdParts[1], Status.BAD_REQUEST, logger);
+                String msg = "Invalid element type: " + elementIdParts[1];
+                logger.error(msg);
+                throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
 
             elementDoc = getElementXml(elementIdParts[0], Long.parseLong(elementIdParts[2]), elementTypeVal, true,
@@ -187,7 +195,9 @@ public class ElementResource {
                                    @PathParam("elementType") String elementType) throws Exception {
         ElementType elementTypeVal = Element.elementTypeFromString(elementType);
         if (elementTypeVal == null) {
-            ResourceErrorHandler.handleError("Invalid element type: " + elementType, Status.BAD_REQUEST, logger);
+            String msg = "Invalid element type: " + elementType;
+            logger.error(msg);
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         Connection conn = DbUtils.createConnection();
@@ -224,17 +234,24 @@ public class ElementResource {
     @Produces({ MediaType.TEXT_XML })
     public Response getFullElementByUniqueId(@PathParam("elementId") String elementId) throws Exception {
         if (!UNIQUE_ELEMENT_ID_PATTERN.matcher(elementId).matches()) {
-            ResourceErrorHandler.handleError("Invalid element ID: " + elementId, Status.BAD_REQUEST, logger);
+            String msg = "Invalid element ID: " + elementId;
+            logger.error(msg);
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         String[] elementIdParts = elementId.split("_");
         ElementType elementType = Element.elementTypeFromString(elementIdParts[1]);
 
         if (elementType == null) {
-            ResourceErrorHandler.handleError("Invalid element type: null", Status.BAD_REQUEST, logger);
+            String msg = "Invalid element type: null";
+            logger.error(msg);
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
-        else if (elementType == ElementType.Node) {
-            ResourceErrorHandler.handleError("Get Full Element Request Invalid for type = Node", Status.BAD_REQUEST, logger);
+
+        if (elementType == ElementType.Node) {
+            String msg = "Get Full Element Request Invalid for type = Node";
+            logger.error(msg);
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         Connection conn = DbUtils.createConnection();
@@ -250,6 +267,7 @@ public class ElementResource {
         }
 
         logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
+
         return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
                 .header("Content-type", MediaType.APPLICATION_XML).build();
     }
@@ -261,15 +279,17 @@ public class ElementResource {
             // input mapId may be a map ID or a map name
             mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, dbConn, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
         }
-        catch (Exception e) {
-            if (e.getMessage().startsWith("Multiple records exist")
-                    || e.getMessage().startsWith("No record exists")) {
-                ResourceErrorHandler.handleError(
-                        e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), Status.NOT_FOUND,
-                        logger);
+        catch (Exception ex) {
+            if (ex.getMessage().startsWith("Multiple records exist")
+                    || ex.getMessage().startsWith("No record exists")) {
+                String msg = ex.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
+                logger.error(msg, ex);
+                throw new WebApplicationException(ex, Response.status(Status.NOT_FOUND).entity(msg).build());
             }
-            ResourceErrorHandler.handleError("Error requesting map with ID: " + mapId + " (" + e.getMessage() + ")",
-                    Status.BAD_REQUEST, logger);
+
+            String msg = "Error requesting map with ID: " + mapId + " (" + ex.getMessage() + ")";
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         Set<Long> elementIds = new HashSet<>();
@@ -279,9 +299,9 @@ public class ElementResource {
                 elementIds, dbConn);
 
         if ((elementRecords == null) || (elementRecords.isEmpty())) {
-            ResourceErrorHandler.handleError(
-                    "Element with ID: " + elementId + " and type: " + elementType + " does not exist.",
-                    Status.NOT_FOUND, logger);
+            String msg = "Element with ID: " + elementId + " and type: " + elementType + " does not exist.";
+            logger.error(msg);
+            throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
         }
 
         assert (elementRecords.size() == 1);
@@ -327,7 +347,9 @@ public class ElementResource {
 
         ElementType elementTypeVal = Element.elementTypeFromString(elementType);
         if (elementTypeVal == null) {
-            ResourceErrorHandler.handleError("Invalid element type: " + elementType, Status.BAD_REQUEST, logger);
+            String msg = "Invalid element type: " + elementType;
+            logger.error(msg);
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         Connection conn = DbUtils.createConnection();
@@ -352,14 +374,17 @@ public class ElementResource {
             // input mapId may be a map ID or a map name
             mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, dbConn, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
         }
-        catch (Exception e) {
-            if (e.getMessage().startsWith("Multiple records exist") || e.getMessage().startsWith("No record exists")) {
-                ResourceErrorHandler.handleError(
-                        e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), Status.NOT_FOUND,
-                        logger);
+        catch (Exception ex) {
+            if (ex.getMessage().startsWith("Multiple records exist") ||
+                    ex.getMessage().startsWith("No record exists")) {
+                String msg = ex.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
+                logger.error(msg, ex);
+                throw new WebApplicationException(ex, Response.status(Status.NOT_FOUND).entity(msg).build());
             }
-            ResourceErrorHandler.handleError("Error requesting map with ID: " + mapId + " (" + e.getMessage() + ")",
-                    Status.BAD_REQUEST, logger);
+
+            String msg = "Error requesting map with ID: " + mapId + " (" + ex.getMessage() + ")";
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         Set<Long> elementIds = new HashSet<>();
@@ -371,11 +396,11 @@ public class ElementResource {
         List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(mapIdNum, elementType,
                 elementIds, dbConn);
         if ((elementRecords == null) || (elementRecords.isEmpty())) {
-            ResourceErrorHandler.handleError("Elements with IDs: " + StringUtils.join(elementIdsStr, ",")
-                    + " and type: " + elementType + " does not exist.", Status.NOT_FOUND, logger);
+            String msg = "Elements with IDs: " + StringUtils.join(elementIdsStr, ",")
+                    + " and type: " + elementType + " does not exist.";
+            logger.error(msg);
+            throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
         }
-
-        assert (elementRecords.size() == 1);
 
         Document elementDoc = XmlDocumentBuilder.create();
         org.w3c.dom.Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(elementDoc);

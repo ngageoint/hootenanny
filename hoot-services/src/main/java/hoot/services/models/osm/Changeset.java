@@ -34,6 +34,8 @@ import java.sql.Types;
 import java.util.Calendar;
 import java.util.Map;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.transform.TransformerException;
 
@@ -57,7 +59,6 @@ import hoot.services.db2.Changesets;
 import hoot.services.db2.QChangesets;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.GeoUtils;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 /**
@@ -420,10 +421,10 @@ public class Changeset extends Changesets {
             changesetExists = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
                     .where(changesets.id.eq(getId())).count() > 0;
         }
-        catch (Exception e) {
-            ResourceErrorHandler.handleError(
-                    "Error updating changeset with ID: " + getId() + " (" + e.getMessage() + ")", Status.BAD_REQUEST,
-                    logger);
+        catch (Exception ex) {
+            String msg = "Error updating changeset with ID: " + getId() + " (" + ex.getMessage() + ")";
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         if (!changesetExists) {
@@ -510,7 +511,7 @@ public class Changeset extends Changesets {
             writeTags(mapId, tagsStr);
         }
         catch (Exception e) {
-            throw new Exception("Error inserting tags for changeset with ID: " + getId() + " - " + e.getMessage());
+            throw new Exception("Error inserting tags for changeset with ID: " + getId() + " - " + e.getMessage(), e);
         }
     }
 
@@ -545,7 +546,7 @@ public class Changeset extends Changesets {
             writeTags(mapId, tagsStr);
         }
         catch (Exception e) {
-            throw new Exception("Error inserting tags for changeset with ID: " + getId() + " - " + e.getMessage());
+            throw new Exception("Error inserting tags for changeset with ID: " + getId() + " - " + e.getMessage(), e);
         }
     }
 }

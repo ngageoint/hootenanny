@@ -48,6 +48,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -97,7 +98,6 @@ import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.writers.osm.MapQueryResponseWriter;
 
@@ -459,7 +459,6 @@ public class MapResource {
 
                 QMaps maps = QMaps.maps;
                 mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
-                assert (mapIdNum != -1);
 
                 BoundingBox queryBounds = null;
                 try {
@@ -567,7 +566,6 @@ public class MapResource {
 
                     QMaps maps = QMaps.maps;
                     mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
-                    assert (mapIdNum != -1);
 
                     BoundingBox queryBounds = null;
                     try {
@@ -628,7 +626,6 @@ public class MapResource {
             else {
                 QMaps maps = QMaps.maps;
                 mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
-                assert (mapIdNum != -1);
 
                 BoundingBox queryBounds = null;
                 try {
@@ -687,25 +684,32 @@ public class MapResource {
         }
         else if (e.getMessage().startsWith("Multiple records exist") ||
                  e.getMessage().startsWith("No record exists")) {
-            ResourceErrorHandler.handleError(e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"),
-                    Status.NOT_FOUND, logger);
+            String msg = e.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
+            logger.error(msg, e);
+            throw new WebApplicationException(e, Response.status(Status.NOT_FOUND).entity(msg).build());
         }
         else if (e.getMessage().startsWith("Map is empty")) {
-            ResourceErrorHandler.handleError(e.getMessage(), Status.NOT_FOUND, logger);
+            String msg = e.getMessage();
+            logger.error(msg, e);
+            throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
         }
         else if (e.getMessage().startsWith("Error parsing bounding box from bbox param") ||
                  e.getMessage().contains("The maximum bbox size is") ||
                  e.getMessage().contains("The maximum number of nodes that may be returned in a map query")) {
-            ResourceErrorHandler.handleError(e.getMessage(), Status.BAD_REQUEST, logger);
+            String msg = e.getMessage();
+            logger.error(msg, e);
+            throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
         else {
             if (mapId != null) {
-                ResourceErrorHandler.handleError("Error querying map with ID: " + mapId + " - data: (" + e.getMessage()
-                        + ") " + requestSnippet, Status.INTERNAL_SERVER_ERROR, logger);
+                String msg = "Error querying map with ID: " + mapId + " - data: (" + e.getMessage() + ") " + requestSnippet;
+                logger.error(msg, e);
+                throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
             else {
-                ResourceErrorHandler.handleError("Error listing layers for map - data: (" + e.getMessage() + ") "
-                        + requestSnippet, Status.INTERNAL_SERVER_ERROR, logger);
+                String msg = "Error listing layers for map - data: (" + e.getMessage() + ") " + requestSnippet;
+                logger.error(msg, e);
+                throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
         }
     }
@@ -1074,15 +1078,19 @@ public class MapResource {
             if (jobStatusManager != null) {
                 jobStatusManager.setFailed(jobId, sqlEx.getMessage());
             }
-            ResourceErrorHandler.handleError("Failure update map tags resource " + sqlEx.getMessage() + " SQLState: "
-                    + sqlEx.getSQLState(), Status.INTERNAL_SERVER_ERROR, logger);
+
+            String msg = "Failure update map tags resource " + sqlEx.getMessage() + " SQLState: " + sqlEx.getSQLState();
+            logger.error(msg, sqlEx);
+            throw new WebApplicationException(sqlEx, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
         catch (Exception ex) {
             if (jobStatusManager != null) {
                 jobStatusManager.setFailed(jobId, ex.getMessage());
             }
-            ResourceErrorHandler.handleError("Failure update map tags resource" + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, logger);
+
+            String msg = "Failure update map tags resource" + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
         finally {
             DbUtils.closeConnection(conn);
@@ -1113,7 +1121,6 @@ public class MapResource {
                     QMaps maps = QMaps.maps;
                     mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
                     logger.info("Retrieving map tags for map with ID: {} ...", mapIdNum);
-                    assert (mapIdNum > 0);
 
                     try {
                         java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapIdNum, conn);
@@ -1134,7 +1141,7 @@ public class MapResource {
                         }
                     }
                     catch (Exception e) {
-                        throw new Exception("Error getting map tags. :" + e.getMessage());
+                        throw new Exception("Error getting map tags. :" + e.getMessage(), e);
                     }
                 }
             }
@@ -1151,25 +1158,24 @@ public class MapResource {
 
     public static long validateMap(String mapId, Connection conn) {
         long mapIdNum = -1;
+
         try {
             // input mapId may be a map ID or a map name
             mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
-            assert (mapIdNum != -1);
         }
-        catch (Exception e) {
-            if (e.getMessage().startsWith("Multiple records exist")) {
-                ResourceErrorHandler
-                        .handleError(e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"),
-                                Status.NOT_FOUND, logger);
+        catch (Exception ex) {
+            if (ex.getMessage().startsWith("Multiple records exist") || ex.getMessage().startsWith("No record exists")) {
+                String msg = ex.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
+                logger.error(msg, ex);
+                throw new WebApplicationException(ex, Response.status(Status.NOT_FOUND).entity(msg).build());
             }
-            else if (e.getMessage().startsWith("No record exists")) {
-                ResourceErrorHandler
-                        .handleError(e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"),
-                                Status.NOT_FOUND, logger);
+            else {
+                String msg = "Error requesting map with ID: " + mapId + " (" + ex.getMessage() + ")";
+                logger.error(msg, ex);
+                throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
-            ResourceErrorHandler.handleError("Error requesting map with ID: " + mapId + " (" + e.getMessage() + ")",
-                    Status.BAD_REQUEST, logger);
         }
+
         return mapIdNum;
     }
 }

@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONObject;
@@ -59,7 +61,6 @@ import hoot.services.command.ICommandRunner;
 import hoot.services.db.DbUtils;
 import hoot.services.job.Executable;
 import hoot.services.utils.FileUtils;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 public class TunningService implements Executable {
@@ -135,7 +136,9 @@ public class TunningService implements Executable {
             res.put("RelationCount", sinkImplementation.getTotalRelation());
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Tuning Service error: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Tuning Service error: " + ex.getMessage();
+            logger.error(msg, ex);
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
         finally {
             DbUtils.closeConnection(conn);
