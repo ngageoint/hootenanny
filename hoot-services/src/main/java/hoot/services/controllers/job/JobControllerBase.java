@@ -50,7 +50,7 @@ import hoot.services.HootProperties;
 
 public class JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(JobControllerBase.class);
-    private static final String coreJobServerUrl = HootProperties.getProperty("coreJobServerUrl");
+    private static final String CORE_JOB_SERVER_URL = HootProperties.getProperty("coreJobServerUrl");
     protected String processScriptName;
     private static int jobResConnectionTimeout;
 
@@ -87,8 +87,8 @@ public class JobControllerBase {
         try (CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom().setDefaultRequestConfig(requestConfig).build()) {
             httpclient.start();
 
-            HttpPost httpPost = new HttpPost(coreJobServerUrl + "/hoot-services/job/" + jobId);
-            logger.debug("postJobRequest : {}/hoot-services/job/{}", coreJobServerUrl, jobId);
+            HttpPost httpPost = new HttpPost(CORE_JOB_SERVER_URL + "/hoot-services/job/" + jobId);
+            logger.debug("postJobRequest : {}/hoot-services/job/{}", CORE_JOB_SERVER_URL, jobId);
             StringEntity se = new StringEntity(requestParams);
             httpPost.setEntity(se);
 
@@ -117,8 +117,8 @@ public class JobControllerBase {
         try (CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom().setDefaultRequestConfig(requestConfig).build()) {
             httpclient.start();
 
-            HttpPost httpPost = new HttpPost(coreJobServerUrl + "/hoot-services/job/chain/" + jobId);
-            logger.debug("postChainJobRquest : {}/hoot-services/job/chain/{}", coreJobServerUrl, jobId);
+            HttpPost httpPost = new HttpPost(CORE_JOB_SERVER_URL + "/hoot-services/job/chain/" + jobId);
+            logger.debug("postChainJobRquest : {}/hoot-services/job/chain/{}", CORE_JOB_SERVER_URL, jobId);
 
             StringEntity se = new StringEntity(requestParams);
             httpPost.setEntity(se);

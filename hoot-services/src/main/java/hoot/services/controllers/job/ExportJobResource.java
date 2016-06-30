@@ -132,7 +132,6 @@ public class ExportJobResource extends JobControllerBase {
                 arg.put("outputname", jobId);
                 commandArgs.add(arg);
 
-                HootProperties.getProperty("dbName");
                 String userid = HootProperties.getProperty("dbUserId");
                 String pwd = HootProperties.getProperty("dbPassword");
                 String host = HootProperties.getProperty("dbHost");
@@ -237,7 +236,7 @@ public class ExportJobResource extends JobControllerBase {
         // ignoring outputname, since we're only going to have a single mapedit
         // connection configured in the core for now configured in the core for now
         JSONObject arg = new JSONObject();
-        arg.put("temppath", HootProperties.getProperty("TEMP_OUTPUT_PATH"));
+        arg.put("temppath", TEMP_OUTPUT_PATH);
         commandArgs.add(arg);
 
         // This option allows the job executor return std out to the client.  This is the only way

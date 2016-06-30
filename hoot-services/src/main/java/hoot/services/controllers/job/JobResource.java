@@ -568,7 +568,7 @@ public class JobResource {
             JSONObject status = getJobStatusObj(jobId);
 
             try {
-                String detail = status.get("statusDetail").toString();
+                String detail = (status.get("statusDetail") != null) ? status.get("statusDetail").toString() : null;
                 if ((detail != null) && (!detail.trim().isEmpty()) && detail.trim().startsWith("{")) {
                     JSONParser p = new JSONParser();
                     JSONObject stat = (JSONObject) p.parse(detail);
