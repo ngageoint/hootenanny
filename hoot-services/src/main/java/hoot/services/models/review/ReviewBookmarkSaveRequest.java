@@ -78,7 +78,7 @@ public class ReviewBookmarkSaveRequest {
             this.detail = (JSONObject) p.parse(jsonStr);
         }
         catch (Exception ex) {
-            throw new Exception("Failed to parse review bookmark detail parameter to JSON: " + ex.getMessage());
+            throw new Exception("Failed to parse review bookmark detail parameter to JSON: " + ex.getMessage(), ex);
         }
     }
 

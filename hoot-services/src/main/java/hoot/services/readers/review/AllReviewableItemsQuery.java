@@ -270,7 +270,6 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
         double maxLon = tup.get(Expressions.numberPath(Double.class, bboxPath, "maxlon"));
 
         BoundingBox bbox = new BoundingBox(minLon, minLat, maxLon, maxLat);
-
         return bbox;
     }
 
@@ -329,7 +328,6 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
      * @throws Exception
      */
     protected SQLQuery getReviewableRelatioWithWayMembersCentroidInBboxQuery() throws Exception {
-        SQLQuery sql = null;
         if (bbox == null) {
             throw new Exception("Invalid Bounding box.");
         }
@@ -408,7 +406,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
                                         "(((max(\"currentNodeSubQ\".\"longitude\") - min(\"currentNodeSubQ\".\"longitude\"))/2)+min(\"currentNodeSubQ\".\"longitude\"))")
                                 .as("centlon"));
 
-        sql = new SQLQuery(super.getConnection(), DbUtils.getConfiguration(getMapId()))
+        SQLQuery sql = new SQLQuery(super.getConnection(), DbUtils.getConfiguration(getMapId()))
                 .from(reviewRelWayMembersCentroidSubQ.as(reviewRelWayMembersCentroidSubQPath))
                 .where(Expressions.numberPath(Double.class, reviewRelWayMembersCentroidSubQPath, "centlat")
                         .goe(bbox.getMinLat())
@@ -439,7 +437,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
 
         Path reviewRelNodeMembersCentroidSubQPath = Expressions.path(Void.class,
                 "reviewRelNodeMembersCentroidSubQ");
-        List<Tuple> tups = _getReviewableRelatioWithNodeMembersCentroidInBboxQuery().list(
+        List<Tuple> tups = getReviewableRelatioWithNodeMembersCentroidInBboxQuery().list(
                 Expressions.path(Long.class, reviewRelNodeMembersCentroidSubQPath, "relation_id"),
                 Expressions.path(String.class, reviewRelNodeMembersCentroidSubQPath, "needreview"),
                 Expressions.numberPath(Double.class, reviewRelNodeMembersCentroidSubQPath, "maxlat"),
@@ -467,7 +465,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
      * 
      * @return - SQL query string
      */
-    protected SQLQuery _getReviewableRelatioWithNodeMembersCentroidInBboxQuery() throws Exception {
+    protected SQLQuery getReviewableRelatioWithNodeMembersCentroidInBboxQuery() throws Exception {
         if (bbox == null) {
             throw new Exception("Invalid Bounding box.");
         }

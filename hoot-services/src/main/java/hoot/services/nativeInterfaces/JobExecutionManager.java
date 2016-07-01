@@ -79,7 +79,7 @@ public class JobExecutionManager {
             throw ne;
         }
         catch (Exception e) {
-            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR);
+            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
         }
     }
 
@@ -92,7 +92,7 @@ public class JobExecutionManager {
             throw ne;
         }
         catch (Exception e) {
-            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR);
+            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
         }
         return ret;
     }
@@ -103,7 +103,7 @@ public class JobExecutionManager {
             progress = getNativeInterface().getJobProgress(jobId);
         }
         catch (Exception e) {
-            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR);
+            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
         }
         return progress;
     }

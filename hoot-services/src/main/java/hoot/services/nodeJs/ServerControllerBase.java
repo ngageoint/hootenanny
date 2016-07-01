@@ -111,6 +111,7 @@ public class ServerControllerBase {
                 }
             }
             catch (Exception e) {
+                logger.error("Error running 'kill -0 {}'", transServerPID, e);
                 isRunning = false;
             }
         }

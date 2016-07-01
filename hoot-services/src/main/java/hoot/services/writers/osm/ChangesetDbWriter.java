@@ -291,7 +291,7 @@ public class ChangesetDbWriter {
             }
             catch (Exception e) {
                 throw new Exception("Error retrieving next new element ID for element type: " + elementType
-                        + " for changeset: " + requestChangesetId + " (" + e.getMessage() + ")");
+                        + " for changeset: " + requestChangesetId + " (" + e.getMessage() + ")", e);
             }
         }
 
@@ -443,7 +443,7 @@ public class ChangesetDbWriter {
         }
         catch (Exception e) {
             throw new Exception("Error parsing changeset diff data: " + StringUtils.abbreviate(changeset, 100) + " ("
-                    + e.getMessage() + ")");
+                    + e.getMessage() + ")", e);
         }
 
         return write(mapId, changesetId, changesetDoc);

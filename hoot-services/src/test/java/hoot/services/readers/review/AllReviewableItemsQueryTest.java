@@ -236,7 +236,7 @@ public class AllReviewableItemsQueryTest {
     public void testGetReviewableRelatioWithNodeMembersCentroidInBboxQuery() throws Exception {
         BoundingBox bbox = new BoundingBox(-77.0520431244303, 38.9025514720831, -77.0120431244303, 38.9925514720831);
         AllReviewableItemsQuery q = new AllReviewableItemsQuery(null, 10, bbox);
-        String actual = q._getReviewableRelatioWithNodeMembersCentroidInBboxQuery().toString();
+        String actual = q.getReviewableRelatioWithNodeMembersCentroidInBboxQuery().toString();
 
         String expected = "from (select \"reviewRelJoinRelMemberSubQ\".\"relation_id\", \"reviewRelJoinRelMemberSubQ\".\"needreview\", max(\"currentNodeSubQ\".\"latitude\") as \"maxlat\", min(\"currentNodeSubQ\".\"latitude\") as \"minlat\", max(\"currentNodeSubQ\".\"longitude\") as \"maxlon\", min(\"currentNodeSubQ\".\"longitude\") as \"minlon\", (((max(\"currentNodeSubQ\".\"latitude\") - min(\"currentNodeSubQ\".\"latitude\"))/2)+min(\"currentNodeSubQ\".\"latitude\")) as \"centlat\", (((max(\"currentNodeSubQ\".\"longitude\") - min(\"currentNodeSubQ\".\"longitude\"))/2)+min(\"currentNodeSubQ\".\"longitude\")) as \"centlon\"\n"
                 + "from (select \"current_nodes\".\"id\", \"current_nodes\".\"latitude\", \"current_nodes\".\"longitude\"\n"
@@ -262,7 +262,7 @@ public class AllReviewableItemsQueryTest {
         BoundingBox bbox = null;
         AllReviewableItemsQuery q = new AllReviewableItemsQuery(null, 10, bbox);
         try {
-            q._getReviewableRelatioWithNodeMembersCentroidInBboxQuery();
+            q.getReviewableRelatioWithNodeMembersCentroidInBboxQuery();
         }
         catch (Exception ex) {
             String expected = "Invalid Bounding box.";

@@ -42,8 +42,8 @@ import hoot.services.models.review.ReviewableItem;
 public class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(RandomReviewableQuery.class);
 
-    public RandomReviewableQuery(Connection c, long mapid) throws SQLException {
-        super(c, mapid);
+    public RandomReviewableQuery(Connection connection, long mapid) throws SQLException {
+        super(connection, mapid);
 
         // TODO: Since this code will affect all subsequent calls to
         // random(), it is better moved to

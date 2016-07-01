@@ -54,7 +54,7 @@ public class ChangesetUploadXmlValidator {
             changesetDiffDoc = XmlDocumentBuilder.parse(changesetXml);
         }
         catch (Exception e) {
-            throw new Exception("Error parsing changeset diff data: " + changesetXml + " (" + e.getMessage() + ")");
+            throw new Exception("Error parsing changeset diff data: " + changesetXml + " (" + e.getMessage() + ")", e);
         }
 
         if (XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange").getLength() > 1) {

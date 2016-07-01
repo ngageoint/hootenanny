@@ -112,13 +112,13 @@ public class ProcessStreamInterface implements INativeInterface {
     @Override
     public JSONObject exec(JSONObject command) throws NativeInterfaceException {
         logger.debug("Executing command : {}", command.toJSONString());
-        String[] commandArr = null;
         JSONObject ret = new JSONObject();
         CommandResult res = null;
         boolean addedToQ = false;
         try {
             String exec = command.get("exectype").toString();
 
+            String[] commandArr = null;
             if (exec.equalsIgnoreCase("hoot")) {
                 commandArr = createCmdArray(command);
             }
@@ -242,9 +242,8 @@ public class ProcessStreamInterface implements INativeInterface {
      * @param cmd
      */
     private static void removeFromProcessQ(JSONObject cmd) {
-        String jobId = "";
         if (cmd.containsKey("jobId")) {
-            jobId = cmd.get("jobId").toString();
+            String jobId = cmd.get("jobId").toString();
             jobProcesses.remove(jobId);
         }
     }
@@ -340,7 +339,7 @@ public class ProcessStreamInterface implements INativeInterface {
                 arg = (String) mEntry.getValue();
             }
 
-            execCmd.add(key + "=" + arg + "");
+            execCmd.add(key + "=" + arg);
         }
 
         String jobid = cmd.get("jobId").toString();

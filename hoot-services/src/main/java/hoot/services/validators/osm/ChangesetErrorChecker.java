@@ -207,7 +207,7 @@ public class ChangesetErrorChecker {
                         id = Long.parseLong(relationMemberIdXmlNodes.item(i).getAttributes().getNamedItem("ref").getNodeValue());
                     }
                     catch (NumberFormatException | NullPointerException e) {
-                        throw new Exception(emptyIdErrorMsg);
+                        throw new Exception(emptyIdErrorMsg, e);
                     }
 
                     if (id > 0) {
@@ -225,7 +225,7 @@ public class ChangesetErrorChecker {
                 id = Long.parseLong(wayNodeIdXmlNodes.item(i).getNodeValue());
             }
             catch (NumberFormatException | NullPointerException e) {
-                throw new Exception(emptyIdErrorMsg);
+                throw new Exception(emptyIdErrorMsg, e);
             }
 
             if (id > 0) {
@@ -249,7 +249,7 @@ public class ChangesetErrorChecker {
                                 id = Long.parseLong(elementIdXmlNodes.item(i).getNodeValue());
                             }
                             catch (NumberFormatException | NullPointerException e) {
-                                throw new Exception(emptyIdErrorMsg);
+                                throw new Exception(emptyIdErrorMsg, e);
                             }
                             if (id > 0) {
                                 elementTypesToElementIds.get(elementType).add(id);

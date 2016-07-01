@@ -718,7 +718,7 @@ public abstract class Element implements XmlSerializable, DbSerializable {
             }
         }
         catch (Exception e) {
-            throw new Exception("Error parsing tag.");
+            throw new Exception("Error parsing tag.", e);
         }
         return tags;
     }

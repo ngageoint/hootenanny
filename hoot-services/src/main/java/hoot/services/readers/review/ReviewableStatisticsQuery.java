@@ -80,7 +80,6 @@ public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IR
     public ReviewQueryMapper execQuery() throws SQLException {
         long nTotal = this.getTotalReviewablesCount();
         long nUnReviewed = this.getRemainingReviewablesCount();
-
         ReviewableStatistics ret = new ReviewableStatistics(nTotal, nUnReviewed);
         return ret;
     }

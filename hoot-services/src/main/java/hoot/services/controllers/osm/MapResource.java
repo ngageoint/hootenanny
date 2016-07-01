@@ -467,7 +467,7 @@ public class MapResource {
                 }
                 catch (Exception e) {
                     throw new Exception("Error parsing bounding box from bbox param: " + bbox + " (" + e.getMessage()
-                            + ")");
+                            + ")", e);
                 }
 
                 boolean doDefault = true;
@@ -574,7 +574,7 @@ public class MapResource {
                     }
                     catch (Exception e) {
                         throw new Exception("Error parsing bounding box from bbox param: " + bbox + " ("
-                                + e.getMessage() + ")");
+                                + e.getMessage() + ")", e);
                     }
                     Map currMap = new Map(mapIdNum, conn);
                     nodeCnt += currMap.getNodesCount(queryBounds);
@@ -634,7 +634,7 @@ public class MapResource {
                 }
                 catch (Exception e) {
                     throw new Exception("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
-                            + e.getMessage() + ")");
+                            + e.getMessage() + ")", e);
                 }
 
                 Map currMap = new Map(mapIdNum, conn);

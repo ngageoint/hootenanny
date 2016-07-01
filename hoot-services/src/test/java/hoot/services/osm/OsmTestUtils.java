@@ -1193,7 +1193,7 @@ public class OsmTestUtils {
 
         }
         catch (Exception e) {
-            throw new Exception("Error inserting node.");
+            throw new Exception("Error inserting node.", e);
         }
         finally {
             if (stmt != null)
@@ -1382,7 +1382,7 @@ public class OsmTestUtils {
 
         }
         catch (Exception e) {
-            throw new Exception("Error inserting node.");
+            throw new Exception("Error inserting node.", e);
         }
 
         finally {
