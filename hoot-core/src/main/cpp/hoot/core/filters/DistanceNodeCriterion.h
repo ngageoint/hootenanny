@@ -25,32 +25,38 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef UNKNOWNCRITERION_H
-#define UNKNOWNCRITERION_H
+#ifndef DISTANCENODECRITERION_H
+#define DISTANCENODECRITERION_H
 
-// hoot
+// GEOS
+#include <geos/geom/Coordinate.h>
+
+// Hoot
+#include <hoot/core/Units.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot
 {
+  using namespace geos::geom;
 
 /**
- * Keeps all the unknown elements
+ * isSatisfied returns true if an element is
+ * within the specified distance of the given center
  */
-class UnknownCriterion : public ElementCriterion
+class DistanceNodeCriterion : public ElementCriterion
 {
 public:
-  static string className() { return "hoot::UnknownCriterion"; }
+  DistanceNodeCriterion(Coordinate center, Meters distance);
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const
-  {
-    return e->isUnknown();
-  }
+protected:
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
 
-  UnknownCriterion* clone() { return new UnknownCriterion(); }
+private:
+  Coordinate _center;
+  Meters _distance;
 };
 
-} // namespace hoot
+}
 
-#endif // UNKNOWNCRITERION_H
+#endif // DISTANCENODECRITERION_H

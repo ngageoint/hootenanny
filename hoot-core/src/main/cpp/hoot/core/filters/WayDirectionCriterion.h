@@ -25,32 +25,42 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef UNKNOWNCRITERION_H
-#define UNKNOWNCRITERION_H
+#ifndef WAYDIRECTIONCRITERION_H
+#define WAYDIRECTIONCRITERION_H
 
-// hoot
+// GEOS
+#include <geos/geom/LineString.h>
+
+// Hoot
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/Units.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/filters/ElementCriterion.h>
 
+#include "WayFilter.h"
+
 namespace hoot
 {
+  using namespace geos::geom;
+  class Way;
 
-/**
- * Keeps all the unknown elements
- */
-class UnknownCriterion : public ElementCriterion
+class WayDirectionCriterion : public ElementCriterion
 {
 public:
-  static string className() { return "hoot::UnknownCriterion"; }
+  WayDirectionCriterion(const ConstOsmMapPtr& map,
+                        shared_ptr<const Way> baseWay,
+                        bool similarDirection = true);
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const
-  {
-    return e->isUnknown();
-  }
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
 
-  UnknownCriterion* clone() { return new UnknownCriterion(); }
+  WayDirectionCriterion* clone() { return new WayDirectionCriterion(_map, _baseWay, _similarDirection); }
+
+private:
+  ConstOsmMapPtr _map;
+  shared_ptr<const Way> _baseWay;
+  bool _similarDirection;
 };
 
-} // namespace hoot
+}
 
-#endif // UNKNOWNCRITERION_H
+#endif // WAYDIRECTIONCRITERION_H

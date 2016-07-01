@@ -25,32 +25,51 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef UNKNOWNCRITERION_H
-#define UNKNOWNCRITERION_H
+#ifndef PARALLELWAYCRITERION_H
+#define PARALLELWAYCRITERION_H
 
-// hoot
+// GEOS
+#include <geos/geom/LineString.h>
+
+// Hoot
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/Units.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot
 {
+  using namespace geos::geom;
+  class Way;
 
-/**
- * Keeps all the unknown elements
- */
-class UnknownCriterion : public ElementCriterion
+class ParallelWayCriterion : public ElementCriterion
 {
 public:
-  static string className() { return "hoot::UnknownCriterion"; }
+  ParallelWayCriterion(const ConstOsmMapPtr& map,
+                       shared_ptr<const Way> baseWay,
+                       bool isParallel = true);
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const
-  {
-    return e->isUnknown();
-  }
+  virtual ~ParallelWayCriterion();
 
-  UnknownCriterion* clone() { return new UnknownCriterion(); }
+  Radians calculateDifference(const shared_ptr<const Way>& w) const;
+
+  void setThreshold(Degrees threshold) { _threshold = threshold; }
+
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+
+  ParallelWayCriterion* clone() { return new ParallelWayCriterion(_map, _baseWay, _isParallel); }
+
+private:
+  shared_ptr<const Way> _baseWay;
+  bool _isParallel;
+
+  // heading of baseWay at each coord
+  std::vector<Radians> _headings;
+  ConstOsmMapPtr _map;
+  std::vector<Point*> _points;
+  Degrees _threshold;
 };
 
-} // namespace hoot
+}
 
-#endif // UNKNOWNCRITERION_H
+#endif // PARALLELWAYCRITERION_H

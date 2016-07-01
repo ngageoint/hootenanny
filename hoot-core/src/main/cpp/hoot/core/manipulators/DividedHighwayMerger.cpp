@@ -45,12 +45,19 @@ using namespace geos::operation::distance;
 #include <hoot/core/algorithms/LineStringAverager.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/filters/OneWayFilter.h>
+#include <hoot/core/filters/NotCriterion.h>
 #include <hoot/core/filters/ParallelWayFilter.h>
+#include <hoot/core/filters/ParallelWayCriterion.h>
 #include <hoot/core/filters/StatusFilter.h>
-#include <hoot/core/filters/UnknownFilter.h>
+#include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/filters/WayDirectionFilter.h>
+#include <hoot/core/filters/WayDirectionCriterion.h>
 #include <hoot/core/filters/WayBufferFilter.h>
+#include <hoot/core/filters/WayBufferCriterion.h>
+#include <hoot/core/filters/OneWayCriterion.h>
+#include <hoot/core/filters/OneWayFilter.h>
+#include <hoot/core/filters/UnknownCriterion.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
@@ -82,17 +89,18 @@ DividedHighwayMerger::DividedHighwayMerger(Meters minSeparation, Meters maxSepar
   _vectorError = vectorError;
   _matchPercent = matchPercent;
 
-  shared_ptr<OneWayFilter> owFilter(new OneWayFilter());
-  shared_ptr<UnknownFilter> unknownFilter(new UnknownFilter());
-  _oneWayUnknownFilter.addFilter(owFilter);
-  _oneWayUnknownFilter.addFilter(unknownFilter);
+  shared_ptr<OneWayCriterion> pOneWayCrit(new OneWayCriterion());
+  shared_ptr<UnknownCriterion> pUnknownCrit(new UnknownCriterion());
+  _oneWayUnknownCriterion.addCriterion(pOneWayCrit);
+  _oneWayUnknownCriterion.addCriterion(pUnknownCrit);
+
 }
 
 const vector< shared_ptr<Manipulation> >& DividedHighwayMerger::findAllManipulations(
         shared_ptr<const OsmMap> map)
 {
   // go through all the oneway, unknown ways
-  vector<long> oneWays = map->filterWays(_oneWayUnknownFilter);
+  vector<long> oneWays = FindWaysVisitor::findWays(map, &_oneWayUnknownCriterion);
 
   // return the result
   return findWayManipulations(map, oneWays);
@@ -126,6 +134,47 @@ const vector< shared_ptr<Manipulation> >& DividedHighwayMerger::findWayManipulat
 vector<long> DividedHighwayMerger::_findCenterWays(shared_ptr<const Way> w1,
                                                    shared_ptr<const Way> w2)
 {
+  shared_ptr<OneWayCriterion> notOneWayCrit(new OneWayCriterion(false));
+
+  Status s;
+  if (w1->getStatus() == Status::Unknown1)
+  {
+    s = Status::Unknown2;
+  }
+  else
+  {
+    s = Status::Unknown1;
+  }
+
+  shared_ptr<StatusCriterion> statusCrit(new StatusCriterion(s));
+  shared_ptr<ParallelWayCriterion> parallelCrit(new ParallelWayCriterion(_map, w1));
+
+  ElementConverter ec(_map);
+  shared_ptr<LineString> ls2 = ec.convertToLineString(w2);
+  if (DirectionFinder::isSimilarDirection(_map, w1, w2) == false)
+  {
+    ls2.reset(dynamic_cast<LineString*>(ls2->reverse()));
+  }
+
+  // calculate the center line of two ways.
+  shared_ptr<LineString> center = LineStringAverager::average(
+    ec.convertToLineString(w1), ls2);
+  shared_ptr<WayBufferCriterion> distanceCrit(new WayBufferCriterion(_map, center, 0.0,
+    (w1->getCircularError() + w2->getCircularError()) / 2.0, _matchPercent));
+
+  ChainCriterion crit;
+  crit.addCriterion(notOneWayCrit);
+  crit.addCriterion(statusCrit);
+  crit.addCriterion(parallelCrit);
+  crit.addCriterion(distanceCrit);
+
+  return FindWaysVisitor::findWays(_map, &crit);
+}
+
+/*
+vector<long> DividedHighwayMerger::_findCenterWays(shared_ptr<const Way> w1,
+                                                   shared_ptr<const Way> w2)
+{
   shared_ptr<OneWayFilter> owFilter(new OneWayFilter(false));
 
   Status s;
@@ -153,8 +202,8 @@ vector<long> DividedHighwayMerger::_findCenterWays(shared_ptr<const Way> w1,
     ec.convertToLineString(w1), ls2);
   shared_ptr<WayBufferFilter> distanceFilter(new WayBufferFilter(_map, center, 0.0,
     (w1->getCircularError() + w2->getCircularError()) / 2.0, _matchPercent));
-  WayFilterChain filter;
 
+  WayFilterChain filter;
   filter.addFilter(owFilter);
   filter.addFilter(statusFilter);
   filter.addFilter(parallelFilter);
@@ -162,6 +211,7 @@ vector<long> DividedHighwayMerger::_findCenterWays(shared_ptr<const Way> w1,
 
   return _map->filterWays(filter);
 }
+*/
 
 void DividedHighwayMerger::_findMatches(long baseWayId)
 {
@@ -198,7 +248,32 @@ void DividedHighwayMerger::_findMatches(long baseWayId)
 
 vector<long> DividedHighwayMerger::_findOtherWays(boost::shared_ptr<const hoot::Way> baseWay)
 {
+  shared_ptr<OneWayCriterion> oneWayCrit(new OneWayCriterion());
+  shared_ptr<StatusCriterion> statusCrit(new StatusCriterion(baseWay->getStatus()));
+  shared_ptr<WayBufferCriterion> distanceCrit(new WayBufferCriterion(_map,
+                                                                     baseWay,
+                                                                     _maxSeparation,
+                                                                     _matchPercent));
+  shared_ptr<ParallelWayCriterion> parallelCrit(new ParallelWayCriterion(_map, baseWay));
+  shared_ptr<WayDirectionCriterion> directionCrit(new WayDirectionCriterion(_map, baseWay, true));
+
+  ChainCriterion chain;
+  chain.addCriterion(oneWayCrit);
+  chain.addCriterion(statusCrit);
+  chain.addCriterion(distanceCrit);
+  chain.addCriterion(parallelCrit);
+  chain.addCriterion(directionCrit);
+
+  return FindWaysVisitor::findWays(_map, &chain);
+}
+
+/*
+vector<long> DividedHighwayMerger::_findOtherWays(boost::shared_ptr<const hoot::Way> baseWay)
+{
+  // Keep one-way streets
   shared_ptr<OneWayFilter> owFilter(new OneWayFilter());
+
+  // Keep w/status of baseWay
   shared_ptr<StatusFilter> statusFilter(new StatusFilter(baseWay->getStatus()));
 
   shared_ptr<WayBufferFilter> distanceFilter(new WayBufferFilter(_map, baseWay,
@@ -215,6 +290,7 @@ vector<long> DividedHighwayMerger::_findOtherWays(boost::shared_ptr<const hoot::
 
   return _map->filterWays(filter);
 }
+*/
 
 }
 

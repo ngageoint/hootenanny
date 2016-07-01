@@ -25,32 +25,31 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef UNKNOWNCRITERION_H
-#define UNKNOWNCRITERION_H
+#include "DistanceNodeFilter.h"
 
-// hoot
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/filters/ElementCriterion.h>
+// Hoot
+#include <hoot/core/elements/Node.h>
 
 namespace hoot
 {
 
-/**
- * Keeps all the unknown elements
- */
-class UnknownCriterion : public ElementCriterion
+DistanceNodeFilter::DistanceNodeFilter(FilterType type, Coordinate center, Meters distance)
 {
-public:
-  static string className() { return "hoot::UnknownCriterion"; }
+  _type = type;
+  _center = center;
+  _distance = distance;
+}
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const
+bool DistanceNodeFilter::isFiltered(const Node& n) const
+{
+  if (_type == KeepMatches)
   {
-    return e->isUnknown();
+    return _center.distance(n.toCoordinate()) > _distance;
   }
+  else
+  {
+    return _center.distance(n.toCoordinate()) < _distance;
+  }
+}
 
-  UnknownCriterion* clone() { return new UnknownCriterion(); }
-};
-
-} // namespace hoot
-
-#endif // UNKNOWNCRITERION_H
+}

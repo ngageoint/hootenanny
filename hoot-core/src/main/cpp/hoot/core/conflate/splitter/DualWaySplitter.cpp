@@ -45,7 +45,7 @@ using namespace geos::operation::buffer;
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/filters/ChainNodeFilter.h>
-#include <hoot/core/filters/DistanceNodeFilter.h>
+//#include <hoot/core/filters/DistanceNodeFilter.h>
 #include <hoot/core/filters/InWayNodeFilter.h>
 #include <hoot/core/filters/OneWayFilter.h>
 #include <hoot/core/filters/TagCriterion.h>

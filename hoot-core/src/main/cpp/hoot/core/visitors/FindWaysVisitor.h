@@ -43,55 +43,30 @@ class FindWaysVisitor :  public ElementConstOsmMapVisitor
 {
 public:
 
-  FindWaysVisitor (ElementCriterion* pCrit):
-    _pCrit(pCrit)
-  {
-    // Nothing
-  }
+  FindWaysVisitor (ElementCriterion* pCrit);
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
+  void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(const shared_ptr<const Element>& e)
-  {
-    if (e->getElementType() == ElementType::Way)
-    {
-      ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
-      if (_pCrit->isSatisfied(e))
-      {
-        _wayIds.push_back(e->getId());
-      }
-    }
-  }
+  void visit(const shared_ptr<const Element>& e);
 
   vector<long> getIds() { return _wayIds; }
 
   // Convenience method for finding ways that match the given criterion
-  static vector<long> findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit)
-  {
-    FindWaysVisitor v(pCrit);
-    map->visitWaysRo(v);
-    return v.getIds();
-  }
+  static vector<long> findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit);
+
+  static vector<long> findWays(const ConstOsmMapPtr& map,
+                               ElementCriterion* pCrit,
+                               shared_ptr<const Way> refWay,
+                               Meters maxDistance,
+                               bool addError);
 
   // Convenience method for finding ways that contain the given node
-  static vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId)
-  {
-    ContainsNodeCriterion crit(nodeId);
-    FindWaysVisitor v(&crit);
-    map->visitWaysRo(v);
-    return v.getIds();
-  }
+  static vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
 
   // Convenience method for finding ways that contain the given tag
   static vector<long> findWaysByTag(const ConstOsmMapPtr& map,
                                     const QString& key,
-                                    const QString& value)
-  {
-    TagCriterion crit(key, value);
-    FindWaysVisitor v(&crit);
-    map->visitWaysRo(v);
-    return v.getIds();
-  }
+                                    const QString& value);
 
 private:
   const OsmMap* _map;

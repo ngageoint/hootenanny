@@ -25,32 +25,38 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef UNKNOWNCRITERION_H
-#define UNKNOWNCRITERION_H
+#ifndef ONEWAYCRITERION_H
+#define ONEWAYCRITERION_H
 
 // hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
 
 /**
- * Keeps all the unknown elements
+ * Keeps all the one-way elements
  */
-class UnknownCriterion : public ElementCriterion
+class OneWayCriterion : public ElementCriterion
 {
 public:
-  static string className() { return "hoot::UnknownCriterion"; }
+  static string className() { return "hoot::OneWayCriterion"; }
+
+  OneWayCriterion(bool isOneWay = true): _isOneWay(isOneWay) { }
 
   bool isSatisfied(const shared_ptr<const Element> &e) const
   {
-    return e->isUnknown();
+    return OsmSchema::getInstance().isOneWay(*e) == _isOneWay;
   }
 
-  UnknownCriterion* clone() { return new UnknownCriterion(); }
+  OneWayCriterion* clone() { return new OneWayCriterion(); }
+
+private:
+  bool _isOneWay;
 };
 
 } // namespace hoot
 
-#endif // UNKNOWNCRITERION_H
+#endif // ONEWAYCRITERION_H

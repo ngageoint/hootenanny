@@ -25,32 +25,29 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef UNKNOWNCRITERION_H
-#define UNKNOWNCRITERION_H
-
-// hoot
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/filters/ElementCriterion.h>
+#include "WayDirectionCriterion.h"
+#include <hoot/core/algorithms/DirectionFinder.h>
 
 namespace hoot
 {
 
-/**
- * Keeps all the unknown elements
- */
-class UnknownCriterion : public ElementCriterion
+WayDirectionCriterion::WayDirectionCriterion(const ConstOsmMapPtr& map,
+                                             shared_ptr<const Way> baseWay,
+                                             bool similarDirection) :
+  _map(map),
+  _baseWay(baseWay),
+  _similarDirection(similarDirection)
 {
-public:
-  static string className() { return "hoot::UnknownCriterion"; }
+  // Blank
+}
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const
-  {
-    return e->isUnknown();
-  }
+bool WayDirectionCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+{
+  if (e->getElementType() != ElementType::Way)
+    return false;
 
-  UnknownCriterion* clone() { return new UnknownCriterion(); }
-};
+  ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+  return DirectionFinder::isSimilarDirection(_map, _baseWay, w) == _similarDirection;
+}
 
 } // namespace hoot
-
-#endif // UNKNOWNCRITERION_H
