@@ -60,12 +60,12 @@ public:
   ParallelWayCriterion* clone() { return new ParallelWayCriterion(_map, _baseWay, _isParallel); }
 
 private:
+  ConstOsmMapPtr _map;
   shared_ptr<const Way> _baseWay;
   bool _isParallel;
 
   // heading of baseWay at each coord
   std::vector<Radians> _headings;
-  ConstOsmMapPtr _map;
   std::vector<Point*> _points;
   Degrees _threshold;
 };

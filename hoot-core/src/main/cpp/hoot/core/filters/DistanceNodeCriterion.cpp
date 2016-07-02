@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "DistanceNodeFilter.h"
+#include "DistanceNodeCriterion.h"
 
 // Hoot
 #include <hoot/core/elements/Node.h>
@@ -33,23 +33,20 @@
 namespace hoot
 {
 
-DistanceNodeFilter::DistanceNodeFilter(FilterType type, Coordinate center, Meters distance)
+DistanceNodeCriterion::DistanceNodeCriterion(Coordinate center, Meters distance):
+  _center(center),
+  _distance(distance)
 {
-  _type = type;
-  _center = center;
-  _distance = distance;
+  // Blank
 }
 
-bool DistanceNodeFilter::isFiltered(const Node& n) const
+bool DistanceNodeCriterion::isSatisfied(const shared_ptr<const Element> &e) const
 {
-  if (_type == KeepMatches)
-  {
-    return _center.distance(n.toCoordinate()) > _distance;
-  }
-  else
-  {
-    return _center.distance(n.toCoordinate()) < _distance;
-  }
+  if (e->getElementType() != ElementType::Node)
+    return false;
+
+  ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
+  return _center.distance(n->toCoordinate()) < _distance;
 }
 
-}
+} // namespace hoot

@@ -67,7 +67,6 @@ namespace hoot {
 
 using namespace std;
 
-class NodeFilter;
 class OsmMapIndex;
 class OsmMapListener;
 class WayFilter;
@@ -159,20 +158,6 @@ public:
   long createNextRelationId() const { return _idGen->createRelationId(); }
 
   long createNextWayId() const { return _idGen->createWayId(); }
-
-  //std::vector<long> filterNodes(const NodeFilter& filter) const;
-
-  std::vector<long> filterNodes(const NodeFilter& filter, const Coordinate& c,
-                                Meters maxDistance) const;
-
-  std::vector<long> filterWays(const WayFilter& filter) const;
-
-  /**
-   * Returns the ID of all the ways that are not filtered by filter and are within maxDistance
-   * of "from".
-   */
-  std::vector<long> filterWays(const WayFilter& filter, shared_ptr<const Way> from,
-                               Meters maxDistance, bool addError = false) const;
 
   virtual ConstElementPtr getElement(const ElementId& id) const;
   ConstElementPtr getElement(ElementType type, long id) const;
@@ -362,6 +347,7 @@ public:
    * visiting any elements.
    */
   void visitRw(ElementVisitor& visitor);
+  void visitWaysRw(ElementVisitor& visitor);
 
 protected:
 

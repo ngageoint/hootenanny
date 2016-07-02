@@ -24,8 +24,6 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef FINDNODESVISITOR_H
-#define FINDNODESVISITOR_H
 
 #include "FindNodesVisitor.h"
 #include <hoot/core/index/OsmMapIndex.h>
@@ -33,65 +31,61 @@
 namespace hoot
 {
 
-  FindNodesVisitor::FindNodesVisitor (ElementCriterion* pCrit):
-    _pCrit(pCrit)
-  {
-    // This space intentionally left blank
-  }
-
-  void FindNodesVisitor::visit(const shared_ptr<const Element>& e)
-  {
-    if (e->getElementType() == ElementType::Node)
-    {
-      ConstNodePtr pNode = dynamic_pointer_cast<const Node>(e);
-      if (_pCrit->isSatisfied(e))
-      {
-        _nodeIds.push_back(e->getId());
-      }
-    }
-  }
-
-  // Convenience method for finding ways that match the given criterion
-  vector<long> FindNodesVisitor::findNodes(const ConstOsmMapPtr& map,
-                                           ElementCriterion* pCrit)
-  {
-    FindNodesVisitor v(pCrit);
-    map->visitNodesRo(v);
-    return v.getIds();
-  }
-
-  vector<long> FindNodesVisitor::findWays(const ConstOsmMapPtr& map,
-                                          ElementCriterion* pCrit,
-                                          shared_ptr<const Node> refNode,
-                                          Meters maxDistance,
-                                          bool addError)
-  {
-    vector<long> close = map->getIndex().findNodeNeighbors(refNode, maxDistance, addError);
-    vector<long> result;
-
-    for (size_t i = 0; i < close.size(); i++)
-    {
-      const shared_ptr<const Node>& n = map->getNode(close[i]);
-      if (pCrit->isSatisfied(n))
-        result.push_back(n->getId());
-    }
-
-    return result;
-  }
-
-  // Convenience method for finding nodes that contain the given tag
-  vector<long> FindNodesVisitor::findNodesByTag(const ConstOsmMapPtr& map,
-                                                const QString& key,
-                                                const QString& value)
-  {
-    TagCriterion crit(key, value);
-    FindNodesVisitor v(&crit);
-    map->visitNodesRo(v);
-    return v.getIds();
-  }
-
-};
-
+FindNodesVisitor::FindNodesVisitor (ElementCriterion* pCrit):
+  _pCrit(pCrit)
+{
+  // This space intentionally left blank
 }
 
-#endif // FINDNODESVISITOR_H
+void FindNodesVisitor::visit(const shared_ptr<const Element>& e)
+{
+  if (e->getElementType() == ElementType::Node)
+  {
+    ConstNodePtr pNode = dynamic_pointer_cast<const Node>(e);
+    if (_pCrit->isSatisfied(e))
+    {
+      _nodeIds.push_back(e->getId());
+    }
+  }
+}
+
+// Convenience method for finding ways that match the given criterion
+vector<long> FindNodesVisitor::findNodes(const ConstOsmMapPtr& map,
+                                         ElementCriterion* pCrit)
+{
+  FindNodesVisitor v(pCrit);
+  map->visitNodesRo(v);
+  return v.getIds();
+}
+
+vector<long> FindNodesVisitor::findNodes(const ConstOsmMapPtr& map,
+                                         ElementCriterion* pCrit,
+                                         const Coordinate& refCoord,
+                                         Meters maxDistance)
+{
+  vector<long> close = map->getIndex().findNodes(refCoord, maxDistance);
+  vector<long> result;
+
+  for (size_t i = 0; i < close.size(); i++)
+  {
+    const shared_ptr<const Node>& n = map->getNode(close[i]);
+    if (pCrit->isSatisfied(n))
+      result.push_back(n->getId());
+  }
+
+  return result;
+}
+
+// Convenience method for finding nodes that contain the given tag
+vector<long> FindNodesVisitor::findNodesByTag(const ConstOsmMapPtr& map,
+                                              const QString& key,
+                                              const QString& value)
+{
+  TagCriterion crit(key, value);
+  FindNodesVisitor v(&crit);
+  map->visitNodesRo(v);
+  return v.getIds();
+}
+
+} // namespace hoot
+

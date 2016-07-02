@@ -49,8 +49,9 @@ class DistanceNodeCriterion : public ElementCriterion
 public:
   DistanceNodeCriterion(Coordinate center, Meters distance);
 
-protected:
   virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+
+  DistanceNodeCriterion* clone() { return new DistanceNodeCriterion(_center, _distance); }
 
 private:
   Coordinate _center;
