@@ -269,7 +269,7 @@ public class ChangesetResource {
                 changesetUploadResponse = (new ChangesetDbWriter(conn)).write(mapid, changesetId, changesetDoc);
             }
             catch (Exception e) {
-                logger.error("Rolling back transaction for changeset upload...");
+                logger.error("Rolling back transaction for changeset upload...", e);
                 transactionManager.rollback(transactionStatus);
                 conn.rollback();
                 handleError(e, changesetId, StringUtils.abbreviate(changeset, 100));
@@ -369,27 +369,27 @@ public class ChangesetResource {
                     || e.getMessage().contains("Changeset maximum element threshold exceeded")
                     || e.getMessage().contains("was closed at")) {
                 String msg = message;
-                logger.error(msg);
+                logger.error(msg, e);
                 throw new WebApplicationException(Response.status(Status.CONFLICT).entity(msg).build());
             }
             else if (e.getMessage().contains("to be updated does not exist")
                     || e.getMessage().contains("Element(s) being referenced don't exist.")) {
                 String msg = message;
-                logger.error(msg);
+                logger.error(msg, e);
                 throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
             }
             else if (e.getMessage().contains("exist specified for") || e.getMessage().contains("exist for")
                     || e.getMessage().contains("still used by") || e.getMessage()
                             .contains("One or more features in the changeset are involved in an unresolved review")) {
                 String msg = message;
-                logger.error(msg);
+                logger.error(msg, e);
                 throw new WebApplicationException(Response.status(Status.PRECONDITION_FAILED).entity(msg).build());
             }
         }
 
         String msg = "Error uploading changeset with ID: " + changesetId + " - data: (" + message
                 + ") " + changesetDiffSnippet;
-        logger.error(msg);
+        logger.error(msg, e);
         throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
     }
 }

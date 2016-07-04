@@ -105,7 +105,7 @@ public class BasemapResource extends JobControllerBase {
             }
         }
         catch (IOException iex) {
-            logger.error(iex.getMessage());
+            logger.error(iex.getMessage(), iex);
         }
     }
 
@@ -231,7 +231,7 @@ public class BasemapResource extends JobControllerBase {
         }
         catch (Exception ex) {
             String message = "Error processing upload: " + ex.getMessage();
-            logger.error(message);
+            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
@@ -258,7 +258,7 @@ public class BasemapResource extends JobControllerBase {
         }
         catch (Exception ex) {
             String message = "Error getting base map list: " + ex.getMessage();
-            logger.error(message);
+            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
@@ -389,7 +389,7 @@ public class BasemapResource extends JobControllerBase {
         }
         catch (Exception ex) {
             String message = "Error enabling base map: " + bmName + " Error: " + ex.getMessage();
-            logger.error(message);
+            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
@@ -438,7 +438,7 @@ public class BasemapResource extends JobControllerBase {
         }
         catch (Exception ex) {
             String message = "Error deleting base map: " + bmName + " Error: " + ex.getMessage();
-            logger.error(message);
+            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 

@@ -309,7 +309,7 @@ public class Map extends Maps {
                     }
                 }
                 catch (Exception ex) {
-                    logger.error(ex.getMessage());
+                    logger.error(ex.getMessage(), ex);
                 }
             }
 
@@ -355,7 +355,7 @@ public class Map extends Maps {
                         }
                     }
                     catch (Exception ex) {
-                        logger.error(ex.getMessage());
+                        logger.error(ex.getMessage(), ex);
                     }
                 }
 
@@ -386,7 +386,7 @@ public class Map extends Maps {
                                 .list(currentWayNodes.nodeId)));
                     }
                     catch (Exception ex) {
-                        logger.error(ex.getMessage());
+                        logger.error(ex.getMessage(), ex);
                     }
                 }
 
@@ -452,7 +452,7 @@ public class Map extends Maps {
                             }
                         }
                         catch (Exception ex) {
-                            logger.error(ex.getMessage());
+                            logger.error(ex.getMessage(), ex);
                         }
                     }
 
@@ -520,7 +520,7 @@ public class Map extends Maps {
                                 .list(currentRelationMembers.relationId)));
                     }
                     catch (Exception ex) {
-                        logger.error(ex.getMessage());
+                        logger.error(ex.getMessage(), ex);
                     }
                 }
 
@@ -551,7 +551,7 @@ public class Map extends Maps {
                                         .list(currentRelationMembers.relationId)));
                     }
                     catch (Exception ex) {
-                        logger.error(ex.getMessage());
+                        logger.error(ex.getMessage(), ex);
                     }
                 }
 
@@ -603,7 +603,7 @@ public class Map extends Maps {
                         }
                     }
                     catch (Exception ex) {
-                        logger.error(ex.getMessage());
+                        logger.error(ex.getMessage(), ex);
                     }
                 }
 

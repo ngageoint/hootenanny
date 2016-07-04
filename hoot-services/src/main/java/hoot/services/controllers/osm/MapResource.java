@@ -244,7 +244,7 @@ public class MapResource {
                 insertMissing.execute();
             }
             catch (Exception e) {
-                logger.error("Could not add missing records...");
+                logger.error("Could not add missing records...", e);
             }
 
             List<FolderMapMappings> linkRecordSet =

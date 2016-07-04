@@ -375,7 +375,7 @@ public class CustomScriptResource {
                         }
                     }
                     catch (Exception e) {
-                        logger.error("Failed to read file header: {}", e.getMessage());
+                        logger.error("Failed to read file header: {}", e.getMessage(), e);
                     }
                 }
             }
@@ -693,7 +693,7 @@ public class CustomScriptResource {
             canExport = getDbSchemaExist && translateToOgrExist;
         }
         catch (Exception ex) {
-            logger.error(ex.getMessage());
+            logger.error(ex.getMessage(), ex);
             if (ex instanceof EvaluatorException) {
                 throw ex;
             }

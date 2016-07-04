@@ -152,7 +152,7 @@ public class HGISReviewResource extends HGISResource {
         }
         catch (Exception e) {
             jobStatusManager.setFailed(jobId);
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             throw e;
         }
 

@@ -184,7 +184,7 @@ public class AdvancedOptResource {
             }
         }
         catch (Exception ignored) {
-            logger.debug(ignored.getMessage());
+            logger.debug(ignored.getMessage(), ignored);
         }
 
         return "";
