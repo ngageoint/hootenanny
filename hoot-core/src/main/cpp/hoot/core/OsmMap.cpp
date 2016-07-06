@@ -288,28 +288,6 @@ void OsmMap::_copy(boost::shared_ptr<const OsmMap> from)
   }
 }
 
-shared_ptr<OsmMap> OsmMap::copyWays(const vector<long>& wIds) const
-{
-  shared_ptr<OsmMap> result(new OsmMap());
-  result->_srs = _srs;
-
-  for (size_t i = 0; i < wIds.size(); i++)
-  {
-    shared_ptr<const Way> oldWay = getWay(wIds[i]);
-    shared_ptr<Way> w = shared_ptr<Way>(new Way(*oldWay));
-    w->registerListener(_index.get());
-    result->_ways[wIds[i]] = w;
-
-    for (size_t j = 0; j < oldWay->getNodeCount(); j++)
-    {
-      shared_ptr<const Node> oldNode = getNode(oldWay->getNodeId(j));
-      result->_nodes[oldNode->getId()] = shared_ptr<Node>(new Node(*oldNode));
-    }
-  }
-
-  return result;
-}
-
 ConstElementPtr OsmMap::getElement(const ElementId& eid) const
 {
   return getElement(eid.getType(), eid.getId());
@@ -511,19 +489,6 @@ void OsmMap::removeWayFully(long wId)
   }
   removeWay(wId);
   VALIDATE(validate());
-}
-
-void OsmMap::removeWays(const WayFilter& filter)
-{
-  const WayMap ways = getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
-  {
-    const shared_ptr<const Way>& w = it->second;
-    if (filter.isFiltered(w) == true)
-    {
-      removeWay(w->getId());
-    }
-  }
 }
 
 void OsmMap::replace(const shared_ptr<const Element>& from, const shared_ptr<Element>& to)

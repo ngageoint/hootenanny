@@ -35,6 +35,7 @@
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
+#include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/Factory.h>
 
@@ -108,7 +109,9 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
   wids.insert(wids.begin(), widSet.begin(), widSet.end());
 
   // create a copy of the map to experiment with
-  OsmMapPtr mapCopy = _map->copyWays(wids);
+  OsmMapPtr mapCopy(new OsmMap());
+  CopySubsetOp(_map, wids).apply(mapCopy);
+
   mapCopy->addElement(r1);
   mapCopy->addElement(r2);
 

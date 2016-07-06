@@ -55,6 +55,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/filters/WayBufferFilter.h>
 #include <hoot/core/filters/WayFilterChain.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
@@ -180,7 +181,9 @@ vector<long> WayMerger::_findOtherWays(shared_ptr<const Way> baseWayConst)
   vector<long> allWays = filtered;
   allWays.push_back(baseWayConst->getId());
 
-  shared_ptr<OsmMap> map = _map->copyWays(allWays);
+  OsmMapPtr map(new OsmMap());
+  CopySubsetOp(_map, allWays).apply(map);
+
 
   shared_ptr<Way> baseWay = map->getWay(baseWayConst->getId());
 

@@ -146,13 +146,6 @@ public:
 
   virtual bool containsWay(long id) const { return _ways.find(id) != _ways.end(); }
 
-  /**
-   * Returns a copy of this map that only contains the specified ways. This can be handy when
-   * performing what-if experiments.
-   * @deprecated CopySubsetOp is now preferred.
-   */
-  shared_ptr<OsmMap> copyWays(const vector<long>& wIds) const;
-
   long createNextNodeId() const { return _idGen->createNodeId(); }
 
   long createNextRelationId() const { return _idGen->createRelationId(); }
@@ -270,11 +263,6 @@ public:
    * Removes the way from all relations and then removes the way from the map.
    */
   void removeWayFully(long wId);
-
-  /**
-   * Removes the way if isFiltered() == true.
-   */
-  void removeWays(const WayFilter& filter);
 
   /**
    * Replace the all instances of from with instances of to. In some cases this may be an invalid
