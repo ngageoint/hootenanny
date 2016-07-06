@@ -94,7 +94,6 @@ public class CapabilitiesResponseWriter {
         }
         catch (Exception ex) {
             String msg = "Error creating response for capabilities query. (" + ex.getMessage() + ") ";
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 

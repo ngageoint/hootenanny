@@ -97,11 +97,10 @@ public class OgrAttributesResource extends JobControllerBase {
     @Produces(MediaType.TEXT_PLAIN)
     public Response processUpload(@QueryParam("INPUT_TYPE") String inputType,
                                   @Context HttpServletRequest request) {
-        JSONObject res = new JSONObject();
+        JSONObject response = new JSONObject();
         String jobId = UUID.randomUUID().toString();
 
         try {
-            logger.debug("Starting file upload for ogr attribute Process");
             Map<String, String> uploadedFiles = new HashMap<>();
             Map<String, String> uploadedFilesPaths = new HashMap<>();
 
@@ -124,28 +123,28 @@ public class OgrAttributesResource extends JobControllerBase {
                 if (ext.equalsIgnoreCase("ZIP")) {
                     zipList.add(fName);
                     String zipFilePath = HOME_FOLDER + "/upload/" + jobId + "/" + inputFileName;
-                    try (FileInputStream in = new FileInputStream(zipFilePath);
-                         ZipInputStream zis = new ZipInputStream(in)) {
-                        ZipEntry ze = zis.getNextEntry();
-
-                        while (ze != null) {
-                            String zipName = ze.getName();
-                            if (ze.isDirectory()) {
-                                if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")
-                                        || zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb")) {
-                                    String fgdbZipName = zipName;
-                                    if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")) {
-                                        fgdbZipName = zipName.substring(0, zipName.length() - 1);
+                    try (FileInputStream in = new FileInputStream(zipFilePath)) {
+                        try (ZipInputStream zis = new ZipInputStream(in)) {
+                            ZipEntry ze = zis.getNextEntry();
+                            while (ze != null) {
+                                String zipName = ze.getName();
+                                if (ze.isDirectory()) {
+                                    if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")
+                                            || zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb")) {
+                                        String fgdbZipName = zipName;
+                                        if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")) {
+                                            fgdbZipName = zipName.substring(0, zipName.length() - 1);
+                                        }
+                                        filesList.add("\"" + fName + "/" + fgdbZipName + "\"");
                                     }
-                                    filesList.add("\"" + fName + "/" + fgdbZipName + "\"");
                                 }
-                            }
-                            else {
-                                if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".shp")) {
-                                    filesList.add("\"" + fName + "/" + zipName + "\"");
+                                else {
+                                    if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".shp")) {
+                                        filesList.add("\"" + fName + "/" + zipName + "\"");
+                                    }
                                 }
+                                ze = zis.getNextEntry();
                             }
-                            ze = zis.getNextEntry();
                         }
                     }
                 }
@@ -154,30 +153,37 @@ public class OgrAttributesResource extends JobControllerBase {
                 }
             }
 
+            if (filesList.isEmpty() && zipList.isEmpty()) {
+                logger.error("Cannot execute: {} with 0 files to process! jobId = {}, uploadedFiles = {}, uploadedFilesPaths = {}",
+                        super.processScriptName, jobId, uploadedFiles, uploadedFilesPaths);
+                throw new Exception("Cannot execute: " + super.processScriptName + " with 0 files to process!  jobId = " + jobId);
+            }
+
             String mergeFilesList = StringUtils.join(filesList.toArray(), ' ');
             String mergedZipList = StringUtils.join(zipList.toArray(), ';');
 
             JSONArray params = new JSONArray();
-            JSONObject param = new JSONObject();
 
+            JSONObject param = new JSONObject();
             param.put("INPUT_FILES", mergeFilesList);
             params.add(param);
+
             param = new JSONObject();
             param.put("INPUT_ZIPS", mergedZipList);
             params.add(param);
 
             String argStr = createPostBody(params);
+
             postJobRquest(jobId, argStr);
         }
         catch (Exception ex) {
-            String msg = "Failed upload: " + ex.getMessage();
-            logger.error(msg, ex);
+            String msg = "Upload failed for job with id = " + jobId + "!  Cause: " + ex.getMessage();
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
-        res.put("jobId", jobId);
+        response.put("jobId", jobId);
 
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(response.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
     /**
@@ -199,8 +205,7 @@ public class OgrAttributesResource extends JobControllerBase {
     @Path("/{id}")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getAttributes(@PathParam("id") String id,
-                                  @QueryParam("deleteoutput")
-                                  String doDelete) {
+                                  @QueryParam("deleteoutput") String doDelete) {
         String script = "";
         try {
             File file = new File(HOME_FOLDER + "/tmp/" + id + ".out");
@@ -212,7 +217,6 @@ public class OgrAttributesResource extends JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error getting attribute: " + id + " Error: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 

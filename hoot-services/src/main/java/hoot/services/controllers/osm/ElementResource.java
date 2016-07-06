@@ -103,7 +103,6 @@ public class ElementResource {
         ElementType elementTypeVal = Element.elementTypeFromString(elementType);
         if (elementTypeVal == null) {
             String msg = "Invalid element type: " + elementType;
-            logger.error(msg);
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
@@ -146,7 +145,6 @@ public class ElementResource {
 
             if (!UNIQUE_ELEMENT_ID_PATTERN.matcher(elementId).matches()) {
                 String msg = "Invalid element ID: " + elementId;
-                logger.error(msg);
                 throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
 
@@ -155,7 +153,6 @@ public class ElementResource {
 
             if (elementTypeVal == null) {
                 String msg = "Invalid element type: " + elementIdParts[1];
-                logger.error(msg);
                 throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
 
@@ -196,7 +193,6 @@ public class ElementResource {
         ElementType elementTypeVal = Element.elementTypeFromString(elementType);
         if (elementTypeVal == null) {
             String msg = "Invalid element type: " + elementType;
-            logger.error(msg);
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
@@ -235,7 +231,6 @@ public class ElementResource {
     public Response getFullElementByUniqueId(@PathParam("elementId") String elementId) throws Exception {
         if (!UNIQUE_ELEMENT_ID_PATTERN.matcher(elementId).matches()) {
             String msg = "Invalid element ID: " + elementId;
-            logger.error(msg);
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
@@ -244,13 +239,11 @@ public class ElementResource {
 
         if (elementType == null) {
             String msg = "Invalid element type: null";
-            logger.error(msg);
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         if (elementType == ElementType.Node) {
             String msg = "Get Full Element Request Invalid for type = Node";
-            logger.error(msg);
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
@@ -283,12 +276,10 @@ public class ElementResource {
             if (ex.getMessage().startsWith("Multiple records exist")
                     || ex.getMessage().startsWith("No record exists")) {
                 String msg = ex.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
-                logger.error(msg, ex);
                 throw new WebApplicationException(ex, Response.status(Status.NOT_FOUND).entity(msg).build());
             }
 
             String msg = "Error requesting map with ID: " + mapId + " (" + ex.getMessage() + ")";
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
@@ -300,7 +291,6 @@ public class ElementResource {
 
         if ((elementRecords == null) || (elementRecords.isEmpty())) {
             String msg = "Element with ID: " + elementId + " and type: " + elementType + " does not exist.";
-            logger.error(msg);
             throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
         }
 
@@ -348,7 +338,6 @@ public class ElementResource {
         ElementType elementTypeVal = Element.elementTypeFromString(elementType);
         if (elementTypeVal == null) {
             String msg = "Invalid element type: " + elementType;
-            logger.error(msg);
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
@@ -378,12 +367,10 @@ public class ElementResource {
             if (ex.getMessage().startsWith("Multiple records exist") ||
                     ex.getMessage().startsWith("No record exists")) {
                 String msg = ex.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
-                logger.error(msg, ex);
                 throw new WebApplicationException(ex, Response.status(Status.NOT_FOUND).entity(msg).build());
             }
 
             String msg = "Error requesting map with ID: " + mapId + " (" + ex.getMessage() + ")";
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
@@ -398,7 +385,6 @@ public class ElementResource {
         if ((elementRecords == null) || (elementRecords.isEmpty())) {
             String msg = "Elements with IDs: " + StringUtils.join(elementIdsStr, ",")
                     + " and type: " + elementType + " does not exist.";
-            logger.error(msg);
             throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
         }
 

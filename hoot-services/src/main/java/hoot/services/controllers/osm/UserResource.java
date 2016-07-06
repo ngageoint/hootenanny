@@ -109,12 +109,10 @@ public class UserResource {
                 if (e.getMessage().startsWith("Multiple records exist") ||
                         e.getMessage().startsWith("No record exists")) {
                     String message = e.getMessage().replaceAll("records", "users").replaceAll("record", "user");
-                    logger.error(message, e);
                     throw new WebApplicationException(e, Response.status(Status.NOT_FOUND).entity(message).build());
                 }
                 else {
                     String message = "Error requesting user with ID: " + userId + " (" + e.getMessage() + ")";
-                    logger.error(message, e);
                     throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(message).build());
                 }
             }
@@ -128,7 +126,6 @@ public class UserResource {
 
             if (user == null) {
                 String message = "No user exists with ID: " + userId + ".  Please request a valid user.";
-                logger.error(message);
                 throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(message).build());
             }
 
@@ -175,7 +172,6 @@ public class UserResource {
         }
         catch (Exception ex) {
             String message = "Error saving user: " + " (" + ex.getMessage() + ")";
-            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
         }
 
@@ -204,7 +200,6 @@ public class UserResource {
         }
         catch (Exception ex) {
             String message = "Error getting all users: " + " (" + ex.getMessage() + ")";
-            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
         }
     }

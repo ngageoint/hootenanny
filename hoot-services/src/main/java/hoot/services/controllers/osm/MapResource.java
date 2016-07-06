@@ -685,30 +685,25 @@ public class MapResource {
         else if (e.getMessage().startsWith("Multiple records exist") ||
                  e.getMessage().startsWith("No record exists")) {
             String msg = e.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
-            logger.error(msg, e);
             throw new WebApplicationException(e, Response.status(Status.NOT_FOUND).entity(msg).build());
         }
         else if (e.getMessage().startsWith("Map is empty")) {
             String msg = e.getMessage();
-            logger.error(msg, e);
             throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
         }
         else if (e.getMessage().startsWith("Error parsing bounding box from bbox param") ||
                  e.getMessage().contains("The maximum bbox size is") ||
                  e.getMessage().contains("The maximum number of nodes that may be returned in a map query")) {
             String msg = e.getMessage();
-            logger.error(msg, e);
             throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
         else {
             if (mapId != null) {
                 String msg = "Error querying map with ID: " + mapId + " - data: (" + e.getMessage() + ") " + requestSnippet;
-                logger.error(msg, e);
                 throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
             else {
                 String msg = "Error listing layers for map - data: (" + e.getMessage() + ") " + requestSnippet;
-                logger.error(msg, e);
                 throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
         }
@@ -1080,7 +1075,6 @@ public class MapResource {
             }
 
             String msg = "Failure update map tags resource " + sqlEx.getMessage() + " SQLState: " + sqlEx.getSQLState();
-            logger.error(msg, sqlEx);
             throw new WebApplicationException(sqlEx, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
         catch (Exception ex) {
@@ -1089,7 +1083,6 @@ public class MapResource {
             }
 
             String msg = "Failure update map tags resource" + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
         finally {
@@ -1166,12 +1159,10 @@ public class MapResource {
         catch (Exception ex) {
             if (ex.getMessage().startsWith("Multiple records exist") || ex.getMessage().startsWith("No record exists")) {
                 String msg = ex.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
-                logger.error(msg, ex);
                 throw new WebApplicationException(ex, Response.status(Status.NOT_FOUND).entity(msg).build());
             }
             else {
                 String msg = "Error requesting map with ID: " + mapId + " (" + ex.getMessage() + ")";
-                logger.error(msg, ex);
                 throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
         }

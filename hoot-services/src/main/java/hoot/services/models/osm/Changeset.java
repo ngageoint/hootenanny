@@ -423,7 +423,6 @@ public class Changeset extends Changesets {
         }
         catch (Exception ex) {
             String msg = "Error updating changeset with ID: " + getId() + " (" + ex.getMessage() + ")";
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 

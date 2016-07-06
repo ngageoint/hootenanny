@@ -159,7 +159,6 @@ public class RasterToTilesService extends JobControllerBase {
         catch (Exception ex) {
             jobStatusManager.setFailed(jobId, ex.getMessage());
             String msg = "Failure ingesting resource: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
         finally {
@@ -215,7 +214,6 @@ public class RasterToTilesService extends JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Failure ingesting resource " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
         finally {

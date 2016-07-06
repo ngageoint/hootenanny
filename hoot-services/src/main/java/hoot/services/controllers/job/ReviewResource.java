@@ -145,7 +145,6 @@ public class ReviewResource {
         catch (Exception e) {
             String message = "Error locating user associated with map having ID: "
                     + request.getMapId() + " (" + e.getMessage() + ")";
-            logger.error(message, e);
             throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(message).build());
         }
 
@@ -249,7 +248,6 @@ public class ReviewResource {
         }
         catch (Exception ex) {
             String message = "Error getting random reviewable item: " + mapId + " (" + ex.getMessage() + ")";
-            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
         }
     }
@@ -297,7 +295,6 @@ public class ReviewResource {
         }
         catch (Exception ex) {
             String message = "Error getting next reviewable item: " + mapId + " (" + ex.getMessage() + ")";
-            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
         }
     }
@@ -328,7 +325,6 @@ public class ReviewResource {
         }
         catch (Exception ex) {
             String message = "Error getting reviewable item: " + mapId + " (" + ex.getMessage() + ")";
-            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
         }
     }
@@ -358,7 +354,6 @@ public class ReviewResource {
             }
             catch (Exception ex) {
                 String message = "Error getting reviewables statistics: " + mapId + " (" + ex.getMessage() + ")";
-                logger.error(message, ex);
                 throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
             }
         }
@@ -418,7 +413,6 @@ public class ReviewResource {
         }
         catch (Exception ex) {
             String message = "Error getting reviewable item: " + mapId + " (" + ex.getMessage() + ")";
-            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
         }
 

@@ -124,7 +124,6 @@ public class ReviewBookmarkResource {
         }
         catch (Exception ex) {
             String msg = "Error saving review bookmark: " + " (" + ex.getMessage() + ")";
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
@@ -193,7 +192,6 @@ public class ReviewBookmarkResource {
         }
         catch (Exception ex) {
             String msg = "Error getting review bookmark: " + " (" + ex.getMessage() + ")";
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
@@ -320,7 +318,6 @@ public class ReviewBookmarkResource {
         }
         catch (Exception ex) {
             String msg = "Error getting review bookmark: " + " (" + ex.getMessage() + ")";
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
         return response;
@@ -345,7 +342,6 @@ public class ReviewBookmarkResource {
         }
         catch (Exception ex) {
             String msg = "Error getting review bookmark counts: " + " (" + ex.getMessage() + ")";
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
@@ -376,7 +372,6 @@ public class ReviewBookmarkResource {
         }
         catch (Exception ex) {
             String msg = "Error deleting review bookmark: " + " (" + ex.getMessage() + ")";
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 

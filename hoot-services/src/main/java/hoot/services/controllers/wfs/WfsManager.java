@@ -257,7 +257,6 @@ public class WfsManager {
         }
         catch (Exception ex) {
             String msg = "Error retrieving WFS services: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 

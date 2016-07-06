@@ -199,7 +199,6 @@ public class FileUploadResource extends JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Failed upload: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 

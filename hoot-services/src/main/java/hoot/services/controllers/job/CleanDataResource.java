@@ -85,7 +85,6 @@ public class CleanDataResource extends JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error process data clean request: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 

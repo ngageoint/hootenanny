@@ -127,7 +127,6 @@ public class ChangesetResource {
         catch (Exception ex) {
             String msg = "Error parsing changeset XML: "
                     + StringUtils.abbreviate(changesetData, 100) + " (" + ex.getMessage() + ")";
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
@@ -145,12 +144,10 @@ public class ChangesetResource {
                 if (ex.getMessage().startsWith("Multiple records exist")
                         || ex.getMessage().startsWith("No record exists")) {
                     String msg = ex.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
-                    logger.error(msg, ex);
                     throw new WebApplicationException(ex, Response.status(Status.NOT_FOUND).entity(msg).build());
                 }
 
                 String msg = "Error requesting map with ID: " + mapId + " (" + ex.getMessage() + ")";
-                logger.error(msg, ex);
                 throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
 
@@ -166,7 +163,6 @@ public class ChangesetResource {
             catch (Exception ex) {
                 String msg = "Error locating user associated with map for changeset data: "
                         + StringUtils.abbreviate(changesetData, 100) + " (" + ex.getMessage() + ")";
-                logger.error(msg, ex);
                 throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
 
@@ -185,7 +181,6 @@ public class ChangesetResource {
 
                 String msg = "Error creating changeset: (" + ex.getMessage() + ") "
                         + StringUtils.abbreviate(changesetData, 100);
-                logger.error(msg, ex);
                 throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
 
@@ -369,27 +364,23 @@ public class ChangesetResource {
                     || e.getMessage().contains("Changeset maximum element threshold exceeded")
                     || e.getMessage().contains("was closed at")) {
                 String msg = message;
-                logger.error(msg, e);
                 throw new WebApplicationException(Response.status(Status.CONFLICT).entity(msg).build());
             }
             else if (e.getMessage().contains("to be updated does not exist")
                     || e.getMessage().contains("Element(s) being referenced don't exist.")) {
                 String msg = message;
-                logger.error(msg, e);
                 throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
             }
             else if (e.getMessage().contains("exist specified for") || e.getMessage().contains("exist for")
                     || e.getMessage().contains("still used by") || e.getMessage()
                             .contains("One or more features in the changeset are involved in an unresolved review")) {
                 String msg = message;
-                logger.error(msg, e);
                 throw new WebApplicationException(Response.status(Status.PRECONDITION_FAILED).entity(msg).build());
             }
         }
 
         String msg = "Error uploading changeset with ID: " + changesetId + " - data: (" + message
                 + ") " + changesetDiffSnippet;
-        logger.error(msg, e);
         throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
     }
 }

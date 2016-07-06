@@ -101,7 +101,6 @@ public class JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Failed upload: " + ex;
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
     }
@@ -132,7 +131,6 @@ public class JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Failed upload: " + ex;
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
     }

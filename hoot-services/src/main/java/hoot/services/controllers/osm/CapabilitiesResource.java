@@ -82,7 +82,6 @@ public class CapabilitiesResource {
         }
         catch (Exception e) {
             String message = "Error retrieving capabilities: " + e.getMessage();
-            logger.error(message, e);
             throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 

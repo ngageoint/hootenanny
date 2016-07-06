@@ -118,7 +118,6 @@ public class MapInfoResource {
         }
         catch (Exception ex) {
             String message = "Error getting map size: " + ex.getMessage();
-            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
@@ -175,7 +174,6 @@ public class MapInfoResource {
         }
         catch (Exception ex) {
             String message = "Error getting map size: " + ex.getMessage();
-            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 

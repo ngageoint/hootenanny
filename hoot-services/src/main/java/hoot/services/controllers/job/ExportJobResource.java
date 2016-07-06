@@ -196,7 +196,6 @@ public class ExportJobResource extends JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error exporting data: " + ex;
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
         finally {
@@ -213,7 +212,6 @@ public class ExportJobResource extends JobControllerBase {
             throws Exception {
         if (!Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"))) {
             String msg = "Attempted to export to an OSM API database but OSM API database support is disabled";
-            logger.error(msg);
             throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
@@ -222,14 +220,12 @@ public class ExportJobResource extends JobControllerBase {
 
         if (!getParameterValue("inputtype", commandArgs).equalsIgnoreCase("db")) {
             String msg = "When exporting to an OSM API database, the input type must be a Hootenanny API database.";
-            logger.error(msg);
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         String translation = getParameterValue("translation", commandArgs);
         if ((StringUtils.trimToNull(translation) != null) && !translation.toUpperCase().equals("NONE")) {
             String msg = "Custom translation not allowed when exporting to OSM API database.";
-            logger.error(msg);
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
@@ -264,14 +260,12 @@ public class ExportJobResource extends JobControllerBase {
         // name entries, but check for it anyway
         if (mapIds.size() > 1) {
             String msg = "Error exporting data.  Multiple maps with name: " + mapName;
-            logger.error(msg);
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         // this may be checked somewhere else down the line...not sure
         if (mapIds.isEmpty()) {
             String msg = "Error exporting data.  No map exists with name: " + mapName;
-            logger.error(msg);
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
@@ -301,7 +295,6 @@ public class ExportJobResource extends JobControllerBase {
         if (!tags.containsKey("osm_api_db_export_time")) {
             String msg = "Error exporting data.  Map with ID: " + map.getId()
                     + " and name: " + map.getDisplayName() + " has no osm_api_db_export_time tag.";
-            logger.error(msg);
             throw new WebApplicationException(Response.status(Status.CONFLICT).entity(msg).build());
         }
 
@@ -365,7 +358,6 @@ public class ExportJobResource extends JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error exporting data: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
@@ -407,7 +399,6 @@ public class ExportJobResource extends JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error removing WFS resource: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
@@ -438,7 +429,6 @@ public class ExportJobResource extends JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error retrieving WFS resource list: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
@@ -484,7 +474,6 @@ public class ExportJobResource extends JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error retrieving exported resource list: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 

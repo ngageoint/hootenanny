@@ -85,7 +85,6 @@ public class TranslatorResource extends ServerControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error starting translation service request: " + ex;
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
     }
@@ -102,7 +101,6 @@ public class TranslatorResource extends ServerControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error starting translation service request: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
     }
@@ -124,7 +122,6 @@ public class TranslatorResource extends ServerControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error starting translation service request: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 

@@ -82,7 +82,6 @@ public class ChangesetUploadResponseWriter {
         catch (Exception ex) {
             String msg = "Error creating response for changeset with ID: " + changesetId
                     + " - data: (" + ex.getMessage() + ") ";
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 

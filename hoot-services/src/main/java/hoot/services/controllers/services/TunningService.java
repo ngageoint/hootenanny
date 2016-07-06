@@ -137,7 +137,6 @@ public class TunningService implements Executable {
         }
         catch (Exception ex) {
             String msg = "Tuning Service error: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
         finally {

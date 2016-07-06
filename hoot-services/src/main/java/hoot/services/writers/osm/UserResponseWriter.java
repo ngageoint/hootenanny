@@ -71,7 +71,6 @@ public class UserResponseWriter {
         }
         catch (Exception ex) {
             String msg = "Error creating response for user query. (" + ex.getMessage() + ") ";
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 

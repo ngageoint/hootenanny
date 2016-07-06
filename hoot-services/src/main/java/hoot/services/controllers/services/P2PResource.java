@@ -76,7 +76,6 @@ public class P2PResource extends ServerControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error starting P2P service request: " + ex;
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
     }
@@ -103,7 +102,6 @@ public class P2PResource extends ServerControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error starting P2P service request: " + ex;
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
@@ -131,7 +129,6 @@ public class P2PResource extends ServerControllerBase {
         }
         catch (Exception ex) {
             String message = "Error starting P2P service request: " + ex.getMessage();
-            logger.error(message, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 

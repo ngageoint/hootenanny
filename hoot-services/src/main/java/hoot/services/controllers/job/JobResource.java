@@ -652,7 +652,6 @@ public class JobResource {
         }
         catch (Exception ex) {
             String msg = "Error retrieving job status for job: " + jobId + " Error: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 

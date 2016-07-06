@@ -156,7 +156,6 @@ public class CustomScriptResource {
         }
         catch (Exception ex) {
             String msg = "Error processing script save for: " + scriptName + " Error: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
@@ -183,7 +182,6 @@ public class CustomScriptResource {
         }
         catch (Exception ex) {
             String msg = "Error processing script save.  Error: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
@@ -247,7 +245,6 @@ public class CustomScriptResource {
         }
         catch (Exception ex) {
             String msg = "Error getting scripts list: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
@@ -382,7 +379,6 @@ public class CustomScriptResource {
         }
         catch (Exception ex) {
             String msg = "Error getting script: " + scriptName + " Error: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
@@ -464,7 +460,6 @@ public class CustomScriptResource {
         }
         catch (Exception ex) {
             String msg = "Error getting script: " + scriptPath + " Error: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
@@ -517,7 +512,6 @@ public class CustomScriptResource {
         }
         catch (Exception ex) {
             String msg = "Error deleting script: " + scriptName + " Error: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
@@ -573,7 +567,6 @@ public class CustomScriptResource {
         }
         catch (Exception ex) {
             String msg = "Error deleting scripts:  Error: " + ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 

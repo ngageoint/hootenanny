@@ -122,7 +122,6 @@ public class ConflationResource extends JobControllerBase {
             //shouldn't actually ever occur, but will leave this check here anyway.
             if (conflatingOsmApiDbData && !osmApiDbEnabled) {
                 String msg = "Attempted to conflate an OSM API database data source but OSM API database support is disabled.";
-                logger.error(msg);
                 throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
 
@@ -187,7 +186,6 @@ public class ConflationResource extends JobControllerBase {
                 long secondaryMapId = Long.parseLong(getParameterValue(secondaryParameterKey, commandArgs));
                 if (!mapExists(secondaryMapId, conn)) {
                     String msg = "No secondary map exists with ID: " + secondaryMapId;
-                    logger.error(msg);
                     throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
                 }
                 Map secondaryMap = new Map(secondaryMapId, conn);
@@ -272,13 +270,11 @@ public class ConflationResource extends JobControllerBase {
                     || (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB") && inputParams
                     .get("REFERENCE_LAYER").toString().toUpperCase().equals("1"))) {
                 String msg = "OSM_API_DB not allowed as secondary input type.";
-                logger.error(msg);
                 throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
         }
         else if (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB")) {
             String msg = "OSM_API_DB not allowed as secondary input type.";
-            logger.error(msg);
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
     }

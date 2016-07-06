@@ -95,12 +95,10 @@ public class HGISFilterResource extends HGISResource {
         }
         catch (InvalidResourceParamException ex) {
             String msg = ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
         catch (Exception ex) {
             String msg = ex.getMessage();
-            logger.error(msg, ex);
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
