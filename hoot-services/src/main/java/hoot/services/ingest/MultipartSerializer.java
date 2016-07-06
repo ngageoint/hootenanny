@@ -83,7 +83,6 @@ public class MultipartSerializer {
 
                 if (fileName == null) {
                     String msg = "A valid file name was not specified.";
-                    logger.error(msg);
                     throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
                 }
 
@@ -126,7 +125,6 @@ public class MultipartSerializer {
 
             if (fileName == null) {
                 String msg = "A valid file name was not specified.";
-                logger.error(msg);
                 throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
 
@@ -186,7 +184,6 @@ public class MultipartSerializer {
 
             if (!ServletFileUpload.isMultipartContent(request)) {
                 String msg = "Content type is not multipart/form-data";
-                logger.error(msg);
                 throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
 
