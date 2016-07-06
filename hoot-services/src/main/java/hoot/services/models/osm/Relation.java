@@ -221,7 +221,7 @@ public class Relation extends Element {
         Set<Long> idsOfNodesToRetrieveFromTheDb = new HashSet<>();
         Set<Long> idsOfWaysForWhichToRetrieveNodesFromTheDb = new HashSet<>();
         BoundingBox bounds = null;
-        BoundingBox dbBounds = null;
+        BoundingBox dbBounds;
 
         // members don't get parsed for a delete request...we'll get the members from the database
         if (entityChangeType != EntityChangeType.DELETE) {
@@ -413,7 +413,7 @@ public class Relation extends Element {
             }
         }
 
-        Element memberElement = null;
+        Element memberElement;
 
         // TODO: these comments need updating
 
@@ -463,7 +463,7 @@ public class Relation extends Element {
             membersCache.add(member);
             relatedRecordIds.add(member.getId());
             relatedRecords.add(RelationMember.createRecord(member.getId(), i + 1, member.getRole(),
-                    Element.elementEnumForElementType(member.getType()), getId(), conn));
+                    Element.elementEnumForElementType(member.getType()), getId()));
         }
     }
 

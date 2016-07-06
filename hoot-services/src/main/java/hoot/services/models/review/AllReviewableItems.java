@@ -34,7 +34,7 @@ import org.json.simple.JSONObject;
 import hoot.services.geo.BoundingBox;
 
 
-public class AllReviewableItems extends ReviewQueryMapper {
+public class AllReviewableItems implements ReviewQueryMapper {
 
     private long mapId;
     private boolean overflow;

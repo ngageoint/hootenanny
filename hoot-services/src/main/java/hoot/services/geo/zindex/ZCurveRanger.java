@@ -54,36 +54,36 @@ public class ZCurveRanger {
         }
 
         @Override
-        public boolean equals(Object o) {
-            if (this == o) {
+        public boolean equals(Object obj) {
+            if (this == obj) {
                 return true;
             }
-            if (o == null || getClass() != o.getClass()) {
+            if ((obj == null) || (getClass() != obj.getClass())) {
                 return false;
             }
 
-            LongBoxContainer that = (LongBoxContainer) o;
+            LongBoxContainer that = (LongBoxContainer) obj;
 
             if (excess != that.excess) {
                 return false;
             }
-            return box != null ? box.equals(that.box) : that.box == null;
+            return (box != null) ? box.equals(that.box) : (that.box == null);
 
         }
 
         @Override
         public int hashCode() {
-            int result = box != null ? box.hashCode() : 0;
-            result = 31 * result + (int) (excess ^ (excess >>> 32));
+            int result = (box != null) ? box.hashCode() : 0;
+            result = (31 * result) + (int) (excess ^ (excess >>> 32));
             return result;
         }
 
         @Override
-        public int compareTo(LongBoxContainer other) {
-            if (getExcess() > other.getExcess()) {
+        public int compareTo(LongBoxContainer o) {
+            if (getExcess() > o.getExcess()) {
                 return -1;
             }
-            else if (getExcess() < other.getExcess()) {
+            else if (getExcess() < o.getExcess()) {
                 return 1;
             }
             else {

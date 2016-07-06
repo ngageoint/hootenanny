@@ -31,7 +31,7 @@ import org.json.simple.JSONObject;
 import hoot.services.geo.BoundingBox;
 
 
-public class ReviewableItemBbox extends ReviewQueryMapper {
+public class ReviewableItemBbox implements ReviewQueryMapper {
 
     private long mapId;
     private long relationId;

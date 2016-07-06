@@ -66,7 +66,6 @@ public class InputParamsValidator extends InputParamsValidatorAbstract {
      */
     public Object validateAndParseInputParam(String name, Object type, Object rangeMin,
             Object rangeMax, boolean optional, Object defaultValue) throws Exception {
-        Object paramValue = null;
 
         // special case
         if (name.equals("geospatialBounds")) {
@@ -100,6 +99,7 @@ public class InputParamsValidator extends InputParamsValidatorAbstract {
             return validateAndParseParamValueString(String.valueOf(param).trim(), name, type, rangeMin, rangeMax);
         }
 
+        Object paramValue = null;
         return paramValue;
     }
 }

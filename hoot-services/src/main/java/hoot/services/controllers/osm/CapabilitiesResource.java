@@ -67,7 +67,7 @@ public class CapabilitiesResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response get() {
-        Document responseDoc = null;
+        Document responseDoc;
 
         try {
             logger.info("Retrieving capabilities...");

@@ -26,8 +26,6 @@
  */
 package hoot.services.models.osm;
 
-import java.sql.Connection;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -38,9 +36,8 @@ import hoot.services.db2.Users;
  * Represents the model for an OSM user
  */
 public class User extends Users {
-    private static final long serialVersionUID = 4395123526768281005L;
 
-    public User(Users user, Connection conn) {
+    public User(Users user) {
         setDisplayName(user.getDisplayName());
         setEmail(user.getEmail());
         setId(user.getId());

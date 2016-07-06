@@ -96,7 +96,7 @@ public class AboutResource {
     @Path("/servicesVersionInfo")
     @Produces(MediaType.APPLICATION_JSON)
     public VersionInfo getServicesVersionInfo() {
-        VersionInfo versionInfo = null;
+        VersionInfo versionInfo;
         try {
             logger.debug("Retrieving services version...");
 
@@ -177,7 +177,7 @@ public class AboutResource {
     @Path("/coreVersionInfo")
     @Produces(MediaType.APPLICATION_JSON)
     public VersionInfo getCoreVersionInfo() {
-        VersionInfo versionInfo = null;
+        VersionInfo versionInfo;
         try {
             logger.debug("Retrieving services version...");
 
@@ -210,7 +210,7 @@ public class AboutResource {
     @Path("/coreVersionDetail")
     @Produces(MediaType.APPLICATION_JSON)
     public CoreDetail getCoreVersionDetail() {
-        CoreDetail coreDetail = null;
+        CoreDetail coreDetail;
         try {
             logger.debug("Retrieving services version...");
 

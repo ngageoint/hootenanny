@@ -252,7 +252,7 @@ public class ExportJobResource extends JobControllerBase {
         return commandArgs;
     }
 
-    private Map getConflatedMap(JSONArray commandArgs, Connection conn) throws Exception {
+    private Map getConflatedMap(JSONArray commandArgs, Connection conn) {
         String mapName = getParameterValue("input", commandArgs);
         List<Long> mapIds = getMapIdsByName(mapName, conn);
 
@@ -275,12 +275,12 @@ public class ExportJobResource extends JobControllerBase {
     }
 
     // adding this to satisfy the mock
-    protected List<Long> getMapIdsByName(String conflatedMapName, Connection conn) throws Exception {
+    protected List<Long> getMapIdsByName(String conflatedMapName, Connection conn) {
         return DbUtils.getMapIdsByName(conn, conflatedMapName);
     }
 
     // adding this to satisfy the mock
-    protected java.util.Map<String, String> getMapTags(long mapId, Connection conn) throws Exception {
+    protected java.util.Map<String, String> getMapTags(long mapId, Connection conn) {
         return DbUtils.getMapsTableTags(mapId, conn);
     }
 
@@ -289,7 +289,7 @@ public class ExportJobResource extends JobControllerBase {
         return map.getBounds();
     }
 
-    private void addMapForExportTag(Map map, JSONArray commandArgs, Connection conn) throws Exception {
+    private void addMapForExportTag(Map map, JSONArray commandArgs, Connection conn) {
         java.util.Map<String, String> tags = getMapTags(map.getId(), conn);
 
         if (!tags.containsKey("osm_api_db_export_time")) {

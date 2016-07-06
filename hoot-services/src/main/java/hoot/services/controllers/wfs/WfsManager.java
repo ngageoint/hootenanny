@@ -68,7 +68,7 @@ public class WfsManager {
     private static final String WFS_STORE_CONN_NAME = HootProperties.getProperty("wfsStoreConnName");
     private static final String WFS_STORE_DB = HootProperties.getProperty("wfsStoreDb");
 
-    public void createWfsResource(String wfsJobName) throws Exception {
+    public void createWfsResource(String wfsJobName) throws Exception, java.sql.SQLException {
         DataDefinitionManager dataDefinitionManager = new DataDefinitionManager();
         List<String> tblsList = dataDefinitionManager.getTablesList(WFS_STORE_DB, wfsJobName);
         createWFSDatasourceFeature(wfsJobName, WFS_STORE_CONN_NAME, tblsList);

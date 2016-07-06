@@ -111,7 +111,7 @@ public class CommandRunner implements ICommandRunner {
     }
 
     @Override
-    public CommandResult exec(String cmd) throws IOException, InterruptedException {
+    public CommandResult exec(String cmd) throws IOException {
         try (StringWriter out = new StringWriter();
              StringWriter err = new StringWriter()) {
             CommandResult result = exec(cmd, out, err);
@@ -140,7 +140,7 @@ public class CommandRunner implements ICommandRunner {
     }
 
     @Override
-    public CommandResult exec(String[] cmd) throws IOException, InterruptedException {
+    public CommandResult exec(String[] cmd) throws IOException {
         out = new StringWriter();
 
         try (StringWriter err = new StringWriter()) {
@@ -154,11 +154,11 @@ public class CommandRunner implements ICommandRunner {
     }
 
     @Override
-    public CommandResult exec(String[] pCmd, Map<String, String> pEnv, boolean useSysEnv)
+    public CommandResult exec(String[] cmd, Map<String, String> env, boolean includeSysEnv)
             throws IOException, InterruptedException {
         try (StringWriter out = new StringWriter();
              StringWriter err = new StringWriter()) {
-            CommandResult result = exec(pCmd, pEnv, useSysEnv, out, err);
+            CommandResult result = exec(cmd, env, includeSysEnv, out, err);
             return result;
         }
     }
@@ -277,7 +277,7 @@ public class CommandRunner implements ICommandRunner {
     }
 
     @Override
-    public CommandResult exec(String[] pCmd, Writer pOut, Writer pErr) throws IOException, InterruptedException {
+    public CommandResult exec(String[] pCmd, Writer pOut, Writer pErr) throws IOException {
         ProcessBuilder builder = new ProcessBuilder();
         Map<String, String> env = builder.environment();
 
@@ -391,7 +391,7 @@ public class CommandRunner implements ICommandRunner {
     }
 
     @Override
-    public CommandResult exec(String pCmd, Writer pOut, Writer pErr) throws IOException, InterruptedException {
+    public CommandResult exec(String pCmd, Writer pOut, Writer pErr) throws IOException {
         return exec(pCmd.split(" "), pOut, pErr);
     }
 

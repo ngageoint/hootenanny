@@ -96,7 +96,7 @@ public final class HootProperties {
 
                     // nested call of property so resolve it.
                     if (sToken.contains("$")) {
-                        sToken = HootProperties.getProperty(token);
+                        sToken = getProperty(token);
                     }
 
                     if ((sToken == null) || (sToken.isEmpty())) {

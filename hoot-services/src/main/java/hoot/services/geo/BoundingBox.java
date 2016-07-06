@@ -157,7 +157,6 @@ public class BoundingBox {
      * 
      * @param nodes
      *            a list of nodes the bounding box should contain
-     * @throws Exception
      */
     public BoundingBox(List<CurrentNodes> nodes) {
         double minLon = LON_LIMIT + 1;

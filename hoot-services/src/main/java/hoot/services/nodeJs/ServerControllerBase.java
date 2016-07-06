@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 public class ServerControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ServerControllerBase.class);
 
-    private Process serverProc = null;
+    private Process serverProc;
 
     protected Process startServer(String currPort, String currThreadCnt, String serverScript) throws IOException {
         List<String> command = new ArrayList<>();
@@ -130,11 +130,11 @@ public class ServerControllerBase {
             try (BufferedReader stdInput = new BufferedReader(stdStream)) {
                 try (InputStreamReader stdErrStream = new InputStreamReader(proc.getErrorStream())) {
                     try (BufferedReader stdError = new BufferedReader(stdErrStream)) {
-                        String s = null;
-
+                        String s;
                         while ((s = stdInput.readLine()) != null) {
                             logger.info(s);
                             if (doSendToStdout) {
+                                //noinspection UseOfSystemOutOrSystemErr
                                 System.out.println(s);
                             }
                         }
@@ -142,6 +142,7 @@ public class ServerControllerBase {
                         while ((s = stdError.readLine()) != null) {
                             logger.error(s);
                             if (doSendToStdout) {
+                                //noinspection UseOfSystemOutOrSystemErr
                                 System.out.println(s);
                             }
                         }

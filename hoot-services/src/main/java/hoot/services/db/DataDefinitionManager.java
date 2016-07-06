@@ -71,7 +71,7 @@ public class DataDefinitionManager {
         try (Connection conn = DriverManager.getConnection(dbUrl + this.dbName, dbUser, dbPassword)) {
             String sql = "SELECT 1 FROM pg_database WHERE datname = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString((int) 1, dbName);
+                stmt.setString(1, dbName);
                 try (ResultSet rs = stmt.executeQuery()) {
                     return rs.next();
                 }
@@ -103,7 +103,7 @@ public class DataDefinitionManager {
         try (Connection conn = DriverManager.getConnection(dbUrl + dbName, dbUser, dbPassword)) {
             // TODO: re-evaluate what this if block is supposed to to.
             if (force) {
-                String columnName = null;
+                String columnName;
                 String sql = "SELECT column_name " + "FROM information_schema.columns "
                         + "WHERE table_name='pg_stat_activity' AND column_name LIKE '%pid'";
 
@@ -118,7 +118,7 @@ public class DataDefinitionManager {
                 String forceSql = "SELECT pg_terminate_backend(" + columnName + ") " + "FROM pg_stat_activity "
                         + "WHERE datname = ?";
                 try (PreparedStatement stmt = conn.prepareStatement(forceSql)) {
-                    stmt.setString((int) 1, dbname);
+                    stmt.setString(1, dbname);
                     // Get the column name from the db as it's version dependent
                     try (ResultSet rs = stmt.executeQuery()) {
                     }

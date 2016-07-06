@@ -26,7 +26,6 @@
  */
 package hoot.services.models.osm;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,13 +99,10 @@ public class RelationMember {
      *            the member's element type
      * @param relationId
      *            the owning relation ID
-     * @param dbConn
-     *            JDBC Connection
      * @return a relation member database record
-     * @throws Exception
      */
-    public static CurrentRelationMembers createRecord(long id, int sequenceId, String role,
-            Object elementType, long relationId, Connection dbConn) {
+    public static CurrentRelationMembers createRecord(long id, int sequenceId, String role, Object elementType,
+            long relationId) {
         CurrentRelationMembers memberRecord = new CurrentRelationMembers();
         memberRecord.setMemberId(id);
         memberRecord.setSequenceId(sequenceId);

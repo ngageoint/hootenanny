@@ -116,7 +116,7 @@ public class TranslatorResource extends ServerControllerBase {
     @Path("/translationserver/status")
     @Produces(MediaType.TEXT_PLAIN)
     public Response isTranslationServiceRunning() {
-        boolean isRunning = false;
+        boolean isRunning;
         try {
             isRunning = getStatus(transProc);
         }

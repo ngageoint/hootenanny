@@ -96,7 +96,7 @@ public final class DbUtils {
 
     static {
         ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext(new String[]{"db/spring-database.xml"});
-        dbcpDatasource = appContext.getBean("dataSource", org.apache.commons.dbcp.BasicDataSource.class);
+        dbcpDatasource = appContext.getBean("dataSource", BasicDataSource.class);
     }
 
     private DbUtils() {
@@ -159,7 +159,7 @@ public final class DbUtils {
 
     public static Configuration getConfiguration(String mapId) {
         Configuration configuration = new Configuration(templates);
-        configuration.register("current_relation_members", "member_type", new EnumAsObjectType<nwr_enum>(nwr_enum.class));
+        configuration.register("current_relation_members", "member_type", new EnumAsObjectType<>(nwr_enum.class));
 
         if ((mapId != null) && (!mapId.isEmpty())) {
             overrideTable(mapId, configuration);
@@ -219,7 +219,7 @@ public final class DbUtils {
         QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
         QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
 
-        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+        SQLQuery query = new SQLQuery(conn, getConfiguration());
 
         recordCount += query.from(currentNodes).count();
         recordCount += query.from(currentWayNodes).count();
@@ -239,7 +239,7 @@ public final class DbUtils {
      */
     public static List<Long> getMapIdsByName(Connection conn, String mapName) {
         QMaps maps = QMaps.maps;
-        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+        SQLQuery query = new SQLQuery(conn, getConfiguration());
 
         List<Long> mapIds = query.from(maps).where(maps.displayName.eq(mapName)).orderBy(maps.id.asc()).list(maps.id);
         return mapIds;
@@ -247,7 +247,7 @@ public final class DbUtils {
 
     public static String getDisplayNameById(Connection conn, long mapId) {
         QMaps maps = QMaps.maps;
-        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+        SQLQuery query = new SQLQuery(conn, getConfiguration());
 
         String displayName = query.from(maps).where(maps.id.eq(mapId)).uniqueResult(maps.displayName);
         return displayName;
@@ -269,7 +269,7 @@ public final class DbUtils {
             List<Long> mapIds = getMapIdsByName(conn, mapName);
             for (Long mapId : mapIds) {
                 QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-                SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId.toString()));
+                SQLQuery query = new SQLQuery(conn, getConfiguration(mapId.toString()));
                 recordCount += query.from(currentNodes).count();
             }
         }
@@ -296,7 +296,7 @@ public final class DbUtils {
 
             for (Long mapId : mapIds) {
                 QCurrentWays currentWays = QCurrentWays.currentWays;
-                SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId.toString()));
+                SQLQuery query = new SQLQuery(conn, getConfiguration(mapId.toString()));
                 recordCount += query.from(currentWays).count();
             }
         }
@@ -322,7 +322,7 @@ public final class DbUtils {
 
             for (Long mapId : mapIds) {
                 QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-                SQLQuery query= new SQLQuery(conn, DbUtils.getConfiguration(mapId.toString()));
+                SQLQuery query= new SQLQuery(conn, getConfiguration(mapId.toString()));
                 recordCount += query.from(currentRelations).count();
             }
         }
@@ -494,7 +494,7 @@ public final class DbUtils {
     public static boolean changesetDataExistsInServicesDb(Connection conn) {
         int recordCtr = 0;
         QChangesets changesets = QChangesets.changesets;
-        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+        SQLQuery query = new SQLQuery(conn, getConfiguration());
 
         recordCtr += query.from(changesets).count();
 
@@ -503,7 +503,7 @@ public final class DbUtils {
 
     public static long getTestUserId(Connection conn) {
         QUsers users = QUsers.users;
-        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+        SQLQuery query = new SQLQuery(conn, getConfiguration());
 
         // there is only ever one test user
         return query.from(users).singleResult(users.id);
@@ -644,7 +644,7 @@ public final class DbUtils {
                     .values(newId, now, "map-with-id-" + newId, true, userId).execute();
         }
 
-        DbUtils.createMap(newId);
+        createMap(newId);
 
         return newId;
     }
@@ -673,10 +673,9 @@ public final class DbUtils {
      * @param jobStatus
      * @param isComplete
      * @param conn
-     * @throws Exception
      */
     public static void updateJobStatus(String jobId, int jobStatus, boolean isComplete, String statusDetail, Connection conn) {
-        Configuration configuration = DbUtils.getConfiguration();
+        Configuration configuration = getConfiguration();
 
         QJobStatus jobStatusTbl = QJobStatus.jobStatus;
         SQLQuery query = new SQLQuery(conn, configuration);
@@ -720,7 +719,7 @@ public final class DbUtils {
      */
     public static int getJobStatus(String jobId, Connection conn) {
         QJobStatus jobStatusTbl = QJobStatus.jobStatus;
-        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+        SQLQuery query = new SQLQuery(conn, getConfiguration());
         JobStatus stat = query.from(jobStatusTbl).where(jobStatusTbl.jobId.eq(jobId)).singleResult(jobStatusTbl);
         return stat.getStatus();
     }
@@ -767,8 +766,7 @@ public final class DbUtils {
 
                         List<BooleanExpression> predicates = predicateslist.get(i);
 
-                        BooleanExpression[] params;
-                        params = new BooleanExpression[predicates.size()];
+                        BooleanExpression[] params = new BooleanExpression[predicates.size()];
 
                         for (int ii = 0; ii < predicates.size(); ii++) {
                             params[ii] = predicates.get(ii);
@@ -799,8 +797,7 @@ public final class DbUtils {
                     for (int i = 0; i < records.size(); i++) {
                         List<BooleanExpression> predicates = predicateslist.get(i);
 
-                        BooleanExpression[] params;
-                        params = new BooleanExpression[predicates.size()];
+                        BooleanExpression[] params = new BooleanExpression[predicates.size()];
 
                         for (int ii = 0; ii < predicates.size(); ii++) {
                             params[ii] = predicates.get(ii);
@@ -861,7 +858,7 @@ public final class DbUtils {
 
     public static long updateMapsTableTags(Map<String, String> tags, long mapId, Connection conn)
             throws SQLException {
-        long execResult = -1;
+        long execResult;
         String sql = "update maps set tags = COALESCE(tags, '') || ?::hstore " + "where id=?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -886,7 +883,7 @@ public final class DbUtils {
         Map<String, String> tags = new HashMap<>();
         QMaps mp = QMaps.maps;
 
-        List<Object> res = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(mp).where(mp.id.eq(mapId)).list(mp.tags);
+        List<Object> res = new SQLQuery(conn, getConfiguration(mapId)).from(mp).where(mp.id.eq(mapId)).list(mp.tags);
 
         if (!res.isEmpty()) {
             Object oTag = res.get(0);
@@ -903,7 +900,7 @@ public final class DbUtils {
         long updateCount = 0;
         PreparedStatement ps = null;
         try {
-            String sql = null;
+            String sql;
 
             int count = 0;
 
@@ -1029,12 +1026,12 @@ public final class DbUtils {
 
     public static long batchRecordsDirectWays(long mapId, List<?> records,
             RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception {
-        logger.debug("Batch way {}...", recordBatchType.toString());
+        logger.debug("Batch way {}...", recordBatchType);
 
         long updateCount = 0;
         PreparedStatement ps = null;
         try {
-            String sql = null;
+            String sql;
 
             int count = 0;
 
@@ -1156,7 +1153,7 @@ public final class DbUtils {
         long updateCount = 0;
         PreparedStatement ps = null;
         try {
-            String sql = null;
+            String sql;
             int count = 0;
 
             switch (recordBatchType) {
@@ -1276,7 +1273,7 @@ public final class DbUtils {
     public static long getTableSizeInByte(String tableName) throws Exception {
         long ret = 0;
 
-        try (Connection conn = DbUtils.createConnection()) {
+        try (Connection conn = createConnection()) {
             try (Statement stmt = conn.createStatement()) {
                 String sql = "select pg_total_relation_size('" + tableName + "') as tablesize";
                 try (ResultSet rs = stmt.executeQuery(sql)){

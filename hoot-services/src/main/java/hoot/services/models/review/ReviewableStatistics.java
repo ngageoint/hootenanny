@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class ReviewableStatistics extends ReviewQueryMapper {
+public class ReviewableStatistics implements ReviewQueryMapper {
     private static final Logger logger = LoggerFactory.getLogger(ReviewableStatistics.class);
 
     private long totalCount;

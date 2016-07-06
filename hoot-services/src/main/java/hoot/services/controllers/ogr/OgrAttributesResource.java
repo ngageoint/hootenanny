@@ -200,7 +200,7 @@ public class OgrAttributesResource extends JobControllerBase {
     @Produces(MediaType.TEXT_PLAIN)
     public Response getAttributes(@PathParam("id") String id,
                                   @QueryParam("deleteoutput") String doDelete) {
-        String script = "";
+        String script;
         try {
             File file = new File(HOME_FOLDER + "/tmp/" + id + ".out");
             script = FileUtils.readFileToString(file, "UTF-8");

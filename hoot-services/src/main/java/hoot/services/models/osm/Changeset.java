@@ -26,7 +26,6 @@
  */
 package hoot.services.models.osm;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
@@ -65,7 +64,6 @@ import hoot.services.geo.GeoUtils;
  * Represents the model of an OSM changeset
  */
 public class Changeset extends Changesets {
-    private static final long serialVersionUID = 4011802505587120104L;
 
     private static final Logger logger = LoggerFactory.getLogger(Changeset.class);
     private static final QChangesets changesets = QChangesets.changesets;
@@ -104,14 +102,14 @@ public class Changeset extends Changesets {
             throws Exception {
         logger.debug("Creating changeset for map ID: {}...", mapId);
 
-        long changesetId = Changeset.insertNew(mapId, userId, dbConn);
+        long changesetId = insertNew(mapId, userId, dbConn);
 
         if ((changesetId == Long.MAX_VALUE) || (changesetId < 1)) {
             throw new Exception("Invalid changeset ID: " + changesetId);
         }
 
         (new Changeset(mapId, changesetId, dbConn)).insertTags(mapId,
-                XPathAPI.selectNodeList(changesetDoc, "//changeset/tag"), dbConn);
+                XPathAPI.selectNodeList(changesetDoc, "//changeset/tag"));
 
         logger.debug("Created changeset for with ID: {} for map with ID: {}", changesetId, mapId);
 
@@ -136,13 +134,13 @@ public class Changeset extends Changesets {
             Connection dbConn) throws Exception {
         logger.debug("Creating changeset for map ID: {}...", mapId);
 
-        long changesetId = Changeset.insertNew(mapId, userId, dbConn);
+        long changesetId = insertNew(mapId, userId, dbConn);
 
         if ((changesetId == Long.MAX_VALUE) || (changesetId < 1)) {
             throw new Exception("Invalid changeset ID: " + changesetId);
         }
 
-        (new Changeset(mapId, changesetId, dbConn)).insertTags(mapId, tags, dbConn);
+        (new Changeset(mapId, changesetId, dbConn)).insertTags(mapId, tags);
 
         logger.debug("Created changeset for with ID: {} for map with ID: {}", changesetId, mapId);
 
@@ -176,9 +174,8 @@ public class Changeset extends Changesets {
      * created, so this basically checks to see if that expiration has occurred.
      *
      * @return true if the changeset is open; false otherwise
-     * @throws IOException
      */
-    public boolean isOpen() throws IOException {
+    public boolean isOpen() {
         // For some strange reason, Changeset DAO's started not working at some
         // point. More specifically, calls to ChangesetDao would return stale data. I
         // suspect it has something to do with the way the transaction is being initialized, but since I
@@ -377,14 +374,13 @@ public class Changeset extends Changesets {
      * @param dbConn
      *            JDBC Connection
      * @return ID of the inserted changeset
-     * @throws Exception
      */
-    public static long insertNew(long mapId, long userId, Connection dbConn) throws Exception {
+    public static long insertNew(long mapId, long userId, Connection dbConn) {
         logger.debug("Inserting new changeset...");
 
         DateTime now = new DateTime();
 
-        Timestamp closedAt = null;
+        Timestamp closedAt;
         int changesetIdleTimeout = Integer.parseInt(HootProperties.getPropertyOrDefault("changesetIdleTimeoutMinutes"));
 
         // The testChangesetAutoClose option = true causes changesetIdleTimeoutMinutes to be interpreted
@@ -414,7 +410,8 @@ public class Changeset extends Changesets {
      */
     public void verifyAvailability() throws Exception {
         // see comments in isOpen method for why ChangesetDao is not used here anymore
-        boolean changesetExists = false;
+        boolean changesetExists;
+
         try {
             logger.debug("Verifying changeset with ID: {} has previously been created ...", getId());
 
@@ -450,12 +447,9 @@ public class Changeset extends Changesets {
      * threshold.
      *
      * @return true; if the changeset entity count is exceeded; false otherwise
-     * @throws IOException
-     *             if unable to open the services configuration file
      * @throws TransformerException
      */
-    public boolean requestChangesExceedMaxElementThreshold(Document changesetDiffDoc)
-            throws IOException, TransformerException {
+    public boolean requestChangesExceedMaxElementThreshold(Document changesetDiffDoc) throws TransformerException {
         int newChangeCount = XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/*/node").getLength()
                 + XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/*/way").getLength()
                 + XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/*/relation").getLength();
@@ -489,11 +483,9 @@ public class Changeset extends Changesets {
      *            ID of the map owning the element
      * @param tags
      *            map containing tags
-     * @param conn
-     *            JDBC Connection
      * @throws Exception
      */
-    private void insertTags(long mapId, java.util.Map<String, String> tags, Connection conn) throws Exception {
+    private void insertTags(long mapId, java.util.Map<String, String> tags) throws Exception {
         try {
             logger.debug("Inserting tags for changeset with ID: {}", getId());
 
@@ -521,11 +513,9 @@ public class Changeset extends Changesets {
      *            ID of the map owning the element
      * @param xml
      *            list of XML tags
-     * @param conn
-     *            JDBC Connection
      * @throws Exception
      */
-    private void insertTags(long mapId, NodeList xml, Connection conn) throws Exception {
+    private void insertTags(long mapId, NodeList xml) throws Exception {
         try {
             logger.debug("Inserting tags for changeset with ID: {}", getId());
 

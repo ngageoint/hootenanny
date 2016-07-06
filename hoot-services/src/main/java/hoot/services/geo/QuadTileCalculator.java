@@ -32,7 +32,10 @@ import org.apache.commons.math.util.MathUtils;
 /**
  * Calculates quad tiles: http://wiki.openstreetmap.org/wiki/QuadTiles
  */
-public class QuadTileCalculator {
+public final class QuadTileCalculator {
+    private QuadTileCalculator() {
+    }
+
     /**
      * Calculates the quad tile for a point
      * 

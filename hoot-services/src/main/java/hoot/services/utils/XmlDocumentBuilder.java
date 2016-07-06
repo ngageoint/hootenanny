@@ -51,16 +51,18 @@ import org.xml.sax.SAXException;
  * General XML utilities
  */
 @SuppressWarnings("deprecation")
-public class XmlDocumentBuilder {
+public final class XmlDocumentBuilder {
+    private XmlDocumentBuilder() {
+    }
+
     /**
      * Creates a new XML DOM
      * 
      * @return XML document
-     * @throws IOException
      * @throws ParserConfigurationException
      */
     public static Document create() throws ParserConfigurationException {
-        return XmlDocumentBuilder.getSecureDocBuilderFactory().newDocumentBuilder().newDocument();
+        return getSecureDocBuilderFactory().newDocumentBuilder().newDocument();
     }
 
     /**

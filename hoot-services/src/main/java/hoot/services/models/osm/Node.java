@@ -416,7 +416,7 @@ public class Node extends Element {
                 Map.Entry pairs = (Map.Entry) it;
                 String key = "\"" + pairs.getKey() + "\"";
                 String val = "\"" + pairs.getValue() + "\"";
-                if (strKv.length() > 0) {
+                if (!strKv.isEmpty()) {
                     strKv += ",";
                 }
 

@@ -84,7 +84,7 @@ public class JobExecutionManager {
     }
 
     public JSONObject execWithResult(JSONObject command) throws NativeInterfaceException {
-        JSONObject ret = null;
+        JSONObject ret;
         try {
             ret = getNativeInterface().exec(command);
         }
@@ -98,7 +98,7 @@ public class JobExecutionManager {
     }
 
     public String getProgress(String jobId) throws NativeInterfaceException {
-        String progress = "";
+        String progress;
         try {
             progress = getNativeInterface().getJobProgress(jobId);
         }

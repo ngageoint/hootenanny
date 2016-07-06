@@ -80,7 +80,7 @@ public class ReportsResource {
     @Path("/get")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getReport(@QueryParam("id") String id, @QueryParam("reportname") String name) {
-        File out = null;
+        File out;
         try {
             out = getReportFile(id);
         }
@@ -106,7 +106,7 @@ public class ReportsResource {
     @Path("/list")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getReport() {
-        JSONArray reps = null;
+        JSONArray reps;
 
         try {
             reps = getReportsList();
@@ -133,7 +133,7 @@ public class ReportsResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response delReport(@QueryParam("id") String id) {
         JSONObject resp = new JSONObject();
-        boolean isDeleted = false;
+        boolean isDeleted;
 
         try {
             isDeleted = deleteReport(id);

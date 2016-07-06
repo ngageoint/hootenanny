@@ -67,7 +67,7 @@ public class ReviewBookmarksSaver {
      * @return - numbers of saved tags
      */
     public long save(ReviewBookmarkSaveRequest request) {
-        long nSaved = 0;
+        long nSaved;
         ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
 
         if (request.getBookmarkId() > -1) {
@@ -173,7 +173,7 @@ public class ReviewBookmarksSaver {
                     hstoreStr += ",";
                 }
 
-                String jsonStr = "";
+                String jsonStr;
                 Object oVal = tags.get(pairs.getKey());
                 if (oVal instanceof JSONObject) {
                     jsonStr = ((JSONObject) oVal).toJSONString();

@@ -30,5 +30,5 @@ import hoot.services.models.review.ReviewQueryMapper;
 
 
 public interface IReviewableQuery {
-    public ReviewQueryMapper execQuery() throws Exception;
+    ReviewQueryMapper execQuery() throws Exception;
 }

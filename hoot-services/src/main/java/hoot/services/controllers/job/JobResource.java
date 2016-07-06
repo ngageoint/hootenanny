@@ -257,7 +257,7 @@ public class JobResource {
         Class<?> clazz = Class.forName(className);
         Object instance = clazz.newInstance();
 
-        JSONObject childJobInfo = null;
+        JSONObject childJobInfo;
         String currentChildJobId = childJobId;
 
         // May be we would need create interface to guarranttee that it will

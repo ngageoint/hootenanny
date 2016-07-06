@@ -48,7 +48,7 @@ public class ChangesetUploadXmlValidator {
      *            an OSM changeset for reviewed items
      */
     public Document parseAndValidate(String changesetXml) throws Exception {
-        Document changesetDiffDoc = null;
+        Document changesetDiffDoc;
         try {
             logger.debug("Parsing changeset diff XML: {}", StringUtils.abbreviate(changesetXml, 1000));
             changesetDiffDoc = XmlDocumentBuilder.parse(changesetXml);

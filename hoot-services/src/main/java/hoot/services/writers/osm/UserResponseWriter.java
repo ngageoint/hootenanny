@@ -56,8 +56,8 @@ public class UserResponseWriter {
      *            JDBC Connection
      * @return an XML document
      */
-    public Document writeResponse(User user, Connection conn) {
-        Document responseDoc = null;
+    public Document writeResponse(User user) {
+        Document responseDoc;
         try {
             logger.debug("Building response...");
 

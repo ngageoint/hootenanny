@@ -228,7 +228,7 @@ public class Map extends Maps {
         return ret;
     }
 
-    public JSONObject retrieveANode(BoundingBox bounds) throws Exception {
+    public JSONObject retrieveANode(BoundingBox bounds) {
         JSONObject ret = new JSONObject();
 
         // get the intersecting tile ranges for the nodes
@@ -290,11 +290,10 @@ public class Map extends Maps {
 
             for (int i = 0; i <= pageCnt; i++) {
                 try {
-                    List<Long> pageList = null;
                     int iStart = i * nQueryPageSize;
                     int iEnd = iStart + nQueryPageSize;
 
-                    pageList = nodesList.subList(iStart, (i < pageCnt) ? iEnd : totalNodeCnt);
+                    List<Long> pageList = nodesList.subList(iStart, (i < pageCnt) ? iEnd : totalNodeCnt);
 
                     if ((pageList == null) || (pageList.isEmpty())) {
                         continue;
@@ -326,11 +325,10 @@ public class Map extends Maps {
 
                 for (int i = 0; i <= wayPageCnt; i++) {
                     try {
-                        List<Long> pageList = null;
                         int iStart = i * nQueryPageSize;
                         int iEnd = iStart + nQueryPageSize;
 
-                        pageList = wayIds.subList(iStart, (i < wayPageCnt) ? iEnd : totalWayCnt);
+                        List<Long> pageList = wayIds.subList(iStart, (i < wayPageCnt) ? iEnd : totalWayCnt);
 
                         if ((pageList == null) || (pageList.isEmpty())) {
                             continue;
@@ -366,7 +364,7 @@ public class Map extends Maps {
                 Set<Long> wayNodeIds = new HashSet<>();
                 for (int i = 0; i <= wayPageCnt; i++) {
                     try {
-                        List<Long> pageList = null;
+                        List<Long> pageList;
                         int iStart = i * nQueryPageSize;
                         int iEnd = iStart + nQueryPageSize;
 
@@ -404,7 +402,7 @@ public class Map extends Maps {
                 Set<Long> geospatialQueryNodeResultIds = new HashSet<>(geospatialQueryNodeResults.keySet());
                 long numGeospatialQueryNodeResults = geospatialQueryNodeResultIds.size();
                 logger.debug("There were {} nodes returned in the geospatial query.", numGeospatialQueryNodeResults);
-                Set<Long> additionalNodeIds = new HashSet<Long>(wayNodeIds);
+                Set<Long> additionalNodeIds = new HashSet<>(wayNodeIds);
                 additionalNodeIds.removeAll(geospatialQueryNodeResultIds);
                 assert (wayNodeIds.size() == numWayNodes);
                 assert (geospatialQueryNodeResultIds.size() == numGeospatialQueryNodeResults);
@@ -421,11 +419,10 @@ public class Map extends Maps {
 
                     for (int i = 0; i <= anilPageCnt; i++) {
                         try {
-                            List<Long> pageList = null;
                             int iStart = i * nQueryPageSize;
                             int iEnd = iStart + nQueryPageSize;
 
-                            pageList = additionalNodeIdsList.subList(iStart, (i < anilPageCnt) ? iEnd : totalANILCnt);
+                            List<Long> pageList = additionalNodeIdsList.subList(iStart, (i < anilPageCnt) ? iEnd : totalANILCnt);
 
                             if ((pageList == null) || (pageList.isEmpty())) {
                                 continue;
@@ -460,7 +457,7 @@ public class Map extends Maps {
                     nodes.putAll(additionalNodeResults);
                     // want to keep the nodes ordered by ID, so add them back in
                     // with a TreeMap
-                    elementIdsToRecordsByType.put(ElementType.Node, new TreeMap<Long, Tuple>(nodes));
+                    elementIdsToRecordsByType.put(ElementType.Node, new TreeMap<>(nodes));
                 }
             }
             else {
@@ -498,7 +495,7 @@ public class Map extends Maps {
                 Set<Long> nodeSetRelationIds = new HashSet<>();
                 for (int i = 0; i <= nodesetPageCnt; i++) {
                     try {
-                        List<Long> pageList = null;
+                        List<Long> pageList;
                         int iStart = i * nQueryPageSize;
                         int iEnd = iStart + nQueryPageSize;
 
@@ -533,11 +530,10 @@ public class Map extends Maps {
 
                 for (int i = 0; i <= waysetPageCnt; i++) {
                     try {
-                        List<Long> pageList = null;
                         int iStart = i * nQueryPageSize;
                         int iEnd = iStart + nQueryPageSize;
 
-                        pageList = waysetList.subList(iStart, (i < waysetPageCnt) ? iEnd : totalWaySetCnt);
+                        List<Long> pageList = waysetList.subList(iStart, (i < waysetPageCnt) ? iEnd : totalWaySetCnt);
 
                         if ((pageList == null) || (pageList.isEmpty())) {
                             continue;
@@ -572,11 +568,10 @@ public class Map extends Maps {
 
                 for (int i = 0; i <= relationIdsPageCnt; i++) {
                     try {
-                        List<Long> pageList = null;
                         int iStart = i * nQueryPageSize;
                         int iEnd = iStart + nQueryPageSize;
 
-                        pageList = relationIdsList.subList(iStart, (i < relationIdsPageCnt) ? iEnd : totalRelationIdsListCnt);
+                        List<Long> pageList = relationIdsList.subList(iStart, (i < relationIdsPageCnt) ? iEnd : totalRelationIdsListCnt);
 
                         if ((pageList == null) || (pageList.isEmpty())) {
                             continue;
@@ -761,9 +756,8 @@ public class Map extends Maps {
      * @param mapLayerRecords
      *            set of map layer records
      * @return map layers web service object
-     * @throws Exception
      */
-    public static MapLayers mapLayerRecordsToLayers(List<Maps> mapLayerRecords) throws Exception {
+    public static MapLayers mapLayerRecordsToLayers(List<Maps> mapLayerRecords) {
         MapLayers mapLayers = new MapLayers();
         List<MapLayer> mapLayerList = new ArrayList<>();
         

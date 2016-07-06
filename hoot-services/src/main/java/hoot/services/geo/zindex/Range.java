@@ -45,15 +45,15 @@ public class Range implements Comparable<Range> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if ((obj == null) || (getClass() != obj.getClass())) {
             return false;
         }
 
-        Range range = (Range) o;
+        Range range = (Range) obj;
 
         if (max != range.max) {
             return false;
@@ -65,13 +65,13 @@ public class Range implements Comparable<Range> {
     @Override
     public int hashCode() {
         int result = (int) (max ^ (max >>> 32));
-        result = 31 * result + (int) (min ^ (min >>> 32));
+        result = (31 * result) + (int) (min ^ (min >>> 32));
         return result;
     }
 
     @Override
-    public int compareTo(Range other) {
-        return Long.valueOf(this.min).compareTo(other.getMin());
+    public int compareTo(Range o) {
+        return Long.valueOf(this.min).compareTo(o.getMin());
     }
 
     public long getMax() {

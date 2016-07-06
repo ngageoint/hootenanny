@@ -92,7 +92,7 @@ public class MapQueryResponseWriter {
      */
     public Document writeResponse(Map<ElementType, Map<Long, Tuple>> results, BoundingBox queryBounds,
             boolean multiLayerUniqueElementIds) {
-        Document responseDoc = null;
+        Document responseDoc;
         try {
             logger.debug("Building response...");
 

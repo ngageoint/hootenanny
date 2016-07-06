@@ -122,7 +122,7 @@ public class P2PResource extends ServerControllerBase {
     @Path("/p2pserver/status")
     @Produces(MediaType.TEXT_PLAIN)
     public Response isP2PServiceRunning() {
-        boolean isRunning = false;
+        boolean isRunning;
 
         try {
             isRunning = getStatus(_P2PProc);

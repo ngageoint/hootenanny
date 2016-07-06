@@ -167,7 +167,7 @@ public class CustomScriptResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ScriptsModifiedResponse saveScripts(ModifyScriptsRequest saveMultipleScriptsRequest) {
-        ScriptsModifiedResponse response = null;
+        ScriptsModifiedResponse response;
         List<String> scriptsModified = new ArrayList<>();
 
         try {
@@ -529,7 +529,7 @@ public class CustomScriptResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ScriptsModifiedResponse deleteScripts(ModifyScriptsRequest deleteScriptsRequest) {
-        ScriptsModifiedResponse response = null;
+        ScriptsModifiedResponse response;
         try {
             CaseInsensitiveStringList scriptNames = new CaseInsensitiveStringList();
             for (Script script : deleteScriptsRequest.getScripts()) {

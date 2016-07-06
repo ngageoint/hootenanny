@@ -41,8 +41,11 @@ import com.mysema.query.types.path.StringPath;
 import hoot.services.db.DbUtils;
 
 
-public class ModelDaoUtils {
+public final class ModelDaoUtils {
     private static final Logger logger = LoggerFactory.getLogger(ModelDaoUtils.class);
+
+    private ModelDaoUtils() {
+    }
 
     /**
      * Returns the record ID associated with the record request input string for

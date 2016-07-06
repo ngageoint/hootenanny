@@ -211,7 +211,6 @@ public class MapResource {
      * GET hoot-services/osm/api/0.6/map/links
      *
      * @return a JSON object containing a list of folders
-     * @throws Exception
      */
     @GET
     @Path("/links")
@@ -400,7 +399,6 @@ public class MapResource {
      *            activated is not compatible with standard OSM clients
      *            (specific to Hootenanny iD); defaults to false
      * @return response containing the data of the requested elements
-     * @throws Exception
      */
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
@@ -442,17 +440,17 @@ public class MapResource {
                     double maxX = Double.parseDouble(sMaxX);
                     double maxY = Double.parseDouble(sMaxY);
 
-                    minX = minX > 180 ? 180 : minX;
-                    minX = minX < -180 ? -180 : minX;
+                    minX = (minX > 180) ? 180 : minX;
+                    minX = (minX < -180) ? -180 : minX;
 
-                    maxX = maxX > 180 ? 180 : maxX;
-                    maxX = maxX < -180 ? -180 : maxX;
+                    maxX = (maxX > 180) ? 180 : maxX;
+                    maxX = (maxX < -180) ? -180 : maxX;
 
-                    minY = minY > 90 ? 90 : minY;
-                    minY = minY < -90 ? -90 : minY;
+                    minY = (minY > 90) ? 90 : minY;
+                    minY = (minY < -90) ? -90 : minY;
 
-                    maxY = maxY > 90 ? 90 : maxY;
-                    maxY = maxY < -90 ? -90 : maxY;
+                    maxY = (maxY > 90) ? 90 : maxY;
+                    maxY = (maxY < -90) ? -90 : maxY;
 
                     bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
                 }
@@ -460,7 +458,7 @@ public class MapResource {
                 QMaps maps = QMaps.maps;
                 mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
 
-                BoundingBox queryBounds = null;
+                BoundingBox queryBounds;
                 try {
                     queryBounds = new BoundingBox(bbox);
                     logger.debug("Query bounds area: {}", queryBounds.getArea());
@@ -489,7 +487,7 @@ public class MapResource {
                 }
 
                 if (doDefault) {
-                    final java.util.Map<ElementType, java.util.Map<Long, Tuple>> results = (new Map(mapIdNum, conn))
+                    java.util.Map<ElementType, java.util.Map<Long, Tuple>> results = (new Map(mapIdNum, conn))
                             .query(queryBounds);
 
                     responseDoc = (new MapQueryResponseWriter(mapIdNum, conn)).writeResponse(results, queryBounds,
@@ -549,17 +547,17 @@ public class MapResource {
                         double maxX = Double.parseDouble(sMaxX);
                         double maxY = Double.parseDouble(sMaxY);
 
-                        minX = minX > 180 ? 180 : minX;
-                        minX = minX < -180 ? -180 : minX;
+                        minX = (minX > 180) ? 180 : minX;
+                        minX = (minX < -180) ? -180 : minX;
 
-                        maxX = maxX > 180 ? 180 : maxX;
-                        maxX = maxX < -180 ? -180 : maxX;
+                        maxX = (maxX > 180) ? 180 : maxX;
+                        maxX = (maxX < -180) ? -180 : maxX;
 
-                        minY = minY > 90 ? 90 : minY;
-                        minY = minY < -90 ? -90 : minY;
+                        minY = (minY > 90) ? 90 : minY;
+                        minY = (minY < -90) ? -90 : minY;
 
-                        maxY = maxY > 90 ? 90 : maxY;
-                        maxY = maxY < -90 ? -90 : maxY;
+                        maxY = (maxY > 90) ? 90 : maxY;
+                        maxY = (maxY < -90) ? -90 : maxY;
 
                         bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
                     }
@@ -567,7 +565,7 @@ public class MapResource {
                     QMaps maps = QMaps.maps;
                     mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
 
-                    BoundingBox queryBounds = null;
+                    BoundingBox queryBounds;
                     try {
                         queryBounds = new BoundingBox(bbox);
                         logger.debug("Query bounds area: {}", queryBounds.getArea());
@@ -627,7 +625,7 @@ public class MapResource {
                 QMaps maps = QMaps.maps;
                 mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
 
-                BoundingBox queryBounds = null;
+                BoundingBox queryBounds;
                 try {
                     queryBounds = new BoundingBox("-180,-90,180,90");
                     logger.debug("Query bounds area: {}", queryBounds.getArea());
@@ -883,7 +881,7 @@ public class MapResource {
             SQLQuery query = new SQLQuery(conn, configuration);
             List<Long> parentId = query.from(folders).where(folders.id.eq(_folderId)).list(folders.parentId);
 
-            Long _parentId = Long.parseLong("0");
+            Long _parentId;
 
             try {
                 _parentId = parentId.get(0);
@@ -968,7 +966,6 @@ public class MapResource {
      *            new: creates new link; update: updates link delete: deletes
      *            link
      * @return jobId Success = True/False
-     * @throws Exception
      */
     @POST
     @Path("/linkMapFolder")
@@ -1150,7 +1147,7 @@ public class MapResource {
     }
 
     public static long validateMap(String mapId, Connection conn) {
-        long mapIdNum = -1;
+        long mapIdNum;
 
         try {
             // input mapId may be a map ID or a map name

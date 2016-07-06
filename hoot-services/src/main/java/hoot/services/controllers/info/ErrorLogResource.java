@@ -77,7 +77,7 @@ public class ErrorLogResource {
     @Path("/debuglog")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getDebugLog() {
-        String logStr = null;
+        String logStr;
         try {
             // 50k Length
             logStr = ErrorLog.getErrorlog(50000);
@@ -105,7 +105,7 @@ public class ErrorLogResource {
     @Path("/export")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response exportLog() throws IOException {
-        File out = null;
+        File out;
         try {
             String outputPath = ErrorLog.generateExportLog();
             out = new File(outputPath);

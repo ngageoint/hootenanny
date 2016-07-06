@@ -157,7 +157,7 @@ public class ReviewBookmarkResource {
 
         try (Connection conn = DbUtils.createConnection()) {
             ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
-            List<ReviewBookmarks> res = null;
+            List<ReviewBookmarks> res;
             if (bookmarkid != null) {
                 long bookmarkId = Long.parseLong(bookmarkid);
                 res = retriever.retrieve(bookmarkId);

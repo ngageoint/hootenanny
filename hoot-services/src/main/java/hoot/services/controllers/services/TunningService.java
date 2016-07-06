@@ -89,7 +89,7 @@ public class TunningService implements Executable {
         long starttime = new Date().getTime();
 
         try {
-            String tempOutputPath = "";
+            String tempOutputPath;
             if (inputtype.equalsIgnoreCase("db")) {
                 DbUtils.getNodesCountByName(conn, input);
                 DbUtils.getWayCountByName(conn, input);

@@ -31,13 +31,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class ReviewableItem extends ReviewQueryMapper {
+public class ReviewableItem implements ReviewQueryMapper {
     private static final Logger logger = LoggerFactory.getLogger(ReviewableItem.class);
 
     private long sortOrder;
     private long mapId;
     private long relationId;
-    private long resultCount = 0;
+    private long resultCount;
 
     public ReviewableItem(long sortOrder, long mapid, long relationid) {
         this.sortOrder = sortOrder;

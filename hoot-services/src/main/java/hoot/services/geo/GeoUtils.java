@@ -29,8 +29,11 @@ package hoot.services.geo;
 /**
  * Various geospatial utilities for hoot services
  */
-public class GeoUtils {
+public final class GeoUtils {
     public static final double DEFAULT_COORD_VALUE = -181.0;
+
+    private GeoUtils() {
+    }
 
     /**
      * Determines if a pair of coordinates lie within world boundaries

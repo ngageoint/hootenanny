@@ -47,7 +47,6 @@ public class ReviewRef extends ElementInfo {
     }
 
     public ReviewRef() {
-        super();
     }
 
     public ReviewRef(String mapId, long elementId, String elementType, long reviewRelationId) {

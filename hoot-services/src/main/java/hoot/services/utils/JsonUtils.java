@@ -40,9 +40,12 @@ import org.slf4j.LoggerFactory;
 /**
  * Various JSON utilities
  */
-public class JsonUtils {
+public final class JsonUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JsonUtils.class);
+
+    private JsonUtils() {
+    }
 
     /**
      * Converts a POJO to JSON

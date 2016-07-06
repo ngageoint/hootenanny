@@ -96,7 +96,7 @@ public class RasterToTilesService extends JobControllerBase {
             QMaps maps = QMaps.maps;
             long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, conn, maps, maps.id, maps.displayName);
 
-            BoundingBox queryBounds = null;
+            BoundingBox queryBounds;
             try {
                 queryBounds = new BoundingBox("-180,-90,180,90");
                 logger.debug("Query bounds area: {}", queryBounds.getArea());
@@ -178,7 +178,7 @@ public class RasterToTilesService extends JobControllerBase {
             QMaps maps = QMaps.maps;
             long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, conn, maps, maps.id, maps.displayName);
 
-            BoundingBox queryBounds = null;
+            BoundingBox queryBounds;
             try {
                 queryBounds = new BoundingBox("-180,-90,180,90");
                 logger.debug("Query bounds area: {}", queryBounds.getArea());

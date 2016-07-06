@@ -118,7 +118,7 @@ public class ProcessStreamInterface implements INativeInterface {
         try {
             String exec = command.get("exectype").toString();
 
-            String[] commandArr = null;
+            String[] commandArr;
             if (exec.equalsIgnoreCase("hoot")) {
                 commandArr = createCmdArray(command);
             }
@@ -171,6 +171,7 @@ public class ProcessStreamInterface implements INativeInterface {
                     }
 
                     if (!warnings.isEmpty()) {
+                        //noinspection UseOfSystemOutOrSystemErr
                         System.out.println(stdOut);
                         ret.put("warnings", warnings);
                     }
@@ -363,10 +364,8 @@ public class ProcessStreamInterface implements INativeInterface {
             Iterator iter = param.entrySet().iterator();
 
             String arg = "";
-            String key = "";
             while (iter.hasNext()) {
                 Map.Entry mEntry = (Map.Entry) iter.next();
-                key = (String) mEntry.getKey();
                 arg = (String) mEntry.getValue();
             }
             execCmd.add(arg);

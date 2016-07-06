@@ -51,7 +51,7 @@ public class CapabilitiesResponseWriter {
      * @return an XML document
      */
     public Document writeResponse() {
-        Document responseDoc = null;
+        Document responseDoc;
         try {
             logger.debug("Building response...");
 

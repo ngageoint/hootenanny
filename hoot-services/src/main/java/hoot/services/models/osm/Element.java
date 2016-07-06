@@ -212,8 +212,8 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     }
 
     @Override
-    public void setEntityChangeType(EntityChangeType changeType) {
-        entityChangeType = changeType;
+    public void setEntityChangeType(EntityChangeType entityChangeType) {
+        this.entityChangeType = entityChangeType;
     }
 
     public Element(Connection conn) {
@@ -225,7 +225,7 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      */
     @Override
     public long getId() throws Exception {
-        return (Long) MethodUtils.invokeMethod(record, "getId", new Object[] {});
+        return (Long) MethodUtils.invokeMethod(record, "getId");
     }
 
     /**
@@ -233,7 +233,7 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      */
     @Override
     public void setId(long id) throws Exception {
-        MethodUtils.invokeMethod(record, "setId", new Object[] { id });
+        MethodUtils.invokeMethod(record, "setId", id);
     }
 
     // We will keep track of map id internally since we do not have map id
@@ -261,11 +261,10 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      * @throws Exception
      */
     public Map<String, String> getTags() throws Exception {
-        Object oTags = MethodUtils.invokeMethod(record, "getTags", new Object[] {});
+        Object oTags = MethodUtils.invokeMethod(record, "getTags");
 
         if (oTags instanceof PGobject) {
-            return PostgresUtils
-                    .postgresObjToHStore((PGobject) MethodUtils.invokeMethod(record, "getTags", new Object[] {}));
+            return PostgresUtils.postgresObjToHStore((PGobject) MethodUtils.invokeMethod(record, "getTags"));
         }
 
         return (Map<String, String>) oTags;
@@ -289,7 +288,7 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      * Returns the visibility of the element associated services database record
      */
     public boolean getVisible() throws Exception {
-        return (Boolean) MethodUtils.invokeMethod(record, "getVisible", new Object[] {});
+        return (Boolean) MethodUtils.invokeMethod(record, "getVisible");
     }
 
     /**
@@ -333,14 +332,10 @@ public abstract class Element implements XmlSerializable, DbSerializable {
             id = getMapId() + "_" + elementType.toString().toLowerCase().charAt(0) + "_" + id;
         }
         element.setAttribute("id", id);
-        element.setAttribute("visible",
-                String.valueOf(MethodUtils.invokeMethod(record, "getVisible", new Object[] {})));
-        element.setAttribute("version",
-                String.valueOf(MethodUtils.invokeMethod(record, "getVersion", new Object[] {})));
-        element.setAttribute("changeset",
-                String.valueOf(MethodUtils.invokeMethod(record, "getChangesetId", new Object[] {})));
-        element.setAttribute("timestamp",
-                String.valueOf(MethodUtils.invokeMethod(record, "getTimestamp", new Object[] {})));
+        element.setAttribute("visible", String.valueOf(MethodUtils.invokeMethod(record, "getVisible")));
+        element.setAttribute("version", String.valueOf(MethodUtils.invokeMethod(record, "getVersion")));
+        element.setAttribute("changeset", String.valueOf(MethodUtils.invokeMethod(record, "getChangesetId")));
+        element.setAttribute("timestamp", String.valueOf(MethodUtils.invokeMethod(record, "getTimestamp")));
         element.setAttribute("user", modifyingUserDisplayName);
         element.setAttribute("uid", String.valueOf(modifyingUserId));
         return element;
@@ -396,8 +391,7 @@ public abstract class Element implements XmlSerializable, DbSerializable {
 
         if (timestampXml != null) {
             try {
-                timestamp = new Timestamp(
-                        Element.getTimeFormatter().parseDateTime(timestampXml.getNodeValue()).getMillis());
+                timestamp = new Timestamp(getTimeFormatter().parseDateTime(timestampXml.getNodeValue()).getMillis());
             }
             catch (IllegalArgumentException e) {
                 //
@@ -415,21 +409,19 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      * Returns an XML representation of the element's data suitable for a
      * changeset upload response
      *
-     * @param parent
+     * @param parentXml
      *            XML node this element should be attached under
      * @throws Exception
      */
     @Override
-    public org.w3c.dom.Element toChangesetResponseXml(org.w3c.dom.Element parent) throws Exception {
-        Document doc = parent.getOwnerDocument();
+    public org.w3c.dom.Element toChangesetResponseXml(org.w3c.dom.Element parentXml) throws Exception {
+        Document doc = parentXml.getOwnerDocument();
         org.w3c.dom.Element entityElement = doc.createElement(toString());
         entityElement.setAttribute("old_id", String.valueOf(getOldId()));
 
         if (getEntityChangeType() != EntityChangeType.DELETE) {
-            entityElement.setAttribute("new_id",
-                    String.valueOf(MethodUtils.invokeMethod(record, "getId", new Object[] {})));
-            entityElement.setAttribute("new_version",
-                    String.valueOf(MethodUtils.invokeMethod(record, "getVersion", new Object[] {})));
+            entityElement.setAttribute("new_id", String.valueOf(MethodUtils.invokeMethod(record, "getId")));
+            entityElement.setAttribute("new_version", String.valueOf(MethodUtils.invokeMethod(record, "getVersion")));
         }
 
         return entityElement;
@@ -626,7 +618,7 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      *            an element type string
      * @return a database relation member type
      */
-    public static DbUtils.nwr_enum elementEnumFromString(final String elementTypeStr) {
+    public static DbUtils.nwr_enum elementEnumFromString(String elementTypeStr) {
         return elementEnumForElementType(elementTypeFromString(elementTypeStr));
     }
 

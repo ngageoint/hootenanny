@@ -68,7 +68,7 @@ import hoot.services.models.review.ReviewableItemBboxInfo;
  */
 public class AllReviewableItemsQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(AllReviewableItemsQuery.class);
-    private static long MAX_RESULT_SIZE;
+    private static final long MAX_RESULT_SIZE;
 
     private final Path currentRelMembersSubQPath = Expressions.path(Void.class, "currentRelMembersSubQ");
     private final Path reviewableCurrentRelSubQPath = Expressions.path(Void.class, "reviewableCurrentRelSubQ");
@@ -76,14 +76,17 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
 
     static {
         String maxQuerySize = HootProperties.getProperty("maxQueryNodes");
+        long value;
 
         try {
-            MAX_RESULT_SIZE = Long.parseLong(maxQuerySize);
+            value = Long.parseLong(maxQuerySize);
         }
         catch (NumberFormatException ingored) {
-            MAX_RESULT_SIZE = 60000;
-            logger.info("Defaulting MAX_RESULT_SIZE to {}", MAX_RESULT_SIZE);
+            value = 60000;
+            logger.info("Defaulting MAX_RESULT_SIZE to {}", value);
         }
+
+        MAX_RESULT_SIZE = value;
     }
 
     public AllReviewableItemsQuery(Connection connection, long mapid, BoundingBox bbox) {
@@ -259,8 +262,6 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
     /**
      * Helper function to translation java.sql.ResultSet to BoundingBox
      * 
-     * @param rs
-     *            - source result set
      * @return - BoundingBox
      */
     private static BoundingBox resultSetToBbox(Tuple tup, Path bboxPath) throws Exception {

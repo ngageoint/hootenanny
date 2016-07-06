@@ -95,8 +95,8 @@ public class ElementResource {
      */
     @GET
     @Path("{elementType: node|way|relation}/{elementId}")
-    @Consumes({ MediaType.TEXT_PLAIN })
-    @Produces({ MediaType.TEXT_XML })
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_XML)
     public Response getElement(@QueryParam("mapId") String mapId,
                                @PathParam("elementId") long elementId,
                                @PathParam("elementType") String elementType) throws Exception {
@@ -135,8 +135,8 @@ public class ElementResource {
      */
     @GET
     @Path("/element/{elementId}")
-    @Consumes({ MediaType.TEXT_PLAIN })
-    @Produces({ MediaType.TEXT_XML })
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_XML)
     public Response getElementByUniqueId(@PathParam("elementId") String elementId) throws Exception {
         Connection conn = DbUtils.createConnection();
         Document elementDoc = null;
@@ -185,8 +185,8 @@ public class ElementResource {
      */
     @GET
     @Path("/{elementType: way|relation}/{elementId}/full")
-    @Consumes({ MediaType.TEXT_PLAIN })
-    @Produces({ MediaType.TEXT_XML })
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_XML)
     public Response getFullElement(@QueryParam("mapId") String mapId,
                                    @PathParam("elementId") long elementId,
                                    @PathParam("elementType") String elementType) throws Exception {
@@ -226,8 +226,8 @@ public class ElementResource {
      */
     @GET
     @Path("/element/{elementId}/full")
-    @Consumes({ MediaType.TEXT_PLAIN })
-    @Produces({ MediaType.TEXT_XML })
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_XML)
     public Response getFullElementByUniqueId(@PathParam("elementId") String elementId) throws Exception {
         if (!UNIQUE_ELEMENT_ID_PATTERN.matcher(elementId).matches()) {
             String msg = "Invalid element ID: " + elementId;
@@ -267,7 +267,7 @@ public class ElementResource {
 
     private static Document getElementXml(String mapId, long elementId, ElementType elementType,
             boolean multiLayerUniqueElementIds, boolean addChildren, Connection dbConn) throws Exception {
-        long mapIdNum = -1;
+        long mapIdNum;
         try {
             // input mapId may be a map ID or a map name
             mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, dbConn, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
@@ -326,8 +326,8 @@ public class ElementResource {
      */
     @GET
     @Path("{elementType: nodes|ways|relations}")
-    @Consumes({ MediaType.TEXT_PLAIN })
-    @Produces({ MediaType.TEXT_XML })
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_XML)
     public Response getElements(@QueryParam("mapId") String mapId,
                                 @QueryParam("elementIds") String elementIds,
                                 @PathParam("elementType") String elemType)
@@ -358,7 +358,7 @@ public class ElementResource {
 
     private static Document getElementsXml(String mapId, String[] elementIdsStr, ElementType elementType,
             boolean multiLayerUniqueElementIds, boolean addChildren, Connection dbConn) throws Exception {
-        long mapIdNum = -1;
+        long mapIdNum;
         try {
             // input mapId may be a map ID or a map name
             mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, dbConn, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);

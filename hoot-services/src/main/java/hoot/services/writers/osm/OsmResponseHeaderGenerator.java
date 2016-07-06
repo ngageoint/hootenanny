@@ -35,7 +35,10 @@ import hoot.services.HootProperties;
 /**
  * Generates an OSM XML response header
  */
-public class OsmResponseHeaderGenerator {
+public final class OsmResponseHeaderGenerator {
+    private OsmResponseHeaderGenerator() {
+    }
+
     /**
      * Creates an OSM data header for a web response
      *

@@ -154,8 +154,7 @@ public class ChangesetDbWriter {
      */
     private static long getNewElementId(long oldElementId, long nextElementId, EntityChangeType entityChangeType,
             int elementCtr) {
-        long newElementId;
-        newElementId = (entityChangeType == EntityChangeType.CREATE) ? (nextElementId + elementCtr) : oldElementId;
+        long newElementId = (entityChangeType == EntityChangeType.CREATE) ? (nextElementId + elementCtr) : oldElementId;
         return newElementId;
     }
 
@@ -237,7 +236,7 @@ public class ChangesetDbWriter {
 
         long nextElementId = new SQLQuery(conn, DbUtils.getConfiguration(requestChangesetMapId))
                 .uniqueResult(SQLExpressions.nextval(Long.class, "current_" + elementType.toString().toLowerCase()
-                        + "s_" + String.valueOf(requestChangesetMapId) + "_id_seq"));
+                        + "s_" + requestChangesetMapId + "_id_seq"));
 
         // This is a bigtime hack put in place b/c I was getting dupe
         // IDs...really needs to be fixed; I need to generate the IDs myself, rather than letting the db

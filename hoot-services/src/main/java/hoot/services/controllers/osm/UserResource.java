@@ -99,7 +99,7 @@ public class UserResource {
         try {
             logger.debug("Initializing database connection...");
 
-            long userIdNum = -1;
+            long userIdNum;
             try {
                 QUsers users = QUsers.users;
                 // input mapId may be a map ID or a map name
@@ -129,7 +129,7 @@ public class UserResource {
                 throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(message).build());
             }
 
-            responseDoc = (new UserResponseWriter()).writeResponse(new User(user, conn), conn);
+            responseDoc = (new UserResponseWriter()).writeResponse(new User(user));
         }
         finally {
             DbUtils.closeConnection(conn);
@@ -158,7 +158,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public UserSaveResponse getSaveUser(@QueryParam("userEmail") String userEmail) {
-        UserSaveResponse response = null;
+        UserSaveResponse response;
         try {
             try (Connection conn = DbUtils.createConnection()) {
                 UserSaver saver = new UserSaver(conn);

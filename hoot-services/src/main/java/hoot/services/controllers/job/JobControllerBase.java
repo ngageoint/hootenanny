@@ -51,17 +51,21 @@ import hoot.services.HootProperties;
 public class JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(JobControllerBase.class);
     private static final String CORE_JOB_SERVER_URL = HootProperties.getProperty("coreJobServerUrl");
+    private static final int JOB_RES_CONNECTION_TIMEOUT;
+
     protected String processScriptName;
-    private static int jobResConnectionTimeout;
 
     static {
+        int value;
         try {
-            jobResConnectionTimeout = Integer.parseInt(HootProperties.getProperty("internalJobRequestWaitTimeMilli"));
+            value = Integer.parseInt(HootProperties.getProperty("internalJobRequestWaitTimeMilli"));
         }
         catch (NumberFormatException nfe) {
-            jobResConnectionTimeout = 3000;
-            logger.error("internalJobRequestWaitTimeMilli is not a valid number!  Defaulting to {}", jobResConnectionTimeout);
+            value = 3000;
+            logger.error("internalJobRequestWaitTimeMilli is not a valid number!  Defaulting to {}", value);
         }
+
+        JOB_RES_CONNECTION_TIMEOUT = value;
     }
 
     public JobControllerBase(String processScriptName) {
@@ -81,8 +85,8 @@ public class JobControllerBase {
         // Request should come back immediately but if something is wrong then timeout and clean up to make UI responsive
         RequestConfig requestConfig =
                 RequestConfig.custom()
-                .setConnectTimeout(jobResConnectionTimeout)
-                .setSocketTimeout(jobResConnectionTimeout).build();
+                .setConnectTimeout(JOB_RES_CONNECTION_TIMEOUT)
+                .setSocketTimeout(JOB_RES_CONNECTION_TIMEOUT).build();
 
         try (CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom().setDefaultRequestConfig(requestConfig).build()) {
             httpclient.start();
@@ -110,8 +114,8 @@ public class JobControllerBase {
         // timeout and clean up.to make UI responsive
         RequestConfig requestConfig =
                 RequestConfig.custom()
-                .setConnectTimeout(jobResConnectionTimeout)
-                .setSocketTimeout(jobResConnectionTimeout).build();
+                .setConnectTimeout(JOB_RES_CONNECTION_TIMEOUT)
+                .setSocketTimeout(JOB_RES_CONNECTION_TIMEOUT).build();
 
         try (CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom().setDefaultRequestConfig(requestConfig).build()) {
             httpclient.start();

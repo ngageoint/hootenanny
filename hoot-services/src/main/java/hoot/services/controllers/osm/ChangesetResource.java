@@ -119,7 +119,7 @@ public class ChangesetResource {
     @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.TEXT_PLAIN)
     public Response create(String changesetData, @QueryParam("mapId") String mapId) throws Exception {
-        Document changesetDoc = null;
+        Document changesetDoc;
         try {
             logger.debug("Parsing changeset XML...");
             changesetDoc = XmlDocumentBuilder.parse(changesetData);
@@ -135,7 +135,7 @@ public class ChangesetResource {
         try {
             logger.debug("Initializing database connection...");
 
-            long mapIdNum = -1;
+            long mapIdNum;
             try {
                 // input mapId may be a map ID or a map name
                 mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
@@ -151,7 +151,7 @@ public class ChangesetResource {
                 throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
 
-            long userId = -1;
+            long userId;
             try {
                 logger.debug("Retrieving user ID associated with map having ID: {} ...", mapIdNum);
 
@@ -253,7 +253,7 @@ public class ChangesetResource {
                 }
 
                 long mapid = Long.parseLong(mapId);
-                Document changesetDoc = null;
+                Document changesetDoc;
                 try {
                     changesetDoc = (new ChangesetUploadXmlValidator()).parseAndValidate(changeset);
                 }

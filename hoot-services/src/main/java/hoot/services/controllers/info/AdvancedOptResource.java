@@ -87,7 +87,7 @@ public class AdvancedOptResource {
     @Path("/getoptions")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getOptions(@QueryParam("conftype") String confType, @QueryParam("force") String isForce) {
-        JSONArray template = null;
+        JSONArray template;
         try {
             // Force option should only be used to update options list by administrator
             boolean doForce = false;

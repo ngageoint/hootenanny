@@ -59,7 +59,7 @@ public class ChangesetUploadResponseWriter {
      * @return a changeset upload response XML document
      */
     public Document writeResponse(long changesetId, List<XmlSerializable> changesetDiffElements) {
-        Document responseDoc = null;
+        Document responseDoc;
         try {
             logger.debug("Building response...");
 

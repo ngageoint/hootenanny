@@ -82,22 +82,24 @@ import hoot.services.writers.review.ReviewResolver;
 @Path("/review")
 public class ReviewResource {
     private static final Logger logger = LoggerFactory.getLogger(ReviewResource.class);
-
-    private static long MAX_RESULT_SIZE;
+    private static final long MAX_RESULT_SIZE;
 
     private final QMaps maps = QMaps.maps;
     private final PlatformTransactionManager transactionManager;
 
     static {
         String maxQuerySize = HootProperties.getProperty("maxQueryNodes");
+        long value;
 
         try {
-            MAX_RESULT_SIZE = Long.parseLong(maxQuerySize);
+            value = Long.parseLong(maxQuerySize);
         }
         catch (NumberFormatException nfe) {
-            MAX_RESULT_SIZE = 60000;
-            logger.error("maxQueryNodes is not a valid number.  Defaulting to {}", MAX_RESULT_SIZE);
+            value = 60000;
+            logger.error("maxQueryNodes is not a valid number.  Defaulting to {}", value);
         }
+
+        MAX_RESULT_SIZE = value;
     }
 
     public ReviewResource() {
@@ -135,7 +137,7 @@ public class ReviewResource {
 
         long mapIdNum = MapResource.validateMap(request.getMapId(), conn);
 
-        long userId = -1;
+        long userId;
         try {
             logger.debug("Retrieving user ID associated with map having ID: {} ...", request.getMapId());
             userId = new SQLQuery(conn, DbUtils.getConfiguration()).from(maps).where(maps.id.eq(mapIdNum))
@@ -342,7 +344,7 @@ public class ReviewResource {
     @Path("/statistics")
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewableStatistics getReviewableSstatistics(@QueryParam("mapId") String mapId) {
-        ReviewableStatistics ret = null;
+        ReviewableStatistics ret;
         if (Long.parseLong(mapId) == -1) { // OSM API db
             ret = new ReviewableStatistics();
         }
