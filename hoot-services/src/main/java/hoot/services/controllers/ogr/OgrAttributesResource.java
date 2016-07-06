@@ -153,12 +153,6 @@ public class OgrAttributesResource extends JobControllerBase {
                 }
             }
 
-            if (filesList.isEmpty() && zipList.isEmpty()) {
-                logger.error("Cannot execute: {} with 0 files to process! jobId = {}, uploadedFiles = {}, uploadedFilesPaths = {}",
-                        super.processScriptName, jobId, uploadedFiles, uploadedFilesPaths);
-                throw new Exception("Cannot execute: " + super.processScriptName + " with 0 files to process!  jobId = " + jobId);
-            }
-
             String mergeFilesList = StringUtils.join(filesList.toArray(), ' ');
             String mergedZipList = StringUtils.join(zipList.toArray(), ';');
 
