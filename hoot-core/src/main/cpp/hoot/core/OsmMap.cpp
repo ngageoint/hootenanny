@@ -35,6 +35,7 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
@@ -59,7 +60,8 @@ OsmMap::OsmMap()
 {
   setIdGenerator(IdGenerator::getInstance());
   _index.reset(new OsmMapIndex(*this));
-  _srs = getWgs84();
+  //_srs = getWgs84(); MICAH
+  _srs = MapProjector::createWgs84Projection();
 }
 
 OsmMap::OsmMap(shared_ptr<const OsmMap> map)
@@ -210,7 +212,8 @@ void OsmMap::addWay(const shared_ptr<Way>& w)
 
 void OsmMap::clear()
 {
-  _srs = getWgs84();
+  //_srs = getWgs84(); MICAH
+  _srs = MapProjector::createWgs84Projection();
 
   _nodes.clear();
   _ways.clear();
@@ -338,6 +341,7 @@ set<ElementId> OsmMap::getParents(ElementId eid) const
   return getIndex().getParents(eid);
 }
 
+/* MICAH
 boost::shared_ptr<OGRSpatialReference> OsmMap::getWgs84()
 {
   if (_wgs84 == 0)
@@ -350,6 +354,7 @@ boost::shared_ptr<OGRSpatialReference> OsmMap::getWgs84()
   }
   return _wgs84;
 }
+*/
 
 bool OsmMap::_listContainsNode(const QList<ElementPtr> l) const
 {
