@@ -113,7 +113,6 @@ SOURCES += \
     src/main/cpp/hoot/core/algorithms/ProbabilityOfMatch.cpp \
     src/main/cpp/hoot/core/conflate/SuperfluousWayRemover.cpp \
     src/main/cpp/hoot/core/conflate/splitter/DualWaySplitter.cpp \
-    src/main/cpp/hoot/core/filters/TagFilter.cpp \
     src/main/cpp/hoot/core/elements/Tags.cpp \
     src/main/cpp/hoot/core/filters/DistanceNodeFilter.cpp \
     src/main/cpp/hoot/core/filters/ChainNodeFilter.cpp \
@@ -580,7 +579,6 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/ProbabilityOfMatch.h \
     src/main/cpp/hoot/core/conflate/SuperfluousWayRemover.h \
     src/main/cpp/hoot/core/conflate/splitter/DualWaySplitter.h \
-    src/main/cpp/hoot/core/filters/TagFilter.h \
     src/main/cpp/hoot/core/filters/DistanceNodeFilter.h \
     src/main/cpp/hoot/core/filters/NodeFilter.h \
     src/main/cpp/hoot/core/filters/Filter.h \

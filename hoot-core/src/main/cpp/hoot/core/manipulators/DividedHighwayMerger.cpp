@@ -46,16 +46,12 @@ using namespace geos::operation::distance;
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/filters/NotCriterion.h>
-#include <hoot/core/filters/ParallelWayFilter.h>
 #include <hoot/core/filters/ParallelWayCriterion.h>
 #include <hoot/core/filters/StatusFilter.h>
 #include <hoot/core/filters/StatusCriterion.h>
-#include <hoot/core/filters/WayDirectionFilter.h>
 #include <hoot/core/filters/WayDirectionCriterion.h>
-#include <hoot/core/filters/WayBufferFilter.h>
 #include <hoot/core/filters/WayBufferCriterion.h>
 #include <hoot/core/filters/OneWayCriterion.h>
-#include <hoot/core/filters/OneWayFilter.h>
 #include <hoot/core/filters/UnknownCriterion.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/index/OsmMapIndex.h>

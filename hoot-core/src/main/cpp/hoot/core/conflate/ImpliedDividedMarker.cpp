@@ -31,8 +31,6 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/filters/TagFilter.h>
-#include <hoot/core/filters/WayFilterChain.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>

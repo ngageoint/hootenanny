@@ -17,7 +17,6 @@
 #include "WayJoin2Mapper.h"
 
 // Hoot
-#include <hoot/core/filters/TagFilter.h>
 #include <hoot/core/io/PbfReader.h>
 #include <hoot/core/io/PbfWriter.h>
 #include <hoot/core/filters/TagCriterion.h>

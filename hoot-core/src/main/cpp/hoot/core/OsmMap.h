@@ -69,7 +69,6 @@ using namespace std;
 
 class OsmMapIndex;
 class OsmMapListener;
-class WayFilter;
 
 /**
  * The OsmMap contains all the information necessary to represent an OSM map. It holds the nodes,
@@ -81,7 +80,6 @@ class WayFilter;
  *
  *  - For instance, complicated operations on the map such as recursively removing elements should
  *    live in another class. E.g. RecursiveElementRemover
- *  - Things like the filter operations can be replaced by visitors.
  *  - In the long term it might also be nice simplify the maintenance by merging all the elements
  *    into a single map and simplify the interface in a similar fashion.
  *  - I'd like to remove the OsmIndex circular reference, but I haven't figured out a good
