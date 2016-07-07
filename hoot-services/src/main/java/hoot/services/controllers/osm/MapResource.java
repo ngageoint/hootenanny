@@ -417,7 +417,7 @@ public class MapResource {
             try {
                 mapIdNum = Long.parseLong(mapId);
             }
-            catch (NumberFormatException e) {
+            catch (NumberFormatException ignored) {
                 //
             }
             if (mapIdNum == -1)
@@ -452,7 +452,7 @@ public class MapResource {
                     maxY = (maxY > 90) ? 90 : maxY;
                     maxY = (maxY < -90) ? -90 : maxY;
 
-                    bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
+                    bbox = minX + "," + minY + "," + maxX + "," + maxY;
                 }
 
                 QMaps maps = QMaps.maps;
@@ -527,7 +527,7 @@ public class MapResource {
                 try {
                     mapIdNum = Long.parseLong(mapId);
                 }
-                catch (NumberFormatException e) {
+                catch (NumberFormatException ignored) {
                     //
                 }
                 // OSM API database data can't be displayed on a hoot map, due to differences
@@ -559,7 +559,7 @@ public class MapResource {
                         maxY = (maxY > 90) ? 90 : maxY;
                         maxY = (maxY < -90) ? -90 : maxY;
 
-                        bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
+                        bbox = minX + "," + minY + "," + maxX + "," + maxY;
                     }
 
                     QMaps maps = QMaps.maps;
@@ -605,7 +605,7 @@ public class MapResource {
             try {
                 mapIdNum = Long.parseLong(mapId);
             }
-            catch (NumberFormatException e) {
+            catch (NumberFormatException ignored) {
                 //
             }
             if (mapIdNum == -1) // OSM API db
@@ -886,7 +886,7 @@ public class MapResource {
             try {
                 _parentId = parentId.get(0);
             }
-            catch (Exception e) {
+            catch (Exception ignored) {
                 _parentId = Long.parseLong("0");
             }
 
@@ -1045,7 +1045,7 @@ public class MapResource {
                 // ConflationResource.java
                 String statsKey = "stats";
                 if (tags.containsKey(statsKey)) {
-                    String statsName = tags.get(statsKey).toString();
+                    String statsName = tags.get(statsKey);
                     File statsFile = new File(statsName);
                     if (statsFile.exists()) {
                         logger.debug("Found {}", statsName);
@@ -1103,7 +1103,7 @@ public class MapResource {
                 try {
                     mapIdNum = Long.parseLong(mapId);
                 }
-                catch (NumberFormatException e) {
+                catch (NumberFormatException ignored) {
                     // a map name string could also be passed in here
                 }
                 if (mapIdNum != -1) // not OSM API db

@@ -65,8 +65,8 @@ public class ServerControllerBase {
                 try {
                     processStreamHandler(serverProc, true);
                 }
-                catch (IOException ignored) {
-                    logger.error("Error during a call to processStreamHandler()", ignored);
+                catch (IOException ioe) {
+                    logger.error("Error during a call to processStreamHandler()", ioe);
                 }
             }
         }.start();
@@ -100,7 +100,7 @@ public class ServerControllerBase {
             try {
                 Runtime runtime = Runtime.getRuntime();
 
-                Process statusProcess = runtime.exec(new String[] { "kill", "-0", "" + transServerPID });
+                Process statusProcess = runtime.exec(new String[] { "kill", "-0", String.valueOf(transServerPID)});
 
                 // usually we should not get any output but just in case if we get some error..
                 processStreamHandler(statusProcess, false);

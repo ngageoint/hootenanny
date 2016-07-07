@@ -406,6 +406,7 @@ public final class DbUtils {
                     ddm.deleteDb(dbname, false);
                 }
                 catch (SQLException e) {
+                    logger.warn("Error deleting {} database!", dbname, e);
                     try {
                         ddm.deleteDb(conn.getCatalog() + "_renderdb_" + mapName, false);
                     }

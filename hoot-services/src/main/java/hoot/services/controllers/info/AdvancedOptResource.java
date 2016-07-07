@@ -182,8 +182,8 @@ public class AdvancedOptResource {
                 return oDep.get("Default Value").toString();
             }
         }
-        catch (Exception ignored) {
-            logger.debug(ignored.getMessage(), ignored);
+        catch (Exception e) {
+            logger.debug(e.getMessage(), e);
         }
 
         return "";

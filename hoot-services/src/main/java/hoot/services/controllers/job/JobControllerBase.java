@@ -60,7 +60,7 @@ public class JobControllerBase {
         try {
             value = Integer.parseInt(HootProperties.getProperty("internalJobRequestWaitTimeMilli"));
         }
-        catch (NumberFormatException nfe) {
+        catch (NumberFormatException ignored) {
             value = 3000;
             logger.error("internalJobRequestWaitTimeMilli is not a valid number!  Defaulting to {}", value);
         }

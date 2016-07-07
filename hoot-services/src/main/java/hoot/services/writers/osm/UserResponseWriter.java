@@ -26,8 +26,6 @@
  */
 package hoot.services.writers.osm;
 
-import java.sql.Connection;
-
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -52,8 +50,6 @@ public class UserResponseWriter {
      * 
      * @param user
      *            user information to write to the response
-     * @param conn
-     *            JDBC Connection
      * @return an XML document
      */
     public Document writeResponse(User user) {

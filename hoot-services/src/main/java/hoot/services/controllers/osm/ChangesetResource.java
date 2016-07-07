@@ -363,19 +363,16 @@ public class ChangesetResource {
                     || e.getMessage().contains("references itself")
                     || e.getMessage().contains("Changeset maximum element threshold exceeded")
                     || e.getMessage().contains("was closed at")) {
-                String msg = message;
-                throw new WebApplicationException(Response.status(Status.CONFLICT).entity(msg).build());
+                throw new WebApplicationException(Response.status(Status.CONFLICT).entity(message).build());
             }
             else if (e.getMessage().contains("to be updated does not exist")
                     || e.getMessage().contains("Element(s) being referenced don't exist.")) {
-                String msg = message;
-                throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
+                throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(message).build());
             }
             else if (e.getMessage().contains("exist specified for") || e.getMessage().contains("exist for")
                     || e.getMessage().contains("still used by") || e.getMessage()
                             .contains("One or more features in the changeset are involved in an unresolved review")) {
-                String msg = message;
-                throw new WebApplicationException(Response.status(Status.PRECONDITION_FAILED).entity(msg).build());
+                throw new WebApplicationException(Response.status(Status.PRECONDITION_FAILED).entity(message).build());
             }
         }
 

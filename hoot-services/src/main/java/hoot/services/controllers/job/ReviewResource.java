@@ -94,7 +94,7 @@ public class ReviewResource {
         try {
             value = Long.parseLong(maxQuerySize);
         }
-        catch (NumberFormatException nfe) {
+        catch (NumberFormatException ignored) {
             value = 60000;
             logger.error("maxQueryNodes is not a valid number.  Defaulting to {}", value);
         }

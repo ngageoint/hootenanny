@@ -74,7 +74,7 @@ public abstract class InputParamsValidatorAbstract {
                 try {
                     paramValue = Long.parseLong(paramValueStr);
                 }
-                catch (NumberFormatException e) {
+                catch (NumberFormatException ignored) {
                     errorParsingVal = true;
                 }
 
@@ -91,7 +91,7 @@ public abstract class InputParamsValidatorAbstract {
                 try {
                     paramValue = Integer.parseInt(paramValueStr);
                 }
-                catch (NumberFormatException e) {
+                catch (NumberFormatException ignored) {
                     errorParsingVal = true;
                 }
 
@@ -108,7 +108,7 @@ public abstract class InputParamsValidatorAbstract {
                 try {
                     paramValue = Double.parseDouble(paramValueStr);
                 }
-                catch (NumberFormatException e) {
+                catch (NumberFormatException ignored) {
                     errorParsingVal = true;
                 }
 

@@ -360,7 +360,7 @@ public class RasterToTilesService extends JobControllerBase {
             if (!zoomList.isEmpty()) {
                 zoomList += " ";
             }
-            zoomList += "" + i + "-" + (i + 1);
+            zoomList += i + "-" + (i + 1);
             i += 1;
         }
 

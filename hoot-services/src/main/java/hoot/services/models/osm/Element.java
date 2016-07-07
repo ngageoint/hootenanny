@@ -351,7 +351,7 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         try {
             elementChangesetId = Long.parseLong(xmlAttributes.getNamedItem("changeset").getNodeValue());
         }
-        catch (NumberFormatException e) {
+        catch (NumberFormatException ignored) {
             //
         }
 
@@ -393,7 +393,7 @@ public abstract class Element implements XmlSerializable, DbSerializable {
             try {
                 timestamp = new Timestamp(getTimeFormatter().parseDateTime(timestampXml.getNodeValue()).getMillis());
             }
-            catch (IllegalArgumentException e) {
+            catch (IllegalArgumentException ignored) {
                 //
             }
         }

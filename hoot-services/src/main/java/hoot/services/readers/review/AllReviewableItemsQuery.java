@@ -81,7 +81,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
         try {
             value = Long.parseLong(maxQuerySize);
         }
-        catch (NumberFormatException ingored) {
+        catch (NumberFormatException ignored) {
             value = 60000;
             logger.info("Defaulting MAX_RESULT_SIZE to {}", value);
         }

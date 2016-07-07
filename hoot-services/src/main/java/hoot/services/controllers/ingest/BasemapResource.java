@@ -316,7 +316,7 @@ public class BasemapResource extends JobControllerBase {
                                 jsonExtent = null;
                             }
                         }
-                        catch (Exception e) {
+                        catch (Exception ignored) {
                             jsonExtent = null;
                         }
                     }

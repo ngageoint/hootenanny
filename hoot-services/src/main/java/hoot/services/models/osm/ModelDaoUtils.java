@@ -79,7 +79,7 @@ public final class ModelDaoUtils {
         try {
             idNum = Long.parseLong(requestStr);
         }
-        catch (NumberFormatException e) {
+        catch (NumberFormatException ignored) {
             parsedAsNum = false;
         }
 

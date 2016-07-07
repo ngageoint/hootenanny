@@ -142,10 +142,10 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
                 bbox = new BoundingBox(minLon, minLat, maxLon, maxLat);
             }
         }
-        catch (Exception ignored) {
+        catch (Exception e) {
             // we will not throw error since ret will be null and null ret
             // will be handled gracefully by caller.
-            logger.error("Error during tuple to bounding box conversion!", ignored);
+            logger.error("Error during tuple to bounding box conversion!", e);
         }
 
         return bbox;

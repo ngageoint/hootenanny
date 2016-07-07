@@ -100,7 +100,7 @@ public class JobResource {
         try {
             threadpoolSize = Integer.parseInt(HootProperties.getProperty("internalJobThreadSize"));
         }
-        catch (Exception ex) {
+        catch (NumberFormatException ignored) {
             logger.error("Failed to get internalJobThreadSize. Setting threadpool size to 5.");
         }
         logger.debug("Threadpool Acquire");
@@ -326,7 +326,7 @@ public class JobResource {
                     try {
                         Thread.sleep(1000);
                     }
-                    catch (InterruptedException e) {
+                    catch (InterruptedException ignored) {
                         isDone = true;
                     }
 
@@ -339,7 +339,7 @@ public class JobResource {
                     try {
                         Thread.sleep(CHAIN_JOS_STATUS_PING_INTERVAL);
                     }
-                    catch (InterruptedException e) {
+                    catch (InterruptedException ignored) {
                         //
                     }
                 }
