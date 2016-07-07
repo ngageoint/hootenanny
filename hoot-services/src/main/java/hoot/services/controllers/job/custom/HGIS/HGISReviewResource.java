@@ -50,7 +50,6 @@ import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.exceptions.osm.InvalidResourceParamException;
-import hoot.services.exceptions.review.custom.HGIS.ReviewMapTagUpdateException;
 import hoot.services.job.JobStatusManager;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.custom.HGIS.PrepareForValidationRequest;

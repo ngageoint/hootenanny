@@ -499,8 +499,7 @@ public class ChangesetDbWriter {
                 if (elementType != ElementType.Changeset) {
                     logger.debug("Parsing {} for {}", entityChangeType, elementType);
 
-                    // parse the elements from the request XML for the given
-                    // element type
+                    // parse the elements from the request XML for the given element type
                     changesetDiffElements.addAll(parseElements(
                             XPathAPI.selectNodeList(changesetDoc,
                                     "//osmChange/" + entityChangeType.toString().toLowerCase() + "/"
@@ -590,8 +589,7 @@ public class ChangesetDbWriter {
         changeset.updateNumChanges((int) changesetDiffElementsSize);
 
         // Even if a bounds is specified in the incoming changeset diff data, it
-        // should be ignored,
-        // per OSM docs.
+        // should be ignored, per OSM docs.
         BoundingBox newChangesetBounds = changeset.getBounds();
         newChangesetBounds.expand(diffBounds,
                 Double.parseDouble(HootProperties.getPropertyOrDefault("changesetBoundsExpansionFactorDeegrees")));
@@ -612,11 +610,11 @@ public class ChangesetDbWriter {
      *            changeset request
      * @return a changeset upload response XML document
      */
-    private Document writeResponse(long changesetId, List<XmlSerializable> changesetDiffElements) throws Exception {
-        Document responseDoc;
+    private static Document writeResponse(long changesetId, List<XmlSerializable> changesetDiffElements)
+            throws Exception {
         logger.debug("Building response...");
 
-        responseDoc = XmlDocumentBuilder.create();
+        Document responseDoc = XmlDocumentBuilder.create();
 
         org.w3c.dom.Element osmElement = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
 

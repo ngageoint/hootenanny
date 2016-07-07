@@ -35,22 +35,22 @@ import org.slf4j.LoggerFactory;
 import hoot.services.geo.BoundingBox;
 
 
-public class ReviewableQueryFactory {
+class ReviewableQueryFactory {
     private static final Logger logger = LoggerFactory.getLogger(ReviewableQueryFactory.class);
 
-    public IReviewableQuery getReviewableQuery(Connection connection, long mapid, long seqid) {
+    static IReviewableQuery getReviewableQuery(Connection connection, long mapid, long seqid) {
         return new ReviewableQuery(connection, mapid, seqid);
     }
 
-    public IReviewableQuery getRandomReviewableQuery(Connection connection, long mapid) throws SQLException {
+    static IReviewableQuery getRandomReviewableQuery(Connection connection, long mapid) throws SQLException {
         return new RandomReviewableQuery(connection, mapid);
     }
 
-    public IReviewableQuery getReviewableStatisticsQuery(Connection connection, long mapid) {
+    static IReviewableQuery getReviewableStatisticsQuery(Connection connection, long mapid) {
         return new ReviewableStatisticsQuery(connection, mapid);
     }
 
-    public IReviewableQuery getAllReviewableItemsQuery(Connection connection, long mapid, BoundingBox bbox) {
+    static IReviewableQuery getAllReviewableItemsQuery(Connection connection, long mapid, BoundingBox bbox) {
         return new AllReviewableItemsQuery(connection, mapid, bbox);
     }
 }

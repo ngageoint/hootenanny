@@ -38,16 +38,16 @@ import hoot.services.models.review.ReviewQueryMapper;
 import hoot.services.models.review.ReviewableItem;
 
 
-public class ReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
+class ReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(ReviewableQuery.class);
     private long seqId = -1;
 
-    public ReviewableQuery(Connection connection, long mapid, long seqid) {
+    ReviewableQuery(Connection connection, long mapid, long seqid) {
         super(connection, mapid);
         seqId = seqid;
     }
 
-    protected String getQueryString() {
+    String getQueryString() {
         return "select id from current_relations_" + getMapId()
                 + " where tags->'hoot:review:needs' = 'yes' and tags->'hoot:review:sort_order'='" + seqId + "'";
     }

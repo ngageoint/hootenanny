@@ -41,10 +41,10 @@ import hoot.services.models.review.ReviewableStatistics;
 /**
  * 
  */
-public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IReviewableQuery {
+class ReviewableStatisticsQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(ReviewableStatisticsQuery.class);
 
-    public ReviewableStatisticsQuery(Connection connection, long mapid) {
+    ReviewableStatisticsQuery(Connection connection, long mapid) {
         super(connection, mapid);
     }
 
@@ -84,11 +84,11 @@ public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IR
         return ret;
     }
 
-    protected String getTotalReviewableCountQueryString() {
+    String getTotalReviewableCountQueryString() {
         return "select count(*) as totalcnt from current_relations_" + getMapId() + " where tags->'type' = 'review'";
     }
 
-    protected String getUnreviewedCountQueryString() {
+    String getUnreviewedCountQueryString() {
         return "select count(*) as remaining from current_relations_" + getMapId()
                 + " where tags->'hoot:review:needs' = 'yes'";
     }

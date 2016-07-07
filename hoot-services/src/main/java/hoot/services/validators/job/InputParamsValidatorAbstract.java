@@ -24,9 +24,11 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.utils;
+package hoot.services.validators.job;
 
 import java.util.Locale;
+
+import hoot.services.utils.ReflectUtils;
 
 
 /**

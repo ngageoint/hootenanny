@@ -39,10 +39,10 @@ import hoot.services.models.review.ReviewQueryMapper;
 import hoot.services.models.review.ReviewableItem;
 
 
-public class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
+class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(RandomReviewableQuery.class);
 
-    public RandomReviewableQuery(Connection connection, long mapid) throws SQLException {
+    RandomReviewableQuery(Connection connection, long mapid) throws SQLException {
         super(connection, mapid);
 
         // TODO: Since this code will affect all subsequent calls to
@@ -93,7 +93,7 @@ public class RandomReviewableQuery extends ReviewableQueryBase implements IRevie
         return ret;
     }
 
-    protected String getQueryString() {
+    String getQueryString() {
         return "select id as relid, tags->'hoot:review:sort_order' as seq from current_relations_" + getMapId()
                 + " where tags->'hoot:review:needs' = 'yes' order by random() limit 1";
     }

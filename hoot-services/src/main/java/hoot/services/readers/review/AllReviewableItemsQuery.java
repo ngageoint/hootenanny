@@ -66,7 +66,7 @@ import hoot.services.models.review.ReviewableItemBboxInfo;
  * combine the bounding box of each members which results in bbox expansion.
  *
  */
-public class AllReviewableItemsQuery extends ReviewableQueryBase implements IReviewableQuery {
+class AllReviewableItemsQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(AllReviewableItemsQuery.class);
     private static final long MAX_RESULT_SIZE;
 
@@ -228,7 +228,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
      *            - [node|way|relation]
      * @return - SQL String
      */
-    protected SQLQuery getReviewableRelationMembersCountByTypeQuery(DbUtils.nwr_enum memberType) {
+    SQLQuery getReviewableRelationMembersCountByTypeQuery(DbUtils.nwr_enum memberType) {
 
         QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
         QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
@@ -328,7 +328,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
      * 
      * @throws Exception
      */
-    protected SQLQuery getReviewableRelatioWithWayMembersCentroidInBboxQuery() throws Exception {
+    SQLQuery getReviewableRelatioWithWayMembersCentroidInBboxQuery() throws Exception {
         if (bbox == null) {
             throw new Exception("Invalid Bounding box.");
         }
@@ -466,7 +466,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements IRev
      * 
      * @return - SQL query string
      */
-    protected SQLQuery getReviewableRelatioWithNodeMembersCentroidInBboxQuery() throws Exception {
+    SQLQuery getReviewableRelatioWithNodeMembersCentroidInBboxQuery() throws Exception {
         if (bbox == null) {
             throw new Exception("Invalid Bounding box.");
         }

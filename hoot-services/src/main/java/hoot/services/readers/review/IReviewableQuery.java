@@ -29,6 +29,6 @@ package hoot.services.readers.review;
 import hoot.services.models.review.ReviewQueryMapper;
 
 
-public interface IReviewableQuery {
+interface IReviewableQuery {
     ReviewQueryMapper execQuery() throws Exception;
 }

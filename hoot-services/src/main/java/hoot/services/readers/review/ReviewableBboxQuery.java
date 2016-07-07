@@ -52,12 +52,12 @@ import hoot.services.models.review.ReviewableItemBbox;
  * specified relation combined recursively.
  *
  */
-public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuery {
+class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(ReviewableBboxQuery.class);
 
     private final Long relationId;
 
-    public ReviewableBboxQuery(Connection connection, long mapid, long relationid) {
+    ReviewableBboxQuery(Connection connection, long mapid, long relationid) {
         super(connection, mapid);
         relationId = relationid;
     }
@@ -180,7 +180,7 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
      *            - container relation id
      * @return - com.mysema.query.sql.SQLQuery object
      */
-    protected SQLQuery getRelationWayMembersBboxQuery(long relationId) {
+    SQLQuery getRelationWayMembersBboxQuery(long relationId) {
         QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
         ListSubQuery<Long> sub = new SQLSubQuery().from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(relationId)
@@ -224,7 +224,7 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
      *            - container relation id
      * @return - com.mysema.query.sql.SQLQuery object
      */
-    protected SQLQuery getRelationNodeMembersBboxQuery(long relationId) {
+    SQLQuery getRelationNodeMembersBboxQuery(long relationId) {
         QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
         ListSubQuery<Long> sub = new SQLSubQuery().from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(relationId)
@@ -256,7 +256,7 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
      *            - container relation id
      * @return - com.mysema.query.sql.SQLQuery object
      */
-    protected SQLQuery getRelationMembersQuery(long relationId) {
+    SQLQuery getRelationMembersQuery(long relationId) {
         QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
         return new SQLQuery(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
                 .from(currentRelationMembers).where(currentRelationMembers.relationId.eq(relationId)

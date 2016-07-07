@@ -31,7 +31,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import hoot.services.geo.BoundingBox;
-import hoot.services.utils.InputParamsValidatorAbstract;
 import hoot.services.utils.ReflectUtils;
 
 

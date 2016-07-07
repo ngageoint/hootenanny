@@ -40,7 +40,6 @@ import hoot.services.models.review.ReviewableStatistics;
 public class ReviewableReader {
     private static final Logger logger = LoggerFactory.getLogger(ReviewableReader.class);
 
-    private final ReviewableQueryFactory fac = new ReviewableQueryFactory();
     private final Connection conn;
 
     public ReviewableReader(Connection conn) {
@@ -48,22 +47,22 @@ public class ReviewableReader {
     }
 
     public ReviewableItem getReviewableItem(long mapid, long seqid) throws Exception {
-        ReviewableItem r = (ReviewableItem) fac.getReviewableQuery(conn, mapid, seqid).execQuery();
+        ReviewableItem r = (ReviewableItem) ReviewableQueryFactory.getReviewableQuery(conn, mapid, seqid).execQuery();
         return r;
     }
 
     public ReviewableItem getRandomReviewableItem(long mapid) throws Exception {
-        ReviewableItem r = (ReviewableItem) fac.getRandomReviewableQuery(conn, mapid).execQuery();
+        ReviewableItem r = (ReviewableItem) ReviewableQueryFactory.getRandomReviewableQuery(conn, mapid).execQuery();
         return r;
     }
 
     public ReviewableStatistics getReviewablesStatistics(long mapid) throws Exception {
-        ReviewableStatistics r = (ReviewableStatistics) fac.getReviewableStatisticsQuery(conn, mapid).execQuery();
+        ReviewableStatistics r = (ReviewableStatistics) ReviewableQueryFactory.getReviewableStatisticsQuery(conn, mapid).execQuery();
         return r;
     }
 
     public AllReviewableItems getAllReviewableItems(long mapid, BoundingBox bbox) throws Exception {
-        AllReviewableItems r = (AllReviewableItems) fac.getAllReviewableItemsQuery(conn, mapid, bbox).execQuery();
+        AllReviewableItems r = (AllReviewableItems) ReviewableQueryFactory.getAllReviewableItemsQuery(conn, mapid, bbox).execQuery();
         return r;
     }
 }
