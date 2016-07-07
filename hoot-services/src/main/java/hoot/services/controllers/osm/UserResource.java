@@ -41,14 +41,18 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
+import com.mysema.query.sql.Configuration;
 import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.sql.dml.SQLInsertClause;
 
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QUsers;
@@ -57,10 +61,8 @@ import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.osm.User;
 import hoot.services.models.user.UserSaveResponse;
 import hoot.services.models.user.UsersGetResponse;
-import hoot.services.readers.users.UsersRetriever;
 import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.writers.osm.UserResponseWriter;
-import hoot.services.writers.user.UserSaver;
+import hoot.services.writers.osm.OsmResponseHeaderGenerator;
 
 
 /**
@@ -91,7 +93,7 @@ public class UserResource {
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
-    public Response get(@PathParam("userId") String userId) {
+    public Response get(@PathParam("userId") String userId) throws ParserConfigurationException {
         logger.debug("Retrieving user with ID: {} ...", userId.trim());
 
         Connection conn = DbUtils.createConnection();
@@ -129,7 +131,7 @@ public class UserResource {
                 throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(message).build());
             }
 
-            responseDoc = (new UserResponseWriter()).writeResponse(new User(user));
+            responseDoc = writeResponse(new User(user));
         }
         finally {
             DbUtils.closeConnection(conn);
@@ -160,9 +162,8 @@ public class UserResource {
     public UserSaveResponse getSaveUser(@QueryParam("userEmail") String userEmail) {
         UserSaveResponse response;
         try {
-            try (Connection conn = DbUtils.createConnection()) {
-                UserSaver saver = new UserSaver(conn);
-                Users user = saver.getOrSaveByEmail(userEmail);
+            try (Connection connection = DbUtils.createConnection()) {
+                Users user = getOrSaveByEmail(userEmail, connection);
                 if (user == null) {
                     throw new Exception("SQL Insert failed.");
                 }
@@ -190,10 +191,8 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public UsersGetResponse getAllUsers() {
         try {
-            try (Connection conn = DbUtils.createConnection()) {
-                UsersRetriever retriever = new UsersRetriever(conn);
-                List<Users> res = retriever.retrieveAll();
-
+            try (Connection connection = DbUtils.createConnection()) {
+                List<Users> res = retrieveAll(connection);
                 UsersGetResponse response = new UsersGetResponse(res);
                 return response;
             }
@@ -202,5 +201,56 @@ public class UserResource {
             String message = "Error getting all users: " + " (" + ex.getMessage() + ")";
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
         }
+    }
+
+    private static Document writeResponse(User user) throws ParserConfigurationException {
+        logger.debug("Building response...");
+
+        Document responseDoc = XmlDocumentBuilder.create();
+
+        Element osmElement = OsmResponseHeaderGenerator.getOsmHeader(responseDoc);
+        Element userElement = user.toXml(osmElement, /* user.numChangesetsModified() */-1);
+        osmElement.appendChild(userElement);
+        responseDoc.appendChild(osmElement);
+
+        return responseDoc;
+    }
+
+    private static List<Users> retrieveAll(Connection connection) {
+        SQLQuery query = new SQLQuery(connection, DbUtils.getConfiguration());
+        query.from(QUsers.users).orderBy(QUsers.users.displayName.asc());
+        List<Users> res = query.list(QUsers.users);
+        return res;
+    }
+
+    private static Users getOrSaveByEmail(String userEmail, Connection connection) {
+        Users ret = (new SQLQuery(connection, DbUtils.getConfiguration()))
+                .from(QUsers.users)
+                .where(QUsers.users.email.equalsIgnoreCase(userEmail)).singleResult(QUsers.users);
+
+        // none then create
+        if (ret == null) {
+            long nCreated = insert(userEmail, connection);
+            if (nCreated > 0) {
+                ret = (new SQLQuery(connection, DbUtils.getConfiguration()))
+                        .from(QUsers.users)
+                        .where(QUsers.users.email.equalsIgnoreCase(userEmail)).singleResult(QUsers.users);
+            }
+        }
+
+        return ret;
+    }
+
+    private static long insert(String email, Connection connection) {
+        SQLInsertClause cl = createInsertClause(email, connection);
+        long nInserted = cl.execute();
+        return nInserted;
+    }
+
+    private static SQLInsertClause createInsertClause(String email, Connection connection) {
+        Configuration configuration = DbUtils.getConfiguration();
+        SQLInsertClause cl = new SQLInsertClause(connection, configuration, QUsers.users).
+                columns(QUsers.users.email, QUsers.users.displayName).values(email, email);
+        return cl;
     }
 }

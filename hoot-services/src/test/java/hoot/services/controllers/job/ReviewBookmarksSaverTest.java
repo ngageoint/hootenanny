@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.writers.review;
+package hoot.services.controllers.job;
 
 import java.sql.Connection;
 import java.sql.Timestamp;

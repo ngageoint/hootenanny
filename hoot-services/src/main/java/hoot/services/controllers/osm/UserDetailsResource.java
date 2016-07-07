@@ -34,6 +34,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +74,7 @@ public class UserDetailsResource {
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
-    public Response getDetails() {
+    public Response getDetails() throws ParserConfigurationException {
         logger.debug("Retrieving logged in user details...");
 
         // For now, we're just grabbing the first user in the db, since we don't

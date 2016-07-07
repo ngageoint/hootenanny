@@ -27,8 +27,11 @@
 package hoot.services.controllers.job;
 
 import java.sql.Connection;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -60,6 +63,7 @@ import hoot.services.controllers.osm.MapResource;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.ElementInfo;
 import hoot.services.models.review.AllReviewableItems;
 import hoot.services.models.review.ReviewRef;
@@ -72,8 +76,7 @@ import hoot.services.models.review.ReviewableItem;
 import hoot.services.models.review.ReviewableStatistics;
 import hoot.services.readers.review.ReviewReferencesRetriever;
 import hoot.services.readers.review.ReviewableReader;
-import hoot.services.review.ReviewUtils;
-import hoot.services.writers.review.ReviewResolver;
+import hoot.services.utils.ReviewUtils;
 
 
 /**
@@ -152,7 +155,7 @@ public class ReviewResource {
 
         long changesetId = -1;
         try {
-            changesetId = (new ReviewResolver(conn)).setAllReviewsResolved(mapIdNum, userId);
+            changesetId = setAllReviewsResolved(mapIdNum, userId, conn);
             logger.debug("Committing set all items reviewed transaction...");
             transactionManager.commit(transactionStatus);
             conn.commit();
@@ -419,5 +422,43 @@ public class ReviewResource {
         }
 
         return ret;
+    }
+
+    /**
+     * Resolves all reviews for a given map
+     *
+     * @param mapId
+     *            ID of the map owning the review data
+     * @param userId
+     *            user ID associated with the review data
+     * @return the ID of the changeset used to resolve the reviews
+     * @throws Exception
+     */
+    private static long setAllReviewsResolved(long mapId, long userId, Connection connection) throws Exception {
+        // create a changeset
+        Map<String, String> changesetTags = new HashMap<>();
+        changesetTags.put("bot", "yes");
+        changesetTags.put("created_by", "hootenanny");
+        long changesetId = Changeset.createChangeset(mapId, userId, changesetTags, connection);
+        Changeset.closeChangeset(mapId, changesetId, connection);
+
+        /*
+         * - mark all review relations belonging to the map as resolved - update
+         * the changeset id for each review relation - increment the version for
+         * each review relation
+         */
+        String sql = "";
+        sql += "update current_relations_" + mapId;
+        sql += " set tags = tags || hstore('hoot:review:needs', 'no'),";
+        sql += " changeset_id = " + changesetId + ",";
+        sql += " version = version + 1";
+        sql += " where tags->'type' = 'review'";
+
+        try (Statement stmt = connection.createStatement()) {
+            int numRecordsUpdated = stmt.executeUpdate(sql);
+            logger.debug("{} records updated.", numRecordsUpdated);
+        }
+
+        return changesetId;
     }
 }

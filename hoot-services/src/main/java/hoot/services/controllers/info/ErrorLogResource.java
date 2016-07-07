@@ -99,12 +99,11 @@ public class ErrorLogResource {
      * GET hoot-services/info/logging/export
      * 
      * @return Binary octet stream
-     * @throws IOException
      */
     @GET
     @Path("/export")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response exportLog() throws IOException {
+    public Response exportLog() {
         File out;
         try {
             String outputPath = ErrorLog.generateExportLog();
@@ -117,8 +116,8 @@ public class ErrorLogResource {
         }
 
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        Date dd = new Date();
-        String dtStr = dateFormat.format(dd);
+        Date date = new Date();
+        String dtStr = dateFormat.format(date);
 
         ResponseBuilder rBuild = Response.ok(out, MediaType.APPLICATION_OCTET_STREAM);
         rBuild.header("Content-Disposition", "attachment; filename=hootlog_" + dtStr + ".logger");

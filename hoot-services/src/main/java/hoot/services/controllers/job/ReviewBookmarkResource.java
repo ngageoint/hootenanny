@@ -52,8 +52,12 @@ import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mysema.query.sql.Configuration;
+import com.mysema.query.sql.dml.SQLDeleteClause;
+
 import hoot.services.db.DbUtils;
 import hoot.services.db.postgres.PostgresUtils;
+import hoot.services.db2.QReviewBookmarks;
 import hoot.services.db2.ReviewBookmarks;
 import hoot.services.models.review.ReviewBookmarkDelRequest;
 import hoot.services.models.review.ReviewBookmarkDelResponse;
@@ -62,8 +66,6 @@ import hoot.services.models.review.ReviewBookmarksGetResponse;
 import hoot.services.models.review.ReviewBookmarksSaveResponse;
 import hoot.services.models.review.ReviewBookmarksStatResponse;
 import hoot.services.readers.review.ReviewBookmarkRetriever;
-import hoot.services.writers.review.ReviewBookmarksRemover;
-import hoot.services.writers.review.ReviewBookmarksSaver;
 
 
 /**
@@ -365,9 +367,8 @@ public class ReviewBookmarkResource {
         ReviewBookmarkDelRequest request = new ReviewBookmarkDelRequest(Long.parseLong(bmkId));
         ReviewBookmarkDelResponse response = new ReviewBookmarkDelResponse();
 
-        try (Connection conn = DbUtils.createConnection()) {
-            ReviewBookmarksRemover remover = new ReviewBookmarksRemover(conn);
-            long nDel = remover.remove(request);
+        try (Connection connection = DbUtils.createConnection()) {
+            long nDel = remove(request, connection);
             response.setDeleteCount(nDel);
         }
         catch (Exception ex) {
@@ -376,5 +377,30 @@ public class ReviewBookmarkResource {
         }
 
         return response;
+    }
+
+    /**
+     * Removes review tag.
+     *
+     * @param request
+     *            - Request containing mapid and relationid
+     * @return - total numbers of removed
+     */
+    private static long remove(ReviewBookmarkDelRequest request, Connection connection) {
+        return createDelClause(request, connection).execute();
+    }
+
+    /**
+     * Delete clause
+     *
+     * @param request
+     *            - Request containing bookmarkid
+     * @return - toal numbers of removed
+     */
+    private static SQLDeleteClause createDelClause(ReviewBookmarkDelRequest request, Connection connection) {
+        QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
+        Configuration configuration = DbUtils.getConfiguration();
+        return new SQLDeleteClause(connection, configuration, reviewBookmarks)
+                .where(reviewBookmarks.id.eq(request.getBookmarkId()));
     }
 }

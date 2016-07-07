@@ -410,8 +410,7 @@ public class ChangesetDbWriter {
         Collection<XmlSerializable> changesetDiffElements = new ArrayList<>();
         changesetDiffElements.addAll(write(changesetDoc));
 
-        return (new ChangesetUploadResponseWriter()).writeResponse(changesetId,
-                (List<XmlSerializable>) changesetDiffElements);
+        return writeResponse(changesetId, (List<XmlSerializable>) changesetDiffElements);
     }
 
     /**
@@ -601,5 +600,38 @@ public class ChangesetDbWriter {
         changeset.updateExpiration();
 
         return changesetDiffElements;
+    }
+
+    /**
+     * Writes a changeset upload response to an XML document
+     *
+     * @param changesetId
+     *            ID of the uploaded changeset
+     * @param changesetDiffElements
+     *            Elements that have been modified in the corresponding
+     *            changeset request
+     * @return a changeset upload response XML document
+     */
+    private Document writeResponse(long changesetId, List<XmlSerializable> changesetDiffElements) throws Exception {
+        Document responseDoc;
+        logger.debug("Building response...");
+
+        responseDoc = XmlDocumentBuilder.create();
+
+        org.w3c.dom.Element osmElement = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
+
+        org.w3c.dom.Element diffResultXmlElement = responseDoc.createElement("diffResult");
+
+        diffResultXmlElement.setAttribute("generator", HootProperties.getPropertyOrDefault("generator"));
+        diffResultXmlElement.setAttribute("version", HootProperties.getPropertyOrDefault("osmVersion"));
+
+        for (XmlSerializable element : changesetDiffElements) {
+            diffResultXmlElement.appendChild(element.toChangesetResponseXml(diffResultXmlElement));
+        }
+
+        osmElement.appendChild(diffResultXmlElement);
+        responseDoc.appendChild(osmElement);
+
+        return responseDoc;
     }
 }

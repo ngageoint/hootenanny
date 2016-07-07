@@ -49,6 +49,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -213,7 +214,7 @@ public class FileUploadResource extends JobControllerBase {
             int fgdbZipCnt, int osmZipCnt, int geonamesZipCnt, int shpCnt, int fgdbCnt,
             int osmCnt, int geonamesCnt, List<String> zipList, String translation,
             String jobId, String etlName, List<String> inputsList, String userEmail,
-            String isNoneTranslation, String fgdbFeatureClasses) throws Exception {
+            String isNoneTranslation, String fgdbFeatureClasses) throws ParseException {
         JSONArray jobArgs = new JSONArray();
 
         String inputs = "";

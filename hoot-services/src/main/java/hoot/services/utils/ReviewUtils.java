@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.review;
+package hoot.services.utils;
 
 import java.sql.SQLException;
 

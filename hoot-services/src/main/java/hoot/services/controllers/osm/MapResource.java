@@ -89,17 +89,20 @@ import hoot.services.db2.Maps;
 import hoot.services.db2.QFolderMapMappings;
 import hoot.services.db2.QFolders;
 import hoot.services.db2.QMaps;
+import hoot.services.db2.QUsers;
+import hoot.services.db2.Users;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobExecutioner;
 import hoot.services.job.JobStatusManager;
 import hoot.services.models.dataset.FolderRecords;
 import hoot.services.models.dataset.LinkRecords;
 import hoot.services.models.osm.Element.ElementType;
+import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.writers.osm.MapQueryResponseWriter;
+import hoot.services.writers.osm.OsmResponseHeaderGenerator;
 
 
 /**
@@ -424,7 +427,7 @@ public class MapResource {
             {
                 // OSM API database data can't be displayed on a hoot map, due to differences
                 // between the display code, so we return no data here.
-                responseDoc = MapQueryResponseWriter.writeEmptyResponse();
+                responseDoc = writeEmptyResponse();
             }
             else {
                 String bbox = BBox;
@@ -490,8 +493,7 @@ public class MapResource {
                     java.util.Map<ElementType, java.util.Map<Long, Tuple>> results = (new Map(mapIdNum, conn))
                             .query(queryBounds);
 
-                    responseDoc = (new MapQueryResponseWriter(mapIdNum, conn)).writeResponse(results, queryBounds,
-                            multiLayerUniqueElementIds);
+                    responseDoc = writeResponse(results, queryBounds, multiLayerUniqueElementIds, mapIdNum, conn);
                 }
             }
         }
@@ -1165,5 +1167,70 @@ public class MapResource {
         }
 
         return mapIdNum;
+    }
+
+    /**
+     * Writes a map query response with no element data
+     *
+     * @return a XML document response
+     * @throws ParserConfigurationException
+     */
+    private static Document writeEmptyResponse() throws ParserConfigurationException {
+        Document responseDoc = XmlDocumentBuilder.create();
+        Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
+        responseDoc.appendChild(elementRootXml);
+        return responseDoc;
+    }
+
+    /**
+     * Writes the query response to an XML document
+     *
+     * @param results
+     *            query results; a mapping of element IDs to records, grouped by
+     *            element type
+     * @param queryBounds
+     *            bounds of the query
+     * @param multiLayerUniqueElementIds
+     *            if true, IDs are prepended with <map id>_<first letter of the
+     *            element type>_; this setting activated is not compatible with
+     *            standard OSM clients (specific to Hootenanny iD)
+     * @return an XML document
+     */
+    private static Document writeResponse(java.util.Map<ElementType, java.util.Map<Long, Tuple>> results, BoundingBox queryBounds,
+            boolean multiLayerUniqueElementIds, long mapId, Connection connection) throws Exception {
+        logger.debug("Building response...");
+
+        Document responseDoc = XmlDocumentBuilder.create();
+        Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
+        responseDoc.appendChild(elementRootXml);
+
+        if (!results.isEmpty()) {
+            elementRootXml.appendChild(queryBounds.toXml(elementRootXml));
+
+            for (ElementType elementType : ElementType.values()) {
+                if (elementType != ElementType.Changeset) {
+                    java.util.Map<Long, Tuple> resultsForType = results.get(elementType);
+                    if (resultsForType != null) {
+                        for (java.util.Map.Entry<Long, Tuple> entry : resultsForType.entrySet()) {
+                            Tuple record = entry.getValue();
+
+                            hoot.services.models.osm.Element element =
+                                    ElementFactory.create(elementType, record, connection, mapId);
+
+                            // the query that sent this in should have
+                            // already handled filtering out invisible elements
+
+                            Users usersTable = record.get(QUsers.users);
+                            assert (element.getVisible());
+                            Element elementXml = element.toXml(elementRootXml, usersTable.getId(),
+                                    usersTable.getDisplayName(), multiLayerUniqueElementIds, true);
+                            elementRootXml.appendChild(elementXml);
+                        }
+                    }
+                }
+            }
+        }
+
+        return responseDoc;
     }
 }

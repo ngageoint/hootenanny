@@ -27,6 +27,9 @@
 package hoot.services.controllers.job.custom.HGIS;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -45,11 +48,13 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db2.QMaps;
 import hoot.services.exceptions.osm.InvalidResourceParamException;
+import hoot.services.exceptions.review.custom.HGIS.ReviewMapTagUpdateException;
 import hoot.services.job.JobStatusManager;
+import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.custom.HGIS.PrepareForValidationRequest;
 import hoot.services.models.review.custom.HGIS.PrepareForValidationResponse;
-import hoot.services.review.custom.HGIS.HGISValidationMarker;
 
 
 @Path("/review/custom/HGIS")
@@ -144,8 +149,8 @@ public class HGISReviewResource extends HGISResource {
             jobStatusManager = new JobStatusManager(conn);
             jobStatusManager.addJob(jobId);
 
-            HGISValidationMarker marker = new HGISValidationMarker(conn, mapName);
-            marker.updateValidationMapTag();
+            long mapId = ModelDaoUtils.getRecordIdForInputString(mapName, conn, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
+            updateMapTagWithReviewType(conn, mapId);
             jobStatusManager.setComplete(jobId);
         }
         catch (Exception e) {
@@ -155,5 +160,17 @@ public class HGISReviewResource extends HGISResource {
         }
 
         return jobId;
+    }
+
+    private static void updateMapTagWithReviewType(Connection connection, long mapId)
+            throws SQLException, ReviewMapTagUpdateException {
+        Map<String, String> tags = new HashMap<>();
+        tags.put("reviewtype", "hgisvalidation");
+
+        long resCnt = DbUtils.updateMapsTableTags(tags, mapId, connection);
+
+        if (resCnt < 1) {
+            throw new ReviewMapTagUpdateException("Failed to update maps table for mapid:" + mapId);
+        }
     }
 }

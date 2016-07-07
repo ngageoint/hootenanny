@@ -60,6 +60,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -272,7 +273,7 @@ public class BasemapResource extends JobControllerBase {
         return Response.ok(retList.toString(), MediaType.TEXT_PLAIN).build();
     }
 
-    private static JSONArray getBasemapListHelper() throws Exception {
+    private static JSONArray getBasemapListHelper() throws IOException, ParseException {
         JSONArray filesList = new JSONArray();
         File basmapDir = new File(INGEST_STAGING_PATH + "/BASEMAP");
 
@@ -397,7 +398,7 @@ public class BasemapResource extends JobControllerBase {
         return Response.ok(resp.toString(), MediaType.TEXT_PLAIN).build();
     }
 
-    private static void deleteBaseMap(String bmName) throws Exception {
+    private static void deleteBaseMap(String bmName) throws IOException {
         String controlFolder = INGEST_STAGING_PATH + "/BASEMAP/";
 
         File tileDir = hoot.services.utils.FileUtils.getSubFolderFromFolder(TILE_SERVER_PATH + "/BASEMAP/", bmName);

@@ -340,7 +340,7 @@ public final class DbUtils {
      * @param mapId
      * @throws Exception
      */
-    public static void deleteMapRelatedTablesByMapId(long mapId) throws Exception {
+    public static void deleteMapRelatedTablesByMapId(long mapId) throws SQLException {
         String dbname = HootProperties.getProperty("dbName");
         DataDefinitionManager ddm = new DataDefinitionManager();
         List<String> tables = new ArrayList<>();
@@ -430,9 +430,9 @@ public final class DbUtils {
      *
      * @param conn
      * @param mapName
-     * @throws Exception
+     * @throws SQLException
      */
-    public static void deleteOSMRecordByName(Connection conn, String mapName) throws Exception {
+    public static void deleteOSMRecordByName(Connection conn, String mapName) throws SQLException {
         Configuration configuration = getConfiguration();
 
         QMaps maps = QMaps.maps;
@@ -1174,7 +1174,6 @@ public final class DbUtils {
                         ps.setBoolean(4, rel.getVisible());
                         ps.setLong(5, rel.getVersion());
 
-                        @SuppressWarnings("unchecked")
                         Map<String, String> tags = (Map<String, String>) rel.getTags();
 
                         String hstoreStr = "";

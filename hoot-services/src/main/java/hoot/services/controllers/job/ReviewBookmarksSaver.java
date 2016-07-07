@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.writers.review;
+package hoot.services.controllers.job;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
@@ -49,12 +49,12 @@ import hoot.services.models.review.ReviewBookmarkSaveRequest;
 import hoot.services.readers.review.ReviewBookmarkRetriever;
 
 
-public class ReviewBookmarksSaver {
+class ReviewBookmarksSaver {
     private static final Logger logger = LoggerFactory.getLogger(ReviewBookmarksSaver.class);
 
     private final Connection conn;
 
-    public ReviewBookmarksSaver(Connection cn) {
+    ReviewBookmarksSaver(Connection cn) {
         conn = cn;
     }
 
@@ -66,7 +66,7 @@ public class ReviewBookmarksSaver {
      *            - request object containing inserted/updated fields
      * @return - numbers of saved tags
      */
-    public long save(ReviewBookmarkSaveRequest request) {
+    long save(ReviewBookmarkSaveRequest request) {
         long nSaved;
         ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
 
@@ -89,7 +89,7 @@ public class ReviewBookmarksSaver {
      *            - request object containing inserted fields
      * @return - total numbers of inserted
      */
-    public long insert(ReviewBookmarkSaveRequest request) {
+    long insert(ReviewBookmarkSaveRequest request) {
         SQLInsertClause cl = createInsertClause(request);
         long nInserted = cl.execute();
         return nInserted;
@@ -104,7 +104,7 @@ public class ReviewBookmarksSaver {
      *            - Current review tag
      * @return total numbers of updated
      */
-    public long update(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto) {
+    long update(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto) {
         long nUpdated = getUpdateQuery(request, reviewBookmarksDto).execute();
         return nUpdated;
     }
@@ -116,7 +116,7 @@ public class ReviewBookmarksSaver {
      *            - request object containing inserted fields
      * @return - SQLInsertClause
      */
-    protected SQLInsertClause createInsertClause(ReviewBookmarkSaveRequest request) {
+    SQLInsertClause createInsertClause(ReviewBookmarkSaveRequest request) {
         Configuration configuration = DbUtils.getConfiguration();
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
@@ -139,7 +139,7 @@ public class ReviewBookmarksSaver {
      *            - Current review tag
      * @return - SQLUpdateClause
      */
-    protected SQLUpdateClause getUpdateQuery(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto) {
+    SQLUpdateClause getUpdateQuery(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto) {
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
         reviewBookmarksDto.setLastModifiedAt(now);

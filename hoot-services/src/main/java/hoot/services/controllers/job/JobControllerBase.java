@@ -42,6 +42,7 @@ import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -208,7 +209,7 @@ public class JobControllerBase {
         return command;
     }
 
-    protected static JSONArray parseParams(String params) throws Exception {
+    protected static JSONArray parseParams(String params) throws ParseException {
         JSONParser parser = new JSONParser();
         JSONObject command = (JSONObject) parser.parse(params);
         JSONArray commandArgs = new JSONArray();

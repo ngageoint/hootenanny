@@ -48,7 +48,7 @@ import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.ElementInfo;
 import hoot.services.models.review.ReviewRef;
-import hoot.services.review.ReviewUtils;
+import hoot.services.utils.ReviewUtils;
 
 
 /**

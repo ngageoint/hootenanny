@@ -57,9 +57,10 @@ public final class JsonUtils {
      */
     public static String objectToJson(Object obj) throws IOException {
         StringWriter writer = new StringWriter();
-        JsonGenerator jsonGenerator = new JsonFactory().createJsonGenerator(writer);
-        jsonGenerator.setCodec(new ObjectMapper());
-        jsonGenerator.writeObject(obj);
+        try (JsonGenerator jsonGenerator = new JsonFactory().createJsonGenerator(writer)) {
+            jsonGenerator.setCodec(new ObjectMapper());
+            jsonGenerator.writeObject(obj);
+        }
         return writer.toString();
     }
 

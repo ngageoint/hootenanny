@@ -48,6 +48,7 @@ import hoot.services.info.BuildInfo;
 import hoot.services.info.CoreDetail;
 import hoot.services.info.VersionInfo;
 import hoot.services.nativeInterfaces.JobExecutionManager;
+import hoot.services.nativeInterfaces.NativeInterfaceException;
 
 
 /**
@@ -116,7 +117,7 @@ public class AboutResource {
         return versionInfo;
     }
 
-    private static String getCoreInfo(boolean withDetails) throws Exception {
+    private static String getCoreInfo(boolean withDetails) throws NativeInterfaceException {
         JSONObject command = new JSONObject();
         command.put("exectype", "hoot");
         command.put("exec", "version");
