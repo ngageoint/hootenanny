@@ -100,11 +100,11 @@ public class ReviewBookmarkRetriever {
      * @throws Exception
      */
     public List<ReviewBookmarks> retrieveAll(final String orderByCol, final boolean isAsc, final long limit,
-            final long offset, final String filterCol, final Object filterVal) throws Exception {
-
+            final long offset, final Long[] creatorArray, final Long[] layerArray) throws Exception {
+    	
         List<ReviewBookmarks> res = null;
         try {
-            SQLQuery query = _getAllQuery(orderByCol, isAsc, limit, offset, filterCol, filterVal);
+            SQLQuery query = _getAllQuery(orderByCol, isAsc, limit, offset, creatorArray, layerArray);
             res = query.list(_reviewBookmarks);
         }
         catch (Exception ex) {
@@ -181,19 +181,24 @@ public class ReviewBookmarkRetriever {
      * @throws Exception
      */
     protected SQLQuery _getAllQuery(final String orderByCol, final boolean isAsc, final long limit, final long offset,
-            final String filterCol, final Object filterVal) throws Exception {
+            final Long[] creatorArray, final Long[] layerArray) throws Exception {
         QReviewBookmarks b = QReviewBookmarks.reviewBookmarks;
 
         SQLQuery query = new SQLQuery(this._conn, DbUtils.getConfiguration());
         try {
-            if (filterCol != null && filterVal != null && filterCol.equalsIgnoreCase("createdBy")) {
-                query.from(_reviewBookmarks).where(b.createdBy.eq((Long) filterVal))
-                        .orderBy(_getSpecifier(orderByCol, isAsc));
+            if (creatorArray != null && layerArray != null) {
+            	query.from(_reviewBookmarks).where(b.createdBy.in(creatorArray)) 
+            		.where(b.mapId.in(layerArray))
+            		.orderBy(_getSpecifier(orderByCol, isAsc));
             }
-            else if (filterCol != null && filterVal != null && filterCol.equalsIgnoreCase("mapId")) {
-                query.from(_reviewBookmarks).where(b.mapId.eq((Long) filterVal))
-                        .orderBy(_getSpecifier(orderByCol, isAsc));
+            else if (creatorArray != null && layerArray == null) {
+            	query.from(_reviewBookmarks).where(b.createdBy.in(creatorArray)) 
+        			.orderBy(_getSpecifier(orderByCol, isAsc));
             }
+            else if (creatorArray == null && layerArray != null) {
+            	query.from(_reviewBookmarks).where(b.mapId.in(layerArray))
+        			.orderBy(_getSpecifier(orderByCol, isAsc));
+            }            
             else {
                 query.from(_reviewBookmarks).orderBy(_getSpecifier(orderByCol, isAsc));
             }

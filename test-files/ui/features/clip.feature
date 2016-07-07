@@ -11,6 +11,7 @@ Feature: Hootenanny Clip Dataset Test
         And I click the "DcGisRoadsCucumber" Dataset
         Then I click first "Add Layer"
         Then I wait 30 "seconds" to see "DcGisRoadsCucumber"
+        Then I change the reference layer color to blue
         Then I press "Tools"
         And I hover over ".tools-clip"
         And I should see "Clip to Visual Extent"
