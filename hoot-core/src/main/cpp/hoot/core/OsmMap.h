@@ -208,8 +208,6 @@ public:
 
   const WayMap& getWays() const { return _ways; }
 
-  //static boost::shared_ptr<OGRSpatialReference> getWgs84(); MICAH
-
   bool isEmpty() const { return _nodes.size() == 0 && _ways.size() == 0 && _relations.size() == 0;}
 
   void registerListener(shared_ptr<OsmMapListener> l) { _listeners.push_back(l); }

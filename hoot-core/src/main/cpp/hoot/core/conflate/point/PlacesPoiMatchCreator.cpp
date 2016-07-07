@@ -115,7 +115,6 @@ public:
     // used for bounds checks.
     _transform.reset(OGRCreateCoordinateTransformation(_map->getProjection().get(),
                      MapProjector::createWgs84Projection().get()));
-                                                       //OsmMap::getWgs84().get())); MICAH
   }
 
   ~PlacesPoiMatchVisitor()

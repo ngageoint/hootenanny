@@ -60,7 +60,6 @@ OsmMap::OsmMap()
 {
   setIdGenerator(IdGenerator::getInstance());
   _index.reset(new OsmMapIndex(*this));
-  //_srs = getWgs84(); MICAH
   _srs = MapProjector::createWgs84Projection();
 }
 
@@ -212,7 +211,6 @@ void OsmMap::addWay(const shared_ptr<Way>& w)
 
 void OsmMap::clear()
 {
-  //_srs = getWgs84(); MICAH
   _srs = MapProjector::createWgs84Projection();
 
   _nodes.clear();
@@ -340,21 +338,6 @@ set<ElementId> OsmMap::getParents(ElementId eid) const
 {
   return getIndex().getParents(eid);
 }
-
-/* MICAH
-boost::shared_ptr<OGRSpatialReference> OsmMap::getWgs84()
-{
-  if (_wgs84 == 0)
-  {
-    _wgs84.reset(new OGRSpatialReference());
-    if (_wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
-    {
-      throw HootException("Error creating EPSG:4326 projection.");
-    }
-  }
-  return _wgs84;
-}
-*/
 
 bool OsmMap::_listContainsNode(const QList<ElementPtr> l) const
 {
