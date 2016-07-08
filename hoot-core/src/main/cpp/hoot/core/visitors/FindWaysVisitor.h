@@ -22,68 +22,75 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef FINDWAYSVISITOR_H
+#define FINDWAYSVISITOR_H
 
-#ifndef WORSTCIRCULARERRORVISITOR_H
-#define WORSTCIRCULARERRORVISITOR_H
-
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/filters/ElementCriterionConsumer.h>
-#include <hoot/core/visitors/SingleStatistic.h>
 
-/**
- * A visitor for finding the worst circular error among elements. Worst = greatest.
- */
+// For convenience functions
+#include <hoot/core/filters/ContainsNodeCriterion.h>
+#include <hoot/core/filters/TagCriterion.h>
+
 namespace hoot
 {
 
-class WorstCircularErrorVisitor :
-    public ElementConstOsmMapVisitor,
-    public SingleStatistic
+// Used to get a vector of IDs for the ways that satisfy
+// the specified criterion
+class FindWaysVisitor :  public ElementConstOsmMapVisitor
 {
 public:
-  static string className() { return "hoot::WorstCircularErrorVisitor"; }
 
-  WorstCircularErrorVisitor(): _worst(-1) {}
-
-  Meters getWorstCircularError() { return _worst; }
-
-  virtual double getStat() const { return _worst; }
+  FindWaysVisitor (ElementCriterion* pCrit):
+    _pCrit(pCrit)
+  {
+    // Nothing
+  }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual void visit(const shared_ptr<const Element>& e)
   {
-    _worst = max(_worst, e->getCircularError());
+    if (e->getElementType() == ElementType::Way)
+    {
+      ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+      if (_pCrit->isSatisfied(e))
+      {
+        _wayIds.push_back(e->getId());
+      }
+    }
   }
 
-  // Convenient way to get worst circular error
-  static Meters getWorstCircularError(const OsmMapPtr& map)
+  vector<long> getIds() { return _wayIds; }
+
+  // Convenience method for finding ways that contain the given node
+  static vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId)
   {
-    WorstCircularErrorVisitor v;
-    map->visitNodesRo(v);
+    ContainsNodeCriterion crit(nodeId);
+    FindWaysVisitor v(&crit);
     map->visitWaysRo(v);
-    return v.getWorstCircularError();
+    return v.getIds();
   }
 
-  // Handle const pointers to const
-  static Meters getWorstCircularError(const ConstOsmMapPtr& map)
+  // Convenience method for finding ways that contain the given tag
+  static vector<long> findWaysByTag(const ConstOsmMapPtr& map,
+                                    const QString& key,
+                                    const QString& value)
   {
-    WorstCircularErrorVisitor v;
-    map->visitNodesRo(v);
+    TagCriterion crit(key, value);
+    FindWaysVisitor v(&crit);
     map->visitWaysRo(v);
-    return v.getWorstCircularError();
+    return v.getIds();
   }
 
 private:
-
   const OsmMap* _map;
-  Meters _worst;
+  vector<long> _wayIds;
+  ElementCriterion * _pCrit;
 };
 
-} // end namespace hoot
+}
 
-#endif // WORSTCIRCULARERRORVISITOR_H
+#endif // FINDWAYSVISITOR_H

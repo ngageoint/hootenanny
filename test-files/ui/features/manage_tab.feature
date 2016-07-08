@@ -40,7 +40,7 @@ Feature: Manage Tab
         And I should see "Hootenanny Core - Version:"
         And I should see "Hootenanny Web Services - Version:"
         And I should see "Hootenanny iD "
-
+        
 
     Scenario: Testing Click Events of Dataset Tab
         When I click on the "Datasets" option in the "settingsSidebar"
@@ -93,3 +93,12 @@ Feature: Manage Tab
         And I context click the "TestFolder" Dataset
         And I click the "Delete" context menu item
         And I accept the alert
+
+        
+
+
+
+
+
+
+        

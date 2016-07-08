@@ -32,17 +32,24 @@
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/filters/ArbitraryCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/rnd/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/visitors/IndexElementsVisitor.h>
 
 // Standard
 #include <fstream>
 
+// Boost
+#include <boost/bind.hpp>
+
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
+#include <tgs/RStarTree/IntersectionIterator.h>
+#include <tgs/RStarTree/MemoryPageStore.h>
 
 namespace hoot
 {
@@ -78,7 +85,10 @@ public:
     env->expandBy(e->getCircularError() + ConfigOptions().getPoiPolygonMatchReviewDistance());
 
     // find other nearby candidates
-    set<ElementId> neighbors = _map->findElements(*env);
+    set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
+                                                                   getIndex(),
+                                                                   _indexToEid,
+                                                                   getMap());
     ElementId from(e->getElementType(), e->getId());
 
     _elementsEvaluated++;
@@ -114,6 +124,11 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
+  Meters getSearchRadius(const shared_ptr<const Element>& e) const
+  {
+    return e->getCircularError() + ConfigOptions().getPoiPolygonMatchReviewDistance();
+  }
+
   virtual void visit(const ConstElementPtr& e)
   {
     if (isMatchCandidate(e))
@@ -127,6 +142,42 @@ public:
     return element->isUnknown() && PoiPolygonMatch::isPoiIsh(element);
   }
 
+  shared_ptr<HilbertRTree>& getIndex()
+  {
+    if (!_index)
+    {
+      // No tuning was done, I just copied these settings from OsmMapIndex.
+      // 10 children - 368
+      shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+      _index.reset(new HilbertRTree(mps, 2));
+
+      // Only index elements satisfy isMatchCandidate(e)
+      //boost::function<bool (ConstElementPtr e)> f = boost::bind(&PoiPolygonMatchVisitor::isMatchCandidate, _1);
+      //shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
+
+      // Null criterion is OK - all elements are considered, none are filtered.
+      // NOT using isMatchCandidate lets us pass PoiPolygonMatchCreatorTest.
+      // Maybe isMatchCandidate is not correct?
+      shared_ptr<ArbitraryCriterion> pCrit;
+
+      // Instantiate our visitor
+      IndexElementsVisitor v(_index,
+                             _indexToEid,
+                             pCrit,
+                             boost::bind(&PoiPolygonMatchVisitor::getSearchRadius, this, _1),
+                             getMap());
+
+      //getMap()->visitRo(v);
+      getMap()->visitNodesRo(v);
+      getMap()->visitWaysRo(v);
+      v.finalizeIndex();
+    }
+
+    return _index;
+  }
+
+  ConstOsmMapPtr getMap() { return _map; }
+
 private:
 
   const ConstOsmMapPtr& _map;
@@ -137,6 +188,10 @@ private:
   int _elementsEvaluated;
   size_t _maxGroupSize;
   ConstMatchThresholdPtr _threshold;
+
+  // Used for finding neighbors
+  shared_ptr<HilbertRTree> _index;
+  deque<ElementId> _indexToEid;
 };
 
 PoiPolygonMatchCreator::PoiPolygonMatchCreator()

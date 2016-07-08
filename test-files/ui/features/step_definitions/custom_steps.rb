@@ -66,6 +66,10 @@ Then(/^I should not see "([^"]*)"$/) do |text|
   expect(page).to have_no_content(text)
 end
 
+Then(/^I click on the "([^"]*)" label$/) do |txt|
+  find('label', :text=> txt, :match => :prefer_exact).click
+end
+
 Then(/^I should see (checkbox )?"([^"]*)" (not )?enabled$/) do |cbox, text,state|
   lbl = find('label', :text=> text, :match => :prefer_exact)
   if cbox
@@ -261,6 +265,11 @@ When(/^I click the "([^"]*)" at "([^"]*)","([^"]*)"$/) do |el, x, y|
   sleep 3
 end
 
+When(/^I double-click the "([^"]*)" at "([^"]*)","([^"]*)"$/) do |el, x, y|
+  find('#' + el).double_click_at(x,y)
+  sleep 3
+end
+
 When(/^I double-click the "([^"]*)"$/) do |el|
   find('#' + el).double_click
   sleep 1
@@ -407,6 +416,14 @@ When(/^I close the UI alert$/) do
   find('#alerts').all('.x')[0].click
 end
 
+When(/^I change the reference layer color to ([^"]*)$/) do |color|
+  page.first('div.big.data').click
+  swatch = find('a[data-color="' + color + '"')
+  rgb = swatch.native.css_value('background').split(")").first + ')'
+  swatch.click
+  expect(page.first('path.stroke.tag-hoot').native.css_value('stroke')).to eq(rgb)
+end
+
 When(/^I scroll element into view and press "([^"]*)"$/) do |id|
   Capybara.ignore_hidden_elements = false
   element = page.driver.browser.find_element(:id, id)
@@ -467,6 +484,20 @@ end
 
 Then(/^I click the "([^"]*)" with text "([^"]*)"$/) do |el, text|
   page.find(el, :text => text).click
+end
+
+Then(/^I hover over the "([^"]*)" with text "([^"]*)"$/) do |el, text|
+  page.find(el, :text => text).hover
+end
+
+Then(/^I should see a measurement line$/) do
+  page.should have_css('line.measure-line-0')
+  page.should have_css('text.measure-label-text')
+end
+
+Then(/^I should see a measurement area$/) do
+  page.should have_css('polygon.measure-area')
+  page.should have_css('text.measure-label-text')
 end
 
 Then(/^I accept the alert$/) do
@@ -603,4 +634,10 @@ Then(/^I open the wfs export url$/) do
   url = find('input.wfsfileExportOutputName').value
   visit url
   # need a way to check the WFS GetCapabilities response is valid
+end
+
+Then(/^I should see "([^"]*)" bookmark first and "([^"]*)" bookmark second$/) do |rb1, rb2|
+  spans = find('#reviewBookmarksContent').all('span.strong')
+  expect(spans.first).to have_content(rb1)
+  expect(spans.last).to have_content(rb2)
 end

@@ -45,7 +45,7 @@ WaySublineMatchString::WaySublineMatchString(const MatchCollection& m)
       {
         LOG_VAR(m);
         throw OverlappingMatchesException(QString("The match collection must not contain "
-          "overlapping matches.").arg(hoot::toString(m[i])).arg(hoot::toString(m[j])));
+          "overlapping matches."));
       }
     }
   }

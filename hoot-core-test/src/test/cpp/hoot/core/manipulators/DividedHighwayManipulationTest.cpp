@@ -38,6 +38,7 @@
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/manipulators/DividedHighwayManipulation.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
 // Qt
@@ -71,9 +72,9 @@ public:
 
     MapProjector::projectToOrthographic(map);
 
-    long left = map->findWays("note", "0")[0];
-    long right = map->findWays("note", "1")[0];
-    long mid = map->findWays("note", "2")[0];
+    long left  = FindWaysVisitor::findWaysByTag(map, "note", "0")[0];
+    long right = FindWaysVisitor::findWaysByTag(map, "note", "1")[0];
+    long mid   = FindWaysVisitor::findWaysByTag(map, "note", "2")[0];
 
     DividedHighwayManipulation uut(left, right, mid, map, 10.0);
     qDebug() << uut.getScoreEstimate();
@@ -82,18 +83,18 @@ public:
     shared_ptr<OsmMap> after(new OsmMap(map));
     uut.applyManipulation(after, ignored1, ignored2);
 
-    left = map->findWays("note", "3")[0];
-    right = map->findWays("note", "4")[0];
-    mid = map->findWays("note", "5")[0];
+    left  = FindWaysVisitor::findWaysByTag(map, "note", "3")[0];
+    right = FindWaysVisitor::findWaysByTag(map, "note", "4")[0];
+    mid   = FindWaysVisitor::findWaysByTag(map, "note", "5")[0];
 
     DividedHighwayManipulation uut2(left, right, mid, after, 10.0);
     qDebug() << uut2.getScoreEstimate();
     qDebug() << uut2.calculateScore(after);
     uut2.applyManipulation(after, ignored1, ignored2);
 
-    left = map->findWays("note", "6")[0];
-    right = map->findWays("note", "7")[0];
-    mid = map->findWays("note", "8")[0];
+    left  = FindWaysVisitor::findWaysByTag(map, "note", "6")[0];
+    right = FindWaysVisitor::findWaysByTag(map, "note", "7")[0];
+    mid   = FindWaysVisitor::findWaysByTag(map, "note", "8")[0];
 
     DividedHighwayManipulation uut3(left, right, mid, after, 10.0);
     qDebug() << uut3.getScoreEstimate();
