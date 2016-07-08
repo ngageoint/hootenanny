@@ -24,40 +24,30 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef COPYSUBSETOP_H
-#define COPYSUBSETOP_H
 
-// hoot
-#include <hoot/core/OsmMap.h>
-
-#include "OsmMapOperation.h"
+#include "WayDirectionCriterion.h"
+#include <hoot/core/algorithms/DirectionFinder.h>
 
 namespace hoot
 {
 
-/**
- * Copies a subset of the map into a new map. The old map is unchanged.
- */
-class CopySubsetOp : public OsmMapOperation
+WayDirectionCriterion::WayDirectionCriterion(const ConstOsmMapPtr& map,
+                                             shared_ptr<const Way> baseWay,
+                                             bool similarDirection) :
+  _map(map),
+  _baseWay(baseWay),
+  _similarDirection(similarDirection)
 {
-public:
-  CopySubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids);
-
-  CopySubsetOp(const ConstOsmMapPtr& from, const vector<long>& ids);
-
-  CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
-
-  /**
-   * A new map is created and the eids specified in the constructor and their depedencies will be
-   * copied into the new map. The @a map will be set to point to the new map.
-   */
-  virtual void apply(shared_ptr<OsmMap>& map);
-
-private:
-  set<ElementId> _eids;
-  const ConstOsmMapPtr& _from;
-};
-
+  // Blank
 }
 
-#endif // COPYSUBSETOP_H
+bool WayDirectionCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+{
+  if (e->getElementType() != ElementType::Way)
+    return false;
+
+  ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+  return DirectionFinder::isSimilarDirection(_map, _baseWay, w) == _similarDirection;
+}
+
+} // namespace hoot

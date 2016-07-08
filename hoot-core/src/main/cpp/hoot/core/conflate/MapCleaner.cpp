@@ -31,7 +31,6 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/filters/TagFilter.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 

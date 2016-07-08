@@ -24,40 +24,43 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef COPYSUBSETOP_H
-#define COPYSUBSETOP_H
 
-// hoot
+#ifndef WAYDIRECTIONCRITERION_H
+#define WAYDIRECTIONCRITERION_H
+
+// GEOS
+#include <geos/geom/LineString.h>
+
+// Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/Units.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/filters/ElementCriterion.h>
 
-#include "OsmMapOperation.h"
+#include "WayFilter.h"
 
 namespace hoot
 {
+  using namespace geos::geom;
+  class Way;
 
-/**
- * Copies a subset of the map into a new map. The old map is unchanged.
- */
-class CopySubsetOp : public OsmMapOperation
+class WayDirectionCriterion : public ElementCriterion
 {
 public:
-  CopySubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids);
+  WayDirectionCriterion(const ConstOsmMapPtr& map,
+                        shared_ptr<const Way> baseWay,
+                        bool similarDirection = true);
 
-  CopySubsetOp(const ConstOsmMapPtr& from, const vector<long>& ids);
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
 
-  CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
-
-  /**
-   * A new map is created and the eids specified in the constructor and their depedencies will be
-   * copied into the new map. The @a map will be set to point to the new map.
-   */
-  virtual void apply(shared_ptr<OsmMap>& map);
+  WayDirectionCriterion* clone() { return new WayDirectionCriterion(_map, _baseWay, _similarDirection); }
 
 private:
-  set<ElementId> _eids;
-  const ConstOsmMapPtr& _from;
+  ConstOsmMapPtr _map;
+  shared_ptr<const Way> _baseWay;
+  bool _similarDirection;
 };
 
 }
 
-#endif // COPYSUBSETOP_H
+#endif // WAYDIRECTIONCRITERION_H

@@ -24,40 +24,52 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef COPYSUBSETOP_H
-#define COPYSUBSETOP_H
 
-// hoot
+#ifndef PARALLELWAYCRITERION_H
+#define PARALLELWAYCRITERION_H
+
+// GEOS
+#include <geos/geom/LineString.h>
+
+// Hoot
 #include <hoot/core/OsmMap.h>
-
-#include "OsmMapOperation.h"
+#include <hoot/core/Units.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot
 {
+  using namespace geos::geom;
+  class Way;
 
-/**
- * Copies a subset of the map into a new map. The old map is unchanged.
- */
-class CopySubsetOp : public OsmMapOperation
+class ParallelWayCriterion : public ElementCriterion
 {
 public:
-  CopySubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids);
+  ParallelWayCriterion(const ConstOsmMapPtr& map,
+                       shared_ptr<const Way> baseWay,
+                       bool isParallel = true);
 
-  CopySubsetOp(const ConstOsmMapPtr& from, const vector<long>& ids);
+  virtual ~ParallelWayCriterion();
 
-  CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
+  Radians calculateDifference(const shared_ptr<const Way>& w) const;
 
-  /**
-   * A new map is created and the eids specified in the constructor and their depedencies will be
-   * copied into the new map. The @a map will be set to point to the new map.
-   */
-  virtual void apply(shared_ptr<OsmMap>& map);
+  void setThreshold(Degrees threshold) { _threshold = threshold; }
+
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+
+  ParallelWayCriterion* clone() { return new ParallelWayCriterion(_map, _baseWay, _isParallel); }
 
 private:
-  set<ElementId> _eids;
-  const ConstOsmMapPtr& _from;
+  ConstOsmMapPtr _map;
+  shared_ptr<const Way> _baseWay;
+  bool _isParallel;
+
+  // heading of baseWay at each coord
+  std::vector<Radians> _headings;
+  std::vector<Point*> _points;
+  Degrees _threshold;
 };
 
 }
 
-#endif // COPYSUBSETOP_H
+#endif // PARALLELWAYCRITERION_H

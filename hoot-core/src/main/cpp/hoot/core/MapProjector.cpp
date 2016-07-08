@@ -376,8 +376,8 @@ shared_ptr<OGRSpatialReference> MapProjector::createWgs84Projection()
 {
   shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
 
-    // EPSG 4326 = WGS84
-//  if (srs->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
+  // EPSG 4326 = WGS84
+  // if (srs->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
   if (srs->importFromEPSG(4326) != OGRERR_NONE)
   {
     throw HootException("Error creating EPSG:4326 projection.");

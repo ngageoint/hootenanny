@@ -25,44 +25,28 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef TAGFILTER_H
-#define TAGFILTER_H
+#include "DistanceNodeCriterion.h"
 
 // Hoot
-#include <hoot/core/elements/Way.h>
-
-#include "WayFilter.h"
+#include <hoot/core/elements/Node.h>
 
 namespace hoot
 {
 
-class TagFilter : public WayFilter
+DistanceNodeCriterion::DistanceNodeCriterion(Coordinate center, Meters distance):
+  _center(center),
+  _distance(distance)
 {
-public:
-
-  static string className() { return "hoot::TagFilter"; }
-
-  /**
-   * Constructs a tag filter and uses the key value pair specified in the configuration file. If
-   * not kvp is specified then an error is thrown.
-   */
-  TagFilter();
-
-  /**
-   * If FilterType is KeepMatches then keep all ways that have the specified key value pair.
-   */
-  TagFilter(FilterType type, QString k, QString v) { _type = type; _k = k; _v = v; }
-
-  virtual bool isFiltered(const Way &w) const { return isFiltered((const Element&)w); }
-
-protected:
-  virtual bool isFiltered(const Element& e) const;
-
-private:
-  QString _k, _v;
-  FilterType _type;
-};
-
+  // Blank
 }
 
-#endif // TAGFILTER_H
+bool DistanceNodeCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+{
+  if (e->getElementType() != ElementType::Node)
+    return false;
+
+  ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
+  return _center.distance(n->toCoordinate()) < _distance;
+}
+
+} // namespace hoot
