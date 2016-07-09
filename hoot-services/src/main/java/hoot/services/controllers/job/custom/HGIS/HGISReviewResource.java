@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.job.custom.HGIS;
 
+import static hoot.services.HootProperties.HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -46,7 +48,6 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.exceptions.osm.InvalidResourceParamException;
@@ -61,7 +62,7 @@ public class HGISReviewResource extends HGISResource {
     private static final Logger logger = LoggerFactory.getLogger(HGISReviewResource.class);
 
     public HGISReviewResource() {
-        super(HootProperties.getProperty("hgisPrepareForValidationScript"));
+        super(HGIS_PREPARE_FOR_VALIDATION_SCRIPT);
     }
 
     /**

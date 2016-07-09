@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.info;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.RPT_STORE_PATH;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -53,14 +56,10 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-
 
 @Path("/reports")
 public class ReportsResource {
     private static final Logger logger = LoggerFactory.getLogger(ReportsResource.class);
-    private static final String RPT_STORE_PATH = HootProperties.getProperty("reportDataPath");
-    private static final String HOME_FOLDER = HootProperties.getProperty("homeFolder");
 
     public ReportsResource() {
     }

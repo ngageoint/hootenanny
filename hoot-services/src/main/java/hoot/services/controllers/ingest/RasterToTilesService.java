@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.HootProperties.RASTER_TO_TILES;
+import static hoot.services.HootProperties.TILE_SERVER_PATH;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -40,7 +43,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
@@ -55,11 +57,8 @@ import hoot.services.nativeInterfaces.JobExecutionManager;
 
 public class RasterToTilesService extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(RasterToTilesService.class);
-    private static final String TILE_SERVER_PATH;
-    private static final ClassPathXmlApplicationContext appContext;
 
     static {
-        TILE_SERVER_PATH = HootProperties.getProperty("tileServerPath");
         File dir = new File(TILE_SERVER_PATH);
         try {
             FileUtils.forceMkdir(dir);
@@ -67,12 +66,10 @@ public class RasterToTilesService extends JobControllerBase {
         catch (IOException ioe) {
             throw new RuntimeException("Error creating " + dir.getAbsolutePath() + " directory!", ioe);
         }
-
-        appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
     }
 
     public RasterToTilesService() {
-        super(HootProperties.getProperty("RasterToTiles"));
+        super(RASTER_TO_TILES);
     }
 
     public String ingestOSMResourceDirect(String name, String userEmail) {
@@ -140,7 +137,8 @@ public class RasterToTilesService extends JobControllerBase {
                 JSONObject argStr = createCommandObj(name, zoomList, rasterSize, userEmail, mapIdNum);
                 argStr.put("jobId", jobId);
 
-                JobExecutionManager jobExecManager = (JobExecutionManager) appContext.getBean("jobExecutionManagerNative");
+                JobExecutionManager jobExecManager = (JobExecutionManager)
+                        HootProperties.getSpringContext().getBean("jobExecutionManagerNative");
                 JSONObject res = jobExecManager.exec(argStr);
                 Object oRes = res.get("warnings");
 

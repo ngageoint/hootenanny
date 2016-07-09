@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.HootProperties.ETL_MAKEFILE;
+
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -42,15 +44,13 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-
 
 @Path("/etl")
 public class ETLResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ETLResource.class);
 
     public ETLResource() {
-        super(HootProperties.getProperty("ETLMakefile"));
+        super(ETL_MAKEFILE);
     }
 
     /**

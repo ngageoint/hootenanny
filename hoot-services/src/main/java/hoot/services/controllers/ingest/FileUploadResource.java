@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.HootProperties.ETL_MAKEFILE;
+import static hoot.services.HootProperties.HOME_FOLDER;
+
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +56,6 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.ingest.MultipartSerializer;
 
@@ -61,10 +63,9 @@ import hoot.services.ingest.MultipartSerializer;
 @Path("/ingest")
 public class FileUploadResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(FileUploadResource.class);
-    private static final String HOME_FOLDER = HootProperties.getProperty("homeFolder");
 
     public FileUploadResource() {
-        super(HootProperties.getProperty("ETLMakefile"));
+        super(ETL_MAKEFILE);
     }
 
     /**
@@ -349,8 +350,8 @@ public class FileUploadResource extends JobControllerBase {
         return jobArgs;
     }
 
-    private void buildNativeRequest(String jobId, String fName, String ext,
-                                    String inputFileName, JSONArray reqList, JSONObject zipStat) throws Exception {
+    private static void buildNativeRequest(String jobId, String fName, String ext, String inputFileName,
+            JSONArray reqList, JSONObject zipStat) throws Exception {
         // get zip stat is not exist then create one
         int shpZipCnt = 0;
         Object oShpStat = zipStat.get("shpzipcnt");
@@ -452,7 +453,8 @@ public class FileUploadResource extends JobControllerBase {
     // returns the type of file in zip
     // throws error if there are mix of osm and ogr
     // zip does not allow fgdb so it needs to be expanded out
-    private JSONObject getZipContentType(String zipFilePath, JSONArray contentTypes, String fName) throws Exception{
+    private static JSONObject getZipContentType(String zipFilePath, JSONArray contentTypes, String fName)
+            throws Exception{
         JSONObject resultStat = new JSONObject();
         String[] extList = { "gdb", "osm", "shp", "geonames" };
 

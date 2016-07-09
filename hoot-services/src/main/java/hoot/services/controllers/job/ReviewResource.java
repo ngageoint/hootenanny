@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.HootProperties.MAX_QUERY_NODES;
+
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -58,7 +60,6 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.mysema.query.sql.SQLQuery;
 
-import hoot.services.HootProperties;
 import hoot.services.controllers.osm.MapResource;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
@@ -91,11 +92,10 @@ public class ReviewResource {
     private final PlatformTransactionManager transactionManager;
 
     static {
-        String maxQuerySize = HootProperties.getProperty("maxQueryNodes");
         long value;
 
         try {
-            value = Long.parseLong(maxQuerySize);
+            value = Long.parseLong(MAX_QUERY_NODES);
         }
         catch (NumberFormatException ignored) {
             value = 60000;

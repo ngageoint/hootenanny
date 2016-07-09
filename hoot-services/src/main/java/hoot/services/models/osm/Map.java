@@ -26,6 +26,8 @@
  */
 package hoot.services.models.osm;
 
+import static hoot.services.HootProperties.*;
+
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +46,6 @@ import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.types.QTuple;
 import com.mysema.query.types.expr.BooleanExpression;
 
-import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.nwr_enum;
 import hoot.services.db.postgres.PostgresUtils;
@@ -115,7 +116,7 @@ public class Map extends Maps {
      */
     private static List<Range> getTileRanges(BoundingBox bounds) {
         logger.debug("Retrieving tile ranges...");
-        int queryDimensions = Integer.parseInt(HootProperties.getPropertyOrDefault("mapQueryDimensions"));
+        int queryDimensions = Integer.parseInt(MAP_QUERY_DIMENSIONS);
         ZCurveRanger ranger = new ZCurveRanger(new ZValue(queryDimensions, 16,
         // use y, x ordering here
                 new double[] { -1 * BoundingBox.LAT_LIMIT, -1 * BoundingBox.LON_LIMIT }, new double[] {
@@ -153,7 +154,7 @@ public class Map extends Maps {
 
     private static void validateQueryBounds(BoundingBox bounds) throws Exception {
         logger.debug("Checking request bounds size...");
-        double maxQueryAreaDegrees = Double.parseDouble(HootProperties.getPropertyOrDefault("maxQueryAreaDegrees"));
+        double maxQueryAreaDegrees = Double.parseDouble(MAP_QUERY_AREA_DEGREES);
         double requestedArea = bounds.getArea();
         if (requestedArea > maxQueryAreaDegrees) {
             throw new Exception("The maximum bbox size is: " + maxQueryAreaDegrees + ", and your request was too "
@@ -177,7 +178,7 @@ public class Map extends Maps {
         // The max node count only applies to the nodes falling within the query
         // bounds, not those that belong to ways that cross the query bounds but fall
         // outside of the query bounds, even though those nodes are returned as well in the query.
-        long maxQueryNodes = Long.parseLong(HootProperties.getPropertyOrDefault("maxQueryNodes"));
+        long maxQueryNodes = Long.parseLong(MAX_QUERY_NODES);
         if (nodeCount > maxQueryNodes) {
             throw new Exception("The maximum number of nodes that may be returned in a map query is " + maxQueryNodes
                     + ".  This query returned " + nodeCount + " nodes.  Please "
@@ -761,13 +762,13 @@ public class Map extends Maps {
         MapLayers mapLayers = new MapLayers();
         List<MapLayer> mapLayerList = new ArrayList<>();
         
-        boolean osmApiDbEnabled = Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"));
+        boolean osmApiDbEnabled = Boolean.parseBoolean(OSM_API_DB_ENABLED);
         
         if (osmApiDbEnabled) {
             // add a OSM API db dummy record for the UI for conflation involving OSM API db data
             MapLayer mapLayer = new MapLayer();
             mapLayer.setId(-1); // using id = -1 to identify the OSM API db source layer in the ui
-            mapLayer.setName("OSM_API_DB_" + HootProperties.getProperty("osmApiDbName"));
+            mapLayer.setName("OSM_API_DB_" + OSM_API_DB_NAME);
             mapLayerList.add(mapLayer);
         }
 

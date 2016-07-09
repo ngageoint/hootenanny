@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.info;
 
+
+import static hoot.services.HootProperties.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,18 +54,11 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 
 
 @Path("/advancedopts")
 public class AdvancedOptResource {
     private static final Logger logger = LoggerFactory.getLogger(AdvancedOptResource.class);
-    private static final String ASCIIDOC_PATH = HootProperties.getProperty("configAsciidocPath");
-    private static final String TEMPLATE_PATH = HootProperties.getProperty("advOptTemplate");
-    private static final String HOME_FOLDER = HootProperties.getProperty("homeFolder");
-    private static final String REF_OVERRIDE_PATH = HootProperties.getProperty("advOptRefOverride");
-    private static final String HORZ_OVERRIDE_PATH = HootProperties.getProperty("advOptHorizontalOverride");
-    private static final String AVE_OVERRIDE_PATH = HootProperties.getProperty("advOptAverageOverride");
 
     private JSONObject doc;
     private JSONArray template;
@@ -189,13 +185,12 @@ public class AdvancedOptResource {
         return "";
     }
 
-    private void generateRule(JSONArray a, JSONObject p) {
+    private void generateRule(JSONArray jsonArray, JSONObject jsonObject) {
         // for each options in template apply the value
-        for (Object o : a) {
+        for (Object o : jsonArray) {
             if (o instanceof JSONObject) {
                 JSONObject curOpt = (JSONObject) o;
-                // first check to see if there is key then apply the asciidoc
-                // val
+                // first check to see if there is key then apply the asciidoc val
                 Object oKey = curOpt.get("hoot_key");
                 if (oKey != null) {
                     String sKey = oKey.toString();
@@ -260,9 +255,9 @@ public class AdvancedOptResource {
                     Object oVal = curOpt.get("hoot_val");
                     if (oVal != null) {
                         String sVal = oVal.toString();
-                        if (p != null) {
+                        if (jsonObject != null) {
                             // parent always have to have hoot_key for hoot_val
-                            Object pKey = p.get("hoot_key");
+                            Object pKey = jsonObject.get("hoot_key");
                             if (pKey != null) {
                                 // try to get default list from parent
                                 String sPKey = pKey.toString();
@@ -432,17 +427,18 @@ public class AdvancedOptResource {
     }
 
     private void parseAsciidoc() throws IOException {
-        try (FileInputStream fstream = new FileInputStream(HOME_FOLDER + "/" + ASCIIDOC_PATH);
-             InputStreamReader istream = new InputStreamReader(fstream);
-             BufferedReader br = new BufferedReader(istream)) {
+        try (FileInputStream fstream = new FileInputStream(HOME_FOLDER + "/" + ASCIIDOC_PATH)) {
+            try (InputStreamReader istream = new InputStreamReader(fstream)) {
+                try (BufferedReader br = new BufferedReader(istream)) {
+                    String strLine;
+                    String curOptName = null;
 
-            String strLine;
-            String curOptName = null;
-
-            // Read File Line By Line
-            while ((strLine = br.readLine()) != null) {
-                // Print the content on the console
-                curOptName = parseLine(strLine, curOptName);
+                    // Read File Line By Line
+                    while ((strLine = br.readLine()) != null) {
+                        // Print the content on the console
+                        curOptName = parseLine(strLine, curOptName);
+                    }
+                }
             }
         }
     }

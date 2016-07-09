@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.services;
 
+import static hoot.services.HootProperties.CORE_SCRIPT_PATH;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+
 import java.io.File;
 import java.sql.Connection;
 import java.util.Collection;
@@ -54,7 +57,6 @@ import org.openstreetmap.osmosis.xml.v0_6.XmlReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.command.CommandResult;
 import hoot.services.command.CommandRunner;
 import hoot.services.command.ICommandRunner;
@@ -64,10 +66,7 @@ import hoot.services.utils.FileUtils;
 
 
 public class TunningService implements Executable {
-
     private static final Logger logger = LoggerFactory.getLogger(TunningService.class);
-    private static final String TEMP_PATH = HootProperties.getProperty("tempOutputPath");
-    private static final String CORE_SCRIPT_PATH = HootProperties.getProperty("coreScriptPath");
 
     private String finalStatusDetail;
     private Double totalSize = 0.0;
@@ -98,7 +97,7 @@ public class TunningService implements Executable {
                 // if the count is greater than threshold then just use it and tell it too big
                 ICommandRunner cmdRunner = new CommandRunner();
 
-                String commandArr = "make -f " + CORE_SCRIPT_PATH + "/makeconvert INPUT=" + input + " OUTPUT=" + TEMP_PATH
+                String commandArr = "make -f " + CORE_SCRIPT_PATH + "/makeconvert INPUT=" + input + " OUTPUT=" + TEMP_OUTPUT_PATH
                         + "/" + input + ".osm";
                 CommandResult result = cmdRunner.exec(commandArr);
 
@@ -110,10 +109,10 @@ public class TunningService implements Executable {
                     throw new Exception(err);
                 }
 
-                tempOutputPath = TEMP_PATH + "/" + input + ".osm";
+                tempOutputPath = TEMP_OUTPUT_PATH + "/" + input + ".osm";
 
                 // fortify fix
-                if (!FileUtils.validateFilePath(TEMP_PATH, tempOutputPath)) {
+                if (!FileUtils.validateFilePath(TEMP_OUTPUT_PATH, tempOutputPath)) {
                     throw new Exception("input can not contain path.");
                 }
             }

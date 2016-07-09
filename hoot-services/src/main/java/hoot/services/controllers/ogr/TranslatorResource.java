@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.ogr;
 
+import static hoot.services.HootProperties.*;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -38,7 +40,6 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.nodeJs.ServerControllerBase;
 
 
@@ -46,22 +47,11 @@ import hoot.services.nodeJs.ServerControllerBase;
 public class TranslatorResource extends ServerControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(TranslatorResource.class);
 
-    private static final String HOME_FOLDER;
-    private static final String TRANSLATION_SERVER_PORT;
-    private static final String TRANSLATION_SERVER_THREAD_COUNT;
-    private static final String TRANSLATION_SERVER_SCRIPT;
     private static final Object procLock = new Object();
     private static final Object portLock = new Object();
 
     private static String currentPort;
     private static Process transProc;
-
-    static {
-        HOME_FOLDER = HootProperties.getProperty("homeFolder");
-        TRANSLATION_SERVER_PORT = HootProperties.getProperty("translationServerPort");
-        TRANSLATION_SERVER_THREAD_COUNT = HootProperties.getProperty("translationServerThreadCount");
-        TRANSLATION_SERVER_SCRIPT = HootProperties.getProperty("translationServerScript");
-    }
 
     public TranslatorResource() {
     }

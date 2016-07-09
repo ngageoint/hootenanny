@@ -31,8 +31,8 @@ import java.sql.Connection;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 
 
@@ -41,8 +41,6 @@ import hoot.services.db.DbUtils;
  */
 public class JobExecutioner extends Thread {
     private static final Logger logger = LoggerFactory.getLogger(JobExecutioner.class);
-
-    private final ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
 
     private final JSONObject command;
     private final String jobId;
@@ -67,7 +65,7 @@ public class JobExecutioner extends Thread {
         try {
             jobStatusManager.addJob(jobId);
 
-            Executable executable = (Executable) appContext.getBean((String) command.get("execImpl"));
+            Executable executable = (Executable) HootProperties.getSpringContext().getBean((String) command.get("execImpl"));
             executable.exec(command);
 
             jobStatusManager.setComplete(jobId, executable.getFinalStatusDetail());

@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.osm;
 
+import static hoot.services.HootProperties.*;
+
 import java.io.IOException;
 
 import javax.ws.rs.Consumes;
@@ -45,7 +47,6 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import hoot.services.HootProperties;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.writers.osm.OsmResponseHeaderGenerator;
 
@@ -106,26 +107,24 @@ public class CapabilitiesResource {
         Element apiElement = responseDoc.createElement("api");
 
         Element versionElement = responseDoc.createElement("version");
-        versionElement.setAttribute("minimum", HootProperties.getPropertyOrDefault("osmVersion"));
-        versionElement.setAttribute("maximum", HootProperties.getPropertyOrDefault("osmVersion"));
+        versionElement.setAttribute("minimum", OSM_VERSION);
+        versionElement.setAttribute("maximum", OSM_VERSION);
         apiElement.appendChild(versionElement);
 
         Element areaElement = responseDoc.createElement("area");
-        areaElement.setAttribute("maximum", HootProperties.getPropertyOrDefault("maxQueryAreaDegrees"));
+        areaElement.setAttribute("maximum", MAX_QUERY_AREA_DEGREES);
         apiElement.appendChild(areaElement);
 
         Element wayNodesElement = responseDoc.createElement("waynodes");
-        wayNodesElement.setAttribute("maximum", HootProperties.getPropertyOrDefault("maximumWayNodes"));
+        wayNodesElement.setAttribute("maximum", MAXIMUM_WAY_NODES);
         apiElement.appendChild(wayNodesElement);
 
         Element changesetsElement = responseDoc.createElement("changesets");
-        changesetsElement.setAttribute("maximum_elements",
-                HootProperties.getPropertyOrDefault("maximumChangesetElements"));
+        changesetsElement.setAttribute("maximum_elements", MAXIMUM_CHANGESET_ELEMENTS);
         apiElement.appendChild(changesetsElement);
 
         Element timeoutElement = responseDoc.createElement("timeout");
-        timeoutElement.setAttribute("seconds", String.valueOf(
-                Integer.parseInt(HootProperties.getPropertyOrDefault("changesetIdleTimeoutMinutes")) * 60));
+        timeoutElement.setAttribute("seconds", String.valueOf(Integer.parseInt(CHANGESET_IDLE_TIMEOUT_MINUTES) * 60));
         apiElement.appendChild(timeoutElement);
 
         Element statusElement = responseDoc.createElement("status");

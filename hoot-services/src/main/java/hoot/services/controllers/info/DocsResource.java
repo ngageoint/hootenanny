@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.info;
 
+import static hoot.services.HootProperties.DOC_NAME;
+import static hoot.services.HootProperties.HOME_FOLDER;
+
 import java.io.File;
 
 import javax.ws.rs.GET;
@@ -38,14 +41,10 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-
 
 @Path("/document")
 public class DocsResource {
     private static final Logger logger = LoggerFactory.getLogger(DocsResource.class);
-    private static final String DOC_NAME = HootProperties.getProperty("documentName");
-    private static final String HOME_FOLDER = HootProperties.getProperty("homeFolder");
 
     public DocsResource() {
     }

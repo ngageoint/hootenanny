@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.HootProperties.*;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -68,25 +70,17 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
 
 
 @Path("/basemap")
 public class BasemapResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(BasemapResource.class);
-    private static final String TILE_SERVER_PATH;
-    private static final String INGEST_STAGING_PATH;
-    private static final String HOME_FOLDER;
     private static final Map<String, String> basemapRasterExt;
 
     static {
-        HOME_FOLDER = HootProperties.getProperty("homeFolder");
-        TILE_SERVER_PATH = HootProperties.getProperty("tileServerPath");
-        INGEST_STAGING_PATH = HootProperties.getProperty("ingestStagingPath");
-
         basemapRasterExt = new HashMap<>();
-        String extStr = HootProperties.getProperty("BasemapRasterExtensions");
+        String extStr = BASEMAP_RASTER_EXTENSIONS;
         String[] extList = extStr.toLowerCase().split(",");
 
         for (String ext : extList) {
@@ -95,18 +89,13 @@ public class BasemapResource extends JobControllerBase {
     }
 
     public BasemapResource() {
-        super(HootProperties.getProperty("BasemapRasterToTiles"));
+        super(BASEMAP_RASTER_TO_TILES);
     }
 
-    public static void createTileServerPath() {
-        try {
-            File file = new File(TILE_SERVER_PATH);
-            if (!file.exists()) {
-                FileUtils.forceMkdir(file);
-            }
-        }
-        catch (IOException iex) {
-            logger.error(iex.getMessage(), iex);
+    public static void createTileServerPath() throws IOException {
+        File file = new File(TILE_SERVER_PATH);
+        if (!file.exists()) {
+            FileUtils.forceMkdir(file);
         }
     }
 

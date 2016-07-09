@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.HootProperties.*;
+
 import java.io.File;
 import java.sql.Connection;
 import java.util.List;
@@ -52,7 +54,6 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.controllers.wfs.WfsManager;
 import hoot.services.db.DataDefinitionManager;
 import hoot.services.db.DbUtils;
@@ -64,15 +65,11 @@ import hoot.services.nativeInterfaces.NativeInterfaceException;
 @Path("/export")
 public class ExportJobResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ExportJobResource.class);
-    private static final String TEMP_OUTPUT_PATH = HootProperties.getProperty("tempOutputPath");
-    private static final String WFS_STORE_DB = HootProperties.getProperty("wfsStoreDb");
-    private static final String HOME_FOLDER = HootProperties.getProperty("homeFolder");
-    private static final String TRANSLATION_EXT_PATH = HootProperties.getProperty("translationExtPath");
 
     private String delPath;
 
     public ExportJobResource() {
-        super(HootProperties.getProperty("ExportScript"));
+        super(EXPORT_SCRIPT);
     }
 
     @PreDestroy
@@ -132,13 +129,10 @@ public class ExportJobResource extends JobControllerBase {
                 arg.put("outputname", jobId);
                 commandArgs.add(arg);
 
-                String userid = HootProperties.getProperty("dbUserId");
-                String pwd = HootProperties.getProperty("dbPassword");
-                String host = HootProperties.getProperty("dbHost");
-                String[] hostParts = host.split(":");
+                String[] hostParts = DB_HOST.split(":");
 
-                String pgUrl = "host='" + hostParts[0] + "' port='" + hostParts[1] + "' user='" + userid
-                        + "' password='" + pwd + "' dbname='" + WFS_STORE_DB + "'";
+                String pgUrl = "host='" + hostParts[0] + "' port='" + hostParts[1] + "' user='" + DB_USER_ID
+                        + "' password='" + DB_PASSWORD + "' dbname='" + WFS_STORE_DB + "'";
 
                 arg = new JSONObject();
                 arg.put("PG_URL", pgUrl);
@@ -210,7 +204,7 @@ public class ExportJobResource extends JobControllerBase {
 
     protected JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, Connection conn)
             throws Exception {
-        if (!Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"))) {
+        if (!Boolean.parseBoolean(OSM_API_DB_ENABLED)) {
             String msg = "Attempted to export to an OSM API database but OSM API database support is disabled";
             throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }

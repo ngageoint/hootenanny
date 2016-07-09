@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.HootProperties.CLIP_DATASET_MAKEFILE_PATH;
+
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -43,15 +45,13 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-
 
 @Path("/clipdataset")
 public class ClipDatasetResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ClipDatasetResource.class);
 
     public ClipDatasetResource() {
-        super(HootProperties.getProperty("ClipDatasetMakefilePath"));
+        super(CLIP_DATASET_MAKEFILE_PATH);
     }
 
     /**

@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.HootProperties.CORE_JOB_SERVER_URL;
+import static hoot.services.HootProperties.INTERNAL_JOB_REQUEST_WAIT_TIME_MILLI;
+
 import java.util.Map;
 import java.util.concurrent.Future;
 
@@ -46,12 +49,9 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-
 
 public class JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(JobControllerBase.class);
-    private static final String CORE_JOB_SERVER_URL = HootProperties.getProperty("coreJobServerUrl");
     private static final int JOB_RES_CONNECTION_TIMEOUT;
 
     protected String processScriptName;
@@ -59,7 +59,7 @@ public class JobControllerBase {
     static {
         int value;
         try {
-            value = Integer.parseInt(HootProperties.getProperty("internalJobRequestWaitTimeMilli"));
+            value = Integer.parseInt(INTERNAL_JOB_REQUEST_WAIT_TIME_MILLI);
         }
         catch (NumberFormatException ignored) {
             value = 3000;

@@ -26,6 +26,8 @@
  */
 package hoot.services.models.osm;
 
+import static hoot.services.HootProperties.MAXIMUM_WAY_NODES;
+
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,7 +53,6 @@ import com.mysema.query.types.path.BooleanPath;
 import com.mysema.query.types.path.NumberPath;
 import com.mysema.query.types.path.SimplePath;
 
-import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.db.DbUtils.nwr_enum;
@@ -359,7 +360,7 @@ public class Way extends Element {
     private void validateWayNodesSize(NodeList wayNodesXml) throws Exception {
         if (entityChangeType != EntityChangeType.DELETE) {
             CurrentWays wayRecord = (CurrentWays) record;
-            long maximumWayNodes = Long.parseLong(HootProperties.getPropertyOrDefault("maximumWayNodes"));
+            long maximumWayNodes = Long.parseLong(MAXIMUM_WAY_NODES);
 
             long numWayNodes = wayNodesXml.getLength();
             if (numWayNodes < 2) {

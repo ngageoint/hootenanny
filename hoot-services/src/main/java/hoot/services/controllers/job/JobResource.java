@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.HootProperties.CHAIN_JOS_STATUS_PING_INTERVAL;
+import static hoot.services.HootProperties.INTERNAL_JOB_THREAD_SIZE;
+
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -56,7 +59,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
@@ -77,8 +79,7 @@ import hoot.services.validators.job.JobFieldsValidator;
 @Path("")
 public class JobResource {
     private static final Logger logger = LoggerFactory.getLogger(JobResource.class);
-    private static final ClassPathXmlApplicationContext appContext;
-    private static final long CHAIN_JOS_STATUS_PING_INTERVAL;
+    private static final long CHAIN_JOS_STATUS_PING_INTERVAL_VALUE;
 
     // Thread pool for chain and job processor
     private static final ExecutorService jobThreadExecutor;
@@ -89,16 +90,15 @@ public class JobResource {
 
 
     static {
-        appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
-        jobExecMan = ((JobExecutionManager) appContext.getBean("jobExecutionManagerNative"));
+        jobExecMan = ((JobExecutionManager) HootProperties.getSpringContext().getBean("jobExecutionManagerNative"));
 
-        Long value = Long.parseLong(HootProperties.getProperty("chainJosStatusPingInterval"));
+        Long value = Long.parseLong(CHAIN_JOS_STATUS_PING_INTERVAL);
 
-        CHAIN_JOS_STATUS_PING_INTERVAL = (value < 1000) ? 1000 : value;
+        CHAIN_JOS_STATUS_PING_INTERVAL_VALUE = (value < 1000) ? 1000 : value;
 
         int threadpoolSize = 5;
         try {
-            threadpoolSize = Integer.parseInt(HootProperties.getProperty("internalJobThreadSize"));
+            threadpoolSize = Integer.parseInt(INTERNAL_JOB_THREAD_SIZE);
         }
         catch (NumberFormatException ignored) {
             logger.error("Failed to get internalJobThreadSize. Setting threadpool size to 5.");
@@ -337,7 +337,7 @@ public class JobResource {
                 }
                 if (!isDone) {
                     try {
-                        Thread.sleep(CHAIN_JOS_STATUS_PING_INTERVAL);
+                        Thread.sleep(CHAIN_JOS_STATUS_PING_INTERVAL_VALUE);
                     }
                     catch (InterruptedException ignored) {
                         //

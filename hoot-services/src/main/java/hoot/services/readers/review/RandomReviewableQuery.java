@@ -26,6 +26,9 @@
  */
 package hoot.services.readers.review;
 
+import static hoot.services.HootProperties.RANDOM_QUERY_SEED;
+import static hoot.services.HootProperties.SEED_RANDOM_QUERIES;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,7 +37,6 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.models.review.ReviewQueryMapper;
 import hoot.services.models.review.ReviewableItem;
 
@@ -49,8 +51,8 @@ class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQu
         // random(), it is better moved to
         // a more centralized location. Given that this is the only class
         // using random() in a SQL query so far, no harm is done for the time being.
-        if (Boolean.parseBoolean(HootProperties.getPropertyOrDefault("seedRandomQueries"))) {
-            double seed = Double.parseDouble(HootProperties.getPropertyOrDefault("randomQuerySeed"));
+        if (Boolean.parseBoolean(SEED_RANDOM_QUERIES)) {
+            double seed = Double.parseDouble(RANDOM_QUERY_SEED);
 
             if ((seed >= -1.0) && (seed <= 1.0)) {
                 try (Statement stmt = super.getConnection().createStatement()) {

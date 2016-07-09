@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.HootProperties.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -61,7 +63,6 @@ import org.mozilla.javascript.ScriptableObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.ingest.ModifyScriptsRequest;
 import hoot.services.ingest.Script;
 import hoot.services.ingest.ScriptsModifiedResponse;
@@ -71,22 +72,11 @@ import hoot.services.utils.CaseInsensitiveStringList;
 @Path("/customscript")
 public class CustomScriptResource {
     private static final Logger logger = LoggerFactory.getLogger(CustomScriptResource.class);
-    private static final String SCRIPT_FOLDER;
-    private static final String HOME_FOLDER;
-    private static final String JS_HEADER_SCRIPT_PATH;
-    private static final String DEFAULT_TRANSLATIONS_CONFIG;
-    private static final String DEFAULT_FOUO_TRANSLATIONS_CONFIG;
     private static final boolean FOUO_TRANSLATIONS_EXIST;
     private static final String HEADER_START = "/*<<<";
     private static final String HEADER_END = ">>>*/" + System.lineSeparator();
 
     static {
-        HOME_FOLDER = HootProperties.getProperty("homeFolder");
-        JS_HEADER_SCRIPT_PATH = HootProperties.getProperty("dummyjsHeaderScriptPath");
-        SCRIPT_FOLDER = HootProperties.getProperty("customScriptPath");
-        DEFAULT_TRANSLATIONS_CONFIG = HootProperties.getProperty("defaultTranslationsConfig");
-        DEFAULT_FOUO_TRANSLATIONS_CONFIG = HootProperties.getProperty("defaultFOUOTranslationsConfig");
-
         if ((new File(DEFAULT_FOUO_TRANSLATIONS_CONFIG)).exists()) {
             FOUO_TRANSLATIONS_EXIST = true;
             logger.info("FOUO translations are present.");
@@ -101,11 +91,11 @@ public class CustomScriptResource {
      *
      * @return a directory
      */
-    private File getUploadDir() {
+    private static File getUploadDir() {
         return new File(SCRIPT_FOLDER);
     }
 
-    private boolean uploadDirExists() {
+    private static boolean uploadDirExists() {
         return getUploadDir().exists();
     }
 
@@ -147,8 +137,8 @@ public class CustomScriptResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public Response processSave(String script,
-                                @QueryParam("SCRIPT_NAME") String scriptName,
-                                @QueryParam("SCRIPT_DESCRIPTION") String scriptDescription) {
+            @QueryParam("SCRIPT_NAME") String scriptName,
+            @QueryParam("SCRIPT_DESCRIPTION") String scriptDescription) {
         JSONArray saveArr = new JSONArray();
 
         try {
@@ -257,9 +247,9 @@ public class CustomScriptResource {
      * and default translations.
      *
      * @return JSONArray of translation objects
-     * @throws Exception
+     * @throws IOException, ParseException
      */
-    private static JSONArray getDefaultList(List<String> configFiles) throws Exception {
+    private static JSONArray getDefaultList(List<String> configFiles) throws IOException, ParseException {
         JSONArray filesList = new JSONArray();
         
         for (String configFile : configFiles) {
@@ -573,8 +563,9 @@ public class CustomScriptResource {
         return response;
     }
 
-    private JSONObject getScriptObject(String content) throws ParseException {
+    private static JSONObject getScriptObject(String content) throws ParseException {
         JSONObject script = new JSONObject();
+
         if (content.startsWith(HEADER_START)) {
             int iHeader = content.indexOf(HEADER_END);
             if (iHeader > 0) {
@@ -593,19 +584,22 @@ public class CustomScriptResource {
                 }
             }
         }
+
         return null;
     }
 
-    private List<File> getFilesInScriptDir() throws IOException {
+    private static List<File> getFilesInScriptDir() throws IOException {
         if (!uploadDirExists()) {
             FileUtils.forceMkdir(getUploadDir());
         }
+
         String[] exts = { "js" };
         File scriptsDir = new File(SCRIPT_FOLDER);
+
         return (List<File>) FileUtils.listFiles(scriptsDir, exts, false);
     }
 
-    private JSONObject saveScript(String name, String description, String content) throws Exception {
+    private static JSONObject saveScript(String name, String description, String content) throws Exception {
         if (StringUtils.trimToNull(name) == null) {
             logger.error("Invalid input script name: {}", name);
             return null;
@@ -651,7 +645,7 @@ public class CustomScriptResource {
 
     // This function checks to see if the script has both getDbSchema and
     // translateToOgr which indicates if it can export
-    private static boolean validateExport(String script) throws Exception {
+    private static boolean validateExport(String script) throws IOException {
         boolean canExport = false;
         Context context = Context.enter();
         try {
@@ -663,14 +657,16 @@ public class CustomScriptResource {
             scope.put("scope", scope, scope);
             scope.put("APP_ROOT", scope, HOME_FOLDER);
 
-            try (FileReader frHeader = new FileReader(JS_HEADER_SCRIPT_PATH);
-                 BufferedReader jsHeader = new BufferedReader(frHeader)) {
-                context.evaluateReader(scope, jsHeader, "jsHeader", 1, null);
+            try (FileReader frHeader = new FileReader(JS_HEADER_SCRIPT_PATH)) {
+                try (BufferedReader jsHeader = new BufferedReader(frHeader)) {
+                    context.evaluateReader(scope, jsHeader, "jsHeader", 1, null);
+                }
             }
 
-            try (StringReader sr = new StringReader(script);
-                 BufferedReader translation_script = new BufferedReader(sr)) {
-                context.evaluateReader(scope, translation_script, "translation_script", 1, null);
+            try (StringReader sr = new StringReader(script)) {
+                try (BufferedReader translation_script = new BufferedReader(sr)) {
+                    context.evaluateReader(scope, translation_script, "translation_script", 1, null);
+                }
             }
 
             // call getDbSchema call any required preloading functions
@@ -686,11 +682,12 @@ public class CustomScriptResource {
             canExport = getDbSchemaExist && translateToOgrExist;
         }
         catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage());
             if (ex instanceof EvaluatorException) {
                 throw ex;
             }
         }
+
         finally {
             Context.exit();
         }

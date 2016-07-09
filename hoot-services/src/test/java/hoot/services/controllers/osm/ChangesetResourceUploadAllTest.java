@@ -26,7 +26,9 @@
  */
 package hoot.services.controllers.osm;
 
-import static org.hamcrest.Matchers.*;
+import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -56,7 +58,6 @@ import com.mysema.query.sql.SQLQuery;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
 import hoot.services.db.postgres.PostgresUtils;
@@ -73,10 +74,10 @@ import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
-import hoot.services.geo.QuadTileCalculator;
 import hoot.services.models.osm.Changeset;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.utils.XmlUtils;
 
@@ -891,7 +892,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(new Long(userId), changeset.getUserId());
 
             BoundingBox expandedBounds = new BoundingBox();
-            double boundsExpansionFactor = Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"));
+            double boundsExpansionFactor = Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES);
             expandedBounds.expand(originalBounds, boundsExpansionFactor);
             expandedBounds.expand(updatedBounds, boundsExpansionFactor);
             Changeset hootChangeset = new Changeset(mapId, changesetId, conn);

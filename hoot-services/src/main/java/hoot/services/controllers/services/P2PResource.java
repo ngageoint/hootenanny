@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.services;
 
+import static hoot.services.HootProperties.*;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -38,16 +40,11 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.nodeJs.ServerControllerBase;
 
 
 public class P2PResource extends ServerControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(P2PResource.class);
-    private static final String HOME_FOLDER = HootProperties.getProperty("homeFolder");
-    private static final String P_2_P_SERVER_PORT = HootProperties.getProperty("P2PServerPort");
-    private static final String P_2_P_SERVER_THREAD_COUNT = HootProperties.getProperty("P2PServerThreadCount");
-    private static final String P_2_P_SERVER_SCRIPT = HootProperties.getProperty("P2PServerScript");
     private static final Object procLock = new Object();
     private static final Object portLock = new Object();
 

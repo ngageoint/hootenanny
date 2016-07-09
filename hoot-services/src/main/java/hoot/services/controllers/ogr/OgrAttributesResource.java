@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.ogr;
 
+import static hoot.services.HootProperties.GET_OGR_ATTRIBUTE_SCRIPT;
+import static hoot.services.HootProperties.HOME_FOLDER;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -57,7 +60,6 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.ingest.MultipartSerializer;
 
@@ -65,10 +67,9 @@ import hoot.services.ingest.MultipartSerializer;
 @Path("/info")
 public class OgrAttributesResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(OgrAttributesResource.class);
-    private static final String HOME_FOLDER = HootProperties.getProperty("homeFolder");
 
     public OgrAttributesResource() {
-        super(HootProperties.getProperty("GetOgrAttributeScript"));
+        super(GET_OGR_ATTRIBUTE_SCRIPT);
     }
 
     /**

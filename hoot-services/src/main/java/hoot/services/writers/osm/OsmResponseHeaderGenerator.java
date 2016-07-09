@@ -26,10 +26,10 @@
  */
 package hoot.services.writers.osm;
 
+import static hoot.services.HootProperties.*;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import hoot.services.HootProperties;
 
 
 /**
@@ -48,9 +48,9 @@ public final class OsmResponseHeaderGenerator {
      */
     public static Element getOsmDataHeader(Document document) {
         Element osmElement = getOsmHeader(document);
-        osmElement.setAttribute("copyright", HootProperties.getPropertyOrDefault("copyright"));
-        osmElement.setAttribute("attribution", HootProperties.getPropertyOrDefault("attribution"));
-        osmElement.setAttribute("license", HootProperties.getPropertyOrDefault("license"));
+        osmElement.setAttribute("copyright", COPYRIGHT);
+        osmElement.setAttribute("attribution", ATTRIBUTION);
+        osmElement.setAttribute("license", LICENSE);
         return osmElement;
     }
 
@@ -63,8 +63,8 @@ public final class OsmResponseHeaderGenerator {
      */
     public static Element getOsmHeader(Document document) {
         Element osmElement = document.createElement("osm");
-        osmElement.setAttribute("version", HootProperties.getPropertyOrDefault("osmVersion"));
-        osmElement.setAttribute("generator", HootProperties.getProperty("generator"));
+        osmElement.setAttribute("version", OSM_VERSION);
+        osmElement.setAttribute("generator", GENERATOR);
         return osmElement;
     }
 }

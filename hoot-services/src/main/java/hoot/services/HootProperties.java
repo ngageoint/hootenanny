@@ -34,12 +34,93 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 
 /**
  * Services configuration file
  */
 public final class HootProperties {
     private static final Properties properties;
+    private static final ApplicationContext springContext;
+
+    public static final String HOME_FOLDER;
+    public static final String ASCIIDOC_PATH;
+    public static final String TEMPLATE_PATH;
+    public static final String REF_OVERRIDE_PATH;
+    public static final String HORZ_OVERRIDE_PATH;
+    public static final String AVE_OVERRIDE_PATH;
+    public static final String DOC_NAME;
+    public static final String RPT_STORE_PATH;
+    public static final String TILE_SERVER_PATH;
+    public static final String INGEST_STAGING_PATH;
+    public static final String JS_HEADER_SCRIPT_PATH;
+    public static final String SCRIPT_FOLDER;
+    public static final String DEFAULT_TRANSLATIONS_CONFIG;
+    public static final String DEFAULT_FOUO_TRANSLATIONS_CONFIG;
+    public static final String CORE_SCRIPT_PATH;
+    public static final String ERROR_LOG_PATH;
+    public static final String TEMP_OUTPUT_PATH;
+    public static final String WFS_STORE_CONN_NAME;
+    public static final String WFS_STORE_DB;
+    public static final String P_2_P_SERVER_PORT;
+    public static final String P_2_P_SERVER_THREAD_COUNT;
+    public static final String P_2_P_SERVER_SCRIPT;
+    public static final String TRANSLATION_SERVER_PORT;
+    public static final String TRANSLATION_SERVER_THREAD_COUNT;
+    public static final String TRANSLATION_SERVER_SCRIPT;
+    public static final String TRANSLATION_EXT_PATH;
+    public static final String CORE_JOB_SERVER_URL;
+    public static final String INTERNAL_JOB_REQUEST_WAIT_TIME_MILLI;
+    public static final String DB_NAME;
+    public static final String DB_USER_ID;
+    public static final String DB_PASSWORD;
+    public static final String DB_HOST;
+    public static final String HGIS_FILTER_SCRIPT;
+    public static final String CONFLATE_SIZE_THRESHOLD;
+    public static final String INGEST_SIZE_THRESHOLD;
+    public static final String EXPORT_SIZE_THRESHOLD;
+    public static final String ETL_MAKEFILE;
+    public static final String OSM_API_DB_NAME;
+    public static final String OSM_API_DB_USER_ID;
+    public static final String OSM_API_DB_PASSWORD;
+    public static final String OSM_API_DB_HOST;
+    public static final String EXPORT_SCRIPT;
+    public static final String OSM_API_DB_ENABLED;
+    public static final String MAP_QUERY_DIMENSIONS;
+    public static final String MAP_QUERY_AREA_DEGREES;
+    public static final String MAX_QUERY_NODES;
+    public static final String HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
+    public static final String CLIP_DATASET_MAKEFILE_PATH;
+    public static final String GET_OGR_ATTRIBUTE_SCRIPT;
+    public static final String RASTER_TO_TILES;
+    public static final String BASEMAP_RASTER_EXTENSIONS;
+    public static final String BASEMAP_RASTER_TO_TILES;
+    public static final String LOG_PROPS_DYNAMIC_CHANGE_SCAN_INTERVAL;
+    public static final String CONFLATE_MAKEFILE_PATH;
+    public static final String CLEAN_DATA_MAKEFILE_PATH;
+    public static final String AUTO_SCAN_FOR_LOG_PROPS_CHANGES;
+    public static final String COPYRIGHT;
+    public static final String ATTRIBUTION;
+    public static final String LICENSE;
+    public static final String OSM_VERSION;
+    public static final String GENERATOR;
+    public static final String MAX_QUERY_AREA_DEGREES;
+    public static final String MAXIMUM_WAY_NODES;
+    public static final String MAXIMUM_CHANGESET_ELEMENTS;
+    public static final String CHANGESET_IDLE_TIMEOUT_MINUTES;
+    public static final String CHANGESET_MAX_OPEN_TIME_HOURS;
+    public static final String CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
+    public static final String MAX_RECORD_BATCH_SIZE;
+    public static final String TEST_CHANGESET_AUTO_CLOSE;
+    public static final String RANDOM_QUERY_SEED;
+    public static final String SEED_RANDOM_QUERIES;
+    public static final String CHAIN_JOS_STATUS_PING_INTERVAL;
+    public static final String INTERNAL_JOB_THREAD_SIZE;
+    public static final String TEST_JOB_STATUS_POLLER_TIMEOUT;
+    public static final String GRIZZLY_PORT;
+    public static final String TRANSLATION_SCRIPT_PATH;
 
     static {
         try {
@@ -69,6 +150,85 @@ public final class HootProperties {
         catch (IOException ioe) {
             throw new RuntimeException("Error loading Hootenanny's configuation!", ioe);
         }
+
+        springContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
+
+        HOME_FOLDER = getProperty("homeFolder");
+        ASCIIDOC_PATH = getProperty("configAsciidocPath");
+        TEMPLATE_PATH = getProperty("advOptTemplate");
+        REF_OVERRIDE_PATH = getProperty("advOptRefOverride");
+        HORZ_OVERRIDE_PATH = getProperty("advOptHorizontalOverride");
+        AVE_OVERRIDE_PATH = getProperty("advOptAverageOverride");
+        DOC_NAME = getProperty("documentName");
+        RPT_STORE_PATH = getProperty("reportDataPath");
+        TILE_SERVER_PATH = getProperty("tileServerPath");
+        INGEST_STAGING_PATH = getProperty("ingestStagingPath");
+        JS_HEADER_SCRIPT_PATH = getProperty("dummyjsHeaderScriptPath");
+        SCRIPT_FOLDER = getProperty("customScriptPath");
+        DEFAULT_TRANSLATIONS_CONFIG = getProperty("defaultTranslationsConfig");
+        DEFAULT_FOUO_TRANSLATIONS_CONFIG = getProperty("defaultFOUOTranslationsConfig");
+        CORE_SCRIPT_PATH = getProperty("coreScriptPath");
+        ERROR_LOG_PATH = getProperty("ErrorLogPath");
+        TEMP_OUTPUT_PATH = getProperty("tempOutputPath");
+        WFS_STORE_CONN_NAME = getProperty("wfsStoreConnName");
+        WFS_STORE_DB = getProperty("wfsStoreDb");
+        P_2_P_SERVER_PORT = getProperty("P2PServerPort");
+        P_2_P_SERVER_THREAD_COUNT = getProperty("P2PServerThreadCount");
+        P_2_P_SERVER_SCRIPT = getProperty("P2PServerScript");
+        TRANSLATION_SERVER_PORT = getProperty("translationServerPort");
+        TRANSLATION_SERVER_THREAD_COUNT = getProperty("translationServerThreadCount");
+        TRANSLATION_SERVER_SCRIPT = getProperty("translationServerScript");
+        TRANSLATION_EXT_PATH = getProperty("translationExtPath");
+        CORE_JOB_SERVER_URL = getProperty("coreJobServerUrl");
+        INTERNAL_JOB_REQUEST_WAIT_TIME_MILLI = getProperty("internalJobRequestWaitTimeMilli");
+        DB_NAME = getProperty("dbName");
+        DB_USER_ID = getProperty("dbUserId");
+        DB_PASSWORD = getProperty("dbPassword");
+        DB_HOST = getProperty("dbHost");
+        HGIS_FILTER_SCRIPT = getProperty("hgisFilterScript");
+        CONFLATE_SIZE_THRESHOLD = getProperty("conflateSizeThreshold");
+        INGEST_SIZE_THRESHOLD = getProperty("ingestSizeThreshold");
+        EXPORT_SIZE_THRESHOLD = getProperty("exportSizeThreshold");
+        ETL_MAKEFILE = getProperty("ETLMakefile");
+        OSM_API_DB_NAME = getProperty("osmApiDbName");
+        OSM_API_DB_USER_ID = getProperty("osmApiDbUserId");
+        OSM_API_DB_PASSWORD = getProperty("osmApiDbPassword");
+        OSM_API_DB_HOST = getProperty("osmApiDbHost");
+        EXPORT_SCRIPT = getProperty("ExportScript");
+        OSM_API_DB_ENABLED = getProperty("osmApiDbEnabled");
+        MAP_QUERY_DIMENSIONS = getProperty("mapQueryDimensions");
+        MAP_QUERY_AREA_DEGREES = getProperty("maxQueryAreaDegrees");
+        MAX_QUERY_NODES = getProperty("maxQueryNodes");
+        HGIS_PREPARE_FOR_VALIDATION_SCRIPT = getProperty("hgisPrepareForValidationScript");
+        CLIP_DATASET_MAKEFILE_PATH = getProperty("ClipDatasetMakefilePath");
+        GET_OGR_ATTRIBUTE_SCRIPT = getProperty("GetOgrAttributeScript");
+        RASTER_TO_TILES = getProperty("RasterToTiles");
+        BASEMAP_RASTER_EXTENSIONS = getProperty("BasemapRasterExtensions");
+        BASEMAP_RASTER_TO_TILES = getProperty("BasemapRasterToTiles");
+        LOG_PROPS_DYNAMIC_CHANGE_SCAN_INTERVAL = getProperty("logPropsDynamicChangeScanInterval");
+        CONFLATE_MAKEFILE_PATH = getProperty("ConflateMakefilePath");
+        CLEAN_DATA_MAKEFILE_PATH = getProperty("cleanDataMakePath");
+        AUTO_SCAN_FOR_LOG_PROPS_CHANGES = getProperty("autoScanForLogPropsChanges");
+        COPYRIGHT = getProperty("copyright");
+        ATTRIBUTION = getProperty("attribution");
+        LICENSE = getProperty("license");
+        OSM_VERSION = getProperty("osmVersion");
+        GENERATOR = getProperty("generator");
+        MAX_QUERY_AREA_DEGREES = getProperty("maxQueryAreaDegrees");
+        MAXIMUM_WAY_NODES = getProperty("maximumWayNodes");
+        MAXIMUM_CHANGESET_ELEMENTS = getProperty("maximumChangesetElements");
+        CHANGESET_IDLE_TIMEOUT_MINUTES = getProperty("changesetIdleTimeoutMinutes");
+        CHANGESET_MAX_OPEN_TIME_HOURS = getProperty("changesetMaxOpenTimeHours");
+        CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES = getProperty("changesetBoundsExpansionFactorDeegrees");
+        MAX_RECORD_BATCH_SIZE = getProperty("maxRecordBatchSize");
+        TEST_CHANGESET_AUTO_CLOSE = getProperty("testChangesetAutoClose");
+        RANDOM_QUERY_SEED = getProperty("randomQuerySeed");
+        SEED_RANDOM_QUERIES = getProperty("seedRandomQueries");
+        CHAIN_JOS_STATUS_PING_INTERVAL = getProperty("chainJosStatusPingInterval");
+        INTERNAL_JOB_THREAD_SIZE = getProperty("internalJobThreadSize");
+        TEST_JOB_STATUS_POLLER_TIMEOUT = getProperty("testJobStatusPollerTimeout");
+        GRIZZLY_PORT = getProperty("grizzlyPort");
+        TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");
     }
 
     private HootProperties() {
@@ -81,7 +241,7 @@ public final class HootProperties {
      *
      * @param key
      */
-    public static String getProperty(String key) {
+    private static String getProperty(String key) {
         StringBuilder sFullProp = new StringBuilder();
         String sProp = properties.getProperty(key, "");
         String[] parts = sProp.split("\\$");
@@ -99,7 +259,7 @@ public final class HootProperties {
                         sToken = getProperty(token);
                     }
 
-                    if ((sToken == null) || (sToken.isEmpty())) {
+                    if (sToken.isEmpty()) {
                         // if not get it from env
                         Map<String, String> env = System.getenv();
                         sToken = env.get(token);
@@ -125,85 +285,6 @@ public final class HootProperties {
         return sFullProp.toString();
     }
 
-    public static String getPropertyOrDefault(String key) {
-        String value = getProperty(key);
-        if ((value == null) || value.isEmpty()) {
-            value = getDefault(key);
-        }
-        return value;
-    }
-
-    /**
-     * Determines reasonable default properties in case the server config file
-     * is missing
-     *
-     * @param key
-     *            property key
-     * @return a property value
-     */
-    public static String getDefault(String key) {
-        switch (key) {
-            case "osmVersion":
-                return "0.6";
-            case "generator":
-                return "Hootenanny server";
-            case "copyright":
-                return "?";
-            case "attribution":
-                return "?";
-            case "license":
-                return "?";
-            case "maxQueryAreaDegrees":
-                return "0.25";
-            case "maxQueryNodes":
-                return "50000";
-            case "mapQueryDimensions":
-                return "2";
-            case "maximumChangesetElements":
-                return "50000";
-            case "maximumWayNodes":
-                return "2000";
-            case "changesetBoundsExpansionFactorDeegrees":
-                return "0.1";
-            case "changesetIdleTimeoutMinutes":
-                return "60";
-            case "changesetMaxOpenTimeHours":
-                return "24";
-            case "debugSql":
-                return "false";
-            case "testChangesetAutoClose":
-                return "false";
-            case "coreScriptPath":
-                return "/project/hoot/scripts";
-            case "coreScriptOutputPath":
-                return "";
-            case "coreJobServerUrl":
-                return "http://localhost:8080";
-            case "ETLMakefile":
-                return "makeetl";
-            case "grizzlyPort":
-                return "9998";
-            case "maxRecordBatchSize":
-                return "5000";
-            case "testJobStatusPollerTimeout":
-                return "250";
-            case "servicesTestClearEntireDb":
-                return "false";
-            case "logPropsDynamicChangeScanInterval":
-                return "1";
-            case "autoScanForLogPropsChanges":
-                return "true";
-            case "maxWarningsDisplayed":
-                return "10";
-            case "seedRandomQueries":
-                return "false";
-            case "randomQuerySeed":
-                return "0.1";
-            default:
-                return null;
-        }
-    }
-
     public static Map<String, String> getProperties() {
         Map<String, String> props = new TreeMap<>();
 
@@ -212,5 +293,9 @@ public final class HootProperties {
         }
 
         return Collections.unmodifiableMap(props);
+    }
+
+    public static ApplicationContext getSpringContext() {
+        return springContext;
     }
 }

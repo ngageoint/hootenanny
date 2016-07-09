@@ -26,6 +26,8 @@
  */
 package hoot.services.validators.job;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
+
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -37,8 +39,6 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-
 
 public class JobFieldsValidator {
     private static final Logger logger = LoggerFactory.getLogger(JobFieldsValidator.class);
@@ -47,7 +47,7 @@ public class JobFieldsValidator {
     private final String resourceName;
 
     static {
-        META_DATA_PATH = HootProperties.getProperty("homeFolder") + "/scripts/services_fields_metadata.json";
+        META_DATA_PATH = HOME_FOLDER + "/scripts/services_fields_metadata.json";
         try {
             try (FileReader fReader = new FileReader(META_DATA_PATH)) {
                 JSONParser parser = new JSONParser();

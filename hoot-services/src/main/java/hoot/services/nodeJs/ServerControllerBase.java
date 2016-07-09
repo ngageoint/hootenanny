@@ -134,7 +134,6 @@ public class ServerControllerBase {
                         while ((s = stdInput.readLine()) != null) {
                             logger.info(s);
                             if (doSendToStdout) {
-                                //noinspection UseOfSystemOutOrSystemErr
                                 System.out.println(s);
                             }
                         }
@@ -142,7 +141,6 @@ public class ServerControllerBase {
                         while ((s = stdError.readLine()) != null) {
                             logger.error(s);
                             if (doSendToStdout) {
-                                //noinspection UseOfSystemOutOrSystemErr
                                 System.out.println(s);
                             }
                         }

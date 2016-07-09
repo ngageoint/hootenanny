@@ -35,8 +35,11 @@ import org.slf4j.LoggerFactory;
 import hoot.services.geo.BoundingBox;
 
 
-class ReviewableQueryFactory {
+final class ReviewableQueryFactory {
     private static final Logger logger = LoggerFactory.getLogger(ReviewableQueryFactory.class);
+
+    private ReviewableQueryFactory() {
+    }
 
     static IReviewableQuery getReviewableQuery(Connection connection, long mapid, long seqid) {
         return new ReviewableQuery(connection, mapid, seqid);

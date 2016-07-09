@@ -52,8 +52,8 @@ import hoot.services.db2.CurrentNodes;
 import hoot.services.exceptions.osm.OSMAPIAlreadyDeletedException;
 import hoot.services.exceptions.osm.OSMAPIPreconditionException;
 import hoot.services.geo.BoundingBox;
-import hoot.services.geo.GeoUtils;
-import hoot.services.geo.QuadTileCalculator;
+import hoot.services.utils.GeoUtils;
+import hoot.services.utils.QuadTileCalculator;
 
 
 /**

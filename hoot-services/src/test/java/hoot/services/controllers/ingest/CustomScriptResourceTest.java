@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.HootProperties.*;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -36,8 +38,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 import java.util.Scanner;
 
 import javax.ws.rs.WebApplicationException;
@@ -56,7 +56,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.ingest.ModifyScriptsRequest;
 import hoot.services.ingest.Script;
@@ -73,21 +72,25 @@ import hoot.services.utils.HootCustomPropertiesSetter;
 public class CustomScriptResourceTest {
     private static File homefolder;
     private static File customScriptFolder;
-    private static Map<String, String> originalHootProperties;
+    private static final String original_HOME_FOLDER;
+    private static final String original_SCRIPT_FOLDER;
+    private static final String original_JS_HEADER_SCRIPT_PATH;
+    private static final String original_DEFAULT_TRANSLATIONS_CONFIG;
+    private static final String original_TRANSLATION_SCRIPT_PATH;
 
     static {
         try {
-            originalHootProperties = HootProperties.getProperties();
-
+            original_HOME_FOLDER = HOME_FOLDER;
             homefolder = new File(FileUtils.getTempDirectory(), "CustomScriptResourceTest");
             FileUtils.forceMkdir(homefolder);
             Assert.assertTrue(homefolder.exists());
-            HootCustomPropertiesSetter.setProperty("homefolder", homefolder.getAbsolutePath());
+            HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homefolder.getAbsolutePath());
 
+            original_SCRIPT_FOLDER = SCRIPT_FOLDER;
             customScriptFolder = new File(homefolder, "customscript");
             FileUtils.forceMkdir(customScriptFolder);
             Assert.assertTrue(customScriptFolder.exists());
-            HootCustomPropertiesSetter.setProperty("customScriptPath", customScriptFolder.getAbsolutePath());
+            HootCustomPropertiesSetter.setProperty("SCRIPT_FOLDER", customScriptFolder.getAbsolutePath());
 
             File scriptsFolder = new File(homefolder, "scripts");
             FileUtils.forceMkdir(scriptsFolder);
@@ -95,22 +98,25 @@ public class CustomScriptResourceTest {
 
             //dummyjsHeaderScriptPath=$(homeFolder)/scripts/empty_rh.js
 
+            original_JS_HEADER_SCRIPT_PATH = JS_HEADER_SCRIPT_PATH;
             URL inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/empty_rh.js");
             File dest = new File(scriptsFolder.getAbsolutePath(), "empty_rh.js");
             FileUtils.copyURLToFile(inputUrl, dest);
-            HootCustomPropertiesSetter.setProperty("dummyjsHeaderScriptPath", dest.getAbsolutePath());
+            HootCustomPropertiesSetter.setProperty("JS_HEADER_SCRIPT_PATH", dest.getAbsolutePath());
 
             File confFolder = new File(homefolder, "conf");
             FileUtils.forceMkdir(confFolder);
             Assert.assertTrue(confFolder.exists());
 
+            original_DEFAULT_TRANSLATIONS_CONFIG = DEFAULT_TRANSLATIONS_CONFIG;
             inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/DefaultTranslations.json");
             dest = new File(confFolder, "DefaultTranslations.json");
             FileUtils.copyURLToFile(inputUrl, dest);
-            HootCustomPropertiesSetter.setProperty("defaultTranslationsConfig", dest.getAbsolutePath());
+            HootCustomPropertiesSetter.setProperty("DEFAULT_TRANSLATIONS_CONFIG", dest.getAbsolutePath());
 
             //translationScriptPath=$(homeFolder)/translations
 
+            original_TRANSLATION_SCRIPT_PATH = TRANSLATION_SCRIPT_PATH;
             File translationsFolder = new File(homefolder, "translations");
             FileUtils.forceMkdir(translationsFolder);
             Assert.assertTrue(translationsFolder.exists());
@@ -135,7 +141,7 @@ public class CustomScriptResourceTest {
             dest = new File(translationsFolder, "GeoNames.js");
             FileUtils.copyURLToFile(inputUrl, dest);
 
-            HootCustomPropertiesSetter.setProperty("translationScriptPath", translationsFolder.getAbsolutePath());
+            HootCustomPropertiesSetter.setProperty("TRANSLATION_SCRIPT_PATH", translationsFolder.getAbsolutePath());
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -149,11 +155,11 @@ public class CustomScriptResourceTest {
     @AfterClass
     public static void oneTimeTearDown() throws Exception {
         FileUtils.deleteDirectory(homefolder);
-        Properties origProperties = new Properties();
-        for (Map.Entry<String, String> entry : originalHootProperties.entrySet()) {
-            origProperties.setProperty(entry.getKey(), entry.getValue());
-        }
-        HootCustomPropertiesSetter.setProperties(origProperties);
+        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", original_HOME_FOLDER);
+        HootCustomPropertiesSetter.setProperty("DEFAULT_TRANSLATIONS_CONFIG", original_DEFAULT_TRANSLATIONS_CONFIG);
+        HootCustomPropertiesSetter.setProperty("JS_HEADER_SCRIPT_PATH", original_JS_HEADER_SCRIPT_PATH);
+        HootCustomPropertiesSetter.setProperty("SCRIPT_FOLDER", original_SCRIPT_FOLDER);
+        HootCustomPropertiesSetter.setProperty("TRANSLATION_SCRIPT_PATH", original_TRANSLATION_SCRIPT_PATH);
     }
 
     @Before
@@ -670,7 +676,7 @@ public class CustomScriptResourceTest {
         getDefaultListMethod.setAccessible(true);
 
         List<String> configFiles = new ArrayList<>();
-        configFiles.add(HootProperties.getProperty("defaultTranslationsConfig"));
+        configFiles.add(DEFAULT_TRANSLATIONS_CONFIG);
         JSONArray trans = (JSONArray) getDefaultListMethod.invoke(null, configFiles);
 
         for (Object o : trans) {

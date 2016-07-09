@@ -38,6 +38,7 @@ import org.w3c.dom.Node;
 
 import hoot.services.db2.CurrentNodes;
 import hoot.services.geo.zindex.Box;
+import hoot.services.utils.GeoUtils;
 
 
 /**

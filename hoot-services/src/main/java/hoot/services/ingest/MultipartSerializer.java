@@ -26,6 +26,8 @@
  */
 package hoot.services.ingest;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,12 +49,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-
 
 public class MultipartSerializer {
     private static final Logger logger = LoggerFactory.getLogger(MultipartSerializer.class);
-    private static final String HOME_FOLDER = HootProperties.getProperty("homeFolder");
 
     protected void serializeFGDB(List<FileItem> fileItemsList, String jobId, Map<String, String> uploadedFiles,
             Map<String, String> uploadedFilesPaths) throws Exception {

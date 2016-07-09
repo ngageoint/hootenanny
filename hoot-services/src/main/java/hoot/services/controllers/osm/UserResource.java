@@ -73,7 +73,6 @@ public class UserResource {
     private static final Logger logger = LoggerFactory.getLogger(UserResource.class);
 
     public UserResource() {
-
     }
 
     /**

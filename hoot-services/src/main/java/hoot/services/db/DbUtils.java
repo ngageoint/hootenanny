@@ -27,6 +27,8 @@
 package hoot.services.db;
 
 
+import static hoot.services.HootProperties.DB_NAME;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -341,7 +343,7 @@ public final class DbUtils {
      * @throws Exception
      */
     public static void deleteMapRelatedTablesByMapId(long mapId) throws SQLException {
-        String dbname = HootProperties.getProperty("dbName");
+        String dbname = DB_NAME;
         DataDefinitionManager ddm = new DataDefinitionManager();
         List<String> tables = new ArrayList<>();
         tables.add("current_way_nodes_" + mapId);
@@ -548,7 +550,7 @@ public final class DbUtils {
      */
     public static void createMap(long mapId) throws Exception {
         try {
-            String dbname = HootProperties.getProperty("dbName");
+            String dbname = DB_NAME;
 
             DataDefinitionManager ddm = new DataDefinitionManager();
 

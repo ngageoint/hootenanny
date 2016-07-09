@@ -26,6 +26,8 @@
  */
 package hoot.services.ingest;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
+
 import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -41,26 +43,23 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 
 
 public class MultipartSerializerTest {
-    private static String homeFolder = null;
     private MultipartSerializer _ms = new MultipartSerializer();
 
     @BeforeClass
     public static void oneTimeSetup() throws Exception {
-        homeFolder = HootProperties.getProperty("homeFolder");
-        org.junit.Assert.assertNotNull(homeFolder);
-        org.junit.Assert.assertTrue(homeFolder.length() > 0);
+        org.junit.Assert.assertNotNull(HOME_FOLDER);
+        org.junit.Assert.assertTrue(HOME_FOLDER.length() > 0);
     }
 
     @Test
     @Category(UnitTest.class)
     public void TestserializeFGDB() throws Exception {
         String jobId = "123-456-789";
-        String wkdirpath = homeFolder + "/upload/" + jobId;
+        String wkdirpath = HOME_FOLDER + "/upload/" + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
         org.junit.Assert.assertTrue(workingDir.exists());
@@ -109,7 +108,7 @@ public class MultipartSerializerTest {
         // Create dummy FGDB
 
         String jobId = "123-456-789-testosm";
-        String wkdirpath = homeFolder + "/upload/" + jobId;
+        String wkdirpath = HOME_FOLDER + "/upload/" + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
         org.junit.Assert.assertTrue(workingDir.exists());

@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.HootProperties.CLEAN_DATA_MAKEFILE_PATH;
+
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -42,15 +44,13 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-
 
 @Path("/cleandata")
 public class CleanDataResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(CleanDataResource.class);
 
     public CleanDataResource() {
-        super(HootProperties.getProperty("cleanDataMakePath"));
+        super(CLEAN_DATA_MAKEFILE_PATH);
     }
 
     /**

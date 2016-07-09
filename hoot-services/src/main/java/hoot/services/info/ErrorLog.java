@@ -26,6 +26,9 @@
  */
 package hoot.services.info;
 
+import static hoot.services.HootProperties.ERROR_LOG_PATH;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -33,14 +36,10 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
-import hoot.services.HootProperties;
 import hoot.services.controllers.info.AboutResource;
 
 
 public final class ErrorLog {
-
-    private static final String ERROR_LOG_PATH = HootProperties.getProperty("ErrorLogPath");
-    private static final String TEMP_OUTPUT_PATH = HootProperties.getProperty("tempOutputPath");
 
     private ErrorLog() {
     }

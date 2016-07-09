@@ -24,39 +24,28 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.geo;
-
-import org.apache.commons.math.util.MathUtils;
-
+package hoot.services.utils;
 
 /**
- * Calculates quad tiles: http://wiki.openstreetmap.org/wiki/QuadTiles
+ * Various geospatial utilities for hoot services
  */
-public final class QuadTileCalculator {
-    private QuadTileCalculator() {
+public final class GeoUtils {
+    public static final double DEFAULT_COORD_VALUE = -181.0;
+
+    private GeoUtils() {
     }
 
     /**
-     * Calculates the quad tile for a point
+     * Determines if a pair of coordinates lie within world boundaries
      * 
-     * @param latitude
-     *            point's latitude
-     * @param longitude
-     *            points longitude
-     * @return tile integer
+     * @param lat
+     *            latitude coordinate
+     * @param lon
+     *            longitude coordinate
+     * @return true if both coordinates lie within world boundaries; false
+     *         otherwise
      */
-    public static long tileForPoint(double latitude,double longitude) {
-        int lonInt = (int) MathUtils.round((((longitude + 180.0) * 65535.0) / 360.0), 0);
-        int latInt = (int) MathUtils.round((((latitude + 90.0) * 65535.0) / 180.0), 0);
-
-        // use a long here, because java doesn't have unsigned int
-        long tileUnsigned = 0;
-        for (int i = 15; i >= 0; i--) {
-            // use y, x ordering
-            tileUnsigned = (tileUnsigned << 1) | ((lonInt >> i) & 1);
-            tileUnsigned = (tileUnsigned << 1) | ((latInt >> i) & 1);
-        }
-        assert (tileUnsigned >= 0);
-        return tileUnsigned;
+    public static boolean coordsInWorld(double lat, double lon) {
+        return (lat >= -90) && (lat <= 90) && (lon >= -180) && (lon <= 180);
     }
 }

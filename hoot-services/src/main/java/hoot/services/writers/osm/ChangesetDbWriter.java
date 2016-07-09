@@ -26,6 +26,8 @@
  */
 package hoot.services.writers.osm;
 
+import static hoot.services.HootProperties.*;
+
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -51,7 +53,6 @@ import com.mysema.query.sql.RelationalPathBase;
 import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
 
-import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.db.DbUtils.RecordBatchType;
@@ -137,7 +138,7 @@ public class ChangesetDbWriter {
      */
     public ChangesetDbWriter(Connection conn) {
         this.conn = conn;
-        maxRecordBatchSize = Integer.parseInt(HootProperties.getPropertyOrDefault("maxRecordBatchSize"));
+        maxRecordBatchSize = Integer.parseInt(MAX_RECORD_BATCH_SIZE);
     }
 
     private void initParsedElementCache() {
@@ -363,8 +364,7 @@ public class ChangesetDbWriter {
             // null check here if for relations that only contain members of
             // type relation, for which no bounds is being calculated
             if (elementBounds != null) {
-                diffBounds.expand(element.getBounds(), Double
-                        .parseDouble(HootProperties.getPropertyOrDefault("changesetBoundsExpansionFactorDeegrees")));
+                diffBounds.expand(element.getBounds(), Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
             }
         }
 
@@ -591,8 +591,7 @@ public class ChangesetDbWriter {
         // Even if a bounds is specified in the incoming changeset diff data, it
         // should be ignored, per OSM docs.
         BoundingBox newChangesetBounds = changeset.getBounds();
-        newChangesetBounds.expand(diffBounds,
-                Double.parseDouble(HootProperties.getPropertyOrDefault("changesetBoundsExpansionFactorDeegrees")));
+        newChangesetBounds.expand(diffBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
 
         changeset.setBounds(newChangesetBounds);
         changeset.updateExpiration();
@@ -620,8 +619,8 @@ public class ChangesetDbWriter {
 
         org.w3c.dom.Element diffResultXmlElement = responseDoc.createElement("diffResult");
 
-        diffResultXmlElement.setAttribute("generator", HootProperties.getPropertyOrDefault("generator"));
-        diffResultXmlElement.setAttribute("version", HootProperties.getPropertyOrDefault("osmVersion"));
+        diffResultXmlElement.setAttribute("generator", GENERATOR);
+        diffResultXmlElement.setAttribute("version", OSM_VERSION);
 
         for (XmlSerializable element : changesetDiffElements) {
             diffResultXmlElement.appendChild(element.toChangesetResponseXml(diffResultXmlElement));

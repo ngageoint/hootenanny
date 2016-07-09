@@ -42,8 +42,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import hoot.services.HootProperties;
 import hoot.services.info.BuildInfo;
 import hoot.services.info.CoreDetail;
 import hoot.services.info.VersionInfo;
@@ -57,12 +57,6 @@ import hoot.services.nativeInterfaces.NativeInterfaceException;
 @Path("/about")
 public class AboutResource {
     private static final Logger logger = LoggerFactory.getLogger(AboutResource.class);
-
-    private static final ClassPathXmlApplicationContext appContext;
-
-    static {
-        appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
-    }
 
     public AboutResource() {
     }
@@ -133,7 +127,7 @@ public class AboutResource {
         command.put("params", params);
         command.put("caller", AboutResource.class.getSimpleName());
 
-        JobExecutionManager jobExecutionManager = ((JobExecutionManager) appContext
+        JobExecutionManager jobExecutionManager = ((JobExecutionManager) HootProperties.getSpringContext()
                 .getBean("jobExecutionManagerNative"));
 
         String output = jobExecutionManager.execWithResult(command).get("stdout").toString();

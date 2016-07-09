@@ -26,6 +26,8 @@
  */
 package hoot.services;
 
+import java.io.IOException;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -50,12 +52,16 @@ public class HootServletContext implements ServletContextListener {
         p2PRes.startP2PService();
 
         // Doing this to make sure we create ingest folder
-        BasemapResource.createTileServerPath();
+        try {
+            BasemapResource.createTileServerPath();
+        }
+        catch (IOException ioe) {
+            throw new RuntimeException("Error creating tile server path!", ioe);
+        }
 
         // Bridge/route all JUL log records to the SLF4J API.
         // Some third-party components use Java Util Logging (JUL). We want to
-        // route those calls
-        // through SLF4J.
+        // route those calls through SLF4J.
         initSLF4JBridgeHandler();
     }
 

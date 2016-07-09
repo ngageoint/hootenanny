@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.HootProperties.*;
+
 import java.lang.management.ManagementFactory;
 import java.sql.Connection;
 import java.util.HashMap;
@@ -51,7 +53,6 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
@@ -60,11 +61,9 @@ import hoot.services.models.osm.Map;
 @Path("/conflation")
 public class ConflationResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ConflationResource.class);
-    private static final String HOME_FOLDER = HootProperties.getProperty("homeFolder");
-    private static final String RPT_STORE_PATH = HootProperties.getProperty("reportDataPath");
 
     public ConflationResource() {
-        super(HootProperties.getProperty("ConflateMakefilePath"));
+        super(CONFLATE_MAKEFILE_PATH);
     }
 
     /**
@@ -115,7 +114,7 @@ public class ConflationResource extends JobControllerBase {
             JSONParser pars = new JSONParser();
             JSONObject oParams = (JSONObject) pars.parse(params);
 
-            boolean osmApiDbEnabled = Boolean.parseBoolean(HootProperties.getProperty("osmApiDbEnabled"));
+            boolean osmApiDbEnabled = Boolean.parseBoolean(OSM_API_DB_ENABLED);
             boolean conflatingOsmApiDbData = oneLayerIsOsmApiDb(oParams);
 
             //Since we're not returning the osm api db layer to the hoot ui, this exception

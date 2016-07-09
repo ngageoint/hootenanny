@@ -26,6 +26,8 @@
  */
 package hoot.services.nativeInterfaces;
 
+import static hoot.services.HootProperties.*;
+
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +44,6 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.command.CommandResult;
 import hoot.services.command.CommandRunner;
 import hoot.services.command.ICommandRunner;
@@ -64,8 +65,6 @@ import hoot.services.command.ICommandRunner;
 public class ProcessStreamInterface implements INativeInterface {
     private static final Logger logger = LoggerFactory.getLogger(ProcessStreamInterface.class);
 
-    private static final String CORE_SCRIPT_PATH = HootProperties.getProperty("coreScriptPath");
-
     // This contains the command runner objects for the executing processes.
     // Used for job cancellation and tracking
     private static final Map<String, ICommandRunner> jobProcesses = new ConcurrentHashMap<>();
@@ -75,17 +74,8 @@ public class ProcessStreamInterface implements INativeInterface {
     private static final String OSM_API_DB_URL;
 
     static {
-        String dbname = HootProperties.getProperty("dbName");
-        String userid = HootProperties.getProperty("dbUserId");
-        String pwd = HootProperties.getProperty("dbPassword");
-        String host = HootProperties.getProperty("dbHost");
-        DB_URL = "hootapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
-
-        String osmApiDbName = HootProperties.getProperty("osmApiDbName");
-        String osmApiDbUserId = HootProperties.getProperty("osmApiDbUserId");
-        String osmApiDbPassword = HootProperties.getProperty("osmApiDbPassword");
-        String osmApiDbHost = HootProperties.getProperty("osmApiDbHost");
-        OSM_API_DB_URL = "osmapidb://" + osmApiDbUserId + ":" + osmApiDbPassword + "@" + osmApiDbHost + "/" + osmApiDbName;
+        DB_URL = "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + "/" + DB_NAME;
+        OSM_API_DB_URL = "osmapidb://" + OSM_API_DB_USER_ID + ":" + OSM_API_DB_PASSWORD + "@" + OSM_API_DB_HOST + "/" + OSM_API_DB_NAME;
     }
 
     public ProcessStreamInterface() {

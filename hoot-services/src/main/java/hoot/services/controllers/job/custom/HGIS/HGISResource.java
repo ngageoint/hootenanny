@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.job.custom.HGIS;
 
+import static hoot.services.HootProperties.*;
+
 import java.sql.Connection;
 
 import org.json.simple.JSONArray;
@@ -33,7 +35,6 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
@@ -44,20 +45,8 @@ import hoot.services.models.osm.ModelDaoUtils;
  * Base code for HGIS specific Rest endpoint.
  */
 public class HGISResource extends JobControllerBase {
-    private static final String DB_NAME;
-    private static final String DB_USER_ID;
-    private static final String DB_PASSWORD;
-    private static final String DB_HOST;
-
     private static final Logger logger = LoggerFactory.getLogger(HGISResource.class);
 
-    // Load just once during class load
-    static {
-        DB_NAME = HootProperties.getProperty("dbName");
-        DB_USER_ID = HootProperties.getProperty("dbUserId");
-        DB_PASSWORD = HootProperties.getProperty("dbPassword");
-        DB_HOST = HootProperties.getProperty("dbHost");
-    }
 
     public HGISResource(String processName) {
         super(processName);

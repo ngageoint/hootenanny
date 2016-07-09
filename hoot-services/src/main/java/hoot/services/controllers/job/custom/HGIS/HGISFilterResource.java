@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.job.custom.HGIS;
 
+import static hoot.services.HootProperties.HGIS_FILTER_SCRIPT;
+
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -40,7 +42,6 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.exceptions.osm.InvalidResourceParamException;
 import hoot.services.models.review.custom.HGIS.FilterNonHgisPoisRequest;
 import hoot.services.models.review.custom.HGIS.FilterNonHgisPoisResponse;
@@ -51,7 +52,7 @@ public class HGISFilterResource extends HGISResource {
     private static final Logger logger = LoggerFactory.getLogger(HGISFilterResource.class);
 
     public HGISFilterResource() {
-        super(HootProperties.getProperty("hgisFilterScript"));
+        super(HGIS_FILTER_SCRIPT);
     }
 
     /**

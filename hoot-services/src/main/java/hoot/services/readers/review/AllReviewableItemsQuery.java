@@ -26,6 +26,8 @@
  */
 package hoot.services.readers.review;
 
+import static hoot.services.HootProperties.MAX_QUERY_NODES;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -75,11 +77,9 @@ class AllReviewableItemsQuery extends ReviewableQueryBase implements IReviewable
     private final BoundingBox bbox;
 
     static {
-        String maxQuerySize = HootProperties.getProperty("maxQueryNodes");
         long value;
-
         try {
-            value = Long.parseLong(maxQuerySize);
+            value = Long.parseLong(MAX_QUERY_NODES);
         }
         catch (NumberFormatException ignored) {
             value = 60000;

@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.wfs;
 
+import static hoot.services.HootProperties.WFS_STORE_CONN_NAME;
+import static hoot.services.HootProperties.WFS_STORE_DB;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -58,15 +61,12 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import hoot.services.HootProperties;
 import hoot.services.db.DataDefinitionManager;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
 public class WfsManager {
     private static final Logger logger = LoggerFactory.getLogger(WfsManager.class);
-    private static final String WFS_STORE_CONN_NAME = HootProperties.getProperty("wfsStoreConnName");
-    private static final String WFS_STORE_DB = HootProperties.getProperty("wfsStoreDb");
 
     public void createWfsResource(String wfsJobName) throws Exception {
         DataDefinitionManager dataDefinitionManager = new DataDefinitionManager();
