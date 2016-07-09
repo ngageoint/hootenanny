@@ -63,6 +63,8 @@ public class HootServletContext implements ServletContextListener {
         // Some third-party components use Java Util Logging (JUL). We want to
         // route those calls through SLF4J.
         initSLF4JBridgeHandler();
+
+        HootProperties.init();
     }
 
     private static void initSLF4JBridgeHandler() {

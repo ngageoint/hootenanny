@@ -34,6 +34,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -42,6 +44,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Services configuration file
  */
 public final class HootProperties {
+    private static final Logger logger = LoggerFactory.getLogger(HootProperties.class);
     private static final Properties properties;
     private static final ApplicationContext springContext;
 
@@ -121,6 +124,8 @@ public final class HootProperties {
     public static final String TEST_JOB_STATUS_POLLER_TIMEOUT;
     public static final String GRIZZLY_PORT;
     public static final String TRANSLATION_SCRIPT_PATH;
+    public static final String DB_URL;
+    public static final String OSM_API_DB_URL;
 
     static {
         try {
@@ -229,6 +234,8 @@ public final class HootProperties {
         TEST_JOB_STATUS_POLLER_TIMEOUT = getProperty("testJobStatusPollerTimeout");
         GRIZZLY_PORT = getProperty("grizzlyPort");
         TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");
+        DB_URL = "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + "/" + DB_NAME;
+        OSM_API_DB_URL = "osmapidb://" + OSM_API_DB_USER_ID + ":" + OSM_API_DB_PASSWORD + "@" + OSM_API_DB_HOST + "/" + OSM_API_DB_NAME;
     }
 
     private HootProperties() {
@@ -285,7 +292,7 @@ public final class HootProperties {
         return sFullProp.toString();
     }
 
-    public static Map<String, String> getProperties() {
+    private static Map<String, String> getProperties() {
         Map<String, String> props = new TreeMap<>();
 
         for (Map.Entry<Object, Object> property : properties.entrySet()) {
@@ -297,5 +304,9 @@ public final class HootProperties {
 
     public static ApplicationContext getSpringContext() {
         return springContext;
+    }
+
+    public static void init() {
+        logger.debug("Hoot Properties - {}", getProperties());
     }
 }

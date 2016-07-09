@@ -70,14 +70,6 @@ public class ProcessStreamInterface implements INativeInterface {
     private static final Map<String, ICommandRunner> jobProcesses = new ConcurrentHashMap<>();
     private static final Map<String, ICommandRunner> progProcesses = new ConcurrentHashMap<>();
 
-    private static final String DB_URL;
-    private static final String OSM_API_DB_URL;
-
-    static {
-        DB_URL = "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + "/" + DB_NAME;
-        OSM_API_DB_URL = "osmapidb://" + OSM_API_DB_USER_ID + ":" + OSM_API_DB_PASSWORD + "@" + OSM_API_DB_HOST + "/" + OSM_API_DB_NAME;
-    }
-
     public ProcessStreamInterface() {
     }
 
@@ -161,7 +153,6 @@ public class ProcessStreamInterface implements INativeInterface {
                     }
 
                     if (!warnings.isEmpty()) {
-                        //noinspection UseOfSystemOutOrSystemErr
                         System.out.println(stdOut);
                         ret.put("warnings", warnings);
                     }
