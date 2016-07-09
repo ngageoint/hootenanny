@@ -52,7 +52,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -60,6 +59,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.mysema.query.sql.SQLQuery;
 
+import hoot.services.HootProperties;
 import hoot.services.controllers.osm.MapResource;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
@@ -87,9 +87,9 @@ import hoot.services.utils.ReviewUtils;
 public class ReviewResource {
     private static final Logger logger = LoggerFactory.getLogger(ReviewResource.class);
     private static final long MAX_RESULT_SIZE;
+    private static final PlatformTransactionManager transactionManager;
 
     private final QMaps maps = QMaps.maps;
-    private final PlatformTransactionManager transactionManager;
 
     static {
         long value;
@@ -103,11 +103,12 @@ public class ReviewResource {
         }
 
         MAX_RESULT_SIZE = value;
+
+        transactionManager = HootProperties.getSpringContext().getBean("transactionManager",
+                                                                       PlatformTransactionManager.class);
     }
 
     public ReviewResource() {
-        ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext(new String[]{"db/spring-database.xml"});
-        transactionManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
     }
 
     /**

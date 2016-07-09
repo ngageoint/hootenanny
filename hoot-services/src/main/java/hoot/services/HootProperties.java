@@ -156,7 +156,8 @@ public final class HootProperties {
             throw new RuntimeException("Error loading Hootenanny's configuation!", ioe);
         }
 
-        springContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
+        springContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml",
+                                                           "db/spring-database.xml");
 
         HOME_FOLDER = getProperty("homeFolder");
         ASCIIDOC_PATH = getProperty("configAsciidocPath");

@@ -46,7 +46,6 @@ import javax.xml.transform.dom.DOMSource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -55,6 +54,7 @@ import org.w3c.dom.Document;
 
 import com.mysema.query.sql.SQLQuery;
 
+import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.models.osm.Changeset;
@@ -70,14 +70,16 @@ import hoot.services.writers.osm.ChangesetDbWriter;
 @Path("/api/0.6/changeset")
 public class ChangesetResource {
     private static final Logger logger = LoggerFactory.getLogger(ChangesetResource.class);
+    private static final PlatformTransactionManager transactionManager;
 
     private final QMaps maps = QMaps.maps;
 
-    private final PlatformTransactionManager transactionManager;
+    static {
+        transactionManager = HootProperties.getSpringContext().getBean("transactionManager",
+                                                                        PlatformTransactionManager.class);
+    }
 
     public ChangesetResource() {
-        ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext(new String[]{"db/spring-database.xml"});
-        transactionManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
     }
 
     /**

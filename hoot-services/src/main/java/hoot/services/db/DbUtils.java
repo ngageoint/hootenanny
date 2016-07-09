@@ -49,7 +49,6 @@ import org.json.simple.parser.ParseException;
 import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.mysema.query.sql.Configuration;
 import com.mysema.query.sql.PostgresTemplates;
@@ -97,8 +96,7 @@ public final class DbUtils {
     public static final String TIME_STAMP_REGEX = "\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}\\.\\d+";
 
     static {
-        ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext(new String[]{"db/spring-database.xml"});
-        dbcpDatasource = appContext.getBean("dataSource", BasicDataSource.class);
+        dbcpDatasource = HootProperties.getSpringContext().getBean("dataSource", BasicDataSource.class);
     }
 
     private DbUtils() {
