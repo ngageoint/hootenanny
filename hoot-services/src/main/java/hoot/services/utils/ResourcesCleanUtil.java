@@ -65,10 +65,8 @@ public class ResourcesCleanUtil implements Executable {
         JSONObject res = new JSONObject();
         res.put("mapId", mapId);
         res.put("result", "success");
-        Connection conn = DbUtils.createConnection();
-        try {
-            logger.debug("Initializing database connection...");
 
+        try (Connection conn = DbUtils.createConnection()){
             DbUtils.deleteBookmarksById(conn, mapId);
             DbUtils.deleteRenderDb(conn, mapId);
             DbUtils.deleteOSMRecordByName(conn, mapId);
@@ -76,9 +74,6 @@ public class ResourcesCleanUtil implements Executable {
         catch (Exception e) {
             logger.error("Error deleting layer with mapId = {}", mapId, e);
             throw e;
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         return res;

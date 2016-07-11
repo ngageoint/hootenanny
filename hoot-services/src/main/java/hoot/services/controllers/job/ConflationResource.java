@@ -108,9 +108,8 @@ public class ConflationResource extends JobControllerBase {
     public Response process(String params) throws Exception {
         // logger.debug("Conflation resource raw request: " + params);
 
-        Connection conn = DbUtils.createConnection();
         String jobId = UUID.randomUUID().toString();
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             JSONParser pars = new JSONParser();
             JSONObject oParams = (JSONObject) pars.parse(params);
 
@@ -241,9 +240,6 @@ public class ConflationResource extends JobControllerBase {
 
             logger.debug(jobArgs.toJSONString());
             postChainJobRquest(jobId, jobArgs.toJSONString());
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         JSONObject res = new JSONObject();

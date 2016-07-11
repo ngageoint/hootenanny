@@ -129,23 +129,15 @@ public class MapResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public MapLayers getLayers() {
-        Connection conn = DbUtils.createConnection();
         MapLayers mapLayers = null;
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             logger.info("Retrieving map layers list...");
-
-            logger.debug("Initializing database connection...");
-
             SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-
             List<Maps> mapLayerRecords = query.from(maps).orderBy(maps.displayName.asc()).list(maps);
             mapLayers = Map.mapLayerRecordsToLayers(mapLayerRecords);
         }
         catch (Exception e) {
             handleError(e, null, null);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         String message = "Returning map layers response";
@@ -177,25 +169,16 @@ public class MapResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public FolderRecords getFolders() {
-        Connection conn = DbUtils.createConnection();
         FolderRecords folderRecords = null;
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             logger.info("Retrieving folders list...");
-
-            logger.debug("Initializing database connection...");
-
             QFolders folders = QFolders.folders;
             SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-
             List<Folders> folderRecordSet = query.from(folders).orderBy(folders.displayName.asc()).list(folders);
-
             folderRecords = Map.mapFolderRecordsToFolders(folderRecordSet);
         }
         catch (Exception e) {
             handleError(e, null, null);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         String message = "Returning map layers response";
@@ -220,13 +203,10 @@ public class MapResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public LinkRecords getLinks() {
-        Connection conn = DbUtils.createConnection();
         Configuration configuration = DbUtils.getConfiguration();
         LinkRecords linkRecords = null;
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             logger.info("Retrieving links list...");
-
-            logger.debug("Initializing database connection...");
 
             QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
             SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
@@ -256,9 +236,6 @@ public class MapResource {
         }
         catch (Exception e) {
             handleError(e, null, null);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         String message = "Returning links response";
@@ -411,9 +388,8 @@ public class MapResource {
                         @QueryParam("extent") String extent,
                         @QueryParam("autoextent") String auto,
                         @DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") boolean multiLayerUniqueElementIds) {
-        Connection conn = DbUtils.createConnection();
         Document responseDoc = null;
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             logger.info("Retrieving map data for map with ID: {} and bounds {} ...", mapId, BBox);
 
             long mapIdNum = -2;
@@ -500,9 +476,6 @@ public class MapResource {
         catch (Exception e) {
             handleError(e, mapId, BBox);
         }
-        finally {
-            DbUtils.closeConnection(conn);
-        }
 
         return Response.ok(new DOMSource(responseDoc), MediaType.TEXT_XML).header("Content-type", MediaType.TEXT_XML)
                 .header("Content-Disposition", "attachment; filename=\"map.osm\"").build();
@@ -513,11 +486,10 @@ public class MapResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTileNodesCounts(String params) {
-        Connection conn = DbUtils.createConnection();
         JSONObject ret = new JSONObject();
         String mapId = "";
         String bbox = "";
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             JSONParser parser = new JSONParser();
             JSONArray paramsArray = (JSONArray) parser.parse(params);
 
@@ -586,9 +558,6 @@ public class MapResource {
         catch (Exception e) {
             handleError(e, mapId, bbox);
         }
-        finally {
-            DbUtils.closeConnection(conn);
-        }
 
         return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();
     }
@@ -598,9 +567,8 @@ public class MapResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMBR(@QueryParam("mapId") String mapId) {
-        Connection conn = DbUtils.createConnection();
         JSONObject ret = new JSONObject();
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             logger.info("Retrieving MBR for map with ID: {} ...", mapId);
 
             long mapIdNum = -2;
@@ -667,9 +635,6 @@ public class MapResource {
         }
         catch (Exception e) {
             handleError(e, mapId, "-180,-90,180,90");
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();
@@ -763,12 +728,9 @@ public class MapResource {
                                @QueryParam("modName") String _modName,
                                @QueryParam("inputType") String inputType) {
         Long _mapId = Long.parseLong(mapId);
-        Connection conn = DbUtils.createConnection();
         String _inputType = inputType.toLowerCase();
 
-        try {
-            logger.debug("Initializing database connection...");
-
+        try (Connection conn = DbUtils.createConnection()) {
             if (_inputType.toLowerCase(Locale.ENGLISH).equals("dataset")) {
                 Configuration configuration = DbUtils.getConfiguration();
 
@@ -790,9 +752,6 @@ public class MapResource {
         }
         catch (Exception e) {
             handleError(e, null, null);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         JSONObject res = new JSONObject();
@@ -823,13 +782,13 @@ public class MapResource {
         Long _parentId = Long.parseLong(parentId);
         Long newId = -1L;
         NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('folders_id_seq')");
-        Connection conn = DbUtils.createConnection();
 
         QFolders folders = QFolders.folders;
         Configuration configuration = DbUtils.getConfiguration();
-        SQLQuery query = new SQLQuery(conn, configuration);
 
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
+            SQLQuery query = new SQLQuery(conn, configuration);
+
             List<Long> ids = query.from().list(expression);
 
             if ((ids != null) && (!ids.isEmpty())) {
@@ -844,9 +803,6 @@ public class MapResource {
         }
         catch (Exception e) {
             handleError(e, null, null);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         JSONObject res = new JSONObject();
@@ -873,13 +829,12 @@ public class MapResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response deleteFolder(@QueryParam("folderId") String folderId) {
         Long _folderId = Long.parseLong(folderId);
-        Connection conn = DbUtils.createConnection();
 
         QFolders folders = QFolders.folders;
         QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
         Configuration configuration = DbUtils.getConfiguration();
 
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             SQLQuery query = new SQLQuery(conn, configuration);
             List<Long> parentId = query.from(folders).where(folders.id.eq(_folderId)).list(folders.parentId);
 
@@ -902,9 +857,6 @@ public class MapResource {
         }
         catch (Exception e) {
             handleError(e, null, null);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         JSONObject res = new JSONObject();
@@ -935,20 +887,16 @@ public class MapResource {
                                    @QueryParam("newRecord") Boolean newRecord) {
         Long _folderId = Long.parseLong(folderId);
         Long _parentId = Long.parseLong(parentId);
-        Connection conn = DbUtils.createConnection();
 
         QFolders folders = QFolders.folders;
         Configuration configuration = DbUtils.getConfiguration();
 
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             new SQLUpdateClause(conn, configuration, folders).where(folders.id.eq(_folderId))
                     .set(folders.parentId, _parentId).execute();
         }
         catch (Exception e) {
             handleError(e, null, null);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         JSONObject res = new JSONObject();
@@ -979,13 +927,13 @@ public class MapResource {
         Long _folderId = Long.parseLong(folderId);
         Long _mapId = Long.parseLong(mapId);
         NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('folder_map_mappings_id_seq')");
-        Connection conn = DbUtils.createConnection();
 
         QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
         Configuration configuration = DbUtils.getConfiguration();
-        SQLQuery query = new SQLQuery(conn, configuration);
 
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
+            SQLQuery query = new SQLQuery(conn, configuration);
+
             // Delete any existing to avoid duplicate entries
             new SQLDeleteClause(conn, configuration, folderMapMappings).where(
                     folderMapMappings.mapId.eq(Long.parseLong(mapId))).execute();
@@ -1005,88 +953,84 @@ public class MapResource {
         catch (Exception e) {
             handleError(e, null, null);
         }
-        finally {
-            DbUtils.closeConnection(conn);
-        }
 
         JSONObject res = new JSONObject();
         res.put("success", true);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
-    public String updateTagsDirect(java.util.Map<String, String> tags, String mapName) {
+    public String updateTagsDirect(java.util.Map<String, String> tags, String mapName) throws SQLException {
         // _zoomLevels
-        Connection conn = DbUtils.createConnection();
-
         String jobId = UUID.randomUUID().toString();
 
         JobStatusManager jobStatusManager = null;
-        try {
-            // Currently we do not have any way to get map id directly from hoot
-            // core command when it runs so for now we need get the all the map ids matching name and pick
-            // first one..
-            // THIS WILL NEED TO CHANGE when we implement handle map by Id
-            // instead of name..
+        try (Connection conn = DbUtils.createConnection()) {
+            try {
+                // Currently we do not have any way to get map id directly from hoot
+                // core command when it runs so for now we need get the all the map ids matching name and pick
+                // first one..
+                // THIS WILL NEED TO CHANGE when we implement handle map by Id
+                // instead of name..
 
-            List<Long> mapIds = DbUtils.getMapIdsByName(conn, mapName);
-            if (!mapIds.isEmpty()) {
-                // we are expecting the last one of duplicate name to be the one
-                // resulted from the conflation
-                // This can be wrong if there is race condition. REMOVE THIS
-                // once core
-                // implement map Id return
-                long mapId = mapIds.get(mapIds.size() - 1);
-                jobStatusManager = new JobStatusManager(conn);
-                jobStatusManager.addJob(jobId);
+                List<Long> mapIds = DbUtils.getMapIdsByName(conn, mapName);
+                if (!mapIds.isEmpty()) {
+                    // we are expecting the last one of duplicate name to be the one
+                    // resulted from the conflation
+                    // This can be wrong if there is race condition. REMOVE THIS
+                    // once core
+                    // implement map Id return
+                    long mapId = mapIds.get(mapIds.size() - 1);
+                    jobStatusManager = new JobStatusManager(conn);
+                    jobStatusManager.addJob(jobId);
 
-                // Hack alert!
-                // Add special handling of stats tag key
-                // We need to read the file in here, because the file doesn't
-                // exist at the time
-                // the updateMapsTagsCommand job is created in
-                // ConflationResource.java
-                String statsKey = "stats";
-                if (tags.containsKey(statsKey)) {
-                    String statsName = tags.get(statsKey);
-                    File statsFile = new File(statsName);
-                    if (statsFile.exists()) {
-                        logger.debug("Found {}", statsName);
-                        String stats = FileUtils.readFileToString(statsFile, "UTF-8");
-                        tags.put(statsKey, stats);
+                    // Hack alert!
+                    // Add special handling of stats tag key
+                    // We need to read the file in here, because the file doesn't
+                    // exist at the time
+                    // the updateMapsTagsCommand job is created in
+                    // ConflationResource.java
+                    String statsKey = "stats";
+                    if (tags.containsKey(statsKey)) {
+                        String statsName = tags.get(statsKey);
+                        File statsFile = new File(statsName);
+                        if (statsFile.exists()) {
+                            logger.debug("Found {}", statsName);
+                            String stats = FileUtils.readFileToString(statsFile, "UTF-8");
+                            tags.put(statsKey, stats);
 
-                        if (!statsFile.delete()) {
-                            logger.error("Error deleting {} file", statsFile.getAbsolutePath());
+                            if (!statsFile.delete()) {
+                                logger.error("Error deleting {} file", statsFile.getAbsolutePath());
+                            }
+                        }
+                        else {
+                            logger.error("Can't find {}", statsName);
+                            tags.remove(statsKey);
                         }
                     }
-                    else {
-                        logger.error("Can't find {}", statsName);
-                        tags.remove(statsKey);
-                    }
+
+                    DbUtils.updateMapsTableTags(tags, mapId, conn);
+                    jobStatusManager.setComplete(jobId);
+                }
+            }
+            catch (SQLException sqlEx) {
+                if (jobStatusManager != null) {
+                    jobStatusManager.setFailed(jobId, sqlEx.getMessage());
                 }
 
-                DbUtils.updateMapsTableTags(tags, mapId, conn);
-                jobStatusManager.setComplete(jobId);
+                String msg = "Failure update map tags resource " + sqlEx.getMessage() + " SQLState: " + sqlEx.getSQLState();
+                throw new WebApplicationException(sqlEx, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
-        }
-        catch (SQLException sqlEx) {
-            if (jobStatusManager != null) {
-                jobStatusManager.setFailed(jobId, sqlEx.getMessage());
-            }
+            catch (Exception ex) {
+                if (jobStatusManager != null) {
+                    jobStatusManager.setFailed(jobId, ex.getMessage());
+                }
 
-            String msg = "Failure update map tags resource " + sqlEx.getMessage() + " SQLState: " + sqlEx.getSQLState();
-            throw new WebApplicationException(sqlEx, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
-        }
-        catch (Exception ex) {
-            if (jobStatusManager != null) {
-                jobStatusManager.setFailed(jobId, ex.getMessage());
+                String msg = "Failure update map tags resource" + ex.getMessage();
+                throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
+        }
 
-            String msg = "Failure update map tags resource" + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
-        }
-        finally {
-            DbUtils.closeConnection(conn);
-        }
         return jobId;
     }
 
@@ -1095,11 +1039,8 @@ public class MapResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTags(@QueryParam("mapid") String mapId) {
-        Connection conn = DbUtils.createConnection();
         JSONObject ret = new JSONObject();
-        try {
-            // log.debug(mapId);
-
+        try (Connection conn = DbUtils.createConnection()) {
             if (!StringUtils.isEmpty(mapId)) {
                 long mapIdNum = -2;
                 try {
@@ -1108,6 +1049,7 @@ public class MapResource {
                 catch (NumberFormatException ignored) {
                     // a map name string could also be passed in here
                 }
+
                 if (mapIdNum != -1) // not OSM API db
                 {
                     QMaps maps = QMaps.maps;
@@ -1140,9 +1082,6 @@ public class MapResource {
         }
         catch (Exception e) {
             handleError(e, mapId, "");
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();

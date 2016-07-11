@@ -28,6 +28,7 @@ package hoot.services.controllers.osm;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -92,14 +93,11 @@ public class UserResource {
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
-    public Response get(@PathParam("userId") String userId) throws ParserConfigurationException {
+    public Response get(@PathParam("userId") String userId) throws ParserConfigurationException, SQLException {
         logger.debug("Retrieving user with ID: {} ...", userId.trim());
 
-        Connection conn = DbUtils.createConnection();
         Document responseDoc = null;
-        try {
-            logger.debug("Initializing database connection...");
-
+        try (Connection conn = DbUtils.createConnection()) {
             long userIdNum;
             try {
                 QUsers users = QUsers.users;
@@ -119,7 +117,6 @@ public class UserResource {
             }
 
             QUsers usersTbl = QUsers.users;
-
             SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
 
             // there is only ever one test user
@@ -131,9 +128,6 @@ public class UserResource {
             }
 
             responseDoc = writeResponse(new User(user));
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         try {
@@ -160,15 +154,13 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public UserSaveResponse getSaveUser(@QueryParam("userEmail") String userEmail) {
         UserSaveResponse response;
-        try {
-            try (Connection connection = DbUtils.createConnection()) {
-                Users user = getOrSaveByEmail(userEmail, connection);
-                if (user == null) {
-                    throw new Exception("SQL Insert failed.");
-                }
-
-                response = new UserSaveResponse(user);
+        try (Connection connection = DbUtils.createConnection()) {
+            Users user = getOrSaveByEmail(userEmail, connection);
+            if (user == null) {
+                throw new Exception("SQL Insert failed.");
             }
+
+            response = new UserSaveResponse(user);
         }
         catch (Exception ex) {
             String message = "Error saving user: " + " (" + ex.getMessage() + ")";
@@ -189,12 +181,10 @@ public class UserResource {
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public UsersGetResponse getAllUsers() {
-        try {
-            try (Connection connection = DbUtils.createConnection()) {
-                List<Users> res = retrieveAll(connection);
-                UsersGetResponse response = new UsersGetResponse(res);
-                return response;
-            }
+        try (Connection connection = DbUtils.createConnection()) {
+            List<Users> res = retrieveAll(connection);
+            UsersGetResponse response = new UsersGetResponse(res);
+            return response;
         }
         catch (Exception ex) {
             String message = "Error getting all users: " + " (" + ex.getMessage() + ")";

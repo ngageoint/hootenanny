@@ -32,6 +32,7 @@ import static hoot.services.HootProperties.TILE_SERVER_PATH;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.UUID;
 
 import javax.ws.rs.WebApplicationException;
@@ -72,7 +73,7 @@ public class RasterToTilesService extends JobControllerBase {
         super(RASTER_TO_TILES);
     }
 
-    public String ingestOSMResourceDirect(String name, String userEmail) {
+    public String ingestOSMResourceDirect(String name, String userEmail) throws Exception {
         String jobId = UUID.randomUUID().toString();
         return ingestOSMResourceDirect(name, userEmail, jobId);
     }
@@ -81,98 +82,94 @@ public class RasterToTilesService extends JobControllerBase {
      * This function executes directly. This should be used when called from
      * JobResource it prevents the thread race condition when threadpool maxes out.
      */
-    public String ingestOSMResourceDirect(String name, String userEmail, String jobId) {
+    public String ingestOSMResourceDirect(String name, String userEmail, String jobId) throws SQLException {
         // _zoomLevels
-        Connection conn = DbUtils.createConnection();
-
         JobStatusManager jobStatusManager = null;
-        try {
-            jobStatusManager = new JobStatusManager(conn);
-            jobStatusManager.addJob(jobId);
-
-            QMaps maps = QMaps.maps;
-            long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, conn, maps, maps.id, maps.displayName);
-
-            BoundingBox queryBounds;
+        try (Connection conn = DbUtils.createConnection()) {
             try {
-                queryBounds = new BoundingBox("-180,-90,180,90");
-                logger.debug("Query bounds area: {}", queryBounds.getArea());
-            }
-            catch (Exception e) {
-                throw new Exception("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
-                        + e.getMessage() + ")", e);
-            }
+                jobStatusManager = new JobStatusManager(conn);
+                jobStatusManager.addJob(jobId);
 
-            Map currMap = new Map(mapIdNum, conn);
-            JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
+                QMaps maps = QMaps.maps;
+                long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, conn, maps, maps.id, maps.displayName);
 
-            Object oMinLon = extents.get("minlon");
-            Object oMaxLon = extents.get("maxlon");
-            Object oMinLat = extents.get("minlat");
-            Object oMaxLat = extents.get("maxlat");
-
-            String warn = null;
-
-            // Make sure we have valid bbox. We may end up with invalid bbox and
-            // in that case we should not produce raster density map
-            if ((oMinLon != null) && (oMaxLon != null) && (oMinLat != null) && (oMaxLat != null)) {
-                double dMinLon = (Double) extents.get("minlon");
-                double dMaxLon = (Double) extents.get("maxlon");
-                double dMinLat = (Double) extents.get("minlat");
-                double dMaxLat = (Double) extents.get("maxlat");
-
-                double deltaLon = dMaxLon - dMinLon;
-                double deltaLat = dMaxLat - dMinLat;
-
-                double maxDelta = deltaLon;
-                if (deltaLat > maxDelta) {
-                    maxDelta = deltaLat;
+                BoundingBox queryBounds;
+                try {
+                    queryBounds = new BoundingBox("-180,-90,180,90");
+                    logger.debug("Query bounds area: {}", queryBounds.getArea());
+                }
+                catch (Exception e) {
+                    throw new Exception("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
+                            + e.getMessage() + ")", e);
                 }
 
-                JSONObject zoomInfo = getZoomInfo(maxDelta);
+                Map currMap = new Map(mapIdNum, conn);
+                JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
 
-                String zoomList = zoomInfo.get("zoomlist").toString();
-                int rasterSize = (Integer) zoomInfo.get("rastersize");
+                Object oMinLon = extents.get("minlon");
+                Object oMaxLon = extents.get("maxlon");
+                Object oMinLat = extents.get("minlat");
+                Object oMaxLat = extents.get("maxlat");
 
-                JSONObject argStr = createCommandObj(name, zoomList, rasterSize, userEmail, mapIdNum);
-                argStr.put("jobId", jobId);
+                String warn = null;
 
-                JobExecutionManager jobExecManager = (JobExecutionManager)
-                        HootProperties.getSpringContext().getBean("jobExecutionManagerNative");
-                JSONObject res = jobExecManager.exec(argStr);
-                Object oRes = res.get("warnings");
+                // Make sure we have valid bbox. We may end up with invalid bbox and
+                // in that case we should not produce raster density map
+                if ((oMinLon != null) && (oMaxLon != null) && (oMinLat != null) && (oMaxLat != null)) {
+                    double dMinLon = (Double) extents.get("minlon");
+                    double dMaxLon = (Double) extents.get("maxlon");
+                    double dMinLat = (Double) extents.get("minlat");
+                    double dMaxLat = (Double) extents.get("maxlat");
 
-                if (oRes != null) {
-                    warn = oRes.toString();
+                    double deltaLon = dMaxLon - dMinLon;
+                    double deltaLat = dMaxLat - dMinLat;
+
+                    double maxDelta = deltaLon;
+                    if (deltaLat > maxDelta) {
+                        maxDelta = deltaLat;
+                    }
+
+                    JSONObject zoomInfo = getZoomInfo(maxDelta);
+
+                    String zoomList = zoomInfo.get("zoomlist").toString();
+                    int rasterSize = (Integer) zoomInfo.get("rastersize");
+
+                    JSONObject argStr = createCommandObj(name, zoomList, rasterSize, userEmail, mapIdNum);
+                    argStr.put("jobId", jobId);
+
+                    JobExecutionManager jobExecManager = (JobExecutionManager)
+                            HootProperties.getSpringContext().getBean("jobExecutionManagerNative");
+                    JSONObject res = jobExecManager.exec(argStr);
+                    Object oRes = res.get("warnings");
+
+                    if (oRes != null) {
+                        warn = oRes.toString();
+                    }
+                }
+
+                if (warn == null) {
+                    jobStatusManager.setComplete(jobId);
+                }
+                else {
+                    jobStatusManager.setComplete(jobId, "WARNINGS: " + warn);
                 }
             }
-
-            if (warn == null) {
-                jobStatusManager.setComplete(jobId);
+            catch (Exception ex) {
+                jobStatusManager.setFailed(jobId, ex.getMessage());
+                String msg = "Failure ingesting resource: " + ex.getMessage();
+                throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
-            else {
-                jobStatusManager.setComplete(jobId, "WARNINGS: " + warn);
-            }
-        }
-        catch (Exception ex) {
-            jobStatusManager.setFailed(jobId, ex.getMessage());
-            String msg = "Failure ingesting resource: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         return jobId;
     }
 
     // This method may appear unused in your IDE since it's currently invoked reflectively.
-    public String ingestOSMResource(String name) {
+    public String ingestOSMResource(String name) throws SQLException {
         // _zoomLevels
-        Connection conn = DbUtils.createConnection();
         String jobId = UUID.randomUUID().toString();
 
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             QMaps maps = QMaps.maps;
             long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, conn, maps, maps.id, maps.displayName);
 
@@ -213,9 +210,6 @@ public class RasterToTilesService extends JobControllerBase {
         catch (Exception ex) {
             String msg = "Failure ingesting resource " + ex.getMessage();
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         return jobId;

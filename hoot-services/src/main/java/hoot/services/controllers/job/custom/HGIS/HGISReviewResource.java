@@ -144,19 +144,21 @@ public class HGISReviewResource extends HGISResource {
     // The method is invoked reflectively
     public String updateMapsTag(String mapName) throws Exception {
         String jobId = UUID.randomUUID().toString();
-        JobStatusManager jobStatusManager = null;
         try (Connection conn = DbUtils.createConnection()) {
-            jobStatusManager = new JobStatusManager(conn);
-            jobStatusManager.addJob(jobId);
+            JobStatusManager jobStatusManager = null;
+            try {
+                jobStatusManager = new JobStatusManager(conn);
+                jobStatusManager.addJob(jobId);
 
-            long mapId = ModelDaoUtils.getRecordIdForInputString(mapName, conn, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
-            updateMapTagWithReviewType(conn, mapId);
-            jobStatusManager.setComplete(jobId);
-        }
-        catch (Exception e) {
-            jobStatusManager.setFailed(jobId);
-            logger.error(e.getMessage(), e);
-            throw e;
+                long mapId = ModelDaoUtils.getRecordIdForInputString(mapName, conn, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
+                updateMapTagWithReviewType(conn, mapId);
+                jobStatusManager.setComplete(jobId);
+            }
+            catch (Exception e) {
+                jobStatusManager.setFailed(jobId);
+                logger.error(e.getMessage(), e);
+                throw e;
+            }
         }
 
         return jobId;

@@ -134,46 +134,43 @@ public class ReviewResource {
     public ReviewResolverResponse resolveAllReviews(ReviewResolverRequest request) throws Exception {
         logger.debug("Setting all items reviewed for map with ID: {}...", request.getMapId());
 
-        Connection conn = DbUtils.createConnection();
-        TransactionStatus transactionStatus = transactionManager.getTransaction(new DefaultTransactionDefinition(
-                TransactionDefinition.PROPAGATION_REQUIRED));
-        conn.setAutoCommit(false);
+        try (Connection conn = DbUtils.createConnection()) {
+            TransactionStatus transactionStatus = transactionManager.getTransaction(new DefaultTransactionDefinition(
+                    TransactionDefinition.PROPAGATION_REQUIRED));
+            conn.setAutoCommit(false);
 
-        long mapIdNum = MapResource.validateMap(request.getMapId(), conn);
+            long mapIdNum = MapResource.validateMap(request.getMapId(), conn);
 
-        long userId;
-        try {
-            logger.debug("Retrieving user ID associated with map having ID: {} ...", request.getMapId());
-            userId = new SQLQuery(conn, DbUtils.getConfiguration()).from(maps).where(maps.id.eq(mapIdNum))
-                    .singleResult(maps.userId);
-            logger.debug("Retrieved user ID: {}", userId);
-        }
-        catch (Exception e) {
-            String message = "Error locating user associated with map having ID: "
-                    + request.getMapId() + " (" + e.getMessage() + ")";
-            throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(message).build());
-        }
+            long userId;
+            try {
+                logger.debug("Retrieving user ID associated with map having ID: {} ...", request.getMapId());
+                userId = new SQLQuery(conn, DbUtils.getConfiguration()).from(maps).where(maps.id.eq(mapIdNum))
+                        .singleResult(maps.userId);
+                logger.debug("Retrieved user ID: {}", userId);
+            }
+            catch (Exception e) {
+                String message = "Error locating user associated with map having ID: "
+                        + request.getMapId() + " (" + e.getMessage() + ")";
+                throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(message).build());
+            }
 
-        long changesetId = -1;
-        try {
-            changesetId = setAllReviewsResolved(mapIdNum, userId, conn);
-            logger.debug("Committing set all items reviewed transaction...");
-            transactionManager.commit(transactionStatus);
-            conn.commit();
-        }
-        catch (Exception e) {
-            transactionManager.rollback(transactionStatus);
-            conn.rollback();
-            ReviewUtils.handleError(e, "Error setting all records to reviewed for map ID: " + request.getMapId());
-        }
-        finally {
-            conn.setAutoCommit(true);
-            DbUtils.closeConnection(conn);
-        }
+            long changesetId = -1;
+            try {
+                changesetId = setAllReviewsResolved(mapIdNum, userId, conn);
+                logger.debug("Committing set all items reviewed transaction...");
+                transactionManager.commit(transactionStatus);
+                conn.commit();
+            }
+            catch (Exception e) {
+                transactionManager.rollback(transactionStatus);
+                conn.rollback();
+                ReviewUtils.handleError(e, "Error setting all records to reviewed for map ID: " + request.getMapId());
+            }
 
-        logger.debug("Set all items reviewed for map with ID: {} using changesetId: {}", request.getMapId(), changesetId);
+            logger.debug("Set all items reviewed for map with ID: {} using changesetId: {}", request.getMapId(), changesetId);
 
-        return new ReviewResolverResponse(changesetId);
+            return new ReviewResolverResponse(changesetId);
+        }
     }
 
     /**
@@ -205,8 +202,8 @@ public class ReviewResource {
         logger.debug("Returning review references...");
 
         ReviewRefsResponses response = new ReviewRefsResponses();
-        Connection conn = DbUtils.createConnection();
-        try {
+
+        try (Connection conn = DbUtils.createConnection()) {
             ReviewReferencesRetriever refsRetriever = new ReviewReferencesRetriever(conn);
             List<ReviewRefsResponse> responseRefsList = new ArrayList<>();
             for (ElementInfo elementInfo : request.getQueryElements()) {
@@ -222,9 +219,6 @@ public class ReviewResource {
                 responseRefsList.add(responseRefs);
             }
             response.setReviewRefsResponses(responseRefsList.toArray(new ReviewRefsResponse[responseRefsList.size()]));
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         logger.debug("response : {}", StringUtils.abbreviate(response.toString(), 1000));

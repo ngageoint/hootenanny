@@ -109,10 +109,9 @@ public class ExportJobResource extends JobControllerBase {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public Response process(String params) {
-        Connection conn = DbUtils.createConnection();
         String jobId = UUID.randomUUID().toString();
         jobId = "ex_" + jobId.replace("-", "");
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             JSONArray commandArgs = parseParams(params);
 
             JSONObject arg = new JSONObject();
@@ -191,9 +190,6 @@ public class ExportJobResource extends JobControllerBase {
         catch (Exception ex) {
             String msg = "Error exporting data: " + ex;
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         JSONObject res = new JSONObject();

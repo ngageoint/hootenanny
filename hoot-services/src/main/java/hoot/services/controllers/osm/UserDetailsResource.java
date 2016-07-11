@@ -27,6 +27,7 @@
 package hoot.services.controllers.osm;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -74,22 +75,17 @@ public class UserDetailsResource {
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
-    public Response getDetails() throws ParserConfigurationException {
+    public Response getDetails() throws ParserConfigurationException, SQLException {
         logger.debug("Retrieving logged in user details...");
 
         // For now, we're just grabbing the first user in the db, since we don't
         // have any authentication in place to get the correct user. Worst case, for now, you see
         // incorrect user information from iD editor...not a big deal since authentication doesn't exist
         // anyway. When hoot gets user authentication, then this obviously has to be updated.
-        Connection conn = DbUtils.createConnection();
         long userId = -1;
 
-        try {
-            logger.debug("Initializing database connection...");
+        try (Connection conn = DbUtils.createConnection()) {
             userId = DbUtils.getTestUserId(conn);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         return (new UserResource()).get(String.valueOf(userId));

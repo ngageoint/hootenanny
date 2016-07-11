@@ -179,17 +179,11 @@ public final class DbUtils {
         }
     }
 
-    public static Connection createConnection() {
-        try {
-            return dbcpDatasource.getConnection();
-        }
-        catch (Exception e) {
-            logger.error("Error creating JDBC connection!", e);
-        }
-        return null;
+    public static Connection createConnection() throws SQLException {
+        return dbcpDatasource.getConnection();
     }
 
-    public static void closeConnection(Connection conn) {
+    private static void closeConnection(Connection conn) {
         if (conn != null) {
             try {
                 if (!conn.isClosed()) {

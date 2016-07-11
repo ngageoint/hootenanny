@@ -322,6 +322,7 @@ public class ReviewBookmarkResource {
             String msg = "Error getting review bookmark: " + " (" + ex.getMessage() + ")";
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
+
         return response;
     }
 

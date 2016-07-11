@@ -148,81 +148,84 @@ public class JobResource {
         private void processCommand() {
 
             logger.debug("Start chain job: {}", jobId);
-            Connection conn = DbUtils.createConnection();
 
             jobInfo.put("chainjobstatus", jobId);
 
             JobStatusManager jobStatusManager = null;
             JSONObject childJobInfo = null;
-            try {
-                jobStatusManager = createJobStatusMananger(conn);
+            try (Connection conn = DbUtils.createConnection()) {
+                try {
+                    jobStatusManager = createJobStatusMananger(conn);
 
-                JSONParser parser = new JSONParser();
-                JSONArray chain = (JSONArray) parser.parse(jobs);
+                    JSONParser parser = new JSONParser();
+                    JSONArray chain = (JSONArray) parser.parse(jobs);
 
-                int nChain = chain.size();
-                jobInfo.put("childrencount", String.valueOf(nChain));
+                    int nChain = chain.size();
+                    jobInfo.put("childrencount", String.valueOf(nChain));
 
-                for (Object aChain : chain) {
-                    String internalJobId = UUID.randomUUID().toString();
+                    for (Object aChain : chain) {
+                        String internalJobId = UUID.randomUUID().toString();
 
-                    // prep child job
+                        // prep child job
 
-                    JSONObject job = (JSONObject) aChain;
-                    String excType = job.get("exectype").toString();
-                    String warnings = null;
+                        JSONObject job = (JSONObject) aChain;
+                        String excType = job.get("exectype").toString();
+                        String warnings = null;
 
-                    if (excType.equalsIgnoreCase("reflection")) {
-                        // getting jobInfo from inside since it generates job id.
-                        childJobInfo = execReflection(jobId, job, jobStatusManager);
-                        Object oWarn = childJobInfo.get("warnings");
-                        if (oWarn != null) {
-                            warnings = oWarn.toString();
+                        if (excType.equalsIgnoreCase("reflection")) {
+                            // getting jobInfo from inside since it generates job id.
+                            childJobInfo = execReflection(jobId, job, jobStatusManager);
+                            Object oWarn = childJobInfo.get("warnings");
+                            if (oWarn != null) {
+                                warnings = oWarn.toString();
+                            }
                         }
-                    }
-                    else if (excType.equalsIgnoreCase("reflection_sync")) {
-                        childJobInfo = execReflectionSync(jobId, internalJobId, job, jobStatusManager);
-                    }
-                    else {
-                        // create and set info
-                        childJobInfo = createChildInfo(internalJobId, JOB_STATUS.RUNNING.toString());
-                        setJobInfo(jobInfo, childJobInfo, childrenInfo, JOB_STATUS.RUNNING.toString(), "processing");
+                        else if (excType.equalsIgnoreCase("reflection_sync")) {
+                            childJobInfo = execReflectionSync(jobId, internalJobId, job, jobStatusManager);
+                        }
+                        else {
+                            // create and set info
+                            childJobInfo = createChildInfo(internalJobId, JOB_STATUS.RUNNING.toString());
+                            setJobInfo(jobInfo, childJobInfo, childrenInfo, JOB_STATUS.RUNNING.toString(), "processing");
+                            jobStatusManager.updateJob(jobId, jobInfo.toString());
+
+                            JSONObject result = processJob(internalJobId, job);
+
+                            // try to get warning
+                            Object oWarn = result.get("warnings");
+                            if (oWarn != null) {
+                                warnings = oWarn.toString();
+                            }
+                        }
+
+                        // if we have warnings then pass on
+                        String resDetail = "success";
+                        if (warnings != null) {
+                            resDetail = "WARNINGS: " + warnings;
+                        }
+
+                        setJobInfo(jobInfo, childJobInfo, childrenInfo, JOB_STATUS.COMPLETE.toString(), resDetail);
+
                         jobStatusManager.updateJob(jobId, jobInfo.toString());
+                    }
 
-                        JSONObject result = processJob(internalJobId, job);
-
-                        // try to get warning
-                        Object oWarn = result.get("warnings");
-                        if (oWarn != null) {
-                            warnings = oWarn.toString();
+                    jobStatusManager.setComplete(jobId, jobInfo.toString());
+                }
+                catch (Exception ex) {
+                    if (jobStatusManager != null) {
+                        if (childJobInfo != null) {
+                            setJobInfo(jobInfo, childJobInfo, childrenInfo, JOB_STATUS.FAILED.toString(), ex.getMessage());
+                            logger.error(ex.getMessage(), ex);
                         }
+                        jobStatusManager.setFailed(jobId, jobInfo.toString());
                     }
-
-                    // if we have warnings then pass on
-                    String resDetail = "success";
-                    if (warnings != null) {
-                        resDetail = "WARNINGS: " + warnings;
-                    }
-
-                    setJobInfo(jobInfo, childJobInfo, childrenInfo, JOB_STATUS.COMPLETE.toString(), resDetail);
-
-                    jobStatusManager.updateJob(jobId, jobInfo.toString());
                 }
-
-                jobStatusManager.setComplete(jobId, jobInfo.toString());
-            }
-            catch (Exception ex) {
-                if (jobStatusManager != null) {
-                    if (childJobInfo != null) {
-                        setJobInfo(jobInfo, childJobInfo, childrenInfo, JOB_STATUS.FAILED.toString(), ex.getMessage());
-                        logger.error(ex.getMessage(), ex);
-                    }
-                    jobStatusManager.setFailed(jobId, jobInfo.toString());
+                finally {
+                    logger.debug("End process chain Job: {}", jobId);
                 }
             }
-            finally {
-                logger.debug("End process chain Job: {}", jobId);
-                DbUtils.closeConnection(conn);
+            catch (SQLException e) {
+                logger.error("Error during processing!", e);
             }
         }
     }
@@ -391,58 +394,56 @@ public class JobResource {
         }
 
         private void processCommand() {
-
             logger.debug("Processing job: {}", jobId);
-            Connection conn = DbUtils.createConnection();
             JobStatusManager jobStatusManager = null;
             JSONObject command = null;
-            try {
-                jobStatusManager = createJobStatusMananger(conn);
 
-                JSONParser parser = new JSONParser();
-                command = (JSONObject) parser.parse(params);
-
-                //log.debug(JsonUtils.objectToJson(command));
-                JSONObject result = processJob(jobId, command);
-                //log.debug(JsonUtils.objectToJson(result));
-
-                String warnings = null;
-                Object oWarn = result.get("warnings");
-                if (oWarn != null) {
-                    warnings = oWarn.toString();
-                }
-                String statusDetail = "";
-                if (warnings != null) {
-                    statusDetail += "WARNINGS: " + warnings;
-                }
-
-                Map<String, String> params = paramsToMap(command);
-                if (params.containsKey("writeStdOutToStatusDetail")
-                        && Boolean.parseBoolean(params.get("writeStdOutToStatusDetail"))) {
-                    statusDetail += "INFO: " + result.get("stdout");
-                }
-
-                if (StringUtils.trimToNull(statusDetail) != null) {
-                    jobStatusManager.setComplete(jobId, statusDetail);
-                }
-                else {
-                    jobStatusManager.setComplete(jobId);
-                }
-            }
-            catch (Exception e) {
-                if (jobStatusManager != null) {
-                    jobStatusManager.setFailed(jobId, e.getMessage());
-                    logger.error("Error processing {}", command, e);
-                }
-            }
-            finally {
-                logger.debug("End process Job: {}", jobId);
+            try (Connection conn = DbUtils.createConnection()) {
                 try {
-                    DbUtils.closeConnection(conn);
+                    jobStatusManager = createJobStatusMananger(conn);
+
+                    JSONParser parser = new JSONParser();
+                    command = (JSONObject) parser.parse(params);
+
+                    //log.debug(JsonUtils.objectToJson(command));
+                    JSONObject result = processJob(jobId, command);
+                    //log.debug(JsonUtils.objectToJson(result));
+
+                    String warnings = null;
+                    Object oWarn = result.get("warnings");
+                    if (oWarn != null) {
+                        warnings = oWarn.toString();
+                    }
+                    String statusDetail = "";
+                    if (warnings != null) {
+                        statusDetail += "WARNINGS: " + warnings;
+                    }
+
+                    Map<String, String> params = paramsToMap(command);
+                    if (params.containsKey("writeStdOutToStatusDetail")
+                            && Boolean.parseBoolean(params.get("writeStdOutToStatusDetail"))) {
+                        statusDetail += "INFO: " + result.get("stdout");
+                    }
+
+                    if (StringUtils.trimToNull(statusDetail) != null) {
+                        jobStatusManager.setComplete(jobId, statusDetail);
+                    }
+                    else {
+                        jobStatusManager.setComplete(jobId);
+                    }
                 }
-                catch (Exception ex) {
-                    logger.error(ex.getMessage());
+                catch (Exception e) {
+                    if (jobStatusManager != null) {
+                        jobStatusManager.setFailed(jobId, e.getMessage());
+                        logger.error("Error processing {}", command, e);
+                    }
                 }
+                finally {
+                    logger.debug("End process Job: {}", jobId);
+                }
+            }
+            catch (SQLException e) {
+                logger.error("Error during command processing!", e);
             }
         }
     }
@@ -661,11 +662,10 @@ public class JobResource {
     /**
      * Return job status
      */
-    protected JSONObject getJobStatusObj(String jobId) {
+    protected JSONObject getJobStatusObj(String jobId) throws SQLException {
         JSONObject status = new JSONObject();
-        Connection conn = DbUtils.createConnection();
 
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             JobStatusManager jobStatusManager = createJobStatusMananger(conn);
 
             status.put("jobId", jobId);
@@ -681,9 +681,6 @@ public class JobResource {
 
             status.put("status", stat.toString());
             status.put("statusDetail", jobStatusObj.getStatusDetail());
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         return status;
@@ -717,18 +714,14 @@ public class JobResource {
         return new JobStatusManager(conn);
     }
 
-    protected Connection createDbConnection() {
+    protected Connection createDbConnection() throws SQLException {
         return DbUtils.createConnection();
     }
 
-    protected void closeDbConnection(Connection conn) {
-        DbUtils.closeConnection(conn);
-    }
-
     protected void initJob(String jobId) throws Exception {
-        Connection conn = createDbConnection();
-        JobStatusManager jobStatusManager = createJobStatusMananger(conn);
-        jobStatusManager.addJob(jobId);
-        closeDbConnection(conn);
+        try (Connection conn = createDbConnection()) {
+            JobStatusManager jobStatusManager = createJobStatusMananger(conn);
+            jobStatusManager.addJob(jobId);
+        }
     }
 }

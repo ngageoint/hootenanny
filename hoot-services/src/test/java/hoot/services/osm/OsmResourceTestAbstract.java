@@ -81,7 +81,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
             userId = DbUtils.insertUser(conn);
         }
         catch (Exception e) {
-            DbUtils.closeConnection(conn);
+            conn.close();
             log.error(e.getMessage() + " ");
             throw e;
         }
@@ -120,7 +120,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
             throw e;
         }
         finally {
-            DbUtils.closeConnection(conn);
+            conn.close();
         }
     }
 }

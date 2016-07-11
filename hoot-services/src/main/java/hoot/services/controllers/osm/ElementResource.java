@@ -101,19 +101,15 @@ public class ElementResource {
                                @PathParam("elementId") long elementId,
                                @PathParam("elementType") String elementType) throws Exception {
         ElementType elementTypeVal = Element.elementTypeFromString(elementType);
+
         if (elementTypeVal == null) {
             String msg = "Invalid element type: " + elementType;
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        Connection conn = DbUtils.createConnection();
-        Document elementDoc = null;
-        try {
-            logger.debug("Initializing database connection...");
+        Document elementDoc;
+        try (Connection conn = DbUtils.createConnection()) {
             elementDoc = getElementXml(mapId, elementId, elementTypeVal, false, false, conn);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
@@ -138,11 +134,8 @@ public class ElementResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response getElementByUniqueId(@PathParam("elementId") String elementId) throws Exception {
-        Connection conn = DbUtils.createConnection();
         Document elementDoc = null;
-        try {
-            logger.debug("Initializing database connection...");
-
+        try (Connection conn = DbUtils.createConnection()) {
             if (!UNIQUE_ELEMENT_ID_PATTERN.matcher(elementId).matches()) {
                 String msg = "Invalid element ID: " + elementId;
                 throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
@@ -158,9 +151,6 @@ public class ElementResource {
 
             elementDoc = getElementXml(elementIdParts[0], Long.parseLong(elementIdParts[2]), elementTypeVal, true,
                     false, conn);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
@@ -191,20 +181,15 @@ public class ElementResource {
                                    @PathParam("elementId") long elementId,
                                    @PathParam("elementType") String elementType) throws Exception {
         ElementType elementTypeVal = Element.elementTypeFromString(elementType);
+
         if (elementTypeVal == null) {
             String msg = "Invalid element type: " + elementType;
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        Connection conn = DbUtils.createConnection();
-        Document elementDoc = null;
-        try {
-            logger.debug("Initializing database connection...");
-
+        Document elementDoc;
+        try (Connection conn = DbUtils.createConnection()) {
             elementDoc = getElementXml(mapId, elementId, elementTypeVal, false, true, conn);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
@@ -247,16 +232,10 @@ public class ElementResource {
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        Connection conn = DbUtils.createConnection();
         Document elementDoc = null;
-        try {
-            logger.debug("Initializing database connection...");
-
+        try (Connection conn = DbUtils.createConnection()) {
             elementDoc = getElementXml(elementIdParts[0], Long.parseLong(elementIdParts[2]), elementType, true, true,
                     conn);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
@@ -293,8 +272,6 @@ public class ElementResource {
             String msg = "Element with ID: " + elementId + " and type: " + elementType + " does not exist.";
             throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
         }
-
-        assert (elementRecords.size() == 1);
 
         Element element = ElementFactory.create(elementType, elementRecords.get(0), dbConn,
                 Long.parseLong(mapId));
@@ -341,14 +318,9 @@ public class ElementResource {
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        Connection conn = DbUtils.createConnection();
-        Document elementDoc = null;
-        try {
-            logger.debug("Initializing database connection...");
+        Document elementDoc;
+        try (Connection conn = DbUtils.createConnection()) {
             elementDoc = getElementsXml(mapId, elemIds, elementTypeVal, false, true, conn);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 10000));
@@ -393,10 +365,8 @@ public class ElementResource {
         elementDoc.appendChild(elementRootXml);
 
         for (Tuple elementRecord : elementRecords) {
-            Element element = ElementFactory.create(elementType, elementRecord, dbConn,
-                    Long.parseLong(mapId));
+            Element element = ElementFactory.create(elementType, elementRecord, dbConn, Long.parseLong(mapId));
             Users usersTable = elementRecord.get(QUsers.users);
-
             org.w3c.dom.Element elementXml = element.toXml(elementRootXml, usersTable.getId(),
                     usersTable.getDisplayName(), multiLayerUniqueElementIds, addChildren);
             elementRootXml.appendChild(elementXml);

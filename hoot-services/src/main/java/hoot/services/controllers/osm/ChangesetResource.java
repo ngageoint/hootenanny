@@ -132,12 +132,10 @@ public class ChangesetResource {
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        Connection conn = DbUtils.createConnection();
         long changesetId = -1;
-        try {
-            logger.debug("Initializing database connection...");
-
+        try (Connection conn = DbUtils.createConnection()) {
             long mapIdNum;
+
             try {
                 // input mapId may be a map ID or a map name
                 mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
@@ -190,10 +188,6 @@ public class ChangesetResource {
             transactionManager.commit(transactionStatus);
             conn.commit();
         }
-        finally {
-            conn.setAutoCommit(true);
-            DbUtils.closeConnection(conn);
-        }
 
         logger.debug("Returning ID: {} for new changeset...", changesetId);
 
@@ -240,10 +234,9 @@ public class ChangesetResource {
     public Response upload(String changeset,
                            @PathParam("changesetId") long changesetId,
                            @QueryParam("mapId") String mapId) throws Exception {
-        logger.debug("Intializing database connection...");
-        Connection conn = DbUtils.createConnection();
+
         Document changesetUploadResponse = null;
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             logger.debug("Intializing changeset upload transaction...");
             TransactionStatus transactionStatus = transactionManager
                     .getTransaction(new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
@@ -269,16 +262,14 @@ public class ChangesetResource {
                 logger.error("Rolling back transaction for changeset upload...", e);
                 transactionManager.rollback(transactionStatus);
                 conn.rollback();
+
                 handleError(e, changesetId, StringUtils.abbreviate(changeset, 100));
             }
 
             logger.debug("Committing changeset upload transaction...");
+
             transactionManager.commit(transactionStatus);
             conn.commit();
-        }
-        finally {
-            conn.setAutoCommit(true);
-            DbUtils.closeConnection(conn);
         }
 
         logger.debug("Returning changeset upload response: {} ...",
@@ -321,18 +312,13 @@ public class ChangesetResource {
                         @QueryParam("mapId") String mapId) throws Exception {
         logger.info("Closing changeset with ID: {} ...", changesetId);
 
-        Connection conn = DbUtils.createConnection();
-        try {
-            logger.debug("Intializing database connection...");
-            if (mapId == null) {
-                throw new Exception("Invalid map id.");
-            }
-            long mapid = Long.parseLong(mapId);
-
-            Changeset.closeChangeset(mapid, changesetId, conn);
+        if (mapId == null) {
+            throw new Exception("Invalid map id.");
         }
-        finally {
-            DbUtils.closeConnection(conn);
+
+        try (Connection conn = DbUtils.createConnection()) {
+            long mapid = Long.parseLong(mapId);
+            Changeset.closeChangeset(mapid, changesetId, conn);
         }
 
         return Response.status(Status.OK).toString();

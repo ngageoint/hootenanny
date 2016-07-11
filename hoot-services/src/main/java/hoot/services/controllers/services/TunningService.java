@@ -84,10 +84,9 @@ public class TunningService implements Executable {
         JSONObject res = new JSONObject();
         String input = command.get("input").toString();
         String inputtype = command.get("inputtype").toString();
-        Connection conn = DbUtils.createConnection();
         long starttime = new Date().getTime();
 
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             String tempOutputPath;
             if (inputtype.equalsIgnoreCase("db")) {
                 DbUtils.getNodesCountByName(conn, input);
@@ -137,9 +136,6 @@ public class TunningService implements Executable {
         catch (Exception ex) {
             String msg = "Tuning Service error: " + ex.getMessage();
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         finalStatusDetail = res.toString();
