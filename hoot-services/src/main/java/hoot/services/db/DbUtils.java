@@ -858,8 +858,7 @@ public final class DbUtils {
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             String hstoreStr = "";
-            for (Object o : tags.entrySet()) {
-                Map.Entry pairs = (Map.Entry) o;
+            for (Map.Entry<String, String> pairs : tags.entrySet()) {
                 if (!hstoreStr.isEmpty()) {
                     hstoreStr += ",";
                 }
@@ -922,8 +921,7 @@ public final class DbUtils {
                         Map<String, String> tags = (Map<String, String>) node.getTags();
 
                         String hstoreStr = "";
-                        for (Object o1 : tags.entrySet()) {
-                            Map.Entry pairs = (Map.Entry) o1;
+                        for (Map.Entry<String, String> pairs : tags.entrySet()) {
                             if (!hstoreStr.isEmpty()) {
                                 hstoreStr += ",";
                             }
@@ -961,8 +959,7 @@ public final class DbUtils {
                         Map<String, String> tags = (Map<String, String>) node.getTags();
 
                         String hstoreStr = "";
-                        for (Object o1 : tags.entrySet()) {
-                            Map.Entry pairs = (Map.Entry) o1;
+                        for (Map.Entry<String, String> pairs : tags.entrySet()) {
                             if (!hstoreStr.isEmpty()) {
                                 hstoreStr += ",";
                             }
@@ -1050,8 +1047,7 @@ public final class DbUtils {
                         Map<String, String> tags = (Map<String, String>) way.getTags();
 
                         String hstoreStr = "";
-                        for (Object o1 : tags.entrySet()) {
-                            Map.Entry pairs = (Map.Entry) o1;
+                        for (Map.Entry<String, String> pairs : tags.entrySet()) {
                             if (!hstoreStr.isEmpty()) {
                                 hstoreStr += ",";
                             }
@@ -1085,8 +1081,7 @@ public final class DbUtils {
                         Map<String, String> tags = (Map<String, String>) way.getTags();
 
                         String hstoreStr = "";
-                        for (Object o1 : tags.entrySet()) {
-                            Map.Entry pairs = (Map.Entry) o1;
+                        for (Map.Entry<String, String> pairs : tags.entrySet()) {
                             if (!hstoreStr.isEmpty()) {
                                 hstoreStr += ",";
                             }
@@ -1171,8 +1166,7 @@ public final class DbUtils {
                         Map<String, String> tags = (Map<String, String>) rel.getTags();
 
                         String hstoreStr = "";
-                        for (Object o1 : tags.entrySet()) {
-                            Map.Entry pairs = (Map.Entry) o1;
+                        for (Map.Entry<String, String> pairs : tags.entrySet()) {
                             if (!hstoreStr.isEmpty()) {
                                 hstoreStr += ",";
                             }
@@ -1206,8 +1200,7 @@ public final class DbUtils {
                         Map<String, String> tags = (Map<String, String>) rel.getTags();
 
                         String hstoreStr = "";
-                        for (Object o1 : tags.entrySet()) {
-                            Map.Entry pairs = (Map.Entry) o1;
+                        for (Map.Entry<String, String> pairs : tags.entrySet()) {
                             if (!hstoreStr.isEmpty()) {
                                 hstoreStr += ",";
                             }

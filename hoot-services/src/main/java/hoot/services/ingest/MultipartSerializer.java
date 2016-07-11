@@ -100,10 +100,9 @@ public class MultipartSerializer {
             }
         }
 
-        for (Object o : folderMap.entrySet()) {
+        for (Map.Entry<String, String> pairs : folderMap.entrySet()) {
             String nameOnly = "";
-            Map.Entry pairs = (Map.Entry) o;
-            String fgdbName = pairs.getValue().toString();
+            String fgdbName = pairs.getValue();
             String[] nParts = fgdbName.split("\\.");
 
             for (int i = 0; i < (nParts.length - 1); i++) {

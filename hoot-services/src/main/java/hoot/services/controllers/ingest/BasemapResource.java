@@ -169,10 +169,9 @@ public class BasemapResource extends JobControllerBase {
                 }
             }
 
-            for (Object o : uploadedFiles.entrySet()) {
+            for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
                 String jobId = UUID.randomUUID().toString();
-                Map.Entry pairs = (Map.Entry) o;
-                String fName = pairs.getKey().toString();
+                String fName = pairs.getKey();
 
                 logger.debug("Preparing Basemap Ingest for :{}", fName);
                 String bmName = inputName;

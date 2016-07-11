@@ -81,10 +81,9 @@ public class AllReviewableItems implements ReviewQueryMapper {
         JSONArray features = new JSONArray();
 
         if (reviewableItems != null) {
-            for (Object it : reviewableItems.entrySet()) {
-                Map.Entry pair = (Map.Entry) it;
-                Long relId = (Long) pair.getKey();
-                ReviewableItemBboxInfo info = (ReviewableItemBboxInfo) pair.getValue();
+            for (Map.Entry<Long, ReviewableItemBboxInfo> pair : reviewableItems.entrySet()) {
+                Long relId = pair.getKey();
+                ReviewableItemBboxInfo info = pair.getValue();
 
                 JSONObject feature = new JSONObject();
                 feature.put("type", "Feature");

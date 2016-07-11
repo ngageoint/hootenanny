@@ -111,10 +111,9 @@ public class OgrAttributesResource extends JobControllerBase {
             List<String> filesList = new ArrayList<>();
             List<String> zipList = new ArrayList<>();
 
-            for (Object o : uploadedFiles.entrySet()) {
-                Map.Entry pairs = (Map.Entry) o;
-                String fName = pairs.getKey().toString();
-                String ext = pairs.getValue().toString();
+            for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
+                String fName = pairs.getKey();
+                String ext = pairs.getValue();
 
                 String inputFileName = uploadedFilesPaths.get(fName);
 

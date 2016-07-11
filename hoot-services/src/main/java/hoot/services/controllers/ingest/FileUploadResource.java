@@ -131,10 +131,9 @@ public class FileUploadResource extends JobControllerBase {
             JSONArray reqList = new JSONArray();
             List<String> inputsList = new ArrayList<>();
 
-            for (Object o : uploadedFiles.entrySet()) {
-                Map.Entry pairs = (Map.Entry) o;
-                String fName = pairs.getKey().toString();
-                String ext = pairs.getValue().toString();
+            for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
+                String fName = pairs.getKey();
+                String ext = pairs.getValue();
 
                 if ((etlName == null) || (etlName.isEmpty())) {
                     etlName = fName;

@@ -412,8 +412,7 @@ public class Node extends Element {
 
         String strKv = "";
         if (tags != null) {
-            for (Object it : tags.entrySet()) {
-                Map.Entry pairs = (Map.Entry) it;
+            for (Map.Entry<String, String> pairs : tags.entrySet()) {
                 String key = "\"" + pairs.getKey() + "\"";
                 String val = "\"" + pairs.getValue() + "\"";
                 if (!strKv.isEmpty()) {
