@@ -434,7 +434,6 @@ public class MapResource {
                     bbox = minX + "," + minY + "," + maxX + "," + maxY;
                 }
 
-                QMaps maps = QMaps.maps;
                 mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
 
                 BoundingBox queryBounds;
@@ -536,7 +535,6 @@ public class MapResource {
                         bbox = minX + "," + minY + "," + maxX + "," + maxY;
                     }
 
-                    QMaps maps = QMaps.maps;
                     mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
 
                     BoundingBox queryBounds;
@@ -592,7 +590,6 @@ public class MapResource {
                 ret.put("nodescount", 0);
             }
             else {
-                QMaps maps = QMaps.maps;
                 mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
 
                 BoundingBox queryBounds;
@@ -1052,7 +1049,6 @@ public class MapResource {
 
                 if (mapIdNum != -1) // not OSM API db
                 {
-                    QMaps maps = QMaps.maps;
                     mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
                     logger.info("Retrieving map tags for map with ID: {} ...", mapIdNum);
 

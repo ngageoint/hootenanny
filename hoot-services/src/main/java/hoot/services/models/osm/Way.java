@@ -460,7 +460,7 @@ public class Way extends Element {
             org.w3c.dom.Node nodeXml = wayNodesXml.item(i);
             long actualNodeId = parseWayNode(nodeXml);
             relatedRecordIds.add(actualNodeId);
-            relatedRecords.add(createWayNodeRecord(actualNodeId, (long) (i + 1)));
+            relatedRecords.add(createWayNodeRecord(actualNodeId, (i + 1)));
         }
     }
 
