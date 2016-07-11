@@ -286,7 +286,7 @@ def createHeader(c):
    */
   get%s : function() 
   {
-      var tmp = getHootConfig('%s');
+      var tmp = hoot.get('%s');
       if (tmp) 
       {
 """ % (
