@@ -385,7 +385,6 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
   {
     set<QString> u1;
     set<QString> u2;
-
     set<ElementId> eids = ReviewMarker::getReviewElements(conflated, *it);
     for (set<ElementId>::iterator eid = eids.begin(); eid != eids.end(); eid++)
     {
