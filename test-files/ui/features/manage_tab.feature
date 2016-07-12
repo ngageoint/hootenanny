@@ -41,36 +41,44 @@ Feature: Manage Tab
         And I should see "Hootenanny Web Services - Version:"
         And I should see "Hootenanny iD "
 
-
     Scenario: Testing Click Events of Dataset Tab
         When I click on the "Datasets" option in the "settingsSidebar"
+        # Clean up from previous failed tests
         When I delete any existing "ManageTabTest" folder if necessary
         When I delete any existing "TestFolder" folder if necessary
+        # Add a new folder
         And I press "Add Folder"
         Then I fill "NewFolderName" input with "ManageTabTest"
         And I press "big.loud" span with text "Add Folder"
+        # Move datasets into folder
         When I click the "AllDataTypesACucumber" Dataset and the "AllDataTypesBCucumber" Dataset
         And I context click the "AllDataTypesACucumber" Dataset
         And I should see "Delete (2)"
         Then I click the "Move (2)" context menu item
         And I select the "ManageTabTest" option in the "root" combobox
         And I press "big.loud" span with text "Update"
+        # Move datasets back out of folder
         Then I click the "ManageTabTest" Dataset
         When I click the "AllDataTypesBCucumber" Dataset and the "AllDataTypesACucumber" Dataset
         And I context click the "AllDataTypesACucumber" Dataset
         And I should see "Delete (2)"
         Then I click the "Move (2)" context menu item
         And I press "big.loud" span with text "Update"
+        # Rename the folder
+        And I wait
         Then I click the "ManageTabTest" Dataset
         And I context click the "ManageTabTest" Dataset
         And I click the "Rename/Move ManageTabTest" context menu item
         Then I fill "fileOutputName" input with "TestFolder"
         And I press "big.loud" span with text "Update"
+        # Add a sub folder
+        And I wait
         Then I context click the "TestFolder" Dataset
         And I click the "Add Folder" context menu item
         Then I fill "NewFolderName" input with "TestSubFolder"
         And I press "big.loud" span with text "Add Folder"
         Then I wait 30 "seconds" to not see "Folder Name"
+        # Add dataset into sub folder
         And I click the "TestSubFolder" Dataset
         And I context click the "TestSubFolder" Dataset
         And I click the "Add Dataset" context menu item
@@ -81,12 +89,19 @@ Feature: Manage Tab
         And I should see element "#importDatasetPathName" with no value and placeholder "TestFolder/TestSubFolder"
         When I press "big.loud" span with text "Import"
         Then I wait 30 "seconds" to not see "Import Type"
+
+        # TODO: Rename dataset
+        # TODO: Add as reference
+        # TODO: Add as secondary
+
+        # Delete sub folder and dataset
         And I click the "TestSubFolder" Dataset
         And I should see "dcpoi_clip_manage"
         And I context click the "TestSubFolder" Dataset
         And I click the "Delete" context menu item
         And I accept the alert
         And I should see "TestFolder"
+        # Delete the folder
         And I wait
         And I click the "TestFolder" Dataset
         And I context click the "TestFolder" Dataset
