@@ -42,6 +42,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 
 // Qt
 #include <QDebug>
@@ -69,7 +70,7 @@ DividedHighwayManipulation::DividedHighwayManipulation(long leftId, long rightId
 void DividedHighwayManipulation::_addConnector(shared_ptr<OsmMap> map,
                                                long nodeId) const
 {
-  vector<long> intersectingWays = map->findWayByNode(nodeId);
+  vector<long> intersectingWays = FindWaysVisitor::findWaysByNode(map, nodeId);
   
   if (intersectingWays.size() == 1)
   {

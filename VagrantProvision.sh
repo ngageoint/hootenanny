@@ -71,43 +71,68 @@ fi
 
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
-    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
+    #echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
+    echo "export PATH=\$PATH:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
+
+# Ruby via rvm - from rvm.io
+gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+
+curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
+
+source /home/vagrant/.rvm/scripts/rvm
+
+rvm install ruby-2.3
+rvm --default use 2.3
+
+# Don't install documentation for gems
+cat > ~/.gemrc <<EOT
+  install: --no-document
+  update: --no-document
+EOT
 
 # gem installs are *very* slow, hence all the checks in place here to facilitate debugging
 echo "### Installing cucumber gems..."
 gem list --local | grep -q mime-types
 if [ $? -eq 1 ]; then
-   sudo gem install mime-types -v 2.6.2
+   #sudo gem install mime-types -v 2.6.2
+   gem install mime-types 
 fi
 gem list --local | grep -q capybara
 if [ $? -eq 1 ]; then
-   sudo gem install capybara -v 2.5.0
+   #sudo gem install capybara -v 2.5.0
+   gem install capybara
 fi
 gem list --local | grep -q cucumber
 if [ $? -eq 1 ]; then
-   sudo gem install cucumber
+   #sudo gem install cucumber
+   gem install cucumber
 fi
 gem list --local | grep -q capybara-webkit
 if [ $? -eq 1 ]; then
-   sudo gem install capybara-webkit
+   #sudo gem install capybara-webkit
+   gem install capybara-webkit
 fi
 gem list --local | grep -q selenium-webdriver
 if [ $? -eq 1 ]; then
-   sudo gem install selenium-webdriver
+   #sudo gem install selenium-webdriver
+   gem install selenium-webdriver
 fi
 gem list --local | grep -q rspec
 if [ $? -eq 1 ]; then
-   sudo gem install rspec
+   #sudo gem install rspec
+   gem install rspec
 fi
 gem list --local | grep -q capybara-screenshot
 if [ $? -eq 1 ]; then
-   sudo gem install capybara-screenshot
+   #sudo gem install capybara-screenshot
+   gem install capybara-screenshot
 fi
 gem list --local | grep -q selenium-cucumber
 if [ $? -eq 1 ]; then
-   sudo gem install selenium-cucumber
+   #sudo gem install selenium-cucumber
+   gem install selenium-cucumber
 fi
 
 # Make sure that we are in ~ before trying to wget & install stuff

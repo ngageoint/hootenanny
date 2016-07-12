@@ -38,10 +38,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, KeepNodesVisitor)
 
-class FindNodesVisitor : public ElementVisitor
+class FindAllNodesVisitor : public ElementVisitor
 {
 public:
-  FindNodesVisitor(OsmMapPtr map) : _map(map) {}
+  FindAllNodesVisitor(OsmMapPtr map) : _map(map) {}
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -71,7 +71,7 @@ void KeepNodesVisitor::visit(const ConstElementPtr& e)
   if (e->getElementType() != ElementType::Node || e->getTags().getNonDebugCount() == 0)
   {
     // check to see if any of this element's children are Nodes.
-    FindNodesVisitor v(_map->shared_from_this());
+    FindAllNodesVisitor v(_map->shared_from_this());
     e->visitRo(*_map, v);
 
     RelationPtr r;
