@@ -108,19 +108,19 @@ public:
     LegacyVertexMatcher uut(map);
     uut.identifyVertexMatches(n1, n2, details);
 
-    HOOT_STR_EQUALS(1, uut.isCandidateMatch(n1->getVertex(a1->getElementId()),
-      n2->getVertex(a2->getElementId()), details));
-    HOOT_STR_EQUALS(0, uut.isConfidentTiePoint(n1->getVertex(a1->getElementId()),
-      n2->getVertex(a2->getElementId())));
-    HOOT_STR_EQUALS(0, uut.scoreMatch(n1->getVertex(a1->getElementId()),
-      n2->getVertex(a2->getElementId())));
+    HOOT_STR_EQUALS(1, uut.isCandidateMatch(n1->getSingleVertex(a1->getElementId()),
+      n2->getSingleVertex(a2->getElementId()), details));
+    HOOT_STR_EQUALS(0, uut.isConfidentTiePoint(n1->getSingleVertex(a1->getElementId()),
+      n2->getSingleVertex(a2->getElementId())));
+    HOOT_STR_EQUALS(0, uut.scoreMatch(n1->getSingleVertex(a1->getElementId()),
+      n2->getSingleVertex(a2->getElementId())));
 
-    HOOT_STR_EQUALS(1, uut.isCandidateMatch(n1->getVertex(b1->getElementId()),
-      n2->getVertex(b2->getElementId()), details));
-    HOOT_STR_EQUALS(1, uut.isConfidentTiePoint(n1->getVertex(b1->getElementId()),
-      n2->getVertex(b2->getElementId())));
-    HOOT_STR_EQUALS(1, uut.scoreMatch(n1->getVertex(b1->getElementId()),
-      n2->getVertex(b2->getElementId())));
+    HOOT_STR_EQUALS(1, uut.isCandidateMatch(n1->getSingleVertex(b1->getElementId()),
+      n2->getSingleVertex(b2->getElementId()), details));
+    HOOT_STR_EQUALS(1, uut.isConfidentTiePoint(n1->getSingleVertex(b1->getElementId()),
+      n2->getSingleVertex(b2->getElementId())));
+    HOOT_STR_EQUALS(1, uut.scoreMatch(n1->getSingleVertex(b1->getElementId()),
+      n2->getSingleVertex(b2->getElementId())));
   }
 };
 

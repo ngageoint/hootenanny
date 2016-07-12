@@ -29,6 +29,13 @@
 namespace hoot
 {
 
+int NetworkVertex::uidCount = 0;
+
+NetworkVertex::NetworkVertex(ConstElementPtr e) : _e(e)
+{
+  _uid = uidCount++;
+}
+
 QString NetworkVertex::toString() const
 {
   QString result;
@@ -38,7 +45,7 @@ QString NetworkVertex::toString() const
   }
   else
   {
-    result = _e->getElementId().toString();
+    result = QString("(%1) %2").arg(_uid).arg(_e->getElementId().toString());
   }
 
   return result;

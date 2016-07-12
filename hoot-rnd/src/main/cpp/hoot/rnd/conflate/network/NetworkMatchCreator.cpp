@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/MatchThreshold.h>
@@ -35,9 +36,11 @@
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/HighwayCriterion.h>
 #include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/rnd/conflate/network/DebugNetworkMapCreator.h>
 #include <hoot/rnd/conflate/network/IterativeNetworkMatcher.h>
 #include <hoot/rnd/conflate/network/SingleSidedNetworkMatcher.h>
 #include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
@@ -106,6 +109,19 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   for (size_t i = 0; i < 20; ++i)
   {
+    if (ConfigOptions().getNetworkMatchWriteDebugMaps())
+    {
+      OsmMapPtr copy(new OsmMap(map));
+      DebugNetworkMapCreator().addDebugElements(copy, matcher->getAllEdgeScores(),
+        matcher->getAllVertexScores());
+
+      MapProjector::projectToWgs84(copy);
+      conf().set(ConfigOptions().getWriterIncludeDebugKey(), true);
+      QString name = QString("tmp/debug-%1.osm").arg(i, 3, 10, QLatin1Char('0'));
+      LOG_INFO("Writing debug map: " << name);
+      OsmMapWriterFactory::getInstance().write(copy, name);
+    }
+
     matcher->iterate();
   }
 

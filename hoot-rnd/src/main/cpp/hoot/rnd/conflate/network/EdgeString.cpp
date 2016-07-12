@@ -44,6 +44,7 @@ void EdgeString::addFirstEdge(ConstNetworkEdgePtr e, bool reversed)
 void EdgeString::appendEdge(ConstNetworkEdgePtr e)
 {
   assert(_edges.size() > 0);
+  assert(isStub() == false);
 
   bool reversed;
   if (e->getFrom() == getTo())

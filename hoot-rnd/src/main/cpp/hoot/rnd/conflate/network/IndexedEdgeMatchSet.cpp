@@ -112,6 +112,7 @@ bool IndexedEdgeMatchSet::contains(const ConstEdgeMatchPtr &em) const
   {
     EdgeMatchPtr r = em->clone();
     r->reverse();
+    // we allow reversed stubs, but no others.
     if (_matches.contains(r))
     {
       result = true;
@@ -185,6 +186,16 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithTermination(ConstNetw
     }
     else if (em->getString1()->getTo() == v1 &&
       em->getString2()->getTo() == v2)
+    {
+      result.insert(em);
+    }
+    else if (em->getString1()->getFrom() == v2 &&
+      em->getString2()->getFrom() == v1)
+    {
+      result.insert(em);
+    }
+    else if (em->getString1()->getTo() == v2 &&
+      em->getString2()->getTo() == v1)
     {
       result.insert(em);
     }

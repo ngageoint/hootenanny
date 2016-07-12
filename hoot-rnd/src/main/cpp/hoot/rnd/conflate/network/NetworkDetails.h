@@ -52,23 +52,21 @@ public:
 
   Meters calculateLength(ConstNetworkEdgePtr e);
 
-  ConstOsmMapPtr getMap() const { return _map; }
+  Radians calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNetworkVertexPtr v);
+
+  QList<ConstNetworkVertexPtr> getCandidateMatches(ConstNetworkVertexPtr v);
 
   double getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
   
   double getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2);
 
-  double getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
-
-  /**
-   * Returns a score matching v1 to v2. This does not consider any neighboring vertices. 0 means
-   * no match and larger scores are better.
-   */
-  double getVertexMatchScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
-
   virtual Envelope getEnvelope(ConstNetworkEdgePtr e) const;
 
   virtual Envelope getEnvelope(ConstNetworkVertexPtr v) const;
+
+  ConstOsmMapPtr getMap() const { return _map; }
+
+  double getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
   Meters getSearchRadius(ConstNetworkEdgePtr e1) const;
 
@@ -78,15 +76,33 @@ public:
 
   Meters getSearchRadius(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const;
 
-  QList<ConstNetworkVertexPtr> getCandidateMatchesV2(ConstNetworkVertexPtr v2);
+  /**
+   * Returns a score matching v1 to v2. This does not consider any neighboring vertices. 0 means
+   * no match and larger scores are better.
+   */
+  double getVertexMatchScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 
   bool hasConfidentTiePoint(ConstNetworkVertexPtr v);
-
-  bool isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
   bool isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
   bool isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
+
+  bool isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
+
+  /**
+   * Starting at v1, v2, are e1 and e2 partial edge match candidates?
+   *
+   * E.g.
+   *
+   *     a----1---b
+   *       c----2---d
+   *
+   * isPartialCandidateMatch(a, c, 1, 2) == true
+   * isPartialCandidateMatch(a, d, 1, 2) == false
+   */
+  bool isPartialCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
+    ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
   WayStringPtr toWayString(ConstEdgeStringPtr e) const;
 

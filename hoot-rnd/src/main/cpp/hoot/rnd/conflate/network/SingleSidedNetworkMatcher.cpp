@@ -245,7 +245,7 @@ void SingleSidedNetworkMatcher::_seedEdgeScores()
   LOG_VAR(em);
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
-    NetworkEdgePtr e1 = it.value();
+    ConstNetworkEdgePtr e1 = it.value();
     // find all the n2 edges that are in range of this one
     Envelope env = _details->getEnvelope(it.value());
     env.expandBy(_details->getSearchRadius(it.value()));
@@ -254,13 +254,7 @@ void SingleSidedNetworkMatcher::_seedEdgeScores()
 
     while (iit.next())
     {
-      NetworkEdgePtr e2 = _index2Edge[iit.getId()];
-
-      if (e1->getFrom()->getElementId().getId() == -3)
-      {
-        LOG_INFO("e1: " << e1 << " e2: " << e2);
-        LOG_VAR(_details->getPartialEdgeMatchScore(e1, e2));
-      }
+      ConstNetworkEdgePtr e2 = _index2Edge[iit.getId()];
 
       if (_details->getPartialEdgeMatchScore(e1, e2) > 0)
       {
@@ -288,9 +282,9 @@ void SingleSidedNetworkMatcher::_seedVertexScores()
   const OsmNetwork::VertexMap& vm = _n2->getVertexMap();
   for (OsmNetwork::VertexMap::const_iterator it = vm.begin(); it != vm.end(); ++it)
   {
-    NetworkVertexPtr v2 = it.value();
+    ConstNetworkVertexPtr v2 = it.value();
 
-    QList<ConstNetworkVertexPtr> matches = _details->getCandidateMatchesV2(v2);
+    QList<ConstNetworkVertexPtr> matches = _details->getCandidateMatches(v2);
     foreach(ConstNetworkVertexPtr v1, matches)
     {
       _vertex21Scores[v2][v1] = 1.0 / matches.size();
@@ -308,7 +302,7 @@ void SingleSidedNetworkMatcher::_updateEdgeScores()
   const OsmNetwork::EdgeMap& em2 = _n2->getEdgeMap();
   for (OsmNetwork::EdgeMap::const_iterator it = em2.begin(); it != em2.end(); ++it)
   {
-    NetworkEdgePtr e2 = it.value();
+    ConstNetworkEdgePtr e2 = it.value();
 
     // set the new score to
     //
@@ -402,7 +396,7 @@ void SingleSidedNetworkMatcher::_updateEdgeScoresAdditive()
   const OsmNetwork::EdgeMap& em2 = _n2->getEdgeMap();
   for (OsmNetwork::EdgeMap::const_iterator it = em2.begin(); it != em2.end(); ++it)
   {
-    NetworkEdgePtr e2 = it.value();
+    ConstNetworkEdgePtr e2 = it.value();
 
     // set the new score to
     //

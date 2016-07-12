@@ -49,7 +49,7 @@ class NetworkEdge
 public:
   NetworkEdge();
 
-  NetworkEdge(NetworkVertexPtr from, NetworkVertexPtr to, bool directed);
+  NetworkEdge(ConstNetworkVertexPtr from, ConstNetworkVertexPtr to, bool directed);
 
   void addMember(ConstElementPtr e) { _members.append(e); }
 
@@ -63,16 +63,22 @@ public:
 
   ConstNetworkVertexPtr getTo() const { return _to; }
 
-  bool isDirected() { return _directed; }
+  bool isDirected() const { return _directed; }
 
-  bool operator==(const NetworkEdge& other) const { return _from == other._from && _to == other._to; }
+  /**
+   * Returns true if this is a stub edge (both vertices are the same). Stubs are handy when trying
+   * to match an edge to a vertex.
+   */
+  bool isStub() const { return _from->getElementId() == _to->getElementId(); }
+
+  bool operator==(const NetworkEdge& other) const { return toString() == other.toString(); }
 
   void setMembers(QList<ConstElementPtr> members) { _members = members; }
 
   QString toString() const;
 
 private:
-  NetworkVertexPtr _from, _to;
+  ConstNetworkVertexPtr _from, _to;
   bool _directed;
   QList<ConstElementPtr> _members;
 };

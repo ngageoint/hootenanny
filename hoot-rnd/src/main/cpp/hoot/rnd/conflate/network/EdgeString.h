@@ -39,6 +39,9 @@ namespace hoot
 /**
  * Contains one or more ordered edges that are connected together into a string. Each edge may
  * contain just a partial or an entire edge as long as the pieces all connect.
+ *
+ * If the EdgeString is a stub it may only contain one edge and that edge must be a stub. An Edge
+ * string cannot contain a stub and other Edges.
  */
 class EdgeString
 {
@@ -64,6 +67,8 @@ public:
   void addFirstEdge(ConstNetworkEdgePtr e, bool reverse);
 
   void appendEdge(ConstNetworkEdgePtr e);
+
+  Meters calculateLength(const ConstElementProviderPtr& provider) const;
 
   shared_ptr<EdgeString> clone() const;
 
@@ -94,11 +99,11 @@ public:
 
   ConstNetworkEdgePtr getLastEdge() const { return _edges.back().e; }
 
-  Meters calculateLength(const ConstElementProviderPtr& provider) const;
-
   QList<ConstElementPtr> getMembers() const;
 
   ConstNetworkVertexPtr getTo() const;
+
+  bool isStub() const { return _edges.size() == 1 && _edges[0].e->isStub(); }
 
   bool overlaps(shared_ptr<const EdgeString> other) const;
 

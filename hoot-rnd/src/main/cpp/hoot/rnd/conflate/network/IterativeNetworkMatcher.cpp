@@ -83,6 +83,223 @@ shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcher::create()
   return shared_ptr<IterativeNetworkMatcher>(new IterativeNetworkMatcher());
 }
 
+void IterativeNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb)
+{
+  if (na == _n1)
+  {
+    LOG_INFO("na is n1");
+  }
+  else
+  {
+    LOG_INFO("na is n2");
+  }
+  const OsmNetwork::VertexMap& vm = na->getVertexMap();
+
+  // go through all the vertices in the network
+  foreach (ConstNetworkVertexPtr va, vm.values())
+  {
+    QList<ConstNetworkVertexPtr> vCandidatesB = _details->getCandidateMatches(va);
+    bool createStub = false;
+    QSet<ConstNetworkEdgePtr> edgeStubsB;
+
+    foreach (ConstNetworkVertexPtr vb, vCandidatesB)
+    {
+      QList<ConstNetworkEdgePtr> edges = nb->getEdgesFromVertex(vb);
+
+      // go through all the edges that start/end at vb
+      foreach (ConstNetworkEdgePtr e, edges)
+      {
+        // if both the from and to vertices are candidate matches with va
+        if (e->getFrom() != e->getTo() && vCandidatesB.contains(e->getFrom()) &&
+          vCandidatesB.contains(e->getTo()))
+        {
+          createStub = true;
+          edgeStubsB.insert(e);
+        }
+      }
+    }
+
+    if (createStub)
+    {
+      foreach (ConstNetworkEdgePtr eb, edgeStubsB)
+      {
+        _createStubIntersection(na, nb, va, eb);
+      }
+
+//      //foreach (ConstNetworkEdgePtr e, na->getEdgesFromVertex(va))
+//      QList<ConstNetworkEdgePtr> edges = na->getEdgesFromVertex(va);
+//      if (edges.size() >= 1)
+//      {
+//        ConstNetworkEdgePtr e = edges[0];
+//        // create a new vertex that points to the same element
+//        NetworkVertexPtr newV(new NetworkVertex(va->getElement()));
+//        LOG_INFO("Adding vertex: " << newV);
+//        na->addVertex(newV);
+
+//        LOG_INFO("Removing edge: " << e);
+//        na->removeEdge(e);
+//        ConstNetworkVertexPtr newFrom = e->getFrom();
+//        ConstNetworkVertexPtr newTo = e->getTo();
+//        if (e->getFrom() == va)
+//        {
+//          newFrom = newV;
+//        }
+//        if (e->getTo() == va)
+//        {
+//          newTo = newV;
+//        }
+
+//        // connect the new vertex to va with a new stub edge
+//        NetworkEdgePtr newEdge(new NetworkEdge(newFrom, newTo, e->isDirected()));
+//        newEdge->setMembers(e->getMembers());
+//        LOG_INFO("Adding new edge: " << newEdge);
+//        na->addEdge(newEdge);
+
+//        // connect the new vertex to va with a new stub edge
+//        NetworkEdgePtr newStub(new NetworkEdge(newV, va, false));
+//        newStub->addMember(va->getElement());
+//        na->addEdge(newStub);
+//        LOG_INFO("Adding stub edge: " << newStub);
+//      }
+    }
+  }
+}
+
+void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetworkPtr nb,
+  ConstNetworkVertexPtr va, ConstNetworkEdgePtr smallWayB)
+{
+
+  #warning break this into smaller functions
+  // Find all the edges that connect to eb
+  QSet<ConstNetworkEdgePtr> ebNeighborhood = QSet<ConstNetworkEdgePtr>::fromList(
+    nb->getEdgesFromVertex(smallWayB->getFrom()));
+  ebNeighborhood.unite(QSet<ConstNetworkEdgePtr>::fromList(nb->getEdgesFromVertex(smallWayB->getTo())));
+  ebNeighborhood.remove(smallWayB);
+  LOG_VAR(ebNeighborhood);
+
+  // represents which vertices an edge may match [vertex in nb][edge in na]
+  QHash<ConstNetworkVertexPtr, QList<ConstNetworkEdgePtr> > edgeVMatch;
+  QList<ConstNetworkEdgePtr> unmatched;
+
+  LOG_VAR(va);
+  // for each edge that intersects with va
+  foreach (ConstNetworkEdgePtr ea, na->getEdgesFromVertex(va))
+  {
+    bool fromMatch = false, toMatch = false;
+
+    // go through all the eb neighbors
+    foreach (ConstNetworkEdgePtr ebNeighbor, ebNeighborhood)
+    {
+      if (ebNeighbor->contains(smallWayB->getFrom()))
+      {
+        if (_details->isPartialCandidateMatch(va, smallWayB->getFrom(), ea, ebNeighbor))
+        {
+          fromMatch = true;
+        }
+      }
+      if (ebNeighbor->contains(smallWayB->getTo()))
+      {
+        if (_details->isPartialCandidateMatch(va, smallWayB->getTo(), ea, ebNeighbor))
+        {
+          toMatch = true;
+        }
+      }
+    }
+    LOG_VAR(ea);
+    LOG_VAR(fromMatch);
+    LOG_VAR(toMatch);
+
+    // if the edge only matches one vertex, put it in edgeVMatch
+    if (fromMatch != toMatch)
+    {
+      if (fromMatch)
+      {
+        edgeVMatch[smallWayB->getFrom()].append(ea);
+      }
+      else
+      {
+        edgeVMatch[smallWayB->getTo()].append(ea);
+      }
+    }
+    // if the edge doesn't match any other edges put it in unmatched
+    // or, if the edge matches multiple vertices put it in unmatched.
+    else
+    {
+      unmatched.append(ea);
+    }
+  }
+
+  LOG_VAR(edgeVMatch);
+  LOG_VAR(unmatched);
+
+  // if this is relatively simple then modify the graph to add a 0:1 match
+  // (AKA intersection:way match)
+  if (unmatched.size() == 0)
+  {
+    QList<ConstNetworkVertexPtr> involvedVertices;
+
+    // for each vertex in nb with clear matches
+    foreach (ConstNetworkVertexPtr vb, edgeVMatch.keys())
+    {
+      // create a new stub vertex in na
+      NetworkVertexPtr newV(new NetworkVertex(va->getElement()));
+      LOG_INFO("Adding vertex: " << newV);
+      na->addVertex(newV);
+      involvedVertices.append(newV);
+
+      // for each edge that clearly matches vb
+      foreach (ConstNetworkEdgePtr ea, edgeVMatch[vb])
+      {
+        LOG_INFO("Removing edge: " << ea);
+        na->removeEdge(ea);
+        ConstNetworkVertexPtr newFrom = ea->getFrom();
+        ConstNetworkVertexPtr newTo = ea->getTo();
+        if (ea->getFrom() == va)
+        {
+          newFrom = newV;
+        }
+        if (ea->getTo() == va)
+        {
+          newTo = newV;
+        }
+
+        // relink each edge to this vertex by recreating the edge
+        NetworkEdgePtr newEdge(new NetworkEdge(newFrom, newTo, ea->isDirected()));
+        newEdge->setMembers(ea->getMembers());
+        LOG_INFO("Adding new edge: " << newEdge);
+        na->addEdge(newEdge);
+      }
+    }
+
+    // if there are no unmatched edges, delete va
+    if (edgeVMatch.size() > 0 && unmatched.size() == 0)
+    {
+      LOG_INFO("Removing vertex: " << va);
+      na->removeVertex(va);
+    }
+    else
+    {
+      involvedVertices.append(va);
+    }
+
+    // make stub edges between all the vertices.
+    for (int i = 0; i < involvedVertices.size(); ++i)
+    {
+      for (int j = i + 1; j < involvedVertices.size(); ++j)
+      {
+        ConstNetworkVertexPtr vi = involvedVertices[i];
+        ConstNetworkVertexPtr vj = involvedVertices[j];
+
+        // Create stub
+        NetworkEdgePtr newStub(new NetworkEdge(vi, vj, false));
+        newStub->addMember(va->getElement());
+        LOG_INFO("Adding new edge: " << newStub);
+        na->addEdge(newStub);
+      }
+    }
+  }
+}
+
 QList<NetworkEdgeScorePtr> IterativeNetworkMatcher::getAllEdgeScores() const
 {
   QList<NetworkEdgeScorePtr> result;
@@ -90,8 +307,8 @@ QList<NetworkEdgeScorePtr> IterativeNetworkMatcher::getAllEdgeScores() const
   for (EdgeScoreMap::const_iterator it = _edge12Scores.begin(); it != _edge12Scores.end();
     ++it)
   {
-    NetworkEdgeScorePtr p(new NetworkEdgeScore(it.key(), sqrt(it.value()),
-      sqrt(_edge21Scores[it.key()])));
+    NetworkEdgeScorePtr p(new NetworkEdgeScore(it.key(), it.value(),
+      _edge21Scores[it.key()]));
     result.append(p);
   }
 
@@ -154,6 +371,16 @@ void IterativeNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
 {
   _n1 = n1;
   _n2 = n2;
+  _details.reset(new NetworkDetails(map, n1, n2));
+
+  // Add stub edges to both networks.
+  // if both vertices on an edge match a single vertex (v2)
+    // create a new zero length edge that connects v2 to itself
+  _createEmptyStubEdges(_n1, _n2);
+  _createEmptyStubEdges(_n2, _n1);
+
+  // create empty stub edges can change the map, recreate the details so the indexes are
+  // reinitialized.
   _details.reset(new NetworkDetails(map, n1, n2));
 
   // create a spatial index of n2 vertices & edges.
@@ -225,12 +452,15 @@ void IterativeNetworkMatcher::_normalizeScoresLocal(EdgeScoreMap& t)
 
   foreach (ConstEdgeMatchPtr em, oldScores.keys())
   {
+    LOG_VAR(em);
     QSet<ConstEdgeMatchPtr> overlap = _edgeMatches->getMatchesThatOverlap(em);
 
     double sum = 0;
 
     foreach (ConstEdgeMatchPtr e, overlap)
     {
+      LOG_VAR(e);
+      LOG_VAR(oldScores[e]);
       sum += oldScores[e];
     }
 
@@ -239,6 +469,7 @@ void IterativeNetworkMatcher::_normalizeScoresLocal(EdgeScoreMap& t)
 
     // let it max out at 1.0 if there are no conflicts
     t[em] = oldScores[em] / sum;
+    LOG_INFO(t[em] << " = " << oldScores[em] << " / " << sum);
   }
 }
 
@@ -277,7 +508,8 @@ double IterativeNetworkMatcher::_scoreVertices(ConstNetworkVertexPtr v1,
   //double result = _details->getVertexMatchScore(v1, v2);
 
   // use the latest derived vertex score.
-  double result = sqrt(_vertex12Scores[v1][v2] * _vertex21Scores[v2][v1]);
+  double result = sqrt(max(_vertex12Scores[v1][v2] * _vertex21Scores[v2][v1],
+    _vertex12Scores[v1][v2] * _vertex21Scores[v2][v1]));
 
   return result;
 }
@@ -286,11 +518,14 @@ void IterativeNetworkMatcher::_seedEdgeScores()
 {
   EdgeMatchSetFinder finder(_details, _edgeMatches, _n1, _n2);
 
+  // modify details so that zero length edges don't give a score of zero
+  // modify finder so that it doesn't add zero length edges to edge strings
+
   // go through all the n1 edges
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
-    NetworkEdgePtr e1 = it.value();
+    ConstNetworkEdgePtr e1 = it.value();
     // find all the n2 edges that are in range of this one
     Envelope env = _details->getEnvelope(it.value());
     env.expandBy(_details->getSearchRadius(it.value()));
@@ -298,7 +533,7 @@ void IterativeNetworkMatcher::_seedEdgeScores()
 
     while (iit.next())
     {
-      NetworkEdgePtr e2 = _index2Edge[iit.getId()];
+      ConstNetworkEdgePtr e2 = _index2Edge[iit.getId()];
 
       if (_details->getPartialEdgeMatchScore(e1, e2) > 0)
       {
@@ -321,7 +556,7 @@ void IterativeNetworkMatcher::_seedVertexScores()
   const OsmNetwork::VertexMap& vm = _n1->getVertexMap();
   for (OsmNetwork::VertexMap::const_iterator it = vm.begin(); it != vm.end(); ++it)
   {
-    NetworkVertexPtr v1 = it.value();
+    ConstNetworkVertexPtr v1 = it.value();
 
     // find all the vertices that are in range of this one
     ConstElementPtr e1 = it.value()->getElement();
@@ -332,7 +567,7 @@ void IterativeNetworkMatcher::_seedVertexScores()
     // set the initial match score to 1 for all candidate matches
     while (iit.next())
     {
-      NetworkVertexPtr v2 = _index2Vertex[iit.getId()];
+      ConstNetworkVertexPtr v2 = _index2Vertex[iit.getId()];
 
       double score = _details->getVertexMatchScore(v1, v2);
       if (score > 0)
@@ -383,17 +618,17 @@ void IterativeNetworkMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreM
   // go through all vertex matches
   for (VertexScoreMap::iterator it = vm.begin(); it != vm.end(); ++it)
   {
-    ConstNetworkVertexPtr v1 = it.key();
-    cost.v1 = v1;
+    ConstNetworkVertexPtr va = it.key();
+    cost.v1 = va;
 
     // Go through all the potential matching vertices
     QHash<ConstNetworkVertexPtr, double>& t2 = it.value();
     for (QHash<ConstNetworkVertexPtr, double>::iterator jt = t2.begin(); jt != t2.end(); ++jt)
     {
       Saps sap(cost);
-      ConstNetworkVertexPtr v2 = jt.key();
+      ConstNetworkVertexPtr vb = jt.key();
 
-      QSet<ConstEdgeMatchPtr> matches = _edgeMatches->getMatchesWithTermination(v1, v2);
+      QSet<ConstEdgeMatchPtr> matches = _edgeMatches->getMatchesWithTermination(va, vb);
 
       QList<double> scores;
       foreach (ConstEdgeMatchPtr m, matches)
@@ -401,8 +636,16 @@ void IterativeNetworkMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreM
         scores.append(_scoreEdges(m));
       }
 
+      LOG_VAR(va);
+      LOG_VAR(vb);
+      LOG_VAR(scores);
       double edgeScore = std::max(EPSILON,
-        pow(_aggregateScores(scores), _dampening) * pow(_scoreVertices(v1, v2), _p));
+        pow(_aggregateScores(scores), _dampening) * pow(_scoreVertices(va, vb), _p));
+      LOG_VAR(pow(_scoreVertices(va, vb), _p));
+
+//      LOG_VAR(_vertex12Scores[va][vb]);
+//      LOG_VAR(_vertex21Scores[vb][va]);
+      LOG_VAR(edgeScore);
 
 /// @todo only use the best matches, don't use them all.
 //      cost.v2 = v2;

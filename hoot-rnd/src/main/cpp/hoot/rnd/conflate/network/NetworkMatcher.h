@@ -70,8 +70,8 @@ public:
 protected:
   HilbertRTreePtr _edge2Index;
   HilbertRTreePtr _vertex2Index;
-  deque<NetworkEdgePtr> _index2Edge;
-  deque<NetworkVertexPtr> _index2Vertex;
+  deque<ConstNetworkEdgePtr> _index2Edge;
+  deque<ConstNetworkVertexPtr> _index2Vertex;
   ConstOsmMapPtr _map;
   OsmNetworkPtr _n1, _n2;
   NetworkDetailsPtr _details;

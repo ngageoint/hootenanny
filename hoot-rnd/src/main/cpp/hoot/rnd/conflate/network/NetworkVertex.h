@@ -45,7 +45,7 @@ namespace hoot
 class NetworkVertex
 {
 public:
-  NetworkVertex(ConstElementPtr e) : _e(e) {}
+  NetworkVertex(ConstElementPtr e);
 
   ConstElementPtr getElement() const { return _e; }
 
@@ -55,6 +55,8 @@ public:
 
 private:
   ConstElementPtr _e;
+  int _uid;
+  static int uidCount;
 };
 
 typedef shared_ptr<NetworkVertex> NetworkVertexPtr;

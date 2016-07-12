@@ -16,7 +16,7 @@ using namespace Tgs;
 LegacyVertexMatcher::LegacyVertexMatcher(ConstOsmMapPtr map) :
   _map(map)
 {
-  _confidentThreshold = 0.5;
+  _confidentThreshold = 0.7;
 }
 
 void LegacyVertexMatcher::_balanceVertexScores()
@@ -64,6 +64,7 @@ void LegacyVertexMatcher::_balanceVertexScores()
       if (m[v2] > 0.0)
       {
         _finalCandidates[v2].append(v1);
+        _finalCandidates[v1].append(v2);
       }
     }
   }
@@ -137,10 +138,10 @@ double LegacyVertexMatcher::_denominatorForTie(TiePointScorePtr tie)
   return sum;
 }
 
-QList<ConstNetworkVertexPtr> LegacyVertexMatcher::getCandidateMatchesV2(ConstNetworkVertexPtr v2)
+QList<ConstNetworkVertexPtr> LegacyVertexMatcher::getCandidateMatches(ConstNetworkVertexPtr v)
   const
 {
-  return _finalCandidates[v2];
+  return _finalCandidates[v];
 }
 
 void LegacyVertexMatcher::identifyVertexMatches(ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2,
@@ -221,6 +222,8 @@ double LegacyVertexMatcher::_scoreSinglePair(ConstNetworkVertexPtr v1, ConstNetw
   }
 
   double score = _nodeMatcher->scorePair(v1->getElementId().getId(), v2->getElementId().getId());
+
+  LOG_INFO("v1: " << v1 << " v2: " << v2 << " score: " << score);
 
   return score;
 }

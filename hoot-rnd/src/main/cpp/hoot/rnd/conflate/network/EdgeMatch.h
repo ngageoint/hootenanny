@@ -67,6 +67,8 @@ public:
    */
   bool contains(ConstNetworkVertexPtr v) const;
 
+  bool containsStub() const { return getString1()->isStub() || getString2()->isStub(); }
+
   /**
    * Returns true if any of the edges in this edge match overlap with other. Overlapping vertexes
    * are ignored.

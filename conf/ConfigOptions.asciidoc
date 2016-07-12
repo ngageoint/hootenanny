@@ -869,6 +869,14 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== network.match.write.debug.maps
+
+* Data Type: bool
+* Default Value: `false`
+
+If true debug maps will be generated at every iteration. This is useful when debugging. The maps
+can be large and slow things down significantly.
+
 === network.matcher
 
 * Data Type: string

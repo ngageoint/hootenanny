@@ -151,6 +151,11 @@ private:
 
   double _aggregateScores(QList<double> pairs);
 
+  void _createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb);
+
+  void _createStubIntersection(OsmNetworkPtr na, OsmNetworkPtr nb, ConstNetworkVertexPtr va,
+    ConstNetworkEdgePtr eb);
+
   double _calculateEdgeVertexScore(const VertexScoreMap& vm, ConstNetworkVertexPtr from1,
     ConstNetworkVertexPtr from2, ConstNetworkVertexPtr to1, ConstNetworkVertexPtr to2) const;
 

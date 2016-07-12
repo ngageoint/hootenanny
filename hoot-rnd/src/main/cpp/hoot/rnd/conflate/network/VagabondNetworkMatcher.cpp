@@ -297,7 +297,7 @@ void VagabondNetworkMatcher::_calculateEdgeMatches()
   //LOG_VAR(em);
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
-    NetworkEdgePtr e1 = it.value();
+    ConstNetworkEdgePtr e1 = it.value();
     // find all the n2 edges that are in range of this one
     Envelope env = _details->getEnvelope(it.value());
     env.expandBy(_details->getSearchRadius(it.value()));
@@ -306,7 +306,7 @@ void VagabondNetworkMatcher::_calculateEdgeMatches()
 
     while (iit.next())
     {
-      NetworkEdgePtr e2 = _index2Edge[iit.getId()];
+      ConstNetworkEdgePtr e2 = _index2Edge[iit.getId()];
 
       if (_details->getPartialEdgeMatchScore(e1, e2) > 0)
       {

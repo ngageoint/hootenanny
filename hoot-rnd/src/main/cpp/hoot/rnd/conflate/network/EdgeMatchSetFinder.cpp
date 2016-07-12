@@ -66,6 +66,8 @@ void EdgeMatchSetFinder::_addEdgeMatches(EdgeMatchPtr em)
   bool fromMatch = _details->isCandidateMatch(from1, from2);
   bool toMatch = _details->isCandidateMatch(to1, to2);
 
+  LOG_VAR(em);
+
   /// @todo Possibly continue to evaluate matches even if we find an end point. This may make
   /// the search space very large, but would avoid missing matches.
   if (fromMatch && toMatch)
@@ -73,35 +75,52 @@ void EdgeMatchSetFinder::_addEdgeMatches(EdgeMatchPtr em)
     double score = _scoreMatch(em);
     if (score > 0)
     {
-      _matchSet->addEdgeMatch(em, score);
+      // if exactly one string is a stub
+      if (em->getString1()->isStub() != em->getString2()->isStub())
+      {
+        // if one is a stub, then add it in both directions. We don't know which is better.
+        _matchSet->addEdgeMatch(em, score);
+        EdgeStringPtr rev1 = em->getString1()->clone();
+        rev1->reverse();
+        EdgeMatchPtr em2(new EdgeMatch(rev1, em->getString2()));
+        _matchSet->addEdgeMatch(em2, score);
+      }
+      else
+      {
+        _matchSet->addEdgeMatch(em, score);
+      }
+      LOG_VAR(em);
     }
   }
-  // if the end of the match isn't terminated.
-  else if (!toMatch)
+  else //if (em->getString1()->isStub() == false && em->getString2()->isStub() == false)
   {
-    // if either of the vertices doesn't have a tie point then we need to keep searching.
-    if (_details->hasConfidentTiePoint(to1) == false ||
-      _details->hasConfidentTiePoint(to2) == false)
+    // if the end of the match isn't terminated.
+    if (!toMatch)
     {
-      // get all the neighboring edges to 1 and 2
-      QList<ConstNetworkEdgePtr> neighbors1 = _n1->getEdgesFromVertex(to1);
-      QList<ConstNetworkEdgePtr> neighbors2 = _n2->getEdgesFromVertex(to2);
+      // if either of the vertices doesn't have a tie point then we need to keep searching.
+      if (_details->hasConfidentTiePoint(to1) == false ||
+        _details->hasConfidentTiePoint(to2) == false)
+      {
+        // get all the neighboring edges to 1 and 2
+        QList<ConstNetworkEdgePtr> neighbors1 = _n1->getEdgesFromVertex(to1);
+        QList<ConstNetworkEdgePtr> neighbors2 = _n2->getEdgesFromVertex(to2);
 
-      _addEdgeNeighborsToEnd(em, neighbors1, neighbors2);
+        _addEdgeNeighborsToEnd(em, neighbors1, neighbors2);
+      }
     }
-  }
-  // if the beginning of the match isn't terminated
-  else if (!fromMatch)
-  {
-    // if either of the vertices doesn't have a tie point then we need to keep searching.
-    if (_details->hasConfidentTiePoint(from1) == false ||
-      _details->hasConfidentTiePoint(from2) == false)
+    // if the beginning of the match isn't terminated
+    else if (!fromMatch)
     {
-      // get all the neighboring edges to 1 and 2
-      QList<ConstNetworkEdgePtr> neighbors1 = _n1->getEdgesFromVertex(from1);
-      QList<ConstNetworkEdgePtr> neighbors2 = _n2->getEdgesFromVertex(from2);
+      // if either of the vertices doesn't have a tie point then we need to keep searching.
+      if (_details->hasConfidentTiePoint(from1) == false ||
+        _details->hasConfidentTiePoint(from2) == false)
+      {
+        // get all the neighboring edges to 1 and 2
+        QList<ConstNetworkEdgePtr> neighbors1 = _n1->getEdgesFromVertex(from1);
+        QList<ConstNetworkEdgePtr> neighbors2 = _n2->getEdgesFromVertex(from2);
 
-      _addEdgeNeighborsToStart(em, neighbors1, neighbors2);
+        _addEdgeNeighborsToStart(em, neighbors1, neighbors2);
+      }
     }
   }
 }
@@ -114,6 +133,7 @@ void EdgeMatchSetFinder::_addEdgeNeighborsToEnd(EdgeMatchPtr em,
   {
     // if the neighbor pair score is non-zero
     if (em->contains(neighbors1[i]) == false &&
+      /*neighbors1[i]->isStub() == false &&*/
       _details->getPartialEdgeMatchScore(neighbors1[i], em->getString2()->getLastEdge()) > 0)
     {
       // create and evaluate a new match
@@ -128,6 +148,7 @@ void EdgeMatchSetFinder::_addEdgeNeighborsToEnd(EdgeMatchPtr em,
   {
     // if the neighbor pair score is non-zero
     if (em->contains(neighbors2[i]) == false &&
+      /*neighbors2[i]->isStub() == false &&*/
       _details->getPartialEdgeMatchScore(neighbors2[i], em->getString1()->getLastEdge()) > 0)
     {
       // create and evaluate a new match
@@ -146,6 +167,7 @@ void EdgeMatchSetFinder::_addEdgeNeighborsToStart(EdgeMatchPtr em,
   {
     // if the neighbor pair score is non-zero
     if (em->contains(neighbors1[i]) == false &&
+      neighbors1[i]->isStub() == false &&
       _details->getPartialEdgeMatchScore(neighbors1[i], em->getString2()->getFirstEdge()) > 0)
     {
       // create and evaluate a new match
@@ -160,6 +182,7 @@ void EdgeMatchSetFinder::_addEdgeNeighborsToStart(EdgeMatchPtr em,
   {
     // if the neighbor pair score is non-zero
     if (em->contains(neighbors2[i]) == false &&
+      neighbors2[i]->isStub() == false &&
       _details->getPartialEdgeMatchScore(neighbors2[i], em->getString1()->getFirstEdge()) > 0)
     {
       // create and evaluate a new match

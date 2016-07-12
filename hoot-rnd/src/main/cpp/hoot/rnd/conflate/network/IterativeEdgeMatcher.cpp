@@ -259,7 +259,7 @@ void IterativeEdgeMatcher::_seedEdgeScores()
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
-    NetworkEdgePtr e1 = it.value();
+    ConstNetworkEdgePtr e1 = it.value();
     // find all the n2 edges that are in range of this one
     Envelope env = _details->getEnvelope(it.value());
     env.expandBy(_details->getSearchRadius(it.value()));
@@ -267,7 +267,7 @@ void IterativeEdgeMatcher::_seedEdgeScores()
 
     while (iit.next())
     {
-      NetworkEdgePtr e2 = _index2Edge[iit.getId()];
+      ConstNetworkEdgePtr e2 = _index2Edge[iit.getId()];
       double score = _scoreEdges(it.value(), e2);
       bool reversed = _details->isReversed(e1, e2);
 
@@ -286,7 +286,7 @@ void IterativeEdgeMatcher::_seedVertexScores()
   const OsmNetwork::VertexMap& vm = _n1->getVertexMap();
   for (OsmNetwork::VertexMap::const_iterator it = vm.begin(); it != vm.end(); ++it)
   {
-    NetworkVertexPtr v1 = it.value();
+    ConstNetworkVertexPtr v1 = it.value();
 
     // find all the vertices that are in range of this one
     ConstElementPtr e1 = it.value()->getElement();
@@ -297,7 +297,7 @@ void IterativeEdgeMatcher::_seedVertexScores()
     // set the initial match score to 1 for all candidate matches
     while (iit.next())
     {
-      NetworkVertexPtr v2 = _index2Vertex[iit.getId()];
+      ConstNetworkVertexPtr v2 = _index2Vertex[iit.getId()];
 
       double score = _scoreVertices(v1, v2);
       if (score > 0)
@@ -425,14 +425,6 @@ void IterativeEdgeMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap 
 
       // aggregate the scores between the two sets of edges
       double edgeScore = pow(_aggregateScores(scores), _dampening) * _scoreVertices(v1, v2);
-      if (v1->getElementId() == ElementId::node(-1803252))
-      {
-        LOG_VAR(em);
-        LOG_VAR(v1);
-        LOG_VAR(v2);
-        LOG_VAR(scores);
-        LOG_VAR(edgeScore);
-      }
 
       // set this vertex pair's score to the new aggregated score.
       jt.value() = edgeScore;

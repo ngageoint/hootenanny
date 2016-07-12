@@ -100,7 +100,7 @@ public:
 protected:
   void _discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeMatch);
 
-  ConstWayPtr _toWay(ConstNetworkEdgePtr edge) const;
+  ConstElementPtr _toElement(ConstNetworkEdgePtr edge) const;
 
 private:
   MatchClassification _classification;

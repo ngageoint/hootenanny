@@ -65,6 +65,7 @@ void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edg
     w->getTags().set("hoot:edge:score21", edgeScore->getScore21());
     w->getTags().set("hoot:edge:score", edgeScore->getScore());
     w->getTags().set("hoot:edge:id", edgeScore->getUid());
+    w->getTags().set("hoot:edge", edgeScore->toString());
     if (edgeScore->getScore() >= 0.15)
     {
       w->getTags().set("highway", "cycleway");
@@ -92,6 +93,7 @@ void DebugNetworkMapCreator::_addVertexLink(OsmMapPtr map, NetworkVertexScorePtr
     w->getTags().set("hoot:vertex:score12", vertexScore->getScore12());
     w->getTags().set("hoot:vertex:score21", vertexScore->getScore21());
     w->getTags().set("hoot:vertex:score", vertexScore->getScore());
+    w->getTags().set("hoot:vertex", vertexScore->toString());
     if (vertexScore->getScore() >= 0.15)
     {
       w->getTags().set("highway", "footway");

@@ -54,51 +54,72 @@ void NetworkMerger::apply(const OsmMapPtr& map,
   // put the matched edges into a format where we can map any point on one edge to the
   // corresponding point on the other edge.
 
-  /// @todo throw an exception if the input edge match contains partial matches. We will need to
-  /// review this method and add more code with partial matches. E.g.
-  /// - Will we still create relations out of the scrap bits?
-
-  // convert the EdgeStrings into WaySublineStrings
-  WayStringPtr str1 = _details->toWayString(_edgeMatch->getString1());
-  WayStringPtr str2 = _details->toWayString(_edgeMatch->getString2());
-
-  WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(str1, str2));
-
-  /******************
-   * At the beginning the merger should identify where the primary way should be broken into bits
-   * then each way in the secondary will match 1 or more bits in the primary. This mapping can be
-   * created at the beginning in the merger and used throughout the rest of the operations.
-   ******************/
-
-  WayMatchStringMergerPtr merger(new WayMatchStringMerger(map, mapping, replaced));
-
-  // merge the tags in the keeper segments
-  merger->setTagMerger(TagMergerFactory::getInstance().getDefaultPtr());
-  merger->mergeTags();
-
-  // set the status on all keeper ways to conflated.
-  merger->setKeeperStatus(Status::Conflated);
-
-  // go through all the nodes in the scrap
-  QList<ConstNodePtr> scrapNodes;
-  ExtractNodesVisitor extractVisitor(scrapNodes);
-  str2->visitRo(*map, extractVisitor);
-  shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
-  for (int i = 0; i < scrapNodes.size(); ++i)
+  if (_edgeMatch->getString1()->isStub())
   {
-    // if the node contains informational tags or is part of another way
-    if (scrapNodes[i]->getTags().getInformationCount() > 0 ||
-      n2w->getWaysByNode(scrapNodes[i]->getId()).size() >= 2)
+    // If the feature we're merging into is a stub, then just delete the secondary feature.
+    // Attributes may be lost, but there isn't really anywhere to put them.
+    foreach (ConstElementPtr e, _edgeMatch->getString2()->getMembers())
     {
-      // move corresponding intersection nodes and non-empty nodes into the keeper segments.
-      merger->mergeNode(scrapNodes[i]->getElementId());
+      RecursiveElementRemover(e->getElementId()).apply(map);
     }
   }
+  else if (_edgeMatch->getString2()->isStub())
+  {
+    // if the feature we're merging is a stub, then things get a little more complicated. So far
+    // our best option is to disconnect the intersection that is being merged. Then the edges should
+    // be merged for us properly as long as all the ways have matches. If they don't have matches
+    // we've got a problem and they should be reviewed. Possibly identify these situations in the
+    // match creator?
+    throw NotImplementedException();
+  }
+  else
+  {
+    /// @todo throw an exception if the input edge match contains partial matches. We will need to
+    /// review this method and add more code with partial matches. E.g.
+    /// - Will we still create relations out of the scrap bits?
 
-  /// @todo this will need to replace one scrap with possibly multiple keeper elements
-  /// - think about the case when the way is part of an interstate or bus relation
-  // remove the duplicate element.
-  merger->replaceScraps();
+    // convert the EdgeStrings into WaySublineStrings
+    WayStringPtr str1 = _details->toWayString(_edgeMatch->getString1());
+    WayStringPtr str2 = _details->toWayString(_edgeMatch->getString2());
+
+    WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(str1, str2));
+
+    /******************
+     * At the beginning the merger should identify where the primary way should be broken into bits
+     * then each way in the secondary will match 1 or more bits in the primary. This mapping can be
+     * created at the beginning in the merger and used throughout the rest of the operations.
+     ******************/
+
+    WayMatchStringMergerPtr merger(new WayMatchStringMerger(map, mapping, replaced));
+
+    // merge the tags in the keeper segments
+    merger->setTagMerger(TagMergerFactory::getInstance().getDefaultPtr());
+    merger->mergeTags();
+
+    // set the status on all keeper ways to conflated.
+    merger->setKeeperStatus(Status::Conflated);
+
+    // go through all the nodes in the scrap
+    QList<ConstNodePtr> scrapNodes;
+    ExtractNodesVisitor extractVisitor(scrapNodes);
+    str2->visitRo(*map, extractVisitor);
+    shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
+    for (int i = 0; i < scrapNodes.size(); ++i)
+    {
+      // if the node contains informational tags or is part of another way
+      if (scrapNodes[i]->getTags().getInformationCount() > 0 ||
+        n2w->getWaysByNode(scrapNodes[i]->getId()).size() >= 2)
+      {
+        // move corresponding intersection nodes and non-empty nodes into the keeper segments.
+        merger->mergeNode(scrapNodes[i]->getElementId());
+      }
+    }
+
+    /// @todo this will need to replace one scrap with possibly multiple keeper elements
+    /// - think about the case when the way is part of an interstate or bus relation
+    // remove the duplicate element.
+    merger->replaceScraps();
+  }
 }
 
 QString NetworkMerger::toString() const
