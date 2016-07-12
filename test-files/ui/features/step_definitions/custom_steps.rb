@@ -512,9 +512,9 @@ Then(/^I should see element "([^"]*)" with value "([^"]*)"$/) do |id, value|
 end
 
 Then(/^I should see element "([^"]*)" with no value and placeholder "([^"]*)"$/) do |id, value|
-  find(id).value.should eq ""
-  #page.find(:css, 'input[placeholder="' + value + '"]')
-  find(id, 'input[placeholder="' + value + '"]')
+  el = find(id)
+  el.value.should eq ""
+  el['placeholder'].should eq value
 end
 
 Then(/^I choose "([^"]*)" radio button$/) do |text|
