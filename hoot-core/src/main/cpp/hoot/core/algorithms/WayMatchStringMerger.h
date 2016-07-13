@@ -58,6 +58,11 @@ public:
   WaySublineMatchStringPtr createMatchString() const;
 
   /**
+   * Merge scrapNode into the keeper way node at the end of a keeper way.
+   */
+  void mergeIntersection(ElementId scrapNode);
+
+  /**
    * Merge scrapNode into the keeper way.
    */
   void mergeNode(ElementId scrapNode);
@@ -129,7 +134,7 @@ private:
 
   WayLocation _findNodeLocation2(WayStringPtr ws, ElementId nodeId);
 
-  void _moveNode(ElementId scrapNode, WayLocation wl1);
+  void _moveNode(ElementId scrapNodeId, WayLocation wl1);
 
   void _rebuildWayString1();
 

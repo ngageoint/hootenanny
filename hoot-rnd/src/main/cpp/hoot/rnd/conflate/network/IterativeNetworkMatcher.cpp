@@ -452,15 +452,12 @@ void IterativeNetworkMatcher::_normalizeScoresLocal(EdgeScoreMap& t)
 
   foreach (ConstEdgeMatchPtr em, oldScores.keys())
   {
-    LOG_VAR(em);
     QSet<ConstEdgeMatchPtr> overlap = _edgeMatches->getMatchesThatOverlap(em);
 
     double sum = 0;
 
     foreach (ConstEdgeMatchPtr e, overlap)
     {
-      LOG_VAR(e);
-      LOG_VAR(oldScores[e]);
       sum += oldScores[e];
     }
 
@@ -469,7 +466,6 @@ void IterativeNetworkMatcher::_normalizeScoresLocal(EdgeScoreMap& t)
 
     // let it max out at 1.0 if there are no conflicts
     t[em] = oldScores[em] / sum;
-    LOG_INFO(t[em] << " = " << oldScores[em] << " / " << sum);
   }
 }
 
@@ -636,16 +632,8 @@ void IterativeNetworkMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreM
         scores.append(_scoreEdges(m));
       }
 
-      LOG_VAR(va);
-      LOG_VAR(vb);
-      LOG_VAR(scores);
       double edgeScore = std::max(EPSILON,
         pow(_aggregateScores(scores), _dampening) * pow(_scoreVertices(va, vb), _p));
-      LOG_VAR(pow(_scoreVertices(va, vb), _p));
-
-//      LOG_VAR(_vertex12Scores[va][vb]);
-//      LOG_VAR(_vertex21Scores[vb][va]);
-      LOG_VAR(edgeScore);
 
 /// @todo only use the best matches, don't use them all.
 //      cost.v2 = v2;

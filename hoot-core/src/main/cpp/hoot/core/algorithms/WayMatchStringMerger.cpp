@@ -168,6 +168,30 @@ WayLocation WayMatchStringMerger::_findNodeLocation2(WayStringPtr ws, ElementId 
   return _nodeToWayLocation2[nodeId];
 }
 
+void WayMatchStringMerger::mergeIntersection(ElementId scrapNode)
+{
+  LOG_VAR(scrapNode);
+  LOG_VAR(_map->getNode(scrapNode));
+  // find the first instance of scrapNode in way 2
+  WayLocation wl2 = _findNodeLocation2(_mapping->getWayString2(), scrapNode);
+
+  // map the WayLocation of scrapNode to way string 1
+  WayLocation wl1 = _mapping->map2To1(wl2);
+
+  if (wl1.isExtreme() == false)
+  {
+    LOG_VAR(wl1.getWay());
+    LOG_VAR(wl1);
+    throw IllegalArgumentException("scrapNode should line up with the beginning or end of a way.");
+  }
+
+  // move scrapNode to the WayLocation in way string 1
+  _moveNode(scrapNode, wl1);
+
+  // notify _sublineMapping that way string 1 changed.
+  _rebuildWayString1();
+}
+
 void WayMatchStringMerger::mergeNode(ElementId scrapNode)
 {
   LOG_VAR(scrapNode);
@@ -205,32 +229,43 @@ void WayMatchStringMerger::mergeTags()
   }
 }
 
-void WayMatchStringMerger::_moveNode(ElementId scrapNode, WayLocation wl1)
+void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, WayLocation wl1)
 {
   if (!_tagMerger)
   {
     throw IllegalArgumentException("You must specify the tag merger first.");
   }
 
+  NodePtr scrapNode = _map->getNode(scrapNodeId);
+
+  // create a new placeholder node so we don't move any scrap ways.
+  NodePtr placeholder(new Node(scrapNode->getStatus(), _map->createNextNodeId(),
+    scrapNode->getX(), scrapNode->getY(), scrapNode->getCircularError()));
+  _map->addNode(placeholder);
+
+  foreach (SublineMappingPtr sm, _sublineMappingOrder)
+  {
+    WayPtr w = _map->getWay(sm->way2->getId());
+    w->replaceNode(scrapNodeId.getId(), placeholder->getId());
+  }
+
   // move the scrapNode to the appropriate spot on the way.
   Coordinate c = wl1.getCoordinate();
-  _map->getNode(scrapNode)->setX(c.x);
-  _map->getNode(scrapNode)->setY(c.y);
+  scrapNode->setX(c.x);
+  scrapNode->setY(c.y);
 
   // if we're merging a node onto a node
   if (wl1.isNode())
   {
     NodePtr n1 = _map->getNode(wl1.getNode()->getElementId());
-    NodePtr n2 = _map->getNode(scrapNode);
-    LOG_VAR(n1);
-    LOG_VAR(n2);
+    NodePtr n2 = scrapNode;
     Tags t = _tagMerger->mergeTags(n1->getTags(), n2->getTags(), ElementType::Node);
 
     _map->replaceNode(n2->getId(), n1->getId());
 
     n1->setTags(t);
 
-    _replaced.push_back(pair<ElementId, ElementId>(scrapNode, n1->getElementId()));
+    _replaced.push_back(pair<ElementId, ElementId>(scrapNodeId, n1->getElementId()));
   }
   else
   {
@@ -238,10 +273,7 @@ void WayMatchStringMerger::_moveNode(ElementId scrapNode, WayLocation wl1)
     WayPtr w = _map->getWay(wl1.getWay()->getElementId());
     // grab the previous nodes and insert the new one.
     vector<long> nids = w->getNodeIds();
-    LOG_VAR(nids);
-    LOG_VAR(wl1.getSegmentIndex());
-    nids.insert(nids.begin() + wl1.getSegmentIndex() + 1, scrapNode.getId());
-    LOG_VAR(nids);
+    nids.insert(nids.begin() + wl1.getSegmentIndex() + 1, scrapNodeId.getId());
     w->setNodes(nids);
   }
 }
@@ -250,12 +282,10 @@ void WayMatchStringMerger::_rebuildWayString1()
 {
   WayStringPtr ws1(new WayString());
 
-  LOG_VAR(_sublineMappingOrder);
 
   for (int i = 0; i < _sublineMappingOrder.size(); ++i)
   {
     WayPtr w1 = _sublineMappingOrder[i]->newWay1;
-    LOG_VAR(w1);
     if (_sublineMappingOrder[i]->start <= _sublineMappingOrder[i]->end)
     {
       ws1->append(WaySubline(WayLocation(_map, w1, 0.0), WayLocation::createAtEndOfWay(_map, w1)));

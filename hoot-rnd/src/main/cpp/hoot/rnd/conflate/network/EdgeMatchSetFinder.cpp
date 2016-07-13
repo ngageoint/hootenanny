@@ -66,8 +66,6 @@ void EdgeMatchSetFinder::_addEdgeMatches(EdgeMatchPtr em)
   bool fromMatch = _details->isCandidateMatch(from1, from2);
   bool toMatch = _details->isCandidateMatch(to1, to2);
 
-  LOG_VAR(em);
-
   /// @todo Possibly continue to evaluate matches even if we find an end point. This may make
   /// the search space very large, but would avoid missing matches.
   if (fromMatch && toMatch)
@@ -89,7 +87,6 @@ void EdgeMatchSetFinder::_addEdgeMatches(EdgeMatchPtr em)
       {
         _matchSet->addEdgeMatch(em, score);
       }
-      LOG_VAR(em);
     }
   }
   else //if (em->getString1()->isStub() == false && em->getString2()->isStub() == false)

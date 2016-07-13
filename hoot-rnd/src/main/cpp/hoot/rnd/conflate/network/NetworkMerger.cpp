@@ -100,18 +100,24 @@ void NetworkMerger::apply(const OsmMapPtr& map,
     merger->setKeeperStatus(Status::Conflated);
 
     // go through all the nodes in the scrap
-    QList<ConstNodePtr> scrapNodes;
-    ExtractNodesVisitor extractVisitor(scrapNodes);
+    QList<ConstNodePtr> scrapNodeList;
+    ExtractNodesVisitor extractVisitor(scrapNodeList);
     str2->visitRo(*map, extractVisitor);
     shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
-    for (int i = 0; i < scrapNodes.size(); ++i)
+    QSet<ConstNodePtr> scrapNodeSet = QSet<ConstNodePtr>::fromList(scrapNodeList);
+    foreach (ConstNodePtr n, scrapNodeSet)
     {
       // if the node contains informational tags or is part of another way
-      if (scrapNodes[i]->getTags().getInformationCount() > 0 ||
-        n2w->getWaysByNode(scrapNodes[i]->getId()).size() >= 2)
+      if (n2w->getWaysByNode(n->getId()).size() >= 2)
+      {
+        // move corresponding intersection nodes and non-empty nodes into the keeper segments and
+        // make sure the interesection snaps to a start/end node of a way
+        merger->mergeIntersection(n->getElementId());
+      }
+      else if (n->getTags().getInformationCount() > 0)
       {
         // move corresponding intersection nodes and non-empty nodes into the keeper segments.
-        merger->mergeNode(scrapNodes[i]->getElementId());
+        merger->mergeNode(n->getElementId());
       }
     }
 

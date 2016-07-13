@@ -59,6 +59,8 @@ namespace hoot
 class WayLocation
 {
 public:
+  // the segment fraction distance from a node that is still considered on a node.
+  static const double EPSILON;
 
   WayLocation();
 
@@ -130,11 +132,14 @@ public:
    */
   bool isExtreme() const { return isFirst() || isLast(); }
 
-  bool isFirst() const { return _segmentIndex == 0 && _segmentFraction == 0.0; }
+  bool isFirst() const { return _segmentIndex == 0 && _segmentFraction <= EPSILON; }
 
-  bool isLast() const { return _segmentIndex == (int)_way->getNodeCount() - 1; }
+  bool isLast() const;
 
-  bool isNode() const { return _segmentFraction <= 0.0 || _segmentFraction >= 1.0; }
+  /**
+   * If this is effectively on a node.
+   */
+  bool isNode() const { return _segmentFraction <= EPSILON || _segmentFraction >= 1.0 - EPSILON; }
 
   bool isValid() const { return _segmentIndex != -1; }
 
