@@ -59,8 +59,8 @@ namespace hoot
 class WayLocation
 {
 public:
-  // the segment fraction distance from a node that is still considered on a node.
-  static const double EPSILON;
+  // the suggested segment fraction distance from a node that is still considered on a node.
+  static const double SLOPPY_EPSILON;
 
   WayLocation();
 
@@ -121,7 +121,7 @@ public:
   /**
    * Returns the node at this WayLocation. If isNode() returns false this will thrown an exception.
    */
-  ConstNodePtr getNode() const;
+  ConstNodePtr getNode(double epsilon = 0.0) const;
 
   int getSegmentIndex() const { return _segmentIndex; }
 
@@ -130,16 +130,16 @@ public:
   /**
    * Returns true if this way location is at one extreme or the other (isFirst() || isLast())
    */
-  bool isExtreme() const { return isFirst() || isLast(); }
+  bool isExtreme(double epsilon = 0.0) const { return isFirst(epsilon) || isLast(epsilon); }
 
-  bool isFirst() const { return _segmentIndex == 0 && _segmentFraction <= EPSILON; }
+  bool isFirst(double epsilon = 0.0) const { return _segmentIndex == 0 && _segmentFraction <= epsilon; }
 
-  bool isLast() const;
+  bool isLast(double epsilon = 0.0) const;
 
   /**
    * If this is effectively on a node.
    */
-  bool isNode() const { return _segmentFraction <= EPSILON || _segmentFraction >= 1.0 - EPSILON; }
+  bool isNode(double epsilon = 0.0) const { return _segmentFraction <= epsilon || _segmentFraction >= 1.0 - epsilon; }
 
   bool isValid() const { return _segmentIndex != -1; }
 

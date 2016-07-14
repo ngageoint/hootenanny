@@ -152,7 +152,8 @@ WayLocation WayMatchStringMerger::_findNodeLocation2(WayStringPtr ws, ElementId 
           // only record the first instance.
           if (_nodeToWayLocation2.contains(ElementId::node(w->getNodeId(j))) == false)
           {
-            assert(wl.isNode() && wl.getNode()->getId() == w->getNodeId(j));
+            assert(wl.isNode(WayLocation::SLOPPY_EPSILON) &&
+              wl.getNode(WayLocation::SLOPPY_EPSILON)->getId() == w->getNodeId(j));
             _nodeToWayLocation2[ElementId::node(w->getNodeId(j))] = wl;
           }
         }
@@ -178,7 +179,7 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNode)
   // map the WayLocation of scrapNode to way string 1
   WayLocation wl1 = _mapping->map2To1(wl2);
 
-  if (wl1.isExtreme() == false)
+  if (wl1.isExtreme(WayLocation::SLOPPY_EPSILON) == false)
   {
     LOG_VAR(wl1.getWay());
     LOG_VAR(wl1);
@@ -255,9 +256,9 @@ void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, WayLocation wl1)
   scrapNode->setY(c.y);
 
   // if we're merging a node onto a node
-  if (wl1.isNode())
+  if (wl1.isNode(WayLocation::SLOPPY_EPSILON))
   {
-    NodePtr n1 = _map->getNode(wl1.getNode()->getElementId());
+    NodePtr n1 = _map->getNode(wl1.getNode(WayLocation::SLOPPY_EPSILON)->getElementId());
     NodePtr n2 = scrapNode;
     Tags t = _tagMerger->mergeTags(n1->getTags(), n2->getTags(), ElementType::Node);
 
@@ -384,7 +385,8 @@ void WayMatchStringMerger::_splitPrimary()
     qSort(sm.begin(), sm.end(), SublineMappingLessThan());
 
     // if there is only one entry in sm and it spans the whole way, don't split anything.
-    if (sm.size() == 1 && sm[0]->start.isExtreme() && sm[0]->end.isExtreme())
+    if (sm.size() == 1 && sm[0]->start.isExtreme(WayLocation::SLOPPY_EPSILON) &&
+      sm[0]->end.isExtreme(WayLocation::SLOPPY_EPSILON))
     {
       sm[0]->newWay1 = w1;
       continue;

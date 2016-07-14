@@ -22,8 +22,8 @@ void WayString::append(const WaySubline& subline)
     }
     else
     {
-      if (subline.getStart().isExtreme() == false ||
-        back().getEnd().isExtreme() == false)
+      if (subline.getStart().isExtreme(WayLocation::SLOPPY_EPSILON) == false ||
+        back().getEnd().isExtreme(WayLocation::SLOPPY_EPSILON) == false)
       {
         throw IllegalArgumentException("If ways are different they must connect at an extreme "
           "node.");

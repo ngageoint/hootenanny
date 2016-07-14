@@ -31,6 +31,8 @@
 #include <hoot/core/algorithms/WayMatchStringMerger.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/conflate/highway/HighwayMatch.h>
+#include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
@@ -70,7 +72,21 @@ void NetworkMerger::apply(const OsmMapPtr& map,
     // be merged for us properly as long as all the ways have matches. If they don't have matches
     // we've got a problem and they should be reviewed. Possibly identify these situations in the
     // match creator?
-    throw NotImplementedException();
+    /// @todo add more logic in the match creator that handles this in a more elegant way.
+
+    set<ElementId> eids;
+
+    foreach (ConstElementPtr e, _edgeMatch->getString2()->getMembers())
+    {
+      eids.insert(e->getElementId());
+    }
+    foreach (ConstElementPtr e, _edgeMatch->getString1()->getMembers())
+    {
+      eids.insert(e->getElementId());
+    }
+
+    ReviewMarker().mark(map, eids, "Complex intersection match. Possible dogleg? "
+      "Very short segment?", HighwayMatch::getHighwayMatchName());
   }
   else
   {

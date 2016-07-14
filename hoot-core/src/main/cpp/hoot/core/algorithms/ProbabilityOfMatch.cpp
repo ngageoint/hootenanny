@@ -202,8 +202,8 @@ double ProbabilityOfMatch::expertProbability(const ConstOsmMapPtr& map, const sh
     LOG_INFO("  ds2 " << distanceScore(map, w2, w1));
     LOG_INFO("  l1 " << ElementConverter(map).convertToLineString(w1)->getLength());
     LOG_INFO("  l2 " << ElementConverter(map).convertToLineString(w2)->getLength());
-    LOG_INFO("" << "probability of match " << ds << " " << ps << " " << as << " " << zs);
-    LOG_INFO("" << "  " << ds * ps * as * zs);
+    LOG_INFO("probability of match " << ds << " " << ps << " " << as << " " << zs << " " << ls);
+    LOG_INFO("  " << ds * ps * as * zs * ls);
   }
 
   return ds * ps * as * zs * ls;

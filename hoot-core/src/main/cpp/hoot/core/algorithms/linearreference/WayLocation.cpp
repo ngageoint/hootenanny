@@ -44,7 +44,7 @@ namespace hoot {
 
 Coordinate c;
 
-const double WayLocation::EPSILON = 1e-10;
+const double WayLocation::SLOPPY_EPSILON = 1e-10;
 
 WayLocation::WayLocation()
 {
@@ -221,15 +221,14 @@ const Coordinate WayLocation::getCoordinate() const
   }
 }
 
-ConstNodePtr WayLocation::getNode() const
+ConstNodePtr WayLocation::getNode(double epsilon) const
 {
-  if (!isNode())
+  if (!isNode(epsilon))
   {
     throw IllegalArgumentException("getNode() is only valid if WayLocation is on a node.");
   }
 
   // Round to the appropriate segment index. This may be necessary due to floating point errors.
-  // See isNode() for thresholds.
   if (_segmentFraction >= 0.5)
   {
     return _map->getNode(getWay()->getNodeId(_segmentIndex + 1));
@@ -240,14 +239,14 @@ ConstNodePtr WayLocation::getNode() const
   }
 }
 
-bool WayLocation::isLast() const
+bool WayLocation::isLast(double epsilon) const
 {
   bool result = false;
   if (_segmentIndex == (int)_way->getNodeCount() - 1)
   {
     result = true;
   }
-  else if (_segmentIndex == (int)_way->getNodeCount() - 2 && _segmentFraction >= 1 - EPSILON)
+  else if (_segmentIndex == (int)_way->getNodeCount() - 2 && _segmentFraction >= 1 - epsilon)
   {
     result = true;
   }

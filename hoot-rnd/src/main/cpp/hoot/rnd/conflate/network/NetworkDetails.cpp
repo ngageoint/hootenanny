@@ -403,7 +403,6 @@ bool NetworkDetails::isPartialCandidateMatch(ConstNetworkVertexPtr v1, ConstNetw
     score *= angleScore;
   }
 
-  LOG_INFO(e1 << ", " << e2 << ": " << score);
   return score >= ConfigOptions().getConflatorMinValidScore();
 }
 

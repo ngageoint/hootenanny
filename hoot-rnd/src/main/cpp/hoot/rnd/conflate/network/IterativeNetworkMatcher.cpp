@@ -175,13 +175,11 @@ void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetwo
     nb->getEdgesFromVertex(smallWayB->getFrom()));
   ebNeighborhood.unite(QSet<ConstNetworkEdgePtr>::fromList(nb->getEdgesFromVertex(smallWayB->getTo())));
   ebNeighborhood.remove(smallWayB);
-  LOG_VAR(ebNeighborhood);
 
   // represents which vertices an edge may match [vertex in nb][edge in na]
   QHash<ConstNetworkVertexPtr, QList<ConstNetworkEdgePtr> > edgeVMatch;
   QList<ConstNetworkEdgePtr> unmatched;
 
-  LOG_VAR(va);
   // for each edge that intersects with va
   foreach (ConstNetworkEdgePtr ea, na->getEdgesFromVertex(va))
   {
@@ -205,9 +203,6 @@ void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetwo
         }
       }
     }
-    LOG_VAR(ea);
-    LOG_VAR(fromMatch);
-    LOG_VAR(toMatch);
 
     // if the edge only matches one vertex, put it in edgeVMatch
     if (fromMatch != toMatch)
@@ -228,9 +223,6 @@ void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetwo
       unmatched.append(ea);
     }
   }
-
-  LOG_VAR(edgeVMatch);
-  LOG_VAR(unmatched);
 
   // if this is relatively simple then modify the graph to add a 0:1 match
   // (AKA intersection:way match)
