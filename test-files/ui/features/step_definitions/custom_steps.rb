@@ -207,6 +207,10 @@ When(/^I click the "([^"]*)" key in the "([^"]*)"$/) do |key, el|
   find(el).native.send_keys(key)
 end
 
+When(/^I press the escape key$/) do
+  find('body').native.send_keys(:escape)
+end
+
 Then(/^I should see options in this order:$/) do |table|
   expected_order = table.raw.flatten
   actual_order = page.all('#settingsSidebar label').collect(&:text)
