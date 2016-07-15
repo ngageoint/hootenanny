@@ -31,14 +31,13 @@ package hoot.services.geo.zindex;
  * 
  * This class is re-entrant but not thread safe.
  */
-final public class ZValue {
-    private long[] _b;
-    private int _depth;
-    private int _dimensions;
-
-    private double[] _min, _max;
-
-    private long _range;
+public final class ZValue {
+    private final long[] b;
+    private final int depth;
+    private final int dimensions;
+    private final double[] min;
+    private final double[] max;
+    private final long range;
 
     /**
      * Creates a new ZValue calculator
@@ -50,21 +49,20 @@ final public class ZValue {
      *            than 63.
      */
     public ZValue(int dimensions, int depth, double[] min, double[] max) {
-        _depth = depth;
-        _dimensions = dimensions;
-        _min = min;
-        _max = max;
-        _range = (1 << (_depth)) - 1;
-        _b = new long[dimensions];
+        this.depth = depth;
+        this.dimensions = dimensions;
+        this.min = min;
+        this.max = max;
+        range = (1 << (this.depth)) - 1;
+        b = new long[dimensions];
 
     }
 
     public long calculate(double[] point) {
-        for (int i = 0; i < _dimensions; i++) {
-            _b[i] = calculateComponent(point[i], i);
+        for (int i = 0; i < dimensions; i++) {
+            b[i] = calculateComponent(point[i], i);
         }
-
-        return calculate(_b);
+        return calculate(b);
     }
 
     /**
@@ -72,18 +70,16 @@ final public class ZValue {
      * the proper space.
      */
     public long calculate(long[] point) {
-        long bitRead = 1 << (_depth - 1);
+        long bitRead = 1 << (depth - 1);
         long result = 0;
-        for (int depth = 0; depth < _depth; depth++) {
+        for (int depth = 0; depth < this.depth; depth++) {
             // reverse the order so it looks like a "z" and makes it consistent
-            // with
-            // the Wikipedia
-            // definition.
-            for (int i = _dimensions - 1; i >= 0; i--) {
-                long bit = (point[i] & bitRead) != 0 ? 1 : 0;
+            // with the Wikipedia definition.
+            for (int i = dimensions - 1; i >= 0; i--) {
+                long bit = ((point[i] & bitRead) != 0) ? 1 : 0;
                 result = (result << 1) | bit;
             }
-            bitRead = bitRead >> 1;
+            bitRead >>= 1;
         }
 
         return result;
@@ -93,7 +89,7 @@ final public class ZValue {
      * Calculates the non-interleaved component for one dimension.
      */
     public long calculateComponent(double v, int d) {
-        return Math.round((v - _min[d]) / (_max[d] - _min[d]) * _range);
+        return Math.round(((v - min[d]) / (max[d] - min[d])) * range);
     }
 
     public void decompose(long v, long[] point) {
@@ -103,29 +99,29 @@ final public class ZValue {
             point[i] = 0;
         }
 
-        long bitRead = 1 << (_depth * _dimensions - 1);
-        for (int depth = 0; depth < _depth; depth++) {
+        long bitRead = 1 << ((depth * dimensions) - 1);
+        for (int depth = 0; depth < this.depth; depth++) {
             // reverse the order so it looks like a "z" and makes it consistent
             // with
             // the Wikipedia definition.
-            for (int i = _dimensions - 1; i >= 0; i--) {
-                long bit = (v & bitRead) != 0 ? 1 : 0;
+            for (int i = dimensions - 1; i >= 0; i--) {
+                long bit = ((v & bitRead) != 0) ? 1 : 0;
                 point[i] = (point[i] << 1) | bit;
-                bitRead = bitRead >> 1;
+                bitRead >>= 1;
             }
         }
     }
 
     public int getDepth() {
-        return _depth;
+        return depth;
     }
 
     public int getDimensions() {
-        return _dimensions;
+        return dimensions;
     }
 
     public double getMax(int d) {
-        return _max[d];
+        return max[d];
     }
 
     /**
@@ -133,10 +129,10 @@ final public class ZValue {
      * direction - 1).
      */
     public long getMaxDimensionRange() {
-        return _range;
+        return range;
     }
 
     public double getMin(int d) {
-        return _min[d];
+        return min[d];
     }
 }

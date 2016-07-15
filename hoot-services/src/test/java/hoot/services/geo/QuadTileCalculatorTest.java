@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
+import hoot.services.utils.QuadTileCalculator;
 
 
 public class QuadTileCalculatorTest {

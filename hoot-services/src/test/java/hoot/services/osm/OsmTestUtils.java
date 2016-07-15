@@ -26,6 +26,9 @@
  */
 package hoot.services.osm;
 
+import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
+import static hoot.services.HootProperties.MAX_RECORD_BATCH_SIZE;
+
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -69,7 +72,7 @@ import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
-import hoot.services.geo.GeoUtils;
+import hoot.services.utils.GeoUtils;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
@@ -377,9 +380,8 @@ public class OsmTestUtils {
             // a change the size of the expansion factor is made automatically,
             // so the changeset's
             // bounds should be no larger than that
-            defaultBounds.expand(originalBounds,
-                    Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
-            Assert.assertTrue(changesetBounds.equals(defaultBounds));
+            defaultBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
+            Assert.assertEquals(defaultBounds, changesetBounds);
         }
         catch (Exception e) {
             Assert.fail("Error checking changeset: " + e.getMessage());
@@ -1075,8 +1077,7 @@ public class OsmTestUtils {
         BoundingBox bounds = new BoundingBox(-78.02265434416296, 38.90089748801109, -77.9224564416296,
                 39.00085678801109);
         BoundingBox expandedBounds = new BoundingBox();
-        expandedBounds.expand(bounds,
-                Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+        expandedBounds.expand(bounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
         return expandedBounds;
     }
 
@@ -1089,9 +1090,9 @@ public class OsmTestUtils {
     // ChangesetResourceUtils. Since that involves updating *a lot* of tests, so
     // not doing it right
     // now.
-    public static Set<Long> createNodesOutsideOfQueryBounds(final long changesetId, final BoundingBox queryBounds)
+    public static Set<Long> createNodesOutsideOfQueryBounds(long changesetId, BoundingBox queryBounds)
             throws Exception {
-        Set<Long> nodeIds = new LinkedHashSet<Long>();
+        Set<Long> nodeIds = new LinkedHashSet<>();
         nodeIds.add(Node.insertNew(changesetId, mapId, queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, null,
                 conn));
         nodeIds.add(Node.insertNew(changesetId, mapId, queryBounds.getMinLat() - 10, queryBounds.getMinLon() - 10, null,
@@ -1193,7 +1194,7 @@ public class OsmTestUtils {
 
         }
         catch (Exception e) {
-            throw new Exception("Error inserting node.");
+            throw new Exception("Error inserting node.", e);
         }
         finally {
             if (stmt != null)
@@ -1230,7 +1231,7 @@ public class OsmTestUtils {
             sequenceCtr++;
         }
 
-        int maxRecordBatchSize = Integer.parseInt(HootProperties.getPropertyOrDefault("maxRecordBatchSize"));
+        int maxRecordBatchSize = Integer.parseInt(MAX_RECORD_BATCH_SIZE);
         DbUtils.batchRecords(mapId, wayNodeRecords, QCurrentWayNodes.currentWayNodes, null, RecordBatchType.INSERT,
                 conn, maxRecordBatchSize);
     }
@@ -1287,7 +1288,7 @@ public class OsmTestUtils {
             sequenceCtr++;
         }
 
-        int maxRecordBatchSize = Integer.parseInt(HootProperties.getPropertyOrDefault("maxRecordBatchSize"));
+        int maxRecordBatchSize = Integer.parseInt(MAX_RECORD_BATCH_SIZE);
         DbUtils.batchRecords(mapId, memberRecords, QCurrentRelationMembers.currentRelationMembers, null,
                 RecordBatchType.INSERT, conn, maxRecordBatchSize);
     }
@@ -1382,7 +1383,7 @@ public class OsmTestUtils {
 
         }
         catch (Exception e) {
-            throw new Exception("Error inserting node.");
+            throw new Exception("Error inserting node.", e);
         }
 
         finally {
@@ -1406,7 +1407,7 @@ public class OsmTestUtils {
      */
     public static long getTagCountForElementType(final long mapId, final ElementType elementType, Connection dbConn)
             throws Exception {
-        final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
+        final Element prototype = ElementFactory.create(mapId, elementType, dbConn);
         List<?> records = new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
                 .list(prototype.getElementTable());
         long tagCount = 0;

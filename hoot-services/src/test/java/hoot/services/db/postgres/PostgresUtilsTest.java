@@ -46,7 +46,7 @@ public class PostgresUtilsTest {
                 + "\\\"high\\\"},\\\"appendTags\\\":{\\\"source:geometry\\\":\\\"${BASEMAP_IMAGE_SOURCE}\\\",\\\"source:geometry:"
                 + "sensor\\\":\\\"${BASEMAP_IMAGE_SENSOR}\\\",\\\"source:geometry:date\\\":\\\"${BASEMAP_IMAGE_DATETIME}\\\","
                 + "\\\"source:geometry:id\\\":\\\"${BASEMAP_IMAGE_ID}\\\"}}}\"";
-        Map<String, String> ret = PostgresUtils._parseTags(tagsStr);
+        Map<String, String> ret = PostgresUtils.parseTags(tagsStr);
 
         Assert.assertTrue(ret.size() == 2);
         Assert.assertTrue(ret.get("test1").toString().equals("val1"));
@@ -64,7 +64,7 @@ public class PostgresUtilsTest {
                 + "\"hoot:review:choices:2\"=>\"{\\\"label\\\":\\\"Assessed\\\",\\\"description\\\":\\\"The point is on a building, but you can't verify its type (e.g. hair salon).\\\",\\\"changes\\\":{\\\"replaceTags\\\":{\\\"hgis:imagery_confirmed\\\":\\\"assessed\\\",\\\"hgis:accuracy\\\":\\\"high\\\"},\\\"appendTags\\\":{\\\"source:geometry\\\":\\\"${BASEMAP_IMAGE_SOURCE}\\\",\\\"source:geometry:sensor\\\":\\\"${BASEMAP_IMAGE_SENSOR}\\\",\\\"source:geometry:date\\\":\\\"${BASEMAP_IMAGE_DATETIME}\\\",\\\"source:geometry:id\\\":\\\"${BASEMAP_IMAGE_ID}\\\"}}}\", "
                 + "\"hoot:review:choices:3\"=>\"{\\\"label\\\":\\\"Reported\\\",\\\"description\\\":\\\"Imagery is pixelated or cloudy -- can not be assessed.\\\",\\\"changes\\\":{\\\"replaceTags\\\":{\\\"hgis:imagery_confirmed\\\":\\\"reported\\\"},\\\"appendTags\\\":{\\\"source:geometry\\\":\\\"${BASEMAP_IMAGE_SOURCE}\\\",\\\"source:geometry:sensor\\\":\\\"${BASEMAP_IMAGE_SENSOR}\\\",\\\"source:geometry:date\\\":\\\"${BASEMAP_IMAGE_DATETIME}\\\",\\\"source:geometry:id\\\":\\\"${BASEMAP_IMAGE_ID}\\\"}}}\"";
 
-        Map<String, String> tags = PostgresUtils._parseTags(fullExample);
+        Map<String, String> tags = PostgresUtils.parseTags(fullExample);
         Assert.assertNotNull(tags);
         Assert.assertEquals(tags.size(), 11);
         Assert.assertEquals(tags.get("poi").toString(), "yes");

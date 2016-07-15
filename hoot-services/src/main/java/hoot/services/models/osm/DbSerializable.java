@@ -45,7 +45,7 @@ public interface DbSerializable {
     // the record this implementation wraps
     Object getRecord();
 
-    void setRecord(Object record) throws Exception;
+    void setRecord(Object record);
 
     // related records to this element (e.g. way nodes for ways, relation
     // members for relations,

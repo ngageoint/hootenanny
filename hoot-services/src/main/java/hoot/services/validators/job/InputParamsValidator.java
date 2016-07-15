@@ -31,7 +31,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import hoot.services.geo.BoundingBox;
-import hoot.services.utils.InputParamsValidatorAbstract;
 import hoot.services.utils.ReflectUtils;
 
 
@@ -39,9 +38,9 @@ import hoot.services.utils.ReflectUtils;
  * Validates Jersey service input parameters
  */
 public class InputParamsValidator extends InputParamsValidatorAbstract {
-    private Map<String, Object> inputParams;
+    private final Map<String, Object> inputParams;
 
-    public InputParamsValidator(final Map<String, Object> inputParams) {
+    public InputParamsValidator(Map<String, Object> inputParams) {
         this.inputParams = inputParams;
     }
 
@@ -64,28 +63,27 @@ public class InputParamsValidator extends InputParamsValidatorAbstract {
      * @return a parameter value
      * @throws Exception
      */
-    public Object validateAndParseInputParam(final String name, final Object type, final Object rangeMin,
-            final Object rangeMax, final boolean optional, final Object defaultValue) throws Exception {
-        Object paramValue = null;
+    public Object validateAndParseInputParam(String name, Object type, Object rangeMin,
+            Object rangeMax, boolean optional, Object defaultValue) throws Exception {
 
         // special case
         if (name.equals("geospatialBounds")) {
-            if (inputParams.get("geospatialBounds") == null && defaultValue != null) {
+            if ((inputParams.get("geospatialBounds") == null) && (defaultValue != null)) {
                 return new BoundingBox((String) defaultValue);
             }
             return new BoundingBox((String) inputParams.get("geospatialBounds"));
         }
 
         Object param = inputParams.get(name);
-        if ((param == null || StringUtils.trimToNull(String.valueOf(param).trim()) == null) && !optional) {
+        if (((param == null) || (StringUtils.trimToNull(String.valueOf(param).trim()) == null)) && !optional) {
             throw new Exception("Invalid input parameter value.  Required parameter: " + name + " not sent to: "
                     + ReflectUtils.getCallingClassName());
         }
 
-        if (param == null && defaultValue != null) {
+        if ((param == null) && (defaultValue != null)) {
             if (!type.getClass().equals(defaultValue.getClass())) {
                 throw new Exception("Invalid input parameter value.  Mismatching input parameter type: "
-                        + type.toString() + " and default value type: " + defaultValue.toString() + "for parameter: "
+                        + type + " and default value type: " + defaultValue + "for parameter: "
                         + name + " sent to: " + ReflectUtils.getCallingClassName());
             }
             return defaultValue;
@@ -100,6 +98,7 @@ public class InputParamsValidator extends InputParamsValidatorAbstract {
             return validateAndParseParamValueString(String.valueOf(param).trim(), name, type, rangeMin, rangeMax);
         }
 
+        Object paramValue = null;
         return paramValue;
     }
 }

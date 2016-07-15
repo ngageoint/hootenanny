@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.osm;
 
+import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
+import static hoot.services.HootProperties.MAXIMUM_WAY_NODES;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,7 +56,6 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.Changesets;
@@ -67,12 +69,12 @@ import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
-import hoot.services.geo.QuadTileCalculator;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlUtils;
 
 
@@ -501,8 +503,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
                 BoundingBox updatedBounds = new BoundingBox((originalBounds.getMinLon() - .001),
                         (originalBounds.getMinLat() - .001), originalBounds.getMaxLon(), originalBounds.getMaxLat());
-                expandedBounds.expand(updatedBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(updatedBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
 
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
@@ -1109,7 +1110,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testUploadCreateTooManyNodesForWay() throws Exception {
-        String originalMaximumWayNodes = HootProperties.getProperty("maximumWayNodes");
+        String originalMaximumWayNodes = MAXIMUM_WAY_NODES;
 
         BoundingBox originalBounds = null;
         Long changesetId = null;
@@ -1128,10 +1129,10 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
             // remember the original value of "maximumWayNodes"
-            originalMaximumWayNodes = HootProperties.getProperty("maximumWayNodes");
+            originalMaximumWayNodes = MAXIMUM_WAY_NODES;
 
             // use a lower number of max way nodes then default for efficiency
-            HootCustomPropertiesSetter.setProperty("maximumWayNodes", "2");
+            HootCustomPropertiesSetter.setProperty("MAXIMUM_WAY_NODES", "2");
 
             resource()
                     .path("api/0.6/changeset/" + changesetId + "/upload")
@@ -1161,7 +1162,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("maximumWayNodes", originalMaximumWayNodes);
+            HootCustomPropertiesSetter.setProperty("MAXIMUM_WAY_NODES", originalMaximumWayNodes);
         }
     }
 

@@ -22,28 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.readers.users;
-
-import java.sql.Connection;
-
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-
-import hoot.services.UnitTest;
+package hoot.services.controllers.job.custom.HGIS;
 
 
-public class UsersRetrieverTest {
-    @Test
-    @Category(UnitTest.class)
-    public void testRetrieveAll() throws Exception {
-        Connection conn = null;
-        UsersRetriever r = new UsersRetriever(conn);
-        String actual = r._getAllQuery().toString();
+public class ReviewMapTagUpdateException extends Exception {
 
-        String expected = "from \"users\" \"users\"\n" + "order by \"users\".\"display_name\" asc";
-
-        org.junit.Assert.assertEquals(expected, actual);
+    public ReviewMapTagUpdateException(String msg) {
+        super(msg);
     }
 }

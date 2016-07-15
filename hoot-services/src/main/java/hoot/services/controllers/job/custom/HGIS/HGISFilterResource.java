@@ -26,23 +26,25 @@
  */
 package hoot.services.controllers.job.custom.HGIS;
 
+import static hoot.services.HootProperties.HGIS_FILTER_SCRIPT;
+
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.exceptions.osm.InvalidResourceParamException;
 import hoot.services.models.review.custom.HGIS.FilterNonHgisPoisRequest;
 import hoot.services.models.review.custom.HGIS.FilterNonHgisPoisResponse;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/filter/custom/HGIS")
@@ -50,7 +52,7 @@ public class HGISFilterResource extends HGISResource {
     private static final Logger logger = LoggerFactory.getLogger(HGISFilterResource.class);
 
     public HGISFilterResource() {
-        super(HootProperties.getProperty("hgisFilterScript"));
+        super(HGIS_FILTER_SCRIPT);
     }
 
     /**
@@ -62,13 +64,12 @@ public class HGISFilterResource extends HGISResource {
      *
      * @param request
      * @return Job ID
-     * @throws Exception
      */
     @POST
     @Path("/filternonhgispois")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public FilterNonHgisPoisResponse filterNonHgisPois(FilterNonHgisPoisRequest request) throws Exception {
+    public FilterNonHgisPoisResponse filterNonHgisPois(FilterNonHgisPoisRequest request) {
         FilterNonHgisPoisResponse resp = new FilterNonHgisPoisResponse();
 
         try {
@@ -93,11 +94,13 @@ public class HGISFilterResource extends HGISResource {
 
             resp.setJobId(jobId);
         }
-        catch (InvalidResourceParamException rpex) {
-            ResourceErrorHandler.handleError(rpex.getMessage(), Status.BAD_REQUEST, logger);
+        catch (InvalidResourceParamException ex) {
+            String msg = ex.getMessage();
+            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError(ex.getMessage(), Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = ex.getMessage();
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return resp;

@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.job.custom.HGIS;
 
+import static hoot.services.HootProperties.*;
+
 import java.sql.Connection;
 
 import org.json.simple.JSONArray;
@@ -33,30 +35,18 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.db.DbUtils;
-import hoot.services.validators.osm.MapValidator;
+import hoot.services.db2.QMaps;
+import hoot.services.models.osm.ModelDaoUtils;
 
 
 /**
  * Base code for HGIS specific Rest endpoint.
  */
 public class HGISResource extends JobControllerBase {
-    private static final String dbName;
-    private static final String dbUserId;
-    private static final String dbPassword;
-    private static final String dbHost;
+    private static final Logger logger = LoggerFactory.getLogger(HGISResource.class);
 
-    private static final Logger log = LoggerFactory.getLogger(HGISResource.class);
-
-    // Load just once during class load
-    static {
-        dbName = HootProperties.getProperty("dbName");
-        dbUserId = HootProperties.getProperty("dbUserId");
-        dbPassword = HootProperties.getProperty("dbPassword");
-        dbHost = HootProperties.getProperty("dbHost");
-    }
 
     public HGISResource(String processName) {
         super(processName);
@@ -72,9 +62,8 @@ public class HGISResource extends JobControllerBase {
     boolean mapExists(String mapName) throws Exception {
         boolean exists;
 
-        try (Connection conn = DbUtils.createConnection()) {
-            MapValidator validator = new MapValidator(conn);
-            exists = (validator.verifyMapExists(mapName) > -1);
+        try (Connection connection = DbUtils.createConnection()) {
+            exists = (verifyMapExists(mapName, connection) > -1);
         }
 
         return exists;
@@ -89,7 +78,7 @@ public class HGISResource extends JobControllerBase {
      *         postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois
      */
     static String generateDbMapParam(String mapName) {
-        return "hootapidb://" + dbUserId + ":" + dbPassword + "@" + dbHost + "/" + dbName + "/" + mapName;
+        return "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + "/" + DB_NAME + "/" + mapName;
     }
 
     /**
@@ -109,5 +98,24 @@ public class HGISResource extends JobControllerBase {
         commandArgs.add(arg);
 
         return commandArgs;
+    }
+
+    /**
+     * Determines whether a maps data has been prepared for review; more or less
+     * a wrapper with a more identifiable name around ModelDaoUtils map
+     * functionality
+     *
+     * @param mapIdStr
+     *            map ID; may be a map ID or unique map name
+     * @return the map's numeric ID
+     * @throws Exception
+     *             if the map doesn't exist
+     */
+    private static long verifyMapExists(String mapIdStr, Connection connection) throws Exception {
+        logger.debug("Checking maps table for map with ID: {} ...", mapIdStr);
+
+        // this will throw if it doesn't find the map
+        QMaps maps = QMaps.maps;
+        return ModelDaoUtils.getRecordIdForInputString(mapIdStr, connection, maps, maps.id, maps.displayName);
     }
 }

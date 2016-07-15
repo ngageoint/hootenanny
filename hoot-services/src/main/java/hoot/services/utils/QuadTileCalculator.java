@@ -24,12 +24,39 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.exceptions.review.custom.HGIS;
+package hoot.services.utils;
 
-@SuppressWarnings("serial")
-public class ReviewMapTagUpdateException extends Exception {
+import org.apache.commons.math.util.MathUtils;
 
-    public ReviewMapTagUpdateException(final String msg) {
-        super(msg);
+
+/**
+ * Calculates quad tiles: http://wiki.openstreetmap.org/wiki/QuadTiles
+ */
+public final class QuadTileCalculator {
+    private QuadTileCalculator() {
+    }
+
+    /**
+     * Calculates the quad tile for a point
+     * 
+     * @param latitude
+     *            point's latitude
+     * @param longitude
+     *            points longitude
+     * @return tile integer
+     */
+    public static long tileForPoint(double latitude,double longitude) {
+        int lonInt = (int) MathUtils.round((((longitude + 180.0) * 65535.0) / 360.0), 0);
+        int latInt = (int) MathUtils.round((((latitude + 90.0) * 65535.0) / 180.0), 0);
+
+        // use a long here, because java doesn't have unsigned int
+        long tileUnsigned = 0;
+        for (int i = 15; i >= 0; i--) {
+            // use y, x ordering
+            tileUnsigned = (tileUnsigned << 1) | ((lonInt >> i) & 1);
+            tileUnsigned = (tileUnsigned << 1) | ((latInt >> i) & 1);
+        }
+        assert (tileUnsigned >= 0);
+        return tileUnsigned;
     }
 }

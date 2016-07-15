@@ -30,11 +30,10 @@ package hoot.services.geo.zindex;
  * Range of values. Min is inclusive. Max is inclusive.
  */
 public class Range implements Comparable<Range> {
-    private long _max;
-    private long _min;
+    private long max;
+    private long min;
 
     public Range() {
-
     }
 
     public Range(long min, long max) {
@@ -42,45 +41,70 @@ public class Range implements Comparable<Range> {
     }
 
     public long calculateSize() {
-        return _max - _min + 1;
+        return (max - min) + 1;
     }
 
     @Override
-    public int compareTo(Range other) {
-        return new Long(_min).compareTo(other._min);
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if ((obj == null) || (getClass() != obj.getClass())) {
+            return false;
+        }
+
+        Range range = (Range) obj;
+
+        if (max != range.max) {
+            return false;
+        }
+        return min == range.min;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (max ^ (max >>> 32));
+        result = (31 * result) + (int) (min ^ (min >>> 32));
+        return result;
+    }
+
+    @Override
+    public int compareTo(Range o) {
+        return Long.valueOf(this.min).compareTo(o.getMin());
     }
 
     public long getMax() {
-        return _max;
+        return max;
     }
 
     public long getMin() {
-        return _min;
+        return min;
     }
 
     public boolean in(long l) {
-        return l >= _min && l <= _max;
+        return (l >= min) && (l <= max);
     }
 
     public boolean isValid() {
-        return _min >= 0 && _max >= 0;
+        return (min >= 0) && (max >= 0);
     }
 
     public void setInvalid() {
-        _min = -1;
-        _max = -1;
+        min = -1;
+        max = -1;
     }
 
     public void set(long min, long max) {
-        _min = min;
-        _max = max;
-        if (_min > _max) {
+        this.min = min;
+        this.max = max;
+        if (this.min > this.max) {
             throw new IllegalArgumentException("min is greater than max: " + min + " " + max);
         }
     }
 
     @Override
     public String toString() {
-        return String.format("%d : %d", _min, _max);
+        return String.format("%d : %d", min, max);
     }
 }
