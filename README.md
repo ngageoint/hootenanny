@@ -112,6 +112,7 @@ In alphabetical order:
 * Ben Marchant (Benjamin.Marchant@digitalglobe.com)
 * Dmitriy Mylov (Dmitriy.Mylov@digitalglobe.com)
 * Terry Ott (Terry.Ott@digitalglobe.com)
+* Seth Putnam (Seth.Putnam@digitalglobe.com)
 * Micah Schicker (Micah.Schicker@digitalglobe.com)
 * Greg Schmidt (Greg.Schmidt@digitalglobe.com)
 * Josh Sisskind (Josh.Sisskind@digitalglobe.com)
