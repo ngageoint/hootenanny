@@ -506,7 +506,8 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmJsonReader.cpp \
     src/main/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.cpp \
     src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.cpp \
-    src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.cpp
+    src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/IndexElementsVisitor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1014,5 +1015,10 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.h \
     src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.h \
     src/main/cpp/hoot/core/visitors/WorstCircularErrorVisitor.h \
-    src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.h
+    src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.h \
+    src/main/cpp/hoot/core/filters/ArbitraryCriterion.h \
+    src/main/cpp/hoot/core/visitors/IndexElementsVisitor.h \
+    src/main/cpp/hoot/core/visitors/FindWaysVisitor.h \
+    src/main/cpp/hoot/core/filters/ContainsNodeCriterion.h \
+    src/main/cpp/hoot/core/visitors/FindNodesVisitor.h
 

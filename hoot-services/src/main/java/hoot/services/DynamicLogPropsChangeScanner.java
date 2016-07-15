@@ -26,6 +26,9 @@
  */
 package hoot.services;
 
+import static hoot.services.HootProperties.AUTO_SCAN_FOR_LOG_PROPS_CHANGES;
+import static hoot.services.HootProperties.LOG_PROPS_DYNAMIC_CHANGE_SCAN_INTERVAL;
+
 import java.net.URL;
 
 import javax.servlet.http.HttpServlet;
@@ -48,7 +51,7 @@ public class DynamicLogPropsChangeScanner extends HttpServlet {
     @Override
     public void init() {
         try {
-            if (Boolean.parseBoolean(HootProperties.getPropertyOrDefault("autoScanForLogPropsChanges"))) {
+            if (Boolean.parseBoolean(AUTO_SCAN_FOR_LOG_PROPS_CHANGES)) {
                 configureLogging(ConfigFileType.XML);
             }
         }
@@ -61,15 +64,15 @@ public class DynamicLogPropsChangeScanner extends HttpServlet {
         XML, PROPERTIES
     }
 
-    private void configureLogging(ConfigFileType configFileType) throws Exception {
+    private void configureLogging(ConfigFileType configFileType) {
         logger.info("Configuring dynamic log properties for file type: " + configFileType + " ...");
+
         URL configFile = getClass().getResource("/log4j." + configFileType);
 
         if ((configFile != null) && "file".equals(configFile.getProtocol())) {
-            int scanDelayMinutes = Integer
-                    .parseInt(HootProperties.getPropertyOrDefault("logPropsDynamicChangeScanInterval"));
+            int scanDelayMinutes = Integer.parseInt(LOG_PROPS_DYNAMIC_CHANGE_SCAN_INTERVAL);
             if (scanDelayMinutes >= 1) {
-                long scanDelayMillis = scanDelayMinutes * 60 * 1000;
+                long scanDelayMillis = scanDelayMinutes * 60 * 1000L;
                 switch (configFileType) {
                     case XML:
 
@@ -82,10 +85,6 @@ public class DynamicLogPropsChangeScanner extends HttpServlet {
                         PropertyConfigurator.configureAndWatch(configFile.getPath(), scanDelayMillis);
 
                     break;
-
-                    default:
-
-                        throw new Exception("Invalid file type.");
                 }
 
                 logger.info("Configured dynamic log properties for file type: " + configFileType);

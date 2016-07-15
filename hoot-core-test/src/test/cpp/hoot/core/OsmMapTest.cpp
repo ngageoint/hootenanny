@@ -43,6 +43,7 @@
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
 // Qt
@@ -268,10 +269,10 @@ public:
     reader.read("test-files/ToyTestB.osm", mapB);
 
     RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
-    relation->addElement("", mapA->getWay(mapA->findWays("note", "1")[0]));
+    relation->addElement("", mapA->getWay(FindWaysVisitor::findWaysByTag(mapA, "note", "1")[0]));
     mapA->addRelation(relation);
     RelationPtr duplicatedRelation(new Relation(Status::Unknown1, -1, 15.0));
-    duplicatedRelation->addElement("", mapA->getWay(mapA->findWays("note", "1")[0]));
+    duplicatedRelation->addElement("", mapA->getWay(FindWaysVisitor::findWaysByTag(mapA, "note", "1")[0]));
     mapB->addRelation(duplicatedRelation);
 
     QString exceptionMsg;
@@ -440,16 +441,16 @@ public:
     // force it to build the tree before we start removing nodes.
     map->getIndex().getWayTree();
 
-    map->removeWay(map->findWays("note", "0")[0]);
+    map->removeWay(FindWaysVisitor::findWaysByTag(map, "note", "0")[0]);
     _checkKnnWayIterator(map);
 
-    map->removeWay(map->findWays("note", "1")[0]);
+    map->removeWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);
     _checkKnnWayIterator(map);
 
-    map->removeWay(map->findWays("note", "2")[0]);
+    map->removeWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]);
     _checkKnnWayIterator(map);
 
-    map->removeWay(map->findWays("note", "3")[0]);
+    map->removeWay(FindWaysVisitor::findWaysByTag(map, "note", "3")[0]);
     _checkKnnWayIterator(map);
   }
 

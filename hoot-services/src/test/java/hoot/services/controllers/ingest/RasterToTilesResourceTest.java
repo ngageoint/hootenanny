@@ -26,10 +26,10 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.HootProperties.*;
+
 import java.io.File;
 import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
@@ -40,7 +40,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.utils.HootCustomPropertiesSetter;
 
@@ -48,26 +47,27 @@ import hoot.services.utils.HootCustomPropertiesSetter;
 public class RasterToTilesResourceTest {
     private static final File homeFolder;
     private static final String tileServerPath;
-    private static Map<String, String> originalHootProperties;
+    private static final String original_HOME_FOLDER;
+    private static final String original_TILE_SERVER_PATH;
 
     static {
         try {
-            originalHootProperties = HootProperties.getProperties();
-
+            original_HOME_FOLDER = HOME_FOLDER;
             homeFolder = new File(FileUtils.getTempDirectory(), "RasterToTilesResourceTest");
             FileUtils.forceMkdir(homeFolder);
             Assert.assertTrue(homeFolder.exists());
-            HootCustomPropertiesSetter.setProperty("homeFolder", homeFolder.getAbsolutePath());
+            HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
 
             //tileServerPath=$(homeFolder)/ingest/processed
 
+            original_TILE_SERVER_PATH = TILE_SERVER_PATH;
             File processedFolder = new File(homeFolder, "ingest/processed");
             FileUtils.forceMkdir(processedFolder);
             Assert.assertTrue(processedFolder.exists());
             tileServerPath = processedFolder.getAbsolutePath();
             Assert.assertNotNull(tileServerPath);
             Assert.assertTrue(!tileServerPath.isEmpty());
-            HootCustomPropertiesSetter.setProperty("tileServerPath", processedFolder.getAbsolutePath());
+            HootCustomPropertiesSetter.setProperty("TILE_SERVER_PATH", processedFolder.getAbsolutePath());
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -77,17 +77,14 @@ public class RasterToTilesResourceTest {
     @AfterClass
     public static void oneTimeTearDown() throws Exception {
         FileUtils.deleteDirectory(homeFolder);
-        Properties origProperties = new Properties();
-        for (Map.Entry<String, String> entry : originalHootProperties.entrySet()) {
-            origProperties.setProperty(entry.getKey(), entry.getValue());
-        }
-        HootCustomPropertiesSetter.setProperties(origProperties);
+        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", original_HOME_FOLDER);
+        HootCustomPropertiesSetter.setProperty("TILE_SERVER_PATH", original_TILE_SERVER_PATH);
     }
 
     @Test
     @Category(UnitTest.class)
     public void TestIngestOSMResource() throws Exception {
-        String processScriptName = HootProperties.getProperty("RasterToTiles");
+        String processScriptName = RASTER_TO_TILES;
         Assert.assertNotNull(processScriptName);
         Assert.assertTrue(!processScriptName.isEmpty());
 

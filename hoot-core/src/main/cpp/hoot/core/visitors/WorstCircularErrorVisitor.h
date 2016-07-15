@@ -30,6 +30,8 @@
 
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/filters/ElementCriterionConsumer.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 
 /**
@@ -38,7 +40,9 @@
 namespace hoot
 {
 
-class WorstCircularErrorVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
+class WorstCircularErrorVisitor :
+    public ElementConstOsmMapVisitor,
+    public SingleStatistic
 {
 public:
   static string className() { return "hoot::WorstCircularErrorVisitor"; }

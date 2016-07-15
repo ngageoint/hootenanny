@@ -34,6 +34,7 @@
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
 
@@ -336,7 +337,7 @@ public:
   vector<ConstWayPtr> toWayVector(OsmMapPtr map, QString note)
   {
     vector<ConstWayPtr> result;
-    vector<long> wids = map->findWays("note", note);
+    vector<long> wids = FindWaysVisitor::findWaysByTag(map, "note", note);
     for (size_t i = 0; i < wids.size(); i++)
     {
       result.push_back(map->getWay(wids[i]));
@@ -346,7 +347,7 @@ public:
 
   ConstWayPtr toWay(OsmMapPtr map, QString note)
   {
-    vector<long> wids = map->findWays("note", note);
+    vector<long> wids = FindWaysVisitor::findWaysByTag(map, "note", note);
     for (size_t i = 0; i < wids.size(); i++)
     {
       return map->getWay(wids[i]);

@@ -26,6 +26,8 @@
  */
 package hoot.services.models.osm;
 
+import static hoot.services.HootProperties.MAXIMUM_WAY_NODES;
+
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,7 +53,6 @@ import com.mysema.query.types.path.BooleanPath;
 import com.mysema.query.types.path.NumberPath;
 import com.mysema.query.types.path.SimplePath;
 
-import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.db.DbUtils.nwr_enum;
@@ -70,6 +71,7 @@ import hoot.services.geo.Coordinates;
  */
 public class Way extends Element {
     private static final Logger log = LoggerFactory.getLogger(Way.class);
+    private static final QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
 
     private final List<Long> wayNodeIdsCache = new ArrayList<>();
 
@@ -77,13 +79,10 @@ public class Way extends Element {
         return wayNodeIdsCache;
     }
 
-    private static final QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
-
-    // temp collection of way node coordinates used to calculate the way's
-    // bounds
+    // temp collection of way node coordinates used to calculate the way'sbounds
     private Map<Long, Coordinates> nodeCoordsCollection;
 
-    public Way(long mapId, Connection dbConn) throws Exception {
+    public Way(long mapId, Connection dbConn) {
         super(dbConn);
         super.elementType = ElementType.Way;
         super.record = new CurrentWays();
@@ -91,7 +90,7 @@ public class Way extends Element {
         setMapId(mapId);
     }
 
-    public Way(long mapId, Connection dbConn, CurrentWays record) throws Exception {
+    public Way(long mapId, Connection dbConn, CurrentWays record) {
         super(dbConn);
         super.elementType = ElementType.Way;
 
@@ -161,16 +160,13 @@ public class Way extends Element {
         double maxLon = (-1 * BoundingBox.LON_LIMIT) - 1;
         double maxLat = (-1 * BoundingBox.LAT_LIMIT) - 1;
 
-        // assert(relatedRecordIds != null && relatedRecordIds.size() >= 2);
-
         // nodes that were parsed in the same request referencing this way;
-        // either
-        // as a create or modify
+        // either as a create or modify
         Set<Long> modifiedRecordIds = new HashSet<>(relatedRecordIds);
         for (long wayNodeId : relatedRecordIds) {
             assert (nodeCoordsCollection.containsKey(wayNodeId));
-            double lat = nodeCoordsCollection.get(wayNodeId).lat;
-            double lon = nodeCoordsCollection.get(wayNodeId).lon;
+            double lat = nodeCoordsCollection.get(wayNodeId).getLat();
+            double lon = nodeCoordsCollection.get(wayNodeId).getLon();
             if (lat < minLat) {
                 minLat = lat;
             }
@@ -188,11 +184,8 @@ public class Way extends Element {
         }
 
         // any way nodes not mentioned in the created/modified in the changeset
-        // XML
-        // represented by
-        // the remainder of the IDs in relatedRecordIds, request must now be
-        // retrieved from the
-        // database
+        // XML represented by the remainder of the IDs in relatedRecordIds, request must now be
+        // retrieved from the database
         List<?> nodeRecords = Element.getElementRecords(getMapId(), ElementType.Node, modifiedRecordIds, conn);
         for (Object record : nodeRecords) {
             CurrentNodes nodeRecord = (CurrentNodes) record;
@@ -212,6 +205,7 @@ public class Way extends Element {
             }
 
             assert (modifiedRecordIds.contains(nodeRecord.getId()));
+
             modifiedRecordIds.remove(nodeRecord.getId());
         }
 
@@ -232,22 +226,16 @@ public class Way extends Element {
     @Override
     public BoundingBox getBounds() throws Exception {
         // this is a little kludgy, but...first see if the related record data
-        // (waynode data) is left
-        // over from the XML parsing (clearTempData clears it out). If it is
-        // still here, use it
-        // because the way nodes will not have been written to the database yet,
-        // so use the cached
-        // way node IDs and node coordinate info to construct the bounds
+        // (waynode data) is left over from the XML parsing (clearTempData clears it out). If it is
+        // still here, use it because the way nodes will not have been written to the database yet,
+        // so use the cached way node IDs and node coordinate info to construct the bounds
         if ((relatedRecordIds != null) && (!relatedRecordIds.isEmpty())) {
             return getBoundsFromRequestDataAndRemainderFromDatabase();
         }
 
         // If no temp related record data is present (hasn't been cleared out),
-        // the
-        // way nodes data
-        // for this way must be in the services database and up to date, so get
-        // it
-        // from there.
+        // the way nodes data for this way must be in the services database and up to date,
+        // so get it from there.
         return new BoundingBox(new ArrayList<>(getNodes()));
     }
 
@@ -279,8 +267,7 @@ public class Way extends Element {
         super.setRecord(wayRecord);
 
         // if we're deleting the way, all the way nodes will get deleted
-        // automatically...and no new
-        // ones need to be parsed
+        // automatically...and no new ones need to be parsed
         if (entityChangeType != EntityChangeType.DELETE) {
             parseWayNodesXml(xml);
         }
@@ -295,8 +282,7 @@ public class Way extends Element {
 
         // From the Rails port of OSM API:
         // rels = Relation.joins(:relation_members).where(:visible => true,
-        // :current_relation_members => { :member_type => "Way", :member_id =>
-        // id }).
+        // :current_relation_members => { :member_type => "Way", :member_id => id }).
         SQLQuery owningRelationsQuery = new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).distinct()
                 .from(currentRelations).join(currentRelationMembers)
                 .on(currentRelations.id.eq(currentRelationMembers.relationId))
@@ -343,9 +329,7 @@ public class Way extends Element {
             List<Long> nodeIds = getNodeIds();
             Set<Long> elementIds = new HashSet<>();
 
-            // way nodes are output in sequence order; list should already be
-            // sorted
-            // by the query
+            // way nodes are output in sequence order; list should already be sorted by the query
             for (long nodeId : nodeIds) {
                 org.w3c.dom.Element nodeElement = doc.createElement("nd");
                 nodeElement.setAttribute("ref", String.valueOf(nodeId));
@@ -353,12 +337,11 @@ public class Way extends Element {
                 elementIds.add(nodeId);
             }
 
-            @SuppressWarnings("unchecked")
             List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(getMapId(),
                     ElementType.Node, elementIds, conn);
 
             for (Tuple elementRecord : elementRecords) {
-                Element nodeFullElement = ElementFactory.getInstance().create(ElementType.Node, elementRecord, conn,
+                Element nodeFullElement = ElementFactory.create(ElementType.Node, elementRecord, conn,
                         getMapId());
                 org.w3c.dom.Element nodeXml = nodeFullElement.toXml(parentXml, modifyingUserId,
                         modifyingUserDisplayName, false, false);
@@ -377,7 +360,7 @@ public class Way extends Element {
     private void validateWayNodesSize(NodeList wayNodesXml) throws Exception {
         if (entityChangeType != EntityChangeType.DELETE) {
             CurrentWays wayRecord = (CurrentWays) record;
-            long maximumWayNodes = Long.parseLong(HootProperties.getPropertyOrDefault("maximumWayNodes"));
+            long maximumWayNodes = Long.parseLong(MAXIMUM_WAY_NODES);
 
             long numWayNodes = wayNodesXml.getLength();
             if (numWayNodes < 2) {
@@ -400,12 +383,9 @@ public class Way extends Element {
         Map<Long, Element> parsedNodes = parsedElementIdsToElementsByType.get(ElementType.Node);
 
         // if this is a node created within the same request that is referencing
-        // this way, it won't
-        // exist in the database, but it will be in the element cache created
-        // when parsing the node
-        // from the request
+        // this way, it won't exist in the database, but it will be in the element cache created
+        // when parsing the node from the request
         if (parsedNodeId < 0) {
-            // assert(parsedNodes.containsKey(parsedNodeId));
             if (!parsedNodes.containsKey(parsedNodeId)) {
                 // TODO: add test for this
                 throw new Exception(
@@ -414,27 +394,22 @@ public class Way extends Element {
         }
 
         // The node is referenced somewhere else in this request, so get its
-        // info from the request, not
-        // the database b/c the database either won't have it or will have
-        // outdated info. Only get info
-        // from the request if the node is being created/modified, as if it is
-        // being deleted, we can
-        // just get the info from the database since its coords won't be
-        // changing and might not be in
-        // the request (not required).
+        // info from the request, not the database b/c the database either won't have it or will have
+        // outdated info. Only get info from the request if the node is being created/modified, as if it is
+        // being deleted, we can just get the info from the database since its coords won't be
+        // changing and might not be in the request (not required).
         long actualNodeId;
         if (parsedNodes.containsKey(parsedNodeId)
                 && (parsedNodes.get(parsedNodeId).getEntityChangeType() != EntityChangeType.DELETE)) {
             Node node = (Node) parsedElementIdsToElementsByType.get(ElementType.Node).get(parsedNodeId);
             CurrentNodes nodeRecord = (CurrentNodes) node.getRecord();
             actualNodeId = nodeRecord.getId();
-            nodeCoords.lat = nodeRecord.getLatitude();
-            nodeCoords.lon = nodeRecord.getLongitude();
+            nodeCoords.setLat(nodeRecord.getLatitude());
+            nodeCoords.setLon(nodeRecord.getLongitude());
         }
 
         // element not referenced in this request, so should already exist in
-        // the db and its info be up
-        // to date
+        // the db and its info be up to date
         else {
             actualNodeId = parsedNodeId;
             CurrentNodes existingNodeRecord = dbNodeCache.get(actualNodeId);
@@ -447,11 +422,12 @@ public class Way extends Element {
                 throw new Exception("Node with ID: " + actualNodeId + " is not visible for way.");
             }
 
-            nodeCoords.lat = existingNodeRecord.getLatitude();
-            nodeCoords.lon = existingNodeRecord.getLongitude();
+            nodeCoords.setLat(existingNodeRecord.getLatitude());
+            nodeCoords.setLon(existingNodeRecord.getLongitude());
         }
 
         assert (actualNodeId > 0);
+
         nodeCoordsCollection.put(actualNodeId, nodeCoords);
 
         return actualNodeId;
@@ -484,7 +460,7 @@ public class Way extends Element {
             org.w3c.dom.Node nodeXml = wayNodesXml.item(i);
             long actualNodeId = parseWayNode(nodeXml);
             relatedRecordIds.add(actualNodeId);
-            relatedRecords.add(createWayNodeRecord(actualNodeId, (long) (i + 1)));
+            relatedRecords.add(createWayNodeRecord(actualNodeId, (i + 1)));
         }
     }
 

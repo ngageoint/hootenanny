@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.writers.review;
+package hoot.services.controllers.job;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
@@ -49,7 +49,7 @@ public class ReviewBookmarksSaverTest {
         Connection conn = null;
         ReviewBookmarkSaveRequest req = new ReviewBookmarkSaveRequest(1, 1, null, -1);
         ReviewBookmarksSaver tagsSaver = new ReviewBookmarksSaver(conn);
-        SQLInsertClause cl = tagsSaver._createInsertClause(req);
+        SQLInsertClause cl = tagsSaver.createInsertClause(req);
         String actual = cl.toString();
 
         String expected = "insert into \"review_bookmarks\" (\"map_id\", \"relation_id\", \"created_at\", \"created_by\", \"detail\")\n"
@@ -67,7 +67,7 @@ public class ReviewBookmarksSaverTest {
         o.put("test2", "val2");
         ReviewBookmarkSaveRequest req = new ReviewBookmarkSaveRequest(1, 1, o, -1);
         ReviewBookmarksSaver tagsSaver = new ReviewBookmarksSaver(conn);
-        SQLInsertClause cl = tagsSaver._createInsertClause(req);
+        SQLInsertClause cl = tagsSaver.createInsertClause(req);
         String actual = cl.toString();
 
         String expected = "insert into \"review_bookmarks\" (\"map_id\", \"relation_id\", \"created_at\", \"created_by\", \"detail\")\n"
@@ -95,7 +95,7 @@ public class ReviewBookmarksSaverTest {
         ReviewBookmarkSaveRequest req = new ReviewBookmarkSaveRequest(1, 2, o, -2);
         ReviewBookmarksSaver tagsSaver = new ReviewBookmarksSaver(conn);
 
-        /* SQLUpdateClause cl = */ tagsSaver._getUpdateQuery(req, dto);
+        /* SQLUpdateClause cl = */ tagsSaver.getUpdateQuery(req, dto);
 
         String expected = "update \"review_bookmarks\"\n"
                 + "set \"last_modified_by\" = ?, \"id\" = ?, \"created_by\" = ?, \"created_at\" = ?, \"detail\" = '\"test4\"=>\"val4\",\"test3\"=>\"val3\"', \"last_modified_at\" = ?\n"

@@ -26,6 +26,9 @@
  */
 package hoot.services.info;
 
+import static hoot.services.HootProperties.ERROR_LOG_PATH;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -33,20 +36,16 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
-import hoot.services.HootProperties;
 import hoot.services.controllers.info.AboutResource;
 
 
 public final class ErrorLog {
 
-    private static final String errLogPath = HootProperties.getProperty("ErrorLogPath");
-    private static final String tempOutputPath = HootProperties.getProperty("tempOutputPath");
-
     private ErrorLog() {
     }
 
     public static String getErrorlog(long maxLength) throws IOException {
-        File file = new File(errLogPath);
+        File file = new File(ERROR_LOG_PATH);
 
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
             StringBuilder builder = new StringBuilder();
@@ -67,7 +66,7 @@ public final class ErrorLog {
 
     public static String generateExportLog() throws IOException {
         String fileId = UUID.randomUUID().toString();
-        String outputPath = tempOutputPath + File.separator + fileId;
+        String outputPath = TEMP_OUTPUT_PATH + File.separator + fileId;
 
         AboutResource about = new AboutResource();
 

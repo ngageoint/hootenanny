@@ -41,16 +41,15 @@ public class UsersGetResponse {
         return this.users;
     }
 
-    public void setUers(final List<Users> usrs) {
+    public void setUers(List<Users> usrs) {
         this.users = usrs;
     }
 
-    public UsersGetResponse(final List<Users> usrs) {
+    public UsersGetResponse(List<Users> usrs) {
         this.users = usrs;
     }
 
     public UsersGetResponse() {
 
     }
-
 }

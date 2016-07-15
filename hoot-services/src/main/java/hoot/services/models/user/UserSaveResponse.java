@@ -39,11 +39,11 @@ public class UserSaveResponse {
         return user;
     }
 
-    public void setUser(final Users u) {
+    public void setUser(Users u) {
         user = u;
     }
 
-    public UserSaveResponse(final Users u) {
+    public UserSaveResponse(Users u) {
         user = u;
     }
 

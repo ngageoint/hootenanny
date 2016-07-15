@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.HootProperties.ETL_MAKEFILE;
+import static hoot.services.HootProperties.HOME_FOLDER;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -42,6 +45,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -50,22 +54,20 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.ingest.MultipartSerializer;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/ingest")
 public class FileUploadResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(FileUploadResource.class);
-    private static final String homeFolder = HootProperties.getProperty("homeFolder");
 
     public FileUploadResource() {
-        super(HootProperties.getProperty("ETLMakefile"));
+        super(ETL_MAKEFILE);
     }
 
     /**
@@ -131,10 +133,9 @@ public class FileUploadResource extends JobControllerBase {
             JSONArray reqList = new JSONArray();
             List<String> inputsList = new ArrayList<>();
 
-            for (Object o : uploadedFiles.entrySet()) {
-                Map.Entry pairs = (Map.Entry) o;
-                String fName = pairs.getKey().toString();
-                String ext = pairs.getValue().toString();
+            for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
+                String fName = pairs.getKey();
+                String ext = pairs.getValue();
 
                 if ((etlName == null) || (etlName.isEmpty())) {
                     etlName = fName;
@@ -180,14 +181,14 @@ public class FileUploadResource extends JobControllerBase {
             if ((osmZipCnt == 1) && ((shpZipCnt + fgdbZipCnt + shpCnt + fgdbCnt + osmCnt) == 0)) {
                 // we want to unzip the file and modify any necessary parameters for the ensuing makefile
                 byte[] buffer = new byte[2048];
-                String zipFilePath = homeFolder + "/upload/" + jobId + File.separator + inputsList.get(0);
+                String zipFilePath = HOME_FOLDER + "/upload/" + jobId + File.separator + inputsList.get(0);
 
                 try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFilePath))) {
                     ZipEntry ze = zis.getNextEntry();
 
                     while (ze != null) {
                         String entryName = ze.getName();
-                        File file = new File(homeFolder + "/upload/" + jobId + File.separator + entryName);
+                        File file = new File(HOME_FOLDER + "/upload/" + jobId + File.separator + entryName);
                         // for now assuming no subdirectories
                         try (FileOutputStream fOutput = new FileOutputStream(file)) {
                             int count = 0;
@@ -234,7 +235,8 @@ public class FileUploadResource extends JobControllerBase {
             resA.add(res);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Failed upload: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Failed upload: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return Response.ok(resA.toJSONString(), MediaType.APPLICATION_JSON).build();
@@ -248,7 +250,7 @@ public class FileUploadResource extends JobControllerBase {
             int fgdbZipCnt, int osmZipCnt, int geonamesZipCnt, int shpCnt, int fgdbCnt,
             int osmCnt, int geonamesCnt, List<String> zipList, String translation,
             String jobId, String etlName, List<String> inputsList, String userEmail,
-            String isNoneTranslation, String fgdbFeatureClasses) throws Exception {
+            String isNoneTranslation, String fgdbFeatureClasses) throws ParseException {
         JSONArray jobArgs = new JSONArray();
 
         String inputs = "";
@@ -343,7 +345,6 @@ public class FileUploadResource extends JobControllerBase {
             if (oRq != null) {
                 JSONObject jsonReq = (JSONObject) oRq;
                 String rawInput = jsonReq.get("name").toString();
-                String fgdbInput = "";
                 List<String> fgdbInputs = new ArrayList<>();
                 String[] cls = fgdbFeatureClasses.split(",");
 
@@ -351,7 +352,7 @@ public class FileUploadResource extends JobControllerBase {
                     fgdbInputs.add(rawInput + "\\;" + cl);
                 }
 
-                fgdbInput = StringUtils.join(fgdbInputs.toArray(), ' ');
+                String fgdbInput = StringUtils.join(fgdbInputs.toArray(), ' ');
                 param.put("INPUT", fgdbInput);
             }
         }
@@ -384,8 +385,8 @@ public class FileUploadResource extends JobControllerBase {
         return jobArgs;
     }
 
-    private void buildNativeRequest(String jobId, String fName, String ext,
-                                    String inputFileName, JSONArray reqList, JSONObject zipStat) throws Exception {
+    private static void buildNativeRequest(String jobId, String fName, String ext, String inputFileName,
+            JSONArray reqList, JSONObject zipStat) throws Exception {
         // get zip stat is not exist then create one
         int shpZipCnt = 0;
         Object oShpStat = zipStat.get("shpzipcnt");
@@ -451,7 +452,7 @@ public class FileUploadResource extends JobControllerBase {
         }
         else if (ext.equalsIgnoreCase("zip")) {
             // Check to see the type of zip (osm, ogr or fgdb)
-            String zipFilePath = homeFolder + "/upload/" + jobId + "/" + inputFileName;
+            String zipFilePath = HOME_FOLDER + "/upload/" + jobId + "/" + inputFileName;
 
             JSONObject res = getZipContentType(zipFilePath, reqList, fName);
 
@@ -487,7 +488,8 @@ public class FileUploadResource extends JobControllerBase {
     // returns the type of file in zip
     // throws error if there are mix of osm and ogr
     // zip does not allow fgdb so it needs to be expanded out
-    private JSONObject getZipContentType(String zipFilePath, JSONArray contentTypes, String fName) throws Exception {
+    private static JSONObject getZipContentType(String zipFilePath, JSONArray contentTypes, String fName)
+            throws Exception{
         JSONObject resultStat = new JSONObject();
         String[] extList = { "gdb", "osm", "shp", "geonames" };
 

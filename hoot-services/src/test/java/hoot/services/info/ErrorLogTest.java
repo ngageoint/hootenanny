@@ -26,6 +26,9 @@
  */
 package hoot.services.info;
 
+import static hoot.services.HootProperties.ERROR_LOG_PATH;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+
 import java.io.File;
 import java.net.URL;
 
@@ -36,15 +39,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class ErrorLogTest {
     private static final File testFolder = new File(FileUtils.getTempDirectory(), "ErrorLogTest");
-    private static String originalErrorLogPath = null;
-    private static String originaltempOutputPath = null;
+    private static String original_ERROR_LOG_PATH;
+    private static String original_TEMP_OUTPUT_PATH;
 
     @BeforeClass
     public static void beforeClass() throws Exception {
@@ -52,17 +54,17 @@ public class ErrorLogTest {
         File dest = new File(testFolder, "catalina.out");
         FileUtils.copyURLToFile(inputUrl, dest);
 
-        originalErrorLogPath = HootProperties.getPropertyOrDefault("ErrorLogPath");
-        originaltempOutputPath = HootProperties.getPropertyOrDefault("tempOutputPath");
-        HootCustomPropertiesSetter.setProperty("ErrorLogPath", dest.getAbsolutePath());
-        HootCustomPropertiesSetter.setProperty("tempOutputPath", FileUtils.getTempDirectory().getAbsolutePath());
+        original_ERROR_LOG_PATH = ERROR_LOG_PATH;
+        original_TEMP_OUTPUT_PATH = TEMP_OUTPUT_PATH;
+        HootCustomPropertiesSetter.setProperty("ERROR_LOG_PATH", dest.getAbsolutePath());
+        HootCustomPropertiesSetter.setProperty("TEMP_OUTPUT_PATH", FileUtils.getTempDirectory().getAbsolutePath());
     }
 
     @AfterClass
     public static void afterClass() throws Exception {
         FileUtils.deleteQuietly(testFolder);
-        HootCustomPropertiesSetter.setProperty("ErrorLogPath", originalErrorLogPath);
-        HootCustomPropertiesSetter.setProperty("tempOutputPath", originaltempOutputPath);
+        HootCustomPropertiesSetter.setProperty("ERROR_LOG_PATH", original_ERROR_LOG_PATH);
+        HootCustomPropertiesSetter.setProperty("TEMP_OUTPUT_PATH", original_TEMP_OUTPUT_PATH);
     }
 
     @Test

@@ -24,25 +24,27 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.review;
+package hoot.services.utils;
 
 import java.sql.SQLException;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
-import org.deegree.commons.ows.exception.OWSException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import hoot.services.utils.ResourceErrorHandler;
 
 
 /**
  * Various utilities for conflated data reviewing
  */
-public class ReviewUtils {
-    private static final Logger log = LoggerFactory.getLogger(ReviewUtils.class);
+public final class ReviewUtils {
+    private static final Logger logger = LoggerFactory.getLogger(ReviewUtils.class);
+
+    private ReviewUtils() {
+    }
 
     /**
      * Handles all thrown exceptions from review services
@@ -51,11 +53,9 @@ public class ReviewUtils {
      *            a thrown exception
      * @param errorMessageStart
      *            text to prepend to the error message
-     * @throws Exception
-     *             //TODO: go through and clean out these message text checks
+     * //TODO: go through and clean out these message text checks
      */
-    public static void handleError(final Exception e, final String errorMessageStart)
-            throws Exception {
+    public static void handleError(Exception e, String errorMessageStart) {
         Status status = null;
         if (!StringUtils.isEmpty(e.getMessage())) {
             if (e.getMessage().contains("Invalid input parameter") || e.getMessage().contains("Invalid reviewed item")
@@ -79,32 +79,37 @@ public class ReviewUtils {
                 status = Status.PRECONDITION_FAILED;
             }
         }
+
         if (status == null) {
             status = Status.INTERNAL_SERVER_ERROR;
         }
+
         String message = "Error " + errorMessageStart + ": ";
-        if (e.getMessage() != null && e.getMessage().contains("empty String")) {
-            // added for giving a better error message when passing invalid
-            // params to jersey
+        if ((e.getMessage() != null) && e.getMessage().contains("empty String")) {
+            // added for giving a better error message when passing invalid params to jersey
             message += "Invalid input parameter";
         }
         else {
             message += e.getMessage();
         }
+
         if (e instanceof SQLException) {
             SQLException sqlException = (SQLException) e;
             if (sqlException.getNextException() != null) {
                 message += "  " + sqlException.getNextException().getMessage();
             }
         }
+
         if (e.getCause() instanceof SQLException) {
             SQLException sqlException = (SQLException) e.getCause();
             if (sqlException.getNextException() != null) {
                 message += "  " + sqlException.getNextException().getMessage();
             }
         }
-        final String exceptionCode = status.getStatusCode() + ": " + status.getReasonPhrase();
-        log.error(exceptionCode + " " + message);
-        ResourceErrorHandler.handleError(message, status, log);
+
+        String exceptionCode = status.getStatusCode() + ": " + status.getReasonPhrase();
+        logger.error("{} {}", exceptionCode, message, e);
+
+        throw new WebApplicationException(e, Response.status(status).entity(message).build());
     }
 }

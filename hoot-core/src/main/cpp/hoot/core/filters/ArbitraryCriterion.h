@@ -24,16 +24,51 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.db.dto;
+#ifndef ARBITRARYCRITERION_H
+#define ARBITRARYCRITERION_H
 
-public class SerializableRecord<T> {
-    private T t;
+// hoot
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/filters/ElementCriterion.h>
 
-    public T get() {
-        return this.t;
-    }
+// Qt
+#include <QString>
 
-    public void set(T t1) {
-        this.t = t1;
-    }
+// Boost
+#include <boost/function.hpp>
+
+namespace hoot
+{
+using namespace boost;
+
+class ArbitraryCriterion : public ElementCriterion
+{
+public:
+  static string className() { return "hoot::ArbitraryCriterion"; }
+
+  // Do something like:
+  // boost::function<bool (ConstElementPtr e)> f = boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
+  explicit ArbitraryCriterion(boost::function<bool (ConstElementPtr e)> f)
+  {
+    _f = f;
+  }
+
+  explicit ArbitraryCriterion(boost::function<bool (const shared_ptr<const Element> &e)> f)
+  {
+    _f = f;
+  }
+
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const
+  {
+    return _f(e);
+  }
+
+  virtual ElementCriterion* clone() { return new ArbitraryCriterion(_f); }
+
+private:
+  boost::function<bool (const shared_ptr<const Element> &e)> _f;
+};
+
 }
+
+#endif // ARBITRARYCRITERION_H

@@ -32,6 +32,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -41,8 +42,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/cancel")
@@ -97,8 +96,8 @@ public class JobCancellationResource extends JobControllerBase {
 
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error process data clean request: " + ex,
-                    Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error process data clean request: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         JSONObject res = new JSONObject();

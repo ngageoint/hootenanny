@@ -185,7 +185,7 @@ public class JobStatusManager {
      * Updates job. This one should be used to any storage behavior like add or
      * update Since the serialization routine can change.
      */
-    private void updateJob(String jobId, JOB_STATUS jobStatus, String statusDetail) throws Exception {
+    private void updateJob(String jobId, JOB_STATUS jobStatus, String statusDetail) {
         try {
             boolean isComplete = (jobStatus != RUNNING);
             DbUtils.updateJobStatus(jobId, jobStatus.ordinal(), isComplete, statusDetail, connection);

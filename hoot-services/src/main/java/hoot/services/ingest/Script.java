@@ -68,7 +68,7 @@ public class Script {
 
     }
 
-    public Script(final String name, final String description, final String content) {
+    public Script(String name, String description, String content) {
         this.name = name;
         this.description = description;
         this.content = content;

@@ -26,8 +26,6 @@
  */
 package hoot.services.models.osm;
 
-import java.sql.Connection;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -38,20 +36,11 @@ import hoot.services.db2.Users;
  * Represents the model for an OSM user
  */
 public class User extends Users {
-    @SuppressWarnings("unused")
-    private static final long serialVersionUID = 4395123526768281005L;
 
-    @SuppressWarnings("unused")
-    private Connection conn;
-
-    public User(final Users user, Connection conn) {
-        super();
-
+    public User(Users user) {
         setDisplayName(user.getDisplayName());
         setEmail(user.getEmail());
         setId(user.getId());
-
-        this.conn = conn;
     }
 
     /**
@@ -61,7 +50,7 @@ public class User extends Users {
      *            XML node this node should be attached under
      * @return an XML node
      */
-    private Element detailsToXml(final Element parentXml, final long changesetsCount) {
+    private Element detailsToXml(Element parentXml, long changesetsCount) {
         Document doc = parentXml.getOwnerDocument();
 
         Element userElement = doc.createElement("user");
@@ -73,6 +62,7 @@ public class User extends Users {
         // roles element not supported
         Element changesetsElement = doc.createElement("changesets");
         changesetsElement.setAttribute("count", String.valueOf(changesetsCount));
+
         // traces element not supported
         // blocks element not supported
         // home element not supported
@@ -92,7 +82,7 @@ public class User extends Users {
      *            XML node this node should be attached under
      * @return an XML node
      */
-    public Element toXml(final Element parentXml, final long changesetsCount) {
+    public Element toXml(Element parentXml, long changesetsCount) {
         return detailsToXml(parentXml, changesetsCount);
     }
 }
