@@ -39,7 +39,6 @@ public final class Box {
     private final double[] max;
 
     public Box(double[] min, double[] max) {
-        assert (min.length == max.length);
         this.min = Arrays.copyOf(min, min.length);
         this.max = Arrays.copyOf(max, max.length);
         check();
@@ -89,8 +88,6 @@ public final class Box {
     }
 
     public boolean intersects(Box b) {
-        assert (b.getDimensions() == getDimensions());
-
         boolean result = true;
         for (int i = 0; i < min.length; i++) {
             result = result && (b.getMin()[i] <= getMax()[i]);
@@ -139,8 +136,6 @@ public final class Box {
      * returns true if this box is inside "container"
      */
     public boolean in(Box container) {
-        assert (container.getDimensions() == getDimensions());
-
         boolean result = true;
         for (int i = 0; i < min.length; i++) {
             result = result && (min[i] >= container.min[i]);

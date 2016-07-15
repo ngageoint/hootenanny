@@ -57,7 +57,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.controllers.job.JobControllerBase;
-import hoot.services.ingest.MultipartSerializer;
+import hoot.services.utils.MultipartSerializer;
 
 
 @Path("/ingest")
@@ -113,8 +113,7 @@ public class FileUploadResource extends JobControllerBase {
             Map<String, String> uploadedFiles = new HashMap<>();
             Map<String, String> uploadedFilesPaths = new HashMap<>();
 
-            MultipartSerializer ser = new MultipartSerializer();
-            ser.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, request);
+            MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, request);
 
             int shpCnt = 0;
             int osmCnt = 0;

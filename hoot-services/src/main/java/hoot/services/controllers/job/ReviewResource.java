@@ -61,7 +61,7 @@ import com.mysema.query.sql.SQLQuery;
 
 import hoot.services.HootProperties;
 import hoot.services.controllers.osm.MapResource;
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
@@ -434,6 +434,7 @@ public class ReviewResource {
         Map<String, String> changesetTags = new HashMap<>();
         changesetTags.put("bot", "yes");
         changesetTags.put("created_by", "hootenanny");
+
         long changesetId = Changeset.createChangeset(mapId, userId, changesetTags, connection);
         Changeset.closeChangeset(mapId, changesetId, connection);
 

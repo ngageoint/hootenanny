@@ -55,11 +55,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.controllers.wfs.WfsManager;
-import hoot.services.db.DataDefinitionManager;
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DataDefinitionManager;
+import hoot.services.utils.DbUtils;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
-import hoot.services.nativeInterfaces.NativeInterfaceException;
+import hoot.services.nativeinterfaces.NativeInterfaceException;
 
 
 @Path("/export")
@@ -198,7 +198,7 @@ public class ExportJobResource extends JobControllerBase {
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
-    protected JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, Connection conn)
+    JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, Connection conn)
             throws Exception {
         if (!Boolean.parseBoolean(OSM_API_DB_ENABLED)) {
             String msg = "Attempted to export to an OSM API database but OSM API database support is disabled";
@@ -265,17 +265,17 @@ public class ExportJobResource extends JobControllerBase {
     }
 
     // adding this to satisfy the mock
-    protected List<Long> getMapIdsByName(String conflatedMapName, Connection conn) {
+    List<Long> getMapIdsByName(String conflatedMapName, Connection conn) {
         return DbUtils.getMapIdsByName(conn, conflatedMapName);
     }
 
     // adding this to satisfy the mock
-    protected java.util.Map<String, String> getMapTags(long mapId, Connection conn) {
+    java.util.Map<String, String> getMapTags(long mapId, Connection conn) {
         return DbUtils.getMapsTableTags(mapId, conn);
     }
 
     // adding this to satisfy the mock
-    protected BoundingBox getMapBounds(Map map) throws Exception {
+    BoundingBox getMapBounds(Map map) throws Exception {
         return map.getBounds();
     }
 
@@ -383,9 +383,8 @@ public class ExportJobResource extends JobControllerBase {
             WfsManager wfsMan = new WfsManager();
             wfsMan.removeWfsResource(id);
 
-            DataDefinitionManager dbMan = new DataDefinitionManager();
-            List<String> tbls = dbMan.getTablesList(WFS_STORE_DB, id);
-            dbMan.deleteTables(tbls, WFS_STORE_DB);
+            List<String> tbls = DataDefinitionManager.getTablesList(WFS_STORE_DB, id);
+            DataDefinitionManager.deleteTables(tbls, WFS_STORE_DB);
         }
         catch (Exception ex) {
             String msg = "Error removing WFS resource: " + ex.getMessage();

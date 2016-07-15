@@ -54,7 +54,7 @@ import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.Changesets;
 import hoot.services.db2.QChangesets;
 import hoot.services.geo.BoundingBox;
@@ -226,8 +226,6 @@ public class Changeset extends Changesets {
         if (isOpen()) {
             int maximumChangesetElements = Integer.parseInt(MAXIMUM_CHANGESET_ELEMENTS);
 
-            assert (changesetRecord.getNumChanges() <= maximumChangesetElements);
-
             Timestamp newClosedAt = null;
             if (changesetRecord.getNumChanges() == maximumChangesetElements) {
                 newClosedAt = new Timestamp(now.getMillis());
@@ -313,7 +311,6 @@ public class Changeset extends Changesets {
                 .where(changesets.id.eq(getId())).singleResult(changesets);
 
         int currentNumChanges = changeset.getNumChanges();
-        assert ((currentNumChanges + numChanges) <= maximumChangesetElements);
         if (new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), changesets).where(changesets.id.eq(getId()))
                 .set(changesets.numChanges, currentNumChanges + numChanges).execute() != 1) {
             throw new Exception("Error updating num changes.");

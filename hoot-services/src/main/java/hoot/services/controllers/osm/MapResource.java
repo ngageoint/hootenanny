@@ -82,7 +82,7 @@ import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.mysema.query.types.expr.NumberExpression;
 import com.mysema.query.types.template.NumberTemplate;
 
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.FolderMapMappings;
 import hoot.services.db2.Folders;
 import hoot.services.db2.Maps;
@@ -94,15 +94,12 @@ import hoot.services.db2.Users;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobExecutioner;
 import hoot.services.job.JobStatusManager;
-import hoot.services.models.dataset.FolderRecords;
-import hoot.services.models.dataset.LinkRecords;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.writers.osm.OsmResponseHeaderGenerator;
 
 
 /**
@@ -1156,7 +1153,6 @@ public class MapResource {
                             // already handled filtering out invisible elements
 
                             Users usersTable = record.get(QUsers.users);
-                            assert (element.getVisible());
                             Element elementXml = element.toXml(elementRootXml, usersTable.getId(),
                                     usersTable.getDisplayName(), multiLayerUniqueElementIds, true);
                             elementRootXml.appendChild(elementXml);

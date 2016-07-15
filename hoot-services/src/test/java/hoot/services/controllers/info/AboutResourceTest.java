@@ -45,9 +45,6 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.test.framework.JerseyTest;
 
 import hoot.services.UnitTest;
-import hoot.services.info.BuildInfo;
-import hoot.services.info.CoreDetail;
-import hoot.services.info.VersionInfo;
 
 
 //Use PowerMock here instead of Mockito, so we can mock a static method.

@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 import com.mysema.query.sql.SQLQuery;
 
 import hoot.services.controllers.osm.MapResource;
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.CurrentRelationMembers;
 import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.models.osm.Element;

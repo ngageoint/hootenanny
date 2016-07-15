@@ -50,9 +50,9 @@ import com.mysema.query.types.path.BooleanPath;
 import com.mysema.query.types.path.NumberPath;
 import com.mysema.query.types.path.SimplePath;
 
-import hoot.services.db.DbUtils;
-import hoot.services.db.DbUtils.EntityChangeType;
-import hoot.services.db.DbUtils.nwr_enum;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.DbUtils.EntityChangeType;
+import hoot.services.utils.DbUtils.nwr_enum;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelationMembers;
 import hoot.services.db2.CurrentRelations;
@@ -108,7 +108,6 @@ public class Relation extends Element {
 
         NamedNodeMap xmlAttributes = xml.getAttributes();
 
-        assert (record != null);
         CurrentRelations relationRecord = (CurrentRelations) record;
         relationRecord.setChangesetId(parseChangesetId(xmlAttributes));
         relationRecord.setVersion(parseVersion());
@@ -185,16 +184,14 @@ public class Relation extends Element {
             for (CurrentRelationMembers member : members) {
                 org.w3c.dom.Element memberElement = doc.createElement("member");
                 memberElement.setAttribute("type", member.getMemberType().toString().toLowerCase());
-                assert (StringUtils.trimToNull(memberElement.getAttribute("type")) != null);
+
                 String role = member.getMemberRole();
                 if (StringUtils.isEmpty(member.getMemberRole())) {
                     memberElement.setAttribute("role", member.getMemberRole());
                     role = "";
                 }
                 memberElement.setAttribute("role", role);
-                assert (memberElement.getAttribute("role") != null);
                 memberElement.setAttribute("ref", String.valueOf(member.getMemberId()));
-                assert (StringUtils.trimToNull(memberElement.getAttribute("ref")) != null);
                 element.appendChild(memberElement);
             }
         }
@@ -408,9 +405,6 @@ public class Relation extends Element {
                             + "relation with ID: " + getId());
                 }
             }
-            else {
-                assert (parsedElements.containsKey(parsedMemberId));
-            }
         }
 
         Element memberElement;
@@ -433,8 +427,6 @@ public class Relation extends Element {
             memberElement = ElementFactory.create(getMapId(), elementType, conn);
         }
 
-        assert (actualMemberId > 0);
-
         // role is allowed to be empty
         org.w3c.dom.Node roleXmlNode = memberXmlAttributes.getNamedItem("role");
         String role = (roleXmlNode == null) ? null : roleXmlNode.getNodeValue();
@@ -449,8 +441,6 @@ public class Relation extends Element {
     // http://wiki.openstreetmap.org/wiki/Empty_relations
     private void parseMembersXml(org.w3c.dom.Node xml) throws Exception {
         logger.debug("Parsing relation members...");
-
-        assert (parsedElementIdsToElementsByType != null);
 
         NodeList membersXml = XPathAPI.selectNodeList(xml, "member");
 

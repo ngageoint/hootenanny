@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.types.OrderSpecifier;
 
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.QReviewBookmarks;
 import hoot.services.db2.ReviewBookmarks;
 

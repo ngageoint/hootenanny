@@ -63,9 +63,6 @@ import org.mozilla.javascript.ScriptableObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.ingest.ModifyScriptsRequest;
-import hoot.services.ingest.Script;
-import hoot.services.ingest.ScriptsModifiedResponse;
 import hoot.services.utils.CaseInsensitiveStringList;
 
 
@@ -137,8 +134,8 @@ public class CustomScriptResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public Response processSave(String script,
-            @QueryParam("SCRIPT_NAME") String scriptName,
-            @QueryParam("SCRIPT_DESCRIPTION") String scriptDescription) {
+                                @QueryParam("SCRIPT_NAME") String scriptName,
+                                @QueryParam("SCRIPT_DESCRIPTION") String scriptDescription) {
         JSONArray saveArr = new JSONArray();
 
         try {

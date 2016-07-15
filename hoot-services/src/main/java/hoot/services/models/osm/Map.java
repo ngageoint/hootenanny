@@ -46,9 +46,9 @@ import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.types.QTuple;
 import com.mysema.query.types.expr.BooleanExpression;
 
-import hoot.services.db.DbUtils;
-import hoot.services.db.DbUtils.nwr_enum;
-import hoot.services.db.postgres.PostgresUtils;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.DbUtils.nwr_enum;
+import hoot.services.utils.PostgresUtils;
 import hoot.services.db2.FolderMapMappings;
 import hoot.services.db2.Folders;
 import hoot.services.db2.Maps;
@@ -64,10 +64,10 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.geo.zindex.Range;
 import hoot.services.geo.zindex.ZCurveRanger;
 import hoot.services.geo.zindex.ZValue;
-import hoot.services.models.dataset.FolderRecord;
-import hoot.services.models.dataset.FolderRecords;
-import hoot.services.models.dataset.LinkRecord;
-import hoot.services.models.dataset.LinkRecords;
+import hoot.services.controllers.osm.FolderRecord;
+import hoot.services.controllers.osm.FolderRecords;
+import hoot.services.controllers.osm.LinkRecord;
+import hoot.services.controllers.osm.LinkRecords;
 import hoot.services.models.osm.Element.ElementType;
 
 
@@ -338,7 +338,6 @@ public class Map extends Maps {
                                     .map(currentWays.id, new QTuple(currentWays, users, changesets));
                         }
                         else {
-                            assert (wayResults != null);
                             wayResults.putAll(new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentWays)
                                     .join(changesets).on(currentWays.changesetId.eq(changesets.id)).join(users)
                                     .on(changesets.userId.eq(users.id))
@@ -383,8 +382,6 @@ public class Map extends Maps {
                     }
                 }
 
-                assert (!wayNodeIds.isEmpty());
-
                 long numWayNodes = wayNodeIds.size();
                 logger.debug("Found {} way nodes.", numWayNodes);
 
@@ -399,8 +396,7 @@ public class Map extends Maps {
                 logger.debug("There were {} nodes returned in the geospatial query.", numGeospatialQueryNodeResults);
                 Set<Long> additionalNodeIds = new HashSet<>(wayNodeIds);
                 additionalNodeIds.removeAll(geospatialQueryNodeResultIds);
-                assert (wayNodeIds.size() == numWayNodes);
-                assert (geospatialQueryNodeResultIds.size() == numGeospatialQueryNodeResults);
+
                 logger.debug("Subtracting the geospatial query nodes from the way nodes collection results in a total of {} nodes remaining to be added to the nodes collection.", additionalNodeIds.size());
                 if (!additionalNodeIds.isEmpty()) {
                     logger.debug("Retrieving nodes falling outside of the query bounds but belonging to a " + "retrieved way...");
@@ -433,7 +429,6 @@ public class Map extends Maps {
                                         .map(currentNodes.id, new QTuple(currentNodes, users, changesets));
                             }
                             else {
-                                assert (additionalNodeResults != null);
                                 additionalNodeResults.putAll(new SQLQuery(conn, DbUtils.getConfiguration(getId()))
                                         .from(currentNodes).join(changesets)
                                         .on(currentNodes.changesetId.eq(changesets.id)).join(users)
@@ -582,7 +577,6 @@ public class Map extends Maps {
                                     .map(currentRelations.id, new QTuple(currentRelations, users, changesets));
                         }
                         else {
-                            assert (relationResults != null);
                             relationResults.putAll(new SQLQuery(conn, DbUtils.getConfiguration(getId()))
                                     .from(currentRelations).join(changesets)
                                     .on(currentRelations.changesetId.eq(changesets.id)).join(users)

@@ -52,7 +52,7 @@ import org.w3c.dom.Document;
 
 import com.mysema.query.Tuple;
 
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.db2.QUsers;
 import hoot.services.db2.Users;
@@ -61,7 +61,6 @@ import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.writers.osm.OsmResponseHeaderGenerator;
 
 
 /**

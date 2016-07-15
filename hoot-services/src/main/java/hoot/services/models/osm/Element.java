@@ -54,9 +54,9 @@ import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.types.path.NumberPath;
 
-import hoot.services.db.DbUtils;
-import hoot.services.db.DbUtils.EntityChangeType;
-import hoot.services.db.postgres.PostgresUtils;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.DbUtils.EntityChangeType;
+import hoot.services.utils.PostgresUtils;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.QChangesets;
 import hoot.services.db2.QCurrentNodes;
@@ -646,7 +646,6 @@ public abstract class Element implements XmlSerializable, DbSerializable {
 
             default:
 
-                assert (false);
                 return null;
         }
     }
@@ -692,7 +691,7 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     /*
      * Parses tags from the element XML and returns them in a map
      */
-    Map<String, String> parseTags(org.w3c.dom.Node elementXml) throws Exception {
+    static Map<String, String> parseTags(org.w3c.dom.Node elementXml) throws Exception {
         logger.debug("Parsing element tags...");
 
         Map<String, String> tags = new HashMap<>();

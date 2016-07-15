@@ -60,7 +60,7 @@ import org.slf4j.LoggerFactory;
 import hoot.services.command.CommandResult;
 import hoot.services.command.CommandRunner;
 import hoot.services.command.ICommandRunner;
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.job.Executable;
 import hoot.services.utils.FileUtils;
 

@@ -42,7 +42,7 @@ import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.mysema.query.support.Expressions;
 
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.QReviewBookmarks;
 import hoot.services.db2.ReviewBookmarks;
 import hoot.services.models.review.ReviewBookmarkSaveRequest;
@@ -89,7 +89,7 @@ class ReviewBookmarksSaver {
      *            - request object containing inserted fields
      * @return - total numbers of inserted
      */
-    long insert(ReviewBookmarkSaveRequest request) {
+    private long insert(ReviewBookmarkSaveRequest request) {
         SQLInsertClause cl = createInsertClause(request);
         long nInserted = cl.execute();
         return nInserted;
@@ -104,7 +104,7 @@ class ReviewBookmarksSaver {
      *            - Current review tag
      * @return total numbers of updated
      */
-    long update(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto) {
+    private long update(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto) {
         long nUpdated = getUpdateQuery(request, reviewBookmarksDto).execute();
         return nUpdated;
     }
@@ -162,12 +162,12 @@ class ReviewBookmarksSaver {
      *            - json containing tags kv
      * @return - Expression Object for QueryDSL consumption
      */
-    private Object jasonToHStore(JSONObject tags) {
+    private static Object jasonToHStore(JSONObject tags) {
         String hstoreStr = "";
 
         if (tags != null) {
             for (Object it : tags.entrySet()) {
-                Map.Entry pairs = (Map.Entry) it;
+                Map.Entry<Object, Object> pairs = (Map.Entry<Object, Object>) it;
 
                 if (!hstoreStr.isEmpty()) {
                     hstoreStr += ",";
