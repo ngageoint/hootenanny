@@ -13,8 +13,8 @@
 	</bean>
   
 
-	<bean id="ResourcesCleanUtil" singleton="true" 
-		class="hoot.services.utils.ResourcesCleanUtil" init-method="init" destroy-method="destroy">
+	<bean id="ResourcesCleanUtil" singleton="true"
+          class="hoot.services.controllers.job.ResourcesCleanUtil" init-method="init" destroy-method="destroy">
 	</bean>
 	
 	<bean id="TunningService" singleton="true" 

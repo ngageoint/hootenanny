@@ -483,10 +483,9 @@ public abstract class Element implements XmlSerializable, DbSerializable {
             NoSuchMethodException, InvocationTargetException {
         Element prototype = ElementFactory.create(mapId, elementType, dbConn);
 
-        QChangesets changesets = QChangesets.changesets;
-        QUsers users = QUsers.users;
-
         if (!elementIds.isEmpty()) {
+            QChangesets changesets = QChangesets.changesets;
+            QUsers users = QUsers.users;
             return new SQLQuery(dbConn, DbUtils.getConfiguration(String.valueOf(mapId))).from(prototype.getElementTable())
                     .join(QChangesets.changesets).on(prototype.getChangesetIdField().eq(changesets.id)).join(users)
                     .on(changesets.userId.eq(users.id)).where(prototype.getElementIdField().in(elementIds))

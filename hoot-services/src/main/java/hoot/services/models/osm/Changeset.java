@@ -305,7 +305,6 @@ public class Changeset extends Changesets {
      */
     public void updateNumChanges(int numChanges) throws Exception {
         logger.debug("Updating num changes...");
-        int maximumChangesetElements = Integer.parseInt(MAXIMUM_CHANGESET_ELEMENTS);
 
         Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
                 .where(changesets.id.eq(getId())).singleResult(changesets);

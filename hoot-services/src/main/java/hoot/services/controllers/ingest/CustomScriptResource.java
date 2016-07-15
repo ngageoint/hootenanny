@@ -155,10 +155,10 @@ public class CustomScriptResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ScriptsModifiedResponse saveScripts(ModifyScriptsRequest saveMultipleScriptsRequest) {
         ScriptsModifiedResponse response;
-        List<String> scriptsModified = new ArrayList<>();
 
         try {
             response = new ScriptsModifiedResponse();
+            List<String> scriptsModified = new ArrayList<>();
             for (Script script : saveMultipleScriptsRequest.getScripts()) {
                 if (saveScript(script.getName(), script.getDescription(), script.getContent()) != null) {
                     scriptsModified.add(script.getName());
@@ -188,7 +188,6 @@ public class CustomScriptResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response getScriptsList() {
         JSONArray retList = new JSONArray();
-        Map<String, JSONObject> sortedScripts = new TreeMap<>();
         JSONArray filesList = new JSONArray();
 
         try {
@@ -222,6 +221,7 @@ public class CustomScriptResource {
             filesList.addAll(getDefaultList(configFiles));
 
             // sort the list
+            Map<String, JSONObject> sortedScripts = new TreeMap<>();
             for (Object o : filesList) {
                 JSONObject cO = (JSONObject) o;
                 String sName = cO.get("NAME").toString();
@@ -338,6 +338,7 @@ public class CustomScriptResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response getScript(@QueryParam("SCRIPT_NAME") String scriptName) {
         String script = "";
+
         try {
             File scriptsDir = new File(SCRIPT_FOLDER);
 
@@ -408,8 +409,6 @@ public class CustomScriptResource {
     public Response getDefaultScript(@QueryParam("SCRIPT_PATH") String scriptPath) {
         String script = "";
         try {
-            // See Bug #6483 Read vulnerability in services script API
-            boolean bPathValidated = false;
             List<String> configFiles = new ArrayList<>();
 
             configFiles.add(DEFAULT_TRANSLATIONS_CONFIG);
@@ -419,6 +418,8 @@ public class CustomScriptResource {
 
             JSONArray defList = getDefaultList(configFiles);
 
+            // See Bug #6483 Read vulnerability in services script API
+            boolean bPathValidated = false;
             for (Object aDefList : defList) {
                 JSONObject item = (JSONObject) aDefList;
 

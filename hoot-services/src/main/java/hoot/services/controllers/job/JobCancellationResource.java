@@ -68,6 +68,7 @@ public class JobCancellationResource extends JobControllerBase {
     @Produces(MediaType.TEXT_PLAIN)
     public Response process(String args) {
         String jobId = UUID.randomUUID().toString();
+
         try {
             JSONParser parser = new JSONParser();
             JSONObject command = (JSONObject) parser.parse(args);
@@ -92,6 +93,7 @@ public class JobCancellationResource extends JobControllerBase {
 
             JSONArray jobArgs = new JSONArray();
             jobArgs.add(jobCancellationCommand);
+
             postChainJobRquest(jobId, jobArgs.toJSONString());
 
         }

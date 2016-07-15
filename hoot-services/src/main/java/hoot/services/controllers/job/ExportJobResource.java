@@ -111,6 +111,7 @@ public class ExportJobResource extends JobControllerBase {
     public Response process(String params) {
         String jobId = UUID.randomUUID().toString();
         jobId = "ex_" + jobId.replace("-", "");
+
         try (Connection conn = DbUtils.createConnection()) {
             JSONArray commandArgs = parseParams(params);
 
@@ -208,7 +209,7 @@ public class ExportJobResource extends JobControllerBase {
         JSONArray commandArgs = new JSONArray();
         commandArgs.addAll(inputCommandArgs);
 
-        if (!getParameterValue("inputtype", commandArgs).equalsIgnoreCase("db")) {
+        if (!"db".equalsIgnoreCase(getParameterValue("inputtype", commandArgs))) {
             String msg = "When exporting to an OSM API database, the input type must be a Hootenanny API database.";
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
@@ -296,7 +297,8 @@ public class ExportJobResource extends JobControllerBase {
     private void setAoi(Map conflatedMap, JSONArray commandArgs) throws Exception {
         BoundingBox bounds = getMapBounds(conflatedMap);
         JSONObject arg = new JSONObject();
-        arg.put("changesetaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
+        arg.put("changesetaoi", bounds.getMinLon() + "," + bounds.getMinLat() +
+                "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
         commandArgs.add(arg);
     }
 

@@ -777,7 +777,6 @@ public class MapResource {
         Long newId = -1L;
         NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('folders_id_seq')");
 
-        QFolders folders = QFolders.folders;
         Configuration configuration = DbUtils.getConfiguration();
 
         try (Connection conn = DbUtils.createConnection()) {
@@ -790,6 +789,7 @@ public class MapResource {
                 Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
                 long userId = 1;
+                QFolders folders = QFolders.folders;
                 new SQLInsertClause(conn, configuration, folders)
                         .columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId,
                                 folders.parentId).values(newId, now, folderName, true, userId, _parentId).execute();
@@ -824,12 +824,12 @@ public class MapResource {
     public Response deleteFolder(@QueryParam("folderId") String folderId) {
         Long _folderId = Long.parseLong(folderId);
 
-        QFolders folders = QFolders.folders;
         QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
         Configuration configuration = DbUtils.getConfiguration();
 
         try (Connection conn = DbUtils.createConnection()) {
             SQLQuery query = new SQLQuery(conn, configuration);
+            QFolders folders = QFolders.folders;
             List<Long> parentId = query.from(folders).where(folders.id.eq(_folderId)).list(folders.parentId);
 
             Long _parentId;
@@ -882,10 +882,10 @@ public class MapResource {
         Long _folderId = Long.parseLong(folderId);
         Long _parentId = Long.parseLong(parentId);
 
-        QFolders folders = QFolders.folders;
         Configuration configuration = DbUtils.getConfiguration();
 
         try (Connection conn = DbUtils.createConnection()) {
+            QFolders folders = QFolders.folders;
             new SQLUpdateClause(conn, configuration, folders).where(folders.id.eq(_folderId))
                     .set(folders.parentId, _parentId).execute();
         }
@@ -922,13 +922,13 @@ public class MapResource {
         Long _mapId = Long.parseLong(mapId);
         NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('folder_map_mappings_id_seq')");
 
-        QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
         Configuration configuration = DbUtils.getConfiguration();
 
         try (Connection conn = DbUtils.createConnection()) {
             SQLQuery query = new SQLQuery(conn, configuration);
 
             // Delete any existing to avoid duplicate entries
+            QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
             new SQLDeleteClause(conn, configuration, folderMapMappings).where(
                     folderMapMappings.mapId.eq(Long.parseLong(mapId))).execute();
 
@@ -1128,10 +1128,9 @@ public class MapResource {
      *            standard OSM clients (specific to Hootenanny iD)
      * @return an XML document
      */
-    private static Document writeResponse(java.util.Map<ElementType, java.util.Map<Long, Tuple>> results, BoundingBox queryBounds,
-            boolean multiLayerUniqueElementIds, long mapId, Connection connection) throws Exception {
-        logger.debug("Building response...");
-
+    private static Document writeResponse(java.util.Map<ElementType, java.util.Map<Long, Tuple>> results,
+            BoundingBox queryBounds, boolean multiLayerUniqueElementIds, long mapId, Connection connection)
+            throws Exception {
         Document responseDoc = XmlDocumentBuilder.create();
         Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
         responseDoc.appendChild(elementRootXml);

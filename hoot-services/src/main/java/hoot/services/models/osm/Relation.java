@@ -214,14 +214,14 @@ public class Relation extends Element {
      * @throws Exception
      */
     private BoundingBox parseNodesAndWayMembersBounds(List<RelationMember> members) throws Exception {
-        List<Coordinates> coordsToComputeBoundsFrom = new ArrayList<>();
-        Set<Long> idsOfNodesToRetrieveFromTheDb = new HashSet<>();
-        Set<Long> idsOfWaysForWhichToRetrieveNodesFromTheDb = new HashSet<>();
         BoundingBox bounds = null;
         BoundingBox dbBounds;
 
         // members don't get parsed for a delete request...we'll get the members from the database
         if (entityChangeType != EntityChangeType.DELETE) {
+            Set<Long> idsOfNodesToRetrieveFromTheDb = new HashSet<>();
+            Set<Long> idsOfWaysForWhichToRetrieveNodesFromTheDb = new HashSet<>();
+            List<Coordinates> coordsToComputeBoundsFrom = new ArrayList<>();
             for (RelationMember member : members) {
                 if (member.getType() == ElementType.Node) {
                     if ((parsedElementIdsToElementsByType != null) && (!parsedElementIdsToElementsByType.isEmpty())) {
@@ -380,7 +380,6 @@ public class Relation extends Element {
         NamedNodeMap memberXmlAttributes = nodeXml.getAttributes();
 
         long parsedMemberId = Long.parseLong(memberXmlAttributes.getNamedItem("ref").getNodeValue());
-        long actualMemberId = parsedMemberId;
 
         ElementType elementType = Element.elementTypeFromString(memberXmlAttributes.getNamedItem("type").getNodeValue());
 
@@ -416,6 +415,7 @@ public class Relation extends Element {
         // outdated info for it. Only get info from the request if the element is being
         // created/modified, because if it is being deleted, we can just get the info from the database since the
         // element's bounds won't be changing and its geo info isn't in the request (not required for a delete).
+        long actualMemberId = parsedMemberId;
         if (parsedElements.containsKey(parsedMemberId)
                 && (parsedElements.get(parsedMemberId).getEntityChangeType() != EntityChangeType.DELETE)) {
             memberElement = parsedElements.get(parsedMemberId);

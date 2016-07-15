@@ -66,11 +66,11 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
     public ReviewQueryMapper execQuery() {
         BoundingBox currBbox = new BoundingBox();
         ReviewableItemBbox ret = new ReviewableItemBbox(currBbox, getMapId(), relationId);
-        List<BoundingBox> membersBboxList = new ArrayList<>();
 
         // do recursive bbox retrieval since relation may contain other relation
         List<Long> relIds = new ArrayList<>();
         relIds.add(relationId);
+        List<BoundingBox> membersBboxList = new ArrayList<>();
         getRelationMembersBboxRecursive(membersBboxList, relIds);
 
         for (BoundingBox bbx : membersBboxList) {

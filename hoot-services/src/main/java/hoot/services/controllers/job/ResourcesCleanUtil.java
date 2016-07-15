@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.utils;
+package hoot.services.controllers.job;
 
 import java.sql.Connection;
 
@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.job.Executable;
+import hoot.services.utils.DbUtils;
 
 
 public class ResourcesCleanUtil implements Executable {
@@ -60,7 +61,7 @@ public class ResourcesCleanUtil implements Executable {
         finalStatusDetail = res.toJSONString();
     }
 
-    public static JSONObject deleteLayers(String mapId) throws Exception {
+    static JSONObject deleteLayers(String mapId) throws Exception {
         JSONObject res = new JSONObject();
         res.put("mapId", mapId);
         res.put("result", "success");

@@ -106,9 +106,10 @@ public class ConflationResource extends JobControllerBase {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public Response process(String params) throws Exception {
-        // logger.debug("Conflation resource raw request: " + params);
+        logger.debug("Conflation resource raw request: {}", params);
 
         String jobId = UUID.randomUUID().toString();
+
         try (Connection conn = DbUtils.createConnection()) {
             JSONParser pars = new JSONParser();
             JSONObject oParams = (JSONObject) pars.parse(params);
@@ -186,6 +187,7 @@ public class ConflationResource extends JobControllerBase {
                     String msg = "No secondary map exists with ID: " + secondaryMapId;
                     throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
                 }
+
                 Map secondaryMap = new Map(secondaryMapId, conn);
                 setAoi(secondaryMap, commandArgs);
 
@@ -193,7 +195,11 @@ public class ConflationResource extends JobControllerBase {
                 // from the source; to be used conflict detection during export of conflated
                 // data back into the osm api db at a later time; timestamp must be 24 hour utc
                 // to match rails port
-                String now = DateTimeFormat.forPattern(DbUtils.OSM_API_TIMESTAMP_FORMAT).withZone(DateTimeZone.UTC).print(new DateTime());
+                String now = DateTimeFormat
+                        .forPattern(DbUtils.OSM_API_TIMESTAMP_FORMAT)
+                        .withZone(DateTimeZone.UTC)
+                        .print(new DateTime());
+
                 tags.put("osm_api_db_export_time", now);
             }
 
@@ -239,6 +245,7 @@ public class ConflationResource extends JobControllerBase {
             jobArgs.add(ingestOSMResource);
 
             logger.debug(jobArgs.toJSONString());
+
             postChainJobRquest(jobId, jobArgs.toJSONString());
         }
 
@@ -287,7 +294,8 @@ public class ConflationResource extends JobControllerBase {
     private void setAoi(Map secondaryMap, JSONArray commandArgs) throws Exception {
         BoundingBox bounds = getMapBounds(secondaryMap);
         JSONObject arg = new JSONObject();
-        arg.put("conflateaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
+        arg.put("conflateaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," +
+                bounds.getMaxLon() + "," + bounds.getMaxLat());
         commandArgs.add(arg);
     }
 }

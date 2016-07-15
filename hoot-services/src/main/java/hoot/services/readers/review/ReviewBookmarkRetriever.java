@@ -105,14 +105,14 @@ public class ReviewBookmarkRetriever {
      * @param relationId
      * @return - SQLQuery
      */
-    protected SQLQuery getQuery(long mapId, long relationId) {
+    SQLQuery getQuery(long mapId, long relationId) {
         SQLQuery query = new SQLQuery(this.conn, DbUtils.getConfiguration());
         query.from(reviewBookmarks)
              .where(reviewBookmarks.mapId.eq(mapId).and(reviewBookmarks.relationId.eq(relationId)));
         return query;
     }
 
-    protected SQLQuery getQuery(long bookmarkId) {
+    private SQLQuery getQuery(long bookmarkId) {
         SQLQuery query = new SQLQuery(this.conn, DbUtils.getConfiguration());
         query.from(reviewBookmarks).where(reviewBookmarks.id.eq(bookmarkId));
         return query;
@@ -127,7 +127,7 @@ public class ReviewBookmarkRetriever {
      * @param offset
      * @return - SQLQuery
      */
-    protected SQLQuery getAllQuery(String orderByCol, boolean isAsc, long limit, long offset,
+    SQLQuery getAllQuery(String orderByCol, boolean isAsc, long limit, long offset,
             Long[] creatorArray, Long[] layerArray) {
         QReviewBookmarks b = QReviewBookmarks.reviewBookmarks;
 

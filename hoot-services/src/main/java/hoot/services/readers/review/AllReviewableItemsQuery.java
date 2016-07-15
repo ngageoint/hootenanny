@@ -86,7 +86,7 @@ class AllReviewableItemsQuery extends ReviewableQueryBase implements IReviewable
         MAX_RESULT_SIZE = value;
     }
 
-    public AllReviewableItemsQuery(Connection connection, long mapid, BoundingBox bbox) {
+    AllReviewableItemsQuery(Connection connection, long mapid, BoundingBox bbox) {
         super(connection, mapid);
         // maxQueryNodes
         this.bbox = bbox;

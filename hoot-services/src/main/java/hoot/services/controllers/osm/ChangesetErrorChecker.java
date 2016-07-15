@@ -80,8 +80,8 @@ class ChangesetErrorChecker {
 
                     Map<Long, Long> elementIdsToVersionsFromChangeset = new HashMap<>();
                     for (int i = 0; i < elementXmlNodes.getLength(); i++) {
-                        long id = Long
-                                .parseLong(elementXmlNodes.item(i).getAttributes().getNamedItem("id").getNodeValue());
+                        long id = Long.parseLong(
+                                elementXmlNodes.item(i).getAttributes().getNamedItem("id").getNodeValue());
                         long parsedVersion = Long.parseLong(
                                 elementXmlNodes.item(i).getAttributes().getNamedItem("version").getNodeValue());
                         if (entityChangeType == EntityChangeType.CREATE) {

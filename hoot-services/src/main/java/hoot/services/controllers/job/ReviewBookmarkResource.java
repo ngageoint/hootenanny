@@ -338,6 +338,7 @@ public class ReviewBookmarkResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewBookmarksStatResponse getAllReviewBookmarkStat() {
         ReviewBookmarksStatResponse response = new ReviewBookmarksStatResponse();
+
         try (Connection conn = DbUtils.createConnection()) {
             ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
             long nCnt = retriever.getbookmarksCount();

@@ -103,7 +103,6 @@ public class FileUploadResource extends JobControllerBase {
                                    @QueryParam("NONE_TRANSLATION") String noneTranslation,
                                    @QueryParam("FGDB_FC") String fgdbFeatureClasses,
                                    @Context HttpServletRequest request) {
-        String etlName = inputName;
         String jobId = UUID.randomUUID().toString();
         JSONArray resA = new JSONArray();
 
@@ -130,6 +129,7 @@ public class FileUploadResource extends JobControllerBase {
             JSONArray reqList = new JSONArray();
             List<String> inputsList = new ArrayList<>();
 
+            String etlName = inputName;
             for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
                 String fName = pairs.getKey();
                 String ext = pairs.getValue();

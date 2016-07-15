@@ -125,7 +125,7 @@ public class HGISReviewResource extends HGISResource {
         return res;
     }
 
-    private JSONObject createUpdateMapTagCommand(String mapName) {
+    private static JSONObject createUpdateMapTagCommand(String mapName) {
         JSONArray reviewArgs = new JSONArray();
         JSONObject param = new JSONObject();
 
@@ -148,7 +148,9 @@ public class HGISReviewResource extends HGISResource {
                 jobStatusManager = new JobStatusManager(conn);
                 jobStatusManager.addJob(jobId);
 
-                long mapId = ModelDaoUtils.getRecordIdForInputString(mapName, conn, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
+                QMaps maps = QMaps.maps;
+                long mapId = ModelDaoUtils.getRecordIdForInputString(mapName, conn, maps, maps.id, maps.displayName);
+
                 updateMapTagWithReviewType(conn, mapId);
                 jobStatusManager.setComplete(jobId);
             }

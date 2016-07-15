@@ -66,9 +66,8 @@ public class ReviewReferencesRetriever {
 
     private List<Long> getAllReviewRelations(ElementInfo queryElementInfo, long mapId) throws SQLException {
         String currentRelationMembersTableName = "current_relation_members_" + mapId;
+        String sql = "select relation_id from " + currentRelationMembersTableName;
         String currentRelationsTableName = "current_relations_" + mapId;
-        String sql = "";
-        sql += "select relation_id from " + currentRelationMembersTableName;
         sql += " join " + currentRelationsTableName + " on " + currentRelationMembersTableName + ".relation_id = "
                 + currentRelationsTableName + ".id";
         sql += " where " + currentRelationMembersTableName + ".member_id = " + queryElementInfo.getId() + " and "
@@ -100,7 +99,6 @@ public class ReviewReferencesRetriever {
      */
     public List<ReviewRef> getAllReferences(ElementInfo queryElementInfo) throws Exception {
         logger.debug("requestingElementInfo: {}", queryElementInfo);
-        List<ReviewRef> references = new ArrayList<>();
 
         long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId(), conn);
 
@@ -117,6 +115,7 @@ public class ReviewReferencesRetriever {
         // member id = requesting element's member id and the element type = the requesting element type
         List<Long> allReviewRelationIds = getAllReviewRelations(queryElementInfo, mapIdNum);
 
+        List<ReviewRef> references = new ArrayList<>();
         if (!allReviewRelationIds.isEmpty()) {
             // select all relation members where themember's id is not equal to the requesting element's id and the
             // member's type is not = to the requesting element's type
