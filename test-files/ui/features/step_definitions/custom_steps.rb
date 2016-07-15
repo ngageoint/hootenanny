@@ -203,6 +203,10 @@ When(/^I click the "([^"]*)" key$/) do |arg1|
   find("body").native.send_keys(arg1)
 end
 
+When(/^I click the "([^"]*)" key in the "([^"]*)"$/) do |key, el|
+  find(el).native.send_keys(key)
+end
+
 Then(/^I should see options in this order:$/) do |table|
   expected_order = table.raw.flatten
   actual_order = page.all('#settingsSidebar label').collect(&:text)
@@ -631,4 +635,8 @@ Then(/^I should see "([^"]*)" bookmark first and "([^"]*)" bookmark second$/) do
   spans = find('#reviewBookmarksContent').all('span.strong')
   expect(spans.first).to have_content(rb1)
   expect(spans.last).to have_content(rb2)
+end
+
+Then(/^I should see a "([^"]*)" on the map$/) do |el|
+  page.should have_css(el)
 end
