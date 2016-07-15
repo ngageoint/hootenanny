@@ -19,7 +19,7 @@ Feature: Hootenanny Clip Dataset Test
         Then I click the "map" at "0","0"
         Then I click the "8" key
         And I click the "map" at "100","100"
-        And I click the "map" at "-100","-100"
+        And I click the "map" at "400","400"
         Then I wait 5 "seconds" to see "Clip Data to Bounding Box"
         And I fill "LayerName" input with "CucumberClip_BB"
         And I press "big.loud" span with text "Clip"
