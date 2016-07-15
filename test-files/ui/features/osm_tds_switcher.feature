@@ -23,36 +23,35 @@ Feature: OSM/TDS Switcher
     #     Then I should see element "#preset-input-MGCP\/ACC" with value "Accurate"
 
     Scenario: I can add a new feature and switch between attribute schemas
-        # # Add a point with OSM schema
-        # When I click the "add-point" button
-        # And I click the "map" at "300","300"
-        # Then I wait 5 "seconds" to see "Select feature type"
-        # And I click the "div.label" with text "Park"
-        # And I should see a "g.tag-leisure-park" on the map
-        # And I click the "map" at "400","400"
-        # # Add a point with TDSv61 schema
-        # When I click the "add-point" button
-        # And I click the "map" at "100","100"
-        # Then I wait 5 "seconds" to see "Select feature type"
-        # Then I select the "TDSv61" option labelled "Filter By Type"
-        # And I click the "div.label" with text "Building (AL013)"
-        # And I should see a "g.tag-building" on the map
-        # And I click the "map" at "400","400"
-        # # Add a point with MGCP schema
-        # When I click the "add-point" button
-        # And I click the "map" at "200","200"
-        # Then I wait 5 "seconds" to see "Select feature type"
-        # Then I select the "MGCP" option labelled "Filter By Type"
-        # And I click the "div.label" with text "Settlement (AL105)"
-        # And I should see a "g.tag-place-settlement" on the map
-        # And I click the "map" at "400","400"
+        # Add a point with OSM schema
+        When I click the "add-point" button
+        And I click the "map" at "300","300"
+        Then I wait 5 "seconds" to see "Select feature type"
+        And I click the "div.label" with text "Park"
+        And I should see a "g.tag-leisure-park" on the map
+        And I click the "map" at "400","400"
+        # Add a point with TDSv61 schema
+        When I click the "add-point" button
+        And I click the "map" at "100","100"
+        Then I wait 5 "seconds" to see "Select feature type"
+        Then I select the "TDSv61" option labelled "Filter By Type"
+        And I click the "div.label" with text "Building (AL013)"
+        And I should see a "g.tag-building" on the map
+        And I click the "map" at "400","400"
+        # Add a point with MGCP schema
+        When I click the "add-point" button
+        And I click the "map" at "200","200"
+        Then I wait 5 "seconds" to see "Select feature type"
+        Then I select the "MGCP" option labelled "Filter By Type"
+        And I click the "div.label" with text "Settlement (AL105)"
+        And I should see a "g.tag-place-settlement" on the map
+        And I click the "map" at "400","400"
 
         # Add a line with TDSv40 schema
-        # When I click the "add-line" button
-        # And I click the "map" at "150","150"
-        # # And I click the "map" at "300","200"
-        # And I click the "map" at "200","300"
-        # And I double-click the "map" at "200","400"
+        When I click the "add-line" button
+        And I click the "map" at "300","200"
+        And I click the "map" at "200","300"
+        And I double-click the "map" at "200","400"
         # Then I wait 5 "seconds" to see "Select feature type"
         # Then I select the "TDSv40" option labelled "Filter By Type"
         # And I click the "div.label" with text "Trail (AP050)"
@@ -61,8 +60,8 @@ Feature: OSM/TDS Switcher
         When I click the "add-area" button
         And I click the "map" at "150","150"
         And I click the "map" at "450","450"
-        And I click the "map" at "150","450"
+        And I double-click the "map" at "150","450"
         #And I click the "↩" key in the "#map"
         Then I wait 5 "seconds" to see "Select feature type"
-        Then I select the "MGCP" option labelled "Filter By Type"
-        And I click the "div.label" with text "Built-up Area (AL020)"
+        # Then I select the "MGCP" option labelled "Filter By Type"
+        # And I click the "div.label" with text "Built-up Area (AL020)"
