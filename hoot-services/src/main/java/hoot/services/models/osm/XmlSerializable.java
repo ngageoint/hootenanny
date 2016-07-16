@@ -36,13 +36,12 @@ import hoot.services.models.osm.Element.ElementType;
  * implement this
  */
 public interface XmlSerializable {
-    void fromXml(final org.w3c.dom.Node xml) throws Exception;
+    void fromXml(org.w3c.dom.Node xml) throws Exception;
 
-    org.w3c.dom.Element toXml(final org.w3c.dom.Element parentXml, final long modifyingUserId,
-            final String modifyingUserDisplayName, final boolean multiLayerUniqueElementIds, final boolean addChildren)
-            throws Exception;
+    org.w3c.dom.Element toXml(org.w3c.dom.Element parentXml, long modifyingUserId, String modifyingUserDisplayName,
+            boolean multiLayerUniqueElementIds, boolean addChildren) throws Exception;
 
-    org.w3c.dom.Element toChangesetResponseXml(final org.w3c.dom.Element parentXml) throws Exception;
+    org.w3c.dom.Element toChangesetResponseXml(org.w3c.dom.Element parentXml) throws Exception;
 
     void setElementCache(Map<ElementType, Map<Long, Element>> parsedElementIdsToElementsByType);
 

@@ -27,7 +27,6 @@
 package hoot.services.db;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,41 +36,19 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-
 
 public class DataDefinitionManager {
     private static final Logger logger = LoggerFactory.getLogger(DataDefinitionManager.class);
-    private static final String POSTGRESQL_DRIVER = "org.postgresql.Driver";
 
-    private final String dbUrl;
-    private final String dbUser;
-    private final String dbPassword;
-    private final String dbName;
-
-    static {
-        try {
-            Class.forName(POSTGRESQL_DRIVER);
-        }
-        catch (ClassNotFoundException e) {
-            String message = "Critical error!  Failed to load " + POSTGRESQL_DRIVER + " JDBC driver!";
-            throw new RuntimeException(message, e);
-        }
-    }
 
     public DataDefinitionManager() {
-        dbName = HootProperties.getProperty("dbName");
-        dbUser = HootProperties.getProperty("dbUserId");
-        dbPassword = HootProperties.getProperty("dbPassword");
-        String host = HootProperties.getProperty("dbHost");
-        dbUrl = "jdbc:postgresql://" + host + "/";
     }
 
     boolean checkDbExists(String dbName) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(dbUrl + this.dbName, dbUser, dbPassword)) {
+        try (Connection conn = DbUtils.createConnection()) {
             String sql = "SELECT 1 FROM pg_database WHERE datname = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString((int) 1, dbName);
+                stmt.setString(1, dbName);
                 try (ResultSet rs = stmt.executeQuery()) {
                     return rs.next();
                 }
@@ -80,7 +57,7 @@ public class DataDefinitionManager {
     }
 
     void createDb(String dbname) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(dbUrl + dbName, dbUser, dbPassword)) {
+        try (Connection conn = DbUtils.createConnection()) {
             String sql = "CREATE DATABASE \"" + dbname + "\"";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.execute();
@@ -89,7 +66,7 @@ public class DataDefinitionManager {
     }
 
     public void deleteTables(List<String> tables, String dbname) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(dbUrl + dbname, dbUser, dbPassword)) {
+        try (Connection conn = DbUtils.createConnection()) {
             for (String tblName : tables) {
                 String sql = "DROP TABLE \"" + tblName + "\"";
                 try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -100,10 +77,10 @@ public class DataDefinitionManager {
     }
 
     void deleteDb(String dbname, boolean force) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(dbUrl + dbName, dbUser, dbPassword)) {
+        try (Connection conn = DbUtils.createConnection()) {
             // TODO: re-evaluate what this if block is supposed to to.
             if (force) {
-                String columnName = null;
+                String columnName;
                 String sql = "SELECT column_name " + "FROM information_schema.columns "
                         + "WHERE table_name='pg_stat_activity' AND column_name LIKE '%pid'";
 
@@ -118,7 +95,7 @@ public class DataDefinitionManager {
                 String forceSql = "SELECT pg_terminate_backend(" + columnName + ") " + "FROM pg_stat_activity "
                         + "WHERE datname = ?";
                 try (PreparedStatement stmt = conn.prepareStatement(forceSql)) {
-                    stmt.setString((int) 1, dbname);
+                    stmt.setString(1, dbname);
                     // Get the column name from the db as it's version dependent
                     try (ResultSet rs = stmt.executeQuery()) {
                     }
@@ -134,7 +111,7 @@ public class DataDefinitionManager {
 
     public List<String> getTablesList(String dbName, String filter_prefix) throws SQLException {
         List<String> tblList = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(dbUrl + dbName, dbUser, dbPassword)) {
+        try (Connection conn = DbUtils.createConnection()) {
             String sql = "SELECT table_name " + "FROM information_schema.tables "
                     + "WHERE table_schema='public' AND table_name LIKE " + "'" + filter_prefix.replace('-', '_')
                     + "_%'";
@@ -153,7 +130,7 @@ public class DataDefinitionManager {
     }
 
     void createTable(String createTblSql, String dbname) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(dbUrl + dbname, dbUser, dbPassword)) {
+        try (Connection conn = DbUtils.createConnection()) {
             try (PreparedStatement stmt = conn.prepareStatement(createTblSql)) {
                 stmt.executeUpdate();
             }

@@ -58,7 +58,7 @@ public class AllReviewableItemsQueryTest {
     public void testGetReviewableRelatioWithWayMembersCentroidInBboxQuery() throws Exception {
         BoundingBox bbox = new BoundingBox(-77.0520431244303, 38.9025514720831, -77.0120431244303, 38.9925514720831);
         AllReviewableItemsQuery q = new AllReviewableItemsQuery(null, 10, bbox);
-        String actual = q._getReviewableRelatioWithWayMembersCentroidInBboxQuery().toString();
+        String actual = q.getReviewableRelatioWithWayMembersCentroidInBboxQuery().toString();
 
         String expected = "from (select \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\".\"relation_id\", \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\".\"needreview\", max(\"currentNodeSubQ\".\"latitude\") as \"maxlat\", min(\"currentNodeSubQ\".\"latitude\") as \"minlat\", max(\"currentNodeSubQ\".\"longitude\") as \"maxlon\", min(\"currentNodeSubQ\".\"longitude\") as \"minlon\", (((max(\"currentNodeSubQ\".\"latitude\") - min(\"currentNodeSubQ\".\"latitude\"))/2)+min(\"currentNodeSubQ\".\"latitude\")) as \"centlat\", (((max(\"currentNodeSubQ\".\"longitude\") - min(\"currentNodeSubQ\".\"longitude\"))/2)+min(\"currentNodeSubQ\".\"longitude\")) as \"centlon\"\n"
                 + "from (select \"current_nodes\".\"id\", \"current_nodes\".\"latitude\", \"current_nodes\".\"longitude\"\n"
@@ -87,7 +87,7 @@ public class AllReviewableItemsQueryTest {
     public void testGetReviewableRelatioWithWayMembersCentroidInBboxQueryWithEmpytBbox() throws Exception {
         BoundingBox bbox = new BoundingBox();
         AllReviewableItemsQuery q = new AllReviewableItemsQuery(null, 7, bbox);
-        String actual = q._getReviewableRelatioWithWayMembersCentroidInBboxQuery().toString();
+        String actual = q.getReviewableRelatioWithWayMembersCentroidInBboxQuery().toString();
 
         String expected = "from (select \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\".\"relation_id\", \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\".\"needreview\", max(\"currentNodeSubQ\".\"latitude\") as \"maxlat\", min(\"currentNodeSubQ\".\"latitude\") as \"minlat\", max(\"currentNodeSubQ\".\"longitude\") as \"maxlon\", min(\"currentNodeSubQ\".\"longitude\") as \"minlon\", (((max(\"currentNodeSubQ\".\"latitude\") - min(\"currentNodeSubQ\".\"latitude\"))/2)+min(\"currentNodeSubQ\".\"latitude\")) as \"centlat\", (((max(\"currentNodeSubQ\".\"longitude\") - min(\"currentNodeSubQ\".\"longitude\"))/2)+min(\"currentNodeSubQ\".\"longitude\")) as \"centlon\"\n"
                 + "from (select \"current_nodes\".\"id\", \"current_nodes\".\"latitude\", \"current_nodes\".\"longitude\"\n"
@@ -117,7 +117,7 @@ public class AllReviewableItemsQueryTest {
         BoundingBox bbox = null;
         AllReviewableItemsQuery q = new AllReviewableItemsQuery(null, 10, bbox);
         try {
-            q._getReviewableRelatioWithWayMembersCentroidInBboxQuery();
+            q.getReviewableRelatioWithWayMembersCentroidInBboxQuery();
         }
         catch (Exception ex) {
             String expected = "Invalid Bounding box.";
@@ -131,21 +131,21 @@ public class AllReviewableItemsQueryTest {
     public void testGetReviewableRelationMembersCountByTypeQuery() throws Exception {
         BoundingBox bbox = new BoundingBox();
         AllReviewableItemsQuery q = new AllReviewableItemsQuery(null, 10, bbox);
-        String actual = q._getReviewableRelationMembersCountByTypeQuery(DbUtils.nwr_enum.node).toString();
+        String actual = q.getReviewableRelationMembersCountByTypeQuery(DbUtils.nwr_enum.node).toString();
         String expected = "from \"current_relation_members_10\" \"current_relation_members\"\n"
                 + "where \"current_relation_members\".\"relation_id\" in (select \"current_relations\".\"id\"\n"
                 + "from \"current_relations_10\" \"current_relations\"\n"
                 + "where exist(tags,'hoot:review:needs')) and \"current_relation_members\".\"member_type\" = ?";
         org.junit.Assert.assertEquals(expected, actual);
 
-        actual = q._getReviewableRelationMembersCountByTypeQuery(DbUtils.nwr_enum.way).toString();
+        actual = q.getReviewableRelationMembersCountByTypeQuery(DbUtils.nwr_enum.way).toString();
         expected = "from \"current_relation_members_10\" \"current_relation_members\"\n"
                 + "where \"current_relation_members\".\"relation_id\" in (select \"current_relations\".\"id\"\n"
                 + "from \"current_relations_10\" \"current_relations\"\n"
                 + "where exist(tags,'hoot:review:needs')) and \"current_relation_members\".\"member_type\" = ?";
         org.junit.Assert.assertEquals(expected, actual);
 
-        actual = q._getReviewableRelationMembersCountByTypeQuery(DbUtils.nwr_enum.relation).toString();
+        actual = q.getReviewableRelationMembersCountByTypeQuery(DbUtils.nwr_enum.relation).toString();
         expected = "from \"current_relation_members_10\" \"current_relation_members\"\n"
                 + "where \"current_relation_members\".\"relation_id\" in (select \"current_relations\".\"id\"\n"
                 + "from \"current_relations_10\" \"current_relations\"\n"
@@ -203,7 +203,7 @@ public class AllReviewableItemsQueryTest {
          * 
          * 
          * Map<Long, ReviewableItemBboxInfo> res =
-         * spy._getReviewableRelatioWithWayMembersCentroidInBbox();
+         * spy.getReviewableRelatioWithWayMembersCentroidInBbox();
          * 
          * org.junit.Assert.assertEquals(3, res.size());
          * 
@@ -236,7 +236,7 @@ public class AllReviewableItemsQueryTest {
     public void testGetReviewableRelatioWithNodeMembersCentroidInBboxQuery() throws Exception {
         BoundingBox bbox = new BoundingBox(-77.0520431244303, 38.9025514720831, -77.0120431244303, 38.9925514720831);
         AllReviewableItemsQuery q = new AllReviewableItemsQuery(null, 10, bbox);
-        String actual = q._getReviewableRelatioWithNodeMembersCentroidInBboxQuery().toString();
+        String actual = q.getReviewableRelatioWithNodeMembersCentroidInBboxQuery().toString();
 
         String expected = "from (select \"reviewRelJoinRelMemberSubQ\".\"relation_id\", \"reviewRelJoinRelMemberSubQ\".\"needreview\", max(\"currentNodeSubQ\".\"latitude\") as \"maxlat\", min(\"currentNodeSubQ\".\"latitude\") as \"minlat\", max(\"currentNodeSubQ\".\"longitude\") as \"maxlon\", min(\"currentNodeSubQ\".\"longitude\") as \"minlon\", (((max(\"currentNodeSubQ\".\"latitude\") - min(\"currentNodeSubQ\".\"latitude\"))/2)+min(\"currentNodeSubQ\".\"latitude\")) as \"centlat\", (((max(\"currentNodeSubQ\".\"longitude\") - min(\"currentNodeSubQ\".\"longitude\"))/2)+min(\"currentNodeSubQ\".\"longitude\")) as \"centlon\"\n"
                 + "from (select \"current_nodes\".\"id\", \"current_nodes\".\"latitude\", \"current_nodes\".\"longitude\"\n"
@@ -262,7 +262,7 @@ public class AllReviewableItemsQueryTest {
         BoundingBox bbox = null;
         AllReviewableItemsQuery q = new AllReviewableItemsQuery(null, 10, bbox);
         try {
-            q._getReviewableRelatioWithNodeMembersCentroidInBboxQuery();
+            q.getReviewableRelatioWithNodeMembersCentroidInBboxQuery();
         }
         catch (Exception ex) {
             String expected = "Invalid Bounding box.";
@@ -323,7 +323,7 @@ public class AllReviewableItemsQueryTest {
          * 
          * 
          * Map<Long, ReviewableItemBboxInfo> res =
-         * spy._getReviewableRelatioWithNodeMembersCentroidInBbox();
+         * spy.getReviewableRelatioWithNodeMembersCentroidInBbox();
          * 
          * org.junit.Assert.assertEquals(3, res.size());
          * 
@@ -404,7 +404,7 @@ public class AllReviewableItemsQueryTest {
          * 
          * 
          * 
-         * List<JSONObject> res = spy._getReviewableRelationMembers();
+         * List<JSONObject> res = spy.getReviewableRelationMembers();
          * 
          * org.junit.Assert.assertEquals(4, res.size());
          * 
@@ -443,15 +443,15 @@ public class AllReviewableItemsQueryTest {
          * spy = Mockito.spy(real);
          * 
          * org.mockito.Mockito.doReturn((long)10).when(spy)
-         * ._getReviewableRelationMembersCount(org.mockito.Matchers.matches(
+         * .getReviewableRelationMembersCount(org.mockito.Matchers.matches(
          * "node"));
          * 
          * org.mockito.Mockito.doReturn((long)0).when(spy)
-         * ._getReviewableRelationMembersCount(org.mockito.Matchers.matches(
+         * .getReviewableRelationMembersCount(org.mockito.Matchers.matches(
          * "way"));
          * 
          * org.mockito.Mockito.doReturn((long)0).when(spy)
-         * ._getReviewableRelationMembersCount(org.mockito.Matchers.matches(
+         * .getReviewableRelationMembersCount(org.mockito.Matchers.matches(
          * "relation"));
          * 
          * Map<Long, ReviewableItemBboxInfo> mockNodeResp = new HashMap<>();
@@ -468,7 +468,7 @@ public class AllReviewableItemsQueryTest {
          * 
          * 
          * org.mockito.Mockito.doReturn(mockNodeResp).when(spy)
-         * ._getReviewableRelatioWithNodeMembersCentroidInBbox();
+         * .getReviewableRelatioWithNodeMembersCentroidInBbox();
          * 
          * AllReviewableItems resp = (AllReviewableItems) spy.execQuery();
          * org.junit.Assert.assertEquals(2, resp.getReviewableItems().size());
@@ -521,15 +521,15 @@ public class AllReviewableItemsQueryTest {
          * spy = Mockito.spy(real);
          * 
          * org.mockito.Mockito.doReturn((long)0).when(spy)
-         * ._getReviewableRelationMembersCount(org.mockito.Matchers.matches(
+         * .getReviewableRelationMembersCount(org.mockito.Matchers.matches(
          * "node"));
          * 
          * org.mockito.Mockito.doReturn((long)10).when(spy)
-         * ._getReviewableRelationMembersCount(org.mockito.Matchers.matches(
+         * .getReviewableRelationMembersCount(org.mockito.Matchers.matches(
          * "way"));
          * 
          * org.mockito.Mockito.doReturn((long)0).when(spy)
-         * ._getReviewableRelationMembersCount(org.mockito.Matchers.matches(
+         * .getReviewableRelationMembersCount(org.mockito.Matchers.matches(
          * "relation"));
          * 
          * Map<Long, ReviewableItemBboxInfo> mockWayResp = new HashMap<>(); long
@@ -546,7 +546,7 @@ public class AllReviewableItemsQueryTest {
          * 
          * 
          * org.mockito.Mockito.doReturn(mockWayResp).when(spy)
-         * ._getReviewableRelatioWithWayMembersCentroidInBbox();
+         * .getReviewableRelatioWithWayMembersCentroidInBbox();
          * 
          * AllReviewableItems resp = (AllReviewableItems) spy.execQuery();
          * org.junit.Assert.assertEquals(2, resp.getReviewableItems().size());
@@ -601,15 +601,15 @@ public class AllReviewableItemsQueryTest {
          * Mockito.spy(real);
          * 
          * org.mockito.Mockito.doReturn((long)0).when(spy)
-         * ._getReviewableRelationMembersCount(org.mockito.Matchers.matches(
+         * .getReviewableRelationMembersCount(org.mockito.Matchers.matches(
          * "node"));
          * 
          * org.mockito.Mockito.doReturn((long)0).when(spy)
-         * ._getReviewableRelationMembersCount(org.mockito.Matchers.matches(
+         * .getReviewableRelationMembersCount(org.mockito.Matchers.matches(
          * "way"));
          * 
          * org.mockito.Mockito.doReturn((long)4).when(spy)
-         * ._getReviewableRelationMembersCount(org.mockito.Matchers.matches(
+         * .getReviewableRelationMembersCount(org.mockito.Matchers.matches(
          * "relation"));
          * 
          * List<JSONObject> mockReviewMems = new ArrayList<>(); JSONObject d =
@@ -631,28 +631,28 @@ public class AllReviewableItemsQueryTest {
          * 
          * 
          * org.mockito.Mockito.doReturn(mockReviewMems).when(spy)
-         * ._getReviewableRelationMembers();
+         * .getReviewableRelationMembers();
          * 
          * BoundingBox mockBbox = new BoundingBox(-77.052043, 38.902551,
          * -77.012043, 38.992551); ReviewableItemBbox mockRelBbox = new
          * ReviewableItemBbox(mockBbox,0, 165);
          * org.mockito.Mockito.doReturn(mockRelBbox).when(spy)
-         * ._getRelationMemberBbox(org.mockito.Matchers.eq((long)165));
+         * .getRelationMemberBbox(org.mockito.Matchers.eq((long)165));
          * 
          * mockBbox = new BoundingBox(-104.720859, 38.874594, -104.719645,
          * 38.874783); mockRelBbox = new ReviewableItemBbox(mockBbox,0, 27);
          * org.mockito.Mockito.doReturn(mockRelBbox).when(spy)
-         * ._getRelationMemberBbox(org.mockito.Matchers.eq((long)27));
+         * .getRelationMemberBbox(org.mockito.Matchers.eq((long)27));
          * 
          * mockBbox = new BoundingBox(-104.719153, 38.875195, -104.717939,
          * 38.875384); mockRelBbox = new ReviewableItemBbox(mockBbox,0, 769);
          * org.mockito.Mockito.doReturn(mockRelBbox).when(spy)
-         * ._getRelationMemberBbox(org.mockito.Matchers.eq((long)769));
+         * .getRelationMemberBbox(org.mockito.Matchers.eq((long)769));
          * 
          * mockBbox = new BoundingBox(-104.9197586, 38.857832, -104.912548,
          * 38.859302); mockRelBbox = new ReviewableItemBbox(mockBbox,0, 628);
          * org.mockito.Mockito.doReturn(mockRelBbox).when(spy)
-         * ._getRelationMemberBbox(org.mockito.Matchers.eq((long)628));
+         * .getRelationMemberBbox(org.mockito.Matchers.eq((long)628));
          * 
          * 
          * 

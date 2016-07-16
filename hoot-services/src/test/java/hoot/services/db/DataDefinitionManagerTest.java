@@ -26,13 +26,14 @@
  */
 package hoot.services.db;
 
+import static hoot.services.HootProperties.DB_NAME;
+
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 
 
@@ -89,7 +90,7 @@ public class DataDefinitionManagerTest {
     @Test
     @Category(UnitTest.class)
     public void createMap() throws Exception {
-        String dbname = HootProperties.getProperty("dbName");
+        String dbname = DB_NAME;
 
         DataDefinitionManager ddm = new DataDefinitionManager();
 
