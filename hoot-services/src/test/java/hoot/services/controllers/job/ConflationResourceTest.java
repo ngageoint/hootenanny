@@ -26,9 +26,7 @@
  */
 package hoot.services.controllers.job;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
 
 import java.io.File;
@@ -46,8 +44,8 @@ import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.mockito.Matchers;
 import org.mockito.AdditionalMatchers;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,7 +92,7 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testProcessOsmApiDbInput() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
             final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
@@ -127,7 +125,7 @@ public class ConflationResourceTest {
                             Matchers.contains("\"conflateaoi\":\"0.0,0.0,0.0,0.0\"")));
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
         }
 
     }
@@ -139,8 +137,8 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testOsmApiDbInputAsSecondary() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
-            final String inputParams = FileUtils.readFileToString(new File(Thread
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            String inputParams = FileUtils.readFileToString(new File(Thread
                     .currentThread()
                     .getContextClassLoader()
                     .getResource(
@@ -159,7 +157,7 @@ public class ConflationResourceTest {
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
         }
     }
 
@@ -167,8 +165,8 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testOsmApiDbInputAsSecondary2() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
-            final String inputParams = FileUtils.readFileToString(new File(Thread
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            String inputParams = FileUtils.readFileToString(new File(Thread
                     .currentThread()
                     .getContextClassLoader()
                     .getResource(
@@ -186,7 +184,7 @@ public class ConflationResourceTest {
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
         }
     }
 
@@ -194,18 +192,17 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testConflateOsmApiDbMissingMap() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
-            final String inputParams = FileUtils.readFileToString(new File(Thread
-                    .currentThread()
-                    .getContextClassLoader()
-                    .getResource(
-                            "hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbMissingMapInput.json")
-                    .getPath()));
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            String inputParams = FileUtils.readFileToString(new File(Thread
+                .currentThread()
+                .getContextClassLoader()
+                .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbMissingMapInput.json")
+                .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
             Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
-            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
+            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
             spy.process(inputParams);
@@ -216,7 +213,7 @@ public class ConflationResourceTest {
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
         }
     }
 
@@ -224,9 +221,8 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testConflateOsmApiDbNotEnabled() throws Exception {
         try {
-
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
-            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
+            String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()));
@@ -234,9 +230,9 @@ public class ConflationResourceTest {
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
             Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
-            final List<Long> mapIds = new ArrayList<>();
-            mapIds.add(new Long(1));
-            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
+            List<Long> mapIds = new ArrayList<>();
+            mapIds.add(1L);
+            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
             spy.process(inputParams);
@@ -244,13 +240,16 @@ public class ConflationResourceTest {
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
             Assert.assertTrue(e
-                    .getResponse()
-                    .getEntity()
-                    .toString()
-                    .contains(
-                            "Attempted to conflate an OSM API database data source but OSM API database"
-                                    + "support is disabled"));
+                .getResponse()
+                .getEntity()
+                .toString()
+                .contains(
+                        "Attempted to conflate an OSM API database data source but OSM API database " +
+                                "support is disabled"));
             throw e;
+        }
+        finally {
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
         }
     }
 }

@@ -47,7 +47,7 @@ public class ReviewResolverResponse {
     public ReviewResolverResponse() {
     }
 
-    public ReviewResolverResponse(final long changesetId) {
+    public ReviewResolverResponse(long changesetId) {
         this.changesetId = changesetId;
     }
 }

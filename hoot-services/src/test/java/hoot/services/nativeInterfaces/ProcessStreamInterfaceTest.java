@@ -26,6 +26,8 @@
  */
 package hoot.services.nativeInterfaces;
 
+import static hoot.services.HootProperties.*;
+
 import java.lang.reflect.Method;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -39,7 +41,6 @@ import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 
 
@@ -101,12 +102,7 @@ public class ProcessStreamInterfaceTest {
         String[] ret = (String[]) method.invoke(ps, command);
         String commandStr = ArrayUtils.toString(ret);
 
-        String coreScriptPath = HootProperties.getProperty("coreScriptPath");
-
-        HootProperties.getProperty("coreScriptOutputPath");
-
-        String ETLMakefile = HootProperties.getPropertyOrDefault("ETLMakefile");
-        String makePath = coreScriptPath + "/" + ETLMakefile;
+        String makePath = CORE_SCRIPT_PATH + "/" + ETL_MAKEFILE;
 
         // [make, -f, /project/hoot/scripts/makeetl,
         // translation=/test/file/test.js, INPUT_TYPE=OSM,
@@ -115,18 +111,10 @@ public class ProcessStreamInterfaceTest {
                 + ",translation=/test/file/test.js,INPUT_TYPE=OSM,INPUT=/test/file/INPUT.osm";
         expected += ",jobid=123-456-789";
 
-        String dbname = HootProperties.getProperty("dbName");
-        String userid = HootProperties.getProperty("dbUserId");
-        String pwd = HootProperties.getProperty("dbPassword");
-        String host = HootProperties.getProperty("dbHost");
-        String dbUrl = "hootapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
+        String dbUrl = "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + "/" + DB_NAME;
         expected += ",DB_URL=" + dbUrl;
         
-        dbname = HootProperties.getProperty("osmApiDbName");
-        userid = HootProperties.getProperty("osmApiDbUserId");
-        pwd = HootProperties.getProperty("osmApiDbPassword");
-        host = HootProperties.getProperty("osmApiDbHost");
-        String osmApiDbUrl = "osmapidb://" + userid + ":" + pwd + "@" + host + "/" + dbname;
+        String osmApiDbUrl = "osmapidb://" + OSM_API_DB_USER_ID + ":" + OSM_API_DB_PASSWORD + "@" + OSM_API_DB_HOST + "/" + OSM_API_DB_NAME;
         expected += ",OSM_API_DB_URL=" + osmApiDbUrl + "}";
 
         Assert.assertEquals(expected, commandStr);

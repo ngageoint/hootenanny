@@ -26,12 +26,12 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
+
 import java.io.File;
 import java.net.URL;
 import java.sql.Connection;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -50,7 +50,6 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.job.JobStatusManager;
 import hoot.services.utils.HootCustomPropertiesSetter;
@@ -58,16 +57,15 @@ import hoot.services.utils.HootCustomPropertiesSetter;
 
 public class JobResourceTest {
     private static final File homeFolder;
-    private static final Map<String, String> originalHootProperties;
+    private static final String original_HOME_FOLDER;
 
     static {
         try {
-            originalHootProperties = HootProperties.getProperties();
-
+            original_HOME_FOLDER = HOME_FOLDER;
             homeFolder = new File(FileUtils.getTempDirectory(), "RasterToTilesResourceTest");
             FileUtils.forceMkdir(homeFolder);
             Assert.assertTrue(homeFolder.exists());
-            HootCustomPropertiesSetter.setProperty("homeFolder", homeFolder.getAbsolutePath());
+            HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
 
             URL inputUrl = JobResourceTest.class.getResource("/hoot/services/validators/job/services_fields_metadata.json");
             File dest = new File(new File(homeFolder, "scripts"), "services_fields_metadata.json");
@@ -84,11 +82,7 @@ public class JobResourceTest {
     @AfterClass
     public static void afterClass() throws Exception {
         FileUtils.deleteDirectory(homeFolder);
-        Properties origProperties = new Properties();
-        for (Map.Entry<String, String> entry : originalHootProperties.entrySet()) {
-            origProperties.setProperty(entry.getKey(), entry.getValue());
-        }
-        HootCustomPropertiesSetter.setProperties(origProperties);
+        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", original_HOME_FOLDER);
     }
 
     @Test

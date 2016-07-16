@@ -26,6 +26,8 @@
  */
 package hoot.services.ingest;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
+
 import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -41,26 +43,23 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 
 
 public class MultipartSerializerTest {
-    private static String homeFolder = null;
     private MultipartSerializer _ms = new MultipartSerializer();
 
     @BeforeClass
     public static void oneTimeSetup() throws Exception {
-        homeFolder = HootProperties.getProperty("homeFolder");
-        org.junit.Assert.assertNotNull(homeFolder);
-        org.junit.Assert.assertTrue(homeFolder.length() > 0);
+        org.junit.Assert.assertNotNull(HOME_FOLDER);
+        org.junit.Assert.assertTrue(HOME_FOLDER.length() > 0);
     }
 
     @Test
     @Category(UnitTest.class)
     public void TestserializeFGDB() throws Exception {
         String jobId = "123-456-789";
-        String wkdirpath = homeFolder + "/upload/" + jobId;
+        String wkdirpath = HOME_FOLDER + "/upload/" + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
         org.junit.Assert.assertTrue(workingDir.exists());
@@ -88,7 +87,7 @@ public class MultipartSerializerTest {
         Map<String, String> uploadedFiles = new HashMap<String, String>();
         Map<String, String> uploadedFilesPaths = new HashMap<String, String>();
 
-        _ms._serializeFGDB(fileItemsList, jobId, uploadedFiles, uploadedFilesPaths);
+        _ms.serializeFGDB(fileItemsList, jobId, uploadedFiles, uploadedFilesPaths);
 
         org.junit.Assert.assertEquals("GDB", uploadedFiles.get("fgdbTest"));
         org.junit.Assert.assertEquals("fgdbTest.gdb", uploadedFilesPaths.get("fgdbTest"));
@@ -109,7 +108,7 @@ public class MultipartSerializerTest {
         // Create dummy FGDB
 
         String jobId = "123-456-789-testosm";
-        String wkdirpath = homeFolder + "/upload/" + jobId;
+        String wkdirpath = HOME_FOLDER + "/upload/" + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
         org.junit.Assert.assertTrue(workingDir.exists());
@@ -136,7 +135,7 @@ public class MultipartSerializerTest {
         Map<String, String> uploadedFiles = new HashMap<String, String>();
         Map<String, String> uploadedFilesPaths = new HashMap<String, String>();
 
-        _ms._serializeUploadedFiles(fileItemsList, uploadedFiles, uploadedFilesPaths, wkdirpath);
+        _ms.serializeUploadedFiles(fileItemsList, uploadedFiles, uploadedFilesPaths, wkdirpath);
 
         org.junit.Assert.assertEquals("OSM", uploadedFiles.get("dummy1"));
         org.junit.Assert.assertEquals("dummy1.osm", uploadedFilesPaths.get("dummy1"));
@@ -150,12 +149,12 @@ public class MultipartSerializerTest {
     @Test
     @Category(UnitTest.class)
     public void TestValidatePath() throws Exception {
-        boolean isValid = _ms._validatePath("/projects/hoot/upload/123456",
+        boolean isValid = _ms.validatePath("/projects/hoot/upload/123456",
                 "/projects/hoot/upload/123456/DcGisRoads.gdb");
         org.junit.Assert.assertTrue(isValid);
-        isValid = _ms._validatePath("/projects/hoot/upload/123456", "/projects/hoot/upload/123456/../DcGisRoads.gdb");
+        isValid = _ms.validatePath("/projects/hoot/upload/123456", "/projects/hoot/upload/123456/../DcGisRoads.gdb");
         org.junit.Assert.assertFalse(isValid);
-        isValid = _ms._validatePath("/projects/hoot/upload/123456", "\0//DcGisRoads.gdb");
+        isValid = _ms.validatePath("/projects/hoot/upload/123456", "\0//DcGisRoads.gdb");
         org.junit.Assert.assertFalse(isValid);
     }
 }

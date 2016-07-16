@@ -42,8 +42,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class JobExecutionManager {
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(JobExecutionManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(JobExecutionManager.class);
 
     private INativeInterface nativeInterface;
 
@@ -68,11 +67,11 @@ public class JobExecutionManager {
      * @param command
      * @throws NativeInterfaceException
      */
-    public JSONObject exec(JSONObject command) throws Exception {
+    public JSONObject exec(JSONObject command) throws NativeInterfaceException {
         return execWithResult(command);
     }
 
-    public void terminate(String jobId) throws Exception {
+    public void terminate(String jobId) throws NativeInterfaceException {
         try {
             getNativeInterface().terminate(jobId);
         }
@@ -80,12 +79,12 @@ public class JobExecutionManager {
             throw ne;
         }
         catch (Exception e) {
-            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR);
+            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
         }
     }
 
-    public JSONObject execWithResult(JSONObject command) throws Exception {
-        JSONObject ret = null;
+    public JSONObject execWithResult(JSONObject command) throws NativeInterfaceException {
+        JSONObject ret;
         try {
             ret = getNativeInterface().exec(command);
         }
@@ -93,18 +92,18 @@ public class JobExecutionManager {
             throw ne;
         }
         catch (Exception e) {
-            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR);
+            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
         }
         return ret;
     }
 
-    public String getProgress(String jobId) throws Exception {
-        String progress = "";
+    public String getProgress(String jobId) throws NativeInterfaceException {
+        String progress;
         try {
             progress = getNativeInterface().getJobProgress(jobId);
         }
         catch (Exception e) {
-            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR);
+            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
         }
         return progress;
     }
