@@ -238,7 +238,6 @@ public class BasemapResource extends JobControllerBase {
     @Produces(MediaType.TEXT_PLAIN)
     public Response getBasemapList() {
         JSONArray retList = new JSONArray();
-        Map<String, JSONObject> sortedScripts = new TreeMap<>();
         JSONArray filesList;
 
         try {
@@ -250,6 +249,7 @@ public class BasemapResource extends JobControllerBase {
         }
 
         // sort the list
+        Map<String, JSONObject> sortedScripts = new TreeMap<>();
         for (Object file : filesList) {
             JSONObject cO = (JSONObject) file;
             String sName = cO.get("name").toString();
@@ -387,13 +387,12 @@ public class BasemapResource extends JobControllerBase {
     }
 
     private static void deleteBaseMap(String bmName) throws IOException {
-        String controlFolder = INGEST_STAGING_PATH + "/BASEMAP/";
-
         File tileDir = hoot.services.utils.FileUtils.getSubFolderFromFolder(TILE_SERVER_PATH + "/BASEMAP/", bmName);
         if ((tileDir != null) && tileDir.exists()) {
             FileUtils.forceDelete(tileDir);
         }
 
+        String controlFolder = INGEST_STAGING_PATH + "/BASEMAP/";
         File dir = new File(controlFolder);
         FileFilter fileFilter = new WildcardFileFilter(bmName + ".*");
         File[] files = dir.listFiles(fileFilter);

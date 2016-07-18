@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 import com.sun.jersey.api.client.AsyncWebResource;
 import com.sun.jersey.test.framework.JerseyTest;
 
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.review.ReviewTestUtils;
 
 

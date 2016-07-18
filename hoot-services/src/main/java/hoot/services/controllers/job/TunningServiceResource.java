@@ -57,9 +57,11 @@ public class TunningServiceResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public Response process(String params) {
+        String jobId = UUID.randomUUID().toString();
+
         try {
-            JSONParser pars = new JSONParser();
-            JSONObject oParams = (JSONObject) pars.parse(params);
+            JSONParser jsonParser = new JSONParser();
+            JSONObject oParams = (JSONObject) jsonParser.parse(params);
             String input = oParams.get("INPUT").toString();
             String inputtype = oParams.get("INPUT_TYPE").toString();
 
@@ -68,18 +70,16 @@ public class TunningServiceResource {
             command.put("inputtype", inputtype);
             command.put("execImpl", "TunningService");
 
-            String jobId = UUID.randomUUID().toString();
-
             (new JobExecutioner(jobId, command)).start();
-
-            JSONObject res = new JSONObject();
-            res.put("jobId", jobId);
-
-            return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
         }
         catch (Exception e) {
             String message = "Tuning Service error: " + e.getMessage();
             throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
+
+        JSONObject res = new JSONObject();
+        res.put("jobId", jobId);
+
+        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 }

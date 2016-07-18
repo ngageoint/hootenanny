@@ -55,15 +55,12 @@ import com.mysema.query.sql.Configuration;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLInsertClause;
 
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.QUsers;
 import hoot.services.db2.Users;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.osm.User;
-import hoot.services.models.user.UserSaveResponse;
-import hoot.services.models.user.UsersGetResponse;
 import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.writers.osm.OsmResponseHeaderGenerator;
 
 
 /**

@@ -44,11 +44,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.info.BuildInfo;
-import hoot.services.info.CoreDetail;
-import hoot.services.info.VersionInfo;
-import hoot.services.nativeInterfaces.JobExecutionManager;
-import hoot.services.nativeInterfaces.NativeInterfaceException;
+import hoot.services.nativeinterfaces.JobExecutionManager;
+import hoot.services.nativeinterfaces.NativeInterfaceException;
 
 
 /**

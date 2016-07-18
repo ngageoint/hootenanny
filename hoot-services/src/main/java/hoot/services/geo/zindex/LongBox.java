@@ -43,7 +43,6 @@ final class LongBox {
     }
 
     public LongBox(long[] min, long[] max) {
-        assert (min.length == max.length);
         this.setMin(min);
         this.setMax(max);
     }
@@ -110,8 +109,6 @@ final class LongBox {
     }
 
     public boolean intersects(LongBox b) {
-        assert (b.getDimensions() == getDimensions());
-
         boolean result = true;
         for (int i = 0; i < getMin().length; i++) {
             result = result && (b.getMin()[i] <= getMax()[i]);

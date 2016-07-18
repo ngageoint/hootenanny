@@ -61,13 +61,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.JobStatus;
 import hoot.services.job.JobStatusManager;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
-import hoot.services.nativeInterfaces.JobExecutionManager;
-import hoot.services.utils.ResourcesCleanUtil;
-import hoot.services.validators.job.JobFieldsValidator;
+import hoot.services.nativeinterfaces.JobExecutionManager;
 
 
 /**
@@ -299,8 +297,7 @@ public class JobResource {
         return childJobInfo;
     }
 
-    public JSONObject execReflection(String jobId, JSONObject job, JobStatusManager jobStatusManager)
-            throws Exception {
+    JSONObject execReflection(String jobId, JSONObject job, JobStatusManager jobStatusManager) throws Exception {
         JSONObject childJobInfo = execReflectionSync(jobId, null, job, jobStatusManager);
         Object oReflectJobId = childJobInfo.get("id");
 
@@ -455,7 +452,7 @@ public class JobResource {
         for (Object aParamsList : paramsList) {
             JSONObject o = (JSONObject) aParamsList;
             for (Object o1 : o.entrySet()) {
-                Map.Entry mEntry = (Map.Entry) o1;
+                Map.Entry<Object, Object> mEntry = (Map.Entry<Object, Object>) o1;
                 String key = (String) mEntry.getKey();
                 String val = (String) mEntry.getValue();
                 paramsMap.put(key, val);
@@ -464,7 +461,7 @@ public class JobResource {
         return paramsMap;
     }
 
-    protected JSONObject processJob(String jobId, JSONObject command) throws Exception {
+    private static JSONObject processJob(String jobId, JSONObject command) throws Exception {
         logger.debug("processing Job: {}", jobId);
         command.put("jobId", jobId);
 
@@ -545,7 +542,7 @@ public class JobResource {
         return jobId;
     }
 
-    public String getProgressText(String jobId) throws Exception {
+    String getProgressText(String jobId) throws Exception {
         return jobExecMan.getProgress(jobId);
     }
 
@@ -662,7 +659,7 @@ public class JobResource {
     /**
      * Return job status
      */
-    protected JSONObject getJobStatusObj(String jobId) throws SQLException {
+    JSONObject getJobStatusObj(String jobId) throws SQLException {
         JSONObject status = new JSONObject();
 
         try (Connection conn = DbUtils.createConnection()) {
@@ -686,7 +683,7 @@ public class JobResource {
         return status;
     }
 
-    protected void setJobInfo(JSONObject jobInfo, JSONObject child, JSONArray children, String stat, String detail) {
+    private static void setJobInfo(JSONObject jobInfo, JSONObject child, JSONArray children, String stat, String detail) {
         for (Object aChildren : children) {
             JSONObject c = (JSONObject) aChildren;
             if (c.get("id").toString().equals(child.get("id").toString())) {
@@ -714,12 +711,8 @@ public class JobResource {
         return new JobStatusManager(conn);
     }
 
-    protected Connection createDbConnection() throws SQLException {
-        return DbUtils.createConnection();
-    }
-
-    protected void initJob(String jobId) throws Exception {
-        try (Connection conn = createDbConnection()) {
+    private void initJob(String jobId) throws Exception {
+        try (Connection conn = DbUtils.createConnection()) {
             JobStatusManager jobStatusManager = createJobStatusMananger(conn);
             jobStatusManager.addJob(jobId);
         }

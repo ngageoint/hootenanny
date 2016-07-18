@@ -47,8 +47,6 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.info.ErrorLog;
-
 
 @Path("/logging")
 public class ErrorLogResource {

@@ -33,6 +33,7 @@ import org.apache.commons.math.util.MathUtils;
  * Calculates quad tiles: http://wiki.openstreetmap.org/wiki/QuadTiles
  */
 public final class QuadTileCalculator {
+
     private QuadTileCalculator() {
     }
 
@@ -56,7 +57,7 @@ public final class QuadTileCalculator {
             tileUnsigned = (tileUnsigned << 1) | ((lonInt >> i) & 1);
             tileUnsigned = (tileUnsigned << 1) | ((latInt >> i) & 1);
         }
-        assert (tileUnsigned >= 0);
+
         return tileUnsigned;
     }
 }
