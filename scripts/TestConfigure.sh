@@ -2,7 +2,7 @@
 
 set -e
 
-aclocal && autoconf && autoheader && automake && ./configure -q && make -s clean
+aclocal && autoconf && autoheader && automake --add-missing && ./configure -q && make -s clean
 
 function build_notest {
     make -s clean

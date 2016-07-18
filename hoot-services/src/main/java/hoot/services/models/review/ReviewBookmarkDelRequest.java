@@ -37,11 +37,11 @@ public class ReviewBookmarkDelRequest {
         return bookmarkId;
     }
 
-    public void setBookmarkId(final long id) {
+    public void setBookmarkId(long id) {
         this.bookmarkId = id;
     }
 
-    public ReviewBookmarkDelRequest(final long bmkId) {
+    public ReviewBookmarkDelRequest(long bmkId) {
         this.bookmarkId = bmkId;
     }
 

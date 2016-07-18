@@ -54,7 +54,7 @@ public class JobStatus {
         this.status = status;
     }
 
-    private double percentComplete = 0.0;
+    private double percentComplete;
 
     public double getPercentComplete() {
         return percentComplete;

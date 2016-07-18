@@ -26,6 +26,8 @@
  */
 package hoot.services.validators.job;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
+
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -40,14 +42,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
+import hoot.services.controllers.job.JobFieldsValidator;
 import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class JobFieldsValidatorTest {
     private static final File testFolder = new File(FileUtils.getTempDirectory(), "JobFieldsValidatorTest");
-    private static String originalHomeFolderDir = null;
+    private static String originalHomeFolderDir;
 
     @BeforeClass
     public static void beforeClass() throws Exception {
@@ -55,14 +57,14 @@ public class JobFieldsValidatorTest {
         File dest = new File(new File(testFolder, "scripts"), "services_fields_metadata.json");
         FileUtils.copyURLToFile(inputUrl, dest);
 
-        originalHomeFolderDir = HootProperties.getPropertyOrDefault("homeFolder");
-        HootCustomPropertiesSetter.setProperty("homeFolder", testFolder.getAbsolutePath());
+        originalHomeFolderDir = HOME_FOLDER;
+        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", testFolder.getAbsolutePath());
     }
 
     @AfterClass
     public static void afterClass() throws Exception {
         FileUtils.deleteQuietly(testFolder);
-        HootCustomPropertiesSetter.setProperty("homeFolder", originalHomeFolderDir);
+        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", originalHomeFolderDir);
     }
 
     @Test

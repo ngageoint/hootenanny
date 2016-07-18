@@ -42,7 +42,7 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
 import hoot.services.UnitTest;
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.geo.BoundingBox;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;

@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.services;
 
+import static hoot.services.HootProperties.CORE_SCRIPT_PATH;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+
 import java.io.File;
 import java.sql.Connection;
 import java.util.Collection;
@@ -33,8 +36,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONObject;
@@ -53,24 +57,19 @@ import org.openstreetmap.osmosis.xml.v0_6.XmlReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.command.CommandResult;
 import hoot.services.command.CommandRunner;
 import hoot.services.command.ICommandRunner;
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.job.Executable;
 import hoot.services.utils.FileUtils;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 public class TunningService implements Executable {
-
     private static final Logger logger = LoggerFactory.getLogger(TunningService.class);
 
     private String finalStatusDetail;
     private Double totalSize = 0.0;
-    private final String tempPath = HootProperties.getProperty("tempOutputPath");
-    private final String coreScriptPath = HootProperties.getProperty("coreScriptPath");
 
     @Override
     public String getFinalStatusDetail() {
@@ -81,18 +80,14 @@ public class TunningService implements Executable {
     }
 
     @Override
-    public void exec(JSONObject command) throws Exception {
+    public void exec(JSONObject command) {
         JSONObject res = new JSONObject();
         String input = command.get("input").toString();
         String inputtype = command.get("inputtype").toString();
-        Connection conn = DbUtils.createConnection();
         long starttime = new Date().getTime();
 
-        //?????
-        UUID.randomUUID().toString();
-
-        try {
-            String tempOutputPath = "";
+        try (Connection conn = DbUtils.createConnection()) {
+            String tempOutputPath;
             if (inputtype.equalsIgnoreCase("db")) {
                 DbUtils.getNodesCountByName(conn, input);
                 DbUtils.getWayCountByName(conn, input);
@@ -101,7 +96,7 @@ public class TunningService implements Executable {
                 // if the count is greater than threshold then just use it and tell it too big
                 ICommandRunner cmdRunner = new CommandRunner();
 
-                String commandArr = "make -f " + coreScriptPath + "/makeconvert INPUT=" + input + " OUTPUT=" + tempPath
+                String commandArr = "make -f " + CORE_SCRIPT_PATH + "/makeconvert INPUT=" + input + " OUTPUT=" + TEMP_OUTPUT_PATH
                         + "/" + input + ".osm";
                 CommandResult result = cmdRunner.exec(commandArr);
 
@@ -113,10 +108,10 @@ public class TunningService implements Executable {
                     throw new Exception(err);
                 }
 
-                tempOutputPath = tempPath + "/" + input + ".osm";
+                tempOutputPath = TEMP_OUTPUT_PATH + "/" + input + ".osm";
 
                 // fortify fix
-                if (!FileUtils.validateFilePath(tempPath, tempOutputPath)) {
+                if (!FileUtils.validateFilePath(TEMP_OUTPUT_PATH, tempOutputPath)) {
                     throw new Exception("input can not contain path.");
                 }
             }
@@ -139,20 +134,17 @@ public class TunningService implements Executable {
             res.put("RelationCount", sinkImplementation.getTotalRelation());
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Tuning Service error: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
+            String msg = "Tuning Service error: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         finalStatusDetail = res.toString();
     }
 
-    private JobSink parseOsm(File inputOsmFile) throws Exception {
+    private JobSink parseOsm(File inputOsmFile) {
         CompressionMethod compression = CompressionMethod.None;
 
         RunnableSource reader = new XmlReader(inputOsmFile, false, compression);
-        Thread readerThread = new Thread(reader);
 
         JobSink sink = new JobSink();
         Map<String, Object> sinkParam = new HashMap<>();
@@ -160,6 +152,7 @@ public class TunningService implements Executable {
 
         reader.setSink(sink);
 
+        Thread readerThread = new Thread(reader);
         readerThread.start();
 
         while (readerThread.isAlive()) {
@@ -223,7 +216,7 @@ public class TunningService implements Executable {
             return totalRelationCnt;
         }
 
-        double calcTagsByteSize(Collection<Tag> tags){
+        static double calcTagsByteSize(Collection<Tag> tags){
             double totalBytes = 0;
             for (Tag curTag : tags) {
                 String tagKey = curTag.getKey();
