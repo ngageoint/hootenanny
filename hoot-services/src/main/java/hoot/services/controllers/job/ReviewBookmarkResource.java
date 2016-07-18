@@ -55,8 +55,8 @@ import org.slf4j.LoggerFactory;
 import com.mysema.query.sql.Configuration;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 
-import hoot.services.db.DbUtils;
-import hoot.services.db.postgres.PostgresUtils;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.PostgresUtils;
 import hoot.services.db2.QReviewBookmarks;
 import hoot.services.db2.ReviewBookmarks;
 import hoot.services.models.review.ReviewBookmarkDelRequest;
@@ -338,6 +338,7 @@ public class ReviewBookmarkResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewBookmarksStatResponse getAllReviewBookmarkStat() {
         ReviewBookmarksStatResponse response = new ReviewBookmarksStatResponse();
+
         try (Connection conn = DbUtils.createConnection()) {
             ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
             long nCnt = retriever.getbookmarksCount();

@@ -83,9 +83,11 @@ public class ETLResource extends JobControllerBase {
     @Produces(MediaType.TEXT_PLAIN)
     public Response process(String params) {
         String jobId = UUID.randomUUID().toString();
+
         try {
             JSONArray commandArgs = parseParams(params);
             String argStr = createPostBody(commandArgs);
+
             postJobRquest(jobId, argStr);
         }
         catch (Exception ex) {

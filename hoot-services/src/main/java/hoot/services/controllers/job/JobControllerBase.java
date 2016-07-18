@@ -86,8 +86,9 @@ public class JobControllerBase {
         // Request should come back immediately but if something is wrong then timeout and clean up to make UI responsive
         RequestConfig requestConfig =
                 RequestConfig.custom()
-                .setConnectTimeout(JOB_RES_CONNECTION_TIMEOUT)
-                .setSocketTimeout(JOB_RES_CONNECTION_TIMEOUT).build();
+                        .setConnectTimeout(JOB_RES_CONNECTION_TIMEOUT)
+                        .setSocketTimeout(JOB_RES_CONNECTION_TIMEOUT)
+                        .build();
 
         try (CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom().setDefaultRequestConfig(requestConfig).build()) {
             httpclient.start();
@@ -115,8 +116,9 @@ public class JobControllerBase {
         // timeout and clean up.to make UI responsive
         RequestConfig requestConfig =
                 RequestConfig.custom()
-                .setConnectTimeout(JOB_RES_CONNECTION_TIMEOUT)
-                .setSocketTimeout(JOB_RES_CONNECTION_TIMEOUT).build();
+                        .setConnectTimeout(JOB_RES_CONNECTION_TIMEOUT)
+                        .setSocketTimeout(JOB_RES_CONNECTION_TIMEOUT)
+                        .build();
 
         try (CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom().setDefaultRequestConfig(requestConfig).build()) {
             httpclient.start();
@@ -156,7 +158,7 @@ public class JobControllerBase {
         return command;
     }
 
-    protected JSONObject createReflectionJobReq(JSONArray args, String className, String methodName) {
+    protected static JSONObject createReflectionJobReq(JSONArray args, String className, String methodName) {
         JSONObject command = new JSONObject();
         command.put("exectype", "reflection");
         command.put("class", className);
@@ -166,7 +168,7 @@ public class JobControllerBase {
         return command;
     }
 
-    protected JSONObject createReflectionJobReq(JSONArray args, String className, String methodName,
+    protected static JSONObject createReflectionJobReq(JSONArray args, String className, String methodName,
             String internalJobId) {
         JSONObject command = new JSONObject();
         command.put("exectype", "reflection");
@@ -178,7 +180,7 @@ public class JobControllerBase {
         return command;
     }
 
-    protected JSONObject createReflectionSycJobReq(JSONArray args, String className, String methodName) {
+    static JSONObject createReflectionSycJobReq(JSONArray args, String className, String methodName) {
         JSONObject command = new JSONObject();
         command.put("exectype", "reflection_sync");
         command.put("class", className);
@@ -215,7 +217,7 @@ public class JobControllerBase {
         JSONArray commandArgs = new JSONArray();
 
         for (Object o : command.entrySet()) {
-            Map.Entry mEntry = (Map.Entry) o;
+            Map.Entry<Object, Object> mEntry = (Map.Entry<Object, Object>) o;
             String key = (String) mEntry.getKey();
             String val = (String) mEntry.getValue();
 
@@ -224,16 +226,18 @@ public class JobControllerBase {
             commandArgs.add(arg);
 
         }
+
         return commandArgs;
     }
 
-    String getParameterValue(String key, JSONArray args) {
+    static String getParameterValue(String key, JSONArray args) {
         for (Object arg : args) {
             JSONObject o = (JSONObject) arg;
             if (o.containsKey(key)) {
                 return o.get(key).toString();
             }
         }
+
         return null;
     }
 }

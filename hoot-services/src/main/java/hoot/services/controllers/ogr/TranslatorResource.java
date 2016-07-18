@@ -40,7 +40,7 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.nodeJs.ServerControllerBase;
+import hoot.services.nodejs.ServerControllerBase;
 
 
 @Path("")
@@ -100,7 +100,7 @@ public class TranslatorResource extends ServerControllerBase {
      * <p>
      * GET hoot-services/ogr/translationserver/status
      *
-     * @return JSON containing state and port it is running
+     * @return JSON containing state and port it is running#background=Bing&map=17.20/-105.00217/39.91295
      */
     @GET
     @Path("/translationserver/status")

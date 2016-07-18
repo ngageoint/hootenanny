@@ -57,7 +57,7 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
 import hoot.services.UnitTest;
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.Changesets;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelations;

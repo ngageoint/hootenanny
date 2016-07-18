@@ -43,6 +43,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
+import hoot.services.controllers.job.JobFieldsValidator;
 import hoot.services.utils.HootCustomPropertiesSetter;
 
 
