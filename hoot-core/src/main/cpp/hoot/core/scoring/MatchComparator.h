@@ -52,7 +52,7 @@ class MatchComparator
 
 public:
 
-  typedef map<QString, ElementId> UuidToEid;
+  typedef QMultiMap<QString, ElementId> UuidToEid;
 
   MatchComparator();
 
