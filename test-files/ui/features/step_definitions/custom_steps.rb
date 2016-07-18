@@ -158,6 +158,18 @@ When(/^I click the "([^"]*)" Dataset$/) do |dataset|
   parent.find('rect').click
 end
 
+When(/^I expand the "([^"]*)" folder$/) do |folder|
+  text = page.find('text',:text=>folder, :match => :prefer_exact)
+  parent = text.find(:xpath,"..")
+  begin
+    el = parent.find('.folder')
+  rescue Capybara::ElementNotFound
+    # In Capybara 0.4+ #find_field raises an error instead of returning nil
+    el = nil
+  end
+  parent.find('rect').click unless el.nil?
+end
+
 When(/^I click the "([^"]*)" Dataset and the "([^"]*)" Dataset$/) do |d1, d2|
   text1 = page.find('text',:text=>d1, :match => :prefer_exact)
   parent1 = text1.find(:xpath,"..")

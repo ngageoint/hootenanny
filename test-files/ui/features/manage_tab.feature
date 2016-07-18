@@ -65,20 +65,22 @@ Feature: Manage Tab
         Then I click the "Move (2)" context menu item
         And I press "big.loud" span with text "Update"
         # Rename the folder
-        And I wait
+        Then I wait 5 "seconds" to see "tspan" element with text "ManageTabTest"
         Then I click the "ManageTabTest" Dataset
         And I context click the "ManageTabTest" Dataset
         And I click the "Rename/Move ManageTabTest" context menu item
         Then I fill "fileOutputName" input with "TestFolder"
         And I press "big.loud" span with text "Update"
         # Add a sub folder
-        And I wait
+        Then I wait 5 "seconds" to see "tspan" element with text "TestFolder"
         Then I context click the "TestFolder" Dataset
         And I click the "Add Folder" context menu item
         Then I fill "NewFolderName" input with "TestSubFolder"
         And I press "big.loud" span with text "Add Folder"
         Then I wait 30 "seconds" to not see "Folder Name"
         # Add dataset into sub folder
+        Then I expand the "TestFolder" folder
+        Then I wait 5 "seconds" to see "tspan" element with text "TestSubFolder"
         And I click the "TestSubFolder" Dataset
         And I context click the "TestSubFolder" Dataset
         And I click the "Add Dataset" context menu item
@@ -102,7 +104,6 @@ Feature: Manage Tab
         And I accept the alert
         And I should see "TestFolder"
         # Delete the folder
-        And I wait
         And I click the "TestFolder" Dataset
         And I context click the "TestFolder" Dataset
         And I click the "Delete" context menu item
