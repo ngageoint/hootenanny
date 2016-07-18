@@ -111,7 +111,6 @@ In alphabetical order:
 * Matt Jackson (Matthew.Jackson@digitalglobe.com)
 * Ben Marchant (Benjamin.Marchant@digitalglobe.com)
 * Dmitriy Mylov (Dmitriy.Mylov@digitalglobe.com)
-* Terry Ott (Terry.Ott@digitalglobe.com)
 * Seth Putnam (Seth.Putnam@digitalglobe.com)
 * Micah Schicker (Micah.Schicker@digitalglobe.com)
 * Greg Schmidt (Greg.Schmidt@digitalglobe.com)
