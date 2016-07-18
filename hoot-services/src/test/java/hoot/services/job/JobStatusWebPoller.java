@@ -43,7 +43,7 @@ import org.springframework.beans.BeansException;
 import com.mysema.query.sql.SQLQuery;
 import com.sun.jersey.api.client.WebResource;
 
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.QJobStatus;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
 

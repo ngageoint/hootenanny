@@ -57,7 +57,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.controllers.job.JobControllerBase;
-import hoot.services.ingest.MultipartSerializer;
+import hoot.services.utils.MultipartSerializer;
 
 
 @Path("/ingest")
@@ -103,7 +103,6 @@ public class FileUploadResource extends JobControllerBase {
                                    @QueryParam("NONE_TRANSLATION") String noneTranslation,
                                    @QueryParam("FGDB_FC") String fgdbFeatureClasses,
                                    @Context HttpServletRequest request) {
-        String etlName = inputName;
         String jobId = UUID.randomUUID().toString();
         JSONArray resA = new JSONArray();
 
@@ -113,8 +112,7 @@ public class FileUploadResource extends JobControllerBase {
             Map<String, String> uploadedFiles = new HashMap<>();
             Map<String, String> uploadedFilesPaths = new HashMap<>();
 
-            MultipartSerializer ser = new MultipartSerializer();
-            ser.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, request);
+            MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, request);
 
             int shpCnt = 0;
             int osmCnt = 0;
@@ -131,6 +129,7 @@ public class FileUploadResource extends JobControllerBase {
             JSONArray reqList = new JSONArray();
             List<String> inputsList = new ArrayList<>();
 
+            String etlName = inputName;
             for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
                 String fName = pairs.getKey();
                 String ext = pairs.getValue();

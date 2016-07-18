@@ -57,9 +57,6 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.ingest.ModifyScriptsRequest;
-import hoot.services.ingest.Script;
-import hoot.services.ingest.ScriptsModifiedResponse;
 import hoot.services.utils.HootCustomPropertiesSetter;
 
 

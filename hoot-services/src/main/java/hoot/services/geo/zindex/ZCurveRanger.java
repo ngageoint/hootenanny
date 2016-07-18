@@ -133,9 +133,6 @@ public class ZCurveRanger {
             long v1 = box.getMin()[d];
             long v2 = box.getMax()[d];
 
-            assert (v1 >= 0) : "bad lower bound";
-            assert (v1 <= v2) : "lower and upper bound are not consistent";
-
             int maxBit = getMaxBitColumn(v1 ^ v2);
             // the later dimensions have a more significant bits so we'll split
             // on >=
@@ -196,8 +193,6 @@ public class ZCurveRanger {
     }
 
     static int getMaxBitColumn(long v) {
-        assert (v >= 0);
-
         int column = -1;
         while ((v != 0) && (column < 100)) {
             column++;

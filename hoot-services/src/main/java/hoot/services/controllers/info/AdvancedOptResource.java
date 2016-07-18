@@ -241,7 +241,7 @@ public class AdvancedOptResource {
                             JSONObject override = (JSONObject) oAttrib;
 
                             for (Object o1 : override.entrySet()) {
-                                Map.Entry pair = (Map.Entry) o1;
+                                Map.Entry<Object, Object> pair = (Map.Entry<Object, Object>) o1;
                                 curOpt.put(pair.getKey(), pair.getValue());
                             }
                             // remove override element
@@ -268,10 +268,10 @@ public class AdvancedOptResource {
 
                                     if (oDocDefList != null) {
                                         JSONObject defList = (JSONObject) oDocDefList;
-                                        Iterator it = defList.entrySet().iterator();
+                                        Iterator<Object> it = defList.entrySet().iterator();
                                         boolean hasNext = true;
                                         while (hasNext) {
-                                            Map.Entry pair = (Map.Entry) it.next();
+                                            Map.Entry<Object, Object> pair = (Map.Entry<Object, Object>) it.next();
                                             hasNext = it.hasNext();
                                             if (pair.getKey().toString().equalsIgnoreCase(sVal)) {
                                                 String sDefListDesc = pair.getValue().toString().trim();
@@ -320,7 +320,7 @@ public class AdvancedOptResource {
                             JSONObject override = (JSONObject) oAttrib;
 
                             for (Object o1 : override.entrySet()) {
-                                Map.Entry pair = (Map.Entry) o1;
+                                Map.Entry<Object, Object> pair = (Map.Entry<Object, Object>) o1;
                                 curOpt.put(pair.getKey(), pair.getValue());
                             }
                             // remove override element

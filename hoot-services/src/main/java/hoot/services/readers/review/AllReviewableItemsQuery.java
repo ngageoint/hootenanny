@@ -43,7 +43,7 @@ import com.mysema.query.support.Expressions;
 import com.mysema.query.types.Path;
 import com.mysema.query.types.query.ListSubQuery;
 
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.QCurrentNodes;
 import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.db2.QCurrentRelations;
@@ -86,7 +86,7 @@ class AllReviewableItemsQuery extends ReviewableQueryBase implements IReviewable
         MAX_RESULT_SIZE = value;
     }
 
-    public AllReviewableItemsQuery(Connection connection, long mapid, BoundingBox bbox) {
+    AllReviewableItemsQuery(Connection connection, long mapid, BoundingBox bbox) {
         super(connection, mapid);
         // maxQueryNodes
         this.bbox = bbox;

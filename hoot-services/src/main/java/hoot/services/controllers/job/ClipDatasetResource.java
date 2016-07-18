@@ -76,6 +76,7 @@ public class ClipDatasetResource extends JobControllerBase {
     @Produces(MediaType.TEXT_PLAIN)
     public Response process(String params) {
         String jobId = UUID.randomUUID().toString();
+        
         try {
             JSONParser pars = new JSONParser();
             JSONObject oParams = (JSONObject)pars.parse(params);

@@ -33,7 +33,7 @@ import com.mysema.query.sql.RelationalPathBase;
 import com.mysema.query.types.path.BooleanPath;
 import com.mysema.query.types.path.NumberPath;
 
-import hoot.services.db.DbUtils.EntityChangeType;
+import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.models.osm.Element.ElementType;
 
 

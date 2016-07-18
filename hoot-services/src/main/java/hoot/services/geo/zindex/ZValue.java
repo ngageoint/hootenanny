@@ -93,8 +93,6 @@ public final class ZValue {
     }
 
     public void decompose(long v, long[] point) {
-        assert (point.length == getDimensions());
-
         for (int i = 0; i < point.length; i++) {
             point[i] = 0;
         }

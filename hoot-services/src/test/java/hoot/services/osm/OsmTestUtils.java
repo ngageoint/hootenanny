@@ -56,10 +56,9 @@ import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 
-import hoot.services.HootProperties;
-import hoot.services.db.DbUtils;
-import hoot.services.db.DbUtils.RecordBatchType;
-import hoot.services.db.postgres.PostgresUtils;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.DbUtils.RecordBatchType;
+import hoot.services.utils.PostgresUtils;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelationMembers;
 import hoot.services.db2.CurrentRelations;

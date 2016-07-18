@@ -254,12 +254,14 @@ public class BoundingBox {
         if (!isInitialized()) {
             throw new Exception("Bounds not initialized.");
         }
+
         Document doc = parentXml.getOwnerDocument();
         Element element = doc.createElement("bounds");
         element.setAttribute("minlat", String.valueOf(minLat));
         element.setAttribute("minlon", String.valueOf(minLon));
         element.setAttribute("maxlat", String.valueOf(maxLat));
         element.setAttribute("maxlon", String.valueOf(maxLon));
+
         return element;
     }
 

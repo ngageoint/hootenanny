@@ -60,7 +60,7 @@ import org.slf4j.LoggerFactory;
 import hoot.services.command.CommandResult;
 import hoot.services.command.CommandRunner;
 import hoot.services.command.ICommandRunner;
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.job.Executable;
 import hoot.services.utils.FileUtils;
 
@@ -145,7 +145,6 @@ public class TunningService implements Executable {
         CompressionMethod compression = CompressionMethod.None;
 
         RunnableSource reader = new XmlReader(inputOsmFile, false, compression);
-        Thread readerThread = new Thread(reader);
 
         JobSink sink = new JobSink();
         Map<String, Object> sinkParam = new HashMap<>();
@@ -153,6 +152,7 @@ public class TunningService implements Executable {
 
         reader.setSink(sink);
 
+        Thread readerThread = new Thread(reader);
         readerThread.start();
 
         while (readerThread.isAlive()) {
@@ -216,7 +216,7 @@ public class TunningService implements Executable {
             return totalRelationCnt;
         }
 
-        double calcTagsByteSize(Collection<Tag> tags){
+        static double calcTagsByteSize(Collection<Tag> tags){
             double totalBytes = 0;
             for (Tag curTag : tags) {
                 String tagKey = curTag.getKey();
