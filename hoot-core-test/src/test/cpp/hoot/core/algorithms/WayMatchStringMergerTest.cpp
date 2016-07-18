@@ -130,10 +130,10 @@ public:
 
     uut.setTagMerger(TagMergerFactory::getInstance().getDefaultPtr());
 
-    uut.mergeNode(getNode(map, "n0")->getElementId());
+    uut.mergeIntersection(getNode(map, "n0")->getElementId());
     uut.mergeNode(getNode(map, "n1")->getElementId());
     uut.mergeNode(getNode(map, "n2")->getElementId());
-    uut.mergeNode(getNode(map, "n3")->getElementId());
+    uut.mergeIntersection(getNode(map, "n3")->getElementId());
 
     MapProjector::projectToWgs84(map);
     shared_ptr<OsmWriter> writer(new OsmWriter());
