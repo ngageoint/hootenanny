@@ -35,70 +35,65 @@ import org.json.simple.parser.JSONParser;
 @XmlRootElement
 public class ReviewBookmarkSaveRequest {
     private long bookmarkId;
+    private long userId;
+    private long mapId;
+    private long relationId;
+    private JSONObject detail;
+
+    public ReviewBookmarkSaveRequest() {
+    }
 
     public long getBookmarkId() {
         return bookmarkId;
     }
 
-    public void setBookmarkId(final long id) {
+    public void setBookmarkId(long id) {
         this.bookmarkId = id;
     }
-
-    private long mapId;
 
     public long getMapId() {
         return mapId;
     }
 
-    public void setMapId(final long id) {
+    public void setMapId(long id) {
         this.mapId = id;
     }
-
-    private long relationId;
 
     public long getRelationId() {
         return this.relationId;
     }
 
-    public void setRelationId(final long relId) {
+    public void setRelationId(long relId) {
         this.relationId = relId;
     }
-
-    private JSONObject detail;
 
     public JSONObject getDetail() {
         return this.detail;
     }
 
-    public void setDetail(final JSONObject d) throws Exception {
+    public void setDetail(JSONObject d) throws Exception {
         String jsonStr = d.toJSONString();
         JSONParser p = new JSONParser();
         try {
             this.detail = (JSONObject) p.parse(jsonStr);
         }
         catch (Exception ex) {
-            throw new Exception("Failed to parse review bookmark detail parameter to JSON: " + ex.getMessage());
+            throw new Exception("Failed to parse review bookmark detail parameter to JSON: " + ex.getMessage(), ex);
         }
     }
 
-    private long userId;
-
-    public long getUserid() {
+    public long getUserId() {
         return this.userId;
     }
 
-    public void setUserId(final long uid) {
+    public void setUserId(long uid) {
         this.userId = uid;
     }
 
-    public ReviewBookmarkSaveRequest(final long mapid, final long relationid, final JSONObject reviewDetail,
-            final long uid) {
+    public ReviewBookmarkSaveRequest(long mapid, long relationid, JSONObject reviewDetail, long uid) {
         this.mapId = mapid;
         this.relationId = relationid;
         this.detail = reviewDetail;
         this.userId = uid;
-    }
-
-    public ReviewBookmarkSaveRequest() {
     }
 }

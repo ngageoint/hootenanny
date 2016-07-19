@@ -27,13 +27,14 @@
 package hoot.services.job;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import hoot.services.db.DbUtils;
+import hoot.services.HootProperties;
+import hoot.services.utils.DbUtils;
 
 
 /**
@@ -41,8 +42,6 @@ import hoot.services.db.DbUtils;
  */
 public class JobExecutioner extends Thread {
     private static final Logger logger = LoggerFactory.getLogger(JobExecutioner.class);
-
-    private final ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
 
     private final JSONObject command;
     private final String jobId;
@@ -59,30 +58,25 @@ public class JobExecutioner extends Thread {
     public void run() {
         logger.debug("Handling job exec request...");
 
-        Connection connection = DbUtils.createConnection();
-        JobStatusManager jobStatusManager = new JobStatusManager(connection);
+        try (Connection connection = DbUtils.createConnection()) {
+            JobStatusManager jobStatusManager = new JobStatusManager(connection);
+            command.put("jobId", jobId);
 
-        command.put("jobId", jobId);
-
-        try {
-            jobStatusManager.addJob(jobId);
-
-            Executable executable = (Executable) appContext.getBean((String) command.get("execImpl"));
-            executable.exec(command);
-
-            jobStatusManager.setComplete(jobId, executable.getFinalStatusDetail());
-        }
-        catch (Exception e) {
-            logger.error("Error executing job with ID = {}", jobId, e);
-            jobStatusManager.setFailed(jobId, e.getMessage());
-        }
-        finally {
             try {
-                DbUtils.closeConnection(connection);
+                jobStatusManager.addJob(jobId);
+
+                Executable executable = (Executable) HootProperties.getSpringContext().getBean((String) command.get("execImpl"));
+                executable.exec(command);
+
+                jobStatusManager.setComplete(jobId, executable.getFinalStatusDetail());
             }
             catch (Exception e) {
-                logger.error("Error closing DB connection", e);
+                logger.error("Error executing job with ID = {}", jobId, e);
+                jobStatusManager.setFailed(jobId, e.getMessage());
             }
+        }
+        catch (SQLException sqle) {
+            logger.error("Error executing job with ID = {}", jobId, sqle);
         }
     }
 }

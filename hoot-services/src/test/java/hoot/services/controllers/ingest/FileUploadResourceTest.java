@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -33,8 +35,6 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -48,23 +48,22 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class FileUploadResourceTest {
     private static final File homeFolder;
-    private static Map<String, String> originalHootProperties;
+    private static final String original_HOME_FOLDER;
+
 
     static {
         try {
-            originalHootProperties = HootProperties.getProperties();
-
+            original_HOME_FOLDER = HOME_FOLDER;
             homeFolder = new File(FileUtils.getTempDirectory(), "FileUploadResourceTest");
             FileUtils.forceMkdir(homeFolder);
             Assert.assertTrue(homeFolder.exists());
-            HootCustomPropertiesSetter.setProperty("homeFolder", homeFolder.getAbsolutePath());
+            HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
 
             copyResourcesInfoTestFolder(new String[]
                     {"ogr.zip", "zip1.zip", "osm.zip", "osm1.osm", "osm2.osm",
@@ -94,11 +93,7 @@ public class FileUploadResourceTest {
     @AfterClass
     public static void oneTimeTearDown() throws Exception {
         FileUtils.deleteDirectory(homeFolder);
-        Properties origProperties = new Properties();
-        for (Map.Entry<String, String> entry : originalHootProperties.entrySet()) {
-            origProperties.setProperty(entry.getKey(), entry.getValue());
-        }
-        HootCustomPropertiesSetter.setProperties(origProperties);
+        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", original_HOME_FOLDER);
     }
 
     @Test
@@ -890,7 +885,7 @@ public class FileUploadResourceTest {
          * Map<String,String> uploadedFilesPaths = new HashMap<String,
          * String>();
          * 
-         * res._serializeFGDB(fileItemsList, jobId, uploadedFiles,
+         * res.serializeFGDB(fileItemsList, jobId, uploadedFiles,
          * uploadedFilesPaths );
          * 
          * org.junit.Assert.assertEquals("GDB", uploadedFiles.get("fgdbTest"));
@@ -946,7 +941,7 @@ public class FileUploadResourceTest {
          * Map<String,String> uploadedFilesPaths = new HashMap<String,
          * String>();
          * 
-         * res._serializeUploadedFiles(fileItemsList, jobId, uploadedFiles,
+         * res.serializeUploadedFiles(fileItemsList, jobId, uploadedFiles,
          * uploadedFilesPaths, wkdirpath);
          * 
          * org.junit.Assert.assertEquals("OSM", uploadedFiles.get("dummy1"));
