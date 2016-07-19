@@ -219,6 +219,11 @@ enum _TestType
 
 void populateTests(_TestType t, CppUnit::TestSuite *suite, bool printDiff)
 {
+  /** This section is a bit verbose but ordering is very important as the order must go as follows:
+   *  Default Registry
+   *  Script Tests
+   *  Named Registries (current, quick, etc.
+   */
   switch(t)
   {
   default:
