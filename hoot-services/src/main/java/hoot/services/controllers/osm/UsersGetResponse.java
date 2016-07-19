@@ -41,12 +41,12 @@ public class UsersGetResponse {
         return this.users;
     }
 
-    public void setUers(List<Users> usrs) {
-        this.users = usrs;
+    public void setUsers(List<Users> users) {
+        this.users = users;
     }
 
-    public UsersGetResponse(List<Users> usrs) {
-        this.users = usrs;
+    public UsersGetResponse(List<Users> users) {
+        this.users = users;
     }
 
     public UsersGetResponse() {
