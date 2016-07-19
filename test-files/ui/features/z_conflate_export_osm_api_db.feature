@@ -1,4 +1,4 @@
-Feature: Conflate and Export OSM API Database Dataset   
+Feature: Conflate and Export OSM API Database Dataset
 
   Scenario: Conflate With an OSM API Database Dataset as the Secondary Layer
     Given I am on Hootenanny
@@ -45,7 +45,7 @@ Feature: Conflate and Export OSM API Database Dataset
     Then I should see "Resolve all remaining reviews"
     And I press "Resolve all remaining reviews"
     Then I wait 30 "seconds" to not see "Reviews remaining:"
-    Then I should see "All Reviews Resolved!" 
+    Then I should see "All Reviews Resolved!"
     Then I select the "sprocket" div
     When I click the "osmapi_test_AllDataTypesBCucumber" Dataset
     And I context click the "osmapi_test_AllDataTypesBCucumber" Dataset
@@ -55,7 +55,7 @@ Feature: Conflate and Export OSM API Database Dataset
     And I press "big.loud" span with text "Export"
     And I wait 30 seconds
     Then I should see an alert containing "Successful export to an OSM API database"
-    Then I accept the alert   
+    Then I accept the alert
 
   Scenario: Export Dataset into an OSM API Database With Conflicts
     Given I am on Hootenanny
@@ -81,7 +81,7 @@ Feature: Conflate and Export OSM API Database Dataset
     Then I should see "Resolve all remaining reviews"
     And I press "Resolve all remaining reviews"
     Then I wait 30 "seconds" to not see "Reviews remaining:"
-    Then I should see "All Reviews Resolved!"  
+    Then I should see "All Reviews Resolved!"
     Then I select the "sprocket" div
     When I click the "osmapi_test_DcTigerRoadsCucumber" Dataset
     And I context click the "osmapi_test_DcTigerRoadsCucumber" Dataset
@@ -95,7 +95,7 @@ Feature: Conflate and Export OSM API Database Dataset
     Then I accept the alert
     Then I close the UI alert
 
-    
 
-    
+
+
 
