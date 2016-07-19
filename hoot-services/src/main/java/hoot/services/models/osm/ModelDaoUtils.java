@@ -38,7 +38,7 @@ import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.types.path.NumberPath;
 import com.mysema.query.types.path.StringPath;
 
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 
 
 public final class ModelDaoUtils {

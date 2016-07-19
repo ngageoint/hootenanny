@@ -48,7 +48,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.writers.osm.OsmResponseHeaderGenerator;
 
 
 /**

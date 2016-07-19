@@ -50,9 +50,9 @@ import com.mysema.query.types.path.BooleanPath;
 import com.mysema.query.types.path.NumberPath;
 import com.mysema.query.types.path.SimplePath;
 
-import hoot.services.db.DbUtils;
-import hoot.services.db.DbUtils.EntityChangeType;
-import hoot.services.db.DbUtils.nwr_enum;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.DbUtils.EntityChangeType;
+import hoot.services.utils.DbUtils.nwr_enum;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelationMembers;
 import hoot.services.db2.CurrentRelations;
@@ -108,7 +108,6 @@ public class Relation extends Element {
 
         NamedNodeMap xmlAttributes = xml.getAttributes();
 
-        assert (record != null);
         CurrentRelations relationRecord = (CurrentRelations) record;
         relationRecord.setChangesetId(parseChangesetId(xmlAttributes));
         relationRecord.setVersion(parseVersion());
@@ -185,16 +184,14 @@ public class Relation extends Element {
             for (CurrentRelationMembers member : members) {
                 org.w3c.dom.Element memberElement = doc.createElement("member");
                 memberElement.setAttribute("type", member.getMemberType().toString().toLowerCase());
-                assert (StringUtils.trimToNull(memberElement.getAttribute("type")) != null);
+
                 String role = member.getMemberRole();
                 if (StringUtils.isEmpty(member.getMemberRole())) {
                     memberElement.setAttribute("role", member.getMemberRole());
                     role = "";
                 }
                 memberElement.setAttribute("role", role);
-                assert (memberElement.getAttribute("role") != null);
                 memberElement.setAttribute("ref", String.valueOf(member.getMemberId()));
-                assert (StringUtils.trimToNull(memberElement.getAttribute("ref")) != null);
                 element.appendChild(memberElement);
             }
         }
@@ -217,14 +214,14 @@ public class Relation extends Element {
      * @throws Exception
      */
     private BoundingBox parseNodesAndWayMembersBounds(List<RelationMember> members) throws Exception {
-        List<Coordinates> coordsToComputeBoundsFrom = new ArrayList<>();
-        Set<Long> idsOfNodesToRetrieveFromTheDb = new HashSet<>();
-        Set<Long> idsOfWaysForWhichToRetrieveNodesFromTheDb = new HashSet<>();
         BoundingBox bounds = null;
         BoundingBox dbBounds;
 
         // members don't get parsed for a delete request...we'll get the members from the database
         if (entityChangeType != EntityChangeType.DELETE) {
+            Set<Long> idsOfNodesToRetrieveFromTheDb = new HashSet<>();
+            Set<Long> idsOfWaysForWhichToRetrieveNodesFromTheDb = new HashSet<>();
+            List<Coordinates> coordsToComputeBoundsFrom = new ArrayList<>();
             for (RelationMember member : members) {
                 if (member.getType() == ElementType.Node) {
                     if ((parsedElementIdsToElementsByType != null) && (!parsedElementIdsToElementsByType.isEmpty())) {
@@ -383,7 +380,6 @@ public class Relation extends Element {
         NamedNodeMap memberXmlAttributes = nodeXml.getAttributes();
 
         long parsedMemberId = Long.parseLong(memberXmlAttributes.getNamedItem("ref").getNodeValue());
-        long actualMemberId = parsedMemberId;
 
         ElementType elementType = Element.elementTypeFromString(memberXmlAttributes.getNamedItem("type").getNodeValue());
 
@@ -408,9 +404,6 @@ public class Relation extends Element {
                             + "relation with ID: " + getId());
                 }
             }
-            else {
-                assert (parsedElements.containsKey(parsedMemberId));
-            }
         }
 
         Element memberElement;
@@ -422,6 +415,7 @@ public class Relation extends Element {
         // outdated info for it. Only get info from the request if the element is being
         // created/modified, because if it is being deleted, we can just get the info from the database since the
         // element's bounds won't be changing and its geo info isn't in the request (not required for a delete).
+        long actualMemberId = parsedMemberId;
         if (parsedElements.containsKey(parsedMemberId)
                 && (parsedElements.get(parsedMemberId).getEntityChangeType() != EntityChangeType.DELETE)) {
             memberElement = parsedElements.get(parsedMemberId);
@@ -432,8 +426,6 @@ public class Relation extends Element {
         else {
             memberElement = ElementFactory.create(getMapId(), elementType, conn);
         }
-
-        assert (actualMemberId > 0);
 
         // role is allowed to be empty
         org.w3c.dom.Node roleXmlNode = memberXmlAttributes.getNamedItem("role");
@@ -449,8 +441,6 @@ public class Relation extends Element {
     // http://wiki.openstreetmap.org/wiki/Empty_relations
     private void parseMembersXml(org.w3c.dom.Node xml) throws Exception {
         logger.debug("Parsing relation members...");
-
-        assert (parsedElementIdsToElementsByType != null);
 
         NodeList membersXml = XPathAPI.selectNodeList(xml, "member");
 

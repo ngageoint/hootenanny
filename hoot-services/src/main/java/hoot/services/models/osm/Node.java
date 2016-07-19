@@ -46,8 +46,8 @@ import com.mysema.query.types.path.BooleanPath;
 import com.mysema.query.types.path.NumberPath;
 import com.mysema.query.types.path.SimplePath;
 
-import hoot.services.db.DbUtils;
-import hoot.services.db.DbUtils.EntityChangeType;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.exceptions.osm.OSMAPIAlreadyDeletedException;
 import hoot.services.exceptions.osm.OSMAPIPreconditionException;
@@ -151,7 +151,6 @@ public class Node extends Element {
 
         NamedNodeMap xmlAttributes = xml.getAttributes();
 
-        assert (record != null);
         CurrentNodes nodeRecord = (CurrentNodes) record;
 
         // set these props at the very beginning, b/c they will be needed

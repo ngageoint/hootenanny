@@ -53,9 +53,9 @@ import com.mysema.query.types.path.BooleanPath;
 import com.mysema.query.types.path.NumberPath;
 import com.mysema.query.types.path.SimplePath;
 
-import hoot.services.db.DbUtils;
-import hoot.services.db.DbUtils.EntityChangeType;
-import hoot.services.db.DbUtils.nwr_enum;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.DbUtils.EntityChangeType;
+import hoot.services.utils.DbUtils.nwr_enum;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentWayNodes;
 import hoot.services.db2.CurrentWays;
@@ -164,7 +164,6 @@ public class Way extends Element {
         // either as a create or modify
         Set<Long> modifiedRecordIds = new HashSet<>(relatedRecordIds);
         for (long wayNodeId : relatedRecordIds) {
-            assert (nodeCoordsCollection.containsKey(wayNodeId));
             double lat = nodeCoordsCollection.get(wayNodeId).getLat();
             double lon = nodeCoordsCollection.get(wayNodeId).getLon();
             if (lat < minLat) {
@@ -204,12 +203,8 @@ public class Way extends Element {
                 maxLon = lon;
             }
 
-            assert (modifiedRecordIds.contains(nodeRecord.getId()));
-
             modifiedRecordIds.remove(nodeRecord.getId());
         }
-
-        assert (modifiedRecordIds.isEmpty());
 
         return new BoundingBox(minLon, minLat, maxLon, maxLat);
     }
@@ -251,8 +246,6 @@ public class Way extends Element {
         log.debug("Parsing way...");
 
         NamedNodeMap xmlAttributes = xml.getAttributes();
-
-        assert (super.record != null);
 
         CurrentWays wayRecord = (CurrentWays) super.record;
         wayRecord.setChangesetId(parseChangesetId(xmlAttributes));
@@ -426,8 +419,6 @@ public class Way extends Element {
             nodeCoords.setLon(existingNodeRecord.getLongitude());
         }
 
-        assert (actualNodeId > 0);
-
         nodeCoordsCollection.put(actualNodeId, nodeCoords);
 
         return actualNodeId;
@@ -446,8 +437,6 @@ public class Way extends Element {
      * info.
      */
     private void parseWayNodesXml(org.w3c.dom.Node xml) throws Exception {
-        assert (parsedElementIdsToElementsByType != null);
-
         NodeList wayNodesXml = XPathAPI.selectNodeList(xml, "nd");
 
         validateWayNodesSize(wayNodesXml);

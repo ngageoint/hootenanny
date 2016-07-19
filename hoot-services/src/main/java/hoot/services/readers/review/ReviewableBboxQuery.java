@@ -38,7 +38,7 @@ import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.SQLSubQuery;
 import com.mysema.query.types.query.ListSubQuery;
 
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.QCurrentNodes;
 import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.db2.QCurrentWayNodes;
@@ -66,11 +66,11 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
     public ReviewQueryMapper execQuery() {
         BoundingBox currBbox = new BoundingBox();
         ReviewableItemBbox ret = new ReviewableItemBbox(currBbox, getMapId(), relationId);
-        List<BoundingBox> membersBboxList = new ArrayList<>();
 
         // do recursive bbox retrieval since relation may contain other relation
         List<Long> relIds = new ArrayList<>();
         relIds.add(relationId);
+        List<BoundingBox> membersBboxList = new ArrayList<>();
         getRelationMembersBboxRecursive(membersBboxList, relIds);
 
         for (BoundingBox bbx : membersBboxList) {

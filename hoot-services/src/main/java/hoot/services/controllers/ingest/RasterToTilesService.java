@@ -47,13 +47,13 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobStatusManager;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.nativeInterfaces.JobExecutionManager;
+import hoot.services.nativeinterfaces.JobExecutionManager;
 
 
 public class RasterToTilesService extends JobControllerBase {

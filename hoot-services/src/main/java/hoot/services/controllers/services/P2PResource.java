@@ -40,7 +40,7 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.nodeJs.ServerControllerBase;
+import hoot.services.nodejs.ServerControllerBase;
 
 
 public class P2PResource extends ServerControllerBase {

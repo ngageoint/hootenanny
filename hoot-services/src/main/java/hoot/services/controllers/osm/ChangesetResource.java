@@ -55,13 +55,11 @@ import org.w3c.dom.Document;
 import com.mysema.query.sql.SQLQuery;
 
 import hoot.services.HootProperties;
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.validators.osm.ChangesetUploadXmlValidator;
-import hoot.services.writers.osm.ChangesetDbWriter;
 
 
 /**
@@ -250,7 +248,7 @@ public class ChangesetResource {
                 long mapid = Long.parseLong(mapId);
                 Document changesetDoc;
                 try {
-                    changesetDoc = (new ChangesetUploadXmlValidator()).parseAndValidate(changeset);
+                    changesetDoc = ChangesetUploadXmlValidator.parseAndValidate(changeset);
                 }
                 catch (Exception e) {
                     throw new Exception("Error parsing changeset diff data: " + StringUtils.abbreviate(changeset, 100)
@@ -325,7 +323,7 @@ public class ChangesetResource {
     }
 
     // TODO: clean up these message...some are obsolete now
-    public static void handleError(Exception e, long changesetId, String changesetDiffSnippet) {
+    private static void handleError(Exception e, long changesetId, String changesetDiffSnippet) {
         String message = e.getMessage();
         if (e instanceof SQLException) {
             SQLException sqlException = (SQLException) e;
