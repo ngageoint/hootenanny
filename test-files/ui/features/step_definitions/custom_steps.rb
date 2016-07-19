@@ -158,6 +158,18 @@ When(/^I click the "([^"]*)" Dataset$/) do |dataset|
   parent.find('rect').click
 end
 
+When(/^I expand the "([^"]*)" folder$/) do |folder|
+  text = page.find('text',:text=>folder, :match => :prefer_exact)
+  parent = text.find(:xpath,"..")
+  begin
+    el = parent.find('.folder')
+  rescue Capybara::ElementNotFound
+    # In Capybara 0.4+ #find_field raises an error instead of returning nil
+    el = nil
+  end
+  parent.find('rect').click unless el.nil?
+end
+
 When(/^I click the "([^"]*)" Dataset and the "([^"]*)" Dataset$/) do |d1, d2|
   text1 = page.find('text',:text=>d1, :match => :prefer_exact)
   parent1 = text1.find(:xpath,"..")
@@ -512,9 +524,9 @@ Then(/^I should see element "([^"]*)" with value "([^"]*)"$/) do |id, value|
 end
 
 Then(/^I should see element "([^"]*)" with no value and placeholder "([^"]*)"$/) do |id, value|
-  find(id).value.should eq ""
-  #page.find(:css, 'input[placeholder="' + value + '"]')
-  find(id, 'input[placeholder="' + value + '"]')
+  el = find(id)
+  el.value.should eq ""
+  el['placeholder'].should eq value
 end
 
 Then(/^I choose "([^"]*)" radio button$/) do |text|
@@ -617,6 +629,15 @@ When(/^I delete any existing "([^"]*)" basemap if necessary$/) do |text|
     Capybara.default_max_wait_time = 30
     page.should have_no_content(text)
     Capybara.default_max_wait_time = oldTimeout
+  rescue Capybara::ElementNotFound
+  end
+end
+
+When(/^I delete any existing "([^"]*)" folder if necessary$/) do |text|
+  begin
+        step "I context click the \"#{text}\" Dataset"
+        step "I click the \"Delete\" context menu item"
+        step "I accept the alert"
   rescue Capybara::ElementNotFound
   end
 end

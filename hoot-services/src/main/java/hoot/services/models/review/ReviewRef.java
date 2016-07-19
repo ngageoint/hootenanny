@@ -47,10 +47,9 @@ public class ReviewRef extends ElementInfo {
     }
 
     public ReviewRef() {
-        super();
     }
 
-    public ReviewRef(final String mapId, final long elementId, final String elementType, final long reviewRelationId) {
+    public ReviewRef(String mapId, long elementId, String elementType, long reviewRelationId) {
         super(mapId, elementId, elementType);
         this.reviewRelationId = reviewRelationId;
     }

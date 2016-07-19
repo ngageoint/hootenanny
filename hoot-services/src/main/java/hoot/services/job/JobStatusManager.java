@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mysema.query.sql.SQLQuery;
 
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.JobStatus;
 import hoot.services.db2.QJobStatus;
 
@@ -185,7 +185,7 @@ public class JobStatusManager {
      * Updates job. This one should be used to any storage behavior like add or
      * update Since the serialization routine can change.
      */
-    private void updateJob(String jobId, JOB_STATUS jobStatus, String statusDetail) throws Exception {
+    private void updateJob(String jobId, JOB_STATUS jobStatus, String statusDetail) {
         try {
             boolean isComplete = (jobStatus != RUNNING);
             DbUtils.updateJobStatus(jobId, jobStatus.ordinal(), isComplete, statusDetail, connection);

@@ -47,7 +47,7 @@ public class ReviewResolverRequest {
     public ReviewResolverRequest() {
     }
 
-    public ReviewResolverRequest(final String mapId) {
+    public ReviewResolverRequest(String mapId) {
         this.mapId = mapId;
     }
 }

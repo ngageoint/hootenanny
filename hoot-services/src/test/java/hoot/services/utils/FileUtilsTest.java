@@ -27,10 +27,13 @@
 
 package hoot.services.utils;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.SCRIPT_FOLDER;
+
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 
 
@@ -39,21 +42,17 @@ public class FileUtilsTest {
     @Category(UnitTest.class)
     public void testValidateFilePath() throws Exception {
         String name = "mytest";
-        String homeFolder = HootProperties.getProperty("homeFolder");
-        String scriptFolder = homeFolder + "/" + HootProperties.getProperty("customScriptPath");
+        String scriptFolder = HOME_FOLDER + "/" + SCRIPT_FOLDER;
         boolean isValid = FileUtils.validateFilePath(scriptFolder, scriptFolder + "/" + name + ".js");
-        org.junit.Assert.assertTrue(isValid);
-
+        Assert.assertTrue(isValid);
     }
 
     @Test
     @Category(UnitTest.class)
     public void testValidateFilePathFail() throws Exception {
         String name = "../mytest";
-        String homeFolder = HootProperties.getProperty("homeFolder");
-        String scriptFolder = homeFolder + "/" + HootProperties.getProperty("customScriptPath");
+        String scriptFolder = HOME_FOLDER + "/" + SCRIPT_FOLDER;
         boolean isValid = FileUtils.validateFilePath(scriptFolder, scriptFolder + "/" + name + ".js");
-        org.junit.Assert.assertTrue(!isValid);
-
+        Assert.assertTrue(!isValid);
     }
 }

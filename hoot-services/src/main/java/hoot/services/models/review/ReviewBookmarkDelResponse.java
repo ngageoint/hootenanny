@@ -37,11 +37,11 @@ public class ReviewBookmarkDelResponse {
         return deleteCount;
     }
 
-    public void setDeleteCount(final long nDel) {
+    public void setDeleteCount(long nDel) {
         this.deleteCount = nDel;
     }
 
-    public ReviewBookmarkDelResponse(final long nDel) {
+    public ReviewBookmarkDelResponse(long nDel) {
         this.deleteCount = nDel;
     }
 

@@ -31,49 +31,49 @@ import org.json.simple.JSONObject;
 import hoot.services.geo.BoundingBox;
 
 
-public class ReviewableItemBbox extends ReviewQueryMapper {
+public class ReviewableItemBbox implements ReviewQueryMapper {
 
-    private long _mapId;
-    private long _relationId;
-    private BoundingBox _bbox;
+    private long mapId;
+    private long relationId;
+    private BoundingBox bbox;
 
-    public ReviewableItemBbox(final BoundingBox bbox, final long mapid, final long relationid) {
-        _bbox = bbox;
-        _mapId = mapid;
-        _relationId = relationid;
+    public ReviewableItemBbox(BoundingBox bbox, long mapid, long relationid) {
+        this.bbox = bbox;
+        mapId = mapid;
+        relationId = relationid;
     }
 
     @Override
     public String toString() {
         JSONObject o = new JSONObject();
-        o.put("bbox", _bbox.toServicesString());
-        o.put("mapid", _mapId);
-        o.put("relationid", _relationId);
+        o.put("bbox", bbox.toServicesString());
+        o.put("mapid", mapId);
+        o.put("relationid", relationId);
 
         return o.toJSONString();
     }
 
     public long getRelationId() {
-        return _relationId;
+        return relationId;
     }
 
-    public void setRelationId(final long relid) {
-        _relationId = relid;
+    public void setRelationId(long relid) {
+        relationId = relid;
     }
 
     public BoundingBox getBbox() {
-        return _bbox;
+        return bbox;
     }
 
-    public void setBbox(final BoundingBox bbox) {
-        _bbox = bbox;
+    public void setBbox(BoundingBox bbox) {
+        this.bbox = bbox;
     }
 
     public long getMapId() {
-        return _mapId;
+        return mapId;
     }
 
-    public void setMapId(final long mapid) {
-        _mapId = mapid;
+    public void setMapId(long mapid) {
+        mapId = mapid;
     }
 }
