@@ -167,48 +167,6 @@ vector<long> DividedHighwayMerger::_findCenterWays(shared_ptr<const Way> w1,
   return FindWaysVisitor::findWays(_map, &crit);
 }
 
-/*
-vector<long> DividedHighwayMerger::_findCenterWays(shared_ptr<const Way> w1,
-                                                   shared_ptr<const Way> w2)
-{
-  shared_ptr<OneWayFilter> owFilter(new OneWayFilter(false));
-
-  Status s;
-  if (w1->getStatus() == Status::Unknown1)
-  {
-    s = Status::Unknown2;
-  }
-  else
-  {
-    s = Status::Unknown1;
-  }
-
-  shared_ptr<StatusFilter> statusFilter(new StatusFilter(s));
-  shared_ptr<ParallelWayFilter> parallelFilter(new ParallelWayFilter(_map, w1));
-
-  ElementConverter ec(_map);
-  shared_ptr<LineString> ls2 = ec.convertToLineString(w2);
-  if (DirectionFinder::isSimilarDirection(_map, w1, w2) == false)
-  {
-    ls2.reset(dynamic_cast<LineString*>(ls2->reverse()));
-  }
-
-  // calculate the center line of two ways.
-  shared_ptr<LineString> center = LineStringAverager::average(
-    ec.convertToLineString(w1), ls2);
-  shared_ptr<WayBufferFilter> distanceFilter(new WayBufferFilter(_map, center, 0.0,
-    (w1->getCircularError() + w2->getCircularError()) / 2.0, _matchPercent));
-
-  WayFilterChain filter;
-  filter.addFilter(owFilter);
-  filter.addFilter(statusFilter);
-  filter.addFilter(parallelFilter);
-  filter.addFilter(distanceFilter);
-
-  return _map->filterWays(filter);
-}
-*/
-
 void DividedHighwayMerger::_findMatches(long baseWayId)
 {
   shared_ptr<const Way> baseWay = _map->getWay(baseWayId);
@@ -262,31 +220,6 @@ vector<long> DividedHighwayMerger::_findOtherWays(boost::shared_ptr<const hoot::
 
   return FindWaysVisitor::findWays(_map, &chain);
 }
-
-/*
-vector<long> DividedHighwayMerger::_findOtherWays(boost::shared_ptr<const hoot::Way> baseWay)
-{
-  // Keep one-way streets
-  shared_ptr<OneWayFilter> owFilter(new OneWayFilter());
-
-  // Keep w/status of baseWay
-  shared_ptr<StatusFilter> statusFilter(new StatusFilter(baseWay->getStatus()));
-
-  shared_ptr<WayBufferFilter> distanceFilter(new WayBufferFilter(_map, baseWay,
-    _maxSeparation, _matchPercent));
-  shared_ptr<ParallelWayFilter> parallelFilter(new ParallelWayFilter(_map, baseWay));
-  shared_ptr<WayDirectionFilter> directionFilter(new WayDirectionFilter(_map, baseWay, false));
-  WayFilterChain filter;
-
-  filter.addFilter(owFilter);
-  filter.addFilter(statusFilter);
-  filter.addFilter(distanceFilter);
-  filter.addFilter(parallelFilter);
-  filter.addFilter(directionFilter);
-
-  return _map->filterWays(filter);
-}
-*/
 
 }
 
