@@ -24,40 +24,40 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef COPYSUBSETOP_H
-#define COPYSUBSETOP_H
 
-// hoot
-#include <hoot/core/OsmMap.h>
+#ifndef DISTANCENODECRITERION_H
+#define DISTANCENODECRITERION_H
 
-#include "OsmMapOperation.h"
+// GEOS
+#include <geos/geom/Coordinate.h>
+
+// Hoot
+#include <hoot/core/Units.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot
 {
+  using namespace geos::geom;
 
 /**
- * Copies a subset of the map into a new map. The old map is unchanged.
+ * isSatisfied returns true if an element is
+ * within the specified distance of the given center
  */
-class CopySubsetOp : public OsmMapOperation
+class DistanceNodeCriterion : public ElementCriterion
 {
 public:
-  CopySubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids);
+  DistanceNodeCriterion(Coordinate center, Meters distance);
 
-  CopySubsetOp(const ConstOsmMapPtr& from, const vector<long>& ids);
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
 
-  CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
-
-  /**
-   * A new map is created and the eids specified in the constructor and their depedencies will be
-   * copied into the new map. The @a map will be set to point to the new map.
-   */
-  virtual void apply(shared_ptr<OsmMap>& map);
+  DistanceNodeCriterion* clone() { return new DistanceNodeCriterion(_center, _distance); }
 
 private:
-  set<ElementId> _eids;
-  const ConstOsmMapPtr& _from;
+  Coordinate _center;
+  Meters _distance;
 };
 
 }
 
-#endif // COPYSUBSETOP_H
+#endif // DISTANCENODECRITERION_H

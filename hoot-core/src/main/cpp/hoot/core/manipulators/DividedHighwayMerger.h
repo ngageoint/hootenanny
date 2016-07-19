@@ -42,6 +42,7 @@ namespace geos {
 // Hoot
 #include <hoot/core/Units.h>
 #include <hoot/core/filters/WayFilterChain.h>
+#include <hoot/core/filters/ChainCriterion.h>
 namespace hoot {
   class OsmMap;
   class Node;
@@ -80,7 +81,7 @@ private:
   boost::shared_ptr<const OsmMap> _map;
 
   Meters _minSeparation, _maxSeparation, _vectorError;
-  WayFilterChain _oneWayUnknownFilter;
+  ChainCriterion _oneWayUnknownCriterion;
   double _matchPercent;
 
   vector<long> _findCenterWays(shared_ptr<const Way> w1, shared_ptr<const Way> w2);

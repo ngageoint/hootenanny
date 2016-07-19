@@ -31,6 +31,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -113,7 +114,7 @@ public:
 
     // used for bounds checks.
     _transform.reset(OGRCreateCoordinateTransformation(_map->getProjection().get(),
-                                                       OsmMap::getWgs84().get()));
+                     MapProjector::createWgs84Projection().get()));
   }
 
   ~PlacesPoiMatchVisitor()

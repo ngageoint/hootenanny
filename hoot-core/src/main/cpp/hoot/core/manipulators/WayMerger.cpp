@@ -47,16 +47,13 @@ using namespace geos::operation::distance;
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/filters/ParallelWayFilter.h>
-#include <hoot/core/filters/ParallelWayFilter.h>
-#include <hoot/core/filters/StatusFilter.h>
-#include <hoot/core/filters/UnknownFilter.h>
-#include <hoot/core/filters/WayBufferFilter.h>
-#include <hoot/core/filters/WayFilterChain.h>
+#include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot::elements;
 
 // Qt
@@ -93,9 +90,10 @@ const vector< shared_ptr<Manipulation> >& WayMerger::findAllManipulations(
         shared_ptr<const OsmMap> map)
 {
   LOG_INFO("Finding all way merge manipulations...");
-  StatusFilter statusFilter(Status::Unknown1);
-  // filter out all the Unknown2 ways
-  vector<long> unknown1 = map->filterWays(statusFilter);
+
+  // Find all Unknown1 ways
+  StatusCriterion statusCrit(Status::Unknown1);
+  vector<long> unknown1 = FindWaysVisitor::findWays(map, &statusCrit);
 
   // return the result
   return findWayManipulations(map, unknown1);
@@ -167,12 +165,19 @@ vector<long> WayMerger::_findOtherWays(shared_ptr<const Way> baseWayConst)
     otherStatus = Status::Unknown1;
   }
 
-  vector<long> filtered = _map->filterWays(StatusFilter(otherStatus), baseWayConst, 0.0, true);
+  StatusCriterion statusCrit(otherStatus);
+  vector<long> filtered = FindWaysVisitor::findWays(_map,
+                                                    &statusCrit,
+                                                    baseWayConst,
+                                                    0.0,
+                                                    true);
 
   vector<long> allWays = filtered;
   allWays.push_back(baseWayConst->getId());
 
-  shared_ptr<OsmMap> map = _map->copyWays(allWays);
+  OsmMapPtr map(new OsmMap());
+  CopySubsetOp(_map, allWays).apply(map);
+
 
   shared_ptr<Way> baseWay = map->getWay(baseWayConst->getId());
 

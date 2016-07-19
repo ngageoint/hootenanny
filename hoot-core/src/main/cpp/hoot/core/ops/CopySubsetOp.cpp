@@ -80,6 +80,19 @@ CopySubsetOp::CopySubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eid
 {
 }
 
+CopySubsetOp::CopySubsetOp(const ConstOsmMapPtr& from, const vector<long>& wayIds) :
+  _from(from)
+{
+  // Need to get ElementIds from our vector of longs
+  for (vector<long>::const_iterator it = wayIds.begin(); it != wayIds.end(); ++it)
+  {
+    if(from->containsWay(*it))
+    { // make sure it's a way
+      _eids.insert(ElementId(ElementType::Way, *it));
+    }
+  }
+}
+
 CopySubsetOp::CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2) :
   _from(from)
 {
@@ -89,6 +102,7 @@ CopySubsetOp::CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId
 
 void CopySubsetOp::apply(shared_ptr<OsmMap> &map)
 {
+  map->setProjection(_from->getProjection());
   AddAllVisitor v(_from, map);
 
   for (set<ElementId>::const_iterator it = _eids.begin(); it != _eids.end(); ++it)
