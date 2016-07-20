@@ -34,10 +34,19 @@
 namespace hoot
 {
 
-ScriptTranslatorFactory ScriptTranslatorFactory::_theInstance;
+shared_ptr<ScriptTranslatorFactory> ScriptTranslatorFactory::_theInstance;
 
 ScriptTranslatorFactory::ScriptTranslatorFactory()
 {
+}
+
+ScriptTranslatorFactory& ScriptTranslatorFactory::getInstance()
+{
+  if (!_theInstance.get())
+  {
+    _theInstance.reset(new ScriptTranslatorFactory());
+  }
+  return *_theInstance;
 }
 
 bool CompareSt(ScriptTranslator* st1, ScriptTranslator* st2)

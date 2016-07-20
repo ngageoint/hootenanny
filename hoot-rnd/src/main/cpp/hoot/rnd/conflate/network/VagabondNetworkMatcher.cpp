@@ -79,6 +79,9 @@ void VagabondNetworkMatcher::iteratePageRank()
   // PR(A) = (1 - _damping) / N + d * (PR(B) / L(B) + PR(C) / L(C) + ...)
   // where A is the edge being traversed into
   // B, C, ... are edges that traverse into A and L is the number of outbound edges for that edge
+  // ###
+  // ### And then a bit of experimentation that isn't documented. Read the code.
+  // ###
 
   IndexedEdgeMatchSetPtr newHash = _pr->clone();
 
@@ -107,7 +110,7 @@ void VagabondNetworkMatcher::iteratePageRank()
 
     if (values.size() != 0)
     {
-      double contribution = (_pr->getScore(from) / values.size()) * _dampen;
+      double contribution = (_pr->getScore(from) / (values.size())) * _dampen;
 
       //LOG_VAR(from);
       foreach (EdgeMatchPtr to, values)
@@ -208,22 +211,20 @@ void VagabondNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1,
   _details2.reset(new NetworkDetails(map, n2));
 
   // calculate all the candidate edge pairs.
+  LOG_INFO("Calculating edge index...");
   _createEdge2Index();
+  LOG_INFO("Calculating edge matches...");
   _calculateEdgeMatches();
 
   // calculate the edge pairs that can be accessed from each candidate edge pair
+  LOG_INFO("Calculating edge links...");
   _calculateEdgeLinks();
 
-  // (not yet) for each edge in base, distribute an even PR to all its edge pairs.
-  // -- or --
-  // (now) distribute an even PR to all edge pairs
-  double startPr = 1.0 / (double)_pr->getSize();
-  LOG_VAR(startPr);
-  for (IndexedEdgeMatchSet::MatchHash::iterator it = _pr->getAllMatches().begin();
-    it != _pr->getAllMatches().end(); ++it)
-  {
-    it.value() = startPr;
-  }
+  // for each link distribute a PR based on length and frequency an edge is used
+  LOG_INFO("Distributing PR...");
+  _distributePrLengthWeighted();
+  // distribute an even PR to all edge pairs
+  //_distributePrEvenly();
 }
 
 void VagabondNetworkMatcher::_calculateEdgeLinks()
@@ -265,6 +266,7 @@ void VagabondNetworkMatcher::_calculateEdgeMatches()
 
   // go through all the n1 edges
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();
+  int count = 0;
   //LOG_VAR(em);
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
@@ -285,6 +287,87 @@ void VagabondNetworkMatcher::_calculateEdgeMatches()
         finder.addEdgeMatches(e1, e2);
       }
     }
+    if (Log::getInstance().getLevel() <= Log::Info)
+    {
+      cout << "Calculating edge matches: " << count++ << " / " << em.size() << "\t\r" << std::flush;
+    }
+  }
+  if (Log::getInstance().getLevel() <= Log::Info)
+  {
+    cout << endl;
+  }
+
+  LOG_VAR(_pr);
+}
+
+double VagabondNetworkMatcher::_calculateLinkWeight(QHash<ConstNetworkEdgePtr, int>& counts,
+  ConstEdgeStringPtr str)
+{
+  double result = 0.0;
+  for (int i = 0; i < str->getAllEdges().size(); ++i)
+  {
+    ConstNetworkEdgePtr e = str->getAllEdges()[i].e;
+    double w = 1.0 / counts[e];
+    double l = _details1->calculateLength(e);
+    result += w * l;
+  }
+
+  return result;
+}
+
+
+void VagabondNetworkMatcher::_countEdgesUsed(QHash<ConstNetworkEdgePtr, int>& counts,
+  ConstEdgeStringPtr str)
+{
+  for (int i = 0; i < str->getAllEdges().size(); ++i)
+  {
+    counts[str->getAllEdges()[i].e]++;
+  }
+}
+
+void VagabondNetworkMatcher::_distributePrLengthWeighted()
+{
+  QHash<ConstNetworkEdgePtr, int> counts;
+
+  // go through all the links
+  for (IndexedEdgeMatchSet::MatchHash::iterator it = _pr->getAllMatches().begin();
+    it != _pr->getAllMatches().end(); ++it)
+  {
+    // go through each edge and count the number of times it is used.
+    _countEdgesUsed(counts, it.key()->getString1());
+    _countEdgesUsed(counts, it.key()->getString2());
+  }
+
+  // distribute a weight equal to sum of v of all edges in a link.
+  // where v is the length * (1 / number of times an edge is referenced).
+  double sum = 0.0;
+  for (IndexedEdgeMatchSet::MatchHash::iterator it = _pr->getAllMatches().begin();
+    it != _pr->getAllMatches().end(); ++it)
+  {
+    double w = 0.0;
+    w += _calculateLinkWeight(counts, it.key()->getString1());
+    w += _calculateLinkWeight(counts, it.key()->getString2());
+    it.value() = w;
+    sum += w;
+  }
+
+  // normalize the values so they add to 1.
+  for (IndexedEdgeMatchSet::MatchHash::iterator it = _pr->getAllMatches().begin();
+    it != _pr->getAllMatches().end(); ++it)
+  {
+    it.value() = it.value() / sum;
+  }
+}
+
+void VagabondNetworkMatcher::_distributePrEvenly()
+{
+  // distribute an even PR to all edge pairs
+  double startPr = 1.0 / (double)_pr->getSize();
+  LOG_VAR(startPr);
+  for (IndexedEdgeMatchSet::MatchHash::iterator it = _pr->getAllMatches().begin();
+    it != _pr->getAllMatches().end(); ++it)
+  {
+    it.value() = startPr;
   }
 }
 

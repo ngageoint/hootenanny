@@ -40,7 +40,7 @@ public class RandomReviewableQueryTest {
         String expected = "select id as relid, tags->'hoot:review:sort_order' as seq from current_relations_10 "
                 + "where tags->'hoot:review:needs' = 'yes' order by random() limit 1";
         RandomReviewableQuery q = new RandomReviewableQuery(null, 10);
-        String actual = q._getQueryString();
+        String actual = q.getQueryString();
 
         org.junit.Assert.assertEquals(expected, actual);
     }

@@ -28,13 +28,12 @@ package hoot.services.command;
 
 public class CommandResult {
 
-    private String command;
-    private int exitStatus;
-    private String stdout;
-    private String stderr;
+    private final String command;
+    private final int exitStatus;
+    private final String stdout;
+    private final String stderr;
 
-    public CommandResult(String cmdString, int result, String stdoutString, String stderrString) {
-
+    CommandResult(String cmdString, int result, String stdoutString, String stderrString) {
         this.command = cmdString;
         this.exitStatus = result;
         this.stdout = stdoutString;

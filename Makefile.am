@@ -84,6 +84,9 @@ test-all:
 test-all-no-core:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-all-no-core
 
+test-all-core:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-all-core
+
 test-quick:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-quick
 
@@ -125,9 +128,6 @@ services-clean-coverage:
 
 services-coverage:
 	$(MAKE) -f Makefile.old services-coverage
-
-conf/DatabaseConfig.sh:
-	$(MAKE) -f Makefile.old conf/DatabaseConfig.sh
 
 # Use some tar fanciness to grab all the files in conf, plugins, translations and scripts
 install-other:

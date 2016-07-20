@@ -26,12 +26,15 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.HootProperties.CLEAN_DATA_MAKEFILE_PATH;
+
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -41,31 +44,17 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
-
 
 @Path("/cleandata")
 public class CleanDataResource extends JobControllerBase {
-    private static final Logger log = LoggerFactory.getLogger(CleanDataResource.class);
-    @SuppressWarnings("unused")
-    private String homeFolder = null;
+    private static final Logger logger = LoggerFactory.getLogger(CleanDataResource.class);
 
     public CleanDataResource() {
-        try {
-            if (processScriptName == null) {
-                processScriptName = HootProperties.getProperty("cleanDataMakePath");
-            }
-
-            homeFolder = HootProperties.getProperty("homeFolder");
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-        }
+        super(CLEAN_DATA_MAKEFILE_PATH);
     }
 
     /**
-     * Clean Data service represents REST and WPS end points for hoot --cleanup
+     * Clean Data service represents REST end point for hoot --cleanup
      * which is defined as --cleanup (input) (output). Removes common erroneous
      * data scenarios from input and writes to output. * input - Input (e.g.
      * .osm file). output - Output file (e.g. .osm file).
@@ -88,19 +77,20 @@ public class CleanDataResource extends JobControllerBase {
     @Produces(MediaType.TEXT_PLAIN)
     public Response process(String params) {
         String jobId = UUID.randomUUID().toString();
-        try {
 
+        try {
             JSONArray commandArgs = parseParams(params);
             String argStr = createPostBody(commandArgs);
             postJobRquest(jobId, argStr);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error process data clean request: " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            String msg = "Error processing data clean request: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
+
         JSONObject res = new JSONObject();
         res.put("jobid", jobId);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
-
 }

@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-232' action='modify' visible='true' lat='39.59184434671' lon='-104.80514950367' />
+  <node id='-230' action='modify' visible='true' lat='39.59183650882' lon='-104.80463416803' />
+  <node id='-228' action='modify' visible='true' lat='39.59093253301' lon='-104.80464094876' />
+  <node id='-226' action='modify' visible='true' lat='39.59093253301' lon='-104.80482063816' />
+  <node id='-224' action='modify' visible='true' lat='39.59106577874' lon='-104.80482063816' />
+  <node id='-222' action='modify' visible='true' lat='39.59106316608' lon='-104.80515289403' />
+  <node id='-220' action='modify' visible='true' lat='39.59182867093' lon='-104.80375267286' />
+  <node id='-218' action='modify' visible='true' lat='39.5911650597' lon='-104.80374589213' />
+  <node id='-216' action='modify' visible='true' lat='39.59115719913' lon='-104.80463926355' />
+  <node id='-214' action='modify' visible='true' lat='39.590940371' lon='-104.80374250177' />
+  <node id='-200' action='modify' visible='true' lat='39.59123179498' lon='-104.80374657403' />
+  <way id='-260' action='modify' visible='true'>
+    <nd ref='-232' />
+    <nd ref='-230' />
+    <nd ref='-216' />
+    <nd ref='-228' />
+    <nd ref='-226' />
+    <nd ref='-224' />
+    <nd ref='-222' />
+    <nd ref='-232' />
+    <tag k='REF2' v='Target' />
+    <tag k='building' v='yes' />
+    <tag k='name' v='Target Grocery' />
+  </way>
+  <way id='-258' action='modify' visible='true'>
+    <nd ref='-230' />
+    <nd ref='-220' />
+    <nd ref='-200' />
+    <nd ref='-218' />
+    <nd ref='-216' />
+    <nd ref='-230' />
+    <tag k='REF2' v='Target' />
+    <tag k='building' v='yes' />
+    <tag k='name' v='Target - Aurora South' />
+  </way>
+  <way id='-256' action='modify' visible='true'>
+    <nd ref='-216' />
+    <nd ref='-218' />
+    <nd ref='-214' />
+    <nd ref='-228' />
+    <nd ref='-216' />
+    <tag k='REF2' v='Target' />
+    <tag k='building' v='yes' />
+    <tag k='name' v='Target Pharmacy' />
+  </way>
+</osm>

@@ -51,16 +51,18 @@ import org.xml.sax.SAXException;
  * General XML utilities
  */
 @SuppressWarnings("deprecation")
-public class XmlDocumentBuilder {
+public final class XmlDocumentBuilder {
+    private XmlDocumentBuilder() {
+    }
+
     /**
      * Creates a new XML DOM
      * 
      * @return XML document
-     * @throws IOException
      * @throws ParserConfigurationException
      */
-    public static Document create() throws IOException, ParserConfigurationException {
-        return XmlDocumentBuilder.getSecureDocBuilderFactory().newDocumentBuilder().newDocument();
+    public static Document create() throws ParserConfigurationException {
+        return getSecureDocBuilderFactory().newDocumentBuilder().newDocument();
     }
 
     /**
@@ -83,8 +85,7 @@ public class XmlDocumentBuilder {
         domFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
         domFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 
-        DocumentBuilder builder;
-        builder = domFactory.newDocumentBuilder();
+        DocumentBuilder builder = domFactory.newDocumentBuilder();
 
         InputSource is = new InputSource();
         is.setCharacterStream(new StringReader(xml));
@@ -119,30 +120,13 @@ public class XmlDocumentBuilder {
      */
     public static void write(Document document, Writer out) throws IOException {
         // happy to replace this code w/ the non-deprecated code, but I couldn't
-        // get the transformer
-        // approach to work.
+        // get the transformer approach to work.
         OutputFormat format = new OutputFormat(document);
         format.setIndenting(true);
         format.setIndent(2);
         XMLSerializer serializer = new XMLSerializer(out, format);
         serializer.serialize(document);
     }
-
-    /**
-     * Returns a secure TransformerFactory, as identified by HP Fortify
-     * 
-     * @return a TransformerFactory
-     * @throws TransformerConfigurationException
-     *             //TODO: could not get this code to run in JDK 1.7
-     */
-    /*
-     * public static TransformerFactory getSecureTransformerFactory() throws
-     * TransformerConfigurationException { TransformerFactory transformerFactory
-     * = TransformerFactory.newInstance();
-     * transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING,
-     * true); transformerFactory.setFeature(XMLConstants.ACCESS_EXTERNAL_DTD,
-     * false); return transformerFactory; }
-     */
 
     /**
      * Returns a secure DocumentBuilderFactory, as identified by HP Fortify
@@ -159,7 +143,6 @@ public class XmlDocumentBuilder {
         return docBuilderFactory;
     }
 
-    @SuppressWarnings("unused")
     private static DocumentBuilderFactory getNormalDocBuilderFactory() {
         DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
         return docBuilderFactory;

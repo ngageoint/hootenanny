@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ReviewBookmarksStatResponse {
     private long totalCount;
 
-    public void setTotalCount(final long cnt) {
+    public void setTotalCount(long cnt) {
         this.totalCount = cnt;
     }
 
@@ -41,7 +41,7 @@ public class ReviewBookmarksStatResponse {
         return this.totalCount;
     }
 
-    public ReviewBookmarksStatResponse(final long cnt) {
+    public ReviewBookmarksStatResponse(long cnt) {
         this.totalCount = cnt;
     }
 

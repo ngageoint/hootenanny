@@ -67,10 +67,8 @@ namespace hoot {
 
 using namespace std;
 
-class NodeFilter;
 class OsmMapIndex;
 class OsmMapListener;
-class WayFilter;
 
 /**
  * The OsmMap contains all the information necessary to represent an OSM map. It holds the nodes,
@@ -82,7 +80,6 @@ class WayFilter;
  *
  *  - For instance, complicated operations on the map such as recursively removing elements should
  *    live in another class. E.g. RecursiveElementRemover
- *  - Things like the filter operations can be replaced by visitors.
  *  - In the long term it might also be nice simplify the maintenance by merging all the elements
  *    into a single map and simplify the interface in a similar fashion.
  *  - I'd like to remove the OsmIndex circular reference, but I haven't figured out a good
@@ -128,23 +125,6 @@ public:
 
   void addWay(const shared_ptr<Way>& w);
 
-  /**
-   * Calculates the bounds of the map by determining the extent of all the nodes. This is slow
-   * every time and there is no caching.
-   */
-  OGREnvelope calculateBounds() const;
-
-  /**
-   * Similar to above, but it returns a geos Envelope.
-   */
-  geos::geom::Envelope calculateEnvelope() const;
-
-  /**
-   * This traverses all nodes and ways to calculate the maximum circular error. This is not cached
-   * and has the potential to be quite expensive.
-   */
-  double calculateMaxCircularError() const;
-
   void clear();
 
   /**
@@ -164,54 +144,11 @@ public:
 
   virtual bool containsWay(long id) const { return _ways.find(id) != _ways.end(); }
 
-  /**
-   * Returns a copy of this map that only contains the specified ways. This can be handy when
-   * performing what-if experiments.
-   * @deprecated CopySubsetOp is now preferred.
-   */
-  shared_ptr<OsmMap> copyWays(const vector<long>& wIds) const;
-
   long createNextNodeId() const { return _idGen->createNodeId(); }
 
   long createNextRelationId() const { return _idGen->createRelationId(); }
 
   long createNextWayId() const { return _idGen->createWayId(); }
-
-  std::vector<long> filterNodes(const NodeFilter& filter) const;
-
-  std::vector<long> filterNodes(const NodeFilter& filter, const Coordinate& c,
-                                Meters maxDistance) const;
-
-  std::vector<long> filterWays(const WayFilter& filter) const;
-
-  /**
-   * Returns the ID of all the ways that are not filtered by filter and are within maxDistance
-   * of "from".
-   */
-  std::vector<long> filterWays(const WayFilter& filter, shared_ptr<const Way> from,
-                               Meters maxDistance, bool addError = false) const;
-
-  /**
-   * Returns a set of all element IDs that intersect with envelope e.
-   */
-  set<ElementId> findElements(const Envelope& e) const;
-
-  /**
-   * Does a very inefficient search for all the ways that contain the given node.
-   */
-  std::vector<long> findWayByNode(long nodeId) const;
-
-  /**
-   * Searches for all ways with a tag that exactly matches the key and value. This is horribly
-   * inefficient and appropriate mainly for testing.
-   */
-  std::vector<long> findWays(QString key, QString value) const;
-
-  /**
-   * Searches for all nodes with a tag that exactly matches the key and value. This is horribly
-   * inefficient and appropriate mainly for testing.
-   */
-  std::vector<long> findNodes(QString key, QString value) const;
 
   virtual ConstElementPtr getElement(const ElementId& id) const;
   ConstElementPtr getElement(ElementType type, long id) const;
@@ -269,9 +206,7 @@ public:
 
   const WayMap& getWays() const { return _ways; }
 
-  static boost::shared_ptr<OGRSpatialReference> getWgs84();
-
-  bool isEmpty() const { return _ways.size() == 0 && _nodes.size() == 0; }
+  bool isEmpty() const { return _nodes.size() == 0 && _ways.size() == 0 && _relations.size() == 0;}
 
   void registerListener(shared_ptr<OsmMapListener> l) { _listeners.push_back(l); }
 
@@ -326,16 +261,18 @@ public:
   void removeWayFully(long wId);
 
   /**
-   * Removes the way if isFiltered() == true.
-   */
-  void removeWays(const WayFilter& filter);
-
-  /**
    * Replace the all instances of from with instances of to. In some cases this may be an invalid
    * operation and an exception will be throw. E.g. replacing a node with a way where the node
    * is part of another way.
    */
   void replace(const shared_ptr<const Element>& from, const shared_ptr<Element>& to);
+
+  /**
+   * Similar to above, but from is replaced with a collection of elements. This makes sense in the
+   * context of a relation, but may not make sense in other cases (e.g. replace a single node
+   * that is part of a way with multiple nodes).
+   */
+  void replace(const shared_ptr<const Element>& from, const QList<ElementPtr> &to);
 
   /**
    * Intelligently replaces all instances of oldNode with newNode. This looks at all the ways
@@ -364,9 +301,10 @@ public:
   bool validate(bool strict = true) const;
 
   /**
-   * Calls the visitRo method on all elements. See Element::visitRo for a more thorough description.
-   *  - The order will always be nodes, ways, relations, but the IDs will not be in any specific
-   *    order.
+   * Calls the visitRo method on all elements. See Element::visitRo for a more
+   * thorough description.
+   *  - The order will always be nodes, ways, relations, but the IDs will not
+   *    be in any specific order.
    *  - Unlike Element::visitRo, elements will not be visited multiple times.
    *  - Modifying the OsmMap while traversing will result in undefined behaviour.
    *  - This should be slightly faster than visitRw.
@@ -375,19 +313,25 @@ public:
    * elements.
    */
   void visitRo(ElementVisitor& visitor) const;
+  void visitNodesRo(ElementVisitor& visitor) const;
+  void visitWaysRo(ElementVisitor& visitor) const;
+  void visitRelationsRo(ElementVisitor& visitor) const;
+
 
   /**
-   * Calls the visitRw method on all elements. See Element::visitRw for a more thorough description.
-   *  - The order will always be nodes, ways, relations, but the IDs will not be in any specific
-   *    order.
+   * Calls the visitRw method on all elements. See Element::visitRw for a more
+   * thorough description.
+   *  - The order will always be nodes, ways, relations, but the IDs will not
+   *    be in any specific order.
    *  - Elements that are added during the traversal may or may not be visited.
    *  - Elements may be deleted during traversal.
    *  - The visitor is guaranteed to not visit deleted elements.
    *
-   * If the visitor implements OsmMapConsumer then setOsmMap will be called before visiting any
-   * elements.
+   * If the visitor implements OsmMapConsumer then setOsmMap will be called before
+   * visiting any elements.
    */
   void visitRw(ElementVisitor& visitor);
+  void visitWaysRw(ElementVisitor& visitor);
 
 protected:
 
@@ -416,6 +360,11 @@ protected:
   vector< shared_ptr<Element> > _replaceTmpArray;
 
   void _copy(boost::shared_ptr<const OsmMap> from);
+
+  /**
+   * Returns true if there is a node in l.
+   */
+  bool _listContainsNode(const QList<ElementPtr> l) const;
 
   void _replaceNodeInRelations(long oldId, long newId);
 

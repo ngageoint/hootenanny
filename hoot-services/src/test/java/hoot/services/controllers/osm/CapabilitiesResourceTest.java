@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.osm;
 
+import static hoot.services.HootProperties.*;
+
 import javax.ws.rs.core.MediaType;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
@@ -41,7 +43,6 @@ import org.w3c.dom.Document;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.utils.XmlUtils;
@@ -71,34 +72,25 @@ public class CapabilitiesResourceTest extends OsmResourceTestAbstract {
         XPath xpath = XmlUtils.createXPath();
         try {
             Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
-            Assert.assertEquals(HootProperties.getPropertyOrDefault("osmVersion"),
-                    xpath.evaluate("//osm/@version", responseData));
-            Assert.assertEquals(HootProperties.getPropertyOrDefault("generator"),
-                    xpath.evaluate("//osm/@generator", responseData));
-            Assert.assertEquals(HootProperties.getPropertyOrDefault("copyright"),
-                    xpath.evaluate("//osm/@copyright", responseData));
-            Assert.assertEquals(HootProperties.getPropertyOrDefault("attribution"),
-                    xpath.evaluate("//osm/@attribution", responseData));
-            Assert.assertEquals(HootProperties.getPropertyOrDefault("license"),
-                    xpath.evaluate("//osm/@license", responseData));
+            Assert.assertEquals(OSM_VERSION, xpath.evaluate("//osm/@version", responseData));
+            Assert.assertEquals(GENERATOR, xpath.evaluate("//osm/@generator", responseData));
+            Assert.assertEquals(COPYRIGHT, xpath.evaluate("//osm/@copyright", responseData));
+            Assert.assertEquals(ATTRIBUTION, xpath.evaluate("//osm/@attribution", responseData));
+            Assert.assertEquals(LICENSE, xpath.evaluate("//osm/@license", responseData));
             Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/api").getLength());
             Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/api/version").getLength());
-            Assert.assertEquals(HootProperties.getPropertyOrDefault("osmVersion"),
-                    xpath.evaluate("//osm/api/version/@minimum", responseData));
-            Assert.assertEquals(HootProperties.getPropertyOrDefault("osmVersion"),
-                    xpath.evaluate("//osm/api/version/@maximum", responseData));
+            Assert.assertEquals(OSM_VERSION, xpath.evaluate("//osm/api/version/@minimum", responseData));
+            Assert.assertEquals(OSM_VERSION, xpath.evaluate("//osm/api/version/@maximum", responseData));
             Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/api/area").getLength());
-            Assert.assertEquals(HootProperties.getPropertyOrDefault("maxQueryAreaDegrees"),
-                    xpath.evaluate("//osm/api/area/@maximum", responseData));
+            Assert.assertEquals(MAX_QUERY_AREA_DEGREES, xpath.evaluate("//osm/api/area/@maximum", responseData));
             Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/api/waynodes").getLength());
-            Assert.assertEquals(HootProperties.getPropertyOrDefault("maximumWayNodes"),
-                    xpath.evaluate("//osm/api/waynodes/@maximum", responseData));
+            Assert.assertEquals(MAXIMUM_WAY_NODES, xpath.evaluate("//osm/api/waynodes/@maximum", responseData));
             Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/api/changesets").getLength());
-            Assert.assertEquals(HootProperties.getPropertyOrDefault("maximumChangesetElements"),
+            Assert.assertEquals(MAXIMUM_CHANGESET_ELEMENTS,
                     xpath.evaluate("//osm/api/changesets/@maximum_elements", responseData));
             Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/api/timeout").getLength());
             Assert.assertEquals(
-                    Integer.parseInt(HootProperties.getPropertyOrDefault("changesetIdleTimeoutMinutes")) * 60,
+                    Integer.parseInt(CHANGESET_IDLE_TIMEOUT_MINUTES) * 60,
                     Integer.parseInt(xpath.evaluate("//osm/api/timeout/@seconds", responseData)));
 
             Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/api/status").getLength());

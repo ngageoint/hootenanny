@@ -34,12 +34,12 @@ import org.slf4j.LoggerFactory;
 
 import com.mysema.query.sql.SQLQuery;
 
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.QCurrentNodes;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.writers.osm.ChangesetDbWriter;
+import hoot.services.controllers.osm.ChangesetDbWriter;
 
 
 /**

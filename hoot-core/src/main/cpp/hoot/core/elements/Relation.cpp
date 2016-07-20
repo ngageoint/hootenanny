@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -78,10 +78,10 @@ private:
 };
 
 Relation::Relation(Status s, long id, Meters circularError, QString type, long changeset,
-                   long version, unsigned int timestamp, QString user, long uid) :
+                   long version, unsigned int timestamp, QString user, long uid, bool visible) :
 Element(s)
 {
-  _relationData.reset(new RelationData(id, changeset, version, timestamp, user, uid));
+  _relationData.reset(new RelationData(id, changeset, version, timestamp, user, uid, visible));
   _relationData->setCircularError(circularError);
   _relationData->setType(type);
 }
@@ -193,11 +193,24 @@ void Relation::removeElement(ElementId eid)
 }
 
 void Relation::replaceElement(const shared_ptr<const Element>& from,
-  const shared_ptr<const Element>& to)
+  const shared_ptr<const Element> &to)
 {
   _preGeometryChange();
   _makeWritable();
   _relationData->replaceElement(from->getElementId(), to->getElementId());
+  _postGeometryChange();
+}
+
+void Relation::replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to)
+{
+  _preGeometryChange();
+  _makeWritable();
+  QList<ElementId> copy;
+  for (int i = 0; i < to.size(); ++i)
+  {
+    copy.append(to[i]->getElementId());
+  }
+  _relationData->replaceElement(from->getElementId(), copy);
   _postGeometryChange();
 }
 
@@ -227,7 +240,9 @@ QString Relation::toString() const
   }
   ss << endl;
   ss << "tags: " << getTags().toString().toUtf8().data();
-  ss << "status: " << getStatusString().toUtf8().data();
+  ss << "status: " << getStatusString().toStdString() << endl;
+  ss << "version: " << getVersion() << endl;
+  ss << "visible: " << getVisible();
   return QString::fromUtf8(ss.str().data());
 }
 

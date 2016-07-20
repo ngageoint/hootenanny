@@ -51,6 +51,7 @@
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
 // CPP Unit
@@ -84,7 +85,7 @@ public:
 
   ConstWayPtr getWay(ConstOsmMapPtr map, const QString& key, const QString& value)
   {
-    std::vector<long> wids = map->findWays(key, value);
+    std::vector<long> wids = FindWaysVisitor::findWaysByTag(map, key, value);
     CPPUNIT_ASSERT_EQUAL((size_t)1, wids.size());
     return map->getWay(wids[0]);
   }
@@ -102,8 +103,8 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    vector<long> wids1 = map->findWays("REF1", "Target");
-    vector<long> wids2 = map->findWays("REF2", "Target");
+    vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, "REF1", "Target");
+    vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, "REF2", "Target");
     set< pair<ElementId, ElementId> > pairs;
 
     for (size_t i = 0; i < wids2.size(); i++)
@@ -154,8 +155,8 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
 
-    vector<long> wids1 = map->findWays("REF1", "Panera");
-    vector<long> wids2 = map->findWays("REF2", "Panera");
+    vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, "REF1", "Panera");
+    vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, "REF2", "Panera");
     set< pair<ElementId, ElementId> > pairs;
 
     for (size_t i = 0; i < wids2.size(); i++)

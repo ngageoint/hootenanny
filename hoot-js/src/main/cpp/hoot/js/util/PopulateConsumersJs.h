@@ -28,6 +28,7 @@
 #define POPULATECONSUMERSJS_H
 
 // hoot
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/algorithms/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregatorConsumer.h>
 #include <hoot/core/elements/ElementConsumer.h>
@@ -36,6 +37,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/js/OsmMapJs.h>
 #include <hoot/js/algorithms/StringDistanceJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/filter/ElementCriterionJs.h>
@@ -102,6 +104,10 @@ public:
         {
           populateValueAggregatorConsumer<T>(consumer, v);
         }
+        else if (str(obj->Get(baseClass())) == QString::fromStdString(OsmMap::className()))
+        {
+          populateOsmMapConsumer<T>(consumer, v);
+        }
         else
         {
           throw IllegalArgumentException("Unexpected object passed to consumer " +
@@ -160,23 +166,6 @@ public:
   }
 
   template <typename T>
-  static void populateVisitorConsumer(T* consumer, const v8::Local<v8::Value>& v)
-  {
-    ElementVisitorJs* obj = ObjectWrap::Unwrap<ElementVisitorJs>(v->ToObject());
-
-    ElementVisitorConsumer* c = dynamic_cast<ElementVisitorConsumer*>(consumer);
-
-    if (c == 0)
-    {
-      throw IllegalArgumentException("Object does not accept ElementCriterion as an argument.");
-    }
-    else
-    {
-      c->addVisitor(obj->getVisitor());
-    }
-  }
-
-  template <typename T>
   static void populateElementConsumer(T* consumer, const v8::Local<v8::Value>& v)
   {
     ElementJs* obj = ObjectWrap::Unwrap<ElementJs>(v->ToObject());
@@ -229,6 +218,40 @@ public:
   }
 
   template <typename T>
+  static void populateOsmMapConsumer(T* consumer, const v8::Local<v8::Value>& v)
+  {
+    OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(v->ToObject());
+
+    if (obj->isConst())
+    {
+      ConstOsmMapConsumer* c = dynamic_cast<ConstOsmMapConsumer*>(consumer);
+
+      if (c == 0)
+      {
+        throw IllegalArgumentException("Object does not accept const OsmMap as an argument. Maybe "
+          "try a non-const OsmMap?");
+      }
+      else
+      {
+        c->setOsmMap(obj->getConstMap().get());
+      }
+    }
+    else
+    {
+      OsmMapConsumer* c = dynamic_cast<OsmMapConsumer*>(consumer);
+
+      if (c == 0)
+      {
+        throw IllegalArgumentException("Object does not accept OsmMap as an argument.");
+      }
+      else
+      {
+        c->setOsmMap(obj->getMap().get());
+      }
+    }
+  }
+
+  template <typename T>
   static void populateStringDistanceConsumer(T* consumer, const Local<Value>& value)
   {
     StringDistancePtr sd = toCpp<StringDistancePtr>(value);
@@ -259,6 +282,23 @@ public:
     else
     {
       c->setValueAggregator(va);
+    }
+  }
+
+  template <typename T>
+  static void populateVisitorConsumer(T* consumer, const v8::Local<v8::Value>& v)
+  {
+    ElementVisitorJs* obj = ObjectWrap::Unwrap<ElementVisitorJs>(v->ToObject());
+
+    ElementVisitorConsumer* c = dynamic_cast<ElementVisitorConsumer*>(consumer);
+
+    if (c == 0)
+    {
+      throw IllegalArgumentException("Object does not accept ElementCriterion as an argument.");
+    }
+    else
+    {
+      c->addVisitor(obj->getVisitor());
     }
   }
 

@@ -3,6 +3,8 @@
 set -x
 set -e
 
+cd $HOOT_HOME
+
 make -sj`nproc`
 
 hoot --version --debug

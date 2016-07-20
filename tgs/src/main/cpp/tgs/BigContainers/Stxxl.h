@@ -27,12 +27,16 @@
 #ifndef STXXL_H
 #define STXXL_H
 
+// Boost Includes
+#include <boost/shared_ptr.hpp>
+
 // Qt
 #include <QTemporaryFile>
 #include <QString>
 
 namespace Tgs
 {
+  using namespace boost;
 
 /**
  * A convenience class for initializing STXXL in a multiple processes safe way.
@@ -58,7 +62,7 @@ public:
   void setConfig(QString configFile);
 
 private:
-  static Stxxl _theInstance;
+  static shared_ptr<Stxxl> _theInstance;
   QTemporaryFile _configFileTmp;
 
   Stxxl();

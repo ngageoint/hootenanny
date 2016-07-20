@@ -39,8 +39,8 @@ hoot.require('fcode_common');
 // Layer name filter - Filter out all layers that match this regexp
 function layerNameFilter()
 {
-    // Drop all of the "SRC_*" and "o2s_*" layers
-    return "^(?!SRC_|o2s_)";
+    // Drop all of the "SRC_*", "o2s_*" and "extra_*" layers
+    return "^(?!SRC_|o2s_|extra_)";
 }
 
 
