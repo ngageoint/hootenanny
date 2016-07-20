@@ -100,6 +100,7 @@ Output.osm
 plugins/*_schema.js
 plugins/etds*_rules.js
 plugins/emgcp*_rules.js
+plugins/eggdm*_rules.js
 plugins-local
 translations-local
 **/*.pro.user*
