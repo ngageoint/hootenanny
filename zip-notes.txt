@@ -1,7 +1,0 @@
-zipList = []
-reqList = [{"name":"DcGisRoads.osm","type":"OSM"}] // json
-inputsList = [DcGisRoads.osm]
-translation = "customscript/NONE.js"
-inputType = "OSM"
-inputName = "DcGisRoads" // Layer Name
-etlName = "DcGisRoads" // same as above, Layer Name
