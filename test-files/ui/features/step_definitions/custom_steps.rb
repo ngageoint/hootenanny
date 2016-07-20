@@ -361,6 +361,10 @@ When(/^I press "([^"]*)" span with text "([^"]*)"$/) do |cls,txt|
   find('span.' + cls, :text=>txt).click
 end
 
+When(/^I press span with text "([^"]*)"$/) do |txt|
+  find('span', :text=>txt).click
+end
+
 When(/^I press "([^"]*)" big loud link$/) do |cls|
   find('a.big.loud.' + cls).click
 end
@@ -652,4 +656,17 @@ Then(/^I should see "([^"]*)" bookmark first and "([^"]*)" bookmark second$/) do
   spans = find('#reviewBookmarksContent').all('span.strong')
   expect(spans.first).to have_content(rb1)
   expect(spans.last).to have_content(rb2)
+end
+
+Then(/^I should see "([^"]*)" with a value between "([^"]*)" and "([^"]*)"$/) do |input, low, high|
+  el = page.find(input)
+  val = el.value.to_f
+  expect(val).to be > low.to_f
+  expect(val).to be < high.to_f
+end
+
+Then(/^I should see "([^"]*)" with a value greater than "([^"]*)"$/) do |el1, el2|
+  max = page.find(el1).value.to_f
+  min = page.find(el2).value.to_f
+  expect(max).to be > min
 end
