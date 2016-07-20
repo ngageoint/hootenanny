@@ -45,6 +45,11 @@ public:
 
   ChainCriterion() {}
 
+  ChainCriterion(shared_ptr<ElementCriterion> child1, shared_ptr<ElementCriterion> child2)
+  {
+    _filters.push_back(child1);
+    _filters.push_back(child2);
+  }
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2)
   {
     _filters.push_back(shared_ptr<ElementCriterion>(child1));

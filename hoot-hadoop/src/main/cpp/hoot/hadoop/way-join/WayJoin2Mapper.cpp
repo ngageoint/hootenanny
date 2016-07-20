@@ -17,9 +17,10 @@
 #include "WayJoin2Mapper.h"
 
 // Hoot
-#include <hoot/core/filters/TagFilter.h>
 #include <hoot/core/io/PbfReader.h>
 #include <hoot/core/io/PbfWriter.h>
+#include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 // Pretty Pipes
 #include <pp/DataOutputStream.h>
@@ -135,7 +136,8 @@ void WayJoin2Mapper::mapOsmMap(shared_ptr<OsmMap> m)
   PbfWriter writer;
 
   // Remove all non-roads.
-  m->removeWays(TagFilter(Filter::FilterMatches, "highway", ""));
+  shared_ptr<TagCriterion> pCrit(new TagCriterion("highway", ""));
+  RemoveElementsVisitor::removeWays(m, pCrit);
 
   _key->elementType = NodesType;
   // Go through all the nodes

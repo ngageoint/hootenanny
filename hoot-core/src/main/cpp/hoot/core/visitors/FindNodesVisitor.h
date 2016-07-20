@@ -42,37 +42,27 @@ class FindNodesVisitor :  public ElementConstOsmMapVisitor
 {
 public:
 
-  FindNodesVisitor (ElementCriterion* pCrit):
-    _pCrit(pCrit)
-  {
-    // This space intentionally left blank
-  }
+  FindNodesVisitor (ElementCriterion* pCrit);
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
+  void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(const shared_ptr<const Element>& e)
-  {
-    if (e->getElementType() == ElementType::Node)
-    {
-      ConstNodePtr pNode = dynamic_pointer_cast<const Node>(e);
-      if (_pCrit->isSatisfied(e))
-      {
-        _nodeIds.push_back(e->getId());
-      }
-    }
-  }
+  void visit(const shared_ptr<const Element>& e);
 
   // Get matching IDs
   vector<long> getIds() { return _nodeIds; }
 
+  static vector<long> findNodes(const ConstOsmMapPtr& map,
+                                ElementCriterion* pCrit);
+
+  static vector<long> findNodes(const ConstOsmMapPtr& map,
+                                ElementCriterion* pCrit,
+                                const Coordinate& refCoord,
+                                Meters maxDistance);
+
   // Convenience method for finding nodes that contain the given tag
-  static vector<long> findNodesByTag(const ConstOsmMapPtr& map, const QString& key, const QString& value)
-  {
-    TagCriterion crit(key, value);
-    FindNodesVisitor v(&crit);
-    map->visitNodesRo(v);
-    return v.getIds();
-  }
+  static vector<long> findNodesByTag(const ConstOsmMapPtr& map,
+                                     const QString& key,
+                                     const QString& value);
 
 private:
   const OsmMap* _map;

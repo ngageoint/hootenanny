@@ -95,7 +95,6 @@ namespace Tgs
     CPPUNIT_TEST(testReproject);
     CPPUNIT_TEST(sanityCheck);
     CPPUNIT_TEST(testRandom);
-    CPPUNIT_TEST(testReproject);
     //CPPUNIT_TEST(test20);
     CPPUNIT_TEST_SUITE_END();
   public:
