@@ -174,3 +174,4 @@ MingsSuperAwesomePrompt.sh
 id_rsa.pub
 coverage/
 hoot-services/db.properties
+hoot-services/src/main/java/hoot/services/db2
