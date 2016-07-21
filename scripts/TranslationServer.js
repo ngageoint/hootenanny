@@ -15,7 +15,7 @@ var serverPort = 8233;
 var util = require('util');
 var nCPU = os.cpus().length;
 
-var availableTrans = {'TDSv40':{'isvailable':'true'}, 'TDSv61':{'isvailable':'true'}, 'MGCP':{'isvailable':'true'}};
+var availableTrans = {'TDSv40':{'isvailable':'true'}, 'TDSv61':{'isvailable':'true'}, 'MGCP':{'isvailable':'true'}, 'GGDMv30':{'isvailable':'true'}};
 var HOOT_HOME = process.env.HOOT_HOME;
 //Moving hoot init to the request handler allows stxxl temp file cleanup to happen properly.
 //hoot = require(HOOT_HOME + '/lib/HootJs');
@@ -132,6 +132,12 @@ var populateOsmToTdsmap = function()
                             'translation.script':HOOT_HOME + '/translations/OSM_to_englishMGCP.js',
                             'translation.direction':'toogr'});
     }
+
+    if(!osmToTdsMap['GGDMv30']) {
+        osmToTdsMap['GGDMv30'] = new hoot.TranslationOp({
+                            'translation.script':HOOT_HOME + '/translations/OSM_to_englishGGDM30.js',
+                            'translation.direction':'toogr'});
+    }
 }
 
 // OSM to TDS request handler
@@ -163,7 +169,8 @@ var osmtotds = function(request, response)
 		var schemaMap = {};
 		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_full_schema.js');
         schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
-		schemaMap['MGCP'] = require(HOOT_HOME + '/plugins/mgcp_schema.js');
+        schemaMap['MGCP'] = require(HOOT_HOME + '/plugins/mgcp_schema.js');
+		schemaMap['GGDMv30'] = require(HOOT_HOME + '/plugins/ggdm30_full_schema.js');
 		
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(trns){
@@ -217,6 +224,13 @@ var populateTdsToOsmMap = function()
     {
         tdsToOsmMap['MGCP'] = new hoot.TranslationOp({
                             'translation.script':HOOT_HOME + '/translations/englishMGCP_to_OSM.js',
+                            'translation.direction':'toosm'});
+    }
+
+    if(!tdsToOsmMap['GGDMv30'])
+    {
+        tdsToOsmMap['GGDMv30'] = new hoot.TranslationOp({
+                            'translation.script':HOOT_HOME + '/translations/englishGGDM30_to_OSM.js',
                             'translation.direction':'toosm'});
     }
 }
@@ -302,7 +316,8 @@ var getTaginfoKeyFields = function(request, response)
 		var schemaMap = {};
 		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_full_schema.js');
         schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
-		schemaMap['MGCP'] = require(HOOT_HOME + '/plugins/mgcp_schema.js');
+        schemaMap['MGCP'] = require(HOOT_HOME + '/plugins/mgcp_schema.js');
+		schemaMap['GGDMv30'] = require(HOOT_HOME + '/plugins/ggdm30_full_schema.js');
 		
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(trns){
@@ -384,7 +399,8 @@ var getTaginfoKeys = function(request, response)
 		var schemaMap = {};
 		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_full_schema.js');
         schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
-		schemaMap['MGCP'] = require(HOOT_HOME + '/plugins/mgcp_schema.js');
+        schemaMap['MGCP'] = require(HOOT_HOME + '/plugins/mgcp_schema.js');
+		schemaMap['GGDMv30'] = require(HOOT_HOME + '/plugins/ggdm30_full_schema.js');
 		
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(trns){
@@ -504,6 +520,8 @@ var getFilteredSchema = function(request, response) {
 		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_full_schema.js');
         schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
 		schemaMap['MGCP'] = require(HOOT_HOME + '/plugins/mgcp_schema.js');
+        schemaMap['GGDMv30'] = require(HOOT_HOME + '/plugins/ggdm30_full_schema.js');
+
 
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(translation){
