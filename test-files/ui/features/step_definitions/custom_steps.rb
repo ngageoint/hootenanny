@@ -368,6 +368,10 @@ When(/^I press "([^"]*)" span with text "([^"]*)"$/) do |cls,txt|
   find('span.' + cls, :text=>txt).click
 end
 
+When(/^I press span with text "([^"]*)"$/) do |txt|
+  find('span', :text=>txt).click
+end
+
 When(/^I press "([^"]*)" big loud link$/) do |cls|
   find('a.big.loud.' + cls).click
 end
