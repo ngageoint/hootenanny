@@ -84,7 +84,7 @@ Feature: Manage Tab
         And I click the "TestSubFolder" Dataset
         And I context click the "TestSubFolder" Dataset
         And I click the "Add Dataset" context menu item
-        And I select the "File (osm)" option in the "Select Import Type" combobox
+        And I select the "File (osm,osm.zip)" option in the "Select Import Type" combobox
         And I select "/test-files/dcpoi_clip.osm" dataset
         And I fill "importDatasetLayerName" with "dcpoi_clip_manage"
         Then I should see element "[id='importDatasetLayerName']" with value "dcpoi_clip_manage"

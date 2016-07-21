@@ -8,7 +8,7 @@ Feature: Import Export Delete OSM Dataset
     Scenario: Import Dataset
         When I click on the "Datasets" option in the "settingsSidebar"
         And I press "Add Dataset"
-        And I select the "File (osm)" option in the "Select Import Type" combobox
+        And I select the "File (osm,osm.zip)" option in the "Select Import Type" combobox
         And I select "/test-files/dcpoi_clip.osm" dataset
         Then I should see element "[id='importDatasetLayerName']" with value "dcpoi_clip"
         When I press "big.loud" span with text "Import"

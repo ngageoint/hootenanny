@@ -37,10 +37,10 @@ public class ReviewableItemBbox implements ReviewQueryMapper {
     private long relationId;
     private BoundingBox bbox;
 
-    public ReviewableItemBbox(BoundingBox bbox, long mapid, long relationid) {
+    public ReviewableItemBbox(BoundingBox bbox, long mapId, long relationId) {
         this.bbox = bbox;
-        mapId = mapid;
-        relationId = relationid;
+        this.mapId = mapId;
+        this.relationId = relationId;
     }
 
     @Override

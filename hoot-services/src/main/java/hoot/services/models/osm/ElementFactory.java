@@ -104,8 +104,6 @@ public final class ElementFactory {
             }
         }
 
-        ClassUtils.getPackageName(ElementFactory.class);
-
         Long oMapId = mapId;
         return (Element) ConstructorUtils.invokeConstructor(
                 Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType),
