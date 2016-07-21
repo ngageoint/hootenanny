@@ -222,7 +222,6 @@ end
 When(/^I press the escape key$/) do
   find('body').native.send_keys(:escape)
 end
-
 Then(/^I should see options in this order:$/) do |table|
   expected_order = table.raw.flatten
   actual_order = page.all('#settingsSidebar label').collect(&:text)
@@ -660,6 +659,19 @@ Then(/^I should see "([^"]*)" bookmark first and "([^"]*)" bookmark second$/) do
   spans = find('#reviewBookmarksContent').all('span.strong')
   expect(spans.first).to have_content(rb1)
   expect(spans.last).to have_content(rb2)
+end
+
+Then(/^I should see "([^"]*)" with a value between "([^"]*)" and "([^"]*)"$/) do |input, low, high|
+  el = page.find(input)
+  val = el.value.to_f
+  expect(val).to be > low.to_f
+  expect(val).to be < high.to_f
+end
+
+Then(/^I should see "([^"]*)" with a value greater than "([^"]*)"$/) do |el1, el2|
+  max = page.find(el1).value.to_f
+  min = page.find(el2).value.to_f
+  expect(max).to be > min
 end
 
 Then(/^I should see a "([^"]*)" on the map$/) do |el|
