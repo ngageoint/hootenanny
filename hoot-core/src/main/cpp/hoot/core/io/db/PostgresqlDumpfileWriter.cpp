@@ -169,6 +169,9 @@ void PostgresqlDumpfileWriter::finalizePartial()
     _outputFilename.remove();
   }
 
+  // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
+  _createTable( "byte_order_mark", "\n", true );
+
   // Output updates for sequences to ensure database sanity
   _writeSequenceUpdates();
 
@@ -177,7 +180,7 @@ void PostgresqlDumpfileWriter::finalizePartial()
   {
     _createTable( "users", "COPY users (email, id, pass_crypt, creation_time) FROM stdin;\n");
 
-    _outputSections["users"] <<
+    *(_outputSections["users"].second) <<
       QString("%1\t%2\t\tNOW()\n").arg(
         _configData.addUserEmail,
         QString::number(_configData.addUserId) );
@@ -202,14 +205,24 @@ void PostgresqlDumpfileWriter::finalizePartial()
       continue;
     }
 
+    LOG_DEBUG("Flushing section " << *it << " to file " << (_outputSections[*it].first)->fileName());
+
     // Write close marker for table
     if ( (*it != "byte_order_mark") && (*it != "sequence_updates") )
     {
-      _outputSections[*it] << QString("\\.\n\n\n");
+      *(_outputSections[*it].second) << QString("\\.\n\n\n");
+    }
+
+    // Flush any residual content from text stream/file
+    (_outputSections[*it].second)->flush();
+    if ( (_outputSections[*it].first)->flush() == false )
+    {
+      throw HootException("Could not flush tempfile for table " + *it);
     }
 
     // Append contents of file to output file
-    outStream << _outputSections[*it].join("");
+    boost::shared_ptr<QTextStream> outContents = _outputSections[*it].second;
+    outStream << outContents->readAll();
 
     LOG_DEBUG( "Wrote contents of section " + *it );
   }
@@ -247,9 +260,9 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 
   _writeNodeToTables(n, nodeDbId);
 
-  _writeTagsToTables(/*t*/n->getTags(), nodeDbId,
-    "current_node_tags", "%1\t%2\t%3\n",
-    "node_tags", "%1\t1\t%2\t%3\n");
+  _writeTagsToTables( n->getTags(), nodeDbId,
+    _outputSections["current_node_tags"].second, "%1\t%2\t%3\n",
+    _outputSections["node_tags"].second, "%1\t1\t%2\t%3\n");
 
   _writeStats.nodesWritten++;
   _incrementChangesInChangeset();
@@ -288,9 +301,9 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 
   _writeWaynodesToTables( _idMappings.wayIdMap->at( w->getId() ), w->getNodeIds() );
 
-  _writeTagsToTables(/*t*/w->getTags(), wayDbId,
-    "current_way_tags", "%1\t%2\t%3\n",
-    "way_tags", "%1\t1\t%2\t%3\n");
+  _writeTagsToTables( w->getTags(), wayDbId,
+    _outputSections["current_way_tags"].second, "%1\t%2\t%3\n",
+    _outputSections["way_tags"].second, "%1\t1\t%2\t%3\n");
 
   _writeStats.waysWritten++;
   _incrementChangesInChangeset();
@@ -329,9 +342,9 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 
   _writeRelationMembersToTables( r );
 
-  _writeTagsToTables(/*t*/r->getTags(), relationDbId,
-    "current_relation_tags", "%1\t%2\t%3\n",
-    "relation_tags", "%1\t1\t%2\t%3\n");
+  _writeTagsToTables( r->getTags(), relationDbId,
+    _outputSections["current_relation_tags"].second, "%1\t%2\t%3\n",
+    _outputSections["relation_tags"].second, "%1\t1\t%2\t%3\n");
 
   _writeStats.relationsWritten++;
   _incrementChangesInChangeset();
@@ -499,7 +512,7 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
     datestring,
     tileNumberString );
 
-  _outputSections["current_nodes"] << outputLine;
+  *(_outputSections["current_nodes"].second) << outputLine;
 
   outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n").arg(
     QString::number(nodeDbId),
@@ -509,21 +522,19 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
     datestring,
     tileNumberString );
 
-  _outputSections["nodes"] << outputLine;
+  *(_outputSections["nodes"].second) << outputLine;
 }
 
 void PostgresqlDumpfileWriter::_writeTagsToTables(
   const Tags& tags,
   const ElementIdDatatype nodeDbId,
-  const QString& currentTableName,
+  boost::shared_ptr<QTextStream>& currentTable,
   const QString& currentTableFormatString,
-  const QString& historicalTableName,
+  boost::shared_ptr<QTextStream>& historicalTable,
   const QString& historicalTableFormatString )
 {
   const QString nodeDbIdString( QString::number(nodeDbId) );
 
-  QStringList currentTable = _outputSections[currentTableName];
-  QStringList historicalTable = _outputSections[historicalTableName];
   for ( Tags::const_iterator it = tags.begin(); it != tags.end(); ++it )
   {
     const QString key = _escapeCopyToData( it.key() );
@@ -531,11 +542,9 @@ void PostgresqlDumpfileWriter::_writeTagsToTables(
     const QString value = _escapeCopyToData( it.value() );
     //LOG_VARD(value);
 
-    currentTable << currentTableFormatString.arg(nodeDbIdString, key, value );
-    historicalTable << historicalTableFormatString.arg(nodeDbIdString, key, value );
+    *currentTable << currentTableFormatString.arg(nodeDbIdString, key, value );
+    *historicalTable << historicalTableFormatString.arg(nodeDbIdString, key, value );
   }
-  _outputSections[currentTableName] = currentTable;
-  _outputSections[historicalTableName] = historicalTable;
 }
 
 void PostgresqlDumpfileWriter::_createWayTables()
@@ -561,14 +570,14 @@ void PostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId
       .arg(changesetId)
       .arg(datestring);
 
-  _outputSections["current_ways"] << outputLine;
+  *(_outputSections["current_ways"].second) << outputLine;
 
   outputLine = QString("%1\t%2\t%3\t1\tt\t\\N\n")
       .arg(wayDbId)
       .arg(changesetId)
       .arg(datestring);
 
-  _outputSections["ways"] << outputLine;
+  *(_outputSections["ways"].second) << outputLine;
 }
 
 void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype dbWayId,
@@ -576,8 +585,8 @@ void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype d
 {
   unsigned int nodeIndex = 1;
 
-  QStringList currentWayNodesStream  = _outputSections["current_way_nodes"];
-  QStringList wayNodesStream         = _outputSections["way_nodes"];
+  boost::shared_ptr<QTextStream> currentWayNodesStream  = _outputSections["current_way_nodes"].second;
+  boost::shared_ptr<QTextStream> wayNodesStream         = _outputSections["way_nodes"].second;
   const QString currentWaynodesFormat("%1\t%2\t%3\n");
   const QString waynodesFormat("%1\t%2\t1\t%3\n");
   const QString dbWayIdString( QString::number(dbWayId));
@@ -589,8 +598,8 @@ void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype d
     {
       const QString dbNodeIdString = QString::number( _idMappings.nodeIdMap->at(*it) );
       const QString nodeIndexString( QString::number(nodeIndex) );
-      currentWayNodesStream << currentWaynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString);
-      wayNodesStream << waynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString);
+      *currentWayNodesStream << currentWaynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString);
+      *wayNodesStream << waynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString);
     }
     else
     {
@@ -600,8 +609,6 @@ void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype d
 
     ++nodeIndex;
   }
-  _outputSections["current_way_nodes"] = currentWayNodesStream;
-  _outputSections["way_nodes"] = wayNodesStream;
 }
 
 void PostgresqlDumpfileWriter::_createRelationTables()
@@ -627,14 +634,14 @@ void PostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype re
       .arg(changesetId)
       .arg(datestring);
 
-  _outputSections["current_relations"] << outputLine;
+  *(_outputSections["current_relations"].second) << outputLine;
 
   outputLine = QString("%1\t%2\t%3\t1\tt\t\\N\n")
       .arg(relationDbId)
       .arg(changesetId)
       .arg(datestring);
 
-  _outputSections["relations"] << outputLine;
+  *(_outputSections["relations"].second) << outputLine;
 }
 
 void PostgresqlDumpfileWriter::_writeRelationMembersToTables( const ConstRelationPtr& relation )
@@ -717,25 +724,49 @@ void PostgresqlDumpfileWriter::_writeRelationMember( const ElementIdDatatype sou
   const QString memberRefIdString( QString::number(memberDbId) );
   const QString memberSequenceString( QString::number(memberSequenceIndex) );
   const QString memberRole = _escapeCopyToData( memberEntry.getRole() );
-  QStringList currentRelationMembersStream  = _outputSections["current_relation_members"];
-  QStringList relationMembersStream         = _outputSections["relation_members"];
+  boost::shared_ptr<QTextStream> currentRelationMembersStream  = _outputSections["current_relation_members"].second;
+  boost::shared_ptr<QTextStream> relationMembersStream         = _outputSections["relation_members"].second;
   const QString currentRelationMemberFormat("%1\t%2\t%3\t%4\t%5\n");
   const QString relationMembersFormat("%1\t%2\t%3\t%4\t1\t%5\n");
 
-  currentRelationMembersStream << currentRelationMemberFormat.arg(
+  *currentRelationMembersStream << currentRelationMemberFormat.arg(
     dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
-  relationMembersStream        << relationMembersFormat.arg(
+  *relationMembersStream        << relationMembersFormat.arg(
     dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
-
-  _outputSections["current_relation_members"] = currentRelationMembersStream;
-  _outputSections["relation_members"] = relationMembersStream;
 
   _writeStats.relationMembersWritten++;
 }
 
 void PostgresqlDumpfileWriter::_createTable(const QString &tableName, const QString &tableHeader)
 {
-  _outputSections[tableName.toUtf8()] << tableHeader.toUtf8();
+  _createTable(tableName, tableHeader, false);
+}
+
+void PostgresqlDumpfileWriter::_createTable( const QString& tableName, const QString& tableHeader,
+  const bool addByteOrderMark )
+{
+  boost::shared_ptr<QTemporaryFile> tempfile( new QTemporaryFile() );
+  if ( tempfile->open() == false )
+  {
+    throw HootException("Could not open temp file for contents of table " + tableName);
+  }
+  tempfile->setAutoRemove(false);
+
+  _outputSections[tableName] =
+      std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
+        tempfile, boost::shared_ptr<QTextStream>(new QTextStream(tempfile.get())) );
+
+  // Database is encoded in UTF-8, so force encoding as otherwise file is in local
+  //    Western encoding which goes poorly for a lot of countries
+  _outputSections[tableName].second->setCodec("UTF-8");
+
+  // First table written out should have byte order mark to help identifify content as UTF-8
+  if ( addByteOrderMark == true )
+  {
+    _outputSections[tableName].second->setGenerateByteOrderMark(true);
+  }
+
+  *(_outputSections[tableName].second) << tableHeader;
 }
 
 void PostgresqlDumpfileWriter::_incrementChangesInChangeset()
@@ -816,11 +847,11 @@ void PostgresqlDumpfileWriter::_writeChangesetToTable()
       "changesets", "COPY changesets (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) FROM stdin;\n" );
   }
 
-  QStringList changesetsStream  = _outputSections["changesets"];
+  boost::shared_ptr<QTextStream> changesetsStream  = _outputSections["changesets"].second;
   const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
   const QString changesetFormat("%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n");
 
-  changesetsStream << changesetFormat.arg(
+  *changesetsStream << changesetFormat.arg(
     QString::number(_changesetData.changesetId),
     QString::number(_configData.changesetUserId),
     datestring,
@@ -830,40 +861,37 @@ void PostgresqlDumpfileWriter::_writeChangesetToTable()
     QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetData.changesetBounds.getMaxX())),
     datestring,
     QString::number(_changesetData.changesInChangeset) );
-  _outputSections["changesets"] = changesetsStream;
 }
 
 void PostgresqlDumpfileWriter::_writeSequenceUpdates()
 {
   _createTable( "sequence_updates", "" );
 
-  QStringList sequenceUpdatesStream  = _outputSections["sequence_updates"];
+  boost::shared_ptr<QTextStream> sequenceUpdatesStream  = _outputSections["sequence_updates"].second;
   const QString sequenceUpdateFormat("SELECT pg_catalog.setval('%1', %2);\n");
 
   // Users
   if ( _configData.addUserEmail.isEmpty() == false )
   {
-    sequenceUpdatesStream << sequenceUpdateFormat.arg("users_id_seq",
+    *sequenceUpdatesStream << sequenceUpdateFormat.arg("users_id_seq",
       QString::number(_configData.addUserId + 1) );
   }
 
   // Changesets
-  sequenceUpdatesStream << sequenceUpdateFormat.arg("changesets_id_seq",
+  *sequenceUpdatesStream << sequenceUpdateFormat.arg("changesets_id_seq",
     QString::number(_changesetData.changesetId + 1) );
 
   // Nodes
-  sequenceUpdatesStream << sequenceUpdateFormat.arg("current_nodes_id_seq",
+  *sequenceUpdatesStream << sequenceUpdateFormat.arg("current_nodes_id_seq",
     QString::number(_idMappings.nextNodeId) );
 
   // Ways
-  sequenceUpdatesStream << sequenceUpdateFormat.arg("current_ways_id_seq",
+  *sequenceUpdatesStream << sequenceUpdateFormat.arg("current_ways_id_seq",
     QString::number(_idMappings.nextWayId) );
 
   // Relations
-  sequenceUpdatesStream << sequenceUpdateFormat.arg("current_relations_id_seq",
+  *sequenceUpdatesStream << sequenceUpdateFormat.arg("current_relations_id_seq",
     QString::number(_idMappings.nextRelationId) ) << "\n\n";
-
-  _outputSections["sequence_updates"] = sequenceUpdatesStream;
 }
 
 }

@@ -143,10 +143,10 @@ public:
       QTextStream in(&stdInputFile);
       while (!in.atEnd())
       {
-         QString line = in.readLine();
-         line = line.remove(reDate);
-         line = line.remove(reTime);
-         stdList << line;
+        QString line = in.readLine();
+        line = line.remove(reDate);
+        line = line.remove(reTime);
+        stdList << line;
       }
       stdInputFile.close();
     }
@@ -155,15 +155,15 @@ public:
     QStringList inList;
     if (inputFile.open(QIODevice::ReadOnly))
     {
-       QTextStream in(&inputFile);
-       while (!in.atEnd())
-       {
-          QString line = in.readLine();
-          line = line.remove(reDate);
-          line = line.remove(reTime);
-          inList << line;
-       }
-       inputFile.close();
+      QTextStream in(&inputFile);
+      while (!in.atEnd())
+      {
+        QString line = in.readLine();
+        line = line.remove(reDate);
+        line = line.remove(reTime);
+        inList << line;
+      }
+      inputFile.close();
     }
     CPPUNIT_ASSERT_EQUAL(inList.size(), stdList.size());
     pgDumpWriter.close();
