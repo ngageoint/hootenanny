@@ -9,17 +9,7 @@ Feature: Conflate and Export OSM API Database Dataset
     And I press "Add Layer"
     Then I wait 30 "seconds" to see "DcTigerRoadsCucumber"
     And I press "Add Secondary Dataset"
-    And I click the "OSM_API_DB_osmapi_test" Dataset
-    And I press "Add Layer"
-    Then I wait 30 "seconds" to see "OSM_API_DB_osmapi_test"
-    Then I wait 30 "seconds" to see "Conflate"
-    And I press "Conflate"
-    And I scroll element into view and press "conflate2"
-    # I couldn't figure out how to do a "wait to see" step def for an alert...if possible, would speed this
-    # and the other ones like it in this file up quite a bit.
-    And I wait 30 seconds
-    Then I should see an alert containing "OSM API database not allowed as secondary layer input"
-    Then I accept the alert
+    And I should not see "OSM_API_DB_osmapi_test"
 
   Scenario: Conflate an OSM API Database Dataset with a Hootenanny Dataset and Export the Conflated Result Back Into the OSM API Database
     Given I am on Hootenanny
@@ -36,7 +26,7 @@ Feature: Conflate and Export OSM API Database Dataset
     Then I wait 30 "seconds" to see "Conflate"
     And I press "Conflate"
     And I scroll element into view and press "conflate2"
-    Then I wait 30 "seconds" to see "Conflating …"
+    Then I wait 60 "seconds" to see "Conflating …"
     Then I wait 3 "minutes" to see "osmapi_test_AllDataTypesBCucumber"
     Then I should see "Complete Review"
     Then I wait 30 "seconds" to see "Reviews remaining:"
