@@ -145,9 +145,9 @@ def printFunctions(eList):
         num_vals = len(eList[i]['values'].keys()) # How many values does the thing have?
         for j in sorted(eList[i]['values'].keys(), key=asint):
             if num_vals == 1: # Are we at the last feature? yes = no trailing comma
-                print '              { name:"%s", value:"%s" } ' % (j,eList[i]['values'][j])
+                print '              { name:"%s", value:"%s" } ' % (eList[i]['values'][j],j)
             else:
-                print '              { name:"%s", value:"%s" }, ' % (j,eList[i]['values'][j])
+                print '              { name:"%s", value:"%s" }, ' % (eList[i]['values'][j],j)
                 num_vals -= 1
 
         print '             ];'

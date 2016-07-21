@@ -437,7 +437,7 @@ void JavaScriptTranslator::_parseEnumerations(DoubleFieldDefinition* fd, QVarian
 
     if (fd->hasEnumeratedValue(v))
     {
-      LOG_WARN("Enumerated value repeated in enumerations table: " << v);
+      LOG_WARN("Enumerated double value repeated in enumerations table: " << v << " = " << vm["value"]);
     }
     else
     {
@@ -471,7 +471,7 @@ void JavaScriptTranslator::_parseEnumerations(IntegerFieldDefinition* fd, QVaria
 
     if (fd->hasEnumeratedValue(v))
     {
-      LOG_WARN("Enumerated value repeated in enumerations table: " << v);
+      LOG_WARN("Enumerated int value repeated in enumerations table: " << v << " = " << vm["value"]);
     }
     else
     {
