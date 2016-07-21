@@ -88,6 +88,10 @@ class OsmMapListener;
  */
 class OsmMap : public enable_shared_from_this<OsmMap>, public ElementProvider
 {
+  friend class RemoveNodeOp;
+  friend class RemoveWayOp;
+  friend class RemoveRelationOp;
+
 public:
 
   static string className() { return "hoot::OsmMap"; }

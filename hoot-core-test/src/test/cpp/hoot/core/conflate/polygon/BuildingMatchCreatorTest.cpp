@@ -35,6 +35,7 @@
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 using namespace hoot;
 
 // CPP Unit
@@ -107,6 +108,7 @@ public:
 
     MapProjector::projectToPlanar(map);
 
+    RemoveWayOp wayRemover;
     WayMap wm = map->getWays();
     for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
     {
@@ -114,7 +116,8 @@ public:
       const Tags& t = w->getTags();
       if (t["REF1"] != "Target" && t["REF2"] != "Target")
       {
-        map->removeWay(it->first);
+        wayRemover.setWayId(it->first);
+        wayRemover.apply(map);
       }
     }
     BuildingMatchCreator uut;
