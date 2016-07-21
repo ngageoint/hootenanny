@@ -653,9 +653,10 @@ def processFile(fileName,enValues):
         # Default: Split the value and store it
         (eValue,eName) = fieldValue.split("=")
         tValue = eValue.replace("'","").strip()
+        tName = eName.replace('"',"'").strip()
 
         if 'enum' in tschema[fName]['columns'][aName]:
-            tschema[fName]['columns'][aName]['enum'].append({'name':eName.strip(),'value':tValue})
+            tschema[fName]['columns'][aName]['enum'].append({'name':tName,'value':tValue})
 
     return tschema
 # End of processFile
