@@ -190,7 +190,7 @@ void PostgresqlDumpfileWriter::finalizePartial()
     _writeChangesetToTable();
   }
 
-  _outputFilename.open(QIODevice::Append);
+  _outputFilename.open(QFile::WriteOnly);
   QTextStream outStream(&_outputFilename);
 
   for ( std::list<QString>::const_iterator it = _sectionNames.begin();
