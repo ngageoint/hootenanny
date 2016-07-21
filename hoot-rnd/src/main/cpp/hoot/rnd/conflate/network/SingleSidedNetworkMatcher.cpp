@@ -55,7 +55,7 @@ double SingleSidedNetworkMatcher::_calculateProbabilityOfMatch(ConstEdgeMatchPtr
 
   foreach (const EdgeString::EdgeEntry& ee, e->getString2()->getAllEdges())
   {
-    foreach (const EdgeLinkScorePtr& els, _edge2Scores[ee.e])
+    foreach (const EdgeLinkScorePtr& els, _edge2Scores[ee.getEdge()])
     {
       if (els->match == e)
       {
@@ -271,7 +271,7 @@ void SingleSidedNetworkMatcher::_seedEdgeScores()
     foreach (const EdgeString::EdgeEntry& ee, s2->getAllEdges())
     {
       // seed all scores w/ 1.0. This will be normalized later.
-      _edge2Scores[ee.e].append(EdgeLinkScorePtr(new EdgeLinkScore(em, 1.0)));
+      _edge2Scores[ee.getEdge()].append(EdgeLinkScorePtr(new EdgeLinkScore(em, 1.0)));
     }
   }
 }
@@ -325,12 +325,12 @@ void SingleSidedNetworkMatcher::_updateEdgeScores()
         double Pi = _calculateProbabilityOfMatch(link);
         ++count;
 
-        if (link->contains(e2Match->getString1()->getFrom()))
+        if (link->contains(e2Match->getString1()->getFromVertex()))
         {
           foundFromLink = true;
           pOfNoMatchesFrom *= 1 - (Pi * _dampening);
         }
-        else if (link->contains(e2Match->getString1()->getTo()))
+        else if (link->contains(e2Match->getString1()->getToVertex()))
         {
           foundToLink = true;
           pOfNoMatchesTo *= 1 - (Pi * _dampening);
@@ -347,16 +347,16 @@ void SingleSidedNetworkMatcher::_updateEdgeScores()
 
       if (!foundFromLink)
       {
-        double p = _calculateProbabilityOfMatch(e2Match->getString1()->getFrom(),
-          e2Match->getString2()->getFrom());
+        double p = _calculateProbabilityOfMatch(e2Match->getString1()->getFromVertex(),
+          e2Match->getString2()->getFromVertex());
         pOfNoMatchesFrom *= 1 - (p * _dampening);
         LOG_VAR(e2Match);
         LOG_VAR(p);
       }
       if (!foundToLink)
       {
-        double p = _calculateProbabilityOfMatch(e2Match->getString1()->getTo(),
-          e2Match->getString2()->getTo());
+        double p = _calculateProbabilityOfMatch(e2Match->getString1()->getToVertex(),
+          e2Match->getString2()->getToVertex());
         pOfNoMatchesTo *= 1 - (p * _dampening);
         LOG_VAR(e2Match);
         LOG_VAR(p);
@@ -419,12 +419,12 @@ void SingleSidedNetworkMatcher::_updateEdgeScoresAdditive()
         double Pi = _calculateProbabilityOfMatch(link);
         ++count;
 
-        if (link->contains(e2Match->getString1()->getFrom()))
+        if (link->contains(e2Match->getString1()->getFromVertex()))
         {
           foundFromLink = true;
           scoreFrom += (Pi * _dampening);
         }
-        else if (link->contains(e2Match->getString1()->getTo()))
+        else if (link->contains(e2Match->getString1()->getToVertex()))
         {
           foundToLink = true;
           scoreTo += (Pi * _dampening);
@@ -441,16 +441,16 @@ void SingleSidedNetworkMatcher::_updateEdgeScoresAdditive()
 
       if (!foundFromLink)
       {
-        double p = _calculateProbabilityOfMatch(e2Match->getString1()->getFrom(),
-          e2Match->getString2()->getFrom());
+        double p = _calculateProbabilityOfMatch(e2Match->getString1()->getFromVertex(),
+          e2Match->getString2()->getFromVertex());
         scoreFrom += (p * _dampening);
         LOG_VAR(e2Match);
         LOG_VAR(p);
       }
       if (!foundToLink)
       {
-        double p = _calculateProbabilityOfMatch(e2Match->getString1()->getTo(),
-          e2Match->getString2()->getTo());
+        double p = _calculateProbabilityOfMatch(e2Match->getString1()->getToVertex(),
+          e2Match->getString2()->getToVertex());
         scoreTo += (p * _dampening);
         LOG_VAR(e2Match);
         LOG_VAR(p);

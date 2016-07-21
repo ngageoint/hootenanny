@@ -120,8 +120,8 @@ private:
     virtual double cost(const EdgeString* e1,
                         const EdgeString* e2) const
     {
-      bool valid = (e1->getFrom() == v1 && e2->getFrom() == v2) ||
-        (e1->getTo() == v1 && e2->getTo() == v2);
+      bool valid = (e1->getFromVertex() == v1 && e2->getFromVertex() == v2) ||
+        (e1->getToVertex() == v1 && e2->getToVertex() == v2);
 
       LOG_VAR(valid);
       LOG_VAR(v1);
@@ -156,8 +156,8 @@ private:
   void _createStubIntersection(OsmNetworkPtr na, OsmNetworkPtr nb, ConstNetworkVertexPtr va,
     ConstNetworkEdgePtr eb);
 
-  double _calculateEdgeVertexScore(const VertexScoreMap& vm, ConstNetworkVertexPtr from1,
-    ConstNetworkVertexPtr from2, ConstNetworkVertexPtr to1, ConstNetworkVertexPtr to2) const;
+  double _calculateEdgeVertexScore(const VertexScoreMap& vm, ConstEdgeLocationPtr from1,
+    ConstEdgeLocationPtr from2, ConstEdgeLocationPtr to1, ConstEdgeLocationPtr to2) const;
 
   QList<ConstNetworkEdgePtr> _getEdgesOnVertex(ConstNetworkVertexPtr v);
 

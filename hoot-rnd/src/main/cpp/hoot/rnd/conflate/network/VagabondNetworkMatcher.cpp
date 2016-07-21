@@ -331,7 +331,7 @@ double VagabondNetworkMatcher::_calculateLinkWeight(QHash<ConstNetworkEdgePtr, i
   double result = 0.0;
   for (int i = 0; i < str->getAllEdges().size(); ++i)
   {
-    ConstNetworkEdgePtr e = str->getAllEdges()[i].e;
+    ConstNetworkEdgePtr e = str->getAllEdges()[i].getEdge();
     double w = 1.0 / counts[e];
     double l = _details->calculateLength(e);
     result += w * l;
@@ -346,7 +346,7 @@ void VagabondNetworkMatcher::_countEdgesUsed(QHash<ConstNetworkEdgePtr, int>& co
 {
   for (int i = 0; i < str->getAllEdges().size(); ++i)
   {
-    counts[str->getAllEdges()[i].e]++;
+    counts[str->getAllEdges()[i].getEdge()]++;
   }
 }
 

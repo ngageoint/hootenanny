@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-177" timestamp="1970-01-01T00:00:00Z" version="1" lat="-10.9057796608732431" lon="86.5021039151042430">
-        <tag k="hoot:id" v="-177"/>
-        <tag k="hoot:status" v="1"/>
-    </node>
-    <node visible="true" id="-176" timestamp="1970-01-01T00:00:00Z" version="1" lat="-10.9056062712935411" lon="86.5020971203931310">
+    <node visible="true" id="-176" timestamp="1970-01-01T00:00:00Z" version="1" lat="-10.9049063803941468" lon="86.5026017773815710">
         <tag k="hoot:id" v="-176"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-171" timestamp="1970-01-01T00:00:00Z" version="1" lat="-10.9049063803941468" lon="86.5026017773815710">
-        <tag k="hoot:id" v="-171"/>
+    <node visible="true" id="-175" timestamp="1970-01-01T00:00:00Z" version="1" lat="-10.9048814568212045" lon="86.5029258387632467">
+        <tag k="hoot:id" v="-175"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-170" timestamp="1970-01-01T00:00:00Z" version="1" lat="-10.9048814568212045" lon="86.5029258387632467">
+    <node visible="true" id="-174" timestamp="1970-01-01T00:00:00Z" version="1" lat="-10.9048267728028438" lon="86.5036609391177507">
+        <tag k="hoot:id" v="-174"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-170" timestamp="1970-01-01T00:00:00Z" version="1" lat="-10.9057796608732431" lon="86.5021039151042430">
         <tag k="hoot:id" v="-170"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-169" timestamp="1970-01-01T00:00:00Z" version="1" lat="-10.9048267728028438" lon="86.5036609391177507">
+    <node visible="true" id="-169" timestamp="1970-01-01T00:00:00Z" version="1" lat="-10.9056062712935411" lon="86.5020971203931310">
         <tag k="hoot:id" v="-169"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1" lat="-10.9050023393024720" lon="86.5010551672644965">
-        <tag k="hoot:id" v="-166"/>
+    <node visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1" lat="-10.9050023393024720" lon="86.5010551672644965">
+        <tag k="hoot:id" v="-165"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="-10.9049161101499976" lon="86.5024879755000029">
@@ -86,11 +86,15 @@
         <tag k="hoot:status" v="1"/>
     </node>
     <way visible="true" id="-192" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-177"/>
-        <nd ref="-8"/>
-        <nd ref="-9"/>
+        <nd ref="-176"/>
+        <nd ref="-12"/>
+        <nd ref="-3"/>
+        <nd ref="-13"/>
+        <nd ref="-4"/>
         <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
+        <tag k="created_by" v="Merkaartor 0.13"/>
+        <tag k="alt_name" v="SALAM;SALEM"/>
+        <tag k="name" v="Salam"/>
         <tag k="all_weather" v="yes"/>
         <tag k="highway" v="residential"/>
         <tag k="lanes" v="2"/>
@@ -100,10 +104,12 @@
         <tag k="hoot:status" v="3"/>
     </way>
     <way visible="true" id="-191" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-175"/>
         <nd ref="-176"/>
-        <nd ref="-177"/>
         <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
+        <tag k="created_by" v="Merkaartor 0.13"/>
+        <tag k="alt_name" v="SALAM;SALEM"/>
+        <tag k="name" v="Salam"/>
         <tag k="all_weather" v="yes"/>
         <tag k="highway" v="residential"/>
         <tag k="lanes" v="2"/>
@@ -113,10 +119,13 @@
         <tag k="hoot:status" v="3"/>
     </way>
     <way visible="true" id="-190" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-4"/>
-        <nd ref="-176"/>
+        <nd ref="-174"/>
+        <nd ref="-2"/>
+        <nd ref="-175"/>
         <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
+        <tag k="created_by" v="Merkaartor 0.13"/>
+        <tag k="alt_name" v="SALAM;SALEM"/>
+        <tag k="name" v="Salam"/>
         <tag k="all_weather" v="yes"/>
         <tag k="highway" v="residential"/>
         <tag k="lanes" v="2"/>
@@ -126,11 +135,8 @@
         <tag k="hoot:status" v="3"/>
     </way>
     <way visible="true" id="-189" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-171"/>
-        <nd ref="-12"/>
-        <nd ref="-3"/>
-        <nd ref="-13"/>
-        <nd ref="-4"/>
+        <nd ref="-1"/>
+        <nd ref="-174"/>
         <tag k="width" v="5"/>
         <tag k="created_by" v="Merkaartor 0.13"/>
         <tag k="alt_name" v="SALAM;SALEM"/>
@@ -145,11 +151,10 @@
     </way>
     <way visible="true" id="-188" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170"/>
-        <nd ref="-171"/>
+        <nd ref="-8"/>
+        <nd ref="-9"/>
         <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.13"/>
-        <tag k="alt_name" v="SALAM;SALEM"/>
-        <tag k="name" v="Salam"/>
+        <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="all_weather" v="yes"/>
         <tag k="highway" v="residential"/>
         <tag k="lanes" v="2"/>
@@ -160,12 +165,9 @@
     </way>
     <way visible="true" id="-187" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-169"/>
-        <nd ref="-2"/>
         <nd ref="-170"/>
         <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.13"/>
-        <tag k="alt_name" v="SALAM;SALEM"/>
-        <tag k="name" v="Salam"/>
+        <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="all_weather" v="yes"/>
         <tag k="highway" v="residential"/>
         <tag k="lanes" v="2"/>
@@ -175,12 +177,10 @@
         <tag k="hoot:status" v="3"/>
     </way>
     <way visible="true" id="-186" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1"/>
+        <nd ref="-4"/>
         <nd ref="-169"/>
         <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.13"/>
-        <tag k="alt_name" v="SALAM;SALEM"/>
-        <tag k="name" v="Salam"/>
+        <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="all_weather" v="yes"/>
         <tag k="highway" v="residential"/>
         <tag k="lanes" v="2"/>
@@ -190,7 +190,7 @@
         <tag k="hoot:status" v="3"/>
     </way>
     <way visible="true" id="-185" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-166"/>
+        <nd ref="-165"/>
         <nd ref="-11"/>
         <tag k="width" v="2.5"/>
         <tag k="created_by" v="Merkaartor 0.13"/>
@@ -206,7 +206,7 @@
     <way visible="true" id="-184" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
         <nd ref="-10"/>
-        <nd ref="-166"/>
+        <nd ref="-165"/>
         <tag k="width" v="2.5"/>
         <tag k="created_by" v="Merkaartor 0.13"/>
         <tag k="name" v="Salam"/>

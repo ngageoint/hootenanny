@@ -64,10 +64,21 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
 
   const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*matches.begin());
 
+  LOG_VAR(matches);
+
   if (m)
   {
     set< pair<ElementId, ElementId> > eids;
-    if (matches.size() != 1)
+
+    // if there are only 2 matches and one completely contains the other, use the larger match.
+    // This may need to be reverted as we play with more data, but at this point it seems like a
+    // reasonable heuristic.
+    if (const NetworkMatch* larger = _getLargestContainer(matches))
+    {
+      mergers.push_back(new NetworkMerger(larger->getMatchPairs(), larger->getEdgeMatch(),
+        larger->getNetworkDetails()));
+    }
+    else if (matches.size() != 1)
     {
       double sum = 0.0;
       QStringList scores;
@@ -109,6 +120,44 @@ vector<MergerCreator::Description> NetworkMergerCreator::getAllCreators() const
   result.push_back(Description(className(), "Network Merge Creator", true));
 
   return result;
+}
+
+const NetworkMatch* NetworkMergerCreator::_getLargestContainer(const MatchSet& matches) const
+{
+  if (matches.size() <= 1)
+  {
+    return 0;
+  }
+
+  const NetworkMatch* largest = dynamic_cast<const NetworkMatch*>(*matches.begin());
+  int largestCount = -1;
+  foreach (const Match* m, matches)
+  {
+    const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(m);
+    int count = nm->getEdgeMatch()->getString1()->getCount() +
+      nm->getEdgeMatch()->getString2()->getCount();
+    if (count > largestCount)
+    {
+      largestCount = count;
+      largest = nm;
+    }
+  }
+
+  LOG_VAR(largest);
+
+  foreach (const Match* m, matches)
+  {
+    const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(m);
+    if (nm != largest &&
+      largest->getEdgeMatch()->contains(nm->getEdgeMatch()) == false)
+    {
+      return 0;
+    }
+  }
+
+  LOG_INFO("Found largest");
+
+  return largest;
 }
 
 bool NetworkMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match* m1,

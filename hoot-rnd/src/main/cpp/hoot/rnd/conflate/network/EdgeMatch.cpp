@@ -56,6 +56,12 @@ shared_ptr<EdgeMatch> EdgeMatch::clone() const
   return result;
 }
 
+bool EdgeMatch::contains(const shared_ptr<const EdgeMatch>& other) const
+{
+  return getString1()->contains(other->getString1()) &&
+    getString2()->contains(other->getString2());
+}
+
 bool EdgeMatch::contains(ConstNetworkEdgePtr e) const
 {
   return getString1()->contains(e) || getString2()->contains(e);
@@ -70,7 +76,7 @@ bool EdgeMatch::overlaps(const shared_ptr<const EdgeMatch> &other) const
 {
   foreach (const EdgeString::EdgeEntry& ee, _edges1->getAllEdges())
   {
-    if (other->contains(ee.e))
+    if (other->contains(ee.getEdge()))
     {
       return true;
     }
@@ -78,7 +84,7 @@ bool EdgeMatch::overlaps(const shared_ptr<const EdgeMatch> &other) const
 
   foreach (const EdgeString::EdgeEntry& ee, _edges2->getAllEdges())
   {
-    if (other->contains(ee.e))
+    if (other->contains(ee.getEdge()))
     {
       return true;
     }

@@ -68,12 +68,25 @@ double IterativeNetworkMatcher::_aggregateScores(QList<double> pairs)
 }
 
 double IterativeNetworkMatcher::_calculateEdgeVertexScore(const VertexScoreMap& /*vm*/,
-  ConstNetworkVertexPtr from1, ConstNetworkVertexPtr from2,
-  ConstNetworkVertexPtr to1, ConstNetworkVertexPtr to2) const
+  ConstEdgeLocationPtr from1, ConstEdgeLocationPtr from2,
+  ConstEdgeLocationPtr to1, ConstEdgeLocationPtr to2) const
 {
   // aggregate the scores of the vertex matches
-  double sFrom = _scoreVertices(from1, from2);
-  double sTo = _scoreVertices(to1, to2);
+  double sFrom = 0;
+  double sTo = 0;
+
+  if (from1->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+    from2->isExtreme(EdgeLocation::SLOPPY_EPSILON))
+  {
+    sFrom = _scoreVertices(from1->getVertex(EdgeLocation::SLOPPY_EPSILON),
+      from2->getVertex(EdgeLocation::SLOPPY_EPSILON));
+  }
+  if (to1->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+    to2->isExtreme(EdgeLocation::SLOPPY_EPSILON))
+  {
+    sTo = _scoreVertices(to1->getVertex(EdgeLocation::SLOPPY_EPSILON),
+      to2->getVertex(EdgeLocation::SLOPPY_EPSILON));
+  }
 
   return sqrt(sFrom * sTo);
 }
@@ -579,7 +592,8 @@ void IterativeNetworkMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexSc
     // aggregate the scores of the vertex matches
     // try matching each of the vertices since we don't know if 1 matches 1 or 1 matches 2.
     double newScore, v, e;
-    v = _calculateEdgeVertexScore(vm, es1->getFrom(), es2->getFrom(), es1->getTo(), es2->getTo());
+    v = _calculateEdgeVertexScore(vm, es1->getFrom(), es2->getFrom(),
+      es1->getTo(), es2->getTo());
     e = _scoreEdges(em1);
     newScore = pow(v, _dampening) * pow(e, _p);
 

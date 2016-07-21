@@ -36,6 +36,8 @@
 #include <hoot/rnd/conflate/network/OsmNetwork.h>
 #include <hoot/rnd/conflate/network/SearchRadiusProvider.h>
 
+#include "EdgeSublineMatch.h"
+
 namespace hoot
 {
 
@@ -53,6 +55,9 @@ public:
   Meters calculateLength(ConstNetworkEdgePtr e);
 
   Radians calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNetworkVertexPtr v);
+
+  QList<EdgeSublineMatchPtr> calculateMatchingSublines(ConstNetworkEdgePtr e1,
+    ConstNetworkEdgePtr e2);
 
   QList<ConstNetworkVertexPtr> getCandidateMatches(ConstNetworkVertexPtr v);
 
@@ -104,6 +109,8 @@ public:
   bool isPartialCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
     ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
+  ConstWayPtr toWay(ConstNetworkEdgePtr e) const;
+
   WayStringPtr toWayString(ConstEdgeStringPtr e) const;
 
 private:
@@ -118,13 +125,26 @@ private:
   public:
     bool reversed;
     double p;
+    WaySublineMatchStringPtr matches;
   };
 
   QHash< ElementId, QHash<ElementId, SublineCache> > _sublineCache;
 
+  /**
+   * Assuming e1 & e2 match at v1 and v2 respectively, score the edges for match based on their
+   * relative angles.
+   * @param v1 - vertex in e1
+   * @param v2 - vertex in e2
+   * @return
+   */
+  double _getEdgeAngleScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
+    ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
+
   const SublineCache& _getSublineCache(ConstWayPtr w1, ConstWayPtr w2);
 
   LegacyVertexMatcherPtr _getVertexMatcher();
+
+  EdgeSublinePtr _toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr);
 };
 
 typedef shared_ptr<NetworkDetails> NetworkDetailsPtr;

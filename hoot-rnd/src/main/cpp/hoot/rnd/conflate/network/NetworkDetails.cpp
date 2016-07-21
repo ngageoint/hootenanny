@@ -93,9 +93,67 @@ Meters NetworkDetails::calculateLength(ConstNetworkEdgePtr e)
   return ElementConverter(_map).calculateLength(e->getMembers()[0]);
 }
 
+QList<EdgeSublineMatchPtr> NetworkDetails::calculateMatchingSublines(ConstNetworkEdgePtr e1,
+  ConstNetworkEdgePtr e2)
+{
+  QList<EdgeSublineMatchPtr> result;
+
+  if (e1->isStub() || e2->isStub())
+  {
+    return result;
+  }
+
+  const NetworkDetails::SublineCache& cache = _getSublineCache(toWay(e1), toWay(e2));
+
+  const WaySublineMatchString::MatchCollection& matches = cache.matches->getMatches();
+
+  foreach (const WaySublineMatch& wsm, matches)
+  {
+    EdgeSublinePtr subline2 = _toEdgeSubline(wsm.getSubline2(), e2);
+    if (wsm.isReverseMatch())
+    {
+      subline2->reverse();
+    }
+    EdgeSublineMatchPtr m(new EdgeSublineMatch(
+      _toEdgeSubline(wsm.getSubline1(), e1),
+      subline2));
+    result.append(m);
+  }
+
+  return result;
+}
+
 QList<ConstNetworkVertexPtr> NetworkDetails::getCandidateMatches(ConstNetworkVertexPtr v)
 {
   return _getVertexMatcher()->getCandidateMatches(v);
+}
+
+double NetworkDetails::_getEdgeAngleScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
+  ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
+{
+  double score = 1.0;
+
+  // if this edge is a simple way type.
+  if (e1->getMembers().size() == 1 && e1->getMembers()[0]->getElementType() == ElementType::Way &&
+      e2->getMembers().size() == 1 && e2->getMembers()[0]->getElementType() == ElementType::Way)
+  {
+    Radians theta1 = calculateHeadingAtVertex(e1, v1);
+    Radians theta2 = calculateHeadingAtVertex(e2, v2);
+
+    Radians diff = WayHeading::deltaMagnitude(theta1, theta2);
+
+    // if the diff in angle is > 90deg then set score to 0
+    if (diff > M_PI / 2.0)
+    {
+      score = 0.0;
+    }
+    else
+    {
+      score = cos(diff);
+    }
+  }
+
+  return score;
 }
 
 double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
@@ -138,7 +196,7 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
     bool candidate = true;
     foreach (EdgeString::EdgeEntry ee, notStub->getAllEdges())
     {
-      candidate = candidate && isCandidateMatch(ee.e, stub->getFirstEdge());
+      candidate = candidate && isCandidateMatch(ee.getEdge(), stub->getFirstEdge());
     }
 
     result = candidate ? 1.0 : 0.0;
@@ -227,11 +285,35 @@ double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNet
   }
   else
   {
+    double bestScore = -1.0;
+    if (isCandidateMatch(e1->getFrom(), e2->getFrom()))
+    {
+      bestScore = max(bestScore, _getEdgeAngleScore(e1->getFrom(), e2->getFrom(), e1, e2));
+    }
+    if (isCandidateMatch(e1->getTo(), e2->getTo()))
+    {
+      bestScore = max(bestScore, _getEdgeAngleScore(e1->getTo(), e2->getTo(), e1, e2));
+    }
+    if (isCandidateMatch(e1->getFrom(), e2->getTo()))
+    {
+      bestScore = max(bestScore, _getEdgeAngleScore(e1->getFrom(), e2->getTo(), e1, e2));
+    }
+    if (isCandidateMatch(e1->getTo(), e2->getFrom()))
+    {
+      bestScore = max(bestScore, _getEdgeAngleScore(e1->getTo(), e2->getFrom(), e1, e2));
+    }
+
+    // this is a partial match
+    if (bestScore == -1.0)
+    {
+      bestScore = 1.0;
+    }
+
     ConstWayPtr w1 = dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
     ConstWayPtr w2 = dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
 
     const SublineCache& sc = _getSublineCache(w1, w2);
-    result = sc.p;
+    result = sc.p * bestScore;
   }
 
   return result;
@@ -311,6 +393,7 @@ const NetworkDetails::SublineCache& NetworkDetails::_getSublineCache(ConstWayPtr
 
   _sublineCache[e1][e2].p = c.getMatchP();
   _sublineCache[e1][e2].reversed = reversed;
+  _sublineCache[e1][e2].matches = WaySublineMatchStringPtr(new WaySublineMatchString(sublineMatch));
 
   return _sublineCache[e1][e2];
 }
@@ -379,29 +462,7 @@ bool NetworkDetails::isPartialCandidateMatch(ConstNetworkVertexPtr v1, ConstNetw
   ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
 {
   double score = getPartialEdgeMatchScore(e1, e2);
-
-  // if this edge is a simple way type.
-  if (e1->getMembers().size() == 1 && e1->getMembers()[0]->getElementType() == ElementType::Way &&
-      e2->getMembers().size() == 1 && e2->getMembers()[0]->getElementType() == ElementType::Way)
-  {
-    Radians theta1 = calculateHeadingAtVertex(e1, v1);
-    Radians theta2 = calculateHeadingAtVertex(e2, v2);
-
-    Radians diff = WayHeading::deltaMagnitude(theta1, theta2);
-
-    // if the diff in angle is > 90deg then set score to 0
-    double angleScore;
-    if (diff > M_PI / 2.0)
-    {
-      angleScore = 0.0;
-    }
-    else
-    {
-      angleScore = cos(diff);
-    }
-
-    score *= angleScore;
-  }
+  score *= _getEdgeAngleScore(v1, v2, e1, e2);
 
   return score >= ConfigOptions().getConflatorMinValidScore();
 }
@@ -418,8 +479,8 @@ bool NetworkDetails::isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
   }
   else
   {
-    ConstWayPtr w1 = dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
-    ConstWayPtr w2 = dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
+    ConstWayPtr w1 = toWay(e1);
+    ConstWayPtr w2 = toWay(e2);
 
     const SublineCache& sc = _getSublineCache(w1, w2);
 
@@ -429,6 +490,34 @@ bool NetworkDetails::isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
   return result;
 }
 
+EdgeSublinePtr NetworkDetails::_toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr e)
+{
+  EdgeSublinePtr result;
+
+  Meters l = ElementConverter(_map).calculateLength(ws.getWay());
+  result.reset(new EdgeSubline(e, ws.getStart().calculateDistanceOnWay() / l,
+    ws.getEnd().calculateDistanceOnWay() / l));
+
+  return result;
+}
+
+ConstWayPtr NetworkDetails::toWay(ConstNetworkEdgePtr e) const
+{
+  if (e->getMembers().size() != 1)
+  {
+    throw IllegalArgumentException("Expected e to contain a single way.");
+  }
+
+  ConstWayPtr w = dynamic_pointer_cast<const Way>(e->getMembers()[0]);
+
+  if (!w)
+  {
+    throw IllegalArgumentException("Expected e to contain a single way.");
+  }
+
+  return w;
+}
+
 WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e) const
 {
   QList<EdgeString::EdgeEntry> edges = e->getAllEdges();
@@ -436,7 +525,7 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e) const
 
   for (int i = 0; i < edges.size(); ++i)
   {
-    ConstNetworkEdgePtr e = edges[i].e;
+    ConstNetworkEdgePtr e = edges[i].getEdge();
     // ignore stubs while building way strings.
     if (e->isStub() == false)
     {
@@ -448,7 +537,7 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e) const
       ConstWayPtr w = dynamic_pointer_cast<const Way>(e->getMembers()[0]);
 
       WaySubline s(WayLocation(_map, w, 0), WayLocation::createAtEndOfWay(_map, w));
-      if (edges[i].reversed)
+      if (edges[i].isBackwards())
       {
         s = WaySubline(s.getEnd(), s.getStart());
       }

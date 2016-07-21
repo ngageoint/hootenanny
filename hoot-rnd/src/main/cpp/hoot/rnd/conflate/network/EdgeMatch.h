@@ -47,14 +47,6 @@ public:
 
   EdgeMatch(ConstEdgeStringPtr es1, ConstEdgeStringPtr es2);
 
-  EdgeStringPtr getString1() { return _edges1; }
-
-  EdgeStringPtr getString2() { return _edges2; }
-
-  ConstEdgeStringPtr getString1() const { return _edges1; }
-
-  ConstEdgeStringPtr getString2() const { return _edges2; }
-
   shared_ptr<EdgeMatch> clone() const;
 
   /**
@@ -63,14 +55,27 @@ public:
   bool contains(ConstNetworkEdgePtr e) const;
 
   /**
+   * Returns true if string 1 & 2 in other are contained by string 1 & 2 of this.
+   */
+  bool contains(const shared_ptr<const EdgeMatch>& other) const;
+
+  /**
    * Returns true if the specified vertex is in either the first or second edge string.
    */
   bool contains(ConstNetworkVertexPtr v) const;
 
   bool containsStub() const { return getString1()->isStub() || getString2()->isStub(); }
 
+  EdgeStringPtr getString1() { return _edges1; }
+
+  EdgeStringPtr getString2() { return _edges2; }
+
+  ConstEdgeStringPtr getString1() const { return _edges1; }
+
+  ConstEdgeStringPtr getString2() const { return _edges2; }
+
   /**
-   * Returns true if any of the edges in this edge match overlap with other. Overlapping vertexes
+   * Returns true if any of the edges in this edge match overlap with other. Overlapping vertices
    * are ignored.
    */
   bool overlaps(const shared_ptr<const EdgeMatch>& other) const;

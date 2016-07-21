@@ -59,7 +59,7 @@ namespace hoot
 class WayLocation
 {
 public:
-  // the suggested segment fraction distance from a node that is still considered on a node.
+  // the suggested sloppy segment fraction distance from a node that is still considered on a node.
   static const double SLOPPY_EPSILON;
 
   WayLocation();

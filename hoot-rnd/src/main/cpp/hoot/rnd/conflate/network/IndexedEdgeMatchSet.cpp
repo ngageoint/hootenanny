@@ -54,7 +54,7 @@ void IndexedEdgeMatchSet::_addEdgeToMatchMapping(ConstEdgeStringPtr str,
 
   foreach (const EdgeString::EdgeEntry& ee, e)
   {
-    _edgeToMatch[ee.e].insert(em);
+    _edgeToMatch[ee.getEdge()].insert(em);
   }
 }
 
@@ -67,10 +67,11 @@ shared_ptr<IndexedEdgeLinks> IndexedEdgeMatchSet::calculateEdgeLinks()
   {
     ConstEdgeMatchPtr em = it.key();
     ConstNetworkVertexPtr from1, from2, to1, to2;
-    from1 = em->getString1()->getFrom();
-    to1 = em->getString1()->getTo();
-    from2 = em->getString2()->getFrom();
-    to2 = em->getString2()->getTo();
+    LOG_VAR(em);
+    from1 = em->getString1()->getFromVertex();
+    to1 = em->getString1()->getToVertex();
+    from2 = em->getString2()->getFromVertex();
+    to2 = em->getString2()->getToVertex();
 
     // get all the edges that connect to from1/from2 and are also a proper pair.
     QSet<ConstEdgeMatchPtr> fromLinks = getMatchesWithTermination(from1, from2);
@@ -145,7 +146,7 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeStri
 
   foreach (const EdgeString::EdgeEntry& ee, str->getAllEdges())
   {
-    result.unite(getMatchesThatContain(ee.e));
+    result.unite(getMatchesThatContain(ee.getEdge()));
   }
 
   return result;
@@ -179,23 +180,31 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithTermination(ConstNetw
 
   foreach (const ConstEdgeMatchPtr& em, _matches.keys())
   {
-    if (em->getString1()->getFrom() == v1 &&
-      em->getString2()->getFrom() == v2)
+    if (em->getString1()->isFromOnVertex() &&
+      em->getString1()->getFromVertex() == v1 &&
+      em->getString2()->isFromOnVertex() &&
+      em->getString2()->getFromVertex() == v2)
     {
       result.insert(em);
     }
-    else if (em->getString1()->getTo() == v1 &&
-      em->getString2()->getTo() == v2)
+    else if (em->getString1()->isToOnVertex() &&
+      em->getString1()->getToVertex() == v1 &&
+      em->getString2()->isToOnVertex() &&
+      em->getString2()->getToVertex() == v2)
     {
       result.insert(em);
     }
-    else if (em->getString1()->getFrom() == v2 &&
-      em->getString2()->getFrom() == v1)
+    else if (em->getString1()->isFromOnVertex() &&
+      em->getString1()->getFromVertex() == v2 &&
+      em->getString2()->isFromOnVertex() &&
+      em->getString2()->getFromVertex() == v1)
     {
       result.insert(em);
     }
-    else if (em->getString1()->getTo() == v2 &&
-      em->getString2()->getTo() == v1)
+    else if (em->getString1()->isToOnVertex() &&
+      em->getString1()->getToVertex() == v2 &&
+      em->getString2()->isToOnVertex() &&
+      em->getString2()->getToVertex() == v1)
     {
       result.insert(em);
     }

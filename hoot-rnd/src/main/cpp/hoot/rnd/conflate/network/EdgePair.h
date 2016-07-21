@@ -32,9 +32,9 @@
 
 namespace hoot
 {
-
+#warning remove me. I'm not used.
 /**
- * This class is not re-entrant or thread safe.
+ * This class is neither re-entrant nor thread safe.
  */
 class EdgePair
 {
