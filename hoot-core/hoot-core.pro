@@ -512,7 +512,8 @@ SOURCES += \
     src/main/cpp/hoot/core/filters/WayDirectionCriterion.cpp \
     src/main/cpp/hoot/core/visitors/FindWaysVisitor.cpp \
     src/main/cpp/hoot/core/visitors/FindNodesVisitor.cpp \
-    src/main/cpp/hoot/core/filters/DistanceNodeCriterion.cpp
+    src/main/cpp/hoot/core/filters/DistanceNodeCriterion.cpp \
+    src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriterv2.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1030,5 +1031,7 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/ParallelWayCriterion.h \
     src/main/cpp/hoot/core/filters/WayBufferCriterion.h \
     src/main/cpp/hoot/core/filters/WayDirectionCriterion.h \
-    src/main/cpp/hoot/core/filters/DistanceNodeCriterion.h
+    src/main/cpp/hoot/core/filters/DistanceNodeCriterion.h \
+    src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriter.h \
+    src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriterv2.h
 

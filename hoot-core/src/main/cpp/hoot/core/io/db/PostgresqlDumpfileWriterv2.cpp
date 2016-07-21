@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "PostgresqlDumpfileWriter.h"
+#include "PostgresqlDumpfileWriterv2.h"
 
 #include <cstdlib>  // for std::system
 #include <cstdio>   // for std::remove
@@ -55,9 +55,9 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapWriter, PostgresqlDumpfileWriter)
+//HOOT_FACTORY_REGISTER(OsmMapWriter, PostgresqlDumpfileWriter)
 
-PostgresqlDumpfileWriter::PostgresqlDumpfileWriter():
+PostgresqlDumpfileWriterv2::PostgresqlDumpfileWriterv2():
 
   _outputSections(),
   _sectionNames(_createSectionNameList()),
@@ -76,7 +76,7 @@ PostgresqlDumpfileWriter::PostgresqlDumpfileWriter():
   _zeroWriteStats();
 }
 
-PostgresqlDumpfileWriter::~PostgresqlDumpfileWriter()
+PostgresqlDumpfileWriterv2::~PostgresqlDumpfileWriterv2()
 {
   if (ConfigOptions().getPostgresqlDumpfileWriterAutoCalcIds())
   {
@@ -85,12 +85,12 @@ PostgresqlDumpfileWriter::~PostgresqlDumpfileWriter()
   close();
 }
 
-bool PostgresqlDumpfileWriter::isSupported(QString url)
+bool PostgresqlDumpfileWriterv2::isSupported(QString url)
 {
   return ( url.endsWith(".sql") );
 }
 
-void PostgresqlDumpfileWriter::open(QString url)
+void PostgresqlDumpfileWriterv2::open(QString url)
 {
   if ( isSupported(url) == false )
   {
@@ -120,7 +120,7 @@ void PostgresqlDumpfileWriter::open(QString url)
   _dataWritten = false;
 }
 
-void PostgresqlDumpfileWriter::close()
+void PostgresqlDumpfileWriterv2::close()
 {
   // Not writing any new data, can drop ID mappings
   _idMappings.nodeIdMap.reset();
@@ -148,7 +148,7 @@ void PostgresqlDumpfileWriter::close()
   _changesetData.changesInChangeset = 0;
 }
 
-void PostgresqlDumpfileWriter::finalizePartial()
+void PostgresqlDumpfileWriterv2::finalizePartial()
 {
   if ( (_writeStats.nodesWritten == 0) && (_writeStats.waysWritten == 0) &&
        (_writeStats.relationsWritten == 0) )
@@ -218,7 +218,7 @@ void PostgresqlDumpfileWriter::finalizePartial()
   _dataWritten = true;
 }
 
-void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
+void PostgresqlDumpfileWriterv2::writePartial(const ConstNodePtr& n)
 {
   //Since we're only creating elements, the changeset bounds is simply the combined bounds
   //of all the nodes involved in the changeset.
@@ -263,7 +263,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
   }
 }
 
-void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
+void PostgresqlDumpfileWriterv2::writePartial(const ConstWayPtr& w)
 {
   if ( _writeStats.waysWritten == 0 )
   {
@@ -304,7 +304,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
   }
 }
 
-void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
+void PostgresqlDumpfileWriterv2::writePartial(const ConstRelationPtr& r)
 {
   if ( _writeStats.relationsWritten == 0 )
   {
@@ -345,7 +345,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
   }
 }
 
-void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
+void PostgresqlDumpfileWriterv2::setConfiguration(const hoot::Settings &conf)
 {
   const ConfigOptions confOptions(conf);
 
@@ -375,7 +375,7 @@ void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
   LOG_DEBUG("Starting relation ID: " << QString::number(_configData.startingRelationId));
 }
 
-std::list<QString> PostgresqlDumpfileWriter::_createSectionNameList()
+std::list<QString> PostgresqlDumpfileWriterv2::_createSectionNameList()
 {
   std::list<QString> sections;
 
@@ -403,7 +403,7 @@ std::list<QString> PostgresqlDumpfileWriter::_createSectionNameList()
   return sections;
 }
 
-void PostgresqlDumpfileWriter::_createNodeTables()
+void PostgresqlDumpfileWriterv2::_createNodeTables()
 {
   _createTable( "current_nodes",
                 "COPY current_nodes (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) FROM stdin;\n" );
@@ -416,7 +416,7 @@ void PostgresqlDumpfileWriter::_createNodeTables()
                 "COPY node_tags (node_id, version, k, v) FROM stdin;\n" );
 }
 
-void PostgresqlDumpfileWriter::_zeroWriteStats()
+void PostgresqlDumpfileWriterv2::_zeroWriteStats()
 {
   _writeStats.nodesWritten = 0;
   _writeStats.nodeTagsWritten = 0;
@@ -429,7 +429,7 @@ void PostgresqlDumpfileWriter::_zeroWriteStats()
   _writeStats.relationTagsWritten = 0;
 }
 
-PostgresqlDumpfileWriter::ElementIdDatatype PostgresqlDumpfileWriter::_establishNewIdMapping(
+PostgresqlDumpfileWriterv2::ElementIdDatatype PostgresqlDumpfileWriterv2::_establishNewIdMapping(
     const ElementId& sourceId)
 {
   ElementIdDatatype dbIdentifier;
@@ -461,12 +461,12 @@ PostgresqlDumpfileWriter::ElementIdDatatype PostgresqlDumpfileWriter::_establish
 }
 
 //TODO: This should use ApiDb::COORDINATE_SCALE instead.
-unsigned int PostgresqlDumpfileWriter::_convertDegreesToNanodegrees(const double degrees) const
+unsigned int PostgresqlDumpfileWriterv2::_convertDegreesToNanodegrees(const double degrees) const
 {
   return ( round(degrees * 10000000.0) );
 }
 
-void PostgresqlDumpfileWriter::_writeNodeToTables(
+void PostgresqlDumpfileWriterv2::_writeNodeToTables(
   const ConstNodePtr& node,
   const ElementIdDatatype nodeDbId)
 {
@@ -512,7 +512,7 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
   _outputSections["nodes"] << outputLine;
 }
 
-void PostgresqlDumpfileWriter::_writeTagsToTables(
+void PostgresqlDumpfileWriterv2::_writeTagsToTables(
   const Tags& tags,
   const ElementIdDatatype nodeDbId,
   const QString& currentTableName,
@@ -538,7 +538,7 @@ void PostgresqlDumpfileWriter::_writeTagsToTables(
   _outputSections[historicalTableName] = historicalTable;
 }
 
-void PostgresqlDumpfileWriter::_createWayTables()
+void PostgresqlDumpfileWriterv2::_createWayTables()
 {
   _createTable( "current_ways",       "COPY current_ways (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
   _createTable( "current_way_tags",   "COPY current_way_tags (way_id, k, v) FROM stdin;\n" );
@@ -549,7 +549,7 @@ void PostgresqlDumpfileWriter::_createWayTables()
   _createTable( "way_nodes",          "COPY way_nodes (way_id, node_id, version, sequence_id) FROM stdin;\n" );
 }
 
-void PostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId )
+void PostgresqlDumpfileWriterv2::_writeWayToTables(const ElementIdDatatype wayDbId )
 {
   //LOG_DEBUG("Writing way with ID: " << wayDbId);
 
@@ -571,7 +571,7 @@ void PostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId
   _outputSections["ways"] << outputLine;
 }
 
-void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype dbWayId,
+void PostgresqlDumpfileWriterv2::_writeWaynodesToTables( const ElementIdDatatype dbWayId,
   const std::vector<long>& waynodeIds )
 {
   unsigned int nodeIndex = 1;
@@ -604,7 +604,7 @@ void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype d
   _outputSections["way_nodes"] = wayNodesStream;
 }
 
-void PostgresqlDumpfileWriter::_createRelationTables()
+void PostgresqlDumpfileWriterv2::_createRelationTables()
 {
   _createTable( "current_relations",        "COPY current_relations (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
   _createTable( "current_relation_tags",    "COPY current_relation_tags (relation_id, k, v) FROM stdin;\n" );
@@ -615,7 +615,7 @@ void PostgresqlDumpfileWriter::_createRelationTables()
   _createTable( "relation_members",         "COPY relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n" );
 }
 
-void PostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype relationDbId )
+void PostgresqlDumpfileWriterv2::_writeRelationToTables(const ElementIdDatatype relationDbId )
 {
   //LOG_DEBUG("Writing relation with ID: " << relationDbId);
 
@@ -637,7 +637,7 @@ void PostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype re
   _outputSections["relations"] << outputLine;
 }
 
-void PostgresqlDumpfileWriter::_writeRelationMembersToTables( const ConstRelationPtr& relation )
+void PostgresqlDumpfileWriterv2::_writeRelationMembersToTables( const ConstRelationPtr& relation )
 {
   unsigned int memberSequenceIndex = 1;
   const ElementIdDatatype relationId = relation->getId();
@@ -691,7 +691,7 @@ void PostgresqlDumpfileWriter::_writeRelationMembersToTables( const ConstRelatio
   }
 }
 
-void PostgresqlDumpfileWriter::_writeRelationMember( const ElementIdDatatype sourceRelationDbId,
+void PostgresqlDumpfileWriterv2::_writeRelationMember( const ElementIdDatatype sourceRelationDbId,
   const RelationData::Entry& memberEntry, const ElementIdDatatype memberDbId, const unsigned int memberSequenceIndex )
 {
   QString memberType;
@@ -733,12 +733,12 @@ void PostgresqlDumpfileWriter::_writeRelationMember( const ElementIdDatatype sou
   _writeStats.relationMembersWritten++;
 }
 
-void PostgresqlDumpfileWriter::_createTable(const QString &tableName, const QString &tableHeader)
+void PostgresqlDumpfileWriterv2::_createTable(const QString &tableName, const QString &tableHeader)
 {
   _outputSections[tableName.toUtf8()] << tableHeader.toUtf8();
 }
 
-void PostgresqlDumpfileWriter::_incrementChangesInChangeset()
+void PostgresqlDumpfileWriterv2::_incrementChangesInChangeset()
 {
   _changesetData.changesInChangeset++;
   if ( _changesetData.changesInChangeset == ConfigOptions().getChangesetMaxSize() )
@@ -751,7 +751,7 @@ void PostgresqlDumpfileWriter::_incrementChangesInChangeset()
   }
 }
 
-void PostgresqlDumpfileWriter::_checkUnresolvedReferences(const ConstElementPtr& element,
+void PostgresqlDumpfileWriterv2::_checkUnresolvedReferences(const ConstElementPtr& element,
   const ElementIdDatatype elementDbId )
 {
   // Regardless of type, may be referenced in relation
@@ -791,7 +791,7 @@ void PostgresqlDumpfileWriter::_checkUnresolvedReferences(const ConstElementPtr&
   }
 }
 
-QString PostgresqlDumpfileWriter::_escapeCopyToData(const QString& stringToOutput) const
+QString PostgresqlDumpfileWriterv2::_escapeCopyToData(const QString& stringToOutput) const
 {
   QString escapedString(stringToOutput);
 
@@ -808,7 +808,7 @@ QString PostgresqlDumpfileWriter::_escapeCopyToData(const QString& stringToOutpu
   return escapedString;
 }
 
-void PostgresqlDumpfileWriter::_writeChangesetToTable()
+void PostgresqlDumpfileWriterv2::_writeChangesetToTable()
 {
   if ( _changesetData.changesetId == _configData.startingChangesetId )
   {
@@ -833,7 +833,7 @@ void PostgresqlDumpfileWriter::_writeChangesetToTable()
   _outputSections["changesets"] = changesetsStream;
 }
 
-void PostgresqlDumpfileWriter::_writeSequenceUpdates()
+void PostgresqlDumpfileWriterv2::_writeSequenceUpdates()
 {
   _createTable( "sequence_updates", "" );
 

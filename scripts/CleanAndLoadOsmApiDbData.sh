@@ -18,6 +18,9 @@ source scripts/SetupOsmApiDB.sh force
 # load dummy user
 psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
 
+echo "Creating SQL dump file from input data..."
 hoot convert $DATASET_TO_LOAD $OUTPUT_SQL_SCRIPT
+echo "Executing SQL statements..."
 psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f $OUTPUT_SQL_SCRIPT
+echo "Data load completed."
 
