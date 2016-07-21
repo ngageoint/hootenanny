@@ -24,40 +24,33 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef COPYSUBSETOP_H
-#define COPYSUBSETOP_H
+
+#ifndef UNKNOWNCRITERION_H
+#define UNKNOWNCRITERION_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-
-#include "OsmMapOperation.h"
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot
 {
 
 /**
- * Copies a subset of the map into a new map. The old map is unchanged.
+ * Keeps all the unknown elements
  */
-class CopySubsetOp : public OsmMapOperation
+class UnknownCriterion : public ElementCriterion
 {
 public:
-  CopySubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids);
+  static string className() { return "hoot::UnknownCriterion"; }
 
-  CopySubsetOp(const ConstOsmMapPtr& from, const vector<long>& ids);
+  bool isSatisfied(const shared_ptr<const Element> &e) const
+  {
+    return e->isUnknown();
+  }
 
-  CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
-
-  /**
-   * A new map is created and the eids specified in the constructor and their depedencies will be
-   * copied into the new map. The @a map will be set to point to the new map.
-   */
-  virtual void apply(shared_ptr<OsmMap>& map);
-
-private:
-  set<ElementId> _eids;
-  const ConstOsmMapPtr& _from;
+  UnknownCriterion* clone() { return new UnknownCriterion(); }
 };
 
-}
+} // namespace hoot
 
-#endif // COPYSUBSETOP_H
+#endif // UNKNOWNCRITERION_H

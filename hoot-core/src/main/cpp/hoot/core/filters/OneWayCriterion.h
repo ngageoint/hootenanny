@@ -25,29 +25,38 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "TagFilter.h"
+#ifndef ONEWAYCRITERION_H
+#define ONEWAYCRITERION_H
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/util/HootException.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
 
-TagFilter::TagFilter()
+/**
+ * Keeps all the one-way elements
+ */
+class OneWayCriterion : public ElementCriterion
 {
-}
+public:
+  static string className() { return "hoot::OneWayCriterion"; }
 
-bool TagFilter::isFiltered(const Element &e) const
-{
-  if (_type == FilterMatches)
-  {
-    return e.getTags()[_k] == _v;
-  }
-  else
-  {
-    return e.getTags()[_k] != _v;
-  }
-}
+  OneWayCriterion(bool isOneWay = true): _isOneWay(isOneWay) { }
 
-}
+  bool isSatisfied(const shared_ptr<const Element> &e) const
+  {
+    return OsmSchema::getInstance().isOneWay(*e) == _isOneWay;
+  }
+
+  OneWayCriterion* clone() { return new OneWayCriterion(); }
+
+private:
+  bool _isOneWay;
+};
+
+} // namespace hoot
+
+#endif // ONEWAYCRITERION_H
