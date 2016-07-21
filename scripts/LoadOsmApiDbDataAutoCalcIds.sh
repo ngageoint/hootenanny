@@ -16,6 +16,9 @@ export PGPASSWORD=$DB_PASSWORD_OSMAPI
 DATASET_TO_LOAD=$1
 OUTPUT_SQL_SCRIPT=$HOOT_HOME/tmp/tmp.sql
 
+echo "Creating SQL dump file from input data..."
 hoot convert -D postgresql.dumpfile.writer.auto.calc.ids=true -D postgresql.dumpfile.writer.id.aware.url=$OSM_API_DB_URL $DATASET_TO_LOAD $OUTPUT_SQL_SCRIPT
+echo "Executing SQL statements..."
 psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f $OUTPUT_SQL_SCRIPT
+echo "Data load completed."
 

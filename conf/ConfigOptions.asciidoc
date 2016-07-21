@@ -1582,16 +1582,6 @@ are 0 to 1 for similarity and -1 if there are no names present (null).
 How far away from a polygon should name matches be considered reviews. This is a fixed value in
 meters that is added to the CE calculation.
 
-=== postgresql.dumpfile.writer.cache.size
-
-* Data Type: int
-* Default Value: `10000000`
-
-Maximum number of elements (nodes, ways, and relations) that can be held in memory before the
-system starts using disk-based storage.  Note that this limit applies to each element type
-individually, so worst case is that three times this value of elements can be stored in memory
-at the same time.
-
 === postgresql.dumpfile.writer.auto.calc.ids
 
 * Data Type: bool
@@ -1665,6 +1655,14 @@ specified email address to the database.
 
 If the `postgresql.dumpfile.writer.user.email` field is set, the user that is added to the
 database will be assigned the user id set by this field.
+
+=== postgresql.dumpfile.writer.element.status.count.interval
+
+* Data Type: long
+* Default Value: `10000`
+
+Count at which the load status of each element type should be logged.  e.g. With a value of 10000,
+you will see a element load status update message for every 10000 elements parsed.
 
 === reader.add.source.datetime
 

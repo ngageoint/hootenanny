@@ -133,12 +133,12 @@ void PostgresqlDumpfileWriter::close()
 
   if ( (_writeStats.nodesWritten > 0) || (_writeStats.waysWritten > 0) || (_writeStats.relationsWritten > 0) )
   {
-    LOG_DEBUG("Write stats:");
-    LOG_DEBUG("\t              Nodes written: " + QString::number(_writeStats.nodesWritten) );
-    LOG_DEBUG("\t               Ways written: " + QString::number(_writeStats.waysWritten) );
-    LOG_DEBUG("\t          Relations written: " + QString::number(_writeStats.relationsWritten) );
-    LOG_DEBUG("\t   Relation members written:" + QString::number(_writeStats.relationMembersWritten));
-    LOG_DEBUG("\tUnresolved relation members:" + QString::number(_writeStats.relationMembersWritten));
+    LOG_INFO("Write stats:");
+    LOG_INFO("\t              Nodes written: " + QString::number(_writeStats.nodesWritten) );
+    LOG_INFO("\t               Ways written: " + QString::number(_writeStats.waysWritten) );
+    LOG_INFO("\t          Relations written: " + QString::number(_writeStats.relationsWritten) );
+    LOG_INFO("\t   Relation members written:" + QString::number(_writeStats.relationMembersWritten));
+    LOG_INFO("\tUnresolved relation members:" + QString::number(_writeStats.relationMembersWritten));
   }
 
   _zeroWriteStats();
@@ -220,11 +220,11 @@ void PostgresqlDumpfileWriter::finalizePartial()
 
 void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 {
-  Tags t = n->getTags();
+  /*Tags t = n->getTags();
   if (n->getCircularError() >= 0.0)
   {
     t["error:circular"] = QString::number(n->getCircularError());
-  }
+  }*/
 
   //Since we're only creating elements, the changeset bounds is simply the combined bounds
   //of all the nodes involved in the changeset.
@@ -253,7 +253,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 
   _writeNodeToTables(n, nodeDbId);
 
-  _writeTagsToTables(t, nodeDbId,
+  _writeTagsToTables(/*t*/n->getTags(), nodeDbId,
     "current_node_tags", "%1\t%2\t%3\n",
     "node_tags", "%1\t1\t%2\t%3\n");
 
@@ -261,15 +261,21 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
   _incrementChangesInChangeset();
 
   _checkUnresolvedReferences( n, nodeDbId );
+
+  if (_writeStats.nodesWritten %
+      ConfigOptions().getPostgresqlDumpfileWriterElementStatusCountInterval() == 0)
+  {
+    LOG_INFO("Parsed " << _writeStats.nodesWritten << " nodes.");
+  }
 }
 
 void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 {
-  Tags t = w->getTags();
+  /*Tags t = w->getTags();
   if (w->getCircularError() >= 0.0)
   {
     t["error:circular"] = QString::number(w->getCircularError());
-  }
+  }*/
 
   if ( _writeStats.waysWritten == 0 )
   {
@@ -294,7 +300,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 
   _writeWaynodesToTables( _idMappings.wayIdMap->at( w->getId() ), w->getNodeIds() );
 
-  _writeTagsToTables(t, wayDbId,
+  _writeTagsToTables(/*t*/w->getTags(), wayDbId,
     "current_way_tags", "%1\t%2\t%3\n",
     "way_tags", "%1\t1\t%2\t%3\n");
 
@@ -302,15 +308,21 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
   _incrementChangesInChangeset();
 
   _checkUnresolvedReferences( w, wayDbId );
+
+  if (_writeStats.waysWritten %
+      ConfigOptions().getPostgresqlDumpfileWriterElementStatusCountInterval() == 0)
+  {
+    LOG_INFO("Parsed " << _writeStats.waysWritten << " ways.");
+  }
 }
 
 void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 {
-  Tags t = r->getTags();
+  /*Tags t = r->getTags();
   if (r->getCircularError() >= 0.0)
   {
     t["error:circular"] = QString::number(r->getCircularError());
-  }
+  }*/
 
   if ( _writeStats.relationsWritten == 0 )
   {
@@ -335,7 +347,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 
   _writeRelationMembersToTables( r );
 
-  _writeTagsToTables(t, relationDbId,
+  _writeTagsToTables(/*t*/r->getTags(), relationDbId,
     "current_relation_tags", "%1\t%2\t%3\n",
     "relation_tags", "%1\t1\t%2\t%3\n");
 
@@ -343,6 +355,12 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
   _incrementChangesInChangeset();
 
   _checkUnresolvedReferences( r, relationDbId );
+
+  if (_writeStats.relationsWritten %
+      ConfigOptions().getPostgresqlDumpfileWriterElementStatusCountInterval() == 0)
+  {
+    LOG_INFO("Parsed " << _writeStats.relationsWritten << " relations.");
+  }
 }
 
 void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
@@ -743,8 +761,8 @@ void PostgresqlDumpfileWriter::_incrementChangesInChangeset()
   _changesetData.changesInChangeset++;
   if ( _changesetData.changesInChangeset == ConfigOptions().getChangesetMaxSize() )
   {
-    //LOG_DEBUG("Changeset " + QString::number(_changesetData.changesetId) + " hit max edits" );
     _writeChangesetToTable();
+    LOG_INFO("Parsed changeset with ID: " + QString::number(_changesetData.changesetId));
     _changesetData.changesetId++;
     _changesetData.changesInChangeset = 0;
     _changesetData.changesetBounds.init();
