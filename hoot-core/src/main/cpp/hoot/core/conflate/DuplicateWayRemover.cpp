@@ -289,7 +289,7 @@ void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int l
   // if we're removing all the nodes, then just remove the way.
   else
   {
-    _map->removeWayFully(w->getId());
+    RemoveWayOp::removeWayFully(_map, w->getId());
   }
 }
 

@@ -31,6 +31,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
@@ -76,7 +77,7 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
     }
     else
     {
-      _map->removeElement(ElementId(type, id));
+      RemoveElementOp::removeElement(_map->shared_from_this(), ElementId(type, id));
     }
   }
 }

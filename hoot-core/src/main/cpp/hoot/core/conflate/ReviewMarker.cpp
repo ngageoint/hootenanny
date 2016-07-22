@@ -27,6 +27,7 @@
 #include "ReviewMarker.h"
 
 #include <hoot/core/util/Log.h>
+#include <hoot/core/ops/RemoveElementOp.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
@@ -238,7 +239,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
 
 void ReviewMarker::removeElement(const OsmMapPtr& map, ElementId eid)
 {
-  map->removeElement(eid);
+  RemoveElementOp::removeElement(map, eid);
 }
 
 }

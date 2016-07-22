@@ -34,6 +34,13 @@
 namespace hoot
 {
 
+/**
+ * Remove the specified node from a map. If doCheck is true, a check
+ * will be made to make sure the node is not part of any way before it is removed.
+ *
+ * If removeFully is true, the node will be removed from all relations,
+ * then removed from teh map.
+ */
 class RemoveNodeOp : public OsmMapOperation
 {
 public:
@@ -49,6 +56,24 @@ public:
   string getClassName() const { return className(); }
 
   void setNodeId(long nId) { _nodeIdToRemove = nId; }
+
+  static void removeNode(OsmMapPtr map, long nId)
+  {
+    RemoveNodeOp nodeRemover(nId);
+    nodeRemover.apply(map);
+  }
+
+  static void removeNodeNoCheck(OsmMapPtr map, long nId)
+  {
+    RemoveNodeOp nodeRemover(nId, false);
+    nodeRemover.apply(map);
+  }
+
+  static void removeNodeFully(OsmMapPtr map, long nId)
+  {
+    RemoveNodeOp nodeRemover(nId, true, true);
+    nodeRemover.apply(map);
+  }
 
 private:
   long _nodeIdToRemove;

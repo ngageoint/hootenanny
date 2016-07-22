@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/ops/RemoveRelationOp.h>
 
 namespace hoot
 {
@@ -46,7 +47,7 @@ void RemoveEmptyRelationsVisitor::visit(const shared_ptr<Element>& e)
 
     if (r->getMembers().size() == 0)
     {
-      _map->removeRelation(r->getId());
+      RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
     }
   }
 }

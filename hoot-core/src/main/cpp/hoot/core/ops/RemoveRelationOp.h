@@ -34,6 +34,7 @@
 namespace hoot
 {
 
+/* Removes a relation from a map */
 class RemoveRelationOp : public OsmMapOperation
 {
 public:
@@ -49,6 +50,12 @@ public:
   string getClassName() const { return className(); }
 
   void setRelationId(long rId) { _rIdToRemove = rId; }
+
+  static void removeRelation(OsmMapPtr map, long rId)
+  {
+    RemoveRelationOp relationRemover(rId);
+    relationRemover.apply(map);
+  }
 
 private:
   long _rIdToRemove;

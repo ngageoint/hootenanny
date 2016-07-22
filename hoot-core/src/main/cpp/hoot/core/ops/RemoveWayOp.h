@@ -34,6 +34,9 @@
 namespace hoot
 {
 
+/**
+ * Remove the specified way from this map.
+ */
 class RemoveWayOp : public OsmMapOperation
 {
 public:
@@ -50,12 +53,18 @@ public:
 
   void setWayId(long wId) { _wayIdToRemove = wId; }
 
+  /**
+   * Remove the specified way from this map.
+   */
   static void removeWay(OsmMapPtr map, long wId)
   {
     RemoveWayOp wayRemover(wId);
     wayRemover.apply(map);
   }
 
+  /**
+   * Removes the way from all relations and then removes the way from the map.
+   */
   static void removeWayFully(OsmMapPtr map, long wId)
   {
     RemoveWayOp wayRemover(wId, true);

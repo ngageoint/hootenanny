@@ -47,6 +47,8 @@ using namespace boost;
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/SignalCatcher.h>
 #include <hoot/core/util/Validate.h>
+#include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/core/ops/RemoveNodeOp.h>
 using namespace hoot::elements;
 
 // Qt
@@ -352,133 +354,6 @@ bool OsmMap::_listContainsNode(const QList<ElementPtr> l) const
   return false;
 }
 
-void OsmMap::removeElement(ElementId eid)
-{
-  switch (eid.getType().getEnum())
-  {
-  case ElementType::Node:
-    removeNodeFully(eid.getId());
-    break;
-  case ElementType::Way:
-    removeWayFully(eid.getId());
-    break;
-  case ElementType::Relation:
-    removeRelation(eid.getId());
-    break;
-  default:
-    throw HootException(QString("Unexpected element type: %1").arg(eid.toString()));
-  }
-}
-
-void OsmMap::removeElementNoCheck(ElementType type, long id)
-{
-  switch (type.getEnum())
-  {
-  case ElementType::Node:
-    removeNodeNoCheck(id);
-    break;
-  case ElementType::Way:
-    removeWay(id);
-    break;
-  case ElementType::Relation:
-    removeRelation(id);
-    break;
-  default:
-    throw HootException(QString("Unexpected element type: %1").arg(type.toString()));
-  }
-}
-
-void OsmMap::removeNode(long nid)
-{
-  const shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
-  const set<long>& ways = n2w->getWaysByNode(nid);
-  if (ways.size() > 0)
-  {
-    throw HootException("Removing a node, but it is still part of one or more ways.");
-  }
-  removeNodeNoCheck(nid);
-}
-
-void OsmMap::removeNodeFully(long nId)
-{
-  // copy the set because we may modify it later.
-  set<long> rid = getIndex().getElementToRelationMap()->
-      getRelationByElement(ElementId::way(nId));
-
-  for (set<long>::const_iterator it = rid.begin(); it != rid.end(); ++it)
-  {
-    getRelation(*it)->removeElement(ElementId::node(nId));
-  }
-
-  const shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
-  const set<long> ways = n2w->getWaysByNode(nId);
-
-  for (set<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
-  {
-    getWay(*it)->removeNode(nId);
-  }
-
-  removeNodeNoCheck(nId);
-
-  VALIDATE(validate());
-}
-
-void OsmMap::removeNodeNoCheck(long nId)
-{
-  _index->removeNode(getNode(nId));
-  _nodes.erase(nId);
-}
-
-void OsmMap::removeRelation(long rId)
-{
-  if (_relations.find(rId) != _relations.end())
-  {
-    // determine if this relation is a part of any other relations
-
-    // make a copy of the rids in case the index gets changed.
-    const set<long> rids = getIndex().getElementToRelationMap()->
-      getRelationByElement(ElementId::relation(rId));
-
-    // remove this relation from all other parent relations.
-    for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
-    {
-      getRelation(*it)->removeElement(ElementId::relation(rId));
-    }
-
-    _index->removeRelation(getRelation(rId));
-    _relations.erase(rId);
-    VALIDATE(validate());
-  }
-}
-
-void OsmMap::removeWay(const shared_ptr<const Way>& w)
-{
-  removeWay(w->getId());
-}
-
-void OsmMap::removeWay(long wId)
-{
-  if (_ways.find(wId) != _ways.end())
-  {
-    _index->removeWay(getWay(wId));
-    _ways.erase(wId);
-  }
-}
-
-void OsmMap::removeWayFully(long wId)
-{
-  // copy the set because we may modify it later.
-  set<long> rid = getIndex().getElementToRelationMap()->
-      getRelationByElement(ElementId::way(wId));
-
-  for (set<long>::const_iterator it = rid.begin(); it != rid.end(); ++it)
-  {
-    getRelation(*it)->removeElement(ElementId::way(wId));
-  }
-  removeWay(wId);
-  VALIDATE(validate());
-}
-
 void OsmMap::replace(const shared_ptr<const Element>& from, const shared_ptr<Element>& to)
 {
   const shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
@@ -512,7 +387,7 @@ void OsmMap::replace(const shared_ptr<const Element>& from, const shared_ptr<Ele
       r->replaceElement(from, to);
     }
 
-    removeElementNoCheck(from->getElementType(), from->getId());
+    RemoveElementOp::removeElementNoCheck(shared_from_this(), from->getElementId());
   }
 }
 
@@ -554,7 +429,7 @@ void OsmMap::replace(const shared_ptr<const Element>& from, const QList<ElementP
       r->replaceElement(from, to);
     }
 
-    removeElementNoCheck(from->getElementType(), from->getId());
+    RemoveElementOp::removeElementNoCheck(shared_from_this(), from->getElementId());
   }
 }
 
@@ -598,7 +473,7 @@ void OsmMap::replaceNode(long oldId, long newId)
 
   if (containsNode(oldId))
   {
-    removeNodeNoCheck(oldId);
+    RemoveNodeOp::removeNodeNoCheck(shared_from_this(), oldId);
   }
 
   VALIDATE(getIndex().getNodeToWayMap()->validate(*this));

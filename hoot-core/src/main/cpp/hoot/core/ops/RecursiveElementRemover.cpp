@@ -31,6 +31,8 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/SetVisitor.h>
 
@@ -135,7 +137,7 @@ void RecursiveElementRemover::_remove(const shared_ptr<OsmMap>& map, ElementId e
       _remove(map, e[i].getElementId(), removeSet);
     }
 
-    map->removeRelation(eid.getId());
+    RemoveRelationOp::removeRelation(map, eid.getId());
   }
   else if (eid.getType() == ElementType::Way)
   {
@@ -152,7 +154,7 @@ void RecursiveElementRemover::_remove(const shared_ptr<OsmMap>& map, ElementId e
   }
   else if (eid.getType() == ElementType::Node)
   {
-    map->removeNodeNoCheck(eid.getId());
+    RemoveNodeOp::removeNodeNoCheck(map, eid.getId());
   }
   else
   {

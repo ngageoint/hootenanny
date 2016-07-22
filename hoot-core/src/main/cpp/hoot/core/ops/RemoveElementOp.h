@@ -34,6 +34,16 @@
 namespace hoot
 {
 
+/**
+ * Removes an element from a map. If the element exists as part of other elements it is
+ * removed from those elements before being removed from the map.
+ *
+ * If this element contains children (e.g. multipolygon) the children will not be
+ * removed from the map.
+ *
+ * If you would like to remove an element and all its children then
+ * see RecursiveElementRemover.
+ */
 class RemoveElementOp : public OsmMapOperation
 {
 public:
@@ -49,6 +59,30 @@ public:
   string getClassName() const { return className(); }
 
   void setElementId(ElementId eId) {_eIdToRemove = eId; }
+
+  /**
+   * Removes an element from a map. If the element exists as part of other elements it is
+   * removed from those elements before being removed from the map.
+   *
+   * If this element contains children (e.g. multipolygon) the children will not be
+   * removed from the map.
+   */
+  static void removeElement(OsmMapPtr map, ElementId eId)
+  {
+    RemoveElementOp elementRemover(eId);
+    elementRemover.apply(map);
+  }
+
+  /**
+   * Removes an element from the map. No check is made before the removal, so
+   * removing an element used by another Way or Relation will result in
+   * undefined behaviour.
+   */
+  static void removeElementNoCheck(OsmMapPtr map, ElementId eId)
+  {
+    RemoveElementOp elementRemover(eId, false);
+    elementRemover.apply(map);
+  }
 
 private:
   ElementId _eIdToRemove;
