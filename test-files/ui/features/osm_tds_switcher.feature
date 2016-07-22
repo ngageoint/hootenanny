@@ -21,3 +21,57 @@ Feature: OSM/TDS Switcher
         Then I select the "MGCP" option labelled "Filter By Type"
         Then I wait 10 "seconds" to see "label" element with text "Horizontal Accuracy Category"
         Then I should see element "#preset-input-MGCP\/ACC" with value "Accurate"
+
+    Scenario: I can add a new feature and switch between attribute schemas
+        # Add a point with OSM schema
+        When I click the "add-point" button
+        And I click the "map" at "300","300"
+        Then I wait 5 "seconds" to see "Select feature type"
+        Then I select the "OSM" option labelled "Filter By Type"
+        And I click the "div.label" with text "Park"
+        And I should see a "g.tag-leisure-park" on the map
+        And I click the "map" at "400","400"
+        # Add a point with TDSv61 schema
+        When I click the "add-point" button
+        And I click the "map" at "100","100"
+        Then I wait 5 "seconds" to see "Select feature type"
+        Then I select the "TDSv61" option labelled "Filter By Type"
+        And I click the "div.label" with text "Building (AL013)"
+        And I should see a "g.tag-building" on the map
+        And I click the "map" at "400","400"
+        # Add a point with MGCP schema
+        When I click the "add-point" button
+        And I click the "map" at "200","200"
+        Then I wait 5 "seconds" to see "Select feature type"
+        Then I select the "MGCP" option labelled "Filter By Type"
+        And I click the "div.label" with text "Settlement (AL105)"
+        And I should see a "g.tag-place-settlement" on the map
+        And I click the "map" at "400","400"
+
+        # Add a line with TDSv40 schema
+        When I click the "add-line" button
+        And I click the "map" at "300","200"
+        And I click the "map" at "200","300"
+        And I double-click the "map" at "200","400"
+        Then I press the escape key
+        Then I wait 5 "seconds" to see "Select feature type"
+        Then I select the "TDSv40" option labelled "Filter By Type"
+        And I click the "div.label" with text "Trail (AP050)"
+        And I should see a "path.tag-highway-path" on the map
+
+        # Add an area with MGCP schema
+        When I click the "add-area" button
+        And I click the "map" at "150","150"
+        And I click the "map" at "450","450"
+        And I double-click the "map" at "150","450"
+        Then I press the escape key
+        Then I wait 5 "seconds" to see "Select feature type"
+        Then I select the "MGCP" option labelled "Filter By Type"
+        And I click the "div.label" with text "Built-up Area (AL020)"
+        And I should see a "path.tag-landuse-built_up_area" on the map
+
+        # Save the features
+        When I press "Save"
+        Then I click the "save-button" button
+        Then I click the "trash" button
+        And I accept the alert

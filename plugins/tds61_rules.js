@@ -148,8 +148,6 @@ tds61.rules = {
      'ZI001_SDV':'source:datetime', // Source Information : Source Date and Time
      'ZI001_VSD':'source:vertical_source:datetime', // Source Information : Vertical Source Date and Time
 //      'ZI001_VSN':'source:vertical_source:description', // Source Information : Vertical Source Description
-     'CCN':'source:copyright', // Restriction Information : Commercial Copyright Notice
-     'CDR':'source:commercial_distribution_restriction', // Restriction Information : Commercial Distribution Restriction
      'ZI002_UFI':'security:restriction_ufi', // Restriction Information : Unique Entity Identifier
      'ZI004_PRE':'source:processing_information', // Process Step Information : Process Step Description
      'ZI005_FNA':'name', // Geographic Name Information : Full Name
@@ -186,9 +184,9 @@ tds61.rules = {
      'AVA':'source:accuracy:vertical', // Absolute Vertical Accuracy (90%)
      'AYRL':'aquifer:yield:lower', // Aquifer Yield Rating <lower value>
      'AYRU':'aquifer:yield:upper', // Aquifer Yield Rating <upper value>
-     'BC040_EOL':'seamark:light:range', // Maritime Navigation Light : Nominal Range
+     'BC040_EOL':'seamark:light:height', // Maritime Navigation Light : Nominal Range
      'BC040_LCN':'seamark:light:characteristic_number', // Maritime Navigation Light : Light Characteristic Number
-     'BC040_LVN':'seamark:light:height', // Maritime Navigation Light : Light Elevation
+     'BC040_LVN':'seamark:light:range', // Maritime Navigation Light : Light Elevation
      'BC040_PER':'seamark:light:period', // Maritime Navigation Light : Period of Light
      'BEL':'ele:base', // Base Elevation - conflict with "ele" but is only used in one feature: ZB035 Control Point
      'BH141_AWBA':'waterway:bank1:slope:above_water', // Inland Waterbody Bank (1) : Above Water Bank Slope (first bank)
@@ -244,7 +242,7 @@ tds61.rules = {
      'LNU':'length:interior_useable', // Usable Length
      'LOG':'gradient:length', // Gradient Length
      'LTN':'lanes', // Track or Lane Count
-     'LZN':'length', // Lengthf
+     'LZN':'length', // Length
      'MAG':'magnetic_variation', // Magnetic Variation
      'MWD':'depth:designed:maximum', // Maximum Design Water Depth
      'MWG':'divider:width', // Centerline Spacing
@@ -428,8 +426,8 @@ tds61.rules = {
 
      // AQTC - Aquifer Thickness <interval closure>
      ['AQTC','2','aquifer:thickness:closure','open_interval'], // Open Interval
-     ['AQTC','3','aquifer:thickness:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['AQTC','4','aquifer:thickness:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['AQTC','3','aquifer:thickness:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['AQTC','4','aquifer:thickness:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['AQTC','5','aquifer:thickness:closure','closed_interval'], // Closed Interval
      ['AQTC','6','aquifer:thickness:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['AQTC','7','aquifer:thickness:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -466,14 +464,14 @@ tds61.rules = {
      ['ASY','1','aeroway:aerodrome_symbol','active_civilian'], // A - Active Civilian
      ['ASY','2','aeroway:aerodrome_symbol','active_joint_(civilian/military)'], // B - Active Joint (Civilian/Military)
      ['ASY','3','aeroway:aerodrome_symbol','active_military'], // C - Active Military
-     ['ASY','4','aeroway:aerodrome_symbol','active_(with_less_than_the_minimum_facilities)'], // D - Active (with less than the minimum facilities)
+     ['ASY','4','aeroway:aerodrome_symbol','active_(with_less-than_the_minimum_facilities)'], // D - Active (with less than the minimum facilities)
      ['ASY','5','aeroway:aerodrome_symbol','abandoned_or_closed_(with_usable_runways_or_landing_areas)'], // E - Abandoned or Closed (with usable runways or landing areas)
      ['ASY','6','aeroway:aerodrome_symbol','highway_strip'], // F - Highway Strip
      ['ASY','7','aeroway:aerodrome_symbol','unusable_for_landing_or_take-off'], // G - Unusable for landing or take-off
      ['ASY','8','aeroway:aerodrome_symbol','active_military_heliport'], // H - Active Military Heliport
      ['ASY','9','aeroway:aerodrome_symbol','active_civil_heliport'], // J - Active Civil Heliport
-     ['ASY','10','aeroway:aerodrome_symbol','active_military_heliport_(with_less_than_minimum_facilities)'], // K - Active Military Heliport (with less than minimum facilities)
-     ['ASY','11','aeroway:aerodrome_symbol','active_civil_heliport_(with_less_than_minimum_facilities)'], // L - Active Civil Heliport (with less than minimum facilities)
+     ['ASY','10','aeroway:aerodrome_symbol','active_military_heliport_(with_less-than_minimum_facilities)'], // K - Active Military Heliport (with less than minimum facilities)
+     ['ASY','11','aeroway:aerodrome_symbol','active_civil_heliport_(with_less-than_minimum_facilities)'], // L - Active Civil Heliport (with less than minimum facilities)
      ['ASY','12','aeroway:aerodrome_symbol','decoy'], // X - Decoy
      ['ASY','13','aeroway:aerodrome_symbol','active_joint_(civilian/military)_heliport'], // Active Joint (Civilian/Military) Heliport
 
@@ -506,6 +504,7 @@ tds61.rules = {
      ['ATC','4','aqueduct:type','underwater'], // Underwater
      ['ATC','5','aqueduct:type','surface'], // Surface
      ['ATC','6','aqueduct:type','qanat'], // Qanat
+
      // AWP - Aeronautical Obstacle Light Present
      // ['AWP','-999999',undefined,undefined],
      ['AWP','1000','light:obstacle','no'],
@@ -520,8 +519,8 @@ tds61.rules = {
 
      // AYRC - Aquifer Yield Rating (interval closure)
      ['AYRC','2','aquifer:yield:closure','open_interval'], // Open Interval
-     ['AYRC','3','aquifer:yield:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['AYRC','4','aquifer:yield:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['AYRC','3','aquifer:yield:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['AYRC','4','aquifer:yield:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['AYRC','5','aquifer:yield:closure','closed_interval'], // Closed Interval
      ['AYRC','6','aquifer:yield:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['AYRC','7','aquifer:yield:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -568,16 +567,16 @@ tds61.rules = {
 
      // BC034_MRT - Maritime Radiobeacon : Maritime Radiobeacon Type
      // ['BC034_MRT','-999999',undefined,undefined], // No Information
-     ['BC034_MRT','1','seamark:radio_station:category ','ais'], // Automated Identification System (AIS)
-     ['BC034_MRT','2','seamark:radio_station:category ','omnidirectional'], // Circular Radiobeacon
-     ['BC034_MRT','3','seamark:radio_station:category ','directional'], // Directional Radiobeacon
-     ['BC034_MRT','4','seamark:radio_station:category ','loran'], // Long Range Air Navigation System (LORAN) C
-     ['BC034_MRT','5','seamark:radio_station:category ','qtg'], // QTG Station
-     ['BC034_MRT','6','seamark:radar_transponder:category ','ramark'], // Radar Marker (RAMARK)
-     ['BC034_MRT','7','seamark:radar_transponder:category ','racon'], // Radar Responder Beacon (RACON)
-     ['BC034_MRT','8','seamark:radio_station:category ','rdf'], // Radio Direction Finding Station
-     ['BC034_MRT','9','seamark:radio_station:category ','rotating_pattern'], // Rotating Pattern Radiobeacon
-     ['BC034_MRT','999','seamark:radio_station:category ','other'], // Other
+     ['BC034_MRT','1','seamark:radio_station:category','ais'], // Automated Identification System (AIS)
+     ['BC034_MRT','2','seamark:radio_station:category','omnidirectional'], // Circular Radiobeacon
+     ['BC034_MRT','3','seamark:radio_station:category','directional'], // Directional Radiobeacon
+     ['BC034_MRT','4','seamark:radio_station:category','loran'], // Long Range Air Navigation System (LORAN) C
+     ['BC034_MRT','5','seamark:radio_station:category','qtg'], // QTG Station
+     ['BC034_MRT','6','seamark:radar_transponder:category','ramark'], // Radar Marker (RAMARK)
+     ['BC034_MRT','7','seamark:radar_transponder:category','racon'], // Radar Responder Beacon (RACON)
+     ['BC034_MRT','8','seamark:radio_station:category','rdf'], // Radio Direction Finding Station
+     ['BC034_MRT','9','seamark:radio_station:category','rotating_pattern'], // Rotating Pattern Radiobeacon
+     ['BC034_MRT','999','seamark:radio_station:category','other'], // Other
 
      // BC101_SST - Fog Signal : Fog Signal Type
      // ['BC101_SST','-999999',undefined,undefined], // No Information
@@ -716,28 +715,28 @@ tds61.rules = {
 
      // BPWHAC - Waterbody Bank 1 height interval closure
      ['BPWHAC','2','waterway:bank1:height:closure','open_interval'],
-     ['BPWHAC','3','waterway:bank1:height:closure','greater_than_or_equal_to_less_than_interval'],
-     ['BPWHAC','4','waterway:bank1:height:closure','greater_than_to_less_than_or_equal_interval'],
+     ['BPWHAC','3','waterway:bank1:height:closure','greater-than_or_equal_to_less-than_interval'],
+     ['BPWHAC','4','waterway:bank1:height:closure','greater-than_to_less-than_or_equal_interval'],
      ['BPWHAC','5','waterway:bank1:height:closure','closed_interval'],
-     ['BPWHAC','6','waterway:bank1:height:closure','greater_than_semi_interval'],
-     ['BPWHAC','7','waterway:bank1:height:closure','greater_than_or_equal_semi_interval'],
-     ['BPWHAC','8','waterway:bank1:height:closure','less_than_semi_interval'],
-     ['BPWHAC','9','waterway:bank1:height:closure','less_than_or_equal_semi_interval'],
+     ['BPWHAC','6','waterway:bank1:height:closure','greater-than_semi-interval'],
+     ['BPWHAC','7','waterway:bank1:height:closure','greater-than_or_equal_semi-interval'],
+     ['BPWHAC','8','waterway:bank1:height:closure','less-than_semi-interval'],
+     ['BPWHAC','9','waterway:bank1:height:closure','less-than_or_equal_semi-interval'],
 
      // BPWHBC - Waterbody Bank 2 height interval closure
      ['BPWHBC','2','waterway:bank2:height:closure','open_interval'],
-     ['BPWHBC','3','waterway:bank2:height:closure','greater_than_or_equal_to_less_than_interval'],
-     ['BPWHBC','4','waterway:bank2:height:closure','greater_than_to_less_than_or_equal_interval'],
+     ['BPWHBC','3','waterway:bank2:height:closure','greater-than_or_equal_to_less-than_interval'],
+     ['BPWHBC','4','waterway:bank2:height:closure','greater-than_to_less-than_or_equal_interval'],
      ['BPWHBC','5','waterway:bank2:height:closure','closed_interval'],
-     ['BPWHBC','6','waterway:bank2:height:closure','greater_than_semi_interval'],
-     ['BPWHBC','7','waterway:bank2:height:closure','greater_than_or_equal_semi_interval'],
-     ['BPWHBC','8','waterway:bank2:height:closure','less_than_semi_interval'],
-     ['BPWHBC','9','waterway:bank2:height:closure','less_than_or_equal_semi_interval'],
+     ['BPWHBC','6','waterway:bank2:height:closure','greater-than_semi-interval'],
+     ['BPWHBC','7','waterway:bank2:height:closure','greater-than_or_equal_semi-interval'],
+     ['BPWHBC','8','waterway:bank2:height:closure','less-than_semi-interval'],
+     ['BPWHBC','9','waterway:bank2:height:closure','less-than_or_equal_semi-interval'],
 
      // BPWSAC - Inland Waterbody Bank (1) : Predominant Waterbody Bank Slope (first bank) (interval closure)
      ['BPWSAC','2','waterway:bank1:slope:closure','open_interval'], // Open Interval
-     ['BPWSAC','3','waterway:bank1:slope:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['BPWSAC','4','waterway:bank1:slope:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['BPWSAC','3','waterway:bank1:slope:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['BPWSAC','4','waterway:bank1:slope:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['BPWSAC','5','waterway:bank1:slope:closure','closed_interval'], // Closed Interval
      ['BPWSAC','6','waterway:bank1:slope:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['BPWSAC','7','waterway:bank1:slope:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -746,13 +745,13 @@ tds61.rules = {
 
      // BPWSBC - Waterbody Bank 2 Slope interval closure
      ['BPWSBC','2','waterway:bank2:slope:closure','open_interval'],
-     ['BPWSBC','3','waterway:bank2:slope:closure','greater_than_or_equal_to_less_than_interval'],
-     ['BPWSBC','4','waterway:bank2:slope:closure','greater_than_to_less_than_or_equal_interval'],
+     ['BPWSBC','3','waterway:bank2:slope:closure','greater-than_or_equal_to_less-than_interval'],
+     ['BPWSBC','4','waterway:bank2:slope:closure','greater-than_to_less-than_or_equal_interval'],
      ['BPWSBC','5','waterway:bank2:slope:closure','closed_interval'],
-     ['BPWSBC','6','waterway:bank2:slope:closure','greater_than_semi_interval'],
-     ['BPWSBC','7','waterway:bank2:slope:closure','greater_than_or_equal_semi_interval'],
-     ['BPWSBC','8','waterway:bank2:slope:closure','less_than_semi_interval'],
-     ['BPWSBC','9','waterway:bank2:slope:closure','less_than_or_equal_semi_interval'],
+     ['BPWSBC','6','waterway:bank2:slope:closure','greater-than_semi-interval'],
+     ['BPWSBC','7','waterway:bank2:slope:closure','greater-than_or_equal_semi-interval'],
+     ['BPWSBC','8','waterway:bank2:slope:closure','less-than_semi-interval'],
+     ['BPWSBC','9','waterway:bank2:slope:closure','less-than_or_equal_semi-interval'],
 
      // BSC - Bridge Structure Type
      // ['BSC','-999999',undefined,undefined], // No Information
@@ -803,23 +802,23 @@ tds61.rules = {
 
      // BWVCAC - Inland Waterbody Bank (1) : Waterbody Bank Vegetation Cover (first bank) (interval closure)
      ['BWVCAC','2','waterway:bank1:cover:closure','open_interval'], // Open Interval
-     ['BWVCAC','3','waterway:bank1:cover:closure','greater_than_or_equal_to_less_than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['BWVCAC','4','waterway:bank1:cover:closure','greater_than_to_less_than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['BWVCAC','3','waterway:bank1:cover:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['BWVCAC','4','waterway:bank1:cover:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['BWVCAC','5','waterway:bank1:cover:closure','closed_interval'], // Closed Interval
-     ['BWVCAC','6','waterway:bank1:cover:closure','greater_than_semi_interval'], // Greater-than Semi-interval
-     ['BWVCAC','7','waterway:bank1:cover:closure','greater_than_or_equal_semi_interval'], // Greater-than or Equal Semi-interval
-     ['BWVCAC','8','waterway:bank1:cover:closure','less_than_semi_interval'], // Less-than Semi-interval
-     ['BWVCAC','9','waterway:bank1:cover:closure','less_than_or_equal_semi_interval'], // Less-than or Equal Semi-interval
+     ['BWVCAC','6','waterway:bank1:cover:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['BWVCAC','7','waterway:bank1:cover:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['BWVCAC','8','waterway:bank1:cover:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['BWVCAC','9','waterway:bank1:cover:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
      // BWVCBC - Inland Waterbody Bank (2) : Waterbody Bank Vegetation Cover (second bank) (interval closure)
      ['BWVCBC','2','waterway:bank2:cover:closure','open_interval'], // Open Interval
-     ['BWVCBC','3','waterway:bank2:cover:closure','greater_than_or_equal_to_less_than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['BWVCBC','4','waterway:bank2:cover:closure','greater_than_to_less_than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['BWVCBC','3','waterway:bank2:cover:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['BWVCBC','4','waterway:bank2:cover:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['BWVCBC','5','waterway:bank2:cover:closure','closed_interval'], // Closed Interval
-     ['BWVCBC','6','waterway:bank2:cover:closure','greater_than_semi_interval'], // Greater-than Semi-interval
-     ['BWVCBC','7','waterway:bank2:cover:closure','greater_than_or_equal_semi_interval'], // Greater-than or Equal Semi-interval
-     ['BWVCBC','8','waterway:bank2:cover:closure','less_than_semi_interval'], // Less-than Semi-interval
-     ['BWVCBC','9','waterway:bank2:cover:closure','less_than_or_equal_semi_interval'], // Less-than or Equal Semi-interval
+     ['BWVCBC','6','waterway:bank2:cover:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['BWVCBC','7','waterway:bank2:cover:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['BWVCBC','8','waterway:bank2:cover:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['BWVCBC','9','waterway:bank2:cover:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
      // CAA - Controlling Authority - This does not play nicely in OSM
      // ['CAA','-999999',undefined,undefined], // No Information
@@ -999,10 +998,10 @@ tds61.rules = {
 
      // COS - Facility Operational Status
      // ['COS','-999999',undefined,undefined], // No Information
-     ['COS','4','operational_status','non_operational'], // Non-operational
+     ['COS','4','operational_status','non-operational'], // Non-operational
      ['COS','6','operational_status','planned'], // Planned
      ['COS','8','operational_status','not_in_operation'], // Not in Operation ???
-     ['COS','9','operational_status','temp_non_operational'], // Temporarily Non-operational
+     ['COS','9','operational_status','temporarily_non-operational'], // Temporarily Non-operational
      ['COS','13','operational_status','operational'], // Operational
      ['COS','14','operational_status','partial'], // Partially Operational
 
@@ -1014,7 +1013,6 @@ tds61.rules = {
      ['CPS','fixed5r0','source:cell_partition_scheme','5_arc_degree'], // A global geodetic grid consisting of 5 by 5 arc degree cells.
      ['CPS','variable','source:cell_partition_scheme','variable'], // A geodetic grid consisting of variable-sized cells situated so as to cover the extent of a region of interest.
      ['CPS','other','source:cell_partition_scheme','other'], // Other
-
 
      // CRA - Crane Type
      // ['CRA','-999999',undefined,undefined], // No Information
@@ -1095,8 +1093,8 @@ tds61.rules = {
 
      // DMBC - Undergrowth Density (interval closure)
      ['DMBC','2','undergrowth:density:closure','open_interval'], // Open Interval
-     ['DMBC','3','undergrowth:density:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['DMBC','4','undergrowth:density:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['DMBC','3','undergrowth:density:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['DMBC','4','undergrowth:density:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['DMBC','5','undergrowth:density:closure','closed_interval'], // Closed Interval
      ['DMBC','6','undergrowth:density:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['DMBC','7','undergrowth:density:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -1110,8 +1108,8 @@ tds61.rules = {
 
      // DPAC - Aquifer Depth <interval closure>
      ['DPAC','2','aquifer:depth:closure','open_interval'], // Open Interval
-     ['DPAC','3','aquifer:depth:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['DPAC','4','aquifer:depth:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['DPAC','3','aquifer:depth:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['DPAC','4','aquifer:depth:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['DPAC','5','aquifer:depth:closure','closed_interval'], // Closed Interval
      ['DPAC','6','aquifer:depth:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['DPAC','7','aquifer:depth:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -1148,6 +1146,14 @@ tds61.rules = {
      ['EQC','scale2m','source:equivalent_scale','1:2m'], // A map scale of 1:2,000,000.
      ['EQC','scale5m','source:equivalent_scale','1:5m'], // A map scale of 1:5,000,000.
      ['EQC','other','source:equivalent_scale','other'], // Other
+
+     // ESC - Elevation Surface Category
+     // ['ESC','-999999',undefined,undefined], // No Information
+     ['ESC','1','elevation:surface','land'], // Land
+     ['ESC','2','elevation:surface','snow_field_and/or_ice-field'], // Snow Field and/or Ice-field
+     ['ESC','4','elevation:surface','vegetation'], // Vegetation
+     ['ESC','5','elevation:surface','inland_water'], // Inland Water
+     ['ESC','6','elevation:surface','tidal_water'], // Tidal Water
 
      // ETS - Extraction Specification
      // ['ETS','noInformation',undefined,undefined], // No Information
@@ -1188,14 +1194,6 @@ tds61.rules = {
      ['ETS','vmap0','source:extraction_specification','3kl-vmap-0'], // 3KL-VMap-0
      ['ETS','vmap1','source:extraction_specification','3km-vmap-1'], // 3KM-VMap-1
      ['ETS','vmap2','source:extraction_specification','3kh-vmap-2'], // 3KH-VMap-2
-
-     // ESC - Elevation Surface Category
-     // ['ESC','-999999',undefined,undefined], // No Information
-     ['ESC','1','elevation:surface','land'], // Land
-     ['ESC','2','elevation:surface','snow_field_and/or_ice-field'], // Snow Field and/or Ice-field
-     ['ESC','4','elevation:surface','vegetation'], // Vegetation
-     ['ESC','5','elevation:surface','inland_water'], // Inland Water
-     ['ESC','6','elevation:surface','tidal_water'], // Tidal Water
 
      // ETY - Engine Test Cell Type
      // ['ETY','-999999',undefined,undefined], // No Information
@@ -1664,8 +1662,8 @@ tds61.rules = {
 
      // GSGCHC - Runway Direction (high end) : Surface Slope (high) (interval closure)
      ['GSGCHC','2','aeroway:runway_highend:slope:closure','open_interval'], // Open Interval
-     ['GSGCHC','3','aeroway:runway_highend:slope:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['GSGCHC','4','aeroway:runway_highend:slope:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['GSGCHC','3','aeroway:runway_highend:slope:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['GSGCHC','4','aeroway:runway_highend:slope:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['GSGCHC','5','aeroway:runway_highend:slope:closure','closed_interval'], // Closed Interval
      ['GSGCHC','6','aeroway:runway_highend:slope:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['GSGCHC','7','aeroway:runway_highend:slope:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -1674,8 +1672,8 @@ tds61.rules = {
 
      // GSGCLC - Runway Direction (low end) : Surface Slope (low) (interval closure)
      ['GSGCLC','2','aeroway:runway_lowend:slope:closure','open_interval'], // Open Interval
-     ['GSGCLC','3','aeroway:runway_lowend:slope:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['GSGCLC','4','aeroway:runway_lowend:slope:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['GSGCLC','3','aeroway:runway_lowend:slope:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['GSGCLC','4','aeroway:runway_lowend:slope:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['GSGCLC','5','aeroway:runway_lowend:slope:closure','closed_interval'], // Closed Interval
      ['GSGCLC','6','aeroway:runway_lowend:slope:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['GSGCLC','7','aeroway:runway_lowend:slope:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -2431,8 +2429,8 @@ tds61.rules = {
 
      // PWAC - Predominant Water Depth <interval closure>
      ['PWAC','2','depth:closure','open_interval'], // Open Interval
-     ['PWAC','3','depth:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['PWAC','4','depth:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['PWAC','3','depth:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['PWAC','4','depth:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['PWAC','5','depth:closure','closed_interval'], // Closed Interval
      ['PWAC','6','depth:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['PWAC','7','depth:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -2531,7 +2529,7 @@ tds61.rules = {
      ['RIT','8','junction','trumpet'], // Trumpet
      ['RIT','9','junction','turban'], // Turban
      ['RIT','10','junction','wye'], // Wye
-     ['RIT','999','junction','other'], // Othe
+     ['RIT','999','junction','other'], // Other
 
      // RKF - Rock Formation Structure
      // ['RKF','-999999',undefined,undefined], // No Information
@@ -2551,13 +2549,13 @@ tds61.rules = {
      // RMWC - Route Median Width (interval closure): Nothing in OSM
      // ['RMWC','-999999',undefined,undefined],
      ['RMWC','2','median:interval:closure','open_interval'], // Open Interval
-     ['RMWC','3','median:interval:closure','greater_than_or_equal_to_less_than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['RMWC','4','median:interval:closure','greater_than_to_less_than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['RMWC','3','median:interval:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['RMWC','4','median:interval:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['RMWC','5','median:interval:closure','closed_interval'], // Closed Interval
-     ['RMWC','6','median:interval:closure','greater_than_semi_interval'], // Greater-than Semi-interval
-     ['RMWC','7','median:interval:closure','greater_than_or_equal_semi_interval'], // Greater-than or Equal Semi-interval
-     ['RMWC','8','median:interval:closure','less_than_semi_interval'], // Less-than Semi-interval
-     ['RMWC','9','median:interval:closure','less_than_or_equal_semi_interval'], // Less-than or Equal Semi-interval
+     ['RMWC','6','median:interval:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['RMWC','7','median:interval:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['RMWC','8','median:interval:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['RMWC','9','median:interval:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
      // This gets fixed in pre/post processing
      // ROR - Road Interchange Ramp
@@ -2662,8 +2660,8 @@ tds61.rules = {
 
      // SDCC - Soil Depth <interval closure>
      ['SDCC','2','soil:depth:closure','open_interval'], // Open Interval
-     ['SDCC','3','soil:depth:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['SDCC','4','soil:depth:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['SDCC','3','soil:depth:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['SDCC','4','soil:depth:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['SDCC','5','soil:depth:closure','closed_interval'], // Closed Interval
      ['SDCC','6','soil:depth:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['SDCC','7','soil:depth:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -2677,8 +2675,8 @@ tds61.rules = {
 
      // SDSC - Stem Diameter (interval closure)
      ['SDSC','2','tree:diameter:closure','open_interval'], // Open Interval
-     ['SDSC','3','tree:diameter:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['SDSC','4','tree:diameter:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['SDSC','3','tree:diameter:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['SDSC','4','tree:diameter:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['SDSC','5','tree:diameter:closure','closed_interval'], // Closed Interval
      ['SDSC','6','tree:diameter:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['SDSC','7','tree:diameter:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -2704,13 +2702,13 @@ tds61.rules = {
 
      // SGCC - Surface Slope (interval closure)
      ['SGCC','2','incline:interval:closure','open_interval'], // Open Interval
-     ['SGCC','3','incline:interval:closure','greater_than_or_equal_to_less_than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['SGCC','4','incline:interval:closure','greater_than_to_less_than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['SGCC','3','incline:interval:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['SGCC','4','incline:interval:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['SGCC','5','incline:interval:closure','closed_interval'], // Closed Interval
-     ['SGCC','6','incline:interval:closure','greater_than_semi_interval'], // Greater-than Semi-interval
-     ['SGCC','7','incline:interval:closure','greater_than_or_equal_semi_interval'], // Greater-than or Equal Semi-interval
-     ['SGCC','8','incline:interval:closure','less_than_semi_interval'], // Less-than Semi-interval
-     ['SGCC','9','incline:interval:closure','less_than_or_equal_semi_interval'], // Less-than or Equal Semi-interval
+     ['SGCC','6','incline:interval:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['SGCC','7','incline:interval:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['SGCC','8','incline:interval:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['SGCC','9','incline:interval:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
      // SHD - Shoreline Delineated
      // ['SHD','-999999',undefined,undefined], // No Information
@@ -3029,8 +3027,8 @@ tds61.rules = {
 
      // TSCC - Tree Spacing (interval closure)
      ['TSCC','2','tree:spacing:closure','open_interval'], // Open Interval
-     ['TSCC','3','tree:spacing:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['TSCC','4','tree:spacing:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['TSCC','3','tree:spacing:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['TSCC','4','tree:spacing:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['TSCC','5','tree:spacing:closure','closed_interval'], // Closed Interval
      ['TSCC','6','tree:spacing:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['TSCC','7','tree:spacing:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -3038,7 +3036,7 @@ tds61.rules = {
      ['TSCC','9','tree:spacing:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
      // TSM - Terrain Surface Material - Added to ZI016_ROC list
-     ['TSM','-999999',undefined,undefined], // No Information
+     // ['TSM','-999999',undefined,undefined], // No Information
      ['TSM','1','desert_surface','asphalt'], // Asphalt
      ['TSM','2','desert_surface','bedrock'], // Bedrock
      ['TSM','3','desert_surface','boulders'], // Boulders
@@ -3261,8 +3259,8 @@ tds61.rules = {
 
      // WDAC - Average Water Depth <interval closure>
      ['WDAC','2','depth:average:closure','open_interval'], // Open Interval
-     ['WDAC','3','depth:average:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['WDAC','4','depth:average:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['WDAC','3','depth:average:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['WDAC','4','depth:average:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['WDAC','5','depth:average:closure','closed_interval'], // Closed Interval
      ['WDAC','6','depth:average:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['WDAC','7','depth:average:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -4206,8 +4204,8 @@ tds61.rules = {
 
      // ZI026_CTUC - Feature Metadata : Cartographic Usability Range <interval closure>
      ['ZI026_CTUC','2','cartographic_scale:closure','open_interval'], // Open Interval
-     ['ZI026_CTUC','3','cartographic_scale:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['ZI026_CTUC','4','cartographic_scale:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['ZI026_CTUC','3','cartographic_scale:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['ZI026_CTUC','4','cartographic_scale:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['ZI026_CTUC','5','cartographic_scale:closure','closed_interval'], // Closed Interval
      ['ZI026_CTUC','6','cartographic_scale:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['ZI026_CTUC','7','cartographic_scale:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval

@@ -363,14 +363,14 @@ tds.rules = {
      ['ASY','1','aeroway:aerodrome_symbol','active_civilian'], // A - Active Civilian
      ['ASY','2','aeroway:aerodrome_symbol','active_joint_(civilian/military)'], // B - Active Joint (Civilian/Military)
      ['ASY','3','aeroway:aerodrome_symbol','active_military'], // C - Active Military
-     ['ASY','4','aeroway:aerodrome_symbol','active_(with_less_than_the_minimum_facilities)'], // D - Active (with less than the minimum facilities)
+     ['ASY','4','aeroway:aerodrome_symbol','active_(with_less-than_the_minimum_facilities)'], // D - Active (with less than the minimum facilities)
      ['ASY','5','aeroway:aerodrome_symbol','abandoned_or_closed_(with_usable_runways_or_landing_areas)'], // E - Abandoned or Closed (with usable runways or landing areas)
      ['ASY','6','aeroway:aerodrome_symbol','highway_strip'], // F - Highway Strip
      ['ASY','7','aeroway:aerodrome_symbol','unusable_for_landing_or_take-off'], // G - Unusable for landing or take-off
      ['ASY','8','aeroway:aerodrome_symbol','active_military_heliport'], // H - Active Military Heliport
      ['ASY','9','aeroway:aerodrome_symbol','active_civil_heliport'], // J - Active Civil Heliport
-     ['ASY','10','aeroway:aerodrome_symbol','active_military_heliport_(with_less_than_minimum_facilities)'], // K - Active Military Heliport (with less than minimum facilities)
-     ['ASY','11','aeroway:aerodrome_symbol','active_civil_heliport_(with_less_than_minimum_facilities)'], // L - Active Civil Heliport (with less than minimum facilities)
+     ['ASY','10','aeroway:aerodrome_symbol','active_military_heliport_(with_less-than_minimum_facilities)'], // K - Active Military Heliport (with less than minimum facilities)
+     ['ASY','11','aeroway:aerodrome_symbol','active_civil_heliport_(with_less-than_minimum_facilities)'], // L - Active Civil Heliport (with less than minimum facilities)
      ['ASY','12','aeroway:aerodrome_symbol','decoy'], // X - Decoy
      ['ASY','13','aeroway:aerodrome_symbol','active_joint_(civilian/military)_heliport'], // Active Joint (Civilian/Military) Heliport
 
@@ -585,23 +585,23 @@ tds.rules = {
 
      // BPWHAC - Waterbody Bank 1 height interval closure
      ['BPWHAC','2','waterway:bank1:height:closure','open_interval'], 
-     ['BPWHAC','3','waterway:bank1:height:closure','greater_than_or_equal_to_less_than_interval'], 
-     ['BPWHAC','4','waterway:bank1:height:closure','greater_than_to_less_than_or_equal_interval'], 
+     ['BPWHAC','3','waterway:bank1:height:closure','greater-than_or_equal_to_less-than_interval'],
+     ['BPWHAC','4','waterway:bank1:height:closure','greater-than_to_less-than_or_equal_interval'],
      ['BPWHAC','5','waterway:bank1:height:closure','closed_interval'], 
-     ['BPWHAC','6','waterway:bank1:height:closure','greater_than_semi_interval'], 
-     ['BPWHAC','7','waterway:bank1:height:closure','greater_than_or_equal_semi_interval'], 
-     ['BPWHAC','8','waterway:bank1:height:closure','less_than_semi_interval'], 
-     ['BPWHAC','9','waterway:bank1:height:closure','less_than_or_equal_semi_interval'], 
+     ['BPWHAC','6','waterway:bank1:height:closure','greater-than_semi-interval'],
+     ['BPWHAC','7','waterway:bank1:height:closure','greater-than_or_equal_semi-interval'],
+     ['BPWHAC','8','waterway:bank1:height:closure','less-than_semi-interval'],
+     ['BPWHAC','9','waterway:bank1:height:closure','less-than_or_equal_semi-interval'],
 
      // BPWHBC - Waterbody Bank 2 height interval closure
      ['BPWHBC','2','waterway:bank2:height:closure','open_interval'],
-     ['BPWHBC','3','waterway:bank2:height:closure','greater_than_or_equal_to_less_than_interval'],
-     ['BPWHBC','4','waterway:bank2:height:closure','greater_than_to_less_than_or_equal_interval'],
+     ['BPWHBC','3','waterway:bank2:height:closure','greater-than_or_equal_to_less-than_interval'],
+     ['BPWHBC','4','waterway:bank2:height:closure','greater-than_to_less-than_or_equal_interval'],
      ['BPWHBC','5','waterway:bank2:height:closure','closed_interval'],
-     ['BPWHBC','6','waterway:bank2:height:closure','greater_than_semi_interval'],
-     ['BPWHBC','7','waterway:bank2:height:closure','greater_than_or_equal_semi_interval'],
-     ['BPWHBC','8','waterway:bank2:height:closure','less_than_semi_interval'],
-     ['BPWHBC','9','waterway:bank2:height:closure','less_than_or_equal_semi_interval'],
+     ['BPWHBC','6','waterway:bank2:height:closure','greater-than_semi-interval'],
+     ['BPWHBC','7','waterway:bank2:height:closure','greater-than_or_equal_semi-interval'],
+     ['BPWHBC','8','waterway:bank2:height:closure','less-than_semi-interval'],
+     ['BPWHBC','9','waterway:bank2:height:closure','less-than_or_equal_semi-interval'],
 
      // BPWSAC - Inland Waterbody Bank (1) : Predominant Waterbody Bank Slope (first bank) (interval closure)
      ['BPWSAC','2','waterway:bank1:slope:closure','open_interval'], // Open Interval
@@ -615,13 +615,13 @@ tds.rules = {
 
      // BPWSBC - Waterbody Bank 2 Slope interval closure
      ['BPWSBC','2','waterway:bank2:slope:closure','open_interval'],
-     ['BPWSBC','3','waterway:bank2:slope:closure','greater_than_or_equal_to_less_than_interval'],
-     ['BPWSBC','4','waterway:bank2:slope:closure','greater_than_to_less_than_or_equal_interval'],
+     ['BPWSBC','3','waterway:bank2:slope:closure','greater-than_or_equal_to_less-than_interval'],
+     ['BPWSBC','4','waterway:bank2:slope:closure','greater-than_to_less-than_or_equal_interval'],
      ['BPWSBC','5','waterway:bank2:slope:closure','closed_interval'],
-     ['BPWSBC','6','waterway:bank2:slope:closure','greater_than_semi_interval'],
-     ['BPWSBC','7','waterway:bank2:slope:closure','greater_than_or_equal_semi_interval'],
-     ['BPWSBC','8','waterway:bank2:slope:closure','less_than_semi_interval'],
-     ['BPWSBC','9','waterway:bank2:slope:closure','less_than_or_equal_semi_interval'],
+     ['BPWSBC','6','waterway:bank2:slope:closure','greater-than_semi-interval'],
+     ['BPWSBC','7','waterway:bank2:slope:closure','greater-than_or_equal_semi-interval'],
+     ['BPWSBC','8','waterway:bank2:slope:closure','less-than_semi-interval'],
+     ['BPWSBC','9','waterway:bank2:slope:closure','less-than_or_equal_semi-interval'],
 
      // BSC - Bridge Structure Type
      // ['BSC','-999999',undefined,undefined], // No Information
@@ -667,23 +667,23 @@ tds.rules = {
 
      // BWVCAC - Inland Waterbody Bank (1) : Waterbody Bank Vegetation Cover (first bank) (interval closure)
      ['BWVCAC','2','waterway:bank1:cover:closure','open_interval'], // Open Interval
-     ['BWVCAC','3','waterway:bank1:cover:closure','greater_than_or_equal_to_less_than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['BWVCAC','4','waterway:bank1:cover:closure','greater_than_to_less_than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['BWVCAC','3','waterway:bank1:cover:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['BWVCAC','4','waterway:bank1:cover:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['BWVCAC','5','waterway:bank1:cover:closure','closed_interval'], // Closed Interval
-     ['BWVCAC','6','waterway:bank1:cover:closure','greater_than_semi_interval'], // Greater-than Semi-interval
-     ['BWVCAC','7','waterway:bank1:cover:closure','greater_than_or_equal_semi_interval'], // Greater-than or Equal Semi-interval
-     ['BWVCAC','8','waterway:bank1:cover:closure','less_than_semi_interval'], // Less-than Semi-interval
-     ['BWVCAC','9','waterway:bank1:cover:closure','less_than_or_equal_semi_interval'], // Less-than or Equal Semi-interval
+     ['BWVCAC','6','waterway:bank1:cover:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['BWVCAC','7','waterway:bank1:cover:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['BWVCAC','8','waterway:bank1:cover:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['BWVCAC','9','waterway:bank1:cover:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
      // BWVCBC - Inland Waterbody Bank (2) : Waterbody Bank Vegetation Cover (second bank) (interval closure)
      ['BWVCBC','2','waterway:bank2:cover:closure','open_interval'], // Open Interval
-     ['BWVCBC','3','waterway:bank2:cover:closure','greater_than_or_equal_to_less_than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['BWVCBC','4','waterway:bank2:cover:closure','greater_than_to_less_than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['BWVCBC','3','waterway:bank2:cover:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['BWVCBC','4','waterway:bank2:cover:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['BWVCBC','5','waterway:bank2:cover:closure','closed_interval'], // Closed Interval
-     ['BWVCBC','6','waterway:bank2:cover:closure','greater_than_semi_interval'], // Greater-than Semi-interval
-     ['BWVCBC','7','waterway:bank2:cover:closure','greater_than_or_equal_semi_interval'], // Greater-than or Equal Semi-interval
-     ['BWVCBC','8','waterway:bank2:cover:closure','less_than_semi_interval'], // Less-than Semi-interval
-     ['BWVCBC','9','waterway:bank2:cover:closure','less_than_or_equal_semi_interval'], // Less-than or Equal Semi-interval
+     ['BWVCBC','6','waterway:bank2:cover:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['BWVCBC','7','waterway:bank2:cover:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['BWVCBC','8','waterway:bank2:cover:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['BWVCBC','9','waterway:bank2:cover:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
      // CAA - Controlling Authority - This does not play nicely in OSM
      // ['CAA','-999999',undefined,undefined], // No Information
@@ -834,10 +834,10 @@ tds.rules = {
 
      // COS - Facility Operational Status
      // ['COS','-999999',undefined,undefined], // No Information
-     ['COS','4','operational_status','non_operational'], // Non-operational
+     ['COS','4','operational_status','non-operational'], // Non-operational
      ['COS','6','operational_status','planned'], // Planned
      ['COS','8','operational_status','not_in_operation'], // Not in Operation ???
-     ['COS','9','operational_status','temp_non_operational'], // Temporarily Non-operational
+     ['COS','9','operational_status','temporarily_non-operational'], // Temporarily Non-operational
      ['COS','13','operational_status','operational'], // Operational
      ['COS','14','operational_status','partial'], // Partially Operational
 
@@ -2608,13 +2608,13 @@ tds.rules = {
      // RMWC - Route Median Width (interval closure): Nothing in OSM
      // ['RMWC','-999999',undefined,undefined],
      ['RMWC','2','median:interval:closure','open_interval'], // Open Interval
-     ['RMWC','3','median:interval:closure','greater_than_or_equal_to_less_than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['RMWC','4','median:interval:closure','greater_than_to_less_than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['RMWC','3','median:interval:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['RMWC','4','median:interval:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['RMWC','5','median:interval:closure','closed_interval'], // Closed Interval
-     ['RMWC','6','median:interval:closure','greater_than_semi_interval'], // Greater-than Semi-interval
-     ['RMWC','7','median:interval:closure','greater_than_or_equal_semi_interval'], // Greater-than or Equal Semi-interval
-     ['RMWC','8','median:interval:closure','less_than_semi_interval'], // Less-than Semi-interval
-     ['RMWC','9','median:interval:closure','less_than_or_equal_semi_interval'], // Less-than or Equal Semi-interval
+     ['RMWC','6','median:interval:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['RMWC','7','median:interval:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['RMWC','8','median:interval:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['RMWC','9','median:interval:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
      // RRC - Railway Use
      // ['RRC','-999999',undefined,undefined], // No Information
@@ -2724,13 +2724,13 @@ tds.rules = {
 
      // SGCC - Surface Slope (interval closure)
      ['SGCC','2','incline:interval:closure','open_interval'], // Open Interval
-     ['SGCC','3','incline:interval:closure','greater_than_or_equal_to_less_than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['SGCC','4','incline:interval:closure','greater_than_to_less_than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['SGCC','3','incline:interval:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['SGCC','4','incline:interval:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['SGCC','5','incline:interval:closure','closed_interval'], // Closed Interval
-     ['SGCC','6','incline:interval:closure','greater_than_semi_interval'], // Greater-than Semi-interval
-     ['SGCC','7','incline:interval:closure','greater_than_or_equal_semi_interval'], // Greater-than or Equal Semi-interval
-     ['SGCC','8','incline:interval:closure','less_than_semi_interval'], // Less-than Semi-interval
-     ['SGCC','9','incline:interval:closure','less_than_or_equal_semi_interval'], // Less-than or Equal Semi-interval
+     ['SGCC','6','incline:interval:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['SGCC','7','incline:interval:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['SGCC','8','incline:interval:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['SGCC','9','incline:interval:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
      // SHD - Shoreline Delineated
      // ['SHD','-999999',undefined,undefined], // No Information

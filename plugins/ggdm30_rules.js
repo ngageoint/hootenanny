@@ -96,89 +96,115 @@ ggdm30.rules = {
      'ADR':'addr:full', // Address
      'AQN':'aquifer_name', // Aquifer Name
      'BA000_VDR':'source:datum:sounding:name', // Water Line : Sounding Datum Name
+     'BC040_COL':'raw:BC040_COL', // Mar Nav Lt : Character of Light
+     'BC040_MLR':'raw:BC040_MLR', // Mar Nav Lt : Multiple Light Ranges
      'BEN':'be_number', // Basic Encyclopedia (BE) Number
+     'BER':'raw:BER', // Berth Identifier
      'BRN':'bridge:reference', // Bridge Reference Number
-     'CCN':'source:copyright', // Commercial Copyright Notice
-     'CDM':'source:cadastral:measurement', // Cadastral Source Measurement
-     'CDR':'source:commercial_distribution_restriction', // Commercial Distribution Restriction
+     'BRR':'raw:BRR', // Bearing and Reciprocal Category
+     'CCR':'raw:CCR', // Colour of Navigation Mark Description
+     'CDM':'raw:CDM', // Cadastral Source Measurement
      'CID':'source:cell_identifier', // Cell Identifier
+     'CNCP':'raw:CNCP', // Construction Completion Date
+     'COL':'raw:COL', // Character of Light
      'CSI':'source:cadastral:identifier', // Cadastral Source Identifier
      'CSY':'source:cadastral:identifier:type', // Cadastral Source Identifier Type
      'CUD':'source:currency:datetime', // Currency Date and Time
+     'DAN':'raw:DAN', // Description of Aids to Navigation
+     'DIA':'raw:DIA', // DIAM Functional Classification
      'DQS':'source:data_quality', // Data Quality Statement
+     'DRP':'raw:DRP', // Description of Reference Point
      'ETZ':'source:extraction_specification:version', // Extraction Specification Version
-//      'F_CODE':'raw:F_CODE', // Feature Code
-     'GB052_RIDH':'aeroway:runway_designator_high', // Runway Direction (high end) : Runway Designator (high)
-     'GB052_RIDL':'aeroway:runway_designator_low', // Runway Direction (low end) : Runway Designator (low)
+     'FUFI':'raw:FUFI', // Feature Unique Identifier
+     'FURL':'raw:FURL', // External References
+     'F_CODE':'F_CODE', // Feature Code
+     'GA032_NSX':'raw:GA032_NSX', // Aero Rad Nav Inst : Aeronautical Radio Navigation Service Name
+     'GB001_AID':'raw:GB001_AID', // Aerodrome : Aerodrome Identifier
+     'GB052_RIDH':'aeroway:runway_designator_high', // Runway Direction : Runway Designator (high end)
+     'GB052_RIDL':'aeroway:runway_designator_low', // Runway Direction : Runway Designator (low end)
+     'HSE':'raw:HSE', // Periodic Marine Current Month Interval
      'IKO':'icao', // ICAO Location Indicator
+     'LASZ':'raw:LASZ', // Largest Aircraft
      'LINK_ID':'etds:link_id', // eLTDS40 Field
+     'MCA':'raw:MCA', // Characters Emitted
      'MDE':'source:update:datetime', // Maintenance Date and Time
+     'MEM':'raw:MEM', // Memorandum
+     'MLR':'raw:MLR', // Multiple Light Ranges
      'NA8':'official_name', // Aerodrome Official Name
      'NAO':'installation_operator_name', // Installation Operator
      'OTH':'note:oth', // Specified Domain Value(s)
      'PDA':'source:dfdd_accessor', // Property DFDD-compatible Accessor
+     'PRVR':'raw:PRVR', // Primary River
      'PSE':'restriction_interval', // Periodic Restriction Month Interval
+     'RIN_RTN':'ref', // Route Identification <route designation>
      'RIN_RTN2':'ref:2', // Route Identification [2] <route designation>
      'RIN_RTN3':'ref:3', // Route Identification [3] <route designation>
-     'RIN_RTN':'ref', // Route Identification <route designation>
-     'SAX_RS1':'security:classification:reason', // Security Attributes Group <resource classification reason>
-     'SAX_RS2':'security:classification:classified_by', // Security Attributes Group <resource classified by>
-     'SAX_RS3':'security:exempted_source:date', // Security Attributes Group <resource date of exempted source>
-     'SAX_RS4':'security:declassification:date', // Security Attributes Group <resource declassification date>
-     'SAX_RS5':'security:declassification:event', // Security Attributes Group <resource declassification event>
-     'SAX_RS8':'security:classification:derived_by', // Security Attributes Group <resource derivatively classified by>
-     'SAX_RS9':'security:classification:derived_from', // Security Attributes Group <resource derived from>
-     'SAX_RX1':'security:foreign_government_information:open_source', // Security Attributes Group <resource foreign government information (open source)>
-     'SAX_RX2':'security:foreign_government_information:protected_source', // Security Attributes Group <resource foreign government information (protected source)>
-     'SAX_RX5':'security:releasability', // Security Attributes Group <resource releasable to>
-     'SAX_RX6':'security:classification:sar', // Security Attributes Group <resource special-access-required program identifier>
-     'SAX_RX7':'security:classification:sci', // Security Attributes Group <resource SCI controls>
-     'SAX_RX9':'security:classification:compilation_reason', // Security Attributes Group <resource compilation reason>
-     'SAX_RY0':'security:display_only_to', // Security Attributes Group <resource display only to>
-     'SAX_RY1':'security:classification:sci:non_us', // Security Attributes Group <resource non-US controls>
-     'SAX_RY2':'security:atomic_markings', // Security Attributes Group <resource atomic energy markings>
+     'RTL':'raw:RTL', // Resource Title
+     'RTN':'raw:RTN', // Route Designation
+     'RTN2':'raw:RTN2', // Route Designation [2]
+     'RTN3':'raw:RTN3', // Route Designation [3]
+//     'SAX_RS1':'security:classification:reason', // Security Attributes Group <resource classification reason>
+//     'SAX_RS2':'security:classification:classified_by', // Security Attributes Group <resource classified by>
+//     'SAX_RS3':'security:exempted_source:date', // Security Attributes Group <resource date of exempted source>
+//     'SAX_RS4':'security:declassification:date', // Security Attributes Group <resource declassification date>
+//     'SAX_RS5':'security:declassification:event', // Security Attributes Group <resource declassification event>
+//     'SAX_RS8':'security:classification:derived_by', // Security Attributes Group <resource derivatively classified by>
+//     'SAX_RS9':'security:classification:derived_from', // Security Attributes Group <resource derived from>
+//     'SAX_RX1':'security:foreign_government_information:open_source', // Security Attributes Group <resource foreign government information (open source)>
+//     'SAX_RX2':'security:foreign_government_information:protected_source', // Security Attributes Group <resource foreign government information (protected source)>
+//     'SAX_RX5':'security:releasability', // Security Attributes Group <resource releasable to>
+//     'SAX_RX6':'security:classification:sar', // Security Attributes Group <resource special-access-required program identifier>
+//     'SAX_RX7':'security:classification:sci', // Security Attributes Group <resource SCI controls>
+//     'SAX_RX9':'security:classification:compilation_reason', // Security Attributes Group <resource compilation reason>
+//     'SAX_RY0':'security:display_only_to', // Security Attributes Group <resource display only to>
+//     'SAX_RY1':'security:classification:sci:non_us', // Security Attributes Group <resource non-US controls>
+//     'SAX_RY2':'security:atomic_markings', // Security Attributes Group <resource atomic energy markings>
+     'SCVN':'raw:SCVN', // Schema Version
      'SSE':'seasonal_ice_limit', // Seasonal Ice Limit
+     'TAN':'raw:TAN', // TSS-associated Aids to Navigation
      'UFI':'uuid', // Unique Feature Identifier. This gets cleaned up in post processing
      'URI':'source_ref', // Unique Resource Identifier
      'VCS_VCR':'max_clearance:note', // Vertical Clearance, Safe <reference level remark>
      'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
      'WAD':'well:description', // Water Well Construction Description
      'WPI':'world_port_index', // World Port Index Identifier - This is part of Built Up Area. What??
-     'ZI001_SDP':'source:description', // Source Information : Source Description
-     'ZI001_SDV':'source:datetime', // Source Information : Source Date and Time
-     'ZI001_VSD':'source:vertical_source:datetime', // Source Information : Vertical Source Date and Time
-//      'ZI001_VSN':'source:vertical_source:description', // Source Information : Vertical Source Description
-     'CCN':'source:copyright', // Restriction Information : Commercial Copyright Notice
-     'CDR':'source:commercial_distribution_restriction', // Restriction Information : Commercial Distribution Restriction
+     'WTCL':'raw:WTCL', // Water Colour
+     'ZHBH_VDR':'raw:ZHBH_VDR', // Base Hgt : Snd Meta : Sounding Datum Name
+     'ZHDP_VDR':'raw:ZHDP_VDR', // Hydro Dpth : Snd Meta : Sounding Datum Name
+     'ZI001_SDP':'source:description', // Source : Source Description
+     'ZI001_SDV':'source:datetime', // Source : Source Date and Time
+     'ZI001_VSD':'source:vertical_source:datetime', // Source : Vertical Source Date and Time
+     'ZI001_VSN':'source:vertical_source:description', // Source : Vertical Source Description
      'ZI002_UFI':'security:restriction_ufi', // Restriction Information : Unique Entity Identifier
      'ZI004_PRE':'source:processing_information', // Process Step Information : Process Step Description
-     'ZI005_FNA':'name', // Geographic Name Information : Full Name
-     'ZI005_FNA2':'alt_name', // Geographic Name Information : (second) Full Name
-     'ZI005_FNA3':'alt_name:2', // Geographic Name Information : Full Name (third)
-     'ZI005_NFN':'gndb_id', // Geographic Name Information : Name Identifier
-     'ZI005_NFN2':'gndb_id:2', // Geographic Name Information : (second) Name Identifier
-     'ZI005_NFN3':'gndb_id:3', // Geographic Name Information : Name Identifier (third)
+     'ZI005_FNA':'name', // Geo Name Info : Full Name
+     'ZI005_FNA2':'alt_name', // Geo Name Info : Full Name [2]
+     'ZI005_FNA3':'alt_name:2', // Geo Name Info : Full Name [3]
+     'ZI005_FNAA':'raw:ZI005_FNAA', // Geo Name Info (1) : Full Name (first side)
+     'ZI005_FNAB':'raw:ZI005_FNAB', // Geo Name Info (2) : Full Name (second side)
+     'ZI005_NFN':'gndb_id', // Geo Name Info : Name Identifier
+     'ZI005_NFN2':'gndb_id:2', // Geo Name Info : Name Identifier [2]
+     'ZI005_NFN3':'gndb_id:3', // Geo Name Info : Name Identifier [3]
+     'ZI005_NFNA':'raw:ZI005_NFNA', // Geo Name Info (1) : Name Identifier (first side)
+     'ZI005_NFNB':'raw:ZI005_NFNB', // Geo Name Info (2) : Name Identifier (second side)
      'ZI006_MEM':'note', // Note : Memorandum
-// We are going to look at valid values for the first country designation and then just treat the rest as plain text fields
-//     'ZI020_GE4':'raw:ZI020_GE4', // (Location Country) Designation : GENC Short URN-based Identifier
-     'ZI020_GE42':'country_code:second', // (Location Country) Designation : GENC Short URN-based Identifier (second)
-     'ZI020_GE43':'country_code:third', // (Location Country) Designation : GENC Short URN-based Identifier (third)
-     'ZI020_GE44':'country_code:fourth', // (Location Country) Designation : GENC Short URN-based Identifier (fourth)
-     'ZI026T_UFI':'source:table:uuid', // Feature Metadata (Table) : Unique Entity Identifier
-     'ZI027T_UFI':'source:attribute:uuid', // Feature Attribute Metadata (Table) : Unique Entity Identifier
-     'ZI028_UFI':'source:feature:uuid', // Feature Entity : Unique Entity Identifier
-     'ZI039S_UFI':'source:entity:surface:uuid', // Entity Collection Metadata (Surface) : Unique Entity Identifier
-     'ZI039T_UFI':'source:entity:table:uuid', // Entity Collection Metadata (Table) : Unique Entity Identifier
+     'ZI012_VDR':'raw:ZI012_VDR', // Dpth Crv : Snd Meta : Sounding Datum Name
+     'ZI020_FI2A':'raw:ZI020_FI2A', // Designation : FIPS 10-4 Country Name (first side)
+     'ZI020_FI2B':'raw:ZI020_FI2B', // Designation : FIPS 10-4 Country Name (second side)
+     'ZI020_IC4':'raw:ZI020_IC4', // Designation : ISO 3166-1 English Country Name
      'ZI031S_URI':'source:dataset:surface:uuid', // Dataset (Surface) : Unique Resource Identifier
-     'ZI031T_URI':'source:dataset:table:uuid', // Dataset (Table) : Unique Resource Identifier
-     'ZSAX_RX0':'security:dissemination_control:ic', // Restriction Information : Security Attributes Group <resource dissemination controls>
-     'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction Information : Security Attributes Group <resource non-intelligence community markings>
-     'ZSAX_RX4':'security:resource_owner', // Restriction Information : Security Attributes Group <resource owner-producer>
+     'ZI039S_UFI':'source:entity:surface:uuid', // Entity Collection Metadata (Surface) : Unique Entity Identifier
+     'ZI103_MVD':'raw:ZI103_MVD', // Magnetic Variation Information : Magnetic Variation Date
+     'ZSAX_RX0':'security:dissemination_control:ic', // Restriction : Security <resource dissemination controls>
+     'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction : Security <resource non-intelligence community markings>
+     'ZSAX_RX4':'security:resource_owner', // Restriction : Security <resource owner-producer>
      }, // End txtBiased
 
     // One2one ruled for Number fields
     numBiased : {
+     'ADUR':'raw:ADUR', // Average Water Supply Duration
      'AHA':'source:accuracy:horizontal', // Absolute Horizontal Accuracy (90%)
+     'ANFL':'raw:ANFL', // Annual Flow Rate
      'AOO':'angle', // Angle of Orientation
      'AQTL':'aquifer:thickness:lower', // Aquifer Thickness <lower value>
      'AQTU':'aquifer:thickness:upper', // Aquifer Thickness <upper value>
@@ -186,137 +212,281 @@ ggdm30.rules = {
      'AVA':'source:accuracy:vertical', // Absolute Vertical Accuracy (90%)
      'AYRL':'aquifer:yield:lower', // Aquifer Yield Rating <lower value>
      'AYRU':'aquifer:yield:upper', // Aquifer Yield Rating <upper value>
-     'BC040_EOL':'seamark:light:range', // Maritime Navigation Light : Nominal Range
-     'BC040_LCN':'seamark:light:characteristic_number', // Maritime Navigation Light : Light Characteristic Number
-     'BC040_LVN':'seamark:light:height', // Maritime Navigation Light : Light Elevation
-     'BC040_PER':'seamark:light:period', // Maritime Navigation Light : Period of Light
+     'BC034_BRF':'raw:BC034_BRF', // Mar Radiobeacon : Broadcast Frequency
+     'BC034_BRF2':'raw:BC034_BRF2', // Mar Radiobeacon : Broadcast Frequency [2]
+     'BC040_EOL':'seamark:light:height', // Mar Nav Lt : Light Elevation
+     'BC040_LCN':'seamark:light:characteristic_number', // Mar Nav Lt : Light Characteristic Number
+     'BC040_LVN':'seamark:light:range', // Mar Nav Lt : Mar Nav Nominal Range
+     'BC040_PER':'seamark:light:period', // Mar Nav Lt : Period of Light
+     'BC040_ZVH':'raw:BC040_ZVH', // Mar Nav Lt : Highest Elevation
      'BEL':'ele:base', // Base Elevation - conflict with "ele" but is only used in one feature: ZB035 Control Point
-     'BH141_AWBA':'waterway:bank1:slope:above_water', // Inland Waterbody Bank (1) : Above Water Bank Slope (first bank)
-     'BH141_AWBB':'waterway:bank2:slope:above_water', // Inland Waterbody Bank (2) : Above Water Bank Slope (second bank)
-     'BH141_WBHA':'waterway:bank1:height', // Inland Waterbody Bank (1) : Waterbody Bank Height (first bank)
-     'BH141_WBHB':'waterway:bank2:height', // Inland Waterbody Bank (2) : Waterbody Bank Height (second bank)
+     'BH141_AWBA':'waterway:bank1:slope:above_water', // Wtrbdy Bank : Above Water Bank Slope (first bank)
+     'BH141_AWBB':'waterway:bank2:slope:above_water', // Above Water Bank Slope (second bank)
+     'BH141_WBHA':'waterway:bank1:height', // Wtrbdy Bank : Waterbody Bank Height (first bank)
+     'BH141_WBHB':'waterway:bank2:height', // Wtrbdy Bank : Waterbody Bank Height (second bank)
      'BNF':'building:levels', // Floor Count
-     'BPWHAL':'waterway:bank1:height:lower', // Inland Waterbody Bank (1) : Predominant Waterbody Bank Height (first bank) (lower value)
-     'BPWHAU':'waterway:bank1:height:upper', // Inland Waterbody Bank (1) : Predominant Waterbody Bank Height (first bank) (upper value)
-     'BPWHBL':'waterway:bank2:height:lower', // Inland Waterbody Bank (2) : Predominant Waterbody Bank Height (second bank) (lower value)
-     'BPWHBU':'waterway:bank2:height:upper', // Inland Waterbody Bank (2) : Predominant Waterbody Bank Height (second bank) (upper value)
-     'BPWSAL':'waterway:bank1:slope:lower', // Inland Waterbody Bank (1) : Predominant Waterbody Bank Slope (first bank) (lower value)
-     'BPWSAU':'waterway:bank1:slope:upper', // Inland Waterbody Bank (1) : Predominant Waterbody Bank Slope (first bank) (upper value)
-     'BPWSBL':'waterway:bank2:slope:lower', // Inland Waterbody Bank (2) : Predominant Waterbody Bank Slope (second bank) (lower value)
-     'BPWSBU':'waterway:bank2:slope:upper', // Inland Waterbody Bank (2) : Predominant Waterbody Bank Slope (second bank) (upper value)
-     'BWVCAL':'waterway:bank1:cover:lower', // Inland Waterbody Bank (1) : Waterbody Bank Vegetation Cover (first bank) (lower value)
-     'BWVCAU':'waterway:bank1:cover:upper', // Inland Waterbody Bank (1) : Waterbody Bank Vegetation Cover (first bank) (upper value)
-     'BWVCBL':'waterway:bank2:cover:lower', // Inland Waterbody Bank (2) : Waterbody Bank Vegetation Cover (second bank) (lower value)
-     'BWVCBU':'waterway:bank2:cover:upper', // Inland Waterbody Bank (2) : Waterbody Bank Vegetation Cover (second bank) (upper value)
+     'BPWHAL':'waterway:bank1:height:lower', // Wtrbdy Bank : Predom Wtrbdy Bank Height (first bank) <lower value>
+     'BPWHAU':'waterway:bank1:height:upper', // Wtrbdy Bank : Predom Wtrbdy Bank Height (first bank) <upper value>
+     'BPWHBL':'waterway:bank2:height:lower', // Predom Wtrbdy Bank Height (second bank) <lower value>
+     'BPWHBU':'waterway:bank2:height:upper', // Predom Wtrbdy Bank Height (second bank) <upper value>
+     'BPWSAL':'waterway:bank1:slope:lower', // Predom Wtrbdy Bank Slope (first bank) <lower value>
+     'BPWSAU':'waterway:bank1:slope:upper', // Predom Wtrbdy Bank Slope (first bank) <upper value>
+     'BPWSBL':'waterway:bank2:slope:lower', // Predom Wtrbdy Bank Slope (second bank) <lower value>
+     'BPWSBU':'waterway:bank2:slope:upper', // Predom Wtrbdy Bank Slope (second bank) <upper value>
+     'BRF':'raw:BRF', // Broadcast Frequency
+     'BRF2':'raw:BRF2', // Broadcast Frequency [2]
+     'BRG':'raw:BRG', // Bearing of Object
+     'BRS':'raw:BRS', // Bearing from Seaward
+     'BWVCAL':'waterway:bank1:cover:lower', // Wtrbdy Bank : Wtrbdy Bank Veg Cover (first bank) <lower value>
+     'BWVCAU':'waterway:bank1:cover:upper', // Wtrbdy Bank : Wtrbdy Bank Veg Cover (first bank) <upper value>
+     'BWVCBL':'waterway:bank2:cover:lower', // Wtrbdy Bank : Wtrbdy Bank Veg Cover (second bank) <lower value>
+     'BWVCBU':'waterway:bank2:cover:upper', // Wtrbdy Bank Veg Cover (second bank) <upper value>
+     'C35':'raw:C35', // Tidal Current Speed 5 Hours Before
+     'C36':'raw:C36', // Tidal Current Speed 4 Hours Before
+     'C37':'raw:C37', // Tidal Current Speed 3 Hours Before
+     'C38':'raw:C38', // Tidal Current Speed 2 Hours Before
+     'C39':'raw:C39', // Tidal Current Speed 1 Hour Before
+     'C40':'raw:C40', // Tidal Current Speed
+     'C41':'raw:C41', // Tidal Current Speed 1 Hour After
+     'C42':'raw:C42', // Tidal Current Speed 2 Hours After
+     'C43':'raw:C43', // Tidal Current Speed 3 Hours After
+     'C44':'raw:C44', // Tidal Current Speed 4 Hours After
+     'C45':'raw:C45', // Tidal Current Speed 5 Hours After
+     'C46':'raw:C46', // Tidal Current Speed 6 Hours After
+     'CDI':'raw:CDI', // Casing Diameter
      'CDL':'covered_drain:length', // Covered Drain Length
+     'CRN':'raw:CRN', // Current Rate Minimum
+     'CRS':'raw:CRS', // Current Rate (Speed)
+     'CRV':'raw:CRV', // Depth Curve or Contour Value
+     'CRX':'raw:CRX', // Current Rate Maximum
      'CTL':'railway:track:length', // Cumulative Track Length
+     'D35':'raw:D35', // Tidal Current Direction 5 Hours Before
+     'D36':'raw:D36', // Tidal Current Direction 4 Hours Before
+     'D37':'raw:D37', // Tidal Current Direction 3 Hours Before
+     'D38':'raw:D38', // Tidal Current Direction 2 Hours Before
+     'D39':'raw:D39', // Tidal Current Direction 1 Hour Before
+     'D40':'raw:D40', // Tidal Current Direction
+     'D41':'raw:D41', // Tidal Current Direction 1 Hour After
+     'D42':'raw:D42', // Tidal Current Direction 2 Hours After
+     'D43':'raw:D43', // Tidal Current Direction 3 Hours After
+     'D44':'raw:D44', // Tidal Current Direction 4 Hours After
+     'D45':'raw:D45', // Tidal Current Direction 5 Hours After
+     'D46':'raw:D46', // Tidal Current Direction 6 Hours After
+     'DCAP':'raw:DCAP', // Daily Capacity
      'DEV':'level', // Deck Level
+     'DF1':'raw:DF1', // Direction of Traffic - 1
+     'DF2':'raw:DF2', // Direction of Traffic - 2
+     'DF3':'raw:DF3', // Direction of Traffic - 3
+     'DF4':'raw:DF4', // Direction of Traffic - 4
      'DIM':'diameter', // Diameter
      'DMBL':'undergrowth:density:lower', // Undergrowth Density (lower value)
      'DMBU':'undergrowth:density:upper', // Undergrowth Density (upper value)
+     'DMF':'raw:DMF', // Feature Count
      'DMT':'canopy_cover', // Canopy Cover
      'DOF':'flow_direction', // Direction of Flow
+     'DOXY':'raw:DOXY', // Dissolved Oxygen
      'DPAL':'aquifer:depth:lower', // Aquifer Depth <lower value>
      'DPAU':'aquifer:depth:upper', // Aquifer Depth <upper value>
+     'DWL':'raw:DWL', // Dynamic Water Level
      'DZC':'deck_count', // Deck Count
      'DZP':'depth:maximum_below_surface', // Deepest Depth Below Surface Level
+     'EOL':'raw:EOL', // Light Elevation
      'EPW':'generator:output:electricity', // Electrical Power Generation Capacity
+     'EQS':'raw:EQS', // Density Equivalent Scale
      'EVA':'source:accuracy:elevation', // Elevation Vertical Accuracy (90%)
      'FCL':'ferry:crossing_distance', // Ferry Crossing Distance
-//     'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
-     'GSGCHL':'aeroway:runway_highend:slope:high_lowervalue', // Runway Direction (high end) : Surface Slope (high) (lower value)
-     'GSGCHU':'aeroway:runway_highend:slope:high_uppervalue', // Runway Direction (high end) : Surface Slope (high) (upper value)
-     'GSGCLL':'aeroway:runway_highend:slope:low_lowervalue', // Runway Direction (low end) : Surface Slope (low) (lower value)
-     'GSGCLU':'aeroway:runway_highend:slope:low_uppervalue', // Runway Direction (low end) : Surface Slope (low) (upper value)
+     'FDI':'raw:FDI', // Geologic Dip
+     'FEO':'raw:FEO', // Feature Element Orientation
+     'GB052_TRHH':'raw:GB052_TRHH', // Runway Direction (high end) : Runway True Heading (high)
+     'GB052_TRHL':'raw:GB052_TRHL', // Runway Direction (low end) : Runway True Heading (low)
+     'GSGCHL':'aeroway:runway_highend:slope:high_lowervalue', // Runway Direction : Surface Slope (high end) <lower value>
+     'GSGCHU':'aeroway:runway_highend:slope:high_uppervalue', // Runway Direction : Surface Slope (high end) <upper value>
+     'GSGCLL':'aeroway:runway_highend:slope:low_lowervalue', // Runway Direction : Surface Slope (low end) <lower value>
+     'GSGCLU':'aeroway:runway_highend:slope:low_uppervalue', // Runway Direction : Surface Slope (low end) <upper value>
+     'GWTR':'raw:GWTR', // Groundwater Transmissivity
+     'HBH':'raw:HBH', // Hydrographic Base Height
      'HCA':'bridge:horizontal_clearance', // Horizontal Clearance
+     'HDH':'raw:HDH', // Hydrographic Drying Height
+     'HDP':'raw:HDP', // Hydrographic Depth
      'HEI':'height:object', // Height of Object
      'HGS':'spillway:height', // Spillway Height
      'HGT':'height', // Height Above Surface Level
+     'HSC':'raw:HSC', // Hospital Number of Beds
+     'HSCD':'raw:HSCD', // Hose Connection Diameter
      'HVA':'source:accuracy:height', // Height Vertical Accuracy (90%)
+     'HYCD':'raw:HYCD', // Hydraulic Conductivity
      'KVA':'voltage', // Power Line Maximum Voltage
      'LC1':'bridge:load_class1', // Load Class Type 1
      'LC2':'bridge:load_class2', // Load Class Type 2
      'LC3':'bridge:load_class3', // Load Class Type 3
      'LC4':'bridge:load_class4', // Load Class Type 4
      'LCA':'crane:lifting_capacity', // Lifting Capacity
+     'LCN':'raw:LCN', // Light Characteristic Number
      'LDC':'length:crest', // Dam Crest Length
      'LEA':'depth:minimum_below_surface', // Least Depth Below Surface Level
      'LNU':'length:interior_useable', // Usable Length
      'LOG':'gradient:length', // Gradient Length
+     'LOR':'raw:LOR', // Length of Range
+     'LSA':'raw:LSA', // Light Sector Angle
+     'LSI':'raw:LSI', // Light Sector Initial Limit
+     'LST':'raw:LST', // Light Sector Terminal Limit
      'LTN':'lanes', // Track or Lane Count
-     'LZN':'length', // Lengthf
+     'LVN':'raw:LVN', // Maritime Navigation Nominal Range
+     'LZN':'length', // Length
      'MAG':'magnetic_variation', // Magnetic Variation
      'MWD':'depth:designed:maximum', // Maximum Design Water Depth
      'MWG':'divider:width', // Centerline Spacing
+     'NOR':'raw:NOR', // Number of Rooms
      'NOS':'bridge:span_count', // Span Count
      'NPL':'cables', // Parallel Line Count: See AT005
      'OHC':'max_clearance', // Overhead Clearance
+     'ORC':'raw:ORC', // Primary Operating Range
+     'PER':'raw:PER', // Period of Light
+     'PFD':'raw:PFD', // Predominant Feature Depth
      'PFH':'height:feature', // Predominant Feature Height
+     'PFHL':'raw:PFHL', // Predominant Feature Height <lower value>
+     'PFHU':'raw:PFHU', // Predominant Feature Height <upper value>
+     'PPL':'raw:PPL', // Population Count
+     'PSN':'raw:PSN', // Path Sinuosity
+     'PUD':'raw:PUD', // Pump Depth
      'PVH':'height:vegetation', // Predominant Vegetation Height
      'PWA':'depth', // Predominant Water Depth
      'PWAL':'depth:lower', // Predominant Water Depth <lower value>
      'PWAU':'depth:upper', // Predominant Water Depth <upper value>
+     'PWR':'raw:PWR', // NAVAID Power
      'RAD':'curve_radius', // Curve Radius
-     'RMWL':'median:min_width', // Route Median Width (lower value)
-     'RMWU':'median:max_width', // Route Median Width (upper value)
+     'RMWL':'median:min_width', // Route Median Width <lower value>
+     'RMWU':'median:max_width', // Route Median Width <upper value>
      'SDCL':'soil:depth:lower', // Soil Depth <lower value>
      'SDCU':'soil:depth:upper', // Soil Depth <upper value>
+     'SDI':'raw:SDI', // Geologic Strike Direction
      'SDO':'dune:orientation', // Sand Dune Orientation
-     'SDSL':'tree:diameter:lower', // Stem Diameter (lower value)
-     'SDSU':'tree:diameter:upper', // Stem Diameter (upper value)
-     'SGCL':'incline:min', // Surface Slope (lower value)
-     'SGCU':'incline:max', // Surface Slope (upper value)
+     'SDSL':'tree:diameter:lower', // Stem Diameter <lower value>
+     'SDSU':'tree:diameter:upper', // Stem Diameter <upper value>
+     'SGCL':'incline:min', // Surface Slope <lower value>
+     'SGCU':'incline:max', // Surface Slope <upper value>
      'SHC':'safe_clearance:horizontal', // Safe Horizontal Clearance
+     'SNDL':'raw:SNDL', // Snow or Ice Depth <lower value>
+     'SNDU':'raw:SNDU', // Snow or Ice Depth <upper value>
+     'SPD':'raw:SPD', // Speed Limit (MPH)
      'SPM':'maxspeed', // Speed Limit (KPH)
+     'STAF':'raw:STAF', // Total Staff
+     'STNB':'raw:STNB', // Strahler Number
+     'STR':'raw:STR', // Summer Canopy Cover
+     'SWCP':'raw:SWCP', // Specific Water Capacity
      'SWW':'water_level', // Static Water Level
      'THI':'thickness', // Thickness
-     'TSCL':'tree:spacing:lower', // Tree Spacing (lower value)
-     'TSCU':'tree:spacing:upper', // Tree Spacing (upper value)
+     'TSCL':'tree:spacing:lower', // Tree Spacing <lower value>
+     'TSCU':'tree:spacing:upper', // Tree Spacing <upper value>
      'UBC':'bridge:under_clearance', // Underbridge Clearance
+     'VAVL':'raw:VAVL', // Magnetic Variation Anomaly <lower value>
+     'VAVU':'raw:VAVU', // Magnetic Variation Anomaly <upper value>
+     'VCO':'raw:VCO', // Vertical Clearance, Open
      'VCS':'safe_clearance:vertical', // Vertical Clearance, Safe
+     'VEC':'raw:VEC', // Vehicle Capacity
      'VLM':'volume', // Volume
      'VTI':'trafficability_impact', // Vegetation Trafficability Impact
+     'WBD':'raw:WBD', // Waterbody Depth
+     'WCAC':'raw:WCAC', // Alkalinity
+     'WCL':'raw:WCL', // Winter Canopy Cover
+     'WD1':'raw:WD1', // Route Minimum Travelled Way Width
      'WD2':'width:total_usable', // Route Total Usable Width
      'WD3':'width:gap', // Terrain Gap Width
-     'WD5':'width:top', // Width at Top
      'WDAL':'depth:average:lower', // Average Water Depth <lower value>
      'WDAU':'depth:average:upper', // Average Water Depth <upper value>
      'WDH':'depth:max', // Predominant Maximum Water Depth
      'WDL':'depth:min', // Predominant Minimum Water Depth
      'WDU':'width:interior_useable', // Usable Width
+     'WHCO':'raw:WHCO', // Bicarbonate
      'WID':'width', // Width
+     'WLSS':'raw:WLSS', // Water Loss
      'WOC':'width:crest', // Dam Crest Width
+     'WPST':'raw:WPST', // Windows Per Story
+     'WRCL':'raw:WRCL', // Water Recharge Rate <lower value>
+     'WRCU':'raw:WRCU', // Water Recharge Rate <upper value>
      'WT2':'width:second_way', // Width of Second Travelled Way
+     'WTBB':'raw:WTBB', // Boron
+     'WTCA':'raw:WTCA', // Calcium
+     'WTFE':'raw:WTFE', // Total Iron
+     'WTKK':'raw:WTKK', // Potassium
+     'WTMN':'raw:WTMN', // Manganese
+     'WTNA':'raw:WTNA', // Sodium
+     'WTNO':'raw:WTNO', // Nitrate
+     'WTPO':'raw:WTPO', // Phosphate
+     'WTSI':'raw:WTSI', // Silicon
      'WVA':'water:velocity:average', // Predominant Average Water Velocity
      'WVH':'water:velocity:maximum', // Predominant Maximum Water Velocity
      'WVL':'water:velocity:minimum', // Predominant Minimum Water Velocity
+     'WWRL':'raw:WWRL', // Water Withdrawal Rate <lower value>
+     'WWRU':'raw:WWRU', // Water Withdrawal Rate <upper value>
+     'ZI005_GNR':'raw:ZI005_GNR', // Geo Name Info : Geographic Name Rank
+     'ZI005_GNR2':'raw:ZI005_GNR2', // Geo Name Info : Geographic Name Rank [2]
+     'ZI005_GNR3':'raw:ZI005_GNR3', // Geo Name Info : Geographic Name Rank [3]
+     'ZI015_GCUL':'raw:ZI015_GCUL', // Geo Name Collection : Geographic Name Cartographic Usability Range <lower value>
+     'ZI015_GCUU':'raw:ZI015_GCUU', // Geo Name Collection : Geographic Name Cartographic Usability Range <upper value>
      'ZI016_WD1':'width:minimum_traveled_way', // Route Pavement Information : Route Minimum Travelled Way Width
      'ZI017_GAW':'gauge', // Track Information : Railway Gauge
-     'ZI024_ASE':'water:arsnic_concentration', // Water Resource Information : Arsenic Concentration
-     'ZI024_CFR':'water:coliform_concentration', // Water Resource Information : Coliform Concentration
-     'ZI024_CLO':'water:chloride_concentration', // Water Resource Information : Chloride Concentration
-     'ZI024_CYN':'water:cyanide_concentration', // Water Resource Information : Cyanide Concentration
-     'ZI024_HAR':'water:hardness', // Water Resource Information : Water Hardness
-     'ZI024_MGN':'water:magnesium_concentration', // Water Resource Information : Magnesium Concentration
-     'ZI024_PHW':'water:ph', // Water Resource Information : pH
-     'ZI024_SUL':'water:sulfate_concentration', // Water Resource Information : Sulfate Concentration
-     'ZI024_TDS':'water:total_dissolved_solids', // Water Resource Information : Total Dissolved Solids
-     'ZI024_TEP':'water:temperature', // Water Resource Information : Temperature
-     'ZI024_TUR':'water:turbidity', // Water Resource Information : Nephelometric Turbidity
-     'ZI024_WAC':'water:conductivity', // Water Resource Information : Water Conductivity
-     'ZI026_CTUL':'cartographic_scale:lower', // Feature Metadata : Cartographic Usability Range <lower value>
-     'ZI026_CTUU':'cartographic_scale:upper', // Feature Metadata : Cartographic Usability Range <upper value>
+     'ZI018_BRF':'raw:ZI018_BRF', // Wireless : Broadcast Frequency
+     'ZI024_ASE':'water:arsnic_concentration', // Water : Arsenic Concentration
+     'ZI024_AWO':'raw:ZI024_AWO', // Water : Predominant Water Flow
+     'ZI024_AWOI':'raw:ZI024_AWOI', // Water : Predominant Water Flow - Maximum
+     'ZI024_AWOX':'raw:ZI024_AWOX', // Water : Predominant Water Flow - Minimum
+     'ZI024_CFR':'water:coliform_concentration', // Water : Coliform Concentration
+     'ZI024_CLO':'water:chloride_concentration', // Water : Chloride Concentration
+     'ZI024_CYN':'water:cyanide_concentration', // Water : Cyanide Concentration
+     'ZI024_FMR':'raw:ZI024_FMR', // Water : Freshwater Production Maximum Rate
+     'ZI024_FRR':'raw:ZI024_FRR', // Water : Freshwater Production Rate
+     'ZI024_HAR':'water:hardness', // Water : Water Hardness
+     'ZI024_MGN':'water:magnesium_concentration', // Water : Magnesium Concentration
+     'ZI024_PHW':'water:ph', // Water: pH
+     'ZI024_SUL':'water:sulfate_concentration', // Water : Sulfate Concentration
+     'ZI024_TDS':'water:total_dissolved_solids', // Water : Total Dissolved Solids
+     'ZI024_TEP':'water:temperature', // Water : Temperature
+     'ZI024_TUR':'water:turbidity', // Water : Nephelometric Turbidity
+     'ZI024_WAC':'water:conductivity', // Water : Water Conductivity
+     'ZI024_WTBB':'raw:ZI024_WTBB', // Water : Boron
+     'ZI024_WTCA':'raw:ZI024_WTCA', // Water : Calcium
+     'ZI024_WTFE':'raw:ZI024_WTFE', // Water : Total Iron
+     'ZI024_WTKK':'raw:ZI024_WTKK', // Water : Potassium
+     'ZI024_WTMN':'raw:ZI024_WTMN', // Water : Manganese
+     'ZI024_WTNA':'raw:ZI024_WTNA', // Water : Sodium
+     'ZI024_WTNO':'raw:ZI024_WTNO', // Water : Nitrate
+     'ZI024_WTPO':'raw:ZI024_WTPO', // Water : Phosphate
+     'ZI024_WTSI':'raw:ZI024_WTSI', // Water : Silicon
+     'ZI025_HDP':'raw:ZI025_HDP', // Vert Pos : Hydrographic Depth
+     'ZI026_CTUL':'cartographic_scale:lower', // Physical Object Metadata : Cartographic Topography Usability Range <lower value>
+     'ZI026_CTUU':'cartographic_scale:upper', // Physical Object Metadata : Cartographic Topography Usability Range <upper value>
      'ZVA':'ele', // Aerodrome Elevation
-     'ZVH_AVA':'source:accuracy:highest_elevation', // Highest Elevation <absolute vertical accuracy>
      'ZVH':'ele:max' // Highest Elevation
+     'ZVH_AVA':'source:accuracy:highest_elevation', // Highest Elevation <absolute vertical accuracy>
+//     'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
      }, // End numBiased
     
 
     // Common one2one rules. Used for both import and export
     // taken from TDSv60 with the NGA TDSv61 additions
     one2one : [
+
+     // ACH - Anchorage Type
+     // ['ACH','-999999',undefined,undefined], // No Information
+     ['ACH','1','raw:ACH','unrestricted_anchorage'], // Unrestricted Anchorage
+     ['ACH','2','raw:ACH','deep_water_anchorage'], // Deep Water Anchorage
+     ['ACH','3','raw:ACH','tanker_anchorage'], // Tanker Anchorage
+     ['ACH','4','raw:ACH','explosives_anchorage'], // Explosives Anchorage
+     ['ACH','5','raw:ACH','quarantine_anchorage'], // Quarantine Anchorage
+     ['ACH','6','raw:ACH','seaplane_anchorage'], // Seaplane Anchorage
+     ['ACH','7','raw:ACH','small_craft_anchorage'], // Small Craft Anchorage
+     ['ACH','8','raw:ACH','small_craft_mooring_area'], // Small Craft Mooring Area
+     ['ACH','9','raw:ACH','anchorage_for_up_to_24_hours'], // Anchorage for up to 24 hours
+     ['ACH','10','raw:ACH','time_limited'], // Time Limited
+     ['ACH','11','raw:ACH','reserved_anchorage'], // Reserved Anchorage
+     ['ACH','12','raw:ACH','naval_reserve_anchorage'], // Naval Reserve Anchorage
+     ['ACH','13','raw:ACH','anchorage_berth'], // Anchorage Berth
+     ['ACH','14','raw:ACH','waiting_anchorage'], // Waiting Anchorage
+     ['ACH','999','raw:ACH','other'], // Other
+
+     // ADI - Administrative Division
      // ['ADI','-999999',undefined,undefined], // No Information
-     // ADI - Administrative Division - Admin_level may need some work
      ['ADI','1','admin_level','1'], // International or Supranational
      ['ADI','2','admin_level','2'], // National
      ['ADI','3','admin_level','4'], // Subnational
@@ -334,7 +504,7 @@ ggdm30.rules = {
      ['AMA','6','attraction','vertical_ride'], // Vertical Ride
      ['AMA','999','attraction','other'], // Other
 
-          // APT - Airfield Use
+     // APT - Airfield Use
      // ['APT','-999999',undefined,undefined], // No Information
      ['APT','1','aeroway:use','major_airfield'], // Major Airfield
      ['APT','2','aeroway:use','minor_airfield'], // Minor Airfield
@@ -347,6 +517,34 @@ ggdm30.rules = {
      ['APT','13','aeroway:use','parascending_site'], // Parascending Site
      ['APT','16','aeroway:use','search_and_rescue_airfield'], // Search and Rescue Airfield
      ['APT','999','aeroway:use','other'], // Other
+
+     // APT2 - Airfield Use [2]
+     // ['APT2','-999999',undefined,undefined], // No Information
+     ['APT2','1','aeroway:use2','major_airfield'], // Major Airfield
+     ['APT2','2','aeroway:use2','minor_airfield'], // Minor Airfield
+     ['APT2','3','aeroway:use2','general_aviation_aircraft_operating_only'], // General Aviation Aircraft Operating Only
+     ['APT2','5','aeroway:use2','glider_site'], // Glider Site
+     ['APT2','6','aeroway:use2','ultralight_site'], // Ultralight Site
+     ['APT2','7','aeroway:use2','hang_glider_site'], // Hang Glider Site
+     ['APT2','8','aeroway:use2','winch_launched_hang_glider_site'], // Winch Launched Hang Glider Site
+     ['APT2','12','aeroway:use2','emergency'], // Emergency
+     ['APT2','13','aeroway:use2','parascending_site'], // Parascending Site
+     ['APT2','16','aeroway:use2','search_and_rescue_airfield'], // Search and Rescue Airfield
+     ['APT2','999','aeroway:use2','other'], // Other
+
+     // APT3 - Airfield Use [3]
+     // ['APT3','-999999',undefined,undefined], // No Information
+     ['APT3','1','aeroway:use3','major_airfield'], // Major Airfield
+     ['APT3','2','aeroway:use3','minor_airfield'], // Minor Airfield
+     ['APT3','3','aeroway:use3','general_aviation_aircraft_operating_only'], // General Aviation Aircraft Operating Only
+     ['APT3','5','aeroway:use3','glider_site'], // Glider Site
+     ['APT3','6','aeroway:use3','ultralight_site'], // Ultralight Site
+     ['APT3','7','aeroway:use3','hang_glider_site'], // Hang Glider Site
+     ['APT3','8','aeroway:use3','winch_launched_hang_glider_site'], // Winch Launched Hang Glider Site
+     ['APT3','12','aeroway:use3','emergency'], // Emergency
+     ['APT3','13','aeroway:use3','parascending_site'], // Parascending Site
+     ['APT3','16','aeroway:use3','search_and_rescue_airfield'], // Search and Rescue Airfield
+     ['APT3','999','aeroway:use3','other'], // Other
 
      // APU - Apron Usage
      // ['APU','-999999',undefined,undefined], // No Information
@@ -366,6 +564,42 @@ ggdm30.rules = {
      ['APU','14','apron:use','decontamination'], // Decontamination
      ['APU','999','apron:use','other'], // Other
 
+     // APU2 - Apron Usage [2]
+     // ['APU2','-999999',undefined,undefined], // No Information
+     ['APU2','1','apron:use2','parking'], // Parking
+     ['APU2','2','apron:use2','loading_and/or_unloading'], // Loading and/or Unloading
+     ['APU2','3','apron:use2','fuelling'], // Fuelling
+     ['APU2','4','apron:use2','transient'], // Transient
+     ['APU2','5','apron:use2','compass_rose'], // Compass Rose
+     ['APU2','6','apron:use2','engine_run_up'], // Engine Run Up
+     ['APU2','7','apron:use2','maintenance'], // Maintenance
+     ['APU2','8','apron:use2','alert'], // Alert
+     ['APU2','9','apron:use2','firing-in'], // Firing-In
+     ['APU2','10','apron:use2','hot_refuelling'], // Hot Refuelling
+     ['APU2','11','apron:use2','weapon_loading'], // Weapon Loading
+     ['APU2','12','apron:use2','de-icing_and/or_anti-icing'], // De-icing and/or Anti-icing
+     ['APU2','13','apron:use2','ins_alignment'], // INS Alignment
+     ['APU2','14','apron:use2','decontamination'], // Decontamination
+     ['APU2','999','apron:use2','other'], // Other
+
+     // APU3 - Apron Usage [3]
+     // ['APU3','-999999',undefined,undefined], // No Information
+     ['APU3','1','apron:use3','parking'], // Parking
+     ['APU3','2','apron:use3','loading_and/or_unloading'], // Loading and/or Unloading
+     ['APU3','3','apron:use3','fuelling'], // Fuelling
+     ['APU3','4','apron:use3','transient'], // Transient
+     ['APU3','5','apron:use3','compass_rose'], // Compass Rose
+     ['APU3','6','apron:use3','engine_run_up'], // Engine Run Up
+     ['APU3','7','apron:use3','maintenance'], // Maintenance
+     ['APU3','8','apron:use3','alert'], // Alert
+     ['APU3','9','apron:use3','firing-in'], // Firing-In
+     ['APU3','10','apron:use3','hot_refuelling'], // Hot Refuelling
+     ['APU3','11','apron:use3','weapon_loading'], // Weapon Loading
+     ['APU3','12','apron:use3','de-icing_and/or_anti-icing'], // De-icing and/or Anti-icing
+     ['APU3','13','apron:use3','ins_alignment'], // INS Alignment
+     ['APU3','14','apron:use3','decontamination'], // Decontamination
+     ['APU3','999','apron:use3','other'], // Other
+
      // APY - Apron Type
      // ['APY','-999999',undefined,undefined], // No Information
      ['APY','1','apron:type','passenger'], // Passenger
@@ -377,6 +611,14 @@ ggdm30.rules = {
      ['APY','7','apron:type','dispersal'], // Dispersal
      ['APY','8','apron:type','holding'], // Holding
      ['APY','999','apron:type','other'], // Other
+
+     // AQF - Aquaculture Facility Type
+     // ['AQF','-999999',undefined,undefined], // No Information
+     ['AQF','1','raw:AQF','marine_culture'], // Marine Culture
+     ['AQF','2','raw:AQF','sea_ranch'], // Sea Ranch
+     ['AQF','3','raw:AQF','shrimp_farm'], // Shrimp Farm
+     ['AQF','4','raw:AQF','kelp_farm'], // Kelp Farm
+     ['AQF','8','raw:AQF','pearl_culture_farm'], // Pearl Culture Farm
 
      // AQO - Aquifer Overburden
      // ['AQO','-999999',undefined,undefined], // No Information
@@ -402,6 +644,54 @@ ggdm30.rules = {
      ['AQO','20','aquifer:overburden','shale'], // Shale
      ['AQO','999','aquifer:overburden','other'], // Other
 
+     // AQO2 - Aquifer Overburden [2]
+     // ['AQO2','-999999',undefined,undefined], // No Information
+     ['AQO2','1','aquifer:overburden2','basalt'], // Basalt
+     ['AQO2','2','aquifer:overburden2','boulders'], // Boulders
+     ['AQO2','3','aquifer:overburden2','clay'], // Clay
+     ['AQO2','4','aquifer:overburden2','conglomerate'], // Conglomerate
+     ['AQO2','5','aquifer:overburden2','dolomite'], // Dolomite
+     ['AQO2','6','aquifer:overburden2','granite'], // Granite
+     ['AQO2','7','aquifer:overburden2','gravel'], // Gravel
+     ['AQO2','8','aquifer:overburden2','igneous_rock'], // Igneous Rock
+     ['AQO2','9','aquifer:overburden2','karst'], // Karst
+     ['AQO2','10','aquifer:overburden2','limestone'], // Limestone
+     ['AQO2','11','aquifer:overburden2','marl'], // Marl
+     ['AQO2','12','aquifer:overburden2','metamorphic_rock'], // Metamorphic Rock
+     ['AQO2','13','aquifer:overburden2','mud'], // Mud
+     ['AQO2','14','aquifer:overburden2','sand'], // Sand
+     ['AQO2','15','aquifer:overburden2','schist'], // Schist
+     ['AQO2','16','aquifer:overburden2','unconsolidated'], // Unconsolidated
+     ['AQO2','17','aquifer:overburden2','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
+     ['AQO2','18','aquifer:overburden2','volcanic_rock'], // Volcanic Rock
+     ['AQO2','19','aquifer:overburden2','sandstone'], // Sandstone
+     ['AQO2','20','aquifer:overburden2','shale'], // Shale
+     ['AQO2','999','aquifer:overburden2','other'], // Other
+
+     // AQO3 - Aquifer Overburden [3]
+     // ['AQO3','-999999',undefined,undefined], // No Information
+     ['AQO3','1','aquifer:overburden3','basalt'], // Basalt
+     ['AQO3','2','aquifer:overburden3','boulders'], // Boulders
+     ['AQO3','3','aquifer:overburden3','clay'], // Clay
+     ['AQO3','4','aquifer:overburden3','conglomerate'], // Conglomerate
+     ['AQO3','5','aquifer:overburden3','dolomite'], // Dolomite
+     ['AQO3','6','aquifer:overburden3','granite'], // Granite
+     ['AQO3','7','aquifer:overburden3','gravel'], // Gravel
+     ['AQO3','8','aquifer:overburden3','igneous_rock'], // Igneous Rock
+     ['AQO3','9','aquifer:overburden3','karst'], // Karst
+     ['AQO3','10','aquifer:overburden3','limestone'], // Limestone
+     ['AQO3','11','aquifer:overburden3','marl'], // Marl
+     ['AQO3','12','aquifer:overburden3','metamorphic_rock'], // Metamorphic Rock
+     ['AQO3','13','aquifer:overburden3','mud'], // Mud
+     ['AQO3','14','aquifer:overburden3','sand'], // Sand
+     ['AQO3','15','aquifer:overburden3','schist'], // Schist
+     ['AQO3','16','aquifer:overburden3','unconsolidated'], // Unconsolidated
+     ['AQO3','17','aquifer:overburden3','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
+     ['AQO3','18','aquifer:overburden3','volcanic_rock'], // Volcanic Rock
+     ['AQO3','19','aquifer:overburden3','sandstone'], // Sandstone
+     ['AQO3','20','aquifer:overburden3','shale'], // Shale
+     ['AQO3','999','aquifer:overburden3','other'], // Other
+
      // AQP - Aquifer Composition
      // ['AQP','-999999',undefined,undefined], // No Information
      ['AQP','1','aquifer:composition','basalt'], // Basalt
@@ -426,74 +716,229 @@ ggdm30.rules = {
      ['AQP','20','aquifer:composition','shale'], // Shale
      ['AQP','999','aquifer:composition','other'], // Other
 
+     // AQP2 - Aquifer Composition [2]
+     // ['AQP2','-999999',undefined,undefined], // No Information
+     ['AQP2','1','aquifer:composition2','basalt'], // Basalt
+     ['AQP2','2','aquifer:composition2','boulders'], // Boulders
+     ['AQP2','3','aquifer:composition2','clay'], // Clay
+     ['AQP2','4','aquifer:composition2','conglomerate'], // Conglomerate
+     ['AQP2','5','aquifer:composition2','dolomite'], // Dolomite
+     ['AQP2','6','aquifer:composition2','granite'], // Granite
+     ['AQP2','7','aquifer:composition2','gravel'], // Gravel
+     ['AQP2','8','aquifer:composition2','igneous_rock'], // Igneous Rock
+     ['AQP2','9','aquifer:composition2','karst'], // Karst
+     ['AQP2','10','aquifer:composition2','limestone'], // Limestone
+     ['AQP2','11','aquifer:composition2','marl'], // Marl
+     ['AQP2','12','aquifer:composition2','metamorphic_rock'], // Metamorphic Rock
+     ['AQP2','13','aquifer:composition2','mud'], // Mud
+     ['AQP2','14','aquifer:composition2','sand'], // Sand
+     ['AQP2','15','aquifer:composition2','schist'], // Schist
+     ['AQP2','16','aquifer:composition2','unconsolidated'], // Unconsolidated
+     ['AQP2','17','aquifer:composition2','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
+     ['AQP2','18','aquifer:composition2','volcanic_rock'], // Volcanic Rock
+     ['AQP2','19','aquifer:composition2','sandstone'], // Sandstone
+     ['AQP2','20','aquifer:composition2','shale'], // Shale
+     ['AQP2','999','aquifer:composition2','other'], // Other
+
+     // AQP3 - Aquifer Composition [3]
+     // ['AQP3','-999999',undefined,undefined], // No Information
+     ['AQP3','1','aquifer:composition3','basalt'], // Basalt
+     ['AQP3','2','aquifer:composition3','boulders'], // Boulders
+     ['AQP3','3','aquifer:composition3','clay'], // Clay
+     ['AQP3','4','aquifer:composition3','conglomerate'], // Conglomerate
+     ['AQP3','5','aquifer:composition3','dolomite'], // Dolomite
+     ['AQP3','6','aquifer:composition3','granite'], // Granite
+     ['AQP3','7','aquifer:composition3','gravel'], // Gravel
+     ['AQP3','8','aquifer:composition3','igneous_rock'], // Igneous Rock
+     ['AQP3','9','aquifer:composition3','karst'], // Karst
+     ['AQP3','10','aquifer:composition3','limestone'], // Limestone
+     ['AQP3','11','aquifer:composition3','marl'], // Marl
+     ['AQP3','12','aquifer:composition3','metamorphic_rock'], // Metamorphic Rock
+     ['AQP3','13','aquifer:composition3','mud'], // Mud
+     ['AQP3','14','aquifer:composition3','sand'], // Sand
+     ['AQP3','15','aquifer:composition3','schist'], // Schist
+     ['AQP3','16','aquifer:composition3','unconsolidated'], // Unconsolidated
+     ['AQP3','17','aquifer:composition3','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
+     ['AQP3','18','aquifer:composition3','volcanic_rock'], // Volcanic Rock
+     ['AQP3','19','aquifer:composition3','sandstone'], // Sandstone
+     ['AQP3','20','aquifer:composition3','shale'], // Shale
+     ['AQP3','999','aquifer:composition3','other'], // Other
+
      // AQTC - Aquifer Thickness <interval closure>
      ['AQTC','2','aquifer:thickness:closure','open_interval'], // Open Interval
-     ['AQTC','3','aquifer:thickness:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['AQTC','4','aquifer:thickness:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['AQTC','3','aquifer:thickness:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['AQTC','4','aquifer:thickness:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['AQTC','5','aquifer:thickness:closure','closed_interval'], // Closed Interval
      ['AQTC','6','aquifer:thickness:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['AQTC','7','aquifer:thickness:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
      ['AQTC','8','aquifer:thickness:closure','less-than_semi-interval'], // Less-than Semi-interval
      ['AQTC','9','aquifer:thickness:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
-     // ASU - Aerodrome Movement Area Surface Composition - See ZI019_ASU
+     // ART - Aeronautical Route Category
+     // ['ART','-999999',undefined,undefined], // No Information
+     ['ART','1','raw:ART','low'], // Low
+     ['ART','2','raw:ART','high'], // High
+     ['ART','3','raw:ART','both'], // Both
+
+     // ASO - Aeronautical Service Operational Status
+     // ['ASO','-999999',undefined,undefined], // No Information
+     ['ASO','1','raw:ASO','operational'], // Operational
+     ['ASO','2','raw:ASO','unserviceable'], // Unserviceable
+     ['ASO','3','raw:ASO','on-test'], // On-Test
+     ['ASO','4','raw:ASO','interrupt'], // Interrupt
+     ['ASO','6','raw:ASO','conditional'], // Conditional
+     ['ASO','7','raw:ASO','false_indication_definite'], // False Indication Definite
+     ['ASO','8','raw:ASO','false_indication_possible'], // False Indication Possible
+     ['ASO','10','raw:ASO','displaced'], // Displaced
+     ['ASO','11','raw:ASO','in_construction'], // In Construction
+     ['ASO','12','raw:ASO','withdrawn'], // Withdrawn
+     ['ASO','13','raw:ASO','intermittent'], // Intermittent
+     ['ASO','14','raw:ASO','irregular'], // Irregular
+     ['ASO','15','raw:ASO','navaid_dme_out-of-service'], // NAVAID DME Out-of-service
+     ['ASO','16','raw:ASO','navaid_frequency_out-of-service'], // NAVAID Frequency Out-of-service
+     ['ASO','17','raw:ASO','navaid_partial_service'], // NAVAID Partial Service
+
+     // ASU - Aerodrome Movement Area Surface Composition #####
      // ['ASU','-999999',undefined,undefined], // No Information
-//      ['ASU','1','raw:ASU','asphalt'], // Asphalt
-//      ['ASU','2','raw:ASU','bituminous_mix'], // Bituminous Mix
-//      ['ASU','3','raw:ASU','brick'], // Brick
-//      ['ASU','4','raw:ASU','clay'], // Clay
-//      ['ASU','5','raw:ASU','concrete'], // Concrete
-//      ['ASU','6','raw:ASU','coral'], // Coral
-//      ['ASU','7','raw:ASU','earthen'], // Earthen
-//      ['ASU','8','raw:ASU','gravel'], // Gravel
-//      ['ASU','9','raw:ASU','ice'], // Ice
-//      ['ASU','10','raw:ASU','landing_mat'], // Landing Mat
-//      ['ASU','11','raw:ASU','laterite'], // Laterite
-//      ['ASU','12','raw:ASU','macadam'], // Macadam
-//      ['ASU','13','raw:ASU','membrane'], // Membrane
-//      ['ASU','14','raw:ASU','non-bituminous_mix'], // Non-bituminous Mix
-//      ['ASU','15','raw:ASU','pierced_steel_planking'], // Pierced Steel Planking
-//      ['ASU','16','raw:ASU','sand'], // Sand
-//      ['ASU','17','raw:ASU','snow'], // Snow
-//      ['ASU','18','raw:ASU','stone'], // Stone
-//      ['ASU','19','raw:ASU','water'], // Water
-//      ['ASU','20','raw:ASU','wood'], // Wood
-//      ['ASU','21','raw:ASU','asphalt_over_concrete'], // Asphalt Over Concrete
-//      ['ASU','999','raw:ASU','other'], // Other
+     ['ASU','1','raw:ASU','asphalt'], // Asphalt
+     ['ASU','2','raw:ASU','bituminous_mix'], // Bituminous Mix
+     ['ASU','3','raw:ASU','brick'], // Brick
+     ['ASU','4','raw:ASU','clay'], // Clay
+     ['ASU','5','raw:ASU','concrete'], // Concrete
+     ['ASU','6','raw:ASU','coral'], // Coral
+     ['ASU','7','raw:ASU','earthen'], // Earthen
+     ['ASU','8','raw:ASU','gravel'], // Gravel
+     ['ASU','9','raw:ASU','ice'], // Ice
+     ['ASU','10','raw:ASU','landing_mat'], // Landing Mat
+     ['ASU','11','raw:ASU','laterite'], // Laterite
+     ['ASU','12','raw:ASU','macadam'], // Macadam
+     ['ASU','13','raw:ASU','membrane'], // Membrane
+     ['ASU','14','raw:ASU','non-bituminous_mix'], // Non-bituminous Mix
+     ['ASU','15','raw:ASU','pierced_steel_planking'], // Pierced Steel Planking
+     ['ASU','16','raw:ASU','sand'], // Sand
+     ['ASU','17','raw:ASU','snow'], // Snow
+     ['ASU','18','raw:ASU','stone'], // Stone
+     ['ASU','20','raw:ASU','wood'], // Wood
+     ['ASU','21','raw:ASU','asphalt_over_concrete'], // Asphalt Over Concrete
+     ['ASU','999','raw:ASU','other'], // Other
+
+     // ASU2 - Aerodrome Movement Area Surface Composition [2]
+     // ['ASU2','-999999',undefined,undefined], // No Information
+     ['ASU2','1','raw:ASU2','asphalt'], // Asphalt
+     ['ASU2','2','raw:ASU2','bituminous_mix'], // Bituminous Mix
+     ['ASU2','3','raw:ASU2','brick'], // Brick
+     ['ASU2','4','raw:ASU2','clay'], // Clay
+     ['ASU2','5','raw:ASU2','concrete'], // Concrete
+     ['ASU2','6','raw:ASU2','coral'], // Coral
+     ['ASU2','7','raw:ASU2','earthen'], // Earthen
+     ['ASU2','8','raw:ASU2','gravel'], // Gravel
+     ['ASU2','9','raw:ASU2','ice'], // Ice
+     ['ASU2','10','raw:ASU2','landing_mat'], // Landing Mat
+     ['ASU2','11','raw:ASU2','laterite'], // Laterite
+     ['ASU2','12','raw:ASU2','macadam'], // Macadam
+     ['ASU2','13','raw:ASU2','membrane'], // Membrane
+     ['ASU2','14','raw:ASU2','non-bituminous_mix'], // Non-bituminous Mix
+     ['ASU2','15','raw:ASU2','pierced_steel_planking'], // Pierced Steel Planking
+     ['ASU2','16','raw:ASU2','sand'], // Sand
+     ['ASU2','17','raw:ASU2','snow'], // Snow
+     ['ASU2','18','raw:ASU2','stone'], // Stone
+     ['ASU2','20','raw:ASU2','wood'], // Wood
+     ['ASU2','21','raw:ASU2','asphalt_over_concrete'], // Asphalt Over Concrete
+     ['ASU2','999','raw:ASU2','other'], // Other
+
+     // ASU3 - Aerodrome Movement Area Surface Composition [3]
+     // ['ASU3','-999999',undefined,undefined], // No Information
+     ['ASU3','1','raw:ASU3','asphalt'], // Asphalt
+     ['ASU3','2','raw:ASU3','bituminous_mix'], // Bituminous Mix
+     ['ASU3','3','raw:ASU3','brick'], // Brick
+     ['ASU3','4','raw:ASU3','clay'], // Clay
+     ['ASU3','5','raw:ASU3','concrete'], // Concrete
+     ['ASU3','6','raw:ASU3','coral'], // Coral
+     ['ASU3','7','raw:ASU3','earthen'], // Earthen
+     ['ASU3','8','raw:ASU3','gravel'], // Gravel
+     ['ASU3','9','raw:ASU3','ice'], // Ice
+     ['ASU3','10','raw:ASU3','landing_mat'], // Landing Mat
+     ['ASU3','11','raw:ASU3','laterite'], // Laterite
+     ['ASU3','12','raw:ASU3','macadam'], // Macadam
+     ['ASU3','13','raw:ASU3','membrane'], // Membrane
+     ['ASU3','14','raw:ASU3','non-bituminous_mix'], // Non-bituminous Mix
+     ['ASU3','15','raw:ASU3','pierced_steel_planking'], // Pierced Steel Planking
+     ['ASU3','16','raw:ASU3','sand'], // Sand
+     ['ASU3','17','raw:ASU3','snow'], // Snow
+     ['ASU3','18','raw:ASU3','stone'], // Stone
+     ['ASU3','20','raw:ASU3','wood'], // Wood
+     ['ASU3','21','raw:ASU3','asphalt_over_concrete'], // Asphalt Over Concrete
+     ['ASU3','999','raw:ASU3','other'], // Other
 
      // ASY - Airfield Symbol Type
      // ['ASY','-999999',undefined,undefined], // No Information
      ['ASY','1','aeroway:aerodrome_symbol','active_civilian'], // A - Active Civilian
      ['ASY','2','aeroway:aerodrome_symbol','active_joint_(civilian/military)'], // B - Active Joint (Civilian/Military)
      ['ASY','3','aeroway:aerodrome_symbol','active_military'], // C - Active Military
-     ['ASY','4','aeroway:aerodrome_symbol','active_(with_less_than_the_minimum_facilities)'], // D - Active (with less than the minimum facilities)
+     ['ASY','4','aeroway:aerodrome_symbol','active_(with_less-than_the_minimum_facilities)'], // D - Active (with less than the minimum facilities)
      ['ASY','5','aeroway:aerodrome_symbol','abandoned_or_closed_(with_usable_runways_or_landing_areas)'], // E - Abandoned or Closed (with usable runways or landing areas)
      ['ASY','6','aeroway:aerodrome_symbol','highway_strip'], // F - Highway Strip
      ['ASY','7','aeroway:aerodrome_symbol','unusable_for_landing_or_take-off'], // G - Unusable for landing or take-off
      ['ASY','8','aeroway:aerodrome_symbol','active_military_heliport'], // H - Active Military Heliport
      ['ASY','9','aeroway:aerodrome_symbol','active_civil_heliport'], // J - Active Civil Heliport
-     ['ASY','10','aeroway:aerodrome_symbol','active_military_heliport_(with_less_than_minimum_facilities)'], // K - Active Military Heliport (with less than minimum facilities)
-     ['ASY','11','aeroway:aerodrome_symbol','active_civil_heliport_(with_less_than_minimum_facilities)'], // L - Active Civil Heliport (with less than minimum facilities)
+     ['ASY','10','aeroway:aerodrome_symbol','active_military_heliport_(with_less-than_minimum_facilities)'], // K - Active Military Heliport (with less than minimum facilities)
+     ['ASY','11','aeroway:aerodrome_symbol','active_civil_heliport_(with_less-than_minimum_facilities)'], // L - Active Civil Heliport (with less than minimum facilities)
      ['ASY','12','aeroway:aerodrome_symbol','decoy'], // X - Decoy
      ['ASY','13','aeroway:aerodrome_symbol','active_joint_(civilian/military)_heliport'], // Active Joint (Civilian/Military) Heliport
 
-     // AT005_CAB - Cable : Cable Type - See CAB
+     // AT005_CAB - Cable : Cable Type #####
      // ['AT005_CAB','-999999',undefined,undefined], // No Information
-//      ['AT005_CAB','2','raw:AT005_CAB','power_distribution_line'], // Power Distribution Line
-//      ['AT005_CAB','3','raw:AT005_CAB','telephone'], // Telephone
-//      ['AT005_CAB','4','raw:AT005_CAB','telegraph'], // Telegraph
-//      ['AT005_CAB','6','raw:AT005_CAB','power_transmission_line'], // Power Transmission Line
-//      ['AT005_CAB','7','raw:AT005_CAB','digital_communication_line'], // Digital Communication Line
-//      ['AT005_CAB','8','raw:AT005_CAB','communication_line'], // Communication Line
-//      ['AT005_CAB','9','raw:AT005_CAB','fibre-optic'], // Fibre-optic
-//      ['AT005_CAB','10','raw:AT005_CAB','tethering'], // Tethering
-//      ['AT005_CAB','11','raw:AT005_CAB','load_bearing'], // Load Bearing
-//      ['AT005_CAB','12','raw:AT005_CAB','guide'], // Guide
-//      ['AT005_CAB','13','raw:AT005_CAB','barrier'], // Barrier
-//      ['AT005_CAB','14','raw:AT005_CAB','restraining'], // Restraining
-//      ['AT005_CAB','15','raw:AT005_CAB','towing'], // Towing
-//      ['AT005_CAB','19','raw:AT005_CAB','cableway'], // Cableway
-//      ['AT005_CAB','999','raw:AT005_CAB','other'], // Other
+     ['AT005_CAB','2','raw:AT005_CAB','power_distribution_line'], // Power Distribution Line
+     ['AT005_CAB','3','raw:AT005_CAB','telephone'], // Telephone
+     ['AT005_CAB','4','raw:AT005_CAB','telegraph'], // Telegraph
+     ['AT005_CAB','6','raw:AT005_CAB','power_transmission_line'], // Power Transmission Line
+     ['AT005_CAB','7','raw:AT005_CAB','digital_communication_line'], // Digital Communication Line
+     ['AT005_CAB','8','raw:AT005_CAB','communication_line'], // Communication Line
+     ['AT005_CAB','9','raw:AT005_CAB','fibre-optic'], // Fibre-optic
+     ['AT005_CAB','10','raw:AT005_CAB','tethering'], // Tethering
+     ['AT005_CAB','11','raw:AT005_CAB','load_bearing'], // Load Bearing
+     ['AT005_CAB','12','raw:AT005_CAB','guide'], // Guide
+     ['AT005_CAB','13','raw:AT005_CAB','barrier'], // Barrier
+     ['AT005_CAB','14','raw:AT005_CAB','restraining'], // Restraining
+     ['AT005_CAB','15','raw:AT005_CAB','towing'], // Towing
+     ['AT005_CAB','19','raw:AT005_CAB','cableway'], // Cableway
+     ['AT005_CAB','999','raw:AT005_CAB','other'], // Other
+
+     // AT005_CAB2 - Cable : Cable Type [2]
+     // ['AT005_CAB2','-999999',undefined,undefined], // No Information
+     ['AT005_CAB2','2','raw:AT005_CAB2','power_distribution_line'], // Power Distribution Line
+     ['AT005_CAB2','3','raw:AT005_CAB2','telephone'], // Telephone
+     ['AT005_CAB2','4','raw:AT005_CAB2','telegraph'], // Telegraph
+     ['AT005_CAB2','6','raw:AT005_CAB2','power_transmission_line'], // Power Transmission Line
+     ['AT005_CAB2','7','raw:AT005_CAB2','digital_communication_line'], // Digital Communication Line
+     ['AT005_CAB2','8','raw:AT005_CAB2','communication_line'], // Communication Line
+     ['AT005_CAB2','9','raw:AT005_CAB2','fibre-optic'], // Fibre-optic
+     ['AT005_CAB2','10','raw:AT005_CAB2','tethering'], // Tethering
+     ['AT005_CAB2','11','raw:AT005_CAB2','load_bearing'], // Load Bearing
+     ['AT005_CAB2','12','raw:AT005_CAB2','guide'], // Guide
+     ['AT005_CAB2','13','raw:AT005_CAB2','barrier'], // Barrier
+     ['AT005_CAB2','14','raw:AT005_CAB2','restraining'], // Restraining
+     ['AT005_CAB2','15','raw:AT005_CAB2','towing'], // Towing
+     ['AT005_CAB2','19','raw:AT005_CAB2','cableway'], // Cableway
+     ['AT005_CAB2','999','raw:AT005_CAB2','other'], // Other
+
+     // AT005_CAB3 - Cable : Cable Type [3]
+     // ['AT005_CAB3','-999999',undefined,undefined], // No Information
+     ['AT005_CAB3','2','raw:AT005_CAB3','power_distribution_line'], // Power Distribution Line
+     ['AT005_CAB3','3','raw:AT005_CAB3','telephone'], // Telephone
+     ['AT005_CAB3','4','raw:AT005_CAB3','telegraph'], // Telegraph
+     ['AT005_CAB3','6','raw:AT005_CAB3','power_transmission_line'], // Power Transmission Line
+     ['AT005_CAB3','7','raw:AT005_CAB3','digital_communication_line'], // Digital Communication Line
+     ['AT005_CAB3','8','raw:AT005_CAB3','communication_line'], // Communication Line
+     ['AT005_CAB3','9','raw:AT005_CAB3','fibre-optic'], // Fibre-optic
+     ['AT005_CAB3','10','raw:AT005_CAB3','tethering'], // Tethering
+     ['AT005_CAB3','11','raw:AT005_CAB3','load_bearing'], // Load Bearing
+     ['AT005_CAB3','12','raw:AT005_CAB3','guide'], // Guide
+     ['AT005_CAB3','13','raw:AT005_CAB3','barrier'], // Barrier
+     ['AT005_CAB3','14','raw:AT005_CAB3','restraining'], // Restraining
+     ['AT005_CAB3','15','raw:AT005_CAB3','towing'], // Towing
+     ['AT005_CAB3','19','raw:AT005_CAB3','cableway'], // Cableway
+     ['AT005_CAB3','999','raw:AT005_CAB3','other'], // Other
 
      // ATB - Attached Building
      // ['ATB','-999999',undefined,undefined], // No Information
@@ -506,8 +951,9 @@ ggdm30.rules = {
      ['ATC','4','aqueduct:type','underwater'], // Underwater
      ['ATC','5','aqueduct:type','surface'], // Surface
      ['ATC','6','aqueduct:type','qanat'], // Qanat
+
      // AWP - Aeronautical Obstacle Light Present
-     // ['AWP','-999999',undefined,undefined],
+     // ['AWP','-999999',undefined,undefined], // No Information
      ['AWP','1000','light:obstacle','no'],
      ['AWP','1001','light:obstacle','yes'],
 
@@ -518,10 +964,10 @@ ggdm30.rules = {
      ['AXS','3','aeroway:surface:status','work_in_progress'], // Work in Progress
      ['AXS','4','aeroway:surface:status','parked_or_disabled_aircraft'], // Parked or Disabled Aircraft
 
-     // AYRC - Aquifer Yield Rating (interval closure)
+     // AYRC - Aquifer Yield Rating <interval closure>
      ['AYRC','2','aquifer:yield:closure','open_interval'], // Open Interval
-     ['AYRC','3','aquifer:yield:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['AYRC','4','aquifer:yield:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['AYRC','3','aquifer:yield:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['AYRC','4','aquifer:yield:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['AYRC','5','aquifer:yield:closure','closed_interval'], // Closed Interval
      ['AYRC','6','aquifer:yield:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['AYRC','7','aquifer:yield:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -566,41 +1012,326 @@ ggdm30.rules = {
      ['BAT','5','barrier:top','spiked'], // Spiked
      ['BAT','999','barrier:top','other'], // Other
 
-     // BC034_MRT - Maritime Radiobeacon : Maritime Radiobeacon Type
+     // BBMCA - Wtrbdy Bank (1) : Bottom Material Type (first bank)
+     // ['BBMCA','-999999',undefined,undefined], // No Information
+     ['BBMCA','1','raw:BBMCA','clay_and_silt'], // Clay and Silt
+     ['BBMCA','2','raw:BBMCA','silty_sands'], // Silty Sands
+     ['BBMCA','3','raw:BBMCA','sand_and_gravel'], // Sand and Gravel
+     ['BBMCA','4','raw:BBMCA','gravel_and_cobble'], // Gravel and Cobble
+     ['BBMCA','5','raw:BBMCA','rocks_and_boulders'], // Rocks and Boulders
+     ['BBMCA','6','raw:BBMCA','bedrock'], // Bedrock
+     ['BBMCA','7','raw:BBMCA','paved'], // Paved
+     ['BBMCA','8','raw:BBMCA','peat'], // Peat
+     ['BBMCA','9','raw:BBMCA','sand_over_mud'], // Sand over Mud
+     ['BBMCA','11','raw:BBMCA','coral'], // Coral
+     ['BBMCA','14','raw:BBMCA','sand'], // Sand
+     ['BBMCA','15','raw:BBMCA','concrete'], // Concrete
+     ['BBMCA','16','raw:BBMCA','masonry'], // Masonry
+     ['BBMCA','17','raw:BBMCA','reinforced_concrete'], // Reinforced Concrete
+     ['BBMCA','18','raw:BBMCA','soil'], // Soil
+     ['BBMCA','999','raw:BBMCA','other'], // Other
+
+     // BBMCA2 - Wtrbdy Bank (1) : Bottom Material Type (first bank) [2]
+     // ['BBMCA2','-999999',undefined,undefined], // No Information
+     ['BBMCA2','1','raw:BBMCA2','clay_and_silt'], // Clay and Silt
+     ['BBMCA2','2','raw:BBMCA2','silty_sands'], // Silty Sands
+     ['BBMCA2','3','raw:BBMCA2','sand_and_gravel'], // Sand and Gravel
+     ['BBMCA2','4','raw:BBMCA2','gravel_and_cobble'], // Gravel and Cobble
+     ['BBMCA2','5','raw:BBMCA2','rocks_and_boulders'], // Rocks and Boulders
+     ['BBMCA2','6','raw:BBMCA2','bedrock'], // Bedrock
+     ['BBMCA2','7','raw:BBMCA2','paved'], // Paved
+     ['BBMCA2','8','raw:BBMCA2','peat'], // Peat
+     ['BBMCA2','9','raw:BBMCA2','sand_over_mud'], // Sand over Mud
+     ['BBMCA2','11','raw:BBMCA2','coral'], // Coral
+     ['BBMCA2','14','raw:BBMCA2','sand'], // Sand
+     ['BBMCA2','15','raw:BBMCA2','concrete'], // Concrete
+     ['BBMCA2','16','raw:BBMCA2','masonry'], // Masonry
+     ['BBMCA2','17','raw:BBMCA2','reinforced_concrete'], // Reinforced Concrete
+     ['BBMCA2','18','raw:BBMCA2','soil'], // Soil
+     ['BBMCA2','999','raw:BBMCA2','other'], // Other
+
+     // BBMCA3 - Wtrbdy Bank (1) : Bottom Material Type (first bank) [3]
+     // ['BBMCA3','-999999',undefined,undefined], // No Information
+     ['BBMCA3','1','raw:BBMCA3','clay_and_silt'], // Clay and Silt
+     ['BBMCA3','2','raw:BBMCA3','silty_sands'], // Silty Sands
+     ['BBMCA3','3','raw:BBMCA3','sand_and_gravel'], // Sand and Gravel
+     ['BBMCA3','4','raw:BBMCA3','gravel_and_cobble'], // Gravel and Cobble
+     ['BBMCA3','5','raw:BBMCA3','rocks_and_boulders'], // Rocks and Boulders
+     ['BBMCA3','6','raw:BBMCA3','bedrock'], // Bedrock
+     ['BBMCA3','7','raw:BBMCA3','paved'], // Paved
+     ['BBMCA3','8','raw:BBMCA3','peat'], // Peat
+     ['BBMCA3','9','raw:BBMCA3','sand_over_mud'], // Sand over Mud
+     ['BBMCA3','11','raw:BBMCA3','coral'], // Coral
+     ['BBMCA3','14','raw:BBMCA3','sand'], // Sand
+     ['BBMCA3','15','raw:BBMCA3','concrete'], // Concrete
+     ['BBMCA3','16','raw:BBMCA3','masonry'], // Masonry
+     ['BBMCA3','17','raw:BBMCA3','reinforced_concrete'], // Reinforced Concrete
+     ['BBMCA3','18','raw:BBMCA3','soil'], // Soil
+     ['BBMCA3','999','raw:BBMCA3','other'], // Other
+
+     // BBMCB - Wtrbdy Bank (2) : Bottom Material Type (second bank)
+     // ['BBMCB','-999999',undefined,undefined], // No Information
+     ['BBMCB','1','raw:BBMCB','clay_and_silt'], // Clay and Silt
+     ['BBMCB','2','raw:BBMCB','silty_sands'], // Silty Sands
+     ['BBMCB','3','raw:BBMCB','sand_and_gravel'], // Sand and Gravel
+     ['BBMCB','4','raw:BBMCB','gravel_and_cobble'], // Gravel and Cobble
+     ['BBMCB','5','raw:BBMCB','rocks_and_boulders'], // Rocks and Boulders
+     ['BBMCB','6','raw:BBMCB','bedrock'], // Bedrock
+     ['BBMCB','7','raw:BBMCB','paved'], // Paved
+     ['BBMCB','8','raw:BBMCB','peat'], // Peat
+     ['BBMCB','9','raw:BBMCB','sand_over_mud'], // Sand over Mud
+     ['BBMCB','11','raw:BBMCB','coral'], // Coral
+     ['BBMCB','14','raw:BBMCB','sand'], // Sand
+     ['BBMCB','15','raw:BBMCB','concrete'], // Concrete
+     ['BBMCB','16','raw:BBMCB','masonry'], // Masonry
+     ['BBMCB','17','raw:BBMCB','reinforced_concrete'], // Reinforced Concrete
+     ['BBMCB','18','raw:BBMCB','soil'], // Soil
+     ['BBMCB','999','raw:BBMCB','other'], // Other
+
+     // BBMCB2 - Wtrbdy Bank (2) : Bottom Material Type (second bank) [2]
+     // ['BBMCB2','-999999',undefined,undefined], // No Information
+     ['BBMCB2','1','raw:BBMCB2','clay_and_silt'], // Clay and Silt
+     ['BBMCB2','2','raw:BBMCB2','silty_sands'], // Silty Sands
+     ['BBMCB2','3','raw:BBMCB2','sand_and_gravel'], // Sand and Gravel
+     ['BBMCB2','4','raw:BBMCB2','gravel_and_cobble'], // Gravel and Cobble
+     ['BBMCB2','5','raw:BBMCB2','rocks_and_boulders'], // Rocks and Boulders
+     ['BBMCB2','6','raw:BBMCB2','bedrock'], // Bedrock
+     ['BBMCB2','7','raw:BBMCB2','paved'], // Paved
+     ['BBMCB2','8','raw:BBMCB2','peat'], // Peat
+     ['BBMCB2','9','raw:BBMCB2','sand_over_mud'], // Sand over Mud
+     ['BBMCB2','11','raw:BBMCB2','coral'], // Coral
+     ['BBMCB2','14','raw:BBMCB2','sand'], // Sand
+     ['BBMCB2','15','raw:BBMCB2','concrete'], // Concrete
+     ['BBMCB2','16','raw:BBMCB2','masonry'], // Masonry
+     ['BBMCB2','17','raw:BBMCB2','reinforced_concrete'], // Reinforced Concrete
+     ['BBMCB2','18','raw:BBMCB2','soil'], // Soil
+     ['BBMCB2','999','raw:BBMCB2','other'], // Other
+
+     // BBMCB3 - Wtrbdy Bank (2) : Bottom Material Type (second bank) [3]
+     // ['BBMCB3','-999999',undefined,undefined], // No Information
+     ['BBMCB3','1','raw:BBMCB3','clay_and_silt'], // Clay and Silt
+     ['BBMCB3','2','raw:BBMCB3','silty_sands'], // Silty Sands
+     ['BBMCB3','3','raw:BBMCB3','sand_and_gravel'], // Sand and Gravel
+     ['BBMCB3','4','raw:BBMCB3','gravel_and_cobble'], // Gravel and Cobble
+     ['BBMCB3','5','raw:BBMCB3','rocks_and_boulders'], // Rocks and Boulders
+     ['BBMCB3','6','raw:BBMCB3','bedrock'], // Bedrock
+     ['BBMCB3','7','raw:BBMCB3','paved'], // Paved
+     ['BBMCB3','8','raw:BBMCB3','peat'], // Peat
+     ['BBMCB3','9','raw:BBMCB3','sand_over_mud'], // Sand over Mud
+     ['BBMCB3','11','raw:BBMCB3','coral'], // Coral
+     ['BBMCB3','14','raw:BBMCB3','sand'], // Sand
+     ['BBMCB3','15','raw:BBMCB3','concrete'], // Concrete
+     ['BBMCB3','16','raw:BBMCB3','masonry'], // Masonry
+     ['BBMCB3','17','raw:BBMCB3','reinforced_concrete'], // Reinforced Concrete
+     ['BBMCB3','18','raw:BBMCB3','soil'], // Soil
+     ['BBMCB3','999','raw:BBMCB3','other'], // Other
+
+     // BC010_REF - Mar Nav Bcn : Radar Reflector Present
+     // ['BC010_REF','-999999',undefined,undefined], // No Information
+     ['BC010_REF','1000','raw:BC010_REF','no'],
+     ['BC010_REF','1001','raw:BC010_REF','yes'],
+
+     // BC010_TZP - Mar Nav Bcn : Topmark Shape
+     // ['BC010_TZP','-999999',undefined,undefined], // No Information
+     ['BC010_TZP','1','raw:BC010_TZP','cone_point_upward'], // Cone Point Upward
+     ['BC010_TZP','2','raw:BC010_TZP','cone_point_downward'], // Cone Point Downward
+     ['BC010_TZP','3','raw:BC010_TZP','sphere'], // Sphere
+     ['BC010_TZP','4','raw:BC010_TZP','2_spheres_one_over_other'], // 2 Spheres One over Other
+     ['BC010_TZP','5','raw:BC010_TZP','cylinder'], // Cylinder
+     ['BC010_TZP','6','raw:BC010_TZP','board'], // Board
+     ['BC010_TZP','7','raw:BC010_TZP','x-shaped'], // X-shaped
+     ['BC010_TZP','8','raw:BC010_TZP','upright_cross'], // Upright Cross
+     ['BC010_TZP','9','raw:BC010_TZP','cube_point_upward'], // Cube Point Upward
+     ['BC010_TZP','10','raw:BC010_TZP','2_cones_point_to_point'], // 2 Cones Point to Point
+     ['BC010_TZP','11','raw:BC010_TZP','2_cones_base_to_base'], // 2 Cones Base to Base
+     ['BC010_TZP','12','raw:BC010_TZP','diamond'], // Diamond
+     ['BC010_TZP','13','raw:BC010_TZP','2_cones_points_upward'], // 2 Cones Points Upward
+     ['BC010_TZP','14','raw:BC010_TZP','2_cones_points_downward'], // 2 Cones Points Downward
+     ['BC010_TZP','15','raw:BC010_TZP','besom_point_upward'], // Besom Point Upward
+     ['BC010_TZP','16','raw:BC010_TZP','besom_point_downward'], // Besom Point Downward
+     ['BC010_TZP','17','raw:BC010_TZP','flag'], // Flag
+     ['BC010_TZP','18','raw:BC010_TZP','sphere_over_diamond'], // Sphere over Diamond
+     ['BC010_TZP','19','raw:BC010_TZP','square'], // Square
+     ['BC010_TZP','20','raw:BC010_TZP','horizontal_rectangle'], // Horizontal Rectangle
+     ['BC010_TZP','21','raw:BC010_TZP','vertical_rectangle'], // Vertical Rectangle
+     ['BC010_TZP','22','raw:BC010_TZP','trapezium_short_upward'], // Trapezium Short Upward
+     ['BC010_TZP','23','raw:BC010_TZP','trapezium_short_downward'], // Trapezium Short Downward
+     ['BC010_TZP','24','raw:BC010_TZP','triangle_point_upward'], // Triangle Point Upward
+     ['BC010_TZP','25','raw:BC010_TZP','triangle_point_downward'], // Triangle Point Downward
+     ['BC010_TZP','26','raw:BC010_TZP','circle'], // Circle
+     ['BC010_TZP','27','raw:BC010_TZP','2_upright_crosses'], // 2 Upright Crosses
+     ['BC010_TZP','28','raw:BC010_TZP','t-shaped'], // T-shaped
+     ['BC010_TZP','29','raw:BC010_TZP','triangle_point_upward_over_circle'], // Triangle Point Upward over Circle
+     ['BC010_TZP','30','raw:BC010_TZP','upright_cross_over_circle'], // Upright Cross over Circle
+     ['BC010_TZP','31','raw:BC010_TZP','diamond_over_circle'], // Diamond over Circle
+     ['BC010_TZP','32','raw:BC010_TZP','circle_over_triangle_point_upward'], // Circle over Triangle Point Upward
+     ['BC010_TZP','33','raw:BC010_TZP','ball_over_cone'], // Ball over Cone
+     ['BC010_TZP','34','raw:BC010_TZP','can_over_ball'], // Can over Ball
+     ['BC010_TZP','35','raw:BC010_TZP','cone_over_ball'], // Cone over Ball
+     ['BC010_TZP','36','raw:BC010_TZP','cross_over_ball'], // Cross over Ball
+     ['BC010_TZP','37','raw:BC010_TZP','diamond_over_ball'], // Diamond over Ball
+     ['BC010_TZP','998','raw:BC010_TZP','not_applicable'], // Not Applicable
+     ['BC010_TZP','999','raw:BC010_TZP','other'], // Other
+
+     // BC034_MRT - Mar Radiobeacon : Maritime Radiobeacon Type
      // ['BC034_MRT','-999999',undefined,undefined], // No Information
-     ['BC034_MRT','1','seamark:radio_station:category ','ais'], // Automated Identification System (AIS)
-     ['BC034_MRT','2','seamark:radio_station:category ','omnidirectional'], // Circular Radiobeacon
-     ['BC034_MRT','3','seamark:radio_station:category ','directional'], // Directional Radiobeacon
-     ['BC034_MRT','4','seamark:radio_station:category ','loran'], // Long Range Air Navigation System (LORAN) C
-     ['BC034_MRT','5','seamark:radio_station:category ','qtg'], // QTG Station
-     ['BC034_MRT','6','seamark:radar_transponder:category ','ramark'], // Radar Marker (RAMARK)
-     ['BC034_MRT','7','seamark:radar_transponder:category ','racon'], // Radar Responder Beacon (RACON)
-     ['BC034_MRT','8','seamark:radio_station:category ','rdf'], // Radio Direction Finding Station
-     ['BC034_MRT','9','seamark:radio_station:category ','rotating_pattern'], // Rotating Pattern Radiobeacon
-     ['BC034_MRT','999','seamark:radio_station:category ','other'], // Other
+     ['BC034_MRT','1','seamark:radio_station:category','ais'], // Automated Identification System (AIS)
+     ['BC034_MRT','2','seamark:radio_station:category','omnidirectional'], // Circular Radiobeacon
+     ['BC034_MRT','3','seamark:radio_station:category','directional'], // Directional Radiobeacon
+     ['BC034_MRT','4','seamark:radio_station:category','loran'], // Long Range Air Navigation System (LORAN) C
+     ['BC034_MRT','5','seamark:radio_station:category','qtg'], // QTG Station
+     ['BC034_MRT','6','seamark:radar_transponder:category','ramark'], // Radar Marker (RAMARK)
+     ['BC034_MRT','7','seamark:radar_transponder:category','racon'], // Radar Responder Beacon (RACON)
+     ['BC034_MRT','8','seamark:radio_station:category','rdf'], // Radio Direction Finding Station
+     ['BC034_MRT','9','seamark:radio_station:category','rotating_pattern'], // Rotating Pattern Radiobeacon
+     ['BC034_MRT','999','seamark:radio_station:category','other'], // Other
+
+     // BC034_MRT2 - Mar Radiobeacon : Maritime Radiobeacon Type [2]
+     // ['BC034_MRT2','-999999',undefined,undefined], // No Information
+     ['BC034_MRT2','1','seamark:radio_station:category2','automated_identification_system_(ais)'], // Automated Identification System (AIS)
+     ['BC034_MRT2','2','seamark:radio_station:category2','circular_radiobeacon'], // Circular Radiobeacon
+     ['BC034_MRT2','3','seamark:radio_station:category2','directional_radiobeacon'], // Directional Radiobeacon
+     ['BC034_MRT2','4','seamark:radio_station:category2','long_range_air_navigation_system_(loran)_c'], // Long Range Air Navigation System (LORAN) C
+     ['BC034_MRT2','5','seamark:radio_station:category2','qtg_station'], // QTG Station
+     ['BC034_MRT2','6','seamark:radio_station:category2','radar_marker_(ramark)'], // Radar Marker (RAMARK)
+     ['BC034_MRT2','7','seamark:radio_station:category2','radar_responder_beacon_(racon)'], // Radar Responder Beacon (RACON)
+     ['BC034_MRT2','8','seamark:radio_station:category2','radio_direction_finding_station'], // Radio Direction Finding Station
+     ['BC034_MRT2','9','seamark:radio_station:category2','rotating_pattern_radiobeacon'], // Rotating Pattern Radiobeacon
+     ['BC034_MRT2','999','seamark:radio_station:category2','other'], // Other
+
+     // BC034_MRT3 - Mar Radiobeacon : Maritime Radiobeacon Type [3]
+     // ['BC034_MRT3','-999999',undefined,undefined], // No Information
+     ['BC034_MRT3','1','seamark:radio_station:category3','automated_identification_system_(ais)'], // Automated Identification System (AIS)
+     ['BC034_MRT3','2','seamark:radio_station:category3','circular_radiobeacon'], // Circular Radiobeacon
+     ['BC034_MRT3','3','seamark:radio_station:category3','directional_radiobeacon'], // Directional Radiobeacon
+     ['BC034_MRT3','4','seamark:radio_station:category3','long_range_air_navigation_system_(loran)_c'], // Long Range Air Navigation System (LORAN) C
+     ['BC034_MRT3','5','seamark:radio_station:category3','qtg_station'], // QTG Station
+     ['BC034_MRT3','6','seamark:radio_station:category3','radar_marker_(ramark)'], // Radar Marker (RAMARK)
+     ['BC034_MRT3','7','seamark:radio_station:category3','radar_responder_beacon_(racon)'], // Radar Responder Beacon (RACON)
+     ['BC034_MRT3','8','seamark:radio_station:category3','radio_direction_finding_station'], // Radio Direction Finding Station
+     ['BC034_MRT3','9','seamark:radio_station:category3','rotating_pattern_radiobeacon'], // Rotating Pattern Radiobeacon
+     ['BC034_MRT3','999','seamark:radio_station:category3','other'], // Other
+
+     // BC040_CAA - Mar Nav Lt : Controlling Authority
+     // ['BC040_CAA','-999999',undefined,undefined], // No Information
+     ['BC040_CAA','3','raw:BC040_CAA','private'], // Private
+     ['BC040_CAA','5','raw:BC040_CAA','military'], // Military
+     ['BC040_CAA','7','raw:BC040_CAA','joint_military_and_civilian'], // Joint Military and Civilian
+     ['BC040_CAA','16','raw:BC040_CAA','civilian'], // Civilian
+     ['BC040_CAA','999','raw:BC040_CAA','other'], // Other
 
      // BC101_SST - Fog Signal : Fog Signal Type
      // ['BC101_SST','-999999',undefined,undefined], // No Information
-     ['BC101_SST','1','seamark:fog_signal:category','bell'], // Bell
-     ['BC101_SST','2','seamark:fog_signal:category','diaphone'], // Diaphone
-     ['BC101_SST','3','seamark:fog_signal:category','explosive'], // Explosive
-     ['BC101_SST','4','seamark:fog_signal:category','gong'], // Gong
-     ['BC101_SST','6','seamark:fog_signal:category','horn'], // Horn
-     ['BC101_SST','7','seamark:fog_signal:category','nautophone'], // Nautophone
-     ['BC101_SST','8','seamark:fog_signal:category','radio'], // Radio
-     ['BC101_SST','9','seamark:fog_signal:category','siren'], // Siren
-     ['BC101_SST','10','seamark:fog_signal:category','submarine_bell'], // Submarine Bell
-     ['BC101_SST','14','seamark:fog_signal:category','whistle'], // Whistle
-     ['BC101_SST','15','seamark:fog_signal:category','reed'], // Reed
-     ['BC101_SST','16','seamark:fog_signal:category','none'], // None
-     ['BC101_SST','98','seamark:fog_signal:category','tyfon'], // Tyfon
-     ['BC101_SST','999','seamark:fog_signal:category','other'], // Other
+     ['BC101_SST','1','raw:BC101_SST','bell'], // Bell
+     ['BC101_SST','2','raw:BC101_SST','diaphone'], // Diaphone
+     ['BC101_SST','3','raw:BC101_SST','explosive'], // Explosive
+     ['BC101_SST','4','raw:BC101_SST','gong'], // Gong
+     ['BC101_SST','6','raw:BC101_SST','horn'], // Horn
+     ['BC101_SST','7','raw:BC101_SST','nautophone'], // Nautophone
+     ['BC101_SST','8','raw:BC101_SST','radio'], // Radio
+     ['BC101_SST','9','raw:BC101_SST','siren'], // Siren
+     ['BC101_SST','10','raw:BC101_SST','submarine_bell'], // Submarine Bell
+     ['BC101_SST','14','raw:BC101_SST','whistle'], // Whistle
+     ['BC101_SST','15','raw:BC101_SST','reed'], // Reed
+     ['BC101_SST','16','raw:BC101_SST','none'], // None
+     ['BC101_SST','98','raw:BC101_SST','tyfon'], // Tyfon
+     ['BC101_SST','998','raw:BC101_SST','not_applicable'], // Not Applicable
+     ['BC101_SST','999','raw:BC101_SST','other'], // Other
 
      // BCC - Bypass Condition
      // ['BCC','-999999',undefined,undefined], // No Information
-     ['BCC','1','bypass','easy'],
-     ['BCC','2','bypass','difficult'],
-     ['BCC','3','bypass','impossible'],
+     ['BCC','1','bypass','easy'], // Easy
+     ['BCC','2','bypass','difficult'], // Difficult
+     ['BCC','3','bypass','impossible'], // Impossible
+
+     // BDS - Bidirectional
+     // ['BDS','-999999',undefined,undefined], // No Information
+     ['BDS','1000','raw:BDS','no'],
+     ['BDS','1001','raw:BDS','yes'],
+
+     // BET - Maritime Navigation Beacon Type
+     // ['BET','-999999',undefined,undefined], // No Information
+     ['BET','7','raw:BET','mooring'], // Mooring
+     ['BET','11','raw:BET','landfall'], // Landfall
+     ['BET','20','raw:BET','fairway'], // Fairway
+     ['BET','21','raw:BET','mid-channel'], // Mid-Channel
+     ['BET','22','raw:BET','bifurcation'], // Bifurcation
+     ['BET','23','raw:BET','junction'], // Junction
+     ['BET','24','raw:BET','wreck'], // Wreck
+     ['BET','25','raw:BET','obstruction'], // Obstruction
+     ['BET','26','raw:BET','telegraph_cable'], // Telegraph Cable
+     ['BET','27','raw:BET','warping'], // Warping
+     ['BET','28','raw:BET','quarantine'], // Quarantine
+     ['BET','29','raw:BET','exercise_area'], // Exercise Area
+     ['BET','30','raw:BET','explosive_anchorage'], // Explosive Anchorage
+     ['BET','31','raw:BET','aeronautical_anchorage'], // Aeronautical Anchorage
+     ['BET','32','raw:BET','compass_adjustment'], // Compass Adjustment
+     ['BET','33','raw:BET','fish_trap'], // Fish Trap
+     ['BET','34','raw:BET','spoil_ground'], // Spoil Ground
+     ['BET','39','raw:BET','trot'], // Trot
+     ['BET','44','raw:BET','firing_danger_area'], // Firing Danger Area
+     ['BET','45','raw:BET','target'], // Target
+     ['BET','46','raw:BET','marker_ship'], // Marker Ship
+     ['BET','47','raw:BET','degaussing_range'], // Degaussing Range
+     ['BET','48','raw:BET','barge'], // Barge
+     ['BET','49','raw:BET','cable'], // Cable
+     ['BET','50','raw:BET','outfall'], // Outfall
+     ['BET','51','raw:BET','recording'], // Recording
+     ['BET','52','raw:BET','recreation_zone'], // Recreation Zone
+     ['BET','53','raw:BET','leading_line'], // Leading Line
+     ['BET','54','raw:BET','measured_distance'], // Measured Distance
+     ['BET','55','raw:BET','tss'], // TSS
+     ['BET','56','raw:BET','anchoring_prohibited'], // Anchoring Prohibited
+     ['BET','57','raw:BET','berthing_prohibited'], // Berthing Prohibited
+     ['BET','58','raw:BET','overtaking_prohibited'], // Overtaking Prohibited
+     ['BET','59','raw:BET','two-way_traffic_prohibited'], // Two-Way Traffic Prohibited
+     ['BET','60','raw:BET','reduced_wake'], // Reduced Wake
+     ['BET','61','raw:BET','speed_limit'], // Speed Limit
+     ['BET','62','raw:BET','stop'], // Stop
+     ['BET','63','raw:BET','sound_ship"s_siren'], // Sound Ship"s Siren
+     ['BET','64','raw:BET','restricted_vertical_clearance'], // Restricted Vertical Clearance
+     ['BET','65','raw:BET','maximum_vessel"s_draught'], // Maximum Vessel"s Draught
+     ['BET','66','raw:BET','restricted_horizontal_clearance'], // Restricted Horizontal Clearance
+     ['BET','67','raw:BET','strong_current_warning'], // Strong Current Warning
+     ['BET','68','raw:BET','berthing_permitted'], // Berthing Permitted
+     ['BET','69','raw:BET','overhead_power_cable'], // Overhead Power Cable
+     ['BET','70','raw:BET','channel_edge_gradient'], // Channel Edge Gradient
+     ['BET','71','raw:BET','telephone'], // Telephone
+     ['BET','72','raw:BET','ferry_crossing'], // Ferry Crossing
+     ['BET','73','raw:BET','pipeline'], // Pipeline
+     ['BET','74','raw:BET','clearing_line'], // Clearing Line
+     ['BET','75','raw:BET','refuge'], // Refuge
+     ['BET','76','raw:BET','foul_ground'], // Foul Ground
+     ['BET','77','raw:BET','yachting'], // Yachting
+     ['BET','78','raw:BET','heliport'], // Heliport
+     ['BET','79','raw:BET','gps_mark'], // GPS Mark
+     ['BET','80','raw:BET','seaplane_landing'], // Seaplane Landing
+     ['BET','81','raw:BET','diving'], // Diving
+     ['BET','86','raw:BET','private'], // Private
+     ['BET','87','raw:BET','swim'], // Swim
+     ['BET','91','raw:BET','preferred_channel_to_port'], // Preferred Channel to Port
+     ['BET','92','raw:BET','preferred_channel_to_starboard'], // Preferred Channel to Starboard
+     ['BET','93','raw:BET','starboard-hand_edge'], // Starboard-hand Edge
+     ['BET','94','raw:BET','port-hand_edge'], // Port-hand Edge
+     ['BET','95','raw:BET','west_cardinal'], // West Cardinal
+     ['BET','96','raw:BET','south_cardinal'], // South Cardinal
+     ['BET','97','raw:BET','east_cardinal'], // East Cardinal
+     ['BET','98','raw:BET','north_cardinal'], // North Cardinal
+     ['BET','101','raw:BET','wavemeter'], // Wavemeter
+     ['BET','102','raw:BET','entry_prohibited'], // Entry Prohibited
+     ['BET','103','raw:BET','work_in_progress'], // Work In Progress
+     ['BET','111','raw:BET','wellhead'], // Wellhead
+     ['BET','113','raw:BET','marine_farm'], // Marine Farm
+     ['BET','114','raw:BET','artificial_reef'], // Artificial Reef
+     ['BET','115','raw:BET','special'], // Special
+     ['BET','116','raw:BET','notice'], // Notice
+     ['BET','117','raw:BET','general_warning'], // General Warning
+     ['BET','118','raw:BET','anchorage'], // Anchorage
+     ['BET','119','raw:BET','control'], // Control
+     ['BET','122','raw:BET','safe_water'], // Safe Water
+     ['BET','123','raw:BET','isolated_danger'], // Isolated Danger
+     ['BET','998','raw:BET','not_applicable'], // Not Applicable
+     ['BET','999','raw:BET','other'], // Other
 
      // BGT - Basin Gate Type
      // ['BGT','-999999',undefined,undefined], // No Information
@@ -609,57 +1340,68 @@ ggdm30.rules = {
      ['BGT','3','seamark:gate:category','tide_lock'], // Tide Lock
      ['BGT','999','seamark:gate:category','other'], // Other
 
-     // BH141_IBOA - Waterbody bank 1 orientation
-     // ['BH141_IBOA','-999999',undefined,undefined],
-     ['BH141_IBOA','1','waterway:bank1:orientation','right'],
-     ['BH141_IBOA','2','waterway:bank1:orientation','left'],
-     ['BH141_IBOA','3','waterway:bank1:orientation','indeterminate'],
-     ['BH141_IBOA','4','waterway:bank1:orientation','no_flow'],
-     ['BH141_IBOA','999','waterway:bank1:orientation','other'],
+     // BH010_CAA - Aqueduct : Controlling Authority
+     // ['BH010_CAA','-999999',undefined,undefined], // No Information
+     ['BH010_CAA','3','raw:BH010_CAA','private'], // Private
+     ['BH010_CAA','5','raw:BH010_CAA','military'], // Military
+     ['BH010_CAA','7','raw:BH010_CAA','joint_military_and_civilian'], // Joint Military and Civilian
+     ['BH010_CAA','16','raw:BH010_CAA','civilian'], // Civilian
+     ['BH010_CAA','17','raw:BH010_CAA','public'], // Public
+     ['BH010_CAA','999','raw:BH010_CAA','other'], // Other
 
-     // BH141_IBOB - Waterbody bank 2 orientation
-     // ['BH141_IBOB','-999999',undefined,undefined],
+     // BH141_IBOA - Wtrbdy Bank : Bank Orientation (first bank)
+     // ['BH141_IBOA','-999999',undefined,undefined], // No Information
+     ['BH141_IBOA','1','waterway:bank1:orientation','right'], // Right
+     ['BH141_IBOA','2','waterway:bank1:orientation','left'], // Left
+     ['BH141_IBOA','3','waterway:bank1:orientation','indeterminate'], // Indeterminate
+     ['BH141_IBOA','4','waterway:bank1:orientation','no_flow'], // No Flow
+     ['BH141_IBOA','999','waterway:bank1:orientation','other'], // Other
+
+     // BH141_IBOB - Wtrbdy Bank : Bank Orientation (second bank)
+     // ['BH141_IBOB','-999999',undefined,undefined], // No Information
      ['BH141_IBOB','1','waterway:bank2:orientation','right'],
      ['BH141_IBOB','2','waterway:bank2:orientation','left'],
      ['BH141_IBOB','3','waterway:bank2:orientation','indeterminate'],
      ['BH141_IBOB','4','waterway:bank2:orientation','no_flow'],
      ['BH141_IBOB','999','waterway:bank2:orientation','other'],
 
-     // BH141_SHDA - Waterbody bank 1 Shoreline Delineated
-     // ['BH141_SHDA','-999999',undefined,undefined],
+     // BH141_SHDA - Wtrbdy Bank : Shoreline Delineated (first bank)
+     // ['BH141_SHDA','-999999',undefined,undefined], // No Information
      ['BH141_SHDA','1000','waterway:bank1:shoreline_delineated','no'],
      ['BH141_SHDA','1001','waterway:bank1:shoreline_delineated','yes'],
 
-     // BH141_SHDB - Waterbody bank 2 Shoreline Delineated
-     // ['BH141_SHDB','-999999',undefined,undefined],
+     // BH141_SHDB - Wtrbdy Bank : Shoreline Delineated (second bank)
+     // ['BH141_SHDB','-999999',undefined,undefined], // No Information
      ['BH141_SHDB','1000','waterway:bank2:shoreline_delineated','no'],
      ['BH141_SHDB','1001','waterway:bank2:shoreline_delineated','yes'],
 
-     // BH141_SLTA - Waterbody bank 1 shoreline type: No OSM even close, See MGCP SHR & SHL
-     // ['BH141_SLTA','-999999',undefined,undefined], // Null
-     ['BH141_SLTA','6','waterway:bank1:type','mangrove'],
-     ['BH141_SLTA','8','waterway:bank1:type','marshy'],
-     ['BH141_SLTA','10','waterway:bank1:type','stony'],
-     ['BH141_SLTA','11','waterway:bank1:type','rubble'],
-     ['BH141_SLTA','12','waterway:bank1:type','erosion_rubble'],
-     ['BH141_SLTA','13','waterway:bank1:type','sandy'],
-     ['BH141_SLTA','14','waterway:bank1:type','shingly'],
-     ['BH141_SLTA','17','waterway:bank1:type','ice'],
-     ['BH141_SLTA','18','waterway:bank1:type','mud'],
-     ['BH141_SLTA','999','waterway:bank1:type','other'],
+     // BH141_SLTA - Wtrbdy Bank : Shoreline Type (first bank)
+     // ['BH141_SLTA','-999999',undefined,undefined], // No Information
+     ['BH141_SLTA','6','waterway:bank1:type','mangrove'], // Mangrove
+     ['BH141_SLTA','8','waterway:bank1:type','marshy'], // Marshy
+     ['BH141_SLTA','10','waterway:bank1:type','stony'], // Stony
+     ['BH141_SLTA','11','waterway:bank1:type','building_rubble'], // Building Rubble
+     ['BH141_SLTA','12','waterway:bank1:type','erosion_rubble'], // Erosion Rubble
+     ['BH141_SLTA','13','waterway:bank1:type','sandy'], // Sandy
+     ['BH141_SLTA','14','waterway:bank1:type','shingly'], // Shingly
+     ['BH141_SLTA','16','waterway:bank1:type','coral'], // Coral
+     ['BH141_SLTA','17','waterway:bank1:type','ice'], // Ice
+     ['BH141_SLTA','18','waterway:bank1:type','mud'], // Mud
+     ['BH141_SLTA','999','waterway:bank1:type','other'], // Other
 
-     // BH141_SLTB - Waterbody bank 2 shoreline type: No OSM even close, See MGCP SHR & SHL
-     // ['BH141_SLTB','-999999',undefined,undefined], // Null
-     ['BH141_SLTB','6','waterway:bank2:type','mangrove'],
-     ['BH141_SLTB','8','waterway:bank2:type','marshy'],
-     ['BH141_SLTB','10','waterway:bank2:type','stony'],
-     ['BH141_SLTB','11','waterway:bank2:type','rubble'],
-     ['BH141_SLTB','12','waterway:bank2:type','erosion_rubble'],
-     ['BH141_SLTB','13','waterway:bank2:type','sandy'],
-     ['BH141_SLTB','14','waterway:bank2:type','shingly'],
-     ['BH141_SLTB','17','waterway:bank2:type','ice'],
-     ['BH141_SLTB','18','waterway:bank2:type','mud'],
-     ['BH141_SLTB','999','waterway:bank2:type','other'],
+     // BH141_SLTB - Wtrbdy Bank : Shoreline Type (second bank)
+     // ['BH141_SLTB','-999999',undefined,undefined], // No Information
+     ['BH141_SLTB','6','waterway:bank2:type','mangrove'], // Mangrove
+     ['BH141_SLTB','8','waterway:bank2:type','marshy'], // Marshy
+     ['BH141_SLTB','10','waterway:bank2:type','stony'], // Stony
+     ['BH141_SLTB','11','waterway:bank2:type','building_rubble'], // Building Rubble
+     ['BH141_SLTB','12','waterway:bank2:type','erosion_rubble'], // Erosion Rubble
+     ['BH141_SLTB','13','waterway:bank2:type','sandy'], // Sandy
+     ['BH141_SLTB','14','waterway:bank2:type','shingly'], // Shingly
+     ['BH141_SLTB','16','waterway:bank2:type','coral'], // Coral
+     ['BH141_SLTB','17','waterway:bank2:type','ice'], // Ice
+     ['BH141_SLTB','18','waterway:bank2:type','mud'], // Mud
+     ['BH141_SLTB','999','waterway:bank2:type','other'], // Other
 
      // BMC - Bottom Material Type
      // ['BMC','-999999',undefined,undefined], // No Information
@@ -672,12 +1414,51 @@ ggdm30.rules = {
      ['BMC','7','waterway:bottom','paved'], // Paved
      ['BMC','8','waterway:bottom','peat'], // Peat
      ['BMC','9','waterway:bottom','sand_over_mud'], // Sand over Mud
+     ['BMC','11','waterway:bottom','coral'], // Coral
      ['BMC','14','waterway:bottom','sand'], // Sand
      ['BMC','15','waterway:bottom','concrete'], // Concrete
      ['BMC','16','waterway:bottom','masonry'], // Masonry
      ['BMC','17','waterway:bottom','reinforced_concrete'], // Reinforced Concrete
      ['BMC','18','waterway:bottom','soil'], // Soil
      ['BMC','999','waterway:bottom','other'], // Other
+
+     // BMC2 - Bottom Material Type [2]
+     // ['BMC2','-999999',undefined,undefined], // No Information
+     ['BMC2','1','waterway:bottom2','clay_and_silt'], // Clay and Silt
+     ['BMC2','2','waterway:bottom2','silty_sands'], // Silty Sands
+     ['BMC2','3','waterway:bottom2','sand_and_gravel'], // Sand and Gravel
+     ['BMC2','4','waterway:bottom2','gravel_and_cobble'], // Gravel and Cobble
+     ['BMC2','5','waterway:bottom2','rocks_and_boulders'], // Rocks and Boulders
+     ['BMC2','6','waterway:bottom2','bedrock'], // Bedrock
+     ['BMC2','7','waterway:bottom2','paved'], // Paved
+     ['BMC2','8','waterway:bottom2','peat'], // Peat
+     ['BMC2','9','waterway:bottom2','sand_over_mud'], // Sand over Mud
+     ['BMC2','11','waterway:bottom2','coral'], // Coral
+     ['BMC2','14','waterway:bottom2','sand'], // Sand
+     ['BMC2','15','waterway:bottom2','concrete'], // Concrete
+     ['BMC2','16','waterway:bottom2','masonry'], // Masonry
+     ['BMC2','17','waterway:bottom2','reinforced_concrete'], // Reinforced Concrete
+     ['BMC2','18','waterway:bottom2','soil'], // Soil
+     ['BMC2','999','waterway:bottom2','other'], // Other
+
+     // BMC3 - Bottom Material Type [3]
+     // ['BMC3','-999999',undefined,undefined], // No Information
+     ['BMC3','1','waterway:bottom3','clay_and_silt'], // Clay and Silt
+     ['BMC3','2','waterway:bottom3','silty_sands'], // Silty Sands
+     ['BMC3','3','waterway:bottom3','sand_and_gravel'], // Sand and Gravel
+     ['BMC3','4','waterway:bottom3','gravel_and_cobble'], // Gravel and Cobble
+     ['BMC3','5','waterway:bottom3','rocks_and_boulders'], // Rocks and Boulders
+     ['BMC3','6','waterway:bottom3','bedrock'], // Bedrock
+     ['BMC3','7','waterway:bottom3','paved'], // Paved
+     ['BMC3','8','waterway:bottom3','peat'], // Peat
+     ['BMC3','9','waterway:bottom3','sand_over_mud'], // Sand over Mud
+     ['BMC3','11','waterway:bottom3','coral'], // Coral
+     ['BMC3','14','waterway:bottom3','sand'], // Sand
+     ['BMC3','15','waterway:bottom3','concrete'], // Concrete
+     ['BMC3','16','waterway:bottom3','masonry'], // Masonry
+     ['BMC3','17','waterway:bottom3','reinforced_concrete'], // Reinforced Concrete
+     ['BMC3','18','waterway:bottom3','soil'], // Soil
+     ['BMC3','999','waterway:bottom3','other'], // Other
 
      // BOC - Bog Type
      // ['BOC','-999999',undefined,undefined], // No Information
@@ -703,61 +1484,62 @@ ggdm30.rules = {
      ['BOC','999','bog:type','other'], // Other
 
      // BOT - Bridge Opening Type
-     // ['BOT','-999999',undefined,undefined], // Null
-     ['BOT','4','bridge:movable','bascule'],
-     ['BOT','10','bridge:movable','swing'],
-     ['BOT','11','bridge:movable','lift'],
-     ['BOT','12','bridge:movable','retractable'],
-     ['BOT','14','bridge:movable','submersible'],
-     ['BOT','15','bridge:movable','drawbridge'],
-     ['BOT','16','bridge:movable','opening'],
-     ['BOT','17','bridge:movable','no'],
-     ['BOT','999','bridge:movable','other'],
+     // ['BOT','-999999',undefined,undefined], // No Information
+     ['BOT','4','bridge:movable','bascule'], // Bascule
+     ['BOT','10','bridge:movable','swing'], // Swing-bridge
+     ['BOT','11','bridge:movable','lift'], // Lift-bridge
+     ['BOT','12','bridge:movable','retractable'], // Retractable
+     ['BOT','14','bridge:movable','submersible'], // Submersible
+     ['BOT','15','bridge:movable','drawbridge'], // Drawbridge
+     ['BOT','16','bridge:movable','opening'], // Opening
+     ['BOT','17','bridge:movable','no'], // Fixed
+     ['BOT','999','bridge:movable','other'], // Other
 
-     // BPWHAC - Waterbody Bank 1 height interval closure
-     ['BPWHAC','2','waterway:bank1:height:closure','open_interval'],
-     ['BPWHAC','3','waterway:bank1:height:closure','greater_than_or_equal_to_less_than_interval'],
-     ['BPWHAC','4','waterway:bank1:height:closure','greater_than_to_less_than_or_equal_interval'],
-     ['BPWHAC','5','waterway:bank1:height:closure','closed_interval'],
-     ['BPWHAC','6','waterway:bank1:height:closure','greater_than_semi_interval'],
-     ['BPWHAC','7','waterway:bank1:height:closure','greater_than_or_equal_semi_interval'],
-     ['BPWHAC','8','waterway:bank1:height:closure','less_than_semi_interval'],
-     ['BPWHAC','9','waterway:bank1:height:closure','less_than_or_equal_semi_interval'],
+     // BPWHAC - Wtrbdy Bank : Predom Wtrbdy Bank Height (first bank) <interval closure>
+     ['BPWHAC','2','waterway:bank1:height:closure','open_interval'], // Open Interval
+     ['BPWHAC','3','waterway:bank1:height:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['BPWHAC','4','waterway:bank1:height:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['BPWHAC','5','waterway:bank1:height:closure','closed_interval'], // Closed Interval
+     ['BPWHAC','6','waterway:bank1:height:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['BPWHAC','7','waterway:bank1:height:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['BPWHAC','8','waterway:bank1:height:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['BPWHAC','9','waterway:bank1:height:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
-     // BPWHBC - Waterbody Bank 2 height interval closure
-     ['BPWHBC','2','waterway:bank2:height:closure','open_interval'],
-     ['BPWHBC','3','waterway:bank2:height:closure','greater_than_or_equal_to_less_than_interval'],
-     ['BPWHBC','4','waterway:bank2:height:closure','greater_than_to_less_than_or_equal_interval'],
-     ['BPWHBC','5','waterway:bank2:height:closure','closed_interval'],
-     ['BPWHBC','6','waterway:bank2:height:closure','greater_than_semi_interval'],
-     ['BPWHBC','7','waterway:bank2:height:closure','greater_than_or_equal_semi_interval'],
-     ['BPWHBC','8','waterway:bank2:height:closure','less_than_semi_interval'],
-     ['BPWHBC','9','waterway:bank2:height:closure','less_than_or_equal_semi_interval'],
+     // BPWHBC - Wtrbdy Bank : Predom Wtrbdy Bank Height (second bank) <interval closure>
+     ['BPWHBC','2','waterway:bank2:height:closure','open_interval'], // Open Interval
+     ['BPWHBC','3','waterway:bank2:height:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['BPWHBC','4','waterway:bank2:height:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['BPWHBC','5','waterway:bank2:height:closure','closed_interval'], // Closed Interval
+     ['BPWHBC','6','waterway:bank2:height:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['BPWHBC','7','waterway:bank2:height:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['BPWHBC','8','waterway:bank2:height:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['BPWHBC','9','waterway:bank2:height:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
-     // BPWSAC - Inland Waterbody Bank (1) : Predominant Waterbody Bank Slope (first bank) (interval closure)
+     // BPWSAC - Wtrbdy Bank : Predom Wtrbdy Bank Slope (first bank) <interval closure>
      ['BPWSAC','2','waterway:bank1:slope:closure','open_interval'], // Open Interval
-     ['BPWSAC','3','waterway:bank1:slope:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['BPWSAC','4','waterway:bank1:slope:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['BPWSAC','3','waterway:bank1:slope:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['BPWSAC','4','waterway:bank1:slope:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['BPWSAC','5','waterway:bank1:slope:closure','closed_interval'], // Closed Interval
      ['BPWSAC','6','waterway:bank1:slope:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['BPWSAC','7','waterway:bank1:slope:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
      ['BPWSAC','8','waterway:bank1:slope:closure','less-than_semi-interval'], // Less-than Semi-interval
      ['BPWSAC','9','waterway:bank1:slope:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
-     // BPWSBC - Waterbody Bank 2 Slope interval closure
-     ['BPWSBC','2','waterway:bank2:slope:closure','open_interval'],
-     ['BPWSBC','3','waterway:bank2:slope:closure','greater_than_or_equal_to_less_than_interval'],
-     ['BPWSBC','4','waterway:bank2:slope:closure','greater_than_to_less_than_or_equal_interval'],
-     ['BPWSBC','5','waterway:bank2:slope:closure','closed_interval'],
-     ['BPWSBC','6','waterway:bank2:slope:closure','greater_than_semi_interval'],
-     ['BPWSBC','7','waterway:bank2:slope:closure','greater_than_or_equal_semi_interval'],
-     ['BPWSBC','8','waterway:bank2:slope:closure','less_than_semi_interval'],
-     ['BPWSBC','9','waterway:bank2:slope:closure','less_than_or_equal_semi_interval'],
+     // BPWSBC - Wtrbdy Bank : Predom Wtrbdy Bank Slope (second bank) <interval closure>
+     ['BPWSBC','2','waterway:bank2:slope:closure','open_interval'], // Open Interval
+     ['BPWSBC','3','waterway:bank2:slope:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['BPWSBC','4','waterway:bank2:slope:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['BPWSBC','5','waterway:bank2:slope:closure','closed_interval'], // Closed Interval
+     ['BPWSBC','6','waterway:bank2:slope:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['BPWSBC','7','waterway:bank2:slope:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['BPWSBC','8','waterway:bank2:slope:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['BPWSBC','9','waterway:bank2:slope:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
      // BSC - Bridge Structure Type
      // ['BSC','-999999',undefined,undefined], // No Information
      ['BSC','1','bridge:structure','open_spandrel_arch'], // Open Spandrel Arch
      ['BSC','2','bridge:structure','cantilever'], // Cantilever
+     ['BSC','3','bridge:structure','deck'], // Deck
      ['BSC','5','bridge:structure','floating'], // Floating
      ['BSC','6','bridge:structure','girder'], // Girder
      ['BSC','7','bridge:structure','tower_suspension'], // Tower Suspension
@@ -766,19 +1548,66 @@ ggdm30.rules = {
      ['BSC','12','bridge:structure','transporter'], // Transporter
      ['BSC','15','bridge:structure','slab'], // Slab
      ['BSC','16','bridge:structure','stringer_beam'], // Stringer Beam
-     ['BSC','19','bridge:structure','bowstring'], // Bowstring-bridge
+     ['BSC','19','bridge:structure','bowstring-bridge'], // Bowstring-bridge
      ['BSC','22','bridge:structure','covered'], // Covered
      ['BSC','26','bridge:structure','closed_spandrel_arch'], // Closed Spandrel Arch
      ['BSC','27','bridge:structure','cable_stayed'], // Cable Stayed
-     ['BSC','30','bridge:structure','submersible'], // Submersible
+     ['BSC','28','bridge:structure','viaduct'], // Viaduct
      ['BSC','31','bridge:structure','arch'], // Arch
      ['BSC','32','bridge:structure','trestle'], // Trestle
-     ['BSC','999','bridge:structure','other'], // Trestle
+     ['BSC','999','bridge:structure','other'], // Other
+
+     // BSC2 - Bridge Structure Type [2]
+     // ['BSC2','-999999',undefined,undefined], // No Information
+     ['BSC2','1','bridge:structure2','open_spandrel_arch'], // Open Spandrel Arch
+     ['BSC2','2','bridge:structure2','cantilever'], // Cantilever
+     ['BSC2','5','bridge:structure2','floating'], // Floating
+     ['BSC2','6','bridge:structure2','girder'], // Girder
+     ['BSC2','7','bridge:structure2','tower_suspension'], // Tower Suspension
+     ['BSC2','8','bridge:structure2','truss'], // Truss
+     ['BSC2','9','bridge:structure2','suspension'], // Suspension
+     ['BSC2','12','bridge:structure2','transporter'], // Transporter
+     ['BSC2','15','bridge:structure2','slab'], // Slab
+     ['BSC2','16','bridge:structure2','stringer_beam'], // Stringer Beam
+     ['BSC2','19','bridge:structure2','bowstring-bridge'], // Bowstring-bridge
+     ['BSC2','22','bridge:structure2','covered'], // Covered
+     ['BSC2','26','bridge:structure2','closed_spandrel_arch'], // Closed Spandrel Arch
+     ['BSC2','27','bridge:structure2','cable_stayed'], // Cable Stayed
+     ['BSC2','31','bridge:structure2','arch'], // Arch
+     ['BSC2','32','bridge:structure2','trestle'], // Trestle
+     ['BSC2','999','bridge:structure2','other'], // Other
+
+     // BSC3 - Bridge Structure Type [3]
+     // ['BSC3','-999999',undefined,undefined], // No Information
+     ['BSC3','1','bridge:structure3','open_spandrel_arch'], // Open Spandrel Arch
+     ['BSC3','2','bridge:structure3','cantilever'], // Cantilever
+     ['BSC3','5','bridge:structure3','floating'], // Floating
+     ['BSC3','6','bridge:structure3','girder'], // Girder
+     ['BSC3','7','bridge:structure3','tower_suspension'], // Tower Suspension
+     ['BSC3','8','bridge:structure3','truss'], // Truss
+     ['BSC3','9','bridge:structure3','suspension'], // Suspension
+     ['BSC3','12','bridge:structure3','transporter'], // Transporter
+     ['BSC3','15','bridge:structure3','slab'], // Slab
+     ['BSC3','16','bridge:structure3','stringer_beam'], // Stringer Beam
+     ['BSC3','19','bridge:structure3','bowstring-bridge'], // Bowstring-bridge
+     ['BSC3','22','bridge:structure3','covered'], // Covered
+     ['BSC3','26','bridge:structure3','closed_spandrel_arch'], // Closed Spandrel Arch
+     ['BSC3','27','bridge:structure3','cable_stayed'], // Cable Stayed
+     ['BSC3','31','bridge:structure3','arch'], // Arch
+     ['BSC3','32','bridge:structure3','trestle'], // Trestle
+     ['BSC3','999','bridge:structure3','other'], // Other
 
      // BSM - Mobile Bridge Span
      // ['BSM','-999999',undefined,undefined], // No Information
      ['BSM','1000','bridge:mobile_span','no'],
      ['BSM','1001','bridge:mobile_span','yes'],
+
+     // BST - Boundary Status
+     // ['BST','-999999',undefined,undefined], // No Information
+     ['BST','1','raw:BST','definite'], // Definite
+     ['BST','2','raw:BST','indefinite'], // Indefinite
+     ['BST','3','raw:BST','in_dispute'], // In Dispute
+     ['BST','4','raw:BST','no_defined_boundary'], // No Defined Boundary
 
      // BSU - Building Superstructure Type
      // ['BSU','-999999',undefined,undefined], // No Information
@@ -793,59 +1622,164 @@ ggdm30.rules = {
      ['BSU','9','building:superstructure:type','roof_garden'], // Roof Garden
      ['BSU','10','building:superstructure:type','signage'], // Signage
      ['BSU','11','building:superstructure:type','skylight'], // Skylight
-     ['BSU','12','building:superstructure:type','clerestory'], // Clerestory
      ['BSU','13','building:superstructure:type','tower'], // Tower
      ['BSU','14','building:superstructure:type','cupola'], // Cupola
      ['BSU','15','building:superstructure:type','steeple'], // Steeple
      ['BSU','16','building:superstructure:type','turret'], // Turret
      ['BSU','17','building:superstructure:type','dome'], // Dome
+     ['BSU','18','building:superstructure:type','solar_panels'], // Solar Panels
      ['BSU','999','building:superstructure:type','other'], // Other
 
-     // BWVCAC - Inland Waterbody Bank (1) : Waterbody Bank Vegetation Cover (first bank) (interval closure)
+     // BUS - Buoy Shape
+     // ['BUS','-999999',undefined,undefined], // No Information
+     ['BUS','1','raw:BUS','conical'], // Conical
+     ['BUS','2','raw:BUS','can'], // Can
+     ['BUS','3','raw:BUS','spherical'], // Spherical
+     ['BUS','4','raw:BUS','pillar'], // Pillar
+     ['BUS','5','raw:BUS','spar'], // Spar
+     ['BUS','6','raw:BUS','barrel'], // Barrel
+     ['BUS','7','raw:BUS','super-buoy'], // Super-buoy
+     ['BUS','8','raw:BUS','ice_buoy'], // Ice Buoy
+     ['BUS','9','raw:BUS','diamond'], // Diamond
+     ['BUS','999','raw:BUS','other'], // Other
+
+     // BUT - Buoy Type
+     // ['BUT','-999999',undefined,undefined], // No Information
+     ['BUT','3','raw:BUT','isolated_danger'], // Isolated Danger
+     ['BUT','4','raw:BUT','large_automatic_navigation_buoy'], // Large Automatic Navigation Buoy
+     ['BUT','6','raw:BUT','light_float'], // Light Float
+     ['BUT','7','raw:BUT','mooring'], // Mooring
+     ['BUT','10','raw:BUT','ocean_data_acquisition_system_(odas)_buoy'], // Ocean Data Acquisition System (ODAS) Buoy
+     ['BUT','11','raw:BUT','landfall'], // Landfall
+     ['BUT','15','raw:BUT','special'], // Special
+     ['BUT','18','raw:BUT','safe_water'], // Safe Water
+     ['BUT','19','raw:BUT','anchorage'], // Anchorage
+     ['BUT','20','raw:BUT','fairway'], // Fairway
+     ['BUT','21','raw:BUT','mid-channel'], // Mid-Channel
+     ['BUT','22','raw:BUT','bifurcation'], // Bifurcation
+     ['BUT','23','raw:BUT','junction'], // Junction
+     ['BUT','24','raw:BUT','wreck'], // Wreck
+     ['BUT','25','raw:BUT','obstruction'], // Obstruction
+     ['BUT','26','raw:BUT','telegraph_cable'], // Telegraph Cable
+     ['BUT','27','raw:BUT','warping'], // Warping
+     ['BUT','28','raw:BUT','quarantine'], // Quarantine
+     ['BUT','29','raw:BUT','exercise_area'], // Exercise Area
+     ['BUT','30','raw:BUT','explosive_anchorage'], // Explosive Anchorage
+     ['BUT','31','raw:BUT','aeronautical_anchorage'], // Aeronautical Anchorage
+     ['BUT','32','raw:BUT','compass_adjustment'], // Compass Adjustment
+     ['BUT','33','raw:BUT','fish_trap'], // Fish Trap
+     ['BUT','34','raw:BUT','spoil_ground'], // Spoil Ground
+     ['BUT','35','raw:BUT','articulated_light'], // Articulated Light
+     ['BUT','39','raw:BUT','trot'], // Trot
+     ['BUT','81','raw:BUT','diving'], // Diving
+     ['BUT','82','raw:BUT','notice'], // Notice
+     ['BUT','84','raw:BUT','apex_float'], // APEX Float
+     ['BUT','85','raw:BUT','general_warning'], // General Warning
+     ['BUT','86','raw:BUT','private'], // Private
+     ['BUT','87','raw:BUT','swim'], // Swim
+     ['BUT','88','raw:BUT','control'], // Control
+     ['BUT','89','raw:BUT','entry_prohibited'], // Entry Prohibited
+     ['BUT','91','raw:BUT','preferred_channel_to_port'], // Preferred Channel to Port
+     ['BUT','92','raw:BUT','preferred_channel_to_starboard'], // Preferred Channel to Starboard
+     ['BUT','93','raw:BUT','starboard-hand_edge'], // Starboard-hand Edge
+     ['BUT','94','raw:BUT','port-hand_edge'], // Port-hand Edge
+     ['BUT','95','raw:BUT','west_cardinal'], // West Cardinal
+     ['BUT','96','raw:BUT','south_cardinal'], // South Cardinal
+     ['BUT','97','raw:BUT','east_cardinal'], // East Cardinal
+     ['BUT','98','raw:BUT','north_cardinal'], // North Cardinal
+     ['BUT','99','raw:BUT','installation'], // Installation
+     ['BUT','100','raw:BUT','accelerometer'], // Accelerometer
+     ['BUT','101','raw:BUT','wavemeter'], // Wavemeter
+     ['BUT','102','raw:BUT','navigation,_communication_and_control_buoy_(nccb)'], // Navigation, communication and control buoy (NCCB)
+     ['BUT','103','raw:BUT','ice_buoy'], // Ice Buoy
+     ['BUT','104','raw:BUT','firing_danger_area'], // Firing Danger Area
+     ['BUT','105','raw:BUT','target'], // Target
+     ['BUT','106','raw:BUT','marker_ship'], // Marker Ship
+     ['BUT','107','raw:BUT','degaussing_range'], // Degaussing Range
+     ['BUT','108','raw:BUT','barge'], // Barge
+     ['BUT','109','raw:BUT','cable'], // Cable
+     ['BUT','110','raw:BUT','outfall'], // Outfall
+     ['BUT','111','raw:BUT','recording'], // Recording
+     ['BUT','112','raw:BUT','recreation_zone'], // Recreation Zone
+     ['BUT','113','raw:BUT','leading_line'], // Leading Line
+     ['BUT','114','raw:BUT','measured_distance'], // Measured Distance
+     ['BUT','115','raw:BUT','tss'], // TSS
+     ['BUT','116','raw:BUT','anchoring_prohibited'], // Anchoring Prohibited
+     ['BUT','117','raw:BUT','berthing_prohibited'], // Berthing Prohibited
+     ['BUT','118','raw:BUT','overtaking_prohibited'], // Overtaking Prohibited
+     ['BUT','119','raw:BUT','two-way_traffic_prohibited'], // Two-Way Traffic Prohibited
+     ['BUT','120','raw:BUT','reduced_wake'], // Reduced Wake
+     ['BUT','121','raw:BUT','speed_limit'], // Speed Limit
+     ['BUT','122','raw:BUT','stop'], // Stop
+     ['BUT','123','raw:BUT','sound_ship"s_siren'], // Sound Ship"s Siren
+     ['BUT','124','raw:BUT','restricted_vertical_clearance'], // Restricted Vertical Clearance
+     ['BUT','125','raw:BUT','maximum_vessel"s_draft'], // Maximum Vessel"s Draft
+     ['BUT','126','raw:BUT','restricted_horizontal_clearance'], // Restricted Horizontal Clearance
+     ['BUT','127','raw:BUT','strong_current_warning'], // Strong Current Warning
+     ['BUT','128','raw:BUT','berthing_permitted'], // Berthing Permitted
+     ['BUT','129','raw:BUT','overhead_power_cable'], // Overhead Power Cable
+     ['BUT','130','raw:BUT','channel_edge_gradient'], // Channel Edge Gradient
+     ['BUT','131','raw:BUT','telephone'], // Telephone
+     ['BUT','132','raw:BUT','ferry_crossing'], // Ferry Crossing
+     ['BUT','133','raw:BUT','pipeline'], // Pipeline
+     ['BUT','134','raw:BUT','clearing_line'], // Clearing Line
+     ['BUT','135','raw:BUT','refuge'], // Refuge
+     ['BUT','136','raw:BUT','foul_ground'], // Foul Ground
+     ['BUT','137','raw:BUT','yachting'], // Yachting
+     ['BUT','138','raw:BUT','heliport'], // Heliport
+     ['BUT','139','raw:BUT','gps_mark'], // GPS Mark
+     ['BUT','140','raw:BUT','work_in_progress'], // Work In Progress
+     ['BUT','141','raw:BUT','artificial_reef'], // Artificial Reef
+     ['BUT','142','raw:BUT','marine_farm'], // Marine Farm
+     ['BUT','143','raw:BUT','seaplane_landing'], // Seaplane Landing
+     ['BUT','144','raw:BUT','wellhead'], // Wellhead
+     ['BUT','145','raw:BUT','water_column_sensor'], // Water Column Sensor
+     ['BUT','149','raw:BUT','emergency_wreck'], // Emergency Wreck
+     ['BUT','150','raw:BUT','mark_of_unknown_intent'], // Mark of Unknown Intent
+     ['BUT','999','raw:BUT','other'], // Other
+
+     // BWVCAC - Wtrbdy Bank : Wtrbdy Bank Veg Cover (first bank) <interval closure>
      ['BWVCAC','2','waterway:bank1:cover:closure','open_interval'], // Open Interval
-     ['BWVCAC','3','waterway:bank1:cover:closure','greater_than_or_equal_to_less_than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['BWVCAC','4','waterway:bank1:cover:closure','greater_than_to_less_than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['BWVCAC','3','waterway:bank1:cover:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['BWVCAC','4','waterway:bank1:cover:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['BWVCAC','5','waterway:bank1:cover:closure','closed_interval'], // Closed Interval
-     ['BWVCAC','6','waterway:bank1:cover:closure','greater_than_semi_interval'], // Greater-than Semi-interval
-     ['BWVCAC','7','waterway:bank1:cover:closure','greater_than_or_equal_semi_interval'], // Greater-than or Equal Semi-interval
-     ['BWVCAC','8','waterway:bank1:cover:closure','less_than_semi_interval'], // Less-than Semi-interval
-     ['BWVCAC','9','waterway:bank1:cover:closure','less_than_or_equal_semi_interval'], // Less-than or Equal Semi-interval
+     ['BWVCAC','6','waterway:bank1:cover:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['BWVCAC','7','waterway:bank1:cover:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['BWVCAC','8','waterway:bank1:cover:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['BWVCAC','9','waterway:bank1:cover:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
-     // BWVCBC - Inland Waterbody Bank (2) : Waterbody Bank Vegetation Cover (second bank) (interval closure)
+     // BWVCBC - Wtrbdy Bank : Wtrbdy Bank Veg Cover (second bank) <interval closure>
      ['BWVCBC','2','waterway:bank2:cover:closure','open_interval'], // Open Interval
-     ['BWVCBC','3','waterway:bank2:cover:closure','greater_than_or_equal_to_less_than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['BWVCBC','4','waterway:bank2:cover:closure','greater_than_to_less_than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['BWVCBC','3','waterway:bank2:cover:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['BWVCBC','4','waterway:bank2:cover:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['BWVCBC','5','waterway:bank2:cover:closure','closed_interval'], // Closed Interval
-     ['BWVCBC','6','waterway:bank2:cover:closure','greater_than_semi_interval'], // Greater-than Semi-interval
-     ['BWVCBC','7','waterway:bank2:cover:closure','greater_than_or_equal_semi_interval'], // Greater-than or Equal Semi-interval
-     ['BWVCBC','8','waterway:bank2:cover:closure','less_than_semi_interval'], // Less-than Semi-interval
-     ['BWVCBC','9','waterway:bank2:cover:closure','less_than_or_equal_semi_interval'], // Less-than or Equal Semi-interval
+     ['BWVCBC','6','waterway:bank2:cover:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['BWVCBC','7','waterway:bank2:cover:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['BWVCBC','8','waterway:bank2:cover:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['BWVCBC','9','waterway:bank2:cover:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
-     // CAA - Controlling Authority - This does not play nicely in OSM
+     // CAA - Controlling Authority
      // ['CAA','-999999',undefined,undefined], // No Information
-     // ['CAA','0','controlling_authority','unknown'],
-     // ['CAA','1','controlling_authority','national'],
-     // ['CAA','2','controlling_authority','state'],
+     ['CAA','1','controlling_authority','national'], // National
+     ['CAA','2','controlling_authority','state'], // State
      ['CAA','3','controlling_authority','private'], // Private
      ['CAA','4','controlling_authority','tribal'], // Tribal
      ['CAA','5','controlling_authority','military'], // Military
      ['CAA','6','controlling_authority','municipal'], // Municipal
-     ['CAA','7','controlling_authority','joint_military_civilian'], // Joint Military and Civilian
-     // ['CAA','8','controlling_authority','international'],
-     // ['CAA','11','controlling_authority','province'], // From NFDD
-     // ['CAA','13','controlling_authority','regional'], // From NFDD
+     ['CAA','7','controlling_authority','joint_military_and_civilian'], // Joint Military and Civilian
+     ['CAA','8','controlling_authority','international'], // International
+     ['CAA','11','controlling_authority','province'], // Province
+     ['CAA','13','controlling_authority','regional'], // Regional
      ['CAA','16','controlling_authority','civilian'], // Civilian
      ['CAA','17','controlling_authority','public'], // Public
-     // ['CAA','998',undefined,undefined],
      ['CAA','999','controlling_authority','other'], // Other
 
      // CAB - Cable Type
      // ['CAB','-999999',undefined,undefined], // No Information
-     // ['CAB','2','power','line'], // Power Distribution Line
-     ['CAB','2','cable:type','power'], // Power Line
+     ['CAB','2','cable:type','power'], // Power Distribution Line
      ['CAB','3','cable:type','telephone'], // Telephone
      ['CAB','4','cable:type','telegraph'], // Telegraph
-     ['CAB','6','cable:type','transmission'], // Transmission Line
+     ['CAB','6','cable:type','transmission'], // Power Transmission Line
      ['CAB','7','cable:type','digital_communication'], // Digital Communication Line
      ['CAB','8','cable:type','communication'], // Communication Line
      ['CAB','9','cable:type','fibre-optic'], // Fibre-optic
@@ -857,6 +1791,42 @@ ggdm30.rules = {
      ['CAB','15','cable:type','towing'], // Towing
      ['CAB','19','cable:type','cableway'], // Cableway
      ['CAB','999','cable:type','other'], // Other
+
+     // CAB2 - Cable Type [2]
+     // ['CAB2','-999999',undefined,undefined], // No Information
+     ['CAB2','2','cable:type2','power'], // Power Distribution Line
+     ['CAB2','3','cable:type2','telephone'], // Telephone
+     ['CAB2','4','cable:type2','telegraph'], // Telegraph
+     ['CAB2','6','cable:type2','transmission'], // Power Transmission Line
+     ['CAB2','7','cable:type2','digital_communication'], // Digital Communication Line
+     ['CAB2','8','cable:type2','communication_line'], // Communication Line
+     ['CAB2','9','cable:type2','fibre-optic'], // Fibre-optic
+     ['CAB2','10','cable:type2','tethering'], // Tethering
+     ['CAB2','11','cable:type2','load_bearing'], // Load Bearing
+     ['CAB2','12','cable:type2','guide'], // Guide
+     ['CAB2','13','cable:type2','barrier'], // Barrier
+     ['CAB2','14','cable:type2','restraining'], // Restraining
+     ['CAB2','15','cable:type2','towing'], // Towing
+     ['CAB2','19','cable:type2','cableway'], // Cableway
+     ['CAB2','999','cable:type2','other'], // Other
+
+     // CAB3 - Cable Type [3]
+     // ['CAB3','-999999',undefined,undefined], // No Information
+     ['CAB3','2','cable:type3','power'], // Power Distribution Line
+     ['CAB3','3','cable:type3','telephone'], // Telephone
+     ['CAB3','4','cable:type3','telegraph'], // Telegraph
+     ['CAB3','6','cable:type3','transmission'], // Power Transmission Line
+     ['CAB3','7','cable:type3','digital_communication'], // Digital Communication Line
+     ['CAB3','8','cable:type3','communication_line'], // Communication Line
+     ['CAB3','9','cable:type3','fibre-optic'], // Fibre-optic
+     ['CAB3','10','cable:type3','tethering'], // Tethering
+     ['CAB3','11','cable:type3','load_bearing'], // Load Bearing
+     ['CAB3','12','cable:type3','guide'], // Guide
+     ['CAB3','13','cable:type3','barrier'], // Barrier
+     ['CAB3','14','cable:type3','restraining'], // Restraining
+     ['CAB3','15','cable:type3','towing'], // Towing
+     ['CAB3','19','cable:type3','cableway'], // Cableway
+     ['CAB3','999','cable:type3','other'], // Other
 
      // CAM - Conservation Area Management Category
      // ['CAM','-999999',undefined,undefined], // No Information
@@ -905,7 +1875,7 @@ ggdm30.rules = {
      ['CCT','4','cover:type','complete'], // Complete
 
      // CDA - Covered Drain
-     // ['CDA','-999999',undefined,undefined],
+     // ['CDA','-999999',undefined,undefined], // No Information
      ['CDA','1000','covered','no'],
      ['CDA','1001','covered','yes'],
 
@@ -935,21 +1905,93 @@ ggdm30.rules = {
      ['CET','4','grading:type','no_sides'], // No Sides
      ['CET','999','grading:type','other'], // Other
 
+     // CFT - Boundary Determination Method
+     // ['CFT','-999999',undefined,undefined], // No Information
+     ['CFT','3','raw:CFT','cadastral'], // Cadastral
+     ['CFT','6','raw:CFT','economic'], // Economic
+     ['CFT','12','raw:CFT','left_bank'], // Left Bank
+     ['CFT','13','raw:CFT','right_bank'], // Right Bank
+     ['CFT','14','raw:CFT','shoreline'], // Shoreline
+     ['CFT','16','raw:CFT','meridian'], // Meridian
+     ['CFT','17','raw:CFT','median'], // Median
+     ['CFT','18','raw:CFT','parallel'], // Parallel
+     ['CFT','19','raw:CFT','straight_segmented'], // Straight Segmented
+     ['CFT','20','raw:CFT','straight'], // Straight
+     ['CFT','21','raw:CFT','geodesic'], // Geodesic
+     ['CFT','22','raw:CFT','great_circle'], // Great Circle
+     ['CFT','23','raw:CFT','arc'], // Arc
+     ['CFT','24','raw:CFT','normal_baseline'], // Normal Baseline
+     ['CFT','25','raw:CFT','straight_baseline'], // Straight Baseline
+     ['CFT','27','raw:CFT','normal_continental_shelf'], // Normal Continental Shelf
+     ['CFT','28','raw:CFT','extended_continental_shelf'], // Extended Continental Shelf
+     ['CFT','29','raw:CFT','main_channel'], // Main Channel
+     ['CFT','30','raw:CFT','archipelagic_baseline'], // Archipelagic Baseline
+     ['CFT','999','raw:CFT','other'], // Other
+
+     // CHA - Navigation Light Characteristic
+     // ['CHA','-999999',undefined,undefined], // No Information
+     ['CHA','1','raw:CHA','alternating'], // Alternating
+     ['CHA','4','raw:CHA','ultra_quick-flashing'], // Ultra Quick-flashing
+     ['CHA','5','raw:CHA','fixed'], // Fixed
+     ['CHA','6','raw:CHA','fixed_and_flashing'], // Fixed and Flashing
+     ['CHA','8','raw:CHA','flashing'], // Flashing
+     ['CHA','11','raw:CHA','interrupted_quick-flashing'], // Interrupted Quick-flashing
+     ['CHA','12','raw:CHA','interrupted_ultra_quick-flashing'], // Interrupted Ultra Quick-flashing
+     ['CHA','13','raw:CHA','interrupted_very_quick-flashing'], // Interrupted Very Quick-flashing
+     ['CHA','14','raw:CHA','isophase'], // Isophase
+     ['CHA','15','raw:CHA','long-flashing'], // Long-flashing
+     ['CHA','16','raw:CHA','morse_code'], // Morse Code
+     ['CHA','17','raw:CHA','occulting'], // Occulting
+     ['CHA','28','raw:CHA','group_quick-flashing'], // Group Quick-flashing
+     ['CHA','29','raw:CHA','group_very_quick-flashing'], // Group Very Quick-flashing
+     ['CHA','44','raw:CHA','quick-flashing'], // Quick-flashing
+     ['CHA','45','raw:CHA','very_quick-flashing'], // Very Quick-flashing
+     ['CHA','46','raw:CHA','flashing_with_long-flash'], // Flashing with Long-flash
+     ['CHA','47','raw:CHA','occulting_flashing'], // Occulting Flashing
+     ['CHA','48','raw:CHA','fixed_long-flashing'], // Fixed Long-flashing
+     ['CHA','49','raw:CHA','occulting_alternating'], // Occulting Alternating
+     ['CHA','50','raw:CHA','long-flashing_alternating'], // Long-flashing Alternating
+     ['CHA','51','raw:CHA','flashing_alternating'], // Flashing Alternating
+     ['CHA','57','raw:CHA','quick-flashing_with_long-flash'], // Quick-flashing with Long-flash
+     ['CHA','58','raw:CHA','very_quick-flashing_with_long-flash'], // Very Quick-flashing with Long-flash
+     ['CHA','59','raw:CHA','ultra_quick-flashing_with_long-flash'], // Ultra Quick-flashing with Long-flash
+     ['CHA','60','raw:CHA','fixed_with_alternating_flashing'], // Fixed with Alternating Flashing
+
+     // CIW - Closed in Winter
+     // ['CIW','-999999',undefined,undefined], // No Information
+     ['CIW','1000','raw:CIW','no'],
+     ['CIW','1001','raw:CIW','yes'],
+
+     // CMS - Commissioned Status
+     // ['CMS','-999999',undefined,undefined], // No Information
+     ['CMS','1','raw:CMS','commissioned_and_operational'], // Commissioned and Operational
+     ['CMS','2','raw:CMS','commissioned_and_on_test'], // Commissioned and on Test
+     ['CMS','3','raw:CMS','commissioned_but_out_of_service'], // Commissioned but Out of Service
+     ['CMS','4','raw:CMS','operational_but_not_commissioned'], // Operational but Not Commissioned
+     ['CMS','5','raw:CMS','on_test_but_not_commissioned'], // On Test but Not Commissioned
+     ['CMS','6','raw:CMS','not_commissioned_and_out_of_service'], // Not Commissioned and Out of Service
+
      // CNF - Confined
      // ['CNF','-999999',undefined,undefined], // No Information
      ['CNF','1000','aquifer:confined','no'],
      ['CNF','1001','aquifer:confined','yes'],
 
-     // COD - Delineation Known
-     ['COD','1000','deliniation','unknown'], // Limits and Information Unknown
-     ['COD','1001','deliniation','known'], // Limits and Information Known
+     // COA - Conspicuous Air Category
+     // ['COA','-999999',undefined,undefined], // No Information
+     ['COA','2','raw:COA','visual'], // Visual
+     ['COA','4','raw:COA','not_conspicuous'], // Not Conspicuous
 
-     //COE - Certainty of Existence - Really???
-     // ['COE','-999999',undefined,undefined], // No Information
-     ['COE','1',undefined,undefined], // Definite - Default?
-     ['COE','2','existence','doubtful'], // Doubtful
-     ['COE','3','existence','reported'], // Reported
-     ['COE','6','existence','probable'], // Probable
+     // COC - Conspicuous Sea Category
+     // ['COC','-999999',undefined,undefined], // No Information
+     ['COC','1','raw:COC','visual_and_radar'], // Visual and Radar
+     ['COC','2','raw:COC','visual'], // Visual
+     ['COC','3','raw:COC','radar'], // Radar
+     ['COC','4','raw:COC','not_conspicuous'], // Not Conspicuous
+
+     // COG - Conspicuous Ground Category
+     // ['COG','-999999',undefined,undefined], // No Information
+     ['COG','2','raw:COG','visual'], // Visual
+     ['COG','4','raw:COG','not_conspicuous'], // Not Conspicuous
 
      // CON - Route Width Constriction Type
      // ['CON','-999999',undefined,undefined], // No Information
@@ -999,33 +2041,56 @@ ggdm30.rules = {
 
      // COS - Facility Operational Status
      // ['COS','-999999',undefined,undefined], // No Information
-     ['COS','4','operational_status','non_operational'], // Non-operational
+     ['COS','1','operational_status','continuous'], // Continuous
+     ['COS','2','operational_status','intermittent'], // Intermittent
+     ['COS','3','operational_status','scheduled'], // Scheduled
+     ['COS','4','operational_status','non-operational'], // Non-operational
      ['COS','6','operational_status','planned'], // Planned
-     ['COS','8','operational_status','not_in_operation'], // Not in Operation ???
-     ['COS','9','operational_status','temp_non_operational'], // Temporarily Non-operational
+     ['COS','8','operational_status','not_in_operation'], // Not in Operation
+     ['COS','9','operational_status','temporarily_non-operational'], // Temporarily Non-operational
      ['COS','13','operational_status','operational'], // Operational
      ['COS','14','operational_status','partial'], // Partially Operational
 
-     // CPS - Cell Partition Scheme
-     // ['CPS','noInformation',undefined,undefined], // No Information
-     ['CPS','fixed0r25','source:cell_partition_scheme','0.25_arc_degree'], // A global geodetic grid consisting of 15 by 15 arc minute cells over land.
-     ['CPS','fixed0r5','source:cell_partition_scheme','0.5_arc_degree'], // A global geodetic grid consisting of 30 by 30 arc minute cells over land.
-     ['CPS','fixed1r0','source:cell_partition_scheme','1_arc_degree'], // A global geodetic grid consisting of 1 by 1 arc degree cells.
-     ['CPS','fixed5r0','source:cell_partition_scheme','5_arc_degree'], // A global geodetic grid consisting of 5 by 5 arc degree cells.
-     ['CPS','variable','source:cell_partition_scheme','variable'], // A geodetic grid consisting of variable-sized cells situated so as to cover the extent of a region of interest.
-     ['CPS','other','source:cell_partition_scheme','other'], // Other
+     // CPA - Survey Control Point Type
+     // ['CPA','-999999',undefined,undefined], // No Information
+     ['CPA','1','raw:CPA','benchmark'], // Benchmark
+     ['CPA','2','raw:CPA','horizontal_position'], // Horizontal Position
+     ['CPA','3','raw:CPA','horizontal_position_and_benchmark'], // Horizontal Position and Benchmark
+     ['CPA','5','raw:CPA','vertical_position'], // Vertical Position
 
+     // CPS - Cell Partition Scheme
+     // ['CPS','-999999',undefined,undefined], // No Information
+     ['CPS','1','source:cell_partition_scheme','5_arc_degree'], // Fixed Cells, 5 Arc Degree
+     ['CPS','2','source:cell_partition_scheme','1_arc_degree'], // Fixed Cells, 1 Arc Degree
+     ['CPS','3','source:cell_partition_scheme','0.5_arc_degree'], // Fixed Cells, 0.5 Arc Degree
+     ['CPS','4','source:cell_partition_scheme','0.25_arc_degree'], // Fixed Cells, 0.25 Arc Degree
+     ['CPS','5','source:cell_partition_scheme','variable'], // Variable Cells
+     ['CPS','998','source:cell_partition_scheme','not_applicable'], // Not Applicable
+     ['CPS','999','source:cell_partition_scheme','other'], // Other
+
+     // CPT - Colour Pattern
+     // ['CPT','-999999',undefined,undefined], // No Information
+     ['CPT','1','raw:CPT','horizontal_stripes'], // Horizontal Stripes
+     ['CPT','2','raw:CPT','vertical_stripes'], // Vertical Stripes
+     ['CPT','3','raw:CPT','diagonal_stripes'], // Diagonal Stripes
+     ['CPT','4','raw:CPT','squared'], // Squared
+     ['CPT','5','raw:CPT','stripes'], // Stripes
+     ['CPT','6','raw:CPT','border_stripe'], // Border Stripe
+     ['CPT','7','raw:CPT','single_colour'], // Single Colour
 
      // CRA - Crane Type
      // ['CRA','-999999',undefined,undefined], // No Information
      ['CRA','2','crane:type','bridge'], // Bridge Crane
      ['CRA','3','crane:type','rotating'], // Rotating Crane
      ['CRA','7','crane:type','tower'], // Tower Crane
+     ['CRA','8','crane:type','shear-legs'], // Shear-Legs
+     ['CRA','9','crane:type','a-frame'], // A-frame Crane
+     ['CRA','10','crane:type','goliath'], // Goliath Crane
      ['CRA','99','crane:type','container'], // Container Crane
      ['CRA','999','crane:type','other'], // Other
 
-     // ['CRM','-999999',undefined,undefined], // No Information
      // CRM - Crane Mobility Type
+     // ['CRM','-999999',undefined,undefined], // No Information
      ['CRM','1','crane:mobile','fixed'], // Fixed
      ['CRM','2','crane:mobile','travelling'], // Travelling
      ['CRM','3','crane:mobile','floating'], // Floating
@@ -1042,6 +2107,26 @@ ggdm30.rules = {
      ['CSC','7','intersection_control','priority_sign'], // Priority Sign
      ['CSC','999','crossing','other'], // Other
 
+     // CSC2 - Intersection Control Type [2]
+     // ['CSC2','-999999',undefined,undefined], // No Information
+     ['CSC2','2','raw:CSC2','signal_device'], // Signal Device
+     ['CSC2','3','raw:CSC2','stop_sign'], // Stop Sign
+     ['CSC2','4','raw:CSC2','no_control'], // No Control
+     ['CSC2','5','raw:CSC2','ground_marking'], // Ground Marking
+     ['CSC2','6','raw:CSC2','yield_sign'], // Yield Sign
+     ['CSC2','7','raw:CSC2','priority_sign'], // Priority Sign
+     ['CSC2','999','raw:CSC2','other'], // Other
+
+     // CSC3 - Intersection Control Type [3]
+     // ['CSC3','-999999',undefined,undefined], // No Information
+     ['CSC3','2','raw:CSC3','signal_device'], // Signal Device
+     ['CSC3','3','raw:CSC3','stop_sign'], // Stop Sign
+     ['CSC3','4','raw:CSC3','no_control'], // No Control
+     ['CSC3','5','raw:CSC3','ground_marking'], // Ground Marking
+     ['CSC3','6','raw:CSC3','yield_sign'], // Yield Sign
+     ['CSC3','7','raw:CSC3','priority_sign'], // Priority Sign
+     ['CSC3','999','raw:CSC3','other'], // Other
+
      // CSO - Contaminant Source
      // ['CSO','-999999',undefined,undefined], // No Information
      ['CSO','1','contaminant_source','dredging'], // Dredging
@@ -1054,10 +2139,18 @@ ggdm30.rules = {
      ['CSO','8','contaminant_source','wrecks'], // Wrecks
      ['CSO','999','contaminant_source','other'], // Other
 
+     // CSS - Cross-sectional Shape
+     // ['CSS','-999999',undefined,undefined], // No Information
+     ['CSS','1','raw:CSS','irregular'], // Irregular
+     ['CSS','4','raw:CSS','circular'], // Circular
+     ['CSS','5','raw:CSS','square'], // Square
+     ['CSS','6','raw:CSS','triangular'], // Triangular
+     ['CSS','999','raw:CSS','other'], // Other
+
      // CST - Contained within Service Tunnel
      // ['CST','-999999',undefined,undefined], // No Information
-     ['CST','1000','service_tunnel','no'],
-     ['CST','1001','service_tunnel','yes'],
+     ['CST','1000','raw:CST','no'],
+     ['CST','1001','raw:CST','yes'],
 
      // CTC - Culvert Type
      // ['CTC','-999999',undefined,undefined], // No Information
@@ -1065,6 +2158,28 @@ ggdm30.rules = {
      ['CTC','2','culvert:type','box_with_soil'], // Box with Soil
      ['CTC','3','culvert:type','box_with_load'], // Box with Load
      ['CTC','999','culvert:type','other'], // Other
+
+     // CUL - Cultural Context Type
+     // ['CUL','-999999',undefined,undefined], // No Information
+     ['CUL','1','raw:CUL','national_identity'], // National Identity
+     ['CUL','2','raw:CUL','ethnic_group'], // Ethnic Group
+     ['CUL','3','raw:CUL','tribe'], // Tribe
+     ['CUL','4','raw:CUL','clan'], // Clan
+     ['CUL','5','raw:CUL','language'], // Language
+     ['CUL','6','raw:CUL','religion'], // Religion
+     ['CUL','999','raw:CUL','other'], // Other
+
+     // CUR - Current Type Category
+     // ['CUR','-999999',undefined,undefined], // No Information
+     ['CUR','1','raw:CUR','ebb_stream'], // Ebb Stream
+     ['CUR','2','raw:CUR','flood_stream'], // Flood Stream
+     ['CUR','4','raw:CUR','river_flow'], // River Flow
+     ['CUR','5','raw:CUR','ocean_current'], // Ocean Current
+     ['CUR','6','raw:CUR','rip'], // Rip
+     ['CUR','7','raw:CUR','longshore'], // Longshore
+     ['CUR','8','raw:CUR','underwater_river_flow'], // Underwater River Flow
+     ['CUR','9','raw:CUR','tidal_flow'], // Tidal Flow
+     ['CUR','999','raw:CUR','other'], // Other
 
      // CVT - Conveyor Type
      // ['CVT','-999999',undefined,undefined], // No Information
@@ -1077,8 +2192,30 @@ ggdm30.rules = {
      ['CVT','7','conveyor:type','flight'], // Flight
      ['CVT','999','conveyor:type','other'], // Other
 
-     // CWT - Contained Within Tunnel
-     // ['CWT','-999999',undefined,undefined],
+     // CVT2 - Conveyor Type [2]
+     // ['CVT2','-999999',undefined,undefined], // No Information
+     ['CVT','1','conveyor:type2','not_visible'], // Not Visible
+     ['CVT','2','conveyor:type2','belt'], // Belt
+     ['CVT','3','conveyor:type2','rollers'], // Rollers
+     ['CVT','4','conveyor:type2','bucket'], // Bucket
+     ['CVT','5','conveyor:type2','screw_auger'], // Screw Auger
+     ['CVT','6','conveyor:type2','apron'], // Apron
+     ['CVT','7','conveyor:type2','flight'], // Flight
+     ['CVT','999','conveyor:type2','other'], // Other
+
+     // CVT3 - Conveyor Type [3]
+     // ['CVT3','-999999',undefined,undefined], // No Information
+     ['CVT','1','conveyor:type3','not_visible'], // Not Visible
+     ['CVT','2','conveyor:type3','belt'], // Belt
+     ['CVT','3','conveyor:type3','rollers'], // Rollers
+     ['CVT','4','conveyor:type3','bucket'], // Bucket
+     ['CVT','5','conveyor:type3','screw_auger'], // Screw Auger
+     ['CVT','6','conveyor:type3','apron'], // Apron
+     ['CVT','7','conveyor:type3','flight'], // Flight
+     ['CVT','999','conveyor:type3','other'], // Other
+
+     // CWT - Contained within Tunnel
+     // ['CWT','-999999',undefined,undefined], // No Information
      ['CWT','1000','in_tunnel','no'],
      ['CWT','1001','in_tunnel','yes'], // Need to think about this
 
@@ -1087,44 +2224,210 @@ ggdm30.rules = {
      ['DFT','1','dam:face:type','vertical'], // Vertical
      ['DFT','2','dam:face:type','slope'], // Slope
 
+     // DFU - Dam Function
+     // ['DFU','-999999',undefined,undefined], // No Information
+     ['DFU','1','raw:DFU','impoundment'], // Impoundment
+     ['DFU','2','raw:DFU','navigation'], // Navigation
+     ['DFU','3','raw:DFU','flood_control'], // Flood Control
+     ['DFU','4','raw:DFU','hydroelectric_power_generation'], // Hydroelectric Power Generation
+     ['DFU','5','raw:DFU','weir'], // Weir
+     ['DFU','6','raw:DFU','irrigation'], // Irrigation
+     ['DFU','7','raw:DFU','recreation'], // Recreation
+     ['DFU','8','raw:DFU','water_supply'], // Water Supply
+     ['DFU','999','raw:DFU','other'], // Other
+
+     // DFU2 - Dam Function [2]
+     // ['DFU2','-999999',undefined,undefined], // No Information
+     ['DFU2','1','raw:DFU2','impoundment'], // Impoundment
+     ['DFU2','2','raw:DFU2','navigation'], // Navigation
+     ['DFU2','3','raw:DFU2','flood_control'], // Flood Control
+     ['DFU2','4','raw:DFU2','hydroelectric_power_generation'], // Hydroelectric Power Generation
+     ['DFU2','5','raw:DFU2','weir'], // Weir
+     ['DFU2','6','raw:DFU2','irrigation'], // Irrigation
+     ['DFU2','7','raw:DFU2','recreation'], // Recreation
+     ['DFU2','8','raw:DFU2','water_supply'], // Water Supply
+     ['DFU2','999','raw:DFU2','other'], // Other
+
+     // DFU3 - Dam Function [3]
+     // ['DFU3','-999999',undefined,undefined], // No Information
+     ['DFU3','1','raw:DFU3','impoundment'], // Impoundment
+     ['DFU3','2','raw:DFU3','navigation'], // Navigation
+     ['DFU3','3','raw:DFU3','flood_control'], // Flood Control
+     ['DFU3','4','raw:DFU3','hydroelectric_power_generation'], // Hydroelectric Power Generation
+     ['DFU3','5','raw:DFU3','weir'], // Weir
+     ['DFU3','6','raw:DFU3','irrigation'], // Irrigation
+     ['DFU3','7','raw:DFU3','recreation'], // Recreation
+     ['DFU3','8','raw:DFU3','water_supply'], // Water Supply
+     ['DFU3','999','raw:DFU3','other'], // Other
+
      // DGC - Transportation Block Type
      // ['DGC','-999999',undefined,undefined], // No Information
      ['DGC','1','block:type','drop_gate'], // Drop Gate
      ['DGC','2','block:type','rolling_block'], // Rolling Block
      ['DGC','999','block:type','other'], // Other
 
-     // DMBC - Undergrowth Density (interval closure)
+     // DINF - Water Disinfection Method
+     // ['DINF','-999999',undefined,undefined], // No Information
+     ['DINF','1','raw:DINF','chlorination'], // Chlorination
+     ['DINF','2','raw:DINF','ozone'], // Ozone
+     ['DINF','3','raw:DINF','uv_light'], // UV Light
+     ['DINF','4','raw:DINF','iodine'], // Iodine
+     ['DINF','5','raw:DINF','bromine'], // Bromine
+     ['DINF','6','raw:DINF','bases_-_sodium_hydroxide_or_lime'], // Bases - Sodium hydroxide or lime
+     ['DINF','7','raw:DINF','ultrasonic'], // Ultrasonic
+     ['DINF','8','raw:DINF','heat'], // Heat
+     ['DINF','998','raw:DINF','not_applicable'], // Not Applicable
+     ['DINF','999','raw:DINF','other'], // Other
+
+     // DIR - Directivity
+     // ['DIR','-999999',undefined,undefined], // No Information
+     ['DIR','1','raw:DIR','unidirectional'], // Unidirectional
+     ['DIR','2','raw:DIR','bidirectional'], // Bidirectional
+     ['DIR','3','raw:DIR','omnidirectional'], // Omnidirectional
+
+     // DIT - Ditch Function
+     // ['DIT','-999999',undefined,undefined], // No Information
+     ['DIT','1','raw:DIT','irrigation'], // Irrigation
+     ['DIT','2','raw:DIT','drainage'], // Drainage
+     ['DIT','3','raw:DIT','sewage'], // Sewage
+     ['DIT','999','raw:DIT','other'], // Other
+
+     // DKC - Bathymetric Measurement Quality Category
+     // ['DKC','-999999',undefined,undefined], // No Information
+     ['DKC','1','raw:DKC','depth_known'], // Depth Known
+     ['DKC','3','raw:DKC','safe_clearance_known'], // Safe Clearance Known
+     ['DKC','4','raw:DKC','depth_unknown'], // Depth Unknown
+     ['DKC','5','raw:DKC','depth_doubtful'], // Depth Doubtful
+     ['DKC','6','raw:DKC','depth_unreliable'], // Depth Unreliable
+     ['DKC','8','raw:DKC','least_depth'], // Least Depth
+     ['DKC','9','raw:DKC','reported_depth'], // Reported Depth
+     ['DKC','998','raw:DKC','not_applicable'], // Not Applicable
+     ['DKC','999','raw:DKC','other'], // Other
+
+     // DKC2 - Bathymetric Measurement Quality Category [2]
+     // ['DKC2','-999999',undefined,undefined], // No Information
+     ['DKC2','1','raw:DKC2','depth_known'], // Depth Known
+     ['DKC2','3','raw:DKC2','safe_clearance_known'], // Safe Clearance Known
+     ['DKC2','4','raw:DKC2','depth_unknown'], // Depth Unknown
+     ['DKC2','5','raw:DKC2','depth_doubtful'], // Depth Doubtful
+     ['DKC2','6','raw:DKC2','depth_unreliable'], // Depth Unreliable
+     ['DKC2','8','raw:DKC2','least_depth'], // Least Depth
+     ['DKC2','9','raw:DKC2','reported_depth'], // Reported Depth
+     ['DKC2','998','raw:DKC2','not_applicable'], // Not Applicable
+     ['DKC2','999','raw:DKC2','other'], // Other
+
+     // DKC3 - Bathymetric Measurement Quality Category [3]
+     // ['DKC3','-999999',undefined,undefined], // No Information
+     ['DKC3','1','raw:DKC3','depth_known'], // Depth Known
+     ['DKC3','3','raw:DKC3','safe_clearance_known'], // Safe Clearance Known
+     ['DKC3','4','raw:DKC3','depth_unknown'], // Depth Unknown
+     ['DKC3','5','raw:DKC3','depth_doubtful'], // Depth Doubtful
+     ['DKC3','6','raw:DKC3','depth_unreliable'], // Depth Unreliable
+     ['DKC3','8','raw:DKC3','least_depth'], // Least Depth
+     ['DKC3','9','raw:DKC3','reported_depth'], // Reported Depth
+     ['DKC3','998','raw:DKC3','not_applicable'], // Not Applicable
+     ['DKC3','999','raw:DKC3','other'], // Other
+
+     // DKS - Daymark Shape
+     // ['DKS','-999999',undefined,undefined], // No Information
+     ['DKS','1','raw:DKS','rectangle'], // Rectangle
+     ['DKS','2','raw:DKS','square'], // Square
+     ['DKS','3','raw:DKS','triangle'], // Triangle
+     ['DKS','4','raw:DKS','cage'], // Cage
+     ['DKS','5','raw:DKS','diamond'], // Diamond
+     ['DKS','6','raw:DKS','circular'], // Circular
+     ['DKS','7','raw:DKS','trapezoidal'], // Trapezoidal
+
+     // DMBC - Undergrowth Density <interval closure>
      ['DMBC','2','undergrowth:density:closure','open_interval'], // Open Interval
-     ['DMBC','3','undergrowth:density:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['DMBC','4','undergrowth:density:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['DMBC','3','undergrowth:density:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['DMBC','4','undergrowth:density:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['DMBC','5','undergrowth:density:closure','closed_interval'], // Closed Interval
      ['DMBC','6','undergrowth:density:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['DMBC','7','undergrowth:density:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
      ['DMBC','8','undergrowth:density:closure','less-than_semi-interval'], // Less-than Semi-interval
      ['DMBC','9','undergrowth:density:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
+     // DMC - Boundary Demarcated
+     // ['DMC','-999999',undefined,undefined], // No Information
+     ['DMC','1000','raw:DMC','no'],
+     ['DMC','1001','raw:DMC','yes'],
+
      // DMD - Dammed
      // ['DMD','-999999',undefined,undefined], // No Information
      ['DMD','1000','dammed','no'], // Just to get rid of errors
      ['DMD','1001','dammed','yes'], // yes
 
+     // DNE - Human Development Index
+     // ['DNE','-999999',undefined,undefined], // No Information
+     ['DNE','1','raw:DNE','highest_development'], // Highest Development
+     ['DNE','2','raw:DNE','high_development'], // High Development
+     ['DNE','3','raw:DNE','rapid_development'], // Rapid Development
+     ['DNE','4','raw:DNE','developing'], // Developing
+     ['DNE','5','raw:DNE','low_development'], // Low Development
+
      // DPAC - Aquifer Depth <interval closure>
      ['DPAC','2','aquifer:depth:closure','open_interval'], // Open Interval
-     ['DPAC','3','aquifer:depth:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['DPAC','4','aquifer:depth:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['DPAC','3','aquifer:depth:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['DPAC','4','aquifer:depth:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['DPAC','5','aquifer:depth:closure','closed_interval'], // Closed Interval
      ['DPAC','6','aquifer:depth:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['DPAC','7','aquifer:depth:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
      ['DPAC','8','aquifer:depth:closure','less-than_semi-interval'], // Less-than Semi-interval
      ['DPAC','9','aquifer:depth:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
-     // DWT - Dam Type
-     // ['DWT','-999999',undefined,undefined], // No Information
-     ['DWT','2','dam:type','navigation'], // Navigation
-     ['DWT','3','dam:type','flood_control'], // Flood Control
-     ['DWT','4','dam:type','hydroelectric_power_generation'], // Hydroelectric Power Generation
-     ['DWT','5','dam:type','weir'], // Weir
-     ['DWT','999','dam:type','other'], // Other
+     // DPG - Dumping Ground Type
+     // ['DPG','-999999',undefined,undefined], // No Information
+     ['DPG','1','raw:DPG','hazardous_material'], // Hazardous Material
+     ['DPG','2','raw:DPG','chemical_waste'], // Chemical Waste
+     ['DPG','3','raw:DPG','nuclear_waste'], // Nuclear Waste
+     ['DPG','4','raw:DPG','explosives'], // Explosives
+     ['DPG','5','raw:DPG','spoil'], // Spoil
+     ['DPG','6','raw:DPG','vessels'], // Vessels
+     ['DPG','999','raw:DPG','other'], // Other
+
+     // DPG2 - Dumping Ground Type [2]
+     // ['DPG2','-999999',undefined,undefined], // No Information
+     ['DPG2','1','raw:DPG2','hazardous_material'], // Hazardous Material
+     ['DPG2','2','raw:DPG2','chemical_waste'], // Chemical Waste
+     ['DPG2','3','raw:DPG2','nuclear_waste'], // Nuclear Waste
+     ['DPG2','4','raw:DPG2','explosives'], // Explosives
+     ['DPG2','5','raw:DPG2','spoil'], // Spoil
+     ['DPG2','6','raw:DPG2','vessels'], // Vessels
+     ['DPG2','999','raw:DPG2','other'], // Other
+
+     // DPG3 - Dumping Ground Type [3]
+     // ['DPG3','-999999',undefined,undefined], // No Information
+     ['DPG3','1','raw:DPG3','hazardous_material'], // Hazardous Material
+     ['DPG3','2','raw:DPG3','chemical_waste'], // Chemical Waste
+     ['DPG3','3','raw:DPG3','nuclear_waste'], // Nuclear Waste
+     ['DPG3','4','raw:DPG3','explosives'], // Explosives
+     ['DPG3','5','raw:DPG3','spoil'], // Spoil
+     ['DPG3','6','raw:DPG3','vessels'], // Vessels
+     ['DPG3','999','raw:DPG3','other'], // Other
+
+     // DSD - Dam Structural Design Type
+     // ['DSD','-999999',undefined,undefined], // No Information
+     ['DSD','101','raw:DSD','arch'], // Arch
+     ['DSD','102','raw:DSD','buttress'], // Buttress
+     ['DSD','103','raw:DSD','gravity'], // Gravity
+     ['DSD','104','raw:DSD','multi-arch'], // Multi-Arch
+     ['DSD','105','raw:DSD','earthen'], // Earthen
+     ['DSD','106','raw:DSD','rockfill'], // Rockfill
+     ['DSD','107','raw:DSD','asphalt-concrete_core'], // Asphalt-concrete core
+     ['DSD','999','raw:DSD','other'], // Other
+
+     // DSP - Boundary Dispute Type
+     // ['DSP','-999999',undefined,undefined], // No Information
+     ['DSP','1','raw:DSP','in_dispute'], // In Dispute
+     ['DSP','2','raw:DSP','undisputed'], // Undisputed
+     ['DSP','3','raw:DSP','de_facto'], // De Facto
+     ['DSP','4','raw:DSP','de_jure'], // De Jure
+
+     // DTN - Dangerous to Navigation
+     // ['DTN','-999999',undefined,undefined], // No Information
+     ['DTN','1000','raw:DTN','no'],
+     ['DTN','1001','raw:DTN','yes'],
 
      // EET - Engineered Earthwork Type
      // ['EET','-999999',undefined,undefined], // No Information
@@ -1135,60 +2438,6 @@ ggdm30.rules = {
      ['EET','5','earthwork:type','redoubt'], // Redoubt
      ['EET','999','earthwork:type','other'], // Other
 
-     // EQC - Equivalent Scale Category
-     // ['EQC','noInformation',undefined,undefined], // No Information
-     ['EQC','scale5k','source:equivalent_scale','1:5k'], // A map scale of 1:5,000.
-     ['EQC','scale12r5k','source:equivalent_scale','1:12.5k'], // A map scale of 1:12,500.
-     ['EQC','scale25k','source:equivalent_scale','1:25k'], // A map scale of 1:25,000.
-     ['EQC','scale50k','source:equivalent_scale','1:50k'], // A map scale of 1:50,000.
-     ['EQC','scale100k','source:equivalent_scale','1:100k'], // A map scale of 1:100,000.
-     ['EQC','scale250k','source:equivalent_scale','1:250k'], // A map scale of 1:250,000.
-     ['EQC','scale500k','source:equivalent_scale','1:500k'], // A map scale of 1:500,000.
-     ['EQC','scale1m','source:equivalent_scale','1:1m'], // A map scale of 1:1,000,000.
-     ['EQC','scale2m','source:equivalent_scale','1:2m'], // A map scale of 1:2,000,000.
-     ['EQC','scale5m','source:equivalent_scale','1:5m'], // A map scale of 1:5,000,000.
-     ['EQC','other','source:equivalent_scale','other'], // Other
-
-     // ETS - Extraction Specification
-     // ['ETS','noInformation',undefined,undefined], // No Information
-     ['ETS','atc','source:extraction_specification','4aa-atc'], // 4AA-ATC
-     ['ETS','combat','source:extraction_specification','2ad-combat'], // 2AD-Combat
-     ['ETS','dfad1','source:extraction_specification','1ce-dfad-1'], // 1CE-DFAD-1
-     ['ETS','dfad2','source:extraction_specification','1cg-dfad-2'], // 1CG-DFAD-2
-     ['ETS','digitalFeg','source:extraction_specification','dfeg'], // DFEG
-     ['ETS','dnc','source:extraction_specification','dnc'], // DNC
-     ['ETS','dted1','source:extraction_specification','1cd-dted-1'], // 1CD-DTED-1
-     ['ETS','dted2','source:extraction_specification','1cf-dted-2'], // 1CF-DTED-2
-     ['ETS','dtop','source:extraction_specification','3kc/001-dtop'], // 3KC/001-DTOP
-     ['ETS','ffd','source:extraction_specification','5ee-ffd'], // 5EE-FFD
-     ['ETS','globalTdsEg','source:extraction_specification','gtds-eg'], // GTDS-EG
-     ['ETS','hac1','source:extraction_specification','2aa/001-hac-1'], // 2AA/001-HAC-1
-     ['ETS','hac2','source:extraction_specification','2aa/002-hac-2'], // 2AA/002-HAC-2
-     ['ETS','hac3','source:extraction_specification','2aa/003-hac-3'], // 2AA/003-HAC-3
-     ['ETS','hac4','source:extraction_specification','2aa/004-hac-4'], // 2AA/004-HAC-4
-     ['ETS','hac5','source:extraction_specification','2aa/005-hac-5'], // 2AA/005-HAC-5
-     ['ETS','hac6','source:extraction_specification','2aa/006-hac-6'], // 2AA/006-HAC-6
-     ['ETS','hac7','source:extraction_specification','2aa/007-hac-7'], // 2AA/007-HAC-7
-     ['ETS','hac8','source:extraction_specification','2aa/008-hac-8'], // 2AA/008-HAC-8
-     ['ETS','hac9','source:extraction_specification','2aa/009-hac-9'], // 2AA/009-HAC-9
-     ['ETS','jogAirGround','source:extraction_specification','1ae-jog-a/g'], // 1AE-JOG-A/G
-     ['ETS','jogRadar','source:extraction_specification','4ac-jog-r'], // 4AC-JOG-R
-     ['ETS','localTdsEg','source:extraction_specification','ltds-eg'], // LTDS-EG
-     ['ETS','mgcpTrd','source:extraction_specification','mgcp_trd'], // MGCP TRD
-     ['ETS','msd1','source:extraction_specification','msd1'], // MSD1
-     ['ETS','msd2','source:extraction_specification','msd2'], // MSD2
-     ['ETS','msd3','source:extraction_specification','msd3'], // MSD3
-     ['ETS','msd4','source:extraction_specification','msd4'], // MSD4
-     ['ETS','msd5','source:extraction_specification','msd5'], // MSD5
-     ['ETS','onc','source:extraction_specification','1ab-onc'], // 1AB-ONC
-     ['ETS','other','source:extraction_specification','other'], // Other
-     ['ETS','regionalTdsEg','Fpc','source:extraction_specification','1aa-tpc'], // 1AA-TPC
-     ['ETS','uvmap','source:extraction_specification','3ku-uvmap'], // 3KU-UVMap
-     ['ETS','vitd','source:extraction_specification','3ka-vitd'], // 3KA-VITD
-     ['ETS','vmap0','source:extraction_specification','3kl-vmap-0'], // 3KL-VMap-0
-     ['ETS','vmap1','source:extraction_specification','3km-vmap-1'], // 3KM-VMap-1
-     ['ETS','vmap2','source:extraction_specification','3kh-vmap-2'], // 3KH-VMap-2
-
      // ESC - Elevation Surface Category
      // ['ESC','-999999',undefined,undefined], // No Information
      ['ESC','1','elevation:surface','land'], // Land
@@ -1196,6 +2445,59 @@ ggdm30.rules = {
      ['ESC','4','elevation:surface','vegetation'], // Vegetation
      ['ESC','5','elevation:surface','inland_water'], // Inland Water
      ['ESC','6','elevation:surface','tidal_water'], // Tidal Water
+
+     // ETS - Extraction Specification
+     // ['ETS','-999999',undefined,undefined], // No Information
+     ['ETS','1',''source:extraction_specification','1aa-tpc'], // 1AA-TPC
+     ['ETS','2',''source:extraction_specification','1ab-onc'], // 1AB-ONC
+     ['ETS','3',''source:extraction_specification','1ae-jog-a/g'], // 1AE-JOG-A/G
+     ['ETS','4',''source:extraction_specification','1cd-dted-1'], // 1CD-DTED-1
+     ['ETS','5',''source:extraction_specification','1ce-dfad-1'], // 1CE-DFAD-1
+     ['ETS','6',''source:extraction_specification','1cf-dted-2'], // 1CF-DTED-2
+     ['ETS','7',''source:extraction_specification','1cg-dfad-2'], // 1CG-DFAD-2
+     ['ETS','8',''source:extraction_specification','2aa/001-hac-1'], // 2AA/001-HAC-1
+     ['ETS','9',''source:extraction_specification','2aa/002-hac-2'], // 2AA/002-HAC-2
+     ['ETS','10',''source:extraction_specification','2aa/003-hac-3'], // 2AA/003-HAC-3
+     ['ETS','11',''source:extraction_specification','2aa/004-hac-4'], // 2AA/004-HAC-4
+     ['ETS','12',''source:extraction_specification','2aa/005-hac-5'], // 2AA/005-HAC-5
+     ['ETS','13',''source:extraction_specification','2aa/006-hac-6'], // 2AA/006-HAC-6
+     ['ETS','14',''source:extraction_specification','2aa/007-hac-7'], // 2AA/007-HAC-7
+     ['ETS','15',''source:extraction_specification','2aa/008-hac-8'], // 2AA/008-HAC-8
+     ['ETS','16',''source:extraction_specification','2aa/009-hac-9'], // 2AA/009-HAC-9
+     ['ETS','17',''source:extraction_specification','2ad-combat'], // 2AD-Combat
+     ['ETS','18',''source:extraction_specification','3aa-tlm50'], // 3AA-TLM50
+     ['ETS','19',''source:extraction_specification','3ag-tlm100'], // 3AG-TLM100
+     ['ETS','20',''source:extraction_specification','3ka-vitd'], // 3KA-VITD
+     ['ETS','21',''source:extraction_specification','3kc/001-dtop'], // 3KC/001-DTOP
+     ['ETS','22',''source:extraction_specification','3kh-vmap-2'], // 3KH-VMap-2
+     ['ETS','23',''source:extraction_specification','3kl-vmap-0'], // 3KL-VMap-0
+     ['ETS','24',''source:extraction_specification','3km-vmap-1'], // 3KM-VMap-1
+     ['ETS','25',''source:extraction_specification','3ku-uvmap'], // 3KU-UVMap
+     ['ETS','26',''source:extraction_specification','4aa-atc'], // 4AA-ATC
+     ['ETS','27',''source:extraction_specification','4ac-jog-r'], // 4AC-JOG-R
+     ['ETS','28',''source:extraction_specification','4ge-tercom-l'], // 4GE-TERCOM-L
+     ['ETS','29',''source:extraction_specification','4gf-tercom-e'], // 4GF-TERCOM-E
+     ['ETS','30',''source:extraction_specification','4gg-tercom-t'], // 4GG-TERCOM-T
+     ['ETS','31',''source:extraction_specification','5ee-ffd'], // 5EE-FFD
+     ['ETS','43',''source:extraction_specification','dnc'], // DNC
+     ['ETS','44',''source:extraction_specification','msd1'], // MSD1
+     ['ETS','45',''source:extraction_specification','msd2'], // MSD2
+     ['ETS','46',''source:extraction_specification','msd3'], // MSD3
+     ['ETS','47',''source:extraction_specification','msd4'], // MSD4
+     ['ETS','48',''source:extraction_specification','msd5'], // MSD5
+     ['ETS','49',''source:extraction_specification','tod0'], // TOD0
+     ['ETS','50',''source:extraction_specification','tod1'], // TOD1
+     ['ETS','51',''source:extraction_specification','tod2'], // TOD2
+     ['ETS','52',''source:extraction_specification','tod3'], // TOD3
+     ['ETS','53',''source:extraction_specification','tod4'], // TOD4
+     ['ETS','56',''source:extraction_specification','dfeg'], // DFEG
+     ['ETS','57',''source:extraction_specification','gtds-eg'], // GTDS-EG
+     ['ETS','58',''source:extraction_specification','rtds-eg'], // RTDS-EG
+     ['ETS','59',''source:extraction_specification','ltds-eg'], // LTDS-EG
+     ['ETS','60',''source:extraction_specification','s-utds-eg'], // S-UTDS-EG
+     ['ETS','61',''source:extraction_specification','mgcp_trd'], // MGCP TRD
+     ['ETS','998',''source:extraction_specification','not_applicable'], // Not Applicable
+     ['ETS','999',''source:extraction_specification','other'], // Other
 
      // ETY - Engine Test Cell Type
      // ['ETY','-999999',undefined,undefined], // No Information
@@ -1212,15 +2514,24 @@ ggdm30.rules = {
      ['EXP','3','expansion:type','railway_sidetrack'], // Railway Sidetrack
      ['EXP','4','expansion:type','roadside_rest_area'], // Roadside Rest Area
      ['EXP','5','expansion:type','shoulder'], // Shoulder
-     ['EXP','999','expansion:type','other'], // Other
+     ['EXP','999','expansion:type','other'], // Otherr
+
+     // FA003_BAL - Administrative Subdivision : BGN Administrative Level
+     // ['FA003_BAL','-999999',undefined,undefined], // No Information
+     ['FA003_BAL','1','raw:FA003_BAL','first-order'], // First-order
+     ['FA003_BAL','2','raw:FA003_BAL','second-order'], // Second-order
+     ['FA003_BAL','3','raw:FA003_BAL','third-order'], // Third-order
+     ['FA003_BAL','4','raw:FA003_BAL','fourth-order'], // Fourth-order
+     ['FA003_BAL','5','raw:FA003_BAL','undifferentiated'], // Undifferentiated
+     ['FA003_BAL','999','raw:FA003_BAL','other'], // Other
 
      // FAC - Solid Maritime Construction
      // ['FAC','-999999',undefined,undefined], // No Information
      ['FAC','1000','solid_construction','no'],
      ['FAC','1001','solid_construction','yes'],
 
-     // FCO Feature Configuration
-     // ['FCO','-999999',undefined,undefined],
+     // FCO - Feature Configuration
+     // ['FCO','-999999',undefined,undefined], // No Information
      ['FCO','5','feature_configuration','same'],
      ['FCO','6','feature_configuration','different'],
      ['FCO','7','feature_configuration','non_divided'], // Ugly
@@ -1234,346 +2545,357 @@ ggdm30.rules = {
      ['FCS','5','flood_control:type','movable_barrage'], // Movable Barrage
      ['FCS','999','flood_control:type','other'], // Other
 
+     // FEF - Fence Function
+     // ['FEF','-999999',undefined,undefined], // No Information
+     ['FEF','1','raw:FEF','animal_containment'], // Animal Containment
+     ['FEF','2','raw:FEF','erosion-control'], // Erosion-control
+     ['FEF','3','raw:FEF','exclusion'], // Exclusion
+     ['FEF','4','raw:FEF','security'], // Security
+     ['FEF','5','raw:FEF','wind'], // Wind
+     ['FEF','999','raw:FEF','other'], // Other
+
      // FER - Ferry Crossing Type
      // ['FER','-999999',undefined,undefined], // No Information
      ['FER','1','ferry:type','cable'], // Cable
      ['FER','2','ferry:type','free-moving'], // Free-moving
      ['FER','3','ferry:type','ice'], // Ice
+     ['FER','4','ferry:type','high-speed_crossing'], // High-speed Crossing
      ['FER','999','ferry:type','other'], // Other
-
 
      // FFN - Feature Function
      // ['FFN','-999999',undefined,undefined], // No Information
-     ['FFN','2','use','agriculture'], // Agriculture
-     ['FFN','3','use','growing_crops'], // Growing of Crops
-     ['FFN','9','use','raising_animals'], // Raising of Animals
-     ['FFN','14','use','grazing'], // Grazing
-     ['FFN','15','use','mixed_farming'], // Mixed Farming
-     ['FFN','16','camp:type','migrant_labour'], // Migrant Labour
-     ['FFN','20','camp:type','forestry'], // Forestry and/or Logging
-     ['FFN','21','landuse','silviculture'], // Silviculture
-     ['FFN','27','amenity','forest_warden'], // Forest Warden
-     ['FFN','30','leisure','fishing'], // Fishing
-     ['FFN','35','use','aquaculture'], // Aquaculture
-     ['FFN','40','use','mining_and_quarrying'], // Mining and Quarrying
-     ['FFN','50','use','solid_mineral_fuel_mining'], // Solid Mineral Fuel Mining
-     ['FFN','60','use','petroleum_andor_gas_extraction'], // Petroleum and/or Gas Extraction
-     ['FFN','70','use','metal_ore_mining'], // Metal Ore Mining
-     ['FFN','83','use','chemical_mining'], // Chemical Mining
-     ['FFN','84','use','peat_mining'], // Peat Extraction
-     ['FFN','85','use','salt_mining'], // Salt Extraction
-     ['FFN','87','use','mineral_mining'], // Mineral Mining
-     ['FFN','91','use','gas_oil_separation'], // Gas Oil Separation
-     ['FFN','95','use','ore_dressing'], // Ore Dressing
-     ['FFN','99','use','manufacturing'], // Manufacturing
-     ['FFN','100','use','food_manufacturing'], // Food Product Manufacture
-     ['FFN','101','use','food_processing'], // Food Processing
-     ['FFN','102','use','meat_processing'], // Meat Processing
-     ['FFN','103','use','seafood_processing'], // Seafood Processing
-     ['FFN','104','use','fruit_vegetable_processing'], // Fruit and/or Vegetable Processing
-     ['FFN','105','use','oil-mill'], // Oil-mill
-     ['FFN','106','crop','dairy'], // Dairying
-     ['FFN','107','use','grain-milling'], // Grain Milling
-     ['FFN','110','use','baking'], // Baking
-     ['FFN','111','use','sugar_manufacturing'], // Sugar Manufacture
-     ['FFN','112','use','sugar_milling'], // Sugar Milling
-     ['FFN','113','use','sugar_refining'], // Sugar Refining
-     ['FFN','114','use','confectionry_manufacturing'], // Confection Manufacture
-     ['FFN','115','use','pasta_manufacturing'], // Pasta Manufacture
-     ['FFN','116','use','prepared_meals_manufacturing'], // Prepared Meal Manufacture
-     ['FFN','118','use','beverage_manufacturing'], // Beverage Manufacture
-     ['FFN','119','use','animal_feed_manufacturing'], // Animal Feed Manufacture
-     ['FFN','120','use','ice_manufacturing'], // Ice Manufacture
-     ['FFN','121','use','distillery'], // Spirit Distillery
-     ['FFN','122','use','winery'], // Winery
-     ['FFN','123','use','brewing'], // Brewing
-     ['FFN','124','use','soft_drink_manufacturing'], // Soft Drink Manufacture
-     ['FFN','125','use','tobacco_product_manufacturing'], // Tobacco Product Manufacture
-     ['FFN','129','use','textile_apparel_and_leather_manufacturing'], // Textile, Apparel and Leather Manufacture
-     ['FFN','130','use','textile_manufacturing'], // Textile Manufacture
-     ['FFN','140','use','apparel_manufacturing'], // Apparel Manufacture
-     ['FFN','150','use','leather_product_manufacturing'], // Leather Product Manufacture
-     ['FFN','155','use','footwear_manufacturing'], // Footwear Manufacturing
-     ['FFN','160','use','wood_product_manufacturing'], // Wood-based Manufacturing
-     ['FFN','161','craft','sawmilling'], // Sawmilling
-     ['FFN','165','use','wooden_construction_product_manufacturing'], // Wooden Construction Product Manufacture
-     ['FFN','171','use','paper_mill'], // Paper-mill
-     ['FFN','181','use','printing'], // Printing
-     ['FFN','190','use','petroleum_and_coal_product_manufacturing'], // Petroleum and Coal Products Manufacturing
-     ['FFN','191','use','coke_manufacturing'], // Coke Manufacture
-     ['FFN','192','use','petroleum_refining'], // Petroleum Refining
-     ['FFN','195','use','chemical_manufacturing'], // Chemical Manufacture
-     ['FFN','210','use','medicinal_manufacturing'], // Medicinal Product Manufacture
-     ['FFN','221','use','rubber_product_manufacturing'], // Rubber Product Manufacture
-     ['FFN','225','use','plastic_product_manufacturing'], // Plastic Product Manufacture
-     ['FFN','230','use','nonmetallic_mineral_product_manufacturing'], // Nonmetallic Mineral Product Manufacturing
-     ['FFN','231','use','glass_product_manufacturing'], // Glass Product Manufacture
-     ['FFN','232','use','refractory_product_manufacturing'], // Refractory Product Manufacture
-     ['FFN','233','use','clay_product_manufacturing'], // Clay Product Manufacture
-     ['FFN','234','use','ceramic_product_manufacturing'], // Ceramic Product Manufacture
-     ['FFN','235','use','cement_mill'], // Cement Mill
-     ['FFN','236','use','cement_product_manufacturing'], // Cement Product Manufacture
-     ['FFN','237','use','stone_product_manufacturing'], // Stone Product Manufacture
-     ['FFN','240','use','metal_manufacturing'], // Primary Metal Manufacturing
-     ['FFN','241','use','steel_mill'], // Steel Mill
-     ['FFN','242','use','metal_refining'], // Metal Refining
-     ['FFN','243','use','foundry'], // Foundry
-     ['FFN','250','use','metal_product_manufacturing'], // Metal Product Manufacturing
-     ['FFN','251','use','structural_metal_product_manufacturing'], // Structural Metal Product Manufacture
-     ['FFN','255','use','munitions_manufacturing'], // Munitions Manufacture
-     ['FFN','257','use','fabricated_metal_product_manufacturing'], // Fabricated Metal Product Manufacture
-     ['FFN','260','use','electronic_equipment_manufacturing'], // Electronic Equipment Manufacture
-     ['FFN','270','use','electrical_equipment_manufacturing'], // Electrical Equipment Manufacture
-     ['FFN','272','shop','gas'], // Propane Sale
-     ['FFN','280','use','machinery_manufacturing'], // Machinery Manufacture
-     ['FFN','289','use','transportation_equipment_manufacturing'], // Transportation Equipment Manufacturing
-     ['FFN','290','use','motor_vehicle_manufacturing'], // Motor Vehicle Manufacture
-     ['FFN','301','use','ship_manufacturing'], // Ship Construction
-     ['FFN','304','use','railway_vehicle_manufacturing'], // Railway Vehicle Manufacture
-     ['FFN','305','use','aircraft_manufacturing'], // Aircraft Manufacture
-     ['FFN','306','use','military_vehicle_manufacturing'], // Military Vehicle Manufacture
-     ['FFN','310','use','furniture_manufacturing'], // Furniture Manufacture
-     ['FFN','320','use','miscellaneous_manufacturing'], // Miscellaneous Manufacturing
-     ['FFN','321','use','jewellery_manufacturing'], // Jewellery Manufacture
-     ['FFN','322','use','musical_instrument_manufacturing'], // Musical Instrument Manufacture
-     ['FFN','323','use','sports_goods_manufacturing'], // Sports Goods Manufacture
-     ['FFN','324','use','game_and_toy_manufacturing'], // Game and/or Toy Manufacture
-     ['FFN','325','use','medical_equipment_manufacturing'], // Medical and/or Dental Equipment Manufacture
-     ['FFN','330','repair','yes'], // General Repair
-     ['FFN','331','repair','fabricated_metal_products'], // Fabricated Metal Product Repair
-     ['FFN','332','repair','electronic_equipment'], // Electronic Equipment Repair
-     ['FFN','333','repair','electrical_equipment'], // Electrical Equipment Repair
-     ['FFN','334','repair','machinery'], // Machinery Repair
-     ['FFN','340','repair','ship'], // Ship Repair
-     ['FFN','341','repair','aircraft'], // Aircraft Repair
-     ['FFN','342','repair','railway_vehicle'], // Railway Vehicle Repair
-     ['FFN','343','shop','car_repair'], // Motor Vehicle Repair
-     ['FFN','350','use','utilities'], // Utilities
-     ['FFN','351','use','power_generation'], // Power Generation
-     ['FFN','352','use','climate_control'], // Climate Control
-     ['FFN','355','use','cooling'], // Cooling
-     ['FFN','356','use','heating'], // Heating
-     ['FFN','360','use','water_supply'], // Water Supply
-     ['FFN','361','use','water_collection'], // Water Collection
-     ['FFN','362','use','water_treatment'], // Water Treatment
-     ['FFN','363','use','water_distribution'], // Water Distribution
-     ['FFN','370','use','sewerage'], // Sewerage
-     ['FFN','372','use','sewerage_screening'], // Sewerage Screening
-     ['FFN','382','amenity','toilets'], // Restroom
-     ['FFN','383','use','waste_treatment_and_disposal'], // Waste Treatment and Disposal
-     ['FFN','385','use','materials_recovery'], // Materials Recovery
-     ['FFN','440','use','commercial'], // Commerce
-     ['FFN','459','shop','wholesale'], // Wholesale Merchant
-     ['FFN','460','shop','yes'], // Retail Sale
-     ['FFN','464','shop','specialized'], // Specialized Store
-     ['FFN','465','shop','non-specialized'], // Non-specialized Store
-     ['FFN','466','shop','convenience'], // Convenience Store
-     ['FFN','470','amenity','fuel'], // Petrol Sale -- links to AQ170 Motor Vehicle Station
-     ['FFN','473','amenity','sales_yard'], // Sales Yard
-     ['FFN','474','shop','precious_metal'], // Precious Metal Merchant
-     ['FFN','475','amenity','marketplace'], // Market
-     ['FFN','476','shop','supermarket'], // Grocery
-     ['FFN','477','amenity','pharmacy'], // Pharmacy
-     ['FFN','478','shop','pet'], // Pet-shop
-     ['FFN','480','use','transportation'], // Transport
-     ['FFN','481','use','terminal'], // Terminal
-     ['FFN','482','public_transport','station'], // Station
-     ['FFN','483','amenity','stop'], // Stop
-     ['FFN','484','amenity','transfer_hub'], // Transfer Hub
-     ['FFN','486','use','signalling'], // Signalling
-     ['FFN','487','use','transport_system_maintenance'], // Transport System Maintenance
-     ['FFN','488','use','navigation'], // Navigation - Not great, used in a number of FCodes
-     ['FFN','489','use','transportation_hub'], // Transportation Hub
-     ['FFN','490','use','railway_transport'], // Railway Transport
-     ['FFN','491','use','railway_passenger_transport'], // Railway Passenger Transport
-     ['FFN','494','use','pedestrian_transport'], // Pedestrian Transport
-     ['FFN','495','use','road_transport'], // Road Transport
-     ['FFN','496','use','road_passenger_transport'], // Road Passenger Transport
-     ['FFN','497','use','road_freight_transport'], // Road Freight Transport
-     ['FFN','500','use','pipeline_transport'], // Pipeline Transport
-     ['FFN','501','use','pumping'], // Pumping
-     ['FFN','505','use','water_transport'], // Water Transport
-     ['FFN','507','use','inland_waters_transport'], // Inland Waters Transport
-     ['FFN','508','use','canal_transport'], // Canal Transport
-     ['FFN','510','use','port_control'], // Port Control
-     ['FFN','511','use','maritime_pilotage'], // Maritime Pilotage
-     ['FFN','512','use','pilot_station'], // Pilot Station
-     ['FFN','513','use','harbour_control'], // Harbour Control
-     ['FFN','520','use','air_transport'], // Air Transport
-     ['FFN','525','use','air_traffic_control'], // Air Traffic Control
-     ['FFN','529','use','transportation_support'], // Transportation Support
-     ['FFN','530','use','warehouse'], // Warehousing and Storage
-     ['FFN','535','use','garage'], // Motor Vehicle Parking
-     ['FFN','536','use','cargo_handling'], // Cargo Handling
-     ['FFN','537','amenity','customs'], // Customs Checkpoint
-     ['FFN','538','use','inspection_station'], // Inspection Station
-     ['FFN','539','use','inspection'], // Inspection
-     ['FFN','540','amenity','post_office'], // Postal Activities
-     ['FFN','541','use','mail_and_package_transport'], // Mail and Package Transport
-     ['FFN','545','use','courier_activities'], // Courier Activities
-     ['FFN','548','use','short-term_accommodation'], // Short-term Accommodation
-     ['FFN','550','use','accommodation'], // Accommodation
-     ['FFN','551','tourism','hotel'], // Hotel
-     ['FFN','552','tourism','resort_hotel'], // Resort Hotel
-     ['FFN','553','tourism','motel'], // Motel
-     ['FFN','554','tourism','guest_house'], // Guest-house
-     ['FFN','555','tourism','hostel'], // Hostel
-     ['FFN','556','use','dormitory'], // Dormitory
-     ['FFN','557','use','vacation_cottage'], // Vacation Cottage
-     ['FFN','558','use','dependents_housing'], // Dependents Housing
-     ['FFN','559','amenity','public_bath'], // Communal Bath
-     ['FFN','563','use','residential'], // Residence
-     ['FFN','570','use','food_service'], // Food Service
-     ['FFN','572','amenity','restaurant'], // Restaurant
-     ['FFN','573','amenity','bar'], // Bar
-     ['FFN','574','amenity','dining_hall'], // Dining Hall
-     ['FFN','578','amenity','banquet_hall'], // Banquet Hall
-     ['FFN','579','amenity','convention_centre'], // Convention Centre
-     ['FFN','580','use','publishing_and_broadcasting'], // Publishing and Broadcasting
-     ['FFN','582','use','print_publishing'], // Print Publishing
-     ['FFN','594','amenity','cinema'], // Cinema
-     ['FFN','601','use','radio_broadcasting'], // Radio Broadcasting
-     ['FFN','604','use','television_broadcasting'], // Television Broadcasting
-     ['FFN','610','use','communication'], // Telecommunications
-     ['FFN','612','use','retail_telecommunications'], // Retail Telecommunications
-     ['FFN','614','use','wired_telecommunications'], // Wired Telecommunications
-     ['FFN','615','use','main_telephone_exchange'], // Main Telephone Exchange
-     ['FFN','616','use','branch_telephone_exchange'], // Branch Telephone Exchange
-     ['FFN','617','use','wired_repeater'], // Wired Repeater
-     ['FFN','620','use','wireless_telecommunications'], // Wireless Telecommunications
-     ['FFN','621','use','mobile_phone_service'], // Mobile Phone Service
-     ['FFN','622','use','wireless_repeater'], // Wireless Repeater
-     ['FFN','625','use','satellite_telecommunications'], // Satellite Telecommunications
-     ['FFN','626','man_made','ground_station'], // Satellite Ground Control
-     ['FFN','632','amenity','information_service'], // Information Service
-     ['FFN','633','amenity','public_records'], // Public Records
-     ['FFN','640','office','financial_services'], // Financial Services
-     ['FFN','642','office','central_banking'], // Central Banking
-     ['FFN','643','amenity','bank'], // Retail Banking
-     ['FFN','651','office','insurance'], // Insurance
-     ['FFN','662','office','financial_market_administration'], // Financial Market Administration
-     ['FFN','663','office','security_brokerage'], // Security Brokerage
-     ['FFN','671','office','fund_management'], // Fund Management
-     ['FFN','680','office','estate_agent'], // Real Estate Activities
-     ['FFN','681','office','professional_scientific_and_technical'], // Professional, Scientific and Technical
-     ['FFN','691','office','legal_activities'], // Legal Activities
-     ['FFN','696','office','accounting'], // Accounting
-     ['FFN','701','office','head_office'], // Head Office
-     ['FFN','706','office','business_management'], // Business Management
-     ['FFN','711','office','architecture_consulting'], // Architecture Consulting
-     ['FFN','714','office','engineering_design'], // Engineering Design
-     ['FFN','717','office','surveying'], // Surveying
-     ['FFN','720','use','research'], // Scientific Research and Development
-     ['FFN','721','use','observation_station'], // Observation Station
-     ['FFN','722','monitoring:weather','yes'], // Weather Station
-     ['FFN','725','use','nuclear_research_centre'], // Nuclear Research Centre
-     ['FFN','730','use','wind_tunnel'], // Wind Tunnel
-     ['FFN','741','amenity','advertising'], // Advertising
-     ['FFN','752','shop','photo'], // Photography
-     ['FFN','757','amenity','veterinary'], // Veterinary
-     ['FFN','760','office','business_support'], // Business and Personal Support Services
-     ['FFN','761','amenity','car_rental'], // Motor Vehicle Rental
-     ['FFN','770','office','employment_agency'], // Employment Agency
-     ['FFN','775','shop','travel_agency'], // Travel Agency
-     ['FFN','780','use','security_enforcement'], // Security Enforcement
-     ['FFN','781','use','guard'], // Guard
-     ['FFN','791','amenity','custodial_service'], // Custodial Service
-     ['FFN','795','amenity','landscaping_service'], // Landscaping Service
-     ['FFN','801','office','office_administration'], // Office Administration
-     ['FFN','807','use','call_centre'], // Call Centre
-     ['FFN','808','office','public_administration'], // Public Administration
-     ['FFN','809','use','headquarters'], // Headquarters
-     ['FFN','810','office','administrative'], // Administration
-     ['FFN','811','office','government'], // Government
-     ['FFN','812','office','local_government'], // Local Government
-     ['FFN','813','office','subnational_government'], // Subnational Government
-     ['FFN','814','office','national_government'], // National Government
-     ['FFN','815','use','palace'], // Palace
-     ['FFN','817','use','capitol'], // Capitol
-     ['FFN','818','office','executive_activities'], // Executive Activities
-     ['FFN','819','office','legislative_activities'], // Legislative Activities
-     ['FFN','821','use','polling_station'], // Polling Station
-     ['FFN','822','use','civil_activities'], // Civil Activities
-     ['FFN','825','amenity','diplomacy'], // Diplomacy
-     ['FFN','826','diplomatic','mission'], // Diplomatic Mission
-     ['FFN','827','diplomatic','embassy'], // Embassy
-     ['FFN','828','diplomatic','consulate'], // Consul
-     ['FFN','829','use','maritime_defense'], // Maritime Defense
-     ['FFN','830','use','public_order_safety_and_security_services'], // Public Order, Safety and Security Services
-     ['FFN','831','use','public_order'], // Public Order
-     ['FFN','832','use','safety'], // Safety
-     ['FFN','833','use','security_services'], // Security Services
-     ['FFN','835','use','military'], // Defence Activities
-     ['FFN','836','military','armory'], // Armory
-     ['FFN','837','military','reserve_activities'], // Military Reserve Activities
-     ['FFN','838','military','recruitment'], // Military Recruitment
-     ['FFN','839','military','cbrne_civilian_support'], // CBRNE Civilian Support
-     ['FFN','840','amenity','judicial_activities'], // Judicial Activities
-     ['FFN','841','amenity','police'], // Law Enforcement
-     ['FFN','842','amenity','immigration_control'], // Immigration Control
-     ['FFN','843','amenity','prison'], // Imprisonment
-     ['FFN','844','amenity','juvenile_corrections'], // Juvenile Corrections
-     ['FFN','845','amenity','fire_station'], // Firefighting
-     ['FFN','846','amenity','rescue_and_paramedical_services'], // Rescue and Paramedical Services
-     ['FFN','847','use','emergency_operations'], // Emergency Operations
-     ['FFN','848','use','civil_intelligence'], // Civil Intelligence
-     ['FFN','850','use','education'], // Education
-     ['FFN','851','isced:level','1'], // Primary Education
-     ['FFN','852','isced:level','2,3'], // Secondary Education
-     ['FFN','855','building','university'], // Higher Education
-     ['FFN','857','use','vocational_education'], // Vocational Education
-     ['FFN','860','use','healthcare'], // Human Health Activities
-     ['FFN','861','use','in-patient_care'], // In-patient Care
-     ['FFN','862','use','out-patient_care'], // Out-patient Care
-     ['FFN','863','use','urgent_medical_care'], // Urgent Medical Care
-     ['FFN','864','use','human_tissue_repository'], // Human Tissue Repository
-     ['FFN','865','use','public_health_activities'], // Public Health Activities
-     ['FFN','866','use','leprosy_care'], // Leprosy Care
-     ['FFN','871','use','intermediate_care'], // Intermediate Care
-     ['FFN','873','use','psychiatric_in-patient_care'], // Psychiatric In-patient Care
-     ['FFN','875','use','residential_care'], // Residential Care
-     ['FFN','881','social_facility','emergency'], // Emergency Shelter
-     ['FFN','882','social_facility','homeless'], // Homeless Shelter
-     ['FFN','883','social_facility','refugee'], // Refugee Shelter
-     ['FFN','884','social_facility','youth_emergency'], // Emergency Youth Shelter
-     ['FFN','885','amenity','child_care'], // Day Care
-     ['FFN','887','use','social_work'], // Social Work
-     ['FFN','888','use','emergency_relief_services'], // Emergency Relief Services
-     ['FFN','890','amenity','cultural_centre'], // Cultural, Arts and Entertainment
-     ['FFN','891','amenity','theatre'], // Theatre
-     ['FFN','892','amenity','auditorium'], // Auditorium
-     ['FFN','893','amenity','community_centre'], // Community Centre
-     ['FFN','894','tourism','opera_house'], // Opera House
-     ['FFN','895','amenity','nightclub'], // Night Club
-     ['FFN','900','use','sports_amusement_and_recreation'], // Sports, Amusement and Recreation
-     ['FFN','902','amenity','library'], // Library
-     ['FFN','905','tourism','museum'], // Museum
-     ['FFN','906','tourism','aquarium'], // Aquarium
-     ['FFN','907','use','botanical_and/or_zoological_reserve_activities'], // Botanical and/or Zoological Reserve Activities
-     ['FFN','909','leisure','gambling'], // Gambling
-     ['FFN','912','use','sports_centre'], // Sports Centre
-     ['FFN','913','leisure','fitness_centre'], // Fitness Centre
-     ['FFN','914','sport','shooting_range'], // Shooting Range
-     ['FFN','919','use','animal_boarding'], // Animal Boarding
-     ['FFN','921','use','recreation'], // Recreation
-     ['FFN','922','use','amusement'], // Amusement
-     ['FFN','923','leisure','hobbies_andor_leisure_activities'], // Hobbies and/or Leisure Activities
-     ['FFN','930','use','religious_activities'], // Religious Activities
-     ['FFN','931','amenity','place_of_worship'], // Place of Worship
-     ['FFN','932','use','islamic_prayer_hall'], // Islamic Prayer Hall
-     ['FFN','950','amenity','membership_organization'], // Membership Organization
-     ['FFN','954','amenity','club'], // Club
-     ['FFN','955','leisure','yacht_club'], // Yacht-club
-     ['FFN','961','shop','laundry'], // Laundry
-     ['FFN','962','shop','beauty'], // Beauty Treatment
-     ['FFN','963','shop','funeral_directors'], // Funeral Services
-     ['FFN','964','amenity','crematorium'], // Cremation
-     ['FFN','965','amenity','mortuary'], // Mortuary Services
-     ['FFN','966','amenity','adult_entertainment'], // Adult Entertainment
-     ['FFN','967','amenity','storage_of_human_remains'], // Storage of Human Remains
-     ['FFN','970','use','meeting_place'], // Meeting Place
-     ['FFN','980','amenity','death_care_services'], // Death Care Services
-     ['FFN','999','use','other'], // Other
+     ['FFN','2','raw:FFN','agriculture'], // Agriculture
+     ['FFN','3','raw:FFN','growing_of_crops'], // Growing of Crops
+     ['FFN','9','raw:FFN','raising_of_animals'], // Raising of Animals
+     ['FFN','14','raw:FFN','grazing'], // Grazing
+     ['FFN','15','raw:FFN','mixed_farming'], // Mixed Farming
+     ['FFN','16','raw:FFN','migrant_labour'], // Migrant Labour
+     ['FFN','19','raw:FFN','hunting'], // Hunting
+     ['FFN','20','raw:FFN','forestry_and/or_logging'], // Forestry and/or Logging
+     ['FFN','21','raw:FFN','silviculture'], // Silviculture
+     ['FFN','27','raw:FFN','forest_warden'], // Forest Warden
+     ['FFN','30','raw:FFN','fishing'], // Fishing
+     ['FFN','35','raw:FFN','aquaculture'], // Aquaculture
+     ['FFN','40','raw:FFN','mining_and_quarrying'], // Mining and Quarrying
+     ['FFN','50','raw:FFN','solid_mineral_fuel_mining'], // Solid Mineral Fuel Mining
+     ['FFN','60','raw:FFN','petroleum_and/or_gas_extraction'], // Petroleum and/or Gas Extraction
+     ['FFN','70','raw:FFN','metal_ore_mining'], // Metal Ore Mining
+     ['FFN','83','raw:FFN','chemical_mining'], // Chemical Mining
+     ['FFN','84','raw:FFN','peat_extraction'], // Peat Extraction
+     ['FFN','85','raw:FFN','salt_extraction'], // Salt Extraction
+     ['FFN','87','raw:FFN','mineral_mining'], // Mineral Mining
+     ['FFN','91','raw:FFN','gas_oil_separation'], // Gas Oil Separation
+     ['FFN','95','raw:FFN','ore_dressing'], // Ore Dressing
+     ['FFN','99','raw:FFN','manufacturing'], // Manufacturing
+     ['FFN','100','raw:FFN','food_product_manufacture'], // Food Product Manufacture
+     ['FFN','101','raw:FFN','food_processing'], // Food Processing
+     ['FFN','102','raw:FFN','meat_processing'], // Meat Processing
+     ['FFN','103','raw:FFN','seafood_processing'], // Seafood Processing
+     ['FFN','104','raw:FFN','fruit_and/or_vegetable_processing'], // Fruit and/or Vegetable Processing
+     ['FFN','105','raw:FFN','oil-mill'], // Oil-mill
+     ['FFN','106','raw:FFN','dairying'], // Dairying
+     ['FFN','107','raw:FFN','grain_milling'], // Grain Milling
+     ['FFN','110','raw:FFN','baking'], // Baking
+     ['FFN','111','raw:FFN','sugar_manufacture'], // Sugar Manufacture
+     ['FFN','112','raw:FFN','sugar_milling'], // Sugar Milling
+     ['FFN','113','raw:FFN','sugar_refining'], // Sugar Refining
+     ['FFN','114','raw:FFN','confection_manufacture'], // Confection Manufacture
+     ['FFN','115','raw:FFN','pasta_manufacture'], // Pasta Manufacture
+     ['FFN','116','raw:FFN','prepared_meal_manufacture'], // Prepared Meal Manufacture
+     ['FFN','118','raw:FFN','beverage_manufacture'], // Beverage Manufacture
+     ['FFN','119','raw:FFN','animal_feed_manufacture'], // Animal Feed Manufacture
+     ['FFN','120','raw:FFN','ice_manufacture'], // Ice Manufacture
+     ['FFN','121','raw:FFN','spirit_distillery'], // Spirit Distillery
+     ['FFN','122','raw:FFN','winery'], // Winery
+     ['FFN','123','raw:FFN','brewing'], // Brewing
+     ['FFN','124','raw:FFN','soft_drink_manufacture'], // Soft Drink Manufacture
+     ['FFN','125','raw:FFN','tobacco_product_manufacture'], // Tobacco Product Manufacture
+     ['FFN','129','raw:FFN','textile,_apparel_and_leather_manufacture'], // Textile, Apparel and Leather Manufacture
+     ['FFN','130','raw:FFN','textile_manufacture'], // Textile Manufacture
+     ['FFN','140','raw:FFN','apparel_manufacture'], // Apparel Manufacture
+     ['FFN','150','raw:FFN','leather_product_manufacture'], // Leather Product Manufacture
+     ['FFN','155','raw:FFN','footwear_manufacturing'], // Footwear Manufacturing
+     ['FFN','160','raw:FFN','wood-based_manufacturing'], // Wood-based Manufacturing
+     ['FFN','161','raw:FFN','sawmilling'], // Sawmilling
+     ['FFN','165','raw:FFN','wooden_construction_product_manufacture'], // Wooden Construction Product Manufacture
+     ['FFN','171','raw:FFN','paper-mill'], // Paper-mill
+     ['FFN','181','raw:FFN','printing'], // Printing
+     ['FFN','190','raw:FFN','petroleum_and_coal_products_manufacturing'], // Petroleum and Coal Products Manufacturing
+     ['FFN','191','raw:FFN','coke_manufacture'], // Coke Manufacture
+     ['FFN','192','raw:FFN','petroleum_refining'], // Petroleum Refining
+     ['FFN','195','raw:FFN','chemical_manufacture'], // Chemical Manufacture
+     ['FFN','210','raw:FFN','medicinal_product_manufacture'], // Medicinal Product Manufacture
+     ['FFN','221','raw:FFN','rubber_product_manufacture'], // Rubber Product Manufacture
+     ['FFN','225','raw:FFN','plastic_product_manufacture'], // Plastic Product Manufacture
+     ['FFN','230','raw:FFN','nonmetallic_mineral_product_manufacturing'], // Nonmetallic Mineral Product Manufacturing
+     ['FFN','231','raw:FFN','glass_product_manufacture'], // Glass Product Manufacture
+     ['FFN','232','raw:FFN','refractory_product_manufacture'], // Refractory Product Manufacture
+     ['FFN','233','raw:FFN','clay_product_manufacture'], // Clay Product Manufacture
+     ['FFN','234','raw:FFN','ceramic_product_manufacture'], // Ceramic Product Manufacture
+     ['FFN','235','raw:FFN','cement_mill'], // Cement Mill
+     ['FFN','236','raw:FFN','cement_product_manufacture'], // Cement Product Manufacture
+     ['FFN','237','raw:FFN','stone_product_manufacture'], // Stone Product Manufacture
+     ['FFN','240','raw:FFN','primary_metal_manufacturing'], // Primary Metal Manufacturing
+     ['FFN','241','raw:FFN','steel_mill'], // Steel Mill
+     ['FFN','242','raw:FFN','metal_refining'], // Metal Refining
+     ['FFN','243','raw:FFN','foundry'], // Foundry
+     ['FFN','250','raw:FFN','metal_product_manufacturing'], // Metal Product Manufacturing
+     ['FFN','251','raw:FFN','structural_metal_product_manufacture'], // Structural Metal Product Manufacture
+     ['FFN','255','raw:FFN','munitions_manufacture'], // Munitions Manufacture
+     ['FFN','257','raw:FFN','fabricated_metal_product_manufacture'], // Fabricated Metal Product Manufacture
+     ['FFN','260','raw:FFN','electronic_equipment_manufacture'], // Electronic Equipment Manufacture
+     ['FFN','270','raw:FFN','electrical_equipment_manufacture'], // Electrical Equipment Manufacture
+     ['FFN','272','raw:FFN','propane_sale'], // Propane Sale
+     ['FFN','280','raw:FFN','machinery_manufacture'], // Machinery Manufacture
+     ['FFN','289','raw:FFN','transportation_equipment_manufacturing'], // Transportation Equipment Manufacturing
+     ['FFN','290','raw:FFN','motor_vehicle_manufacture'], // Motor Vehicle Manufacture
+     ['FFN','301','raw:FFN','ship_construction'], // Ship Construction
+     ['FFN','304','raw:FFN','railway_vehicle_manufacture'], // Railway Vehicle Manufacture
+     ['FFN','305','raw:FFN','aircraft_manufacture'], // Aircraft Manufacture
+     ['FFN','306','raw:FFN','military_vehicle_manufacture'], // Military Vehicle Manufacture
+     ['FFN','310','raw:FFN','furniture_manufacture'], // Furniture Manufacture
+     ['FFN','320','raw:FFN','miscellaneous_manufacturing'], // Miscellaneous Manufacturing
+     ['FFN','321','raw:FFN','jewellery_manufacture'], // Jewellery Manufacture
+     ['FFN','322','raw:FFN','musical_instrument_manufacture'], // Musical Instrument Manufacture
+     ['FFN','323','raw:FFN','sports_goods_manufacture'], // Sports Goods Manufacture
+     ['FFN','324','raw:FFN','game_and/or_toy_manufacture'], // Game and/or Toy Manufacture
+     ['FFN','325','raw:FFN','medical_and/or_dental_equipment_manufacture'], // Medical and/or Dental Equipment Manufacture
+     ['FFN','330','raw:FFN','general_repair'], // General Repair
+     ['FFN','331','raw:FFN','fabricated_metal_product_repair'], // Fabricated Metal Product Repair
+     ['FFN','332','raw:FFN','electronic_equipment_repair'], // Electronic Equipment Repair
+     ['FFN','333','raw:FFN','electrical_equipment_repair'], // Electrical Equipment Repair
+     ['FFN','334','raw:FFN','machinery_repair'], // Machinery Repair
+     ['FFN','340','raw:FFN','ship_repair'], // Ship Repair
+     ['FFN','341','raw:FFN','aircraft_repair'], // Aircraft Repair
+     ['FFN','342','raw:FFN','railway_vehicle_repair'], // Railway Vehicle Repair
+     ['FFN','343','raw:FFN','motor_vehicle_repair'], // Motor Vehicle Repair
+     ['FFN','350','raw:FFN','utilities'], // Utilities
+     ['FFN','351','raw:FFN','power_generation'], // Power Generation
+     ['FFN','352','raw:FFN','climate_control'], // Climate Control
+     ['FFN','355','raw:FFN','cooling'], // Cooling
+     ['FFN','356','raw:FFN','heating'], // Heating
+     ['FFN','360','raw:FFN','water_supply'], // Water Supply
+     ['FFN','361','raw:FFN','water_collection'], // Water Collection
+     ['FFN','362','raw:FFN','water_treatment'], // Water Treatment
+     ['FFN','363','raw:FFN','water_distribution'], // Water Distribution
+     ['FFN','370','raw:FFN','sewerage'], // Sewerage
+     ['FFN','372','raw:FFN','sewerage_screening'], // Sewerage Screening
+     ['FFN','382','raw:FFN','restroom'], // Restroom
+     ['FFN','383','raw:FFN','waste_treatment_and_disposal'], // Waste Treatment and Disposal
+     ['FFN','385','raw:FFN','materials_recovery'], // Materials Recovery
+     ['FFN','440','raw:FFN','commerce'], // Commerce
+     ['FFN','459','raw:FFN','wholesale_merchant'], // Wholesale Merchant
+     ['FFN','460','raw:FFN','retail_sale'], // Retail Sale
+     ['FFN','464','raw:FFN','specialized_store'], // Specialized Store
+     ['FFN','465','raw:FFN','non-specialized_store'], // Non-specialized Store
+     ['FFN','466','raw:FFN','convenience_store'], // Convenience Store
+     ['FFN','470','raw:FFN','petrol_sale'], // Petrol Sale
+     ['FFN','473','raw:FFN','sales_yard'], // Sales Yard
+     ['FFN','474','raw:FFN','precious_metal_merchant'], // Precious Metal Merchant
+     ['FFN','475','raw:FFN','market'], // Market
+     ['FFN','476','raw:FFN','grocery'], // Grocery
+     ['FFN','477','raw:FFN','pharmacy'], // Pharmacy
+     ['FFN','478','raw:FFN','pet-shop'], // Pet-shop
+     ['FFN','480','raw:FFN','transport'], // Transport
+     ['FFN','481','raw:FFN','terminal'], // Terminal
+     ['FFN','482','raw:FFN','station'], // Station
+     ['FFN','483','raw:FFN','stop'], // Stop
+     ['FFN','484','raw:FFN','transfer_hub'], // Transfer Hub
+     ['FFN','486','raw:FFN','signalling'], // Signalling
+     ['FFN','487','raw:FFN','transport_system_maintenance'], // Transport System Maintenance
+     ['FFN','488','raw:FFN','navigation'], // Navigation
+     ['FFN','489','raw:FFN','transportation_hub'], // Transportation Hub
+     ['FFN','490','raw:FFN','railway_transport'], // Railway Transport
+     ['FFN','491','raw:FFN','railway_passenger_transport'], // Railway Passenger Transport
+     ['FFN','494','raw:FFN','pedestrian_transport'], // Pedestrian Transport
+     ['FFN','495','raw:FFN','road_transport'], // Road Transport
+     ['FFN','496','raw:FFN','road_passenger_transport'], // Road Passenger Transport
+     ['FFN','497','raw:FFN','road_freight_transport'], // Road Freight Transport
+     ['FFN','500','raw:FFN','pipeline_transport'], // Pipeline Transport
+     ['FFN','501','raw:FFN','pumping'], // Pumping
+     ['FFN','505','raw:FFN','water_transport'], // Water Transport
+     ['FFN','507','raw:FFN','inland_waters_transport'], // Inland Waters Transport
+     ['FFN','508','raw:FFN','canal_transport'], // Canal Transport
+     ['FFN','510','raw:FFN','port_control'], // Port Control
+     ['FFN','511','raw:FFN','maritime_pilotage'], // Maritime Pilotage
+     ['FFN','512','raw:FFN','pilot_station'], // Pilot Station
+     ['FFN','513','raw:FFN','harbour_control'], // Harbour Control
+     ['FFN','520','raw:FFN','air_transport'], // Air Transport
+     ['FFN','525','raw:FFN','air_traffic_control'], // Air Traffic Control
+     ['FFN','529','raw:FFN','transportation_support'], // Transportation Support
+     ['FFN','530','raw:FFN','warehousing_and_storage'], // Warehousing and Storage
+     ['FFN','535','raw:FFN','motor_vehicle_parking'], // Motor Vehicle Parking
+     ['FFN','536','raw:FFN','cargo_handling'], // Cargo Handling
+     ['FFN','537','raw:FFN','customs_checkpoint'], // Customs Checkpoint
+     ['FFN','538','raw:FFN','inspection_station'], // Inspection Station
+     ['FFN','539','raw:FFN','inspection'], // Inspection
+     ['FFN','540','raw:FFN','postal_activities'], // Postal Activities
+     ['FFN','541','raw:FFN','mail_and_package_transport'], // Mail and Package Transport
+     ['FFN','545','raw:FFN','courier_activities'], // Courier Activities
+     ['FFN','548','raw:FFN','short-term_accommodation'], // Short-term Accommodation
+     ['FFN','549','raw:FFN','long-term_accommodation'], // Long-term Accommodation
+     ['FFN','550','raw:FFN','accommodation'], // Accommodation
+     ['FFN','551','raw:FFN','hotel'], // Hotel
+     ['FFN','552','raw:FFN','resort'], // Resort
+     ['FFN','553','raw:FFN','motel'], // Motel
+     ['FFN','554','raw:FFN','guest-house'], // Guest-house
+     ['FFN','555','raw:FFN','hostel'], // Hostel
+     ['FFN','556','raw:FFN','dormitory'], // Dormitory
+     ['FFN','557','raw:FFN','vacation_cottage'], // Vacation Cottage
+     ['FFN','558','raw:FFN','dependents_housing'], // Dependents Housing
+     ['FFN','559','raw:FFN','communal_bath'], // Communal Bath
+     ['FFN','563','raw:FFN','residence'], // Residence
+     ['FFN','570','raw:FFN','food_service'], // Food Service
+     ['FFN','572','raw:FFN','restaurant'], // Restaurant
+     ['FFN','573','raw:FFN','bar'], // Bar
+     ['FFN','574','raw:FFN','dining_hall'], // Dining Hall
+     ['FFN','578','raw:FFN','banquet_hall'], // Banquet Hall
+     ['FFN','579','raw:FFN','convention_centre'], // Convention Centre
+     ['FFN','580','raw:FFN','publishing_and_broadcasting'], // Publishing and Broadcasting
+     ['FFN','582','raw:FFN','print_publishing'], // Print Publishing
+     ['FFN','594','raw:FFN','cinema'], // Cinema
+     ['FFN','601','raw:FFN','radio_broadcasting'], // Radio Broadcasting
+     ['FFN','604','raw:FFN','television_broadcasting'], // Television Broadcasting
+     ['FFN','610','raw:FFN','telecommunications'], // Telecommunications
+     ['FFN','612','raw:FFN','retail_telecommunications'], // Retail Telecommunications
+     ['FFN','614','raw:FFN','wired_telecommunications'], // Wired Telecommunications
+     ['FFN','615','raw:FFN','main_telephone_exchange'], // Main Telephone Exchange
+     ['FFN','616','raw:FFN','branch_telephone_exchange'], // Branch Telephone Exchange
+     ['FFN','617','raw:FFN','wired_repeater'], // Wired Repeater
+     ['FFN','620','raw:FFN','wireless_telecommunications'], // Wireless Telecommunications
+     ['FFN','621','raw:FFN','mobile_phone_service'], // Mobile Phone Service
+     ['FFN','622','raw:FFN','wireless_repeater'], // Wireless Repeater
+     ['FFN','625','raw:FFN','satellite_telecommunications'], // Satellite Telecommunications
+     ['FFN','626','raw:FFN','satellite_ground_control'], // Satellite Ground Control
+     ['FFN','632','raw:FFN','information_service'], // Information Service
+     ['FFN','633','raw:FFN','public_records'], // Public Records
+     ['FFN','640','raw:FFN','financial_services'], // Financial Services
+     ['FFN','642','raw:FFN','central_banking'], // Central Banking
+     ['FFN','643','raw:FFN','retail_banking'], // Retail Banking
+     ['FFN','651','raw:FFN','insurance'], // Insurance
+     ['FFN','662','raw:FFN','financial_market_administration'], // Financial Market Administration
+     ['FFN','663','raw:FFN','security_brokerage'], // Security Brokerage
+     ['FFN','671','raw:FFN','fund_management'], // Fund Management
+     ['FFN','680','raw:FFN','real_estate_activities'], // Real Estate Activities
+     ['FFN','681','raw:FFN','professional,_scientific_and_technical'], // Professional, Scientific and Technical
+     ['FFN','691','raw:FFN','legal_activities'], // Legal Activities
+     ['FFN','696','raw:FFN','accounting'], // Accounting
+     ['FFN','701','raw:FFN','head_office'], // Head Office
+     ['FFN','706','raw:FFN','business_management'], // Business Management
+     ['FFN','711','raw:FFN','architecture_consulting'], // Architecture Consulting
+     ['FFN','714','raw:FFN','engineering_design'], // Engineering Design
+     ['FFN','717','raw:FFN','surveying'], // Surveying
+     ['FFN','720','raw:FFN','scientific_research_and_development'], // Scientific Research and Development
+     ['FFN','721','raw:FFN','observation_station'], // Observation Station
+     ['FFN','722','raw:FFN','weather_station'], // Weather Station
+     ['FFN','725','raw:FFN','nuclear_research_centre'], // Nuclear Research Centre
+     ['FFN','730','raw:FFN','wind_tunnel'], // Wind Tunnel
+     ['FFN','741','raw:FFN','advertising'], // Advertising
+     ['FFN','752','raw:FFN','photography'], // Photography
+     ['FFN','757','raw:FFN','veterinary'], // Veterinary
+     ['FFN','760','raw:FFN','business_and_personal_support_services'], // Business and Personal Support Services
+     ['FFN','761','raw:FFN','motor_vehicle_rental'], // Motor Vehicle Rental
+     ['FFN','770','raw:FFN','employment_agency'], // Employment Agency
+     ['FFN','775','raw:FFN','travel_agency'], // Travel Agency
+     ['FFN','780','raw:FFN','security_enforcement'], // Security Enforcement
+     ['FFN','781','raw:FFN','guard'], // Guard
+     ['FFN','791','raw:FFN','custodial_service'], // Custodial Service
+     ['FFN','795','raw:FFN','landscaping_service'], // Landscaping Service
+     ['FFN','801','raw:FFN','office_administration'], // Office Administration
+     ['FFN','807','raw:FFN','call_centre'], // Call Centre
+     ['FFN','808','raw:FFN','public_administration'], // Public Administration
+     ['FFN','809','raw:FFN','headquarters'], // Headquarters
+     ['FFN','810','raw:FFN','administration'], // Administration
+     ['FFN','811','raw:FFN','government'], // Government
+     ['FFN','812','raw:FFN','local_government'], // Local Government
+     ['FFN','813','raw:FFN','subnational_government'], // Subnational Government
+     ['FFN','814','raw:FFN','national_government'], // National Government
+     ['FFN','815','raw:FFN','palace'], // Palace
+     ['FFN','817','raw:FFN','capitol'], // Capitol
+     ['FFN','818','raw:FFN','executive_activities'], // Executive Activities
+     ['FFN','819','raw:FFN','legislative_activities'], // Legislative Activities
+     ['FFN','821','raw:FFN','polling_station'], // Polling Station
+     ['FFN','822','raw:FFN','civil_activities'], // Civil Activities
+     ['FFN','825','raw:FFN','diplomacy'], // Diplomacy
+     ['FFN','826','raw:FFN','diplomatic_mission'], // Diplomatic Mission
+     ['FFN','827','raw:FFN','embassy'], // Embassy
+     ['FFN','828','raw:FFN','consul'], // Consul
+     ['FFN','829','raw:FFN','maritime_defence'], // Maritime Defence
+     ['FFN','830','raw:FFN','public_order,_safety_and_security_services'], // Public Order, Safety and Security Services
+     ['FFN','831','raw:FFN','public_order'], // Public Order
+     ['FFN','832','raw:FFN','safety'], // Safety
+     ['FFN','833','raw:FFN','security_services'], // Security Services
+     ['FFN','835','raw:FFN','defence_activities'], // Defence Activities
+     ['FFN','836','raw:FFN','armoury'], // Armoury
+     ['FFN','837','raw:FFN','military_reserve_activities'], // Military Reserve Activities
+     ['FFN','838','raw:FFN','military_recruitment'], // Military Recruitment
+     ['FFN','839','raw:FFN','cbrne_civilian_support'], // CBRNE Civilian Support
+     ['FFN','840','raw:FFN','judicial_activities'], // Judicial Activities
+     ['FFN','841','raw:FFN','law_enforcement'], // Law Enforcement
+     ['FFN','842','raw:FFN','immigration_control'], // Immigration Control
+     ['FFN','843','raw:FFN','imprisonment'], // Imprisonment
+     ['FFN','844','raw:FFN','juvenile_corrections'], // Juvenile Corrections
+     ['FFN','845','raw:FFN','firefighting'], // Firefighting
+     ['FFN','846','raw:FFN','rescue_and_paramedical_services'], // Rescue and Paramedical Services
+     ['FFN','847','raw:FFN','emergency_operations'], // Emergency Operations
+     ['FFN','848','raw:FFN','civil_intelligence'], // Civil Intelligence
+     ['FFN','850','raw:FFN','education'], // Education
+     ['FFN','851','raw:FFN','primary_education'], // Primary Education
+     ['FFN','852','raw:FFN','secondary_education'], // Secondary Education
+     ['FFN','855','raw:FFN','higher_education'], // Higher Education
+     ['FFN','857','raw:FFN','vocational_education'], // Vocational Education
+     ['FFN','860','raw:FFN','human_health_activities'], // Human Health Activities
+     ['FFN','861','raw:FFN','in-patient_care'], // In-patient Care
+     ['FFN','862','raw:FFN','out-patient_care'], // Out-patient Care
+     ['FFN','863','raw:FFN','urgent_medical_care'], // Urgent Medical Care
+     ['FFN','864','raw:FFN','human_tissue_repository'], // Human Tissue Repository
+     ['FFN','865','raw:FFN','public_health_activities'], // Public Health Activities
+     ['FFN','866','raw:FFN','leprosy_care'], // Leprosy Care
+     ['FFN','871','raw:FFN','intermediate_care'], // Intermediate Care
+     ['FFN','873','raw:FFN','psychiatric_in-patient_care'], // Psychiatric In-patient Care
+     ['FFN','875','raw:FFN','residential_care'], // Residential Care
+     ['FFN','881','raw:FFN','emergency_shelter'], // Emergency Shelter
+     ['FFN','882','raw:FFN','homeless_shelter'], // Homeless Shelter
+     ['FFN','883','raw:FFN','refugee_shelter'], // Refugee Shelter
+     ['FFN','884','raw:FFN','emergency_youth_shelter'], // Emergency Youth Shelter
+     ['FFN','885','raw:FFN','day_care'], // Day Care
+     ['FFN','887','raw:FFN','social_work'], // Social Work
+     ['FFN','888','raw:FFN','emergency_relief_services'], // Emergency Relief Services
+     ['FFN','890','raw:FFN','cultural,_arts_and_entertainment'], // Cultural, Arts and Entertainment
+     ['FFN','891','raw:FFN','theatre'], // Theatre
+     ['FFN','892','raw:FFN','auditorium'], // Auditorium
+     ['FFN','893','raw:FFN','community_centre'], // Community Centre
+     ['FFN','894','raw:FFN','opera_house'], // Opera House
+     ['FFN','895','raw:FFN','night_club'], // Night Club
+     ['FFN','900','raw:FFN','sports,_amusement_and_recreation'], // Sports, Amusement and Recreation
+     ['FFN','902','raw:FFN','library'], // Library
+     ['FFN','905','raw:FFN','museum'], // Museum
+     ['FFN','906','raw:FFN','aquarium'], // Aquarium
+     ['FFN','907','raw:FFN','botanical_and/or_zoological_reserve_activities'], // Botanical and/or Zoological Reserve Activities
+     ['FFN','909','raw:FFN','gambling'], // Gambling
+     ['FFN','912','raw:FFN','sports_centre'], // Sports Centre
+     ['FFN','913','raw:FFN','fitness_centre'], // Fitness Centre
+     ['FFN','914','raw:FFN','shooting_range'], // Shooting Range
+     ['FFN','915','raw:FFN','water_park'], // Water Park
+     ['FFN','919','raw:FFN','animal_boarding'], // Animal Boarding
+     ['FFN','921','raw:FFN','recreation'], // Recreation
+     ['FFN','922','raw:FFN','amusement'], // Amusement
+     ['FFN','923','raw:FFN','hobbies_and/or_leisure_activities'], // Hobbies and/or Leisure Activities
+     ['FFN','930','raw:FFN','religious_activities'], // Religious Activities
+     ['FFN','931','raw:FFN','place_of_worship'], // Place of Worship
+     ['FFN','950','raw:FFN','membership_organization'], // Membership Organization
+     ['FFN','954','raw:FFN','club'], // Club
+     ['FFN','955','raw:FFN','yacht-club'], // Yacht-club
+     ['FFN','961','raw:FFN','laundry'], // Laundry
+     ['FFN','962','raw:FFN','beauty_treatment'], // Beauty Treatment
+     ['FFN','963','raw:FFN','funeral_services'], // Funeral Services
+     ['FFN','964','raw:FFN','cremation'], // Cremation
+     ['FFN','965','raw:FFN','mortuary_services'], // Mortuary Services
+     ['FFN','966','raw:FFN','adult_entertainment'], // Adult Entertainment
+     ['FFN','967','raw:FFN','storage_of_human_remains'], // Storage of Human Remains
+     ['FFN','970','raw:FFN','meeting_place'], // Meeting Place
+     ['FFN','980','raw:FFN','death_care_services'], // Death Care Services
+     ['FFN','999','raw:FFN','other'], // Other
 
      // FHC - Harbour Facility Function
      // ['FHC','-999999',undefined,undefined], // No Information
@@ -1590,6 +2912,36 @@ ggdm30.rules = {
      ['FHC','11','harbour:use','bulk_terminal'], // Bulk Terminal
      ['FHC','999','harbour:use','other'], // Other
 
+     // FHC2 - Harbour Facility Function [2]
+     // ['FHC2','-999999',undefined,undefined], // No Information
+     ['FHC2','1','harbour:use2','ro-ro_terminal'], // Ro-Ro Terminal
+     ['FHC2','2','harbour:use2','timber-yard'], // Timber-yard
+     ['FHC2','3','harbour:use2','ferry_terminal'], // Ferry Terminal
+     ['FHC2','4','harbour:use2','fishing_harbour'], // Fishing Harbour
+     ['FHC2','5','harbour:use2','marina'], // Marina
+     ['FHC2','6','harbour:use2','naval_base'], // Naval Base
+     ['FHC2','7','harbour:use2','tanker_terminal'], // Tanker Terminal
+     ['FHC2','8','harbour:use2','passenger_terminal'], // Passenger Terminal
+     ['FHC2','9','harbour:use2','shipyard'], // Shipyard
+     ['FHC2','10','harbour:use2','container_terminal'], // Container Terminal
+     ['FHC2','11','harbour:use2','bulk_terminal'], // Bulk Terminal
+     ['FHC2','999','harbour:use2','other'], // Other
+
+     // FHC3 - Harbour Facility Function [3]
+     // ['FHC3','-999999',undefined,undefined], // No Information
+     ['FHC3','1','harbour:use3','ro-ro_terminal'], // Ro-Ro Terminal
+     ['FHC3','2','harbour:use3','timber-yard'], // Timber-yard
+     ['FHC3','3','harbour:use3','ferry_terminal'], // Ferry Terminal
+     ['FHC3','4','harbour:use3','fishing_harbour'], // Fishing Harbour
+     ['FHC3','5','harbour:use3','marina'], // Marina
+     ['FHC3','6','harbour:use3','naval_base'], // Naval Base
+     ['FHC3','7','harbour:use3','tanker_terminal'], // Tanker Terminal
+     ['FHC3','8','harbour:use3','passenger_terminal'], // Passenger Terminal
+     ['FHC3','9','harbour:use3','shipyard'], // Shipyard
+     ['FHC3','10','harbour:use3','container_terminal'], // Container Terminal
+     ['FHC3','11','harbour:use3','bulk_terminal'], // Bulk Terminal
+     ['FHC3','999','harbour:use3','other'], // Other
+
      // FIC - Embankment Type
      // ['FIC','-999999',undefined,undefined], // No Information
      ['FIC','1','embankment:type','mound'], // Mound
@@ -1604,9 +2956,14 @@ ggdm30.rules = {
      ['FLO','1000','floating','no'],
      ['FLO','1001','floating','yes'],
 
+     // FLT - Floodlit
+     // ['FLT','-999999',undefined,undefined], // No Information
+     ['FLT','1000','raw:FLT','no'],
+     ['FLT','1001','raw:FLT','yes'],
+
      // FPT - Airfield Type
      // ['FPT','-999999',undefined,undefined], // No Information
-     ['FPT','1','aeroway:airfield:type','major'], // Major
+   ['FPT','1','aeroway:airfield:type','major'], // Major
      ['FPT','2','aeroway:airfield:type','minor_and_hard'], // Minor and Hard
      ['FPT','3','aeroway:airfield:type','minor_and_soft'], // Minor and Soft
      ['FPT','4','aeroway:airfield:type','minor'], // Minor
@@ -1621,6 +2978,31 @@ ggdm30.rules = {
      ['FRT','5','range:type','demolition'], // Demolition Area
      ['FRT','6','range:type','impact_area'], // Impact Area
      ['FRT','999','range:type','other'], // Other
+
+     // FRT2 - Weapons Range Type [2]
+     // ['FRT2','-999999',undefined,undefined], // No Information
+     ['FRT2','1','range:type2','small_arms'], // Small Arms
+     ['FRT2','2','range:type2','tank'], // Tank
+     ['FRT2','3','range:type2','artillery'], // Field Artillery
+     ['FRT2','4','range:type2','grenade'], // Grenade
+     ['FRT2','5','range:type2','demolition_area'], // Demolition Area
+     ['FRT2','6','range:type2','impact_area'], // Impact Area
+     ['FRT2','999','range:type2','other'], // Other
+
+     // FRT3 - Weapons Range Type [3]
+     // ['FRT3','-999999',undefined,undefined], // No Information
+     ['FRT3','1','range:type3','small_arms'], // Small Arms
+     ['FRT3','2','range:type3','tank'], // Tank
+     ['FRT3','3','range:type3','artillery'], // Field Artillery
+     ['FRT3','4','range:type3','grenade'], // Grenade
+     ['FRT3','5','range:type3','demolition_area'], // Demolition Area
+     ['FRT3','6','range:type3','impact_area'], // Impact Area
+     ['FRT3','999','range:type3','other'], // Other
+
+     // FRZ - Seasonally Frozen
+     // ['FRZ','-999999',undefined,undefined], // No Information
+     ['FRZ','1000','raw:FRZ','no'],
+     ['FRZ','1001','raw:FRZ','yes'],
 
      // FSC - Flight Strip Capable
      // ['FSC','-999999',undefined,undefined], // No Information
@@ -1648,10 +3030,54 @@ ggdm30.rules = {
      ['FZR','6','fortified:type','pillbox'], // Pillbox
      ['FZR','999','fortified:type','other'], // Other
 
+     // GDBV - Geodatabase Schema Version
+     // ['GDBV','-999999',undefined,undefined], // No Information
+     ['GDBV','1','raw:GDBV','tds_4_0'], // TDS_4_0
+     ['GDBV','2','raw:GDBV','tds_6_0'], // TDS_6_0
+     ['GDBV','3','raw:GDBV','tds_6_1'], // TDS_6_1
+     ['GDBV','4','raw:GDBV','ggdm_2_0'], // GGDM_2_0
+     ['GDBV','5','raw:GDBV','ggdm_2_1'], // GGDM_2_1
+     ['GDBV','6','raw:GDBV','ggdm_2_2'], // GGDM_2_2
+     ['GDBV','7','raw:GDBV','ggdm_3_0'], // GGDM_3_0
+     ['GDBV','999','raw:GDBV','other'], // Other
+
+     // GEC - Geopolitical Entity Type
+     // ['GEC','-999999',undefined,undefined], // No Information
+     ['GEC','5','raw:GEC','area_of_no_sovereignty'], // Area of No Sovereignty
+     ['GEC','7','raw:GEC','demilitarized_zone_(dmz)'], // Demilitarized Zone (DMZ)
+     ['GEC','8','raw:GEC','zone_of_occupation'], // Zone of Occupation
+     ['GEC','9','raw:GEC','leased_area'], // Leased Area
+     ['GEC','10','raw:GEC','political_entity'], // Political Entity
+     ['GEC','11','raw:GEC','dependent_political_entity'], // Dependent Political Entity
+     ['GEC','12','raw:GEC','freely_associated_state'], // Freely Associated State
+     ['GEC','13','raw:GEC','independent_political_entity'], // Independent Political Entity
+     ['GEC','14','raw:GEC','semi-independent_political_entity'], // Semi-independent Political Entity
+     ['GEC','15','raw:GEC','economic_region'], // Economic Region
+     ['GEC','16','raw:GEC','territory'], // Territory
+     ['GEC','17','raw:GEC','buffer_zone'], // Buffer Zone
+     ['GEC','999','raw:GEC','other'], // Other
+
      // GFT - Geologic Fault Trace Visible
      // ['GFT','-999999',undefined,undefined], // No Information
      ['GFT','1000','visible_fault','no'],
      ['GFT','1001','visible_fault','yes'],
+
+     // GFY - Geologic Fault Type
+     // ['GFY','-999999',undefined,undefined], // No Information
+     ['GFY','1','raw:GFY','normal'], // Normal
+     ['GFY','2','raw:GFY','thrust'], // Thrust
+     ['GFY','3','raw:GFY','reverse'], // Reverse
+     ['GFY','4','raw:GFY','strike-slip'], // Strike-slip
+     ['GFY','5','raw:GFY','extension'], // Extension
+     ['GFY','6','raw:GFY','transpression'], // Transpression
+     ['GFY','7','raw:GFY','restraining_bend'], // Restraining Bend
+     ['GFY','8','raw:GFY','transextension'], // Transextension
+     ['GFY','9','raw:GFY','releasing_bend'], // Releasing Bend
+     ['GFY','10','raw:GFY','oblique'], // Oblique
+     ['GFY','11','raw:GFY','decollement'], // Decollement
+     ['GFY','12','raw:GFY','shear_zone'], // Shear Zone
+     ['GFY','13','raw:GFY','transverse'], // Transverse
+     ['GFY','999','raw:GFY','other'], // Other
 
      // GOT - Geothermal Outlet Type
      // ['GOT','-999999',undefined,undefined], // No Information
@@ -1662,20 +3088,25 @@ ggdm30.rules = {
      ['GOT','5','natural','geyser'], // Geyser
      ['GOT','999','natural','other_geothermal_outlet'], // Other
 
-     // GSGCHC - Runway Direction (high end) : Surface Slope (high) (interval closure)
+     // GRD - Guarded
+     // ['GRD','-999999',undefined,undefined], // No Information
+     ['GRD','1000','raw:GRD','no'],
+     ['GRD','1001','raw:GRD','yes'],
+
+     // GSGCHC - Runway Direction : Surface Slope (high end) <interval closure>
      ['GSGCHC','2','aeroway:runway_highend:slope:closure','open_interval'], // Open Interval
-     ['GSGCHC','3','aeroway:runway_highend:slope:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['GSGCHC','4','aeroway:runway_highend:slope:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['GSGCHC','3','aeroway:runway_highend:slope:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['GSGCHC','4','aeroway:runway_highend:slope:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['GSGCHC','5','aeroway:runway_highend:slope:closure','closed_interval'], // Closed Interval
      ['GSGCHC','6','aeroway:runway_highend:slope:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['GSGCHC','7','aeroway:runway_highend:slope:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
      ['GSGCHC','8','aeroway:runway_highend:slope:closure','less-than_semi-interval'], // Less-than Semi-interval
      ['GSGCHC','9','aeroway:runway_highend:slope:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
-     // GSGCLC - Runway Direction (low end) : Surface Slope (low) (interval closure)
+     // GSGCLC - Runway Direction : Surface Slope (low end) <interval closure>
      ['GSGCLC','2','aeroway:runway_lowend:slope:closure','open_interval'], // Open Interval
-     ['GSGCLC','3','aeroway:runway_lowend:slope:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['GSGCLC','4','aeroway:runway_lowend:slope:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['GSGCLC','3','aeroway:runway_lowend:slope:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['GSGCLC','4','aeroway:runway_lowend:slope:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['GSGCLC','5','aeroway:runway_lowend:slope:closure','closed_interval'], // Closed Interval
      ['GSGCLC','6','aeroway:runway_lowend:slope:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['GSGCLC','7','aeroway:runway_lowend:slope:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -1691,9 +3122,16 @@ ggdm30.rules = {
      ['GTC','999','barrier','other'], // Other
 
      // GUG - Guyed
-     ['GUG','-999999',undefined,undefined], // No Information
+     // ['GUG','-999999',undefined,undefined], // No Information
      ['GUG','1000','guyed','no'],
      ['GUG','1001','guyed','yes'],
+
+     // GWS - Groundwater Potential Score
+     // ['GWS','-999999',undefined,undefined], // No Information
+     ['GWS','1','raw:GWS','unsuitable'], // Unsuitable
+     ['GWS','2','raw:GWS','poor'], // Poor
+     ['GWS','3','raw:GWS','moderate'], // Moderate
+     ['GWS','4','raw:GWS','good'], // Good
 
      // HAF - Helipad Associated Facility
      // ['HAF','-999999',undefined,undefined], // No Information
@@ -1707,7 +3145,7 @@ ggdm30.rules = {
      ['HAF','11','helipad:facility','military_installation'], // Military Installation
      ['HAF','999','helipad:facility','other'], // Other
 
-     // HHD - Homogenous Habitation Distribution -- Nothing in OSM even close to this
+     // HHD - Homogenous Habitation Distribution
      // ['HHD','-999999',undefined,undefined], // No Information
      ['HHD','1000','homogenous_distribution','no'],
      ['HHD','1001','homogenous_distribution','yes'],
@@ -1752,10 +3190,24 @@ ggdm30.rules = {
 
      // HST - Hazard Shelter Intended Use
      // ['HST','-999999',undefined,undefined], // No Information
-     ['HST','1','shelter:type','bomb'], // Bomb Shelter
-     ['HST','2','shelter:type','fallout'], // Fallout Shelter
-     ['HST','3','shelter:type','storm'], // Storm Shelter
+     ['HST','1','shelter:type','bomb_shelter'], // Bomb Shelter
+     ['HST','2','shelter:type','fallout_shelter'], // Fallout Shelter
+     ['HST','3','shelter:type','storm_shelter'], // Storm Shelter
      ['HST','999','shelter:type','other'], // Other
+
+     // HST2 - Hazard Shelter Intended Use [2]
+     // ['HST2','-999999',undefined,undefined], // No Information
+     ['HST2','1','shelter:type2','bomb_shelter'], // Bomb Shelter
+     ['HST2','2','shelter:type2','fallout_shelter'], // Fallout Shelter
+     ['HST2','3','shelter:type2','storm_shelter'], // Storm Shelter
+     ['HST2','999','shelter:type2','other'], // Other
+
+     // HST3 - Hazard Shelter Intended Use [3]
+     // ['HST3','-999999',undefined,undefined], // No Information
+     ['HST3','1','shelter:type3','bomb_shelter'], // Bomb Shelter
+     ['HST3','2','shelter:type3','fallout_shelter'], // Fallout Shelter
+     ['HST3','3','shelter:type3','storm_shelter'], // Storm Shelter
+     ['HST3','999','shelter:type3','other'], // Other
 
      // HTP - Hangar Type Category
      // ['HTP','-999999',undefined,undefined], // No Information
@@ -1766,301 +3218,313 @@ ggdm30.rules = {
      ['HTP','5','hangar:type','single_bay'], // S - Single Bay
      ['HTP','6','hangar:type','double_bay'], // D - Double Bay
      ['HTP','7','hangar:type','t-shaped'], // T - T-Shaped
+     ['HTP','999',''hangar:type','other'], // Other
 
      // HZD - Geodetic Datum
-     // ['HZD','noInformation',undefined,undefined], // No Information
-     ['HZD','other','source:datum:geodetic','other'], // Other
-     ['HZD','worldGeodeticSystem1984','source:datum:geodetic','world_geodetic_system_1984'], // The geodetic datum known as 'World Geodetic System 1984' and intended to be used globally.
-     ['HZD','adindanBurkinaFaso','source:datum:geodetic','adindan_(burkina_faso)'], // The geodetic datum known as 'Adindan' and intended to be used only in the geographic region of Burkina Faso.
-     ['HZD','adindanCameroon','source:datum:geodetic','adindan_(cameroon)'], // The geodetic datum known as 'Adindan' and intended to be used only in the geographic region of Cameroon.
-     ['HZD','adindanEthiopia','source:datum:geodetic','adindan_(ethiopia)'], // The geodetic datum known as 'Adindan' and intended to be used only in the geographic region of Ethiopia.
-     ['HZD','adindanMali','source:datum:geodetic','adindan_(mali)'], // The geodetic datum known as 'Adindan' and intended to be used only in the geographic region of Mali.
-     ['HZD','adindanMeanValue','source:datum:geodetic','adindan_(mean_value)'], // The geodetic datum known as 'Adindan' and intended as a mean solution for the geographic region of Ethiopia and Sudan.
-     ['HZD','adindanSenegal','source:datum:geodetic','adindan_(senegal)'], // The geodetic datum known as 'Adindan' and intended to be used only in the geographic region of Senegal.
-     ['HZD','adindanSudan','source:datum:geodetic','adindan_(sudan)'], // The geodetic datum known as 'Adindan' and intended to be used only in the geographic region of Sudan.
-     ['HZD','afgooyeSomalia','source:datum:geodetic','afgooye_(somalia)'], // The geodetic datum known as 'Afgooye' and intended to be used only in the geographic region of Somalia.
-     ['HZD','ainelAbd1970BahrainIsland','source:datum:geodetic','ain_el_abd_1970_(bahrain_island)'], // The geodetic datum known as 'Ain el Abd 1970' and intended to be used only in the geographic region of Bahrain Island.
-     ['HZD','ainelAbd1970SaudiArabia','source:datum:geodetic','ain_el_abd_1970_(saudi_arabia)'], // The geodetic datum known as 'Ain el Abd 1970' and intended to be used only in the geographic region of Saudi Arabia.
-     ['HZD','americanSamoaDatum1962','source:datum:geodetic','american_samoa_datum_1962'], // The geodetic datum known as 'American Samoa Datum 1962' and intended to be used in the geographic region of the American Samoa Islands.
-     ['HZD','amersfoort1885dash1903','source:datum:geodetic','amersfoort_1885/1903_(netherlands)'], // The geodetic datum known as 'Amersfoort 1885/1903' and intended to be used only in the geographic region of Netherlands.
-     ['HZD','anna1Astro1965CocosIslands','source:datum:geodetic','anna_1_astro_1965_(cocos_islands)'], // The geodetic datum known as 'Anna 1 Astro 1965' and intended to be used only in the geographic region of Cocos Islands.
-     ['HZD','antiguaIslandAstro1943','source:datum:geodetic','antigua_island_astro_1943'], // The geodetic datum known as 'Antigua Island Astro 1943' and intended to be used only in the geographic region of Antigua and the Leeward Islands.
-     ['HZD','approximateLuzonDatum','source:datum:geodetic','approximate_luzon_datum_(philippines)'], // The geodetic datum known as 'Approximate Luzon Datum' and intended to be used only in the geographic region of Philippines.
-     ['HZD','arc1935Africa','source:datum:geodetic','arc_1935_(africa)'], // The geodetic datum known as 'Arc 1935' and intended to be used only in the geographic region of Africa.
-     ['HZD','arc1950Botswana','source:datum:geodetic','arc_1950_(botswana)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Botswana.
-     ['HZD','arc1950Burundi','source:datum:geodetic','arc_1950_(burundi)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Burundi.
-     ['HZD','arc1950Lesotho','source:datum:geodetic','arc_1950_(lesotho)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Lesotho.
-     ['HZD','arc1950Malawi','source:datum:geodetic','arc_1950_(malawi)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Malawi.
-     ['HZD','arc1950MeanValue','source:datum:geodetic','arc_1950_(mean_value)'], // The geodetic datum known as 'Arc 1950' and intended as a mean solution for the geographic region of Botswana, Lesotho, Malawi, Swaziland, Zaire, Zambia and Zimbabwe.
-     ['HZD','arc1950Swaziland','source:datum:geodetic','arc_1950_(swaziland)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Swaziland.
-     ['HZD','arc1950Zaire','source:datum:geodetic','arc_1950_(zaire)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Zaire.
-     ['HZD','arc1950Zambia','source:datum:geodetic','arc_1950_(zambia)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Zambia.
-     ['HZD','arc1950Zimbabwe','source:datum:geodetic','arc_1950_(zimbabwe)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Zimbabwe.
-     ['HZD','arc1960Kenya','source:datum:geodetic','arc_1960_(kenya)'], // The geodetic datum known as 'Arc 1960' and intended to be used only in the geographic region of Kenya.
-     ['HZD','arc1960MeanValue','source:datum:geodetic','arc_1960_(mean_value)'], // The geodetic datum known as 'Arc 1960' and intended as a mean solution for the geographic region of Kenya and Tanzania.
-     ['HZD','arc1960Tanzania','source:datum:geodetic','arc_1960_(tanzania)'], // The geodetic datum known as 'Arc 1960' and intended to be used only in the geographic region of Tanzania.
-     ['HZD','ascensionIsland1958','source:datum:geodetic','ascension_island_1958_(ascension_island)'], // The geodetic datum known as 'Ascension Island 1958' and intended to be used only in the geographic region of Ascension Island.
-     ['HZD','astroBeaconEIwoJimaIsland','source:datum:geodetic','astro_beacon_e_(iwo_jima_island)'], // The geodetic datum known as 'Astro Beacon 'E'' and intended to be used only in the geographic region of Iwo Jima Island.
-     ['HZD','astroDos71dash4StHelena','source:datum:geodetic','astro_dos_71/4_(st._helena_island)'], // The geodetic datum known as 'Astro DOS 71/4' and intended to be used only in the geographic region of St. Helena Island.
-     ['HZD','astroStation1952MarcusIs','source:datum:geodetic','astro_station_1952_(marcus_island)'], // The geodetic datum known as 'Astro Station 1952' and intended to be used only in the geographic region of Marcus Island.
-     ['HZD','astroTernIsland1961Hawaii','source:datum:geodetic','astro_tern_island_1961_(tern_island_hawaii)'], // The geodetic datum known as 'Astro Tern Island 1961' and intended to be used only in the geographic region of Tern Island and Hawaii.
-     ['HZD','australianGeodetic1966','source:datum:geodetic','australian_geod._1966_(australia_and_tasmania_island)'], // The geodetic datum known as 'Australian Geod. 1966' and intended to be used only in the geographic region of Australia and Tasmania Island.
-     ['HZD','australianGeodetic1984','source:datum:geodetic','australian_geod._1984_(australia_and_tasmania_island)'], // The geodetic datum known as 'Australian Geod. 1984' and intended to be used only in the geographic region of Australia and Tasmania Island.
-     ['HZD','averageTerrestrialSys1977','source:datum:geodetic','average_terrestrial_system_1977_new_brunswick'], // The geodetic datum known as 'Average Terrestrial System 1977' and intended to be used only in the geographic region of New Brunswick, Nova Scotia, and Prince Edward Island.
-     ['HZD','ayabelleLighthouseDjibouti','source:datum:geodetic','ayabelle_lighthouse_(djibouti)'], // The geodetic datum known as 'Ayabelle Lighthouse' and intended to be used only in the geographic region of Djibouti.
-     ['HZD','bekaaBaseSouthEndLebanon','source:datum:geodetic','bekaa_base_south_end_(lebanon)'], // The geodetic datum known as 'Bekaa Base South End' and intended to be used only in the geographic region of Lebanon.
-     ['HZD','belgium1950SystemLommelSig','source:datum:geodetic','belgium_1950_system_(lommel_signal_belgium)'], // The geodetic datum known as 'Belgium 1950 System' and intended to be used only in the geographic region of Lommel Signal, Belgium.
-     ['HZD','belgium1972Observatoire','source:datum:geodetic','belgium_1972_(observatoire_duccle)'], // The geodetic datum known as Belgium 1972 and intended to be used only in the geographic region of the Observatoire dUccle.
-     ['HZD','bellevueIgnEfateErromango','source:datum:geodetic','bellevue_(ign)_(efate_and_erromango_islands)'], // The geodetic datum known as 'Bellevue IGN' and intended to be used only in the geographic region of the Efate and Erromango Islands.
-     ['HZD','bermuda1957BermudaIslands','source:datum:geodetic','bermuda_1957_(bermuda_islands)'], // The geodetic datum known as 'Bermuda 1957' and intended to be used only in the geographic region of the Bermuda Islands.
-     ['HZD','bern1898Switzerland','source:datum:geodetic','bern_1898_(switzerland)'], // The geodetic datum known as 'Bern 1898' and intended to be used only in the geographic region of Switzerland.
-     ['HZD','bern1898ZeroMeridian','source:datum:geodetic','bern_1898_(switzerland)_with_zero_meridian_bern'], // The geodetic datum known as 'Bern 1898' whose zero meridian is set at Bern and is intended to be used only in the geographic region of Switzerland.
-     ['HZD','bissauGuineaBissau','source:datum:geodetic','bissau_(guinea-bissau)'], // The geodetic datum known as 'Bissau' and intended to be used only in the geographic region of Guinea-Bissau.
-     ['HZD','bjz54A954BeijingCoord','source:datum:geodetic','bjz54_(a954_beijing_coordinates)_(china)'], // The geodetic datum known as 'BJZ54' or 'A954 Beijing Coordinates' and intended to be used only in the geographic region of China.
-     ['HZD','bogotaObservatoryColombia','source:datum:geodetic','bogota_observatory_(colombia)'], // The geodetic datum known as 'Bogota Observatory' and intended to be used only in the geographic region of Colombia.
-     ['HZD','bogotaObsZeroMeridian','source:datum:geodetic','bogota_observatory_(colombia)_with_zero_meridian_bogota'], // The geodetic datum known as 'Bogota Observatory' whose zero meridian is set at Bogota and is intended to be used only in the geographic region of Colombia.
-     ['HZD','bukitRimpahIndonesia','source:datum:geodetic','bukit_rimpah_(bangka_and_belitung_islands_indonesia)'], // The geodetic datum known as 'Bukit Rimpah' and intended to be used only in the geographic region of Bangka and Belitung Islands, Indonesia.
-     ['HZD','camacupaBaseSwEndAngola','source:datum:geodetic','camacupa_base_sw_end_(campo_de_aviacao_angola)'], // The geodetic datum known as 'Camacupa Base SW End' and intended to be used only in the geographic region of Campo De Aviacao, Angola.
-     ['HZD','campAreaAstroAntarctica','source:datum:geodetic','camp_area_astro_(camp_mcmurdo_area_antarctica)'], // The geodetic datum known as 'Camp Area Astro' and intended to be used only in the geographic region of Camp McMurdo Area, Antarctica.
-     ['HZD','campoInchauspeArgentina','source:datum:geodetic','campo_inchauspe_(argentina)'], // The geodetic datum known as 'Campo Inchauspe' and intended to be used only in the geographic region of Argentina.
-     ['HZD','cantonAstro1966PhoenixIs','source:datum:geodetic','canton_astro_1966_(phoenix_islands)'], // The geodetic datum known as 'Canton Astro 1966' and intended to be used only in the geographic region of Phoenix Islands.
-     ['HZD','capeSouthAfrica','source:datum:geodetic','cape_(south_africa)'], // The geodetic datum known as 'Cape' and intended to be used only in the geographic region of South Africa.
-     ['HZD','capeCanaveralMeanValue','source:datum:geodetic','cape_canaveral_(mean_value)'], // The geodetic datum known as 'Cape Canaveral' and intended as a mean solution for the geographic region of Florida and the Bahama Islands.
-     ['HZD','carthageTunisia','source:datum:geodetic','carthage_(tunisia)'], // The geodetic datum known as 'Carthage' and intended to be used only in the geographic region of Tunisia.
-     ['HZD','chatham1971NewZealand','source:datum:geodetic','chatham_1971_(chatham_island_new_zealand)'], // The geodetic datum known as 'Chatham 1971' and intended to be used only in the geographic region of Chatham Island, New Zealand.
-     ['HZD','chuaAstroParaguay','source:datum:geodetic','chua_astro_(paraguay)'], // The geodetic datum known as 'Chua Astro' and intended to be used only in the geographic region of Paraguay.
-     ['HZD','compensationGeoQuebec1977','source:datum:geodetic','compensation_geodetique_du_quebec_1977'], // The geodetic datum known as 'Compensation Geodetique du Quebec 1977' and whose geographic region of intended use is not specified.
-     ['HZD','conakryPyramidGuinea','source:datum:geodetic','conakry_pyramid_of_the_service_geographique_(guinea)'], // The geodetic datum known as 'Conakry Pyramid of the Service Geographique' and intended to be used only in the geographic region of Guinea.
-     ['HZD','estonia1937','source:datum:geodetic','co-ordinate_system_1937_of_estonia'], // The geodetic datum known as 'Co-ordinate System 1937 of Estonia' and intended to be used only in the geographic region of Estonia.
-     ['HZD','corregoAlegreBrazil','source:datum:geodetic','corrego_alegre_(brazil)'], // The geodetic datum known as 'Corrego Alegre' and intended to be used only in the geographic region of Brazil.
-     ['HZD','dabolaGuinea','source:datum:geodetic','dabola_(guinea)'], // The geodetic datum known as 'Dabola' and intended to be used only in the geographic region of Guinea.
-     ['HZD','dcs3LighthouseLesserAnt','source:datum:geodetic','dcs-3_lighthouse_saint_lucia_lesser_antilles'], // The geodetic datum known as 'DCS-3 Lighthouse, Saint Lucia, Lesser Antilles' and whose geographic region of intended use is not specified.
-     ['HZD','deceptionIslAntarctica','source:datum:geodetic','deception_island_antarctica'], // The geodetic datum known as 'Deception Island' or 'Deception 1993' and intended to be used only in the geographic region of Deception Island, Antarctica.
-     ['HZD','djakartaBataviaIndonesia','source:datum:geodetic','djakarta_(batavia)_(sumatra_island_indonesia)'], // The geodetic datum known as 'Djakarta (Batavia)' and intended to be used only in the geographic region of Sumatra Island, Indonesia.
-     ['HZD','djakartaBataviaZeroMerid','source:datum:geodetic','djakarta_(batavia)_(sumatra_island_indonesia)_with_zero_meridian_djakarta'], // The geodetic datum known as 'Djakarta (Batavia)' whose zero meridian is set at Djakarta and is intended to be used only in the geographic region of Sumatra Island, Indonesia.
-     ['HZD','dominicaAstroM12LesserAnt','source:datum:geodetic','dominica_astro_m-12_dominica_lesser_antilles'], // The geodetic datum known as 'Dominica Astro M-12, Dominica, Lesser Antilles' and whose geographic region of intended use is not specified.
-     ['HZD','dos1968GizoNewGeorgiaIs','source:datum:geodetic','dos_1968_(gizo_island_new_georgia_islands)'], // The geodetic datum known as 'DOS 1968' and intended to be used only in the geographic region of Gizo Island and the New Georgia Islands.
-     ['HZD','easterIsland1967EasterIs','source:datum:geodetic','easter_island_1967_(easter_island)'], // The geodetic datum known as 'Easter Island 1967' and intended to be used only in the geographic region of Easter Island.
-     ['HZD','european1950BritishIsles','source:datum:geodetic','european_1950_(british_isles)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of the British Isles to specifically encompass England, the Channel Islands, Ireland, Northern Ireland, Scotland, the Shetland Islands, and Wales.
-     ['HZD','european1950Cyprus','source:datum:geodetic','european_1950_(cyprus)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Cyprus.
-     ['HZD','european1950Egypt','source:datum:geodetic','european_1950_(egypt)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Egypt.
-     ['HZD','european1950England','source:datum:geodetic','european_1950_(england_channel_islands_scotland_and_shetland_islands)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of England, Channel Islands, Scotland, and Shetland Islands.
-     ['HZD','european1950Greece','source:datum:geodetic','european_1950_(greece)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Greece.
-     ['HZD','european1950Iran','source:datum:geodetic','european_1950_(iran)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Iran.
-     ['HZD','european1950IraqSyria','source:datum:geodetic','european_1950_(iraq_israel_jordan_kuwait_lebanon_saudi_arabia_and_syria)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Iraq, Israel, Jordan, Kuwait, Lebanon, Saudi Arabia, and Syria.
-     ['HZD','european1950Malta','source:datum:geodetic','european_1950_(malta)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Malta.
-     ['HZD','european1950MeanValue','source:datum:geodetic','european_1950_(mean_value)'], // The geodetic datum known as 'European 1950' and intended as a mean solution for the geographic region of Austria, Belgium, Denmark, Finland, France, Federal Republic of Germany, Gibraltar, Greece, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, S
-     ['HZD','european1950NorwayFinland','source:datum:geodetic','european_1950_(norway_and_finland)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Norway and Finland.
-     ['HZD','european1950PortugalSpain','source:datum:geodetic','european_1950_(portugal_and_spain)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Portugal and Spain.
-     ['HZD','european1950Sardinia','source:datum:geodetic','european_1950_(sardinia)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Sardinia.
-     ['HZD','european1950Sicily','source:datum:geodetic','european_1950_(sicily)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Sicily.
-     ['HZD','european1950Tunisia','source:datum:geodetic','european_1950_(tunisia)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Tunisia.
-     ['HZD','european1950WesternEurope','source:datum:geodetic','european_1950_(western_europe)'], // The geodetic datum known as 'European 1950' and intended as a mean solution for a geographic region of Western Europe encompassing Austria, Denmark, France, Federal Republic of Germany, Netherlands, and Switzerland.
-     ['HZD','european1979MeanValue','source:datum:geodetic','european_1979_(mean_value)'], // The geodetic datum known as 'European 1979' and intended as a mean solution for the geographic region of Austria, Finland, Netherlands, Norway, Spain, Sweden, and Switzerland.
-     ['HZD','etrs1989','source:datum:geodetic','european_terrestrial_reference_system_1989_(etrs89)'], // The geodetic datum known as 'European Terrestrial Reference System 1989' and intended to be used only in the geographic region of ETRS89.
-     ['HZD','fortThomas1955LeewardIs','source:datum:geodetic','fort_thomas_1955_(nevis_st_kitts_leeward_islands)'], // The geodetic datum known as 'Fort Thomas 1955' and intended to be used only in the geographic region of Nevis, St Kitts, and the Leeward Islands.
-     ['HZD','gan1970AdduAtoll','source:datum:geodetic','gan_1970_(addu_atoll_republic_of_maldives)'], // The geodetic datum known as 'Gan 1970' and intended to be used only in the geographic region of Addu Atoll, Republic of Maldives.
-     ['HZD','gandajikaBaseZaire','source:datum:geodetic','gandajika_base_(zaire)'], // The geodetic datum known as 'Gandajika Base' and intended to be used only in the geographic region of Zaire.
-     ['HZD','gdz80China','source:datum:geodetic','gdz80_(china)'], // The geodetic datum known as 'GDZ80' and intended to be used only in the geographic region of China.
-     ['HZD','geocentricDatumOfAustralia','source:datum:geodetic','geocentric_datum_of_australia_(gda)'], // The geodetic datum known as 'Geocentric Datum of Australia' or 'GDA' and intended to be used only in the geographic region of Australia.
-     ['HZD','geodeticDatum1949Zealand','source:datum:geodetic','datum:geodetic_1949_(new_zealand)'], // The geodetic datum known as 'Geodetic Datum 1949' and intended to be used only in the geographic region of New Zealand.
-     ['HZD','graciosaBaseSWFaialAzores','source:datum:geodetic','graciosa_base_sw_(faial_graciosa_pico_sao_jorge_and_terceira_island_azores)'], // The geodetic datum known as 'Graciosa Base SW' and intended to be used only in the geographic region of Faial, Graciosa, Pico, Sao Jorge, and Terceira Island, Azores.
-     ['HZD','greekDatumGreece','source:datum:geodetic','greek_datum_greece'], // The geodetic datum known as 'Greek Datum, Greece' and whose geographic region of intended use is not specified.
-     ['HZD','greekGeodeticRefSystem1987','source:datum:geodetic','greek_geodetic_reference_system_1987_(ggrs_87)'], // The geodetic datum known as 'Greek Geodetic Reference System 1987' or 'GGRS 87' and whose geographic region of intended use is not specified.
-     ['HZD','guam1963','source:datum:geodetic','guam_1963'], // The geodetic datum known as 'Guam 1963' and intended to be used only in the geographic region of Guam.
-     ['HZD','gunongSegaraKalimantanIs','source:datum:geodetic','gunong_segara_(kalimantan_island_indonesia)'], // The geodetic datum known as 'Gunong Segara' and intended to be used only in the geographic region of Kalimantan Island, Indonesia.
-     ['HZD','gunongSerindung','source:datum:geodetic','gunong_serindung'], // The geodetic datum known as 'Gunong Serindung' and whose geographic region of intended use is not specified.
-     ['HZD','gux1AstroGuadacanalIs','source:datum:geodetic','gux_1_astro_(guadacanal_island)'], // The geodetic datum known as 'GUX 1 Astro' and intended to be used only in the geographic region of Guadacanal Island.
-     ['HZD','guyanaCSG67','source:datum:geodetic','guyana_csg67'], // The geodetic datum known as 'Guyana CSG76' and whose geographic region of intended use is not specified.
-     ['HZD','heratNorthAfganistan','source:datum:geodetic','herat_north_(afganistan)'], // The geodetic datum known as 'Herat North' and intended to be used only in the geographic region of Afganistan.
-     ['HZD','hermannskogel','source:datum:geodetic','hermannskogel'], // The geodetic datum known as 'Hermannskogel' and intended to be used only in the geographic region of Yugoslavia (prior to 1990), Slovenia, Croatia, Bosnia and Herzegovina, and Serbia.
-     ['HZD','hjorsey1955Iceland','source:datum:geodetic','hjorsey_1955_(iceland)'], // The geodetic datum known as 'Hjorsey 1955' and intended to be used only in the geographic region of Iceland.
-     ['HZD','hongKong1929','source:datum:geodetic','hong_kong_1929'], // The geodetic datum known as 'Hong Kong 1929' and whose geographic region of intended use is not specified.
-     ['HZD','hongKong1963HongKong','source:datum:geodetic','hong_kong_1963_(hong_kong)'], // The geodetic datum known as 'Hong Kong 1963' and intended to be used only in the geographic region of Hong Kong.
-     ['HZD','hungarian1972','source:datum:geodetic','hungarian_1972'], // The geodetic datum known as 'Hungarian 1972' and whose geographic region of intended use is not specified.
-     ['HZD','huTzuShan','source:datum:geodetic','hu-tzu-shan'], // The geodetic datum known as 'Hu-Tzu-Shan' and intended to be used only in the geographic region of Taiwan.
-     ['HZD','indianBangladesh','source:datum:geodetic','indian_(bangladesh)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of Bangladesh.
-     ['HZD','indianIndiaNepal','source:datum:geodetic','indian_(india_and_nepal)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of India and Nepal.
-     ['HZD','indianPakistan','source:datum:geodetic','indian_(pakistan)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of Pakistan.
-     ['HZD','indianThailandVietnam','source:datum:geodetic','indian_(thailand_and_vietnam)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of Thailand and Vietnam.
-     ['HZD','indian1954Thailand','source:datum:geodetic','indian_1954_(thailand)'], // The geodetic datum known as 'Indian 1954' and intended to be used only in the geographic region of Thailand.
-     ['HZD','indian1960ConSonIsland','source:datum:geodetic','indian_1960_(con_son_island_(vietnam))'], // The geodetic datum known as 'Indian 1960 (Con Son Island)' and intended to be used only in the geographic region of Con Son Island (Vietnam).
-     ['HZD','indian1960Vietnam','source:datum:geodetic','indian_1960_(vietnam:_near_16_degrees_north)'], // The geodetic datum known as 'Indian 1960' and intended to be used only in the geographic region of Vietnam near 16 degrees North.
-     ['HZD','indian1975Thailand','source:datum:geodetic','indian_1975_(thailand)'], // The geodetic datum known as 'Indian 1975' and intended to be used only in the geographic region of Thailand.
-     ['HZD','indian1975ThailandCycle1','source:datum:geodetic','indian_1975_(thailand)_-_cycle_1'], // The geodetic datum known as 'Indian 1975 - Cycle 1' and intended to be used only in the geographic region of Thailand.
-     ['HZD','indonesian1974','source:datum:geodetic','indonesian_1974'], // The geodetic datum known as 'Indonesian 1974' and intended to be used only in the geographic region of Indonesia.
-     ['HZD','ireland1965IrelandNorthern','source:datum:geodetic','ireland_1965_(ireland_and_northern_ireland)'], // The geodetic datum known as 'Ireland 1965' and intended to be used only in the geographic region of Ireland and Northern Ireland.
-     ['HZD','ists061Astro1968GeorgiaIs','source:datum:geodetic','ists_061_astro_1968_(south_georgia_islands)'], // The geodetic datum known as 'ISTS 061 Astro 1968' and intended to be used only in the geographic region of the South Georgia Islands.
-     ['HZD','ists073Astro1969DiegoGar','source:datum:geodetic','ists_073_astro_1969_(diego_garcia)'], // The geodetic datum known as 'ISTS 073 Astro 1969' and intended to be used only in the geographic region of Diego Garcia.
-     ['HZD','johnstonIsland1961','source:datum:geodetic','johnston_island_1961_(johnston_island)'], // The geodetic datum known as 'Johnston Island 1961' and intended to be used only in the geographic region of Johnston Island.
-     ['HZD','kalianpurIndia','source:datum:geodetic','kalianpur_(india)'], // The geodetic datum known as 'Kalianpur' and intended to be used only in the geographic region of India.
-     ['HZD','kandawalaSriLanka','source:datum:geodetic','kandawala_(sri_lanka)'], // The geodetic datum known as 'Kandawala' and intended to be used only in the geographic region of Sri Lanka.
-     ['HZD','kcs2SierraLeone','source:datum:geodetic','kcs_2_sierra_leone'], // The geodetic datum known as 'KCS 2, Sierra Leone' and whose geographic region of intended use is not specified.
-     ['HZD','kerguelenIsland1949','source:datum:geodetic','kerguelen_island_1949_(kerguelen_island)'], // The geodetic datum known as 'Kerguelen Island 1949' and intended to be used only in the geographic region of Kerguelen Island.
-     ['HZD','kertau1948RevisedMalaysia','source:datum:geodetic','kertau_1948_(or_revised_kertau)_(west_malaysia_and_singapore)'], // The geodetic datum known as 'Kertau 1948' or 'Revised Kertau' and intended to be used only in the geographic region of West Malaysia and Singapore.
-     ['HZD','kkjFinland','source:datum:geodetic','kkj_(or_kartastokoordinaattijarjestelma)_finland'], // The geodetic datum known as 'KKJ' or 'Kartastokoordinaattijarjestelma' and intended to be used only in the geographic region of Finland.
-     ['HZD','koreanGeodeticSystem1995','source:datum:geodetic','korean_geodetic_system_1995_(south_korea)'], // The geodetic datum known as 'Korean Geodetic System 1995' and intended to be used only in the geographic region of South Korea.
-     ['HZD','kusaieAstro1951','source:datum:geodetic','kusaie_astro_1951'], // The geodetic datum known as 'Kusaie Astro 1951' and intended to be used only in the geographic region of the Caroline Islands (Federated States of Micronesia).
-     ['HZD','kuwaitOilCompanyK28','source:datum:geodetic','kuwait_oil_company_(k28)'], // The geodetic datum known as 'Kuwait Oil Company (K28)' and whose geographic region of intended use is not specified.
-     ['HZD','lc5Astro1961CaymanBracIs','source:datum:geodetic','l.c._5_astro_1961_(cayman_brac_island)'], // The geodetic datum known as 'L.C. 5 Astro 1961' and intended to be used only in the geographic region of Cayman Brac Island.
-     ['HZD','leigonGhana','source:datum:geodetic','leigon_(ghana)'], // The geodetic datum known as 'Leigon' and intended to be used only in the geographic region of Ghana.
-     ['HZD','liberia1964Liberia','source:datum:geodetic','liberia_1964_(liberia)'], // The geodetic datum known as 'Liberia 1964' and intended to be used only in the geographic region of Liberia.
-     ['HZD','lisbonCastelodiSaoJorge','source:datum:geodetic','lisbon_(castelo_di_sao_jorge)_portugal'], // The geodetic datum known as 'Lisbon (Castelo di Sao Jorge)' and intended to be used only in the geographic region of Portugal.
-     ['HZD','localAstro','source:datum:geodetic','local_astro'], // A local geodetic datum established through astronomic observations.
-     ['HZD','lomaQuintanaVenezuela','source:datum:geodetic','loma_quintana_(venezuela)'], // The geodetic datum known as 'Loma Quintana' and intended to be used only in the geographic region of Venezuela.
-     ['HZD','luzonMindanaoIsland','source:datum:geodetic','luzon_(mindanao_island)'], // The geodetic datum known as 'Luzon' and intended to be used only in the geographic region of Mindanao Island.
-     ['HZD','luzonPhilipinesNotMindanao','source:datum:geodetic','luzon_(philipines_except_mindanao_island)'], // The geodetic datum known as 'Luzon' and intended to be used only in the geographic region of the Philipines, excepting Mindanao Island.
-     ['HZD','mahe1971MaheIsland','source:datum:geodetic','mahe_1971_(mahe_island)'], // The geodetic datum known as 'Mahe 1971' and intended to be used only in the geographic region of Mahe Island.
-     ['HZD','manokwariWestIrian','source:datum:geodetic','manokwari_(west_irian)'], // The geodetic datum known as 'Manokwari' and intended to be used only in the geographic region of West Irian.
-     ['HZD','marcoAstroSalvageIslands','source:datum:geodetic','marco_astro_(salvage_islands)'], // The geodetic datum known as 'Marco Astro' and intended to be used only in the geographic region of Salvage Islands.
-     ['HZD','martiniqueFortDesaix','source:datum:geodetic','martinique_fort-desaix'], // The geodetic datum known as 'Martinique Fort-Desaix' and whose geographic region of intended use is not specified.
-     ['HZD','massawEritreaEthiopia','source:datum:geodetic','massawa_(eritrea_ethiopia)'], // The geodetic datum known as 'Massawa' and intended to be used only in the geographic region of Eritrea, Ethiopia.
-     ['HZD','mayotteCombani','source:datum:geodetic','mayotte_combani'], // The geodetic datum known as 'Mayotte Combani' and whose geographic region of intended use is not specified.
-     ['HZD','merchichMorocco','source:datum:geodetic','merchich_(morocco)'], // The geodetic datum known as 'Merchich' and intended to be used only in the geographic region of Morocco.
-     ['HZD','midwayAstro1961MidwayIs','source:datum:geodetic','midway_astro_1961_(midway_island)'], // The geodetic datum known as 'Midway Astro 1961' and intended to be used only in the geographic region of Midway Island.
-     ['HZD','minnaCameroon','source:datum:geodetic','minna_(cameroon)'], // The geodetic datum known as 'Minna' and intended to be used only in the geographic region of Cameroon.
-     ['HZD','minnaNigeria','source:datum:geodetic','minna_(nigeria)'], // The geodetic datum known as 'Minna' and intended to be used only in the geographic region of Nigeria.
-     ['HZD','modifiedBJZ54China','source:datum:geodetic','modified_bjz54_(china)'], // The geodetic datum known as 'Modified BJZ54' and intended to be used only in the geographic region of China.
-     ['HZD','montjongLowe','source:datum:geodetic','montjong_lowe'], // The geodetic datum known as 'Montjong Lowe' and whose geographic region of intended use is not specified.
-     ['HZD','montserratIslandAstro1958','source:datum:geodetic','montserrat_island_astro_1958'], // The geodetic datum known as 'Montserrat Island Astro 1958' and intended to be used only in the geographic region of Montserrat and Leeward Islands.
-     ['HZD','mountDillonTobago','source:datum:geodetic','mount_dillon_tobago'], // The geodetic datum known as 'Mount Dillon, Tobago' and whose geographic region of intended use is not specified.
-     ['HZD','mPoralokoGabon','source:datum:geodetic','mporaloko_(gabon)'], // The geodetic datum known as 'M'Poraloko' and intended to be used only in the geographic region of Gabon.
-     ['HZD','nahrwanMasirahIslandOman','source:datum:geodetic','nahrwan_(masirah_island_oman)'], // The geodetic datum known as 'Nahrwan' and intended to be used only in the geographic region of Masirah Island, Oman.
-     ['HZD','nahrwanSaudiArabia','source:datum:geodetic','nahrwan_(saudi_arabia)'], // The geodetic datum known as 'Nahrwan' and intended to be used only in the geographic region of Saudi Arabia.
-     ['HZD','nahrwanUnitedArabEmirates','source:datum:geodetic','nahrwan_(united_arab_emirates)'], // The geodetic datum known as 'Nahrwan' and intended to be used only in the geographic region of the United Arab Emirates.
-     ['HZD','naparimaBwiTrinidadTobago','source:datum:geodetic','naparima_(bwi_trinidad_and_tobago)'], // The geodetic datum known as 'Naparima' and intended to be used only in the geographic region of the British West Indies, Trinidad and Tobago.
-     ['HZD','newFrenchZeroMeridianParis','source:datum:geodetic','new_french_or_nouvelle_triangulation_francaise_(ntf)_with_zero_meridian_paris'], // The geodetic datum known as 'New French' or 'Nouvelle Triangulation Francaise' whose zero meridian is set at Paris and is intended to be used only in the geographic region of continental France, Corsica and other surrounding islands.
-     ['HZD','northAm1927Alaska','source:datum:geodetic','north_american_1927_(alaska)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Alaska.
-     ['HZD','northAm1927Alberta','source:datum:geodetic','north_american_1927_(alberta_and_british_columbia)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Alberta and British Columbia.
-     ['HZD','northAm1927AleutianE','source:datum:geodetic','north_american_1927_(aleutian_islands_east_of_180_degrees_west)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of the Aleutian Islands East of 180 degrees West.
-     ['HZD','northAm1927AleutianW','source:datum:geodetic','north_american_1927_(aleutian_islands_west_of_180_degrees_west)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of the Aleutian Islands West of 180 degrees West.
-     ['HZD','northAm1927Bahamas','source:datum:geodetic','north_american_1927_(bahamas_except_san_salvador_island)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of the Bahamas, except San Salvador Island.
-     ['HZD','northAm1927CanadMean','source:datum:geodetic','north_american_1927_(canada_mean)'], // The geodetic datum known as 'North American 1927' and intended as a mean solution for the geographic region of Canada.
-     ['HZD','northAm1927CanalZone','source:datum:geodetic','north_american_1927_(canal_zone)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Canal Zone.
-     ['HZD','northAm1927Caribbean','source:datum:geodetic','north_american_1927_(caribbean)'], // The geodetic datum known as 'North American 1927' and intended as a mean solution for the geographic region of the Caribbean (Barbados, Caicos Islands, Cuba, Dominican Republic, Grand Cayman, Jamaica, Leeward Islands, and Turks Islands).
-     ['HZD','northAm1927CentAmer','source:datum:geodetic','north_american_1927_(central_america)'], // The geodetic datum known as 'North American 1927' and intended as a mean solution for the geographic region of Central America (Belize, Costa Rica, El Salvador, Guatemala, Honduras, and Nicaragua).
-     ['HZD','northAm1927ConusMean','source:datum:geodetic','north_american_1927_(conus_mean)'], // The geodetic datum known as 'North American 1927 'and intended as a mean solution for the geographic region of the continental United States.
-     ['HZD','northAm1927Cuba','source:datum:geodetic','north_american_1927_(cuba)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Cuba.
-     ['HZD','northAm1927EasternUs','source:datum:geodetic','north_american_1927_(eastern_us)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of the Eastern United States.
-     ['HZD','northAm1927HayesPen','source:datum:geodetic','north_american_1927_(hayes_peninsula_greenland)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of the Hayes Peninsula, Greenland.
-     ['HZD','northAm1927Manitoba','source:datum:geodetic','north_american_1927_(manitoba_and_ontario)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Manitoba and Ontario.
-     ['HZD','northAm1927Mexico','source:datum:geodetic','north_american_1927_(mexico)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Mexico.
-     ['HZD','northAm1927Newfound','source:datum:geodetic','north_american_1927_(newfoundland_new_brunswick_nova_scotia_and_quebec)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Newfoundland, New Brunswick, Nova Scotia and Quebec.
-     ['HZD','northAm1927NwTerSaskat','source:datum:geodetic','north_american_1927_(northwest_territories_and_saskatchewan)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of the Northwest Territories and Saskatchewan.
-     ['HZD','northAm1927Salvador','source:datum:geodetic','north_american_1927_(san_salvador_island)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of San Salvador Island.
-     ['HZD','northAm1927WesternUs','source:datum:geodetic','north_american_1927_(western_us)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of the Western United States.
-     ['HZD','northAm1927Yukon','source:datum:geodetic','north_american_1927_(yukon)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Yukon.
-     ['HZD','northAm1983AlaskaExAleut','source:datum:geodetic','north_american_1983_(alaska_excluding_aleutian_islands)'], // The geodetic datum known as 'North American 1983' and intended to be used only in the geographic region of Alaska, excluding Aleutian Islands.
-     ['HZD','northAm1983Aleutian','source:datum:geodetic','north_american_1983_(aleutian_islands)'], // The geodetic datum known as 'North American 1983' and intended to be used only in the geographic region of Aleutian Islands.
-     ['HZD','northAm1983Canada','source:datum:geodetic','north_american_1983_(canada)'], // The geodetic datum known as 'North American 1983' and intended to be used only in the geographic region of Canada.
-     ['HZD','northAm1983Conus','source:datum:geodetic','north_american_1983_(conus)'], // The geodetic datum known as 'North American 1983' and intended to be used only in the geographic region of the continental United States.
-     ['HZD','northAm1983Hawaii','source:datum:geodetic','north_american_1983_(hawaii)'], // The geodetic datum known as 'North American 1983' and intended to be used only in the geographic region of Hawaii.
-     ['HZD','northAm1983Mexico','source:datum:geodetic','north_american_1983_(mexico_and_central_america))'], // The geodetic datum known as 'North American 1983' and intended to be used only in the geographic region of Mexico and Central America..
-     ['HZD','northSahara1959','source:datum:geodetic','north_sahara_1959'], // The geodetic datum known as 'North Sahara 1959' and intended to be used only in the geographic region of Algeria.
-     ['HZD','observMeteorologico1939','source:datum:geodetic','observatorio_meteorologico_1939_(corvo_and_flores_islands_azores)'], // The geodetic datum known as 'Observatorio Meteorologico 1939' and intended to be used only in the geographic region of the Corvo and Flores Islands, Azores.
-     ['HZD','ocotopequeGuatemala','source:datum:geodetic','ocotopeque_guatemala'], // The geodetic datum known as 'Ocotopeque, Guatemala' and whose geographic region of intended use is not specified.
-     ['HZD','oldEgyptian','source:datum:geodetic','old_egyptian_(egypt)'], // The geodetic datum known as 'Old Egyptian' and intended to be used only in the geographic region of Egypt.
-     ['HZD','oldHawaiianHawaiiIsland','source:datum:geodetic','old_hawaiian_(hawaii)'], // The geodetic datum known as 'Old Hawaiian' and intended to be used only in the geographic region of Hawaii.
-     ['HZD','oldHawaiianKauaiIsland','source:datum:geodetic','old_hawaiian_(kauai)'], // The geodetic datum known as 'Old Hawaiian' and intended to be used only in the geographic region of Kauai.
-     ['HZD','oldHawaiianMauiIsland','source:datum:geodetic','old_hawaiian_(maui)'], // The geodetic datum known as 'Old Hawaiian' and intended to be used only in the geographic region of Maui.
-     ['HZD','oldHawaiianMeanValue','source:datum:geodetic','old_hawaiian_(mean_value)'], // The geodetic datum known as 'Old Hawaiian' and intended as a mean solution for the geographic region of the Hawaii Islands.
-     ['HZD','oldHawaiianOahuIsland','source:datum:geodetic','old_hawaiian_(oahu)'], // The geodetic datum known as 'Old Hawaiian' and intended to be used only in the geographic region of Oahu.
-     ['HZD','oman','source:datum:geodetic','oman_(oman)'], // The geodetic datum known as 'Oman' and intended to be used only in the geographic region of Oman.
-     ['HZD','ordnanceSurvGB1936England','source:datum:geodetic','ordnance_survey_g.b._1936_(england)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended to be used only in the geographic region of England.
-     ['HZD','ordnanceSurvGB1936ScotWale','source:datum:geodetic','ordnance_survey_g.b._1936_(england_isle_of_man_and_wales)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended to be used only in the geographic region of England, the Isle of Man, and Wales.
-     ['HZD','ordnanceSurvGB1936MeanVal','source:datum:geodetic','ordnance_survey_g.b._1936_(mean_value)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended as a mean solution for the geographic region of England, the Isle of Man, Scotland, Shetland, and Wales.
-     ['HZD','ordnanceSurvGB1936ScotShet','source:datum:geodetic','ordnance_survey_g.b._1936_(scotland_and_shetland_islands)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended to be used only in the geographic region of Scotland and the Shetland Islands.
-     ['HZD','ordnanceSurvGB1936Wales','source:datum:geodetic','ordnance_survey_g.b._1936_(wales)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended to be used only in the geographic region of Wales.
-     ['HZD','osloObservatoryOld','source:datum:geodetic','oslo_observatory_(old)_norway'], // The geodetic datum known as 'Oslo Observatory (Old)' and intended to be used only in the geographic region of Norway.
-     ['HZD','padangBaseWestEnd','source:datum:geodetic','padang_base_west_end_(sumatra_indonesia)'], // The geodetic datum known as 'Padang Base West End' and intended to be used only in the geographic region of Sumatra, Indonesia.
-     ['HZD','padangBaseWestEndZeroMerid','source:datum:geodetic','padang_base_west_end_(sumatra_indonesia)_with_zero_meridian_djakarta'], // The geodetic datum known as 'Padang Base West End' whose zero meridian is set at Djakarta and is intended to be used only in the geographic region of Sumatra, Indonesia.
-     ['HZD','palestine1928','source:datum:geodetic','palestine_1928_(israel_jordan)'], // The geodetic datum known as 'Palestine 1928' and intended to be used only in the geographic region of Israel and Jordan.
-     ['HZD','picoDeLasNievesCanaryIs','source:datum:geodetic','pico_de_las_nieves_(canary_islands)'], // The geodetic datum known as 'Pico de las Nieves' and intended to be used only in the geographic region of Canary Islands.
-     ['HZD','pitcairnAstro1967','source:datum:geodetic','pitcairn_astro_1967_(pitcairn_island)'], // The geodetic datum known as 'Pitcairn Astro 1967' and intended to be used only in the geographic region of Pitcairn Island.
-     ['HZD','point58MeanSolution','source:datum:geodetic','point_58_mean_solution_(burkina_faso_and_niger)'], // The geodetic datum known as 'Point 58 Mean Solution' and intended to be used only in the geographic region of Burkina Faso and Niger.
-     ['HZD','pointeNoire1948','source:datum:geodetic','pointe_noire_1948'], // The geodetic datum known as 'Pointe Noire 1948' and intended to be used only in the geographic region of Congo.
-     ['HZD','potsdamHelmertturmGermany','source:datum:geodetic','potsdam_or_helmertturm_(germany)'], // The geodetic datum known as 'Potsdam' or 'Helmertturm' and intended to be used only in the geographic region of Germany.
-     ['HZD','provSouthAm1956Bolivia','source:datum:geodetic','prov._s._american_1956_(bolivia)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Bolivia.
-     ['HZD','provSouthAm1956Columbia','source:datum:geodetic','prov._s._american_1956_(columbia)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Columbia.
-     ['HZD','provSouthAm1956Ecuador','source:datum:geodetic','prov._s._american_1956_(ecuador)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Ecuador.
-     ['HZD','provSouthAm1956Guyana','source:datum:geodetic','prov._s._american_1956_(guyana)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Guyana.
-     ['HZD','provSouthAm1956MeanValue','source:datum:geodetic','prov._s._american_1956_(mean_value)'], // The geodetic datum known as 'Prov. S. American 1956' and intended as a mean solution for the geographic region of Bolivia, Chile, Colombia, Ecuador, Guyana, Peru, and Venezuela.
-     ['HZD','provSouthAm1956NChile','source:datum:geodetic','prov._s._american_1956_(northern_chile_near_19_degrees_south)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Northern Chile near 19 degrees South.
-     ['HZD','provSouthAm1956Peru','source:datum:geodetic','prov._s._american_1956_(peru)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Peru.
-     ['HZD','provSouthAm1956SChile','source:datum:geodetic','prov._s._american_1956_(southern_chile_near_43_degrees_south)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Southern Chile near 43 degrees South.
-     ['HZD','provSouthAm1956Venezuela','source:datum:geodetic','prov._s._american_1956_(venezuela)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Venezuela.
-     ['HZD','provSouthChilean1963','source:datum:geodetic','provisional_south_chilean_1963_(or_hito_xviii_1963)_(s._chile_53_degrees_south)'], // The geodetic datum known as 'Provisional South Chilean 1963' or 'Hito XVIII 1963' and intended to be used only in the geographic region of Chile south of 53 degrees South.
-     ['HZD','puertoRicoVirginIslands','source:datum:geodetic','puerto_rico_(puerto_rico_and_virgin_islands)'], // The geodetic datum known as 'Puerto Rico' and intended to be used only in the geographic region of Puerto Rico and the Virgin Islands.
-     ['HZD','pulkovo1942Albania','source:datum:geodetic','pulkovo_1942_(albania)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Albania.
-     ['HZD','pulkovo1942Czechoslovakia','source:datum:geodetic','pulkovo_1942_(czechoslovakia)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Czechoslovakia (prior to 1 January 1993).
-     ['HZD','pulkovo1942Hungary','source:datum:geodetic','pulkovo_1942_(hungary)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Hungary.
-     ['HZD','pulkovo1942Kazakhstan','source:datum:geodetic','pulkovo_1942_(kazakhstan)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Kazakhstan.
-     ['HZD','pulkovo1942Latvia','source:datum:geodetic','pulkovo_1942_(latvia)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Latvia.
-     ['HZD','pulkovo1942Poland','source:datum:geodetic','pulkovo_1942_(poland)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Poland.
-     ['HZD','pulkovo1942Romania','source:datum:geodetic','pulkovo_1942_(romania)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Romania.
-     ['HZD','pulkovo1942Russia','source:datum:geodetic','pulkovo_1942_(russia)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Russia.
-     ['HZD','qatarNationalQatar','source:datum:geodetic','qatar_national_(qatar)'], // The geodetic datum known as 'Qatar National' and intended to be used only in the geographic region of Qatar.
-     ['HZD','qornoqSouthGreenland','source:datum:geodetic','qornoq_(south_greenland)'], // The geodetic datum known as 'Qornoq' and intended to be used only in the geographic region of South Greenland.
-     ['HZD','rauenbergBerlinGermany','source:datum:geodetic','rauenberg_(berlin_germany)'], // The geodetic datum known as 'Rauenberg' and intended to be used only in the geographic region of Berlin, Germany.
-     ['HZD','reconTriangulationMorocco','source:datum:geodetic','reconnaissance_triangulation_morocco'], // The geodetic datum known as 'Reconnaissance Triangulation, Morocco' and whose geographic region of intended use is not specified.
-     ['HZD','reunion1947','source:datum:geodetic','reunion_1947'], // The geodetic datum known as 'Reunion 1947' and intended to be used only in the geographic region of the Mascarene Islands.
-     ['HZD','revisedNahrwan','source:datum:geodetic','revised_nahrwan'], // The geodetic datum known as 'Revised Nahrwan' and whose geographic region of intended use is not specified.
-     ['HZD','rome1940','source:datum:geodetic','rome_1940_(or_monte_mario_1940)_italy'], // The geodetic datum known as 'Rome 1940' or 'Monte Mario 1940' and intended to be used only in the geographic region of Italy.
-     ['HZD','rome1940ZeroMeridianRome','source:datum:geodetic','rome_1940_(or_monte_mario_1940)_italy_with_zero_meridian_rome'], // The geodetic datum known as 'Rome 1940' or 'Monte Mario 1940' whose zero meridian is set at Rome and is intended to be used only in the geographic region of Italy.
-     ['HZD','rt90StockholmSweden','source:datum:geodetic','rt90_stockholm_sweden'], // The geodetic datum known as 'RT90, Stockholm, Sweden' and whose geographic region of intended use is not specified.
-     ['HZD','sainteAnneI1984Guadeloupe','source:datum:geodetic','sainte_anne_i_1984_(guadeloupe)'], // The geodetic datum known as 'Sainte Anne I 1984' and intended to be used only in the geographic region of Guadeloupe.
-     ['HZD','santoDos1965EspiritoSanto','source:datum:geodetic','santo_(dos)_1965_(espirito_santo_island)'], // The geodetic datum known as 'Santo DOS. 1965' and intended to be used only in the geographic region of Espirito Santo Island.
-     ['HZD','saoBrazSaoMiguelAzores','source:datum:geodetic','sao_braz_(sao_miguel_santa_maria_islands_azores)'], // The geodetic datum known as 'Sao Braz' and intended to be used only in the geographic region of Sao Miguel, the Santa Maria Islands, and the Azores.
-     ['HZD','sapperHill1943EastFalkland','source:datum:geodetic','sapper_hill_1943_(east_falkland_islands)'], // The geodetic datum known as 'Sapper Hill 1943' and intended to be used only in the geographic region of the East Falkland Islands.
-     ['HZD','schwarzeckNamibia','source:datum:geodetic','schwarzeck_(namibia)'], // The geodetic datum known as 'Schwarzeck' and intended to be used only in the geographic region of Namibia.
-     ['HZD','seBasePortoSanto','source:datum:geodetic','se_base_(porto_santo)_(porto_santo_and_madeira_islands)'], // The geodetic datum known as 'SE Base Porto Santo' and intended to be used only in the geographic region of Porto Santo and the Madeira Islands.
-     ['HZD','selvagemGrande1938Salvage','source:datum:geodetic','selvagem_grande_1938_(salvage_islands)'], // The geodetic datum known as 'Selvagem Grande 1938' and intended to be used only in the geographic region of the Salvage Islands.
-     ['HZD','sierraLeone1960','source:datum:geodetic','sierra_leone_1960'], // The geodetic datum known as 'Sierra Leone 1960' and intended to be used only in the geographic region of Sierra Leone.
-     ['HZD','sJtsk','source:datum:geodetic','s-jtsk'], // The geodetic datum known as 'S-JTSK' and intended to be used in the geographic region of the Czech Republic and Slovakia.
-     ['HZD','southAfricanSouthAfrica','source:datum:geodetic','south_african_(south_africa)'], // The geodetic datum known as 'South African' and intended to be used only in the geographic region of South Africa.
-     ['HZD','southAmerican1969Argentina','source:datum:geodetic','south_american_1969_(argentina)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Argentina.
-     ['HZD','southAmerican1969BaltraIs','source:datum:geodetic','south_american_1969_(baltra_galapagos_islands)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Baltra and the Galapagos Islands.
-     ['HZD','southAmerican1969Bolivia','source:datum:geodetic','south_american_1969_(bolivia)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Bolivia.
-     ['HZD','southAmerican1969Brazil','source:datum:geodetic','south_american_1969_(brazil)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Brazil.
-     ['HZD','southAmerican1969Chile','source:datum:geodetic','south_american_1969_(chile)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Chile.
-     ['HZD','southAmerican1969Columbia','source:datum:geodetic','south_american_1969_(columbia)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Columbia.
-     ['HZD','southAmerican1969Ecuador','source:datum:geodetic','south_american_1969_(ecuador)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Ecuador.
-     ['HZD','southAmerican1969Guyana','source:datum:geodetic','south_american_1969_(guyana)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Guyana.
-     ['HZD','southAmerican1969MeanValue','source:datum:geodetic','south_american_1969_(mean_value)'], // The geodetic datum known as 'South American 1969' and intended as a mean solution for the geographic region of Argentina, Bolivia, Brazil, Chile, Columbia, Ecuador, Guyana, Paraguay, Peru, Trinidad and Tobago, and Venezuela.
-     ['HZD','southAmerican1969Paraguay','source:datum:geodetic','south_american_1969_(paraguay)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Paraguay.
-     ['HZD','southAmerican1969Peru','source:datum:geodetic','south_american_1969_(peru)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Peru.
-     ['HZD','southAmerican1969Trinidad','source:datum:geodetic','south_american_1969_(trinidad_and_tobago)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Trinidad and Tobago.
-     ['HZD','southAmerican1969Venezuela','source:datum:geodetic','south_american_1969_(venezuela)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Venezuela.
-     ['HZD','sirgas','source:datum:geodetic','south_american_geocentric_reference_system_(sirgas)'], // The geodetic datum known as 'South American Geocentric Reference System' and intended to be used only in the geographic region of South America.
-     ['HZD','southAsiaSingapore','source:datum:geodetic','south_asia_(southeast_asia_singapore)'], // The geodetic datum known as 'South Asia' and intended to be used only in the geographic region of Southeast Asia and Singapore.
-     ['HZD','sovietGeodeticSystem1985','source:datum:geodetic','soviet_geodetic_system_1985'], // The geodetic datum known as 'Soviet Geodetic System 1985' and intended to be used only in the geographic region of the former Soviet Union.
-     ['HZD','sovietGeodeticSystem1990','source:datum:geodetic','soviet_geodetic_system_1990'], // The geodetic datum known as 'Soviet Geodetic System 1990' and intended to be used only in the geographic region of the former Soviet Union.
-     ['HZD','stPierreetMiquelon1950','source:datum:geodetic','st._pierre_et_miquelon_1950'], // The geodetic datum known as 'St. Pierre et Miquelon 1950' and whose geographic region of intended use is not specified.
-     ['HZD','stockholm1938Sweden','source:datum:geodetic','stockholm_1938_(sweden)'], // The geodetic datum known as 'Stockholm 1938' and intended to be used only in the geographic region of Sweden.
-     ['HZD','sydneyObservatoryNewSouth','source:datum:geodetic','sydney_observatory_new_south_wales_australia'], // The geodetic datum known as 'Sydney Observatory, New South Wales, Australia' and whose geographic region of intended use is not specified.
-     ['HZD','tananariveObservatory1925','source:datum:geodetic','tananarive_observatory_1925'], // The geodetic datum known as 'Tananarive Observatory 1925' and intended to be used only in the geographic region of Madagascar.
-     ['HZD','tananariveObs1925ZerMerPar','source:datum:geodetic','tananarive_observatory_1925_with_zero_meridian_paris'], // The geodetic datum known as 'Tananarive Observatory 1925' whose zero meridian is set at Paris and is intended to be used only in the geographic region of Madagascar.
-     ['HZD','timbalai1948BruneiMalaysia','source:datum:geodetic','timbalai_1948_(brunei_and_east_malaysia_-_sarawak_and_sabah)'], // The geodetic datum known as 'Timbalai 1948' and intended to be used only in the geographic region of Brunei and East Malaysia (Sarawak and Sabah).
-     ['HZD','timbalai1968','source:datum:geodetic','timbalai_1968'], // The geodetic datum known as 'Timbalai 1968' and whose geographic region of intended use is not specified.
-     ['HZD','tokyoJapan','source:datum:geodetic','tokyo_(japan)'], // The geodetic datum known as 'Tokyo' and intended to be used only in the geographic region of Japan.
-     ['HZD','tokyoKorea','source:datum:geodetic','tokyo_(korea)'], // The geodetic datum known as 'Tokyo' and intended to be used only in the geographic region of Korea.
-     ['HZD','tokyoKoreaCycle1','source:datum:geodetic','tokyo_(korea)_-_cycle_1'], // The geodetic datum known as 'Tokyo - Cycle 1' and intended to be used only in the geographic region of Korea.
-     ['HZD','tokyoMeanValue','source:datum:geodetic','tokyo_(mean_value)'], // The geodetic datum known as 'Tokyo' and intended as a mean solution for the geographic region of Japan, Korea, and Okinawa.
-     ['HZD','tokyoOkinawa','source:datum:geodetic','tokyo_(okinawa)'], // The geodetic datum known as 'Tokyo' and intended to be used only in the geographic region of Okinawa.
-     ['HZD','trinidad1903','source:datum:geodetic','trinidad_1903'], // The geodetic datum known as 'Trinidad 1903' and whose geographic region of intended use is not specified.
-     ['HZD','tristanAstro1968Cunha','source:datum:geodetic','tristan_astro_1968_(tristan_da_cunha)'], // The geodetic datum known as 'Tristan Astro 1968' and intended to be used only in the geographic region of Tristan da Cunha.
-     ['HZD','vitiLevu1916FijiIslands','source:datum:geodetic','viti_levu_1916_(viti_levu_island_fiji_islands)'], // The geodetic datum known as 'Viti Levu 1916' and intended to be used only in the geographic region of Viti Levu Island, Fiji Islands.
-     ['HZD','voirol1875','source:datum:geodetic','voirol_1875'], // The geodetic datum known as 'Voirol 1875' and intended to be used only in the geographic region of Algeria.
-     ['HZD','voirol1875ZeroMeridParis','source:datum:geodetic','voirol_1875_with_zero_meridian_paris'], // The geodetic datum known as 'Voirol 1875' whose zero meridian is set at Paris and is intended to be used only in the geographic region of Algeria.
-     ['HZD','voirol1960Algeria','source:datum:geodetic','voirol_1960_algeria'], // The geodetic datum known as 'Voirol 1960' and intended to be used only in the geographic region of Algeria.
-     ['HZD','voirol1960ZeroMeridParis','source:datum:geodetic','voirol_1960_algeria_with_zero_meridian_paris'], // The geodetic datum known as 'Voirol 1960' whose zero meridian is set at Paris and is intended to be used only in the geographic region of Algeria.
-     ['HZD','wakeIslandAstro1952','source:datum:geodetic','wake_island_astro_1952'], // The geodetic datum known as 'Wake Island 1952' which is based on astronomic observations and is intended to be used only in the geographic region of the Wake Atoll.
-     ['HZD','wakeEniwetok1960MarshallIs','source:datum:geodetic','wake-eniwetok_1960_(marshall_islands)'], // The geodetic datum known as 'Wake-Eniwetok 1960' and intended to be used only in the geographic region of the Marshall Islands.
-     ['HZD','worldGeodeticSystem1960','source:datum:geodetic','world_geodetic_system_1960'], // The geodetic datum known as 'World Geodetic System 1960' and intended to be used globally.
-     ['HZD','worldGeodeticSystem1966','source:datum:geodetic','world_geodetic_system_1966'], // The geodetic datum known as 'World Geodetic System 1966' and intended to be used globally.
-     ['HZD','worldGeodeticSystem1972','source:datum:geodetic','world_geodetic_system_1972'], // The geodetic datum known as 'World Geodetic System 1972' and intended to be used globally.
-     ['HZD','yacareUruguay','source:datum:geodetic','yacare_(uruguay)'], // The geodetic datum known as 'Yacare' and intended to be used only in the geographic region of Uruguay.
-     ['HZD','zanderijSurinam','source:datum:geodetic','zanderij_(surinam)'], // The geodetic datum known as 'Zanderij' and intended to be used only in the geographic region of Surinam.
+     // ['HZD','-999999',undefined,undefined], // No Information
+     ['HZD','2','source:datum:geodetic','adindan_(ethiopia)'], // Adindan (Ethiopia)
+     ['HZD','3','source:datum:geodetic','adindan_(sudan)'], // Adindan (Sudan)
+     ['HZD','4','source:datum:geodetic','adindan_(mali)'], // Adindan (Mali)
+     ['HZD','5','source:datum:geodetic','adindan_(senegal)'], // Adindan (Senegal)
+     ['HZD','6','source:datum:geodetic','adindan_(burkina_faso)'], // Adindan (Burkina Faso)
+     ['HZD','7','source:datum:geodetic','adindan_(cameroon)'], // Adindan (Cameroon)
+     ['HZD','8','source:datum:geodetic','adindan_(mean_value)'], // Adindan (mean value)
+     ['HZD','9','source:datum:geodetic','afgooye_(somalia)'], // Afgooye (Somalia)
+     ['HZD','10','source:datum:geodetic','antigua_island_astro_1943'], // Antigua Island Astro 1943
+     ['HZD','12','source:datum:geodetic','ain_el_abd_1970_(bahrain_island)'], // Ain el Abd 1970 (Bahrain Island)
+     ['HZD','13','source:datum:geodetic','ain_el_abd_1970_(saudi_arabia)'], // Ain el Abd 1970 (Saudi Arabia)
+     ['HZD','14','source:datum:geodetic','american_samoa_datum_1962'], // American Samoa Datum 1962
+     ['HZD','15','source:datum:geodetic','amersfoort_1885/1903_(netherlands)'], // Amersfoort 1885/1903 (Netherlands)
+     ['HZD','16','source:datum:geodetic','anna_1_astro_1965_(cocos_islands)'], // Anna 1 Astro 1965 (Cocos Islands)
+     ['HZD','17','source:datum:geodetic','approximate_luzon_datum_(philippines)'], // Approximate Luzon Datum (Philippines)
+     ['HZD','19','source:datum:geodetic','arc_1950_(botswana)'], // Arc 1950 (Botswana)
+     ['HZD','20','source:datum:geodetic','arc_1950_(lesotho)'], // Arc 1950 (Lesotho)
+     ['HZD','21','source:datum:geodetic','arc_1950_(malawi)'], // Arc 1950 (Malawi)
+     ['HZD','22','source:datum:geodetic','arc_1950_(swaziland)'], // Arc 1950 (Swaziland)
+     ['HZD','23','source:datum:geodetic','arc_1950_(zaire)'], // Arc 1950 (Zaire)
+     ['HZD','24','source:datum:geodetic','arc_1950_(zambia)'], // Arc 1950 (Zambia)
+     ['HZD','25','source:datum:geodetic','arc_1950_(zimbabwe)'], // Arc 1950 (Zimbabwe)
+     ['HZD','26','source:datum:geodetic','arc_1950_(burundi)'], // Arc 1950 (Burundi)
+     ['HZD','27','source:datum:geodetic','arc_1950_(mean_value)'], // Arc 1950 (mean value)
+     ['HZD','29','source:datum:geodetic','arc_1960_(kenya)'], // Arc 1960 (Kenya)
+     ['HZD','30','source:datum:geodetic','arc_1960_(tanzania)'], // Arc 1960 (Tanzania)
+     ['HZD','31','source:datum:geodetic','arc_1960_(mean_value)'], // Arc 1960 (mean value)
+     ['HZD','32','source:datum:geodetic','arc_1935_(africa)'], // Arc 1935 (Africa)
+     ['HZD','33','source:datum:geodetic','ascension_island_1958_(ascension_island)'], // Ascension Island 1958 (Ascension Island)
+     ['HZD','34','source:datum:geodetic','montserrat_island_astro_1958'], // Montserrat Island Astro 1958
+     ['HZD','35','source:datum:geodetic','astro_station_1952_(marcus_island)'], // Astro Station 1952 (Marcus Island)
+     ['HZD','36','source:datum:geodetic','astro_beacon_'e'_(iwo_jima_island)'], // Astro Beacon 'E' (Iwo Jima Island)
+     ['HZD','37','source:datum:geodetic','average_terrestrial_system_1977,_new_brunswick'], // Average Terrestrial System 1977, New Brunswick
+     ['HZD','38','source:datum:geodetic','australian_geod._1966_(australia_and_tasmania_island)'], // Australian Geod. 1966 (Australia and Tasmania Island)
+     ['HZD','39','source:datum:geodetic','australian_geod._1984_(australia_and_tasmania_island)'], // Australian Geod. 1984 (Australia and Tasmania Island)
+     ['HZD','40','source:datum:geodetic','djakarta_(batavia)_(sumatra_island,_indonesia)'], // Djakarta (Batavia) (Sumatra Island, Indonesia)
+     ['HZD','41','source:datum:geodetic','djakarta_(batavia)_(sumatra_island,_indonesia)_with_zero_meridian_djakarta'], // Djakarta (Batavia) (Sumatra Island, Indonesia) with Zero Meridian Djakarta
+     ['HZD','42','source:datum:geodetic','bekaa_base_south_end_(lebanon)'], // Bekaa Base South End (Lebanon)
+     ['HZD','43','source:datum:geodetic','belgium_1950_system_(lommel_signal,_belgium)'], // Belgium 1950 System (Lommel Signal, Belgium)
+     ['HZD','44','source:datum:geodetic','bermuda_1957_(bermuda_islands)'], // Bermuda 1957 (Bermuda Islands)
+     ['HZD','45','source:datum:geodetic','bissau_(guinea-bissau)'], // Bissau (Guinea-Bissau)
+     ['HZD','46','source:datum:geodetic','modified_bjz54_(china)'], // Modified BJZ54 (China)
+     ['HZD','47','source:datum:geodetic','bjz54_(a954_beijing_coordinates)_(china)'], // BJZ54 (A954 Beijing Coordinates) (China)
+     ['HZD','48','source:datum:geodetic','bogota_observatory_(colombia)'], // Bogota Observatory (Colombia)
+     ['HZD','49','source:datum:geodetic','bogota_observatory_(colombia)_with_zero_meridian_bogota'], // Bogota Observatory (Colombia) with Zero Meridian Bogota
+     ['HZD','50','source:datum:geodetic','bern_1898_(switzerland)'], // Bern 1898 (Switzerland)
+     ['HZD','51','source:datum:geodetic','bern_1898_(switzerland)_with_zero_meridian_bern'], // Bern 1898 (Switzerland) with Zero Meridian Bern
+     ['HZD','52','source:datum:geodetic','bukit_rimpah_(bangka_and_belitung_islands,_indonesia)'], // Bukit Rimpah (Bangka and Belitung Islands, Indonesia)
+     ['HZD','53','source:datum:geodetic','cape_canaveral_(mean_value)'], // Cape Canaveral (mean value)
+     ['HZD','54','source:datum:geodetic','campo_inchauspe_(argentina)'], // Campo Inchauspe (Argentina)
+     ['HZD','55','source:datum:geodetic','camacupa_base_sw_end_(campo_de_aviacao,_angola)'], // Camacupa Base SW End (Campo De Aviacao, Angola)
+     ['HZD','56','source:datum:geodetic','canton_astro_1966_(phoenix_islands)'], // Canton Astro 1966 (Phoenix Islands)
+     ['HZD','57','source:datum:geodetic','cape_(south_africa)'], // Cape (South Africa)
+     ['HZD','58','source:datum:geodetic','camp_area_astro_(camp_mcmurdo_area,_antarctica)'], // Camp Area Astro (Camp McMurdo Area, Antarctica)
+     ['HZD','59','source:datum:geodetic','s-jtsk'], // S-JTSK
+     ['HZD','60','source:datum:geodetic','carthage_(tunisia)'], // Carthage (Tunisia)
+     ['HZD','61','source:datum:geodetic','compensation_geodetique_du_quebec_1977'], // Compensation Geodetique du Quebec 1977
+     ['HZD','62','source:datum:geodetic','chatham_1971_(chatham_island,_new_zealand)'], // Chatham 1971 (Chatham Island, New Zealand)
+     ['HZD','63','source:datum:geodetic','chua_astro_(paraguay)'], // Chua Astro (Paraguay)
+     ['HZD','64','source:datum:geodetic','corrego_alegre_(brazil)'], // Corrego Alegre (Brazil)
+     ['HZD','65','source:datum:geodetic','conakry_pyramid_of_the_service_geographique_(guinea)'], // Conakry Pyramid of the Service Geographique (Guinea)
+     ['HZD','66','source:datum:geodetic','guyana_csg67'], // Guyana CSG67
+     ['HZD','67','source:datum:geodetic','dabola_(guinea)'], // Dabola (Guinea)
+     ['HZD','68','source:datum:geodetic','dcs-3_lighthouse,_saint_lucia,_lesser_antilles'], // DCS-3 Lighthouse, Saint Lucia, Lesser Antilles
+     ['HZD','69','source:datum:geodetic','deception_island,_antarctica'], // Deception Island, Antarctica
+     ['HZD','70','source:datum:geodetic','gux_1_astro_(guadacanal_island)'], // GUX 1 Astro (Guadacanal Island)
+     ['HZD','71','source:datum:geodetic','dominica_astro_m-12,_dominica,_lesser_antilles'], // Dominica Astro M-12, Dominica, Lesser Antilles
+     ['HZD','72','source:datum:geodetic','easter_island_1967_(easter_island)'], // Easter Island 1967 (Easter Island)
+     ['HZD','73','source:datum:geodetic','wake-eniwetok_1960_(marshall_islands)'], // Wake-Eniwetok 1960 (Marshall Islands)
+     ['HZD','75','source:datum:geodetic','european_1950_(western_europe)'], // European 1950 (Western Europe)
+     ['HZD','76','source:datum:geodetic','european_1950_(greece)'], // European 1950 (Greece)
+     ['HZD','77','source:datum:geodetic','european_1950_(norway_and_finland)'], // European 1950 (Norway and Finland)
+     ['HZD','78','source:datum:geodetic','european_1950_(portugal_and_spain)'], // European 1950 (Portugal and Spain)
+     ['HZD','79','source:datum:geodetic','european_1950_(cyprus)'], // European 1950 (Cyprus)
+     ['HZD','80','source:datum:geodetic','european_1950_(egypt)'], // European 1950 (Egypt)
+     ['HZD','81','source:datum:geodetic','european_1950_(england,_channel_islands,_scotland,_and_shetland_islands)'], // European 1950 (England, Channel Islands, Scotland, and Shetland Islands)
+     ['HZD','82','source:datum:geodetic','european_1950_(iran)'], // European 1950 (Iran)
+     ['HZD','83','source:datum:geodetic','european_1950_(sardinia)'], // European 1950 (Sardinia)
+     ['HZD','84','source:datum:geodetic','european_1950_(sicily)'], // European 1950 (Sicily)
+     ['HZD','85','source:datum:geodetic','european_1950_(british_isles)'], // European 1950 (British Isles)
+     ['HZD','86','source:datum:geodetic','european_1950_(malta)'], // European 1950 (Malta)
+     ['HZD','87','source:datum:geodetic','european_1950_(mean_value)'], // European 1950 (mean value)
+     ['HZD','88','source:datum:geodetic','european_1950_(iraq,_israel,_jordan,_kuwait,_lebanon,_saudi_arabia,_and_syria)'], // European 1950 (Iraq, Israel, Jordan, Kuwait, Lebanon, Saudi Arabia, and Syria)
+     ['HZD','89','source:datum:geodetic','european_1950_(tunisia)'], // European 1950 (Tunisia)
+     ['HZD','90','source:datum:geodetic','european_1979_(mean_value)'], // European 1979 (mean value)
+     ['HZD','91','source:datum:geodetic','european_terrestrial_reference_system_1989_(etrs89)'], // European Terrestrial Reference System 1989 (ETRS89)
+     ['HZD','92','source:datum:geodetic','oman_(oman)'], // Oman (Oman)
+     ['HZD','93','source:datum:geodetic','observatorio_meteorologico_1939_(corvo_and_flores_islands,_azores)'], // Observatorio Meteorologico 1939 (Corvo and Flores Islands, Azores)
+     ['HZD','94','source:datum:geodetic','fort_thomas_1955_(nevis,_st_kitts,_leeward_islands)'], // Fort Thomas 1955 (Nevis, St Kitts, Leeward Islands)
+     ['HZD','95','source:datum:geodetic','gan_1970_(addu_atoll,_republic_of_maldives)'], // Gan 1970 (Addu Atoll, Republic of Maldives)
+     ['HZD','96','source:datum:geodetic','gandajika_base_(zaire)'], // Gandajika Base (Zaire)
+     ['HZD','97','source:datum:geodetic','geocentric_datum_of_australia_(gda)'], // Geocentric Datum of Australia (GDA)
+     ['HZD','98','source:datum:geodetic','gdz80_(china)'], // GDZ80 (China)
+     ['HZD','99','source:datum:geodetic','geodetic_datum_1949_(new_zealand)'], // Geodetic Datum 1949 (New Zealand)
+     ['HZD','100','source:datum:geodetic','dos_1968_(gizo_island,_new_georgia_islands)'], // DOS 1968 (Gizo Island, New Georgia Islands)
+     ['HZD','101','source:datum:geodetic','graciosa_base_sw_(faial,_graciosa,_pico,_sao_jorge,_and_terceira_island,_azores)'], // Graciosa Base SW (Faial, Graciosa, Pico, Sao Jorge, and Terceira Island, Azores)
+     ['HZD','102','source:datum:geodetic','greek_datum,_greece'], // Greek Datum, Greece
+     ['HZD','103','source:datum:geodetic','greek_geodetic_reference_system_1987_(ggrs_87)'], // Greek Geodetic Reference System 1987 (GGRS 87)
+     ['HZD','104','source:datum:geodetic','gunong_segara_(kalimantan_island,_indonesia)'], // Gunong Segara (Kalimantan Island, Indonesia)
+     ['HZD','105','source:datum:geodetic','gunong_serindung'], // Gunong Serindung
+     ['HZD','106','source:datum:geodetic','guam_1963'], // Guam 1963
+     ['HZD','107','source:datum:geodetic','herat_north_(afganistan)'], // Herat North (Afganistan)
+     ['HZD','108','source:datum:geodetic','hermannskogel'], // Hermannskogel
+     ['HZD','109','source:datum:geodetic','provisional_south_chilean_1963_(or_hito_xviii_1963)_(s._chile,_53_degrees_south)'], // Provisional South Chilean 1963 (or Hito XVIII 1963) (S. Chile, 53 degrees South)
+     ['HZD','110','source:datum:geodetic','hjorsey_1955_(iceland)'], // Hjorsey 1955 (Iceland)
+     ['HZD','111','source:datum:geodetic','hong_kong_1963_(hong_kong)'], // Hong Kong 1963 (Hong Kong)
+     ['HZD','112','source:datum:geodetic','hong_kong_1929'], // Hong Kong 1929
+     ['HZD','113','source:datum:geodetic','hu-tzu-shan'], // Hu-Tzu-Shan
+     ['HZD','114','source:datum:geodetic','hungarian_1972'], // Hungarian 1972
+     ['HZD','115','source:datum:geodetic','bellevue_(ign)_(efate_and_erromango_islands)'], // Bellevue (IGN) (Efate and Erromango Islands)
+     ['HZD','116','source:datum:geodetic','indonesian_1974'], // Indonesian 1974
+     ['HZD','118','source:datum:geodetic','indian_(thailand_and_vietnam)'], // Indian (Thailand and Vietnam)
+     ['HZD','119','source:datum:geodetic','indian_(bangladesh)'], // Indian (Bangladesh)
+     ['HZD','120','source:datum:geodetic','indian_(india_and_nepal)'], // Indian (India and Nepal)
+     ['HZD','121','source:datum:geodetic','indian_(pakistan)'], // Indian (Pakistan)
+     ['HZD','123','source:datum:geodetic','indian_1954_(thailand)'], // Indian 1954 (Thailand)
+     ['HZD','125','source:datum:geodetic','indian_1960_(vietnam:_near_16_degrees_north)'], // Indian 1960 (Vietnam: near 16 degrees North)
+     ['HZD','126','source:datum:geodetic','indian_1960_(con_son_island_(vietnam))'], // Indian 1960 (Con Son Island (Vietnam))
+     ['HZD','128','source:datum:geodetic','indian_1975_(thailand)'], // Indian 1975 (Thailand)
+     ['HZD','129','source:datum:geodetic','ireland_1965_(ireland_and_northern_ireland)'], // Ireland 1965 (Ireland and Northern Ireland)
+     ['HZD','130','source:datum:geodetic','ists_061_astro_1968_(south_georgia_islands)'], // ISTS 061 Astro 1968 (South Georgia Islands)
+     ['HZD','131','source:datum:geodetic','ists_073_astro_1969_(diego_garcia)'], // ISTS 073 Astro 1969 (Diego Garcia)
+     ['HZD','132','source:datum:geodetic','johnston_island_1961_(johnston_island)'], // Johnston Island 1961 (Johnston Island)
+     ['HZD','133','source:datum:geodetic','kalianpur_(india)'], // Kalianpur (India)
+     ['HZD','134','source:datum:geodetic','kandawala_(sri_lanka)'], // Kandawala (Sri Lanka)
+     ['HZD','135','source:datum:geodetic','kertau_1948_(or_revised_kertau)_(west_malaysia_and_singapore)'], // Kertau 1948 (or Revised Kertau) (West Malaysia and Singapore)
+     ['HZD','136','source:datum:geodetic','kcs_2,_sierra_leone'], // KCS 2, Sierra Leone
+     ['HZD','137','source:datum:geodetic','kerguelen_island_1949_(kerguelen_island)'], // Kerguelen Island 1949 (Kerguelen Island)
+     ['HZD','138','source:datum:geodetic','korean_geodetic_system_1995_(south_korea)'], // Korean Geodetic System 1995 (South Korea)
+     ['HZD','139','source:datum:geodetic','kkj_(or_kartastokoordinaattijarjestelma),_finland'], // KKJ (or Kartastokoordinaattijarjestelma), Finland
+     ['HZD','140','source:datum:geodetic','kusaie_astro_1951'], // Kusaie Astro 1951
+     ['HZD','141','source:datum:geodetic','kuwait_oil_company_(k28)'], // Kuwait Oil Company (K28)
+     ['HZD','142','source:datum:geodetic','l.c._5_astro_1961_(cayman_brac_island)'], // L.C. 5 Astro 1961 (Cayman Brac Island)
+     ['HZD','143','source:datum:geodetic','leigon_(ghana)'], // Leigon (Ghana)
+     ['HZD','144','source:datum:geodetic','liberia_1964_(liberia)'], // Liberia 1964 (Liberia)
+     ['HZD','145','source:datum:geodetic','lisbon_(castelo_di_sao_jorge),_portugal'], // Lisbon (Castelo di Sao Jorge), Portugal
+     ['HZD','146','source:datum:geodetic','local_astro'], // Local Astro
+     ['HZD','147','source:datum:geodetic','loma_quintana_(venezuela)'], // Loma Quintana (Venezuela)
+     ['HZD','149','source:datum:geodetic','luzon_(philipines_except_mindanao_island)'], // Luzon (Philipines except Mindanao Island)
+     ['HZD','150','source:datum:geodetic','luzon_(mindanao_island)'], // Luzon (Mindanao Island)
+     ['HZD','151','source:datum:geodetic','marco_astro_(salvage_islands)'], // Marco Astro (Salvage Islands)
+     ['HZD','152','source:datum:geodetic','martinique_fort-desaix'], // Martinique Fort-Desaix
+     ['HZD','153','source:datum:geodetic','massawa_(eritrea,_ethiopia)'], // Massawa (Eritrea, Ethiopia)
+     ['HZD','154','source:datum:geodetic','manokwari_(west_irian)'], // Manokwari (West Irian)
+     ['HZD','155','source:datum:geodetic','mayotte_combani'], // Mayotte Combani
+     ['HZD','156','source:datum:geodetic','mount_dillon,_tobago'], // Mount Dillon, Tobago
+     ['HZD','157','source:datum:geodetic','merchich_(morocco)'], // Merchich (Morocco)
+     ['HZD','158','source:datum:geodetic','midway_astro_1961_(midway_island)'], // Midway Astro 1961 (Midway Island)
+     ['HZD','159','source:datum:geodetic','mahe_1971_(mahe_island)'], // Mahe 1971 (Mahe Island)
+     ['HZD','161','source:datum:geodetic','minna_(cameroon)'], // Minna (Cameroon)
+     ['HZD','162','source:datum:geodetic','minna_(nigeria)'], // Minna (Nigeria)
+     ['HZD','163','source:datum:geodetic','rome_1940_(or_monte_mario_1940),_italy'], // Rome 1940 (or Monte Mario 1940), Italy
+     ['HZD','164','source:datum:geodetic','rome_1940_(or_monte_mario_1940),_italy,_with_zero_meridian_rome'], // Rome 1940 (or Monte Mario 1940), Italy, with Zero Meridian Rome
+     ['HZD','165','source:datum:geodetic','montjong_lowe'], // Montjong Lowe
+     ['HZD','166','source:datum:geodetic','m'poraloko_(gabon)'], // M'Poraloko (Gabon)
+     ['HZD','167','source:datum:geodetic','viti_levu_1916_(viti_levu_island,_fiji_islands)'], // Viti Levu 1916 (Viti Levu Island, Fiji Islands)
+     ['HZD','169','source:datum:geodetic','nahrwan_(masirah_island,_oman)'], // Nahrwan (Masirah Island, Oman)
+     ['HZD','170','source:datum:geodetic','nahrwan_(united_arab_emirates)'], // Nahrwan (United Arab Emirates)
+     ['HZD','171','source:datum:geodetic','nahrwan_(saudi_arabia)'], // Nahrwan (Saudi Arabia)
+     ['HZD','172','source:datum:geodetic','naparima_(bwi,_trinidad_and_tobago)'], // Naparima (BWI, Trinidad and Tobago)
+     ['HZD','174','source:datum:geodetic','north_american_1983_(alaska,_excluding_aleutian_islands)'], // North American 1983 (Alaska, excluding Aleutian Islands)
+     ['HZD','175','source:datum:geodetic','north_american_1983_(canada)'], // North American 1983 (Canada)
+     ['HZD','176','source:datum:geodetic','north_american_1983_(conus)'], // North American 1983 (CONUS)
+     ['HZD','177','source:datum:geodetic','north_american_1983_(mexico_and_central_america))'], // North American 1983 (Mexico and Central America))
+     ['HZD','178','source:datum:geodetic','north_american_1983_(aleutian_islands)'], // North American 1983 (Aleutian Islands)
+     ['HZD','179','source:datum:geodetic','north_american_1983_(hawaii)'], // North American 1983 (Hawaii)
+     ['HZD','181','source:datum:geodetic','north_american_1927_(eastern_us)'], // North American 1927 (Eastern US)
+     ['HZD','182','source:datum:geodetic','north_american_1927_(western_us)'], // North American 1927 (Western US)
+     ['HZD','183','source:datum:geodetic','north_american_1927_(conus_mean)'], // North American 1927 (CONUS mean)
+     ['HZD','184','source:datum:geodetic','north_american_1927_(alaska)'], // North American 1927 (Alaska)
+     ['HZD','185','source:datum:geodetic','north_american_1927_(canada_mean)'], // North American 1927 (Canada mean)
+     ['HZD','186','source:datum:geodetic','north_american_1927_(alberta_and_british_columbia)'], // North American 1927 (Alberta and British Columbia)
+     ['HZD','187','source:datum:geodetic','north_american_1927_(newfoundland,_new_brunswick,_nova_scotia_and_quebec)'], // North American 1927 (Newfoundland, New Brunswick, Nova Scotia and Quebec)
+     ['HZD','188','source:datum:geodetic','north_american_1927_(manitoba_and_ontario)'], // North American 1927 (Manitoba and Ontario)
+     ['HZD','189','source:datum:geodetic','north_american_1927_(northwest_territories_and_saskatchewan)'], // North American 1927 (Northwest Territories and Saskatchewan)
+     ['HZD','190','source:datum:geodetic','north_american_1927_(yukon)'], // North American 1927 (Yukon)
+     ['HZD','191','source:datum:geodetic','north_american_1927_(mexico)'], // North American 1927 (Mexico)
+     ['HZD','192','source:datum:geodetic','north_american_1927_(central_america)'], // North American 1927 (Central America)
+     ['HZD','193','source:datum:geodetic','north_american_1927_(canal_zone)'], // North American 1927 (Canal Zone)
+     ['HZD','194','source:datum:geodetic','north_american_1927_(caribbean)'], // North American 1927 (Caribbean)
+     ['HZD','195','source:datum:geodetic','north_american_1927_(bahamas,_except_san_salvador_island)'], // North American 1927 (Bahamas, except San Salvador Island)
+     ['HZD','196','source:datum:geodetic','north_american_1927_(san_salvador_island)'], // North American 1927 (San Salvador Island)
+     ['HZD','197','source:datum:geodetic','north_american_1927_(cuba)'], // North American 1927 (Cuba)
+     ['HZD','198','source:datum:geodetic','north_american_1927_(hayes_peninsula,_greenland)'], // North American 1927 (Hayes Peninsula, Greenland)
+     ['HZD','199','source:datum:geodetic','north_american_1927_(aleutian_islands_east_of_180_degrees_west)'], // North American 1927 (Aleutian Islands East of 180 degrees West)
+     ['HZD','200','source:datum:geodetic','north_american_1927_(aleutian_islands_west_of_180_degrees_west)'], // North American 1927 (Aleutian Islands West of 180 degrees West)
+     ['HZD','201','source:datum:geodetic','revised_nahrwan'], // Revised Nahrwan
+     ['HZD','202','source:datum:geodetic','new_french_or_nouvelle_triangulation_francaise_(ntf)_with_zero_meridian_paris'], // New French or Nouvelle Triangulation Francaise (NTF) with Zero Meridian Paris
+     ['HZD','204','source:datum:geodetic','north_sahara_1959'], // North Sahara 1959
+     ['HZD','205','source:datum:geodetic','ocotopeque,_guatemala'], // Ocotopeque, Guatemala
+     ['HZD','206','source:datum:geodetic','belgium_1972_(observatoire_d'uccle)'], // Belgium 1972 (Observatoire d'Uccle)
+     ['HZD','207','source:datum:geodetic','old_egyptian_(egypt)'], // Old Egyptian (Egypt)
+     ['HZD','209','source:datum:geodetic','ordnance_survey_g.b._1936_(england)'], // Ordnance Survey G.B. 1936 (England)
+     ['HZD','210','source:datum:geodetic','ordnance_survey_g.b._1936_(england,_isle_of_man,_and_wales)'], // Ordnance Survey G.B. 1936 (England, Isle of Man, and Wales)
+     ['HZD','211','source:datum:geodetic','ordnance_survey_g.b._1936_(scotland_and_shetland_islands)'], // Ordnance Survey G.B. 1936 (Scotland and Shetland Islands)
+     ['HZD','212','source:datum:geodetic','ordnance_survey_g.b._1936_(wales)'], // Ordnance Survey G.B. 1936 (Wales)
+     ['HZD','213','source:datum:geodetic','ordnance_survey_g.b._1936_(mean_value)'], // Ordnance Survey G.B. 1936 (mean value)
+     ['HZD','215','source:datum:geodetic','old_hawaiian_(hawaii)'], // Old Hawaiian (Hawaii)
+     ['HZD','216','source:datum:geodetic','old_hawaiian_(kauai)'], // Old Hawaiian (Kauai)
+     ['HZD','217','source:datum:geodetic','old_hawaiian_(maui)'], // Old Hawaiian (Maui)
+     ['HZD','218','source:datum:geodetic','old_hawaiian_(oahu)'], // Old Hawaiian (Oahu)
+     ['HZD','219','source:datum:geodetic','old_hawaiian_(mean_value)'], // Old Hawaiian (mean value)
+     ['HZD','220','source:datum:geodetic','oslo_observatory_(old),_norway'], // Oslo Observatory (Old), Norway
+     ['HZD','221','source:datum:geodetic','padang_base_west_end_(sumatra,_indonesia)'], // Padang Base West End (Sumatra, Indonesia)
+     ['HZD','222','source:datum:geodetic','padang_base_west_end_(sumatra,_indonesia)_with_zero_meridian_djakarta'], // Padang Base West End (Sumatra, Indonesia) with Zero Meridian Djakarta
+     ['HZD','223','source:datum:geodetic','palestine_1928_(israel,_jordan)'], // Palestine 1928 (Israel, Jordan)
+     ['HZD','224','source:datum:geodetic','potsdam_or_helmertturm_(germany)'], // Potsdam or Helmertturm (Germany)
+     ['HZD','225','source:datum:geodetic','ayabelle_lighthouse_(djibouti)'], // Ayabelle Lighthouse (Djibouti)
+     ['HZD','226','source:datum:geodetic','pitcairn_astro_1967_(pitcairn_island)'], // Pitcairn Astro 1967 (Pitcairn Island)
+     ['HZD','227','source:datum:geodetic','pico_de_las_nieves_(canary_islands)'], // Pico de las Nieves (Canary Islands)
+     ['HZD','228','source:datum:geodetic','se_base_(porto_santo)_(porto_santo_and_madeira_islands)'], // SE Base (Porto Santo) (Porto Santo and Madeira Islands)
+     ['HZD','230','source:datum:geodetic','prov._s._american_1956_(bolivia)'], // Prov. S. American 1956 (Bolivia)
+     ['HZD','231','source:datum:geodetic','prov._s._american_1956_(northern_chile_near_19_degrees_south)'], // Prov. S. American 1956 (Northern Chile near 19 degrees South)
+     ['HZD','232','source:datum:geodetic','prov._s._american_1956_(southern_chile_near_43_degrees_south)'], // Prov. S. American 1956 (Southern Chile near 43 degrees South)
+     ['HZD','233','source:datum:geodetic','prov._s._american_1956_(columbia)'], // Prov. S. American 1956 (Columbia)
+     ['HZD','234','source:datum:geodetic','prov._s._american_1956_(ecuador)'], // Prov. S. American 1956 (Ecuador)
+     ['HZD','235','source:datum:geodetic','prov._s._american_1956_(guyana)'], // Prov. S. American 1956 (Guyana)
+     ['HZD','236','source:datum:geodetic','prov._s._american_1956_(peru)'], // Prov. S. American 1956 (Peru)
+     ['HZD','237','source:datum:geodetic','prov._s._american_1956_(venezuela)'], // Prov. S. American 1956 (Venezuela)
+     ['HZD','238','source:datum:geodetic','prov._s._american_1956_(mean_value)'], // Prov. S. American 1956 (mean value)
+     ['HZD','239','source:datum:geodetic','point_58_mean_solution_(burkina_faso_and_niger)'], // Point 58 Mean Solution (Burkina Faso and Niger)
+     ['HZD','240','source:datum:geodetic','pointe_noire_1948'], // Pointe Noire 1948
+     ['HZD','241','source:datum:geodetic','pulkovo_1942_(russia)'], // Pulkovo 1942 (Russia)
+     ['HZD','242','source:datum:geodetic','puerto_rico_(puerto_rico_and_virgin_islands)'], // Puerto Rico (Puerto Rico and Virgin Islands)
+     ['HZD','243','source:datum:geodetic','qatar_national_(qatar)'], // Qatar National (Qatar)
+     ['HZD','244','source:datum:geodetic','qornoq_(south_greenland)'], // Qornoq (South Greenland)
+     ['HZD','245','source:datum:geodetic','rauenberg_(berlin,_germany)'], // Rauenberg (Berlin, Germany)
+     ['HZD','246','source:datum:geodetic','reconnaissance_triangulation,_morocco'], // Reconnaissance Triangulation, Morocco
+     ['HZD','247','source:datum:geodetic','reunion_1947'], // Reunion 1947
+     ['HZD','248','source:datum:geodetic','rt90,_stockholm,_sweden'], // RT90, Stockholm, Sweden
+     ['HZD','249','source:datum:geodetic','santo_(dos)_1965_(espirito_santo_island)'], // Santo (DOS) 1965 (Espirito Santo Island)
+     ['HZD','250','source:datum:geodetic','south_african_(south_africa)'], // South African (South Africa)
+     ['HZD','251','source:datum:geodetic','sainte_anne_i_1984_(guadeloupe)'], // Sainte Anne I 1984 (Guadeloupe)
+     ['HZD','253','source:datum:geodetic','south_american_1969_(argentina)'], // South American 1969 (Argentina)
+     ['HZD','254','source:datum:geodetic','south_american_1969_(bolivia)'], // South American 1969 (Bolivia)
+     ['HZD','255','source:datum:geodetic','south_american_1969_(brazil)'], // South American 1969 (Brazil)
+     ['HZD','256','source:datum:geodetic','south_american_1969_(chile)'], // South American 1969 (Chile)
+     ['HZD','257','source:datum:geodetic','south_american_1969_(columbia)'], // South American 1969 (Columbia)
+     ['HZD','258','source:datum:geodetic','south_american_1969_(ecuador)'], // South American 1969 (Ecuador)
+     ['HZD','259','source:datum:geodetic','south_american_1969_(guyana)'], // South American 1969 (Guyana)
+     ['HZD','260','source:datum:geodetic','south_american_1969_(paraguay)'], // South American 1969 (Paraguay)
+     ['HZD','261','source:datum:geodetic','south_american_1969_(peru)'], // South American 1969 (Peru)
+     ['HZD','262','source:datum:geodetic','south_american_1969_(baltra,_galapagos_islands)'], // South American 1969 (Baltra, Galapagos Islands)
+     ['HZD','263','source:datum:geodetic','south_american_1969_(trinidad_and_tobago)'], // South American 1969 (Trinidad and Tobago)
+     ['HZD','264','source:datum:geodetic','south_american_1969_(venezuela)'], // South American 1969 (Venezuela)
+     ['HZD','265','source:datum:geodetic','south_american_1969_(mean_value)'], // South American 1969 (mean value)
+     ['HZD','266','source:datum:geodetic','sao_braz_(sao_miguel,_santa_maria_islands,_azores)'], // Sao Braz (Sao Miguel, Santa Maria Islands, Azores)
+     ['HZD','267','source:datum:geodetic','sapper_hill_1943_(east_falkland_islands)'], // Sapper Hill 1943 (East Falkland Islands)
+     ['HZD','268','source:datum:geodetic','schwarzeck_(namibia)'], // Schwarzeck (Namibia)
+     ['HZD','269','source:datum:geodetic','soviet_geodetic_system_1985'], // Soviet Geodetic System 1985
+     ['HZD','270','source:datum:geodetic','soviet_geodetic_system_1990'], // Soviet Geodetic System 1990
+     ['HZD','271','source:datum:geodetic','selvagem_grande_1938_(salvage_islands)'], // Selvagem Grande 1938 (Salvage Islands)
+     ['HZD','272','source:datum:geodetic','astro_dos_71/4_(st._helena_island)'], // Astro DOS 71/4 (St. Helena Island)
+     ['HZD','273','source:datum:geodetic','sierra_leone_1960'], // Sierra Leone 1960
+     ['HZD','274','source:datum:geodetic','south_asia_(southeast_asia,_singapore)'], // South Asia (Southeast Asia, Singapore)
+     ['HZD','276','source:datum:geodetic','st._pierre_et_miquelon_1950'], // St. Pierre et Miquelon 1950
+     ['HZD','277','source:datum:geodetic','stockholm_1938_(sweden)'], // Stockholm 1938 (Sweden)
+     ['HZD','278','source:datum:geodetic','sydney_observatory,_new_south_wales,_australia'], // Sydney Observatory, New South Wales, Australia
+     ['HZD','279','source:datum:geodetic','tananarive_observatory_1925'], // Tananarive Observatory 1925
+     ['HZD','280','source:datum:geodetic','tananarive_observatory_1925,_with_zero_meridian_paris'], // Tananarive Observatory 1925, with Zero Meridian Paris
+     ['HZD','281','source:datum:geodetic','tristan_astro_1968_(tristan_da_cunha)'], // Tristan Astro 1968 (Tristan da Cunha)
+     ['HZD','282','source:datum:geodetic','timbalai_1948_(brunei_and_east_malaysia_-_sarawak_and_sabah)'], // Timbalai 1948 (Brunei and East Malaysia - Sarawak and Sabah)
+     ['HZD','283','source:datum:geodetic','timbalai_1968'], // Timbalai 1968
+     ['HZD','285','source:datum:geodetic','tokyo_(japan)'], // Tokyo (Japan)
+     ['HZD','286','source:datum:geodetic','tokyo_(korea)'], // Tokyo (Korea)
+     ['HZD','287','source:datum:geodetic','tokyo_(okinawa)'], // Tokyo (Okinawa)
+     ['HZD','288','source:datum:geodetic','tokyo_(mean_value)'], // Tokyo (mean value)
+     ['HZD','289','source:datum:geodetic','trinidad_1903'], // Trinidad 1903
+     ['HZD','290','source:datum:geodetic','astro_tern_island_1961_(tern_island,_hawaii)'], // Astro Tern Island 1961 (Tern Island, Hawaii)
+     ['HZD','292','source:datum:geodetic','voirol_1875'], // Voirol 1875
+     ['HZD','293','source:datum:geodetic','voirol_1875_with_zero_meridian_paris'], // Voirol 1875 with Zero Meridian Paris
+     ['HZD','294','source:datum:geodetic','voirol_1960,_algeria'], // Voirol 1960, Algeria
+     ['HZD','295','source:datum:geodetic','voirol_1960,_algeria,_with_zero_meridian_paris'], // Voirol 1960, Algeria, with Zero Meridian Paris
+     ['HZD','296','source:datum:geodetic','wake_island_astro_1952'], // Wake Island Astro 1952
+     ['HZD','297','source:datum:geodetic','world_geodetic_system_1960'], // World Geodetic System 1960
+     ['HZD','298','source:datum:geodetic','world_geodetic_system_1966'], // World Geodetic System 1966
+     ['HZD','299','source:datum:geodetic','world_geodetic_system_1972'], // World Geodetic System 1972
+     ['HZD','300','source:datum:geodetic','world_geodetic_system_1984'], // World Geodetic System 1984
+     ['HZD','301','source:datum:geodetic','yacare_(uruguay)'], // Yacare (Uruguay)
+     ['HZD','302','source:datum:geodetic','zanderij_(surinam)'], // Zanderij (Surinam)
+     ['HZD','305','source:datum:geodetic','co-ordinate_system_1937_of_estonia'], // Co-ordinate System 1937 of Estonia
+     ['HZD','306','source:datum:geodetic','indian_1975_(thailand)_-_cycle_1'], // Indian 1975 (Thailand) - Cycle 1
+     ['HZD','307','source:datum:geodetic','south_american_geocentric_reference_system_(sirgas)'], // South American Geocentric Reference System (SIRGAS)
+     ['HZD','308','source:datum:geodetic','pulkovo_1942_(hungary)'], // Pulkovo 1942 (Hungary)
+     ['HZD','309','source:datum:geodetic','pulkovo_1942_(poland)'], // Pulkovo 1942 (Poland)
+     ['HZD','310','source:datum:geodetic','pulkovo_1942_(czechoslovakia)'], // Pulkovo 1942 (Czechoslovakia)
+     ['HZD','311','source:datum:geodetic','pulkovo_1942_(latvia)'], // Pulkovo 1942 (Latvia)
+     ['HZD','312','source:datum:geodetic','pulkovo_1942_(kazakhstan)'], // Pulkovo 1942 (Kazakhstan)
+     ['HZD','313','source:datum:geodetic','pulkovo_1942_(albania)'], // Pulkovo 1942 (Albania)
+     ['HZD','314','source:datum:geodetic','pulkovo_1942_(romania)'], // Pulkovo 1942 (Romania)
+     ['HZD','315','source:datum:geodetic','tokyo_(korea)_-_cycle_1'], // Tokyo (Korea) - Cycle 1
+     ['HZD','998','source:datum:geodetic','not_applicable'], // Not Applicable
+     ['HZD','999','source:datum:geodetic','other'], // Other
+
+     // IAA - IALA A or B Adopted
+     // ['IAA','-999999',undefined,undefined], // No Information
+     ['IAA','1000','raw:IAA','no'],
+     ['IAA','1001','raw:IAA','yes'],
+
+     // IAS - IMO Adopted
+     // ['IAS','-999999',undefined,undefined], // No Information
+     ['IAS','1000','raw:IAS','no'],
+     ['IAS','1001','raw:IAS','yes'],
 
      // INU - Inundation Type
      // ['INU','-999999',undefined,undefined], // No Information
@@ -2077,6 +3541,85 @@ ggdm30.rules = {
      ['IWT','6','water','water-hole'], // Water-hole
      ['IWT','7','water','landlocked_sea'], // Landlocked Sea
      ['IWT','999','water','other'], // Other
+
+     // LAF - Maritime Navigation Line Features
+     // ['LAF','-999999',undefined,undefined], // No Information
+     ['LAF','1','raw:LAF','one_other_than_directional_light'], // One other than Directional Light
+     ['LAF','2','raw:LAF','directional_light'], // Directional Light
+     ['LAF','3','raw:LAF','two_lights_or_more'], // Two Lights or more
+     ['LAF','4','raw:LAF','two_beacons_or_more'], // Two Beacons or more
+     ['LAF','5','raw:LAF','two_other_than_two_lights_or_beacons'], // Two other than Two Lights or Beacons
+     ['LAF','6','raw:LAF','measured_distance_markers'], // Measured Distance Markers
+     ['LAF','999','raw:LAF','other'], // Other
+
+     // LFC - Maritime Light Type
+     // ['LFC','-999999',undefined,undefined], // No Information
+     ['LFC','1','raw:LFC','directional_function'], // Directional Function
+     ['LFC','4','raw:LFC','leading_light'], // Leading Light
+     ['LFC','6','raw:LFC','air_obstruction_light'], // Air Obstruction Light
+     ['LFC','7','raw:LFC','fog_detector_light'], // Fog Detector Light
+     ['LFC','8','raw:LFC','flood_light'], // Flood Light
+     ['LFC','9','raw:LFC','strip_light'], // Strip Light
+     ['LFC','10','raw:LFC','subsidiary_light'], // Subsidiary Light
+     ['LFC','11','raw:LFC','spotlight'], // Spotlight
+     ['LFC','12','raw:LFC','emergency_light'], // Emergency Light
+     ['LFC','13','raw:LFC','bearing_light'], // Bearing Light
+     ['LFC','14','raw:LFC','upper'], // Upper
+     ['LFC','16','raw:LFC','lower'], // Lower
+     ['LFC','17','raw:LFC','horizontally_disposed'], // Horizontally Disposed
+     ['LFC','18','raw:LFC','vertically_disposed'], // Vertically Disposed
+     ['LFC','19','raw:LFC','front'], // Front
+     ['LFC','20','raw:LFC','rear'], // Rear
+     ['LFC','21','raw:LFC','moire_effect_light'], // Moire Effect Light
+     ['LFC','22','raw:LFC','sectored_light'], // Sectored Light
+     ['LFC','25','raw:LFC','occasional_light'], // Occasional Light
+     ['LFC','999','raw:LFC','other'], // Other
+
+     // LFC2 - Maritime Light Type [2]
+     // ['LFC2','-999999',undefined,undefined], // No Information
+     ['LFC2','1','raw:LFC2','directional_function'], // Directional Function
+     ['LFC2','4','raw:LFC2','leading_light'], // Leading Light
+     ['LFC2','6','raw:LFC2','air_obstruction_light'], // Air Obstruction Light
+     ['LFC2','7','raw:LFC2','fog_detector_light'], // Fog Detector Light
+     ['LFC2','8','raw:LFC2','flood_light'], // Flood Light
+     ['LFC2','9','raw:LFC2','strip_light'], // Strip Light
+     ['LFC2','10','raw:LFC2','subsidiary_light'], // Subsidiary Light
+     ['LFC2','11','raw:LFC2','spotlight'], // Spotlight
+     ['LFC2','12','raw:LFC2','emergency_light'], // Emergency Light
+     ['LFC2','13','raw:LFC2','bearing_light'], // Bearing Light
+     ['LFC2','14','raw:LFC2','upper'], // Upper
+     ['LFC2','16','raw:LFC2','lower'], // Lower
+     ['LFC2','17','raw:LFC2','horizontally_disposed'], // Horizontally Disposed
+     ['LFC2','18','raw:LFC2','vertically_disposed'], // Vertically Disposed
+     ['LFC2','19','raw:LFC2','front'], // Front
+     ['LFC2','20','raw:LFC2','rear'], // Rear
+     ['LFC2','21','raw:LFC2','moire_effect_light'], // Moire Effect Light
+     ['LFC2','22','raw:LFC2','sectored_light'], // Sectored Light
+     ['LFC2','25','raw:LFC2','occasional_light'], // Occasional Light
+     ['LFC2','999','raw:LFC2','other'], // Other
+
+     // LFC3 - Maritime Light Type [3]
+     // ['LFC3','-999999',undefined,undefined], // No Information
+     ['LFC3','1','raw:LFC3','directional_function'], // Directional Function
+     ['LFC3','4','raw:LFC3','leading_light'], // Leading Light
+     ['LFC3','6','raw:LFC3','air_obstruction_light'], // Air Obstruction Light
+     ['LFC3','7','raw:LFC3','fog_detector_light'], // Fog Detector Light
+     ['LFC3','8','raw:LFC3','flood_light'], // Flood Light
+     ['LFC3','9','raw:LFC3','strip_light'], // Strip Light
+     ['LFC3','10','raw:LFC3','subsidiary_light'], // Subsidiary Light
+     ['LFC3','11','raw:LFC3','spotlight'], // Spotlight
+     ['LFC3','12','raw:LFC3','emergency_light'], // Emergency Light
+     ['LFC3','13','raw:LFC3','bearing_light'], // Bearing Light
+     ['LFC3','14','raw:LFC3','upper'], // Upper
+     ['LFC3','16','raw:LFC3','lower'], // Lower
+     ['LFC3','17','raw:LFC3','horizontally_disposed'], // Horizontally Disposed
+     ['LFC3','18','raw:LFC3','vertically_disposed'], // Vertically Disposed
+     ['LFC3','19','raw:LFC3','front'], // Front
+     ['LFC3','20','raw:LFC3','rear'], // Rear
+     ['LFC3','21','raw:LFC3','moire_effect_light'], // Moire Effect Light
+     ['LFC3','22','raw:LFC3','sectored_light'], // Sectored Light
+     ['LFC3','25','raw:LFC3','occasional_light'], // Occasional Light
+     ['LFC3','999','raw:LFC3','other'], // Other
 
      // LMC - Navigation Landmark
      // ['LMC','-999999',undefined,undefined], // No Information
@@ -2099,6 +3642,28 @@ ggdm30.rules = {
      ['LOC','45','location','overground'], // Above Surface
      ['LOC','46','location','above_waterbody_bottom'], // Above Waterbody Bottom
      ['LOC','47','location','underwater'], // Below Waterbody Surface
+     ['LOC','48','location','portions_below_ground_surface'], // Portions Below Ground Surface
+
+     // LSP - Geopolitical Line Type
+     // ['LSP','-999999',undefined,undefined], // No Information
+     ['LSP','1','raw:LSP','generic_administrative_boundary'], // Generic Administrative Boundary
+     ['LSP','2','raw:LSP','provisional_administrative_line'], // Provisional Administrative Line
+     ['LSP','3','raw:LSP','armistice_line'], // Armistice Line
+     ['LSP','4','raw:LSP','line_of_control'], // Line of Control
+     ['LSP','5','raw:LSP','demarcation_line'], // Demarcation Line
+     ['LSP','6','raw:LSP','line_of_convenience'], // Line of Convenience
+     ['LSP','7','raw:LSP','cease_fire_line'], // Cease Fire Line
+     ['LSP','8','raw:LSP','convention_line'], // Convention Line
+     ['LSP','9','raw:LSP','claim_line'], // Claim Line
+     ['LSP','10','raw:LSP','intercolonial_line'], // Intercolonial Line
+     ['LSP','11','raw:LSP','interentity_line'], // Interentity Line
+     ['LSP','12','raw:LSP','line_of_adjacency'], // Line of Adjacency
+     ['LSP','13','raw:LSP','line_of_withdrawal'], // Line of Withdrawal
+     ['LSP','14','raw:LSP','military_disengagement_line'], // Military Disengagement Line
+     ['LSP','15','raw:LSP','treaty_line'], // Treaty Line
+     ['LSP','16','raw:LSP','unclos_claim_boundary'], // UNCLOS Claim Boundary
+     ['LSP','17','raw:LSP','generic_international_boundary'], // Generic International Boundary
+     ['LSP','999','raw:LSP','other'], // Other
 
      // LUN - Located Underground
      // ['LUN','-999999',undefined,undefined], // No Information
@@ -2110,17 +3675,294 @@ ggdm30.rules = {
      ['MAN','1000','navigation:maritime_landmark','no'],
      ['MAN','1001','navigation:maritime_landmark','yes'],
 
-// MCC - Structural Material Type
+     // MAS - Maintained
+     // ['MAS','-999999',undefined,undefined], // No Information
+     ['MAS','1000','raw:MAS','no'],
+     ['MAS','1001','raw:MAS','yes'],
+
+     // MBC_MCC1 - Bot Char (First Material Type)
+     // ['MBC_MCC1','-999999',undefined,undefined], // No Information
+     ['MBC_MCC1','4','raw:MBC_MCC1','ash'], // Ash
+     ['MBC_MCC1','7','raw:MBC_MCC1','bedrock'], // Bedrock
+     ['MBC_MCC1','8','raw:MBC_MCC1','boulders'], // Boulders
+     ['MBC_MCC1','10','raw:MBC_MCC1','calcareous'], // Calcareous
+     ['MBC_MCC1','12','raw:MBC_MCC1','chalk'], // Chalk
+     ['MBC_MCC1','14','raw:MBC_MCC1','cinders'], // Cinders
+     ['MBC_MCC1','15','raw:MBC_MCC1','cirripedia'], // Cirripedia
+     ['MBC_MCC1','16','raw:MBC_MCC1','clay'], // Clay
+     ['MBC_MCC1','18','raw:MBC_MCC1','cobbles'], // Cobbles
+     ['MBC_MCC1','22','raw:MBC_MCC1','conglomerate'], // Conglomerate
+     ['MBC_MCC1','24','raw:MBC_MCC1','coral'], // Coral
+     ['MBC_MCC1','25','raw:MBC_MCC1','coral_head'], // Coral Head
+     ['MBC_MCC1','28','raw:MBC_MCC1','diatomaceous_earth'], // Diatomaceous Earth
+     ['MBC_MCC1','36','raw:MBC_MCC1','foraminifera'], // Foraminifera
+     ['MBC_MCC1','37','raw:MBC_MCC1','fucus'], // Fucus
+     ['MBC_MCC1','45','raw:MBC_MCC1','plant_material'], // Plant Material
+     ['MBC_MCC1','46','raw:MBC_MCC1','gravel'], // Gravel
+     ['MBC_MCC1','49','raw:MBC_MCC1','ground_shell'], // Ground Shell
+     ['MBC_MCC1','52','raw:MBC_MCC1','lava'], // Lava
+     ['MBC_MCC1','55','raw:MBC_MCC1','loess'], // Loess
+     ['MBC_MCC1','58','raw:MBC_MCC1','madrepore'], // Madrepore
+     ['MBC_MCC1','59','raw:MBC_MCC1','manganese'], // Manganese
+     ['MBC_MCC1','61','raw:MBC_MCC1','marl'], // Marl
+     ['MBC_MCC1','63','raw:MBC_MCC1','matte'], // Matte
+     ['MBC_MCC1','65','raw:MBC_MCC1','mud'], // Mud
+     ['MBC_MCC1','66','raw:MBC_MCC1','mussels'], // Mussels
+     ['MBC_MCC1','69','raw:MBC_MCC1','ooze'], // Ooze
+     ['MBC_MCC1','70','raw:MBC_MCC1','oysters'], // Oysters
+     ['MBC_MCC1','73','raw:MBC_MCC1','pebbles'], // Pebbles
+     ['MBC_MCC1','75','raw:MBC_MCC1','sea_moss'], // Sea Moss
+     ['MBC_MCC1','79','raw:MBC_MCC1','pumice'], // Pumice
+     ['MBC_MCC1','80','raw:MBC_MCC1','quartz'], // Quartz
+     ['MBC_MCC1','81','raw:MBC_MCC1','radiolaria'], // Radiolaria
+     ['MBC_MCC1','84','raw:MBC_MCC1','rocks'], // Rocks
+     ['MBC_MCC1','88','raw:MBC_MCC1','sand'], // Sand
+     ['MBC_MCC1','90','raw:MBC_MCC1','schist'], // Schist
+     ['MBC_MCC1','92','raw:MBC_MCC1','scoria'], // Scoria
+     ['MBC_MCC1','96','raw:MBC_MCC1','shell'], // Shell
+     ['MBC_MCC1','98','raw:MBC_MCC1','shingle'], // Shingle
+     ['MBC_MCC1','99','raw:MBC_MCC1','silt'], // Silt
+     ['MBC_MCC1','103','raw:MBC_MCC1','frozen_water'], // Frozen Water
+     ['MBC_MCC1','104','raw:MBC_MCC1','soil'], // Soil
+     ['MBC_MCC1','105','raw:MBC_MCC1','spicules'], // Spicules
+     ['MBC_MCC1','106','raw:MBC_MCC1','sponge'], // Sponge
+     ['MBC_MCC1','108','raw:MBC_MCC1','stone'], // Stone
+     ['MBC_MCC1','111','raw:MBC_MCC1','tufa'], // Tufa
+     ['MBC_MCC1','115','raw:MBC_MCC1','volcanic_ash'], // Volcanic Ash
+     ['MBC_MCC1','999','raw:MBC_MCC1','other'], // Other
+
+     // MBC_MCC2 - Bot Char (Second Material Type)
+     // ['MBC_MCC2','-999999',undefined,undefined], // No Information
+     ['MBC_MCC2','4','raw:MBC_MCC2','ash'], // Ash
+     ['MBC_MCC2','7','raw:MBC_MCC2','bedrock'], // Bedrock
+     ['MBC_MCC2','8','raw:MBC_MCC2','boulders'], // Boulders
+     ['MBC_MCC2','10','raw:MBC_MCC2','calcareous'], // Calcareous
+     ['MBC_MCC2','12','raw:MBC_MCC2','chalk'], // Chalk
+     ['MBC_MCC2','14','raw:MBC_MCC2','cinders'], // Cinders
+     ['MBC_MCC2','15','raw:MBC_MCC2','cirripedia'], // Cirripedia
+     ['MBC_MCC2','16','raw:MBC_MCC2','clay'], // Clay
+     ['MBC_MCC2','18','raw:MBC_MCC2','cobbles'], // Cobbles
+     ['MBC_MCC2','22','raw:MBC_MCC2','conglomerate'], // Conglomerate
+     ['MBC_MCC2','24','raw:MBC_MCC2','coral'], // Coral
+     ['MBC_MCC2','25','raw:MBC_MCC2','coral_head'], // Coral Head
+     ['MBC_MCC2','28','raw:MBC_MCC2','diatomaceous_earth'], // Diatomaceous Earth
+     ['MBC_MCC2','36','raw:MBC_MCC2','foraminifera'], // Foraminifera
+     ['MBC_MCC2','37','raw:MBC_MCC2','fucus'], // Fucus
+     ['MBC_MCC2','45','raw:MBC_MCC2','plant_material'], // Plant Material
+     ['MBC_MCC2','46','raw:MBC_MCC2','gravel'], // Gravel
+     ['MBC_MCC2','49','raw:MBC_MCC2','ground_shell'], // Ground Shell
+     ['MBC_MCC2','52','raw:MBC_MCC2','lava'], // Lava
+     ['MBC_MCC2','55','raw:MBC_MCC2','loess'], // Loess
+     ['MBC_MCC2','58','raw:MBC_MCC2','madrepore'], // Madrepore
+     ['MBC_MCC2','59','raw:MBC_MCC2','manganese'], // Manganese
+     ['MBC_MCC2','61','raw:MBC_MCC2','marl'], // Marl
+     ['MBC_MCC2','63','raw:MBC_MCC2','matte'], // Matte
+     ['MBC_MCC2','65','raw:MBC_MCC2','mud'], // Mud
+     ['MBC_MCC2','66','raw:MBC_MCC2','mussels'], // Mussels
+     ['MBC_MCC2','69','raw:MBC_MCC2','ooze'], // Ooze
+     ['MBC_MCC2','70','raw:MBC_MCC2','oysters'], // Oysters
+     ['MBC_MCC2','73','raw:MBC_MCC2','pebbles'], // Pebbles
+     ['MBC_MCC2','75','raw:MBC_MCC2','sea_moss'], // Sea Moss
+     ['MBC_MCC2','79','raw:MBC_MCC2','pumice'], // Pumice
+     ['MBC_MCC2','80','raw:MBC_MCC2','quartz'], // Quartz
+     ['MBC_MCC2','81','raw:MBC_MCC2','radiolaria'], // Radiolaria
+     ['MBC_MCC2','84','raw:MBC_MCC2','rocks'], // Rocks
+     ['MBC_MCC2','88','raw:MBC_MCC2','sand'], // Sand
+     ['MBC_MCC2','90','raw:MBC_MCC2','schist'], // Schist
+     ['MBC_MCC2','92','raw:MBC_MCC2','scoria'], // Scoria
+     ['MBC_MCC2','96','raw:MBC_MCC2','shell'], // Shell
+     ['MBC_MCC2','98','raw:MBC_MCC2','shingle'], // Shingle
+     ['MBC_MCC2','99','raw:MBC_MCC2','silt'], // Silt
+     ['MBC_MCC2','103','raw:MBC_MCC2','frozen_water'], // Frozen Water
+     ['MBC_MCC2','104','raw:MBC_MCC2','soil'], // Soil
+     ['MBC_MCC2','105','raw:MBC_MCC2','spicules'], // Spicules
+     ['MBC_MCC2','106','raw:MBC_MCC2','sponge'], // Sponge
+     ['MBC_MCC2','108','raw:MBC_MCC2','stone'], // Stone
+     ['MBC_MCC2','111','raw:MBC_MCC2','tufa'], // Tufa
+     ['MBC_MCC2','115','raw:MBC_MCC2','volcanic_ash'], // Volcanic Ash
+     ['MBC_MCC2','999','raw:MBC_MCC2','other'], // Other
+
+     // MBC_PSC1 - Bot Char (first material quality)
+     // ['MBC_PSC1','-999999',undefined,undefined], // No Information
+     ['MBC_PSC1','1','raw:MBC_PSC1','broken'], // Broken
+     ['MBC_PSC1','2','raw:MBC_PSC1','coarse'], // Coarse
+     ['MBC_PSC1','3','raw:MBC_PSC1','decayed'], // Decayed
+     ['MBC_PSC1','4','raw:MBC_PSC1','fine'], // Fine
+     ['MBC_PSC1','5','raw:MBC_PSC1','gritty'], // Gritty
+     ['MBC_PSC1','6','raw:MBC_PSC1','hard'], // Hard
+     ['MBC_PSC1','7','raw:MBC_PSC1','rotten'], // Rotten
+     ['MBC_PSC1','8','raw:MBC_PSC1','soft'], // Soft
+     ['MBC_PSC1','9','raw:MBC_PSC1','sticky'], // Sticky
+     ['MBC_PSC1','10','raw:MBC_PSC1','stiff'], // Stiff
+     ['MBC_PSC1','11','raw:MBC_PSC1','streaky'], // Streaky
+     ['MBC_PSC1','12','raw:MBC_PSC1','tenacious'], // Tenacious
+     ['MBC_PSC1','13','raw:MBC_PSC1','irregular'], // Irregular
+     ['MBC_PSC1','14','raw:MBC_PSC1','bare'], // Bare
+     ['MBC_PSC1','17','raw:MBC_PSC1','calcareous'], // Calcareous
+     ['MBC_PSC1','18','raw:MBC_PSC1','flinty'], // Flinty
+     ['MBC_PSC1','19','raw:MBC_PSC1','glacial'], // Glacial
+     ['MBC_PSC1','20','raw:MBC_PSC1','ground'], // Ground
+     ['MBC_PSC1','21','raw:MBC_PSC1','large'], // Large
+     ['MBC_PSC1','22','raw:MBC_PSC1','rocky'], // Rocky
+     ['MBC_PSC1','23','raw:MBC_PSC1','small'], // Small
+     ['MBC_PSC1','24','raw:MBC_PSC1','speckled'], // Speckled
+     ['MBC_PSC1','25','raw:MBC_PSC1','varied'], // Varied
+     ['MBC_PSC1','26','raw:MBC_PSC1','volcanic'], // Volcanic
+     ['MBC_PSC1','27','raw:MBC_PSC1','medium'], // Medium
+     ['MBC_PSC1','29','raw:MBC_PSC1','mobile_bottom'], // Mobile Bottom
+     ['MBC_PSC1','999','raw:MBC_PSC1','other'], // Other
+
+     // MBC_PSC2 - Bot Char (second material quality)
+     // ['MBC_PSC2','-999999',undefined,undefined], // No Information
+     ['MBC_PSC2','1','raw:MBC_PSC2','broken'], // Broken
+     ['MBC_PSC2','2','raw:MBC_PSC2','coarse'], // Coarse
+     ['MBC_PSC2','3','raw:MBC_PSC2','decayed'], // Decayed
+     ['MBC_PSC2','4','raw:MBC_PSC2','fine'], // Fine
+     ['MBC_PSC2','5','raw:MBC_PSC2','gritty'], // Gritty
+     ['MBC_PSC2','6','raw:MBC_PSC2','hard'], // Hard
+     ['MBC_PSC2','7','raw:MBC_PSC2','rotten'], // Rotten
+     ['MBC_PSC2','8','raw:MBC_PSC2','soft'], // Soft
+     ['MBC_PSC2','9','raw:MBC_PSC2','sticky'], // Sticky
+     ['MBC_PSC2','10','raw:MBC_PSC2','stiff'], // Stiff
+     ['MBC_PSC2','11','raw:MBC_PSC2','streaky'], // Streaky
+     ['MBC_PSC2','12','raw:MBC_PSC2','tenacious'], // Tenacious
+     ['MBC_PSC2','13','raw:MBC_PSC2','irregular'], // Irregular
+     ['MBC_PSC2','14','raw:MBC_PSC2','bare'], // Bare
+     ['MBC_PSC2','17','raw:MBC_PSC2','calcareous'], // Calcareous
+     ['MBC_PSC2','18','raw:MBC_PSC2','flinty'], // Flinty
+     ['MBC_PSC2','19','raw:MBC_PSC2','glacial'], // Glacial
+     ['MBC_PSC2','20','raw:MBC_PSC2','ground'], // Ground
+     ['MBC_PSC2','21','raw:MBC_PSC2','large'], // Large
+     ['MBC_PSC2','22','raw:MBC_PSC2','rocky'], // Rocky
+     ['MBC_PSC2','23','raw:MBC_PSC2','small'], // Small
+     ['MBC_PSC2','24','raw:MBC_PSC2','speckled'], // Speckled
+     ['MBC_PSC2','25','raw:MBC_PSC2','varied'], // Varied
+     ['MBC_PSC2','26','raw:MBC_PSC2','volcanic'], // Volcanic
+     ['MBC_PSC2','27','raw:MBC_PSC2','medium'], // Medium
+     ['MBC_PSC2','29','raw:MBC_PSC2','mobile_bottom'], // Mobile Bottom
+     ['MBC_PSC2','999','raw:MBC_PSC2','other'], // Other
+
+     // MBC_SCO1 - Bot Char (First Sediment Colour)
+     // ['MBC_SCO1','-999999',undefined,undefined], // No Information
+     ['MBC_SCO1','1','raw:MBC_SCO1','grayish_green'], // Grayish Green
+     ['MBC_SCO1','2','raw:MBC_SCO1','pale_grayish_green'], // Pale Grayish Green
+     ['MBC_SCO1','3','raw:MBC_SCO1','very_pale_green'], // Very Pale Green
+     ['MBC_SCO1','4','raw:MBC_SCO1','dusky_yellowish_green'], // Dusky Yellowish Green
+     ['MBC_SCO1','5','raw:MBC_SCO1','dark_yellowish_green'], // Dark Yellowish Green
+     ['MBC_SCO1','6','raw:MBC_SCO1','grayish_yellowish_green'], // Grayish Yellowish Green
+     ['MBC_SCO1','7','raw:MBC_SCO1','moderate_yellowish_green'], // Moderate Yellowish Green
+     ['MBC_SCO1','8','raw:MBC_SCO1','pale_yellowish_green'], // Pale Yellowish Green
+     ['MBC_SCO1','9','raw:MBC_SCO1','very_dusky_red'], // Very Dusky Red
+     ['MBC_SCO1','10','raw:MBC_SCO1','dark_reddish_brown'], // Dark Reddish Brown
+     ['MBC_SCO1','11','raw:MBC_SCO1','grayish_red'], // Grayish Red
+     ['MBC_SCO1','12','raw:MBC_SCO1','moderate_reddish_brown'], // Moderate Reddish Brown
+     ['MBC_SCO1','13','raw:MBC_SCO1','pale_reddish_brown'], // Pale Reddish Brown
+     ['MBC_SCO1','14','raw:MBC_SCO1','pale_red'], // Pale Red
+     ['MBC_SCO1','15','raw:MBC_SCO1','moderate_reddish_orange'], // Moderate Reddish Orange
+     ['MBC_SCO1','16','raw:MBC_SCO1','moderate_orange_pink'], // Moderate Orange Pink
+     ['MBC_SCO1','17','raw:MBC_SCO1','grayish_orange_pink'], // Grayish Orange Pink
+     ['MBC_SCO1','18','raw:MBC_SCO1','greenish_olive'], // Greenish Olive
+     ['MBC_SCO1','19','raw:MBC_SCO1','light_olive'], // Light Olive
+     ['MBC_SCO1','20','raw:MBC_SCO1','pale_olive'], // Pale Olive
+     ['MBC_SCO1','21','raw:MBC_SCO1','dark_greenish_yellow'], // Dark Greenish Yellow
+     ['MBC_SCO1','22','raw:MBC_SCO1','moderate_greenish_yellow'], // Moderate Greenish Yellow
+     ['MBC_SCO1','23','raw:MBC_SCO1','pale_greenish_yellow'], // Pale Greenish Yellow
+     ['MBC_SCO1','24','raw:MBC_SCO1','dusky_green'], // Dusky Green
+     ['MBC_SCO1','25','raw:MBC_SCO1','moderate_grayish_green'], // Moderate Grayish Green
+     ['MBC_SCO1','26','raw:MBC_SCO1','moderate_green'], // Moderate Green
+     ['MBC_SCO1','27','raw:MBC_SCO1','brilliant_green'], // Brilliant Green
+     ['MBC_SCO1','28','raw:MBC_SCO1','pale_green'], // Pale Green
+     ['MBC_SCO1','29','raw:MBC_SCO1','light_green'], // Light Green
+     ['MBC_SCO1','30','raw:MBC_SCO1','light_yellowish_green'], // Light Yellowish Green
+     ['MBC_SCO1','31','raw:MBC_SCO1','very_dusky_purple'], // Very Dusky Purple
+     ['MBC_SCO1','32','raw:MBC_SCO1','pale_purple'], // Pale Purple
+     ['MBC_SCO1','33','raw:MBC_SCO1','very_dark_red'], // Very Dark Red
+     ['MBC_SCO1','34','raw:MBC_SCO1','dusky_red'], // Dusky Red
+     ['MBC_SCO1','35','raw:MBC_SCO1','moderate_red'], // Moderate Red
+     ['MBC_SCO1','36','raw:MBC_SCO1','light_red'], // Light Red
+     ['MBC_SCO1','37','raw:MBC_SCO1','moderate_pink'], // Moderate Pink
+     ['MBC_SCO1','38','raw:MBC_SCO1','very_dusky_red_purple'], // Very Dusky Red Purple
+     ['MBC_SCO1','39','raw:MBC_SCO1','pale_red_purple'], // Pale Red Purple
+     ['MBC_SCO1','40','raw:MBC_SCO1','pale_pink'], // Pale Pink
+     ['MBC_SCO1','41','raw:MBC_SCO1','moderate_olive_brown'], // Moderate Olive Brown
+     ['MBC_SCO1','42','raw:MBC_SCO1','light_olive_brown'], // Light Olive Brown
+     ['MBC_SCO1','43','raw:MBC_SCO1','dusky_yellow'], // Dusky Yellow
+     ['MBC_SCO1','44','raw:MBC_SCO1','moderate_yellow'], // Moderate Yellow
+     ['MBC_SCO1','45','raw:MBC_SCO1','grayish_yellow'], // Grayish Yellow
+     ['MBC_SCO1','46','raw:MBC_SCO1','dusky_blue_green'], // Dusky Blue Green
+     ['MBC_SCO1','47','raw:MBC_SCO1','light_blue_green'], // Light Blue Green
+     ['MBC_SCO1','48','raw:MBC_SCO1','white'], // White
+     ['MBC_SCO1','49','raw:MBC_SCO1','black'], // Black
+     ['MBC_SCO1','999','raw:MBC_SCO1','other'], // Other
+
+     // MBC_SCO2 - Bot Char (Second Sediment Colour)
+     // ['MBC_SCO2','-999999',undefined,undefined], // No Information
+     ['MBC_SCO2','1','raw:MBC_SCO2','grayish_green'], // Grayish Green
+     ['MBC_SCO2','2','raw:MBC_SCO2','pale_grayish_green'], // Pale Grayish Green
+     ['MBC_SCO2','3','raw:MBC_SCO2','very_pale_green'], // Very Pale Green
+     ['MBC_SCO2','4','raw:MBC_SCO2','dusky_yellowish_green'], // Dusky Yellowish Green
+     ['MBC_SCO2','5','raw:MBC_SCO2','dark_yellowish_green'], // Dark Yellowish Green
+     ['MBC_SCO2','6','raw:MBC_SCO2','grayish_yellowish_green'], // Grayish Yellowish Green
+     ['MBC_SCO2','7','raw:MBC_SCO2','moderate_yellowish_green'], // Moderate Yellowish Green
+     ['MBC_SCO2','8','raw:MBC_SCO2','pale_yellowish_green'], // Pale Yellowish Green
+     ['MBC_SCO2','9','raw:MBC_SCO2','very_dusky_red'], // Very Dusky Red
+     ['MBC_SCO2','10','raw:MBC_SCO2','dark_reddish_brown'], // Dark Reddish Brown
+     ['MBC_SCO2','11','raw:MBC_SCO2','grayish_red'], // Grayish Red
+     ['MBC_SCO2','12','raw:MBC_SCO2','moderate_reddish_brown'], // Moderate Reddish Brown
+     ['MBC_SCO2','13','raw:MBC_SCO2','pale_reddish_brown'], // Pale Reddish Brown
+     ['MBC_SCO2','14','raw:MBC_SCO2','pale_red'], // Pale Red
+     ['MBC_SCO2','15','raw:MBC_SCO2','moderate_reddish_orange'], // Moderate Reddish Orange
+     ['MBC_SCO2','16','raw:MBC_SCO2','moderate_orange_pink'], // Moderate Orange Pink
+     ['MBC_SCO2','17','raw:MBC_SCO2','grayish_orange_pink'], // Grayish Orange Pink
+     ['MBC_SCO2','18','raw:MBC_SCO2','greenish_olive'], // Greenish Olive
+     ['MBC_SCO2','19','raw:MBC_SCO2','light_olive'], // Light Olive
+     ['MBC_SCO2','20','raw:MBC_SCO2','pale_olive'], // Pale Olive
+     ['MBC_SCO2','21','raw:MBC_SCO2','dark_greenish_yellow'], // Dark Greenish Yellow
+     ['MBC_SCO2','22','raw:MBC_SCO2','moderate_greenish_yellow'], // Moderate Greenish Yellow
+     ['MBC_SCO2','23','raw:MBC_SCO2','pale_greenish_yellow'], // Pale Greenish Yellow
+     ['MBC_SCO2','24','raw:MBC_SCO2','dusky_green'], // Dusky Green
+     ['MBC_SCO2','25','raw:MBC_SCO2','moderate_grayish_green'], // Moderate Grayish Green
+     ['MBC_SCO2','26','raw:MBC_SCO2','moderate_green'], // Moderate Green
+     ['MBC_SCO2','27','raw:MBC_SCO2','brilliant_green'], // Brilliant Green
+     ['MBC_SCO2','28','raw:MBC_SCO2','pale_green'], // Pale Green
+     ['MBC_SCO2','29','raw:MBC_SCO2','light_green'], // Light Green
+     ['MBC_SCO2','30','raw:MBC_SCO2','light_yellowish_green'], // Light Yellowish Green
+     ['MBC_SCO2','31','raw:MBC_SCO2','very_dusky_purple'], // Very Dusky Purple
+     ['MBC_SCO2','32','raw:MBC_SCO2','pale_purple'], // Pale Purple
+     ['MBC_SCO2','33','raw:MBC_SCO2','very_dark_red'], // Very Dark Red
+     ['MBC_SCO2','34','raw:MBC_SCO2','dusky_red'], // Dusky Red
+     ['MBC_SCO2','35','raw:MBC_SCO2','moderate_red'], // Moderate Red
+     ['MBC_SCO2','36','raw:MBC_SCO2','light_red'], // Light Red
+     ['MBC_SCO2','37','raw:MBC_SCO2','moderate_pink'], // Moderate Pink
+     ['MBC_SCO2','38','raw:MBC_SCO2','very_dusky_red_purple'], // Very Dusky Red Purple
+     ['MBC_SCO2','39','raw:MBC_SCO2','pale_red_purple'], // Pale Red Purple
+     ['MBC_SCO2','40','raw:MBC_SCO2','pale_pink'], // Pale Pink
+     ['MBC_SCO2','41','raw:MBC_SCO2','moderate_olive_brown'], // Moderate Olive Brown
+     ['MBC_SCO2','42','raw:MBC_SCO2','light_olive_brown'], // Light Olive Brown
+     ['MBC_SCO2','43','raw:MBC_SCO2','dusky_yellow'], // Dusky Yellow
+     ['MBC_SCO2','44','raw:MBC_SCO2','moderate_yellow'], // Moderate Yellow
+     ['MBC_SCO2','45','raw:MBC_SCO2','grayish_yellow'], // Grayish Yellow
+     ['MBC_SCO2','46','raw:MBC_SCO2','dusky_blue_green'], // Dusky Blue Green
+     ['MBC_SCO2','47','raw:MBC_SCO2','light_blue_green'], // Light Blue Green
+     ['MBC_SCO2','48','raw:MBC_SCO2','white'], // White
+     ['MBC_SCO2','49','raw:MBC_SCO2','black'], // Black
+     ['MBC_SCO2','999','raw:MBC_SCO2','other'], // Other
+
+     // MCC - Structural Material Type
      // ['MCC','-999999',undefined,undefined], // No Information
-     ['MCC','2','material','aluminum'], // Aluminum
+     ['MCC','2','material','aluminium'], // Aluminium
      ['MCC','5','material','asphalt'], // Asphalt
      ['MCC','7','material','bedrock'], // Bedrock
      ['MCC','8','material','boulders'], // Boulders
      ['MCC','9','material','brick'], // Brick
      ['MCC','21','material','concrete'], // Concrete
+     ['MCC','23','material','copper'], // Copper
+     ['MCC','24','material','coral'], // Coral
+     ['MCC','25','material','coral_head'], // Coral Head
      ['MCC','46','material','gravel'], // Gravel
      ['MCC','51','material','iron'], // Iron
      ['MCC','52','material','lava'], // Lava
+     ['MCC','54','material','lead'], // Lead
      ['MCC','55','material','loess'], // Loess
      ['MCC','62','material','masonry'], // Masonry
      ['MCC','64','material','metal'], // Metal
@@ -2128,7 +3970,7 @@ ggdm30.rules = {
      ['MCC','74','material','plastic'], // Plastic
      ['MCC','77','material','prestressed_concrete'], // Prestressed Concrete
      ['MCC','83','material','reinforced_concrete'], // Reinforced Concrete
-     ['MCC','84','material','rock'], // Rock
+     ['MCC','84','material','rocks'], // Rocks
      ['MCC','86','material','rubble'], // Rubble
      ['MCC','88','material','sand'], // Sand
      ['MCC','103','material','frozen_water'], // Frozen Water
@@ -2137,14 +3979,180 @@ ggdm30.rules = {
      ['MCC','108','material','stone'], // Stone
      ['MCC','117','material','wood'], // Wood
      ['MCC','119','material','evaporite'], // Evaporite
+     ['MCC','120','material','glass_reinforced_plastic_(grp)'], // Glass Reinforced Plastic (GRP)
+     ['MCC','131','material','ceramic'], // Ceramic
      ['MCC','150','material','treated_timber'], // Treated Timber
      ['MCC','152','material','fibreglass'], // Fibreglass
+     ['MCC','160','material','earthen'], // Earthen
      ['MCC','999','material','other'], // Other
+
+     // MCC2 - Structural Material Type [2]
+     // ['MCC2','-999999',undefined,undefined], // No Information
+     ['MCC2','2','raw:MCC2','aluminium'], // Aluminium
+     ['MCC2','5','raw:MCC2','asphalt'], // Asphalt
+     ['MCC2','7','raw:MCC2','bedrock'], // Bedrock
+     ['MCC2','8','raw:MCC2','boulders'], // Boulders
+     ['MCC2','9','raw:MCC2','brick'], // Brick
+     ['MCC2','21','raw:MCC2','concrete'], // Concrete
+     ['MCC2','23','raw:MCC2','copper'], // Copper
+     ['MCC2','24','raw:MCC2','coral'], // Coral
+     ['MCC2','25','raw:MCC2','coral_head'], // Coral Head
+     ['MCC2','46','raw:MCC2','gravel'], // Gravel
+     ['MCC2','51','raw:MCC2','iron'], // Iron
+     ['MCC2','52','raw:MCC2','lava'], // Lava
+     ['MCC2','54','raw:MCC2','lead'], // Lead
+     ['MCC2','55','raw:MCC2','loess'], // Loess
+     ['MCC2','62','raw:MCC2','masonry'], // Masonry
+     ['MCC2','64','raw:MCC2','metal'], // Metal
+     ['MCC2','65','raw:MCC2','mud'], // Mud
+     ['MCC2','74','raw:MCC2','plastic'], // Plastic
+     ['MCC2','77','raw:MCC2','prestressed_concrete'], // Prestressed Concrete
+     ['MCC2','83','raw:MCC2','reinforced_concrete'], // Reinforced Concrete
+     ['MCC2','84','raw:MCC2','rocks'], // Rocks
+     ['MCC2','86','raw:MCC2','rubble'], // Rubble
+     ['MCC2','88','raw:MCC2','sand'], // Sand
+     ['MCC2','103','raw:MCC2','frozen_water'], // Frozen Water
+     ['MCC2','104','raw:MCC2','soil'], // Soil
+     ['MCC2','107','raw:MCC2','steel'], // Steel
+     ['MCC2','108','raw:MCC2','stone'], // Stone
+     ['MCC2','117','raw:MCC2','wood'], // Wood
+     ['MCC2','119','raw:MCC2','evaporite'], // Evaporite
+     ['MCC2','120','raw:MCC2','glass_reinforced_plastic_(grp)'], // Glass Reinforced Plastic (GRP)
+     ['MCC2','131','raw:MCC2','ceramic'], // Ceramic
+     ['MCC2','150','raw:MCC2','treated_timber'], // Treated Timber
+     ['MCC2','152','raw:MCC2','fibreglass'], // Fibreglass
+     ['MCC2','160','raw:MCC2','earthen'], // Earthen
+     ['MCC2','999','raw:MCC2','other'], // Other
+
+     // MCC3 - Structural Material Type [3]
+     // ['MCC3','-999999',undefined,undefined], // No Information
+     ['MCC3','2','raw:MCC3','aluminium'], // Aluminium
+     ['MCC3','5','raw:MCC3','asphalt'], // Asphalt
+     ['MCC3','7','raw:MCC3','bedrock'], // Bedrock
+     ['MCC3','8','raw:MCC3','boulders'], // Boulders
+     ['MCC3','9','raw:MCC3','brick'], // Brick
+     ['MCC3','21','raw:MCC3','concrete'], // Concrete
+     ['MCC3','23','raw:MCC3','copper'], // Copper
+     ['MCC3','24','raw:MCC3','coral'], // Coral
+     ['MCC3','25','raw:MCC3','coral_head'], // Coral Head
+     ['MCC3','46','raw:MCC3','gravel'], // Gravel
+     ['MCC3','51','raw:MCC3','iron'], // Iron
+     ['MCC3','52','raw:MCC3','lava'], // Lava
+     ['MCC3','54','raw:MCC3','lead'], // Lead
+     ['MCC3','55','raw:MCC3','loess'], // Loess
+     ['MCC3','62','raw:MCC3','masonry'], // Masonry
+     ['MCC3','64','raw:MCC3','metal'], // Metal
+     ['MCC3','65','raw:MCC3','mud'], // Mud
+     ['MCC3','74','raw:MCC3','plastic'], // Plastic
+     ['MCC3','77','raw:MCC3','prestressed_concrete'], // Prestressed Concrete
+     ['MCC3','83','raw:MCC3','reinforced_concrete'], // Reinforced Concrete
+     ['MCC3','84','raw:MCC3','rocks'], // Rocks
+     ['MCC3','86','raw:MCC3','rubble'], // Rubble
+     ['MCC3','88','raw:MCC3','sand'], // Sand
+     ['MCC3','103','raw:MCC3','frozen_water'], // Frozen Water
+     ['MCC3','104','raw:MCC3','soil'], // Soil
+     ['MCC3','107','raw:MCC3','steel'], // Steel
+     ['MCC3','108','raw:MCC3','stone'], // Stone
+     ['MCC3','117','raw:MCC3','wood'], // Wood
+     ['MCC3','119','raw:MCC3','evaporite'], // Evaporite
+     ['MCC3','120','raw:MCC3','glass_reinforced_plastic_(grp)'], // Glass Reinforced Plastic (GRP)
+     ['MCC3','131','raw:MCC3','ceramic'], // Ceramic
+     ['MCC3','150','raw:MCC3','treated_timber'], // Treated Timber
+     ['MCC3','152','raw:MCC3','fibreglass'], // Fibreglass
+     ['MCC3','160','raw:MCC3','earthen'], // Earthen
+     ['MCC3','999','raw:MCC3','other'], // Other
 
      // MCX - Motorized Crossing
      // ['MCX','-999999',undefined,undefined], // No Information
      ['MCX','1000','ferry:motorized','no'],
      ['MCX','1001','ferry:motorized','yes'],
+
+     // MCY - Maritime Caution Type
+     // ['MCY','-999999',undefined,undefined], // No Information
+     ['MCY','1','raw:MCY','cargo_transshipment'], // Cargo Transshipment
+     ['MCY','2','raw:MCY','ice_advisory'], // Ice Advisory
+     ['MCY','3','raw:MCY','intake_area'], // Intake Area
+     ['MCY','4','raw:MCY','outfall_area'], // Outfall Area
+     ['MCY','5','raw:MCY','pollution_zone'], // Pollution Zone
+     ['MCY','6','raw:MCY','submarine_cable'], // Submarine Cable
+     ['MCY','7','raw:MCY','submarine_pipeline'], // Submarine Pipeline
+     ['MCY','8','raw:MCY','submarine_sewer'], // Submarine Sewer
+     ['MCY','9','raw:MCY','unexploded_ordnance'], // Unexploded Ordnance
+     ['MCY','10','raw:MCY','clearing_line'], // Clearing Line
+     ['MCY','11','raw:MCY','colregs_demarcation_line'], // COLREGS Demarcation Line
+     ['MCY','12','raw:MCY','harbour_area'], // Harbour Area
+     ['MCY','13','raw:MCY','ocean_current_margin'], // Ocean Current Margin
+     ['MCY','14','raw:MCY','works_in_progress_area'], // Works in Progress Area
+     ['MCY','15','raw:MCY','unsurveyed_area'], // Unsurveyed Area
+     ['MCY','999','raw:MCY','other'], // Other
+
+     // MCY2 - Maritime Caution Type [2]
+     // ['MCY2','-999999',undefined,undefined], // No Information
+     ['MCY2','1','raw:MCY2','cargo_transshipment'], // Cargo Transshipment
+     ['MCY2','2','raw:MCY2','ice_advisory'], // Ice Advisory
+     ['MCY2','3','raw:MCY2','intake_area'], // Intake Area
+     ['MCY2','4','raw:MCY2','outfall_area'], // Outfall Area
+     ['MCY2','5','raw:MCY2','pollution_zone'], // Pollution Zone
+     ['MCY2','6','raw:MCY2','submarine_cable'], // Submarine Cable
+     ['MCY2','7','raw:MCY2','submarine_pipeline'], // Submarine Pipeline
+     ['MCY2','8','raw:MCY2','submarine_sewer'], // Submarine Sewer
+     ['MCY2','9','raw:MCY2','unexploded_ordnance'], // Unexploded Ordnance
+     ['MCY2','10','raw:MCY2','clearing_line'], // Clearing Line
+     ['MCY2','11','raw:MCY2','colregs_demarcation_line'], // COLREGS Demarcation Line
+     ['MCY2','12','raw:MCY2','harbour_area'], // Harbour Area
+     ['MCY2','13','raw:MCY2','ocean_current_margin'], // Ocean Current Margin
+     ['MCY2','14','raw:MCY2','works_in_progress_area'], // Works in Progress Area
+     ['MCY2','15','raw:MCY2','unsurveyed_area'], // Unsurveyed Area
+     ['MCY2','999','raw:MCY2','other'], // Other
+
+     // MCY3 - Maritime Caution Type [3]
+     // ['MCY3','-999999',undefined,undefined], // No Information
+     ['MCY3','1','raw:MCY3','cargo_transshipment'], // Cargo Transshipment
+     ['MCY3','2','raw:MCY3','ice_advisory'], // Ice Advisory
+     ['MCY3','3','raw:MCY3','intake_area'], // Intake Area
+     ['MCY3','4','raw:MCY3','outfall_area'], // Outfall Area
+     ['MCY3','5','raw:MCY3','pollution_zone'], // Pollution Zone
+     ['MCY3','6','raw:MCY3','submarine_cable'], // Submarine Cable
+     ['MCY3','7','raw:MCY3','submarine_pipeline'], // Submarine Pipeline
+     ['MCY3','8','raw:MCY3','submarine_sewer'], // Submarine Sewer
+     ['MCY3','9','raw:MCY3','unexploded_ordnance'], // Unexploded Ordnance
+     ['MCY3','10','raw:MCY3','clearing_line'], // Clearing Line
+     ['MCY3','11','raw:MCY3','colregs_demarcation_line'], // COLREGS Demarcation Line
+     ['MCY3','12','raw:MCY3','harbour_area'], // Harbour Area
+     ['MCY3','13','raw:MCY3','ocean_current_margin'], // Ocean Current Margin
+     ['MCY3','14','raw:MCY3','works_in_progress_area'], // Works in Progress Area
+     ['MCY3','15','raw:MCY3','unsurveyed_area'], // Unsurveyed Area
+     ['MCY3','999','raw:MCY3','other'], // Other
+
+     // MEL - Medical Service
+     // ['MEL','-999999',undefined,undefined], // No Information
+     ['MEL','1','raw:MEL','accident_and_emergency'], // Accident and Emergency
+     ['MEL','2','raw:MEL','anaesthetics'], // Anaesthetics
+     ['MEL','3','raw:MEL','cardiology'], // Cardiology
+     ['MEL','4','raw:MEL','critical_care'], // Critical Care
+     ['MEL','5','raw:MEL','diagnostic_imaging'], // Diagnostic Imaging
+     ['MEL','6','raw:MEL','ear,_nose_and_throat'], // Ear, Nose and Throat
+     ['MEL','7','raw:MEL','general_surgery'], // General Surgery
+     ['MEL','8','raw:MEL','gynaecology'], // Gynaecology
+     ['MEL','9','raw:MEL','maternity'], // Maternity
+     ['MEL','10','raw:MEL','neurology'], // Neurology
+     ['MEL','11','raw:MEL','oncology'], // Oncology
+     ['MEL','12','raw:MEL','ophthalmology'], // Ophthalmology
+     ['MEL','13','raw:MEL','orthopaedics'], // Orthopaedics
+     ['MEL','14','raw:MEL','pharmacy'], // Pharmacy
+     ['MEL','15','raw:MEL','urology'], // Urology
+     ['MEL','16','raw:MEL','sexual_health'], // Sexual Health
+     ['MEL','17','raw:MEL','haematology'], // Haematology
+     ['MEL','18','raw:MEL','physiotherapy'], // Physiotherapy
+     ['MEL','19','raw:MEL','dietetics'], // Dietetics
+     ['MEL','20','raw:MEL','preventive_medicine'], // Preventive Medicine
+     ['MEL','21','raw:MEL','blood_bank'], // Blood Bank
+     ['MEL','22','raw:MEL','paediatrics'], // Paediatrics
+     ['MEL','23','raw:MEL','psychiatry'], // Psychiatry
+     ['MEL','24','raw:MEL','burns_unit'], // Burns Unit
+     ['MEL','25','raw:MEL','general_practice'], // General Practice
+     ['MEL','26','raw:MEL','clinical_services'], // Clinical Services
+     ['MEL','999','raw:MEL','other'], // Other
 
      // MES - Median Present
      // ['MES','-999999',undefined,undefined], // No Information
@@ -2156,16 +4164,413 @@ ggdm30.rules = {
      ['MFB','1000','building:manufactured','no'],
      ['MFB','1001','building:manufactured','yes'],
 
+     // MFE - Marine Farm Enclosure Method
+     // ['MFE','-999999',undefined,undefined], // No Information
+     ['MFE','1','raw:MFE','fencing'], // Fencing
+     ['MFE','2','raw:MFE','fishing_stakes'], // Fishing Stakes
+     ['MFE','3','raw:MFE','nets'], // Nets
+     ['MFE','999','raw:MFE','other'], // Other
+
+     // MFY - Medical Facility Type
+     // ['MFY','-999999',undefined,undefined], // No Information
+     ['MFY','1','raw:MFY','general_medical_and_surgical'], // General Medical and Surgical
+     ['MFY','2','raw:MFY','long-term_acute_care'], // Long-term Acute Care
+     ['MFY','3','raw:MFY','chemical_dependency'], // Chemical Dependency
+     ['MFY','4','raw:MFY','chronic_disease'], // Chronic Disease
+     ['MFY','5','raw:MFY','eye,_ear,_nose_and_throat'], // Eye, Ear, Nose and Throat
+     ['MFY','6','raw:MFY','intellectual_disablement_care'], // Intellectual Disablement Care
+     ['MFY','7','raw:MFY','obstetrics_and_gynaecology'], // Obstetrics and Gynaecology
+     ['MFY','8','raw:MFY','orthopaedics'], // Orthopaedics
+     ['MFY','9','raw:MFY','psychiatric'], // Psychiatric
+     ['MFY','10','raw:MFY','rehabilitation'], // Rehabilitation
+     ['MFY','11','raw:MFY','respiratory_disease'], // Respiratory Disease
+     ['MFY','12','raw:MFY','specialty_care'], // Specialty Care
+     ['MFY','13','raw:MFY','unit_within_institution'], // Unit within Institution
+     ['MFY','14','raw:MFY','unit_within_institution_for_the_intellectually_disabled'], // Unit within Institution for the Intellectually Disabled
+     ['MFY','15','raw:MFY','pediatric_medical_and_surgical'], // Pediatric Medical and Surgical
+     ['MFY','16','raw:MFY','paediatric_chronic_disease'], // Paediatric Chronic Disease
+     ['MFY','17','raw:MFY','paediatric_eye,_ear,_nose_and_throat'], // Paediatric Eye, Ear, Nose and Throat
+     ['MFY','18','raw:MFY','paediatric_orthopaedic'], // Paediatric Orthopaedic
+     ['MFY','19','raw:MFY','pediatric_psychiatric'], // Pediatric Psychiatric
+     ['MFY','20','raw:MFY','paediatric_rehabilitation'], // Paediatric Rehabilitation
+     ['MFY','21','raw:MFY','paediatric_respiratory_disease'], // Paediatric Respiratory Disease
+     ['MFY','22','raw:MFY','paediatric_specialty_care'], // Paediatric Specialty Care
+     ['MFY','23','raw:MFY','paediatric_unit_within_institution'], // Paediatric Unit within Institution
+     ['MFY','999','raw:MFY','other'], // Other
+
+     // MGL - Maritime Geopolitical Limit Type
+     // ['MGL','-999999',undefined,undefined], // No Information
+     ['MGL','1','raw:MGL','international_boundary'], // International Boundary
+     ['MGL','2','raw:MGL','territorial_sea_baseline'], // Territorial Sea Baseline
+     ['MGL','3','raw:MGL','three_nautical_mile_limit'], // Three Nautical Mile Limit
+     ['MGL','4','raw:MGL','territorial_waters_limit_of_sovereignty'], // Territorial Waters Limit of Sovereignty
+     ['MGL','5','raw:MGL','contiguous_zone_limit'], // Contiguous Zone Limit
+     ['MGL','6','raw:MGL','continental_shelf_limit'], // Continental Shelf Limit
+     ['MGL','7','raw:MGL','extended_continental_shelf_limit'], // Extended Continental Shelf Limit
+     ['MGL','8','raw:MGL','exclusive_economic_zone_limit'], // Exclusive Economic Zone Limit
+     ['MGL','9','raw:MGL','customs_boundary'], // Customs Boundary
+     ['MGL','999','raw:MGL','other'], // Other
+
+     // MGL2 - Maritime Geopolitical Limit Type [2]
+     // ['MGL2','-999999',undefined,undefined], // No Information
+     ['MGL2','1','raw:MGL2','international_boundary'], // International Boundary
+     ['MGL2','2','raw:MGL2','territorial_sea_baseline'], // Territorial Sea Baseline
+     ['MGL2','3','raw:MGL2','three_nautical_mile_limit'], // Three Nautical Mile Limit
+     ['MGL2','4','raw:MGL2','territorial_waters_limit_of_sovereignty'], // Territorial Waters Limit of Sovereignty
+     ['MGL2','5','raw:MGL2','contiguous_zone_limit'], // Contiguous Zone Limit
+     ['MGL2','6','raw:MGL2','continental_shelf_limit'], // Continental Shelf Limit
+     ['MGL2','7','raw:MGL2','extended_continental_shelf_limit'], // Extended Continental Shelf Limit
+     ['MGL2','8','raw:MGL2','exclusive_economic_zone_limit'], // Exclusive Economic Zone Limit
+     ['MGL2','9','raw:MGL2','customs_boundary'], // Customs Boundary
+     ['MGL2','999','raw:MGL2','other'], // Other
+
+     // MGL3 - Maritime Geopolitical Limit Type [3]
+     // ['MGL3','-999999',undefined,undefined], // No Information
+     ['MGL3','1','raw:MGL3','international_boundary'], // International Boundary
+     ['MGL3','2','raw:MGL3','territorial_sea_baseline'], // Territorial Sea Baseline
+     ['MGL3','3','raw:MGL3','three_nautical_mile_limit'], // Three Nautical Mile Limit
+     ['MGL3','4','raw:MGL3','territorial_waters_limit_of_sovereignty'], // Territorial Waters Limit of Sovereignty
+     ['MGL3','5','raw:MGL3','contiguous_zone_limit'], // Contiguous Zone Limit
+     ['MGL3','6','raw:MGL3','continental_shelf_limit'], // Continental Shelf Limit
+     ['MGL3','7','raw:MGL3','extended_continental_shelf_limit'], // Extended Continental Shelf Limit
+     ['MGL3','8','raw:MGL3','exclusive_economic_zone_limit'], // Exclusive Economic Zone Limit
+     ['MGL3','9','raw:MGL3','customs_boundary'], // Customs Boundary
+     ['MGL3','999','raw:MGL3','other'], // Other
+
+     // MKSZ - Market Size
+     // ['MKSZ','-999999',undefined,undefined], // No Information
+     ['MKSZ','1','raw:MKSZ','small'], // Small
+     ['MKSZ','2','raw:MKSZ','medium'], // Medium
+     ['MKSZ','3','raw:MKSZ','large'], // Large
+     ['MKSZ','998','raw:MKSZ','not_applicable'], // Not Applicable
+
+     // MLO - Limit(s) Physically Based
+     // ['MLO','-999999',undefined,undefined], // No Information
+     ['MLO','1000','raw:MLO','no'],
+     ['MLO','1001','raw:MLO','yes'],
+
+     // MLOP - Military Operations Type
+     // ['MLOP','-999999',undefined,undefined], // No Information
+     ['MLOP','1','raw:MLOP','command_post'], // Command Post
+     ['MLOP','2','raw:MLOP','command_outpost'], // Command Outpost
+     ['MLOP','3','raw:MLOP','brigade_maintenance_area'], // Brigade Maintenance Area
+     ['MLOP','4','raw:MLOP','air_departure_point'], // Air Departure Point
+     ['MLOP','5','raw:MLOP','amphibious_departure_point'], // Amphibious Departure Point
+     ['MLOP','6','raw:MLOP','evacuee_handling_centre'], // Evacuee Handling Centre
+     ['MLOP','7','raw:MLOP','evacuee_collection_point'], // Evacuee Collection Point
+     ['MLOP','8','raw:MLOP','observation_post'], // Observation Post
+     ['MLOP','9','raw:MLOP','forward_operating_base'], // Forward Operating Base
+     ['MLOP','10','raw:MLOP','patrol_base'], // Patrol Base
+     ['MLOP','11','raw:MLOP','evacuation_point'], // Evacuation Point
+     ['MLOP','12','raw:MLOP','evacuee_assembly_area'], // Evacuee Assembly Area
+     ['MLOP','999','raw:MLOP','other'], // Other
+
+     // MLUS - Military Use Type
+     // ['MLUS','-999999',undefined,undefined], // No Information
+     ['MLUS','1','raw:MLUS','tactical_area_of_responsibility'], // Tactical Area of Responsibility
+     ['MLUS','2','raw:MLUS','named_area_of_interest'], // Named Area of Interest
+     ['MLUS','3','raw:MLUS','target_area_of_interest'], // Target Area of Interest
+     ['MLUS','4','raw:MLUS','area_of_operations'], // Area of Operations
+     ['MLUS','5','raw:MLUS','area_of_interest'], // Area of Interest
+     ['MLUS','6','raw:MLUS','out_of_bounds'], // Out of Bounds
+     ['MLUS','7','raw:MLUS','no_go_area'], // No Go Area
+     ['MLUS','8','raw:MLUS','no_fly_zone'], // No Fly Zone
+     ['MLUS','9','raw:MLUS','restricted_operation_zone'], // Restricted Operation Zone
+     ['MLUS','10','raw:MLUS','temporary_area_of_operations'], // Temporary Area of Operations
+     ['MLUS','11','raw:MLUS','report_line'], // Report line
+     ['MLUS','12','raw:MLUS','supply_route,_main'], // Supply Route, Main
+     ['MLUS','13','raw:MLUS','supply_route,_secondary'], // Supply Route, Secondary
+     ['MLUS','14','raw:MLUS','supply_route,_alternate'], // Supply Route, Alternate
+     ['MLUS','15','raw:MLUS','forward_edge_of_battle_area'], // Forward Edge of Battle Area
+     ['MLUS','16','raw:MLUS','bomb_release_line'], // Bomb release line
+     ['MLUS','17','raw:MLUS','forward_line_of_own_troops'], // Forward Line of Own Troops
+     ['MLUS','18','raw:MLUS','missile_release_line'], // Missile release line
+     ['MLUS','19','raw:MLUS','forward_line_of_enemy_troops'], // Forward Line of Enemy Troops
+     ['MLUS','999','raw:MLUS','other'], // Other
+
+     // MNR - Maritime Navigation Restriction
+     // ['MNR','-999999',undefined,undefined], // No Information
+     ['MNR','1','raw:MNR','anchoring_prohibited'], // Anchoring Prohibited
+     ['MNR','2','raw:MNR','anchoring_restricted'], // Anchoring Restricted
+     ['MNR','3','raw:MNR','fishing_prohibited'], // Fishing Prohibited
+     ['MNR','4','raw:MNR','fishing_restricted'], // Fishing Restricted
+     ['MNR','5','raw:MNR','trawling_prohibited'], // Trawling Prohibited
+     ['MNR','6','raw:MNR','trawling_restricted'], // Trawling Restricted
+     ['MNR','7','raw:MNR','entry_prohibited'], // Entry Prohibited
+     ['MNR','8','raw:MNR','entry_restricted'], // Entry Restricted
+     ['MNR','9','raw:MNR','dredging_prohibited'], // Dredging Prohibited
+     ['MNR','10','raw:MNR','dredging_restricted'], // Dredging Restricted
+     ['MNR','11','raw:MNR','diving_prohibited'], // Diving Prohibited
+     ['MNR','12','raw:MNR','diving_restricted'], // Diving Restricted
+     ['MNR','13','raw:MNR','reduced_wake_area'], // Reduced Wake Area
+     ['MNR','14','raw:MNR','avoidance_area'], // Avoidance Area
+     ['MNR','15','raw:MNR','construction_prohibited'], // Construction Prohibited
+     ['MNR','16','raw:MNR','discharging_prohibited'], // Discharging Prohibited
+     ['MNR','17','raw:MNR','discharging_restricted'], // Discharging Restricted
+     ['MNR','18','raw:MNR','exploration_and/or_development_prohibited'], // Exploration and/or Development Prohibited
+     ['MNR','19','raw:MNR','exploration_and/or_development_restricted'], // Exploration and/or Development Restricted
+     ['MNR','20','raw:MNR','drilling_prohibited'], // Drilling Prohibited
+     ['MNR','21','raw:MNR','drilling_restricted'], // Drilling Restricted
+     ['MNR','22','raw:MNR','artefact_removal_prohibited'], // Artefact Removal Prohibited
+     ['MNR','23','raw:MNR','cargo_transshipment_prohibited'], // Cargo Transshipment Prohibited
+     ['MNR','24','raw:MNR','dragging_prohibited'], // Dragging Prohibited
+     ['MNR','25','raw:MNR','stopping_prohibited'], // Stopping Prohibited
+     ['MNR','26','raw:MNR','landing_prohibited'], // Landing Prohibited
+     ['MNR','27','raw:MNR','limited_speed_area'], // Limited Speed Area
+     ['MNR','28','raw:MNR','navigational_aid_safety_zone'], // Navigational Aid Safety Zone
+     ['MNR','29','raw:MNR','offshore_safety_zone'], // Offshore Safety Zone
+     ['MNR','30','raw:MNR','shipping_prohibited'], // Shipping Prohibited
+     ['MNR','31','raw:MNR','swimming_prohibited'], // Swimming Prohibited
+     ['MNR','999','raw:MNR','other'], // Other
+
+     // MNR2 - Maritime Navigation Restriction [2]
+     // ['MNR2','-999999',undefined,undefined], // No Information
+     ['MNR2','1','raw:MNR2','anchoring_prohibited'], // Anchoring Prohibited
+     ['MNR2','2','raw:MNR2','anchoring_restricted'], // Anchoring Restricted
+     ['MNR2','3','raw:MNR2','fishing_prohibited'], // Fishing Prohibited
+     ['MNR2','4','raw:MNR2','fishing_restricted'], // Fishing Restricted
+     ['MNR2','5','raw:MNR2','trawling_prohibited'], // Trawling Prohibited
+     ['MNR2','6','raw:MNR2','trawling_restricted'], // Trawling Restricted
+     ['MNR2','7','raw:MNR2','entry_prohibited'], // Entry Prohibited
+     ['MNR2','8','raw:MNR2','entry_restricted'], // Entry Restricted
+     ['MNR2','9','raw:MNR2','dredging_prohibited'], // Dredging Prohibited
+     ['MNR2','10','raw:MNR2','dredging_restricted'], // Dredging Restricted
+     ['MNR2','11','raw:MNR2','diving_prohibited'], // Diving Prohibited
+     ['MNR2','12','raw:MNR2','diving_restricted'], // Diving Restricted
+     ['MNR2','13','raw:MNR2','reduced_wake_area'], // Reduced Wake Area
+     ['MNR2','14','raw:MNR2','avoidance_area'], // Avoidance Area
+     ['MNR2','15','raw:MNR2','construction_prohibited'], // Construction Prohibited
+     ['MNR2','16','raw:MNR2','discharging_prohibited'], // Discharging Prohibited
+     ['MNR2','17','raw:MNR2','discharging_restricted'], // Discharging Restricted
+     ['MNR2','18','raw:MNR2','exploration_and/or_development_prohibited'], // Exploration and/or Development Prohibited
+     ['MNR2','19','raw:MNR2','exploration_and/or_development_restricted'], // Exploration and/or Development Restricted
+     ['MNR2','20','raw:MNR2','drilling_prohibited'], // Drilling Prohibited
+     ['MNR2','21','raw:MNR2','drilling_restricted'], // Drilling Restricted
+     ['MNR2','22','raw:MNR2','artefact_removal_prohibited'], // Artefact Removal Prohibited
+     ['MNR2','23','raw:MNR2','cargo_transshipment_prohibited'], // Cargo Transshipment Prohibited
+     ['MNR2','24','raw:MNR2','dragging_prohibited'], // Dragging Prohibited
+     ['MNR2','25','raw:MNR2','stopping_prohibited'], // Stopping Prohibited
+     ['MNR2','26','raw:MNR2','landing_prohibited'], // Landing Prohibited
+     ['MNR2','27','raw:MNR2','limited_speed_area'], // Limited Speed Area
+     ['MNR2','28','raw:MNR2','navigational_aid_safety_zone'], // Navigational Aid Safety Zone
+     ['MNR2','29','raw:MNR2','offshore_safety_zone'], // Offshore Safety Zone
+     ['MNR2','30','raw:MNR2','shipping_prohibited'], // Shipping Prohibited
+     ['MNR2','31','raw:MNR2','swimming_prohibited'], // Swimming Prohibited
+     ['MNR2','999','raw:MNR2','other'], // Other
+
+     // MNR3 - Maritime Navigation Restriction [3]
+     // ['MNR3','-999999',undefined,undefined], // No Information
+     ['MNR3','1','raw:MNR3','anchoring_prohibited'], // Anchoring Prohibited
+     ['MNR3','2','raw:MNR3','anchoring_restricted'], // Anchoring Restricted
+     ['MNR3','3','raw:MNR3','fishing_prohibited'], // Fishing Prohibited
+     ['MNR3','4','raw:MNR3','fishing_restricted'], // Fishing Restricted
+     ['MNR3','5','raw:MNR3','trawling_prohibited'], // Trawling Prohibited
+     ['MNR3','6','raw:MNR3','trawling_restricted'], // Trawling Restricted
+     ['MNR3','7','raw:MNR3','entry_prohibited'], // Entry Prohibited
+     ['MNR3','8','raw:MNR3','entry_restricted'], // Entry Restricted
+     ['MNR3','9','raw:MNR3','dredging_prohibited'], // Dredging Prohibited
+     ['MNR3','10','raw:MNR3','dredging_restricted'], // Dredging Restricted
+     ['MNR3','11','raw:MNR3','diving_prohibited'], // Diving Prohibited
+     ['MNR3','12','raw:MNR3','diving_restricted'], // Diving Restricted
+     ['MNR3','13','raw:MNR3','reduced_wake_area'], // Reduced Wake Area
+     ['MNR3','14','raw:MNR3','avoidance_area'], // Avoidance Area
+     ['MNR3','15','raw:MNR3','construction_prohibited'], // Construction Prohibited
+     ['MNR3','16','raw:MNR3','discharging_prohibited'], // Discharging Prohibited
+     ['MNR3','17','raw:MNR3','discharging_restricted'], // Discharging Restricted
+     ['MNR3','18','raw:MNR3','exploration_and/or_development_prohibited'], // Exploration and/or Development Prohibited
+     ['MNR3','19','raw:MNR3','exploration_and/or_development_restricted'], // Exploration and/or Development Restricted
+     ['MNR3','20','raw:MNR3','drilling_prohibited'], // Drilling Prohibited
+     ['MNR3','21','raw:MNR3','drilling_restricted'], // Drilling Restricted
+     ['MNR3','22','raw:MNR3','artefact_removal_prohibited'], // Artefact Removal Prohibited
+     ['MNR3','23','raw:MNR3','cargo_transshipment_prohibited'], // Cargo Transshipment Prohibited
+     ['MNR3','24','raw:MNR3','dragging_prohibited'], // Dragging Prohibited
+     ['MNR3','25','raw:MNR3','stopping_prohibited'], // Stopping Prohibited
+     ['MNR3','26','raw:MNR3','landing_prohibited'], // Landing Prohibited
+     ['MNR3','27','raw:MNR3','limited_speed_area'], // Limited Speed Area
+     ['MNR3','28','raw:MNR3','navigational_aid_safety_zone'], // Navigational Aid Safety Zone
+     ['MNR3','29','raw:MNR3','offshore_safety_zone'], // Offshore Safety Zone
+     ['MNR3','30','raw:MNR3','shipping_prohibited'], // Shipping Prohibited
+     ['MNR3','31','raw:MNR3','swimming_prohibited'], // Swimming Prohibited
+     ['MNR3','999','raw:MNR3','other'], // Other
+
      // MNS - Man-made Shoreline
      // ['MNS','-999999',undefined,undefined], // No Information
      ['MNS','1000','man_made:shoreline','no'],
      ['MNS','1001','man_made:shoreline','yes'],
 
+     // MRP - Maritime Radiobeacon Present
+     // ['MRP','-999999',undefined,undefined], // No Information
+     ['MRP','1000','raw:MRP','no'],
+     ['MRP','1001','raw:MRP','yes'],
+
+     // MRR - Maritime Area Restriction
+     // ['MRR','-999999',undefined,undefined], // No Information
+     ['MRR','1','raw:MRR','unrestricted_area'], // Unrestricted Area
+     ['MRR','2','raw:MRR','bird_sanctuary'], // Bird Sanctuary
+     ['MRR','3','raw:MRR','conservation_and_management_zone'], // Conservation and Management Zone
+     ['MRR','4','raw:MRR','ecological_reserve'], // Ecological Reserve
+     ['MRR','5','raw:MRR','fish_sanctuary'], // Fish Sanctuary
+     ['MRR','6','raw:MRR','game_preserve'], // Game Preserve
+     ['MRR','7','raw:MRR','marine_nature_reserve'], // Marine Nature Reserve
+     ['MRR','8','raw:MRR','nature_reserve'], // Nature Reserve
+     ['MRR','9','raw:MRR','seal_sanctuary'], // Seal Sanctuary
+     ['MRR','10','raw:MRR','fishing_ground'], // Fishing Ground
+     ['MRR','11','raw:MRR','fishery_zone'], // Fishery Zone
+     ['MRR','12','raw:MRR','foreign_fishing_rights_zone'], // Foreign Fishing Rights Zone
+     ['MRR','13','raw:MRR','unilateral_fishing_zone'], // Unilateral Fishing Zone
+     ['MRR','14','raw:MRR','international_council_for_the_seas_(ices)_fishery_zone'], // International Council for the Seas (ICES) Fishery Zone
+     ['MRR','15','raw:MRR','compass_adjustment'], // Compass Adjustment
+     ['MRR','16','raw:MRR','degaussing_range'], // Degaussing Range
+     ['MRR','17','raw:MRR','dredging_area'], // Dredging Area
+     ['MRR','18','raw:MRR','fairway'], // Fairway
+     ['MRR','19','raw:MRR','historic_wreck_area'], // Historic Wreck Area
+     ['MRR','20','raw:MRR','incineration_area'], // Incineration Area
+     ['MRR','21','raw:MRR','joint_economic_development_zone'], // Joint Economic Development Zone
+     ['MRR','22','raw:MRR','maritime_mass_grave'], // Maritime Mass Grave
+     ['MRR','23','raw:MRR','maritime_pollution_(marpol)_reporting_area'], // Maritime Pollution (MARPOL) Reporting Area
+     ['MRR','24','raw:MRR','mine_danger_area'], // Mine Danger Area
+     ['MRR','25','raw:MRR','former_mine_danger_area'], // Former Mine Danger Area
+     ['MRR','26','raw:MRR','natural_gas_field'], // Natural Gas Field
+     ['MRR','27','raw:MRR','petroleum_field'], // Petroleum Field
+     ['MRR','28','raw:MRR','reclamation_area'], // Reclamation Area
+     ['MRR','29','raw:MRR','research_area'], // Research Area
+     ['MRR','30','raw:MRR','stranding_danger_area'], // Stranding Danger Area
+     ['MRR','31','raw:MRR','swimming_area'], // Swimming Area
+     ['MRR','32','raw:MRR','swinging_area'], // Swinging Area
+     ['MRR','33','raw:MRR','waiting_area'], // Waiting Area
+     ['MRR','34','raw:MRR','water_skiing_area'], // Water Skiing Area
+     ['MRR','35','raw:MRR','exclusive_economic_zone'], // Exclusive Economic Zone
+     ['MRR','36','raw:MRR','extended_continental_shelf_area'], // Extended Continental Shelf Area
+     ['MRR','37','raw:MRR','continental_shelf_area'], // Continental Shelf Area
+     ['MRR','38','raw:MRR','contiguous_zone'], // Contiguous Zone
+     ['MRR','39','raw:MRR','territorial_sea_area'], // Territorial Sea Area
+     ['MRR','40','raw:MRR','internal_waters'], // Internal Waters
+     ['MRR','41','raw:MRR','no_wake_area'], // No Wake Area
+     ['MRR','42','raw:MRR','traffic_services_limit'], // Traffic Services Limit
+     ['MRR','45','raw:MRR','environmentally_sensitive_sea_area'], // Environmentally Sensitive Sea Area
+     ['MRR','46','raw:MRR','particularly_sensitive_sea_area'], // Particularly Sensitive Sea Area
+     ['MRR','47','raw:MRR','military_area'], // Military Area
+     ['MRR','52','raw:MRR','disengagement_area'], // Disengagement Area
+     ['MRR','999','raw:MRR','other'], // Other
+
+     // MRR2 - Maritime Area Restriction [2]
+     // ['MRR2','-999999',undefined,undefined], // No Information
+     ['MRR2','1','raw:MRR2','unrestricted_area'], // Unrestricted Area
+     ['MRR2','2','raw:MRR2','bird_sanctuary'], // Bird Sanctuary
+     ['MRR2','3','raw:MRR2','conservation_and_management_zone'], // Conservation and Management Zone
+     ['MRR2','4','raw:MRR2','ecological_reserve'], // Ecological Reserve
+     ['MRR2','5','raw:MRR2','fish_sanctuary'], // Fish Sanctuary
+     ['MRR2','6','raw:MRR2','game_preserve'], // Game Preserve
+     ['MRR2','7','raw:MRR2','marine_nature_reserve'], // Marine Nature Reserve
+     ['MRR2','8','raw:MRR2','nature_reserve'], // Nature Reserve
+     ['MRR2','9','raw:MRR2','seal_sanctuary'], // Seal Sanctuary
+     ['MRR2','10','raw:MRR2','fishing_ground'], // Fishing Ground
+     ['MRR2','11','raw:MRR2','fishery_zone'], // Fishery Zone
+     ['MRR2','12','raw:MRR2','foreign_fishing_rights_zone'], // Foreign Fishing Rights Zone
+     ['MRR2','13','raw:MRR2','unilateral_fishing_zone'], // Unilateral Fishing Zone
+     ['MRR2','14','raw:MRR2','international_council_for_the_seas_(ices)_fishery_zone'], // International Council for the Seas (ICES) Fishery Zone
+     ['MRR2','15','raw:MRR2','compass_adjustment'], // Compass Adjustment
+     ['MRR2','16','raw:MRR2','degaussing_range'], // Degaussing Range
+     ['MRR2','17','raw:MRR2','dredging_area'], // Dredging Area
+     ['MRR2','18','raw:MRR2','fairway'], // Fairway
+     ['MRR2','19','raw:MRR2','historic_wreck_area'], // Historic Wreck Area
+     ['MRR2','20','raw:MRR2','incineration_area'], // Incineration Area
+     ['MRR2','21','raw:MRR2','joint_economic_development_zone'], // Joint Economic Development Zone
+     ['MRR2','22','raw:MRR2','maritime_mass_grave'], // Maritime Mass Grave
+     ['MRR2','23','raw:MRR2','maritime_pollution_(marpol)_reporting_area'], // Maritime Pollution (MARPOL) Reporting Area
+     ['MRR2','24','raw:MRR2','mine_danger_area'], // Mine Danger Area
+     ['MRR2','25','raw:MRR2','former_mine_danger_area'], // Former Mine Danger Area
+     ['MRR2','26','raw:MRR2','natural_gas_field'], // Natural Gas Field
+     ['MRR2','27','raw:MRR2','petroleum_field'], // Petroleum Field
+     ['MRR2','28','raw:MRR2','reclamation_area'], // Reclamation Area
+     ['MRR2','29','raw:MRR2','research_area'], // Research Area
+     ['MRR2','30','raw:MRR2','stranding_danger_area'], // Stranding Danger Area
+     ['MRR2','31','raw:MRR2','swimming_area'], // Swimming Area
+     ['MRR2','32','raw:MRR2','swinging_area'], // Swinging Area
+     ['MRR2','33','raw:MRR2','waiting_area'], // Waiting Area
+     ['MRR2','34','raw:MRR2','water_skiing_area'], // Water Skiing Area
+     ['MRR2','35','raw:MRR2','exclusive_economic_zone'], // Exclusive Economic Zone
+     ['MRR2','36','raw:MRR2','extended_continental_shelf_area'], // Extended Continental Shelf Area
+     ['MRR2','37','raw:MRR2','continental_shelf_area'], // Continental Shelf Area
+     ['MRR2','38','raw:MRR2','contiguous_zone'], // Contiguous Zone
+     ['MRR2','39','raw:MRR2','territorial_sea_area'], // Territorial Sea Area
+     ['MRR2','40','raw:MRR2','internal_waters'], // Internal Waters
+     ['MRR2','41','raw:MRR2','no_wake_area'], // No Wake Area
+     ['MRR2','42','raw:MRR2','traffic_services_limit'], // Traffic Services Limit
+     ['MRR2','45','raw:MRR2','environmentally_sensitive_sea_area'], // Environmentally Sensitive Sea Area
+     ['MRR2','46','raw:MRR2','particularly_sensitive_sea_area'], // Particularly Sensitive Sea Area
+     ['MRR2','47','raw:MRR2','military_area'], // Military Area
+     ['MRR2','52','raw:MRR2','disengagement_area'], // Disengagement Area
+     ['MRR2','999','raw:MRR2','other'], // Other
+
+     // MRR3 - Maritime Area Restriction [3]
+     // ['MRR3','-999999',undefined,undefined], // No Information
+     ['MRR3','1','raw:MRR3','unrestricted_area'], // Unrestricted Area
+     ['MRR3','2','raw:MRR3','bird_sanctuary'], // Bird Sanctuary
+     ['MRR3','3','raw:MRR3','conservation_and_management_zone'], // Conservation and Management Zone
+     ['MRR3','4','raw:MRR3','ecological_reserve'], // Ecological Reserve
+     ['MRR3','5','raw:MRR3','fish_sanctuary'], // Fish Sanctuary
+     ['MRR3','6','raw:MRR3','game_preserve'], // Game Preserve
+     ['MRR3','7','raw:MRR3','marine_nature_reserve'], // Marine Nature Reserve
+     ['MRR3','8','raw:MRR3','nature_reserve'], // Nature Reserve
+     ['MRR3','9','raw:MRR3','seal_sanctuary'], // Seal Sanctuary
+     ['MRR3','10','raw:MRR3','fishing_ground'], // Fishing Ground
+     ['MRR3','11','raw:MRR3','fishery_zone'], // Fishery Zone
+     ['MRR3','12','raw:MRR3','foreign_fishing_rights_zone'], // Foreign Fishing Rights Zone
+     ['MRR3','13','raw:MRR3','unilateral_fishing_zone'], // Unilateral Fishing Zone
+     ['MRR3','14','raw:MRR3','international_council_for_the_seas_(ices)_fishery_zone'], // International Council for the Seas (ICES) Fishery Zone
+     ['MRR3','15','raw:MRR3','compass_adjustment'], // Compass Adjustment
+     ['MRR3','16','raw:MRR3','degaussing_range'], // Degaussing Range
+     ['MRR3','17','raw:MRR3','dredging_area'], // Dredging Area
+     ['MRR3','18','raw:MRR3','fairway'], // Fairway
+     ['MRR3','19','raw:MRR3','historic_wreck_area'], // Historic Wreck Area
+     ['MRR3','20','raw:MRR3','incineration_area'], // Incineration Area
+     ['MRR3','21','raw:MRR3','joint_economic_development_zone'], // Joint Economic Development Zone
+     ['MRR3','22','raw:MRR3','maritime_mass_grave'], // Maritime Mass Grave
+     ['MRR3','23','raw:MRR3','maritime_pollution_(marpol)_reporting_area'], // Maritime Pollution (MARPOL) Reporting Area
+     ['MRR3','24','raw:MRR3','mine_danger_area'], // Mine Danger Area
+     ['MRR3','25','raw:MRR3','former_mine_danger_area'], // Former Mine Danger Area
+     ['MRR3','26','raw:MRR3','natural_gas_field'], // Natural Gas Field
+     ['MRR3','27','raw:MRR3','petroleum_field'], // Petroleum Field
+     ['MRR3','28','raw:MRR3','reclamation_area'], // Reclamation Area
+     ['MRR3','29','raw:MRR3','research_area'], // Research Area
+     ['MRR3','30','raw:MRR3','stranding_danger_area'], // Stranding Danger Area
+     ['MRR3','31','raw:MRR3','swimming_area'], // Swimming Area
+     ['MRR3','32','raw:MRR3','swinging_area'], // Swinging Area
+     ['MRR3','33','raw:MRR3','waiting_area'], // Waiting Area
+     ['MRR3','34','raw:MRR3','water_skiing_area'], // Water Skiing Area
+     ['MRR3','35','raw:MRR3','exclusive_economic_zone'], // Exclusive Economic Zone
+     ['MRR3','36','raw:MRR3','extended_continental_shelf_area'], // Extended Continental Shelf Area
+     ['MRR3','37','raw:MRR3','continental_shelf_area'], // Continental Shelf Area
+     ['MRR3','38','raw:MRR3','contiguous_zone'], // Contiguous Zone
+     ['MRR3','39','raw:MRR3','territorial_sea_area'], // Territorial Sea Area
+     ['MRR3','40','raw:MRR3','internal_waters'], // Internal Waters
+     ['MRR3','41','raw:MRR3','no_wake_area'], // No Wake Area
+     ['MRR3','42','raw:MRR3','traffic_services_limit'], // Traffic Services Limit
+     ['MRR3','45','raw:MRR3','environmentally_sensitive_sea_area'], // Environmentally Sensitive Sea Area
+     ['MRR3','46','raw:MRR3','particularly_sensitive_sea_area'], // Particularly Sensitive Sea Area
+     ['MRR3','47','raw:MRR3','military_area'], // Military Area
+     ['MRR3','52','raw:MRR3','disengagement_area'], // Disengagement Area
+     ['MRR3','999','raw:MRR3','other'], // Other
+
+     // MRT - Maritime Radiobeacon Type
+     // ['MRT','-999999',undefined,undefined], // No Information
+     ['MRT','1','raw:MRT','automated_identification_system_(ais)'], // Automated Identification System (AIS)
+     ['MRT','2','raw:MRT','circular_radiobeacon'], // Circular Radiobeacon
+     ['MRT','3','raw:MRT','directional_radiobeacon'], // Directional Radiobeacon
+     ['MRT','4','raw:MRT','long_range_air_navigation_system_(loran)_c'], // Long Range Air Navigation System (LORAN) C
+     ['MRT','5','raw:MRT','qtg_station'], // QTG Station
+     ['MRT','6','raw:MRT','radar_marker_(ramark)'], // Radar Marker (RAMARK)
+     ['MRT','7','raw:MRT','radar_responder_beacon_(racon)'], // Radar Responder Beacon (RACON)
+     ['MRT','8','raw:MRT','radio_direction_finding_station'], // Radio Direction Finding Station
+     ['MRT','9','raw:MRT','rotating_pattern_radiobeacon'], // Rotating Pattern Radiobeacon
+     ['MRT','999','raw:MRT','other'], // Other
+
      // MST - Missile Site Type
      // ['MST','-999999',undefined,undefined], // No Information
-     ['MST','1','missile','anti-ballistic_missile'], // Anti-ballistic Missile (ABM)
-     ['MST','2','missile','intercontinental_ballistic_missile'], // Intercontinental Ballistic Missile (ICBM)
-     ['MST','3','missile','intermediate-range_ballistic_missile'], // Intermediate-range Ballistic Missile (IRBM)
+     ['MST','1','missile','anti-ballistic_missile_(abm)'], // Anti-ballistic Missile (ABM)
+     ['MST','2','missile','intercontinental_ballistic_missile_(icbm)'], // Intercontinental Ballistic Missile (ICBM)
+     ['MST','3','missile','intermediate-range_ballistic_missile_(irbm)'], // Intermediate-range Ballistic Missile (IRBM)
      ['MST','4','missile','sa-1_guild'], // SA-1 Guild
      ['MST','5','missile','sa-2_guideline'], // SA-2 Guideline
      ['MST','6','missile','sa-3_goa'], // SA-3 Goa
@@ -2175,9 +4580,9 @@ ggdm30.rules = {
      ['MST','10','missile','sa-7_grail'], // SA-7 Grail
      ['MST','11','missile','sa-8_gecko'], // SA-8 Gecko
      ['MST','12','missile','sa-9_gaskin'], // SA-9 Gaskin
-     ['MST','13','missile','medium-range_ballistic_missile'], // Medium-range Ballistic Missile (MRBM)
-     ['MST','14','missile','surface-to-surface_missile'], // Surface-to-surface Missile (SSM)
-     ['MST','15','missile','surface-to-air_missile'], // Surface-to-air Missile (SAM)
+     ['MST','13','missile','medium-range_ballistic_missile_(mrbm)'], // Medium-range Ballistic Missile (MRBM)
+     ['MST','14','missile','surface-to-surface_missile_(ssm)'], // Surface-to-surface Missile (SSM)
+     ['MST','15','missile','surface-to-air_missile_(sam)'], // Surface-to-air Missile (SAM)
      ['MST','17','missile','sa-10_grumble'], // SA-10 Grumble
      ['MST','18','missile','sa-11_gadfly'], // SA-11 Gadfly
      ['MST','19','missile','sa-12_gladiator/giant'], // SA-12 Gladiator/Giant
@@ -2189,6 +4594,64 @@ ggdm30.rules = {
      ['MST','25','missile','sa-18_grouse'], // SA-18 Grouse
      ['MST','26','missile','sa-19_grisom'], // SA-19 Grisom
      ['MST','999','missile','other'], // Other
+
+     // MST2 - Missile Site Type [2]
+     // ['MST2','-999999',undefined,undefined], // No Information
+     ['MST2','1','missile2','anti-ballistic_missile_(abm)'], // Anti-ballistic Missile (ABM)
+     ['MST2','2','missile2','intercontinental_ballistic_missile_(icbm)'], // Intercontinental Ballistic Missile (ICBM)
+     ['MST2','3','missile2','intermediate-range_ballistic_missile_(irbm)'], // Intermediate-range Ballistic Missile (IRBM)
+     ['MST2','4','missile2','sa-1_guild'], // SA-1 Guild
+     ['MST2','5','missile2','sa-2_guideline'], // SA-2 Guideline
+     ['MST2','6','missile2','sa-3_goa'], // SA-3 Goa
+     ['MST2','7','missile2','sa-4_ganef'], // SA-4 Ganef
+     ['MST2','8','missile2','sa-5_gammon'], // SA-5 Gammon
+     ['MST2','9','missile2','sa-6_gainful'], // SA-6 Gainful
+     ['MST2','10','missile2','sa-7_grail'], // SA-7 Grail
+     ['MST2','11','missile2','sa-8_gecko'], // SA-8 Gecko
+     ['MST2','12','missile2','sa-9_gaskin'], // SA-9 Gaskin
+     ['MST2','13','missile2','medium-range_ballistic_missile_(mrbm)'], // Medium-range Ballistic Missile (MRBM)
+     ['MST2','14','missile2','surface-to-surface_missile_(ssm)'], // Surface-to-surface Missile (SSM)
+     ['MST2','15','missile2','surface-to-air_missile_(sam)'], // Surface-to-air Missile (SAM)
+     ['MST2','17','missile2','sa-10_grumble'], // SA-10 Grumble
+     ['MST2','18','missile2','sa-11_gadfly'], // SA-11 Gadfly
+     ['MST2','19','missile2','sa-12_gladiator/giant'], // SA-12 Gladiator/Giant
+     ['MST2','20','missile2','sa-13_gopher'], // SA-13 Gopher
+     ['MST2','21','missile2','sa-14_gremlin'], // SA-14 Gremlin
+     ['MST2','22','missile2','sa-15_gauntlet'], // SA-15 Gauntlet
+     ['MST2','23','missile2','sa-16_gimlet'], // SA-16 Gimlet
+     ['MST2','24','missile2','sa-17_grizzly'], // SA-17 Grizzly
+     ['MST2','25','missile2','sa-18_grouse'], // SA-18 Grouse
+     ['MST2','26','missile2','sa-19_grisom'], // SA-19 Grisom
+     ['MST2','999','missile2','other'], // Other
+
+     // MST3 - Missile Site Type [3]
+     // ['MST3','-999999',undefined,undefined], // No Information
+     ['MST3','1','missile3','anti-ballistic_missile_(abm)'], // Anti-ballistic Missile (ABM)
+     ['MST3','2','missile3','intercontinental_ballistic_missile_(icbm)'], // Intercontinental Ballistic Missile (ICBM)
+     ['MST3','3','missile3','intermediate-range_ballistic_missile_(irbm)'], // Intermediate-range Ballistic Missile (IRBM)
+     ['MST3','4','missile3','sa-1_guild'], // SA-1 Guild
+     ['MST3','5','missile3','sa-2_guideline'], // SA-2 Guideline
+     ['MST3','6','missile3','sa-3_goa'], // SA-3 Goa
+     ['MST3','7','missile3','sa-4_ganef'], // SA-4 Ganef
+     ['MST3','8','missile3','sa-5_gammon'], // SA-5 Gammon
+     ['MST3','9','missile3','sa-6_gainful'], // SA-6 Gainful
+     ['MST3','10','missile3','sa-7_grail'], // SA-7 Grail
+     ['MST3','11','missile3','sa-8_gecko'], // SA-8 Gecko
+     ['MST3','12','missile3','sa-9_gaskin'], // SA-9 Gaskin
+     ['MST3','13','missile3','medium-range_ballistic_missile_(mrbm)'], // Medium-range Ballistic Missile (MRBM)
+     ['MST3','14','missile3','surface-to-surface_missile_(ssm)'], // Surface-to-surface Missile (SSM)
+     ['MST3','15','missile3','surface-to-air_missile_(sam)'], // Surface-to-air Missile (SAM)
+     ['MST3','17','missile3','sa-10_grumble'], // SA-10 Grumble
+     ['MST3','18','missile3','sa-11_gadfly'], // SA-11 Gadfly
+     ['MST3','19','missile3','sa-12_gladiator/giant'], // SA-12 Gladiator/Giant
+     ['MST3','20','missile3','sa-13_gopher'], // SA-13 Gopher
+     ['MST3','21','missile3','sa-14_gremlin'], // SA-14 Gremlin
+     ['MST3','22','missile3','sa-15_gauntlet'], // SA-15 Gauntlet
+     ['MST3','23','missile3','sa-16_gimlet'], // SA-16 Gimlet
+     ['MST3','24','missile3','sa-17_grizzly'], // SA-17 Grizzly
+     ['MST3','25','missile3','sa-18_grouse'], // SA-18 Grouse
+     ['MST3','26','missile3','sa-19_grisom'], // SA-19 Grisom
+     ['MST3','999','missile3','other'], // Other
 
      // MUB - Multi-unit Building
      // ['MUB','-999999',undefined,undefined], // No Information
@@ -2211,6 +4674,57 @@ ggdm30.rules = {
      ['MZN','13','mine:type','dredge'], // Dredge
      ['MZN','999','mine:type','other'], // Other
 
+     // NDX - Neighbourhood-defining Characteristic
+     // ['NDX','-999999',undefined,undefined], // No Information
+     ['NDX','1','raw:NDX','economic_activity'], // Economic Activity
+     ['NDX','2','raw:NDX','ethnicity'], // Ethnicity
+     ['NDX','3','raw:NDX','historical'], // Historical
+     ['NDX','4','raw:NDX','linguistics'], // Linguistics
+     ['NDX','5','raw:NDX','physical_structure'], // Physical Structure
+     ['NDX','6','raw:NDX','religion'], // Religion
+     ['NDX','7','raw:NDX','socioeconomics'], // Socioeconomics
+     ['NDX','999','raw:NDX','other'], // Other
+
+     // NDX2 - Neighbourhood-defining Characteristic [2]
+     // ['NDX2','-999999',undefined,undefined], // No Information
+     ['NDX2','1','raw:NDX2','economic_activity'], // Economic Activity
+     ['NDX2','2','raw:NDX2','ethnicity'], // Ethnicity
+     ['NDX2','3','raw:NDX2','historical'], // Historical
+     ['NDX2','4','raw:NDX2','linguistics'], // Linguistics
+     ['NDX2','5','raw:NDX2','physical_structure'], // Physical Structure
+     ['NDX2','6','raw:NDX2','religion'], // Religion
+     ['NDX2','7','raw:NDX2','socioeconomics'], // Socioeconomics
+     ['NDX2','999','raw:NDX2','other'], // Other
+
+     // NDX3 - Neighbourhood-defining Characteristic [3]
+     // ['NDX3','-999999',undefined,undefined], // No Information
+     ['NDX3','1','raw:NDX3','economic_activity'], // Economic Activity
+     ['NDX3','2','raw:NDX3','ethnicity'], // Ethnicity
+     ['NDX3','3','raw:NDX3','historical'], // Historical
+     ['NDX3','4','raw:NDX3','linguistics'], // Linguistics
+     ['NDX3','5','raw:NDX3','physical_structure'], // Physical Structure
+     ['NDX3','6','raw:NDX3','religion'], // Religion
+     ['NDX3','7','raw:NDX3','socioeconomics'], // Socioeconomics
+     ['NDX3','999','raw:NDX3','other'], // Other
+
+     // NFP - Naval Firing and/or Practice Type
+     // ['NFP','-999999',undefined,undefined], // No Information
+     ['NFP','4','raw:NFP','firing_danger_area'], // Firing Danger Area
+     ['NFP','6','raw:NFP','mine_laying_practice_area'], // Mine Laying Practice Area
+     ['NFP','999','raw:NFP','other'], // Other
+
+     // NFP2 - Naval Firing and/or Practice Type [2]
+     // ['NFP2','-999999',undefined,undefined], // No Information
+     ['NFP2','4','raw:NFP2','firing_danger_area'], // Firing Danger Area
+     ['NFP2','6','raw:NFP2','mine_laying_practice_area'], // Mine Laying Practice Area
+     ['NFP2','999','raw:NFP2','other'], // Other
+
+     // NFP3 - Naval Firing and/or Practice Type [3]
+     // ['NFP3','-999999',undefined,undefined], // No Information
+     ['NFP3','4','raw:NFP3','firing_danger_area'], // Firing Danger Area
+     ['NFP3','6','raw:NFP3','mine_laying_practice_area'], // Mine Laying Practice Area
+     ['NFP3','999','raw:NFP3','other'], // Other
+
      // NLT - Named Location Type
      // ['NLT','-999999',undefined,undefined], // No Information
      ['NLT','1','named_location:type','area'], // Area
@@ -2219,6 +4733,85 @@ ggdm30.rules = {
      ['NLT','4','named_location:type','arctic_land'], // Arctic Land
      ['NLT','5','named_location:type','populated_locality'], // Populated Locality
      ['NLT','999','named_location:type','other'], // Other
+
+     // NMC - Navigation Mark Colour
+     // ['NMC','-999999',undefined,undefined], // No Information
+     ['NMC','1','raw:NMC','white'], // White
+     ['NMC','2','raw:NMC','black'], // Black
+     ['NMC','3','raw:NMC','red'], // Red
+     ['NMC','4','raw:NMC','green'], // Green
+     ['NMC','5','raw:NMC','blue'], // Blue
+     ['NMC','6','raw:NMC','yellow'], // Yellow
+     ['NMC','7','raw:NMC','grey'], // Grey
+     ['NMC','8','raw:NMC','brown'], // Brown
+     ['NMC','9','raw:NMC','amber'], // Amber
+     ['NMC','10','raw:NMC','violet'], // Violet
+     ['NMC','11','raw:NMC','orange'], // Orange
+     ['NMC','12','raw:NMC','magenta'], // Magenta
+     ['NMC','13','raw:NMC','pink'], // Pink
+     ['NMC','999','raw:NMC','other'], // Other
+
+     // NMC2 - Navigation Mark Colour [2]
+     // ['NMC2','-999999',undefined,undefined], // No Information
+     ['NMC2','1','raw:NMC2','white'], // White
+     ['NMC2','2','raw:NMC2','black'], // Black
+     ['NMC2','3','raw:NMC2','red'], // Red
+     ['NMC2','4','raw:NMC2','green'], // Green
+     ['NMC2','5','raw:NMC2','blue'], // Blue
+     ['NMC2','6','raw:NMC2','yellow'], // Yellow
+     ['NMC2','7','raw:NMC2','grey'], // Grey
+     ['NMC2','8','raw:NMC2','brown'], // Brown
+     ['NMC2','9','raw:NMC2','amber'], // Amber
+     ['NMC2','10','raw:NMC2','violet'], // Violet
+     ['NMC2','11','raw:NMC2','orange'], // Orange
+     ['NMC2','12','raw:NMC2','magenta'], // Magenta
+     ['NMC2','13','raw:NMC2','pink'], // Pink
+     ['NMC2','999','raw:NMC2','other'], // Other
+
+     // NMC3 - Navigation Mark Colour [3]
+     // ['NMC3','-999999',undefined,undefined], // No Information
+     ['NMC3','1','raw:NMC3','white'], // White
+     ['NMC3','2','raw:NMC3','black'], // Black
+     ['NMC3','3','raw:NMC3','red'], // Red
+     ['NMC3','4','raw:NMC3','green'], // Green
+     ['NMC3','5','raw:NMC3','blue'], // Blue
+     ['NMC3','6','raw:NMC3','yellow'], // Yellow
+     ['NMC3','7','raw:NMC3','grey'], // Grey
+     ['NMC3','8','raw:NMC3','brown'], // Brown
+     ['NMC3','9','raw:NMC3','amber'], // Amber
+     ['NMC3','10','raw:NMC3','violet'], // Violet
+     ['NMC3','11','raw:NMC3','orange'], // Orange
+     ['NMC3','12','raw:NMC3','magenta'], // Magenta
+     ['NMC3','13','raw:NMC3','pink'], // Pink
+     ['NMC3','999','raw:NMC3','other'], // Other
+
+     // NOA - Naval Operations Type
+     // ['NOA','-999999',undefined,undefined], // No Information
+     ['NOA','14','raw:NOA','submarine_exercise_area'], // Submarine Exercise Area
+     ['NOA','27','raw:NOA','foracs_v_limit'], // FORACS V Limit
+     ['NOA','999','raw:NOA','other'], // Other
+
+     // NOA2 - Naval Operations Type [2]
+     // ['NOA2','-999999',undefined,undefined], // No Information
+     ['NOA2','14','raw:NOA2','submarine_exercise_area'], // Submarine Exercise Area
+     ['NOA2','27','raw:NOA2','foracs_v_limit'], // FORACS V Limit
+     ['NOA2','999','raw:NOA2','other'], // Other
+
+     // NOA3 - Naval Operations Type [3]
+     // ['NOA3','-999999',undefined,undefined], // No Information
+     ['NOA3','14','raw:NOA3','submarine_exercise_area'], // Submarine Exercise Area
+     ['NOA3','27','raw:NOA3','foracs_v_limit'], // FORACS V Limit
+     ['NOA3','999','raw:NOA3','other'], // Other
+
+     // NSC - Hydrographic NAVAID System
+     // ['NSC','-999999',undefined,undefined], // No Information
+     ['NSC','2','raw:NSC','iala_region_a'], // IALA Region A
+     ['NSC','3','raw:NSC','iala_region_b'], // IALA Region B
+     ['NSC','6','raw:NSC','signi'], // SIGNI
+     ['NSC','7','raw:NSC','us_intracoastal_waterway'], // US Intracoastal Waterway
+     ['NSC','8','raw:NSC','us_uniform_state'], // US Uniform State
+     ['NSC','9','raw:NSC','us_western_rivers'], // US Western Rivers
+     ['NSC','10','raw:NSC','no_system'], // No System
 
      // NVS - Navigability Information
      // ['NVS','-999999',undefined,undefined], // No Information
@@ -2286,18 +4879,70 @@ ggdm30.rules = {
      ['OPT','7','operating_cycle','never_operating'], // Never Operating
      ['OPT','999','operating_cycle','other'], // Other
 
+     // ORS - Operating Restriction
+     // ['ORS','-999999',undefined,undefined], // No Information
+     ['ORS','3','raw:ORS','no_restriction'], // No Restriction
+     ['ORS','4','raw:ORS','snow'], // Snow
+     ['ORS','5','raw:ORS','icing'], // Icing
+     ['ORS','6','raw:ORS','flooding'], // Flooding
+     ['ORS','7','raw:ORS','special_restriction'], // Special Restriction
+     ['ORS','8','raw:ORS','wind'], // Wind
+     ['ORS','9','raw:ORS','reduced_visibility'], // Reduced Visibility
+     ['ORS','10','raw:ORS','time'], // Time
+     ['ORS','999','raw:ORS','other'], // Other
+
+     // ORS2 - Operating Restriction [2]
+     // ['ORS2','-999999',undefined,undefined], // No Information
+     ['ORS2','3','raw:ORS2','no_restriction'], // No Restriction
+     ['ORS2','4','raw:ORS2','snow'], // Snow
+     ['ORS2','5','raw:ORS2','icing'], // Icing
+     ['ORS2','6','raw:ORS2','flooding'], // Flooding
+     ['ORS2','7','raw:ORS2','special_restriction'], // Special Restriction
+     ['ORS2','8','raw:ORS2','wind'], // Wind
+     ['ORS2','9','raw:ORS2','reduced_visibility'], // Reduced Visibility
+     ['ORS2','10','raw:ORS2','time'], // Time
+     ['ORS2','999','raw:ORS2','other'], // Other
+
+     // ORS3 - Operating Restriction [3]
+     // ['ORS3','-999999',undefined,undefined], // No Information
+     ['ORS3','3','raw:ORS3','no_restriction'], // No Restriction
+     ['ORS3','4','raw:ORS3','snow'], // Snow
+     ['ORS3','5','raw:ORS3','icing'], // Icing
+     ['ORS3','6','raw:ORS3','flooding'], // Flooding
+     ['ORS3','7','raw:ORS3','special_restriction'], // Special Restriction
+     ['ORS3','8','raw:ORS3','wind'], // Wind
+     ['ORS3','9','raw:ORS3','reduced_visibility'], // Reduced Visibility
+     ['ORS3','10','raw:ORS3','time'], // Time
+     ['ORS3','999','raw:ORS3','other'], // Other
+
      // OWO - Waterbody Overhead Obstruction
      // ['OWO','-999999',undefined,undefined], // No Information
      ['OWO','1000','waterway:overhead_obstruction','no'],
      ['OWO','1001','waterway:overhead_obstruction','yes'],
 
-//      // PBY - By-product - See ZI014PBY
-//      // ['PBY','-999999',undefined,undefined], // No Information
-//      ['PBY','8','raw:PBY','refuse'], // Refuse
-//      ['PBY','15','raw:PBY','slag'], // Slag
-//      ['PBY','16','raw:PBY','sludge'], // Sludge
-//      ['PBY','17','raw:PBY','spoil'], // Spoil
-//      ['PBY','999','raw:PBY','other'], // Other
+     // PBY - By-product
+     // ['PBY','-999999',undefined,undefined], // No Information
+     ['PBY','8','raw:PBY','refuse'], // Refuse
+     ['PBY','15','raw:PBY','slag'], // Slag
+     ['PBY','16','raw:PBY','sludge'], // Sludge
+     ['PBY','17','raw:PBY','spoil'], // Spoil
+     ['PBY','999','raw:PBY','other'], // Other
+
+     // PBY2 - By-product [2]
+     // ['PBY2','-999999',undefined,undefined], // No Information
+     ['PBY2','8','raw:PBY2','refuse'], // Refuse
+     ['PBY2','15','raw:PBY2','slag'], // Slag
+     ['PBY2','16','raw:PBY2','sludge'], // Sludge
+     ['PBY2','17','raw:PBY2','spoil'], // Spoil
+     ['PBY2','999','raw:PBY2','other'], // Other
+
+     // PBY3 - By-product [3]
+     // ['PBY3','-999999',undefined,undefined], // No Information
+     ['PBY3','8','raw:PBY3','refuse'], // Refuse
+     ['PBY3','15','raw:PBY3','slag'], // Slag
+     ['PBY3','16','raw:PBY3','sludge'], // Sludge
+     ['PBY3','17','raw:PBY3','spoil'], // Spoil
+     ['PBY3','999','raw:PBY3','other'], // Other
 
      // PCF - Physical Condition
      // ['PCF','-999999',undefined,undefined], // No Information
@@ -2313,6 +4958,24 @@ ggdm30.rules = {
      ['PEC','1000','port_of_entry','no'],
      ['PEC','1001','port_of_entry','yes'],
 
+     // PFHC - Predominant Feature Height <interval closure>
+     ['PFHC','2','raw:PFHC','open_interval'], // Open Interval
+     ['PFHC','3','raw:PFHC','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['PFHC','4','raw:PFHC','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['PFHC','5','raw:PFHC','closed_interval'], // Closed Interval
+     ['PFHC','6','raw:PFHC','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['PFHC','7','raw:PFHC','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['PFHC','8','raw:PFHC','less-than_semi-interval'], // Less-than Semi-interval
+     ['PFHC','9','raw:PFHC','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
+
+     // PLC - Pile Type
+     // ['PLC','-999999',undefined,undefined], // No Information
+     ['PLC','1','raw:PLC','stake'], // Stake
+     ['PLC','3','raw:PLC','post'], // Post
+     ['PLC','4','raw:PLC','tripodal'], // Tripodal
+     ['PLC','5','raw:PLC','linear'], // Linear
+     ['PLC','999','raw:PLC','other'], // Other
+
      // PLT - Pipeline Type
      // ['PLT','-999999',undefined,undefined], // No Information
      ['PLT','1','pipeline:type','transport'], // Transport Pipe
@@ -2323,6 +4986,31 @@ ggdm30.rules = {
      ['PLT','7','pipeline:type','bubbler_system'], // Bubbler System
      ['PLT','999','pipeline:type','other'], // Other
 
+     // PLT2 - Pipeline Type [2]
+     // ['PLT2','-999999',undefined,undefined], // No Information
+     ['PLT2','1','raw:PLT2','transport_pipe'], // Transport Pipe
+     ['PLT2','2','raw:PLT2','outfall_pipe'], // Outfall Pipe
+     ['PLT2','3','raw:PLT2','intake_pipe'], // Intake Pipe
+     ['PLT2','4','raw:PLT2','sewer'], // Sewer
+     ['PLT2','5','raw:PLT2','pipeline_valve'], // Pipeline Valve
+     ['PLT2','7','raw:PLT2','bubbler_system'], // Bubbler System
+     ['PLT2','999','raw:PLT2','other'], // Other
+
+     // PLT3 - Pipeline Type [3]
+     // ['PLT3','-999999',undefined,undefined], // No Information
+     ['PLT3','1','raw:PLT3','transport_pipe'], // Transport Pipe
+     ['PLT3','2','raw:PLT3','outfall_pipe'], // Outfall Pipe
+     ['PLT3','3','raw:PLT3','intake_pipe'], // Intake Pipe
+     ['PLT3','4','raw:PLT3','sewer'], // Sewer
+     ['PLT3','5','raw:PLT3','pipeline_valve'], // Pipeline Valve
+     ['PLT3','7','raw:PLT3','bubbler_system'], // Bubbler System
+     ['PLT3','999','raw:PLT3','other'], // Other
+
+     // PMPR - Pump Present
+     // ['PMPR','-999999',undefined,undefined], // No Information
+     ['PMPR','1000','raw:PMPR','no'],
+     ['PMPR','1001','raw:PMPR','yes'],
+
      // POS - Power Source
      // ['POS','-999999',undefined,undefined], // No Information
      ['POS','1','generator:source','geothermal'], // Geothermal
@@ -2332,107 +5020,317 @@ ggdm30.rules = {
      ['POS','5','generator:source','tidal'], // Tidal
      ['POS','999','generator:source','other'], // Other
 
-     // This attribute is handled in Pre and Post processing. See ZI014_PPO
-//      // PPO - Product
-//      // ['PPO','-999999',undefined,undefined], // No Information
-//      ['PPO','1','raw:PPO','aircraft'], // Aircraft
-//      ['PPO','3','raw:PPO','ammunition'], // Ammunition
-//      ['PPO','8','raw:PPO','basalt'], // Basalt
-//      ['PPO','9','raw:PPO','bauxite'], // Bauxite
-//      ['PPO','11','raw:PPO','bivalve_mollusc'], // Bivalve Mollusc
-//      ['PPO','13','raw:PPO','brick'], // Brick
-//      ['PPO','15','raw:PPO','cement'], // Cement
-//      ['PPO','16','raw:PPO','chemical'], // Chemical
-//      ['PPO','17','raw:PPO','clay'], // Clay
-//      ['PPO','18','raw:PPO','coal'], // Coal
-//      ['PPO','19','raw:PPO','cobbles'], // Cobbles
-//      ['PPO','21','raw:PPO','coke'], // Coke
-//      ['PPO','26','raw:PPO','copper'], // Copper
-//      ['PPO','29','raw:PPO','crustacean'], // Crustacean
-//      ['PPO','30','raw:PPO','cultivated_shellfish'], // Cultivated Shellfish
-//      ['PPO','33','raw:PPO','diamond'], // Diamond
-//      ['PPO','34','raw:PPO','diatomaceous_earth'], // Diatomaceous Earth
-//      ['PPO','35','raw:PPO','dolomite'], // Dolomite
-//      ['PPO','37','raw:PPO','electric_power'], // Electric Power
-//      ['PPO','38','raw:PPO','explosive'], // Explosive
-//      ['PPO','39','raw:PPO','fish'], // Fish
-//      ['PPO','45','raw:PPO','gas'], // Gas
-//      ['PPO','46','raw:PPO','petrol'], // Petrol
-//      ['PPO','48','raw:PPO','gold'], // Gold
-//      ['PPO','50','raw:PPO','granite'], // Granite
-//      ['PPO','53','raw:PPO','gravel'], // Gravel
-//      ['PPO','58','raw:PPO','iron'], // Iron
-//      ['PPO','59','raw:PPO','lead'], // Lead
-//      ['PPO','60','raw:PPO','lime'], // Lime
-//      ['PPO','61','raw:PPO','liquefied_natural_gas_(lng)'], // Liquefied Natural Gas (LNG)
-//      ['PPO','62','raw:PPO','liquefied_petroleum_gas_(lpg)'], // Liquefied Petroleum Gas (LPG)
-//      ['PPO','63','raw:PPO','lumber'], // Lumber
-//      ['PPO','65','raw:PPO','manganese'], // Manganese
-//      ['PPO','66','raw:PPO','marble'], // Marble
-//      ['PPO','72','raw:PPO','mussels'], // Mussels
-//      ['PPO','77','raw:PPO','oysters'], // Oysters
-//      ['PPO','83','raw:PPO','petroleum'], // Petroleum
-//      ['PPO','85','raw:PPO','porphyry'], // Porphyry
-//      ['PPO','88','raw:PPO','pumice'], // Pumice
-//      ['PPO','89','raw:PPO','quartz'], // Quartz
-//      ['PPO','90','raw:PPO','radioactive_material'], // Radioactive Material
-//      ['PPO','93','raw:PPO','rock'], // Rock
-//      ['PPO','95','raw:PPO','salt'], // Salt
-//      ['PPO','96','raw:PPO','sand'], // Sand
-//      ['PPO','97','raw:PPO','sandstone'], // Sandstone
-//      ['PPO','101','raw:PPO','sewage'], // Sewage
-//      ['PPO','105','raw:PPO','silver'], // Silver
-//      ['PPO','110','raw:PPO','stone'], // Stone
-//      ['PPO','116','raw:PPO','timber'], // Timber
-//      ['PPO','117','raw:PPO','tobacco'], // Tobacco
-//      ['PPO','118','raw:PPO','travertine'], // Travertine
-//      ['PPO','120','raw:PPO','uranium'], // Uranium
-//      ['PPO','122','raw:PPO','water'], // Water
-//      ['PPO','126','raw:PPO','zinc'], // Zinc
-//      ['PPO','130','raw:PPO','chalk'], // Chalk
-//      ['PPO','146','raw:PPO','heating_steam_and/or_water'], // Heating Steam and/or Water
-//      ['PPO','149','raw:PPO','brine'], // Brine
-//      ['PPO','151','raw:PPO','chromium'], // Chromium
-//      ['PPO','152','raw:PPO','nickel'], // Nickel
-//      ['PPO','153','raw:PPO','tin'], // Tin
-//      ['PPO','158','raw:PPO','pottery'], // Pottery
-//      ['PPO','159','raw:PPO','charcoal'], // Charcoal
-//      ['PPO','160','raw:PPO','milled_grain'], // Milled Grain
-//      ['PPO','161','raw:PPO','coalbed_methane'], // Coalbed Methane
-//      ['PPO','162','raw:PPO','natural_gas_condensate'], // Natural Gas Condensate
-//      ['PPO','163','raw:PPO','helium'], // Helium
-//      ['PPO','164','raw:PPO','hydrothermal_fluid'], // Hydrothermal Fluid
-//      ['PPO','170','raw:PPO','beverage'], // Beverage
-//      ['PPO','173','raw:PPO','fluorite'], // Fluorite
-//      ['PPO','204','raw:PPO','phosphate'], // Phosphate
-//      ['PPO','214','raw:PPO','biodiesel'], // Biodiesel
-//      ['PPO','224','raw:PPO','vanadium'], // Vanadium
-//      ['PPO','283','raw:PPO','mica'], // Mica
-//      ['PPO','339','raw:PPO','selenium'], // Selenium
-//      ['PPO','999','raw:PPO','other'], // Other
+     // POS2 - Power Source [2]
+     // ['POS2','-999999',undefined,undefined], // No Information
+     ['POS2','1','raw:POS2','geothermal'], // Geothermal
+     ['POS2','2','raw:POS2','hydro-electric'], // Hydro-electric
+     ['POS2','3','raw:POS2','nuclear'], // Nuclear
+     ['POS2','4','raw:POS2','thermal'], // Thermal
+     ['POS2','5','raw:POS2','tidal'], // Tidal
+     ['POS2','999','raw:POS2','other'], // Other
+
+     // POS3 - Power Source [3]
+     // ['POS3','-999999',undefined,undefined], // No Information
+     ['POS3','1','raw:POS3','geothermal'], // Geothermal
+     ['POS3','2','raw:POS3','hydro-electric'], // Hydro-electric
+     ['POS3','3','raw:POS3','nuclear'], // Nuclear
+     ['POS3','4','raw:POS3','thermal'], // Thermal
+     ['POS3','5','raw:POS3','tidal'], // Tidal
+     ['POS3','999','raw:POS3','other'], // Other
+
+     // PPO - Physical Product
+     // ['PPO','-999999',undefined,undefined], // No Information
+     ['PPO','1','raw:PPO','aircraft'], // Aircraft
+     ['PPO','3','raw:PPO','ammunition'], // Ammunition
+     ['PPO','8','raw:PPO','basalt'], // Basalt
+     ['PPO','9','raw:PPO','bauxite'], // Bauxite
+     ['PPO','11','raw:PPO','bivalve_mollusc'], // Bivalve Mollusc
+     ['PPO','13','raw:PPO','brick'], // Brick
+     ['PPO','15','raw:PPO','cement'], // Cement
+     ['PPO','16','raw:PPO','chemical'], // Chemical
+     ['PPO','17','raw:PPO','clay'], // Clay
+     ['PPO','18','raw:PPO','coal'], // Coal
+     ['PPO','19','raw:PPO','cobbles'], // Cobbles
+     ['PPO','21','raw:PPO','coke'], // Coke
+     ['PPO','26','raw:PPO','copper'], // Copper
+     ['PPO','29','raw:PPO','crustacean'], // Crustacean
+     ['PPO','30','raw:PPO','cultivated_shellfish'], // Cultivated Shellfish
+     ['PPO','33','raw:PPO','diamond'], // Diamond
+     ['PPO','34','raw:PPO','diatomaceous_earth'], // Diatomaceous Earth
+     ['PPO','35','raw:PPO','dolomite'], // Dolomite
+     ['PPO','37','raw:PPO','electric_power'], // Electric Power
+     ['PPO','38','raw:PPO','explosive'], // Explosive
+     ['PPO','39','raw:PPO','fish'], // Fish
+     ['PPO','45','raw:PPO','gas'], // Gas
+     ['PPO','46','raw:PPO','petrol'], // Petrol
+     ['PPO','48','raw:PPO','gold'], // Gold
+     ['PPO','49','raw:PPO','grain'], // Grain
+     ['PPO','50','raw:PPO','granite'], // Granite
+     ['PPO','53','raw:PPO','gravel'], // Gravel
+     ['PPO','58','raw:PPO','iron'], // Iron
+     ['PPO','59','raw:PPO','lead'], // Lead
+     ['PPO','60','raw:PPO','lime'], // Lime
+     ['PPO','61','raw:PPO','liquefied_natural_gas_(lng)'], // Liquefied Natural Gas (LNG)
+     ['PPO','62','raw:PPO','liquefied_petroleum_gas_(lpg)'], // Liquefied Petroleum Gas (LPG)
+     ['PPO','63','raw:PPO','lumber'], // Lumber
+     ['PPO','65','raw:PPO','manganese'], // Manganese
+     ['PPO','66','raw:PPO','marble'], // Marble
+     ['PPO','70','raw:PPO','milk'], // Milk
+     ['PPO','72','raw:PPO','mussels'], // Mussels
+     ['PPO','77','raw:PPO','oysters'], // Oysters
+     ['PPO','83','raw:PPO','petroleum'], // Petroleum
+     ['PPO','85','raw:PPO','porphyry'], // Porphyry
+     ['PPO','88','raw:PPO','pumice'], // Pumice
+     ['PPO','89','raw:PPO','quartz'], // Quartz
+     ['PPO','90','raw:PPO','radioactive_material'], // Radioactive Material
+     ['PPO','93','raw:PPO','rocks'], // Rocks
+     ['PPO','95','raw:PPO','salt'], // Salt
+     ['PPO','96','raw:PPO','sand'], // Sand
+     ['PPO','97','raw:PPO','sandstone'], // Sandstone
+     ['PPO','101','raw:PPO','sewage'], // Sewage
+     ['PPO','105','raw:PPO','silver'], // Silver
+     ['PPO','110','raw:PPO','stone'], // Stone
+     ['PPO','116','raw:PPO','timber'], // Timber
+     ['PPO','117','raw:PPO','tobacco'], // Tobacco
+     ['PPO','118','raw:PPO','travertine'], // Travertine
+     ['PPO','120','raw:PPO','uranium'], // Uranium
+     ['PPO','122','raw:PPO','water'], // Water
+     ['PPO','123','raw:PPO','wine'], // Wine
+     ['PPO','126','raw:PPO','zinc'], // Zinc
+     ['PPO','130','raw:PPO','chalk'], // Chalk
+     ['PPO','146','raw:PPO','heating_steam_and/or_water'], // Heating Steam and/or Water
+     ['PPO','149','raw:PPO','brine'], // Brine
+     ['PPO','151','raw:PPO','chromium'], // Chromium
+     ['PPO','152','raw:PPO','nickel'], // Nickel
+     ['PPO','153','raw:PPO','tin'], // Tin
+     ['PPO','158','raw:PPO','pottery'], // Pottery
+     ['PPO','159','raw:PPO','charcoal'], // Charcoal
+     ['PPO','160','raw:PPO','milled_grain'], // Milled Grain
+     ['PPO','161','raw:PPO','coalbed_methane'], // Coalbed Methane
+     ['PPO','162','raw:PPO','natural_gas_condensate'], // Natural Gas Condensate
+     ['PPO','163','raw:PPO','helium'], // Helium
+     ['PPO','164','raw:PPO','hydrothermal_fluid'], // Hydrothermal Fluid
+     ['PPO','170','raw:PPO','beverage'], // Beverage
+     ['PPO','173','raw:PPO','fluorite'], // Fluorite
+     ['PPO','204','raw:PPO','phosphate'], // Phosphate
+     ['PPO','214','raw:PPO','biodiesel'], // Biodiesel
+     ['PPO','224','raw:PPO','vanadium'], // Vanadium
+     ['PPO','283','raw:PPO','mica'], // Mica
+     ['PPO','339','raw:PPO','selenium'], // Selenium
+     ['PPO','999','raw:PPO','other'], // Other
+
+     // PPO2 - Physical Product [2]
+     // ['PPO2','-999999',undefined,undefined], // No Information
+     ['PPO2','1','raw:PPO2','aircraft'], // Aircraft
+     ['PPO2','3','raw:PPO2','ammunition'], // Ammunition
+     ['PPO2','8','raw:PPO2','basalt'], // Basalt
+     ['PPO2','9','raw:PPO2','bauxite'], // Bauxite
+     ['PPO2','11','raw:PPO2','bivalve_mollusc'], // Bivalve Mollusc
+     ['PPO2','13','raw:PPO2','brick'], // Brick
+     ['PPO2','15','raw:PPO2','cement'], // Cement
+     ['PPO2','16','raw:PPO2','chemical'], // Chemical
+     ['PPO2','17','raw:PPO2','clay'], // Clay
+     ['PPO2','18','raw:PPO2','coal'], // Coal
+     ['PPO2','19','raw:PPO2','cobbles'], // Cobbles
+     ['PPO2','21','raw:PPO2','coke'], // Coke
+     ['PPO2','26','raw:PPO2','copper'], // Copper
+     ['PPO2','29','raw:PPO2','crustacean'], // Crustacean
+     ['PPO2','30','raw:PPO2','cultivated_shellfish'], // Cultivated Shellfish
+     ['PPO2','33','raw:PPO2','diamond'], // Diamond
+     ['PPO2','34','raw:PPO2','diatomaceous_earth'], // Diatomaceous Earth
+     ['PPO2','35','raw:PPO2','dolomite'], // Dolomite
+     ['PPO2','37','raw:PPO2','electric_power'], // Electric Power
+     ['PPO2','38','raw:PPO2','explosive'], // Explosive
+     ['PPO2','39','raw:PPO2','fish'], // Fish
+     ['PPO2','45','raw:PPO2','gas'], // Gas
+     ['PPO2','46','raw:PPO2','petrol'], // Petrol
+     ['PPO2','48','raw:PPO2','gold'], // Gold
+     ['PPO2','49','raw:PPO2','grain'], // Grain
+     ['PPO2','50','raw:PPO2','granite'], // Granite
+     ['PPO2','53','raw:PPO2','gravel'], // Gravel
+     ['PPO2','58','raw:PPO2','iron'], // Iron
+     ['PPO2','59','raw:PPO2','lead'], // Lead
+     ['PPO2','60','raw:PPO2','lime'], // Lime
+     ['PPO2','61','raw:PPO2','liquefied_natural_gas_(lng)'], // Liquefied Natural Gas (LNG)
+     ['PPO2','62','raw:PPO2','liquefied_petroleum_gas_(lpg)'], // Liquefied Petroleum Gas (LPG)
+     ['PPO2','63','raw:PPO2','lumber'], // Lumber
+     ['PPO2','65','raw:PPO2','manganese'], // Manganese
+     ['PPO2','66','raw:PPO2','marble'], // Marble
+     ['PPO2','70','raw:PPO2','milk'], // Milk
+     ['PPO2','72','raw:PPO2','mussels'], // Mussels
+     ['PPO2','77','raw:PPO2','oysters'], // Oysters
+     ['PPO2','83','raw:PPO2','petroleum'], // Petroleum
+     ['PPO2','85','raw:PPO2','porphyry'], // Porphyry
+     ['PPO2','88','raw:PPO2','pumice'], // Pumice
+     ['PPO2','89','raw:PPO2','quartz'], // Quartz
+     ['PPO2','90','raw:PPO2','radioactive_material'], // Radioactive Material
+     ['PPO2','93','raw:PPO2','rocks'], // Rocks
+     ['PPO2','95','raw:PPO2','salt'], // Salt
+     ['PPO2','96','raw:PPO2','sand'], // Sand
+     ['PPO2','97','raw:PPO2','sandstone'], // Sandstone
+     ['PPO2','101','raw:PPO2','sewage'], // Sewage
+     ['PPO2','105','raw:PPO2','silver'], // Silver
+     ['PPO2','110','raw:PPO2','stone'], // Stone
+     ['PPO2','116','raw:PPO2','timber'], // Timber
+     ['PPO2','117','raw:PPO2','tobacco'], // Tobacco
+     ['PPO2','118','raw:PPO2','travertine'], // Travertine
+     ['PPO2','120','raw:PPO2','uranium'], // Uranium
+     ['PPO2','122','raw:PPO2','water'], // Water
+     ['PPO2','123','raw:PPO2','wine'], // Wine
+     ['PPO2','126','raw:PPO2','zinc'], // Zinc
+     ['PPO2','130','raw:PPO2','chalk'], // Chalk
+     ['PPO2','146','raw:PPO2','heating_steam_and/or_water'], // Heating Steam and/or Water
+     ['PPO2','149','raw:PPO2','brine'], // Brine
+     ['PPO2','151','raw:PPO2','chromium'], // Chromium
+     ['PPO2','152','raw:PPO2','nickel'], // Nickel
+     ['PPO2','153','raw:PPO2','tin'], // Tin
+     ['PPO2','158','raw:PPO2','pottery'], // Pottery
+     ['PPO2','159','raw:PPO2','charcoal'], // Charcoal
+     ['PPO2','160','raw:PPO2','milled_grain'], // Milled Grain
+     ['PPO2','161','raw:PPO2','coalbed_methane'], // Coalbed Methane
+     ['PPO2','162','raw:PPO2','natural_gas_condensate'], // Natural Gas Condensate
+     ['PPO2','163','raw:PPO2','helium'], // Helium
+     ['PPO2','164','raw:PPO2','hydrothermal_fluid'], // Hydrothermal Fluid
+     ['PPO2','170','raw:PPO2','beverage'], // Beverage
+     ['PPO2','173','raw:PPO2','fluorite'], // Fluorite
+     ['PPO2','204','raw:PPO2','phosphate'], // Phosphate
+     ['PPO2','214','raw:PPO2','biodiesel'], // Biodiesel
+     ['PPO2','224','raw:PPO2','vanadium'], // Vanadium
+     ['PPO2','283','raw:PPO2','mica'], // Mica
+     ['PPO2','339','raw:PPO2','selenium'], // Selenium
+     ['PPO2','999','raw:PPO2','other'], // Other
+
+     // PPO3 - Physical Product [3]
+     // ['PPO3','-999999',undefined,undefined], // No Information
+     ['PPO3','1','raw:PPO3','aircraft'], // Aircraft
+     ['PPO3','3','raw:PPO3','ammunition'], // Ammunition
+     ['PPO3','8','raw:PPO3','basalt'], // Basalt
+     ['PPO3','9','raw:PPO3','bauxite'], // Bauxite
+     ['PPO3','11','raw:PPO3','bivalve_mollusc'], // Bivalve Mollusc
+     ['PPO3','13','raw:PPO3','brick'], // Brick
+     ['PPO3','15','raw:PPO3','cement'], // Cement
+     ['PPO3','16','raw:PPO3','chemical'], // Chemical
+     ['PPO3','17','raw:PPO3','clay'], // Clay
+     ['PPO3','18','raw:PPO3','coal'], // Coal
+     ['PPO3','19','raw:PPO3','cobbles'], // Cobbles
+     ['PPO3','21','raw:PPO3','coke'], // Coke
+     ['PPO3','26','raw:PPO3','copper'], // Copper
+     ['PPO3','29','raw:PPO3','crustacean'], // Crustacean
+     ['PPO3','30','raw:PPO3','cultivated_shellfish'], // Cultivated Shellfish
+     ['PPO3','33','raw:PPO3','diamond'], // Diamond
+     ['PPO3','34','raw:PPO3','diatomaceous_earth'], // Diatomaceous Earth
+     ['PPO3','35','raw:PPO3','dolomite'], // Dolomite
+     ['PPO3','37','raw:PPO3','electric_power'], // Electric Power
+     ['PPO3','38','raw:PPO3','explosive'], // Explosive
+     ['PPO3','39','raw:PPO3','fish'], // Fish
+     ['PPO3','45','raw:PPO3','gas'], // Gas
+     ['PPO3','46','raw:PPO3','petrol'], // Petrol
+     ['PPO3','48','raw:PPO3','gold'], // Gold
+     ['PPO3','49','raw:PPO3','grain'], // Grain
+     ['PPO3','50','raw:PPO3','granite'], // Granite
+     ['PPO3','53','raw:PPO3','gravel'], // Gravel
+     ['PPO3','58','raw:PPO3','iron'], // Iron
+     ['PPO3','59','raw:PPO3','lead'], // Lead
+     ['PPO3','60','raw:PPO3','lime'], // Lime
+     ['PPO3','61','raw:PPO3','liquefied_natural_gas_(lng)'], // Liquefied Natural Gas (LNG)
+     ['PPO3','62','raw:PPO3','liquefied_petroleum_gas_(lpg)'], // Liquefied Petroleum Gas (LPG)
+     ['PPO3','63','raw:PPO3','lumber'], // Lumber
+     ['PPO3','65','raw:PPO3','manganese'], // Manganese
+     ['PPO3','66','raw:PPO3','marble'], // Marble
+     ['PPO3','70','raw:PPO3','milk'], // Milk
+     ['PPO3','72','raw:PPO3','mussels'], // Mussels
+     ['PPO3','77','raw:PPO3','oysters'], // Oysters
+     ['PPO3','83','raw:PPO3','petroleum'], // Petroleum
+     ['PPO3','85','raw:PPO3','porphyry'], // Porphyry
+     ['PPO3','88','raw:PPO3','pumice'], // Pumice
+     ['PPO3','89','raw:PPO3','quartz'], // Quartz
+     ['PPO3','90','raw:PPO3','radioactive_material'], // Radioactive Material
+     ['PPO3','93','raw:PPO3','rocks'], // Rocks
+     ['PPO3','95','raw:PPO3','salt'], // Salt
+     ['PPO3','96','raw:PPO3','sand'], // Sand
+     ['PPO3','97','raw:PPO3','sandstone'], // Sandstone
+     ['PPO3','101','raw:PPO3','sewage'], // Sewage
+     ['PPO3','105','raw:PPO3','silver'], // Silver
+     ['PPO3','110','raw:PPO3','stone'], // Stone
+     ['PPO3','116','raw:PPO3','timber'], // Timber
+     ['PPO3','117','raw:PPO3','tobacco'], // Tobacco
+     ['PPO3','118','raw:PPO3','travertine'], // Travertine
+     ['PPO3','120','raw:PPO3','uranium'], // Uranium
+     ['PPO3','122','raw:PPO3','water'], // Water
+     ['PPO3','123','raw:PPO3','wine'], // Wine
+     ['PPO3','126','raw:PPO3','zinc'], // Zinc
+     ['PPO3','130','raw:PPO3','chalk'], // Chalk
+     ['PPO3','146','raw:PPO3','heating_steam_and/or_water'], // Heating Steam and/or Water
+     ['PPO3','149','raw:PPO3','brine'], // Brine
+     ['PPO3','151','raw:PPO3','chromium'], // Chromium
+     ['PPO3','152','raw:PPO3','nickel'], // Nickel
+     ['PPO3','153','raw:PPO3','tin'], // Tin
+     ['PPO3','158','raw:PPO3','pottery'], // Pottery
+     ['PPO3','159','raw:PPO3','charcoal'], // Charcoal
+     ['PPO3','160','raw:PPO3','milled_grain'], // Milled Grain
+     ['PPO3','161','raw:PPO3','coalbed_methane'], // Coalbed Methane
+     ['PPO3','162','raw:PPO3','natural_gas_condensate'], // Natural Gas Condensate
+     ['PPO3','163','raw:PPO3','helium'], // Helium
+     ['PPO3','164','raw:PPO3','hydrothermal_fluid'], // Hydrothermal Fluid
+     ['PPO3','170','raw:PPO3','beverage'], // Beverage
+     ['PPO3','173','raw:PPO3','fluorite'], // Fluorite
+     ['PPO3','204','raw:PPO3','phosphate'], // Phosphate
+     ['PPO3','214','raw:PPO3','biodiesel'], // Biodiesel
+     ['PPO3','224','raw:PPO3','vanadium'], // Vanadium
+     ['PPO3','283','raw:PPO3','mica'], // Mica
+     ['PPO3','339','raw:PPO3','selenium'], // Selenium
+     ['PPO3','999','raw:PPO3','other'], // Other
 
      // PRM - Permanent
      // ['PRM','-999999',undefined,undefined], // No Information
      ['PRM','1000','permanent','no'],
      ['PRM','1001','permanent','yes'],
 
-     // This attribute is handled in Pre and Post processing. See ZI014_PRW
      // PRW - Raw Material
      // ['PRW','-999999',undefined,undefined], // No Information
-//      ['PRW','12','raw:PRW','coal'], // Coal
-//      ['PRW','14','raw:PRW','coke'], // Coke
-//      ['PRW','34','raw:PRW','gravel'], // Gravel
-//      ['PRW','54','raw:PRW','ore'], // Ore
-//      ['PRW','67','raw:PRW','salt'], // Salt
-//      ['PRW','68','raw:PRW','sand'], // Sand
-//      ['PRW','84','raw:PRW','stone'], // Stone
-//      ['PRW','154','raw:PRW','sulphur'], // Sulphur
-//      ['PRW','999','raw:PRW','other'], // Other
+     ['PRW','12','raw:PRW','coal'], // Coal
+     ['PRW','14','raw:PRW','coke'], // Coke
+     ['PRW','34','raw:PRW','gravel'], // Gravel
+     ['PRW','54','raw:PRW','ore'], // Ore
+     ['PRW','67','raw:PRW','salt'], // Salt
+     ['PRW','68','raw:PRW','sand'], // Sand
+     ['PRW','84','raw:PRW','stone'], // Stone
+     ['PRW','154','raw:PRW','sulphur'], // Sulphur
+     ['PRW','999','raw:PRW','other'], // Other
+
+     // PRW2 - Raw Material [2]
+     // ['PRW2','-999999',undefined,undefined], // No Information
+     ['PRW2','12','raw:PRW2','coal'], // Coal
+     ['PRW2','14','raw:PRW2','coke'], // Coke
+     ['PRW2','34','raw:PRW2','gravel'], // Gravel
+     ['PRW2','54','raw:PRW2','ore'], // Ore
+     ['PRW2','67','raw:PRW2','salt'], // Salt
+     ['PRW2','68','raw:PRW2','sand'], // Sand
+     ['PRW2','84','raw:PRW2','stone'], // Stone
+     ['PRW2','154','raw:PRW2','sulphur'], // Sulphur
+     ['PRW2','999','raw:PRW2','other'], // Other
+
+     // PRW3 - Raw Material [3]
+     // ['PRW3','-999999',undefined,undefined], // No Information
+     ['PRW3','12','raw:PRW3','coal'], // Coal
+     ['PRW3','14','raw:PRW3','coke'], // Coke
+     ['PRW3','34','raw:PRW3','gravel'], // Gravel
+     ['PRW3','54','raw:PRW3','ore'], // Ore
+     ['PRW3','67','raw:PRW3','salt'], // Salt
+     ['PRW3','68','raw:PRW3','sand'], // Sand
+     ['PRW3','84','raw:PRW3','stone'], // Stone
+     ['PRW3','154','raw:PRW3','sulphur'], // Sulphur
+     ['PRW3','999','raw:PRW3','other'], // Other
+
+     // PTG - Portage Use
+     // ['PTG','-999999',undefined,undefined], // No Information
+     ['PTG','1000','raw:PTG','no'],
+     ['PTG','1001','raw:PTG','yes'],
 
      // PWAC - Predominant Water Depth <interval closure>
      ['PWAC','2','depth:closure','open_interval'], // Open Interval
-     ['PWAC','3','depth:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['PWAC','4','depth:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['PWAC','3','depth:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['PWAC','4','depth:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['PWAC','5','depth:closure','closed_interval'], // Closed Interval
      ['PWAC','6','depth:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['PWAC','7','depth:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -2500,12 +5398,96 @@ ggdm30.rules = {
      ['RAS','12','radar:use','precision_approach'], // Precision Approach
      ['RAS','999','radar:use','other'], // Other
 
-     // RFD - Roofed (really?)
+     // RAY - Racing Type
+     // ['RAY','-999999',undefined,undefined], // No Information
+     ['RAY','1','raw:RAY','bicycle'], // Bicycle
+     ['RAY','2','raw:RAY','camel'], // Camel
+     ['RAY','3','raw:RAY','greyhound'], // Greyhound
+     ['RAY','4','raw:RAY','harness'], // Harness
+     ['RAY','5','raw:RAY','horse'], // Horse
+     ['RAY','6','raw:RAY','ice_skate'], // Ice Skate
+     ['RAY','7','raw:RAY','motor_vehicle'], // Motor Vehicle
+     ['RAY','8','raw:RAY','roller_skate'], // Roller Skate
+     ['RAY','9','raw:RAY','track_and_field'], // Track and Field
+     ['RAY','999','raw:RAY','other'], // Other
+
+     // RCG - Resource Content Originator
+     // ['RCG','-999999',undefined,undefined], // No Information
+     ['RCG','1','raw:RCG','u.s._army'], // U.S. Army
+     ['RCG','2','raw:RCG','u.s._navy'], // U.S. Navy
+     ['RCG','3','raw:RCG','u.s._air_force'], // U.S. Air Force
+     ['RCG','4','raw:RCG','u.s._marine_corps'], // U.S. Marine Corps
+     ['RCG','5','raw:RCG','u.s._coast_guard'], // U.S. Coast Guard
+     ['RCG','6','raw:RCG','u.s._africa_command_(usafricom)'], // U.S. Africa Command (USAFRICOM)
+     ['RCG','7','raw:RCG','u.s._central_command_(uscentcom)'], // U.S. Central Command (USCENTCOM)
+     ['RCG','8','raw:RCG','u.s._european_command_(useucom)'], // U.S. European Command (USEUCOM)
+     ['RCG','9','raw:RCG','u.s._joint_forces_command_(usjfcom)'], // U.S. Joint Forces Command (USJFCOM)
+     ['RCG','10','raw:RCG','u.s._northern_command_(usnorthcom)'], // U.S. Northern Command (USNORTHCOM)
+     ['RCG','11','raw:RCG','u.s._pacific_command_(pacom)'], // U.S. Pacific Command (PACOM)
+     ['RCG','12','raw:RCG','u.s._special_operations_command_(ussocom)'], // U.S. Special Operations Command (USSOCOM)
+     ['RCG','13','raw:RCG','u.s._southern_command_(ussouthcom)'], // U.S. Southern Command (USSOUTHCOM)
+     ['RCG','14','raw:RCG','u.s._strategic_command_(usstratcom)'], // U.S. Strategic Command (USSTRATCOM)
+     ['RCG','15','raw:RCG','u.s._transportation_command_(ustranscom)'], // U.S. Transportation Command (USTRANSCOM)
+     ['RCG','16','raw:RCG','u.s._central_intelligence_agency_(cia)'], // U.S. Central Intelligence Agency (CIA)
+     ['RCG','17','raw:RCG','u.s._defense_intelligence_agency_(dia)'], // U.S. Defense Intelligence Agency (DIA)
+     ['RCG','18','raw:RCG','u.s._national_security_agency_(nsa)'], // U.S. National Security Agency (NSA)
+     ['RCG','19','raw:RCG','u.s._national_geospatial-intelligence_agency_(nga)'], // U.S. National Geospatial-Intelligence Agency (NGA)
+     ['RCG','20','raw:RCG','u.s._national_reconnaissance_office_(nro)'], // U.S. National Reconnaissance Office (NRO)
+     ['RCG','21','raw:RCG','u.s._department_of_state'], // U.S. Department of State
+     ['RCG','22','raw:RCG','u.s._department_of_homeland_security_(dhs)'], // U.S. Department of Homeland Security (DHS)
+     ['RCG','23','raw:RCG','u.s._department_of_energy_(doe)'], // U.S. Department of Energy (DOE)
+     ['RCG','24','raw:RCG','u.s._federal_bureau_of_investigation_(fbi)'], // U.S. Federal Bureau of Investigation (FBI)
+     ['RCG','25','raw:RCG','u.s._geological_survey_(usgs)'], // U.S. Geological Survey (USGS)
+     ['RCG','26','raw:RCG','u.s._national_civil_applications_program_(ncap)'], // U.S. National Civil Applications Program (NCAP)
+     ['RCG','27','raw:RCG','u.s._national_oceanic_and_atmospheric_administration'], // U.S. National Oceanic and Atmospheric Administration
+     ['RCG','28','raw:RCG','defence_imagery_and_geospatial_organisation_(australia)'], // Defence Imagery and Geospatial Organisation (Australia)
+     ['RCG','29','raw:RCG','geographic_service_(belgium)'], // Geographic Service (Belgium)
+     ['RCG','30','raw:RCG','military_topographic_service_(bulgaria)'], // Military Topographic Service (Bulgaria)
+     ['RCG','31','raw:RCG','mapping_and_charting_establishment_(canada)'], // Mapping and Charting Establishment (Canada)
+     ['RCG','32','raw:RCG','geographic_service_of_the_czech_armed_forces_(czech_republic)'], // Geographic Service of the Czech Armed Forces (Czech Republic)
+     ['RCG','33','raw:RCG','defence_acquisition_and_logistics_organization_(denmark)'], // Defence Acquisition and Logistics Organization (Denmark)
+     ['RCG','34','raw:RCG','military_geographic_group_(estonia)'], // Military Geographic Group (Estonia)
+     ['RCG','35','raw:RCG','topographic_service_(finland)'], // Topographic Service (Finland)
+     ['RCG','36','raw:RCG','joint_geography_bureau_(france)'], // Joint Geography Bureau (France)
+     ['RCG','37','raw:RCG','bundeswehr_geoinformation_office_(germany)'], // Bundeswehr Geoinformation Office (Germany)
+     ['RCG','38','raw:RCG','hellenic_military_geographic_service_(greece)'], // Hellenic Military Geographic Service (Greece)
+     ['RCG','39','raw:RCG','mapping_service_(hungary)'], // Mapping Service (Hungary)
+     ['RCG','40','raw:RCG','defense_information_security_(italy)'], // Defense Information Security (Italy)
+     ['RCG','41','raw:RCG','geospatial_information_agency_(latvia)'], // Geospatial Information Agency (Latvia)
+     ['RCG','42','raw:RCG','military_mapping_centre_(lithuania)'], // Military Mapping Centre (Lithuania)
+     ['RCG','43','raw:RCG','national_army_topographic_service_(moldova)'], // National Army Topographic Service (Moldova)
+     ['RCG','44','raw:RCG','army_geographic_agency_(netherlands)'], // Army Geographic Agency (Netherlands)
+     ['RCG','45','raw:RCG','geospatial_intelligence_organisation_(new_zealand)'], // Geospatial Intelligence Organisation (New Zealand)
+     ['RCG','46','raw:RCG','military_geographic_service_(norway)'], // Military Geographic Service (Norway)
+     ['RCG','47','raw:RCG','military_geography_division_(poland)'], // Military Geography Division (Poland)
+     ['RCG','48','raw:RCG','army_geographic_institute_(portugal)'], // Army Geographic Institute (Portugal)
+     ['RCG','49','raw:RCG','military_topographic_directorate_(romania)'], // Military Topographic Directorate (Romania)
+     ['RCG','50','raw:RCG','topographic_institute_(slovakia)'], // Topographic Institute (Slovakia)
+     ['RCG','51','raw:RCG','army_geographic_centre_(spain)'], // Army Geographic Centre (Spain)
+     ['RCG','52','raw:RCG','swedish_armed_forces_(sweden)'], // Swedish Armed Forces (Sweden)
+     ['RCG','53','raw:RCG','general_command_of_mapping_(turkey)'], // General Command of Mapping (Turkey)
+     ['RCG','54','raw:RCG','defence_geographic_centre_intelligence_collection_group_(united_kingdom)'], // Defence Geographic Centre Intelligence Collection Group (United Kingdom)
+     ['RCG','55','raw:RCG','u.s._army_geospatial_center_(agc)'], // U.S. Army Geospatial Center (AGC)
+     ['RCG','56','raw:RCG','army_(australia)'], // Army (Australia)
+     ['RCG','998','raw:RCG','not_applicable'], // Not Applicable
+     ['RCG','999','raw:RCG','other'], // Other
+
+     // REF - Radar Reflector Present
+     // ['REF','-999999',undefined,undefined], // No Information
+     ['REF','1000','raw:REF','no'],
+     ['REF','1001','raw:REF','yes'],
+
+     // REW - Reference Water Level
+     // ['REW','-999999',undefined,undefined], // No Information
+     ['REW','1','raw:REW','high_tide'], // High Tide
+     ['REW','2','raw:REW','low_tide'], // Low Tide
+
+     // RFD - Roofed
      // ['RFD','-999999',undefined,undefined], // No Information
      ['RFD','1000','bridge:roof','no'],
      ['RFD','1001','bridge:roof','yes'],
 
-     // RIN_ROI - Route Designation (route designation type)
+     // RIN_ROI - Route Identification <route designation type>
      // ['RIN_ROI','-999999',undefined,undefined], // No Information
      ['RIN_ROI','1','ref:road:class','international'], // International
      ['RIN_ROI','2','ref:road:class','national_motorway'], // National Motorway
@@ -2513,6 +5495,24 @@ ggdm30.rules = {
      ['RIN_ROI','4','ref:road:class','secondary'], // Secondary
      ['RIN_ROI','5','ref:road:class','local'], // Local
      ['RIN_ROI','999','ref:road:class','other'], // Other
+
+     // RIN_ROI2 - Route Identification [2] <route designation type>
+     // ['RIN_ROI2','-999999',undefined,undefined], // No Information
+     ['RIN_ROI2','1','raw:RIN_ROI2','international'], // International
+     ['RIN_ROI2','2','raw:RIN_ROI2','national_motorway'], // National Motorway
+     ['RIN_ROI2','3','raw:RIN_ROI2','national'], // National
+     ['RIN_ROI2','4','raw:RIN_ROI2','secondary'], // Secondary
+     ['RIN_ROI2','5','raw:RIN_ROI2','local'], // Local
+     ['RIN_ROI2','999','raw:RIN_ROI2','other'], // Other
+
+     // RIN_ROI3 - Route Identification [3] <route designation type>
+     // ['RIN_ROI3','-999999',undefined,undefined], // No Information
+     ['RIN_ROI3','1','raw:RIN_ROI3','international'], // International
+     ['RIN_ROI3','2','raw:RIN_ROI3','national_motorway'], // National Motorway
+     ['RIN_ROI3','3','raw:RIN_ROI3','national'], // National
+     ['RIN_ROI3','4','raw:RIN_ROI3','secondary'], // Secondary
+     ['RIN_ROI3','5','raw:RIN_ROI3','local'], // Local
+     ['RIN_ROI3','999','raw:RIN_ROI3','other'], // Other
 
      // RIP - Rig Present
      // ['RIP','-999999',undefined,undefined], // No Information
@@ -2531,7 +5531,7 @@ ggdm30.rules = {
      ['RIT','8','junction','trumpet'], // Trumpet
      ['RIT','9','junction','turban'], // Turban
      ['RIT','10','junction','wye'], // Wye
-     ['RIT','999','junction','other'], // Othe
+     ['RIT','999','junction','other'], // Other
 
      // RKF - Rock Formation Structure
      // ['RKF','-999999',undefined,undefined], // No Information
@@ -2541,33 +5541,39 @@ ggdm30.rules = {
      ['RKF','4','rock_formation','fossilized_forest'], // Fossilized Forest
      ['RKF','999','rock_formation','other'], // Other
 
-     // RLE - Relative Level: Need to do-conflict with LOC
+     // RLE - Relative Level
      // ['RLE','-999999',undefined,undefined], // No Information
      ['RLE','1','layer','1'], // Raised
      ['RLE','2','layer','0'], // Level with surrounding area
      ['RLE','3','layer','-1'], // Depressed
      ['RLE','998',undefined,undefined], // Not Applicable
 
-     // RMWC - Route Median Width (interval closure): Nothing in OSM
-     // ['RMWC','-999999',undefined,undefined],
+     // RMWC - Route Median Width <interval closure>
      ['RMWC','2','median:interval:closure','open_interval'], // Open Interval
-     ['RMWC','3','median:interval:closure','greater_than_or_equal_to_less_than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['RMWC','4','median:interval:closure','greater_than_to_less_than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['RMWC','3','median:interval:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['RMWC','4','median:interval:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['RMWC','5','median:interval:closure','closed_interval'], // Closed Interval
-     ['RMWC','6','median:interval:closure','greater_than_semi_interval'], // Greater-than Semi-interval
-     ['RMWC','7','median:interval:closure','greater_than_or_equal_semi_interval'], // Greater-than or Equal Semi-interval
-     ['RMWC','8','median:interval:closure','less_than_semi_interval'], // Less-than Semi-interval
-     ['RMWC','9','median:interval:closure','less_than_or_equal_semi_interval'], // Less-than or Equal Semi-interval
+     ['RMWC','6','median:interval:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['RMWC','7','median:interval:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['RMWC','8','median:interval:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['RMWC','9','median:interval:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
-     // This gets fixed in pre/post processing
      // ROR - Road Interchange Ramp
      // ['ROR','-999999',undefined,undefined], // No Information
      ['ROR','1000',undefined,undefined], // The default: No ramp
      ['ROR','1001','interchange_ramp','yes'],
 
+     // RPC - Boundary Representation Policy
+     // ['RPC','-999999',undefined,undefined], // No Information
+     ['RPC','1','raw:RPC','show_no_line'], // Show No Line
+     ['RPC','2','raw:RPC','definite'], // Definite
+     ['RPC','3','raw:RPC','indefinite'], // Indefinite
+     ['RPC','4','raw:RPC','in_dispute'], // In Dispute
+     ['RPC','5','raw:RPC','administrative_as_international'], // Administrative as International
+     ['RPC','999','raw:RPC','other'], // Other
+
      // RRC - Railway Use
      // ['RRC','-999999',undefined,undefined], // No Information
-     // ['RRC','0','railway','rail'],
      ['RRC','2','railway','carline'], // Carline
      ['RRC','6','railway','subway'], // Underground Railway
      ['RRC','8','railway','logging'], // Logging
@@ -2580,6 +5586,34 @@ ggdm30.rules = {
      ['RRC','33','railway','longhaul'], // Long-haul
      ['RRC','999','railway','Other'], // Other
 
+     // RRC2 - Railway Use [2]
+     // ['RRC2','-999999',undefined,undefined], // No Information
+     ['RRC2','2','raw:RRC2','carline'], // Carline
+     ['RRC2','6','raw:RRC2','underground_railway'], // Underground Railway
+     ['RRC2','8','raw:RRC2','logging'], // Logging
+     ['RRC2','11','raw:RRC2','rail_rapid_transit'], // Rail Rapid Transit
+     ['RRC2','13','raw:RRC2','marine_railway'], // Marine Railway
+     ['RRC2','14','raw:RRC2','tramway'], // Tramway
+     ['RRC2','15','raw:RRC2','funicular'], // Funicular
+     ['RRC2','24','raw:RRC2','museum'], // Museum
+     ['RRC2','32','raw:RRC2','automated_transit_system'], // Automated Transit System
+     ['RRC2','33','raw:RRC2','long-haul'], // Long-haul
+     ['RRC2','999','raw:RRC2','other'], // Other
+
+     // RRC3 - Railway Use [3]
+     // ['RRC3','-999999',undefined,undefined], // No Information
+     ['RRC3','2','raw:RRC3','carline'], // Carline
+     ['RRC3','6','raw:RRC3','underground_railway'], // Underground Railway
+     ['RRC3','8','raw:RRC3','logging'], // Logging
+     ['RRC3','11','raw:RRC3','rail_rapid_transit'], // Rail Rapid Transit
+     ['RRC3','13','raw:RRC3','marine_railway'], // Marine Railway
+     ['RRC3','14','raw:RRC3','tramway'], // Tramway
+     ['RRC3','15','raw:RRC3','funicular'], // Funicular
+     ['RRC3','24','raw:RRC3','museum'], // Museum
+     ['RRC3','32','raw:RRC3','automated_transit_system'], // Automated Transit System
+     ['RRC3','33','raw:RRC3','long-haul'], // Long-haul
+     ['RRC3','999','raw:RRC3','other'], // Other
+
      // RSA - Branch Railway Type
      // ['RSA','-999999',undefined,undefined], // No Information
      ['RSA','1','service','spur'], // Spur
@@ -2587,15 +5621,34 @@ ggdm30.rules = {
      ['RSA','3','service','passing'], // Passing
      ['RSA','999','service','other'], // Other
 
+     // RSI - Radar Significance
+     // ['RSI','-999999',undefined,undefined], // No Information
+     ['RSI','1','raw:RSI','metal'], // Metal
+     ['RSI','2','raw:RSI','part_metal'], // Part Metal
+     ['RSI','3','raw:RSI','masonry'], // Masonry
+     ['RSI','4','raw:RSI','composition'], // Composition
+     ['RSI','5','raw:RSI','earthen'], // Earthen
+     ['RSI','999','raw:RSI','other'], // Other
+
      // RTA - Linear Feature Arrangement
      // ['RTA','-999999',undefined,undefined], // No Information
-     // ['RTA','0',undefined,undefined], // This also gets used by pipelines
      ['RTA','1','arrangement','single'], // Single Arrangement
      ['RTA','2','arrangement','double'], // Double Arrangement
      ['RTA','3','arrangement','multiple'], // Multiple Arrangements
      ['RTA','999','arrangement','other'], // Other
 
-     // These give the basic highway types. Post processing fixes them
+     // RTT - Route Intended Use
+     // ['RTT','-999999',undefined,undefined], // No Information
+     ['RTT','2','raw:RTT','recommended_track_for_other_than_deep_draft_vessels'], // Recommended Track for Other Than Deep Draft Vessels
+     ['RTT','3','raw:RTT','recommended_track_for_deep_draft_vessels'], // Recommended Track for Deep Draft Vessels
+     ['RTT','4','raw:RTT','deep_water_route'], // Deep Water Route
+     ['RTT','5','raw:RTT','transit_route'], // Transit Route
+     ['RTT','11','raw:RTT','two-way_route'], // Two-way Route
+     ['RTT','13','raw:RTT','recommended_direction_of_traffic_flow'], // Recommended Direction of Traffic Flow
+     ['RTT','17','raw:RTT','q-route'], // Q-Route
+     ['RTT','18','raw:RTT','recommended_route'], // Recommended Route
+     ['RTT','999','raw:RTT','other'], // Other
+
      // RTY - Roadway Type
      // ['RTY','-999999',undefined,undefined], // No Information
      ['RTY','1','ref:road:type','motorway'], // Motorway
@@ -2616,33 +5669,6 @@ ggdm30.rules = {
      ['SAD','1000','stabilized','no'],
      ['SAD','1001','stabilized','yes'],
 
-     // SAX_RS6 - Security Attributes Group <resource declassification exception>
-     ['SAX_RS6','AEA','security:declassification:exception','AEA'],
-     ['SAX_RS6','25X1','security:declassification:exception','25X1'],
-     ['SAX_RS6','25X1-human','security:declassification:exception','25X1-human'],
-     ['SAX_RS6','25X1-EO-12951','security:declassification:exception','25X1-EO-12951'],
-     ['SAX_RS6','25X2','security:declassification:exception','25X2'],
-     ['SAX_RS6','25X3','security:declassification:exception','25X3'],
-     ['SAX_RS6','25X4','security:declassification:exception','25X4'],
-     ['SAX_RS6','25X5','security:declassification:exception','25X5'],
-     ['SAX_RS6','25X6','security:declassification:exception','25X6'],
-     ['SAX_RS6','25X7','security:declassification:exception','25X7'],
-     ['SAX_RS6','25X8','security:declassification:exception','25X8'],
-     ['SAX_RS6','25X9','security:declassification:exception','25X9'],
-     ['SAX_RS6','50X1-HUM','security:declassification:exception','50X1-HUM'],
-     ['SAX_RS6','50X2-WMD','security:declassification:exception','50X2-WMD'],
-
-     // SAX_RX8 - Security Attributes Group <resource type of exempted source>
-     ['SAX_RX8','OADR','security:exempted_source:type','OADR'], // Source Marked OADR (Originating Agency's Determination Required)
-     ['SAX_RX8','X1','security:exempted_source:type','X1'], // Source Marked X1
-     ['SAX_RX8','X2','security:exempted_source:type','X2'], // Source Marked X2
-     ['SAX_RX8','X3','security:exempted_source:type','X3'], // Source Marked X3
-     ['SAX_RX8','X4','security:exempted_source:type','X4'], // Source Marked X4
-     ['SAX_RX8','X5','security:exempted_source:type','X5'], // Source Marked X5
-     ['SAX_RX8','X6','security:exempted_source:type','X6'], // Source Marked X6
-     ['SAX_RX8','X7','security:exempted_source:type','X7'], // Source Marked X7
-     ['SAX_RX8','X8','security:exempted_source:type','X8'], // Source Marked X8
-
      // SBB - Supported by Bridge Span
      // ['SBB','-999999',undefined,undefined], // No Information
      ['SBB','1000','on_bridge','no'], // Do we need this??
@@ -2653,17 +5679,40 @@ ggdm30.rules = {
      ['SBC','1000','shelter_belt','no'],
      ['SBC','1001','shelter_belt','yes'],
 
-     // SBT - Substation Type: Not a good translation.
+     // SBT - Substation Type
      // ['SBT','-999999',undefined,undefined], // No Information
      ['SBT','1','substation','switched'], // Switched Substation
      ['SBT','2','substation','transformer'], // Transformer Substation
      ['SBT','3','substation','converter'], // Converter Substation
      ['SBT','999','substation','other'], // Other
 
+     // SBT2 - Substation Type [2]
+     // ['SBT2','-999999',undefined,undefined], // No Information
+     ['SBT2','1','raw:SBT2','switched_substation'], // Switched Substation
+     ['SBT2','2','raw:SBT2','transformer_substation'], // Transformer Substation
+     ['SBT2','3','raw:SBT2','converter_substation'], // Converter Substation
+     ['SBT2','999','raw:SBT2','other'], // Other
+
+     // SBT3 - Substation Type [3]
+     // ['SBT3','-999999',undefined,undefined], // No Information
+     ['SBT3','1','raw:SBT3','switched_substation'], // Switched Substation
+     ['SBT3','2','raw:SBT3','transformer_substation'], // Transformer Substation
+     ['SBT3','3','raw:SBT3','converter_substation'], // Converter Substation
+     ['SBT3','999','raw:SBT3','other'], // Other
+
+     // SCOG - Sample Collector Organization
+     // ['SCOG','-999999',undefined,undefined], // No Information
+     ['SCOG','1','raw:SCOG','government_official'], // Government Official
+     ['SCOG','2','raw:SCOG','non_government'], // Non Government
+     ['SCOG','3','raw:SCOG','military'], // Military
+     ['SCOG','4','raw:SCOG','educational'], // Educational
+     ['SCOG','998','raw:SCOG','not_applicable'], // Not Applicable
+     ['SCOG','999','raw:SCOG','other'], // Other
+
      // SDCC - Soil Depth <interval closure>
      ['SDCC','2','soil:depth:closure','open_interval'], // Open Interval
-     ['SDCC','3','soil:depth:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['SDCC','4','soil:depth:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['SDCC','3','soil:depth:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['SDCC','4','soil:depth:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['SDCC','5','soil:depth:closure','closed_interval'], // Closed Interval
      ['SDCC','6','soil:depth:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['SDCC','7','soil:depth:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -2675,10 +5724,10 @@ ggdm30.rules = {
      ['SDQ','1000','structurally_dissected','no'],
      ['SDQ','1001','structurally_dissected','yes'],
 
-     // SDSC - Stem Diameter (interval closure)
+     // SDSC - Stem Diameter <interval closure>
      ['SDSC','2','tree:diameter:closure','open_interval'], // Open Interval
-     ['SDSC','3','tree:diameter:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['SDSC','4','tree:diameter:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['SDSC','3','tree:diameter:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['SDSC','4','tree:diameter:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['SDSC','5','tree:diameter:closure','closed_interval'], // Closed Interval
      ['SDSC','6','tree:diameter:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['SDSC','7','tree:diameter:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -2702,20 +5751,35 @@ ggdm30.rules = {
      ['SEP','1000','is_divided','no'],
      ['SEP','1001','is_divided','yes'],
 
-     // SGCC - Surface Slope (interval closure)
+     // SERP - Surface Permanence
+     // ['SERP','-999999',undefined,undefined], // No Information
+     ['SERP','6','raw:SERP','natural'], // Natural
+     ['SERP','7','raw:SERP','permanent'], // Permanent
+     ['SERP','8','raw:SERP','temporary'], // Temporary
+
+     // SGCC - Surface Slope <interval closure>
      ['SGCC','2','incline:interval:closure','open_interval'], // Open Interval
-     ['SGCC','3','incline:interval:closure','greater_than_or_equal_to_less_than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['SGCC','4','incline:interval:closure','greater_than_to_less_than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['SGCC','3','incline:interval:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['SGCC','4','incline:interval:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['SGCC','5','incline:interval:closure','closed_interval'], // Closed Interval
-     ['SGCC','6','incline:interval:closure','greater_than_semi_interval'], // Greater-than Semi-interval
-     ['SGCC','7','incline:interval:closure','greater_than_or_equal_semi_interval'], // Greater-than or Equal Semi-interval
-     ['SGCC','8','incline:interval:closure','less_than_semi_interval'], // Less-than Semi-interval
-     ['SGCC','9','incline:interval:closure','less_than_or_equal_semi_interval'], // Less-than or Equal Semi-interval
+     ['SGCC','6','incline:interval:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['SGCC','7','incline:interval:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['SGCC','8','incline:interval:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['SGCC','9','incline:interval:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
      // SHD - Shoreline Delineated
      // ['SHD','-999999',undefined,undefined], // No Information
      ['SHD','1000','shoreline:delineated','no'],
      ['SHD','1001','shoreline:delineated','yes'],
+
+     // SHO - Coast Type
+     // ['SHO','-999999',undefined,undefined], // No Information
+     ['SHO','1','raw:SHO','hillocks'], // Hillocks
+     ['SHO','2','raw:SHO','flat_coast'], // Flat Coast
+     ['SHO','7','raw:SHO','glacier'], // Glacier
+     ['SHO','8','raw:SHO','ice_coast'], // Ice Coast
+     ['SHO','9','raw:SHO','steep_coast'], // Steep Coast
+     ['SHO','999','raw:SHO','other'], // Other
 
      // SHT - Shipping Container Type
      // ['SHT','-999999',undefined,undefined], // No Information
@@ -2738,8 +5802,8 @@ ggdm30.rules = {
      ['SLR','3','leisure','slipway'], // Slipway
      ['SLR','999','shoreline:ramp','other'], // Other
 
-     // ['SLT','-999999',undefined,undefined], // No Information
      // SLT - Shoreline Type
+     // ['SLT','-999999',undefined,undefined], // No Information
      ['SLT','6','shoreline:type','mangrove'], // Mangrove
      ['SLT','8','shoreline:type','marshy'], // Marshy
      ['SLT','10','shoreline:type','stony'], // Stony
@@ -2753,6 +5817,16 @@ ggdm30.rules = {
      // ['SLT','998','shoreline:type','not_applicable'], // Not Applicable
      ['SLT','998',undefined,undefined], // Not Applicable
      ['SLT','999','shoreline:type','other'], // Other
+
+     // SNDC - Snow or Ice Depth <interval closure>
+     ['SNDC','2','raw:SNDC','open_interval'], // Open Interval
+     ['SNDC','3','raw:SNDC','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['SNDC','4','raw:SNDC','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['SNDC','5','raw:SNDC','closed_interval'], // Closed Interval
+     ['SNDC','6','raw:SNDC','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['SNDC','7','raw:SNDC','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['SNDC','8','raw:SNDC','less-than_semi-interval'], // Less-than Semi-interval
+     ['SNDC','9','raw:SNDC','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
      // SPT - Supported
      // ['SPT','-999999',undefined,undefined], // No Information
@@ -2820,7 +5894,7 @@ ggdm30.rules = {
      ['SRE','9','traffic_restriction','steep_grades'], // Steep Grades
      ['SRE','999','traffic_restriction','other'], // Other
 
-     // SRL - Location Referenced to Shoreline -- deconflicted with LOC
+     // SRL - Location Referenced to Shoreline
      // ['SRL','-999999',undefined,undefined], // No Information
      ['SRL','1','location','offshore'], // Offshore
      ['SRL','2','location','inland'], // Inland
@@ -2883,13 +5957,183 @@ ggdm30.rules = {
      ['SSR','64','roof:shape','pitched_with_clerestory'], // Pitched with Clerestory
      ['SSR','999','roof:shape','other'], // Other
 
-     // STL - Nomadic Seasonal Location -- Nothing in OSM is close to this
+     // SSR2 - Roof Shape [2]
+     // ['SSR2','-999999',undefined,undefined], // No Information
+     ['SSR2','6','raw:SSR2','conical'], // Conical
+     ['SSR2','7','raw:SSR2','pyramidal'], // Pyramidal
+     ['SSR2','38','raw:SSR2','semi-cylindrical'], // Semi-cylindrical
+     ['SSR2','40','raw:SSR2','domed'], // Domed
+     ['SSR2','41','raw:SSR2','flat'], // Flat
+     ['SSR2','42','raw:SSR2','pitched'], // Pitched
+     ['SSR2','47','raw:SSR2','sawtoothed'], // Sawtoothed
+     ['SSR2','50','raw:SSR2','with_clerestory'], // With Clerestory
+     ['SSR2','55','raw:SSR2','flat_with_clerestory'], // Flat with Clerestory
+     ['SSR2','64','raw:SSR2','pitched_with_clerestory'], // Pitched with Clerestory
+     ['SSR2','999','raw:SSR2','other'], // Other
+
+     // SSR3 - Roof Shape [3]
+     // ['SSR3','-999999',undefined,undefined], // No Information
+     ['SSR3','6','raw:SSR3','conical'], // Conical
+     ['SSR3','7','raw:SSR3','pyramidal'], // Pyramidal
+     ['SSR3','38','raw:SSR3','semi-cylindrical'], // Semi-cylindrical
+     ['SSR3','40','raw:SSR3','domed'], // Domed
+     ['SSR3','41','raw:SSR3','flat'], // Flat
+     ['SSR3','42','raw:SSR3','pitched'], // Pitched
+     ['SSR3','47','raw:SSR3','sawtoothed'], // Sawtoothed
+     ['SSR3','50','raw:SSR3','with_clerestory'], // With Clerestory
+     ['SSR3','55','raw:SSR3','flat_with_clerestory'], // Flat with Clerestory
+     ['SSR3','64','raw:SSR3','pitched_with_clerestory'], // Pitched with Clerestory
+     ['SSR3','999','raw:SSR3','other'], // Other
+
+     // STA - Maritime Station Type
+     // ['STA','-999999',undefined,undefined], // No Information
+     ['STA','1','raw:STA','coast_guard_station'], // Coast Guard Station
+     ['STA','2','raw:STA','fireboat_station'], // Fireboat Station
+     ['STA','3','raw:STA','water-police_station'], // Water-police Station
+     ['STA','4','raw:STA','ice_signal_station'], // Ice Signal Station
+     ['STA','5','raw:STA','rescue_station'], // Rescue Station
+     ['STA','6','raw:STA','port_control_station'], // Port Control Station
+     ['STA','11','raw:STA','pilot_station'], // Pilot Station
+     ['STA','13','raw:STA','signal_station'], // Signal Station
+     ['STA','14','raw:STA','signal_mast'], // Signal Mast
+     ['STA','15','raw:STA','storm_signal_station'], // Storm Signal Station
+     ['STA','17','raw:STA','tide_station'], // Tide Station
+     ['STA','18','raw:STA','time_ball_station'], // Time Ball Station
+     ['STA','19','raw:STA','time_signal_station'], // Time Signal Station
+     ['STA','20','raw:STA','unmanned_oceanographic_station'], // Unmanned Oceanographic Station
+     ['STA','21','raw:STA','weather_signal_station'], // Weather Signal Station
+     ['STA','22','raw:STA','fog_signal'], // Fog Signal
+     ['STA','27','raw:STA','tidal_stream_station'], // Tidal Stream Station
+     ['STA','28','raw:STA','traffic_signal_station'], // Traffic Signal Station
+     ['STA','29','raw:STA','bridge_signal_station'], // Bridge Signal Station
+     ['STA','30','raw:STA','lock_signal_station'], // Lock Signal Station
+     ['STA','32','raw:STA','international_port_signals_station'], // International Port Signals Station
+     ['STA','33','raw:STA','military_practice_signal_station'], // Military Practice Signal Station
+     ['STA','35','raw:STA','warning_signal_station'], // Warning Signal Station
+     ['STA','36','raw:STA','radar_surveillance_station'], // Radar Surveillance Station
+     ['STA','37','raw:STA','pilot_lookout_station'], // Pilot Lookout Station
+     ['STA','48','raw:STA','semaphore_station'], // Semaphore Station
+     ['STA','49','raw:STA','berthing_control_station'], // Berthing Control Station
+     ['STA','50','raw:STA','cable_warning_station'], // Cable Warning Station
+     ['STA','51','raw:STA','clock_station'], // Clock Station
+     ['STA','52','raw:STA','danger_warning_station'], // Danger Warning Station
+     ['STA','53','raw:STA','distress_warning_station'], // Distress Warning Station
+     ['STA','54','raw:STA','diving_warning_station'], // Diving Warning Station
+     ['STA','55','raw:STA','dock_control_station'], // Dock Control Station
+     ['STA','56','raw:STA','dredging_operations_station'], // Dredging Operations Station
+     ['STA','57','raw:STA','flood_barrage_control_station'], // Flood Barrage Control Station
+     ['STA','58','raw:STA','maritime_obstruction_warning_station'], // Maritime Obstruction Warning Station
+     ['STA','59','raw:STA','port_entry_and_departure_control_station'], // Port Entry and Departure Control Station
+     ['STA','60','raw:STA','tide_scale_station'], // Tide Scale Station
+     ['STA','999','raw:STA','other'], // Other
+
+     // STA2 - Maritime Station Type [2]
+     // ['STA2','-999999',undefined,undefined], // No Information
+     ['STA2','1','raw:STA2','coast_guard_station'], // Coast Guard Station
+     ['STA2','2','raw:STA2','fireboat_station'], // Fireboat Station
+     ['STA2','3','raw:STA2','water-police_station'], // Water-police Station
+     ['STA2','4','raw:STA2','ice_signal_station'], // Ice Signal Station
+     ['STA2','5','raw:STA2','rescue_station'], // Rescue Station
+     ['STA2','6','raw:STA2','port_control_station'], // Port Control Station
+     ['STA2','11','raw:STA2','pilot_station'], // Pilot Station
+     ['STA2','13','raw:STA2','signal_station'], // Signal Station
+     ['STA2','14','raw:STA2','signal_mast'], // Signal Mast
+     ['STA2','15','raw:STA2','storm_signal_station'], // Storm Signal Station
+     ['STA2','17','raw:STA2','tide_station'], // Tide Station
+     ['STA2','18','raw:STA2','time_ball_station'], // Time Ball Station
+     ['STA2','19','raw:STA2','time_signal_station'], // Time Signal Station
+     ['STA2','20','raw:STA2','unmanned_oceanographic_station'], // Unmanned Oceanographic Station
+     ['STA2','21','raw:STA2','weather_signal_station'], // Weather Signal Station
+     ['STA2','22','raw:STA2','fog_signal'], // Fog Signal
+     ['STA2','27','raw:STA2','tidal_stream_station'], // Tidal Stream Station
+     ['STA2','28','raw:STA2','traffic_signal_station'], // Traffic Signal Station
+     ['STA2','29','raw:STA2','bridge_signal_station'], // Bridge Signal Station
+     ['STA2','30','raw:STA2','lock_signal_station'], // Lock Signal Station
+     ['STA2','32','raw:STA2','international_port_signals_station'], // International Port Signals Station
+     ['STA2','33','raw:STA2','military_practice_signal_station'], // Military Practice Signal Station
+     ['STA2','35','raw:STA2','warning_signal_station'], // Warning Signal Station
+     ['STA2','36','raw:STA2','radar_surveillance_station'], // Radar Surveillance Station
+     ['STA2','37','raw:STA2','pilot_lookout_station'], // Pilot Lookout Station
+     ['STA2','48','raw:STA2','semaphore_station'], // Semaphore Station
+     ['STA2','49','raw:STA2','berthing_control_station'], // Berthing Control Station
+     ['STA2','50','raw:STA2','cable_warning_station'], // Cable Warning Station
+     ['STA2','51','raw:STA2','clock_station'], // Clock Station
+     ['STA2','52','raw:STA2','danger_warning_station'], // Danger Warning Station
+     ['STA2','53','raw:STA2','distress_warning_station'], // Distress Warning Station
+     ['STA2','54','raw:STA2','diving_warning_station'], // Diving Warning Station
+     ['STA2','55','raw:STA2','dock_control_station'], // Dock Control Station
+     ['STA2','56','raw:STA2','dredging_operations_station'], // Dredging Operations Station
+     ['STA2','57','raw:STA2','flood_barrage_control_station'], // Flood Barrage Control Station
+     ['STA2','58','raw:STA2','maritime_obstruction_warning_station'], // Maritime Obstruction Warning Station
+     ['STA2','59','raw:STA2','port_entry_and_departure_control_station'], // Port Entry and Departure Control Station
+     ['STA2','60','raw:STA2','tide_scale_station'], // Tide Scale Station
+     ['STA2','999','raw:STA2','other'], // Other
+
+     // STA3 - Maritime Station Type [3]
+     // ['STA3','-999999',undefined,undefined], // No Information
+     ['STA3','1','raw:STA3','coast_guard_station'], // Coast Guard Station
+     ['STA3','2','raw:STA3','fireboat_station'], // Fireboat Station
+     ['STA3','3','raw:STA3','water-police_station'], // Water-police Station
+     ['STA3','4','raw:STA3','ice_signal_station'], // Ice Signal Station
+     ['STA3','5','raw:STA3','rescue_station'], // Rescue Station
+     ['STA3','6','raw:STA3','port_control_station'], // Port Control Station
+     ['STA3','11','raw:STA3','pilot_station'], // Pilot Station
+     ['STA3','13','raw:STA3','signal_station'], // Signal Station
+     ['STA3','14','raw:STA3','signal_mast'], // Signal Mast
+     ['STA3','15','raw:STA3','storm_signal_station'], // Storm Signal Station
+     ['STA3','17','raw:STA3','tide_station'], // Tide Station
+     ['STA3','18','raw:STA3','time_ball_station'], // Time Ball Station
+     ['STA3','19','raw:STA3','time_signal_station'], // Time Signal Station
+     ['STA3','20','raw:STA3','unmanned_oceanographic_station'], // Unmanned Oceanographic Station
+     ['STA3','21','raw:STA3','weather_signal_station'], // Weather Signal Station
+     ['STA3','22','raw:STA3','fog_signal'], // Fog Signal
+     ['STA3','27','raw:STA3','tidal_stream_station'], // Tidal Stream Station
+     ['STA3','28','raw:STA3','traffic_signal_station'], // Traffic Signal Station
+     ['STA3','29','raw:STA3','bridge_signal_station'], // Bridge Signal Station
+     ['STA3','30','raw:STA3','lock_signal_station'], // Lock Signal Station
+     ['STA3','32','raw:STA3','international_port_signals_station'], // International Port Signals Station
+     ['STA3','33','raw:STA3','military_practice_signal_station'], // Military Practice Signal Station
+     ['STA3','35','raw:STA3','warning_signal_station'], // Warning Signal Station
+     ['STA3','36','raw:STA3','radar_surveillance_station'], // Radar Surveillance Station
+     ['STA3','37','raw:STA3','pilot_lookout_station'], // Pilot Lookout Station
+     ['STA3','48','raw:STA3','semaphore_station'], // Semaphore Station
+     ['STA3','49','raw:STA3','berthing_control_station'], // Berthing Control Station
+     ['STA3','50','raw:STA3','cable_warning_station'], // Cable Warning Station
+     ['STA3','51','raw:STA3','clock_station'], // Clock Station
+     ['STA3','52','raw:STA3','danger_warning_station'], // Danger Warning Station
+     ['STA3','53','raw:STA3','distress_warning_station'], // Distress Warning Station
+     ['STA3','54','raw:STA3','diving_warning_station'], // Diving Warning Station
+     ['STA3','55','raw:STA3','dock_control_station'], // Dock Control Station
+     ['STA3','56','raw:STA3','dredging_operations_station'], // Dredging Operations Station
+     ['STA3','57','raw:STA3','flood_barrage_control_station'], // Flood Barrage Control Station
+     ['STA3','58','raw:STA3','maritime_obstruction_warning_station'], // Maritime Obstruction Warning Station
+     ['STA3','59','raw:STA3','port_entry_and_departure_control_station'], // Port Entry and Departure Control Station
+     ['STA3','60','raw:STA3','tide_scale_station'], // Tide Scale Station
+     ['STA3','999','raw:STA3','other'], // Other
+
+     // STL - Nomadic Seasonal Location
      // ['STL','-999999',undefined,undefined], // No Information
      ['STL','1','seasonal_location','winter'], // Winter
      ['STL','2','seasonal_location','summer'], // Summer
      ['STL','3','seasonal_location','spring'], // Spring
      ['STL','4','seasonal_location','autumn'], // Autumn
      ['STL','999','seasonal_location','other'], // Other
+
+     // STL2 - Nomadic Seasonal Location [2]
+     // ['STL2','-999999',undefined,undefined], // No Information
+     ['STL2','1','raw:STL2','winter'], // Winter
+     ['STL2','2','raw:STL2','summer'], // Summer
+     ['STL2','3','raw:STL2','spring'], // Spring
+     ['STL2','4','raw:STL2','autumn'], // Autumn
+     ['STL2','999','raw:STL2','other'], // Other
+
+     // STL3 - Nomadic Seasonal Location [3]
+     // ['STL3','-999999',undefined,undefined], // No Information
+     ['STL3','1','raw:STL3','winter'], // Winter
+     ['STL3','2','raw:STL3','summer'], // Summer
+     ['STL3','3','raw:STL3','spring'], // Spring
+     ['STL3','4','raw:STL3','autumn'], // Autumn
+     ['STL3','999','raw:STL3','other'], // Other
 
      // STP - Soil Type
      // ['STP','-999999',undefined,undefined], // No Information
@@ -3014,31 +6258,72 @@ ggdm30.rules = {
      ['TRS','11','transport:type','portage'], // Portage
      ['TRS','12','transport:type','railway'], // Railway
      ['TRS','13','transport:type','road'], // Road
-     // ['TRS','14','transport:type','road_and_railway'],
-     ['TRS','15','transport:type','truck'], // Truck
      ['TRS','16','transport:type','underground_railway'], // Underground Railway
      ['TRS','17','transport:type','inland_waterway'], // Inland Waterway
      ['TRS','18','transport:type','pack-road'], // Pack-road
      ['TRS','20','transport:type','taxiway'], // Taxiway
-     ['TRS','21','transport:type','pipeline_maintenance'], // Pipeline Maintenance
-     ['TRS','22','transport:type','powerline_maintenance'], // Power Line Maintenance
      ['TRS','23','transport:type','drove'], // Drove
      ['TRS','25','transport:type','runway'], // Runway
-     ['TRS','30','transport:type','cableway'], // Cableway
      ['TRS','999','transport:type','other'], // Other
 
-     // TSCC - Tree Spacing (interval closure)
+     // TRS2 - Transportation System Type [2]
+     // ['TRS2','-999999',undefined,undefined], // No Information
+     ['TRS2','1','raw:TRS2','aeronautical'], // Aeronautical
+     ['TRS2','2','raw:TRS2','aqueduct'], // Aqueduct
+     ['TRS2','3','raw:TRS2','automotive'], // Automotive
+     ['TRS2','4','raw:TRS2','bus'], // Bus
+     ['TRS2','5','raw:TRS2','canal'], // Canal
+     ['TRS2','6','raw:TRS2','caravan_route'], // Caravan Route
+     ['TRS2','7','raw:TRS2','maritime'], // Maritime
+     ['TRS2','8','raw:TRS2','no_transportation_system'], // No Transportation System
+     ['TRS2','9','raw:TRS2','pedestrian'], // Pedestrian
+     ['TRS2','10','raw:TRS2','pipeline'], // Pipeline
+     ['TRS2','11','raw:TRS2','portage'], // Portage
+     ['TRS2','12','raw:TRS2','railway'], // Railway
+     ['TRS2','13','raw:TRS2','road'], // Road
+     ['TRS2','16','raw:TRS2','underground_railway'], // Underground Railway
+     ['TRS2','17','raw:TRS2','inland_waterway'], // Inland Waterway
+     ['TRS2','18','raw:TRS2','pack-road'], // Pack-road
+     ['TRS2','20','raw:TRS2','taxiway'], // Taxiway
+     ['TRS2','23','raw:TRS2','drove'], // Drove
+     ['TRS2','25','raw:TRS2','runway'], // Runway
+     ['TRS2','999','raw:TRS2','other'], // Other
+
+     // TRS3 - Transportation System Type [3]
+     // ['TRS3','-999999',undefined,undefined], // No Information
+     ['TRS3','1','raw:TRS3','aeronautical'], // Aeronautical
+     ['TRS3','2','raw:TRS3','aqueduct'], // Aqueduct
+     ['TRS3','3','raw:TRS3','automotive'], // Automotive
+     ['TRS3','4','raw:TRS3','bus'], // Bus
+     ['TRS3','5','raw:TRS3','canal'], // Canal
+     ['TRS3','6','raw:TRS3','caravan_route'], // Caravan Route
+     ['TRS3','7','raw:TRS3','maritime'], // Maritime
+     ['TRS3','8','raw:TRS3','no_transportation_system'], // No Transportation System
+     ['TRS3','9','raw:TRS3','pedestrian'], // Pedestrian
+     ['TRS3','10','raw:TRS3','pipeline'], // Pipeline
+     ['TRS3','11','raw:TRS3','portage'], // Portage
+     ['TRS3','12','raw:TRS3','railway'], // Railway
+     ['TRS3','13','raw:TRS3','road'], // Road
+     ['TRS3','16','raw:TRS3','underground_railway'], // Underground Railway
+     ['TRS3','17','raw:TRS3','inland_waterway'], // Inland Waterway
+     ['TRS3','18','raw:TRS3','pack-road'], // Pack-road
+     ['TRS3','20','raw:TRS3','taxiway'], // Taxiway
+     ['TRS3','23','raw:TRS3','drove'], // Drove
+     ['TRS3','25','raw:TRS3','runway'], // Runway
+     ['TRS3','999','raw:TRS3','other'], // Other
+
+     // TSCC - Tree Spacing <interval closure>
      ['TSCC','2','tree:spacing:closure','open_interval'], // Open Interval
-     ['TSCC','3','tree:spacing:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['TSCC','4','tree:spacing:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['TSCC','3','tree:spacing:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['TSCC','4','tree:spacing:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['TSCC','5','tree:spacing:closure','closed_interval'], // Closed Interval
      ['TSCC','6','tree:spacing:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['TSCC','7','tree:spacing:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
      ['TSCC','8','tree:spacing:closure','less-than_semi-interval'], // Less-than Semi-interval
      ['TSCC','9','tree:spacing:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
-     // TSM - Terrain Surface Material - Added to ZI016_ROC list
-     ['TSM','-999999',undefined,undefined], // No Information
+     // TSM - Terrain Surface Material
+     // ['TSM','-999999',undefined,undefined], // No Information
      ['TSM','1','desert_surface','asphalt'], // Asphalt
      ['TSM','2','desert_surface','bedrock'], // Bedrock
      ['TSM','3','desert_surface','boulders'], // Boulders
@@ -3055,12 +6340,144 @@ ggdm30.rules = {
      ['TSM','14','desert_surface','soil'], // Soil
      ['TSM','999','desert_surface','other'], // Other
 
+     // TSM2 - Terrain Surface Material [2]
+     // ['TSM2','-999999',undefined,undefined], // No Information
+     ['TSM2','1','raw:TSM2','asphalt'], // Asphalt
+     ['TSM2','2','raw:TSM2','bedrock'], // Bedrock
+     ['TSM2','3','raw:TSM2','boulders'], // Boulders
+     ['TSM2','4','raw:TSM2','concrete'], // Concrete
+     ['TSM2','5','raw:TSM2','evaporite'], // Evaporite
+     ['TSM2','6','raw:TSM2','frozen_water'], // Frozen Water
+     ['TSM2','7','raw:TSM2','gravel'], // Gravel
+     ['TSM2','8','raw:TSM2','lava_flow'], // Lava Flow
+     ['TSM2','9','raw:TSM2','loess'], // Loess
+     ['TSM2','10','raw:TSM2','mud'], // Mud
+     ['TSM2','11','raw:TSM2','paved'], // Paved
+     ['TSM2','12','raw:TSM2','rocks'], // Rocks
+     ['TSM2','13','raw:TSM2','sand'], // Sand
+     ['TSM2','14','raw:TSM2','soil'], // Soil
+     ['TSM2','999','raw:TSM2','other'], // Other
+
+     // TSM3 - Terrain Surface Material [3]
+     // ['TSM3','-999999',undefined,undefined], // No Information
+     ['TSM3','1','raw:TSM3','asphalt'], // Asphalt
+     ['TSM3','2','raw:TSM3','bedrock'], // Bedrock
+     ['TSM3','3','raw:TSM3','boulders'], // Boulders
+     ['TSM3','4','raw:TSM3','concrete'], // Concrete
+     ['TSM3','5','raw:TSM3','evaporite'], // Evaporite
+     ['TSM3','6','raw:TSM3','frozen_water'], // Frozen Water
+     ['TSM3','7','raw:TSM3','gravel'], // Gravel
+     ['TSM3','8','raw:TSM3','lava_flow'], // Lava Flow
+     ['TSM3','9','raw:TSM3','loess'], // Loess
+     ['TSM3','10','raw:TSM3','mud'], // Mud
+     ['TSM3','11','raw:TSM3','paved'], // Paved
+     ['TSM3','12','raw:TSM3','rocks'], // Rocks
+     ['TSM3','13','raw:TSM3','sand'], // Sand
+     ['TSM3','14','raw:TSM3','soil'], // Soil
+     ['TSM3','999','raw:TSM3','other'], // Other
+
+     // TSP - Maritime Traffic Separation Scheme Component
+     // ['TSP','-999999',undefined,undefined], // No Information
+     ['TSP','2','raw:TSP','boundary'], // Boundary
+     ['TSP','3','raw:TSP','separation_zone'], // Separation Zone
+     ['TSP','4','raw:TSP','line'], // Line
+     ['TSP','5','raw:TSP','point'], // Point
+     ['TSP','6','raw:TSP','inbound_lane'], // Inbound Lane
+     ['TSP','7','raw:TSP','outbound_lane'], // Outbound Lane
+     ['TSP','8','raw:TSP','lane_part'], // Lane Part
+     ['TSP','9','raw:TSP','roundabout'], // Roundabout
+     ['TSP','10','raw:TSP','crossing'], // Crossing
+     ['TSP','11','raw:TSP','precautionary_area'], // Precautionary Area
+     ['TSP','12','raw:TSP','inshore_traffic_zone'], // Inshore Traffic Zone
+     ['TSP','999','raw:TSP','other'], // Other
+
+     // TSSM - Terrain Subsurface Material
+     // ['TSSM','-999999',undefined,undefined], // No Information
+     ['TSSM','1','raw:TSSM','basalt'], // Basalt
+     ['TSSM','2','raw:TSSM','boulders'], // Boulders
+     ['TSSM','3','raw:TSSM','clay'], // Clay
+     ['TSSM','4','raw:TSSM','conglomerate'], // Conglomerate
+     ['TSSM','5','raw:TSSM','dolomite'], // Dolomite
+     ['TSSM','6','raw:TSSM','granite'], // Granite
+     ['TSSM','7','raw:TSSM','gravel'], // Gravel
+     ['TSSM','8','raw:TSSM','igneous_rock'], // Igneous Rock
+     ['TSSM','9','raw:TSSM','karst'], // Karst
+     ['TSSM','10','raw:TSSM','limestone'], // Limestone
+     ['TSSM','11','raw:TSSM','marl'], // Marl
+     ['TSSM','12','raw:TSSM','metamorphic_rock'], // Metamorphic Rock
+     ['TSSM','13','raw:TSSM','mud'], // Mud
+     ['TSSM','14','raw:TSSM','sand'], // Sand
+     ['TSSM','15','raw:TSSM','schist'], // Schist
+     ['TSSM','16','raw:TSSM','unconsolidated'], // Unconsolidated
+     ['TSSM','17','raw:TSSM','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
+     ['TSSM','18','raw:TSSM','volcanic_rock'], // Volcanic Rock
+     ['TSSM','19','raw:TSSM','sandstone'], // Sandstone
+     ['TSSM','20','raw:TSSM','shale'], // Shale
+     ['TSSM','999','raw:TSSM','other'], // Other
+
+     // TSSM2 - Terrain Subsurface Material [2]
+     // ['TSSM2','-999999',undefined,undefined], // No Information
+     ['TSSM2','1','raw:TSSM2','basalt'], // Basalt
+     ['TSSM2','2','raw:TSSM2','boulders'], // Boulders
+     ['TSSM2','3','raw:TSSM2','clay'], // Clay
+     ['TSSM2','4','raw:TSSM2','conglomerate'], // Conglomerate
+     ['TSSM2','5','raw:TSSM2','dolomite'], // Dolomite
+     ['TSSM2','6','raw:TSSM2','granite'], // Granite
+     ['TSSM2','7','raw:TSSM2','gravel'], // Gravel
+     ['TSSM2','8','raw:TSSM2','igneous_rock'], // Igneous Rock
+     ['TSSM2','9','raw:TSSM2','karst'], // Karst
+     ['TSSM2','10','raw:TSSM2','limestone'], // Limestone
+     ['TSSM2','11','raw:TSSM2','marl'], // Marl
+     ['TSSM2','12','raw:TSSM2','metamorphic_rock'], // Metamorphic Rock
+     ['TSSM2','13','raw:TSSM2','mud'], // Mud
+     ['TSSM2','14','raw:TSSM2','sand'], // Sand
+     ['TSSM2','15','raw:TSSM2','schist'], // Schist
+     ['TSSM2','16','raw:TSSM2','unconsolidated'], // Unconsolidated
+     ['TSSM2','17','raw:TSSM2','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
+     ['TSSM2','18','raw:TSSM2','volcanic_rock'], // Volcanic Rock
+     ['TSSM2','19','raw:TSSM2','sandstone'], // Sandstone
+     ['TSSM2','20','raw:TSSM2','shale'], // Shale
+     ['TSSM2','999','raw:TSSM2','other'], // Other
+
+     // TSSM3 - Terrain Subsurface Material [3]
+     // ['TSSM3','-999999',undefined,undefined], // No Information
+     ['TSSM3','1','raw:TSSM3','basalt'], // Basalt
+     ['TSSM3','2','raw:TSSM3','boulders'], // Boulders
+     ['TSSM3','3','raw:TSSM3','clay'], // Clay
+     ['TSSM3','4','raw:TSSM3','conglomerate'], // Conglomerate
+     ['TSSM3','5','raw:TSSM3','dolomite'], // Dolomite
+     ['TSSM3','6','raw:TSSM3','granite'], // Granite
+     ['TSSM3','7','raw:TSSM3','gravel'], // Gravel
+     ['TSSM3','8','raw:TSSM3','igneous_rock'], // Igneous Rock
+     ['TSSM3','9','raw:TSSM3','karst'], // Karst
+     ['TSSM3','10','raw:TSSM3','limestone'], // Limestone
+     ['TSSM3','11','raw:TSSM3','marl'], // Marl
+     ['TSSM3','12','raw:TSSM3','metamorphic_rock'], // Metamorphic Rock
+     ['TSSM3','13','raw:TSSM3','mud'], // Mud
+     ['TSSM3','14','raw:TSSM3','sand'], // Sand
+     ['TSSM3','15','raw:TSSM3','schist'], // Schist
+     ['TSSM3','16','raw:TSSM3','unconsolidated'], // Unconsolidated
+     ['TSSM3','17','raw:TSSM3','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
+     ['TSSM3','18','raw:TSSM3','volcanic_rock'], // Volcanic Rock
+     ['TSSM3','19','raw:TSSM3','sandstone'], // Sandstone
+     ['TSSM3','20','raw:TSSM3','shale'], // Shale
+     ['TSSM3','999','raw:TSSM3','other'], // Other
+
      // TST - Cable Suspended Shape
      // ['TST','-999999',undefined,undefined], // No Information
      ['TST','1','cable:shape','symmetric_catenary'], // Symmetric Catenary
      ['TST','2','cable:shape','mountain_catenary'], // Mountain Catenary
      ['TST','3','cable:shape','overwater_catenary'], // Overwater Catenary
      ['TST','999','cable:shape','other'], // Other
+
+     // TSTE - Water Taste
+     // ['TSTE','-999999',undefined,undefined], // No Information
+     ['TSTE','1','raw:TSTE','salty_or_brackish'], // Salty or brackish
+     ['TSTE','2','raw:TSTE','alkali_or_soapy'], // Alkali or Soapy
+     ['TSTE','3','raw:TSTE','metallic'], // Metallic
+     ['TSTE','4','raw:TSTE','chemical'], // Chemical
+     ['TSTE','998','raw:TSTE','not_applicable'], // Not Applicable
+     ['TSTE','999','raw:TSTE','other'], // Other
 
      // TTC - Tower Type
      // ['TTC','-999999',undefined,undefined], // No Information
@@ -3074,6 +6491,30 @@ ggdm30.rules = {
      ['TTC','24','tower:type','solar_power'], // Solar Power Tower
      ['TTC','999','tower:type','other'], // Other
 
+     // TTC2 - Tower Type [2]
+     // ['TTC2','-999999',undefined,undefined], // No Information
+     ['TTC2','2','raw:TTC2','observation_tower'], // Observation Tower
+     ['TTC2','10','raw:TTC2','lookout_tower'], // Lookout Tower
+     ['TTC2','12','raw:TTC2','fire_tower'], // Fire Tower
+     ['TTC2','20','raw:TTC2','telecommunication_tower'], // Telecommunication Tower
+     ['TTC2','21','raw:TTC2','guard_tower'], // Guard Tower
+     ['TTC2','22','raw:TTC2','industrial_tower'], // Industrial Tower
+     ['TTC2','23','raw:TTC2','drop_tower'], // Drop Tower
+     ['TTC2','24','raw:TTC2','solar_power_tower'], // Solar Power Tower
+     ['TTC2','999','raw:TTC2','other'], // Other
+
+     // TTC3 - Tower Type [3]
+     // ['TTC3','-999999',undefined,undefined], // No Information
+     ['TTC3','2','raw:TTC3','observation_tower'], // Observation Tower
+     ['TTC3','10','raw:TTC3','lookout_tower'], // Lookout Tower
+     ['TTC3','12','raw:TTC3','fire_tower'], // Fire Tower
+     ['TTC3','20','raw:TTC3','telecommunication_tower'], // Telecommunication Tower
+     ['TTC3','21','raw:TTC3','guard_tower'], // Guard Tower
+     ['TTC3','22','raw:TTC3','industrial_tower'], // Industrial Tower
+     ['TTC3','23','raw:TTC3','drop_tower'], // Drop Tower
+     ['TTC3','24','raw:TTC3','solar_power_tower'], // Solar Power Tower
+     ['TTC3','999','raw:TTC3','other'], // Other
+
      // TTY - Tomb Type
      // ['TTY','-999999',undefined,undefined], // No Information
      ['TTY','1','tomb','cave'], // Cave
@@ -3084,6 +6525,11 @@ ggdm30.rules = {
      ['TTY','6','tomb','burial_mound'], // Burial Mound
      ['TTY','7','tomb','columbarium'], // Columbarium
      ['TTY','999','tomb','other'], // Other
+
+     // TWS - Trees Widely Scattered
+     // ['TWS','-999999',undefined,undefined], // No Information
+     ['TWS','1000','raw:TWS','no'],
+     ['TWS','1001','raw:TWS','yes'],
 
      // TXP - Taxiway Type
      // ['TXP','-999999',undefined,undefined], // No Information
@@ -3102,13 +6548,47 @@ ggdm30.rules = {
      ['TXP','13','taxiway:type','helicopter_ground_taxiway'], // Helicopter Ground Taxiway
      ['TXP','999','taxiway:type','other'], // Other
 
-     // UDQ - Underwater Delineation Quality
-     // ['UDQ','-999999',undefined,undefined], // No Information
-     ['UDQ','1','deliniation:quality','excellent'], // Excellent Delineation
-     ['UDQ','2','deliniation:quality','good'], // Good Delineation
-     ['UDQ','3','deliniation:quality','average'], // Average Delineation
-     ['UDQ','4','deliniation:quality','poor'], // Poor Delineation
-     ['UDQ','5','deliniation:quality','highly_obscured'], // Highly Obscured Delineation
+     // TZP - Topmark Shape
+     // ['TZP','-999999',undefined,undefined], // No Information
+     ['TZP','1','raw:TZP','cone_point_upward'], // Cone Point Upward
+     ['TZP','2','raw:TZP','cone_point_downward'], // Cone Point Downward
+     ['TZP','3','raw:TZP','sphere'], // Sphere
+     ['TZP','4','raw:TZP','2_spheres_one_over_other'], // 2 Spheres One over Other
+     ['TZP','5','raw:TZP','cylinder'], // Cylinder
+     ['TZP','6','raw:TZP','board'], // Board
+     ['TZP','7','raw:TZP','x-shaped'], // X-shaped
+     ['TZP','8','raw:TZP','upright_cross'], // Upright Cross
+     ['TZP','9','raw:TZP','cube_point_upward'], // Cube Point Upward
+     ['TZP','10','raw:TZP','2_cones_point_to_point'], // 2 Cones Point to Point
+     ['TZP','11','raw:TZP','2_cones_base_to_base'], // 2 Cones Base to Base
+     ['TZP','12','raw:TZP','diamond'], // Diamond
+     ['TZP','13','raw:TZP','2_cones_points_upward'], // 2 Cones Points Upward
+     ['TZP','14','raw:TZP','2_cones_points_downward'], // 2 Cones Points Downward
+     ['TZP','15','raw:TZP','besom_point_upward'], // Besom Point Upward
+     ['TZP','16','raw:TZP','besom_point_downward'], // Besom Point Downward
+     ['TZP','17','raw:TZP','flag'], // Flag
+     ['TZP','18','raw:TZP','sphere_over_diamond'], // Sphere over Diamond
+     ['TZP','19','raw:TZP','square'], // Square
+     ['TZP','20','raw:TZP','horizontal_rectangle'], // Horizontal Rectangle
+     ['TZP','21','raw:TZP','vertical_rectangle'], // Vertical Rectangle
+     ['TZP','22','raw:TZP','trapezium_short_upward'], // Trapezium Short Upward
+     ['TZP','23','raw:TZP','trapezium_short_downward'], // Trapezium Short Downward
+     ['TZP','24','raw:TZP','triangle_point_upward'], // Triangle Point Upward
+     ['TZP','25','raw:TZP','triangle_point_downward'], // Triangle Point Downward
+     ['TZP','26','raw:TZP','circle'], // Circle
+     ['TZP','27','raw:TZP','2_upright_crosses'], // 2 Upright Crosses
+     ['TZP','28','raw:TZP','t-shaped'], // T-shaped
+     ['TZP','29','raw:TZP','triangle_point_upward_over_circle'], // Triangle Point Upward over Circle
+     ['TZP','30','raw:TZP','upright_cross_over_circle'], // Upright Cross over Circle
+     ['TZP','31','raw:TZP','diamond_over_circle'], // Diamond over Circle
+     ['TZP','32','raw:TZP','circle_over_triangle_point_upward'], // Circle over Triangle Point Upward
+     ['TZP','33','raw:TZP','ball_over_cone'], // Ball over Cone
+     ['TZP','34','raw:TZP','can_over_ball'], // Can over Ball
+     ['TZP','35','raw:TZP','cone_over_ball'], // Cone over Ball
+     ['TZP','36','raw:TZP','cross_over_ball'], // Cross over Ball
+     ['TZP','37','raw:TZP','diamond_over_ball'], // Diamond over Ball
+     ['TZP','998','raw:TZP','not_applicable'], // Not Applicable
+     ['TZP','999','raw:TZP','other'], // Other
 
      // UMA - Underground Mine Access
      // ['UMA','-999999',undefined,undefined], // No Information
@@ -3135,6 +6615,50 @@ ggdm30.rules = {
      ['UTY','13','manhole','water_distribution'], // Water Distribution
      ['UTY','999','manhole','other'], // Other
 
+     // UTY2 - Accessible Utility Type [2]
+     // ['UTY2','-999999',undefined,undefined], // No Information
+     ['UTY2','1','raw:UTY2','cable_television'], // Cable Television
+     ['UTY2','2','raw:UTY2','cooling_fluid_circulation'], // Cooling Fluid Circulation
+     ['UTY2','3','raw:UTY2','digital_fibre-optic_system'], // Digital Fibre-optic System
+     ['UTY2','4','raw:UTY2','electric_power_distribution'], // Electric Power Distribution
+     ['UTY2','5','raw:UTY2','heating_fluid_circulation'], // Heating Fluid Circulation
+     ['UTY2','6','raw:UTY2','natural_gas_distribution'], // Natural Gas Distribution
+     ['UTY2','7','raw:UTY2','sewage'], // Sewage
+     ['UTY2','8','raw:UTY2','storm_sewer'], // Storm Sewer
+     ['UTY2','9','raw:UTY2','street_light'], // Street Light
+     ['UTY2','10','raw:UTY2','telegraph'], // Telegraph
+     ['UTY2','11','raw:UTY2','telephone'], // Telephone
+     ['UTY2','12','raw:UTY2','traffic_light'], // Traffic Light
+     ['UTY2','13','raw:UTY2','water_distribution'], // Water Distribution
+     ['UTY2','999','raw:UTY2','other'], // Other
+
+     // UTY3 - Accessible Utility Type [3]
+     // ['UTY3','-999999',undefined,undefined], // No Information
+     ['UTY3','1','raw:UTY3','cable_television'], // Cable Television
+     ['UTY3','2','raw:UTY3','cooling_fluid_circulation'], // Cooling Fluid Circulation
+     ['UTY3','3','raw:UTY3','digital_fibre-optic_system'], // Digital Fibre-optic System
+     ['UTY3','4','raw:UTY3','electric_power_distribution'], // Electric Power Distribution
+     ['UTY3','5','raw:UTY3','heating_fluid_circulation'], // Heating Fluid Circulation
+     ['UTY3','6','raw:UTY3','natural_gas_distribution'], // Natural Gas Distribution
+     ['UTY3','7','raw:UTY3','sewage'], // Sewage
+     ['UTY3','8','raw:UTY3','storm_sewer'], // Storm Sewer
+     ['UTY3','9','raw:UTY3','street_light'], // Street Light
+     ['UTY3','10','raw:UTY3','telegraph'], // Telegraph
+     ['UTY3','11','raw:UTY3','telephone'], // Telephone
+     ['UTY3','12','raw:UTY3','traffic_light'], // Traffic Light
+     ['UTY3','13','raw:UTY3','water_distribution'], // Water Distribution
+     ['UTY3','999','raw:UTY3','other'], // Other
+
+     // VAVC - Magnetic Variation Anomaly <interval closure>
+     ['VAVC','2','raw:VAVC','open_interval'], // Open Interval
+     ['VAVC','3','raw:VAVC','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['VAVC','4','raw:VAVC','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['VAVC','5','raw:VAVC','closed_interval'], // Closed Interval
+     ['VAVC','6','raw:VAVC','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['VAVC','7','raw:VAVC','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['VAVC','8','raw:VAVC','less-than_semi-interval'], // Less-than Semi-interval
+     ['VAVC','9','raw:VAVC','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
+
      // VCA - Void Collection Reason
      // ['VCA','-999999',undefined,undefined], // No Information
      ['VCA','1','void_collection:reason','not_requested'], // Not Requested
@@ -3150,6 +6674,38 @@ ggdm30.rules = {
      ['VCA','13','void_collection:reason','flooded'], // Flooded
      ['VCA','16','void_collection:reason','no_available_survey'], // No Available Survey
      ['VCA','999','void_collection:reason','other'], // Other
+
+     // VCA2 - Void Collection Reason [2]
+     // ['VCA2','-999999',undefined,undefined], // No Information
+     ['VCA2','1','raw:VCA2','not_requested'], // Not Requested
+     ['VCA2','2','raw:VCA2','inaccessible'], // Inaccessible
+     ['VCA2','3','raw:VCA2','no_available_imagery'], // No Available Imagery
+     ['VCA2','6','raw:VCA2','no_available_map_source'], // No Available Map Source
+     ['VCA2','7','raw:VCA2','no_suitable_imagery'], // No Suitable Imagery
+     ['VCA2','8','raw:VCA2','not_required'], // Not Required
+     ['VCA2','9','raw:VCA2','cloud_cover'], // Cloud Cover
+     ['VCA2','10','raw:VCA2','snow_cover'], // Snow Cover
+     ['VCA2','11','raw:VCA2','dark_shade'], // Dark Shade
+     ['VCA2','12','raw:VCA2','vegetation_cover'], // Vegetation Cover
+     ['VCA2','13','raw:VCA2','flooded'], // Flooded
+     ['VCA2','16','raw:VCA2','no_available_survey'], // No Available Survey
+     ['VCA2','999','raw:VCA2','other'], // Other
+
+     // VCA3 - Void Collection Reason [3]
+     // ['VCA3','-999999',undefined,undefined], // No Information
+     ['VCA3','1','raw:VCA3','not_requested'], // Not Requested
+     ['VCA3','2','raw:VCA3','inaccessible'], // Inaccessible
+     ['VCA3','3','raw:VCA3','no_available_imagery'], // No Available Imagery
+     ['VCA3','6','raw:VCA3','no_available_map_source'], // No Available Map Source
+     ['VCA3','7','raw:VCA3','no_suitable_imagery'], // No Suitable Imagery
+     ['VCA3','8','raw:VCA3','not_required'], // Not Required
+     ['VCA3','9','raw:VCA3','cloud_cover'], // Cloud Cover
+     ['VCA3','10','raw:VCA3','snow_cover'], // Snow Cover
+     ['VCA3','11','raw:VCA3','dark_shade'], // Dark Shade
+     ['VCA3','12','raw:VCA3','vegetation_cover'], // Vegetation Cover
+     ['VCA3','13','raw:VCA3','flooded'], // Flooded
+     ['VCA3','16','raw:VCA3','no_available_survey'], // No Available Survey
+     ['VCA3','999','raw:VCA3','other'], // Other
 
      // VCM - Vertical Construction Material
      // ['VCM','-999999',undefined,undefined], // No Information
@@ -3173,6 +6729,50 @@ ggdm30.rules = {
      ['VCM','18','material:vertical','wood'], // Wood
      ['VCM','999','material:vertical','other'], // Other
 
+     // VCM2 - Vertical Construction Material [2]
+     // ['VCM2','-999999',undefined,undefined], // No Information
+     ['VCM2','1','raw:VCM2','adobe_brick'], // Adobe Brick
+     ['VCM2','2','raw:VCM2','aluminium'], // Aluminium
+     ['VCM2','3','raw:VCM2','brick'], // Brick
+     ['VCM2','4','raw:VCM2','concrete'], // Concrete
+     ['VCM2','5','raw:VCM2','fibreglass'], // Fibreglass
+     ['VCM2','6','raw:VCM2','glass'], // Glass
+     ['VCM2','7','raw:VCM2','iron'], // Iron
+     ['VCM2','8','raw:VCM2','masonry'], // Masonry
+     ['VCM2','9','raw:VCM2','metal'], // Metal
+     ['VCM2','10','raw:VCM2','mud-based_construction'], // Mud-based Construction
+     ['VCM2','11','raw:VCM2','plant_material'], // Plant Material
+     ['VCM2','12','raw:VCM2','prestressed_concrete'], // Prestressed Concrete
+     ['VCM2','13','raw:VCM2','reinforced_concrete'], // Reinforced Concrete
+     ['VCM2','14','raw:VCM2','sod'], // Sod
+     ['VCM2','15','raw:VCM2','steel'], // Steel
+     ['VCM2','16','raw:VCM2','stone'], // Stone
+     ['VCM2','17','raw:VCM2','treated_timber'], // Treated Timber
+     ['VCM2','18','raw:VCM2','wood'], // Wood
+     ['VCM2','999','raw:VCM2','other'], // Other
+
+     // VCM3 - Vertical Construction Material [3]
+     // ['VCM3','-999999',undefined,undefined], // No Information
+     ['VCM3','1','raw:VCM3','adobe_brick'], // Adobe Brick
+     ['VCM3','2','raw:VCM3','aluminium'], // Aluminium
+     ['VCM3','3','raw:VCM3','brick'], // Brick
+     ['VCM3','4','raw:VCM3','concrete'], // Concrete
+     ['VCM3','5','raw:VCM3','fibreglass'], // Fibreglass
+     ['VCM3','6','raw:VCM3','glass'], // Glass
+     ['VCM3','7','raw:VCM3','iron'], // Iron
+     ['VCM3','8','raw:VCM3','masonry'], // Masonry
+     ['VCM3','9','raw:VCM3','metal'], // Metal
+     ['VCM3','10','raw:VCM3','mud-based_construction'], // Mud-based Construction
+     ['VCM3','11','raw:VCM3','plant_material'], // Plant Material
+     ['VCM3','12','raw:VCM3','prestressed_concrete'], // Prestressed Concrete
+     ['VCM3','13','raw:VCM3','reinforced_concrete'], // Reinforced Concrete
+     ['VCM3','14','raw:VCM3','sod'], // Sod
+     ['VCM3','15','raw:VCM3','steel'], // Steel
+     ['VCM3','16','raw:VCM3','stone'], // Stone
+     ['VCM3','17','raw:VCM3','treated_timber'], // Treated Timber
+     ['VCM3','18','raw:VCM3','wood'], // Wood
+     ['VCM3','999','raw:VCM3','other'], // Other
+
      // VCS_VCD - Vertical Clearance, Safe <reference level>
      // ['VCS_VCD','-999999',undefined,undefined], // No Information
      ['VCS_VCD','7','safe_clearance:vertical:reference','mean_high_water'], // Mean High Water
@@ -3191,24 +6791,38 @@ ggdm30.rules = {
      ['VCT','4','void_collection:type','waterbody_bottom_composition'], // Waterbody Bottom Composition
      ['VCT','999','void_collection:type','other'], // Other
 
+     // VCT2 - Void Collection Type [2]
+     // ['VCT2','-999999',undefined,undefined], // No Information
+     ['VCT2','1','raw:VCT2','hypsography'], // Hypsography
+     ['VCT2','3','raw:VCT2','bathymetry'], // Bathymetry
+     ['VCT2','4','raw:VCT2','waterbody_bottom_composition'], // Waterbody Bottom Composition
+     ['VCT2','999','raw:VCT2','other'], // Other
+
+     // VCT3 - Void Collection Type [3]
+     // ['VCT3','-999999',undefined,undefined], // No Information
+     ['VCT3','1','raw:VCT3','hypsography'], // Hypsography
+     ['VCT3','3','raw:VCT3','bathymetry'], // Bathymetry
+     ['VCT3','4','raw:VCT3','waterbody_bottom_composition'], // Waterbody Bottom Composition
+     ['VCT3','999','raw:VCT3','other'], // Other
+
      // VDT - Vertical Datum
-     // ['VDT','noInformation',undefined,undefined], // No Information
-     ['VDT','other','source:datum:vertical','other'], // Other
-     ['VDT','groundLevel','source:datum:vertical','ground_level'], // Ground Level
-     ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
-     ['VDT','navd88','source:datum:vertical','north_american_vertical_datum_(navd)_1988'], // North American Vertical Datum (NAVD) 1988
-     ['VDT','ngvd29','source:datum:vertical','national_geodetic_vertical_datum_(ngvd)_1929'], // National Geodetic Vertical Datum (NGVD) 1929
-     ['VDT','wgs84','source:datum:vertical','wgs_84_ellipsoid'], // WGS 84 Ellipsoid
-     ['VDT','wgs84Egm08','source:datum:vertical','wgs_84_egm08_geoid'], // WGS 84 EGM08 Geoid
-     ['VDT','wgs84Egm96','source:datum:vertical','wgs_84_egm96_geoid'], // WGS 84 EGM96 Geoid
+     // ['VDT','-999999',undefined,undefined], // No Information
+     ['VDT','1','source:datum:vertical','wgs_84_ellipsoid'], // WGS 84 Ellipsoid
+     ['VDT','2','source:datum:vertical','wgs_84_egm96_geoid'], // WGS 84 EGM96 Geoid
+     ['VDT','3','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
+     ['VDT','4','source:datum:vertical','north_american_vertical_datum_(navd)_1988'], // North American Vertical Datum (NAVD) 1988
+     ['VDT','5','source:datum:vertical','national_geodetic_vertical_datum_(ngvd)_1929'], // National Geodetic Vertical Datum (NGVD) 1929
+     ['VDT','6','source:datum:vertical','ground_level'], // Ground Level
+     ['VDT','7','source:datum:vertical','wgs_84_egm08_geoid'], // WGS 84 EGM08 Geoid
+     ['VDT','998','source:datum:vertical','not_applicable'], // Not Applicable
+     ['VDT','999','source:datum:vertical','other'], // Other
 
      // VEG - Vegetation Characteristic
      // ['VEG','-999999',undefined,undefined], // No Information
      ['VEG','8','grassland:type','grassland'], // Grassland
-     ['VEG','9','grassland:type','grassland_with_trees'], // Grassland with Trees
      ['VEG','10','grassland:type','tropical_grass'], // Tropical Grass
-     ['VEG','56','grassland:type','without_trees'], // Without Trees
-     ['VEG','83','grassland:type','meadow'], // Meadow
+     ['VEG','61','raw:VEG','algae'], // Algae
+     ['VEG','62','raw:VEG','sea_grass'], // Sea Grass
      ['VEG','999','grassland:type','other'], // Other
 
      // VET - Vehicle Type
@@ -3233,6 +6847,42 @@ ggdm30.rules = {
      ['VGT','4','volcano:type','caldera'], // Caldera
      ['VGT','5','volcano:type','composite'], // Composite
 
+     // VIS - Light Visibility
+     // ['VIS','-999999',undefined,undefined], // No Information
+     ['VIS','1','raw:VIS','high_intensity'], // High Intensity
+     ['VIS','2','raw:VIS','low_intensity'], // Low Intensity
+     ['VIS','3','raw:VIS','faint'], // Faint
+     ['VIS','4','raw:VIS','intensified'], // Intensified
+     ['VIS','5','raw:VIS','unintensified'], // Unintensified
+     ['VIS','6','raw:VIS','visibility_deliberately_restricted'], // Visibility Deliberately Restricted
+     ['VIS','7','raw:VIS','obscured'], // Obscured
+     ['VIS','8','raw:VIS','partially_obscured'], // Partially Obscured
+     ['VIS','999','raw:VIS','other'], // Other
+
+     // VIS2 - Light Visibility [2]
+     // ['VIS2','-999999',undefined,undefined], // No Information
+     ['VIS2','1','raw:VIS2','high_intensity'], // High Intensity
+     ['VIS2','2','raw:VIS2','low_intensity'], // Low Intensity
+     ['VIS2','3','raw:VIS2','faint'], // Faint
+     ['VIS2','4','raw:VIS2','intensified'], // Intensified
+     ['VIS2','5','raw:VIS2','unintensified'], // Unintensified
+     ['VIS2','6','raw:VIS2','visibility_deliberately_restricted'], // Visibility Deliberately Restricted
+     ['VIS2','7','raw:VIS2','obscured'], // Obscured
+     ['VIS2','8','raw:VIS2','partially_obscured'], // Partially Obscured
+     ['VIS2','999','raw:VIS2','other'], // Other
+
+     // VIS3 - Light Visibility [3]
+     // ['VIS3','-999999',undefined,undefined], // No Information
+     ['VIS3','1','raw:VIS3','high_intensity'], // High Intensity
+     ['VIS3','2','raw:VIS3','low_intensity'], // Low Intensity
+     ['VIS3','3','raw:VIS3','faint'], // Faint
+     ['VIS3','4','raw:VIS3','intensified'], // Intensified
+     ['VIS3','5','raw:VIS3','unintensified'], // Unintensified
+     ['VIS3','6','raw:VIS3','visibility_deliberately_restricted'], // Visibility Deliberately Restricted
+     ['VIS3','7','raw:VIS3','obscured'], // Obscured
+     ['VIS3','8','raw:VIS3','partially_obscured'], // Partially Obscured
+     ['VIS3','999','raw:VIS3','other'], // Other
+
      // VOA - Volcanic Activity
      // ['VOA','-999999',undefined,undefined], // No Information
      ['VOA','1','volcano:status','active'], // Active
@@ -3242,12 +6892,53 @@ ggdm30.rules = {
      // VSP - Vegetation Species
      // ['VSP','-999999',undefined,undefined], // No Information
      ['VSP','8','vegetation:type','cypress'], // Cypress
+     ['VSP','17','vegetation:type','kelp'], // Kelp
      ['VSP','19','vegetation:type','mangrove'], // Mangrove
      ['VSP','22','vegetation:type','nipa'], // Nipa
      ['VSP','25','vegetation:type','palm'], // Palm
+     ['VSP','28','vegetation:type','posidonia'], // Posidonia
+     ['VSP','29','vegetation:type','reed'], // Reed
+     ['VSP','30','vegetation:type','sargassum'], // Sargassum
+     ['VSP','31','vegetation:type','sea-tangle'], // Sea-tangle
      ['VSP','34','vegetation:type','bamboo'], // Bamboo
+     ['VSP','35','vegetation:type','water_hyacinth'], // Water Hyacinth
+     ['VSP','36','vegetation:type','algae'], // Algae
      ['VSP','64','vegetation:type','swamp_cypress'], // Swamp Cypress
      ['VSP','999','vegetation:type','other'], // Other
+
+     // VSP2 - Vegetation Species [2]
+     // ['VSP2','-999999',undefined,undefined], // No Information
+     ['VSP2','8','raw:VSP2','cypress'], // Cypress
+     ['VSP2','17','raw:VSP2','kelp'], // Kelp
+     ['VSP2','19','raw:VSP2','mangrove'], // Mangrove
+     ['VSP2','22','raw:VSP2','nipa'], // Nipa
+     ['VSP2','25','raw:VSP2','palm'], // Palm
+     ['VSP2','28','raw:VSP2','posidonia'], // Posidonia
+     ['VSP2','29','raw:VSP2','reed'], // Reed
+     ['VSP2','30','raw:VSP2','sargassum'], // Sargassum
+     ['VSP2','31','raw:VSP2','sea-tangle'], // Sea-tangle
+     ['VSP2','34','raw:VSP2','bamboo'], // Bamboo
+     ['VSP2','35','raw:VSP2','water_hyacinth'], // Water Hyacinth
+     ['VSP2','36','raw:VSP2','algae'], // Algae
+     ['VSP2','64','raw:VSP2','swamp_cypress'], // Swamp Cypress
+     ['VSP2','999','raw:VSP2','other'], // Other
+
+     // VSP3 - Vegetation Species [3]
+     // ['VSP3','-999999',undefined,undefined], // No Information
+     ['VSP3','8','raw:VSP3','cypress'], // Cypress
+     ['VSP3','17','raw:VSP3','kelp'], // Kelp
+     ['VSP3','19','raw:VSP3','mangrove'], // Mangrove
+     ['VSP3','22','raw:VSP3','nipa'], // Nipa
+     ['VSP3','25','raw:VSP3','palm'], // Palm
+     ['VSP3','28','raw:VSP3','posidonia'], // Posidonia
+     ['VSP3','29','raw:VSP3','reed'], // Reed
+     ['VSP3','30','raw:VSP3','sargassum'], // Sargassum
+     ['VSP3','31','raw:VSP3','sea-tangle'], // Sea-tangle
+     ['VSP3','34','raw:VSP3','bamboo'], // Bamboo
+     ['VSP3','35','raw:VSP3','water_hyacinth'], // Water Hyacinth
+     ['VSP3','36','raw:VSP3','algae'], // Algae
+     ['VSP3','64','raw:VSP3','swamp_cypress'], // Swamp Cypress
+     ['VSP3','999','raw:VSP3','other'], // Other
 
      // WCC - Watercourse Channel Type
      // ['WCC','-999999',undefined,undefined], // No Information
@@ -3256,18 +6947,30 @@ ggdm30.rules = {
      ['WCC','3','waterway','gorge'], // Gorge
      ['WCC','4','waterway','wadi'], // Wadi
      ['WCC','7','waterway','river'], // Normal Channel
-     ['WCC','8','waterway','lost_watercourse'], // Lost Watercourse
      ['WCC','999','waterway','other'], // Other
 
      // WDAC - Average Water Depth <interval closure>
      ['WDAC','2','depth:average:closure','open_interval'], // Open Interval
-     ['WDAC','3','depth:average:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['WDAC','4','depth:average:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['WDAC','3','depth:average:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['WDAC','4','depth:average:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['WDAC','5','depth:average:closure','closed_interval'], // Closed Interval
      ['WDAC','6','depth:average:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['WDAC','7','depth:average:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
      ['WDAC','8','depth:average:closure','less-than_semi-interval'], // Less-than Semi-interval
      ['WDAC','9','depth:average:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
+
+     // WDST - Water Distribution System Type
+     // ['WDST','-999999',undefined,undefined], // No Information
+     ['WDST','1','raw:WDST','none'], // None
+     ['WDST','2','raw:WDST','no_current_system_but_nearby_system'], // No Current System but Nearby System
+     ['WDST','3','raw:WDST','manual_labor-transported'], // Manual Labor-Transported
+     ['WDST','4','raw:WDST','water_storage_tanks/trucks'], // Water Storage Tanks/Trucks
+     ['WDST','5','raw:WDST','simple_gravity'], // Simple Gravity
+     ['WDST','6','raw:WDST','complex_gravity'], // Complex Gravity
+     ['WDST','7','raw:WDST','small_pumped_and_piped'], // Small Pumped and Piped
+     ['WDST','8','raw:WDST','large_urban_system'], // Large Urban System
+     ['WDST','998','raw:WDST','not_applicable'], // Not Applicable
+     ['WDST','999','raw:WDST','other'], // Other
 
      // WEQ - Well Equipment
      // ['WEQ','-999999',undefined,undefined], // No Information
@@ -3283,6 +6986,34 @@ ggdm30.rules = {
      ['WEQ','10','well:equipment','capped'], // Capped
      ['WEQ','999','well:equipment','other'], // Other
 
+     // WEQ2 - Well Equipment [2]
+     // ['WEQ2','-999999',undefined,undefined], // No Information
+     ['WEQ2','1','raw:WEQ2','wellhead'], // Wellhead
+     ['WEQ2','2','raw:WEQ2','christmas_tree'], // Christmas Tree
+     ['WEQ2','3','raw:WEQ2','manifold'], // Manifold
+     ['WEQ2','4','raw:WEQ2','protective_structure'], // Protective Structure
+     ['WEQ2','5','raw:WEQ2','pump'], // Pump
+     ['WEQ2','6','raw:WEQ2','rod_pump'], // Rod Pump
+     ['WEQ2','7','raw:WEQ2','separator'], // Separator
+     ['WEQ2','8','raw:WEQ2','stock_tank'], // Stock Tank
+     ['WEQ2','9','raw:WEQ2','treater'], // Treater
+     ['WEQ2','10','raw:WEQ2','capped'], // Capped
+     ['WEQ2','999','raw:WEQ2','other'], // Other
+
+     // WEQ3 - Well Equipment [3]
+     // ['WEQ3','-999999',undefined,undefined], // No Information
+     ['WEQ3','1','raw:WEQ3','wellhead'], // Wellhead
+     ['WEQ3','2','raw:WEQ3','christmas_tree'], // Christmas Tree
+     ['WEQ3','3','raw:WEQ3','manifold'], // Manifold
+     ['WEQ3','4','raw:WEQ3','protective_structure'], // Protective Structure
+     ['WEQ3','5','raw:WEQ3','pump'], // Pump
+     ['WEQ3','6','raw:WEQ3','rod_pump'], // Rod Pump
+     ['WEQ3','7','raw:WEQ3','separator'], // Separator
+     ['WEQ3','8','raw:WEQ3','stock_tank'], // Stock Tank
+     ['WEQ3','9','raw:WEQ3','treater'], // Treater
+     ['WEQ3','10','raw:WEQ3','capped'], // Capped
+     ['WEQ3','999','raw:WEQ3','other'], // Other
+
      // WFT - Well Type
      // ['WFT','-999999',undefined,undefined], // No Information
      ['WFT','2','well:type','walled-in'], // Walled-in
@@ -3292,7 +7023,7 @@ ggdm30.rules = {
      ['WFT','7','well:type','drilled'], // Drilled
      ['WFT','999','well:type','other'], // Other
 
-     // WLE - Hydrographic Vertical Positioning Information : Water Level Effect
+     // WLE - Water Level Effect
      // ['WLE','-999999',undefined,undefined], // No Information
      ['WLE','1','hydrographic_vertical_position','partly_submerged'], // Partly Submerged
      ['WLE','2','hydrographic_vertical_position','always_dry'], // Always Dry
@@ -3302,7 +7033,17 @@ ggdm30.rules = {
      ['WLE','9','hydrographic_vertical_position','awash_at_chart_datum'], // Awash at Chart Datum
      ['WLE','999','hydrographic_vertical_position','other'], // Other
 
-     // WMT - Watercourse Morphology - Really?
+     // WLO - Wreck or Hulk Exposure
+     // ['WLO','-999999',undefined,undefined], // No Information
+     ['WLO','1','raw:WLO','hull_showing'], // Hull Showing
+     ['WLO','2','raw:WLO','masts_showing'], // Masts Showing
+     ['WLO','3','raw:WLO','funnel_showing'], // Funnel Showing
+     ['WLO','4','raw:WLO','superstructure_showing'], // Superstructure Showing
+     ['WLO','5','raw:WLO','masts_and_funnel_showing'], // Masts and Funnel Showing
+     ['WLO','6','raw:WLO','not_exposed'], // Not Exposed
+     ['WLO','999','raw:WLO','other'], // Other
+
+     // WMT - Watercourse Morphology
      // ['WMT','-999999',undefined,undefined], // No Information
      ['WMT','1','water:morphology','mouth'], // Mouth
      ['WMT','2','water:morphology','pool'], // Pool
@@ -3318,6 +7059,46 @@ ggdm30.rules = {
      ['WMT','12','water:morphology','meander'], // Meander
      ['WMT','999','water:morphology','other'], // Other
 
+     // WODR - Water Odour
+     // ['WODR','-999999',undefined,undefined], // No Information
+     ['WODR','1','raw:WODR','none'], // None
+     ['WODR','2','raw:WODR','sulphur/rotten_egg'], // Sulphur/Rotten Egg
+     ['WODR','3','raw:WODR','detergent'], // Detergent
+     ['WODR','4','raw:WODR','gasoline/oil'], // Gasoline/Oil
+     ['WODR','5','raw:WODR','chlorine'], // Chlorine
+     ['WODR','6','raw:WODR','methane_gas/earthy'], // Methane Gas/Earthy
+     ['WODR','7','raw:WODR','phenolic_or_chemical'], // Phenolic or Chemical
+     ['WODR','998','raw:WODR','not_applicable'], // Not Applicable
+     ['WODR','999','raw:WODR','other'], // Other
+
+     // WPC - Coastal Work Type
+     // ['WPC','-999999',undefined,undefined], // No Information
+     ['WPC','1','raw:WPC','land_reclamation'], // Land Reclamation
+     ['WPC','2','raw:WPC','construction_of_structures'], // Construction of Structures
+     ['WPC','999','raw:WPC','other'], // Other
+
+     // WPC2 - Coastal Work Type [2]
+     // ['WPC2','-999999',undefined,undefined], // No Information
+     ['WPC2','1','raw:WPC2','land_reclamation'], // Land Reclamation
+     ['WPC2','2','raw:WPC2','construction_of_structures'], // Construction of Structures
+     ['WPC2','999','raw:WPC2','other'], // Other
+
+     // WPC3 - Coastal Work Type [3]
+     // ['WPC3','-999999',undefined,undefined], // No Information
+     ['WPC3','1','raw:WPC3','land_reclamation'], // Land Reclamation
+     ['WPC3','2','raw:WPC3','construction_of_structures'], // Construction of Structures
+     ['WPC3','999','raw:WPC3','other'], // Other
+
+     // WRCC - Water Recharge Rate <interval closure>
+     ['WRCC','2','raw:WRCC','open_interval'], // Open Interval
+     ['WRCC','3','raw:WRCC','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['WRCC','4','raw:WRCC','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['WRCC','5','raw:WRCC','closed_interval'], // Closed Interval
+     ['WRCC','6','raw:WRCC','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['WRCC','7','raw:WRCC','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['WRCC','8','raw:WRCC','less-than_semi-interval'], // Less-than Semi-interval
+     ['WRCC','9','raw:WRCC','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
+
      // WRT - Water Race Type
      // ['WRT','-999999',undefined,undefined], // No Information
      ['WRT','1','water:race','sluice'], // Sluice
@@ -3325,7 +7106,17 @@ ggdm30.rules = {
      ['WRT','3','water:race','headrace'], // Headrace
      ['WRT','4','water:race','tailrace'], // Tailrace
 
-     // WST - Watercourse Sink Type: No OSM even close
+     // WSRC - Source of Water
+     // ['WSRC','-999999',undefined,undefined], // No Information
+     ['WSRC','1','raw:WSRC','well/ground_water'], // Well/Ground Water
+     ['WSRC','2','raw:WSRC','surface_water'], // Surface Water
+     ['WSRC','3','raw:WSRC','piped_water_supply'], // Piped Water Supply
+     ['WSRC','4','raw:WSRC','delivered_water_supply'], // Delivered Water Supply
+     ['WSRC','5','raw:WSRC','rain_fed/cistern'], // Rain fed/Cistern
+     ['WSRC','998','raw:WSRC','not_applicable'], // Not Applicable
+     ['WSRC','999','raw:WSRC','other'], // Other
+
+     // WST - Watercourse Sink Type
      // ['WST','-999999',undefined,undefined], // No Information
      ['WST','1','water:sink:type','dissipating'], // Dissipating
      ['WST','2','water:sink:type','disappearing'], // Disappearing
@@ -3339,8 +7130,118 @@ ggdm30.rules = {
      ['WTI','2','wall','retaining'], // Retaining
      ['WTI','999','wall','other'], // Other
 
-     // ['YSU','-999999',undefined,undefined], // No Information
+     // WTST - Water Test Type
+     // ['WTST','-999999',undefined,undefined], // No Information
+     ['WTST','1','raw:WTST','quick_field_test'], // Quick Field Test
+     ['WTST','2','raw:WTST','complex_lab_test'], // Complex Lab Test
+     ['WTST','998','raw:WTST','not_applicable'], // Not Applicable
+     ['WTST','999','raw:WTST','other'], // Other
+
+     // WTT - Water Turbulence Type
+     // ['WTT','-999999',undefined,undefined], // No Information
+     ['WTT','1','raw:WTT','spilling_breakers'], // Spilling Breakers
+     ['WTT','2','raw:WTT','plunging_breakers'], // Plunging Breakers
+     ['WTT','3','raw:WTT','surging_breakers'], // Surging Breakers
+     ['WTT','4','raw:WTT','eddies'], // Eddies
+     ['WTT','5','raw:WTT','overfalls'], // Overfalls
+     ['WTT','6','raw:WTT','tide_rips'], // Tide Rips
+     ['WTT','7','raw:WTT','whirlpool'], // Whirlpool
+     ['WTT','8','raw:WTT','breakers'], // Breakers
+     ['WTT','9','raw:WTT','confused_seas'], // Confused Seas
+     ['WTT','999','raw:WTT','other'], // Other
+
+     // WTYP - Window Type
+     // ['WTYP','-999999',undefined,undefined], // No Information
+     ['WTYP','1','raw:WTYP','open_with_bars'], // Open with Bars
+     ['WTYP','2','raw:WTYP','open_without_bars'], // Open without Bars
+     ['WTYP','3','raw:WTYP','plastic_with_bars'], // Plastic with Bars
+     ['WTYP','4','raw:WTYP','plastic_without_bars'], // Plastic without Bars
+     ['WTYP','999','raw:WTYP','other'], // Other
+
+     // WWM - Sub-Surface Stratum Type
+     // ['WWM','-999999',undefined,undefined], // No Information
+     ['WWM','1','raw:WWM','basalt'], // Basalt
+     ['WWM','2','raw:WWM','boulders'], // Boulders
+     ['WWM','3','raw:WWM','clay'], // Clay
+     ['WWM','4','raw:WWM','conglomerate'], // Conglomerate
+     ['WWM','5','raw:WWM','dolomite'], // Dolomite
+     ['WWM','6','raw:WWM','granite'], // Granite
+     ['WWM','7','raw:WWM','gravel'], // Gravel
+     ['WWM','8','raw:WWM','igneous_rock'], // Igneous Rock
+     ['WWM','9','raw:WWM','karst'], // Karst
+     ['WWM','10','raw:WWM','limestone'], // Limestone
+     ['WWM','11','raw:WWM','marl'], // Marl
+     ['WWM','12','raw:WWM','metamorphic_rock'], // Metamorphic Rock
+     ['WWM','13','raw:WWM','mud'], // Mud
+     ['WWM','14','raw:WWM','sand'], // Sand
+     ['WWM','15','raw:WWM','schist'], // Schist
+     ['WWM','16','raw:WWM','unconsolidated'], // Unconsolidated
+     ['WWM','17','raw:WWM','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
+     ['WWM','18','raw:WWM','volcanic_rock'], // Volcanic Rock
+     ['WWM','19','raw:WWM','sandstone'], // Sandstone
+     ['WWM','20','raw:WWM','shale'], // Shale
+     ['WWM','999','raw:WWM','other'], // Other
+
+     // WWM2 - Sub-Surface Stratum Type [2]
+     // ['WWM2','-999999',undefined,undefined], // No Information
+     ['WWM2','1','raw:WWM2','basalt'], // Basalt
+     ['WWM2','2','raw:WWM2','boulders'], // Boulders
+     ['WWM2','3','raw:WWM2','clay'], // Clay
+     ['WWM2','4','raw:WWM2','conglomerate'], // Conglomerate
+     ['WWM2','5','raw:WWM2','dolomite'], // Dolomite
+     ['WWM2','6','raw:WWM2','granite'], // Granite
+     ['WWM2','7','raw:WWM2','gravel'], // Gravel
+     ['WWM2','8','raw:WWM2','igneous_rock'], // Igneous Rock
+     ['WWM2','9','raw:WWM2','karst'], // Karst
+     ['WWM2','10','raw:WWM2','limestone'], // Limestone
+     ['WWM2','11','raw:WWM2','marl'], // Marl
+     ['WWM2','12','raw:WWM2','metamorphic_rock'], // Metamorphic Rock
+     ['WWM2','13','raw:WWM2','mud'], // Mud
+     ['WWM2','14','raw:WWM2','sand'], // Sand
+     ['WWM2','15','raw:WWM2','schist'], // Schist
+     ['WWM2','16','raw:WWM2','unconsolidated'], // Unconsolidated
+     ['WWM2','17','raw:WWM2','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
+     ['WWM2','18','raw:WWM2','volcanic_rock'], // Volcanic Rock
+     ['WWM2','19','raw:WWM2','sandstone'], // Sandstone
+     ['WWM2','20','raw:WWM2','shale'], // Shale
+     ['WWM2','999','raw:WWM2','other'], // Other
+
+     // WWM3 - Sub-Surface Stratum Type [3]
+     // ['WWM3','-999999',undefined,undefined], // No Information
+     ['WWM3','1','raw:WWM3','basalt'], // Basalt
+     ['WWM3','2','raw:WWM3','boulders'], // Boulders
+     ['WWM3','3','raw:WWM3','clay'], // Clay
+     ['WWM3','4','raw:WWM3','conglomerate'], // Conglomerate
+     ['WWM3','5','raw:WWM3','dolomite'], // Dolomite
+     ['WWM3','6','raw:WWM3','granite'], // Granite
+     ['WWM3','7','raw:WWM3','gravel'], // Gravel
+     ['WWM3','8','raw:WWM3','igneous_rock'], // Igneous Rock
+     ['WWM3','9','raw:WWM3','karst'], // Karst
+     ['WWM3','10','raw:WWM3','limestone'], // Limestone
+     ['WWM3','11','raw:WWM3','marl'], // Marl
+     ['WWM3','12','raw:WWM3','metamorphic_rock'], // Metamorphic Rock
+     ['WWM3','13','raw:WWM3','mud'], // Mud
+     ['WWM3','14','raw:WWM3','sand'], // Sand
+     ['WWM3','15','raw:WWM3','schist'], // Schist
+     ['WWM3','16','raw:WWM3','unconsolidated'], // Unconsolidated
+     ['WWM3','17','raw:WWM3','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
+     ['WWM3','18','raw:WWM3','volcanic_rock'], // Volcanic Rock
+     ['WWM3','19','raw:WWM3','sandstone'], // Sandstone
+     ['WWM3','20','raw:WWM3','shale'], // Shale
+     ['WWM3','999','raw:WWM3','other'], // Other
+
+     // WWRC - Water Withdrawal Rate <interval closure>
+     ['WWRC','2','raw:WWRC','open_interval'], // Open Interval
+     ['WWRC','3','raw:WWRC','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['WWRC','4','raw:WWRC','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['WWRC','5','raw:WWRC','closed_interval'], // Closed Interval
+     ['WWRC','6','raw:WWRC','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['WWRC','7','raw:WWRC','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['WWRC','8','raw:WWRC','less-than_semi-interval'], // Less-than Semi-interval
+     ['WWRC','9','raw:WWRC','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
+
      // YSU - Military Service Branch
+     // ['YSU','-999999',undefined,undefined], // No Information
      ['YSU','1','military:service','air_force'], // Air Force
      ['YSU','2','military:service','army'], // Army
      ['YSU','3','military:service','coastguard'], // Coastguard
@@ -3353,120 +7254,695 @@ ggdm30.rules = {
      ['YSU','998',undefined,undefined], // Not Applicable
      ['YSU','999','military:service','other'], // Other
 
-     // YWQ - Water Potability - See ZI024_YWQ
+     // YWQ - Water Potability
      // ['YWQ','-999999',undefined,undefined], // No Information
-//      ['YWQ','1','raw:YWQ','potable'], // Potable
-//      ['YWQ','2','raw:YWQ','treatable'], // Treatable
-//      ['YWQ','3','raw:YWQ','contaminated'], // Contaminated
-//      ['YWQ','4','raw:YWQ','nonpotable'], // Nonpotable
-//      ['YWQ','999','raw:YWQ','other'], // Other
+     ['YWQ','1','raw:YWQ','potable'], // Potable
+     ['YWQ','2','raw:YWQ','treatable'], // Treatable
+     ['YWQ','3','raw:YWQ','contaminated'], // Contaminated
+     ['YWQ','4','raw:YWQ','nonpotable'], // Nonpotable
+     ['YWQ','999','raw:YWQ','other'], // Other
 
-     // ZI001_SPS - Source Information : Spatial Source
+     // ZHBH_DCR - Base Hgt : Snd Meta : Vessel Draft Correction
+     // ['ZHBH_DCR','-999999',undefined,undefined], // No Information
+     ['ZHBH_DCR','1000','raw:ZHBH_DCR','no'],
+     ['ZHBH_DCR','1001','raw:ZHBH_DCR','yes'],
+
+     // ZHBH_DKC - Base Hgt : Snd Meta : Bathymetric Measurement Quality Category
+     // ['ZHBH_DKC','-999999',undefined,undefined], // No Information
+     ['ZHBH_DKC','1','raw:ZHBH_DKC','depth_known'], // Depth Known
+     ['ZHBH_DKC','3','raw:ZHBH_DKC','safe_clearance_known'], // Safe Clearance Known
+     ['ZHBH_DKC','4','raw:ZHBH_DKC','depth_unknown'], // Depth Unknown
+     ['ZHBH_DKC','5','raw:ZHBH_DKC','depth_doubtful'], // Depth Doubtful
+     ['ZHBH_DKC','6','raw:ZHBH_DKC','depth_unreliable'], // Depth Unreliable
+     ['ZHBH_DKC','7','raw:ZHBH_DKC','no_bottom'], // No Bottom
+     ['ZHBH_DKC','8','raw:ZHBH_DKC','least_depth'], // Least Depth
+     ['ZHBH_DKC','9','raw:ZHBH_DKC','reported_depth'], // Reported Depth
+     ['ZHBH_DKC','10','raw:ZHBH_DKC','unconfirmed_depth'], // Unconfirmed Depth
+     ['ZHBH_DKC','11','raw:ZHBH_DKC','maintained_depth'], // Maintained Depth
+     ['ZHBH_DKC','12','raw:ZHBH_DKC','unmaintained_depth'], // Unmaintained Depth
+     ['ZHBH_DKC','998','raw:ZHBH_DKC','not_applicable'], // Not Applicable
+     ['ZHBH_DKC','999','raw:ZHBH_DKC','other'], // Other
+
+     // ZHBH_DKC2 - Base Hgt : Snd Meta : Bathymetric Measurement Quality Category [2]
+     // ['ZHBH_DKC2','-999999',undefined,undefined], // No Information
+     ['ZHBH_DKC2','1','raw:ZHBH_DKC2','depth_known'], // Depth Known
+     ['ZHBH_DKC2','3','raw:ZHBH_DKC2','safe_clearance_known'], // Safe Clearance Known
+     ['ZHBH_DKC2','4','raw:ZHBH_DKC2','depth_unknown'], // Depth Unknown
+     ['ZHBH_DKC2','5','raw:ZHBH_DKC2','depth_doubtful'], // Depth Doubtful
+     ['ZHBH_DKC2','6','raw:ZHBH_DKC2','depth_unreliable'], // Depth Unreliable
+     ['ZHBH_DKC2','7','raw:ZHBH_DKC2','no_bottom'], // No Bottom
+     ['ZHBH_DKC2','8','raw:ZHBH_DKC2','least_depth'], // Least Depth
+     ['ZHBH_DKC2','9','raw:ZHBH_DKC2','reported_depth'], // Reported Depth
+     ['ZHBH_DKC2','10','raw:ZHBH_DKC2','unconfirmed_depth'], // Unconfirmed Depth
+     ['ZHBH_DKC2','11','raw:ZHBH_DKC2','maintained_depth'], // Maintained Depth
+     ['ZHBH_DKC2','12','raw:ZHBH_DKC2','unmaintained_depth'], // Unmaintained Depth
+     ['ZHBH_DKC2','998','raw:ZHBH_DKC2','not_applicable'], // Not Applicable
+     ['ZHBH_DKC2','999','raw:ZHBH_DKC2','other'], // Other
+
+     // ZHBH_DKC3 - Base Hgt : Snd Meta : Bathymetric Measurement Quality Category [3]
+     // ['ZHBH_DKC3','-999999',undefined,undefined], // No Information
+     ['ZHBH_DKC3','1','raw:ZHBH_DKC3','depth_known'], // Depth Known
+     ['ZHBH_DKC3','3','raw:ZHBH_DKC3','safe_clearance_known'], // Safe Clearance Known
+     ['ZHBH_DKC3','4','raw:ZHBH_DKC3','depth_unknown'], // Depth Unknown
+     ['ZHBH_DKC3','5','raw:ZHBH_DKC3','depth_doubtful'], // Depth Doubtful
+     ['ZHBH_DKC3','6','raw:ZHBH_DKC3','depth_unreliable'], // Depth Unreliable
+     ['ZHBH_DKC3','7','raw:ZHBH_DKC3','no_bottom'], // No Bottom
+     ['ZHBH_DKC3','8','raw:ZHBH_DKC3','least_depth'], // Least Depth
+     ['ZHBH_DKC3','9','raw:ZHBH_DKC3','reported_depth'], // Reported Depth
+     ['ZHBH_DKC3','10','raw:ZHBH_DKC3','unconfirmed_depth'], // Unconfirmed Depth
+     ['ZHBH_DKC3','11','raw:ZHBH_DKC3','maintained_depth'], // Maintained Depth
+     ['ZHBH_DKC3','12','raw:ZHBH_DKC3','unmaintained_depth'], // Unmaintained Depth
+     ['ZHBH_DKC3','998','raw:ZHBH_DKC3','not_applicable'], // Not Applicable
+     ['ZHBH_DKC3','999','raw:ZHBH_DKC3','other'], // Other
+
+     // ZHBH_SVC - Base Hgt : Snd Meta : Sounding Velocity Correction Method
+     // ['ZHBH_SVC','-999999',undefined,undefined], // No Information
+     ['ZHBH_SVC','1','raw:ZHBH_SVC','sounder_4800_calibrated'], // Sounder 4800 Calibrated
+     ['ZHBH_SVC','2','raw:ZHBH_SVC','sounder_1500_calibrated'], // Sounder 1500 Calibrated
+     ['ZHBH_SVC','3','raw:ZHBH_SVC','mathews_tables'], // Mathews Tables
+     ['ZHBH_SVC','4','raw:ZHBH_SVC','sound_velocity_meter'], // Sound Velocity Meter
+     ['ZHBH_SVC','5','raw:ZHBH_SVC','sounder_other_calibrated'], // Sounder Other Calibrated
+     ['ZHBH_SVC','998','raw:ZHBH_SVC','not_applicable'], // Not Applicable
+     ['ZHBH_SVC','999','raw:ZHBH_SVC','other'], // Other
+
+     // ZHBH_TEC - Base Hgt : Snd Meta : Bathymetric Measurement Technique
+     // ['ZHBH_TEC','-999999',undefined,undefined], // No Information
+     ['ZHBH_TEC','1','raw:ZHBH_TEC','echo_sounder'], // Echo Sounder
+     ['ZHBH_TEC','2','raw:ZHBH_TEC','side-scan_sonar'], // Side-scan Sonar
+     ['ZHBH_TEC','3','raw:ZHBH_TEC','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
+     ['ZHBH_TEC','4','raw:ZHBH_TEC','diver'], // Diver
+     ['ZHBH_TEC','5','raw:ZHBH_TEC','lead-line'], // Lead-line
+     ['ZHBH_TEC','6','raw:ZHBH_TEC','area_swept_by_wire-drag'], // Area Swept by Wire-drag
+     ['ZHBH_TEC','8','raw:ZHBH_TEC','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
+     ['ZHBH_TEC','9','raw:ZHBH_TEC','electromagnetic_sensor'], // Electromagnetic Sensor
+     ['ZHBH_TEC','10','raw:ZHBH_TEC','photogrammetry'], // Photogrammetry
+     ['ZHBH_TEC','11','raw:ZHBH_TEC','satellite_imagery'], // Satellite Imagery
+     ['ZHBH_TEC','12','raw:ZHBH_TEC','levelling'], // Levelling
+     ['ZHBH_TEC','13','raw:ZHBH_TEC','computer_generated'], // Computer Generated
+     ['ZHBH_TEC','14','raw:ZHBH_TEC','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
+     ['ZHBH_TEC','15','raw:ZHBH_TEC','bathymetric_lidar'], // Bathymetric LiDAR
+     ['ZHBH_TEC','17','raw:ZHBH_TEC','singlebeam'], // Singlebeam
+     ['ZHBH_TEC','18','raw:ZHBH_TEC','underwater_utility_vehicle'], // Underwater Utility Vehicle
+     ['ZHBH_TEC','999','raw:ZHBH_TEC','other'], // Other
+
+     // ZHBH_TEC2 - Base Hgt : Snd Meta : Bathymetric Measurement Technique [2]
+     // ['ZHBH_TEC2','-999999',undefined,undefined], // No Information
+     ['ZHBH_TEC2','1','raw:ZHBH_TEC2','echo_sounder'], // Echo Sounder
+     ['ZHBH_TEC2','2','raw:ZHBH_TEC2','side-scan_sonar'], // Side-scan Sonar
+     ['ZHBH_TEC2','3','raw:ZHBH_TEC2','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
+     ['ZHBH_TEC2','4','raw:ZHBH_TEC2','diver'], // Diver
+     ['ZHBH_TEC2','5','raw:ZHBH_TEC2','lead-line'], // Lead-line
+     ['ZHBH_TEC2','6','raw:ZHBH_TEC2','area_swept_by_wire-drag'], // Area Swept by Wire-drag
+     ['ZHBH_TEC2','8','raw:ZHBH_TEC2','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
+     ['ZHBH_TEC2','9','raw:ZHBH_TEC2','electromagnetic_sensor'], // Electromagnetic Sensor
+     ['ZHBH_TEC2','10','raw:ZHBH_TEC2','photogrammetry'], // Photogrammetry
+     ['ZHBH_TEC2','11','raw:ZHBH_TEC2','satellite_imagery'], // Satellite Imagery
+     ['ZHBH_TEC2','12','raw:ZHBH_TEC2','levelling'], // Levelling
+     ['ZHBH_TEC2','13','raw:ZHBH_TEC2','computer_generated'], // Computer Generated
+     ['ZHBH_TEC2','14','raw:ZHBH_TEC2','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
+     ['ZHBH_TEC2','15','raw:ZHBH_TEC2','bathymetric_lidar'], // Bathymetric LiDAR
+     ['ZHBH_TEC2','17','raw:ZHBH_TEC2','singlebeam'], // Singlebeam
+     ['ZHBH_TEC2','18','raw:ZHBH_TEC2','underwater_utility_vehicle'], // Underwater Utility Vehicle
+     ['ZHBH_TEC2','999','raw:ZHBH_TEC2','other'], // Other
+
+     // ZHBH_TEC3 - Base Hgt : Snd Meta : Bathymetric Measurement Technique [3]
+     // ['ZHBH_TEC3','-999999',undefined,undefined], // No Information
+     ['ZHBH_TEC3','1','raw:ZHBH_TEC3','echo_sounder'], // Echo Sounder
+     ['ZHBH_TEC3','2','raw:ZHBH_TEC3','side-scan_sonar'], // Side-scan Sonar
+     ['ZHBH_TEC3','3','raw:ZHBH_TEC3','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
+     ['ZHBH_TEC3','4','raw:ZHBH_TEC3','diver'], // Diver
+     ['ZHBH_TEC3','5','raw:ZHBH_TEC3','lead-line'], // Lead-line
+     ['ZHBH_TEC3','6','raw:ZHBH_TEC3','area_swept_by_wire-drag'], // Area Swept by Wire-drag
+     ['ZHBH_TEC3','8','raw:ZHBH_TEC3','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
+     ['ZHBH_TEC3','9','raw:ZHBH_TEC3','electromagnetic_sensor'], // Electromagnetic Sensor
+     ['ZHBH_TEC3','10','raw:ZHBH_TEC3','photogrammetry'], // Photogrammetry
+     ['ZHBH_TEC3','11','raw:ZHBH_TEC3','satellite_imagery'], // Satellite Imagery
+     ['ZHBH_TEC3','12','raw:ZHBH_TEC3','levelling'], // Levelling
+     ['ZHBH_TEC3','13','raw:ZHBH_TEC3','computer_generated'], // Computer Generated
+     ['ZHBH_TEC3','14','raw:ZHBH_TEC3','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
+     ['ZHBH_TEC3','15','raw:ZHBH_TEC3','bathymetric_lidar'], // Bathymetric LiDAR
+     ['ZHBH_TEC3','17','raw:ZHBH_TEC3','singlebeam'], // Singlebeam
+     ['ZHBH_TEC3','18','raw:ZHBH_TEC3','underwater_utility_vehicle'], // Underwater Utility Vehicle
+     ['ZHBH_TEC3','999','raw:ZHBH_TEC3','other'], // Other
+
+     // ZHBH_VDC - Base Hgt : Snd Meta : Sounding Datum
+     // ['ZHBH_VDC','-999999',undefined,undefined], // No Information
+     ['ZHBH_VDC','2','raw:ZHBH_VDC','high_water'], // High Water
+     ['ZHBH_VDC','3','raw:ZHBH_VDC','higher_high_water'], // Higher High Water
+     ['ZHBH_VDC','4','raw:ZHBH_VDC','indian_spring_low_water'], // Indian Spring Low Water
+     ['ZHBH_VDC','5','raw:ZHBH_VDC','low_water'], // Low Water
+     ['ZHBH_VDC','6','raw:ZHBH_VDC','lower_low_water'], // Lower Low Water
+     ['ZHBH_VDC','7','raw:ZHBH_VDC','mean_high_water'], // Mean High Water
+     ['ZHBH_VDC','8','raw:ZHBH_VDC','mean_high_water_neaps'], // Mean High Water Neaps
+     ['ZHBH_VDC','9','raw:ZHBH_VDC','mean_high_water_springs'], // Mean High Water Springs
+     ['ZHBH_VDC','10','raw:ZHBH_VDC','mean_higher_high_water'], // Mean Higher High Water
+     ['ZHBH_VDC','11','raw:ZHBH_VDC','mean_low_water'], // Mean Low Water
+     ['ZHBH_VDC','12','raw:ZHBH_VDC','mean_low_water_neaps'], // Mean Low Water Neaps
+     ['ZHBH_VDC','13','raw:ZHBH_VDC','mean_low_water_springs'], // Mean Low Water Springs
+     ['ZHBH_VDC','14','raw:ZHBH_VDC','mean_lower_low_water'], // Mean Lower Low Water
+     ['ZHBH_VDC','15','raw:ZHBH_VDC','mean_sea_level'], // Mean Sea Level
+     ['ZHBH_VDC','16','raw:ZHBH_VDC','mean_tide_level'], // Mean Tide Level
+     ['ZHBH_VDC','17','raw:ZHBH_VDC','neap_tide'], // Neap Tide
+     ['ZHBH_VDC','18','raw:ZHBH_VDC','spring_tide'], // Spring Tide
+     ['ZHBH_VDC','19','raw:ZHBH_VDC','mean_lower_low_water_springs'], // Mean Lower Low Water Springs
+     ['ZHBH_VDC','20','raw:ZHBH_VDC','lowest_astronomical_tide'], // Lowest Astronomical Tide
+     ['ZHBH_VDC','21','raw:ZHBH_VDC','chart_datum_(unspecified)'], // Chart Datum (Unspecified)
+     ['ZHBH_VDC','22','raw:ZHBH_VDC','highest_astronomical_tide'], // Highest Astronomical Tide
+     ['ZHBH_VDC','24','raw:ZHBH_VDC','mean_higher_high_water_springs'], // Mean Higher High Water Springs
+     ['ZHBH_VDC','28','raw:ZHBH_VDC','highest_high_water'], // Highest High Water
+     ['ZHBH_VDC','30','raw:ZHBH_VDC','indian_spring_high_water'], // Indian Spring High Water
+     ['ZHBH_VDC','90','raw:ZHBH_VDC','lowest_low_water'], // Lowest Low Water
+     ['ZHBH_VDC','91','raw:ZHBH_VDC','lowest_low_water_springs'], // Lowest Low Water Springs
+     ['ZHBH_VDC','92','raw:ZHBH_VDC','approximate_mean_low_water_springs'], // Approximate Mean Low Water Springs
+     ['ZHBH_VDC','93','raw:ZHBH_VDC','low_water_springs'], // Low Water Springs
+     ['ZHBH_VDC','94','raw:ZHBH_VDC','approximate_lowest_astronomical_tide'], // Approximate Lowest Astronomical Tide
+     ['ZHBH_VDC','95','raw:ZHBH_VDC','nearly_lowest_low_water'], // Nearly Lowest Low Water
+     ['ZHBH_VDC','96','raw:ZHBH_VDC','approximate_mean_low_water'], // Approximate Mean Low Water
+     ['ZHBH_VDC','97','raw:ZHBH_VDC','approximate_mean_lower_low_water'], // Approximate Mean Lower Low Water
+     ['ZHBH_VDC','98','raw:ZHBH_VDC','approximate_mean_sea_level'], // Approximate Mean Sea Level
+     ['ZHBH_VDC','99','raw:ZHBH_VDC','high_water_springs'], // High Water Springs
+     ['ZHBH_VDC','100','raw:ZHBH_VDC','equinoctial_spring_low_water'], // Equinoctial Spring Low Water
+     ['ZHBH_VDC','101','raw:ZHBH_VDC','local_datum'], // Local Datum
+     ['ZHBH_VDC','102','raw:ZHBH_VDC','international_great_lakes_datum_1985'], // International Great Lakes Datum 1985
+     ['ZHBH_VDC','103','raw:ZHBH_VDC','mean_water_level'], // Mean Water Level
+     ['ZHBH_VDC','104','raw:ZHBH_VDC','lower_low_water_large_tide'], // Lower Low Water Large Tide
+     ['ZHBH_VDC','105','raw:ZHBH_VDC','higher_high_water_large_tide'], // Higher High Water Large Tide
+     ['ZHBH_VDC','107','raw:ZHBH_VDC','nearly_highest_high_water'], // Nearly Highest High Water
+     ['ZHBH_VDC','999','raw:ZHBH_VDC','other'], // Other
+
+     // ZHDP_DCR - Hydro Dpth : Snd Meta : Vessel Draft Correction
+     // ['ZHDP_DCR','-999999',undefined,undefined], // No Information
+     ['ZHDP_DCR','1000','raw:ZHDP_DCR','no'],
+     ['ZHDP_DCR','1001','raw:ZHDP_DCR','yes'],
+
+     // ZHDP_DKC - Hydro Dpth : Snd Meta : Bathymetric Measurement Quality Category
+     // ['ZHDP_DKC','-999999',undefined,undefined], // No Information
+     ['ZHDP_DKC','1','raw:ZHDP_DKC','depth_known'], // Depth Known
+     ['ZHDP_DKC','3','raw:ZHDP_DKC','safe_clearance_known'], // Safe Clearance Known
+     ['ZHDP_DKC','4','raw:ZHDP_DKC','depth_unknown'], // Depth Unknown
+     ['ZHDP_DKC','5','raw:ZHDP_DKC','depth_doubtful'], // Depth Doubtful
+     ['ZHDP_DKC','6','raw:ZHDP_DKC','depth_unreliable'], // Depth Unreliable
+     ['ZHDP_DKC','7','raw:ZHDP_DKC','no_bottom'], // No Bottom
+     ['ZHDP_DKC','8','raw:ZHDP_DKC','least_depth'], // Least Depth
+     ['ZHDP_DKC','9','raw:ZHDP_DKC','reported_depth'], // Reported Depth
+     ['ZHDP_DKC','10','raw:ZHDP_DKC','unconfirmed_depth'], // Unconfirmed Depth
+     ['ZHDP_DKC','11','raw:ZHDP_DKC','maintained_depth'], // Maintained Depth
+     ['ZHDP_DKC','12','raw:ZHDP_DKC','unmaintained_depth'], // Unmaintained Depth
+     ['ZHDP_DKC','998','raw:ZHDP_DKC','not_applicable'], // Not Applicable
+     ['ZHDP_DKC','999','raw:ZHDP_DKC','other'], // Other
+
+     // ZHDP_DKC2 - Hydro Dpth : Snd Meta : Bathymetric Measurement Quality Category [2]
+     // ['ZHDP_DKC2','-999999',undefined,undefined], // No Information
+     ['ZHDP_DKC2','1','raw:ZHDP_DKC2','depth_known'], // Depth Known
+     ['ZHDP_DKC2','3','raw:ZHDP_DKC2','safe_clearance_known'], // Safe Clearance Known
+     ['ZHDP_DKC2','4','raw:ZHDP_DKC2','depth_unknown'], // Depth Unknown
+     ['ZHDP_DKC2','5','raw:ZHDP_DKC2','depth_doubtful'], // Depth Doubtful
+     ['ZHDP_DKC2','6','raw:ZHDP_DKC2','depth_unreliable'], // Depth Unreliable
+     ['ZHDP_DKC2','7','raw:ZHDP_DKC2','no_bottom'], // No Bottom
+     ['ZHDP_DKC2','8','raw:ZHDP_DKC2','least_depth'], // Least Depth
+     ['ZHDP_DKC2','9','raw:ZHDP_DKC2','reported_depth'], // Reported Depth
+     ['ZHDP_DKC2','10','raw:ZHDP_DKC2','unconfirmed_depth'], // Unconfirmed Depth
+     ['ZHDP_DKC2','11','raw:ZHDP_DKC2','maintained_depth'], // Maintained Depth
+     ['ZHDP_DKC2','12','raw:ZHDP_DKC2','unmaintained_depth'], // Unmaintained Depth
+     ['ZHDP_DKC2','998','raw:ZHDP_DKC2','not_applicable'], // Not Applicable
+     ['ZHDP_DKC2','999','raw:ZHDP_DKC2','other'], // Other
+
+     // ZHDP_DKC3 - Hydro Dpth : Snd Meta : Bathymetric Measurement Quality Category [3]
+     // ['ZHDP_DKC3','-999999',undefined,undefined], // No Information
+     ['ZHDP_DKC3','1','raw:ZHDP_DKC3','depth_known'], // Depth Known
+     ['ZHDP_DKC3','3','raw:ZHDP_DKC3','safe_clearance_known'], // Safe Clearance Known
+     ['ZHDP_DKC3','4','raw:ZHDP_DKC3','depth_unknown'], // Depth Unknown
+     ['ZHDP_DKC3','5','raw:ZHDP_DKC3','depth_doubtful'], // Depth Doubtful
+     ['ZHDP_DKC3','6','raw:ZHDP_DKC3','depth_unreliable'], // Depth Unreliable
+     ['ZHDP_DKC3','7','raw:ZHDP_DKC3','no_bottom'], // No Bottom
+     ['ZHDP_DKC3','8','raw:ZHDP_DKC3','least_depth'], // Least Depth
+     ['ZHDP_DKC3','9','raw:ZHDP_DKC3','reported_depth'], // Reported Depth
+     ['ZHDP_DKC3','10','raw:ZHDP_DKC3','unconfirmed_depth'], // Unconfirmed Depth
+     ['ZHDP_DKC3','11','raw:ZHDP_DKC3','maintained_depth'], // Maintained Depth
+     ['ZHDP_DKC3','12','raw:ZHDP_DKC3','unmaintained_depth'], // Unmaintained Depth
+     ['ZHDP_DKC3','998','raw:ZHDP_DKC3','not_applicable'], // Not Applicable
+     ['ZHDP_DKC3','999','raw:ZHDP_DKC3','other'], // Other
+
+     // ZHDP_SVC - Hydro Dpth : Snd Meta : Sounding Velocity Correction Method
+     // ['ZHDP_SVC','-999999',undefined,undefined], // No Information
+     ['ZHDP_SVC','1','raw:ZHDP_SVC','sounder_4800_calibrated'], // Sounder 4800 Calibrated
+     ['ZHDP_SVC','2','raw:ZHDP_SVC','sounder_1500_calibrated'], // Sounder 1500 Calibrated
+     ['ZHDP_SVC','3','raw:ZHDP_SVC','mathews_tables'], // Mathews Tables
+     ['ZHDP_SVC','4','raw:ZHDP_SVC','sound_velocity_meter'], // Sound Velocity Meter
+     ['ZHDP_SVC','5','raw:ZHDP_SVC','sounder_other_calibrated'], // Sounder Other Calibrated
+     ['ZHDP_SVC','998','raw:ZHDP_SVC','not_applicable'], // Not Applicable
+     ['ZHDP_SVC','999','raw:ZHDP_SVC','other'], // Other
+
+     // ZHDP_TEC - Hydro Dpth : Snd Meta : Bathymetric Measurement Technique
+     // ['ZHDP_TEC','-999999',undefined,undefined], // No Information
+     ['ZHDP_TEC','1','raw:ZHDP_TEC','echo_sounder'], // Echo Sounder
+     ['ZHDP_TEC','2','raw:ZHDP_TEC','side-scan_sonar'], // Side-scan Sonar
+     ['ZHDP_TEC','3','raw:ZHDP_TEC','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
+     ['ZHDP_TEC','4','raw:ZHDP_TEC','diver'], // Diver
+     ['ZHDP_TEC','5','raw:ZHDP_TEC','lead-line'], // Lead-line
+     ['ZHDP_TEC','6','raw:ZHDP_TEC','area_swept_by_wire-drag'], // Area Swept by Wire-drag
+     ['ZHDP_TEC','8','raw:ZHDP_TEC','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
+     ['ZHDP_TEC','9','raw:ZHDP_TEC','electromagnetic_sensor'], // Electromagnetic Sensor
+     ['ZHDP_TEC','10','raw:ZHDP_TEC','photogrammetry'], // Photogrammetry
+     ['ZHDP_TEC','11','raw:ZHDP_TEC','satellite_imagery'], // Satellite Imagery
+     ['ZHDP_TEC','12','raw:ZHDP_TEC','levelling'], // Levelling
+     ['ZHDP_TEC','13','raw:ZHDP_TEC','computer_generated'], // Computer Generated
+     ['ZHDP_TEC','14','raw:ZHDP_TEC','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
+     ['ZHDP_TEC','15','raw:ZHDP_TEC','bathymetric_lidar'], // Bathymetric LiDAR
+     ['ZHDP_TEC','17','raw:ZHDP_TEC','singlebeam'], // Singlebeam
+     ['ZHDP_TEC','18','raw:ZHDP_TEC','underwater_utility_vehicle'], // Underwater Utility Vehicle
+     ['ZHDP_TEC','999','raw:ZHDP_TEC','other'], // Other
+
+     // ZHDP_TEC2 - Hydro Dpth : Snd Meta : Bathymetric Measurement Technique [2]
+     // ['ZHDP_TEC2','-999999',undefined,undefined], // No Information
+     ['ZHDP_TEC2','1','raw:ZHDP_TEC2','echo_sounder'], // Echo Sounder
+     ['ZHDP_TEC2','2','raw:ZHDP_TEC2','side-scan_sonar'], // Side-scan Sonar
+     ['ZHDP_TEC2','3','raw:ZHDP_TEC2','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
+     ['ZHDP_TEC2','4','raw:ZHDP_TEC2','diver'], // Diver
+     ['ZHDP_TEC2','5','raw:ZHDP_TEC2','lead-line'], // Lead-line
+     ['ZHDP_TEC2','6','raw:ZHDP_TEC2','area_swept_by_wire-drag'], // Area Swept by Wire-drag
+     ['ZHDP_TEC2','8','raw:ZHDP_TEC2','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
+     ['ZHDP_TEC2','9','raw:ZHDP_TEC2','electromagnetic_sensor'], // Electromagnetic Sensor
+     ['ZHDP_TEC2','10','raw:ZHDP_TEC2','photogrammetry'], // Photogrammetry
+     ['ZHDP_TEC2','11','raw:ZHDP_TEC2','satellite_imagery'], // Satellite Imagery
+     ['ZHDP_TEC2','12','raw:ZHDP_TEC2','levelling'], // Levelling
+     ['ZHDP_TEC2','13','raw:ZHDP_TEC2','computer_generated'], // Computer Generated
+     ['ZHDP_TEC2','14','raw:ZHDP_TEC2','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
+     ['ZHDP_TEC2','15','raw:ZHDP_TEC2','bathymetric_lidar'], // Bathymetric LiDAR
+     ['ZHDP_TEC2','17','raw:ZHDP_TEC2','singlebeam'], // Singlebeam
+     ['ZHDP_TEC2','18','raw:ZHDP_TEC2','underwater_utility_vehicle'], // Underwater Utility Vehicle
+     ['ZHDP_TEC2','999','raw:ZHDP_TEC2','other'], // Other
+
+     // ZHDP_TEC3 - Hydro Dpth : Snd Meta : Bathymetric Measurement Technique [3]
+     // ['ZHDP_TEC3','-999999',undefined,undefined], // No Information
+     ['ZHDP_TEC3','1','raw:ZHDP_TEC3','echo_sounder'], // Echo Sounder
+     ['ZHDP_TEC3','2','raw:ZHDP_TEC3','side-scan_sonar'], // Side-scan Sonar
+     ['ZHDP_TEC3','3','raw:ZHDP_TEC3','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
+     ['ZHDP_TEC3','4','raw:ZHDP_TEC3','diver'], // Diver
+     ['ZHDP_TEC3','5','raw:ZHDP_TEC3','lead-line'], // Lead-line
+     ['ZHDP_TEC3','6','raw:ZHDP_TEC3','area_swept_by_wire-drag'], // Area Swept by Wire-drag
+     ['ZHDP_TEC3','8','raw:ZHDP_TEC3','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
+     ['ZHDP_TEC3','9','raw:ZHDP_TEC3','electromagnetic_sensor'], // Electromagnetic Sensor
+     ['ZHDP_TEC3','10','raw:ZHDP_TEC3','photogrammetry'], // Photogrammetry
+     ['ZHDP_TEC3','11','raw:ZHDP_TEC3','satellite_imagery'], // Satellite Imagery
+     ['ZHDP_TEC3','12','raw:ZHDP_TEC3','levelling'], // Levelling
+     ['ZHDP_TEC3','13','raw:ZHDP_TEC3','computer_generated'], // Computer Generated
+     ['ZHDP_TEC3','14','raw:ZHDP_TEC3','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
+     ['ZHDP_TEC3','15','raw:ZHDP_TEC3','bathymetric_lidar'], // Bathymetric LiDAR
+     ['ZHDP_TEC3','17','raw:ZHDP_TEC3','singlebeam'], // Singlebeam
+     ['ZHDP_TEC3','18','raw:ZHDP_TEC3','underwater_utility_vehicle'], // Underwater Utility Vehicle
+     ['ZHDP_TEC3','999','raw:ZHDP_TEC3','other'], // Other
+
+     // ZHDP_VDC - Hydro Dpth : Snd Meta : Sounding Datum
+     // ['ZHDP_VDC','-999999',undefined,undefined], // No Information
+     ['ZHDP_VDC','2','raw:ZHDP_VDC','high_water'], // High Water
+     ['ZHDP_VDC','3','raw:ZHDP_VDC','higher_high_water'], // Higher High Water
+     ['ZHDP_VDC','4','raw:ZHDP_VDC','indian_spring_low_water'], // Indian Spring Low Water
+     ['ZHDP_VDC','5','raw:ZHDP_VDC','low_water'], // Low Water
+     ['ZHDP_VDC','6','raw:ZHDP_VDC','lower_low_water'], // Lower Low Water
+     ['ZHDP_VDC','7','raw:ZHDP_VDC','mean_high_water'], // Mean High Water
+     ['ZHDP_VDC','8','raw:ZHDP_VDC','mean_high_water_neaps'], // Mean High Water Neaps
+     ['ZHDP_VDC','9','raw:ZHDP_VDC','mean_high_water_springs'], // Mean High Water Springs
+     ['ZHDP_VDC','10','raw:ZHDP_VDC','mean_higher_high_water'], // Mean Higher High Water
+     ['ZHDP_VDC','11','raw:ZHDP_VDC','mean_low_water'], // Mean Low Water
+     ['ZHDP_VDC','12','raw:ZHDP_VDC','mean_low_water_neaps'], // Mean Low Water Neaps
+     ['ZHDP_VDC','13','raw:ZHDP_VDC','mean_low_water_springs'], // Mean Low Water Springs
+     ['ZHDP_VDC','14','raw:ZHDP_VDC','mean_lower_low_water'], // Mean Lower Low Water
+     ['ZHDP_VDC','15','raw:ZHDP_VDC','mean_sea_level'], // Mean Sea Level
+     ['ZHDP_VDC','16','raw:ZHDP_VDC','mean_tide_level'], // Mean Tide Level
+     ['ZHDP_VDC','17','raw:ZHDP_VDC','neap_tide'], // Neap Tide
+     ['ZHDP_VDC','18','raw:ZHDP_VDC','spring_tide'], // Spring Tide
+     ['ZHDP_VDC','19','raw:ZHDP_VDC','mean_lower_low_water_springs'], // Mean Lower Low Water Springs
+     ['ZHDP_VDC','20','raw:ZHDP_VDC','lowest_astronomical_tide'], // Lowest Astronomical Tide
+     ['ZHDP_VDC','21','raw:ZHDP_VDC','chart_datum_(unspecified)'], // Chart Datum (Unspecified)
+     ['ZHDP_VDC','22','raw:ZHDP_VDC','highest_astronomical_tide'], // Highest Astronomical Tide
+     ['ZHDP_VDC','24','raw:ZHDP_VDC','mean_higher_high_water_springs'], // Mean Higher High Water Springs
+     ['ZHDP_VDC','28','raw:ZHDP_VDC','highest_high_water'], // Highest High Water
+     ['ZHDP_VDC','30','raw:ZHDP_VDC','indian_spring_high_water'], // Indian Spring High Water
+     ['ZHDP_VDC','90','raw:ZHDP_VDC','lowest_low_water'], // Lowest Low Water
+     ['ZHDP_VDC','91','raw:ZHDP_VDC','lowest_low_water_springs'], // Lowest Low Water Springs
+     ['ZHDP_VDC','92','raw:ZHDP_VDC','approximate_mean_low_water_springs'], // Approximate Mean Low Water Springs
+     ['ZHDP_VDC','93','raw:ZHDP_VDC','low_water_springs'], // Low Water Springs
+     ['ZHDP_VDC','94','raw:ZHDP_VDC','approximate_lowest_astronomical_tide'], // Approximate Lowest Astronomical Tide
+     ['ZHDP_VDC','95','raw:ZHDP_VDC','nearly_lowest_low_water'], // Nearly Lowest Low Water
+     ['ZHDP_VDC','96','raw:ZHDP_VDC','approximate_mean_low_water'], // Approximate Mean Low Water
+     ['ZHDP_VDC','97','raw:ZHDP_VDC','approximate_mean_lower_low_water'], // Approximate Mean Lower Low Water
+     ['ZHDP_VDC','98','raw:ZHDP_VDC','approximate_mean_sea_level'], // Approximate Mean Sea Level
+     ['ZHDP_VDC','99','raw:ZHDP_VDC','high_water_springs'], // High Water Springs
+     ['ZHDP_VDC','100','raw:ZHDP_VDC','equinoctial_spring_low_water'], // Equinoctial Spring Low Water
+     ['ZHDP_VDC','101','raw:ZHDP_VDC','local_datum'], // Local Datum
+     ['ZHDP_VDC','102','raw:ZHDP_VDC','international_great_lakes_datum_1985'], // International Great Lakes Datum 1985
+     ['ZHDP_VDC','103','raw:ZHDP_VDC','mean_water_level'], // Mean Water Level
+     ['ZHDP_VDC','104','raw:ZHDP_VDC','lower_low_water_large_tide'], // Lower Low Water Large Tide
+     ['ZHDP_VDC','105','raw:ZHDP_VDC','higher_high_water_large_tide'], // Higher High Water Large Tide
+     ['ZHDP_VDC','107','raw:ZHDP_VDC','nearly_highest_high_water'], // Nearly Highest High Water
+     ['ZHDP_VDC','999','raw:ZHDP_VDC','other'], // Other
+
+     // ZI001_SPS - Source : Entity Spatial Source
      // ['ZI001_SPS','-999999',undefined,undefined], // No Information
      ['ZI001_SPS','1000','source:spatial_source','no'],
      ['ZI001_SPS','1001','source:spatial_source','yes'],
 
-     // ZI001_SRT - Source Information : Source Type
-     // ['ZI001_SRT','noInformation',undefined,undefined], // No Information
-     // ['ZI001_SRT','noInformation',undefined,undefined], // No Information
-     ['ZI001_SRT','other','source:non_spatial_source:type','other'], // Other
-     ['ZI001_SRT','commercial','source:non_spatial_source:type','commercial_data'], // Commercial Data
-     ['ZI001_SRT','deLormeDigitalAtlasEarth','source:non_spatial_source:type','delorme_digital_atlas_of_the_earth_(dae)'], // DeLorme Digital Atlas of the Earth (DAE)
-     ['ZI001_SRT','gpsBasedFieldCollect','source:non_spatial_source:type','gps'], // GPS
-     ['ZI001_SRT','ikonosImagery','source:non_spatial_source:type','ikonos_imagery'], // Ikonos Imagery
-     ['ZI001_SRT','imageryUnspecified','source:non_spatial_source:type','imagery'], // Imagery
-     ['ZI001_SRT','militaryMapData','source:non_spatial_source:type','military_map_data'], // Military Map Data
-     ['ZI001_SRT','navteqData','source:non_spatial_source:type','navteq_data'], // NAVTEQ Data
-     ['ZI001_SRT','ngaAutoAirFacInfoFile','source:non_spatial_source:type','aafif'], // AAFIF
-     ['ZI001_SRT','ngaControlledImageBase1','source:non_spatial_source:type','cib1'], // CIB1
-     ['ZI001_SRT','ngaDigitalAirFltInfoFile','source:non_spatial_source:type','dafif'], // DAFIF
-     ['ZI001_SRT','ngaDigitalNauticalChart','source:non_spatial_source:type','dnc'], // DNC
-     ['ZI001_SRT','ngaDigitalVertObstruction','source:non_spatial_source:type','dvof'], // DVOF
-     ['ZI001_SRT','ngaFoundationFeatureData','source:non_spatial_source:type','ffd'], // FFD
-     ['ZI001_SRT','ngaGeoNames','source:non_spatial_source:type','geonames'], // GeoNames
-     ['ZI001_SRT','ngaInterimTerrainData','source:non_spatial_source:type','itd'], // ITD
-     ['ZI001_SRT','ngaInterimVectorData','source:non_spatial_source:type','ivd'], // IVD
-     ['ZI001_SRT','ngaStereoAirfieldCollect','source:non_spatial_source:type','sac'], // SAC
-     ['ZI001_SRT','ngaUrbanVectorMap','source:non_spatial_source:type','uvmap'], // UVMap
-     ['ZI001_SRT','ngaVectorInterimTerrain','source:non_spatial_source:type','vitd'], // VITD
-     ['ZI001_SRT','ngaVectorMap2','source:non_spatial_source:type','vmap_2'], // VMap 2
-     ['ZI001_SRT','nonMilitaryMap','source:non_spatial_source:type','non-military_map'], // Non-military Map
-     ['ZI001_SRT','openSource','source:non_spatial_source:type','open_source_information'], // Open Source Information
-     ['ZI001_SRT','operationsData','source:non_spatial_source:type','operations_data'], // Operations Data
-     ['ZI001_SRT','quickBirdImagery','source:non_spatial_source:type','quickbird_imagery'], // QuickBird Imagery
-     ['ZI001_SRT','tomTomData','source:non_spatial_source:type','tomtom_data'], // TomTom Data
-     ['ZI001_SRT','usModernizedIntegratedDB','source:non_spatial_source:type','midb'], // MIDB
-     ['ZI001_SRT','usNtmImagery','source:non_spatial_source:type','ntm_imagery'], // NTM Imagery
+     // ZI001_SRT - Source : Source Type
+     // ['ZI001_SRT','-999999',undefined,undefined], // No Information
+     ['ZI001_SRT','2','source:non_spatial_source:type','aafif'], // AAFIF
+     ['ZI001_SRT','7','source:non_spatial_source:type','cib1'], // CIB1
+     ['ZI001_SRT','9','source:non_spatial_source:type','quickbird_imagery'], // QuickBird Imagery
+     ['ZI001_SRT','10','source:non_spatial_source:type','dnc'], // DNC
+     ['ZI001_SRT','21','source:non_spatial_source:type','dvof'], // DVOF
+     ['ZI001_SRT','22','source:non_spatial_source:type','ffd'], // FFD
+     ['ZI001_SRT','25','source:non_spatial_source:type','geonames'], // GeoNames
+     ['ZI001_SRT','26','source:non_spatial_source:type','gps'], // GPS
+     ['ZI001_SRT','28','source:non_spatial_source:type','ikonos_imagery'], // Ikonos Imagery
+     ['ZI001_SRT','29','source:non_spatial_source:type','ntm_imagery'], // NTM Imagery
+     ['ZI001_SRT','30','source:non_spatial_source:type','imagery'], // Imagery
+     ['ZI001_SRT','31','source:non_spatial_source:type','itd'], // ITD
+     ['ZI001_SRT','32','source:non_spatial_source:type','ivd'], // IVD
+     ['ZI001_SRT','43','source:non_spatial_source:type','midb'], // MIDB
+     ['ZI001_SRT','60','source:non_spatial_source:type','uvmap'], // UVMap
+     ['ZI001_SRT','61','source:non_spatial_source:type','vitd'], // VITD
+     ['ZI001_SRT','64','source:non_spatial_source:type','vmap_2'], // VMap 2
+     ['ZI001_SRT','108','source:non_spatial_source:type','navteq_data'], // NAVTEQ Data
+     ['ZI001_SRT','159','source:non_spatial_source:type','commercial_data'], // Commercial Data
+     ['ZI001_SRT','160','source:non_spatial_source:type','open_source_information'], // Open Source Information
+     ['ZI001_SRT','165','source:non_spatial_source:type','dafif'], // DAFIF
+     ['ZI001_SRT','166','source:non_spatial_source:type','delorme_digital_atlas_of_the_earth_(dae)'], // DeLorme Digital Atlas of the Earth (DAE)
+     ['ZI001_SRT','167','source:non_spatial_source:type','military_map_data'], // Military Map Data
+     ['ZI001_SRT','168','source:non_spatial_source:type','non-military_map'], // Non-military Map
+     ['ZI001_SRT','169','source:non_spatial_source:type','operations_data'], // Operations Data
+     ['ZI001_SRT','170','source:non_spatial_source:type','sac'], // SAC
+     ['ZI001_SRT','171','source:non_spatial_source:type','tomtom_data'], // TomTom Data
+     ['ZI001_SRT','999','source:non_spatial_source:type','other'], // Other
 
-     // ZI001_VSC - Source Information : Vertical Source Category
-     // ['ZI001_VSC','noInformation',undefined,undefined], // No Information
-     ['ZI001_VSC','other','source:vertical_source:type','other'], // Other
-     ['ZI001_VSC','interpolatedDted1','source:vertical_source:type','dted_1'], // DTED 1
-     ['ZI001_VSC','interpolatedDted2','source:vertical_source:type','dted_2'], // DTED 2
-     ['ZI001_VSC','noElevations','source:vertical_source:type','no_elevations'], // No Elevations
-     ['ZI001_VSC','reflectiveSurface','source:vertical_source:type','reflective_surface'], // Reflective Surface
-     ['ZI001_VSC','stereoscopicImagery','source:vertical_source:type','stereoscopic_imagery'], // Stereoscopic Imagery
-     ['ZI001_VSC','tinData','source:vertical_source:type','tin_data'], // TIN Data
+     // ZI001_VSC - Source : Vertical Source Category
+     // ['ZI001_VSC','-999999',undefined,undefined], // No Information
+     ['ZI001_VSC','1','source:vertical_source:type','dted_1'], // DTED 1
+     ['ZI001_VSC','2','source:vertical_source:type','dted_2'], // DTED 2
+     ['ZI001_VSC','3','source:vertical_source:type','no_elevations'], // No Elevations
+     ['ZI001_VSC','4','source:vertical_source:type','reflective_surface'], // Reflective Surface
+     ['ZI001_VSC','5','source:vertical_source:type','stereoscopic_imagery'], // Stereoscopic Imagery
+     ['ZI001_VSC','6','source:vertical_source:type','tin_data'], // TIN Data
+     ['ZI001_VSC','998','source:vertical_source:type','not_applicable'], // Not Applicable
+     ['ZI001_VSC','999','source:vertical_source:type','other'], // Other
 
-     // ZI004_RCG - Process Step Information : Resource Content Originator
-     // This is just plain Ugly
-     // ['ZI004_RCG','noInformation',undefined,undefined], // No Information
-     ['ZI004_RCG','other','attribution','other'], // Other
-     ['ZI004_RCG','armyGeoAgencyNetherlands','attribution','army_geographic_agency_(netherlands)'], // The Royal Netherlands Army Geographic Agency (RNLAGA) in the Dutch Ministry of Defence.
-     ['ZI004_RCG','armyGeographicCentreSpain','attribution','army_geographic_centre_(spain)'], // The Army Geographic Centre of the Spanish Armed Forces.
-     ['ZI004_RCG','armyGeoInstitutePortugal','attribution','army_geographic_institute_(portugal)'], // The Army Geographic Institute (IGeoE),whose mission is to provide geographic information and geographic support the Portugese Army, to provide geographical information to other branches of the Portugese Armed Forces and the civilian community, ensuring th
-     ['ZI004_RCG','bundeswehrGeoinfoOffice','attribution','bundeswehr_geoinformation_office_(germany)'], // The Bundeswehr Geoinformation Office (BGIO) of the German Federal Armed Forces.
-     ['ZI004_RCG','defenceAcqLogOrgDenmark','attribution','defence_acquisition_and_logistics_organization_(denmark)'], // The Danish Defence Acquisition and Logistics Organisation (DALO) is the specialized materiel centre and logistics authority of the Danish Defence.
-     ['ZI004_RCG','defenceGeoCentreIntColGrp','attribution','defence_geographic_centre_intelligence_collection_group_(united_kingdom)'], // The Defence Geographic Centre (DGC) Intelligence Collection Group (ICG) of the Ministry of Defence of the United Kingdom.
-     ['ZI004_RCG','defenceImageryGeoOrg','attribution','defence_imagery_and_geospatial_organisation_(australia)'], // The Defence Imagery and Geospatial Organisation (DIGO) provides geospatial intelligence, from imagery and other sources, in support of Australia's defence and national interests.
-     ['ZI004_RCG','defenseInfoSecurityItaly','attribution','defense_information_security_(italy)'], // The Reparto Informazioni e Sicurezza dello Stato Maggiore della Difesa (SMD-RIS), an intelligence agency of the Defense Ministry of Italy.
-     ['ZI004_RCG','generalCommandMapping','attribution','general_command_of_mapping_(turkey)'], // The General Command of Mapping (GCM) is the National Mapping Agency for Turkey and is responsible for the official topographical mapping of the country in hard-copy and digital forms for: military, government, administrative, and educational uses.
-     ['ZI004_RCG','geoServiceBelgium','attribution','geographic_service_(belgium)'], // The Geographic Service of Belgium.
-     ['ZI004_RCG','geoServCzechArmedForces','attribution','geographic_service_of_the_czech_armed_forces_(czech_republic)'], // The Geographic Service of the Armed Forces of the Czech Republic (GeoS AER).
-     ['ZI004_RCG','geoInfoAgencyLatvia','attribution','geospatial_information_agency_(latvia)'], // The Geospatial Information Agency of the Defence Ministry of Latvia.
-     ['ZI004_RCG','geoIntelOrgNewZealand','attribution','geospatial_intelligence_organisation_(new_zealand)'], // The Geospatial Intelligence Organisation of the New Zealand Defence Force (NZDF), whose mission is to acquire, collate and maintain high integrity databases for production and dissemination of geospatial products and services to static and deployed NZDF H
-     ['ZI004_RCG','hellenicMilitaryGeoServ','attribution','hellenic_military_geographic_service_(greece)'], // The Hellenic Military Geographic Service of the Hellenic Army General Service Directorate of Geographical Corps, who produce, manage and provide geographical data for the entire Hellenic region including the neighbouring countries of Greece.
-     ['ZI004_RCG','jointGeoBureauFrance','attribution','joint_geography_bureau_(france)'], // The Bureau Geographique Interarmees (BGI), Etat-Major des Armees (EMA), Department of the Ministry of Defense of the French Republic, who is in charge of geospatial information support to the French military forces.
-     ['ZI004_RCG','mapChartEstablishment','attribution','mapping_and_charting_establishment_(canada)'], // The Mapping and Charting Establishment (MCE) of Canada.
-     ['ZI004_RCG','mappingServiceHungary','attribution','mapping_service_(hungary)'], // The Mapping Service of the Hungarian Defence Forces.
-     ['ZI004_RCG','milGeoGroupEstonia','attribution','military_geographic_group_(estonia)'], // The Military Geographic Group of the Estonian Defence Forces.
-     ['ZI004_RCG','milGeoServiceNorway','attribution','military_geographic_service_(norway)'], // The Norwegian Military Geographic Service of the Defence Command Norway.
-     ['ZI004_RCG','milGeogDivisionPoland','attribution','military_geography_division_(poland)'], // The Military Geography Division of the General Staff of the Polish Armed Forces.
-     ['ZI004_RCG','milMapCentreLithuania','attribution','military_mapping_centre_(lithuania)'], // The Military Mapping Centre of the Lithuanian National Defence Forces, whose mission is to ensure that the troops and commands of the Lithuanian Armed Forces are provided with the relevant mapping material, geographic information and geospatial support re
-     ['ZI004_RCG','milTopoDirectRomania','attribution','military_topographic_directorate_(romania)'], // The Military Topographic Directorate of the Romanian Armed Forces.
-     ['ZI004_RCG','milTopoServiceBulgaria','attribution','military_topographic_service_(bulgaria)'], // The Military Topographic Service of the Bulgarian Army.
-     ['ZI004_RCG','natArmyTopoServiceMoldova','attribution','national_army_topographic_service_(moldova)'], // The National Army Topographic Service of Moldova.
-     ['ZI004_RCG','swedishArmedForces','attribution','swedish_armed_forces_(sweden)'], // The Swedish Armed Forces (Forsvarsmakten).
-     ['ZI004_RCG','topoInstituteSlovakia','attribution','topographic_institute_(slovakia)'], // The Topograficky Ustav (TOPU) of Slovakia.
-     ['ZI004_RCG','topoServiceFinland','attribution','topographic_service_(finland)'], // The Topographic Service of the Finnish Defence Forces.
-     ['ZI004_RCG','usAfricaCommand','attribution','u.s._africa_command_(usafricom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for U.S. military operations and military relations with 53 African nations.
-     ['ZI004_RCG','usAirForce','attribution','u.s._air_force'], // The aerial warfare branch of the U.S. Armed Forces.
-     ['ZI004_RCG','usArmy','attribution','u.s._army'], // The land-based military operations branch of the U.S. Armed Forces.
-     ['ZI004_RCG','usArmyGeospatialCenter','attribution','u.s._army_geospatial_center_(agc)'], // A laboratory of the Engineer Research and Development Center (ERDC) that is responsible for coordination, integration and synchronization of geospatial information requirements and standards across the U.S. Army; development and fielding of geospatial-ent
-     ['ZI004_RCG','usCentralCommand','attribution','u.s._central_command_(uscentcom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for U.S. military operations and military relations in the Middle East, extending from Egypt through Central Asia.
-     ['ZI004_RCG','usCentralIntelAgency','attribution','u.s._central_intelligence_agency_(cia)'], // An independent U.S. Government agency responsible for providing national security intelligence to senior U.S. policymakers.
-     ['ZI004_RCG','usCoastGuard','attribution','u.s._coast_guard'], // The branch of the U.S. Armed Forces responsible for protecting the public, the environment, and the U.S. economic and security interests in any maritime region in which those interests may be at risk, including international waters and America's coasts, p
-     ['ZI004_RCG','usDefenseIntelAgency','attribution','u.s._defense_intelligence_agency_(dia)'], // A U.S. Department of Defense (DoD) combat support agency that is responsible for providing intelligence in support of military planning and operations and weapons acquisition.
-     ['ZI004_RCG','usDeptOfEnergy','attribution','u.s._department_of_energy_(doe)'], // The cabinet-level department of the U.S. Government that is responsible for maintaining national energy policy, nuclear power and nuclear weapons programs, and the national energy research labs.
-     ['ZI004_RCG','usDeptOfHomelandSecurity','attribution','u.s._department_of_homeland_security_(dhs)'], // The cabinet-level department of the U.S. Government that is responsible for protecting the territory of the U.S. from terrorist attacks and for responding to natural disasters.
-     ['ZI004_RCG','usDeptOfState','attribution','u.s._department_of_state'], // The cabinet-level foreign affairs department of the U.S. Government, often referred to as the State Department.
-     ['ZI004_RCG','usEuropeanCommand','attribution','u.s._european_command_(useucom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for U.S. military operations and military relations in Europe, extending from Greenland/Iceland through Israel.
-     ['ZI004_RCG','usFedBurOfInvestigation','attribution','u.s._federal_bureau_of_investigation_(fbi)'], // The principal investigative arm of the U.S. Department of Justice (the Cabinet-level department of the U.S. Government responsible for enforcing federal laws).
-     ['ZI004_RCG','usGeologicalSurvey','attribution','u.s._geological_survey_(usgs)'], // The U.S. Department of the Interior (a cabinet-level department of the U.S. Government) component agency that provides reliable scientific information to describe and understand the Earth; minimize loss of life and property from natural disasters; manage
-     ['ZI004_RCG','usJointForcesCommand','attribution','u.s._joint_forces_command_(usjfcom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is a functional command providing specific services to the U.S. military.
-     ['ZI004_RCG','usMarineCorps','attribution','u.s._marine_corps'], // The branch of the U.S. Armed Forces responsible for providing force projection from the sea, using the mobility of the U.S. Navy to rapidly deliver combined-arms task forces.
-     ['ZI004_RCG','usNatCivilAppsProgram','attribution','u.s._national_civil_applications_program_(ncap)'], // The component of the U.S. Geological Survey (USGS) Mapping, Remote Sensing, and Geographic Investigations Program that serves Federal civil agencies by providing for the acquisition, dissemination, and exploitation of classified remote sensing systems and
-     ['ZI004_RCG','usNationalGeoIntelAgency','attribution','u.s._national_geospatial-intelligence_agency_(nga)'], // A U.S. Department of Defense (DoD) combat support agency that provides geographic intelligence in support of national security.
-     ['ZI004_RCG','usNatOceanAtmosAdmin','attribution','u.s._national_oceanic_and_atmospheric_administration'], // The U.S. Department of Commerce (a cabinet-level department of the U.S. Government) component agency that provides reliable scientific information to describe and understand the conditions of the oceans and the atmosphere, including: warning of dangerous
-     ['ZI004_RCG','usNationalReconnOffice','attribution','u.s._national_reconnaissance_office_(nro)'], // An intelligence agency in the U.S. Department of Defense (DoD) that is responsible for designing, building and operating space reconnaissance systems to: detect trouble spots worldwide; monitor arms control agreements and environmental issues; and help pl
-     ['ZI004_RCG','usNationalSecurityAgency','attribution','u.s._national_security_agency_(nsa)'], // A U.S. Department of Defense (DoD) combat support agency that is responsible for providing cryptologic products and services to the U.S. DoD, the U.S. Intelligence Community, U.S. Government agencies, industry partners, and select allies and coalition par
-     ['ZI004_RCG','usNavy','attribution','u.s._navy'], // The sea-based military operations branch of the U.S. Armed Forces.
-     ['ZI004_RCG','usNorthernCommand','attribution','u.s._northern_command_(usnorthcom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for protecting the United States homeland and supporting local, state, and federal authorities.
-     ['ZI004_RCG','usPacificCommand','attribution','u.s._pacific_command_(pacom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for U.S. military operations and military relations in the region of the Pacific Ocean, extending westwards to Mongolia, the People's Republic of China, and Southest
-     ['ZI004_RCG','usSouthernCommand','attribution','u.s._southern_command_(ussouthcom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for providing contingency planning, operations, and security cooperation for Central and South America, the Caribbean (except U.S. commonwealths, territories, and po
-     ['ZI004_RCG','usSpecialOperCommand','attribution','u.s._special_operations_command_(ussocom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for overseeing the various Special Operations Commands of the Army, Air Force, Navy and Marine Corps of the U.S. Armed Forces.
-     ['ZI004_RCG','usStrategicCommand','attribution','u.s._strategic_command_(usstratcom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that controls the nuclear weapons of the U.S. military and is a globally focused command charged with the missions of space operations, information operations, integrated missile defens
-     ['ZI004_RCG','usTransportationCommand','attribution','u.s._transportation_command_(ustranscom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for providing air, land and sea transportation for the DoD, both in time of peace and time of war.
+     // ZI004_RCG - Physical Object Metadata : Process Step Information : Resource Content Originator
+     // ['ZI004_RCG','-999999',undefined,undefined], // No Information
+     ['ZI004_RCG','1','attribution','u.s._army'], // U.S. Army
+     ['ZI004_RCG','2','attribution','u.s._navy'], // U.S. Navy
+     ['ZI004_RCG','3','attribution','u.s._air_force'], // U.S. Air Force
+     ['ZI004_RCG','4','attribution','u.s._marine_corps'], // U.S. Marine Corps
+     ['ZI004_RCG','5','attribution','u.s._coast_guard'], // U.S. Coast Guard
+     ['ZI004_RCG','6','attribution','u.s._africa_command_(usafricom)'], // U.S. Africa Command (USAFRICOM)
+     ['ZI004_RCG','7','attribution','u.s._central_command_(uscentcom)'], // U.S. Central Command (USCENTCOM)
+     ['ZI004_RCG','8','attribution','u.s._european_command_(useucom)'], // U.S. European Command (USEUCOM)
+     ['ZI004_RCG','9','attribution','u.s._joint_forces_command_(usjfcom)'], // U.S. Joint Forces Command (USJFCOM)
+     ['ZI004_RCG','10','attribution','u.s._northern_command_(usnorthcom)'], // U.S. Northern Command (USNORTHCOM)
+     ['ZI004_RCG','11','attribution','u.s._pacific_command_(pacom)'], // U.S. Pacific Command (PACOM)
+     ['ZI004_RCG','12','attribution','u.s._special_operations_command_(ussocom)'], // U.S. Special Operations Command (USSOCOM)
+     ['ZI004_RCG','13','attribution','u.s._southern_command_(ussouthcom)'], // U.S. Southern Command (USSOUTHCOM)
+     ['ZI004_RCG','14','attribution','u.s._strategic_command_(usstratcom)'], // U.S. Strategic Command (USSTRATCOM)
+     ['ZI004_RCG','15','attribution','u.s._transportation_command_(ustranscom)'], // U.S. Transportation Command (USTRANSCOM)
+     ['ZI004_RCG','16','attribution','u.s._central_intelligence_agency_(cia)'], // U.S. Central Intelligence Agency (CIA)
+     ['ZI004_RCG','17','attribution','u.s._defense_intelligence_agency_(dia)'], // U.S. Defense Intelligence Agency (DIA)
+     ['ZI004_RCG','18','attribution','u.s._national_security_agency_(nsa)'], // U.S. National Security Agency (NSA)
+     ['ZI004_RCG','19','attribution','u.s._national_geospatial-intelligence_agency_(nga)'], // U.S. National Geospatial-Intelligence Agency (NGA)
+     ['ZI004_RCG','20','attribution','u.s._national_reconnaissance_office_(nro)'], // U.S. National Reconnaissance Office (NRO)
+     ['ZI004_RCG','21','attribution','u.s._department_of_state'], // U.S. Department of State
+     ['ZI004_RCG','22','attribution','u.s._department_of_homeland_security_(dhs)'], // U.S. Department of Homeland Security (DHS)
+     ['ZI004_RCG','23','attribution','u.s._department_of_energy_(doe)'], // U.S. Department of Energy (DOE)
+     ['ZI004_RCG','24','attribution','u.s._federal_bureau_of_investigation_(fbi)'], // U.S. Federal Bureau of Investigation (FBI)
+     ['ZI004_RCG','25','attribution','u.s._geological_survey_(usgs)'], // U.S. Geological Survey (USGS)
+     ['ZI004_RCG','26','attribution','u.s._national_civil_applications_program_(ncap)'], // U.S. National Civil Applications Program (NCAP)
+     ['ZI004_RCG','27','attribution','u.s._national_oceanic_and_atmospheric_administration'], // U.S. National Oceanic and Atmospheric Administration
+     ['ZI004_RCG','28','attribution','defence_imagery_and_geospatial_organisation_(australia)'], // Defence Imagery and Geospatial Organisation (Australia)
+     ['ZI004_RCG','29','attribution','geographic_service_(belgium)'], // Geographic Service (Belgium)
+     ['ZI004_RCG','30','attribution','military_topographic_service_(bulgaria)'], // Military Topographic Service (Bulgaria)
+     ['ZI004_RCG','31','attribution','mapping_and_charting_establishment_(canada)'], // Mapping and Charting Establishment (Canada)
+     ['ZI004_RCG','32','attribution','geographic_service_of_the_czech_armed_forces_(czech_republic)'], // Geographic Service of the Czech Armed Forces (Czech Republic)
+     ['ZI004_RCG','33','attribution','defence_acquisition_and_logistics_organization_(denmark)'], // Defence Acquisition and Logistics Organization (Denmark)
+     ['ZI004_RCG','34','attribution','military_geographic_group_(estonia)'], // Military Geographic Group (Estonia)
+     ['ZI004_RCG','35','attribution','topographic_service_(finland)'], // Topographic Service (Finland)
+     ['ZI004_RCG','36','attribution','joint_geography_bureau_(france)'], // Joint Geography Bureau (France)
+     ['ZI004_RCG','37','attribution','bundeswehr_geoinformation_office_(germany)'], // Bundeswehr Geoinformation Office (Germany)
+     ['ZI004_RCG','38','attribution','hellenic_military_geographic_service_(greece)'], // Hellenic Military Geographic Service (Greece)
+     ['ZI004_RCG','39','attribution','mapping_service_(hungary)'], // Mapping Service (Hungary)
+     ['ZI004_RCG','40','attribution','defense_information_security_(italy)'], // Defense Information Security (Italy)
+     ['ZI004_RCG','41','attribution','geospatial_information_agency_(latvia)'], // Geospatial Information Agency (Latvia)
+     ['ZI004_RCG','42','attribution','military_mapping_centre_(lithuania)'], // Military Mapping Centre (Lithuania)
+     ['ZI004_RCG','43','attribution','national_army_topographic_service_(moldova)'], // National Army Topographic Service (Moldova)
+     ['ZI004_RCG','44','attribution','army_geographic_agency_(netherlands)'], // Army Geographic Agency (Netherlands)
+     ['ZI004_RCG','45','attribution','geospatial_intelligence_organisation_(new_zealand)'], // Geospatial Intelligence Organisation (New Zealand)
+     ['ZI004_RCG','46','attribution','military_geographic_service_(norway)'], // Military Geographic Service (Norway)
+     ['ZI004_RCG','47','attribution','military_geography_division_(poland)'], // Military Geography Division (Poland)
+     ['ZI004_RCG','48','attribution','army_geographic_institute_(portugal)'], // Army Geographic Institute (Portugal)
+     ['ZI004_RCG','49','attribution','military_topographic_directorate_(romania)'], // Military Topographic Directorate (Romania)
+     ['ZI004_RCG','50','attribution','topographic_institute_(slovakia)'], // Topographic Institute (Slovakia)
+     ['ZI004_RCG','51','attribution','army_geographic_centre_(spain)'], // Army Geographic Centre (Spain)
+     ['ZI004_RCG','52','attribution','swedish_armed_forces_(sweden)'], // Swedish Armed Forces (Sweden)
+     ['ZI004_RCG','53','attribution','general_command_of_mapping_(turkey)'], // General Command of Mapping (Turkey)
+     ['ZI004_RCG','54','attribution','defence_geographic_centre_intelligence_collection_group_(united_kingdom)'], // Defence Geographic Centre Intelligence Collection Group (United Kingdom)
+     ['ZI004_RCG','55','attribution','u.s._army_geospatial_center_(agc)'], // U.S. Army Geospatial Center (AGC)
+     ['ZI004_RCG','56','attribution','army_(australia)'], // Army (Australia)
+     ['ZI004_RCG','998','attribution','not_applicable'], // Not Applicable
+     ['ZI004_RCG','999','attribution','other'], // Other
+
+     // ZI005_GNT - Geo Name Info : Geographic Name Type
+     // ['ZI005_GNT','-999999',undefined,undefined], // No Information
+     ['ZI005_GNT','1','raw:ZI005_GNT','conventional'], // Conventional
+     ['ZI005_GNT','2','raw:ZI005_GNT','native_transliterated'], // Native Transliterated
+     ['ZI005_GNT','3','raw:ZI005_GNT','variant_transliterated'], // Variant Transliterated
+     ['ZI005_GNT','4','raw:ZI005_GNT','unverified_transliterated'], // Unverified Transliterated
+     ['ZI005_GNT','5','raw:ZI005_GNT','native_original'], // Native Original
+     ['ZI005_GNT','6','raw:ZI005_GNT','variant_original'], // Variant Original
+     ['ZI005_GNT','7','raw:ZI005_GNT','unverified_original'], // Unverified Original
+     ['ZI005_GNT','8','raw:ZI005_GNT','historical_transliterated'], // Historical Transliterated
+     ['ZI005_GNT','9','raw:ZI005_GNT','historical_original'], // Historical Original
+     ['ZI005_GNT','10','raw:ZI005_GNT','provisional'], // Provisional
+     ['ZI005_GNT','999','raw:ZI005_GNT','other'], // Other
+
+     // ZI005_GNT2 - Geo Name Info : Geographic Name Type [2]
+     // ['ZI005_GNT2','-999999',undefined,undefined], // No Information
+     ['ZI005_GNT2','1','raw:ZI005_GNT2','conventional'], // Conventional
+     ['ZI005_GNT2','2','raw:ZI005_GNT2','native_transliterated'], // Native Transliterated
+     ['ZI005_GNT2','3','raw:ZI005_GNT2','variant_transliterated'], // Variant Transliterated
+     ['ZI005_GNT2','4','raw:ZI005_GNT2','unverified_transliterated'], // Unverified Transliterated
+     ['ZI005_GNT2','5','raw:ZI005_GNT2','native_original'], // Native Original
+     ['ZI005_GNT2','6','raw:ZI005_GNT2','variant_original'], // Variant Original
+     ['ZI005_GNT2','7','raw:ZI005_GNT2','unverified_original'], // Unverified Original
+     ['ZI005_GNT2','8','raw:ZI005_GNT2','historical_transliterated'], // Historical Transliterated
+     ['ZI005_GNT2','9','raw:ZI005_GNT2','historical_original'], // Historical Original
+     ['ZI005_GNT2','10','raw:ZI005_GNT2','provisional'], // Provisional
+     ['ZI005_GNT2','999','raw:ZI005_GNT2','other'], // Other
+
+     // ZI005_GNT3 - Geo Name Info : Geographic Name Type [3]
+     // ['ZI005_GNT3','-999999',undefined,undefined], // No Information
+     ['ZI005_GNT3','1','raw:ZI005_GNT3','conventional'], // Conventional
+     ['ZI005_GNT3','2','raw:ZI005_GNT3','native_transliterated'], // Native Transliterated
+     ['ZI005_GNT3','3','raw:ZI005_GNT3','variant_transliterated'], // Variant Transliterated
+     ['ZI005_GNT3','4','raw:ZI005_GNT3','unverified_transliterated'], // Unverified Transliterated
+     ['ZI005_GNT3','5','raw:ZI005_GNT3','native_original'], // Native Original
+     ['ZI005_GNT3','6','raw:ZI005_GNT3','variant_original'], // Variant Original
+     ['ZI005_GNT3','7','raw:ZI005_GNT3','unverified_original'], // Unverified Original
+     ['ZI005_GNT3','8','raw:ZI005_GNT3','historical_transliterated'], // Historical Transliterated
+     ['ZI005_GNT3','9','raw:ZI005_GNT3','historical_original'], // Historical Original
+     ['ZI005_GNT3','10','raw:ZI005_GNT3','provisional'], // Provisional
+     ['ZI005_GNT3','999','raw:ZI005_GNT3','other'], // Other
+
+     // ZI005_GNTA - Geo Name Info (1) : Geographic Name Type (first side)
+     // ['ZI005_GNTA','-999999',undefined,undefined], // No Information
+     ['ZI005_GNTA','1','raw:ZI005_GNTA','conventional'], // Conventional
+     ['ZI005_GNTA','2','raw:ZI005_GNTA','native_transliterated'], // Native Transliterated
+     ['ZI005_GNTA','3','raw:ZI005_GNTA','variant_transliterated'], // Variant Transliterated
+     ['ZI005_GNTA','4','raw:ZI005_GNTA','unverified_transliterated'], // Unverified Transliterated
+     ['ZI005_GNTA','5','raw:ZI005_GNTA','native_original'], // Native Original
+     ['ZI005_GNTA','6','raw:ZI005_GNTA','variant_original'], // Variant Original
+     ['ZI005_GNTA','7','raw:ZI005_GNTA','unverified_original'], // Unverified Original
+     ['ZI005_GNTA','8','raw:ZI005_GNTA','historical_transliterated'], // Historical Transliterated
+     ['ZI005_GNTA','9','raw:ZI005_GNTA','historical_original'], // Historical Original
+     ['ZI005_GNTA','10','raw:ZI005_GNTA','provisional'], // Provisional
+     ['ZI005_GNTA','999','raw:ZI005_GNTA','other'], // Other
+
+     // ZI005_GNTB - Geo Name Info (2) : Geographic Name Type (second side)
+     // ['ZI005_GNTB','-999999',undefined,undefined], // No Information
+     ['ZI005_GNTB','1','raw:ZI005_GNTB','conventional'], // Conventional
+     ['ZI005_GNTB','2','raw:ZI005_GNTB','native_transliterated'], // Native Transliterated
+     ['ZI005_GNTB','3','raw:ZI005_GNTB','variant_transliterated'], // Variant Transliterated
+     ['ZI005_GNTB','4','raw:ZI005_GNTB','unverified_transliterated'], // Unverified Transliterated
+     ['ZI005_GNTB','5','raw:ZI005_GNTB','native_original'], // Native Original
+     ['ZI005_GNTB','6','raw:ZI005_GNTB','variant_original'], // Variant Original
+     ['ZI005_GNTB','7','raw:ZI005_GNTB','unverified_original'], // Unverified Original
+     ['ZI005_GNTB','8','raw:ZI005_GNTB','historical_transliterated'], // Historical Transliterated
+     ['ZI005_GNTB','9','raw:ZI005_GNTB','historical_original'], // Historical Original
+     ['ZI005_GNTB','10','raw:ZI005_GNTB','provisional'], // Provisional
+     ['ZI005_GNTB','999','raw:ZI005_GNTB','other'], // Other
+
+     // ZI012_DCR - Dpth Crv : Snd Meta : Vessel Draft Correction
+     // ['ZI012_DCR','-999999',undefined,undefined], // No Information
+     ['ZI012_DCR','1000','raw:ZI012_DCR','no'],
+     ['ZI012_DCR','1001','raw:ZI012_DCR','yes'],
+
+     // ZI012_DKC - Dpth Crv : Snd Meta : Bathymetric Measurement Quality Category
+     // ['ZI012_DKC','-999999',undefined,undefined], // No Information
+     ['ZI012_DKC','1','raw:ZI012_DKC','depth_known'], // Depth Known
+     ['ZI012_DKC','3','raw:ZI012_DKC','safe_clearance_known'], // Safe Clearance Known
+     ['ZI012_DKC','4','raw:ZI012_DKC','depth_unknown'], // Depth Unknown
+     ['ZI012_DKC','5','raw:ZI012_DKC','depth_doubtful'], // Depth Doubtful
+     ['ZI012_DKC','6','raw:ZI012_DKC','depth_unreliable'], // Depth Unreliable
+     ['ZI012_DKC','7','raw:ZI012_DKC','no_bottom'], // No Bottom
+     ['ZI012_DKC','8','raw:ZI012_DKC','least_depth'], // Least Depth
+     ['ZI012_DKC','9','raw:ZI012_DKC','reported_depth'], // Reported Depth
+     ['ZI012_DKC','10','raw:ZI012_DKC','unconfirmed_depth'], // Unconfirmed Depth
+     ['ZI012_DKC','11','raw:ZI012_DKC','maintained_depth'], // Maintained Depth
+     ['ZI012_DKC','12','raw:ZI012_DKC','unmaintained_depth'], // Unmaintained Depth
+     ['ZI012_DKC','998','raw:ZI012_DKC','not_applicable'], // Not Applicable
+     ['ZI012_DKC','999','raw:ZI012_DKC','other'], // Other
+
+     // ZI012_DKC2 - Dpth Crv : Snd Meta : Bathymetric Measurement Quality Category [2]
+     // ['ZI012_DKC2','-999999',undefined,undefined], // No Information
+     ['ZI012_DKC2','1','raw:ZI012_DKC2','depth_known'], // Depth Known
+     ['ZI012_DKC2','3','raw:ZI012_DKC2','safe_clearance_known'], // Safe Clearance Known
+     ['ZI012_DKC2','4','raw:ZI012_DKC2','depth_unknown'], // Depth Unknown
+     ['ZI012_DKC2','5','raw:ZI012_DKC2','depth_doubtful'], // Depth Doubtful
+     ['ZI012_DKC2','6','raw:ZI012_DKC2','depth_unreliable'], // Depth Unreliable
+     ['ZI012_DKC2','7','raw:ZI012_DKC2','no_bottom'], // No Bottom
+     ['ZI012_DKC2','8','raw:ZI012_DKC2','least_depth'], // Least Depth
+     ['ZI012_DKC2','9','raw:ZI012_DKC2','reported_depth'], // Reported Depth
+     ['ZI012_DKC2','10','raw:ZI012_DKC2','unconfirmed_depth'], // Unconfirmed Depth
+     ['ZI012_DKC2','11','raw:ZI012_DKC2','maintained_depth'], // Maintained Depth
+     ['ZI012_DKC2','12','raw:ZI012_DKC2','unmaintained_depth'], // Unmaintained Depth
+     ['ZI012_DKC2','998','raw:ZI012_DKC2','not_applicable'], // Not Applicable
+     ['ZI012_DKC2','999','raw:ZI012_DKC2','other'], // Other
+
+     // ZI012_DKC3 - Dpth Crv : Snd Meta : Bathymetric Measurement Quality Category [3]
+     // ['ZI012_DKC3','-999999',undefined,undefined], // No Information
+     ['ZI012_DKC3','1','raw:ZI012_DKC3','depth_known'], // Depth Known
+     ['ZI012_DKC3','3','raw:ZI012_DKC3','safe_clearance_known'], // Safe Clearance Known
+     ['ZI012_DKC3','4','raw:ZI012_DKC3','depth_unknown'], // Depth Unknown
+     ['ZI012_DKC3','5','raw:ZI012_DKC3','depth_doubtful'], // Depth Doubtful
+     ['ZI012_DKC3','6','raw:ZI012_DKC3','depth_unreliable'], // Depth Unreliable
+     ['ZI012_DKC3','7','raw:ZI012_DKC3','no_bottom'], // No Bottom
+     ['ZI012_DKC3','8','raw:ZI012_DKC3','least_depth'], // Least Depth
+     ['ZI012_DKC3','9','raw:ZI012_DKC3','reported_depth'], // Reported Depth
+     ['ZI012_DKC3','10','raw:ZI012_DKC3','unconfirmed_depth'], // Unconfirmed Depth
+     ['ZI012_DKC3','11','raw:ZI012_DKC3','maintained_depth'], // Maintained Depth
+     ['ZI012_DKC3','12','raw:ZI012_DKC3','unmaintained_depth'], // Unmaintained Depth
+     ['ZI012_DKC3','998','raw:ZI012_DKC3','not_applicable'], // Not Applicable
+     ['ZI012_DKC3','999','raw:ZI012_DKC3','other'], // Other
+
+     // ZI012_SVC - Dpth Crv : Snd Meta : Sounding Velocity Correction Method
+     // ['ZI012_SVC','-999999',undefined,undefined], // No Information
+     ['ZI012_SVC','1','raw:ZI012_SVC','sounder_4800_calibrated'], // Sounder 4800 Calibrated
+     ['ZI012_SVC','2','raw:ZI012_SVC','sounder_1500_calibrated'], // Sounder 1500 Calibrated
+     ['ZI012_SVC','3','raw:ZI012_SVC','mathews_tables'], // Mathews Tables
+     ['ZI012_SVC','4','raw:ZI012_SVC','sound_velocity_meter'], // Sound Velocity Meter
+     ['ZI012_SVC','5','raw:ZI012_SVC','sounder_other_calibrated'], // Sounder Other Calibrated
+     ['ZI012_SVC','998','raw:ZI012_SVC','not_applicable'], // Not Applicable
+     ['ZI012_SVC','999','raw:ZI012_SVC','other'], // Other
+
+     // ZI012_TEC - Dpth Crv : Snd Meta : Bathymetric Measurement Technique
+     // ['ZI012_TEC','-999999',undefined,undefined], // No Information
+     ['ZI012_TEC','1','raw:ZI012_TEC','echo_sounder'], // Echo Sounder
+     ['ZI012_TEC','2','raw:ZI012_TEC','side-scan_sonar'], // Side-scan Sonar
+     ['ZI012_TEC','3','raw:ZI012_TEC','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
+     ['ZI012_TEC','4','raw:ZI012_TEC','diver'], // Diver
+     ['ZI012_TEC','5','raw:ZI012_TEC','lead-line'], // Lead-line
+     ['ZI012_TEC','6','raw:ZI012_TEC','area_swept_by_wire-drag'], // Area Swept by Wire-drag
+     ['ZI012_TEC','8','raw:ZI012_TEC','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
+     ['ZI012_TEC','9','raw:ZI012_TEC','electromagnetic_sensor'], // Electromagnetic Sensor
+     ['ZI012_TEC','10','raw:ZI012_TEC','photogrammetry'], // Photogrammetry
+     ['ZI012_TEC','11','raw:ZI012_TEC','satellite_imagery'], // Satellite Imagery
+     ['ZI012_TEC','12','raw:ZI012_TEC','levelling'], // Levelling
+     ['ZI012_TEC','13','raw:ZI012_TEC','computer_generated'], // Computer Generated
+     ['ZI012_TEC','14','raw:ZI012_TEC','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
+     ['ZI012_TEC','15','raw:ZI012_TEC','bathymetric_lidar'], // Bathymetric LiDAR
+     ['ZI012_TEC','17','raw:ZI012_TEC','singlebeam'], // Singlebeam
+     ['ZI012_TEC','18','raw:ZI012_TEC','underwater_utility_vehicle'], // Underwater Utility Vehicle
+     ['ZI012_TEC','999','raw:ZI012_TEC','other'], // Other
+
+     // ZI012_TEC2 - Dpth Crv : Snd Meta : Bathymetric Measurement Technique [2]
+     // ['ZI012_TEC2','-999999',undefined,undefined], // No Information
+     ['ZI012_TEC2','1','raw:ZI012_TEC2','echo_sounder'], // Echo Sounder
+     ['ZI012_TEC2','2','raw:ZI012_TEC2','side-scan_sonar'], // Side-scan Sonar
+     ['ZI012_TEC2','3','raw:ZI012_TEC2','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
+     ['ZI012_TEC2','4','raw:ZI012_TEC2','diver'], // Diver
+     ['ZI012_TEC2','5','raw:ZI012_TEC2','lead-line'], // Lead-line
+     ['ZI012_TEC2','6','raw:ZI012_TEC2','area_swept_by_wire-drag'], // Area Swept by Wire-drag
+     ['ZI012_TEC2','8','raw:ZI012_TEC2','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
+     ['ZI012_TEC2','9','raw:ZI012_TEC2','electromagnetic_sensor'], // Electromagnetic Sensor
+     ['ZI012_TEC2','10','raw:ZI012_TEC2','photogrammetry'], // Photogrammetry
+     ['ZI012_TEC2','11','raw:ZI012_TEC2','satellite_imagery'], // Satellite Imagery
+     ['ZI012_TEC2','12','raw:ZI012_TEC2','levelling'], // Levelling
+     ['ZI012_TEC2','13','raw:ZI012_TEC2','computer_generated'], // Computer Generated
+     ['ZI012_TEC2','14','raw:ZI012_TEC2','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
+     ['ZI012_TEC2','15','raw:ZI012_TEC2','bathymetric_lidar'], // Bathymetric LiDAR
+     ['ZI012_TEC2','17','raw:ZI012_TEC2','singlebeam'], // Singlebeam
+     ['ZI012_TEC2','18','raw:ZI012_TEC2','underwater_utility_vehicle'], // Underwater Utility Vehicle
+     ['ZI012_TEC2','999','raw:ZI012_TEC2','other'], // Other
+
+     // ZI012_TEC3 - Dpth Crv : Snd Meta : Bathymetric Measurement Technique [3]
+     // ['ZI012_TEC3','-999999',undefined,undefined], // No Information
+     ['ZI012_TEC3','1','raw:ZI012_TEC3','echo_sounder'], // Echo Sounder
+     ['ZI012_TEC3','2','raw:ZI012_TEC3','side-scan_sonar'], // Side-scan Sonar
+     ['ZI012_TEC3','3','raw:ZI012_TEC3','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
+     ['ZI012_TEC3','4','raw:ZI012_TEC3','diver'], // Diver
+     ['ZI012_TEC3','5','raw:ZI012_TEC3','lead-line'], // Lead-line
+     ['ZI012_TEC3','6','raw:ZI012_TEC3','area_swept_by_wire-drag'], // Area Swept by Wire-drag
+     ['ZI012_TEC3','8','raw:ZI012_TEC3','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
+     ['ZI012_TEC3','9','raw:ZI012_TEC3','electromagnetic_sensor'], // Electromagnetic Sensor
+     ['ZI012_TEC3','10','raw:ZI012_TEC3','photogrammetry'], // Photogrammetry
+     ['ZI012_TEC3','11','raw:ZI012_TEC3','satellite_imagery'], // Satellite Imagery
+     ['ZI012_TEC3','12','raw:ZI012_TEC3','levelling'], // Levelling
+     ['ZI012_TEC3','13','raw:ZI012_TEC3','computer_generated'], // Computer Generated
+     ['ZI012_TEC3','14','raw:ZI012_TEC3','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
+     ['ZI012_TEC3','15','raw:ZI012_TEC3','bathymetric_lidar'], // Bathymetric LiDAR
+     ['ZI012_TEC3','17','raw:ZI012_TEC3','singlebeam'], // Singlebeam
+     ['ZI012_TEC3','18','raw:ZI012_TEC3','underwater_utility_vehicle'], // Underwater Utility Vehicle
+     ['ZI012_TEC3','999','raw:ZI012_TEC3','other'], // Other
+
+     // ZI012_VDC - Dpth Crv : Snd Meta : Sounding Datum
+     // ['ZI012_VDC','-999999',undefined,undefined], // No Information
+     ['ZI012_VDC','2','raw:ZI012_VDC','high_water'], // High Water
+     ['ZI012_VDC','3','raw:ZI012_VDC','higher_high_water'], // Higher High Water
+     ['ZI012_VDC','4','raw:ZI012_VDC','indian_spring_low_water'], // Indian Spring Low Water
+     ['ZI012_VDC','5','raw:ZI012_VDC','low_water'], // Low Water
+     ['ZI012_VDC','6','raw:ZI012_VDC','lower_low_water'], // Lower Low Water
+     ['ZI012_VDC','7','raw:ZI012_VDC','mean_high_water'], // Mean High Water
+     ['ZI012_VDC','8','raw:ZI012_VDC','mean_high_water_neaps'], // Mean High Water Neaps
+     ['ZI012_VDC','9','raw:ZI012_VDC','mean_high_water_springs'], // Mean High Water Springs
+     ['ZI012_VDC','10','raw:ZI012_VDC','mean_higher_high_water'], // Mean Higher High Water
+     ['ZI012_VDC','11','raw:ZI012_VDC','mean_low_water'], // Mean Low Water
+     ['ZI012_VDC','12','raw:ZI012_VDC','mean_low_water_neaps'], // Mean Low Water Neaps
+     ['ZI012_VDC','13','raw:ZI012_VDC','mean_low_water_springs'], // Mean Low Water Springs
+     ['ZI012_VDC','14','raw:ZI012_VDC','mean_lower_low_water'], // Mean Lower Low Water
+     ['ZI012_VDC','15','raw:ZI012_VDC','mean_sea_level'], // Mean Sea Level
+     ['ZI012_VDC','16','raw:ZI012_VDC','mean_tide_level'], // Mean Tide Level
+     ['ZI012_VDC','17','raw:ZI012_VDC','neap_tide'], // Neap Tide
+     ['ZI012_VDC','18','raw:ZI012_VDC','spring_tide'], // Spring Tide
+     ['ZI012_VDC','19','raw:ZI012_VDC','mean_lower_low_water_springs'], // Mean Lower Low Water Springs
+     ['ZI012_VDC','20','raw:ZI012_VDC','lowest_astronomical_tide'], // Lowest Astronomical Tide
+     ['ZI012_VDC','21','raw:ZI012_VDC','chart_datum_(unspecified)'], // Chart Datum (Unspecified)
+     ['ZI012_VDC','22','raw:ZI012_VDC','highest_astronomical_tide'], // Highest Astronomical Tide
+     ['ZI012_VDC','24','raw:ZI012_VDC','mean_higher_high_water_springs'], // Mean Higher High Water Springs
+     ['ZI012_VDC','28','raw:ZI012_VDC','highest_high_water'], // Highest High Water
+     ['ZI012_VDC','30','raw:ZI012_VDC','indian_spring_high_water'], // Indian Spring High Water
+     ['ZI012_VDC','90','raw:ZI012_VDC','lowest_low_water'], // Lowest Low Water
+     ['ZI012_VDC','91','raw:ZI012_VDC','lowest_low_water_springs'], // Lowest Low Water Springs
+     ['ZI012_VDC','92','raw:ZI012_VDC','approximate_mean_low_water_springs'], // Approximate Mean Low Water Springs
+     ['ZI012_VDC','93','raw:ZI012_VDC','low_water_springs'], // Low Water Springs
+     ['ZI012_VDC','94','raw:ZI012_VDC','approximate_lowest_astronomical_tide'], // Approximate Lowest Astronomical Tide
+     ['ZI012_VDC','95','raw:ZI012_VDC','nearly_lowest_low_water'], // Nearly Lowest Low Water
+     ['ZI012_VDC','96','raw:ZI012_VDC','approximate_mean_low_water'], // Approximate Mean Low Water
+     ['ZI012_VDC','97','raw:ZI012_VDC','approximate_mean_lower_low_water'], // Approximate Mean Lower Low Water
+     ['ZI012_VDC','98','raw:ZI012_VDC','approximate_mean_sea_level'], // Approximate Mean Sea Level
+     ['ZI012_VDC','99','raw:ZI012_VDC','high_water_springs'], // High Water Springs
+     ['ZI012_VDC','100','raw:ZI012_VDC','equinoctial_spring_low_water'], // Equinoctial Spring Low Water
+     ['ZI012_VDC','101','raw:ZI012_VDC','local_datum'], // Local Datum
+     ['ZI012_VDC','102','raw:ZI012_VDC','international_great_lakes_datum_1985'], // International Great Lakes Datum 1985
+     ['ZI012_VDC','103','raw:ZI012_VDC','mean_water_level'], // Mean Water Level
+     ['ZI012_VDC','104','raw:ZI012_VDC','lower_low_water_large_tide'], // Lower Low Water Large Tide
+     ['ZI012_VDC','105','raw:ZI012_VDC','higher_high_water_large_tide'], // Higher High Water Large Tide
+     ['ZI012_VDC','107','raw:ZI012_VDC','nearly_highest_high_water'], // Nearly Highest High Water
+     ['ZI012_VDC','999','raw:ZI012_VDC','other'], // Other
 
      // ZI013_CSP - Crop Information : Crop Species
      // ['ZI013_CSP','-999999',undefined,undefined], // No Information
@@ -3522,6 +7998,108 @@ ggdm30.rules = {
      ['ZI013_CSP','159','crop','ornamental'], // Ornamental Crop
      ['ZI013_CSP','999','crop','other'], // Other
 
+     // ZI013_CSP2 - Crop Information : Crop Species [2]
+     // ['ZI013_CSP2','-999999',undefined,undefined], // No Information
+     ['ZI013_CSP2','1','raw:ZI013_CSP2','almond'], // Almond
+     ['ZI013_CSP2','2','raw:ZI013_CSP2','apple'], // Apple
+     ['ZI013_CSP2','3','raw:ZI013_CSP2','barley'], // Barley
+     ['ZI013_CSP2','4','raw:ZI013_CSP2','berry'], // Berry
+     ['ZI013_CSP2','5','raw:ZI013_CSP2','carob'], // Carob
+     ['ZI013_CSP2','6','raw:ZI013_CSP2','chestnut'], // Chestnut
+     ['ZI013_CSP2','7','raw:ZI013_CSP2','citrus'], // Citrus
+     ['ZI013_CSP2','8','raw:ZI013_CSP2','cork-oak'], // Cork-Oak
+     ['ZI013_CSP2','9','raw:ZI013_CSP2','cacao'], // Cacao
+     ['ZI013_CSP2','10','raw:ZI013_CSP2','coffee'], // Coffee
+     ['ZI013_CSP2','11','raw:ZI013_CSP2','maize'], // Maize
+     ['ZI013_CSP2','13','raw:ZI013_CSP2','dry_crop'], // Dry Crop
+     ['ZI013_CSP2','14','raw:ZI013_CSP2','fibre_crop'], // Fibre Crop
+     ['ZI013_CSP2','15','raw:ZI013_CSP2','fruit_tree'], // Fruit Tree
+     ['ZI013_CSP2','17','raw:ZI013_CSP2','hazelnut'], // Hazelnut
+     ['ZI013_CSP2','19','raw:ZI013_CSP2','maple'], // Maple
+     ['ZI013_CSP2','20','raw:ZI013_CSP2','millet'], // Millet
+     ['ZI013_CSP2','21','raw:ZI013_CSP2','oat'], // Oat
+     ['ZI013_CSP2','22','raw:ZI013_CSP2','oil_crop'], // Oil Crop
+     ['ZI013_CSP2','23','raw:ZI013_CSP2','olive'], // Olive
+     ['ZI013_CSP2','24','raw:ZI013_CSP2','peach'], // Peach
+     ['ZI013_CSP2','25','raw:ZI013_CSP2','peanut'], // Peanut
+     ['ZI013_CSP2','26','raw:ZI013_CSP2','potato'], // Potato
+     ['ZI013_CSP2','27','raw:ZI013_CSP2','pulse'], // Pulse
+     ['ZI013_CSP2','29','raw:ZI013_CSP2','rubber'], // Rubber
+     ['ZI013_CSP2','30','raw:ZI013_CSP2','rye'], // Rye
+     ['ZI013_CSP2','31','raw:ZI013_CSP2','sisal'], // Sisal
+     ['ZI013_CSP2','32','raw:ZI013_CSP2','sorghum'], // Sorghum
+     ['ZI013_CSP2','33','raw:ZI013_CSP2','sugar_crop'], // Sugar Crop
+     ['ZI013_CSP2','34','raw:ZI013_CSP2','tea'], // Tea
+     ['ZI013_CSP2','35','raw:ZI013_CSP2','tobacco'], // Tobacco
+     ['ZI013_CSP2','36','raw:ZI013_CSP2','tuber'], // Tuber
+     ['ZI013_CSP2','37','raw:ZI013_CSP2','vegetable_crop'], // Vegetable Crop
+     ['ZI013_CSP2','38','raw:ZI013_CSP2','walnut'], // Walnut
+     ['ZI013_CSP2','39','raw:ZI013_CSP2','wheat'], // Wheat
+     ['ZI013_CSP2','40','raw:ZI013_CSP2','date'], // Date
+     ['ZI013_CSP2','41','raw:ZI013_CSP2','banana'], // Banana
+     ['ZI013_CSP2','42','raw:ZI013_CSP2','oil_palm'], // Oil Palm
+     ['ZI013_CSP2','43','raw:ZI013_CSP2','coconut'], // Coconut
+     ['ZI013_CSP2','44','raw:ZI013_CSP2','sugar_cane'], // Sugar Cane
+     ['ZI013_CSP2','45','raw:ZI013_CSP2','cotton'], // Cotton
+     ['ZI013_CSP2','46','raw:ZI013_CSP2','bamboo'], // Bamboo
+     ['ZI013_CSP2','47','raw:ZI013_CSP2','palmetto'], // Palmetto
+     ['ZI013_CSP2','48','raw:ZI013_CSP2','timber'], // Timber
+     ['ZI013_CSP2','117','raw:ZI013_CSP2','opium_poppy'], // Opium Poppy
+     ['ZI013_CSP2','152','raw:ZI013_CSP2','cannabis'], // Cannabis
+     ['ZI013_CSP2','159','raw:ZI013_CSP2','ornamental_crop'], // Ornamental Crop
+     ['ZI013_CSP2','999','raw:ZI013_CSP2','other'], // Other
+
+     // ZI013_CSP3 - Crop Information : Crop Species [3]
+     // ['ZI013_CSP3','-999999',undefined,undefined], // No Information
+     ['ZI013_CSP3','1','raw:ZI013_CSP3','almond'], // Almond
+     ['ZI013_CSP3','2','raw:ZI013_CSP3','apple'], // Apple
+     ['ZI013_CSP3','3','raw:ZI013_CSP3','barley'], // Barley
+     ['ZI013_CSP3','4','raw:ZI013_CSP3','berry'], // Berry
+     ['ZI013_CSP3','5','raw:ZI013_CSP3','carob'], // Carob
+     ['ZI013_CSP3','6','raw:ZI013_CSP3','chestnut'], // Chestnut
+     ['ZI013_CSP3','7','raw:ZI013_CSP3','citrus'], // Citrus
+     ['ZI013_CSP3','8','raw:ZI013_CSP3','cork-oak'], // Cork-Oak
+     ['ZI013_CSP3','9','raw:ZI013_CSP3','cacao'], // Cacao
+     ['ZI013_CSP3','10','raw:ZI013_CSP3','coffee'], // Coffee
+     ['ZI013_CSP3','11','raw:ZI013_CSP3','maize'], // Maize
+     ['ZI013_CSP3','13','raw:ZI013_CSP3','dry_crop'], // Dry Crop
+     ['ZI013_CSP3','14','raw:ZI013_CSP3','fibre_crop'], // Fibre Crop
+     ['ZI013_CSP3','15','raw:ZI013_CSP3','fruit_tree'], // Fruit Tree
+     ['ZI013_CSP3','17','raw:ZI013_CSP3','hazelnut'], // Hazelnut
+     ['ZI013_CSP3','19','raw:ZI013_CSP3','maple'], // Maple
+     ['ZI013_CSP3','20','raw:ZI013_CSP3','millet'], // Millet
+     ['ZI013_CSP3','21','raw:ZI013_CSP3','oat'], // Oat
+     ['ZI013_CSP3','22','raw:ZI013_CSP3','oil_crop'], // Oil Crop
+     ['ZI013_CSP3','23','raw:ZI013_CSP3','olive'], // Olive
+     ['ZI013_CSP3','24','raw:ZI013_CSP3','peach'], // Peach
+     ['ZI013_CSP3','25','raw:ZI013_CSP3','peanut'], // Peanut
+     ['ZI013_CSP3','26','raw:ZI013_CSP3','potato'], // Potato
+     ['ZI013_CSP3','27','raw:ZI013_CSP3','pulse'], // Pulse
+     ['ZI013_CSP3','29','raw:ZI013_CSP3','rubber'], // Rubber
+     ['ZI013_CSP3','30','raw:ZI013_CSP3','rye'], // Rye
+     ['ZI013_CSP3','31','raw:ZI013_CSP3','sisal'], // Sisal
+     ['ZI013_CSP3','32','raw:ZI013_CSP3','sorghum'], // Sorghum
+     ['ZI013_CSP3','33','raw:ZI013_CSP3','sugar_crop'], // Sugar Crop
+     ['ZI013_CSP3','34','raw:ZI013_CSP3','tea'], // Tea
+     ['ZI013_CSP3','35','raw:ZI013_CSP3','tobacco'], // Tobacco
+     ['ZI013_CSP3','36','raw:ZI013_CSP3','tuber'], // Tuber
+     ['ZI013_CSP3','37','raw:ZI013_CSP3','vegetable_crop'], // Vegetable Crop
+     ['ZI013_CSP3','38','raw:ZI013_CSP3','walnut'], // Walnut
+     ['ZI013_CSP3','39','raw:ZI013_CSP3','wheat'], // Wheat
+     ['ZI013_CSP3','40','raw:ZI013_CSP3','date'], // Date
+     ['ZI013_CSP3','41','raw:ZI013_CSP3','banana'], // Banana
+     ['ZI013_CSP3','42','raw:ZI013_CSP3','oil_palm'], // Oil Palm
+     ['ZI013_CSP3','43','raw:ZI013_CSP3','coconut'], // Coconut
+     ['ZI013_CSP3','44','raw:ZI013_CSP3','sugar_cane'], // Sugar Cane
+     ['ZI013_CSP3','45','raw:ZI013_CSP3','cotton'], // Cotton
+     ['ZI013_CSP3','46','raw:ZI013_CSP3','bamboo'], // Bamboo
+     ['ZI013_CSP3','47','raw:ZI013_CSP3','palmetto'], // Palmetto
+     ['ZI013_CSP3','48','raw:ZI013_CSP3','timber'], // Timber
+     ['ZI013_CSP3','117','raw:ZI013_CSP3','opium_poppy'], // Opium Poppy
+     ['ZI013_CSP3','152','raw:ZI013_CSP3','cannabis'], // Cannabis
+     ['ZI013_CSP3','159','raw:ZI013_CSP3','ornamental_crop'], // Ornamental Crop
+     ['ZI013_CSP3','999','raw:ZI013_CSP3','other'], // Other
+
      // ZI013_FFP - Crop Information : Farming Pattern
      // ['ZI013_FFP','-999999',undefined,undefined], // No Information
      ['ZI013_FFP','1','farm:pattern','linear'], // Linear
@@ -3534,6 +8112,30 @@ ggdm30.rules = {
      ['ZI013_FFP','8','farm:pattern','irregular'], // Irregular
      ['ZI013_FFP','999','farm:pattern','other'], // Other
 
+     // ZI013_FFP2 - Crop Information : Farming Pattern [2]
+     // ['ZI013_FFP2','-999999',undefined,undefined], // No Information
+     ['ZI013_FFP2','1','raw:ZI013_FFP2','linear'], // Linear
+     ['ZI013_FFP2','2','raw:ZI013_FFP2','regular'], // Regular
+     ['ZI013_FFP2','3','raw:ZI013_FFP2','terraced'], // Terraced
+     ['ZI013_FFP2','4','raw:ZI013_FFP2','intermingled_woods'], // Intermingled Woods
+     ['ZI013_FFP2','5','raw:ZI013_FFP2','intermingled_trees'], // Intermingled Trees
+     ['ZI013_FFP2','6','raw:ZI013_FFP2','treeless'], // Treeless
+     ['ZI013_FFP2','7','raw:ZI013_FFP2','trellised'], // Trellised
+     ['ZI013_FFP2','8','raw:ZI013_FFP2','irregular'], // Irregular
+     ['ZI013_FFP2','999','raw:ZI013_FFP2','other'], // Other
+
+     // ZI013_FFP3 - Crop Information : Farming Pattern [3]
+     // ['ZI013_FFP3','-999999',undefined,undefined], // No Information
+     ['ZI013_FFP3','1','raw:ZI013_FFP3','linear'], // Linear
+     ['ZI013_FFP3','2','raw:ZI013_FFP3','regular'], // Regular
+     ['ZI013_FFP3','3','raw:ZI013_FFP3','terraced'], // Terraced
+     ['ZI013_FFP3','4','raw:ZI013_FFP3','intermingled_woods'], // Intermingled Woods
+     ['ZI013_FFP3','5','raw:ZI013_FFP3','intermingled_trees'], // Intermingled Trees
+     ['ZI013_FFP3','6','raw:ZI013_FFP3','treeless'], // Treeless
+     ['ZI013_FFP3','7','raw:ZI013_FFP3','trellised'], // Trellised
+     ['ZI013_FFP3','8','raw:ZI013_FFP3','irregular'], // Irregular
+     ['ZI013_FFP3','999','raw:ZI013_FFP3','other'], // Other
+
      // ZI013_FMM - Crop Information : Farming Method
      // ['ZI013_FMM','-999999',undefined,undefined], // No Information
      ['ZI013_FMM','1','farm:method','fallow'], // Fallow
@@ -3541,6 +8143,22 @@ ggdm30.rules = {
      ['ZI013_FMM','3','farm:method','permanent'], // Permanent
      ['ZI013_FMM','4','farm:method','slash_and_burn'], // Slash and Burn
      ['ZI013_FMM','999','farm:method','other'], // Other
+
+     // ZI013_FMM2 - Crop Information : Farming Method [2]
+     // ['ZI013_FMM2','-999999',undefined,undefined], // No Information
+     ['ZI013_FMM2','1','raw:ZI013_FMM2','fallow'], // Fallow
+     ['ZI013_FMM2','2','raw:ZI013_FMM2','grazing'], // Grazing
+     ['ZI013_FMM2','3','raw:ZI013_FMM2','permanent'], // Permanent
+     ['ZI013_FMM2','4','raw:ZI013_FMM2','slash_and_burn'], // Slash and Burn
+     ['ZI013_FMM2','999','raw:ZI013_FMM2','other'], // Other
+
+     // ZI013_FMM3 - Crop Information : Farming Method [3]
+     // ['ZI013_FMM3','-999999',undefined,undefined], // No Information
+     ['ZI013_FMM3','1','raw:ZI013_FMM3','fallow'], // Fallow
+     ['ZI013_FMM3','2','raw:ZI013_FMM3','grazing'], // Grazing
+     ['ZI013_FMM3','3','raw:ZI013_FMM3','permanent'], // Permanent
+     ['ZI013_FMM3','4','raw:ZI013_FMM3','slash_and_burn'], // Slash and Burn
+     ['ZI013_FMM3','999','raw:ZI013_FMM3','other'], // Other
 
      // ZI013_IRG - Crop Information : Irrigation Method
      // ['ZI013_IRG','-999999',undefined,undefined], // No Information
@@ -3569,36 +8187,53 @@ ggdm30.rules = {
      ['ZI014_PBY','12','by_product','scrap-metal'], // Scrap-metal
      ['ZI014_PBY','13','by_product','sewage'], // Sewage
      ['ZI014_PBY','15','by_product','slag'], // Slag
+     ['ZI014_PBY','89','by_product','timber'], // Timber
      ['ZI014_PBY','999','by_product','other'], // Other
 
-     // ZI014_PPO - Manufacturing Information : Product
+     // ZI014_PBY2 - Manufacturing Information : By-product [2]
+     // ['ZI014_PBY2','-999999',undefined,undefined], // No Information
+     ['ZI014_PBY2','1','raw:ZI014_PBY2','ash'], // Ash
+     ['ZI014_PBY2','2','raw:ZI014_PBY2','cinders'], // Cinders
+     ['ZI014_PBY2','6','raw:ZI014_PBY2','no_byproduct'], // No Byproduct
+     ['ZI014_PBY2','7','raw:ZI014_PBY2','radioactive_material'], // Radioactive Material
+     ['ZI014_PBY2','8','raw:ZI014_PBY2','refuse'], // Refuse
+     ['ZI014_PBY2','12','raw:ZI014_PBY2','scrap-metal'], // Scrap-metal
+     ['ZI014_PBY2','13','raw:ZI014_PBY2','sewage'], // Sewage
+     ['ZI014_PBY2','15','raw:ZI014_PBY2','slag'], // Slag
+     ['ZI014_PBY2','89','raw:ZI014_PBY2','timber'], // Timber
+     ['ZI014_PBY2','999','raw:ZI014_PBY2','other'], // Other
+
+     // ZI014_PBY3 - Manufacturing Information : By-product [3]
+     // ['ZI014_PBY3','-999999',undefined,undefined], // No Information
+     ['ZI014_PBY3','1','raw:ZI014_PBY3','ash'], // Ash
+     ['ZI014_PBY3','2','raw:ZI014_PBY3','cinders'], // Cinders
+     ['ZI014_PBY3','6','raw:ZI014_PBY3','no_byproduct'], // No Byproduct
+     ['ZI014_PBY3','7','raw:ZI014_PBY3','radioactive_material'], // Radioactive Material
+     ['ZI014_PBY3','8','raw:ZI014_PBY3','refuse'], // Refuse
+     ['ZI014_PBY3','12','raw:ZI014_PBY3','scrap-metal'], // Scrap-metal
+     ['ZI014_PBY3','13','raw:ZI014_PBY3','sewage'], // Sewage
+     ['ZI014_PBY3','15','raw:ZI014_PBY3','slag'], // Slag
+     ['ZI014_PBY3','89','raw:ZI014_PBY3','timber'], // Timber
+     ['ZI014_PBY3','999','raw:ZI014_PBY3','other'], // Other
+
+     // ZI014_PPO - Manufacturing Information : Physical Product
      // ['ZI014_PPO','-999999',undefined,undefined], // No Information
      ['ZI014_PPO','1','product','aircraft'], // Aircraft
-     ['ZI014_PPO','2','product','aluminum'], // Aluminum
+     ['ZI014_PPO','2','product','aluminium'], // Aluminium
      ['ZI014_PPO','3','product','ammunition'], // Ammunition
      ['ZI014_PPO','4','product','asphalt'], // Asphalt
      ['ZI014_PPO','5','product','motor_vehicle'], // Motor Vehicle
-     ['ZI014_PPO','8','product','basalt'], // Basalt -- From PPO
-     ['ZI014_PPO','9','product','bauxite'], // Bauxite -- From PPO
-     ['ZI014_PPO','11','product','bivalve_mollusc'], // Bivalve Mollusc -- From PPO
      ['ZI014_PPO','13','product','brick'], // Brick
      ['ZI014_PPO','15','product','cement'], // Cement
      ['ZI014_PPO','16','product','chemical'], // Chemical
-     ['ZI014_PPO','17','product','clay'], // Clay -- From PPO
      ['ZI014_PPO','18','product','coal'], // Coal
-     ['ZI014_PPO','19','product','cobbles'], // Cobbles -- From PPO
      ['ZI014_PPO','20','product','coffee'], // Coffee
      ['ZI014_PPO','21','product','coke'], // Coke
      ['ZI014_PPO','23','product','concrete'], // Concrete
      ['ZI014_PPO','25','product','consumer_goods'], // Consumer Goods
      ['ZI014_PPO','26','product','copper'], // Copper
      ['ZI014_PPO','28','product','cotton'], // Cotton
-     ['ZI014_PPO','29','product','crustacean'], // Crustacean -- From PPO
-     ['ZI014_PPO','30','product','cultivated_shellfish'], // Cultivated Shellfish -- From PPO
      ['ZI014_PPO','32','product','desalinated_water'], // Desalinated Water
-     ['ZI014_PPO','33','product','diamond'], // Diamond -- From PPO
-     ['ZI014_PPO','34','product','diatomaceous_earth'], // Diatomaceous Earth -- From PPO
-     ['ZI014_PPO','35','product','dolomite'], // Dolomite -- From PPO
      ['ZI014_PPO','37','product','electric_power'], // Electric Power
      ['ZI014_PPO','38','product','explosive'], // Explosive
      ['ZI014_PPO','39','product','fish'], // Fish
@@ -3609,8 +8244,6 @@ ggdm30.rules = {
      ['ZI014_PPO','46','product','petrol'], // Petrol
      ['ZI014_PPO','47','product','glass'], // Glass
      ['ZI014_PPO','48','product','gold'], // Gold
-     ['ZI014_PPO','50','product','granite'], // Granite -- From PPO
-     ['ZI014_PPO','53','product','gravel'], // Gravel -- From PPO
      ['ZI014_PPO','57','product','ice'], // Ice
      ['ZI014_PPO','58','product','iron'], // Iron
      ['ZI014_PPO','59','product','lead'], // Lead
@@ -3619,80 +8252,213 @@ ggdm30.rules = {
      ['ZI014_PPO','62','product','liquefied_petroleum_gas_(lpg)'], // Liquefied Petroleum Gas (LPG)
      ['ZI014_PPO','63','product','lumber'], // Lumber
      ['ZI014_PPO','65','product','manganese'], // Manganese
-     ['ZI014_PPO','66','product','marble'], // Marble -- From PPO
      ['ZI014_PPO','69','product','metal'], // Metal
      ['ZI014_PPO','70','product','milk'], // Milk
-     ['ZI014_PPO','72','product','mussels'], // Mussels -- From PPO
      ['ZI014_PPO','73','product','no_product'], // No Product
      ['ZI014_PPO','74','product','non-solid_hydrocarbon_fuel'], // Non-solid Hydrocarbon Fuel
-     ['ZI014_PPO','77','product','oysters'], // Oysters -- From PPO
      ['ZI014_PPO','80','product','paper'], // Paper
      ['ZI014_PPO','83','product','petroleum'], // Petroleum
      ['ZI014_PPO','84','product','plastic'], // Plastic
-     ['ZI014_PPO','85','product','porphyry'], // Porphyry -- From PPO
      ['ZI014_PPO','87','product','prestressed_concrete'], // Prestressed Concrete
-     ['ZI014_PPO','88','product','pumice'], // Pumice -- From PPO
-     ['ZI014_PPO','89','product','quartz'], // Quartz -- From PPO
      ['ZI014_PPO','90','product','radioactive_material'], // Radioactive Material
      ['ZI014_PPO','92','product','rice'], // Rice
-     ['ZI014_PPO','93','product','rock'], // Rock -- From PPO
      ['ZI014_PPO','94','product','rubber'], // Rubber
      ['ZI014_PPO','95','product','salt'], // Salt
-     ['ZI014_PPO','96','product','sand'], // Sand -- From PPO
-     ['ZI014_PPO','97','product','sandstone'], // Sandstone -- From PPO
      ['ZI014_PPO','101','product','sewage'], // Sewage
      ['ZI014_PPO','105','product','silver'], // Silver
      ['ZI014_PPO','106','product','snow'], // Snow
      ['ZI014_PPO','109','product','steel'], // Steel
-     ['ZI014_PPO','110','product','stone'], // Stone -- From PPO
      ['ZI014_PPO','111','product','sugar'], // Sugar
      ['ZI014_PPO','114','product','textile'], // Textile
-     ['ZI014_PPO','116','product','timber'], // Timber -- From PPO
      ['ZI014_PPO','117','product','tobacco'], // Tobacco
-     ['ZI014_PPO','118','product','travertine'], // Travertine -- From PPO
      ['ZI014_PPO','120','product','uranium'], // Uranium
      ['ZI014_PPO','121','product','vegetation_product'], // Vegetation Product
      ['ZI014_PPO','122','product','water'], // Water
      ['ZI014_PPO','123','product','wine'], // Wine
      ['ZI014_PPO','126','product','zinc'], // Zinc
-     ['ZI014_PPO','130','product','chalk'], // Chalk -- From PPO
      ['ZI014_PPO','136','product','biochemical'], // Biochemical
      ['ZI014_PPO','137','product','petrochemical'], // Petrochemical
      ['ZI014_PPO','146','product','heating_steam_and/or_water'], // Heating Steam and/or Water
      ['ZI014_PPO','147','product','electronic_equipment'], // Electronic Equipment
      ['ZI014_PPO','148','product','electrical_equipment'], // Electrical Equipment
-     ['ZI014_PPO','149','product','brine'], // Brine -- From PPO
      ['ZI014_PPO','150','product','fertilizer'], // Fertilizer
-     ['ZI014_PPO','151','product','chromium'], // Chromium -- From PPO
-     ['ZI014_PPO','152','product','nickel'], // Nickel -- From PPO
-     ['ZI014_PPO','153','product','tin'], // Tin -- From PPO
      ['ZI014_PPO','154','product','munitions'], // Munitions
      ['ZI014_PPO','155','product','olive_oil'], // Olive Oil
      ['ZI014_PPO','156','product','whale_products'], // Whale Products
      ['ZI014_PPO','157','product','petroleum_and/or_natural_gas'], // Petroleum and/or Natural Gas
-     ['ZI014_PPO','158','product','pottery'], // Pottery -- From PPO
-     ['ZI014_PPO','159','product','charcoal'], // Charcoal -- From PPO
      ['ZI014_PPO','160','product','milled_grain'], // Milled Grain
-     ['ZI014_PPO','161','product','coalbed_methane'], // Coalbed Methane -- From PPO
-     ['ZI014_PPO','162','product','natural_gas_condensate'], // Natural Gas Condensate -- From PPO
-     ['ZI014_PPO','163','product','helium'], // Helium -- From PPO
-     ['ZI014_PPO','164','product','hydrothermal_fluid'], // Hydrothermal Fluid -- From PPO
      ['ZI014_PPO','165','product','clothing'], // Clothing
-     ['ZI014_PPO','173','product','fluorite'], // Fluorite -- From PPO
      ['ZI014_PPO','192','product','petroleum_lubricant'], // Petroleum Lubricant
-     ['ZI014_PPO','204','product','phosphate'], // Phosphate -- From PPO
+     ['ZI014_PPO','200','product','iron_ingot'], // Iron Ingot
      ['ZI014_PPO','214','product','biodiesel'], // Biodiesel
-     ['ZI014_PPO','224','product','vanadium'], // Vanadium -- From PPO
      ['ZI014_PPO','279','product','fluorine'], // Fluorine
-     ['ZI014_PPO','283','product','mica'], // Mica -- From PPO
      ['ZI014_PPO','325','product','phosphorus'], // Phosphorus
-     ['ZI014_PPO','339','product','selenium'], // Selenium -- From PPO
      ['ZI014_PPO','435','product','nuclear_fuel'], // Nuclear Fuel
      ['ZI014_PPO','999','product','other'], // Other
 
-     // ZI014_PRW - Manufacturing Information : Raw Material -- Includes codes from PRW
+     // ZI014_PPO2 - Manufacturing Information : Physical Product [2]
+     // ['ZI014_PPO2','-999999',undefined,undefined], // No Information
+     ['ZI014_PPO2','1','product2','aircraft'], // Aircraft
+     ['ZI014_PPO2','2','product2','aluminium'], // Aluminium
+     ['ZI014_PPO2','3','product2','ammunition'], // Ammunition
+     ['ZI014_PPO2','4','product2','asphalt'], // Asphalt
+     ['ZI014_PPO2','5','product2','motor_vehicle'], // Motor Vehicle
+     ['ZI014_PPO2','13','product2','brick'], // Brick
+     ['ZI014_PPO2','15','product2','cement'], // Cement
+     ['ZI014_PPO2','16','product2','chemical'], // Chemical
+     ['ZI014_PPO2','18','product2','coal'], // Coal
+     ['ZI014_PPO2','20','product2','coffee'], // Coffee
+     ['ZI014_PPO2','21','product2','coke'], // Coke
+     ['ZI014_PPO2','23','product2','concrete'], // Concrete
+     ['ZI014_PPO2','25','product2','consumer_goods'], // Consumer Goods
+     ['ZI014_PPO2','26','product2','copper'], // Copper
+     ['ZI014_PPO2','28','product2','cotton'], // Cotton
+     ['ZI014_PPO2','32','product2','desalinated_water'], // Desalinated Water
+     ['ZI014_PPO2','37','product2','electric_power'], // Electric Power
+     ['ZI014_PPO2','38','product2','explosive'], // Explosive
+     ['ZI014_PPO2','39','product2','fish'], // Fish
+     ['ZI014_PPO2','41','product2','food'], // Food
+     ['ZI014_PPO2','43','product2','frozen_water'], // Frozen Water
+     ['ZI014_PPO2','44','product2','fruit'], // Fruit
+     ['ZI014_PPO2','45','product2','gas'], // Gas
+     ['ZI014_PPO2','46','product2','petrol'], // Petrol
+     ['ZI014_PPO2','47','product2','glass'], // Glass
+     ['ZI014_PPO2','48','product2','gold'], // Gold
+     ['ZI014_PPO2','57','product2','ice'], // Ice
+     ['ZI014_PPO2','58','product2','iron'], // Iron
+     ['ZI014_PPO2','59','product2','lead'], // Lead
+     ['ZI014_PPO2','60','product2','lime'], // Lime
+     ['ZI014_PPO2','61','product2','liquefied_natural_gas_(lng)'], // Liquefied Natural Gas (LNG)
+     ['ZI014_PPO2','62','product2','liquefied_petroleum_gas_(lpg)'], // Liquefied Petroleum Gas (LPG)
+     ['ZI014_PPO2','63','product2','lumber'], // Lumber
+     ['ZI014_PPO2','65','product2','manganese'], // Manganese
+     ['ZI014_PPO2','69','product2','metal'], // Metal
+     ['ZI014_PPO2','70','product2','milk'], // Milk
+     ['ZI014_PPO2','73','product2','no_product'], // No Product
+     ['ZI014_PPO2','74','product2','non-solid_hydrocarbon_fuel'], // Non-solid Hydrocarbon Fuel
+     ['ZI014_PPO2','80','product2','paper'], // Paper
+     ['ZI014_PPO2','83','product2','petroleum'], // Petroleum
+     ['ZI014_PPO2','84','product2','plastic'], // Plastic
+     ['ZI014_PPO2','87','product2','prestressed_concrete'], // Prestressed Concrete
+     ['ZI014_PPO2','90','product2','radioactive_material'], // Radioactive Material
+     ['ZI014_PPO2','92','product2','rice'], // Rice
+     ['ZI014_PPO2','94','product2','rubber'], // Rubber
+     ['ZI014_PPO2','95','product2','salt'], // Salt
+     ['ZI014_PPO2','101','product2','sewage'], // Sewage
+     ['ZI014_PPO2','105','product2','silver'], // Silver
+     ['ZI014_PPO2','106','product2','snow'], // Snow
+     ['ZI014_PPO2','109','product2','steel'], // Steel
+     ['ZI014_PPO2','111','product2','sugar'], // Sugar
+     ['ZI014_PPO2','114','product2','textile'], // Textile
+     ['ZI014_PPO2','117','product2','tobacco'], // Tobacco
+     ['ZI014_PPO2','120','product2','uranium'], // Uranium
+     ['ZI014_PPO2','121','product2','vegetation_product'], // Vegetation Product
+     ['ZI014_PPO2','122','product2','water'], // Water
+     ['ZI014_PPO2','123','product2','wine'], // Wine
+     ['ZI014_PPO2','126','product2','zinc'], // Zinc
+     ['ZI014_PPO2','136','product2','biochemical'], // Biochemical
+     ['ZI014_PPO2','137','product2','petrochemical'], // Petrochemical
+     ['ZI014_PPO2','146','product2','heating_steam_and/or_water'], // Heating Steam and/or Water
+     ['ZI014_PPO2','147','product2','electronic_equipment'], // Electronic Equipment
+     ['ZI014_PPO2','148','product2','electrical_equipment'], // Electrical Equipment
+     ['ZI014_PPO2','150','product2','fertilizer'], // Fertilizer
+     ['ZI014_PPO2','154','product2','munitions'], // Munitions
+     ['ZI014_PPO2','155','product2','olive_oil'], // Olive Oil
+     ['ZI014_PPO2','156','product2','whale_products'], // Whale Products
+     ['ZI014_PPO2','157','product2','petroleum_and/or_natural_gas'], // Petroleum and/or Natural Gas
+     ['ZI014_PPO2','160','product2','milled_grain'], // Milled Grain
+     ['ZI014_PPO2','165','product2','clothing'], // Clothing
+     ['ZI014_PPO2','192','product2','petroleum_lubricant'], // Petroleum Lubricant
+     ['ZI014_PPO2','200','product2','iron_ingot'], // Iron Ingot
+     ['ZI014_PPO2','214','product2','biodiesel'], // Biodiesel
+     ['ZI014_PPO2','279','product2','fluorine'], // Fluorine
+     ['ZI014_PPO2','325','product2','phosphorus'], // Phosphorus
+     ['ZI014_PPO2','435','product2','nuclear_fuel'], // Nuclear Fuel
+     ['ZI014_PPO2','999','product2','other'], // Other
+
+     // ZI014_PPO3 - Manufacturing Information : Physical Product [3]
+     // ['ZI014_PPO3','-999999',undefined,undefined], // No Information
+     ['ZI014_PPO3','1','product3','aircraft'], // Aircraft
+     ['ZI014_PPO3','2','product3','aluminium'], // Aluminium
+     ['ZI014_PPO3','3','product3','ammunition'], // Ammunition
+     ['ZI014_PPO3','4','product3','asphalt'], // Asphalt
+     ['ZI014_PPO3','5','product3','motor_vehicle'], // Motor Vehicle
+     ['ZI014_PPO3','13','product3','brick'], // Brick
+     ['ZI014_PPO3','15','product3','cement'], // Cement
+     ['ZI014_PPO3','16','product3','chemical'], // Chemical
+     ['ZI014_PPO3','18','product3','coal'], // Coal
+     ['ZI014_PPO3','20','product3','coffee'], // Coffee
+     ['ZI014_PPO3','21','product3','coke'], // Coke
+     ['ZI014_PPO3','23','product3','concrete'], // Concrete
+     ['ZI014_PPO3','25','product3','consumer_goods'], // Consumer Goods
+     ['ZI014_PPO3','26','product3','copper'], // Copper
+     ['ZI014_PPO3','28','product3','cotton'], // Cotton
+     ['ZI014_PPO3','32','product3','desalinated_water'], // Desalinated Water
+     ['ZI014_PPO3','37','product3','electric_power'], // Electric Power
+     ['ZI014_PPO3','38','product3','explosive'], // Explosive
+     ['ZI014_PPO3','39','product3','fish'], // Fish
+     ['ZI014_PPO3','41','product3','food'], // Food
+     ['ZI014_PPO3','43','product3','frozen_water'], // Frozen Water
+     ['ZI014_PPO3','44','product3','fruit'], // Fruit
+     ['ZI014_PPO3','45','product3','gas'], // Gas
+     ['ZI014_PPO3','46','product3','petrol'], // Petrol
+     ['ZI014_PPO3','47','product3','glass'], // Glass
+     ['ZI014_PPO3','48','product3','gold'], // Gold
+     ['ZI014_PPO3','57','product3','ice'], // Ice
+     ['ZI014_PPO3','58','product3','iron'], // Iron
+     ['ZI014_PPO3','59','product3','lead'], // Lead
+     ['ZI014_PPO3','60','product3','lime'], // Lime
+     ['ZI014_PPO3','61','product3','liquefied_natural_gas_(lng)'], // Liquefied Natural Gas (LNG)
+     ['ZI014_PPO3','62','product3','liquefied_petroleum_gas_(lpg)'], // Liquefied Petroleum Gas (LPG)
+     ['ZI014_PPO3','63','product3','lumber'], // Lumber
+     ['ZI014_PPO3','65','product3','manganese'], // Manganese
+     ['ZI014_PPO3','69','product3','metal'], // Metal
+     ['ZI014_PPO3','70','product3','milk'], // Milk
+     ['ZI014_PPO3','73','product3','no_product'], // No Product
+     ['ZI014_PPO3','74','product3','non-solid_hydrocarbon_fuel'], // Non-solid Hydrocarbon Fuel
+     ['ZI014_PPO3','80','product3','paper'], // Paper
+     ['ZI014_PPO3','83','product3','petroleum'], // Petroleum
+     ['ZI014_PPO3','84','product3','plastic'], // Plastic
+     ['ZI014_PPO3','87','product3','prestressed_concrete'], // Prestressed Concrete
+     ['ZI014_PPO3','90','product3','radioactive_material'], // Radioactive Material
+     ['ZI014_PPO3','92','product3','rice'], // Rice
+     ['ZI014_PPO3','94','product3','rubber'], // Rubber
+     ['ZI014_PPO3','95','product3','salt'], // Salt
+     ['ZI014_PPO3','101','product3','sewage'], // Sewage
+     ['ZI014_PPO3','105','product3','silver'], // Silver
+     ['ZI014_PPO3','106','product3','snow'], // Snow
+     ['ZI014_PPO3','109','product3','steel'], // Steel
+     ['ZI014_PPO3','111','product3','sugar'], // Sugar
+     ['ZI014_PPO3','114','product3','textile'], // Textile
+     ['ZI014_PPO3','117','product3','tobacco'], // Tobacco
+     ['ZI014_PPO3','120','product3','uranium'], // Uranium
+     ['ZI014_PPO3','121','product3','vegetation_product'], // Vegetation Product
+     ['ZI014_PPO3','122','product3','water'], // Water
+     ['ZI014_PPO3','123','product3','wine'], // Wine
+     ['ZI014_PPO3','126','product3','zinc'], // Zinc
+     ['ZI014_PPO3','136','product3','biochemical'], // Biochemical
+     ['ZI014_PPO3','137','product3','petrochemical'], // Petrochemical
+     ['ZI014_PPO3','146','product3','heating_steam_and/or_water'], // Heating Steam and/or Water
+     ['ZI014_PPO3','147','product3','electronic_equipment'], // Electronic Equipment
+     ['ZI014_PPO3','148','product3','electrical_equipment'], // Electrical Equipment
+     ['ZI014_PPO3','150','product3','fertilizer'], // Fertilizer
+     ['ZI014_PPO3','154','product3','munitions'], // Munitions
+     ['ZI014_PPO3','155','product3','olive_oil'], // Olive Oil
+     ['ZI014_PPO3','156','product3','whale_products'], // Whale Products
+     ['ZI014_PPO3','157','product3','petroleum_and/or_natural_gas'], // Petroleum and/or Natural Gas
+     ['ZI014_PPO3','160','product3','milled_grain'], // Milled Grain
+     ['ZI014_PPO3','165','product3','clothing'], // Clothing
+     ['ZI014_PPO3','192','product3','petroleum_lubricant'], // Petroleum Lubricant
+     ['ZI014_PPO3','200','product3','iron_ingot'], // Iron Ingot
+     ['ZI014_PPO3','214','product3','biodiesel'], // Biodiesel
+     ['ZI014_PPO3','279','product3','fluorine'], // Fluorine
+     ['ZI014_PPO3','325','product3','phosphorus'], // Phosphorus
+     ['ZI014_PPO3','435','product3','nuclear_fuel'], // Nuclear Fuel
+     ['ZI014_PPO3','999','product3','other'], // Other
+
+     // ZI014_PRW - Manufacturing Information : Raw Material
      // ['ZI014_PRW','-999999',undefined,undefined], // No Information
-     ['ZI014_PRW','1','raw_material','aluminum'], // Aluminum
+     ['ZI014_PRW','1','raw_material','aluminium'], // Aluminium
      ['ZI014_PRW','2','raw_material','asphalt'], // Asphalt
      ['ZI014_PRW','5','raw_material','bauxite'], // Bauxite
      ['ZI014_PRW','9','raw_material','cement'], // Cement
@@ -3705,8 +8471,8 @@ ggdm30.rules = {
      ['ZI014_PRW','27','raw_material','gas'], // Gas
      ['ZI014_PRW','28','raw_material','glass'], // Glass
      ['ZI014_PRW','29','raw_material','gold'], // Gold
+     ['ZI014_PRW','30','raw_material','grain'], // Grain
      ['ZI014_PRW','33','raw_material','plant_material'], // Plant Material
-     ['ZI014_PRW','34','raw_material','gravel'], // Gravel -- Added from PRW
      ['ZI014_PRW','38','raw_material','ice'], // Ice
      ['ZI014_PRW','39','raw_material','iron'], // Iron
      ['ZI014_PRW','41','raw_material','lead'], // Lead
@@ -3720,13 +8486,13 @@ ggdm30.rules = {
      ['ZI014_PRW','60','raw_material','plastic'], // Plastic
      ['ZI014_PRW','64','raw_material','radioactive_material'], // Radioactive Material
      ['ZI014_PRW','66','raw_material','rubber'], // Rubber
-     ['ZI014_PRW','67','raw_material','salt'], // Salt -- Added from PRW
-     ['ZI014_PRW','68','raw_material','sand'], // Sand -- Added from PRW
+     ['ZI014_PRW','68','raw_material','sand'], // Sand
+     ['ZI014_PRW','70','raw_material','wood_fragments'], // Wood Fragments
      ['ZI014_PRW','75','raw_material','sewage'], // Sewage
      ['ZI014_PRW','78','raw_material','silver'], // Silver
      ['ZI014_PRW','79','raw_material','snow'], // Snow
      ['ZI014_PRW','83','raw_material','steel'], // Steel
-     ['ZI014_PRW','84','raw_material','stone'], // Stone -- Added from PRW
+     ['ZI014_PRW','84','raw_material','stone'], // Stone
      ['ZI014_PRW','85','raw_material','sugar'], // Sugar
      ['ZI014_PRW','87','raw_material','textile'], // Textile
      ['ZI014_PRW','90','raw_material','tobacco'], // Tobacco
@@ -3736,32 +8502,138 @@ ggdm30.rules = {
      ['ZI014_PRW','97','raw_material','wood'], // Wood
      ['ZI014_PRW','99','raw_material','zinc'], // Zinc
      ['ZI014_PRW','118','raw_material','petroleum_and/or_natural_gas'], // Petroleum and/or Natural Gas
-     ['ZI014_PRW','154','raw_material','sulphur'], // Sulphur -- Added from PRW
+     ['ZI014_PRW','119','raw_material','biodiesel'], // Biodiesel
      ['ZI014_PRW','999','raw_material','other'], // Other
 
-     // Some of these have been added to the fuzzy table for export
-     // ZI016_ROC - Route Pavement Information : Route Surface Composition
-     // ['ZI016_ROC','-999999','surface','unknown'], // Trying this instead of undefined
-     ['ZI016_ROC','-999999',undefined,undefined], // No Information
-//      ['ZI016_ROC','1','surface','ground'], // Unimproved
-//      ['ZI016_ROC','2','surface','compacted'], // Stabilized earth
-//      ['ZI016_ROC','3','surface','flexible_pavement'], // Flexible Pavement
-//      ['ZI016_ROC','4','surface','gravel'], // Aggregate
-//      ['ZI016_ROC','5','surface','macadam'], // Macadam
-//      ['ZI016_ROC','6','surface','bound_surface'], // Bound Surface
-//      ['ZI016_ROC','7','surface','ridgid_pavement'], // Rigid Pavement
-//      ['ZI016_ROC','8','surface','concrete'], // Concrete
-//      ['ZI016_ROC','9','surface','asphalt'], // Asphalt
-//      ['ZI016_ROC','10','surface','asphalt_over_concrete'], // Asphalt over Concrete
-//      ['ZI016_ROC','11','surface','cobblestone'], // Cobble-stone
-//      ['ZI016_ROC','12','surface','brick'], // Brick
-//      ['ZI016_ROC','13','surface','metal'], // Metal
-//      ['ZI016_ROC','14','surface','wood'], // Wood
-//      ['ZI016_ROC','15','surface','corduroy'], // rough hewn logs...  // Corduroy
-//      ['ZI016_ROC','16','surface','wood_plank'], // Wood Plank
-//      ['ZI016_ROC','17','surface','ice'], // Ice
-//      ['ZI016_ROC','18','surface','snow'], // Snow
-//      ['ZI016_ROC','999','surface','other'], // Other
+     // ZI014_PRW2 - Manufacturing Information : Raw Material [2]
+     // ['ZI014_PRW2','-999999',undefined,undefined], // No Information
+     ['ZI014_PRW2','1','raw:ZI014_PRW2','aluminium'], // Aluminium
+     ['ZI014_PRW2','2','raw:ZI014_PRW2','asphalt'], // Asphalt
+     ['ZI014_PRW2','5','raw:ZI014_PRW2','bauxite'], // Bauxite
+     ['ZI014_PRW2','9','raw:ZI014_PRW2','cement'], // Cement
+     ['ZI014_PRW2','10','raw:ZI014_PRW2','chemical'], // Chemical
+     ['ZI014_PRW2','11','raw:ZI014_PRW2','clay'], // Clay
+     ['ZI014_PRW2','12','raw:ZI014_PRW2','coal'], // Coal
+     ['ZI014_PRW2','14','raw:ZI014_PRW2','coke'], // Coke
+     ['ZI014_PRW2','16','raw:ZI014_PRW2','copper'], // Copper
+     ['ZI014_PRW2','18','raw:ZI014_PRW2','cotton'], // Cotton
+     ['ZI014_PRW2','27','raw:ZI014_PRW2','gas'], // Gas
+     ['ZI014_PRW2','28','raw:ZI014_PRW2','glass'], // Glass
+     ['ZI014_PRW2','29','raw:ZI014_PRW2','gold'], // Gold
+     ['ZI014_PRW2','30','raw:ZI014_PRW2','grain'], // Grain
+     ['ZI014_PRW2','33','raw:ZI014_PRW2','plant_material'], // Plant Material
+     ['ZI014_PRW2','38','raw:ZI014_PRW2','ice'], // Ice
+     ['ZI014_PRW2','39','raw:ZI014_PRW2','iron'], // Iron
+     ['ZI014_PRW2','41','raw:ZI014_PRW2','lead'], // Lead
+     ['ZI014_PRW2','45','raw:ZI014_PRW2','lumber'], // Lumber
+     ['ZI014_PRW2','46','raw:ZI014_PRW2','manganese'], // Manganese
+     ['ZI014_PRW2','48','raw:ZI014_PRW2','metal'], // Metal
+     ['ZI014_PRW2','50','raw:ZI014_PRW2','no_raw_material'], // No Raw Material
+     ['ZI014_PRW2','52','raw:ZI014_PRW2','oil'], // Oil
+     ['ZI014_PRW2','54','raw:ZI014_PRW2','ore'], // Ore
+     ['ZI014_PRW2','57','raw:ZI014_PRW2','paper'], // Paper
+     ['ZI014_PRW2','60','raw:ZI014_PRW2','plastic'], // Plastic
+     ['ZI014_PRW2','64','raw:ZI014_PRW2','radioactive_material'], // Radioactive Material
+     ['ZI014_PRW2','66','raw:ZI014_PRW2','rubber'], // Rubber
+     ['ZI014_PRW2','68','raw:ZI014_PRW2','sand'], // Sand
+     ['ZI014_PRW2','70','raw:ZI014_PRW2','wood_fragments'], // Wood Fragments
+     ['ZI014_PRW2','75','raw:ZI014_PRW2','sewage'], // Sewage
+     ['ZI014_PRW2','78','raw:ZI014_PRW2','silver'], // Silver
+     ['ZI014_PRW2','79','raw:ZI014_PRW2','snow'], // Snow
+     ['ZI014_PRW2','83','raw:ZI014_PRW2','steel'], // Steel
+     ['ZI014_PRW2','84','raw:ZI014_PRW2','stone'], // Stone
+     ['ZI014_PRW2','85','raw:ZI014_PRW2','sugar'], // Sugar
+     ['ZI014_PRW2','87','raw:ZI014_PRW2','textile'], // Textile
+     ['ZI014_PRW2','90','raw:ZI014_PRW2','tobacco'], // Tobacco
+     ['ZI014_PRW2','93','raw:ZI014_PRW2','uranium'], // Uranium
+     ['ZI014_PRW2','94','raw:ZI014_PRW2','vegetation'], // Vegetation
+     ['ZI014_PRW2','96','raw:ZI014_PRW2','water'], // Water
+     ['ZI014_PRW2','97','raw:ZI014_PRW2','wood'], // Wood
+     ['ZI014_PRW2','99','raw:ZI014_PRW2','zinc'], // Zinc
+     ['ZI014_PRW2','118','raw:ZI014_PRW2','petroleum_and/or_natural_gas'], // Petroleum and/or Natural Gas
+     ['ZI014_PRW2','119','raw:ZI014_PRW2','biodiesel'], // Biodiesel
+     ['ZI014_PRW2','999','raw:ZI014_PRW2','other'], // Other
+
+     // ZI014_PRW3 - Manufacturing Information : Raw Material [3]
+     // ['ZI014_PRW3','-999999',undefined,undefined], // No Information
+     ['ZI014_PRW3','1','raw:ZI014_PRW3','aluminium'], // Aluminium
+     ['ZI014_PRW3','2','raw:ZI014_PRW3','asphalt'], // Asphalt
+     ['ZI014_PRW3','5','raw:ZI014_PRW3','bauxite'], // Bauxite
+     ['ZI014_PRW3','9','raw:ZI014_PRW3','cement'], // Cement
+     ['ZI014_PRW3','10','raw:ZI014_PRW3','chemical'], // Chemical
+     ['ZI014_PRW3','11','raw:ZI014_PRW3','clay'], // Clay
+     ['ZI014_PRW3','12','raw:ZI014_PRW3','coal'], // Coal
+     ['ZI014_PRW3','14','raw:ZI014_PRW3','coke'], // Coke
+     ['ZI014_PRW3','16','raw:ZI014_PRW3','copper'], // Copper
+     ['ZI014_PRW3','18','raw:ZI014_PRW3','cotton'], // Cotton
+     ['ZI014_PRW3','27','raw:ZI014_PRW3','gas'], // Gas
+     ['ZI014_PRW3','28','raw:ZI014_PRW3','glass'], // Glass
+     ['ZI014_PRW3','29','raw:ZI014_PRW3','gold'], // Gold
+     ['ZI014_PRW3','30','raw:ZI014_PRW3','grain'], // Grain
+     ['ZI014_PRW3','33','raw:ZI014_PRW3','plant_material'], // Plant Material
+     ['ZI014_PRW3','38','raw:ZI014_PRW3','ice'], // Ice
+     ['ZI014_PRW3','39','raw:ZI014_PRW3','iron'], // Iron
+     ['ZI014_PRW3','41','raw:ZI014_PRW3','lead'], // Lead
+     ['ZI014_PRW3','45','raw:ZI014_PRW3','lumber'], // Lumber
+     ['ZI014_PRW3','46','raw:ZI014_PRW3','manganese'], // Manganese
+     ['ZI014_PRW3','48','raw:ZI014_PRW3','metal'], // Metal
+     ['ZI014_PRW3','50','raw:ZI014_PRW3','no_raw_material'], // No Raw Material
+     ['ZI014_PRW3','52','raw:ZI014_PRW3','oil'], // Oil
+     ['ZI014_PRW3','54','raw:ZI014_PRW3','ore'], // Ore
+     ['ZI014_PRW3','57','raw:ZI014_PRW3','paper'], // Paper
+     ['ZI014_PRW3','60','raw:ZI014_PRW3','plastic'], // Plastic
+     ['ZI014_PRW3','64','raw:ZI014_PRW3','radioactive_material'], // Radioactive Material
+     ['ZI014_PRW3','66','raw:ZI014_PRW3','rubber'], // Rubber
+     ['ZI014_PRW3','68','raw:ZI014_PRW3','sand'], // Sand
+     ['ZI014_PRW3','70','raw:ZI014_PRW3','wood_fragments'], // Wood Fragments
+     ['ZI014_PRW3','75','raw:ZI014_PRW3','sewage'], // Sewage
+     ['ZI014_PRW3','78','raw:ZI014_PRW3','silver'], // Silver
+     ['ZI014_PRW3','79','raw:ZI014_PRW3','snow'], // Snow
+     ['ZI014_PRW3','83','raw:ZI014_PRW3','steel'], // Steel
+     ['ZI014_PRW3','84','raw:ZI014_PRW3','stone'], // Stone
+     ['ZI014_PRW3','85','raw:ZI014_PRW3','sugar'], // Sugar
+     ['ZI014_PRW3','87','raw:ZI014_PRW3','textile'], // Textile
+     ['ZI014_PRW3','90','raw:ZI014_PRW3','tobacco'], // Tobacco
+     ['ZI014_PRW3','93','raw:ZI014_PRW3','uranium'], // Uranium
+     ['ZI014_PRW3','94','raw:ZI014_PRW3','vegetation'], // Vegetation
+     ['ZI014_PRW3','96','raw:ZI014_PRW3','water'], // Water
+     ['ZI014_PRW3','97','raw:ZI014_PRW3','wood'], // Wood
+     ['ZI014_PRW3','99','raw:ZI014_PRW3','zinc'], // Zinc
+     ['ZI014_PRW3','118','raw:ZI014_PRW3','petroleum_and/or_natural_gas'], // Petroleum and/or Natural Gas
+     ['ZI014_PRW3','119','raw:ZI014_PRW3','biodiesel'], // Biodiesel
+     ['ZI014_PRW3','999','raw:ZI014_PRW3','other'], // Other
+
+     // ZI015_GCUC - Geo Name Collection : Geographic Name Cartographic Usability Range <interval closure>
+     ['ZI015_GCUC','2','raw:ZI015_GCUC','open_interval'], // Open Interval
+     ['ZI015_GCUC','3','raw:ZI015_GCUC','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['ZI015_GCUC','4','raw:ZI015_GCUC','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['ZI015_GCUC','5','raw:ZI015_GCUC','closed_interval'], // Closed Interval
+     ['ZI015_GCUC','6','raw:ZI015_GCUC','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['ZI015_GCUC','7','raw:ZI015_GCUC','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['ZI015_GCUC','8','raw:ZI015_GCUC','less-than_semi-interval'], // Less-than Semi-interval
+     ['ZI015_GCUC','9','raw:ZI015_GCUC','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
+
+     // ZI016_ROC - Route Pavement Information : Route Surface Composition #####
+     // ['ZI016_ROC','-999999',undefined,undefined], // No Information
+     ['ZI016_ROC','1','surface','unimproved'], // Unimproved
+     ['ZI016_ROC','2','surface','stabilized_earth'], // Stabilized Earth
+     ['ZI016_ROC','3','surface','flexible_pavement'], // Flexible Pavement
+     ['ZI016_ROC','4','surface','aggregate'], // Aggregate
+     ['ZI016_ROC','5','surface','macadam'], // Macadam
+     ['ZI016_ROC','6','surface','bound_surface'], // Bound Surface
+     ['ZI016_ROC','7','surface','rigid_pavement'], // Rigid Pavement
+     ['ZI016_ROC','8','surface','concrete'], // Concrete
+     ['ZI016_ROC','9','surface','asphalt'], // Asphalt
+     ['ZI016_ROC','10','surface','asphalt_over_concrete'], // Asphalt over Concrete
+     ['ZI016_ROC','11','surface','cobble-stone'], // Cobble-stone
+     ['ZI016_ROC','12','surface','brick'], // Brick
+     ['ZI016_ROC','13','surface','metal'], // Metal
+     ['ZI016_ROC','14','surface','wood'], // Wood
+     ['ZI016_ROC','15','surface','corduroy'], // Corduroy
+     ['ZI016_ROC','16','surface','wood_plank'], // Wood Plank
+     ['ZI016_ROC','17','surface','ice'], // Ice
+     ['ZI016_ROC','18','surface','snow'], // Snow
+     ['ZI016_ROC','999','surface','other'], // Other
 
      // ZI016_WTC - Route Pavement Information : Road Weather Restriction
      // ['ZI016_WTC','-999999',undefined,undefined], // No Information
@@ -3769,7 +8641,6 @@ ggdm30.rules = {
      ['ZI016_WTC','2','seasonal','fair'], // possibly seasonal // Fair-weather
      ['ZI016_WTC','3','seasonal','winter'], // Winter Only
      ['ZI016_WTC','4','seasonal','limited'], // Limited all-weather
-     ['ZI016_WTC','5','seasonal','not_winter'], // Closed in Winter
      ['ZI016_WTC','999','seasonal','other'], // Other
 
      // ZI017_RGC - Track Information : Railway Gauge Classification
@@ -3806,7 +8677,7 @@ ggdm30.rules = {
      ['ZI017_TRT','13','railway:track','maglev'], // Maglev
      ['ZI017_TRT','999','railway:track','other'], // Other
 
-     // ZI018_WIT - Wireless Telecommunication Information : Wireless Telecommunication Type
+     // ZI018_WIT - Wireless : Wireless Telecommunication Type
      // ['ZI018_WIT','-999999',undefined,undefined], // No Information
      ['ZI018_WIT','1','communication:cellular_phone','yes'], // Cellular Phone
      ['ZI018_WIT','2','communication:microwave_radio_relay','yes'], // Microwave Radio Relay
@@ -3817,7 +8688,7 @@ ggdm30.rules = {
      ['ZI018_WIT','7','communication:television','yes'], // Television (TV)
      ['ZI018_WIT','999','communication:other','yes'], // Other
 
-     // ZI019_ASP - Aerodrome Pavement Information : Aerodrome Movement Area Surface Preparation Method
+     // ZI019_ASP - Aero Pvmt : Aerodrome Movement Area Surface Preparation Method
      // ['ZI019_ASP','-999999',undefined,undefined], // No Information
      ['ZI019_ASP','1','aeroway:pavement:preparation','aggregate_seal_coat'], // Aggregate Seal Coat
      ['ZI019_ASP','2','aeroway:pavement:preparation','graded'], // Graded
@@ -3829,7 +8700,31 @@ ggdm30.rules = {
      ['ZI019_ASP','8','aeroway:pavement:preparation','rubberized_seal_coat'], // Rubberized Seal Coat
      ['ZI019_ASP','999','aeroway:pavement:preparation','other'], // Other
 
-     // ZI019_ASU - Aerodrome Pavement Information : Aerodrome Movement Area Surface Composition
+     // ZI019_ASP2 - Aero Pvmt : Aerodrome Movement Area Surface Preparation Method [2]
+     // ['ZI019_ASP2','-999999',undefined,undefined], // No Information
+     ['ZI019_ASP2','1','raw:ZI019_ASP2','aggregate_seal_coat'], // Aggregate Seal Coat
+     ['ZI019_ASP2','2','raw:ZI019_ASP2','graded'], // Graded
+     ['ZI019_ASP2','3','raw:ZI019_ASP2','grass'], // Grass
+     ['ZI019_ASP2','4','raw:ZI019_ASP2','grooved'], // Grooved
+     ['ZI019_ASP2','5','raw:ZI019_ASP2','oiled'], // Oiled
+     ['ZI019_ASP2','6','raw:ZI019_ASP2','porous_friction_course'], // Porous Friction Course
+     ['ZI019_ASP2','7','raw:ZI019_ASP2','rolled'], // Rolled
+     ['ZI019_ASP2','8','raw:ZI019_ASP2','rubberized_seal_coat'], // Rubberized Seal Coat
+     ['ZI019_ASP2','999','raw:ZI019_ASP2','other'], // Other
+
+     // ZI019_ASP3 - Aero Pvmt : Aerodrome Movement Area Surface Preparation Method [3]
+     // ['ZI019_ASP3','-999999',undefined,undefined], // No Information
+     ['ZI019_ASP3','1','raw:ZI019_ASP3','aggregate_seal_coat'], // Aggregate Seal Coat
+     ['ZI019_ASP3','2','raw:ZI019_ASP3','graded'], // Graded
+     ['ZI019_ASP3','3','raw:ZI019_ASP3','grass'], // Grass
+     ['ZI019_ASP3','4','raw:ZI019_ASP3','grooved'], // Grooved
+     ['ZI019_ASP3','5','raw:ZI019_ASP3','oiled'], // Oiled
+     ['ZI019_ASP3','6','raw:ZI019_ASP3','porous_friction_course'], // Porous Friction Course
+     ['ZI019_ASP3','7','raw:ZI019_ASP3','rolled'], // Rolled
+     ['ZI019_ASP3','8','raw:ZI019_ASP3','rubberized_seal_coat'], // Rubberized Seal Coat
+     ['ZI019_ASP3','999','raw:ZI019_ASP3','other'], // Other
+
+     // ZI019_ASU - Aero Pvmt : Aerodrome Movement Area Surface Composition
      // ['ZI019_ASU','-999999',undefined,undefined], // No Information
      ['ZI019_ASU','1','aeroway:surface','asphalt'], // Asphalt
      ['ZI019_ASU','2','aeroway:surface','bituminous_mix'], // Bituminous Mix
@@ -3849,12 +8744,59 @@ ggdm30.rules = {
      ['ZI019_ASU','16','aeroway:surface','sand'], // Sand
      ['ZI019_ASU','17','aeroway:surface','snow'], // Snow
      ['ZI019_ASU','18','aeroway:surface','stone'], // Stone
-     ['ZI019_ASU','19','aeroway:surface','water'], // Water
      ['ZI019_ASU','20','aeroway:surface','wood'], // Wood
      ['ZI019_ASU','21','aeroway:surface','asphalt_over_concrete'], // Asphalt Over Concrete
      ['ZI019_ASU','999','aeroway:surface','other'], // Other
 
-     // ZI019_ASX - Aerodrome Pavement Information : Aerodrome Movement Area Surface Category
+     // ZI019_ASU2 - Aero Pvmt : Aerodrome Movement Area Surface Composition [2]
+     // ['ZI019_ASU2','-999999',undefined,undefined], // No Information
+     ['ZI019_ASU2','1','raw:ZI019_ASU2','asphalt'], // Asphalt
+     ['ZI019_ASU2','2','raw:ZI019_ASU2','bituminous_mix'], // Bituminous Mix
+     ['ZI019_ASU2','3','raw:ZI019_ASU2','brick'], // Brick
+     ['ZI019_ASU2','4','raw:ZI019_ASU2','clay'], // Clay
+     ['ZI019_ASU2','5','raw:ZI019_ASU2','concrete'], // Concrete
+     ['ZI019_ASU2','6','raw:ZI019_ASU2','coral'], // Coral
+     ['ZI019_ASU2','7','raw:ZI019_ASU2','earthen'], // Earthen
+     ['ZI019_ASU2','8','raw:ZI019_ASU2','gravel'], // Gravel
+     ['ZI019_ASU2','9','raw:ZI019_ASU2','ice'], // Ice
+     ['ZI019_ASU2','10','raw:ZI019_ASU2','landing_mat'], // Landing Mat
+     ['ZI019_ASU2','11','raw:ZI019_ASU2','laterite'], // Laterite
+     ['ZI019_ASU2','12','raw:ZI019_ASU2','macadam'], // Macadam
+     ['ZI019_ASU2','13','raw:ZI019_ASU2','membrane'], // Membrane
+     ['ZI019_ASU2','14','raw:ZI019_ASU2','non-bituminous_mix'], // Non-bituminous Mix
+     ['ZI019_ASU2','15','raw:ZI019_ASU2','pierced_steel_planking'], // Pierced Steel Planking
+     ['ZI019_ASU2','16','raw:ZI019_ASU2','sand'], // Sand
+     ['ZI019_ASU2','17','raw:ZI019_ASU2','snow'], // Snow
+     ['ZI019_ASU2','18','raw:ZI019_ASU2','stone'], // Stone
+     ['ZI019_ASU2','20','raw:ZI019_ASU2','wood'], // Wood
+     ['ZI019_ASU2','21','raw:ZI019_ASU2','asphalt_over_concrete'], // Asphalt Over Concrete
+     ['ZI019_ASU2','999','raw:ZI019_ASU2','other'], // Other
+
+     // ZI019_ASU3 - Aero Pvmt : Aerodrome Movement Area Surface Composition [3]
+     // ['ZI019_ASU3','-999999',undefined,undefined], // No Information
+     ['ZI019_ASU3','1','raw:ZI019_ASU3','asphalt'], // Asphalt
+     ['ZI019_ASU3','2','raw:ZI019_ASU3','bituminous_mix'], // Bituminous Mix
+     ['ZI019_ASU3','3','raw:ZI019_ASU3','brick'], // Brick
+     ['ZI019_ASU3','4','raw:ZI019_ASU3','clay'], // Clay
+     ['ZI019_ASU3','5','raw:ZI019_ASU3','concrete'], // Concrete
+     ['ZI019_ASU3','6','raw:ZI019_ASU3','coral'], // Coral
+     ['ZI019_ASU3','7','raw:ZI019_ASU3','earthen'], // Earthen
+     ['ZI019_ASU3','8','raw:ZI019_ASU3','gravel'], // Gravel
+     ['ZI019_ASU3','9','raw:ZI019_ASU3','ice'], // Ice
+     ['ZI019_ASU3','10','raw:ZI019_ASU3','landing_mat'], // Landing Mat
+     ['ZI019_ASU3','11','raw:ZI019_ASU3','laterite'], // Laterite
+     ['ZI019_ASU3','12','raw:ZI019_ASU3','macadam'], // Macadam
+     ['ZI019_ASU3','13','raw:ZI019_ASU3','membrane'], // Membrane
+     ['ZI019_ASU3','14','raw:ZI019_ASU3','non-bituminous_mix'], // Non-bituminous Mix
+     ['ZI019_ASU3','15','raw:ZI019_ASU3','pierced_steel_planking'], // Pierced Steel Planking
+     ['ZI019_ASU3','16','raw:ZI019_ASU3','sand'], // Sand
+     ['ZI019_ASU3','17','raw:ZI019_ASU3','snow'], // Snow
+     ['ZI019_ASU3','18','raw:ZI019_ASU3','stone'], // Stone
+     ['ZI019_ASU3','20','raw:ZI019_ASU3','wood'], // Wood
+     ['ZI019_ASU3','21','raw:ZI019_ASU3','asphalt_over_concrete'], // Asphalt Over Concrete
+     ['ZI019_ASU3','999','raw:ZI019_ASU3','other'], // Other
+
+     // ZI019_ASX - Aero Pvmt : Aerodrome Movement Area Surface Category
      // ['ZI019_ASX','-999999',undefined,undefined], // No Information
      ['ZI019_ASX','1','aeroway:pavement','paved'], // Completely Paved
      ['ZI019_ASX','2','aeroway:pavement','mostly_paved'], // Mostly Paved
@@ -3863,9 +8805,9 @@ ggdm30.rules = {
      ['ZI019_ASX','5','aeroway:pavement','unpaved'], // Unpaved
      ['ZI019_ASX','999','aeroway:pavement','other'], // Other
 
-     // ZI019_SFS - Aerodrome Pavement Information : Aerodrome Pavement Functional Status
+     // ZI019_SFS - Aero Pvmt : Aerodrome Pavement Functional Status
      // ['ZI019_SFS','-999999',undefined,undefined], // No Information
-     ['ZI019_SFS','1','surface:condition','fair'], // Fair
+      ['ZI019_SFS','1','surface:condition','fair'], // Fair
      ['ZI019_SFS','2','surface:condition','fair_estimated'], // Fair Estimated
      ['ZI019_SFS','3','surface:condition','good'], // Good
      ['ZI019_SFS','4','surface:condition','good_estimated'], // Good Estimated
@@ -3875,299 +8817,1848 @@ ggdm30.rules = {
      ['ZI019_SFS','8','surface:condition','unserviceable'], // Unserviceable
      ['ZI019_SFS','9','surface:condition','excellent'], // Excellent
 
-     // ZI020_GE4 - (Location Country) Designation : GENC Short URN-based Identifier
-     // ['ZI020_GE4','noInformation',undefined,undefined], // No Information
+     // ZI020_GE4 - Designation : GENC Short URN-based Identifier
+     ['ZI020_GE4','ge:GENC:3:1-2:ABW','is_in:country_code','aruba_as_of_2013-06-30'], // ARUBA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:AFG','is_in:country_code','afghanistan_as_of_2013-06-30'], // AFGHANISTAN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:AGO','is_in:country_code','angola_as_of_2013-06-30'], // ANGOLA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ALB','is_in:country_code','albania_as_of_2013-06-30'], // ALBANIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:AND','is_in:country_code','andorra_as_of_2013-06-30'], // ANDORRA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ARE','is_in:country_code','united_arab_emirates_as_of_2013-06-30'], // UNITED ARAB EMIRATES AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ARG','is_in:country_code','argentina_as_of_2013-06-30'], // ARGENTINA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ARM','is_in:country_code','armenia_as_of_2013-06-30'], // ARMENIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ASM','is_in:country_code','american_samoa_as_of_2013-06-30'], // AMERICAN SAMOA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ATF','is_in:country_code','french_southern_and_antarctic_lands_as_of_2013-06-30'], // FRENCH SOUTHERN AND ANTARCTIC LANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ATG','is_in:country_code','antigua_and_barbuda_as_of_2013-06-30'], // ANTIGUA AND BARBUDA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:AUS','is_in:country_code','australia_as_of_2013-06-30'], // AUSTRALIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:AUT','is_in:country_code','austria_as_of_2013-06-30'], // AUSTRIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:AX1','is_in:country_code','unknown_as_of_2013-06-30'], // UNKNOWN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:AX2','is_in:country_code','guantanamo_bay_naval_base_as_of_2013-06-30'], // GUANTANAMO BAY NAVAL BASE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:AZE','is_in:country_code','azerbaijan_as_of_2013-06-30'], // AZERBAIJAN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BDI','is_in:country_code','burundi_as_of_2013-06-30'], // BURUNDI AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BEL','is_in:country_code','belgium_as_of_2013-06-30'], // BELGIUM AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BEN','is_in:country_code','benin_as_of_2013-06-30'], // BENIN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BES','is_in:country_code','bonaire,_sint_eustatius,_and_saba_as_of_2013-06-30'], // BONAIRE, SINT EUSTATIUS, AND SABA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BFA','is_in:country_code','burkina_faso_as_of_2013-06-30'], // BURKINA FASO AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BGD','is_in:country_code','bangladesh_as_of_2013-06-30'], // BANGLADESH AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BGR','is_in:country_code','bulgaria_as_of_2013-06-30'], // BULGARIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BHR','is_in:country_code','bahrain_as_of_2013-06-30'], // BAHRAIN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BHS','is_in:country_code','bahamas,_the_as_of_2013-06-30'], // BAHAMAS, THE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BLM','is_in:country_code','saint_barthelemy_as_of_2013-06-30'], // SAINT BARTHELEMY AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BLR','is_in:country_code','belarus_as_of_2013-06-30'], // BELARUS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BOL','is_in:country_code','bolivia_as_of_2013-06-30'], // BOLIVIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BRA','is_in:country_code','brazil_as_of_2013-06-30'], // BRAZIL AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BRN','is_in:country_code','brunei_as_of_2013-06-30'], // BRUNEI AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BTN','is_in:country_code','bhutan_as_of_2013-06-30'], // BHUTAN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:BWA','is_in:country_code','botswana_as_of_2013-06-30'], // BOTSWANA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CAF','is_in:country_code','central_african_republic_as_of_2013-06-30'], // CENTRAL AFRICAN REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CAN','is_in:country_code','canada_as_of_2013-06-30'], // CANADA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CCK','is_in:country_code','cocos_(keeling)_islands_as_of_2013-06-30'], // COCOS (KEELING) ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CHE','is_in:country_code','switzerland_as_of_2013-06-30'], // SWITZERLAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CHL','is_in:country_code','chile_as_of_2013-06-30'], // CHILE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CHN','is_in:country_code','china_as_of_2013-06-30'], // CHINA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CIV','is_in:country_code','cote_d"ivoire_as_of_2013-06-30'], // COTE D"IVOIRE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CMR','is_in:country_code','cameroon_as_of_2013-06-30'], // CAMEROON AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:COD','is_in:country_code','congo_(kinshasa)_as_of_2013-06-30'], // CONGO (KINSHASA) AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:COG','is_in:country_code','congo_(brazzaville)_as_of_2013-06-30'], // CONGO (BRAZZAVILLE) AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:COK','is_in:country_code','cook_islands_as_of_2013-06-30'], // COOK ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:COL','is_in:country_code','colombia_as_of_2013-06-30'], // COLOMBIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:COM','is_in:country_code','comoros_as_of_2013-06-30'], // COMOROS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CPT','is_in:country_code','clipperton_island_as_of_2013-06-30'], // CLIPPERTON ISLAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CPV','is_in:country_code','cape_verde_as_of_2013-06-30'], // CAPE VERDE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CRI','is_in:country_code','costa_rica_as_of_2013-06-30'], // COSTA RICA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CUB','is_in:country_code','cuba_as_of_2013-06-30'], // CUBA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CUW','is_in:country_code','curacao_as_of_2013-06-30'], // CURACAO AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CXR','is_in:country_code','christmas_island_as_of_2013-06-30'], // CHRISTMAS ISLAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CYM','is_in:country_code','cayman_islands_as_of_2013-06-30'], // CAYMAN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CYP','is_in:country_code','cyprus_as_of_2013-06-30'], // CYPRUS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:CZE','is_in:country_code','czech_republic_as_of_2013-06-30'], // CZECH REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:DEU','is_in:country_code','germany_as_of_2013-06-30'], // GERMANY AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:DGA','is_in:country_code','diego_garcia_as_of_2013-06-30'], // DIEGO GARCIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:DJI','is_in:country_code','djibouti_as_of_2013-06-30'], // DJIBOUTI AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:DMA','is_in:country_code','dominica_as_of_2013-06-30'], // DOMINICA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:DNK','is_in:country_code','denmark_as_of_2013-06-30'], // DENMARK AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:DOM','is_in:country_code','dominican_republic_as_of_2013-06-30'], // DOMINICAN REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:DZA','is_in:country_code','algeria_as_of_2013-06-30'], // ALGERIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ECU','is_in:country_code','ecuador_as_of_2013-06-30'], // ECUADOR AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:EGY','is_in:country_code','egypt_as_of_2013-06-30'], // EGYPT AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ERI','is_in:country_code','eritrea_as_of_2013-06-30'], // ERITREA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ESH','is_in:country_code','western_sahara_as_of_2013-06-30'], // WESTERN SAHARA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ESP','is_in:country_code','spain_as_of_2013-06-30'], // SPAIN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:EST','is_in:country_code','estonia_as_of_2013-06-30'], // ESTONIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ETH','is_in:country_code','ethiopia_as_of_2013-06-30'], // ETHIOPIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:FIN','is_in:country_code','finland_as_of_2013-06-30'], // FINLAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:FJI','is_in:country_code','fiji_as_of_2013-06-30'], // FIJI AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:FLK','is_in:country_code','falkland_islands_(islas_malvinas)_as_of_2013-06-30'], // FALKLAND ISLANDS (ISLAS MALVINAS) AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:FRA','is_in:country_code','france_as_of_2013-06-30'], // FRANCE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:FRO','is_in:country_code','faroe_islands_as_of_2013-06-30'], // FAROE ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:FSM','is_in:country_code','micronesia,_federated_states_of_as_of_2013-06-30'], // MICRONESIA, FEDERATED STATES OF AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:GAB','is_in:country_code','gabon_as_of_2013-06-30'], // GABON AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:GBR','is_in:country_code','united_kingdom_as_of_2013-06-30'], // UNITED KINGDOM AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:GEO','is_in:country_code','georgia_as_of_2013-06-30'], // GEORGIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:GGY','is_in:country_code','guernsey_as_of_2013-06-30'], // GUERNSEY AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:GHA','is_in:country_code','ghana_as_of_2013-06-30'], // GHANA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:GIN','is_in:country_code','guinea_as_of_2013-06-30'], // GUINEA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:GLP','is_in:country_code','guadeloupe_as_of_2013-06-30'], // GUADELOUPE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:GMB','is_in:country_code','gambia,_the_as_of_2013-06-30'], // GAMBIA, THE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:GNB','is_in:country_code','guinea-bissau_as_of_2013-06-30'], // GUINEA-BISSAU AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:GNQ','is_in:country_code','equatorial_guinea_as_of_2013-06-30'], // EQUATORIAL GUINEA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:GRC','is_in:country_code','greece_as_of_2013-06-30'], // GREECE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:GTM','is_in:country_code','guatemala_as_of_2013-06-30'], // GUATEMALA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:GUF','is_in:country_code','french_guiana_as_of_2013-06-30'], // FRENCH GUIANA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:GUM','is_in:country_code','guam_as_of_2013-06-30'], // GUAM AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:GUY','is_in:country_code','guyana_as_of_2013-06-30'], // GUYANA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:HKG','is_in:country_code','hong_kong_as_of_2013-06-30'], // HONG KONG AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:HMD','is_in:country_code','heard_island_and_mcdonald_islands_as_of_2013-06-30'], // HEARD ISLAND AND MCDONALD ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:HND','is_in:country_code','honduras_as_of_2013-06-30'], // HONDURAS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:HRV','is_in:country_code','croatia_as_of_2013-06-30'], // CROATIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:HTI','is_in:country_code','haiti_as_of_2013-06-30'], // HAITI AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:IDN','is_in:country_code','indonesia_as_of_2013-06-30'], // INDONESIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:IND','is_in:country_code','india_as_of_2013-06-30'], // INDIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:IOT','is_in:country_code','british_indian_ocean_territory_as_of_2013-06-30'], // BRITISH INDIAN OCEAN TERRITORY AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:IRN','is_in:country_code','iran_as_of_2013-06-30'], // IRAN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:IRQ','is_in:country_code','iraq_as_of_2013-06-30'], // IRAQ AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ISL','is_in:country_code','iceland_as_of_2013-06-30'], // ICELAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ISR','is_in:country_code','israel_as_of_2013-06-30'], // ISRAEL AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ITA','is_in:country_code','italy_as_of_2013-06-30'], // ITALY AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:JEY','is_in:country_code','jersey_as_of_2013-06-30'], // JERSEY AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:JOR','is_in:country_code','jordan_as_of_2013-06-30'], // JORDAN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:KAZ','is_in:country_code','kazakhstan_as_of_2013-06-30'], // KAZAKHSTAN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:KEN','is_in:country_code','kenya_as_of_2013-06-30'], // KENYA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:KGZ','is_in:country_code','kyrgyzstan_as_of_2013-06-30'], // KYRGYZSTAN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:KHM','is_in:country_code','cambodia_as_of_2013-06-30'], // CAMBODIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:KIR','is_in:country_code','kiribati_as_of_2013-06-30'], // KIRIBATI AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:KNA','is_in:country_code','saint_kitts_and_nevis_as_of_2013-06-30'], // SAINT KITTS AND NEVIS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:KOR','is_in:country_code','korea,_south_as_of_2013-06-30'], // KOREA, SOUTH AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:KWT','is_in:country_code','kuwait_as_of_2013-06-30'], // KUWAIT AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:LAO','is_in:country_code','laos_as_of_2013-06-30'], // LAOS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:LBN','is_in:country_code','lebanon_as_of_2013-06-30'], // LEBANON AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:LBR','is_in:country_code','liberia_as_of_2013-06-30'], // LIBERIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:LIE','is_in:country_code','liechtenstein_as_of_2013-06-30'], // LIECHTENSTEIN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:LKA','is_in:country_code','sri_lanka_as_of_2013-06-30'], // SRI LANKA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:LSO','is_in:country_code','lesotho_as_of_2013-06-30'], // LESOTHO AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:LTU','is_in:country_code','lithuania_as_of_2013-06-30'], // LITHUANIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:LUX','is_in:country_code','luxembourg_as_of_2013-06-30'], // LUXEMBOURG AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:LVA','is_in:country_code','latvia_as_of_2013-06-30'], // LATVIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MAC','is_in:country_code','macau_as_of_2013-06-30'], // MACAU AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MAF','is_in:country_code','saint_martin_as_of_2013-06-30'], // SAINT MARTIN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MAR','is_in:country_code','morocco_as_of_2013-06-30'], // MOROCCO AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MCO','is_in:country_code','monaco_as_of_2013-06-30'], // MONACO AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MDA','is_in:country_code','moldova_as_of_2013-06-30'], // MOLDOVA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MDG','is_in:country_code','madagascar_as_of_2013-06-30'], // MADAGASCAR AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MDV','is_in:country_code','maldives_as_of_2013-06-30'], // MALDIVES AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MEX','is_in:country_code','mexico_as_of_2013-06-30'], // MEXICO AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MHL','is_in:country_code','marshall_islands_as_of_2013-06-30'], // MARSHALL ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MKD','is_in:country_code','macedonia_as_of_2013-06-30'], // MACEDONIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MLI','is_in:country_code','mali_as_of_2013-06-30'], // MALI AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MLT','is_in:country_code','malta_as_of_2013-06-30'], // MALTA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MMR','is_in:country_code','burma_as_of_2013-06-30'], // BURMA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MNG','is_in:country_code','mongolia_as_of_2013-06-30'], // MONGOLIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MNP','is_in:country_code','northern_mariana_islands_as_of_2013-06-30'], // NORTHERN MARIANA ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MOZ','is_in:country_code','mozambique_as_of_2013-06-30'], // MOZAMBIQUE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MRT','is_in:country_code','mauritania_as_of_2013-06-30'], // MAURITANIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MTQ','is_in:country_code','martinique_as_of_2013-06-30'], // MARTINIQUE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MUS','is_in:country_code','mauritius_as_of_2013-06-30'], // MAURITIUS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MWI','is_in:country_code','malawi_as_of_2013-06-30'], // MALAWI AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MYS','is_in:country_code','malaysia_as_of_2013-06-30'], // MALAYSIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:MYT','is_in:country_code','mayotte_as_of_2013-06-30'], // MAYOTTE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:NAM','is_in:country_code','namibia_as_of_2013-06-30'], // NAMIBIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:NCL','is_in:country_code','new_caledonia_as_of_2013-06-30'], // NEW CALEDONIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:NER','is_in:country_code','niger_as_of_2013-06-30'], // NIGER AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:NFK','is_in:country_code','norfolk_island_as_of_2013-06-30'], // NORFOLK ISLAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:NGA','is_in:country_code','nigeria_as_of_2013-06-30'], // NIGERIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:NIC','is_in:country_code','nicaragua_as_of_2013-06-30'], // NICARAGUA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:NLD','is_in:country_code','netherlands_as_of_2013-06-30'], // NETHERLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:NOR','is_in:country_code','norway_as_of_2013-06-30'], // NORWAY AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:NPL','is_in:country_code','nepal_as_of_2013-06-30'], // NEPAL AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:NRU','is_in:country_code','nauru_as_of_2013-06-30'], // NAURU AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:NZL','is_in:country_code','new_zealand_as_of_2013-06-30'], // NEW ZEALAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:OMN','is_in:country_code','oman_as_of_2013-06-30'], // OMAN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:PAK','is_in:country_code','pakistan_as_of_2013-06-30'], // PAKISTAN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:PAN','is_in:country_code','panama_as_of_2013-06-30'], // PANAMA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:PCN','is_in:country_code','pitcairn_islands_as_of_2013-06-30'], // PITCAIRN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:PER','is_in:country_code','peru_as_of_2013-06-30'], // PERU AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:PHL','is_in:country_code','philippines_as_of_2013-06-30'], // PHILIPPINES AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:PLW','is_in:country_code','palau_as_of_2013-06-30'], // PALAU AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:POL','is_in:country_code','poland_as_of_2013-06-30'], // POLAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:PRI','is_in:country_code','puerto_rico_as_of_2013-06-30'], // PUERTO RICO AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:PRK','is_in:country_code','korea,_north_as_of_2013-06-30'], // KOREA, NORTH AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:PRT','is_in:country_code','portugal_as_of_2013-06-30'], // PORTUGAL AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:PRY','is_in:country_code','paraguay_as_of_2013-06-30'], // PARAGUAY AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:PSE','is_in:country_code','palestinian_territory_as_of_2013-06-30'], // PALESTINIAN TERRITORY AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:PYF','is_in:country_code','french_polynesia_as_of_2013-06-30'], // FRENCH POLYNESIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:QAT','is_in:country_code','qatar_as_of_2013-06-30'], // QATAR AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:REU','is_in:country_code','reunion_as_of_2013-06-30'], // REUNION AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:RUS','is_in:country_code','russia_as_of_2013-06-30'], // RUSSIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:RWA','is_in:country_code','rwanda_as_of_2013-06-30'], // RWANDA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SAU','is_in:country_code','saudi_arabia_as_of_2013-06-30'], // SAUDI ARABIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SDN','is_in:country_code','sudan_as_of_2013-06-30'], // SUDAN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SEN','is_in:country_code','senegal_as_of_2013-06-30'], // SENEGAL AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SGP','is_in:country_code','singapore_as_of_2013-06-30'], // SINGAPORE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SGS','is_in:country_code','south_georgia_and_south_sandwich_islands_as_of_2013-06-30'], // SOUTH GEORGIA AND SOUTH SANDWICH ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SHN','is_in:country_code','saint_helena,_ascension,_and_tristan_da_cunha_as_of_2013-06-30'], // SAINT HELENA, ASCENSION, AND TRISTAN DA CUNHA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SLB','is_in:country_code','solomon_islands_as_of_2013-06-30'], // SOLOMON ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SLE','is_in:country_code','sierra_leone_as_of_2013-06-30'], // SIERRA LEONE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SLV','is_in:country_code','el_salvador_as_of_2013-06-30'], // EL SALVADOR AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SMR','is_in:country_code','san_marino_as_of_2013-06-30'], // SAN MARINO AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SOM','is_in:country_code','somalia_as_of_2013-06-30'], // SOMALIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SPM','is_in:country_code','saint_pierre_and_miquelon_as_of_2013-06-30'], // SAINT PIERRE AND MIQUELON AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SRB','is_in:country_code','serbia_as_of_2013-06-30'], // SERBIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SSD','is_in:country_code','south_sudan_as_of_2013-06-30'], // SOUTH SUDAN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:STP','is_in:country_code','sao_tome_and_principe_as_of_2013-06-30'], // SAO TOME AND PRINCIPE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SUR','is_in:country_code','suriname_as_of_2013-06-30'], // SURINAME AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SVK','is_in:country_code','slovakia_as_of_2013-06-30'], // SLOVAKIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SVN','is_in:country_code','slovenia_as_of_2013-06-30'], // SLOVENIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SWE','is_in:country_code','sweden_as_of_2013-06-30'], // SWEDEN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SWZ','is_in:country_code','swaziland_as_of_2013-06-30'], // SWAZILAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SXM','is_in:country_code','sint_maarten_as_of_2013-06-30'], // SINT MAARTEN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SYC','is_in:country_code','seychelles_as_of_2013-06-30'], // SEYCHELLES AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:SYR','is_in:country_code','syria_as_of_2013-06-30'], // SYRIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:TCA','is_in:country_code','turks_and_caicos_islands_as_of_2013-06-30'], // TURKS AND CAICOS ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:TCD','is_in:country_code','chad_as_of_2013-06-30'], // CHAD AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:TGO','is_in:country_code','togo_as_of_2013-06-30'], // TOGO AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:THA','is_in:country_code','thailand_as_of_2013-06-30'], // THAILAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:TJK','is_in:country_code','tajikistan_as_of_2013-06-30'], // TAJIKISTAN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:TLS','is_in:country_code','timor-leste_as_of_2013-06-30'], // TIMOR-LESTE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:TON','is_in:country_code','tonga_as_of_2013-06-30'], // TONGA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:TTO','is_in:country_code','trinidad_and_tobago_as_of_2013-06-30'], // TRINIDAD AND TOBAGO AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:TUN','is_in:country_code','tunisia_as_of_2013-06-30'], // TUNISIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:TUR','is_in:country_code','turkey_as_of_2013-06-30'], // TURKEY AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:TWN','is_in:country_code','taiwan_as_of_2013-06-30'], // TAIWAN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:TZA','is_in:country_code','tanzania_as_of_2013-06-30'], // TANZANIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:UGA','is_in:country_code','uganda_as_of_2013-06-30'], // UGANDA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:UKR','is_in:country_code','ukraine_as_of_2013-06-30'], // UKRAINE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:URY','is_in:country_code','uruguay_as_of_2013-06-30'], // URUGUAY AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:USA','is_in:country_code','united_states_as_of_2013-06-30'], // UNITED STATES AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:UZB','is_in:country_code','uzbekistan_as_of_2013-06-30'], // UZBEKISTAN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:VAT','is_in:country_code','vatican_city_as_of_2013-06-30'], // VATICAN CITY AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:VCT','is_in:country_code','saint_vincent_and_the_grenadines_as_of_2013-06-30'], // SAINT VINCENT AND THE GRENADINES AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:VEN','is_in:country_code','venezuela_as_of_2013-06-30'], // VENEZUELA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:VGB','is_in:country_code','virgin_islands,_british_as_of_2013-06-30'], // VIRGIN ISLANDS, BRITISH AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:VIR','is_in:country_code','virgin_islands,_u.s._as_of_2013-06-30'], // VIRGIN ISLANDS, U.S. AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:VNM','is_in:country_code','vietnam_as_of_2013-06-30'], // VIETNAM AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:VUT','is_in:country_code','vanuatu_as_of_2013-06-30'], // VANUATU AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:WLF','is_in:country_code','wallis_and_futuna_as_of_2013-06-30'], // WALLIS AND FUTUNA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:WSM','is_in:country_code','samoa_as_of_2013-06-30'], // SAMOA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XAC','is_in:country_code','ashmore_and_cartier_islands_as_of_2013-06-30'], // ASHMORE AND CARTIER ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XAZ','is_in:country_code','entity_1_as_of_2013-06-30'], // ENTITY 1 AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XBI','is_in:country_code','bassas_da_india_as_of_2013-06-30'], // BASSAS DA INDIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XBK','is_in:country_code','baker_island_as_of_2013-06-30'], // BAKER ISLAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XCR','is_in:country_code','entity_2_as_of_2013-06-30'], // ENTITY 2 AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XCS','is_in:country_code','coral_sea_islands_as_of_2013-06-30'], // CORAL SEA ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XCY','is_in:country_code','entity_3_as_of_2013-06-30'], // ENTITY 3 AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XEU','is_in:country_code','europa_island_as_of_2013-06-30'], // EUROPA ISLAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XGL','is_in:country_code','glorioso_islands_as_of_2013-06-30'], // GLORIOSO ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XGZ','is_in:country_code','gaza_strip_as_of_2013-06-30'], // GAZA STRIP AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XHO','is_in:country_code','howland_island_as_of_2013-06-30'], // HOWLAND ISLAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XJA','is_in:country_code','johnston_atoll_as_of_2013-06-30'], // JOHNSTON ATOLL AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XJM','is_in:country_code','jan_mayen_as_of_2013-06-30'], // JAN MAYEN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XJN','is_in:country_code','juan_de_nova_island_as_of_2013-06-30'], // JUAN DE NOVA ISLAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XJV','is_in:country_code','jarvis_island_as_of_2013-06-30'], // JARVIS ISLAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XKM','is_in:country_code','entity_4_as_of_2013-06-30'], // ENTITY 4 AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XKN','is_in:country_code','entity_5_as_of_2013-06-30'], // ENTITY 5 AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XKR','is_in:country_code','kingman_reef_as_of_2013-06-30'], // KINGMAN REEF AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XKS','is_in:country_code','kosovo_as_of_2013-06-30'], // KOSOVO AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XMW','is_in:country_code','midway_islands_as_of_2013-06-30'], // MIDWAY ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XNV','is_in:country_code','navassa_island_as_of_2013-06-30'], // NAVASSA ISLAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XPL','is_in:country_code','palmyra_atoll_as_of_2013-06-30'], // PALMYRA ATOLL AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XPR','is_in:country_code','paracel_islands_as_of_2013-06-30'], // PARACEL ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XQP','is_in:country_code','etorofu,_habomai,_kunashiri,_and_shikotan_islands_as_of_2013-06-30'], // ETOROFU, HABOMAI, KUNASHIRI, AND SHIKOTAN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XQZ','is_in:country_code','akrotiri_as_of_2013-06-30'], // AKROTIRI AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XSP','is_in:country_code','spratly_islands_as_of_2013-06-30'], // SPRATLY ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XSV','is_in:country_code','svalbard_as_of_2013-06-30'], // SVALBARD AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XTR','is_in:country_code','tromelin_island_as_of_2013-06-30'], // TROMELIN ISLAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XWB','is_in:country_code','west_bank_as_of_2013-06-30'], // WEST BANK AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XWK','is_in:country_code','wake_island_as_of_2013-06-30'], // WAKE ISLAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XXD','is_in:country_code','dhekelia_as_of_2013-06-30'], // DHEKELIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:XXX','is_in:country_code','no_man"s_land_as_of_2013-06-30'], // NO MAN"S LAND AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:YEM','is_in:country_code','yemen_as_of_2013-06-30'], // YEMEN AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ZAF','is_in:country_code','south_africa_as_of_2013-06-30'], // SOUTH AFRICA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ZMB','is_in:country_code','zambia_as_of_2013-06-30'], // ZAMBIA AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:1-2:ZWE','is_in:country_code','zimbabwe_as_of_2013-06-30'], // ZIMBABWE AS OF 2013-06-30
+     ['ZI020_GE4','ge:GENC:3:ed3:AX3','is_in:country_code','entity_6_as_of_2015-06-30'], // ENTITY 6 AS OF 2015-06-30
+     ['ZI020_GE4','ge:ISO1:3:VI-15:AIA','is_in:country_code','anguilla_as_of_2013-05-10'], // ANGUILLA AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:ATA','is_in:country_code','antarctica_as_of_2013-05-10'], // ANTARCTICA AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:BIH','is_in:country_code','bosnia_and_herzegovina_as_of_2013-05-10'], // BOSNIA AND HERZEGOVINA AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:BLZ','is_in:country_code','belize_as_of_2013-05-10'], // BELIZE AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:BMU','is_in:country_code','bermuda_as_of_2013-05-10'], // BERMUDA AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:BRB','is_in:country_code','barbados_as_of_2013-05-10'], // BARBADOS AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:BVT','is_in:country_code','bouvet_island_as_of_2013-05-10'], // BOUVET ISLAND AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:GIB','is_in:country_code','gibraltar_as_of_2013-05-10'], // GIBRALTAR AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:GRD','is_in:country_code','grenada_as_of_2013-05-10'], // GRENADA AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:GRL','is_in:country_code','greenland_as_of_2013-05-10'], // GREENLAND AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:HUN','is_in:country_code','hungary_as_of_2013-05-10'], // HUNGARY AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:IMN','is_in:country_code','isle_of_man_as_of_2013-05-10'], // ISLE OF MAN AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:IRL','is_in:country_code','ireland_as_of_2013-05-10'], // IRELAND AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:JAM','is_in:country_code','jamaica_as_of_2013-05-10'], // JAMAICA AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:JPN','is_in:country_code','japan_as_of_2013-05-10'], // JAPAN AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:LBY','is_in:country_code','libya_as_of_2013-05-10'], // LIBYA AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:LCA','is_in:country_code','saint_lucia_as_of_2013-05-10'], // SAINT LUCIA AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:MNE','is_in:country_code','montenegro_as_of_2013-05-10'], // MONTENEGRO AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:MSR','is_in:country_code','montserrat_as_of_2013-05-10'], // MONTSERRAT AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:NIU','is_in:country_code','niue_as_of_2013-05-10'], // NIUE AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:PNG','is_in:country_code','papua_new_guinea_as_of_2013-05-10'], // PAPUA NEW GUINEA AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:ROU','is_in:country_code','romania_as_of_2013-05-10'], // ROMANIA AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:TKL','is_in:country_code','tokelau_as_of_2013-05-10'], // TOKELAU AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:TKM','is_in:country_code','turkmenistan_as_of_2013-05-10'], // TURKMENISTAN AS OF 2013-05-10
+     ['ZI020_GE4','ge:ISO1:3:VI-15:TUV','is_in:country_code','tuvalu_as_of_2013-05-10'], // TUVALU AS OF 2013-05-10
+     ['ZI020_GE4','noInformation','is_in:country_code','no_information'], // No Information
      ['ZI020_GE4','other','is_in:country_code','other'], // Other
-     ['ZI020_GE4','ge:GENC:3:1-2:AFG','is_in:country_code','AF'], // Islamic Republic of Afghanistan
-     ['ZI020_GE4','ge:GENC:3:1-2:XQZ','is_in:country_code','QZ'], // Akrotiri
-     ['ZI020_GE4','ge:GENC:3:1-2:ALB','is_in:country_code','AL'], // Republic of Albania
-     ['ZI020_GE4','ge:GENC:3:1-2:DZA','is_in:country_code','DZ'], // Peoples Democratic Republic of Algeria
-     ['ZI020_GE4','ge:GENC:3:1-2:ASM','is_in:country_code','AS'], // Territory of American Samoa
-     ['ZI020_GE4','ge:GENC:3:1-2:AND','is_in:country_code','AD'], // Principality of Andorra
-     ['ZI020_GE4','ge:GENC:3:1-2:AGO','is_in:country_code','AO'], // Republic of Angola
-     ['ZI020_GE4','ge:ISO1:3:VI-15:AIA','is_in:country_code','AI'], // Anguilla
-     ['ZI020_GE4','ge:ISO1:3:VI-15:ATA','is_in:country_code','AQ'], // Antarctica
-     ['ZI020_GE4','ge:GENC:3:1-2:ATG','is_in:country_code','AG'], // Antigua and Barbuda
-     ['ZI020_GE4','ge:GENC:3:1-2:ARG','is_in:country_code','AR'], // Argentine Republic
-     ['ZI020_GE4','ge:GENC:3:1-2:ARM','is_in:country_code','AM'], // Republic of Armenia
-     ['ZI020_GE4','ge:GENC:3:1-2:ABW','is_in:country_code','AW'], // Aruba
-     ['ZI020_GE4','ge:GENC:3:1-2:XAC','is_in:country_code','XA'], // Territory of Ashmore and Cartier Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:AUS','is_in:country_code','AU'], // Commonwealth of Australia
-     ['ZI020_GE4','ge:GENC:3:1-2:AUT','is_in:country_code','AT'], // Republic of Austria
-     ['ZI020_GE4','ge:GENC:3:1-2:AZE','is_in:country_code','AZ'], // Republic of Azerbaijan
-     ['ZI020_GE4','ge:GENC:3:1-2:BHS','is_in:country_code','BS'], // Commonwealth of The Bahamas
-     ['ZI020_GE4','ge:GENC:3:1-2:BHR','is_in:country_code','BH'], // Kingdom of Bahrain
-     ['ZI020_GE4','ge:GENC:3:1-2:XBK','is_in:country_code','XB'], // Baker Island
-     ['ZI020_GE4','ge:GENC:3:1-2:BGD','is_in:country_code','BD'], // Peoples Republic of Bangladesh
-     ['ZI020_GE4','ge:ISO1:3:VI-15:BRB','is_in:country_code','BB'], // Barbados
-     ['ZI020_GE4','ge:GENC:3:1-2:XBI','is_in:country_code','QS'], // Bassas da India
-     ['ZI020_GE4','ge:GENC:3:1-2:BLR','is_in:country_code','BY'], // Republic of Belarus
-     ['ZI020_GE4','ge:GENC:3:1-2:BEL','is_in:country_code','BE'], // Kingdom of Belgium
-     ['ZI020_GE4','ge:ISO1:3:VI-15:BLZ','is_in:country_code','BZ'], // Belize
-     ['ZI020_GE4','ge:GENC:3:1-2:BEN','is_in:country_code','BJ'], // Republic of Benin
-     ['ZI020_GE4','ge:ISO1:3:VI-15:BMU','is_in:country_code','BM'], // Bermuda
-     ['ZI020_GE4','ge:GENC:3:1-2:BTN','is_in:country_code','BT'], // Kingdom of Bhutan
-     ['ZI020_GE4','ge:GENC:3:1-2:BOL','is_in:country_code','BO'], // Plurinational State of Bolivia
-     ['ZI020_GE4','ge:GENC:3:1-2:BES','is_in:country_code','BQ'], // Bonaire, Sint Eustatius, and Saba
-     ['ZI020_GE4','ge:ISO1:3:VI-15:BIH','is_in:country_code','BA'], // Bosnia and Herzegovina
-     ['ZI020_GE4','ge:GENC:3:1-2:BWA','is_in:country_code','BW'], // Republic of Botswana
-     ['ZI020_GE4','ge:ISO1:3:VI-15:BVT','is_in:country_code','BV'], // Bouvet Island
-     ['ZI020_GE4','ge:GENC:3:1-2:BRA','is_in:country_code','BR'], // Federative Republic of Brazil
-     ['ZI020_GE4','ge:GENC:3:1-2:IOT','is_in:country_code','IO'], // British Indian Ocean Territory
-     ['ZI020_GE4','ge:GENC:3:1-2:BRN','is_in:country_code','BN'], // Brunei Darussalam
-     ['ZI020_GE4','ge:GENC:3:1-2:BGR','is_in:country_code','BG'], // Republic of Bulgaria
-     ['ZI020_GE4','ge:GENC:3:1-2:BFA','is_in:country_code','BF'], // Burkina Faso
-     ['ZI020_GE4','ge:GENC:3:1-2:MMR','is_in:country_code','MM'], // Union of Burma
-     ['ZI020_GE4','ge:GENC:3:1-2:BDI','is_in:country_code','BI'], // Republic of Burundi
-     ['ZI020_GE4','ge:GENC:3:1-2:KHM','is_in:country_code','KH'], // Kingdom of Cambodia
-     ['ZI020_GE4','ge:GENC:3:1-2:CMR','is_in:country_code','CM'], // Republic of Cameroon
-     ['ZI020_GE4','ge:GENC:3:1-2:CAN','is_in:country_code','CA'], // Canada
-     ['ZI020_GE4','ge:GENC:3:1-2:CPV','is_in:country_code','CV'], // Republic of Cape Verde
-     ['ZI020_GE4','ge:GENC:3:1-2:CYM','is_in:country_code','KY'], // Cayman Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:CAF','is_in:country_code','CF'], // Central African Republic
-     ['ZI020_GE4','ge:GENC:3:1-2:TCD','is_in:country_code','TD'], // Republic of Chad
-     ['ZI020_GE4','ge:GENC:3:1-2:CHL','is_in:country_code','CL'], // Republic of Chile
-     ['ZI020_GE4','ge:GENC:3:1-2:CHN','is_in:country_code','CN'], // Peoples Republic of China
-     ['ZI020_GE4','ge:GENC:3:1-2:CXR','is_in:country_code','CX'], // Territory of Christmas Island
-     ['ZI020_GE4','ge:GENC:3:1-2:CPT','is_in:country_code','CP'], // Clipperton Island
-     ['ZI020_GE4','ge:GENC:3:1-2:CCK','is_in:country_code','CC'], // Territory of Cocos (Keeling) Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:COL','is_in:country_code','CO'], // Republic of Colombia
-     ['ZI020_GE4','ge:GENC:3:1-2:COM','is_in:country_code','KM'], // Union of the Comoros
-     ['ZI020_GE4','ge:GENC:3:1-2:COG','is_in:country_code','CG'], // Republic of the Congo
-     ['ZI020_GE4','ge:GENC:3:1-2:COD','is_in:country_code','CD'], // Democratic Republic of the Congo
-     ['ZI020_GE4','ge:GENC:3:1-2:COK','is_in:country_code','CK'], // Cook Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:XCS','is_in:country_code','XC'], // Coral Sea Islands Territory
-     ['ZI020_GE4','ge:GENC:3:1-2:CRI','is_in:country_code','CR'], // Republic of Costa Rica
-     ['ZI020_GE4','ge:GENC:3:1-2:CIV','is_in:country_code','CI'], // Republic of Côte dIvoire
-     ['ZI020_GE4','ge:GENC:3:1-2:HRV','is_in:country_code','HR'], // Republic of Croatia
-     ['ZI020_GE4','ge:GENC:3:1-2:CUB','is_in:country_code','CU'], // Republic of Cuba
-     ['ZI020_GE4','ge:GENC:3:1-2:CUW','is_in:country_code','CW'], // Curaçao
-     ['ZI020_GE4','ge:GENC:3:1-2:CYP','is_in:country_code','CY'], // Republic of Cyprus
-     ['ZI020_GE4','ge:GENC:3:1-2:CZE','is_in:country_code','CZ'], // Czech Republic
-     ['ZI020_GE4','ge:GENC:3:1-2:DNK','is_in:country_code','DK'], // Kingdom of Denmark
-     ['ZI020_GE4','ge:GENC:3:1-2:XXD','is_in:country_code','XD'], // Dhekelia
-     ['ZI020_GE4','ge:GENC:3:1-2:DGA','is_in:country_code','DG'], // Diego Garcia
-     ['ZI020_GE4','ge:GENC:3:1-2:DJI','is_in:country_code','DJ'], // Republic of Djibouti
-     ['ZI020_GE4','ge:GENC:3:1-2:DMA','is_in:country_code','DM'], // Commonwealth of Dominica
-     ['ZI020_GE4','ge:GENC:3:1-2:DOM','is_in:country_code','DO'], // Dominican Republic
-     ['ZI020_GE4','ge:GENC:3:1-2:ECU','is_in:country_code','EC'], // Republic of Ecuador
-     ['ZI020_GE4','ge:GENC:3:1-2:EGY','is_in:country_code','EG'], // Arab Republic of Egypt
-     ['ZI020_GE4','ge:GENC:3:1-2:SLV','is_in:country_code','SV'], // Republic of El Salvador
-     ['ZI020_GE4','ge:GENC:3:1-2:XAZ','is_in:country_code','XAZ'], // Entity 1
-     ['ZI020_GE4','ge:GENC:3:1-2:XCR','is_in:country_code','XCR'], // Entity 2
-     ['ZI020_GE4','ge:GENC:3:1-2:XCY','is_in:country_code','XCY'], // Entity 3
-     ['ZI020_GE4','ge:GENC:3:1-2:XKM','is_in:country_code','XKM'], // Entity 4
-     ['ZI020_GE4','ge:GENC:3:1-2:XKN','is_in:country_code','XKN'], // Entity 5
-     ['ZI020_GE4','ge:GENC:3:1-2:GNQ','is_in:country_code','GQ'], // Republic of Equatorial Guinea
-     ['ZI020_GE4','ge:GENC:3:1-2:ERI','is_in:country_code','ER'], // State of Eritrea
-     ['ZI020_GE4','ge:GENC:3:1-2:EST','is_in:country_code','EE'], // Republic of Estonia
-     ['ZI020_GE4','ge:GENC:3:1-2:ETH','is_in:country_code','ET'], // Federal Democratic Republic of Ethiopia
-     ['ZI020_GE4','ge:GENC:3:1-2:XQP','is_in:country_code','QP'], // Etorofu, Habomai, Kunashiri, and Shikotan Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:XEU','is_in:country_code','XE'], // Europa Island
-     ['ZI020_GE4','ge:GENC:3:1-2:FLK','is_in:country_code','FK'], // Falkland Islands (Islas Malvinas)
-     ['ZI020_GE4','ge:GENC:3:1-2:FRO','is_in:country_code','FO'], // Faroe Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:FJI','is_in:country_code','FJ'], // Republic of Fiji
-     ['ZI020_GE4','ge:GENC:3:1-2:FIN','is_in:country_code','FI'], // Republic of Finland
-     ['ZI020_GE4','ge:GENC:3:1-2:FRA','is_in:country_code','FR'], // French Republic
-     ['ZI020_GE4','ge:GENC:3:1-2:GUF','is_in:country_code','GF'], // Department of Guiana
-     ['ZI020_GE4','ge:GENC:3:1-2:PYF','is_in:country_code','PF'], // French Polynesia
-     ['ZI020_GE4','ge:GENC:3:1-2:ATF','is_in:country_code','TF'], // French Southern and Antarctic Lands
-     ['ZI020_GE4','ge:GENC:3:1-2:GAB','is_in:country_code','GA'], // Gabonese Republic
-     ['ZI020_GE4','ge:GENC:3:1-2:GMB','is_in:country_code','GM'], // Republic of The Gambia
-     ['ZI020_GE4','ge:GENC:3:1-2:XGZ','is_in:country_code','XG'], // Gaza Strip
-     ['ZI020_GE4','ge:GENC:3:1-2:GEO','is_in:country_code','GE'], // Georgia
-     ['ZI020_GE4','ge:GENC:3:1-2:DEU','is_in:country_code','DE'], // Federal Republic of Germany
-     ['ZI020_GE4','ge:GENC:3:1-2:GHA','is_in:country_code','GH'], // Republic of Ghana
-     ['ZI020_GE4','ge:ISO1:3:VI-15:GIB','is_in:country_code','GI'], // Gibraltar
-     ['ZI020_GE4','ge:GENC:3:1-2:XGL','is_in:country_code','QX'], // Glorioso Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:GRC','is_in:country_code','GR'], // Hellenic Republic
-     ['ZI020_GE4','ge:ISO1:3:VI-15:GRL','is_in:country_code','GL'], // Greenland
-     ['ZI020_GE4','ge:ISO1:3:VI-15:GRD','is_in:country_code','GD'], // Grenada
-     ['ZI020_GE4','ge:GENC:3:1-2:GLP','is_in:country_code','GP'], // Department of Guadeloupe
-     ['ZI020_GE4','ge:GENC:3:1-2:GUM','is_in:country_code','GU'], // Territory of Guam
-     ['ZI020_GE4','ge:GENC:3:1-2:AX2','is_in:country_code','A2'], // Guantanamo Bay Naval Base
-     ['ZI020_GE4','ge:GENC:3:1-2:GTM','is_in:country_code','GT'], // Republic of Guatemala
-     ['ZI020_GE4','ge:GENC:3:1-2:GGY','is_in:country_code','GG'], // Bailiwick of Guernsey
-     ['ZI020_GE4','ge:GENC:3:1-2:GIN','is_in:country_code','GN'], // Republic of Guinea
-     ['ZI020_GE4','ge:GENC:3:1-2:GNB','is_in:country_code','GW'], // Republic of Guinea-Bissau
-     ['ZI020_GE4','ge:GENC:3:1-2:GUY','is_in:country_code','GY'], // Co-operative Republic of Guyana
-     ['ZI020_GE4','ge:GENC:3:1-2:HTI','is_in:country_code','HT'], // Republic of Haiti
-     ['ZI020_GE4','ge:GENC:3:1-2:HMD','is_in:country_code','HM'], // Territory of Heard Island and McDonald Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:HND','is_in:country_code','HN'], // Republic of Honduras
-     ['ZI020_GE4','ge:GENC:3:1-2:HKG','is_in:country_code','HK'], // Hong Kong Special Administrative Region
-     ['ZI020_GE4','ge:GENC:3:1-2:XHO','is_in:country_code','XH'], // Howland Island
-     ['ZI020_GE4','ge:ISO1:3:VI-15:HUN','is_in:country_code','HU'], // Hungary
-     ['ZI020_GE4','ge:GENC:3:1-2:ISL','is_in:country_code','IS'], // Republic of Iceland
-     ['ZI020_GE4','ge:GENC:3:1-2:IND','is_in:country_code','IN'], // Republic of India
-     ['ZI020_GE4','ge:GENC:3:1-2:IDN','is_in:country_code','ID'], // Republic of Indonesia
-     ['ZI020_GE4','ge:GENC:3:1-2:IRN','is_in:country_code','IR'], // Islamic Republic of Iran
-     ['ZI020_GE4','ge:GENC:3:1-2:IRQ','is_in:country_code','IQ'], // Republic of Iraq
-     ['ZI020_GE4','ge:ISO1:3:VI-15:IRL','is_in:country_code','IE'], // Ireland
-     ['ZI020_GE4','ge:ISO1:3:VI-15:IMN','is_in:country_code','IM'], // Isle of Man
-     ['ZI020_GE4','ge:GENC:3:1-2:ISR','is_in:country_code','IL'], // State of Israel
-     ['ZI020_GE4','ge:GENC:3:1-2:ITA','is_in:country_code','IT'], // Italian Republic
-     ['ZI020_GE4','ge:ISO1:3:VI-15:JAM','is_in:country_code','JM'], // Jamaica
-     ['ZI020_GE4','ge:GENC:3:1-2:XJM','is_in:country_code','XJ'], // Jan Mayen
-     ['ZI020_GE4','ge:ISO1:3:VI-15:JPN','is_in:country_code','JP'], // Japan
-     ['ZI020_GE4','ge:GENC:3:1-2:XJV','is_in:country_code','XQ'], // Jarvis Island
-     ['ZI020_GE4','ge:GENC:3:1-2:JEY','is_in:country_code','JE'], // Bailiwick of Jersey
-     ['ZI020_GE4','ge:GENC:3:1-2:XJA','is_in:country_code','XU'], // Johnston Atoll
-     ['ZI020_GE4','ge:GENC:3:1-2:JOR','is_in:country_code','JO'], // Hashemite Kingdom of Jordan
-     ['ZI020_GE4','ge:GENC:3:1-2:XJN','is_in:country_code','QU'], // Juan de Nova Island
-     ['ZI020_GE4','ge:GENC:3:1-2:KAZ','is_in:country_code','KZ'], // Republic of Kazakhstan
-     ['ZI020_GE4','ge:GENC:3:1-2:KEN','is_in:country_code','KE'], // Republic of Kenya
-     ['ZI020_GE4','ge:GENC:3:1-2:XKR','is_in:country_code','XM'], // Kingman Reef
-     ['ZI020_GE4','ge:GENC:3:1-2:KIR','is_in:country_code','KI'], // Republic of Kiribati
-     ['ZI020_GE4','ge:GENC:3:1-2:PRK','is_in:country_code','KP'], // Democratic Peoples Republic of Korea
-     ['ZI020_GE4','ge:GENC:3:1-2:KOR','is_in:country_code','KR'], // Republic of Korea
-     ['ZI020_GE4','ge:GENC:3:1-2:XKS','is_in:country_code','XK'], // Republic of Kosovo
-     ['ZI020_GE4','ge:GENC:3:1-2:KWT','is_in:country_code','KW'], // State of Kuwait
-     ['ZI020_GE4','ge:GENC:3:1-2:KGZ','is_in:country_code','KG'], // Kyrgyz Republic
-     ['ZI020_GE4','ge:GENC:3:1-2:LAO','is_in:country_code','LA'], // Lao Peoples Democratic Republic
-     ['ZI020_GE4','ge:GENC:3:1-2:LVA','is_in:country_code','LV'], // Republic of Latvia
-     ['ZI020_GE4','ge:GENC:3:1-2:LBN','is_in:country_code','LB'], // Lebanese Republic
-     ['ZI020_GE4','ge:GENC:3:1-2:LSO','is_in:country_code','LS'], // Kingdom of Lesotho
-     ['ZI020_GE4','ge:GENC:3:1-2:LBR','is_in:country_code','LR'], // Republic of Liberia
-     ['ZI020_GE4','ge:ISO1:3:VI-15:LBY','is_in:country_code','LY'], // Libya
-     ['ZI020_GE4','ge:GENC:3:1-2:LIE','is_in:country_code','LI'], // Principality of Liechtenstein
-     ['ZI020_GE4','ge:GENC:3:1-2:LTU','is_in:country_code','LT'], // Republic of Lithuania
-     ['ZI020_GE4','ge:GENC:3:1-2:LUX','is_in:country_code','LU'], // Grand Duchy of Luxembourg
-     ['ZI020_GE4','ge:GENC:3:1-2:MAC','is_in:country_code','MO'], // Macau Special Administrative Region
-     ['ZI020_GE4','ge:GENC:3:1-2:MKD','is_in:country_code','MK'], // Republic of Macedonia
-     ['ZI020_GE4','ge:GENC:3:1-2:MDG','is_in:country_code','MG'], // Republic of Madagascar
-     ['ZI020_GE4','ge:GENC:3:1-2:MWI','is_in:country_code','MW'], // Republic of Malawi
-     ['ZI020_GE4','ge:GENC:3:1-2:MYS','is_in:country_code','MY'], // Malaysia
-     ['ZI020_GE4','ge:GENC:3:1-2:MDV','is_in:country_code','MV'], // Republic of Maldives
-     ['ZI020_GE4','ge:GENC:3:1-2:MLI','is_in:country_code','ML'], // Republic of Mali
-     ['ZI020_GE4','ge:GENC:3:1-2:MLT','is_in:country_code','MT'], // Republic of Malta
-     ['ZI020_GE4','ge:GENC:3:1-2:MHL','is_in:country_code','MH'], // Republic of the Marshall Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:MTQ','is_in:country_code','MQ'], // Department of Martinique
-     ['ZI020_GE4','ge:GENC:3:1-2:MRT','is_in:country_code','MR'], // Islamic Republic of Mauritania
-     ['ZI020_GE4','ge:GENC:3:1-2:MUS','is_in:country_code','MU'], // Republic of Mauritius
-     ['ZI020_GE4','ge:GENC:3:1-2:MYT','is_in:country_code','YT'], // Department of Mayotte
-     ['ZI020_GE4','ge:GENC:3:1-2:MEX','is_in:country_code','MX'], // United Mexican States
-     ['ZI020_GE4','ge:GENC:3:1-2:FSM','is_in:country_code','FM'], // Federated States of Micronesia
-     ['ZI020_GE4','ge:GENC:3:1-2:XMW','is_in:country_code','QM'], // Midway Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:MDA','is_in:country_code','MD'], // Republic of Moldova
-     ['ZI020_GE4','ge:GENC:3:1-2:MCO','is_in:country_code','MC'], // Principality of Monaco
-     ['ZI020_GE4','ge:GENC:3:1-2:MNG','is_in:country_code','MN'], // Mongolia
-     ['ZI020_GE4','ge:ISO1:3:VI-15:MNE','is_in:country_code','ME'], // Montenegro
-     ['ZI020_GE4','ge:ISO1:3:VI-15:MSR','is_in:country_code','MS'], // Montserrat
-     ['ZI020_GE4','ge:GENC:3:1-2:MAR','is_in:country_code','MA'], // Kingdom of Morocco
-     ['ZI020_GE4','ge:GENC:3:1-2:MOZ','is_in:country_code','MZ'], // Republic of Mozambique
-     ['ZI020_GE4','ge:GENC:3:1-2:NAM','is_in:country_code','NA'], // Republic of Namibia
-     ['ZI020_GE4','ge:GENC:3:1-2:NRU','is_in:country_code','NR'], // Republic of Nauru
-     ['ZI020_GE4','ge:GENC:3:1-2:XNV','is_in:country_code','XV'], // Navassa Island
-     ['ZI020_GE4','ge:GENC:3:1-2:NPL','is_in:country_code','NP'], // Federal Democratic Republic of Nepal
-     ['ZI020_GE4','ge:GENC:3:1-2:NLD','is_in:country_code','NL'], // Kingdom of the Netherlands
-     ['ZI020_GE4','ge:GENC:3:1-2:NCL','is_in:country_code','NC'], // New Caledonia
-     ['ZI020_GE4','ge:GENC:3:1-2:NZL','is_in:country_code','NZ'], // New Zealand
-     ['ZI020_GE4','ge:GENC:3:1-2:NIC','is_in:country_code','NI'], // Republic of Nicaragua
-     ['ZI020_GE4','ge:GENC:3:1-2:NER','is_in:country_code','NE'], // Republic of the Niger
-     ['ZI020_GE4','ge:GENC:3:1-2:NGA','is_in:country_code','NG'], // Federal Republic of Nigeria
-     ['ZI020_GE4','ge:ISO1:3:VI-15:NIU','is_in:country_code','NU'], // Niue
-     ['ZI020_GE4','ge:GENC:3:1-2:XXX','is_in:country_code','[None]'], // No Mans Land
-     ['ZI020_GE4','ge:GENC:3:1-2:NFK','is_in:country_code','NF'], // Territory of Norfolk Island
-     ['ZI020_GE4','ge:GENC:3:1-2:MNP','is_in:country_code','MP'], // Commonwealth of the Northern Mariana Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:NOR','is_in:country_code','NO'], // Kingdom of Norway
-     ['ZI020_GE4','ge:GENC:3:1-2:OMN','is_in:country_code','OM'], // Sultanate of Oman
-     ['ZI020_GE4','ge:GENC:3:1-2:PAK','is_in:country_code','PK'], // Islamic Republic of Pakistan
-     ['ZI020_GE4','ge:GENC:3:1-2:PLW','is_in:country_code','PW'], // Republic of Palau
-     ['ZI020_GE4','ge:GENC:3:1-2:PSE','is_in:country_code','PS'], // Palestinian Territory
-     ['ZI020_GE4','ge:GENC:3:1-2:XPL','is_in:country_code','XL'], // Palmyra Atoll
-     ['ZI020_GE4','ge:GENC:3:1-2:PAN','is_in:country_code','PA'], // Republic of Panama
-     ['ZI020_GE4','ge:ISO1:3:VI-15:PNG','is_in:country_code','PG'], // Independent State of Papua New Guinea
-     ['ZI020_GE4','ge:GENC:3:1-2:XPR','is_in:country_code','XP'], // Paracel Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:PRY','is_in:country_code','PY'], // Republic of Paraguay
-     ['ZI020_GE4','ge:GENC:3:1-2:PER','is_in:country_code','PE'], // Republic of Peru
-     ['ZI020_GE4','ge:GENC:3:1-2:PHL','is_in:country_code','PH'], // Republic of the Philippines
-     ['ZI020_GE4','ge:GENC:3:1-2:PCN','is_in:country_code','PN'], // Pitcairn, Henderson, Ducie, and Oeno Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:POL','is_in:country_code','PL'], // Republic of Poland
-     ['ZI020_GE4','ge:GENC:3:1-2:PRT','is_in:country_code','PT'], // Portuguese Republic
-     ['ZI020_GE4','ge:GENC:3:1-2:PRI','is_in:country_code','PR'], // Commonwealth of Puerto Rico
-     ['ZI020_GE4','ge:GENC:3:1-2:QAT','is_in:country_code','QA'], // State of Qatar
-     ['ZI020_GE4','ge:GENC:3:1-2:REU','is_in:country_code','RE'], // Department of Reunion
-     ['ZI020_GE4','ge:ISO1:3:VI-15:ROU','is_in:country_code','RO'], // Romania
-     ['ZI020_GE4','ge:GENC:3:1-2:RUS','is_in:country_code','RU'], // Russian Federation
-     ['ZI020_GE4','ge:GENC:3:1-2:RWA','is_in:country_code','RW'], // Republic of Rwanda
-     ['ZI020_GE4','ge:GENC:3:1-2:BLM','is_in:country_code','BL'], // Saint Barthelemy
-     ['ZI020_GE4','ge:GENC:3:1-2:SHN','is_in:country_code','SH'], // Saint Helena, Ascension, and Tristan da Cunha
-     ['ZI020_GE4','ge:GENC:3:1-2:KNA','is_in:country_code','KN'], // Federation of Saint Kitts and Nevis
-     ['ZI020_GE4','ge:ISO1:3:VI-15:LCA','is_in:country_code','LC'], // Saint Lucia
-     ['ZI020_GE4','ge:GENC:3:1-2:MAF','is_in:country_code','MF'], // Saint Martin
-     ['ZI020_GE4','ge:GENC:3:1-2:SPM','is_in:country_code','PM'], // Territorial Collectivity of Saint Pierre and Miquelon
-     ['ZI020_GE4','ge:GENC:3:1-2:VCT','is_in:country_code','VC'], // Saint Vincent and the Grenadines
-     ['ZI020_GE4','ge:GENC:3:1-2:WSM','is_in:country_code','WS'], // Independent State of Samoa
-     ['ZI020_GE4','ge:GENC:3:1-2:SMR','is_in:country_code','SM'], // Republic of San Marino
-     ['ZI020_GE4','ge:GENC:3:1-2:STP','is_in:country_code','ST'], // Democratic Republic of Sao Tome and Principe
-     ['ZI020_GE4','ge:GENC:3:1-2:SAU','is_in:country_code','SA'], // Kingdom of Saudi Arabia
-     ['ZI020_GE4','ge:GENC:3:1-2:SEN','is_in:country_code','SN'], // Republic of Senegal
-     ['ZI020_GE4','ge:GENC:3:1-2:SRB','is_in:country_code','RS'], // Republic of Serbia
-     ['ZI020_GE4','ge:GENC:3:1-2:SYC','is_in:country_code','SC'], // Republic of Seychelles
-     ['ZI020_GE4','ge:GENC:3:1-2:SLE','is_in:country_code','SL'], // Republic of Sierra Leone
-     ['ZI020_GE4','ge:GENC:3:1-2:SGP','is_in:country_code','SG'], // Republic of Singapore
-     ['ZI020_GE4','ge:GENC:3:1-2:SXM','is_in:country_code','SX'], // Sint Maarten
-     ['ZI020_GE4','ge:GENC:3:1-2:SVK','is_in:country_code','SK'], // Slovak Republic
-     ['ZI020_GE4','ge:GENC:3:1-2:SVN','is_in:country_code','SI'], // Republic of Slovenia
-     ['ZI020_GE4','ge:GENC:3:1-2:SLB','is_in:country_code','SB'], // Solomon Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:SOM','is_in:country_code','SO'], // Somalia, Federal Republic of
-     ['ZI020_GE4','ge:GENC:3:1-2:ZAF','is_in:country_code','ZA'], // Republic of South Africa
-     ['ZI020_GE4','ge:GENC:3:1-2:SGS','is_in:country_code','GS'], // South Georgia and South Sandwich Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:SSD','is_in:country_code','SS'], // Republic of South Sudan
-     ['ZI020_GE4','ge:GENC:3:1-2:ESP','is_in:country_code','ES'], // Kingdom of Spain
-     ['ZI020_GE4','ge:GENC:3:1-2:XSP','is_in:country_code','XS'], // Spratly Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:LKA','is_in:country_code','LK'], // Democratic Socialist Republic of Sri Lanka
-     ['ZI020_GE4','ge:GENC:3:1-2:SDN','is_in:country_code','SD'], // Republic of the Sudan
-     ['ZI020_GE4','ge:GENC:3:1-2:SUR','is_in:country_code','SR'], // Republic of Suriname
-     ['ZI020_GE4','ge:GENC:3:1-2:XSV','is_in:country_code','XR'], // Svalbard
-     ['ZI020_GE4','ge:GENC:3:1-2:SWZ','is_in:country_code','SZ'], // Kingdom of Swaziland
-     ['ZI020_GE4','ge:GENC:3:1-2:SWE','is_in:country_code','SE'], // Kingdom of Sweden
-     ['ZI020_GE4','ge:GENC:3:1-2:CHE','is_in:country_code','CH'], // Swiss Confederation
-     ['ZI020_GE4','ge:GENC:3:1-2:SYR','is_in:country_code','SY'], // Syrian Arab Republic
-     ['ZI020_GE4','ge:GENC:3:1-2:TWN','is_in:country_code','TW'], // Taiwan
-     ['ZI020_GE4','ge:GENC:3:1-2:TJK','is_in:country_code','TJ'], // Republic of Tajikistan
-     ['ZI020_GE4','ge:GENC:3:1-2:TZA','is_in:country_code','TZ'], // United Republic of Tanzania
-     ['ZI020_GE4','ge:GENC:3:1-2:THA','is_in:country_code','TH'], // Kingdom of Thailand
-     ['ZI020_GE4','ge:GENC:3:1-2:TLS','is_in:country_code','TL'], // Democratic Republic of Timor-Leste
-     ['ZI020_GE4','ge:GENC:3:1-2:TGO','is_in:country_code','TG'], // Togolese Republic
-     ['ZI020_GE4','ge:ISO1:3:VI-15:TKL','is_in:country_code','TK'], // Tokelau
-     ['ZI020_GE4','ge:GENC:3:1-2:TON','is_in:country_code','TO'], // Kingdom of Tonga
-     ['ZI020_GE4','ge:GENC:3:1-2:TTO','is_in:country_code','TT'], // Republic of Trinidad and Tobago
-     ['ZI020_GE4','ge:GENC:3:1-2:XTR','is_in:country_code','XT'], // Tromelin Island
-     ['ZI020_GE4','ge:GENC:3:1-2:TUN','is_in:country_code','TN'], // Tunisian Republic
-     ['ZI020_GE4','ge:GENC:3:1-2:TUR','is_in:country_code','TR'], // Republic of Turkey
-     ['ZI020_GE4','ge:ISO1:3:VI-15:TKM','is_in:country_code','TM'], // Turkmenistan
-     ['ZI020_GE4','ge:GENC:3:1-2:TCA','is_in:country_code','TC'], // Turks and Caicos Islands
-     ['ZI020_GE4','ge:ISO1:3:VI-15:TUV','is_in:country_code','TV'], // Tuvalu
-     ['ZI020_GE4','ge:GENC:3:1-2:UGA','is_in:country_code','UG'], // Republic of Uganda
-     ['ZI020_GE4','ge:GENC:3:1-2:UKR','is_in:country_code','UA'], // Ukraine
-     ['ZI020_GE4','ge:GENC:3:1-2:ARE','is_in:country_code','AE'], // United Arab Emirates
-     ['ZI020_GE4','ge:GENC:3:1-2:GBR','is_in:country_code','GB'], // United Kingdom of Great Britain and Northern Ireland
-     ['ZI020_GE4','ge:GENC:3:1-2:USA','is_in:country_code','US'], // United States of America
-     ['ZI020_GE4','ge:GENC:3:1-2:AX1','is_in:country_code','A1'], // Unknown
-     ['ZI020_GE4','ge:GENC:3:1-2:URY','is_in:country_code','UY'], // Oriental Republic of Uruguay
-     ['ZI020_GE4','ge:GENC:3:1-2:UZB','is_in:country_code','UZ'], // Republic of Uzbekistan
-     ['ZI020_GE4','ge:GENC:3:1-2:VUT','is_in:country_code','VU'], // Republic of Vanuatu
-     ['ZI020_GE4','ge:GENC:3:1-2:VAT','is_in:country_code','VA'], // State of the Vatican City
-     ['ZI020_GE4','ge:GENC:3:1-2:VEN','is_in:country_code','VE'], // Bolivarian Republic of Venezuela
-     ['ZI020_GE4','ge:GENC:3:1-2:VNM','is_in:country_code','VN'], // Socialist Republic of Vietnam
-     ['ZI020_GE4','ge:GENC:3:1-2:VGB','is_in:country_code','VG'], // Virgin Islands, British
-     ['ZI020_GE4','ge:GENC:3:1-2:VIR','is_in:country_code','VI'], // United States Virgin Islands
-     ['ZI020_GE4','ge:GENC:3:1-2:XWK','is_in:country_code','QW'], // Wake Island
-     ['ZI020_GE4','ge:GENC:3:1-2:WLF','is_in:country_code','WF'], // Wallis and Futuna
-     ['ZI020_GE4','ge:GENC:3:1-2:XWB','is_in:country_code','XW'], // West Bank
-     ['ZI020_GE4','ge:GENC:3:1-2:ESH','is_in:country_code','EH'], // Western Sahara
-     ['ZI020_GE4','ge:GENC:3:1-2:YEM','is_in:country_code','YE'], // Republic of Yemen
-     ['ZI020_GE4','ge:GENC:3:1-2:ZMB','is_in:country_code','ZM'], // Republic of Zambia
-     ['ZI020_GE4','ge:GENC:3:1-2:ZWE','is_in:country_code','ZW'], // Republic of Zimbabwe
 
-     // ZI024_HYP - Water Resource Information : Hydrologic Persistence
+     // ZI020_GE42 - Designation : GENC Short URN-based Identifier [2]
+     ['ZI020_GE42','ge:GENC:3:1-2:ABW','is_in:country_code2','aruba_as_of_2013-06-30'], // ARUBA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:AFG','is_in:country_code2','afghanistan_as_of_2013-06-30'], // AFGHANISTAN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:AGO','is_in:country_code2','angola_as_of_2013-06-30'], // ANGOLA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ALB','is_in:country_code2','albania_as_of_2013-06-30'], // ALBANIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:AND','is_in:country_code2','andorra_as_of_2013-06-30'], // ANDORRA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ARE','is_in:country_code2','united_arab_emirates_as_of_2013-06-30'], // UNITED ARAB EMIRATES AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ARG','is_in:country_code2','argentina_as_of_2013-06-30'], // ARGENTINA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ARM','is_in:country_code2','armenia_as_of_2013-06-30'], // ARMENIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ASM','is_in:country_code2','american_samoa_as_of_2013-06-30'], // AMERICAN SAMOA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ATF','is_in:country_code2','french_southern_and_antarctic_lands_as_of_2013-06-30'], // FRENCH SOUTHERN AND ANTARCTIC LANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ATG','is_in:country_code2','antigua_and_barbuda_as_of_2013-06-30'], // ANTIGUA AND BARBUDA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:AUS','is_in:country_code2','australia_as_of_2013-06-30'], // AUSTRALIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:AUT','is_in:country_code2','austria_as_of_2013-06-30'], // AUSTRIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:AX1','is_in:country_code2','unknown_as_of_2013-06-30'], // UNKNOWN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:AX2','is_in:country_code2','guantanamo_bay_naval_base_as_of_2013-06-30'], // GUANTANAMO BAY NAVAL BASE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:AZE','is_in:country_code2','azerbaijan_as_of_2013-06-30'], // AZERBAIJAN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BDI','is_in:country_code2','burundi_as_of_2013-06-30'], // BURUNDI AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BEL','is_in:country_code2','belgium_as_of_2013-06-30'], // BELGIUM AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BEN','is_in:country_code2','benin_as_of_2013-06-30'], // BENIN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BES','is_in:country_code2','bonaire,_sint_eustatius,_and_saba_as_of_2013-06-30'], // BONAIRE, SINT EUSTATIUS, AND SABA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BFA','is_in:country_code2','burkina_faso_as_of_2013-06-30'], // BURKINA FASO AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BGD','is_in:country_code2','bangladesh_as_of_2013-06-30'], // BANGLADESH AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BGR','is_in:country_code2','bulgaria_as_of_2013-06-30'], // BULGARIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BHR','is_in:country_code2','bahrain_as_of_2013-06-30'], // BAHRAIN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BHS','is_in:country_code2','bahamas,_the_as_of_2013-06-30'], // BAHAMAS, THE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BLM','is_in:country_code2','saint_barthelemy_as_of_2013-06-30'], // SAINT BARTHELEMY AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BLR','is_in:country_code2','belarus_as_of_2013-06-30'], // BELARUS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BOL','is_in:country_code2','bolivia_as_of_2013-06-30'], // BOLIVIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BRA','is_in:country_code2','brazil_as_of_2013-06-30'], // BRAZIL AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BRN','is_in:country_code2','brunei_as_of_2013-06-30'], // BRUNEI AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BTN','is_in:country_code2','bhutan_as_of_2013-06-30'], // BHUTAN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:BWA','is_in:country_code2','botswana_as_of_2013-06-30'], // BOTSWANA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CAF','is_in:country_code2','central_african_republic_as_of_2013-06-30'], // CENTRAL AFRICAN REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CAN','is_in:country_code2','canada_as_of_2013-06-30'], // CANADA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CCK','is_in:country_code2','cocos_(keeling)_islands_as_of_2013-06-30'], // COCOS (KEELING) ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CHE','is_in:country_code2','switzerland_as_of_2013-06-30'], // SWITZERLAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CHL','is_in:country_code2','chile_as_of_2013-06-30'], // CHILE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CHN','is_in:country_code2','china_as_of_2013-06-30'], // CHINA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CIV','is_in:country_code2','cote_d"ivoire_as_of_2013-06-30'], // COTE D"IVOIRE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CMR','is_in:country_code2','cameroon_as_of_2013-06-30'], // CAMEROON AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:COD','is_in:country_code2','congo_(kinshasa)_as_of_2013-06-30'], // CONGO (KINSHASA) AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:COG','is_in:country_code2','congo_(brazzaville)_as_of_2013-06-30'], // CONGO (BRAZZAVILLE) AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:COK','is_in:country_code2','cook_islands_as_of_2013-06-30'], // COOK ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:COL','is_in:country_code2','colombia_as_of_2013-06-30'], // COLOMBIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:COM','is_in:country_code2','comoros_as_of_2013-06-30'], // COMOROS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CPT','is_in:country_code2','clipperton_island_as_of_2013-06-30'], // CLIPPERTON ISLAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CPV','is_in:country_code2','cape_verde_as_of_2013-06-30'], // CAPE VERDE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CRI','is_in:country_code2','costa_rica_as_of_2013-06-30'], // COSTA RICA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CUB','is_in:country_code2','cuba_as_of_2013-06-30'], // CUBA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CUW','is_in:country_code2','curacao_as_of_2013-06-30'], // CURACAO AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CXR','is_in:country_code2','christmas_island_as_of_2013-06-30'], // CHRISTMAS ISLAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CYM','is_in:country_code2','cayman_islands_as_of_2013-06-30'], // CAYMAN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CYP','is_in:country_code2','cyprus_as_of_2013-06-30'], // CYPRUS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:CZE','is_in:country_code2','czech_republic_as_of_2013-06-30'], // CZECH REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:DEU','is_in:country_code2','germany_as_of_2013-06-30'], // GERMANY AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:DGA','is_in:country_code2','diego_garcia_as_of_2013-06-30'], // DIEGO GARCIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:DJI','is_in:country_code2','djibouti_as_of_2013-06-30'], // DJIBOUTI AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:DMA','is_in:country_code2','dominica_as_of_2013-06-30'], // DOMINICA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:DNK','is_in:country_code2','denmark_as_of_2013-06-30'], // DENMARK AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:DOM','is_in:country_code2','dominican_republic_as_of_2013-06-30'], // DOMINICAN REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:DZA','is_in:country_code2','algeria_as_of_2013-06-30'], // ALGERIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ECU','is_in:country_code2','ecuador_as_of_2013-06-30'], // ECUADOR AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:EGY','is_in:country_code2','egypt_as_of_2013-06-30'], // EGYPT AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ERI','is_in:country_code2','eritrea_as_of_2013-06-30'], // ERITREA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ESH','is_in:country_code2','western_sahara_as_of_2013-06-30'], // WESTERN SAHARA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ESP','is_in:country_code2','spain_as_of_2013-06-30'], // SPAIN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:EST','is_in:country_code2','estonia_as_of_2013-06-30'], // ESTONIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ETH','is_in:country_code2','ethiopia_as_of_2013-06-30'], // ETHIOPIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:FIN','is_in:country_code2','finland_as_of_2013-06-30'], // FINLAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:FJI','is_in:country_code2','fiji_as_of_2013-06-30'], // FIJI AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:FLK','is_in:country_code2','falkland_islands_(islas_malvinas)_as_of_2013-06-30'], // FALKLAND ISLANDS (ISLAS MALVINAS) AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:FRA','is_in:country_code2','france_as_of_2013-06-30'], // FRANCE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:FRO','is_in:country_code2','faroe_islands_as_of_2013-06-30'], // FAROE ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:FSM','is_in:country_code2','micronesia,_federated_states_of_as_of_2013-06-30'], // MICRONESIA, FEDERATED STATES OF AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:GAB','is_in:country_code2','gabon_as_of_2013-06-30'], // GABON AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:GBR','is_in:country_code2','united_kingdom_as_of_2013-06-30'], // UNITED KINGDOM AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:GEO','is_in:country_code2','georgia_as_of_2013-06-30'], // GEORGIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:GGY','is_in:country_code2','guernsey_as_of_2013-06-30'], // GUERNSEY AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:GHA','is_in:country_code2','ghana_as_of_2013-06-30'], // GHANA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:GIN','is_in:country_code2','guinea_as_of_2013-06-30'], // GUINEA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:GLP','is_in:country_code2','guadeloupe_as_of_2013-06-30'], // GUADELOUPE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:GMB','is_in:country_code2','gambia,_the_as_of_2013-06-30'], // GAMBIA, THE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:GNB','is_in:country_code2','guinea-bissau_as_of_2013-06-30'], // GUINEA-BISSAU AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:GNQ','is_in:country_code2','equatorial_guinea_as_of_2013-06-30'], // EQUATORIAL GUINEA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:GRC','is_in:country_code2','greece_as_of_2013-06-30'], // GREECE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:GTM','is_in:country_code2','guatemala_as_of_2013-06-30'], // GUATEMALA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:GUF','is_in:country_code2','french_guiana_as_of_2013-06-30'], // FRENCH GUIANA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:GUM','is_in:country_code2','guam_as_of_2013-06-30'], // GUAM AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:GUY','is_in:country_code2','guyana_as_of_2013-06-30'], // GUYANA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:HKG','is_in:country_code2','hong_kong_as_of_2013-06-30'], // HONG KONG AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:HMD','is_in:country_code2','heard_island_and_mcdonald_islands_as_of_2013-06-30'], // HEARD ISLAND AND MCDONALD ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:HND','is_in:country_code2','honduras_as_of_2013-06-30'], // HONDURAS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:HRV','is_in:country_code2','croatia_as_of_2013-06-30'], // CROATIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:HTI','is_in:country_code2','haiti_as_of_2013-06-30'], // HAITI AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:IDN','is_in:country_code2','indonesia_as_of_2013-06-30'], // INDONESIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:IND','is_in:country_code2','india_as_of_2013-06-30'], // INDIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:IOT','is_in:country_code2','british_indian_ocean_territory_as_of_2013-06-30'], // BRITISH INDIAN OCEAN TERRITORY AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:IRN','is_in:country_code2','iran_as_of_2013-06-30'], // IRAN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:IRQ','is_in:country_code2','iraq_as_of_2013-06-30'], // IRAQ AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ISL','is_in:country_code2','iceland_as_of_2013-06-30'], // ICELAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ISR','is_in:country_code2','israel_as_of_2013-06-30'], // ISRAEL AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ITA','is_in:country_code2','italy_as_of_2013-06-30'], // ITALY AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:JEY','is_in:country_code2','jersey_as_of_2013-06-30'], // JERSEY AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:JOR','is_in:country_code2','jordan_as_of_2013-06-30'], // JORDAN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:KAZ','is_in:country_code2','kazakhstan_as_of_2013-06-30'], // KAZAKHSTAN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:KEN','is_in:country_code2','kenya_as_of_2013-06-30'], // KENYA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:KGZ','is_in:country_code2','kyrgyzstan_as_of_2013-06-30'], // KYRGYZSTAN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:KHM','is_in:country_code2','cambodia_as_of_2013-06-30'], // CAMBODIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:KIR','is_in:country_code2','kiribati_as_of_2013-06-30'], // KIRIBATI AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:KNA','is_in:country_code2','saint_kitts_and_nevis_as_of_2013-06-30'], // SAINT KITTS AND NEVIS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:KOR','is_in:country_code2','korea,_south_as_of_2013-06-30'], // KOREA, SOUTH AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:KWT','is_in:country_code2','kuwait_as_of_2013-06-30'], // KUWAIT AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:LAO','is_in:country_code2','laos_as_of_2013-06-30'], // LAOS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:LBN','is_in:country_code2','lebanon_as_of_2013-06-30'], // LEBANON AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:LBR','is_in:country_code2','liberia_as_of_2013-06-30'], // LIBERIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:LIE','is_in:country_code2','liechtenstein_as_of_2013-06-30'], // LIECHTENSTEIN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:LKA','is_in:country_code2','sri_lanka_as_of_2013-06-30'], // SRI LANKA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:LSO','is_in:country_code2','lesotho_as_of_2013-06-30'], // LESOTHO AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:LTU','is_in:country_code2','lithuania_as_of_2013-06-30'], // LITHUANIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:LUX','is_in:country_code2','luxembourg_as_of_2013-06-30'], // LUXEMBOURG AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:LVA','is_in:country_code2','latvia_as_of_2013-06-30'], // LATVIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MAC','is_in:country_code2','macau_as_of_2013-06-30'], // MACAU AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MAF','is_in:country_code2','saint_martin_as_of_2013-06-30'], // SAINT MARTIN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MAR','is_in:country_code2','morocco_as_of_2013-06-30'], // MOROCCO AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MCO','is_in:country_code2','monaco_as_of_2013-06-30'], // MONACO AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MDA','is_in:country_code2','moldova_as_of_2013-06-30'], // MOLDOVA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MDG','is_in:country_code2','madagascar_as_of_2013-06-30'], // MADAGASCAR AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MDV','is_in:country_code2','maldives_as_of_2013-06-30'], // MALDIVES AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MEX','is_in:country_code2','mexico_as_of_2013-06-30'], // MEXICO AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MHL','is_in:country_code2','marshall_islands_as_of_2013-06-30'], // MARSHALL ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MKD','is_in:country_code2','macedonia_as_of_2013-06-30'], // MACEDONIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MLI','is_in:country_code2','mali_as_of_2013-06-30'], // MALI AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MLT','is_in:country_code2','malta_as_of_2013-06-30'], // MALTA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MMR','is_in:country_code2','burma_as_of_2013-06-30'], // BURMA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MNG','is_in:country_code2','mongolia_as_of_2013-06-30'], // MONGOLIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MNP','is_in:country_code2','northern_mariana_islands_as_of_2013-06-30'], // NORTHERN MARIANA ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MOZ','is_in:country_code2','mozambique_as_of_2013-06-30'], // MOZAMBIQUE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MRT','is_in:country_code2','mauritania_as_of_2013-06-30'], // MAURITANIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MTQ','is_in:country_code2','martinique_as_of_2013-06-30'], // MARTINIQUE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MUS','is_in:country_code2','mauritius_as_of_2013-06-30'], // MAURITIUS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MWI','is_in:country_code2','malawi_as_of_2013-06-30'], // MALAWI AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MYS','is_in:country_code2','malaysia_as_of_2013-06-30'], // MALAYSIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:MYT','is_in:country_code2','mayotte_as_of_2013-06-30'], // MAYOTTE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:NAM','is_in:country_code2','namibia_as_of_2013-06-30'], // NAMIBIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:NCL','is_in:country_code2','new_caledonia_as_of_2013-06-30'], // NEW CALEDONIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:NER','is_in:country_code2','niger_as_of_2013-06-30'], // NIGER AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:NFK','is_in:country_code2','norfolk_island_as_of_2013-06-30'], // NORFOLK ISLAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:NGA','is_in:country_code2','nigeria_as_of_2013-06-30'], // NIGERIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:NIC','is_in:country_code2','nicaragua_as_of_2013-06-30'], // NICARAGUA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:NLD','is_in:country_code2','netherlands_as_of_2013-06-30'], // NETHERLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:NOR','is_in:country_code2','norway_as_of_2013-06-30'], // NORWAY AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:NPL','is_in:country_code2','nepal_as_of_2013-06-30'], // NEPAL AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:NRU','is_in:country_code2','nauru_as_of_2013-06-30'], // NAURU AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:NZL','is_in:country_code2','new_zealand_as_of_2013-06-30'], // NEW ZEALAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:OMN','is_in:country_code2','oman_as_of_2013-06-30'], // OMAN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:PAK','is_in:country_code2','pakistan_as_of_2013-06-30'], // PAKISTAN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:PAN','is_in:country_code2','panama_as_of_2013-06-30'], // PANAMA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:PCN','is_in:country_code2','pitcairn_islands_as_of_2013-06-30'], // PITCAIRN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:PER','is_in:country_code2','peru_as_of_2013-06-30'], // PERU AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:PHL','is_in:country_code2','philippines_as_of_2013-06-30'], // PHILIPPINES AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:PLW','is_in:country_code2','palau_as_of_2013-06-30'], // PALAU AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:POL','is_in:country_code2','poland_as_of_2013-06-30'], // POLAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:PRI','is_in:country_code2','puerto_rico_as_of_2013-06-30'], // PUERTO RICO AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:PRK','is_in:country_code2','korea,_north_as_of_2013-06-30'], // KOREA, NORTH AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:PRT','is_in:country_code2','portugal_as_of_2013-06-30'], // PORTUGAL AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:PRY','is_in:country_code2','paraguay_as_of_2013-06-30'], // PARAGUAY AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:PSE','is_in:country_code2','palestinian_territory_as_of_2013-06-30'], // PALESTINIAN TERRITORY AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:PYF','is_in:country_code2','french_polynesia_as_of_2013-06-30'], // FRENCH POLYNESIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:QAT','is_in:country_code2','qatar_as_of_2013-06-30'], // QATAR AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:REU','is_in:country_code2','reunion_as_of_2013-06-30'], // REUNION AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:RUS','is_in:country_code2','russia_as_of_2013-06-30'], // RUSSIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:RWA','is_in:country_code2','rwanda_as_of_2013-06-30'], // RWANDA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SAU','is_in:country_code2','saudi_arabia_as_of_2013-06-30'], // SAUDI ARABIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SDN','is_in:country_code2','sudan_as_of_2013-06-30'], // SUDAN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SEN','is_in:country_code2','senegal_as_of_2013-06-30'], // SENEGAL AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SGP','is_in:country_code2','singapore_as_of_2013-06-30'], // SINGAPORE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SGS','is_in:country_code2','south_georgia_and_south_sandwich_islands_as_of_2013-06-30'], // SOUTH GEORGIA AND SOUTH SANDWICH ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SHN','is_in:country_code2','saint_helena,_ascension,_and_tristan_da_cunha_as_of_2013-06-30'], // SAINT HELENA, ASCENSION, AND TRISTAN DA CUNHA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SLB','is_in:country_code2','solomon_islands_as_of_2013-06-30'], // SOLOMON ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SLE','is_in:country_code2','sierra_leone_as_of_2013-06-30'], // SIERRA LEONE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SLV','is_in:country_code2','el_salvador_as_of_2013-06-30'], // EL SALVADOR AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SMR','is_in:country_code2','san_marino_as_of_2013-06-30'], // SAN MARINO AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SOM','is_in:country_code2','somalia_as_of_2013-06-30'], // SOMALIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SPM','is_in:country_code2','saint_pierre_and_miquelon_as_of_2013-06-30'], // SAINT PIERRE AND MIQUELON AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SRB','is_in:country_code2','serbia_as_of_2013-06-30'], // SERBIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SSD','is_in:country_code2','south_sudan_as_of_2013-06-30'], // SOUTH SUDAN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:STP','is_in:country_code2','sao_tome_and_principe_as_of_2013-06-30'], // SAO TOME AND PRINCIPE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SUR','is_in:country_code2','suriname_as_of_2013-06-30'], // SURINAME AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SVK','is_in:country_code2','slovakia_as_of_2013-06-30'], // SLOVAKIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SVN','is_in:country_code2','slovenia_as_of_2013-06-30'], // SLOVENIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SWE','is_in:country_code2','sweden_as_of_2013-06-30'], // SWEDEN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SWZ','is_in:country_code2','swaziland_as_of_2013-06-30'], // SWAZILAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SXM','is_in:country_code2','sint_maarten_as_of_2013-06-30'], // SINT MAARTEN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SYC','is_in:country_code2','seychelles_as_of_2013-06-30'], // SEYCHELLES AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:SYR','is_in:country_code2','syria_as_of_2013-06-30'], // SYRIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:TCA','is_in:country_code2','turks_and_caicos_islands_as_of_2013-06-30'], // TURKS AND CAICOS ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:TCD','is_in:country_code2','chad_as_of_2013-06-30'], // CHAD AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:TGO','is_in:country_code2','togo_as_of_2013-06-30'], // TOGO AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:THA','is_in:country_code2','thailand_as_of_2013-06-30'], // THAILAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:TJK','is_in:country_code2','tajikistan_as_of_2013-06-30'], // TAJIKISTAN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:TLS','is_in:country_code2','timor-leste_as_of_2013-06-30'], // TIMOR-LESTE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:TON','is_in:country_code2','tonga_as_of_2013-06-30'], // TONGA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:TTO','is_in:country_code2','trinidad_and_tobago_as_of_2013-06-30'], // TRINIDAD AND TOBAGO AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:TUN','is_in:country_code2','tunisia_as_of_2013-06-30'], // TUNISIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:TUR','is_in:country_code2','turkey_as_of_2013-06-30'], // TURKEY AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:TWN','is_in:country_code2','taiwan_as_of_2013-06-30'], // TAIWAN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:TZA','is_in:country_code2','tanzania_as_of_2013-06-30'], // TANZANIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:UGA','is_in:country_code2','uganda_as_of_2013-06-30'], // UGANDA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:UKR','is_in:country_code2','ukraine_as_of_2013-06-30'], // UKRAINE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:URY','is_in:country_code2','uruguay_as_of_2013-06-30'], // URUGUAY AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:USA','is_in:country_code2','united_states_as_of_2013-06-30'], // UNITED STATES AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:UZB','is_in:country_code2','uzbekistan_as_of_2013-06-30'], // UZBEKISTAN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:VAT','is_in:country_code2','vatican_city_as_of_2013-06-30'], // VATICAN CITY AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:VCT','is_in:country_code2','saint_vincent_and_the_grenadines_as_of_2013-06-30'], // SAINT VINCENT AND THE GRENADINES AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:VEN','is_in:country_code2','venezuela_as_of_2013-06-30'], // VENEZUELA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:VGB','is_in:country_code2','virgin_islands,_british_as_of_2013-06-30'], // VIRGIN ISLANDS, BRITISH AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:VIR','is_in:country_code2','virgin_islands,_u.s._as_of_2013-06-30'], // VIRGIN ISLANDS, U.S. AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:VNM','is_in:country_code2','vietnam_as_of_2013-06-30'], // VIETNAM AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:VUT','is_in:country_code2','vanuatu_as_of_2013-06-30'], // VANUATU AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:WLF','is_in:country_code2','wallis_and_futuna_as_of_2013-06-30'], // WALLIS AND FUTUNA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:WSM','is_in:country_code2','samoa_as_of_2013-06-30'], // SAMOA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XAC','is_in:country_code2','ashmore_and_cartier_islands_as_of_2013-06-30'], // ASHMORE AND CARTIER ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XAZ','is_in:country_code2','entity_1_as_of_2013-06-30'], // ENTITY 1 AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XBI','is_in:country_code2','bassas_da_india_as_of_2013-06-30'], // BASSAS DA INDIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XBK','is_in:country_code2','baker_island_as_of_2013-06-30'], // BAKER ISLAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XCR','is_in:country_code2','entity_2_as_of_2013-06-30'], // ENTITY 2 AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XCS','is_in:country_code2','coral_sea_islands_as_of_2013-06-30'], // CORAL SEA ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XCY','is_in:country_code2','entity_3_as_of_2013-06-30'], // ENTITY 3 AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XEU','is_in:country_code2','europa_island_as_of_2013-06-30'], // EUROPA ISLAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XGL','is_in:country_code2','glorioso_islands_as_of_2013-06-30'], // GLORIOSO ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XGZ','is_in:country_code2','gaza_strip_as_of_2013-06-30'], // GAZA STRIP AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XHO','is_in:country_code2','howland_island_as_of_2013-06-30'], // HOWLAND ISLAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XJA','is_in:country_code2','johnston_atoll_as_of_2013-06-30'], // JOHNSTON ATOLL AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XJM','is_in:country_code2','jan_mayen_as_of_2013-06-30'], // JAN MAYEN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XJN','is_in:country_code2','juan_de_nova_island_as_of_2013-06-30'], // JUAN DE NOVA ISLAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XJV','is_in:country_code2','jarvis_island_as_of_2013-06-30'], // JARVIS ISLAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XKM','is_in:country_code2','entity_4_as_of_2013-06-30'], // ENTITY 4 AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XKN','is_in:country_code2','entity_5_as_of_2013-06-30'], // ENTITY 5 AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XKR','is_in:country_code2','kingman_reef_as_of_2013-06-30'], // KINGMAN REEF AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XKS','is_in:country_code2','kosovo_as_of_2013-06-30'], // KOSOVO AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XMW','is_in:country_code2','midway_islands_as_of_2013-06-30'], // MIDWAY ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XNV','is_in:country_code2','navassa_island_as_of_2013-06-30'], // NAVASSA ISLAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XPL','is_in:country_code2','palmyra_atoll_as_of_2013-06-30'], // PALMYRA ATOLL AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XPR','is_in:country_code2','paracel_islands_as_of_2013-06-30'], // PARACEL ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XQP','is_in:country_code2','etorofu,_habomai,_kunashiri,_and_shikotan_islands_as_of_2013-06-30'], // ETOROFU, HABOMAI, KUNASHIRI, AND SHIKOTAN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XQZ','is_in:country_code2','akrotiri_as_of_2013-06-30'], // AKROTIRI AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XSP','is_in:country_code2','spratly_islands_as_of_2013-06-30'], // SPRATLY ISLANDS AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XSV','is_in:country_code2','svalbard_as_of_2013-06-30'], // SVALBARD AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XTR','is_in:country_code2','tromelin_island_as_of_2013-06-30'], // TROMELIN ISLAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XWB','is_in:country_code2','west_bank_as_of_2013-06-30'], // WEST BANK AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XWK','is_in:country_code2','wake_island_as_of_2013-06-30'], // WAKE ISLAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XXD','is_in:country_code2','dhekelia_as_of_2013-06-30'], // DHEKELIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:XXX','is_in:country_code2','no_man"s_land_as_of_2013-06-30'], // NO MAN"S LAND AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:YEM','is_in:country_code2','yemen_as_of_2013-06-30'], // YEMEN AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ZAF','is_in:country_code2','south_africa_as_of_2013-06-30'], // SOUTH AFRICA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ZMB','is_in:country_code2','zambia_as_of_2013-06-30'], // ZAMBIA AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:1-2:ZWE','is_in:country_code2','zimbabwe_as_of_2013-06-30'], // ZIMBABWE AS OF 2013-06-30
+     ['ZI020_GE42','ge:GENC:3:ed3:AX3','is_in:country_code2','entity_6_as_of_2015-06-30'], // ENTITY 6 AS OF 2015-06-30
+     ['ZI020_GE42','ge:ISO1:3:VI-15:AIA','is_in:country_code2','anguilla_as_of_2013-05-10'], // ANGUILLA AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:ATA','is_in:country_code2','antarctica_as_of_2013-05-10'], // ANTARCTICA AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:BIH','is_in:country_code2','bosnia_and_herzegovina_as_of_2013-05-10'], // BOSNIA AND HERZEGOVINA AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:BLZ','is_in:country_code2','belize_as_of_2013-05-10'], // BELIZE AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:BMU','is_in:country_code2','bermuda_as_of_2013-05-10'], // BERMUDA AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:BRB','is_in:country_code2','barbados_as_of_2013-05-10'], // BARBADOS AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:BVT','is_in:country_code2','bouvet_island_as_of_2013-05-10'], // BOUVET ISLAND AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:GIB','is_in:country_code2','gibraltar_as_of_2013-05-10'], // GIBRALTAR AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:GRD','is_in:country_code2','grenada_as_of_2013-05-10'], // GRENADA AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:GRL','is_in:country_code2','greenland_as_of_2013-05-10'], // GREENLAND AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:HUN','is_in:country_code2','hungary_as_of_2013-05-10'], // HUNGARY AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:IMN','is_in:country_code2','isle_of_man_as_of_2013-05-10'], // ISLE OF MAN AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:IRL','is_in:country_code2','ireland_as_of_2013-05-10'], // IRELAND AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:JAM','is_in:country_code2','jamaica_as_of_2013-05-10'], // JAMAICA AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:JPN','is_in:country_code2','japan_as_of_2013-05-10'], // JAPAN AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:LBY','is_in:country_code2','libya_as_of_2013-05-10'], // LIBYA AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:LCA','is_in:country_code2','saint_lucia_as_of_2013-05-10'], // SAINT LUCIA AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:MNE','is_in:country_code2','montenegro_as_of_2013-05-10'], // MONTENEGRO AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:MSR','is_in:country_code2','montserrat_as_of_2013-05-10'], // MONTSERRAT AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:NIU','is_in:country_code2','niue_as_of_2013-05-10'], // NIUE AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:PNG','is_in:country_code2','papua_new_guinea_as_of_2013-05-10'], // PAPUA NEW GUINEA AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:ROU','is_in:country_code2','romania_as_of_2013-05-10'], // ROMANIA AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:TKL','is_in:country_code2','tokelau_as_of_2013-05-10'], // TOKELAU AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:TKM','is_in:country_code2','turkmenistan_as_of_2013-05-10'], // TURKMENISTAN AS OF 2013-05-10
+     ['ZI020_GE42','ge:ISO1:3:VI-15:TUV','is_in:country_code2','tuvalu_as_of_2013-05-10'], // TUVALU AS OF 2013-05-10
+     ['ZI020_GE42','noInformation','is_in:country_code2','no_information'], // No Information
+     ['ZI020_GE42','other','is_in:country_code2','other'], // Other
+
+     // ZI020_GE43 - Designation : GENC Short URN-based Identifier [3]
+     ['ZI020_GE43','ge:GENC:3:1-2:ABW','is_in:country_code3','aruba_as_of_2013-06-30'], // ARUBA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:AFG','is_in:country_code3','afghanistan_as_of_2013-06-30'], // AFGHANISTAN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:AGO','is_in:country_code3','angola_as_of_2013-06-30'], // ANGOLA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ALB','is_in:country_code3','albania_as_of_2013-06-30'], // ALBANIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:AND','is_in:country_code3','andorra_as_of_2013-06-30'], // ANDORRA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ARE','is_in:country_code3','united_arab_emirates_as_of_2013-06-30'], // UNITED ARAB EMIRATES AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ARG','is_in:country_code3','argentina_as_of_2013-06-30'], // ARGENTINA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ARM','is_in:country_code3','armenia_as_of_2013-06-30'], // ARMENIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ASM','is_in:country_code3','american_samoa_as_of_2013-06-30'], // AMERICAN SAMOA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ATF','is_in:country_code3','french_southern_and_antarctic_lands_as_of_2013-06-30'], // FRENCH SOUTHERN AND ANTARCTIC LANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ATG','is_in:country_code3','antigua_and_barbuda_as_of_2013-06-30'], // ANTIGUA AND BARBUDA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:AUS','is_in:country_code3','australia_as_of_2013-06-30'], // AUSTRALIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:AUT','is_in:country_code3','austria_as_of_2013-06-30'], // AUSTRIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:AX1','is_in:country_code3','unknown_as_of_2013-06-30'], // UNKNOWN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:AX2','is_in:country_code3','guantanamo_bay_naval_base_as_of_2013-06-30'], // GUANTANAMO BAY NAVAL BASE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:AZE','is_in:country_code3','azerbaijan_as_of_2013-06-30'], // AZERBAIJAN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BDI','is_in:country_code3','burundi_as_of_2013-06-30'], // BURUNDI AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BEL','is_in:country_code3','belgium_as_of_2013-06-30'], // BELGIUM AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BEN','is_in:country_code3','benin_as_of_2013-06-30'], // BENIN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BES','is_in:country_code3','bonaire,_sint_eustatius,_and_saba_as_of_2013-06-30'], // BONAIRE, SINT EUSTATIUS, AND SABA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BFA','is_in:country_code3','burkina_faso_as_of_2013-06-30'], // BURKINA FASO AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BGD','is_in:country_code3','bangladesh_as_of_2013-06-30'], // BANGLADESH AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BGR','is_in:country_code3','bulgaria_as_of_2013-06-30'], // BULGARIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BHR','is_in:country_code3','bahrain_as_of_2013-06-30'], // BAHRAIN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BHS','is_in:country_code3','bahamas,_the_as_of_2013-06-30'], // BAHAMAS, THE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BLM','is_in:country_code3','saint_barthelemy_as_of_2013-06-30'], // SAINT BARTHELEMY AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BLR','is_in:country_code3','belarus_as_of_2013-06-30'], // BELARUS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BOL','is_in:country_code3','bolivia_as_of_2013-06-30'], // BOLIVIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BRA','is_in:country_code3','brazil_as_of_2013-06-30'], // BRAZIL AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BRN','is_in:country_code3','brunei_as_of_2013-06-30'], // BRUNEI AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BTN','is_in:country_code3','bhutan_as_of_2013-06-30'], // BHUTAN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:BWA','is_in:country_code3','botswana_as_of_2013-06-30'], // BOTSWANA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CAF','is_in:country_code3','central_african_republic_as_of_2013-06-30'], // CENTRAL AFRICAN REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CAN','is_in:country_code3','canada_as_of_2013-06-30'], // CANADA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CCK','is_in:country_code3','cocos_(keeling)_islands_as_of_2013-06-30'], // COCOS (KEELING) ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CHE','is_in:country_code3','switzerland_as_of_2013-06-30'], // SWITZERLAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CHL','is_in:country_code3','chile_as_of_2013-06-30'], // CHILE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CHN','is_in:country_code3','china_as_of_2013-06-30'], // CHINA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CIV','is_in:country_code3','cote_d"ivoire_as_of_2013-06-30'], // COTE D"IVOIRE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CMR','is_in:country_code3','cameroon_as_of_2013-06-30'], // CAMEROON AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:COD','is_in:country_code3','congo_(kinshasa)_as_of_2013-06-30'], // CONGO (KINSHASA) AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:COG','is_in:country_code3','congo_(brazzaville)_as_of_2013-06-30'], // CONGO (BRAZZAVILLE) AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:COK','is_in:country_code3','cook_islands_as_of_2013-06-30'], // COOK ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:COL','is_in:country_code3','colombia_as_of_2013-06-30'], // COLOMBIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:COM','is_in:country_code3','comoros_as_of_2013-06-30'], // COMOROS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CPT','is_in:country_code3','clipperton_island_as_of_2013-06-30'], // CLIPPERTON ISLAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CPV','is_in:country_code3','cape_verde_as_of_2013-06-30'], // CAPE VERDE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CRI','is_in:country_code3','costa_rica_as_of_2013-06-30'], // COSTA RICA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CUB','is_in:country_code3','cuba_as_of_2013-06-30'], // CUBA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CUW','is_in:country_code3','curacao_as_of_2013-06-30'], // CURACAO AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CXR','is_in:country_code3','christmas_island_as_of_2013-06-30'], // CHRISTMAS ISLAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CYM','is_in:country_code3','cayman_islands_as_of_2013-06-30'], // CAYMAN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CYP','is_in:country_code3','cyprus_as_of_2013-06-30'], // CYPRUS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:CZE','is_in:country_code3','czech_republic_as_of_2013-06-30'], // CZECH REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:DEU','is_in:country_code3','germany_as_of_2013-06-30'], // GERMANY AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:DGA','is_in:country_code3','diego_garcia_as_of_2013-06-30'], // DIEGO GARCIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:DJI','is_in:country_code3','djibouti_as_of_2013-06-30'], // DJIBOUTI AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:DMA','is_in:country_code3','dominica_as_of_2013-06-30'], // DOMINICA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:DNK','is_in:country_code3','denmark_as_of_2013-06-30'], // DENMARK AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:DOM','is_in:country_code3','dominican_republic_as_of_2013-06-30'], // DOMINICAN REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:DZA','is_in:country_code3','algeria_as_of_2013-06-30'], // ALGERIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ECU','is_in:country_code3','ecuador_as_of_2013-06-30'], // ECUADOR AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:EGY','is_in:country_code3','egypt_as_of_2013-06-30'], // EGYPT AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ERI','is_in:country_code3','eritrea_as_of_2013-06-30'], // ERITREA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ESH','is_in:country_code3','western_sahara_as_of_2013-06-30'], // WESTERN SAHARA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ESP','is_in:country_code3','spain_as_of_2013-06-30'], // SPAIN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:EST','is_in:country_code3','estonia_as_of_2013-06-30'], // ESTONIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ETH','is_in:country_code3','ethiopia_as_of_2013-06-30'], // ETHIOPIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:FIN','is_in:country_code3','finland_as_of_2013-06-30'], // FINLAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:FJI','is_in:country_code3','fiji_as_of_2013-06-30'], // FIJI AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:FLK','is_in:country_code3','falkland_islands_(islas_malvinas)_as_of_2013-06-30'], // FALKLAND ISLANDS (ISLAS MALVINAS) AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:FRA','is_in:country_code3','france_as_of_2013-06-30'], // FRANCE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:FRO','is_in:country_code3','faroe_islands_as_of_2013-06-30'], // FAROE ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:FSM','is_in:country_code3','micronesia,_federated_states_of_as_of_2013-06-30'], // MICRONESIA, FEDERATED STATES OF AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:GAB','is_in:country_code3','gabon_as_of_2013-06-30'], // GABON AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:GBR','is_in:country_code3','united_kingdom_as_of_2013-06-30'], // UNITED KINGDOM AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:GEO','is_in:country_code3','georgia_as_of_2013-06-30'], // GEORGIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:GGY','is_in:country_code3','guernsey_as_of_2013-06-30'], // GUERNSEY AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:GHA','is_in:country_code3','ghana_as_of_2013-06-30'], // GHANA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:GIN','is_in:country_code3','guinea_as_of_2013-06-30'], // GUINEA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:GLP','is_in:country_code3','guadeloupe_as_of_2013-06-30'], // GUADELOUPE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:GMB','is_in:country_code3','gambia,_the_as_of_2013-06-30'], // GAMBIA, THE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:GNB','is_in:country_code3','guinea-bissau_as_of_2013-06-30'], // GUINEA-BISSAU AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:GNQ','is_in:country_code3','equatorial_guinea_as_of_2013-06-30'], // EQUATORIAL GUINEA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:GRC','is_in:country_code3','greece_as_of_2013-06-30'], // GREECE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:GTM','is_in:country_code3','guatemala_as_of_2013-06-30'], // GUATEMALA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:GUF','is_in:country_code3','french_guiana_as_of_2013-06-30'], // FRENCH GUIANA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:GUM','is_in:country_code3','guam_as_of_2013-06-30'], // GUAM AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:GUY','is_in:country_code3','guyana_as_of_2013-06-30'], // GUYANA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:HKG','is_in:country_code3','hong_kong_as_of_2013-06-30'], // HONG KONG AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:HMD','is_in:country_code3','heard_island_and_mcdonald_islands_as_of_2013-06-30'], // HEARD ISLAND AND MCDONALD ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:HND','is_in:country_code3','honduras_as_of_2013-06-30'], // HONDURAS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:HRV','is_in:country_code3','croatia_as_of_2013-06-30'], // CROATIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:HTI','is_in:country_code3','haiti_as_of_2013-06-30'], // HAITI AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:IDN','is_in:country_code3','indonesia_as_of_2013-06-30'], // INDONESIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:IND','is_in:country_code3','india_as_of_2013-06-30'], // INDIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:IOT','is_in:country_code3','british_indian_ocean_territory_as_of_2013-06-30'], // BRITISH INDIAN OCEAN TERRITORY AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:IRN','is_in:country_code3','iran_as_of_2013-06-30'], // IRAN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:IRQ','is_in:country_code3','iraq_as_of_2013-06-30'], // IRAQ AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ISL','is_in:country_code3','iceland_as_of_2013-06-30'], // ICELAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ISR','is_in:country_code3','israel_as_of_2013-06-30'], // ISRAEL AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ITA','is_in:country_code3','italy_as_of_2013-06-30'], // ITALY AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:JEY','is_in:country_code3','jersey_as_of_2013-06-30'], // JERSEY AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:JOR','is_in:country_code3','jordan_as_of_2013-06-30'], // JORDAN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:KAZ','is_in:country_code3','kazakhstan_as_of_2013-06-30'], // KAZAKHSTAN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:KEN','is_in:country_code3','kenya_as_of_2013-06-30'], // KENYA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:KGZ','is_in:country_code3','kyrgyzstan_as_of_2013-06-30'], // KYRGYZSTAN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:KHM','is_in:country_code3','cambodia_as_of_2013-06-30'], // CAMBODIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:KIR','is_in:country_code3','kiribati_as_of_2013-06-30'], // KIRIBATI AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:KNA','is_in:country_code3','saint_kitts_and_nevis_as_of_2013-06-30'], // SAINT KITTS AND NEVIS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:KOR','is_in:country_code3','korea,_south_as_of_2013-06-30'], // KOREA, SOUTH AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:KWT','is_in:country_code3','kuwait_as_of_2013-06-30'], // KUWAIT AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:LAO','is_in:country_code3','laos_as_of_2013-06-30'], // LAOS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:LBN','is_in:country_code3','lebanon_as_of_2013-06-30'], // LEBANON AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:LBR','is_in:country_code3','liberia_as_of_2013-06-30'], // LIBERIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:LIE','is_in:country_code3','liechtenstein_as_of_2013-06-30'], // LIECHTENSTEIN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:LKA','is_in:country_code3','sri_lanka_as_of_2013-06-30'], // SRI LANKA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:LSO','is_in:country_code3','lesotho_as_of_2013-06-30'], // LESOTHO AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:LTU','is_in:country_code3','lithuania_as_of_2013-06-30'], // LITHUANIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:LUX','is_in:country_code3','luxembourg_as_of_2013-06-30'], // LUXEMBOURG AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:LVA','is_in:country_code3','latvia_as_of_2013-06-30'], // LATVIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MAC','is_in:country_code3','macau_as_of_2013-06-30'], // MACAU AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MAF','is_in:country_code3','saint_martin_as_of_2013-06-30'], // SAINT MARTIN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MAR','is_in:country_code3','morocco_as_of_2013-06-30'], // MOROCCO AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MCO','is_in:country_code3','monaco_as_of_2013-06-30'], // MONACO AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MDA','is_in:country_code3','moldova_as_of_2013-06-30'], // MOLDOVA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MDG','is_in:country_code3','madagascar_as_of_2013-06-30'], // MADAGASCAR AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MDV','is_in:country_code3','maldives_as_of_2013-06-30'], // MALDIVES AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MEX','is_in:country_code3','mexico_as_of_2013-06-30'], // MEXICO AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MHL','is_in:country_code3','marshall_islands_as_of_2013-06-30'], // MARSHALL ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MKD','is_in:country_code3','macedonia_as_of_2013-06-30'], // MACEDONIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MLI','is_in:country_code3','mali_as_of_2013-06-30'], // MALI AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MLT','is_in:country_code3','malta_as_of_2013-06-30'], // MALTA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MMR','is_in:country_code3','burma_as_of_2013-06-30'], // BURMA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MNG','is_in:country_code3','mongolia_as_of_2013-06-30'], // MONGOLIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MNP','is_in:country_code3','northern_mariana_islands_as_of_2013-06-30'], // NORTHERN MARIANA ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MOZ','is_in:country_code3','mozambique_as_of_2013-06-30'], // MOZAMBIQUE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MRT','is_in:country_code3','mauritania_as_of_2013-06-30'], // MAURITANIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MTQ','is_in:country_code3','martinique_as_of_2013-06-30'], // MARTINIQUE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MUS','is_in:country_code3','mauritius_as_of_2013-06-30'], // MAURITIUS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MWI','is_in:country_code3','malawi_as_of_2013-06-30'], // MALAWI AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MYS','is_in:country_code3','malaysia_as_of_2013-06-30'], // MALAYSIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:MYT','is_in:country_code3','mayotte_as_of_2013-06-30'], // MAYOTTE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:NAM','is_in:country_code3','namibia_as_of_2013-06-30'], // NAMIBIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:NCL','is_in:country_code3','new_caledonia_as_of_2013-06-30'], // NEW CALEDONIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:NER','is_in:country_code3','niger_as_of_2013-06-30'], // NIGER AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:NFK','is_in:country_code3','norfolk_island_as_of_2013-06-30'], // NORFOLK ISLAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:NGA','is_in:country_code3','nigeria_as_of_2013-06-30'], // NIGERIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:NIC','is_in:country_code3','nicaragua_as_of_2013-06-30'], // NICARAGUA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:NLD','is_in:country_code3','netherlands_as_of_2013-06-30'], // NETHERLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:NOR','is_in:country_code3','norway_as_of_2013-06-30'], // NORWAY AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:NPL','is_in:country_code3','nepal_as_of_2013-06-30'], // NEPAL AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:NRU','is_in:country_code3','nauru_as_of_2013-06-30'], // NAURU AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:NZL','is_in:country_code3','new_zealand_as_of_2013-06-30'], // NEW ZEALAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:OMN','is_in:country_code3','oman_as_of_2013-06-30'], // OMAN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:PAK','is_in:country_code3','pakistan_as_of_2013-06-30'], // PAKISTAN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:PAN','is_in:country_code3','panama_as_of_2013-06-30'], // PANAMA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:PCN','is_in:country_code3','pitcairn_islands_as_of_2013-06-30'], // PITCAIRN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:PER','is_in:country_code3','peru_as_of_2013-06-30'], // PERU AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:PHL','is_in:country_code3','philippines_as_of_2013-06-30'], // PHILIPPINES AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:PLW','is_in:country_code3','palau_as_of_2013-06-30'], // PALAU AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:POL','is_in:country_code3','poland_as_of_2013-06-30'], // POLAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:PRI','is_in:country_code3','puerto_rico_as_of_2013-06-30'], // PUERTO RICO AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:PRK','is_in:country_code3','korea,_north_as_of_2013-06-30'], // KOREA, NORTH AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:PRT','is_in:country_code3','portugal_as_of_2013-06-30'], // PORTUGAL AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:PRY','is_in:country_code3','paraguay_as_of_2013-06-30'], // PARAGUAY AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:PSE','is_in:country_code3','palestinian_territory_as_of_2013-06-30'], // PALESTINIAN TERRITORY AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:PYF','is_in:country_code3','french_polynesia_as_of_2013-06-30'], // FRENCH POLYNESIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:QAT','is_in:country_code3','qatar_as_of_2013-06-30'], // QATAR AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:REU','is_in:country_code3','reunion_as_of_2013-06-30'], // REUNION AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:RUS','is_in:country_code3','russia_as_of_2013-06-30'], // RUSSIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:RWA','is_in:country_code3','rwanda_as_of_2013-06-30'], // RWANDA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SAU','is_in:country_code3','saudi_arabia_as_of_2013-06-30'], // SAUDI ARABIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SDN','is_in:country_code3','sudan_as_of_2013-06-30'], // SUDAN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SEN','is_in:country_code3','senegal_as_of_2013-06-30'], // SENEGAL AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SGP','is_in:country_code3','singapore_as_of_2013-06-30'], // SINGAPORE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SGS','is_in:country_code3','south_georgia_and_south_sandwich_islands_as_of_2013-06-30'], // SOUTH GEORGIA AND SOUTH SANDWICH ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SHN','is_in:country_code3','saint_helena,_ascension,_and_tristan_da_cunha_as_of_2013-06-30'], // SAINT HELENA, ASCENSION, AND TRISTAN DA CUNHA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SLB','is_in:country_code3','solomon_islands_as_of_2013-06-30'], // SOLOMON ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SLE','is_in:country_code3','sierra_leone_as_of_2013-06-30'], // SIERRA LEONE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SLV','is_in:country_code3','el_salvador_as_of_2013-06-30'], // EL SALVADOR AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SMR','is_in:country_code3','san_marino_as_of_2013-06-30'], // SAN MARINO AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SOM','is_in:country_code3','somalia_as_of_2013-06-30'], // SOMALIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SPM','is_in:country_code3','saint_pierre_and_miquelon_as_of_2013-06-30'], // SAINT PIERRE AND MIQUELON AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SRB','is_in:country_code3','serbia_as_of_2013-06-30'], // SERBIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SSD','is_in:country_code3','south_sudan_as_of_2013-06-30'], // SOUTH SUDAN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:STP','is_in:country_code3','sao_tome_and_principe_as_of_2013-06-30'], // SAO TOME AND PRINCIPE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SUR','is_in:country_code3','suriname_as_of_2013-06-30'], // SURINAME AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SVK','is_in:country_code3','slovakia_as_of_2013-06-30'], // SLOVAKIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SVN','is_in:country_code3','slovenia_as_of_2013-06-30'], // SLOVENIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SWE','is_in:country_code3','sweden_as_of_2013-06-30'], // SWEDEN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SWZ','is_in:country_code3','swaziland_as_of_2013-06-30'], // SWAZILAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SXM','is_in:country_code3','sint_maarten_as_of_2013-06-30'], // SINT MAARTEN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SYC','is_in:country_code3','seychelles_as_of_2013-06-30'], // SEYCHELLES AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:SYR','is_in:country_code3','syria_as_of_2013-06-30'], // SYRIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:TCA','is_in:country_code3','turks_and_caicos_islands_as_of_2013-06-30'], // TURKS AND CAICOS ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:TCD','is_in:country_code3','chad_as_of_2013-06-30'], // CHAD AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:TGO','is_in:country_code3','togo_as_of_2013-06-30'], // TOGO AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:THA','is_in:country_code3','thailand_as_of_2013-06-30'], // THAILAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:TJK','is_in:country_code3','tajikistan_as_of_2013-06-30'], // TAJIKISTAN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:TLS','is_in:country_code3','timor-leste_as_of_2013-06-30'], // TIMOR-LESTE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:TON','is_in:country_code3','tonga_as_of_2013-06-30'], // TONGA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:TTO','is_in:country_code3','trinidad_and_tobago_as_of_2013-06-30'], // TRINIDAD AND TOBAGO AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:TUN','is_in:country_code3','tunisia_as_of_2013-06-30'], // TUNISIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:TUR','is_in:country_code3','turkey_as_of_2013-06-30'], // TURKEY AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:TWN','is_in:country_code3','taiwan_as_of_2013-06-30'], // TAIWAN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:TZA','is_in:country_code3','tanzania_as_of_2013-06-30'], // TANZANIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:UGA','is_in:country_code3','uganda_as_of_2013-06-30'], // UGANDA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:UKR','is_in:country_code3','ukraine_as_of_2013-06-30'], // UKRAINE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:URY','is_in:country_code3','uruguay_as_of_2013-06-30'], // URUGUAY AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:USA','is_in:country_code3','united_states_as_of_2013-06-30'], // UNITED STATES AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:UZB','is_in:country_code3','uzbekistan_as_of_2013-06-30'], // UZBEKISTAN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:VAT','is_in:country_code3','vatican_city_as_of_2013-06-30'], // VATICAN CITY AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:VCT','is_in:country_code3','saint_vincent_and_the_grenadines_as_of_2013-06-30'], // SAINT VINCENT AND THE GRENADINES AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:VEN','is_in:country_code3','venezuela_as_of_2013-06-30'], // VENEZUELA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:VGB','is_in:country_code3','virgin_islands,_british_as_of_2013-06-30'], // VIRGIN ISLANDS, BRITISH AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:VIR','is_in:country_code3','virgin_islands,_u.s._as_of_2013-06-30'], // VIRGIN ISLANDS, U.S. AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:VNM','is_in:country_code3','vietnam_as_of_2013-06-30'], // VIETNAM AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:VUT','is_in:country_code3','vanuatu_as_of_2013-06-30'], // VANUATU AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:WLF','is_in:country_code3','wallis_and_futuna_as_of_2013-06-30'], // WALLIS AND FUTUNA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:WSM','is_in:country_code3','samoa_as_of_2013-06-30'], // SAMOA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XAC','is_in:country_code3','ashmore_and_cartier_islands_as_of_2013-06-30'], // ASHMORE AND CARTIER ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XAZ','is_in:country_code3','entity_1_as_of_2013-06-30'], // ENTITY 1 AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XBI','is_in:country_code3','bassas_da_india_as_of_2013-06-30'], // BASSAS DA INDIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XBK','is_in:country_code3','baker_island_as_of_2013-06-30'], // BAKER ISLAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XCR','is_in:country_code3','entity_2_as_of_2013-06-30'], // ENTITY 2 AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XCS','is_in:country_code3','coral_sea_islands_as_of_2013-06-30'], // CORAL SEA ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XCY','is_in:country_code3','entity_3_as_of_2013-06-30'], // ENTITY 3 AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XEU','is_in:country_code3','europa_island_as_of_2013-06-30'], // EUROPA ISLAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XGL','is_in:country_code3','glorioso_islands_as_of_2013-06-30'], // GLORIOSO ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XGZ','is_in:country_code3','gaza_strip_as_of_2013-06-30'], // GAZA STRIP AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XHO','is_in:country_code3','howland_island_as_of_2013-06-30'], // HOWLAND ISLAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XJA','is_in:country_code3','johnston_atoll_as_of_2013-06-30'], // JOHNSTON ATOLL AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XJM','is_in:country_code3','jan_mayen_as_of_2013-06-30'], // JAN MAYEN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XJN','is_in:country_code3','juan_de_nova_island_as_of_2013-06-30'], // JUAN DE NOVA ISLAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XJV','is_in:country_code3','jarvis_island_as_of_2013-06-30'], // JARVIS ISLAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XKM','is_in:country_code3','entity_4_as_of_2013-06-30'], // ENTITY 4 AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XKN','is_in:country_code3','entity_5_as_of_2013-06-30'], // ENTITY 5 AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XKR','is_in:country_code3','kingman_reef_as_of_2013-06-30'], // KINGMAN REEF AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XKS','is_in:country_code3','kosovo_as_of_2013-06-30'], // KOSOVO AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XMW','is_in:country_code3','midway_islands_as_of_2013-06-30'], // MIDWAY ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XNV','is_in:country_code3','navassa_island_as_of_2013-06-30'], // NAVASSA ISLAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XPL','is_in:country_code3','palmyra_atoll_as_of_2013-06-30'], // PALMYRA ATOLL AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XPR','is_in:country_code3','paracel_islands_as_of_2013-06-30'], // PARACEL ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XQP','is_in:country_code3','etorofu,_habomai,_kunashiri,_and_shikotan_islands_as_of_2013-06-30'], // ETOROFU, HABOMAI, KUNASHIRI, AND SHIKOTAN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XQZ','is_in:country_code3','akrotiri_as_of_2013-06-30'], // AKROTIRI AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XSP','is_in:country_code3','spratly_islands_as_of_2013-06-30'], // SPRATLY ISLANDS AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XSV','is_in:country_code3','svalbard_as_of_2013-06-30'], // SVALBARD AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XTR','is_in:country_code3','tromelin_island_as_of_2013-06-30'], // TROMELIN ISLAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XWB','is_in:country_code3','west_bank_as_of_2013-06-30'], // WEST BANK AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XWK','is_in:country_code3','wake_island_as_of_2013-06-30'], // WAKE ISLAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XXD','is_in:country_code3','dhekelia_as_of_2013-06-30'], // DHEKELIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:XXX','is_in:country_code3','no_man"s_land_as_of_2013-06-30'], // NO MAN"S LAND AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:YEM','is_in:country_code3','yemen_as_of_2013-06-30'], // YEMEN AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ZAF','is_in:country_code3','south_africa_as_of_2013-06-30'], // SOUTH AFRICA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ZMB','is_in:country_code3','zambia_as_of_2013-06-30'], // ZAMBIA AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:1-2:ZWE','is_in:country_code3','zimbabwe_as_of_2013-06-30'], // ZIMBABWE AS OF 2013-06-30
+     ['ZI020_GE43','ge:GENC:3:ed3:AX3','is_in:country_code3','entity_6_as_of_2015-06-30'], // ENTITY 6 AS OF 2015-06-30
+     ['ZI020_GE43','ge:ISO1:3:VI-15:AIA','is_in:country_code3','anguilla_as_of_2013-05-10'], // ANGUILLA AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:ATA','is_in:country_code3','antarctica_as_of_2013-05-10'], // ANTARCTICA AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:BIH','is_in:country_code3','bosnia_and_herzegovina_as_of_2013-05-10'], // BOSNIA AND HERZEGOVINA AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:BLZ','is_in:country_code3','belize_as_of_2013-05-10'], // BELIZE AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:BMU','is_in:country_code3','bermuda_as_of_2013-05-10'], // BERMUDA AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:BRB','is_in:country_code3','barbados_as_of_2013-05-10'], // BARBADOS AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:BVT','is_in:country_code3','bouvet_island_as_of_2013-05-10'], // BOUVET ISLAND AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:GIB','is_in:country_code3','gibraltar_as_of_2013-05-10'], // GIBRALTAR AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:GRD','is_in:country_code3','grenada_as_of_2013-05-10'], // GRENADA AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:GRL','is_in:country_code3','greenland_as_of_2013-05-10'], // GREENLAND AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:HUN','is_in:country_code3','hungary_as_of_2013-05-10'], // HUNGARY AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:IMN','is_in:country_code3','isle_of_man_as_of_2013-05-10'], // ISLE OF MAN AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:IRL','is_in:country_code3','ireland_as_of_2013-05-10'], // IRELAND AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:JAM','is_in:country_code3','jamaica_as_of_2013-05-10'], // JAMAICA AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:JPN','is_in:country_code3','japan_as_of_2013-05-10'], // JAPAN AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:LBY','is_in:country_code3','libya_as_of_2013-05-10'], // LIBYA AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:LCA','is_in:country_code3','saint_lucia_as_of_2013-05-10'], // SAINT LUCIA AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:MNE','is_in:country_code3','montenegro_as_of_2013-05-10'], // MONTENEGRO AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:MSR','is_in:country_code3','montserrat_as_of_2013-05-10'], // MONTSERRAT AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:NIU','is_in:country_code3','niue_as_of_2013-05-10'], // NIUE AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:PNG','is_in:country_code3','papua_new_guinea_as_of_2013-05-10'], // PAPUA NEW GUINEA AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:ROU','is_in:country_code3','romania_as_of_2013-05-10'], // ROMANIA AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:TKL','is_in:country_code3','tokelau_as_of_2013-05-10'], // TOKELAU AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:TKM','is_in:country_code3','turkmenistan_as_of_2013-05-10'], // TURKMENISTAN AS OF 2013-05-10
+     ['ZI020_GE43','ge:ISO1:3:VI-15:TUV','is_in:country_code3','tuvalu_as_of_2013-05-10'], // TUVALU AS OF 2013-05-10
+     ['ZI020_GE43','noInformation','is_in:country_code3','no_information'], // No Information
+     ['ZI020_GE43','other','is_in:country_code3','other'], // Other
+
+     // ZI020_GE44 - Designation : GENC Short URN-based Identifier [4]
+     ['ZI020_GE44','ge:GENC:3:1-2:ABW','is_in:country_code4','aruba_as_of_2013-06-30'], // ARUBA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:AFG','is_in:country_code4','afghanistan_as_of_2013-06-30'], // AFGHANISTAN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:AGO','is_in:country_code4','angola_as_of_2013-06-30'], // ANGOLA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ALB','is_in:country_code4','albania_as_of_2013-06-30'], // ALBANIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:AND','is_in:country_code4','andorra_as_of_2013-06-30'], // ANDORRA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ARE','is_in:country_code4','united_arab_emirates_as_of_2013-06-30'], // UNITED ARAB EMIRATES AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ARG','is_in:country_code4','argentina_as_of_2013-06-30'], // ARGENTINA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ARM','is_in:country_code4','armenia_as_of_2013-06-30'], // ARMENIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ASM','is_in:country_code4','american_samoa_as_of_2013-06-30'], // AMERICAN SAMOA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ATF','is_in:country_code4','french_southern_and_antarctic_lands_as_of_2013-06-30'], // FRENCH SOUTHERN AND ANTARCTIC LANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ATG','is_in:country_code4','antigua_and_barbuda_as_of_2013-06-30'], // ANTIGUA AND BARBUDA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:AUS','is_in:country_code4','australia_as_of_2013-06-30'], // AUSTRALIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:AUT','is_in:country_code4','austria_as_of_2013-06-30'], // AUSTRIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:AX1','is_in:country_code4','unknown_as_of_2013-06-30'], // UNKNOWN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:AX2','is_in:country_code4','guantanamo_bay_naval_base_as_of_2013-06-30'], // GUANTANAMO BAY NAVAL BASE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:AZE','is_in:country_code4','azerbaijan_as_of_2013-06-30'], // AZERBAIJAN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BDI','is_in:country_code4','burundi_as_of_2013-06-30'], // BURUNDI AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BEL','is_in:country_code4','belgium_as_of_2013-06-30'], // BELGIUM AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BEN','is_in:country_code4','benin_as_of_2013-06-30'], // BENIN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BES','is_in:country_code4','bonaire,_sint_eustatius,_and_saba_as_of_2013-06-30'], // BONAIRE, SINT EUSTATIUS, AND SABA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BFA','is_in:country_code4','burkina_faso_as_of_2013-06-30'], // BURKINA FASO AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BGD','is_in:country_code4','bangladesh_as_of_2013-06-30'], // BANGLADESH AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BGR','is_in:country_code4','bulgaria_as_of_2013-06-30'], // BULGARIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BHR','is_in:country_code4','bahrain_as_of_2013-06-30'], // BAHRAIN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BHS','is_in:country_code4','bahamas,_the_as_of_2013-06-30'], // BAHAMAS, THE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BLM','is_in:country_code4','saint_barthelemy_as_of_2013-06-30'], // SAINT BARTHELEMY AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BLR','is_in:country_code4','belarus_as_of_2013-06-30'], // BELARUS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BOL','is_in:country_code4','bolivia_as_of_2013-06-30'], // BOLIVIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BRA','is_in:country_code4','brazil_as_of_2013-06-30'], // BRAZIL AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BRN','is_in:country_code4','brunei_as_of_2013-06-30'], // BRUNEI AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BTN','is_in:country_code4','bhutan_as_of_2013-06-30'], // BHUTAN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:BWA','is_in:country_code4','botswana_as_of_2013-06-30'], // BOTSWANA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CAF','is_in:country_code4','central_african_republic_as_of_2013-06-30'], // CENTRAL AFRICAN REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CAN','is_in:country_code4','canada_as_of_2013-06-30'], // CANADA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CCK','is_in:country_code4','cocos_(keeling)_islands_as_of_2013-06-30'], // COCOS (KEELING) ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CHE','is_in:country_code4','switzerland_as_of_2013-06-30'], // SWITZERLAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CHL','is_in:country_code4','chile_as_of_2013-06-30'], // CHILE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CHN','is_in:country_code4','china_as_of_2013-06-30'], // CHINA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CIV','is_in:country_code4','cote_d"ivoire_as_of_2013-06-30'], // COTE D"IVOIRE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CMR','is_in:country_code4','cameroon_as_of_2013-06-30'], // CAMEROON AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:COD','is_in:country_code4','congo_(kinshasa)_as_of_2013-06-30'], // CONGO (KINSHASA) AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:COG','is_in:country_code4','congo_(brazzaville)_as_of_2013-06-30'], // CONGO (BRAZZAVILLE) AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:COK','is_in:country_code4','cook_islands_as_of_2013-06-30'], // COOK ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:COL','is_in:country_code4','colombia_as_of_2013-06-30'], // COLOMBIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:COM','is_in:country_code4','comoros_as_of_2013-06-30'], // COMOROS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CPT','is_in:country_code4','clipperton_island_as_of_2013-06-30'], // CLIPPERTON ISLAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CPV','is_in:country_code4','cape_verde_as_of_2013-06-30'], // CAPE VERDE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CRI','is_in:country_code4','costa_rica_as_of_2013-06-30'], // COSTA RICA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CUB','is_in:country_code4','cuba_as_of_2013-06-30'], // CUBA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CUW','is_in:country_code4','curacao_as_of_2013-06-30'], // CURACAO AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CXR','is_in:country_code4','christmas_island_as_of_2013-06-30'], // CHRISTMAS ISLAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CYM','is_in:country_code4','cayman_islands_as_of_2013-06-30'], // CAYMAN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CYP','is_in:country_code4','cyprus_as_of_2013-06-30'], // CYPRUS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:CZE','is_in:country_code4','czech_republic_as_of_2013-06-30'], // CZECH REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:DEU','is_in:country_code4','germany_as_of_2013-06-30'], // GERMANY AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:DGA','is_in:country_code4','diego_garcia_as_of_2013-06-30'], // DIEGO GARCIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:DJI','is_in:country_code4','djibouti_as_of_2013-06-30'], // DJIBOUTI AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:DMA','is_in:country_code4','dominica_as_of_2013-06-30'], // DOMINICA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:DNK','is_in:country_code4','denmark_as_of_2013-06-30'], // DENMARK AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:DOM','is_in:country_code4','dominican_republic_as_of_2013-06-30'], // DOMINICAN REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:DZA','is_in:country_code4','algeria_as_of_2013-06-30'], // ALGERIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ECU','is_in:country_code4','ecuador_as_of_2013-06-30'], // ECUADOR AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:EGY','is_in:country_code4','egypt_as_of_2013-06-30'], // EGYPT AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ERI','is_in:country_code4','eritrea_as_of_2013-06-30'], // ERITREA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ESH','is_in:country_code4','western_sahara_as_of_2013-06-30'], // WESTERN SAHARA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ESP','is_in:country_code4','spain_as_of_2013-06-30'], // SPAIN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:EST','is_in:country_code4','estonia_as_of_2013-06-30'], // ESTONIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ETH','is_in:country_code4','ethiopia_as_of_2013-06-30'], // ETHIOPIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:FIN','is_in:country_code4','finland_as_of_2013-06-30'], // FINLAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:FJI','is_in:country_code4','fiji_as_of_2013-06-30'], // FIJI AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:FLK','is_in:country_code4','falkland_islands_(islas_malvinas)_as_of_2013-06-30'], // FALKLAND ISLANDS (ISLAS MALVINAS) AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:FRA','is_in:country_code4','france_as_of_2013-06-30'], // FRANCE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:FRO','is_in:country_code4','faroe_islands_as_of_2013-06-30'], // FAROE ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:FSM','is_in:country_code4','micronesia,_federated_states_of_as_of_2013-06-30'], // MICRONESIA, FEDERATED STATES OF AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:GAB','is_in:country_code4','gabon_as_of_2013-06-30'], // GABON AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:GBR','is_in:country_code4','united_kingdom_as_of_2013-06-30'], // UNITED KINGDOM AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:GEO','is_in:country_code4','georgia_as_of_2013-06-30'], // GEORGIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:GGY','is_in:country_code4','guernsey_as_of_2013-06-30'], // GUERNSEY AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:GHA','is_in:country_code4','ghana_as_of_2013-06-30'], // GHANA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:GIN','is_in:country_code4','guinea_as_of_2013-06-30'], // GUINEA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:GLP','is_in:country_code4','guadeloupe_as_of_2013-06-30'], // GUADELOUPE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:GMB','is_in:country_code4','gambia,_the_as_of_2013-06-30'], // GAMBIA, THE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:GNB','is_in:country_code4','guinea-bissau_as_of_2013-06-30'], // GUINEA-BISSAU AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:GNQ','is_in:country_code4','equatorial_guinea_as_of_2013-06-30'], // EQUATORIAL GUINEA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:GRC','is_in:country_code4','greece_as_of_2013-06-30'], // GREECE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:GTM','is_in:country_code4','guatemala_as_of_2013-06-30'], // GUATEMALA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:GUF','is_in:country_code4','french_guiana_as_of_2013-06-30'], // FRENCH GUIANA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:GUM','is_in:country_code4','guam_as_of_2013-06-30'], // GUAM AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:GUY','is_in:country_code4','guyana_as_of_2013-06-30'], // GUYANA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:HKG','is_in:country_code4','hong_kong_as_of_2013-06-30'], // HONG KONG AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:HMD','is_in:country_code4','heard_island_and_mcdonald_islands_as_of_2013-06-30'], // HEARD ISLAND AND MCDONALD ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:HND','is_in:country_code4','honduras_as_of_2013-06-30'], // HONDURAS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:HRV','is_in:country_code4','croatia_as_of_2013-06-30'], // CROATIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:HTI','is_in:country_code4','haiti_as_of_2013-06-30'], // HAITI AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:IDN','is_in:country_code4','indonesia_as_of_2013-06-30'], // INDONESIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:IND','is_in:country_code4','india_as_of_2013-06-30'], // INDIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:IOT','is_in:country_code4','british_indian_ocean_territory_as_of_2013-06-30'], // BRITISH INDIAN OCEAN TERRITORY AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:IRN','is_in:country_code4','iran_as_of_2013-06-30'], // IRAN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:IRQ','is_in:country_code4','iraq_as_of_2013-06-30'], // IRAQ AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ISL','is_in:country_code4','iceland_as_of_2013-06-30'], // ICELAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ISR','is_in:country_code4','israel_as_of_2013-06-30'], // ISRAEL AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ITA','is_in:country_code4','italy_as_of_2013-06-30'], // ITALY AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:JEY','is_in:country_code4','jersey_as_of_2013-06-30'], // JERSEY AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:JOR','is_in:country_code4','jordan_as_of_2013-06-30'], // JORDAN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:KAZ','is_in:country_code4','kazakhstan_as_of_2013-06-30'], // KAZAKHSTAN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:KEN','is_in:country_code4','kenya_as_of_2013-06-30'], // KENYA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:KGZ','is_in:country_code4','kyrgyzstan_as_of_2013-06-30'], // KYRGYZSTAN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:KHM','is_in:country_code4','cambodia_as_of_2013-06-30'], // CAMBODIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:KIR','is_in:country_code4','kiribati_as_of_2013-06-30'], // KIRIBATI AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:KNA','is_in:country_code4','saint_kitts_and_nevis_as_of_2013-06-30'], // SAINT KITTS AND NEVIS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:KOR','is_in:country_code4','korea,_south_as_of_2013-06-30'], // KOREA, SOUTH AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:KWT','is_in:country_code4','kuwait_as_of_2013-06-30'], // KUWAIT AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:LAO','is_in:country_code4','laos_as_of_2013-06-30'], // LAOS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:LBN','is_in:country_code4','lebanon_as_of_2013-06-30'], // LEBANON AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:LBR','is_in:country_code4','liberia_as_of_2013-06-30'], // LIBERIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:LIE','is_in:country_code4','liechtenstein_as_of_2013-06-30'], // LIECHTENSTEIN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:LKA','is_in:country_code4','sri_lanka_as_of_2013-06-30'], // SRI LANKA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:LSO','is_in:country_code4','lesotho_as_of_2013-06-30'], // LESOTHO AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:LTU','is_in:country_code4','lithuania_as_of_2013-06-30'], // LITHUANIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:LUX','is_in:country_code4','luxembourg_as_of_2013-06-30'], // LUXEMBOURG AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:LVA','is_in:country_code4','latvia_as_of_2013-06-30'], // LATVIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MAC','is_in:country_code4','macau_as_of_2013-06-30'], // MACAU AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MAF','is_in:country_code4','saint_martin_as_of_2013-06-30'], // SAINT MARTIN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MAR','is_in:country_code4','morocco_as_of_2013-06-30'], // MOROCCO AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MCO','is_in:country_code4','monaco_as_of_2013-06-30'], // MONACO AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MDA','is_in:country_code4','moldova_as_of_2013-06-30'], // MOLDOVA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MDG','is_in:country_code4','madagascar_as_of_2013-06-30'], // MADAGASCAR AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MDV','is_in:country_code4','maldives_as_of_2013-06-30'], // MALDIVES AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MEX','is_in:country_code4','mexico_as_of_2013-06-30'], // MEXICO AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MHL','is_in:country_code4','marshall_islands_as_of_2013-06-30'], // MARSHALL ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MKD','is_in:country_code4','macedonia_as_of_2013-06-30'], // MACEDONIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MLI','is_in:country_code4','mali_as_of_2013-06-30'], // MALI AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MLT','is_in:country_code4','malta_as_of_2013-06-30'], // MALTA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MMR','is_in:country_code4','burma_as_of_2013-06-30'], // BURMA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MNG','is_in:country_code4','mongolia_as_of_2013-06-30'], // MONGOLIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MNP','is_in:country_code4','northern_mariana_islands_as_of_2013-06-30'], // NORTHERN MARIANA ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MOZ','is_in:country_code4','mozambique_as_of_2013-06-30'], // MOZAMBIQUE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MRT','is_in:country_code4','mauritania_as_of_2013-06-30'], // MAURITANIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MTQ','is_in:country_code4','martinique_as_of_2013-06-30'], // MARTINIQUE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MUS','is_in:country_code4','mauritius_as_of_2013-06-30'], // MAURITIUS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MWI','is_in:country_code4','malawi_as_of_2013-06-30'], // MALAWI AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MYS','is_in:country_code4','malaysia_as_of_2013-06-30'], // MALAYSIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:MYT','is_in:country_code4','mayotte_as_of_2013-06-30'], // MAYOTTE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:NAM','is_in:country_code4','namibia_as_of_2013-06-30'], // NAMIBIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:NCL','is_in:country_code4','new_caledonia_as_of_2013-06-30'], // NEW CALEDONIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:NER','is_in:country_code4','niger_as_of_2013-06-30'], // NIGER AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:NFK','is_in:country_code4','norfolk_island_as_of_2013-06-30'], // NORFOLK ISLAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:NGA','is_in:country_code4','nigeria_as_of_2013-06-30'], // NIGERIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:NIC','is_in:country_code4','nicaragua_as_of_2013-06-30'], // NICARAGUA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:NLD','is_in:country_code4','netherlands_as_of_2013-06-30'], // NETHERLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:NOR','is_in:country_code4','norway_as_of_2013-06-30'], // NORWAY AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:NPL','is_in:country_code4','nepal_as_of_2013-06-30'], // NEPAL AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:NRU','is_in:country_code4','nauru_as_of_2013-06-30'], // NAURU AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:NZL','is_in:country_code4','new_zealand_as_of_2013-06-30'], // NEW ZEALAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:OMN','is_in:country_code4','oman_as_of_2013-06-30'], // OMAN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:PAK','is_in:country_code4','pakistan_as_of_2013-06-30'], // PAKISTAN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:PAN','is_in:country_code4','panama_as_of_2013-06-30'], // PANAMA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:PCN','is_in:country_code4','pitcairn_islands_as_of_2013-06-30'], // PITCAIRN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:PER','is_in:country_code4','peru_as_of_2013-06-30'], // PERU AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:PHL','is_in:country_code4','philippines_as_of_2013-06-30'], // PHILIPPINES AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:PLW','is_in:country_code4','palau_as_of_2013-06-30'], // PALAU AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:POL','is_in:country_code4','poland_as_of_2013-06-30'], // POLAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:PRI','is_in:country_code4','puerto_rico_as_of_2013-06-30'], // PUERTO RICO AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:PRK','is_in:country_code4','korea,_north_as_of_2013-06-30'], // KOREA, NORTH AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:PRT','is_in:country_code4','portugal_as_of_2013-06-30'], // PORTUGAL AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:PRY','is_in:country_code4','paraguay_as_of_2013-06-30'], // PARAGUAY AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:PSE','is_in:country_code4','palestinian_territory_as_of_2013-06-30'], // PALESTINIAN TERRITORY AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:PYF','is_in:country_code4','french_polynesia_as_of_2013-06-30'], // FRENCH POLYNESIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:QAT','is_in:country_code4','qatar_as_of_2013-06-30'], // QATAR AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:REU','is_in:country_code4','reunion_as_of_2013-06-30'], // REUNION AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:RUS','is_in:country_code4','russia_as_of_2013-06-30'], // RUSSIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:RWA','is_in:country_code4','rwanda_as_of_2013-06-30'], // RWANDA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SAU','is_in:country_code4','saudi_arabia_as_of_2013-06-30'], // SAUDI ARABIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SDN','is_in:country_code4','sudan_as_of_2013-06-30'], // SUDAN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SEN','is_in:country_code4','senegal_as_of_2013-06-30'], // SENEGAL AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SGP','is_in:country_code4','singapore_as_of_2013-06-30'], // SINGAPORE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SGS','is_in:country_code4','south_georgia_and_south_sandwich_islands_as_of_2013-06-30'], // SOUTH GEORGIA AND SOUTH SANDWICH ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SHN','is_in:country_code4','saint_helena,_ascension,_and_tristan_da_cunha_as_of_2013-06-30'], // SAINT HELENA, ASCENSION, AND TRISTAN DA CUNHA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SLB','is_in:country_code4','solomon_islands_as_of_2013-06-30'], // SOLOMON ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SLE','is_in:country_code4','sierra_leone_as_of_2013-06-30'], // SIERRA LEONE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SLV','is_in:country_code4','el_salvador_as_of_2013-06-30'], // EL SALVADOR AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SMR','is_in:country_code4','san_marino_as_of_2013-06-30'], // SAN MARINO AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SOM','is_in:country_code4','somalia_as_of_2013-06-30'], // SOMALIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SPM','is_in:country_code4','saint_pierre_and_miquelon_as_of_2013-06-30'], // SAINT PIERRE AND MIQUELON AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SRB','is_in:country_code4','serbia_as_of_2013-06-30'], // SERBIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SSD','is_in:country_code4','south_sudan_as_of_2013-06-30'], // SOUTH SUDAN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:STP','is_in:country_code4','sao_tome_and_principe_as_of_2013-06-30'], // SAO TOME AND PRINCIPE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SUR','is_in:country_code4','suriname_as_of_2013-06-30'], // SURINAME AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SVK','is_in:country_code4','slovakia_as_of_2013-06-30'], // SLOVAKIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SVN','is_in:country_code4','slovenia_as_of_2013-06-30'], // SLOVENIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SWE','is_in:country_code4','sweden_as_of_2013-06-30'], // SWEDEN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SWZ','is_in:country_code4','swaziland_as_of_2013-06-30'], // SWAZILAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SXM','is_in:country_code4','sint_maarten_as_of_2013-06-30'], // SINT MAARTEN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SYC','is_in:country_code4','seychelles_as_of_2013-06-30'], // SEYCHELLES AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:SYR','is_in:country_code4','syria_as_of_2013-06-30'], // SYRIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:TCA','is_in:country_code4','turks_and_caicos_islands_as_of_2013-06-30'], // TURKS AND CAICOS ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:TCD','is_in:country_code4','chad_as_of_2013-06-30'], // CHAD AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:TGO','is_in:country_code4','togo_as_of_2013-06-30'], // TOGO AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:THA','is_in:country_code4','thailand_as_of_2013-06-30'], // THAILAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:TJK','is_in:country_code4','tajikistan_as_of_2013-06-30'], // TAJIKISTAN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:TLS','is_in:country_code4','timor-leste_as_of_2013-06-30'], // TIMOR-LESTE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:TON','is_in:country_code4','tonga_as_of_2013-06-30'], // TONGA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:TTO','is_in:country_code4','trinidad_and_tobago_as_of_2013-06-30'], // TRINIDAD AND TOBAGO AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:TUN','is_in:country_code4','tunisia_as_of_2013-06-30'], // TUNISIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:TUR','is_in:country_code4','turkey_as_of_2013-06-30'], // TURKEY AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:TWN','is_in:country_code4','taiwan_as_of_2013-06-30'], // TAIWAN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:TZA','is_in:country_code4','tanzania_as_of_2013-06-30'], // TANZANIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:UGA','is_in:country_code4','uganda_as_of_2013-06-30'], // UGANDA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:UKR','is_in:country_code4','ukraine_as_of_2013-06-30'], // UKRAINE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:URY','is_in:country_code4','uruguay_as_of_2013-06-30'], // URUGUAY AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:USA','is_in:country_code4','united_states_as_of_2013-06-30'], // UNITED STATES AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:UZB','is_in:country_code4','uzbekistan_as_of_2013-06-30'], // UZBEKISTAN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:VAT','is_in:country_code4','vatican_city_as_of_2013-06-30'], // VATICAN CITY AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:VCT','is_in:country_code4','saint_vincent_and_the_grenadines_as_of_2013-06-30'], // SAINT VINCENT AND THE GRENADINES AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:VEN','is_in:country_code4','venezuela_as_of_2013-06-30'], // VENEZUELA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:VGB','is_in:country_code4','virgin_islands,_british_as_of_2013-06-30'], // VIRGIN ISLANDS, BRITISH AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:VIR','is_in:country_code4','virgin_islands,_u.s._as_of_2013-06-30'], // VIRGIN ISLANDS, U.S. AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:VNM','is_in:country_code4','vietnam_as_of_2013-06-30'], // VIETNAM AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:VUT','is_in:country_code4','vanuatu_as_of_2013-06-30'], // VANUATU AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:WLF','is_in:country_code4','wallis_and_futuna_as_of_2013-06-30'], // WALLIS AND FUTUNA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:WSM','is_in:country_code4','samoa_as_of_2013-06-30'], // SAMOA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XAC','is_in:country_code4','ashmore_and_cartier_islands_as_of_2013-06-30'], // ASHMORE AND CARTIER ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XAZ','is_in:country_code4','entity_1_as_of_2013-06-30'], // ENTITY 1 AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XBI','is_in:country_code4','bassas_da_india_as_of_2013-06-30'], // BASSAS DA INDIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XBK','is_in:country_code4','baker_island_as_of_2013-06-30'], // BAKER ISLAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XCR','is_in:country_code4','entity_2_as_of_2013-06-30'], // ENTITY 2 AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XCS','is_in:country_code4','coral_sea_islands_as_of_2013-06-30'], // CORAL SEA ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XCY','is_in:country_code4','entity_3_as_of_2013-06-30'], // ENTITY 3 AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XEU','is_in:country_code4','europa_island_as_of_2013-06-30'], // EUROPA ISLAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XGL','is_in:country_code4','glorioso_islands_as_of_2013-06-30'], // GLORIOSO ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XGZ','is_in:country_code4','gaza_strip_as_of_2013-06-30'], // GAZA STRIP AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XHO','is_in:country_code4','howland_island_as_of_2013-06-30'], // HOWLAND ISLAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XJA','is_in:country_code4','johnston_atoll_as_of_2013-06-30'], // JOHNSTON ATOLL AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XJM','is_in:country_code4','jan_mayen_as_of_2013-06-30'], // JAN MAYEN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XJN','is_in:country_code4','juan_de_nova_island_as_of_2013-06-30'], // JUAN DE NOVA ISLAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XJV','is_in:country_code4','jarvis_island_as_of_2013-06-30'], // JARVIS ISLAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XKM','is_in:country_code4','entity_4_as_of_2013-06-30'], // ENTITY 4 AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XKN','is_in:country_code4','entity_5_as_of_2013-06-30'], // ENTITY 5 AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XKR','is_in:country_code4','kingman_reef_as_of_2013-06-30'], // KINGMAN REEF AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XKS','is_in:country_code4','kosovo_as_of_2013-06-30'], // KOSOVO AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XMW','is_in:country_code4','midway_islands_as_of_2013-06-30'], // MIDWAY ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XNV','is_in:country_code4','navassa_island_as_of_2013-06-30'], // NAVASSA ISLAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XPL','is_in:country_code4','palmyra_atoll_as_of_2013-06-30'], // PALMYRA ATOLL AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XPR','is_in:country_code4','paracel_islands_as_of_2013-06-30'], // PARACEL ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XQP','is_in:country_code4','etorofu,_habomai,_kunashiri,_and_shikotan_islands_as_of_2013-06-30'], // ETOROFU, HABOMAI, KUNASHIRI, AND SHIKOTAN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XQZ','is_in:country_code4','akrotiri_as_of_2013-06-30'], // AKROTIRI AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XSP','is_in:country_code4','spratly_islands_as_of_2013-06-30'], // SPRATLY ISLANDS AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XSV','is_in:country_code4','svalbard_as_of_2013-06-30'], // SVALBARD AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XTR','is_in:country_code4','tromelin_island_as_of_2013-06-30'], // TROMELIN ISLAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XWB','is_in:country_code4','west_bank_as_of_2013-06-30'], // WEST BANK AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XWK','is_in:country_code4','wake_island_as_of_2013-06-30'], // WAKE ISLAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XXD','is_in:country_code4','dhekelia_as_of_2013-06-30'], // DHEKELIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:XXX','is_in:country_code4','no_man"s_land_as_of_2013-06-30'], // NO MAN"S LAND AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:YEM','is_in:country_code4','yemen_as_of_2013-06-30'], // YEMEN AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ZAF','is_in:country_code4','south_africa_as_of_2013-06-30'], // SOUTH AFRICA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ZMB','is_in:country_code4','zambia_as_of_2013-06-30'], // ZAMBIA AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:1-2:ZWE','is_in:country_code4','zimbabwe_as_of_2013-06-30'], // ZIMBABWE AS OF 2013-06-30
+     ['ZI020_GE44','ge:GENC:3:ed3:AX3','is_in:country_code4','entity_6_as_of_2015-06-30'], // ENTITY 6 AS OF 2015-06-30
+     ['ZI020_GE44','ge:ISO1:3:VI-15:AIA','is_in:country_code4','anguilla_as_of_2013-05-10'], // ANGUILLA AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:ATA','is_in:country_code4','antarctica_as_of_2013-05-10'], // ANTARCTICA AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:BIH','is_in:country_code4','bosnia_and_herzegovina_as_of_2013-05-10'], // BOSNIA AND HERZEGOVINA AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:BLZ','is_in:country_code4','belize_as_of_2013-05-10'], // BELIZE AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:BMU','is_in:country_code4','bermuda_as_of_2013-05-10'], // BERMUDA AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:BRB','is_in:country_code4','barbados_as_of_2013-05-10'], // BARBADOS AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:BVT','is_in:country_code4','bouvet_island_as_of_2013-05-10'], // BOUVET ISLAND AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:GIB','is_in:country_code4','gibraltar_as_of_2013-05-10'], // GIBRALTAR AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:GRD','is_in:country_code4','grenada_as_of_2013-05-10'], // GRENADA AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:GRL','is_in:country_code4','greenland_as_of_2013-05-10'], // GREENLAND AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:HUN','is_in:country_code4','hungary_as_of_2013-05-10'], // HUNGARY AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:IMN','is_in:country_code4','isle_of_man_as_of_2013-05-10'], // ISLE OF MAN AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:IRL','is_in:country_code4','ireland_as_of_2013-05-10'], // IRELAND AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:JAM','is_in:country_code4','jamaica_as_of_2013-05-10'], // JAMAICA AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:JPN','is_in:country_code4','japan_as_of_2013-05-10'], // JAPAN AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:LBY','is_in:country_code4','libya_as_of_2013-05-10'], // LIBYA AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:LCA','is_in:country_code4','saint_lucia_as_of_2013-05-10'], // SAINT LUCIA AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:MNE','is_in:country_code4','montenegro_as_of_2013-05-10'], // MONTENEGRO AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:MSR','is_in:country_code4','montserrat_as_of_2013-05-10'], // MONTSERRAT AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:NIU','is_in:country_code4','niue_as_of_2013-05-10'], // NIUE AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:PNG','is_in:country_code4','papua_new_guinea_as_of_2013-05-10'], // PAPUA NEW GUINEA AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:ROU','is_in:country_code4','romania_as_of_2013-05-10'], // ROMANIA AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:TKL','is_in:country_code4','tokelau_as_of_2013-05-10'], // TOKELAU AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:TKM','is_in:country_code4','turkmenistan_as_of_2013-05-10'], // TURKMENISTAN AS OF 2013-05-10
+     ['ZI020_GE44','ge:ISO1:3:VI-15:TUV','is_in:country_code4','tuvalu_as_of_2013-05-10'], // TUVALU AS OF 2013-05-10
+     ['ZI020_GE44','noInformation','is_in:country_code4','no_information'], // No Information
+     ['ZI020_GE44','other','is_in:country_code4','other'], // Other
+
+     // ZI020_GE4A - Designation : GENC Short URN-based Identifier
+     ['ZI020_GE4A','ge:GENC:3:1-2:ABW','is_in:country_codeA','aruba_as_of_2013-06-30'], // ARUBA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:AFG','is_in:country_codeA','afghanistan_as_of_2013-06-30'], // AFGHANISTAN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:AGO','is_in:country_codeA','angola_as_of_2013-06-30'], // ANGOLA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ALB','is_in:country_codeA','albania_as_of_2013-06-30'], // ALBANIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:AND','is_in:country_codeA','andorra_as_of_2013-06-30'], // ANDORRA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ARE','is_in:country_codeA','united_arab_emirates_as_of_2013-06-30'], // UNITED ARAB EMIRATES AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ARG','is_in:country_codeA','argentina_as_of_2013-06-30'], // ARGENTINA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ARM','is_in:country_codeA','armenia_as_of_2013-06-30'], // ARMENIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ASM','is_in:country_codeA','american_samoa_as_of_2013-06-30'], // AMERICAN SAMOA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ATF','is_in:country_codeA','french_southern_and_antarctic_lands_as_of_2013-06-30'], // FRENCH SOUTHERN AND ANTARCTIC LANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ATG','is_in:country_codeA','antigua_and_barbuda_as_of_2013-06-30'], // ANTIGUA AND BARBUDA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:AUS','is_in:country_codeA','australia_as_of_2013-06-30'], // AUSTRALIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:AUT','is_in:country_codeA','austria_as_of_2013-06-30'], // AUSTRIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:AX1','is_in:country_codeA','unknown_as_of_2013-06-30'], // UNKNOWN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:AX2','is_in:country_codeA','guantanamo_bay_naval_base_as_of_2013-06-30'], // GUANTANAMO BAY NAVAL BASE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:AZE','is_in:country_codeA','azerbaijan_as_of_2013-06-30'], // AZERBAIJAN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BDI','is_in:country_codeA','burundi_as_of_2013-06-30'], // BURUNDI AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BEL','is_in:country_codeA','belgium_as_of_2013-06-30'], // BELGIUM AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BEN','is_in:country_codeA','benin_as_of_2013-06-30'], // BENIN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BES','is_in:country_codeA','bonaire,_sint_eustatius,_and_saba_as_of_2013-06-30'], // BONAIRE, SINT EUSTATIUS, AND SABA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BFA','is_in:country_codeA','burkina_faso_as_of_2013-06-30'], // BURKINA FASO AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BGD','is_in:country_codeA','bangladesh_as_of_2013-06-30'], // BANGLADESH AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BGR','is_in:country_codeA','bulgaria_as_of_2013-06-30'], // BULGARIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BHR','is_in:country_codeA','bahrain_as_of_2013-06-30'], // BAHRAIN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BHS','is_in:country_codeA','bahamas,_the_as_of_2013-06-30'], // BAHAMAS, THE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BLM','is_in:country_codeA','saint_barthelemy_as_of_2013-06-30'], // SAINT BARTHELEMY AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BLR','is_in:country_codeA','belarus_as_of_2013-06-30'], // BELARUS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BOL','is_in:country_codeA','bolivia_as_of_2013-06-30'], // BOLIVIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BRA','is_in:country_codeA','brazil_as_of_2013-06-30'], // BRAZIL AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BRN','is_in:country_codeA','brunei_as_of_2013-06-30'], // BRUNEI AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BTN','is_in:country_codeA','bhutan_as_of_2013-06-30'], // BHUTAN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:BWA','is_in:country_codeA','botswana_as_of_2013-06-30'], // BOTSWANA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CAF','is_in:country_codeA','central_african_republic_as_of_2013-06-30'], // CENTRAL AFRICAN REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CAN','is_in:country_codeA','canada_as_of_2013-06-30'], // CANADA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CCK','is_in:country_codeA','cocos_(keeling)_islands_as_of_2013-06-30'], // COCOS (KEELING) ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CHE','is_in:country_codeA','switzerland_as_of_2013-06-30'], // SWITZERLAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CHL','is_in:country_codeA','chile_as_of_2013-06-30'], // CHILE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CHN','is_in:country_codeA','china_as_of_2013-06-30'], // CHINA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CIV','is_in:country_codeA','cote_d"ivoire_as_of_2013-06-30'], // COTE D"IVOIRE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CMR','is_in:country_codeA','cameroon_as_of_2013-06-30'], // CAMEROON AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:COD','is_in:country_codeA','congo_(kinshasa)_as_of_2013-06-30'], // CONGO (KINSHASA) AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:COG','is_in:country_codeA','congo_(brazzaville)_as_of_2013-06-30'], // CONGO (BRAZZAVILLE) AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:COK','is_in:country_codeA','cook_islands_as_of_2013-06-30'], // COOK ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:COL','is_in:country_codeA','colombia_as_of_2013-06-30'], // COLOMBIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:COM','is_in:country_codeA','comoros_as_of_2013-06-30'], // COMOROS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CPT','is_in:country_codeA','clipperton_island_as_of_2013-06-30'], // CLIPPERTON ISLAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CPV','is_in:country_codeA','cape_verde_as_of_2013-06-30'], // CAPE VERDE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CRI','is_in:country_codeA','costa_rica_as_of_2013-06-30'], // COSTA RICA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CUB','is_in:country_codeA','cuba_as_of_2013-06-30'], // CUBA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CUW','is_in:country_codeA','curacao_as_of_2013-06-30'], // CURACAO AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CXR','is_in:country_codeA','christmas_island_as_of_2013-06-30'], // CHRISTMAS ISLAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CYM','is_in:country_codeA','cayman_islands_as_of_2013-06-30'], // CAYMAN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CYP','is_in:country_codeA','cyprus_as_of_2013-06-30'], // CYPRUS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:CZE','is_in:country_codeA','czech_republic_as_of_2013-06-30'], // CZECH REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:DEU','is_in:country_codeA','germany_as_of_2013-06-30'], // GERMANY AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:DGA','is_in:country_codeA','diego_garcia_as_of_2013-06-30'], // DIEGO GARCIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:DJI','is_in:country_codeA','djibouti_as_of_2013-06-30'], // DJIBOUTI AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:DMA','is_in:country_codeA','dominica_as_of_2013-06-30'], // DOMINICA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:DNK','is_in:country_codeA','denmark_as_of_2013-06-30'], // DENMARK AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:DOM','is_in:country_codeA','dominican_republic_as_of_2013-06-30'], // DOMINICAN REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:DZA','is_in:country_codeA','algeria_as_of_2013-06-30'], // ALGERIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ECU','is_in:country_codeA','ecuador_as_of_2013-06-30'], // ECUADOR AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:EGY','is_in:country_codeA','egypt_as_of_2013-06-30'], // EGYPT AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ERI','is_in:country_codeA','eritrea_as_of_2013-06-30'], // ERITREA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ESH','is_in:country_codeA','western_sahara_as_of_2013-06-30'], // WESTERN SAHARA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ESP','is_in:country_codeA','spain_as_of_2013-06-30'], // SPAIN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:EST','is_in:country_codeA','estonia_as_of_2013-06-30'], // ESTONIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ETH','is_in:country_codeA','ethiopia_as_of_2013-06-30'], // ETHIOPIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:FIN','is_in:country_codeA','finland_as_of_2013-06-30'], // FINLAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:FJI','is_in:country_codeA','fiji_as_of_2013-06-30'], // FIJI AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:FLK','is_in:country_codeA','falkland_islands_(islas_malvinas)_as_of_2013-06-30'], // FALKLAND ISLANDS (ISLAS MALVINAS) AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:FRA','is_in:country_codeA','france_as_of_2013-06-30'], // FRANCE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:FRO','is_in:country_codeA','faroe_islands_as_of_2013-06-30'], // FAROE ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:FSM','is_in:country_codeA','micronesia,_federated_states_of_as_of_2013-06-30'], // MICRONESIA, FEDERATED STATES OF AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:GAB','is_in:country_codeA','gabon_as_of_2013-06-30'], // GABON AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:GBR','is_in:country_codeA','united_kingdom_as_of_2013-06-30'], // UNITED KINGDOM AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:GEO','is_in:country_codeA','georgia_as_of_2013-06-30'], // GEORGIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:GGY','is_in:country_codeA','guernsey_as_of_2013-06-30'], // GUERNSEY AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:GHA','is_in:country_codeA','ghana_as_of_2013-06-30'], // GHANA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:GIN','is_in:country_codeA','guinea_as_of_2013-06-30'], // GUINEA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:GLP','is_in:country_codeA','guadeloupe_as_of_2013-06-30'], // GUADELOUPE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:GMB','is_in:country_codeA','gambia,_the_as_of_2013-06-30'], // GAMBIA, THE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:GNB','is_in:country_codeA','guinea-bissau_as_of_2013-06-30'], // GUINEA-BISSAU AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:GNQ','is_in:country_codeA','equatorial_guinea_as_of_2013-06-30'], // EQUATORIAL GUINEA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:GRC','is_in:country_codeA','greece_as_of_2013-06-30'], // GREECE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:GTM','is_in:country_codeA','guatemala_as_of_2013-06-30'], // GUATEMALA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:GUF','is_in:country_codeA','french_guiana_as_of_2013-06-30'], // FRENCH GUIANA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:GUM','is_in:country_codeA','guam_as_of_2013-06-30'], // GUAM AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:GUY','is_in:country_codeA','guyana_as_of_2013-06-30'], // GUYANA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:HKG','is_in:country_codeA','hong_kong_as_of_2013-06-30'], // HONG KONG AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:HMD','is_in:country_codeA','heard_island_and_mcdonald_islands_as_of_2013-06-30'], // HEARD ISLAND AND MCDONALD ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:HND','is_in:country_codeA','honduras_as_of_2013-06-30'], // HONDURAS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:HRV','is_in:country_codeA','croatia_as_of_2013-06-30'], // CROATIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:HTI','is_in:country_codeA','haiti_as_of_2013-06-30'], // HAITI AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:IDN','is_in:country_codeA','indonesia_as_of_2013-06-30'], // INDONESIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:IND','is_in:country_codeA','india_as_of_2013-06-30'], // INDIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:IOT','is_in:country_codeA','british_indian_ocean_territory_as_of_2013-06-30'], // BRITISH INDIAN OCEAN TERRITORY AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:IRN','is_in:country_codeA','iran_as_of_2013-06-30'], // IRAN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:IRQ','is_in:country_codeA','iraq_as_of_2013-06-30'], // IRAQ AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ISL','is_in:country_codeA','iceland_as_of_2013-06-30'], // ICELAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ISR','is_in:country_codeA','israel_as_of_2013-06-30'], // ISRAEL AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ITA','is_in:country_codeA','italy_as_of_2013-06-30'], // ITALY AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:JEY','is_in:country_codeA','jersey_as_of_2013-06-30'], // JERSEY AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:JOR','is_in:country_codeA','jordan_as_of_2013-06-30'], // JORDAN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:KAZ','is_in:country_codeA','kazakhstan_as_of_2013-06-30'], // KAZAKHSTAN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:KEN','is_in:country_codeA','kenya_as_of_2013-06-30'], // KENYA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:KGZ','is_in:country_codeA','kyrgyzstan_as_of_2013-06-30'], // KYRGYZSTAN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:KHM','is_in:country_codeA','cambodia_as_of_2013-06-30'], // CAMBODIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:KIR','is_in:country_codeA','kiribati_as_of_2013-06-30'], // KIRIBATI AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:KNA','is_in:country_codeA','saint_kitts_and_nevis_as_of_2013-06-30'], // SAINT KITTS AND NEVIS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:KOR','is_in:country_codeA','korea,_south_as_of_2013-06-30'], // KOREA, SOUTH AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:KWT','is_in:country_codeA','kuwait_as_of_2013-06-30'], // KUWAIT AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:LAO','is_in:country_codeA','laos_as_of_2013-06-30'], // LAOS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:LBN','is_in:country_codeA','lebanon_as_of_2013-06-30'], // LEBANON AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:LBR','is_in:country_codeA','liberia_as_of_2013-06-30'], // LIBERIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:LIE','is_in:country_codeA','liechtenstein_as_of_2013-06-30'], // LIECHTENSTEIN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:LKA','is_in:country_codeA','sri_lanka_as_of_2013-06-30'], // SRI LANKA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:LSO','is_in:country_codeA','lesotho_as_of_2013-06-30'], // LESOTHO AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:LTU','is_in:country_codeA','lithuania_as_of_2013-06-30'], // LITHUANIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:LUX','is_in:country_codeA','luxembourg_as_of_2013-06-30'], // LUXEMBOURG AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:LVA','is_in:country_codeA','latvia_as_of_2013-06-30'], // LATVIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MAC','is_in:country_codeA','macau_as_of_2013-06-30'], // MACAU AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MAF','is_in:country_codeA','saint_martin_as_of_2013-06-30'], // SAINT MARTIN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MAR','is_in:country_codeA','morocco_as_of_2013-06-30'], // MOROCCO AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MCO','is_in:country_codeA','monaco_as_of_2013-06-30'], // MONACO AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MDA','is_in:country_codeA','moldova_as_of_2013-06-30'], // MOLDOVA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MDG','is_in:country_codeA','madagascar_as_of_2013-06-30'], // MADAGASCAR AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MDV','is_in:country_codeA','maldives_as_of_2013-06-30'], // MALDIVES AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MEX','is_in:country_codeA','mexico_as_of_2013-06-30'], // MEXICO AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MHL','is_in:country_codeA','marshall_islands_as_of_2013-06-30'], // MARSHALL ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MKD','is_in:country_codeA','macedonia_as_of_2013-06-30'], // MACEDONIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MLI','is_in:country_codeA','mali_as_of_2013-06-30'], // MALI AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MLT','is_in:country_codeA','malta_as_of_2013-06-30'], // MALTA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MMR','is_in:country_codeA','burma_as_of_2013-06-30'], // BURMA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MNG','is_in:country_codeA','mongolia_as_of_2013-06-30'], // MONGOLIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MNP','is_in:country_codeA','northern_mariana_islands_as_of_2013-06-30'], // NORTHERN MARIANA ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MOZ','is_in:country_codeA','mozambique_as_of_2013-06-30'], // MOZAMBIQUE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MRT','is_in:country_codeA','mauritania_as_of_2013-06-30'], // MAURITANIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MTQ','is_in:country_codeA','martinique_as_of_2013-06-30'], // MARTINIQUE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MUS','is_in:country_codeA','mauritius_as_of_2013-06-30'], // MAURITIUS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MWI','is_in:country_codeA','malawi_as_of_2013-06-30'], // MALAWI AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MYS','is_in:country_codeA','malaysia_as_of_2013-06-30'], // MALAYSIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:MYT','is_in:country_codeA','mayotte_as_of_2013-06-30'], // MAYOTTE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:NAM','is_in:country_codeA','namibia_as_of_2013-06-30'], // NAMIBIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:NCL','is_in:country_codeA','new_caledonia_as_of_2013-06-30'], // NEW CALEDONIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:NER','is_in:country_codeA','niger_as_of_2013-06-30'], // NIGER AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:NFK','is_in:country_codeA','norfolk_island_as_of_2013-06-30'], // NORFOLK ISLAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:NGA','is_in:country_codeA','nigeria_as_of_2013-06-30'], // NIGERIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:NIC','is_in:country_codeA','nicaragua_as_of_2013-06-30'], // NICARAGUA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:NLD','is_in:country_codeA','netherlands_as_of_2013-06-30'], // NETHERLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:NOR','is_in:country_codeA','norway_as_of_2013-06-30'], // NORWAY AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:NPL','is_in:country_codeA','nepal_as_of_2013-06-30'], // NEPAL AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:NRU','is_in:country_codeA','nauru_as_of_2013-06-30'], // NAURU AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:NZL','is_in:country_codeA','new_zealand_as_of_2013-06-30'], // NEW ZEALAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:OMN','is_in:country_codeA','oman_as_of_2013-06-30'], // OMAN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:PAK','is_in:country_codeA','pakistan_as_of_2013-06-30'], // PAKISTAN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:PAN','is_in:country_codeA','panama_as_of_2013-06-30'], // PANAMA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:PCN','is_in:country_codeA','pitcairn_islands_as_of_2013-06-30'], // PITCAIRN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:PER','is_in:country_codeA','peru_as_of_2013-06-30'], // PERU AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:PHL','is_in:country_codeA','philippines_as_of_2013-06-30'], // PHILIPPINES AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:PLW','is_in:country_codeA','palau_as_of_2013-06-30'], // PALAU AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:POL','is_in:country_codeA','poland_as_of_2013-06-30'], // POLAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:PRI','is_in:country_codeA','puerto_rico_as_of_2013-06-30'], // PUERTO RICO AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:PRK','is_in:country_codeA','korea,_north_as_of_2013-06-30'], // KOREA, NORTH AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:PRT','is_in:country_codeA','portugal_as_of_2013-06-30'], // PORTUGAL AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:PRY','is_in:country_codeA','paraguay_as_of_2013-06-30'], // PARAGUAY AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:PSE','is_in:country_codeA','palestinian_territory_as_of_2013-06-30'], // PALESTINIAN TERRITORY AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:PYF','is_in:country_codeA','french_polynesia_as_of_2013-06-30'], // FRENCH POLYNESIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:QAT','is_in:country_codeA','qatar_as_of_2013-06-30'], // QATAR AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:REU','is_in:country_codeA','reunion_as_of_2013-06-30'], // REUNION AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:RUS','is_in:country_codeA','russia_as_of_2013-06-30'], // RUSSIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:RWA','is_in:country_codeA','rwanda_as_of_2013-06-30'], // RWANDA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SAU','is_in:country_codeA','saudi_arabia_as_of_2013-06-30'], // SAUDI ARABIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SDN','is_in:country_codeA','sudan_as_of_2013-06-30'], // SUDAN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SEN','is_in:country_codeA','senegal_as_of_2013-06-30'], // SENEGAL AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SGP','is_in:country_codeA','singapore_as_of_2013-06-30'], // SINGAPORE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SGS','is_in:country_codeA','south_georgia_and_south_sandwich_islands_as_of_2013-06-30'], // SOUTH GEORGIA AND SOUTH SANDWICH ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SHN','is_in:country_codeA','saint_helena,_ascension,_and_tristan_da_cunha_as_of_2013-06-30'], // SAINT HELENA, ASCENSION, AND TRISTAN DA CUNHA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SLB','is_in:country_codeA','solomon_islands_as_of_2013-06-30'], // SOLOMON ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SLE','is_in:country_codeA','sierra_leone_as_of_2013-06-30'], // SIERRA LEONE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SLV','is_in:country_codeA','el_salvador_as_of_2013-06-30'], // EL SALVADOR AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SMR','is_in:country_codeA','san_marino_as_of_2013-06-30'], // SAN MARINO AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SOM','is_in:country_codeA','somalia_as_of_2013-06-30'], // SOMALIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SPM','is_in:country_codeA','saint_pierre_and_miquelon_as_of_2013-06-30'], // SAINT PIERRE AND MIQUELON AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SRB','is_in:country_codeA','serbia_as_of_2013-06-30'], // SERBIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SSD','is_in:country_codeA','south_sudan_as_of_2013-06-30'], // SOUTH SUDAN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:STP','is_in:country_codeA','sao_tome_and_principe_as_of_2013-06-30'], // SAO TOME AND PRINCIPE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SUR','is_in:country_codeA','suriname_as_of_2013-06-30'], // SURINAME AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SVK','is_in:country_codeA','slovakia_as_of_2013-06-30'], // SLOVAKIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SVN','is_in:country_codeA','slovenia_as_of_2013-06-30'], // SLOVENIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SWE','is_in:country_codeA','sweden_as_of_2013-06-30'], // SWEDEN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SWZ','is_in:country_codeA','swaziland_as_of_2013-06-30'], // SWAZILAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SXM','is_in:country_codeA','sint_maarten_as_of_2013-06-30'], // SINT MAARTEN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SYC','is_in:country_codeA','seychelles_as_of_2013-06-30'], // SEYCHELLES AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:SYR','is_in:country_codeA','syria_as_of_2013-06-30'], // SYRIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:TCA','is_in:country_codeA','turks_and_caicos_islands_as_of_2013-06-30'], // TURKS AND CAICOS ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:TCD','is_in:country_codeA','chad_as_of_2013-06-30'], // CHAD AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:TGO','is_in:country_codeA','togo_as_of_2013-06-30'], // TOGO AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:THA','is_in:country_codeA','thailand_as_of_2013-06-30'], // THAILAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:TJK','is_in:country_codeA','tajikistan_as_of_2013-06-30'], // TAJIKISTAN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:TLS','is_in:country_codeA','timor-leste_as_of_2013-06-30'], // TIMOR-LESTE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:TON','is_in:country_codeA','tonga_as_of_2013-06-30'], // TONGA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:TTO','is_in:country_codeA','trinidad_and_tobago_as_of_2013-06-30'], // TRINIDAD AND TOBAGO AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:TUN','is_in:country_codeA','tunisia_as_of_2013-06-30'], // TUNISIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:TUR','is_in:country_codeA','turkey_as_of_2013-06-30'], // TURKEY AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:TWN','is_in:country_codeA','taiwan_as_of_2013-06-30'], // TAIWAN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:TZA','is_in:country_codeA','tanzania_as_of_2013-06-30'], // TANZANIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:UGA','is_in:country_codeA','uganda_as_of_2013-06-30'], // UGANDA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:UKR','is_in:country_codeA','ukraine_as_of_2013-06-30'], // UKRAINE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:URY','is_in:country_codeA','uruguay_as_of_2013-06-30'], // URUGUAY AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:USA','is_in:country_codeA','united_states_as_of_2013-06-30'], // UNITED STATES AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:UZB','is_in:country_codeA','uzbekistan_as_of_2013-06-30'], // UZBEKISTAN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:VAT','is_in:country_codeA','vatican_city_as_of_2013-06-30'], // VATICAN CITY AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:VCT','is_in:country_codeA','saint_vincent_and_the_grenadines_as_of_2013-06-30'], // SAINT VINCENT AND THE GRENADINES AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:VEN','is_in:country_codeA','venezuela_as_of_2013-06-30'], // VENEZUELA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:VGB','is_in:country_codeA','virgin_islands,_british_as_of_2013-06-30'], // VIRGIN ISLANDS, BRITISH AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:VIR','is_in:country_codeA','virgin_islands,_u.s._as_of_2013-06-30'], // VIRGIN ISLANDS, U.S. AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:VNM','is_in:country_codeA','vietnam_as_of_2013-06-30'], // VIETNAM AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:VUT','is_in:country_codeA','vanuatu_as_of_2013-06-30'], // VANUATU AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:WLF','is_in:country_codeA','wallis_and_futuna_as_of_2013-06-30'], // WALLIS AND FUTUNA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:WSM','is_in:country_codeA','samoa_as_of_2013-06-30'], // SAMOA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XAC','is_in:country_codeA','ashmore_and_cartier_islands_as_of_2013-06-30'], // ASHMORE AND CARTIER ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XAZ','is_in:country_codeA','entity_1_as_of_2013-06-30'], // ENTITY 1 AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XBI','is_in:country_codeA','bassas_da_india_as_of_2013-06-30'], // BASSAS DA INDIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XBK','is_in:country_codeA','baker_island_as_of_2013-06-30'], // BAKER ISLAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XCR','is_in:country_codeA','entity_2_as_of_2013-06-30'], // ENTITY 2 AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XCS','is_in:country_codeA','coral_sea_islands_as_of_2013-06-30'], // CORAL SEA ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XCY','is_in:country_codeA','entity_3_as_of_2013-06-30'], // ENTITY 3 AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XEU','is_in:country_codeA','europa_island_as_of_2013-06-30'], // EUROPA ISLAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XGL','is_in:country_codeA','glorioso_islands_as_of_2013-06-30'], // GLORIOSO ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XGZ','is_in:country_codeA','gaza_strip_as_of_2013-06-30'], // GAZA STRIP AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XHO','is_in:country_codeA','howland_island_as_of_2013-06-30'], // HOWLAND ISLAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XJA','is_in:country_codeA','johnston_atoll_as_of_2013-06-30'], // JOHNSTON ATOLL AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XJM','is_in:country_codeA','jan_mayen_as_of_2013-06-30'], // JAN MAYEN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XJN','is_in:country_codeA','juan_de_nova_island_as_of_2013-06-30'], // JUAN DE NOVA ISLAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XJV','is_in:country_codeA','jarvis_island_as_of_2013-06-30'], // JARVIS ISLAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XKM','is_in:country_codeA','entity_4_as_of_2013-06-30'], // ENTITY 4 AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XKN','is_in:country_codeA','entity_5_as_of_2013-06-30'], // ENTITY 5 AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XKR','is_in:country_codeA','kingman_reef_as_of_2013-06-30'], // KINGMAN REEF AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XKS','is_in:country_codeA','kosovo_as_of_2013-06-30'], // KOSOVO AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XMW','is_in:country_codeA','midway_islands_as_of_2013-06-30'], // MIDWAY ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XNV','is_in:country_codeA','navassa_island_as_of_2013-06-30'], // NAVASSA ISLAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XPL','is_in:country_codeA','palmyra_atoll_as_of_2013-06-30'], // PALMYRA ATOLL AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XPR','is_in:country_codeA','paracel_islands_as_of_2013-06-30'], // PARACEL ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XQP','is_in:country_codeA','etorofu,_habomai,_kunashiri,_and_shikotan_islands_as_of_2013-06-30'], // ETOROFU, HABOMAI, KUNASHIRI, AND SHIKOTAN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XQZ','is_in:country_codeA','akrotiri_as_of_2013-06-30'], // AKROTIRI AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XSP','is_in:country_codeA','spratly_islands_as_of_2013-06-30'], // SPRATLY ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XSV','is_in:country_codeA','svalbard_as_of_2013-06-30'], // SVALBARD AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XTR','is_in:country_codeA','tromelin_island_as_of_2013-06-30'], // TROMELIN ISLAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XWB','is_in:country_codeA','west_bank_as_of_2013-06-30'], // WEST BANK AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XWK','is_in:country_codeA','wake_island_as_of_2013-06-30'], // WAKE ISLAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XXD','is_in:country_codeA','dhekelia_as_of_2013-06-30'], // DHEKELIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:XXX','is_in:country_codeA','no_man"s_land_as_of_2013-06-30'], // NO MAN"S LAND AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:YEM','is_in:country_codeA','yemen_as_of_2013-06-30'], // YEMEN AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ZAF','is_in:country_codeA','south_africa_as_of_2013-06-30'], // SOUTH AFRICA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ZMB','is_in:country_codeA','zambia_as_of_2013-06-30'], // ZAMBIA AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:1-2:ZWE','is_in:country_codeA','zimbabwe_as_of_2013-06-30'], // ZIMBABWE AS OF 2013-06-30
+     ['ZI020_GE4A','ge:GENC:3:ed3:AX3','is_in:country_codeA','entity_6_as_of_2015-06-30'], // ENTITY 6 AS OF 2015-06-30
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:AIA','is_in:country_codeA','anguilla_as_of_2013-05-10'], // ANGUILLA AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:ATA','is_in:country_codeA','antarctica_as_of_2013-05-10'], // ANTARCTICA AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:BIH','is_in:country_codeA','bosnia_and_herzegovina_as_of_2013-05-10'], // BOSNIA AND HERZEGOVINA AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:BLZ','is_in:country_codeA','belize_as_of_2013-05-10'], // BELIZE AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:BMU','is_in:country_codeA','bermuda_as_of_2013-05-10'], // BERMUDA AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:BRB','is_in:country_codeA','barbados_as_of_2013-05-10'], // BARBADOS AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:BVT','is_in:country_codeA','bouvet_island_as_of_2013-05-10'], // BOUVET ISLAND AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:GIB','is_in:country_codeA','gibraltar_as_of_2013-05-10'], // GIBRALTAR AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:GRD','is_in:country_codeA','grenada_as_of_2013-05-10'], // GRENADA AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:GRL','is_in:country_codeA','greenland_as_of_2013-05-10'], // GREENLAND AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:HUN','is_in:country_codeA','hungary_as_of_2013-05-10'], // HUNGARY AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:IMN','is_in:country_codeA','isle_of_man_as_of_2013-05-10'], // ISLE OF MAN AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:IRL','is_in:country_codeA','ireland_as_of_2013-05-10'], // IRELAND AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:JAM','is_in:country_codeA','jamaica_as_of_2013-05-10'], // JAMAICA AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:JPN','is_in:country_codeA','japan_as_of_2013-05-10'], // JAPAN AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:LBY','is_in:country_codeA','libya_as_of_2013-05-10'], // LIBYA AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:LCA','is_in:country_codeA','saint_lucia_as_of_2013-05-10'], // SAINT LUCIA AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:MNE','is_in:country_codeA','montenegro_as_of_2013-05-10'], // MONTENEGRO AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:MSR','is_in:country_codeA','montserrat_as_of_2013-05-10'], // MONTSERRAT AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:NIU','is_in:country_codeA','niue_as_of_2013-05-10'], // NIUE AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:PNG','is_in:country_codeA','papua_new_guinea_as_of_2013-05-10'], // PAPUA NEW GUINEA AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:ROU','is_in:country_codeA','romania_as_of_2013-05-10'], // ROMANIA AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:TKL','is_in:country_codeA','tokelau_as_of_2013-05-10'], // TOKELAU AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:TKM','is_in:country_codeA','turkmenistan_as_of_2013-05-10'], // TURKMENISTAN AS OF 2013-05-10
+     ['ZI020_GE4A','ge:ISO1:3:VI-15:TUV','is_in:country_codeA','tuvalu_as_of_2013-05-10'], // TUVALU AS OF 2013-05-10
+     ['ZI020_GE4A','noInformation','is_in:country_codeA','no_information'], // No Information
+     ['ZI020_GE4A','other','is_in:country_codeA','other'], // Other
+
+     // ZI020_GE4B - Designation : GENC Short URN-based Identifier
+     ['ZI020_GE4B','ge:GENC:3:1-2:ABW','is_in:country_codeB','aruba_as_of_2013-06-30'], // ARUBA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:AFG','is_in:country_codeB','afghanistan_as_of_2013-06-30'], // AFGHANISTAN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:AGO','is_in:country_codeB','angola_as_of_2013-06-30'], // ANGOLA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ALB','is_in:country_codeB','albania_as_of_2013-06-30'], // ALBANIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:AND','is_in:country_codeB','andorra_as_of_2013-06-30'], // ANDORRA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ARE','is_in:country_codeB','united_arab_emirates_as_of_2013-06-30'], // UNITED ARAB EMIRATES AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ARG','is_in:country_codeB','argentina_as_of_2013-06-30'], // ARGENTINA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ARM','is_in:country_codeB','armenia_as_of_2013-06-30'], // ARMENIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ASM','is_in:country_codeB','american_samoa_as_of_2013-06-30'], // AMERICAN SAMOA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ATF','is_in:country_codeB','french_southern_and_antarctic_lands_as_of_2013-06-30'], // FRENCH SOUTHERN AND ANTARCTIC LANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ATG','is_in:country_codeB','antigua_and_barbuda_as_of_2013-06-30'], // ANTIGUA AND BARBUDA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:AUS','is_in:country_codeB','australia_as_of_2013-06-30'], // AUSTRALIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:AUT','is_in:country_codeB','austria_as_of_2013-06-30'], // AUSTRIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:AX1','is_in:country_codeB','unknown_as_of_2013-06-30'], // UNKNOWN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:AX2','is_in:country_codeB','guantanamo_bay_naval_base_as_of_2013-06-30'], // GUANTANAMO BAY NAVAL BASE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:AZE','is_in:country_codeB','azerbaijan_as_of_2013-06-30'], // AZERBAIJAN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BDI','is_in:country_codeB','burundi_as_of_2013-06-30'], // BURUNDI AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BEL','is_in:country_codeB','belgium_as_of_2013-06-30'], // BELGIUM AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BEN','is_in:country_codeB','benin_as_of_2013-06-30'], // BENIN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BES','is_in:country_codeB','bonaire,_sint_eustatius,_and_saba_as_of_2013-06-30'], // BONAIRE, SINT EUSTATIUS, AND SABA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BFA','is_in:country_codeB','burkina_faso_as_of_2013-06-30'], // BURKINA FASO AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BGD','is_in:country_codeB','bangladesh_as_of_2013-06-30'], // BANGLADESH AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BGR','is_in:country_codeB','bulgaria_as_of_2013-06-30'], // BULGARIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BHR','is_in:country_codeB','bahrain_as_of_2013-06-30'], // BAHRAIN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BHS','is_in:country_codeB','bahamas,_the_as_of_2013-06-30'], // BAHAMAS, THE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BLM','is_in:country_codeB','saint_barthelemy_as_of_2013-06-30'], // SAINT BARTHELEMY AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BLR','is_in:country_codeB','belarus_as_of_2013-06-30'], // BELARUS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BOL','is_in:country_codeB','bolivia_as_of_2013-06-30'], // BOLIVIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BRA','is_in:country_codeB','brazil_as_of_2013-06-30'], // BRAZIL AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BRN','is_in:country_codeB','brunei_as_of_2013-06-30'], // BRUNEI AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BTN','is_in:country_codeB','bhutan_as_of_2013-06-30'], // BHUTAN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:BWA','is_in:country_codeB','botswana_as_of_2013-06-30'], // BOTSWANA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CAF','is_in:country_codeB','central_african_republic_as_of_2013-06-30'], // CENTRAL AFRICAN REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CAN','is_in:country_codeB','canada_as_of_2013-06-30'], // CANADA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CCK','is_in:country_codeB','cocos_(keeling)_islands_as_of_2013-06-30'], // COCOS (KEELING) ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CHE','is_in:country_codeB','switzerland_as_of_2013-06-30'], // SWITZERLAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CHL','is_in:country_codeB','chile_as_of_2013-06-30'], // CHILE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CHN','is_in:country_codeB','china_as_of_2013-06-30'], // CHINA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CIV','is_in:country_codeB','cote_d"ivoire_as_of_2013-06-30'], // COTE D"IVOIRE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CMR','is_in:country_codeB','cameroon_as_of_2013-06-30'], // CAMEROON AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:COD','is_in:country_codeB','congo_(kinshasa)_as_of_2013-06-30'], // CONGO (KINSHASA) AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:COG','is_in:country_codeB','congo_(brazzaville)_as_of_2013-06-30'], // CONGO (BRAZZAVILLE) AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:COK','is_in:country_codeB','cook_islands_as_of_2013-06-30'], // COOK ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:COL','is_in:country_codeB','colombia_as_of_2013-06-30'], // COLOMBIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:COM','is_in:country_codeB','comoros_as_of_2013-06-30'], // COMOROS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CPT','is_in:country_codeB','clipperton_island_as_of_2013-06-30'], // CLIPPERTON ISLAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CPV','is_in:country_codeB','cape_verde_as_of_2013-06-30'], // CAPE VERDE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CRI','is_in:country_codeB','costa_rica_as_of_2013-06-30'], // COSTA RICA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CUB','is_in:country_codeB','cuba_as_of_2013-06-30'], // CUBA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CUW','is_in:country_codeB','curacao_as_of_2013-06-30'], // CURACAO AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CXR','is_in:country_codeB','christmas_island_as_of_2013-06-30'], // CHRISTMAS ISLAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CYM','is_in:country_codeB','cayman_islands_as_of_2013-06-30'], // CAYMAN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CYP','is_in:country_codeB','cyprus_as_of_2013-06-30'], // CYPRUS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:CZE','is_in:country_codeB','czech_republic_as_of_2013-06-30'], // CZECH REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:DEU','is_in:country_codeB','germany_as_of_2013-06-30'], // GERMANY AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:DGA','is_in:country_codeB','diego_garcia_as_of_2013-06-30'], // DIEGO GARCIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:DJI','is_in:country_codeB','djibouti_as_of_2013-06-30'], // DJIBOUTI AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:DMA','is_in:country_codeB','dominica_as_of_2013-06-30'], // DOMINICA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:DNK','is_in:country_codeB','denmark_as_of_2013-06-30'], // DENMARK AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:DOM','is_in:country_codeB','dominican_republic_as_of_2013-06-30'], // DOMINICAN REPUBLIC AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:DZA','is_in:country_codeB','algeria_as_of_2013-06-30'], // ALGERIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ECU','is_in:country_codeB','ecuador_as_of_2013-06-30'], // ECUADOR AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:EGY','is_in:country_codeB','egypt_as_of_2013-06-30'], // EGYPT AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ERI','is_in:country_codeB','eritrea_as_of_2013-06-30'], // ERITREA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ESH','is_in:country_codeB','western_sahara_as_of_2013-06-30'], // WESTERN SAHARA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ESP','is_in:country_codeB','spain_as_of_2013-06-30'], // SPAIN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:EST','is_in:country_codeB','estonia_as_of_2013-06-30'], // ESTONIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ETH','is_in:country_codeB','ethiopia_as_of_2013-06-30'], // ETHIOPIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:FIN','is_in:country_codeB','finland_as_of_2013-06-30'], // FINLAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:FJI','is_in:country_codeB','fiji_as_of_2013-06-30'], // FIJI AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:FLK','is_in:country_codeB','falkland_islands_(islas_malvinas)_as_of_2013-06-30'], // FALKLAND ISLANDS (ISLAS MALVINAS) AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:FRA','is_in:country_codeB','france_as_of_2013-06-30'], // FRANCE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:FRO','is_in:country_codeB','faroe_islands_as_of_2013-06-30'], // FAROE ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:FSM','is_in:country_codeB','micronesia,_federated_states_of_as_of_2013-06-30'], // MICRONESIA, FEDERATED STATES OF AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:GAB','is_in:country_codeB','gabon_as_of_2013-06-30'], // GABON AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:GBR','is_in:country_codeB','united_kingdom_as_of_2013-06-30'], // UNITED KINGDOM AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:GEO','is_in:country_codeB','georgia_as_of_2013-06-30'], // GEORGIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:GGY','is_in:country_codeB','guernsey_as_of_2013-06-30'], // GUERNSEY AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:GHA','is_in:country_codeB','ghana_as_of_2013-06-30'], // GHANA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:GIN','is_in:country_codeB','guinea_as_of_2013-06-30'], // GUINEA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:GLP','is_in:country_codeB','guadeloupe_as_of_2013-06-30'], // GUADELOUPE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:GMB','is_in:country_codeB','gambia,_the_as_of_2013-06-30'], // GAMBIA, THE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:GNB','is_in:country_codeB','guinea-bissau_as_of_2013-06-30'], // GUINEA-BISSAU AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:GNQ','is_in:country_codeB','equatorial_guinea_as_of_2013-06-30'], // EQUATORIAL GUINEA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:GRC','is_in:country_codeB','greece_as_of_2013-06-30'], // GREECE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:GTM','is_in:country_codeB','guatemala_as_of_2013-06-30'], // GUATEMALA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:GUF','is_in:country_codeB','french_guiana_as_of_2013-06-30'], // FRENCH GUIANA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:GUM','is_in:country_codeB','guam_as_of_2013-06-30'], // GUAM AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:GUY','is_in:country_codeB','guyana_as_of_2013-06-30'], // GUYANA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:HKG','is_in:country_codeB','hong_kong_as_of_2013-06-30'], // HONG KONG AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:HMD','is_in:country_codeB','heard_island_and_mcdonald_islands_as_of_2013-06-30'], // HEARD ISLAND AND MCDONALD ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:HND','is_in:country_codeB','honduras_as_of_2013-06-30'], // HONDURAS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:HRV','is_in:country_codeB','croatia_as_of_2013-06-30'], // CROATIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:HTI','is_in:country_codeB','haiti_as_of_2013-06-30'], // HAITI AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:IDN','is_in:country_codeB','indonesia_as_of_2013-06-30'], // INDONESIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:IND','is_in:country_codeB','india_as_of_2013-06-30'], // INDIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:IOT','is_in:country_codeB','british_indian_ocean_territory_as_of_2013-06-30'], // BRITISH INDIAN OCEAN TERRITORY AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:IRN','is_in:country_codeB','iran_as_of_2013-06-30'], // IRAN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:IRQ','is_in:country_codeB','iraq_as_of_2013-06-30'], // IRAQ AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ISL','is_in:country_codeB','iceland_as_of_2013-06-30'], // ICELAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ISR','is_in:country_codeB','israel_as_of_2013-06-30'], // ISRAEL AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ITA','is_in:country_codeB','italy_as_of_2013-06-30'], // ITALY AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:JEY','is_in:country_codeB','jersey_as_of_2013-06-30'], // JERSEY AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:JOR','is_in:country_codeB','jordan_as_of_2013-06-30'], // JORDAN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:KAZ','is_in:country_codeB','kazakhstan_as_of_2013-06-30'], // KAZAKHSTAN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:KEN','is_in:country_codeB','kenya_as_of_2013-06-30'], // KENYA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:KGZ','is_in:country_codeB','kyrgyzstan_as_of_2013-06-30'], // KYRGYZSTAN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:KHM','is_in:country_codeB','cambodia_as_of_2013-06-30'], // CAMBODIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:KIR','is_in:country_codeB','kiribati_as_of_2013-06-30'], // KIRIBATI AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:KNA','is_in:country_codeB','saint_kitts_and_nevis_as_of_2013-06-30'], // SAINT KITTS AND NEVIS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:KOR','is_in:country_codeB','korea,_south_as_of_2013-06-30'], // KOREA, SOUTH AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:KWT','is_in:country_codeB','kuwait_as_of_2013-06-30'], // KUWAIT AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:LAO','is_in:country_codeB','laos_as_of_2013-06-30'], // LAOS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:LBN','is_in:country_codeB','lebanon_as_of_2013-06-30'], // LEBANON AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:LBR','is_in:country_codeB','liberia_as_of_2013-06-30'], // LIBERIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:LIE','is_in:country_codeB','liechtenstein_as_of_2013-06-30'], // LIECHTENSTEIN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:LKA','is_in:country_codeB','sri_lanka_as_of_2013-06-30'], // SRI LANKA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:LSO','is_in:country_codeB','lesotho_as_of_2013-06-30'], // LESOTHO AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:LTU','is_in:country_codeB','lithuania_as_of_2013-06-30'], // LITHUANIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:LUX','is_in:country_codeB','luxembourg_as_of_2013-06-30'], // LUXEMBOURG AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:LVA','is_in:country_codeB','latvia_as_of_2013-06-30'], // LATVIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MAC','is_in:country_codeB','macau_as_of_2013-06-30'], // MACAU AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MAF','is_in:country_codeB','saint_martin_as_of_2013-06-30'], // SAINT MARTIN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MAR','is_in:country_codeB','morocco_as_of_2013-06-30'], // MOROCCO AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MCO','is_in:country_codeB','monaco_as_of_2013-06-30'], // MONACO AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MDA','is_in:country_codeB','moldova_as_of_2013-06-30'], // MOLDOVA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MDG','is_in:country_codeB','madagascar_as_of_2013-06-30'], // MADAGASCAR AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MDV','is_in:country_codeB','maldives_as_of_2013-06-30'], // MALDIVES AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MEX','is_in:country_codeB','mexico_as_of_2013-06-30'], // MEXICO AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MHL','is_in:country_codeB','marshall_islands_as_of_2013-06-30'], // MARSHALL ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MKD','is_in:country_codeB','macedonia_as_of_2013-06-30'], // MACEDONIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MLI','is_in:country_codeB','mali_as_of_2013-06-30'], // MALI AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MLT','is_in:country_codeB','malta_as_of_2013-06-30'], // MALTA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MMR','is_in:country_codeB','burma_as_of_2013-06-30'], // BURMA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MNG','is_in:country_codeB','mongolia_as_of_2013-06-30'], // MONGOLIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MNP','is_in:country_codeB','northern_mariana_islands_as_of_2013-06-30'], // NORTHERN MARIANA ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MOZ','is_in:country_codeB','mozambique_as_of_2013-06-30'], // MOZAMBIQUE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MRT','is_in:country_codeB','mauritania_as_of_2013-06-30'], // MAURITANIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MTQ','is_in:country_codeB','martinique_as_of_2013-06-30'], // MARTINIQUE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MUS','is_in:country_codeB','mauritius_as_of_2013-06-30'], // MAURITIUS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MWI','is_in:country_codeB','malawi_as_of_2013-06-30'], // MALAWI AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MYS','is_in:country_codeB','malaysia_as_of_2013-06-30'], // MALAYSIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:MYT','is_in:country_codeB','mayotte_as_of_2013-06-30'], // MAYOTTE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:NAM','is_in:country_codeB','namibia_as_of_2013-06-30'], // NAMIBIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:NCL','is_in:country_codeB','new_caledonia_as_of_2013-06-30'], // NEW CALEDONIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:NER','is_in:country_codeB','niger_as_of_2013-06-30'], // NIGER AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:NFK','is_in:country_codeB','norfolk_island_as_of_2013-06-30'], // NORFOLK ISLAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:NGA','is_in:country_codeB','nigeria_as_of_2013-06-30'], // NIGERIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:NIC','is_in:country_codeB','nicaragua_as_of_2013-06-30'], // NICARAGUA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:NLD','is_in:country_codeB','netherlands_as_of_2013-06-30'], // NETHERLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:NOR','is_in:country_codeB','norway_as_of_2013-06-30'], // NORWAY AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:NPL','is_in:country_codeB','nepal_as_of_2013-06-30'], // NEPAL AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:NRU','is_in:country_codeB','nauru_as_of_2013-06-30'], // NAURU AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:NZL','is_in:country_codeB','new_zealand_as_of_2013-06-30'], // NEW ZEALAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:OMN','is_in:country_codeB','oman_as_of_2013-06-30'], // OMAN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:PAK','is_in:country_codeB','pakistan_as_of_2013-06-30'], // PAKISTAN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:PAN','is_in:country_codeB','panama_as_of_2013-06-30'], // PANAMA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:PCN','is_in:country_codeB','pitcairn_islands_as_of_2013-06-30'], // PITCAIRN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:PER','is_in:country_codeB','peru_as_of_2013-06-30'], // PERU AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:PHL','is_in:country_codeB','philippines_as_of_2013-06-30'], // PHILIPPINES AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:PLW','is_in:country_codeB','palau_as_of_2013-06-30'], // PALAU AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:POL','is_in:country_codeB','poland_as_of_2013-06-30'], // POLAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:PRI','is_in:country_codeB','puerto_rico_as_of_2013-06-30'], // PUERTO RICO AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:PRK','is_in:country_codeB','korea,_north_as_of_2013-06-30'], // KOREA, NORTH AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:PRT','is_in:country_codeB','portugal_as_of_2013-06-30'], // PORTUGAL AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:PRY','is_in:country_codeB','paraguay_as_of_2013-06-30'], // PARAGUAY AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:PSE','is_in:country_codeB','palestinian_territory_as_of_2013-06-30'], // PALESTINIAN TERRITORY AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:PYF','is_in:country_codeB','french_polynesia_as_of_2013-06-30'], // FRENCH POLYNESIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:QAT','is_in:country_codeB','qatar_as_of_2013-06-30'], // QATAR AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:REU','is_in:country_codeB','reunion_as_of_2013-06-30'], // REUNION AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:RUS','is_in:country_codeB','russia_as_of_2013-06-30'], // RUSSIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:RWA','is_in:country_codeB','rwanda_as_of_2013-06-30'], // RWANDA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SAU','is_in:country_codeB','saudi_arabia_as_of_2013-06-30'], // SAUDI ARABIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SDN','is_in:country_codeB','sudan_as_of_2013-06-30'], // SUDAN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SEN','is_in:country_codeB','senegal_as_of_2013-06-30'], // SENEGAL AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SGP','is_in:country_codeB','singapore_as_of_2013-06-30'], // SINGAPORE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SGS','is_in:country_codeB','south_georgia_and_south_sandwich_islands_as_of_2013-06-30'], // SOUTH GEORGIA AND SOUTH SANDWICH ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SHN','is_in:country_codeB','saint_helena,_ascension,_and_tristan_da_cunha_as_of_2013-06-30'], // SAINT HELENA, ASCENSION, AND TRISTAN DA CUNHA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SLB','is_in:country_codeB','solomon_islands_as_of_2013-06-30'], // SOLOMON ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SLE','is_in:country_codeB','sierra_leone_as_of_2013-06-30'], // SIERRA LEONE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SLV','is_in:country_codeB','el_salvador_as_of_2013-06-30'], // EL SALVADOR AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SMR','is_in:country_codeB','san_marino_as_of_2013-06-30'], // SAN MARINO AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SOM','is_in:country_codeB','somalia_as_of_2013-06-30'], // SOMALIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SPM','is_in:country_codeB','saint_pierre_and_miquelon_as_of_2013-06-30'], // SAINT PIERRE AND MIQUELON AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SRB','is_in:country_codeB','serbia_as_of_2013-06-30'], // SERBIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SSD','is_in:country_codeB','south_sudan_as_of_2013-06-30'], // SOUTH SUDAN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:STP','is_in:country_codeB','sao_tome_and_principe_as_of_2013-06-30'], // SAO TOME AND PRINCIPE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SUR','is_in:country_codeB','suriname_as_of_2013-06-30'], // SURINAME AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SVK','is_in:country_codeB','slovakia_as_of_2013-06-30'], // SLOVAKIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SVN','is_in:country_codeB','slovenia_as_of_2013-06-30'], // SLOVENIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SWE','is_in:country_codeB','sweden_as_of_2013-06-30'], // SWEDEN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SWZ','is_in:country_codeB','swaziland_as_of_2013-06-30'], // SWAZILAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SXM','is_in:country_codeB','sint_maarten_as_of_2013-06-30'], // SINT MAARTEN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SYC','is_in:country_codeB','seychelles_as_of_2013-06-30'], // SEYCHELLES AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:SYR','is_in:country_codeB','syria_as_of_2013-06-30'], // SYRIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:TCA','is_in:country_codeB','turks_and_caicos_islands_as_of_2013-06-30'], // TURKS AND CAICOS ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:TCD','is_in:country_codeB','chad_as_of_2013-06-30'], // CHAD AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:TGO','is_in:country_codeB','togo_as_of_2013-06-30'], // TOGO AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:THA','is_in:country_codeB','thailand_as_of_2013-06-30'], // THAILAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:TJK','is_in:country_codeB','tajikistan_as_of_2013-06-30'], // TAJIKISTAN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:TLS','is_in:country_codeB','timor-leste_as_of_2013-06-30'], // TIMOR-LESTE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:TON','is_in:country_codeB','tonga_as_of_2013-06-30'], // TONGA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:TTO','is_in:country_codeB','trinidad_and_tobago_as_of_2013-06-30'], // TRINIDAD AND TOBAGO AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:TUN','is_in:country_codeB','tunisia_as_of_2013-06-30'], // TUNISIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:TUR','is_in:country_codeB','turkey_as_of_2013-06-30'], // TURKEY AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:TWN','is_in:country_codeB','taiwan_as_of_2013-06-30'], // TAIWAN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:TZA','is_in:country_codeB','tanzania_as_of_2013-06-30'], // TANZANIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:UGA','is_in:country_codeB','uganda_as_of_2013-06-30'], // UGANDA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:UKR','is_in:country_codeB','ukraine_as_of_2013-06-30'], // UKRAINE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:URY','is_in:country_codeB','uruguay_as_of_2013-06-30'], // URUGUAY AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:USA','is_in:country_codeB','united_states_as_of_2013-06-30'], // UNITED STATES AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:UZB','is_in:country_codeB','uzbekistan_as_of_2013-06-30'], // UZBEKISTAN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:VAT','is_in:country_codeB','vatican_city_as_of_2013-06-30'], // VATICAN CITY AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:VCT','is_in:country_codeB','saint_vincent_and_the_grenadines_as_of_2013-06-30'], // SAINT VINCENT AND THE GRENADINES AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:VEN','is_in:country_codeB','venezuela_as_of_2013-06-30'], // VENEZUELA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:VGB','is_in:country_codeB','virgin_islands,_british_as_of_2013-06-30'], // VIRGIN ISLANDS, BRITISH AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:VIR','is_in:country_codeB','virgin_islands,_u.s._as_of_2013-06-30'], // VIRGIN ISLANDS, U.S. AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:VNM','is_in:country_codeB','vietnam_as_of_2013-06-30'], // VIETNAM AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:VUT','is_in:country_codeB','vanuatu_as_of_2013-06-30'], // VANUATU AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:WLF','is_in:country_codeB','wallis_and_futuna_as_of_2013-06-30'], // WALLIS AND FUTUNA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:WSM','is_in:country_codeB','samoa_as_of_2013-06-30'], // SAMOA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XAC','is_in:country_codeB','ashmore_and_cartier_islands_as_of_2013-06-30'], // ASHMORE AND CARTIER ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XAZ','is_in:country_codeB','entity_1_as_of_2013-06-30'], // ENTITY 1 AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XBI','is_in:country_codeB','bassas_da_india_as_of_2013-06-30'], // BASSAS DA INDIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XBK','is_in:country_codeB','baker_island_as_of_2013-06-30'], // BAKER ISLAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XCR','is_in:country_codeB','entity_2_as_of_2013-06-30'], // ENTITY 2 AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XCS','is_in:country_codeB','coral_sea_islands_as_of_2013-06-30'], // CORAL SEA ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XCY','is_in:country_codeB','entity_3_as_of_2013-06-30'], // ENTITY 3 AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XEU','is_in:country_codeB','europa_island_as_of_2013-06-30'], // EUROPA ISLAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XGL','is_in:country_codeB','glorioso_islands_as_of_2013-06-30'], // GLORIOSO ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XGZ','is_in:country_codeB','gaza_strip_as_of_2013-06-30'], // GAZA STRIP AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XHO','is_in:country_codeB','howland_island_as_of_2013-06-30'], // HOWLAND ISLAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XJA','is_in:country_codeB','johnston_atoll_as_of_2013-06-30'], // JOHNSTON ATOLL AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XJM','is_in:country_codeB','jan_mayen_as_of_2013-06-30'], // JAN MAYEN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XJN','is_in:country_codeB','juan_de_nova_island_as_of_2013-06-30'], // JUAN DE NOVA ISLAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XJV','is_in:country_codeB','jarvis_island_as_of_2013-06-30'], // JARVIS ISLAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XKM','is_in:country_codeB','entity_4_as_of_2013-06-30'], // ENTITY 4 AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XKN','is_in:country_codeB','entity_5_as_of_2013-06-30'], // ENTITY 5 AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XKR','is_in:country_codeB','kingman_reef_as_of_2013-06-30'], // KINGMAN REEF AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XKS','is_in:country_codeB','kosovo_as_of_2013-06-30'], // KOSOVO AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XMW','is_in:country_codeB','midway_islands_as_of_2013-06-30'], // MIDWAY ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XNV','is_in:country_codeB','navassa_island_as_of_2013-06-30'], // NAVASSA ISLAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XPL','is_in:country_codeB','palmyra_atoll_as_of_2013-06-30'], // PALMYRA ATOLL AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XPR','is_in:country_codeB','paracel_islands_as_of_2013-06-30'], // PARACEL ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XQP','is_in:country_codeB','etorofu,_habomai,_kunashiri,_and_shikotan_islands_as_of_2013-06-30'], // ETOROFU, HABOMAI, KUNASHIRI, AND SHIKOTAN ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XQZ','is_in:country_codeB','akrotiri_as_of_2013-06-30'], // AKROTIRI AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XSP','is_in:country_codeB','spratly_islands_as_of_2013-06-30'], // SPRATLY ISLANDS AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XSV','is_in:country_codeB','svalbard_as_of_2013-06-30'], // SVALBARD AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XTR','is_in:country_codeB','tromelin_island_as_of_2013-06-30'], // TROMELIN ISLAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XWB','is_in:country_codeB','west_bank_as_of_2013-06-30'], // WEST BANK AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XWK','is_in:country_codeB','wake_island_as_of_2013-06-30'], // WAKE ISLAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XXD','is_in:country_codeB','dhekelia_as_of_2013-06-30'], // DHEKELIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:XXX','is_in:country_codeB','no_man"s_land_as_of_2013-06-30'], // NO MAN"S LAND AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:YEM','is_in:country_codeB','yemen_as_of_2013-06-30'], // YEMEN AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ZAF','is_in:country_codeB','south_africa_as_of_2013-06-30'], // SOUTH AFRICA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ZMB','is_in:country_codeB','zambia_as_of_2013-06-30'], // ZAMBIA AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:1-2:ZWE','is_in:country_codeB','zimbabwe_as_of_2013-06-30'], // ZIMBABWE AS OF 2013-06-30
+     ['ZI020_GE4B','ge:GENC:3:ed3:AX3','is_in:country_codeB','entity_6_as_of_2015-06-30'], // ENTITY 6 AS OF 2015-06-30
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:AIA','is_in:country_codeB','anguilla_as_of_2013-05-10'], // ANGUILLA AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:ATA','is_in:country_codeB','antarctica_as_of_2013-05-10'], // ANTARCTICA AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:BIH','is_in:country_codeB','bosnia_and_herzegovina_as_of_2013-05-10'], // BOSNIA AND HERZEGOVINA AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:BLZ','is_in:country_codeB','belize_as_of_2013-05-10'], // BELIZE AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:BMU','is_in:country_codeB','bermuda_as_of_2013-05-10'], // BERMUDA AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:BRB','is_in:country_codeB','barbados_as_of_2013-05-10'], // BARBADOS AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:BVT','is_in:country_codeB','bouvet_island_as_of_2013-05-10'], // BOUVET ISLAND AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:GIB','is_in:country_codeB','gibraltar_as_of_2013-05-10'], // GIBRALTAR AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:GRD','is_in:country_codeB','grenada_as_of_2013-05-10'], // GRENADA AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:GRL','is_in:country_codeB','greenland_as_of_2013-05-10'], // GREENLAND AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:HUN','is_in:country_codeB','hungary_as_of_2013-05-10'], // HUNGARY AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:IMN','is_in:country_codeB','isle_of_man_as_of_2013-05-10'], // ISLE OF MAN AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:IRL','is_in:country_codeB','ireland_as_of_2013-05-10'], // IRELAND AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:JAM','is_in:country_codeB','jamaica_as_of_2013-05-10'], // JAMAICA AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:JPN','is_in:country_codeB','japan_as_of_2013-05-10'], // JAPAN AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:LBY','is_in:country_codeB','libya_as_of_2013-05-10'], // LIBYA AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:LCA','is_in:country_codeB','saint_lucia_as_of_2013-05-10'], // SAINT LUCIA AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:MNE','is_in:country_codeB','montenegro_as_of_2013-05-10'], // MONTENEGRO AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:MSR','is_in:country_codeB','montserrat_as_of_2013-05-10'], // MONTSERRAT AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:NIU','is_in:country_codeB','niue_as_of_2013-05-10'], // NIUE AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:PNG','is_in:country_codeB','papua_new_guinea_as_of_2013-05-10'], // PAPUA NEW GUINEA AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:ROU','is_in:country_codeB','romania_as_of_2013-05-10'], // ROMANIA AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:TKL','is_in:country_codeB','tokelau_as_of_2013-05-10'], // TOKELAU AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:TKM','is_in:country_codeB','turkmenistan_as_of_2013-05-10'], // TURKMENISTAN AS OF 2013-05-10
+     ['ZI020_GE4B','ge:ISO1:3:VI-15:TUV','is_in:country_codeB','tuvalu_as_of_2013-05-10'], // TUVALU AS OF 2013-05-10
+     ['ZI020_GE4B','noInformation','is_in:country_codeB','no_information'], // No Information
+     ['ZI020_GE4B','other','is_in:country_codeB','other'], // Other
+
+     // ZI024_DRL - Water : Device Relative Location
+     // ['ZI024_DRL','-999999',undefined,undefined], // No Information
+     ['ZI024_DRL','17','raw:ZI024_DRL','on_waterbody_bottom'], // On Waterbody Bottom
+     ['ZI024_DRL','40','raw:ZI024_DRL','below_ground_surface'], // Below Ground Surface
+     ['ZI024_DRL','44','raw:ZI024_DRL','on_surface'], // On Surface
+     ['ZI024_DRL','45','raw:ZI024_DRL','above_surface'], // Above Surface
+     ['ZI024_DRL','50','raw:ZI024_DRL','submerged'], // Submerged
+     ['ZI024_DRL','999','raw:ZI024_DRL','other'], // Other
+
+     // ZI024_DVPT - Water : Device Power Type
+     // ['ZI024_DVPT','-999999',undefined,undefined], // No Information
+     ['ZI024_DVPT','1','raw:ZI024_DVPT','electricity'], // Electricity
+     ['ZI024_DVPT','2','raw:ZI024_DVPT','petroleum_product'], // Petroleum Product
+     ['ZI024_DVPT','3','raw:ZI024_DVPT','manual'], // Manual
+     ['ZI024_DVPT','4','raw:ZI024_DVPT','gravity'], // Gravity
+     ['ZI024_DVPT','5','raw:ZI024_DVPT','compressed_air'], // Compressed Air
+     ['ZI024_DVPT','6','raw:ZI024_DVPT','steam'], // Steam
+     ['ZI024_DVPT','7','raw:ZI024_DVPT','solar'], // Solar
+     ['ZI024_DVPT','999','raw:ZI024_DVPT','other'], // Other
+
+     // ZI024_HYP - Water : Hydrologic Persistence
      // ['ZI024_HYP','-999999',undefined,undefined], // No Information
      ['ZI024_HYP','1','intermittent','no'], // Perennial
-     ['ZI024_HYP','2','intermittent','yes'],
+     ['ZI024_HYP','2','intermittent','yes'], // Intermittent
      ['ZI024_HYP','4','intermittent','dry'], // Dry
 
-     // ZI024_SCC - Water Resource Information : Water Type
+     // ZI024_PMP - Water : Pump Type
+     // ['ZI024_PMP','-999999',undefined,undefined], // No Information
+     ['ZI024_PMP','1','raw:ZI024_PMP','airlift'], // Airlift
+     ['ZI024_PMP','2','raw:ZI024_PMP','centrifugal'], // Centrifugal
+     ['ZI024_PMP','3','raw:ZI024_PMP','jet'], // Jet
+     ['ZI024_PMP','4','raw:ZI024_PMP','reciprocating'], // Reciprocating
+     ['ZI024_PMP','5','raw:ZI024_PMP','turbine'], // Turbine
+     ['ZI024_PMP','6','raw:ZI024_PMP','gravity'], // Gravity
+     ['ZI024_PMP','7','raw:ZI024_PMP','vacuum'], // Vacuum
+     ['ZI024_PMP','8','raw:ZI024_PMP','rotary'], // Rotary
+     ['ZI024_PMP','999','raw:ZI024_PMP','other'], // Other
+
+     // ZI024_PUR - Water : Purification Process
+     // ['ZI024_PUR','-999999',undefined,undefined], // No Information
+     ['ZI024_PUR','1','raw:ZI024_PUR','desalination'], // Desalination
+     ['ZI024_PUR','2','raw:ZI024_PUR','filtration'], // Filtration
+     ['ZI024_PUR','3','raw:ZI024_PUR','sedimentation/coagulation'], // Sedimentation/coagulation
+     ['ZI024_PUR','4','raw:ZI024_PUR','reverse_osmosis'], // Reverse Osmosis
+     ['ZI024_PUR','5','raw:ZI024_PUR','electrolysis'], // Electrolysis
+     ['ZI024_PUR','6','raw:ZI024_PUR','disinfection'], // Disinfection
+     ['ZI024_PUR','7','raw:ZI024_PUR','blending'], // Blending
+     ['ZI024_PUR','8','raw:ZI024_PUR','freezing'], // Freezing
+     ['ZI024_PUR','9','raw:ZI024_PUR','multi-stage_flash'], // Multi-stage flash
+     ['ZI024_PUR','10','raw:ZI024_PUR','multi-effect_evaporation'], // Multi-effect evaporation
+     ['ZI024_PUR','11','raw:ZI024_PUR','vapor_compression'], // Vapor Compression
+     ['ZI024_PUR','999','raw:ZI024_PUR','other'], // Other
+
+     // ZI024_PUR2 - Water : Purification Process [2]
+     // ['ZI024_PUR2','-999999',undefined,undefined], // No Information
+     ['ZI024_PUR2','1','raw:ZI024_PUR2','desalination'], // Desalination
+     ['ZI024_PUR2','2','raw:ZI024_PUR2','filtration'], // Filtration
+     ['ZI024_PUR2','3','raw:ZI024_PUR2','sedimentation/coagulation'], // Sedimentation/coagulation
+     ['ZI024_PUR2','4','raw:ZI024_PUR2','reverse_osmosis'], // Reverse Osmosis
+     ['ZI024_PUR2','5','raw:ZI024_PUR2','electrolysis'], // Electrolysis
+     ['ZI024_PUR2','6','raw:ZI024_PUR2','disinfection'], // Disinfection
+     ['ZI024_PUR2','7','raw:ZI024_PUR2','blending'], // Blending
+     ['ZI024_PUR2','8','raw:ZI024_PUR2','freezing'], // Freezing
+     ['ZI024_PUR2','9','raw:ZI024_PUR2','multi-stage_flash'], // Multi-stage flash
+     ['ZI024_PUR2','10','raw:ZI024_PUR2','multi-effect_evaporation'], // Multi-effect evaporation
+     ['ZI024_PUR2','11','raw:ZI024_PUR2','vapor_compression'], // Vapor Compression
+     ['ZI024_PUR2','999','raw:ZI024_PUR2','other'], // Other
+
+     // ZI024_PUR3 - Water : Purification Process [3]
+     // ['ZI024_PUR3','-999999',undefined,undefined], // No Information
+     ['ZI024_PUR3','1','raw:ZI024_PUR3','desalination'], // Desalination
+     ['ZI024_PUR3','2','raw:ZI024_PUR3','filtration'], // Filtration
+     ['ZI024_PUR3','3','raw:ZI024_PUR3','sedimentation/coagulation'], // Sedimentation/coagulation
+     ['ZI024_PUR3','4','raw:ZI024_PUR3','reverse_osmosis'], // Reverse Osmosis
+     ['ZI024_PUR3','5','raw:ZI024_PUR3','electrolysis'], // Electrolysis
+     ['ZI024_PUR3','6','raw:ZI024_PUR3','disinfection'], // Disinfection
+     ['ZI024_PUR3','7','raw:ZI024_PUR3','blending'], // Blending
+     ['ZI024_PUR3','8','raw:ZI024_PUR3','freezing'], // Freezing
+     ['ZI024_PUR3','9','raw:ZI024_PUR3','multi-stage_flash'], // Multi-stage flash
+     ['ZI024_PUR3','10','raw:ZI024_PUR3','multi-effect_evaporation'], // Multi-effect evaporation
+     ['ZI024_PUR3','11','raw:ZI024_PUR3','vapor_compression'], // Vapor Compression
+     ['ZI024_PUR3','999','raw:ZI024_PUR3','other'], // Other
+
+     // ZI024_PUR4 - Water : Purification Process [4]
+     // ['ZI024_PUR4','-999999',undefined,undefined], // No Information
+     ['ZI024_PUR4','1','raw:ZI024_PUR4','desalination'], // Desalination
+     ['ZI024_PUR4','2','raw:ZI024_PUR4','filtration'], // Filtration
+     ['ZI024_PUR4','3','raw:ZI024_PUR4','sedimentation/coagulation'], // Sedimentation/coagulation
+     ['ZI024_PUR4','4','raw:ZI024_PUR4','reverse_osmosis'], // Reverse Osmosis
+     ['ZI024_PUR4','5','raw:ZI024_PUR4','electrolysis'], // Electrolysis
+     ['ZI024_PUR4','6','raw:ZI024_PUR4','disinfection'], // Disinfection
+     ['ZI024_PUR4','7','raw:ZI024_PUR4','blending'], // Blending
+     ['ZI024_PUR4','8','raw:ZI024_PUR4','freezing'], // Freezing
+     ['ZI024_PUR4','9','raw:ZI024_PUR4','multi-stage_flash'], // Multi-stage flash
+     ['ZI024_PUR4','10','raw:ZI024_PUR4','multi-effect_evaporation'], // Multi-effect evaporation
+     ['ZI024_PUR4','11','raw:ZI024_PUR4','vapor_compression'], // Vapor Compression
+     ['ZI024_PUR4','999','raw:ZI024_PUR4','other'], // Other
+
+     // ZI024_PUR5 - Water : Purification Process [5]
+     // ['ZI024_PUR5','-999999',undefined,undefined], // No Information
+     ['ZI024_PUR5','1','raw:ZI024_PUR5','desalination'], // Desalination
+     ['ZI024_PUR5','2','raw:ZI024_PUR5','filtration'], // Filtration
+     ['ZI024_PUR5','3','raw:ZI024_PUR5','sedimentation/coagulation'], // Sedimentation/coagulation
+     ['ZI024_PUR5','4','raw:ZI024_PUR5','reverse_osmosis'], // Reverse Osmosis
+     ['ZI024_PUR5','5','raw:ZI024_PUR5','electrolysis'], // Electrolysis
+     ['ZI024_PUR5','6','raw:ZI024_PUR5','disinfection'], // Disinfection
+     ['ZI024_PUR5','7','raw:ZI024_PUR5','blending'], // Blending
+     ['ZI024_PUR5','8','raw:ZI024_PUR5','freezing'], // Freezing
+     ['ZI024_PUR5','9','raw:ZI024_PUR5','multi-stage_flash'], // Multi-stage flash
+     ['ZI024_PUR5','10','raw:ZI024_PUR5','multi-effect_evaporation'], // Multi-effect evaporation
+     ['ZI024_PUR5','11','raw:ZI024_PUR5','vapor_compression'], // Vapor Compression
+     ['ZI024_PUR5','999','raw:ZI024_PUR5','other'], // Other
+
+     // ZI024_RTP - Water : Reservoir Type
+     // ['ZI024_RTP','-999999',undefined,undefined], // No Information
+     ['ZI024_RTP','1','raw:ZI024_RTP','constructed_basin'], // Constructed Basin
+     ['ZI024_RTP','2','raw:ZI024_RTP','back-up_water_impounded_by_a_dam'], // Back-up Water Impounded by a Dam
+     ['ZI024_RTP','999','raw:ZI024_RTP','other'], // Other
+
+     // ZI024_SCC - Water : Water Type
      // ['ZI024_SCC','-999999',undefined,undefined], // No Information
      ['ZI024_SCC','1','water:type','alkaline'], // Alkaline
      ['ZI024_SCC','4','water:type','mineral'], // Mineral
@@ -4179,7 +10670,92 @@ ggdm30.rules = {
      // ['ZI024_SCC','998','water:type','not_applicable'], // Not Applicable
      ['ZI024_SCC','998',undefined,undefined], // Not Applicable
 
-     // ZI024_YWQ - Water Resource Information : Water Potability
+     // ZI024_SQN - Water : Water Flow Rate Category
+     // ['ZI024_SQN','-999999',undefined,undefined], // No Information
+     ['ZI024_SQN','1','raw:ZI024_SQN','small'], // Small
+     ['ZI024_SQN','2','raw:ZI024_SQN','moderate'], // Moderate
+     ['ZI024_SQN','3','raw:ZI024_SQN','large'], // Large
+     ['ZI024_SQN','999','raw:ZI024_SQN','other'], // Other
+
+     // ZI024_WPAC - Water : Water Pump Accessibility
+     // ['ZI024_WPAC','-999999',undefined,undefined], // No Information
+     ['ZI024_WPAC','100','raw:ZI024_WPAC','from_left'], // From Left
+     ['ZI024_WPAC','101','raw:ZI024_WPAC','from_right'], // From Right
+     ['ZI024_WPAC','102','raw:ZI024_WPAC','from_all_sides'], // From All Sides
+     ['ZI024_WPAC','103','raw:ZI024_WPAC','no_accessibility'], // No Accessibility
+     ['ZI024_WPAC','104','raw:ZI024_WPAC','from_north'], // From North
+     ['ZI024_WPAC','105','raw:ZI024_WPAC','from_south'], // From South
+     ['ZI024_WPAC','106','raw:ZI024_WPAC','from_east'], // From East
+     ['ZI024_WPAC','107','raw:ZI024_WPAC','from_west'], // From West
+
+     // ZI024_WSG - Water : Water Stage
+     // ['ZI024_WSG','-999999',undefined,undefined], // No Information
+     ['ZI024_WSG','1','raw:ZI024_WSG','low'], // Low
+     ['ZI024_WSG','2','raw:ZI024_WSG','mean'], // Mean
+     ['ZI024_WSG','3','raw:ZI024_WSG','high'], // High
+     ['ZI024_WSG','999','raw:ZI024_WSG','other'], // Other
+
+     // ZI024_WUR - Water : Water Use
+     // ['ZI024_WUR','-999999',undefined,undefined], // No Information
+     ['ZI024_WUR','1','raw:ZI024_WUR','agricultural_irrigation'], // Agricultural Irrigation
+     ['ZI024_WUR','2','raw:ZI024_WUR','commercial'], // Commercial
+     ['ZI024_WUR','3','raw:ZI024_WUR','domestic_irrigation'], // Domestic Irrigation
+     ['ZI024_WUR','4','raw:ZI024_WUR','industrial'], // Industrial
+     ['ZI024_WUR','5','raw:ZI024_WUR','institutional'], // Institutional
+     ['ZI024_WUR','6','raw:ZI024_WUR','livestock'], // Livestock
+     ['ZI024_WUR','7','raw:ZI024_WUR','municipal'], // Municipal
+     ['ZI024_WUR','8','raw:ZI024_WUR','power_generation'], // Power Generation
+     ['ZI024_WUR','9','raw:ZI024_WUR','recreational'], // Recreational
+     ['ZI024_WUR','10','raw:ZI024_WUR','sanitary_domestic'], // Sanitary Domestic
+     ['ZI024_WUR','11','raw:ZI024_WUR','military'], // Military
+     ['ZI024_WUR','999','raw:ZI024_WUR','other'], // Other
+
+     // ZI024_WUR2 - Water : Water Use [2]
+     // ['ZI024_WUR2','-999999',undefined,undefined], // No Information
+     ['ZI024_WUR2','1','raw:ZI024_WUR2','agricultural_irrigation'], // Agricultural Irrigation
+     ['ZI024_WUR2','2','raw:ZI024_WUR2','commercial'], // Commercial
+     ['ZI024_WUR2','3','raw:ZI024_WUR2','domestic_irrigation'], // Domestic Irrigation
+     ['ZI024_WUR2','4','raw:ZI024_WUR2','industrial'], // Industrial
+     ['ZI024_WUR2','5','raw:ZI024_WUR2','institutional'], // Institutional
+     ['ZI024_WUR2','6','raw:ZI024_WUR2','livestock'], // Livestock
+     ['ZI024_WUR2','7','raw:ZI024_WUR2','municipal'], // Municipal
+     ['ZI024_WUR2','8','raw:ZI024_WUR2','power_generation'], // Power Generation
+     ['ZI024_WUR2','9','raw:ZI024_WUR2','recreational'], // Recreational
+     ['ZI024_WUR2','10','raw:ZI024_WUR2','sanitary_domestic'], // Sanitary Domestic
+     ['ZI024_WUR2','11','raw:ZI024_WUR2','military'], // Military
+     ['ZI024_WUR2','999','raw:ZI024_WUR2','other'], // Other
+
+     // ZI024_WUR3 - Water : Water Use [3]
+     // ['ZI024_WUR3','-999999',undefined,undefined], // No Information
+     ['ZI024_WUR3','1','raw:ZI024_WUR3','agricultural_irrigation'], // Agricultural Irrigation
+     ['ZI024_WUR3','2','raw:ZI024_WUR3','commercial'], // Commercial
+     ['ZI024_WUR3','3','raw:ZI024_WUR3','domestic_irrigation'], // Domestic Irrigation
+     ['ZI024_WUR3','4','raw:ZI024_WUR3','industrial'], // Industrial
+     ['ZI024_WUR3','5','raw:ZI024_WUR3','institutional'], // Institutional
+     ['ZI024_WUR3','6','raw:ZI024_WUR3','livestock'], // Livestock
+     ['ZI024_WUR3','7','raw:ZI024_WUR3','municipal'], // Municipal
+     ['ZI024_WUR3','8','raw:ZI024_WUR3','power_generation'], // Power Generation
+     ['ZI024_WUR3','9','raw:ZI024_WUR3','recreational'], // Recreational
+     ['ZI024_WUR3','10','raw:ZI024_WUR3','sanitary_domestic'], // Sanitary Domestic
+     ['ZI024_WUR3','11','raw:ZI024_WUR3','military'], // Military
+     ['ZI024_WUR3','999','raw:ZI024_WUR3','other'], // Other
+
+     // ZI024_WUR4 - Water : Water Use [4]
+     // ['ZI024_WUR4','-999999',undefined,undefined], // No Information
+     ['ZI024_WUR4','1','raw:ZI024_WUR4','agricultural_irrigation'], // Agricultural Irrigation
+     ['ZI024_WUR4','2','raw:ZI024_WUR4','commercial'], // Commercial
+     ['ZI024_WUR4','3','raw:ZI024_WUR4','domestic_irrigation'], // Domestic Irrigation
+     ['ZI024_WUR4','4','raw:ZI024_WUR4','industrial'], // Industrial
+     ['ZI024_WUR4','5','raw:ZI024_WUR4','institutional'], // Institutional
+     ['ZI024_WUR4','6','raw:ZI024_WUR4','livestock'], // Livestock
+     ['ZI024_WUR4','7','raw:ZI024_WUR4','municipal'], // Municipal
+     ['ZI024_WUR4','8','raw:ZI024_WUR4','power_generation'], // Power Generation
+     ['ZI024_WUR4','9','raw:ZI024_WUR4','recreational'], // Recreational
+     ['ZI024_WUR4','10','raw:ZI024_WUR4','sanitary_domestic'], // Sanitary Domestic
+     ['ZI024_WUR4','11','raw:ZI024_WUR4','military'], // Military
+     ['ZI024_WUR4','999','raw:ZI024_WUR4','other'], // Other
+
+     // ZI024_YWQ - Water : Water Potability
      // ['ZI024_YWQ','-999999',undefined,undefined], // No Information
      ['ZI024_YWQ','1','water:potable','yes'], // Potable
      ['ZI024_YWQ','2','water:potable','treatable'], // Treatable
@@ -4187,73 +10763,76 @@ ggdm30.rules = {
      ['ZI024_YWQ','4','water:potable','no'], // Nonpotable
      ['ZI024_YWQ','999','water:potable','other'], // Other
 
-     // See MAN
-     // ZI025_MAN - Hydrographic Vertical Positioning Information : Maritime Navigation Marked
+     // ZI025_MAN - Vert Pos : Maritime Navigation Marked
      // ['ZI025_MAN','-999999',undefined,undefined], // No Information
-//      ['ZI025_MAN','1000','raw:ZI025_MAN','no'],
-//      ['ZI025_MAN','1001','raw:ZI025_MAN','yes'],
+     ['ZI025_MAN','1000','raw:ZI025_MAN','no'],
+     ['ZI025_MAN','1001','raw:ZI025_MAN','yes'],
 
-     // See WLE
-     // ZI025_WLE - Hydrographic Vertical Positioning Information : Water Level Effect
+     // ZI025_UHS - Vert Pos : Uncovering Height Known
+     // ['ZI025_UHS','-999999',undefined,undefined], // No Information
+     ['ZI025_UHS','1000','raw:ZI025_UHS','no'],
+     ['ZI025_UHS','1001','raw:ZI025_UHS','yes'],
+
+     // ZI025_WLE - Vert Pos : Water Level Effect
      // ['ZI025_WLE','-999999',undefined,undefined], // No Information
-//      ['ZI025_WLE','1','raw:ZI025_WLE','partly_submerged'], // Partly Submerged
-//      ['ZI025_WLE','2','raw:ZI025_WLE','always_dry'], // Always Dry
-//      ['ZI025_WLE','3','raw:ZI025_WLE','always_submerged'], // Always Submerged
-//      ['ZI025_WLE','4','raw:ZI025_WLE','covers_and_uncovers'], // Covers and Uncovers
-//      ['ZI025_WLE','5','raw:ZI025_WLE','awash_at_low_water'], // Awash at Low Water
-//      ['ZI025_WLE','9','raw:ZI025_WLE','awash_at_chart_datum'], // Awash at Chart Datum
-//      ['ZI025_WLE','999','raw:ZI025_WLE','other'], // Other
+     ['ZI025_WLE','1','raw:ZI025_WLE','partly_submerged'], // Partly Submerged
+     ['ZI025_WLE','2','raw:ZI025_WLE','always_dry'], // Always Dry
+     ['ZI025_WLE','3','raw:ZI025_WLE','always_submerged'], // Always Submerged
+     ['ZI025_WLE','4','raw:ZI025_WLE','covers_and_uncovers'], // Covers and Uncovers
+     ['ZI025_WLE','5','raw:ZI025_WLE','awash_at_low_water'], // Awash at Low Water
+     ['ZI025_WLE','9','raw:ZI025_WLE','awash_at_chart_datum'], // Awash at Chart Datum
+     ['ZI025_WLE','999','raw:ZI025_WLE','other'], // Other
 
-     // ZI026_CTUC - Feature Metadata : Cartographic Usability Range <interval closure>
+     // ZI026_CTUC - Physical Object Metadata : Cartographic Topography Usability Range <interval closure>
      ['ZI026_CTUC','2','cartographic_scale:closure','open_interval'], // Open Interval
-     ['ZI026_CTUC','3','cartographic_scale:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['ZI026_CTUC','4','cartographic_scale:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['ZI026_CTUC','3','cartographic_scale:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['ZI026_CTUC','4','cartographic_scale:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
      ['ZI026_CTUC','5','cartographic_scale:closure','closed_interval'], // Closed Interval
      ['ZI026_CTUC','6','cartographic_scale:closure','greater-than_semi-interval'], // Greater-than Semi-interval
      ['ZI026_CTUC','7','cartographic_scale:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
      ['ZI026_CTUC','8','cartographic_scale:closure','less-than_semi-interval'], // Less-than Semi-interval
      ['ZI026_CTUC','9','cartographic_scale:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
-     // ZI026_SUR - Feature Metadata : Survey Coverage Category
+     // ZI026_SUR - Physical Object Metadata : Survey Coverage Category
      // ['ZI026_SUR','-999999',undefined,undefined], // No Information
      ['ZI026_SUR','1','source:surveyed','yes'], // Surveyed
      ['ZI026_SUR','2','source:surveyed','inadequately_surveyed'], // Inadequately Surveyed
      ['ZI026_SUR','3','source:surveyed','no'], // Unsurveyed
 
-     // ZI032_GUG - Pylon Information : Guyed - See GUG
+     // ZI032_GUG - Pylon Information : Guyed
      // ['ZI032_GUG','-999999',undefined,undefined], // No Information
-//      ['ZI032_GUG','1000','raw:ZI032_GUG','no'],
-//      ['ZI032_GUG','1001','raw:ZI032_GUG','yes'],
+     ['ZI032_GUG','1000','raw:ZI032_GUG','no'],
+     ['ZI032_GUG','1001','raw:ZI032_GUG','yes'],
 
-     // ZI032_PYC - Pylon Information : Pylon Configuration - See PYC
+     // ZI032_PYC - Pylon Information : Pylon Configuration
      // ['ZI032_PYC','-999999',undefined,undefined], // No Information
-//      ['ZI032_PYC','1','raw:ZI032_PYC',''a''], // 'A'
-//      ['ZI032_PYC','2','raw:ZI032_PYC',''h''], // 'H'
-//      ['ZI032_PYC','3','raw:ZI032_PYC',''i''], // 'I'
-//      ['ZI032_PYC','4','raw:ZI032_PYC',''y''], // 'Y'
-//      ['ZI032_PYC','5','raw:ZI032_PYC',''t''], // 'T'
-//      ['ZI032_PYC','999','raw:ZI032_PYC','other'], // Other
+     ['ZI032_PYC','1','raw:ZI032_PYC','a"'], // A"
+     ['ZI032_PYC','2','raw:ZI032_PYC','h"'], // H"
+     ['ZI032_PYC','3','raw:ZI032_PYC','i"'], // I"
+     ['ZI032_PYC','4','raw:ZI032_PYC','y"'], // Y"
+     ['ZI032_PYC','5','raw:ZI032_PYC','t"'], // T"
+     ['ZI032_PYC','999','raw:ZI032_PYC','other'], // Other
 
-     // ZI032_PYM - Pylon Information : Pylon Material - See PYM
+     // ZI032_PYM - Pylon Information : Pylon Material
      // ['ZI032_PYM','-999999',undefined,undefined], // No Information
-//      ['ZI032_PYM','1','raw:ZI032_PYM','aluminum'], // Aluminum
-//      ['ZI032_PYM','3','raw:ZI032_PYM','concrete'], // Concrete
-//      ['ZI032_PYM','4','raw:ZI032_PYM','masonry'], // Masonry
-//      ['ZI032_PYM','5','raw:ZI032_PYM','metal'], // Metal
-//      ['ZI032_PYM','7','raw:ZI032_PYM','wood'], // Wood
-//      ['ZI032_PYM','8','raw:ZI032_PYM','steel'], // Steel
-//      ['ZI032_PYM','9','raw:ZI032_PYM','fibreglass'], // Fibreglass
-//      ['ZI032_PYM','10','raw:ZI032_PYM','iron'], // Iron
-//      ['ZI032_PYM','999','raw:ZI032_PYM','other'], // Other
+     ['ZI032_PYM','1','raw:ZI032_PYM','aluminium'], // Aluminium
+     ['ZI032_PYM','3','raw:ZI032_PYM','concrete'], // Concrete
+     ['ZI032_PYM','4','raw:ZI032_PYM','masonry'], // Masonry
+     ['ZI032_PYM','5','raw:ZI032_PYM','metal'], // Metal
+     ['ZI032_PYM','7','raw:ZI032_PYM','wood'], // Wood
+     ['ZI032_PYM','8','raw:ZI032_PYM','steel'], // Steel
+     ['ZI032_PYM','9','raw:ZI032_PYM','fibreglass'], // Fibreglass
+     ['ZI032_PYM','10','raw:ZI032_PYM','iron'], // Iron
+     ['ZI032_PYM','999','raw:ZI032_PYM','other'], // Other
 
-     // ZI032_TOS - Pylon Information : Tower Shape = See TOS
+     // ZI032_TOS - Pylon Information : Tower Shape
      // ['ZI032_TOS','-999999',undefined,undefined], // No Information
-//      ['ZI032_TOS','6','raw:ZI032_TOS','mast'], // Mast
-//      ['ZI032_TOS','8','raw:ZI032_TOS','pole'], // Pole
-//      ['ZI032_TOS','11','raw:ZI032_TOS','tripod'], // Tripod
-//      ['ZI032_TOS','12','raw:ZI032_TOS','truss'], // Truss
-//      ['ZI032_TOS','13','raw:ZI032_TOS','tubular'], // Tubular
-//      ['ZI032_TOS','999','raw:ZI032_TOS','other'], // Other
+     ['ZI032_TOS','6','raw:ZI032_TOS','mast'], // Mast
+     ['ZI032_TOS','8','raw:ZI032_TOS','pole'], // Pole
+     ['ZI032_TOS','11','raw:ZI032_TOS','tripod'], // Tripod
+     ['ZI032_TOS','12','raw:ZI032_TOS','truss'], // Truss
+     ['ZI032_TOS','13','raw:ZI032_TOS','tubular'], // Tubular
+     ['ZI032_TOS','999','raw:ZI032_TOS','other'], // Other
 
      // ZI037_REL - Religious Information : Religious Designation
      // ['ZI037_REL','-999999',undefined,undefined], // No Information
@@ -4273,7 +10852,7 @@ ggdm30.rules = {
      ['ZI037_REL','14','religion','mixed_or_none'], // Mixed and/or No Designation
      ['ZI037_REL','999','religion','other'], // Other
 
-     // ZI037_RFA - Religious Information : Religious Facility Type
+     // ZI037_RFA - Religious Information : Religious Site Type
      ['ZI037_RFA','-999999','building:religious','unknown'], // No Information
      ['ZI037_RFA','1','building','cathedral'], // Cathedral
      ['ZI037_RFA','2','building','chapel'], // Chapel
@@ -4308,13 +10887,29 @@ ggdm30.rules = {
      ['ZI071_CTX','7','cave:type','talus'], // Talus
      ['ZI071_CTX','999','cave:type','other'], // Other
 
-     // ZI071_FFN - Cave Information : Feature Function - See FFN
+     // ZI071_FFN - Cave Information : Feature Function
      // ['ZI071_FFN','-999999',undefined,undefined], // No Information
-//      ['ZI071_FFN','530','raw:ZI071_FFN','warehousing_and_storage'], // Warehousing and Storage
-//      ['ZI071_FFN','563','raw:ZI071_FFN','residence'], // Residence
-//      ['ZI071_FFN','835','raw:ZI071_FFN','defence_activities'], // Defence Activities
-//      ['ZI071_FFN','930','raw:ZI071_FFN','religious_activities'], // Religious Activities
-//      ['ZI071_FFN','999','raw:ZI071_FFN','other'], // Other
+     ['ZI071_FFN','530','raw:ZI071_FFN','warehousing_and_storage'], // Warehousing and Storage
+     ['ZI071_FFN','563','raw:ZI071_FFN','residence'], // Residence
+     ['ZI071_FFN','835','raw:ZI071_FFN','defence_activities'], // Defence Activities
+     ['ZI071_FFN','930','raw:ZI071_FFN','religious_activities'], // Religious Activities
+     ['ZI071_FFN','999','raw:ZI071_FFN','other'], // Other
+
+     // ZI071_FFN2 - Cave Information : Feature Function [2]
+     // ['ZI071_FFN2','-999999',undefined,undefined], // No Information
+     ['ZI071_FFN2','530','raw:ZI071_FFN2','warehousing_and_storage'], // Warehousing and Storage
+     ['ZI071_FFN2','563','raw:ZI071_FFN2','residence'], // Residence
+     ['ZI071_FFN2','835','raw:ZI071_FFN2','defence_activities'], // Defence Activities
+     ['ZI071_FFN2','930','raw:ZI071_FFN2','religious_activities'], // Religious Activities
+     ['ZI071_FFN2','999','raw:ZI071_FFN2','other'], // Other
+
+     // ZI071_FFN3 - Cave Information : Feature Function [3]
+     // ['ZI071_FFN3','-999999',undefined,undefined], // No Information
+     ['ZI071_FFN3','530','raw:ZI071_FFN3','warehousing_and_storage'], // Warehousing and Storage
+     ['ZI071_FFN3','563','raw:ZI071_FFN3','residence'], // Residence
+     ['ZI071_FFN3','835','raw:ZI071_FFN3','defence_activities'], // Defence Activities
+     ['ZI071_FFN3','930','raw:ZI071_FFN3','religious_activities'], // Religious Activities
+     ['ZI071_FFN3','999','raw:ZI071_FFN3','other'], // Other
 
      // ZI071_UAO - Cave Information : Underground Access Orientation
      // ['ZI071_UAO','-999999',undefined,undefined], // No Information
@@ -4324,13 +10919,27 @@ ggdm30.rules = {
      ['ZI071_UAO','4','direction','slopes_upward'], // Slopes Upward
      ['ZI071_UAO','5','direction','vertical_up'], // Vertical Up
 
-     // ZSAX_RS0 - Restriction Information : Security Attributes Group <resource classification>
-     ['ZSAX_RS0','U','security:classification','U'],
-     ['ZSAX_RS0','R','security:classification','R'],
-     ['ZSAX_RS0','C','security:classification','C'],
-     ['ZSAX_RS0','S','security:classification','S'],
-     ['ZSAX_RS0','TS','security:classification','TS'],
+     // ZSAX_RS0 - Restriction : Security <resource classification>
+     ['ZSAX_RS0','C','security:classification','(u)_confidential'], // (U) CONFIDENTIAL
+     ['ZSAX_RS0','R','security:classification','(u)_restricted'], // (U) RESTRICTED
+     ['ZSAX_RS0','S','security:classification','(u)_secret'], // (U) SECRET
+     ['ZSAX_RS0','TS','security:classification','(u)_top_secret'], // (U) TOP SECRET
+     ['ZSAX_RS0','U','security:classification','(u)_unclassified'], // (U) UNCLASSIFIED
+     ['ZSAX_RS0','noInformation','security:classification','no_information'], // No Information
+     ['ZSAX_RS0','other','security:classification','other'], // Other
 
+     // ZVH_VDT - Highest Elevation <vertical datum>
+     // ['ZVH_VDT','-999999',undefined,undefined], // No Information
+     ['ZVH_VDT','1','raw:ZVH_VDT','wgs_84_ellipsoid'], // WGS 84 Ellipsoid
+     ['ZVH_VDT','2','raw:ZVH_VDT','wgs_84_egm96_geoid'], // WGS 84 EGM96 Geoid
+     ['ZVH_VDT','3','raw:ZVH_VDT','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
+     ['ZVH_VDT','4','raw:ZVH_VDT','north_american_vertical_datum_(navd)_1988'], // North American Vertical Datum (NAVD) 1988
+     ['ZVH_VDT','5','raw:ZVH_VDT','national_geodetic_vertical_datum_(ngvd)_1929'], // National Geodetic Vertical Datum (NGVD) 1929
+     ['ZVH_VDT','6','raw:ZVH_VDT','ground_level'], // Ground Level
+     ['ZVH_VDT','7','raw:ZVH_VDT','wgs_84_egm08_geoid'], // WGS 84 EGM08 Geoid
+     ['ZVH_VDT','998','raw:ZVH_VDT','not_applicable'], // Not Applicable
+     ['ZVH_VDT','999','raw:ZVH_VDT','other'], // Other
+     
      ], // End one2one
 
      // Input Translation Rules:
@@ -4551,509 +11160,6 @@ ggdm30.rules = {
         'PAA010':'IndustryPnt', // Industry
         'AAA010':'IndustrySrf', // Industry
         'LAA011':'IndustryCrv', // Industry
-        'PAA020':'IndustryPnt', // Industry
-        'AAA020':'IndustrySrf', // Industry
-        'PAA040':'IndustryPnt', // Industry
-        'AAA040':'IndustrySrf', // Industry
-        'PAA045':'IndustryPnt', // Industry
-        'AAA052':'IndustrySrf', // Industry
-        'PAA054':'IndustryPnt', // Industry
-        'PAB000':'IndustryPnt', // Industry
-        'AAB000':'IndustrySrf', // Industry
-        'AAB010':'IndustrySrf', // Industry
-        'PAB021':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'AAB040':'IndustrySrf', // Industry
-        'PAB507':'IndustryPnt', // Industry
-        'AAB507':'IndustrySrf', // Industry
-        'PAC010':'IndustryPnt', // Industry
-        'AAC010':'IndustrySrf', // Industry
-        'PAC020':'IndustryPnt', // Industry
-        'AAC020':'IndustrySrf', // Industry
-        'AAC030':'IndustrySrf', // Industry
-        'PAC040':'IndustryPnt', // Industry
-        'AAC040':'IndustrySrf', // Industry
-        'PAC060':'IndustryPnt', // Industry
-        'AAC060':'IndustrySrf', // Industry
-        'PAC507':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'AAC507':'UtilityInfrastructureSrf', // Utility Infrastructure
-        'PAD010':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'AAD010':'UtilityInfrastructureSrf', // Utility Infrastructure
-        'PAD020':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'AAD020':'UtilityInfrastructureSrf', // Utility Infrastructure
-        'PAD025':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'AAD025':'UtilityInfrastructureSrf', // Utility Infrastructure
-        'PAD030':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'AAD030':'UtilityInfrastructureSrf', // Utility Infrastructure
-        'PAD041':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'AAD041':'UtilityInfrastructureSrf', // Utility Infrastructure
-        'PAD050':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'AAD050':'UtilityInfrastructureSrf', // Utility Infrastructure
-        'PAD055':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'AAD055':'UtilityInfrastructureSrf', // Utility Infrastructure
-        'PAD060':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'AAD060':'UtilityInfrastructureSrf', // Utility Infrastructure
-        'PAF010':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'LAF020':'IndustryCrv', // Industry
-        'PAF030':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'AAF030':'UtilityInfrastructureSrf', // Utility Infrastructure
-        'PAF040':'IndustryPnt', // Industry
-        'AAF040':'IndustrySrf', // Industry
-        'PAF050':'IndustryPnt', // Industry
-        'LAF050':'IndustryCrv', // Industry
-        'PAF060':'StructurePnt', // Structure
-        'AAF060':'StructureSrf', // Structure
-        'PAF070':'IndustryPnt', // Industry
-        'PAF080':'IndustryPnt', // Industry
-        'AAG030':'FacilitySrf', // Facility
-        'AAG040':'FacilitySrf', // Facility
-        'PAG050':'StructurePnt', // Structure
-        'LAH025':'MilitaryCrv', // Military
-        'AAH025':'MilitarySrf', // Military
-        'PAH055':'MilitaryPnt', // Military
-        'AAH055':'MilitarySrf', // Military
-        'PAH060':'MilitaryPnt', // Military
-        'AAH060':'MilitarySrf', // Military
-        'PAH070':'TransportationGroundPnt', // Transportation - Ground
-        'AAI020':'SettlementSrf', // Settlement
-        'AAI021':'SettlementSrf', // Settlement
-        'PAI030':'SettlementPnt', // Settlement
-        'AAI030':'SettlementSrf', // Settlement
-        'PAJ030':'AgriculturePnt', // Agriculture
-        'AAJ030':'AgricultureSrf', // Agriculture
-        'PAJ050':'AgriculturePnt', // Agriculture
-        'AAJ050':'AgricultureSrf', // Agriculture
-        'PAJ051':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'PAJ055':'IndustryPnt', // Industry
-        'AAJ055':'IndustrySrf', // Industry
-        'PAJ080':'AgriculturePnt', // Agriculture
-        'AAJ080':'AgricultureSrf', // Agriculture
-        'PAJ085':'AgriculturePnt', // Agriculture
-        'AAJ085':'AgricultureSrf', // Agriculture
-        'PAJ110':'AgriculturePnt', // Agriculture
-        'AAJ110':'AgricultureSrf', // Agriculture
-        'PAK020':'RecreationPnt', // Recreation
-        'LAK020':'RecreationCrv', // Recreation
-        'AAK020':'RecreationSrf', // Recreation
-        'PAK030':'RecreationPnt', // Recreation
-        'AAK030':'RecreationSrf', // Recreation
-        'PAK040':'RecreationPnt', // Recreation
-        'AAK040':'RecreationSrf', // Recreation
-        'PAK060':'RecreationPnt', // Recreation
-        'AAK060':'RecreationSrf', // Recreation
-        'AAK061':'RecreationSrf', // Recreation
-        'AAK070':'RecreationSrf', // Recreation
-        'PAK080':'RecreationPnt', // Recreation
-        'LAK080':'RecreationCrv', // Recreation
-        'AAK090':'RecreationSrf', // Recreation
-        'AAK100':'RecreationSrf', // Recreation
-        'AAK101':'RecreationSrf', // Recreation
-        'PAK110':'RecreationPnt', // Recreation
-        'AAK110':'RecreationSrf', // Recreation
-        'AAK120':'CultureSrf', // Culture
-        'PAK121':'CulturePnt', // Culture
-        'AAK121':'CultureSrf', // Culture
-        'LAK130':'RecreationCrv', // Recreation
-        'AAK130':'RecreationSrf', // Recreation
-        'PAK150':'RecreationPnt', // Recreation
-        'LAK150':'RecreationCrv', // Recreation
-        'LAK155':'RecreationCrv', // Recreation
-        'AAK155':'RecreationSrf', // Recreation
-        'PAK160':'RecreationPnt', // Recreation
-        'AAK160':'RecreationSrf', // Recreation
-        'PAK161':'RecreationPnt', // Recreation
-        'PAK164':'RecreationPnt', // Recreation
-        'AAK164':'RecreationSrf', // Recreation
-        'PAK170':'RecreationPnt', // Recreation
-        'AAK170':'RecreationSrf', // Recreation
-        'PAK180':'RecreationPnt', // Recreation
-        'AAK180':'RecreationSrf', // Recreation
-        'PAL010':'FacilityPnt', // Facility
-        'AAL010':'FacilitySrf', // Facility
-        'PAL011':'FacilityPnt', // Facility
-        'AAL011':'FacilitySrf', // Facility
-        'PAL012':'CulturePnt', // Culture
-        'AAL012':'CultureSrf', // Culture
-        'PAL013':'StructurePnt', // Structure
-        'AAL013':'StructureSrf', // Structure
-        'PAL014':'StructurePnt', // Structure
-        'AAL014':'StructureSrf', // Structure
-        'PAL017':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'PAL018':'StructurePnt', // Structure
-        'LAL018':'StructureCrv', // Structure
-        'AAL018':'StructureSrf', // Structure
-        'PAL019':'StructurePnt', // Structure
-        'AAL019':'StructureSrf', // Structure
-        'PAL020':'SettlementPnt', // Settlement
-        'AAL020':'SettlementSrf', // Settlement
-        'PAL025':'CulturePnt', // Culture
-        'PAL030':'CulturePnt', // Culture
-        'AAL030':'CultureSrf', // Culture
-        'PAL036':'CulturePnt', // Culture
-        'AAL036':'CultureSrf', // Culture
-        'LAL060':'MilitaryCrv', // Military
-        'AAL060':'MilitarySrf', // Military
-        'AAL065':'MilitarySrf', // Military
-        'LAL070':'StructureCrv', // Structure
-        'PAL073':'StructurePnt', // Structure
-        'PAL080':'StructurePnt', // Structure
-        'LAL080':'StructureCrv', // Structure
-        'PAL099':'StructurePnt', // Structure
-        'AAL099':'StructureSrf', // Structure
-        'PAL105':'SettlementPnt', // Settlement
-        'AAL105':'SettlementSrf', // Settlement
-        'PAL110':'StructurePnt', // Structure
-        'PAL120':'MilitaryPnt', // Military
-        'AAL120':'MilitarySrf', // Military
-        'PAL130':'CulturePnt', // Culture
-        'LAL130':'CultureCrv', // Culture
-        'AAL130':'CultureSrf', // Culture
-        'LAL140':'StructureCrv', // Structure
-        'AAL140':'StructureSrf', // Structure
-        'PAL142':'StructurePnt', // Structure
-        'AAL142':'StructureSrf', // Structure
-        'PAL155':'TransportationGroundPnt', // Transportation - Ground
-        'LAL155':'TransportationGroundCrv', // Transportation - Ground
-        'PAL165':'TransportationGroundPnt', // Transportation - Ground
-        'PAL170':'RecreationPnt', // Recreation
-        'AAL170':'RecreationSrf', // Recreation
-        'AAL175':'CultureSrf', // Culture
-        'AAL180':'CultureSrf', // Culture
-        'LAL195':'TransportationGroundCrv', // Transportation - Ground
-        'AAL195':'TransportationGroundSrf', // Transportation - Ground
-        'PAL200':'CulturePnt', // Culture
-        'AAL200':'CultureSrf', // Culture
-        'PAL201':'CulturePnt', // Culture
-        'AAL201':'CultureSrf', // Culture
-        'PAL208':'SettlementPnt', // Settlement
-        'AAL208':'SettlementSrf', // Settlement
-        'PAL211':'TransportationGroundPnt', // Transportation - Ground
-        'LAL211':'TransportationGroundCrv', // Transportation - Ground
-        'AAL211':'TransportationGroundSrf', // Transportation - Ground
-        'PAL241':'StructurePnt', // Structure
-        'AAL241':'StructureSrf', // Structure
-        'PAL250':'StructurePnt', // Structure
-        'LAL260':'StructureCrv', // Structure
-        'PAL270':'AgriculturePnt', // Agriculture
-        'AAL270':'AgricultureSrf', // Agriculture
-        'PAL351':'AeronauticPnt', // Aeronautic
-        'AAL351':'AeronauticSrf', // Aeronautic
-        'PAL371':'StructurePnt', // Structure
-        'AAL371':'StructureSrf', // Structure
-        'PAL375':'MilitaryPnt', // Military
-        'AAL375':'MilitarySrf', // Military
-        'PAL376':'MilitaryPnt', // Military
-        'AAL376':'MilitarySrf', // Military
-        'PAL510':'AeronauticPnt', // Aeronautic
-        'PAM010':'StoragePnt', // Storage
-        'AAM010':'StorageSrf', // Storage
-        'PAM011':'StoragePnt', // Storage
-        'AAM011':'StorageSrf', // Storage
-        'PAM020':'AgriculturePnt', // Agriculture
-        'AAM020':'AgricultureSrf', // Agriculture
-        'PAM030':'StoragePnt', // Storage
-        'AAM030':'StorageSrf', // Storage
-        'PAM040':'IndustryPnt', // Industry
-        'AAM040':'IndustrySrf', // Industry
-        'PAM060':'MilitaryPnt', // Military
-        'AAM060':'MilitarySrf', // Military
-        'PAM065':'StoragePnt', // Storage
-        'AAM065':'StorageSrf', // Storage
-        'PAM070':'StoragePnt', // Storage
-        'AAM070':'StorageSrf', // Storage
-        'PAM071':'StoragePnt', // Storage
-        'AAM071':'StorageSrf', // Storage
-        'PAM075':'StoragePnt', // Storage
-        'AAM075':'StorageSrf', // Storage
-        'PAM080':'StoragePnt', // Storage
-        'AAM080':'StorageSrf', // Storage
-        'LAN010':'TransportationGroundCrv', // Transportation - Ground
-        'LAN050':'TransportationGroundCrv', // Transportation - Ground
-        'AAN060':'TransportationGroundSrf', // Transportation - Ground
-        'PAN075':'TransportationGroundPnt', // Transportation - Ground
-        'AAN075':'TransportationGroundSrf', // Transportation - Ground
-        'PAN076':'TransportationGroundPnt', // Transportation - Ground
-        'AAN076':'TransportationGroundSrf', // Transportation - Ground
-        'PAN085':'TransportationGroundPnt', // Transportation - Ground
-        'LAP010':'TransportationGroundCrv', // Transportation - Ground
-        'PAP020':'TransportationGroundPnt', // Transportation - Ground
-        'LAP030':'TransportationGroundCrv', // Transportation - Ground
-        'AAP030':'TransportationGroundSrf', // Transportation - Ground
-        'PAP033':'TransportationGroundPnt', // Transportation - Ground
-        'PAP040':'TransportationGroundPnt', // Transportation - Ground
-        'LAP040':'TransportationGroundCrv', // Transportation - Ground
-        'PAP041':'TransportationGroundPnt', // Transportation - Ground
-        'LAP041':'TransportationGroundCrv', // Transportation - Ground
-        'LAP050':'TransportationGroundCrv', // Transportation - Ground
-        'AAP055':'TransportationGroundSrf', // Transportation - Ground
-        'PAP056':'TransportationGroundPnt', // Transportation - Ground
-        'AAP056':'TransportationGroundSrf', // Transportation - Ground
-        'LAQ035':'TransportationGroundCrv', // Transportation - Ground
-        'PAQ040':'TransportationGroundPnt', // Transportation - Ground
-        'LAQ040':'TransportationGroundCrv', // Transportation - Ground
-        'AAQ040':'TransportationGroundSrf', // Transportation - Ground
-        'PAQ045':'TransportationGroundPnt', // Transportation - Ground
-        'LAQ045':'TransportationGroundCrv', // Transportation - Ground
-        'AAQ045':'TransportationGroundSrf', // Transportation - Ground
-        'LAQ050':'TransportationGroundCrv', // Transportation - Ground
-        'AAQ050':'TransportationGroundSrf', // Transportation - Ground
-        'PAQ055':'TransportationGroundPnt', // Transportation - Ground
-        'PAQ056':'TransportationGroundPnt', // Transportation - Ground
-        'LAQ056':'TransportationGroundCrv', // Transportation - Ground
-        'AAQ056':'TransportationGroundSrf', // Transportation - Ground
-        'PAQ059':'TransportationGroundPnt', // Transportation - Ground
-        'LAQ059':'TransportationGroundCrv', // Transportation - Ground
-        'PAQ060':'AeronauticPnt', // Aeronautic
-        'AAQ060':'AeronauticSrf', // Aeronautic
-        'PAQ062':'TransportationGroundPnt', // Transportation - Ground
-        'LAQ063':'TransportationGroundCrv', // Transportation - Ground
-        'AAQ063':'TransportationGroundSrf', // Transportation - Ground
-        'PAQ065':'TransportationGroundPnt', // Transportation - Ground
-        'LAQ065':'TransportationGroundCrv', // Transportation - Ground
-        'PAQ068':'TransportationGroundPnt', // Transportation - Ground
-        'AAQ068':'TransportationGroundSrf', // Transportation - Ground
-        'LAQ070':'TransportationWaterCrv', // Transportation - Water
-        'LAQ075':'TransportationGroundCrv', // Transportation - Ground
-        'PAQ080':'TransportationWaterPnt', // Transportation - Water
-        'AAQ080':'TransportationWaterSrf', // Transportation - Water
-        'PAQ095':'TransportationGroundPnt', // Transportation - Ground
-        'PAQ110':'AeronauticPnt', // Aeronautic
-        'PAQ111':'TransportationWaterPnt', // Transportation - Water
-        'LAQ113':'UtilityInfrastructureCrv', // Utility Infrastructure
-        'PAQ114':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'PAQ115':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'PAQ116':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'AAQ116':'UtilityInfrastructureSrf', // Utility Infrastructure
-        'PAQ118':'TransportationGroundPnt', // Transportation - Ground
-        'LAQ120':'TransportationGroundCrv', // Transportation - Ground
-        'PAQ125':'TransportationGroundPnt', // Transportation - Ground
-        'AAQ125':'TransportationGroundSrf', // Transportation - Ground
-        'LAQ130':'TransportationGroundCrv', // Transportation - Ground
-        'AAQ130':'TransportationGroundSrf', // Transportation - Ground
-        'PAQ135':'TransportationGroundPnt', // Transportation - Ground
-        'AAQ135':'TransportationGroundSrf', // Transportation - Ground
-        'AAQ140':'TransportationGroundSrf', // Transportation - Ground
-        'PAQ141':'TransportationGroundPnt', // Transportation - Ground
-        'AAQ141':'TransportationGroundSrf', // Transportation - Ground
-        'LAQ150':'StructureCrv', // Structure
-        'AAQ150':'StructureSrf', // Structure
-        'LAQ151':'TransportationGroundCrv', // Transportation - Ground
-        'AAQ151':'TransportationGroundSrf', // Transportation - Ground
-        'PAQ160':'TransportationGroundPnt', // Transportation - Ground
-        'PAQ161':'TransportationGroundPnt', // Transportation - Ground
-        'PAQ162':'TransportationGroundPnt', // Transportation - Ground
-        'PAQ170':'TransportationGroundPnt', // Transportation - Ground
-        'AAQ170':'TransportationGroundSrf', // Transportation - Ground
-        'LAT005':'UtilityInfrastructureCrv', // Utility Infrastructure
-        'PAT010':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'PAT011':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'PAT012':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'AAT012':'UtilityInfrastructureSrf', // Utility Infrastructure
-        'LAT041':'TransportationGroundCrv', // Transportation - Ground
-        'PAT042':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'PAT045':'FacilityPnt', // Facility
-        'AAT045':'FacilitySrf', // Facility
-        'LBA010':'PhysiographyCrv', // Physiography
-        'PBA030':'PhysiographyPnt', // Physiography
-        'ABA030':'PhysiographySrf', // Physiography
-        'ABA040':'HydrographySrf', // Hydrography
-        'ABB005':'PortorHarbourSrf', // Port or Harbour
-        'PBB009':'PortorHarbourPnt', // Port or Harbour
-        'ABB009':'PortorHarbourSrf', // Port or Harbour
-        'LBB081':'PortorHarbourCrv', // Port or Harbour
-        'ABB081':'PortorHarbourSrf', // Port or Harbour
-        'LBB082':'PortorHarbourCrv', // Port or Harbour
-        'ABB082':'PortorHarbourSrf', // Port or Harbour
-        'ABB090':'PortorHarbourSrf', // Port or Harbour
-        'PBB110':'HydrographyPnt', // Hydrography
-        'ABB110':'HydrographySrf', // Hydrography
-        'ABB199':'PortorHarbourSrf', // Port or Harbour
-        'PBB201':'PortorHarbourPnt', // Port or Harbour
-        'ABB201':'PortorHarbourSrf', // Port or Harbour
-        'PBB241':'PortorHarbourPnt', // Port or Harbour
-        'ABB241':'PortorHarbourSrf', // Port or Harbour
-        'PBC050':'HydrographicAidtoNavigationPnt', // Hydrographic Aid to Navigation
-        'ABC050':'HydrographicAidtoNavigationSrf', // Hydrographic Aid to Navigation
-        'PBC070':'HydrographicAidtoNavigationPnt', // Hydrographic Aid to Navigation
-        'PBD100':'PortorHarbourPnt', // Port or Harbour
-        'ABD100':'PortorHarbourSrf', // Port or Harbour
-        'PBD115':'HydrographyPnt', // Hydrography
-        'ABD115':'HydrographySrf', // Hydrography
-        'PBD140':'HydrographyPnt', // Hydrography
-        'ABD140':'HydrographySrf', // Hydrography
-        'PBD181':'HydrographyPnt', // Hydrography
-        'LBH010':'HydrographyCrv', // Hydrography
-        'ABH010':'HydrographySrf', // Hydrography
-        'PBH012':'HydrographyPnt', // Hydrography
-        'ABH015':'VegetationSrf', // Vegetation
-        'LBH020':'TransportationWaterCrv', // Transportation - Water
-        'ABH020':'TransportationWaterSrf', // Transportation - Water
-        'LBH030':'HydrographyCrv', // Hydrography
-        'ABH030':'HydrographySrf', // Hydrography
-        'ABH040':'IndustrySrf', // Industry
-        'PBH051':'AgriculturePnt', // Agriculture
-        'ABH051':'AgricultureSrf', // Agriculture
-        'LBH065':'HydrographyCrv', // Hydrography
-        'PBH070':'TransportationGroundPnt', // Transportation - Ground
-        'LBH070':'TransportationGroundCrv', // Transportation - Ground
-        'ABH070':'TransportationGroundSrf', // Transportation - Ground
-        'PBH075':'CulturePnt', // Culture
-        'ABH075':'CultureSrf', // Culture
-        'ABH077':'VegetationSrf', // Vegetation
-        'PBH082':'HydrographyPnt', // Hydrography
-        'ABH082':'HydrographySrf', // Hydrography
-        'ABH090':'HydrographySrf', // Hydrography
-        'LBH100':'HydrographyCrv', // Hydrography
-        'ABH100':'HydrographySrf', // Hydrography
-        'LBH110':'HydrographyCrv', // Hydrography
-        'ABH116':'SubterraneanSrf', // Subterranean
-        'PBH120':'HydrographyPnt', // Hydrography
-        'LBH120':'HydrographyCrv', // Hydrography
-        'ABH120':'HydrographySrf', // Hydrography
-        'ABH135':'AgricultureSrf', // Agriculture
-        'LBH140':'HydrographyCrv', // Hydrography
-        'ABH140':'HydrographySrf', // Hydrography
-        'PBH145':'HydrographyPnt', // Hydrography
-        'ABH150':'PhysiographySrf', // Physiography
-        'PBH155':'IndustryPnt', // Industry
-        'ABH155':'IndustrySrf', // Industry
-        'ABH160':'PhysiographySrf', // Physiography
-        'LBH165':'HydrographyCrv', // Hydrography
-        'ABH165':'HydrographySrf', // Hydrography
-        'PBH170':'HydrographyPnt', // Hydrography
-        'ABH170':'HydrographySrf', // Hydrography
-        'PBH180':'HydrographyPnt', // Hydrography
-        'LBH180':'HydrographyCrv', // Hydrography
-        'PBH220':'UtilityInfrastructurePnt', // Utility Infrastructure
-        'ABH220':'UtilityInfrastructureSrf', // Utility Infrastructure
-        'PBH230':'HydrographyPnt', // Hydrography
-        'ABH230':'HydrographySrf', // Hydrography
-        'ABI005':'PortorHarbourSrf', // Port or Harbour
-        'PBI006':'TransportationWaterPnt', // Transportation - Water
-        'LBI006':'TransportationWaterCrv', // Transportation - Water
-        'ABI006':'TransportationWaterSrf', // Transportation - Water
-        'PBI010':'HydrographyPnt', // Hydrography
-        'PBI020':'HydrographyPnt', // Hydrography
-        'LBI020':'HydrographyCrv', // Hydrography
-        'ABI020':'HydrographySrf', // Hydrography
-        'PBI030':'TransportationWaterPnt', // Transportation - Water
-        'LBI030':'TransportationWaterCrv', // Transportation - Water
-        'ABI030':'TransportationWaterSrf', // Transportation - Water
-        'PBI040':'HydrographyPnt', // Hydrography
-        'LBI040':'HydrographyCrv', // Hydrography
-        'PBI044':'HydrographyPnt', // Hydrography
-        'LBI044':'HydrographyCrv', // Hydrography
-        'ABI044':'HydrographySrf', // Hydrography
-        'PBI045':'TransportationWaterPnt', // Transportation - Water
-        'LBI045':'TransportationWaterCrv', // Transportation - Water
-        'PBI050':'HydrographyPnt', // Hydrography
-        'ABI050':'HydrographySrf', // Hydrography
-        'LBI060':'HydrographyCrv', // Hydrography
-        'PBI070':'HydrographyPnt', // Hydrography
-        'ABJ020':'PhysiographySrf', // Physiography
-        'ABJ030':'PhysiographySrf', // Physiography
-        'LBJ031':'PhysiographyCrv', // Physiography
-        'ABJ031':'PhysiographySrf', // Physiography
-        'LBJ040':'PhysiographyCrv', // Physiography
-        'PBJ060':'PhysiographyPnt', // Physiography
-        'ABJ065':'PhysiographySrf', // Physiography
-        'ABJ080':'PhysiographySrf', // Physiography
-        'ABJ099':'PhysiographySrf', // Physiography
-        'ABJ100':'PhysiographySrf', // Physiography
-        'ABJ110':'VegetationSrf', // Vegetation
-        'LCA010':'HypsographyCrv', // Hypsography
-        'PCA030':'HypsographyPnt', // Hypsography
-        'ADA005':'PhysiographySrf', // Physiography
-        'ADA010':'PhysiographySrf', // Physiography
-        'LDB010':'PhysiographyCrv', // Physiography
-        'ADB028':'SubterraneanSrf', // Subterranean
-        'PDB029':'PhysiographyPnt', // Physiography
-        'LDB061':'PhysiographyCrv', // Physiography
-        'ADB061':'PhysiographySrf', // Physiography
-        'LDB070':'PhysiographyCrv', // Physiography
-        'LDB071':'PhysiographyCrv', // Physiography
-        'ADB080':'PhysiographySrf', // Physiography
-        'LDB090':'PhysiographyCrv', // Physiography
-        'ADB090':'PhysiographySrf', // Physiography
-        'LDB100':'PhysiographyCrv', // Physiography
-        'LDB110':'PhysiographyCrv', // Physiography
-        'PDB115':'PhysiographyPnt', // Physiography
-        'ADB115':'PhysiographySrf', // Physiography
-        'PDB150':'PhysiographyPnt', // Physiography
-        'PDB160':'PhysiographyPnt', // Physiography
-        'ADB160':'PhysiographySrf', // Physiography
-        'ADB170':'PhysiographySrf', // Physiography
-        'PDB180':'PhysiographyPnt', // Physiography
-        'ADB180':'PhysiographySrf', // Physiography
-        'LDB190':'PhysiographyCrv', // Physiography
-        'ADB211':'PhysiographySrf', // Physiography
-        'AEA010':'AgricultureSrf', // Agriculture
-        'LEA020':'VegetationCrv', // Vegetation
-        'AEA030':'AgricultureSrf', // Agriculture
-        'AEA031':'CultureSrf', // Culture
-        'AEA040':'AgricultureSrf', // Agriculture
-        'AEA050':'AgricultureSrf', // Agriculture
-        'AEA055':'AgricultureSrf', // Agriculture
-        'AEB010':'VegetationSrf', // Vegetation
-        'AEB020':'VegetationSrf', // Vegetation
-        'AEB070':'VegetationSrf', // Vegetation
-        'PEC005':'VegetationPnt', // Vegetation
-        'AEC010':'AgricultureSrf', // Agriculture
-        'LEC015':'VegetationCrv', // Vegetation
-        'AEC015':'VegetationSrf', // Vegetation
-        'PEC020':'PhysiographyPnt', // Physiography
-        'AEC020':'PhysiographySrf', // Physiography
-        'LEC040':'VegetationCrv', // Vegetation
-        'AEC040':'VegetationSrf', // Vegetation
-        'AEC060':'VegetationSrf', // Vegetation
-        'AED010':'VegetationSrf', // Vegetation
-        'AED020':'VegetationSrf', // Vegetation
-        'AEE010':'VegetationSrf', // Vegetation
-        'AEE030':'PhysiographySrf', // Physiography
-        'PFA012':'CulturePnt', // Culture
-        'AFA012':'CultureSrf', // Culture
-        'PFA015':'MilitaryPnt', // Military
-        'AFA015':'MilitarySrf', // Military
-        'AFA100':'MilitarySrf', // Military
-        'PFA165':'MilitaryPnt', // Military
-        'AFA165':'MilitarySrf', // Military
-        'AFA210':'CultureSrf', // Culture
-        'PGB005':'AeronauticPnt', // Aeronautic
-        'AGB005':'AeronauticSrf', // Aeronautic
-        'AGB015':'AeronauticSrf', // Aeronautic
-        'PGB030':'AeronauticPnt', // Aeronautic
-        'AGB030':'AeronauticSrf', // Aeronautic
-        'PGB035':'AeronauticPnt', // Aeronautic
-        'AGB035':'AeronauticSrf', // Aeronautic
-        'PGB040':'AeronauticPnt', // Aeronautic
-        'AGB040':'AeronauticSrf', // Aeronautic
-        'AGB045':'AeronauticSrf', // Aeronautic
-        'LGB050':'MilitaryCrv', // Military
-        'AGB055':'AeronauticSrf', // Aeronautic
-        'PGB065':'AeronauticPnt', // Aeronautic
-        'AGB065':'AeronauticSrf', // Aeronautic
-        'AGB070':'AeronauticSrf', // Aeronautic
-        'LGB075':'AeronauticCrv', // Aeronautic
-        'AGB075':'AeronauticSrf', // Aeronautic
-        'PGB230':'AeronauticPnt', // Aeronautic
-        'AGB230':'AeronauticSrf', // Aeronautic
-        'PGB250':'AeronauticPnt', // Aeronautic
-        'AGB250':'AeronauticSrf', // Aeronautic
-        'AIA040':'BoundarySrf', // Boundary
-        'PSU001':'MilitaryPnt', // Military
-        'ASU001':'MilitarySrf', // Military
-        'ASU004':'MilitarySrf', // Military
-        'LSU030':'MilitaryCrv', // Military
-        'PZB030':'BoundaryPnt', // Boundary
-        'PZB050':'HypsographyPnt', // Hypsography
-        'AZD020':'InformationSrf', // Information
-        'PZD040':'InformationPnt', // Information
-        'PZD045':'InformationPnt', // Information
-        'LZD045':'InformationCrv', // Information
-        'AZD045':'InformationSrf', // Information
-        'PZD070':'HydrographyPnt', // Hydrography
-        'AZD070':'HydrographySrf', // Hydrography
-        'AZI031':'ResourceSrf', // Resource
-        'AZI039':'MetadataSrf' // Metadata
        }, // End of thematicGroupList
     // ##### End of Thematic Group Rules #####
 
