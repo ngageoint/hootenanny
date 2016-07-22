@@ -1,10 +1,13 @@
 #!/bin/bash
 
 # Loads data from a Hootenanny compatible data file into an OSM API database.  It assumes
-# the database has already been initialized with a user.  The write operation will
-# automatically determine the changeset/element starting ID's at the beginning of the write
-# operation only.  THIS SCRIPT SHOULD NOT BE USED IN A PRODUCTION ENVIRONMENT; TESTING ONLY.
-# See the documentation for "postgresql.dumpfile.writer.auto.calc.ids" for further details.
+# the database has already been initialized with a user (see CleanAndInitializeOsmApiDb.sh).  
+# The write operation will automatically determine the changeset/element starting ID's and 
+# do so at the beginning of the write operation only.  
+
+# THIS SCRIPT SHOULD NOT BE USED IN AN ENVIRONMENT WHERE MULTIPLE SIMULTANEOUS DATABASE 
+# WRITERS EXIST, AS ID CONFLICTS MAY OCCUR.  It should only be used when the user of 
+# this script is the only potential database writer.
 
 set -e
 

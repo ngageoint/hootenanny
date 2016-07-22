@@ -2,7 +2,7 @@
 
 # Completely clears an OSM API database, initializes it with a dummy user, and then loads data 
 # from a Hootenanny compatible data file into it.  THIS SCRIPT WILL COMPLETELY OVERWRITE THE
-# CONTENTS OF THE DATABASE.
+# CONTENTS OF THE DATABASE WITH EACH EXECUTION.
 
 set -e
 

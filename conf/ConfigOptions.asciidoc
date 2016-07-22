@@ -1593,7 +1593,7 @@ write operation.  Enabling this setting precludes a user from having to specify 
 "postgresql.dumpfile.writer.start.id.*" configuration options (it overrides them).  This setting
 must be used in conjunction with the "postgresql.dumpfile.writer.id.aware.url" setting.  IMPORTANT:
 This setting should only be enabled in situations where a single user is writing to the target OSM
-API database (testing environment).  Since the command does not continuallly check for the next
+API database (database is offline).  Since the command does not continuallly check for the next
 available ID (for performance reasons), ID conflict errors may occur if multiple users are writing
 to the database simultaneously when this option is enabled.
 
@@ -1659,10 +1659,20 @@ database will be assigned the user id set by this field.
 === postgresql.dumpfile.writer.element.status.count.interval
 
 * Data Type: long
-* Default Value: `10000`
+* Default Value: `100000`
 
-Count at which the load status of each element type should be logged.  e.g. With a value of 10000,
-you will see a element load status update message for every 10000 elements parsed.
+Count at which the load status of each element type should be logged.  e.g. With a value of 100000,
+you will see a element load status update message for every 100000 elements parsed.
+
+=== postgresql.dumpfile.writer.add.circular.error.tag
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, then any element being written to an OSM API database via 'hoot convert' will have the
+"error:circular" tag written to the element, if that element has a positive circular error value.
+This operation can be slow for large amounts of data.  This is a temporary setting for holy grail
+that eventually needs to be removed.
 
 === reader.add.source.datetime
 

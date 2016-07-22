@@ -244,6 +244,15 @@ void PostgresqlDumpfileWriter::finalizePartial()
 
 void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 {
+  Tags t = n->getTags();
+  if (ConfigOptions().getPostgresqlDumpfileWriterAddCircularErrorTag())
+  {
+    if (n->getCircularError() >= 0.0)
+    {
+      t["error:circular"] = QString::number(n->getCircularError());
+    }
+  }
+
   //Since we're only creating elements, the changeset bounds is simply the combined bounds
   //of all the nodes involved in the changeset.
   //LOG_VARD(n->getX());
@@ -271,7 +280,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 
   _writeNodeToTables(n, nodeDbId);
 
-  _writeTagsToTables( n->getTags(), nodeDbId,
+  _writeTagsToTables(t, nodeDbId,
     _outputSections["current_node_tags"].second, "%1\t%2\t%3\n",
     _outputSections["node_tags"].second, "%1\t1\t%2\t%3\n");
 
@@ -289,6 +298,15 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 
 void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 {
+  Tags t = w->getTags();
+  if (ConfigOptions().getPostgresqlDumpfileWriterAddCircularErrorTag())
+  {
+    if (w->getCircularError() >= 0.0)
+    {
+      t["error:circular"] = QString::number(w->getCircularError());
+    }
+  }
+
   if ( _writeStats.waysWritten == 0 )
   {
     _createWayTables();
@@ -312,7 +330,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 
   _writeWaynodesToTables( _idMappings.wayIdMap->at( w->getId() ), w->getNodeIds() );
 
-  _writeTagsToTables( w->getTags(), wayDbId,
+  _writeTagsToTables(t, wayDbId,
     _outputSections["current_way_tags"].second, "%1\t%2\t%3\n",
     _outputSections["way_tags"].second, "%1\t1\t%2\t%3\n");
 
@@ -330,6 +348,15 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 
 void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 {
+  Tags t = r->getTags();
+  if (ConfigOptions().getPostgresqlDumpfileWriterAddCircularErrorTag())
+  {
+    if (r->getCircularError() >= 0.0)
+    {
+      t["error:circular"] = QString::number(r->getCircularError());
+    }
+  }
+
   if ( _writeStats.relationsWritten == 0 )
   {
     _createRelationTables();
