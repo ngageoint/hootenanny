@@ -93,8 +93,6 @@ public:
 
     for (int i = 0; i < inputs.size(); i++)
     {
-      LOG_INFO("Loading map data from " << inputs[i] << " ...");
-
       shared_ptr<OsmMap> map(new OsmMap());
       loadMap(map, inputs[i], true, Status::Invalid);
 

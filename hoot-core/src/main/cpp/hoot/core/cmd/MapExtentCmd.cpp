@@ -54,7 +54,6 @@ public:
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
 
-    LOG_INFO("Loading map data from " << args[0] << " ...");
     shared_ptr<OsmMap> map(new OsmMap());
     loadMap(map, args[0], true, Status::Invalid);
 
