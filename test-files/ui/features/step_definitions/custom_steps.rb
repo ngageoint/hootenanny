@@ -215,6 +215,13 @@ When(/^I click the "([^"]*)" key$/) do |arg1|
   find("body").native.send_keys(arg1)
 end
 
+When(/^I click the "([^"]*)" key in the "([^"]*)"$/) do |key, el|
+  find(el).native.send_keys(key)
+end
+
+When(/^I press the escape key$/) do
+  find('body').native.send_keys(:escape)
+end
 Then(/^I should see options in this order:$/) do |table|
   expected_order = table.raw.flatten
   actual_order = page.all('#settingsSidebar label').collect(&:text)
@@ -669,4 +676,8 @@ Then(/^I should see "([^"]*)" with a value greater than "([^"]*)"$/) do |el1, el
   max = page.find(el1).value.to_f
   min = page.find(el2).value.to_f
   expect(max).to be > min
+end
+
+Then(/^I should see a "([^"]*)" on the map$/) do |el|
+  page.should have_css(el)
 end
