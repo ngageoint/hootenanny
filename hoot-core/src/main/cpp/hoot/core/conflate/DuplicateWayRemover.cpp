@@ -38,6 +38,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 
 // Standard
 #include <iostream>
@@ -315,7 +316,7 @@ void DuplicateWayRemover::_replaceMultiple(const shared_ptr<const Way>& oldWay,
     }
   }
 
-  _map->removeWay(oldWay);
+  RemoveWayOp::removeWay(_map, oldWay->getId());
 }
 
 }

@@ -108,7 +108,6 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    RemoveWayOp wayRemover;
     WayMap wm = map->getWays();
     for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
     {
@@ -116,8 +115,7 @@ public:
       const Tags& t = w->getTags();
       if (t["REF1"] != "Target" && t["REF2"] != "Target")
       {
-        wayRemover.setWayId(it->first);
-        wayRemover.apply(map);
+        RemoveWayOp::removeWay(map, it->first);
       }
     }
     BuildingMatchCreator uut;

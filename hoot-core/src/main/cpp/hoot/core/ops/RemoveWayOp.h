@@ -56,6 +56,12 @@ public:
     wayRemover.apply(map);
   }
 
+  static void removeWayFully(OsmMapPtr map, long wId)
+  {
+    RemoveWayOp wayRemover(wId, true);
+    wayRemover.apply(map);
+  }
+
 private:
   long _wayIdToRemove;
   bool _removeFully;

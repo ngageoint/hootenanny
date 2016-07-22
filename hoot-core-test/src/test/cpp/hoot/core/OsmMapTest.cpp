@@ -442,22 +442,16 @@ public:
     // force it to build the tree before we start removing nodes.
     map->getIndex().getWayTree();
 
-    RemoveWayOp wayRemover;
-
-    wayRemover.setWayId(FindWaysVisitor::findWaysByTag(map, "note", "0")[0]);
-    wayRemover.apply(map);
+    RemoveWayOp::removeWay(map, FindWaysVisitor::findWaysByTag(map, "note", "0")[0]);
     _checkKnnWayIterator(map);
 
-    wayRemover.setWayId(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);
-    wayRemover.apply(map);
+    RemoveWayOp::removeWay(map, FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);
     _checkKnnWayIterator(map);
 
-    wayRemover.setWayId(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]);
-    wayRemover.apply(map);
+    RemoveWayOp::removeWay(map, FindWaysVisitor::findWaysByTag(map, "note", "2")[0]);
     _checkKnnWayIterator(map);
 
-    wayRemover.setWayId(FindWaysVisitor::findWaysByTag(map, "note", "3")[0]);
-    wayRemover.apply(map);
+    RemoveWayOp::removeWay(map, FindWaysVisitor::findWaysByTag(map, "note", "3")[0]);
     _checkKnnWayIterator(map);
   }
 

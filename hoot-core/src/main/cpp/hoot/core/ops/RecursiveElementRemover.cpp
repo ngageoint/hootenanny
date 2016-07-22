@@ -30,6 +30,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/SetVisitor.h>
 
@@ -147,7 +148,7 @@ void RecursiveElementRemover::_remove(const shared_ptr<OsmMap>& map, ElementId e
       _remove(map, ElementId::node(nodes[i]), removeSet);
     }
 
-    map->removeWay(w);
+    RemoveWayOp::removeWay(map, w->getId());
   }
   else if (eid.getType() == ElementType::Node)
   {
