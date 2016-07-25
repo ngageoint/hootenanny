@@ -360,7 +360,7 @@ public:
       env.MaxY = 89.5;
       shared_ptr<OGRSpatialReference> srs = MapProjector::createOrthographic(env);
       Coordinate c(500, 200);
-      CPPUNIT_ASSERT_THROW(MapProjector::project(c, OsmMap::getWgs84(), srs),
+      CPPUNIT_ASSERT_THROW(MapProjector::project(c, MapProjector::createWgs84Projection(), srs),
                            IllegalArgumentException);
     }
 

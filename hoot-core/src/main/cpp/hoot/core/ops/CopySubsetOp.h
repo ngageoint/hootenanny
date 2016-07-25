@@ -43,6 +43,8 @@ class CopySubsetOp : public OsmMapOperation
 public:
   CopySubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids);
 
+  CopySubsetOp(const ConstOsmMapPtr& from, const vector<long>& ids);
+
   CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
 
   /**

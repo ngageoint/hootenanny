@@ -67,10 +67,8 @@ namespace hoot {
 
 using namespace std;
 
-class NodeFilter;
 class OsmMapIndex;
 class OsmMapListener;
-class WayFilter;
 
 /**
  * The OsmMap contains all the information necessary to represent an OSM map. It holds the nodes,
@@ -82,7 +80,6 @@ class WayFilter;
  *
  *  - For instance, complicated operations on the map such as recursively removing elements should
  *    live in another class. E.g. RecursiveElementRemover
- *  - Things like the filter operations can be replaced by visitors.
  *  - In the long term it might also be nice simplify the maintenance by merging all the elements
  *    into a single map and simplify the interface in a similar fashion.
  *  - I'd like to remove the OsmIndex circular reference, but I haven't figured out a good
@@ -147,32 +144,11 @@ public:
 
   virtual bool containsWay(long id) const { return _ways.find(id) != _ways.end(); }
 
-  /**
-   * Returns a copy of this map that only contains the specified ways. This can be handy when
-   * performing what-if experiments.
-   * @deprecated CopySubsetOp is now preferred.
-   */
-  shared_ptr<OsmMap> copyWays(const vector<long>& wIds) const;
-
   long createNextNodeId() const { return _idGen->createNodeId(); }
 
   long createNextRelationId() const { return _idGen->createRelationId(); }
 
   long createNextWayId() const { return _idGen->createWayId(); }
-
-  std::vector<long> filterNodes(const NodeFilter& filter) const;
-
-  std::vector<long> filterNodes(const NodeFilter& filter, const Coordinate& c,
-                                Meters maxDistance) const;
-
-  std::vector<long> filterWays(const WayFilter& filter) const;
-
-  /**
-   * Returns the ID of all the ways that are not filtered by filter and are within maxDistance
-   * of "from".
-   */
-  std::vector<long> filterWays(const WayFilter& filter, shared_ptr<const Way> from,
-                               Meters maxDistance, bool addError = false) const;
 
   virtual ConstElementPtr getElement(const ElementId& id) const;
   ConstElementPtr getElement(ElementType type, long id) const;
@@ -230,8 +206,6 @@ public:
 
   const WayMap& getWays() const { return _ways; }
 
-  static boost::shared_ptr<OGRSpatialReference> getWgs84();
-
   bool isEmpty() const { return _nodes.size() == 0 && _ways.size() == 0 && _relations.size() == 0;}
 
   void registerListener(shared_ptr<OsmMapListener> l) { _listeners.push_back(l); }
@@ -285,11 +259,6 @@ public:
    * Removes the way from all relations and then removes the way from the map.
    */
   void removeWayFully(long wId);
-
-  /**
-   * Removes the way if isFiltered() == true.
-   */
-  void removeWays(const WayFilter& filter);
 
   /**
    * Replace the all instances of from with instances of to. In some cases this may be an invalid
@@ -362,6 +331,7 @@ public:
    * visiting any elements.
    */
   void visitRw(ElementVisitor& visitor);
+  void visitWaysRw(ElementVisitor& visitor);
 
 protected:
 

@@ -35,6 +35,7 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
@@ -59,7 +60,7 @@ OsmMap::OsmMap()
 {
   setIdGenerator(IdGenerator::getInstance());
   _index.reset(new OsmMapIndex(*this));
-  _srs = getWgs84();
+  _srs = MapProjector::createWgs84Projection();
 }
 
 OsmMap::OsmMap(shared_ptr<const OsmMap> map)
@@ -210,7 +211,7 @@ void OsmMap::addWay(const shared_ptr<Way>& w)
 
 void OsmMap::clear()
 {
-  _srs = getWgs84();
+  _srs = MapProjector::createWgs84Projection();
 
   _nodes.clear();
   _ways.clear();
@@ -288,97 +289,6 @@ void OsmMap::_copy(boost::shared_ptr<const OsmMap> from)
   }
 }
 
-shared_ptr<OsmMap> OsmMap::copyWays(const vector<long>& wIds) const
-{
-  shared_ptr<OsmMap> result(new OsmMap());
-  result->_srs = _srs;
-
-  for (size_t i = 0; i < wIds.size(); i++)
-  {
-    shared_ptr<const Way> oldWay = getWay(wIds[i]);
-    shared_ptr<Way> w = shared_ptr<Way>(new Way(*oldWay));
-    w->registerListener(_index.get());
-    result->_ways[wIds[i]] = w;
-
-    for (size_t j = 0; j < oldWay->getNodeCount(); j++)
-    {
-      shared_ptr<const Node> oldNode = getNode(oldWay->getNodeId(j));
-      result->_nodes[oldNode->getId()] = shared_ptr<Node>(new Node(*oldNode));
-    }
-  }
-
-  return result;
-}
-
-std::vector<long> OsmMap::filterNodes(const NodeFilter& filter) const
-{
-  std::vector<long> result;
-
-  for (NodeMap::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
-  {
-    const shared_ptr<const Node>& n = it->second;
-    if (filter.isFiltered(n) == false)
-    {
-      result.push_back(n->getId());
-    }
-  }
-
-  return result;
-}
-
-std::vector<long> OsmMap::filterNodes(const NodeFilter& filter, const Coordinate& from,
-                                      Meters maxDistance) const
-{
-  vector<long> result;
-  vector<long> close = getIndex().findNodes(from, maxDistance);
-
-  for (size_t i = 0; i < close.size(); i++)
-  {
-    const shared_ptr<const Node>& n = getNode(close[i]);
-    if (filter.isFiltered(n) == false)
-    {
-      result.push_back(close[i]);
-    }
-  }
-
-  return result;
-}
-
-vector<long> OsmMap::filterWays(const WayFilter& filter, shared_ptr<const Way> from,
-                        Meters maxDistance, bool addError) const
-{
-  vector<long> close = getIndex().findWayNeighbors(from, maxDistance, addError);
-  vector<long> result;
-
-  for (size_t i = 0; i < close.size(); i++)
-  {
-    const shared_ptr<const Way>& w = getWay(close[i]);
-    if (filter.isFiltered(w) == false)
-    {
-      result.push_back(w->getId());
-    }
-  }
-
-  return result;
-}
-
-
-std::vector<long> OsmMap::filterWays(const WayFilter& filter) const
-{
-  std::vector<long> result;
-
-  for (WayMap::const_iterator it = _ways.begin(); it != _ways.end(); ++it)
-  {
-    const shared_ptr<const Way>& w = it->second;
-    if (filter.isFiltered(w) == false)
-    {
-      result.push_back(w->getId());
-    }
-  }
-
-  return result;
-}
-
 ConstElementPtr OsmMap::getElement(const ElementId& eid) const
 {
   return getElement(eid.getType(), eid.getId());
@@ -427,19 +337,6 @@ size_t OsmMap::getElementCount() const
 set<ElementId> OsmMap::getParents(ElementId eid) const
 {
   return getIndex().getParents(eid);
-}
-
-boost::shared_ptr<OGRSpatialReference> OsmMap::getWgs84()
-{
-  if (_wgs84 == 0)
-  {
-    _wgs84.reset(new OGRSpatialReference());
-    if (_wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
-    {
-      throw HootException("Error creating EPSG:4326 projection.");
-    }
-  }
-  return _wgs84;
 }
 
 bool OsmMap::_listContainsNode(const QList<ElementPtr> l) const
@@ -580,19 +477,6 @@ void OsmMap::removeWayFully(long wId)
   }
   removeWay(wId);
   VALIDATE(validate());
-}
-
-void OsmMap::removeWays(const WayFilter& filter)
-{
-  const WayMap ways = getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
-  {
-    const shared_ptr<const Way>& w = it->second;
-    if (filter.isFiltered(w) == true)
-    {
-      removeWay(w->getId());
-    }
-  }
 }
 
 void OsmMap::replace(const shared_ptr<const Element>& from, const shared_ptr<Element>& to)
@@ -896,6 +780,25 @@ void OsmMap::visitRw(ElementVisitor& visitor)
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
     if (containsRelation(it->first))
+    {
+      visitor.visit(it->second);
+    }
+  }
+}
+
+void OsmMap::visitWaysRw(ElementVisitor& visitor)
+{
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const WayMap allWays = getWays();
+  for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
+  {
+    if (containsWay(it->first))
     {
       visitor.visit(it->second);
     }

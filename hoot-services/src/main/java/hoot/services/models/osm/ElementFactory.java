@@ -94,14 +94,12 @@ public final class ElementFactory {
             }
         }
 
-        ClassUtils.getPackageName(ElementFactory.class);
-
         try {
             Long oMapId = mapId;
             return (Element) ConstructorUtils.invokeConstructor(
-                    Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType),
-                    new Object[] { oMapId, conn, oElem },
-                    new Class<?>[] { Long.class, Connection.class, oElem.getClass() });
+                Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType),
+                new Object[] { oMapId, conn, oElem },
+                new Class<?>[] { Long.class, Connection.class, oElem.getClass() });
         }
         catch (Exception e) {
             throw new RuntimeException("Error creating " + elementType + " OSM element for map with id = " + mapId, e);
