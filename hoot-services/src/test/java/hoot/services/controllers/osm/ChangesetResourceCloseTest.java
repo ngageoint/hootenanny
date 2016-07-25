@@ -26,12 +26,13 @@
  */
 package hoot.services.controllers.osm;
 
+import static hoot.services.HootProperties.*;
+
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.ws.rs.core.MediaType;
@@ -54,10 +55,9 @@ import com.mysema.query.sql.SQLQuery;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
-import hoot.services.db.DbUtils;
-import hoot.services.db.postgres.PostgresUtils;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.PostgresUtils;
 import hoot.services.db2.Changesets;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelationMembers;
@@ -71,11 +71,11 @@ import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
-import hoot.services.geo.QuadTileCalculator;
 import hoot.services.models.osm.Changeset;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlUtils;
 
 
@@ -185,14 +185,11 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testChangesetMaxElementsExceededUploadedToEmptyChangeset() throws Exception {
-        Map<String, String> originalHootProperties = HootProperties.getProperties();
-
+        String original_MAXIMUM_CHANGESET_ELEMENTS = MAXIMUM_CHANGESET_ELEMENTS;
         try {
-            Properties hootProps = new Properties();
             // lower the max allowed elements per changeset from the default
             int maximumChangesetElements = 2;
-            hootProps.setProperty("maximumChangesetElements", String.valueOf(maximumChangesetElements));
-            HootCustomPropertiesSetter.setProperties(hootProps);
+            HootCustomPropertiesSetter.setProperty("MAXIMUM_CHANGESET_ELEMENTS", String.valueOf(maximumChangesetElements));
 
             BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
             long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 0);
@@ -250,8 +247,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                     BoundingBox defaultBounds = new BoundingBox();
                     // a change the size of the expansion factor is made
                     // automatically, so the changeset's bounds should be no larger than that
-                    defaultBounds.expand(originalBounds,
-                            Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                    defaultBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                     Assert.assertEquals(defaultBounds, changesetBounds);
                 }
                 catch (Exception e2) {
@@ -267,24 +263,20 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         }
         finally {
             // restore original properties since they are at defined at the class level
-            Properties hootProps = new Properties();
-            hootProps.putAll(originalHootProperties);
-            HootCustomPropertiesSetter.setProperties(hootProps);
+            HootCustomPropertiesSetter.setProperty("MAXIMUM_CHANGESET_ELEMENTS", original_MAXIMUM_CHANGESET_ELEMENTS);
         }
     }
 
     @Test
     @Category(UnitTest.class)
     public void testChangesetAutoCloseWhenMaxElementsUploadedToEmptyChangeset() throws Exception {
-        Map<String, String> originalHootProperties = HootProperties.getProperties();
-        try {
-            Properties hootProps = new Properties();
+        String original_MAXIMUM_CHANGESET_ELEMENTS = MAXIMUM_CHANGESET_ELEMENTS;
 
+        try {
             // lower the max allowed elements per changeset from the default to the
             // number of elements we're uploading
             int maximumChangesetElements = 12;
-            hootProps.setProperty("maximumChangesetElements", String.valueOf(maximumChangesetElements));
-            HootCustomPropertiesSetter.setProperties(hootProps);
+            HootCustomPropertiesSetter.setProperty("MAXIMUM_CHANGESET_ELEMENTS", String.valueOf(maximumChangesetElements));
 
             BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
             long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 0);
@@ -499,23 +491,19 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         }
         finally {
             // restore original properties since they are at defined at the class level
-            Properties hootProps = new Properties();
-            hootProps.putAll(originalHootProperties);
-            HootCustomPropertiesSetter.setProperties(hootProps);
+            HootCustomPropertiesSetter.setProperty("MAXIMUM_CHANGESET_ELEMENTS", original_MAXIMUM_CHANGESET_ELEMENTS);
         }
     }
 
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testChangesetMaxElementsExceededUploadedToExistingChangeset() throws Exception {
-        Map<String, String> originalHootProperties = HootProperties.getProperties();
+        String original_MAXIMUM_CHANGESET_ELEMENTS = MAXIMUM_CHANGESET_ELEMENTS;
 
         try {
-            Properties hootProps = new Properties();
             // lower the max allowed elements per changeset from the default
             int maximumChangesetElements = 16;
-            hootProps.setProperty("maximumChangesetElements", String.valueOf(maximumChangesetElements));
-            HootCustomPropertiesSetter.setProperties(hootProps);
+            HootCustomPropertiesSetter.setProperty("MAXIMUM_CHANGESET_ELEMENTS", String.valueOf(maximumChangesetElements));
 
             BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
             long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
@@ -583,27 +571,22 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         }
         finally {
             // restore original properties since they are at defined at the class level
-            Properties hootProps = new Properties();
-            hootProps.putAll(originalHootProperties);
-            HootCustomPropertiesSetter.setProperties(hootProps);
+            HootCustomPropertiesSetter.setProperty("MAXIMUM_CHANGESET_ELEMENTS", original_MAXIMUM_CHANGESET_ELEMENTS);
         }
     }
 
     @Test
     @Category(UnitTest.class)
     public void testChangesetAutoCloseWhenMaxElementsUploadedToExistingChangeset() throws Exception {
-        Map<String, String> originalHootProperties = HootProperties.getProperties();
-        try {
-            Properties hootProps = new Properties();
+        String original_MAXIMUM_CHANGESET_ELEMENTS = MAXIMUM_CHANGESET_ELEMENTS;
 
+        try {
             // lower the max allowed elements per changeset from the default to the
             // sum of number of elements existing currently in changeset + what we're adding
             int maximumChangesetElements = 18;
-            hootProps.setProperty("maximumChangesetElements", String.valueOf(maximumChangesetElements));
-            HootCustomPropertiesSetter.setProperties(hootProps);
+            HootCustomPropertiesSetter.setProperty("MAXIMUM_CHANGESET_ELEMENTS", String.valueOf(maximumChangesetElements));
 
-            Assert.assertEquals(maximumChangesetElements,
-                    Integer.parseInt(HootProperties.getProperty("maximumChangesetElements")));
+            Assert.assertEquals(maximumChangesetElements, Integer.parseInt(MAXIMUM_CHANGESET_ELEMENTS));
 
             BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
             long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
@@ -1034,8 +1017,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(updatedBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(updatedBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
                 Assert.assertEquals(changesetBounds, expandedBounds);
@@ -1050,16 +1032,16 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         }
         finally {
             // restore original hoot properties since they are shared at the class level
-            Properties hootProps = new Properties();
-            hootProps.putAll(originalHootProperties);
-            HootCustomPropertiesSetter.setProperties(hootProps);
+            HootCustomPropertiesSetter.setProperty("MAXIMUM_CHANGESET_ELEMENTS", original_MAXIMUM_CHANGESET_ELEMENTS);
         }
     }
 
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testChangesetAutoCloseWhenNoElementsAddedToItBeforeExpiration() throws Exception {
-        Map<String, String> originalHootProperties = HootProperties.getProperties();
+        String original_TEST_CHANGESET_AUTO_CLOSE = TEST_CHANGESET_AUTO_CLOSE;
+        String original_CHANGESET_IDLE_TIMEOUT_MINUTES = CHANGESET_IDLE_TIMEOUT_MINUTES;
+
         try {
             // A changeset is created, but no elements are added to it. It
             // should auto-close once changesetIdleTimeoutMinutes time has passed, since that's when
@@ -1067,22 +1049,20 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
             // set these props at the beginning, since they are read by
             // OsmResourceTestUtils.createTestChangeset
-            Properties hootProps = new Properties();
 
             // Toggle the var that allows for testing changeset auto-closing.
             // This will change the service
             // to temporarily interpret changesetIdleTimeoutMinutes as a value
             // in seconds instead of minutes to enable a faster runtime for this test.
-            hootProps.setProperty("testChangesetAutoClose", String.valueOf(true));
+            HootCustomPropertiesSetter.setProperty("TEST_CHANGESET_AUTO_CLOSE", String.valueOf(true));
 
             // set the timeout to one second
             int changesetIdleTimeoutSeconds = 1;
-            hootProps.setProperty("changesetIdleTimeoutMinutes", String.valueOf(changesetIdleTimeoutSeconds));
-            HootCustomPropertiesSetter.setProperties(hootProps);
+            HootCustomPropertiesSetter.setProperty("CHANGESET_IDLE_TIMEOUT_MINUTES",
+                    String.valueOf(changesetIdleTimeoutSeconds));
 
-            Assert.assertTrue(Boolean.parseBoolean(HootProperties.getProperty("testChangesetAutoClose")));
-            Assert.assertEquals(changesetIdleTimeoutSeconds,
-                    Integer.parseInt(HootProperties.getProperty("changesetIdleTimeoutMinutes")));
+            Assert.assertTrue(Boolean.parseBoolean(TEST_CHANGESET_AUTO_CLOSE));
+            Assert.assertEquals(changesetIdleTimeoutSeconds, Integer.parseInt(CHANGESET_IDLE_TIMEOUT_MINUTES));
 
             BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
             long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 0);
@@ -1132,16 +1112,18 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         }
         finally {
             // restore original hoot properties since they are shared at the class level
-            Properties hootProps = new Properties();
-            hootProps.putAll(originalHootProperties);
-            HootCustomPropertiesSetter.setProperties(hootProps);
+            HootCustomPropertiesSetter.setProperty("CHANGESET_IDLE_TIMEOUT_MINUTES", original_CHANGESET_IDLE_TIMEOUT_MINUTES);
+            HootCustomPropertiesSetter.setProperty("TEST_CHANGESET_AUTO_CLOSE", original_TEST_CHANGESET_AUTO_CLOSE);
         }
     }
 
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testChangesetAutoCloseWhenLengthBetweenUpdatesCausesExpiration() throws Exception {
-        Map<String, String> originalHootProperties = HootProperties.getProperties();
+        String original_TEST_CHANGESET_AUTO_CLOSE = TEST_CHANGESET_AUTO_CLOSE;
+        String original_CHANGESET_IDLE_TIMEOUT_MINUTES = CHANGESET_IDLE_TIMEOUT_MINUTES;
+        String original_CHANGESET_MAX_OPEN_TIME_HOURS = CHANGESET_MAX_OPEN_TIME_HOURS;
+
         try {
             // A changeset is created and elements are added to it. After that,
             // a time longer than changesetMaxOpenTimeHours passes before attempting to add any
@@ -1150,26 +1132,25 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
             // set these props at the beginning, since they are read by
             // OsmResourceTestUtils.createTestChangeset
-            Properties hootProps = new Properties();
 
             // Toggle the var that allows for testing changeset auto-closing.
             // This will change the service
             // to temporarily interpret changesetIdleTimeoutMinutes as a value
             // in seconds instead of minutes to enable a faster runtime for this test.
-            hootProps.setProperty("testChangesetAutoClose", String.valueOf(true));
+            HootCustomPropertiesSetter.setProperty("TEST_CHANGESET_AUTO_CLOSE", String.valueOf(true));
 
             // set the timeout to one second
             int changesetIdleTimeoutSeconds = 1;
-            hootProps.setProperty("changesetIdleTimeoutMinutes", String.valueOf(changesetIdleTimeoutSeconds));
-            int changesetMaxOpenTimeSeconds = 2;
-            hootProps.setProperty("changesetMaxOpenTimeHours", String.valueOf(changesetMaxOpenTimeSeconds));
-            HootCustomPropertiesSetter.setProperties(hootProps);
+            HootCustomPropertiesSetter.setProperty("CHANGESET_IDLE_TIMEOUT_MINUTES",
+                    String.valueOf(changesetIdleTimeoutSeconds));
 
-            Assert.assertTrue(Boolean.parseBoolean(HootProperties.getProperty("testChangesetAutoClose")));
-            Assert.assertEquals(changesetIdleTimeoutSeconds,
-                    Integer.parseInt(HootProperties.getProperty("changesetIdleTimeoutMinutes")));
-            Assert.assertEquals(changesetMaxOpenTimeSeconds,
-                    Integer.parseInt(HootProperties.getProperty("changesetMaxOpenTimeHours")));
+            int changesetMaxOpenTimeSeconds = 2;
+            HootCustomPropertiesSetter.setProperty("CHANGESET_MAX_OPEN_TIME_HOURS",
+                    String.valueOf(changesetMaxOpenTimeSeconds));
+
+            Assert.assertTrue(Boolean.parseBoolean(TEST_CHANGESET_AUTO_CLOSE));
+            Assert.assertEquals(changesetIdleTimeoutSeconds, Integer.parseInt(CHANGESET_IDLE_TIMEOUT_MINUTES));
+            Assert.assertEquals(changesetMaxOpenTimeSeconds, Integer.parseInt(CHANGESET_MAX_OPEN_TIME_HOURS));
 
             BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
             long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
@@ -1223,9 +1204,9 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         }
         finally {
             // restore original hoot properties since they are shared at the class level
-            Properties hootProps = new Properties();
-            hootProps.putAll(originalHootProperties);
-            HootCustomPropertiesSetter.setProperties(hootProps);
+            HootCustomPropertiesSetter.setProperty("CHANGESET_IDLE_TIMEOUT_MINUTES", original_CHANGESET_IDLE_TIMEOUT_MINUTES);
+            HootCustomPropertiesSetter.setProperty("CHANGESET_MAX_OPEN_TIME_HOURS", original_CHANGESET_MAX_OPEN_TIME_HOURS);
+            HootCustomPropertiesSetter.setProperty("TEST_CHANGESET_AUTO_CLOSE", original_TEST_CHANGESET_AUTO_CLOSE);
         }
     }
 

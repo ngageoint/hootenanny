@@ -39,7 +39,7 @@ public interface ICommandRunner {
      * the CommandResult. Waits for all output and process completion then
      * returns the process exit status.
      */
-    CommandResult exec(String cmd) throws IOException, InterruptedException;
+    CommandResult exec(String cmd) throws IOException;
 
     /**
      * Runs a process using Runtime.exec() with the given environment. System
@@ -58,7 +58,7 @@ public interface ICommandRunner {
      * returns the process exit status.
      */
 
-    CommandResult exec(String[] cmd) throws IOException, InterruptedException;
+    CommandResult exec(String[] cmd) throws IOException;
 
     /**
      * Runs a process using Runtime.exec(). The command to run is passed as a
@@ -79,7 +79,7 @@ public interface ICommandRunner {
      * <p>
      * Note that if one of the Writers blocks, this may block the child process.
      */
-    CommandResult exec(String[] pCmd, Writer pOut, Writer pErr) throws IOException, InterruptedException;
+    CommandResult exec(String[] pCmd, Writer pOut, Writer pErr) throws IOException;
 
     /**
      * Runs a process using Runtime.exec(). The command to run is passed as a
@@ -90,7 +90,7 @@ public interface ICommandRunner {
      * <p>
      * Note that if one of the Writers blocks, this may block the child process.
      */
-    CommandResult exec(String pCmd, Writer pOut, Writer pErr) throws IOException, InterruptedException;
+    CommandResult exec(String pCmd, Writer pOut, Writer pErr) throws IOException;
 
     /**
      * Terminates the command process

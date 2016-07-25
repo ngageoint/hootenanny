@@ -26,12 +26,15 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.HootProperties.CLEAN_DATA_MAKEFILE_PATH;
+
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -41,16 +44,13 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
-
 
 @Path("/cleandata")
 public class CleanDataResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(CleanDataResource.class);
 
     public CleanDataResource() {
-        super(HootProperties.getProperty("cleanDataMakePath"));
+        super(CLEAN_DATA_MAKEFILE_PATH);
     }
 
     /**
@@ -77,13 +77,15 @@ public class CleanDataResource extends JobControllerBase {
     @Produces(MediaType.TEXT_PLAIN)
     public Response process(String params) {
         String jobId = UUID.randomUUID().toString();
+
         try {
             JSONArray commandArgs = parseParams(params);
             String argStr = createPostBody(commandArgs);
             postJobRquest(jobId, argStr);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error process data clean request: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error processing data clean request: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         JSONObject res = new JSONObject();

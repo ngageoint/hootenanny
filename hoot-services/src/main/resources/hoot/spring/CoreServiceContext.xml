@@ -3,18 +3,18 @@
 
 <beans>
 
-	<bean id="processStreamInterface" singleton="true" 
-		class="hoot.services.nativeInterfaces.ProcessStreamInterface" init-method="init" destroy-method="destroy">
+	<bean id="processStreamInterface" singleton="true"
+          class="hoot.services.nativeinterfaces.ProcessStreamInterface" init-method="init" destroy-method="destroy">
 	</bean>
 	
-	<bean id="jobExecutionManagerNative" singleton="true" 
-		class="hoot.services.nativeInterfaces.JobExecutionManager" init-method="init" destroy-method="destroy">
+	<bean id="jobExecutionManagerNative" singleton="true"
+          class="hoot.services.nativeinterfaces.JobExecutionManager" init-method="init" destroy-method="destroy">
 		<property name="nativeInterface" ref="processStreamInterface"/>
 	</bean>
   
 
-	<bean id="ResourcesCleanUtil" singleton="true" 
-		class="hoot.services.utils.ResourcesCleanUtil" init-method="init" destroy-method="destroy">
+	<bean id="ResourcesCleanUtil" singleton="true"
+          class="hoot.services.controllers.job.ResourcesCleanUtil" init-method="init" destroy-method="destroy">
 	</bean>
 	
 	<bean id="TunningService" singleton="true" 

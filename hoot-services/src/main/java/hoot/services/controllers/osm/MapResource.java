@@ -27,6 +27,7 @@
 package hoot.services.controllers.osm;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.SocketException;
@@ -47,13 +48,16 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -78,25 +82,24 @@ import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.mysema.query.types.expr.NumberExpression;
 import com.mysema.query.types.template.NumberTemplate;
 
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.db2.FolderMapMappings;
 import hoot.services.db2.Folders;
 import hoot.services.db2.Maps;
 import hoot.services.db2.QFolderMapMappings;
 import hoot.services.db2.QFolders;
 import hoot.services.db2.QMaps;
+import hoot.services.db2.QUsers;
+import hoot.services.db2.Users;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobExecutioner;
 import hoot.services.job.JobStatusManager;
-import hoot.services.models.dataset.FolderRecords;
-import hoot.services.models.dataset.LinkRecords;
 import hoot.services.models.osm.Element.ElementType;
+import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.writers.osm.MapQueryResponseWriter;
 
 
 /**
@@ -117,30 +120,21 @@ public class MapResource {
      * GET hoot-services/osm/api/0.6/map/layers
      *
      * @return a JSON object containing a list of map layers
-     * @throws Exception
      */
     @GET
     @Path("/layers")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public MapLayers getLayers() throws Exception {
-        Connection conn = DbUtils.createConnection();
+    public MapLayers getLayers() {
         MapLayers mapLayers = null;
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             logger.info("Retrieving map layers list...");
-
-            logger.debug("Initializing database connection...");
-
             SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-
             List<Maps> mapLayerRecords = query.from(maps).orderBy(maps.displayName.asc()).list(maps);
             mapLayers = Map.mapLayerRecordsToLayers(mapLayerRecords);
         }
         catch (Exception e) {
             handleError(e, null, null);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         String message = "Returning map layers response";
@@ -149,6 +143,7 @@ public class MapResource {
         }
 
         logger.debug(message);
+
         return mapLayers;
     }
 
@@ -165,33 +160,22 @@ public class MapResource {
      * Returns a list of all folders in the services database
      *
      * @return a JSON object containing a list of folders
-     * @throws Exception
      */
-
     @GET
     @Path("/folders")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public FolderRecords getFolders() throws Exception {
-        Connection conn = DbUtils.createConnection();
+    public FolderRecords getFolders() {
         FolderRecords folderRecords = null;
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             logger.info("Retrieving folders list...");
-
-            logger.debug("Initializing database connection...");
-
             QFolders folders = QFolders.folders;
             SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-
             List<Folders> folderRecordSet = query.from(folders).orderBy(folders.displayName.asc()).list(folders);
-
             folderRecords = Map.mapFolderRecordsToFolders(folderRecordSet);
         }
         catch (Exception e) {
             handleError(e, null, null);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         String message = "Returning map layers response";
@@ -210,20 +194,16 @@ public class MapResource {
      * GET hoot-services/osm/api/0.6/map/links
      *
      * @return a JSON object containing a list of folders
-     * @throws Exception
      */
     @GET
     @Path("/links")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public LinkRecords getLinks() throws Exception {
-        Connection conn = DbUtils.createConnection();
+    public LinkRecords getLinks() {
         Configuration configuration = DbUtils.getConfiguration();
         LinkRecords linkRecords = null;
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             logger.info("Retrieving links list...");
-
-            logger.debug("Initializing database connection...");
 
             QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
             SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
@@ -243,7 +223,7 @@ public class MapResource {
                 insertMissing.execute();
             }
             catch (Exception e) {
-                logger.error("Could not add missing records...");
+                logger.error("Could not add missing records...", e);
             }
 
             List<FolderMapMappings> linkRecordSet =
@@ -254,9 +234,6 @@ public class MapResource {
         catch (Exception e) {
             handleError(e, null, null);
         }
-        finally {
-            DbUtils.closeConnection(conn);
-        }
 
         String message = "Returning links response";
         logger.debug(message);
@@ -264,8 +241,8 @@ public class MapResource {
         return linkRecords;
     }
 
-    private static Document _generateExtentOSM(String maxlon, String maxlat, String minlon, String minlat)
-            throws Exception {
+    private static Document generateExtentOSM(String maxlon, String maxlat, String minlon, String minlat)
+            throws ParserConfigurationException, TransformerException, IOException {
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         Date now = new Date();
         String strDate = sdfDate.format(now);
@@ -399,7 +376,6 @@ public class MapResource {
      *            activated is not compatible with standard OSM clients
      *            (specific to Hootenanny iD); defaults to false
      * @return response containing the data of the requested elements
-     * @throws Exception
      */
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
@@ -408,25 +384,23 @@ public class MapResource {
                         @QueryParam("bbox") String BBox,
                         @QueryParam("extent") String extent,
                         @QueryParam("autoextent") String auto,
-                        @DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") boolean multiLayerUniqueElementIds)
-    throws Exception {
-        Connection conn = DbUtils.createConnection();
+                        @DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") boolean multiLayerUniqueElementIds) {
         Document responseDoc = null;
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             logger.info("Retrieving map data for map with ID: {} and bounds {} ...", mapId, BBox);
 
             long mapIdNum = -2;
             try {
                 mapIdNum = Long.parseLong(mapId);
             }
-            catch (NumberFormatException e) {
+            catch (NumberFormatException ignored) {
                 //
             }
             if (mapIdNum == -1)
             {
                 // OSM API database data can't be displayed on a hoot map, due to differences
                 // between the display code, so we return no data here.
-                responseDoc = MapQueryResponseWriter.writeEmptyResponse();
+                responseDoc = writeEmptyResponse();
             }
             else {
                 String bbox = BBox;
@@ -442,33 +416,31 @@ public class MapResource {
                     double maxX = Double.parseDouble(sMaxX);
                     double maxY = Double.parseDouble(sMaxY);
 
-                    minX = minX > 180 ? 180 : minX;
-                    minX = minX < -180 ? -180 : minX;
+                    minX = (minX > 180) ? 180 : minX;
+                    minX = (minX < -180) ? -180 : minX;
 
-                    maxX = maxX > 180 ? 180 : maxX;
-                    maxX = maxX < -180 ? -180 : maxX;
+                    maxX = (maxX > 180) ? 180 : maxX;
+                    maxX = (maxX < -180) ? -180 : maxX;
 
-                    minY = minY > 90 ? 90 : minY;
-                    minY = minY < -90 ? -90 : minY;
+                    minY = (minY > 90) ? 90 : minY;
+                    minY = (minY < -90) ? -90 : minY;
 
-                    maxY = maxY > 90 ? 90 : maxY;
-                    maxY = maxY < -90 ? -90 : maxY;
+                    maxY = (maxY > 90) ? 90 : maxY;
+                    maxY = (maxY < -90) ? -90 : maxY;
 
-                    bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
+                    bbox = minX + "," + minY + "," + maxX + "," + maxY;
                 }
 
-                QMaps maps = QMaps.maps;
                 mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
-                assert (mapIdNum != -1);
 
-                BoundingBox queryBounds = null;
+                BoundingBox queryBounds;
                 try {
                     queryBounds = new BoundingBox(bbox);
                     logger.debug("Query bounds area: {}", queryBounds.getArea());
                 }
                 catch (Exception e) {
                     throw new Exception("Error parsing bounding box from bbox param: " + bbox + " (" + e.getMessage()
-                            + ")");
+                            + ")", e);
                 }
 
                 boolean doDefault = true;
@@ -481,7 +453,7 @@ public class MapResource {
                                 String maxlat = coords[1].trim();
                                 String minlon = coords[2].trim();
                                 String minlat = coords[3].trim();
-                                responseDoc = _generateExtentOSM(maxlon, maxlat, minlon, minlat);
+                                responseDoc = generateExtentOSM(maxlon, maxlat, minlon, minlat);
                                 doDefault = false;
                             }
                         }
@@ -490,19 +462,15 @@ public class MapResource {
                 }
 
                 if (doDefault) {
-                    final java.util.Map<ElementType, java.util.Map<Long, Tuple>> results = (new Map(mapIdNum, conn))
+                    java.util.Map<ElementType, java.util.Map<Long, Tuple>> results = (new Map(mapIdNum, conn))
                             .query(queryBounds);
 
-                    responseDoc = (new MapQueryResponseWriter(mapIdNum, conn)).writeResponse(results, queryBounds,
-                            multiLayerUniqueElementIds);
+                    responseDoc = writeResponse(results, queryBounds, multiLayerUniqueElementIds, mapIdNum, conn);
                 }
             }
         }
         catch (Exception e) {
             handleError(e, mapId, BBox);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         return Response.ok(new DOMSource(responseDoc), MediaType.TEXT_XML).header("Content-type", MediaType.TEXT_XML)
@@ -513,16 +481,15 @@ public class MapResource {
     @Path("/nodescount")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTileNodesCounts(String params) throws Exception {
-        Connection conn = DbUtils.createConnection();
+    public Response getTileNodesCounts(String params) {
         JSONObject ret = new JSONObject();
         String mapId = "";
         String bbox = "";
-        long nodeCnt = 0;
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             JSONParser parser = new JSONParser();
             JSONArray paramsArray = (JSONArray) parser.parse(params);
 
+            long nodeCnt = 0;
             for (Object aParamsArray : paramsArray) {
                 JSONObject param = (JSONObject) aParamsArray;
                 mapId = (String) param.get("mapId");
@@ -530,13 +497,13 @@ public class MapResource {
                 try {
                     mapIdNum = Long.parseLong(mapId);
                 }
-                catch (NumberFormatException e) {
+                catch (NumberFormatException ignored) {
                     //
                 }
                 // OSM API database data can't be displayed on a hoot map, due to differences
                 // between the display code, so we return a zero count if its that layer.
                 if (mapIdNum != -1) {
-                    logger.info("Retrieving node count for map with ID: " + mapId + " ...");
+                    logger.info("Retrieving node count for map with ID: {} ...", mapId);
                     bbox = (String) param.get("tile");
                     String[] coords = bbox.split(",");
                     if (coords.length == 4) {
@@ -550,33 +517,31 @@ public class MapResource {
                         double maxX = Double.parseDouble(sMaxX);
                         double maxY = Double.parseDouble(sMaxY);
 
-                        minX = minX > 180 ? 180 : minX;
-                        minX = minX < -180 ? -180 : minX;
+                        minX = (minX > 180) ? 180 : minX;
+                        minX = (minX < -180) ? -180 : minX;
 
-                        maxX = maxX > 180 ? 180 : maxX;
-                        maxX = maxX < -180 ? -180 : maxX;
+                        maxX = (maxX > 180) ? 180 : maxX;
+                        maxX = (maxX < -180) ? -180 : maxX;
 
-                        minY = minY > 90 ? 90 : minY;
-                        minY = minY < -90 ? -90 : minY;
+                        minY = (minY > 90) ? 90 : minY;
+                        minY = (minY < -90) ? -90 : minY;
 
-                        maxY = maxY > 90 ? 90 : maxY;
-                        maxY = maxY < -90 ? -90 : maxY;
+                        maxY = (maxY > 90) ? 90 : maxY;
+                        maxY = (maxY < -90) ? -90 : maxY;
 
-                        bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
+                        bbox = minX + "," + minY + "," + maxX + "," + maxY;
                     }
 
-                    QMaps maps = QMaps.maps;
                     mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
-                    assert (mapIdNum != -1);
 
-                    BoundingBox queryBounds = null;
+                    BoundingBox queryBounds;
                     try {
                         queryBounds = new BoundingBox(bbox);
-                        logger.debug("Query bounds area: " + queryBounds.getArea());
+                        logger.debug("Query bounds area: {}", queryBounds.getArea());
                     }
                     catch (Exception e) {
                         throw new Exception("Error parsing bounding box from bbox param: " + bbox + " ("
-                                + e.getMessage() + ")");
+                                + e.getMessage() + ")", e);
                     }
                     Map currMap = new Map(mapIdNum, conn);
                     nodeCnt += currMap.getNodesCount(queryBounds);
@@ -588,9 +553,6 @@ public class MapResource {
         catch (Exception e) {
             handleError(e, mapId, bbox);
         }
-        finally {
-            DbUtils.closeConnection(conn);
-        }
 
         return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();
     }
@@ -599,17 +561,16 @@ public class MapResource {
     @Path("/mbr")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMBR(@QueryParam("mapId") String mapId) throws Exception {
-        Connection conn = DbUtils.createConnection();
+    public Response getMBR(@QueryParam("mapId") String mapId) {
         JSONObject ret = new JSONObject();
-        try {
-            logger.info("Retrieving MBR for map with ID: " + mapId + " ...");
+        try (Connection conn = DbUtils.createConnection()) {
+            logger.info("Retrieving MBR for map with ID: {} ...", mapId);
 
             long mapIdNum = -2;
             try {
                 mapIdNum = Long.parseLong(mapId);
             }
-            catch (NumberFormatException e) {
+            catch (NumberFormatException ignored) {
                 //
             }
             if (mapIdNum == -1) // OSM API db
@@ -626,18 +587,16 @@ public class MapResource {
                 ret.put("nodescount", 0);
             }
             else {
-                QMaps maps = QMaps.maps;
                 mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
-                assert (mapIdNum != -1);
 
-                BoundingBox queryBounds = null;
+                BoundingBox queryBounds;
                 try {
                     queryBounds = new BoundingBox("-180,-90,180,90");
                     logger.debug("Query bounds area: {}", queryBounds.getArea());
                 }
                 catch (Exception e) {
                     throw new Exception("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
-                            + e.getMessage() + ")");
+                            + e.getMessage() + ")", e);
                 }
 
                 Map currMap = new Map(mapIdNum, conn);
@@ -671,9 +630,6 @@ public class MapResource {
         catch (Exception e) {
             handleError(e, mapId, "-180,-90,180,90");
         }
-        finally {
-            DbUtils.closeConnection(conn);
-        }
 
         return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();
     }
@@ -687,25 +643,27 @@ public class MapResource {
         }
         else if (e.getMessage().startsWith("Multiple records exist") ||
                  e.getMessage().startsWith("No record exists")) {
-            ResourceErrorHandler.handleError(e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"),
-                    Status.NOT_FOUND, logger);
+            String msg = e.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
+            throw new WebApplicationException(e, Response.status(Status.NOT_FOUND).entity(msg).build());
         }
         else if (e.getMessage().startsWith("Map is empty")) {
-            ResourceErrorHandler.handleError(e.getMessage(), Status.NOT_FOUND, logger);
+            String msg = e.getMessage();
+            throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
         }
         else if (e.getMessage().startsWith("Error parsing bounding box from bbox param") ||
                  e.getMessage().contains("The maximum bbox size is") ||
                  e.getMessage().contains("The maximum number of nodes that may be returned in a map query")) {
-            ResourceErrorHandler.handleError(e.getMessage(), Status.BAD_REQUEST, logger);
+            String msg = e.getMessage();
+            throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
         else {
             if (mapId != null) {
-                ResourceErrorHandler.handleError("Error querying map with ID: " + mapId + " - data: (" + e.getMessage()
-                        + ") " + requestSnippet, Status.INTERNAL_SERVER_ERROR, logger);
+                String msg = "Error querying map with ID: " + mapId + " - data: (" + e.getMessage() + ") " + requestSnippet;
+                throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
             else {
-                ResourceErrorHandler.handleError("Error listing layers for map - data: (" + e.getMessage() + ") "
-                        + requestSnippet, Status.INTERNAL_SERVER_ERROR, logger);
+                String msg = "Error listing layers for map - data: (" + e.getMessage() + ") " + requestSnippet;
+                throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
         }
     }
@@ -720,13 +678,12 @@ public class MapResource {
      * @param mapId
      *            ID of map record to be deleted
      * @return id of the deleted map
-     * @throws Exception
      */
     @POST
     @Path("/delete")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response deleteLayers(@QueryParam("mapId") String mapId) throws Exception {
+    public Response deleteLayers(@QueryParam("mapId") String mapId) {
         JSONObject command = new JSONObject();
         command.put("mapId", mapId);
         command.put("execImpl", "ResourcesCleanUtil");
@@ -756,7 +713,6 @@ public class MapResource {
      * @param inputType
      *            Flag for either dataset or folder
      * @return jobId Success = True/False
-     * @throws Exception
      */
     @POST
     @Path("/modify")
@@ -764,14 +720,11 @@ public class MapResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response modifyName(@QueryParam("mapId") String mapId,
                                @QueryParam("modName") String _modName,
-                               @QueryParam("inputType") String inputType) throws Exception {
+                               @QueryParam("inputType") String inputType) {
         Long _mapId = Long.parseLong(mapId);
-        Connection conn = DbUtils.createConnection();
         String _inputType = inputType.toLowerCase();
 
-        try {
-            logger.debug("Initializing database connection...");
-
+        try (Connection conn = DbUtils.createConnection()) {
             if (_inputType.toLowerCase(Locale.ENGLISH).equals("dataset")) {
                 Configuration configuration = DbUtils.getConfiguration();
 
@@ -794,9 +747,6 @@ public class MapResource {
         catch (Exception e) {
             handleError(e, null, null);
         }
-        finally {
-            DbUtils.closeConnection(conn);
-        }
 
         JSONObject res = new JSONObject();
         res.put("success", true);
@@ -816,24 +766,22 @@ public class MapResource {
      *            The parent folder of the new folder. If at root level, is
      *            equal to 0.
      * @return jobId Success = True/False
-     * @throws Exception
      */
     @POST
     @Path("/addfolder")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public Response addFolder(@QueryParam("folderName") String folderName,
-                              @QueryParam("parentId") String parentId) throws Exception {
+                              @QueryParam("parentId") String parentId) {
         Long _parentId = Long.parseLong(parentId);
         Long newId = -1L;
         NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('folders_id_seq')");
-        Connection conn = DbUtils.createConnection();
 
-        QFolders folders = QFolders.folders;
         Configuration configuration = DbUtils.getConfiguration();
-        SQLQuery query = new SQLQuery(conn, configuration);
 
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
+            SQLQuery query = new SQLQuery(conn, configuration);
+
             List<Long> ids = query.from().list(expression);
 
             if ((ids != null) && (!ids.isEmpty())) {
@@ -841,6 +789,7 @@ public class MapResource {
                 Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
                 long userId = 1;
+                QFolders folders = QFolders.folders;
                 new SQLInsertClause(conn, configuration, folders)
                         .columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId,
                                 folders.parentId).values(newId, now, folderName, true, userId, _parentId).execute();
@@ -848,9 +797,6 @@ public class MapResource {
         }
         catch (Exception e) {
             handleError(e, null, null);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         JSONObject res = new JSONObject();
@@ -870,30 +816,28 @@ public class MapResource {
      * @param folderId
      *            Folder Id
      * @return jobId
-     * @throws Exception
      */
     @POST
     @Path("/deletefolder")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response deleteFolder(@QueryParam("folderId") String folderId) throws Exception {
+    public Response deleteFolder(@QueryParam("folderId") String folderId) {
         Long _folderId = Long.parseLong(folderId);
-        Connection conn = DbUtils.createConnection();
 
-        QFolders folders = QFolders.folders;
         QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
         Configuration configuration = DbUtils.getConfiguration();
 
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
             SQLQuery query = new SQLQuery(conn, configuration);
+            QFolders folders = QFolders.folders;
             List<Long> parentId = query.from(folders).where(folders.id.eq(_folderId)).list(folders.parentId);
 
-            Long _parentId = Long.parseLong("0");
+            Long _parentId;
 
             try {
                 _parentId = parentId.get(0);
             }
-            catch (Exception e) {
+            catch (Exception ignored) {
                 _parentId = Long.parseLong("0");
             }
 
@@ -907,9 +851,6 @@ public class MapResource {
         }
         catch (Exception e) {
             handleError(e, null, null);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         JSONObject res = new JSONObject();
@@ -930,7 +871,6 @@ public class MapResource {
      * @param newRecord
      *            ?
      * @return jobId Success = True/False
-     * @throws Exception
      */
     @POST
     @Path("/updateParentId")
@@ -938,24 +878,19 @@ public class MapResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateParentId(@QueryParam("folderId") String folderId,
                                    @QueryParam("parentId") String parentId,
-                                   @QueryParam("newRecord") Boolean newRecord)
-            throws Exception {
+                                   @QueryParam("newRecord") Boolean newRecord) {
         Long _folderId = Long.parseLong(folderId);
         Long _parentId = Long.parseLong(parentId);
-        Connection conn = DbUtils.createConnection();
 
-        QFolders folders = QFolders.folders;
         Configuration configuration = DbUtils.getConfiguration();
 
-        try {
+        try (Connection conn = DbUtils.createConnection()) {
+            QFolders folders = QFolders.folders;
             new SQLUpdateClause(conn, configuration, folders).where(folders.id.eq(_folderId))
                     .set(folders.parentId, _parentId).execute();
         }
         catch (Exception e) {
             handleError(e, null, null);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
         }
 
         JSONObject res = new JSONObject();
@@ -975,7 +910,6 @@ public class MapResource {
      *            new: creates new link; update: updates link delete: deletes
      *            link
      * @return jobId Success = True/False
-     * @throws Exception
      */
     @POST
     @Path("/linkMapFolder")
@@ -983,28 +917,18 @@ public class MapResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateFolderMapLink(@QueryParam("folderId") String folderId,
                                         @QueryParam("mapId") String mapId,
-                                        @QueryParam("updateType") String updateType)
-            throws Exception {
+                                        @QueryParam("updateType") String updateType) {
         Long _folderId = Long.parseLong(folderId);
         Long _mapId = Long.parseLong(mapId);
-        Long newId = -1L;
         NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('folder_map_mappings_id_seq')");
-        Connection conn = DbUtils.createConnection();
 
-        QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
         Configuration configuration = DbUtils.getConfiguration();
-        SQLQuery query = new SQLQuery(conn, configuration);
 
-        /*
-         * long _mapId = 0;
-         *
-         * try { _mapId = ModelDaoUtils.getRecordIdForInputString(mapId, conn,
-         * maps, maps.id, maps.displayName); } catch (Exception e){ _mapId = 0;
-         * }
-         */
+        try (Connection conn = DbUtils.createConnection()) {
+            SQLQuery query = new SQLQuery(conn, configuration);
 
-        try {
             // Delete any existing to avoid duplicate entries
+            QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
             new SQLDeleteClause(conn, configuration, folderMapMappings).where(
                     folderMapMappings.mapId.eq(Long.parseLong(mapId))).execute();
 
@@ -1012,7 +936,7 @@ public class MapResource {
                 List<Long> ids = query.from().list(expression);
 
                 if ((ids != null) && (!ids.isEmpty())) {
-                    newId = ids.get(0);
+                    Long newId = ids.get(0);
 
                     new SQLInsertClause(conn, configuration, folderMapMappings)
                             .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
@@ -1023,87 +947,84 @@ public class MapResource {
         catch (Exception e) {
             handleError(e, null, null);
         }
-        finally {
-            DbUtils.closeConnection(conn);
-        }
 
         JSONObject res = new JSONObject();
         res.put("success", true);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
-    public String updateTagsDirect(java.util.Map<String, String> tags, String mapName) throws Exception {
+    public String updateTagsDirect(java.util.Map<String, String> tags, String mapName) throws SQLException {
         // _zoomLevels
-        Connection conn = DbUtils.createConnection();
-
         String jobId = UUID.randomUUID().toString();
 
         JobStatusManager jobStatusManager = null;
-        try {
-            // Currently we do not have any way to get map id directly from hoot
-            // core command when it runs so for now we need get the all the map ids matching name and pick
-            // first one..
-            // THIS WILL NEED TO CHANGE when we implement handle map by Id
-            // instead of name..
+        try (Connection conn = DbUtils.createConnection()) {
+            try {
+                // Currently we do not have any way to get map id directly from hoot
+                // core command when it runs so for now we need get the all the map ids matching name and pick
+                // first one..
+                // THIS WILL NEED TO CHANGE when we implement handle map by Id
+                // instead of name..
 
-            List<Long> mapIds = DbUtils.getMapIdsByName(conn, mapName);
-            if (!mapIds.isEmpty()) {
-                // we are expecting the last one of duplicate name to be the one
-                // resulted from the conflation
-                // This can be wrong if there is race condition. REMOVE THIS
-                // once core
-                // implement map Id return
-                long mapId = mapIds.get(mapIds.size() - 1);
-                jobStatusManager = new JobStatusManager(conn);
-                jobStatusManager.addJob(jobId);
+                List<Long> mapIds = DbUtils.getMapIdsByName(conn, mapName);
+                if (!mapIds.isEmpty()) {
+                    // we are expecting the last one of duplicate name to be the one
+                    // resulted from the conflation
+                    // This can be wrong if there is race condition. REMOVE THIS
+                    // once core
+                    // implement map Id return
+                    long mapId = mapIds.get(mapIds.size() - 1);
+                    jobStatusManager = new JobStatusManager(conn);
+                    jobStatusManager.addJob(jobId);
 
-                // Hack alert!
-                // Add special handling of stats tag key
-                // We need to read the file in here, because the file doesn't
-                // exist at the time
-                // the updateMapsTagsCommand job is created in
-                // ConflationResource.java
-                String statsKey = "stats";
-                if (tags.containsKey(statsKey)) {
-                    String statsName = tags.get(statsKey).toString();
-                    File statsFile = new File(statsName);
-                    if (statsFile.exists()) {
-                        logger.debug("Found {}", statsName);
-                        String stats = FileUtils.readFileToString(statsFile, "UTF-8");
-                        tags.put(statsKey, stats);
+                    // Hack alert!
+                    // Add special handling of stats tag key
+                    // We need to read the file in here, because the file doesn't
+                    // exist at the time
+                    // the updateMapsTagsCommand job is created in
+                    // ConflationResource.java
+                    String statsKey = "stats";
+                    if (tags.containsKey(statsKey)) {
+                        String statsName = tags.get(statsKey);
+                        File statsFile = new File(statsName);
+                        if (statsFile.exists()) {
+                            logger.debug("Found {}", statsName);
+                            String stats = FileUtils.readFileToString(statsFile, "UTF-8");
+                            tags.put(statsKey, stats);
 
-                        if (!statsFile.delete()) {
-                            logger.error("Error deleting {} file", statsFile.getAbsolutePath());
+                            if (!statsFile.delete()) {
+                                logger.error("Error deleting {} file", statsFile.getAbsolutePath());
+                            }
+                        }
+                        else {
+                            logger.error("Can't find {}", statsName);
+                            tags.remove(statsKey);
                         }
                     }
-                    else {
-                        logger.error("Can't find {}", statsName);
-                        tags.remove(statsKey);
-                    }
+
+                    DbUtils.updateMapsTableTags(tags, mapId, conn);
+                    jobStatusManager.setComplete(jobId);
+                }
+            }
+            catch (SQLException sqlEx) {
+                if (jobStatusManager != null) {
+                    jobStatusManager.setFailed(jobId, sqlEx.getMessage());
                 }
 
-                DbUtils.updateMapsTableTags(tags, mapId, conn);
-                jobStatusManager.setComplete(jobId);
+                String msg = "Failure update map tags resource " + sqlEx.getMessage() + " SQLState: " + sqlEx.getSQLState();
+                throw new WebApplicationException(sqlEx, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
+            catch (Exception ex) {
+                if (jobStatusManager != null) {
+                    jobStatusManager.setFailed(jobId, ex.getMessage());
+                }
 
-        }
-        catch (SQLException sqlEx) {
-            if (jobStatusManager != null) {
-                jobStatusManager.setFailed(jobId, sqlEx.getMessage());
+                String msg = "Failure update map tags resource" + ex.getMessage();
+                throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
-            ResourceErrorHandler.handleError("Failure update map tags resource " + sqlEx.getMessage() + " SQLState: "
-                    + sqlEx.getSQLState(), Status.INTERNAL_SERVER_ERROR, logger);
         }
-        catch (Exception ex) {
-            if (jobStatusManager != null) {
-                jobStatusManager.setFailed(jobId, ex.getMessage());
-            }
-            ResourceErrorHandler.handleError("Failure update map tags resource" + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, logger);
-        }
-        finally {
-            DbUtils.closeConnection(conn);
-        }
+
         return jobId;
     }
 
@@ -1111,26 +1032,22 @@ public class MapResource {
     @Path("/tags")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTags(@QueryParam("mapid") String mapId) throws Exception {
-        Connection conn = DbUtils.createConnection();
+    public Response getTags(@QueryParam("mapid") String mapId) {
         JSONObject ret = new JSONObject();
-        try {
-            // log.debug(mapId);
-
+        try (Connection conn = DbUtils.createConnection()) {
             if (!StringUtils.isEmpty(mapId)) {
                 long mapIdNum = -2;
                 try {
                     mapIdNum = Long.parseLong(mapId);
                 }
-                catch (NumberFormatException e) {
+                catch (NumberFormatException ignored) {
                     // a map name string could also be passed in here
                 }
+
                 if (mapIdNum != -1) // not OSM API db
                 {
-                    QMaps maps = QMaps.maps;
                     mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
                     logger.info("Retrieving map tags for map with ID: {} ...", mapIdNum);
-                    assert (mapIdNum > 0);
 
                     try {
                         java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapIdNum, conn);
@@ -1140,18 +1057,18 @@ public class MapResource {
                         ret.putAll(tags);
                         Object oInput1 = ret.get("input1");
                         if (oInput1 != null) {
-                            String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput1.toString()));
+                            String dispName = DbUtils.getDisplayNameById(conn, Long.valueOf(oInput1.toString()));
                             ret.put("input1Name", dispName);
                         }
 
                         Object oInput2 = ret.get("input2");
                         if (oInput2 != null) {
-                            String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput2.toString()));
+                            String dispName = DbUtils.getDisplayNameById(conn, Long.valueOf(oInput2.toString()));
                             ret.put("input2Name", dispName);
                         }
                     }
                     catch (Exception e) {
-                        throw new Exception("Error getting map tags. :" + e.getMessage());
+                        throw new Exception("Error getting map tags. :" + e.getMessage(), e);
                     }
                 }
             }
@@ -1159,34 +1076,91 @@ public class MapResource {
         catch (Exception e) {
             handleError(e, mapId, "");
         }
-        finally {
-            DbUtils.closeConnection(conn);
-        }
 
         return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();
     }
 
     public static long validateMap(String mapId, Connection conn) {
-        long mapIdNum = -1;
+        long mapIdNum;
+
         try {
             // input mapId may be a map ID or a map name
             mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
-            assert (mapIdNum != -1);
         }
-        catch (Exception e) {
-            if (e.getMessage().startsWith("Multiple records exist")) {
-                ResourceErrorHandler
-                        .handleError(e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"),
-                                Status.NOT_FOUND, logger);
+        catch (Exception ex) {
+            if (ex.getMessage().startsWith("Multiple records exist") || ex.getMessage().startsWith("No record exists")) {
+                String msg = ex.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
+                throw new WebApplicationException(ex, Response.status(Status.NOT_FOUND).entity(msg).build());
             }
-            else if (e.getMessage().startsWith("No record exists")) {
-                ResourceErrorHandler
-                        .handleError(e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"),
-                                Status.NOT_FOUND, logger);
+            else {
+                String msg = "Error requesting map with ID: " + mapId + " (" + ex.getMessage() + ")";
+                throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
-            ResourceErrorHandler.handleError("Error requesting map with ID: " + mapId + " (" + e.getMessage() + ")",
-                    Status.BAD_REQUEST, logger);
         }
+
         return mapIdNum;
+    }
+
+    /**
+     * Writes a map query response with no element data
+     *
+     * @return a XML document response
+     * @throws ParserConfigurationException
+     */
+    private static Document writeEmptyResponse() throws ParserConfigurationException {
+        Document responseDoc = XmlDocumentBuilder.create();
+        Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
+        responseDoc.appendChild(elementRootXml);
+        return responseDoc;
+    }
+
+    /**
+     * Writes the query response to an XML document
+     *
+     * @param results
+     *            query results; a mapping of element IDs to records, grouped by
+     *            element type
+     * @param queryBounds
+     *            bounds of the query
+     * @param multiLayerUniqueElementIds
+     *            if true, IDs are prepended with <map id>_<first letter of the
+     *            element type>_; this setting activated is not compatible with
+     *            standard OSM clients (specific to Hootenanny iD)
+     * @return an XML document
+     */
+    private static Document writeResponse(java.util.Map<ElementType, java.util.Map<Long, Tuple>> results,
+            BoundingBox queryBounds, boolean multiLayerUniqueElementIds, long mapId, Connection connection)
+            throws Exception {
+        Document responseDoc = XmlDocumentBuilder.create();
+        Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
+        responseDoc.appendChild(elementRootXml);
+
+        if (!results.isEmpty()) {
+            elementRootXml.appendChild(queryBounds.toXml(elementRootXml));
+
+            for (ElementType elementType : ElementType.values()) {
+                if (elementType != ElementType.Changeset) {
+                    java.util.Map<Long, Tuple> resultsForType = results.get(elementType);
+                    if (resultsForType != null) {
+                        for (java.util.Map.Entry<Long, Tuple> entry : resultsForType.entrySet()) {
+                            Tuple record = entry.getValue();
+
+                            hoot.services.models.osm.Element element =
+                                    ElementFactory.create(elementType, record, connection, mapId);
+
+                            // the query that sent this in should have
+                            // already handled filtering out invisible elements
+
+                            Users usersTable = record.get(QUsers.users);
+                            Element elementXml = element.toXml(elementRootXml, usersTable.getId(),
+                                    usersTable.getDisplayName(), multiLayerUniqueElementIds, true);
+                            elementRootXml.appendChild(elementXml);
+                        }
+                    }
+                }
+            }
+        }
+
+        return responseDoc;
     }
 }
