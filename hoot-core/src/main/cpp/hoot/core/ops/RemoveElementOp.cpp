@@ -52,6 +52,7 @@ void RemoveElementOp::apply(shared_ptr<OsmMap>& map)
 {
   if (ElementType::Node == _eIdToRemove.getType().getEnum())
   {
+    // Remove node fully (Removes node from relations & ways, then removes node from map)
     RemoveNodeOp removeNode(_eIdToRemove.getId(), _doCheck, true);
     removeNode.apply(map);
   }

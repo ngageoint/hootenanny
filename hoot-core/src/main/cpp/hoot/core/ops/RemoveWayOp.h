@@ -35,26 +35,50 @@ namespace hoot
 {
 
 /**
- * Remove the specified way from this map.
+ * @brief The RemoveWayOp class is used to remove ways from an OsmMap
  */
 class RemoveWayOp : public OsmMapOperation
 {
 public:
 
+  /**
+   * @brief className gets the name of the class as a string
+   * @return class name
+   */
   static string className() { return "hoot::RemoveWayOp"; }
-
-  RemoveWayOp(bool removeFully = false);
-
-  RemoveWayOp(long wId, bool removeFully = false);
-
-  void apply(shared_ptr<OsmMap>& map);
-
   string getClassName() const { return className(); }
 
+  /**
+   * @brief RemoveWayOp is used to remove ways from maps
+   * @param removeFully if true, way is removed from all relations in the map, then
+   *                    removed from the map's way collection.
+   */
+  RemoveWayOp(bool removeFully = false);
+
+  /**
+   * @brief RemoveWayOp is used to remove ways from maps
+   * @param wId ID of the way to remove
+   * @param removeFully if true, way is removed from all relations in the map, then
+   *                    removed from the map's way collection.
+   */
+  RemoveWayOp(long wId, bool removeFully = false);
+
+  /**
+   * @brief apply Apply the operation to the given map
+   * @param map the map to operate on
+   */
+  void apply(shared_ptr<OsmMap>& map);
+
+  /**
+   * @brief setWayId set the ID of the way to remove on the apply() call
+   * @param wId ID of the way to remove
+   */
   void setWayId(long wId) { _wayIdToRemove = wId; }
 
   /**
-   * Remove the specified way from this map.
+   * @brief removeWay Remove the given way from the given map
+   * @param map Map to operate on
+   * @param wId ID of way to remove
    */
   static void removeWay(OsmMapPtr map, long wId)
   {
@@ -63,7 +87,10 @@ public:
   }
 
   /**
-   * Removes the way from all relations and then removes the way from the map.
+   * @brief removeWayFully Removes the way from all relations and
+   *                       then removes the way from the map.
+   * @param map Map to operate on
+   * @param wId ID of way to remove
    */
   static void removeWayFully(OsmMapPtr map, long wId)
   {

@@ -35,8 +35,11 @@ namespace hoot
 {
 
 /**
- * Removes an element from a map. If the element exists as part of other elements it is
- * removed from those elements before being removed from the map.
+ * @brief The RemoveElementOp class removes an element from a map.
+ *
+ * Removes an element from a map. First, we will check to see if the
+ * element exists as part of other elements in the map. If it does, the
+ * element is removed from those others, then removed from the map.
  *
  * If this element contains children (e.g. multipolygon) the children will not be
  * removed from the map.
@@ -48,24 +51,55 @@ class RemoveElementOp : public OsmMapOperation
 {
 public:
 
+  /**
+   * @brief className gets the name of the class
+   * @return class name string
+   */
   static string className() { return "hoot::RemoveElementOp"; }
 
+  /**
+   * @brief RemoveElementOp removes an element from the map
+   * @param doCheck passed down to RemoveNode, RemoveWay, RemoveRelation
+   *                to indicate if we should check to see if the element
+   *                exists as a component of another element
+   */
   RemoveElementOp(bool doCheck = true);
 
+  /**
+   * @brief RemoveElementOp removes an element from the map
+   * @param eId ID of element to remove
+   * @param doCheck check to see if element belongs to another element
+   */
   RemoveElementOp(ElementId eId, bool doCheck = true);
 
+  /**
+   * @brief apply performs the removal operation
+   * @param map to operate on
+   */
   void apply(shared_ptr<OsmMap>& map);
 
+  /**
+   * @brief getClassName gest the name of the class
+   * @return class name string
+   */
   string getClassName() const { return className(); }
 
+  /**
+   * @brief setElementId sets the id of the element to remove
+   * @param eId ElementId
+   */
   void setElementId(ElementId eId) {_eIdToRemove = eId; }
 
   /**
-   * Removes an element from a map. If the element exists as part of other elements it is
-   * removed from those elements before being removed from the map.
+   * @brief removeElement Removes an element from a map. If the element exists
+   * as part of other elements it is removed from those elements before
+   * being removed from the map.
    *
    * If this element contains children (e.g. multipolygon) the children will not be
    * removed from the map.
+   *
+   * @param map to operate on
+   * @param eId ID of the element to remove
    */
   static void removeElement(OsmMapPtr map, ElementId eId)
   {
@@ -74,9 +108,12 @@ public:
   }
 
   /**
-   * Removes an element from the map. No check is made before the removal, so
-   * removing an element used by another Way or Relation will result in
-   * undefined behaviour.
+   * @brief removeElementNoCheck Removes an element from the map. No check
+   *                             is made before the removal, so removing
+   *                             an element used by another Way or Relation
+   *                             will result in undefined behaviour.
+   * @param map to operate on
+   * @param eId ID of the element to remove
    */
   static void removeElementNoCheck(OsmMapPtr map, ElementId eId)
   {

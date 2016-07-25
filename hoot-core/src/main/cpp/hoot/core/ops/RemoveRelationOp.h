@@ -34,23 +34,48 @@
 namespace hoot
 {
 
-/* Removes a relation from a map */
+/**
+ * @brief The RemoveRelationOp class removes a relation from an OsmMap
+ */
 class RemoveRelationOp : public OsmMapOperation
 {
 public:
 
+  /**
+   * @brief className gets the class name as a string
+   * @return class name
+   */
   static string className() { return "hoot::RemoveRelationOp"; }
-
-  RemoveRelationOp();
-
-  RemoveRelationOp(long rId);
-
-  void apply(shared_ptr<OsmMap>& map);
-
   string getClassName() const { return className(); }
 
+  /**
+   * @brief RemoveRelationOp Default constructor
+   */
+  RemoveRelationOp();
+
+  /**
+   * @brief RemoveRelationOp
+   * @param rId ID of relation to remove
+   */
+  RemoveRelationOp(long rId);
+
+  /**
+   * @brief apply Peform the remove operation
+   * @param map Map to operate on
+   */
+  void apply(shared_ptr<OsmMap>& map);
+
+  /**
+   * @brief setRelationId Set the ID of the relation to remove
+   * @param rId ID of relation to remove
+   */
   void setRelationId(long rId) { _rIdToRemove = rId; }
 
+  /**
+   * @brief removeRelation Remove the specified relation from the given map
+   * @param map Map to operate on
+   * @param rId ID of relation to remove
+   */
   static void removeRelation(OsmMapPtr map, long rId)
   {
     RemoveRelationOp relationRemover(rId);
