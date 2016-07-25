@@ -32,7 +32,6 @@ import static hoot.services.HootProperties.TILE_SERVER_PATH;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.UUID;
 
 import javax.ws.rs.WebApplicationException;
@@ -47,13 +46,13 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
-import hoot.services.utils.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobStatusManager;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.nativeinterfaces.JobExecutionManager;
+import hoot.services.utils.DbUtils;
 
 
 public class RasterToTilesService extends JobControllerBase {
@@ -73,7 +72,7 @@ public class RasterToTilesService extends JobControllerBase {
         super(RASTER_TO_TILES);
     }
 
-    public String ingestOSMResourceDirect(String name, String userEmail) throws Exception {
+    public String ingestOSMResourceDirect(String name, String userEmail) {
         String jobId = UUID.randomUUID().toString();
         return ingestOSMResourceDirect(name, userEmail, jobId);
     }
@@ -82,10 +81,10 @@ public class RasterToTilesService extends JobControllerBase {
      * This function executes directly. This should be used when called from
      * JobResource it prevents the thread race condition when threadpool maxes out.
      */
-    public String ingestOSMResourceDirect(String name, String userEmail, String jobId) throws SQLException {
+    public String ingestOSMResourceDirect(String name, String userEmail, String jobId) {
         // _zoomLevels
-        JobStatusManager jobStatusManager = null;
         try (Connection conn = DbUtils.createConnection()) {
+            JobStatusManager jobStatusManager = null;
             try {
                 jobStatusManager = new JobStatusManager(conn);
                 jobStatusManager.addJob(jobId);
@@ -99,7 +98,7 @@ public class RasterToTilesService extends JobControllerBase {
                     logger.debug("Query bounds area: {}", queryBounds.getArea());
                 }
                 catch (Exception e) {
-                    throw new Exception("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
+                    throw new RuntimeException("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
                             + e.getMessage() + ")", e);
                 }
 
@@ -160,12 +159,19 @@ public class RasterToTilesService extends JobControllerBase {
                 throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Failure resource ingestion: " + e.getMessage();
+            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        }
 
         return jobId;
     }
 
     // This method may appear unused in your IDE since it's currently invoked reflectively.
-    public String ingestOSMResource(String name) throws SQLException {
+    public String ingestOSMResource(String name) {
         // _zoomLevels
         String jobId = UUID.randomUUID().toString();
 
@@ -179,7 +185,7 @@ public class RasterToTilesService extends JobControllerBase {
                 logger.debug("Query bounds area: {}", queryBounds.getArea());
             }
             catch (Exception e) {
-                throw new Exception("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
+                throw new RuntimeException("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
                         + e.getMessage() + ")", e);
             }
 
@@ -206,6 +212,9 @@ public class RasterToTilesService extends JobControllerBase {
 
             String argStr = createCommand(name, zoomList, rasterSize, mapIdNum);
             postJobRquest(jobId, argStr);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Failure ingesting resource " + ex.getMessage();

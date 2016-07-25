@@ -72,6 +72,9 @@ public class TunningServiceResource {
 
             (new JobExecutioner(jobId, command)).start();
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception e) {
             String message = "Tuning Service error: " + e.getMessage();
             throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());

@@ -105,14 +105,14 @@ public class TunningService implements Executable {
                 }
                 else {
                     String err = result.getStderr();
-                    throw new Exception(err);
+                    throw new RuntimeException(err);
                 }
 
                 tempOutputPath = TEMP_OUTPUT_PATH + "/" + input + ".osm";
 
                 // fortify fix
                 if (!FileUtils.validateFilePath(TEMP_OUTPUT_PATH, tempOutputPath)) {
-                    throw new Exception("input can not contain path.");
+                    throw new RuntimeException("input can not contain path.");
                 }
             }
             else {

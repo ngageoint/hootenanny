@@ -30,6 +30,7 @@ import static hoot.services.HootProperties.ETL_MAKEFILE;
 import static hoot.services.HootProperties.HOME_FOLDER;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -167,12 +168,12 @@ public class FileUploadResource extends JobControllerBase {
             }
 
             if (((shpZipCnt + fgdbZipCnt + shpCnt + fgdbCnt) > 0) && ((osmZipCnt + osmCnt) > 0)) {
-                throw new Exception("Can not mix osm and ogr type.");
+                throw new IllegalStateException("Can not mix osm and ogr type.");
             }
 
             if (osmZipCnt > 0) {
                 // #6027
-                throw new Exception("Hootennany does not support zip files containing .osm data.");
+                throw new IllegalArgumentException("Hootennany does not support zip files containing .osm data.");
             }
 
             String batchJobId = UUID.randomUUID().toString();
@@ -196,6 +197,9 @@ public class FileUploadResource extends JobControllerBase {
             res.put("status", batchJobReqStatus);
 
             resA.add(res);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Failed upload: " + ex.getMessage();
@@ -291,6 +295,7 @@ public class FileUploadResource extends JobControllerBase {
         if (translation.contains("/")) {
             translationPath = translation;
         }
+
         logger.debug("Using Translation for ETL :{}", translationPath);
 
         // Formulate request parameters
@@ -302,6 +307,7 @@ public class FileUploadResource extends JobControllerBase {
         param.put("INPUT", inputs);
         param.put("INPUT_NAME", etlName);
         param.put("USER_EMAIL", userEmail);
+
         if (curInputType.equalsIgnoreCase("FGDB") && (fgdbFeatureClasses != null) && (!fgdbFeatureClasses.isEmpty())) {
             Object oRq = reqList.get(0);
 
@@ -349,7 +355,7 @@ public class FileUploadResource extends JobControllerBase {
     }
 
     private static void buildNativeRequest(String jobId, String fName, String ext, String inputFileName,
-            JSONArray reqList, JSONObject zipStat) throws Exception {
+            JSONArray reqList, JSONObject zipStat) throws IOException {
         // get zip stat is not exist then create one
         int shpZipCnt = 0;
         Object oShpStat = zipStat.get("shpzipcnt");
@@ -426,7 +432,7 @@ public class FileUploadResource extends JobControllerBase {
 
             // We do not allow mix of ogr and osm in zip
             if (((shpZipCnt + fgdbZipCnt) > 0) && (osmZipCnt > 0)) {
-                throw new Exception("Zip should not contain both osm and ogr types.");
+                throw new IllegalStateException("Zip should not contain both osm and ogr types.");
             }
 
             zipStat.put("shpzipcnt", shpZipCnt);
@@ -452,7 +458,7 @@ public class FileUploadResource extends JobControllerBase {
     // throws error if there are mix of osm and ogr
     // zip does not allow fgdb so it needs to be expanded out
     private static JSONObject getZipContentType(String zipFilePath, JSONArray contentTypes, String fName)
-            throws Exception{
+            throws IOException {
         JSONObject resultStat = new JSONObject();
         String[] extList = { "gdb", "osm", "shp", "geonames" };
 
@@ -480,7 +486,7 @@ public class FileUploadResource extends JobControllerBase {
 
                 // See if there is extension and if none then throw error
                 if (ext == null) {
-                    throw new Exception("Unknown file type.");
+                    throw new IOException("Unknown file type.");
                 }
 
                 // for each type of extensions
@@ -495,7 +501,7 @@ public class FileUploadResource extends JobControllerBase {
                                 fgdbCnt++;
                             }
                             else {
-                                throw new Exception("Unknown folder type. Only gdb folder type is supported.");
+                                throw new IOException("Unknown folder type. Only gdb folder type is supported.");
                             }
                         }
                         else // file
@@ -534,9 +540,10 @@ public class FileUploadResource extends JobControllerBase {
                             }
                         }
                     }
+
                     // We do not allow mix of ogr and osm in zip
                     if (((shpCnt + fgdbCnt) > 0) && (osmCnt > 0)) {
-                        throw new Exception("Zip should not contain both osm and ogr types.");
+                        throw new IOException("Zip should not contain both osm and ogr types.");
                     }
                 }
 

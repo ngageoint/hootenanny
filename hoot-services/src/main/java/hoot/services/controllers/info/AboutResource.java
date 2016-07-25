@@ -100,6 +100,9 @@ public class AboutResource {
 
             logger.debug("Returning response: {} ...", versionInfo);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception e) {
             String message = "Error retrieving services version info: " + e.getMessage();
             throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
@@ -182,6 +185,9 @@ public class AboutResource {
 
             logger.debug("Returning response: {} ...", versionInfo);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception e) {
             String message = "Error retrieving core version info: " + e.getMessage();
             throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
@@ -220,6 +226,9 @@ public class AboutResource {
             coreDetail.setEnvironmentInfo(versionInfoPartsModified.toArray(new String[versionInfoPartsModified.size()]));
 
             logger.debug("Returning response: {} ...", coreDetail);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception e) {
             String message = "Error retrieving core version info: " + e.getMessage();

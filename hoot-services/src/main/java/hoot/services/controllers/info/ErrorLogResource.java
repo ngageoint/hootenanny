@@ -80,9 +80,12 @@ public class ErrorLogResource {
             // 50k Length
             logStr = ErrorLog.getErrorlog(50000);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            String message = "Error getting error logger: " + ex;
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String msg = "Error getting error logger: " + ex;
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         JSONObject res = new JSONObject();
@@ -107,6 +110,9 @@ public class ErrorLogResource {
             String outputPath = ErrorLog.generateExportLog();
             out = new File(outputPath);
             exportLogPath = outputPath;
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String message = "Error exporting logger file: " + ex;

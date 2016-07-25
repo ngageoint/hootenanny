@@ -109,6 +109,9 @@ public class ClipDatasetResource extends JobControllerBase {
 
             postChainJobRquest(jobId, jobArgs.toJSONString());
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String msg = "Error processing cookie cutter request: " + ex;
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());

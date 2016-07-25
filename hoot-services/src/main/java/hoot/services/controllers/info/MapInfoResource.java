@@ -28,6 +28,11 @@ package hoot.services.controllers.info;
 
 import static hoot.services.HootProperties.*;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -80,10 +85,13 @@ public class MapInfoResource {
             for (String mapId : mapids) {
                 if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
                     for (String table : maptables) {
-                        nsize += DbUtils.getTableSizeInByte(table + "_" + mapId);
+                        nsize += getTableSizeInByte(table + "_" + mapId);
                     }
                 }
             }
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String message = "Error getting map size: " + ex.getMessage();
@@ -130,7 +138,7 @@ public class MapInfoResource {
                 try {
                     for (String table : maptables) {
                         if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
-                            nsize += DbUtils.getTableSizeInByte(table + "_" + mapId);
+                            nsize += getTableSizeInByte(table + "_" + mapId);
                         }
                     }
                 }
@@ -140,6 +148,9 @@ public class MapInfoResource {
                     retval.put(jsonObject);
                 }
             }
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String message = "Error getting map size: " + ex.getMessage();
@@ -169,5 +180,32 @@ public class MapInfoResource {
         res.put("export_threshold", EXPORT_SIZE_THRESHOLD);
 
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+    }
+
+    /**
+     * Returns table size in byte
+     */
+    private static long getTableSizeInByte(String tableName) {
+        long ret = 0;
+
+        try (Connection conn = DbUtils.createConnection()) {
+            try (Statement stmt = conn.createStatement()) {
+                String sql = "select pg_total_relation_size('" + tableName + "') as tablesize";
+                try (ResultSet rs = stmt.executeQuery(sql)){
+                    while (rs.next()) {
+                        ret = rs.getLong("tablesize");
+                    }
+                }
+            }
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (SQLException e) {
+            String msg = "Error retrieving table size in bytes of " + tableName + " table!";
+            throw new RuntimeException(msg, e);
+        }
+
+        return ret;
     }
 }

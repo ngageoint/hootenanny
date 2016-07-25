@@ -90,6 +90,9 @@ public class ETLResource extends JobControllerBase {
 
             postJobRquest(jobId, argStr);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String msg = "Error processing ETL request: " + ex.getMessage();
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());

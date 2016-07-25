@@ -101,7 +101,7 @@ public class RelationMember {
      *            the owning relation ID
      * @return a relation member database record
      */
-    public static CurrentRelationMembers createRecord(long id, int sequenceId, String role, Object elementType,
+    static CurrentRelationMembers createRecord(long id, int sequenceId, String role, Object elementType,
             long relationId) {
         CurrentRelationMembers memberRecord = new CurrentRelationMembers();
         memberRecord.setMemberId(id);
@@ -120,7 +120,7 @@ public class RelationMember {
      *            a list of relation member database records
      * @return a list of RelationMember objects
      */
-    public static List<RelationMember> fromRecords(List<CurrentRelationMembers> records) {
+    static List<RelationMember> fromRecords(List<CurrentRelationMembers> records) {
         List<RelationMember> members = new ArrayList<>();
         for (CurrentRelationMembers memberRecord : records) {
             members.add(new RelationMember(memberRecord));

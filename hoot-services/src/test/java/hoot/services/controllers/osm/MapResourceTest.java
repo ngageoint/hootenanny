@@ -76,6 +76,7 @@ import hoot.services.models.osm.RelationMember;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.utils.MapUtils;
 import hoot.services.utils.XmlUtils;
 
 
@@ -1320,9 +1321,9 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         // existing test layer
         mapIds.add(mapId);
         // create some more maps
-        long mapId2 = DbUtils.insertMap(userId, conn);
+        long mapId2 = MapUtils.insertMap(userId, conn);
         mapIds.add(mapId2);
-        long mapId3 = DbUtils.insertMap(userId, conn);
+        long mapId3 = MapUtils.insertMap(userId, conn);
         mapIds.add(mapId3);
 
         // query out the layers
@@ -1357,8 +1358,8 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
         Assert.assertTrue(foundFirstId && foundSecondId && foundThirdId);
 
-        DbUtils.deleteOSMRecord(conn, mapId2);
-        DbUtils.deleteOSMRecord(conn, mapId3);
+        MapUtils.deleteOSMRecord(conn, mapId2);
+        MapUtils.deleteOSMRecord(conn, mapId3);
     }
 
     @Test

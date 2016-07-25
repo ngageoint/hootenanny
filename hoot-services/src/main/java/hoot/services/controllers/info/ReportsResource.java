@@ -83,6 +83,9 @@ public class ReportsResource {
         try {
             out = getReportFile(id);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String message = "Error exporting report file: " + ex.getMessage();
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
@@ -109,6 +112,9 @@ public class ReportsResource {
 
         try {
             reps = getReportsList();
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String message = "Error getting reports list: " + ex.getMessage();
@@ -137,6 +143,9 @@ public class ReportsResource {
         try {
             isDeleted = deleteReport(id);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String message = "Error exporting report file: " + ex.getMessage();
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
@@ -152,10 +161,10 @@ public class ReportsResource {
     private static JSONObject getMetaData(String id) throws IOException, ParseException {
         JSONObject res = new JSONObject();
 
-        String metaDataPath = HOME_FOLDER + "/" + RPT_STORE_PATH + "/" + id + "/meta.data";
         File metaFolder = hoot.services.utils.FileUtils.getSubFolderFromFolder(HOME_FOLDER + "/" + RPT_STORE_PATH, id);
 
         if (metaFolder != null) {
+            String metaDataPath = HOME_FOLDER + "/" + RPT_STORE_PATH + "/" + id + "/meta.data";
             File file = new File(metaDataPath);
             if (file.exists()) {
                 String meta = FileUtils.readFileToString(file, "UTF-8");

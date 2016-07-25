@@ -218,9 +218,12 @@ public class BasemapResource extends JobControllerBase {
                 jobsArr.add(res);
             }
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            String message = "Error processing upload: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String msg = "Error processing upload: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return Response.ok(jobsArr.toJSONString(), MediaType.APPLICATION_JSON).build();
@@ -242,6 +245,9 @@ public class BasemapResource extends JobControllerBase {
 
         try {
             filesList = getBasemapListHelper();
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String message = "Error getting base map list: " + ex.getMessage();
@@ -323,7 +329,7 @@ public class BasemapResource extends JobControllerBase {
         return filesList;
     }
 
-    private static void toggleBaseMap(String bmName, boolean enable) throws Exception {
+    private static void toggleBaseMap(String bmName, boolean enable) throws IOException {
         // See ticket#6760
         // for file path manipulation
         String fileExt = "enabled";
@@ -342,11 +348,11 @@ public class BasemapResource extends JobControllerBase {
             boolean renamed = sourceFile.renameTo(new File(INGEST_STAGING_PATH + "/BASEMAP/", bmName + targetExt));
 
             if (!renamed) {
-                throw new Exception("Failed to rename file:" + bmName + fileExt + " to " + bmName + targetExt);
+                throw new IOException("Failed to rename file:" + bmName + fileExt + " to " + bmName + targetExt);
             }
         }
         else {
-            throw new Exception("Can not enable file:" + bmName + targetExt + ". It does not exist.");
+            throw new IOException("Can not enable file:" + bmName + targetExt + ". It does not exist.");
         }
     }
 
@@ -367,16 +373,19 @@ public class BasemapResource extends JobControllerBase {
     public Response enableBasemap(@QueryParam("NAME") String bmName, @QueryParam("ENABLE") String enable) {
         boolean doEnable = true;
 
-        try {
-            if ((enable != null) && (!enable.isEmpty())) {
-                doEnable = Boolean.parseBoolean(enable);
-            }
+        if ((enable != null) && (!enable.isEmpty())) {
+            doEnable = Boolean.parseBoolean(enable);
+        }
 
+        try {
             toggleBaseMap(bmName, doEnable);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            String message = "Error enabling base map: " + bmName + " Error: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String msg = "Error enabling base map: " + bmName + " Error: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         JSONObject resp = new JSONObject();
@@ -386,7 +395,7 @@ public class BasemapResource extends JobControllerBase {
         return Response.ok(resp.toString(), MediaType.TEXT_PLAIN).build();
     }
 
-    private static void deleteBaseMap(String bmName) throws IOException {
+    private static void deleteBaseMapHelper(String bmName) throws IOException {
         File tileDir = hoot.services.utils.FileUtils.getSubFolderFromFolder(TILE_SERVER_PATH + "/BASEMAP/", bmName);
         if ((tileDir != null) && tileDir.exists()) {
             FileUtils.forceDelete(tileDir);
@@ -419,11 +428,14 @@ public class BasemapResource extends JobControllerBase {
     @Produces(MediaType.TEXT_PLAIN)
     public Response deleteBasemap(@QueryParam("NAME") String bmName) {
         try {
-            deleteBaseMap(bmName);
+            deleteBaseMapHelper(bmName);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
-            String message = "Error deleting base map: " + bmName + " Error: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String msg = "Error deleting base map: " + bmName + " Error: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         JSONObject resp = new JSONObject();

@@ -92,51 +92,47 @@ public class AdvancedOptResource {
             }
 
             getOverrides(isForce);
+
             if ((doc == null) || doForce) {
                 doc = new JSONObject();
                 parseAsciidoc();
             }
 
-            if (doc != null) {
-                JSONParser par = new JSONParser();
-                if (confType.equalsIgnoreCase("reference")) {
-                    if ((refTemplate == null) || doForce) {
-                        refTemplate = new JSONArray();
-                        refTemplate.add(refOverride);
-                    }
-                    template = refTemplate;
+            JSONParser par = new JSONParser();
+            if (confType.equalsIgnoreCase("reference")) {
+                if ((refTemplate == null) || doForce) {
+                    refTemplate = new JSONArray();
+                    refTemplate.add(refOverride);
                 }
-                else if (confType.equalsIgnoreCase("horizontal")) {
-                    if ((hrzTemplate == null) || doForce) {
-                        hrzTemplate = new JSONArray();
-                        hrzTemplate.add(horzOverride);
-                    }
-                    template = hrzTemplate;
+                template = refTemplate;
+            }
+            else if (confType.equalsIgnoreCase("horizontal")) {
+                if ((hrzTemplate == null) || doForce) {
+                    hrzTemplate = new JSONArray();
+                    hrzTemplate.add(horzOverride);
                 }
-                else if (confType.equalsIgnoreCase("average")) {
-                    if ((aveTemplate == null) || doForce) {
-                        aveTemplate = new JSONArray();
-                        aveTemplate.add(aveOverride);
-                    }
-                    template = aveTemplate;
+                template = hrzTemplate;
+            }
+            else if (confType.equalsIgnoreCase("average")) {
+                if ((aveTemplate == null) || doForce) {
+                    aveTemplate = new JSONArray();
+                    aveTemplate.add(aveOverride);
                 }
-                else {
-                    if ((this.template == null) || doForce) {
-                        try (FileReader fr = new FileReader(HOME_FOLDER + "/" + TEMPLATE_PATH)) {
-                            this.template = (JSONArray)par.parse(fr);
-                            generateRule(this.template, null);
-                        }
-                    }
-                    template = this.template;
-                }
+                template = aveTemplate;
             }
             else {
-                throw new Exception("Failed to populate asciidoc information.");
+                if ((this.template == null) || doForce) {
+                    try (FileReader fr = new FileReader(HOME_FOLDER + "/" + TEMPLATE_PATH)) {
+                        this.template = (JSONArray)par.parse(fr);
+                        generateRule(this.template, null);
+                    }
+                }
+                template = this.template;
             }
         }
         catch (Exception ex) {
-            String message = "Error getting advanced options: " + ex;
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String msg = "Error getting advanced options: " + ex;
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         return Response.ok(template.toJSONString(), MediaType.APPLICATION_JSON).build();

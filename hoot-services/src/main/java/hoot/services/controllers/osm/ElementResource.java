@@ -27,6 +27,7 @@
 package hoot.services.controllers.osm;
 
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.HashSet;
 import java.util.List;
@@ -43,6 +44,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
 import org.apache.commons.lang3.StringUtils;
@@ -52,7 +54,6 @@ import org.w3c.dom.Document;
 
 import com.mysema.query.Tuple;
 
-import hoot.services.utils.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.db2.QUsers;
 import hoot.services.db2.Users;
@@ -60,6 +61,7 @@ import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.ModelDaoUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -90,7 +92,6 @@ public class ElementResource {
      *            OSM element type of the element to retrieve; valid values are:
      *            node, way, or relation
      * @return element XML document
-     * @throws Exception
      */
     @GET
     @Path("{elementType: node|way|relation}/{elementId}")
@@ -98,7 +99,7 @@ public class ElementResource {
     @Produces(MediaType.TEXT_XML)
     public Response getElement(@QueryParam("mapId") String mapId,
                                @PathParam("elementId") long elementId,
-                               @PathParam("elementType") String elementType) throws Exception {
+                               @PathParam("elementType") String elementType) {
         ElementType elementTypeVal = Element.elementTypeFromString(elementType);
 
         if (elementTypeVal == null) {
@@ -110,8 +111,21 @@ public class ElementResource {
         try (Connection conn = DbUtils.createConnection()) {
             elementDoc = getElementXml(mapId, elementId, elementTypeVal, false, false, conn);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error getting element elementId = " +
+                    elementId + ", elementType = " + elementType + ", mapId = " + mapId;
+            throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(msg).build());
+        }
 
-        logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
+        try {
+            logger.debug("Returning response: {} ...",
+                    StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
+        }
+        catch (IOException ignored) {
+        }
 
         return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
                        .header("Content-type", MediaType.APPLICATION_XML).build();
@@ -126,33 +140,44 @@ public class ElementResource {
      *            letter of the element type>_<element id>; valid element types
      *            include: node, way, or relation
      * @return element XML document
-     * @throws Exception
      */
     @GET
     @Path("/element/{elementId}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
-    public Response getElementByUniqueId(@PathParam("elementId") String elementId) throws Exception {
+    public Response getElementByUniqueId(@PathParam("elementId") String elementId) {
+        if (!UNIQUE_ELEMENT_ID_PATTERN.matcher(elementId).matches()) {
+            String msg = "Invalid element ID: " + elementId;
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
+        }
+
+        String[] elementIdParts = elementId.split("_");
+        ElementType elementTypeVal = Element.elementTypeFromString(elementIdParts[1]);
+
+        if (elementTypeVal == null) {
+            String msg = "Invalid element type: " + elementIdParts[1];
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
+        }
+
         Document elementDoc = null;
         try (Connection conn = DbUtils.createConnection()) {
-            if (!UNIQUE_ELEMENT_ID_PATTERN.matcher(elementId).matches()) {
-                String msg = "Invalid element ID: " + elementId;
-                throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
-            }
-
-            String[] elementIdParts = elementId.split("_");
-            ElementType elementTypeVal = Element.elementTypeFromString(elementIdParts[1]);
-
-            if (elementTypeVal == null) {
-                String msg = "Invalid element type: " + elementIdParts[1];
-                throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
-            }
-
             elementDoc = getElementXml(elementIdParts[0], Long.parseLong(elementIdParts[2]), elementTypeVal, true,
                     false, conn);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error getting element by unique id.  elementId = " + elementId;
+            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        }
 
-        logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
+        try {
+            logger.debug("Returning response: {} ...",
+                    StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
+        }
+        catch (IOException ignored) {
+        }
 
         return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
                 .header("Content-type", MediaType.APPLICATION_XML).build();
@@ -170,7 +195,6 @@ public class ElementResource {
      *            OSM element type of the element to retrieve; valid values are:
      *            way or relation
      * @return element XML document
-     * @throws Exception
      */
     @GET
     @Path("/{elementType: way|relation}/{elementId}/full")
@@ -178,7 +202,7 @@ public class ElementResource {
     @Produces(MediaType.TEXT_XML)
     public Response getFullElement(@QueryParam("mapId") String mapId,
                                    @PathParam("elementId") long elementId,
-                                   @PathParam("elementType") String elementType) throws Exception {
+                                   @PathParam("elementType") String elementType) {
         ElementType elementTypeVal = Element.elementTypeFromString(elementType);
 
         if (elementTypeVal == null) {
@@ -186,12 +210,25 @@ public class ElementResource {
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        Document elementDoc;
+        Document elementDoc = null;
         try (Connection conn = DbUtils.createConnection()) {
             elementDoc = getElementXml(mapId, elementId, elementTypeVal, false, true, conn);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error getting full element data!" +
+                    "  mapId = " + mapId + ", elementId = " + elementId + ", elementType = " + elementType;
+            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        }
 
-        logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
+        try {
+            logger.debug("Returning response: {} ...",
+                    StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
+        }
+        catch (IOException ignored) {
+        }
 
         return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
                 .header("Content-type", MediaType.APPLICATION_XML).build();
@@ -206,13 +243,12 @@ public class ElementResource {
      *            letter of the element type>_<element id>; valid element types
      *            include: way or relation
      * @return element XML document
-     * @throws Exception
      */
     @GET
     @Path("/element/{elementId}/full")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
-    public Response getFullElementByUniqueId(@PathParam("elementId") String elementId) throws Exception {
+    public Response getFullElementByUniqueId(@PathParam("elementId") String elementId) {
         if (!UNIQUE_ELEMENT_ID_PATTERN.matcher(elementId).matches()) {
             String msg = "Invalid element ID: " + elementId;
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
@@ -236,15 +272,27 @@ public class ElementResource {
             elementDoc = getElementXml(elementIdParts[0], Long.parseLong(elementIdParts[2]), elementType, true, true,
                     conn);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error getting full element data by unique id! elementId = " + elementId;
+            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        }
 
-        logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
+        try {
+            logger.debug("Returning response: {} ...",
+                    StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
+        }
+        catch (IOException ignored) {
+        }
 
         return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
                 .header("Content-type", MediaType.APPLICATION_XML).build();
     }
 
     private static Document getElementXml(String mapId, long elementId, ElementType elementType,
-            boolean multiLayerUniqueElementIds, boolean addChildren, Connection dbConn) throws Exception {
+            boolean multiLayerUniqueElementIds, boolean addChildren, Connection dbConn) {
         long mapIdNum;
         try {
             // input mapId may be a map ID or a map name
@@ -276,7 +324,16 @@ public class ElementResource {
                 Long.parseLong(mapId));
 
         Users usersTable = elementRecords.get(0).get(QUsers.users);
-        Document elementDoc = XmlDocumentBuilder.create();
+        Document elementDoc = null;
+        try {
+            elementDoc = XmlDocumentBuilder.create();
+        }
+        catch (ParserConfigurationException e) {
+            String msg = "Error building XMLDocumentBuilder while processing " +
+                    "elementId = " + elementId + ", mapId = " + mapId;
+            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        }
+
         org.w3c.dom.Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(elementDoc);
         elementDoc.appendChild(elementRootXml);
         org.w3c.dom.Element elementXml = element.toXml(elementRootXml, usersTable.getId(), usersTable.getDisplayName(),
@@ -298,7 +355,6 @@ public class ElementResource {
      *            OSM element type of the element to retrieve; valid values are:
      *            node, way, or relation
      * @return element XML document
-     * @throws Exception
      */
     @GET
     @Path("{elementType: nodes|ways|relations}")
@@ -306,8 +362,7 @@ public class ElementResource {
     @Produces(MediaType.TEXT_XML)
     public Response getElements(@QueryParam("mapId") String mapId,
                                 @QueryParam("elementIds") String elementIds,
-                                @PathParam("elementType") String elemType)
-            throws Exception {
+                                @PathParam("elementType") String elemType) {
         String elementType = elemType.substring(0, elemType.length() - 1);
         String[] elemIds = elementIds.split(",");
 
@@ -321,14 +376,27 @@ public class ElementResource {
         try (Connection conn = DbUtils.createConnection()) {
             elementDoc = getElementsXml(mapId, elemIds, elementTypeVal, false, true, conn);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error getting elements!" + "  mapId = " + mapId +
+                    ", elementIds = " + elementIds + ", elementType = " + elemType;
+            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        }
 
-        logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 10000));
+        try {
+            logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 10000));
+        }
+        catch (IOException ignored) {
+        }
+
         return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
                 .header("Content-type", MediaType.APPLICATION_XML).build();
     }
 
     private static Document getElementsXml(String mapId, String[] elementIdsStr, ElementType elementType,
-            boolean multiLayerUniqueElementIds, boolean addChildren, Connection dbConn) throws Exception {
+            boolean multiLayerUniqueElementIds, boolean addChildren, Connection dbConn) {
         long mapIdNum;
         try {
             // input mapId may be a map ID or a map name
@@ -359,7 +427,14 @@ public class ElementResource {
             throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
         }
 
-        Document elementDoc = XmlDocumentBuilder.create();
+        Document elementDoc = null;
+        try {
+            elementDoc = XmlDocumentBuilder.create();
+        }
+        catch (ParserConfigurationException e) {
+            throw new RuntimeException("Error creating XmlDocumentBuilder", e);
+        }
+
         org.w3c.dom.Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(elementDoc);
         elementDoc.appendChild(elementRootXml);
 

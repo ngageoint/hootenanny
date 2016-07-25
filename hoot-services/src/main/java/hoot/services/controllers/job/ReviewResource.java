@@ -29,6 +29,7 @@ package hoot.services.controllers.job;
 import static hoot.services.HootProperties.MAX_QUERY_NODES;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,16 +53,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.mysema.query.sql.SQLQuery;
 
-import hoot.services.HootProperties;
 import hoot.services.controllers.osm.MapResource;
-import hoot.services.utils.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
@@ -77,6 +72,7 @@ import hoot.services.models.review.ReviewableItem;
 import hoot.services.models.review.ReviewableStatistics;
 import hoot.services.readers.review.ReviewReferencesRetriever;
 import hoot.services.readers.review.ReviewableReader;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.ReviewUtils;
 
 
@@ -87,7 +83,6 @@ import hoot.services.utils.ReviewUtils;
 public class ReviewResource {
     private static final Logger logger = LoggerFactory.getLogger(ReviewResource.class);
     private static final long MAX_RESULT_SIZE;
-    private static final PlatformTransactionManager transactionManager;
 
     private final QMaps maps = QMaps.maps;
 
@@ -103,9 +98,6 @@ public class ReviewResource {
         }
 
         MAX_RESULT_SIZE = value;
-
-        transactionManager = HootProperties.getSpringContext().getBean("transactionManager",
-                                                                       PlatformTransactionManager.class);
     }
 
     public ReviewResource() {
@@ -125,18 +117,16 @@ public class ReviewResource {
      *            a JSON request containing the map ID for the reviews to be
      *            resolved
      * @return a JSON response with the changeset ID used to resolve the reviews
-     * @throws Exception
      */
     @PUT
     @Path("/resolveall")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ReviewResolverResponse resolveAllReviews(ReviewResolverRequest request) throws Exception {
+    public ReviewResolverResponse resolveAllReviews(ReviewResolverRequest request) {
         logger.debug("Setting all items reviewed for map with ID: {}...", request.getMapId());
 
+        long changesetId = -1;
         try (Connection conn = DbUtils.createConnection()) {
-            TransactionStatus transactionStatus = transactionManager.getTransaction(new DefaultTransactionDefinition(
-                    TransactionDefinition.PROPAGATION_REQUIRED));
             conn.setAutoCommit(false);
 
             long mapIdNum = MapResource.validateMap(request.getMapId(), conn);
@@ -154,23 +144,29 @@ public class ReviewResource {
                 throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(message).build());
             }
 
-            long changesetId = -1;
             try {
                 changesetId = setAllReviewsResolved(mapIdNum, userId, conn);
                 logger.debug("Committing set all items reviewed transaction...");
-                transactionManager.commit(transactionStatus);
                 conn.commit();
             }
             catch (Exception e) {
-                transactionManager.rollback(transactionStatus);
                 conn.rollback();
                 ReviewUtils.handleError(e, "Error setting all records to reviewed for map ID: " + request.getMapId());
             }
-
-            logger.debug("Set all items reviewed for map with ID: {} using changesetId: {}", request.getMapId(), changesetId);
-
-            return new ReviewResolverResponse(changesetId);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error resolving all reviews associated with map having ID: "
+                    + request.getMapId() + " (" + e.getMessage() + ")";
+            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        }
+
+        logger.debug("Set all items reviewed for map with ID: {} using changesetId: {}", request.getMapId(), changesetId);
+
+        return new ReviewResolverResponse(changesetId);
+
     }
 
     /**
@@ -192,13 +188,12 @@ public class ReviewResource {
      *         each query element passed in; The returned ReviewRef object
      *         extends the ElementInfo object to add the associated review
      *         relation id.
-     * @throws Exception
      */
     @POST
     @Path("/refs")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ReviewRefsResponses getReviewReferences(ReviewRefsRequest request) throws Exception {
+    public ReviewRefsResponses getReviewReferences(ReviewRefsRequest request) {
         logger.debug("Returning review references...");
 
         ReviewRefsResponses response = new ReviewRefsResponses();
@@ -219,6 +214,13 @@ public class ReviewResource {
                 responseRefsList.add(responseRefs);
             }
             response.setReviewRefsResponses(responseRefsList.toArray(new ReviewRefsResponse[responseRefsList.size()]));
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error getting review references!";
+            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         logger.debug("response : {}", StringUtils.abbreviate(response.toString(), 1000));
@@ -246,9 +248,12 @@ public class ReviewResource {
             ReviewableItem ret = reader.getRandomReviewableItem(nMapId);
             return ret;
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            String message = "Error getting random reviewable item: " + mapId + " (" + ex.getMessage() + ")";
-            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
+            String msg = "Error getting random reviewable item: " + mapId + " (" + ex.getMessage() + ")";
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
     }
 
@@ -293,9 +298,12 @@ public class ReviewResource {
 
             return ret;
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            String message = "Error getting next reviewable item: " + mapId + " (" + ex.getMessage() + ")";
-            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
+            String msg = "Error getting next reviewable item: " + mapId + " (" + ex.getMessage() + ")";
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
     }
 
@@ -323,9 +331,12 @@ public class ReviewResource {
             ReviewableItem ret = reader.getReviewableItem(nMapId, nOffsetSeqId);
             return ret;
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            String message = "Error getting reviewable item: " + mapId + " (" + ex.getMessage() + ")";
-            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
+            String msg = "Error getting reviewable item: " + mapId + " (" + ex.getMessage() + ")";
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
     }
 
@@ -352,9 +363,12 @@ public class ReviewResource {
                 ReviewableReader reader = new ReviewableReader(conn);
                 ret = reader.getReviewablesStatistics(nMapId);
             }
+            catch (WebApplicationException wae) {
+                throw wae;
+            }
             catch (Exception ex) {
-                String message = "Error getting reviewables statistics: " + mapId + " (" + ex.getMessage() + ")";
-                throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
+                String msg = "Error getting reviewables statistics: " + mapId + " (" + ex.getMessage() + ")";
+                throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
         }
 
@@ -411,9 +425,12 @@ public class ReviewResource {
             ret.put("total", result.getReviewableItems().size());
             ret.put("geojson", result.toGeoJson());
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String message = "Error getting reviewable item: " + mapId + " (" + ex.getMessage() + ")";
-            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
 
         return ret;
@@ -427,9 +444,8 @@ public class ReviewResource {
      * @param userId
      *            user ID associated with the review data
      * @return the ID of the changeset used to resolve the reviews
-     * @throws Exception
      */
-    private static long setAllReviewsResolved(long mapId, long userId, Connection connection) throws Exception {
+    private static long setAllReviewsResolved(long mapId, long userId, Connection connection) {
         // create a changeset
         Map<String, String> changesetTags = new HashMap<>();
         changesetTags.put("bot", "yes");
@@ -453,6 +469,9 @@ public class ReviewResource {
         try (Statement stmt = connection.createStatement()) {
             int numRecordsUpdated = stmt.executeUpdate(sql);
             logger.debug("{} records updated.", numRecordsUpdated);
+        }
+        catch (SQLException e) {
+            throw new RuntimeException("Error retrieving all resolved reviews!", e);
         }
 
         return changesetId;

@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.osm;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -46,19 +47,14 @@ import javax.xml.transform.dom.DOMSource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.w3c.dom.Document;
 
 import com.mysema.query.sql.SQLQuery;
 
-import hoot.services.HootProperties;
-import hoot.services.utils.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.ModelDaoUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -68,14 +64,8 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Path("/api/0.6/changeset")
 public class ChangesetResource {
     private static final Logger logger = LoggerFactory.getLogger(ChangesetResource.class);
-    private static final PlatformTransactionManager transactionManager;
 
     private final QMaps maps = QMaps.maps;
-
-    static {
-        transactionManager = HootProperties.getSpringContext().getBean("transactionManager",
-                                                                        PlatformTransactionManager.class);
-    }
 
     public ChangesetResource() {
     }
@@ -112,17 +102,19 @@ public class ChangesetResource {
      * @param mapId
      *            ID of the map the changeset belongs to
      * @return Response containing the ID assigned to the new changeset
-     * @throws Exception
      */
     @PUT
     @Path("/create")
     @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response create(String changesetData, @QueryParam("mapId") String mapId) throws Exception {
+    public Response create(String changesetData, @QueryParam("mapId") String mapId) {
         Document changesetDoc;
         try {
             logger.debug("Parsing changeset XML...");
             changesetDoc = XmlDocumentBuilder.parse(changesetData);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error parsing changeset XML: "
@@ -164,9 +156,6 @@ public class ChangesetResource {
                 throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
 
-            logger.debug("Intializing transaction...");
-            TransactionStatus transactionStatus = transactionManager
-                    .getTransaction(new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
             conn.setAutoCommit(false);
 
             try {
@@ -174,7 +163,6 @@ public class ChangesetResource {
             }
             catch (Exception ex) {
                 logger.error("Rolling back the database transaction...");
-                transactionManager.rollback(transactionStatus);
                 conn.rollback();
 
                 String msg = "Error creating changeset: (" + ex.getMessage() + ") "
@@ -183,8 +171,14 @@ public class ChangesetResource {
             }
 
             logger.debug("Committing the database transaction...");
-            transactionManager.commit(transactionStatus);
             conn.commit();
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (SQLException e) {
+            String msg = "Error during changeset diff data upload! changesetId = " + changesetId + ", mapId = " + mapId;
+            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         logger.debug("Returning ID: {} for new changeset...", changesetId);
@@ -223,7 +217,6 @@ public class ChangesetResource {
      *            ID of the map owning the changeset being uploaded
      * @return response acknowledging the result of the update operation with
      *         updated entity ID information
-     * @throws Exception
      */
     @POST
     @Path("/{changesetId}/upload")
@@ -231,34 +224,40 @@ public class ChangesetResource {
     @Produces(MediaType.TEXT_XML)
     public Response upload(String changeset,
                            @PathParam("changesetId") long changesetId,
-                           @QueryParam("mapId") String mapId) throws Exception {
+                           @QueryParam("mapId") String mapId) {
+        if (mapId == null) {
+            String msg = "mapId cannot be null!";
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
+        }
+
+        long mapid = Long.parseLong(mapId);
+        Document changesetDoc;
+        try {
+            changesetDoc = ChangesetUploadXmlValidator.parseAndValidate(changeset);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error parsing changeset diff data: " + StringUtils.abbreviate(changeset, 100)
+                    + " (" + e.getMessage() + ")";
+            throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(msg).build());
+        }
 
         Document changesetUploadResponse = null;
         try (Connection conn = DbUtils.createConnection()) {
             logger.debug("Intializing changeset upload transaction...");
-            TransactionStatus transactionStatus = transactionManager
-                    .getTransaction(new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+
             conn.setAutoCommit(false);
 
             try {
-                if (mapId == null) {
-                    throw new Exception("Invalid map id.");
-                }
-
-                long mapid = Long.parseLong(mapId);
-                Document changesetDoc;
-                try {
-                    changesetDoc = ChangesetUploadXmlValidator.parseAndValidate(changeset);
-                }
-                catch (Exception e) {
-                    throw new Exception("Error parsing changeset diff data: " + StringUtils.abbreviate(changeset, 100)
-                            + " (" + e.getMessage() + ")", e);
-                }
                 changesetUploadResponse = (new ChangesetDbWriter(conn)).write(mapid, changesetId, changesetDoc);
+            }
+            catch (WebApplicationException wae) {
+                throw wae;
             }
             catch (Exception e) {
                 logger.error("Rolling back transaction for changeset upload...", e);
-                transactionManager.rollback(transactionStatus);
                 conn.rollback();
 
                 handleError(e, changesetId, StringUtils.abbreviate(changeset, 100));
@@ -266,12 +265,19 @@ public class ChangesetResource {
 
             logger.debug("Committing changeset upload transaction...");
 
-            transactionManager.commit(transactionStatus);
             conn.commit();
         }
+        catch (SQLException e) {
+            String msg = "Error during changeset diff data upload! changesetId = " + changesetId + ", mapId = " + mapId;
+            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        }
 
-        logger.debug("Returning changeset upload response: {} ...",
-                StringUtils.abbreviate(XmlDocumentBuilder.toString(changesetUploadResponse), 100));
+        try {
+            logger.debug("Returning changeset upload response: {} ...",
+                    StringUtils.abbreviate(XmlDocumentBuilder.toString(changesetUploadResponse), 100));
+        }
+        catch (IOException ignored) {
+        }
 
         return Response.ok(new DOMSource(changesetUploadResponse), MediaType.TEXT_XML)
                        .header("Content-type", MediaType.TEXT_XML).build();
@@ -289,7 +295,6 @@ public class ChangesetResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response closePreflight() {
         logger.info("Handling changeset close pre-flight request...");
-
         return Response.ok().build();
     }
 
@@ -298,25 +303,30 @@ public class ChangesetResource {
      * 
      * @param changesetId
      *            ID of the changeset to close
-     * @return HTTP status code indicating the status of the closing of the
-     *         changeset
-     * @throws Exception
+     * @return HTTP status code indicating the status of the closing of the changeset
      */
     @PUT
     @Path("/{changesetId}/close")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public String close(@PathParam("changesetId") long changesetId,
-                        @QueryParam("mapId") String mapId) throws Exception {
+                        @QueryParam("mapId") String mapId) {
         logger.info("Closing changeset with ID: {} ...", changesetId);
 
         if (mapId == null) {
-            throw new Exception("Invalid map id.");
+            String msg = "Invalid map id!";
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         try (Connection conn = DbUtils.createConnection()) {
             long mapid = Long.parseLong(mapId);
             Changeset.closeChangeset(mapid, changesetId, conn);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            handleError(e, changesetId, "");
         }
 
         return Response.status(Status.OK).toString();

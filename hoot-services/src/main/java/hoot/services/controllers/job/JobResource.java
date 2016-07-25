@@ -61,11 +61,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.utils.DbUtils;
 import hoot.services.db2.JobStatus;
 import hoot.services.job.JobStatusManager;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.nativeinterfaces.JobExecutionManager;
+import hoot.services.nativeinterfaces.NativeInterfaceException;
+import hoot.services.utils.DbUtils;
 
 
 /**
@@ -101,7 +102,6 @@ public class JobResource {
         catch (NumberFormatException ignored) {
             logger.error("Failed to get internalJobThreadSize. Setting threadpool size to 5.");
         }
-        logger.debug("Threadpool Acquire");
 
         jobThreadExecutor = Executors.newFixedThreadPool(threadpoolSize);
     }
@@ -118,13 +118,21 @@ public class JobResource {
     @Path("/chain/{jobid}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response processChainJob(@PathParam("jobid") String jobId, String jobs) throws Exception {
+    public Response processChainJob(@PathParam("jobid") String jobId, String jobs) {
         logger.debug("Curent JobResource thread count:{}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
 
-        initJob(jobId);
-
-        Runnable chainJobWorker = new ProcessChainJobWorkerThread(jobId, jobs);
-        jobThreadExecutor.execute(chainJobWorker);
+        try {
+            initJob(jobId);
+            Runnable chainJobWorker = new ProcessChainJobWorkerThread(jobId, jobs);
+            jobThreadExecutor.execute(chainJobWorker);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error during processing of a chain job!" + " jobId = " + jobId + ", jobs = " + jobs;
+            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        }
 
         return Response.ok().build();
     }
@@ -149,9 +157,9 @@ public class JobResource {
 
             jobInfo.put("chainjobstatus", jobId);
 
-            JobStatusManager jobStatusManager = null;
-            JSONObject childJobInfo = null;
             try (Connection conn = DbUtils.createConnection()) {
+                JobStatusManager jobStatusManager = null;
+                JSONObject childJobInfo = null;
                 try {
                     jobStatusManager = createJobStatusMananger(conn);
 
@@ -231,7 +239,7 @@ public class JobResource {
     // this function is currently used by WfsManager only and WfsManager does
     // not perform any job tracking. It is raw class.
     private JSONObject execReflectionSync(String jobId, String childJobId, JSONObject job,
-            JobStatusManager jobStatusManager) throws Exception{
+            JobStatusManager jobStatusManager) throws Exception {
         String className = job.get("class").toString();
         String methodName = job.get("method").toString();
 
@@ -351,21 +359,26 @@ public class JobResource {
 
     /**
      * Processes requested job. Parameter is in String in JSON format
-     *
-     * @throws SQLException
      */
     @POST
     @Path("/{jobid}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response processJob(@PathParam("jobid") String jobId, String params) throws Exception {
+    public Response processJob(@PathParam("jobid") String jobId, String params) {
         logger.debug("Curent JobResource thread count:{}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
 
-        initJob(jobId);
-
-        Runnable jobWorker = new ProcessJobWorkerThread(jobId, params);
-
-        jobThreadExecutor.execute(jobWorker);
+        try {
+            initJob(jobId);
+            Runnable jobWorker = new ProcessJobWorkerThread(jobId, params);
+            jobThreadExecutor.execute(jobWorker);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error during processing a job with jobId = " + jobId + ", params = " + params;
+            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        }
 
         return Response.ok().build();
     }
@@ -392,10 +405,10 @@ public class JobResource {
 
         private void processCommand() {
             logger.debug("Processing job: {}", jobId);
-            JobStatusManager jobStatusManager = null;
-            JSONObject command = null;
 
             try (Connection conn = DbUtils.createConnection()) {
+                JobStatusManager jobStatusManager = null;
+                JSONObject command = null;
                 try {
                     jobStatusManager = createJobStatusMananger(conn);
 
@@ -461,7 +474,7 @@ public class JobResource {
         return paramsMap;
     }
 
-    private static JSONObject processJob(String jobId, JSONObject command) throws Exception {
+    private static JSONObject processJob(String jobId, JSONObject command) throws NativeInterfaceException {
         logger.debug("processing Job: {}", jobId);
         command.put("jobId", jobId);
 
@@ -474,23 +487,28 @@ public class JobResource {
         if (!validator.validateRequiredExists(paramsMap, missingList)) {
             logger.error("Missing following required field(s): {}", missingList);
         }
+
         logger.debug("calling native request Job: {}", jobId);
+
         return jobExecMan.exec(command);
     }
 
     /**
      * Raw call to terminate job
-     *
-     * @throws Exception
      */
-    public void terminateJob(String childId) throws Exception {
-        jobExecMan.terminate(childId);
+    public void terminateJob(String childId) {
+        try {
+            jobExecMan.terminate(childId);
+        }
+        catch (NativeInterfaceException e) {
+            throw new RuntimeException("Error terminating job with childId = " + childId, e);
+        }
     }
 
     /**
      * Terminate Job and its children jobs
      */
-    public String terminateJob(String jobId, String mapId) throws Exception {
+    public String terminateJob(String jobId, String mapId) {
         /*
          * Example job status
          *
@@ -503,40 +521,44 @@ public class JobResource {
          * "id\":\"43821fd7-a488-4137-b25a-2a66d0a4e197\",\"detail\":\"success\",\"status\":\"complete\"}]}"
          * ,"status":"complete"}
          */
-        JSONParser parser = new JSONParser();
-        // see if chain job
-        JSONObject status = getJobStatusObj(jobId);
-        if (status != null) {
-            String detailStr = status.get("statusDetail").toString();
-            JSONObject detail = (JSONObject) parser.parse(detailStr);
-            if (detail != null) {
-                if (detail.containsKey("chainjobstatus") && detail.containsKey("children")) {
-                    if (detail.containsKey("mapid")) {
-                        mapId = detail.get("mapid").toString();
-                    }
+        try {
+            JSONParser parser = new JSONParser();
+            // see if chain job
+            JSONObject status = getJobStatusObj(jobId);
+            if (status != null) {
+                String detailStr = status.get("statusDetail").toString();
+                JSONObject detail = (JSONObject) parser.parse(detailStr);
+                if (detail != null) {
+                    if (detail.containsKey("chainjobstatus") && detail.containsKey("children")) {
+                        if (detail.containsKey("mapid")) {
+                            mapId = detail.get("mapid").toString();
+                        }
 
-                    JSONArray children = (JSONArray) detail.get("children");
-                    if (children != null) {
-                        for (Object aChildren : children) {
-                            JSONObject child = (JSONObject) aChildren;
-                            if (child.get("status") != null) {
-                                String childStat = child.get("status").toString();
-                                if (childStat.equals(JOB_STATUS.RUNNING.toString())) {
-                                    if (child.get("id") != null) {
-                                        String childId = child.get("id").toString();
-                                        terminateJob(childId);
+                        JSONArray children = (JSONArray) detail.get("children");
+                        if (children != null) {
+                            for (Object aChildren : children) {
+                                JSONObject child = (JSONObject) aChildren;
+                                if (child.get("status") != null) {
+                                    String childStat = child.get("status").toString();
+                                    if (childStat.equals(JOB_STATUS.RUNNING.toString())) {
+                                        if (child.get("id") != null) {
+                                            String childId = child.get("id").toString();
+                                            terminateJob(childId);
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        if (mapId != null) {
-                            //ResourcesCleanUtil clean = new ResourcesCleanUtil();
-                            ResourcesCleanUtil.deleteLayers(mapId);
+                            if (mapId != null) {
+                                ResourcesCleanUtil.deleteLayers(mapId);
+                            }
                         }
                     }
                 }
             }
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Error terminating job with jobId = " + jobId, e);
         }
 
         return jobId;
@@ -648,6 +670,9 @@ public class JobResource {
 
             outStr = status.toJSONString();
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String msg = "Error retrieving job status for job: " + jobId + " Error: " + ex.getMessage();
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
@@ -711,7 +736,7 @@ public class JobResource {
         return new JobStatusManager(conn);
     }
 
-    private void initJob(String jobId) throws Exception {
+    private void initJob(String jobId) throws SQLException {
         try (Connection conn = DbUtils.createConnection()) {
             JobStatusManager jobStatusManager = createJobStatusMananger(conn);
             jobStatusManager.addJob(jobId);

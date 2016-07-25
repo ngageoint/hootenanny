@@ -141,6 +141,9 @@ public class CustomScriptResource {
         try {
             saveArr.add(saveScript(scriptName, scriptDescription, script));
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String msg = "Error processing script save for: " + scriptName + " Error: " + ex.getMessage();
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
@@ -166,6 +169,9 @@ public class CustomScriptResource {
             }
 
             response.setScriptsModified(scriptsModified.toArray(new String[scriptsModified.size()]));
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error processing script save.  Error: " + ex.getMessage();
@@ -229,6 +235,9 @@ public class CustomScriptResource {
             }
 
             retList.addAll(sortedScripts.values());
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error getting scripts list: " + ex.getMessage();
@@ -365,6 +374,9 @@ public class CustomScriptResource {
                 }
             }
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String msg = "Error getting script: " + scriptName + " Error: " + ex.getMessage();
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
@@ -399,8 +411,7 @@ public class CustomScriptResource {
      * return tags; }
      * 
      * @param scriptPath
-     *            Relative path of default translation script. (Relative to hoot
-     *            home path)
+     *            Relative path of default translation script. (Relative to hoot home path)
      * @return Requested translation script
      */
     @GET
@@ -443,8 +454,12 @@ public class CustomScriptResource {
                 }
             }
             else {
-                throw new Exception("Invalid script path.");
+                String msg = "Invalid script path.";
+                throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
             }
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error getting script: " + scriptPath + " Error: " + ex.getMessage();
@@ -463,8 +478,7 @@ public class CustomScriptResource {
      * 
      * @param scriptName
      *            Name of the script to delete.
-     * @return JSON Array containing JSON of name and description of deleted
-     *         scripts
+     * @return JSON Array containing JSON of name and description of deleted scripts
      */
     @GET
     @Path("/deletescript")
@@ -497,6 +511,9 @@ public class CustomScriptResource {
                     logger.error("Failed to read file header: {}", e.getMessage(), e);
                 }
             }
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error deleting script: " + scriptName + " Error: " + ex.getMessage();
@@ -553,6 +570,9 @@ public class CustomScriptResource {
 
             response.setScriptsModified(scriptsDeleted.toArray(new String[scriptsDeleted.size()]));
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String msg = "Error deleting scripts:  Error: " + ex.getMessage();
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
@@ -597,7 +617,7 @@ public class CustomScriptResource {
         return (List<File>) FileUtils.listFiles(scriptsDir, exts, false);
     }
 
-    private static JSONObject saveScript(String name, String description, String content) throws Exception {
+    private static JSONObject saveScript(String name, String description, String content) throws IOException {
         if (StringUtils.trimToNull(name) == null) {
             logger.error("Invalid input script name: {}", name);
             return null;
@@ -615,7 +635,7 @@ public class CustomScriptResource {
         }
 
         if (!hoot.services.utils.FileUtils.validateFilePath(SCRIPT_FOLDER, SCRIPT_FOLDER + "/" + name + ".js")) {
-            throw new Exception("Script name can not contain path.");
+            throw new IOException("Script name can not contain path.");
         }
 
         File fScript = new File(SCRIPT_FOLDER, name + ".js");

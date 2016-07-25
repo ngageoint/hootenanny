@@ -188,6 +188,9 @@ public class ExportJobResource extends JobControllerBase {
                 postJobRquest(jobId, argStr);
             }
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String msg = "Error exporting data: " + ex;
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
@@ -199,8 +202,7 @@ public class ExportJobResource extends JobControllerBase {
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
-    JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, Connection conn)
-            throws Exception {
+    JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, Connection conn) {
         if (!Boolean.parseBoolean(OSM_API_DB_ENABLED)) {
             String msg = "Attempted to export to an OSM API database but OSM API database support is disabled";
             throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
@@ -276,7 +278,7 @@ public class ExportJobResource extends JobControllerBase {
     }
 
     // adding this to satisfy the mock
-    BoundingBox getMapBounds(Map map) throws Exception {
+    BoundingBox getMapBounds(Map map) {
         return map.getBounds();
     }
 
@@ -294,7 +296,7 @@ public class ExportJobResource extends JobControllerBase {
         commandArgs.add(arg);
     }
 
-    private void setAoi(Map conflatedMap, JSONArray commandArgs) throws Exception {
+    private void setAoi(Map conflatedMap, JSONArray commandArgs) {
         BoundingBox bounds = getMapBounds(conflatedMap);
         JSONObject arg = new JSONObject();
         arg.put("changesetaoi", bounds.getMinLon() + "," + bounds.getMinLat() +
@@ -345,8 +347,10 @@ public class ExportJobResource extends JobControllerBase {
         }
         catch (NativeInterfaceException ne) {
             int nStat = ne.getExceptionCode().toInt();
-            logger.error(ne.getMessage(), ne);
             return Response.status(nStat).entity(ne.getMessage()).build();
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error exporting data: " + ex.getMessage();
@@ -388,6 +392,9 @@ public class ExportJobResource extends JobControllerBase {
             List<String> tbls = DataDefinitionManager.getTablesList(WFS_STORE_DB, id);
             DataDefinitionManager.deleteTables(tbls, WFS_STORE_DB);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String msg = "Error removing WFS resource: " + ex.getMessage();
             throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
@@ -417,6 +424,9 @@ public class ExportJobResource extends JobControllerBase {
                 o.put("id", wfsResource);
                 srvList.add(o);
             }
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error retrieving WFS resource list: " + ex.getMessage();
@@ -462,6 +472,9 @@ public class ExportJobResource extends JobControllerBase {
                 o.put("description", "UTP");
                 srvList.add(o);
             }
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error retrieving exported resource list: " + ex.getMessage();

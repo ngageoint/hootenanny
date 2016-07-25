@@ -77,6 +77,9 @@ public class CapabilitiesResource {
 
             responseDoc = writeResponse();
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception e) {
             String message = "Error retrieving capabilities: " + e.getMessage();
             throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
