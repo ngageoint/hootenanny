@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -107,12 +107,22 @@ public:
   static Geometry* validatePolygon(const Polygon* p);
 
   /**
-   * Converts a bounds in the format used in the hoot options config to an envelope
+   * Converts a bounds in the format used in the hoot options config (minx,miny,maxx,maxy) to an
+   * envelope
    *
    * @param boundsStr bounds string in the format used in the hoot options config to an envelope
    * @return
    */
   static Envelope envelopeFromConfigString(const QString boundsStr);
+
+  /**
+   * Creates a bounds string in the format used in the hoot options config (minx,miny,maxx,maxy)
+   * from an envelope
+   *
+   * @param boundsStr bounds string in the format used in the hoot options config to an envelope
+   * @return
+   */
+  static QString envelopeToConfigString(const Envelope& bounds);
 
 };
 

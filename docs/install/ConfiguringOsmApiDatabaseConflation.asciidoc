@@ -1,8 +1,8 @@
 
 [[HootConfiguringOsmApiDatabaseConflation]]
-== Configuring OSM API Database Conflation
+== Configuring an OSM API Database Connection
 
-By default, Hootenanny is configured with an empty test OSM API database.  To conflate against a production OSM API database:
+By default, Hootenanny is configured with an empty test OSM API database.  To conflate against your own OSM API database:
 
 * Create a custom OSM API database configuration file $HOOT_HOME/conf/DatabaseConfigLocal.sh by copying the file 
 $HOOT_HOME/conf/DatabaseConfigDefault.sh

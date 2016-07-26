@@ -30,7 +30,9 @@ export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NA
 export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 export HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
-export HOOT_OPTS="--error -D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=OsmApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=OsmApiDbConflate@hoottestcpp.org -D reader.add.source.datetime=false"
+# Will probably eventually remove postgresql.dumpfile.writer.add.circular.error.tag, but its needed for the time being for tests
+# using this script only.
+export HOOT_OPTS="--error -D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=OsmApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=OsmApiDbConflate@hoottestcpp.org -D reader.add.source.datetime=false -D postgresql.dumpfile.writer.add.circular.error.tag=true"
 
 rm -rf test-output/cmd/glacial/$TEST_NAME
 mkdir -p test-output/cmd/glacial/$TEST_NAME

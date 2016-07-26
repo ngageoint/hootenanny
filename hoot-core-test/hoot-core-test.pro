@@ -228,3 +228,4 @@ SOURCES += \
     src/test/cpp/hoot/core/algorithms/linearreference/WayMatchStringMappingConverterTest.cpp \
     src/test/cpp/hoot/core/io/OsmJsonReaderTest.cpp
 
+

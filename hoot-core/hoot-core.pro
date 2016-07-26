@@ -513,6 +513,9 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/FindWaysVisitor.cpp \
     src/main/cpp/hoot/core/visitors/FindNodesVisitor.cpp \
     src/main/cpp/hoot/core/filters/DistanceNodeCriterion.cpp \
+    src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriterv2.cpp \
+    src/main/cpp/hoot/core/visitors/MapExtentVisitor.cpp \
+    src/main/cpp/hoot/core/cmd/MapExtentCmd.cpp \
     src/main/cpp/hoot/core/ops/RemoveElementOp.cpp \
     src/main/cpp/hoot/core/ops/RemoveNodeOp.cpp \
     src/main/cpp/hoot/core/ops/RemoveRelationOp.cpp \
@@ -1035,6 +1038,9 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WayBufferCriterion.h \
     src/main/cpp/hoot/core/filters/WayDirectionCriterion.h \
     src/main/cpp/hoot/core/filters/DistanceNodeCriterion.h \
+    src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriter.h \
+    src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriterv2.h \
+    src/main/cpp/hoot/core/visitors/MapExtentVisitor.h \
     src/main/cpp/hoot/core/ops/RemoveElementOp.h \
     src/main/cpp/hoot/core/ops/RemoveNodeOp.h \
     src/main/cpp/hoot/core/ops/RemoveRelationOp.h \
