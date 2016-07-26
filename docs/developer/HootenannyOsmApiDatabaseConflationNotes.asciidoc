@@ -5,30 +5,6 @@ Testing Hootenanny conflation with OSM API database (MapEdit) data without acces
 cumbersome, but possible.  First, read the "Conflating OSM API Database Data" in the web user interface document for details on the workflow and 
 limitations involved with conflating this type of data.
 
-=== Manually Writing Data into an OSM API Database for Testing Purposes
-
-Hootenanny ships with an empty OSM API database, which can be used for testing.  To manually populate this database with a dataset from the
-command line, use one or more of the following scripts in the "scripts" directory after reading their documentation about when its best to 
-use each one:
-
-* CleanAndInitializeOsmApiDb.sh
-* CleanAndLoadOsmApiDbData.sh
-* LoadOsmApiDbData.sh
-* LoadOsmApiDbDataAutoCalcIds.sh
-
-For example, if you just want to load a single dataset, you can run on the server:
-
-cd $HOOT_HOME
-scripts/CleanAndLoadOsmApiDb.sh yourDataset.*
-
-If you want to load multiple datasets in a row, the easiest way is like this:
-
-cd $HOOT_HOME
-scripts/CleanAndInitializeOsmApiDb.sh
-scripts/LoadOsmApiDbDataAutoCalcIds.sh yourDataset1.*
-scripts/LoadOsmApiDbDataAutoCalcIds.sh yourDataset2.*​
-etc.
-
 === Testing the Changeset Conflict Detection for OSM API Database Export
 
 As described in the web user interface guide, when exporting a conflated dataset into an OSM API database, Hootenanny will detect any conflicts
