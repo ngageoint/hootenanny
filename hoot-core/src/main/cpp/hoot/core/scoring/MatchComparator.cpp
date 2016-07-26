@@ -127,13 +127,7 @@ public:
 
     if (!uuid.isEmpty())
     {
-      //For more information on the need for this assertion, see
-      //https://insightcloud.digitalglobe.com/redmine/issues/4775 , comments 61 through 63
-      //This assertion will fail since UUID's in the conflated output may be repeated
-      //across multiple elements.  Ticket 5496 will address this.
-      /// @todo Address this issue with r5496.
-      //assert(_uuidToEid.count(uuid) == 0);
-      _uuidToEid[uuid] = e->getElementId();
+      _uuidToEid.insert(uuid, e->getElementId());
     }
   }
 
@@ -313,24 +307,43 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
     {
       if (actualIndex != MatchType::Review)
       {
-        ElementId eid1 = _actualUuidToEid[m.first];
-        ElementId eid2 = _actualUuidToEid[m.second];
+        QList<ElementId> eid1s =  _actualUuidToEid.values(m.first);
+        for (int eidIndex = 0; eidIndex < eid1s.size(); eidIndex++)
+        {
+          ElementId eid1 = eid1s.at(eidIndex);
+          // sometimes elements are removed during conflation. If they were supposed to be matched,
+          // then mark it as an error.
+          if (!eid1.isNull())
+          {
+            _tagWrong(conflated, m.first);
+          }
+        }
 
-        // sometimes elements are removed during conflation. If they were supposed to be matched,
-        // then mark it as an error.
-        if (!eid1.isNull())
+        QList<ElementId> eid2s =  _actualUuidToEid.values(m.second);
+        for (int eidIndex = 0; eidIndex < eid2s.size(); eidIndex++)
         {
-          _tagWrong(conflated, m.first);
+          ElementId eid2 = eid2s.at(eidIndex);
+          // sometimes elements are removed during conflation. If they were supposed to be matched,
+          // then mark it as an error.
+          if (!eid2.isNull())
+          {
+            _tagWrong(conflated, m.second);
+          }
         }
-        if (!eid2.isNull())
+
+        for (int eid1Index = 0; eid1Index < eid1s.size(); eid1Index++)
         {
-          _tagWrong(conflated, m.second);
-        }
-        if (!eid1.isNull() && !eid2.isNull())
-        {
-          ElementPtr e1 = conflated->getElement(eid1);
-          ElementPtr e2 = conflated->getElement(eid2);
-          _addWrong(e1->getTags(), e2->getTags());
+          ElementId eid1 = eid1s.at(eid1Index);
+          for (int eid2Index = 0; eid2Index < eid2s.size(); eid2Index++)
+          {
+            ElementId eid2 = eid2s.at(eid2Index);
+            if (!eid1.isNull() && !eid2.isNull())
+            {
+              ElementPtr e1 = conflated->getElement(eid1);
+              ElementPtr e2 = conflated->getElement(eid2);
+              _addWrong(e1->getTags(), e2->getTags());
+            }
+          }
         }
       }
 
@@ -378,6 +391,56 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
   GetTagValuesVisitor vc("uuid", cUuids);
   conflated->visitRo(vc);
   //LOG_DEBUG("cUuids size: " << cUuids.size());
+
+  // go through all the reviews in the conflated map
+  set<ReviewMarker::ReviewUid> ruuid = ReviewMarker::getReviewUids(conflated);
+  for (set<ReviewMarker::ReviewUid>::iterator it = ruuid.begin(); it != ruuid.end(); it++)
+  {
+    set<QString> u1;
+    set<QString> u2;
+
+    set<ElementId> eids = ReviewMarker::getReviewElements(conflated, *it);
+    for (set<ElementId>::iterator eid = eids.begin(); eid != eids.end(); eid++)
+    {
+      ElementId p = *eid;
+      QString uuidStr = conflated->getElement(p)->getTags()["uuid"];
+      if (uuidStr.isEmpty())
+      {
+        LOG_WARN("Missing uuid for " + p.toString());
+        continue;
+      }
+
+      if (conflated->getElement(p)->getStatus() == Status::Unknown1)
+      {
+        u1.insert(uuidStr);
+      }
+      else if (conflated->getElement(p)->getStatus() == Status::Unknown2)
+      {
+        u2.insert(uuidStr);
+      }
+      else if (u1.size() == 0 && u2.size() > 0)
+      {
+        u1.insert(uuidStr);
+      }
+      else if (u2.size() == 0 && u1.size() > 0)
+      {
+        u2.insert(uuidStr);
+      }
+      else
+      {
+        u2.insert(uuidStr);
+      }
+    }
+
+    // create a match between all the combinations of ref1 uuid to ref2 uuid
+    for (set<QString>::const_iterator iit = u1.begin(); iit != u1.end(); ++iit)
+    {
+      for (set<QString>::const_iterator jt = u2.begin(); jt != u2.end(); ++jt)
+      {
+        _actual.insert(UuidPair(*iit, *jt));
+      }
+    }
+  }
 
   // read out all the uuids in in1 and in2
   set<QString> in1Uuids;
@@ -500,46 +563,64 @@ int MatchComparator::getTotalCount() const
 
 bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOsmMapPtr& conflated)
 {
-  ElementId eid1 = _actualUuidToEid[uuid1];
-  ElementId eid2 = _actualUuidToEid[uuid2];
+  QList<ElementId> eid1s = _actualUuidToEid.values(uuid1);
+  QList<ElementId> eid2s = _actualUuidToEid.values(uuid2);
 
   bool result = false;
-
-  if (eid1.isNull() || eid2.isNull())
+  for (int eid1Index = 0; eid1Index < eid1s.size(); eid1Index++)
   {
-    //So far this message is ok, change from LOG_INFO to LOG_DEBUG.
-    //More information please see issue 167. https://github.com/ngageoint/hootenanny/issues/167
-    LOG_DEBUG("No actual element exists.");
-    return false;
-  }
+    ElementId eid1 = eid1s.at(eid1Index);
+    for (int eid2Index = 0; eid2Index < eid2s.size(); eid2Index++)
+    {
+      ElementId eid2 = eid2s.at(eid2Index);
+      if (eid1.isNull() || eid2.isNull())
+      {
+        //So far this message is ok, change from LOG_INFO to LOG_DEBUG.
+        //More information please see issue 167. https://github.com/ngageoint/hootenanny/issues/167
+        LOG_DEBUG("No actual element exists.");
+        return false;
+      }
 
-  if (ReviewMarker().isNeedsReview(conflated, conflated->getElement(eid1),
-    conflated->getElement(eid2)))
-  {
-    result = true;
+      if (ReviewMarker().isNeedsReview(conflated, conflated->getElement(eid1),
+        conflated->getElement(eid2)))
+      {
+        result = true;
+      }
+    }
   }
-
   return result;
 }
 
 void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const QString& value)
 {
-  // if the uuid contains the first uuid
-  TagContainsFilter tcf(Filter::KeepMatches, "uuid", uuid);
-  // set mismatch to 1.
+  // if the uuid contains the first uuid, set mismatch
   SetTagVisitor stv("hoot:mismatch", value);
-  FilteredVisitor fv(tcf, stv);
-  map->visitRw(fv);
+  MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
+  while (it != _actualUuidToEid.end())
+  {
+    if (it.key().contains(uuid))
+    {
+      shared_ptr<Element> eid = map->getElement(it.value());
+      stv.visit(eid);
+    }
+    it++;
+  }
 }
 
 void MatchComparator::_tagWrong(const OsmMapPtr &map, const QString &uuid)
 {
-  // if the uuid contains the first uuid
-  TagContainsFilter tcf(Filter::KeepMatches, "uuid", uuid);
-  // set mismatch to 1.
+  // if the uuid contains the first uuid, set mismatch
   SetTagVisitor stv("hoot:wrong", "1");
-  FilteredVisitor fv(tcf, stv);
-  map->visitRw(fv);
+  MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
+  while (it != _actualUuidToEid.end())
+  {
+    if (it.key().contains(uuid))
+    {
+      shared_ptr<Element> eid = map->getElement(it.value());
+      stv.visit(eid);
+    }
+    it++;
+  }
 }
 
 QString MatchComparator::toString() const
