@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -60,6 +60,7 @@ public:
   static unsigned int TIMESTAMP_EMPTY;
   static QString USER_EMPTY;
   static long UID_EMPTY;
+  static bool VISIBLE_EMPTY;
 
   virtual ~ElementData() {}
 
@@ -71,7 +72,11 @@ public:
 
   long getId() const { return _id; }
 
+  void setId(long id) { _id = id; }
+
   long getChangeset() const { return _changeset; }
+
+  void setChangeset(long changeset) { _changeset = changeset; }
 
   Meters getRawCircularError() const { return _circularError; }
 
@@ -95,6 +100,10 @@ public:
 
   void setTag(QString k, QString v) { _tags.insert(k, v); }
 
+  bool getVisible() const { return _visible; }
+
+  void setVisible(bool visible) { _visible = visible; }
+
 protected:
 
   // Please don't add any additional constructors. Multiple constructors has lead to a large number
@@ -104,7 +113,8 @@ protected:
               long changeset = ElementData::CHANGESET_EMPTY,
               long version = ElementData::VERSION_EMPTY,
               unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
-              QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY);
+              QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
+              bool visible = ElementData::VISIBLE_EMPTY);
 
   long _id;
   Tags _tags;
@@ -114,6 +124,7 @@ protected:
   unsigned int _timestamp;
   QString _user;
   long _uid;
+  bool _visible;
 
 };
 

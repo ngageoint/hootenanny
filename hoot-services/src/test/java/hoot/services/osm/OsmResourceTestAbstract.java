@@ -26,6 +26,8 @@
  */
 package hoot.services.osm;
 
+import static hoot.services.HootProperties.GRIZZLY_PORT;
+
 import java.sql.Connection;
 
 import org.joda.time.format.DateTimeFormat;
@@ -34,22 +36,20 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sun.jersey.api.client.AsyncWebResource;
 import com.sun.jersey.test.framework.JerseyTest;
 
-import hoot.services.HootProperties;
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.review.ReviewTestUtils;
+import hoot.services.utils.MapUtils;
 
 
 /*
  * Base class for tests that need to read/write OSM data to the services database
  */
-@Ignore
 public abstract class OsmResourceTestAbstract extends JerseyTest {
     private static final Logger log = LoggerFactory.getLogger(OsmResourceTestAbstract.class);
 
@@ -67,9 +67,9 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
 
     protected static Connection conn = null;
 
-    public OsmResourceTestAbstract(final String... controllerGroup) throws NumberFormatException {
+    public OsmResourceTestAbstract(String... controllerGroup) throws NumberFormatException {
         super(controllerGroup);
-        final int grizzlyPort = Integer.parseInt(HootProperties.getPropertyOrDefault("grizzlyPort"));
+        int grizzlyPort = Integer.parseInt(GRIZZLY_PORT);
         asyncTestResource = client().asyncResource("http://localhost:" + String.valueOf(grizzlyPort));
     }
 
@@ -79,10 +79,10 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
             conn = DbUtils.createConnection();
             OsmTestUtils.conn = conn;
             ReviewTestUtils.conn = conn;
-            userId = DbUtils.insertUser(conn);
+            userId = MapUtils.insertUser(conn);
         }
         catch (Exception e) {
-            DbUtils.closeConnection(conn);
+            conn.close();
             log.error(e.getMessage() + " ");
             throw e;
         }
@@ -91,7 +91,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
     @Before
     public void beforeTest() throws Exception {
         try {
-            mapId = DbUtils.insertMap(userId, conn);
+            mapId = MapUtils.insertMap(userId, conn);
 
             OsmTestUtils.userId = userId;
 
@@ -105,17 +105,8 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
 
     @After
     public void afterTest() throws Exception {
-        try {
-            // no need to clear out each map, if we're clearing the whole db out
-            // before each run
-            if (!Boolean.parseBoolean(HootProperties.getPropertyOrDefault("servicesTestClearEntireDb"))) {
-                DbUtils.deleteOSMRecord(conn, mapId);
-            }
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
+        // no need to clear out each map, if we're clearing the whole db out before each run
+        MapUtils.deleteOSMRecord(conn, mapId);
     }
 
     @AfterClass
@@ -130,7 +121,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
             throw e;
         }
         finally {
-            DbUtils.closeConnection(conn);
+            conn.close();
         }
     }
 }

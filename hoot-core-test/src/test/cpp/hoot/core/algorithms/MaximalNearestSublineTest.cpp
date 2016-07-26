@@ -37,6 +37,8 @@
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
 
@@ -81,7 +83,7 @@ public:
       shared_ptr<OsmMap> map2(new OsmMap(map->getProjection()));
 
       shared_ptr<OGRSpatialReference> srs =
-          MapProjector::createAeacProjection(map->calculateBounds());
+          MapProjector::createAeacProjection(CalculateBoundsVisitor::getBounds(map));
       MapProjector::project(map, srs);
 
       stringstream ss;
@@ -138,8 +140,8 @@ public:
 
       MapProjector::projectToPlanar(map);
 
-      long n1 = map->findWays("note", "1")[0];
-      long n2 = map->findWays("note", "2")[0];
+      long n1 = FindWaysVisitor::findWaysByTag(map, "note", "1")[0];
+      long n2 = FindWaysVisitor::findWaysByTag(map, "note", "2")[0];
       shared_ptr<Way> left = MaximalNearestSubline::getMaximalNearestSubline(map,
             map->getWay(n1),
             map->getWay(n2),
@@ -194,8 +196,8 @@ public:
 
       MapProjector::projectToPlanar(map);
 
-      long n3 = map->findWays("note", "3")[0];
-      long n4 = map->findWays("note", "4")[0];
+      long n3 = FindWaysVisitor::findWaysByTag(map, "note", "3")[0];
+      long n4 = FindWaysVisitor::findWaysByTag(map, "note", "4")[0];
       shared_ptr<Way> left = MaximalNearestSubline::getMaximalNearestSubline(
             map,
             map->getWay(n3),
@@ -247,5 +249,6 @@ public:
 };
 
 
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MaximalNearestSublineTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MaximalNearestSublineTest, "slow");
 

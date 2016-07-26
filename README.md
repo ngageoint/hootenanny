@@ -15,8 +15,7 @@ and user-friendly conflation experience without the extra overhead of thick desk
 benefits which include its open license allowing users to easily customize and add functionality, a robust editing capability 
 originally targeted for interactive editing of OSM features, and a web service based architecture for integrating into SOA environments.  
 A REST API is in place to connect the web browser based User Interface (UI) with the core conflation algorithms and database. 
-The translation and conflation operations are also exposed through node.js service endpoints, Open Geospatial Consortium (OGC) 
-Web Processing Service (WPS) and the resulting vector data is accessible via a Web Feature Service (WFS) for additional open 
+The translation and conflation operations are also exposed through node.js service endpoints and the resulting vector data is accessible via an Open Geospatial Consortium (OGC) Web Feature Service (WFS) for additional open 
 interoperability. The application is primarily supported in either the Chrome or Chromium browser with limited supported in Firefox.  
 
 If you have any support questions please create an Issue in this repo or contact us via email: Hootenanny.Help@DigitalGlobe.com.
@@ -33,12 +32,25 @@ it is important to note that conflation occurs between similar feature types (e.
 polyline to Transportation polyline, etc.).
 
 ## Supported Data Formats
-_Import:_ Hootenanny can ingest shapefiles, openstreetmap (.osm), ESRI File Geodatabase (.gdb), and geonames.org (.geonames).  Additionally, 
-.zip files containing shapefiles and/or .gdb files can be uploaded.
+_Import:_ Hootenanny can ingest from:
+* Shapefile (.shp)
+* OpenStreetMap (.osm)
+* ESRI File Geodatabase (.gdb)
+* .zip files containing shapefiles and/or .gdb files
+* geonames.org (.geonames)
+* OSM API database sources (MapEdit, etc.; experimental feature; see documentation for workflow)
 
-_Export:_ There are currently four options for exporting data from Hootenanny: File Geodatabase (FGDB), Shapefile, OSM and Web 
-Feature Service (WFS). Note that .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the relevant 
-associated files, while WFS is exported as WFS Get Capabilities service URL that can be added into an OGC-enabled third party application
+_Export:_ Hootenanny can export to: 
+* Shapefile (.shp)
+* OpenStreetMap (.osm)
+* ESRI File Geodatabase (.gdb)
+* Web Feature Service (WFS)
+* OSM API database (MapEdit, etc.; experimental feature; see documentation for workflow)
+
+Note that .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the relevant 
+associated files, while WFS is exported as WFS Get Capabilities service URL that can be added into 
+an OGC-enabled third party application, and OSM API database export is done with an OSM changeset
+representing the before/after difference of conflated data.
 
 ## Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database structure to support translation between various 
@@ -52,6 +64,12 @@ or on the [releases](https://github.com/ngageoint/hootenanny/releases) under eac
 # Installation
 Instructions to launch a Hootenanny virtual machine using [Vagrant](https://www.vagrantup.com/) may
 be found [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
+
+Optional file download:
+* https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
+
+If you're compiling manually on CentOS, you'll need:
+** https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/geos-3.3.8-patched.tgz
 
 Additional instructions for setting up a Hootenanny development environment may be found in the Hootenanny
 Developer's Guide.
@@ -92,7 +110,9 @@ In alphabetical order:
 * Brian Hatchl (Brian.Hatchl@digitalglobe.com)
 * Matt Jackson (Matthew.Jackson@digitalglobe.com)
 * Ben Marchant (Benjamin.Marchant@digitalglobe.com)
-* Terry Ott (Terry.Ott@digitalglobe.com)
+* Dmitriy Mylov (Dmitriy.Mylov@digitalglobe.com)
+* Seth Putnam (Seth.Putnam@digitalglobe.com)
+* Micah Schicker (Micah.Schicker@digitalglobe.com)
 * Greg Schmidt (Greg.Schmidt@digitalglobe.com)
 * Josh Sisskind (Josh.Sisskind@digitalglobe.com)
 * Ming Su (Ming.Su@digitalglobe.com)

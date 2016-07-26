@@ -36,66 +36,61 @@ import javax.annotation.PreDestroy;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.info.ErrorLog;
-import hoot.services.utils.ResourceErrorHandler;
-
 
 @Path("/logging")
 public class ErrorLogResource {
-    private static final Logger log = LoggerFactory.getLogger(ErrorLogResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(ErrorLogResource.class);
 
-    private String _exportLogPath = null;
+    private String exportLogPath;
 
     public ErrorLogResource() {
-
     }
 
     @PreDestroy
-    public void PreDestroy() {
-        try {
-            if (_exportLogPath != null && _exportLogPath.length() > 0) {
-                FileUtils.forceDelete(new File(_exportLogPath));
-            }
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
+    public void preDestroy() throws IOException {
+        if ((exportLogPath != null) && (!exportLogPath.isEmpty())) {
+            FileUtils.forceDelete(new File(exportLogPath));
         }
     }
 
     /**
-     * Service method endpoint for retrieving the Hootenanny tomcat log.
+     * Service method endpoint for retrieving the Hootenanny tomcat logger.
      * 
      * GET hoot-services/info/logging/debuglog
      * 
-     * @return JSON containing debug log
+     * @return JSON containing debug logger
      */
     @GET
     @Path("/debuglog")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getDebugLog() {
-        String logStr = null;
+        String errorLog;
         try {
-            ErrorLog logging = new ErrorLog();
             // 50k Length
-            logStr = logging.getErrorlog(50000);
+            errorLog = ErrorLog.getErrorlog(50000);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting error log: " + ex.toString(), Status.INTERNAL_SERVER_ERROR,
-                    log);
+            String msg = "Error getting error log: " + ex;
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
-        JSONObject res = new JSONObject();
-        res.put("log", logStr);
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+
+        JSONObject entity = new JSONObject();
+        entity.put("logger", errorLog);
+
+        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
     /**
@@ -104,29 +99,33 @@ public class ErrorLogResource {
      * GET hoot-services/info/logging/export
      * 
      * @return Binary octet stream
-     * @throws IOException
      */
     @GET
     @Path("/export")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response exportLog() throws IOException {
-        ErrorLog logging = new ErrorLog();
-        File out = null;
+    public Response exportLog() {
+        File out;
         try {
-            String outputPath = logging.generateExportLog();
+            String outputPath = ErrorLog.generateExportLog();
             out = new File(outputPath);
-            _exportLogPath = outputPath;
+            // TODO: Really not sure about the line below.  Will the be always a single export?  Probably not.
+            exportLogPath = outputPath;
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error exporting log file: " + ex.toString(), Status.INTERNAL_SERVER_ERROR,
-                    log);
+            String message = "Error exporting log file!";
+            throw new WebApplicationException(ex, Response.serverError().entity(message).build());
         }
-        DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        Date dd = new Date();
-        String dtStr = dateFormat.format(dd);
-        ResponseBuilder rBuild = Response.ok(out, MediaType.APPLICATION_OCTET_STREAM);
-        rBuild.header("Content-Disposition", "attachment; filename=hootlog_" + dtStr + ".log");
 
-        return rBuild.build();
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date date = new Date();
+        String dtStr = dateFormat.format(date);
+
+        ResponseBuilder responseBuilder = Response.ok(out, MediaType.APPLICATION_OCTET_STREAM);
+        responseBuilder.header("Content-Disposition", "attachment; filename=hootlog_" + dtStr + ".logger");
+
+        return responseBuilder.build();
     }
 }

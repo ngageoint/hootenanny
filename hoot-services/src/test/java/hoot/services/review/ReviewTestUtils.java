@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.writers.osm.ChangesetDbWriter;
+import hoot.services.controllers.osm.ChangesetDbWriter;
 
 
 /*

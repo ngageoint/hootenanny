@@ -12,9 +12,10 @@ plugins/config.js
 *.kate-swp
 aclocal.m4
 autom4te.cache
+BuildDate.txt
 bin/
 callgrind.*
-conf/DatabaseConfig.sh
+conf/DatabaseConfigLocal.sh
 conf/LocalHoot.json
 conf/*.rf
 conf/words*.sqlite
@@ -144,7 +145,6 @@ customscript/
 */buildInfo.json/*
 **/buildInfo.json/*.*
 scripts/MakeHootRelease.sh
-hoot-services/pom.xml
 hoot-services/src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml
 BigReport.asciidoc
 BigReport.pdf
@@ -173,3 +173,5 @@ vagrant*-*
 MingsSuperAwesomePrompt.sh
 id_rsa.pub
 coverage/
+hoot-services/db.properties
+hoot-services/src/main/java/hoot/services/db2

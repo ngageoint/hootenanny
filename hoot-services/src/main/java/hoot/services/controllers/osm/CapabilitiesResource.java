@@ -26,22 +26,27 @@
  */
 package hoot.services.controllers.osm;
 
+import static hoot.services.HootProperties.*;
+
+import java.io.IOException;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.writers.osm.CapabilitiesResponseWriter;
 
 
 /**
@@ -49,7 +54,7 @@ import hoot.services.writers.osm.CapabilitiesResponseWriter;
  */
 @Path("/api/capabilities")
 public class CapabilitiesResource {
-    private static final Logger log = LoggerFactory.getLogger(CapabilitiesResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(CapabilitiesResource.class);
 
     /**
      * The Hootenanny Capabilities Service implements the OSM Capabilities
@@ -64,19 +69,74 @@ public class CapabilitiesResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response get() {
-        try {
-            log.info("Retrieving capabilities...");
+        Document responseDoc;
 
-            Document responseDoc = (new CapabilitiesResponseWriter()).writeResponse();
-            log.debug("Returning response: " + StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100)
-                    + " ...");
-            return Response.ok(new DOMSource(responseDoc), MediaType.TEXT_XML)
-                    .header("Content-type", MediaType.TEXT_XML).build();
+        try {
+            logger.info("Retrieving capabilities...");
+
+            responseDoc = writeResponse();
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception e) {
-            final String message = "Error retrieving capabilities: " + e.getMessage();
-            log.error(message);
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build();
+            String message = "Error retrieving capabilities: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(message).build());
         }
+
+        try {
+            logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100));
+        }
+        catch (IOException ignored) {
+        }
+
+        return Response.ok(new DOMSource(responseDoc), MediaType.TEXT_XML)
+                .header("Content-type", MediaType.TEXT_XML).build();
+    }
+
+    /**
+     * Writes the capabilities response to an XML document
+     *
+     * @return an XML document
+     */
+    private static Document writeResponse() throws ParserConfigurationException {
+        logger.debug("Building response...");
+
+        Document responseDoc = XmlDocumentBuilder.create();
+
+        Element osmElement = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
+        Element apiElement = responseDoc.createElement("api");
+
+        Element versionElement = responseDoc.createElement("version");
+        versionElement.setAttribute("minimum", OSM_VERSION);
+        versionElement.setAttribute("maximum", OSM_VERSION);
+        apiElement.appendChild(versionElement);
+
+        Element areaElement = responseDoc.createElement("area");
+        areaElement.setAttribute("maximum", MAX_QUERY_AREA_DEGREES);
+        apiElement.appendChild(areaElement);
+
+        Element wayNodesElement = responseDoc.createElement("waynodes");
+        wayNodesElement.setAttribute("maximum", MAXIMUM_WAY_NODES);
+        apiElement.appendChild(wayNodesElement);
+
+        Element changesetsElement = responseDoc.createElement("changesets");
+        changesetsElement.setAttribute("maximum_elements", MAXIMUM_CHANGESET_ELEMENTS);
+        apiElement.appendChild(changesetsElement);
+
+        Element timeoutElement = responseDoc.createElement("timeout");
+        timeoutElement.setAttribute("seconds", String.valueOf(Integer.parseInt(CHANGESET_IDLE_TIMEOUT_MINUTES) * 60));
+        apiElement.appendChild(timeoutElement);
+
+        Element statusElement = responseDoc.createElement("status");
+        statusElement.setAttribute("database", "online");
+        statusElement.setAttribute("api", "online");
+        statusElement.setAttribute("gpx", "offline");
+        apiElement.appendChild(statusElement);
+
+        osmElement.appendChild(apiElement);
+        responseDoc.appendChild(osmElement);
+
+        return responseDoc;
     }
 }

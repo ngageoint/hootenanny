@@ -26,7 +26,7 @@
  */
 package hoot.services.geo.zindex;
 
-import java.util.Vector;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -41,9 +41,9 @@ public class ZCurveRangerTest {
     public void testMaxBitColumn() {
         ZValue zv = new ZValue(2, 4, new double[] { 0, 1 }, new double[] { 0, 1 });
         ZCurveRanger ranger = new ZCurveRanger(zv);
-        Assert.assertEquals(7, ranger._getMaxBitColumn(0xFF));
-        Assert.assertEquals(0, ranger._getMaxBitColumn(0x1));
-        Assert.assertEquals(1, ranger._getMaxBitColumn(0x2));
+        Assert.assertEquals(7, ZCurveRanger.getMaxBitColumn(0xFF));
+        Assert.assertEquals(0, ZCurveRanger.getMaxBitColumn(0x1));
+        Assert.assertEquals(1, ZCurveRanger.getMaxBitColumn(0x2));
     }
 
     @Test
@@ -52,9 +52,9 @@ public class ZCurveRangerTest {
         ZValue zv = new ZValue(2, 4, new double[] { 0, 1 }, new double[] { 0, 1 });
         ZCurveRanger ranger = new ZCurveRanger(zv);
 
-        Assert.assertEquals(0x10, ranger._getSplitValue(0x0, 0x10));
-        Assert.assertEquals(0x110, ranger._getSplitValue(0x100, 0x113));
-        Assert.assertEquals(0x4, ranger._getSplitValue(0x3, 0x5));
+        Assert.assertEquals(0x10, ZCurveRanger.getSplitValue(0x0, 0x10));
+        Assert.assertEquals(0x110, ZCurveRanger.getSplitValue(0x100, 0x113));
+        Assert.assertEquals(0x4, ZCurveRanger.getSplitValue(0x3, 0x5));
     }
 
     @Test
@@ -67,22 +67,22 @@ public class ZCurveRangerTest {
         LongBox[] lb;
 
         in = new LongBox(new long[] { 2, 0 }, new long[] { 5, 3 });
-        lb = ranger._breakBox(in);
+        lb = ranger.breakBox(in);
         Assert.assertEquals("{ (2 : 3) (0 : 3) }", lb[0].toString());
         Assert.assertEquals("{ (4 : 5) (0 : 3) }", lb[1].toString());
 
         in = new LongBox(new long[] { 2, 3 }, new long[] { 5, 4 });
-        lb = ranger._breakBox(in);
+        lb = ranger.breakBox(in);
         Assert.assertEquals("{ (2 : 5) (3 : 3) }", lb[0].toString());
         Assert.assertEquals("{ (2 : 5) (4 : 4) }", lb[1].toString());
 
         in = new LongBox(new long[] { 2, 2 }, new long[] { 4, 7 });
-        lb = ranger._breakBox(in);
+        lb = ranger.breakBox(in);
         Assert.assertEquals("{ (2 : 4) (2 : 3) }", lb[0].toString());
         Assert.assertEquals("{ (2 : 4) (4 : 7) }", lb[1].toString());
 
         in = new LongBox(new long[] { 4, 4 }, new long[] { 7, 5 });
-        lb = ranger._breakBox(in);
+        lb = ranger.breakBox(in);
         Assert.assertEquals("{ (4 : 5) (4 : 5) }", lb[0].toString());
         Assert.assertEquals("{ (6 : 7) (4 : 5) }", lb[1].toString());
     }
@@ -94,28 +94,28 @@ public class ZCurveRangerTest {
         ZCurveRanger ranger = new ZCurveRanger(zv);
 
         LongBox in;
-        Vector<LongBox> lb;
+        List<LongBox> lb;
 
         in = new LongBox(new long[] { 2, 0 }, new long[] { 5, 3 });
-        lb = ranger._decomposeBox(in, 1);
-        Assert.assertEquals("{ (2 : 3) (0 : 1) }", lb.elementAt(0).toString());
-        Assert.assertEquals("{ (2 : 3) (2 : 3) }", lb.elementAt(1).toString());
-        Assert.assertEquals("{ (4 : 5) (0 : 1) }", lb.elementAt(2).toString());
-        Assert.assertEquals("{ (4 : 5) (2 : 3) }", lb.elementAt(3).toString());
+        lb = ranger.decomposeBox(in, 1);
+        Assert.assertEquals("{ (2 : 3) (0 : 1) }", lb.get(0).toString());
+        Assert.assertEquals("{ (2 : 3) (2 : 3) }", lb.get(1).toString());
+        Assert.assertEquals("{ (4 : 5) (0 : 1) }", lb.get(2).toString());
+        Assert.assertEquals("{ (4 : 5) (2 : 3) }", lb.get(3).toString());
 
         in = new LongBox(new long[] { 0, 0 }, new long[] { 3, 7 });
-        lb = ranger._decomposeBox(in, 1);
-        Assert.assertEquals("{ (0 : 3) (0 : 1) }", lb.elementAt(0).toString());
-        Assert.assertEquals("{ (0 : 3) (2 : 3) }", lb.elementAt(1).toString());
-        Assert.assertEquals("{ (0 : 3) (4 : 5) }", lb.elementAt(2).toString());
-        Assert.assertEquals("{ (0 : 3) (6 : 7) }", lb.elementAt(3).toString());
+        lb = ranger.decomposeBox(in, 1);
+        Assert.assertEquals("{ (0 : 3) (0 : 1) }", lb.get(0).toString());
+        Assert.assertEquals("{ (0 : 3) (2 : 3) }", lb.get(1).toString());
+        Assert.assertEquals("{ (0 : 3) (4 : 5) }", lb.get(2).toString());
+        Assert.assertEquals("{ (0 : 3) (6 : 7) }", lb.get(3).toString());
 
         in = new LongBox(new long[] { 1, 2 }, new long[] { 2, 7 });
-        lb = ranger._decomposeBox(in, 1);
-        Assert.assertEquals("{ (1 : 1) (2 : 3) }", lb.elementAt(0).toString());
-        Assert.assertEquals("{ (2 : 2) (2 : 3) }", lb.elementAt(1).toString());
-        Assert.assertEquals("{ (1 : 2) (4 : 5) }", lb.elementAt(2).toString());
-        Assert.assertEquals("{ (1 : 2) (6 : 7) }", lb.elementAt(3).toString());
+        lb = ranger.decomposeBox(in, 1);
+        Assert.assertEquals("{ (1 : 1) (2 : 3) }", lb.get(0).toString());
+        Assert.assertEquals("{ (2 : 2) (2 : 3) }", lb.get(1).toString());
+        Assert.assertEquals("{ (1 : 2) (4 : 5) }", lb.get(2).toString());
+        Assert.assertEquals("{ (1 : 2) (6 : 7) }", lb.get(3).toString());
     }
 
     @Test
@@ -124,7 +124,7 @@ public class ZCurveRangerTest {
         ZValue zv = new ZValue(2, 4, new double[] { 0, 1 }, new double[] { 0, 1 });
         ZCurveRanger ranger = new ZCurveRanger(zv);
 
-        Vector<Range> r;
+        List<Range> r;
         LongBox in;
 
         in = new LongBox(new long[] { 2, 0 }, new long[] { 5, 3 });
@@ -147,7 +147,7 @@ public class ZCurveRangerTest {
         ZValue zv = new ZValue(2, 10, new double[] { -180, -90 }, new double[] { 180, 90 });
         ZCurveRanger ranger = new ZCurveRanger(zv);
 
-        Vector<Range> r;
+        List<Range> r;
         Box b;
 
         b = new Box(new double[] { -105, 38 }, new double[] { -104.9, 38.1 });

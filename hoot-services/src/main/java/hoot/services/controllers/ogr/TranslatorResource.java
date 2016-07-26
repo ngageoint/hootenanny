@@ -26,42 +26,31 @@
  */
 package hoot.services.controllers.ogr;
 
+import static hoot.services.HootProperties.*;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-import hoot.services.nodeJs.ServerControllerBase;
-import hoot.services.utils.ResourceErrorHandler;
+import hoot.services.nodejs.ServerControllerBase;
 
 
 @Path("")
 public class TranslatorResource extends ServerControllerBase {
-    private static final Logger log = LoggerFactory.getLogger(TranslatorResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(TranslatorResource.class);
 
-    private static final String homeFolder;
-    private static final String translationServerPort;
-    private static final String translationServerThreadCount;
-    private static final String translationServerScript;
     private static final Object procLock = new Object();
     private static final Object portLock = new Object();
 
     private static String currentPort;
     private static Process transProc;
-
-    static {
-        homeFolder = HootProperties.getProperty("homeFolder");
-        translationServerPort = HootProperties.getProperty("translationServerPort");
-        translationServerThreadCount = HootProperties.getProperty("translationServerThreadCount");
-        translationServerScript = HootProperties.getProperty("translationServerScript");
-    }
 
     public TranslatorResource() {
     }
@@ -70,42 +59,38 @@ public class TranslatorResource extends ServerControllerBase {
         // set default default port and threadcount
         try {
             // Make sure to wipe out previosuly running servers.
-            stopServer(homeFolder + "/scripts/" + translationServerScript);
+            stopServer(HOME_FOLDER + "/scripts/" + TRANSLATION_SERVER_SCRIPT);
 
             // Probably an overkill but just in-case using synch lock
-            String currPort = translationServerPort;
+            String currPort = TRANSLATION_SERVER_PORT;
             synchronized (portLock) {
                 currentPort = currPort;
             }
 
             synchronized (procLock) {
-                String currThreadCnt = translationServerThreadCount;
-                transProc = startServer(currPort, currThreadCnt, homeFolder + "/scripts/" + translationServerScript);
+                String currThreadCnt = TRANSLATION_SERVER_THREAD_COUNT;
+                transProc = startServer(currPort, currThreadCnt, HOME_FOLDER + "/scripts/" + TRANSLATION_SERVER_SCRIPT);
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error starting translation service request: " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            String msg = "Error starting translation service request: " + ex;
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
     }
 
-    public void stopTranslationService() {
+    public static void stopTranslationService() {
         // This also gets called automatically from HootServletContext when
-        // service exits but
-        // should not be reliable since there are many path where it will not be
-        // invoked.
+        // service exits but should not be reliable since there are many path where it will not be invoked.
         try {
             // Destroy the reference to the process directly here via the Java
-            // API vs having the base
-            // class kill it with a unix command. Killing it via command causes
-            // the stxxl temp files
-            // created by hoot threads not to be cleaned up.
+            // API vs having the base class kill it with a unix command. Killing it via command causes
+            // the stxxl temp files created by hoot threads not to be cleaned up.
             // stopServer(homeFolder + "/scripts/" + translationServerScript);
             transProc.destroy();
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error starting translation service request: " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            String msg = "Error starting translation service request: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
     }
 
@@ -114,19 +99,19 @@ public class TranslatorResource extends ServerControllerBase {
      * <p>
      * GET hoot-services/ogr/translationserver/status
      *
-     * @return JSON containing state and port it is running
+     * @return JSON containing state and port it is running#background=Bing&map=17.20/-105.00217/39.91295
      */
     @GET
     @Path("/translationserver/status")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response isTranslationServiceRunning() {
-        boolean isRunning = false;
+        boolean isRunning;
         try {
             isRunning = getStatus(transProc);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error starting translation service request: " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            String msg = "Error starting translation service request: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         JSONObject res = new JSONObject();

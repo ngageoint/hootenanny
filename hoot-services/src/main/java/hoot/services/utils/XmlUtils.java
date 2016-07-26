@@ -26,6 +26,7 @@
  */
 package hoot.services.utils;
 
+import java.io.IOException;
 import java.io.StringWriter;
 
 import javax.xml.transform.Transformer;
@@ -43,7 +44,10 @@ import org.w3c.dom.NodeList;
 /**
  * Various xml utilities
  */
-public class XmlUtils {
+public final class XmlUtils {
+    private XmlUtils() {
+    }
+
     /**
      * Creates an XPATH instance for querying with
      * 
@@ -60,16 +64,18 @@ public class XmlUtils {
      * @return a string representation of the node list
      * @throws TransformerFactoryConfigurationError
      * @throws TransformerException
+     * @throws IOException
      */
-    public static String nodeListToString(final NodeList nodeList)
-            throws TransformerFactoryConfigurationError, TransformerException {
-        String result = "";
+    public static String nodeListToString(NodeList nodeList)
+            throws TransformerFactoryConfigurationError, TransformerException, IOException {
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < nodeList.getLength(); i++) {
-            StringWriter sw = new StringWriter();
-            Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            serializer.transform(new DOMSource(nodeList.item(i)), new StreamResult(sw));
-            result += sw.toString();
+            try (StringWriter sw = new StringWriter()) {
+                Transformer serializer = TransformerFactory.newInstance().newTransformer();
+                serializer.transform(new DOMSource(nodeList.item(i)), new StreamResult(sw));
+                result.append(sw);
+            }
         }
-        return result;
+        return result.toString();
     }
 }

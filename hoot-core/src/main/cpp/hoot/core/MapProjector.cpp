@@ -39,6 +39,7 @@ using namespace boost;
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/visitors/CalculateBoundsVisitor.h>
 
 // GEOS
 #include <geos/geom/CoordinateFilter.h>
@@ -50,7 +51,7 @@ using namespace boost;
 namespace hoot
 {
 
-MapProjector MapProjector::_theInstance;
+shared_ptr<MapProjector> MapProjector::_theInstance;
 
 class DisableCplErrors
 {
@@ -97,6 +98,15 @@ void ReprojectCoordinateFilter::project(Coordinate* c) const
   }
 }
 
+
+MapProjector& MapProjector::getInstance()
+{
+  if (!_theInstance.get())
+  {
+    _theInstance.reset(new MapProjector());
+  }
+  return *_theInstance;
+}
 
 bool MapProjector::_angleLessThan(const MapProjector::PlanarTestResult& p1,
   const MapProjector::PlanarTestResult& p2)
@@ -366,8 +376,8 @@ shared_ptr<OGRSpatialReference> MapProjector::createWgs84Projection()
 {
   shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
 
-    // EPSG 4326 = WGS84
-//  if (srs->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
+  // EPSG 4326 = WGS84
+  // if (srs->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
   if (srs->importFromEPSG(4326) != OGRERR_NONE)
   {
     throw HootException("Error creating EPSG:4326 projection.");
@@ -582,13 +592,13 @@ void MapProjector::project(const shared_ptr<Geometry>& g,
 void MapProjector::projectToAeac(shared_ptr<OsmMap> map)
 {
   shared_ptr<OGRSpatialReference> srs = getInstance().createAeacProjection(
-    map->calculateBounds());
+    CalculateBoundsVisitor::getBounds(map));
   project(map, srs);
 }
 
 void MapProjector::projectToOrthographic(shared_ptr<OsmMap> map)
 {
-  OGREnvelope env = map->calculateBounds();
+  OGREnvelope env = CalculateBoundsVisitor::getBounds(map);
   return projectToOrthographic(map, env);
 }
 
@@ -609,7 +619,7 @@ void MapProjector::projectToPlanar(shared_ptr<OsmMap> map)
 {
   if (isGeographic(map))
   {
-    OGREnvelope env = map->calculateBounds();
+    OGREnvelope env = CalculateBoundsVisitor::getBounds(map);
     projectToPlanar(map, env);
   }
 }

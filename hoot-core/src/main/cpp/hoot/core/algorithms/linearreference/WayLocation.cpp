@@ -219,6 +219,15 @@ const Coordinate WayLocation::getCoordinate() const
   }
 }
 
+ConstNodePtr WayLocation::getNode() const
+{
+  if (!isNode())
+  {
+    throw IllegalArgumentException("getNode() is only valid if WayLocation is on a node.");
+  }
+  return _map->getNode(getWay()->getNodeId(_segmentIndex));
+}
+
 WayLocation WayLocation::move(Meters distance) const
 {
   WayLocation result(*this);

@@ -1,8 +1,8 @@
 ****Quick Stats****
 Reprojecting 0 / 117         
-13:31:32.860 INFO  .../core/ops/CalculateStatsOp.cpp(  97) Calculating map statistics...
-13:31:32.861 INFO  .../core/ops/CalculateStatsOp.cpp( 359) Map statistics calculated.
-13:31:32.861 INFO  ...oot/core/io/MapStatsWriter.cpp( 221) Writing stats to file: test-output/StatsAllDataTypesA.txt
+17:39:46.446 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
+17:39:46.446 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
+17:39:46.447 INFO  ...oot/core/io/MapStatsWriter.cpp( 221) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -14,11 +14,11 @@ Minimum Relation ID	9.2233720368547758e+18
 Maximum Relation ID	-9.2233720368547758e+18
 ****JSON Stats****
 Reprojecting 0 / 117         
-13:31:32.985 INFO  .../core/ops/CalculateStatsOp.cpp(  97) Calculating map statistics...
-13:31:33.999 INFO  .../core/ops/CalculateStatsOp.cpp( 359) Map statistics calculated.
+17:39:46.722 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
+17:39:47.501 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
 Reprojecting 0 / 116         
-13:31:34.032 INFO  .../core/ops/CalculateStatsOp.cpp(  97) Calculating map statistics...
-13:31:34.886 INFO  .../core/ops/CalculateStatsOp.cpp( 359) Map statistics calculated.
+17:39:47.524 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
+17:39:48.091 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
 {
     "Node Count":
     [
@@ -402,18 +402,18 @@ Reprojecting 0 / 116
     ],
     "Translated Populated Tag Percent":
     [
-        "0.04434314131786158",
-        "0.042325581395348838"
+        "0.050805452292441142",
+        "0.047729379054680263"
     ],
     "Translated Populated Tag Count":
     [
-        "107",
-        "91"
+        "123",
+        "103"
     ],
     "Translated Default Tag Count":
     [
-        "1762",
-        "1549"
+        "1754",
+        "1545"
     ],
     "Translated Null Tag Count":
     [
@@ -422,8 +422,8 @@ Reprojecting 0 / 116
     ],
     "Building Translated Populated Tag Percent":
     [
-        "0.040404040404040407",
-        "0.040404040404040407"
+        "0.050505050505050504",
+        "0.04924242424242424"
     ],
     "Highway Translated Populated Tag Percent":
     [
@@ -432,8 +432,8 @@ Reprojecting 0 / 116
     ],
     "POI Translated Populated Tag Percent":
     [
-        "0.059119496855345913",
-        "0.058904109589041097"
+        "0.066002490660024907",
+        "0.065040650406504072"
     ],
     "Waterway Translated Populated Tag Percent":
     [

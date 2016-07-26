@@ -45,12 +45,8 @@ using namespace geos::operation::distance;
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/filters/ParallelWayFilter.h>
-#include <hoot/core/filters/ParallelWayFilter.h>
-#include <hoot/core/filters/StatusFilter.h>
-#include <hoot/core/filters/UnknownFilter.h>
-#include <hoot/core/filters/WayBufferFilter.h>
-#include <hoot/core/filters/WayFilterChain.h>
+#include <hoot/core/filters/UnknownCriterion.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 using namespace hoot::elements;
@@ -81,9 +77,10 @@ const vector< shared_ptr<Manipulation> >& DanglerRemover::findAllManipulations(
         shared_ptr<const OsmMap> map)
 {
   LOG_INFO("Finding all dangle remover manipulations...");
-  UnknownFilter unknownFilter;
-  // filter out all the Unknown2 ways
-  vector<long> unknown = map->filterWays(unknownFilter);
+
+  // Find all Unknown ways
+  UnknownCriterion unknownCrit;
+  vector<long> unknown = FindWaysVisitor::findWays(map, &unknownCrit);
 
   // return the result
   return findWayManipulations(map, unknown);

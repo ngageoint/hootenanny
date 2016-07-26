@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -94,6 +94,18 @@ public:
     vector<QString> choices = vector<QString>() );
 
   /**
+   * Marks a set of elements as needing review and sets them to reference each other. If the score is
+   * negative then the score is omitted.
+   *
+   * @param note A human readable note describing the review.
+   * @param reviewType A human readable review type. Typically this is a one word description of
+   *  the feature being reviewed. E.g. "Highway" or "Building".
+   */
+  static void mark(const OsmMapPtr &map, set<ElementId> ids,
+    const QString& note, const QString& reviewType, double score = -1,
+    vector<QString> choices = vector<QString>() );
+
+  /**
    * Marks a single element as needing review.
    */
   static void mark(const OsmMapPtr &map, const ElementPtr& e, const QString& note,
@@ -124,6 +136,9 @@ private:
   static set<ElementId> _getReviewRelations(const ConstOsmMapPtr &map, ElementId eid);
 
   void _updateScore(Tags& t, double score);
+
+  // for white box testing.
+  friend class RemoveEmptyReviewRelationsVisitorTest;
 };
 
 }

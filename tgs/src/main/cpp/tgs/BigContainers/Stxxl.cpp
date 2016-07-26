@@ -44,7 +44,7 @@
 namespace Tgs
 {
 
-Stxxl Stxxl::_theInstance;
+shared_ptr<Stxxl> Stxxl::_theInstance;
 
 Stxxl::Stxxl()
 {
@@ -57,7 +57,11 @@ Stxxl::~Stxxl()
 
 Stxxl& Stxxl::getInstance()
 {
-  return _theInstance;
+  if (!_theInstance.get())
+  {
+    _theInstance.reset(new Stxxl());
+  }
+  return *_theInstance;
 }
 
 void Stxxl::_init()

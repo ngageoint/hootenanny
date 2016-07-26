@@ -69,7 +69,7 @@ Match* NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, ElementId
   return result;
 }
 
-const Match* NetworkMatchCreator::_createMatch(const ConstOsmMapPtr& map, NetworkEdgeScorePtr e,
+const Match* NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, NetworkEdgeScorePtr e,
   ConstMatchThresholdPtr mt)
 {
   return new NetworkMatch(map, e->getEdgeMatch(), e->getScore(), mt);
@@ -97,6 +97,8 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   VagabondNetworkMatcherPtr matcher = VagabondNetworkMatcher::create();
   matcher->matchNetworks(map, n1, n2);
 
+  NetworkDetailsPtr details(new NetworkDetails(map, n1));
+
   for (size_t i = 0; i < 10; ++i)
   {
     matcher->iterate();
@@ -108,7 +110,11 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   for (int i = 0; i < edgeMatch.size(); i++)
   {
-    matches.push_back(_createMatch(map, edgeMatch[i], threshold));
+    /// @todo tunable parameter
+    if (edgeMatch[i]->getScore() > 0.15)
+    {
+      matches.push_back(_createMatch(details, edgeMatch[i], threshold));
+    }
   }
 }
 

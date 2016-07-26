@@ -26,170 +26,170 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.HootProperties.RASTER_TO_TILES;
+import static hoot.services.HootProperties.TILE_SERVER_PATH;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.UUID;
 
-import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
-import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobStatusManager;
+import hoot.services.models.osm.Map;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.nativeInterfaces.JobExecutionManager;
-import hoot.services.utils.ResourceErrorHandler;
+import hoot.services.nativeinterfaces.JobExecutionManager;
+import hoot.services.utils.DbUtils;
 
 
 public class RasterToTilesService extends JobControllerBase {
-    private static final Logger log = LoggerFactory.getLogger(RasterToTilesService.class);
-    protected static String _tileServerPath = null;
-    protected static String _rasterToTilesPath = null;
-    private static ClassPathXmlApplicationContext appContext = null;
+    private static final Logger logger = LoggerFactory.getLogger(RasterToTilesService.class);
 
-    public RasterToTilesService() throws IOException {
-        File f = null;
-        if (processScriptName == null) {
-            processScriptName = HootProperties.getProperty("RasterToTiles");
+    static {
+        File dir = new File(TILE_SERVER_PATH);
+        try {
+            FileUtils.forceMkdir(dir);
         }
-
-        if (_tileServerPath == null) {
-            _tileServerPath = HootProperties.getProperty("tileServerPath");
-            f = new File(_tileServerPath);
-            FileUtils.forceMkdir(f);
-        }
-        if (appContext == null) {
-            appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
+        catch (IOException ioe) {
+            throw new RuntimeException("Error creating " + dir.getAbsolutePath() + " directory!", ioe);
         }
     }
 
-    public String ingestOSMResourceDirect(String name, String userEmail) throws Exception {
+    public RasterToTilesService() {
+        super(RASTER_TO_TILES);
+    }
+
+    public String ingestOSMResourceDirect(String name, String userEmail) {
         String jobId = UUID.randomUUID().toString();
         return ingestOSMResourceDirect(name, userEmail, jobId);
     }
 
     /**
      * This function executes directly. This should be used when called from
-     * JobResource it prevents the thread race condition when threadpool maxes
-     * out.
+     * JobResource it prevents the thread race condition when threadpool maxes out.
      */
-    public String ingestOSMResourceDirect(String name, String userEmail, String jobId) throws Exception {
+    public String ingestOSMResourceDirect(String name, String userEmail, String jobId) {
         // _zoomLevels
-        Connection conn = DbUtils.createConnection();
-
-        JobStatusManager jobStatusManager = null;
-        try {
-            jobStatusManager = new JobStatusManager(conn);
-            jobStatusManager.addJob(jobId);
-
-            QMaps maps = QMaps.maps;
-            long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, conn, maps, maps.id, maps.displayName);
-            assert (mapIdNum != -1);
-
-            BoundingBox queryBounds = null;
+        try (Connection conn = DbUtils.createConnection()) {
+            JobStatusManager jobStatusManager = null;
             try {
-                queryBounds = new BoundingBox("-180,-90,180,90");
-                log.debug("Query bounds area: " + queryBounds.getArea());
-            }
-            catch (Exception e) {
-                throw new Exception("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
-                        + e.getMessage() + ")");
-            }
+                jobStatusManager = new JobStatusManager(conn);
+                jobStatusManager.addJob(jobId);
 
-            hoot.services.models.osm.Map currMap = new hoot.services.models.osm.Map(mapIdNum, conn);
-            final JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
+                QMaps maps = QMaps.maps;
+                long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, conn, maps, maps.id, maps.displayName);
 
-            Object oMinLon = extents.get("minlon");
-            Object oMaxLon = extents.get("maxlon");
-            Object oMinLat = extents.get("minlat");
-            Object oMaxLat = extents.get("maxlat");
-
-            String warn = null;
-
-            // Make sure we have valid bbox. We may end up with invalid bbox and
-            // in that case we should
-            // not produce raster density map
-            if (oMinLon != null && oMaxLon != null && oMinLat != null && oMaxLat != null) {
-                double dMinLon = (Double) extents.get("minlon");
-                double dMaxLon = (Double) extents.get("maxlon");
-                double dMinLat = (Double) extents.get("minlat");
-                double dMaxLat = (Double) extents.get("maxlat");
-
-                double deltaLon = dMaxLon - dMinLon;
-                double deltaLat = dMaxLat - dMinLat;
-
-                double maxDelta = deltaLon;
-                if (deltaLat > maxDelta) {
-                    maxDelta = deltaLat;
+                BoundingBox queryBounds;
+                try {
+                    queryBounds = new BoundingBox("-180,-90,180,90");
+                    logger.debug("Query bounds area: {}", queryBounds.getArea());
                 }
-                JSONObject zoomInfo = _getZoomInfo(maxDelta);
+                catch (Exception e) {
+                    throw new RuntimeException("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
+                            + e.getMessage() + ")", e);
+                }
 
-                String zoomList = zoomInfo.get("zoomlist").toString();
-                int rasterSize = (Integer) zoomInfo.get("rastersize");
+                Map currMap = new Map(mapIdNum, conn);
+                JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
 
-                JSONObject argStr = _createCommandObj(name, zoomList, rasterSize, userEmail, mapIdNum);
-                argStr.put("jobId", jobId);
+                Object oMinLon = extents.get("minlon");
+                Object oMaxLon = extents.get("maxlon");
+                Object oMinLat = extents.get("minlat");
+                Object oMaxLat = extents.get("maxlat");
 
-                JobExecutionManager jobExecManager = (JobExecutionManager) appContext
-                        .getBean("jobExecutionManagerNative");
-                JSONObject res = jobExecManager.exec(argStr);
-                Object oRes = res.get("warnings");
-                if (oRes != null) {
-                    warn = oRes.toString();
+                String warn = null;
+
+                // Make sure we have valid bbox. We may end up with invalid bbox and
+                // in that case we should not produce raster density map
+                if ((oMinLon != null) && (oMaxLon != null) && (oMinLat != null) && (oMaxLat != null)) {
+                    double dMinLon = (Double) extents.get("minlon");
+                    double dMaxLon = (Double) extents.get("maxlon");
+                    double dMinLat = (Double) extents.get("minlat");
+                    double dMaxLat = (Double) extents.get("maxlat");
+
+                    double deltaLon = dMaxLon - dMinLon;
+                    double deltaLat = dMaxLat - dMinLat;
+
+                    double maxDelta = deltaLon;
+                    if (deltaLat > maxDelta) {
+                        maxDelta = deltaLat;
+                    }
+
+                    JSONObject zoomInfo = getZoomInfo(maxDelta);
+
+                    String zoomList = zoomInfo.get("zoomlist").toString();
+                    int rasterSize = (Integer) zoomInfo.get("rastersize");
+
+                    JSONObject argStr = createCommandObj(name, zoomList, rasterSize, userEmail, mapIdNum);
+                    argStr.put("jobId", jobId);
+
+                    JobExecutionManager jobExecManager = (JobExecutionManager)
+                            HootProperties.getSpringContext().getBean("jobExecutionManagerNative");
+                    JSONObject res = jobExecManager.exec(argStr);
+                    Object oRes = res.get("warnings");
+
+                    if (oRes != null) {
+                        warn = oRes.toString();
+                    }
+                }
+
+                if (warn == null) {
+                    jobStatusManager.setComplete(jobId);
+                }
+                else {
+                    jobStatusManager.setComplete(jobId, "WARNINGS: " + warn);
                 }
             }
-            if (warn == null) {
-                jobStatusManager.setComplete(jobId);
+            catch (Exception ex) {
+                jobStatusManager.setFailed(jobId, ex.getMessage());
+                String msg = "Failure ingesting resource: " + ex.getMessage();
+                throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
             }
-            else {
-                jobStatusManager.setComplete(jobId, "WARNINGS: " + warn);
-            }
         }
-        catch (Exception ex) {
-            assert (jobStatusManager != null);
-            jobStatusManager.setFailed(jobId, ex.getMessage());
-            ResourceErrorHandler.handleError("Failure ingesting resource " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+        catch (WebApplicationException wae) {
+            throw wae;
         }
-        finally {
-            DbUtils.closeConnection(conn);
+        catch (Exception e) {
+            String msg = "Failure resource ingestion: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
+
         return jobId;
     }
 
-    public String ingestOSMResource(String name) throws Exception {
+    // This method may appear unused in your IDE since it's currently invoked reflectively.
+    public String ingestOSMResource(String name) {
         // _zoomLevels
-        Connection conn = DbUtils.createConnection();
         String jobId = UUID.randomUUID().toString();
 
-        try {
-
+        try (Connection conn = DbUtils.createConnection()) {
             QMaps maps = QMaps.maps;
             long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, conn, maps, maps.id, maps.displayName);
-            assert (mapIdNum != -1);
 
-            BoundingBox queryBounds = null;
+            BoundingBox queryBounds;
             try {
                 queryBounds = new BoundingBox("-180,-90,180,90");
-                log.debug("Query bounds area: " + queryBounds.getArea());
+                logger.debug("Query bounds area: {}", queryBounds.getArea());
             }
             catch (Exception e) {
-                throw new Exception("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
-                        + e.getMessage() + ")");
+                throw new RuntimeException("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
+                        + e.getMessage() + ")", e);
             }
 
-            hoot.services.models.osm.Map currMap = new hoot.services.models.osm.Map(mapIdNum, conn);
-            final JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
+            Map currMap = new Map(mapIdNum, conn);
+            JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
 
             double dMinLon = (Double) extents.get("minlon");
             double dMaxLon = (Double) extents.get("maxlon");
@@ -203,29 +203,30 @@ public class RasterToTilesService extends JobControllerBase {
             if (deltaLat > maxDelta) {
                 maxDelta = deltaLat;
             }
-            JSONObject zoomInfo = _getZoomInfo(maxDelta);
+
+            JSONObject zoomInfo = getZoomInfo(maxDelta);
 
             String zoomList = zoomInfo.get("zoomlist").toString();
             int rasterSize = (Integer) zoomInfo.get("rastersize");
 
-            String argStr = _createCommand(name, zoomList, rasterSize, mapIdNum);
+            String argStr = createCommand(name, zoomList, rasterSize, mapIdNum);
             postJobRquest(jobId, argStr);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Failure ingesting resource " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            String msg = "Failure ingesting resource " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
-        finally {
-            DbUtils.closeConnection(conn);
-        }
+
         return jobId;
     }
 
-    protected JSONObject _createCommandObj(String name, String zoomList, int rasterSize, String userEmail, long mapId)
-            throws Exception {
+    private JSONObject createCommandObj(String name, String zoomList, int rasterSize, String userEmail, long mapId) {
         JSONArray commandArgs = new JSONArray();
         JSONObject arg = new JSONObject();
-        arg.put("RASTER_OUTPUT_DIR", _tileServerPath);
+        arg.put("RASTER_OUTPUT_DIR", TILE_SERVER_PATH);
         commandArgs.add(arg);
 
         arg = new JSONObject();
@@ -237,7 +238,7 @@ public class RasterToTilesService extends JobControllerBase {
         commandArgs.add(arg);
 
         arg = new JSONObject();
-        arg.put("RASTER_SIZE", "" + rasterSize);
+        arg.put("RASTER_SIZE", String.valueOf(rasterSize));
         commandArgs.add(arg);
 
         arg = new JSONObject();
@@ -246,7 +247,7 @@ public class RasterToTilesService extends JobControllerBase {
 
         if (userEmail != null) {
             arg = new JSONObject();
-            arg.put("USER_EMAIL", "" + userEmail);
+            arg.put("USER_EMAIL", userEmail);
             commandArgs.add(arg);
         }
 
@@ -256,88 +257,89 @@ public class RasterToTilesService extends JobControllerBase {
         return jsonArgs;
     }
 
-    protected String _createCommand(String name, String zoomList, int rasterSize, long mapId) throws Exception {
-        return _createCommandObj(name, zoomList, rasterSize, null, mapId).toJSONString();
+    private String createCommand(String name, String zoomList, int rasterSize, long mapId) {
+        return createCommandObj(name, zoomList, rasterSize, null, mapId).toJSONString();
     }
 
-    protected JSONObject _getZoomInfo(double maxDelta) throws Exception {
+    private JSONObject getZoomInfo(double maxDelta) {
         JSONObject zoomInfo = new JSONObject();
         int rasterSize = 500;
+
         // losely based on http://wiki.openstreetmap.org/wiki/Zoom_levels
         int zoom = 0;
         if (maxDelta >= 360.0) {
             rasterSize = 1900;
             zoom = 0;
         }
-        else if (maxDelta < 360.0 && maxDelta >= 180.0) {
+        else if ((maxDelta < 360.0) && (maxDelta >= 180.0)) {
             rasterSize = 1800;
             zoom = 1;
         }
-        else if (maxDelta < 180.0 && maxDelta >= 90.0) {
+        else if ((maxDelta < 180.0) && (maxDelta >= 90.0)) {
             rasterSize = 1700;
             zoom = 2;
         }
-        else if (maxDelta < 90.0 && maxDelta >= 45.0) {
+        else if ((maxDelta < 90.0) && (maxDelta >= 45.0)) {
             rasterSize = 1600;
             zoom = 3;
         }
-        else if (maxDelta < 45.0 && maxDelta >= 22.5) {
+        else if ((maxDelta < 45.0) && (maxDelta >= 22.5)) {
             rasterSize = 1500;
             zoom = 4;
         }
-        else if (maxDelta < 22.5 && maxDelta >= 11.25) {
+        else if ((maxDelta < 22.5) && (maxDelta >= 11.25)) {
             rasterSize = 1400;
             zoom = 5;
         }
-        else if (maxDelta < 11.25 && maxDelta >= 5.625) {
+        else if ((maxDelta < 11.25) && (maxDelta >= 5.625)) {
             rasterSize = 1300;
             zoom = 6;
         }
-        else if (maxDelta < 5.625 && maxDelta >= 2.813) {
+        else if ((maxDelta < 5.625) && (maxDelta >= 2.813)) {
             rasterSize = 1200;
             zoom = 7;
         }
-        else if (maxDelta < 2.813 && maxDelta >= 1.406) {
+        else if ((maxDelta < 2.813) && (maxDelta >= 1.406)) {
             rasterSize = 1100;
             zoom = 8;
         }
-        else if (maxDelta < 1.406 && maxDelta >= 0.703) {
+        else if ((maxDelta < 1.406) && (maxDelta >= 0.703)) {
             rasterSize = 1000;
             zoom = 9;
         }
-        else if (maxDelta < 0.703 && maxDelta >= 0.352) {
+        else if ((maxDelta < 0.703) && (maxDelta >= 0.352)) {
             rasterSize = 900;
             zoom = 10;
         }
-        else if (maxDelta < 0.352 && maxDelta >= 0.176) {
+        else if ((maxDelta < 0.352) && (maxDelta >= 0.176)) {
             rasterSize = 800;
             zoom = 11;
         }
-        else if (maxDelta < 0.176 && maxDelta >= 0.088) {
+        else if ((maxDelta < 0.176) && (maxDelta >= 0.088)) {
             rasterSize = 700;
             zoom = 12;
         }
-        else if (maxDelta < 0.088 && maxDelta >= 0.044) {
+        else if ((maxDelta < 0.088) && (maxDelta >= 0.044)) {
             rasterSize = 600;
             zoom = 13;
         }
-        else if (maxDelta < 0.044 && maxDelta >= 0.022) {
+        else if ((maxDelta < 0.044) && (maxDelta >= 0.022)) {
             rasterSize = 500;
             zoom = 14;
         }
-        else if (maxDelta < 0.022 && maxDelta >= 0.011) {
+        else if ((maxDelta < 0.022) && (maxDelta >= 0.011)) {
             rasterSize = 400;
             zoom = 15;
         }
-        else if (maxDelta < 0.005 && maxDelta >= 0.003) {
+        else if ((maxDelta < 0.005) && (maxDelta >= 0.003)) {
             rasterSize = 300;
             zoom = 16;
         }
-        else if (maxDelta < 0.003 && maxDelta >= 0.001) {
+        else if ((maxDelta < 0.003) && (maxDelta >= 0.001)) {
             rasterSize = 200;
             zoom = 17;
         }
-        else if (maxDelta < 0.001 && maxDelta >= 0.0005) {
+        else if ((maxDelta < 0.001) && (maxDelta >= 0.0005)) {
             rasterSize = 200;
             zoom = 18;
         }
@@ -355,10 +357,10 @@ public class RasterToTilesService extends JobControllerBase {
 
         String zoomList = "";
         for (int i = 0; i < zoom; i++) {
-            if (zoomList.length() > 0) {
+            if (!zoomList.isEmpty()) {
                 zoomList += " ";
             }
-            zoomList += "" + i + "-" + (i + 1);
+            zoomList += i + "-" + (i + 1);
             i += 1;
         }
 

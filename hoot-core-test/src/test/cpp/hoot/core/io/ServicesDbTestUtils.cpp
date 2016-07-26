@@ -184,7 +184,21 @@ int ServicesDbTestUtils::findIndex(const QList<QString>& keys, const QString& ke
 Settings ServicesDbTestUtils::_readDbConfig()
 {
   Settings result;
-  QFile fp(ConfPath::getHootHome() + "/conf/DatabaseConfig.sh");
+  //  Read in the default values
+  QString defaults = ConfPath::getHootHome() + "/conf/DatabaseConfigDefault.sh";
+  _readDbConfig(result, defaults);
+  //  Read in the local values if the file exists
+  QString local = ConfPath::getHootHome() + "/conf/DatabaseConfigLocal.sh";
+  if (QFile::exists(local))
+  {
+    _readDbConfig(result, local);
+  }
+  return result;
+}
+
+void ServicesDbTestUtils::_readDbConfig(Settings& settings, QString config_path)
+{
+  QFile fp(config_path);
   if (fp.open(QIODevice::ReadOnly) == false)
   {
     throw HootException("Error opening: " + fp.fileName());
@@ -199,11 +213,9 @@ Settings ServicesDbTestUtils::_readDbConfig()
     QString value = s.section("=", 1).trimmed();
     if (!key.startsWith("#") && key.length() > 0)
     {
-      result.set(key, value);
+      settings.set(key, value);
     }
   }
-
-  return result;
 }
 
 }

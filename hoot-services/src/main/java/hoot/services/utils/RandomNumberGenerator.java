@@ -32,7 +32,10 @@ import java.util.Random;
 /**
  * Generates random numbers
  */
-public class RandomNumberGenerator {
+public final class RandomNumberGenerator {
+    private RandomNumberGenerator() {
+    }
+
     /**
      * Generates a random number within the specified range
      * 
@@ -44,6 +47,6 @@ public class RandomNumberGenerator {
      */
     public static double nextDouble(double min, double max) {
         Random r = new Random(System.currentTimeMillis());
-        return min + (max - min) * r.nextDouble();
+        return min + ((max - min) * r.nextDouble());
     }
 }

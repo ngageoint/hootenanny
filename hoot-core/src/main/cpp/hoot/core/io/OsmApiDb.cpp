@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -58,7 +58,8 @@
 namespace hoot
 {
 
-const QString OsmApiDb::TIME_FORMAT = "yyyy-MM-dd hh:mm:ss.zzz";
+const QString OsmApiDb::TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.zzz";
+const QString OsmApiDb::TIMESTAMP_FUNCTION = "(now() at time zone 'utc')";
 
 OsmApiDb::OsmApiDb()
 {
@@ -151,7 +152,7 @@ void OsmApiDb::open(const QUrl& url)
 {
   if (!isSupported(url))
   {
-    throw HootException("An unsupported URL was passed in.");
+    throw HootException("An unsupported URL was passed into OsmApiDb: " + url.toString());
   }
   ApiDb::open(url);
 }
@@ -358,28 +359,48 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId,
   // setup base sql query string
   QString sql =  "SELECT ";
 
-  if(elementType == ElementType::Node)
+  //TODO: This logic seems inconsistent.  _elementTypeToElementTableName is used for one element
+  //type but not others.
+  if (elementType == ElementType::Node)
   {
     sql += _elementTypeToElementTableName(elementType) +
-      " where (latitude between "+QString::number(minLat)+" and "+QString::number(maxLat)+") and (longitude between "+
-      QString::number(minLon)+" and "+QString::number(maxLon)+")";
+      " where (latitude between "+ QString::number(minLat)+" and "+QString::number(maxLat) +
+      ") and (longitude between "+ QString::number(minLon)+" and "+QString::number(maxLon) + ")";
 
     // if requesting a specific id then append this string
-    if (elementId > -1) { sql += " AND (id = :elementId) "; }
+    if (elementId > -1)
+    {
+      sql += " AND (id = :elementId) ";
+    }
+    sql += " AND visible = true ";
   }
   else if (elementType == ElementType::Way)
   {
     sql += "* FROM current_ways ";
 
     // if requesting a specific id then append this string
-    if (elementId > -1) { sql += " WHERE id = :elementId "; }
+    if (elementId > -1)
+    {
+      sql += " WHERE id = :elementId AND visible = true ";
+    }
+    else
+    {
+      sql += " WHERE visible = true ";
+    }
   }
-  else if(elementType == ElementType::Relation)
+  else if (elementType == ElementType::Relation)
   {
     sql += "* FROM current_relations ";
 
     // if requesting a specific id then append this string
-    if(elementId > -1) { sql += " WHERE id = :elementId "; }
+    if (elementId > -1)
+    {
+      sql += " WHERE id = :elementId AND visible = true ";
+    }
+    else
+    {
+      sql += " WHERE visible = true ";
+    }
   }
   else
   {
@@ -424,7 +445,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
   QString sql =  "SELECT " + _elementTypeToElementTableName(elementType);
 
   // sort them in descending order, set limit and offset
-  sql += " ORDER BY id DESC";
+  sql += " WHERE visible = true ORDER BY id DESC";
 
   // let's see what that sql query string looks like
   LOG_DEBUG(QString("The sql query= "+sql));
@@ -512,6 +533,21 @@ QString OsmApiDb::extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType
   return tag;
 }
 
+long OsmApiDb::getNextId(const ElementType type)
+{
+  switch (type.getEnum())
+  {
+    case ElementType::Node:
+      return getNextId("current_" + type.toString().toLower() + "s");
+    case ElementType::Way:
+      return getNextId("current_" + type.toString().toLower() + "s");
+    case ElementType::Relation:
+      return getNextId("current_" + type.toString().toLower() + "s");
+    default:
+      throw HootException("Unknown element type");
+  }
+}
+
 long OsmApiDb::getNextId(const QString tableName)
 {
   long result;
@@ -569,6 +605,16 @@ shared_ptr<QSqlQuery> OsmApiDb::getChangesetsCreatedAfterTime(const QString time
   LOG_VARD(_selectChangesetsCreatedAfterTime->numRowsAffected());
 
   return _selectChangesetsCreatedAfterTime;
+}
+
+long OsmApiDb::toOsmApiDbCoord(const double x)
+{
+  return round(x * COORDINATE_SCALE);
+}
+
+double OsmApiDb::fromOsmApiDbCoord(const long x)
+{
+  return (double)x / COORDINATE_SCALE;
 }
 
 }

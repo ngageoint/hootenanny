@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.osm;
 
+import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,10 +57,9 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
-import hoot.services.db.DbUtils;
-import hoot.services.db.postgres.PostgresUtils;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.PostgresUtils;
 import hoot.services.db2.Changesets;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelationMembers;
@@ -72,13 +73,13 @@ import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
-import hoot.services.geo.QuadTileCalculator;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.Node;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlUtils;
 
 
@@ -446,8 +447,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(originalBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
                 Assert.assertEquals(changesetBounds, expandedBounds);
@@ -751,8 +751,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(originalBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
                 Assert.assertEquals(changesetBounds, expandedBounds);
@@ -1268,8 +1267,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(originalBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
                 Assert.assertEquals(changesetBounds, expandedBounds);
@@ -1656,8 +1654,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(originalBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
                 Assert.assertEquals(changesetBounds, expandedBounds);
@@ -2254,8 +2251,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(updateBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(updateBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
                 Assert.assertEquals(changesetBounds, expandedBounds);
@@ -2380,8 +2376,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(originalBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
                 Assert.assertEquals(changesetBounds, expandedBounds);
@@ -2503,8 +2498,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(originalBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
                 Assert.assertEquals(changesetBounds, expandedBounds);
@@ -2698,8 +2692,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(originalBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
                 Assert.assertEquals(changesetBounds, expandedBounds);
@@ -3075,8 +3068,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(originalBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
 
@@ -3353,8 +3345,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(originalBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
 
@@ -3531,8 +3522,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(originalBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
 
@@ -3766,8 +3756,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(originalBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
                 Assert.assertEquals(changesetBounds, expandedBounds);

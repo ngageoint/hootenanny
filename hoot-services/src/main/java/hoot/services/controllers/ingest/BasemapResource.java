@@ -26,12 +26,13 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.HootProperties.*;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -44,10 +45,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -60,6 +61,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -67,62 +69,32 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/basemap")
 public class BasemapResource extends JobControllerBase {
-    private static final Logger log = LoggerFactory.getLogger(BasemapResource.class);
-    protected static String _tileServerPath = null;
-    protected static String _ingestStagingPath = null;
-    private static String homeFolder = null;
-
-    protected static Map<String, String> _basemapRasterExt = null;
+    private static final Logger logger = LoggerFactory.getLogger(BasemapResource.class);
+    private static final Map<String, String> basemapRasterExt;
 
     static {
-        try {
-            homeFolder = HootProperties.getProperty("homeFolder");
-            _tileServerPath = HootProperties.getProperty("tileServerPath");
-            _ingestStagingPath = HootProperties.getProperty("ingestStagingPath");
+        basemapRasterExt = new HashMap<>();
+        String extStr = BASEMAP_RASTER_EXTENSIONS;
+        String[] extList = extStr.toLowerCase().split(",");
 
-            _basemapRasterExt = new HashMap<String, String>();
-            String extStr = HootProperties.getProperty("BasemapRasterExtensions");
-            String[] extList = extStr.toLowerCase().split(",");
-            for (String ext : extList) {
-                _basemapRasterExt.put(ext, ext);
-            }
-
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
+        for (String ext : extList) {
+            basemapRasterExt.put(ext, ext);
         }
     }
 
     public BasemapResource() {
-        try {
-            if (processScriptName == null) {
-                processScriptName = HootProperties.getProperty("BasemapRasterToTiles");
-            }
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-        }
+        super(BASEMAP_RASTER_TO_TILES);
     }
 
-    public void createTileServerPath() {
-        try {
-            File f = new File(_tileServerPath);
-            if (!f.exists()) {
-                FileUtils.forceMkdir(f);
-            }
-        }
-        catch (IOException iex) {
-            log.error(iex.getMessage());
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
+    public static void createTileServerPath() throws IOException {
+        File file = new File(TILE_SERVER_PATH);
+        if (!file.exists()) {
+            FileUtils.forceMkdir(file);
         }
     }
 
@@ -141,34 +113,42 @@ public class BasemapResource extends JobControllerBase {
      */
     @POST
     @Path("/upload")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response processUpload(@QueryParam("INPUT_NAME") final String inputName,
-            @QueryParam("PROJECTION") final String projection, @Context HttpServletRequest request) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response processUpload(@QueryParam("INPUT_NAME") String inputName,
+                                  @QueryParam("PROJECTION") String projection,
+                                  @Context HttpServletRequest request) {
         String groupId = UUID.randomUUID().toString();
         JSONArray jobsArr = new JSONArray();
         try {
-            File uploadDir = new File(homeFolder + "/upload/");
-            uploadDir.mkdir();
+            File uploadDir = new File(HOME_FOLDER + "/upload/");
+            if (!uploadDir.exists()) {
+                if (!uploadDir.mkdir()) {
+                    throw new IOException("Error creating " + uploadDir.getAbsolutePath() + " directory!");
+                }
+            }
 
-            String repFolderPath = homeFolder + "/upload/" + groupId;
+            String repFolderPath = HOME_FOLDER + "/upload/" + groupId;
             File dir = new File(repFolderPath);
-            dir.mkdir();
+            if (!dir.exists()) {
+                if (!dir.mkdir()) {
+                    throw new IOException("Error creating " + dir.getAbsolutePath() + " directory!");
+                }
+            }
 
             if (!ServletFileUpload.isMultipartContent(request)) {
                 throw new ServletException("Content type is not multipart/form-data");
             }
+
             DiskFileItemFactory fileFactory = new DiskFileItemFactory();
             File filesDir = new File(repFolderPath);
             fileFactory.setRepository(filesDir);
             ServletFileUpload uploader = new ServletFileUpload(fileFactory);
 
-            Map<String, String> uploadedFiles = new HashMap<String, String>();
-            Map<String, String> uploadedFilesPaths = new HashMap<String, String>();
+            Map<String, String> uploadedFiles = new HashMap<>();
+            Map<String, String> uploadedFilesPaths = new HashMap<>();
             List<FileItem> fileItemsList = uploader.parseRequest(request);
-            Iterator<FileItem> fileItemsIterator = fileItemsList.iterator();
 
-            while (fileItemsIterator.hasNext()) {
-                FileItem fileItem = fileItemsIterator.next();
+            for (FileItem fileItem : fileItemsList) {
                 String fileName = fileItem.getName();
 
                 String uploadedPath = repFolderPath + "/" + fileName;
@@ -180,81 +160,69 @@ public class BasemapResource extends JobControllerBase {
                     String extension = nameParts[nameParts.length - 1].toLowerCase();
                     String filename = nameParts[0];
 
-                    if (_basemapRasterExt.get(extension) != null) {
+                    if (basemapRasterExt.get(extension) != null) {
                         uploadedFiles.put(filename, extension);
                         uploadedFilesPaths.put(filename, fileName);
-                        log.debug("Saving uploaded:" + filename);
+                        logger.debug("Saving uploaded:{}", filename);
                     }
-
                 }
-
             }
 
-            Iterator it = uploadedFiles.entrySet().iterator();
-            while (it.hasNext()) {
+            for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
                 String jobId = UUID.randomUUID().toString();
-                Map.Entry pairs = (Map.Entry) it.next();
-                String fName = pairs.getKey().toString();
-                pairs.getValue().toString();
+                String fName = pairs.getKey();
 
-                log.debug("Preparing Basemap Ingest for :" + fName);
-                String inputFileName = "";
+                logger.debug("Preparing Basemap Ingest for :{}", fName);
                 String bmName = inputName;
 
-                if (bmName == null || bmName.length() == 0) {
+                if ((bmName == null) || (bmName.isEmpty())) {
                     bmName = fName;
                 }
 
-                inputFileName = uploadedFilesPaths.get(fName);
+                String inputFileName = uploadedFilesPaths.get(fName);
 
-                try {
-                    JSONArray commandArgs = new JSONArray();
-                    JSONObject arg = new JSONObject();
-                    arg.put("INPUT", "upload/" + groupId + "/" + inputFileName);
-                    commandArgs.add(arg);
+                JSONArray commandArgs = new JSONArray();
+                JSONObject arg = new JSONObject();
+                arg.put("INPUT", "upload/" + groupId + "/" + inputFileName);
+                commandArgs.add(arg);
 
-                    arg = new JSONObject();
-                    arg.put("INPUT_NAME", bmName);
-                    commandArgs.add(arg);
+                arg = new JSONObject();
+                arg.put("INPUT_NAME", bmName);
+                commandArgs.add(arg);
 
-                    arg = new JSONObject();
-                    arg.put("RASTER_OUTPUT_DIR", _tileServerPath + "/BASEMAP");
-                    commandArgs.add(arg);
+                arg = new JSONObject();
+                arg.put("RASTER_OUTPUT_DIR", TILE_SERVER_PATH + "/BASEMAP");
+                commandArgs.add(arg);
 
-                    arg = new JSONObject();
-                    if (projection != null && projection.length() > 0) {
-                        arg.put("PROJECTION", projection);
-                    }
-                    else {
-                        arg.put("PROJECTION", "auto");
-                    }
-                    commandArgs.add(arg);
-
-                    arg = new JSONObject();
-                    arg.put("JOB_PROCESSOR_DIR", _ingestStagingPath + "/BASEMAP");
-                    commandArgs.add(arg);
-
-                    String argStr = createBashPostBody(commandArgs);
-                    postJobRquest(jobId, argStr);
-
-                    JSONObject res = new JSONObject();
-                    res.put("jobid", jobId);
-                    res.put("name", bmName);
-
-                    jobsArr.add(res);
-
+                arg = new JSONObject();
+                if ((projection != null) && (!projection.isEmpty())) {
+                    arg.put("PROJECTION", projection);
                 }
-                catch (Exception ex) {
-                    ResourceErrorHandler.handleError("Error processing upload: " + ex.getMessage(),
-                            Status.INTERNAL_SERVER_ERROR, log);
+                else {
+                    arg.put("PROJECTION", "auto");
                 }
+                commandArgs.add(arg);
 
+                arg = new JSONObject();
+                arg.put("JOB_PROCESSOR_DIR", INGEST_STAGING_PATH + "/BASEMAP");
+                commandArgs.add(arg);
+
+                String argStr = createBashPostBody(commandArgs);
+                postJobRquest(jobId, argStr);
+
+                JSONObject res = new JSONObject();
+                res.put("jobid", jobId);
+                res.put("name", bmName);
+
+                jobsArr.add(res);
             }
-
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error processing upload: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            String msg = "Error processing upload for: " + inputName;
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(jobsArr.toJSONString(), MediaType.APPLICATION_JSON).build();
@@ -269,52 +237,51 @@ public class BasemapResource extends JobControllerBase {
      */
     @GET
     @Path("/getlist")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getBasemapList() {
-        JSONArray retList = new JSONArray();
-        Map<String, JSONObject> sortedScripts = new TreeMap<String, JSONObject>();
-        JSONArray filesList = new JSONArray();
+        JSONArray basemapList = new JSONArray();
+        JSONArray filesList;
 
         try {
-            filesList = _getBasemapList();
+            filesList = getBasemapListHelper();
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting base map list: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            String message = "Error getting basemap list!";
+            throw new WebApplicationException(ex, Response.serverError().entity(message).build());
         }
 
         // sort the list
-        for (Object o : filesList) {
-            JSONObject cO = (JSONObject) o;
+        Map<String, JSONObject> sortedScripts = new TreeMap<>();
+        for (Object file : filesList) {
+            JSONObject cO = (JSONObject) file;
             String sName = cO.get("name").toString();
             sortedScripts.put(sName.toUpperCase(), cO);
         }
 
-        retList.addAll(sortedScripts.values());
+        basemapList.addAll(sortedScripts.values());
 
-        return Response.ok(retList.toString(), MediaType.TEXT_PLAIN).build();
+        return Response.ok(basemapList.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
-    protected JSONArray _getBasemapList() throws Exception {
+    private static JSONArray getBasemapListHelper() throws IOException, ParseException {
         JSONArray filesList = new JSONArray();
-        File basmapDir = new File(_ingestStagingPath + "/BASEMAP");
-        if (basmapDir.exists()) {
+        File basmapDir = new File(INGEST_STAGING_PATH + "/BASEMAP");
 
-            String[] exts = new String[4];
-            exts[0] = "processing";
-            exts[1] = "enabled";
-            exts[2] = "disabled";
-            exts[3] = "failed";
+        if (basmapDir.exists()) {
+            String[] exts = {"processing", "enabled", "disabled", "failed"};
+
             List<File> files = (List<File>) FileUtils.listFiles(basmapDir, exts, false);
 
-            for (int i = 0; i < files.size(); i++) {
-                File f = files.get(i);
-                if (f.isFile()) {
-                    String basemapName = f.getName();
+            for (File file : files) {
+                if (file.isFile()) {
+                    String basemapName = file.getName();
                     String ext = FilenameUtils.getExtension(basemapName);
                     String name = FilenameUtils.getBaseName(basemapName);
 
-                    String meta = FileUtils.readFileToString(f, Charset.defaultCharset());
+                    String meta = FileUtils.readFileToString(file, Charset.defaultCharset());
                     JSONParser parser = new JSONParser();
                     JSONObject jsonMeta = (JSONObject) parser.parse(meta);
                     String jobId = jsonMeta.get("jobid").toString();
@@ -322,7 +289,7 @@ public class BasemapResource extends JobControllerBase {
                     // Check for tilemapresource.xml in processed folder
                     JSONObject jsonExtent = new JSONObject();
 
-                    String XmlPath = _tileServerPath + "/BASEMAP/" + name + "/tilemapresource.xml";
+                    String XmlPath = TILE_SERVER_PATH + "/BASEMAP/" + name + "/tilemapresource.xml";
                     File fXmlFile = new File(XmlPath);
                     if (fXmlFile.exists()) {
                         try {
@@ -330,10 +297,10 @@ public class BasemapResource extends JobControllerBase {
                             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
                             Document doc = dBuilder.parse(fXmlFile);
                             doc.getDocumentElement().normalize();
-                            NodeList l = doc.getElementsByTagName("BoundingBox");
-                            Node prop = l.item(0);
+                            NodeList nodeList = doc.getElementsByTagName("BoundingBox");
+                            Node prop = nodeList.item(0);
                             NamedNodeMap attr = prop.getAttributes();
-                            if (null != attr) {
+                            if (attr != null) {
                                 jsonExtent.put("minx", Double.parseDouble(attr.getNamedItem("minx").getNodeValue()));
                                 jsonExtent.put("miny", Double.parseDouble(attr.getNamedItem("miny").getNodeValue()));
                                 jsonExtent.put("maxx", Double.parseDouble(attr.getNamedItem("maxx").getNodeValue()));
@@ -343,7 +310,7 @@ public class BasemapResource extends JobControllerBase {
                                 jsonExtent = null;
                             }
                         }
-                        catch (Exception e) {
+                        catch (Exception ignored) {
                             jsonExtent = null;
                         }
                     }
@@ -355,36 +322,36 @@ public class BasemapResource extends JobControllerBase {
                     oBaseMap.put("extent", jsonExtent);
                     filesList.add(oBaseMap);
                 }
-
             }
         }
+
         return filesList;
     }
 
-    protected void _toggleBaseMap(String bmName, boolean enable) throws Exception {
+    private static void toggleBaseMap(String bmName, boolean enable) throws IOException {
         // See ticket#6760
         // for file path manipulation
         String fileExt = "enabled";
         String targetExt = ".disabled";
+
         if (enable) {
             fileExt = "disabled";
             targetExt = ".enabled";
         }
 
-        // We first verify that file exits in the folder first and then try to
-        // get the source file
-        File sourceFile = hoot.services.utils.FileUtils.getFileFromFolder(_ingestStagingPath + "/BASEMAP/", bmName,
-                fileExt);
+        // We first verify that file exits in the folder first and then try to get the source file
+        File sourceFile = hoot.services.utils.FileUtils.getFileFromFolder(INGEST_STAGING_PATH + "/BASEMAP/", bmName, fileExt);
 
-        if (sourceFile != null && sourceFile.exists()) {
+        if ((sourceFile != null) && sourceFile.exists()) {
             // if the source file exist then just swap the extension
-            boolean res = sourceFile.renameTo(new File(_ingestStagingPath + "/BASEMAP/", bmName + targetExt));
-            if (res == false) {
-                throw new Exception("Failed to rename file:" + bmName + fileExt + " to " + bmName + targetExt);
+            boolean renamed = sourceFile.renameTo(new File(INGEST_STAGING_PATH + "/BASEMAP/", bmName + targetExt));
+
+            if (!renamed) {
+                throw new IOException("Failed to rename file:" + bmName + fileExt + " to " + bmName + targetExt);
             }
         }
         else {
-            throw new Exception("Can not enable file:" + bmName + targetExt + ". It does not exist.");
+            throw new IOException("Can not enable file:" + bmName + targetExt + ". It does not exist.");
         }
     }
 
@@ -393,7 +360,7 @@ public class BasemapResource extends JobControllerBase {
      * 
      * GET hoot-services/ingest/basemap/enable?NAME=abc&ENABLE=true
      * 
-     * @param bmName
+     * @param basemap
      *            Name of a basemap
      * @param enable
      *            true/false
@@ -401,45 +368,47 @@ public class BasemapResource extends JobControllerBase {
      */
     @GET
     @Path("/enable")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response enableBasemap(@QueryParam("NAME") final String bmName, @QueryParam("ENABLE") final String enable) {
-
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response enableBasemap(@QueryParam("NAME") String basemap, @QueryParam("ENABLE") String enable) {
         boolean doEnable = true;
+
+        if ((enable != null) && (!enable.isEmpty())) {
+            doEnable = Boolean.parseBoolean(enable);
+        }
+
         try {
-
-            if (enable != null && enable.length() > 0) {
-                doEnable = Boolean.parseBoolean(enable);
-            }
-
-            _toggleBaseMap(bmName, doEnable);
+            toggleBaseMap(basemap, doEnable);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error enabling base map: " + bmName + " Error: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            String msg = "Error enabling basemap: " + basemap;
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        JSONObject resp = new JSONObject();
-        resp.put("name", bmName);
-        resp.put("isenabled", doEnable);
-        return Response.ok(resp.toString(), MediaType.TEXT_PLAIN).build();
+        JSONObject entity = new JSONObject();
+        entity.put("name", basemap);
+        entity.put("isenabled", doEnable);
+
+        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
-    protected void _deleteBaseMap(String bmName) throws Exception {
-        String controlFolder = _ingestStagingPath + "/BASEMAP/";
-
-        File tileDir = hoot.services.utils.FileUtils.getSubFolderFromFolder(_tileServerPath + "/BASEMAP/", bmName);
-        if (tileDir != null && tileDir.exists()) {
+    private static void deleteBaseMapHelper(String bmName) throws IOException {
+        File tileDir = hoot.services.utils.FileUtils.getSubFolderFromFolder(TILE_SERVER_PATH + "/BASEMAP/", bmName);
+        if ((tileDir != null) && tileDir.exists()) {
             FileUtils.forceDelete(tileDir);
         }
 
+        String controlFolder = INGEST_STAGING_PATH + "/BASEMAP/";
         File dir = new File(controlFolder);
         FileFilter fileFilter = new WildcardFileFilter(bmName + ".*");
         File[] files = dir.listFiles(fileFilter);
-        for (int i = 0; i < files.length; i++) {
-            File curFile = files[i];
-            FileUtils.forceDelete(curFile);
+        if (files != null) {
+            for (File curFile : files) {
+                FileUtils.forceDelete(curFile);
+            }
         }
-
     }
 
     /**
@@ -449,26 +418,28 @@ public class BasemapResource extends JobControllerBase {
      * 
      * //TODO: this should be an HTTP DELETE
      * 
-     * @param bmName
+     * @param basemap
      *            Name of a basemap
      * @return JSON containing enable state
      */
     @GET
     @Path("/delete")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response deleteBasemap(@QueryParam("NAME") final String bmName) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteBasemap(@QueryParam("NAME") String basemap) {
         try {
-            _deleteBaseMap(bmName);
+            deleteBaseMapHelper(basemap);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error deleting base map: " + bmName + " Error: " + ex.getMessage(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            String msg = "Error deleting base map: " + basemap;
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        JSONObject resp = new JSONObject();
-        resp.put("name", bmName);
+        JSONObject entity = new JSONObject();
+        entity.put("name", basemap);
 
-        return Response.ok(resp.toString(), MediaType.TEXT_PLAIN).build();
+        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
-
 }

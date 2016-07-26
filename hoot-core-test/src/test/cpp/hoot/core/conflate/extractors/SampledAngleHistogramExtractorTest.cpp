@@ -32,6 +32,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
 // CPP Unit
@@ -75,8 +76,8 @@ public:
       0.040583,
       angleHistogramExtractor.extract(
         *map,
-        map->getWay(map->findWays("REF1", "001f4b")[0]),
-        map->getWay(map->findWays("REF2", "001f4b")[0])),
+        map->getWay(FindWaysVisitor::findWaysByTag(map, "REF1", "001f4b")[0]),
+        map->getWay(FindWaysVisitor::findWaysByTag(map, "REF2", "001f4b")[0])),
       1e-6);
   }
 };

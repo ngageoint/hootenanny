@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -261,7 +261,7 @@ public:
     //compare relations
     const RelationMap relations = map->getRelationMap();
     HOOT_STR_EQUALS(1, relations.size());
-    QString relationStr = "relation(-1592); type: multipolygon; members:   Entry: role: outer, eid: Way:-1556;   Entry: role: inner, eid: Way:-1552; ; tags: landuse = farmland; status: invalid";
+    QString relationStr = "relation(-1592); type: multipolygon; members:   Entry: role: outer, eid: Way:-1556;   Entry: role: inner, eid: Way:-1552; ; tags: landuse = farmland; status: invalid; version: 0; visible: 1";
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
     {
       const shared_ptr<Relation>& r = it->second;

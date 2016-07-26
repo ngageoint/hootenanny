@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -142,7 +142,7 @@ set<long> HootApiDbWriter::_openDb(QString& urlStr)
 {
   if (!isSupported(urlStr))
   {
-    throw HootException("An unsupported URL was passed in.");
+    throw HootException("An unsupported URL was passed into HootApiDbWriter: " + urlStr);
   }
   if (_userEmail.isEmpty())
   {
@@ -155,8 +155,6 @@ set<long> HootApiDbWriter::_openDb(QString& urlStr)
   _hootdb.open(url);
   _open = true;
 
-  LOG_DEBUG("DB opened");
-
   // create the user before we have a transaction so we can make sure the user gets added.
   if (_createUserIfNotFound)
   {
@@ -166,8 +164,6 @@ set<long> HootApiDbWriter::_openDb(QString& urlStr)
   {
     _hootdb.setUserId(_hootdb.getUserId(_userEmail, true));
   }
-
-  //LOG_DEBUG("DB user set");
 
   // start the transaction. We'll close it when finalizePartial is called.
   _hootdb.transaction();
@@ -256,11 +252,6 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     if (_relationRemap.count(eid.getId()) == 1)
     {
       retVal = _relationRemap.at(eid.getId());
-      /*
-      LOG_DEBUG("Returning established relation ID mapping, source ID = " <<
-        QString::number(eid.getId()) << ", database ID = " <<
-        QString::number(_relationRemap.at(eid.getId())) );
-      */
     }
     else
     {
@@ -270,12 +261,6 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
       {
         _sourceRelationIds.insert(eid.getId());
       }
-
-      /*
-      LOG_DEBUG("Established new relation ID mapping, source ID = " <<
-        QString::number(eid.getId()) << ", database ID = " <<
-        QString::number(_relationRemap.at(eid.getId())) );
-      */
     }
 
     break;
@@ -287,6 +272,9 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     break;
   }
 
+  //LOG_DEBUG("Remapped ID for element type " << eid.getType().toString() << " from " <<
+            //eid.getId() << " to " << retVal);
+
   return retVal;
 }
 
@@ -294,14 +282,12 @@ vector<long> HootApiDbWriter::_remapNodes(const vector<long>& nids)
 {
   vector<long> result(nids.size()); // Creates the vector and fills nids.size number of zeroes
 
-  Tags empty;
-
   for (size_t i = 0; i < nids.size(); i++)
   {
     // This is only called when adding nodes for a way.  If a way has a node we
     //    did not successfully create a mapping for when importing nodes,
     //    we can't continue
-    if ( _nodeRemap.count(nids[i]) == 1 )
+    if (_nodeRemap.count(nids[i]) == 1)
     {
       result[i] = _nodeRemap.at(nids[i]);
     }
@@ -334,19 +320,12 @@ void HootApiDbWriter::_startNewChangeSet()
 
 void HootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
 {
-  bool countChange = true;
-
-  //LOG_DEBUG("Inside writePartial for Node");
-
   Tags t = n->getTags();
   _addElementTags(n, t);
-
-  //LOG_DEBUG("Incoming node ID: " << n->getId());
 
   if (_remapIds)
   {
     bool alreadyThere = _nodeRemap.count(n->getId()) != 0;
-    LOG_VARD(alreadyThere);
     long nodeId = _getRemappedElementId(n->getElementId());
     if (alreadyThere)
     {
@@ -359,28 +338,22 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
   }
   else
   {
-    if ( n->getId() < 1 )
+    if (n->getId() < 1)
     {
       throw HootException("Writing non-positive IDs without remap is not supported by "
                           "HootApiDbWriter.");
     }
 
-    //LOG_DEBUG("Inserted node " << QString::number(n->getId()) << ", no remapping" );
     _hootdb.insertNode(n->getId(), n->getY(), n->getX(), t);
   }
 
-  if (countChange)
-  {
-    _countChange();
-    _nodesWritten++;
-  }
+  _countChange();
+  _nodesWritten++;
 }
 
 void HootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
 {
   long wayId;
-
-  //LOG_DEBUG("Inside writePartial for Way " << QString::number(w->getId()));
 
   Tags tags = w->getTags();
   _addElementTags(w, tags);
@@ -408,7 +381,7 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
     _hootdb.insertWay(w->getId(), tags);
   }
 
-  if ( _remapIds == true )
+  if (_remapIds == true)
   {
     _hootdb.insertWayNodes(wayId, _remapNodes(w->getNodeIds()));
   }
@@ -426,8 +399,6 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
 {
   long relationId;
 
-  //LOG_DEBUG("Inside writePartial for Relation");
-
   Tags tags = r->getTags();
   _addElementTags(r, tags);
 
@@ -439,12 +410,7 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
   if (_remapIds)
   {
     relationId = _getRemappedElementId(r->getElementId());
-
-    LOG_DEBUG("Inserting relation with source ID = " <<
-              QString::number(r->getId()) << " which maps to DB ID = " <<
-              QString::number(relationId) );
-
-      _hootdb.insertRelation(relationId, tags);
+    _hootdb.insertRelation(relationId, tags);
   }
   else
   {
@@ -457,7 +423,6 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
     relationId = r->getId();
   }
 
-  Tags emptyTags;
   for (size_t i = 0; i < r->getMembers().size(); ++i)
   {
     RelationData::Entry e = r->getMembers()[i];
@@ -465,10 +430,10 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
     // May need to create new ID mappings for items we've not yet seen
     ElementId relationMemberElementId = e.getElementId();
 
-    if ( _remapIds == true )
+    if (_remapIds == true)
     {
-      relationMemberElementId = ElementId(relationMemberElementId.getType(),
-        _getRemappedElementId(relationMemberElementId));
+      relationMemberElementId =
+        ElementId(relationMemberElementId.getType(), _getRemappedElementId(relationMemberElementId));
     }
 
     _hootdb.insertRelationMember(relationId, relationMemberElementId.getType(),
@@ -478,8 +443,6 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
   //LOG_DEBUG("All members added to relation " << QString::number(relationId));
 
   _countChange();
-
-  //LOG_DEBUG("Leaving relation write cleanly");
 
   _relationsWritten++;
 }

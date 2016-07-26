@@ -29,10 +29,6 @@ package hoot.services.controllers.job;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.verify;
 
-import javax.ws.rs.core.Response;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
@@ -46,18 +42,16 @@ public class CleanDataResourceTest {
     @Test
     @Category(UnitTest.class)
     public void testProcess() throws Exception {
-        String params = "{\"INPUT_TYPE\":\"DB\",\"INPUT\":\"DcGisRoads\",\"OUTPUT_TYPE\":\"DB\",\"OUTPUT\":\"DcGisRoadsOUt5\"}";
 
         String jobArgs = ",\"exec\":\"makecleandata\",\"params\":[{\"INPUT\":\"DcGisRoads\"},{\"INPUT_TYPE\":\"DB\"},";
         jobArgs += "{\"OUTPUT\":\"DcGisRoadsOUt5\"},{\"OUTPUT_TYPE\":\"DB\"}],\"exectype\":\"make\"}";
 
         CleanDataResource spy = Mockito.spy(new CleanDataResource());
         Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
-        Response resp = spy.process(params);
-        String result = resp.getEntity().toString();
-        JSONParser parser = new JSONParser();
-        JSONObject o = (JSONObject) parser.parse(result);
-        String jobId = o.get("jobid").toString();
-        verify(spy).postJobRquest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
+
+        String params = "{\"INPUT_TYPE\":\"DB\",\"INPUT\":\"DcGisRoads\",\"OUTPUT_TYPE\":\"DB\",\"OUTPUT\":\"DcGisRoadsOUt5\"}";
+
+        JobId resp = spy.process(params);
+        verify(spy).postJobRquest(Matchers.matches(resp.getJobid()), Matchers.endsWith(jobArgs));
     }
 }

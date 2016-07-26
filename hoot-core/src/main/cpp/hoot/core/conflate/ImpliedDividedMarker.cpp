@@ -31,9 +31,9 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/filters/TagFilter.h>
-#include <hoot/core/filters/WayFilterChain.h>
+#include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/Factory.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 
 // Standard
 #include <iostream>
@@ -109,12 +109,10 @@ shared_ptr<OsmMap> ImpliedDividedMarker::markDivided()
   _n2w.reset(new NodeToWayMap(*_inputMap));
 
   // find all the tunnels & bridges
-  shared_ptr<WayFilter> tunnelFilter(new TagFilter(Filter::KeepMatches, "tunnel", "yes"));
-  shared_ptr<WayFilter> bridgeFilter(new TagFilter(Filter::KeepMatches, "bridge", "yes"));
-  WayFilterChain chain(tunnelFilter, bridgeFilter);
-  chain.setAggregator(WayFilterChain::And);
-
-  vector<long> wayIds = _result->filterWays(chain);
+  shared_ptr<TagCriterion> tunnelCrit(new TagCriterion("tunnel", "yes"));
+  shared_ptr<TagCriterion> bridgeCrit(new TagCriterion("bridge", "yes"));
+  ChainCriterion chain(tunnelCrit, bridgeCrit);
+  vector<long> wayIds = FindWaysVisitor::findWays(_result, &chain);
 
   // go through each way
   for (size_t i = 0; i < wayIds.size(); i++)

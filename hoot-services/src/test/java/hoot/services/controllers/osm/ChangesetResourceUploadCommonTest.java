@@ -42,10 +42,10 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
 import hoot.services.UnitTest;
-import hoot.services.db.DbUtils;
 import hoot.services.geo.BoundingBox;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.MapUtils;
 
 
 public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
@@ -185,7 +185,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
             Assert.assertTrue(r.getEntity(String.class).contains("Error parsing changeset diff data"));
 
             OsmTestUtils.verifyTestChangesetUnmodified(changesetId);
-            Assert.assertFalse(DbUtils.elementDataExistsInServicesDb(conn));
+            Assert.assertFalse(MapUtils.elementDataExistsInServicesDb(conn));
 
             throw e;
         }
@@ -219,7 +219,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
             ClientResponse r = e.getResponse();
             Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
             Assert.assertTrue(r.getEntity(String.class).contains("No items in uploaded changeset"));
-            Assert.assertFalse(DbUtils.elementDataExistsInServicesDb(conn));
+            Assert.assertFalse(MapUtils.elementDataExistsInServicesDb(conn));
             throw e;
         }
     }

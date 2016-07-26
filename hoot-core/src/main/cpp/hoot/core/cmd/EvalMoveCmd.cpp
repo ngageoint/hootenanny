@@ -42,6 +42,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/visitors/CalculateBoundsVisitor.h>
 
 // Qt
 #include <QDir>
@@ -253,10 +254,10 @@ public:
     compareMaps(map, mapReproject, pointCount).print();
     cout << endl;
 
-    OGREnvelope e1 = map->calculateBounds();
+    OGREnvelope e1 = CalculateBoundsVisitor::getBounds(map);
     e1.MinX = (e1.MinX + e1.MaxX) / 2.0;
     e1.MinY = (e1.MinY + e1.MaxY) / 2.0;
-    OGREnvelope e2 = map->calculateBounds();
+    OGREnvelope e2 = CalculateBoundsVisitor::getBounds(map);
     e2.MaxX = (e2.MinX + e2.MaxX) / 2.0;
     e2.MaxY = (e2.MinY + e2.MaxY) / 2.0;
     shared_ptr<OsmMap> mapReproject1(new OsmMap(map));
