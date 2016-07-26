@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POSTGRESQLDUMPFILEWRITER_H
-#define POSTGRESQLDUMPFILEWRITER_H
+#ifndef POSTGRESQLDUMPFILEWRITERV2_H
+#define POSTGRESQLDUMPFILEWRITERV2_H
 
 /*
  * This file is part of Hootenanny.
@@ -86,17 +86,19 @@ namespace hoot
 /**
  * OSM element write optimization that writes out a Postgres dump file which can later be applied
  * to Postgres.
+ *
+ * This is the newer version which needs more work to scale well for large datasets.
  */
-class PostgresqlDumpfileWriter : public hoot::PartialOsmMapWriter, public hoot::Configurable
+class PostgresqlDumpfileWriterv2 : public hoot::PartialOsmMapWriter, public hoot::Configurable
 {
 
 public:
 
-  static std::string className() { return "hoot::PostgresqlDumpfileWriter"; }
+  static std::string className() { return "hoot::PostgresqlDumpfileWriterv2"; }
 
-  PostgresqlDumpfileWriter();
+  PostgresqlDumpfileWriterv2();
 
-  ~PostgresqlDumpfileWriter();
+  ~PostgresqlDumpfileWriterv2();
 
   virtual bool isSupported(QString url);
 
@@ -114,12 +116,11 @@ public:
 
 private:
 
-  std::map<QString,
-    std::pair<boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> > > _outputSections;
+  std::map<QString, QStringList> _outputSections;
 
   std::list<QString> _sectionNames;
 
-  QString _outputFilename;
+  QFile _outputFilename;
 
   struct _ElementWriteStats
   {
@@ -218,9 +219,9 @@ private:
   void _writeTagsToTables(
     const Tags& tags,
     const ElementIdDatatype nodeDbId,
-    boost::shared_ptr<QTextStream>& currentTable,
+    const QString& currentTableName,
     const QString& currentTableFormatString,
-    boost::shared_ptr<QTextStream>& historicalTable,
+    const QString& historicalTableName,
     const QString& historicalTableFormatString );
 
   void _createWayTables();
@@ -242,8 +243,6 @@ private:
 
   void _createTable( const QString& tableName, const QString& tableHeader );
 
-  void _createTable( const QString& tableName, const QString& tableHeader, const bool addByteOrderMarker );
-
   void _incrementChangesInChangeset();
 
   void _checkUnresolvedReferences( const ConstElementPtr& element,
@@ -261,4 +260,4 @@ private:
 
 }
 
-#endif // POSTGRESQLDUMPFILEWRITER_H
+#endif // POSTGRESQLDUMPFILEWRITERV2_H

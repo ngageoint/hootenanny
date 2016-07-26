@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -259,7 +259,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     }
 
     QMap<QString, long> matchCandidateCountsByMatchCreator =
-            any_cast<QMap<QString, long> >(matchCandidateCountsData);
+      any_cast<QMap<QString, long> >(matchCandidateCountsData);
     LOG_VARD(matchCandidateCountsByMatchCreator.size());
     LOG_VARD(matchCandidateCountsByMatchCreator);
     for (QMap<QString, long >::const_iterator iterator = matchCandidateCountsByMatchCreator.begin();

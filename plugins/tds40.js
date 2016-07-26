@@ -289,7 +289,7 @@ tds = {
                             {
                                 // Still too long. Chop to the maximum length.
                                 attrs[val] = tStr[0].substring(0,tds.rules.txtLength[val]);
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncating to ' + tds.rules.txtLength[val] + ' characters.');
                             }
                         } // End text attr length > max length
                         // It's text fo skip the next test
@@ -331,7 +331,7 @@ tds = {
                             {
                                 // Still too long. Chop to the maximum length.
                                 attrs[val] = tStr[0].substring(0,tds.rules.txtLength[val]);
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncating to ' + tds.rules.txtLength[val] + ' characters.');
                             }
                         } // End text attr length > max length
                         // It's text fo skip the next test

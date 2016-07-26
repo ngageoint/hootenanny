@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -315,6 +315,14 @@ Envelope GeometryUtils::envelopeFromConfigString(const QString boundsStr)
   {
     throw HootException(errMsg);
   }
+}
+
+QString GeometryUtils::envelopeToConfigString(const Envelope& bounds)
+{
+  return QString::number(bounds.getMinX()) + "," +
+    QString::number(bounds.getMinY()) + "," +
+    QString::number(bounds.getMaxX()) + "," +
+    QString::number(bounds.getMaxY());
 }
 
 }
