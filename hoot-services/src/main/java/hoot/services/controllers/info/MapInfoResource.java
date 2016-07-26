@@ -71,20 +71,23 @@ public class MapInfoResource {
      * 
      * GET hoot-services/info/map/size?mapid=1
      * 
-     * @param mapId
+     * @param mapIds
      *            id of the map for which to retrieve size
      * @return JSON containing size information
      */
     @GET
     @Path("/size")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMapSize(@QueryParam("mapid") String mapId) {
-        long mapSize = 0;
+    public Response getCombinedMapSize(@QueryParam("mapid") String mapIds) {
+        long combinedMapSize = 0;
 
         try {
-            if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
-                for (String table : maptables) {
-                    mapSize += getTableSizeInBytes(table + "_" + mapId);
+            String[] mapids = mapIds.split(",");
+            for (String mapId : mapids) {
+                if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
+                    for (String table : maptables) {
+                        combinedMapSize += getTableSizeInBytes(table + "_" + mapId);
+                    }
                 }
             }
         }
@@ -92,13 +95,13 @@ public class MapInfoResource {
             throw wae;
         }
         catch (Exception ex) {
-            String message = "Error getting map size for: " + mapId;
+            String message = "Error getting combined map size for: " + mapIds;
             throw new WebApplicationException(ex, Response.serverError().entity(message).build());
         }
 
         JSONObject entity = new JSONObject();
-        entity.put("mapid", mapId);
-        entity.put("size_byte", mapSize);
+        entity.put("mapid", mapIds);
+        entity.put("size_byte", combinedMapSize);
 
         return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
