@@ -9,7 +9,14 @@ cd $HOOT_HOME
 hoot --version --debug
 
 export HOOT_TEST_DIFF=--diff
-time -p make -sj`nproc` test-all
+# Run all of the tests - fronm the "test-all" target
+make -sj`nproc` services-test-all
+make -sj`nproc` pp-test
+make -sj`nproc` plugins-test
+make -s ui-test
+
+echo "Running glacial tests..."
+bin/HootTest $(HOOT_TEST_DIFF) --glacial
 
 # This is done in VagrantBuild.sh
 # cd $HOOT_HOME/docs
@@ -17,4 +24,12 @@ time -p make -sj`nproc` test-all
 
 time -p make -sj`nproc` archive
 
-time -p make -sj`nproc` coverage
+# Generate coverage reports
+echo "Building core coverage reports..."
+make -sj`nproc` core-coverage
+
+echo "Building services coverage reports..."
+make -sj`nproc` services-coverage
+
+echo "Building UI coverage reports..."
+make -sj`nproc` ui-coverage
