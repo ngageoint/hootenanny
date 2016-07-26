@@ -62,10 +62,10 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <QtCore/QString>
-#include <QtCore/QTemporaryFile>
-#include <QtCore/QTextStream>
-#include <QtCore/Q_INT64>
+#include <QString>
+#include <QTemporaryFile>
+#include <QTextStream>
+#include <Q_INT64>
 
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/OsmMapWriter.h>

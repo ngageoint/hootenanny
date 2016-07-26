@@ -35,10 +35,10 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <QtCore/QString>
-#include <QtCore/QTemporaryFile>
-#include <QtCore/QTextStream>
-#include <QtCore/QDateTime>
+#include <QString>
+#include <QTemporaryFile>
+#include <QTextStream>
+#include <QDateTime>
 
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/HootException.h>
@@ -103,7 +103,6 @@ void PostgresqlDumpfileWriter::open(QString url)
   }
 
   _outputFilename = url;
-  //LOG_INFO( QString("Output filename set to ") + _outputFilename);
 
   _zeroWriteStats();
 
@@ -139,10 +138,10 @@ void PostgresqlDumpfileWriter::close()
   if ( (_writeStats.nodesWritten > 0) || (_writeStats.waysWritten > 0) || (_writeStats.relationsWritten > 0) )
   {
     LOG_INFO("Write stats:");
-    LOG_INFO("\t              Nodes written: " + QString::number(_writeStats.nodesWritten) );
-    LOG_INFO("\t               Ways written: " + QString::number(_writeStats.waysWritten) );
-    LOG_INFO("\t          Relations written: " + QString::number(_writeStats.relationsWritten) );
-    LOG_INFO("\t   Relation members written:" + QString::number(_writeStats.relationMembersWritten));
+    LOG_INFO("\tNodes written: " + QString::number(_writeStats.nodesWritten) );
+    LOG_INFO("\tWays written: " + QString::number(_writeStats.waysWritten) );
+    LOG_INFO("\tRelations written: " + QString::number(_writeStats.relationsWritten) );
+    LOG_INFO("\tRelation members written:" + QString::number(_writeStats.relationMembersWritten));
     LOG_INFO("\tUnresolved relation members:" + QString::number(_writeStats.relationMembersWritten));
   }
 
