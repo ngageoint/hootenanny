@@ -668,11 +668,11 @@ public class MapResource {
         else {
             if (mapId != null) {
                 String msg = "Error querying map with ID: " + mapId + " - data: (" + e.getMessage() + ") " + requestSnippet;
-                throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+                throw new WebApplicationException(e, Response.serverError().entity(msg).build());
             }
             else {
                 String msg = "Error listing layers for map - data: (" + e.getMessage() + ") " + requestSnippet;
-                throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+                throw new WebApplicationException(e, Response.serverError().entity(msg).build());
             }
         }
     }
@@ -691,7 +691,7 @@ public class MapResource {
     @POST
     @Path("/delete")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteLayers(@QueryParam("mapId") String mapId) {
         JSONObject command = new JSONObject();
         command.put("mapId", mapId);
@@ -726,7 +726,7 @@ public class MapResource {
     @POST
     @Path("/modify")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response modifyName(@QueryParam("mapId") String mapId,
                                @QueryParam("modName") String modName,
                                @QueryParam("inputType") String inputType) {
@@ -782,7 +782,7 @@ public class MapResource {
     @POST
     @Path("/addfolder")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response addFolder(@QueryParam("folderName") String folderName,
                               @QueryParam("parentId") String parentId) {
         Long _parentId = Long.parseLong(parentId);
@@ -832,7 +832,7 @@ public class MapResource {
     @POST
     @Path("/deletefolder")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteFolder(@QueryParam("folderId") String folderId) {
         Long _folderId = Long.parseLong(folderId);
 
@@ -873,6 +873,7 @@ public class MapResource {
 
         JSONObject res = new JSONObject();
         res.put("success", true);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
@@ -893,7 +894,7 @@ public class MapResource {
     @POST
     @Path("/updateParentId")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response updateParentId(@QueryParam("folderId") String folderId,
                                    @QueryParam("parentId") String parentId,
                                    @QueryParam("newRecord") Boolean newRecord) {
@@ -935,7 +936,7 @@ public class MapResource {
     @POST
     @Path("/linkMapFolder")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response updateFolderMapLink(@QueryParam("folderId") String folderId,
                                         @QueryParam("mapId") String mapId,
                                         @QueryParam("updateType") String updateType) {
@@ -1035,7 +1036,7 @@ public class MapResource {
                 }
 
                 String msg = "Failure update map tags resource" + ex.getMessage();
-                throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+                throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
             }
         }
 

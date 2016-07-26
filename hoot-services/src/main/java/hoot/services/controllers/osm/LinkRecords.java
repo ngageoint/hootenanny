@@ -26,13 +26,9 @@
  */
 package hoot.services.controllers.osm;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-
 /**
  * Model class for a set of Hootenanny map layers
  */
-@XmlRootElement
 public class LinkRecords {
     private LinkRecord[] links;
 

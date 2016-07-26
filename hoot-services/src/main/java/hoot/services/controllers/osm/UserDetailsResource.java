@@ -88,8 +88,8 @@ public class UserDetailsResource {
             userId = DbUtils.getTestUserId(conn);
         }
         catch (SQLException e) {
-            String message = "Error getting OSM user info: " + " (" + e.getMessage() + ")";
-            throw new WebApplicationException(e, Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String msg = "Error getting OSM user info: " + " (" + e.getMessage() + ")";
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return (new UserResource()).get(String.valueOf(userId));

@@ -96,7 +96,7 @@ public class HGISFilterResource extends HGISResource {
         }
         catch (Exception ex) {
             String msg = "Error while trying to filter non-HGIS POI's" + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return resp;

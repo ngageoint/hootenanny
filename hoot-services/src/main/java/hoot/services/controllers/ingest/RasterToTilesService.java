@@ -36,7 +36,6 @@ import java.util.UUID;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
@@ -156,7 +155,7 @@ public class RasterToTilesService extends JobControllerBase {
             catch (Exception ex) {
                 jobStatusManager.setFailed(jobId, ex.getMessage());
                 String msg = "Failure ingesting resource: " + ex.getMessage();
-                throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+                throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
             }
         }
         catch (WebApplicationException wae) {
@@ -164,7 +163,7 @@ public class RasterToTilesService extends JobControllerBase {
         }
         catch (Exception e) {
             String msg = "Failure resource ingestion: " + e.getMessage();
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return jobId;
@@ -218,7 +217,7 @@ public class RasterToTilesService extends JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Failure ingesting resource " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return jobId;

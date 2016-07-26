@@ -45,7 +45,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -81,7 +80,7 @@ public class AdvancedOptResource {
 
     @GET
     @Path("/getoptions")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getOptions(@QueryParam("conftype") String confType, @QueryParam("force") String isForce) {
         JSONArray template;
         try {
@@ -130,9 +129,12 @@ public class AdvancedOptResource {
                 template = this.template;
             }
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            String msg = "Error getting advanced options: " + ex;
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            String msg = "Error getting advanced options!";
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(template.toJSONString(), MediaType.APPLICATION_JSON).build();

@@ -26,13 +26,10 @@
  */
 package hoot.services.controllers.info;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-
 /**
  * Represents details about the core environment
  */
-@XmlRootElement
+
 public class CoreDetail {
     private String[] environmentInfo;
 

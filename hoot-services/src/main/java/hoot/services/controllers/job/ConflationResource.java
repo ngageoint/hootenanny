@@ -104,8 +104,8 @@ public class ConflationResource extends JobControllerBase {
     @POST
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response process(String params) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public JobId process(String params) {
         logger.debug("Conflation resource raw request: {}", params);
 
         String jobId = UUID.randomUUID().toString();
@@ -122,7 +122,7 @@ public class ConflationResource extends JobControllerBase {
             if (conflatingOsmApiDbData && !osmApiDbEnabled) {
                 String msg = "Attempted to conflate an OSM API database data source but OSM " +
                         "API database support is disabled.";
-                throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+                throw new WebApplicationException(Response.serverError().entity(msg).build());
             }
 
             oParams.put("IS_BIG", "false");
@@ -253,14 +253,11 @@ public class ConflationResource extends JobControllerBase {
             throw wae;
         }
         catch (Exception e) {
-            String msg = "Error processing: " + params;
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            String msg = "Error during process call!  Params: " + params;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject res = new JSONObject();
-        res.put("jobid", jobId);
-
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return new JobId(jobId);
     }
 
     private static boolean oneLayerIsOsmApiDb(JSONObject inputParams) {

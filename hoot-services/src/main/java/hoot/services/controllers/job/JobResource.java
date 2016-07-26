@@ -51,7 +51,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
@@ -117,7 +116,7 @@ public class JobResource {
     @POST
     @Path("/chain/{jobid}")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response processChainJob(@PathParam("jobid") String jobId, String jobs) {
         logger.debug("Curent JobResource thread count:{}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
 
@@ -131,7 +130,7 @@ public class JobResource {
         }
         catch (Exception e) {
             String msg = "Error during processing of a chain job!" + " jobId = " + jobId + ", jobs = " + jobs;
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return Response.ok().build();
@@ -363,7 +362,7 @@ public class JobResource {
     @POST
     @Path("/{jobid}")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response processJob(@PathParam("jobid") String jobId, String params) {
         logger.debug("Curent JobResource thread count:{}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
 
@@ -377,7 +376,7 @@ public class JobResource {
         }
         catch (Exception e) {
             String msg = "Error during processing a job with jobId = " + jobId + ", params = " + params;
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return Response.ok().build();
@@ -675,7 +674,7 @@ public class JobResource {
         }
         catch (Exception ex) {
             String msg = "Error retrieving job status for job: " + jobId + " Error: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(outStr, MediaType.APPLICATION_JSON).build();

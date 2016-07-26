@@ -37,7 +37,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
@@ -82,7 +81,7 @@ public class CapabilitiesResource {
         }
         catch (Exception e) {
             String message = "Error retrieving capabilities: " + e.getMessage();
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            throw new WebApplicationException(e, Response.serverError().entity(message).build());
         }
 
         try {

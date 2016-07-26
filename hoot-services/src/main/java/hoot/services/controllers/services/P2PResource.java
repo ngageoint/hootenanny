@@ -34,7 +34,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -73,7 +72,7 @@ public class P2PResource extends ServerControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error starting P2P service request: " + ex;
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
     }
 
@@ -87,7 +86,7 @@ public class P2PResource extends ServerControllerBase {
      */
     @GET
     @Path("/p2pserver/stop")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response stopP2PService() {
         // This also gets called automatically from HootServletContext when
         // service exits but should not be reliable since there are many path where it will not be invoked.
@@ -99,7 +98,7 @@ public class P2PResource extends ServerControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error starting P2P service request: " + ex;
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         JSONObject res = new JSONObject();
@@ -117,7 +116,7 @@ public class P2PResource extends ServerControllerBase {
      */
     @GET
     @Path("/p2pserver/status")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response isP2PServiceRunning() {
         boolean isRunning;
 
@@ -125,8 +124,8 @@ public class P2PResource extends ServerControllerBase {
             isRunning = getStatus(_P2PProc);
         }
         catch (Exception ex) {
-            String message = "Error starting P2P service request: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String msg = "Error starting P2P service request: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         JSONObject res = new JSONObject();

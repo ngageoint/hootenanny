@@ -121,7 +121,7 @@ public class HGISReviewResource extends HGISResource {
         }
         catch (Exception ex) {
             String msg = ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return res;

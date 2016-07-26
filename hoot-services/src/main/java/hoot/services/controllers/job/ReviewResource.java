@@ -84,8 +84,6 @@ public class ReviewResource {
     private static final Logger logger = LoggerFactory.getLogger(ReviewResource.class);
     private static final long MAX_RESULT_SIZE;
 
-    private final QMaps maps = QMaps.maps;
-
     static {
         long value;
 
@@ -134,8 +132,10 @@ public class ReviewResource {
             long userId;
             try {
                 logger.debug("Retrieving user ID associated with map having ID: {} ...", request.getMapId());
-                userId = new SQLQuery(conn, DbUtils.getConfiguration()).from(maps).where(maps.id.eq(mapIdNum))
-                        .singleResult(maps.userId);
+                userId = new SQLQuery(conn, DbUtils.getConfiguration())
+                        .from(QMaps.maps)
+                        .where(QMaps.maps.id.eq(mapIdNum))
+                        .singleResult(QMaps.maps.userId);
                 logger.debug("Retrieved user ID: {}", userId);
             }
             catch (Exception e) {
@@ -160,7 +160,7 @@ public class ReviewResource {
         catch (Exception e) {
             String msg = "Error resolving all reviews associated with map having ID: "
                     + request.getMapId() + " (" + e.getMessage() + ")";
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         logger.debug("Set all items reviewed for map with ID: {} using changesetId: {}", request.getMapId(), changesetId);
@@ -220,7 +220,7 @@ public class ReviewResource {
         }
         catch (Exception e) {
             String msg = "Error getting review references!";
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         logger.debug("response : {}", StringUtils.abbreviate(response.toString(), 1000));
@@ -251,9 +251,9 @@ public class ReviewResource {
         catch (WebApplicationException wae) {
             throw wae;
         }
-        catch (Exception ex) {
-            String msg = "Error getting random reviewable item: " + mapId + " (" + ex.getMessage() + ")";
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error getting random reviewable item: " + mapId + " (" + e.getMessage() + ")";
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
     }
 
@@ -301,9 +301,9 @@ public class ReviewResource {
         catch (WebApplicationException wae) {
             throw wae;
         }
-        catch (Exception ex) {
-            String msg = "Error getting next reviewable item: " + mapId + " (" + ex.getMessage() + ")";
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error getting next reviewable item: " + mapId + " (" + e.getMessage() + ")";
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
     }
 
@@ -334,9 +334,9 @@ public class ReviewResource {
         catch (WebApplicationException wae) {
             throw wae;
         }
-        catch (Exception ex) {
-            String msg = "Error getting reviewable item: " + mapId + " (" + ex.getMessage() + ")";
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error getting reviewable item: " + mapId + " (" + e.getMessage() + ")";
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
     }
 
@@ -366,9 +366,9 @@ public class ReviewResource {
             catch (WebApplicationException wae) {
                 throw wae;
             }
-            catch (Exception ex) {
-                String msg = "Error getting reviewables statistics: " + mapId + " (" + ex.getMessage() + ")";
-                throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            catch (Exception e) {
+                String msg = "Error getting reviewables statistics: " + mapId + " (" + e.getMessage() + ")";
+                throw new WebApplicationException(e, Response.serverError().entity(msg).build());
             }
         }
 
@@ -413,8 +413,8 @@ public class ReviewResource {
             double maxlon = Double.parseDouble(maxLon);
             double maxlat = Double.parseDouble(maxLat);
             ReviewableReader reader = new ReviewableReader(conn);
-            AllReviewableItems result = reader.getAllReviewableItems(nMapId, new BoundingBox(minlon, minlat, maxlon,
-                    maxlat));
+            AllReviewableItems result =
+                    reader.getAllReviewableItems(nMapId, new BoundingBox(minlon, minlat, maxlon, maxlat));
             ret = new JSONObject();
 
             if (result.getOverFlow()) {
@@ -428,9 +428,9 @@ public class ReviewResource {
         catch (WebApplicationException wae) {
             throw wae;
         }
-        catch (Exception ex) {
-            String message = "Error getting reviewable item: " + mapId + " (" + ex.getMessage() + ")";
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+        catch (Exception e) {
+            String msg = "Error getting reviewable item: " + mapId + " (" + e.getMessage() + ")";
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return ret;

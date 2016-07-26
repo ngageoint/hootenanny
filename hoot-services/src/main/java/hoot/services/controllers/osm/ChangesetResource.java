@@ -178,7 +178,7 @@ public class ChangesetResource {
         }
         catch (SQLException e) {
             String msg = "Error during changeset diff data upload! changesetId = " + changesetId + ", mapId = " + mapId;
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         logger.debug("Returning ID: {} for new changeset...", changesetId);
@@ -269,7 +269,7 @@ public class ChangesetResource {
         }
         catch (SQLException e) {
             String msg = "Error during changeset diff data upload! changesetId = " + changesetId + ", mapId = " + mapId;
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         try {
@@ -308,7 +308,7 @@ public class ChangesetResource {
     @PUT
     @Path("/{changesetId}/close")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String close(@PathParam("changesetId") long changesetId,
                         @QueryParam("mapId") String mapId) {
         logger.info("Closing changeset with ID: {} ...", changesetId);
@@ -329,7 +329,7 @@ public class ChangesetResource {
             handleError(e, changesetId, "");
         }
 
-        return Response.status(Status.OK).toString();
+        return Response.ok().toString();
     }
 
     // TODO: clean up these message...some are obsolete now

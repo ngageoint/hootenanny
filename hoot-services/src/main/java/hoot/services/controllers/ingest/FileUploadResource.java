@@ -50,7 +50,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
@@ -98,7 +97,7 @@ public class FileUploadResource extends JobControllerBase {
      */
     @POST
     @Path("/upload")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response processUpload2(@QueryParam("TRANSLATION") String translation,
                                    @QueryParam("INPUT_TYPE") String inputType,
                                    @QueryParam("INPUT_NAME") String inputName,
@@ -180,12 +179,12 @@ public class FileUploadResource extends JobControllerBase {
 
             if ((osmZipCnt == 1) && ((shpZipCnt + fgdbZipCnt + shpCnt + fgdbCnt + osmCnt) == 0)) {
                 // we want to unzip the file and modify any necessary parameters for the ensuing makefile
-                byte[] buffer = new byte[2048];
                 String zipFilePath = HOME_FOLDER + "/upload/" + jobId + File.separator + inputsList.get(0);
 
                 try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFilePath))) {
                     ZipEntry ze = zis.getNextEntry();
 
+                    byte[] buffer = new byte[2048];
                     while (ze != null) {
                         String entryName = ze.getName();
                         File file = new File(HOME_FOLDER + "/upload/" + jobId + File.separator + entryName);
@@ -239,7 +238,7 @@ public class FileUploadResource extends JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Failed upload: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(resA.toJSONString(), MediaType.APPLICATION_JSON).build();

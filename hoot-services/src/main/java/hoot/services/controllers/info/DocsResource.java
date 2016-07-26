@@ -61,9 +61,9 @@ public class DocsResource {
         String documentPath = HOME_FOLDER + "/" + "docs" + "/" + DOC_NAME;
         File out = new File(documentPath);
 
-        ResponseBuilder rBuild = Response.ok(out, "application/pdf");
-        rBuild.header("Content-Disposition", "attachment; filename=" + DOC_NAME);
+        ResponseBuilder responseBuilder = Response.ok(out, "application/pdf");
+        responseBuilder.header("Content-Disposition", "attachment; filename=" + DOC_NAME);
 
-        return rBuild.build();
+        return responseBuilder.build();
     }
 }

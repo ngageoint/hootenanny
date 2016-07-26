@@ -128,7 +128,7 @@ public class UserResource {
         }
         catch (SQLException | ParserConfigurationException e) {
             String message = "Error fetching OSM user data!";
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            throw new WebApplicationException(e, Response.serverError().entity(message).build());
         }
 
         try {
@@ -159,14 +159,14 @@ public class UserResource {
             Users user = getOrSaveByEmail(userEmail, connection);
             if (user == null) {
                 String msg = "SQL Insert failed.";
-                throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+                throw new WebApplicationException(Response.serverError().entity(msg).build());
             }
 
             response = new UserSaveResponse(user);
         }
         catch (SQLException e) {
             String msg = "Error saving user: " + " (" + e.getMessage() + ")";
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return response;

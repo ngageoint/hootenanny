@@ -169,7 +169,7 @@ public class ElementResource {
         }
         catch (Exception e) {
             String msg = "Error getting element by unique id.  elementId = " + elementId;
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         try {
@@ -220,7 +220,7 @@ public class ElementResource {
         catch (Exception e) {
             String msg = "Error getting full element data!" +
                     "  mapId = " + mapId + ", elementId = " + elementId + ", elementType = " + elementType;
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         try {
@@ -277,7 +277,7 @@ public class ElementResource {
         }
         catch (Exception e) {
             String msg = "Error getting full element data by unique id! elementId = " + elementId;
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         try {
@@ -331,7 +331,7 @@ public class ElementResource {
         catch (ParserConfigurationException e) {
             String msg = "Error building XMLDocumentBuilder while processing " +
                     "elementId = " + elementId + ", mapId = " + mapId;
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         org.w3c.dom.Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(elementDoc);
@@ -382,7 +382,7 @@ public class ElementResource {
         catch (Exception e) {
             String msg = "Error getting elements!" + "  mapId = " + mapId +
                     ", elementIds = " + elementIds + ", elementType = " + elemType;
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         try {
