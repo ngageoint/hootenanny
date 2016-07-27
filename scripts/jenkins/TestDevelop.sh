@@ -9,12 +9,12 @@ cd $HOOT_HOME
 hoot --version --debug
 
 export HOOT_TEST_DIFF=--diff
-# Run all of the tests - fronm the "test-all" target
-make -sj`nproc` services-test-all
+
+# Run the tests that don't get hit by coverage
 make -sj`nproc` pp-test
 make -sj`nproc` plugins-test
-make -s ui-test
 
+# Running glacial tests here because we're not sure core-coverage runs them
 echo "Running glacial tests..."
 bin/HootTest $(HOOT_TEST_DIFF) --glacial
 
