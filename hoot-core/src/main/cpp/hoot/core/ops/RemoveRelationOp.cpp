@@ -24,32 +24,48 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "RemoveEmptyRelationsVisitor.h"
+#include "RemoveRelationOp.h"
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/Factory.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/util/Validate.h>
 
 namespace hoot
 {
 
-RemoveEmptyRelationsVisitor::RemoveEmptyRelationsVisitor()
+HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveRelationOp)
+
+RemoveRelationOp::RemoveRelationOp()
 {
 }
 
-void RemoveEmptyRelationsVisitor::visit(const shared_ptr<Element>& e)
+RemoveRelationOp::RemoveRelationOp(long rId):
+  _rIdToRemove(rId)
 {
-  if (e->getElementType() == ElementType::Relation)
-  {
-    Relation* r = dynamic_cast<Relation*>(e.get());
-    assert(r != 0);
+}
 
-    if (r->getMembers().size() == 0)
+void RemoveRelationOp::apply(shared_ptr<OsmMap>& map)
+{
+  if (map->_relations.find(_rIdToRemove) != map->_relations.end())
+  {
+    // determine if this relation is a part of any other relations
+    // make a copy of the rids in case the index gets changed.
+    const set<long> rids = map->_index->getElementToRelationMap()->
+      getRelationByElement(ElementId::relation(_rIdToRemove));
+
+    // remove this relation from all other parent relations.
+    for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
     {
-      RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
+      map->getRelation(*it)->removeElement(ElementId::relation(_rIdToRemove));
     }
+
+    map->_index->removeRelation(map->getRelation(_rIdToRemove));
+    map->_relations.erase(_rIdToRemove);
+    VALIDATE(map->validate());
   }
 }
 
-}
+} // end namespace hoot
+

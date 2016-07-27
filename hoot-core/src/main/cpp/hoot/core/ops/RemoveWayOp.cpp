@@ -24,43 +24,59 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "KeepHighwaysVisitor.h"
+#include "RemoveWayOp.h"
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/util/Validate.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, KeepHighwaysVisitor)
+HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveWayOp)
 
-void KeepHighwaysVisitor::visit(const ConstElementPtr& e)
+RemoveWayOp::RemoveWayOp(bool removeFully):
+  _removeFully(removeFully)
 {
-  ElementType type = e->getElementType();
-  long id = e->getId();
+}
 
-  if (OsmSchema::getInstance().isLinearHighway(e->getTags(), type) == false ||
-      OsmSchema::getInstance().isArea(e->getTags(), type))
+RemoveWayOp::RemoveWayOp(long wId, bool removeFully):
+  _wayIdToRemove(wId),
+  _removeFully(removeFully)
+{
+}
+
+void RemoveWayOp::_removeWay(shared_ptr<OsmMap> &map, long wId)
+{
+  if (map->_ways.find(wId) != map->_ways.end())
   {
-    // we don't want to accidentally delete a highway by deleting a relation that contains
-    // highways.
-    if (type == ElementType::Relation)
-    {
-      if (_map->getIndex().getParents(e->getElementId()).size() == 0)
-      {
-        RemoveRelationOp::removeRelation(_map->shared_from_this(), id);
-      }
-    }
-    else
-    {
-      RecursiveElementRemover(ElementId(type, id)).apply(_map->shared_from_this());
-    }
+    map->_index->removeWay(map->getWay(wId));
+    map->_ways.erase(wId);
   }
 }
 
+void RemoveWayOp::_removeWayFully(shared_ptr<OsmMap> &map, long wId)
+{
+  // copy the set because we may modify it later.
+  set<long> rid = map->_index->getElementToRelationMap()->
+      getRelationByElement(ElementId::way(wId));
+
+  for (set<long>::const_iterator it = rid.begin(); it != rid.end(); ++it)
+  {
+    map->getRelation(*it)->removeElement(ElementId::way(wId));
+  }
+  _removeWay(map, wId);
+  VALIDATE(map->validate());
 }
+
+void RemoveWayOp::apply(shared_ptr<OsmMap>& map)
+{
+  if (_removeFully)
+    _removeWayFully(map, _wayIdToRemove);
+  else
+    _removeWay(map, _wayIdToRemove);
+}
+
+} // end namespace hoot
