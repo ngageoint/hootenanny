@@ -24,32 +24,53 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "RemoveEmptyRelationsVisitor.h"
+#include "RemoveElementOp.h"
+#include "RemoveNodeOp.h"
+#include "RemoveWayOp.h"
+#include "RemoveRelationOp.h"
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/Factory.h>
 
 namespace hoot
 {
 
-RemoveEmptyRelationsVisitor::RemoveEmptyRelationsVisitor()
+HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveElementOp)
+
+RemoveElementOp::RemoveElementOp(bool doCheck):
+  _doCheck(doCheck)
 {
 }
 
-void RemoveEmptyRelationsVisitor::visit(const shared_ptr<Element>& e)
+RemoveElementOp::RemoveElementOp(ElementId eId, bool doCheck):
+  _eIdToRemove(eId),
+  _doCheck(doCheck)
 {
-  if (e->getElementType() == ElementType::Relation)
-  {
-    Relation* r = dynamic_cast<Relation*>(e.get());
-    assert(r != 0);
+}
 
-    if (r->getMembers().size() == 0)
-    {
-      RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
-    }
+void RemoveElementOp::apply(shared_ptr<OsmMap>& map)
+{
+  if (ElementType::Node == _eIdToRemove.getType().getEnum())
+  {
+    // Remove node fully (Removes node from relations & ways, then removes node from map)
+    RemoveNodeOp removeNode(_eIdToRemove.getId(), _doCheck, true);
+    removeNode.apply(map);
+  }
+  else if (ElementType::Way == _eIdToRemove.getType().getEnum())
+  {
+    RemoveWayOp removeWay(_eIdToRemove.getId(), _doCheck);
+    removeWay.apply(map);
+  }
+  else if (ElementType::Relation == _eIdToRemove.getType().getEnum())
+  {
+    RemoveRelationOp removeRelation(_eIdToRemove.getId());
+    removeRelation.apply(map);
+  }
+  else
+  {
+    throw HootException(QString("Unexpected element type: %1").arg(_eIdToRemove.toString()));
   }
 }
 
-}
+} // end namespace hoot
+

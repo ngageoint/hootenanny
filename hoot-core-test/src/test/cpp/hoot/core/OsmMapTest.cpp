@@ -43,6 +43,7 @@
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
@@ -441,16 +442,16 @@ public:
     // force it to build the tree before we start removing nodes.
     map->getIndex().getWayTree();
 
-    map->removeWay(FindWaysVisitor::findWaysByTag(map, "note", "0")[0]);
+    RemoveWayOp::removeWay(map, FindWaysVisitor::findWaysByTag(map, "note", "0")[0]);
     _checkKnnWayIterator(map);
 
-    map->removeWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);
+    RemoveWayOp::removeWay(map, FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);
     _checkKnnWayIterator(map);
 
-    map->removeWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]);
+    RemoveWayOp::removeWay(map, FindWaysVisitor::findWaysByTag(map, "note", "2")[0]);
     _checkKnnWayIterator(map);
 
-    map->removeWay(FindWaysVisitor::findWaysByTag(map, "note", "3")[0]);
+    RemoveWayOp::removeWay(map, FindWaysVisitor::findWaysByTag(map, "note", "3")[0]);
     _checkKnnWayIterator(map);
   }
 

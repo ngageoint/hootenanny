@@ -30,6 +30,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/ops/RemoveElementOp.h>
 
 namespace hoot
 {
@@ -48,7 +49,7 @@ void KeepBuildingsVisitor::visit(const ConstElementPtr& e)
     if (OsmSchema::getInstance().isBuilding(ee->getTags(), type) == false)
     {
       // @todo This could do bad things if the element is in use.
-      _map->removeElementNoCheck(type, id);
+      RemoveElementOp::removeElementNoCheck(_map->shared_from_this(), e->getElementId());
     }
   }
 }
