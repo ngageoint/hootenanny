@@ -30,6 +30,9 @@ clean-coverage:
 coverage:
 	$(MAKE) -f Makefile.old coverage
 
+core-coverage:
+	$(MAKE) -f Makefile.old core-coverage
+
 eclipse:
 	$(MAKE) -f Makefile.old eclipse
 
@@ -54,6 +57,7 @@ help:
 	@echo "clean-all               - Clean out all binaries and remove all tables from the DB defined in liquibase.properties"
 	@echo "clean-coverage          - Remove all test code coverage report output."
 	@echo "clean-db                - Remove all tables from the DB defined in liquibase.properties"
+	@echo "core-coverage           - If configured '--with-coverage', then creates coverage reports for the core."
 	@echo "coverage                - If configured '--with-coverage', then creates test coverage reports."
 	@echo "docs                    - Build all project documentation."
 	@echo "dist                    - Make a distributable tarball."
@@ -64,7 +68,7 @@ help:
 	@echo "services-build          - If configured '--with-services', then builds just the web services source."
 	@echo "services-clean          - If configured '--with-services', then cleans just the web services binaries. This will not modify the DB."
 	@echo "services-clean-coverage - If configured '--with-services', then removes just the web services test code coverage report output."
-	@echo "services-coverage       - If configured '--with-coverage' and '--with-coverage', then creates just the web services coverage report."
+	@echo "services-coverage       - If configured '--with-services' and '--with-coverage', then creates just the web services coverage report."
 	@echo "services-docs           - If configure '--with-services', then builds just the web services documentation."
 	@echo "services-test           - If configure '--with-services', then runs the web services slow tests.  Should take five to ten minutes."
 	@echo "services-test-all       - If configure '--with-services', then runs the web services glacial tests.  Should take five to ten minutes."
