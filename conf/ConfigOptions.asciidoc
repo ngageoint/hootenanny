@@ -1582,6 +1582,14 @@ are 0 to 1 for similarity and -1 if there are no names present (null).
 How far away from a polygon should name matches be considered reviews. This is a fixed value in
 meters that is added to the CE calculation.
 
+=== poi.polygon.match.distance
+
+* Data Type: double
+* Default Value: `0`
+
+The maximum distance, in meters, between a POI and a polygon where they can still be considered
+an exact match based on distance criteria only.
+
 === postgresql.dumpfile.writer.auto.calc.ids
 
 * Data Type: bool

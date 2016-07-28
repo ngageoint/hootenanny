@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -92,34 +92,51 @@ Match(threshold)
   int evidence = 0;
   evidence += typeMatch ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
-  evidence += distance == 0 ? 2 : 0;
+  evidence += distance <= ConfigOptions().getPoiPolygonMatchDistance() ? 2 : 0;
 
   if (!closeMatch)
   {
     _c.setMiss();
+    LOG_DEBUG("poipoly miss");
   }
   else if (evidence >= 3)
   {
     _c.setMatch();
+    LOG_DEBUG("poipoly match");
   }
   else if (evidence >= 1)
   {
     _c.setReview();
+    LOG_DEBUG("poipoly review");
   }
   else
   {
     _c.setMiss();
+    LOG_DEBUG("poipoly miss");
   }
+
+  LOG_VARD(eid1);
+  //LOG_VARD(e1->toString());
+  LOG_VARD(eid2);
+  //LOG_VARD(e2->toString());
+  LOG_VARD(typeMatch);
+  LOG_VARD(nameScore);
+  LOG_VARD(nameMatch);
+  LOG_VARD(e1->getCircularError());
+  LOG_VARD(e2->getCircularError());
+  LOG_VARD(distance);
+  LOG_VARD(reviewDistance);
+  LOG_VARD(closeMatch);
+  LOG_VARD(evidence);
 }
 
 double PoiPolygonMatch::_calculateNameScore(ConstElementPtr e1, ConstElementPtr e2) const
 {
   // found experimentally when doing building name comparisons
-  double score = NameExtractor(
-        new TranslateStringDistance(
-          new MeanWordSetDistance(new LevenshteinDistance(1.45)))).extract(e1, e2);
-
-  return score;
+  return
+    NameExtractor(
+      new TranslateStringDistance(
+        new MeanWordSetDistance(new LevenshteinDistance(1.45)))).extract(e1, e2);
 }
 
 bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2) const
