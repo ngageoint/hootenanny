@@ -31,6 +31,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/Factory.h>
+#include <hoot/core/ops/RemoveNodeOp.h>
 
 // Standard
 #include <iostream>
@@ -94,7 +95,7 @@ void SuperfluousNodeRemover::apply(shared_ptr<OsmMap>& map)
       if (_bounds.isNull() || _bounds.contains(n->getX(), n->getY()))
       {
         //LOG_INFO("Removing node. " << n->toString());
-        map->removeNodeNoCheck(n->getId());
+        RemoveNodeOp::removeNodeNoCheck(map, n->getId());
       }
       else
       {

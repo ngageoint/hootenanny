@@ -27,6 +27,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 
@@ -75,8 +76,8 @@ public:
     const ElementId r2Id = *review2.begin()++;
 
     //remove all of one of the review relation's members
-    map->removeElement(n3->getElementId());
-    map->removeElement(n4->getElementId());
+    RemoveElementOp::removeElement(map, n3->getElementId());
+    RemoveElementOp::removeElement(map, n4->getElementId());
     map->getRelation(r2Id.getId())->removeElement(n3->getElementId());
     map->getRelation(r2Id.getId())->removeElement(n4->getElementId());
 

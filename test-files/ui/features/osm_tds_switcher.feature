@@ -25,6 +25,7 @@ Feature: OSM/TDS Switcher
     Scenario: I can add a new feature and switch between attribute schemas
         # Add a point with OSM schema
         When I click the "add-point" button
+        And I hover over "#map"
         And I click the "map" at "300","300"
         Then I wait 5 "seconds" to see "Select feature type"
         Then I select the "OSM" option labelled "Filter By Type"
@@ -33,6 +34,7 @@ Feature: OSM/TDS Switcher
         And I click the "map" at "400","400"
         # Add a point with TDSv61 schema
         When I click the "add-point" button
+        And I hover over "#map"
         And I click the "map" at "100","100"
         Then I wait 5 "seconds" to see "Select feature type"
         Then I select the "TDSv61" option labelled "Filter By Type"
@@ -41,6 +43,7 @@ Feature: OSM/TDS Switcher
         And I click the "map" at "400","400"
         # Add a point with MGCP schema
         When I click the "add-point" button
+        And I hover over "#map"
         And I click the "map" at "200","200"
         Then I wait 5 "seconds" to see "Select feature type"
         Then I select the "MGCP" option labelled "Filter By Type"
@@ -50,6 +53,7 @@ Feature: OSM/TDS Switcher
 
         # Add a line with TDSv40 schema
         When I click the "add-line" button
+        And I hover over "#map"
         And I click the "map" at "300","200"
         And I click the "map" at "200","300"
         And I double-click the "map" at "200","400"
@@ -61,6 +65,7 @@ Feature: OSM/TDS Switcher
 
         # Add an area with MGCP schema
         When I click the "add-area" button
+        And I hover over "#map"
         And I click the "map" at "150","150"
         And I click the "map" at "450","450"
         And I double-click the "map" at "150","450"

@@ -35,6 +35,7 @@
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 using namespace hoot;
 
 // CPP Unit
@@ -114,7 +115,7 @@ public:
       const Tags& t = w->getTags();
       if (t["REF1"] != "Target" && t["REF2"] != "Target")
       {
-        map->removeWay(it->first);
+        RemoveWayOp::removeWay(map, it->first);
       }
     }
     BuildingMatchCreator uut;

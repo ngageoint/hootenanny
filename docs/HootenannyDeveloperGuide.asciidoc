@@ -17,5 +17,6 @@ include::developer/HootenannyDevelopmentAdvancedOptionsInfo.asciidoc[]
 include::developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc[]
 include::developer/HootenannyVMSnapshotting.asciidoc[]
 include::developer/HootenannyOsmApiDatabaseConflationNotes.asciidoc[]
+include::developer/HootenannyManualConflation.asciidoc[]
 
 

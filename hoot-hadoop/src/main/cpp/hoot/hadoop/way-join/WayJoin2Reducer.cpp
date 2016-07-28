@@ -22,6 +22,7 @@
 // Hoot
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/io/PbfReader.h>
+#include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/hadoop/HadoopIdGenerator.h>
@@ -260,7 +261,7 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
 
     for (int i = 0; i < tempNodes.size(); i++)
     {
-      _map->removeNodeNoCheck(tempNodes[i]);
+      RemoveNodeOp::removeNodeNoCheck(_map, tempNodes[i]);
     }
 
     if (w == NULL)

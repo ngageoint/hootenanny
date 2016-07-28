@@ -52,6 +52,7 @@ using namespace geos::operation::buffer;
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/visitors/FindNodesVisitor.h>
 
@@ -536,7 +537,7 @@ void DualWaySplitter::_splitWay(long wid)
   _reconnectEnd(nids[nids.size() - 1], _left);
   _reconnectEnd(nids[nids.size() - 1], _right);
 
-  _result->removeWay(wid);
+  RemoveWayOp::removeWay(_result, wid);
 
   // add the results to the map
   _result->addWay(_left);

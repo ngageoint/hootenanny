@@ -35,6 +35,7 @@
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/FindNodesInWayFactory.h>
 
@@ -148,7 +149,7 @@ vector< shared_ptr<Way> > WaySplitter::split(WayLocation& splitPoint)
     result.push_back(WaySubline(first, splitPoint).toWay(_map, _nf.get()));
     result.push_back(WaySubline(splitPoint, last).toWay(_map, _nf.get()));
 
-    _map->removeWay(_a);
+    RemoveWayOp::removeWay(_map, _a->getId());
     _map->addWay(result[0]);
     _map->addWay(result[1]);
   }
