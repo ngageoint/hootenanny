@@ -16,7 +16,7 @@ cd $HOOT_HOME
 
 # Maintain vagrant state in the parent directory so very clean will still work.
 mkdir -p ../vagrant-hootenanny
-ln -s ../vagrant-hootenanny .vagrant
+[ -L VSphereDummy.box ] || ln -s ../vagrant-hootenanny .vagrant
 
 # Update hoot-ui
 git submodule update --init
