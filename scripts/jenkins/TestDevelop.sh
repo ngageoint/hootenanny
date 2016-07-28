@@ -21,9 +21,3 @@ echo "Running services tests..."
 make -sj`nproc` services-test
 echo "Running ui tests..."
 make -s ui-test
-
-# This is done in VagrantBuild.sh
-# cd $HOOT_HOME/docs
-# make -sj`nproc`
-
-time -p make -sj`nproc` archive
