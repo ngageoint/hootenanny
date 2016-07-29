@@ -205,7 +205,7 @@ class ChangesetErrorChecker {
             }
         }
 
-        String emptyIdErrorMsg = "Element in changeset has empty ID.";;
+        String emptyIdErrorMsg = "Element in changeset has empty ID.";
 
         // check relation members
         for (ElementType elementType : ElementType.values()) {
