@@ -115,12 +115,29 @@ Match(threshold)
     LOG_DEBUG("poipoly miss");
   }
 
+  _uuid1 = e1->getTags().get("uuid");
+  _uuid2 = e2->getTags().get("uuid");
+  _typeMatch = typeMatch;
+  _nameMatch = nameMatch;
+  _nameScore = nameScore;
+  QStringList names1 = e1->getTags().getNames();
+  names1.append(e1->getTags().getPseudoNames());
+  _names1 = names1.join(",");
+  QStringList names2 = e2->getTags().getNames();
+  names2.append(e2->getTags().getPseudoNames());
+  _names2 = names2.join(",");
+  _closeMatch = closeMatch;
+  _distance = distance;
+  _reviewDistance = reviewDistance;
+  _ce = ce;
+  _circularError1 = e1->getCircularError();
+  _circularError2 = e2->getCircularError();
+  _evidence = evidence;
+
   LOG_VARD(eid1);\
   LOG_VARD(e1->getTags().get("uuid"));
-  //LOG_VARD(e1->toString());
   LOG_VARD(eid2);
   LOG_VARD(e2->getTags().get("uuid"));
-  //LOG_VARD(e2->toString());
   LOG_VARD(typeMatch);
   LOG_VARD(nameScore);
   LOG_VARD(nameMatch);
@@ -138,10 +155,11 @@ double PoiPolygonMatch::_calculateNameScore(ConstElementPtr e1, ConstElementPtr 
   return
     NameExtractor(
       new TranslateStringDistance(
-        new MeanWordSetDistance(new LevenshteinDistance(1.45)))).extract(e1, e2);
+        new MeanWordSetDistance(
+          new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())))).extract(e1, e2);
 }
 
-bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2) const
+bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2) //const
 {
   bool result = false;
 
@@ -164,6 +182,10 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
         LOG_VARD(it.value());
         LOG_VARD(t1.toString());
         LOG_VARD(t2.toString());
+
+        _typeMatchAttributeKey = it.key();
+        _typeMatchAttributeValue = it.value();
+
         return result;
       }
     }
@@ -196,8 +218,29 @@ bool PoiPolygonMatch::isPoiIsh(ConstElementPtr e)
 
 QString PoiPolygonMatch::toString() const
 {
-  return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
+  //return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
+      //arg(_polyEid.toString()).arg(_c.toString());
+
+  QString str =
+    QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
       arg(_polyEid.toString()).arg(_c.toString());
+  str += " UUID1: " + _uuid1 + "\n";
+  str += "UUID2: " + _uuid2 + "\n";
+  str += "type match: " + QString::number(_typeMatch) + "\n";
+  str += "type match attribute key: " + _typeMatchAttributeKey + "\n";
+  str += "type match attribute value: " + _typeMatchAttributeValue + "\n";
+  str += "name match: " + QString::number(_nameMatch) + "\n";
+  str += "name score: " + QString::number(_nameScore) + "\n";
+  str += "names 1: " + _names1 + "\n";
+  str += "names 2: " + _names2 + "\n";
+  str += "close match: " + QString::number(_closeMatch) + "\n";
+  str += "distance: " + QString::number(_distance) + "\n";
+  str += "review distance: " + QString::number(_reviewDistance) + "\n";
+  str += "overall circular error: " + QString::number(_ce) + "\n";
+  str += "circular error 1: " + QString::number(_circularError1) + "\n";
+  str += "circular error 2: " + QString::number(_circularError2) + "\n";
+  str += "evidence: " + QString::number(_evidence);
+  return str;
 }
 
 }

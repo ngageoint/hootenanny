@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -83,6 +83,23 @@ private:
   ElementId _poiEid, _polyEid;
   MatchClassification _c;
 
+  QString _uuid1;
+  QString _uuid2;
+  bool _typeMatch;
+  QString _typeMatchAttributeKey;
+  QString _typeMatchAttributeValue;
+  double _nameScore;
+  bool _nameMatch;
+  QString _names1;
+  QString _names2;
+  double _circularError1;
+  double _circularError2;
+  double _ce;
+  double _distance;
+  double _reviewDistance;
+  bool _closeMatch;
+  int _evidence;
+
   /**
    * Returns a score from 0 to 1 representing the similarity of the names. A score of -1 means one
    * or both of the features have no names.
@@ -93,7 +110,7 @@ private:
    * Returns true if at least one POI tag is an exact match between the two elements. E.g.
    * amenity=cafe in e1 and in e2.
    */
-  bool _calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2) const;
+  bool _calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2) /*const*/;
 
 };
 
