@@ -115,9 +115,11 @@ Match(threshold)
     LOG_DEBUG("poipoly miss");
   }
 
-  LOG_VARD(eid1);
+  LOG_VARD(eid1);\
+  LOG_VARD(e1->getTags().get("uuid"));
   //LOG_VARD(e1->toString());
   LOG_VARD(eid2);
+  LOG_VARD(e2->getTags().get("uuid"));
   //LOG_VARD(e2->toString());
   LOG_VARD(typeMatch);
   LOG_VARD(nameScore);
@@ -153,8 +155,15 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
           != OsmSchemaCategory::Empty)
     {
       result = t2.get(it.key()) == it.value();
-      if (result)
+      if (result &&
+          ((it.key().toLower() != "building" && it.value().toLower() != "yes") ||
+            ConfigOptions().getPoiPolygonAllowGenericBuildingMatches()))
       {
+        LOG_VARD("type match");
+        LOG_VARD(it.key());
+        LOG_VARD(it.value());
+        LOG_VARD(t1.toString());
+        LOG_VARD(t2.toString());
         return result;
       }
     }

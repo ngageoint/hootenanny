@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -273,6 +273,9 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
 
     const UuidPair& m = *it;
 
+    //LOG_VARD(m.first);
+    //LOG_VARD(m.second);
+
     // if this is an expected match
     if (_expectedMatchGroups.findT(m.first) == _expectedMatchGroups.findT(m.second))
     {
@@ -287,6 +290,7 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
     {
       expectedIndex = MatchType::Miss;
     }
+    //LOG_VARD(expectedIndex);
 
     // if this is an expected match
     if (_actualMatchGroups.findT(m.first) == _actualMatchGroups.findT(m.second))
@@ -303,6 +307,7 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
       actualIndex = MatchType::Miss;
     }
 
+    //LOG_VARD(actualIndex);
     if (actualIndex != expectedIndex)
     {
       if (actualIndex != MatchType::Review)
@@ -315,6 +320,7 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
           // then mark it as an error.
           if (!eid1.isNull())
           {
+            //LOG_VARD(eid1);
             _tagWrong(conflated, m.first);
           }
         }
@@ -327,6 +333,7 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
           // then mark it as an error.
           if (!eid2.isNull())
           {
+            //LOG_VARD(eid2);
             _tagWrong(conflated, m.second);
           }
         }
@@ -609,15 +616,18 @@ void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const
 
 void MatchComparator::_tagWrong(const OsmMapPtr &map, const QString &uuid)
 {
+  //LOG_VARD(uuid);
   // if the uuid contains the first uuid, set mismatch
   SetTagVisitor stv("hoot:wrong", "1");
   MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
   while (it != _actualUuidToEid.end())
   {
+    //LOG_VARD(it.key());
     if (it.key().contains(uuid))
     {
       shared_ptr<Element> eid = map->getElement(it.value());
       stv.visit(eid);
+      //LOG_DEBUG("tagged wrong");
     }
     it++;
   }

@@ -54,6 +54,29 @@ void RemoveEmptyReviewRelationsVisitor::visit(const ElementPtr& e)
       //LOG_DEBUG("Removing review relation with ID: " << r->getId());
       RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
     }
+    else if (r->getType() == Relation::REVIEW)
+    {
+      const vector<RelationData::Entry> members = r->getMembers();
+      for (size_t i = 0; i < members.size(); ++i)
+      {
+        //LOG_VARD(members[i].getElementId());
+        if (!_map->containsElement(members[i].getElementId()))
+        {
+          //LOG_DEBUG("Removing review relation with ID: " << r->getId());
+          RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
+          break;
+        }
+      }
+    }
+    //for testing only
+    /*else if (r->getType() == Relation::REVIEW)
+    {
+      if (r->getMembers().size() == 1)
+      {
+        //LOG_DEBUG("Removing review relation with ID: " << r->getId());
+        RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
+      }
+    }*/
   }
 }
 

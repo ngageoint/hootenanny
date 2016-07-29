@@ -301,7 +301,7 @@ less confident matches.
 
 * Data Type: list
 * Default Value:
-** ``
+** `hoot::RemoveEmptyReviewRelationsVisitor` - Remove empty review relations
 
 List of user specified operations to run post conflation.
 
@@ -1590,6 +1590,15 @@ meters that is added to the CE calculation.
 The maximum distance, in meters, between a POI and a polygon where they can still be considered
 an exact match based on distance criteria only.
 
+=== poi.polygon.allow.generic.building.matches
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, then POI's and polygon buildings only need building=yes in common to have a type match.
+This will generally generate more reviews when turned on than when turned off.  TODO: This setting
+may not be needed after poi-polygon conflation moves beyond a prototype.
+
 === postgresql.dumpfile.writer.auto.calc.ids
 
 * Data Type: bool
@@ -2162,7 +2171,7 @@ problematic if you're doing testing or expecting repeatable output for other
 === unify.post.ops
 
 * Data Type: string
-* Default Value: `hoot::SuperfluousNodeRemover;hoot::SmallWayMerger`
+* Default Value: `hoot::SuperfluousNodeRemover;hoot::SmallWayMerger;hoot::RemoveEmptyReviewRelationsVisitor`
 
 Semi-colon delimited list of operations to apply after conflating.
 
