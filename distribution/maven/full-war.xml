@@ -1,0 +1,49 @@
+<assembly>
+  <id>full-war</id>
+  <formats>
+    <format>war</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <moduleSets>
+    <moduleSet>
+      <useAllReactorProjects>true</useAllReactorProjects>
+      <includes>
+        <include>hoot:hoot-services</include>
+      </includes>
+      <binaries>
+        <dependencySets>
+          <dependencySet>
+            <unpack>false</unpack>
+            <outputDirectory>lib</outputDirectory>
+            <includes>
+              <include>hoot:hoot-services</include>
+            </includes>
+            <excludes>
+              <exclude>hoot:hoot-services</exclude>
+            </excludes>
+          </dependencySet>
+        </dependencySets>
+      </binaries>
+    </moduleSet>
+    <!-- moduleSet>
+      <useAllReactorProjects>true</useAllReactorProjects>
+      <includes>
+        <include>hoot:hootenanny-id</include>
+      </includes>
+      <binaries>
+        <dependencySets>
+          <dependencySet>
+            <unpack>false</unpack>
+            <outputDirectory>lib</outputDirectory>
+            <includes>
+              <include>hoot:hootenanny-id</include>
+            </includes>
+            <excludes>
+              <include>hoot:hootenanny-id</include>
+            </excludes>
+          </dependencySet>
+        </dependencySets>
+      </binaries>
+    </moduleSet -->
+  </moduleSets>
+</assembly>
