@@ -301,7 +301,7 @@ less confident matches.
 
 * Data Type: list
 * Default Value:
-** `hoot::RemoveEmptyReviewRelationsVisitor` - Remove empty review relations
+** ``
 
 List of user specified operations to run post conflation.
 
@@ -1593,11 +1593,10 @@ an exact match based on distance criteria only.
 === poi.polygon.allow.generic.building.matches
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If true, then POI's and polygon buildings only need building=yes in common to have a type match.
-This will generally generate more reviews when turned on than when turned off.  TODO: This setting
-may not be needed after poi-polygon conflation moves beyond a prototype.
+This will generally generate more reviews when turned on than when turned off.
 
 === postgresql.dumpfile.writer.auto.calc.ids
 
@@ -2171,7 +2170,7 @@ problematic if you're doing testing or expecting repeatable output for other
 === unify.post.ops
 
 * Data Type: string
-* Default Value: `hoot::SuperfluousNodeRemover;hoot::SmallWayMerger;hoot::RemoveEmptyReviewRelationsVisitor`
+* Default Value: `hoot::SuperfluousNodeRemover;hoot::SmallWayMerger`
 
 Semi-colon delimited list of operations to apply after conflating.
 
