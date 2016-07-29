@@ -182,17 +182,21 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
      */
     SQLQuery getRelationWayMembersBboxQuery(long relationId) {
         QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
-        ListSubQuery<Long> sub = new SQLSubQuery().from(currentRelationMembers)
+        ListSubQuery<Long> sub = new SQLSubQuery()
+                .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(relationId)
                         .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way)))
                 .list(currentRelationMembers.memberId);
 
         QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
-        ListSubQuery<Long> wayNodesSub = new SQLSubQuery().from(currentWayNodes).where(currentWayNodes.wayId.in(sub))
+        ListSubQuery<Long> wayNodesSub = new SQLSubQuery()
+                .from(currentWayNodes)
+                .where(currentWayNodes.wayId.in(sub))
                 .list(currentWayNodes.nodeId);
 
         QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-        return new SQLQuery(this.getConnection(), DbUtils.getConfiguration(this.getMapId())).from(currentNodes)
+        return new SQLQuery(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
+                .from(currentNodes)
                 .where(currentNodes.id.in(wayNodesSub));
     }
 
@@ -226,13 +230,15 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
      */
     SQLQuery getRelationNodeMembersBboxQuery(long relationId) {
         QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
-        ListSubQuery<Long> sub = new SQLSubQuery().from(currentRelationMembers)
+        ListSubQuery<Long> sub = new SQLSubQuery()
+                .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(relationId)
                         .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node)))
                 .list(currentRelationMembers.memberId);
 
         QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-        return new SQLQuery(this.getConnection(), DbUtils.getConfiguration(this.getMapId())).from(currentNodes)
+        return new SQLQuery(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
+                .from(currentNodes)
                 .where(currentNodes.id.in(sub));
     }
 
@@ -259,7 +265,8 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
     SQLQuery getRelationMembersQuery(long relationId) {
         QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
         return new SQLQuery(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
-                .from(currentRelationMembers).where(currentRelationMembers.relationId.eq(relationId)
+                .from(currentRelationMembers)
+                .where(currentRelationMembers.relationId.eq(relationId)
                         .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.relation)));
     }
 }

@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 
 @XmlRootElement
@@ -71,14 +72,14 @@ public class ReviewBookmarkSaveRequest {
         return this.detail;
     }
 
-    public void setDetail(JSONObject d) throws Exception {
+    public void setDetail(JSONObject d) {
         String jsonStr = d.toJSONString();
         JSONParser p = new JSONParser();
         try {
             this.detail = (JSONObject) p.parse(jsonStr);
         }
-        catch (Exception ex) {
-            throw new Exception("Failed to parse review bookmark detail parameter to JSON: " + ex.getMessage(), ex);
+        catch (ParseException ex) {
+            throw new RuntimeException("Failed to convert review bookmark detail parameter to JSON!", ex);
         }
     }
 

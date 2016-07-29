@@ -120,7 +120,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testCloseClosedChangeset() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -128,33 +128,21 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
         // close the changeset
         OsmTestUtils.closeChangeset(mapId, changesetId);
-        // QChangesets changesets = QChangesets.changesets;
-        /*
-         * hoot.services.db2.Changesets changeset = new SQLQuery(conn,
-         * DbUtils.getConfiguration(mapId)).from(changesets)
-         * .where(changesets.id.eq(changesetId)).singleResult(changesets); final
-         * Timestamp now = new Timestamp(Calendar.getInstance()
-         * .getTimeInMillis());
-         */
-        // this check causes intermittent test failures
-        // Thread.sleep(1000);
-        // Assert.assertTrue(changeset.getClosedAt().before(now));
 
-        ClientResponse response = null;
+        //ClientResponse response = null;
         try {
             // Try to close an already closed changeset. A failure should occur
-            // and no
-            // data in the
-            // system should be modified.
-            response = resource()
+            // and no data in the system should be modified.
+            resource()
                     .path("api/0.6/changeset/" + changesetId + "/close")
-                    .put(ClientResponse.class, "");
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .put();
         }
-        catch (Exception e) {
-            Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(response.getStatus()));
-            Assert.assertTrue(response.getEntity(String.class)
+        catch (UniformInterfaceException e) {
+            ClientResponse r = e.getResponse();
+            Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.getEntity(String.class)
                     .contains("The changeset with ID: " + changesetId + " was closed at"));
-
             OsmTestUtils.verifyTestChangesetUnmodified(changesetId, originalBounds);
             OsmTestUtils.verifyTestChangesetClosed(changesetId);
 
@@ -162,21 +150,22 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testCloseNonExistingChangeset() throws Exception {
         // Try to close a changeset that doesn't exist. A failure should occur
         // and no data in system should be modified.
-        ClientResponse response = null;
         try {
             // close a changeset that doesn't exist
-            response = resource()
+            resource()
                     .path("api/0.6/changeset/1/close")
-                    .put(ClientResponse.class, "");
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .put();
         }
-        catch (Exception e) {
-            Assert.assertEquals(404, response.getStatus());
-            Assert.assertTrue(response.getEntity(String.class).contains("Changeset to be updated does not exist"));
+        catch (UniformInterfaceException e) {
+            ClientResponse r = e.getResponse();
+            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.getEntity(String.class).contains("Changeset to be updated does not exist"));
 
             throw e;
         }

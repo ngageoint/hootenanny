@@ -34,13 +34,11 @@ import org.json.simple.JSONObject;
  */
 public interface Executable {
     /**
-     * Performs execution. All required meta data should be in command
-     * parameter.
+     * Performs execution. All required meta data should be in command parameter.
      * 
      * @param command
-     * @throws Exception
      */
-    void exec(JSONObject command) throws Exception;
+    void exec(JSONObject command);
 
     /**
      * Returns the final job status detail

@@ -46,22 +46,22 @@ public class ReviewableReader {
         this.conn = conn;
     }
 
-    public ReviewableItem getReviewableItem(long mapid, long seqid) throws Exception {
+    public ReviewableItem getReviewableItem(long mapid, long seqid) {
         ReviewableItem r = (ReviewableItem) ReviewableQueryFactory.getReviewableQuery(conn, mapid, seqid).execQuery();
         return r;
     }
 
-    public ReviewableItem getRandomReviewableItem(long mapid) throws Exception {
+    public ReviewableItem getRandomReviewableItem(long mapid) {
         ReviewableItem r = (ReviewableItem) ReviewableQueryFactory.getRandomReviewableQuery(conn, mapid).execQuery();
         return r;
     }
 
-    public ReviewableStatistics getReviewablesStatistics(long mapid) throws Exception {
+    public ReviewableStatistics getReviewablesStatistics(long mapid) {
         ReviewableStatistics r = (ReviewableStatistics) ReviewableQueryFactory.getReviewableStatisticsQuery(conn, mapid).execQuery();
         return r;
     }
 
-    public AllReviewableItems getAllReviewableItems(long mapid, BoundingBox bbox) throws Exception {
+    public AllReviewableItems getAllReviewableItems(long mapid, BoundingBox bbox) {
         AllReviewableItems r = (AllReviewableItems) ReviewableQueryFactory.getAllReviewableItemsQuery(conn, mapid, bbox).execQuery();
         return r;
     }

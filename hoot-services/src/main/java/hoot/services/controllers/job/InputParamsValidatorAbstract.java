@@ -51,10 +51,9 @@ public abstract class InputParamsValidatorAbstract {
      * @param rangeMax
      *            maximum allowable value for numeric parameters
      * @return a parameter value
-     * @throws Exception
      */
     protected Object validateAndParseParamValueString(String paramValueStr, String name, Object type,
-            Object rangeMin, Object rangeMax) throws Exception {
+            Object rangeMin, Object rangeMax) {
         Object paramValue = null;
 
         if (type instanceof String) {
@@ -63,8 +62,8 @@ public abstract class InputParamsValidatorAbstract {
         else if (type instanceof Boolean) {
             if (!paramValueStr.toLowerCase(Locale.ENGLISH).equals("false")
                     && !paramValueStr.toLowerCase(Locale.ENGLISH).equals("true")) {
-                throw new Exception(
-                        "Invalid input parameter: " + name + " sent to: " + ReflectUtils.getCallingClassName());
+                throw new IllegalArgumentException("Invalid input parameter: " + name +
+                        " sent to: " + ReflectUtils.getCallingClassName());
             }
             paramValue = Boolean.parseBoolean(paramValueStr);
         }
@@ -125,16 +124,18 @@ public abstract class InputParamsValidatorAbstract {
             }
 
             if (errorParsingVal) {
-                throw new Exception(
-                        "Invalid input parameter: " + name + " sent to " + ReflectUtils.getCallingClassName());
+                throw new IllegalArgumentException("Invalid input parameter: " + name
+                        + " sent to " + ReflectUtils.getCallingClassName());
             }
+
             if (valueBelowMin) {
-                throw new Exception("Invalid input parameter: " + name + " sent to "
+                throw new IllegalArgumentException("Invalid input parameter: " + name + " sent to "
                         + ReflectUtils.getCallingClassName()
                         + " is out of the allowable range.  Minimum allowed value = " + rangeMin);
             }
+
             if (valueAboveMax) {
-                throw new Exception("Invalid input parameter: " + name + " sent to "
+                throw new IllegalArgumentException("Invalid input parameter: " + name + " sent to "
                         + ReflectUtils.getCallingClassName()
                         + " is out of the allowable range.  Maximum allowed value = " + rangeMax);
             }

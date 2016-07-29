@@ -24,27 +24,21 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.job.custom.hgis;
+package hoot.services.controllers.job;
 
 
-public class FilterNonHgisPoisRequest {
-    private String source;
+public class JobId {
+    private String jobid;
 
-    public String getSource() {
-        return this.source;
+    public JobId(String jobid) {
+        this.jobid = jobid;
     }
 
-    public void setSource(String src) {
-        this.source = src;
+    public String getJobid() {
+        return this.jobid;
     }
 
-    private String output;
-
-    public String getOutput() {
-        return this.output;
-    }
-
-    public void setOutput(String out) {
-        this.output = out;
+    public void setJobid(String jobid) {
+        this.jobid = jobid;
     }
 }

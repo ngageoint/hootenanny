@@ -27,7 +27,6 @@
 package hoot.services.readers.review;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +44,7 @@ final class ReviewableQueryFactory {
         return new ReviewableQuery(connection, mapid, seqid);
     }
 
-    static IReviewableQuery getRandomReviewableQuery(Connection connection, long mapid) throws SQLException {
+    static IReviewableQuery getRandomReviewableQuery(Connection connection, long mapid) {
         return new RandomReviewableQuery(connection, mapid);
     }
 

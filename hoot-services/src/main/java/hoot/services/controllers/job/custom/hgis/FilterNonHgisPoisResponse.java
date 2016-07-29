@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.job.custom.hgis;
 
+
 public class FilterNonHgisPoisResponse {
     private String jobId;
 

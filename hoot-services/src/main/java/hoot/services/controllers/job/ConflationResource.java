@@ -53,9 +53,10 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.utils.DbUtils;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.JsonUtils;
 
 
 @Path("/conflation")
@@ -99,13 +100,12 @@ public class ConflationResource extends JobControllerBase {
      *            requesting the conflation job. </USER_EMAIL> <ADV_OPTIONS>
      *            Advanced options list for hoot-core command </ADV_OPTIONS>
      * @return Job ID
-     * @throws Exception
      */
     @POST
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response process(String params) throws Exception {
+    @Produces(MediaType.APPLICATION_JSON)
+    public JobId process(String params) {
         logger.debug("Conflation resource raw request: {}", params);
 
         String jobId = UUID.randomUUID().toString();
@@ -120,8 +120,9 @@ public class ConflationResource extends JobControllerBase {
             //Since we're not returning the osm api db layer to the hoot ui, this exception
             //shouldn't actually ever occur, but will leave this check here anyway.
             if (conflatingOsmApiDbData && !osmApiDbEnabled) {
-                String msg = "Attempted to conflate an OSM API database data source but OSM API database support is disabled.";
-                throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+                String msg = "Attempted to conflate an OSM API database data source but OSM " +
+                        "API database support is disabled.";
+                throw new WebApplicationException(Response.serverError().entity(msg).build());
             }
 
             oParams.put("IS_BIG", "false");
@@ -158,7 +159,7 @@ public class ConflationResource extends JobControllerBase {
             tags.put("input2", input2Name);
 
             // Need to reformat the list of hoot command options to json properties
-            tags.put("params", DbUtils.escapeJson(params));
+            tags.put("params", JsonUtils.escapeJson(params));
 
             // Hack alert!
             // Write stats file name to tags, if the file exists
@@ -248,11 +249,15 @@ public class ConflationResource extends JobControllerBase {
 
             postChainJobRquest(jobId, jobArgs.toJSONString());
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error during process call!  Params: " + params;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
 
-        JSONObject res = new JSONObject();
-        res.put("jobid", jobId);
-
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return new JobId(jobId);
     }
 
     private static boolean oneLayerIsOsmApiDb(JSONObject inputParams) {
@@ -282,7 +287,7 @@ public class ConflationResource extends JobControllerBase {
     }
 
     // adding this to satisfy the mock
-    BoundingBox getMapBounds(Map map) throws Exception{
+    BoundingBox getMapBounds(Map map) {
         return map.getBounds();
     }
 
@@ -291,7 +296,7 @@ public class ConflationResource extends JobControllerBase {
         return Map.mapExists(id, conn);
     }
 
-    private void setAoi(Map secondaryMap, JSONArray commandArgs) throws Exception {
+    private void setAoi(Map secondaryMap, JSONArray commandArgs) {
         BoundingBox bounds = getMapBounds(secondaryMap);
         JSONObject arg = new JSONObject();
         arg.put("conflateaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," +

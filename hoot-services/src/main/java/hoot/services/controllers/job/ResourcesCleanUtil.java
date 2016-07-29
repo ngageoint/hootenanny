@@ -28,6 +28,8 @@ package hoot.services.controllers.job;
 
 import java.sql.Connection;
 
+import javax.ws.rs.WebApplicationException;
+
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,12 +58,12 @@ public class ResourcesCleanUtil implements Executable {
     }
 
     @Override
-    public void exec(JSONObject command) throws Exception {
+    public void exec(JSONObject command) {
         JSONObject res = deleteLayers(command.get("mapId").toString());
         finalStatusDetail = res.toJSONString();
     }
 
-    static JSONObject deleteLayers(String mapId) throws Exception {
+    static JSONObject deleteLayers(String mapId) {
         JSONObject res = new JSONObject();
         res.put("mapId", mapId);
         res.put("result", "success");
@@ -71,9 +73,12 @@ public class ResourcesCleanUtil implements Executable {
             DbUtils.deleteRenderDb(conn, mapId);
             DbUtils.deleteOSMRecordByName(conn, mapId);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception e) {
-            logger.error("Error deleting layer with mapId = {}", mapId, e);
-            throw e;
+            String msg = "Error deleting layer with mapId = " +  mapId;
+            throw new RuntimeException(msg, e);
         }
 
         return res;

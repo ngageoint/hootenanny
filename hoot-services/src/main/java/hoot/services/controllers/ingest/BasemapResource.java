@@ -49,7 +49,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -114,7 +113,7 @@ public class BasemapResource extends JobControllerBase {
      */
     @POST
     @Path("/upload")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response processUpload(@QueryParam("INPUT_NAME") String inputName,
                                   @QueryParam("PROJECTION") String projection,
                                   @Context HttpServletRequest request) {
@@ -218,9 +217,12 @@ public class BasemapResource extends JobControllerBase {
                 jobsArr.add(res);
             }
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            String message = "Error processing upload: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String msg = "Error processing upload for: " + inputName;
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(jobsArr.toJSONString(), MediaType.APPLICATION_JSON).build();
@@ -235,17 +237,20 @@ public class BasemapResource extends JobControllerBase {
      */
     @GET
     @Path("/getlist")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getBasemapList() {
-        JSONArray retList = new JSONArray();
+        JSONArray basemapList = new JSONArray();
         JSONArray filesList;
 
         try {
             filesList = getBasemapListHelper();
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            String message = "Error getting base map list: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String message = "Error getting basemap list!";
+            throw new WebApplicationException(ex, Response.serverError().entity(message).build());
         }
 
         // sort the list
@@ -256,9 +261,9 @@ public class BasemapResource extends JobControllerBase {
             sortedScripts.put(sName.toUpperCase(), cO);
         }
 
-        retList.addAll(sortedScripts.values());
+        basemapList.addAll(sortedScripts.values());
 
-        return Response.ok(retList.toString(), MediaType.TEXT_PLAIN).build();
+        return Response.ok(basemapList.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
     private static JSONArray getBasemapListHelper() throws IOException, ParseException {
@@ -323,7 +328,7 @@ public class BasemapResource extends JobControllerBase {
         return filesList;
     }
 
-    private static void toggleBaseMap(String bmName, boolean enable) throws Exception {
+    private static void toggleBaseMap(String bmName, boolean enable) throws IOException {
         // See ticket#6760
         // for file path manipulation
         String fileExt = "enabled";
@@ -342,11 +347,11 @@ public class BasemapResource extends JobControllerBase {
             boolean renamed = sourceFile.renameTo(new File(INGEST_STAGING_PATH + "/BASEMAP/", bmName + targetExt));
 
             if (!renamed) {
-                throw new Exception("Failed to rename file:" + bmName + fileExt + " to " + bmName + targetExt);
+                throw new IOException("Failed to rename file:" + bmName + fileExt + " to " + bmName + targetExt);
             }
         }
         else {
-            throw new Exception("Can not enable file:" + bmName + targetExt + ". It does not exist.");
+            throw new IOException("Can not enable file:" + bmName + targetExt + ". It does not exist.");
         }
     }
 
@@ -355,7 +360,7 @@ public class BasemapResource extends JobControllerBase {
      * 
      * GET hoot-services/ingest/basemap/enable?NAME=abc&ENABLE=true
      * 
-     * @param bmName
+     * @param basemap
      *            Name of a basemap
      * @param enable
      *            true/false
@@ -363,30 +368,33 @@ public class BasemapResource extends JobControllerBase {
      */
     @GET
     @Path("/enable")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response enableBasemap(@QueryParam("NAME") String bmName, @QueryParam("ENABLE") String enable) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response enableBasemap(@QueryParam("NAME") String basemap, @QueryParam("ENABLE") String enable) {
         boolean doEnable = true;
 
-        try {
-            if ((enable != null) && (!enable.isEmpty())) {
-                doEnable = Boolean.parseBoolean(enable);
-            }
+        if ((enable != null) && (!enable.isEmpty())) {
+            doEnable = Boolean.parseBoolean(enable);
+        }
 
-            toggleBaseMap(bmName, doEnable);
+        try {
+            toggleBaseMap(basemap, doEnable);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
-            String message = "Error enabling base map: " + bmName + " Error: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String msg = "Error enabling basemap: " + basemap;
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        JSONObject resp = new JSONObject();
-        resp.put("name", bmName);
-        resp.put("isenabled", doEnable);
+        JSONObject entity = new JSONObject();
+        entity.put("name", basemap);
+        entity.put("isenabled", doEnable);
 
-        return Response.ok(resp.toString(), MediaType.TEXT_PLAIN).build();
+        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
-    private static void deleteBaseMap(String bmName) throws IOException {
+    private static void deleteBaseMapHelper(String bmName) throws IOException {
         File tileDir = hoot.services.utils.FileUtils.getSubFolderFromFolder(TILE_SERVER_PATH + "/BASEMAP/", bmName);
         if ((tileDir != null) && tileDir.exists()) {
             FileUtils.forceDelete(tileDir);
@@ -410,25 +418,28 @@ public class BasemapResource extends JobControllerBase {
      * 
      * //TODO: this should be an HTTP DELETE
      * 
-     * @param bmName
+     * @param basemap
      *            Name of a basemap
      * @return JSON containing enable state
      */
     @GET
     @Path("/delete")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response deleteBasemap(@QueryParam("NAME") String bmName) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteBasemap(@QueryParam("NAME") String basemap) {
         try {
-            deleteBaseMap(bmName);
+            deleteBaseMapHelper(basemap);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
-            String message = "Error deleting base map: " + bmName + " Error: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String msg = "Error deleting base map: " + basemap;
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        JSONObject resp = new JSONObject();
-        resp.put("name", bmName);
+        JSONObject entity = new JSONObject();
+        entity.put("name", basemap);
 
-        return Response.ok(resp.toString(), MediaType.TEXT_PLAIN).build();
+        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 }

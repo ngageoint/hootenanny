@@ -44,7 +44,7 @@ import hoot.services.models.review.ReviewableItem;
 class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(RandomReviewableQuery.class);
 
-    RandomReviewableQuery(Connection connection, long mapid) throws SQLException {
+    RandomReviewableQuery(Connection connection, long mapid) {
         super(connection, mapid);
 
         // TODO: Since this code will affect all subsequent calls to
@@ -60,12 +60,15 @@ class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQu
                     try (ResultSet rs = stmt.executeQuery("select setseed(" + seed + ");")) {
                     }
                 }
+                catch (SQLException e) {
+                    throw new RuntimeException("Error setting seeed!", e);
+                }
             }
         }
     }
 
     @Override
-    public ReviewQueryMapper execQuery() throws SQLException {
+    public ReviewQueryMapper execQuery() {
         ReviewableItem ret = new ReviewableItem(-1, getMapId(), -1);
 
         try (Connection connection = getConnection()){
@@ -86,10 +89,14 @@ class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQu
                     if (seqId != null) {
                         nSeq = Long.parseLong(seqId);
                     }
+
                     ret.setSortOrder(nSeq);
                     ret.setResultCount(nResCnt);
                 }
             }
+        }
+        catch (SQLException e) {
+            throw new RuntimeException("Error executing query!", e);
         }
 
         return ret;

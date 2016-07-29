@@ -53,7 +53,7 @@ class ReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
     }
 
     @Override
-    public ReviewQueryMapper execQuery() throws SQLException {
+    public ReviewQueryMapper execQuery() {
         ReviewableItem ret;
         try (Statement stmt = super.getConnection().createStatement()) {
             try (ResultSet rs = stmt.executeQuery(getQueryString())) {
@@ -69,6 +69,9 @@ class ReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
                 ret = new ReviewableItem(seqId, getMapId(), relid);
                 ret.setResultCount(nResCnt);
             }
+        }
+        catch (SQLException e) {
+            throw new RuntimeException("Error executing query!", e);
         }
 
         return ret;
