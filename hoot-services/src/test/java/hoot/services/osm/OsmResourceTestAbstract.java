@@ -44,6 +44,7 @@ import com.sun.jersey.test.framework.JerseyTest;
 
 import hoot.services.utils.DbUtils;
 import hoot.services.review.ReviewTestUtils;
+import hoot.services.utils.MapUtils;
 
 
 /*
@@ -78,7 +79,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
             conn = DbUtils.createConnection();
             OsmTestUtils.conn = conn;
             ReviewTestUtils.conn = conn;
-            userId = DbUtils.insertUser(conn);
+            userId = MapUtils.insertUser(conn);
         }
         catch (Exception e) {
             conn.close();
@@ -90,7 +91,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
     @Before
     public void beforeTest() throws Exception {
         try {
-            mapId = DbUtils.insertMap(userId, conn);
+            mapId = MapUtils.insertMap(userId, conn);
 
             OsmTestUtils.userId = userId;
 
@@ -105,7 +106,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
     @After
     public void afterTest() throws Exception {
         // no need to clear out each map, if we're clearing the whole db out before each run
-        DbUtils.deleteOSMRecord(conn, mapId);
+        MapUtils.deleteOSMRecord(conn, mapId);
     }
 
     @AfterClass

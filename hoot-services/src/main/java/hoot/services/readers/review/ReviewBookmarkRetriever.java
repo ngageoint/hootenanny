@@ -133,16 +133,18 @@ public class ReviewBookmarkRetriever {
 
         SQLQuery query = new SQLQuery(this.conn, DbUtils.getConfiguration());
         if ((creatorArray != null) && (layerArray != null)) {
-            query.from(reviewBookmarks).where(b.createdBy.in(creatorArray))
-                    .where(b.mapId.in(layerArray))
+            query.from(reviewBookmarks).where(b.createdBy.in((Number[]) creatorArray))
+                    .where(b.mapId.in((Number[]) layerArray))
                     .orderBy(getSpecifier(orderByCol, isAsc));
         }
         else if ((creatorArray != null) && (layerArray == null)) {
-            query.from(reviewBookmarks).where(b.createdBy.in(creatorArray))
+            query.from(reviewBookmarks)
+                    .where(b.createdBy.in((Number[]) creatorArray))
                     .orderBy(getSpecifier(orderByCol, isAsc));
         }
         else if ((creatorArray == null) && (layerArray != null)) {
-            query.from(reviewBookmarks).where(b.mapId.in(layerArray))
+            query.from(reviewBookmarks)
+                    .where(b.mapId.in((Number[]) layerArray))
                     .orderBy(getSpecifier(orderByCol, isAsc));
         }
         else {

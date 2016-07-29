@@ -34,7 +34,6 @@ import java.util.concurrent.Future;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -107,7 +106,7 @@ public class JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Failed upload: " + ex;
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
     }
 
@@ -138,7 +137,7 @@ public class JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Failed upload: " + ex;
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
     }
 

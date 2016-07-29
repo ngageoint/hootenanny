@@ -61,17 +61,16 @@ public final class ModelDaoUtils {
      *         if a record name string is passed in, it is verified that only
      *         one record of the requested type exists with the given name, and
      *         its ID is returned
-     * @throws Exception
-     *             if the requested record doesn't exist or if multiple reccords
-     *             of the same type exist with the requested input name
      */
     public static long getRecordIdForInputString(String requestStr, Connection dbConn,
-            RelationalPathBase<?> table, NumberPath<Long> idField, StringPath nameField) throws Exception {
+            RelationalPathBase<?> table, NumberPath<Long> idField, StringPath nameField) {
+
         // There must be a way to implement this generically for all DAO's but
         // haven't been able to figured out how to do it yet.
 
         if (StringUtils.isEmpty(requestStr)) {
-            throw new Exception("No record exists with ID: " + requestStr + ".  Please specify a valid record.");
+            throw new IllegalArgumentException("No record exists with ID: " + requestStr
+                    + ".  Please specify a valid record.");
         }
 
         boolean parsedAsNum = true;
@@ -90,16 +89,20 @@ public final class ModelDaoUtils {
         boolean recordExists = false;
         boolean multipleRecordsExist = false;
         if (idNum != -1) {
-            recordExists = new SQLQuery(dbConn, DbUtils.getConfiguration()).from(table)
-                    .where(idField.eq(idNum)).exists();
+            recordExists = new SQLQuery(dbConn, DbUtils.getConfiguration())
+                    .from(table)
+                    .where(idField.eq(idNum))
+                    .exists();
         }
         else if (!StringUtils.isEmpty(requestStr)) {
             // input wasn't parsed as a numeric ID, so let's try it as a name
 
             // there has to be a better way to do this against the generated
             // code but haven't been able to get it to work yet
-            List<Long> records = new SQLQuery(dbConn, DbUtils.getConfiguration()).from(table)
-                    .where(nameField.eq(requestStr)).list(idField);
+            List<Long> records = new SQLQuery(dbConn, DbUtils.getConfiguration())
+                    .from(table)
+                    .where(nameField.eq(requestStr))
+                    .list(idField);
 
             if (records.size() == 1) {
                 return records.get(0);
@@ -112,13 +115,13 @@ public final class ModelDaoUtils {
         }
 
         if (multipleRecordsExist) {
-            throw new Exception("Multiple records exist with " + requestStrType + ": " + requestStr
+            throw new IllegalArgumentException("Multiple records exist with " + requestStrType + ": " + requestStr
                     + ".  Please specify " + "a single, valid record.");
         }
 
         if (!recordExists) {
-            throw new Exception("No record exists with " + requestStrType + ": " + requestStr + ".  Please specify a "
-                    + "valid record.");
+            throw new IllegalArgumentException("No record exists with " + requestStrType + ": " + requestStr +
+                    ".  Please specify a valid record.");
         }
 
         return idNum;

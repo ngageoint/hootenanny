@@ -34,7 +34,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -75,7 +74,7 @@ public class TranslatorResource extends ServerControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error starting translation service request: " + ex;
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
     }
 
@@ -91,7 +90,7 @@ public class TranslatorResource extends ServerControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error starting translation service request: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
     }
 
@@ -104,7 +103,7 @@ public class TranslatorResource extends ServerControllerBase {
      */
     @GET
     @Path("/translationserver/status")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response isTranslationServiceRunning() {
         boolean isRunning;
         try {
@@ -112,7 +111,7 @@ public class TranslatorResource extends ServerControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error starting translation service request: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         JSONObject res = new JSONObject();

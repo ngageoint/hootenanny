@@ -99,7 +99,7 @@ public class DataDefinitionManagerTest {
                 // exception can be currently thrown while trying to delete non-existent tables.
             }
 
-            DbUtils.createMap(1234);
+            MapUtils.createMap(1234);
 
             List<String> tbls = DataDefinitionManager.getTablesList(dbname, "changesets");
             Assert.assertTrue(!tbls.isEmpty());

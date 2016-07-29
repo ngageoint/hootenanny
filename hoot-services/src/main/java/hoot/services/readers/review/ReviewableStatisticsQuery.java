@@ -48,7 +48,7 @@ class ReviewableStatisticsQuery extends ReviewableQueryBase implements IReviewab
         super(connection, mapid);
     }
 
-    private long getTotalReviewablesCount() throws SQLException {
+    private long getTotalReviewablesCount() {
         long recordCount = 0;
 
         try (Statement stmt = super.getConnection().createStatement()) {
@@ -58,11 +58,14 @@ class ReviewableStatisticsQuery extends ReviewableQueryBase implements IReviewab
                 }
             }
         }
+        catch (SQLException e) {
+            throw new RuntimeException("Error getting count of reviewables!", e);
+        }
 
         return recordCount;
     }
 
-    private long getRemainingReviewablesCount() throws SQLException {
+    private long getRemainingReviewablesCount() {
         long recordCount = 0;
 
         try (Statement stmt = super.getConnection().createStatement()) {
@@ -72,12 +75,15 @@ class ReviewableStatisticsQuery extends ReviewableQueryBase implements IReviewab
                 }
             }
         }
+        catch (SQLException e) {
+            throw new RuntimeException("Error getting remaining count of reviewables!", e);
+        }
 
         return recordCount;
     }
 
     @Override
-    public ReviewQueryMapper execQuery() throws SQLException {
+    public ReviewQueryMapper execQuery() {
         long nTotal = this.getTotalReviewablesCount();
         long nUnReviewed = this.getRemainingReviewablesCount();
         ReviewableStatistics ret = new ReviewableStatistics(nTotal, nUnReviewed);

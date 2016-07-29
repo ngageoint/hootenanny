@@ -170,7 +170,7 @@ public class BasemapResourceTest {
         FileUtils.touch(controlFile);
         Assert.assertTrue(controlFile.exists());
 
-        Method deleteBaseMapMethod = BasemapResource.class.getDeclaredMethod("deleteBaseMap", String.class);
+        Method deleteBaseMapMethod = BasemapResource.class.getDeclaredMethod("deleteBaseMapHelper", String.class);
         deleteBaseMapMethod.setAccessible(true);
         deleteBaseMapMethod.invoke(null, testMapName);
 

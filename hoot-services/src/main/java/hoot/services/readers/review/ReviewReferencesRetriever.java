@@ -64,7 +64,7 @@ public class ReviewReferencesRetriever {
         this.conn = conn;
     }
 
-    private List<Long> getAllReviewRelations(ElementInfo queryElementInfo, long mapId) throws SQLException {
+    private List<Long> getAllReviewRelations(ElementInfo queryElementInfo, long mapId) {
         String currentRelationMembersTableName = "current_relation_members_" + mapId;
         String sql = "select relation_id from " + currentRelationMembersTableName;
         String currentRelationsTableName = "current_relations_" + mapId;
@@ -83,6 +83,9 @@ public class ReviewReferencesRetriever {
                 }
             }
         }
+        catch (SQLException e) {
+            throw new RuntimeException("Error getting all review relations!", e);
+        }
 
         return relationIds;
     }
@@ -95,9 +98,8 @@ public class ReviewReferencesRetriever {
      *            element whose review references are to be retrieved
      * @return a list containing all features the input feature needs to be
      *         reviewed with
-     * @throws Exception
      */
-    public List<ReviewRef> getAllReferences(ElementInfo queryElementInfo) throws Exception {
+    public List<ReviewRef> getAllReferences(ElementInfo queryElementInfo) {
         logger.debug("requestingElementInfo: {}", queryElementInfo);
 
         long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId(), conn);
@@ -120,11 +122,12 @@ public class ReviewReferencesRetriever {
             // select all relation members where themember's id is not equal to the requesting element's id and the
             // member's type is not = to the requesting element's type
             List<CurrentRelationMembers> referencedMembers = new SQLQuery(conn,
-                    DbUtils.getConfiguration(mapIdNum)).from(currentRelationMembers)
-                            .where(currentRelationMembers.relationId.in(allReviewRelationIds))
-                            .orderBy(currentRelationMembers.relationId.asc(), currentRelationMembers.memberId.asc(),
-                                    currentRelationMembers.sequenceId.asc())
-                            .list(currentRelationMembers);
+                    DbUtils.getConfiguration(mapIdNum))
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.in(allReviewRelationIds))
+                    .orderBy(currentRelationMembers.relationId.asc(), currentRelationMembers.memberId.asc(),
+                            currentRelationMembers.sequenceId.asc())
+                    .list(currentRelationMembers);
 
             // return all elements corresponding to the filtered down set of relation members
             for (CurrentRelationMembers member : referencedMembers) {

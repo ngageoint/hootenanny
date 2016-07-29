@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.osm;
+package hoot.services.controllers.osm;
 
 import java.sql.Connection;
 
@@ -34,12 +34,13 @@ import org.slf4j.LoggerFactory;
 
 import com.mysema.query.sql.SQLQuery;
 
+import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.DbUtils;
 import hoot.services.db2.QCurrentNodes;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.controllers.osm.ChangesetDbWriter;
+import hoot.services.utils.MapUtils;
 
 
 /**
@@ -62,8 +63,8 @@ public class ChangesetDbWriterTest {
      */
     public void testLargeWrite() throws Exception {
         Connection conn = DbUtils.createConnection();
-        final long userId = DbUtils.insertUser(conn);
-        final long mapId = DbUtils.insertMap(userId, conn);
+        final long userId = MapUtils.insertUser(conn);
+        final long mapId = MapUtils.insertMap(userId, conn);
         final long changesetId = Changeset.insertNew(mapId, userId, conn);
         final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
         try {

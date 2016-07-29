@@ -137,9 +137,9 @@ public final class HootProperties {
 
             // This block of code checks for the local.conf and if there is one
             // then it overrides the global properties.
-            Properties localProperties = new Properties();
             try (InputStream in = HootProperties.class.getClassLoader().getResourceAsStream("conf/local.conf")) {
                 if (in != null) {
+                    Properties localProperties = new Properties();
                     localProperties.load(in);
                     Enumeration<?> enumeration = localProperties.propertyNames();
                     while (enumeration.hasMoreElements()) {
