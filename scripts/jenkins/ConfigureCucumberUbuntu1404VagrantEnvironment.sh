@@ -16,13 +16,13 @@ cd $HOOT_HOME
 
 # Maintain vagrant state in the parent directory so very clean will still work.
 mkdir -p ../vagrant-hootenanny
-[ -L VSphereDummy.box ] || ln -s ../vagrant-hootenanny .vagrant
+[ -L .vagrant ] || ln -s ../vagrant-hootenanny .vagrant
 
 # Update hoot-ui
 git submodule update --init
 
-[ -e VSphereDummy.box ] || ln -s ../vagrant/VSphereDummy.box VSphereDummy.box
-[ -e VagrantfileLocal ] || ln -s ../vagrant/VagrantfileLocal.ubuntu1404 VagrantfileLocal
+[ -e VSphereDummy.box ] || ln -s ../../vagrant/VSphereDummy.box VSphereDummy.box
+[ -e VagrantfileLocal ] || ln -s ../../vagrant/VagrantfileLocal.ubuntu1404 VagrantfileLocal
 
 # Copy words1.sqlite Db so we don't have to download it again
 ( [ -e $WORDS_HOME/words1.sqlite ] &&  cp $WORDS_HOME/words1.sqlite conf )
