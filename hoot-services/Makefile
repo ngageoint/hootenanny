@@ -33,7 +33,7 @@ config: src/main/resources/db/spring-database.xml src/main/webapp/WEB-INF/worksp
 run-liquibase:
 	rm -f ./src/main/resources/db/liquibase.properties
 	../scripts/ReplaceEnvironmentVariables.sh ./src/main/resources/db/liquibase.properties.in ./src/main/resources/db/liquibase.properties
-	mvn liquibase:update
+	mvn $(MVN_QUIET) liquibase:update
 
 #add -X param temporarily to mvn-build command to debug mvn execution
 build: build-info config run-liquibase
