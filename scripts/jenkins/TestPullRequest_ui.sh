@@ -8,5 +8,4 @@ cd $HOOT_HOME
 
 hoot --version --debug
 
-export HOOT_TEST_DIFF=--diff
-time -p make -sj`nproc` ui-test
+time -p make -s ui-test

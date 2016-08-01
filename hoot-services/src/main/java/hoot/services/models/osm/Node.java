@@ -27,6 +27,7 @@
 package hoot.services.models.osm;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,19 +98,19 @@ public class Node extends Element {
      * the bbox.
      *
      * @return a bounding box
-     * @throws Exception
-     *             if the element has invalid coordinates
      */
     @Override
-    public BoundingBox getBounds() throws Exception {
+    public BoundingBox getBounds() {
         CurrentNodes nodeRecord;
 
         if (record != null) {
             nodeRecord = (CurrentNodes) record;
         }
         else {
-            nodeRecord = new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(currentNodes)
-                    .where(currentNodes.id.eq(getId())).singleResult(currentNodes);
+            nodeRecord = new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+                    .from(currentNodes)
+                    .where(currentNodes.id.eq(getId()))
+                    .singleResult(currentNodes);
         }
 
         return new BoundingBox(nodeRecord.getLongitude(), nodeRecord.getLatitude(), nodeRecord.getLongitude(),
@@ -131,8 +132,10 @@ public class Node extends Element {
         // This seems redundant when compared to Element::getElementRecords
 
         if (!nodeIds.isEmpty()) {
-            return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(currentNodes)
-                    .where(currentNodes.id.in(nodeIds)).list(currentNodes);
+            return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+                    .from(currentNodes)
+                    .where(currentNodes.id.in(nodeIds))
+                    .list(currentNodes);
         }
 
         return new ArrayList<>();
@@ -143,10 +146,9 @@ public class Node extends Element {
      *
      * @param xml
      *            XML data to construct the element from
-     * @throws Exception
      */
     @Override
-    public void fromXml(org.w3c.dom.Node xml) throws Exception {
+    public void fromXml(org.w3c.dom.Node xml) {
         logger.debug("Parsing node...");
 
         NamedNodeMap xmlAttributes = xml.getAttributes();
@@ -166,7 +168,7 @@ public class Node extends Element {
         double latitude = Double.parseDouble(xmlAttributes.getNamedItem("lat").getNodeValue());
         double longitude = Double.parseDouble(xmlAttributes.getNamedItem("lon").getNodeValue());
         if (!GeoUtils.coordsInWorld(latitude, longitude)) {
-            throw new Exception("Coordinates for node with ID: " + getId() + " not within world boundary.");
+            throw new RuntimeException("Coordinates for node with ID: " + getId() + " not within world boundary.");
         }
 
         // If the node is being deleted, we still need to make sure that the
@@ -185,7 +187,7 @@ public class Node extends Element {
     }
 
     @Override
-    public void checkAndFailIfUsedByOtherObjects() throws Exception {
+    public void checkAndFailIfUsedByOtherObjects() throws OSMAPIAlreadyDeletedException, OSMAPIPreconditionException {
         if (!super.getVisible()) {
             throw new OSMAPIAlreadyDeletedException("Node with ID = " + super.getId() + " has been already deleted "
                     + "from map with ID = " + getMapId());
@@ -194,7 +196,9 @@ public class Node extends Element {
         // From the Rails port of OSM API:
         // ways = Way.joins(:way_nodes).where(:visible => true, :current_way_nodes => { :node_id => id }).order(:id)
         SQLQuery owningWaysQuery = new SQLQuery(super.getDbConnection(), DbUtils.getConfiguration(super.getMapId()))
-                .distinct().from(currentWays).join(currentWayNodes).on(currentWays.id.eq(currentWayNodes.wayId))
+                .distinct()
+                .from(currentWays)
+                .join(currentWayNodes).on(currentWays.id.eq(currentWayNodes.wayId))
                 .where(currentWays.visible.eq(true).and(currentWayNodes.nodeId.eq(super.getId())));
 
         Set<Long> owningWayIds = new TreeSet<>(owningWaysQuery.list(currentWayNodes.wayId));
@@ -208,7 +212,8 @@ public class Node extends Element {
         // rels = Relation.joins(:relation_members).where(:visible => true,
         // :current_relation_members => { :member_type => "Node", :member_id => id }).
         SQLQuery owningRelationsQuery = new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).distinct()
-                .from(currentRelations).join(currentRelationMembers)
+                .from(currentRelations)
+                .join(currentRelationMembers)
                 .on(currentRelations.id.eq(currentRelationMembers.relationId))
                 .where(currentRelations.visible.eq(true)
                         .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node))
@@ -239,11 +244,10 @@ public class Node extends Element {
      * @param addChildren
      *            ignored by Node
      * @return an XML node
-     * @throws Exception
      */
     @Override
     public org.w3c.dom.Element toXml(org.w3c.dom.Element parentXml, long modifyingUserId,
-            String modifyingUserDisplayName, boolean multiLayerUniqueElementIds, boolean addChildren) throws Exception {
+            String modifyingUserDisplayName, boolean multiLayerUniqueElementIds, boolean addChildren) {
         org.w3c.dom.Element element = super.toXml(parentXml, modifyingUserId, modifyingUserDisplayName,
                 multiLayerUniqueElementIds, addChildren);
         CurrentNodes nodeRecord = (CurrentNodes) record;
@@ -375,10 +379,9 @@ public class Node extends Element {
      * @param conn
      *            JDBC Connection
      * @return ID of the newly created node
-     * @throws Exception
      */
     public static long insertNew(long changesetId, long mapId, double latitude, double longitude,
-            java.util.Map<String, String> tags, Connection conn) throws Exception {
+            java.util.Map<String, String> tags, Connection conn) {
         long nextNodeId = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
                 .uniqueResult(SQLExpressions.nextval(Long.class, "current_nodes_id_seq"));
         insertNew(nextNodeId, changesetId, mapId, latitude, longitude, tags, conn);
@@ -403,10 +406,9 @@ public class Node extends Element {
      *            element tags
      * @param conn
      *            JDBC Connection
-     * @throws Exception
      */
     public static void insertNew(long nodeId, long changesetId, long mapId, double latitude, double longitude,
-            java.util.Map<String, String> tags, Connection conn) throws Exception {
+            java.util.Map<String, String> tags, Connection conn) {
         // querydsl does not support hstore so using jdbc
 
         String strKv = "";
@@ -434,6 +436,9 @@ public class Node extends Element {
 
         try (Statement stmt = conn.createStatement()){
             stmt.executeUpdate(sql);
+        }
+        catch (SQLException e) {
+            throw new RuntimeException("Error inserting into the database!", e);
         }
     }
 }

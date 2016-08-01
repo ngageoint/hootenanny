@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
 import static hoot.services.HootProperties.*;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +38,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
@@ -53,12 +54,10 @@ import com.mysema.query.sql.RelationalPathBase;
 import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
 
-import hoot.services.utils.DbUtils;
-import hoot.services.utils.DbUtils.EntityChangeType;
-import hoot.services.utils.DbUtils.RecordBatchType;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.db2.QCurrentWayNodes;
+import hoot.services.exceptions.osm.OSMAPIAlreadyDeletedException;
 import hoot.services.exceptions.osm.OSMAPIPreconditionException;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
@@ -66,6 +65,9 @@ import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.XmlSerializable;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.DbUtils.EntityChangeType;
+import hoot.services.utils.DbUtils.RecordBatchType;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -81,8 +83,9 @@ import hoot.services.utils.XmlDocumentBuilder;
  * intuitive, unfortunately, but hopefully should result in increased write
  * performance.
  * <p>
+ *
  * //TODO: All element type specific db writing code should be made generic
- * again like it was before the jooq to querydsl conversion.
+ * //TODO: again like it was before the jooq to querydsl conversion.
  */
 public class ChangesetDbWriter {
     private static final Logger logger = LoggerFactory.getLogger(ChangesetDbWriter.class);
@@ -158,7 +161,7 @@ public class ChangesetDbWriter {
     }
 
     private long getOldElementId(NamedNodeMap nodeAttributes, EntityChangeType entityChangeType,
-            List<Long> oldElementIds) throws Exception {
+            List<Long> oldElementIds) {
         long oldElementId = Long.parseLong(nodeAttributes.getNamedItem("id").getNodeValue());
 
         // make sure request has no duplicate IDs for new elements
@@ -166,14 +169,15 @@ public class ChangesetDbWriter {
         // updating the same node twice could be allowed (not sure if rails port does), but I'm
         // going to not allow that for now.
         if (oldElementIds.contains(oldElementId)) {
-            throw new Exception("Duplicate OSM element ID: " + oldElementId + " in changeset " + requestChangesetId);
+            throw new IllegalArgumentException("Duplicate OSM element ID: " + oldElementId +
+                    " in changeset " + requestChangesetId);
         }
 
         if (entityChangeType == EntityChangeType.CREATE) {
             // by convention, new element IDs should have a negative value
             if (oldElementId >= 0) {
-                throw new Exception("Invalid OSM element ID for create: " + oldElementId + " for " + "changeset: "
-                        + requestChangesetId + ".  Use a negative ID value.");
+                throw new IllegalArgumentException("Invalid OSM element ID for create: " +
+                        oldElementId + " for " + "changeset: " + requestChangesetId + ".  Use a negative ID value.");
             }
         }
 
@@ -200,10 +204,9 @@ public class ChangesetDbWriter {
      *            type of request database change to be performed on the
      *            elements
      * @return an element
-     * @throws Exception
      */
     private Element parseElement(Node xml, long oldId, long newId, ElementType elementType,
-            EntityChangeType entityChangeType) throws Exception {
+            EntityChangeType entityChangeType) {
 
         Element element = ElementFactory.create(requestChangesetMapId, elementType, conn);
         element.setId(newId);
@@ -230,8 +233,7 @@ public class ChangesetDbWriter {
         return element;
     }
 
-    private long getNextElementId(ElementType elementType) throws InstantiationException, IllegalAccessException,
-            ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
+    private long getNextElementId(ElementType elementType) {
 
         long nextElementId = new SQLQuery(conn, DbUtils.getConfiguration(requestChangesetMapId))
                 .uniqueResult(SQLExpressions.nextval(Long.class, "current_" + elementType.toString().toLowerCase()
@@ -251,7 +253,8 @@ public class ChangesetDbWriter {
 
         if (recordExistsWithSameId) {
             long highestElementId = new SQLQuery(conn, DbUtils.getConfiguration(requestChangesetMapId))
-                    .from(prototypeElement.getElementTable()).orderBy(prototypeElement.getElementIdField().desc())
+                    .from(prototypeElement.getElementTable())
+                    .orderBy(prototypeElement.getElementIdField().desc())
                     .singleResult(prototypeElement.getElementIdField());
 
             nextElementId = highestElementId + 1;
@@ -274,23 +277,18 @@ public class ChangesetDbWriter {
      * @param deleteIfUnused
      *            see description in writeDiff
      * @return collection of elements corresponding to the records to be updated
-     * @throws Exception
+     * @throws OSMAPIPreconditionException
+     * @throws OSMAPIAlreadyDeletedException
      */
     private List<Element> parseElements(NodeList xml, ElementType elementType, EntityChangeType entityChangeType,
-            boolean deleteIfUnused) throws Exception {
+            boolean deleteIfUnused) throws OSMAPIPreconditionException, OSMAPIAlreadyDeletedException {
         logger.debug("Parsing elements...");
 
         long nextElementId = -1;
 
         // no need to get the next element ID from the database unless we are creating a new one
         if ((entityChangeType == EntityChangeType.CREATE) && (elementType != ElementType.Changeset)) {
-            try {
-                nextElementId = getNextElementId(elementType);
-            }
-            catch (Exception e) {
-                throw new Exception("Error retrieving next new element ID for element type: " + elementType
-                        + " for changeset: " + requestChangesetId + " (" + e.getMessage() + ")", e);
-            }
+            nextElementId = getNextElementId(elementType);
         }
 
         List<Element> changesetDiffElements = new ArrayList<>();
@@ -328,6 +326,9 @@ public class ChangesetDbWriter {
                     else {
                         throw e; // re-throw the error since 'if-unused' is not specified.
                     }
+                }
+                catch (OSMAPIAlreadyDeletedException e) {
+                    throw e;
                 }
             }
 
@@ -390,7 +391,6 @@ public class ChangesetDbWriter {
      * @param changesetDoc
      *            changeset contents
      * @return changeset upload response
-     * @throws Exception
      */
     public Document write(long mapId, long changesetId, Document changesetDoc) throws Exception {
         logger.debug("Uploading data for changeset with ID: {} ...", changesetId);
@@ -400,7 +400,7 @@ public class ChangesetDbWriter {
         changeset.verifyAvailability();
 
         if (changeset.requestChangesExceedMaxElementThreshold(changesetDoc)) {
-            throw new Exception("Changeset maximum element threshold exceeded.");
+            throw new RuntimeException("Changeset maximum element threshold exceeded.");
         }
 
         requestChangesetMapId = mapId;
@@ -430,7 +430,6 @@ public class ChangesetDbWriter {
      * @param changeset
      *            changeset contents
      * @return changeset upload response
-     * @throws Exception
      */
     public Document write(long mapId, long changesetId, String changeset) throws Exception {
         Document changesetDoc;
@@ -438,161 +437,158 @@ public class ChangesetDbWriter {
             changesetDoc = ChangesetUploadXmlValidator.parseAndValidate(changeset);
         }
         catch (Exception e) {
-            throw new Exception("Error parsing changeset diff data: " + StringUtils.abbreviate(changeset, 100) + " ("
-                    + e.getMessage() + ")", e);
+            throw new RuntimeException("Error parsing changeset diff data: " +
+                    StringUtils.abbreviate(changeset, 100) + " (" + e.getMessage() + ")", e);
         }
 
         return write(mapId, changesetId, changesetDoc);
     }
 
     private List<Element> write(Document changesetDoc) throws Exception {
-        logger.debug(XmlDocumentBuilder.toString(changesetDoc));
+            logger.debug(XmlDocumentBuilder.toString(changesetDoc));
 
-        ChangesetErrorChecker changesetErrorChecker = new ChangesetErrorChecker(changesetDoc, requestChangesetMapId,
-                conn);
-        dbNodeCache = changesetErrorChecker.checkForElementExistenceErrors();
-        changesetErrorChecker.checkForVersionErrors();
-        changesetErrorChecker.checkForElementVisibilityErrors();
+            ChangesetErrorChecker changesetErrorChecker = new ChangesetErrorChecker(changesetDoc, requestChangesetMapId,
+                    conn);
+            dbNodeCache = changesetErrorChecker.checkForElementExistenceErrors();
+            changesetErrorChecker.checkForVersionErrors();
+            changesetErrorChecker.checkForElementVisibilityErrors();
 
-        initParsedElementCache();
+            initParsedElementCache();
 
-        // The "if-unused" attribute in the delete tag prevents any element
-        // being used by another element from being deleted (e.g. node can't be deleted that is still
-        // being used by a way or relation, etc.); its attribute value is ignored; only the presence
-        // of the attribute or lack thereof is looked at. This seems a little confusing to me,
-        // but that's how the OSM rails port parses it, and I'm trying to stay consistent with
-        // what it does when possible.
-        logger.debug("Changeset delete unused check...");
-        boolean deleteIfUnused = false;
-        Node deleteXml = XPathAPI.selectSingleNode(changesetDoc, "//osmChange/delete");
-        if ((deleteXml != null) && deleteXml.hasAttributes()
-                && (deleteXml.getAttributes().getNamedItem("if-unused") != null)) {
-            deleteIfUnused = true;
-        }
-
-        logger.debug("Inserting new OSM elements and updating existing OSM elements...");
-
-        // By storing the elements and the element records in two different
-        // collections, changesetDiffElements and recordsToStore, data is being duplicated
-        // here since Element already has a copy of the UpdatableRecord. However, this prevents
-        // having to parse through the records a second time to collect them to pass on to the database
-        // with the batch method. This is wasteful of memory, so perhaps there is a better way to do this.
-        List<Element> changesetDiffElements = new ArrayList<>();
-        long changesetDiffElementsSize = 0;
-
-        // Process on entity change type at a time, different database update
-        // types must be batched separately (inserts/updates/deletes).
-        for (EntityChangeType entityChangeType : EntityChangeType.values()) {
-            // Process one element type at a time. For create/modify operations
-            // we want to make sure elements that contain an element type are processed after that
-            // element type (ways contain nodes, so process ways after nodes). This corresponds to the
-            // default ordering of ElementType. For delete operations we want to go in the reverse order.
-            List<ElementType> elementTypeValues = Arrays.asList(ElementType.values());
-
-            if (entityChangeType == EntityChangeType.DELETE) {
-                Collections.reverse(elementTypeValues);
+            // The "if-unused" attribute in the delete tag prevents any element
+            // being used by another element from being deleted (e.g. node can't be deleted that is still
+            // being used by a way or relation, etc.); its attribute value is ignored; only the presence
+            // of the attribute or lack thereof is looked at. This seems a little confusing to me,
+            // but that's how the OSM rails port parses it, and I'm trying to stay consistent with
+            // what it does when possible.
+            logger.debug("Changeset delete unused check...");
+            boolean deleteIfUnused = false;
+            Node deleteXml = XPathAPI.selectSingleNode(changesetDoc, "//osmChange/delete");
+            if ((deleteXml != null) && deleteXml.hasAttributes()
+                    && (deleteXml.getAttributes().getNamedItem("if-unused") != null)) {
+                deleteIfUnused = true;
             }
 
-            for (ElementType elementType : elementTypeValues) {
-                if (elementType != ElementType.Changeset) {
-                    logger.debug("Parsing {} for {}", entityChangeType, elementType);
+            logger.debug("Inserting new OSM elements and updating existing OSM elements...");
 
-                    // parse the elements from the request XML for the given element type
-                    changesetDiffElements.addAll(parseElements(
-                            XPathAPI.selectNodeList(changesetDoc,
-                                    "//osmChange/" + entityChangeType.toString().toLowerCase() + "/"
-                                            + elementType.toString().toLowerCase()),
-                            elementType, entityChangeType, deleteIfUnused));
+            // By storing the elements and the element records in two different
+            // collections, changesetDiffElements and recordsToStore, data is being duplicated
+            // here since Element already has a copy of the UpdatableRecord. However, this prevents
+            // having to parse through the records a second time to collect them to pass on to the database
+            // with the batch method. This is wasteful of memory, so perhaps there is a better way to do this.
+            List<Element> changesetDiffElements = new ArrayList<>();
+            long changesetDiffElementsSize = 0;
 
-                    // If any elements were actually parsed for this element and entity update type, update the
-                    // database with the parsed elements, their related records, and their tags
-                    if (changesetDiffElements.size() > changesetDiffElementsSize) {
-                        changesetDiffElementsSize += (changesetDiffElements.size() - changesetDiffElementsSize);
+            // Process on entity change type at a time, different database update
+            // types must be batched separately (inserts/updates/deletes).
+            for (EntityChangeType entityChangeType : EntityChangeType.values()) {
+                // Process one element type at a time. For create/modify operations
+                // we want to make sure elements that contain an element type are processed after that
+                // element type (ways contain nodes, so process ways after nodes). This corresponds to the
+                // default ordering of ElementType. For delete operations we want to go in the reverse order.
+                List<ElementType> elementTypeValues = Arrays.asList(ElementType.values());
 
-                        // don't need to clear tags or related records out if
-                        // this is a new element, since they won't exist yet
-                        if (entityChangeType != EntityChangeType.CREATE) {
-                            // Clear out *all* related elements (e.g. way nodes
-                            // for node, relation members for relation, etc.) first (this is how the rails port
-                            // does it, although while it seems necessary for ways, it doesn't seem necessary to
-                            // me for relations). Any related elements to be created/retained specified in the
-                            // request have already been added to relatedRecordsToStore and will be inserted into
-                            // the db following this.
-                            Element prototypeElement = ElementFactory.create(requestChangesetMapId,
-                                    elementType, conn);
+                if (entityChangeType == EntityChangeType.DELETE) {
+                    Collections.reverse(elementTypeValues);
+                }
 
-                            // Elements which don't have related elements, will return a null for the
-                            // relatedRecordType.
-                            RelationalPathBase<?> relatedRecordTable = prototypeElement.getRelatedRecordTable();
-                            Element.removeRelatedRecords(requestChangesetMapId, relatedRecordTable,
-                                    prototypeElement.getRelatedRecordJoinField(), parsedElementIds,
-                                    relatedRecordTable != null, conn);
-                        }
+                for (ElementType elementType : elementTypeValues) {
+                    if (elementType != ElementType.Changeset) {
+                        logger.debug("Parsing {} for {}", entityChangeType, elementType);
 
-                        // TODO: really need to be flushing these batch
-                        // executions after they get to be a certain
-                        // size to avoid memory problems; see maxRecordBatchSize
+                        // parse the elements from the request XML for the given element type
+                        changesetDiffElements.addAll(parseElements(
+                                XPathAPI.selectNodeList(changesetDoc,
+                                        "//osmChange/" + entityChangeType.toString().toLowerCase() + "/"
+                                                + elementType.toString().toLowerCase()),
+                                elementType, entityChangeType, deleteIfUnused));
 
-                        // TODO: make this code element generic; reinstate the
-                        // DbSerializable interface??
-                        if (elementType == ElementType.Node) {
-                            DbUtils.batchRecordsDirectNodes(requestChangesetMapId, recordsToModify,
-                                    DbUtils.recordBatchTypeForEntityChangeType(entityChangeType), conn,
-                                    maxRecordBatchSize);
-                        }
-                        else if (elementType == ElementType.Way) {
-                            DbUtils.batchRecordsDirectWays(requestChangesetMapId, recordsToModify,
-                                    DbUtils.recordBatchTypeForEntityChangeType(entityChangeType), conn,
-                                    maxRecordBatchSize);
-                        }
-                        else if (elementType == ElementType.Relation) {
-                            DbUtils.batchRecordsDirectRelations(requestChangesetMapId, recordsToModify,
-                                    DbUtils.recordBatchTypeForEntityChangeType(entityChangeType), conn,
-                                    maxRecordBatchSize);
-                        }
+                        // If any elements were actually parsed for this element and entity update type, update the
+                        // database with the parsed elements, their related records, and their tags
+                        if (changesetDiffElements.size() > changesetDiffElementsSize) {
+                            changesetDiffElementsSize += (changesetDiffElements.size() - changesetDiffElementsSize);
 
-                        // make the database updates for the element records
-                        recordsToModify.clear();
-                        parsedElementIds.clear();
+                            // don't need to clear tags or related records out if
+                            // this is a new element, since they won't exist yet
+                            if (entityChangeType != EntityChangeType.CREATE) {
+                                // Clear out *all* related elements (e.g. way nodes
+                                // for node, relation members for relation, etc.) first (this is how the rails port
+                                // does it, although while it seems necessary for ways, it doesn't seem necessary to
+                                // me for relations). Any related elements to be created/retained specified in the
+                                // request have already been added to relatedRecordsToStore and will be inserted into
+                                // the db following this.
+                                Element prototypeElement = ElementFactory.create(requestChangesetMapId,
+                                        elementType, conn);
 
-                        // Add the related records after the parent element records to keep from violating
-                        // foreign key constraints. Any existing related records
-                        // for this element have already been completely cleared.
-                        // TODO: make this code element generic; reinstate the
-                        // DbSerializable interface??
-                        if ((relatedRecordsToStore != null) && (!relatedRecordsToStore.isEmpty())) {
+                                // Elements which don't have related elements, will return a null for the
+                                // relatedRecordType.
+                                RelationalPathBase<?> relatedRecordTable = prototypeElement.getRelatedRecordTable();
+                                Element.removeRelatedRecords(requestChangesetMapId, relatedRecordTable,
+                                        prototypeElement.getRelatedRecordJoinField(), parsedElementIds,
+                                        relatedRecordTable != null, conn);
+                            }
+
+                            // TODO: really need to be flushing these batch executions after they get
+                            // TODO: to be a certain size to avoid memory problems; see maxRecordBatchSize
+                            // TODO: make this code element generic; reinstate the DbSerializable interface??
                             if (elementType == ElementType.Node) {
-                                DbUtils.batchRecordsDirectNodes(requestChangesetMapId, relatedRecordsToStore,
-                                        RecordBatchType.INSERT, conn, maxRecordBatchSize);
+                                DbUtils.batchRecordsDirectNodes(requestChangesetMapId, recordsToModify,
+                                        recordBatchTypeForEntityChangeType(entityChangeType), conn,
+                                        maxRecordBatchSize);
                             }
                             else if (elementType == ElementType.Way) {
-                                DbUtils.batchRecords(requestChangesetMapId, relatedRecordsToStore,
-                                        QCurrentWayNodes.currentWayNodes, null, RecordBatchType.INSERT, conn,
+                                DbUtils.batchRecordsDirectWays(requestChangesetMapId, recordsToModify,
+                                        recordBatchTypeForEntityChangeType(entityChangeType), conn,
                                         maxRecordBatchSize);
                             }
                             else if (elementType == ElementType.Relation) {
-                                DbUtils.batchRecords(requestChangesetMapId, relatedRecordsToStore,
-                                        QCurrentRelationMembers.currentRelationMembers, null, RecordBatchType.INSERT,
-                                        conn, maxRecordBatchSize);
+                                DbUtils.batchRecordsDirectRelations(requestChangesetMapId, recordsToModify,
+                                        recordBatchTypeForEntityChangeType(entityChangeType), conn,
+                                        maxRecordBatchSize);
                             }
-                            relatedRecordsToStore.clear();
+
+                            // make the database updates for the element records
+                            recordsToModify.clear();
+                            parsedElementIds.clear();
+
+                            // Add the related records after the parent element records to keep from violating
+                            // foreign key constraints. Any existing related records
+                            // for this element have already been completely cleared.
+                            // TODO: make this code element generic; reinstate the
+                            // DbSerializable interface??
+                            if ((relatedRecordsToStore != null) && (!relatedRecordsToStore.isEmpty())) {
+                                if (elementType == ElementType.Node) {
+                                    DbUtils.batchRecordsDirectNodes(requestChangesetMapId, relatedRecordsToStore,
+                                            RecordBatchType.INSERT, conn, maxRecordBatchSize);
+                                }
+                                else if (elementType == ElementType.Way) {
+                                    DbUtils.batchRecords(requestChangesetMapId, relatedRecordsToStore,
+                                            QCurrentWayNodes.currentWayNodes, null, RecordBatchType.INSERT, conn,
+                                            maxRecordBatchSize);
+                                }
+                                else if (elementType == ElementType.Relation) {
+                                    DbUtils.batchRecords(requestChangesetMapId, relatedRecordsToStore,
+                                            QCurrentRelationMembers.currentRelationMembers, null, RecordBatchType.INSERT,
+                                            conn, maxRecordBatchSize);
+                                }
+                                relatedRecordsToStore.clear();
+                            }
                         }
-                    }
+                      }
                 }
             }
-        }
 
-        changeset.updateNumChanges((int) changesetDiffElementsSize);
+            changeset.updateNumChanges((int) changesetDiffElementsSize);
 
-        // Even if a bounds is specified in the incoming changeset diff data, it
-        // should be ignored, per OSM docs.
-        BoundingBox newChangesetBounds = changeset.getBounds();
-        newChangesetBounds.expand(diffBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
+            // Even if a bounds is specified in the incoming changeset diff data, it
+            // should be ignored, per OSM docs.
+            BoundingBox newChangesetBounds = changeset.getBounds();
+            newChangesetBounds.expand(diffBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
 
-        changeset.setBounds(newChangesetBounds);
-        changeset.updateExpiration();
+            changeset.setBounds(newChangesetBounds);
+            changeset.updateExpiration();
 
-        return changesetDiffElements;
+            return changesetDiffElements;
     }
 
     /**
@@ -605,14 +601,18 @@ public class ChangesetDbWriter {
      *            changeset request
      * @return a changeset upload response XML document
      */
-    private static Document writeResponse(long changesetId, List<XmlSerializable> changesetDiffElements)
-            throws Exception {
+    private static Document writeResponse(long changesetId, List<XmlSerializable> changesetDiffElements) {
         logger.debug("Building response...");
 
-        Document responseDoc = XmlDocumentBuilder.create();
+        Document responseDoc = null;
+        try {
+            responseDoc = XmlDocumentBuilder.create();
+        }
+        catch (ParserConfigurationException e) {
+            throw new RuntimeException("Error creating XmlDocumentBuilder!", e);
+        }
 
         org.w3c.dom.Element osmElement = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
-
         org.w3c.dom.Element diffResultXmlElement = responseDoc.createElement("diffResult");
 
         diffResultXmlElement.setAttribute("generator", GENERATOR);
@@ -626,5 +626,32 @@ public class ChangesetDbWriter {
         responseDoc.appendChild(osmElement);
 
         return responseDoc;
+    }
+
+    /**
+     * Returns a record batch type given the corresponding entity change type
+     *
+     * @param entityChangeType
+     *            an entity change type
+     * @return a record batch type
+     */
+    private static RecordBatchType recordBatchTypeForEntityChangeType(EntityChangeType entityChangeType) {
+        RecordBatchType rbType = null;
+
+        switch (entityChangeType) {
+            case CREATE:
+                rbType = RecordBatchType.INSERT;
+                break;
+
+            case MODIFY:
+                rbType = RecordBatchType.UPDATE;
+                break;
+
+            case DELETE:
+                rbType = RecordBatchType.DELETE;
+                break;
+        }
+
+        return rbType;
     }
 }

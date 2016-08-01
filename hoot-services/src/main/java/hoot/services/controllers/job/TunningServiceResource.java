@@ -35,7 +35,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -55,9 +54,9 @@ public class TunningServiceResource {
     @POST
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response process(String params) {
-        String jobId = UUID.randomUUID().toString();
+    @Produces(MediaType.APPLICATION_JSON)
+    public JobId process(String params) {
+        String uuid = UUID.randomUUID().toString();
 
         try {
             JSONParser jsonParser = new JSONParser();
@@ -70,16 +69,16 @@ public class TunningServiceResource {
             command.put("inputtype", inputtype);
             command.put("execImpl", "TunningService");
 
-            (new JobExecutioner(jobId, command)).start();
+            (new JobExecutioner(uuid, command)).start();
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception e) {
             String message = "Tuning Service error: " + e.getMessage();
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            throw new WebApplicationException(e, Response.serverError().entity(message).build());
         }
 
-        JSONObject res = new JSONObject();
-        res.put("jobId", jobId);
-
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return new JobId(uuid);
     }
 }

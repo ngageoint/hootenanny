@@ -107,8 +107,8 @@ public class ExportJobResource extends JobControllerBase {
     @POST
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response process(String params) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public JobId process(String params) {
         String jobId = UUID.randomUUID().toString();
         jobId = "ex_" + jobId.replace("-", "");
 
@@ -139,6 +139,7 @@ public class ExportJobResource extends JobControllerBase {
                 commandArgs.add(arg);
 
                 JSONObject osm2orgCommand = _createPostBody(commandArgs);
+
                 // this may need change in the future if we decided to use user
                 // defined ouputname..
                 String outname = jobId;
@@ -188,22 +189,21 @@ public class ExportJobResource extends JobControllerBase {
                 postJobRquest(jobId, argStr);
             }
         }
-        catch (Exception ex) {
-            String msg = "Error exporting data: " + ex;
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error exporting data! params = " + params;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject res = new JSONObject();
-        res.put("jobid", jobId);
-
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return new JobId(jobId);
     }
 
-    JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, Connection conn)
-            throws Exception {
+    JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, Connection conn) {
         if (!Boolean.parseBoolean(OSM_API_DB_ENABLED)) {
             String msg = "Attempted to export to an OSM API database but OSM API database support is disabled";
-            throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(Response.serverError().entity(msg).build());
         }
 
         JSONArray commandArgs = new JSONArray();
@@ -276,7 +276,7 @@ public class ExportJobResource extends JobControllerBase {
     }
 
     // adding this to satisfy the mock
-    BoundingBox getMapBounds(Map map) throws Exception {
+    BoundingBox getMapBounds(Map map) {
         return map.getBounds();
     }
 
@@ -294,7 +294,7 @@ public class ExportJobResource extends JobControllerBase {
         commandArgs.add(arg);
     }
 
-    private void setAoi(Map conflatedMap, JSONArray commandArgs) throws Exception {
+    private void setAoi(Map conflatedMap, JSONArray commandArgs) {
         BoundingBox bounds = getMapBounds(conflatedMap);
         JSONObject arg = new JSONObject();
         arg.put("changesetaoi", bounds.getMinLon() + "," + bounds.getMinLat() +
@@ -345,12 +345,14 @@ public class ExportJobResource extends JobControllerBase {
         }
         catch (NativeInterfaceException ne) {
             int nStat = ne.getExceptionCode().toInt();
-            logger.error(ne.getMessage(), ne);
             return Response.status(nStat).entity(ne.getMessage()).build();
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error exporting data: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         String outFileName = id;
@@ -378,9 +380,10 @@ public class ExportJobResource extends JobControllerBase {
      */
     @GET
     @Path("/wfs/remove/{id}")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response removeWfsResource(@PathParam("id") String id) {
-        JSONObject ret = new JSONObject();
+        JSONObject entity = new JSONObject();
+
         try {
             WfsManager wfsMan = new WfsManager();
             wfsMan.removeWfsResource(id);
@@ -388,13 +391,17 @@ public class ExportJobResource extends JobControllerBase {
             List<String> tbls = DataDefinitionManager.getTablesList(WFS_STORE_DB, id);
             DataDefinitionManager.deleteTables(tbls, WFS_STORE_DB);
         }
-        catch (Exception ex) {
-            String msg = "Error removing WFS resource: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error removing WFS resource with id = " + id;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        ret.put("id", id);
-        return Response.ok(ret.toString(), MediaType.TEXT_PLAIN).build();
+        entity.put("id", id);
+
+        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
     /**
@@ -406,24 +413,29 @@ public class ExportJobResource extends JobControllerBase {
      */
     @GET
     @Path("/wfs/resources")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getWfsResources() {
-        JSONArray srvList = new JSONArray();
+        JSONArray wfsResources = new JSONArray();
         try {
             List<String> list = WfsManager.getAllWfsServices();
 
-            for (String wfsResource : list) {
-                JSONObject o = new JSONObject();
-                o.put("id", wfsResource);
-                srvList.add(o);
+            if (list != null) {
+                for (String wfsResource : list) {
+                    JSONObject resource = new JSONObject();
+                    resource.put("id", wfsResource);
+                    wfsResources.add(resource);
+                }
             }
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            String msg = "Error retrieving WFS resource list: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            String msg = "Error retrieving WFS resource list!";
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(srvList.toString(), MediaType.TEXT_PLAIN).build();
+        return Response.ok(wfsResources.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
     /**
@@ -436,38 +448,41 @@ public class ExportJobResource extends JobControllerBase {
      */
     @GET
     @Path("/resources")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getExportResources() {
         String transExtPath = HOME_FOLDER + "/" + "/plugins-local/script/utp";
         if ((TRANSLATION_EXT_PATH != null) && (!TRANSLATION_EXT_PATH.isEmpty())) {
             transExtPath = TRANSLATION_EXT_PATH;
         }
 
-        JSONArray srvList = new JSONArray();
+        JSONArray exportResources = new JSONArray();
         try {
             JSONObject o = new JSONObject();
             o.put("name", "TDS");
             o.put("description", "LTDS 4.0");
-            srvList.add(o);
+            exportResources.add(o);
 
             o = new JSONObject();
             o.put("name", "MGCP");
             o.put("description", "MGCP");
-            srvList.add(o);
+            exportResources.add(o);
 
             File f = new File(transExtPath);
             if (f.exists() && f.isDirectory()) {
                 o = new JSONObject();
                 o.put("name", "UTP");
                 o.put("description", "UTP");
-                srvList.add(o);
+                exportResources.add(o);
             }
         }
-        catch (Exception ex) {
-            String msg = "Error retrieving exported resource list: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error retrieving exported resource list!";
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(srvList.toString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(exportResources.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 }

@@ -37,10 +37,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,23 +72,23 @@ public class CleanDataResource extends JobControllerBase {
     @POST
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response process(String params) {
-        String jobId = UUID.randomUUID().toString();
+    @Produces(MediaType.APPLICATION_JSON)
+    public JobId process(String params) {
+        String uuid = UUID.randomUUID().toString();
 
         try {
             JSONArray commandArgs = parseParams(params);
             String argStr = createPostBody(commandArgs);
-            postJobRquest(jobId, argStr);
+            postJobRquest(uuid, argStr);
         }
-        catch (Exception ex) {
-            String msg = "Error processing data clean request: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error processing data clean request: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject res = new JSONObject();
-        res.put("jobid", jobId);
-
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return new JobId(uuid);
     }
 }

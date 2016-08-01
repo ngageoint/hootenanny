@@ -43,7 +43,6 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -81,11 +80,8 @@ public class ExportJobResourceTest {
 
         ExportJobResource spy = Mockito.spy(new ExportJobResource());
         Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
-        Response resp = spy.process(params);
-        String result = resp.getEntity().toString();
-        JSONParser parser = new JSONParser();
-        JSONObject o = (JSONObject) parser.parse(result);
-        String jobId = o.get("jobid").toString();
+        JobId resp = spy.process(params);
+        String jobId = resp.getJobid();
 
         jobArgs = jobArgs.replaceAll("f9a8d471", jobId);
         verify(spy).postJobRquest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
@@ -113,11 +109,8 @@ public class ExportJobResourceTest {
 
         ExportJobResource spy = Mockito.spy(new ExportJobResource());
         Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
-        Response resp = spy.process(params);
-        String result = resp.getEntity().toString();
-        JSONParser parser = new JSONParser();
-        JSONObject o = (JSONObject) parser.parse(result);
-        String jobId = o.get("jobid").toString();
+        JobId resp = spy.process(params);
+        String jobId = resp.getJobid();
 
         jobArgs = jobArgs.replaceAll("f9a8d471", jobId);
         verify(spy).postChainJobRquest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
@@ -194,8 +187,7 @@ public class ExportJobResourceTest {
                     .readFileToString(new File(
                             Thread.currentThread()
                                     .getContextClassLoader()
-                                    .getResource(
-                                            "hoot/services/controllers/job/ExportResourceTestExportToOsmApiDbWithTranslationInput.json")
+                                    .getResource("hoot/services/controllers/job/ExportResourceTestExportToOsmApiDbWithTranslationInput.json")
                                     .getPath()));
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());

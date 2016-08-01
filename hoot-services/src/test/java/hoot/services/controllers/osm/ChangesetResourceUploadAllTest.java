@@ -60,6 +60,7 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 
 import hoot.services.UnitTest;
 import hoot.services.utils.DbUtils;
+import hoot.services.utils.MapUtils;
 import hoot.services.utils.PostgresUtils;
 import hoot.services.db2.Changesets;
 import hoot.services.db2.CurrentNodes;
@@ -106,7 +107,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
     @Category(UnitTest.class)
     public void testUploadAll() throws Exception {
         DbUtils.deleteMapRelatedTablesByMapId(mapId);
-        DbUtils.createMap(mapId);
+        MapUtils.createMap(mapId);
 
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
         long changesetId = OsmTestUtils.createTestChangeset(originalBounds);

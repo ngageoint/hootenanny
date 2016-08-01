@@ -8,12 +8,11 @@ cd $HOOT_HOME
 
 hoot --version --debug
 
-export HOOT_TEST_DIFF=--diff
-
 # Run the tests that don't get hit by coverage
 make -sj`nproc` pp-test
 make -sj`nproc` plugins-test
 
+export HOOT_TEST_DIFF=--diff
 # Running glacial tests here because we're not sure core-coverage runs them
 echo "Running glacial tests..."
 bin/HootTest $(HOOT_TEST_DIFF) --glacial

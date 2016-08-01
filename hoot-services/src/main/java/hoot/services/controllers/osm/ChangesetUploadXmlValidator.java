@@ -22,9 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
+
+import javax.xml.transform.TransformerException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
@@ -50,22 +52,27 @@ final class ChangesetUploadXmlValidator {
      * @param changesetXml
      *            an OSM changeset for reviewed items
      */
-    static Document parseAndValidate(String changesetXml) throws Exception {
+    static Document parseAndValidate(String changesetXml) {
         Document changesetDiffDoc;
         try {
             logger.debug("Parsing changeset diff XML: {}", StringUtils.abbreviate(changesetXml, 1000));
             changesetDiffDoc = XmlDocumentBuilder.parse(changesetXml);
         }
         catch (Exception e) {
-            throw new Exception("Error parsing changeset diff data: " + changesetXml + " (" + e.getMessage() + ")", e);
+            throw new RuntimeException("Error parsing changeset diff data: " + changesetXml + " (" + e.getMessage() + ")", e);
         }
 
-        if (XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange").getLength() > 1) {
-            throw new Exception("Only one changeset may be uploaded at a time.");
+        try {
+            if (XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange").getLength() > 1) {
+                throw new IllegalArgumentException("Only one changeset may be uploaded at a time.");
+            }
+        }
+        catch (TransformerException e) {
+            throw new RuntimeException("Error invoking XPathAPI!", e);
         }
 
         if (!changesetHasElements(changesetDiffDoc)) {
-            throw new Exception("No items in uploaded changeset.");
+            throw new IllegalArgumentException("No items in uploaded changeset.");
         }
 
         return changesetDiffDoc;

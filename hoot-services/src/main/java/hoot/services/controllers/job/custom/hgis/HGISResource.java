@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job.custom.hgis;
 
@@ -36,9 +36,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.controllers.job.JobControllerBase;
-import hoot.services.utils.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.models.osm.ModelDaoUtils;
+import hoot.services.utils.DbUtils;
 
 
 /**
@@ -57,13 +57,15 @@ public class HGISResource extends JobControllerBase {
      *
      * @param mapName
      * @return returns true when exists else false
-     * @throws Exception
      */
-    boolean mapExists(String mapName) throws Exception {
+    boolean mapExists(String mapName) {
         boolean exists;
 
         try (Connection connection = DbUtils.createConnection()) {
             exists = (verifyMapExists(mapName, connection) > -1);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Error verifying that map '" + mapName + "' exists!", e);
         }
 
         return exists;
@@ -108,14 +110,13 @@ public class HGISResource extends JobControllerBase {
      * @param mapIdStr
      *            map ID; may be a map ID or unique map name
      * @return the map's numeric ID
-     * @throws Exception
-     *             if the map doesn't exist
      */
-    private static long verifyMapExists(String mapIdStr, Connection connection) throws Exception {
+    private static long verifyMapExists(String mapIdStr, Connection connection) {
         logger.debug("Checking maps table for map with ID: {} ...", mapIdStr);
 
-        // this will throw if it doesn't find the map
         QMaps maps = QMaps.maps;
+
+        // this will throw if it doesn't find the map
         return ModelDaoUtils.getRecordIdForInputString(mapIdStr, connection, maps, maps.id, maps.displayName);
     }
 }

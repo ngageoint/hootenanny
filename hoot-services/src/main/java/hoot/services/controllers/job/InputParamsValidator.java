@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -61,10 +61,9 @@ public class InputParamsValidator extends InputParamsValidatorAbstract {
      * @param defaultValue
      *            a default value to assign to the parameter, if it has no value
      * @return a parameter value
-     * @throws Exception
      */
     public Object validateAndParseInputParam(String name, Object type, Object rangeMin,
-            Object rangeMax, boolean optional, Object defaultValue) throws Exception {
+            Object rangeMax, boolean optional, Object defaultValue) {
 
         // special case
         if (name.equals("geospatialBounds")) {
@@ -76,13 +75,13 @@ public class InputParamsValidator extends InputParamsValidatorAbstract {
 
         Object param = inputParams.get(name);
         if (((param == null) || (StringUtils.trimToNull(String.valueOf(param).trim()) == null)) && !optional) {
-            throw new Exception("Invalid input parameter value.  Required parameter: " + name + " not sent to: "
-                    + ReflectUtils.getCallingClassName());
+            throw new IllegalArgumentException("Invalid input parameter value.  Required parameter: "
+                    + name + " not sent to: " + ReflectUtils.getCallingClassName());
         }
 
         if ((param == null) && (defaultValue != null)) {
             if (!type.getClass().equals(defaultValue.getClass())) {
-                throw new Exception("Invalid input parameter value.  Mismatching input parameter type: "
+                throw new IllegalArgumentException("Invalid input parameter value.  Mismatching input parameter type: "
                         + type + " and default value type: " + defaultValue + "for parameter: "
                         + name + " sent to: " + ReflectUtils.getCallingClassName());
             }
@@ -91,14 +90,15 @@ public class InputParamsValidator extends InputParamsValidatorAbstract {
 
         if (param != null) {
             if (StringUtils.trimToNull(String.valueOf(param).trim()) == null) {
-                throw new Exception(
-                        "Invalid input parameter: " + name + " sent to: " + ReflectUtils.getCallingClassName());
+                throw new IllegalArgumentException("Invalid input parameter: " + name +
+                        " sent to: " + ReflectUtils.getCallingClassName());
             }
 
             return validateAndParseParamValueString(String.valueOf(param).trim(), name, type, rangeMin, rangeMax);
         }
 
         Object paramValue = null;
+
         return paramValue;
     }
 }

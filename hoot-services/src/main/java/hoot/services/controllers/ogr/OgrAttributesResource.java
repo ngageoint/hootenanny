@@ -51,7 +51,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -95,7 +94,7 @@ public class OgrAttributesResource extends JobControllerBase {
      */
     @POST
     @Path("/upload")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response processUpload(@QueryParam("INPUT_TYPE") String inputType,
                                   @Context HttpServletRequest request) {
         JSONObject response = new JSONObject();
@@ -171,7 +170,7 @@ public class OgrAttributesResource extends JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Upload failed for job with id = " + jobId + "!  Cause: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         response.put("jobId", jobId);
@@ -210,7 +209,7 @@ public class OgrAttributesResource extends JobControllerBase {
         }
         catch (Exception ex) {
             String msg = "Error getting attribute: " + id + " Error: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(script, MediaType.TEXT_PLAIN).build();

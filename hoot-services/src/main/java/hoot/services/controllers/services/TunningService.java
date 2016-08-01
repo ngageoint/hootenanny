@@ -39,7 +39,6 @@ import java.util.Map;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONObject;
 import org.openstreetmap.osmosis.core.container.v0_6.EntityContainer;
@@ -60,8 +59,8 @@ import org.slf4j.LoggerFactory;
 import hoot.services.command.CommandResult;
 import hoot.services.command.CommandRunner;
 import hoot.services.command.ICommandRunner;
-import hoot.services.utils.DbUtils;
 import hoot.services.job.Executable;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.FileUtils;
 
 
@@ -105,14 +104,14 @@ public class TunningService implements Executable {
                 }
                 else {
                     String err = result.getStderr();
-                    throw new Exception(err);
+                    throw new RuntimeException(err);
                 }
 
                 tempOutputPath = TEMP_OUTPUT_PATH + "/" + input + ".osm";
 
                 // fortify fix
                 if (!FileUtils.validateFilePath(TEMP_OUTPUT_PATH, tempOutputPath)) {
-                    throw new Exception("input can not contain path.");
+                    throw new RuntimeException("input can not contain path.");
                 }
             }
             else {
@@ -135,7 +134,7 @@ public class TunningService implements Executable {
         }
         catch (Exception ex) {
             String msg = "Tuning Service error: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         finalStatusDetail = res.toString();

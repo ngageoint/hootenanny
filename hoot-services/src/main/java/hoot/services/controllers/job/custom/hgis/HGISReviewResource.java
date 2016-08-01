@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job.custom.hgis;
 
@@ -48,11 +48,10 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.utils.DbUtils;
 import hoot.services.db2.QMaps;
-import hoot.services.exceptions.osm.InvalidResourceParamException;
 import hoot.services.job.JobStatusManager;
 import hoot.services.models.osm.ModelDaoUtils;
+import hoot.services.utils.DbUtils;
 
 
 @Path("/review/custom/HGIS")
@@ -82,22 +81,26 @@ public class HGISReviewResource extends HGISResource {
     @Produces(MediaType.APPLICATION_JSON)
     public PrepareForValidationResponse prepareItemsForValidationReview(PrepareForValidationRequest request) {
         PrepareForValidationResponse res = new PrepareForValidationResponse();
+
+        String src = request.getSourceMap();
+        String output = request.getOutputMap();
+
+        if (src == null) {
+            String msg = "Invalid or empty sourceMap.";
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
+        }
+
+        if (output == null) {
+            String msg = "Invalid or empty outputMap.";
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
+        }
+
+        if (!mapExists(src)) {
+            String msg = "sourceMap does not exist.";
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
+        }
+
         try {
-            String src = request.getSourceMap();
-            String output = request.getOutputMap();
-
-            if (src == null) {
-                throw new InvalidResourceParamException("Invalid or empty sourceMap.");
-            }
-
-            if (output == null) {
-                throw new InvalidResourceParamException("Invalid or empty outputMap.");
-            }
-
-            if (!mapExists(src)) {
-                throw new InvalidResourceParamException("sourceMap does not exist.");
-            }
-
             String jobId = UUID.randomUUID().toString();
             JSONObject validationCommand = _createBashPostBody(createParamObj(src, output));
 
@@ -113,13 +116,12 @@ public class HGISReviewResource extends HGISResource {
 
             res.setJobId(jobId);
         }
-        catch (InvalidResourceParamException ex) {
-            String msg = ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return res;
@@ -140,32 +142,29 @@ public class HGISReviewResource extends HGISResource {
 
     // Warning: do not remove this method even though it will appear as unused in your IDE of choice.
     // The method is invoked reflectively
-    public String updateMapsTag(String mapName) throws Exception {
+    public String updateMapsTag(String mapName) {
         String jobId = UUID.randomUUID().toString();
+        JobStatusManager jobStatusManager = null;
         try (Connection conn = DbUtils.createConnection()) {
-            JobStatusManager jobStatusManager = null;
-            try {
-                jobStatusManager = new JobStatusManager(conn);
-                jobStatusManager.addJob(jobId);
+            jobStatusManager = new JobStatusManager(conn);
+            jobStatusManager.addJob(jobId);
 
-                QMaps maps = QMaps.maps;
-                long mapId = ModelDaoUtils.getRecordIdForInputString(mapName, conn, maps, maps.id, maps.displayName);
+            QMaps maps = QMaps.maps;
+            long mapId = ModelDaoUtils.getRecordIdForInputString(mapName, conn, maps, maps.id, maps.displayName);
 
-                updateMapTagWithReviewType(conn, mapId);
-                jobStatusManager.setComplete(jobId);
-            }
-            catch (Exception e) {
-                jobStatusManager.setFailed(jobId);
-                logger.error(e.getMessage(), e);
-                throw e;
-            }
+            updateMapTagWithReviewType(conn, mapId);
+            jobStatusManager.setComplete(jobId);
+        }
+        catch (SQLException | ReviewMapTagUpdateException e) {
+            jobStatusManager.setFailed(jobId);
+            throw new RuntimeException("Error updating map " + mapName + "'s tags!", e);
         }
 
         return jobId;
     }
 
     private static void updateMapTagWithReviewType(Connection connection, long mapId)
-            throws SQLException, ReviewMapTagUpdateException {
+            throws ReviewMapTagUpdateException {
         Map<String, String> tags = new HashMap<>();
         tags.put("reviewtype", "hgisvalidation");
 

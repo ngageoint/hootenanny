@@ -90,7 +90,7 @@ public class UserResource {
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
-    public Response get(@PathParam("userId") String userId) throws ParserConfigurationException, SQLException {
+    public Response get(@PathParam("userId") String userId) {
         logger.debug("Retrieving user with ID: {} ...", userId.trim());
 
         Document responseDoc = null;
@@ -126,6 +126,10 @@ public class UserResource {
 
             responseDoc = writeResponse(new User(user));
         }
+        catch (SQLException | ParserConfigurationException e) {
+            String message = "Error fetching OSM user data!";
+            throw new WebApplicationException(e, Response.serverError().entity(message).build());
+        }
 
         try {
             logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100));
@@ -154,14 +158,15 @@ public class UserResource {
         try (Connection connection = DbUtils.createConnection()) {
             Users user = getOrSaveByEmail(userEmail, connection);
             if (user == null) {
-                throw new Exception("SQL Insert failed.");
+                String msg = "SQL Insert failed.";
+                throw new WebApplicationException(Response.serverError().entity(msg).build());
             }
 
             response = new UserSaveResponse(user);
         }
-        catch (Exception ex) {
-            String message = "Error saving user: " + " (" + ex.getMessage() + ")";
-            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
+        catch (SQLException e) {
+            String msg = "Error saving user: " + " (" + e.getMessage() + ")";
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return response;
@@ -193,7 +198,6 @@ public class UserResource {
         logger.debug("Building response...");
 
         Document responseDoc = XmlDocumentBuilder.create();
-
         Element osmElement = OsmResponseHeaderGenerator.getOsmHeader(responseDoc);
         Element userElement = user.toXml(osmElement, /* user.numChangesetsModified() */-1);
         osmElement.appendChild(userElement);
@@ -212,7 +216,8 @@ public class UserResource {
     private static Users getOrSaveByEmail(String userEmail, Connection connection) {
         Users ret = (new SQLQuery(connection, DbUtils.getConfiguration()))
                 .from(QUsers.users)
-                .where(QUsers.users.email.equalsIgnoreCase(userEmail)).singleResult(QUsers.users);
+                .where(QUsers.users.email.equalsIgnoreCase(userEmail))
+                .singleResult(QUsers.users);
 
         // none then create
         if (ret == null) {
@@ -220,7 +225,8 @@ public class UserResource {
             if (nCreated > 0) {
                 ret = (new SQLQuery(connection, DbUtils.getConfiguration()))
                         .from(QUsers.users)
-                        .where(QUsers.users.email.equalsIgnoreCase(userEmail)).singleResult(QUsers.users);
+                        .where(QUsers.users.email.equalsIgnoreCase(userEmail))
+                        .singleResult(QUsers.users);
             }
         }
 

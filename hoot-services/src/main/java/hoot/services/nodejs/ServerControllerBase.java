@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.nodejs;
 
@@ -74,7 +74,7 @@ public class ServerControllerBase {
         return serverProc;
     }
 
-    protected void stopServer(String processSignature) throws IOException {
+    public static void stopServer(String processSignature) throws IOException {
         closeAllServers(processSignature);
     }
 
@@ -83,7 +83,7 @@ public class ServerControllerBase {
         return Integer.parseInt(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
     }
 
-    protected boolean getStatus(Process serverProc) {
+    public static boolean getStatus(Process serverProc) {
         // We first get the server process ID
         Integer transServerPID = null;
         if (serverProc.getClass().getName().equals("java.lang.UNIXProcess")) {
