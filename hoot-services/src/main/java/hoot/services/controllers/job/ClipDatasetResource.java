@@ -26,58 +26,46 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.HootProperties.CLIP_DATASET_MAKEFILE_PATH;
+
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
-
-//import org.json.simple.parser.JSONParser;
 
 
 @Path("/clipdataset")
 public class ClipDatasetResource extends JobControllerBase {
-
-    private static final Logger log = LoggerFactory.getLogger(ClipDatasetResource.class);
-    protected static String _tileServerPath = null;
+    private static final Logger logger = LoggerFactory.getLogger(ClipDatasetResource.class);
 
     public ClipDatasetResource() {
-        try {
-
-            if (processScriptName == null) {
-                processScriptName = HootProperties.getProperty("ClipDatasetMakefilePath");
-            }
-
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-        }
+        super(CLIP_DATASET_MAKEFILE_PATH);
     }
 
     /**
      * This service will clip a dataset to a bounding box and create a new
      * output dataset within those dimensions.
-     * 
+     *
      * POST hoot-services/job/clipdataset/execute
-     * 
+     *
      * { "BBOX" :
      * "{"LR":[-77.04813267598544,38.89292259454727],"UL":[-77.04315011486628,38.89958152667718]}",
      * //The upper left and lower right of the bounding box to clip the dataset
      * "INPUT_NAME" : "DcRoads", //The name of the dataset to be clipped
      * "OUTPUT_NAME" : "DcRoads_Clip" //The output name of the new dataset. }
-     * 
+     *
      * @param params
      *            JSON input params; see description
      * @return a job id
@@ -88,27 +76,47 @@ public class ClipDatasetResource extends JobControllerBase {
     @Produces(MediaType.TEXT_PLAIN)
     public Response process(String params) {
         String jobId = UUID.randomUUID().toString();
+        
         try {
-            // JSONParser pars = new JSONParser();
-            // JSONObject oParams = (JSONObject)pars.parse(params);
-            // String clipOutputName = oParams.get("OUTPUT_NAME").toString();
+            JSONParser pars = new JSONParser();
+            JSONObject oParams = (JSONObject)pars.parse(params);
+            String clipOutputName = oParams.get("OUTPUT_NAME").toString();
 
             JSONArray commandArgs = parseParams(params);
-            JSONObject clipCommand = _createMakeScriptJobReq(commandArgs);
+            JSONObject clipCommand = createMakeScriptJobReq(commandArgs);
+
+            // Density Raster
+            JSONArray rasterTilesArgs = new JSONArray();
+            JSONObject rasterTilesparam = new JSONObject();
+            rasterTilesparam.put("value", clipOutputName);
+            rasterTilesparam.put("paramtype", String.class.getName());
+            rasterTilesparam.put("isprimitivetype", "false");
+            rasterTilesArgs.add(rasterTilesparam);
+
+            rasterTilesparam = new JSONObject();
+            rasterTilesparam.put("value", null);
+            rasterTilesparam.put("paramtype", String.class.getName());
+            rasterTilesparam.put("isprimitivetype", "false");
+            rasterTilesArgs.add(rasterTilesparam);
+
+            JSONObject ingestOSMResource = createReflectionJobReq(rasterTilesArgs,
+                           "hoot.services.controllers.ingest.RasterToTilesService",
+                           "ingestOSMResourceDirect");
 
             JSONArray jobArgs = new JSONArray();
             jobArgs.add(clipCommand);
+            jobArgs.add(ingestOSMResource);
 
             postChainJobRquest(jobId, jobArgs.toJSONString());
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error processing cookie cutter request: " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            String msg = "Error processing cookie cutter request: " + ex;
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
 
         JSONObject res = new JSONObject();
         res.put("jobid", jobId);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
-
 }

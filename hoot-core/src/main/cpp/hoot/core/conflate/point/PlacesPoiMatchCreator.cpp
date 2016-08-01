@@ -31,6 +31,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -38,6 +39,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 // tgs
 #include <tgs/System/SystemInfo.h>
@@ -112,7 +114,7 @@ public:
 
     // used for bounds checks.
     _transform.reset(OGRCreateCoordinateTransformation(_map->getProjection().get(),
-                                                       OsmMap::getWgs84().get()));
+                     MapProjector::createWgs84Projection().get()));
   }
 
   ~PlacesPoiMatchVisitor()
@@ -290,25 +292,6 @@ private:
   }
 };
 
-class WorstCircularErrorVisitor : public ElementConstOsmMapVisitor
-{
-public:
-  Meters _worst;
-
-  WorstCircularErrorVisitor()
-  {
-    _worst = -1;
-  }
-
-  Meters getWorstCircularError() { return _worst; }
-
-  virtual void visit(const shared_ptr<const Element>& e)
-  {
-    _worst = max(_worst, e->getCircularError());
-  }
-};
-
-
 PlacesPoiMatchCreator::PlacesPoiMatchCreator()
 {
 }
@@ -340,10 +323,9 @@ void PlacesPoiMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<cons
 {
   LOG_DEBUG(SystemInfo::getMemoryUsageString());
   {
-    WorstCircularErrorVisitor wav;
-    map->visitRo(wav);
-    LOG_DEBUG("Worst circular error: " << wav.getWorstCircularError());
-    PlacesPoiMatchVisitor v(map, matches, wav.getWorstCircularError(), _bounds, threshold);
+    Meters worstErr = WorstCircularErrorVisitor::getWorstCircularError(map);
+    LOG_DEBUG("Worst circular error: " << worstErr);
+    PlacesPoiMatchVisitor v(map, matches, worstErr, _bounds, threshold);
     map->visitRo(v);
     LOG_DEBUG(SystemInfo::getMemoryUsageString());
   }

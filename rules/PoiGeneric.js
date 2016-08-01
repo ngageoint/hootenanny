@@ -82,7 +82,7 @@ var distances = [
 ];
 
 function distance(e1, e2) {
-    return Math.sqrt(Math.pow(e1.getX() - e2.getX(), 2) + 
+    return Math.sqrt(Math.pow(e1.getX() - e2.getX(), 2) +
         Math.pow(e1.getY() - e2.getY(), 2));
 }
 
@@ -102,14 +102,18 @@ exports.getSearchRadius = function(e) {
     var tags = e.getTags();
 
     var radius = e.getCircularError();
+    //hoot.debug("radius start: " + radius);
 
     for (var i = 0; i < distances.length; i++) {
         if (tags.contains(distances[i].k) &&
             (distances[i].v == undefined ||
              tags.get(distances[i].k) == distances[i].v)) {
+            //hoot.debug("distances[i].review: " + distances[i].review);
             radius = Math.max(radius, distances[i].review);
         }
     }
+
+    //hoot.debug("radius final: " + radius);
 
     return radius;
 }
@@ -188,7 +192,6 @@ function additiveScore(map, e1, e2) {
     {
       hoot.debug("One element in the pair is generic.");
     }
-
 
     var e1SearchRadius = exports.getSearchRadius(e1);
     hoot.debug("e1SearchRadius: " + e1SearchRadius);
@@ -284,7 +287,7 @@ function additiveScore(map, e1, e2) {
 
 
     // if at least one feature contains a place
-    var placeCount = getTagsByAncestor("place", t1).length + 
+    var placeCount = getTagsByAncestor("place", t1).length +
         getTagsByAncestor("place", t2).length;
 
     // if at least one of the points has a place and neither of them are
@@ -328,7 +331,15 @@ function additiveScore(map, e1, e2) {
     result.reasons = reason;
 
     hoot.debug("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+    if (e1.getTags().get("note"))
+    {
+      hoot.debug("e1 note: " + e1.getTags().get("note"));
+    }
     hoot.debug("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
+    if (e2.getTags().get("note"))
+    {
+      hoot.debug("e2 note: " + e2.getTags().get("note"));
+    }
     hoot.debug("reason: " + reason);
     hoot.debug("score: " + score);
 

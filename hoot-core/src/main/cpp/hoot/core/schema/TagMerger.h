@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGMERGER_H
 #define TAGMERGER_H
@@ -50,6 +50,9 @@ public:
 
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const = 0;
 };
+
+typedef boost::shared_ptr<TagMerger> TagMergerPtr;
+typedef boost::shared_ptr<const TagMerger> ConstTagMergerPtr;
 
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OGRUTILITIES_H
 #define OGRUTILITIES_H
@@ -46,7 +46,7 @@ public:
 
   shared_ptr<OGRDataSource> createDataSource(QString url);
 
-  static OgrUtilities& getInstance() { return _theInstance; }
+  static OgrUtilities& getInstance();
 
   /**
    * Returns true if this is likely a data source OGR can open. This will just do a quick check
@@ -57,7 +57,7 @@ public:
   shared_ptr<OGRDataSource> openDataSource(QString url);
 
 private:
-  static OgrUtilities _theInstance;
+  static shared_ptr<OgrUtilities> _theInstance;
 };
 
 }

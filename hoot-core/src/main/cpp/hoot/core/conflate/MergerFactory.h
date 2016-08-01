@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MERGEFACTORY_H
 #define MERGEFACTORY_H
@@ -98,7 +98,7 @@ public:
   void reset() { _creators.clear(); }
 
 private:
-  static MergerFactory _theInstance;
+  static shared_ptr<MergerFactory> _theInstance;
 
   vector<MergerCreator*> _creators;
 };

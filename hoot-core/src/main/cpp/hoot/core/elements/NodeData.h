@@ -50,7 +50,8 @@ public:
 
   void init(long id, double x, double y, long changeset = ElementData::CHANGESET_EMPTY,
             long version = ElementData::VERSION_EMPTY, long timestamp = ElementData::TIMESTAMP_EMPTY,
-            QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY);
+            QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
+            bool visible = ElementData::VISIBLE_EMPTY);
 
   void setX(double x) { _x = x; }
 

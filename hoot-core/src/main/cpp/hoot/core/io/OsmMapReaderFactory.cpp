@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmMapReaderFactory.h"
 
@@ -37,10 +37,19 @@
 namespace hoot
 {
 
-OsmMapReaderFactory OsmMapReaderFactory::_theInstance;
+shared_ptr<OsmMapReaderFactory> OsmMapReaderFactory::_theInstance;
 
 OsmMapReaderFactory::OsmMapReaderFactory()
 {
+}
+
+OsmMapReaderFactory& OsmMapReaderFactory::getInstance()
+{
+  if (!_theInstance.get())
+  {
+    _theInstance.reset(new OsmMapReaderFactory());
+  }
+  return *_theInstance;
 }
 
 bool OsmMapReaderFactory::hasReader(QString url)
@@ -89,6 +98,13 @@ shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, bool use
                                                            Status defaultStatus)
 {
   QString readerOverride = ConfigOptions().getOsmMapReaderFactoryReader();
+
+  //TODO: hack - the OsmApiDbAwareHootApiDbReader should always be reading from hoot api databases,
+  //but by using the factory override during conflation it won't - see #781 for potential fix task
+  if (readerOverride == "hoot::OsmApiDbAwareHootApiDbReader" && url.startsWith("osmapidb"))
+  {
+    readerOverride = "";
+  }
 
   shared_ptr<OsmMapReader> reader;
   if (readerOverride != "")

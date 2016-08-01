@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LocalTileWorker.h"
@@ -49,6 +49,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
+#include <hoot/core/visitors/CalculateBoundsVisitor.h>
 
 #include "TileBoundsCalculator.h"
 
@@ -110,7 +111,7 @@ OGREnvelope LocalTileWorker::calculateEnvelope()
   reader.setDefaultStatus(Status::Unknown2);
   reader.read(_in2, map);
 
-  return map->calculateBounds();
+  return CalculateBoundsVisitor::getBounds(map);
 }
 
 void LocalTileWorker::calculateNodeDensity(cv::Mat& r1, cv::Mat& r2)

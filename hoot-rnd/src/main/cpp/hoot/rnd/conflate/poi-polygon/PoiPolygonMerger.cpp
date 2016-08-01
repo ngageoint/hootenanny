@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMerger.h"
 
@@ -60,9 +60,9 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map,
   // Get all the building parts for each status
   vector<ElementId> buildings1 = _getBuildingParts(map, Status::Unknown1);
   vector<ElementId> buildings2 = _getBuildingParts(map, Status::Unknown2);
-  LOG_VAR(buildings1);
-  LOG_VAR(buildings2);
-  LOG_VAR(_pairs);
+  LOG_VARD(buildings1);
+  LOG_VARD(buildings2);
+  LOG_VARD(_pairs);
 
   // Merge all the building parts together into a single building entity using the typical building
   // merge process.

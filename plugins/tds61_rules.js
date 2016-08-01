@@ -138,7 +138,7 @@ tds61.rules = {
      'SAX_RY1':'security:classification:sci:non_us', // Security Attributes Group <resource non-US controls>
      'SAX_RY2':'security:atomic_markings', // Security Attributes Group <resource atomic energy markings>
      'SSE':'seasonal_ice_limit', // Seasonal Ice Limit
-//      'UFI':'source_ref', // Unique Feature Identifier. Handled in pre-processing
+     'UFI':'uuid', // Unique Feature Identifier. This gets cleaned up in post processing
      'URI':'source_ref', // Unique Resource Identifier
      'VCS_VCR':'max_clearance:note', // Vertical Clearance, Safe <reference level remark>
      'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
@@ -4408,7 +4408,6 @@ tds61.rules = {
      ['FFN','852','isced:level','2'], // Secondary Education
      ['FFN','852','isced:level','3'], // Secondary Education
      // ['FFN','852','isced:level','2,3'], // Secondary Education
-     ['FFN','855','building','university'],
      ['FFN','857','building','college'], // Vocational Education
 
      ['FFN','572','amenity','cafe'], // Restaurant
@@ -4437,10 +4436,10 @@ tds61.rules = {
      ['FFN','843','amenity','jail'], // Imprisonment
      ['FFN','980','building','cemetery_building'], // Death care services
      ['ZI014_PPO','-999999','product','unknown'], // Unknown
-     [undefined,undefined,'amenity','school'], //  converted in pre processing
-     [undefined,undefined,'amenity','hospital'], //  converted in pre processing
-     [undefined,undefined,'amenity','university'], //  converted in pre processing
-     [undefined,undefined,'amenity','college'], //  converted in pre processing
+//XX     [undefined,undefined,'amenity','school'], //  converted in pre processing
+//      [undefined,undefined,'amenity','hospital'], //  converted in pre processing
+//      [undefined,undefined,'amenity','university'], //  converted in pre processing
+//      [undefined,undefined,'amenity','college'], //  converted in pre processing
      [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
 
      // From UFD
@@ -4491,6 +4490,9 @@ tds61.rules = {
      ['FFN','760','amenity','office'], // Business and Personal Support Services 
      ['FFN','815','building','palace'], // Palace
 
+     // Added to give something for the OTH value to use
+     ['ZI016_ROC','999','surface','other'], // Other
+
    ], // End one2oneOut
 
     // ##### End of One2One Rules #####
@@ -4499,7 +4501,6 @@ tds61.rules = {
     // ##### Start of fuzzyTable #####
     // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
     fuzzyTable : [
-
      ['ZI016_ROC','1',schemaTools.simple('surface=ground',1)], // Unimproved
      ['ZI016_ROC','2',schemaTools.simple('surface=compacted',1)], // Stabilized earth
      ['ZI016_ROC','3',schemaTools.isA('surface=unpaved', 0.8)], // Flexible Pavement

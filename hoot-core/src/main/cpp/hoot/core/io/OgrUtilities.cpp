@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OgrUtilities.h"
 
@@ -78,11 +78,20 @@ static const char* beginName[][2] =  { { "PG:"      , "PGeo" },
                                            { NULL, NULL }
                                          };
 
-OgrUtilities OgrUtilities::_theInstance;
+shared_ptr<OgrUtilities> OgrUtilities::_theInstance;
 
 OgrUtilities::OgrUtilities()
 {
   OGRRegisterAll();
+}
+
+OgrUtilities& OgrUtilities::getInstance()
+{
+  if (!_theInstance.get())
+  {
+      _theInstance.reset(new OgrUtilities());
+  }
+  return *_theInstance;
 }
 
 shared_ptr<OGRDataSource> OgrUtilities::createDataSource(QString url)

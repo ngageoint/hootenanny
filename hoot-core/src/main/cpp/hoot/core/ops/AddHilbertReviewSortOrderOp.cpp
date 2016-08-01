@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddHilbertReviewSortOrderOp.h"
 
@@ -31,6 +31,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/visitors/CalculateBoundsVisitor.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
@@ -67,7 +68,8 @@ void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
 
   const RelationMap& relations = map->getRelationMap();
 
-  Envelope e = map->calculateEnvelope();
+  Envelope e = CalculateBoundsVisitor::getGeosBounds(map);
+
 
   vector< pair<ElementId, int64_t> > reviewOrder;
   // reserves at least as much as we need.
@@ -78,11 +80,20 @@ void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
     RelationPtr r = it->second;
     if (ReviewMarker::isReviewUid(map, r->getElementId()))
     {
-      int64_t hv = _calculateHilbertValue(map,
-        ReviewMarker::getReviewElements(map, r->getElementId()));
+      const set<ElementId> eids = ReviewMarker::getReviewElements(map, r->getElementId());
+      //LOG_VARD(eids.size());
+      if (eids.size() > 0)
+      {
+        int64_t hv = _calculateHilbertValue(map, eids);
 
-      pair<ElementId, int64_t> p(r->getElementId(), hv);
-      reviewOrder.push_back(p);
+        pair<ElementId, int64_t> p(r->getElementId(), hv);
+        reviewOrder.push_back(p);
+      }
+      else
+      {
+        throw HootException(
+          "No review elements returned for relation with ID: " + r->getElementId().toString());
+      }
     }
   }
 
@@ -112,10 +123,11 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr
       env->expandToInclude(te.get());
     }
   }
+  //LOG_VARD(env->toString());
 
   if (_mapEnvelope.get() == 0)
   {
-    _mapEnvelope.reset(new Envelope(map->calculateEnvelope()));
+    _mapEnvelope.reset(new Envelope(CalculateBoundsVisitor::getGeosBounds(map)));
   }
 
   Coordinate center;

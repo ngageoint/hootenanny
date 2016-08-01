@@ -26,10 +26,13 @@
  */
 package hoot.services.controllers.info;
 
+import static hoot.services.HootProperties.*;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -39,38 +42,14 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-import hoot.services.db.DbUtils;
-import hoot.services.utils.ResourceErrorHandler;
+import hoot.services.utils.DbUtils;
 
 
 @Path("/map")
 public class MapInfoResource {
-    private static final Logger log = LoggerFactory.getLogger(MapInfoResource.class);
-    protected static Long conflateThreshold = null;
-    protected static Long ingestThreshold = null;
-    protected static Long exportThreshold = null;
+    private static final Logger logger = LoggerFactory.getLogger(MapInfoResource.class);
 
     public MapInfoResource() {
-        try {
-            if (conflateThreshold == null) {
-                String s = HootProperties.getProperty("conflateSizeThreshold");
-                conflateThreshold = Long.parseLong(s);
-            }
-
-            if (ingestThreshold == null) {
-                String s = HootProperties.getProperty("ingestSizeThreshold");
-                ingestThreshold = Long.parseLong(s);
-            }
-
-            if (exportThreshold == null) {
-                String s = HootProperties.getProperty("exportSizeThreshold");
-                exportThreshold = Long.parseLong(s);
-            }
-        }
-        catch (Exception ex) {
-            log.error("Failed obtain map info config: " + ex.getMessage());
-        }
     }
 
     /**
@@ -85,32 +64,36 @@ public class MapInfoResource {
     @GET
     @Path("/size")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getMapSize(@QueryParam("mapid") final String mapIds) {
+    public Response getMapSize(@QueryParam("mapid") String mapIds) {
         long nsize = 0;
-        String[] maptables = { "changesets", "current_nodes", "current_relation_members", "current_relations",
-                "current_way_nodes", "current_ways" };
+        String[] maptables = {
+                "changesets",
+                "current_nodes",
+                "current_relation_members",
+                "current_relations",
+                "current_way_nodes",
+                "current_ways"
+        };
 
         try {
             String[] mapids = mapIds.split(",");
             for (String mapId : mapids) {
-                for (String table : maptables) {
-                    nsize += DbUtils.getTableSizeInByte(table + "_" + mapId);
+                if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
+                    for (String table : maptables) {
+                        nsize += DbUtils.getTableSizeInByte(table + "_" + mapId);
+                    }
                 }
             }
-
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting map size: " + ex.toString(), Status.INTERNAL_SERVER_ERROR,
-                    log);
+            String message = "Error getting map size: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
+
         JSONObject res = new JSONObject();
         res.put("mapid", mapIds);
         res.put("size_byte", nsize);
-        /*
-         * res.put("conflate_threshold", conflateThreshold);
-         * res.put("ingest_threshold", ingestThreshold);
-         * res.put("export_threshold", exportThreshold);
-         */
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
@@ -127,40 +110,45 @@ public class MapInfoResource {
     @GET
     @Path("/sizes")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getMapSizes(@QueryParam("mapid") final String mapIds) {
-        String[] maptables = { "changesets", "current_nodes", "current_relation_members", "current_relations",
-                "current_way_nodes", "current_ways" };
+    public Response getMapSizes(@QueryParam("mapid") String mapIds) {
+        String[] maptables = {
+                "changesets",
+                "current_nodes",
+                "current_relation_members",
+                "current_relations",
+                "current_way_nodes",
+                "current_ways"
+        };
 
         JSONArray retval = new JSONArray();
 
         try {
             String[] mapids = mapIds.split(",");
             for (String mapId : mapids) {
-                JSONObject jo = new JSONObject();
+                JSONObject jsonObject = new JSONObject();
                 long nsize = 0;
                 try {
                     for (String table : maptables) {
-                        nsize += DbUtils.getTableSizeInByte(table + "_" + mapId);
+                        if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
+                            nsize += DbUtils.getTableSizeInByte(table + "_" + mapId);
+                        }
                     }
                 }
                 finally {
-                    jo.put("id", Long.parseLong(mapId));
-                    jo.put("size", nsize);
-                    retval.put(jo);
+                    jsonObject.put("id", Long.parseLong(mapId));
+                    jsonObject.put("size", nsize);
+                    retval.put(jsonObject);
                 }
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting map size: " + ex.toString(), Status.INTERNAL_SERVER_ERROR,
-                    log);
+            String message = "Error getting map size: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
         }
+
         JSONObject res = new JSONObject();
         res.put("layers", retval);
-        /*
-         * res.put("conflate_threshold", conflateThreshold);
-         * res.put("ingest_threshold", ingestThreshold);
-         * res.put("export_threshold", exportThreshold);
-         */
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
@@ -176,9 +164,10 @@ public class MapInfoResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response getThresholds() {
         JSONObject res = new JSONObject();
-        res.put("conflate_threshold", conflateThreshold);
-        res.put("ingest_threshold", ingestThreshold);
-        res.put("export_threshold", exportThreshold);
+        res.put("conflate_threshold", CONFLATE_SIZE_THRESHOLD);
+        res.put("ingest_threshold", INGEST_SIZE_THRESHOLD);
+        res.put("export_threshold", EXPORT_SIZE_THRESHOLD);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 }

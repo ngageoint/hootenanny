@@ -34,9 +34,6 @@
 namespace hoot
 {
 
-/**
- * Defaults to 5cm threshold
- */
 ElementComparer::ElementComparer(Meters threshold) :
 _threshold(threshold)
 {
@@ -48,9 +45,29 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2)
   if (e1->getElementId() != e2->getElementId() ||
       !(e1->getTags() == e2->getTags()) ||
       e1->getStatus() != e2->getStatus() ||
-      e1->getVersion() != e2->getVersion() ||
+      (e1->getVersion() != e2->getVersion()) ||
       fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
   {
+    /*if (!(e1->getTags() == e2->getTags()))
+    {
+      LOG_DEBUG("compare failed on tags:");
+    }
+    else if (e1->getStatus() != e2->getStatus())
+    {
+      LOG_DEBUG("compare failed on status:");
+    }
+    else if (e1->getVersion() != e2->getVersion())
+    {
+      LOG_DEBUG("compare failed on version:");
+    }
+    else if (fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
+    {
+      LOG_DEBUG("compare failed on circular error:");
+      LOG_VARD(fabs(e1->getCircularError() - e2->getCircularError()));
+      LOG_VARD(_threshold);
+    }
+    LOG_VARD(e1);
+    LOG_VARD(e2);*/
     return false;
   }
   switch (e1->getElementType().getEnum())
@@ -120,5 +137,4 @@ bool ElementComparer::_compareRelation(const shared_ptr<const Element>& re,
 
     return true;
   }
-
 }

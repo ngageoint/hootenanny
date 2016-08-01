@@ -67,12 +67,12 @@ public:
 
 private:
 
+  Change _nextChange();
+
   ElementInputStreamPtr _from;
   ElementInputStreamPtr _to;
   Change _next;
   ElementPtr _fromE, _toE;
-
-  Change _nextChange();
 
 };
 

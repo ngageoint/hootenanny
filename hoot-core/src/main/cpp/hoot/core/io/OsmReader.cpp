@@ -310,6 +310,8 @@ void OsmReader::open(QString url)
 
 void OsmReader::read(shared_ptr<OsmMap> map)
 {
+  LOG_DEBUG("OsmReader::read");
+
   _osmFound = false;
 
   _missingNodeCount = 0;
@@ -603,6 +605,9 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
           if (circularError > 0 && ok)
           {
             _element->setCircularError(circularError);
+            /*LOG_DEBUG(
+              "Set circular error from accuracy or error:circular tag to " << circularError <<
+              " for element with ID: " << _element->getId());*/
           }
           else
           {

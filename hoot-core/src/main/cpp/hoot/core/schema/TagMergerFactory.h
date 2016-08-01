@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGMERGERFACTORY_H
 #define TAGMERGERFACTORY_H
@@ -44,14 +44,18 @@ public:
 
   ~TagMergerFactory();
 
-  static TagMergerFactory& getInstance() { return _theInstance; }
+  static TagMergerFactory& getInstance();
 
   /**
    * Returns the default TagMerger.
    */
-  const TagMerger& getDefault();
+  const TagMerger& getDefault() { return *getDefaultPtr(); }
 
-  const TagMerger& getMerger(const QString& name);
+  shared_ptr<const TagMerger> getDefaultPtr();
+
+  const TagMerger& getMerger(const QString& name) { return *getMergerPtr(name); }
+
+  shared_ptr<const TagMerger> getMergerPtr(const QString& name);
 
   /**
    * A convenience function for merging tags using the default mechanism. Equivalent to:
@@ -66,9 +70,9 @@ public:
 
 private:
   QHash<QString, shared_ptr<const TagMerger> > _mergers;
-  const TagMerger* _default;
+  shared_ptr<const TagMerger> _default;
 
-  static TagMergerFactory _theInstance;
+  static shared_ptr<TagMergerFactory> _theInstance;
 };
 
 }

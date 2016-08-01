@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveTagVisitor.h"
 
@@ -60,6 +60,7 @@ _keys(keys)
 void RemoveTagVisitor::setConfiguration(const Settings& conf)
 {
   _keys = ConfigOptions(conf).getRemoveTagVisitorKeys();
+  LOG_VARD(_keys);
 }
 
 void RemoveTagVisitor::addKey(QString key)
@@ -71,6 +72,7 @@ void RemoveTagVisitor::visit(const shared_ptr<Element>& e)
 {
   for (int i = 0; i < _keys.size(); i++)
   {
+    LOG_DEBUG("Remove tag " << _keys[i]);
     e->getTags().remove(_keys[i]);
   }
 }

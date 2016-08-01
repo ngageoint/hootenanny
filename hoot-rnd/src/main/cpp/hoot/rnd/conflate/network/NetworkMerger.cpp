@@ -29,23 +29,27 @@
 // hoot
 #include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
 #include <hoot/core/algorithms/WayMatchStringMerger.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/visitors/ExtractNodesVisitor.h>
 
 namespace hoot
 {
 
 NetworkMerger::NetworkMerger(const set< pair<ElementId, ElementId> >& pairs,
-  ConstEdgeMatchPtr edgeMatch) :
+  ConstEdgeMatchPtr edgeMatch, ConstNetworkDetailsPtr details) :
   _pairs(pairs),
-  _edgeMatch(edgeMatch)
+  _edgeMatch(edgeMatch),
+  _details(details)
 {
-  assert(_pairs.size() == 1);
+  assert(_pairs.size() >= 1);
 }
 
-void NetworkMerger::apply(const OsmMapPtr& /*map*/,
-  vector< pair<ElementId, ElementId> >& /*replaced*/) const
+void NetworkMerger::apply(const OsmMapPtr& map,
+  vector< pair<ElementId, ElementId> >& replaced) const
 {
   // put the matched edges into a format where we can map any point on one edge to the
   // corresponding point on the other edge.
@@ -54,44 +58,47 @@ void NetworkMerger::apply(const OsmMapPtr& /*map*/,
   /// review this method and add more code with partial matches. E.g.
   /// - Will we still create relations out of the scrap bits?
 
-  WaySublineMatchStringPtr matchString = _createMatchString();
-  WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(matchString));
+  // convert the EdgeStrings into WaySublineStrings
+  WayStringPtr str1 = _details->toWayString(_edgeMatch->getString1());
+  WayStringPtr str2 = _details->toWayString(_edgeMatch->getString2());
+
+  WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(str1, str2));
 
   /******************
    * At the beginning the merger should identify where the primary way should be broken into bits
    * then each way in the secondary will match 1 or more bits in the primary. This mapping can be
-   * created at the beginning in the merger and used throughout the rests of the operations.
+   * created at the beginning in the merger and used throughout the rest of the operations.
    ******************/
 
-  WayMatchStringMergerPtr merger(new WayMatchStringMerger(matchString, mapping));
-
-  /// @todo can this be used in some way? HighwaySnapMerger::_splitElement
-  /// how about this? MultiLineStringSplitter
+  WayMatchStringMergerPtr merger(new WayMatchStringMerger(map, mapping, replaced));
 
   // merge the tags in the keeper segments
-  merger->mergeTags(TagMergerFactory::getInstance().getDefault());
+  merger->setTagMerger(TagMergerFactory::getInstance().getDefaultPtr());
+  merger->mergeTags();
 
   // set the status on all keeper ways to conflated.
   merger->setKeeperStatus(Status::Conflated);
 
   // go through all the nodes in the scrap
-    // if the node contains informational tags or is part of a larger intersection
+  QList<ConstNodePtr> scrapNodes;
+  ExtractNodesVisitor extractVisitor(scrapNodes);
+  str2->visitRo(*map, extractVisitor);
+  shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
+  for (int i = 0; i < scrapNodes.size(); ++i)
+  {
+    // if the node contains informational tags or is part of another way
+    if (scrapNodes[i]->getTags().getInformationCount() > 0 ||
+      n2w->getWaysByNode(scrapNodes[i]->getId()).size() >= 2)
+    {
       // move corresponding intersection nodes and non-empty nodes into the keeper segments.
-      /// @todo
-      //merger->mergeNode(scrapNode);
+      merger->mergeNode(scrapNodes[i]->getElementId());
+    }
+  }
 
   /// @todo this will need to replace one scrap with possibly multiple keeper elements
   /// - think about the case when the way is part of an interstate or bus relation
   // remove the duplicate element.
-  /// @todo ReplaceElementOp(keeper->getElementId(), scrap->getElementId()).apply(map);
-
-  // we don't want to modify any of the scrap geometries until all merging is complete this will
-  // avoid issues with the scrap lengths changing.
-
-  /// @todo RecursiveElementRemover(scrap->getElementId()).apply(map);
-  /// @todo scrap->getTags().clear();
-
-  /// @todo replaced.push_back(pair<ElementId, ElementId>(scrap->getElementId(), keeper->getElementId()));
+  merger->replaceScraps();
 }
 
 QString NetworkMerger::toString() const

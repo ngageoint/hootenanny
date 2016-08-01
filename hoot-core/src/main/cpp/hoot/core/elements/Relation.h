@@ -72,7 +72,8 @@ public:
            long changeset = ElementData::CHANGESET_EMPTY,
            long version = ElementData::VERSION_EMPTY,
            unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
-           QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY);
+           QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
+           bool visible = ElementData::VISIBLE_EMPTY);
 
   virtual ~Relation() {}
 
@@ -126,6 +127,7 @@ public:
    * no changes are made.
    */
   void replaceElement(const shared_ptr<const Element>& from, const shared_ptr<const Element>& to);
+  void replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to);
 
   /**
    * Replaces all instances of old with the values in the collection defined by start/end. Order is

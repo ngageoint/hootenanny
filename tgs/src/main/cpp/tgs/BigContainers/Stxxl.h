@@ -22,10 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STXXL_H
 #define STXXL_H
+
+// Boost Includes
+#include <boost/shared_ptr.hpp>
 
 // Qt
 #include <QTemporaryFile>
@@ -33,6 +36,7 @@
 
 namespace Tgs
 {
+  using namespace boost;
 
 /**
  * A convenience class for initializing STXXL in a multiple processes safe way.
@@ -58,7 +62,7 @@ public:
   void setConfig(QString configFile);
 
 private:
-  static Stxxl _theInstance;
+  static shared_ptr<Stxxl> _theInstance;
   QTemporaryFile _configFileTmp;
 
   Stxxl();

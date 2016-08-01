@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef PROBABILITYOFMATCH_H
@@ -47,7 +47,7 @@ class ProbabilityOfMatch
 public:
   ProbabilityOfMatch();
 
-  static ProbabilityOfMatch& getInstance() { return _default; }
+  static ProbabilityOfMatch& getInstance();
 
   double attributeScore(const ConstOsmMapPtr &map, const shared_ptr<const Way>& w1,
     const shared_ptr<const Way> &w2);
@@ -72,7 +72,7 @@ public:
   static bool debug;
 
 private:
-  static ProbabilityOfMatch _default;
+  static shared_ptr<ProbabilityOfMatch> _theInstance;
   double _parallelExp;
   double _dMax;
 

@@ -66,6 +66,8 @@ private:
 
   int _precision;
 
+  Change _change;
+
 };
 
 }

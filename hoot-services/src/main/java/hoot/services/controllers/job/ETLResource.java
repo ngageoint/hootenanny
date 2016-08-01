@@ -26,12 +26,15 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.HootProperties.ETL_MAKEFILE;
+
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -41,33 +44,19 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
-
 
 @Path("/etl")
 public class ETLResource extends JobControllerBase {
-    private static final Logger log = LoggerFactory.getLogger(ETLResource.class);
-    @SuppressWarnings("unused")
-    private String homeFolder = null;
+    private static final Logger logger = LoggerFactory.getLogger(ETLResource.class);
 
     public ETLResource() {
-        try {
-            if (processScriptName == null) {
-                processScriptName = HootProperties.getProperty("ETLMakefile");
-            }
-
-            homeFolder = HootProperties.getProperty("homeFolder");
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage());
-        }
+        super(ETL_MAKEFILE);
     }
 
     /**
      * For ETL service, there are 2 types of services are available: Standard
-     * REST endpoint and WPS endpoint. Both are accessed by POST. Both ETL
-     * services ends up at hoot command shell and use makeetl make file. makeetl
+     * REST endpoint. Accessed by POST. ETL
+     * service ends up at hoot command shell and use makeetl make file. makeetl
      * make file handles 2 types of ETL formats: OGR and OSM. For OGR, it
      * translates the INPUT shapefile into hoot db using provided translation
      * file. Also, multiple inputs can be listed using semicolon as a separator.
@@ -94,19 +83,21 @@ public class ETLResource extends JobControllerBase {
     @Produces(MediaType.TEXT_PLAIN)
     public Response process(String params) {
         String jobId = UUID.randomUUID().toString();
-        try {
 
+        try {
             JSONArray commandArgs = parseParams(params);
             String argStr = createPostBody(commandArgs);
+
             postJobRquest(jobId, argStr);
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error processing ETL request: " + ex.toString(),
-                    Status.INTERNAL_SERVER_ERROR, log);
+            String msg = "Error processing ETL request: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
         }
+
         JSONObject res = new JSONObject();
         res.put("jobid", jobId);
+
         return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
-
 }

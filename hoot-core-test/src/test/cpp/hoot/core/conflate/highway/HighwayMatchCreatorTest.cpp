@@ -38,6 +38,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 
 // Qt
 #include <QDebug>
@@ -71,7 +72,7 @@ public:
     reader.read("test-files/ToyBuildingsTestA.osm", map);
     MapProjector::projectToPlanar(map);
 
-    CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(map->findWays("name", "Panera Bread")[0]), map));
+    CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "Panera Bread")[0]), map));
 
     OsmMap::resetCounters();
     map.reset(new OsmMap());
@@ -79,7 +80,7 @@ public:
     reader.read("test-files/ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);
 
-    CPPUNIT_ASSERT(uut.isMatchCandidate(map->getWay(map->findWays("note", "1")[0]), map));
+    CPPUNIT_ASSERT(uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]), map));
   }
 
 };

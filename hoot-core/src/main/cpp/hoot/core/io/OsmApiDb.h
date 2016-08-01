@@ -43,6 +43,7 @@ class OsmApiDb : public ApiDb
 public:
 
   static const QString TIME_FORMAT;
+  static const QString TIMESTAMP_FUNCTION;
 
   OsmApiDb();
 
@@ -104,10 +105,18 @@ public:
   shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
   /**
+   * Gets the next sequence ID for the given element type
+   *
+   * @param type element type
+   * @return an element ID
+   */
+  long getNextId(const ElementType type);
+
+  /**
    * Gets the next sequence ID for the given database table
    *
-   * @param table database table name
-   * @return an ID
+   * @param tableName database table name
+   * @return an element ID
    */
   long getNextId(const QString tableName);
 
@@ -119,6 +128,26 @@ public:
    * @return a SQL results iterator
    */
   shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
+
+  /**
+   * Converts a node coordinate from how its stored in a Hootenanny API database (0.01 nanodegrees
+   * as a double precision floating point number) to how its stored in an OSM API database
+   * (100 nanodegrees as a 64 bit integer)
+   *
+   * @param x the coordinate to convert
+   * @return a converted coordinate
+   */
+  static long toOsmApiDbCoord(const double x);
+
+  /**
+   * Converts a node coordinate from how its stored in an OSMAPI database (100 nanodegrees
+   * as a 64 bit integer) to how its stored in an OSM API database (0.01 nanodegrees
+   * as a double precision floating point number)
+   *
+   * @param x the coordinate to convert
+   * @return a converted coordinate
+   */
+  static double fromOsmApiDbCoord(const long x);
 
 private:
 
@@ -142,6 +171,7 @@ private:
   // Osm Api DB table strings
   static QString _getWayNodesTableName() { return "current_way_nodes"; }
   static QString _getRelationMembersTableName() { return "current_relation_members"; }
+
 };
 
 }

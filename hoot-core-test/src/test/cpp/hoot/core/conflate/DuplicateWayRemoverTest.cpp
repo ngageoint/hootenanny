@@ -36,6 +36,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
 
@@ -108,7 +109,7 @@ public:
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
     //create a non matching text tag between two of the ways that will be examined
-    map->getWay(map->findWays("name", "Constitution Ave NW")[0])->getTags().set("email", "blah");
+    map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "Constitution Ave NW")[0])->getTags().set("email", "blah");
 
     DuplicateWayRemover dupeWayRemover;
     dupeWayRemover.setStrictTagMatching(true);
@@ -137,7 +138,7 @@ public:
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
     //create a non matching text tag between two of the ways that will be examined
-    map->getWay(map->findWays("name", "Constitution Ave NW")[0])->getTags().set("email", "blah");
+    map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "Constitution Ave NW")[0])->getTags().set("email", "blah");
 
     DuplicateWayRemover dupeWayRemover;
     dupeWayRemover.setStrictTagMatching(false);

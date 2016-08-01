@@ -669,6 +669,8 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
   _updateChangesetEnvelope(envelopeNode);
 
+  LOG_DEBUG("Inserted node with ID: " << QString::number(id));
+
   return true;
 }
 
@@ -705,6 +707,9 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
   _relationBulkInsert->insert(v);
 
   _lazyFlushBulkInsert();
+
+  LOG_DEBUG("Inserted relation with ID: " << QString::number(relationId));
+
   return true;
 }
 
@@ -871,7 +876,7 @@ void HootApiDb::open(const QUrl& url)
 {
   if (!isSupported(url))
   {
-    throw HootException("An unsupported URL was passed in.");
+    throw HootException("An unsupported URL was passed into HootApiDb: " + url.toString());
   }
 
   _resetQueries();
@@ -932,16 +937,6 @@ void HootApiDb::rollback()
   _inTransaction = false;
 }
 
-long HootApiDb::round(double x)
-{
-  return (long)(x + 0.5);
-}
-
-long HootApiDb::round(double x, int precision)
-{
-  return (long)(floor(x * (10 * (precision - 1)) + 0.5) / (10 * (precision - 1)));
-}
-
 set<long> HootApiDb::selectMapIds(QString name)
 {
   const long userId = _currUserId;
@@ -975,23 +970,6 @@ set<long> HootApiDb::selectMapIds(QString name)
   }
 
   return result;
-}
-
-unsigned int HootApiDb::tileForPoint(double lat, double lon)
-{
-  int lonInt = round((lon + 180.0) * 65535.0 / 360.0);
-  int latInt = round((lat + 90.0) * 65535.0 / 180.0);
-
-  unsigned int tile = 0;
-  int          i;
-
-  for (i = 15; i >= 0; i--)
-  {
-    tile = (tile << 1) | ((lonInt >> i) & 1);
-    tile = (tile << 1) | ((latInt >> i) & 1);
-  }
-
-  return tile;
 }
 
 void HootApiDb::transaction()
@@ -1212,6 +1190,8 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
   }
 
   _updateNode->finish();
+
+  LOG_DEBUG("Updated node with ID: " << QString::number(id));
 }
 
 void HootApiDb::updateRelation(const long id, const long version, const Tags& tags)
@@ -1242,6 +1222,8 @@ void HootApiDb::updateRelation(const long id, const long version, const Tags& ta
   }
 
   _updateRelation->finish();
+
+  LOG_DEBUG("Updated relation with ID: " << QString::number(id));
 }
 
 void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
@@ -1272,6 +1254,8 @@ void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
   }
 
   _updateWay->finish();
+
+  LOG_DEBUG("Updated way with ID: " << QString::number(id));
 }
 
 bool HootApiDb::insertWay(const Tags &tags, long &assignedId)
@@ -1313,7 +1297,8 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags)
 
   _lazyFlushBulkInsert();
 
-  LOG_DEBUG("Inserted way " << QString::number(wayId));
+  LOG_DEBUG("Inserted way with ID: " << QString::number(wayId));
+
   return true;
 }
 
@@ -1322,7 +1307,7 @@ void HootApiDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
   const long mapId = _currMapId;
   double start = Tgs::Time::getTime();
 
-  LOG_DEBUG("Inserting nodes into way " << QString::number(wayId));
+  //LOG_DEBUG("Inserting nodes into way " << QString::number(wayId));
 
   _checkLastMapId(mapId);
 
@@ -1370,39 +1355,6 @@ void HootApiDb::_updateChangesetEnvelope(const ConstNodePtr node)
 
   _changesetEnvelope.expandToInclude(nodeX, nodeY);
   //LOG_DEBUG("Changeset bounding box updated to include X=" + QString::number(nodeX) + ", Y=" + QString::number(nodeY));
-}
-
-void HootApiDb::_updateChangesetEnvelopeWayIds(const std::vector<long>& wayIds)
-{
-  QString idListString;
-
-  std::vector<long>::const_iterator idIter;
-
-  for ( idIter = wayIds.begin(); idIter != wayIds.end(); ++idIter )
-  {
-    idListString += QString::number(*idIter) + ",";
-  }
-
-  // Remove last comma
-  idListString.chop(1);
-
-  // Get envelope for way from database, then update changeset envelope as needed
-  QSqlQuery getWayEnvelopeCmd = _exec(QString(
-        "SELECT way_id, MIN(latitude),MAX(latitude),MIN(longitude),MAX(longitude) "
-        "FROM current_way_nodes JOIN current_nodes ON node_id = id "
-        "WHERE way_id IN (%1) GROUP BY way_id;").arg(idListString));
-
-  // NOTE: the result will return one row per way found in the list -- have to iterate until done!
-  while (getWayEnvelopeCmd.next())
-  {
-    double minY = (double)getWayEnvelopeCmd.value(1).toLongLong() / (double)COORDINATE_SCALE;
-    double maxY = (double)getWayEnvelopeCmd.value(2).toLongLong() / (double)COORDINATE_SCALE;
-    double minX = (double)getWayEnvelopeCmd.value(3).toLongLong() / (double)COORDINATE_SCALE;
-    double maxX = (double)getWayEnvelopeCmd.value(4).toLongLong() / (double)COORDINATE_SCALE;
-
-    _changesetEnvelope.expandToInclude(minX, minY);
-    _changesetEnvelope.expandToInclude(maxX, maxY);
-  }
 }
 
 long HootApiDb::reserveElementId(const ElementType::Type type)

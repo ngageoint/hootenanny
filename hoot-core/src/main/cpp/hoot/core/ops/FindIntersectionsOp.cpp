@@ -40,10 +40,11 @@
 #include <hoot/core/conflate/UnlikelyIntersectionRemover.h>
 #include <hoot/core/conflate/splitter/DualWaySplitter.h>
 #include <hoot/core/conflate/splitter/IntersectionSplitter.h>
-#include <hoot/core/filters/TagFilter.h>
+#include <hoot/core/filters/TagCriterion.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/RemoveDuplicateAreaVisitor.h>
 #include <hoot/core/visitors/RemoveEmptyAreasVisitor.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
@@ -70,7 +71,9 @@ void FindIntersectionsOp::apply(shared_ptr<OsmMap>& map)
 
   /// @todo move this to a config file.
   // pragmatically remove "bad" data in OSM afghanistan
-  map->removeWays(TagFilter(Filter::FilterMatches, "source", "AIMS"));
+  //map->removeWays(TagFilter(Filter::FilterMatches, "source", "AIMS"));
+  shared_ptr<TagCriterion> pCrit(new TagCriterion("source", "AIMS"));
+  RemoveElementsVisitor::removeWays(map, pCrit);
 
   // reproject into a planar projection centered in the middle of bounding box.
   MapProjector::projectToPlanar(map);

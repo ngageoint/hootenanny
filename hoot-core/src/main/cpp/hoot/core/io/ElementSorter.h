@@ -36,7 +36,8 @@ namespace hoot
 {
 
 /**
- * An element stream that returns elements in the order of node, way, then relation
+ * An element stream that returns elements in the order of node, way, then relation, sorted by
+ * element ID
  */
 class ElementSorter : public ElementInputStream
 {

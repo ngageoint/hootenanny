@@ -40,7 +40,7 @@ public class ReviewableQueryTest {
         String expected = "select id from current_relations_10 where "
                 + "tags->'hoot:review:needs' = 'yes' and tags->'hoot:review:sort_order'='2'";
         ReviewableQuery q = new ReviewableQuery(null, 10, 2);
-        String actual = q._getQueryString();
+        String actual = q.getQueryString();
 
         org.junit.Assert.assertEquals(expected, actual);
     }

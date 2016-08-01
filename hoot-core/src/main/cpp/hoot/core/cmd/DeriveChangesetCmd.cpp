@@ -57,15 +57,17 @@ public:
       throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
     }
 
+    LOG_INFO("Deriving changeset for inputs " << args[0] << ", " << args[1] << "...");
+
+    //use the same unknown1 status for both so they pass comparison correctly
     OsmMapPtr map1(new OsmMap());
-    loadMap(map1, args[0], true);
+    loadMap(map1, args[0], true, Status::Unknown1);
 
     OsmMapPtr map2(new OsmMap());
-    loadMap(map2, args[1], true);
+    loadMap(map2, args[1], true, Status::Unknown1);
 
     ElementSorterPtr sorted1(new ElementSorter(map1));
     ElementSorterPtr sorted2(new ElementSorter(map2));
-
     ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
 
     if (args[2].endsWith(".osc"))
@@ -80,8 +82,7 @@ public:
           QString("SQL changeset writing requires a target database URL for configuration purposes."));
       }
 
-      OsmChangesetSqlFileWriter(QUrl(args[3]))
-        .write(args[2], delta);
+      OsmChangesetSqlFileWriter(QUrl(args[3])).write(args[2], delta);
     }
     else
     {

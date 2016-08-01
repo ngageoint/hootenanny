@@ -368,6 +368,23 @@ QSqlQuery ApiDb::_exec(const QString& sql, QVariant v1, QVariant v2, QVariant v3
   return q;
 }
 
+unsigned int ApiDb::tileForPoint(double lat, double lon)
+{
+  int lonInt = round((lon + 180.0) * 65535.0 / 360.0);
+  int latInt = round((lat + 90.0) * 65535.0 / 180.0);
+
+  unsigned int tile = 0;
+  int          i;
+
+  for (i = 15; i >= 0; i--)
+  {
+    tile = (tile << 1) | ((lonInt >> i) & 1);
+    tile = (tile << 1) | ((latInt >> i) & 1);
+  }
+
+  return tile;
+}
+
 QSqlQuery ApiDb::_execNoPrepare(const QString& sql) const
 {
   // inserting strings in this fashion is safe b/c it is private and we closely control the table
@@ -382,6 +399,11 @@ QSqlQuery ApiDb::_execNoPrepare(const QString& sql) const
   LOG_VARD(q.numRowsAffected());
 
   return q;
+}
+
+long ApiDb::round(double x)
+{
+  return (long)(x + 0.5);
 }
 
 }

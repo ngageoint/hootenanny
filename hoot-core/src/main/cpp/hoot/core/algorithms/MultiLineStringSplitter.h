@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTILINESTRINGSPLITTER_H
 #define MULTILINESTRINGSPLITTER_H
 
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/algorithms/linearreference/WaySublineString.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/util/FindNodesInWayFactory.h>
 
 namespace hoot
@@ -42,7 +42,7 @@ public:
   MultiLineStringSplitter();
 
   /**
-   * Given a WaySublineString, extract all the matching sub-elements.
+   * Given a WaySublineCollection, extract all the matching sub-elements.
    *
    * @param map - Map that contains the data. The resulting match will be added to map if it isn't
    *  already in map.
@@ -51,7 +51,7 @@ public:
    *  be placed into a multilinestring relation. The relations tags will _not_ be populated with
    *  the subline way tags. Status and CE will be taken from the first matching subline.
    */
-  ElementPtr createSublines(const OsmMapPtr& map, const WaySublineString& string,
+  ElementPtr createSublines(const OsmMapPtr& map, const WaySublineCollection& string,
     const vector<bool>& reverse, GeometryConverter::NodeFactory* nf = 0) const;
 
   /**
@@ -67,7 +67,7 @@ public:
    * @param scraps Contains all the bits that don't match the subline string. This element will be
    *  created and added to the map. If nothing matches or the line length is zero then @a scraps
    */
-  void split(const OsmMapPtr& map, const WaySublineString& string, const vector<bool>& reverse,
+  void split(const OsmMapPtr& map, const WaySublineCollection& string, const vector<bool>& reverse,
     ElementPtr& match, ElementPtr& scraps, GeometryConverter::NodeFactory *nf = 0) const;
 
   /**
@@ -84,7 +84,7 @@ public:
              ElementPtr& match) const;
 
 private:
-  auto_ptr<FindNodesInWayFactory> _createNodeFactory(const WaySublineString& string) const;
+  auto_ptr<FindNodesInWayFactory> _createNodeFactory(const WaySublineCollection& string) const;
 };
 
 }

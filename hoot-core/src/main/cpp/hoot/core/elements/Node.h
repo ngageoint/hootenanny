@@ -58,7 +58,8 @@ public:
   Node(Status s, long id, double x, double y, Meters circularError,
        long changeset = ElementData::CHANGESET_EMPTY, long version = ElementData::VERSION_EMPTY,
        unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
-       QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY);
+       QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
+       bool visible = ElementData::VISIBLE_EMPTY);
 
   virtual ~Node() {}
 
@@ -92,7 +93,6 @@ public:
   virtual void visitRo(const ElementProvider& map, ElementVisitor& visitor) const;
 
   virtual void visitRw(ElementProvider& map, ElementVisitor& visitor);
-
 
 protected:
 

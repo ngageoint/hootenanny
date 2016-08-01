@@ -32,6 +32,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
 // CPP Unit
@@ -120,8 +121,8 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    vector<long> r1 = map->findWays("REF1", "Target");
-    vector<long> r2 = map->findWays("name", "Target Grocery");
+    vector<long> r1 = FindWaysVisitor::findWaysByTag(map, "REF1", "Target");
+    vector<long> r2 = FindWaysVisitor::findWaysByTag(map, "name", "Target Grocery");
 
     const shared_ptr<const Way> w = map->getWay(r1[0]);
     const shared_ptr<const Way> w1 = map->getWay(r2[0]);

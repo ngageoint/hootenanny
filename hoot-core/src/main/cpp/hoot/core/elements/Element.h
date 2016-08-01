@@ -98,7 +98,11 @@ public:
 
   long getId() const { return _getElementData().getId(); }
 
+  void setId(long id) { _getElementData().setId(id); }
+
   long getChangeset() const { return _getElementData().getChangeset(); }
+
+  void setChangeset(bool changeset) { _getElementData().setChangeset(changeset); }
 
   Meters getRawCircularError() const { return _getElementData().getRawCircularError(); }
 
@@ -125,6 +129,10 @@ public:
   void setTags(const Tags& tags) { _getElementData().setTags(tags); }
 
   void setTag(QString k, QString v) { _getElementData().setTag(k, v); }
+
+  bool getVisible() const { return _getElementData().getVisible(); }
+
+  void setVisible(bool visible) { _getElementData().setVisible(visible); }
 
   Status getStatus() const { return _status; }
 

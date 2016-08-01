@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REVIEWMARKER_H
 #define REVIEWMARKER_H
@@ -94,6 +94,18 @@ public:
     vector<QString> choices = vector<QString>() );
 
   /**
+   * Marks a set of elements as needing review and sets them to reference each other. If the score is
+   * negative then the score is omitted.
+   *
+   * @param note A human readable note describing the review.
+   * @param reviewType A human readable review type. Typically this is a one word description of
+   *  the feature being reviewed. E.g. "Highway" or "Building".
+   */
+  static void mark(const OsmMapPtr &map, set<ElementId> ids,
+    const QString& note, const QString& reviewType, double score = -1,
+    vector<QString> choices = vector<QString>() );
+
+  /**
    * Marks a single element as needing review.
    */
   static void mark(const OsmMapPtr &map, const ElementPtr& e, const QString& note,
@@ -124,6 +136,9 @@ private:
   static set<ElementId> _getReviewRelations(const ConstOsmMapPtr &map, ElementId eid);
 
   void _updateScore(Tags& t, double score);
+
+  // for white box testing.
+  friend class RemoveEmptyReviewRelationsVisitorTest;
 };
 
 }

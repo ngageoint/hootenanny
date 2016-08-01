@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayLocation.h"
@@ -217,6 +217,15 @@ const Coordinate WayLocation::getCoordinate() const
     shared_ptr<const Node> p1 = _map->getNode(_way->getNodeId(_segmentIndex + 1));
     return pointAlongSegmentByFraction(p0->toCoordinate(), p1->toCoordinate(), _segmentFraction);
   }
+}
+
+ConstNodePtr WayLocation::getNode() const
+{
+  if (!isNode())
+  {
+    throw IllegalArgumentException("getNode() is only valid if WayLocation is on a node.");
+  }
+  return _map->getNode(getWay()->getNodeId(_segmentIndex));
 }
 
 WayLocation WayLocation::move(Meters distance) const

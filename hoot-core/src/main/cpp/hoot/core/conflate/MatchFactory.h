@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHFACTORY_H
 #define MATCHFACTORY_H
@@ -103,7 +103,7 @@ private:
                                    const Envelope& bounds) const;
   static void _setMatchCreators(QStringList matchCreatorsList);
 
-  static MatchFactory _theInstance;
+  static shared_ptr<MatchFactory> _theInstance;
 
   vector< shared_ptr<MatchCreator> > _creators;
 

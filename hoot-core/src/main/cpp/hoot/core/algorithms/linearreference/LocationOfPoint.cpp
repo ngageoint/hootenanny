@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LocationOfPoint.h"
@@ -122,16 +122,23 @@ WayLocation LocationOfPoint::locate(const Coordinate& inputPt) const
     return WayLocation(_map, _way, 0, 0);
   }
 
-  for (size_t i = 0; i < _way->getNodeCount() - 1; i++) {
-    seg.p0 = _map->getNode(_way->getNodeId(i))->toCoordinate();
-    seg.p1 = _map->getNode(_way->getNodeId(i + 1))->toCoordinate();
-    double segDistance = seg.distance(inputPt);
-    double segFrac = segmentFraction(seg, inputPt);
+  if (_way->getNodeCount() >= 1)
+  {
+    // this little bit of fanciness makes the function ~30% faster.
+    Coordinate lastCoord = _map->getNode(_way->getNodeId(0))->toCoordinate();
+    for (size_t i = 0; i < _way->getNodeCount() - 1; i++) {
+      Coordinate nextCoord = _map->getNode(_way->getNodeId(i + 1))->toCoordinate();
+      seg.p0 = lastCoord;
+      seg.p1 = nextCoord;
+      lastCoord = nextCoord;
+      double segDistance = seg.distance(inputPt);
+      double segFrac = segmentFraction(seg, inputPt);
 
-    if (segDistance < minDistance) {
-      minIndex = i;
-      minFrac = segFrac;
-      minDistance = segDistance;
+      if (segDistance < minDistance) {
+        minIndex = i;
+        minFrac = segFrac;
+        minDistance = segDistance;
+      }
     }
   }
 

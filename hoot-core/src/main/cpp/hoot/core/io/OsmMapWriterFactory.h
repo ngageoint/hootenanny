@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPWRITERFACTORY_H
 #define OSMMAPWRITERFACTORY_H
@@ -48,7 +48,7 @@ public:
 
   shared_ptr<OsmMapWriter> createWriter(QString url);
 
-  static OsmMapWriterFactory& getInstance() { return _theInstance; }
+  static OsmMapWriterFactory& getInstance();
 
   bool hasElementOutputStream(QString url);
 
@@ -59,7 +59,7 @@ public:
   static void write(const shared_ptr<const OsmMap>& map, QString url);
 
 private:
-  static OsmMapWriterFactory _theInstance;
+  static shared_ptr<OsmMapWriterFactory> _theInstance;
 };
 
 }

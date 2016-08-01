@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- *
+ * Compares two elements of the same type for similarity
  */
 class ElementComparer
 {
@@ -50,16 +50,13 @@ public:
 
 private:
 
+  bool _compareNode(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e);
+
+  bool _compareWay(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e);
+
+  bool _compareRelation(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e);
+
   Meters _threshold;
-
-  bool _compareNode(const shared_ptr<const Element>& re,
-                    const shared_ptr<const Element>& e);
-
-  bool _compareWay(const shared_ptr<const Element>& re,
-                   const shared_ptr<const Element>& e);
-
-  bool _compareRelation(const shared_ptr<const Element>& re,
-                        const shared_ptr<const Element>& e);
 
 };
 

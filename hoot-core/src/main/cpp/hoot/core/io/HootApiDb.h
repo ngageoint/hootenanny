@@ -278,18 +278,6 @@ public:
   QString execToString(QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
                         QVariant v3 = QVariant());
 
-  static long round(double x);
-  static long round(double x, int precision);
-
-  /**
-   * Calculates the QuadTile for a point.
-   * http://wiki.openstreetmap.org/wiki/QuadTiles
-   *
-   * The code was taken from quad_tile.h and quad_tile.c in the openstreetmap-website
-   * https://github.com/openstreetmap/openstreetmap-website
-   */
-  static unsigned int tileForPoint(double lat, double lon);
-
 private:
 
   bool _inTransaction;

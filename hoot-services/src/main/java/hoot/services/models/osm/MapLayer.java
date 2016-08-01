@@ -26,6 +26,8 @@
  */
 package hoot.services.models.osm;
 
+import java.sql.Timestamp;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 
@@ -54,7 +56,7 @@ public class MapLayer {
         this.name = name;
     }
 
-    private java.sql.Timestamp date;
+    private Timestamp date;
 
     public String getDate() {
         return String.format("%1$TD", date);
@@ -62,8 +64,18 @@ public class MapLayer {
         // return String.format("%1$TD %1$TT", date);
     }
 
-    public void setDate(java.sql.Timestamp date) {
+    public void setDate(Timestamp date) {
         this.date = date;
+    }
+
+    private boolean canExportToOsmApiDb;
+
+    public boolean getCanExportToOsmApiDb() {
+        return canExportToOsmApiDb;
+    }
+
+    public void setCanExportToOsmApiDb(boolean canExport) {
+        this.canExportToOsmApiDb = canExport;
     }
 
     public MapLayer() {

@@ -31,16 +31,18 @@
 // Standard Includes
 #include <stdlib.h>
 #include <vector>
-
+//  Boost Includes
 #include <boost/shared_ptr.hpp>
 
-#include "../TgsExport.h"
+#include "tgs/TgsExport.h"
 
 namespace Tgs
 {
   class TGS_EXPORT Random
   {
   public:
+    Random(unsigned int seed);
+
     static boost::shared_ptr<Random> instance()
     {
       if (!_instance)
@@ -74,6 +76,10 @@ namespace Tgs
     Random();
 
     static boost::shared_ptr<Random> _instance;
+
+    unsigned int _seed;
+    bool _is_single;
+
   };
 }
 

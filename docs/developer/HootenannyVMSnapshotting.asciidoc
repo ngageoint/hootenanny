@@ -11,3 +11,4 @@
 ** run: 'vagrant snapshot save hoot-partially-provisioned && vagrant provision' - The remaining, not quite as lengthy (sometimes less stable) hoot specific provisioning then gets done.
 * To restore the partially provisioned VM snapshot at a later time: 
 ** run: 'vagrant snapshot restore hoot-partially-provisioned'
+

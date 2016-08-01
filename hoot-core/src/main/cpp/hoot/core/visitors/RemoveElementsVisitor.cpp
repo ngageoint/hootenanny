@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveElementsVisitor.h"
 
@@ -79,6 +79,13 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
       _map->removeElement(ElementId(type, id));
     }
   }
+}
+
+void RemoveElementsVisitor::removeWays(shared_ptr<OsmMap> pMap,
+                       const shared_ptr<ElementCriterion>& pCrit)
+{
+  RemoveElementsVisitor v(pCrit);
+  pMap->visitWaysRw(v);
 }
 
 }

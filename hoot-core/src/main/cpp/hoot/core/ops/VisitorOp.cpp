@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "VisitorOp.h"
 
@@ -32,6 +32,18 @@
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(OsmMapOperation, VisitorOp)
+
+void VisitorOp::addVisitor(const ElementVisitorPtr& e)
+{
+  if (_visitor)
+  {
+    throw IllegalArgumentException("The visitor can only be set once on the VisitorOp.");
+  }
+
+  _visitor = e;
+}
 
 void VisitorOp::apply(shared_ptr<OsmMap>& map)
 {

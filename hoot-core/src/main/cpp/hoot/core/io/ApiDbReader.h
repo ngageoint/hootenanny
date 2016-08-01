@@ -85,6 +85,9 @@ public:
           double tv = tags.getLength("error:circular").value();
           element->setCircularError(tv);
           ok = true;
+          /*LOG_DEBUG(
+            "Set circular error from error:circular tag to " << tv << " for element with ID: " <<
+            element->getId());*/
         }
         catch (const HootException& e)
         {
@@ -109,6 +112,9 @@ public:
           double tv = tags.getLength("accuracy").value();
           element->setCircularError(tv);
           ok = true;
+          /*LOG_DEBUG(
+            "Set circular error from accuracy tag to " << tv << " for element with ID: " <<
+            element->getId());*/
         }
         catch (const HootException& e)
         {

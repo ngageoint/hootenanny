@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+    <node visible="true" id="-271173" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7692302999999967" lon="-122.4478454999999997"/>
+    <node visible="true" id="-271161" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7690521999999973" lon="-122.4477191999999945"/>
+    <node visible="true" id="-271160" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7690405999999967" lon="-122.4478040000000050"/>
+    <node visible="true" id="-271159" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7690279999999987" lon="-122.4478962999999965"/>
+    <node visible="true" id="-74242" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7719724000000028" lon="-122.4681824999999975"/>
+    <node visible="true" id="-20421" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7712891999999982" lon="-122.4696196000000015"/>
+    <node visible="true" id="-20420" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7707806000000019" lon="-122.4690369000000061"/>
+    <way visible="true" id="-3295" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-20420"/>
+        <nd ref="-20421"/>
+        <nd ref="-74242"/>
+        <nd ref="-20420"/>
+        <tag k="REF1" v="007f9a"/>
+        <tag k="website" v="http://deyoung.famsf.org/"/>
+        <tag k="building" v="yes"/>
+        <tag k="name" v="De Young Museum"/>
+        <tag k="tourism" v="museum"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-27044" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-271160"/>
+        <nd ref="-271159"/>
+        <nd ref="-271173"/>
+        <nd ref="-271160"/>
+        <tag k="REF1" v="007e14"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-27037" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-271161"/>
+        <nd ref="-271160"/>
+        <nd ref="-271173"/>
+        <nd ref="-271161"/>
+        <tag k="REF1" v="007e08"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

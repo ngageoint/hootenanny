@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddRef2Visitor.h"
 
@@ -35,14 +35,24 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, AddRef2Visitor)
 
+AddRef2Visitor::AddRef2Visitor()
+{
+  setConfiguration(conf());
+}
+
 void AddRef2Visitor::visit(const ConstElementPtr& e)
 {
   shared_ptr<Element> ee = _map->getElement(e->getElementId());
 
-  if (ee->getTags().getNonDebugCount() > 0)
+  if (_informationOnly == false || ee->getTags().getNonDebugCount() > 0)
   {
     ee->getTags()["REF2"] = "todo";
   }
+}
+
+void AddRef2Visitor::setConfiguration(const Settings& conf)
+{
+  _informationOnly = ConfigOptions(conf).getAddRefVisitorInformationOnly();
 }
 
 }

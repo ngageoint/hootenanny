@@ -25,6 +25,20 @@ Feature: Manually resolve reviews feature
     Then I should see "Previous"
     Then I should see "Next"
     Then I should see "Resolved"
+    #Add a new point and edit name tag
+    When I click the "add-point" button
+    And I click the "map" at "400","100"
+    And I click the "div.label" with text "Park"
+    And I type "Test Name" in input "preset-input-name"
+    And I click the "All tags" link
+    Then I should see these tags in the table:
+        | leisure | park |
+        | name | Test Name |
+    #Edit a review feature
+    When I select a node map feature with id "activeReviewFeature"
+    And I type "Edit Name" in input "preset-input-name"
+    Then I wait 2 "seconds" to see "div.tag-table td.f1" element with text "Edit Name"
+
     #Then I should see "Merge"
     #And I press "Merge"
     #Then I wait 30 "seconds" to see "Resolved"
@@ -47,13 +61,13 @@ Feature: Manually resolve reviews feature
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 1 (Resolved: 7)"
     And I press "Merge"
-    Then I wait 30 "seconds" to see "Resolved"
+    Then I wait 30 "seconds" to not see "Please wait while merging review items."
     And I press "Next"
     Then I wait 5 "seconds" to see "Please resolve or undo the current feature changes before proceeding to the next review."
     And I press "Previous"
     Then I wait 5 "seconds" to see "Please resolve or undo the current feature changes before proceeding to the next review."
     And I press "Resolved"
-    Then I wait 10 "seconds" to see "There are no more available features to review.  Exiting the review session."
+    Then I wait 30 "seconds" to see "There are no more available features to review."
     Then I should not see "Reviews remaining:"
     Then I should not see "Hide Table"
     Then I should not see "name"

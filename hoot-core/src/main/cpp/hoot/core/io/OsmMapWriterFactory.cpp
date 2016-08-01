@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmMapWriterFactory.h"
 
@@ -36,10 +36,19 @@
 namespace hoot
 {
 
-OsmMapWriterFactory OsmMapWriterFactory::_theInstance;
+shared_ptr<OsmMapWriterFactory> OsmMapWriterFactory::_theInstance;
 
 OsmMapWriterFactory::OsmMapWriterFactory()
 {
+}
+
+OsmMapWriterFactory& OsmMapWriterFactory::getInstance()
+{
+  if (!_theInstance.get())
+  {
+    _theInstance.reset(new OsmMapWriterFactory());
+  }
+  return *_theInstance;
 }
 
 shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
@@ -47,7 +56,7 @@ shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
   QString writerOverride = ConfigOptions().getOsmMapWriterFactoryWriter();
 
   shared_ptr<OsmMapWriter> writer;
-  if (writerOverride != "")
+  if (writerOverride != "" && url != ConfigOptions().getDebugMapFilename())
   {
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(writerOverride));
   }

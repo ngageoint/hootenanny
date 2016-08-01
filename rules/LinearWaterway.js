@@ -27,7 +27,8 @@ var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
  */
 exports.init = function(map) 
 {
-  if (Boolean(hoot.get("waterway.auto.calc.search.radius")))
+  var autoCalcSearchRadius = (hoot.get("waterway.auto.calc.search.radius") === 'true');
+  if (autoCalcSearchRadius)
   {
     hoot.log("Automatically calculating search radius...");
     exports.searchRadius =

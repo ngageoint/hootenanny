@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WaySplitter.h"
@@ -60,9 +60,12 @@ vector<WayPtr> WaySplitter::createSplits(const vector<WayLocation>& wl)
     assert(wl[i].getWay() == _a);
     WayLocation curr = wl[i];
 
+    LOG_VAR(last);
+    LOG_VAR(curr);
+    LOG_VAR(last.compareTo(curr));
     if (last.compareTo(curr) != 0)
     {
-      result[i] = WaySubline(last, curr).toWay(_map);
+      result[i] = WaySubline(last, curr).toWay(_map, _nf.get());
       if (result[i]->getNodeCount() == 0)
       {
         result[i].reset();

@@ -33,7 +33,7 @@ import com.mysema.query.sql.RelationalPathBase;
 import com.mysema.query.types.path.BooleanPath;
 import com.mysema.query.types.path.NumberPath;
 
-import hoot.services.db.DbUtils.EntityChangeType;
+import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.models.osm.Element.ElementType;
 
 
@@ -45,7 +45,7 @@ public interface DbSerializable {
     // the record this implementation wraps
     Object getRecord();
 
-    void setRecord(Object record) throws Exception;
+    void setRecord(Object record);
 
     // related records to this element (e.g. way nodes for ways, relation
     // members for relations,

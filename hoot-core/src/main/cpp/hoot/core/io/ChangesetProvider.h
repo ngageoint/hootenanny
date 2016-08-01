@@ -75,14 +75,14 @@ public:
 
   QString toString() const
   {
-    QString str =
-      changeTypeToString(type) + ": " + e->getElementId().toString();
-    //str += ->toString();
-    return str;
+    return
+      "Change type: " + changeTypeToString(type) + ", ID: " + e->getElementId().toString() +
+      ", Note: " + note;
   }
 
   ConstElementPtr e;
   ChangeType type;
+  QString note;
 
 };
 

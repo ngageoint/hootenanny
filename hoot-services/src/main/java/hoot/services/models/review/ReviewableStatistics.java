@@ -31,33 +31,33 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/**
- * 
- */
-public class ReviewableStatistics extends ReviewQueryMapper {
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(ReviewableStatistics.class);
-    private long _totalCount = 0;
-    private long _unreviewedCount = 0;
+public class ReviewableStatistics implements ReviewQueryMapper {
+    private static final Logger logger = LoggerFactory.getLogger(ReviewableStatistics.class);
 
-    public ReviewableStatistics(final long nTotal, final long nUnreviewed) {
-        _totalCount = nTotal;
-        _unreviewedCount = nUnreviewed;
+    private long totalCount;
+    private long unreviewedCount;
+
+    public ReviewableStatistics() {
+    }
+
+    public ReviewableStatistics(long nTotal, long nUnreviewed) {
+        this.totalCount = nTotal;
+        this.unreviewedCount = nUnreviewed;
     }
 
     public long getTotalCount() {
-        return _totalCount;
+        return totalCount;
     }
 
     public long getUnreviewedCount() {
-        return _unreviewedCount;
+        return unreviewedCount;
     }
 
     @Override
     public String toString() {
         JSONObject o = new JSONObject();
-        o.put("totalCount", _totalCount);
-        o.put("unreviewedCount", _unreviewedCount);
+        o.put("totalCount", totalCount);
+        o.put("unreviewedCount", unreviewedCount);
         return o.toJSONString();
     }
 }
