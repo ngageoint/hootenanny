@@ -30,8 +30,13 @@ build-info:
 
 config: src/main/resources/db/spring-database.xml src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml db.properties src/main/resources/conf/hoot-services.conf
 
+run-liquibase:
+	rm -f ./src/main/resources/db/liquibase.properties
+	../scripts/ReplaceEnvironmentVariables.sh ./src/main/resources/db/liquibase.properties.in ./src/main/resources/db/liquibase.properties
+	mvn liquibase:update
+
 #add -X param temporarily to mvn-build command to debug mvn execution
-build: build-info config
+build: build-info config run-liquibase
 	# If there isn't a local copy of the properties, copy the global version.
 	# [ -f src/main/resources/conf/hoot-services.conf ] || cp src/main/resources/conf/hoot-services.conf.orig src/main/resources/conf/hoot-services.conf
 	../scripts/mvn-build $(MVN_QUIET) build
@@ -83,9 +88,6 @@ else
 	../scripts/mvn-build $(MVN_QUIET) verify
 endif
 
-generate-querydsl-entities:
+generate-querydsl-entities: run-liquibase
 	rm -rf ./src/main/java/hoot/services/models/db
-	rm -f ./src/main/resources/db/liquibase.properties
-	../scripts/ReplaceEnvironmentVariables.sh ./src/main/resources/db/liquibase.properties.in ./src/main/resources/db/liquibase.properties
-	mvn liquibase:update
 	mvn querydsl:export
