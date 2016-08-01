@@ -60,7 +60,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.db2.JobStatus;
+import hoot.services.models.db.JobStatus;
 import hoot.services.job.JobStatusManager;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.nativeinterfaces.JobExecutionManager;

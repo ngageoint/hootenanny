@@ -26,7 +26,7 @@
  */
 package hoot.services.controllers.osm;
 
-import hoot.services.db2.Users;
+import hoot.services.models.db.Users;
 
 
 public class UserSaveResponse {

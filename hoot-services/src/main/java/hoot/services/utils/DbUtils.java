@@ -57,15 +57,15 @@ import com.mysema.query.types.Predicate;
 import com.mysema.query.types.expr.BooleanExpression;
 
 import hoot.services.HootProperties;
-import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.CurrentRelations;
-import hoot.services.db2.CurrentWays;
-import hoot.services.db2.QCurrentNodes;
-import hoot.services.db2.QCurrentRelations;
-import hoot.services.db2.QCurrentWays;
-import hoot.services.db2.QMaps;
-import hoot.services.db2.QReviewBookmarks;
-import hoot.services.db2.QUsers;
+import hoot.services.models.db.CurrentNodes;
+import hoot.services.models.db.CurrentRelations;
+import hoot.services.models.db.CurrentWays;
+import hoot.services.models.db.QCurrentNodes;
+import hoot.services.models.db.QCurrentRelations;
+import hoot.services.models.db.QCurrentWays;
+import hoot.services.models.db.QMaps;
+import hoot.services.models.db.QReviewBookmarks;
+import hoot.services.models.db.QUsers;
 import hoot.services.models.osm.Element.ElementType;
 
 

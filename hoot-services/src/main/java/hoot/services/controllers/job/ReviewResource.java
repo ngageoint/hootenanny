@@ -57,10 +57,10 @@ import org.slf4j.LoggerFactory;
 import com.mysema.query.sql.SQLQuery;
 
 import hoot.services.controllers.osm.MapResource;
-import hoot.services.db2.QMaps;
+import hoot.services.models.db.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
-import hoot.services.models.osm.ElementInfo;
+import hoot.services.models.review.ElementInfo;
 import hoot.services.models.review.AllReviewableItems;
 import hoot.services.models.review.ReviewRef;
 import hoot.services.models.review.ReviewRefsRequest;

@@ -48,7 +48,7 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.db2.QMaps;
+import hoot.services.models.db.QMaps;
 import hoot.services.job.JobStatusManager;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.DbUtils;

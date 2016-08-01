@@ -26,7 +26,7 @@
  */
 package hoot.services.controllers.osm;
 
-import static hoot.services.db2.QCurrentNodes.currentNodes;
+import static hoot.services.models.db.QCurrentNodes.currentNodes;
 
 import java.sql.Connection;
 import java.util.HashMap;
@@ -46,7 +46,7 @@ import com.mysema.query.sql.SQLQuery;
 
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.EntityChangeType;
-import hoot.services.db2.CurrentNodes;
+import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;

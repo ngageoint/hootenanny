@@ -54,9 +54,9 @@ import com.mysema.query.sql.RelationalPathBase;
 import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
 
-import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.QCurrentRelationMembers;
-import hoot.services.db2.QCurrentWayNodes;
+import hoot.services.models.db.CurrentNodes;
+import hoot.services.models.db.QCurrentRelationMembers;
+import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.exceptions.osm.OSMAPIAlreadyDeletedException;
 import hoot.services.exceptions.osm.OSMAPIPreconditionException;
 import hoot.services.geo.BoundingBox;
