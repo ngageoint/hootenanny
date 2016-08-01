@@ -27,6 +27,7 @@ Feature: Manually resolve reviews feature
     Then I should see "Resolved"
     #Add a new point and edit name tag
     When I click the "add-point" button
+    And I hover over "#map"
     And I click the "map" at "400","100"
     And I click the "div.label" with text "Park"
     And I type "Test Name" in input "preset-input-name"
