@@ -41,8 +41,8 @@ import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 
-import hoot.services.db2.JobStatus;
-import hoot.services.db2.QJobStatus;
+import hoot.services.models.db.JobStatus;
+import hoot.services.models.db.QJobStatus;
 
 
 /**

@@ -40,7 +40,7 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 import hoot.services.UnitTest;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.models.osm.ElementInfo;
+import hoot.services.models.review.ElementInfo;
 import hoot.services.models.review.ReviewRef;
 import hoot.services.models.review.ReviewRefsRequest;
 import hoot.services.models.review.ReviewRefsResponse;

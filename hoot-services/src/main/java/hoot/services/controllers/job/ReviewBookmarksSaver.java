@@ -43,8 +43,8 @@ import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.mysema.query.support.Expressions;
 
 import hoot.services.utils.DbUtils;
-import hoot.services.db2.QReviewBookmarks;
-import hoot.services.db2.ReviewBookmarks;
+import hoot.services.models.db.QReviewBookmarks;
+import hoot.services.models.db.ReviewBookmarks;
 import hoot.services.models.review.ReviewBookmarkSaveRequest;
 import hoot.services.readers.review.ReviewBookmarkRetriever;
 
