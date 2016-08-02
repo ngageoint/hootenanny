@@ -29,7 +29,7 @@ package hoot.services.models.osm;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import hoot.services.db2.Users;
+import hoot.services.models.db.Users;
 
 
 /**

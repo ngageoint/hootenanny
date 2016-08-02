@@ -58,12 +58,10 @@ import com.mysema.query.types.path.SimplePath;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.utils.DbUtils.nwr_enum;
-import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.CurrentWayNodes;
-import hoot.services.db2.CurrentWays;
-import hoot.services.db2.QCurrentWayNodes;
-import hoot.services.exceptions.osm.OSMAPIAlreadyDeletedException;
-import hoot.services.exceptions.osm.OSMAPIPreconditionException;
+import hoot.services.models.db.CurrentNodes;
+import hoot.services.models.db.CurrentWayNodes;
+import hoot.services.models.db.CurrentWays;
+import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.Coordinates;
 

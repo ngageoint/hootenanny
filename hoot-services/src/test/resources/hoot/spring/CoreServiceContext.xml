@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-<beans>
+    <bean id="processStreamInterface" class="hoot.services.nativeinterfaces.INativeInterfaceStubImpl">
+    </bean>
 
-	<bean id="processStreamInterface" singleton="true"
-          class="hoot.services.nativeinterfaces.INativeInterfaceStubImpl" init-method="init" destroy-method="destroy">
-	</bean>
-
-	<bean id="jobExecutionManagerNative" singleton="true"
-          class="hoot.services.nativeinterfaces.JobExecutionManager" init-method="init" destroy-method="destroy">
-		<property name="nativeInterface" ref="processStreamInterface"/>
-	</bean>
+    <bean id="jobExecutionManagerNative" class="hoot.services.nativeinterfaces.JobExecutionManager">
+        <property name="nativeInterface" ref="processStreamInterface"/>
+    </bean>
 
 </beans>

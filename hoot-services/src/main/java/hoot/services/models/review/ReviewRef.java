@@ -28,8 +28,6 @@ package hoot.services.models.review;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import hoot.services.models.osm.ElementInfo;
-
 
 /**
  * Element information

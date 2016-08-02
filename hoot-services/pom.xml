@@ -21,7 +21,7 @@
         <skip.hoot.services.integrationTests>false</skip.hoot.services.integrationTests>
         <redirect-test-output-to-file>false</redirect-test-output-to-file>
 
-        <spring.version>3.2.4.RELEASE</spring.version>
+        <spring.version>4.2.6.RELEASE</spring.version>
         <deegree.version>3.3.6</deegree.version>
         <jersey.version>1.17.1</jersey.version>
         <querydsl.version>3.3.2</querydsl.version>
@@ -50,6 +50,7 @@
         <osmosis-core.version>0.43-RELEASE</osmosis-core.version>
         <antlr-runtime.version>3.4</antlr-runtime.version>
 
+        <!-- Unit test tools section -->
         <junit.version>4.12</junit.version>
         <hamcrest.version>1.3</hamcrest.version>
         <mockito-all.version>1.9.5</mockito-all.version>
@@ -223,6 +224,8 @@
                     <changeLogFile>src/main/resources/db/db.changelog-master.xml</changeLogFile>
                     <logging>warning</logging>
                 </configuration>
+
+<!-- Exclude from the main build.  To be invoked manually via the command line instead.
                 <executions>
                     <execution>
                         <phase>initialize</phase>
@@ -231,11 +234,15 @@
                         </goals>
                     </execution>
                 </executions>
+ -->
             </plugin>
             <plugin>
                 <groupId>com.mysema.querydsl</groupId>
                 <artifactId>querydsl-maven-plugin</artifactId>
                 <version>${querydsl.version}</version>
+
+<!--  Exclude from the main build.  To be invoked manually via the command line instead.
+
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -244,12 +251,13 @@
                         </goals>
                     </execution>
                 </executions>
+-->
                 <configuration>
                     <jdbcDriver>org.postgresql.Driver</jdbcDriver>
                     <jdbcUrl>jdbc:postgresql://localhost:5432/hoot</jdbcUrl>
                     <jdbcUser>hoot</jdbcUser>
                     <jdbcPassword>hoottest</jdbcPassword>
-                    <packageName>hoot.services.db2</packageName>
+                    <packageName>hoot.services.models.db</packageName>
                     <tableNamePattern>changesets,current_nodes,current_relation_members,current_relations,current_way_nodes,current_ways,databasechangelog,databasechangeloglock,folder_map_mappings,folders,job_status,maps,users,review_bookmarks</tableNamePattern>
                     <targetFolder>src/main/java</targetFolder>
                     <exportBeans>true</exportBeans>
@@ -272,7 +280,7 @@
                     <!-- This has been disabled to prevent build breakage....but then you could end up with
                     no docs. -->
                     <failOnError>false</failOnError>
-                    <excludePackageNames>hoot.services.db2</excludePackageNames>
+                    <excludePackageNames>hoot.services.models.db.db2</excludePackageNames>
                     <!-- the version isn't right here; if fixed, then we could use the default param -->
                     <doctitle>${project.name} API</doctitle>
                 </configuration>

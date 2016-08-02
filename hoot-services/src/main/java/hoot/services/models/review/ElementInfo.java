@@ -22,17 +22,60 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.exceptions.osm;
+package hoot.services.models.review;
 
-public class OSMAPIPreconditionException extends Exception {
+import javax.xml.bind.annotation.XmlRootElement;
 
-    public OSMAPIPreconditionException(String message, Throwable t) {
-        super(message, t);
+
+/**
+ * Element information
+ */
+@XmlRootElement
+public class ElementInfo {
+    private long id = -1;
+
+    public long getId() {
+        return id;
     }
 
-    public OSMAPIPreconditionException(String message) {
-        super(message);
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    // can be map name or id
+    private String mapId;
+
+    public String getMapId() {
+        return mapId;
+    }
+
+    public void setMapId(String id) {
+        this.mapId = id;
+    }
+
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public ElementInfo() {
+    }
+
+    public ElementInfo(String mapId, long elementId, String elementType) {
+        this.mapId = mapId;
+        this.id = elementId;
+        this.type = elementType;
+    }
+
+    @Override
+    public String toString() {
+        return "map id: " + mapId + ", element id: " + id + ", element type: " + type;
     }
 }

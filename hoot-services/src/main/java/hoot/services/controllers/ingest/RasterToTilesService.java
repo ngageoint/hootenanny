@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
-import hoot.services.db2.QMaps;
+import hoot.services.models.db.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobStatusManager;
 import hoot.services.models.osm.Map;

@@ -54,9 +54,9 @@ import org.w3c.dom.Document;
 
 import com.mysema.query.Tuple;
 
-import hoot.services.db2.QMaps;
-import hoot.services.db2.QUsers;
-import hoot.services.db2.Users;
+import hoot.services.models.db.QMaps;
+import hoot.services.models.db.QUsers;
+import hoot.services.models.db.Users;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;

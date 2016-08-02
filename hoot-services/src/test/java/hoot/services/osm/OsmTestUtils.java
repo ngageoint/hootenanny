@@ -56,20 +56,21 @@ import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 
+import hoot.services.models.db.Changesets;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.RecordBatchType;
 import hoot.services.utils.PostgresUtils;
-import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.CurrentRelationMembers;
-import hoot.services.db2.CurrentRelations;
-import hoot.services.db2.CurrentWayNodes;
-import hoot.services.db2.CurrentWays;
-import hoot.services.db2.QChangesets;
-import hoot.services.db2.QCurrentNodes;
-import hoot.services.db2.QCurrentRelationMembers;
-import hoot.services.db2.QCurrentRelations;
-import hoot.services.db2.QCurrentWayNodes;
-import hoot.services.db2.QCurrentWays;
+import hoot.services.models.db.CurrentNodes;
+import hoot.services.models.db.CurrentRelationMembers;
+import hoot.services.models.db.CurrentRelations;
+import hoot.services.models.db.CurrentWayNodes;
+import hoot.services.models.db.CurrentWays;
+import hoot.services.models.db.QChangesets;
+import hoot.services.models.db.QCurrentNodes;
+import hoot.services.models.db.QCurrentRelationMembers;
+import hoot.services.models.db.QCurrentRelations;
+import hoot.services.models.db.QCurrentWayNodes;
+import hoot.services.models.db.QCurrentWays;
 import hoot.services.geo.BoundingBox;
 import hoot.services.utils.GeoUtils;
 import hoot.services.models.osm.Changeset;
@@ -142,7 +143,7 @@ public class OsmTestUtils {
 
         QChangesets changesets = QChangesets.changesets;
 
-        hoot.services.db2.Changesets changesetPojo = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Changesets changesetPojo = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
                 .from(changesets).where(changesets.id.eq(changesetId)).singleResult(changesets);
 
         Assert.assertNotNull(changesetPojo);
@@ -285,7 +286,7 @@ public class OsmTestUtils {
 
     public static void verifyTestChangesetCreatedByRequest(final Long changesetId) {
         QChangesets changesets = QChangesets.changesets;
-        hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
+        Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
                 .where(changesets.id.eq(changesetId)).singleResult(changesets);
 
         Assert.assertNotNull(changeset);
@@ -316,7 +317,7 @@ public class OsmTestUtils {
     public static void verifyTestChangesetUnmodified(final long changesetId) {
         try {
             QChangesets changesets = QChangesets.changesets;
-            hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
                     .from(changesets).where(changesets.id.eq(changesetId)).singleResult(changesets);
 
             Assert.assertNotNull(changeset);
@@ -341,7 +342,7 @@ public class OsmTestUtils {
     // for testing purposes allow specifying numChanges as a variable
     public static void verifyTestChangesetClosed(final long changesetId, final int numChanges) {
         QChangesets changesets = QChangesets.changesets;
-        hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
+        Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
                 .where(changesets.id.eq(changesetId)).singleResult(changesets);
 
         Assert.assertNotNull(changeset);
@@ -361,7 +362,7 @@ public class OsmTestUtils {
     public static void verifyTestChangesetUnmodified(final long changesetId, final BoundingBox originalBounds) {
         try {
             QChangesets changesets = QChangesets.changesets;
-            hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
                     .from(changesets).where(changesets.id.eq(changesetId)).singleResult(changesets);
 
             Assert.assertNotNull(changeset);
@@ -1061,7 +1062,7 @@ public class OsmTestUtils {
 
     public static void closeChangeset(final long mapId, final long changesetId) {
         QChangesets changesets = QChangesets.changesets;
-        hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
+        Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
                 .where(changesets.id.eq(changesetId)).singleResult(changesets);
 
         final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());

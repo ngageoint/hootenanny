@@ -43,10 +43,10 @@ import com.mysema.query.sql.SQLQuery;
 
 import hoot.services.controllers.osm.MapResource;
 import hoot.services.utils.DbUtils;
-import hoot.services.db2.CurrentRelationMembers;
-import hoot.services.db2.QCurrentRelationMembers;
+import hoot.services.models.db.CurrentRelationMembers;
+import hoot.services.models.db.QCurrentRelationMembers;
 import hoot.services.models.osm.Element;
-import hoot.services.models.osm.ElementInfo;
+import hoot.services.models.review.ElementInfo;
 import hoot.services.models.review.ReviewRef;
 import hoot.services.utils.ReviewUtils;
 

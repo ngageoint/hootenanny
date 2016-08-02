@@ -54,8 +54,8 @@ import org.slf4j.LoggerFactory;
 import com.mysema.query.sql.Configuration;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 
-import hoot.services.db2.QReviewBookmarks;
-import hoot.services.db2.ReviewBookmarks;
+import hoot.services.models.db.QReviewBookmarks;
+import hoot.services.models.db.ReviewBookmarks;
 import hoot.services.models.review.ReviewBookmarkDelRequest;
 import hoot.services.models.review.ReviewBookmarkDelResponse;
 import hoot.services.models.review.ReviewBookmarkSaveRequest;

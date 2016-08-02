@@ -30,7 +30,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import hoot.services.db2.ReviewBookmarks;
+import hoot.services.models.db.ReviewBookmarks;
 
 
 @XmlRootElement

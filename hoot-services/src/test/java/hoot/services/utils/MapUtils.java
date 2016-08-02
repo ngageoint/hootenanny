@@ -15,13 +15,13 @@ import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.types.expr.NumberExpression;
 import com.mysema.query.types.template.NumberTemplate;
 
-import hoot.services.db2.QCurrentNodes;
-import hoot.services.db2.QCurrentRelationMembers;
-import hoot.services.db2.QCurrentRelations;
-import hoot.services.db2.QCurrentWayNodes;
-import hoot.services.db2.QCurrentWays;
-import hoot.services.db2.QMaps;
-import hoot.services.db2.QUsers;
+import hoot.services.models.db.QCurrentNodes;
+import hoot.services.models.db.QCurrentRelationMembers;
+import hoot.services.models.db.QCurrentRelations;
+import hoot.services.models.db.QCurrentWayNodes;
+import hoot.services.models.db.QCurrentWays;
+import hoot.services.models.db.QMaps;
+import hoot.services.models.db.QUsers;
 
 
 /**

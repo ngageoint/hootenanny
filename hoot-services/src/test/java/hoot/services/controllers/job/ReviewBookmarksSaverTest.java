@@ -37,7 +37,7 @@ import org.junit.experimental.categories.Category;
 import com.mysema.query.sql.dml.SQLInsertClause;
 
 import hoot.services.UnitTest;
-import hoot.services.db2.ReviewBookmarks;
+import hoot.services.models.db.ReviewBookmarks;
 import hoot.services.models.review.ReviewBookmarkSaveRequest;
 
 

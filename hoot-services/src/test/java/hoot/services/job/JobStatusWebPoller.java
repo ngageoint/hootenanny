@@ -44,7 +44,7 @@ import com.mysema.query.sql.SQLQuery;
 import com.sun.jersey.api.client.WebResource;
 
 import hoot.services.utils.DbUtils;
-import hoot.services.db2.QJobStatus;
+import hoot.services.models.db.QJobStatus;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
 
 
@@ -146,7 +146,7 @@ public class JobStatusWebPoller {
         SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
         QJobStatus jobStatus = QJobStatus.jobStatus;
 
-        hoot.services.db2.JobStatus finalJobStatus =
+        hoot.services.models.db.JobStatus finalJobStatus =
                 query
                      .from(jobStatus)
                      .where(jobStatus.jobId.eq(jobId))
