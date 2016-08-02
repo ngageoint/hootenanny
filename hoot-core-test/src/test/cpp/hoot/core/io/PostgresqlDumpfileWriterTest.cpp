@@ -51,7 +51,7 @@ namespace hoot
 class PostgresqlDumpfileWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PostgresqlDumpfileWriterTest);
-  //CPPUNIT_TEST(runWriterTest);
+  CPPUNIT_TEST(runWriterTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -176,6 +176,6 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PostgresqlDumpfileWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PostgresqlDumpfileWriterTest, "quick");
 
 }
