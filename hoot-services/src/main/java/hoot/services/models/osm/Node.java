@@ -50,8 +50,6 @@ import com.mysema.query.types.path.SimplePath;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.models.db.CurrentNodes;
-import hoot.services.exceptions.osm.OSMAPIAlreadyDeletedException;
-import hoot.services.exceptions.osm.OSMAPIPreconditionException;
 import hoot.services.geo.BoundingBox;
 import hoot.services.utils.GeoUtils;
 import hoot.services.utils.QuadTileCalculator;
