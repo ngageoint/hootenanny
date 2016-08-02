@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.exceptions.osm;
+package hoot.services.models.osm;
 
 public class OSMAPIPreconditionException extends Exception {
 

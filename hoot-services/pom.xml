@@ -21,7 +21,7 @@
         <skip.hoot.services.integrationTests>false</skip.hoot.services.integrationTests>
         <redirect-test-output-to-file>false</redirect-test-output-to-file>
 
-        <spring.version>3.2.4.RELEASE</spring.version>
+        <spring.version>4.2.6.RELEASE</spring.version>
         <deegree.version>3.3.6</deegree.version>
         <jersey.version>1.17.1</jersey.version>
         <querydsl.version>3.3.2</querydsl.version>
