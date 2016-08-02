@@ -51,7 +51,7 @@ import org.w3c.dom.Document;
 
 import com.mysema.query.sql.SQLQuery;
 
-import hoot.services.db2.QMaps;
+import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.DbUtils;

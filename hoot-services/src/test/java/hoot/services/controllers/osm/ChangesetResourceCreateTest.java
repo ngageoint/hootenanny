@@ -47,10 +47,10 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
 import hoot.services.UnitTest;
-import hoot.services.db2.QChangesets;
+import hoot.services.models.db.QChangesets;
 import hoot.services.utils.DbUtils;
-import hoot.services.db2.Maps;
-import hoot.services.db2.QMaps;
+import hoot.services.models.db.Maps;
+import hoot.services.models.db.QMaps;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
 

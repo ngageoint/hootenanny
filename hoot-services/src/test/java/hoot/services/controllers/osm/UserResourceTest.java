@@ -46,8 +46,8 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 
 import hoot.services.UnitTest;
 import hoot.services.utils.DbUtils;
-import hoot.services.db2.Changesets;
-import hoot.services.db2.QChangesets;
+import hoot.services.models.db.Changesets;
+import hoot.services.models.db.QChangesets;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
 import hoot.services.osm.OsmResourceTestAbstract;

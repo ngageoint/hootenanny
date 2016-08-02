@@ -31,7 +31,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import hoot.services.db2.CurrentRelationMembers;
+import hoot.services.models.db.CurrentRelationMembers;
 import hoot.services.models.osm.Element.ElementType;
 
 

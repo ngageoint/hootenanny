@@ -36,8 +36,8 @@ import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.types.OrderSpecifier;
 
 import hoot.services.utils.DbUtils;
-import hoot.services.db2.QReviewBookmarks;
-import hoot.services.db2.ReviewBookmarks;
+import hoot.services.models.db.QReviewBookmarks;
+import hoot.services.models.db.ReviewBookmarks;
 
 
 public class ReviewBookmarkRetriever {

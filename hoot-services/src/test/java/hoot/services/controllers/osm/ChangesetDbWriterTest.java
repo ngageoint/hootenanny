@@ -36,7 +36,7 @@ import com.mysema.query.sql.SQLQuery;
 
 import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.DbUtils;
-import hoot.services.db2.QCurrentNodes;
+import hoot.services.models.db.QCurrentNodes;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;

@@ -52,8 +52,8 @@ import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 
-import hoot.services.db2.Changesets;
-import hoot.services.db2.QChangesets;
+import hoot.services.models.db.Changesets;
+import hoot.services.models.db.QChangesets;
 import hoot.services.geo.BoundingBox;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.GeoUtils;
