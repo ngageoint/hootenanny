@@ -159,8 +159,8 @@ Match(threshold)
   _tourismAncestorDistance = tourismAncestorDistance;
   //_tourismDistance = tourismDistance;
 
-  /*if (e1->getTags().get("name").toUpper() == "LAGUNA HONDA SUBSTATION" ||
-      e2->getTags().get("name").toUpper() == "LAGUNA HONDA SUBSTATION")
+  /*if (e1->getTags().get("name") == "San Francisco Columbarium" ||
+      e2->getTags().get("name") == "San Francisco Columbarium")
   {
     LOG_VARD(eid1);\
     LOG_VARD(e1->getTags().get("uuid"));
@@ -210,8 +210,6 @@ double PoiPolygonMatch::_calculateNameScore(ConstElementPtr e1, ConstElementPtr 
 
 bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2) //const
 {
-  bool result = false;
-
   const Tags& t1 = e1->getTags();
   const Tags& t2 = e2->getTags();
   for (Tags::const_iterator it = t1.begin(); it != t1.end(); it++)
@@ -221,26 +219,20 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
          (OsmSchemaCategory::building() | OsmSchemaCategory::use() | OsmSchemaCategory::poi()))
           != OsmSchemaCategory::Empty)
     {
-      result = t2.get(it.key()) == it.value();
+      bool result = t2.get(it.key()) == it.value();
       if (result &&
           ((it.key().toLower() != "building" && it.value().toLower() != "yes") ||
             ConfigOptions().getPoiPolygonAllowGenericBuildingMatches()))
       {
-        //LOG_VARD("type match");
-        //LOG_VARD(it.key());
-        //LOG_VARD(it.value());
-        //LOG_VARD(t1.toString());
-        //LOG_VARD(t2.toString());
-
         _typeMatchAttributeKey = it.key();
         _typeMatchAttributeValue = it.value();
 
-        return result;
+        return true;
       }
     }
   }
 
-  return result;
+  return false;
 }
 
 set< pair<ElementId, ElementId> > PoiPolygonMatch::getMatchPairs() const
