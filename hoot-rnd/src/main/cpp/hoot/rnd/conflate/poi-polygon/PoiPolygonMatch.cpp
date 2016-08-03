@@ -108,6 +108,7 @@ Match(threshold)
   int evidence = 0;
   evidence += typeMatch ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
+  evidence += typeMatch && nameScore == 1.0 ? 1 : 0;
   evidence += distance <= ConfigOptions().getPoiPolygonMatchDistance() ? 2 : 0;
 
   if (!closeMatch)
