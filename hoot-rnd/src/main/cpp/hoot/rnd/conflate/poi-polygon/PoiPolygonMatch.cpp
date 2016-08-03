@@ -83,11 +83,13 @@ Match(threshold)
 
   bool typeMatch = _calculateTypeMatch(poi, poly);
   double tourismAncestorDistance = -1.0;
+  double amenityAncestorDistance = -1.0;
   if (ConfigOptions().getPoiPolygonUseTagAncestorTypeMatching())
   {
     tourismAncestorDistance = _getTagDistance("ancestor", "tourism", map, e1, e2);
+    amenityAncestorDistance = _getTagDistance("ancestor", "amenity", map, e1, e2);
     //double tourismDistance = _getTagDistance("tourism", e1, e2);
-    if (tourismAncestorDistance == 0)
+    if (tourismAncestorDistance == 0 || amenityAncestorDistance == 0)
     {
       typeMatch = true;
     }
@@ -158,9 +160,10 @@ Match(threshold)
 
   _tourismAncestorDistance = tourismAncestorDistance;
   //_tourismDistance = tourismDistance;
+  _amenityAncestorDistance = amenityAncestorDistance;
 
-  /*if (e1->getTags().get("name") == "San Francisco Columbarium" ||
-      e2->getTags().get("name") == "San Francisco Columbarium")
+  /*if (e1->getTags().get("name") == "S. SUNSET PLAYGRND: CLUBHOUSE" ||
+      e2->getTags().get("name") == "S. SUNSET PLAYGRND: CLUBHOUSE")
   {
     LOG_VARD(eid1);\
     LOG_VARD(e1->getTags().get("uuid"));
@@ -395,6 +398,7 @@ QString PoiPolygonMatch::toString() const
   //str += "poi category distance: " + QString::number(_poiCategoryDistance) + "\n";
   //str += "tourism distance: " + QString::number(_tourismDistance) + "\n";
   //str += "leisure ancestor distance: " + QString::number(_leisureAncestorDistance) + "\n";
+  str += "amenity ancestor distance: " + QString::number(_amenityAncestorDistance) + "\n";
   str += "evidence: " + QString::number(_evidence);
   return str;*/
 }

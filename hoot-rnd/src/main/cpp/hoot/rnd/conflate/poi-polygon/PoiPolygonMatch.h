@@ -108,6 +108,7 @@ private:
   int _evidence;
 
   double _tourismAncestorDistance;
+  double _amenityAncestorDistance;
   //double _tourismDistance;
 
   QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
