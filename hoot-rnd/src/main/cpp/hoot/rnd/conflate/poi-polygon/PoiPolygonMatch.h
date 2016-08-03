@@ -32,6 +32,8 @@
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/schema/TagAncestorDifferencer.h>
+#include <hoot/core/schema/TagCategoryDifferencer.h>
 
 namespace hoot
 {
@@ -92,6 +94,11 @@ private:
   bool _nameMatch;
   QString _names1;
   QString _names2;
+  //bool _addressMatch;
+  //QString _addrTag1;
+  //QString _combAddr1;
+  //QString _addrTag2;
+  //QString _combAddr2;
   double _circularError1;
   double _circularError2;
   double _ce;
@@ -99,6 +106,12 @@ private:
   double _reviewDistance;
   bool _closeMatch;
   int _evidence;
+
+  double _tourismAncestorDistance;
+  //double _tourismDistance;
+
+  QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
+  QMap<QString, shared_ptr<TagCategoryDifferencer> > _tagCategoryDifferencers;
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the names. A score of -1 means one
@@ -111,6 +124,13 @@ private:
    * amenity=cafe in e1 and in e2.
    */
   bool _calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2) /*const*/;
+
+  double _getTagDistance(const QString type, const QString kvp, ConstOsmMapPtr map,
+                         ConstElementPtr e1, ConstElementPtr e2);
+  double _getTagDistance(const QString kvp, ConstElementPtr e1, ConstElementPtr e2) const;
+  QStringList _getRelatedTags(const QString relateToKvp, const Tags& tags) const;
+
+  bool _getAddressMatch(ConstElementPtr e1, ConstElementPtr e2);
 
 };
 

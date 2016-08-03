@@ -24,12 +24,11 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef NAMEEXTRACTOR_H
-#define NAMEEXTRACTOR_H
+#ifndef POIPOLYGONNAMEEXTRACTOR_H
+#define POIPOLYGONNAMEEXTRACTOR_H
 
 // hoot
-#include <hoot/core/algorithms/StringDistanceConsumer.h>
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
+#include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
 #include <hoot/core/elements/Element.h>
 
 namespace hoot
@@ -38,38 +37,22 @@ namespace hoot
 /**
  *
  */
-class NameExtractor : public FeatureExtractor, public StringDistanceConsumer
+class PoiPolygonNameExtractor : public NameExtractor
 {
 public:
-  NameExtractor();
 
-  NameExtractor(StringDistance* d);
+  PoiPolygonNameExtractor();
 
-  static string className() { return "hoot::NameExtractor"; }
+  PoiPolygonNameExtractor(StringDistance* d);
 
-  virtual string getClassName() const { return NameExtractor::className(); }
+  static string className() { return "hoot::PoiPolygonNameExtractor"; }
 
-  virtual string getName() const;
+  virtual string getClassName() const { return PoiPolygonNameExtractor::className(); }
 
-  virtual DataFrame::FactorType getFactorType() const { return DataFrame::Numerical; }
+  virtual double extract(const ConstElementPtr& target, const ConstElementPtr& candidate) const;
 
-  virtual DataFrame::NullTreatment getNullTreatment() const
-  {
-    return DataFrame::NullAsMissingValue;
-  }
-
-  virtual double extract(const OsmMap& /*map*/, const shared_ptr<const Element>& target,
-    const shared_ptr<const Element>& candidate) const { return extract(target, candidate); }
-
-  virtual double extract(const ConstElementPtr& target,
-    const ConstElementPtr& candidate) const;
-
-  virtual void setStringDistance(const StringDistancePtr &sd) { _d = sd; }
-
-protected:
-  StringDistancePtr _d;
 };
 
 }
 
-#endif // OVERLAPEXTRACTOR_H
+#endif // POIPOLYGONNAMEEXTRACTOR_H

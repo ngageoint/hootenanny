@@ -1588,7 +1588,7 @@ meters that is added to the CE calculation.
 * Default Value: `0`
 
 The maximum distance, in meters, between a POI and a polygon where they can still be considered
-an exact match based on distance criteria only.
+an exact match based on distance criteria only.  TODO: This may not remain a permanent config option.
 
 === poi.polygon.allow.generic.building.matches
 
@@ -1596,7 +1596,48 @@ an exact match based on distance criteria only.
 * Default Value: `true`
 
 If true, then POI's and polygon buildings only need building=yes in common to have a type match.
-This will generally generate more reviews when turned on than when turned off.
+This will generally generate more reviews when turned on than when turned off.  TODO: This may
+not remain a permanent config option.
+
+=== poi.polygon.use.tag.ancestor.type.matching
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, then more detailed checks are done with tag matching related to ancestry.  TODO: This may
+not remain a permanent config option.
+
+=== poi.polygon.use.address.name.matching
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, then more detailed checks are done with tag matching related to addresses.  TODO: This
+may not remain a permanent config option.
+
+=== poi.polygon.remove.operator.name.matching
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, then name comparisons are not done with the "operator" tag.  TODO: This may not
+remain a permanent config option.
+
+=== poi.polygon.review.multiple.matches
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, then multiple matches are always reviewed.  TODO: This may not remain a permanent
+config option.
+
+=== poi.polygon.use.mean.word.distance.name.comparison
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, then uses MeanWordsetDistance; otherwise uses MinSumWordSetDistance.  TODO: This may not
+remain a permanent config option.
 
 === postgresql.dumpfile.writer.auto.calc.ids
 

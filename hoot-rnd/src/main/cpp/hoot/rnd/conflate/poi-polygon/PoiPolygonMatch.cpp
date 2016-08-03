@@ -32,12 +32,17 @@
 // hoot
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
+#include <hoot/core/algorithms/string/MinSumWordSetDistance.h>
+//#include <hoot/core/algorithms/string/WeightedWordDistance.h>
+//#include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
+#include <hoot/rnd/conflate/poi-polygon/extractors/PoiPolygonNameExtractor.h>
+//#include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/conflate/MatchThreshold.h>
+//#include <hoot/core/util/ConfPath.h>
 
 namespace hoot
 {
@@ -77,8 +82,19 @@ Match(threshold)
   shared_ptr<Geometry> gpoi = ElementConverter(map).convertToGeometry(poi);
 
   bool typeMatch = _calculateTypeMatch(poi, poly);
+  double tourismAncestorDistance = -1.0;
+  if (ConfigOptions().getPoiPolygonUseTagAncestorTypeMatching())
+  {
+    tourismAncestorDistance = _getTagDistance("ancestor", "tourism", map, e1, e2);
+    //double tourismDistance = _getTagDistance("tourism", e1, e2);
+    if (tourismAncestorDistance == 0)
+    {
+      typeMatch = true;
+    }
+  }
   double nameScore = _calculateNameScore(poi, poly);
   bool nameMatch = nameScore >= ConfigOptions().getPoiPolygonMatchNameThreshold();
+
   double distance = gpoly->distance(gpoi.get());
 
   // calculate the 2 sigma for the distance between the two objects
@@ -97,22 +113,22 @@ Match(threshold)
   if (!closeMatch)
   {
     _c.setMiss();
-    LOG_DEBUG("poipoly miss");
+    //LOG_DEBUG("poipoly miss");
   }
   else if (evidence >= 3)
   {
     _c.setMatch();
-    LOG_DEBUG("poipoly match");
+    //LOG_DEBUG("poipoly match");
   }
   else if (evidence >= 1)
   {
     _c.setReview();
-    LOG_DEBUG("poipoly review");
+    //LOG_DEBUG("poipoly review");
   }
   else
   {
     _c.setMiss();
-    LOG_DEBUG("poipoly miss");
+    //LOG_DEBUG("poipoly miss");
   }
 
   _uuid1 = e1->getTags().get("uuid");
@@ -126,6 +142,11 @@ Match(threshold)
   QStringList names2 = e2->getTags().getNames();
   names2.append(e2->getTags().getPseudoNames());
   _names2 = names2.join(",");
+  //_addressMatch = addressMatch;
+  //_addrTag1 = e1AddrTag;
+  //_combAddr1 = e1AddrComb;
+  //_addrTag2 = e2AddrTag;
+  //_combAddr2 = e2AddrComb;
   _closeMatch = closeMatch;
   _distance = distance;
   _reviewDistance = reviewDistance;
@@ -134,29 +155,56 @@ Match(threshold)
   _circularError2 = e2->getCircularError();
   _evidence = evidence;
 
-  LOG_VARD(eid1);\
-  LOG_VARD(e1->getTags().get("uuid"));
-  LOG_VARD(eid2);
-  LOG_VARD(e2->getTags().get("uuid"));
-  LOG_VARD(typeMatch);
-  LOG_VARD(nameScore);
-  LOG_VARD(nameMatch);
-  LOG_VARD(e1->getCircularError());
-  LOG_VARD(e2->getCircularError());
-  LOG_VARD(distance);
-  LOG_VARD(reviewDistance);
-  LOG_VARD(closeMatch);
-  LOG_VARD(evidence);
+  _tourismAncestorDistance = tourismAncestorDistance;
+  //_tourismDistance = tourismDistance;
+
+  /*if (e1->getTags().get("name").toUpper() == "LAGUNA HONDA SUBSTATION" ||
+      e2->getTags().get("name").toUpper() == "LAGUNA HONDA SUBSTATION")
+  {
+    LOG_VARD(eid1);\
+    LOG_VARD(e1->getTags().get("uuid"));
+    LOG_VARD(eid2);
+    LOG_VARD(e2->getTags().get("uuid"));
+    LOG_VARD(typeMatch);
+    LOG_VARD(_typeMatchAttributeKey);
+    LOG_VARD(_typeMatchAttributeValue);
+    LOG_VARD(nameMatch);
+    LOG_VARD(nameScore);
+    LOG_VARD(names1);
+    LOG_VARD(names2);
+    LOG_VARD(closeMatch);
+    LOG_VARD(distance);
+    LOG_VARD(reviewDistance);
+    LOG_VARD(ce);
+    LOG_VARD(e1->getCircularError());
+    LOG_VARD(e2->getCircularError());
+    LOG_VARD(evidence);
+  }*/
 }
 
 double PoiPolygonMatch::_calculateNameScore(ConstElementPtr e1, ConstElementPtr e2) const
 {
-  // found experimentally when doing building name comparisons
-  return
-    NameExtractor(
-      new TranslateStringDistance(
-        new MeanWordSetDistance(
-          new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())))).extract(e1, e2);
+  if (ConfigOptions().getPoiPolygonUseMeanWordDistanceNameComparison())
+  {
+    return
+      /*NameExtractor*/PoiPolygonNameExtractor(
+        new TranslateStringDistance(
+          new MeanWordSetDistance(
+            new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))))
+        .extract(e1, e2);
+  }
+  else
+  {
+    /*SqliteWordWeightDictionary* dict =
+      new SqliteWordWeightDictionary(
+        ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary()));*/
+    return
+      /*NameExtractor*/PoiPolygonNameExtractor(
+        new TranslateStringDistance(
+          new /*MeanWordSetDistance*/MinSumWordSetDistance/*WeightedWordDistance*/(
+            new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())/*, dict*/)))
+        .extract(e1, e2);
+  }
 }
 
 bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2) //const
@@ -177,11 +225,11 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
           ((it.key().toLower() != "building" && it.value().toLower() != "yes") ||
             ConfigOptions().getPoiPolygonAllowGenericBuildingMatches()))
       {
-        LOG_VARD("type match");
-        LOG_VARD(it.key());
-        LOG_VARD(it.value());
-        LOG_VARD(t1.toString());
-        LOG_VARD(t2.toString());
+        //LOG_VARD("type match");
+        //LOG_VARD(it.key());
+        //LOG_VARD(it.value());
+        //LOG_VARD(t1.toString());
+        //LOG_VARD(t2.toString());
 
         _typeMatchAttributeKey = it.key();
         _typeMatchAttributeValue = it.value();
@@ -216,12 +264,118 @@ bool PoiPolygonMatch::isPoiIsh(ConstElementPtr e)
      e->getTags().getNames().size() > 0);
 }
 
+double PoiPolygonMatch::_getTagDistance(const QString type, const QString kvp, ConstOsmMapPtr map,
+                                       ConstElementPtr e1, ConstElementPtr e2)
+{
+  shared_ptr<TagFilteredDifferencer> differencer;
+  if (type == "ancestor")
+  {
+    if (!_tagAncestorDifferencers.contains(kvp))
+    {
+      differencer.reset(new TagAncestorDifferencer(kvp));
+      _tagAncestorDifferencers[kvp] = dynamic_pointer_cast<TagAncestorDifferencer>(differencer);
+    }
+    else
+    {
+      differencer = _tagAncestorDifferencers[kvp];
+    }
+  }
+  else if (type == "category")
+  {
+    if (!_tagCategoryDifferencers.contains(kvp))
+    {
+      differencer.reset(new TagCategoryDifferencer(OsmSchemaCategory::fromString(kvp)));
+      _tagCategoryDifferencers[kvp] = dynamic_pointer_cast<TagCategoryDifferencer>(differencer);
+    }
+    else
+    {
+      differencer = _tagCategoryDifferencers[kvp];
+    }
+  }
+  else
+  {
+    throw HootException();
+  }
+  return differencer->diff(map, e1, e2);
+}
+
+double PoiPolygonMatch::_getTagDistance(const QString kvp, ConstElementPtr e1,
+                                        ConstElementPtr e2) const
+{
+  double result = 1.0;
+
+  const QStringList relatedTags1 = _getRelatedTags(kvp, e1->getTags());
+  const QStringList relatedTags2 = _getRelatedTags(kvp, e2->getTags());
+  if (relatedTags1.size() == 0 || relatedTags2.size() == 0)
+  {
+    return FeatureExtractor::nullValue();
+  }
+
+  for (int i = 0; i < relatedTags1.length(); i++)
+  {
+    for (int j = 0; j < relatedTags2.length(); j++)
+    {
+      result =
+        min(1.0 - OsmSchema::getInstance().score(relatedTags1.at(i), relatedTags2.at(j)), result);
+    }
+  }
+
+  return result;
+}
+
+QStringList PoiPolygonMatch::_getRelatedTags(const QString relateToKvp, const Tags& tags) const
+{
+  QStringList result;
+  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); it++)
+  {
+    QString kvp = it.key() + "=" + it.value();
+    if (kvp != "poi=yes" && kvp != "place=locality" && kvp != "building=yes")
+    {
+      if (OsmSchema::getInstance().score(relateToKvp, kvp) > 0)
+      {
+        result.append(kvp);
+      }
+    }
+  }
+  return result;
+}
+
+//not currently using this...accounted for, hardcoded, in PoiPolygonNameExtractor for now
+bool PoiPolygonMatch::_getAddressMatch(ConstElementPtr e1, ConstElementPtr e2)
+{
+  Tags e1Tags = e1->getTags();
+  Tags e2Tags = e2->getTags();
+  QString e1HouseNum = e1Tags.get("addr:housenumber").trimmed();
+  QString e1Street = e1Tags.get("addr:street").trimmed().toLower();
+  QString e1AddrComb = e1HouseNum + " " + e1Street;
+  QString e1AddrTag = e1Tags.get("address").trimmed().toLower();
+  QString e2HouseNum = e2Tags.get("addr:housenumber").trimmed();
+  QString e2Street = e2Tags.get("addr:street").trimmed().toLower();
+  QString e2AddrComb = e2HouseNum + " " + e2Street;
+  QString e2AddrTag = e2Tags.get("address").trimmed().toLower();
+  bool addressMatch = false;
+  StringDistancePtr addrComp =
+    StringDistancePtr(
+      new TranslateStringDistance(
+        new MeanWordSetDistance(
+          new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))));
+  const double addrMatchThresh = 0.8;
+  if (addrComp->compare(e1AddrComb, e2AddrComb) >= addrMatchThresh ||
+      addrComp->compare(e1AddrComb, e2AddrTag) >= addrMatchThresh ||
+      addrComp->compare(e2AddrComb, e1AddrTag) >= addrMatchThresh)
+  {
+    addressMatch = true;
+  }
+
+  return addressMatch;
+}
+
 QString PoiPolygonMatch::toString() const
 {
-  //return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
-      //arg(_polyEid.toString()).arg(_c.toString());
+  return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
+      arg(_polyEid.toString()).arg(_c.toString());
 
-  QString str =
+  /*QString str =
     QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
       arg(_polyEid.toString()).arg(_c.toString());
   str += " UUID1: " + _uuid1 + "\n";
@@ -233,14 +387,23 @@ QString PoiPolygonMatch::toString() const
   str += "name score: " + QString::number(_nameScore) + "\n";
   str += "names 1: " + _names1 + "\n";
   str += "names 2: " + _names2 + "\n";
+  //str += "address match: " + QString::number(_addressMatch) + "\n";
+  //str += "address tag 1: " + _addrTag1 + "\n";
+  //str += "combined address 1: " + _combAddr1 + "\n";
+  //str += "address tag 2: " + _addrTag2 + "\n";
+  //str += "combined address 2: " + _combAddr2 + "\n";
   str += "close match: " + QString::number(_closeMatch) + "\n";
   str += "distance: " + QString::number(_distance) + "\n";
   str += "review distance: " + QString::number(_reviewDistance) + "\n";
   str += "overall circular error: " + QString::number(_ce) + "\n";
   str += "circular error 1: " + QString::number(_circularError1) + "\n";
   str += "circular error 2: " + QString::number(_circularError2) + "\n";
+  str += "tourism ancestor distance: " + QString::number(_tourismAncestorDistance) + "\n";
+  //str += "poi category distance: " + QString::number(_poiCategoryDistance) + "\n";
+  //str += "tourism distance: " + QString::number(_tourismDistance) + "\n";
+  //str += "leisure ancestor distance: " + QString::number(_leisureAncestorDistance) + "\n";
   str += "evidence: " + QString::number(_evidence);
-  return str;
+  return str;*/
 }
 
 }

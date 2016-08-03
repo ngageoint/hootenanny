@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -188,19 +188,36 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
     if (ma.get() == 0 ||
         ma->getType() == MatchType::Miss)
     {
-      result = true;
+      //TODO: this config option probably shouldn't stay
+      //poi.polygon.review.multiple.matches
+      if (ConfigOptions().getPoiPolygonReviewMultipleMatches())
+      {
+        result = true;
+        //LOG_DEBUG("conflict");
+        //LOG_VARD(o1);
+        //LOG_VARD(o2);
+      }
     }
   }
   // if you don't dereference the m1/m2 pointers it always returns Match as the typeid. Odd.
   else if (typeid(*m1) == typeid(*m2))
   {
     result = m1->isConflicting(*m2, map);
+    /*if (result)
+    {
+      LOG_DEBUG("conflict");
+    }*/
   }
   else
   {
     result = false;
   }
 
+  /*if (result)
+  {
+    LOG_VARD(m1->toString());
+    LOG_VARD(m2->toString());
+  }*/
   return result;
 }
 
@@ -223,6 +240,8 @@ bool PoiPolygonMergerCreator::_isConflictingSet(const MatchSet& matches) const
         if (MergerFactory::getInstance().isConflicting(map, m1, m2))
         {
           conflicting = true;
+          LOG_VARD(m1->toString());
+          LOG_VARD(m2->toString());
         }
       }
     }
