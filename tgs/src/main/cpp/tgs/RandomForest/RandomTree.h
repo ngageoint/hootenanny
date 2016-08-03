@@ -174,6 +174,12 @@ namespace Tgs
     */
     void trainRoundRobin(boost::shared_ptr<DataFrame> data, unsigned int numFactors, std::string posClass,
       std::string negClass, unsigned int nodeSize = 1, bool balanced = false);
+    /**
+    * Resets the id counter.  Only needed in build-model when a model is loaded, increasing the ids,
+    * and then a model is created, subsequently creating a new model where the random forest's first tree doesn't start
+    * with an id of zero like it should
+    */
+    static void resetIds() { _idCtr = 0; }
 
   private:
     /**
