@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -93,16 +93,12 @@ bool PostgresqlDumpfileWriter::isSupported(QString url)
 void PostgresqlDumpfileWriter::open(QString url)
 {
   // Make sure we're not already open and the URL is valid
-  if ( _outputFilename.length() > 0)
-  {
-    throw HootException( QString("Tried to open writer when already open") );
-  }
-  else if ( isSupported(url) == false )
+  if ( isSupported(url) == false )
   {
     throw HootException( QString("Could not open URL ") + url);
   }
 
-  _outputFilename = url;
+  _outputFilename.setFileName(url);
 
   _zeroWriteStats();
 
@@ -146,7 +142,6 @@ void PostgresqlDumpfileWriter::close()
   }
 
   _zeroWriteStats();
-  _outputFilename = "";
   _outputSections.clear();
   _sectionNames.erase(_sectionNames.begin(), _sectionNames.end());
   _changesetData.changesetId  = _configData.startingChangesetId;
@@ -166,10 +161,13 @@ void PostgresqlDumpfileWriter::finalizePartial()
     return;
   }
 
-  LOG_DEBUG( QString("Finalize called, time to create ") + _outputFilename);
+  LOG_DEBUG( QString("Finalize called, time to create ") + _outputFilename.fileName());
 
   // Remove file if it used to be there;
-  std::remove(_outputFilename.toStdString().c_str());
+  if (_outputFilename.exists())
+  {
+    _outputFilename.remove();
+  }
 
   // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
   _createTable( "byte_order_mark", "\n", true );
@@ -194,6 +192,9 @@ void PostgresqlDumpfileWriter::finalizePartial()
     LOG_DEBUG("Flushed changeset to disk");
     _writeChangesetToTable();
   }
+
+  _outputFilename.open(QIODevice::Append);
+  QTextStream outStream(&_outputFilename);
 
   for ( std::list<QString>::const_iterator it = _sectionNames.begin();
         it != _sectionNames.end(); ++it )
@@ -220,23 +221,19 @@ void PostgresqlDumpfileWriter::finalizePartial()
     }
 
     // Append contents of file to output file
-    QString cmdToExec(
-      QString("/bin/cat ") + (_outputSections[*it].first)->fileName() +
-      QString(" >> ") + _outputFilename );
+    QFile tempInputFile(_outputSections[*it].first->fileName());
+    if (tempInputFile.open(QIODevice::ReadOnly)) {
+       QTextStream inStream(&tempInputFile);
+       QString inText = inStream.readAll();
+       outStream << inText;
 
-    //LOG_DEBUG("Flush cmd: " + cmdToExec );
-
-    const int systemRetval = std::system( cmdToExec.toStdString().c_str() );
-
-    if ( systemRetval != 0 )
-    {
-      LOG_ERROR("Flush for section " + *it + " had error, retval = " +
-                QString::number(systemRetval));
-      throw HootException("Error generating output file " + _outputFilename);
+       //remove temp file after write to the output file
+       _outputSections[*it].first->remove();
     }
 
     LOG_DEBUG( "Wrote contents of section " + *it );
   }
+  _outputFilename.close();
 
   _dataWritten = true;
 }

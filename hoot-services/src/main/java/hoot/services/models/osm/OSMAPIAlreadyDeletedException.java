@@ -22,13 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.exceptions.osm;
+package hoot.services.models.osm;
 
-public class InvalidResourceParamException extends Exception {
+public class OSMAPIAlreadyDeletedException extends Exception {
 
-    public InvalidResourceParamException(String msg) {
-        super(msg);
+    public OSMAPIAlreadyDeletedException(String message, Throwable t) {
+        super(message, t);
     }
+
+    public OSMAPIAlreadyDeletedException(String message) {
+        super(message);
+    }
+
 }
