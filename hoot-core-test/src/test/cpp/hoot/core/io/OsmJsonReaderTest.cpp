@@ -331,28 +331,53 @@ public:
   // Try hitting the network to get some data...
   void urlTest()
   {
-    OsmMapPtr pMap(new OsmMap());
+    OsmMapPtr pMap;
     QString urlNodes = "http://overpass-api.de/api/interpreter?data=[out:json];node(35.20,-120.59,35.21,-120.58);out;";
     QString urlWays  = "http://overpass-api.de/api/interpreter?data=[out:json];way(35.20,-120.59,35.21,-120.58);out;";
     OsmJsonReader uut;
 
-    // Get Nodes
-    CPPUNIT_ASSERT(uut.isSupported(urlNodes));
-    uut.open(urlNodes);
-    uut.read(pMap);
+    const uint32_t RETRY_SECS = 30;
+    const uint32_t MAX_TRIES = 5;
+    uint32_t numTries = 0;
+    bool success = false;
 
-    // Get Ways
-    CPPUNIT_ASSERT(uut.isSupported(urlWays));
-    uut.open(urlWays);
-    uut.read(pMap);
+    // Try a few times, to handle server timeouts
+    while (!success && numTries < MAX_TRIES)
+    {
+      try
+      {
+        // Get clean map
+        pMap.reset(new OsmMap());
 
+        // Get Nodes
+        CPPUNIT_ASSERT(uut.isSupported(urlNodes));
+        uut.open(urlNodes);
+        uut.read(pMap);
+
+        // Get Ways
+        CPPUNIT_ASSERT(uut.isSupported(urlWays));
+        uut.open(urlWays);
+        uut.read(pMap);
+        success = true;
+      }
+      catch (HootException ex)
+      {
+        numTries++;
+        LOG_INFO(ex.getWhat() + QString(" will retry after %1 seconds").arg(RETRY_SECS));
+        sleep(RETRY_SECS);
+      }
+    }
+    CPPUNIT_ASSERT(success);
+
+    // File URL
     QString fname = QDir::currentPath() + "/test-files/nodes.json";
     QString urlFile = "file://" + fname;
     OsmMapPtr pMap2(new OsmMap());
     CPPUNIT_ASSERT(uut.isSupported(urlFile));
     uut.open(urlFile);
     uut.read(pMap2);
-    // Not failure == success in this case!
+
+    // Not failure == success
   }
 }; // class OsmJsonReaderTest
 } // namespace hoot

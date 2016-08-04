@@ -26,7 +26,9 @@
  */
 package hoot.services.controllers.osm;
 
-import static org.hamcrest.Matchers.*;
+import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -56,27 +58,27 @@ import com.mysema.query.sql.SQLQuery;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
-import hoot.services.db.DbUtils;
-import hoot.services.db.postgres.PostgresUtils;
-import hoot.services.db2.Changesets;
-import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.CurrentRelationMembers;
-import hoot.services.db2.CurrentRelations;
-import hoot.services.db2.CurrentWayNodes;
-import hoot.services.db2.CurrentWays;
-import hoot.services.db2.QChangesets;
-import hoot.services.db2.QCurrentNodes;
-import hoot.services.db2.QCurrentRelationMembers;
-import hoot.services.db2.QCurrentRelations;
-import hoot.services.db2.QCurrentWayNodes;
-import hoot.services.db2.QCurrentWays;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.MapUtils;
+import hoot.services.utils.PostgresUtils;
+import hoot.services.models.db.Changesets;
+import hoot.services.models.db.CurrentNodes;
+import hoot.services.models.db.CurrentRelationMembers;
+import hoot.services.models.db.CurrentRelations;
+import hoot.services.models.db.CurrentWayNodes;
+import hoot.services.models.db.CurrentWays;
+import hoot.services.models.db.QChangesets;
+import hoot.services.models.db.QCurrentNodes;
+import hoot.services.models.db.QCurrentRelationMembers;
+import hoot.services.models.db.QCurrentRelations;
+import hoot.services.models.db.QCurrentWayNodes;
+import hoot.services.models.db.QCurrentWays;
 import hoot.services.geo.BoundingBox;
-import hoot.services.geo.QuadTileCalculator;
 import hoot.services.models.osm.Changeset;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.utils.XmlUtils;
 
@@ -105,7 +107,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
     @Category(UnitTest.class)
     public void testUploadAll() throws Exception {
         DbUtils.deleteMapRelatedTablesByMapId(mapId);
-        DbUtils.createMap(mapId);
+        MapUtils.createMap(mapId);
 
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
         long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
@@ -891,7 +893,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(new Long(userId), changeset.getUserId());
 
             BoundingBox expandedBounds = new BoundingBox();
-            double boundsExpansionFactor = Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"));
+            double boundsExpansionFactor = Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES);
             expandedBounds.expand(originalBounds, boundsExpansionFactor);
             expandedBounds.expand(updatedBounds, boundsExpansionFactor);
             Changeset hootChangeset = new Changeset(mapId, changesetId, conn);

@@ -42,6 +42,8 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/FindNodesInWayFactory.h>
 #include <hoot/core/util/ElementConverter.h>
@@ -135,7 +137,7 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
     if (_isWhollyOutside(e))
     {
       // remove the way
-      result->removeWayFully(w->getId());
+      RemoveWayOp::removeWayFully(result, w->getId());
     }
     else if (_isWhollyInside(e))
     {
@@ -196,7 +198,7 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
         if (n2w.find(it->first) == n2w.end())
         {
           // remove the node
-          result->removeNodeNoCheck(it->second->getId());
+          RemoveNodeOp::removeNodeNoCheck(result, it->second->getId());
         }
       }
     }
@@ -261,7 +263,7 @@ void MapCropper::_cropWay(shared_ptr<OsmMap> map, long wid)
 
   if (e == 0)
   {
-    map->removeWayFully(way->getId());
+    RemoveWayOp::removeWayFully(map, way->getId());
   }
   else
   {

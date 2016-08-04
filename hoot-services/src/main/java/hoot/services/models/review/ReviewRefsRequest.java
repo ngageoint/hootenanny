@@ -28,8 +28,6 @@ package hoot.services.models.review;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import hoot.services.models.osm.ElementInfo;
-
 
 /**
  * A request for review references
@@ -49,7 +47,7 @@ public class ReviewRefsRequest {
     public ReviewRefsRequest() {
     }
 
-    public ReviewRefsRequest(final ElementInfo[] elementInfos) {
+    public ReviewRefsRequest(ElementInfo[] elementInfos) {
         this.queryElements = elementInfos;
     }
 
@@ -57,8 +55,8 @@ public class ReviewRefsRequest {
     public String toString() {
         String str = "";
         if (queryElements != null) {
-            for (int i = 0; i < queryElements.length; i++) {
-                str += queryElements[i].toString();
+            for (ElementInfo queryElement : queryElements) {
+                str += queryElement.toString();
             }
         }
         return str;

@@ -113,7 +113,6 @@ SOURCES += \
     src/main/cpp/hoot/core/algorithms/ProbabilityOfMatch.cpp \
     src/main/cpp/hoot/core/conflate/SuperfluousWayRemover.cpp \
     src/main/cpp/hoot/core/conflate/splitter/DualWaySplitter.cpp \
-    src/main/cpp/hoot/core/filters/TagFilter.cpp \
     src/main/cpp/hoot/core/elements/Tags.cpp \
     src/main/cpp/hoot/core/filters/DistanceNodeFilter.cpp \
     src/main/cpp/hoot/core/filters/ChainNodeFilter.cpp \
@@ -507,7 +506,20 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.cpp \
     src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.cpp \
-    src/main/cpp/hoot/core/algorithms/KskipBigramDistance.cpp
+    src/main/cpp/hoot/core/algorithms/KskipBigramDistance.cpp \
+    src/main/cpp/hoot/core/visitors/IndexElementsVisitor.cpp \
+    src/main/cpp/hoot/core/filters/ParallelWayCriterion.cpp \
+    src/main/cpp/hoot/core/filters/WayBufferCriterion.cpp \
+    src/main/cpp/hoot/core/filters/WayDirectionCriterion.cpp \
+    src/main/cpp/hoot/core/visitors/FindWaysVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/FindNodesVisitor.cpp \
+    src/main/cpp/hoot/core/filters/DistanceNodeCriterion.cpp \
+    src/main/cpp/hoot/core/visitors/MapExtentVisitor.cpp \
+    src/main/cpp/hoot/core/cmd/MapExtentCmd.cpp \
+    src/main/cpp/hoot/core/ops/RemoveElementOp.cpp \
+    src/main/cpp/hoot/core/ops/RemoveNodeOp.cpp \
+    src/main/cpp/hoot/core/ops/RemoveRelationOp.cpp \
+    src/main/cpp/hoot/core/ops/RemoveWayOp.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -574,7 +586,6 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/ProbabilityOfMatch.h \
     src/main/cpp/hoot/core/conflate/SuperfluousWayRemover.h \
     src/main/cpp/hoot/core/conflate/splitter/DualWaySplitter.h \
-    src/main/cpp/hoot/core/filters/TagFilter.h \
     src/main/cpp/hoot/core/filters/DistanceNodeFilter.h \
     src/main/cpp/hoot/core/filters/NodeFilter.h \
     src/main/cpp/hoot/core/filters/Filter.h \
@@ -1016,5 +1027,22 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.h \
     src/main/cpp/hoot/core/visitors/WorstCircularErrorVisitor.h \
     src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.h \
-    src/main/cpp/hoot/core/algorithms/KskipBigramDistance.h
+    src/main/cpp/hoot/core/algorithms/KskipBigramDistance.h \
+    src/main/cpp/hoot/core/filters/ArbitraryCriterion.h \
+    src/main/cpp/hoot/core/visitors/IndexElementsVisitor.h \
+    src/main/cpp/hoot/core/visitors/FindWaysVisitor.h \
+    src/main/cpp/hoot/core/filters/ContainsNodeCriterion.h \
+    src/main/cpp/hoot/core/visitors/FindNodesVisitor.h \
+    src/main/cpp/hoot/core/filters/UnknownCriterion.h \
+    src/main/cpp/hoot/core/filters/OneWayCriterion.h \
+    src/main/cpp/hoot/core/filters/ParallelWayCriterion.h \
+    src/main/cpp/hoot/core/filters/WayBufferCriterion.h \
+    src/main/cpp/hoot/core/filters/WayDirectionCriterion.h \
+    src/main/cpp/hoot/core/filters/DistanceNodeCriterion.h \
+    src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriter.h \
+    src/main/cpp/hoot/core/visitors/MapExtentVisitor.h \
+    src/main/cpp/hoot/core/ops/RemoveElementOp.h \
+    src/main/cpp/hoot/core/ops/RemoveNodeOp.h \
+    src/main/cpp/hoot/core/ops/RemoveRelationOp.h \
+    src/main/cpp/hoot/core/ops/RemoveWayOp.h
 

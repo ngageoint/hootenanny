@@ -35,6 +35,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.xml.transform.TransformerException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.xpath.XPathAPI;
@@ -50,27 +52,25 @@ import com.mysema.query.types.path.BooleanPath;
 import com.mysema.query.types.path.NumberPath;
 import com.mysema.query.types.path.SimplePath;
 
-import hoot.services.db.DbUtils;
-import hoot.services.db.DbUtils.EntityChangeType;
-import hoot.services.db.DbUtils.nwr_enum;
-import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.CurrentRelationMembers;
-import hoot.services.db2.CurrentRelations;
-import hoot.services.exceptions.osm.OSMAPIAlreadyDeletedException;
-import hoot.services.exceptions.osm.OSMAPIPreconditionException;
+import hoot.services.models.db.CurrentNodes;
+import hoot.services.models.db.CurrentRelationMembers;
+import hoot.services.models.db.CurrentRelations;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.Coordinates;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.DbUtils.EntityChangeType;
+import hoot.services.utils.DbUtils.nwr_enum;
 
 
 /**
  * Represents the model for an OSM relation
  */
 public class Relation extends Element {
-    private static final Logger log = LoggerFactory.getLogger(Relation.class);
+    private static final Logger logger = LoggerFactory.getLogger(Relation.class);
 
     private List<RelationMember> membersCache = new ArrayList<>();
 
-    public Relation(long mapId, Connection dbConn) throws Exception {
+    public Relation(long mapId, Connection dbConn) {
         super(dbConn);
         super.elementType = ElementType.Relation;
         super.record = new CurrentRelations();
@@ -78,7 +78,7 @@ public class Relation extends Element {
         setMapId(mapId);
     }
 
-    public Relation(long mapId, Connection dbConn, CurrentRelations record) throws Exception {
+    public Relation(long mapId, Connection dbConn, CurrentRelations record) {
         super(dbConn);
         super.elementType = ElementType.Relation;
 
@@ -100,15 +100,13 @@ public class Relation extends Element {
      *
      * @param xml
      *            xml data to construct the element from
-     * @throws Exception
      */
     @Override
-    public void fromXml(org.w3c.dom.Node xml) throws Exception {
-        log.debug("Parsing relation...");
+    public void fromXml(org.w3c.dom.Node xml) {
+        logger.debug("Parsing relation...");
 
         NamedNodeMap xmlAttributes = xml.getAttributes();
 
-        assert (record != null);
         CurrentRelations relationRecord = (CurrentRelations) record;
         relationRecord.setChangesetId(parseChangesetId(xmlAttributes));
         relationRecord.setVersion(parseVersion());
@@ -122,15 +120,14 @@ public class Relation extends Element {
         setRecord(relationRecord);
 
         // if we're deleting the relation, all the relation members will get
-        // deleted automatically...and
-        // no new ones need to be parsed
+        // deleted automatically...and no new ones need to be parsed
         if (entityChangeType != EntityChangeType.DELETE) {
             parseMembersXml(xml);
         }
     }
 
     @Override
-    public void checkAndFailIfUsedByOtherObjects() throws Exception {
+    public void checkAndFailIfUsedByOtherObjects() throws OSMAPIAlreadyDeletedException, OSMAPIPreconditionException {
         if (!super.getVisible()) {
             throw new OSMAPIAlreadyDeletedException("Relation with ID = " + super.getId() + " has been already deleted "
                     + "from map with ID = " + getMapId());
@@ -171,11 +168,10 @@ public class Relation extends Element {
      * @param addChildren
      *            if true, element children are added to the element xml
      * @return an XML element
-     * @throws Exception
      */
     @Override
     public org.w3c.dom.Element toXml(org.w3c.dom.Element parentXml, long modifyingUserId,
-            String modifyingUserDisplayName, boolean multiLayerUniqueElementIds, boolean addChildren) throws Exception {
+            String modifyingUserDisplayName, boolean multiLayerUniqueElementIds, boolean addChildren) {
         org.w3c.dom.Element element = super.toXml(parentXml, modifyingUserId, modifyingUserDisplayName,
                 multiLayerUniqueElementIds, addChildren);
         Document doc = parentXml.getOwnerDocument();
@@ -186,16 +182,14 @@ public class Relation extends Element {
             for (CurrentRelationMembers member : members) {
                 org.w3c.dom.Element memberElement = doc.createElement("member");
                 memberElement.setAttribute("type", member.getMemberType().toString().toLowerCase());
-                assert (StringUtils.trimToNull(memberElement.getAttribute("type")) != null);
+
                 String role = member.getMemberRole();
                 if (StringUtils.isEmpty(member.getMemberRole())) {
                     memberElement.setAttribute("role", member.getMemberRole());
                     role = "";
                 }
                 memberElement.setAttribute("role", role);
-                assert (memberElement.getAttribute("role") != null);
                 memberElement.setAttribute("ref", String.valueOf(member.getMemberId()));
-                assert (StringUtils.trimToNull(memberElement.getAttribute("ref")) != null);
                 element.appendChild(memberElement);
             }
         }
@@ -204,6 +198,7 @@ public class Relation extends Element {
         if (elementWithTags == null) {
             return element;
         }
+
         return elementWithTags;
     }
 
@@ -216,25 +211,29 @@ public class Relation extends Element {
      * 
      * @throws Exception
      */
-    private BoundingBox parseNodesAndWayMembersBounds(List<RelationMember> members) throws Exception {
-        List<Coordinates> coordsToComputeBoundsFrom = new ArrayList<Coordinates>();
-        Set<Long> idsOfNodesToRetrieveFromTheDb = new HashSet<Long>();
-        Set<Long> idsOfWaysForWhichToRetrieveNodesFromTheDb = new HashSet<Long>();
+    private BoundingBox parseNodesAndWayMembersBounds(List<RelationMember> members) {
         BoundingBox bounds = null;
-        BoundingBox dbBounds = null;
+        BoundingBox dbBounds;
 
-        // members don't get parsed for a delete request...we'll get the members
-        // from the database
+        // members don't get parsed for a delete request...we'll get the members from the database
         if (entityChangeType != EntityChangeType.DELETE) {
+            Set<Long> idsOfNodesToRetrieveFromTheDb = new HashSet<>();
+            Set<Long> idsOfWaysForWhichToRetrieveNodesFromTheDb = new HashSet<>();
+            List<Coordinates> coordsToComputeBoundsFrom = new ArrayList<>();
             for (RelationMember member : members) {
                 if (member.getType() == ElementType.Node) {
                     if ((parsedElementIdsToElementsByType != null) && (!parsedElementIdsToElementsByType.isEmpty())) {
                         Map<Long, Element> parsedNodes = parsedElementIdsToElementsByType.get(ElementType.Node);
                         if (parsedNodes.containsKey(member.getOldId())) {
                             Node parsedNode = (Node) parsedNodes.get(member.getOldId());
-                            coordsToComputeBoundsFrom.add(new Coordinates(
-                                    (Double) MethodUtils.invokeMethod(parsedNode.getRecord(), "getLatitude"),
-                                    (Double) MethodUtils.invokeMethod(parsedNode.getRecord(), "getLongitude")));
+                            try {
+                                coordsToComputeBoundsFrom.add(new Coordinates(
+                                        (Double) MethodUtils.invokeMethod(parsedNode.getRecord(), "getLatitude"),
+                                        (Double) MethodUtils.invokeMethod(parsedNode.getRecord(), "getLongitude")));
+                            }
+                            catch (Exception e) {
+                                throw new RuntimeException("Error invoking getLatitude() or getLongitude()!", e);
+                            }
                         }
                         else {
                             idsOfNodesToRetrieveFromTheDb.add(member.getId());
@@ -253,9 +252,14 @@ public class Relation extends Element {
                                 Map<Long, Element> parsedNodes = parsedElementIdsToElementsByType.get(ElementType.Node);
                                 if (parsedNodes.containsKey(wayNodeId)) {
                                     Node parsedNode = (Node) parsedNodes.get(wayNodeId);
-                                    coordsToComputeBoundsFrom.add(new Coordinates(
-                                            (Double) MethodUtils.invokeMethod(parsedNode.getRecord(), "getLatitude"),
-                                            (Double) MethodUtils.invokeMethod(parsedNode.getRecord(), "getLongitude")));
+                                    try {
+                                        coordsToComputeBoundsFrom.add(new Coordinates(
+                                                (Double) MethodUtils.invokeMethod(parsedNode.getRecord(), "getLatitude"),
+                                                (Double) MethodUtils.invokeMethod(parsedNode.getRecord(), "getLongitude")));
+                                    }
+                                    catch (Exception e) {
+                                        throw new RuntimeException("Error invoking getLatitude() or getLongitude()!", e);
+                                    }
                                 }
                                 else {
                                     idsOfNodesToRetrieveFromTheDb.add(wayNodeId);
@@ -274,7 +278,7 @@ public class Relation extends Element {
 
             // compute a bounds for the elements parsed from the request data
             if (!coordsToComputeBoundsFrom.isEmpty()) {
-                bounds = new BoundingBox(coordsToComputeBoundsFrom);
+                bounds = new BoundingBox(new HashSet<>(coordsToComputeBoundsFrom));
             }
 
             dbBounds = getBoundsForNodesAndWays(idsOfNodesToRetrieveFromTheDb,
@@ -284,9 +288,7 @@ public class Relation extends Element {
             dbBounds = getBoundsForNodesAndWays();
         }
 
-        // add to the bounds the bounds calculated for the elements retrieved
-        // from
-        // the database
+        // add to the bounds the bounds calculated for the elements retrieved from the database
         if (dbBounds != null) {
             if (bounds == null) {
                 bounds = new BoundingBox(dbBounds);
@@ -303,7 +305,7 @@ public class Relation extends Element {
      * Retrieves geo info for the nodes/ways associated with the input IDs and
      * then computes the combined bounds for all the elements
      */
-    private BoundingBox getBoundsForNodesAndWays(Set<Long> dbNodeIds, Set<Long> dbWayIds) throws Exception {
+    private BoundingBox getBoundsForNodesAndWays(Set<Long> dbNodeIds, Set<Long> dbWayIds) {
         ArrayList<CurrentNodes> nodes = new ArrayList<>(Node.getNodes(getMapId(), dbNodeIds, conn));
         nodes.addAll(Way.getNodesForWays(getMapId(), dbWayIds, conn));
         BoundingBox bounds = null;
@@ -314,14 +316,17 @@ public class Relation extends Element {
         return bounds;
     }
 
-    private BoundingBox getBoundsForNodesAndWays() throws Exception {
-        List<Long> nodeIds = new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(currentRelationMembers)
+    private BoundingBox getBoundsForNodesAndWays() {
+        List<Long> nodeIds = new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+                .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(getId())
                         .and(currentRelationMembers.memberType.eq(nwr_enum.node)))
                 .list(currentRelationMembers.memberId);
 
-        List<Long> wayIds = new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(currentRelationMembers).where(
-                currentRelationMembers.relationId.eq(getId()).and(currentRelationMembers.memberType.eq(nwr_enum.way)))
+        List<Long> wayIds = new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+                .from(currentRelationMembers)
+                .where(currentRelationMembers.relationId.eq(getId())
+                        .and(currentRelationMembers.memberType.eq(nwr_enum.way)))
                 .list(currentRelationMembers.memberId);
 
         return getBoundsForNodesAndWays(new HashSet<>(nodeIds), new HashSet<>(wayIds));
@@ -335,35 +340,38 @@ public class Relation extends Element {
      * box. - adding a relation member or changing tag values causes all node
      * and way members to be added to the bounding box.
      *
-     * @return a bounding box; null if the relation only contains other
-     *         relations
-     * @throws Exception
+     * @return a bounding box; null if the relation only contains other relations
      */
     @Override
-    public BoundingBox getBounds() throws Exception {
+    public BoundingBox getBounds() {
         if ((membersCache == null) || (membersCache.isEmpty())) {
             membersCache = RelationMember.fromRecords(getMembers());
         }
+
         BoundingBox nodesAndWaysBounds = parseNodesAndWayMembersBounds(membersCache);
         BoundingBox bounds = null;
         if (nodesAndWaysBounds != null) {
             bounds = new BoundingBox(nodesAndWaysBounds);
         }
+
         return bounds;
     }
 
     /*
      * Retrieves this relation's members from the services database
      */
-    private List<CurrentRelationMembers> getMembers() throws Exception {
-        return new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(currentRelationMembers)
-                .where(currentRelationMembers.relationId.eq(getId())).orderBy(currentRelationMembers.sequenceId.asc())
+    private List<CurrentRelationMembers> getMembers() {
+        return new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+                .from(currentRelationMembers)
+                .where(currentRelationMembers.relationId.eq(getId()))
+                .orderBy(currentRelationMembers.sequenceId.asc())
                 .list(currentRelationMembers);
     }
 
-    private void checkForCircularReference(long parsedRelationMemberId) throws Exception {
+    private void checkForCircularReference(long parsedRelationMemberId) {
         long relationId = 0;
         boolean circularRefFound = false;
+
         if ((parsedRelationMemberId > 0) && (parsedRelationMemberId == getId())) {
             relationId = getId();
             circularRefFound = true;
@@ -372,25 +380,25 @@ public class Relation extends Element {
             relationId = oldId;
             circularRefFound = true;
         }
+
         if (circularRefFound) {
-            throw new Exception(
-                    "Relation with ID: " + relationId + " contains a relation member that references itself.");
+            throw new IllegalStateException("Relation with ID: " + relationId +
+                    " contains a relation member that references itself.");
         }
     }
 
-    private RelationMember parseMember(org.w3c.dom.Node nodeXml) throws Exception {
-        log.debug("Parsing relation member...");
+    private RelationMember parseMember(org.w3c.dom.Node nodeXml) {
+        logger.debug("Parsing relation member...");
 
         NamedNodeMap memberXmlAttributes = nodeXml.getAttributes();
 
         long parsedMemberId = Long.parseLong(memberXmlAttributes.getNamedItem("ref").getNodeValue());
-        long actualMemberId = parsedMemberId;
-        ElementType elementType = Element
-                .elementTypeFromString(memberXmlAttributes.getNamedItem("type").getNodeValue());
+
+        ElementType elementType = Element.elementTypeFromString(memberXmlAttributes.getNamedItem("type").getNodeValue());
 
         if (elementType == null) {
-            throw new Exception(
-                    "Invalid relation member type: " + memberXmlAttributes.getNamedItem("type").getNodeValue());
+            throw new IllegalArgumentException("Invalid relation member type: " +
+                    memberXmlAttributes.getNamedItem("type").getNodeValue());
         }
 
         if (elementType == ElementType.Relation) {
@@ -400,50 +408,37 @@ public class Relation extends Element {
         Map<Long, Element> parsedElements = parsedElementIdsToElementsByType.get(elementType);
 
         // if this is an element created within the same request that is
-        // referencing
-        // this relation, it
-        // won't exist in the database, but it will be in the element cache
-        // created
-        // when parsing the
-        // element from the request
+        // referencing this relation, it won't exist in the database, but it will be in the element cache
+        // created when parsing the element from the request
         if (parsedMemberId < 0) {
             if (elementType == ElementType.Relation) {
                 if (!parsedElements.containsKey(parsedMemberId)) {
-                    throw new Exception("Relation with ID: " + parsedMemberId + " does not exist for "
+                    throw new IllegalStateException("Relation with ID: " + parsedMemberId + " does not exist for "
                             + "relation with ID: " + getId());
                 }
             }
-            else {
-                assert (parsedElements.containsKey(parsedMemberId));
-            }
         }
 
-        Element memberElement = null;
+        Element memberElement;
 
         // TODO: these comments need updating
 
         // The element is referenced somewhere else in this request, so get its
-        // info from the request,
-        // not the database, b/c the database either won't have it or will have
-        // outdated info for it.
-        // Only get info from the request if the element is being
-        // created/modified, because if it is
-        // being deleted, we can just get the info from the database since the
-        // element's bounds won't be
-        // changing and its geo info isn't in the request (not required for a
-        // delete).
+        // info from the request, not the database, b/c the database either won't have it or will have
+        // outdated info for it. Only get info from the request if the element is being
+        // created/modified, because if it is being deleted, we can just get the info from the database since the
+        // element's bounds won't be changing and its geo info isn't in the request (not required for a delete).
+        long actualMemberId = parsedMemberId;
         if (parsedElements.containsKey(parsedMemberId)
                 && (parsedElements.get(parsedMemberId).getEntityChangeType() != EntityChangeType.DELETE)) {
             memberElement = parsedElements.get(parsedMemberId);
             actualMemberId = memberElement.getId();
         }
         // element not referenced in this request, so should already exist in
-        // the db and its info up
-        // to date
+        // the db and its info up to date
         else {
-            memberElement = ElementFactory.getInstance().create(getMapId(), elementType, conn);
+            memberElement = ElementFactory.create(getMapId(), elementType, conn);
         }
-        assert (actualMemberId > 0);
 
         // role is allowed to be empty
         org.w3c.dom.Node roleXmlNode = memberXmlAttributes.getNamedItem("role");
@@ -451,17 +446,22 @@ public class Relation extends Element {
         RelationMember member = new RelationMember(actualMemberId,
                 Element.elementTypeFromString(memberXmlAttributes.getNamedItem("type").getNodeValue()), role);
         member.setOldId(parsedMemberId);
+
         return member;
     }
 
     // relations of size = 0 are allowed; see
     // http://wiki.openstreetmap.org/wiki/Empty_relations
-    private void parseMembersXml(org.w3c.dom.Node xml) throws Exception {
-        log.debug("Parsing relation members...");
+    private void parseMembersXml(org.w3c.dom.Node xml) {
+        logger.debug("Parsing relation members...");
 
-        assert (parsedElementIdsToElementsByType != null);
-
-        NodeList membersXml = XPathAPI.selectNodeList(xml, "member");
+        NodeList membersXml = null;
+        try {
+            membersXml = XPathAPI.selectNodeList(xml, "member");
+        }
+        catch (TransformerException e) {
+            throw new RuntimeException("Error accessing 'member' node using XPathAPI!", e);
+        }
 
         relatedRecords = new ArrayList<>();
         relatedRecordIds = new HashSet<>();
@@ -472,7 +472,7 @@ public class Relation extends Element {
             membersCache.add(member);
             relatedRecordIds.add(member.getId());
             relatedRecords.add(RelationMember.createRecord(member.getId(), i + 1, member.getRole(),
-                    Element.elementEnumForElementType(member.getType()), getId(), conn));
+                    Element.elementEnumForElementType(member.getType()), getId()));
         }
     }
 

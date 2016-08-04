@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaximalNearestSublineMatcher.h"
 
@@ -32,6 +32,7 @@
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/ops/CopySubsetOp.h>
 
 #include "MaximalNearestSubline.h"
 
@@ -52,10 +53,10 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
   Meters mrd = maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() :
     maxRelevantDistance;
 
-  vector<long> wayIds;
-  wayIds.push_back(way1->getId());
-  wayIds.push_back(way2->getId());
-  OsmMapPtr mapCopy(map->copyWays(wayIds));
+  OsmMapPtr mapCopy(new OsmMap());
+  CopySubsetOp(map,
+               way1->getElementId(),
+               way2->getElementId()).apply(mapCopy);
 
   WayPtr way1NonConst = mapCopy->getWay(way1->getId());
   WayPtr way2NonConst = mapCopy->getWay(way2->getId());

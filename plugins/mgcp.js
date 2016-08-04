@@ -101,7 +101,7 @@ mgcp = {
                             }
                             else
                             {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + mgcp.rules.txtLength[val] + ' characters.');
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + mgcp.rules.txtLength[val] + ' characters.');
                                 // Still too long. Chop to the maximum length.
                                 attrs[val] = tStr[0].substring(0,mgcp.rules.txtLength[val]);
                             }
@@ -135,7 +135,7 @@ mgcp = {
                             }
                             else
                             {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + mgcp.rules.txtLength[val] + ' characters.');
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + mgcp.rules.txtLength[val] + ' characters.');
                                 // Still too long. Chop to the maximum length.
                                 attrs[val] = tStr[0].substring(0,mgcp.rules.txtLength[val]);
                             }

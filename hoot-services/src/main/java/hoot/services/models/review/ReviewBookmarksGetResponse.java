@@ -30,7 +30,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import hoot.services.db2.ReviewBookmarks;
+import hoot.services.models.db.ReviewBookmarks;
 
 
 @XmlRootElement
@@ -41,11 +41,11 @@ public class ReviewBookmarksGetResponse {
         return this.reviewBookmarks;
     }
 
-    public void setReviewBookmarks(final List<ReviewBookmarks> rTags) {
+    public void setReviewBookmarks(List<ReviewBookmarks> rTags) {
         this.reviewBookmarks = rTags;
     }
 
-    public ReviewBookmarksGetResponse(final List<ReviewBookmarks> rTags) {
+    public ReviewBookmarksGetResponse(List<ReviewBookmarks> rTags) {
         this.reviewBookmarks = rTags;
     }
 

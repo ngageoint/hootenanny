@@ -26,6 +26,9 @@
  */
 package hoot.services.readers.review;
 
+import static hoot.services.HootProperties.RANDOM_QUERY_SEED;
+import static hoot.services.HootProperties.SEED_RANDOM_QUERIES;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,76 +37,72 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.models.review.ReviewQueryMapper;
 import hoot.services.models.review.ReviewableItem;
 
 
-/**
- *
- */
-public class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
+class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(RandomReviewableQuery.class);
 
-    public RandomReviewableQuery(Connection c, long mapid) {
-        super(c, mapid);
+    RandomReviewableQuery(Connection connection, long mapid) {
+        super(connection, mapid);
 
-        try {
-            // TODO: Since this code will affect all subsequent calls to
-            // random(), it is better moved to
-            // a more centralized location. Given that this is the only class
-            // using random() in a SQL
-            // query so far, no harm is done for the time being.
-            if (Boolean.parseBoolean(HootProperties.getPropertyOrDefault("seedRandomQueries"))) {
-                double seed = Double.parseDouble(HootProperties.getPropertyOrDefault("randomQuerySeed"));
+        // TODO: Since this code will affect all subsequent calls to
+        // random(), it is better moved to
+        // a more centralized location. Given that this is the only class
+        // using random() in a SQL query so far, no harm is done for the time being.
+        if (Boolean.parseBoolean(SEED_RANDOM_QUERIES)) {
+            double seed = Double.parseDouble(RANDOM_QUERY_SEED);
 
-                if ((seed >= -1.0) && (seed <= 1.0)) {
-                    try (Statement stmt = getConnection().createStatement()) {
-                        // After executing this, all subsequent calls to
-                        // random() will be seeded.
-                        stmt.executeQuery("select setseed(" + seed + ");");
+            if ((seed >= -1.0) && (seed <= 1.0)) {
+                try (Statement stmt = super.getConnection().createStatement()) {
+                    // After executing this, all subsequent calls to random() will be seeded.
+                    try (ResultSet rs = stmt.executeQuery("select setseed(" + seed + ");")) {
                     }
                 }
+                catch (SQLException e) {
+                    throw new RuntimeException("Error setting seeed!", e);
+                }
             }
-        }
-        catch (Exception e) {
-            logger.error("Unable to seed random review query.");
         }
     }
 
     @Override
-    public ReviewQueryMapper execQuery() throws SQLException, Exception {
+    public ReviewQueryMapper execQuery() {
         ReviewableItem ret = new ReviewableItem(-1, getMapId(), -1);
 
-        long relId = -1;
-        String seqId = "-1";
+        try (Connection connection = getConnection()){
+            try (Statement stmt = connection.createStatement()) {
+                try (ResultSet rs = stmt.executeQuery(getQueryString())) {
+                    long nResCnt = 0;
+                    long relId = -1;
+                    String seqId = "-1";
 
-        try (Statement stmt = getConnection().createStatement(); ResultSet rs = stmt.executeQuery(_getQueryString())) {
-            long nResCnt = 0;
+                    while (rs.next()) {
+                        relId = rs.getLong("relid");
+                        seqId = rs.getString("seq");
+                        nResCnt++;
+                    }
 
-            if (rs == null) {
-                throw new SQLException("Error executing ReviewQueryMapper::execQuery");
+                    ret.setRelationId(relId);
+                    long nSeq = -1;
+                    if (seqId != null) {
+                        nSeq = Long.parseLong(seqId);
+                    }
+
+                    ret.setSortOrder(nSeq);
+                    ret.setResultCount(nResCnt);
+                }
             }
-
-            while (rs.next()) {
-                relId = rs.getLong("relid");
-                seqId = rs.getString("seq");
-                nResCnt++;
-            }
-
-            ret.setRelationId(relId);
-            long nSeq = -1;
-            if (seqId != null) {
-                nSeq = Long.parseLong(seqId);
-            }
-            ret.setSortOrder(nSeq);
-            ret.setResultCount(nResCnt);
+        }
+        catch (SQLException e) {
+            throw new RuntimeException("Error executing query!", e);
         }
 
         return ret;
     }
 
-    protected String _getQueryString() {
+    String getQueryString() {
         return "select id as relid, tags->'hoot:review:sort_order' as seq from current_relations_" + getMapId()
                 + " where tags->'hoot:review:needs' = 'yes' order by random() limit 1";
     }

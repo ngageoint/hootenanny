@@ -66,6 +66,10 @@ Then(/^I should not see "([^"]*)"$/) do |text|
   expect(page).to have_no_content(text)
 end
 
+Then(/^I click on the "([^"]*)" label$/) do |txt|
+  find('label', :text=> txt, :match => :prefer_exact).click
+end
+
 Then(/^I should see (checkbox )?"([^"]*)" (not )?enabled$/) do |cbox, text,state|
   lbl = find('label', :text=> text, :match => :prefer_exact)
   if cbox
@@ -154,6 +158,18 @@ When(/^I click the "([^"]*)" Dataset$/) do |dataset|
   parent.find('rect').click
 end
 
+When(/^I expand the "([^"]*)" folder$/) do |folder|
+  text = page.find('text',:text=>folder, :match => :prefer_exact)
+  parent = text.find(:xpath,"..")
+  begin
+    el = parent.find('.folder')
+  rescue Capybara::ElementNotFound
+    # In Capybara 0.4+ #find_field raises an error instead of returning nil
+    el = nil
+  end
+  parent.find('rect').click unless el.nil?
+end
+
 When(/^I click the "([^"]*)" Dataset and the "([^"]*)" Dataset$/) do |d1, d2|
   text1 = page.find('text',:text=>d1, :match => :prefer_exact)
   parent1 = text1.find(:xpath,"..")
@@ -199,6 +215,13 @@ When(/^I click the "([^"]*)" key$/) do |arg1|
   find("body").native.send_keys(arg1)
 end
 
+When(/^I click the "([^"]*)" key in the "([^"]*)"$/) do |key, el|
+  find(el).native.send_keys(key)
+end
+
+When(/^I press the escape key$/) do
+  find('body').native.send_keys(:escape)
+end
 Then(/^I should see options in this order:$/) do |table|
   expected_order = table.raw.flatten
   actual_order = page.all('#settingsSidebar label').collect(&:text)
@@ -345,6 +368,10 @@ When(/^I press "([^"]*)" span with text "([^"]*)"$/) do |cls,txt|
   find('span.' + cls, :text=>txt).click
 end
 
+When(/^I press span with text "([^"]*)"$/) do |txt|
+  find('span', :text=>txt).click
+end
+
 When(/^I press "([^"]*)" big loud link$/) do |cls|
   find('a.big.loud.' + cls).click
 end
@@ -410,6 +437,14 @@ end
 
 When(/^I close the UI alert$/) do
   find('#alerts').all('.x')[0].click
+end
+
+When(/^I change the reference layer color to ([^"]*)$/) do |color|
+  page.first('div.big.data').click
+  swatch = find('a[data-color="' + color + '"')
+  rgb = swatch.native.css_value('background').split(")").first + ')'
+  swatch.click
+  expect(page.first('path.stroke.tag-hoot').native.css_value('stroke')).to eq(rgb)
 end
 
 When(/^I scroll element into view and press "([^"]*)"$/) do |id|
@@ -500,9 +535,9 @@ Then(/^I should see element "([^"]*)" with value "([^"]*)"$/) do |id, value|
 end
 
 Then(/^I should see element "([^"]*)" with no value and placeholder "([^"]*)"$/) do |id, value|
-  find(id).value.should eq ""
-  #page.find(:css, 'input[placeholder="' + value + '"]')
-  find(id, 'input[placeholder="' + value + '"]')
+  el = find(id)
+  el.value.should eq ""
+  el['placeholder'].should eq value
 end
 
 Then(/^I choose "([^"]*)" radio button$/) do |text|
@@ -609,8 +644,40 @@ When(/^I delete any existing "([^"]*)" basemap if necessary$/) do |text|
   end
 end
 
+When(/^I delete any existing "([^"]*)" folder if necessary$/) do |text|
+  begin
+        step "I context click the \"#{text}\" Dataset"
+        step "I click the \"Delete\" context menu item"
+        step "I accept the alert"
+  rescue Capybara::ElementNotFound
+  end
+end
+
 Then(/^I open the wfs export url$/) do
   url = find('input.wfsfileExportOutputName').value
   visit url
   # need a way to check the WFS GetCapabilities response is valid
+end
+
+Then(/^I should see "([^"]*)" bookmark first and "([^"]*)" bookmark second$/) do |rb1, rb2|
+  spans = find('#reviewBookmarksContent').all('span.strong')
+  expect(spans.first).to have_content(rb1)
+  expect(spans.last).to have_content(rb2)
+end
+
+Then(/^I should see "([^"]*)" with a value between "([^"]*)" and "([^"]*)"$/) do |input, low, high|
+  el = page.find(input)
+  val = el.value.to_f
+  expect(val).to be > low.to_f
+  expect(val).to be < high.to_f
+end
+
+Then(/^I should see "([^"]*)" with a value greater than "([^"]*)"$/) do |el1, el2|
+  max = page.find(el1).value.to_f
+  min = page.find(el2).value.to_f
+  expect(max).to be > min
+end
+
+Then(/^I should see a "([^"]*)" on the map$/) do |el|
+  page.should have_css(el)
 end

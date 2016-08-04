@@ -47,7 +47,7 @@ public class ReviewRefsResponses {
     public ReviewRefsResponses() {
     }
 
-    public ReviewRefsResponses(final ReviewRefsResponse[] reviewRefsResponses) {
+    public ReviewRefsResponses(ReviewRefsResponse[] reviewRefsResponses) {
         this.reviewRefsResponses = reviewRefsResponses;
     }
 

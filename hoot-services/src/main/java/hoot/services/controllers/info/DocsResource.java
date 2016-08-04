@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.info;
 
+import static hoot.services.HootProperties.DOC_NAME;
+import static hoot.services.HootProperties.HOME_FOLDER;
+
 import java.io.File;
 
 import javax.ws.rs.GET;
@@ -38,14 +41,10 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-
 
 @Path("/document")
 public class DocsResource {
     private static final Logger logger = LoggerFactory.getLogger(DocsResource.class);
-    private static final String docName = HootProperties.getProperty("documentName");
-    private static final String homeFolder = HootProperties.getProperty("homeFolder");
 
     public DocsResource() {
     }
@@ -59,12 +58,12 @@ public class DocsResource {
     @Path("/export")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response exportDoc() {
-        String documentPath = homeFolder + "/" + "docs" + "/" + docName;
+        String documentPath = HOME_FOLDER + "/" + "docs" + "/" + DOC_NAME;
         File out = new File(documentPath);
 
-        ResponseBuilder rBuild = Response.ok(out, "application/pdf");
-        rBuild.header("Content-Disposition", "attachment; filename=" + docName);
+        ResponseBuilder responseBuilder = Response.ok(out, "application/pdf");
+        responseBuilder.header("Content-Disposition", "attachment; filename=" + DOC_NAME);
 
-        return rBuild.build();
+        return responseBuilder.build();
     }
 }

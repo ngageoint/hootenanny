@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "KeepNodesVisitor.h"
 
@@ -32,16 +32,17 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveRelationOp.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, KeepNodesVisitor)
 
-class FindNodesVisitor : public ElementVisitor
+class FindAllNodesVisitor : public ElementVisitor
 {
 public:
-  FindNodesVisitor(OsmMapPtr map) : _map(map) {}
+  FindAllNodesVisitor(OsmMapPtr map) : _map(map) {}
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -71,7 +72,7 @@ void KeepNodesVisitor::visit(const ConstElementPtr& e)
   if (e->getElementType() != ElementType::Node || e->getTags().getNonDebugCount() == 0)
   {
     // check to see if any of this element's children are Nodes.
-    FindNodesVisitor v(_map->shared_from_this());
+    FindAllNodesVisitor v(_map->shared_from_this());
     e->visitRo(*_map, v);
 
     RelationPtr r;
@@ -92,7 +93,7 @@ void KeepNodesVisitor::visit(const ConstElementPtr& e)
     // if it was used, clean up the temporary parent relation.
     if (r)
     {
-      _map->removeRelation(r);
+      RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
     }
   }
 }

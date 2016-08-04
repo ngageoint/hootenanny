@@ -32,6 +32,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 
 #include "../../TestUtils.h"
 
@@ -66,8 +67,8 @@ public:
   void runTest()
   {
     OsmMapPtr map = createTestMap();
-    WayPtr w1 = map->getWay(map->findWays("note", "w1")[0]);
-    WayPtr w2 = map->getWay(map->findWays("note", "w2")[0]);
+    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w1")[0]);
+    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w2")[0]);
 
 
     {

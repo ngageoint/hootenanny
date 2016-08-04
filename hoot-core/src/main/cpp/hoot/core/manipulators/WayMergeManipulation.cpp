@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayMergeManipulation.h"
@@ -41,6 +41,8 @@
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 
@@ -139,8 +141,8 @@ void WayMergeManipulation::applyManipulation(shared_ptr<OsmMap> map,
   // insert the new merged way
   newElements.insert(ElementId::way(w->getId()));
 
-  result->removeWay(_left);
-  result->removeWay(_right);
+  RemoveWayOp::removeWay(result, _left);
+  RemoveWayOp::removeWay(result, _right);
 
   for (set<ElementId>::iterator it = impactedElements.begin(); it != impactedElements.end(); it++)
   {
@@ -167,10 +169,10 @@ double WayMergeManipulation::calculateScore(shared_ptr<const OsmMap> map) const
 
 double WayMergeManipulation::_calculateExpertProbability(shared_ptr<const OsmMap> map) const
 {
-  vector<long> wids;
-  wids.push_back(_left);
-  wids.push_back(_right);
-  shared_ptr<OsmMap> theMap = map->copyWays(wids);
+  OsmMapPtr theMap(new OsmMap());
+  CopySubsetOp(map,
+               ElementId(ElementType::Way, _left),
+               ElementId(ElementType::Way, _right)).apply(theMap);
 
   shared_ptr<Way> left = theMap->getWay(_left);
   shared_ptr<Way> right = theMap->getWay(_right);
@@ -307,7 +309,7 @@ void WayMergeManipulation::_removeSpans(shared_ptr<OsmMap> map,
     {
       if (_directConnect(map, w))
       {
-        map->removeWay(eid.getId());
+        RemoveWayOp::removeWay(map, eid.getId());
         impactedElements.erase(eid);
       }
     }
@@ -366,8 +368,8 @@ void WayMergeManipulation::_splitWays(shared_ptr<OsmMap> map, shared_ptr<Way>& l
     }
   }
 
-  result->removeWay(_left);
-  result->removeWay(_right);
+  RemoveWayOp::removeWay(result, _left);
+  RemoveWayOp::removeWay(result, _right);
 
   for (set<ElementId>::iterator it = impactedElements.begin(); it != impactedElements.end(); it++)
   {

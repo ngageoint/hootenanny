@@ -38,43 +38,40 @@ import hoot.services.models.review.ReviewQueryMapper;
 import hoot.services.models.review.ReviewableItem;
 
 
-/**
- * 
- */
-public class ReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(ReviewableQuery.class);
-    private long _seqId = -1;
+class ReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
+    private static final Logger logger = LoggerFactory.getLogger(ReviewableQuery.class);
+    private long seqId = -1;
 
-    public ReviewableQuery(final Connection c, final long mapid, final long seqid) {
-        super(c, mapid);
-        _seqId = seqid;
+    ReviewableQuery(Connection connection, long mapid, long seqid) {
+        super(connection, mapid);
+        seqId = seqid;
     }
 
-    protected String _getQueryString() {
+    String getQueryString() {
         return "select id from current_relations_" + getMapId()
-                + " where tags->'hoot:review:needs' = 'yes' and tags->'hoot:review:sort_order'='" + _seqId + "'";
+                + " where tags->'hoot:review:needs' = 'yes' and tags->'hoot:review:sort_order'='" + seqId + "'";
     }
 
     @Override
-    public ReviewQueryMapper execQuery() throws SQLException, Exception {
-        ReviewableItem ret = null;
-        try (Statement stmt = getConnection().createStatement(); ResultSet rs = stmt.executeQuery(_getQueryString())) {
-            long nResCnt = 0;
-            long relid = -1;
+    public ReviewQueryMapper execQuery() {
+        ReviewableItem ret;
+        try (Statement stmt = super.getConnection().createStatement()) {
+            try (ResultSet rs = stmt.executeQuery(getQueryString())) {
+                long nResCnt = 0;
+                long relid = -1;
 
-            if (rs == null) {
-                throw new SQLException("Error executing ReviewQueryMapper::execQuery");
+                while (rs.next()) {
+                    // Retrieve by column name
+                    relid = rs.getLong("id");
+                    nResCnt++;
+                }
+
+                ret = new ReviewableItem(seqId, getMapId(), relid);
+                ret.setResultCount(nResCnt);
             }
-
-            while (rs.next()) {
-                // Retrieve by column name
-                relid = rs.getLong("id");
-                nResCnt++;
-            }
-
-            ret = new ReviewableItem(_seqId, getMapId(), relid);
-            ret.setResultCount(nResCnt);
+        }
+        catch (SQLException e) {
+            throw new RuntimeException("Error executing query!", e);
         }
 
         return ret;

@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.osm;
 
+import static hoot.services.HootProperties.MAX_QUERY_AREA_DEGREES;
+import static hoot.services.HootProperties.MAX_QUERY_NODES;
+
 import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -55,17 +58,16 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
-import hoot.services.db.DbUtils;
-import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.CurrentRelations;
-import hoot.services.db2.CurrentWays;
-import hoot.services.db2.Maps;
-import hoot.services.db2.QCurrentNodes;
-import hoot.services.db2.QCurrentRelations;
-import hoot.services.db2.QCurrentWays;
-import hoot.services.db2.QMaps;
+import hoot.services.utils.DbUtils;
+import hoot.services.models.db.CurrentNodes;
+import hoot.services.models.db.CurrentRelations;
+import hoot.services.models.db.CurrentWays;
+import hoot.services.models.db.Maps;
+import hoot.services.models.db.QCurrentNodes;
+import hoot.services.models.db.QCurrentRelations;
+import hoot.services.models.db.QCurrentWays;
+import hoot.services.models.db.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.MapLayer;
@@ -74,6 +76,7 @@ import hoot.services.models.osm.RelationMember;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.utils.MapUtils;
 import hoot.services.utils.XmlUtils;
 
 
@@ -1016,7 +1019,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
     @Category(UnitTest.class)
     public void testGetMapNodeLimitExceeded() throws Exception {
         QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-        String originalMaxQueryNodes = HootProperties.getPropertyOrDefault("maxQueryNodes");
+        String originalMaxQueryNodes = MAX_QUERY_NODES;
         try {
             BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
             BoundingBox queryBounds = OsmTestUtils.createTestQueryBounds();
@@ -1267,7 +1270,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         BoundingBox queryBounds = new BoundingBox(-79.02265434416296, 37.90089748801109,
                                                   -77.9224564416296, 39.00085678801109);
 
-        Assert.assertTrue(queryBounds.getArea() > Double.parseDouble(HootProperties.getDefault("maxQueryAreaDegrees")));
+        Assert.assertTrue(queryBounds.getArea() > Double.parseDouble(MAX_QUERY_AREA_DEGREES));
 
         long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
         Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
@@ -1318,9 +1321,9 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         // existing test layer
         mapIds.add(mapId);
         // create some more maps
-        long mapId2 = DbUtils.insertMap(userId, conn);
+        long mapId2 = MapUtils.insertMap(userId, conn);
         mapIds.add(mapId2);
-        long mapId3 = DbUtils.insertMap(userId, conn);
+        long mapId3 = MapUtils.insertMap(userId, conn);
         mapIds.add(mapId3);
 
         // query out the layers
@@ -1355,8 +1358,8 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
         Assert.assertTrue(foundFirstId && foundSecondId && foundThirdId);
 
-        DbUtils.deleteOSMRecord(conn, mapId2);
-        DbUtils.deleteOSMRecord(conn, mapId3);
+        MapUtils.deleteOSMRecord(conn, mapId2);
+        MapUtils.deleteOSMRecord(conn, mapId3);
     }
 
     @Test

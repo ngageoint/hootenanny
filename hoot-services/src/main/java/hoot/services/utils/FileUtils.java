@@ -26,12 +26,8 @@
  */
 package hoot.services.utils;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
-import java.util.Scanner;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
@@ -39,55 +35,21 @@ import org.apache.commons.io.filefilter.NotFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 
-public class FileUtils {
-    /**
-     * Removes the first line from a file
-     *
-     * @param file
-     *            file to modify
-     * @throws IOException
-     */
-    public static void removeFirstLineFromFile(File file) throws IOException {
-        Scanner fileScanner = new Scanner(file);
-        fileScanner.nextLine();
-        FileWriter fileStream = null;
-        BufferedWriter out = null;
-        try {
-            fileStream = new FileWriter(file.getAbsolutePath());
-            out = new BufferedWriter(fileStream);
-            while (fileScanner.hasNextLine()) {
-                String next = fileScanner.nextLine();
-                if (next.equals("\n")) {
-                    out.newLine();
-                }
-                else
-                    out.write(next);
-                {
-                    out.newLine();
-                }
-            }
+public final class FileUtils {
 
-        }
-        finally {
-            fileScanner.close();
-            if (out != null) {
-                out.close();
-            }
-            if (fileStream != null) {
-                fileStream.close();
-            }
-        }
+    private FileUtils() {
     }
 
-    public static File getSubFolderFromFolder(final String targetFolder, final String subFolderName) throws Exception {
+    public static File getSubFolderFromFolder(String targetFolder, String subFolderName) {
         File ret = null;
 
-        File f = new File(targetFolder);
-        List<File> files = (List<File>) org.apache.commons.io.FileUtils.listFilesAndDirs(f,
+        File folder = new File(targetFolder);
+        List<File> files = (List<File>) org.apache.commons.io.FileUtils.listFilesAndDirs(folder,
                 new NotFileFilter(TrueFileFilter.INSTANCE), DirectoryFileFilter.DIRECTORY);
-        for (File ff : files) {
-            if (ff.getName().equals(subFolderName)) {
-                ret = ff;
+
+        for (File file : files) {
+            if (file.getName().equals(subFolderName)) {
+                ret = file;
                 break;
             }
         }
@@ -95,16 +57,15 @@ public class FileUtils {
         return ret;
     }
 
-    public static File getFileFromFolder(final String targetFolder, final String fileName, final String ext)
-            throws Exception {
+    public static File getFileFromFolder(String targetFolder, String fileName, String ext) {
         File ret = null;
         String[] extension = { ext };
         File dir = new File(targetFolder);
         if (dir.isDirectory()) {
             List<File> files = (List<File>) org.apache.commons.io.FileUtils.listFiles(dir, extension, false);
-            for (File f : files) {
-                if (f.getName().equals(fileName + "." + ext)) {
-                    ret = f;
+            for (File file : files) {
+                if (file.getName().equals(fileName + "." + ext)) {
+                    ret = file;
                     break;
                 }
             }
@@ -113,11 +74,9 @@ public class FileUtils {
         return ret;
     }
 
-    public static boolean validateFilePath(final String expectedPath, final String actualPath) throws Exception {
-        boolean isValid = true;
-
+    public static boolean validateFilePath(String expectedPath, String actualPath) {
         String path = FilenameUtils.getFullPathNoEndSeparator(actualPath);
-        isValid = expectedPath.equals(path);
+        boolean isValid = expectedPath.equals(path);
         return isValid;
     }
 }

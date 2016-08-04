@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.osm;
 
+import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
+import static hoot.services.HootProperties.MAXIMUM_WAY_NODES;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,24 +59,22 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
-import hoot.services.db.DbUtils;
-import hoot.services.db.postgres.PostgresUtils;
-import hoot.services.db2.Changesets;
-import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.CurrentRelationMembers;
-import hoot.services.db2.CurrentRelations;
-import hoot.services.db2.CurrentWayNodes;
-import hoot.services.db2.CurrentWays;
-import hoot.services.db2.QChangesets;
-import hoot.services.db2.QCurrentNodes;
-import hoot.services.db2.QCurrentRelationMembers;
-import hoot.services.db2.QCurrentRelations;
-import hoot.services.db2.QCurrentWayNodes;
-import hoot.services.db2.QCurrentWays;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.PostgresUtils;
+import hoot.services.models.db.Changesets;
+import hoot.services.models.db.CurrentNodes;
+import hoot.services.models.db.CurrentRelationMembers;
+import hoot.services.models.db.CurrentRelations;
+import hoot.services.models.db.CurrentWayNodes;
+import hoot.services.models.db.CurrentWays;
+import hoot.services.models.db.QChangesets;
+import hoot.services.models.db.QCurrentNodes;
+import hoot.services.models.db.QCurrentRelationMembers;
+import hoot.services.models.db.QCurrentRelations;
+import hoot.services.models.db.QCurrentWayNodes;
+import hoot.services.models.db.QCurrentWays;
 import hoot.services.geo.BoundingBox;
-import hoot.services.geo.QuadTileCalculator;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.Node;
@@ -81,6 +82,7 @@ import hoot.services.models.osm.RelationMember;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.RandomNumberGenerator;
 import hoot.services.utils.XmlUtils;
 
@@ -541,8 +543,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(updatedBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(updatedBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
                 Assert.assertEquals(changesetBounds, expandedBounds);
@@ -1298,8 +1299,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(updatedBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(updatedBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
 
@@ -1390,8 +1390,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Changeset hootChangeset = new Changeset(mapId, changesetId1, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
                 BoundingBox expandedBounds = new BoundingBox();
-                double boundsExpansionFactor = Double
-                        .parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"));
+                double boundsExpansionFactor = Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES);
                 expandedBounds.expand(changeset1Bounds, boundsExpansionFactor);
                 Assert.assertEquals(expandedBounds, changesetBounds);
 
@@ -1912,8 +1911,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                expandedBounds.expand(updateBounds,
-                        Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+                expandedBounds.expand(updateBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
 
                 Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
@@ -2284,7 +2282,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = UniformInterfaceException.class)
     @Category(UnitTest.class)
     public void testUploadModifyTooManyNodesForWay() throws Exception {
-        String originalMaximumWayNodes = HootProperties.getProperty("maximumWayNodes");
+        String originalMaximumWayNodes = MAXIMUM_WAY_NODES;
 
         BoundingBox originalBounds = null;
         Long changesetId = null;
@@ -2306,10 +2304,10 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
             // remember the original value to restore it later
-            originalMaximumWayNodes = HootProperties.getProperty("maximumWayNodes");
+            originalMaximumWayNodes = MAXIMUM_WAY_NODES;
 
             // use a lower number of max way nodes then default for efficiency
-            HootCustomPropertiesSetter.setProperty("maximumWayNodes", "2");
+            HootCustomPropertiesSetter.setProperty("MAXIMUM_WAY_NODES", "2");
 
             resource()
                     .path("api/0.6/changeset/" + changesetId + "/upload")
@@ -2340,7 +2338,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("maximumWayNodes", originalMaximumWayNodes);
+            HootCustomPropertiesSetter.setProperty("MAXIMUM_WAY_NODES", originalMaximumWayNodes);
         }
     }
 

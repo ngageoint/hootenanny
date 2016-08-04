@@ -26,6 +26,9 @@
  */
 package hoot.services.osm;
 
+import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
+import static hoot.services.HootProperties.MAX_RECORD_BATCH_SIZE;
+
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -53,23 +56,23 @@ import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 
-import hoot.services.HootProperties;
-import hoot.services.db.DbUtils;
-import hoot.services.db.DbUtils.RecordBatchType;
-import hoot.services.db.postgres.PostgresUtils;
-import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.CurrentRelationMembers;
-import hoot.services.db2.CurrentRelations;
-import hoot.services.db2.CurrentWayNodes;
-import hoot.services.db2.CurrentWays;
-import hoot.services.db2.QChangesets;
-import hoot.services.db2.QCurrentNodes;
-import hoot.services.db2.QCurrentRelationMembers;
-import hoot.services.db2.QCurrentRelations;
-import hoot.services.db2.QCurrentWayNodes;
-import hoot.services.db2.QCurrentWays;
+import hoot.services.models.db.Changesets;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.DbUtils.RecordBatchType;
+import hoot.services.utils.PostgresUtils;
+import hoot.services.models.db.CurrentNodes;
+import hoot.services.models.db.CurrentRelationMembers;
+import hoot.services.models.db.CurrentRelations;
+import hoot.services.models.db.CurrentWayNodes;
+import hoot.services.models.db.CurrentWays;
+import hoot.services.models.db.QChangesets;
+import hoot.services.models.db.QCurrentNodes;
+import hoot.services.models.db.QCurrentRelationMembers;
+import hoot.services.models.db.QCurrentRelations;
+import hoot.services.models.db.QCurrentWayNodes;
+import hoot.services.models.db.QCurrentWays;
 import hoot.services.geo.BoundingBox;
-import hoot.services.geo.GeoUtils;
+import hoot.services.utils.GeoUtils;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
@@ -140,7 +143,7 @@ public class OsmTestUtils {
 
         QChangesets changesets = QChangesets.changesets;
 
-        hoot.services.db2.Changesets changesetPojo = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Changesets changesetPojo = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
                 .from(changesets).where(changesets.id.eq(changesetId)).singleResult(changesets);
 
         Assert.assertNotNull(changesetPojo);
@@ -283,7 +286,7 @@ public class OsmTestUtils {
 
     public static void verifyTestChangesetCreatedByRequest(final Long changesetId) {
         QChangesets changesets = QChangesets.changesets;
-        hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
+        Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
                 .where(changesets.id.eq(changesetId)).singleResult(changesets);
 
         Assert.assertNotNull(changeset);
@@ -314,7 +317,7 @@ public class OsmTestUtils {
     public static void verifyTestChangesetUnmodified(final long changesetId) {
         try {
             QChangesets changesets = QChangesets.changesets;
-            hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
                     .from(changesets).where(changesets.id.eq(changesetId)).singleResult(changesets);
 
             Assert.assertNotNull(changeset);
@@ -339,7 +342,7 @@ public class OsmTestUtils {
     // for testing purposes allow specifying numChanges as a variable
     public static void verifyTestChangesetClosed(final long changesetId, final int numChanges) {
         QChangesets changesets = QChangesets.changesets;
-        hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
+        Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
                 .where(changesets.id.eq(changesetId)).singleResult(changesets);
 
         Assert.assertNotNull(changeset);
@@ -359,7 +362,7 @@ public class OsmTestUtils {
     public static void verifyTestChangesetUnmodified(final long changesetId, final BoundingBox originalBounds) {
         try {
             QChangesets changesets = QChangesets.changesets;
-            hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
                     .from(changesets).where(changesets.id.eq(changesetId)).singleResult(changesets);
 
             Assert.assertNotNull(changeset);
@@ -377,9 +380,8 @@ public class OsmTestUtils {
             // a change the size of the expansion factor is made automatically,
             // so the changeset's
             // bounds should be no larger than that
-            defaultBounds.expand(originalBounds,
-                    Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
-            Assert.assertTrue(changesetBounds.equals(defaultBounds));
+            defaultBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
+            Assert.assertEquals(defaultBounds, changesetBounds);
         }
         catch (Exception e) {
             Assert.fail("Error checking changeset: " + e.getMessage());
@@ -1060,7 +1062,7 @@ public class OsmTestUtils {
 
     public static void closeChangeset(final long mapId, final long changesetId) {
         QChangesets changesets = QChangesets.changesets;
-        hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
+        Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
                 .where(changesets.id.eq(changesetId)).singleResult(changesets);
 
         final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
@@ -1075,8 +1077,7 @@ public class OsmTestUtils {
         BoundingBox bounds = new BoundingBox(-78.02265434416296, 38.90089748801109, -77.9224564416296,
                 39.00085678801109);
         BoundingBox expandedBounds = new BoundingBox();
-        expandedBounds.expand(bounds,
-                Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
+        expandedBounds.expand(bounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
         return expandedBounds;
     }
 
@@ -1089,9 +1090,9 @@ public class OsmTestUtils {
     // ChangesetResourceUtils. Since that involves updating *a lot* of tests, so
     // not doing it right
     // now.
-    public static Set<Long> createNodesOutsideOfQueryBounds(final long changesetId, final BoundingBox queryBounds)
+    public static Set<Long> createNodesOutsideOfQueryBounds(long changesetId, BoundingBox queryBounds)
             throws Exception {
-        Set<Long> nodeIds = new LinkedHashSet<Long>();
+        Set<Long> nodeIds = new LinkedHashSet<>();
         nodeIds.add(Node.insertNew(changesetId, mapId, queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, null,
                 conn));
         nodeIds.add(Node.insertNew(changesetId, mapId, queryBounds.getMinLat() - 10, queryBounds.getMinLon() - 10, null,
@@ -1193,7 +1194,7 @@ public class OsmTestUtils {
 
         }
         catch (Exception e) {
-            throw new Exception("Error inserting node.");
+            throw new Exception("Error inserting node.", e);
         }
         finally {
             if (stmt != null)
@@ -1230,7 +1231,7 @@ public class OsmTestUtils {
             sequenceCtr++;
         }
 
-        int maxRecordBatchSize = Integer.parseInt(HootProperties.getPropertyOrDefault("maxRecordBatchSize"));
+        int maxRecordBatchSize = Integer.parseInt(MAX_RECORD_BATCH_SIZE);
         DbUtils.batchRecords(mapId, wayNodeRecords, QCurrentWayNodes.currentWayNodes, null, RecordBatchType.INSERT,
                 conn, maxRecordBatchSize);
     }
@@ -1287,7 +1288,7 @@ public class OsmTestUtils {
             sequenceCtr++;
         }
 
-        int maxRecordBatchSize = Integer.parseInt(HootProperties.getPropertyOrDefault("maxRecordBatchSize"));
+        int maxRecordBatchSize = Integer.parseInt(MAX_RECORD_BATCH_SIZE);
         DbUtils.batchRecords(mapId, memberRecords, QCurrentRelationMembers.currentRelationMembers, null,
                 RecordBatchType.INSERT, conn, maxRecordBatchSize);
     }
@@ -1382,7 +1383,7 @@ public class OsmTestUtils {
 
         }
         catch (Exception e) {
-            throw new Exception("Error inserting node.");
+            throw new Exception("Error inserting node.", e);
         }
 
         finally {
@@ -1406,7 +1407,7 @@ public class OsmTestUtils {
      */
     public static long getTagCountForElementType(final long mapId, final ElementType elementType, Connection dbConn)
             throws Exception {
-        final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
+        final Element prototype = ElementFactory.create(mapId, elementType, dbConn);
         List<?> records = new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
                 .list(prototype.getElementTable());
         long tagCount = 0;

@@ -1,0 +1,12 @@
+== map-extent
+
+=== Description
+
++map-extent+ outputs the geospatial bounds of the input map data.
+
+=== Usage
+
+--------------------------------------
+map-extent (input)
+--------------------------------------
+

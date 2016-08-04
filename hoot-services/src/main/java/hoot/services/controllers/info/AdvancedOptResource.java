@@ -26,10 +26,14 @@
  */
 package hoot.services.controllers.info;
 
+
+import static hoot.services.HootProperties.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Map;
@@ -38,29 +42,22 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/advancedopts")
 public class AdvancedOptResource {
     private static final Logger logger = LoggerFactory.getLogger(AdvancedOptResource.class);
-    private static final String asciidocPath = HootProperties.getProperty("configAsciidocPath");
-    private static final String templatePath = HootProperties.getProperty("advOptTemplate");
-    private static final String homeFolder = HootProperties.getProperty("homeFolder");
-    private static final String refOverridePath = HootProperties.getProperty("advOptRefOverride");
-    private static final String horzOverridePath = HootProperties.getProperty("advOptHorizontalOverride");
-    private static final String aveOverridePath = HootProperties.getProperty("advOptAverageOverride");
 
     private JSONObject doc;
     private JSONArray template;
@@ -72,7 +69,7 @@ public class AdvancedOptResource {
     private JSONObject aveOverride;
 
     static {
-        File file = new File(homeFolder + "/" + asciidocPath);
+        File file = new File(HOME_FOLDER + "/" + ASCIIDOC_PATH);
         if (!file.exists()) {
             throw new RuntimeException("Missing required file: " + file.getAbsolutePath());
         }
@@ -83,9 +80,9 @@ public class AdvancedOptResource {
 
     @GET
     @Path("/getoptions")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getOptions(@QueryParam("conftype") String confType, @QueryParam("force") String isForce) {
-        JSONArray template = null;
+        JSONArray template;
         try {
             // Force option should only be used to update options list by administrator
             boolean doForce = false;
@@ -94,58 +91,56 @@ public class AdvancedOptResource {
             }
 
             getOverrides(isForce);
+
             if ((doc == null) || doForce) {
                 doc = new JSONObject();
                 parseAsciidoc();
             }
 
-            if (doc != null) {
-                JSONParser par = new JSONParser();
-                if (confType.equalsIgnoreCase("reference")) {
-                    if ((refTemplate == null) || doForce) {
-                        refTemplate = new JSONArray();
-                        refTemplate.add(refOverride);
-                    }
-                    template = refTemplate;
+            JSONParser par = new JSONParser();
+            if (confType.equalsIgnoreCase("reference")) {
+                if ((refTemplate == null) || doForce) {
+                    refTemplate = new JSONArray();
+                    refTemplate.add(refOverride);
                 }
-                else if (confType.equalsIgnoreCase("horizontal")) {
-                    if ((hrzTemplate == null) || doForce) {
-                        hrzTemplate = new JSONArray();
-                        hrzTemplate.add(horzOverride);
-                    }
-                    template = hrzTemplate;
+                template = refTemplate;
+            }
+            else if (confType.equalsIgnoreCase("horizontal")) {
+                if ((hrzTemplate == null) || doForce) {
+                    hrzTemplate = new JSONArray();
+                    hrzTemplate.add(horzOverride);
                 }
-                else if (confType.equalsIgnoreCase("average")) {
-                    if ((aveTemplate == null) || doForce) {
-                        aveTemplate = new JSONArray();
-                        aveTemplate.add(aveOverride);
-                    }
-                    template = aveTemplate;
+                template = hrzTemplate;
+            }
+            else if (confType.equalsIgnoreCase("average")) {
+                if ((aveTemplate == null) || doForce) {
+                    aveTemplate = new JSONArray();
+                    aveTemplate.add(aveOverride);
                 }
-                else {
-                    if ((this.template == null) || doForce) {
-                        try (FileReader fr = new FileReader(homeFolder + "/" + templatePath)) {
-                            this.template = (JSONArray)par.parse(fr);
-                            generateRule(this.template, null);
-                        }
-                    }
-                    template = this.template;
-                }
+                template = aveTemplate;
             }
             else {
-                throw new Exception("Failed to populate asciidoc information.");
+                if ((this.template == null) || doForce) {
+                    try (FileReader fr = new FileReader(HOME_FOLDER + "/" + TEMPLATE_PATH)) {
+                        this.template = (JSONArray)par.parse(fr);
+                        generateRule(this.template, null);
+                    }
+                }
+                template = this.template;
             }
         }
-        catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting advanced options: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+        catch (WebApplicationException wae) {
+            throw wae;
         }
-
-        assert (template != null);
+        catch (Exception ex) {
+            String msg = "Error getting advanced options!";
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        }
 
         return Response.ok(template.toJSONString(), MediaType.APPLICATION_JSON).build();
     }
 
-    private void getOverrides(String isForce) throws Exception {
+    private void getOverrides(String isForce) throws IOException, ParseException {
         // Force option should only be used to update options list by administrator
         boolean doForce = false;
         if (isForce != null) {
@@ -155,15 +150,15 @@ public class AdvancedOptResource {
         if ((horzOverride == null) || (refOverride == null) || doForce) {
             JSONParser par = new JSONParser();
 
-            try (FileReader frRef = new FileReader(homeFolder + File.separator + refOverridePath)){
+            try (FileReader frRef = new FileReader(HOME_FOLDER + File.separator + REF_OVERRIDE_PATH)){
                 refOverride = (JSONObject) par.parse(frRef);
             }
 
-            try (FileReader frHrz = new FileReader(homeFolder + File.separator + horzOverridePath)){
+            try (FileReader frHrz = new FileReader(HOME_FOLDER + File.separator + HORZ_OVERRIDE_PATH)){
                 horzOverride = (JSONObject) par.parse(frHrz);
             }
 
-            try (FileReader frAve = new FileReader(homeFolder + File.separator + aveOverridePath)) {
+            try (FileReader frAve = new FileReader(HOME_FOLDER + File.separator + AVE_OVERRIDE_PATH)) {
                 aveOverride = (JSONObject) par.parse(frAve);
             }
         }
@@ -181,20 +176,19 @@ public class AdvancedOptResource {
                 return oDep.get("Default Value").toString();
             }
         }
-        catch (Exception ignored) {
-            logger.debug(ignored.getMessage());
+        catch (Exception e) {
+            logger.debug(e.getMessage(), e);
         }
 
         return "";
     }
 
-    private void generateRule(JSONArray a, JSONObject p) throws Exception {
+    private void generateRule(JSONArray jsonArray, JSONObject jsonObject) {
         // for each options in template apply the value
-        for (Object o : a) {
+        for (Object o : jsonArray) {
             if (o instanceof JSONObject) {
                 JSONObject curOpt = (JSONObject) o;
-                // first check to see if there is key then apply the asciidoc
-                // val
+                // first check to see if there is key then apply the asciidoc val
                 Object oKey = curOpt.get("hoot_key");
                 if (oKey != null) {
                     String sKey = oKey.toString();
@@ -245,7 +239,7 @@ public class AdvancedOptResource {
                             JSONObject override = (JSONObject) oAttrib;
 
                             for (Object o1 : override.entrySet()) {
-                                Map.Entry pair = (Map.Entry) o1;
+                                Map.Entry<Object, Object> pair = (Map.Entry<Object, Object>) o1;
                                 curOpt.put(pair.getKey(), pair.getValue());
                             }
                             // remove override element
@@ -259,9 +253,9 @@ public class AdvancedOptResource {
                     Object oVal = curOpt.get("hoot_val");
                     if (oVal != null) {
                         String sVal = oVal.toString();
-                        if (p != null) {
+                        if (jsonObject != null) {
                             // parent always have to have hoot_key for hoot_val
-                            Object pKey = p.get("hoot_key");
+                            Object pKey = jsonObject.get("hoot_key");
                             if (pKey != null) {
                                 // try to get default list from parent
                                 String sPKey = pKey.toString();
@@ -272,10 +266,10 @@ public class AdvancedOptResource {
 
                                     if (oDocDefList != null) {
                                         JSONObject defList = (JSONObject) oDocDefList;
-                                        Iterator it = defList.entrySet().iterator();
+                                        Iterator<Object> it = defList.entrySet().iterator();
                                         boolean hasNext = true;
                                         while (hasNext) {
-                                            Map.Entry pair = (Map.Entry) it.next();
+                                            Map.Entry<Object, Object> pair = (Map.Entry<Object, Object>) it.next();
                                             hasNext = it.hasNext();
                                             if (pair.getKey().toString().equalsIgnoreCase(sVal)) {
                                                 String sDefListDesc = pair.getValue().toString().trim();
@@ -324,7 +318,7 @@ public class AdvancedOptResource {
                             JSONObject override = (JSONObject) oAttrib;
 
                             for (Object o1 : override.entrySet()) {
-                                Map.Entry pair = (Map.Entry) o1;
+                                Map.Entry<Object, Object> pair = (Map.Entry<Object, Object>) o1;
                                 curOpt.put(pair.getKey(), pair.getValue());
                             }
                             // remove override element
@@ -348,7 +342,7 @@ public class AdvancedOptResource {
     // "Data Type:"
     // "Default Value:"
     // If line starts with "** " then list item field
-    private String parseLine(String line, String curOptName) throws Exception {
+    private String parseLine(String line, String curOptName) {
         String optName = curOptName;
         // If line starts with "=== " then it is option field
         if (line.startsWith("=== ")) {
@@ -430,18 +424,19 @@ public class AdvancedOptResource {
         return optName;
     }
 
-    private void parseAsciidoc() throws Exception {
-        try (FileInputStream fstream = new FileInputStream(homeFolder + "/" + asciidocPath);
-             InputStreamReader istream = new InputStreamReader(fstream);
-             BufferedReader br = new BufferedReader(istream)) {
+    private void parseAsciidoc() throws IOException {
+        try (FileInputStream fstream = new FileInputStream(HOME_FOLDER + "/" + ASCIIDOC_PATH)) {
+            try (InputStreamReader istream = new InputStreamReader(fstream)) {
+                try (BufferedReader br = new BufferedReader(istream)) {
+                    String strLine;
+                    String curOptName = null;
 
-            String strLine;
-            String curOptName = null;
-
-            // Read File Line By Line
-            while ((strLine = br.readLine()) != null) {
-                // Print the content on the console
-                curOptName = parseLine(strLine, curOptName);
+                    // Read File Line By Line
+                    while ((strLine = br.readLine()) != null) {
+                        // Print the content on the console
+                        curOptName = parseLine(strLine, curOptName);
+                    }
+                }
             }
         }
     }

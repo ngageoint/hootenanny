@@ -38,6 +38,7 @@
 #include <hoot/js/util/StreamUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
 #include <hoot/js/visitors/JsFunctionVisitor.h>
+#include <hoot/core/ops/RemoveElementOp.h>
 #include "JsRegistrar.h"
 
 using namespace v8;
@@ -223,7 +224,7 @@ Handle<Value> OsmMapJs::removeElement(const Arguments& args) {
 
   ElementId eid = toCpp<ElementId>(args[0]);
 
-  obj->getMap()->removeElement(eid);
+  RemoveElementOp::removeElement(obj->getMap(), eid);
 
   return scope.Close(Undefined());
 }

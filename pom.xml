@@ -1,0 +1,124 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <properties>
+    <!-- Eclipse's Tomcat Server Name. -->
+    <tomcat-server>Tomcat v6.0 Server</tomcat-server>
+    <!-- Change to skip unit tests on these modules.  A better way to change these is to use the 
+    command line.  e.g.  mvn -Dskip.mrgeo.core.tests=true -->
+    <skip.hoot.services.tests>false</skip.hoot.services.tests>
+    <!-- do not touch anything below here.  Bad things could happen -->
+    <!-- revision>${user.name}-${buildNumber}${localModified}</revision -->
+    <revision>${user.name}</revision>
+    <hoot-short-version>${project.artifactId}</hoot-short-version>
+    <hoot-short-full-war>${project.parent.artifactId}</hoot-short-full-war>
+    <hoot-version>${hoot-short-version}-${revision}</hoot-version>
+    <hoot-full-war>${project.parent.artifactId}-${project.version}-${revision}</hoot-full-war>
+    <id-short-version>${project.artifactId}</id-short-version>
+    <id-short-full-war>${project.parent.artifactId}</id-short-full-war>
+    <id-version>${id-short-version}-${revision}</id-version>
+    <id-full-war>${project.parent.artifactId}-${project.version}-${revision}</id-full-war>
+  </properties>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>hoot</groupId>
+  <artifactId>hoot-java</artifactId>
+  <packaging>pom</packaging>
+  <version>0.0.1</version>
+  <repositories>
+    <!-- can comment out these repos if using artifactory -->
+    <repository>
+      <id>xwiki.org-cache</id>
+      <url>http://maven.xwiki.org/externals</url>
+      <releases>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>deegree-repo</id>
+      <url>http://repo.deegree.org/content/groups/public/</url>
+      <releases>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <!-- uncomment below for artifactory support -->
+    <!-- repository>
+        <id>central</id>
+        <url>http://selma:8081/artifactory/libs-release</url>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </repository>
+    <repository>
+        <id>snapshots</id>
+        <url>http://selma:8081/artifactory/libs-snapshot</url>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+    </repository -->
+  </repositories>
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <finalName>${hoot-version}</finalName>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.5.1</version>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+          <!-- this argument allows classes within rt.jar to be referenced... -->
+          <compilerArgument>-XDignore.symbol.file=true</compilerArgument>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.7</version>
+        <configuration>
+          <!-- outputDirectory>../../../coverage/services</outputDirectory -->
+          <formats>
+            <format>html</format>
+            <!-- format>xml</format -->
+          </formats>
+          <quiet>true</quiet>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.7</version>
+      </plugin>
+    </plugins>
+  </reporting>
+  <profiles>
+    <!-- NOTE!!!  Very important!
+         ========================
+         We have gone out of our way to eliminate apache's commons-logging (now stagnant) with
+         slf4j for our logging "facade."  As such, make sure when adding jars to exclude any dependencies to
+         commons-logging.
+         slf4j provides jcl-over-slf4j to bridge any 3rd party usages of commons logging into slf4j.
+    -->
+    <!-- Module build profiles -->
+    <profile>
+      <id>build-all</id>
+      <activation>
+        <property>
+          <name>modules</name>
+          <value>all</value>
+        </property>
+      </activation>
+      <modules>
+        <module>hoot-services</module>
+        <module>distribution</module>
+      </modules>
+    </profile>
+  </profiles>
+</project>

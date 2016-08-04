@@ -44,15 +44,18 @@ using namespace geos::operation::buffer;
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/filters/ChainNodeFilter.h>
-#include <hoot/core/filters/DistanceNodeFilter.h>
-#include <hoot/core/filters/InWayNodeFilter.h>
-#include <hoot/core/filters/OneWayFilter.h>
-#include <hoot/core/filters/TagFilter.h>
+#include <hoot/core/filters/DistanceNodeCriterion.h>
+#include <hoot/core/filters/NotCriterion.h>
+#include <hoot/core/filters/ChainCriterion.h>
+#include <hoot/core/filters/TagCriterion.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/FindNodesVisitor.h>
+
 
 // Qt
 #include <QDebug>
@@ -248,11 +251,10 @@ shared_ptr<OsmMap> DualWaySplitter::splitAll()
   shared_ptr<OsmMap> result(new OsmMap(_map));
   _result = result;
 
-  shared_ptr<TagFilter> tf(new TagFilter(Filter::KeepMatches, "divider", "yes"));
-
+  TagCriterion tagCrit("divider", "yes");
   LOG_DEBUG("  filtering...");
 
-  vector<long> wayIds = _result->filterWays(*tf);
+  vector<long> wayIds = FindWaysVisitor::findWays(_result, &tagCrit);
   LOG_DEBUG("  filtered.");
 
   for (size_t i = 0; i < wayIds.size(); i++)
@@ -412,13 +414,15 @@ void DualWaySplitter::_reconnectEnd(long centerNodeId, shared_ptr<Way> edge)
   }
 
   // find all the nodes that are about the right distance from centerNodeId
-  shared_ptr<DistanceNodeFilter> filterOuter(new DistanceNodeFilter(Filter::KeepMatches,
-    centerNodeC, _splitSize * 1.01));
-  shared_ptr<DistanceNodeFilter> filterInner(new DistanceNodeFilter(Filter::FilterMatches,
-    centerNodeC, _splitSize * .99));
-  ChainNodeFilter chain(filterOuter, filterInner);
+  // Find nodes that are > _splitSize*.99 away, but less than _splitSize*1.01
+  shared_ptr<DistanceNodeCriterion> outerCrit(new DistanceNodeCriterion(centerNodeC, _splitSize*1.01));
+  shared_ptr<NotCriterion> notInnerCrit(new NotCriterion(new DistanceNodeCriterion(centerNodeC, _splitSize * .99)));
+  ChainCriterion chainCrit(outerCrit, notInnerCrit);
 
-  vector<long> nids = _result->filterNodes(chain, centerNodeC, _splitSize * 1.02);
+  vector<long> nids = FindNodesVisitor::findNodes(_result,
+                                                  &chainCrit,
+                                                  centerNodeC,
+                                                  _splitSize * 1.02);
 
   Radians bestAngle = std::numeric_limits<Radians>::max();
   long bestNid = numeric_limits<long>::max();
@@ -451,7 +455,7 @@ void DualWaySplitter::_reconnectEnd(long centerNodeId, shared_ptr<Way> edge)
 
 void DualWaySplitter::_splitIntersectingWays(long nid)
 {
-  std::vector<long> wids = _result->findWayByNode(nid);
+  std::vector<long> wids = FindWaysVisitor::findWaysByNode(_result, nid);
 
   if (wids.size() == 1)
   {
@@ -533,7 +537,7 @@ void DualWaySplitter::_splitWay(long wid)
   _reconnectEnd(nids[nids.size() - 1], _left);
   _reconnectEnd(nids[nids.size() - 1], _right);
 
-  _result->removeWay(wid);
+  RemoveWayOp::removeWay(_result, wid);
 
   // add the results to the map
   _result->addWay(_left);

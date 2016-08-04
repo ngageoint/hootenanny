@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAP_H
 #define OSMMAP_H
@@ -67,30 +67,26 @@ namespace hoot {
 
 using namespace std;
 
-class NodeFilter;
 class OsmMapIndex;
 class OsmMapListener;
-class WayFilter;
 
 /**
  * The OsmMap contains all the information necessary to represent an OSM map. It holds the nodes,
  * ways, relations and an index to access them efficiently. It also provides a number of methods
  * for CRUD.
  *
- * The OsmMap class is a beast. A bit too much of a beast. It would be nice to break it into smaller
- * chunks that are easier to maintain.
- *
- *  - For instance, complicated operations on the map such as recursively removing elements should
- *    live in another class. E.g. RecursiveElementRemover
- *  - Things like the filter operations can be replaced by visitors.
- *  - In the long term it might also be nice simplify the maintenance by merging all the elements
- *    into a single map and simplify the interface in a similar fashion.
- *  - I'd like to remove the OsmIndex circular reference, but I haven't figured out a good
- *    way to do that. Possibly refactor into an OsmMap class and OsmData class. The OsmMap class
- *    maintains pointers to OsmData and an OsmIndex where neither directly references the other. (?)
+ *  - In the long term it might be nice to remove the OsmIndex circular reference, but I
+ *    haven't figured out a good way to do that. Possibly refactor into an OsmMap class
+ *    and OsmData class. The OsmMap class maintains pointers to OsmData and an OsmIndex
+ *    where neither directly references the other. (?)
  */
 class OsmMap : public enable_shared_from_this<OsmMap>, public ElementProvider
 {
+  // Friend classes that need to modify private elements
+  friend class RemoveNodeOp;
+  friend class RemoveWayOp;
+  friend class RemoveRelationOp;
+
 public:
 
   static string className() { return "hoot::OsmMap"; }
@@ -147,54 +143,11 @@ public:
 
   virtual bool containsWay(long id) const { return _ways.find(id) != _ways.end(); }
 
-  /**
-   * Returns a copy of this map that only contains the specified ways. This can be handy when
-   * performing what-if experiments.
-   * @deprecated CopySubsetOp is now preferred.
-   */
-  shared_ptr<OsmMap> copyWays(const vector<long>& wIds) const;
-
   long createNextNodeId() const { return _idGen->createNodeId(); }
 
   long createNextRelationId() const { return _idGen->createRelationId(); }
 
   long createNextWayId() const { return _idGen->createWayId(); }
-
-  std::vector<long> filterNodes(const NodeFilter& filter) const;
-
-  std::vector<long> filterNodes(const NodeFilter& filter, const Coordinate& c,
-                                Meters maxDistance) const;
-
-  std::vector<long> filterWays(const WayFilter& filter) const;
-
-  /**
-   * Returns the ID of all the ways that are not filtered by filter and are within maxDistance
-   * of "from".
-   */
-  std::vector<long> filterWays(const WayFilter& filter, shared_ptr<const Way> from,
-                               Meters maxDistance, bool addError = false) const;
-
-  /**
-   * Returns a set of all element IDs that intersect with envelope e.
-   */
-  set<ElementId> findElements(const Envelope& e) const;
-
-  /**
-   * Does a very inefficient search for all the ways that contain the given node.
-   */
-  std::vector<long> findWayByNode(long nodeId) const;
-
-  /**
-   * Searches for all ways with a tag that exactly matches the key and value. This is horribly
-   * inefficient and appropriate mainly for testing.
-   */
-  std::vector<long> findWays(QString key, QString value) const;
-
-  /**
-   * Searches for all nodes with a tag that exactly matches the key and value. This is horribly
-   * inefficient and appropriate mainly for testing.
-   */
-  std::vector<long> findNodes(QString key, QString value) const;
 
   virtual ConstElementPtr getElement(const ElementId& id) const;
   ConstElementPtr getElement(ElementType type, long id) const;
@@ -252,66 +205,9 @@ public:
 
   const WayMap& getWays() const { return _ways; }
 
-  static boost::shared_ptr<OGRSpatialReference> getWgs84();
-
   bool isEmpty() const { return _nodes.size() == 0 && _ways.size() == 0 && _relations.size() == 0;}
 
   void registerListener(shared_ptr<OsmMapListener> l) { _listeners.push_back(l); }
-
-  /**
-   * Removes an element from the map. If the element exists as part of other elements it is
-   * removed from those elements before being removed from the map.
-   *
-   * If this element contains children (e.g. multipolygon) the children will not be removed from
-   * the map.
-   *
-   * If you would like to remove an element and all its children then see RecursiveElementRemover.
-   */
-  void removeElement(ElementId eid);
-
-  /**
-   * Removes an element from the map. No check is made before the removal, so removing an element
-   * used by another Way or Relation will result in undefined behaviour.
-   */
-  void removeElementNoCheck(ElementType type, long id);
-
-  /**
-   * Remove the specified node from this map. A check will be made to make sure the node is not
-   * part of any way before it is removed.
-   */
-  void removeNode(long nid);
-
-  /**
-   * Removes the node from all relations, ways and then removes the node from the map.
-   */
-  void removeNodeFully(long wId);
-
-  /**
-   * Remove the specified node from this map. No check will be made to remove this node from ways.
-   * If the node exists in one or more ways the results are undefined.
-   */
-  void removeNodeNoCheck(long nId);
-
-  void removeRelation(const shared_ptr<Relation>& r) { removeRelation(r->getId()); }
-
-  void removeRelation(long rId);
-
-  /**
-   * Remove the specified way from this map.
-   */
-  void removeWay(const shared_ptr<const Way>& w);
-
-  void removeWay(long wId);
-
-  /**
-   * Removes the way from all relations and then removes the way from the map.
-   */
-  void removeWayFully(long wId);
-
-  /**
-   * Removes the way if isFiltered() == true.
-   */
-  void removeWays(const WayFilter& filter);
 
   /**
    * Replace the all instances of from with instances of to. In some cases this may be an invalid
@@ -384,6 +280,7 @@ public:
    * visiting any elements.
    */
   void visitRw(ElementVisitor& visitor);
+  void visitWaysRw(ElementVisitor& visitor);
 
 protected:
 

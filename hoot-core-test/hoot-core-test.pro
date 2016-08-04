@@ -229,3 +229,4 @@ SOURCES += \
     src/test/cpp/hoot/core/io/OsmJsonReaderTest.cpp \
     src/test/cpp/hoot/core/algorithms/KspikBigramDistanceTest.cpp
 
+
