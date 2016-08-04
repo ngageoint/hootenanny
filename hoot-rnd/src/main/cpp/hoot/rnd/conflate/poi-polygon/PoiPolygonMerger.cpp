@@ -52,33 +52,54 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map,
   // See "Hootenanny - POI to Building" powerpoint for more details.
   ////
 
+  LOG_DEBUG("test1");
+
   // merge all POI tags first, but keep Unknown1 and Unknown2 separate. It is implicitly assumed
   // that since they're in a single group they all represent the same entity.
   Tags poiTags1 = _mergePoiTags(map, Status::Unknown1);
   Tags poiTags2 = _mergePoiTags(map, Status::Unknown2);
 
+  LOG_DEBUG("test2");
+
   // Get all the building parts for each status
   vector<ElementId> buildings1 = _getBuildingParts(map, Status::Unknown1);
   vector<ElementId> buildings2 = _getBuildingParts(map, Status::Unknown2);
+
+  LOG_DEBUG("test3");
 
   // Merge all the building parts together into a single building entity using the typical building
   // merge process.
   ElementId finalBuildingEid = _mergeBuildings(map, buildings1, buildings2, replaced);
 
+  LOG_DEBUG("test4");
+  LOG_VARD(finalBuildingEid);
+
+  assert(map.get());
   ElementPtr finalBuilding = map->getElement(finalBuildingEid);
+  if (!finalBuilding.get())
+  {
+    LOG_ERROR("finalBuilding");
+  }
+  assert(finalBuilding.get());
 
   Tags finalBuildingTags = finalBuilding->getTags();
   if (poiTags1.size())
   {
+    LOG_DEBUG("test9");
+
     finalBuildingTags = TagMergerFactory::getInstance().mergeTags(poiTags1, finalBuildingTags,
       finalBuilding->getElementType());
   }
   if (poiTags2.size())
   {
+    LOG_DEBUG("test10");
+
     finalBuildingTags = TagMergerFactory::getInstance().mergeTags(finalBuildingTags,
       poiTags2, finalBuilding->getElementType());
   }
   finalBuilding->setTags(finalBuildingTags);
+
+  LOG_DEBUG("test5");
 
   // do some book keeping to remove the POIs and mark them as replaced.
   for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin(); it != _pairs.end();
@@ -96,6 +117,8 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map,
       }
     }
 
+    LOG_DEBUG("test6");
+
     if (p.second.getType() == ElementType::Node)
     {
       replaced.push_back(pair<ElementId, ElementId>(p.second, finalBuildingEid));
@@ -106,7 +129,11 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map,
         RecursiveElementRemover(p.second).apply(map);
       }
     }
+
+    LOG_DEBUG("test7");
   }
+
+  LOG_DEBUG("test8");
 }
 
 Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const

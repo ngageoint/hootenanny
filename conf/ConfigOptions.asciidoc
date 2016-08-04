@@ -1639,6 +1639,14 @@ config option.
 If true, then uses MeanWordsetDistance; otherwise uses MinSumWordSetDistance.  TODO: This may not
 remain a permanent config option.
 
+=== poi.polygon.add.circular.error.to.review.distance
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, then the maximum distance used to identify review candidates during matching has a
+circular error added to it.  TODO: This may not remain a permanent config option.
+
 === postgresql.dumpfile.writer.auto.calc.ids
 
 * Data Type: bool

@@ -82,20 +82,25 @@ Match(threshold)
   shared_ptr<Geometry> gpoi = ElementConverter(map).convertToGeometry(poi);
 
   bool typeMatch = _calculateTypeMatch(poi, poly);
-  double tourismAncestorDistance = -1.0;
-  double amenityAncestorDistance = -1.0;
+  bool ancestorTypeMatch = false;
   if (ConfigOptions().getPoiPolygonUseTagAncestorTypeMatching())
   {
-    tourismAncestorDistance = _getTagDistance("ancestor", "tourism", map, e1, e2);
-    amenityAncestorDistance = _getTagDistance("ancestor", "amenity", map, e1, e2);
-    //double tourismDistance = _getTagDistance("tourism", e1, e2);
-    if (tourismAncestorDistance == 0 || amenityAncestorDistance == 0)
+    ancestorTypeMatch = _calculateAncestorTypeMatch(map, poi, poly);
+    if (ancestorTypeMatch)
     {
       typeMatch = true;
     }
   }
+  LOG_VARD(ancestorTypeMatch);
+  //bool buildingCategoryTypeMatch = _getTagDistance("category", "building", map, e1, e2) == 0;
+  //LOG_VARD(buildingCategoryTypeMatch);
+  //bool poiCategoryTypeMatch = _getTagDistance("category", "poi", map, e1, e2) == 0;
+  //LOG_VARD(poiCategoryTypeMatch);
+  //TagCategoryDifferencer differ(OsmSchemaCategory::fromString("building"));
+  //bool buildingCategoryTypeMatch = differ.diff(map, e1, e2) == 0;
   double nameScore = _calculateNameScore(poi, poly);
   bool nameMatch = nameScore >= ConfigOptions().getPoiPolygonMatchNameThreshold();
+  bool exactNameMatch = nameMatch == 1.0;
 
   double distance = gpoly->distance(gpoi.get());
 
@@ -104,13 +109,21 @@ Match(threshold)
   double sigma2 = e1->getCircularError() / 2.0;
   double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
 
-  double reviewDistance = ConfigOptions().getPoiPolygonMatchReviewDistance() + ce;
+  //double reviewDistance = ConfigOptions().getPoiPolygonMatchReviewDistance() + ce;
+  double reviewDistance = ConfigOptions().getPoiPolygonMatchReviewDistance();
+  if (ConfigOptions().getPoiPolygonAddCircularErrorToReviewDistance())
+  {
+    reviewDistance += ce;
+  }
   bool closeMatch = distance <= reviewDistance;
 
   int evidence = 0;
   evidence += typeMatch ? 1 : 0;
+  //evidence += ancestorTypeMatch ? 1 : 0;
+  //evidence += ancestorTypeMatch || typeMatch ? 1 : 0;
+  //evidence += buildingCategoryTypeMatch /*|| poiCategoryTypeMatch*/ ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
-  evidence += typeMatch && nameScore == 1.0 ? 1 : 0;
+  evidence += exactNameMatch ? 1 : 0;
   evidence += distance <= ConfigOptions().getPoiPolygonMatchDistance() ? 2 : 0;
 
   if (!closeMatch)
@@ -128,6 +141,10 @@ Match(threshold)
     _c.setReview();
     //LOG_DEBUG("poipoly review");
   }
+  /*else if (!e1->getTags().contains("name") || !e2->getTags().contains("name"))
+  {
+    _c.setReview();
+  }*/
   else
   {
     _c.setMiss();
@@ -157,10 +174,6 @@ Match(threshold)
   _circularError1 = e1->getCircularError();
   _circularError2 = e2->getCircularError();
   _evidence = evidence;
-
-  _tourismAncestorDistance = tourismAncestorDistance;
-  //_tourismDistance = tourismDistance;
-  _amenityAncestorDistance = amenityAncestorDistance;
 
   /*if (e1->getTags().get("name") == "S. SUNSET PLAYGRND: CLUBHOUSE" ||
       e2->getTags().get("name") == "S. SUNSET PLAYGRND: CLUBHOUSE")
@@ -230,6 +243,72 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
         _typeMatchAttributeKey = it.key();
         _typeMatchAttributeValue = it.value();
 
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, ConstElementPtr e1,
+                                                  ConstElementPtr e2) //const
+{
+  QStringList types;
+
+  types.append("tourism");
+  types.append("amenity");
+
+  types.append("leisure");
+  types.append("historic");
+  types.append("landuse");
+  types.append("man_made");
+  types.append("natural");
+  types.append("place");
+  types.append("power");
+  types.append("railway");
+  types.append("shop");
+  types.append("sport");
+  types.append("station");
+  types.append("transport");
+  //types.append("barrier");
+
+  //??
+  types.append("building");
+
+  for (int i = 0; i < types.length(); i++)
+  {
+    const QString type = types.at(i);
+    //LOG_VARD(type);
+    bool eitherHaveOnlyBuildingGenericTag = false;
+    //bool bothHaveOnlyBuildingGenericTag = false;
+    if (type == "building")
+    {
+      const QStringList buildingTags1 = e1->getTags().getList("building");
+      const QStringList buildingTags2 = e2->getTags().getList("building");
+      if ((buildingTags1.length() == 1 && buildingTags1.at(0) == "yes") ||
+          (buildingTags2.length() == 1 && buildingTags2.at(0) == "yes"))
+      {
+        eitherHaveOnlyBuildingGenericTag = true;
+      }
+      /*if ((buildingTags1.length() == 1 && buildingTags1.at(0) == "yes") &&
+          (buildingTags2.length() == 1 && buildingTags2.at(0) == "yes"))
+      {
+        bothHaveOnlyBuildingGenericTag = true;
+      }*/
+    }
+
+    if (type == "building" && eitherHaveOnlyBuildingGenericTag/*bothHaveOnlyBuildingGenericTag*/)
+    {
+      //LOG_DEBUG("generic building only");
+    }
+    else if (e1->getTags().contains(type) && e2->getTags().contains(type))
+    {
+      const double ancestorDistance = _getTagDistance("ancestor", type, map, e1, e2);
+      //LOG_VARD(ancestorDistance);
+      if (ancestorDistance == 0.0)
+      {
+        _ancestorTypeMatch = true;
+        //LOG_VARD(_ancestorTypeMatch);
         return true;
       }
     }
@@ -379,6 +458,7 @@ QString PoiPolygonMatch::toString() const
   str += "type match: " + QString::number(_typeMatch) + "\n";
   str += "type match attribute key: " + _typeMatchAttributeKey + "\n";
   str += "type match attribute value: " + _typeMatchAttributeValue + "\n";
+  str += "ancestor type match: " + QString::number(_ancestorTypeMatch) + "\n";
   str += "name match: " + QString::number(_nameMatch) + "\n";
   str += "name score: " + QString::number(_nameScore) + "\n";
   str += "names 1: " + _names1 + "\n";
@@ -394,11 +474,6 @@ QString PoiPolygonMatch::toString() const
   str += "overall circular error: " + QString::number(_ce) + "\n";
   str += "circular error 1: " + QString::number(_circularError1) + "\n";
   str += "circular error 2: " + QString::number(_circularError2) + "\n";
-  str += "tourism ancestor distance: " + QString::number(_tourismAncestorDistance) + "\n";
-  //str += "poi category distance: " + QString::number(_poiCategoryDistance) + "\n";
-  //str += "tourism distance: " + QString::number(_tourismDistance) + "\n";
-  //str += "leisure ancestor distance: " + QString::number(_leisureAncestorDistance) + "\n";
-  str += "amenity ancestor distance: " + QString::number(_amenityAncestorDistance) + "\n";
   str += "evidence: " + QString::number(_evidence);
   return str;*/
 }

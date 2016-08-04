@@ -107,9 +107,7 @@ private:
   bool _closeMatch;
   int _evidence;
 
-  double _tourismAncestorDistance;
-  double _amenityAncestorDistance;
-  //double _tourismDistance;
+  bool _ancestorTypeMatch;
 
   QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
   QMap<QString, shared_ptr<TagCategoryDifferencer> > _tagCategoryDifferencers;
@@ -125,6 +123,9 @@ private:
    * amenity=cafe in e1 and in e2.
    */
   bool _calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2) /*const*/;
+
+  bool _calculateAncestorTypeMatch(const ConstOsmMapPtr& map, ConstElementPtr e1,
+                                   ConstElementPtr e2) /*const*/;
 
   double _getTagDistance(const QString type, const QString kvp, ConstOsmMapPtr map,
                          ConstElementPtr e1, ConstElementPtr e2);
