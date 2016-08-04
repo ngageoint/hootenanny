@@ -189,7 +189,6 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
         ma->getType() == MatchType::Miss)
     {
       //TODO: this config option probably shouldn't stay
-      //poi.polygon.review.multiple.matches
       if (ConfigOptions().getPoiPolygonReviewMultipleMatches())
       {
         result = true;

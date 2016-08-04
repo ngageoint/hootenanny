@@ -51,7 +51,8 @@ QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold) :
-Match(threshold)
+Match(threshold),
+_ancestorTypeMatch(false)
 {
   ConstElementPtr e1 = map->getElement(eid1);
   ConstElementPtr e2 = map->getElement(eid2);
@@ -184,13 +185,15 @@ Match(threshold)
   _circularError2 = e2->getCircularError();
   _evidence = evidence;
 
-  if (e1->getTags().get("uuid") == "{5a7e2420-4f4f-58cd-b17c-bf507e2dcfc2}" ||
-      e2->getTags().get("uuid") == "{5a7e2420-4f4f-58cd-b17c-bf507e2dcfc2}")
+  if (e1->getTags().get("uuid") == "{aeb5cc44-25f2-51df-9ff0-89def62fb613}" ||
+      e2->getTags().get("uuid") == "{aeb5cc44-25f2-51df-9ff0-89def62fb613}")
   {
     LOG_VARD(eid1);\
     LOG_VARD(e1->getTags().get("uuid"));
+    LOG_VARD(e1->getTags());
     LOG_VARD(eid2);
     LOG_VARD(e2->getTags().get("uuid"));
+    LOG_VARD(e2->getTags());
     LOG_VARD(typeMatch);
     LOG_VARD(_typeMatchAttributeKey);
     LOG_VARD(_typeMatchAttributeValue);
@@ -291,6 +294,7 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
   types.append("transport");
   types.append("barrier");
   types.append("use");
+  types.append("industrial");
 
   //??
   types.append("building");
@@ -318,9 +322,10 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
     }
     LOG_VARD(eitherHaveOnlyBuildingGenericTag);
 
-    if (type == "building" && eitherHaveOnlyBuildingGenericTag/*bothHaveOnlyBuildingGenericTag*/)
+    if (!ConfigOptions().getPoiPolygonAllowGenericBuildingMatches() && type == "building" &&
+        eitherHaveOnlyBuildingGenericTag/*bothHaveOnlyBuildingGenericTag*/)
     {
-      //LOG_DEBUG("generic building only");
+      LOG_DEBUG("generic building only");
     }
     else if (e1->getTags().contains(type) && e2->getTags().contains(type))
     {
@@ -629,6 +634,7 @@ double PoiPolygonMatch::_getReviewDistance(ConstElementPtr element)
   {
     return max(200.0, element->getCircularError());
   }
+  //industrial -->
   else
   {
     return ConfigOptions().getPoiPolygonMatchReviewDistance();
