@@ -47,7 +47,7 @@ public:
    */
   void toyTest()
   {
-    NetworkVertex::resetUids();
+    NetworkVertex::reset();
 
     OsmMapPtr map(new OsmMap());
 

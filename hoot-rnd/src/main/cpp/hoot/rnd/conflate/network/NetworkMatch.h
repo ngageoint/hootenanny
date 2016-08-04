@@ -76,6 +76,11 @@ public:
    */
   virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const;
 
+  /**
+   * Returns true if either of the matched strings contains a non-whole edge.
+   */
+  bool isPartialMatch() const { return _edgeMatch->containsPartial(); }
+
   virtual bool isWholeGroup() const { return true; }
 
   /**

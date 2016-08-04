@@ -115,6 +115,9 @@ private:
 typedef shared_ptr<VagabondNetworkMatcher> VagabondNetworkMatcherPtr;
 typedef shared_ptr<const VagabondNetworkMatcher> ConstVagabondNetworkMatcherPtr;
 
+// not implemented
+bool operator<(ConstVagabondNetworkMatcherPtr, ConstVagabondNetworkMatcherPtr);
+
 }
 
 #endif // __VAGABOND_NETWORK_MATCHER_H__

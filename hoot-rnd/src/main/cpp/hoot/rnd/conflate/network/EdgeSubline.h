@@ -60,6 +60,9 @@ private:
 typedef shared_ptr<EdgeSubline> EdgeSublinePtr;
 typedef shared_ptr<const EdgeSubline> ConstEdgeSublinePtr;
 
+// not implemented
+bool operator<(ConstEdgeSublinePtr, ConstEdgeSublinePtr);
+
 }
 
 #endif // EDGESUBLINE_H

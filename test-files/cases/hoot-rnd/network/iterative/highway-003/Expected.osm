@@ -4,15 +4,15 @@
         <tag k="hoot:id" v="-12"/>
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0046337555700000" lon="0.0007334530700000">
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0046444844100000" lon="0.0008514702700000">
         <tag k="hoot:id" v="-11"/>
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0051170997300000" lon="0.0002994294300000">
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0049668960300000" lon="0.0002672429200000">
         <tag k="hoot:id" v="-10"/>
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0060751017000000" lon="-0.0000762576100000">
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0057639654600000" lon="-0.0003766650200000">
         <tag k="hoot:id" v="-9"/>
         <tag k="hoot:status" v="2"/>
     </node>

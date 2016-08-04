@@ -71,10 +71,13 @@ double IterativeNetworkMatcher::_calculateEdgeVertexScore(const VertexScoreMap& 
   ConstEdgeLocationPtr from1, ConstEdgeLocationPtr from2,
   ConstEdgeLocationPtr to1, ConstEdgeLocationPtr to2) const
 {
-  // aggregate the scores of the vertex matches
-  double sFrom = 0;
-  double sTo = 0;
+  // These scores initialize as low values which only really get used if there is a partial match.
+  // The idea being that low values here will dissuade using partial matches if there is a
+  // competing full match.
+  double sFrom = 0.1;
+  double sTo = 0.1;
 
+  // aggregate the scores of the vertex matches
   if (from1->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
     from2->isExtreme(EdgeLocation::SLOPPY_EPSILON))
   {
@@ -518,6 +521,7 @@ double IterativeNetworkMatcher::_scoreVertices(ConstNetworkVertexPtr v1,
 void IterativeNetworkMatcher::_seedEdgeScores()
 {
   EdgeMatchSetFinder finder(_details, _edgeMatches, _n1, _n2);
+  finder.setIncludePartialMatches(true);
 
   // modify details so that zero length edges don't give a score of zero
   // modify finder so that it doesn't add zero length edges to edge strings
@@ -594,6 +598,7 @@ void IterativeNetworkMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexSc
     double newScore, v, e;
     v = _calculateEdgeVertexScore(vm, es1->getFrom(), es2->getFrom(),
       es1->getTo(), es2->getTo());
+
     e = _scoreEdges(em1);
     newScore = pow(v, _dampening) * pow(e, _p);
 

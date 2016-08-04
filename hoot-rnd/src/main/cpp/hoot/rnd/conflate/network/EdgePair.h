@@ -68,6 +68,9 @@ public:
 typedef shared_ptr<EdgePair> EdgePairPtr;
 typedef shared_ptr<const EdgePair> ConstEdgePairPtr;
 
+// not implemented
+bool operator<(ConstEdgePairPtr, ConstEdgePairPtr);
+
 inline uint qHash(const EdgePairPtr& v) { return qHash(v->e1) ^ qHash(v->e2); }
 inline bool operator==(const EdgePairPtr& v1, const EdgePairPtr& v2)
 {

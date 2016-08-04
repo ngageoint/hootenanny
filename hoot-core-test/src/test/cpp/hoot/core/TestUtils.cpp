@@ -47,6 +47,8 @@
 namespace hoot
 {
 
+shared_ptr<TestUtils> TestUtils::_theInstance;
+
 TestUtils::TestUtils()
 {
 }
@@ -167,6 +169,16 @@ ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString tagKey,
   return map->getElement(*bag.begin());
 }
 
+shared_ptr<TestUtils> TestUtils::getInstance()
+{
+  if (!_theInstance)
+  {
+    _theInstance.reset(new TestUtils());
+  }
+
+  return _theInstance;
+}
+
 std::string TestUtils::readFile(QString f1)
 {
   QFile fpTest(f1);
@@ -193,6 +205,11 @@ void TestUtils::resetEnvironment()
 
   // make sure the UUIDs are repeatable
   UuidHelper::resetRepeatableKey();
+
+  foreach (RegisteredReset* rr, getInstance()->_resets)
+  {
+    rr->reset();
+  }
 }
 
 QString TestUtils::toQuotedString(QString str)

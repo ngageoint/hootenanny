@@ -74,6 +74,8 @@ public:
 
   ConstEdgeStringPtr getString2() const { return _edges2; }
 
+  bool containsPartial() const { return getString1()->isPartial() || getString2()->isPartial(); }
+
   /**
    * Returns true if any of the edges in this edge match overlap with other. Overlapping vertices
    * are ignored.
@@ -94,6 +96,9 @@ private:
 
 typedef shared_ptr<EdgeMatch> EdgeMatchPtr;
 typedef shared_ptr<const EdgeMatch> ConstEdgeMatchPtr;
+
+// not implemented
+bool operator<(ConstEdgeMatchPtr, ConstEdgeMatchPtr);
 
 // needed for QSet
 bool operator==(const hoot::ConstEdgeMatchPtr& em1, const hoot::ConstEdgeMatchPtr& em2);

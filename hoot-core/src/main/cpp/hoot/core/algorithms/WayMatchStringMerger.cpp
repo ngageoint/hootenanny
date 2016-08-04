@@ -30,7 +30,6 @@
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/WayString.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/util/ElementConverter.h>
 
 namespace hoot
 {
@@ -48,7 +47,6 @@ WayMatchStringMerger::WayMatchStringMerger(const OsmMapPtr& map,
 
 void WayMatchStringMerger::_addSublineMapping(SublineMappingPtr sm)
 {
-  _sublineMapping.insert(_map->getWay(sm->start.getWay()->getElementId()), sm);
   _sublineMappingOrder.append(sm);
 }
 
@@ -56,11 +54,10 @@ WaySublineMatchStringPtr WayMatchStringMerger::createMatchString() const
 {
   vector<WaySublineMatch> matches;
 
-  for (int i = 0; i < _sublineMappingOrder.size(); ++i)
+  foreach (SublineMappingPtr sm, _sublineMappingOrder)
   {
-    SublineMappingPtr sm = _sublineMappingOrder[i];
-    WaySubline ws1(sm->start, sm->end);
-    WaySubline ws2(_mapping->map1To2(sm->start), _mapping->map1To2(sm->end));
+    WaySubline ws1(sm->getStart1(), sm->getEnd1());
+    WaySubline ws2(_mapping->map1To2(sm->getStart1()), _mapping->map1To2(sm->getEnd1()));
     // they're reversed if they aren't both in the same orientation.
     bool reversed = ws1.isBackwards() != ws2.isBackwards();
 
@@ -76,20 +73,24 @@ WaySublineMatchStringPtr WayMatchStringMerger::createMatchString() const
   return result;
 }
 
-void WayMatchStringMerger::_createWayMappings(WayLocation split1, WayLocation split2,
+void WayMatchStringMerger::_createWayMappings(WayLocation splitStart, WayLocation splitEnd,
   WaySubline subline2)
 {
+  // splitStart and splitEnd represent the locations that subline2 matches on the primary way
+  // string. For this reason splitStart and splitEnd may not be on the same way. We need to go
+  // through all the ways in the primary in this function and find the sublines that match up to
+  // subline2, then place them into the appropriate data structures for later use.
+
   ConstWayPtr way2 = subline2.getWay();
   WayStringPtr ws1 = _mapping->getWayString1();
 
   SublineMappingPtr lastSm(new SublineMapping());
-  lastSm->start = split1;
+  lastSm->setStart1(splitStart);
   lastSm->way2 = way2;
-  lastSm->subline2 = subline2;
 
   int i = 0;
   // go through the list till we find the starting way
-  while (i < ws1->getSize() && ws1->at(i).getWay() != split1.getWay())
+  while (i < ws1->getSize() && ws1->at(i).getWay() != splitStart.getWay())
   {
     ++i;
   }
@@ -102,20 +103,23 @@ void WayMatchStringMerger::_createWayMappings(WayLocation split1, WayLocation sp
     if (!lastSm)
     {
       lastSm.reset(new SublineMapping());
-      lastSm->start = ws1->at(i).getStart();
+      lastSm->setStart1(ws1->at(i).getStart());
       lastSm->way2 = way2;
-      lastSm->subline2 = subline2;
     }
 
-    if (ws1->at(i).getStart().getWay() != lastSm->start.getWay())
+    // check our assumptions.
+    if (ws1->at(i).getStart().getWay() != lastSm->getStart1().getWay())
     {
       throw InternalErrorException(QString("Not a way match %1, %2").arg(i).arg(
         hoot::toString(ws1->at(i).getStart().getWay()->getElementId())));
     }
     // if we found the end of the match
-    if (ws1->at(i).getEnd().getWay() == split2.getWay())
+    if (ws1->at(i).getEnd().getWay() == splitEnd.getWay())
     {
-      lastSm->end = split2;
+      lastSm->setEnd1(splitEnd);
+      lastSm->setSubline2(WaySubline(
+        _mapping->map1To2(lastSm->getStart1(), way2->getElementId()),
+        _mapping->map1To2(lastSm->getEnd1(), way2->getElementId())));
       _addSublineMapping(lastSm);
       foundEnd = true;
     }
@@ -123,7 +127,10 @@ void WayMatchStringMerger::_createWayMappings(WayLocation split1, WayLocation sp
     else
     {
       // add the rest of the subline to the mapping
-      lastSm->end = ws1->at(i).getEnd();
+      lastSm->setEnd1(ws1->at(i).getEnd());
+      lastSm->setSubline2(WaySubline(
+        _mapping->map1To2(lastSm->getStart1(), way2->getElementId()),
+        _mapping->map1To2(lastSm->getEnd1(), way2->getElementId())));
       _addSublineMapping(lastSm);
     }
     lastSm.reset();
@@ -218,15 +225,13 @@ void WayMatchStringMerger::mergeTags()
   }
 
   // go through all the way mappings
-  for (QMultiMap<WayPtr, SublineMappingPtr>::iterator it = _sublineMapping.begin();
-    it != _sublineMapping.end(); ++it)
+  foreach (SublineMappingPtr sm, _sublineMappingOrder)
   {
-    LOG_VAR(it.value());
     // merge the tags (order matters)
-    Tags mergedTags = _tagMerger->mergeTags(it.value()->newWay1->getTags(),
-      it.value()->way2->getTags(), it.value()->newWay1->getElementType());
+    Tags mergedTags = _tagMerger->mergeTags(sm->newWay1->getTags(),
+      sm->getNewWay2()->getTags(), sm->newWay1->getElementType());
     // set the new tags.
-    it.value()->newWay1->setTags(mergedTags);
+    sm->newWay1->setTags(mergedTags);
   }
 }
 
@@ -244,9 +249,13 @@ void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, WayLocation wl1)
     scrapNode->getX(), scrapNode->getY(), scrapNode->getCircularError()));
   _map->addNode(placeholder);
 
+  LOG_VAR(_sublineMappingOrder);
   foreach (SublineMappingPtr sm, _sublineMappingOrder)
   {
-    WayPtr w = _map->getWay(sm->way2->getId());
+    LOG_VAR(sm->getNewWay2());
+    LOG_VAR(sm->getNewWay2()->getId());
+    LOG_VAR(_map->containsElement(sm->getNewWay2()->getElementId()));
+    WayPtr w = _map->getWay(sm->getNewWay2()->getId());
     w->replaceNode(scrapNodeId.getId(), placeholder->getId());
   }
 
@@ -287,7 +296,7 @@ void WayMatchStringMerger::_rebuildWayString1()
   for (int i = 0; i < _sublineMappingOrder.size(); ++i)
   {
     WayPtr w1 = _sublineMappingOrder[i]->newWay1;
-    if (_sublineMappingOrder[i]->start <= _sublineMappingOrder[i]->end)
+    if (_sublineMappingOrder[i]->getStart1() <= _sublineMappingOrder[i]->getEnd1())
     {
       ws1->append(WaySubline(WayLocation(_map, w1, 0.0), WayLocation::createAtEndOfWay(_map, w1)));
     }
@@ -300,20 +309,43 @@ void WayMatchStringMerger::_rebuildWayString1()
   _mapping->setWayString1(ws1);
 }
 
-void WayMatchStringMerger::replaceScraps()
+void WayMatchStringMerger::_rebuildWayString2()
 {
-  QMap< WayPtr, QList<ElementPtr> > w2ToW1;
+  WayStringPtr ws2(new WayString());
 
   for (int i = 0; i < _sublineMappingOrder.size(); ++i)
   {
-    SublineMappingPtr sm = _sublineMappingOrder[i];
+    WayPtr w2 = _sublineMappingOrder[i]->getNewWay2();
+    assert(w2);
+    if (_sublineMappingOrder[i]->getStart2() <= _sublineMappingOrder[i]->getEnd2())
+    {
+      ws2->append(WaySubline(WayLocation(_map, w2, 0.0), WayLocation::createAtEndOfWay(_map, w2)));
+    }
+    else
+    {
+      ws2->append(WaySubline(WayLocation::createAtEndOfWay(_map, w2), WayLocation(_map, w2, 0.0)));
+    }
+  }
+
+  LOG_VAR(_sublineMappingOrder);
+  LOG_VAR(ws2);
+
+  _mapping->setWayString2(ws2);
+}
+
+void WayMatchStringMerger::replaceScraps()
+{
+  // Determine which bits in secondary will be replaced by bits in the primary. Once we have that
+  // we can replace them all at once, delete them and update the _replaced structure.
+
+  QMap< WayPtr, QList<ElementPtr> > w2ToW1;
+
+  foreach (SublineMappingPtr sm, _sublineMappingOrder)
+  {
     ElementPtr w1 = _map->getElement(sm->newWay1->getElementId());
-    WayPtr w2 = _map->getWay(sm->way2->getId());
+    WayPtr w2 = _map->getWay(sm->getNewWay2()->getId());
 
     LOG_VAR(sm->subline2);
-
-    // make sure the subline covers the full way -- partial matches will require more work.
-    assert(sm->subline2.getFormer().isFirst() && sm->subline2.getLatter().isLast());
 
     // w1 should only occur once.
     assert(w2ToW1[w2].contains(w1) == false);
@@ -341,31 +373,27 @@ void WayMatchStringMerger::replaceScraps()
 void WayMatchStringMerger::setKeeperStatus(Status s)
 {
   // go through all the way mappings
-  for (QMultiMap<WayPtr, SublineMappingPtr>::iterator it = _sublineMapping.begin();
-    it != _sublineMapping.end(); ++it)
+  foreach (SublineMappingPtr sm, _sublineMappingOrder)
   {
     // set the new status.
-    it.value()->newWay1->setStatus(s);
+    sm->newWay1->setStatus(s);
   }
 }
 
 void WayMatchStringMerger::_splitPrimary()
 {
-  WayStringPtr ws1 = _mapping->getWayString1();
   WayStringPtr ws2 = _mapping->getWayString2();
 
   QList<ConstWayPtr> order2;
 
-  /*
-   * Create mappings from the sublines in s2 to sublines in s1
-   */
+  // Create mappings from the sublines in s2 to sublines in s1
   for (int i = 0; i < ws2->getSize(); ++i)
   {
     WaySubline& s2 = ws2->at(i);
     LOG_VAR(s2);
-    WayLocation split1 = _mapping->map2To1(s2.getStart());
-    WayLocation split2 = _mapping->map2To1(s2.getEnd());
-    _createWayMappings(split1, split2, s2);
+    WayLocation splitStart = _mapping->map2To1(s2.getStart());
+    WayLocation splitEnd = _mapping->map2To1(s2.getEnd());
+    _createWayMappings(splitStart, splitEnd, s2);
 
     if (order2.contains(s2.getWay()))
     {
@@ -375,76 +403,6 @@ void WayMatchStringMerger::_splitPrimary()
 
     order2.append(s2.getWay());
   }
-
-  ElementConverter ec(_map);
-
-  // split each way in the subline mapping.
-  foreach (WayPtr w1, _sublineMapping.uniqueKeys())
-  {
-    QList<SublineMappingPtr> sm = _sublineMapping.values(w1);
-    qSort(sm.begin(), sm.end(), SublineMappingLessThan());
-
-    // if there is only one entry in sm and it spans the whole way, don't split anything.
-    if (sm.size() == 1 && sm[0]->start.isExtreme(WayLocation::SLOPPY_EPSILON) &&
-      sm[0]->end.isExtreme(WayLocation::SLOPPY_EPSILON))
-    {
-      sm[0]->newWay1 = w1;
-      continue;
-    }
-
-    vector<WayLocation> wls;
-
-    // push them all on. This will inevitably create some empty ways, but it is predictable.
-    for (int i = 0; i < sm.size(); ++i)
-    {
-      // make sure the split points are sorted.
-      wls.push_back(std::min(sm.at(i)->start, sm.at(i)->end));
-      wls.push_back(std::max(sm.at(i)->start, sm.at(i)->end));
-    }
-
-    LOG_VAR(w1.get());
-    LOG_VAR(wls);
-    vector<WayPtr> splits = WaySplitter(_map, w1).createSplits(wls);
-
-    assert((int)splits.size() == sm.size() * 2 + 1);
-
-    int c = 0;
-    WayPtr w = splits[c++];
-    // if this isn't empty
-    if (w && ec.calculateLength(w) > 0.0)
-    {
-      _scraps1.append(w);
-      _replaced.push_back(pair<ElementId, ElementId>(w1->getElementId(), w->getElementId()));
-    }
-
-    QList<ElementPtr> newWays;
-    for (int i = 0; i < sm.size(); ++i)
-    {
-      WayPtr w;
-      w = splits[c++];
-      sm.at(i)->newWay1 = w;
-      _replaced.push_back(pair<ElementId, ElementId>(w1->getElementId(), w->getElementId()));
-      newWays.append(w);
-
-      w = splits[c++];
-      // if this isn't empty
-      if (w && ec.calculateLength(w) > 0.0)
-      {
-        // only the last split should be non-empty
-        if (i != sm.size() - 1)
-        {
-          throw InternalErrorException("Only the last split should be empty.");
-        }
-        newWays.append(w);
-        _scraps1.append(w);
-        _replaced.push_back(pair<ElementId, ElementId>(w1->getElementId(), w->getElementId()));
-      }
-    }
-
-    _map->replace(w1, newWays);
-  }
-
-  _rebuildWayString1();
 }
 
 }

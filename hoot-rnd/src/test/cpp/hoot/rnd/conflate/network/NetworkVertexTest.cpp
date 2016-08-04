@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,56 +22,27 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef NETWORKEDGESCORE_H
-#define NETWORKEDGESCORE_H
 
-#include "EdgeMatch.h"
+// Hoot
+#include <hoot/core/TestUtils.h>
+#include <hoot/rnd/conflate/network/NetworkVertex.h>
 
 namespace hoot
 {
 
-class NetworkEdgeScore
+TEST_UTILS_REGISTER_RESET(NetworkVertex)
+
+class NetworkVertexTest : public CppUnit::TestFixture
 {
+  CPPUNIT_TEST_SUITE(NetworkVertexTest);
+  CPPUNIT_TEST_SUITE_END();
+
 public:
-  NetworkEdgeScore(ConstEdgeMatchPtr em, double score12, double score21) :
-    _em(em),
-    _score12(score12),
-    _score21(score21)
-  {
-  }
-
-  ConstEdgeMatchPtr getEdgeMatch() const { return _em; }
-
-  double getScore() const { return sqrt(_score12 * _score21); }
-
-  double getScore12() const { return _score12; }
-
-  double getScore21() const { return _score21; }
-
-  QString getUid() const { return _uid; }
-
-  void setUid(const QString uid) { _uid = uid; }
-
-  QString toString() const
-  {
-    return QString("em: %1 score: %3").arg(_em->toString()).
-      arg(getScore());
-  }
-
-private:
-  ConstEdgeMatchPtr _em;
-  double _score12, _score21;
-  QString _uid;
 
 };
 
-typedef shared_ptr<NetworkEdgeScore> NetworkEdgeScorePtr;
-
-// not implemented
-bool operator<(NetworkEdgeScorePtr, NetworkEdgeScorePtr);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NetworkVertexTest, "quick");
 
 }
-
-#endif // NETWORKEDGESCORE_H

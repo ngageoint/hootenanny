@@ -109,6 +109,8 @@ private:
    */
   double _denominatorForTie(TiePointScorePtr tie);
 
+  NodeMatcherPtr _getNodeMatcher();
+
   /**
    * Scores a single pair of vertices (doesn't consider neighbors)
    */
@@ -143,6 +145,9 @@ inline uint qHash(const LegacyVertexMatcher::TiePointScorePtr& t)
 
 typedef shared_ptr<LegacyVertexMatcher> LegacyVertexMatcherPtr;
 typedef shared_ptr<const LegacyVertexMatcher> ConstLegacyVertexMatcherPtr;
+
+// not implemented
+bool operator<(ConstLegacyVertexMatcherPtr, ConstLegacyVertexMatcherPtr);
 
 }
 

@@ -28,6 +28,9 @@ private:
 typedef shared_ptr<EdgeSublineMatch> EdgeSublineMatchPtr;
 typedef shared_ptr<const EdgeSublineMatch> ConstEdgeSublineMatchPtr;
 
+// not implemented
+bool operator<(ConstEdgeSublineMatchPtr, ConstEdgeSublineMatchPtr);
+
 }
 
 #endif // EDGESUBLINEMATCH_H

@@ -47,6 +47,9 @@ public:
 typedef shared_ptr<IndexedEdgeLinks> IndexedEdgeLinksPtr;
 typedef shared_ptr<const IndexedEdgeLinks> ConstIndexedEdgeLinksPtr;
 
+// not implemented
+bool operator<(ConstIndexedEdgeLinksPtr, ConstIndexedEdgeLinksPtr);
+
 }
 
 #endif // INDEXEDEDGELINKS_H

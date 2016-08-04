@@ -68,6 +68,9 @@ private:
 
 typedef shared_ptr<NetworkVertexScore> NetworkVertexScorePtr;
 
+// not implemented
+bool operator<(NetworkVertexScorePtr, NetworkVertexScorePtr);
+
 }
 
 #endif // NETWORKVERTEXSCORE_H

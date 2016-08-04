@@ -36,6 +36,7 @@
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/HighwayCriterion.h>
 #include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/NotImplementedException.h>

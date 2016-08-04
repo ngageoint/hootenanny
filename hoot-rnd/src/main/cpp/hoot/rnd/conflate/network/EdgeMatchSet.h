@@ -46,6 +46,9 @@ public:
 typedef shared_ptr<EdgeMatchSet> EdgeMatchSetPtr;
 typedef shared_ptr<const EdgeMatchSet> ConstEdgeMatchSetPtr;
 
+// not implemented
+bool operator<(ConstEdgeMatchSetPtr, ConstEdgeMatchSetPtr);
+
 }
 
 #endif // __EDGE_MATCH_SET_H__

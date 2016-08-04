@@ -30,6 +30,7 @@
 #include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
 #include <hoot/core/algorithms/WayMatchStringMerger.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/ReviewMarker.h>

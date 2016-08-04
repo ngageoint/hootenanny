@@ -54,7 +54,7 @@ public:
   /**
    * This should only be used during testing to get consistent results.
    */
-  static void resetUids() { uidCount = 0; }
+  static void reset();
 
   QString toString() const;
 
@@ -66,6 +66,16 @@ private:
 
 typedef shared_ptr<NetworkVertex> NetworkVertexPtr;
 typedef shared_ptr<const NetworkVertex> ConstNetworkVertexPtr;
+
+inline bool operator<(const NetworkVertexPtr& v1, const NetworkVertexPtr& v2)
+{
+  return v1->getElementId() < v2->getElementId();
+}
+
+inline bool operator<(const ConstNetworkVertexPtr& v1, const ConstNetworkVertexPtr& v2)
+{
+  return v1->getElementId() < v2->getElementId();
+}
 
 inline uint qHash(const ConstNetworkVertexPtr& v)
 {

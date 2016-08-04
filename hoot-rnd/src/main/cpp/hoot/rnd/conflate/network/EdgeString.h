@@ -145,6 +145,8 @@ public:
 
   bool isFromOnVertex() const { return getFrom()->isExtreme(EdgeLocation::SLOPPY_EPSILON); }
 
+  bool isPartial() const { return isFromOnVertex() == false || isToOnVertex() == false; }
+
   bool isStub() const { return _edges.size() == 1 && _edges[0].getEdge()->isStub(); }
 
   bool isToOnVertex() const { return getTo()->isExtreme(EdgeLocation::SLOPPY_EPSILON); }
@@ -171,6 +173,9 @@ private:
 
 typedef shared_ptr<EdgeString> EdgeStringPtr;
 typedef shared_ptr<const EdgeString> ConstEdgeStringPtr;
+
+// not implemented
+bool operator<(ConstEdgeStringPtr, ConstEdgeStringPtr);
 
 // needed for QSet
 inline bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2)

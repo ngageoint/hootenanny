@@ -156,6 +156,9 @@ private:
 typedef shared_ptr<SingleSidedNetworkMatcher> SingleSidedNetworkMatcherPtr;
 typedef shared_ptr<const SingleSidedNetworkMatcher> ConstSingleSidedNetworkMatcherPtr;
 
+// not implemented
+bool operator<(ConstSingleSidedNetworkMatcherPtr, ConstSingleSidedNetworkMatcherPtr);
+
 }
 
 #endif // __SINGLE_SIDED_NETWORK_MATCHER_H__

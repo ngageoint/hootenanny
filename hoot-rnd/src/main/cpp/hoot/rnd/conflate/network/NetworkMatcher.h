@@ -87,6 +87,9 @@ protected:
 typedef shared_ptr<NetworkMatcher> NetworkMatcherPtr;
 typedef shared_ptr<const NetworkMatcher> ConstNetworkMatcherPtr;
 
+// not implemented
+bool operator<(ConstNetworkMatcherPtr, ConstNetworkMatcherPtr);
+
 }
 
 #endif // NETWORKMATCHER_H

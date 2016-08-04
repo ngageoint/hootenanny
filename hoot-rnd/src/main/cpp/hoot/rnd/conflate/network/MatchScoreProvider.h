@@ -63,6 +63,9 @@ public:
 typedef shared_ptr<MatchScoreProvider> MatchScoreProviderPtr;
 typedef shared_ptr<const MatchScoreProvider> ConstMatchScoreProviderPtr;
 
+// not implemented
+bool operator<(ConstMatchScoreProviderPtr, ConstMatchScoreProviderPtr);
+
 }
 
 #endif // MATCHSCOREPROVIDER_H

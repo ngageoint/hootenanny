@@ -86,11 +86,18 @@ Radians NetworkDetails::calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNet
   return result;
 }
 
-Meters NetworkDetails::calculateLength(ConstNetworkEdgePtr e)
+Meters NetworkDetails::calculateLength(ConstNetworkEdgePtr e) const
 {
   assert(e->getMembers().size() == 1);
 
   return ElementConverter(_map).calculateLength(e->getMembers()[0]);
+}
+
+Meters NetworkDetails::calculateLength(ConstEdgeSublinePtr e) const
+{
+  Meters l = calculateLength(e->getEdge());
+
+  return (e->getLatter()->getPortion() - e->getFormer()->getPortion()) * l;
 }
 
 QList<EdgeSublineMatchPtr> NetworkDetails::calculateMatchingSublines(ConstNetworkEdgePtr e1,
@@ -206,6 +213,7 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
   {
     WayStringPtr ws1 = toWayString(e1);
     WayStringPtr ws2 = toWayString(e2);
+
     RelationPtr r1(new Relation(Status::Unknown1, _map->createNextRelationId(), 15));
     r1->setType("multilinestring");
     RelationPtr r2(new Relation(Status::Unknown1, _map->createNextRelationId(), 15));
@@ -236,6 +244,8 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
     // convert from a mapping to a WaySublineMatchString
     WaySublineMatchStringPtr matchString = WayMatchStringMappingConverter().toWaySublineMatchString(
       mapping);
+
+    LOG_VAR(matchString);
 
     MatchClassification c;
     // calculate the match score
@@ -526,6 +536,8 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e) const
   for (int i = 0; i < edges.size(); ++i)
   {
     ConstNetworkEdgePtr e = edges[i].getEdge();
+    const ConstEdgeSublinePtr& subline = edges[i].getSubline();
+    LOG_VAR(subline);
     // ignore stubs while building way strings.
     if (e->isStub() == false)
     {
@@ -536,11 +548,13 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e) const
       }
       ConstWayPtr w = dynamic_pointer_cast<const Way>(e->getMembers()[0]);
 
-      WaySubline s(WayLocation(_map, w, 0), WayLocation::createAtEndOfWay(_map, w));
-      if (edges[i].isBackwards())
-      {
-        s = WaySubline(s.getEnd(), s.getStart());
-      }
+      Meters l = calculateLength(e);
+      double startP = subline->getStart()->getPortion();
+      double endP = subline->getEnd()->getPortion();
+
+      WaySubline s(WayLocation(_map, w, startP * l), WayLocation(_map, w, endP * l));
+      LOG_VAR(s);
+      LOG_VAR(w);
 
       ws->append(s);
     }

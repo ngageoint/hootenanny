@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/algorithms/WayMatchStringMerger.h>
+#include <hoot/core/algorithms/WayMatchStringSplitter.h>
 #include <hoot/core/algorithms/linearreference/WayString.h>
 #include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -128,6 +129,9 @@ public:
 
     QDir().mkdir("test-output/algorithms/");
 
+    WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
+    uut.updateSublineMapping();
+
     uut.setTagMerger(TagMergerFactory::getInstance().getDefaultPtr());
 
     uut.mergeIntersection(getNode(map, "n0")->getElementId());
@@ -158,6 +162,9 @@ public:
 
     QDir().mkdir("test-output/algorithms/");
 
+    WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
+    uut.updateSublineMapping();
+
     uut.setTagMerger(TagMergerFactory::getInstance().getDefaultPtr());
     uut.mergeTags();
     uut.setKeeperStatus(Status::Conflated);
@@ -182,6 +189,7 @@ public:
 
     vector< pair<ElementId, ElementId> > replaced;
     WayMatchStringMerger uut(map, mapping, replaced);
+    WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
 
     QDir().mkdir("test-output/algorithms/");
 

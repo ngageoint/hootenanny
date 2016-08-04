@@ -34,6 +34,18 @@ public:
   WayLocation calculateLocationFromStart(Meters distance,
     ElementId preferredEid = ElementId()) const;
 
+  /**
+   * Simplifies this WayString from a complex collection of sublines into a single simple way. The
+   * new way and all the associated nodes are put into destination.
+   *
+   * This is primarily useful when performing experiments (e.g. does this WayString match that
+   * WayString).
+   *
+   * Some information may be lost as the new way is created (e.g. conflicting tags within child
+   * ways).
+   */
+  WayPtr copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr destination);
+
   int getSize() { return _sublines.size(); }
 
   QString toString() const { return hoot::toString(_sublines); }
@@ -50,6 +62,8 @@ public:
 private:
   QList<WaySubline> _sublines;
   static Meters _epsilon;
+
+  Meters _aggregateCircularError() const;
 
   WayLocation _changeToPreferred(int index, const WayLocation& wl, ElementId preferredEid) const;
 };

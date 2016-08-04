@@ -144,6 +144,17 @@ QList<ConstNetworkVertexPtr> LegacyVertexMatcher::getCandidateMatches(ConstNetwo
   return _finalCandidates[v];
 }
 
+NodeMatcherPtr LegacyVertexMatcher::_getNodeMatcher()
+{
+  if (!_nodeMatcher)
+  {
+    _nodeMatcher.reset(new NodeMatcher());
+    _nodeMatcher->setMap(_map);
+  }
+
+  return _nodeMatcher;
+}
+
 void LegacyVertexMatcher::identifyVertexMatches(ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2,
   SearchRadiusProvider& srp)
 {
@@ -194,8 +205,8 @@ bool LegacyVertexMatcher::isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetwor
     _hasConfidentTie.contains(v2) == false)
   {
     // if these aren't technically intersections they might be tie points.
-    if (_nodeMatcher->getDegree(v1->getElementId()) <= 2 ||
-      _nodeMatcher->getDegree(v2->getElementId()) <= 2)
+    if (_getNodeMatcher()->getDegree(v1->getElementId()) <= 2 ||
+      _getNodeMatcher()->getDegree(v2->getElementId()) <= 2)
     {
       Meters sr = srp.getSearchRadius(v1, v2);
 
@@ -215,13 +226,9 @@ bool LegacyVertexMatcher::isConfidentTiePoint(ConstNetworkVertexPtr v1, ConstNet
 
 double LegacyVertexMatcher::_scoreSinglePair(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2)
 {
-  if (!_nodeMatcher)
-  {
-    _nodeMatcher.reset(new NodeMatcher());
-    _nodeMatcher->setMap(_map);
-  }
 
-  double score = _nodeMatcher->scorePair(v1->getElementId().getId(), v2->getElementId().getId());
+  double score = _getNodeMatcher()->scorePair(v1->getElementId().getId(),
+    v2->getElementId().getId());
 
   return score;
 }

@@ -86,6 +86,9 @@ private:
 typedef shared_ptr<NetworkEdge> NetworkEdgePtr;
 typedef shared_ptr<const NetworkEdge> ConstNetworkEdgePtr;
 
+// not implemented
+bool operator<(ConstNetworkEdgePtr, ConstNetworkEdgePtr);
+
 inline uint qHash(const ConstNetworkEdgePtr& v)
 {
   uint result = 0;

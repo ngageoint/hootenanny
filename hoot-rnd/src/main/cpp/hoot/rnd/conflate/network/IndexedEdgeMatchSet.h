@@ -110,6 +110,9 @@ private:
 typedef shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSetPtr;
 typedef shared_ptr<const IndexedEdgeMatchSet> ConstIndexedEdgeMatchSetPtr;
 
+// not implemented
+bool operator<(ConstIndexedEdgeMatchSetPtr, ConstIndexedEdgeMatchSetPtr);
+
 }
 
 #endif // __EDGE_MATCH_SET_INDEX_H__

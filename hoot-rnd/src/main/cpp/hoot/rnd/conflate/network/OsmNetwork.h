@@ -96,6 +96,9 @@ private:
 typedef shared_ptr<OsmNetwork> OsmNetworkPtr;
 typedef shared_ptr<const OsmNetwork> ConstOsmNetworkPtr;
 
+// not implemented
+bool operator<(ConstOsmNetworkPtr, ConstOsmNetworkPtr);
+
 }
 
 #endif // OSMNETWORK_H

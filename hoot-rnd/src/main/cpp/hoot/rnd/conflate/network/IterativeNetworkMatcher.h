@@ -190,6 +190,9 @@ private:
 typedef shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcherPtr;
 typedef shared_ptr<const IterativeNetworkMatcher> ConstIterativeNetworkMatcherPtr;
 
+// not implemented
+bool operator<(ConstIterativeNetworkMatcherPtr, ConstIterativeNetworkMatcherPtr);
+
 }
 
 #endif // ITERATIVENETWORKMATCHER_H

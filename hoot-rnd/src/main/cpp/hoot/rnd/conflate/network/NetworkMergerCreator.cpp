@@ -39,7 +39,7 @@
 #include <typeinfo>
 
 #include "NetworkMatch.h"
-#include "NetworkMerger.h"
+#include "PartialNetworkMerger.h"
 
 namespace hoot
 {
@@ -69,16 +69,60 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
   if (m)
   {
     set< pair<ElementId, ElementId> > eids;
+    bool matchOverlap = false;
+
+    for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
+    {
+      const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
+
+      MatchSet::const_iterator jt = it;
+      for (++jt; jt != matches.end(); ++jt)
+      {
+        const NetworkMatch* nmj = dynamic_cast<const NetworkMatch*>(*jt);
+
+        if (!nmi || !nmj)
+        {
+          LOG_VARE(*it);
+          LOG_VARE(*jt);
+          throw UnsupportedException("If one match is a network match they should all be network "
+            "matches.");
+        }
+
+        if (nmi->getEdgeMatch()->overlaps(nmj->getEdgeMatch()))
+        {
+          matchOverlap = true;
+        }
+      }
+    }
+
+    LOG_VAR(matchOverlap);
 
     // if there are only 2 matches and one completely contains the other, use the larger match.
     // This may need to be reverted as we play with more data, but at this point it seems like a
     // reasonable heuristic.
     if (const NetworkMatch* larger = _getLargestContainer(matches))
     {
-      mergers.push_back(new NetworkMerger(larger->getMatchPairs(), larger->getEdgeMatch(),
+      mergers.push_back(new PartialNetworkMerger(larger->getMatchPairs(),
+        QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
         larger->getNetworkDetails()));
     }
-    else if (matches.size() != 1)
+    else if (!matchOverlap)
+    {
+      QSet<ConstEdgeMatchPtr> edgeMatches;
+      set< pair<ElementId, ElementId> > pairs;
+      // create a merger that can merge multiple partial matches. If any of the partial matches
+      // overlap then mark them all for review.
+      foreach (const Match* itm, matches)
+      {
+        const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(itm);
+        edgeMatches.insert(nm->getEdgeMatch());
+        set< pair<ElementId, ElementId> > p = nm->getMatchPairs();
+        pairs.insert(p.begin(), p.end());
+      }
+
+      mergers.push_back(new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails()));
+    }
+    else
     {
       double sum = 0.0;
       QStringList scores;
@@ -102,11 +146,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
           m->getMatchName(), m->getScore()));
       }
     }
-    else
-    {
-      mergers.push_back(new NetworkMerger(m->getMatchPairs(), m->getEdgeMatch(),
-        m->getNetworkDetails()));
-    }
+
     result = true;
   }
 

@@ -33,7 +33,7 @@ include(../Configure.pri)
 
 QMAKE_CXXFLAGS = -I/usr/include/nodejs $$QMAKE_CXXFLAGS
 
-LIBS += -L../lib/ -lTgs -ltbs -lHootCore
+LIBS += -L../lib/ -lTgs -ltbs -lHootCore -lHootCoreTest
 
 UI_DIR = tmp/ui
 MOC_DIR = tmp/moc
@@ -93,7 +93,9 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/EdgeLocation.cpp \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSubline.cpp \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSublineMatch.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/EdgeMatchSetFinderTest.cpp
+    src/test/cpp/hoot/rnd/conflate/network/EdgeMatchSetFinderTest.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/PartialNetworkMerger.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/NetworkVertexTest.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h \
@@ -133,7 +135,8 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcher.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeLocation.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSubline.h \
-    src/main/cpp/hoot/rnd/conflate/network/EdgeSublineMatch.h
+    src/main/cpp/hoot/rnd/conflate/network/EdgeSublineMatch.h \
+    src/main/cpp/hoot/rnd/conflate/network/PartialNetworkMerger.h
 
 FORMS +=
 

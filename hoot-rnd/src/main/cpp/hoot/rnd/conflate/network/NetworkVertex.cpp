@@ -26,6 +26,9 @@
  */
 #include "NetworkVertex.h"
 
+// hoot
+#include <hoot/core/util/Log.h>
+
 namespace hoot
 {
 
@@ -34,6 +37,11 @@ int NetworkVertex::uidCount = 0;
 NetworkVertex::NetworkVertex(ConstElementPtr e) : _e(e)
 {
   _uid = uidCount++;
+}
+
+void NetworkVertex::reset()
+{
+  uidCount = 0;
 }
 
 QString NetworkVertex::toString() const

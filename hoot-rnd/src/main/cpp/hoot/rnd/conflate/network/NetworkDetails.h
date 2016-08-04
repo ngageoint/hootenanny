@@ -52,7 +52,9 @@ class NetworkDetails : public SearchRadiusProvider
 public:
   NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
 
-  Meters calculateLength(ConstNetworkEdgePtr e);
+  Meters calculateLength(ConstNetworkEdgePtr e) const;
+
+  Meters calculateLength(ConstEdgeSublinePtr e) const;
 
   Radians calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNetworkVertexPtr v);
 
@@ -149,6 +151,9 @@ private:
 
 typedef shared_ptr<NetworkDetails> NetworkDetailsPtr;
 typedef shared_ptr<const NetworkDetails> ConstNetworkDetailsPtr;
+
+// not implemented
+bool operator<(ConstNetworkDetailsPtr, ConstNetworkDetailsPtr);
 
 }
 

@@ -78,6 +78,9 @@ private:
 typedef shared_ptr<EdgeMatchSetFinder> EdgeMatchSetFinderPtr;
 typedef shared_ptr<const EdgeMatchSetFinder> ConstEdgeMatchSetFinderPtr;
 
+// not implemented
+bool operator<(ConstEdgeMatchSetFinderPtr, ConstEdgeMatchSetFinderPtr);
+
 }
 
 #endif // EDGEMATCHSETFINDER_H
