@@ -1647,6 +1647,22 @@ remain a permanent config option.
 If true, then the maximum distance used to identify review candidates during matching has a
 circular error added to it.  TODO: This may not remain a permanent config option.
 
+=== poi.polygon.use.type.customized.match.distance
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, then custom match distances are used for some poi/building types.  TODO: This may not
+remain a permanent config option.
+
+=== poi.polygon.use.type.customized.review.distance
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, then custom review distances are used for some poi/building types.  TODO: This may not
+remain a permanent config option.
+
 === postgresql.dumpfile.writer.auto.calc.ids
 
 * Data Type: bool

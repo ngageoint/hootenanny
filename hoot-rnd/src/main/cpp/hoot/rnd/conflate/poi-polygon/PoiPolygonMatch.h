@@ -137,6 +137,8 @@ private:
   bool _getAddressMatch(ConstElementPtr e1, ConstElementPtr e2);
 
   double _getReviewDistance(ConstElementPtr element);
+  double _getMatchDistance(ConstElementPtr element);
+
 
 };
 
