@@ -111,6 +111,15 @@ Match(threshold)
 
   //double reviewDistance = ConfigOptions().getPoiPolygonMatchReviewDistance() + ce;
   double reviewDistance = ConfigOptions().getPoiPolygonMatchReviewDistance();
+  /*double reviewDistance;
+  if (_oneGeneric(e1, e2))
+  {
+    reviewDistance = max(_getReviewDistance(e1), _getReviewDistance(e2));
+  }
+  else
+  {
+    reviewDistance = min(_getReviewDistance(e1), _getReviewDistance(e2));
+  }*/
   if (ConfigOptions().getPoiPolygonAddCircularErrorToReviewDistance())
   {
     reviewDistance += ce;
@@ -175,8 +184,8 @@ Match(threshold)
   _circularError2 = e2->getCircularError();
   _evidence = evidence;
 
-  /*if (e1->getTags().get("name") == "S. SUNSET PLAYGRND: CLUBHOUSE" ||
-      e2->getTags().get("name") == "S. SUNSET PLAYGRND: CLUBHOUSE")
+  if (e1->getTags().get("uuid") == "{5a7e2420-4f4f-58cd-b17c-bf507e2dcfc2}" ||
+      e2->getTags().get("uuid") == "{5a7e2420-4f4f-58cd-b17c-bf507e2dcfc2}")
   {
     LOG_VARD(eid1);\
     LOG_VARD(e1->getTags().get("uuid"));
@@ -196,7 +205,7 @@ Match(threshold)
     LOG_VARD(e1->getCircularError());
     LOG_VARD(e2->getCircularError());
     LOG_VARD(evidence);
-  }*/
+  }
 }
 
 double PoiPolygonMatch::_calculateNameScore(ConstElementPtr e1, ConstElementPtr e2) const
@@ -247,6 +256,16 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
       }
     }
   }
+
+  //TODO: hack - having trouble figuring out how to do this the right way...will fix
+  if ((e1->getTags().get("amenity").toLower() == "hospital" &&
+       e2->getTags().get("use").toLower() == "healthcare") ||
+      (e2->getTags().get("amenity").toLower() == "hospital" &&
+       e1->getTags().get("use").toLower() == "healthcare"))
+  {
+    return true;
+  }
+
   return false;
 }
 
@@ -270,7 +289,8 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
   types.append("sport");
   types.append("station");
   types.append("transport");
-  //types.append("barrier");
+  types.append("barrier");
+  types.append("use");
 
   //??
   types.append("building");
@@ -278,7 +298,7 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
   for (int i = 0; i < types.length(); i++)
   {
     const QString type = types.at(i);
-    //LOG_VARD(type);
+    LOG_VARD(type);
     bool eitherHaveOnlyBuildingGenericTag = false;
     //bool bothHaveOnlyBuildingGenericTag = false;
     if (type == "building")
@@ -296,6 +316,7 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
         bothHaveOnlyBuildingGenericTag = true;
       }*/
     }
+    LOG_VARD(eitherHaveOnlyBuildingGenericTag);
 
     if (type == "building" && eitherHaveOnlyBuildingGenericTag/*bothHaveOnlyBuildingGenericTag*/)
     {
@@ -304,11 +325,11 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
     else if (e1->getTags().contains(type) && e2->getTags().contains(type))
     {
       const double ancestorDistance = _getTagDistance("ancestor", type, map, e1, e2);
-      //LOG_VARD(ancestorDistance);
+      LOG_VARD(ancestorDistance);
       if (ancestorDistance == 0.0)
       {
         _ancestorTypeMatch = true;
-        //LOG_VARD(_ancestorTypeMatch);
+        LOG_VARD(_ancestorTypeMatch);
         return true;
       }
     }
@@ -415,6 +436,41 @@ QStringList PoiPolygonMatch::_getRelatedTags(const QString relateToKvp, const Ta
   return result;
 }
 
+QStringList PoiPolygonMatch::_getTagsByCategory(const QString category, const Tags& tags) const
+{
+  QStringList result;
+  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); it++)
+  {
+    QString kvp = it.key() + "=" + it.value();
+    if (kvp != "poi=yes" && kvp != "place=locality" && kvp != "building=yes")
+    {
+      if (OsmSchema::getInstance().getCategories(kvp).toStringList().indexOf(category) >= 0)
+      {
+        result.append(kvp);
+      }
+    }
+  }
+  return result;
+}
+
+bool PoiPolygonMatch::_oneGeneric(ConstElementPtr e1, ConstElementPtr e2) const
+{
+  if (isPoiIsh(e1) && isBuildingIsh(e2))
+  {
+    return _getTagsByCategory("poi", e1->getTags()).length() == 0 ||
+           _getTagsByCategory("building", e2->getTags()).length() == 0;
+  }
+  else if (isPoiIsh(e2) && isBuildingIsh(e1))
+  {
+    return _getTagsByCategory("building", e1->getTags()).length() == 0 ||
+           _getTagsByCategory("poi", e2->getTags()).length() == 0;
+  }
+  else
+  {
+    throw HootException();
+  }
+}
+
 //not currently using this...accounted for, hardcoded, in PoiPolygonNameExtractor for now
 bool PoiPolygonMatch::_getAddressMatch(ConstElementPtr e1, ConstElementPtr e2)
 {
@@ -443,6 +499,142 @@ bool PoiPolygonMatch::_getAddressMatch(ConstElementPtr e1, ConstElementPtr e2)
   }
 
   return addressMatch;
+}
+
+//attempt to borrow some logic from poi to poi...not using this right now
+double PoiPolygonMatch::_getReviewDistance(ConstElementPtr element)
+{
+  Tags tags = element->getTags();
+  if (tags.get("amenity") == "grave_yard")
+  {
+    return max(1000.0, element->getCircularError());
+  }
+  else if (tags.get("amenity") == "hospital")
+  {
+    return max(100.0, element->getCircularError());
+  }
+  else if (tags.get("building") == "hospital")
+  {
+    return max(500.0, element->getCircularError());
+  }
+  else if (tags.get("building") == "train_station")
+  {
+    return max(500.0, element->getCircularError());
+  }
+  else if (tags.get("barrier") == "toll_booth")
+  {
+    return max(50.0, element->getCircularError());
+  }
+  else if (tags.get("barrier") == "border_control")
+  {
+    return max(100.0, element->getCircularError());
+  }
+  else if (tags.get("landuse") == "built_up_area")
+  {
+    return max(3000.0, element->getCircularError());
+  }
+  else if (tags.get("place") == "built_up_area")
+  {
+    return max(3000.0, element->getCircularError());
+  }
+  else if (tags.get("place") == "locality")
+  {
+    return max(3000.0, element->getCircularError());
+  }
+  else if (tags.get("place") == "populated")
+  {
+    return max(3000.0, element->getCircularError());
+  }
+  else if (tags.get("place") == "region")
+  {
+    return max(2000.0, element->getCircularError());
+  }
+  else if (tags.get("place") == "village")
+  {
+    return max(3000.0, element->getCircularError());
+  }
+  else if (tags.get("railway") == "station")
+  {
+    return max(1000.0, element->getCircularError());
+  }
+  else if (tags.get("station") == "light_rail")
+  {
+    return max(1000.0, element->getCircularError());
+  }
+  else if (tags.get("tourism") == "hotel")
+  {
+    return max(400.0, element->getCircularError());
+  }
+  else if (tags.get("transport") == "station")
+  {
+    return max(1000.0, element->getCircularError());
+  }
+  else if (tags.get("use") == "healthcare")
+  {
+    return max(100.0, element->getCircularError());
+  }
+  else if (tags.contains("amenity"))
+  {
+    return max(200.0, element->getCircularError());
+  }
+  else if (tags.contains("building"))
+  {
+    return max(200.0, element->getCircularError());
+  }
+  else if (tags.contains("historic"))
+  {
+    return max(200.0, element->getCircularError());
+  }
+  else if (tags.contains("landuse"))
+  {
+    return max(1000.0, element->getCircularError());
+  }
+  else if (tags.contains("leisure"))
+  {
+    return max(500.0, element->getCircularError());
+  }
+  else if (tags.contains("man_made"))
+  {
+    return max(200.0, element->getCircularError());
+  }
+  else if (tags.contains("natural"))
+  {
+    return max(1000.0, element->getCircularError());
+  }
+  else if (tags.contains("place"))
+  {
+    return max(1000.0, element->getCircularError());
+  }
+  else if (tags.contains("power"))
+  {
+    return max(50.0, element->getCircularError());
+  }
+  else if (tags.contains("railway"))
+  {
+    return max(500.0, element->getCircularError());
+  }
+  else if (tags.contains("shop"))
+  {
+    return max(200.0, element->getCircularError());
+  }
+  else if (tags.contains("sport"))
+  {
+    return max(100.0, element->getCircularError());
+  }
+  else if (tags.contains("station"))
+  {
+    return max(200.0, element->getCircularError());
+  }
+  else if (tags.contains("tourism"))
+  {
+    return max(200.0, element->getCircularError());
+  }
+  else
+  {
+    return ConfigOptions().getPoiPolygonMatchReviewDistance();
+  }
+
+  return -1.0;
 }
 
 QString PoiPolygonMatch::toString() const

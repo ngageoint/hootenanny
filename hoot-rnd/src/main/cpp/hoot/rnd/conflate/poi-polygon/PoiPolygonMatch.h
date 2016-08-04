@@ -131,8 +131,12 @@ private:
                          ConstElementPtr e1, ConstElementPtr e2);
   double _getTagDistance(const QString kvp, ConstElementPtr e1, ConstElementPtr e2) const;
   QStringList _getRelatedTags(const QString relateToKvp, const Tags& tags) const;
+  QStringList _getTagsByCategory(const QString category, const Tags& tags) const;
+  bool _oneGeneric(ConstElementPtr e1, ConstElementPtr e2) const;
 
   bool _getAddressMatch(ConstElementPtr e1, ConstElementPtr e2);
+
+  double _getReviewDistance(ConstElementPtr element);
 
 };
 
