@@ -77,7 +77,6 @@ import org.w3c.dom.Element;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.Configuration;
-import com.querydsl.sql.SQLExpressions;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLDeleteClause;
 import com.querydsl.sql.dml.SQLInsertClause;
@@ -92,11 +91,11 @@ import hoot.services.models.db.Maps;
 import hoot.services.models.db.QMaps;
 import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
+import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.models.osm.Element.ElementType;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
@@ -222,19 +221,16 @@ public class MapResource {
                     .execute();
 
             try {
-                SQLInsertClause insertMissing =
-                        new SQLInsertClause(conn, configuration, folderMapMappings)
-                                .columns(folderMapMappings.mapId, folderMapMappings.folderId)
-                                .select(SQLExpressions
-                                        .select(maps.id, Expressions.numberTemplate(Long.class, "0"))
-                                        .from(maps)
-                                        .where(maps.id.notIn(new SQLQuery<>()
-                                                .select(folderMapMappings.mapId)
-                                                .distinct()
-                                                .from(folderMapMappings)
-                                                .fetch())));
-
-                insertMissing.execute();
+                new SQLInsertClause(conn, configuration, folderMapMappings)
+                        .columns(folderMapMappings.mapId, folderMapMappings.folderId)
+                        .select(new SQLQuery<>()
+                                .select(maps.id, Expressions.numberTemplate(Long.class, "0"))
+                                .from(maps)
+                                .where(maps.id.notIn(new SQLQuery<>()
+                                        .select(folderMapMappings.mapId)
+                                        .distinct()
+                                        .from(folderMapMappings))))
+                        .execute();
             }
             catch (Exception e) {
                 logger.error("Could not add missing records...", e);

@@ -127,25 +127,23 @@ public class ReviewBookmarkRetriever {
             Long[] creatorArray, Long[] layerArray) {
 
         SQLQuery<ReviewBookmarks> query = new SQLQuery<>(this.conn, DbUtils.getConfiguration());
+        query.select(reviewBookmarks).from(reviewBookmarks);
+
         if ((creatorArray != null) && (layerArray != null)) {
-            query.select(reviewBookmarks)
-                    .where(reviewBookmarks.createdBy.in((Number[]) creatorArray)
-                            .and(reviewBookmarks.mapId.in((Number[]) layerArray)))
-                    .orderBy(getSpecifier(orderByCol, isAsc));
+            query.where(reviewBookmarks.createdBy.in((Number[]) creatorArray)
+                    .and(reviewBookmarks.mapId.in((Number[]) layerArray)));
         }
         else if ((creatorArray != null) && (layerArray == null)) {
-            query.from(reviewBookmarks)
-                    .where(reviewBookmarks.createdBy.in((Number[]) creatorArray))
-                    .orderBy(getSpecifier(orderByCol, isAsc));
+            query.where(reviewBookmarks.createdBy.in((Number[]) creatorArray));
         }
         else if ((creatorArray == null) && (layerArray != null)) {
-            query.from(reviewBookmarks)
-                    .where(reviewBookmarks.mapId.in((Number[]) layerArray))
-                    .orderBy(getSpecifier(orderByCol, isAsc));
+            query.where(reviewBookmarks.mapId.in((Number[]) layerArray));
         }
         else {
-            query.from(reviewBookmarks).orderBy(getSpecifier(orderByCol, isAsc));
+            query.from(reviewBookmarks);
         }
+
+        query.orderBy(getSpecifier(orderByCol, isAsc));
 
         if (limit > -1) {
             query.limit(limit);
