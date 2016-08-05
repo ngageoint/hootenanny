@@ -39,15 +39,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.query.sql.SQLQuery;
+import com.querydsl.sql.SQLQuery;
 
 import hoot.services.controllers.osm.MapResource;
-import hoot.services.utils.DbUtils;
 import hoot.services.models.db.CurrentRelationMembers;
 import hoot.services.models.db.QCurrentRelationMembers;
 import hoot.services.models.osm.Element;
 import hoot.services.models.review.ElementInfo;
 import hoot.services.models.review.ReviewRef;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.ReviewUtils;
 
 
@@ -115,19 +115,20 @@ public class ReviewReferencesRetriever {
 
         // select all review relation id's from current relation members where
         // member id = requesting element's member id and the element type = the requesting element type
-        List<Long> allReviewRelationIds = getAllReviewRelations(queryElementInfo, mapIdNum);
+        List<Long> allReviewRelationIds = this.getAllReviewRelations(queryElementInfo, mapIdNum);
 
         List<ReviewRef> references = new ArrayList<>();
         if (!allReviewRelationIds.isEmpty()) {
             // select all relation members where themember's id is not equal to the requesting element's id and the
             // member's type is not = to the requesting element's type
-            List<CurrentRelationMembers> referencedMembers = new SQLQuery(conn,
-                    DbUtils.getConfiguration(mapIdNum))
+            List<CurrentRelationMembers> referencedMembers = new SQLQuery<>(conn, DbUtils.getConfiguration(mapIdNum))
+                    .select(QCurrentRelationMembers.currentRelationMembers)
                     .from(currentRelationMembers)
                     .where(currentRelationMembers.relationId.in(allReviewRelationIds))
-                    .orderBy(currentRelationMembers.relationId.asc(), currentRelationMembers.memberId.asc(),
-                            currentRelationMembers.sequenceId.asc())
-                    .list(currentRelationMembers);
+                    .orderBy(currentRelationMembers.relationId.asc(),
+                             currentRelationMembers.memberId.asc(),
+                             currentRelationMembers.sequenceId.asc())
+                    .fetch();
 
             // return all elements corresponding to the filtered down set of relation members
             for (CurrentRelationMembers member : referencedMembers) {

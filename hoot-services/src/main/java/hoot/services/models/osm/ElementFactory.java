@@ -31,7 +31,7 @@ import java.sql.Connection;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 
-import com.mysema.query.Tuple;
+import com.querydsl.core.Tuple;
 
 import hoot.services.models.osm.Element.ElementType;
 

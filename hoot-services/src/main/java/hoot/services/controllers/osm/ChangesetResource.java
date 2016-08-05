@@ -49,7 +49,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import com.mysema.query.sql.SQLQuery;
+import com.querydsl.sql.SQLQuery;
 
 import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.Changeset;
@@ -145,8 +145,11 @@ public class ChangesetResource {
             try {
                 logger.debug("Retrieving user ID associated with map having ID: {} ...", mapIdNum);
 
-                SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-                userId = query.from(maps).where(maps.id.eq(mapIdNum)).singleResult(maps.userId);
+                userId = new SQLQuery<>(conn, DbUtils.getConfiguration())
+                        .select(maps.userId)
+                        .from(maps)
+                        .where(maps.id.eq(mapIdNum))
+                        .fetchOne();
 
                 logger.debug("Retrieved user ID: {}", userId);
             }
@@ -223,14 +226,14 @@ public class ChangesetResource {
     @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.TEXT_XML)
     public Response upload(String changeset,
-                           @PathParam("changesetId") long changesetId,
-                           @QueryParam("mapId") String mapId) {
+                           @PathParam("changesetId") Long changesetId,
+                           @QueryParam("mapId") Long mapId) {
+
         if (mapId == null) {
             String msg = "mapId cannot be null!";
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        long mapid = Long.parseLong(mapId);
         Document changesetDoc;
         try {
             changesetDoc = ChangesetUploadXmlValidator.parseAndValidate(changeset);
@@ -251,7 +254,7 @@ public class ChangesetResource {
             conn.setAutoCommit(false);
 
             try {
-                changesetUploadResponse = (new ChangesetDbWriter(conn)).write(mapid, changesetId, changesetDoc);
+                changesetUploadResponse = (new ChangesetDbWriter(conn)).write(mapId, changesetId, changesetDoc);
             }
             catch (WebApplicationException wae) {
                 throw wae;
@@ -309,8 +312,8 @@ public class ChangesetResource {
     @Path("/{changesetId}/close")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public String close(@PathParam("changesetId") long changesetId,
-                        @QueryParam("mapId") String mapId) {
+    public String close(@PathParam("changesetId") Long changesetId,
+                        @QueryParam("mapId") Long mapId) {
         logger.info("Closing changeset with ID: {} ...", changesetId);
 
         if (mapId == null) {
@@ -319,8 +322,7 @@ public class ChangesetResource {
         }
 
         try (Connection conn = DbUtils.createConnection()) {
-            long mapid = Long.parseLong(mapId);
-            Changeset.closeChangeset(mapid, changesetId, conn);
+            Changeset.closeChangeset(mapId, changesetId, conn);
         }
         catch (WebApplicationException wae) {
             throw wae;

@@ -47,7 +47,7 @@ class ReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
         seqId = seqid;
     }
 
-    String getQueryString() {
+    private String getQueryString() {
         return "select id from current_relations_" + getMapId()
                 + " where tags->'hoot:review:needs' = 'yes' and tags->'hoot:review:sort_order'='" + seqId + "'";
     }

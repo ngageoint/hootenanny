@@ -33,7 +33,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.xml.transform.TransformerException;
 
@@ -46,17 +45,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
-import com.mysema.query.sql.RelationalPathBase;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.types.path.BooleanPath;
-import com.mysema.query.types.path.NumberPath;
-import com.mysema.query.types.path.SimplePath;
+import com.querydsl.core.types.dsl.BooleanPath;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.SimplePath;
+import com.querydsl.sql.RelationalPathBase;
+import com.querydsl.sql.SQLQuery;
 
+import hoot.services.geo.BoundingBox;
+import hoot.services.geo.Coordinates;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.db.CurrentRelationMembers;
 import hoot.services.models.db.CurrentRelations;
-import hoot.services.geo.BoundingBox;
-import hoot.services.geo.Coordinates;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.utils.DbUtils.nwr_enum;
@@ -136,14 +135,17 @@ public class Relation extends Element {
         // From the Rails port of OSM API:
         // RelationMember.joins(:relation).find_by("visible = ? AND member_type
         // = 'Relation' and member_id = ? ", true, id)
-        SQLQuery owningRelationsQuery = new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).distinct()
-                .from(currentRelationMembers).join(currentRelations)
-                .on(currentRelationMembers.relationId.eq(currentRelations.id))
+        SQLQuery<Long> owningRelationsQuery = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+                .select(currentRelationMembers.relationId)
+                .distinct()
+                .from(currentRelationMembers)
+                .join(currentRelations).on(currentRelationMembers.relationId.eq(currentRelations.id))
                 .where(currentRelations.visible.eq(true)
                         .and(currentRelationMembers.memberId.eq(super.getId()))
-                        .and(currentRelationMembers.memberType.eq(nwr_enum.relation)));
+                        .and(currentRelationMembers.memberType.eq(nwr_enum.relation)))
+                .orderBy(currentRelationMembers.relationId.asc());
 
-        Set<Long> owningRelationsIds = new TreeSet<>(owningRelationsQuery.list(currentRelationMembers.relationId));
+        List<Long> owningRelationsIds = owningRelationsQuery.fetch();
 
         if (!owningRelationsIds.isEmpty()) {
             throw new OSMAPIPreconditionException(
@@ -317,17 +319,19 @@ public class Relation extends Element {
     }
 
     private BoundingBox getBoundsForNodesAndWays() {
-        List<Long> nodeIds = new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+        List<Long> nodeIds = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+                .select(currentRelationMembers.memberId)
                 .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(getId())
                         .and(currentRelationMembers.memberType.eq(nwr_enum.node)))
-                .list(currentRelationMembers.memberId);
+                .fetch();
 
-        List<Long> wayIds = new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+        List<Long> wayIds = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+                .select(currentRelationMembers.memberId)
                 .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(getId())
                         .and(currentRelationMembers.memberType.eq(nwr_enum.way)))
-                .list(currentRelationMembers.memberId);
+                .fetch();
 
         return getBoundsForNodesAndWays(new HashSet<>(nodeIds), new HashSet<>(wayIds));
     }
@@ -361,11 +365,12 @@ public class Relation extends Element {
      * Retrieves this relation's members from the services database
      */
     private List<CurrentRelationMembers> getMembers() {
-        return new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+        return new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+                .select(currentRelationMembers)
                 .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(getId()))
                 .orderBy(currentRelationMembers.sequenceId.asc())
-                .list(currentRelationMembers);
+                .fetch();
     }
 
     private void checkForCircularReference(long parsedRelationMemberId) {

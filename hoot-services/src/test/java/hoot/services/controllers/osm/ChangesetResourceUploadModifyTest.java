@@ -26,8 +26,10 @@
  */
 package hoot.services.controllers.osm;
 
+import static com.querydsl.core.group.GroupBy.groupBy;
 import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
 import static hoot.services.HootProperties.MAXIMUM_WAY_NODES;
+import static hoot.services.models.db.QCurrentNodes.currentNodes;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -53,15 +55,14 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLUpdateClause;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLUpdateClause;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.DbUtils;
-import hoot.services.utils.PostgresUtils;
+import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Changesets;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.db.CurrentRelationMembers;
@@ -74,14 +75,15 @@ import hoot.services.models.db.QCurrentRelationMembers;
 import hoot.services.models.db.QCurrentRelations;
 import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.models.db.QCurrentWays;
-import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.Node;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.RandomNumberGenerator;
 import hoot.services.utils.XmlUtils;
@@ -90,7 +92,7 @@ import hoot.services.utils.XmlUtils;
 public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     private static final Logger log = LoggerFactory.getLogger(ChangesetResourceUploadModifyTest.class);
 
-    private final QCurrentNodes currentNodesTbl = QCurrentNodes.currentNodes;
+    private final QCurrentNodes currentNodesTbl = currentNodes;
     private final QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
     private final QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
     private final QCurrentRelations currentRelationsTbl = QCurrentRelations.currentRelations;
@@ -223,15 +225,17 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
             Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
             QChangesets changesets = QChangesets.changesets;
-            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(changesets)
                     .from(changesets)
                     .where(changesets.id.eq(changesetId))
-                    .singleResult(changesets);
+                    .fetchOne();
 
             try {
-                Map<Long, CurrentNodes> nodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                Map<Long, CurrentNodes> nodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
                         .from(currentNodesTbl)
-                        .map(currentNodesTbl.id, currentNodesTbl);
+                        .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
+
                 Assert.assertEquals(5, nodes.size());
 
                 CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
@@ -288,8 +292,9 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             try {
-                Map<Long, CurrentWays> ways = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWaysTbl)
-                        .map(currentWaysTbl.id, currentWaysTbl);
+                Map<Long, CurrentWays> ways = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .from(currentWaysTbl)
+                        .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
 
                 Assert.assertEquals(3, ways.size());
 
@@ -299,11 +304,14 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertTrue(wayRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
+
                 List<CurrentWayNodes> wayNodes =
-                        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .select(currentWayNodesTbl)
                                 .from(currentWayNodesTbl)
                                 .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
-                                .orderBy(currentWayNodesTbl.sequenceId.asc()).list(currentWayNodesTbl);
+                                .orderBy(currentWayNodesTbl.sequenceId.asc())
+                                .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
                 CurrentWayNodes wayNode = wayNodes.get(0);
@@ -327,11 +335,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                                .from(currentWayNodesTbl)
-                                .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
-                                .orderBy(currentWayNodesTbl.sequenceId.asc())
-                                .list(currentWayNodesTbl);
+                wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
+                        .from(currentWayNodesTbl)
+                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
+                        .orderBy(currentWayNodesTbl.sequenceId.asc())
+                        .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
 
@@ -359,11 +368,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
                         .from(currentWayNodesTbl)
                         .where(currentWayNodesTbl.wayId.eq(wayIdsArr[2]))
                         .orderBy(currentWayNodesTbl.sequenceId.asc())
-                        .list(currentWayNodesTbl);
+                        .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
 
@@ -391,9 +401,10 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             try {
-                Map<Long, CurrentRelations> relations = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentRelationsTbl)
-                        .map(currentRelationsTbl.id, currentRelationsTbl);
+                Map<Long, CurrentRelations> relations =
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .from(currentRelationsTbl)
+                                .transform(groupBy(currentRelationsTbl.id).as(currentRelationsTbl));
 
                 CurrentRelations relationRecord = relations.get(relationIdsArr[0]);
                 Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
@@ -402,10 +413,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                List<CurrentRelationMembers> members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentRelationMembersTbl)
-                        .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                List<CurrentRelationMembers> members =
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .select(currentRelationMembersTbl)
+                                .from(currentRelationMembersTbl)
+                                .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
+                                .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                                .fetch();
 
                 Assert.assertEquals(3, members.size());
 
@@ -446,9 +460,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationMembersTbl)
+                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
+                        .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                        .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                        .fetch();
 
                 Assert.assertEquals(2, members.size());
 
@@ -483,11 +500,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
                         .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[2]))
                         .orderBy(currentRelationMembersTbl.sequenceId.asc())
-                        .list(currentRelationMembersTbl);
+                        .fetch();
 
                 Assert.assertEquals(1, members.size());
 
@@ -513,11 +531,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
                         .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[3]))
                         .orderBy(currentRelationMembersTbl.sequenceId.asc())
-                        .list(currentRelationMembersTbl);
+                        .fetch();
 
                 Assert.assertEquals(1, members.size());
 
@@ -617,14 +636,15 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
             Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
             QChangesets changesets = QChangesets.changesets;
-            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(changesets)
                     .from(changesets)
                     .where(changesets.id.eq(changesetId))
-                    .singleResult(changesets);
+                    .fetchOne();
             try {
-                Map<Long, CurrentWays> ways = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                Map<Long, CurrentWays> ways = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
                         .from(currentWaysTbl)
-                        .map(currentWaysTbl.id, currentWaysTbl);
+                        .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
 
                 Assert.assertEquals(3, ways.size());
 
@@ -636,10 +656,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                List<CurrentWayNodes> wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentWayNodesTbl).where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
+                List<CurrentWayNodes> wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
+                        .from(currentWayNodesTbl)
+                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
                         .orderBy(currentWayNodesTbl.sequenceId.asc())
-                        .list(currentWayNodesTbl);
+                        .fetch();
 
                 Assert.assertEquals(4, wayNodes.size());
 
@@ -983,13 +1005,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
             QChangesets changesets = QChangesets.changesets;
 
-            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                    .where(changesets.id.eq(changesetId)).singleResult(changesets);
-
             try {
-                Map<Long, CurrentNodes> nodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                Map<Long, CurrentNodes> nodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
                         .from(currentNodesTbl)
-                        .map(currentNodesTbl.id, currentNodesTbl);
+                        .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
+
                 Assert.assertEquals(5, nodes.size());
 
                 CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
@@ -1051,8 +1071,10 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             try {
-                Map<Long, CurrentWays> ways = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWaysTbl)
-                        .map(currentWaysTbl.id, currentWaysTbl);
+                Map<Long, CurrentWays> ways = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .from(currentWaysTbl)
+                        .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
+
                 Assert.assertEquals(3, ways.size());
 
                 CurrentWays wayRecord = ways.get(wayIdsArr[0]);
@@ -1063,9 +1085,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                List<CurrentWayNodes> wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentWayNodesTbl).where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
-                        .orderBy(currentWayNodesTbl.sequenceId.asc()).list(currentWayNodesTbl);
+                List<CurrentWayNodes> wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
+                        .from(currentWayNodesTbl)
+                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
+                        .orderBy(currentWayNodesTbl.sequenceId.asc())
+                        .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
 
@@ -1091,11 +1116,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
                         .from(currentWayNodesTbl)
                         .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
                         .orderBy(currentWayNodesTbl.sequenceId.asc())
-                        .list(currentWayNodesTbl);
+                        .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
 
@@ -1119,11 +1145,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
                         .from(currentWayNodesTbl)
                         .where(currentWayNodesTbl.wayId.eq(wayIdsArr[2]))
                         .orderBy(currentWayNodesTbl.sequenceId.asc())
-                        .list(currentWayNodesTbl);
+                        .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
 
@@ -1150,8 +1177,10 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             try {
-                Map<Long, CurrentRelations> relations = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentRelationsTbl).map(currentRelationsTbl.id, currentRelationsTbl);
+                Map<Long, CurrentRelations> relations =
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .from(currentRelationsTbl)
+                                .transform(groupBy(currentRelationsTbl.id).as(currentRelationsTbl));
 
                 Assert.assertEquals(4, relations.size());
 
@@ -1162,10 +1191,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                List<CurrentRelationMembers> members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentRelationMembersTbl)
-                        .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                List<CurrentRelationMembers> members =
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .select(currentRelationMembersTbl)
+                                .from(currentRelationMembersTbl)
+                                .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
+                                .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                                .fetch();
 
                 Assert.assertEquals(3, members.size());
 
@@ -1205,11 +1237,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
                         .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
                         .orderBy(currentRelationMembersTbl.sequenceId.asc())
-                        .list(currentRelationMembersTbl);
+                        .fetch();
 
                 Assert.assertEquals(2, members.size());
 
@@ -1238,9 +1271,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertTrue(relationRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(1), relationRecord.getVersion());
                 Assert.assertEquals(true, relationRecord.getVisible());
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationMembersTbl)
+
+                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
+                        .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[2]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                        .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                        .fetch();
 
                 Assert.assertEquals(1, members.size());
 
@@ -1266,11 +1303,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
                         .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[3]))
                         .orderBy(currentRelationMembersTbl.sequenceId.asc())
-                        .list(currentRelationMembersTbl);
+                        .fetch();
 
                 Assert.assertEquals(1, members.size());
 
@@ -1289,8 +1327,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             try {
-                changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                        .where(changesets.id.eq(changesetId)).singleResult(changesets);
+                Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(changesets)
+                        .from(changesets)
+                        .where(changesets.id.eq(changesetId))
+                        .fetchOne();
 
                 Assert.assertNotNull(changeset);
                 Assert.assertTrue(changeset.getCreatedAt().before(now));
@@ -1366,19 +1407,25 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
             try {
                 QChangesets changesets = QChangesets.changesets;
-                Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                        .where(changesets.id.eq(changesetId1)).singleResult(changesets);
+                Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(changesets)
+                        .from(changesets)
+                        .where(changesets.id.eq(changesetId1))
+                        .fetchOne();
 
                 Assert.assertNotNull(changeset);
-                final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+                Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
                 Assert.assertTrue(changeset.getCreatedAt().before(now));
                 Assert.assertTrue(changeset.getClosedAt().after(changeset.getCreatedAt()));
                 Assert.assertEquals(new Integer(12), changeset.getNumChanges());
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 // changeset = changesetDao.findById(changesetId2);
-                changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                        .where(changesets.id.eq(changesetId2)).singleResult(changesets);
+                changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(changesets)
+                        .from(changesets)
+                        .where(changesets.id.eq(changesetId2))
+                        .fetchOne();
 
                 Assert.assertNotNull(changeset);
                 Assert.assertTrue(changeset.getCreatedAt().before(now));
@@ -1489,10 +1536,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
             tags.clear();
 
-            CurrentNodes insertedNodeRecord = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            CurrentNodes insertedNodeRecord = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentNodesTbl)
                     .from(currentNodesTbl)
                     .where(currentNodesTbl.id.eq(negativeNodeId))
-                    .singleResult(currentNodesTbl);
+                    .fetchOne();
 
             Assert.assertNotNull(insertedNodeRecord);
             Assert.assertEquals(new Long(negativeNodeId), insertedNodeRecord.getId());
@@ -1521,10 +1569,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
             tags.clear();
 
-            CurrentNodes insertedWayRecord = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            CurrentNodes insertedWayRecord = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentNodesTbl)
                     .from(currentNodesTbl)
                     .where(currentNodesTbl.id.eq(negativeWayId))
-                    .singleResult(currentNodesTbl);
+                    .fetchOne();
 
             Assert.assertNotNull(insertedWayRecord);
             Assert.assertEquals(new Long(negativeWayId), insertedWayRecord.getId());
@@ -1549,10 +1598,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             long negativeRelationId = -1;
             OsmTestUtils.insertNewRelation(negativeRelationId, changesetId, mapId, members, tags, conn);
             tags.clear();
-            CurrentRelations insertedRelationRecord = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                    .from(currentRelationsTbl)
-                    .where(currentRelationsTbl.id.eq(negativeRelationId))
-                    .singleResult(currentRelationsTbl);
+            CurrentRelations insertedRelationRecord =
+                    new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                            .select(currentRelationsTbl)
+                            .from(currentRelationsTbl)
+                            .where(currentRelationsTbl.id.eq(negativeRelationId))
+                            .fetchOne();
 
             Assert.assertNotNull(insertedRelationRecord);
             Assert.assertEquals(new Long(negativeRelationId), insertedRelationRecord.getId());
@@ -1685,11 +1736,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
             Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
             QChangesets changesets = QChangesets.changesets;
-            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                    .where(changesets.id.eq(changesetId)).singleResult(changesets);
+
             try {
-                Map<Long, CurrentNodes> nodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentNodesTbl).map(currentNodesTbl.id, currentNodesTbl);
+                Map<Long, CurrentNodes> nodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .from(currentNodesTbl)
+                        .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
 
                 Assert.assertEquals(2, nodes.size());
                 Assert.assertEquals(negativeNodeId, (long) nodeIdsArr[0]);
@@ -1738,8 +1789,9 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             try {
-                Map<Long, CurrentWays> ways = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWaysTbl)
-                        .map(currentWaysTbl.id, currentWaysTbl);
+                Map<Long, CurrentWays> ways = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .from(currentWaysTbl)
+                        .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
                 Assert.assertEquals(2, ways.size());
 
                 // verify the updated ways
@@ -1754,10 +1806,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertTrue(wayRecord.getVisible());
 
                 List<CurrentWayNodes> wayNodes =
-
-                        new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWayNodesTbl)
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId)).from(currentWayNodesTbl)
+                                .select(currentWayNodesTbl)
                                 .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
-                                .orderBy(currentWayNodesTbl.sequenceId.asc()).list(currentWayNodesTbl);
+                                .orderBy(currentWayNodesTbl.sequenceId.asc())
+                                .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
 
@@ -1787,9 +1840,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWayNodesTbl)
-                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1])).orderBy(currentWayNodesTbl.sequenceId.asc())
-                        .list(currentWayNodesTbl);
+                wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
+                        .from(currentWayNodesTbl)
+                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
+                        .orderBy(currentWayNodesTbl.sequenceId.asc())
+                        .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
 
@@ -1817,8 +1873,10 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             try {
-                Map<Long, CurrentRelations> relations = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentRelationsTbl).map(currentRelationsTbl.id, currentRelationsTbl);
+                Map<Long, CurrentRelations> relations =
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .from(currentRelationsTbl)
+                                .transform(groupBy(currentRelationsTbl.id).as(currentRelationsTbl));
 
                 Assert.assertEquals(2, relations.size());
                 Assert.assertEquals(negativeRelationId, (long) relationIdsArr[0]);
@@ -1831,10 +1889,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                List<CurrentRelationMembers> memberRecords = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentRelationMembersTbl)
-                        .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                List<CurrentRelationMembers> memberRecords =
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .select(currentRelationMembersTbl)
+                                .from(currentRelationMembersTbl)
+                                .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
+                                .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                                .fetch();
 
                 Assert.assertEquals(2, members.size());
 
@@ -1868,9 +1929,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                memberRecords = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationMembersTbl)
+                memberRecords = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
+                        .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                        .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                        .fetch();
 
                 Assert.assertEquals(2, members.size());
 
@@ -1901,8 +1965,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             try {
-                changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                        .where(changesets.id.eq(changesetId)).singleResult(changesets);
+                Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(changesets)
+                        .from(changesets)
+                        .where(changesets.id.eq(changesetId))
+                        .fetchOne();
 
                 Assert.assertNotNull(changeset);
                 Assert.assertTrue(changeset.getCreatedAt().before(now));
@@ -2125,10 +2192,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
         // close the changeset
         QChangesets changesets = QChangesets.changesets;
-        Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(changesets)
                 .from(changesets)
                 .where(changesets.id.eq(changesetId))
-                .singleResult(changesets);
+                .fetchOne();
 
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         changeset.setClosedAt(now);
@@ -2138,10 +2206,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 .set(changesets.closedAt, now)
                 .execute();
 
-        changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(changesets)
                 .from(changesets)
                 .where(changesets.id.eq(changesetId))
-                .singleResult(changesets);
+                .fetchOne();
+
         Assert.assertTrue(changeset.getClosedAt().equals(now));
 
         BoundingBox updateBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
@@ -2529,8 +2599,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // make one of way nodes invisible
-        CurrentNodes invisibleNode = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentNodesTbl)
-                .where(currentNodesTbl.id.eq(nodeIdsArr[0])).singleResult(currentNodesTbl);
+        CurrentNodes invisibleNode = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentNodesTbl)
+                .from(currentNodesTbl)
+                .where(currentNodesTbl.id.eq(nodeIdsArr[0]))
+                .fetchOne();
 
         Assert.assertNotNull(invisibleNode);
 
@@ -2542,10 +2615,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 .execute();
 
         Assert.assertEquals(1, success);
-        Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentNodesTbl.visible)
                 .from(currentNodesTbl)
                 .where(currentNodesTbl.id.eq(nodeIdsArr[0]))
-                .singleResult(currentNodesTbl.visible));
+                .fetchOne());
 
         // Try to upload a way which references an invisible node. The request
         // should fail and no data in the system should be modified.
@@ -2590,10 +2664,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // make one of relation node members invisible
-        CurrentNodes invisibleNode = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        CurrentNodes invisibleNode = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentNodesTbl)
                 .from(currentNodesTbl)
                 .where(currentNodesTbl.id.eq(nodeIdsArr[0]))
-                .singleResult(currentNodesTbl);
+                .fetchOne();
 
         Assert.assertNotNull(invisibleNode);
 
@@ -2605,10 +2680,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 .execute();
 
         Assert.assertEquals(1, success);
-        Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentNodesTbl.visible)
                 .from(currentNodesTbl)
                 .where(currentNodesTbl.id.eq(nodeIdsArr[0]))
-                .singleResult(currentNodesTbl.visible));
+                .fetchOne());
 
         // Try to upload a relation which references an invisible node. The
         // request should fail and no data in the system should be modified.
@@ -2655,10 +2731,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // make one of relation way members invisible
-        CurrentWays invisibleWay = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        CurrentWays invisibleWay = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentWaysTbl)
                 .from(currentWaysTbl)
                 .where(currentWaysTbl.id.eq(wayIdsArr[0]))
-                .singleResult(currentWaysTbl);
+                .fetchOne();
 
         Assert.assertNotNull(invisibleWay);
 
@@ -2670,10 +2747,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 .execute();
 
         Assert.assertEquals(1, success);
-        Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentWaysTbl.visible)
                 .from(currentWaysTbl)
                 .where(currentWaysTbl.id.eq(wayIdsArr[0]))
-                .singleResult(currentWaysTbl.visible));
+                .fetchOne());
 
         // Try to upload a relation which references an invisible way. The
         // request should fail and no data in the system should be modified.
@@ -2720,10 +2798,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // make one of relation's members invisible
-        CurrentRelations invisibleRelation = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        CurrentRelations invisibleRelation = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentRelationsTbl)
                 .from(currentRelationsTbl)
                 .where(currentRelationsTbl.id.eq(relationIdsArr[0]))
-                .singleResult(currentRelationsTbl);
+                .fetchOne();
 
         Assert.assertNotNull(invisibleRelation);
         invisibleRelation.setVisible(false);
@@ -2734,10 +2813,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 .execute();
 
         Assert.assertEquals(1, success);
-        Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentRelationsTbl.visible)
                 .from(currentRelationsTbl)
                 .where(currentRelationsTbl.id.eq(relationIdsArr[0]))
-                .singleResult(currentRelationsTbl.visible));
+                .fetchOne());
 
         // Try to upload a relation which references an invisible relation. The
         // request should fail and no data in the system should be modified.

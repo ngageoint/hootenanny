@@ -35,8 +35,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import hoot.services.models.db.CurrentNodes;
 import hoot.services.geo.zindex.Box;
+import hoot.services.models.db.CurrentNodes;
 import hoot.services.utils.GeoUtils;
 
 

@@ -40,17 +40,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import com.mysema.query.sql.SQLQuery;
+import com.querydsl.sql.SQLQuery;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.DbUtils;
+import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Changesets;
 import hoot.services.models.db.QChangesets;
-import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
 import hoot.services.osm.OsmResourceTestAbstract;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlUtils;
 
 
@@ -164,10 +164,11 @@ public class UserResourceTest extends OsmResourceTestAbstract {
 
             QChangesets changesets = QChangesets.changesets;
 
-            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(changesets)
                     .from(changesets)
                     .where(changesets.id.eq(changesetId))
-                    .singleResult(changesets);
+                    .fetchOne();
 
             Assert.assertNotNull(changeset);
             Assert.assertEquals(userId, (long) changeset.getUserId());
@@ -177,10 +178,11 @@ public class UserResourceTest extends OsmResourceTestAbstract {
 
             (new Changeset(mapId, changesetId, conn)).setBounds(originalBounds);
 
-            changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(changesets)
                     .from(changesets)
                     .where(changesets.id.eq(changesetId))
-                    .singleResult(changesets);
+                    .fetchOne();
 
             Assert.assertNotNull(changeset);
             Assert.assertEquals(userId, (long) changeset.getUserId());

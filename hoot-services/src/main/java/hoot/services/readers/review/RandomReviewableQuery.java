@@ -69,7 +69,7 @@ class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQu
 
     @Override
     public ReviewQueryMapper execQuery() {
-        ReviewableItem ret = new ReviewableItem(-1, getMapId(), -1);
+        ReviewableItem reviewableItem = new ReviewableItem(-1, getMapId(), -1);
 
         try (Connection connection = getConnection()){
             try (Statement stmt = connection.createStatement()) {
@@ -84,14 +84,14 @@ class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQu
                         nResCnt++;
                     }
 
-                    ret.setRelationId(relId);
+                    reviewableItem.setRelationId(relId);
                     long nSeq = -1;
                     if (seqId != null) {
                         nSeq = Long.parseLong(seqId);
                     }
 
-                    ret.setSortOrder(nSeq);
-                    ret.setResultCount(nResCnt);
+                    reviewableItem.setSortOrder(nSeq);
+                    reviewableItem.setResultCount(nResCnt);
                 }
             }
         }
@@ -99,10 +99,10 @@ class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQu
             throw new RuntimeException("Error executing query!", e);
         }
 
-        return ret;
+        return reviewableItem;
     }
 
-    String getQueryString() {
+    private String getQueryString() {
         return "select id as relid, tags->'hoot:review:sort_order' as seq from current_relations_" + getMapId()
                 + " where tags->'hoot:review:needs' = 'yes' order by random() limit 1";
     }

@@ -369,15 +369,9 @@ public class BasemapResource extends JobControllerBase {
     @GET
     @Path("/enable")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response enableBasemap(@QueryParam("NAME") String basemap, @QueryParam("ENABLE") String enable) {
-        boolean doEnable = true;
-
-        if ((enable != null) && (!enable.isEmpty())) {
-            doEnable = Boolean.parseBoolean(enable);
-        }
-
+    public Response enableBasemap(@QueryParam("NAME") String basemap, @QueryParam("ENABLE") Boolean enable) {
         try {
-            toggleBaseMap(basemap, doEnable);
+            toggleBaseMap(basemap, enable);
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -389,7 +383,7 @@ public class BasemapResource extends JobControllerBase {
 
         JSONObject entity = new JSONObject();
         entity.put("name", basemap);
-        entity.put("isenabled", doEnable);
+        entity.put("isenabled", String.valueOf(enable));
 
         return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
     }

@@ -1,14 +1,15 @@
 package hoot.services.models.db;
 
-import static com.mysema.query.types.PathMetadataFactory.*;
+import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.mysema.query.types.path.*;
+import com.querydsl.core.types.dsl.*;
 
-import com.mysema.query.types.PathMetadata;
+import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
-import com.mysema.query.types.Path;
+import com.querydsl.core.types.Path;
 
-import com.mysema.query.sql.ColumnMetadata;
+import com.querydsl.sql.ColumnMetadata;
+import java.sql.Types;
 
 
 
@@ -16,8 +17,8 @@ import com.mysema.query.sql.ColumnMetadata;
 /**
  * QFolders is a Querydsl query type for Folders
  */
-@Generated("com.mysema.query.sql.codegen.MetaDataSerializer")
-public class QFolders extends com.mysema.query.sql.RelationalPathBase<Folders> {
+@Generated("com.querydsl.sql.codegen.MetaDataSerializer")
+public class QFolders extends com.querydsl.sql.RelationalPathBase<Folders> {
 
     private static final long serialVersionUID = -268403029;
 
@@ -35,7 +36,7 @@ public class QFolders extends com.mysema.query.sql.RelationalPathBase<Folders> {
 
     public final NumberPath<Long> userId = createNumber("userId", Long.class);
 
-    public final com.mysema.query.sql.PrimaryKey<Folders> foldersPk = createPrimaryKey(id);
+    public final com.querydsl.sql.PrimaryKey<Folders> foldersPk = createPrimaryKey(id);
 
     public QFolders(String variable) {
         super(Folders.class, forVariable(variable), "public", "folders");
@@ -52,18 +53,18 @@ public class QFolders extends com.mysema.query.sql.RelationalPathBase<Folders> {
         addMetadata();
     }
 
-    public QFolders(PathMetadata<?> metadata) {
+    public QFolders(PathMetadata metadata) {
         super(Folders.class, metadata, "public", "folders");
         addMetadata();
     }
 
     public void addMetadata() {
-        addMetadata(createdAt, ColumnMetadata.named("created_at").ofType(93).withSize(35).withDigits(6).notNull());
-        addMetadata(displayName, ColumnMetadata.named("display_name").ofType(12).withSize(255).notNull());
-        addMetadata(id, ColumnMetadata.named("id").ofType(-5).withSize(19).notNull());
-        addMetadata(parentId, ColumnMetadata.named("parent_id").ofType(-5).withSize(19).notNull());
-        addMetadata(publicCol, ColumnMetadata.named("public").ofType(-7).withSize(1).notNull());
-        addMetadata(userId, ColumnMetadata.named("user_id").ofType(-5).withSize(19).notNull());
+        addMetadata(createdAt, ColumnMetadata.named("created_at").withIndex(6).ofType(Types.TIMESTAMP).withSize(35).withDigits(6).notNull());
+        addMetadata(displayName, ColumnMetadata.named("display_name").withIndex(2).ofType(Types.VARCHAR).withSize(255).notNull());
+        addMetadata(id, ColumnMetadata.named("id").withIndex(1).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(parentId, ColumnMetadata.named("parent_id").withIndex(3).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(publicCol, ColumnMetadata.named("public").withIndex(5).ofType(Types.BIT).withSize(1).notNull());
+        addMetadata(userId, ColumnMetadata.named("user_id").withIndex(4).ofType(Types.BIGINT).withSize(19).notNull());
     }
 
 }

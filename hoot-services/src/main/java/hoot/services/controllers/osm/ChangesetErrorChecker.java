@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.osm;
 
+import static com.querydsl.core.group.GroupBy.groupBy;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
 
 import java.sql.Connection;
@@ -42,14 +43,14 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import com.mysema.query.sql.SQLQuery;
+import com.querydsl.sql.SQLQuery;
 
-import hoot.services.utils.DbUtils;
-import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.osm.Element;
-import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
+import hoot.services.models.osm.Element.ElementType;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.DbUtils.EntityChangeType;
 
 
 class ChangesetErrorChecker {
@@ -101,12 +102,13 @@ class ChangesetErrorChecker {
                     if ((entityChangeType != EntityChangeType.CREATE)
                             && (!elementIdsToVersionsFromChangeset.isEmpty())) {
                         Element prototype = ElementFactory.create(mapId, elementType, dbConn);
-                        Map<Long, Long> elementIdsToVersionsFromDb = new SQLQuery(dbConn,
-                                DbUtils.getConfiguration(mapId))
+
+                        Map<Long, Long> elementIdsToVersionsFromDb =
+                                new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
                                         .from(prototype.getElementTable())
                                         .where(prototype.getElementIdField()
                                                 .in(elementIdsToVersionsFromChangeset.keySet()))
-                                        .map(prototype.getElementIdField(), prototype.getElementVersionField());
+                                        .transform(groupBy(prototype.getElementIdField()).as(prototype.getElementVersionField()));
 
                         if (!elementIdsToVersionsFromDb.equals(elementIdsToVersionsFromChangeset)) {
                             throw new IllegalArgumentException("Invalid version specified for element(s).");
@@ -178,8 +180,7 @@ class ChangesetErrorChecker {
                 for (int i = 0; i < wayNodeIdXmlNodes.getLength(); i++) {
                     // don't need to check for empty id here, b/c previous
                     // checking would have already errored out for it
-                    long id = Long.parseLong(
-                            wayNodeIdXmlNodes.item(i).getAttributes().getNamedItem("ref").getNodeValue());
+                    long id = Long.parseLong(wayNodeIdXmlNodes.item(i).getAttributes().getNamedItem("ref").getNodeValue());
 
                     if (id > 0) {
                         wayNodeIds.add(id);
@@ -301,9 +302,10 @@ class ChangesetErrorChecker {
         }
 
         if (!elementTypesToElementIds.get(ElementType.Node).isEmpty()) {
-            return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(currentNodes)
+            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+                    .from(currentNodes)
                     .where(currentNodes.id.in(elementTypesToElementIds.get(ElementType.Node)))
-                    .map(currentNodes.id, currentNodes);
+                    .transform(groupBy(currentNodes.id).as(currentNodes));
         }
 
         return null;

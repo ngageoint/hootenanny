@@ -1,14 +1,15 @@
 package hoot.services.models.db;
 
-import static com.mysema.query.types.PathMetadataFactory.*;
+import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.mysema.query.types.path.*;
+import com.querydsl.core.types.dsl.*;
 
-import com.mysema.query.types.PathMetadata;
+import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
-import com.mysema.query.types.Path;
+import com.querydsl.core.types.Path;
 
-import com.mysema.query.sql.ColumnMetadata;
+import com.querydsl.sql.ColumnMetadata;
+import java.sql.Types;
 
 
 
@@ -16,8 +17,8 @@ import com.mysema.query.sql.ColumnMetadata;
 /**
  * QReviewBookmarks is a Querydsl query type for ReviewBookmarks
  */
-@Generated("com.mysema.query.sql.codegen.MetaDataSerializer")
-public class QReviewBookmarks extends com.mysema.query.sql.RelationalPathBase<ReviewBookmarks> {
+@Generated("com.querydsl.sql.codegen.MetaDataSerializer")
+public class QReviewBookmarks extends com.querydsl.sql.RelationalPathBase<ReviewBookmarks> {
 
     private static final long serialVersionUID = -1625377685;
 
@@ -39,7 +40,7 @@ public class QReviewBookmarks extends com.mysema.query.sql.RelationalPathBase<Re
 
     public final NumberPath<Long> relationId = createNumber("relationId", Long.class);
 
-    public final com.mysema.query.sql.PrimaryKey<ReviewBookmarks> reviewBookmarksPk = createPrimaryKey(id);
+    public final com.querydsl.sql.PrimaryKey<ReviewBookmarks> reviewBookmarksPk = createPrimaryKey(id);
 
     public QReviewBookmarks(String variable) {
         super(ReviewBookmarks.class, forVariable(variable), "public", "review_bookmarks");
@@ -56,20 +57,20 @@ public class QReviewBookmarks extends com.mysema.query.sql.RelationalPathBase<Re
         addMetadata();
     }
 
-    public QReviewBookmarks(PathMetadata<?> metadata) {
+    public QReviewBookmarks(PathMetadata metadata) {
         super(ReviewBookmarks.class, metadata, "public", "review_bookmarks");
         addMetadata();
     }
 
     public void addMetadata() {
-        addMetadata(createdAt, ColumnMetadata.named("created_at").ofType(93).withSize(29).withDigits(6).notNull());
-        addMetadata(createdBy, ColumnMetadata.named("created_by").ofType(-5).withSize(19));
-        addMetadata(detail, ColumnMetadata.named("detail").ofType(1111).withSize(2147483647));
-        addMetadata(id, ColumnMetadata.named("id").ofType(-5).withSize(19).notNull());
-        addMetadata(lastModifiedAt, ColumnMetadata.named("last_modified_at").ofType(93).withSize(29).withDigits(6));
-        addMetadata(lastModifiedBy, ColumnMetadata.named("last_modified_by").ofType(-5).withSize(19));
-        addMetadata(mapId, ColumnMetadata.named("map_id").ofType(-5).withSize(19).notNull());
-        addMetadata(relationId, ColumnMetadata.named("relation_id").ofType(-5).withSize(19).notNull());
+        addMetadata(createdAt, ColumnMetadata.named("created_at").withIndex(5).ofType(Types.TIMESTAMP).withSize(29).withDigits(6).notNull());
+        addMetadata(createdBy, ColumnMetadata.named("created_by").withIndex(7).ofType(Types.BIGINT).withSize(19));
+        addMetadata(detail, ColumnMetadata.named("detail").withIndex(4).ofType(Types.OTHER).withSize(2147483647));
+        addMetadata(id, ColumnMetadata.named("id").withIndex(1).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(lastModifiedAt, ColumnMetadata.named("last_modified_at").withIndex(6).ofType(Types.TIMESTAMP).withSize(29).withDigits(6));
+        addMetadata(lastModifiedBy, ColumnMetadata.named("last_modified_by").withIndex(8).ofType(Types.BIGINT).withSize(19));
+        addMetadata(mapId, ColumnMetadata.named("map_id").withIndex(2).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(relationId, ColumnMetadata.named("relation_id").withIndex(3).ofType(Types.BIGINT).withSize(19).notNull());
     }
 
 }
