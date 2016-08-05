@@ -1,3 +1,4 @@
+hoot-services/src/main/resources/conf/local.conf
 plugins/config.js
 .*.swo
 .*.swp
