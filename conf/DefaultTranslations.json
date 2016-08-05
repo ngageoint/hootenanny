@@ -22,7 +22,7 @@
 		"DESCRIPTION" : "OpenStreetMap.org (OSM)",
 		"CANEXPORT" : true,
 		"IMPORTPATH" : "translations/OSM_Ingest.js",
-		"EXPORTPATH" : "translations/RenderDB.js"
+		"EXPORTPATH" : "translations/RenderDb.js"
 	},
 	{
 		"NAME" : "GEONAMES",
