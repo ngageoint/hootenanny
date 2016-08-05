@@ -102,7 +102,8 @@ def printJavascript(schema,withDefs):
                 print '                       defValue:"%s", ' % (schema[f]['columns'][k]['defValue'])
                 print '                       enumerations:['
                 for l in schema[f]['columns'][k]['enum']:
-                    print '                           { name:"%s", value:"%s" }, ' % (l['name'],l['value'])
+                    #print '                           { name:"%s", value:"%s" }, ' % (l['name'],l['value'])
+                    print '                           { value:"%s", name:"%s" }, ' % (l['value'],l['name'])
                 print '                        ] // End of Enumerations '
 
             else:
@@ -145,9 +146,11 @@ def printFunctions(eList):
         num_vals = len(eList[i]['values'].keys()) # How many values does the thing have?
         for j in sorted(eList[i]['values'].keys(), key=asint):
             if num_vals == 1: # Are we at the last feature? yes = no trailing comma
-                print '              { name:"%s", value:"%s" } ' % (eList[i]['values'][j],j)
+                #print '              { name:"%s", value:"%s" } ' % (eList[i]['values'][j],j)
+                print '              { value:"%s", name:"%s" } ' % (j,eList[i]['values'][j])
             else:
-                print '              { name:"%s", value:"%s" }, ' % (eList[i]['values'][j],j)
+                #print '              { name:"%s", value:"%s" }, ' % (eList[i]['values'][j],j)
+                print '              { value:"%s", name:"%s" }, ' % (j,eList[i]['values'][j])
                 num_vals -= 1
 
         print '             ];'
@@ -524,13 +527,14 @@ def processValues(fileName):
         # Default: Split the value and store it
         if (fieldValue.find('=') > -1):
             (aValue,aName) = fieldValue.split("=")
-            aName = aName.strip()
+            tName = aName.replace("'","").replace("\"","").strip()
             tValue = aValue.replace("'","").strip()
             tValues[fieldName]['type'] = 'integer'
-            tValues[fieldName]['values'][tValue] = aName
+            tValues[fieldName]['values'][tValue] = tName
         else:
             tValues[fieldName]['type'] = 'text'
-            tValues[fieldName]['values'][fieldValue] = fieldDefinition
+            tDef = fieldDefinition.replace("'","").replace("\"","").strip()
+            tValues[fieldName]['values'][fieldValue] = tDef
 
 
 

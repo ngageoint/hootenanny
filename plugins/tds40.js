@@ -43,13 +43,13 @@ tds = {
         tds.rawSchema = tds.schema.getDbSchema();
 
         // Add the Very ESRI specific FCSubtype attribute
-        if (config.getOgrTdsAddFcsubtype() == 'true') tds.rawSchema = translate.addFCSubtype(tds.rawSchema);
+        if (config.getOgrEsriFcsubtype() == 'true') tds.rawSchema = translate.addFCSubtype(tds.rawSchema);
 
         // Add the eLTDS attributes
         if (config.getOgrTdsAddEtds() == 'true') tds.rawSchema = translate.addEtds(tds.rawSchema);
 
         // Add empty "extra" feature layers if needed
-        if (config.getOgrTdsExtra() == 'file') tds61.rawSchema = translate.addExtraFeature(tds61.rawSchema);
+        if (config.getOgrNoteExtra() == 'file') tds61.rawSchema = translate.addExtraFeature(tds61.rawSchema);
 
      /*
         // This has been removed since we no longer have text enumerations in the schema
@@ -80,7 +80,7 @@ tds = {
 
         // Decide if we are going to use TDS structure or 1 FCODE / File
         // if we DON't want the new structure, just return the tds.rawSchema
-        if (config.getOgrTdsStructure() == 'false')
+        if (config.getOgrThematicStructure() == 'false')
         {
             // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
             layerNameLookup = translate.makeLayerNameLookup(tds.rawSchema);
@@ -216,7 +216,7 @@ tds = {
 
         // Add the ESRI Feature Dataset name to the schema
         // newSchema = translate.addFdName(newSchema,'TDS');
-        if (config.getOgrTdsFdname() !== "") newSchema = translate.addFdName(newSchema,config.getOgrTdsFdname());
+        if (config.getOgrEsriFdname() !== "") newSchema = translate.addFdName(newSchema,config.getOgrEsriFdname());
 
         // Now add the o2s feature to the tds.rawSchema
         // We can drop features but this is a nice way to see what we would drop
@@ -1743,7 +1743,7 @@ tds = {
         // for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
 
         // If we have unused tags, add them to the memo field.
-        if (Object.keys(notUsedTags).length > 0 && config.getOgrTdsExtra() == 'note')
+        if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'note')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
@@ -1812,14 +1812,14 @@ tds = {
 
                 // Now set the FCSubtype.
                 // NOTE: If we export to shapefile, GAIT _will_ complain about this
-                if (config.getOgrTdsAddFcsubtype() == 'true')
+                if (config.getOgrEsriFcsubtype() == 'true')
                 {
                     returnData[i]['attrs']['FCSUBTYPE'] = tds.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
                 }
 
                 var gFcode = gType + returnData[i]['attrs']['F_CODE'];
                 // If we are using the TDS structre, fill the rest of the unused attrs in the schema
-                if (config.getOgrTdsStructure() == 'true')
+                if (config.getOgrThematicStructure() == 'true')
                 {
                     returnData[i]['tableName'] = tds.rules.thematicGroupList[gFcode];
                     tds.validateTDSAttrs(gFcode, returnData[i]['attrs']);
@@ -1831,7 +1831,7 @@ tds = {
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer
-            if (Object.keys(notUsedTags).length > 0 && config.getOgrTdsExtra() == 'file')
+            if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'file')
             {
                 var extraFeature = {};
                 extraFeature.tags = JSON.stringify(notUsedTags);

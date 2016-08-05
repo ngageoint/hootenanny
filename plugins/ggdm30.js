@@ -43,21 +43,22 @@ ggdm30 = {
         ggdm30.rawSchema = ggdm30.schema.getDbSchema();
 
         // Add the Very ESRI specific FCSubtype attribute
-        //if (config.getOgrTdsAddFcsubtype() == 'true') ggdm30.rawSchema = translate.addFCSubtype(ggdm30.rawSchema);
+        if (config.getOgrEsriFcsubtype() == 'true') ggdm30.rawSchema = translate.addFCSubtype(ggdm30.rawSchema);
 
         // Add empty "extra" feature layers if needed
-        if (config.getOgrTdsExtra() == 'file') ggdm30.rawSchema = translate.addExtraFeature(ggdm30.rawSchema);
+        if (config.getOgrNoteExtra() == 'file') ggdm30.rawSchema = translate.addExtraFeature(ggdm30.rawSchema);
 
         // Build the NFDD fcode/attrs lookup table. Note: This is <GLOBAL>
         ggdmAttrLookup = translate.makeAttrLookup(ggdm30.rawSchema);
 
         // Debug:
-        // print("ggdmAttrLookup");
+        // print("ggdmAttrLookup: Start");
         // translate.dumpLookup(ggdmAttrLookup);
+        // print("ggdmAttrLookup: End");
 
         // Decide if we are going to use TDS structure or 1 FCODE / File
         // if we DON't want the new structure, just return the ggdm30.rawSchema
-        if (config.getOgrTdsStructure() == 'false')
+        if (config.getOgrThematicStructure() == 'false')
         {
             // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
             layerNameLookup = translate.makeLayerNameLookup(ggdm30.rawSchema);
@@ -184,16 +185,17 @@ ggdm30 = {
             } // End newSchema loop
         } // end ggdm30.rawSchema loop
         
-        // Create a lookup table of TDS structures attributes. Note this is <GLOBAL>
-        tdsAttrLookup = translate.makeTdsAttrLookup(newSchema);
+        // Create a lookup table of TDS like structures attributes. Note this is <GLOBAL>
+        ggdmThematicLookup = translate.makeTdsAttrLookup(newSchema);
 
         // Debug:
-        // print("tdsAttrLookup");
-        // translate.dumpLookup(tdsAttrLookup);
+        print("ggdmThematicLookup: Start");
+        translate.dumpLookup(ggdmThematicLookup);
+        print("ggdmThematicLookup: End");
 
         // Add the ESRI Feature Dataset name to the schema
         //  newSchema = translate.addFdName(newSchema,'TDS');
-        if (config.getOgrTdsFdname() !== "") newSchema = translate.addFdName(newSchema,config.getOgrTdsFdname());
+        if (config.getOgrEsriFdname() !== "") newSchema = translate.addFdName(newSchema,config.getOgrEsriFdname());
 
         // Now add the o2s feature to the ggdm30.rawSchema
         // We can drop features but this is a nice way to see what we would drop
@@ -205,7 +207,9 @@ ggdm30 = {
         newSchema = translate.addReviewFeature(newSchema);
 
         // Debug:
+        // print("newSchema: Start");
         // translate.dumpSchema(newSchema);
+        // print("newSchema: End");
 
         return newSchema;
 
@@ -398,12 +402,12 @@ ggdm30 = {
     // validateTDSAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
     validateTDSAttrs: function(gFcode, attrs) {
 
-        var tdsAttrList = tdsAttrLookup[ggdm30.rules.thematicGroupList[gFcode]];
-        var nfddAttrList = ggdmAttrLookup[gFcode];
+        var thematicAttrList = ggdmThematicLookup[ggdm30.rules.thematicGroupList[gFcode]];
+        var ggdmAttrList = ggdmAttrLookup[gFcode];
 
-        for (var i = 0, len = tdsAttrList.length; i < len; i++)
+        for (var i = 0, len = thematicAttrList.length; i < len; i++)
         {
-            if (nfddAttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
+            if (ggdmAttrList.indexOf(thematicAttrList[i]) == -1) attrs[thematicAttrList[i]] = undefined;
         }
     }, // End validateTDSAttrs
 
@@ -1750,7 +1754,9 @@ ggdm30 = {
             fcodeCommon.one2one.push.apply(fcodeCommon.one2one,ggdm30.rules.fcodeOne2oneIn);
 
             ggdm30.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
-            // translate.dumpOne2OneLookup(ggdm30.fcodeLookup);
+            print('Start Dump FCODE:');
+            translate.dumpOne2OneLookup(ggdm30.fcodeLookup);
+            print('End Dump FCODE:');
         }
 
         if (ggdm30.lookup == undefined)
@@ -1860,7 +1866,10 @@ ggdm30 = {
             fcodeCommon.one2one.push.apply(fcodeCommon.one2one,ggdm30.rules.fcodeOne2oneOut);
 
             ggdm30.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
+            // Debug
+            // print('Start Dump FCODE:');
             // translate.dumpOne2OneLookup(ggdm30.fcodeLookup);
+            // print('End Dump FCODE:');
         }
 
         if (ggdm30.lookup == undefined)
@@ -1914,10 +1923,10 @@ ggdm30 = {
         ggdm30.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        // for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
+        for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
 
         // If we have unused tags, add them to the memo field.
-        if (Object.keys(notUsedTags).length > 0 && config.getOgrTdsExtra() == 'note')
+        if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'note')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
@@ -1927,6 +1936,12 @@ ggdm30 = {
         // E.g. If the spec says a runway is a polygon and we have a line, throw error and 
         // push the feature to o2s layer
         var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
+
+        // Debug
+        print('gFcode: ' + gFcode);
+        print('ggdm: ' + ggdmAttrLookup[gFcode]);
+
+
 
         if (!(ggdmAttrLookup[gFcode]))
         {
@@ -1986,14 +2001,14 @@ ggdm30 = {
 
                 // Now set the FCSubtype.
                 // NOTE: If we export to shapefile, GAIT _will_ complain about this
-                if (config.getOgrTdsAddFcsubtype() == 'true')
-                {
-                    returnData[i]['attrs']['FCSUBTYPE'] = ggdm30.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
-                }
+//                 if (config.getOgrEsriFcsubtype() == 'true')
+//                 {
+//                     returnData[i]['attrs']['FCSUBTYPE'] = ggdm30.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
+//                 }
 
                 var gFcode = gType + returnData[i]['attrs']['F_CODE'];
-                // If we are using the TDS structre, fill the rest of the unused attrs in the schema
-                if (config.getOgrTdsStructure() == 'true')
+                // If we are using the Thematic structre, fill the rest of the unused attrs in the schema
+                if (config.getOgrThematicStructure() == 'true')
                 {
                     returnData[i]['tableName'] = ggdm30.rules.thematicGroupList[gFcode];
                     ggdm30.validateTDSAttrs(gFcode, returnData[i]['attrs']);
@@ -2005,7 +2020,7 @@ ggdm30 = {
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer
-            if (Object.keys(notUsedTags).length > 0 && config.getOgrTdsExtra() == 'file')
+            if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'file')
             {
                 var extraFeature = {};
                 extraFeature.tags = JSON.stringify(notUsedTags);

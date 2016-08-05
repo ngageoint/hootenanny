@@ -60,7 +60,7 @@ function getRawDbSchema()
 function initialize()
 {
     // Turn off the TDS structure so we just get the raw feature
-    hoot.Settings.set({"ogr.tds.structure":"false"});
+    hoot.Settings.set({"ogr.thematic.structure":"false"});
 }
 
 

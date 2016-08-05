@@ -912,30 +912,6 @@ Attribute columns and values that do not match a one2one rule.
 
 Debugging: Print out which attributes are dropped during export validation.
 
-=== ogr.mgcp.extra
-
-* Data Type: string
-* Default Value: `file`
-
-When exporting to MGCP:
-- "file" Save the unused tags in a new layer (extra_[PLA]).
-- "note" Add unused tags to the "TXT" field.
-- "none" Don't save the unused tags, just drop them.
-
-NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of 255 characters. Extra text will be truncated.
-
-=== ogr.tds.extra
-
-* Data Type: string
-* Default Value: `note`
-
-When exporting to TDSv40 and TDSv61:
-- "note" Add unused tags to the "ZI006_MEM" field.
-- "file" Save the unused tags in a new layer (extra_[PLA]).
-- "none" Don't save the unused tags, just drop them.
-
-NOTE: If exporting to Shapefile, this field will be truncated to 255 characters.
-
 === ogr.import.filter
 
 * Data Type: string
@@ -952,6 +928,18 @@ script.
 * Default Value: `3`
 
 The number of identical log messages that will be emitted before they're silenced.
+
+=== ogr.mgcp.extra
+
+* Data Type: string
+* Default Value: `file`
+
+When exporting to MGCP:
+- "file" Save the unused tags in a new layer (extra_[PLA]).
+- "note" Add unused tags to the "TXT" field.
+- "none" Don't save the unused tags, just drop them.
+
+NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of 255 characters. Extra text will be truncated.
 
 === ogr.reader.bounding.box
 
@@ -1020,14 +1008,26 @@ Turn errors into warnings or off. Valid values are: on, off, warn
 
 Add the eLTDS specific attributes (SCAMIN, SCAMAX, LINK_ID) to the output
 
-=== ogr.tds.add.fcsubtype
+=== ogr.esri.fcsubtype
 
 * Data Type: bool
 * Default Value: `true`
 
 Add the ESRI specific FCSUBTYPE field to the output
 
-=== ogr.tds.fdname
+=== ogr.note.extra
+
+* Data Type: string
+* Default Value: `note`
+
+When exporting to TDSv40 and TDSv61:
+- "note" Add unused tags to the "ZI006_MEM" field.
+- "file" Save the unused tags in a new layer (extra_[PLA]).
+- "none" Don't save the unused tags, just drop them.
+
+NOTE: If exporting to Shapefile, this field will be truncated to 255 characters.
+
+=== ogr.esri.fdname
 
 * Data Type: string
 * Default Value: `TDS`
@@ -1035,12 +1035,12 @@ Add the ESRI specific FCSUBTYPE field to the output
 The name to use for the ESRI Feature Dataset on export. Note: This only applies to ESRI File
 Geodatabases.
 
-=== ogr.tds.structure
+=== ogr.thematic.structure
 
 * Data Type: bool
 * Default Value: `true`
 
-Export TDS data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one
+Where applicable, export data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one
 FCODE per file/layer (ROAD_L, BUILDING_P etc).
 
 === ogr.writer.create.all.layers
