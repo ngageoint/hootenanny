@@ -50,6 +50,11 @@ PoiPolygonNameExtractor::PoiPolygonNameExtractor(StringDistance* d)
 double PoiPolygonNameExtractor::extract(const ConstElementPtr& target,
                                         const ConstElementPtr& candidate) const
 {
+  double score = -1.0;
+
+  const QString targetName = target->getTags().get("name");
+  const QString candidateName = candidate->getTags().get("name");
+
   QStringList targetNames = target->getTags().getNames();
   targetNames.append(target->getTags().getPseudoNames());
   QStringList candidateNames = candidate->getTags().getNames();
@@ -57,8 +62,8 @@ double PoiPolygonNameExtractor::extract(const ConstElementPtr& target,
 
   if (ConfigOptions().getPoiPolygonUseAddressNameMatching())
   {
-    //where one of the pair has no name but has a combination of address fields that match the
-    //other's name
+    //custom rule - where one of the pair has no name but has a combination of address fields that
+    //match the other's name
     if (OsmSchema::getInstance().isBuilding(target) && !target->getTags().contains("name") &&
         target->getTags().contains("addr:housenumber") &&
         target->getTags().contains("addr:street"))
@@ -82,7 +87,8 @@ double PoiPolygonNameExtractor::extract(const ConstElementPtr& target,
       }
     }
 
-    //similar to above, but with the combined "address" field; two can probably be combined
+    //custom rule - similar to above, but with the combined "address" field; two can probably be
+    //combined
     if (OsmSchema::getInstance().isPoi(*target) && !candidate->getTags().contains("name") &&
         target->getTags().contains("address") &&
         candidate->getTags().contains("addr:housenumber") &&
@@ -115,7 +121,7 @@ double PoiPolygonNameExtractor::extract(const ConstElementPtr& target,
 
   if (ConfigOptions().getPoiPolygonRemoveOperatorNameMatching())
   {
-    //remove operator
+    //custom rule
     if (target->getTags().contains("operator"))
     {
       const QString op = target->getTags().get("operator");
@@ -128,23 +134,41 @@ double PoiPolygonNameExtractor::extract(const ConstElementPtr& target,
     }
   }
 
-  double score = -1;
+  //custom rule
+  if (targetName.toLower().trimmed().contains("rec center") &&
+      candidateName.toLower().trimmed().contains("recreation center"))
+  {
+    QString targetNameMod = targetName;
+    targetNameMod.replace("Rec Center", "Recreation Center", Qt::CaseInsensitive);
+    targetNames.append(targetNameMod);
+  }
+  if (candidateName.toLower().trimmed().contains("rec center") &&
+      targetName.toLower().trimmed().contains("recreation center"))
+  {
+    QString candidateNameMod = candidateName;
+    candidateNameMod.replace("Rec Center", "Recreation Center", Qt::CaseInsensitive);
+    candidateNames.append(candidateNameMod);
+  }
+
+  //custom rule
+  if (targetName.toLower().trimmed().contains("bldg"))
+  {
+    QString targetNameMod = targetName;
+    targetNameMod.replace("Bldg", "Building", Qt::CaseInsensitive);
+    targetNames.append(targetNameMod);
+  }
+  if (candidateName.toLower().trimmed().contains("bldg"))
+  {
+    QString candidateNameMod = candidateName;
+    candidateNameMod.replace("Bldg", "Building", Qt::CaseInsensitive);
+    candidateNames.append(candidateNameMod);
+  }
 
   for (int i = 0; i < targetNames.size(); i++)
   {
     for (int j = 0; j < candidateNames.size(); j++)
     {
-      //const QString targetName = targetNames[i];
-      //const QString candidateName = candidateNames[j];
-      double thisScore = -1.0;
-      //if (!targetName.trimmed().isEmpty() && !candidateName.trimmed().isEmpty())
-      //{
-        thisScore = _d->compare(targetNames[i], candidateNames[j]);
-      //}
-      //else
-      //{
-        //thisScore = 0.0;
-      //}
+      double thisScore = _d->compare(targetNames[i], candidateNames[j]);
       score = max(thisScore, score);
     }
   }

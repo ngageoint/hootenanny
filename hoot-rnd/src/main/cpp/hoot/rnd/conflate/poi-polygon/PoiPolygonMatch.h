@@ -85,6 +85,8 @@ private:
   ElementId _poiEid, _polyEid;
   MatchClassification _c;
 
+  static QString _testUuid;
+
   QString _uuid1;
   QString _uuid2;
   bool _typeMatch;
@@ -94,11 +96,6 @@ private:
   bool _nameMatch;
   QString _names1;
   QString _names2;
-  //bool _addressMatch;
-  //QString _addrTag1;
-  //QString _combAddr1;
-  //QString _addrTag2;
-  //QString _combAddr2;
   double _circularError1;
   double _circularError2;
   double _ce;
