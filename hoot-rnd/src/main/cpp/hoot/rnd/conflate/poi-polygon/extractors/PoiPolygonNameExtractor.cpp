@@ -60,65 +60,6 @@ double PoiPolygonNameExtractor::extract(const ConstElementPtr& target,
   QStringList candidateNames = candidate->getTags().getNames();
   candidateNames.append(candidate->getTags().getPseudoNames());
 
-  if (ConfigOptions().getPoiPolygonUseAddressNameMatching())
-  {
-    //custom rule - where one of the pair has no name but has a combination of address fields that
-    //match the other's name
-    if (OsmSchema::getInstance().isBuilding(target) && !target->getTags().contains("name") &&
-        target->getTags().contains("addr:housenumber") &&
-        target->getTags().contains("addr:street"))
-    {
-      const QString houseNumber = target->getTags().get("addr:housenumber").trimmed();
-      const QString street = target->getTags().get("addr:street").trimmed();
-      if (!houseNumber.isEmpty() && !street.isEmpty())
-      {
-        targetNames.append(houseNumber + " " + street);
-      }
-    }
-    else if (OsmSchema::getInstance().isBuilding(candidate) && !candidate->getTags().contains("name") &&
-             candidate->getTags().contains("addr:housenumber") &&
-             candidate->getTags().contains("addr:street"))
-    {
-      const QString houseNumber = candidate->getTags().get("addr:housenumber").trimmed();
-      const QString street = candidate->getTags().get("addr:street").trimmed();
-      if (!houseNumber.isEmpty() && !street.isEmpty())
-      {
-        candidateNames.append(houseNumber + " " + street);
-      }
-    }
-
-    //custom rule - similar to above, but with the combined "address" field; two can probably be
-    //combined
-    if (OsmSchema::getInstance().isPoi(*target) && !candidate->getTags().contains("name") &&
-        target->getTags().contains("address") &&
-        candidate->getTags().contains("addr:housenumber") &&
-        candidate->getTags().contains("addr:street"))
-    {
-      const QString houseNumber = candidate->getTags().get("addr:housenumber").trimmed();
-      const QString street = candidate->getTags().get("addr:street").trimmed();
-      const QString address = target->getTags().get("address").trimmed();
-      if (!houseNumber.isEmpty() && !street.isEmpty() && !address.isEmpty())
-      {
-        candidateNames.append(houseNumber + " " + street);
-        targetNames.append(address);
-      }
-    }
-    else if (OsmSchema::getInstance().isPoi(*candidate) && !target->getTags().contains("name") &&
-        candidate->getTags().contains("address") &&
-        target->getTags().contains("addr:housenumber") &&
-        target->getTags().contains("addr:street"))
-    {
-      const QString houseNumber = target->getTags().get("addr:housenumber").trimmed();
-      const QString street = target->getTags().get("addr:street").trimmed();
-      const QString address = candidate->getTags().get("address").trimmed();
-      if (!houseNumber.isEmpty() && !street.isEmpty() && !address.isEmpty())
-      {
-        targetNames.append(houseNumber + " " + street);
-        candidateNames.append(address);
-      }
-    }
-  }
-
   if (ConfigOptions().getPoiPolygonRemoveOperatorNameMatching())
   {
     //custom rule
