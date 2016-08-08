@@ -98,10 +98,6 @@ _ancestorDistance(-1.0)
   if (ConfigOptions().getPoiPolygonUseTagAncestorTypeMatching())
   {
     ancestorTypeMatch = _calculateAncestorTypeMatch(map, poi, poly);
-    /*if (ancestorTypeMatch)
-    {
-      typeMatch = true;
-    }*/
   }
   //bool buildingCategoryTypeMatch = _getTagDistance("category", "building", map, e1, e2) == 0;
   //LOG_VARD(buildingCategoryTypeMatch);
@@ -120,11 +116,8 @@ _ancestorDistance(-1.0)
   if (ConfigOptions().getPoiPolygonUseAddressNameMatching())
   {
     addressMatch = _getAddressMatch(e1, e2);
+    _addressMatch = addressMatch;
   }
-  /*if (addressMatch)
-  {
-    nameMatch = true;
-  }*/
 
   double distance = gpoly->distance(gpoi.get());
 
@@ -256,6 +249,7 @@ _ancestorDistance(-1.0)
     LOG_VARD(_typeMatchAttributeKey);
     LOG_VARD(_typeMatchAttributeValue);
     LOG_VARD(ancestorTypeMatch);
+    LOG_VARD(_ancestorDistance);
     LOG_VARD(nameMatch);
     LOG_VARD(nameScore);
     LOG_VARD(names1);
@@ -364,7 +358,6 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
   types.append("use");
   types.append("industrial");*/
 
-  //??
   types.append("building");
 
   bool hasMatchingCategory = false;
@@ -375,31 +368,7 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
     {
       LOG_VARD(type);
     }
-    /*bool eitherHaveOnlyBuildingGenericTag = false;
-    if (type == "building")
-    {
-      const QStringList buildingTags1 = e1->getTags().getList("building");
-      const QStringList buildingTags2 = e2->getTags().getList("building");
-      if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
-      {
-        LOG_VARD(buildingTags1);
-        LOG_VARD(buildingTags2);
-      }
-      if ((buildingTags1.length() == 1 && buildingTags1.at(0) == "yes") ||
-          (buildingTags2.length() == 1 && buildingTags2.at(0) == "yes"))
-      {
-        eitherHaveOnlyBuildingGenericTag = true;
-      }
-    }*/
 
-    /*if (!ConfigOptions().getPoiPolygonAllowGenericBuildingMatches() && type == "building" &&
-        eitherHaveOnlyBuildingGenericTag)
-    {
-      if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
-      {
-        LOG_DEBUG("generic building only");
-      }
-    }*/
     if (!ConfigOptions().getPoiPolygonAllowGenericBuildingMatches() && type == "building" &&
         !hasMatchingCategory && _oneGeneric(e1, e2))
     {
@@ -728,15 +697,12 @@ QString PoiPolygonMatch::toString() const
   str += "type match attribute key: " + _typeMatchAttributeKey + "\n";
   str += "type match attribute value: " + _typeMatchAttributeValue + "\n";
   str += "ancestor type match: " + QString::number(_ancestorTypeMatch) + "\n";
+  str += "ancestor distance score: " + QString::number(_ancestorDistance) + "\n";
   str += "name match: " + QString::number(_nameMatch) + "\n";
   str += "name score: " + QString::number(_nameScore) + "\n";
   str += "names 1: " + _names1 + "\n";
   str += "names 2: " + _names2 + "\n";
-  //str += "address match: " + QString::number(_addressMatch) + "\n";
-  //str += "address tag 1: " + _addrTag1 + "\n";
-  //str += "combined address 1: " + _combAddr1 + "\n";
-  //str += "address tag 2: " + _addrTag2 + "\n";
-  //str += "combined address 2: " + _combAddr2 + "\n";
+  str += "address match: " + QString::number(_addressMatch) + "\n";
   str += "close match: " + QString::number(_closeMatch) + "\n";
   str += "distance: " + QString::number(_distance) + "\n";
   str += "review distance: " + QString::number(_reviewDistance) + "\n";

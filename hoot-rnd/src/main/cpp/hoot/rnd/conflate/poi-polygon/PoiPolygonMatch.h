@@ -107,6 +107,8 @@ private:
   bool _ancestorTypeMatch;
   double _ancestorDistance;
 
+  bool _addressMatch;
+
   QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
   QMap<QString, shared_ptr<TagCategoryDifferencer> > _tagCategoryDifferencers;
 
