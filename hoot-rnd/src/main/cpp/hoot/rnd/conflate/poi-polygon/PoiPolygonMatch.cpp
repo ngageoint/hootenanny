@@ -716,8 +716,8 @@ bool PoiPolygonMatch::_getAddressMatch(ConstElementPtr e1, ConstElementPtr e2)
 
 QString PoiPolygonMatch::toString() const
 {
-  //return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
-      //arg(_polyEid.toString()).arg(_c.toString());
+  return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
+      arg(_polyEid.toString()).arg(_c.toString());
 
   /*QString str =
     QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
