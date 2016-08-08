@@ -105,6 +105,7 @@ private:
   int _evidence;
 
   bool _ancestorTypeMatch;
+  double _ancestorDistance;
 
   QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
   QMap<QString, shared_ptr<TagCategoryDifferencer> > _tagCategoryDifferencers;
@@ -135,7 +136,6 @@ private:
 
   double _getReviewDistance(ConstElementPtr element);
   double _getMatchDistance(ConstElementPtr element);
-
 
 };
 

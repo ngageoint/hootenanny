@@ -50,7 +50,6 @@ public:
   virtual string getClassName() const { return PoiPolygonNameExtractor::className(); }
 
   virtual double extract(const ConstElementPtr& target, const ConstElementPtr& candidate) const;
-
 };
 
 }

@@ -164,12 +164,15 @@ double PoiPolygonNameExtractor::extract(const ConstElementPtr& target,
     candidateNames.append(candidateNameMod);
   }
 
-  for (int i = 0; i < targetNames.size(); i++)
+  if (!targetNames.isEmpty() && !candidateNames.isEmpty())
   {
-    for (int j = 0; j < candidateNames.size(); j++)
+    for (int i = 0; i < targetNames.size(); i++)
     {
-      double thisScore = _d->compare(targetNames[i], candidateNames[j]);
-      score = max(thisScore, score);
+      for (int j = 0; j < candidateNames.size(); j++)
+      {
+        double thisScore = _d->compare(targetNames[i], candidateNames[j]);
+        score = max(thisScore, score);
+      }
     }
   }
 

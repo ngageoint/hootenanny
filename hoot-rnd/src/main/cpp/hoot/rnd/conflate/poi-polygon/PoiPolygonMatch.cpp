@@ -32,10 +32,11 @@
 // hoot
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
+#include <hoot/core/algorithms/ExactStringDistance.h>
+#include <hoot/rnd/conflate/poi-polygon/extractors/PoiPolygonNameExtractor.h>
 #include <hoot/core/algorithms/string/MinSumWordSetDistance.h>
 //#include <hoot/core/algorithms/string/WeightedWordDistance.h>
 //#include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
-#include <hoot/rnd/conflate/poi-polygon/extractors/PoiPolygonNameExtractor.h>
 //#include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
@@ -49,12 +50,13 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{76b2d309-2a33-5255-ab5b-dd8520bbab26}";
+QString PoiPolygonMatch::_testUuid = "{77d82015-cd33-5fff-ada6-5fa4497aeba3}";
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold) :
 Match(threshold),
-_ancestorTypeMatch(false)
+_ancestorTypeMatch(false),
+_ancestorDistance(-1.0)
 {
   ConstElementPtr e1 = map->getElement(eid1);
   ConstElementPtr e2 = map->getElement(eid2);
@@ -112,7 +114,17 @@ _ancestorTypeMatch(false)
 
   double nameScore = _calculateNameScore(poi, poly);
   bool nameMatch = nameScore >= ConfigOptions().getPoiPolygonMatchNameThreshold();
-  bool exactNameMatch = nameMatch == 1.0;
+  bool exactNameMatch = nameScore == 1.0;
+
+  /*bool addressMatch = false;
+  if (ConfigOptions().getPoiPolygonUseAddressNameMatching())
+  {
+    addressMatch = _getAddressMatch(e1, e2);
+  }
+  if (addressMatch)
+  {
+    nameMatch = true;
+  }*/
 
   double distance = gpoly->distance(gpoi.get());
 
@@ -121,11 +133,27 @@ _ancestorTypeMatch(false)
   double sigma2 = e1->getCircularError() / 2.0;
   double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
 
+  double matchDistance = -1.0;
+  if (!ConfigOptions().getPoiPolygonUseTypeCustomizedMatchDistance())
+  {
+    matchDistance = ConfigOptions().getPoiPolygonMatchDistance();
+  }
+  else
+  {
+    if (_oneGeneric(e1, e2) && _ancestorDistance == -1.0)
+    {
+      matchDistance = max(_getMatchDistance(e1), _getMatchDistance(e2));
+    }
+    else
+    {
+      matchDistance = min(_getMatchDistance(e1), _getMatchDistance(e2));
+    }
+  }
+
   double reviewDistance = -1.0;
-  //reviewDistance = ConfigOptions().getPoiPolygonMatchReviewDistance() + ce;
   if (ConfigOptions().getPoiPolygonUseTypeCustomizedReviewDistance())
   {
-    if (_oneGeneric(e1, e2))
+    if (_oneGeneric(e1, e2) && _ancestorDistance == -1.0)
     {
       reviewDistance = max(_getReviewDistance(e1), _getReviewDistance(e2));
     }
@@ -144,29 +172,22 @@ _ancestorTypeMatch(false)
     reviewDistance += ce;
   }
 
+  //custom rule
+  if (e1->getTags().get("man_made") == "tower" || e2->getTags().get("man_made") == "tower")
+  {
+    matchDistance = 0.0;
+    reviewDistance = 0.0;
+  }
+
   bool closeMatch = distance <= reviewDistance;
 
   int evidence = 0;
   evidence += typeMatch ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
   evidence += exactNameMatch ? 1 : 0;
-  if (!ConfigOptions().getPoiPolygonUseTypeCustomizedMatchDistance())
-  {
-    evidence += distance <= ConfigOptions().getPoiPolygonMatchDistance() ? 2 : 0;
-  }
-  else
-  {
-    if (_oneGeneric(e1, e2))
-    {
-      evidence += distance <= max(_getMatchDistance(e1), _getMatchDistance(e2)) ? 2 : 0;
-    }
-    else
-    {
-      evidence += distance <= min(_getMatchDistance(e1), _getMatchDistance(e2)) ? 2 : 0;
-    }
-  }
+  evidence += distance <= matchDistance ? 2 : 0;
 
-  //another custom rule
+  //custom rule
   if (((e1->getTags().get("building") == "terminal" &&
        e2->getTags().get("man_made") == "control_tower") ||
       (e2->getTags().get("building") == "terminal" &&
@@ -347,16 +368,15 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
   //??
   types.append("building");
 
+  bool hasMatchingCategory = false;
   for (int i = 0; i < types.length(); i++)
   {
     const QString type = types.at(i);
-    if (e1->getTags().get("uuid") == _testUuid ||
-        e2->getTags().get("uuid") == _testUuid)
+    if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
     {
       LOG_VARD(type);
     }
-    bool eitherHaveOnlyBuildingGenericTag = false;
-    //bool bothHaveOnlyBuildingGenericTag = false;
+    /*bool eitherHaveOnlyBuildingGenericTag = false;
     if (type == "building")
     {
       const QStringList buildingTags1 = e1->getTags().getList("building");
@@ -371,16 +391,18 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
       {
         eitherHaveOnlyBuildingGenericTag = true;
       }
-      /*if ((buildingTags1.length() == 1 && buildingTags1.at(0) == "yes") &&
-          (buildingTags2.length() == 1 && buildingTags2.at(0) == "yes"))
-      {
-        bothHaveOnlyBuildingGenericTag = true;
-      }*/
-    }
-    //LOG_VARD(eitherHaveOnlyBuildingGenericTag);
+    }*/
 
+    /*if (!ConfigOptions().getPoiPolygonAllowGenericBuildingMatches() && type == "building" &&
+        eitherHaveOnlyBuildingGenericTag)
+    {
+      if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
+      {
+        LOG_DEBUG("generic building only");
+      }
+    }*/
     if (!ConfigOptions().getPoiPolygonAllowGenericBuildingMatches() && type == "building" &&
-        eitherHaveOnlyBuildingGenericTag/*bothHaveOnlyBuildingGenericTag*/)
+        !hasMatchingCategory && _oneGeneric(e1, e2))
     {
       if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
       {
@@ -389,7 +411,9 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
     }
     else if (e1->getTags().contains(type) && e2->getTags().contains(type))
     {
+      hasMatchingCategory = true;
       const double ancestorDistance = _getTagDistance("ancestor", type, map, e1, e2);
+      _ancestorDistance = ancestorDistance;
       if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
       {
         LOG_VARD(ancestorDistance);
@@ -598,10 +622,87 @@ double PoiPolygonMatch::_getReviewDistance(ConstElementPtr element)
   {
     return 16.0;
   }
+  else if (tags.get("amenity") == "toilets")
+  {
+    return 12.0;
+  }
+  else if (tags.get("amenity") == "police")
+  {
+    return 19.0;
+  }
+  //TODO: verify this one is actually doing anything
+  else if (tags.get("shop") == "department_store")
+  {
+    return 40.0;
+  }
+  else if (tags.get("building") == "apartments")
+  {
+    return 84.0;
+  }
+  else if (tags.get("amenity") == "library")
+  {
+    return 31.0;
+  }
+  else if (tags.get("building") == "station")
+  {
+    return 31.0;
+  }
+  else if (tags.get("tourism") == "attraction")
+  {
+    return 51.0;
+  }
+  else if (tags.get("amenity") == "restaurant")
+  {
+    return 8.0;
+  }
   else
   {
     return ConfigOptions().getPoiPolygonMatchReviewDistance();
   }
+}
+
+//not currently using this...accounted for, hardcoded, in PoiPolygonNameExtractor for now
+//this seems more correct, but scores lower than doing it in PoiPolygonNameExtractor
+bool PoiPolygonMatch::_getAddressMatch(ConstElementPtr e1, ConstElementPtr e2)
+{
+  Tags e1Tags = e1->getTags();
+  Tags e2Tags = e2->getTags();
+  const QString e1HouseNum = e1Tags.get("addr:housenumber").trimmed();
+  const QString e1Street = e1Tags.get("addr:street").trimmed().toLower();
+  const QString e1AddrComb = e1HouseNum + " " + e1Street;
+  const QString e1AddrTag = e1Tags.get("address").trimmed().toLower();
+  const QString e2HouseNum = e2Tags.get("addr:housenumber").trimmed();
+  const QString e2Street = e2Tags.get("addr:street").trimmed().toLower();
+  const QString e2AddrComb = e2HouseNum + " " + e2Street;
+  const QString e2AddrTag = e2Tags.get("address").trimmed().toLower();
+  StringDistancePtr addrComp =
+    StringDistancePtr(
+      new TranslateStringDistance(
+        new MeanWordSetDistance(
+          new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))));
+  //ExactStringDistance addrComp;
+  const double addrMatchThresh = 1.0;
+  if (!e1AddrComb.isEmpty() && !e2AddrComb.isEmpty() && e1HouseNum == e2HouseNum &&
+        addrComp->compare(e1AddrComb, e2AddrComb) >= addrMatchThresh)
+  {
+    return true;
+  }
+  else if (!e1AddrComb.isEmpty() && !e2AddrTag.isEmpty() && e2AddrTag.startsWith(e1HouseNum) &&
+           addrComp->compare(e1AddrComb, e2AddrTag) >= addrMatchThresh)
+  {
+    return true;
+  }
+  else if (!e2AddrComb.isEmpty() && !e1AddrTag.isEmpty() && e1AddrTag.startsWith(e2HouseNum) &&
+           addrComp->compare(e2AddrComb, e1AddrTag) >= addrMatchThresh)
+  {
+    return true;
+  }
+  else if (!e1AddrTag.isEmpty() && !e2AddrTag.isEmpty() && //e1HouseNum == e2HouseNum &&
+           addrComp->compare(e1AddrTag, e2AddrTag) >= addrMatchThresh)
+  {
+    return true;
+  }
+  return false;
 }
 
 QString PoiPolygonMatch::toString() const
