@@ -50,13 +50,14 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{a12b6865-7f10-5fbe-815f-2d54f40a8ff7}";
+QString PoiPolygonMatch::_testUuid = "{08cf2389-216b-5a49-afcd-5ce30cef9436}";
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold) :
 Match(threshold),
 _ancestorTypeMatch(false),
-_ancestorDistance(-1.0)
+_ancestorDistance(-1.0),
+_addressMatch(false)
 {
   ConstElementPtr e1 = map->getElement(eid1);
   ConstElementPtr e2 = map->getElement(eid2);
@@ -115,6 +116,7 @@ _ancestorDistance(-1.0)
   if (ConfigOptions().getPoiPolygonPromoteExactNameMatches())
   {
     exactNameMatch = nameScore == 1.0;
+    _exactNameMatch = exactNameMatch;
   }
 
   bool addressMatch = false;
@@ -302,6 +304,22 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
 {
   const Tags& t1 = e1->getTags();
   const Tags& t2 = e2->getTags();
+
+  if (ConfigOptions().getPoiPolygonUseCustomRestaurantRules())
+  {
+    if (t1.get("amenity").toLower() == "restaurant" &&
+        t2.get("amenity").toLower() == "restaurant")
+    {
+      if (t1.contains("cuisine") && t2.contains("cuisine"))
+      {
+        if (t1.get("cuisine").toLower() != t2.get("cuisine").toLower())
+        {
+          return false;
+        }
+      }
+    }
+  }
+
   for (Tags::const_iterator it = t1.begin(); it != t1.end(); it++)
   {
     // if it is a use or POI category
@@ -322,21 +340,27 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
     }
   }
 
-  //poi.polygon.use.schema.mods
   if (ConfigOptions().getPoiPolygonUseSchemaMods())
   {
     //TODO: hacks - having trouble figuring out how to do this the right way...will fix in schema
-    if ((e1->getTags().get("amenity").toLower() == "hospital" &&
-         e2->getTags().get("use").toLower() == "healthcare") ||
-        (e2->getTags().get("amenity").toLower() == "hospital" &&
-         e1->getTags().get("use").toLower() == "healthcare"))
+    if ((t1.get("amenity").toLower() == "hospital" &&
+         t2.get("use").toLower() == "healthcare") ||
+        (t2.get("amenity").toLower() == "hospital" &&
+         t1.get("use").toLower() == "healthcare"))
     {
       return true;
     }
-    if (((e1->getTags().get("building") == "school" &&
-         e2->getTags().get("amenity") == "school") ||
-        (e2->getTags().get("building") == "school" &&
-         e1->getTags().get("amenity") == "school")))
+    if (((t1.get("building") == "school" &&
+         t2.get("amenity") == "school") ||
+        (t2.get("building") == "school" &&
+         t1.get("amenity") == "school")))
+    {
+      return true;
+    }
+    if ((t1.get("amenity").toLower() == "hospital" &&
+         t2.get("building").toLower() == "hospital") ||
+        (t2.get("amenity").toLower() == "hospital" &&
+         t1.get("building").toLower() == "hospital"))
     {
       return true;
     }
@@ -353,7 +377,8 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
   types.append("tourism");
   types.append("amenity");
 
-  /*types.append("leisure");
+  //TODO: Remove these if they don't yield any improvements after testing all of dataset D?
+  types.append("leisure");
   types.append("historic");
   types.append("landuse");
   types.append("man_made");
@@ -367,7 +392,7 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
   types.append("transport");
   types.append("barrier");
   types.append("use");
-  types.append("industrial");*/
+  types.append("industrial");
 
   types.append("building");
 
@@ -644,22 +669,43 @@ bool PoiPolygonMatch::_getAddressMatch(ConstElementPtr e1, ConstElementPtr e2)
 {
   Tags e1Tags = e1->getTags();
   Tags e2Tags = e2->getTags();
+
+  //TODO: hack - this should be able to be eliminated by using the translated name comparison
+  //logic
+  QChar eszett(0x00DF);
+
   const QString e1HouseNum = e1Tags.get("addr:housenumber").trimmed();
-  const QString e1Street = e1Tags.get("addr:street").trimmed().toLower();
+  QString e1Street = e1Tags.get("addr:street").trimmed().toLower();
+  if (ConfigOptions().getPoiPolygonUseAddressTranslationRules())
+  {
+    e1Street = e1Street.replace(eszett, "ss");
+  }
   QString e1AddrComb;
   if (!e1HouseNum.isEmpty() && !e1Street.isEmpty())
   {
     e1AddrComb = e1HouseNum + " " + e1Street;
   }
-  const QString e1AddrTag = e1Tags.get("address").trimmed().toLower();
+  QString e1AddrTag = e1Tags.get("address").trimmed().toLower();
+  if (ConfigOptions().getPoiPolygonUseAddressTranslationRules())
+  {
+    e1AddrTag = e1AddrTag.replace(eszett, "ss");
+  }
   const QString e2HouseNum = e2Tags.get("addr:housenumber").trimmed();
-  const QString e2Street = e2Tags.get("addr:street").trimmed().toLower();
+  QString e2Street = e2Tags.get("addr:street").trimmed().toLower();
+  if (ConfigOptions().getPoiPolygonUseAddressTranslationRules())
+  {
+    e2Street = e2Street.replace(eszett, "ss");
+  }
   QString e2AddrComb;
   if (!e2HouseNum.isEmpty() && !e2Street.isEmpty())
   {
     e2AddrComb = e2HouseNum + " " + e2Street;
   }
-  const QString e2AddrTag = e2Tags.get("address").trimmed().toLower();
+  QString e2AddrTag = e2Tags.get("address").trimmed().toLower();
+  if (ConfigOptions().getPoiPolygonUseAddressTranslationRules())
+  {
+    e2AddrTag = e2AddrTag.replace(eszett, "ss");
+  }
 
   if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
   {
@@ -697,7 +743,7 @@ bool PoiPolygonMatch::_getAddressMatch(ConstElementPtr e1, ConstElementPtr e2)
 QString PoiPolygonMatch::toString() const
 {
   return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
-      arg(_polyEid.toString()).arg(_c.toString());
+    arg(_polyEid.toString()).arg(_c.toString());
 
   /*QString str =
     QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
@@ -710,6 +756,7 @@ QString PoiPolygonMatch::toString() const
   str += "ancestor type match: " + QString::number(_ancestorTypeMatch) + "\n";
   str += "ancestor distance score: " + QString::number(_ancestorDistance) + "\n";
   str += "name match: " + QString::number(_nameMatch) + "\n";
+  str += "exact name match: " + QString::number(_exactNameMatch) + "\n";
   str += "name score: " + QString::number(_nameScore) + "\n";
   str += "names 1: " + _names1 + "\n";
   str += "names 2: " + _names2 + "\n";

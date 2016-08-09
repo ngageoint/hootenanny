@@ -109,6 +109,8 @@ private:
 
   bool _addressMatch;
 
+  bool _exactNameMatch;
+
   QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
   QMap<QString, shared_ptr<TagCategoryDifferencer> > _tagCategoryDifferencers;
 

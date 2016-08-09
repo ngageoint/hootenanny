@@ -1692,7 +1692,22 @@ remain a permanent config option.
 * Data Type: bool
 * Default Value: `true`
 
-If true, then custom schema mods are used.  TODO: This may not
+If true, then custom schema mods are used.  TODO: This may not remain a permanent config option.
+
+=== poi.polygon.use.custom.restaurant.rules
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, then custom restaurant matching rules are used.  TODO: This may not
+remain a permanent config option.
+
+=== poi.polygon.use.address.translation.rules
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, then custom restaurant matching rules are used.  TODO: This may not
 remain a permanent config option.
 
 === postgresql.dumpfile.writer.auto.calc.ids
