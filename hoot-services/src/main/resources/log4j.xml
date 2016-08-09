@@ -64,6 +64,11 @@
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
+    <logger name="com.sun.jersey" additivity="false">
+        <level value="error"/>
+        <appender-ref ref="ConsoleAppender" />
+    </logger>
+
     <root>
         <level value="error" />
         <appender-ref ref="ConsoleAppender" />
