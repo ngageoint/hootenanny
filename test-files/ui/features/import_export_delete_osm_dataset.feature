@@ -11,18 +11,19 @@ Feature: Import Export Delete OSM Dataset
         And I select the "File (osm,osm.zip)" option in the "Select Import Type" combobox
         And I select "/test-files/dcpoi_clip.osm" dataset
         Then I should see element "[id='importDatasetLayerName']" with value "dcpoi_clip"
+        And I append "[id='importDatasetLayerName']" input with "_Cucumber"
         When I press "big.loud" span with text "Import"
-        Then I wait 30 "seconds" to see "dcpoi_clip"
+        Then I wait 30 "seconds" to see "dcpoi_clip_Cucumber"
 
     Scenario: Export Dataset
-        When I click the "dcpoi_clip" Dataset
-        And I context click the "dcpoi_clip" Dataset
+        When I click the "dcpoi_clip_Cucumber" Dataset
+        And I context click the "dcpoi_clip_Cucumber" Dataset
         And I click the "Export" context menu item
-        Then I should see element "[id='fileExportOutputName']" with value "dcpoi_clip"
+        Then I should see element "[id='fileExportOutputName']" with value "dcpoi_clip_Cucumber"
         When I select the "Open Street Map (OSM)" option in the "File Geodatabase" combobox
         And I press "big.loud" span with text "Export"
         And I wait 30 seconds
-        Then the download file "dcpoi_clip.zip" should exist
+        Then the download file "dcpoi_clip_Cucumber.zip" should exist
 
     Scenario: Create Folder
         And I press "Add Folder"
@@ -30,18 +31,18 @@ Feature: Import Export Delete OSM Dataset
         And I press "big.loud" span with text "Add Folder"
 
     Scenario: Move Dataset
-        When I click the "dcpoi_clip" Dataset
-        And I context click the "dcpoi_clip" Dataset
+        When I click the "dcpoi_clip_Cucumber" Dataset
+        And I context click the "dcpoi_clip_Cucumber" Dataset
         And I click the "Move" context menu item
         And I select the "CucumberOsm" option in the "root" combobox
         And I press "big.loud" span with text "Update"
 
     Scenario: Rename Dataset
         When I click the "CucumberOsm" Dataset
-        And I click the "dcpoi_clip" Dataset
-        And I context click the "dcpoi_clip" Dataset
+        And I click the "dcpoi_clip_Cucumber" Dataset
+        And I context click the "dcpoi_clip_Cucumber" Dataset
         And I click the "Rename" context menu item
-        Then I type "dcpoi_clip_rename" in input "dcpoi_clip"
+        Then I type "dcpoi_clip_Cucumber_rename" in input "dcpoi_clip_Cucumber"
         And I press "big.loud" span with text "Update"
 
     Scenario: Delete Folder and Dataset
