@@ -11,7 +11,7 @@ Feature: Import Export Delete OSM Dataset
         And I select the "File (osm,osm.zip)" option in the "Select Import Type" combobox
         And I select "/test-files/dcpoi_clip.osm" dataset
         Then I should see element "[id='importDatasetLayerName']" with value "dcpoi_clip"
-        And I append "[id='importDatasetLayerName']" input with "_Cucumber"
+        Then I type "dcpoi_clip_Cucumber" in input "importDatasetLayerName"
         When I press "big.loud" span with text "Import"
         Then I wait 30 "seconds" to see "dcpoi_clip_Cucumber"
 
