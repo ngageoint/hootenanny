@@ -702,9 +702,9 @@ public class MapResource {
     @Path("/delete")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteLayers(@QueryParam("mapId") Long mapId) {
+    public Response deleteLayers(@QueryParam("mapId") String mapId) {
         JSONObject command = new JSONObject();
-        command.put("mapId", String.valueOf(mapId));
+        command.put("mapId", mapId);
         command.put("execImpl", "ResourcesCleanUtil");
 
         String jobId = UUID.randomUUID().toString();
@@ -737,7 +737,7 @@ public class MapResource {
     @Path("/modify")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response modifyName(@QueryParam("mapId") Long mapId,
+    public Response modifyName(@QueryParam("mapId") String mapId,
                                @QueryParam("modName") String modName,
                                @QueryParam("inputType") String inputType) {
         try (Connection conn = DbUtils.createConnection()) {
@@ -745,7 +745,7 @@ public class MapResource {
 
             if (inputType.toLowerCase(Locale.ENGLISH).equals("dataset")) {
                 new SQLUpdateClause(conn, configuration, maps)
-                        .where(maps.id.eq(mapId))
+                        .where(maps.id.eq(Long.valueOf(mapId)))
                         .set(maps.displayName, modName)
                         .execute();
 
@@ -753,7 +753,7 @@ public class MapResource {
             }
             else if (inputType.toLowerCase(Locale.ENGLISH).equals("folder")) {
                 new SQLUpdateClause(conn, configuration, folders)
-                        .where(folders.id.eq(mapId))
+                        .where(folders.id.eq(Long.valueOf(mapId)))
                         .set(folders.displayName, modName)
                         .execute();
 
