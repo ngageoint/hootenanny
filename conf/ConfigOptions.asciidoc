@@ -1663,6 +1663,38 @@ remain a permanent config option.
 If true, then custom review distances are used for some poi/building types.  TODO: This may not
 remain a permanent config option.
 
+=== poi.polygon.use.abbreviation.substitutions
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, then some common name abbreviations are replaced with full words.  TODO: This may not
+remain a permanent config option.
+
+=== poi.polygon.promote.exact.name.matches
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, then elements with identical names are more likely to match.  TODO: This may not
+remain a permanent config option.
+
+=== poi.polygon.use.custom.tower.rules
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, then custom matching rules are used with tower elements.  TODO: This may not
+remain a permanent config option.
+
+=== poi.polygon.use.schema.mods
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, then custom schema mods are used.  TODO: This may not
+remain a permanent config option.
+
 === postgresql.dumpfile.writer.auto.calc.ids
 
 * Data Type: bool

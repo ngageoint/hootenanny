@@ -110,7 +110,12 @@ _ancestorDistance(-1.0)
 
   double nameScore = _calculateNameScore(poi, poly);
   bool nameMatch = nameScore >= ConfigOptions().getPoiPolygonMatchNameThreshold();
-  bool exactNameMatch = nameScore == 1.0;
+  bool exactNameMatch = false;
+  //poi.polygon.promote.exact.name.matches
+  if (ConfigOptions().getPoiPolygonPromoteExactNameMatches())
+  {
+    exactNameMatch = nameScore == 1.0;
+  }
 
   bool addressMatch = false;
   if (ConfigOptions().getPoiPolygonUseAddressNameMatching())
@@ -166,7 +171,8 @@ _ancestorDistance(-1.0)
   }
 
   //custom rule
-  if (e1->getTags().get("man_made") == "tower" || e2->getTags().get("man_made") == "tower")
+  if (ConfigOptions().getPoiPolygonUseCustomTowerRules() &&
+      (e1->getTags().get("man_made") == "tower" || e2->getTags().get("man_made") == "tower"))
   {
     matchDistance = 0.0;
     reviewDistance = 0.0;
@@ -183,10 +189,11 @@ _ancestorDistance(-1.0)
   evidence += distance <= matchDistance ? 2 : 0;
 
   //custom rule
-  if (((e1->getTags().get("building") == "terminal" &&
-       e2->getTags().get("man_made") == "control_tower") ||
+  if (ConfigOptions().getPoiPolygonUseCustomTowerRules() &&
+      (((e1->getTags().get("building") == "terminal" &&
+        e2->getTags().get("man_made") == "control_tower") ||
       (e2->getTags().get("building") == "terminal" &&
-       e1->getTags().get("man_made") == "control_tower")) && closeMatch)
+       e1->getTags().get("man_made") == "control_tower")) && closeMatch))
   {
     evidence += 1;
   }
@@ -315,20 +322,24 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
     }
   }
 
-  //TODO: hacks - having trouble figuring out how to do this the right way...will fix in schema
-  if ((e1->getTags().get("amenity").toLower() == "hospital" &&
-       e2->getTags().get("use").toLower() == "healthcare") ||
-      (e2->getTags().get("amenity").toLower() == "hospital" &&
-       e1->getTags().get("use").toLower() == "healthcare"))
+  //poi.polygon.use.schema.mods
+  if (ConfigOptions().getPoiPolygonUseSchemaMods())
   {
-    return true;
-  }
-  if (((e1->getTags().get("building") == "school" &&
-       e2->getTags().get("amenity") == "school") ||
-      (e2->getTags().get("building") == "school" &&
-       e1->getTags().get("amenity") == "school")))
-  {
-    return true;
+    //TODO: hacks - having trouble figuring out how to do this the right way...will fix in schema
+    if ((e1->getTags().get("amenity").toLower() == "hospital" &&
+         e2->getTags().get("use").toLower() == "healthcare") ||
+        (e2->getTags().get("amenity").toLower() == "hospital" &&
+         e1->getTags().get("use").toLower() == "healthcare"))
+    {
+      return true;
+    }
+    if (((e1->getTags().get("building") == "school" &&
+         e2->getTags().get("amenity") == "school") ||
+        (e2->getTags().get("building") == "school" &&
+         e1->getTags().get("amenity") == "school")))
+    {
+      return true;
+    }
   }
 
   return false;

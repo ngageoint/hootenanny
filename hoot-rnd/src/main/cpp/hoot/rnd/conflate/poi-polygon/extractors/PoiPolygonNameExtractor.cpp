@@ -75,34 +75,36 @@ double PoiPolygonNameExtractor::extract(const ConstElementPtr& target,
     }
   }
 
-  //custom rule
-  if (targetName.toLower().trimmed().contains("rec center") &&
-      candidateName.toLower().trimmed().contains("recreation center"))
+  //custom rules
+  if (ConfigOptions().getPoiPolygonUseAbbreviationSubstitutions())
   {
-    QString targetNameMod = targetName;
-    targetNameMod.replace("Rec Center", "Recreation Center", Qt::CaseInsensitive);
-    targetNames.append(targetNameMod);
-  }
-  if (candidateName.toLower().trimmed().contains("rec center") &&
-      targetName.toLower().trimmed().contains("recreation center"))
-  {
-    QString candidateNameMod = candidateName;
-    candidateNameMod.replace("Rec Center", "Recreation Center", Qt::CaseInsensitive);
-    candidateNames.append(candidateNameMod);
-  }
+    if (targetName.toLower().trimmed().contains("rec center") &&
+        candidateName.toLower().trimmed().contains("recreation center"))
+    {
+      QString targetNameMod = targetName;
+      targetNameMod.replace("Rec Center", "Recreation Center", Qt::CaseInsensitive);
+      targetNames.append(targetNameMod);
+    }
+    if (candidateName.toLower().trimmed().contains("rec center") &&
+        targetName.toLower().trimmed().contains("recreation center"))
+    {
+      QString candidateNameMod = candidateName;
+      candidateNameMod.replace("Rec Center", "Recreation Center", Qt::CaseInsensitive);
+      candidateNames.append(candidateNameMod);
+    }
 
-  //custom rule
-  if (targetName.toLower().trimmed().contains("bldg"))
-  {
-    QString targetNameMod = targetName;
-    targetNameMod.replace("Bldg", "Building", Qt::CaseInsensitive);
-    targetNames.append(targetNameMod);
-  }
-  if (candidateName.toLower().trimmed().contains("bldg"))
-  {
-    QString candidateNameMod = candidateName;
-    candidateNameMod.replace("Bldg", "Building", Qt::CaseInsensitive);
-    candidateNames.append(candidateNameMod);
+    if (targetName.toLower().trimmed().contains("bldg"))
+    {
+      QString targetNameMod = targetName;
+      targetNameMod.replace("Bldg", "Building", Qt::CaseInsensitive);
+      targetNames.append(targetNameMod);
+    }
+    if (candidateName.toLower().trimmed().contains("bldg"))
+    {
+      QString candidateNameMod = candidateName;
+      candidateNameMod.replace("Bldg", "Building", Qt::CaseInsensitive);
+      candidateNames.append(candidateNameMod);
+    }
   }
 
   if (!targetNames.isEmpty() && !candidateNames.isEmpty())
