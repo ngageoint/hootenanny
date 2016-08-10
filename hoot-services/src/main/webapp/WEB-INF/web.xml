@@ -12,9 +12,11 @@
         <welcome-file>default.htm</welcome-file>
         <welcome-file>default.jsp</welcome-file>
     </welcome-file-list>
+
     <listener>
         <listener-class>hoot.services.HootServletContext</listener-class>
     </listener>
+
     <servlet>
         <servlet-name>logging</servlet-name>
         <servlet-class>hoot.services.DynamicLogPropsChangeScanner</servlet-class>
@@ -24,6 +26,7 @@
         <servlet-name>logging</servlet-name>
         <url-pattern>/logging/*</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>osm</servlet-name>
         <servlet-class>
@@ -43,7 +46,14 @@
         </init-param>
         <init-param>
             <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
-            <param-value>hoot.services.controllers.filters.CorsResponseFilter</param-value>
+            <param-value>
+                         hoot.services.controllers.filters.CorsResponseFilter;
+                         com.sun.jersey.api.container.filter.LoggingFilter
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+            <param-value>com.sun.jersey.api.container.filter.LoggingFilter</param-value>
         </init-param>
         <load-on-startup>2</load-on-startup>
     </servlet>
@@ -51,6 +61,7 @@
         <servlet-name>osm</servlet-name>
         <url-pattern>/osm/*</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>job</servlet-name>
         <servlet-class>
@@ -70,7 +81,14 @@
         </init-param>
         <init-param>
             <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
-            <param-value>hoot.services.controllers.filters.CorsResponseFilter</param-value>
+            <param-value>
+                        hoot.services.controllers.filters.CorsResponseFilter;
+                        com.sun.jersey.api.container.filter.LoggingFilter
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+            <param-value>com.sun.jersey.api.container.filter.LoggingFilter</param-value>
         </init-param>
         <load-on-startup>2</load-on-startup>
     </servlet>
@@ -78,6 +96,7 @@
         <servlet-name>job</servlet-name>
         <url-pattern>/job/*</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>info</servlet-name>
         <servlet-class>
@@ -97,7 +116,14 @@
         </init-param>
         <init-param>
             <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
-            <param-value>hoot.services.controllers.filters.CorsResponseFilter</param-value>
+            <param-value>
+                        hoot.services.controllers.filters.CorsResponseFilter;
+                        com.sun.jersey.api.container.filter.LoggingFilter
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+            <param-value>com.sun.jersey.api.container.filter.LoggingFilter</param-value>
         </init-param>
         <load-on-startup>2</load-on-startup>
     </servlet>
@@ -105,6 +131,7 @@
         <servlet-name>info</servlet-name>
         <url-pattern>/info/*</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>ogr</servlet-name>
         <servlet-class>
@@ -124,7 +151,14 @@
         </init-param>
         <init-param>
             <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
-            <param-value>hoot.services.controllers.filters.CorsResponseFilter</param-value>
+            <param-value>
+                        hoot.services.controllers.filters.CorsResponseFilter;
+                        com.sun.jersey.api.container.filter.LoggingFilter
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+            <param-value>com.sun.jersey.api.container.filter.LoggingFilter</param-value>
         </init-param>
         <load-on-startup>2</load-on-startup>
     </servlet>
@@ -132,6 +166,7 @@
         <servlet-name>ogr</servlet-name>
         <url-pattern>/ogr/*</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>ingest</servlet-name>
         <servlet-class>
@@ -151,7 +186,14 @@
         </init-param>
         <init-param>
             <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
-            <param-value>hoot.services.controllers.filters.CorsResponseFilter</param-value>
+            <param-value>
+                        hoot.services.controllers.filters.CorsResponseFilter;
+                        com.sun.jersey.api.container.filter.LoggingFilter
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+            <param-value>com.sun.jersey.api.container.filter.LoggingFilter</param-value>
         </init-param>
         <load-on-startup>2</load-on-startup>
     </servlet>
@@ -159,6 +201,7 @@
         <servlet-name>ingest</servlet-name>
         <url-pattern>/ingest/*</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>ogc</servlet-name>
         <servlet-class>org.deegree.services.controller.OGCFrontController</servlet-class>
@@ -168,6 +211,7 @@
         <servlet-name>ogc</servlet-name>
         <url-pattern>/ogc/*</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>config</servlet-name>
         <servlet-class>org.deegree.services.config.servlet.ConfigServlet</servlet-class>
@@ -177,6 +221,7 @@
         <servlet-name>config</servlet-name>
         <url-pattern>/config/*</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>gbm</servlet-name>
         <servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>
@@ -193,6 +238,7 @@
         <servlet-name>gbm</servlet-name>
         <url-pattern>/gbm/*</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>egd</servlet-name>
         <servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>

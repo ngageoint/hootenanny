@@ -1,14 +1,15 @@
 package hoot.services.models.db;
 
-import static com.mysema.query.types.PathMetadataFactory.*;
+import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.mysema.query.types.path.*;
+import com.querydsl.core.types.dsl.*;
 
-import com.mysema.query.types.PathMetadata;
+import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
-import com.mysema.query.types.Path;
+import com.querydsl.core.types.Path;
 
-import com.mysema.query.sql.ColumnMetadata;
+import com.querydsl.sql.ColumnMetadata;
+import java.sql.Types;
 
 
 
@@ -16,8 +17,8 @@ import com.mysema.query.sql.ColumnMetadata;
 /**
  * QCurrentRelations is a Querydsl query type for CurrentRelations
  */
-@Generated("com.mysema.query.sql.codegen.MetaDataSerializer")
-public class QCurrentRelations extends com.mysema.query.sql.RelationalPathBase<CurrentRelations> {
+@Generated("com.querydsl.sql.codegen.MetaDataSerializer")
+public class QCurrentRelations extends com.querydsl.sql.RelationalPathBase<CurrentRelations> {
 
     private static final long serialVersionUID = 1195103832;
 
@@ -35,7 +36,7 @@ public class QCurrentRelations extends com.mysema.query.sql.RelationalPathBase<C
 
     public final BooleanPath visible = createBoolean("visible");
 
-    public final com.mysema.query.sql.PrimaryKey<CurrentRelations> currentRelationsPkey = createPrimaryKey(id);
+    public final com.querydsl.sql.PrimaryKey<CurrentRelations> currentRelationsPkey = createPrimaryKey(id);
 
     public QCurrentRelations(String variable) {
         super(CurrentRelations.class, forVariable(variable), "public", "current_relations");
@@ -52,18 +53,18 @@ public class QCurrentRelations extends com.mysema.query.sql.RelationalPathBase<C
         addMetadata();
     }
 
-    public QCurrentRelations(PathMetadata<?> metadata) {
+    public QCurrentRelations(PathMetadata metadata) {
         super(CurrentRelations.class, metadata, "public", "current_relations");
         addMetadata();
     }
 
     public void addMetadata() {
-        addMetadata(changesetId, ColumnMetadata.named("changeset_id").ofType(-5).withSize(19).notNull());
-        addMetadata(id, ColumnMetadata.named("id").ofType(-5).withSize(19).notNull());
-        addMetadata(tags, ColumnMetadata.named("tags").ofType(1111).withSize(2147483647));
-        addMetadata(timestamp, ColumnMetadata.named("timestamp").ofType(93).withSize(29).withDigits(6).notNull());
-        addMetadata(version, ColumnMetadata.named("version").ofType(-5).withSize(19).notNull());
-        addMetadata(visible, ColumnMetadata.named("visible").ofType(-7).withSize(1).notNull());
+        addMetadata(changesetId, ColumnMetadata.named("changeset_id").withIndex(2).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(id, ColumnMetadata.named("id").withIndex(1).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(tags, ColumnMetadata.named("tags").withIndex(6).ofType(Types.OTHER).withSize(2147483647));
+        addMetadata(timestamp, ColumnMetadata.named("timestamp").withIndex(3).ofType(Types.TIMESTAMP).withSize(29).withDigits(6).notNull());
+        addMetadata(version, ColumnMetadata.named("version").withIndex(5).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(visible, ColumnMetadata.named("visible").withIndex(4).ofType(Types.BIT).withSize(1).notNull());
     }
 
 }

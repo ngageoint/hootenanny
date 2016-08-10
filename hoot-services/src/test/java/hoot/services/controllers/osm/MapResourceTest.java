@@ -49,17 +49,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import com.mysema.query.sql.SQLExpressions;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLDeleteClause;
-import com.mysema.query.sql.dml.SQLInsertClause;
-import com.mysema.query.sql.dml.SQLUpdateClause;
+import com.querydsl.sql.SQLExpressions;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLDeleteClause;
+import com.querydsl.sql.dml.SQLInsertClause;
+import com.querydsl.sql.dml.SQLUpdateClause;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.UniformInterfaceException;
+import com.sun.jersey.api.client.ClientResponse.Status;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.DbUtils;
+import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.db.CurrentRelations;
 import hoot.services.models.db.CurrentWays;
@@ -68,13 +68,13 @@ import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.db.QCurrentRelations;
 import hoot.services.models.db.QCurrentWays;
 import hoot.services.models.db.QMaps;
-import hoot.services.geo.BoundingBox;
-import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.MapLayer;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.RelationMember;
+import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.MapUtils;
 import hoot.services.utils.XmlUtils;
@@ -867,10 +867,11 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
             // make one of the nodes invisible, so it shouldn't be returned in a map query
-            CurrentNodes invisibleNode = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            CurrentNodes invisibleNode = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentNodes)
                     .from(currentNodes)
                     .where(currentNodes.id.eq(nodeIdsArr[3]))
-                    .singleResult(currentNodes);
+                    .fetchOne();
 
             Assert.assertNotNull(invisibleNode);
 
@@ -883,16 +884,18 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             Assert.assertEquals(1, success);
 
-            Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentNodes.visible)
                     .from(currentNodes)
                     .where(currentNodes.id.eq(nodeIdsArr[3]))
-                    .singleResult(currentNodes.visible));
+                    .fetchOne());
 
             // make one of the ways invisible, so it shouldn't be returned in a map query
-            CurrentWays invisibleWay = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            CurrentWays invisibleWay = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentWays)
                     .from(currentWays)
                     .where(currentWays.id.eq(wayIdsArr[0]))
-                    .singleResult(currentWays);
+                    .fetchOne();
 
             Assert.assertNotNull(invisibleWay);
 
@@ -905,16 +908,18 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             Assert.assertEquals(1, success);
 
-            Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentWays.visible)
                     .from(currentWays)
                     .where(currentWays.id.eq(wayIdsArr[0]))
-                    .singleResult(currentWays.visible));
+                    .fetchOne());
 
             // make one of the relations invisible, so it shouldn't be returned in a map query
-            CurrentRelations invisibleRelation = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            CurrentRelations invisibleRelation = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentRelations)
                     .from(currentRelations)
                     .where(currentRelations.id.eq(relationIdsArr[0]))
-                    .singleResult(currentRelations);
+                    .fetchOne();
 
             Assert.assertNotNull(invisibleRelation);
 
@@ -927,10 +932,11 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             Assert.assertEquals(1, success);
 
-            Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentRelations.visible)
                     .from(currentRelations)
                     .where(currentRelations.id.eq(relationIdsArr[0]))
-                    .singleResult(currentRelations.visible));
+                    .fetchOne());
 
             // Query the elements back out geospatially and ensure the invisible
             // node and way do not come back in the results.
@@ -1033,9 +1039,9 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             long maxQueryNumberOfNodes = 3;
 
-            Assert.assertTrue(maxQueryNumberOfNodes < new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Assert.assertTrue(maxQueryNumberOfNodes < new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
                     .from(currentNodes)
-                    .count());
+                    .fetchCount());
 
             try {
                 // try to run a query that returns more than the maximum allowed
@@ -1167,8 +1173,10 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         // insert another map with the same name as the test map
         Maps map = new Maps();
-        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId));
-        long nextMapId = query.uniqueResult(SQLExpressions.nextval(Long.class, "maps_id_seq"));
+        long nextMapId = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(SQLExpressions.nextval(Long.class, "maps_id_seq"))
+                .from()
+                .fetchOne();
 
         map.setId(nextMapId);
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
@@ -1370,11 +1378,12 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), maps).where(maps.id.eq(mapId)).execute();
 
-        Assert.assertNull(/* mapDao.findById(mapId) */
-                new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Assert.assertNull(
+                new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(maps)
                         .from(maps)
                         .where(maps.id.eq(mapId))
-                        .singleResult(maps));
+                        .fetchOne());
 
         // query out the layers
         /*

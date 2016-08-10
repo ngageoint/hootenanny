@@ -1,14 +1,15 @@
 package hoot.services.models.db;
 
-import static com.mysema.query.types.PathMetadataFactory.*;
+import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.mysema.query.types.path.*;
+import com.querydsl.core.types.dsl.*;
 
-import com.mysema.query.types.PathMetadata;
+import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
-import com.mysema.query.types.Path;
+import com.querydsl.core.types.Path;
 
-import com.mysema.query.sql.ColumnMetadata;
+import com.querydsl.sql.ColumnMetadata;
+import java.sql.Types;
 
 
 
@@ -16,8 +17,8 @@ import com.mysema.query.sql.ColumnMetadata;
 /**
  * QCurrentWayNodes is a Querydsl query type for CurrentWayNodes
  */
-@Generated("com.mysema.query.sql.codegen.MetaDataSerializer")
-public class QCurrentWayNodes extends com.mysema.query.sql.RelationalPathBase<CurrentWayNodes> {
+@Generated("com.querydsl.sql.codegen.MetaDataSerializer")
+public class QCurrentWayNodes extends com.querydsl.sql.RelationalPathBase<CurrentWayNodes> {
 
     private static final long serialVersionUID = -677563263;
 
@@ -29,7 +30,7 @@ public class QCurrentWayNodes extends com.mysema.query.sql.RelationalPathBase<Cu
 
     public final NumberPath<Long> wayId = createNumber("wayId", Long.class);
 
-    public final com.mysema.query.sql.PrimaryKey<CurrentWayNodes> currentWayNodesPkey = createPrimaryKey(wayId, sequenceId);
+    public final com.querydsl.sql.PrimaryKey<CurrentWayNodes> currentWayNodesPkey = createPrimaryKey(wayId, sequenceId);
 
     public QCurrentWayNodes(String variable) {
         super(CurrentWayNodes.class, forVariable(variable), "public", "current_way_nodes");
@@ -46,15 +47,15 @@ public class QCurrentWayNodes extends com.mysema.query.sql.RelationalPathBase<Cu
         addMetadata();
     }
 
-    public QCurrentWayNodes(PathMetadata<?> metadata) {
+    public QCurrentWayNodes(PathMetadata metadata) {
         super(CurrentWayNodes.class, metadata, "public", "current_way_nodes");
         addMetadata();
     }
 
     public void addMetadata() {
-        addMetadata(nodeId, ColumnMetadata.named("node_id").ofType(-5).withSize(19).notNull());
-        addMetadata(sequenceId, ColumnMetadata.named("sequence_id").ofType(-5).withSize(19).notNull());
-        addMetadata(wayId, ColumnMetadata.named("way_id").ofType(-5).withSize(19).notNull());
+        addMetadata(nodeId, ColumnMetadata.named("node_id").withIndex(2).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(sequenceId, ColumnMetadata.named("sequence_id").withIndex(3).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(wayId, ColumnMetadata.named("way_id").withIndex(1).ofType(Types.BIGINT).withSize(19).notNull());
     }
 
 }

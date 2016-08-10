@@ -50,25 +50,25 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.mysema.query.sql.RelationalPathBase;
-import com.mysema.query.sql.SQLExpressions;
-import com.mysema.query.sql.SQLQuery;
+import com.querydsl.sql.RelationalPathBase;
+import com.querydsl.sql.SQLExpressions;
+import com.querydsl.sql.SQLQuery;
 
+import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.db.QCurrentRelationMembers;
 import hoot.services.models.db.QCurrentWayNodes;
-import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;
-import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.OSMAPIAlreadyDeletedException;
 import hoot.services.models.osm.OSMAPIPreconditionException;
 import hoot.services.models.osm.XmlSerializable;
+import hoot.services.models.osm.Element.ElementType;
 import hoot.services.utils.DbUtils;
+import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.utils.DbUtils.RecordBatchType;
-import hoot.services.utils.XmlDocumentBuilder;
 
 
 /**
@@ -235,9 +235,10 @@ public class ChangesetDbWriter {
 
     private long getNextElementId(ElementType elementType) {
 
-        long nextElementId = new SQLQuery(conn, DbUtils.getConfiguration(requestChangesetMapId))
-                .uniqueResult(SQLExpressions.nextval(Long.class, "current_" + elementType.toString().toLowerCase()
-                        + "s_" + requestChangesetMapId + "_id_seq"));
+        long nextElementId =
+                new SQLQuery<>(conn, DbUtils.getConfiguration(requestChangesetMapId))
+                .select(SQLExpressions.nextval(Long.class, "current_" + elementType.toString().toLowerCase() + "s_" + requestChangesetMapId + "_id_seq"))
+                .fetchOne();
 
         // This is a bigtime hack put in place b/c I was getting dupe
         // IDs...really needs to be fixed; I need to generate the IDs myself, rather than letting the db
@@ -247,15 +248,17 @@ public class ChangesetDbWriter {
         Element prototypeElement = ElementFactory.create(requestChangesetMapId, elementType, conn);
 
         // THIS SHOULD NEVER HAPPEN!!
-        boolean recordExistsWithSameId = new SQLQuery(conn, DbUtils.getConfiguration(requestChangesetMapId))
-                .from(prototypeElement.getElementTable()).where(prototypeElement.getElementIdField().eq(nextElementId))
-                .singleResult(prototypeElement.getElementTable()) != null;
+        boolean recordExistsWithSameId = new SQLQuery<>(conn, DbUtils.getConfiguration(requestChangesetMapId))
+                .from(prototypeElement.getElementTable())
+                .where(prototypeElement.getElementIdField().eq(nextElementId))
+                .fetchCount() > 0;
 
         if (recordExistsWithSameId) {
-            long highestElementId = new SQLQuery(conn, DbUtils.getConfiguration(requestChangesetMapId))
+            long highestElementId = new SQLQuery<>(conn, DbUtils.getConfiguration(requestChangesetMapId))
+                    .select(prototypeElement.getElementIdField())
                     .from(prototypeElement.getElementTable())
                     .orderBy(prototypeElement.getElementIdField().desc())
-                    .singleResult(prototypeElement.getElementIdField());
+                    .fetchOne();
 
             nextElementId = highestElementId + 1;
         }

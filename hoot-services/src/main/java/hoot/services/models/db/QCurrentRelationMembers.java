@@ -1,14 +1,15 @@
 package hoot.services.models.db;
 
-import static com.mysema.query.types.PathMetadataFactory.*;
+import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.mysema.query.types.path.*;
+import com.querydsl.core.types.dsl.*;
 
-import com.mysema.query.types.PathMetadata;
+import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
-import com.mysema.query.types.Path;
+import com.querydsl.core.types.Path;
 
-import com.mysema.query.sql.ColumnMetadata;
+import com.querydsl.sql.ColumnMetadata;
+import java.sql.Types;
 
 
 
@@ -16,8 +17,8 @@ import com.mysema.query.sql.ColumnMetadata;
 /**
  * QCurrentRelationMembers is a Querydsl query type for CurrentRelationMembers
  */
-@Generated("com.mysema.query.sql.codegen.MetaDataSerializer")
-public class QCurrentRelationMembers extends com.mysema.query.sql.RelationalPathBase<CurrentRelationMembers> {
+@Generated("com.querydsl.sql.codegen.MetaDataSerializer")
+public class QCurrentRelationMembers extends com.querydsl.sql.RelationalPathBase<CurrentRelationMembers> {
 
     private static final long serialVersionUID = 738359070;
 
@@ -33,7 +34,7 @@ public class QCurrentRelationMembers extends com.mysema.query.sql.RelationalPath
 
     public final NumberPath<Integer> sequenceId = createNumber("sequenceId", Integer.class);
 
-    public final com.mysema.query.sql.PrimaryKey<CurrentRelationMembers> currentRelationMembersPkey = createPrimaryKey(relationId, memberType, memberId, memberRole, sequenceId);
+    public final com.querydsl.sql.PrimaryKey<CurrentRelationMembers> currentRelationMembersPkey = createPrimaryKey(relationId, memberType, memberId, memberRole, sequenceId);
 
     public QCurrentRelationMembers(String variable) {
         super(CurrentRelationMembers.class, forVariable(variable), "public", "current_relation_members");
@@ -50,17 +51,17 @@ public class QCurrentRelationMembers extends com.mysema.query.sql.RelationalPath
         addMetadata();
     }
 
-    public QCurrentRelationMembers(PathMetadata<?> metadata) {
+    public QCurrentRelationMembers(PathMetadata metadata) {
         super(CurrentRelationMembers.class, metadata, "public", "current_relation_members");
         addMetadata();
     }
 
     public void addMetadata() {
-        addMetadata(memberId, ColumnMetadata.named("member_id").ofType(-5).withSize(19).notNull());
-        addMetadata(memberRole, ColumnMetadata.named("member_role").ofType(12).withSize(255).notNull());
-        addMetadata(memberType, ColumnMetadata.named("member_type").ofType(1111).withSize(2147483647).notNull());
-        addMetadata(relationId, ColumnMetadata.named("relation_id").ofType(-5).withSize(19).notNull());
-        addMetadata(sequenceId, ColumnMetadata.named("sequence_id").ofType(4).withSize(10).notNull());
+        addMetadata(memberId, ColumnMetadata.named("member_id").withIndex(3).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(memberRole, ColumnMetadata.named("member_role").withIndex(4).ofType(Types.VARCHAR).withSize(255).notNull());
+        addMetadata(memberType, ColumnMetadata.named("member_type").withIndex(2).ofType(Types.OTHER).withSize(2147483647).notNull());
+        addMetadata(relationId, ColumnMetadata.named("relation_id").withIndex(1).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(sequenceId, ColumnMetadata.named("sequence_id").withIndex(5).ofType(Types.INTEGER).withSize(10).notNull());
     }
 
 }

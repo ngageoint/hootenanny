@@ -8,12 +8,11 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 
-import com.mysema.query.sql.Configuration;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLDeleteClause;
-import com.mysema.query.sql.dml.SQLInsertClause;
-import com.mysema.query.types.expr.NumberExpression;
-import com.mysema.query.types.template.NumberTemplate;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.sql.Configuration;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLDeleteClause;
+import com.querydsl.sql.dml.SQLInsertClause;
 
 import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.db.QCurrentRelationMembers;
@@ -116,12 +115,12 @@ public class MapUtils {
 
     public static long insertMap(long userId, Connection conn) {
         Long newId = -1L;
-        NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('maps_id_seq')");
         Configuration configuration = DbUtils.getConfiguration();
 
-        SQLQuery query = new SQLQuery(conn, configuration);
-
-        List<Long> ids = query.from().list(expression);
+        List<Long> ids = new SQLQuery<>(conn, configuration)
+                .select(Expressions.numberTemplate(Long.class, "nextval('maps_id_seq')"))
+                .from()
+                .fetch();
 
         if ((ids != null) && (!ids.isEmpty())) {
             newId = ids.get(0);
@@ -131,7 +130,8 @@ public class MapUtils {
 
             new SQLInsertClause(conn, configuration, maps)
                     .columns(maps.id, maps.createdAt, maps.displayName, maps.publicCol, maps.userId)
-                    .values(newId, now, "map-with-id-" + newId, true, userId).execute();
+                    .values(newId, now, "map-with-id-" + newId, true, userId)
+                    .execute();
         }
 
         createMap(newId);
@@ -150,25 +150,25 @@ public class MapUtils {
     public static boolean elementDataExistsInServicesDb(Connection conn) {
         long recordCount = 0;
 
-        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+        SQLQuery<Long> query = new SQLQuery<>(conn, DbUtils.getConfiguration());
 
-        recordCount += query.from(QCurrentNodes.currentNodes).count();
-        recordCount += query.from(QCurrentWayNodes.currentWayNodes).count();
-        recordCount += query.from(QCurrentWays.currentWays).count();
-        recordCount += query.from(QCurrentRelationMembers.currentRelationMembers).count();
-        recordCount += query.from(QCurrentRelations.currentRelations).count();
+        recordCount += query.from(QCurrentNodes.currentNodes).fetchCount();
+        recordCount += query.from(QCurrentWayNodes.currentWayNodes).fetchCount();
+        recordCount += query.from(QCurrentWays.currentWays).fetchCount();
+        recordCount += query.from(QCurrentRelationMembers.currentRelationMembers).fetchCount();
+        recordCount += query.from(QCurrentRelations.currentRelations).fetchCount();
 
         return (recordCount > 0);
     }
 
     public static long insertUser(Connection conn) {
         Long newId = -1L;
-        NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('users_id_seq')");
         Configuration configuration = DbUtils.getConfiguration();
 
-        SQLQuery query = new SQLQuery(conn, configuration);
-
-        List<Long> ids = query.from().list(expression);
+        List<Long> ids = new SQLQuery<>(conn, configuration)
+                .select(Expressions.numberTemplate(Long.class, "nextval('users_id_seq')"))
+                .from()
+                .fetch();
 
         if ((ids != null) && (!ids.isEmpty())) {
             newId = ids.get(0);

@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 /**
  * Maps is a Querydsl bean type
  */
-@Generated("com.mysema.query.codegen.BeanSerializer")
+@Generated("com.querydsl.codegen.BeanSerializer")
 public class Maps {
 
     private java.sql.Timestamp createdAt;

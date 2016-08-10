@@ -50,6 +50,7 @@ clean: config clean-coverage
 	../scripts/mvn-build $(MVN_QUIET) clean
 	rm -f db.properties
 	rm -rf target/site/apidocs
+	rm -rf ./src/main/java/hoot/services/db2
 
 # Both commands now do the same thing.
 clean-db: clean-db-force
@@ -89,5 +90,6 @@ else
 endif
 
 generate-querydsl-entities: run-liquibase
+	rm -rf ./src/main/java/hoot/services/db2
 	rm -rf ./src/main/java/hoot/services/models/db
 	mvn querydsl:export

@@ -77,7 +77,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
     public static void beforeClass() throws Exception {
         try {
             conn = DbUtils.createConnection();
-            OsmTestUtils.conn = conn;
+            OsmTestUtils.setConn(conn);
             ReviewTestUtils.conn = conn;
             userId = MapUtils.insertUser(conn);
         }
@@ -93,9 +93,9 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
         try {
             mapId = MapUtils.insertMap(userId, conn);
 
-            OsmTestUtils.userId = userId;
+            OsmTestUtils.setUserId(userId);
 
-            OsmTestUtils.mapId = mapId;
+            OsmTestUtils.setMapId(mapId);
         }
         catch (Exception e) {
             log.error(e.getMessage() + " ");
@@ -113,7 +113,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
     public static void afterClass() throws Exception {
         try {
             // DbUtils.deleteUser(conn, userId);
-            OsmTestUtils.conn = null;
+            OsmTestUtils.setConn(null);
             ReviewTestUtils.conn = null;
         }
         catch (Exception e) {
