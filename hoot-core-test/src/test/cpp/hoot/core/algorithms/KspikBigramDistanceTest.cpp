@@ -47,12 +47,6 @@
 namespace hoot
 {
 
-#define GET_TEST_VALUES(v1, v2, v3) \
-{ \
-  std::cout << v2 << std::endl; \
-} \
-
-
 class KskipBigramDistanceTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(KskipBigramDistanceTest);
@@ -119,15 +113,18 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8958, kskip2.compare("First Second Third Fourth Fifth Sixth", "First Second Third Fourth Fifth"), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8867, kskip3.compare("First Second Third Fourth Fifth Sixth", "First Second Third Fourth Fifth"), 0.0001);
 
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3469, kskip2.compare("KALORAMA COMMUNITY GARDEN", "KALORAMA PARK"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.2857, kskip2.compare("KALORAMA COMMUNITY GARDEN", "KALORAMA RECREATION CENTER"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3333, kskip2.compare("KALORAMA RECREATION CENTER", "KALORAMA PARK"), 0.0001);
+
     //  100% code coverage
     HOOT_STR_EQUALS("1-skip bi-gram", kskip1.toString());
     HOOT_STR_EQUALS("2-skip bi-gram", kskip2.toString());
   }
 
-  QString te(const char* s)
+  QString te(const QString& s)
   {
-    QString result = Translator::getInstance().translateStreet(QString::fromUtf8(s));
-    return result;
+    return Translator::getInstance().translateStreet(s);
   }
 
   QString joinBigrams(QSet<QString> bigrams)

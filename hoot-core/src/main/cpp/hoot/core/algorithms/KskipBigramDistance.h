@@ -46,6 +46,34 @@ namespace hoot
  *  A Closer Look at Skip-gram Modelling
  *  David Guthrie, Ben Allison, Wei Liu, Louise Guthrie, Yorick Wilks
  *  http://homepages.inf.ed.ac.uk/ballison/pdf/lrec_skipgrams.pdf
+ *
+ *  NOTE: This algorithm isn't being used anywhere because tests on Geonames data showed
+ *   that the Levenshtein distance outperformed or was equal to Skip-grams in 98.3% of the
+ *   test cases.  The test were run as follows, Geonames data was used from four countries
+ *   AF, AR, RU and US (http://download.geonames.org/export/dump/).  The test cases used only
+ *   geonames POIs that contained alternate names to compare the original name against.  The
+ *   first tests were run solely Skip-grams vs. Levenshtein and Skip-grams fared better on
+ *   its own but when combined with other distance classes (TranslateStringDistance and
+ *   MeanWordSetDistance) those results dropped off tremendously.  Since the Random Forest
+ *   extractors apply both of those distances to Levenshtein, the test had to include them
+ *   thus degrading and already degraded results.  So the TranslateStringDistance and
+ *   MeanWordSetDistance classes were applied to both algorithms, counted, averaged, and
+ *   reported.  Below is a sample of the data both before the two distance algorithms were
+ *   applied and after:
+ *
+ *  RESULTS:
+ *                                         | Algorithms     | Algorithms          |
+ *                                         | Compared Solo  | Including Translate |
+ *                                         |                | and MeanWordSet     |
+ *                                         |                |                     |
+ *   Total POIs:                           |    240483      |    240483           |
+ *   POIs where Levenshtein == Skip-grams  |     11928      |     42005           |
+ *   POIs where Levenshtein > Skip-grams   |    161401      |      4277**         |
+ *   POIs where Levenshtein < Skip-grams   |     67154      |    194201           |
+ *
+ *    ** - Only 1.77% of the time did Skip-grams give a better result on training data
+ *         than did Levenshtein
+ *
  */
 class KskipBigramDistance : public StringDistance
 {
