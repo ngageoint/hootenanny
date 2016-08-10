@@ -742,10 +742,10 @@ bool PoiPolygonMatch::_getAddressMatch(ConstElementPtr e1, ConstElementPtr e2)
 
 QString PoiPolygonMatch::toString() const
 {
-  return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
-    arg(_polyEid.toString()).arg(_c.toString());
+  //return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
+    //arg(_polyEid.toString()).arg(_c.toString());
 
-  /*QString str =
+  QString str =
     QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
       arg(_polyEid.toString()).arg(_c.toString());
   str += " UUID1: " + _uuid1 + "\n";
@@ -768,7 +768,7 @@ QString PoiPolygonMatch::toString() const
   str += "circular error 1: " + QString::number(_circularError1) + "\n";
   str += "circular error 2: " + QString::number(_circularError2) + "\n";
   str += "evidence: " + QString::number(_evidence);
-  return str;*/
+  return str;
 }
 
 }
