@@ -32,14 +32,14 @@ import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.query.sql.SQLQuery;
+import com.querydsl.sql.SQLQuery;
 
-import hoot.services.osm.OsmTestUtils;
-import hoot.services.utils.DbUtils;
-import hoot.services.models.db.QCurrentNodes;
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
+import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.MapUtils;
 
 
@@ -47,9 +47,8 @@ import hoot.services.utils.MapUtils;
  * This is simply in place for doing a rough performance check on changeset
  * writing. Its not meant to be run as part of the test suite.
  */
-@SuppressWarnings("unused")
 public class ChangesetDbWriterTest {
-    private static final Logger log = LoggerFactory.getLogger(ChangesetDbWriterTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChangesetDbWriterTest.class);
 
     private static final QCurrentNodes nodes = QCurrentNodes.currentNodes;
 
@@ -63,30 +62,33 @@ public class ChangesetDbWriterTest {
      */
     public void testLargeWrite() throws Exception {
         Connection conn = DbUtils.createConnection();
-        final long userId = MapUtils.insertUser(conn);
-        final long mapId = MapUtils.insertMap(userId, conn);
-        final long changesetId = Changeset.insertNew(mapId, userId, conn);
-        final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
+        long userId = MapUtils.insertUser(conn);
+        long mapId = MapUtils.insertMap(userId, conn);
+        long changesetId = Changeset.insertNew(mapId, userId, conn);
+        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
+
         try {
             String changeset = "<osmChange version=\"0.3\" generator=\"iD\">" + "<create>";
             for (int i = 0; i < NUM_NODES; i++) {
-                changeset += "<node id=\"" + String.valueOf((i + 1) * -1) + "\" lon=\"" + originalBounds.getMinLon()
+                changeset += "<node id=\"" + (i + 1) * -1 + "\" lon=\"" + originalBounds.getMinLon()
                         + "\" lat=\"" + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId
                         + "\">";
                 for (int j = 0; j < NUM_TAGS_PER_NODE; j++) {
-                    changeset += "<tag k=\"" + "tag " + String.valueOf(j + 1) + "\" v=\"" + String.valueOf(j + 1)
-                            + "\"/>";
+                    changeset += "<tag k=\"" + "tag " + (j + 1) + "\" v=\"" + (j + 1) + "\"/>";
                 }
                 changeset += "</node>";
             }
             changeset += "</create>" + "<modify/>" + "<delete if-unused=\"true\"/>" + "</osmChange>";
 
-            log.info("Create elements test start.");
+            logger.info("Create elements test start.");
             /* final Document response = */new ChangesetDbWriter(conn).write(mapId, changesetId, changeset);
-            log.info("Create elements test end.");
+            logger.info("Create elements test end.");
 
             Assert.assertEquals(NUM_NODES,
-                    (int) new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(nodes).count());
+                    (int) new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                            .from(nodes)
+                            .fetchCount());
+
             Assert.assertEquals(NUM_NODES * NUM_TAGS_PER_NODE,
                     OsmTestUtils.getTagCountForElementType(mapId, ElementType.Node, conn));
         }

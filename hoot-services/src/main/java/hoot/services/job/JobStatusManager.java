@@ -27,6 +27,7 @@
 package hoot.services.job;
 
 import static hoot.services.job.JobStatusManager.JOB_STATUS.*;
+import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.utils.DbUtils.getConfiguration;
 
 import java.sql.Connection;
@@ -36,10 +37,10 @@ import java.util.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.query.sql.Configuration;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLInsertClause;
-import com.mysema.query.sql.dml.SQLUpdateClause;
+import com.querydsl.sql.Configuration;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLInsertClause;
+import com.querydsl.sql.dml.SQLUpdateClause;
 
 import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.QJobStatus;
@@ -177,9 +178,11 @@ public class JobStatusManager {
      */
     public JobStatus getJobStatusObj(String jobId) {
         try {
-            QJobStatus jobStatusTbl = QJobStatus.jobStatus;
-            SQLQuery query = new SQLQuery(connection, getConfiguration());
-            return query.from(jobStatusTbl).where(jobStatusTbl.jobId.eq(jobId)).singleResult(jobStatusTbl);
+            return new SQLQuery<>(connection, getConfiguration())
+                    .select(jobStatus)
+                    .from(jobStatus)
+                    .where(jobStatus.jobId.eq(jobId))
+                    .fetchOne();
         }
         catch (Exception e) {
             logger.error("{} failed to fetch job status.", jobId, e);
@@ -213,9 +216,12 @@ public class JobStatusManager {
     private static void updateJobStatus(String jobId, int jobStatus, boolean isComplete, String statusDetail, Connection conn) {
         Configuration configuration = getConfiguration();
 
-        QJobStatus jobStatusTbl = QJobStatus.jobStatus;
-        SQLQuery query = new SQLQuery(conn, configuration);
-        JobStatus stat = query.from(jobStatusTbl).where(jobStatusTbl.jobId.eq(jobId)).singleResult(jobStatusTbl);
+        JobStatus stat = new SQLQuery<>(conn, configuration)
+                .select(QJobStatus.jobStatus)
+                .from(QJobStatus.jobStatus)
+                .where(QJobStatus.jobStatus.jobId.eq(jobId))
+                .fetchOne();
+
         if (stat != null) {
             if (isComplete) {
                 stat.setPercentComplete(100.0);
@@ -228,8 +234,10 @@ public class JobStatusManager {
                 stat.setStatusDetail(statusDetail);
             }
 
-            new SQLUpdateClause(conn, configuration, jobStatusTbl).populate(stat)
-                    .where(jobStatusTbl.jobId.eq(stat.getJobId())).execute();
+            new SQLUpdateClause(conn, configuration, QJobStatus.jobStatus)
+                    .populate(stat)
+                    .where(QJobStatus.jobStatus.jobId.eq(stat.getJobId()))
+                    .execute();
         }
         else {
             stat = new JobStatus();
@@ -242,41 +250,7 @@ public class JobStatusManager {
                 stat.setEnd(ts);
             }
 
-            new SQLInsertClause(conn, configuration, jobStatusTbl).populate(stat).execute();
+            new SQLInsertClause(conn, configuration, QJobStatus.jobStatus).populate(stat).execute();
         }
-    }
-
-    /**
-     * retrieves job status.
-     *
-     * @param jobId
-     *            ID of the job
-     * @param conn
-     *            JDBC Connection
-     * @return a numeric job status
-     */
-    private static int getJobStatus(String jobId, Connection conn) {
-        QJobStatus jobStatusTbl = QJobStatus.jobStatus;
-        SQLQuery query = new SQLQuery(conn, getConfiguration());
-        JobStatus stat = query.from(jobStatusTbl).where(jobStatusTbl.jobId.eq(jobId)).singleResult(jobStatusTbl);
-        return stat.getStatus();
-    }
-
-    /**
-     *
-     * @param jobId
-     * @param status
-     * @param conn
-     */
-    public static void insertJobStatus(String jobId, int status, Connection conn) {
-        Configuration configuration = getConfiguration();
-        QJobStatus jobStatus = QJobStatus.jobStatus;
-
-        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-
-        new SQLInsertClause(conn, configuration, jobStatus)
-                .columns(jobStatus.jobId, jobStatus.status, jobStatus.start)
-                .values(jobId, status, now)
-                .execute();
     }
 }

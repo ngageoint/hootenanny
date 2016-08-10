@@ -40,12 +40,13 @@ import org.json.simple.parser.ParseException;
 import org.junit.Assert;
 import org.springframework.beans.BeansException;
 
-import com.mysema.query.sql.SQLQuery;
+import com.querydsl.sql.SQLQuery;
 import com.sun.jersey.api.client.WebResource;
 
-import hoot.services.utils.DbUtils;
-import hoot.services.models.db.QJobStatus;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
+import hoot.services.models.db.JobStatus;
+import hoot.services.models.db.QJobStatus;
+import hoot.services.utils.DbUtils;
 
 
 /**
@@ -143,14 +144,12 @@ public class JobStatusWebPoller {
      *            status the job should have in the database
      */
     private void verifyJobStatusInDb(String jobId, JOB_STATUS status) {
-        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
         QJobStatus jobStatus = QJobStatus.jobStatus;
-
-        hoot.services.models.db.JobStatus finalJobStatus =
-                query
-                     .from(jobStatus)
-                     .where(jobStatus.jobId.eq(jobId))
-                     .singleResult(jobStatus);
+        JobStatus finalJobStatus = new SQLQuery<>(conn, DbUtils.getConfiguration())
+                .select(jobStatus)
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
+                .fetchOne();
 
         Assert.assertNotNull(finalJobStatus);
         Assert.assertEquals(jobId, finalJobStatus.getJobId());

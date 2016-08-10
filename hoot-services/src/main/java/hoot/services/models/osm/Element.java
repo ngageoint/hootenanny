@@ -48,11 +48,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
-import com.mysema.query.sql.RelationalPathBase;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLDeleteClause;
-import com.mysema.query.types.path.NumberPath;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.sql.RelationalPathBase;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLDeleteClause;
 
+import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.db.QChangesets;
 import hoot.services.models.db.QCurrentNodes;
@@ -61,10 +62,9 @@ import hoot.services.models.db.QCurrentRelations;
 import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.models.db.QCurrentWays;
 import hoot.services.models.db.QUsers;
-import hoot.services.geo.BoundingBox;
 import hoot.services.utils.DbUtils;
-import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.DbUtils.EntityChangeType;
+import hoot.services.utils.PostgresUtils;
 
 
 /**
@@ -477,14 +477,15 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         Element prototype = ElementFactory.create(mapId, elementType, dbConn);
 
         if (!elementIds.isEmpty()) {
-            return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+                    .select(prototype.getElementTable())
                     .from(prototype.getElementTable())
                     .where(prototype.getElementIdField().in(elementIds))
                     .orderBy(prototype.getElementIdField().asc())
-                    .list(prototype.getElementTable());
+                    .fetch();
         }
 
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     /**
@@ -508,11 +509,14 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         if (!elementIds.isEmpty()) {
             QChangesets changesets = QChangesets.changesets;
             QUsers users = QUsers.users;
-            return new SQLQuery(dbConn, DbUtils.getConfiguration(String.valueOf(mapId)))
+            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(String.valueOf(mapId)))
+                    .select(prototype.getElementTable(), users, changesets)
                     .from(prototype.getElementTable())
-                    .join(QChangesets.changesets).on(prototype.getChangesetIdField().eq(changesets.id)).join(users)
-                    .on(changesets.userId.eq(users.id)).where(prototype.getElementIdField().in(elementIds))
-                    .orderBy(prototype.getElementIdField().asc()).list(prototype.getElementTable(), users, changesets);
+                    .join(QChangesets.changesets).on(prototype.getChangesetIdField().eq(changesets.id))
+                    .join(users).on(changesets.userId.eq(users.id))
+                    .where(prototype.getElementIdField().in(elementIds))
+                    .orderBy(prototype.getElementIdField().asc())
+                    .fetch();
         }
 
         return new ArrayList();
@@ -587,8 +591,10 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         Element prototype = ElementFactory.create(mapId, elementType, dbConn);
 
         if (!elementIds.isEmpty()) {
-            return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
-                    .where(prototype.getElementIdField().in(elementIds)).count() == elementIds.size();
+            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+                    .from(prototype.getElementTable())
+                    .where(prototype.getElementIdField().in(elementIds))
+                    .fetchCount() == elementIds.size();
         }
 
         return elementIds.isEmpty();
@@ -612,9 +618,11 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         Element prototype = ElementFactory.create(mapId, elementType, dbConn);
 
         if (!elementIds.isEmpty()) {
-            return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable()).where(
-                    prototype.getElementIdField().in(elementIds).and(prototype.getElementVisibilityField().eq(true)))
-                    .count() == elementIds.size();
+            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+                    .from(prototype.getElementTable())
+                    .where(prototype.getElementIdField().in(elementIds)
+                            .and(prototype.getElementVisibilityField().eq(true)))
+                    .fetchCount() == elementIds.size();
         }
 
         return elementIds.isEmpty();

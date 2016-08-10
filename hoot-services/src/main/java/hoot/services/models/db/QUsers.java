@@ -1,14 +1,15 @@
 package hoot.services.models.db;
 
-import static com.mysema.query.types.PathMetadataFactory.forVariable;
+import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import com.querydsl.core.types.dsl.*;
+
+import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
+import com.querydsl.core.types.Path;
 
-import com.mysema.query.sql.ColumnMetadata;
-import com.mysema.query.types.Path;
-import com.mysema.query.types.PathMetadata;
-import com.mysema.query.types.path.NumberPath;
-import com.mysema.query.types.path.StringPath;
+import com.querydsl.sql.ColumnMetadata;
+import java.sql.Types;
 
 
 
@@ -16,8 +17,8 @@ import com.mysema.query.types.path.StringPath;
 /**
  * QUsers is a Querydsl query type for Users
  */
-@Generated("com.mysema.query.sql.codegen.MetaDataSerializer")
-public class QUsers extends com.mysema.query.sql.RelationalPathBase<Users> {
+@Generated("com.querydsl.sql.codegen.MetaDataSerializer")
+public class QUsers extends com.querydsl.sql.RelationalPathBase<Users> {
 
     private static final long serialVersionUID = 1881840750;
 
@@ -29,7 +30,7 @@ public class QUsers extends com.mysema.query.sql.RelationalPathBase<Users> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final com.mysema.query.sql.PrimaryKey<Users> usersPk = createPrimaryKey(id);
+    public final com.querydsl.sql.PrimaryKey<Users> usersPk = createPrimaryKey(id);
 
     public QUsers(String variable) {
         super(Users.class, forVariable(variable), "public", "users");
@@ -46,15 +47,15 @@ public class QUsers extends com.mysema.query.sql.RelationalPathBase<Users> {
         addMetadata();
     }
 
-    public QUsers(PathMetadata<?> metadata) {
+    public QUsers(PathMetadata metadata) {
         super(Users.class, metadata, "public", "users");
         addMetadata();
     }
 
     public void addMetadata() {
-        addMetadata(displayName, ColumnMetadata.named("display_name").ofType(12).withSize(255).notNull());
-        addMetadata(email, ColumnMetadata.named("email").ofType(12).withSize(255).notNull());
-        addMetadata(id, ColumnMetadata.named("id").ofType(-5).withSize(19).notNull());
+        addMetadata(displayName, ColumnMetadata.named("display_name").withIndex(3).ofType(Types.VARCHAR).withSize(255).notNull());
+        addMetadata(email, ColumnMetadata.named("email").withIndex(1).ofType(Types.VARCHAR).withSize(255).notNull());
+        addMetadata(id, ColumnMetadata.named("id").withIndex(2).ofType(Types.BIGINT).withSize(19).notNull());
     }
 
 }

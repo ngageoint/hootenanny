@@ -37,16 +37,16 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.query.sql.Configuration;
-import com.mysema.query.sql.dml.SQLInsertClause;
-import com.mysema.query.sql.dml.SQLUpdateClause;
-import com.mysema.query.support.Expressions;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.sql.Configuration;
+import com.querydsl.sql.dml.SQLInsertClause;
+import com.querydsl.sql.dml.SQLUpdateClause;
 
-import hoot.services.utils.DbUtils;
 import hoot.services.models.db.QReviewBookmarks;
 import hoot.services.models.db.ReviewBookmarks;
 import hoot.services.models.review.ReviewBookmarkSaveRequest;
 import hoot.services.readers.review.ReviewBookmarkRetriever;
+import hoot.services.utils.DbUtils;
 
 
 class ReviewBookmarksSaver {
