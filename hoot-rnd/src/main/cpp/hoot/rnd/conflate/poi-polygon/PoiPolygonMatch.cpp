@@ -35,15 +35,15 @@
 #include <hoot/core/algorithms/ExactStringDistance.h>
 #include <hoot/rnd/conflate/poi-polygon/extractors/PoiPolygonNameExtractor.h>
 #include <hoot/core/algorithms/string/MinSumWordSetDistance.h>
-//#include <hoot/core/algorithms/string/WeightedWordDistance.h>
+#include <hoot/core/algorithms/string/WeightedWordDistance.h>
 //#include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
-//#include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
+#include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/conflate/MatchThreshold.h>
-//#include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/ConfPath.h>
 
 namespace hoot
 {
@@ -278,26 +278,41 @@ _exactNameMatch(false)
 
 double PoiPolygonMatch::_calculateNameScore(ConstElementPtr e1, ConstElementPtr e2) const
 {
-  if (ConfigOptions().getPoiPolygonUseMeanWordDistanceNameComparison())
+  if (ConfigOptions().getPoiPolygonUseWeightedWordDistance())
   {
+    SqliteWordWeightDictionary* dict =
+      new SqliteWordWeightDictionary(
+        ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary()));
     return
-      /*NameExtractor*/PoiPolygonNameExtractor(
+      PoiPolygonNameExtractor(
         new TranslateStringDistance(
-          new MeanWordSetDistance(
-            new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))))
+          new WeightedWordDistance(
+            new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()), dict)))
         .extract(e1, e2);
   }
   else
   {
-    /*SqliteWordWeightDictionary* dict =
-      new SqliteWordWeightDictionary(
-        ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary()));*/
-    return
-      /*NameExtractor*/PoiPolygonNameExtractor(
-        new TranslateStringDistance(
-          new /*MeanWordSetDistance*/MinSumWordSetDistance/*WeightedWordDistance*/(
-            new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())/*, dict*/)))
-        .extract(e1, e2);
+    if (ConfigOptions().getPoiPolygonUseMeanWordDistanceNameComparison())
+    {
+      return
+        /*NameExtractor*/PoiPolygonNameExtractor(
+          new TranslateStringDistance(
+            new MeanWordSetDistance(
+              new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))))
+          .extract(e1, e2);
+    }
+    else
+    {
+      /*SqliteWordWeightDictionary* dict =
+        new SqliteWordWeightDictionary(
+          ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary()));*/
+      return
+        /*NameExtractor*/PoiPolygonNameExtractor(
+          new TranslateStringDistance(
+            new /*MeanWordSetDistance*/MinSumWordSetDistance/*WeightedWordDistance*/(
+              new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())/*, dict*/)))
+          .extract(e1, e2);
+    }
   }
 }
 

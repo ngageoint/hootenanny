@@ -1710,6 +1710,13 @@ remain a permanent config option.
 If true, then custom restaurant matching rules are used.  TODO: This may not
 remain a permanent config option.
 
+=== poi.polygon.use.weighted.word.distance
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO: This may not remain a permanent config option.
+
 === postgresql.dumpfile.writer.auto.calc.ids
 
 * Data Type: bool
