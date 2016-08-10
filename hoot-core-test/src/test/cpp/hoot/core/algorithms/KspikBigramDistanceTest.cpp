@@ -122,9 +122,9 @@ public:
     HOOT_STR_EQUALS("2-skip bi-gram", kskip2.toString());
   }
 
-  QString te(const QString& s)
+  QString te(const char* s)
   {
-    return Translator::getInstance().translateStreet(s);
+    return Translator::getInstance().translateStreet(QString::fromUtf8(s));
   }
 
   QString joinBigrams(QSet<QString> bigrams)
