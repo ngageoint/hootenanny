@@ -57,7 +57,8 @@ PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid
 Match(threshold),
 _ancestorTypeMatch(false),
 _ancestorDistance(-1.0),
-_addressMatch(false)
+_addressMatch(false),
+_exactNameMatch(false)
 {
   ConstElementPtr e1 = map->getElement(eid1);
   ConstElementPtr e2 = map->getElement(eid2);
@@ -312,7 +313,15 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
     {
       if (t1.contains("cuisine") && t2.contains("cuisine"))
       {
-        if (t1.get("cuisine").toLower() != t2.get("cuisine").toLower())
+        if (t1.get("cuisine").toLower() == "german" && t2.get("cuisine").toLower() == "bavarian")
+        {
+          return true;
+        }
+        else if (t2.get("cuisine").toLower() == "german" && t1.get("cuisine").toLower() == "bavarian")
+        {
+          return true;
+        }
+        else if (t1.get("cuisine").toLower() != t2.get("cuisine").toLower())
         {
           return false;
         }
@@ -361,6 +370,91 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
          t2.get("building").toLower() == "hospital") ||
         (t2.get("amenity").toLower() == "hospital" &&
          t1.get("building").toLower() == "hospital"))
+    {
+      return true;
+    }
+    //dataset D
+    if ((t1.get("building").toLower() == "transportation" &&
+         t2.contains("station")) ||
+        (t2.get("building").toLower() == "transportation" &&
+         t1.contains("station")))
+    {
+      return true;
+    }
+    if ((t1.contains("shop") &&
+         t2.get("shop").toLower() == "mall") ||
+        (t2.contains("shop") &&
+         t1.get("shop").toLower() == "mall"))
+    {
+      return true;
+    }
+    if ((t1.get("leisure").toLower() == "sports_centre" &&
+         t2.contains("sport")) ||
+        (t2.get("leisure").toLower() == "sports_centre" &&
+         t1.contains("sport")))
+    {
+      return true;
+    }
+    if ((t1.get("leisure").toLower() == "sports_complex" &&
+         t2.contains("sport")) ||
+        (t2.get("leisure").toLower() == "sports_complex" &&
+         t1.contains("sport")))
+    {
+      return true;
+    }
+    if ((t1.get("shop").toLower() == "car" &&
+         t2.get("shop").toLower() == "car_repair") ||
+        (t2.get("shop").toLower() == "car" &&
+         t1.get("shop").toLower() == "car_repair")) //very questionable
+    {
+      return true;
+    }
+    if ((t1.get("leisure").toLower() == "sports_centre" &&
+         t2.get("leisure").toLower() == "water_park") ||
+        (t2.get("leisure").toLower() == "sports_centre" &&
+         t1.get("leisure").toLower() == "water_park")) //very questionable
+    {
+      return true;
+    }
+    if ((t1.get("tourism").toLower() == "attraction" &&
+         t2.get("tourism").toLower() == "zoo") ||
+        (t2.get("tourism").toLower() == "attraction" &&
+         t1.get("tourism").toLower() == "zoo"))
+    {
+      return true;
+    }
+    if ((t1.get("amenity").toLower() == "arts_centre" &&
+         t2.get("amenity").toLower() == "theatre") ||
+        (t2.get("amenity").toLower() == "arts_centre" &&
+         t1.get("amenity").toLower() == "theatre"))
+    {
+      return true;
+    }
+    if ((t1.get("amenity").toLower() == "clinic" &&
+         t2.get("amenity").toLower() == "hospital") ||
+        (t2.get("amenity").toLower() == "clinic" &&
+         t1.get("amenity").toLower() == "hospital"))
+    {
+      return true;
+    }
+    if ((t1.get("station").toLower() == "light_rail" &&
+         t2.get("building").toLower() == "train_station") ||
+        (t2.get("station").toLower() == "light_rail" &&
+         t1.get("building").toLower() == "train_station"))
+    {
+      return true;
+    }
+    if ((t1.get("historic").toLower() == "building" &&
+         t2.get("historic").toLower() == "monument") ||
+        (t2.get("historic").toLower() == "building" &&
+         t1.get("historic").toLower() == "monument"))
+    {
+      return true;
+    }
+    if ((t1.get("amenity").toLower() == "arts_centre" &&
+         t2.get("amenity").toLower() == "theatre") ||
+        (t2.get("amenity").toLower() == "arts_centre" &&
+         t1.get("amenity").toLower() == "theatre"))
     {
       return true;
     }
