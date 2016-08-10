@@ -20,13 +20,14 @@
 	{
 		"NAME" : "OSM",
 		"DESCRIPTION" : "OpenStreetMap.org (OSM)",
-		"CANEXPORT" : false,
-		"PATH" : "translations/OSM_Ingest.js",
+		"CANEXPORT" : true,
+		"IMPORTPATH" : "translations/OSM_Ingest.js",
+		"EXPORTPATH" : "translations/RenderDb.js"
 	},
 	{
 		"NAME" : "GEONAMES",
 		"DESCRIPTION" : "GeoNames.org",
 		"CANEXPORT" : false,
-		"PATH" : "translations/GeoNames.js",
+		"PATH" : "translations/GeoNames.js"
 	}
 ]
