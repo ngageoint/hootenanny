@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -384,7 +383,7 @@ public final class DbUtils {
 
         if (!res.isEmpty()) {
             Object oTag = res.get(0);
-            tags = PostgresUtils.postgresObjToHStore((PGobject) oTag);
+            tags = PostgresUtils.postgresObjToHStore(oTag);
         }
 
         return tags;

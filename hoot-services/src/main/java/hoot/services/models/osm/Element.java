@@ -63,8 +63,8 @@ import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.models.db.QCurrentWays;
 import hoot.services.models.db.QUsers;
 import hoot.services.utils.DbUtils;
-import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.utils.PostgresUtils;
+import hoot.services.utils.DbUtils.EntityChangeType;
 
 
 /**
@@ -274,7 +274,7 @@ public abstract class Element implements XmlSerializable, DbSerializable {
             oTags = MethodUtils.invokeMethod(record, "getTags");
 
             if (oTags instanceof PGobject) {
-                return PostgresUtils.postgresObjToHStore((PGobject) MethodUtils.invokeMethod(record, "getTags"));
+                return PostgresUtils.postgresObjToHStore(MethodUtils.invokeMethod(record, "getTags"));
             }
         }
         catch (Exception e) {

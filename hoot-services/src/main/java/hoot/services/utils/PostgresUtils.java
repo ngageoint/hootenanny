@@ -32,7 +32,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.postgresql.util.PGobject;
 
 
 /**
@@ -50,17 +49,15 @@ public final class PostgresUtils {
      *            a Postgres object containing an hstore
      * @return a string map with the hstore's data
      */
-    public static Map<String, String> postgresObjToHStore(PGobject postgresObj) {
+    public static Map<String, String> postgresObjToHStore(Object postgresObj) {
         // type = hstore
         // value = "key 1"=>"val 1", "key 2"=>"val 2"
 
-        Map<String, String> hstore = new HashMap<>();
-
-        if ((postgresObj != null) && (postgresObj.getValue() != null)
-                && (StringUtils.trimToNull(postgresObj.getValue()) != null)) {
-            String tagsStr = postgresObj.getValue();
-            hstore = parseTags(tagsStr);
+        Map<String, String> hstore = (Map<String, String>) postgresObj;
+        if (hstore == null) {
+            hstore = new HashMap<>();
         }
+
         return hstore;
     }
 

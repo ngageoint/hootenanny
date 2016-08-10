@@ -62,7 +62,6 @@ import hoot.services.models.db.CurrentWays;
 import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.EntityChangeType;
-import hoot.services.utils.DbUtils.nwr_enum;
 
 
 /**
@@ -290,7 +289,7 @@ public class Way extends Element {
                 .from(currentRelations, currentRelationMembers)
                 .join(currentRelationMembers).on(currentRelations.id.eq(currentRelationMembers.relationId))
                 .where(currentRelations.visible.eq(true)
-                        .and(currentRelationMembers.memberType.eq(nwr_enum.way))
+                        .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way))
                         .and(currentRelationMembers.memberId.eq(super.getId())))
                 .orderBy(currentRelationMembers.relationId.asc());
 

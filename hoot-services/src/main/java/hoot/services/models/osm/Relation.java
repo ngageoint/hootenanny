@@ -58,7 +58,6 @@ import hoot.services.models.db.CurrentRelationMembers;
 import hoot.services.models.db.CurrentRelations;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.EntityChangeType;
-import hoot.services.utils.DbUtils.nwr_enum;
 
 
 /**
@@ -142,7 +141,7 @@ public class Relation extends Element {
                 .join(currentRelations).on(currentRelationMembers.relationId.eq(currentRelations.id))
                 .where(currentRelations.visible.eq(true)
                         .and(currentRelationMembers.memberId.eq(super.getId()))
-                        .and(currentRelationMembers.memberType.eq(nwr_enum.relation)))
+                        .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.relation)))
                 .orderBy(currentRelationMembers.relationId.asc());
 
         List<Long> owningRelationsIds = owningRelationsQuery.fetch();
@@ -323,14 +322,14 @@ public class Relation extends Element {
                 .select(currentRelationMembers.memberId)
                 .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(getId())
-                        .and(currentRelationMembers.memberType.eq(nwr_enum.node)))
+                        .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node)))
                 .fetch();
 
         List<Long> wayIds = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
                 .select(currentRelationMembers.memberId)
                 .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(getId())
-                        .and(currentRelationMembers.memberType.eq(nwr_enum.way)))
+                        .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way)))
                 .fetch();
 
         return getBoundsForNodesAndWays(new HashSet<>(nodeIds), new HashSet<>(wayIds));

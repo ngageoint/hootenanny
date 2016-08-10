@@ -43,13 +43,11 @@ import java.util.Set;
 
 import javax.xml.xpath.XPath;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.xpath.XPathAPI;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Assert;
-import org.postgresql.util.PGobject;
 import org.w3c.dom.Document;
 
 import com.querydsl.sql.SQLExpressions;
@@ -71,17 +69,17 @@ import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.models.db.QCurrentWays;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;
-import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Node;
 import hoot.services.models.osm.Relation;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Way;
+import hoot.services.models.osm.Element.ElementType;
 import hoot.services.utils.DbUtils;
-import hoot.services.utils.DbUtils.RecordBatchType;
 import hoot.services.utils.GeoUtils;
 import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.XmlUtils;
+import hoot.services.utils.DbUtils.RecordBatchType;
 
 
 /*
@@ -431,7 +429,7 @@ public class OsmTestUtils {
 
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                     Assert.assertEquals(2, tags.size());
                     // System.out.println(tags.get("key 1"));
                     Assert.assertEquals("val 1", tags.get("key 1"));
@@ -452,7 +450,7 @@ public class OsmTestUtils {
             if (verifyTags) {
                 try {
                     Assert.assertTrue((nodeRecord.getTags() == null)
-                            || StringUtils.isEmpty(((PGobject) nodeRecord.getTags()).getValue()));
+                            || PostgresUtils.postgresObjToHStore(nodeRecord.getTags()).isEmpty());
                 }
                 catch (Exception e) {
                     Assert.fail("Error checking node tags: " + e.getMessage());
@@ -468,7 +466,7 @@ public class OsmTestUtils {
             if (verifyTags) {
                 try {
                     Assert.assertTrue((nodeRecord.getTags() == null)
-                            || StringUtils.isEmpty(((PGobject) nodeRecord.getTags()).getValue()));
+                            || PostgresUtils.postgresObjToHStore(nodeRecord.getTags()).isEmpty());
                 }
                 catch (Exception e) {
                     Assert.fail("Error checking node tags: " + e.getMessage());
@@ -483,7 +481,7 @@ public class OsmTestUtils {
             Assert.assertEquals(new Long(1), nodeRecord.getVersion());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                     Assert.assertEquals(1, tags.size());
                     Assert.assertEquals("val 3", tags.get("key 3"));
                 }
@@ -500,7 +498,7 @@ public class OsmTestUtils {
             Assert.assertEquals(new Long(1), nodeRecord.getVersion());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                     Assert.assertEquals(1, tags.size());
                     Assert.assertEquals("val 4", tags.get("key 4"));
                 }
@@ -559,7 +557,7 @@ public class OsmTestUtils {
             Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) wayRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(wayRecord.getTags());
                     Assert.assertEquals(2, tags.size());
                     Assert.assertEquals("val 1", tags.get("key 1"));
                     Assert.assertEquals("val 2", tags.get("key 2"));
@@ -594,7 +592,7 @@ public class OsmTestUtils {
             if (verifyTags) {
                 try {
                     Assert.assertTrue((wayRecord.getTags() == null)
-                            || StringUtils.isEmpty(((PGobject) wayRecord.getTags()).getValue()));
+                            || PostgresUtils.postgresObjToHStore(wayRecord.getTags()).isEmpty());
                 }
                 catch (Exception e) {
                     Assert.fail("Error checking way tags: " + e.getMessage());
@@ -624,7 +622,7 @@ public class OsmTestUtils {
             Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) wayRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(wayRecord.getTags());
                     Assert.assertEquals(1, tags.size());
                     Assert.assertEquals("val 3", tags.get("key 3"));
                 }
@@ -704,7 +702,7 @@ public class OsmTestUtils {
             Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
                     Assert.assertEquals(1, tags.size());
                     Assert.assertEquals("val 1", tags.get("key 1"));
                 }
@@ -742,7 +740,7 @@ public class OsmTestUtils {
             Assert.assertEquals(relationIdsArr[0], member.getMemberId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
                     Assert.assertEquals(2, tags.size());
                     Assert.assertEquals("val 2", tags.get("key 2"));
                     Assert.assertEquals("val 3", tags.get("key 3"));
@@ -774,7 +772,7 @@ public class OsmTestUtils {
             Assert.assertEquals(wayIdsArr[1], member.getMemberId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
                     Assert.assertEquals(1, tags.size());
                     Assert.assertEquals("val 4", tags.get("key 4"));
                 }
@@ -807,7 +805,7 @@ public class OsmTestUtils {
             if (verifyTags) {
                 try {
                     Assert.assertTrue((relationRecord.getTags() == null)
-                            || StringUtils.isEmpty(((PGobject) relationRecord.getTags()).getValue()));
+                            || PostgresUtils.postgresObjToHStore(relationRecord.getTags()).isEmpty());
                 }
                 catch (Exception e) {
                     Assert.fail("Error checking relation tags: " + e.getMessage());
@@ -865,7 +863,7 @@ public class OsmTestUtils {
             Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
                     Assert.assertEquals(1, tags.size());
                     Assert.assertEquals("val 1", tags.get("key 1"));
                 }
@@ -903,7 +901,7 @@ public class OsmTestUtils {
             Assert.assertEquals(relationIdsArr[0], member.getMemberId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
                     Assert.assertEquals(2, tags.size());
                     Assert.assertEquals("val 2", tags.get("key 2"));
                     Assert.assertEquals("val 3", tags.get("key 3"));
@@ -935,7 +933,7 @@ public class OsmTestUtils {
             Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
                     Assert.assertEquals(1, tags.size());
                     Assert.assertEquals("val 4", tags.get("key 4"));
                 }
@@ -1494,7 +1492,7 @@ public class OsmTestUtils {
 
         long tagCount = 0;
         for (Object record : records) {
-            PGobject tags = (PGobject) MethodUtils.invokeMethod(record, "getTags");
+            Object tags = MethodUtils.invokeMethod(record, "getTags");
             if (tags != null) {
                 tagCount += PostgresUtils.postgresObjToHStore(tags).size();
             }

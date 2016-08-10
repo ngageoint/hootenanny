@@ -39,7 +39,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.json.simple.JSONObject;
-import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +61,6 @@ import hoot.services.models.db.QMaps;
 import hoot.services.models.db.QUsers;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.utils.DbUtils;
-import hoot.services.utils.DbUtils.nwr_enum;
 import hoot.services.utils.PostgresUtils;
 
 
@@ -503,7 +501,7 @@ public class Map extends Maps {
                             .select(currentRelationMembers.relationId)
                             .from(currentRelationMembers)
                             .where(currentRelationMembers.memberId.in(pageList)
-                                    .and(currentRelationMembers.memberType.eq(nwr_enum.node)))
+                                    .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node)))
                             .fetch()));
                 }
 
@@ -529,7 +527,7 @@ public class Map extends Maps {
                                     .select(currentRelationMembers.relationId)
                                     .from(currentRelationMembers)
                                     .where(currentRelationMembers.memberId.in(pageList)
-                                            .and(currentRelationMembers.memberType.eq(nwr_enum.way)))
+                                            .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way)))
                                     .fetch()));
                 }
 
@@ -658,10 +656,13 @@ public class Map extends Maps {
 
             // if the Set is empty the in statement blows up..
             if (nodesIds.isEmpty()) {
+                // nodesset returned by elementIdsToRecordsByType.get(ElementType.Node).keySet() might be immutable
+                nodesIds = new HashSet<>();
                 nodesIds.add(-1L);
             }
 
             if (waysIds.isEmpty()) {
+                waysIds = new HashSet<>();
                 waysIds.add(-1L);
             }
 
@@ -670,9 +671,9 @@ public class Map extends Maps {
                     .select(currentRelationMembers.relationId)
                     .from(currentRelationMembers)
                     .where(currentRelationMembers.memberId.in(nodesIds)
-                            .and(currentRelationMembers.memberType.eq(nwr_enum.node))
+                            .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node))
                             .or(currentRelationMembers.memberId.in(waysIds).and(
-                                    currentRelationMembers.memberType.eq(nwr_enum.way))))
+                                    currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way))))
                     .fetch());
 
             elementIdsByType.put(ElementType.Relation, relationIds);
@@ -748,7 +749,7 @@ public class Map extends Maps {
             mapLayer.setDate(mapLayerRecord.getCreatedAt());
 
             if (osmApiDbEnabled) {
-                java.util.Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) mapLayerRecord.getTags());
+                java.util.Map<String, String> tags = PostgresUtils.postgresObjToHStore(mapLayerRecord.getTags());
                 //This tag, set during conflation, is what indicates whether a conflated dataset
                 //had any osm api db source data in it.  That is the requirement to export back
                 //into an osm api db.
