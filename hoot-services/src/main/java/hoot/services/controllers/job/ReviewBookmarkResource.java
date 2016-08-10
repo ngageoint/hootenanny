@@ -162,15 +162,15 @@ public class ReviewBookmarkResource {
 
         try (Connection conn = DbUtils.createConnection()) {
             ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
-            List<ReviewBookmarks> reviewBookmarkses;
+            List<ReviewBookmarks> reviewBookmarks;
             if (bookmarkId != null) {
-                reviewBookmarkses = retriever.retrieve(bookmarkId);
+                reviewBookmarks = retriever.retrieve(bookmarkId);
             }
             else {
-                reviewBookmarkses = retriever.retrieve(mapId, relationId);
+                reviewBookmarks = retriever.retrieve(mapId, relationId);
             }
 
-            for (ReviewBookmarks mk : reviewBookmarkses) {
+            for (ReviewBookmarks mk : reviewBookmarks) {
                 Object oDetail = mk.getDetail();
 
                 Map<String, String> hstoreMap = PostgresUtils.postgresObjToHStore((PGobject) oDetail);
@@ -193,7 +193,7 @@ public class ReviewBookmarkResource {
                 mk.setDetail(oBmkDetail);
             }
 
-            response.setReviewBookmarks(reviewBookmarkses);
+            response.setReviewBookmarks(reviewBookmarks);
         }
         catch (WebApplicationException wae) {
             throw wae;

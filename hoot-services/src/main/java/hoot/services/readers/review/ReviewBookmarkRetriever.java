@@ -56,8 +56,8 @@ public class ReviewBookmarkRetriever {
         return reviewBookmarks;
     }
 
-    public List<ReviewBookmarks> retrieve(long boookMarkId) {
-        SQLQuery<ReviewBookmarks> query = this.getQuery(boookMarkId);
+    public List<ReviewBookmarks> retrieve(long bookMarkId) {
+        SQLQuery<ReviewBookmarks> query = this.getQuery(bookMarkId);
         List<ReviewBookmarks> reviewBookmarks = query.fetch();
         return reviewBookmarks;
     }

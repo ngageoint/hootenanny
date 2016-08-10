@@ -389,7 +389,7 @@ public class MapResource {
      *            in
      * @param multiLayerUniqueElementIds
      *            if true, returned element IDs are prepended with <map
-     *            id>_<first lettletterletterer of the element type>_; this setting
+     *            id>_<first letter of the element type>_; this setting
      *            activated is not compatible with standard OSM clients
      *            (specific to Hootenanny iD); defaults to false
      * @return response containing the data of the requested elements
