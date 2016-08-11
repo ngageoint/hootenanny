@@ -64,6 +64,7 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreator.cpp \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/extractors/PoiPolygonNameExtractor.cpp \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonRfClassifier.cpp \
+    src/main/cpp/hoot/rnd/conflate/poi-polygon/extractors/PoiPolygonAddressExtractor.cpp \
     src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatch.cpp \
@@ -96,6 +97,7 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreator.h \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/extractors/PoiPolygonNameExtractor.h \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonRfClassifier.h \
+    src/main/cpp/hoot/rnd/conflate/poi-polygon/extractors/PoiPolygonAddressExtractor.h \
     src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.h \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatch.h \

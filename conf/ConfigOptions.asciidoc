@@ -1602,7 +1602,7 @@ not remain a permanent config option.
 === poi.polygon.use.tag.ancestor.type.matching
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, then more detailed checks are done with tag matching related to ancestry.  TODO: This may
 not remain a permanent config option.
@@ -1610,7 +1610,7 @@ not remain a permanent config option.
 === poi.polygon.use.address.name.matching
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, then more detailed checks are done with tag matching related to addresses.  TODO: This
 may not remain a permanent config option.
@@ -1618,7 +1618,7 @@ may not remain a permanent config option.
 === poi.polygon.remove.operator.name.matching
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, then name comparisons are not done with the "operator" tag.  TODO: This may not
 remain a permanent config option.
@@ -1650,7 +1650,7 @@ circular error added to it.  TODO: This may not remain a permanent config option
 === poi.polygon.use.type.customized.match.distance
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, then custom match distances are used for some poi/building types.  TODO: This may not
 remain a permanent config option.
@@ -1658,7 +1658,7 @@ remain a permanent config option.
 === poi.polygon.use.type.customized.review.distance
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, then custom review distances are used for some poi/building types.  TODO: This may not
 remain a permanent config option.
@@ -1666,7 +1666,7 @@ remain a permanent config option.
 === poi.polygon.use.abbreviation.substitutions
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, then some common name abbreviations are replaced with full words.  TODO: This may not
 remain a permanent config option.
@@ -1674,7 +1674,7 @@ remain a permanent config option.
 === poi.polygon.promote.exact.name.matches
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, then elements with identical names are more likely to match.  TODO: This may not
 remain a permanent config option.
@@ -1682,7 +1682,7 @@ remain a permanent config option.
 === poi.polygon.use.custom.tower.rules
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, then custom matching rules are used with tower elements.  TODO: This may not
 remain a permanent config option.
@@ -1690,14 +1690,14 @@ remain a permanent config option.
 === poi.polygon.use.schema.mods
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, then custom schema mods are used.  TODO: This may not remain a permanent config option.
 
 === poi.polygon.use.custom.restaurant.rules
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, then custom restaurant matching rules are used.  TODO: This may not
 remain a permanent config option.

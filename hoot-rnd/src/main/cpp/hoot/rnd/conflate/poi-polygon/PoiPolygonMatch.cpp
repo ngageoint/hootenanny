@@ -80,7 +80,8 @@ _ancestorDistance(-1.0),
 _addressMatch(false),
 _exactNameMatch(false)
 {
-  _calculateMatch(map, eid1, eid2);
+  //_calculateMatch(map, eid1, eid2);
+  _calculateMatchWekaGetFeatures(map, eid1, eid2);
 }
 
 /*
@@ -109,8 +110,8 @@ void PoiPolygonMatch::_calculateMatchWeka(const ConstOsmMapPtr& map, const Eleme
   ConstElementPtr e2 = map->getElement(eid2);
 
   //A
-  const double centroidDistanceScore = CentroidDistanceExtractor().extract(map, e1, e2);
-  const double hausdorffDistanceScore = HausdorffDistanceExtractor().extract(map, e1, e2);
+  const double centroidDistanceScore = CentroidDistanceExtractor().extract(*map.get(), e1, e2);
+  const double hausdorffDistanceScore = HausdorffDistanceExtractor().extract(*map.get(), e1, e2);
   _c.setMiss();
   if (centroidDistanceScore > 0.545846 && hausdorffDistanceScore > 0.38672)
   {
@@ -118,8 +119,10 @@ void PoiPolygonMatch::_calculateMatchWeka(const ConstOsmMapPtr& map, const Eleme
   }
 
   //B
-  const double bufferedOverlap_0_1_Score = BufferedOverlapExtractor(0.1).extract(map, e1, e2);
-  const double bufferedOverlap_0_3_Score = BufferedOverlapExtractor(0.3).extract(map, e1, e2);
+  const double bufferedOverlap_0_1_Score =
+    BufferedOverlapExtractor(0.1).extract(*map.get(), e1, e2);
+  const double bufferedOverlap_0_3_Score =
+    BufferedOverlapExtractor(0.3).extract(*map.get(), e1, e2);
   _c.setMiss();
   if (bufferedOverlap_0_3_Score > 0 && bufferedOverlap_0_1_Score > 0.017073)
   {
@@ -130,11 +133,42 @@ void PoiPolygonMatch::_calculateMatchWeka(const ConstOsmMapPtr& map, const Eleme
 
 }
 
+void PoiPolygonMatch::_calculateMatchWekaGetFeatures(const ConstOsmMapPtr& map,
+                                                     const ElementId& eid1,
+                                                     const ElementId& eid2)
+{
+  ConstElementPtr e1 = map->getElement(eid1);
+  ConstElementPtr e2 = map->getElement(eid2);
+
+  ConstElementPtr poi, poly;
+  if (isPoiIsh(e1) && isBuildingIsh(e2))
+  {
+    _poiEid = eid1;
+    _polyEid = eid2;
+    poi = e1;
+    poly = e2;
+  }
+  else if (isPoiIsh(e2) && isBuildingIsh(e1))
+  {
+    _poiEid = eid2;
+    _polyEid = eid1;
+    poi = e2;
+    poly = e1;
+  }
+  else
+  {
+    LOG_WARN(e1->toString());
+    LOG_WARN(e2->toString());
+    throw IllegalArgumentException("Expected a POI & polygon, got: " + eid1.toString() + " " +
+                                   eid2.toString());
+  }
+
+  //_c.setMiss();
+}
+
 void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                       const ElementId& eid2)
 {
-
-
   ConstElementPtr e1 = map->getElement(eid1);
   ConstElementPtr e2 = map->getElement(eid2);
 

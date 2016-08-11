@@ -24,41 +24,34 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONRFCLASSIFIER_H
-#define POIPOLYGONRFCLASSIFIER_H
+#ifndef POIPOLYGONADDRESSEXTRACTOR_H
+#define POIPOLYGONADDRESSEXTRACTOR_H
 
 // hoot
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
-#include <hoot/core/conflate/MatchClassification.h>
-#include <hoot/core/OsmMap.h>
-
-// tgs
-#include <tgs/RandomForest/RandomForest.h>
+#include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
-class PoiPolygonRfClassifier
+/**
+ *
+ */
+class PoiPolygonAddressExtractor : public NameExtractor
 {
-
 public:
 
-  //static std::string className() { return "hoot::PoiPolygonRfClassifier"; }
+  PoiPolygonAddressExtractor();
 
-  PoiPolygonRfClassifier();
+  PoiPolygonAddressExtractor(StringDistance* d);
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m,
-    ElementId eid1, ElementId eid2) const;
+  static string className() { return "hoot::PoiPolygonAddressExtractor"; }
 
-private:
+  virtual string getClassName() const { return PoiPolygonAddressExtractor::className(); }
 
-  vector< shared_ptr<const FeatureExtractor> > _extractors;
-
-  void _createExtractors();
+  virtual double extract(const ConstElementPtr& target, const ConstElementPtr& candidate) const;
 };
-
-typedef shared_ptr<PoiPolygonRfClassifier> PoiPolygonRfClassifierPtr;
 
 }
 
-#endif // POIPOLYGONRFCLASSIFIER_H
+#endif // POIPOLYGONADDRESSEXTRACTOR_H
