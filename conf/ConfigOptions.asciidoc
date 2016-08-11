@@ -1724,6 +1724,13 @@ TODO: This may not remain a permanent config option.
 
 TODO: This may not remain a permanent config option.
 
+=== poi.polygon.address.only.evidence.boost
+
+* Data Type: int
+* Default Value: `0`
+
+TODO: This may not remain a permanent config option.
+
 === postgresql.dumpfile.writer.auto.calc.ids
 
 * Data Type: bool

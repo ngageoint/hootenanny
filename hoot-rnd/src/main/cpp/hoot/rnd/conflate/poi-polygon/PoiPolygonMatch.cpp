@@ -194,11 +194,14 @@ _exactNameMatch(false)
   evidence += ancestorTypeMatch ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
   evidence += exactNameMatch ? 1 : 0;
-  //only add address if you don't have type or name; TODO: also try giving it +2
-  //if (!typeMatch && !nameMatch)
-  //{
+  if (ConfigOptions().getPoiPolygonAddressOnlyEvidenceBoost() != 0 && !typeMatch && !nameMatch)
+  {
+    evidence += addressMatch ? ConfigOptions().getPoiPolygonAddressOnlyEvidenceBoost() : 0;
+  }
+  else
+  {
     evidence += addressMatch ? 1 : 0;
-  //}
+  }
   evidence += distance <= matchDistance ? 2 : 0;
 
   //custom rule
