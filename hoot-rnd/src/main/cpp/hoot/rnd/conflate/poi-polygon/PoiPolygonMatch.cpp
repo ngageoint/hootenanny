@@ -44,6 +44,9 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/util/ConfPath.h>
+#include <hoot/core/conflate/polygon/extractors/CentroidDistanceExtractor.h>
+#include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
+#include <hoot/core/conflate/polygon/extractors/BufferedOverlapExtractor.h>
 
 namespace hoot
 {
@@ -55,11 +58,83 @@ QString PoiPolygonMatch::_testUuid = "{08cf2389-216b-5a49-afcd-5ce30cef9436}";
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold) :
 Match(threshold),
+_eid1(eid1),
+_eid2(eid2),
 _ancestorTypeMatch(false),
 _ancestorDistance(-1.0),
 _addressMatch(false),
 _exactNameMatch(false)
 {
+  _calculateMatch(map, eid1, eid2);
+}
+
+PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
+                                 const ElementId& eid2, ConstMatchThresholdPtr threshold,
+                                 shared_ptr<const PoiPolygonRfClassifier> rf) :
+Match(threshold),
+_eid1(eid1),
+_eid2(eid2),
+_rf(rf),
+_ancestorTypeMatch(false),
+_ancestorDistance(-1.0),
+_addressMatch(false),
+_exactNameMatch(false)
+{
+  _calculateMatch(map, eid1, eid2);
+}
+
+/*
+ * A
+ *
+ * hoot__CentroidDistanceExtractor <= 0.545846: miss (494.0/8.0)
+   hoot__CentroidDistanceExtractor > 0.545846
+   |   hoot__HausdorffDistanceExtractor <= 0.38672: miss (31.0/12.0)
+   |   hoot__HausdorffDistanceExtractor > 0.38672: match (69.0/31.0)
+
+   B
+
+   BufferedOverlapExtractor_0_3 <= 0: miss (137.0/3.0)
+   BufferedOverlapExtractor_0_3 > 0
+   |   BufferedOverlapExtractor_0_1 <= 0.017073: miss (3.0/1.0)
+   |   BufferedOverlapExtractor_0_1 > 0.017073: match (6.0/1.0)
+
+   C
+
+
+ */
+void PoiPolygonMatch::_calculateMatchWeka(const ConstOsmMapPtr& map, const ElementId& eid1,
+                                          const ElementId& eid2)
+{
+  ConstElementPtr e1 = map->getElement(eid1);
+  ConstElementPtr e2 = map->getElement(eid2);
+
+  //A
+  const double centroidDistanceScore = CentroidDistanceExtractor().extract(map, e1, e2);
+  const double hausdorffDistanceScore = HausdorffDistanceExtractor().extract(map, e1, e2);
+  _c.setMiss();
+  if (centroidDistanceScore > 0.545846 && hausdorffDistanceScore > 0.38672)
+  {
+    _c.setMatch();
+  }
+
+  //B
+  const double bufferedOverlap_0_1_Score = BufferedOverlapExtractor(0.1).extract(map, e1, e2);
+  const double bufferedOverlap_0_3_Score = BufferedOverlapExtractor(0.3).extract(map, e1, e2);
+  _c.setMiss();
+  if (bufferedOverlap_0_3_Score > 0 && bufferedOverlap_0_1_Score > 0.017073)
+  {
+    _c.setMatch();
+  }
+
+  //C
+
+}
+
+void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
+                                      const ElementId& eid2)
+{
+
+
   ConstElementPtr e1 = map->getElement(eid1);
   ConstElementPtr e2 = map->getElement(eid2);
 
@@ -877,6 +952,11 @@ bool PoiPolygonMatch::_getAddressMatch(ConstElementPtr e1, ConstElementPtr e2)
     return true;
   }
   return false;
+}
+
+map<QString, double> PoiPolygonMatch::getFeatures(const shared_ptr<const OsmMap>& m) const
+{
+  return _rf->getFeatures(m, _eid1, _eid2);
 }
 
 QString PoiPolygonMatch::toString() const

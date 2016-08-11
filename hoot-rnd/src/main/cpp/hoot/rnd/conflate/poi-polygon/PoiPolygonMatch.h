@@ -34,11 +34,16 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/schema/TagAncestorDifferencer.h>
 #include <hoot/core/schema/TagCategoryDifferencer.h>
+#include <hoot/core/conflate/MatchDetails.h>
+
+#include "PoiPolygonRfClassifier.h"
 
 namespace hoot
 {
 
 /**
+ * TODO: update
+ *
  * This is a very simple mechanism for matching POIs to polygons. The following rules are used:
  *
  * - Match - If the names are fairly similar or non-existant & the point is inside the polygon
@@ -51,12 +56,14 @@ namespace hoot
  * If there are multiple overlapping matches then they will all get marked as needing review in
  * PoiPolygonMergerCreator.
  */
-class PoiPolygonMatch : public Match
+class PoiPolygonMatch : public Match, public MatchDetails
 {
 public:
 
   PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     ConstMatchThresholdPtr threshold);
+  PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
+    ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf);
 
   virtual const MatchClassification& getClassification() const { return _c; }
 
@@ -79,7 +86,13 @@ public:
 
   virtual QString toString() const;
 
+  virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m) const;
+
 private:
+
+  ElementId _eid1;
+  ElementId _eid2;
+  shared_ptr<const PoiPolygonRfClassifier> _rf;
 
   static QString _matchName;
   ElementId _poiEid, _polyEid;
@@ -113,6 +126,11 @@ private:
 
   QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
   QMap<QString, shared_ptr<TagCategoryDifferencer> > _tagCategoryDifferencers;
+
+  void _calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
+                       const ElementId& eid2);
+  void _calculateMatchWeka(const ConstOsmMapPtr& map, const ElementId& eid1,
+                           const ElementId& eid2);
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the names. A score of -1 means one

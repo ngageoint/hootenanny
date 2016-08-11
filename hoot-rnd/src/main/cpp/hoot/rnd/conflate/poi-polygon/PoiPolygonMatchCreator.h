@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -31,6 +31,8 @@
 #include <hoot/core/conflate/MatchCreator.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/algorithms/SublineStringMatcher.h>
+
+#include "PoiPolygonRfClassifier.h"
 
 namespace hoot
 {
@@ -69,6 +71,9 @@ public:
 private:
 
   shared_ptr<MatchThreshold> _matchThreshold;
+  shared_ptr<PoiPolygonRfClassifier> _getRf();
+
+  shared_ptr<PoiPolygonRfClassifier> _rf;
 
 };
 
