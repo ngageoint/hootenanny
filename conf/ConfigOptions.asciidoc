@@ -1717,6 +1717,13 @@ remain a permanent config option.
 
 TODO: This may not remain a permanent config option.
 
+=== poi.polygon.ancestor.only.review.penalty
+
+* Data Type: double
+* Default Value: `1.0`
+
+TODO: This may not remain a permanent config option.
+
 === postgresql.dumpfile.writer.auto.calc.ids
 
 * Data Type: bool

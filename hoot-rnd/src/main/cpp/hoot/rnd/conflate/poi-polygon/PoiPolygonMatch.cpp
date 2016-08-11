@@ -181,6 +181,12 @@ _exactNameMatch(false)
     reviewDistance = 0.0;
   }
 
+  /*if (ancestorTypeMatch && !typeMatch && !nameMatch)
+  {
+    reviewDistance *= ConfigOptions().getPoiPolygonAncestorOnlyReviewPenalty();
+    //matchDistance = 0.0;
+  }*/
+
   bool closeMatch = distance <= reviewDistance;
 
   int evidence = 0;
@@ -188,7 +194,11 @@ _exactNameMatch(false)
   evidence += ancestorTypeMatch ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
   evidence += exactNameMatch ? 1 : 0;
-  evidence += addressMatch ? 1 : 0;
+  //only add address if you don't have type or name; TODO: also try giving it +2
+  //if (!typeMatch && !nameMatch)
+  //{
+    evidence += addressMatch ? 1 : 0;
+  //}
   evidence += distance <= matchDistance ? 2 : 0;
 
   //custom rule
@@ -295,7 +305,7 @@ double PoiPolygonMatch::_calculateNameScore(ConstElementPtr e1, ConstElementPtr 
     if (ConfigOptions().getPoiPolygonUseMeanWordDistanceNameComparison())
     {
       return
-        /*NameExtractor*/PoiPolygonNameExtractor(
+        PoiPolygonNameExtractor(
           new TranslateStringDistance(
             new MeanWordSetDistance(
               new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))))
@@ -303,14 +313,11 @@ double PoiPolygonMatch::_calculateNameScore(ConstElementPtr e1, ConstElementPtr 
     }
     else
     {
-      /*SqliteWordWeightDictionary* dict =
-        new SqliteWordWeightDictionary(
-          ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary()));*/
       return
-        /*NameExtractor*/PoiPolygonNameExtractor(
+        PoiPolygonNameExtractor(
           new TranslateStringDistance(
-            new /*MeanWordSetDistance*/MinSumWordSetDistance/*WeightedWordDistance*/(
-              new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())/*, dict*/)))
+            new MinSumWordSetDistance(
+              new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))))
           .extract(e1, e2);
     }
   }
@@ -424,10 +431,30 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
     {
       return true;
     }
+    //TODO: haven't tested this yet
+    if (t1.get("shop").toLower().contains("car") &&
+        t2.get("shop").toLower().contains("car")) //very questionable
+    {
+      return true;
+    }
     if ((t1.get("leisure").toLower() == "sports_centre" &&
          t2.get("leisure").toLower() == "water_park") ||
         (t2.get("leisure").toLower() == "sports_centre" &&
          t1.get("leisure").toLower() == "water_park")) //very questionable
+    {
+      return true;
+    }
+    if ((t1.get("leisure").toLower() == "sports_centre" &&
+         t2.get("leisure").toLower() == "swimming_pool") ||
+        (t2.get("leisure").toLower() == "sports_centre" &&
+         t1.get("leisure").toLower() == "swimming_pool")) //very questionable
+    {
+      return true;
+    }
+    if ((t1.get("leisure").toLower() == "sports_centre" &&
+         t2.get("sport").toLower() == "swimming") ||
+        (t2.get("leisure").toLower() == "sports_centre" &&
+         t1.get("sport").toLower() == "swimming")) //very questionable
     {
       return true;
     }
