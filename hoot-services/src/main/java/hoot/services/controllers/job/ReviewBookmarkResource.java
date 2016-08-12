@@ -49,7 +49,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -173,7 +172,7 @@ public class ReviewBookmarkResource {
             for (ReviewBookmarks mk : reviewBookmarks) {
                 Object oDetail = mk.getDetail();
 
-                Map<String, String> hstoreMap = PostgresUtils.postgresObjToHStore((PGobject) oDetail);
+                Map<String, String> hstoreMap = PostgresUtils.postgresObjToHStore(oDetail);
 
                 JSONObject oBmkDetail = new JSONObject();
 
@@ -307,7 +306,7 @@ public class ReviewBookmarkResource {
 
             for (ReviewBookmarks mk : res) {
                 Object oDetail = mk.getDetail();
-                Map<String, String> hstoreMap = PostgresUtils.postgresObjToHStore((PGobject) oDetail);
+                Map<String, String> hstoreMap = PostgresUtils.postgresObjToHStore(oDetail);
 
                 String bmkDetail = hstoreMap.get("bookmarkdetail");
                 if ((bmkDetail != null) && (!bmkDetail.isEmpty())) {

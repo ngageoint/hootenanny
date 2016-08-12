@@ -685,6 +685,9 @@ public class MapResource {
                 throw new WebApplicationException(e, Response.serverError().entity(msg).build());
             }
         }
+
+        String msg = e.getMessage();
+        throw new WebApplicationException(e, Response.serverError().entity(msg).build());
     }
 
     /**

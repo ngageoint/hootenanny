@@ -39,7 +39,7 @@
         <commons-codec.version>1.7</commons-codec.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
         <joda-time.version>2.3</joda-time.version>
-        <postgresql.version>9.1-901-1.jdbc4</postgresql.version>
+        <postgresql.version>9.4.1208.jre7</postgresql.version>
         <xalan.version>2.7.1</xalan.version>
         <xercesImpl.version>2.9.1</xercesImpl.version>
         <json-simple.version>1.1.1</json-simple.version>
@@ -266,7 +266,7 @@
                 </configuration>
                 <dependencies>
                     <dependency>
-                        <groupId>postgresql</groupId>
+                        <groupId>org.postgresql</groupId>
                         <artifactId>postgresql</artifactId>
                         <version>${postgresql.version}</version>
                     </dependency>
@@ -281,7 +281,7 @@
                     <!-- This has been disabled to prevent build breakage....but then you could end up with
                     no docs. -->
                     <failOnError>false</failOnError>
-                    <excludePackageNames>hoot.services.models.db.db2</excludePackageNames>
+                    <excludePackageNames>hoot.services.models.db</excludePackageNames>
                     <!-- the version isn't right here; if fixed, then we could use the default param -->
                     <doctitle>${project.name} API</doctitle>
                 </configuration>
@@ -446,7 +446,7 @@
 
         <!-- database driver -->
         <dependency>
-            <groupId>postgresql</groupId>
+            <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
         </dependency>
@@ -594,12 +594,22 @@
                     <groupId>javassist</groupId>
                     <artifactId>javassist</artifactId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>postgresql</artifactId>
+                    <groupId>postgresql</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
             <groupId>org.deegree</groupId>
             <artifactId>deegree-sqldialect-postgis</artifactId>
             <version>${deegree.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>postgresql</artifactId>
+                    <groupId>postgresql</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.deegree</groupId>
