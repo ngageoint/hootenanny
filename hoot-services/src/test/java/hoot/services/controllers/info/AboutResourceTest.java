@@ -30,8 +30,13 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Properties;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -39,10 +44,6 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.test.framework.JerseyTest;
 
 import hoot.services.UnitTest;
 
@@ -52,9 +53,13 @@ import hoot.services.UnitTest;
 @PrepareForTest({ BuildInfo.class })
 public class AboutResourceTest extends JerseyTest {
 
-    public AboutResourceTest() {
-        super("hoot.services.controllers.info");
+    public AboutResourceTest() {}
+
+    @Override
+    protected Application configure() {
+        return new ResourceConfig(AboutResourceTest.class);
     }
+
 
     private static void mockBuildInfo() throws IOException {
         // mock the existence of the build info properties
@@ -73,14 +78,11 @@ public class AboutResourceTest extends JerseyTest {
 
         VersionInfo responseData = null;
         try {
-            responseData = resource()
-                    .path("/about/servicesVersionInfo")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .get(VersionInfo.class);
+            responseData = target("/about/servicesVersionInfo").request(MediaType.APPLICATION_JSON).get(VersionInfo.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
         }
 
         Assert.assertEquals("Hootenanny Web Services", responseData.getName());
@@ -95,14 +97,11 @@ public class AboutResourceTest extends JerseyTest {
 
         VersionInfo responseData = null;
         try {
-            responseData = resource()
-                    .path("/about/coreVersionInfo")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .get(VersionInfo.class);
+            responseData = target("/about/coreVersionInfo").request(MediaType.APPLICATION_JSON).get(VersionInfo.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
         }
 
         Assert.assertEquals("Hootenanny Core", responseData.getName());
@@ -117,14 +116,11 @@ public class AboutResourceTest extends JerseyTest {
 
         CoreDetail responseData = null;
         try {
-            responseData = resource()
-                    .path("/about/coreVersionDetail")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .get(CoreDetail.class);
+            responseData = target("/about/coreVersionDetail").request(MediaType.APPLICATION_JSON).get(CoreDetail.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
         }
 
         // not a great way to test this, but haven't thought of anything better yet
@@ -144,14 +140,11 @@ public class AboutResourceTest extends JerseyTest {
 
         VersionInfo responseData = null;
         try {
-            responseData = resource()
-                    .path("/about/servicesVersionInfo")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .get(VersionInfo.class);
+            responseData = target("/about/servicesVersionInfo").request(MediaType.APPLICATION_JSON).get(VersionInfo.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
         }
 
         Assert.assertEquals("unknown", responseData.getName());
