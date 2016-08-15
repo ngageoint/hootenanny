@@ -123,12 +123,10 @@ private:
   bool _exactNameMatch;
 
   QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
-  QMap<QString, shared_ptr<TagCategoryDifferencer> > _tagCategoryDifferencers;
+  //QMap<QString, shared_ptr<TagCategoryDifferencer> > _tagCategoryDifferencers;
 
   void _calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                        const ElementId& eid2);
-  void _calculateMatchWeka(const ConstOsmMapPtr& map, const ElementId& eid1,
-                           const ElementId& eid2);
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the names. A score of -1 means one
@@ -149,12 +147,7 @@ private:
                          ConstElementPtr e1, ConstElementPtr e2);
   double _getTagDistance(const QString kvp, ConstElementPtr e1, ConstElementPtr e2) const;
   QStringList _getRelatedTags(const QString relateToKvp, const Tags& tags) const;
-  QStringList _getTagsByCategory(const QString category, const Tags& tags) const;
-  bool _oneGeneric(ConstElementPtr e1, ConstElementPtr e2) const;
-
-  double _getReviewDistance(ConstElementPtr element);
-  double _getMatchDistance(ConstElementPtr element);
-
+  //QStringList _getTagsByCategory(const QString category, const Tags& tags) const;
 };
 
 }

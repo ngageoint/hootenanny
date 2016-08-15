@@ -71,7 +71,7 @@ namespace hoot
 
 PoiPolygonRfClassifier::PoiPolygonRfClassifier()
 {
-  _createExtractors();
+  //_createExtractors();
 }
 
 void PoiPolygonRfClassifier::_createExtractors()

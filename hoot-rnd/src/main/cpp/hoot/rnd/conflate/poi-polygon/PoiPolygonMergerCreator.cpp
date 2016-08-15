@@ -188,14 +188,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
     if (ma.get() == 0 ||
         ma->getType() == MatchType::Miss)
     {
-      //TODO: this config option probably shouldn't stay
-      if (ConfigOptions().getPoiPolygonReviewMultipleMatches())
-      {
-        result = true;
-        //LOG_DEBUG("conflict");
-        //LOG_VARD(o1);
-        //LOG_VARD(o2);
-      }
+      result = true;
     }
   }
   // if you don't dereference the m1/m2 pointers it always returns Match as the typeid. Odd.

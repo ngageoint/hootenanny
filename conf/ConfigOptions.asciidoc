@@ -1577,7 +1577,7 @@ are 0 to 1 for similarity and -1 if there are no names present (null).
 === poi.polygon.match.review.distance
 
 * Data Type: double
-* Default Value: `0`
+* Default Value: `100`
 
 How far away from a polygon should name matches be considered reviews. This is a fixed value in
 meters that is added to the CE calculation.
@@ -1585,151 +1585,41 @@ meters that is added to the CE calculation.
 === poi.polygon.match.distance
 
 * Data Type: double
-* Default Value: `0`
+* Default Value: `5`
 
 The maximum distance, in meters, between a POI and a polygon where they can still be considered
 an exact match based on distance criteria only.  TODO: This may not remain a permanent config option.
 
-=== poi.polygon.allow.generic.building.matches
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, then POI's and polygon buildings only need building=yes in common to have a type match.
-This will generally generate more reviews when turned on than when turned off.  TODO: This may
-not remain a permanent config option.
-
 === poi.polygon.use.tag.ancestor.type.matching
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If true, then more detailed checks are done with tag matching related to ancestry.  TODO: This may
 not remain a permanent config option.
 
-=== poi.polygon.use.address.name.matching
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, then more detailed checks are done with tag matching related to addresses.  TODO: This
-may not remain a permanent config option.
-
-=== poi.polygon.remove.operator.name.matching
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, then name comparisons are not done with the "operator" tag.  TODO: This may not
-remain a permanent config option.
-
-=== poi.polygon.review.multiple.matches
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, then multiple matches are always reviewed.  TODO: This may not remain a permanent
-config option.
-
-=== poi.polygon.use.mean.word.distance.name.comparison
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, then uses MeanWordsetDistance; otherwise uses MinSumWordSetDistance.  TODO: This may not
-remain a permanent config option.
-
-=== poi.polygon.add.circular.error.to.review.distance
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, then the maximum distance used to identify review candidates during matching has a
-circular error added to it.  TODO: This may not remain a permanent config option.
-
-=== poi.polygon.use.type.customized.match.distance
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, then custom match distances are used for some poi/building types.  TODO: This may not
-remain a permanent config option.
-
-=== poi.polygon.use.type.customized.review.distance
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, then custom review distances are used for some poi/building types.  TODO: This may not
-remain a permanent config option.
-
 === poi.polygon.use.abbreviation.substitutions
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If true, then some common name abbreviations are replaced with full words.  TODO: This may not
-remain a permanent config option.
-
-=== poi.polygon.promote.exact.name.matches
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, then elements with identical names are more likely to match.  TODO: This may not
-remain a permanent config option.
-
-=== poi.polygon.use.custom.tower.rules
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, then custom matching rules are used with tower elements.  TODO: This may not
 remain a permanent config option.
 
 === poi.polygon.use.schema.mods
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If true, then custom schema mods are used.  TODO: This may not remain a permanent config option.
 
 === poi.polygon.use.custom.restaurant.rules
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If true, then custom restaurant matching rules are used.  TODO: This may not
 remain a permanent config option.
-
-=== poi.polygon.use.address.translation.rules
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, then custom restaurant matching rules are used.  TODO: This may not
-remain a permanent config option.
-
-=== poi.polygon.use.weighted.word.distance
-
-* Data Type: bool
-* Default Value: `false`
-
-TODO: This may not remain a permanent config option.
-
-=== poi.polygon.ancestor.only.review.penalty
-
-* Data Type: double
-* Default Value: `1.0`
-
-TODO: This may not remain a permanent config option.
-
-=== poi.polygon.address.only.evidence.boost
-
-* Data Type: int
-* Default Value: `0`
-
-TODO: This may not remain a permanent config option.
 
 === postgresql.dumpfile.writer.auto.calc.ids
 
