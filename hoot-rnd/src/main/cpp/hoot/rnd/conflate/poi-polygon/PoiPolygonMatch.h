@@ -46,8 +46,10 @@ namespace hoot
  *
  * This is a very simple mechanism for matching POIs to polygons. The following rules are used:
  *
- * - Match - If the names are fairly similar or non-existant & the point is inside the polygon
- * - Review - If the point is inside the polygon, but the names are different OR
+ * - Match - If the names are fairly similar or non-existant & the point is within a specified
+ *           distance of the polygon
+ * - Review - If the point is within a specified distance of the polygon, but the names are
+ *            different OR
  *            If the point is close to the polygon and the names are similar
  * - Miss - Everything else
  *
@@ -123,7 +125,6 @@ private:
   bool _exactNameMatch;
 
   QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
-  //QMap<QString, shared_ptr<TagCategoryDifferencer> > _tagCategoryDifferencers;
 
   void _calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                        const ElementId& eid2);
@@ -138,16 +139,15 @@ private:
    * Returns true if at least one POI tag is an exact match between the two elements. E.g.
    * amenity=cafe in e1 and in e2.
    */
-  bool _calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2) /*const*/;
+  bool _calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2);
 
   bool _calculateAncestorTypeMatch(const ConstOsmMapPtr& map, ConstElementPtr e1,
-                                   ConstElementPtr e2) /*const*/;
+                                   ConstElementPtr e2);
 
   double _getTagDistance(const QString type, const QString kvp, ConstOsmMapPtr map,
                          ConstElementPtr e1, ConstElementPtr e2);
   double _getTagDistance(const QString kvp, ConstElementPtr e1, ConstElementPtr e2) const;
   QStringList _getRelatedTags(const QString relateToKvp, const Tags& tags) const;
-  //QStringList _getTagsByCategory(const QString category, const Tags& tags) const;
 };
 
 }

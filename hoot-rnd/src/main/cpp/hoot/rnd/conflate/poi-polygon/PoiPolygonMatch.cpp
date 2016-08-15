@@ -46,7 +46,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-//QString PoiPolygonMatch::_testUuid = "{08cf2389-216b-5a49-afcd-5ce30cef9436}";
+QString PoiPolygonMatch::_testUuid = "{08cf2389-216b-5a49-afcd-5ce30cef9436}";
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold) :
@@ -78,11 +78,11 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   ConstElementPtr e1 = map->getElement(eid1);
   ConstElementPtr e2 = map->getElement(eid2);
 
-  /*if (e1->getTags().get("uuid") == _testUuid ||
+  if (e1->getTags().get("uuid") == _testUuid ||
       e2->getTags().get("uuid") == _testUuid)
   {
     LOG_DEBUG("Conflating:" << _testUuid);
-  }*/
+  }
 
   ConstElementPtr poi, poly;
   if (isPoiIsh(e1) && isBuildingIsh(e2))
@@ -155,28 +155,28 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     _c.setMiss();
   }
 
-  /*_uuid1 = e1->getTags().get("uuid");
-  _uuid2 = e2->getTags().get("uuid");
-  _typeMatch = typeMatch;
-  _nameMatch = nameMatch;
-  _nameScore = nameScore;
-  QStringList names1 = e1->getTags().getNames();
-  names1.append(e1->getTags().getPseudoNames());
-  _names1 = names1.join(",");
-  QStringList names2 = e2->getTags().getNames();
-  names2.append(e2->getTags().getPseudoNames());
-  _names2 = names2.join(",");
-  _closeMatch = closeMatch;
-  _distance = distance;
-  _reviewDistance = reviewDistance;
-  _ce = ce;
-  _circularError1 = e1->getCircularError();
-  _circularError2 = e2->getCircularError();
-  _evidence = evidence;
-
   if (e1->getTags().get("uuid") == _testUuid ||
       e2->getTags().get("uuid") == _testUuid)
   {
+    _uuid1 = e1->getTags().get("uuid");
+    _uuid2 = e2->getTags().get("uuid");
+    _typeMatch = typeMatch;
+    _nameMatch = nameMatch;
+    _nameScore = nameScore;
+    QStringList names1 = e1->getTags().getNames();
+    names1.append(e1->getTags().getPseudoNames());
+    _names1 = names1.join(",");
+    QStringList names2 = e2->getTags().getNames();
+    names2.append(e2->getTags().getPseudoNames());
+    _names2 = names2.join(",");
+    _closeMatch = closeMatch;
+    _distance = distance;
+    _reviewDistance = reviewDistance;
+    _ce = ce;
+    _circularError1 = e1->getCircularError();
+    _circularError2 = e2->getCircularError();
+    _evidence = evidence;
+
     LOG_VARD(eid1);\
     LOG_VARD(e1->getTags().get("uuid"));
     LOG_VARD(e1->getTags());
@@ -200,7 +200,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     LOG_VARD(e2->getCircularError());
     LOG_VARD(evidence);
     LOG_DEBUG("**************************");
-  }*/
+  }
 }
 
 double PoiPolygonMatch::_calculateNameScore(ConstElementPtr e1, ConstElementPtr e2) const
@@ -319,7 +319,6 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
     {
       return true;
     }
-    //TODO: haven't tested this yet
     if (t1.get("shop").toLower().contains("car") &&
         t2.get("shop").toLower().contains("car")) //very questionable
     {
@@ -422,26 +421,28 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
   for (int i = 0; i < types.length(); i++)
   {
     const QString type = types.at(i);
-    /*if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
+    if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
     {
       LOG_VARD(type);
-    }*/
+    }
 
     if (e1->getTags().contains(type) && e2->getTags().contains(type))
     {
       const double ancestorDistance = _getTagDistance("ancestor", type, map, e1, e2);
-      //_ancestorDistance = ancestorDistance;
-      /*if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
+      _ancestorDistance = ancestorDistance;
+      if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
       {
         LOG_VARD(ancestorDistance);
-      }*/
+      }
+
       if (ancestorDistance == 0.0)
       {
-        //_ancestorTypeMatch = true;
-        /*if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
+        _ancestorTypeMatch = true;
+        if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
         {
           LOG_VARD(_ancestorTypeMatch);
-        }*/
+        }
+
         return true;
       }
     }
@@ -488,18 +489,6 @@ double PoiPolygonMatch::_getTagDistance(const QString type, const QString kvp, C
       differencer = _tagAncestorDifferencers[kvp];
     }
   }
-  /*else if (type == "category")
-  {
-    if (!_tagCategoryDifferencers.contains(kvp))
-    {
-      differencer.reset(new TagCategoryDifferencer(OsmSchemaCategory::fromString(kvp)));
-      _tagCategoryDifferencers[kvp] = dynamic_pointer_cast<TagCategoryDifferencer>(differencer);
-    }
-    else
-    {
-      differencer = _tagCategoryDifferencers[kvp];
-    }
-  }*/
   else
   {
     throw HootException();
@@ -547,23 +536,6 @@ QStringList PoiPolygonMatch::_getRelatedTags(const QString relateToKvp, const Ta
   }
   return result;
 }
-
-/*QStringList PoiPolygonMatch::_getTagsByCategory(const QString category, const Tags& tags) const
-{
-  QStringList result;
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); it++)
-  {
-    QString kvp = it.key() + "=" + it.value();
-    if (kvp != "poi=yes" && kvp != "place=locality" && kvp != "building=yes")
-    {
-      if (OsmSchema::getInstance().getCategories(kvp).toStringList().indexOf(category) >= 0)
-      {
-        result.append(kvp);
-      }
-    }
-  }
-  return result;
-}*/
 
 map<QString, double> PoiPolygonMatch::getFeatures(const shared_ptr<const OsmMap>& m) const
 {
