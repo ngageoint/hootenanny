@@ -201,12 +201,6 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     reviewDistance += ce;
   }
 
-  /*if (ancestorTypeMatch && !typeMatch && !nameMatch)
-  {
-    reviewDistance *= ConfigOptions().getPoiPolygonAncestorOnlyReviewPenalty();
-    //matchDistance = 0.0;
-  }*/
-
   bool closeMatch = distance <= reviewDistance;
 
   int evidence = 0;
@@ -214,16 +208,6 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   evidence += ancestorTypeMatch ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
   evidence += distance <= matchDistance ? 2 : 0;
-
-  //custom rule
-  if (ConfigOptions().getPoiPolygonUseCustomTowerRules() &&
-      (((e1->getTags().get("building") == "terminal" &&
-        e2->getTags().get("man_made") == "control_tower") ||
-      (e2->getTags().get("building") == "terminal" &&
-       e1->getTags().get("man_made") == "control_tower")) && closeMatch))
-  {
-    evidence += 1;
-  }
 
   /*if (evidence < 2)
   {
