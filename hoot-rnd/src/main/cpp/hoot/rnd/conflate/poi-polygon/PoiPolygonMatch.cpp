@@ -201,14 +201,6 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     reviewDistance += ce;
   }
 
-  //custom rule
-  if (ConfigOptions().getPoiPolygonUseCustomTowerRules() &&
-      (e1->getTags().get("man_made") == "tower" || e2->getTags().get("man_made") == "tower"))
-  {
-    matchDistance = 0.0;
-    reviewDistance = 0.0;
-  }
-
   /*if (ancestorTypeMatch && !typeMatch && !nameMatch)
   {
     reviewDistance *= ConfigOptions().getPoiPolygonAncestorOnlyReviewPenalty();
