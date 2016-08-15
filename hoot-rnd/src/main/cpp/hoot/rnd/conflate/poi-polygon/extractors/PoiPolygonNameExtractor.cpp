@@ -35,7 +35,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonNameExtractor)
+//HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonNameExtractor)
 
 PoiPolygonNameExtractor::PoiPolygonNameExtractor()
 {

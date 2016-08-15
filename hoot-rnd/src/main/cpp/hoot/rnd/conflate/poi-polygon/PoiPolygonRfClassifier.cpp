@@ -66,12 +66,6 @@
 #include <hoot/core/conflate/extractors/SampledAngleHistogramExtractor.h>
 #include <hoot/rnd/conflate/poi-polygon/extractors/PoiPolygonAddressExtractor.h>
 
-// Standard
-#include <fstream>
-
-// Qt
-#include <QFile>
-
 namespace hoot
 {
 
@@ -83,62 +77,45 @@ PoiPolygonRfClassifier::PoiPolygonRfClassifier()
 void PoiPolygonRfClassifier::_createExtractors()
 {
   _extractors.clear();
-  //vector<std::string> extractorNames = Factory::getInstance().getObjectNamesByBase(
-    //FeatureExtractor::className());
-  //LOG_VAR(extractorNames);
-
-  /*
-   * hoot::AngleHistogramExtractor - DONE
-   * hoot::AttributeDistanceExtractor - DONE
-   * hoot::AttributeScoreExtractor - DONE
-   * hoot::BufferedOverlapExtractor - DONE
-   * hoot::CentroidDistanceExtractor  - DONE
-   * hoot::CompactnessExtractor - DONE
-   * hoot::DistanceScoreExtractor - DONE
-   * hoot::EdgeDistanceExtractor - DONE
-   * hoot::EuclideanDistanceExtractor - DONE
-   * hoot::HausdorffDistanceExtractor - DONE
-   * hoot::LengthScoreExtractor - DONE
-   * hoot::NameExtractor - DONE
-   * //hoot::OverlapExtractor
-   * //hoot::PoiPolygonNameExtractor
-   * hoot::SampledAngleHistogramExtractor - DONE
-   * //hoot::SmallerOverlapExtractor
-   * hoot::WeightedMetricDistanceExtractor - DONE
-   * hoot::WeightedShapeDistanceExtractor - DONE
-   */
-
-  /*for (size_t i = 0; i < extractorNames.size(); i++)
+  vector<std::string> allExtractorNames = Factory::getInstance().getObjectNamesByBase(
+    FeatureExtractor::className());
+  vector<std::string> extractorNames;
+  for (size_t i = 0; i < allExtractorNames.size(); i++)
   {
-    FeatureExtractor* fe = Factory::getInstance().constructObject<FeatureExtractor>(
-      extractorNames[i]);
-    _extractors.push_back(shared_ptr<FeatureExtractor>(fe));
-  }*/
+    if (allExtractorNames.at(i) != "hoot::OverlapExtractor" &&
+        allExtractorNames.at(i) != "hoot::SmallerOverlapExtractor" &&
+        allExtractorNames.at(i) != "hoot::SampledAngleHistogramExtractor")
+    {
+      extractorNames.push_back(allExtractorNames.at(i));
+    }
+  }
+  for (size_t i = 0; i < extractorNames.size(); i++)
+  {
+    _extractors.push_back(
+      shared_ptr<FeatureExtractor>(
+        Factory::getInstance().constructObject<FeatureExtractor>(extractorNames[i])));
+  }
+  LOG_VAR(extractorNames);
 
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(NULL, false)));
-  //_extractors.push_back(shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(NULL, true)));
-
-  //MinSumWordSetDistance
-
-  /*_extractors.push_back(
+  _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
-        new ExactStringDistance())));*/
-  /*_extractors.push_back(
+        new ExactStringDistance())));
+  _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
         new MaxWordSetDistance(
-          new ExactStringDistance()))));*/
-  /*_extractors.push_back(
+          new ExactStringDistance()))));
+  _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
         new MeanWordSetDistance(
-          new ExactStringDistance()))));*/
-  /*_extractors.push_back(
+          new ExactStringDistance()))));
+  _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
         new TranslateStringDistance(
-          new ExactStringDistance()))));*/
+          new ExactStringDistance()))));
   _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
@@ -152,25 +129,25 @@ void PoiPolygonRfClassifier::_createExtractors()
           new MeanWordSetDistance(
             new ExactStringDistance())))));
 
-  /*_extractors.push_back(
+  _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
-        new LevenshteinDistance())));*/
-  /*_extractors.push_back(
+        new LevenshteinDistance())));
+  _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
         new MaxWordSetDistance(
-          new LevenshteinDistance()))));*/
-  /*_extractors.push_back(
+          new LevenshteinDistance()))));
+  _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
         new MeanWordSetDistance(
-          new LevenshteinDistance()))));*/
-  /*_extractors.push_back(
+          new LevenshteinDistance()))));
+  _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
         new TranslateStringDistance(
-          new LevenshteinDistance()))));*/
+          new LevenshteinDistance()))));
   _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
@@ -198,25 +175,25 @@ void PoiPolygonRfClassifier::_createExtractors()
       new TranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance(a))))));
   }*/
 
-  /*_extractors.push_back(
+  _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
-        new Soundex())));*/
-  /*_extractors.push_back(
+        new Soundex())));
+  _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
         new MaxWordSetDistance(
-          new Soundex()))));*/
-  /*_extractors.push_back(
+          new Soundex()))));
+  _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
         new MeanWordSetDistance(
-          new Soundex()))));*/
-  /*_extractors.push_back(
+          new Soundex()))));
+  _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
         new TranslateStringDistance(
-          new Soundex()))));*/
+          new Soundex()))));
   _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
@@ -230,6 +207,13 @@ void PoiPolygonRfClassifier::_createExtractors()
           new MeanWordSetDistance(
             new Soundex())))));
 
+  _extractors.push_back(
+    shared_ptr<FeatureExtractor>(
+      new PoiPolygonAddressExtractor(
+        new TranslateStringDistance(
+          new MeanWordSetDistance(
+            new LevenshteinDistance())))));
+
    SqliteWordWeightDictionary* dict =
       new SqliteWordWeightDictionary(
         ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary()));
@@ -240,21 +224,31 @@ void PoiPolygonRfClassifier::_createExtractors()
           new WeightedWordDistance(
             new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()), dict)))));
 
+  /*_extractors.push_back(shared_ptr<FeatureExtractor>(new EdgeDistanceExtractor()));
+  for (double q = 0; q < 1.0; q += 0.05)
+  {
+    _extractors.push_back(shared_ptr<FeatureExtractor>(
+      new EdgeDistanceExtractor(new QuantileAggregator(q))));
+  }
   _extractors.push_back(shared_ptr<FeatureExtractor>(
-    new EdgeDistanceExtractor(/*new RmseAggregator()*/)));
-  //_extractors.push_back(shared_ptr<FeatureExtractor>(
-    //new EdgeDistanceExtractor(new SigmaAggregator())));
+    new EdgeDistanceExtractor(new RmseAggregator())));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(
+    new EdgeDistanceExtractor(new SigmaAggregator())));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new AngleHistogramExtractor()));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(NULL, false)));
-  //_extractors.push_back(shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(NULL, true)));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(NULL, true)));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new WeightedShapeDistanceExtractor()));
 
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new WeightedMetricDistanceExtractor(
-    /*new MeanAggregator(), new SigmaAggregator()*/)));
-  //_extractors.push_back(shared_ptr<FeatureExtractor>(new WeightedMetricDistanceExtractor(
-    //new MeanAggregator(), new RmseAggregator())));
+  _extractors.push_back(
+    shared_ptr<FeatureExtractor>(
+    new WeightedMetricDistanceExtractor(
+      new MeanAggregator(), new SigmaAggregator())));
+  _extractors.push_back(
+    shared_ptr<FeatureExtractor>(
+      new WeightedMetricDistanceExtractor(
+        new MeanAggregator(), new RmseAggregator())));
 
-  /*for (double b = -0.3; b < 0.0; b += 0.1)
+  for (double b = -0.3; b < 0.0; b += 0.1)
   {
     _extractors.push_back(shared_ptr<FeatureExtractor>(new BufferedOverlapExtractor(b)));
   }
@@ -262,22 +256,15 @@ void PoiPolygonRfClassifier::_createExtractors()
   for (double b = 0.1; b < 0.5; b += 0.1)
   {
     _extractors.push_back(shared_ptr<FeatureExtractor>(new BufferedOverlapExtractor(b)));
-  }*/
+  }
   _extractors.push_back(shared_ptr<FeatureExtractor>(new BufferedOverlapExtractor()));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new BufferedOverlapExtractor(0.3)));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new BufferedOverlapExtractor(0.1)));
 
-  /*for (double q = 0; q < 1.0; q += 0.05)
-  {
-    _extractors.push_back(shared_ptr<FeatureExtractor>(
-      new EdgeDistanceExtractor(new QuantileAggregator(q))));
-  }*/
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new EdgeDistanceExtractor()));
-
-  /*for (double r = 0.0; r <= 1.0; r += 0.05)
+  for (double r = 0.0; r <= 1.0; r += 0.05)
   {
     _extractors.push_back(shared_ptr<FeatureExtractor>(new AngleHistogramExtractor(r)));
-  }*/
+  }
 
    _extractors.push_back(shared_ptr<FeatureExtractor>(new AttributeDistanceExtractor()));
    _extractors.push_back(shared_ptr<FeatureExtractor>(new CentroidDistanceExtractor()));
@@ -286,14 +273,7 @@ void PoiPolygonRfClassifier::_createExtractors()
    _extractors.push_back(shared_ptr<FeatureExtractor>(new EuclideanDistanceExtractor()));
    _extractors.push_back(shared_ptr<FeatureExtractor>(new HausdorffDistanceExtractor()));
    _extractors.push_back(shared_ptr<FeatureExtractor>(new LengthScoreExtractor()));
-   _extractors.push_back(shared_ptr<FeatureExtractor>(new SampledAngleHistogramExtractor()));
-
-   _extractors.push_back(
-     shared_ptr<FeatureExtractor>(
-       new PoiPolygonAddressExtractor(
-         new TranslateStringDistance(
-           new MeanWordSetDistance(
-             new LevenshteinDistance())))));
+   _extractors.push_back(shared_ptr<FeatureExtractor>(new SampledAngleHistogramExtractor()));*/
 }
 
 map<QString, double> PoiPolygonRfClassifier::getFeatures(const ConstOsmMapPtr& m,
@@ -310,8 +290,8 @@ map<QString, double> PoiPolygonRfClassifier::getFeatures(const ConstOsmMapPtr& m
     // if it isn't null then include it.
     if (!FeatureExtractor::isNull(v))
     {
-      QString factorName = QString::fromStdString(_extractors[i]->getName()).
-          replace(QRegExp("[^\\w]"), "_");
+      QString factorName =
+        QString::fromStdString(_extractors[i]->getName()).replace(QRegExp("[^\\w]"), "_");
       result[factorName] = v;
     }
   }

@@ -131,8 +131,6 @@ private:
                        const ElementId& eid2);
   void _calculateMatchWeka(const ConstOsmMapPtr& map, const ElementId& eid1,
                            const ElementId& eid2);
-  void _calculateMatchWekaGetFeatures(const ConstOsmMapPtr& map, const ElementId& eid1,
-                                      const ElementId& eid2);
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the names. A score of -1 means one

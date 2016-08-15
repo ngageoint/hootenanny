@@ -35,6 +35,7 @@
 #include <hoot/core/algorithms/ExactStringDistance.h>
 #include <hoot/rnd/conflate/poi-polygon/extractors/PoiPolygonNameExtractor.h>
 #include <hoot/core/algorithms/string/MinSumWordSetDistance.h>
+#include <hoot/core/algorithms/MaxWordSetDistance.h>
 #include <hoot/core/algorithms/string/WeightedWordDistance.h>
 //#include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
 #include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
@@ -47,6 +48,9 @@
 #include <hoot/core/conflate/polygon/extractors/CentroidDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/BufferedOverlapExtractor.h>
+#include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
+#include <hoot/core/algorithms/Soundex.h>
+#include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
 
 namespace hoot
 {
@@ -81,89 +85,7 @@ _addressMatch(false),
 _exactNameMatch(false)
 {
   //_calculateMatch(map, eid1, eid2);
-  _calculateMatchWekaGetFeatures(map, eid1, eid2);
-}
-
-/*
- * A
- *
- * hoot__CentroidDistanceExtractor <= 0.545846: miss (494.0/8.0)
-   hoot__CentroidDistanceExtractor > 0.545846
-   |   hoot__HausdorffDistanceExtractor <= 0.38672: miss (31.0/12.0)
-   |   hoot__HausdorffDistanceExtractor > 0.38672: match (69.0/31.0)
-
-   B
-
-   BufferedOverlapExtractor_0_3 <= 0: miss (137.0/3.0)
-   BufferedOverlapExtractor_0_3 > 0
-   |   BufferedOverlapExtractor_0_1 <= 0.017073: miss (3.0/1.0)
-   |   BufferedOverlapExtractor_0_1 > 0.017073: match (6.0/1.0)
-
-   C
-
-
- */
-void PoiPolygonMatch::_calculateMatchWeka(const ConstOsmMapPtr& map, const ElementId& eid1,
-                                          const ElementId& eid2)
-{
-  ConstElementPtr e1 = map->getElement(eid1);
-  ConstElementPtr e2 = map->getElement(eid2);
-
-  //A
-  const double centroidDistanceScore = CentroidDistanceExtractor().extract(*map.get(), e1, e2);
-  const double hausdorffDistanceScore = HausdorffDistanceExtractor().extract(*map.get(), e1, e2);
-  _c.setMiss();
-  if (centroidDistanceScore > 0.545846 && hausdorffDistanceScore > 0.38672)
-  {
-    _c.setMatch();
-  }
-
-  //B
-  const double bufferedOverlap_0_1_Score =
-    BufferedOverlapExtractor(0.1).extract(*map.get(), e1, e2);
-  const double bufferedOverlap_0_3_Score =
-    BufferedOverlapExtractor(0.3).extract(*map.get(), e1, e2);
-  _c.setMiss();
-  if (bufferedOverlap_0_3_Score > 0 && bufferedOverlap_0_1_Score > 0.017073)
-  {
-    _c.setMatch();
-  }
-
-  //C
-
-}
-
-void PoiPolygonMatch::_calculateMatchWekaGetFeatures(const ConstOsmMapPtr& map,
-                                                     const ElementId& eid1,
-                                                     const ElementId& eid2)
-{
-  ConstElementPtr e1 = map->getElement(eid1);
-  ConstElementPtr e2 = map->getElement(eid2);
-
-  ConstElementPtr poi, poly;
-  if (isPoiIsh(e1) && isBuildingIsh(e2))
-  {
-    _poiEid = eid1;
-    _polyEid = eid2;
-    poi = e1;
-    poly = e2;
-  }
-  else if (isPoiIsh(e2) && isBuildingIsh(e1))
-  {
-    _poiEid = eid2;
-    _polyEid = eid1;
-    poi = e2;
-    poly = e1;
-  }
-  else
-  {
-    LOG_WARN(e1->toString());
-    LOG_WARN(e2->toString());
-    throw IllegalArgumentException("Expected a POI & polygon, got: " + eid1.toString() + " " +
-                                   eid2.toString());
-  }
-
-  //_c.setMiss();
+  _calculateMatchWeka(map, eid1, eid2);
 }
 
 void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
@@ -200,6 +122,34 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     throw IllegalArgumentException("Expected a POI & polygon, got: " + eid1.toString() + " " +
                                    eid2.toString());
   }
+
+  /*const double centroidDistanceScore = CentroidDistanceExtractor().extract(*map.get(), e1, e2);
+  const double hausdorffDistanceScore = HausdorffDistanceExtractor().extract(*map.get(), e1, e2);
+  const double bufferedOverlap_0_1_Score =
+    BufferedOverlapExtractor(0.1).extract(*map.get(), e1, e2);
+  shared_ptr<FeatureExtractor> minSumExt =
+    shared_ptr<FeatureExtractor>(
+      new NameExtractor(
+        new TranslateStringDistance(
+          new MinSumWordSetDistance(
+            new LevenshteinDistance()))));
+  const double minSumScore = minSumExt->extract(*map.get(), e1, e2);
+  shared_ptr<FeatureExtractor> meanSoundexExt =
+    shared_ptr<FeatureExtractor>(
+      new NameExtractor(
+        new TranslateStringDistance(
+          new MeanWordSetDistance(
+            new Soundex()))));
+  const double meanSoundexScore = meanSoundexExt->extract(*map.get(), e1, e2);
+  shared_ptr<FeatureExtractor> maxSoundexExt =
+    shared_ptr<FeatureExtractor>(
+      new NameExtractor(
+        new TranslateStringDistance(
+          new MaxWordSetDistance(
+            new Soundex()))));
+  const double maxSoundexScore = maxSoundexExt->extract(*map.get(), e1, e2);
+  const double edgeDistanceScore = EdgeDistanceExtractor().extract(*map.get(), e1, e2);
+  const double euclideanDistanceScore = EuclideanDistanceExtractor().extract(*map.get(), e1, e2);*/
 
   shared_ptr<Geometry> gpoly = ElementConverter(map).convertToGeometry(poly);
   shared_ptr<Geometry> gpoi = ElementConverter(map).convertToGeometry(poi);
@@ -322,6 +272,45 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   {
     evidence += 1;
   }
+
+  /*if (evidence < 2)
+  {
+    if (euclideanDistanceScore < 0.173)
+    {
+      _c.setMiss();
+      return;
+    }
+    if (centroidDistanceScore < 0.142 || centroidDistanceScore > 1.0)
+    {
+      _c.setMiss();
+      return;
+    }
+    if (bufferedOverlap_0_1_Score  == 1.0)
+    {
+      _c.setMiss();
+      return;
+    }
+    if (minSumScore < -0.33)
+    {
+      _c.setMiss();
+      return;
+    }
+    if (meanSoundexScore < 0.125)
+    {
+      _c.setMiss();
+      return;
+    }
+    if (maxSoundexScore < 0.25)
+    {
+      _c.setMiss();
+      return;
+    }
+    if (edgeDistanceScore > 1.23)
+    {
+      _c.setMiss();
+      return;
+    }
+  }*/
 
   if (!closeMatch)
   {
@@ -991,6 +980,93 @@ bool PoiPolygonMatch::_getAddressMatch(ConstElementPtr e1, ConstElementPtr e2)
 map<QString, double> PoiPolygonMatch::getFeatures(const shared_ptr<const OsmMap>& m) const
 {
   return _rf->getFeatures(m, _eid1, _eid2);
+}
+
+void PoiPolygonMatch::_calculateMatchWeka(const ConstOsmMapPtr& map, const ElementId& eid1,
+                                          const ElementId& eid2)
+{
+  ConstElementPtr e1 = map->getElement(eid1);
+  ConstElementPtr e2 = map->getElement(eid2);
+
+  ConstElementPtr poi, poly;
+  if (isPoiIsh(e1) && isBuildingIsh(e2))
+  {
+    _poiEid = eid1;
+    _polyEid = eid2;
+    poi = e1;
+    poly = e2;
+  }
+  else if (isPoiIsh(e2) && isBuildingIsh(e1))
+  {
+    _poiEid = eid2;
+    _polyEid = eid1;
+    poi = e2;
+    poly = e1;
+  }
+  else
+  {
+    LOG_WARN(e1->toString());
+    LOG_WARN(e2->toString());
+    throw IllegalArgumentException("Expected a POI & polygon, got: " + eid1.toString() + " " +
+                                   eid2.toString());
+  }
+
+  _c.setMiss();
+
+  //const double centroidDistanceScore = CentroidDistanceExtractor().extract(*map.get(), e1, e2);
+  //const double hausdorffDistanceScore = HausdorffDistanceExtractor().extract(*map.get(), e1, e2);
+  //const double bufferedOverlap_0_1_Score =
+    //BufferedOverlapExtractor(0.1).extract(*map.get(), e1, e2);
+  //const double bufferedOverlap_0_3_Score =
+    //BufferedOverlapExtractor(0.3).extract(*map.get(), e1, e2);
+  //const double euclideanDistanceScore = EuclideanDistanceExtractor().extract(*map.get(), e1, e2);
+
+  //A*
+  /*if (centroidDistanceScore > 0.545846 && hausdorffDistanceScore > 0.38672 &&
+      euclideanDistanceScore > 0.636)
+  {
+    _c.setMatch();
+  }*/
+
+  //B*
+  /*if (bufferedOverlap_0_3_Score > 0 && bufferedOverlap_0_1_Score > 0.017073 &&
+      euclideanDistanceScore > 0.636)
+  {
+    _c.setMatch();
+  }*/
+
+  //A2
+  /*if (centroidDistanceScore > 0.545846 && hausdorffDistanceScore > 0.38672 &&
+      bufferedOverlap_0_1_Score > 0.040993)
+  {
+    _c.setMatch();
+  }*/
+
+  //B2
+  /*if (bufferedOverlap_0_1_Score > 0.017073)
+  {
+    _c.setMatch();
+  }*/
+
+  //A and B
+  /*if (hausdorffDistanceScore > 0.35 && bufferedOverlap_0_1_Score > 0.03)
+  {
+    _c.setMatch();
+  }
+  else if (centroidDistanceScore > 0.722 && hausdorffDistanceScore > .302 &&
+           centroidDistanceScore <= .951)
+  {
+    _c.setMatch();
+  }
+  else if (hausdorffDistanceScore > .302 && euclideanDistanceScore > 0.924 &&
+           hausdorffDistanceScore <=.573)
+  {
+    _c.setMatch();
+  }
+  else if (bufferedOverlap_0_1_Score > 0.0327 && centroidDistanceScore > 0.722)
+  {
+    _c.setMatch();
+  }*/
 }
 
 QString PoiPolygonMatch::toString() const
