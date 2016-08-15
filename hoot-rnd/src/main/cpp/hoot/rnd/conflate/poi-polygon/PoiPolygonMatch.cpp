@@ -178,28 +178,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
 
   double matchDistance = ConfigOptions().getPoiPolygonMatchDistance();
-
-  double reviewDistance = -1.0;
-  if (ConfigOptions().getPoiPolygonUseTypeCustomizedReviewDistance())
-  {
-    if (_oneGeneric(e1, e2) && _ancestorDistance == -1.0)
-    {
-      reviewDistance = max(_getReviewDistance(e1), _getReviewDistance(e2));
-    }
-    else
-    {
-      reviewDistance = min(_getReviewDistance(e1), _getReviewDistance(e2));
-    }
-  }
-  else
-  {
-    reviewDistance = ConfigOptions().getPoiPolygonMatchReviewDistance();
-  }
-
-  if (ConfigOptions().getPoiPolygonAddCircularErrorToReviewDistance())
-  {
-    reviewDistance += ce;
-  }
+  double reviewDistance = ConfigOptions().getPoiPolygonMatchReviewDistance() + ce;
 
   bool closeMatch = distance <= reviewDistance;
 
