@@ -28,9 +28,6 @@ package hoot.services.readers.review;
 
 import java.sql.Connection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.AllReviewableItems;
 import hoot.services.models.review.ReviewableItem;
@@ -38,31 +35,33 @@ import hoot.services.models.review.ReviewableStatistics;
 
 
 public class ReviewableReader {
-    private static final Logger logger = LoggerFactory.getLogger(ReviewableReader.class);
+    private final Connection connection;
 
-    private final Connection conn;
-
-    public ReviewableReader(Connection conn) {
-        this.conn = conn;
+    public ReviewableReader(Connection connection) {
+        this.connection = connection;
     }
 
     public ReviewableItem getReviewableItem(long mapid, long seqid) {
-        ReviewableItem r = (ReviewableItem) ReviewableQueryFactory.getReviewableQuery(conn, mapid, seqid).execQuery();
+        ReviewableItem r =
+                (ReviewableItem) ReviewableQueryFactory.getReviewableQuery(connection, mapid, seqid).execQuery();
         return r;
     }
 
     public ReviewableItem getRandomReviewableItem(long mapid) {
-        ReviewableItem r = (ReviewableItem) ReviewableQueryFactory.getRandomReviewableQuery(conn, mapid).execQuery();
+        ReviewableItem r =
+                (ReviewableItem) ReviewableQueryFactory.getRandomReviewableQuery(connection, mapid).execQuery();
         return r;
     }
 
     public ReviewableStatistics getReviewablesStatistics(long mapid) {
-        ReviewableStatistics r = (ReviewableStatistics) ReviewableQueryFactory.getReviewableStatisticsQuery(conn, mapid).execQuery();
+        ReviewableStatistics r = (ReviewableStatistics)
+                ReviewableQueryFactory.getReviewableStatisticsQuery(connection, mapid).execQuery();
         return r;
     }
 
     public AllReviewableItems getAllReviewableItems(long mapid, BoundingBox bbox) {
-        AllReviewableItems r = (AllReviewableItems) ReviewableQueryFactory.getAllReviewableItemsQuery(conn, mapid, bbox).execQuery();
+        AllReviewableItems r = (AllReviewableItems)
+                ReviewableQueryFactory.getAllReviewableItemsQuery(connection, mapid, bbox).execQuery();
         return r;
     }
 }

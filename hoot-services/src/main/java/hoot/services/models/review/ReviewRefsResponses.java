@@ -26,11 +26,18 @@
  */
 package hoot.services.models.review;
 
+
 /**
  * Collection of review references
  */
 public class ReviewRefsResponses {
     private ReviewRefsResponse[] reviewRefsResponses;
+
+    public ReviewRefsResponses() {}
+
+    public ReviewRefsResponses(ReviewRefsResponse[] reviewRefsResponses) {
+        this.reviewRefsResponses = reviewRefsResponses;
+    }
 
     public ReviewRefsResponse[] getReviewRefsResponses() {
         return reviewRefsResponses;
@@ -38,13 +45,6 @@ public class ReviewRefsResponses {
 
     public void setReviewRefsResponses(ReviewRefsResponse[] responses) {
         this.reviewRefsResponses = responses;
-    }
-
-    public ReviewRefsResponses() {
-    }
-
-    public ReviewRefsResponses(ReviewRefsResponse[] reviewRefsResponses) {
-        this.reviewRefsResponses = reviewRefsResponses;
     }
 
     @Override

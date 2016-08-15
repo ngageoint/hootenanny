@@ -26,9 +26,7 @@
  */
 package hoot.services.models.review;
 
-/**
- * Element information
- */
+
 public class ElementInfo {
     private long id = -1;
     private String category;

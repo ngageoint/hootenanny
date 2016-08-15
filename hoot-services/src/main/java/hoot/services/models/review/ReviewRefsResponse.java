@@ -26,12 +26,20 @@
  */
 package hoot.services.models.review;
 
+
 /**
  * Response to a review references web request
  */
 public class ReviewRefsResponse {
     private ReviewRef[] reviewRefs;
     private ElementInfo queryElementInfo;
+
+    public ReviewRefsResponse() {}
+
+    public ReviewRefsResponse(ElementInfo requestingElementInfo, ReviewRef[] reviewReferences) {
+        this.queryElementInfo = requestingElementInfo;
+        this.reviewRefs = reviewReferences;
+    }
 
     public ReviewRef[] getReviewRefs() {
         return reviewRefs;
@@ -47,14 +55,6 @@ public class ReviewRefsResponse {
 
     public void setQueryElementInfo(ElementInfo info) {
         this.queryElementInfo = info;
-    }
-
-    public ReviewRefsResponse() {
-    }
-
-    public ReviewRefsResponse(ElementInfo requestingElementInfo, ReviewRef[] reviewReferences) {
-        this.queryElementInfo = requestingElementInfo;
-        this.reviewRefs = reviewReferences;
     }
 
     @Override

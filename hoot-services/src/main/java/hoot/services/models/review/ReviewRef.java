@@ -26,11 +26,19 @@
  */
 package hoot.services.models.review;
 
+
 /**
  * Element information
  */
 public class ReviewRef extends ElementInfo {
     private long reviewRelationId = -1;
+
+    public ReviewRef() {}
+
+    public ReviewRef(String mapId, long elementId, String elementType, long reviewRelationId) {
+        super(mapId, elementId, elementType);
+        this.reviewRelationId = reviewRelationId;
+    }
 
     public long getReviewRelationId() {
         return reviewRelationId;
@@ -38,14 +46,6 @@ public class ReviewRef extends ElementInfo {
 
     public void setReviewRelationId(long id) {
         this.reviewRelationId = id;
-    }
-
-    public ReviewRef() {
-    }
-
-    public ReviewRef(String mapId, long elementId, String elementType, long reviewRelationId) {
-        super(mapId, elementId, elementType);
-        this.reviewRelationId = reviewRelationId;
     }
 
     @Override

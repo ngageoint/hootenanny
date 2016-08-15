@@ -26,21 +26,21 @@
  */
 package hoot.services.models.review;
 
+
 public class ReviewBookmarksStatResponse {
     private long totalCount;
 
-    public void setTotalCount(long cnt) {
-        this.totalCount = cnt;
+    public ReviewBookmarksStatResponse() {}
+
+    public ReviewBookmarksStatResponse(long totalCount) {
+        this.totalCount = totalCount;
+    }
+
+    public void setTotalCount(long totalCount) {
+        this.totalCount = totalCount;
     }
 
     public long getTotalCount() {
         return this.totalCount;
-    }
-
-    public ReviewBookmarksStatResponse(long cnt) {
-        this.totalCount = cnt;
-    }
-
-    public ReviewBookmarksStatResponse() {
     }
 }

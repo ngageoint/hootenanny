@@ -26,24 +26,24 @@
  */
 package hoot.services.models.review;
 
+
 /**
  * Represents a request to mark all reviews resolved
  */
 public class ReviewResolverRequest {
     private String mapId;
 
+    public ReviewResolverRequest() {}
+
+    public ReviewResolverRequest(String mapId) {
+        this.mapId = mapId;
+    }
+
     public String getMapId() {
         return mapId;
     }
 
-    public void setMapId(String id) {
-        this.mapId = id;
-    }
-
-    public ReviewResolverRequest() {
-    }
-
-    public ReviewResolverRequest(String mapId) {
+    public void setMapId(String mapId) {
         this.mapId = mapId;
     }
 }
