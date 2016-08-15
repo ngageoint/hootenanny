@@ -65,6 +65,24 @@ inline bool operator<(const ConstEdgeLocationPtr& a, const ConstEdgeLocationPtr&
   return a->getPortion() < b->getPortion();
 }
 
+inline bool operator>(const ConstEdgeLocationPtr& a, const ConstEdgeLocationPtr& b)
+{
+  assert(a->getEdge() == b->getEdge());
+  return a->getPortion() > b->getPortion();
+}
+
+inline bool operator<=(const ConstEdgeLocationPtr& a, const ConstEdgeLocationPtr& b)
+{
+  assert(a->getEdge() == b->getEdge());
+  return a->getPortion() <= b->getPortion();
+}
+
+inline bool operator>=(const ConstEdgeLocationPtr& a, const ConstEdgeLocationPtr& b)
+{
+  assert(a->getEdge() == b->getEdge());
+  return a->getPortion() >= b->getPortion();
+}
+
 }
 
 #endif // EDGELOCATION_H

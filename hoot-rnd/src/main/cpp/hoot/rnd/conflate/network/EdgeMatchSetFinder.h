@@ -47,10 +47,13 @@ public:
    */
   void addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
+  void setAddStubsInBothDirections(bool bidirectionalStubs) { _bidirectionalStubs = bidirectionalStubs; }
+
   void setIncludePartialMatches(bool include) { _includePartialMatches = include; }
 
 private:
 
+  bool _bidirectionalStubs;
   NetworkDetailsPtr _details;
   bool _includePartialMatches;
   IndexedEdgeMatchSetPtr _matchSet;

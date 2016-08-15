@@ -20,6 +20,8 @@ public:
 
   shared_ptr<EdgeSubline> clone() const;
 
+  bool contains(ConstNetworkVertexPtr v) const;
+
   static shared_ptr<EdgeSubline> createFullSubline(ConstNetworkEdgePtr e);
 
   const ConstNetworkEdgePtr& getEdge() const { return _start->getEdge(); }
@@ -45,6 +47,12 @@ public:
   bool isValid() const { return _start->isValid() && _end->isValid(); }
 
   bool isZeroLength() const { return _start == _end; }
+
+  /**
+   * Returns true if other overlaps (a subline in common). If they only touch at a point it is not
+   * considered overlapping.
+   */
+  bool overlaps(shared_ptr<const EdgeSubline> other) const;
 
   /**
    * swap start and end.

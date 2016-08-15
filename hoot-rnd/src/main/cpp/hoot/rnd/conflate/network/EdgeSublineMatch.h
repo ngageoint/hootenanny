@@ -20,6 +20,8 @@ public:
 
   const ConstEdgeSublinePtr& getSubline2() const { return _es2; }
 
+  QString toString() const;
+
 private:
   ConstEdgeSublinePtr _es1, _es2;
 

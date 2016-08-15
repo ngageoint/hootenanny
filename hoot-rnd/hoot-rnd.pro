@@ -95,7 +95,9 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSublineMatch.cpp \
     src/test/cpp/hoot/rnd/conflate/network/EdgeMatchSetFinderTest.cpp \
     src/main/cpp/hoot/rnd/conflate/network/PartialNetworkMerger.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/NetworkVertexTest.cpp
+    src/test/cpp/hoot/rnd/conflate/network/NetworkVertexTest.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherTest.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h \
@@ -136,7 +138,8 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/EdgeLocation.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSubline.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSublineMatch.h \
-    src/main/cpp/hoot/rnd/conflate/network/PartialNetworkMerger.h
+    src/main/cpp/hoot/rnd/conflate/network/PartialNetworkMerger.h \
+    src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.h
 
 FORMS +=
 

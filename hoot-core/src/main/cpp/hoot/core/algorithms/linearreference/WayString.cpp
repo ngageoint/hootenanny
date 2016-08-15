@@ -241,6 +241,16 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
   return newWay;
 }
 
+Meters WayString::getMaxCircularError() const
+{
+  Meters result = 0.0;
+  foreach (const WaySubline& ws, _sublines)
+  {
+    result = max(ws.getWay()->getCircularError(), result);
+  }
+  return result;
+}
+
 void WayString::visitRo(const ElementProvider &map, ElementVisitor& v) const
 {
   // go through each subline and call visitRw on the subline. The sublines should only visit the

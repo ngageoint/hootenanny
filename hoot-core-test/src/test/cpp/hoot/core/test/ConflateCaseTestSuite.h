@@ -49,8 +49,6 @@ public:
   ConflateCaseTestSuite(QString dir);
 
 private:
-  vector< shared_ptr<ConflateCaseTest> > _tests;
-
   void _loadDir(QString dir, QStringList confs);
 };
 

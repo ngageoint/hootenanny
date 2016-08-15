@@ -46,6 +46,8 @@ public:
    */
   WayPtr copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr destination);
 
+  Meters getMaxCircularError() const;
+
   int getSize() { return _sublines.size(); }
 
   QString toString() const { return hoot::toString(_sublines); }

@@ -8,13 +8,18 @@
 namespace hoot
 {
 
+QString WayMatchStringSplitter::_overlyAggressiveMergeReviewText =
+  "One or more ways in the merge are being removed. This is likely due to an inconsistent match. "
+  "Please review the length of the review for overly aggressive merges and manually merge features "
+  "using input data/imagery. There may also be one or more zero length ways at intersections.";
+
 WayMatchStringSplitter::WayMatchStringSplitter()
 {
 }
 
 void WayMatchStringSplitter::applySplits(OsmMapPtr map,
   vector<pair<ElementId, ElementId> > &replaced,
-  QList<WayMatchStringMerger::SublineMappingPtr> mappings)
+  QList<WayMatchStringMerger::SublineMappingPtr> mappings) throw (NeedsReviewException)
 {
   _splitWay1(map, replaced, mappings);
   _splitWay2(map, replaced, mappings);
@@ -81,6 +86,17 @@ void WayMatchStringSplitter::_splitWay1(OsmMapPtr map,
       wls.push_back(std::max(sm.at(i)->getStart1(), sm.at(i)->getEnd1()));
     }
 
+    // This can happen if there is an unmatched section in a way
+    bool discontiguous = false;
+    for (size_t i = 0; i < wls.size() - 1; ++i)
+    {
+      assert(wls[i] <= wls[i + 1]);
+      if (i % 2 == 1 && wls[i] != wls[i + 1])
+      {
+        discontiguous = true;
+      }
+    }
+
     LOG_VAR(w1.get());
     LOG_VAR(wls);
     vector<WayPtr> splits = WaySplitter(map, w1).createSplits(wls);
@@ -102,6 +118,10 @@ void WayMatchStringSplitter::_splitWay1(OsmMapPtr map,
     {
       WayPtr w;
       w = splits[c++];
+      if (!w)
+      {
+        throw NeedsReviewException(_overlyAggressiveMergeReviewText);
+      }
       sm.at(i)->newWay1 = w;
       replaced.push_back(pair<ElementId, ElementId>(w1->getElementId(), w->getElementId()));
       newWays.append(w);
@@ -111,7 +131,7 @@ void WayMatchStringSplitter::_splitWay1(OsmMapPtr map,
       if (w && ec.calculateLength(w) > 0.0)
       {
         // only the last split should be non-empty
-        if (i != sm.size() - 1)
+        if (i != sm.size() - 1 && discontiguous == false)
         {
           throw InternalErrorException("Only the last split should be empty.");
         }
@@ -158,9 +178,24 @@ void WayMatchStringSplitter::_splitWay2(OsmMapPtr map,
       wls.push_back(std::max(sm.at(i)->getStart2(), sm.at(i)->getEnd2()));
     }
 
+    // This can happen if there is an unmatched section in a way
+    bool discontiguous = false;
+    for (size_t i = 0; i < wls.size() - 1; ++i)
+    {
+      assert(wls[i] <= wls[i + 1]);
+      if (i % 2 == 1 && wls[i] != wls[i + 1])
+      {
+        discontiguous = true;
+      }
+    }
+
     vector<WayPtr> splits = WaySplitter(map, w2).createSplits(wls);
 
     assert((int)splits.size() == sm.size() * 2 + 1);
+
+    LOG_VAR(w2.get());
+    LOG_VAR(wls);
+    LOG_VAR(splits);
 
     QList<ElementPtr> newWays;
 
@@ -177,16 +212,22 @@ void WayMatchStringSplitter::_splitWay2(OsmMapPtr map,
     {
       WayPtr w;
       w = splits[c++];
+      if (!w)
+      {
+        throw NeedsReviewException(_overlyAggressiveMergeReviewText);
+      }
       sm.at(i)->setNewWay2(w);
       replaced.push_back(pair<ElementId, ElementId>(w2->getElementId(), w->getElementId()));
       newWays.append(w);
 
       w = splits[c++];
+      LOG_VAR(c);
+      LOG_VAR(w);
       // if this isn't empty
       if (w && ec.calculateLength(w) > 0.0)
       {
         // only the last split should be non-empty
-        if (i != sm.size() - 1)
+        if (i != sm.size() - 1 && discontiguous == false)
         {
           throw InternalErrorException("Only the last split should be empty.");
         }

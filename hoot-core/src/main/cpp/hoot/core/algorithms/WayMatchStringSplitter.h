@@ -16,9 +16,10 @@ public:
    * place.
    */
   void applySplits(OsmMapPtr map, vector<pair<ElementId, ElementId> > &replaced,
-    QList<WayMatchStringMerger::SublineMappingPtr> mappings);
+    QList<WayMatchStringMerger::SublineMappingPtr> mappings) throw (NeedsReviewException);
 
 private:
+  static QString _overlyAggressiveMergeReviewText;
 
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex1(OsmMapPtr map,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;

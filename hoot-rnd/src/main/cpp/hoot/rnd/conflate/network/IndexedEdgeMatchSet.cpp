@@ -140,6 +140,23 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatContain(ConstNetworkE
   return _edgeToMatch[e];
 }
 
+QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatTerminateAt(ConstNetworkVertexPtr v)
+  const
+{
+  /// @todo replace this with an index. This will get quite slow w/ 100k edges.
+  QSet<ConstEdgeMatchPtr> result;
+  foreach (const ConstEdgeMatchPtr& em, _matches.keys())
+  {
+    if (em->getString1()->isAtExtreme(v) || em->getString2()->isAtExtreme(v))
+    {
+      result.insert(em);
+    }
+  }
+
+  return result;
+}
+
+
 QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeStringPtr str) const
 {
   QSet<ConstEdgeMatchPtr> result;
@@ -163,6 +180,23 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeMatc
   {
     if (em->getString1()->overlaps(e->getString1()) ||
       em->getString2()->overlaps(e->getString2()))
+    {
+      result.insert(em);
+    }
+  }
+
+  return result;
+}
+
+QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithInteriorVertex(ConstNetworkVertexPtr v)
+  const
+{
+  /// @todo replace this with an index. This will get quite slow w/ 100k edges.
+  QSet<ConstEdgeMatchPtr> result;
+  foreach (const ConstEdgeMatchPtr& em, _matches.keys())
+  {
+    if (em->getString1()->containsInteriorVertex(v) ||
+      em->getString2()->containsInteriorVertex(v))
     {
       result.insert(em);
     }
@@ -212,6 +246,80 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithTermination(ConstNetw
 
   return result;
 }
+
+QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getConnectingStubs(ConstEdgeMatchPtr a,
+  ConstEdgeMatchPtr b) const
+{
+  QSet<ConstEdgeMatchPtr> result;
+
+  if (a->containsStub() || b->containsStub())
+  {
+    // no connecting stubs
+  }
+  result += getConnectingStubs(a->getString1()->getFrom(), a->getString2()->getFrom(),
+    b->getString1()->getFrom(), b->getString2()->getFrom());
+  result += getConnectingStubs(a->getString1()->getFrom(), a->getString2()->getFrom(),
+    b->getString1()->getTo(), b->getString2()->getTo());
+  result += getConnectingStubs(a->getString1()->getTo(), a->getString2()->getTo(),
+    b->getString1()->getTo(), b->getString2()->getTo());
+  result += getConnectingStubs(a->getString1()->getTo(), a->getString2()->getTo(),
+    b->getString1()->getFrom(), b->getString2()->getFrom());
+
+  return result;
+}
+
+QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getConnectingStubs(ConstEdgeLocationPtr ela1,
+  ConstEdgeLocationPtr ela2, ConstEdgeLocationPtr elb1, ConstEdgeLocationPtr elb2) const
+{
+  QSet<ConstEdgeMatchPtr> result;
+
+  if (ela1->isExtreme() == false || ela2->isExtreme() == false || elb1->isExtreme() == false ||
+    elb2->isExtreme() == false)
+  {
+    return result;
+  }
+
+  ConstNetworkVertexPtr va1 = ela1->getVertex();
+  ConstNetworkVertexPtr va2 = ela2->getVertex();
+  ConstNetworkVertexPtr vb1 = elb1->getVertex();
+  ConstNetworkVertexPtr vb2 = elb2->getVertex();
+
+  // if they're directly connected
+  if (va1 == vb1 && va2 == vb2)
+  {
+    // pass
+  }
+  // if they aren't connected by at least one vertex.
+  else if (va1 != vb1 && va2 != vb2)
+  {
+    // pass
+  }
+  // if the vertices in string 1 match
+  else if (va1 == vb1)
+  {
+    foreach (const ConstEdgeMatchPtr& em, _matches.keys())
+    {
+      if (em->containsStub() && em->contains(va1) && em->contains(va2) && em->contains(vb2))
+      {
+        result.insert(em);
+      }
+    }
+  }
+  // if the vertices in string 2 match
+  else if (va2 == vb2)
+  {
+    foreach (const ConstEdgeMatchPtr& em, _matches.keys())
+    {
+      if (em->containsStub() && em->contains(va1) && em->contains(va2) && em->contains(vb1))
+      {
+        result.insert(em);
+      }
+    }
+  }
+
+  return result;
+}
+
 
 QString IndexedEdgeMatchSet::toString() const
 {

@@ -158,13 +158,18 @@ bool EdgeString::contains(ConstNetworkVertexPtr v) const
 {
   for (int i = 0; i < _edges.size(); ++i)
   {
-    if (_edges[i].getEdge()->contains(v))
+    if (_edges[i].getSubline()->contains(v))
     {
       return true;
     }
   }
 
   return false;
+}
+
+bool EdgeString::containsInteriorVertex(ConstNetworkVertexPtr v) const
+{
+  return contains(v) && isAtExtreme(v) == false;
 }
 
 ConstNetworkEdgePtr EdgeString::getEdgeAtOffset(ConstOsmMapPtr map, Meters offset) const
@@ -240,11 +245,26 @@ bool EdgeString::isEdgeClosed() const
   return result;
 }
 
+bool EdgeString::isAtExtreme(ConstNetworkVertexPtr v) const
+{
+  bool result = false;
+  const ConstEdgeLocationPtr& start = getFrom();
+  const ConstEdgeLocationPtr& end = getTo();
+
+  if ((start->isExtreme() && start->getVertex() == v) ||
+    (end->isExtreme() && end->getVertex() == v))
+  {
+    result = true;
+  }
+
+  return result;
+}
+
 bool EdgeString::overlaps(shared_ptr<const EdgeString> other) const
 {
   for (int i = 0; i < _edges.size(); ++i)
   {
-    if (other->overlaps(_edges[i].getEdge()))
+    if (other->overlaps(_edges[i].getSubline()))
     {
       return true;
     }
@@ -253,12 +273,24 @@ bool EdgeString::overlaps(shared_ptr<const EdgeString> other) const
   return false;
 }
 
-bool EdgeString::overlaps(ConstNetworkEdgePtr e) const
+bool EdgeString::overlaps(const ConstNetworkEdgePtr& e) const
 {
   for (int i = 0; i < _edges.size(); ++i)
   {
-    // poor man's equality. Should work.
-    if (_edges[i].getEdge()->toString() == e->toString())
+    if (_edges[i].getEdge() == e)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool EdgeString::overlaps(const ConstEdgeSublinePtr& es) const
+{
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    if (_edges[i].getSubline()->overlaps(es))
     {
       return true;
     }

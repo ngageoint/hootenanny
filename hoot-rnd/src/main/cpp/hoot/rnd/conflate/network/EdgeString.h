@@ -110,6 +110,8 @@ public:
    */
   bool contains(ConstNetworkVertexPtr e) const;
 
+  bool containsInteriorVertex(ConstNetworkVertexPtr v) const;
+
   QList<EdgeEntry> getAllEdges() const { return _edges; }
 
   int getCount() const { return _edges.size(); }
@@ -143,8 +145,21 @@ public:
 
   bool isEdgeClosed() const;
 
+  /**
+   * Returns true if v is at the beginning or end of the string.
+   */
+  bool isAtExtreme(ConstNetworkVertexPtr v) const;
+
   bool isFromOnVertex() const { return getFrom()->isExtreme(EdgeLocation::SLOPPY_EPSILON); }
 
+  /**
+   * If neither terminal is on a vertex return true.
+   */
+  bool isFullPartial() const { return isFromOnVertex() == false && isToOnVertex() == false; }
+
+  /**
+   * If at least one terminal is not on a vertex.
+   */
   bool isPartial() const { return isFromOnVertex() == false || isToOnVertex() == false; }
 
   bool isStub() const { return _edges.size() == 1 && _edges[0].getEdge()->isStub(); }
@@ -153,7 +168,9 @@ public:
 
   bool overlaps(shared_ptr<const EdgeString> other) const;
 
-  bool overlaps(ConstNetworkEdgePtr e) const;
+  bool overlaps(const ConstEdgeSublinePtr& es) const;
+
+  bool overlaps(const ConstNetworkEdgePtr& es) const;
 
   void prependEdge(ConstNetworkEdgePtr e);
 

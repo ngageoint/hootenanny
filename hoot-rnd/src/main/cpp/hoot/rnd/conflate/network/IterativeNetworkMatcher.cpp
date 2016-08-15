@@ -366,7 +366,7 @@ void IterativeNetworkMatcher::iterate()
 
   // create a more refined estimate of edge match based on the typical similarity scores and
   // the neighboring node scores (product of neighboring scores?)
-  LOG_WARN("these should use a copy of _edge**Scores, then update the original");
+  LOG_INFO("these should use a copy of _edge**Scores, then update the original");
   LOG_INFO("1 to 2");
   _updateEdgeScores(_edge12Scores, _vertex12Scores);
   LOG_INFO("2 to 1");

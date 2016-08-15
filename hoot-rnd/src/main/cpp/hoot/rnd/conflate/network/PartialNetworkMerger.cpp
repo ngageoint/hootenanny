@@ -169,13 +169,43 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
     _appendSublineMappings(_mergerList.back()->getAllSublineMappings());
   }
 
-  // split the ways in such a way that the mappings are updated appropriately.
-  _splitAllWays(map, replaced, _allSublineMappings);
-
-  // apply merge operations on the split ways.
-  foreach (WayMatchStringMergerPtr merger, _mergerList)
+  try
   {
-    _applyMerger(map, merger);
+    // split the ways in such a way that the mappings are updated appropriately.
+    _splitAllWays(map, replaced, _allSublineMappings);
+
+    // apply merge operations on the split ways.
+    foreach (WayMatchStringMergerPtr merger, _mergerList)
+    {
+      _applyMerger(map, merger);
+    }
+  }
+  catch (NeedsReviewException& e)
+  {
+    set<ElementId> reviews;
+
+    foreach (WayMatchStringMerger::SublineMappingPtr mapping, _allSublineMappings)
+    {
+      if (mapping->getNewWay2())
+      {
+        reviews.insert(mapping->getNewWay2()->getElementId());
+      }
+      else
+      {
+        reviews.insert(mapping->getStart2().getWay()->getElementId());
+      }
+
+      if (mapping->newWay1)
+      {
+        reviews.insert(mapping->newWay1->getElementId());
+      }
+      else
+      {
+        reviews.insert(mapping->getStart1().getWay()->getElementId());
+      }
+    }
+
+    ReviewMarker::mark(map, reviews, e.getWhat(), HighwayMatch::getHighwayMatchName());
   }
 }
 
@@ -211,8 +241,8 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
       eids.insert(e->getElementId());
     }
 
-    ReviewMarker().mark(map, eids, "Complex intersection match. Possible dogleg? "
-      "Very short segment?", HighwayMatch::getHighwayMatchName());
+    ReviewMarker().mark(map, eids, "Ambiguous intersection match. Possible dogleg? Very short "
+      "segment? Please verify merge and fix as needed.", HighwayMatch::getHighwayMatchName());
   }
   else
   {

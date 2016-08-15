@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.1966581620793493" lon="106.7865276275659596">
+        <tag k="hoot:id" v="-20"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.1969622623099987" lon="106.7865273480000070">
+        <tag k="hoot:id" v="-11"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.1969908769799993" lon="106.7865669170000018">
+        <tag k="hoot:id" v="-10"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.1970077528600020" lon="106.7866675939999794">
+        <tag k="hoot:id" v="-9"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.1969390000000004" lon="106.7865407000000033">
+        <tag k="created_by" v="Merkaartor 0.12"/>
+        <tag k="hoot:id" v="-7"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.1966834999999989" lon="106.7865287999999850">
+        <tag k="created_by" v="Merkaartor 0.12"/>
+        <tag k="hoot:id" v="-6"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.1962663999999981" lon="106.7865094999999798">
+        <tag k="created_by" v="Merkaartor 0.12"/>
+        <tag k="hoot:id" v="-5"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.1958721000000008" lon="106.7864912000000004">
+        <tag k="created_by" v="Merkaartor 0.12"/>
+        <tag k="hoot:id" v="-4"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.1955524000000004" lon="106.7864763000000039">
+        <tag k="created_by" v="Merkaartor 0.12"/>
+        <tag k="hoot:id" v="-3"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.1969821999999990" lon="106.7877287999999965">
+        <tag k="created_by" v="Merkaartor 0.12"/>
+        <tag k="hoot:id" v="-2"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.1970029999999996" lon="106.7867337999999933">
+        <tag k="created_by" v="Merkaartor 0.12"/>
+        <tag k="hoot:id" v="-1"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-9"/>
+        <nd ref="-10"/>
+        <nd ref="-11"/>
+        <nd ref="-7"/>
+        <tag k="width" v="2.5"/>
+        <tag k="name" v="KEMANGGISAN 3G"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="paved"/>
+        <tag k="error:circular" v="10.08"/>
+        <tag k="hoot:id" v="-17"/>
+        <tag k="hoot:status" v="2"/>
+    </way>
+    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-20"/>
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <tag k="width" v="2.5"/>
+        <tag k="created_by" v="Merkaartor 0.12"/>
+        <tag k="name" v="KEMANGGISAN 3G"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="highway" v="residential"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="paved"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-15"/>
+        <tag k="hoot:status" v="3"/>
+    </way>
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <nd ref="-5"/>
+        <nd ref="-20"/>
+        <tag k="created_by" v="Merkaartor 0.12"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-14"/>
+        <tag k="hoot:status" v="1"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <tag k="width" v="2.5"/>
+        <tag k="created_by" v="Merkaartor 0.12"/>
+        <tag k="name" v="KEMANGGISAN 3G"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="highway" v="residential"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="paved"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-1"/>
+        <tag k="hoot:status" v="3"/>
+    </way>
+</osm>

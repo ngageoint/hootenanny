@@ -214,44 +214,63 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
     WayStringPtr ws1 = toWayString(e1);
     WayStringPtr ws2 = toWayString(e2);
 
-    RelationPtr r1(new Relation(Status::Unknown1, _map->createNextRelationId(), 15));
-    r1->setType("multilinestring");
-    RelationPtr r2(new Relation(Status::Unknown1, _map->createNextRelationId(), 15));
-    r2->setType("multilinestring");
+    Meters sr = getSearchRadius(ws1, ws2);
 
-    // create a set of all the way IDs
-    set<long> widSet;
-    for (int i = 0; i < ws1->getSize(); ++i)
+    // if this is a partial match in the middle of an edge then we want to be more strict about
+    // accepting the match.
+    if (e1->isFullPartial() || e2->isFullPartial())
     {
-      widSet.insert(ws1->at(i).getWay()->getId());
-      r1->addElement("", ws1->at(i).getWay());
+      sr *= 2;
     }
-    for (int i = 0; i < ws2->getSize(); ++i)
+
+    // we won't even try to make partial matches smaller than the search radius. It just creates too
+    // much noise.
+    if (ws1->calculateLength() < sr && ws2->calculateLength() < sr &&
+      (e1->isPartial() || e2->isPartial()))
     {
-      widSet.insert(ws2->at(i).getWay()->getId());
-      r2->addElement("", ws2->at(i).getWay());
+      result = 0.0;
     }
-    vector<long> wids;
-    wids.insert(wids.begin(), widSet.begin(), widSet.end());
+    else
+    {
+      RelationPtr r1(new Relation(Status::Unknown1, _map->createNextRelationId(), 15));
+      r1->setType("multilinestring");
+      RelationPtr r2(new Relation(Status::Unknown1, _map->createNextRelationId(), 15));
+      r2->setType("multilinestring");
 
-    // create a copy of the map for experimentation
-    OsmMapPtr mapCopy = _map->copyWays(wids);
-    mapCopy->addElement(r1);
-    mapCopy->addElement(r2);
+      // create a set of all the way IDs
+      set<long> widSet;
+      for (int i = 0; i < ws1->getSize(); ++i)
+      {
+        widSet.insert(ws1->at(i).getWay()->getId());
+        r1->addElement("", ws1->at(i).getWay());
+      }
+      for (int i = 0; i < ws2->getSize(); ++i)
+      {
+        widSet.insert(ws2->at(i).getWay()->getId());
+        r2->addElement("", ws2->at(i).getWay());
+      }
+      vector<long> wids;
+      wids.insert(wids.begin(), widSet.begin(), widSet.end());
 
-    WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(ws1, ws2));
+      // create a copy of the map for experimentation
+      OsmMapPtr mapCopy = _map->copyWays(wids);
+      mapCopy->addElement(r1);
+      mapCopy->addElement(r2);
 
-    // convert from a mapping to a WaySublineMatchString
-    WaySublineMatchStringPtr matchString = WayMatchStringMappingConverter().toWaySublineMatchString(
-      mapping);
+      WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(ws1, ws2));
 
-    LOG_VAR(matchString);
+      // convert from a mapping to a WaySublineMatchString
+      WaySublineMatchStringPtr matchString = WayMatchStringMappingConverter().toWaySublineMatchString(
+        mapping);
 
-    MatchClassification c;
-    // calculate the match score
-    c = _classifier->classify(mapCopy, r1->getElementId(), r2->getElementId(), *matchString);
+      LOG_VAR(matchString);
 
-    result = c.getMatchP();
+      MatchClassification c;
+      // calculate the match score
+      c = _classifier->classify(mapCopy, r1->getElementId(), r2->getElementId(), *matchString);
+
+      result = c.getMatchP();
+    }
   }
 
   return result;
@@ -369,7 +388,29 @@ Meters NetworkDetails::getSearchRadius(ConstNetworkVertexPtr v1, ConstNetworkVer
   Meters ce1 = getSearchRadius(v1);
   Meters ce2 = getSearchRadius(v2);
 
-  return sqrt(ce1 * ce1 + ce2 * ce2);
+  Meters result = sqrt(ce1 * ce1 + ce2 * ce2);
+  LOG_VAR(result);
+  return result;
+}
+
+Meters NetworkDetails::getSearchRadius(ConstWayStringPtr ws1, ConstWayStringPtr ws2) const
+{
+  Meters ce1 = ws1->getMaxCircularError();
+  Meters ce2 = ws2->getMaxCircularError();
+
+  Meters result = sqrt(ce1 * ce1 + ce2 * ce2);
+  LOG_VAR(result);
+  return result;
+}
+
+Meters NetworkDetails::getSearchRadius(ConstWayPtr w1, ConstWayPtr w2) const
+{
+  Meters ce1 = w1->getCircularError();
+  Meters ce2 = w2->getCircularError();
+
+  Meters result = sqrt(ce1 * ce1 + ce2 * ce2);
+  LOG_VAR(result);
+  return result;
 }
 
 const NetworkDetails::SublineCache& NetworkDetails::_getSublineCache(ConstWayPtr w1, ConstWayPtr w2)
@@ -381,9 +422,10 @@ const NetworkDetails::SublineCache& NetworkDetails::_getSublineCache(ConstWayPtr
     return _sublineCache[e1][e2];
   }
 
+  Meters srh = ConfigOptions().getSearchRadiusHighway();
+  double sr = srh <= 0.0 ? getSearchRadius(w1, w2) : srh;
   // calculated the shared sublines
-  WaySublineMatchString sublineMatch = _sublineMatcher->findMatch(_map, w1, w2,
-    ConfigOptions().getSearchRadiusHighway());
+  WaySublineMatchString sublineMatch = _sublineMatcher->findMatch(_map, w1, w2, sr);
 
   MatchClassification c;
   bool reversed = false;

@@ -83,6 +83,10 @@ public:
 
   Meters getSearchRadius(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const;
 
+  Meters getSearchRadius(ConstWayStringPtr ws1, ConstWayStringPtr ws2) const;
+
+  Meters getSearchRadius(ConstWayPtr w1, ConstWayPtr w2) const;
+
   /**
    * Returns a score matching v1 to v2. This does not consider any neighboring vertices. 0 means
    * no match and larger scores are better.

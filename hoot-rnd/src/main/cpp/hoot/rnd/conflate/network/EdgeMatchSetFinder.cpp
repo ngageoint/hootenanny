@@ -34,6 +34,7 @@ namespace hoot
 
 EdgeMatchSetFinder::EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMatchSetPtr matchSet,
     ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2) :
+  _bidirectionalStubs(true),
   _details(details),
   _includePartialMatches(false),
   _matchSet(matchSet),
@@ -59,6 +60,8 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
   {
     em->getString2()->addFirstEdge(EdgeSubline::createFullSubline(e2));
   }
+  LOG_VAR(e1);
+  LOG_VAR(e2);
 
   _steps = 0;
   _addEdgeMatches(em);
@@ -90,12 +93,15 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
       // if exactly one string is a stub
       if (em->getString1()->isStub() != em->getString2()->isStub())
       {
-        // if one is a stub, then add it in both directions. We don't know which is better.
         _matchSet->addEdgeMatch(em, score);
-        EdgeStringPtr rev1 = em->getString1()->clone();
-        rev1->reverse();
-        EdgeMatchPtr em2(new EdgeMatch(rev1, em->getString2()));
-        _matchSet->addEdgeMatch(em2, score);
+        if (_bidirectionalStubs)
+        {
+          // add it in both directions. In some matchers we don't know which is better.
+          EdgeStringPtr rev1 = em->getString1()->clone();
+          rev1->reverse();
+          EdgeMatchPtr em2(new EdgeMatch(rev1, em->getString2()));
+          _matchSet->addEdgeMatch(em2, score);
+        }
       }
       else
       {
@@ -279,12 +285,13 @@ bool EdgeMatchSetFinder::_addPartialMatch(ConstEdgeMatchPtr em)
     // create a new edge match for each of the partial matches
     foreach (const EdgeSublineMatchPtr& m, matches)
     {
+
       // we won't even try to make partial matches smaller than the search radius. It just creates
       // too much noise.
       Meters searchRadius = _details->getSearchRadius(m->getSubline1()->getEdge(),
         m->getSubline2()->getEdge());
-      if (_details->calculateLength(m->getSubline1()) >= searchRadius * 2 &&
-        _details->calculateLength(m->getSubline2()) >= searchRadius * 2)
+      if (_details->calculateLength(m->getSubline1()) >= searchRadius &&
+        _details->calculateLength(m->getSubline2()) >= searchRadius)
       {
         // create a partial match entry here
         EdgeStringPtr s1(new EdgeString());
@@ -322,6 +329,8 @@ bool EdgeMatchSetFinder::_addPartialMatch(ConstEdgeMatchPtr em)
   if (newEm)
   {
     double score = _scoreMatch(newEm);
+    LOG_VAR(newEm);
+    LOG_VAR(score);
     if (score > 0)
     {
       LOG_VAR(newEm);
@@ -353,15 +362,6 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimFromEdge(ConstEdgeMatchPtr em)
 
   LOG_VAR(s1);
   LOG_VAR(s2);
-
-  // we won't even try to make partial matches smaller than the search radius. It just creates too
-  // much noise.
-  Meters searchRadius = _details->getSearchRadius(s1->getEdge(), s2->getEdge());
-  if (_details->calculateLength(s1) <= searchRadius * 2 ||
-    _details->calculateLength(s2) <= searchRadius * 2)
-  {
-    return result;
-  }
 
   ConstEdgeSublinePtr origS1 = em->getString1()->getAllEdges().front().getSubline();
   ConstEdgeLocationPtr startS1 = s1->getStart();
@@ -426,15 +426,6 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimToEdge(ConstEdgeMatchPtr em)
 
   LOG_VAR(s1);
   LOG_VAR(s2);
-
-  // we won't even try to make partial matches smaller than the search radius. It just creates too
-  // much noise.
-  Meters searchRadius = _details->getSearchRadius(s1->getEdge(), s2->getEdge());
-  if (_details->calculateLength(s1) <= searchRadius * 2 ||
-    _details->calculateLength(s2) <= searchRadius * 2)
-  {
-    return result;
-  }
 
   ConstEdgeSublinePtr origS1 = em->getString1()->getAllEdges().back().getSubline();
   ConstEdgeLocationPtr endS1 = s1->getEnd();

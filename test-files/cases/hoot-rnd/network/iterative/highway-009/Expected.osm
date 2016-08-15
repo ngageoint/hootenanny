@@ -83,8 +83,8 @@
         <member type="way" ref="-2" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:score" v="0.500002"/>
-        <tag k="hoot:review:note" v="A complex road situation was found."/>
+        <tag k="hoot:review:score" v="0.5"/>
+        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:sort_order" v="0"/>
         <tag k="type" v="review"/>
         <tag k="hoot:id" v="-8"/>
@@ -95,8 +95,8 @@
         <member type="way" ref="-2" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:score" v="0.499995"/>
-        <tag k="hoot:review:note" v="A complex road situation was found."/>
+        <tag k="hoot:review:score" v="0.5"/>
+        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:sort_order" v="1"/>
         <tag k="type" v="review"/>
         <tag k="hoot:id" v="-7"/>

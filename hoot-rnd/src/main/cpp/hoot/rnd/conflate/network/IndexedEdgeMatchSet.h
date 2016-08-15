@@ -63,6 +63,13 @@ public:
 
   QSet<ConstEdgeMatchPtr> getMatchesThatContain(ConstNetworkEdgePtr e) const;
 
+  QSet<ConstEdgeMatchPtr> getMatchesThatTerminateAt(ConstNetworkVertexPtr v) const;
+
+  /**
+   * Returns all edges that contain v as an interior vertex (not at an extreme)
+   */
+  QSet<ConstEdgeMatchPtr> getMatchesWithInteriorVertex(ConstNetworkVertexPtr v) const;
+
   /**
    * Return all matches that overlap with e. This may include e.
    */
@@ -76,8 +83,8 @@ public:
   /**
    * Return all the edges that either start at v1/v2 or end at v1/v2.
    */
-  QSet<ConstEdgeMatchPtr> getMatchesWithTermination(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2)
-    const;
+  QSet<ConstEdgeMatchPtr> getMatchesWithTermination(ConstNetworkVertexPtr v1,
+    ConstNetworkVertexPtr v2) const;
 
   /**
    * This is handy if you want to de-duplicate edge matches. The equivalent stored pointer will be
@@ -93,6 +100,25 @@ public:
   double getScore(ConstEdgeMatchPtr em) const { return _matches[em]; }
 
   int getSize() const { return _matches.size(); }
+
+  /**
+   * Returns true if:
+   *  - neither a nor b are stubs.
+   *  - a and b are connected to the same stub, and that stub allows the edges to be implicitly
+   *    connected.
+   *
+   * E.g.
+   *
+   * *---v----*--w--*----x-----* network 1
+   * *----u------*------z------* network 2
+   *             y
+   *
+   * In this case match w/y is a stub so match u/v and match x/z are connected through a stub.
+   */
+  QSet<ConstEdgeMatchPtr> getConnectingStubs(ConstEdgeMatchPtr a, ConstEdgeMatchPtr b) const;
+
+  QSet<ConstEdgeMatchPtr> getConnectingStubs(ConstEdgeLocationPtr ela1, ConstEdgeLocationPtr ela2,
+    ConstEdgeLocationPtr elb1, ConstEdgeLocationPtr elb2) const;
 
   void setScore(ConstEdgeMatchPtr em, double score) { _matches[em] = score; }
 

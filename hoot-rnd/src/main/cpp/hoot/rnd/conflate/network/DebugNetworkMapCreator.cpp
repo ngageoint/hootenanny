@@ -32,7 +32,8 @@
 namespace hoot
 {
 
-DebugNetworkMapCreator::DebugNetworkMapCreator()
+DebugNetworkMapCreator::DebugNetworkMapCreator(double matchThreshold) :
+  _matchThreshold(matchThreshold)
 {
 }
 
@@ -66,7 +67,7 @@ void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edg
     w->getTags().set("hoot:edge:score", edgeScore->getScore());
     w->getTags().set("hoot:edge:id", edgeScore->getUid());
     w->getTags().set("hoot:edge", edgeScore->toString());
-    if (edgeScore->getScore() >= 0.15)
+    if (edgeScore->getScore() >= _matchThreshold)
     {
       w->getTags().set("highway", "cycleway");
     }

@@ -142,7 +142,9 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
         scores << QString::number(m->getProbability());
         sum += m->getScore();
 
-        mergers.push_back(new MarkForReviewMerger(eids, "A complex road situation was found.",
+        mergers.push_back(new MarkForReviewMerger(eids, "A complex road situation was found with "
+          "multiple plausible solutions. Please reference input data/imagery and manually merge "
+          "or modify as needed.",
           m->getMatchName(), m->getScore()));
       }
     }

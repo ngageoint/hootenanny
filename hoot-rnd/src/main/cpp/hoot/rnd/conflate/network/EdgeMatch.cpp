@@ -74,20 +74,16 @@ bool EdgeMatch::contains(ConstNetworkVertexPtr v) const
 
 bool EdgeMatch::overlaps(const shared_ptr<const EdgeMatch> &other) const
 {
-  foreach (const EdgeString::EdgeEntry& ee, _edges1->getAllEdges())
+  if (other->getString1()->overlaps(getString1()))
   {
-    if (other->contains(ee.getEdge()))
-    {
-      return true;
-    }
+    LOG_INFO("Overlaps: " << toString() << " " << other);
+    return true;
   }
 
-  foreach (const EdgeString::EdgeEntry& ee, _edges2->getAllEdges())
+  if (other->getString2()->overlaps(getString2()))
   {
-    if (other->contains(ee.getEdge()))
-    {
-      return true;
-    }
+    LOG_INFO("Overlaps: " << toString() << " " << other);
+    return true;
   }
 
   return false;

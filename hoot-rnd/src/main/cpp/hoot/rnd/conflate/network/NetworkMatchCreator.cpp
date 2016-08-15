@@ -108,13 +108,13 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   NetworkDetailsPtr details(new NetworkDetails(map, n1, n2));
 
-  for (size_t i = 0; i < 20; ++i)
+  for (size_t i = 0; i < 30; ++i)
   {
     if (ConfigOptions().getNetworkMatchWriteDebugMaps())
     {
       OsmMapPtr copy(new OsmMap(map));
-      DebugNetworkMapCreator().addDebugElements(copy, matcher->getAllEdgeScores(),
-        matcher->getAllVertexScores());
+      DebugNetworkMapCreator(matcher->getMatchThreshold()).addDebugElements(copy,
+        matcher->getAllEdgeScores(), matcher->getAllVertexScores());
 
       MapProjector::projectToWgs84(copy);
       conf().set(ConfigOptions().getWriterIncludeDebugKey(), true);
@@ -132,7 +132,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   for (int i = 0; i < edgeMatch.size(); i++)
   {
     /// @todo tunable parameter
-    if (edgeMatch[i]->getScore() > 0.15)
+    if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
       matches.push_back(_createMatch(details, edgeMatch[i], threshold));
     }

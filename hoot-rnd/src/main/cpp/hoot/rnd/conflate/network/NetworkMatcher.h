@@ -55,6 +55,8 @@ public:
 
   virtual ~NetworkMatcher();
 
+  virtual double getMatchThreshold() const { return 0.15; }
+
   /**
    * Iterate torwards a solution. Each iteration should slowly move towards a better result, but
    * there will likely be a diminishing return for each call.

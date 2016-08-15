@@ -47,6 +47,7 @@ using namespace geos::geom;
 // Hoot
 #include <hoot/core/Hoot.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/test/ConflateCaseTestSuite.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -67,7 +68,6 @@ using namespace std;
 // Tgs
 #include <tgs/System/Time.h>
 
-#include "ConflateCaseTestSuite.h"
 #include "ScriptTestSuite.h"
 #include <hoot/core/HootConfig.h>
 
