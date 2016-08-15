@@ -26,8 +26,10 @@
  */
 package hoot.services.controllers.osm;
 
+import static com.querydsl.core.group.GroupBy.groupBy;
 import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
 import static hoot.services.HootProperties.MAXIMUM_WAY_NODES;
+import static hoot.services.models.db.QCurrentNodes.currentNodes;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -50,14 +52,14 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLUpdateClause;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLUpdateClause;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.DbUtils;
+import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Changesets;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.db.CurrentRelations;
@@ -68,11 +70,11 @@ import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.db.QCurrentRelations;
 import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.models.db.QCurrentWays;
-import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.MapUtils;
 import hoot.services.utils.QuadTileCalculator;
@@ -82,7 +84,7 @@ import hoot.services.utils.XmlUtils;
 public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
     private static final Logger log = LoggerFactory.getLogger(ChangesetResourceUploadCreateTest.class);
 
-    private final QCurrentNodes currentNodesTbl = QCurrentNodes.currentNodes;
+    private final QCurrentNodes currentNodesTbl = currentNodes;
     private final QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
     private final QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
     private final QCurrentRelations currentRelationsTbl = QCurrentRelations.currentRelations;
@@ -401,15 +403,16 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
             QChangesets changesets = QChangesets.changesets;
 
-            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(changesets)
                     .from(changesets)
                     .where(changesets.id.eq(changesetId))
-                    .singleResult(changesets);
+                    .fetchOne();
+
             try {
-                Map<Long, CurrentNodes> nodes =
-                        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                                .from(currentNodesTbl)
-                                .map(currentNodesTbl.id, currentNodesTbl);
+                Map<Long, CurrentNodes> nodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .from(currentNodesTbl)
+                        .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
 
                 Assert.assertEquals(3, nodes.size());
 
@@ -454,9 +457,9 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             }
 
             try {
-                Map<Long, CurrentWays> ways = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                Map<Long, CurrentWays> ways = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
                         .from(currentWaysTbl)
-                        .map(currentWaysTbl.id, currentWaysTbl);
+                        .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
 
                 Assert.assertEquals(1, ways.size());
                 CurrentWays wayRecord = ways.get(wayIdsArr[0]);
@@ -466,11 +469,12 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                List<CurrentWayNodes> wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                List<CurrentWayNodes> wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
                         .from(currentWayNodesTbl)
                         .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
                         .orderBy(currentWayNodesTbl.sequenceId.asc())
-                        .list(currentWayNodesTbl);
+                        .fetch();
 
                 Assert.assertEquals(4, wayNodes.size());
                 CurrentWayNodes wayNode = wayNodes.get(0);
@@ -912,21 +916,21 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             try {
                 // make sure the nodes weren't created
                 Assert.assertEquals(0,
-                        new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentNodesTbl).count());
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .from(currentNodesTbl)
+                                .fetchCount());
             }
             catch (Exception e2) {
                 Assert.fail("Error checking nodes: " + e.getMessage());
             }
 
-            QChangesets changesets = QChangesets.changesets;
-            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                    .from(changesets).where(changesets.id.eq(changesetId))
-                    .singleResult(changesets);
             try {
-                changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                QChangesets changesets = QChangesets.changesets;
+                Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(changesets)
                         .from(changesets)
                         .where(changesets.id.eq(changesetId))
-                        .singleResult(changesets);
+                        .fetchOne();
 
                 Assert.assertNotNull(changeset);
                 Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
@@ -1044,7 +1048,9 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             try {
                 // make sure the new nodes weren't created
                 Assert.assertEquals(5,
-                        new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentNodesTbl).count());
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .from(currentNodesTbl)
+                                .fetchCount());
             }
             catch (Exception e2) {
                 Assert.fail("Error checking nodes: " + e.getMessage());
@@ -1191,7 +1197,8 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
                     "</osmChange>");
 
         Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/diffResult/relation").getLength());
-        Assert.assertEquals(1, new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationsTbl).count());
+        Assert.assertEquals(1, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .from(currentRelationsTbl).fetchCount());
     }
 
     @Test(expected = UniformInterfaceException.class)
@@ -1420,10 +1427,11 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // make one of way nodes invisible
-        CurrentNodes invisibleNode = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        CurrentNodes invisibleNode = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentNodesTbl)
                 .from(currentNodesTbl)
                 .where(currentNodesTbl.id.eq(nodeIdsArr[0]))
-                .singleResult(currentNodesTbl);
+                .fetchOne();
 
         Assert.assertNotNull(invisibleNode);
 
@@ -1435,10 +1443,11 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
                 .execute());
 
         Assert.assertEquals(1, success);
-        Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentNodesTbl.visible)
                 .from(currentNodesTbl)
                 .where(currentNodesTbl.id.eq(nodeIdsArr[0]))
-                .singleResult(currentNodesTbl.visible));
+                .fetchOne());
 
         // Try to upload a way which references an invisible node. The request
         // should fail and no data in the system should be modified.
@@ -1482,10 +1491,11 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // make one of relation node members invisible
-        CurrentNodes invisibleNode = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        CurrentNodes invisibleNode = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentNodesTbl)
                 .from(currentNodesTbl)
                 .where(currentNodesTbl.id.eq(nodeIdsArr[0]))
-                .singleResult(currentNodesTbl);
+                .fetchOne();
 
         Assert.assertNotNull(invisibleNode);
 
@@ -1497,10 +1507,11 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
                 .execute();
 
         Assert.assertEquals(1, success);
-        Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentNodesTbl.visible)
                 .from(currentNodesTbl)
                 .where(currentNodesTbl.id.eq(nodeIdsArr[0]))
-                .singleResult(currentNodesTbl.visible));
+                .fetchOne());
 
         // Try to upload a relation which references an invisible node. The
         // request should fail and no data in the system should be modified.
@@ -1544,10 +1555,11 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // make one of relation way members invisible
-        CurrentWays invisibleWay = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        CurrentWays invisibleWay = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentWaysTbl)
                 .from(currentWaysTbl)
                 .where(currentWaysTbl.id.eq(wayIdsArr[0]))
-                .singleResult(currentWaysTbl);
+                .fetchOne();
 
         Assert.assertNotNull(invisibleWay);
 
@@ -1559,10 +1571,11 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
                 .execute();
 
         Assert.assertEquals(1, success);
-        Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentWaysTbl.visible)
                 .from(currentWaysTbl)
                 .where(currentWaysTbl.id.eq(wayIdsArr[0]))
-                .singleResult(currentWaysTbl.visible));
+                .fetchOne());
 
         // Try to upload a relation which references an invisible way. The
         // request should fail and no data in the system should be modified.
@@ -1608,10 +1621,11 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // make one of relation's relation members invisible
-        CurrentRelations invisibleRelation = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        CurrentRelations invisibleRelation = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentRelationsTbl)
                 .from(currentRelationsTbl)
                 .where(currentRelationsTbl.id.eq(relationIdsArr[0]))
-                .singleResult(currentRelationsTbl);
+                .fetchOne();
 
         Assert.assertNotNull(invisibleRelation);
 
@@ -1623,10 +1637,11 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
                 .execute();
 
         Assert.assertEquals(1, success);
-        Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentRelationsTbl.visible)
                 .from(currentRelationsTbl)
                 .where(currentRelationsTbl.id.eq(relationIdsArr[0]))
-                .singleResult(currentRelationsTbl.visible));
+                .fetchOne());
 
         // Try to upload a relation which references an invisible relation. The request should fail
         // and no data in the system should be modified.

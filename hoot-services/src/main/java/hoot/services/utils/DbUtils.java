@@ -40,21 +40,20 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.query.sql.Configuration;
-import com.mysema.query.sql.PostgresTemplates;
-import com.mysema.query.sql.RelationalPathBase;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.SQLTemplates;
-import com.mysema.query.sql.dml.SQLDeleteClause;
-import com.mysema.query.sql.dml.SQLInsertClause;
-import com.mysema.query.sql.dml.SQLUpdateClause;
-import com.mysema.query.sql.types.EnumAsObjectType;
-import com.mysema.query.types.Predicate;
-import com.mysema.query.types.expr.BooleanExpression;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.sql.Configuration;
+import com.querydsl.sql.PostgreSQLTemplates;
+import com.querydsl.sql.RelationalPathBase;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.SQLTemplates;
+import com.querydsl.sql.dml.SQLDeleteClause;
+import com.querydsl.sql.dml.SQLInsertClause;
+import com.querydsl.sql.dml.SQLUpdateClause;
+import com.querydsl.sql.types.EnumAsObjectType;
 
 import hoot.services.HootProperties;
 import hoot.services.models.db.CurrentNodes;
@@ -75,7 +74,7 @@ import hoot.services.models.osm.Element.ElementType;
 public final class DbUtils {
     private static final Logger logger = LoggerFactory.getLogger(DbUtils.class);
 
-    private static final SQLTemplates templates = PostgresTemplates.builder().quote().build();
+    private static final SQLTemplates templates = PostgreSQLTemplates.builder().quote().build();
     private static final BasicDataSource dbcpDatasource;
 
     public static final String TIMESTAMP_DATE_FORMAT = "YYYY-MM-dd HH:mm:ss";
@@ -151,24 +150,22 @@ public final class DbUtils {
      * @return List of map ids
      */
     public static List<Long> getMapIdsByName(Connection conn, String mapName) {
-        SQLQuery query = new SQLQuery(conn, getConfiguration());
-
-        List<Long> mapIds = query
+        List<Long> mapIds = new SQLQuery<>(conn, getConfiguration())
+                .select(QMaps.maps.id)
                 .from(QMaps.maps)
                 .where(QMaps.maps.displayName.eq(mapName))
                 .orderBy(QMaps.maps.id.asc())
-                .list(QMaps.maps.id);
+                .fetch();
 
         return mapIds;
     }
 
     public static String getDisplayNameById(Connection conn, long mapId) {
-        SQLQuery query = new SQLQuery(conn, getConfiguration());
-
-        String displayName = query
+        String displayName = new SQLQuery<>(conn, getConfiguration())
+                .select(QMaps.maps.displayName)
                 .from(QMaps.maps)
                 .where(QMaps.maps.id.eq(mapId))
-                .uniqueResult(QMaps.maps.displayName);
+                .fetchFirst();
 
         return displayName;
     }
@@ -188,8 +185,9 @@ public final class DbUtils {
         List<Long> mapIds = getMapIdsByName(conn, mapName);
 
         for (Long mapId : mapIds) {
-            SQLQuery query = new SQLQuery(conn, getConfiguration(mapId.toString()));
-            recordCount += query.from(QCurrentNodes.currentNodes).count();
+            recordCount += new SQLQuery<>(conn, getConfiguration(mapId.toString()))
+                    .from(QCurrentNodes.currentNodes)
+                    .fetchCount();
         }
 
         return recordCount;
@@ -208,8 +206,9 @@ public final class DbUtils {
         List<Long> mapIds = getMapIdsByName(conn, mapName);
 
         for (Long mapId : mapIds) {
-            SQLQuery query = new SQLQuery(conn, getConfiguration(mapId.toString()));
-            recordCount += query.from(QCurrentWays.currentWays).count();
+            recordCount += new SQLQuery<>(conn, getConfiguration(mapId.toString()))
+                    .from(QCurrentWays.currentWays)
+                    .fetchCount();
         }
 
         return recordCount;
@@ -228,8 +227,9 @@ public final class DbUtils {
         List<Long> mapIds = getMapIdsByName(conn, mapName);
 
         for (Long mapId : mapIds) {
-            SQLQuery query= new SQLQuery(conn, getConfiguration(mapId.toString()));
-            recordCount += query.from(QCurrentRelations.currentRelations).count();
+            recordCount += new SQLQuery<>(conn, getConfiguration(mapId.toString()))
+                    .from(QCurrentRelations.currentRelations)
+                    .fetchCount();
         }
 
         return recordCount;
@@ -307,10 +307,11 @@ public final class DbUtils {
     public static void deleteOSMRecordByName(Connection conn, String mapName) {
         Configuration configuration = getConfiguration();
 
-        List<Long> mapIds = new SQLQuery(conn, configuration)
+        List<Long> mapIds = new SQLQuery<>(conn, configuration)
+                .select(QMaps.maps.id)
                 .from(QMaps.maps)
                 .where(QMaps.maps.displayName.equalsIgnoreCase(mapName))
-                .list(QMaps.maps.id);
+                .fetch();
 
         if (!mapIds.isEmpty()) {
             Long mapId = mapIds.get(0);
@@ -340,9 +341,11 @@ public final class DbUtils {
     }
 
     public static long getTestUserId(Connection conn) {
-        SQLQuery query = new SQLQuery(conn, getConfiguration());
         // there is only ever one test user
-        return query.from(QUsers.users).singleResult(QUsers.users.id);
+        return new SQLQuery<Long>(conn, getConfiguration())
+                .select(QUsers.users.id)
+                .from(QUsers.users)
+                .fetchFirst();
     }
 
     public static long updateMapsTableTags(Map<String, String> tags, long mapId, Connection conn) {
@@ -371,13 +374,16 @@ public final class DbUtils {
 
     public static Map<String, String> getMapsTableTags(long mapId, Connection conn) {
         Map<String, String> tags = new HashMap<>();
-        QMaps mp = QMaps.maps;
 
-        List<Object> res = new SQLQuery(conn, getConfiguration(mapId)).from(mp).where(mp.id.eq(mapId)).list(mp.tags);
+        List<Object> res = new SQLQuery<>(conn, getConfiguration(mapId))
+                .select(QMaps.maps.tags)
+                .from(QMaps.maps)
+                .where(QMaps.maps.id.eq(mapId))
+                .fetch();
 
         if (!res.isEmpty()) {
             Object oTag = res.get(0);
-            tags = PostgresUtils.postgresObjToHStore((PGobject) oTag);
+            tags = PostgresUtils.postgresObjToHStore(oTag);
         }
 
         return tags;

@@ -38,21 +38,21 @@ import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.query.sql.SQLExpressions;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLDeleteClause;
-import com.mysema.query.sql.dml.SQLInsertClause;
+import com.querydsl.sql.SQLExpressions;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLDeleteClause;
+import com.querydsl.sql.dml.SQLInsertClause;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
 import hoot.services.UnitTest;
-import hoot.services.models.db.QChangesets;
-import hoot.services.utils.DbUtils;
 import hoot.services.models.db.Maps;
+import hoot.services.models.db.QChangesets;
 import hoot.services.models.db.QMaps;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.DbUtils;
 
 
 public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
@@ -161,15 +161,19 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
     public void testCreateByNonUniqueMapName() throws Exception {
         // insert another map with the same name as the test map
         Maps map = new Maps();
-        QMaps maps = QMaps.maps;
-        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId));
-        long nextMapId = query.uniqueResult(SQLExpressions.nextval(Long.class, "maps_id_seq"));
+
+        long nextMapId = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(SQLExpressions.nextval(Long.class, "maps_id_seq"))
+                .from()
+                .fetchOne();
 
         map.setId(nextMapId);
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         map.setCreatedAt(now);
         map.setDisplayName("map-with-id-" + mapId);
         map.setUserId(userId);
+
+        QMaps maps = QMaps.maps;
         new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), maps).populate(map).execute();
 
         String mapName = null;
@@ -387,8 +391,9 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
      * @return true if changeset data exists; false otherwise
      */
     private static boolean changesetDataExistsInServicesDb(Connection conn) {
-        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-        long recordCtr = query.from(QChangesets.changesets).count();
+        long recordCtr = new SQLQuery<>(conn, DbUtils.getConfiguration())
+                .from(QChangesets.changesets)
+                .fetchCount();
         return (recordCtr > 0);
     }
 }

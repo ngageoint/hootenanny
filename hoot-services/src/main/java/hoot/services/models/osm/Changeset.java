@@ -48,13 +48,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLInsertClause;
-import com.mysema.query.sql.dml.SQLUpdateClause;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLInsertClause;
+import com.querydsl.sql.dml.SQLUpdateClause;
 
+import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Changesets;
 import hoot.services.models.db.QChangesets;
-import hoot.services.geo.BoundingBox;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.GeoUtils;
 
@@ -176,20 +176,18 @@ public class Changeset extends Changesets {
      * @return true if the changeset is open; false otherwise
      */
     private boolean isOpen() {
-        // For some strange reason, Changeset DAO's started not working at some
-        // point. More specifically, calls to ChangesetDao would return stale data. I
-        // suspect it has something to do with the way the transaction is being initialized, but since I
-        // couldn't figure out how to fix it, I changed this code to not use ChangesetDao anymore.
+        //SQLQueryFactory queryFactory = null;
 
-        Changesets changesetRecord = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Changesets changesetRecord = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(changesets)
                 .from(changesets)
                 .where(changesets.id.eq(getId()))
-                .singleResult(changesets);
+                .fetchOne();
 
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
-        return changesetRecord.getClosedAt().after(now) && (changesetRecord.getNumChanges() <
-                Integer.parseInt(MAXIMUM_CHANGESET_ELEMENTS));
+        return changesetRecord.getClosedAt().after(now) &&
+                (changesetRecord.getNumChanges() < Integer.parseInt(MAXIMUM_CHANGESET_ELEMENTS));
     }
 
     /**
@@ -220,8 +218,11 @@ public class Changeset extends Changesets {
     public void updateExpiration() {
         DateTime now = new DateTime();
 
-        Changesets changesetRecord = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                .where(changesets.id.eq(getId())).singleResult(changesets);
+        Changesets changesetRecord = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(QChangesets.changesets)
+                .from(changesets)
+                .where(changesets.id.eq(getId()))
+                .fetchOne();
 
         if (isOpen()) {
             int maximumChangesetElements = Integer.parseInt(MAXIMUM_CHANGESET_ELEMENTS);
@@ -308,10 +309,11 @@ public class Changeset extends Changesets {
     public void updateNumChanges(int numChanges) {
         logger.debug("Updating num changes...");
 
-        Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(QChangesets.changesets)
                 .from(changesets)
                 .where(changesets.id.eq(getId()))
-                .singleResult(changesets);
+                .fetchOne();
 
         int currentNumChanges = changeset.getNumChanges();
 
@@ -351,10 +353,11 @@ public class Changeset extends Changesets {
     public BoundingBox getBounds() {
         logger.debug("Retrieving changeset bounds...");
 
-        Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(QChangesets.changesets)
                 .from(changesets)
                 .where(changesets.id.eq(getId()))
-                .singleResult(changesets);
+                .fetchOne();
 
         // I don't like doing this...
         double minLon = changeset.getMinLon();
@@ -418,10 +421,10 @@ public class Changeset extends Changesets {
         logger.debug("Verifying changeset with ID: {} has previously been created ...", getId());
 
         // see comments in isOpen method for why ChangesetDao is not used here anymore
-        boolean changesetExists = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        boolean changesetExists = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
                 .from(changesets)
                 .where(changesets.id.eq(getId()))
-                .count() > 0;
+                .fetchCount() > 0;
 
         if (!changesetExists) {
             // I haven't been able to explicit find in the OSM docs or code what
@@ -433,10 +436,11 @@ public class Changeset extends Changesets {
         // this handles checking changeset expiration
         if (!isOpen()) {
             // this needs to be retrieved again to refresh the data
-            Changesets changesetRecord = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Changesets changesetRecord = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(changesets)
                     .from(changesets)
                     .where(changesets.id.eq(getId()))
-                    .singleResult(changesets);
+                    .fetchOne();
 
             throw new IllegalStateException("The changeset with ID: " + getId() +
                     " was closed at " + changesetRecord.getClosedAt());
@@ -461,10 +465,11 @@ public class Changeset extends Changesets {
             throw new RuntimeException("Error accessing changesetDiffDoc using XPathAPI!", e);
         }
 
-        Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(QChangesets.changesets)
                 .from(changesets)
                 .where(changesets.id.eq(getId()))
-                .singleResult(changesets);
+                .fetchOne();
 
         return (newChangeCount + changeset.getNumChanges()) > Integer.parseInt(MAXIMUM_CHANGESET_ELEMENTS);
     }

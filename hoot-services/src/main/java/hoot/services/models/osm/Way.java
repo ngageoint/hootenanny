@@ -36,7 +36,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.xml.transform.TransformerException;
 
@@ -48,22 +47,21 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
-import com.mysema.query.Tuple;
-import com.mysema.query.sql.RelationalPathBase;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.types.path.BooleanPath;
-import com.mysema.query.types.path.NumberPath;
-import com.mysema.query.types.path.SimplePath;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.BooleanPath;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.SimplePath;
+import com.querydsl.sql.RelationalPathBase;
+import com.querydsl.sql.SQLQuery;
 
-import hoot.services.utils.DbUtils;
-import hoot.services.utils.DbUtils.EntityChangeType;
-import hoot.services.utils.DbUtils.nwr_enum;
+import hoot.services.geo.BoundingBox;
+import hoot.services.geo.Coordinates;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.db.CurrentWayNodes;
 import hoot.services.models.db.CurrentWays;
 import hoot.services.models.db.QCurrentWayNodes;
-import hoot.services.geo.BoundingBox;
-import hoot.services.geo.Coordinates;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.DbUtils.EntityChangeType;
 
 
 /**
@@ -120,11 +118,12 @@ public class Way extends Element {
      */
     static List<CurrentNodes> getNodesForWays(long mapId, Set<Long> wayIds, Connection dbConn) {
         if (!wayIds.isEmpty()) {
-            return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
-                    .from(currentWayNodes)
+            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+                    .select(currentNodes)
+                    .from(currentWayNodes, currentNodes)
                     .join(currentNodes).on(currentWayNodes.nodeId.eq(currentNodes.id))
                     .where(currentWayNodes.wayId.in(wayIds))
-                    .list(currentNodes);
+                    .fetch();
         }
         return new ArrayList<>();
     }
@@ -133,11 +132,13 @@ public class Way extends Element {
      * Returns the nodes associated with this way
      */
     private List<CurrentNodes> getNodes() {
-        return new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
-                .from(currentWayNodes).join(currentNodes)
-                .on(currentWayNodes.nodeId.eq(currentNodes.id))
+        return new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+                .select(currentNodes)
+                .from(currentWayNodes, currentNodes)
+                .join(currentNodes).on(currentWayNodes.nodeId.eq(currentNodes.id))
                 .where(currentWayNodes.wayId.eq(getId()))
-                .orderBy(currentWayNodes.sequenceId.asc()).list(currentNodes);
+                .orderBy(currentWayNodes.sequenceId.asc())
+                .fetch();
     }
 
     /*
@@ -147,11 +148,12 @@ public class Way extends Element {
      * the first and last node ID in the way nodes sequence for closed polygons.
      */
     private List<Long> getNodeIds() {
-        return new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+        return new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+                .select(currentWayNodes.nodeId)
                 .from(currentWayNodes)
                 .where(currentWayNodes.wayId.eq(getId()))
                 .orderBy(currentWayNodes.sequenceId.asc())
-                .list(currentWayNodes.nodeId);
+                .fetch();
     }
 
     /*
@@ -281,15 +283,17 @@ public class Way extends Element {
         // From the Rails port of OSM API:
         // rels = Relation.joins(:relation_members).where(:visible => true,
         // :current_relation_members => { :member_type => "Way", :member_id => id }).
-        SQLQuery owningRelationsQuery = new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+        SQLQuery<Long> owningRelationsQuery = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+                .select(currentRelationMembers.relationId)
                 .distinct()
-                .from(currentRelations)
+                .from(currentRelations, currentRelationMembers)
                 .join(currentRelationMembers).on(currentRelations.id.eq(currentRelationMembers.relationId))
                 .where(currentRelations.visible.eq(true)
-                        .and(currentRelationMembers.memberType.eq(nwr_enum.way))
-                        .and(currentRelationMembers.memberId.eq(super.getId())));
+                        .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way))
+                        .and(currentRelationMembers.memberId.eq(super.getId())))
+                .orderBy(currentRelationMembers.relationId.asc());
 
-        Set<Long> owningRelationsIds = new TreeSet<>(owningRelationsQuery.list(currentRelationMembers.relationId));
+        List<Long> owningRelationsIds = owningRelationsQuery.fetch();
 
         if (!owningRelationsIds.isEmpty()) {
             throw new OSMAPIPreconditionException(

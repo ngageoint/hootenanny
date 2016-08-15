@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 /**
  * JobStatus is a Querydsl bean type
  */
-@Generated("com.mysema.query.codegen.BeanSerializer")
+@Generated("com.querydsl.codegen.BeanSerializer")
 public class JobStatus {
 
     private java.sql.Timestamp end;

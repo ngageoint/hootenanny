@@ -90,11 +90,11 @@ class ReviewableStatisticsQuery extends ReviewableQueryBase implements IReviewab
         return ret;
     }
 
-    String getTotalReviewableCountQueryString() {
+    private String getTotalReviewableCountQueryString() {
         return "select count(*) as totalcnt from current_relations_" + getMapId() + " where tags->'type' = 'review'";
     }
 
-    String getUnreviewedCountQueryString() {
+    private String getUnreviewedCountQueryString() {
         return "select count(*) as remaining from current_relations_" + getMapId()
                 + " where tags->'hoot:review:needs' = 'yes'";
     }

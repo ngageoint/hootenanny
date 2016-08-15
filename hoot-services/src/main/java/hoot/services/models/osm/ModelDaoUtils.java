@@ -33,10 +33,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.query.sql.RelationalPathBase;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.types.path.NumberPath;
-import com.mysema.query.types.path.StringPath;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.sql.RelationalPathBase;
+import com.querydsl.sql.SQLQuery;
 
 import hoot.services.utils.DbUtils;
 
@@ -89,20 +89,21 @@ public final class ModelDaoUtils {
         boolean recordExists = false;
         boolean multipleRecordsExist = false;
         if (idNum != -1) {
-            recordExists = new SQLQuery(dbConn, DbUtils.getConfiguration())
+            recordExists = new SQLQuery<>(dbConn, DbUtils.getConfiguration())
                     .from(table)
                     .where(idField.eq(idNum))
-                    .exists();
+                    .fetchCount() > 0;
         }
         else if (!StringUtils.isEmpty(requestStr)) {
             // input wasn't parsed as a numeric ID, so let's try it as a name
 
             // there has to be a better way to do this against the generated
             // code but haven't been able to get it to work yet
-            List<Long> records = new SQLQuery(dbConn, DbUtils.getConfiguration())
+            List<Long> records = new SQLQuery<>(dbConn, DbUtils.getConfiguration())
+                    .select(idField)
                     .from(table)
                     .where(nameField.eq(requestStr))
-                    .list(idField);
+                    .fetch();
 
             if (records.size() == 1) {
                 return records.get(0);
