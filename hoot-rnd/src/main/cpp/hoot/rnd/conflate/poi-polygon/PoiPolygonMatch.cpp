@@ -84,8 +84,8 @@ _ancestorDistance(-1.0),
 _addressMatch(false),
 _exactNameMatch(false)
 {
-  //_calculateMatch(map, eid1, eid2);
-  _calculateMatchWeka(map, eid1, eid2);
+  _calculateMatch(map, eid1, eid2);
+  //_calculateMatchWeka(map, eid1, eid2);
 }
 
 void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
@@ -171,13 +171,6 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
 
   double nameScore = _calculateNameScore(poi, poly);
   bool nameMatch = nameScore >= ConfigOptions().getPoiPolygonMatchNameThreshold();
-  bool exactNameMatch = false;
-  //poi.polygon.promote.exact.name.matches
-  if (ConfigOptions().getPoiPolygonPromoteExactNameMatches())
-  {
-    exactNameMatch = nameScore == 1.0;
-    _exactNameMatch = exactNameMatch;
-  }
 
   bool addressMatch = false;
   if (ConfigOptions().getPoiPolygonUseAddressNameMatching())
@@ -252,7 +245,6 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   evidence += typeMatch ? 1 : 0;
   evidence += ancestorTypeMatch ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
-  evidence += exactNameMatch ? 1 : 0;
   if (ConfigOptions().getPoiPolygonAddressOnlyEvidenceBoost() != 0 && !typeMatch && !nameMatch)
   {
     evidence += addressMatch ? ConfigOptions().getPoiPolygonAddressOnlyEvidenceBoost() : 0;
