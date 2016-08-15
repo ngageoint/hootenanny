@@ -60,7 +60,7 @@ double PoiPolygonNameExtractor::extract(const ConstElementPtr& target,
   QStringList candidateNames = candidate->getTags().getNames();
   candidateNames.append(candidate->getTags().getPseudoNames());
 
-  if (ConfigOptions().getPoiPolygonRemoveOperatorNameMatching())
+  /*if (ConfigOptions().getPoiPolygonRemoveOperatorNameMatching())
   {
     //custom rule
     if (target->getTags().contains("operator"))
@@ -73,7 +73,7 @@ double PoiPolygonNameExtractor::extract(const ConstElementPtr& target,
       const QString op = candidate->getTags().get("operator");
       candidateNames.removeAll(op);
     }
-  }
+  }*/
 
   //custom rules
   if (ConfigOptions().getPoiPolygonUseAbbreviationSubstitutions())

@@ -342,9 +342,7 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
           != OsmSchemaCategory::Empty)
     {
       bool result = t2.get(it.key()) == it.value();
-      if (result &&
-          ((it.key().toLower() != "building" && it.value().toLower() != "yes") ||
-            ConfigOptions().getPoiPolygonAllowGenericBuildingMatches()))
+      if (result)
       {
         _typeMatchAttributeKey = it.key();
         _typeMatchAttributeValue = it.value();
@@ -515,7 +513,7 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
 
   types.append("building");
 
-  bool hasMatchingCategory = false;
+  //bool hasMatchingCategory = false;
   for (int i = 0; i < types.length(); i++)
   {
     const QString type = types.at(i);
@@ -524,17 +522,9 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
       LOG_VARD(type);
     }
 
-    if (!ConfigOptions().getPoiPolygonAllowGenericBuildingMatches() && type == "building" &&
-        !hasMatchingCategory && _oneGeneric(e1, e2))
+    if (e1->getTags().contains(type) && e2->getTags().contains(type))
     {
-      if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
-      {
-        LOG_DEBUG("generic building only");
-      }
-    }
-    else if (e1->getTags().contains(type) && e2->getTags().contains(type))
-    {
-      hasMatchingCategory = true;
+      //hasMatchingCategory = true;
       const double ancestorDistance = _getTagDistance("ancestor", type, map, e1, e2);
       _ancestorDistance = ancestorDistance;
       if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
@@ -654,7 +644,7 @@ QStringList PoiPolygonMatch::_getRelatedTags(const QString relateToKvp, const Ta
   return result;
 }
 
-QStringList PoiPolygonMatch::_getTagsByCategory(const QString category, const Tags& tags) const
+/*QStringList PoiPolygonMatch::_getTagsByCategory(const QString category, const Tags& tags) const
 {
   QStringList result;
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); it++)
@@ -669,120 +659,7 @@ QStringList PoiPolygonMatch::_getTagsByCategory(const QString category, const Ta
     }
   }
   return result;
-}
-
-bool PoiPolygonMatch::_oneGeneric(ConstElementPtr e1, ConstElementPtr e2) const
-{
-  if (isPoiIsh(e1) && isBuildingIsh(e2))
-  {
-    return _getTagsByCategory("poi", e1->getTags()).length() == 0 ||
-           _getTagsByCategory("building", e2->getTags()).length() == 0;
-  }
-  else if (isPoiIsh(e2) && isBuildingIsh(e1))
-  {
-    return _getTagsByCategory("building", e1->getTags()).length() == 0 ||
-           _getTagsByCategory("poi", e2->getTags()).length() == 0;
-  }
-  else
-  {
-    throw HootException();
-  }
-}
-
-double PoiPolygonMatch::_getMatchDistance(ConstElementPtr element)
-{
-  Tags tags = element->getTags();
-  if (tags.get("building") == "school")
-  {
-    return 10.0;
-  }
-  else if (tags.get("industrial") == "manufacturing")
-  {
-    return 20.0;
-  }
-  else if (tags.get("amenity") == "hospital")
-  {
-    return 7.0;
-  }
-  else if (tags.get("amenity") == "prison")
-  {
-    return 21.0;
-  }
-  else if (tags.get("amenity") == "courthouse" || tags.get("amenity") == "judicial_activities")
-  {
-    return 8.0;
-  }
-  else
-  {
-    return ConfigOptions().getPoiPolygonMatchDistance();
-  }
-}
-
-double PoiPolygonMatch::_getReviewDistance(ConstElementPtr element)
-{
-  Tags tags = element->getTags();
-  if (tags.get("amenity") == "prison")
-  {
-    return 27.0;
-  }
-  else if (tags.get("amenity") == "place_of_worship")
-  {
-    return 58.0;
-  }
-  else if (tags.get("amenity") == "government_administration")
-  {
-    return 10.0;
-  }
-  else if (tags.get("building") == "terminal")
-  {
-    return 32.0;
-  }
-  else if (tags.get("man_made") == "storage_tank")
-  {
-    return 8.0;
-  }
-  else if (tags.get("amenity") == "school")
-  {
-    return 16.0;
-  }
-  else if (tags.get("amenity") == "toilets")
-  {
-    return 12.0;
-  }
-  else if (tags.get("amenity") == "police")
-  {
-    return 19.0;
-  }
-  //TODO: verify this one is actually doing anything
-  else if (tags.get("shop") == "department_store")
-  {
-    return 40.0;
-  }
-  else if (tags.get("building") == "apartments")
-  {
-    return 84.0;
-  }
-  else if (tags.get("amenity") == "library")
-  {
-    return 31.0;
-  }
-  else if (tags.get("building") == "station")
-  {
-    return 31.0;
-  }
-  else if (tags.get("tourism") == "attraction")
-  {
-    return 51.0;
-  }
-  else if (tags.get("amenity") == "restaurant")
-  {
-    return 8.0;
-  }
-  else
-  {
-    return ConfigOptions().getPoiPolygonMatchReviewDistance();
-  }
-}
+}*/
 
 map<QString, double> PoiPolygonMatch::getFeatures(const shared_ptr<const OsmMap>& m) const
 {
