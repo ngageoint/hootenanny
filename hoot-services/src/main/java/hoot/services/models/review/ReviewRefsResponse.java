@@ -26,15 +26,12 @@
  */
 package hoot.services.models.review;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-
 /**
  * Response to a review references web request
  */
-@XmlRootElement
 public class ReviewRefsResponse {
     private ReviewRef[] reviewRefs;
+    private ElementInfo queryElementInfo;
 
     public ReviewRef[] getReviewRefs() {
         return reviewRefs;
@@ -43,8 +40,6 @@ public class ReviewRefsResponse {
     public void setReviewRefs(ReviewRef[] refs) {
         this.reviewRefs = refs;
     }
-
-    private ElementInfo queryElementInfo;
 
     public ElementInfo getQueryElementInfo() {
         return queryElementInfo;

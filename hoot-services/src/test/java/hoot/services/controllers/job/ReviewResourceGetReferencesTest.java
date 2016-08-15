@@ -40,7 +40,6 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.controllers.info.AboutResourceTest;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.review.ElementInfo;
@@ -59,7 +58,7 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(ReviewResourceGetReferencesTest.class);
+        return new ResourceConfig(ReviewResource.class);
     }
 
     @Test
@@ -75,7 +74,7 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract {
                     new ReviewRefsRequest(new ElementInfo[] {
                         new ElementInfo(String.valueOf(mapId), oldNodeIdsToNewNodes.get(-116L).getId(), "node"),
                         new ElementInfo(String.valueOf(mapId), oldNodeIdsToNewNodes.get(-117L).getId(), "node") })),
-                ReviewRefsResponses.class);
+                    ReviewRefsResponses.class);
 
         ReviewRefsResponse[] reviewReferenceResponses = response.getReviewRefsResponses();
         Assert.assertEquals(2, reviewReferenceResponses.length);
@@ -85,7 +84,7 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract {
 
             if (i == 0) {
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-116L).getId(), queryElementInfo.getId());
-                Assert.assertEquals("node", queryElementInfo.getType());
+                Assert.assertEquals("node", queryElementInfo.getCategory());
 
                 ReviewRef[] refs = refsResponse.getReviewRefs();
                 Assert.assertEquals(4, refs.length);
@@ -97,28 +96,28 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract {
                 // we are forced return all including self. (Client need to
                 // handle self)
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-116L).getId(), refs[0].getId());
-                Assert.assertEquals("node", refs[0].getType());
+                Assert.assertEquals("node", refs[0].getCategory());
                 Assert.assertEquals(String.valueOf(mapId), refs[0].getMapId());
                 Assert.assertEquals(2, refs[0].getReviewRelationId());
 
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-46L).getId(), refs[1].getId());
-                Assert.assertEquals("node", refs[1].getType());
+                Assert.assertEquals("node", refs[1].getCategory());
                 Assert.assertEquals(String.valueOf(mapId), refs[1].getMapId());
                 Assert.assertEquals(2, refs[1].getReviewRelationId());
 
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-116L).getId(), refs[2].getId());
-                Assert.assertEquals("node", refs[2].getType());
+                Assert.assertEquals("node", refs[2].getCategory());
                 Assert.assertEquals(String.valueOf(mapId), refs[2].getMapId());
                 Assert.assertEquals(3, refs[2].getReviewRelationId());
 
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-49L).getId(), refs[3].getId());
-                Assert.assertEquals("node", refs[3].getType());
+                Assert.assertEquals("node", refs[3].getCategory());
                 Assert.assertEquals(String.valueOf(mapId), refs[3].getMapId());
                 Assert.assertEquals(3, refs[3].getReviewRelationId());
             }
             else if (i == 1) {
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-117L).getId(), queryElementInfo.getId());
-                Assert.assertEquals("node", queryElementInfo.getType());
+                Assert.assertEquals("node", queryElementInfo.getCategory());
 
                 ReviewRef[] refs = refsResponse.getReviewRefs();
                 Assert.assertEquals(4, refs.length);
@@ -128,22 +127,22 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract {
                 // element's parent relation (or even if there is one)
                 // we are forced return all including self. (Client need to handle self)
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-117L).getId(), refs[0].getId());
-                Assert.assertEquals("node", refs[0].getType());
+                Assert.assertEquals("node", refs[0].getCategory());
                 Assert.assertEquals(String.valueOf(mapId), refs[0].getMapId());
                 Assert.assertEquals(4, refs[0].getReviewRelationId());
 
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-42L).getId(), refs[1].getId());
-                Assert.assertEquals("node", refs[1].getType());
+                Assert.assertEquals("node", refs[1].getCategory());
                 Assert.assertEquals(String.valueOf(mapId), refs[1].getMapId());
                 Assert.assertEquals(4, refs[1].getReviewRelationId());
 
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-117L).getId(), refs[2].getId());
-                Assert.assertEquals("node", refs[2].getType());
+                Assert.assertEquals("node", refs[2].getCategory());
                 Assert.assertEquals(String.valueOf(mapId), refs[2].getMapId());
                 Assert.assertEquals(6, refs[2].getReviewRelationId());
 
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-47L).getId(), refs[3].getId());
-                Assert.assertEquals("node", refs[3].getType());
+                Assert.assertEquals("node", refs[3].getCategory());
                 Assert.assertEquals(String.valueOf(mapId), refs[3].getMapId());
                 Assert.assertEquals(6, refs[3].getReviewRelationId());
             }
@@ -167,8 +166,7 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
-            // System.out.println(e.getResponse().getEntity(String.class));
-            Assert.assertTrue(e.getResponse().getEntity().toString().contains("No map exists"));
+            Assert.assertTrue(e.getResponse().readEntity(String.class).contains("No map exists"));
             throw e;
         }
     }
@@ -186,7 +184,7 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
-            Assert.assertTrue(e.getResponse().getEntity().toString().contains("does not exist"));
+            Assert.assertTrue(e.getResponse().readEntity(String.class).contains("does not exist"));
             throw e;
         }
     }
@@ -204,7 +202,7 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
-            Assert.assertTrue(e.getResponse().getEntity().toString().contains("does not exist"));
+            Assert.assertTrue(e.getResponse().readEntity(String.class).contains("does not exist"));
             throw e;
         }
     }

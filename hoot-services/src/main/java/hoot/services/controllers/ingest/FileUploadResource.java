@@ -241,7 +241,7 @@ public class FileUploadResource extends JobControllerBase {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(resA.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(resA.toJSONString()).build();
     }
 
     /*

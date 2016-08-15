@@ -43,7 +43,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 
@@ -102,7 +101,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(ChangesetResourceUploadAllTest.class);
+        return new ResourceConfig(ChangesetResource.class);
     }
 
     /*
@@ -190,7 +189,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             responseData = target("api/0.6/changeset/" + changesetId + "/upload")
                 .queryParam("mapId", String.valueOf(mapId))
                 .request(MediaType.TEXT_XML)
-                .post(Entity.xml(
+                .post(Entity.entity(
                     "<osmChange version=\"0.3\" generator=\"iD\">" +
                         "<create>" +
                             "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
@@ -268,11 +267,10 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
                                 "<member type=\"way\" ref=\"" + wayIdsArr[1] + "\"></member>" +
                             "</relation>" +
                         "</delete>" +
-                    "</osmChange>"), Document.class);
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         // Log responseData.  For debugging purposes...

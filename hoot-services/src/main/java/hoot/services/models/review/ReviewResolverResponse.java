@@ -26,13 +26,9 @@
  */
 package hoot.services.models.review;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-
 /**
  * Represents a response from marking all reviews resolved
  */
-@XmlRootElement
 public class ReviewResolverResponse {
     private long changesetId;
 

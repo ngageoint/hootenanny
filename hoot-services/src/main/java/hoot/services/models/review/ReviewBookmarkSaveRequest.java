@@ -26,14 +26,11 @@
  */
 package hoot.services.models.review;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 
-@XmlRootElement
 public class ReviewBookmarkSaveRequest {
     private long bookmarkId;
     private long userId;

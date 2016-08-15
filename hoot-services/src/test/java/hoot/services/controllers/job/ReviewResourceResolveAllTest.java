@@ -55,7 +55,7 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(ReviewResourceResolveAllTest.class);
+        return new ResourceConfig(ReviewResource.class);
     }
 
     @Test
@@ -144,7 +144,7 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
-            Assert.assertTrue(e.getResponse().getEntity().toString().contains("No map exists"));
+            Assert.assertTrue(e.getResponse().readEntity(String.class).contains("No map exists"));
             throw e;
         }
     }
@@ -153,12 +153,13 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract {
     @Category(UnitTest.class)
     public void testSetAllReviewsResolvedMissingMapIdParam() throws Exception {
         try {
-            target("/review/resolveall").request(MediaType.APPLICATION_JSON).put(Entity.json(new ReviewResolverRequest()));
+            target("/review/resolveall")
+                    .request(MediaType.APPLICATION_JSON)
+                    .put(Entity.json(new ReviewResolverRequest()),
+                            ReviewResolverResponse.class);
         }
         catch (WebApplicationException e) {
             Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
-            // Assert.assertTrue(
-            // e.getResponse().getEntity(String.class).contains(""));
             throw e;
         }
     }

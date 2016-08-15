@@ -72,7 +72,7 @@ public class ReviewReferencesRetriever {
                 + currentRelationsTableName + ".id";
         sql += " where " + currentRelationMembersTableName + ".member_id = " + queryElementInfo.getId() + " and "
                 + currentRelationMembersTableName + ".member_type = '"
-                + Element.elementTypeFromString(queryElementInfo.getType()).toString().toLowerCase() + "'";
+                + Element.elementTypeFromString(queryElementInfo.getCategory()).toString().toLowerCase() + "'";
 
         List<Long> relationIds = new ArrayList<>();
 
@@ -107,10 +107,10 @@ public class ReviewReferencesRetriever {
         // check for query element existence
         Set<Long> elementIds = new HashSet<>();
         elementIds.add(queryElementInfo.getId());
-        if ((StringUtils.trimToNull(queryElementInfo.getType()) == null) || !Element.allElementsExist(mapIdNum,
-                Element.elementTypeFromString(queryElementInfo.getType()), elementIds, conn)) {
+        if ((StringUtils.trimToNull(queryElementInfo.getCategory()) == null) || !Element.allElementsExist(mapIdNum,
+                Element.elementTypeFromString(queryElementInfo.getCategory()), elementIds, conn)) {
             ReviewUtils.handleError(new Exception("Element with ID: " + queryElementInfo + " and type: "
-                    + queryElementInfo.getType() + " does not exist."), "");
+                    + queryElementInfo.getCategory() + " does not exist."), "");
         }
 
         // select all review relation id's from current relation members where

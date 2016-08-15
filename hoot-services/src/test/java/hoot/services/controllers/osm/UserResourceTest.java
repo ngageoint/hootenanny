@@ -65,7 +65,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(UserResourceTest.class);
+        return new ResourceConfig(UserResource.class, UserDetailsResource.class);
     }
 
     @Test
@@ -77,8 +77,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
                 responseData = target("user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
             }
             catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -118,8 +117,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
                 responseData = target("user/" + "user-with-id-" + userId).request(MediaType.TEXT_XML).get(Document.class);
             }
             catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -198,8 +196,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
                 responseData = target("user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
             }
             catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -241,7 +238,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.getEntity().toString().contains("No user exists with ID"));
+            Assert.assertTrue(r.readEntity(String.class).contains("No user exists with ID"));
             throw e;
         }
     }
@@ -283,8 +280,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
                 responseData = target("api/0.6/user/details").request(MediaType.TEXT_XML).get(Document.class);
             }
             catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 

@@ -103,7 +103,7 @@ public class MapInfoResource {
         entity.put("mapid", mapIds);
         entity.put("size_byte", combinedMapSize);
 
-        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     /**
@@ -148,7 +148,7 @@ public class MapInfoResource {
         JSONObject entity = new JSONObject();
         entity.put("layers", layers);
 
-        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     /**
@@ -167,7 +167,7 @@ public class MapInfoResource {
         entity.put("ingest_threshold", INGEST_SIZE_THRESHOLD);
         entity.put("export_threshold", EXPORT_SIZE_THRESHOLD);
 
-        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     /**

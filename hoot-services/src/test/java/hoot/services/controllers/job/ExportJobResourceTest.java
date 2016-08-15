@@ -375,7 +375,7 @@ public class ExportJobResourceTest {
 
             Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
             List<Long> mapIds = new ArrayList<>();
-            mapIds.add(new Long(1));
+            mapIds.add(1L);
 
             Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
             java.util.Map<String, String> mapTags = new HashMap<>();

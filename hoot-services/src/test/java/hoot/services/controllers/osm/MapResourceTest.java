@@ -90,7 +90,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(MapResourceTest.class);
+        return new ResourceConfig(MapResource.class);
     }
 
     private void getMap(String idOrName, String multiLayerUniqueElementIdsStr,
@@ -169,8 +169,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
                 }
             }
             catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -445,8 +444,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
                         .get(Document.class);
             }
             catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -512,8 +510,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
                         .get(Document.class);
             }
             catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -665,8 +662,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
                         .get(Document.class);
             }
             catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -796,8 +792,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
                         .get(Document.class);
             }
             catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -953,8 +948,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
                         .get(Document.class);
             }
             catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -1058,7 +1052,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             catch (WebApplicationException e) {
                 Response r = e.getResponse();
                 Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-                Assert.assertTrue(r.getEntity().toString()
+                Assert.assertTrue(r.readEntity(String.class)
                         .contains("The maximum number of nodes that may be returned in a map query is "
                                 + maxQueryNumberOfNodes + ".  This query returned " + (maxQueryNumberOfNodes + 1)
                                 + " nodes.  Please " + "execute a query which returns fewer nodes."));
@@ -1098,7 +1092,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.getEntity().toString().contains("No map exists with ID"));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists with ID"));
 
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
@@ -1126,7 +1120,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.getEntity().toString().contains("No map exists with ID: null"));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists with ID: null"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -1153,7 +1147,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.getEntity().toString().contains("No map exists with ID:"));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists with ID:"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -1196,7 +1190,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.getEntity().toString().contains("Multiple maps exist with name: " + duplicatedMapName
+            Assert.assertTrue(r.readEntity(String.class).contains("Multiple maps exist with name: " + duplicatedMapName
                     + ".  Please specify a " + "single, valid map."));
 
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1227,7 +1221,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("Error parsing bounding box from bbox param"));
+            Assert.assertTrue(r.readEntity(String.class).contains("Error parsing bounding box from bbox param"));
 
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
@@ -1259,7 +1253,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             // "bbox" of "-181,-90,180,90" should be corrected to "-180,-90,180,90" on the server side
             // Therefore, the call should not fail because of invalid coordiates
-            Assert.assertFalse(r.getEntity().toString().contains("Error parsing bounding box from bbox param"));
+            Assert.assertFalse(r.readEntity(String.class).contains("Error parsing bounding box from bbox param"));
 
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
@@ -1294,7 +1288,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("The maximum bbox size is"));
+            Assert.assertTrue(r.readEntity(String.class).contains("The maximum bbox size is"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }

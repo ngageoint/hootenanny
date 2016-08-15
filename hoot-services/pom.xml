@@ -590,12 +590,10 @@
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-common</artifactId>
         </dependency>
-<!--
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-moxy</artifactId>
         </dependency>
--->
         <dependency>
             <groupId>org.glassfish.jersey.test-framework.providers</groupId>
             <artifactId>jersey-test-framework-provider-inmemory</artifactId>
@@ -611,6 +609,7 @@
             <artifactId>jersey-test-framework-util</artifactId>
             <scope>test</scope>
         </dependency>
+
 <!--
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>

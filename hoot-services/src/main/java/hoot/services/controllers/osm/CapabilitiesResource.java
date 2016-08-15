@@ -90,8 +90,7 @@ public class CapabilitiesResource {
         catch (IOException ignored) {
         }
 
-        return Response.ok(new DOMSource(responseDoc), MediaType.TEXT_XML)
-                .header("Content-type", MediaType.TEXT_XML).build();
+        return Response.ok(new DOMSource(responseDoc)).build();
     }
 
     /**

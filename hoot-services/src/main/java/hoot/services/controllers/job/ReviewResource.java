@@ -167,7 +167,6 @@ public class ReviewResource {
         logger.debug("Set all items reviewed for map with ID: {} using changesetId: {}", request.getMapId(), changesetId);
 
         return new ReviewResolverResponse(changesetId);
-
     }
 
     /**

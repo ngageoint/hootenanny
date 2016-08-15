@@ -33,7 +33,6 @@ import java.util.Properties;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
@@ -57,7 +56,7 @@ public class AboutResourceTest extends JerseyTest {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(AboutResourceTest.class);
+        return new ResourceConfig(AboutResource.class);
     }
 
 
@@ -81,8 +80,7 @@ public class AboutResourceTest extends JerseyTest {
             responseData = target("/about/servicesVersionInfo").request(MediaType.APPLICATION_JSON).get(VersionInfo.class);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertEquals("Hootenanny Web Services", responseData.getName());
@@ -100,8 +98,7 @@ public class AboutResourceTest extends JerseyTest {
             responseData = target("/about/coreVersionInfo").request(MediaType.APPLICATION_JSON).get(VersionInfo.class);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertEquals("Hootenanny Core", responseData.getName());
@@ -119,8 +116,7 @@ public class AboutResourceTest extends JerseyTest {
             responseData = target("/about/coreVersionDetail").request(MediaType.APPLICATION_JSON).get(CoreDetail.class);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         // not a great way to test this, but haven't thought of anything better yet
@@ -143,8 +139,7 @@ public class AboutResourceTest extends JerseyTest {
             responseData = target("/about/servicesVersionInfo").request(MediaType.APPLICATION_JSON).get(VersionInfo.class);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response; " + e.getResponse());
         }
 
         Assert.assertEquals("unknown", responseData.getName());
@@ -180,6 +175,7 @@ public class AboutResourceTest extends JerseyTest {
                 "14:27:08.974 WARN ...rc/main/cpp/hoot/core/Hoot.cpp( 135) " + System.lineSeparator() + " "
                         + "Cannot load library HootHadoop: (libhdfs.so.0: cannot open shared object file: No such file or directory)",
                 true);
+
         Assert.assertEquals("Unable to determine!", returnValue);
     }
 }

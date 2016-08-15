@@ -28,12 +28,9 @@ package hoot.services.models.review;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import hoot.services.models.db.ReviewBookmarks;
 
 
-@XmlRootElement
 public class ReviewBookmarksGetResponse {
     private List<ReviewBookmarks> reviewBookmarks;
 

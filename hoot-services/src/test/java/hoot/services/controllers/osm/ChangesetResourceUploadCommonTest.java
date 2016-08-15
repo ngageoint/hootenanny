@@ -58,7 +58,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(ChangesetResourceUploadCommonTest.class);
+        return new ResourceConfig(ChangesetResource.class);
     }
 
     @Test
@@ -76,8 +76,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
                         .options(String.class);
             }
             catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
 
             Assert.assertEquals("", responseData);
@@ -103,7 +102,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
             target("api/0.6/changeset/" + changesetId + "/upload")
                 .queryParam("mapId", String.valueOf(mapId))
                 .request(MediaType.TEXT_XML)
-                .post(Entity.xml(
+                .post(Entity.entity(
                     "<osmChanges>" +
                         "<osmChange version=\"0.3\" generator=\"iD\">" +
                             "<create>" +
@@ -135,12 +134,12 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
                             "<modify/>" +
                             "<delete if-unused=\"true\"/>" +
                         "</osmChange>" +
-                    "</osmChanges>"), Document.class);
+                    "</osmChanges>", MediaType.TEXT_XML_TYPE), Document.class);
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("Only one changeset may be uploaded at a time"));
+            Assert.assertTrue(r.readEntity(String.class).contains("Only one changeset may be uploaded at a time"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -162,7 +161,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
             target("api/0.6/changeset/" + changesetId + "/upload")
                 .queryParam("mapId", String.valueOf(mapId))
                 .request(MediaType.TEXT_XML)
-                .post(Entity.xml(
+                .post(Entity.entity(
                     "<osmChange version=\"0.3\" generator=\"iD\"" + // missing closing tag
                         "<create>" +
                             "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
@@ -177,12 +176,12 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
                         "</create>" +
                         "<modify/>" +
                         "<delete if-unused=\"true\"/>" +
-                    "</osmChange>"), Document.class);
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("Error parsing changeset diff data"));
+            Assert.assertTrue(r.readEntity(String.class).contains("Error parsing changeset diff data"));
             OsmTestUtils.verifyTestChangesetUnmodified(changesetId);
             Assert.assertFalse(MapUtils.elementDataExistsInServicesDb(conn));
             throw e;
@@ -204,17 +203,17 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
             target("api/0.6/changeset/" + changesetId + "/upload")
                 .queryParam("mapId", String.valueOf(mapId))
                 .request(MediaType.TEXT_XML)
-                .post(Entity.xml(
+                .post(Entity.entity(
                     "<osmChange version=\"0.3\" generator=\"iD\">" +
                         "<create/>" +
                         "<modify/>" +
                         "<delete if-unused=\"true\"/>" +
-                    "</osmChange>"), Document.class);
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("No items in uploaded changeset"));
+            Assert.assertTrue(r.readEntity(String.class).contains("No items in uploaded changeset"));
             Assert.assertFalse(MapUtils.elementDataExistsInServicesDb(conn));
             throw e;
         }

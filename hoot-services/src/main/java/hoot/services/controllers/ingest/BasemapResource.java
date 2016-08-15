@@ -225,7 +225,7 @@ public class BasemapResource extends JobControllerBase {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(jobsArr.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(jobsArr.toJSONString()).build();
     }
 
     /**
@@ -263,7 +263,7 @@ public class BasemapResource extends JobControllerBase {
 
         basemapList.addAll(sortedScripts.values());
 
-        return Response.ok(basemapList.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(basemapList.toJSONString()).build();
     }
 
     private static JSONArray getBasemapListHelper() throws IOException, ParseException {
@@ -385,7 +385,7 @@ public class BasemapResource extends JobControllerBase {
         entity.put("name", basemap);
         entity.put("isenabled", String.valueOf(enable));
 
-        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     private static void deleteBaseMapHelper(String bmName) throws IOException {
@@ -434,6 +434,6 @@ public class BasemapResource extends JobControllerBase {
         JSONObject entity = new JSONObject();
         entity.put("name", basemap);
 
-        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 }

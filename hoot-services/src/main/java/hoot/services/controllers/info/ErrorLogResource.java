@@ -90,7 +90,7 @@ public class ErrorLogResource {
         JSONObject entity = new JSONObject();
         entity.put("logger", errorLog);
 
-        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     /**
@@ -123,7 +123,7 @@ public class ErrorLogResource {
         Date date = new Date();
         String dtStr = dateFormat.format(date);
 
-        ResponseBuilder responseBuilder = Response.ok(out, MediaType.APPLICATION_OCTET_STREAM);
+        ResponseBuilder responseBuilder = Response.ok(out);
         responseBuilder.header("Content-Disposition", "attachment; filename=hootlog_" + dtStr + ".logger");
 
         return responseBuilder.build();

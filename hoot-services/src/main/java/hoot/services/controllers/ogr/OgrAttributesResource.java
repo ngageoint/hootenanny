@@ -175,7 +175,7 @@ public class OgrAttributesResource extends JobControllerBase {
 
         response.put("jobId", jobId);
 
-        return Response.ok(response.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(response.toJSONString()).build();
     }
 
     /**
@@ -212,6 +212,6 @@ public class OgrAttributesResource extends JobControllerBase {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(script, MediaType.TEXT_PLAIN).build();
+        return Response.ok(script).build();
     }
 }

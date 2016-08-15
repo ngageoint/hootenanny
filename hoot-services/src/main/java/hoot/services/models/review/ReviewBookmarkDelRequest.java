@@ -26,10 +26,6 @@
  */
 package hoot.services.models.review;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-
-@XmlRootElement
 public class ReviewBookmarkDelRequest {
     private long bookmarkId;
 

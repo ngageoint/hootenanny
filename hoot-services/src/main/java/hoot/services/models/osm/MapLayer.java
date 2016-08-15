@@ -28,13 +28,10 @@ package hoot.services.models.osm;
 
 import java.sql.Timestamp;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 
 /**
  * Model class for the Hootenanny map layer
  */
-@XmlRootElement
 public class MapLayer {
     private long id;
 

@@ -26,13 +26,9 @@
  */
 package hoot.services.models.review;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-
 /**
  * Collection of review references
  */
-@XmlRootElement
 public class ReviewRefsResponses {
     private ReviewRefsResponse[] reviewRefsResponses;
 

@@ -26,13 +26,9 @@
  */
 package hoot.services.models.review;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-
 /**
  * Element information
  */
-@XmlRootElement
 public class ReviewRef extends ElementInfo {
     private long reviewRelationId = -1;
 

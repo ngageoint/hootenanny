@@ -31,7 +31,6 @@ import static hoot.services.HootProperties.*;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 
@@ -59,7 +58,7 @@ public class CapabilitiesResourceTest extends OsmResourceTestAbstract {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(CapabilitiesResourceTest.class);
+        return new ResourceConfig(CapabilitiesResource.class);
     }
 
     @Test
@@ -70,8 +69,7 @@ public class CapabilitiesResourceTest extends OsmResourceTestAbstract {
             responseData = target("api/capabilities").request(MediaType.TEXT_XML).get(Document.class);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);

@@ -26,13 +26,9 @@
  */
 package hoot.services.models.review;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-
 /**
  * Represents a request to mark all reviews resolved
  */
-@XmlRootElement
 public class ReviewResolverRequest {
     private String mapId;
 

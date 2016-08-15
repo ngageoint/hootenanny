@@ -97,7 +97,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(ChangesetResourceCloseTest.class);
+        return new ResourceConfig(ChangesetResource.class);
     }
 
     @Test
@@ -110,14 +110,13 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             // close the changeset via the service
             try {
                 Response response = target("api/0.6/changeset/" + changesetId + "/close")
-                        .queryParam("mapId", String.valueOf(mapId))
-                        .request()
-                        .options();
+                        .queryParam("mapId", mapId)
+                        .request(MediaType.APPLICATION_JSON)
+                        .put(Entity.text(""), Response.class);
                 Assert.assertEquals(200, response.getStatus());
             }
             catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
 
             OsmTestUtils.verifyTestChangesetClosed(changesetId);
@@ -144,13 +143,12 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             target("api/0.6/changeset/" + changesetId + "/close")
                     .queryParam("mapId", String.valueOf(mapId))
                     .request(MediaType.APPLICATION_JSON)
-                    .options();
-
+                    .put(Entity.text(""), String.class);
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString()
+            Assert.assertTrue(r.readEntity(String.class)
                     .contains("The changeset with ID: " + changesetId + " was closed at"));
             OsmTestUtils.verifyTestChangesetUnmodified(changesetId, originalBounds);
             OsmTestUtils.verifyTestChangesetClosed(changesetId);
@@ -168,13 +166,12 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             target("api/0.6/changeset/1/close")
                 .queryParam("mapId", String.valueOf(mapId))
                 .request(MediaType.APPLICATION_JSON)
-                .options();
+                .put(Entity.text(""), String.class);
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("Changeset to be updated does not exist"));
-
+            Assert.assertTrue(r.readEntity(String.class).contains("Changeset to be updated does not exist"));
             throw e;
         }
     }
@@ -195,9 +192,9 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             // the max allowed. A failure should occur and no data in the system should be modified.
             try {
                 target("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
+                    .queryParam("mapId", mapId)
                     .request(MediaType.TEXT_XML)
-                    .post(Entity.xml(
+                    .post(Entity.entity(
                         "<osmChange version=\"0.3\" generator=\"iD\">" +
                             "<create>" +
                                 "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() +
@@ -214,12 +211,12 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                             "</create>" +
                             "<modify/>" +
                             "<delete if-unused=\"true\"/>" +
-                        "</osmChange>"), Document.class);
+                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
             catch (WebApplicationException e) {
                 Response r = e.getResponse();
                 Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-                Assert.assertTrue(r.getEntity().toString().contains("Changeset maximum element threshold exceeded"));
+                Assert.assertTrue(r.readEntity(String.class).contains("Changeset maximum element threshold exceeded"));
 
                 try {
                     QChangesets changesets = QChangesets.changesets;
@@ -285,7 +282,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 responseData = target("api/0.6/changeset/" + changesetId + "/upload")
                         .queryParam("mapId", String.valueOf(mapId))
                         .request(MediaType.TEXT_XML)
-                        .post(Entity.xml(
+                        .post(Entity.entity(
                             "<osmChange version=\"0.3\" generator=\"iD\">" +
                                 "<create>" +
                                     "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
@@ -341,11 +338,10 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                                 "</create>" +
                                 "<modify/>" +
                                 "<delete if-unused=\"true\"/>" +
-                            "</osmChange>"), Document.class);
+                            "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
             catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -517,7 +513,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 target("api/0.6/changeset/" + changesetId + "/upload")
                     .queryParam("mapId", String.valueOf(mapId))
                     .request(MediaType.TEXT_XML)
-                    .post(Entity.xml(
+                    .post(Entity.entity(
                         "<osmChange version=\"0.3\" generator=\"iD\">" +
                             "<create/>" +
                             "<modify>" +
@@ -547,12 +543,12 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                                 "</relation>" +
                             "</modify>" +
                             "<delete if-unused=\"true\"/>" +
-                        "</osmChange>"), Document.class);
+                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
             catch (WebApplicationException e) {
                 Response r = e.getResponse();
                 Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-                Assert.assertTrue(r.getEntity().toString().contains("Changeset maximum element threshold exceeded"));
+                Assert.assertTrue(r.readEntity(String.class).contains("Changeset maximum element threshold exceeded"));
                 OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
                 throw e;
             }
@@ -599,7 +595,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 responseData = target("api/0.6/changeset/" + changesetId + "/upload")
                     .queryParam("mapId", String.valueOf(mapId))
                     .request(MediaType.TEXT_XML)
-                    .post(Entity.xml(
+                    .post(Entity.entity(
                         "<osmChange version=\"0.3\" generator=\"iD\">" +
                             "<create/>" +
                             "<modify>" +
@@ -634,11 +630,10 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                                 "</relation>" +
                             "</modify>" +
                             "<delete if-unused=\"true\"/>" +
-                        "</osmChange>"), Document.class);
+                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
             catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -864,7 +859,6 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals("val 3", tags.get("key 3"));
             }
             catch (Exception e) {
-                e.printStackTrace();
                 Assert.fail("Error checking ways: " + e.getMessage());
             }
 
@@ -1075,7 +1069,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 target("api/0.6/changeset/" + changesetId + "/upload")
                     .queryParam("mapId", String.valueOf(mapId))
                     .request(MediaType.TEXT_XML)
-                    .post(Entity.xml(
+                    .post(Entity.entity(
                         "<osmChange version=\"0.3\" generator=\"iD\">" +
                             "<create>" +
                                 "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() +
@@ -1089,13 +1083,13 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                             "</create>" +
                             "<modify/>" +
                             "<delete if-unused=\"true\"/>" +
-                        "</osmChange>"), Document.class);
+                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
             catch (WebApplicationException e) {
                 Response r = e.getResponse();
                 Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
                 Assert.assertTrue(
-                        r.getEntity().toString().contains("The changeset with ID: " + changesetId + " was closed at"));
+                        r.readEntity(String.class).contains("The changeset with ID: " + changesetId + " was closed at"));
                 OsmTestUtils.verifyTestChangesetClosed(changesetId, 0);
                 throw e;
             }
@@ -1164,7 +1158,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 target("api/0.6/changeset/" + changesetId + "/upload")
                     .queryParam("mapId", String.valueOf(mapId))
                     .request(MediaType.TEXT_XML)
-                    .post(Entity.xml(
+                    .post(Entity.entity(
                         "<osmChange version=\"0.3\" generator=\"iD\">" +
                             "<create/>" +
                             "<modify>" +
@@ -1175,13 +1169,13 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                                 "</node>" +
                             "</modify>" +
                             "<delete if-unused=\"true\"/>" +
-                        "</osmChange>"), Document.class);
+                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
             catch (WebApplicationException e) {
                 Response r = e.getResponse();
                 Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
                 Assert.assertTrue(
-                        r.getEntity().toString().contains("The changeset with ID: " + changesetId + " was closed at"));
+                        r.readEntity(String.class).contains("The changeset with ID: " + changesetId + " was closed at"));
 
                 // make sure nothing was updated
                 OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1212,8 +1206,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                     .options();
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
         catch (Exception e) {
             log.error(e.getMessage());

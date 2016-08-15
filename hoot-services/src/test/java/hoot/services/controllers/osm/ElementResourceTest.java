@@ -71,7 +71,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(ElementResourceTest.class);
+        return new ResourceConfig(ElementResource.class);
     }
 
     private static void verifyFirstNodeWasReturned(Document responseData, String id, long changesetId,
@@ -179,8 +179,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
                     .get(Document.class);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -208,8 +207,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
                     .get(Document.class);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -237,8 +235,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
                     .get(Document.class);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
         Assert.assertNotNull(responseData);
 
@@ -264,8 +261,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
             responseData = target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -294,7 +290,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -321,8 +317,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
             responseData = target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -351,8 +346,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
                     .get(Document.class);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -387,8 +381,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
                     .get(Document.class);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -424,8 +417,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
                     .get(Document.class);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -460,8 +452,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
                     .get(Document.class);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity());
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -497,7 +488,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
 
             Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("does not exist"));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
@@ -521,7 +512,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("does not exist"));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -546,7 +537,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("does not exist"));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
@@ -570,7 +561,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("does not exist"));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -595,7 +586,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("does not exist"));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -618,7 +609,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("does not exist"));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -643,7 +634,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("does not exist"));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
@@ -667,7 +658,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("does not exist"));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
@@ -693,7 +684,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("does not exist"));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
@@ -717,7 +708,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("does not exist"));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
@@ -745,7 +736,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("No map exists"));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
@@ -770,7 +761,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("No map exists"));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
@@ -796,7 +787,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("No map exists"));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -820,7 +811,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("No map exists"));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -889,7 +880,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("Invalid element ID"));
+            Assert.assertTrue(r.readEntity(String.class).contains("Invalid element ID"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -913,7 +904,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("Invalid element ID"));
+            Assert.assertTrue(r.readEntity(String.class).contains("Invalid element ID"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -967,7 +958,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity().toString().contains("Get Full Element Request Invalid for type = Node"));
+            Assert.assertTrue(r.readEntity(String.class).contains("Get Full Element Request Invalid for type = Node"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
