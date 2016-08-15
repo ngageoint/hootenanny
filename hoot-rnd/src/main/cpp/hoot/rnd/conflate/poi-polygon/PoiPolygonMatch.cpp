@@ -298,39 +298,12 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
 
 double PoiPolygonMatch::_calculateNameScore(ConstElementPtr e1, ConstElementPtr e2) const
 {
-  if (ConfigOptions().getPoiPolygonUseWeightedWordDistance())
-  {
-    SqliteWordWeightDictionary* dict =
-      new SqliteWordWeightDictionary(
-        ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary()));
-    return
-      PoiPolygonNameExtractor(
-        new TranslateStringDistance(
-          new WeightedWordDistance(
-            new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()), dict)))
-        .extract(e1, e2);
-  }
-  else
-  {
-    if (ConfigOptions().getPoiPolygonUseMeanWordDistanceNameComparison())
-    {
-      return
-        PoiPolygonNameExtractor(
-          new TranslateStringDistance(
-            new MeanWordSetDistance(
-              new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))))
-          .extract(e1, e2);
-    }
-    else
-    {
-      return
-        PoiPolygonNameExtractor(
-          new TranslateStringDistance(
-            new MinSumWordSetDistance(
-              new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))))
-          .extract(e1, e2);
-    }
-  }
+  return
+   PoiPolygonNameExtractor(
+     new TranslateStringDistance(
+       new MeanWordSetDistance(
+         new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))))
+   .extract(e1, e2);
 }
 
 bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2) //const
