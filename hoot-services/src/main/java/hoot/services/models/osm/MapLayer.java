@@ -27,6 +27,7 @@
 package hoot.services.models.osm;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 
 /**
@@ -56,9 +57,8 @@ public class MapLayer {
     private Timestamp date;
 
     public String getDate() {
-        return String.format("%1$TD", date);
-        // Use below to include time stamp
-        // return String.format("%1$TD %1$TT", date);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        return format.format(this.date);
     }
 
     public void setDate(Timestamp date) {

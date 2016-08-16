@@ -489,16 +489,6 @@
             <artifactId>json-simple</artifactId>
             <version>${json-simple.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
 
         <!-- QueryDsl Dependency -->
         <dependency>
@@ -575,7 +565,7 @@
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <!-- if your container implements Servlet API older than 3.0, use "jersey-container-servlet-core"  -->
-            <artifactId>jersey-container-servlet</artifactId>
+            <artifactId>jersey-container-servlet-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
@@ -585,14 +575,13 @@
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-common</artifactId>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-moxy</artifactId>
+            <artifactId>jersey-media-json-jackson</artifactId>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.test-framework.providers</groupId>
@@ -609,13 +598,6 @@
             <artifactId>jersey-test-framework-util</artifactId>
             <scope>test</scope>
         </dependency>
-
-<!--
-        <dependency>
-            <groupId>org.glassfish.jersey.containers</groupId>
-            <artifactId>jersey-container-grizzly2-http</artifactId>
-        </dependency>
--->
 
         <!-- deegree provides OGC compliant services -->
         <dependency>
@@ -634,6 +616,10 @@
                 <exclusion>
                     <artifactId>postgresql</artifactId>
                     <groupId>postgresql</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jersey-server</artifactId>
+                    <groupId>com.sun.jersey</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
