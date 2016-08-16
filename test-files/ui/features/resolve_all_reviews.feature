@@ -35,7 +35,7 @@ Feature: Resolve all reviews feature
 
   Scenario: I can conflate with another dataset
     Then I click on "input.fill-dark[type='submit']"
-    Then I wait 30 "seconds" to see "Add Secondary Dataset"
+    Then I wait 30 seconds
     And I press "Add Secondary Dataset"
     And I click the "DcOsmRoadsCucumber" Dataset
     And I press "Add Layer"

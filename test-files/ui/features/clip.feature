@@ -47,6 +47,7 @@ Feature: Clip Dataset
         And I click the "CucumberClip_BB" Dataset
         Then I click first "Add Layer"
         Then I wait 30 "seconds" to see "CucumberClip_BB"
+        Then I wait 5 seconds
         Then I click the "trash.map-button" icon
         And I accept the alert
 
