@@ -71,7 +71,7 @@ namespace hoot
 
 PoiPolygonRfClassifier::PoiPolygonRfClassifier()
 {
-  //_createExtractors();
+  _createExtractors();
 }
 
 void PoiPolygonRfClassifier::_createExtractors()
@@ -97,7 +97,7 @@ void PoiPolygonRfClassifier::_createExtractors()
   }
   LOG_VAR(extractorNames);
 
-  _extractors.push_back(
+  /*_extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
         new ExactStringDistance())));
@@ -110,7 +110,7 @@ void PoiPolygonRfClassifier::_createExtractors()
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
         new MeanWordSetDistance(
-          new ExactStringDistance()))));
+          new ExactStringDistance()))));*/
   _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
@@ -129,7 +129,7 @@ void PoiPolygonRfClassifier::_createExtractors()
           new MeanWordSetDistance(
             new ExactStringDistance())))));
 
-  _extractors.push_back(
+  /*_extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
         new LevenshteinDistance())));
@@ -142,7 +142,7 @@ void PoiPolygonRfClassifier::_createExtractors()
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
         new MeanWordSetDistance(
-          new LevenshteinDistance()))));
+          new LevenshteinDistance()))));*/
   _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
@@ -175,7 +175,7 @@ void PoiPolygonRfClassifier::_createExtractors()
       new TranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance(a))))));
   }*/
 
-  _extractors.push_back(
+  /*_extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
         new Soundex())));
@@ -188,7 +188,7 @@ void PoiPolygonRfClassifier::_createExtractors()
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
         new MeanWordSetDistance(
-          new Soundex()))));
+          new Soundex()))));*/
   _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
