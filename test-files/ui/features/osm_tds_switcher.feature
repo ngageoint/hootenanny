@@ -9,7 +9,7 @@ Feature: OSM/TDS Switcher
         Then I wait 30 "seconds" to see "DcGisRoadsCucumber"
 
     Scenario: I can select a feature and switch between attribute schemas
-        When I select a way map feature with id "w309"
+        When I select a way map feature with OSM id "w309"
         Then I wait 10 "seconds" to see "Edit feature:"
         Then I should see element "#preset-input-name" with value "23RD ST NW"
         Then I select the "TDSv61" option labelled "Filter By Type"
