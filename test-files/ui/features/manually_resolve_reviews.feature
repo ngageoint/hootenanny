@@ -36,7 +36,7 @@ Feature: Manually resolve reviews feature
         | leisure | park |
         | name | Test Name |
     #Edit a review feature
-    When I select a node map feature with id "activeReviewFeature"
+    When I select a node map feature with class "activeReviewFeature"
     And I type "Edit Name" in input "preset-input-name"
     Then I wait 2 "seconds" to see "div.tag-table td.f1" element with text "Edit Name"
 
@@ -53,6 +53,8 @@ Feature: Manually resolve reviews feature
     Then I wait 30 "seconds" to see "Reviews remaining: 6 (Resolved: 2)"
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 5 (Resolved: 3)"
+    Then I wait 5 seconds to see "g.activeReviewFeature" on the map 
+    Then I should see a "g.activeReviewFeature2" on the map 
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 4 (Resolved: 4)"
     And I press "Resolved"
