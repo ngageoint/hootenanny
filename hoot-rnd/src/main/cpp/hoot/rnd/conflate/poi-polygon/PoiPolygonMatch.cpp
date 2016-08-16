@@ -218,8 +218,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
       LOG_VARD(_evidence);
     }
     if (/*e1->getTags().getNames().size() != 0 && e2->getTags().getNames().size() != 0 &&*/
-        _minSumScore != NameExtractor::nullValue() &&
-        _minSumScore < -0.28)
+        _minSumScore != NameExtractor::nullValue() && _minSumScore < -0.28)
     {
        _c.setMiss();
 
@@ -235,7 +234,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
       LOG_VARD(_hausdorffDistanceScore);
       LOG_VARD(_evidence);
     }
-    if (_meanLevScore < 0.1)
+    if (_meanLevScore != NameExtractor::nullValue() && _meanLevScore < 0.1)
     {
       _c.setMiss();
 
