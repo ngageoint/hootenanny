@@ -123,8 +123,6 @@ emgcp_osm = {
         // Check if we have a second FCODE and if it can add any tags
         if (fCode2 !== '')
         {
-            print('fCode2 = ' + fCode2);
-
             var ftag = mgcp.fcodeLookup['F_CODE'][fCode2];
             if (ftag)
             {
