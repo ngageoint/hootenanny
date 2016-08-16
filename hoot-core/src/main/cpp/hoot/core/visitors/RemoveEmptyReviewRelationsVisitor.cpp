@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -54,7 +54,7 @@ void RemoveEmptyReviewRelationsVisitor::visit(const ElementPtr& e)
       //LOG_DEBUG("Removing review relation with ID: " << r->getId());
       RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
     }
-    else if (r->getType() == Relation::REVIEW)
+    /*else if (r->getType() == Relation::REVIEW)
     {
       const vector<RelationData::Entry> members = r->getMembers();
       for (size_t i = 0; i < members.size(); ++i)
@@ -67,7 +67,7 @@ void RemoveEmptyReviewRelationsVisitor::visit(const ElementPtr& e)
           break;
         }
       }
-    }
+    }*/
     //for testing only
     /*else if (r->getType() == Relation::REVIEW)
     {

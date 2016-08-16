@@ -1571,13 +1571,13 @@ See also:
 * Data Type: double
 * Default Value: `0.8`
 
-If the name similarity score is greater than this then the names are considered a match. Scores
-are 0 to 1 for similarity and -1 if there are no names present (null).
+If the name similarity score is greater than this then the names are considered a match during POI
+to polygon matching.  Scores are 0 to 1 for similarity and -1 if there are no names present (null).
 
 === poi.polygon.match.review.distance
 
 * Data Type: double
-* Default Value: `100`
+* Default Value: `0`
 
 How far away from a polygon should name matches be considered reviews. This is a fixed value in
 meters that is added to the CE calculation.
@@ -1585,25 +1585,26 @@ meters that is added to the CE calculation.
 === poi.polygon.match.distance
 
 * Data Type: double
-* Default Value: `5`
+* Default Value: `0`
 
 The maximum distance, in meters, between a POI and a polygon where they can still be considered
-an exact match based on distance criteria only.  TODO: This may not remain a permanent config option.
+a close match based on distance criteria only.
 
 === poi.polygon.use.tag.ancestor.type.matching
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
-If true, then more detailed checks are done with tag matching related to ancestry.  TODO: This may
-not remain a permanent config option.
+If true, then features with a common type ancestor in their tag data will be more likely to match
+during POI to polygon matching.
 
 === poi.polygon.use.schema.mods
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
-If true, then custom schema mods are used.  TODO: This may not remain a permanent config option.
+If true, then custom schema mods are used in POI to polygon matching.  TODO: This setting will
+not be a permanent config option.
 
 === postgresql.dumpfile.writer.auto.calc.ids
 
