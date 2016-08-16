@@ -357,10 +357,12 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
       _tagError(conflated, it->first, "1");
       _tagError(conflated, it->second, "2");
 
-      const MatchType expectedMatchType(expectedIndex);
+      /*const MatchType expectedMatchType(expectedIndex);
       const MatchType actualMatchType(actualIndex);
-      _tagTestOutcome(conflated, it->first, expectedMatchType.toString(), actualMatchType.toString());
-      _tagTestOutcome(conflated, it->second, expectedMatchType.toString(), actualMatchType.toString());
+      _tagTestOutcome(
+        conflated, it->first, expectedMatchType.toString(), actualMatchType.toString());
+      _tagTestOutcome(
+        conflated, it->second, expectedMatchType.toString(), actualMatchType.toString());*/
     }
 
     _confusion[actualIndex][expectedIndex]++;
@@ -649,18 +651,15 @@ void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const
 
 void MatchComparator::_tagWrong(const OsmMapPtr &map, const QString &uuid)
 {
-  //LOG_VARD(uuid);
   // if the uuid contains the first uuid, set mismatch
   SetTagVisitor stv("hoot:wrong", "1");
   MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
   while (it != _actualUuidToEid.end())
   {
-    //LOG_VARD(it.key());
     if (it.key().contains(uuid))
     {
       shared_ptr<Element> eid = map->getElement(it.value());
       stv.visit(eid);
-      //LOG_DEBUG("tagged wrong");
     }
     it++;
   }

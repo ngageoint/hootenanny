@@ -171,11 +171,6 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
 {
   set< pair<ElementId, ElementId> > pairs;
 
-  //LOG_VARD(buildings1.size());
-  //LOG_VARD(buildings1);
-  //LOG_VARD(buildings2.size());
-  //LOG_VARD(buildings2);
-
   assert(buildings1.size() != 0 || buildings2.size() != 0);
   // if there is only one set of buildings then there is no need to merge.
   if (buildings1.size() == 0)
@@ -191,7 +186,6 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
     // group all the building parts into a single building
     set<ElementId> eids;
     eids.insert(buildings1.begin(), buildings1.end());
-    //LOG_VARD(eids);
     return BuildingMerger::buildBuilding(map, eids)->getElementId();
   }
 
@@ -206,15 +200,10 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
     pairs.insert(p);
   }
 
-  //LOG_VARD(replaced.size());
-  //LOG_VARD(replaced);
   assert(replaced.size() == 0);
   assert(pairs.size() == 0);
-  //LOG_VARD(pairs);
   BuildingMerger(pairs).apply(map, replaced);
   assert(replaced.size() > 0);
-  //LOG_VARD(replaced.size());
-  //LOG_VARD(replaced);
 
   set<ElementId> newElement;
   for (size_t i = 0; i < replaced.size(); i++)
@@ -223,7 +212,6 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
   }
   assert(newElement.size() == 1);
 
-  //LOG_VARD(newElement);
   return *newElement.begin();
 }
 
