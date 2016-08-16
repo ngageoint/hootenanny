@@ -49,9 +49,9 @@ import com.querydsl.sql.SQLQuery;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.utils.DbUtils;
-import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.utils.GeoUtils;
 import hoot.services.utils.QuadTileCalculator;
+import hoot.services.utils.DbUtils.EntityChangeType;
 
 
 /**
