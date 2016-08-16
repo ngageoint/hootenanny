@@ -59,7 +59,7 @@ function getRawDbSchema()
 function initialize()
 {
     // Make sure the MGCP translator exports extra tags to the TXT field
-    hoot.Settings.set({"ogr.mgcp.extra":"note"});
+    hoot.Settings.set({"ogr.mgcp.extra":"false"});
 
     // Turn on partial translations
     hoot.Settings.set({"ogr.partial.translate":"true"});
