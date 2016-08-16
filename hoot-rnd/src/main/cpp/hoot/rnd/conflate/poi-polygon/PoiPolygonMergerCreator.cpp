@@ -195,21 +195,12 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
   else if (typeid(*m1) == typeid(*m2))
   {
     result = m1->isConflicting(*m2, map);
-    /*if (result)
-    {
-      LOG_DEBUG("conflict");
-    }*/
   }
   else
   {
     result = false;
   }
 
-  /*if (result)
-  {
-    LOG_VARD(m1->toString());
-    LOG_VARD(m2->toString());
-  }*/
   return result;
 }
 
@@ -232,8 +223,6 @@ bool PoiPolygonMergerCreator::_isConflictingSet(const MatchSet& matches) const
         if (MergerFactory::getInstance().isConflicting(map, m1, m2))
         {
           conflicting = true;
-          LOG_VARD(m1->toString());
-          LOG_VARD(m2->toString());
         }
       }
     }

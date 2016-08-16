@@ -41,6 +41,16 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 
+#include <hoot/core/conflate/polygon/extractors/CentroidDistanceExtractor.h>
+#include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
+#include <hoot/core/conflate/polygon/extractors/BufferedOverlapExtractor.h>
+#include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
+#include <hoot/core/algorithms/Soundex.h>
+#include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
+#include <hoot/core/conflate/polygon/extractors/CompactnessExtractor.h>
+#include <hoot/core/algorithms/string/MinSumWordSetDistance.h>
+#include <hoot/core/conflate/polygon/extractors/CentroidDistanceExtractor.h>
+
 namespace hoot
 {
 
@@ -110,43 +120,42 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   shared_ptr<Geometry> gpoly = ElementConverter(map).convertToGeometry(poly);
   shared_ptr<Geometry> gpoi = ElementConverter(map).convertToGeometry(poi);
 
-  const bool typeMatch = _calculateTypeMatch(poi, poly);
-  bool ancestorTypeMatch = false;
+  _typeMatch = _calculateTypeMatch(poi, poly);
   if (ConfigOptions().getPoiPolygonUseTagAncestorTypeMatching())
   {
-    ancestorTypeMatch = _calculateAncestorTypeMatch(map, poi, poly);
+    _ancestorTypeMatch = _calculateAncestorTypeMatch(map, poi, poly);
   }
 
-  const double nameScore = _calculateNameScore(poi, poly);
-  const bool nameMatch = nameScore >= ConfigOptions().getPoiPolygonMatchNameThreshold();
+  _nameScore = _calculateNameScore(poi, poly);
+  _nameMatch = _nameScore >= ConfigOptions().getPoiPolygonMatchNameThreshold();
 
-  const double distance = gpoly->distance(gpoi.get());
+  _distance = gpoly->distance(gpoi.get());
 
   // calculate the 2 sigma for the distance between the two objects
   const double sigma1 = e1->getCircularError() / 2.0;
   const double sigma2 = e1->getCircularError() / 2.0;
-  const double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
+  _ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
 
-  const double matchDistance = ConfigOptions().getPoiPolygonMatchDistance();
-  const double reviewDistance = ConfigOptions().getPoiPolygonMatchReviewDistance() + ce;
+  _matchDistance = ConfigOptions().getPoiPolygonMatchDistance();
+  _reviewDistance = ConfigOptions().getPoiPolygonMatchReviewDistance() + _ce;
 
-  const bool closeMatch = distance <= reviewDistance;
+  _closeMatch = _distance <= _reviewDistance;
 
-  int evidence = 0;
-  evidence += typeMatch ? 1 : 0;
-  evidence += ancestorTypeMatch ? 1 : 0;
-  evidence += nameMatch ? 1 : 0;
-  evidence += distance <= matchDistance ? 2 : 0;
+  _evidence = 0;
+  _evidence += _typeMatch ? 1 : 0;
+  _evidence += _ancestorTypeMatch ? 1 : 0;
+  _evidence += _nameMatch ? 1 : 0;
+  _evidence += _distance <= _matchDistance ? 2 : 0;
 
-  if (!closeMatch)
+  if (!_closeMatch)
   {
     _c.setMiss();
   }
-  else if (evidence >= 3)
+  else if (_evidence >= 3)
   {
     _c.setMatch();
   }
-  else if (evidence >= 1)
+  else if (_evidence >= 1)
   {
     _c.setReview();
   }
@@ -155,50 +164,123 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     _c.setMiss();
   }
 
+  if (_evidence > 0)
+  {
+    _hausdorffDistanceScore = HausdorffDistanceExtractor().extract(*map.get(), e1, e2);
+    _edgeDistanceScore = EdgeDistanceExtractor().extract(*map.get(), e1, e2);
+    _euclideanDistanceScore = EuclideanDistanceExtractor().extract(*map.get(), e1, e2);
+    _compactnessScore = CompactnessExtractor().extract(*map.get(), e1, e2);
+    shared_ptr<FeatureExtractor> minSumExt =
+      shared_ptr<FeatureExtractor>(
+        new NameExtractor(
+          new TranslateStringDistance(
+            new MinSumWordSetDistance(
+              new LevenshteinDistance()))));
+    _minSumScore = minSumExt->extract(*map.get(), e1, e2);
+    _centroidDistanceScore = CentroidDistanceExtractor().extract(*map.get(), e1, e2);
+    shared_ptr<FeatureExtractor> meanLevExt =
+      shared_ptr<FeatureExtractor>(
+        new NameExtractor(
+          new TranslateStringDistance(
+            new MeanWordSetDistance(
+              new LevenshteinDistance()))));
+    _meanLevScore = meanLevExt->extract(*map.get(), e1, e2);
+    if (_edgeDistanceScore > 1.1)
+    {
+      _c.setMiss();
+
+      LOG_DEBUG("Miss");
+      LOG_VARD(_edgeDistanceScore);
+      LOG_VARD(_evidence);
+    }
+    if (_centroidDistanceScore > 0.85 || _centroidDistanceScore < 0.09)
+    {
+      _c.setMiss();
+
+      LOG_DEBUG("Miss");
+      LOG_VARD(_centroidDistanceScore);
+      LOG_VARD(_evidence);
+    }
+    if (_compactnessScore < 0.08 || _compactnessScore > 0.8)
+    {
+      _c.setMiss();
+
+      LOG_DEBUG("Miss");
+      LOG_VARD(_compactnessScore);
+      LOG_VARD(_evidence);
+    }
+    if (_euclideanDistanceScore < 0.17)
+    {
+      _c.setMiss();
+
+      LOG_DEBUG("Miss");
+      LOG_VARD(_euclideanDistanceScore);
+      LOG_VARD(_evidence);
+    }
+    if (/*e1->getTags().getNames().size() != 0 && e2->getTags().getNames().size() != 0 &&*/
+        _minSumScore != NameExtractor::nullValue() &&
+        _minSumScore < -0.28)
+    {
+       _c.setMiss();
+
+       LOG_DEBUG("Miss");
+       LOG_VARD(_minSumScore);
+       LOG_VARD(_evidence);
+    }
+    if (_hausdorffDistanceScore > 0.45)
+    {
+      _c.setMiss();
+
+      LOG_DEBUG("Miss");
+      LOG_VARD(_hausdorffDistanceScore);
+      LOG_VARD(_evidence);
+    }
+    if (_meanLevScore < 0.1)
+    {
+      _c.setMiss();
+
+      LOG_DEBUG("Miss");
+      LOG_VARD(_meanLevScore);
+      LOG_VARD(_evidence);
+    }
+  }
+
   if (e1->getTags().get("uuid") == _testUuid ||
       e2->getTags().get("uuid") == _testUuid)
   {
     _uuid1 = e1->getTags().get("uuid");
     _uuid2 = e2->getTags().get("uuid");
-    _typeMatch = typeMatch;
-    _nameMatch = nameMatch;
-    _nameScore = nameScore;
     QStringList names1 = e1->getTags().getNames();
     names1.append(e1->getTags().getPseudoNames());
     _names1 = names1.join(",");
     QStringList names2 = e2->getTags().getNames();
     names2.append(e2->getTags().getPseudoNames());
     _names2 = names2.join(",");
-    _closeMatch = closeMatch;
-    _distance = distance;
-    _reviewDistance = reviewDistance;
-    _ce = ce;
     _circularError1 = e1->getCircularError();
     _circularError2 = e2->getCircularError();
-    _evidence = evidence;
 
-    LOG_VARD(eid1);\
+    LOG_VARD(_eid1);\
     LOG_VARD(e1->getTags().get("uuid"));
     LOG_VARD(e1->getTags());
-    LOG_VARD(eid2);
+    LOG_VARD(_eid2);
     LOG_VARD(e2->getTags().get("uuid"));
     LOG_VARD(e2->getTags());
-    LOG_VARD(typeMatch);
+    LOG_VARD(_typeMatch);
     LOG_VARD(_typeMatchAttributeKey);
     LOG_VARD(_typeMatchAttributeValue);
-    LOG_VARD(ancestorTypeMatch);
+    LOG_VARD(_ancestorTypeMatch);
     LOG_VARD(_ancestorDistance);
-    LOG_VARD(nameMatch);
-    LOG_VARD(nameScore);
+    LOG_VARD(_nameMatch);
+    LOG_VARD(_nameScore);
     LOG_VARD(names1);
     LOG_VARD(names2);
-    LOG_VARD(closeMatch);
-    LOG_VARD(distance);
-    LOG_VARD(reviewDistance);
-    LOG_VARD(ce);
+    LOG_VARD(_closeMatch);
+    LOG_VARD(_distance);
+    LOG_VARD(_reviewDistance);
+    LOG_VARD(_ce);
     LOG_VARD(e1->getCircularError());
     LOG_VARD(e2->getCircularError());
-    LOG_VARD(evidence);
+    LOG_VARD(_evidence);
     LOG_DEBUG("**************************");
   }
 }
@@ -558,7 +640,6 @@ QString PoiPolygonMatch::toString() const
   str += "ancestor type match: " + QString::number(_ancestorTypeMatch) + "\n";
   str += "ancestor distance score: " + QString::number(_ancestorDistance) + "\n";
   str += "name match: " + QString::number(_nameMatch) + "\n";
-  str += "exact name match: " + QString::number(_exactNameMatch) + "\n";
   str += "name score: " + QString::number(_nameScore) + "\n";
   str += "names 1: " + _names1 + "\n";
   str += "names 2: " + _names2 + "\n";
@@ -568,7 +649,14 @@ QString PoiPolygonMatch::toString() const
   str += "overall circular error: " + QString::number(_ce) + "\n";
   str += "circular error 1: " + QString::number(_circularError1) + "\n";
   str += "circular error 2: " + QString::number(_circularError2) + "\n";
-  str += "evidence: " + QString::number(_evidence);
+  str += "evidence: " + QString::number(_evidence) + "\n";
+  str += "bufferedOverlap_0_1_Score: " + QString::number(_bufferedOverlap_0_1_Score) + "\n";
+  str += "edgeDistanceScore: " + QString::number(_edgeDistanceScore) + "\n";
+  str += "centroidDistanceScore: " + QString::number(_centroidDistanceScore) + "\n";
+  str += "compactnessScore: " + QString::number(_compactnessScore) + "\n";
+  str += "euclideanDistanceScore: " + QString::number(_euclideanDistanceScore) + "\n";
+  str += "hausdorffDistanceScore: " + QString::number(_hausdorffDistanceScore) + "\n";
+  str += "minSumScore: " + QString::number(_minSumScore);
   return str;
 }
 

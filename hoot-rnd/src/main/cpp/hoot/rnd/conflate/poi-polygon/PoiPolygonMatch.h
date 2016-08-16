@@ -101,7 +101,6 @@ private:
   MatchClassification _c;
 
   static QString _testUuid;
-
   QString _uuid1;
   QString _uuid2;
   bool _typeMatch;
@@ -115,14 +114,20 @@ private:
   double _circularError2;
   double _ce;
   double _distance;
+  double _matchDistance;
   double _reviewDistance;
   bool _closeMatch;
   int _evidence;
-
   bool _ancestorTypeMatch;
   double _ancestorDistance;
-
-  bool _exactNameMatch;
+  double _bufferedOverlap_0_1_Score;
+  double _edgeDistanceScore;
+  double _centroidDistanceScore;
+  double _compactnessScore;
+  double _euclideanDistanceScore;
+  double _minSumScore;
+  double _hausdorffDistanceScore;
+  double _meanLevScore;
 
   QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
 
