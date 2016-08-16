@@ -943,21 +943,21 @@ mgcp = {
         
         // Movable Bridges
         if (tags.bridge == 'movable')
-		{
-		  if (! tags['bridge:movable'])
-		  {
-			tags['bridge:movable'] = 'unknown';
-		  }
-		  tags.bridge = 'yes';
-		  attrs.F_CODE = 'AQ040';
-		}
+        {
+            if (! tags['bridge:movable'])
+            {
+            tags['bridge:movable'] = 'unknown';
+            }
+            tags.bridge = 'yes';
+            attrs.F_CODE = 'AQ040';
+        }
 
-		// Viaducts
-		if (tags.bridge == 'viaduct')
-		{
-		  tags.bridge = 'yes';
-		  tags['source:text'] = translate.appendValue(tags['source:text'],'Viaduct',';');
-		}
+        // Viaducts
+        if (tags.bridge == 'viaduct')
+        {
+            tags.bridge = 'yes';
+            tags['source:text'] = translate.appendValue(tags['source:text'],'Viaduct',';');
+        }
 
         // Keep looking for an FCODE
         // This uses the fcodeLookup tables that are defined earlier
@@ -1412,44 +1412,61 @@ mgcp = {
             // tableName = layerNameLookup[tableName];
             hoot.logVerbose('FCODE and Geometry: ' + tableName + ' is not in the schema');
 
-            tableName = 'o2s_' + geometryType.toString().charAt(0);
-
-            // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
-
-            for (var i in tags)
+            if (config.getOgrPartialTranslate() == 'true')
             {
-                // Clean out all of the "source:XXX" tags to save space
-                // if (i.indexOf('source:') !== -1) delete tags[i];
-                if (i.indexOf('error:') !== -1) delete tags[i];
-                if (i.indexOf('hoot:') !== -1) delete tags[i];
-            }
+                tableName = 'Partial';
+                attrs.FCODE = 'Partial';
 
-            var str = JSON.stringify(tags);
-
-            // Shapefiles can't handle fields > 254 chars.
-            // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
-            // A nicer thing would be to arrange the tags until they fit neatly
-            if (str.length < 255 || config.getOgrSplitO2s() == 'false')
-            {
-                // return {attrs:{tag1:str}, tableName: tableName};
-                attrs = {tag1:str};
+                // If we have unused tags, add them to partial feature.
+                if (Object.keys(notUsedTags).length > 0)
+                {
+                    for (var i in notUsedTags)
+                    {
+                        attrs['OSM:' + i] = notUsedTags[i];
+                    }
+                }
             }
             else
             {
-                // Not good. Will fix with the rewrite of the tag splitting code
-                if (str.length > 1012)
+                tableName = 'o2s_' + geometryType.toString().charAt(0);
+
+                // Dump out what attributes we have converted before they get wiped out
+                if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+
+                for (var i in tags)
                 {
-                    hoot.logVerbose('o2s tags truncated to fit in available space.');
-                    str = str.substring(0,1012);
+                    // Clean out all of the "source:XXX" tags to save space
+                    // if (i.indexOf('source:') !== -1) delete tags[i];
+                    if (i.indexOf('error:') !== -1) delete tags[i];
+                    if (i.indexOf('hoot:') !== -1) delete tags[i];
                 }
 
-                // Now split the text across the available tags
-                attrs = {tag1:str.substring(0,253),
-                         tag2:str.substring(253,506),
-                         tag3:str.substring(506,759),
-                         tag4:str.substring(759,1012)};
-             }
+                var str = JSON.stringify(tags);
+
+                // Shapefiles can't handle fields > 254 chars.
+                // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
+                // A nicer thing would be to arrange the tags until they fit neatly
+                if (str.length < 255 || config.getOgrSplitO2s() == 'false')
+                {
+                    // return {attrs:{tag1:str}, tableName: tableName};
+                    attrs = {tag1:str};
+                }
+                else
+                {
+                    // Not good. Will fix with the rewrite of the tag splitting code
+                    if (str.length > 1012)
+                    {
+                        hoot.logVerbose('o2s tags truncated to fit in available space.');
+                        str = str.substring(0,1012);
+                    }
+
+                    // Now split the text across the available tags
+                    attrs = {tag1:str.substring(0,253),
+                            tag2:str.substring(253,506),
+                            tag3:str.substring(506,759),
+                            tag4:str.substring(759,1012)};
+                }
+            }
 
              returnData.push({attrs: attrs, tableName: tableName});
         }
