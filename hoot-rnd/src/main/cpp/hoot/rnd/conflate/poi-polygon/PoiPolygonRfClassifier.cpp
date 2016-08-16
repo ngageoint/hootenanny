@@ -28,56 +28,20 @@
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/algorithms/aggregator/MeanAggregator.h>
-#include <hoot/core/algorithms/aggregator/RmseAggregator.h>
-#include <hoot/core/algorithms/aggregator/SigmaAggregator.h>
-#include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
-#include <hoot/core/algorithms/ExactStringDistance.h>
-#include <hoot/core/algorithms/MaxWordSetDistance.h>
-#include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/algorithms/string/MinSumWordSetDistance.h>
-#include <hoot/core/algorithms/MultiLineStringSplitter.h>
-#include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/algorithms/Soundex.h>
-#include <hoot/core/conflate/MatchType.h>
-#include <hoot/core/conflate/extractors/AttributeScoreExtractor.h>
-#include <hoot/core/conflate/extractors/WeightedMetricDistanceExtractor.h>
-#include <hoot/core/conflate/extractors/WeightedShapeDistanceExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/BufferedOverlapExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/ops/CopySubsetOp.h>
-#include <hoot/core/schema/TranslateStringDistance.h>
-#include <hoot/core/util/ConfPath.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
-#include <hoot/core/algorithms/string/WeightedWordDistance.h>
-
-#include <hoot/core/conflate/polygon/extractors/CentroidDistanceExtractor.h>
-#include <hoot/core/conflate/extractors/DistanceScoreExtractor.h>
-#include <hoot/core/conflate/extractors/LengthScoreExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/CompactnessExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/SmallerOverlapExtractor.h>
-#include <hoot/core/conflate/extractors/AttributeDistanceExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
-#include <hoot/core/conflate/extractors/SampledAngleHistogramExtractor.h>
-#include <hoot/rnd/conflate/poi-polygon/extractors/PoiPolygonAddressExtractor.h>
 
 namespace hoot
 {
 
 PoiPolygonRfClassifier::PoiPolygonRfClassifier()
 {
-  _createExtractors();
+  //_createExtractors();
 }
 
 void PoiPolygonRfClassifier::_createExtractors()
 {
   _extractors.clear();
-  vector<std::string> allExtractorNames = Factory::getInstance().getObjectNamesByBase(
+
+  /*vector<std::string> allExtractorNames = Factory::getInstance().getObjectNamesByBase(
     FeatureExtractor::className());
   vector<std::string> extractorNames;
   for (size_t i = 0; i < allExtractorNames.size(); i++)
@@ -97,20 +61,6 @@ void PoiPolygonRfClassifier::_createExtractors()
   }
   LOG_VAR(extractorNames);
 
-  /*_extractors.push_back(
-    shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new ExactStringDistance())));
-  _extractors.push_back(
-    shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new MaxWordSetDistance(
-          new ExactStringDistance()))));
-  _extractors.push_back(
-    shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new MeanWordSetDistance(
-          new ExactStringDistance()))));*/
   _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
@@ -129,20 +79,6 @@ void PoiPolygonRfClassifier::_createExtractors()
           new MeanWordSetDistance(
             new ExactStringDistance())))));
 
-  /*_extractors.push_back(
-    shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new LevenshteinDistance())));
-  _extractors.push_back(
-    shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new MaxWordSetDistance(
-          new LevenshteinDistance()))));
-  _extractors.push_back(
-    shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new MeanWordSetDistance(
-          new LevenshteinDistance()))));*/
   _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
@@ -167,28 +103,14 @@ void PoiPolygonRfClassifier::_createExtractors()
           new MinSumWordSetDistance(
             new LevenshteinDistance())))));
 
-  /*for (double a = 1.0; a < 1.8; a += 0.05)
+  for (double a = 1.0; a < 1.8; a += 0.05)
   {
     _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
       new MeanWordSetDistance(new LevenshteinDistance(a)))));
     _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
       new TranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance(a))))));
-  }*/
+  }
 
-  /*_extractors.push_back(
-    shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new Soundex())));
-  _extractors.push_back(
-    shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new MaxWordSetDistance(
-          new Soundex()))));
-  _extractors.push_back(
-    shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new MeanWordSetDistance(
-          new Soundex()))));*/
   _extractors.push_back(
     shared_ptr<FeatureExtractor>(
       new NameExtractor(
@@ -224,7 +146,7 @@ void PoiPolygonRfClassifier::_createExtractors()
           new WeightedWordDistance(
             new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()), dict)))));
 
-  /*_extractors.push_back(shared_ptr<FeatureExtractor>(new EdgeDistanceExtractor()));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new EdgeDistanceExtractor()));
   for (double q = 0; q < 1.0; q += 0.05)
   {
     _extractors.push_back(shared_ptr<FeatureExtractor>(

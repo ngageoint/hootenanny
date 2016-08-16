@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -70,7 +70,8 @@ public:
     map->addNode(n1);
 
     PoiPolygonMatch match1(
-      map, w1->getElementId(), n1->getElementId(), shared_ptr<MatchThreshold>());
+      map, w1->getElementId(), n1->getElementId(), shared_ptr<MatchThreshold>(),
+      shared_ptr<PoiPolygonRfClassifier>());
     MatchSet matches;
     matches.insert(&match1);
     vector<Merger*> mergers;
@@ -112,12 +113,14 @@ public:
     map->addNode(n1);
 
     vector<const Match*> matchesV;
-    PoiPolygonMatch match1(map, w1->getElementId(), n1->getElementId(), shared_ptr<MatchThreshold>());
+    PoiPolygonMatch match1(map, w1->getElementId(), n1->getElementId(), shared_ptr<MatchThreshold>(),
+                           shared_ptr<PoiPolygonRfClassifier>());
     matchesV.push_back(&match1);
     shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
     BuildingMatchCreator().createMatches(map, matchesV, threshold);
 
-    PoiPolygonMatch match2(map, w2->getElementId(), n1->getElementId(), shared_ptr<MatchThreshold>());
+    PoiPolygonMatch match2(map, w2->getElementId(), n1->getElementId(), shared_ptr<MatchThreshold>(),
+                           shared_ptr<PoiPolygonRfClassifier>());
     LOG_VAR(match2);
 
     MatchSet matches;

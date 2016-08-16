@@ -33,7 +33,6 @@
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/schema/TagAncestorDifferencer.h>
-#include <hoot/core/schema/TagCategoryDifferencer.h>
 #include <hoot/core/conflate/MatchDetails.h>
 
 #include "PoiPolygonRfClassifier.h"
@@ -42,8 +41,6 @@ namespace hoot
 {
 
 /**
- * TODO: update
- *
  * This is a very simple mechanism for matching POIs to polygons. The following rules are used:
  *
  * - Match - If the names are fairly similar or non-existant & the point is within a specified
@@ -62,8 +59,6 @@ class PoiPolygonMatch : public Match, public MatchDetails
 {
 public:
 
-  PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-    ConstMatchThresholdPtr threshold);
   PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf);
 
@@ -100,36 +95,9 @@ private:
   ElementId _poiEid, _polyEid;
   MatchClassification _c;
 
-  static QString _testUuid;
-  QString _uuid1;
-  QString _uuid2;
-  bool _typeMatch;
-  QString _typeMatchAttributeKey;
-  QString _typeMatchAttributeValue;
-  double _nameScore;
-  bool _nameMatch;
-  QString _names1;
-  QString _names2;
-  double _circularError1;
-  double _circularError2;
-  double _ce;
-  double _distance;
-  double _matchDistance;
-  double _reviewDistance;
-  bool _closeMatch;
-  int _evidence;
-  bool _ancestorTypeMatch;
-  double _ancestorDistance;
-  double _bufferedOverlap_0_1_Score;
-  double _edgeDistanceScore;
-  double _centroidDistanceScore;
-  double _compactnessScore;
-  double _euclideanDistanceScore;
-  double _minSumScore;
-  double _hausdorffDistanceScore;
-  double _meanLevScore;
-
   QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
+
+  //static QString _testUuid;
 
   void _calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                        const ElementId& eid2);
@@ -148,11 +116,11 @@ private:
 
   bool _calculateAncestorTypeMatch(const ConstOsmMapPtr& map, ConstElementPtr e1,
                                    ConstElementPtr e2);
-
   double _getTagDistance(const QString type, const QString kvp, ConstOsmMapPtr map,
                          ConstElementPtr e1, ConstElementPtr e2);
   double _getTagDistance(const QString kvp, ConstElementPtr e1, ConstElementPtr e2) const;
   QStringList _getRelatedTags(const QString relateToKvp, const Tags& tags) const;
+
 };
 
 }
