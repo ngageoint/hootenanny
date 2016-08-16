@@ -29,7 +29,7 @@ package hoot.services.models.review;
 
 public class ElementInfo {
     private long id = -1;
-    private String category;
+    private String type;
     // can be map name or id
     private String mapId;
 
@@ -49,25 +49,25 @@ public class ElementInfo {
         this.mapId = id;
     }
 
-    public String getCategory() {
-        return category;
+    public String getType() {
+        return type;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public ElementInfo() {
     }
 
-    public ElementInfo(String mapId, long elementId, String category) {
+    public ElementInfo(String mapId, long elementId, String type) {
         this.mapId = mapId;
         this.id = elementId;
-        this.category = category;
+        this.type = type;
     }
 
     @Override
     public String toString() {
-        return "map id: " + mapId + ", element id: " + id + ", element type: " + category;
+        return "map id: " + mapId + ", element id: " + id + ", element type: " + type;
     }
 }

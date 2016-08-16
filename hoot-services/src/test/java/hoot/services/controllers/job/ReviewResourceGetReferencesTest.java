@@ -84,7 +84,7 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract {
 
             if (i == 0) {
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-116L).getId(), queryElementInfo.getId());
-                Assert.assertEquals("node", queryElementInfo.getCategory());
+                Assert.assertEquals("node", queryElementInfo.getType());
 
                 ReviewRef[] refs = refsResponse.getReviewRefs();
                 Assert.assertEquals(4, refs.length);
@@ -96,28 +96,28 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract {
                 // we are forced return all including self. (Client need to
                 // handle self)
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-116L).getId(), refs[0].getId());
-                Assert.assertEquals("node", refs[0].getCategory());
+                Assert.assertEquals("node", refs[0].getType());
                 Assert.assertEquals(String.valueOf(mapId), refs[0].getMapId());
                 Assert.assertEquals(2, refs[0].getReviewRelationId());
 
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-46L).getId(), refs[1].getId());
-                Assert.assertEquals("node", refs[1].getCategory());
+                Assert.assertEquals("node", refs[1].getType());
                 Assert.assertEquals(String.valueOf(mapId), refs[1].getMapId());
                 Assert.assertEquals(2, refs[1].getReviewRelationId());
 
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-116L).getId(), refs[2].getId());
-                Assert.assertEquals("node", refs[2].getCategory());
+                Assert.assertEquals("node", refs[2].getType());
                 Assert.assertEquals(String.valueOf(mapId), refs[2].getMapId());
                 Assert.assertEquals(3, refs[2].getReviewRelationId());
 
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-49L).getId(), refs[3].getId());
-                Assert.assertEquals("node", refs[3].getCategory());
+                Assert.assertEquals("node", refs[3].getType());
                 Assert.assertEquals(String.valueOf(mapId), refs[3].getMapId());
                 Assert.assertEquals(3, refs[3].getReviewRelationId());
             }
             else if (i == 1) {
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-117L).getId(), queryElementInfo.getId());
-                Assert.assertEquals("node", queryElementInfo.getCategory());
+                Assert.assertEquals("node", queryElementInfo.getType());
 
                 ReviewRef[] refs = refsResponse.getReviewRefs();
                 Assert.assertEquals(4, refs.length);
@@ -127,22 +127,22 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract {
                 // element's parent relation (or even if there is one)
                 // we are forced return all including self. (Client need to handle self)
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-117L).getId(), refs[0].getId());
-                Assert.assertEquals("node", refs[0].getCategory());
+                Assert.assertEquals("node", refs[0].getType());
                 Assert.assertEquals(String.valueOf(mapId), refs[0].getMapId());
                 Assert.assertEquals(4, refs[0].getReviewRelationId());
 
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-42L).getId(), refs[1].getId());
-                Assert.assertEquals("node", refs[1].getCategory());
+                Assert.assertEquals("node", refs[1].getType());
                 Assert.assertEquals(String.valueOf(mapId), refs[1].getMapId());
                 Assert.assertEquals(4, refs[1].getReviewRelationId());
 
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-117L).getId(), refs[2].getId());
-                Assert.assertEquals("node", refs[2].getCategory());
+                Assert.assertEquals("node", refs[2].getType());
                 Assert.assertEquals(String.valueOf(mapId), refs[2].getMapId());
                 Assert.assertEquals(6, refs[2].getReviewRelationId());
 
                 Assert.assertEquals(oldNodeIdsToNewNodes.get(-47L).getId(), refs[3].getId());
-                Assert.assertEquals("node", refs[3].getCategory());
+                Assert.assertEquals("node", refs[3].getType());
                 Assert.assertEquals(String.valueOf(mapId), refs[3].getMapId());
                 Assert.assertEquals(6, refs[3].getReviewRelationId());
             }
