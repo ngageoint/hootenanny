@@ -1590,21 +1590,13 @@ meters that is added to the CE calculation.
 The maximum distance, in meters, between a POI and a polygon where they can still be considered
 a close match based on distance criteria only.
 
-=== poi.polygon.use.tag.ancestor.type.matching
+=== poi.polygon.min.tag.score
 
-* Data Type: bool
-* Default Value: `false`
+* Data Type: double
+* Default Value: `0.1`
 
-If true, then features with a common type ancestor in their tag data will be more likely to match
-during POI to polygon matching.
-
-=== poi.polygon.use.schema.mods
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, then custom schema mods are used in POI to polygon matching.  TODO: This setting will
-not be a permanent config option.
+The minimum tag similarity score required between a POI and a building for it to be considered
+a match or a review.
 
 === postgresql.dumpfile.writer.auto.calc.ids
 

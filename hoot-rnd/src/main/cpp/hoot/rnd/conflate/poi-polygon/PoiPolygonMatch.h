@@ -98,7 +98,6 @@ private:
   QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
 
   //static QString _testUuid;
-  static bool _test;
 
   void _calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                        const ElementId& eid2);
@@ -110,17 +109,13 @@ private:
   double _calculateNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
 
   /**
-   * Returns true if at least one POI tag is an exact match between the two elements. E.g.
-   * amenity=cafe in e1 and in e2.
+   * Returns true if the tag similarity score is greater than or equal to
+   * poi.polygon.min.tag.score
    */
   bool _calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2);
 
-  bool _calculateAncestorTypeMatch(const ConstOsmMapPtr& map, ConstElementPtr e1,
-                                   ConstElementPtr e2);
-  double _getTagDistance(const QString type, const QString kvp, ConstOsmMapPtr map,
-                         ConstElementPtr e1, ConstElementPtr e2);
-  double _getTagDistance(const QString kvp, ConstElementPtr e1, ConstElementPtr e2) const;
-  QStringList _getRelatedTags(const QString relateToKvp, const Tags& tags) const;
+  double _getTagScore(ConstElementPtr e1, ConstElementPtr e2) const;
+  QStringList _getRelatedTags(const Tags& tags) const;
 
 };
 
