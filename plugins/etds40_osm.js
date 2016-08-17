@@ -114,6 +114,12 @@ etds40_osm = {
         // Now convert the attributes to tags.
         tags = tds.toOsm(nAttrs,'',geometryType);
 
+        // Go looking for "OSM:XXX" values and copy them to the output
+        for (var i in attrs)
+        {
+            if (i.indexOf('OSM:') > -1) tags[i.replace('OSM:','')] = attrs[i];
+        }
+
         // Check if we have a second FCODE and if it can add any tags
         if (fCode2 !== '')
         {
@@ -127,7 +133,7 @@ etds40_osm = {
                 else
                 {
                     // Debug: Dump out the tags from the FCODE
-                    print('fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
+                    hoot.logVerbose('fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
                 }
             }
         }
