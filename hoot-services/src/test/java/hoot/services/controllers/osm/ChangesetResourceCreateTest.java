@@ -195,8 +195,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.readEntity(String.class)
-                    .contains("Multiple maps exist with name: " + mapName + ".  Please specify a single, valid map."));
+            Assert.assertTrue(r.readEntity(String.class).contains("Multiple maps exist"));
 
             throw e;
         }
@@ -279,7 +278,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.readEntity(String.class).contains("No map exists with ID"));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
             throw e;
         }
     }

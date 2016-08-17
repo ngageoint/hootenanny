@@ -1092,7 +1092,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.readEntity(String.class).contains("No map exists with ID"));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
 
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
@@ -1190,8 +1190,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.readEntity(String.class).contains("Multiple maps exist with name: " + duplicatedMapName
-                    + ".  Please specify a " + "single, valid map."));
+            Assert.assertTrue(r.readEntity(String.class).contains("Multiple maps exist"));
 
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;

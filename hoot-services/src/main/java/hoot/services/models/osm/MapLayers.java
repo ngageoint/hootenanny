@@ -32,15 +32,13 @@ package hoot.services.models.osm;
 public class MapLayers {
     private MapLayer[] layers;
 
+    public MapLayers() {}
+
     public MapLayer[] getLayers() {
         return layers;
     }
 
     public void setLayers(MapLayer[] layers) {
         this.layers = layers;
-    }
-
-    public MapLayers() {
-
     }
 }
