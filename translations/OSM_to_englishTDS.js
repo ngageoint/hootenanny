@@ -60,6 +60,15 @@ function initialize()
 {
     // Turn off the TDS structure so we just get the raw feature
     hoot.Settings.set({"ogr.thematic.structure":"false"});
+
+    // Turn on partial translations
+    hoot.Settings.set({"ogr.partial.translate":"true"});
+
+    // Turn off the tds extra function
+    hoot.Settings.set({"ogr.note.extra":"none"});
+
+    // Turn off the ESRI FCSUBTYPE
+    hoot.Settings.set({"ogr.esri.fcsubtype":"false"});
 }
 
 

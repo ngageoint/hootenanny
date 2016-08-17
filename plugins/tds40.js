@@ -1743,7 +1743,7 @@ tds = {
         // for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
 
         // If we have unused tags, add them to the memo field.
-        if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'note')
+        if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'attribute')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
@@ -1758,36 +1758,53 @@ tds = {
         {
             hoot.logVerbose('FCODE and Geometry: ' + gFcode + ' is not in the schema');
 
-            tableName = 'o2s_' + geometryType.toString().charAt(0);
-
-            // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
-
-            // Convert all of the Tags to a string so we can jam it into an attribute
-            var str = JSON.stringify(tags);
-
-            // Shapefiles can't handle fields > 254 chars.
-            // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
-            // A nicer thing would be to arrange the tags until they fit neatly
-            if (str.length < 255 || config.getOgrSplitO2s() == 'false')
+            if (config.getOgrPartialTranslate() == 'true')
             {
-                // return {attrs:{tag1:str}, tableName: tableName};
-                attrs = {tag1:str};
+                tableName = 'Partial';
+                attrs.F_CODE = 'Partial';
+
+                // If we have unused tags, add them to partial feature.
+                if (Object.keys(notUsedTags).length > 0)
+                {
+                    for (var i in notUsedTags)
+                    {
+                        attrs['OSM:' + i] = notUsedTags[i];
+                    }
+                }
             }
             else
             {
-                // Not good. Will fix with the rewrite of the tag splitting code
-                if (str.length > 1012)
-                {
-                    hoot.logVerbose('o2s tags truncated to fit in available space.');
-                    str = str.substring(0,1012);
-                }
+                tableName = 'o2s_' + geometryType.toString().charAt(0);
 
-                // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
-                attrs = {tag1:str.substring(0,253),
-                         tag2:str.substring(253,506),
-                         tag3:str.substring(506,759),
-                         tag4:str.substring(759,1012)};
+                // Dump out what attributes we have converted before they get wiped out
+                if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+
+                // Convert all of the Tags to a string so we can jam it into an attribute
+                var str = JSON.stringify(tags);
+
+                // Shapefiles can't handle fields > 254 chars.
+                // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
+                // A nicer thing would be to arrange the tags until they fit neatly
+                if (str.length < 255 || config.getOgrSplitO2s() == 'false')
+                {
+                    // return {attrs:{tag1:str}, tableName: tableName};
+                    attrs = {tag1:str};
+                }
+                else
+                {
+                    // Not good. Will fix with the rewrite of the tag splitting code
+                    if (str.length > 1012)
+                    {
+                        hoot.logVerbose('o2s tags truncated to fit in available space.');
+                        str = str.substring(0,1012);
+                    }
+
+                    // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
+                    attrs = {tag1:str.substring(0,253),
+                            tag2:str.substring(253,506),
+                            tag3:str.substring(506,759),
+                            tag4:str.substring(759,1012)};
+                }
             }
 
             returnData.push({attrs: attrs, tableName: tableName});
@@ -1856,7 +1873,6 @@ tds = {
                 var reviewTable = 'review_' + geometryType.toString().charAt(0);
                 returnData.push({attrs: reviewAttrs, tableName: reviewTable});
             } // End ReviewTags
-
         } // End else We have a feature
 
         // Debug:

@@ -26,6 +26,8 @@ Feature: Import Export Delete OSM Dataset
         Then the download file "dcpoi_clip_Cucumber.zip" should exist
 
     Scenario: Create Folder
+        # Clean up from previous failed tests
+        When I delete any existing "CucumberOsm" folder if necessary
         And I press "Add Folder"
         Then I type "CucumberOsm" in input ""
         And I press "big.loud" span with text "Add Folder"

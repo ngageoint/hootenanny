@@ -929,17 +929,12 @@ script.
 
 The number of identical log messages that will be emitted before they're silenced.
 
-=== ogr.mgcp.extra
+=== ogr.partial.translate
 
-* Data Type: string
-* Default Value: `file`
+* Data Type: bool
+* Default Value: `false`
 
-When exporting to MGCP:
-- "file" Save the unused tags in a new layer (extra_[PLA]).
-- "note" Add unused tags to the "TXT" field.
-- "none" Don't save the unused tags, just drop them.
-
-NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of 255 characters. Extra text will be truncated.
+Write partial translations instead of o2s_[PAL] features.
 
 === ogr.reader.bounding.box
 
@@ -1015,18 +1010,6 @@ Add the eLTDS specific attributes (SCAMIN, SCAMAX, LINK_ID) to the output
 
 Add the ESRI specific FCSUBTYPE field to the output
 
-=== ogr.note.extra
-
-* Data Type: string
-* Default Value: `note`
-
-When exporting to TDSv40 and TDSv61:
-- "note" Add unused tags to the "ZI006_MEM" field.
-- "file" Save the unused tags in a new layer (extra_[PLA]).
-- "none" Don't save the unused tags, just drop them.
-
-NOTE: If exporting to Shapefile, this field will be truncated to 255 characters.
-
 === ogr.esri.fdname
 
 * Data Type: string
@@ -1034,6 +1017,23 @@ NOTE: If exporting to Shapefile, this field will be truncated to 255 characters.
 
 The name to use for the ESRI Feature Dataset on export. Note: This only applies to ESRI File
 Geodatabases.
+
+=== ogr.note.extra
+
+* Data Type: string
+* Default Value: `attribute`
+
+When exporting to TDSv40 and TDSv61:
+- "attribute" Add unused tags to the "ZI006_MEM" field.
+- "file" Save the unused tags in a new layer (extra_[PLA]).
+- "none" Don't save the unused tags, just drop them.
+
+When exporting to MGCP:
+- "attribute" Add unused tags to the "TXT" field.
+- "file" Save the unused tags in a new layer (extra_[PLA]).
+- "none" Don't save the unused tags, just drop them.
+
+NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of 255 characters. Extra text will be truncated.
 
 === ogr.thematic.structure
 
