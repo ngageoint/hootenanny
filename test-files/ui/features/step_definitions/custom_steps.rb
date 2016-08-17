@@ -2,6 +2,10 @@ Given(/^I am on Hootenanny$/) do
   visit "http://localhost:" + (ENV['TOMCAT_PORT'] ? ENV['TOMCAT_PORT'] : "8080") + "/hootenanny-id" # may need to change URL
 end
 
+Given(/^I am on Hootenanny at location "([^"]*)"$/) do |location|
+  visit "http://localhost:" + (ENV['TOMCAT_PORT'] ? ENV['TOMCAT_PORT'] : "8080") + "/hootenanny-id/#map=" + location # may need to change URL
+end
+
 When(/^I click Get Started$/) do
   begin
     el = find_button('Get Started')
@@ -32,17 +36,31 @@ When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent
   find('div.' + parent).find('a.' + classed).click
 end
 
-When(/^I select a way map feature with id "([^"]*)"$/) do |id|
+When(/^I select a node map feature with OSM id "([^"]*)"$/) do |id|
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = 10
+  find('div.layer-data').all('g[class*=" ' + id + '"]').last.click
+  Capybara.default_max_wait_time = oldTimeout
+end
+
+When(/^I select a way map feature with OSM id "([^"]*)"$/) do |id|
   oldTimeout = Capybara.default_max_wait_time
   Capybara.default_max_wait_time = 10
   find('div.layer-data').all('path[class*=" ' + id + '"]').last.click
   Capybara.default_max_wait_time = oldTimeout
 end
 
-When(/^I select a node map feature with id "([^"]*)"$/) do |id|
+When(/^I select a way map feature with class "([^"]*)"$/) do |cls|
   oldTimeout = Capybara.default_max_wait_time
   Capybara.default_max_wait_time = 10
-  find('div.layer-data').all('g[class*=" ' + id + '"]').last.click
+  find('div.layer-data').all('path.' + cls).last.click
+  Capybara.default_max_wait_time = oldTimeout
+end
+
+When(/^I select a node map feature with class "([^"]*)"$/) do |cls|
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = 10
+  find('div.layer-data').all('g.' + cls).last.click
   Capybara.default_max_wait_time = oldTimeout
 end
 
@@ -523,8 +541,51 @@ Then(/^I should see a measurement area$/) do
   page.should have_css('text.measure-label-text')
 end
 
+Then(/^I should (not )?see an image footprint on the map$/) do |negate|
+  expectation = negate ? :should_not : :should
+  page.send(expectation, have_css('path.carousel-footprint'))
+end
+
+Then(/^I should (not )?see an image overlay on the map$/) do |negate|
+  io = all('div.layer-overlay').last
+  expectation = negate ? :should_not : :should
+  io.send(expectation, have_css('img.tile'))
+end
+
+When(/^I wait ([0-9]*) seconds to see image thumbnails$/) do |timeout|
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout)
+  list = page.find('ul.carousel-metadata-list')
+  images = list.all('li')
+  expect( images.size ).to be > 0
+  Capybara.default_max_wait_time = oldTimeout
+end
+
+When(/^I click the image carousel button$/) do
+  find('div.carousel-control').find('button').click
+end
+
+Given(/^that the EGD plugin is available$/) do
+  pending unless page.has_css?('div.carousel-control')
+end
+
+Then(/^I hover over the first thumbnail$/) do
+  list = page.find('ul.carousel-metadata-list')
+  list.first('li').hover
+end
+
+Then(/^I click on the first thumbnail$/) do
+  list = page.find('ul.carousel-metadata-list')
+  list.first('li').click
+end
+
+Then(/^I double click on the first thumbnail$/) do
+  list = page.find('ul.carousel-metadata-list')
+  list.first('li').double_click
+end
+
 Then(/^I accept the alert$/) do
-  sleep 2
+  sleep 5
   page.driver.browser.switch_to.alert.accept
 end
 
@@ -680,4 +741,11 @@ end
 
 Then(/^I should see a "([^"]*)" on the map$/) do |el|
   page.should have_css(el)
+end
+
+Then(/^I wait ([0-9]+) seconds to see "([^"]*)" on the map$/) do |wait, el|
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(wait)
+  page.should have_css(el)
+  Capybara.default_max_wait_time = oldTimeout
 end
