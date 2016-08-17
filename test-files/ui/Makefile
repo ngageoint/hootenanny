@@ -63,6 +63,8 @@ endif
 
 clean-coverage:
 	rm -f coverage.log
+	rm -f screenshot_*.png
+	rm -f screenshot_*.html
 	rm -f $(HOOT_HOME)/hoot-ui/test/istanbul_index.html
 	rm -rf $(HOOT_HOME)/hoot-ui/istanbul
 	rm -rf $(HOOT_HOME)/hoot-ui/mocha-coverage
