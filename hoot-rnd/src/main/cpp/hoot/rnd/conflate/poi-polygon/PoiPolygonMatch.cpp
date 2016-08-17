@@ -45,6 +45,7 @@ namespace hoot
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
 //QString PoiPolygonMatch::_testUuid = "{08cf2389-216b-5a49-afcd-5ce30cef9436}";
+bool PoiPolygonMatch::_test = false;
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
@@ -60,6 +61,27 @@ _rf(rf)
 void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                       const ElementId& eid2)
 {
+  if (!_test)
+  {
+    LOG_VARD(OsmSchema::getInstance().score("amenity=hospital", "use=healthcare"));
+    LOG_VARD(OsmSchema::getInstance().score("building=school", "amenity=school"));
+    LOG_VARD(OsmSchema::getInstance().score("amenity=hospital", "building=hospital"));
+    LOG_VARD(OsmSchema::getInstance().score("building=transportation", "station=*"));
+    LOG_VARD(OsmSchema::getInstance().score("shop=mall", "shop=*"));
+    LOG_VARD(OsmSchema::getInstance().score("leisure=sports_centre", "sport=*"));
+    LOG_VARD(OsmSchema::getInstance().score("leisure=sports_complex", "sport=*"));
+    LOG_VARD(OsmSchema::getInstance().score("shop=car", "shop=car_repair"));
+    LOG_VARD(OsmSchema::getInstance().score("leisure=sports_centre", "leisure=water_park"));
+    LOG_VARD(OsmSchema::getInstance().score("leisure=sports_centre", "leisure=swimming_pool"));
+    LOG_VARD(OsmSchema::getInstance().score("leisure=sports_centre", "leisure=swimming"));
+    LOG_VARD(OsmSchema::getInstance().score("tourism=attraction", "tourism=zoo"));
+    LOG_VARD(OsmSchema::getInstance().score("amenity=arts_centre", "amenity=theatre"));
+    LOG_VARD(OsmSchema::getInstance().score("amenity=clinic", "amenity=hospital"));
+    LOG_VARD(OsmSchema::getInstance().score("station=light_rail", "building=train_station"));
+    LOG_VARD(OsmSchema::getInstance().score("historic=building", "historic=monument"));
+    _test = true;
+  }
+
   ConstElementPtr e1 = map->getElement(eid1);
   ConstElementPtr e2 = map->getElement(eid2);
 
@@ -110,10 +132,9 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   const bool closeMatch = distance <= reviewDistance;
 
   int evidence = 0;
-  evidence += typeMatch ? 1 : 0;
-  //using common ancestors as an additional piece of evidence seems to create some extra reviews
-  //for things that get missed w/o it
-  evidence += ancestorTypeMatch ? 1 : 0;
+  //also allowing common ancestors to be an additional piece of evidence seems to create
+  //some extra reviews for things that would be missed otherwise
+  evidence += typeMatch || ancestorMatch ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
   evidence += distance <= matchDistance ? 2 : 0;
 
@@ -189,13 +210,23 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
   const Tags& t1 = e1->getTags();
   const Tags& t2 = e2->getTags();
 
+  //be a little more restrictive with restaurants
+  if (t1.get("amenity") == "restaurant" &&
+      t2.get("amenity") == "restaurant" &&
+      t1.contains("cuisine") && t2.contains("cuisine") &&
+      t1.get("cuisine").toLower() != t2.get("cuisine").toLower())
+  {
+    return false;
+  }
+
   for (Tags::const_iterator it = t1.begin(); it != t1.end(); it++)
   {
-    // if it is a use or POI category
+    // if it is a use, POI, or building category
     if ((OsmSchema::getInstance().getCategories(it.key(), it.value()) &
          (OsmSchemaCategory::building() | OsmSchemaCategory::use() | OsmSchemaCategory::poi()))
           != OsmSchemaCategory::Empty)
     {
+      //and any tag matches exactly
       bool result = t2.get(it.key()) == it.value();
       if (result)
       {
@@ -266,11 +297,13 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
     {
       return true;
     }
-    if (t1.get("shop").toLower().contains("car") &&
+    //TODO: this shouldn't be needed regardless
+    /*if (t1.get("shop").toLower().contains("car") &&
         t2.get("shop").toLower().contains("car"))
     {
+      LOG_VARD(OsmSchema::score("shop=car", "shop=car"));
       return true;
-    }
+    }*/
     if ((t1.get("leisure").toLower() == "sports_centre" &&
          t2.get("leisure").toLower() == "water_park") ||
         (t2.get("leisure").toLower() == "sports_centre" &&
