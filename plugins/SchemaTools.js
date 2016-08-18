@@ -35,7 +35,7 @@ schemaTools = exports;
 if (typeof hoot === 'undefined')
 {
     var HOOT_HOME = process.env.HOOT_HOME;
-    hoot = require(HOOT_HOME + '/lib/HootJs');
+    var hoot = require(HOOT_HOME + '/lib/HootJs');
 
 }
 
