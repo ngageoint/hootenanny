@@ -59,16 +59,30 @@ emgcp = {
             for (var fNum = 0, fLen = mgcpData.length; fNum < fLen; fNum++)
             {
                 var tFCODE = mgcpData[fNum]['attrs']['FCODE'];
-
-                // Go through the list of possible attributes and add the missing ones
-                var tmpList = emgcp.rules.fcodeLookup[tFCODE]['enum'];
-
-                for (var i=0, elen = tmpList.length; i < elen; i++)
+                if (tFCODE == 'Partial')
                 {
-                    // If we don't find one, add it with it's default value
-                    if (!(mgcpData[fNum]['attrs'][tmpList[i]]))
+                    // Go looking for "OSM:XXX" values and copy them to the output
+                    for (var i in mgcpData[fNum]['attrs'])
                     {
-                        mgcpData[fNum]['attrs'][tmpList[i]] = emgcp.rules.engDefault[tmpList[i]];
+                        if (i.indexOf('OSM:') > -1)
+                        {
+                            eAttrs[i] = mgcpData[fNum]['attrs'][i];
+                            delete mgcpData[fNum]['attrs'][i]
+                        }
+                    }
+                }
+                else
+                {
+                    // Go through the list of possible attributes and add the missing ones
+                    var tmpList = emgcp.rules.fcodeLookup[tFCODE]['enum'];
+
+                    for (var i=0, elen = tmpList.length; i < elen; i++)
+                    {
+                        // If we don't find one, add it with it's default value
+                        if (!(mgcpData[fNum]['attrs'][tmpList[i]]))
+                        {
+                            mgcpData[fNum]['attrs'][tmpList[i]] = emgcp.rules.engDefault[tmpList[i]];
+                        }
                     }
                 }
 

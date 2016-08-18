@@ -61,6 +61,15 @@ function initialize()
 {
     // Turn off the TDS structure so we just get the raw feature
     hoot.Settings.set({"ogr.tds.structure":"false"});
+
+    // Turn on partial translations
+    hoot.Settings.set({"ogr.partial.translate":"true"});
+
+    // Turn off the tds extra function
+    hoot.Settings.set({"ogr.tds.extra":"false"});
+
+    // Turn off the ESRI FCSUBTYPE
+    hoot.Settings.set({"ogr.tds.add.fcsubtype":"false"});
 }
 
 
@@ -96,8 +105,4 @@ function translateToOgr(tags, elementType, geometryType)
 {
         return etds61.toEnglish(tags, elementType, geometryType)
 } // End of translateToOgr
-
-
-
-
 
