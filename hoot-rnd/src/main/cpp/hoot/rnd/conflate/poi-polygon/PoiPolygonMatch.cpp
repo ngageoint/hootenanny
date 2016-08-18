@@ -44,7 +44,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{87f8a061-d9f1-5bc9-ac28-27f07c8febae}";
+//QString PoiPolygonMatch::_testUuid = "{87f8a061-d9f1-5bc9-ac28-27f07c8febae}";
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
@@ -147,7 +147,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     _c.setMiss();
   }
 
-  if (e1->getTags().get("uuid") == _testUuid ||
+ /* if (e1->getTags().get("uuid") == _testUuid ||
       e2->getTags().get("uuid") == _testUuid)
   {
     //_uuid1 = e1->getTags().get("uuid");
@@ -180,7 +180,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     LOG_VARD(e2->getCircularError());
     LOG_VARD(evidence);
     LOG_DEBUG("**************************");
-  }
+  }*/
 }
 
 bool PoiPolygonMatch::isBuildingIsh(ConstElementPtr e)

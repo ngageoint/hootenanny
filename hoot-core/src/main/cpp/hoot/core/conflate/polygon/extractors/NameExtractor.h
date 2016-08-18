@@ -66,7 +66,7 @@ public:
 
   virtual void setStringDistance(const StringDistancePtr &sd) { _d = sd; }
 
-protected:
+private:
   StringDistancePtr _d;
 };
 

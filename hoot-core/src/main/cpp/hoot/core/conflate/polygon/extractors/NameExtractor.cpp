@@ -36,8 +36,6 @@
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 
-#include <hoot/core/schema/OsmSchema.h>
-
 namespace hoot
 {
 

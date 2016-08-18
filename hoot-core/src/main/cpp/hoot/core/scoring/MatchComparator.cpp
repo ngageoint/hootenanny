@@ -273,9 +273,6 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
 
     const UuidPair& m = *it;
 
-    //LOG_VARD(m.first);
-    //LOG_VARD(m.second);
-
     // if this is an expected match
     if (_expectedMatchGroups.findT(m.first) == _expectedMatchGroups.findT(m.second))
     {
@@ -290,7 +287,6 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
     {
       expectedIndex = MatchType::Miss;
     }
-    //LOG_VARD(expectedIndex);
 
     // if this is an expected match
     if (_actualMatchGroups.findT(m.first) == _actualMatchGroups.findT(m.second))
@@ -307,7 +303,6 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
       actualIndex = MatchType::Miss;
     }
 
-    //LOG_VARD(actualIndex);
     if (actualIndex != expectedIndex)
     {
       if (actualIndex != MatchType::Review)
@@ -320,7 +315,6 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
           // then mark it as an error.
           if (!eid1.isNull())
           {
-            //LOG_VARD(eid1);
             _tagWrong(conflated, m.first);
           }
         }
@@ -333,7 +327,6 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
           // then mark it as an error.
           if (!eid2.isNull())
           {
-            //LOG_VARD(eid2);
             _tagWrong(conflated, m.second);
           }
         }

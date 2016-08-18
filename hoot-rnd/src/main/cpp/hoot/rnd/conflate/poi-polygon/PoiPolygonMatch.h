@@ -97,7 +97,7 @@ private:
 
   QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
 
-  static QString _testUuid;
+  //static QString _testUuid;
 
   void _calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                        const ElementId& eid2);
