@@ -74,7 +74,7 @@ schemaTools.isSimilar = function(name, threshold, minScore, maxScore) {
         maxScore = minScore;
     }
 
-    if (!schemaTools.hoot.OsmSchema.getTagVertex(name)) {
+    if (!hoot.OsmSchema.getTagVertex(name)) {
         throw new Error("Invalid tag specified in isSimilar: " + JSON.stringify(name));
     }
 
@@ -109,7 +109,6 @@ schemaTools.generateRuleTags = function(rule) {
         for (i in tags) {
             if (tags[i].value !== '' && tags[i].value !== '*')
             {
-                //var schemaScore = schemaTools.hoot.OsmSchema.scoreOneWay(tags[i].name, rule.name);
                 var schemaScore = hoot.OsmSchema.scoreOneWay(tags[i].name, rule.name);
                 if (schemaScore >= rule.threshold)
                 {
