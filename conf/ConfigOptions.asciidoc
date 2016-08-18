@@ -1580,7 +1580,7 @@ meters that is added to the CE calculation.
 === poi.polygon.match.type.threshold
 
 * Data Type: double
-* Default Value: `0.8`
+* Default Value: `0.2`
 
 The minimum tag similarity score required between a POI and a building for it to be considered
 for a match or a review.  Scores range from 0 to 1, with 1 being the most similar.
