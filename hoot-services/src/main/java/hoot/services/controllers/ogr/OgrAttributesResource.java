@@ -40,7 +40,7 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -48,12 +48,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -94,9 +94,10 @@ public class OgrAttributesResource extends JobControllerBase {
      */
     @POST
     @Path("/upload")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response processUpload(@QueryParam("INPUT_TYPE") String inputType,
-                                  @Context HttpServletRequest request) {
+                                  FormDataMultiPart multiPart) {
         JSONObject response = new JSONObject();
         String jobId = UUID.randomUUID().toString();
 
@@ -104,7 +105,7 @@ public class OgrAttributesResource extends JobControllerBase {
             Map<String, String> uploadedFiles = new HashMap<>();
             Map<String, String> uploadedFilesPaths = new HashMap<>();
 
-            MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, request);
+            MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, multiPart);
 
             List<String> filesList = new ArrayList<>();
             List<String> zipList = new ArrayList<>();
