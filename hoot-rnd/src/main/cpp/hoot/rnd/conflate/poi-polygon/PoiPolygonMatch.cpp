@@ -52,7 +52,28 @@ PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid
 Match(threshold),
 _eid1(eid1),
 _eid2(eid2),
-_rf(rf)
+_rf(rf),
+_matchDistance(ConfigOptions().getPoiPolygonMatchDistance()),
+_reviewDistance(ConfigOptions().getPoiPolygonMatchReviewDistance()),
+_nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
+_typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold())
+{
+  _calculateMatch(map, eid1, eid2);
+}
+
+PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
+                                 const ElementId& eid2, ConstMatchThresholdPtr threshold,
+                                 shared_ptr<const PoiPolygonRfClassifier> rf,
+                                 double matchDistance, double reviewDistance,
+                                 double nameScoreThreshold, double typeScoreThreshold) :
+Match(threshold),
+_eid1(eid1),
+_eid2(eid2),
+_rf(rf),
+_matchDistance(matchDistance),
+_reviewDistance(reviewDistance),
+_nameScoreThreshold(nameScoreThreshold),
+_typeScoreThreshold(typeScoreThreshold)
 {
   _calculateMatch(map, eid1, eid2);
 }
@@ -92,7 +113,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   const bool typeMatch = _calculateTypeMatch(map, poi, poly);
 
   const double nameScore = _calculateNameScore(poi, poly);
-  const bool nameMatch = nameScore >= ConfigOptions().getPoiPolygonMatchNameThreshold();
+  const bool nameMatch = nameScore >= _nameScoreThreshold;
 
   // calculate the 2 sigma for the distance between the two objects
   const double sigma1 = e1->getCircularError() / 2.0;
@@ -100,8 +121,8 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   const double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
 
   const double distance = gpoly->distance(gpoi.get());
-  const double matchDistance = ConfigOptions().getPoiPolygonMatchDistance();
-  const double reviewDistance = ConfigOptions().getPoiPolygonMatchReviewDistance() + ce;
+  const double matchDistance = _matchDistance;
+  const double reviewDistance = _reviewDistance + ce;
   const bool closeMatch = distance <= reviewDistance;
 
   int evidence = 0;
@@ -215,7 +236,7 @@ bool PoiPolygonMatch::_calculateTypeMatch(const ConstOsmMapPtr& /*map*/, ConstEl
     LOG_VARD(tagScore);
   }
 
-  return tagScore >= ConfigOptions().getPoiPolygonMatchTypeThreshold();
+  return tagScore >= _typeScoreThreshold;
 }
 
 /*bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, ConstElementPtr e1,

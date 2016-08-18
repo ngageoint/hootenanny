@@ -781,7 +781,7 @@ A list of map operations to be applied to a map for cleaning purposes in order
 === match.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMatchCreator;hoot::PlacesPoiMatchCreator;hoot::HighwayMatchCreator`
+* Default Value: `hoot::BuildingMatchCreator;hoot::PlacesPoiMatchCreator;hoot::HighwayMatchCreator;hoot::PoiPolygonMatchCreator`
 
 List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).
 
@@ -791,6 +791,7 @@ Some of the possible options include:
 * `hoot::PlacesPoiMatchCreator` - Matches POIs using the PLACES algorithm.
 * `hoot::HighwayMatchCreator` - Matches linear highway features using the Unify
   algorithm.
+* `hoot::PoiPolygonMatchCreator` - Matches POI's and buldings the Unify algorithm.
 * `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify
   algorithm.
 * `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The
@@ -842,7 +843,7 @@ When merging nodes during --ogr2osm, what tolerance should be used for deciding 
 === merger.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMergerCreator;hoot::PlacesPoiMergerCreator;hoot::HighwaySnapMergerCreator`
+* Default Value: `hoot::BuildingMergerCreator;hoot::PlacesPoiMergerCreator;hoot::HighwaySnapMergerCreator;hoot::PoiPolygonMergerCreator`
 
 List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).
 
@@ -854,6 +855,8 @@ Possible values include:
   specified in `match.creators`.
 * `hoot::HighwaySnapMergerCreator` - Required if `hoot::HighwayMatchCreator`
   is specified in `match.creators`.
+* `hoot::PoiPolygonMergerCreator` - Required if `hoot::PoiPolygonMatchCreator`
+is specified in `match.creators`.
 * `hoot::ScriptMergerCreator` - Required if one or more instances of
   `hoot::SplitMatchCreator` is specified in `match.creators`. Note that the
   script name is not specified in this parameter.
@@ -1604,13 +1607,6 @@ The threshold at which a review is called a review for PoiPolygon. See
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== poi.polygon.use.old.logic
-
-* Data Type: bool
-* Default Value: `false`
-
-TEMPORARY
 
 === postgresql.dumpfile.writer.auto.calc.ids
 

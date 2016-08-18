@@ -34,6 +34,7 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/schema/TagAncestorDifferencer.h>
 #include <hoot/core/conflate/MatchDetails.h>
+#include <hoot/core/util/Configurable.h>
 
 #include "PoiPolygonRfClassifier.h"
 
@@ -41,19 +42,8 @@ namespace hoot
 {
 
 /**
- * This is a very simple mechanism for matching POIs to polygons. The following rules are used:
- *
- * - Match - If the names are fairly similar or non-existant & the point is within a specified
- *           distance of the polygon
- * - Review - If the point is within a specified distance of the polygon, but the names are
- *            different OR
- *            If the point is close to the polygon and the names are similar
- * - Miss - Everything else
- *
- * This supports intra-dataset and inter-dataset conflation.
- *
- * If there are multiple overlapping matches then they will all get marked as needing review in
- * PoiPolygonMergerCreator.
+ * This is a very simple mechanism for matching POIs to polygons. See "Building to POI Conflation"
+ * in the Hootenanny Algorithms document for more details.
  */
 class PoiPolygonMatch : public Match, public MatchDetails
 {
@@ -61,6 +51,11 @@ public:
 
   PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf);
+
+  PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
+    ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf,
+    double matchDistance, double reviewDistance, double nameScoreThreshold,
+    double typeScoreThreshold);
 
   virtual const MatchClassification& getClassification() const { return _c; }
 
@@ -94,6 +89,11 @@ private:
   static QString _matchName;
   ElementId _poiEid, _polyEid;
   MatchClassification _c;
+
+  double _matchDistance;
+  double _reviewDistance;
+  double _nameScoreThreshold;
+  double _typeScoreThreshold;
 
   QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
 
