@@ -44,7 +44,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{f16cc391-dd09-56f9-8b12-e8ce9c7707a3}";
+QString PoiPolygonMatch::_testUuid = "{ee5efb97-18e3-5230-9800-62ed07d81cae}";
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
@@ -193,37 +193,12 @@ bool PoiPolygonMatch::_calculateTypeMatch(const ConstOsmMapPtr& /*map*/, ConstEl
   const Tags& t1 = e1->getTags();
   const Tags& t2 = e2->getTags();
 
-  if (!ConfigOptions().getPoiPolygonUseOldLogic())
+  //be a little more restrictive with restaurants
+  if (t1.get("amenity") == "restaurant" &&
+      t2.get("amenity") == "restaurant" &&
+      t1.contains("cuisine") && t2.contains("cuisine") &&
+      t1.get("cuisine").toLower() != t2.get("cuisine").toLower())
   {
-    //be a little more restrictive with restaurants
-    if (t1.get("amenity") == "restaurant" &&
-        t2.get("amenity") == "restaurant" &&
-        t1.contains("cuisine") && t2.contains("cuisine") &&
-        t1.get("cuisine").toLower() != t2.get("cuisine").toLower())
-    {
-      return false;
-    }
-  }
-
-  if (ConfigOptions().getPoiPolygonUseOldLogic())
-  {
-    for (Tags::const_iterator it = t1.begin(); it != t1.end(); it++)
-    {
-      // if it is a use, POI, or building category
-      if ((OsmSchema::getInstance().getCategories(it.key(), it.value()) &
-           (OsmSchemaCategory::building() | OsmSchemaCategory::use() | OsmSchemaCategory::poi()))
-          != OsmSchemaCategory::Empty)
-      {
-        //and any tag matches exactly
-        bool result = t2.get(it.key()) == it.value();
-        if (result)
-        {
-          //_typeMatchAttributeKey = it.key();
-          //_typeMatchAttributeValue = it.value();
-          return true;
-        }
-      }
-    }
     return false;
   }
 
@@ -232,24 +207,18 @@ bool PoiPolygonMatch::_calculateTypeMatch(const ConstOsmMapPtr& /*map*/, ConstEl
     return true;
   }*/
 
-  if (!ConfigOptions().getPoiPolygonUseOldLogic())
+  const double tagScore = _getTagScore(e1, e2);
+
+  if (e1->getTags().get("uuid") == _testUuid ||
+      e2->getTags().get("uuid") == _testUuid)
   {
-    const double tagScore = _getTagScore(e1, e2);
-
-    /*if (e1->getTags().get("uuid") == _testUuid ||
-        e2->getTags().get("uuid") == _testUuid)
-    {
-      LOG_VARD(tagScore);
-    }*/
-
-    return tagScore >= ConfigOptions().getPoiPolygonMatchTypeThreshold();
+    LOG_VARD(tagScore);
   }
 
-
-  return false;
+  return tagScore >= ConfigOptions().getPoiPolygonMatchTypeThreshold();
 }
 
-bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, ConstElementPtr e1,
+/*bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, ConstElementPtr e1,
                                                   ConstElementPtr e2)
 {
   QStringList types;
@@ -261,37 +230,20 @@ bool PoiPolygonMatch::_calculateAncestorTypeMatch(const ConstOsmMapPtr& map, Con
   for (int i = 0; i < types.length(); i++)
   {
     const QString type = types.at(i);
-    /*if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
-    {
-      LOG_VARD(type);
-    }*/
-
     if (e1->getTags().contains(type) && e2->getTags().contains(type))
     {
       const double ancestorDistance = _getAncestorTagDistance(type, map, e1, e2);
-      //_ancestorDistance = ancestorDistance;
-      /*if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
-      {
-        LOG_VARD(ancestorDistance);
-      }*/
-
       if (ancestorDistance == 0.0)
       {
-        //_ancestorTypeMatch = true;
-        /*if (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid)
-        {
-          LOG_VARD(_ancestorTypeMatch);
-        }*/
-
         return true;
       }
     }
   }
 
   return false;
-}
+}*/
 
-double PoiPolygonMatch::_getAncestorTagDistance(const QString kvp, ConstOsmMapPtr map,
+/*double PoiPolygonMatch::_getAncestorTagDistance(const QString kvp, ConstOsmMapPtr map,
                                                 ConstElementPtr e1, ConstElementPtr e2)
 {
   shared_ptr<TagFilteredDifferencer> differencer;
@@ -305,7 +257,7 @@ double PoiPolygonMatch::_getAncestorTagDistance(const QString kvp, ConstOsmMapPt
     differencer = _tagAncestorDifferencers[kvp];
   }
   return differencer->diff(map, e1, e2);
-}
+}*/
 
 double PoiPolygonMatch::_getTagScore(ConstElementPtr e1, ConstElementPtr e2) const
 {
