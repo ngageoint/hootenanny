@@ -117,11 +117,6 @@ private:
   double _getTagScore(ConstElementPtr e1, ConstElementPtr e2) const;
   QStringList _getRelatedTags(const Tags& tags) const;
 
-  //bool _calculateAncestorTypeMatch(const ConstOsmMapPtr& map, ConstElementPtr e1,
-                                   //ConstElementPtr e2);
-  //double _getAncestorTagDistance(const QString kvp, ConstOsmMapPtr map,
-                                 //ConstElementPtr e1, ConstElementPtr e2);
-
 };
 
 }
