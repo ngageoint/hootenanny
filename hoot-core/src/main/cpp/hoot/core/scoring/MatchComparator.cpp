@@ -357,12 +357,12 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
       _tagError(conflated, it->first, "1");
       _tagError(conflated, it->second, "2");
 
-      /*const MatchType expectedMatchType(expectedIndex);
+      const MatchType expectedMatchType(expectedIndex);
       const MatchType actualMatchType(actualIndex);
       _tagTestOutcome(
         conflated, it->first, expectedMatchType.toString(), actualMatchType.toString());
       _tagTestOutcome(
-        conflated, it->second, expectedMatchType.toString(), actualMatchType.toString());*/
+        conflated, it->second, expectedMatchType.toString(), actualMatchType.toString());
     }
 
     _confusion[actualIndex][expectedIndex]++;

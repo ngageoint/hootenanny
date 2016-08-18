@@ -63,6 +63,7 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMerger.cpp \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreator.cpp \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonRfClassifier.cpp \
+    src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonRemoveRef2Op.cpp \
     src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatch.cpp \
@@ -94,6 +95,7 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMerger.h \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreator.h \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonRfClassifier.h \
+    src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonRemoveRef2Op.h \
     src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.h \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatch.h \

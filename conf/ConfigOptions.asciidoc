@@ -1550,6 +1550,38 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.match.distance
+
+* Data Type: double
+* Default Value: `5`
+
+The maximum distance, in meters, between a POI and a polygon where they can still be considered
+a close match based on distance criteria only.
+
+=== poi.polygon.match.name.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+If the name similarity score is greater than this then the names are considered a match during POI
+to polygon matching.  Scores are 0 to 1 for similarity and -1 if there are no names present (null).
+
+=== poi.polygon.match.review.distance
+
+* Data Type: double
+* Default Value: `100`
+
+How far away from a polygon should name matches be considered reviews. This is a fixed value in
+meters that is added to the CE calculation.
+
+=== poi.polygon.match.type.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+The minimum tag similarity score required between a POI and a building for it to be considered
+for a match or a review.  Scores range from 0 to 1, with 1 being the most similar.
+
 === poi.polygon.miss.threshold
 
 * Data Type: double
@@ -1573,37 +1605,12 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== poi.polygon.match.name.threshold
+=== poi.polygon.use.old.logic
 
-* Data Type: double
-* Default Value: `0.8`
+* Data Type: bool
+* Default Value: `false`
 
-If the name similarity score is greater than this then the names are considered a match during POI
-to polygon matching.  Scores are 0 to 1 for similarity and -1 if there are no names present (null).
-
-=== poi.polygon.match.review.distance
-
-* Data Type: double
-* Default Value: `0`
-
-How far away from a polygon should name matches be considered reviews. This is a fixed value in
-meters that is added to the CE calculation.
-
-=== poi.polygon.match.distance
-
-* Data Type: double
-* Default Value: `0`
-
-The maximum distance, in meters, between a POI and a polygon where they can still be considered
-a close match based on distance criteria only.
-
-=== poi.polygon.min.tag.score
-
-* Data Type: double
-* Default Value: `0.1`
-
-The minimum tag similarity score required between a POI and a building for it to be considered
-a match or a review.
+TEMPORARY
 
 === postgresql.dumpfile.writer.auto.calc.ids
 
