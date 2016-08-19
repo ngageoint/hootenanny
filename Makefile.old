@@ -132,7 +132,7 @@ endif
 
 plugins-test:
 ifneq ($(shell which mocha),)
-	cd plugins; mocha --reporter dot
+	cd plugins; mocha --reporter dot --timeout 30000
 else
 	@echo Skipping mocha tests
 endif
