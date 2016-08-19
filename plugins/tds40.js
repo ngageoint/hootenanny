@@ -814,7 +814,7 @@ tds = {
        } // End if AP030
 
         // Add the LayerName to the source
-        tags.source = 'tdsv40:' + layerName.toLowerCase();
+        if ((! tags.source) && layerName !== '') tags.source = 'tdsv40:' + layerName.toLowerCase();
 
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
         if (tags.uuid)
@@ -1010,7 +1010,7 @@ tds = {
         if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
         if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
-        // Unpack the TXT field
+        // Unpack the ZI006_MEM field
         if (tags.note)
         {
             var tObj = translate.unpackMemo(tags.note);
@@ -1020,8 +1020,9 @@ tds = {
                 var tTags = JSON.parse(tObj.tags)
                 for (i in tTags)
                 {
-                    print('Memo: Add: ' + i + ' = ' + tTags[i]);
-                    if (tags[tTags[i]]) print('Overwrite:' + i + ' = ' + tTags[i]);
+                    // Debug
+                    // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
 
@@ -1061,7 +1062,6 @@ tds = {
     {
         // Remove Hoot assigned tags for the source of the data
         if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-        if (tags.source) delete tags.source;
         if (tags.area) delete tags.area;
         if (tags['error:circular']) delete tags['error:circular'];
         if (tags['hoot:status']) delete tags['hoot:status'];

@@ -22,7 +22,7 @@
         <nd ref="-16"/>
         <nd ref="-17"/>
         <nd ref="-18"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:38.406Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:24.106Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="gauge" v="2"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
@@ -53,7 +53,7 @@
         <tag k="arrangement" v="juxtaposition"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="railway:in_road" v="separated"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:38.406Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:24.106Z"/>
         <tag k="gauge:type" v="standard"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{1ea0b3a4-8ad2-4eb6-b523-8207d4da5b2e}"/>
@@ -65,7 +65,7 @@
         <nd ref="-10"/>
         <nd ref="-11"/>
         <nd ref="-12"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:38.406Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:24.106Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="electrified" v="no"/>
         <tag k="gauge" v="4"/>
@@ -86,7 +86,7 @@
         <nd ref="-7"/>
         <nd ref="-8"/>
         <nd ref="-9"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:38.406Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:24.106Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="electrified" v="contact_line"/>
         <tag k="gauge" v="2"/>
@@ -117,7 +117,7 @@
         <tag k="arrangement" v="single"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="railway:in_road" v="separated"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:38.405Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:24.105Z"/>
         <tag k="gauge:type" v="broad"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{1ddc1109-9eef-442d-b959-4b973b429c8e}"/>
@@ -129,7 +129,7 @@
         <nd ref="-1"/>
         <nd ref="-2"/>
         <nd ref="-3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:38.405Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:24.105Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="construction" v="logging"/>
         <tag k="gauge" v="1"/>

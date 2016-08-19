@@ -644,6 +644,9 @@ tds61 = {
         // Drop the FCSUBTYPE since we don't use it
         if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
 
+        // Drop the the "Not Found" F_CODE. This is from the UI
+        if (attrs.F_CODE == 'Not found') delete attrs.F_CODE;
+
         // Drop all of the XXX Closure default values IFF the associated attributes are 
         // not set.
         // Doing this after the main cleaning loop so all of the -999999 values are
@@ -841,7 +844,7 @@ tds61 = {
         }
 
         // Add the LayerName to the source
-        tags.source = 'tdsv61:' + layerName.toLowerCase();
+        if ((! tags.source) && layerName !== '') tags.source = 'tdsv61:' + layerName.toLowerCase();
         
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
         if (attrs.UFI)
@@ -1070,7 +1073,7 @@ tds61 = {
         if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
         if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
-        // Unpack the MEMO field
+        // Unpack the ZI006_MEM field
         if (tags.note)
         {
             var tObj = translate.unpackMemo(tags.note);
@@ -1102,7 +1105,6 @@ tds61 = {
     {
         // Remove Hoot assigned tags for the source of the data
         if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-        if (tags.source) delete tags.source;
         if (tags.area) delete tags.area;
         if (tags['error:circular']) delete tags['error:circular'];
         if (tags['hoot:status']) delete tags['hoot:status'];
@@ -1727,7 +1729,6 @@ tds61 = {
             delete attrs.ZI005_FNA3;
         }
 
-
         // The ZI001_SDV (source date time) field can only be 20 characters long. When we conflate features,
         // we concatenate the tag values for this field.
         // We are getting guidance from the customer on what value they would like in this field:
@@ -1740,8 +1741,6 @@ tds61 = {
         {
             attrs.ZI001_SDV = translate.chopDateTime(attrs.ZI001_SDV);
         }
-
-
     }, // End applyToNfddPostProcessing
 
 // #####################################################################################################

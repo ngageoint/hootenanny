@@ -9,7 +9,7 @@
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-6"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:44.439Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:57:46.110Z"/>
         <tag k="bridge" v="yes"/>
         <tag k="uuid" v="{0d2eae0f-4e9f-4622-bedb-7550a298e0d3}"/>
         <tag k="source" v="mgcp:laq040"/>
@@ -19,7 +19,7 @@
         <nd ref="-3"/>
         <nd ref="-4"/>
         <tag k="width" v="5"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:44.439Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:57:46.110Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="condition" v="functional"/>
@@ -28,9 +28,8 @@
         <tag k="bridge:movable" v="no"/>
         <tag k="bridge:span_count" v="1"/>
         <tag k="transport:type" v="road"/>
+        <tag k="source" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="uuid" v="{c287d07a-d796-4083-ae87-1451e24c2e96}"/>
-        <tag k="source" v="mgcp:laq040"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="bridge:structure" v="deck"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:datetime" v="2013-01-01T00:00:00Z"/>
@@ -42,7 +41,7 @@
         <nd ref="-2"/>
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="bridge" v="movable"/>
-        <tag k="source" v="mgcp:laq040"/>
+        <tag k="source" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="condition" v="construction"/>
         <tag k="name" v="Troll"/>
         <tag k="material" v="part_metal"/>
@@ -51,9 +50,8 @@
         <tag k="bridge:span_count" v="5"/>
         <tag k="source:copyright" v="Copyright 2014 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
         <tag k="transport:type" v="road"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="width" v="5"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:44.438Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:57:46.109Z"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="bridge:structure" v="girder"/>
         <tag k="highway" v="road"/>

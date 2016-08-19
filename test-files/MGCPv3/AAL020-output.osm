@@ -57,7 +57,7 @@
         <nd ref="-49"/>
         <nd ref="-50"/>
         <nd ref="-46"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:37.533Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.269Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="place" v="yes"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
@@ -78,7 +78,7 @@
         <nd ref="-44"/>
         <nd ref="-45"/>
         <nd ref="-41"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:37.533Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.269Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="education"/>
         <tag k="place" v="city"/>
@@ -102,7 +102,7 @@
         <nd ref="-39"/>
         <nd ref="-40"/>
         <nd ref="-36"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:37.532Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.269Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="healthcare"/>
         <tag k="place" v="city"/>
@@ -125,7 +125,7 @@
         <nd ref="-34"/>
         <nd ref="-35"/>
         <nd ref="-31"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:37.532Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.268Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="urbanised"/>
         <tag k="place" v="village"/>
@@ -148,7 +148,7 @@
         <nd ref="-29"/>
         <nd ref="-30"/>
         <nd ref="-26"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:37.532Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.268Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="correctional"/>
         <tag k="place" v="village"/>
@@ -170,7 +170,7 @@
         <nd ref="-24"/>
         <nd ref="-25"/>
         <nd ref="-21"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:37.532Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.268Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="residential"/>
         <tag k="place" v="town"/>
@@ -193,7 +193,7 @@
         <nd ref="-19"/>
         <nd ref="-20"/>
         <nd ref="-16"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:37.531Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.268Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="institute"/>
         <tag k="place" v="town"/>
@@ -217,7 +217,7 @@
         <nd ref="-14"/>
         <nd ref="-15"/>
         <nd ref="-11"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:37.531Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.267Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="commercial"/>
         <tag k="place" v="city"/>
@@ -241,7 +241,7 @@
         <nd ref="-9"/>
         <nd ref="-10"/>
         <nd ref="-6"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:37.531Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.267Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="industrial"/>
         <tag k="place" v="city"/>
@@ -266,7 +266,7 @@
         <nd ref="-4"/>
         <nd ref="-5"/>
         <nd ref="-1"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:37.409Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.148Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="place" v="yes"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>

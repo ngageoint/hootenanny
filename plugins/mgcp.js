@@ -579,7 +579,7 @@ mgcp = {
         if (attrs.HWT && attrs.HWT !== '0') tags.amenity = 'place_of_worship';
 
         // Add the LayerName to the source
-        tags.source = 'mgcp:' + layerName.toLowerCase();
+        if ((! tags.source) && layerName !== '') tags.source = 'mgcp:' + layerName.toLowerCase();
 
         // If we have a UID, store it
         if (tags.uuid)
@@ -740,8 +740,9 @@ mgcp = {
                 var tTags = JSON.parse(tObj.tags)
                 for (i in tTags)
                 {
-                    print('Memo: Add: ' + i + ' = ' + tTags[i]);
-                    if (tags[tTags[i]]) print('Overwrite:' + i + ' = ' + tTags[i]);
+                    // Debug
+                    // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking TXT, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
 
@@ -757,7 +758,6 @@ mgcp = {
     {
         // Remove Hoot assigned tags for the source of the data
         if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-        if (tags.source) delete tags.source;
         if (tags.area) delete tags.area;
         if (tags['error:circular']) delete tags['error:circular'];
         if (tags['hoot:status']) delete tags['hoot:status'];
@@ -956,7 +956,7 @@ mgcp = {
         if (tags.bridge == 'viaduct')
         {
             tags.bridge = 'yes';
-            tags['source:text'] = translate.appendValue(tags['source:text'],'Viaduct',';');
+            tags.note = translate.appendValue(tags.note,'Viaduct',';');
         }
 
         // Keep looking for an FCODE
@@ -1436,7 +1436,7 @@ mgcp = {
                 for (var i in tags)
                 {
                     // Clean out all of the "source:XXX" tags to save space
-                    // if (i.indexOf('source:') !== -1) delete tags[i];
+                    if (i.indexOf('source:') !== -1) delete tags[i];
                     if (i.indexOf('error:') !== -1) delete tags[i];
                     if (i.indexOf('hoot:') !== -1) delete tags[i];
                 }
