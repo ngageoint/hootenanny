@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -669,7 +669,7 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
   _updateChangesetEnvelope(envelopeNode);
 
-  LOG_DEBUG("Inserted node with ID: " << QString::number(id));
+  //LOG_DEBUG("Inserted node with ID: " << QString::number(id));
 
   return true;
 }
