@@ -52,7 +52,7 @@ Feature: OSM/TDS Switcher
         And I append "preset-search-input" input with "i"
         And I append "preset-search-input" input with "l"
         And I append "preset-search-input" input with "d"
-        And I wait 5 "seconds" to see "Building Superstructure (AL018)"
+        And I wait 10 "seconds" to see "Building Superstructure (AL018)"
         And I click the "div.label" with text "Building (AL013)"
         And I should see a "g.tag-building" on the map
         And I click the "map" at "440","425"
