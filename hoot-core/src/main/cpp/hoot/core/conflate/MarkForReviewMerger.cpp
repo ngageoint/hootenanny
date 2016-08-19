@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -58,7 +58,10 @@ void MarkForReviewMerger::apply(const OsmMapPtr& map,
     ElementPtr e1 = map->getElement(eid1);
     ElementPtr e2 = map->getElement(eid2);
 
-    ReviewMarker().mark(map, e1, e2, _note, _reviewType, _score);
+    if (e1.get() && e2.get())
+    {
+      ReviewMarker().mark(map, e1, e2, _note, _reviewType, _score);
+    }
   }
 }
 
