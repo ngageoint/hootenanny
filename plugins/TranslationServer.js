@@ -52,19 +52,19 @@ process.argv.forEach(function (val, index, array) {
   }
 });
 
-// This is when the cluster master gets invoked
-if(cluster.isMaster){
-	// Spawn off http server process by requested thread count
-	for(var i=0; i<nCPU; i++) {
-		cluster.fork();
-	}
-//This doesn't seem right.  When calling cluster.disconnect
-//and the workers get stopped, this code launches a new process
-	// // This is for if one child process dies then create new one
-	// cluster.on('exit', function(worker){
- //    	cluster.fork();
-	// })
-} else {
+// // This is when the cluster master gets invoked
+// if(cluster.isMaster){
+// 	// Spawn off http server process by requested thread count
+// 	for(var i=0; i<nCPU; i++) {
+// 		cluster.fork();
+// 	}
+// //This doesn't seem right.  When calling cluster.disconnect
+// //and the workers get stopped, this code launches a new process
+// 	// // This is for if one child process dies then create new one
+// 	// cluster.on('exit', function(worker){
+//  //    	cluster.fork();
+// 	// })
+// } else {
 	// We create child process http server
 	// and we all listen on serverPort
 	http.createServer(
@@ -102,7 +102,7 @@ if(cluster.isMaster){
 
 		}
 	).listen(serverPort);
-}
+// }
 
 var getCapabilities = function(request, response)
 {
@@ -153,7 +153,10 @@ var osmtotds = function(request, response)
 		request.on('end', function(data){
 			populateOsmToTdsmap();
 
-			postHandler(alldata, response, osmToTdsMap);
+			var result = postHandler(alldata, osmToTdsMap);
+		    response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
+			response.end(JSON.stringify(result));
+
 		});
 	} else if(request.method === "GET"){
 		// When we get get request on  /osmtotds then produce fields based on supplied fcode
@@ -232,7 +235,9 @@ var tdstoosm = function(request, response)
 		request.on('end', function(data){
 			populateTdsToOsmMap();
 
-			postHandler(alldata, response, tdsToOsmMap);
+			var result = postHandler(alldata, tdsToOsmMap);
+            response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
+            response.end(JSON.stringify(result));
 		});
 	} else if(request.method === "GET"){
 		/*response.writeHead(404, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
@@ -429,7 +434,7 @@ var getTaginfoKeys = function(request, response)
 }
 
 // This is where all interesting things happen interfacing with hoot core lib directly
-var postHandler = function(data, response, translatorMap)
+var postHandler = function(data, translatorMap)
 {
 	var hoot = require(HOOT_HOME + '/lib/HootJs');
 	logVerbose = hoot.logVerbose;
@@ -462,9 +467,7 @@ var postHandler = function(data, response, translatorMap)
     }
 
     result.elapsed = new Date().getTime() - start;
-
-    response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
-	response.end(JSON.stringify(result));
+    return result;
 }
 
 var getFilteredSchema = function(request, response) {
