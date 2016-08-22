@@ -26,14 +26,14 @@
  */
 
 // Hoot
-#include <hoot/core/TestUtils.h>
+#include "../../TestUtils.h"
 #include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/rnd/conflate/poi-polygon/PoiPolygonMatch.h>
-#include <hoot/rnd/conflate/poi-polygon/PoiPolygonMerger.h>
-#include <hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreator.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot

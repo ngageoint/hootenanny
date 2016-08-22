@@ -37,7 +37,7 @@
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/rnd/conflate/poi-polygon/PoiPolygonMatch.h>
+#include "PoiPolygonMatch.h"
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 
 // Standard

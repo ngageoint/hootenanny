@@ -26,8 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/TestUtils.h>
-#include <hoot/rnd/conflate/poi-polygon/PoiPolygonMatch.h>
+#include "../../TestUtils.h"
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 
 namespace hoot
 {

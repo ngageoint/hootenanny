@@ -51,6 +51,7 @@ SOURCES += \
     src/test/cpp/hoot/js/JavaScriptTranslatorTest.cpp \
     src/test/cpp/hoot/js/conflate/js/ScriptMatchTest.cpp \
     src/test/cpp/hoot/js/conflate/js/ScriptMatchCreatorTest.cpp \
+    src/test/cpp/hoot/js/conflate/js/PoiBuildingMergerJsTest.cpp
 
 HEADERS += \
 
@@ -103,7 +104,8 @@ SOURCES += \
     src/main/cpp/hoot/js/visitors/JsFunctionVisitor.cpp \
     src/main/cpp/hoot/js/schema/TagDifferencerJs.cpp \
     src/main/cpp/hoot/js/schema/JsonOsmSchemaLoader.cpp \
-    src/main/cpp/hoot/js/algorithms/string/MostEnglishNameJs.cpp
+    src/main/cpp/hoot/js/algorithms/string/MostEnglishNameJs.cpp \
+    src/main/cpp/hoot/js/conflate/PoiBuildingMergerJs.cpp
 
 HEADERS += \
     src/main/cpp/hoot/js/HelloWorld.h \
@@ -157,7 +159,8 @@ HEADERS += \
     src/main/cpp/hoot/js/visitors/JsFunctionVisitor.h \
     src/main/cpp/hoot/js/schema/TagDifferencerJs.h \
     src/main/cpp/hoot/js/schema/JsonOsmSchemaLoader.h \
-    src/main/cpp/hoot/js/algorithms/string/MostEnglishNameJs.h
+    src/main/cpp/hoot/js/algorithms/string/MostEnglishNameJs.h \
+    src/main/cpp/hoot/js/conflate/PoiBuildingMergerJs.h
 
 FORMS +=
 

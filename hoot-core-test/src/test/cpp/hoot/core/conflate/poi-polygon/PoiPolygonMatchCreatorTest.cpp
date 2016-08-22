@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,10 +26,10 @@
  */
 
 // Hoot
-#include <hoot/core/TestUtils.h>
+#include "../../TestUtils.h"
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatchCreator.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>

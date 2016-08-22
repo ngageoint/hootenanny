@@ -40,7 +40,7 @@ namespace hoot
 {
 
 PoiPolygonMerger::PoiPolygonMerger(const set< pair<ElementId, ElementId> >& pairs) :
-  _pairs(pairs)
+_pairs(pairs)
 {
   assert(_pairs.size() >= 1);
 }

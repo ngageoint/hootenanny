@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,13 +26,13 @@
  */
 
 // Hoot
-#include <hoot/core/TestUtils.h>
+#include "../../TestUtils.h"
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/rnd/conflate/poi-polygon/PoiPolygonMerger.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 
 namespace hoot
 {
