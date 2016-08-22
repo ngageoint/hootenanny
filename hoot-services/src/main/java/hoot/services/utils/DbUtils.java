@@ -33,6 +33,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -145,29 +146,25 @@ public final class DbUtils {
     /**
      * Gets the map id list from map name
      *
-     * @param conn
+     * @param connection
      * @param mapName
      * @return List of map ids
      */
-    public static List<Long> getMapIdsByName(Connection conn, String mapName) {
-        List<Long> mapIds = new SQLQuery<>(conn, getConfiguration())
+    public static List<Long> getMapIdsByName(Connection connection, String mapName) {
+        return new SQLQuery<>(connection, getConfiguration())
                 .select(QMaps.maps.id)
                 .from(QMaps.maps)
                 .where(QMaps.maps.displayName.eq(mapName))
                 .orderBy(QMaps.maps.id.asc())
                 .fetch();
-
-        return mapIds;
     }
 
     public static String getDisplayNameById(Connection conn, long mapId) {
-        String displayName = new SQLQuery<>(conn, getConfiguration())
+        return new SQLQuery<>(conn, getConfiguration())
                 .select(QMaps.maps.displayName)
                 .from(QMaps.maps)
                 .where(QMaps.maps.id.eq(mapId))
                 .fetchFirst();
-
-        return displayName;
     }
 
     // TODO: use reflection to get these three element count queries down to one
@@ -274,6 +271,7 @@ public final class DbUtils {
         if (!mapIds.isEmpty()) {
             long mapId = mapIds.get(0);
             String dbname = null;
+
             try {
                 dbname = conn.getCatalog() + "_renderdb_" + mapId;
             }
@@ -284,13 +282,14 @@ public final class DbUtils {
             try {
                 DataDefinitionManager.deleteDb(dbname, false);
             }
-            catch (SQLException e) {
-                logger.warn("Error deleting {} database!", dbname, e);
+            catch (SQLException e1) {
+                logger.warn("Error deleting {} database!", dbname, e1);
+
                 try {
                     DataDefinitionManager.deleteDb(conn.getCatalog() + "_renderdb_" + mapName, false);
                 }
-                catch (SQLException ee) {
-                    logger.warn("No renderdb present to delete for {} or map id {}", mapName, mapId, ee);
+                catch (SQLException e2) {
+                    logger.warn("No renderdb present to delete for {} or map id {}", mapName, mapId, e2);
                 }
             }
         }
@@ -301,13 +300,13 @@ public final class DbUtils {
     /**
      *
      *
-     * @param conn
+     * @param connection
      * @param mapName
      */
-    public static void deleteOSMRecordByName(Connection conn, String mapName) {
+    public static void deleteOSMRecordByName(Connection connection, String mapName) {
         Configuration configuration = getConfiguration();
 
-        List<Long> mapIds = new SQLQuery<>(conn, configuration)
+        List<Long> mapIds = new SQLQuery<>(connection, configuration)
                 .select(QMaps.maps.id)
                 .from(QMaps.maps)
                 .where(QMaps.maps.displayName.equalsIgnoreCase(mapName))
@@ -318,7 +317,7 @@ public final class DbUtils {
 
             deleteMapRelatedTablesByMapId(mapId);
 
-            new SQLDeleteClause(conn, configuration, QMaps.maps)
+            new SQLDeleteClause(connection, configuration, QMaps.maps)
                     .where(QMaps.maps.displayName.eq(mapName))
                     .execute();
         }
@@ -326,15 +325,15 @@ public final class DbUtils {
     
     /**
     *
-    * @param conn
+    * @param connection
     * @param mapName
     */
-    public static void deleteBookmarksById(Connection conn, String mapName) {
-        List<Long> mapIds = getMapIdsByName(conn, mapName);
+    public static void deleteBookmarksById(Connection connection, String mapName) {
+        List<Long> mapIds = getMapIdsByName(connection, mapName);
 
         if (!mapIds.isEmpty()) {
             long mapId = mapIds.get(0);
-            new SQLDeleteClause(conn, getConfiguration(), QReviewBookmarks.reviewBookmarks)
+            new SQLDeleteClause(connection, getConfiguration(), QReviewBookmarks.reviewBookmarks)
                     .where(QReviewBookmarks.reviewBookmarks.mapId.eq(mapId))
                     .execute();
         }
@@ -369,20 +368,21 @@ public final class DbUtils {
             throw new RuntimeException("Error trying to update map's tags.  mapId = " + mapId, e);
         }
 
+
         return execResult;
     }
 
-    public static Map<String, String> getMapsTableTags(long mapId, Connection conn) {
+    public static Map<String, String> getMapsTableTags(long mapId, Connection connection) {
         Map<String, String> tags = new HashMap<>();
 
-        List<Object> res = new SQLQuery<>(conn, getConfiguration(mapId))
+        List<Object> results = new SQLQuery<>(connection, getConfiguration(mapId))
                 .select(QMaps.maps.tags)
                 .from(QMaps.maps)
                 .where(QMaps.maps.id.eq(mapId))
                 .fetch();
 
-        if (!res.isEmpty()) {
-            Object oTag = res.get(0);
+        if (!results.isEmpty()) {
+            Object oTag = results.get(0);
             tags = PostgresUtils.postgresObjToHStore(oTag);
         }
 
@@ -849,5 +849,30 @@ public final class DbUtils {
         }
 
         return null;
+    }
+
+    /**
+     * Returns table size in byte
+     */
+    public static long getTableSizeInBytes(String tableName) {
+        long tableSize = 0;
+
+        try (Connection conn = createConnection()) {
+            try (Statement stmt = conn.createStatement()) {
+                String sql = "select pg_total_relation_size('" + tableName + "') as tablesize";
+                try (ResultSet rs = stmt.executeQuery(sql)){
+                    while (rs.next()) {
+                        tableSize = rs.getLong("tablesize");
+                    }
+                }
+            }
+        }
+        catch (SQLException e) {
+            String msg = "Error retrieving table size in bytes of " + tableName + " table!";
+            throw new RuntimeException(msg, e);
+        }
+
+
+        return tableSize;
     }
 }

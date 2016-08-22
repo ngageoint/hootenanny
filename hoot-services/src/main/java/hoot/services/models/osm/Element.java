@@ -36,12 +36,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -269,19 +269,12 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      * @return a string map with tag key/value pairs
      */
     public Map<String, String> getTags() {
-        Object oTags = null;
         try {
-            oTags = MethodUtils.invokeMethod(record, "getTags");
-
-            if (oTags instanceof PGobject) {
-                return PostgresUtils.postgresObjToHStore(MethodUtils.invokeMethod(record, "getTags"));
-            }
+            return PostgresUtils.postgresObjToHStore(MethodUtils.invokeMethod(record, "getTags"));
         }
         catch (Exception e) {
             throw new RuntimeException("Error invoking getTags()", e);
         }
-
-        return (Map<String, String>) oTags;
     }
 
     /**
@@ -737,11 +730,8 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     org.w3c.dom.Element addTagsXml(org.w3c.dom.Element elementXml) {
         try {
             Document doc = elementXml.getOwnerDocument();
-            Map<String, String> tags = getTags();
-
-            if (tags.isEmpty()) {
-                return null;
-            }
+            // We want tags map sorted
+            Map<String, String> tags = new TreeMap<>(this.getTags());
 
             for (Map.Entry<String, String> tagEntry : tags.entrySet()) {
                 org.w3c.dom.Element tagElement = doc.createElement("tag");

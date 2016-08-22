@@ -37,8 +37,12 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.sql.SQLQuery;
+
 import hoot.services.models.review.ReviewQueryMapper;
 import hoot.services.models.review.ReviewableItem;
+import hoot.services.utils.DbUtils;
 
 
 class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
@@ -53,27 +57,38 @@ class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQu
         // using random() in a SQL query so far, no harm is done for the time being.
         if (Boolean.parseBoolean(SEED_RANDOM_QUERIES)) {
             double seed = Double.parseDouble(RANDOM_QUERY_SEED);
-
             if ((seed >= -1.0) && (seed <= 1.0)) {
-                try (Statement stmt = super.getConnection().createStatement()) {
-                    // After executing this, all subsequent calls to random() will be seeded.
-                    try (ResultSet rs = stmt.executeQuery("select setseed(" + seed + ");")) {
-                    }
-                }
-                catch (SQLException e) {
-                    throw new RuntimeException("Error setting seeed!", e);
-                }
+                new SQLQuery<>(super.getConnection(), DbUtils.getConfiguration())
+                        .select(Expressions.numberTemplate(Double.class, "setseed(" + seed + ");"))
+                        .from()
+                        .fetch();
             }
         }
     }
+
+        /*
+            SQLQuery<Tuple> reviewableCurrentRelSubQ = SQLExpressions
+                .select(currentRelations.id,
+                        Expressions.stringTemplate("tags->'hoot:review:needs'").as("needreview"))
+                .from(currentRelations)
+                .where(Expressions.booleanTemplate("exist(tags,'hoot:review:needs')"));
+     */
+
 
     @Override
     public ReviewQueryMapper execQuery() {
         ReviewableItem reviewableItem = new ReviewableItem(-1, getMapId(), -1);
 
+        String sql = "select id as relid, tags->'hoot:review:sort_order' as seq " +
+                     "from current_relations_" + getMapId() + " " +
+                     "where tags->'hoot:review:needs' = 'yes' " +
+                     "order by random() limit 1";
+
+
+
         try (Connection connection = getConnection()){
             try (Statement stmt = connection.createStatement()) {
-                try (ResultSet rs = stmt.executeQuery(getQueryString())) {
+                try (ResultSet rs = stmt.executeQuery(sql)) {
                     long nResCnt = 0;
                     long relId = -1;
                     String seqId = "-1";
@@ -100,10 +115,5 @@ class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQu
         }
 
         return reviewableItem;
-    }
-
-    private String getQueryString() {
-        return "select id as relid, tags->'hoot:review:sort_order' as seq from current_relations_" + getMapId()
-                + " where tags->'hoot:review:needs' = 'yes' order by random() limit 1";
     }
 }

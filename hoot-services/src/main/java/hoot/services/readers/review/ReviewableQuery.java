@@ -47,16 +47,22 @@ class ReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
         seqId = seqid;
     }
 
-    private String getQueryString() {
-        return "select id from current_relations_" + getMapId()
-                + " where tags->'hoot:review:needs' = 'yes' and tags->'hoot:review:sort_order'='" + seqId + "'";
-    }
+    /*
+            SQLQuery<Tuple> reviewableCurrentRelSubQ = SQLExpressions
+                .select(currentRelations.id,
+                        Expressions.stringTemplate("tags->'hoot:review:needs'").as("needreview"))
+                .from(currentRelations)
+                .where(Expressions.booleanTemplate("exist(tags,'hoot:review:needs')"));
+     */
 
     @Override
     public ReviewQueryMapper execQuery() {
         ReviewableItem ret;
+        String sql = "select id from current_relations_" + getMapId() + " " +
+                     "where tags->'hoot:review:needs' = 'yes' and tags->'hoot:review:sort_order'='" + seqId + "'";
+
         try (Statement stmt = super.getConnection().createStatement()) {
-            try (ResultSet rs = stmt.executeQuery(getQueryString())) {
+            try (ResultSet rs = stmt.executeQuery(sql)) {
                 long nResCnt = 0;
                 long relid = -1;
 
@@ -73,6 +79,7 @@ class ReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
         catch (SQLException e) {
             throw new RuntimeException("Error executing query!", e);
         }
+
 
         return ret;
     }

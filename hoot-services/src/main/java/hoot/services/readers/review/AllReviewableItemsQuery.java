@@ -231,7 +231,7 @@ class AllReviewableItemsQuery extends ReviewableQueryBase implements IReviewable
      *            - [node|way|relation]
      * @return - SQL String
      */
-    SQLQuery<CurrentRelationMembers> getReviewableRelationMembersCountByTypeQuery(DbUtils.nwr_enum memberType) {
+    private SQLQuery<CurrentRelationMembers> getReviewableRelationMembersCountByTypeQuery(DbUtils.nwr_enum memberType) {
         SQLQuery<CurrentRelationMembers> query =
                 new SQLQuery<>(super.getConnection(), DbUtils.getConfiguration(getMapId()))
                         .select(currentRelationMembers)
@@ -310,7 +310,7 @@ class AllReviewableItemsQuery extends ReviewableQueryBase implements IReviewable
      * 
      * @return - SQL query string
      */
-    SQLQuery<Tuple> getReviewableRelatioWithWayMembersCentroidInBboxQuery() {
+    private SQLQuery<Tuple> getReviewableRelatioWithWayMembersCentroidInBboxQuery() {
         if (bbox == null) {
             throw new IllegalArgumentException("Invalid Bounding box.");
         }
@@ -445,7 +445,7 @@ class AllReviewableItemsQuery extends ReviewableQueryBase implements IReviewable
      * 
      * @return - SQL query string
      */
-    SQLQuery<Tuple> getReviewableRelatioWithNodeMembersCentroidInBboxQuery() {
+    private SQLQuery<Tuple> getReviewableRelatioWithNodeMembersCentroidInBboxQuery() {
         if (bbox == null) {
             throw new IllegalArgumentException("Invalid Bounding box.");
         }

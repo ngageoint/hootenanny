@@ -58,10 +58,10 @@ public class ReviewReferencesRetriever {
     private static final Logger logger = LoggerFactory.getLogger(ReviewReferencesRetriever.class);
     private static final QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
 
-    private final Connection conn;
+    private final Connection connection;
 
-    public ReviewReferencesRetriever(Connection conn) {
-        this.conn = conn;
+    public ReviewReferencesRetriever(Connection connection) {
+        this.connection = connection;
     }
 
     private List<Long> getAllReviewRelations(ElementInfo queryElementInfo, long mapId) {
@@ -76,7 +76,7 @@ public class ReviewReferencesRetriever {
 
         List<Long> relationIds = new ArrayList<>();
 
-        try (Statement stmt = conn.createStatement()) {
+        try (Statement stmt = connection.createStatement()) {
             try (ResultSet rs = stmt.executeQuery(sql)){
                 while (rs.next()) {
                     relationIds.add(rs.getLong(1));
@@ -88,6 +88,7 @@ public class ReviewReferencesRetriever {
         }
 
         return relationIds;
+
     }
 
     /**
@@ -102,13 +103,13 @@ public class ReviewReferencesRetriever {
     public List<ReviewRef> getAllReferences(ElementInfo queryElementInfo) {
         logger.debug("requestingElementInfo: {}", queryElementInfo);
 
-        long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId(), conn);
+        long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId(), connection);
 
         // check for query element existence
         Set<Long> elementIds = new HashSet<>();
         elementIds.add(queryElementInfo.getId());
         if ((StringUtils.trimToNull(queryElementInfo.getType()) == null) || !Element.allElementsExist(mapIdNum,
-                Element.elementTypeFromString(queryElementInfo.getType()), elementIds, conn)) {
+                Element.elementTypeFromString(queryElementInfo.getType()), elementIds, connection)) {
             ReviewUtils.handleError(new Exception("Element with ID: " + queryElementInfo + " and type: "
                     + queryElementInfo.getType() + " does not exist."), "");
         }
@@ -121,7 +122,7 @@ public class ReviewReferencesRetriever {
         if (!allReviewRelationIds.isEmpty()) {
             // select all relation members where themember's id is not equal to the requesting element's id and the
             // member's type is not = to the requesting element's type
-            List<CurrentRelationMembers> referencedMembers = new SQLQuery<>(conn, DbUtils.getConfiguration(mapIdNum))
+            List<CurrentRelationMembers> referencedMembers = new SQLQuery<>(connection, DbUtils.getConfiguration(mapIdNum))
                     .select(QCurrentRelationMembers.currentRelationMembers)
                     .from(currentRelationMembers)
                     .where(currentRelationMembers.relationId.in(allReviewRelationIds))

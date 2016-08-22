@@ -183,9 +183,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
 
         Assert.assertNotNull(responseData);
-
         verifyFirstNodeWasReturned(responseData, String.valueOf(nodeIdsArr[0]), changesetId, originalBounds);
-
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 
