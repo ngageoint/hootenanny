@@ -50,8 +50,7 @@ SOURCES += \
     src/test/cpp/hoot/js/util/UuidHelperJsTest.cpp \
     src/test/cpp/hoot/js/JavaScriptTranslatorTest.cpp \
     src/test/cpp/hoot/js/conflate/js/ScriptMatchTest.cpp \
-    src/test/cpp/hoot/js/conflate/js/ScriptMatchCreatorTest.cpp \
-    src/test/cpp/hoot/js/conflate/js/PoiBuildingMergerJsTest.cpp
+    src/test/cpp/hoot/js/conflate/js/ScriptMatchCreatorTest.cpp
 
 HEADERS += \
 

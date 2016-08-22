@@ -26,39 +26,56 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
-#include <hoot/core/TestUtils.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/js/conflate/PoiBuildingMergerJs.h>
-
-// Qt
-#include <QVariant>
-
-#include <v8.h>
-#include <iostream>
-#include <string>
-
-using namespace v8;
+#include "../../TestUtils.h"
+#include <hoot/core/conflate/poi-polygon/PoiBuildingMerger.h>
 
 namespace hoot
 {
 
-class PoiBuildingMergerJsTest : public CppUnit::TestFixture
+class PoiBuildingMergerTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(PoiBuildingMergerJsTest);
-  //CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST_SUITE(PoiBuildingMergerTest);
+  //CPPUNIT_TEST(mergeWayAsBuildingTest);
+  //CPPUNIT_TEST(mergeRelationAsBuildingTest);
+  //CPPUNIT_TEST(mergeMissingPoiInputTest);
+  //CPPUNIT_TEST(mergeMissingBuildingInputTest);
+  //CPPUNIT_TEST(mergeBadPoiIdTest);
+  //CPPUNIT_TEST(mergeBadBuildingIdTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runTest()
+  void mergeWayAsBuildingTest()
   {
 
   }
 
+  void mergeRelationAsBuildingTest()
+  {
+
+  }
+
+  void mergeMissingPoiInputTest()
+  {
+
+  }
+
+  void mergeMissingBuildingInputTest()
+  {
+
+  }
+
+  void mergeBadPoiIdTest()
+  {
+
+  }
+
+  void mergeBadBuildingIdTest()
+  {
+
+  }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiBuildingMergerJsTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiBuildingMergerTest, "quick");
 
 }
