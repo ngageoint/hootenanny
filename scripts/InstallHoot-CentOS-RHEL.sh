@@ -572,7 +572,7 @@ if [ "$INSTALL_HOOT_APPLICATION" == "true" ]; then
     # this command exactly as written, from the exact directory shown here.  If not,
     # unnecessary updates will be applied, which will result in SQL errors.
     cd hootenanny-services-$HOOT_VERSION/WEB-INF
-    liquibase --contexts=default,production --changeLogFile=classes/db/db.changelog-master.xml --promptForNonLocalDatabase=false --defaultsFile=classes/db/liquibase.properties --logLevel=warning --classpath=lib/postgresql-9.1-901-1.jdbc4.jar --url jdbc:postgresql:hoot update #&> /usr/local/test
+    liquibase --contexts=default,production --changeLogFile=classes/db/db.changelog-master.xml --promptForNonLocalDatabase=false --defaultsFile=classes/db/liquibase.properties --logLevel=warning --classpath=lib/postgresql-9.4.1208.jre7.jar --url jdbc:postgresql:hoot update #&> /usr/local/test
     cd $TEMP_DIR
     rm -rf hootenanny-services-$HOOT_VERSION
     echo "hoot database updated."

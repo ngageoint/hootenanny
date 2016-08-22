@@ -29,14 +29,17 @@ package hoot.services.controllers.job;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
+import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
 
 import hoot.services.UnitTest;
 import hoot.services.models.review.ReviewResolverRequest;
@@ -48,7 +51,11 @@ import hoot.services.utils.RandomNumberGenerator;
 
 public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract {
     public ReviewResourceResolveAllTest() {
-        super("hoot.services.controllers.job");
+    }
+
+    @Override
+    protected Application configure() {
+        return new ResourceConfig(ReviewResource.class);
     }
 
     @Test
@@ -58,10 +65,10 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract {
         /* final long changesetId = */ testUtils.populateReviewDataForAllDataTypes(mapId, userId);
 
         ReviewResolverResponse response =
-                resource()
-                        .path("/review/resolveall").type(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .put(ReviewResolverResponse.class, new ReviewResolverRequest(String.valueOf(mapId)));
+            target("/review/resolveall")
+                .request(MediaType.APPLICATION_JSON)
+                .put(Entity.json(new ReviewResolverRequest(String.valueOf(mapId))),
+                     ReviewResolverResponse.class);
 
         Statement stmt = null;
         ResultSet rs = null;
@@ -124,33 +131,35 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testSetAllReviewsResolvedMapDoesntExist() throws Exception {
         try {
-            resource().path("/review/resolveall").type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
-                    .put(new ReviewResolverRequest(String
-                            .valueOf((long) RandomNumberGenerator.nextDouble(mapId + 10 ^ 4, Integer.MAX_VALUE))));
+            target("/review/resolveall")
+                .request(MediaType.APPLICATION_JSON)
+                .put(Entity.json(
+                        new ReviewResolverRequest(String.valueOf(
+                                (long) RandomNumberGenerator.nextDouble((mapId + 10) ^ 4, Integer.MAX_VALUE)))),
+                        ReviewResolverResponse.class);
         }
-        catch (UniformInterfaceException e) {
+        catch (WebApplicationException e) {
             Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
-            Assert.assertTrue(e.getResponse().getEntity(String.class).contains("No map exists"));
-
+            Assert.assertTrue(e.getResponse().readEntity(String.class).contains("No map exists"));
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testSetAllReviewsResolvedMissingMapIdParam() throws Exception {
         try {
-            resource().path("/review/resolveall").type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
-                    .put(new ReviewResolverRequest());
+            target("/review/resolveall")
+                    .request(MediaType.APPLICATION_JSON)
+                    .put(Entity.json(new ReviewResolverRequest()),
+                            ReviewResolverResponse.class);
         }
-        catch (UniformInterfaceException e) {
+        catch (WebApplicationException e) {
             Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
-            // Assert.assertTrue(
-            // e.getResponse().getEntity(String.class).contains(""));
             throw e;
         }
     }

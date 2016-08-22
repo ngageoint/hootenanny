@@ -490,7 +490,7 @@ public class MapResource {
             handleError(e, mapId, BBox);
         }
 
-        return Response.ok(new DOMSource(responseDoc), MediaType.TEXT_XML).header("Content-type", MediaType.TEXT_XML)
+        return Response.ok(new DOMSource(responseDoc))
                 .header("Content-Disposition", "attachment; filename=\"map.osm\"").build();
     }
 
@@ -571,7 +571,7 @@ public class MapResource {
             handleError(e, mapId, bbox);
         }
 
-        return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(ret.toString()).build();
     }
 
     @GET
@@ -648,7 +648,7 @@ public class MapResource {
             handleError(e, mapId, "-180,-90,180,90");
         }
 
-        return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(ret.toString()).build();
     }
 
     private static void handleError(Exception e, String mapId, String requestSnippet) {
@@ -717,7 +717,7 @@ public class MapResource {
         JSONObject res = new JSONObject();
         res.put("jobId", jobId);
 
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(res.toJSONString()).build();
     }
 
     /**
@@ -770,7 +770,7 @@ public class MapResource {
         JSONObject res = new JSONObject();
         res.put("success", true);
 
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(res.toJSONString()).build();
     }
 
     /**
@@ -822,7 +822,7 @@ public class MapResource {
         res.put("success", true);
         res.put("folderId", newId);
 
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(res.toJSONString()).build();
     }
 
     /**
@@ -873,7 +873,7 @@ public class MapResource {
         JSONObject res = new JSONObject();
         res.put("success", true);
 
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(res.toJSONString()).build();
     }
 
     /**
@@ -911,7 +911,7 @@ public class MapResource {
         JSONObject res = new JSONObject();
         res.put("success", true);
 
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(res.toJSONString()).build();
     }
 
     /**
@@ -964,7 +964,7 @@ public class MapResource {
         JSONObject res = new JSONObject();
         res.put("success", true);
 
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(res.toJSONString()).build();
     }
 
     public String updateTagsDirect(java.util.Map<String, String> tags, String mapName) throws SQLException {
@@ -1082,7 +1082,7 @@ public class MapResource {
             handleError(e, mapId, "");
         }
 
-        return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(ret.toString()).build();
     }
 
     public static long validateMap(String mapId, Connection conn) {

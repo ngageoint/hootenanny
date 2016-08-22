@@ -26,14 +26,17 @@
  */
 package hoot.services;
 
+import static hoot.services.HootProperties.TILE_SERVER_PATH;
+
+import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-import hoot.services.controllers.ingest.BasemapResource;
 import hoot.services.controllers.ogr.TranslatorResource;
 import hoot.services.controllers.services.P2PResource;
 
@@ -51,20 +54,20 @@ public class HootServletContext implements ServletContextListener {
         p2PRes = new P2PResource();
         p2PRes.startP2PService();
 
-        // Doing this to make sure we create ingest folder
-        try {
-            BasemapResource.createTileServerPath();
-        }
-        catch (IOException ioe) {
-            throw new RuntimeException("Error creating tile server path!", ioe);
-        }
-
         // Bridge/route all JUL log records to the SLF4J API.
         // Some third-party components use Java Util Logging (JUL). We want to
         // route those calls through SLF4J.
         initSLF4JBridgeHandler();
 
         HootProperties.init();
+
+        // Doing this to make sure we create ingest folder
+        try {
+            createTileServerPath(TILE_SERVER_PATH);
+        }
+        catch (IOException ioe) {
+            throw new RuntimeException("Error creating tile server path: " + TILE_SERVER_PATH, ioe);
+        }
     }
 
     private static void initSLF4JBridgeHandler() {
@@ -80,5 +83,12 @@ public class HootServletContext implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent sce) {
         TranslatorResource.stopTranslationService();
         p2PRes.stopP2PService();
+    }
+
+    private static void createTileServerPath(String path) throws IOException {
+        File file = new File(path);
+        if (!file.exists()) {
+            FileUtils.forceMkdir(file);
+        }
     }
 }

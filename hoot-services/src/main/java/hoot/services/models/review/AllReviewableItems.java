@@ -41,7 +41,7 @@ public class AllReviewableItems implements ReviewQueryMapper {
     private Map<Long, ReviewableItemBboxInfo> reviewableItems;
 
     public AllReviewableItems(long mapid, Map<Long, ReviewableItemBboxInfo> reviewableItems) {
-        mapId = mapid;
+        this.mapId = mapid;
         this.reviewableItems = reviewableItems;
     }
 
@@ -50,7 +50,7 @@ public class AllReviewableItems implements ReviewQueryMapper {
     }
 
     public void setMapId(long mapid) {
-        mapId = mapid;
+        this.mapId = mapid;
     }
 
     public Map<Long, ReviewableItemBboxInfo> getReviewableItems() {
@@ -61,12 +61,12 @@ public class AllReviewableItems implements ReviewQueryMapper {
         this.reviewableItems = reviewableItems;
     }
 
-    public boolean getOverFlow() {
+    public boolean getOverflow() {
         return overflow;
     }
 
-    public void setOverFlow(boolean isOverFlow) {
-        overflow = isOverFlow;
+    public void setOverflow(boolean overflow) {
+        this.overflow = overflow;
     }
 
     @Override
@@ -108,10 +108,10 @@ public class AllReviewableItems implements ReviewQueryMapper {
             }
         }
 
-        JSONObject geojson = new JSONObject();
-        geojson.put("type", "FeatureCollection");
-        geojson.put("features", features);
+        JSONObject geoJson = new JSONObject();
+        geoJson.put("type", "FeatureCollection");
+        geoJson.put("features", features);
 
-        return geojson;
+        return geoJson;
     }
 }

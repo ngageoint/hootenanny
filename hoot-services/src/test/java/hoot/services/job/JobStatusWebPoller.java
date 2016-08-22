@@ -32,6 +32,7 @@ import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import org.json.simple.JSONObject;
@@ -41,7 +42,6 @@ import org.junit.Assert;
 import org.springframework.beans.BeansException;
 
 import com.querydsl.sql.SQLQuery;
-import com.sun.jersey.api.client.WebResource;
 
 import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.models.db.JobStatus;
@@ -54,12 +54,12 @@ import hoot.services.utils.DbUtils;
  */
 public class JobStatusWebPoller {
 
-    private final WebResource webResource;
+    private final WebTarget webTarget;
     private final Connection conn;
     private final int jobStatusPollDelayMs;
 
-    public JobStatusWebPoller(WebResource webResource, Connection conn) {
-        this.webResource = webResource;
+    public JobStatusWebPoller(WebTarget webTarget, Connection conn) {
+        this.webTarget = webTarget;
         this.conn = conn;
 
         // increase this to something long when debugging in debugger to the
@@ -77,7 +77,7 @@ public class JobStatusWebPoller {
      * @throws ParseException
      */
     private JOB_STATUS pollJobStatus(String jobId) throws ParseException {
-        String response = webResource.path("status/" + jobId).accept(MediaType.APPLICATION_JSON).get(String.class);
+        String response = webTarget.path("status/" + jobId).request(MediaType.APPLICATION_JSON).get(String.class);
         JSONObject responseObj = (JSONObject) (new JSONParser()).parse(response);
         assert (responseObj.get("jobId").equals(jobId));
         return JOB_STATUS.valueOf(((String) responseObj.get("status")).toUpperCase());
@@ -92,7 +92,7 @@ public class JobStatusWebPoller {
      * @throws ParseException
      */
     private JSONObject pollJobStatusObj(String jobId) throws ParseException {
-        String response = webResource.path("status/" + jobId).accept(MediaType.APPLICATION_JSON).get(String.class);
+        String response = webTarget.path("status/" + jobId).request(MediaType.APPLICATION_JSON).get(String.class);
         JSONObject responseObj = (JSONObject) (new JSONParser()).parse(response);
         assert (responseObj.get("jobId").equals(jobId));
         return responseObj;

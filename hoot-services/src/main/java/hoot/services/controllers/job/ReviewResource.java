@@ -167,7 +167,6 @@ public class ReviewResource {
         logger.debug("Set all items reviewed for map with ID: {} using changesetId: {}", request.getMapId(), changesetId);
 
         return new ReviewResolverResponse(changesetId);
-
     }
 
     /**
@@ -406,7 +405,7 @@ public class ReviewResource {
                     reader.getAllReviewableItems(mapId, new BoundingBox(minLon, minLat, maxLon, maxLat));
             response = new JSONObject();
 
-            if (result.getOverFlow()) {
+            if (result.getOverflow()) {
                 response.put("warning", "The result size is greater than maximum limit of:" + MAX_RESULT_SIZE
                         + ". Returning truncated data.");
             }

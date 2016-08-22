@@ -118,6 +118,6 @@ public class TranslatorResource extends ServerControllerBase {
         res.put("isRunning", isRunning);
         res.put("port", currentPort);
 
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(res.toJSONString()).build();
     }
 }
