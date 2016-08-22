@@ -539,6 +539,9 @@ tds = {
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
+        // Drop the FCSUBTYPE since we don't use it
+        if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
+
         // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
         // but renamed in different features. Some of these were done during the move from TDSv30 to
         // TDSv40.  We swap these so that there is only one set of rules needed in the One2One section.
@@ -631,9 +634,6 @@ tds = {
             }
         } // End in attrs loop
 
-        // Drop the FCSUBTYPE since we don't use it
-        if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
-
         // Drop all of the XXX Closure default values IFF the associated attributes are
         // not set.
         // Doing this after the main cleaning loop so all of the -999999 values are
@@ -662,7 +662,8 @@ tds = {
 
         if (attrs.F_CODE)
         {
-            // Nothing to do :-)
+            // Drop the the "Not Found" F_CODE. This is from the UI
+            if (attrs.F_CODE == 'Not found') delete attrs.F_CODE;
         }
         else if (attrs.FCODE)
         {
@@ -1022,7 +1023,7 @@ tds = {
                 {
                     // Debug
                     // print('Memo: Add: ' + i + ' = ' + tTags[i]);
-                    if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
 

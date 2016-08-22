@@ -558,6 +558,9 @@ tds61 = {
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
+        // Drop the FCSUBTYPE since we don't use it
+        if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
+
         // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
         // but renamed in different features. We swap these so that there is only one
         // set of rules needed in the One2One section.
@@ -641,13 +644,7 @@ tds61 = {
 
         } // End in attrs loop
 
-        // Drop the FCSUBTYPE since we don't use it
-        if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
-
-        // Drop the the "Not Found" F_CODE. This is from the UI
-        if (attrs.F_CODE == 'Not found') delete attrs.F_CODE;
-
-        // Drop all of the XXX Closure default values IFF the associated attributes are 
+        // Drop all of the XXX Closure default values IFF the associated attributes are
         // not set.
         // Doing this after the main cleaning loop so all of the -999999 values are
         // already gone and we can just check for existance.
@@ -692,7 +689,8 @@ tds61 = {
         // Now find an F_CODE
         if (attrs.F_CODE)
         {
-            // Nothing to do :-)
+            // Drop the the "Not Found" F_CODE. This is from the UI
+            if (attrs.F_CODE == 'Not found') delete attrs.F_CODE;
         }
         else if (attrs.FCODE)
         {
@@ -1083,7 +1081,7 @@ tds61 = {
                 var tTags = JSON.parse(tObj.tags)
                 for (i in tTags)
                 {
-                    if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
 

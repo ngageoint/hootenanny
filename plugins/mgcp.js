@@ -331,6 +331,9 @@ mgcp = {
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
+        // Drop the FCSUBTYPE since we don't use it
+        if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
+
         // The swap list. These are the same attr, just named differently
         // These may get converted back on output.
         var swapList = {
@@ -393,17 +396,20 @@ mgcp = {
 
         if (attrs.F_CODE)
         {
-            // Do nothing
+            // Drop the the "Not Found" F_CODE. This is from the UI
+            // NOTE: We _should_ be getting "FCODE" not "F_CODE" from files/UI
+            if (attrs.F_CODE == 'Not found') delete attrs.F_CODE;
         }
         else if (attrs.FCODE)
         {
             // Swap these since the rest of the lookup tables & TDS use F_CODE
-            attrs.F_CODE = attrs.FCODE;
+            if (attrs.FCODE !== 'Not found') attrs.F_CODE = attrs.FCODE;
+
             delete attrs.FCODE;
         }
         else
         {
-            // Time to find an FCODE based on teh filename
+            // Time to find an FCODE based on the filename
             var fCodeMap = [
                 ['AA010', ['aa010']], // Extraction Mine
                 ['AA012', ['aa012']], // Quarry
@@ -742,7 +748,7 @@ mgcp = {
                 {
                     // Debug
                     // print('Memo: Add: ' + i + ' = ' + tTags[i]);
-                    if (tags[tTags[i]]) hoot.logWarn('Unpacking TXT, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking TXT, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
 
@@ -1416,6 +1422,7 @@ mgcp = {
             {
                 tableName = 'Partial';
                 attrs.FCODE = 'Partial';
+                delete attrs.F_CODE;
 
                 // If we have unused tags, add them to partial feature.
                 if (Object.keys(notUsedTags).length > 0)
