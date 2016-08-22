@@ -26,15 +26,13 @@
  */
 package hoot.services.models.osm;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-
 /**
  * Model class for a set of Hootenanny map layers
  */
-@XmlRootElement
 public class MapLayers {
     private MapLayer[] layers;
+
+    public MapLayers() {}
 
     public MapLayer[] getLayers() {
         return layers;
@@ -42,9 +40,5 @@ public class MapLayers {
 
     public void setLayers(MapLayer[] layers) {
         this.layers = layers;
-    }
-
-    public MapLayers() {
-
     }
 }

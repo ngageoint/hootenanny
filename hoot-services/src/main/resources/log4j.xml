@@ -64,7 +64,7 @@
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
-    <logger name="com.sun.jersey" additivity="false">
+    <logger name="org.glassfish.jersey" additivity="false">
         <level value="error"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>

@@ -127,8 +127,7 @@ public class ElementResource {
         catch (IOException ignored) {
         }
 
-        return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
-                       .header("Content-type", MediaType.APPLICATION_XML).build();
+        return Response.ok(new DOMSource(elementDoc)).build();
     }
 
     /**
@@ -179,8 +178,7 @@ public class ElementResource {
         catch (IOException ignored) {
         }
 
-        return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
-                .header("Content-type", MediaType.APPLICATION_XML).build();
+        return Response.ok(new DOMSource(elementDoc)).build();
     }
 
     /**
@@ -230,8 +228,7 @@ public class ElementResource {
         catch (IOException ignored) {
         }
 
-        return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
-                .header("Content-type", MediaType.APPLICATION_XML).build();
+        return Response.ok(new DOMSource(elementDoc)).build();
     }
 
     /**
@@ -287,8 +284,7 @@ public class ElementResource {
         catch (IOException ignored) {
         }
 
-        return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
-                .header("Content-type", MediaType.APPLICATION_XML).build();
+        return Response.ok(new DOMSource(elementDoc)).build();
     }
 
     private static Document getElementXml(String mapId, long elementId, ElementType elementType,
@@ -391,8 +387,7 @@ public class ElementResource {
         catch (IOException ignored) {
         }
 
-        return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
-                .header("Content-type", MediaType.APPLICATION_XML).build();
+        return Response.ok(new DOMSource(elementDoc)).build();
     }
 
     private static Document getElementsXml(String mapId, String[] elementIdsStr, ElementType elementType,

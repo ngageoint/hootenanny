@@ -186,8 +186,7 @@ public class ChangesetResource {
 
         logger.debug("Returning ID: {} for new changeset...", changesetId);
 
-        return Response.ok(String.valueOf(changesetId), MediaType.TEXT_PLAIN)
-                .header("Content-type", MediaType.TEXT_PLAIN).build();
+        return Response.ok(String.valueOf(changesetId)).build();
     }
 
     /**
@@ -282,8 +281,7 @@ public class ChangesetResource {
         catch (IOException ignored) {
         }
 
-        return Response.ok(new DOMSource(changesetUploadResponse), MediaType.TEXT_XML)
-                       .header("Content-type", MediaType.TEXT_XML).build();
+        return Response.ok(new DOMSource(changesetUploadResponse)).build();
     }
 
     /**

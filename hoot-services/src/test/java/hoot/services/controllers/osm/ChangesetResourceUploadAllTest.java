@@ -39,11 +39,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.xpath.XPathAPI;
+import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -55,8 +59,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.querydsl.sql.SQLQuery;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
 
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
@@ -94,7 +96,12 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
     private final QCurrentRelationMembers currentRelationMembersTbl = QCurrentRelationMembers.currentRelationMembers;
 
     public ChangesetResourceUploadAllTest() {
-        super("hoot.services.controllers.osm");
+        super();
+    }
+
+    @Override
+    protected Application configure() {
+        return new ResourceConfig(ChangesetResource.class);
     }
 
     /*
@@ -179,12 +186,10 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
         BoundingBox updatedBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
         Document responseData = null;
         try {
-            responseData = resource()
-                .path("api/0.6/changeset/" + changesetId + "/upload")
+            responseData = target("api/0.6/changeset/" + changesetId + "/upload")
                 .queryParam("mapId", String.valueOf(mapId))
-                .type(MediaType.TEXT_XML)
-                .accept(MediaType.TEXT_XML)
-                .post(Document.class,
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
                     "<osmChange version=\"0.3\" generator=\"iD\">" +
                         "<create>" +
                             "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
@@ -262,11 +267,10 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
                                 "<member type=\"way\" ref=\"" + wayIdsArr[1] + "\"></member>" +
                             "</relation>" +
                         "</delete>" +
-                    "</osmChange>");
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         // Log responseData.  For debugging purposes...

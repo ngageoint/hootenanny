@@ -139,8 +139,7 @@ public class UserResource {
         catch (IOException ignored) {
         }
 
-        return Response.ok(new DOMSource(responseDoc), MediaType.APPLICATION_XML)
-                .header("Content-type", MediaType.APPLICATION_XML).build();
+        return Response.ok(new DOMSource(responseDoc)).build();
     }
 
     /**

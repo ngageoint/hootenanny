@@ -26,15 +26,19 @@
  */
 package hoot.services.models.review;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 
 /**
  * A request for review references
  */
-@XmlRootElement
 public class ReviewRefsRequest {
     private ElementInfo[] queryElements;
+
+    public ReviewRefsRequest() {
+    }
+
+    public ReviewRefsRequest(ElementInfo[] elementInfos) {
+        this.queryElements = elementInfos;
+    }
 
     public ElementInfo[] getQueryElements() {
         return queryElements;
@@ -42,13 +46,6 @@ public class ReviewRefsRequest {
 
     public void setQueryElements(ElementInfo[] infos) {
         this.queryElements = infos;
-    }
-
-    public ReviewRefsRequest() {
-    }
-
-    public ReviewRefsRequest(ElementInfo[] elementInfos) {
-        this.queryElements = elementInfos;
     }
 
     @Override
