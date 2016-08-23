@@ -1110,6 +1110,9 @@
         "objectType": "tag"
     },
     {
+        "categories": [
+            "use"
+        ],
         "isA": "sport",
         "name": "sport=swimming",
         "objectType": "tag"

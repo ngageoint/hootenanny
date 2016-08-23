@@ -781,7 +781,7 @@ A list of map operations to be applied to a map for cleaning purposes in order
 === match.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMatchCreator;hoot::PlacesPoiMatchCreator;hoot::HighwayMatchCreator`
+* Default Value: `hoot::BuildingMatchCreator;hoot::PlacesPoiMatchCreator;hoot::HighwayMatchCreator;hoot::PoiPolygonMatchCreator`
 
 List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).
 
@@ -791,6 +791,7 @@ Some of the possible options include:
 * `hoot::PlacesPoiMatchCreator` - Matches POIs using the PLACES algorithm.
 * `hoot::HighwayMatchCreator` - Matches linear highway features using the Unify
   algorithm.
+* `hoot::PoiPolygonMatchCreator` - Matches POI's and buldings the Unify algorithm.
 * `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify
   algorithm.
 * `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The
@@ -842,7 +843,7 @@ When merging nodes during --ogr2osm, what tolerance should be used for deciding 
 === merger.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMergerCreator;hoot::PlacesPoiMergerCreator;hoot::HighwaySnapMergerCreator`
+* Default Value: `hoot::BuildingMergerCreator;hoot::PlacesPoiMergerCreator;hoot::HighwaySnapMergerCreator;hoot::PoiPolygonMergerCreator`
 
 List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).
 
@@ -854,6 +855,8 @@ Possible values include:
   specified in `match.creators`.
 * `hoot::HighwaySnapMergerCreator` - Required if `hoot::HighwayMatchCreator`
   is specified in `match.creators`.
+* `hoot::PoiPolygonMergerCreator` - Required if `hoot::PoiPolygonMatchCreator`
+is specified in `match.creators`.
 * `hoot::ScriptMergerCreator` - Required if one or more instances of
   `hoot::SplitMatchCreator` is specified in `match.creators`. Note that the
   script name is not specified in this parameter.
@@ -1550,6 +1553,38 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.match.distance
+
+* Data Type: double
+* Default Value: `5`
+
+The maximum distance, in meters, between a POI and a polygon where they can still be considered
+a close match based on distance criteria only.
+
+=== poi.polygon.match.name.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+If the name similarity score is greater than this then the names are considered a match during POI
+to polygon matching.  Scores are 0 to 1 for similarity and -1 if there are no names present (null).
+
+=== poi.polygon.match.review.distance
+
+* Data Type: double
+* Default Value: `100`
+
+How far away from a polygon should name matches be considered reviews. This is a fixed value in
+meters that is added to the CE calculation.
+
+=== poi.polygon.match.type.threshold
+
+* Data Type: double
+* Default Value: `0.2`
+
+The minimum tag similarity score required between a POI and a building for it to be considered
+for a match or a review.  Scores range from 0 to 1, with 1 being the most similar.
+
 === poi.polygon.miss.threshold
 
 * Data Type: double
@@ -1572,22 +1607,6 @@ The threshold at which a review is called a review for PoiPolygon. See
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== poi.polygon.match.name.threshold
-
-* Data Type: double
-* Default Value: `0.8`
-
-If the name similarity score is greater than this then the names are considered a match. Scores
-are 0 to 1 for similarity and -1 if there are no names present (null).
-
-=== poi.polygon.match.review.distance
-
-* Data Type: double
-* Default Value: `0`
-
-How far away from a polygon should name matches be considered reviews. This is a fixed value in
-meters that is added to the CE calculation.
 
 === postgresql.dumpfile.writer.auto.calc.ids
 

@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-461568' visible='true' lat='37.807482499999985' lon='-122.4065646'>
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-461567' visible='true' lat='37.80752910000001' lon='-122.4066719'>
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-461566' visible='true' lat='37.807455' lon='-122.4067363'>
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-461565' visible='true' lat='37.8069866' lon='-122.405827'>
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-461564' visible='true' lat='37.807065' lon='-122.4057653'>
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-461563' visible='true' lat='37.80719010000001' lon='-122.4059906'>
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-461562' visible='true' lat='37.8100475' lon='-122.40622499999999'>
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-461561' visible='true' lat='37.81002079999999' lon='-122.406772'>
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-461560' visible='true' lat='37.809769' lon='-122.40674969999999'>
+    <tag k='hoot:status' v='1' />
+  </node>
+  <way id='-461559' visible='true'>
+    <nd ref='-461560' />
+    <nd ref='-461561' />
+    <nd ref='-461562' />
+    <nd ref='-461563' />
+    <nd ref='-461564' />
+    <nd ref='-461565' />
+    <nd ref='-461566' />
+    <nd ref='-461567' />
+    <nd ref='-461568' />
+    <nd ref='-461560' />
+    <tag k='REF1' v='009cdc' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:mismatch' v='1' />
+    <tag k='hoot:status' v='1' />
+    <tag k='hoot:wrong' v='1' />
+    <tag k='name' v='Pier 35' />
+    <tag k='uuid' v='{f5cb9318-6902-464a-86fb-54bf5779bbb4}' />
+  </way>
+</osm>

@@ -77,6 +77,9 @@
             "node",
             "area"
         ],
+        "aliases": [
+            "leisure=sports_complex"
+        ],
         "isA": "leisure",
         "name": "leisure=sports_centre",
         "objectType": "tag",
@@ -92,8 +95,33 @@
             {
                 "name": "amenity=swimming_pool",
                 "weight": 0.8
+            },
+            {
+                "name": "leisure=water_park",
+                "weight": 0.8
+            },
+            {
+                "name": "leisure=swimming_pool",
+                "weight": 0.8
+            },
+            {
+                "name": "sport=swimming",
+                "weight": 0.8
+            },
+            {
+                "name": "sport=*",
+                "weight": 0.1
             }
         ]
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "isA": "leisure",
+        "name": "leisure=swimming_pool",
+        "objectType": "tag"
     },
     {
         "geometries": [
@@ -120,6 +148,15 @@
         ],
         "isA": "leisure",
         "name": "leisure=track",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "isA": "leisure",
+        "name": "leisure=water_park",
         "objectType": "tag"
     }
 ]

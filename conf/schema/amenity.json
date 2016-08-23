@@ -1029,6 +1029,10 @@
         "similarTo": {
             "name": "building=hospital",
             "weight": 0.8
+        },
+        "similarTo": {
+            "name": "use=healthcare",
+            "weight": 0.8
         }
     },
     {

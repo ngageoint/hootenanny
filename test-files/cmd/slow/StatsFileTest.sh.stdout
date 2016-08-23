@@ -1,8 +1,9 @@
 ****Quick Stats****
+14:53:23.846 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesA.osm ...
 Reprojecting 0 / 117         
-17:39:46.446 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
-17:39:46.446 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
-17:39:46.447 INFO  ...oot/core/io/MapStatsWriter.cpp( 221) Writing stats to file: test-output/StatsAllDataTypesA.txt
+14:53:23.881 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
+14:53:23.881 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
+14:53:23.881 INFO  ...oot/core/io/MapStatsWriter.cpp( 221) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -13,12 +14,14 @@ Maximum Way ID	-1559687
 Minimum Relation ID	9.2233720368547758e+18
 Maximum Relation ID	-9.2233720368547758e+18
 ****JSON Stats****
+14:53:23.989 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesA.osm ...
 Reprojecting 0 / 117         
-17:39:46.722 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
-17:39:47.501 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
+14:53:24.025 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
+14:53:24.991 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
+14:53:24.991 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesB.osm ...
 Reprojecting 0 / 116         
-17:39:47.524 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
-17:39:48.091 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
+14:53:25.024 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
+14:53:25.861 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
 {
     "Node Count":
     [
@@ -147,8 +150,8 @@ Reprojecting 0 / 116
     ],
     "Number of Match Creators":
     [
-        "3",
-        "3"
+        "4",
+        "4"
     ],
     "Features Conflatable by: hoot::BuildingMatchCreator":
     [

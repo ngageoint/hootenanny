@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-24984' visible='true' lat='-0.349085266999964' lon='42.55160784100008' />
+  <node id='-24983' visible='true' lat='-0.3490478039999517' lon='42.551439697000035' />
+  <node id='-24982' visible='true' lat='-0.3493079779999562' lon='42.551382197000066' />
+  <node id='-24981' visible='true' lat='-0.3493262099999583' lon='42.551463640000065' />
+  <node id='-24980' visible='true' lat='-0.3493510609999362' lon='42.551574645000066' />
+  <node id='-24979' visible='true' lat='-0.3490907189999461' lon='42.55163231300003' />
+  <way id='-24978' action='modify' visible='true'>
+    <nd ref='-24979' />
+    <nd ref='-24980' />
+    <nd ref='-24980' />
+    <nd ref='-24981' />
+    <nd ref='-24982' />
+    <nd ref='-24982' />
+    <nd ref='-24983' />
+    <nd ref='-24984' />
+    <nd ref='-24979' />
+    <tag k='amenity' v='islamic_prayer_hall' />
+    <tag k='building' v='mosque' />
+    <tag k='uuid' v='d' />
+  </way>
+</osm>

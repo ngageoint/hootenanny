@@ -518,7 +518,13 @@ SOURCES += \
     src/main/cpp/hoot/core/ops/RemoveElementOp.cpp \
     src/main/cpp/hoot/core/ops/RemoveNodeOp.cpp \
     src/main/cpp/hoot/core/ops/RemoveRelationOp.cpp \
-    src/main/cpp/hoot/core/ops/RemoveWayOp.cpp
+    src/main/cpp/hoot/core/ops/RemoveWayOp.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchCreator.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatch.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMerger.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiBuildingMerger.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1042,5 +1048,11 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/RemoveElementOp.h \
     src/main/cpp/hoot/core/ops/RemoveNodeOp.h \
     src/main/cpp/hoot/core/ops/RemoveRelationOp.h \
-    src/main/cpp/hoot/core/ops/RemoveWayOp.h
+    src/main/cpp/hoot/core/ops/RemoveWayOp.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchCreator.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatch.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMerger.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiBuildingMerger.h
 
