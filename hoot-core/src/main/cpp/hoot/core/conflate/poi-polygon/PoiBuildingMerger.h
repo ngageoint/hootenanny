@@ -34,15 +34,20 @@ namespace hoot
 {
 
 /**
- * Merges a POI w/ a single POI with a single building
+ * Merges a POI w/ a single POI with a single building.  Assumes that a single
+ * POI and a single building are the only elements in the input map.
  */
 class PoiBuildingMerger
 {
 public:
 
-  PoiBuildingMerger();
-
-  void merge(OsmMapPtr map, const int poiId, const int buildingId);
+  /**
+   * Merges a POI with a building
+   *
+   * @param map an OSM map containing a single node POI and a single poly building, which
+   * can be a way or a relation (multipolygon)
+   */
+  static void merge(OsmMapPtr map);
 
 };
 

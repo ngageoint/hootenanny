@@ -28,6 +28,12 @@
 // Hoot
 #include "../../TestUtils.h"
 #include <hoot/core/conflate/poi-polygon/PoiBuildingMerger.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/MapProjector.h>
+
+// Qt
+#include <QDir>
 
 namespace hoot
 {
@@ -35,44 +41,130 @@ namespace hoot
 class PoiBuildingMergerTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PoiBuildingMergerTest);
-  //CPPUNIT_TEST(mergeWayAsBuildingTest);
-  //CPPUNIT_TEST(mergeRelationAsBuildingTest);
-  //CPPUNIT_TEST(mergeMissingPoiInputTest);
-  //CPPUNIT_TEST(mergeMissingBuildingInputTest);
-  //CPPUNIT_TEST(mergeBadPoiIdTest);
-  //CPPUNIT_TEST(mergeBadBuildingIdTest);
+  CPPUNIT_TEST(mergeWayAsBuildingTest);
+  CPPUNIT_TEST(mergeRelationAsBuildingTest);
+  CPPUNIT_TEST(mergeMissingPoiInputTest);
+  CPPUNIT_TEST(mergeMissingBuildingInputTest);
+  CPPUNIT_TEST(mergeMoreThanOnePoiInputTest);
+  CPPUNIT_TEST(mergeMoreThanOneBuildingInputTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   void mergeWayAsBuildingTest()
   {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/poi-polygon/poi-poly-way-building-in.osm", false,
+      Status::Unknown1);
 
+    PoiBuildingMerger::merge(map);
+
+    QDir().mkdir("test-output/conflate/poi-polygon");
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/conflate/poi-polygon/poi-poly-way-building-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/conflate/poi-polygon/poi-poly-way-building-out.osm",
+      "test-output/conflate/poi-polygon/poi-poly-way-building-out.osm");
   }
 
   void mergeRelationAsBuildingTest()
   {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/poi-polygon/poi-poly-relation-building-in.osm", false,
+      Status::Unknown1);
 
+    PoiBuildingMerger::merge(map);
+
+    QDir().mkdir("test-output/conflate/poi-polygon");
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/conflate/poi-polygon/poi-poly-relation-building-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/conflate/poi-polygon/poi-poly-relation-building-out.osm",
+      "test-output/conflate/poi-polygon/poi-poly-relation-building-out.osm");
   }
 
   void mergeMissingPoiInputTest()
   {
+    QString exceptionMsg("");
+    try
+    {
+      OsmMapPtr map(new OsmMap());
+      OsmMapReaderFactory::read(
+        map, "test-files/conflate/poi-polygon/poi-poly-missing-poi-in.osm", false,
+        Status::Unknown1);
 
+      PoiBuildingMerger::merge(map);
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = e.what();
+    }
+    HOOT_STR_EQUALS("No POI passed to POI/building merger.", exceptionMsg.toStdString());
   }
 
   void mergeMissingBuildingInputTest()
   {
+    QString exceptionMsg("");
+    try
+    {
+      OsmMapPtr map(new OsmMap());
+      OsmMapReaderFactory::read(
+        map, "test-files/conflate/poi-polygon/poi-poly-missing-building-in.osm", false,
+        Status::Unknown1);
 
+      PoiBuildingMerger::merge(map);
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = e.what();
+    }
+    HOOT_STR_EQUALS("No building passed to POI/building merger.", exceptionMsg.toStdString());
   }
 
-  void mergeBadPoiIdTest()
+  void mergeMoreThanOnePoiInputTest()
   {
+    QString exceptionMsg("");
+    try
+    {
+      OsmMapPtr map(new OsmMap());
+      OsmMapReaderFactory::read(
+        map, "test-files/conflate/poi-polygon/poi-poly-more-than-one-poi-in.osm", false,
+        Status::Unknown1);
 
+      PoiBuildingMerger::merge(map);
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = e.what();
+    }
+    HOOT_STR_EQUALS(
+      "More than one POI passed to POI/building merger.", exceptionMsg.toStdString());
   }
 
-  void mergeBadBuildingIdTest()
+  void mergeMoreThanOneBuildingInputTest()
   {
+    QString exceptionMsg("");
+    try
+    {
+      OsmMapPtr map(new OsmMap());
+      OsmMapReaderFactory::read(
+        map, "test-files/conflate/poi-polygon/poi-poly-more-than-one-building-in.osm", false,
+        Status::Unknown1);
 
+      PoiBuildingMerger::merge(map);
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = e.what();
+    }
+    HOOT_STR_EQUALS(
+      "More than one building passed to POI/building merger.", exceptionMsg.toStdString());
   }
 };
 

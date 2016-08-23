@@ -68,29 +68,21 @@ v8::Handle<v8::Value> PoiBuildingMergerJs::jsPoiBuildingMerge(const v8::Argument
   HandleScope scope;
   try
   {
-    if (args.Length() != 3)
+    if (args.Length() != 1)
     {
       return
         v8::ThrowException(
           HootExceptionJs::create(
-            IllegalArgumentException(
-              "Expected three arguments for 'poiBuildingMerge'.")));
+            IllegalArgumentException("Expected on argument for 'poiBuildingMerge'.")));
     }
 
-    // arg 1: map with the POI and building
+    // arg 1: map with a single POI and a single building
     OsmMapJs* mapJs = node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
     OsmMapPtr map(mapJs->getMap());
 
-    // arg 2: poi id
-    const int poiId = toCpp<int>(args[1]);
+    PoiBuildingMerger::merge(map);
 
-    // arg3: building id
-    const int buildingId = toCpp<int>(args[2]);
-
-    PoiBuildingMerger().merge(map, poiId, buildingId);
-
-    //Hand merged elements back to caller in OsmMap
-    v8::Handle<v8::Object> returnMap = OsmMapJs::create(/*mergedMap*/map);
+    v8::Handle<v8::Object> returnMap = OsmMapJs::create(map);
     return scope.Close(returnMap);
   }
   catch (const HootException& e)

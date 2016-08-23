@@ -33,59 +33,73 @@
 namespace hoot
 {
 
-PoiBuildingMerger::PoiBuildingMerger()
+void PoiBuildingMerger::merge(OsmMapPtr map)
 {
+  //there should be one poi node and one building poly, which is either a way or a relation
 
-}
-
-void PoiBuildingMerger::merge(OsmMapPtr map, const int poiId, const int buildingId)
-{
-  //there should be one poi node and one building, either a way or a relation
-
-  NodePtr poi = map->getNode(poiId);
-  if (!poi.get() || !OsmSchema::getInstance().isPoi(*poi))
+  int poiCount = 0;
+  ElementId poiElementId;
+  NodeMap::const_iterator nodeItr = map->getNodeMap().begin();
+  while (nodeItr != map->getNodeMap().end())
   {
-    throw IllegalArgumentException(
-      "Invalid POI passed to POI/building merger.  ID: " + poiId);
+    const int nodeId = nodeItr->first;
+    if (OsmSchema::getInstance().isPoi(*map->getNode(nodeId)))
+    {
+      poiElementId = ElementId::node(nodeId);
+      poiCount++;
+    }
+    nodeItr++;
   }
-  ElementId poiElementId = ElementId::node(poiId);
+  if (poiCount == 0)
+  {
+    throw IllegalArgumentException("No POI passed to POI/building merger.");
+  }
+  if (poiCount > 1)
+  {
+    throw IllegalArgumentException("More than one POI passed to POI/building merger.");
+  }
 
-  //if a relation was passed in at all, the building must be that relation
+  int buildingCount = 0;
   ElementId buildingElementId;
-  ElementPtr building;
-  if (map->getRelationMap().size() > 0)
+  WayMap::const_iterator wayItr = map->getWays().begin();
+  while (wayItr != map->getWays().end())
   {
-    building = map->getRelation(buildingId);
-    buildingElementId = ElementId::relation(buildingId);
+    const int wayId = wayItr->first;
+    if (OsmSchema::getInstance().isBuilding(map->getWay(wayId)))
+    {
+      buildingElementId = ElementId::way(wayId);
+      buildingCount++;
+    }
+    wayItr++;
   }
-  //otherwise, its a way
-  else
+  if (buildingElementId.isNull())
   {
-    building = map->getWay(buildingId);
-    buildingElementId = ElementId::way(buildingId);
+    RelationMap::const_iterator relItr = map->getRelationMap().begin();
+    while (relItr != map->getRelationMap().end())
+    {
+      const int relationId = relItr->first;
+      if (OsmSchema::getInstance().isBuilding(map->getRelation(relationId)))
+      {
+        buildingElementId = ElementId::relation(relationId);
+        buildingCount++;
+      }
+      relItr++;
+    }
   }
-  if (!building.get() || !OsmSchema::getInstance().isBuilding(building))
+  if (buildingCount == 0)
   {
-     throw IllegalArgumentException(
-       "Invalid building passed to POI/building merger.  ID: " + poiId);
+    throw IllegalArgumentException("No building passed to POI/building merger.");
+  }
+  if (buildingCount > 1)
+  {
+    throw IllegalArgumentException("More than one building passed to POI/building merger.");
   }
 
   std::set<std::pair<ElementId, ElementId> > pairs;
   pairs.insert(std::pair<ElementId, ElementId>(poiElementId, buildingElementId));
   PoiPolygonMerger merger(pairs);
-  //OsmMapPtr mergedMap(map);
   std::vector<std::pair<ElementId, ElementId> > replacedElements;
-  merger.apply(/*mergedMap*/map, replacedElements);
-
-  //TODO: fix - I think the poi's always get merged into the building poly's, so only
-  //the building poly's would need their id's updated here, but I need to verify
-  LOG_VARD(replacedElements.size());
-  LOG_VARD(replacedElements);
-  /*if (replacedElements.size() == 1)
-  {
-    mergedMap->replacedElements(
-      replacedElements[0].first.getId(), replacedElements[0].second.getId());
-  }*/
+  merger.apply(map, replacedElements);
 }
 
 }

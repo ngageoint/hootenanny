@@ -33,6 +33,9 @@
 namespace hoot
 {
 
+/**
+ * Hoot JS wrapper around PoiBuildingMerger
+ */
 class PoiBuildingMergerJs : public node::ObjectWrap
 {
 
@@ -45,6 +48,13 @@ private:
   PoiBuildingMergerJs();
   ~PoiBuildingMergerJs();
 
+  /**
+   * Merges a POI with a building
+   *
+   * @param args an OSM map containing a single node POI and a single poly building, which
+   * can be a way or a relation (multipolygon)
+   * @return a map with the building and POI merged
+   */
   static v8::Handle<v8::Value> jsPoiBuildingMerge(const v8::Arguments& args);
 };
 
