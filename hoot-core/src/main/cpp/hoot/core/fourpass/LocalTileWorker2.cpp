@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LocalTileWorker2.h"
@@ -39,6 +39,7 @@
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
+#include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
@@ -296,7 +297,7 @@ void LocalTileWorker2::_writeTheRest(QString dirIn, QString dirOut,
       const Envelope& tile = conflatedBits[i];
       if (tile.contains((it->second)->getX(), (it->second)->getY()))
       {
-        map->removeNodeNoCheck((it->second)->getId());
+        RemoveNodeOp::removeNodeNoCheck(map, (it->second)->getId());
       }
     }
   }

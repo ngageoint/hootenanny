@@ -26,7 +26,6 @@
  */
 package hoot.services.models.review;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
@@ -35,14 +34,14 @@ import org.json.simple.JSONObject;
 import hoot.services.geo.BoundingBox;
 
 
-public class AllReviewableItems extends ReviewQueryMapper {
+public class AllReviewableItems implements ReviewQueryMapper {
 
     private long mapId;
     private boolean overflow;
     private Map<Long, ReviewableItemBboxInfo> reviewableItems;
 
     public AllReviewableItems(long mapid, Map<Long, ReviewableItemBboxInfo> reviewableItems) {
-        mapId = mapid;
+        this.mapId = mapid;
         this.reviewableItems = reviewableItems;
     }
 
@@ -51,7 +50,7 @@ public class AllReviewableItems extends ReviewQueryMapper {
     }
 
     public void setMapId(long mapid) {
-        mapId = mapid;
+        this.mapId = mapid;
     }
 
     public Map<Long, ReviewableItemBboxInfo> getReviewableItems() {
@@ -62,12 +61,12 @@ public class AllReviewableItems extends ReviewQueryMapper {
         this.reviewableItems = reviewableItems;
     }
 
-    public boolean getOverFlow() {
+    public boolean getOverflow() {
         return overflow;
     }
 
-    public void setOverFlow(boolean isOverFlow) {
-        overflow = isOverFlow;
+    public void setOverflow(boolean overflow) {
+        this.overflow = overflow;
     }
 
     @Override
@@ -82,11 +81,9 @@ public class AllReviewableItems extends ReviewQueryMapper {
         JSONArray features = new JSONArray();
 
         if (reviewableItems != null) {
-            Iterator it = reviewableItems.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry) it.next();
-                Long relId = (Long) pair.getKey();
-                ReviewableItemBboxInfo info = (ReviewableItemBboxInfo) pair.getValue();
+            for (Map.Entry<Long, ReviewableItemBboxInfo> pair : reviewableItems.entrySet()) {
+                Long relId = pair.getKey();
+                ReviewableItemBboxInfo info = pair.getValue();
 
                 JSONObject feature = new JSONObject();
                 feature.put("type", "Feature");
@@ -94,7 +91,7 @@ public class AllReviewableItems extends ReviewQueryMapper {
                 JSONObject geometry = new JSONObject();
                 geometry.put("type", "Point");
                 BoundingBox bbx = info.getBbox();
-                double[] coords = new double[] { bbx.getCenterX(), bbx.getCenterY() };
+                double[] coords = { bbx.getCenterX(), bbx.getCenterY() };
                 geometry.put("coordinates", coords);
                 feature.put("geometry", geometry);
 
@@ -111,11 +108,10 @@ public class AllReviewableItems extends ReviewQueryMapper {
             }
         }
 
-        JSONObject geojson = new JSONObject();
-        geojson.put("type", "FeatureCollection");
-        geojson.put("features", features);
+        JSONObject geoJson = new JSONObject();
+        geoJson.put("type", "FeatureCollection");
+        geoJson.put("features", features);
 
-        return geojson;
-
+        return geoJson;
     }
 }

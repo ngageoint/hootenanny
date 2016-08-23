@@ -17,7 +17,8 @@
 #include "WayJoin1Mapper.h"
 
 // Hoot
-#include <hoot/core/filters/TagFilter.h>
+#include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/hadoop/PbfRecordWriter.h>
 #include <hoot/hadoop/Debug.h>
 
@@ -48,7 +49,8 @@ void WayJoin1Mapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& contex
   int64_t* key = (int64_t*)keyStr.data();
 
   // Remove all non-roads.
-  m->removeWays(TagFilter(Filter::FilterMatches, "highway", ""));
+  shared_ptr<TagCriterion> pCrit(new TagCriterion("highway", ""));
+  RemoveElementsVisitor::removeWays(m, pCrit);
 
   Debug::printTroubled(m);
 

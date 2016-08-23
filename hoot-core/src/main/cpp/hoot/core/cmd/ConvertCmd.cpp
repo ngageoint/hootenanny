@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -39,6 +39,9 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -75,6 +78,8 @@ public:
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
+    QElapsedTimer timer;
+    timer.start();
     LOG_INFO("Converting " << args[0] << " to " << args[1] << "...");
 
     OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
@@ -98,6 +103,19 @@ public:
 
       saveMap(map, args[1]);
     }
+
+    //LOG_DEBUG(_timer->elapsed());
+    QString msg = "Convert operation took ";
+    const qint64 timeElapsed = timer.elapsed();
+    if (timeElapsed > 60000)
+    {
+      msg += QString::number(timeElapsed / 1000 / 60) + " minutes";
+    }
+    else
+    {
+      msg += QString::number(timeElapsed / 1000) + " seconds";
+    }
+    LOG_INFO(msg);
 
     return 0;
   }

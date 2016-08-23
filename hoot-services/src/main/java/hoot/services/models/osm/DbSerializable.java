@@ -29,12 +29,12 @@ package hoot.services.models.osm;
 import java.util.Collection;
 import java.util.List;
 
-import com.mysema.query.sql.RelationalPathBase;
-import com.mysema.query.types.path.BooleanPath;
-import com.mysema.query.types.path.NumberPath;
+import com.querydsl.core.types.dsl.BooleanPath;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.sql.RelationalPathBase;
 
-import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.models.osm.Element.ElementType;
+import hoot.services.utils.DbUtils.EntityChangeType;
 
 
 /**
@@ -45,7 +45,7 @@ public interface DbSerializable {
     // the record this implementation wraps
     Object getRecord();
 
-    void setRecord(Object record) throws Exception;
+    void setRecord(Object record);
 
     // related records to this element (e.g. way nodes for ways, relation
     // members for relations,

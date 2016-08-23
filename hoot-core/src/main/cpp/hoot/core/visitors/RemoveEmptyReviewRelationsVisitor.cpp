@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,6 +30,7 @@
 //hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/Factory.h>
+#include <hoot/core/ops/RemoveRelationOp.h>
 
 namespace hoot
 {
@@ -51,7 +52,7 @@ void RemoveEmptyReviewRelationsVisitor::visit(const ElementPtr& e)
     if (r->getType() == Relation::REVIEW && r->getMembers().size() == 0)
     {
       //LOG_DEBUG("Removing review relation with ID: " << r->getId());
-      _map->removeRelation(r->getId());
+      RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
     }
   }
 }

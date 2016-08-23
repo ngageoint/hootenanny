@@ -354,7 +354,7 @@ shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
 shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
-  LOG_DEBUG("Reading node with ID: " << nodeId);
+  //LOG_DEBUG("Reading node with ID: " << nodeId);
   shared_ptr<Node> result(
     new Node(
       _status,
@@ -377,11 +377,11 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
 {
   const long wayId = resultIterator.value(0).toLongLong();
   const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
-  LOG_DEBUG("Reading way with ID: " << wayId);
-  if (newWayId != wayId)
+  //LOG_DEBUG("Reading way with ID: " << wayId);
+  /*if (newWayId != wayId)
   {
     LOG_VARD(newWayId);
-  }
+  }*/
   shared_ptr<Way> way(
     new Way(
       _status,
@@ -412,11 +412,11 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
 {
   const long relationId = resultIterator.value(0).toLongLong();
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
-  LOG_DEBUG("Reading relation with ID: " << relationId);
-  if (newRelationId != relationId)
+  //LOG_DEBUG("Reading relation with ID: " << relationId);
+  /*if (newRelationId != relationId)
   {
     LOG_VARD(newRelationId);
-  }
+  }*/
   shared_ptr<Relation> relation(
     new Relation(
       _status,

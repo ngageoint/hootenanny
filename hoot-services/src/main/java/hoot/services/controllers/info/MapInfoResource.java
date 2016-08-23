@@ -26,59 +26,42 @@
  */
 package hoot.services.controllers.info;
 
+import static hoot.services.HootProperties.*;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
-import org.codehaus.jettison.json.JSONArray;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-import hoot.services.db.DbUtils;
-import hoot.services.utils.ResourceErrorHandler;
+import hoot.services.utils.DbUtils;
 
 
 @Path("/map")
 public class MapInfoResource {
     private static final Logger logger = LoggerFactory.getLogger(MapInfoResource.class);
-    private static final Long conflateThreshold;
-    private static final Long ingestThreshold;
-    private static final Long exportThreshold;
 
-    static {
-        try {
-            String value = HootProperties.getProperty("conflateSizeThreshold");
-            conflateThreshold = Long.parseLong(value);
-        }
-        catch (NumberFormatException nfe) {
-            logger.error("Invalid value specified for conflateSizeThreshold!");
-            throw nfe;
-        }
+    private static final String[] maptables = {
+            "changesets",
+            "current_nodes",
+            "current_relation_members",
+            "current_relations",
+            "current_way_nodes",
+            "current_ways"
+    };
 
-        try {
-            String value = HootProperties.getProperty("ingestSizeThreshold");
-            ingestThreshold = Long.parseLong(value);
-        }
-        catch (NumberFormatException nfe) {
-            logger.error("Invalid value specified for ingestSizeThreshold!");
-            throw nfe;
-        }
-
-        try {
-            String value = HootProperties.getProperty("exportSizeThreshold");
-            exportThreshold = Long.parseLong(value);
-        }
-        catch (NumberFormatException nfe) {
-            logger.error("Invalid value specified for exportSizeThreshold!");
-            throw nfe;
-        }
-    }
 
     public MapInfoResource() {
     }
@@ -89,53 +72,42 @@ public class MapInfoResource {
      * GET hoot-services/info/map/size?mapid=1
      * 
      * @param mapIds
-     *            ids of the maps for which to retrieve sizes
+     *            id of the map for which to retrieve size
      * @return JSON containing size information
      */
     @GET
     @Path("/size")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response getMapSize(@QueryParam("mapid") String mapIds) {
-        long nsize = 0;
-        String[] maptables = {
-                "changesets",
-                "current_nodes",
-                "current_relation_members",
-                "current_relations",
-                "current_way_nodes",
-                "current_ways"
-        };
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCombinedMapSize(@QueryParam("mapid") String mapIds) {
+        long combinedMapSize = 0;
 
         try {
             String[] mapids = mapIds.split(",");
             for (String mapId : mapids) {
-                if (Long.parseLong(mapId) != -1) // skips OSM API db layer
-                {
+                if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
                     for (String table : maptables) {
-                        nsize += DbUtils.getTableSizeInByte(table + "_" + mapId);
+                        combinedMapSize += getTableSizeInBytes(table + "_" + mapId);
                     }
                 }
             }
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting map size: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error getting combined map size for: " + mapIds;
+            throw new WebApplicationException(ex, Response.serverError().entity(message).build());
         }
 
-        JSONObject res = new JSONObject();
-        res.put("mapid", mapIds);
-        res.put("size_byte", nsize);
+        JSONObject entity = new JSONObject();
+        entity.put("mapid", mapIds);
+        entity.put("size_byte", combinedMapSize);
 
-        /*
-         * res.put("conflate_threshold", conflateThreshold);
-         * res.put("ingest_threshold", ingestThreshold);
-         * res.put("export_threshold", exportThreshold);
-         */
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     /**
-     * Service method endpoint for retrieving the physical size of multiple map
-     * records.
+     * Service method endpoint for retrieving the physical size of multiple map records.
      * 
      * GET hoot-services/info/map/sizes?mapid=54,62
      * 
@@ -145,52 +117,38 @@ public class MapInfoResource {
      */
     @GET
     @Path("/sizes")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getMapSizes(@QueryParam("mapid") String mapIds) {
-        String[] maptables = {
-                "changesets",
-                "current_nodes",
-                "current_relation_members",
-                "current_relations",
-                "current_way_nodes",
-                "current_ways"
-        };
-
-        JSONArray retval = new JSONArray();
+        JSONArray layers = new JSONArray();
 
         try {
             String[] mapids = mapIds.split(",");
             for (String mapId : mapids) {
-                JSONObject jo = new JSONObject();
-                long nsize = 0;
-                try {
-                    for (String table : maptables) {
-                        if (Long.parseLong(mapId) != -1) // skips OSM API db layer
-                        {
-                            nsize += DbUtils.getTableSizeInByte(table + "_" + mapId);
-                        }
+                long mapSize = 0;
+                for (String table : maptables) {
+                    if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
+                        mapSize += getTableSizeInBytes(table + "_" + mapId);
                     }
                 }
-                finally {
-                    jo.put("id", Long.parseLong(mapId));
-                    jo.put("size", nsize);
-                    retval.put(jo);
-                }
+                JSONObject layer = new JSONObject();
+                layer.put("id", Long.parseLong(mapId));
+                layer.put("size", mapSize);
+                layers.add(layer);
+                //layers.put(layer);
             }
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting map size: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error getting map size: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.serverError().entity(message).build());
         }
 
-        JSONObject res = new JSONObject();
-        res.put("layers", retval);
+        JSONObject entity = new JSONObject();
+        entity.put("layers", layers);
 
-        /*
-         * res.put("conflate_threshold", conflateThreshold);
-         * res.put("ingest_threshold", ingestThreshold);
-         * res.put("export_threshold", exportThreshold);
-         */
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     /**
@@ -202,13 +160,37 @@ public class MapInfoResource {
      */
     @GET
     @Path("/thresholds")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getThresholds() {
-        JSONObject res = new JSONObject();
-        res.put("conflate_threshold", conflateThreshold);
-        res.put("ingest_threshold", ingestThreshold);
-        res.put("export_threshold", exportThreshold);
+        JSONObject entity = new JSONObject();
+        entity.put("conflate_threshold", CONFLATE_SIZE_THRESHOLD);
+        entity.put("ingest_threshold", INGEST_SIZE_THRESHOLD);
+        entity.put("export_threshold", EXPORT_SIZE_THRESHOLD);
 
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
+    }
+
+    /**
+     * Returns table size in byte
+     */
+    private static long getTableSizeInBytes(String tableName) {
+        long tableSize = 0;
+
+        try (Connection conn = DbUtils.createConnection()) {
+            try (Statement stmt = conn.createStatement()) {
+                String sql = "select pg_total_relation_size('" + tableName + "') as tablesize";
+                try (ResultSet rs = stmt.executeQuery(sql)){
+                    while (rs.next()) {
+                        tableSize = rs.getLong("tablesize");
+                    }
+                }
+            }
+        }
+        catch (SQLException e) {
+            String msg = "Error retrieving table size in bytes of " + tableName + " table!";
+            throw new RuntimeException(msg, e);
+        }
+
+        return tableSize;
     }
 }

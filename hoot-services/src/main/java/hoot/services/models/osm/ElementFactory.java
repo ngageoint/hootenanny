@@ -26,13 +26,12 @@
  */
 package hoot.services.models.osm;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 
-import com.mysema.query.Tuple;
+import com.querydsl.core.Tuple;
 
 import hoot.services.models.osm.Element.ElementType;
 
@@ -40,22 +39,8 @@ import hoot.services.models.osm.Element.ElementType;
 /**
  * Factory for creating the different OSM element types
  */
-public class ElementFactory {
+public final class ElementFactory {
     private ElementFactory() {
-    }
-
-    private static ElementFactory instance;
-
-    /**
-     * Singleton instance access
-     *
-     * @return an ElementFactory
-     */
-    public static ElementFactory getInstance() {
-        if (instance == null) {
-            instance = new ElementFactory();
-        }
-        return instance;
     }
 
     /**
@@ -66,18 +51,16 @@ public class ElementFactory {
      * @param conn
      *            JDBC Connection
      * @return an element
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     * @throws InvocationTargetException
-     * @throws NoSuchMethodException
      */
-    public Element create(final long mapId, final ElementType elementType, Connection conn)
-            throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException,
-            InvocationTargetException {
-        return (Element) ConstructorUtils.invokeConstructor(
-                Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType.toString()),
-                new Object[] { new Long(mapId), conn }, new Class<?>[] { Long.class, Connection.class });
+    public static Element create(long mapId, ElementType elementType, Connection conn) {
+        try {
+            return (Element) ConstructorUtils.invokeConstructor(
+                    Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType),
+                    new Object[] { Long.valueOf(mapId), conn }, new Class<?>[] { Long.class, Connection.class });
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Error creating " + elementType + " OSM element for map with id = " + mapId, e);
+        }
     }
 
     /**
@@ -90,39 +73,36 @@ public class ElementFactory {
      * @param conn
      *            JDBC Connection
      * @return an element
-     * @throws ClassNotFoundException
-     * @throws InstantiationException
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
-     * @throws NoSuchMethodException
      */
-    public Element create(final ElementType elementType, final Object record, Connection conn, final long mapId)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException,
-            ClassNotFoundException, Exception {
-        Object oRec = record;
-        Object oElem = oRec;
-        if (oRec instanceof Tuple) {
+    public static Element create(ElementType elementType, Object record, Connection conn, long mapId) {
+        Object oElem = record;
+
+        if (record instanceof Tuple) {
             // This was forced since we are using reflection which need to be
             // refactored to something more solid.
 
-            Tuple tRec = (Tuple) oRec;
+            Tuple tRec = (Tuple) record;
             Object[] tRecs = tRec.toArray();
             if (tRecs.length > 0) {
                 // assume first record is good.
                 oElem = tRecs[0];
             }
             else {
-                throw new Exception(
+                throw new IllegalArgumentException(
                         "Bad Record type. Tuple is empty. Please make sure the first object is tuple is DTO "
                                 + "that supports setVersion.");
             }
         }
-        Long oMapId = new Long(mapId);
-        ClassUtils.getPackageName(ElementFactory.class);
-        elementType.toString();
-        return (Element) ConstructorUtils.invokeConstructor(
-                Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType.toString()),
+
+        try {
+            Long oMapId = mapId;
+            return (Element) ConstructorUtils.invokeConstructor(
+                Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType),
                 new Object[] { oMapId, conn, oElem },
                 new Class<?>[] { Long.class, Connection.class, oElem.getClass() });
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Error creating " + elementType + " OSM element for map with id = " + mapId, e);
+        }
     }
 }

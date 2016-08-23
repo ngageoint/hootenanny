@@ -41,13 +41,6 @@ Please note that this requires the VMware Vagrant plugin, which can be installed
 vagrant plugin install vagrant-vmware-workstation
 ```
 
-# *On Windows hosts,*
-
-* Windows hosts will also have to create a symlink that's in the git repo, but seems to be treated as a file when cloning to windows.
-
-    `vagrant ssh`
-    `cd hoot`
-
 # Vagrant Provisioning
 
 The initialization of the vagrant vm will take about an hour to download required software from the internet and set it up as a running system. ~~Once it is complete, uncomment the `#, group: "tomcat6"` portion of the in Vagrantfile to allow the webapp to write to shared folders.~~  The previous workaround step is no longer needed as the provision script adds vagrant and tomcat6 users to each others group.

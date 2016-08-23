@@ -205,21 +205,81 @@ void printNames(CppUnit::Test* t)
   }
 }
 
-void populateAllTests(CppUnit::TestSuite *suite, bool printDiff)
+enum _TestType
 {
-  CppUnit::TestFactoryRegistry &registry = CppUnit::TestFactoryRegistry::getRegistry();
-  suite->addTest(registry.makeTest());
-  suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff));
-  suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff));
-  suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff));
-  suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/", printDiff));
-  suite->addTest(new ConflateCaseTestSuite("test-files/cases"));
-  suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-  suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
-  suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
-  suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
-  suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
-  suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
+  CURRENT,
+  QUICK,
+  QUICK_ONLY,
+  SLOW,
+  SLOW_ONLY,
+  GLACIAL,
+  GLACIAL_ONLY,
+  ALL
+};
+
+void populateTests(_TestType t, CppUnit::TestSuite *suite, bool printDiff)
+{
+  /** This section is a bit verbose but ordering is very important as the order must go as follows:
+   *  Default Registry
+   *  Script Tests
+   *  Named Registries (current, quick, etc.
+   */
+  switch(t)
+  {
+  default:
+  case CURRENT:
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
+    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff));
+    break;
+  case QUICK:
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff));
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
+    break;
+  case QUICK_ONLY:
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff));
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
+    break;
+  case SLOW:
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff));
+    suite->addTest(new ConflateCaseTestSuite("test-files/cases"));
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
+    break;
+  case SLOW_ONLY:
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff));
+    suite->addTest(new ConflateCaseTestSuite("test-files/cases"));
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
+    break;
+  case GLACIAL:
+  case ALL:
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/", printDiff));
+    suite->addTest(new ConflateCaseTestSuite("test-files/cases"));
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
+    break;
+  case GLACIAL_ONLY:
+    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/", printDiff));
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
+    break;
+  }
 }
 
 int main(int argc, char *argv[])
@@ -253,6 +313,9 @@ int main(int argc, char *argv[])
             "--slow - Run the 'slow' tests and all above.\n"
             "--glacial - Run the 'glacial' tests and all above.\n"
             "--all - Run all the above tests.\n"
+            "--quick-only - Run the quick (unnamed) tests only.\n"
+            "--slow-only - Run the 'slow' tests only.\n"
+            "--glacial-only - Run the 'glacial' tests only.\n"
             "--single [test name] - Run only the test specified.\n"
             "--names - Show the names of all the tests as they run.\n"
             "--all-names - Only print the names of all the tests.\n"
@@ -273,11 +336,10 @@ int main(int argc, char *argv[])
 
     bool printDiff = args.contains("--diff");
 
-    CppUnit::TestFactoryRegistry &registry = CppUnit::TestFactoryRegistry::getRegistry();
     CppUnit::TestSuite *searchSuite = new CppUnit::TestSuite( "Search Tests" );
     if (args.contains("--all-names"))
     {
-      populateAllTests(searchSuite, printDiff);
+      populateTests(ALL, searchSuite, printDiff);
       printNames(searchSuite);
       delete searchSuite;
       return 0;
@@ -295,7 +357,7 @@ int main(int argc, char *argv[])
       listener = new HootTestListener(false, -1);
       Log::getInstance().setLevel(Log::Info);
       CppUnit::TestSuite *searchSuite = new CppUnit::TestSuite( "Search Tests" );
-      populateAllTests(searchSuite, printDiff);
+      populateTests(ALL, searchSuite, printDiff);
 
       CppUnit::Test* t = findTest(searchSuite, testName);
       if (t == 0)
@@ -313,58 +375,37 @@ int main(int argc, char *argv[])
       {
         listener = new HootTestListener(true);
         Log::getInstance().setLevel(Log::Info);
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
-          printDiff));
+        populateTests(CURRENT, rootSuite, printDiff);
       }
       else if (args.contains("--quick"))
       {
         listener = new HootTestListener(false, 1.0);
-        rootSuite->addTest(registry.makeTest());
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
-                                               printDiff));
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/quick/",
-                                               printDiff));
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
+        populateTests(QUICK, rootSuite, printDiff);
+      }
+      else if (args.contains("--quick-only"))
+      {
+        listener = new HootTestListener(false, 1.0);
+        populateTests(QUICK_ONLY, rootSuite, printDiff);
       }
       else if (args.contains("--slow"))
       {
         listener = new HootTestListener(false, 30.0);
-        rootSuite->addTest(registry.makeTest());
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
-                                               printDiff));
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/quick/",
-                                               printDiff));
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/slow/",
-                                               printDiff));
-        rootSuite->addTest(new ConflateCaseTestSuite("test-files/cases"));
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
+        populateTests(SLOW, rootSuite, printDiff);
+      }
+      else if (args.contains("--slow-only"))
+      {
+        listener = new HootTestListener(false, 30.0);
+        populateTests(SLOW_ONLY, rootSuite, printDiff);
       }
       else if (args.contains("--all") || args.contains("--glacial"))
       {
         listener = new HootTestListener(false, 900.0);
-        rootSuite->addTest(registry.makeTest());
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
-                                               printDiff));
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/quick/",
-                                               printDiff));
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/slow/",
-                                               printDiff));
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/glacial/",
-                                               printDiff));
-        rootSuite->addTest(new ConflateCaseTestSuite("test-files/cases"));
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
+        populateTests(GLACIAL, rootSuite, printDiff);
+      }
+      else if (args.contains("--glacial-only"))
+      {
+        listener = new HootTestListener(false, 900.0);
+        populateTests(GLACIAL_ONLY, rootSuite, printDiff);
       }
 
       for (int i = 0; i < args.size(); i++)

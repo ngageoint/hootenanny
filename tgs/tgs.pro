@@ -263,7 +263,6 @@ cppunit:SOURCES += \
     src/test/cpp/tgs/FeatureSelection/ConsistencySubsetEvaluatorTest.cpp \
     src/test/cpp/tgs/FeatureSelection/FayyadMdlDiscretizerTest.cpp \
     src/test/cpp/tgs/FeatureSelection/CfsSubsetEvaluatorTest.cpp \
-    src/test/cpp/tgs/FeatureSelection/InformationGainCalculatorTest.cpp \
     src/test/cpp/tgs/FeatureSelection/GreedyStepwiseSearchTest.cpp \
     src/test/cpp/tgs/FeatureSelection/SymmetricUncertaintyCalculatorTest.cpp \
     src/test/cpp/tgs/RandomForest/RandomForestTest.cpp \

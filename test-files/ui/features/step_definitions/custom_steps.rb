@@ -2,6 +2,10 @@ Given(/^I am on Hootenanny$/) do
   visit "http://localhost:" + (ENV['TOMCAT_PORT'] ? ENV['TOMCAT_PORT'] : "8080") + "/hootenanny-id" # may need to change URL
 end
 
+Given(/^I am on Hootenanny at location "([^"]*)"$/) do |location|
+  visit "http://localhost:" + (ENV['TOMCAT_PORT'] ? ENV['TOMCAT_PORT'] : "8080") + "/hootenanny-id/#map=" + location # may need to change URL
+end
+
 When(/^I click Get Started$/) do
   begin
     el = find_button('Get Started')
@@ -32,17 +36,31 @@ When(/^I click the "([^"]*)" classed link under "([^"]*)"$/) do |classed, parent
   find('div.' + parent).find('a.' + classed).click
 end
 
-When(/^I select a way map feature with id "([^"]*)"$/) do |id|
+When(/^I select a node map feature with OSM id "([^"]*)"$/) do |id|
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = 10
+  find('div.layer-data').all('g[class*=" ' + id + '"]').last.click
+  Capybara.default_max_wait_time = oldTimeout
+end
+
+When(/^I select a way map feature with OSM id "([^"]*)"$/) do |id|
   oldTimeout = Capybara.default_max_wait_time
   Capybara.default_max_wait_time = 10
   find('div.layer-data').all('path[class*=" ' + id + '"]').last.click
   Capybara.default_max_wait_time = oldTimeout
 end
 
-When(/^I select a node map feature with id "([^"]*)"$/) do |id|
+When(/^I select a way map feature with class "([^"]*)"$/) do |cls|
   oldTimeout = Capybara.default_max_wait_time
   Capybara.default_max_wait_time = 10
-  find('div.layer-data').all('g[class*=" ' + id + '"]').last.click
+  find('div.layer-data').all('path.' + cls).last.click
+  Capybara.default_max_wait_time = oldTimeout
+end
+
+When(/^I select a node map feature with class "([^"]*)"$/) do |cls|
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = 10
+  find('div.layer-data').all('g.' + cls).last.click
   Capybara.default_max_wait_time = oldTimeout
 end
 
@@ -158,6 +176,18 @@ When(/^I click the "([^"]*)" Dataset$/) do |dataset|
   parent.find('rect').click
 end
 
+When(/^I expand the "([^"]*)" folder$/) do |folder|
+  text = page.find('text',:text=>folder, :match => :prefer_exact)
+  parent = text.find(:xpath,"..")
+  begin
+    el = parent.find('.folder')
+  rescue Capybara::ElementNotFound
+    # In Capybara 0.4+ #find_field raises an error instead of returning nil
+    el = nil
+  end
+  parent.find('rect').click unless el.nil?
+end
+
 When(/^I click the "([^"]*)" Dataset and the "([^"]*)" Dataset$/) do |d1, d2|
   text1 = page.find('text',:text=>d1, :match => :prefer_exact)
   parent1 = text1.find(:xpath,"..")
@@ -203,6 +233,13 @@ When(/^I click the "([^"]*)" key$/) do |arg1|
   find("body").native.send_keys(arg1)
 end
 
+When(/^I click the "([^"]*)" key in the "([^"]*)"$/) do |key, el|
+  find(el).native.send_keys(key)
+end
+
+When(/^I press the escape key$/) do
+  find('body').native.send_keys(:escape)
+end
 Then(/^I should see options in this order:$/) do |table|
   expected_order = table.raw.flatten
   actual_order = page.all('#settingsSidebar label').collect(&:text)
@@ -347,6 +384,10 @@ end
 
 When(/^I press "([^"]*)" span with text "([^"]*)"$/) do |cls,txt|
   find('span.' + cls, :text=>txt).click
+end
+
+When(/^I press span with text "([^"]*)"$/) do |txt|
+  find('span', :text=>txt).click
 end
 
 When(/^I press "([^"]*)" big loud link$/) do |cls|
@@ -500,8 +541,51 @@ Then(/^I should see a measurement area$/) do
   page.should have_css('text.measure-label-text')
 end
 
+Then(/^I should (not )?see an image footprint on the map$/) do |negate|
+  expectation = negate ? :should_not : :should
+  page.send(expectation, have_css('path.carousel-footprint'))
+end
+
+Then(/^I should (not )?see an image overlay on the map$/) do |negate|
+  io = all('div.layer-overlay').last
+  expectation = negate ? :should_not : :should
+  io.send(expectation, have_css('img.tile'))
+end
+
+When(/^I wait ([0-9]*) seconds to see image thumbnails$/) do |timeout|
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout)
+  list = page.find('ul.carousel-metadata-list')
+  images = list.all('li')
+  expect( images.size ).to be > 0
+  Capybara.default_max_wait_time = oldTimeout
+end
+
+When(/^I click the image carousel button$/) do
+  find('div.carousel-control').find('button').click
+end
+
+Given(/^that the EGD plugin is available$/) do
+  pending unless page.has_css?('div.carousel-control')
+end
+
+Then(/^I hover over the first thumbnail$/) do
+  list = page.find('ul.carousel-metadata-list')
+  list.first('li').hover
+end
+
+Then(/^I click on the first thumbnail$/) do
+  list = page.find('ul.carousel-metadata-list')
+  list.first('li').click
+end
+
+Then(/^I double click on the first thumbnail$/) do
+  list = page.find('ul.carousel-metadata-list')
+  list.first('li').double_click
+end
+
 Then(/^I accept the alert$/) do
-  sleep 2
+  sleep 5
   page.driver.browser.switch_to.alert.accept
 end
 
@@ -512,9 +596,9 @@ Then(/^I should see element "([^"]*)" with value "([^"]*)"$/) do |id, value|
 end
 
 Then(/^I should see element "([^"]*)" with no value and placeholder "([^"]*)"$/) do |id, value|
-  find(id).value.should eq ""
-  #page.find(:css, 'input[placeholder="' + value + '"]')
-  find(id, 'input[placeholder="' + value + '"]')
+  el = find(id)
+  el.value.should eq ""
+  el['placeholder'].should eq value
 end
 
 Then(/^I choose "([^"]*)" radio button$/) do |text|
@@ -621,6 +705,15 @@ When(/^I delete any existing "([^"]*)" basemap if necessary$/) do |text|
   end
 end
 
+When(/^I delete any existing "([^"]*)" folder if necessary$/) do |text|
+  begin
+        step "I context click the \"#{text}\" Dataset"
+        step "I click the \"Delete\" context menu item"
+        step "I accept the alert"
+  rescue Capybara::ElementNotFound
+  end
+end
+
 Then(/^I open the wfs export url$/) do
   url = find('input.wfsfileExportOutputName').value
   visit url
@@ -631,4 +724,28 @@ Then(/^I should see "([^"]*)" bookmark first and "([^"]*)" bookmark second$/) do
   spans = find('#reviewBookmarksContent').all('span.strong')
   expect(spans.first).to have_content(rb1)
   expect(spans.last).to have_content(rb2)
+end
+
+Then(/^I should see "([^"]*)" with a value between "([^"]*)" and "([^"]*)"$/) do |input, low, high|
+  el = page.find(input)
+  val = el.value.to_f
+  expect(val).to be > low.to_f
+  expect(val).to be < high.to_f
+end
+
+Then(/^I should see "([^"]*)" with a value greater than "([^"]*)"$/) do |el1, el2|
+  max = page.find(el1).value.to_f
+  min = page.find(el2).value.to_f
+  expect(max).to be > min
+end
+
+Then(/^I should see a "([^"]*)" on the map$/) do |el|
+  page.should have_css(el)
+end
+
+Then(/^I wait ([0-9]+) seconds to see "([^"]*)" on the map$/) do |wait, el|
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(wait)
+  page.should have_css(el)
+  Capybara.default_max_wait_time = oldTimeout
 end

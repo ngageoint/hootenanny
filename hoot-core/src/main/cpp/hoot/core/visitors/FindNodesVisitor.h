@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FINDNODESVISITOR_H
 #define FINDNODESVISITOR_H
@@ -42,37 +42,27 @@ class FindNodesVisitor :  public ElementConstOsmMapVisitor
 {
 public:
 
-  FindNodesVisitor (ElementCriterion* pCrit):
-    _pCrit(pCrit)
-  {
-    // This space intentionally left blank
-  }
+  FindNodesVisitor (ElementCriterion* pCrit);
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
+  void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(const shared_ptr<const Element>& e)
-  {
-    if (e->getElementType() == ElementType::Node)
-    {
-      ConstNodePtr pNode = dynamic_pointer_cast<const Node>(e);
-      if (_pCrit->isSatisfied(e))
-      {
-        _nodeIds.push_back(e->getId());
-      }
-    }
-  }
+  void visit(const shared_ptr<const Element>& e);
 
   // Get matching IDs
   vector<long> getIds() { return _nodeIds; }
 
+  static vector<long> findNodes(const ConstOsmMapPtr& map,
+                                ElementCriterion* pCrit);
+
+  static vector<long> findNodes(const ConstOsmMapPtr& map,
+                                ElementCriterion* pCrit,
+                                const Coordinate& refCoord,
+                                Meters maxDistance);
+
   // Convenience method for finding nodes that contain the given tag
-  static vector<long> findNodesByTag(const ConstOsmMapPtr& map, const QString& key, const QString& value)
-  {
-    TagCriterion crit(key, value);
-    FindNodesVisitor v(&crit);
-    map->visitNodesRo(v);
-    return v.getIds();
-  }
+  static vector<long> findNodesByTag(const ConstOsmMapPtr& map,
+                                     const QString& key,
+                                     const QString& value);
 
 private:
   const OsmMap* _map;

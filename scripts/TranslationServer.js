@@ -10,7 +10,7 @@ var cluster = require('cluster');
 var os = require('os');
 var fs = require('fs');
 // default port
-var serverPort = 8233;
+var serverPort = 8094;
 
 var util = require('util');
 var nCPU = os.cpus().length;
@@ -26,7 +26,7 @@ var tdsToOsmMap = {};
 // Argument parser
 process.argv.forEach(function (val, index, array) {
 	// port arg
-	// Note that default port comes from serverPort var 
+	// Note that default port comes from serverPort var
   if(val.indexOf('port=') == 0){
   	var portArg = val.split('=');
   	if(portArg.length == 2){
@@ -48,7 +48,7 @@ process.argv.forEach(function (val, index, array) {
 });
 
 // This is when the cluster master gets invoked
-if(cluster.isMaster){	
+if(cluster.isMaster){
 	// Spawn off http server process by requested thread count
 	for(var i=0; i<nCPU; i++) {
 		cluster.fork();
@@ -67,7 +67,7 @@ if(cluster.isMaster){
 			try
 			{
 				// we sends request based on requested path
-				var subPath = url.parse(request.url).pathname; 
+				var subPath = url.parse(request.url).pathname;
 
 				if(subPath == '/osmtotds'){
 					osmtotds(request, response);
@@ -86,7 +86,7 @@ if(cluster.isMaster){
 					response.write("404 Not Found\n");
 					response.end();
 				}
-			} 
+			}
 			catch (err)
 			{
 					response.writeHead(500, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
@@ -107,7 +107,7 @@ var getCapabilities = function(request, response)
 		response.writeHead(404, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
 		response.write("Post not supported\n");
 		response.end();
-	}	
+	}
 }
 
 var populateOsmToTdsmap = function()
@@ -137,7 +137,7 @@ var populateOsmToTdsmap = function()
 // OSM to TDS request handler
 var osmtotds = function(request, response)
 {
-	
+
 	if(request.method === "POST"){
 		var alldata = "";
 		request.on('data', function(data){
@@ -146,7 +146,7 @@ var osmtotds = function(request, response)
 
 		request.on('end', function(data){
 			populateOsmToTdsmap();
-			
+
 			postHandler(alldata, response, osmToTdsMap);
 		});
 	} else if(request.method === "GET"){
@@ -157,14 +157,14 @@ var osmtotds = function(request, response)
 		var featWGeomMatchSchema = null;
 		var geom = params.geom;
 		var trns = params.translation;
-		
+
 		//Gets the translation schema for field population for a fcode
 		// TODO: In the future we should get this from caller
 		var schemaMap = {};
 		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_full_schema.js');
         schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
 		schemaMap['MGCP'] = require(HOOT_HOME + '/plugins/mgcp_schema.js');
-		
+
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(trns){
 			var schModule = schemaMap[trns];
@@ -190,11 +190,11 @@ var osmtotds = function(request, response)
 
 		response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
 		response.end(JSON.stringify(featSchema));
-	}	
+	}
 }
 
 
-var populateTdsToOsmMap = function() 
+var populateTdsToOsmMap = function()
 {
 	var hoot = require(HOOT_HOME + '/lib/HootJs');
 	logVerbose = hoot.logVerbose;
@@ -223,7 +223,7 @@ var populateTdsToOsmMap = function()
 // TDS to OSM handler
 var tdstoosm = function(request, response)
 {
-	
+
 	if(request.method === "POST"){
 		var alldata = "";
 		request.on('data', function(data){
@@ -232,7 +232,7 @@ var tdstoosm = function(request, response)
 
 		request.on('end', function(data){
 			populateTdsToOsmMap();
-			
+
 			postHandler(alldata, response, tdsToOsmMap);
 		});
 	} else if(request.method === "GET"){
@@ -269,7 +269,7 @@ var tdstoosm = function(request, response)
 
 		response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
 		response.end(JSON.stringify(osm_out));
-	}	
+	}
 }
 
 // TDS taginfo service
@@ -293,17 +293,17 @@ var getTaginfoKeyFields = function(request, response)
 			geom = ['Point'];
 		} else if(params.filter == 'ways') {
 			geom = ['Line','Area'];
-		} 
+		}
 
 		var trns = params.translation;
-		
+
 		//Gets the translation schema for field population for a fcode
-		// TODO: In the future we should get this from caller		
+		// TODO: In the future we should get this from caller
 		var schemaMap = {};
 		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_full_schema.js');
         schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
 		schemaMap['MGCP'] = require(HOOT_HOME + '/plugins/mgcp_schema.js');
-		
+
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(trns){
 			var schModule = schemaMap[trns];
@@ -322,7 +322,7 @@ var getTaginfoKeyFields = function(request, response)
 						featWGeomMatchSchema = elem;
 					}
 				}
-				
+
 			}
 		}
 
@@ -331,9 +331,9 @@ var getTaginfoKeyFields = function(request, response)
 			var fields = featWGeomMatchSchema.columns;
 			for(var j=0; j<fields.length; j++) {
 				var f = fields[j];
-				
+
 				if(f.name == params.key && f.enumerations){
-					
+
 					for(var jj=0; jj<f.enumerations.length; jj++) {
 						var nf = {};
 						var fEnum = f.enumerations[jj];
@@ -357,7 +357,7 @@ var getTaginfoKeyFields = function(request, response)
 		output['data'] = fData;
 		response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
 		response.end(JSON.stringify(output));
-	}	
+	}
 }
 
 // TDS taginfo service
@@ -378,14 +378,14 @@ var getTaginfoKeys = function(request, response)
 		// Line, Point, Area
 		var geom = params.rawgeom;
 		var trns = params.translation;
-		
+
 		//Gets the translation schema for field population for a fcode
 		// TODO: In the future we should get this from caller
 		var schemaMap = {};
 		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_full_schema.js');
         schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_full_schema.js');
 		schemaMap['MGCP'] = require(HOOT_HOME + '/plugins/mgcp_schema.js');
-		
+
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(trns){
 			var schModule = schemaMap[trns];
@@ -413,7 +413,7 @@ var getTaginfoKeys = function(request, response)
 			for(var j=0; j<fields.length; j++) {
 				var f = fields[j];
 				var nf = {};
-				
+
 				nf['key'] = f.name;
 				nf['count_all'] = 100001;
 				nf['count_all_fraction'] = 0.1;
@@ -440,7 +440,7 @@ var getTaginfoKeys = function(request, response)
 		output['data'] = fData;
 		response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
 		response.end(JSON.stringify(output));
-	}	
+	}
 }
 
 // This is where all interesting things happen interfacing with hoot core lib directly
@@ -449,7 +449,7 @@ var postHandler = function(data, response, translatorMap)
 	var hoot = require(HOOT_HOME + '/lib/HootJs');
 	logVerbose = hoot.logVerbose;
 	logWarn = hoot.logWarn;
-	
+
 	var msg = JSON.parse(data);
     var resArr = [];
     var start = new Date().getTime();
@@ -462,7 +462,7 @@ var postHandler = function(data, response, translatorMap)
         result.command = msg.command;
     }
 
-    var cmdTrans = msg.translation; 
+    var cmdTrans = msg.translation;
 
     var tran = translatorMap[cmdTrans];
     if (msg.command == 'translate') {
@@ -497,7 +497,7 @@ var getFilteredSchema = function(request, response) {
 		var translation = params.translation;
 		var maxLevDistance = 1*params.maxlevdst;
 		var limitResult = 1*params.limit;
-		
+
 		//Gets the translation schema for field population for a fcode
 		// TODO: In the future we should get this from caller
 		var schemaMap = {};
@@ -513,50 +513,82 @@ var getFilteredSchema = function(request, response) {
 			}
 		}
 
-		var levDistList = [];
-		for(var ii=0; ii<schema.length; ii++){
-			var elem = schema[ii];
-			if(geomType === elem.geom.toLowerCase()){
-				var targetStr = elem.desc;
-				var levDist = 1*getLevenshteinDistance(searchStr, targetStr);
-
-				if(levDist <= maxLevDistance) {
-					var scoredElem = {};
-					scoredElem['levdist'] = levDist;
-					scoredElem['name'] = elem.name;
-					scoredElem['fcode'] = elem.fcode;
-					scoredElem['desc'] = elem.desc;
-					scoredElem['geom'] = elem.geom;
-					levDistList.push(scoredElem);
-				}
-
-				var targetFCode = elem.fcode;
-				levDist = 1*getLevenshteinDistance(searchStr, targetFCode);
-
-				if(levDist <= maxLevDistance) {
-					var scoredElem = {};
-					scoredElem['levdist'] = levDist;
-					scoredElem['name'] = elem.name;
-					scoredElem['fcode'] = elem.fcode;
-					scoredElem['desc'] = elem.desc;
-					scoredElem['geom'] = elem.geom;
-					levDistList.push(scoredElem);
-				}
-			}	
-		}
-
-		var sorted = levDistList.sort(function(a,b){
-			return (1*a.levdist) - (1*b.levdist);
-		});
-		
-		var nRes = sorted.length;
-		if(nRes > limitResult) {
-			nRes = limitResult;
-		}
 		var result = [];
-		for(var n=0; n<nRes; n++) {
-			result.push(sorted[n]);
+		if (searchStr.length > 0) {
+
+			//Check for search string in the description or fcode
+			var exactMatches = schema
+				.filter(function(d) {
+					return d.geom.toLowerCase() === geomType.toLowerCase() &&
+					( d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 ||
+						d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 )
+					;
+				})
+				.map(function(d) {
+					return {
+						name: d.name,
+						fcode: d.fcode,
+						desc: d.desc,
+						geom: d.geom,
+						idx: Math.min( d.desc.toLowerCase().indexOf(searchStr.toLowerCase()),
+							d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) )
+					}
+				})
+				.sort(function(a, b) {
+				  	return a.idx - b.idx;
+				})
+				.slice(0, limitResult);
+
+			result = result.concat(exactMatches);
+
+			//If  more results are needed to reach the limitm, calculate fuzzy levenshtein matches
+			if (exactMatches.length < limitResult) {
+
+				var fuzzyMatches = schema
+					.filter(function(d) {
+						return (! exactMatches.some(function(e) { //filter out exact matches
+							return e.desc === d.desc;
+						}) ) &&
+						d.geom.toLowerCase() === geomType.toLowerCase() &&
+						( getLevenshteinDistance(searchStr.toLowerCase(), d.desc.toLowerCase()) <= maxLevDistance ||
+							getLevenshteinDistance(searchStr.toLowerCase(), d.fcode.toLowerCase()) <= maxLevDistance )
+						;
+					})
+					.map(function(d) {
+						return {
+							name: d.name,
+							fcode: d.fcode,
+							desc: d.desc,
+							geom: d.geom,
+							idx: Math.min( getLevenshteinDistance(searchStr.toLowerCase(), d.desc.toLowerCase()),
+								getLevenshteinDistance(searchStr.toLowerCase(), d.fcode.toLowerCase()) )
+						}
+					})
+					.sort(function(a, b) {
+					  	return a.idx - b.idx;
+					})
+					.slice(0, limitResult);
+
+				result = result.concat(fuzzyMatches)
+					.slice(0, limitResult);
+			}
+
+		} else {
+			// Return the first N elements of the schema
+			result = schema.filter(function(d) {
+					return d.geom.toLowerCase() === geomType.toLowerCase()
+				})
+				.slice(limitResult)
+				.map(function(d) {
+					return {
+						name: d.name,
+						fcode: d.fcode,
+						desc: d.desc,
+						geom: d.geom
+					}
+				});
 		}
+
 		response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
 		response.end(JSON.stringify(result));
 	}

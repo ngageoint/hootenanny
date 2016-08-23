@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DividedHighwayManipulation.h"
@@ -41,6 +41,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
@@ -105,7 +106,7 @@ void DividedHighwayManipulation::_addConnector(shared_ptr<OsmMap> map,
 
           if (other->getTags()["hoot:stub"] == "true")
           {
-            map->removeWay(other);
+            RemoveWayOp::removeWay(map, other->getId());
           }
           // if the angle is less than 45
           else if (angle < toRadians(45))
@@ -138,7 +139,7 @@ void DividedHighwayManipulation::applyManipulation(shared_ptr<OsmMap> wm,
   _addConnector(result, mid->getNodeIds()[0]);
   _addConnector(result, mid->getNodeIds()[mid->getNodeCount() - 1]);
 
-  result->removeWay(_mid);
+  RemoveWayOp::removeWay(result, _mid);
 
   result->getWay(_left)->setStatus(Status::Conflated);
   result->getWay(_right)->setStatus(Status::Conflated);
@@ -328,7 +329,7 @@ void DividedHighwayManipulation::_mergeInbound(shared_ptr<OsmMap> map,
 
   if (inbound->getNodeCount() == 2 && inbound->getNodeId(0) == inbound->getLastNodeId())
   {
-    map->removeWay(inbound);
+    RemoveWayOp::removeWay(map, inbound->getId());
   }
 }
 

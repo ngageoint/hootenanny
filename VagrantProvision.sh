@@ -29,7 +29,7 @@ if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
 fi
 
 echo "### Installing dependencies from repos..."
-sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server htop unzip postgresql-9.5  postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.2 >> Ubuntu_upgrade.txt 2>&1
+sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server htop unzip postgresql-9.5  postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.2 >> Ubuntu_upgrade.txt 2>&1
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -71,43 +71,68 @@ fi
 
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
-    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
+    #echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
+    echo "export PATH=\$PATH:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
+
+# Ruby via rvm - from rvm.io
+gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+
+curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
+
+source /home/vagrant/.rvm/scripts/rvm
+
+rvm install ruby-2.3
+rvm --default use 2.3
+
+# Don't install documentation for gems
+cat > ~/.gemrc <<EOT
+  install: --no-document
+  update: --no-document
+EOT
 
 # gem installs are *very* slow, hence all the checks in place here to facilitate debugging
 echo "### Installing cucumber gems..."
 gem list --local | grep -q mime-types
 if [ $? -eq 1 ]; then
-   sudo gem install mime-types -v 2.6.2
+   #sudo gem install mime-types -v 2.6.2
+   gem install mime-types
 fi
-gem list --local | grep -q capybara
-if [ $? -eq 1 ]; then
-   sudo gem install capybara -v 2.5.0
-fi
+# gem list --local | grep -q capybara
+# if [ $? -eq 1 ]; then
+#    #sudo gem install capybara -v 2.5.0
+#    gem install capybara
+# fi
 gem list --local | grep -q cucumber
 if [ $? -eq 1 ]; then
-   sudo gem install cucumber
+   #sudo gem install cucumber
+   gem install cucumber
 fi
 gem list --local | grep -q capybara-webkit
 if [ $? -eq 1 ]; then
-   sudo gem install capybara-webkit
+   #sudo gem install capybara-webkit
+   gem install capybara-webkit
 fi
 gem list --local | grep -q selenium-webdriver
 if [ $? -eq 1 ]; then
-   sudo gem install selenium-webdriver
+   #sudo gem install selenium-webdriver
+   gem install selenium-webdriver
 fi
 gem list --local | grep -q rspec
 if [ $? -eq 1 ]; then
-   sudo gem install rspec
+   #sudo gem install rspec
+   gem install rspec
 fi
 gem list --local | grep -q capybara-screenshot
 if [ $? -eq 1 ]; then
-   sudo gem install capybara-screenshot
+   #sudo gem install capybara-screenshot
+   gem install capybara-screenshot
 fi
 gem list --local | grep -q selenium-cucumber
 if [ $? -eq 1 ]; then
-   sudo gem install selenium-cucumber
+   #sudo gem install selenium-cucumber
+   gem install selenium-cucumber
 fi
 
 # Make sure that we are in ~ before trying to wget & install stuff

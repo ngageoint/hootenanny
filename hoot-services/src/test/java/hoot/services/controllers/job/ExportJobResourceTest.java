@@ -26,9 +26,11 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.HootProperties.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.sql.Connection;
@@ -39,15 +41,8 @@ import java.util.List;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-import hoot.services.HootProperties;
-import hoot.services.UnitTest;
-import hoot.services.geo.BoundingBox;
-import hoot.services.models.osm.Map;
-import hoot.services.utils.HootCustomPropertiesSetter;
-
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -56,12 +51,10 @@ import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.jersey.api.client.ClientResponse.Status;
-
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class ExportJobResourceTest {
@@ -73,7 +66,7 @@ public class ExportJobResourceTest {
     public void testProcess() throws Exception {
         String params = "{\"translation\":\"MGCP.js\",\"inputtype\":\"db\",\"input\":\"ToyTestA\",\"outputtype\":\"gdb\",\"removereview\" : \"false\"}";
 
-        String tempOutputPath = HootProperties.getProperty("tempOutputPath");
+        String tempOutputPath = TEMP_OUTPUT_PATH;
         JSONObject arg = new JSONObject();
         arg.put("outputfolder", tempOutputPath + "/" + "f9a8d471");
         tempOutputPath = arg.toJSONString();
@@ -85,11 +78,8 @@ public class ExportJobResourceTest {
 
         ExportJobResource spy = Mockito.spy(new ExportJobResource());
         Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
-        Response resp = spy.process(params);
-        String result = resp.getEntity().toString();
-        JSONParser parser = new JSONParser();
-        JSONObject o = (JSONObject) parser.parse(result);
-        String jobId = o.get("jobid").toString();
+        JobId resp = spy.process(params);
+        String jobId = resp.getJobid();
 
         jobArgs = jobArgs.replaceAll("f9a8d471", jobId);
         verify(spy).postJobRquest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
@@ -98,20 +88,15 @@ public class ExportJobResourceTest {
     @Test
     @Category(UnitTest.class)
     public void testProcessForWFS() throws Exception {
-        String wfsStoreDb = HootProperties.getProperty("wfsStoreDb");
-        String userid = HootProperties.getProperty("dbUserId");
-        String pwd = HootProperties.getProperty("dbPassword");
-        String host = HootProperties.getProperty("dbHost");
-        String[] hostParts = host.split(":");
-        String pgUrl = "host='" + hostParts[0] + "' port='" + hostParts[1] + "' user='" + userid + "' password='" + pwd
-                + "' dbname='" + wfsStoreDb + "'";
+        String[] hostParts = DB_HOST.split(":");
+        String pgUrl = "host='" + hostParts[0] + "' port='" + hostParts[1] + "' user='" + DB_USER_ID + "' password='" + DB_PASSWORD
+                + "' dbname='" + WFS_STORE_DB + "'";
 
         String params = "{\"translation\":\"MGCP.js\",\"inputtype\":\"db\",\"input\":\"ToyTestA\",\"outputtype\":\"wfs\",\"removereview\" : \"false\"}";
 
-        String tempOutputPath = HootProperties.getProperty("tempOutputPath");
         JSONObject arg = new JSONObject();
-        arg.put("outputfolder", tempOutputPath + "/" + "f9a8d471");
-        tempOutputPath = arg.toJSONString();
+        arg.put("outputfolder", TEMP_OUTPUT_PATH + "/" + "f9a8d471");
+        String tempOutputPath = arg.toJSONString();
         String jobArgs = ",\"exec\":\"osm2ogrscript\",\"params\":[{\"input\":\"ToyTestA\"},{\"translation\":\"MGCP.js\"},{\"outputtype\":\"wfs\"},"
                 + "{\"removereview\":\"false\"},{\"inputtype\":\"db\"},";
         jobArgs += tempOutputPath + ",";
@@ -122,11 +107,8 @@ public class ExportJobResourceTest {
 
         ExportJobResource spy = Mockito.spy(new ExportJobResource());
         Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
-        Response resp = spy.process(params);
-        String result = resp.getEntity().toString();
-        JSONParser parser = new JSONParser();
-        JSONObject o = (JSONObject) parser.parse(result);
-        String jobId = o.get("jobid").toString();
+        JobId resp = spy.process(params);
+        String jobId = resp.getJobid();
 
         jobArgs = jobArgs.replaceAll("f9a8d471", jobId);
         verify(spy).postChainJobRquest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
@@ -139,12 +121,9 @@ public class ExportJobResourceTest {
         Response resp = exRes.getExportResources();
         String result = resp.getEntity().toString();
 
-        String homeFolder = HootProperties.getProperty("homeFolder");
-        String translationExtPath = HootProperties.getProperty("translationExtPath");
-
-        String transExtPath = homeFolder + "/" + "/plugins-local/script/utp";
-        if (!translationExtPath.isEmpty()) {
-            transExtPath = translationExtPath;
+        String transExtPath = HOME_FOLDER + "/" + "/plugins-local/script/utp";
+        if (!TRANSLATION_EXT_PATH.isEmpty()) {
+            transExtPath = TRANSLATION_EXT_PATH;
         }
 
         String expected = "";
@@ -162,27 +141,26 @@ public class ExportJobResourceTest {
     @Category(UnitTest.class)
     public void testExportToOsmApiDb() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
-            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot/services/controllers/job/ExportResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()));
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
             Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
-            final List<Long> mapIds = new ArrayList<>();
+            List<Long> mapIds = new ArrayList<>();
             mapIds.add(new Long(1));
             Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
             java.util.Map<String, String> mapTags = new HashMap<>();
-            final String exportTime = "2016-05-04 10:15";
+            String exportTime = "2016-05-04 10:15";
             mapTags.put("osm_api_db_export_time", exportTime);
             Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
-            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
-            final String mapBoundsStr = mapBounds.toServicesString();
+            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
+            String mapBoundsStr = mapBounds.toServicesString();
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            final String commandArgs = spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams),
-                    null).toString();
+            String commandArgs = spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
             log.debug(commandArgs);
 
             Assert.assertTrue(commandArgs.contains("{\"input\":\"MyTestMap\"}"));
@@ -194,7 +172,7 @@ public class ExportJobResourceTest {
             Assert.assertTrue(commandArgs.contains("{\"changesetaoi\":\"" + mapBoundsStr + "\"}"));
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
         }
     }
 
@@ -202,13 +180,12 @@ public class ExportJobResourceTest {
     @Category(UnitTest.class)
     public void testExportToOsmApiDbWithTranslation() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
-            final String inputParams = FileUtils
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            String inputParams = FileUtils
                     .readFileToString(new File(
                             Thread.currentThread()
                                     .getContextClassLoader()
-                                    .getResource(
-                                            "hoot/services/controllers/job/ExportResourceTestExportToOsmApiDbWithTranslationInput.json")
+                                    .getResource("hoot/services/controllers/job/ExportResourceTestExportToOsmApiDbWithTranslationInput.json")
                                     .getPath()));
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
@@ -227,13 +204,13 @@ public class ExportJobResourceTest {
             spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
-            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
             Assert.assertTrue(e.getResponse().getEntity().toString()
                     .contains("Custom translation not allowed when exporting to OSM API database."));
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
         }
     }
 
@@ -241,8 +218,8 @@ public class ExportJobResourceTest {
     @Category(UnitTest.class)
     public void testExportToOsmApiDbNoTimestampTag() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
-            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot/services/controllers/job/ExportResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()));
@@ -262,12 +239,12 @@ public class ExportJobResourceTest {
             spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
-            Assert.assertEquals(Status.CONFLICT.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertEquals(Response.Status.CONFLICT.getStatusCode(), e.getResponse().getStatus());
             Assert.assertTrue(e.getResponse().getEntity().toString().contains("has no osm_api_db_export_time tag"));
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
         }
     }
 
@@ -275,8 +252,8 @@ public class ExportJobResourceTest {
     @Category(UnitTest.class)
     public void testExportToOsmApiDbBadInputType() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
-            final String inputParams = FileUtils.readFileToString(new File(Thread
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            String inputParams = FileUtils.readFileToString(new File(Thread
                     .currentThread()
                     .getContextClassLoader()
                     .getResource(
@@ -299,7 +276,7 @@ public class ExportJobResourceTest {
             spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
-            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
             Assert.assertTrue(e
                     .getResponse()
                     .getEntity()
@@ -308,7 +285,7 @@ public class ExportJobResourceTest {
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
         }
     }
 
@@ -316,8 +293,8 @@ public class ExportJobResourceTest {
     @Category(UnitTest.class)
     public void testExportToOsmApiDbMultipleMapsWithSameName() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
-            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot/services/controllers/job/ExportResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()));
@@ -340,12 +317,12 @@ public class ExportJobResourceTest {
             spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
-            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
             Assert.assertTrue(e.getResponse().getEntity().toString().contains("Multiple maps with name"));
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
         }
     }
 
@@ -353,8 +330,8 @@ public class ExportJobResourceTest {
     @Category(UnitTest.class)
     public void testExportToOsmApiDbMissingMap() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "true");
-            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot/services/controllers/job/ExportResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()));
@@ -375,12 +352,12 @@ public class ExportJobResourceTest {
             spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
-            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
             Assert.assertTrue(e.getResponse().getEntity().toString().contains("No map exists with name"));
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
         }
     }
 
@@ -388,9 +365,8 @@ public class ExportJobResourceTest {
     @Category(UnitTest.class)
     public void testExportOsmApiDbNotEnabled() throws Exception {
         try {
-
-            HootCustomPropertiesSetter.setProperty("osmApiDbEnabled", "false");
-            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
+            String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot/services/controllers/job/ExportResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()));
@@ -398,23 +374,29 @@ public class ExportJobResourceTest {
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
             Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
-            final List<Long> mapIds = new ArrayList<>();
-            mapIds.add(new Long(1));
+            List<Long> mapIds = new ArrayList<>();
+            mapIds.add(1L);
+
             Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString(), any(Connection.class));
             java.util.Map<String, String> mapTags = new HashMap<>();
-            final String exportTime = "2016-05-04 10:15";
+
+            String exportTime = "2016-05-04 10:15";
             mapTags.put("osm_api_db_export_time", exportTime);
             Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong(), any(Connection.class));
-            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
+
+            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
             spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), null).toString();
         }
         catch (WebApplicationException e) {
-            Assert.assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
             Assert.assertTrue(e.getResponse().getEntity().toString()
                     .contains("Attempted to export to an OSM API database but OSM API database support is disabled"));
             throw e;
+        }
+        finally {
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
         }
     }
 }

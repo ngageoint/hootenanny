@@ -29,22 +29,27 @@ package hoot.services.utils;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 /**
  * Various JSON utilities
  */
-public class JsonUtils {
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(JsonUtils.class);
+public final class JsonUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(JsonUtils.class);
+
+    private JsonUtils() {
+    }
 
     /**
      * Converts a POJO to JSON
@@ -54,11 +59,12 @@ public class JsonUtils {
      * @return JSON string
      * @throws IOException
      */
-    public static String objectToJson(final Object obj) throws IOException {
+    public static String objectToJson(Object obj) throws IOException {
         StringWriter writer = new StringWriter();
-        JsonGenerator jsonGenerator = new JsonFactory().createJsonGenerator(writer);
-        jsonGenerator.setCodec(new ObjectMapper());
-        jsonGenerator.writeObject(obj);
+        try (JsonGenerator jsonGenerator = new JsonFactory().createJsonGenerator(writer)) {
+            jsonGenerator.setCodec(new ObjectMapper());
+            jsonGenerator.writeObject(obj);
+        }
         return writer.toString();
     }
 
@@ -74,16 +80,14 @@ public class JsonUtils {
      *            if true, "'s are left in the parse value; otherwise they are
      *            removed
      * @return string value
-     * @throws JsonParseException
-     * @throws JsonMappingException
      * @throws IOException
      */
-    public static String getTopLevelValueAsString(final String fieldName, final String json, final boolean retainQuotes)
-            throws JsonParseException, JsonMappingException, IOException {
+    public static String getTopLevelValueAsString(String fieldName, String json, boolean retainQuotes)
+            throws IOException {
         JsonNode root = (new ObjectMapper()).readTree(json).path(fieldName);
         if (root != null) {
             String value = root.toString();
-            if (!retainQuotes && value != null) {
+            if (!retainQuotes && (value != null)) {
                 value = value.replaceAll("\"", "");
             }
             return value;
@@ -91,4 +95,33 @@ public class JsonUtils {
         return null;
     }
 
+    /**
+     *
+     *
+     * @param input
+     * @return String
+     */
+    public static String escapeJson(String input) throws ParseException {
+        JSONParser parser = new JSONParser();
+        JSONObject json = (JSONObject) parser.parse(input);
+
+        // Special handling of ADV_OPTIONS
+        String key = "ADV_OPTIONS";
+        if (json.containsKey(key)) {
+            String advopts = json.get(key).toString();
+            String cleanup = advopts
+                    .replaceAll("-D \"", "'")
+                    .replaceAll("=", "': '")
+                    .replaceAll("\"", "',")
+                    .replaceAll("'", "\"");
+
+            // wrap with curly braces and remove trailing comma
+            cleanup = "{" + cleanup.substring(0, cleanup.length() - 1) + "}";
+
+            JSONObject obj = (JSONObject) parser.parse(cleanup);
+            json.put(key, obj);
+        }
+
+        return JSONObject.escape(json.toString());
+    }
 }

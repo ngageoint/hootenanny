@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.wfs;
 
+import static hoot.services.HootProperties.WFS_STORE_CONN_NAME;
+import static hoot.services.HootProperties.WFS_STORE_DB;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -33,7 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -56,22 +60,16 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import hoot.services.HootProperties;
-import hoot.services.db.DataDefinitionManager;
-import hoot.services.utils.ResourceErrorHandler;
+import hoot.services.utils.DataDefinitionManager;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
 public class WfsManager {
     private static final Logger logger = LoggerFactory.getLogger(WfsManager.class);
-    private static final String coreJobServerUrl = HootProperties.getProperty("coreJobServerUrl");
-    private static final String wfsStoreConnName = HootProperties.getProperty("wfsStoreConnName");
-    private static final String wfsStoreDb = HootProperties.getProperty("wfsStoreDb");
 
     public void createWfsResource(String wfsJobName) throws Exception {
-        DataDefinitionManager dataDefinitionManager = new DataDefinitionManager();
-        List<String> tblsList = dataDefinitionManager.getTablesList(wfsStoreDb, wfsJobName);
-        createWFSDatasourceFeature(wfsJobName, wfsStoreConnName, tblsList);
+        List<String> tblsList = DataDefinitionManager.getTablesList(WFS_STORE_DB, wfsJobName);
+        createWFSDatasourceFeature(wfsJobName, WFS_STORE_CONN_NAME, tblsList);
         createService(wfsJobName);
     }
 
@@ -180,6 +178,7 @@ public class WfsManager {
         if (fstore == null) {
             throw new Exception("fstore argument can not be null");
         }
+
         DeegreeWorkspace workspace = OGCFrontController.getServiceWorkspace();
         WebServicesConfiguration wsConfig = workspace.getSubsystemManager(WebServicesConfiguration.class);
 
@@ -197,7 +196,7 @@ public class WfsManager {
         }
     }
 
-    private static void removeService(String wfsResourceName) throws Exception {
+    private static void removeService(String wfsResourceName) {
         DeegreeWorkspace workspace = OGCFrontController.getServiceWorkspace();
         WebServicesConfiguration webServicesConfiguration = workspace.getSubsystemManager(WebServicesConfiguration.class);
         webServicesConfiguration.deactivate(wfsResourceName);
@@ -235,7 +234,7 @@ public class WfsManager {
         }
     }
 
-    public static List<String> getAllWfsServices() throws Exception {
+    public static List<String> getAllWfsServices() {
         List<String> services = new ArrayList<>();
 
         try {
@@ -255,7 +254,8 @@ public class WfsManager {
             }
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error retrieving WFS services: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+            String msg = "Error retrieving WFS services: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return services;

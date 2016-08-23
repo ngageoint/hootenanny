@@ -26,13 +26,12 @@
  */
 package hoot.services.models.osm;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import hoot.services.db2.CurrentRelationMembers;
+import hoot.services.models.db.CurrentRelationMembers;
 import hoot.services.models.osm.Element.ElementType;
 
 
@@ -40,28 +39,20 @@ import hoot.services.models.osm.Element.ElementType;
  * Represents the model for a member of an OSM relation
  */
 public class RelationMember {
-    /**
-     * element type
-     */
-    private ElementType type;
+
+    private final ElementType type;
+    private final long id;
+
+    private String role = "";
+    private long oldId;
 
     public ElementType getType() {
         return type;
     }
 
-    /**
-     * member ID
-     */
-    private long id;
-
     public long getId() {
         return id;
     }
-
-    /**
-     * original member ID from the changeset upload request
-     */
-    private long oldId;
 
     public long getOldId() {
         return oldId;
@@ -71,27 +62,22 @@ public class RelationMember {
         oldId = elementId;
     }
 
-    /**
-     * member's role
-     */
-    private String role = "";
-
     public String getRole() {
         return role;
     }
 
-    public RelationMember(final long id, final ElementType type, final String role) {
+    public RelationMember(long id, ElementType type, String role) {
         this.id = id;
         this.type = type;
         this.role = role;
     }
 
-    public RelationMember(final long id, final ElementType type) {
+    public RelationMember(long id, ElementType type) {
         this.id = id;
         this.type = type;
     }
 
-    public RelationMember(final CurrentRelationMembers record) {
+    public RelationMember(CurrentRelationMembers record) {
         this.id = record.getMemberId();
         this.type = Element.elementTypeForElementEnum(record.getMemberType());
         this.role = record.getMemberRole();
@@ -113,22 +99,14 @@ public class RelationMember {
      *            the member's element type
      * @param relationId
      *            the owning relation ID
-     * @param dbConn
-     *            JDBC Connection
      * @return a relation member database record
-     * @throws Exception
      */
-    public static CurrentRelationMembers createRecord(final long id, final int sequenceId, final String role,
-            final Object elementType, final long relationId, Connection dbConn) throws Exception {
+    static CurrentRelationMembers createRecord(long id, int sequenceId, String role, Object elementType,
+            long relationId) {
         CurrentRelationMembers memberRecord = new CurrentRelationMembers();
         memberRecord.setMemberId(id);
         memberRecord.setSequenceId(sequenceId);
-        if (!StringUtils.isEmpty(role)) {
-            memberRecord.setMemberRole(role);
-        }
-        else {
-            memberRecord.setMemberRole("");
-        }
+        memberRecord.setMemberRole(StringUtils.isEmpty(role) ? "" : role);
         memberRecord.setMemberType(elementType);
         memberRecord.setRelationId(relationId);
         return memberRecord;
@@ -142,8 +120,8 @@ public class RelationMember {
      *            a list of relation member database records
      * @return a list of RelationMember objects
      */
-    public static List<RelationMember> fromRecords(final List<CurrentRelationMembers> records) {
-        List<RelationMember> members = new ArrayList<RelationMember>();
+    static List<RelationMember> fromRecords(List<CurrentRelationMembers> records) {
+        List<RelationMember> members = new ArrayList<>();
         for (CurrentRelationMembers memberRecord : records) {
             members.add(new RelationMember(memberRecord));
         }

@@ -26,7 +26,11 @@
  */
 package hoot.services.controllers.info;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.RPT_STORE_PATH;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -35,10 +39,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
@@ -47,18 +51,14 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import hoot.services.HootProperties;
-import hoot.services.utils.ResourceErrorHandler;
 
 
 @Path("/reports")
 public class ReportsResource {
     private static final Logger logger = LoggerFactory.getLogger(ReportsResource.class);
-    private static final String rptStorePath = HootProperties.getProperty("reportDataPath");
-    private static final String homeFolder = HootProperties.getProperty("homeFolder");
 
     public ReportsResource() {
     }
@@ -78,18 +78,23 @@ public class ReportsResource {
     @Path("/get")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getReport(@QueryParam("id") String id, @QueryParam("reportname") String name) {
-        File out = null;
+        File report;
+
         try {
-            out = getReportFile(id);
+            report = getReportFile(id);
         }
-        catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error exporting report file: ", Status.INTERNAL_SERVER_ERROR, logger);
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error returning report with id = " + id + ", reportname = "  + name;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        ResponseBuilder rBuild = Response.ok(out, "application/pdf");
-        rBuild.header("Content-Disposition", "attachment; filename=" + name);
+        ResponseBuilder responseBuilder = Response.ok(report, "application/pdf");
+        responseBuilder.header("Content-Disposition", "attachment; filename=" + name);
 
-        return rBuild.build();
+        return responseBuilder.build();
     }
 
     /**
@@ -101,17 +106,22 @@ public class ReportsResource {
      */
     @GET
     @Path("/list")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getReport() {
-        JSONArray reps = new JSONArray();
+        JSONArray reports;
+
         try {
-            reps = getReportsList();
+            reports = getReportsList();
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting reports list: " + ex.getMessage(), Status.INTERNAL_SERVER_ERROR, logger);
+            String message = "Error getting reports list!";
+            throw new WebApplicationException(ex, Response.serverError().entity(message).build());
         }
 
-        return Response.ok(reps.toString(), MediaType.TEXT_PLAIN).build();
+        return Response.ok(reports.toJSONString()).build();
     }
 
     /**
@@ -125,32 +135,36 @@ public class ReportsResource {
      */
     @GET
     @Path("/delete")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response delReport(@QueryParam("id") String id) {
-        JSONObject resp = new JSONObject();
-        boolean isDeleted = false;
+        boolean isDeleted;
 
         try {
             isDeleted = deleteReport(id);
         }
-        catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error exporting report file: " + ex, Status.INTERNAL_SERVER_ERROR, logger);
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error deleting report file with id = " + id;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        resp.put("id", id);
-        resp.put("deleted", String.valueOf(isDeleted));
+        JSONObject entity = new JSONObject();
+        entity.put("id", id);
+        entity.put("deleted", String.valueOf(isDeleted));
 
-        return Response.ok(resp.toString(), MediaType.TEXT_PLAIN).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     // Gets the meta data of the report
-    private static JSONObject getMetaData(String id) throws Exception {
+    private static JSONObject getMetaData(String id) throws IOException, ParseException {
         JSONObject res = new JSONObject();
 
-        String metaDataPath = homeFolder + "/" + rptStorePath + "/" + id + "/meta.data";
-        File metaFolder = hoot.services.utils.FileUtils.getSubFolderFromFolder(homeFolder + "/" + rptStorePath, id);
+        File metaFolder = hoot.services.utils.FileUtils.getSubFolderFromFolder(HOME_FOLDER + "/" + RPT_STORE_PATH, id);
 
         if (metaFolder != null) {
+            String metaDataPath = HOME_FOLDER + "/" + RPT_STORE_PATH + "/" + id + "/meta.data";
             File file = new File(metaDataPath);
             if (file.exists()) {
                 String meta = FileUtils.readFileToString(file, "UTF-8");
@@ -165,12 +179,12 @@ public class ReportsResource {
     // gets the list of meta data. This could get slow if there is large numbers of reports
     // One solution may be using Runtime to do bash to get folder count natively
     // and that should be the fastest way..
-    private static JSONArray getReportsList() throws Exception {
+    private static JSONArray getReportsList() {
         JSONArray res = new JSONArray();
         // sort by name
         Map<String, JSONObject> sorted = new TreeMap<>();
 
-        String storePath = homeFolder + "/" + rptStorePath;
+        String storePath = HOME_FOLDER + "/" + RPT_STORE_PATH;
         File dir = new File(storePath);
         if (dir.exists()) {
             List<File> files = (List<File>) FileUtils.listFilesAndDirs(dir, new NotFileFilter(TrueFileFilter.INSTANCE),
@@ -189,7 +203,6 @@ public class ReportsResource {
                 }
                 catch (Exception ignored) {
                     // we ignore and continue
-                    // logger.error(ee.getMessage());
                 }
             }
         }
@@ -200,7 +213,7 @@ public class ReportsResource {
     }
 
     // retrieves the report file
-    private static File getReportFile(String id) throws Exception {
+    private static File getReportFile(String id) throws IOException, ParseException {
         File res = null;
 
         JSONObject meta = getMetaData(id);
@@ -217,10 +230,10 @@ public class ReportsResource {
     }
 
     // deletes requested report by deleting folder
-    private static boolean deleteReport(String id) throws Exception {
+    private static boolean deleteReport(String id) throws IOException {
         boolean deleted = false;
 
-        File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(homeFolder + "/" + rptStorePath, id);
+        File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(HOME_FOLDER + "/" + RPT_STORE_PATH, id);
         if ((folder != null) && folder.exists()) {
             FileUtils.forceDelete(folder);
             deleted = true;

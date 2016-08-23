@@ -25,10 +25,10 @@ image::user/images/id/hoot_UI_layout.png[]
 
 === Adding Layers to the Map
 
-During conflation, source datasets are merged based on user-specified conflation parameters to create an output layer that is ultimately superior in terms of complete geometry and attribution. Two datasets are required to perform a conflation; _Reference_ and _Secondary_ Data. To add a new Reference Dataset to the map, click on the _Add Reference Dataset_ button on the left side. A list of available layers will appear in the drop down menu as shown in <<hoot_add_datasets>>. Note that in order to add a layer it must be <<Hoot-iD_Datasets,imported>> into Hootenanny using the workflow described in <<Hoot-iD_Datasets>>.
+During conflation, source datasets are merged based on user-specified conflation parameters to create an output layer that is ultimately superior in terms of complete geometry and attribution. Two datasets are required to perform a conflation; _Reference_ and _Secondary_ Data. To add a new Reference Dataset to the map, click on the _Add Reference Dataset_ button on the left side. A list of available layers will appear in the drop down menu as shown in <<hoot_add_datasets>>. Note that in order to add a layer it must be <<Hoot-iD_Datasets,imported>> into Hootenanny using the workflow described in <<Hoot-iD_Datasets>>. Layers can also be added directly from the Dataset tab in Manage.  This is described in <<HootAddDataFromManage>>.
 
 [[hoot_add_datasets]]
-.Adding Datasets.  Click on Add Reference/Secondary Dataset button to display a list of available layers and folders.  Clicking on the folder icon e.g. dc, expands the contents showing all layers and subfolders.  In order to add a layer to the map it must be selected (highlighted in yellow).  To modify the layer color click on the palette or select OSM symbology then add to map. Recently used layers can be added using the dropdown menu shown. The size of the panel can be expanded to increase/decrease the width of the panel by dragging the sidebar (L in <<HootiD-UILayout>>) to the desired size. 
+.Adding Datasets.  Click on Add Reference/Secondary Dataset button to display a list of available layers and folders.  Clicking on the folder icon e.g. dc, expands the contents showing all layers and subfolders.  In order to add a layer to the map it must be selected (highlighted in yellow).  To modify the layer color click on the palette or select OSM symbology then add to map. Recently used layers can be added using the dropdown menu shown. The size of the panel can be expanded to increase/decrease the width of the panel by dragging the sidebar (L in <<HootiD-UILayout>>) to the desired size.  
 image::user/images/id/hoot_addlayer_folder.png[scaledwidth="25%"]
 
 [[HootiD-Addinglayers]]
@@ -51,11 +51,11 @@ image::user/images/id/hoot_mapnik_rendering.png[scaledwidth="75%"]
 [[HootiD-EditingLayers]]
 === Editing Features in Hootenanny
 
-Similar to editing data in link:$$http://wiki.openstreetmap.org/wiki/Editing$$[OpenStreetMap.org], users can select any point, line or polygon feature and modify both the geometry and attribution displayed. To aid the user during the editing process, Hootenanny provides the additional functionality of allowing users to toggle between different display tag schemas (OSM, TDS 6.1, and TDS 4.0) by changing the Filter By Type drop down to the desired tag format.  This does _not_ modify the underlying data but merely changes the displayed tag schema in the left panel.
+Similar to editing data in link:$$http://wiki.openstreetmap.org/wiki/Editing$$[OpenStreetMap.org], users can select any point, line or polygon feature and modify both the geometry and attribution displayed. To aid the user during the editing process, Hootenanny provides the additional functionality of allowing users to toggle between different display tag schemas (OSM, TDS 6.1/4.0, and MGCP) by changing the Filter By Type drop down to the desired tag format.  This does _not_ modify the underlying data but merely changes the displayed tag schema in the left panel.
 
 [[Filter-by-Type]]
-.Changing the displayed tag schema in Hootenanny using the Filter By Type dropdown. The left image shows the selected feature displayed in OSM while right side shows the identical feature in TDSv61. DigitalGlobe GBM basemap.
-image::user/images/id/hoot_OSMvTDS.png[scaledwidth="75%"]
+.The Filter By Type dropdown menu that allows users to select a desired tag schema e.g. TDS, OSM, MCCP.
+image::user/images/id/hoot_filterbytype.png[scaledwidth="75%"]
 
 ==== Modifying Layer Attributes
 
@@ -205,7 +205,7 @@ image::user/images/id/hoot_enable_editedfeatures.png[scaledwidth="75%"]
 
 ==== Tools
 
-The Tools button provides users with a quick set of customized tools for measuring length/area and cropping layers to smaller subsets using either the visual extent or user defined bounding box. To access both options click on the Tools button and select either Measurement or Clip Tools.
+The Tools button provides users with a quick set of customized tools for measuring length/area and cropping layers to smaller subsets using either the visual extent or user defined bounding box. To access both options click on the _Tools_ button and select either Measurement or Clip Tools.
 
 [[Hoot_Tools]]
 .Tools button shown in Hoot UI.
@@ -221,12 +221,12 @@ image::user/images/id/hoot_measure_area.png[scaledwidth="75%"]
 
 ===== Clip Tools
 
-The clip tools provide a simple mechanism for cropping map layers using either the current visual extent of the map or a user defined bounding box.  An example use case might be if the user ingests a country level dataset into Hootenanny but is only interested in conflating a region or city within that data. Rather than conflate the entire country dataset, the user would clip the area using the Clip Tools to reduce it to a specific AOI and then run the conflation against that clipped dataset.  Two options are provided; clip to visual extent and clip to bounding box.  When clip to visual extent is selected the current visible map is used as the clip AOI.  If the preference is to define a bounding box on the map, the user can select clip to bounding box and then single left-click on any location dragging the displayed box to the desired size and direction. Keep in mind the first point clicked on the map is either the top or bottom corner depending on where the box is positioned.
+The _Clip Dataset_ tool allows users to crop existing datasets using a custom bounding box or the current visual extent of the map.  To access this tool click on the Tools | Clip Tools | Clip Dataset button which will open a dialog box that supports three mechanisms to define a clip bounding box.  First the bounding box can be defined by manually entering coordinate values in the displayed box.  Secondly, the user can click on _Clip to Bounding Box_ and drag a box over a specific AOI to populate the clip region bounding box coordinates.  Third, users can select _User Visual Extent_  and pass in the current map visual extent as the clip region.  To define a bounding box on the map, single left-click on any location on the map within the source dataset AOI and drag window to the desired clip size and direction.
 
-Once a bounding box (or visual extent) has been selected, a dialog box will pop up with options to specify an output name and path of the clipped dataset.  After the job has successfully completed it will appear in the list of available datasets.
+Once a bounding box (or visual extent) has been selected, additional options to specify an output name and path of the clipped dataset will appear.  After the job has completed it will show up in the list of available datasets and specified output folder.
 
 [[Hoot_Clip_Map]]
-.Clipping a layer using a defined bounding box.  This image shows the user selecting the bounding box option, creating a rectangular clip area and submitting the job to the server. The imagery basemap displayed is the DigitalGlobe GBM service.
+.Clipping a layer using a defined bounding box. The imagery basemap displayed is the DigitalGlobe GBM service.
 image::user/images/id/hoot_clip.png[scaledwidth="75%"]
 
 ==== Help
@@ -387,9 +387,9 @@ Clicking on any of the highlighted fields in the review table (I) selects the fe
 When features are flagged as needing review, a number of different review notes may appear to provide some guidance to the user.  The review notes are general and don't provide the specific reasons why a pair of features are being reviewed against one another but do provide some context for understanding why a review may have occurred.  For example, the Review Note: The feature pair with a review score of 0.375 met the review threshold of 0.25 provides the review score and the threshold value which could be compared against other features with similar score and threshold values. Often when conflating POI data, review notes such as _Somewhat similar (200m) - very similar names and generic type, very close together, generic type to place match_ or _Somewhat similar (26m) - very close together, similar POI type_ will appear.  Those provide an indication of the reasons for being flagged and the distance between the POIs in the particular review.  Any specific questions regarding the reviews and required action can be addressed to Hootenanny.Help@digitalglobe.com.
 
 [[ReviewRelations]]
-==== Viewing Review Relations
+==== Show Review Relations
 
-After conflating two input datasets and entering review mode, users are presented with a review containing Feature A against Feature B, reflective of the pairwise manner that conflation occurs.  In some cases, Feature A or B (highlighted by either blue/red) may represent a relation such as the case with road reviews involving one or more multiline strings.  However in other cases such as with Pois, the relations represent associated Pois that are also reviewed against the same set of features (listed in the tag `hoot:score:uuid` for a selected feature).  In order to view all of the associated review relations for a given feature, click on either the blue/red highlighted feature and select the palette option "Show Review Relations" or Shift-R. This will display a line between the feature and all of the associated review relations.  Users can scroll through each review pair by clicking on the letter icon, i.e. A-Z, above each line.  
+When reviewing conflicts, a review is presented to the user with different options depending on the type of feature e.g. if POI they can merge or resolve, if building/road they can resolve, etc.  Reviews occur in a pairwise manner where feature a is reviewed against feature b but because any member of a review pair can also be involved in reviews against other features, it is important to provide a mechanism to display these relationships even if conflicts are only resolved between two features per review.  In an effort to account for these one to many relationships between reviewed features, users have the option to _show review relations_ for a given reviewed feature by clicking on the feature and then selecting the palette option, Show review relations for this feature (Shortcut: *Shift+R*). A line will appear from the feature to all related features with a letter designation depending on the order of the review inside a green circle.  In cases where there are more than 26 related reviews for a given feature, the letter displayed will appear as AA, BB, etc.  Each letter circles can be dragged around using a mouse cursor and clicking on it will open the review associated with that feature pair in the blue/red table.     
 
 [[LatviaHotelReview]]
 .The review relations of the selected Latvia Geonames Poi, Gutnebergs Hotel.  Clicking on each letter will display the associated review feature pair/table.
@@ -416,15 +416,18 @@ image::user/images/id/hoot_mapinmap_review.png[scaledwidth="75%"]
 
 ==== Multi-user Conflict Reviewing
 
-Hootenanny supports the ability for multiple users to review the same merged output layer containing any number of generated reviews.  Using the given scenario of a reference conflation between two POI layers resulting in 15K reviews, any user with access to the same Hootenanny deployment can load the merged layer containing the unresolved reviews and take any necessary action to resolve them.  To mitigate any toe-stepping that might occur due to multiple users accessing the same review pair simultaneously, reviews are presented in a randomized order such that there is a fairly low probability of two users getting the same review at the same time (assuming that the review count is high and the number of reviewers is low).  For those instances where a review is presented to two users simultaneously, the user that resolves their review first by clicking on the Resolved button will commit the change to the database.  
+Hootenanny supports the ability for multiple users to view the same layer containing unresolved reviews.  Given the scenario of a reference conflation between two POI layers resulting in 15K reviews, any user with access to the same Hootenanny instance can load the merged layer containing the unresolved reviews and take any necessary action to resolve them.  To mitigate any toe-stepping that might occur due to multiple users accessing the same review pair simultaneously, reviews are presented in a randomized order such that there is a fairly low probability of two users getting the same review at the same time (assuming that the review count is high and the number of reviewers is low).  For those instances where a review is presented to two users simultaneously, the user that resolves their review first by clicking on the Resolved button will commit the change to the database.  
 
 [[HootShareReviews]]
-==== Sharing/Saving Reviews
+==== Bookmark Review
 
-To assist with the multi-user conflict reviewing, there is a new mechanism to allow users to better collaborate on reviews using the _Share Review_ (*C* in <<ReviewMode_Layout>>) option.  When a user encounters a review that requires additional feedback prior to resolving, they can click the _Share Review_ button.  This will pop-up a dialog box allowing them to enter some details about the review which others can then open separately as a bookmark from the Review Bookmarks in Manage.  A second user can then open the review bookmark, add additional comments and view that review to take any additional action required.
+When reviewing conflicts it is often useful to collaborate with others to determine the best coarse of action.  To this end, users can bookmark reviews so that they can be reviewed at a later time provided that the review is not resolved or the review layer is not deleted.  To bookmark a review, click on the associated button from the review items tool bar shown in <<HootBookmarkReview>>.
 
-.Share Review.  Clicking the Share Review button pops up a dialog box where a user can enter a title, description, note and email to associate with an unresolved review. 
-image::user/images/id/hoot_sharereview.png[scaledwidth="25%"]
+This will pop-up a dialog box allowing them to provide some details about the review.  A second user can access this bookmarked review from the Manage | Review Bookmarks page and take whatever action is needed.
+
+[[HootBookmarkReview]]
+.Bookmark Review.  Clicking the Bookmark Review button pops up a dialog box where a user can enter a title, description, note and email to associate with the review. The bookmark is then accessed in the Manage | Review Bookmarks page.
+image::user/images/id/hoot_bookmarkreview.png[scaledwidth="75%"]
 
 === Conflating OSM API Database Data (MapEdit, etc.)
 
@@ -606,14 +609,103 @@ This is the output name of the exported file.
 [[Hoot-iD_Manage]]
 === Manage Hootenanny
 
-The _Manage_ capabilities within Hootenanny provide a set of administrative tools and data management options for users. For example, a user can use the _Translation Assistant_ to create a custom translation between two different tag schemas for generating agency standard products used for foundation GEOINT content. Data can also be imported/exported from the _Datasets_ settings to different file formats supported by desktop GIS applications and translated to a specific data schema to evaluate compliance to standard specifications using tools like the Geospatial Analysis Integrity Toolkit (GAIT).
+The _Manage_ capabilities within Hootenanny provide a set of administrative and dataset tools. For example, a user can use the _Translation Assistant_ to create a custom translation between two different tag schemas for generating agency standard products used for foundation GEOINT content. Data can also be imported/exported from the _Datasets_ settings to different file formats supported by desktop GIS applications and translated to a specific data schema to evaluate compliance to standard specifications using tools like the Geospatial Analysis Integrity Toolkit (GAIT).
 
-This section presents an overview of the functionality in each setting and provides a set of example workflows to showcase how the tool can be implemented using real world datasets.
+This section presents an overview of the functionality in each settings page and provides a set of example workflows to showcase how the tool can be implemented using real world datasets.
 
 Click on the _Manage_ link in the top right-hand side of the user interface.
 
-.Manage Settings in Hootenanny.  A. Vertically displayed settings allow users to select different menu options for each setting.  B. The primary window for updating or interacting with elements associated with each setting. C. The toggle to return to map/manage view.
+.Manage options.  A. Settings pages, e.g. Datasets, Translation Assistant, etc..., that allow users to select different menu options for each setting.  B. The primary window for updating or interacting with elements associated with each setting. C. The toggle to return to map/manage view.
 image::user/images/id/hoot_ui_manage.png[scaledwidth="75%"]
+
+[[Hoot-iD_Datasets]]
+==== Datasets
+
+The Datasets settings page provides users with different options for managing data in Hootenanny including data ingest (shapefile, osm, geonames, FGDB), data management and data export from Hootenanny into pre-defined output formats and translation schemas.  To access this feature click on Datasets from the Manage Settings page.
+
+.Datasets settings. Users can add new datasets, add a new folder and manage existing datasets.
+image::user/images/id/hoot_dataset_tab.png[scaledwidth="75%"]
+
+===== Data Ingest
+
+When users click on Add Data, a dialog box displaying different options for importing datasets appears. For _Import Type_, users can select a shapefile(s), filegeodatabase, .osm file, geonames text file, etc. or than can upload a .zip containing either a shapefile, filegeodatabase or .osm dataset.  
+
+
+IMPORTANT:  File Geodatabase files, Shapefiles and .osm datasets are now supported in .zip.  The GBD format refers to a folder containing all of the relevant geodatabase layers.  When uploading multiple files in a single zip, all features are merged into a single layer.  To avoid this behavior of merging datasets into a single layer you will need to separate the features e.g. pois, roads, buildings, etc., first and then upload each layer separately.  
+
+[[AddNewData]]
+.Importing data into Hootenanny.
+image::user/images/id/hoot_add_dataset.png[scaledwidth="75%"]
+
+*_Bulk Import_*
+
+To ingest multiple datasets in bulk mode, Hootenanny provides a bulk importer where additional data can be added as rows to a form that handles the ingest data job.  To access this feature, right-click on the Add Datasets button as shown below and select the Bulk Import option.  A _Bulk Importer_ menu will appear with each row representing a unique dataset to import along with any relevant import options.  Click import when finished to submit the job.
+
+[[HootBulkImport]]
+.Bulk Import in Hootenanny.  To access right-click on the Add Dataset button and populate each field.  Note that larger datasets will require more time to import.
+image::user/images/id/hoot_bulkimport.png[scaledwidth="75%"]
+
+[[HootAddDataFromManage]]
+===== Add Reference / Secondary Layer to Map
+
+Once data has been ingested into Hootenanny, users can add it directly to the map from the Manage | Datasets settings page by right-clicking on a dataset and selecting Add as Reference or Secondary Dataset.  
+
+.Adding data from dataset options page.  Select either option from the right-click menu on highlighted dataset. 
+image::user/images/id/hoot_adddatafrommanage.png[scaledwidth="50%"] 
+
+NOTE: Once a Reference or Secondary dataset has been added these options will no longer be listed in the right-click menu until either have been removed from the main map.
+
+===== Adding Folders
+
+To add a new folder, click on the _Add Folder_ button and enter the name of the folder they wish to create.  Any sub folders can be created by right-clicking on the folder and selecting Add Folder or selecting a new output folder name in the add dataset menu.  When deleting a folder, all data contained in the folder and any subfolders will be deleted.  
+
+.Add folder.  Click the Add folder button to open the relevant menu options.
+image::user/images/id/hoot_add_folder.png[scaledwidth="25%"]
+
+===== Export Data
+
+To export a dataset, right-mouse click on a dataset and select the Export Dataset option to open the Export dialog box shown in <<hootexport>>.  The various export options are discussed in detail in <<HootiD_Exporting>>.
+
+[[right-click_export]]
+.Export from dataset.
+image::user/images/id/hoot_export_rtclick.png[scaledwidth="75%"]
+
+NOTE: Datasets must be selected (highlighted in yellow) to export. When selecting more than one dataset only delete and move are available options.
+
+===== Other Dataset Options
+
+Layers can be managed by right-clicking on selected datasets to expose different options.  Note that the options presented will depend on what is selected or highlighted.  To select more than one dataset hold the ctrl key and select each dataset.  
+
+.Manage data options available from Right-click.
+image::user/images/id/hoot_adddatafrommanage.png[scaledwidth="50%"] 
+
+To delete, move or rename an existing dataset(s), right click over the highlighted layers and select the appropriate option.
+
+NOTE: It is not possible to select more than one folder simultaneously.
+
+*_Prepare for Validation_*
+
+The Prepare for Validation option provides users with the capability of generating a 30% sample of validated POI features that can be used to determine the degree to which it can be identified using the basemap imagery data source. When using DigitalGlobe GBM/EGD data, the imagery metadata is appended to each POI indicating what image id was used to validate a given feature.  To prepare a POI layer for validation, right-click and select Prepare for Validation.  A dialog box will appear prompting users to enter a name for the layer.
+
+.Create new validation layer.  Enter an output name and click run to generate the validation layer.
+image::user/images/id/hoot_prepareforvalidation.png[scaledwidth="25%"]
+
+Once complete, users can load this newly generated validation layer and Hootenanny will popup a prompt to go into Validation mode whereby three validation options are presented.  Each presented option (either 1, 2, or 3) when selected will populate different hoot:review:choices tags as well as any imagery source metadata if used.
+
+.Confirmed: You can look at the point in the imagery and determine what it is (e.g. a mosque, airport, stadium, etc.) Shortcut key = 1.
+
+.Assessed: You can determine that the point is a building from the imagery but you cannot verify its type (e.g. hair salon, coffee shop, etc..). Shortcut key = 2.
+
+.Reported: You cannot determine the point using the provided imagery (missing coverage, clouds, etc.). Shortcut key = 3.
+
+.Validating a layer of Washington, D.C. Points of Interest in Hootenanny against the DigitalGlobe GBM/EGD basemap.
+image::user/images/id/hoot_validate_layer.png[scaledwidth="75%"]
+
+NOTE: Panning the map during Validation causes the highlighted POI to become unselected and removes the validation options. To resume validation, click the Select button at the bottom.
+
+*_Filter Non-HGIS POIs_*
+
+The Filter Non-HGIS POI capabilities is provided for users working with the Human Geography Information Service (HGIS) version 2.0.  It provides a simple means to take any layer and filter anything that is not a HGIS POI (e.g. road and/or building) based on the HGIS v2.0 definitions for POI.  Note that this capability is very specific to the HGIS group at DigitalGlobe/NGA and should only be used in conjunction with those efforts.  Please contact hootenanny.help@digitalglobe.com for any questions regarding this.  To create a new filtered layer simply right-click and select the option, then provide an output layer name.
 
 [[TranslationAssistant]]
 ==== Translation Assistant
@@ -703,84 +795,10 @@ The Translation settings page contains all of the predefined translations (MGCP,
 .Managing Translations. Clicking on the Translation page opens the list of available translation files that can be used for importing new data.  To modify a given translation file (only applicable for read/write capable custom translation files), click on the folder icon and edit the javascript as needed.  To delete click on the trash can icon.
 image::user/images/id/hoot_translation_tab.png[scaledwidth="75%"]
 
-[[Hoot-iD_Datasets]]
-==== Datasets
-
-The Datasets settings page provides users with options for managing data that they wish to use in Hootenanny including importing from source (shapefile, osm, geonames, FGDB), organizing data into a folder structure, renaming/deleting/moving data that has been already ingested, and exporting data from Hootenanny into pre-defined output formats and translation schemas.  To access this feature click on the Datasets setting button.
-
-.Datasets settings. Users can add new datasets, add a new folder and manage existing datasets.
-image::user/images/id/hoot_dataset_tab.png[scaledwidth="75%"]
-
-===== Adding Datasets
-
-When users click on Add Data, a dialog box including different options for importing datasets appears. For _Import Type_, users can select either .zip file containing a single or multiple shapefiles (multiple shapefiles will get merged into a single layer during import), a shapefile, a .osm file, a geonames text file from geonames.org (renamed to x.geonames) or a ESRI FileGeoDatabase (FGDB) directory.
-
-[[AddNewData]]
-.Importing data into Hootenanny.
-image::user/images/id/hoot_add_dataset.png[scaledwidth="75%"]
-
-*_Bulk Import_*
-
-To ingest multiple datasets in bulk mode, Hootenanny provides a bulk importer where additional data can be added as rows to a form that handles the ingest data job.  To access this feature, right-click on the Add Datasets button as shown below and select the Bulk Import option.  A _Bulk Importer_ menu will appear with each row representing a unique dataset to import along with any relevant import options.  Click import when finished to submit the job.
-
-[[HootBulkImport]]
-.Bulk Import in Hootenanny.  To access right-click on the Add Dataset button and populate each field.  Note that larger datasets will require more time to import.
-image::user/images/id/hoot_bulkimport.png[scaledwidth="75%"]
-
-===== Adding Folders
-
-To add a new folder, click on the Add Folder button and enter the name of the folder they wish to create.  Any sub folders can be created by right-clicking on the folder and selecting Add Folder or selecting a new output folder name in the add dataset menu.  When deleting a folder, all data contained in the folder will be removed with the exception of any subfolders, which will then become the next directory within the newly deleted folder.  For example, if your folder structure consists of a parent named TEST containing dataset1 and subfolders TEST2 (containing dataset2) and TEST3 (containing dataset3). Deleting the TEST folder will remove only dataset1 and bring the folders, TEST2 and TEST3 to the root level.  The data within those folders will remain intact.
-
-.Add folder.  Click the Add folder button to open the relevant menu options.
-image::user/images/id/hoot_add_folder.png[scaledwidth="25%"]
-
-===== Export Data
-
-To export a dataset, right-mouse click on a dataset and select the Export Dataset option to open the Export dialog box shown in <<hootexport>>.  The various export options are discussed in detail in <<HootiD_Exporting>>.
-
-[[right-click_export]]
-.Export from dataset.
-image::user/images/id/hoot_export_rtclick.png[scaledwidth="75%"]
-
-NOTE: Datasets must be selected (highlighted in yellow) to export. When selecting more than one dataset only delete and move are available options.
-
-===== Other Data Manage Options
-
-Layers can be managed by right-clicking on selected datasets to expose different menu options.  Note that the options presented will depend on the number of files are selected.
-
-.Manage data options available from Right-click.
-image::user/images/id/hoot_manageoptions.png[scaledwidth="15%"]
-
-To delete, move or rename an existing dataset(s), right click over the highlighted layers and select the appropriate option.
-
-*_Prepare for Validation_*
-
-The Prepare for Validation option provides users with the capability of generating a 30% sample of validated POI features that can be used to determine the degree to which it can be identified using the basemap imagery data source. When using DigitalGlobe GBM/EGD data, the imagery metadata is appended to each POI indicating what image id was used to validate a given feature.  To prepare a POI layer for validation, right-click and select Prepare for Validation.  A dialog box will appear prompting users to enter a name for the layer.
-
-.Create new validation layer.  Enter an output name and click run to generate the validation layer.
-image::user/images/id/hoot_prepareforvalidation.png[scaledwidth="25%"]
-
-Once complete, users can load this newly generated validation layer and Hootenanny will popup a prompt to go into Validation mode whereby three validation options are presented.  Each presented option (either 1, 2, or 3) when selected will populate different hoot:review:choices tags as well as any imagery source metadata if used.
-
-.Confirmed: You can look at the point in the imagery and determine what it is (e.g. a mosque, airport, stadium, etc.) Shortcut key = 1.
-
-.Assessed: You can determine that the point is a building from the imagery but you cannot verify its type (e.g. hair salon, coffee shop, etc..). Shortcut key = 2.
-
-.Reported: You cannot determine the point using the provided imagery (missing coverage, clouds, etc.). Shortcut key = 3.
-
-.Validating a layer of Washington, D.C. Points of Interest in Hootenanny against the DigitalGlobe GBM/EGD basemap.
-image::user/images/id/hoot_validate_layer.png[scaledwidth="75%"]
-
-NOTE: Panning the map during Validation causes the highlighted POI to become unselected and removes the validation options. To resume validation, click the Select button at the bottom.
-
-*_Filter Non-HGIS POIs_*
-
-The Filter Non-HGIS POI capabilities is provided for users working with the Human Geography Information Service (HGIS) version 2.0.  It provides a simple means to take any layer and filter anything that is not a HGIS POI (e.g. road and/or building) based on the HGIS v2.0 definitions for POI.  Note that this capability is very specific to the HGIS group at DigitalGlobe/NGA and should only be used in conjunction with those efforts.  Please contact hootenanny.help@digitalglobe.com for any questions regarding this.  To create a new filtered layer simply right-click and select the option, then provide an output layer name.
-
 [[HootiD_WFSExport]]
 ==== WFS Exports
 
-The WFS Export tab lists all of the available WFS Services that have been generated from previous conflation jobs. Click on the up arrow icon to display the WFS Resource URL. Copy/Paste the URL into a third party application that supports WFS. Note that the URL provided is the full GetCapabilities document describing the service.
+The WFS Export settings lists all of the available WFS Services that have been generated from previous conflation jobs. Click on the up arrow icon to display the WFS Resource URL. Copy/Paste the URL into a third party application that supports WFS. Note that the URL provided is the full GetCapabilities document describing the service.
 
 .WFS Exports tab. A list of all user generated WFS services will appear here.
 image::user/images/id/hoot_wfs.png[]
@@ -794,7 +812,7 @@ URL:  http://localhost:8080/hoot-services/ogc/ex_f7e41fccf46343b6987d003c5a83c9a
 [[Hoot-iD_Basemap]]
 ==== Manage Basemaps
 
-Hootenanny provides users with the capability to generate their own custom basemap service using a georeferenced image. Currently Hootenanny only supports GeoTIFF or png file types. To generate a new basemap that can be displayed in Hootenanny, click on the Basemap tab and the _New Basemap_ button. Use the file browser to upload your local georeferenced image (GeoTIFF or png only).
+Hootenanny provides users with the capability to generate their own custom basemap service using a georeferenced image. Currently Hootenanny only supports GeoTIFF or png file types. To generate a new basemap that can be displayed in Hootenanny, click on the Basemap settings and the _New Basemap_ button. Use the file browser to upload your local georeferenced image (GeoTIFF or png only).
 
 .Creating New Basemaps for Hootenanny.  Click on the + New Basemap and select an appropriate georeferenced image.
 image::user/images/id/hoot_basemap.png[]
@@ -811,7 +829,7 @@ image::user/images/id/hoot_view_basemap.png[]
 
 ===== Hoot Log
 
-The Log tab provides both the Application and UI log for users to troubleshoot any issues that may occur during a user session.  There are two panels that are provided here; The Error log which provides core and service logging detail (i.e. tomcat catalina.out) and the UI log which provides errors generated from the iD web client.  The full log can be exported by clicking on the export full log button.  Note that any UI issues will also appear on the map map in the upper right corner in red highlight when they are triggered.  This messages are maintained in the UI log until the browser session is reloaded.
+The Log settings provides both the Application and UI log for users to troubleshoot any issues that may occur during a user session.  There are two panels that are provided here; The Error log which provides core and service logging detail (i.e. tomcat catalina.out) and the UI log which provides errors generated from the iD web client.  The full log can be exported by clicking on the export full log button.  Note that any UI issues will also appear on the map map in the upper right corner in red highlight when they are triggered.  This messages are maintained in the UI log until the browser session is reloaded.
 
 .Hootenanny Error and UI Log File.
 image::user/images/id/hoot_log_tab.png[]
@@ -823,23 +841,24 @@ NOTE: Those familiar with Chrome's developer console (hitting F-12 key will open
 [[HootStatsReport]]
 ===== Reports
 
-The Reports tab contains all of the generated reports for conflation jobs where Generate Report = True has been specified. To download a report, click on the arrow and save the file to your local desktop.
+The Reports settings contains all of the generated reports for conflation jobs where _Generate Report = True_ has been specified. To download a report, click on the arrow and save the pdf file to your local desktop.
 
 .Hootenanny Conflation Statistic Reports
 image::user/images/id/hoot_csr_tab.png[]
 
+IMPORTANT: To enable report generation for a conflation, users must check the _Enable Test Mode_ check box on the About settings page.  This will add the option to the list of conflation parameters.  Note that report generation only works on Ubuntu based deployments.  
 
 ===== Review Bookmarks
 
-The Review Bookmarks tab shown in <<ViewingReviewBookmark>> stores all of the shared reviews described in <<HootShareReviews>>.  Users can open any review and read any pertinent notes or comments, then if necessary add any relevant additional comments.  These notes will persist with the review bookmark for the duration of its lifecycle or until the user clicks the trashcan icon to delete them.  
+The Review Bookmarks settings shown in <<ViewingReviewBookmark>> stores all of the bookmarked reviews described in <<HootShareReviews>>.  Users can open any review and add any pertinent notes or comments and then open .  Each bookmarked review and associated comments will persist as long as any layers associated with the review have not been deleted.  Bookmarks can be sorted and filtered using any of the displayed options such as Created By (asc/desc), Creator user, Layer name, etc.
 
-Note that when adding comments to an existing review they will appear from an anonymous user unless you click on the user icon in the upper right corner to _Set User For Session_.  
+NOTE: any comments added to a bookmarked review will appear as an anonymous user unless you click on the user icon for each comment.  
 
 [[ViewingReviewBookmark]]
-.Hootenanny Review Bookmarks.
-image::user/images/id/hoot_reviewbookmarks.png[]
+.Viewing Review Bookmarks.
+image::user/images/id/hoot_managebookmarks.png[]
 
-Clicking on the magnifying glass next to the refresh icon for each review will open a pop-up message asking if you would like to navigate to the review item on the map.  Note that when the review is resolved, this feature is no longer available and the review bookmark will appear with the status, Resolved. 
+To open a bookmarked review, click on the magnifying glass shown in <<EditingReviewBookmark>>.  Note that when an action has been taken on a review to resolve it, users can no longer open the review. 
 
 [[EditingReviewBookmark]]
 .Opening a review in the Review Bookmarks tab.  Comments and notes can be added by clicking on the `+` symbol in the right corner.  To open the map to this review click on the magnifier glass in the top right corner and a pop-up message will provide feedback for returning to review mode in the map.

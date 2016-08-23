@@ -33,16 +33,19 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.query.sql.RelationalPathBase;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.types.path.NumberPath;
-import com.mysema.query.types.path.StringPath;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.sql.RelationalPathBase;
+import com.querydsl.sql.SQLQuery;
 
-import hoot.services.db.DbUtils;
+import hoot.services.utils.DbUtils;
 
 
-public class ModelDaoUtils {
-    private static final Logger log = LoggerFactory.getLogger(ModelDaoUtils.class);
+public final class ModelDaoUtils {
+    private static final Logger logger = LoggerFactory.getLogger(ModelDaoUtils.class);
+
+    private ModelDaoUtils() {
+    }
 
     /**
      * Returns the record ID associated with the record request input string for
@@ -50,7 +53,7 @@ public class ModelDaoUtils {
      * record ID. If that is unsuccessful, it treats the request string as a
      * record display name. This currently only supports Map and User types.
      * 
-     * @param requestStr
+     * @param input
      *            can be either a map ID or a map name
      * @param dbConn
      *            JDBC Connection
@@ -58,66 +61,66 @@ public class ModelDaoUtils {
      *         if a record name string is passed in, it is verified that only
      *         one record of the requested type exists with the given name, and
      *         its ID is returned
-     * @throws Exception
-     *             if the requested record doesn't exist or if multiple reccords
-     *             of the same type exist with the requested input name
      */
-    public static long getRecordIdForInputString(final String requestStr, Connection dbConn,
-            RelationalPathBase<?> table, NumberPath<Long> idField, StringPath nameField) throws Exception {
-        // There must be a way to implement this generically for all DAO's but
-        // haven't been able to
-        // figured out how to do it yet.
+    public static long getRecordIdForInputString(String input, Connection dbConn,
+            RelationalPathBase<?> table, NumberPath<Long> idField, StringPath nameField) {
 
-        if (StringUtils.isEmpty(requestStr)) {
-            throw new Exception("No record exists with ID: " + requestStr + ".  Please specify a valid record.");
+        if (StringUtils.isEmpty(input)) {
+            throw new IllegalArgumentException("No record exists with ID: " + input
+                    + ".  Please specify a valid record.");
         }
 
-        boolean parsedAsNum = true;
-        long idNum = -1;
-        try {
-            idNum = Long.parseLong(requestStr);
-        }
-        catch (NumberFormatException e) {
-            parsedAsNum = false;
-        }
+        // Check if we can compare by ID
+        if (StringUtils.isNumeric(input)) {
+            logger.debug("Verifying that record with ID = {} in '{}' table has previously been created ...",
+                    input, table.getTableName());
 
-        String requestStrType = parsedAsNum ? "ID" : "name";
+            long recordCount = new SQLQuery<>(dbConn, DbUtils.getConfiguration())
+                    .from(table)
+                    .where(idField.eq(Long.valueOf(input)))
+                    .fetchCount();
 
-        boolean recordExists = false;
-        boolean multipleRecordsExist = false;
-        log.debug("Verifying record with " + requestStrType + ": " + requestStr + " has previously been "
-                + "created ...");
-        if (idNum != -1) {
-            recordExists = new SQLQuery(dbConn, DbUtils.getConfiguration()).from(table)
-                    .where(idField.eq(new Long(idNum))).exists();
+            if (recordCount == 0) {
+                throw new IllegalArgumentException("No record exists with ID = " + input +
+                        " in '" + table + "' table.  Please specify a valid record.");
+            }
+
+            if (recordCount == 1) {
+                return Long.valueOf(input);
+            }
+
+            if (recordCount > 1) {
+                throw new IllegalArgumentException("Multiple records exist with ID " + " = " + input
+                        + " in '" + table + "' table.  Please specify a single, valid record.");
+            }
         }
-        else if (!StringUtils.isEmpty(requestStr)) {
-            // input wasn't parsed as a numeric ID, so let's try it as a name
+        else { // input wasn't parsed as a numeric ID, so let's try it as a name
+            logger.debug("Verifying that record with NAME = {} in '{}' table has previously been created ...",
+                    input, table.getTableName());
 
             // there has to be a better way to do this against the generated
-            // code but haven't been
-            // able to get it to work yet
+            // code but haven't been able to get it to work yet
+            List<Long> records = new SQLQuery<>(dbConn, DbUtils.getConfiguration())
+                    .select(idField)
+                    .from(table)
+                    .where(nameField.eq(input))
+                    .fetch();
 
-            List<Long> records = new SQLQuery(dbConn, DbUtils.getConfiguration()).from(table)
-                    .where(nameField.eq(requestStr)).list(idField);
+            if (records.isEmpty()) {
+                throw new IllegalArgumentException("No record exists with NAME = " + input +
+                        " in '" + table + "' table.  Please specify a valid record.");
+            }
 
             if (records.size() == 1) {
                 return records.get(0);
             }
+
             if (records.size() > 1) {
-                recordExists = true;
-                multipleRecordsExist = true;
+                throw new IllegalArgumentException("Multiple records exist with NAME " + " = " + input
+                        + " in '" + table + "' table.  Please specify a single, valid record.");
             }
         }
-        if (multipleRecordsExist) {
-            throw new Exception("Multiple records exist with " + requestStrType + ": " + requestStr
-                    + ".  Please specify " + "a single, valid record.");
-        }
-        if (!recordExists) {
-            throw new Exception("No record exists with " + requestStrType + ": " + requestStr + ".  Please specify a "
-                    + "valid record.");
-        }
 
-        return idNum;
+        return -1;
     }
 }

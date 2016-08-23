@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayExpertClassifier.h"
 
@@ -31,6 +31,7 @@
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/ops/CopySubsetOp.h>
 
 namespace hoot
 {
@@ -71,10 +72,10 @@ MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
 {
   MatchClassification result;
 
-  vector<long> wids;
-  wids.push_back(match.getSubline1().getElementId().getId());
-  wids.push_back(match.getSubline2().getElementId().getId());
-  shared_ptr<OsmMap> theMap = map->copyWays(wids);
+  OsmMapPtr mapCopy(new OsmMap());
+  CopySubsetOp(map,
+               match.getSubline1().getElementId(),
+               match.getSubline2().getElementId()).apply(mapCopy);
 
   if (match.isValid() == false)
   {
@@ -84,10 +85,10 @@ MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
     return result;
   }
 
-  WayPtr sl1 = match.getSubline1().toWay(theMap);
-  WayPtr sl2 = match.getSubline2().toWay(theMap);
+  WayPtr sl1 = match.getSubline1().toWay(mapCopy);
+  WayPtr sl2 = match.getSubline2().toWay(mapCopy);
 
-  ElementConverter ec(theMap);
+  ElementConverter ec(mapCopy);
   Meters l1 = ec.convertToLineString(match.getSubline1().getWay())->getLength();
   Meters l2 = ec.convertToLineString(match.getSubline2().getWay())->getLength();
 
@@ -107,7 +108,7 @@ MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
   }
   else
   {
-    p = ps * ProbabilityOfMatch::getInstance().expertProbability(theMap, sl1, sl2);
+    p = ps * ProbabilityOfMatch::getInstance().expertProbability(mapCopy, sl1, sl2);
   }
 
   result.setMatchP(p);

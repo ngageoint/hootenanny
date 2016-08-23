@@ -26,8 +26,13 @@
  */
 package hoot.services.osm;
 
+import static hoot.services.HootProperties.GRIZZLY_PORT;
+
 import java.sql.Connection;
 
+import javax.ws.rs.client.WebTarget;
+
+import org.glassfish.jersey.test.JerseyTest;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.After;
@@ -37,12 +42,9 @@ import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.jersey.api.client.AsyncWebResource;
-import com.sun.jersey.test.framework.JerseyTest;
-
-import hoot.services.HootProperties;
-import hoot.services.db.DbUtils;
 import hoot.services.review.ReviewTestUtils;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.MapUtils;
 
 
 /*
@@ -54,7 +56,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
     // For whatever reason, when making Jersey async test calls you have to
     // specify the host and port,
     // whereas you do not with synchronous calls.
-    protected static AsyncWebResource asyncTestResource;
+    private static WebTarget asyncTestResource;
 
     public static final int TEST_JOB_DELAY_MS = /* 125 */0;
 
@@ -65,22 +67,22 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
 
     protected static Connection conn = null;
 
-    public OsmResourceTestAbstract(final String... controllerGroup) throws NumberFormatException {
-        super(controllerGroup);
-        final int grizzlyPort = Integer.parseInt(HootProperties.getPropertyOrDefault("grizzlyPort"));
-        asyncTestResource = client().asyncResource("http://localhost:" + String.valueOf(grizzlyPort));
+    public OsmResourceTestAbstract(String... controllerGroup) throws NumberFormatException {
+        super();
+        int grizzlyPort = Integer.parseInt(GRIZZLY_PORT);
+        //asyncTestResource = client().target("http://localhost:" + String.valueOf(grizzlyPort));
     }
 
     @BeforeClass
     public static void beforeClass() throws Exception {
         try {
             conn = DbUtils.createConnection();
-            OsmTestUtils.conn = conn;
+            OsmTestUtils.setConn(conn);
             ReviewTestUtils.conn = conn;
-            userId = DbUtils.insertUser(conn);
+            userId = MapUtils.insertUser(conn);
         }
         catch (Exception e) {
-            DbUtils.closeConnection(conn);
+            conn.close();
             log.error(e.getMessage() + " ");
             throw e;
         }
@@ -89,11 +91,11 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
     @Before
     public void beforeTest() throws Exception {
         try {
-            mapId = DbUtils.insertMap(userId, conn);
+            mapId = MapUtils.insertMap(userId, conn);
 
-            OsmTestUtils.userId = userId;
+            OsmTestUtils.setUserId(userId);
 
-            OsmTestUtils.mapId = mapId;
+            OsmTestUtils.setMapId(mapId);
         }
         catch (Exception e) {
             log.error(e.getMessage() + " ");
@@ -103,24 +105,15 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
 
     @After
     public void afterTest() throws Exception {
-        try {
-            // no need to clear out each map, if we're clearing the whole db out
-            // before each run
-            if (!Boolean.parseBoolean(HootProperties.getPropertyOrDefault("servicesTestClearEntireDb"))) {
-                DbUtils.deleteOSMRecord(conn, mapId);
-            }
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
+        // no need to clear out each map, if we're clearing the whole db out before each run
+        MapUtils.deleteOSMRecord(conn, mapId);
     }
 
     @AfterClass
     public static void afterClass() throws Exception {
         try {
             // DbUtils.deleteUser(conn, userId);
-            OsmTestUtils.conn = null;
+            OsmTestUtils.setConn(null);
             ReviewTestUtils.conn = null;
         }
         catch (Exception e) {
@@ -128,7 +121,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
             throw e;
         }
         finally {
-            DbUtils.closeConnection(conn);
+            conn.close();
         }
     }
 }

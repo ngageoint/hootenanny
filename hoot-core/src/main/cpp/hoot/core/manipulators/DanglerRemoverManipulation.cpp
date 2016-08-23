@@ -34,6 +34,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ElementConverter.h>
 
 namespace hoot
@@ -56,7 +57,7 @@ void DanglerRemoverManipulation::applyManipulation(shared_ptr<OsmMap> map,
   impactedElements = getImpactedElementIds(map);
   impactedElements.erase(ElementId::way(_wayId));
 
-  result->removeWay(_wayId);
+  RemoveWayOp::removeWay(result, _wayId);
 }
 
 double DanglerRemoverManipulation::calculateProbability(shared_ptr<const OsmMap> map) const

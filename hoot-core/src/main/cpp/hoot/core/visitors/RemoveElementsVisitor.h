@@ -73,6 +73,9 @@ public:
 
   void setRecursive(bool recursive) { _recursive = recursive; }
 
+  static void removeWays(shared_ptr<OsmMap> pMap,
+                         const shared_ptr<ElementCriterion>& pCrit);
+
 private:
 
   OsmMap* _map;

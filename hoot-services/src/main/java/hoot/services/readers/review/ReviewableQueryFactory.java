@@ -28,32 +28,26 @@ package hoot.services.readers.review;
 
 import java.sql.Connection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hoot.services.geo.BoundingBox;
 
 
-/**
- *
- */
-public class ReviewableQueryFactory {
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(ReviewableQueryFactory.class);
+final class ReviewableQueryFactory {
 
-    public IReviewableQuery getReviewableQuery(final Connection c, final long mapid, final long seqid) {
-        return new ReviewableQuery(c, mapid, seqid);
+    private ReviewableQueryFactory() {}
+
+    static IReviewableQuery getReviewableQuery(Connection connection, long mapid, long seqid) {
+        return new ReviewableQuery(connection, mapid, seqid);
     }
 
-    public IReviewableQuery getRandomReviewableQuery(final Connection c, final long mapid) {
-        return new RandomReviewableQuery(c, mapid);
+    static IReviewableQuery getRandomReviewableQuery(Connection connection, long mapid) {
+        return new RandomReviewableQuery(connection, mapid);
     }
 
-    public IReviewableQuery getReviewableStatisticsQuery(final Connection c, final long mapid) {
-        return new ReviewableStatisticsQuery(c, mapid);
+    static IReviewableQuery getReviewableStatisticsQuery(Connection connection, long mapid) {
+        return new ReviewableStatisticsQuery(connection, mapid);
     }
 
-    public IReviewableQuery getAllReviewableItemsQuery(final Connection c, final long mapid, final BoundingBox bbox) {
-        return new AllReviewableItemsQuery(c, mapid, bbox);
+    static IReviewableQuery getAllReviewableItemsQuery(Connection connection, long mapid, BoundingBox bbox) {
+        return new AllReviewableItemsQuery(connection, mapid, bbox);
     }
 }

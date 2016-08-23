@@ -34,7 +34,7 @@
         <nd ref="-29"/>
         <nd ref="-30"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:42.405Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.954Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="no"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -51,7 +51,7 @@
         <nd ref="-27"/>
         <nd ref="-28"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:42.405Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.954Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="tidal" v="yes"/>
@@ -69,7 +69,7 @@
         <nd ref="-25"/>
         <nd ref="-26"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:42.405Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.954Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="tidal" v="no"/>
@@ -86,7 +86,7 @@
         <nd ref="-23"/>
         <nd ref="-24"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:42.405Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.954Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="no"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -104,7 +104,7 @@
         <nd ref="-21"/>
         <nd ref="-22"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:42.405Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.954Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="no"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -121,7 +121,7 @@
         <nd ref="-19"/>
         <nd ref="-20"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:42.404Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.953Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="no"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -140,7 +140,7 @@
         <nd ref="-17"/>
         <nd ref="-18"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:42.404Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.953Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="dry"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -160,7 +160,7 @@
         <nd ref="-15"/>
         <nd ref="-16"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:42.404Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.953Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="yes"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -178,7 +178,7 @@
         <nd ref="-13"/>
         <nd ref="-14"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:42.404Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.953Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="dry"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -195,7 +195,7 @@
         <nd ref="-11"/>
         <nd ref="-12"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:42.404Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.953Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="dry"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -213,7 +213,7 @@
         <nd ref="-9"/>
         <nd ref="-10"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:42.403Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.952Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="yes"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -232,7 +232,7 @@
         <nd ref="-7"/>
         <nd ref="-8"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:42.403Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.952Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="yes"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -249,7 +249,7 @@
         <nd ref="-5"/>
         <nd ref="-6"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:42.403Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.952Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="no"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -269,7 +269,7 @@
         <nd ref="-3"/>
         <nd ref="-4"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:42.403Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.952Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="no"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -285,7 +285,7 @@
         <nd ref="-1"/>
         <nd ref="-2"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:42.402Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.951Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="tidal" v="no"/>

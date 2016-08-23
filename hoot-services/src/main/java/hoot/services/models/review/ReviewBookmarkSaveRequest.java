@@ -26,79 +26,71 @@
  */
 package hoot.services.models.review;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 
-@XmlRootElement
 public class ReviewBookmarkSaveRequest {
     private long bookmarkId;
+    private long userId;
+    private long mapId;
+    private long relationId;
+    private JSONObject detail;
+
+    public ReviewBookmarkSaveRequest() {}
+
+    public ReviewBookmarkSaveRequest(long mapid, long relationId, JSONObject reviewDetail, long userId) {
+        this.mapId = mapid;
+        this.relationId = relationId;
+        this.detail = reviewDetail;
+        this.userId = userId;
+    }
 
     public long getBookmarkId() {
         return bookmarkId;
     }
 
-    public void setBookmarkId(final long id) {
-        this.bookmarkId = id;
+    public void setBookmarkId(long bookmarkId) {
+        this.bookmarkId = bookmarkId;
     }
-
-    private long mapId;
 
     public long getMapId() {
         return mapId;
     }
 
-    public void setMapId(final long id) {
-        this.mapId = id;
+    public void setMapId(long mapId) {
+        this.mapId = mapId;
     }
-
-    private long relationId;
 
     public long getRelationId() {
         return this.relationId;
     }
 
-    public void setRelationId(final long relId) {
-        this.relationId = relId;
+    public void setRelationId(long relationId) {
+        this.relationId = relationId;
     }
-
-    private JSONObject detail;
 
     public JSONObject getDetail() {
         return this.detail;
     }
 
-    public void setDetail(final JSONObject d) throws Exception {
-        String jsonStr = d.toJSONString();
+    public void setDetail(JSONObject detail) {
+        String jsonStr = detail.toJSONString();
         JSONParser p = new JSONParser();
         try {
             this.detail = (JSONObject) p.parse(jsonStr);
         }
-        catch (Exception ex) {
-            throw new Exception("Failed to parse review bookmark detail parameter to JSON: " + ex.getMessage());
+        catch (ParseException ex) {
+            throw new RuntimeException("Failed to convert review bookmark detail parameter to JSON!", ex);
         }
     }
 
-    private long userId;
-
-    public long getUserid() {
+    public long getUserId() {
         return this.userId;
     }
 
-    public void setUserId(final long uid) {
-        this.userId = uid;
-    }
-
-    public ReviewBookmarkSaveRequest(final long mapid, final long relationid, final JSONObject reviewDetail,
-            final long uid) {
-        this.mapId = mapid;
-        this.relationId = relationid;
-        this.detail = reviewDetail;
-        this.userId = uid;
-    }
-
-    public ReviewBookmarkSaveRequest() {
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 }

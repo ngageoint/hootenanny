@@ -28,54 +28,40 @@ package hoot.services.readers.review;
 
 import java.sql.Connection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.AllReviewableItems;
 import hoot.services.models.review.ReviewableItem;
 import hoot.services.models.review.ReviewableStatistics;
 
 
-/**
- * 
- */
 public class ReviewableReader {
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(ReviewableReader.class);
+    private final Connection connection;
 
-    private ReviewableQueryFactory _fac = new ReviewableQueryFactory();
-    private Connection _conn;
-
-    public ReviewableReader(final Connection conn) {
-        _conn = conn;
+    public ReviewableReader(Connection connection) {
+        this.connection = connection;
     }
 
-    public ReviewableItem getReviewableItem(final long mapid, final long seqid) throws Exception {
-        ReviewableItem r = null;
-        r = (ReviewableItem) _fac.getReviewableQuery(_conn, mapid, seqid).execQuery();
+    public ReviewableItem getReviewableItem(long mapid, long seqid) {
+        ReviewableItem r =
+                (ReviewableItem) ReviewableQueryFactory.getReviewableQuery(connection, mapid, seqid).execQuery();
         return r;
     }
 
-    public ReviewableItem getRandomReviewableItem(final long mapid) throws Exception {
-        ReviewableItem r = null;
-
-        r = (ReviewableItem) _fac.getRandomReviewableQuery(_conn, mapid).execQuery();
-
+    public ReviewableItem getRandomReviewableItem(long mapid) {
+        ReviewableItem r =
+                (ReviewableItem) ReviewableQueryFactory.getRandomReviewableQuery(connection, mapid).execQuery();
         return r;
     }
 
-    public ReviewableStatistics getReviewablesStatistics(final long mapid) throws Exception {
-        ReviewableStatistics r = null;
-        r = (ReviewableStatistics) _fac.getReviewableStatisticsQuery(_conn, mapid).execQuery();
-
+    public ReviewableStatistics getReviewablesStatistics(long mapid) {
+        ReviewableStatistics r = (ReviewableStatistics)
+                ReviewableQueryFactory.getReviewableStatisticsQuery(connection, mapid).execQuery();
         return r;
     }
 
-    public AllReviewableItems getAllReviewableItems(final long mapid, final BoundingBox bbox) throws Exception {
-        AllReviewableItems r = null;
-        r = (AllReviewableItems) _fac.getAllReviewableItemsQuery(_conn, mapid, bbox).execQuery();
-
+    public AllReviewableItems getAllReviewableItems(long mapid, BoundingBox bbox) {
+        AllReviewableItems r = (AllReviewableItems)
+                ReviewableQueryFactory.getAllReviewableItemsQuery(connection, mapid, bbox).execQuery();
         return r;
     }
 }

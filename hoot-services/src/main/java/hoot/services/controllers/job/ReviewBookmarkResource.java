@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
+
 import java.sql.Connection;
 import java.util.Calendar;
 import java.util.List;
@@ -39,19 +41,21 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.Response;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.postgresql.util.PGobject;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.db.DbUtils;
-import hoot.services.db.postgres.PostgresUtils;
-import hoot.services.db2.ReviewBookmarks;
+import com.querydsl.sql.Configuration;
+import com.querydsl.sql.dml.SQLDeleteClause;
+
+import hoot.services.models.db.ReviewBookmarks;
 import hoot.services.models.review.ReviewBookmarkDelRequest;
 import hoot.services.models.review.ReviewBookmarkDelResponse;
 import hoot.services.models.review.ReviewBookmarkSaveRequest;
@@ -59,9 +63,8 @@ import hoot.services.models.review.ReviewBookmarksGetResponse;
 import hoot.services.models.review.ReviewBookmarksSaveResponse;
 import hoot.services.models.review.ReviewBookmarksStatResponse;
 import hoot.services.readers.review.ReviewBookmarkRetriever;
-import hoot.services.utils.ResourceErrorHandler;
-import hoot.services.writers.review.ReviewBookmarksRemover;
-import hoot.services.writers.review.ReviewBookmarksSaver;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.PostgresUtils;
 
 
 /**
@@ -83,13 +86,12 @@ public class ReviewBookmarkResource {
      * @param request
      *            ReviewBookmarkSaveRequest class
      * @return json containing created/updated bookmark id
-     * @throws Exception
      */
     @POST
     @Path("/save")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ReviewBookmarksSaveResponse createReviewBookmark(ReviewBookmarkSaveRequest request) throws Exception {
+    public ReviewBookmarksSaveResponse createReviewBookmark(ReviewBookmarkSaveRequest request) {
         ReviewBookmarksSaveResponse response = new ReviewBookmarksSaveResponse();
 
         try (Connection conn = DbUtils.createConnection()) {
@@ -121,9 +123,12 @@ public class ReviewBookmarkResource {
             long nSaved = saver.save(request);
             response.setSavedCount(nSaved);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error saving review bookmark: " + " (" + ex.getMessage() + ")",
-                    Status.BAD_REQUEST, logger);
+            String msg = "Error saving review bookmark: " + " (" + ex.getMessage() + ")";
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return response;
@@ -138,40 +143,39 @@ public class ReviewBookmarkResource {
      * 2, "lastModifiedAt": null, "lastModifiedBy": null, "mapId": 1,
      * "relationId": 2 } ] }
      * 
-     * @param bookmarkid
+     * @param bookmarkId
      *            bookmark id
-     * @param mapid
+     * @param mapId
      *            map Id
-     * @param relid
+     * @param relationId
      *            relation id
      * @return json containing list of review bookmarks
-     * @throws Exception
      */
     @GET
     @Path("/get")
     @Produces(MediaType.APPLICATION_JSON)
-    public ReviewBookmarksGetResponse getReviewBookmark(@QueryParam("bookmarkId") String bookmarkid,
-                                                        @QueryParam("mapId") String mapid,
-                                                        @QueryParam("relationId") String relid) throws Exception {
+    public ReviewBookmarksGetResponse getReviewBookmark(@QueryParam("bookmarkId") Long bookmarkId,
+                                                        @QueryParam("mapId") Long mapId,
+                                                        @QueryParam("relationId") Long relationId) {
         ReviewBookmarksGetResponse response = new ReviewBookmarksGetResponse();
 
         try (Connection conn = DbUtils.createConnection()) {
             ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
-            List<ReviewBookmarks> res = null;
-            if (bookmarkid != null) {
-                long bookmarkId = Long.parseLong(bookmarkid);
-                res = retriever.retrieve(bookmarkId);
+            List<ReviewBookmarks> reviewBookmarks;
+            if (bookmarkId != null) {
+                reviewBookmarks = retriever.retrieve(bookmarkId);
             }
             else {
-                long mapId = Long.parseLong(mapid);
-                long relationId = Long.parseLong(relid);
-                res = retriever.retrieve(mapId, relationId);
+                reviewBookmarks = retriever.retrieve(mapId, relationId);
             }
 
-            for (ReviewBookmarks mk : res) {
+            for (ReviewBookmarks mk : reviewBookmarks) {
                 Object oDetail = mk.getDetail();
-                Map<String, String> hstoreMap = PostgresUtils.postgresObjToHStore((PGobject) oDetail);
+
+                Map<String, String> hstoreMap = PostgresUtils.postgresObjToHStore(oDetail);
+
                 JSONObject oBmkDetail = new JSONObject();
+
                 appendHstoreElement(hstoreMap.get("bookmarkdetail"), oBmkDetail, "bookmarkdetail");
 
                 String bmkNotes = hstoreMap.get("bookmarknotes");
@@ -188,12 +192,16 @@ public class ReviewBookmarkResource {
                 mk.setDetail(oBmkDetail);
             }
 
-            response.setReviewBookmarks(res);
+            response.setReviewBookmarks(reviewBookmarks);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting review bookmark: " + " (" + ex.getMessage() + ")",
-                    Status.BAD_REQUEST, logger);
+            String msg = "Error getting review bookmark: " + " (" + ex.getMessage() + ")";
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
+
         return response;
     }
 
@@ -201,9 +209,10 @@ public class ReviewBookmarkResource {
      * Helper function to handle JSON string conversion to Hstore friendly
      * format
      * 
-     * @throws Exception
+     * @throws ParseException
      */
-    private static void appendHstoreElement(String rawElem, JSONObject oBmkDetail, String elemName) throws Exception {
+    private static void appendHstoreElement(String rawElem, JSONObject oBmkDetail, String elemName)
+            throws ParseException {
         String bmkElem = rawElem;
         if ((bmkElem != null) && (!bmkElem.isEmpty())) {
             bmkElem = bmkElem.replace("\\\"", "\"");
@@ -237,9 +246,8 @@ public class ReviewBookmarkResource {
      * @param filterByCreatedVal
      *            ?
      * @param filterByLayerVal
-     *            ?     *            
+     *            ?     *
      * @return json containing list of review bookmarks
-     * @throws Exception
      */
     @GET
     @Path("/getall")
@@ -248,9 +256,10 @@ public class ReviewBookmarkResource {
                                                            @QueryParam("asc") String asc,
                                                            @QueryParam("limit") String limitSize,
                                                            @QueryParam("offset") String offset,
+                                                           @QueryParam("filterby") String filterBy,
+                                                           @QueryParam("filterbyval") String filterByVal,
                                                            @QueryParam("createFilterVal") String filterByCreatedVal,
-                                                           @QueryParam("layerFilterVal") String filterByLayerVal)
-            throws Exception {
+                                                           @QueryParam("layerFilterVal") String filterByLayerVal) {
         ReviewBookmarksGetResponse response = new ReviewBookmarksGetResponse();
 
         try (Connection conn = DbUtils.createConnection()) {
@@ -270,26 +279,26 @@ public class ReviewBookmarkResource {
                 offsetCnt = Long.parseLong(offset);
             }
 
-            Long[] creatorArray = null;       
+            Long[] creatorArray = null;
             if(filterByCreatedVal != null){
-            	String[] cA = filterByCreatedVal.split(",");
+                String[] cA = filterByCreatedVal.split(",");
                 if(cA.length > 0){
-                	creatorArray = new Long[cA.length];
+                    creatorArray = new Long[cA.length];
                     for(int i = 0; i < creatorArray.length; i++){
-                    	creatorArray[i] = Long.valueOf(cA[i]);
-                    }            	
-                }	
+                        creatorArray[i] = Long.valueOf(cA[i]);
+                    }
+                }
             }
-            
-            Long[] layerArray = null; 
+
+            Long[] layerArray = null;
             if(filterByLayerVal != null){
-	            String[] lA = filterByLayerVal.split(",");
-	            if(lA.length > 0){
-	            	layerArray = new Long[lA.length];
-	                for(int i = 0; i < layerArray.length; i++){
-	                	layerArray[i] = Long.valueOf(lA[i]);
-	                }            	
-	            }
+                String[] lA = filterByLayerVal.split(",");
+                if(lA.length > 0){
+                    layerArray = new Long[lA.length];
+                    for(int i = 0; i < layerArray.length; i++){
+                        layerArray[i] = Long.valueOf(lA[i]);
+                    }
+                }
             }
 
             ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
@@ -297,7 +306,7 @@ public class ReviewBookmarkResource {
 
             for (ReviewBookmarks mk : res) {
                 Object oDetail = mk.getDetail();
-                Map<String, String> hstoreMap = PostgresUtils.postgresObjToHStore((PGobject) oDetail);
+                Map<String, String> hstoreMap = PostgresUtils.postgresObjToHStore(oDetail);
 
                 String bmkDetail = hstoreMap.get("bookmarkdetail");
                 if ((bmkDetail != null) && (!bmkDetail.isEmpty())) {
@@ -314,10 +323,14 @@ public class ReviewBookmarkResource {
             }
             response.setReviewBookmarks(res);
         }
-        catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting review bookmark: " + " (" + ex.getMessage() + ")",
-                    Status.BAD_REQUEST, logger);
+        catch (WebApplicationException wae) {
+            throw wae;
         }
+        catch (Exception ex) {
+            String msg = "Error getting review bookmark: " + " (" + ex.getMessage() + ")";
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        }
+
         return response;
     }
 
@@ -327,21 +340,24 @@ public class ReviewBookmarkResource {
      * GET hoot-services/job/review/bookmarks/stat
      * 
      * @return json stat info
-     * @throws Exception
      */
     @GET
     @Path("/stat")
     @Produces(MediaType.APPLICATION_JSON)
-    public ReviewBookmarksStatResponse getAllReviewBookmarkStat() throws Exception {
+    public ReviewBookmarksStatResponse getAllReviewBookmarkStat() {
         ReviewBookmarksStatResponse response = new ReviewBookmarksStatResponse();
+
         try (Connection conn = DbUtils.createConnection()) {
             ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
-            long nCnt = retriever.getbookmarksCount();
+            long nCnt = retriever.getBookmarksCount();
             response.setTotalCount(nCnt);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error getting review bookmark counts: " + " (" + ex.getMessage() + ")",
-                    Status.BAD_REQUEST, logger);
+            String msg = "Error getting review bookmark counts: " + " (" + ex.getMessage() + ")";
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return response;
@@ -353,28 +369,53 @@ public class ReviewBookmarkResource {
      * DELETE hoot-services/job/review/bookmarks/delete { "mapId":397,
      * "relationId":3 }
      * 
-     * @param bmkId
+     * @param bookmarkId
      *            id of the bookmark to delete
      * @return json containing total numbers of deleted
-     * @throws Exception
      */
     @DELETE
     @Path("/delete")
     @Produces(MediaType.APPLICATION_JSON)
-    public ReviewBookmarkDelResponse delReviewBookmark(@QueryParam("bookmarkId") String bmkId) throws Exception {
-        ReviewBookmarkDelRequest request = new ReviewBookmarkDelRequest(Long.parseLong(bmkId));
+    public ReviewBookmarkDelResponse delReviewBookmark(@QueryParam("bookmarkId") Long bookmarkId) {
+        ReviewBookmarkDelRequest request = new ReviewBookmarkDelRequest(bookmarkId);
         ReviewBookmarkDelResponse response = new ReviewBookmarkDelResponse();
 
-        try (Connection conn = DbUtils.createConnection()) {
-            ReviewBookmarksRemover remover = new ReviewBookmarksRemover(conn);
-            long nDel = remover.remove(request);
+        try (Connection connection = DbUtils.createConnection()) {
+            long nDel = remove(request, connection);
             response.setDeleteCount(nDel);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            ResourceErrorHandler.handleError("Error deleting review bookmark: " + " (" + ex.getMessage() + ")",
-                    Status.BAD_REQUEST, logger);
+            String msg = "Error deleting review bookmark: " + " (" + ex.getMessage() + ")";
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return response;
+    }
+
+    /**
+     * Removes review tag.
+     *
+     * @param request
+     *            - Request containing mapid and relationid
+     * @return - total numbers of removed
+     */
+    private static long remove(ReviewBookmarkDelRequest request, Connection connection) {
+        return createDelClause(request, connection).execute();
+    }
+
+    /**
+     * Delete clause
+     *
+     * @param request
+     *            - Request containing bookmarkid
+     * @return - toal numbers of removed
+     */
+    private static SQLDeleteClause createDelClause(ReviewBookmarkDelRequest request, Connection connection) {
+        Configuration configuration = DbUtils.getConfiguration();
+        return new SQLDeleteClause(connection, configuration, reviewBookmarks)
+                .where(reviewBookmarks.id.eq(request.getBookmarkId()));
     }
 }

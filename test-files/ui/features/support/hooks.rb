@@ -25,6 +25,9 @@ After do |scenario|
 
   if(scenario.failed?)
     #Do something if scenario fails.
+
+    # Tell Cucumber to quit after this scenario is done - if it failed.
+    Cucumber.wants_to_quit = true if scenario.failed?
   end
 end
 

@@ -31,6 +31,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
@@ -76,7 +77,7 @@ void RemoveReviewsByEidOp::apply(const shared_ptr<OsmMap> &map)
     ++it)
   {
     // just remove the review, not its children.
-    map->removeElement(*it);
+    RemoveElementOp::removeElement(map, *it);
   }
 
   if (_clearAndRemove)

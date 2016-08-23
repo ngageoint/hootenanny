@@ -1,37 +1,70 @@
 
-== OpenStreetMap Editing API Database Converter 
+== Working with OpenStreetMap Editing API Database Data in Hootenanny 
 
 Hootenanny offers the capability to convert data between an OpenStreetMap Editing API Database and any supported Hootenanny data sources.  The OpenStreetMap Editing API database allows fetching and saving of raw geo-data for OpenStreetMap.  The current supported API version is 0.6. More information about the database and API is found at: http://http://wiki.openstreetmap.org/wiki/API. 
 
 Hootenanny supports writing and reading from the OpenStreetMap API database using its 'convert' command.  Hootenanny's Services Database was refactored to support both Hootenanny's internal database and the OpenStreetMap Editing API database.  Conversion methods were created to write and read from the database.  A description of how to use Hootenanny's capability for 'writing to' and 'reading from' an OpenStreetMap Editing API Database is described here. 
 
+=== Configuring an OSM API Database Connection
+
+Before any reading/writing can occur, you must configure Hootenanny to use your OSM API database (only one database at a time is supported).  
+See "Configuring an OSM API Database Connection" section of the Hootenanny Installation Guide for instructions.
+
+=== Creating an OSM API Database
+
+If you do not already have an OSM API database, you can run the following:
+
+----------------------------
+$HOOT_HOME/scripts/CleanAndInitializeOsmApiDb.sh
+-------------------------------
+
+This will create an empty OSM API database with a single test user.
+
 === Writing to an OpenStreetMap Editing API Database
 
-Writing to an OpenStreetMap API database is currently not supported but will be updated with command line examples in the future.
+Hootenanny uses optimized SQL routines to write data to the OSM API database, which results in much faster performance than using 
+XML changesets passed to the OSM web services over HTTP.
 
-////
+IMPORTANT: This script should not be used in an environment where multiple simultaneous database writers exist (online production 
+environment), as ID conflicts may occur.  It should only be used when the user of this script is the only potential database writer 
+(database offline).  If you cannot take your database offline, your best course of action is to either use Osmosis or Hootenanny 
+to load your data in as OSM changesets (see Hootenanny derive-changeset and apply-changeset command documentation).
 
-------
-% Hootenanny 'convert' command: hoot convert [args] input output
+The configuration option, postgresql.dumpfile.writer.changeset.user.id, must match a user existing in your database and one you want
+associated with the changesets that write the data.  If you use the hoot scripts to create your OSM API database, this user will
+be created for you.   The default user ID is 1.  To change this value, add the following to the 'hoot convert' line in the scripts referenced
+in this section: -D postgresql.dumpfile.writer.changeset.user.id=<id> , where <id> is your user ID.
 
-% Command arguments:
-services.db.writer.email='email address'  e.g. make up an email address like: OsmApiInsert@hoot.local
-services.db.writer.create.user=true  e.g. set this to true
-reader.add.source.datetime=false  e.g. setting this to false uses current date
-services.db.writer.output.id.mappings=/tmp/idmaps.xml  e.g. optional to validation purposes
+Other settings you may be interested in tweaking:
 
-% Input source:
-a sample osm file: $HOOT_HOME/test-files/ToyTestA.osm
+postgresql.dumpfile.writer.element.status.count.interval
+changeset.max.size
 
-% Output source:
-a sample OpenStreetMap Editing API Database: osmapidb://hoot:hoottest@localhost:5432/osmapi_test  This database is the test database and should be active for testing. However, any database output source may be applied here. 
+Additionally, see the descriptions of all postgresql.dumpfile.writer.* configuration option settings in the User Guide.
 
-% Command syntax example:
-hoot convert -D services.db.writer.email=OsmApiInsert@hoot.local -D services.db.writer.create.user=true -D reader.add.source.datetime=false -D services.db.writer.output.id.mappings=/tmp/idmaps.xml $HOOT_HOME/test-files/ToyTestA.osm osmapidb://hoot:hoottest@localhost:5432/osmapi_test
-------
+Hootenanny ships with an empty OSM API database, configured by default, which can be used for testing these commands.
 
-NOTE: Currently it is not possible to write to an OpenStreetMap API database so this example will likely be updated in future versions.
-////
+To load data into an existing OSM API database using Hootenanny, run:
+
+-----------------------
+$HOOT_HOME/scripts/LoadOsmApiDbData.sh yourDataset1.osm
+$HOOT_HOME/scripts/LoadOsmApiDbData.sh yourDataset2.osm
+# etc.
+-------------------------
+
+To create a new database and load a single layer in one step, run:
+
+-----------------------
+$HOOT_HOME/scripts/CleanAndLoadOsmApiDbData.sh yourDataset.osm
+-------------------------
+
+This script completely cleans out the database with each use.
+
+To create a SQL dump file with your input data, which can later be applied to Postgres to load the data:
+
+--------------------
+hoot convert yourDataset.osm sqlFile.sql
+--------------------
 
 === Reading from an OpenStreetMap Editing API Database
 
