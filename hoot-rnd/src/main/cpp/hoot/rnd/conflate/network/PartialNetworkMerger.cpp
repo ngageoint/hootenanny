@@ -220,7 +220,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
 }
 
 void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
-  vector<pair<ElementId, ElementId> > &replaced, ConstEdgeMatchPtr edgeMatch) const
+  vector<pair<ElementId, ElementId> > &/*replaced*/, ConstEdgeMatchPtr edgeMatch) const
 {
   if (edgeMatch->getString1()->isStub())
   {

@@ -453,8 +453,6 @@ void ConflictsNetworkMatcher::_iterateSimple()
       newWeights[em]);
   }
 
-  #warning grasping... Looks like one way is overlapping w/ the stub and the way on it's opposite end is causing the score to be artificially large. Maybe you can score each end and take the product? Time to bring vertices back?
-
   foreach (ConstEdgeMatchPtr em, newWeights.keys())
   {
     newWeights[em] = pow(newWeights[em] * newWeights.size() / weightSum, _weightInfluence);

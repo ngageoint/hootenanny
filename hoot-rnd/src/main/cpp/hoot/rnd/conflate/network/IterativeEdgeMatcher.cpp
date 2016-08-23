@@ -367,7 +367,7 @@ void IterativeEdgeMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexScore
   }
 }
 
-void IterativeEdgeMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &em)
+void IterativeEdgeMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &/*em*/)
 {
   CostFunction cost;
   if (&vm == &_vertex12Scores)
