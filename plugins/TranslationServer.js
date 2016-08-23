@@ -299,7 +299,7 @@ var getTaginfoKeyFields = function(params)
 var getTaginfoKeys = function(params)
 {
     if (params.method === 'POST') {
-        throw new Error('Unsupported method';
+        throw new Error('Unsupported method');
     } else if (request.method === 'GET') {
 
         var featWGeomMatchSchema = null;
@@ -509,7 +509,7 @@ var getLevenshteinDistance = function(s, t) {
 }
 
 var schemaError = function(params) {
-    new Error(throw params.translation + ' for ' + params.geom + ' with ' + params.idelem + '=' + params.idval + ' not found');
+    throw new Error(params.translation + ' for ' + params.geom + ' with ' + params.idelem + '=' + params.idval + ' not found');
 }
 
 if (typeof exports !== 'undefined') {
