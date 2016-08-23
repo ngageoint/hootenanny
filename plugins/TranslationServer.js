@@ -231,8 +231,15 @@ var tdstoosm = function(params) {
     if (params.method === 'POST') {
         return postHandler(params);
     } else if (params.method === 'GET') {
-        var hoot = require(HOOT_HOME + '/lib/HootJs');
-        var osm = params.transMap[params.translation].toOSM({
+        hoot = require(HOOT_HOME + '/lib/HootJs');
+        createUuid = hoot.UuidHelper.createUuid;
+        var englishToOsmMap = {
+            TDSv40: require(HOOT_HOME + '/plugins/etds40_osm.js'),
+            TDSv61: require(HOOT_HOME + '/plugins/etds61_osm.js'),
+            MGCP: require(HOOT_HOME + '/plugins/emgcp_osm.js')
+        };
+
+        var osm = englishToOsmMap[params.translation].toOSM({
             'Feature Code': params.fcode
         }, '', '');
 

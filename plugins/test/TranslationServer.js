@@ -89,6 +89,17 @@ if (server.cluster.isMaster) {
                 assert.equal(schema.columns[0].enumerations[0].value, '1');
             });
 
+            it('should handle tdstoosm GET', function(){
+                //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
+                var attrs = server.handleInputs({
+                    fcode: 'AL013',
+                    translation: 'TDSv61',
+                    method: 'GET',
+                    path: '/tdstoosm'
+                }).attrs;
+                assert.equal(attrs.building, 'yes');
+            });
+
             function notFound() {
                 server.handleInputs({
                     idval: 'AL015',
