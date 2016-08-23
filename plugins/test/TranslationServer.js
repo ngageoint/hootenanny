@@ -1,6 +1,6 @@
 var assert = require('assert'),
     http = require('http');
-var server  = require('../TranslationServer.js');
+var server = require('../TranslationServer.js');
 
 var defaults = {};
 var defaultsResult = {
