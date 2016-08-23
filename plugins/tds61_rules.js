@@ -144,7 +144,8 @@ tds61.rules = {
      'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
      'WAD':'well:description', // Water Well Construction Description
      'WPI':'world_port_index', // World Port Index Identifier - This is part of Built Up Area. What??
-     'ZI001_SDP':'source:description', // Source Information : Source Description
+     //'ZI001_SDP':'source:description', // Source Information : Source Description
+     'ZI001_SDP':'source', // Source Information : Source Description
      'ZI001_SDV':'source:datetime', // Source Information : Source Date and Time
      'ZI001_VSD':'source:vertical_source:datetime', // Source Information : Vertical Source Date and Time
 //      'ZI001_VSN':'source:vertical_source:description', // Source Information : Vertical Source Description

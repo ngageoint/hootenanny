@@ -30,6 +30,9 @@ import static hoot.services.HootProperties.GRIZZLY_PORT;
 
 import java.sql.Connection;
 
+import javax.ws.rs.client.WebTarget;
+
+import org.glassfish.jersey.test.JerseyTest;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.After;
@@ -39,11 +42,8 @@ import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.jersey.api.client.AsyncWebResource;
-import com.sun.jersey.test.framework.JerseyTest;
-
-import hoot.services.utils.DbUtils;
 import hoot.services.review.ReviewTestUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.MapUtils;
 
 
@@ -56,7 +56,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
     // For whatever reason, when making Jersey async test calls you have to
     // specify the host and port,
     // whereas you do not with synchronous calls.
-    protected static AsyncWebResource asyncTestResource;
+    private static WebTarget asyncTestResource;
 
     public static final int TEST_JOB_DELAY_MS = /* 125 */0;
 
@@ -68,9 +68,9 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
     protected static Connection conn = null;
 
     public OsmResourceTestAbstract(String... controllerGroup) throws NumberFormatException {
-        super(controllerGroup);
+        super();
         int grizzlyPort = Integer.parseInt(GRIZZLY_PORT);
-        asyncTestResource = client().asyncResource("http://localhost:" + String.valueOf(grizzlyPort));
+        //asyncTestResource = client().target("http://localhost:" + String.valueOf(grizzlyPort));
     }
 
     @BeforeClass

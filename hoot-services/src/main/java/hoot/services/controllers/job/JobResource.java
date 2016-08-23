@@ -677,7 +677,7 @@ public class JobResource {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(outStr, MediaType.APPLICATION_JSON).build();
+        return Response.ok(outStr).build();
     }
 
     /**

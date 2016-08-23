@@ -121,7 +121,7 @@ public class ReportsResource {
             throw new WebApplicationException(ex, Response.serverError().entity(message).build());
         }
 
-        return Response.ok(reports.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(reports.toJSONString()).build();
     }
 
     /**

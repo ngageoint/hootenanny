@@ -26,26 +26,21 @@
  */
 package hoot.services.models.review;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
-
-@XmlRootElement
 public class ReviewBookmarksSaveResponse {
     private long savedCount;
 
-    public void setSavedCount(long nSaved) {
-        this.savedCount = nSaved;
+    public ReviewBookmarksSaveResponse() {}
+
+    public void setSavedCount(long savedCount) {
+        this.savedCount = savedCount;
     }
 
     public long getSavedCount() {
         return this.savedCount;
     }
 
-    public ReviewBookmarksSaveResponse(long nSaved) {
-        this.savedCount = nSaved;
-    }
-
-    public ReviewBookmarksSaveResponse() {
-
+    public ReviewBookmarksSaveResponse(long savedCount) {
+        this.savedCount = savedCount;
     }
 }

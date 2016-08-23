@@ -41,7 +41,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONArray;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,7 +103,7 @@ public class MapInfoResource {
         entity.put("mapid", mapIds);
         entity.put("size_byte", combinedMapSize);
 
-        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     /**
@@ -133,7 +133,8 @@ public class MapInfoResource {
                 JSONObject layer = new JSONObject();
                 layer.put("id", Long.parseLong(mapId));
                 layer.put("size", mapSize);
-                layers.put(layer);
+                layers.add(layer);
+                //layers.put(layer);
             }
         }
         catch (WebApplicationException wae) {
@@ -147,7 +148,7 @@ public class MapInfoResource {
         JSONObject entity = new JSONObject();
         entity.put("layers", layers);
 
-        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     /**
@@ -166,7 +167,7 @@ public class MapInfoResource {
         entity.put("ingest_threshold", INGEST_SIZE_THRESHOLD);
         entity.put("export_threshold", EXPORT_SIZE_THRESHOLD);
 
-        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     /**

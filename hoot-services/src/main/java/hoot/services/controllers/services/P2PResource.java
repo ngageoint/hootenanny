@@ -104,7 +104,7 @@ public class P2PResource extends ServerControllerBase {
         JSONObject res = new JSONObject();
         res.put("isRunning", "false");
 
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(res.toJSONString()).build();
     }
 
     /**
@@ -132,6 +132,6 @@ public class P2PResource extends ServerControllerBase {
         res.put("isRunning", isRunning);
         res.put("port", currentPort);
 
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(res.toJSONString()).build();
     }
 }

@@ -27,22 +27,18 @@
 package hoot.services.models.review;
 
 import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class ReviewableStatistics implements ReviewQueryMapper {
-    private static final Logger logger = LoggerFactory.getLogger(ReviewableStatistics.class);
-
     private long totalCount;
     private long unreviewedCount;
 
     public ReviewableStatistics() {
     }
 
-    public ReviewableStatistics(long nTotal, long nUnreviewed) {
-        this.totalCount = nTotal;
-        this.unreviewedCount = nUnreviewed;
+    public ReviewableStatistics(long totalCount, long unreviewedCount) {
+        this.totalCount = totalCount;
+        this.unreviewedCount = unreviewedCount;
     }
 
     public long getTotalCount() {

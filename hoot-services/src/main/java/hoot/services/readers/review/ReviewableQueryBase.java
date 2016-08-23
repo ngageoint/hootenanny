@@ -28,13 +28,8 @@ package hoot.services.readers.review;
 
 import java.sql.Connection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 class ReviewableQueryBase {
-    private static final Logger logger = LoggerFactory.getLogger(ReviewableQueryBase.class);
-
     private final Connection connection;
     private long mapId = -1;
 

@@ -106,6 +106,6 @@ public class JobCancellationResource extends JobControllerBase {
         JSONObject res = new JSONObject();
         res.put("jobid", jobId);
 
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(res.toJSONString()).build();
     }
 }

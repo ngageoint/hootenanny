@@ -27,16 +27,19 @@
 package hoot.services.models.osm;
 
 import java.sql.Timestamp;
-
-import javax.xml.bind.annotation.XmlRootElement;
+import java.text.SimpleDateFormat;
 
 
 /**
  * Model class for the Hootenanny map layer
  */
-@XmlRootElement
 public class MapLayer {
     private long id;
+    private String name;
+    private Timestamp date;
+    private boolean canExportToOsmApiDb;
+
+    public MapLayer() {}
 
     public long getId() {
         return id;
@@ -46,8 +49,6 @@ public class MapLayer {
         this.id = id;
     }
 
-    private String name;
-
     public String getName() {
         return name;
     }
@@ -56,19 +57,14 @@ public class MapLayer {
         this.name = name;
     }
 
-    private Timestamp date;
-
     public String getDate() {
-        return String.format("%1$TD", date);
-        // Use below to include time stamp
-        // return String.format("%1$TD %1$TT", date);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        return format.format(this.date);
     }
 
     public void setDate(Timestamp date) {
-        this.date = date;
+        this.date = new Timestamp(date.getTime());
     }
-
-    private boolean canExportToOsmApiDb;
 
     public boolean getCanExportToOsmApiDb() {
         return canExportToOsmApiDb;
@@ -76,9 +72,5 @@ public class MapLayer {
 
     public void setCanExportToOsmApiDb(boolean canExport) {
         this.canExportToOsmApiDb = canExport;
-    }
-
-    public MapLayer() {
-
     }
 }
