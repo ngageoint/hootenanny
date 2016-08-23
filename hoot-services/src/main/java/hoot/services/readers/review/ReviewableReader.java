@@ -41,27 +41,19 @@ public class ReviewableReader {
         this.connection = connection;
     }
 
-    public ReviewableItem getReviewableItem(long mapid, long seqid) {
-        ReviewableItem r =
-                (ReviewableItem) ReviewableQueryFactory.getReviewableQuery(connection, mapid, seqid).execQuery();
-        return r;
+    public ReviewableItem getReviewableItem(long mapId, long sortOrder) {
+        return (ReviewableItem) ReviewableQueryFactory.getReviewableQuery(connection, mapId, sortOrder).execQuery();
     }
 
-    public ReviewableItem getRandomReviewableItem(long mapid) {
-        ReviewableItem r =
-                (ReviewableItem) ReviewableQueryFactory.getRandomReviewableQuery(connection, mapid).execQuery();
-        return r;
+    public ReviewableItem getRandomReviewableItem(long mapId) {
+        return (ReviewableItem) ReviewableQueryFactory.getRandomReviewableQuery(connection, mapId).execQuery();
     }
 
-    public ReviewableStatistics getReviewablesStatistics(long mapid) {
-        ReviewableStatistics r = (ReviewableStatistics)
-                ReviewableQueryFactory.getReviewableStatisticsQuery(connection, mapid).execQuery();
-        return r;
+    public ReviewableStatistics getReviewablesStatistics(long mapId) {
+        return (ReviewableStatistics) ReviewableQueryFactory.getReviewableStatisticsQuery(connection, mapId).execQuery();
     }
 
-    public AllReviewableItems getAllReviewableItems(long mapid, BoundingBox bbox) {
-        AllReviewableItems r = (AllReviewableItems)
-                ReviewableQueryFactory.getAllReviewableItemsQuery(connection, mapid, bbox).execQuery();
-        return r;
+    public AllReviewableItems getAllReviewableItems(long mapId, BoundingBox bbox) {
+        return (AllReviewableItems) ReviewableQueryFactory.getAllReviewableItemsQuery(connection, mapId, bbox).execQuery();
     }
 }

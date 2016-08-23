@@ -28,16 +28,16 @@ package hoot.services.readers.review;
 
 import static hoot.services.HootProperties.RANDOM_QUERY_SEED;
 import static hoot.services.HootProperties.SEED_RANDOM_QUERIES;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.sql.SQLQuery;
 
 import hoot.services.models.review.ReviewQueryMapper;
@@ -66,52 +66,23 @@ class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQu
         }
     }
 
-        /*
-            SQLQuery<Tuple> reviewableCurrentRelSubQ = SQLExpressions
-                .select(currentRelations.id,
-                        Expressions.stringTemplate("tags->'hoot:review:needs'").as("needreview"))
-                .from(currentRelations)
-                .where(Expressions.booleanTemplate("exist(tags,'hoot:review:needs')"));
-     */
-
-
     @Override
     public ReviewQueryMapper execQuery() {
         ReviewableItem reviewableItem = new ReviewableItem(-1, getMapId(), -1);
 
-        String sql = "select id as relid, tags->'hoot:review:sort_order' as seq " +
-                     "from current_relations_" + getMapId() + " " +
-                     "where tags->'hoot:review:needs' = 'yes' " +
-                     "order by random() limit 1";
+        Tuple result = new SQLQuery<Tuple>(this.getConnection(), DbUtils.getConfiguration(getMapId()))
+                .select(currentRelations.id, Expressions.stringTemplate("tags->'hoot:review:sort_order'"))
+                .from(currentRelations)
+                .where(Expressions.booleanTemplate("tags->'hoot:review:needs' = 'yes'"))
+                .orderBy(NumberExpression.random().asc())
+                .limit(1)
+                .fetchOne();
 
-
-
-        try (Connection connection = getConnection()){
-            try (Statement stmt = connection.createStatement()) {
-                try (ResultSet rs = stmt.executeQuery(sql)) {
-                    long nResCnt = 0;
-                    long relId = -1;
-                    String seqId = "-1";
-
-                    while (rs.next()) {
-                        relId = rs.getLong("relid");
-                        seqId = rs.getString("seq");
-                        nResCnt++;
-                    }
-
-                    reviewableItem.setRelationId(relId);
-                    long nSeq = -1;
-                    if (seqId != null) {
-                        nSeq = Long.parseLong(seqId);
-                    }
-
-                    reviewableItem.setSortOrder(nSeq);
-                    reviewableItem.setResultCount(nResCnt);
-                }
-            }
-        }
-        catch (SQLException e) {
-            throw new RuntimeException("Error executing query!", e);
+        if (result != null) {
+            reviewableItem.setRelationId(result.get(0, Long.TYPE));
+            String sortOrder = result.get(1, String.class);
+            reviewableItem.setSortOrder((sortOrder != null) ? Long.parseLong(sortOrder) : -1L);
+            reviewableItem.setResultCount(1L);
         }
 
         return reviewableItem;

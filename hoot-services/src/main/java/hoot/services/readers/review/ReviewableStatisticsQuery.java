@@ -49,8 +49,6 @@ class ReviewableStatisticsQuery extends ReviewableQueryBase implements IReviewab
     }
 
     private long getTotalReviewablesCount() {
-        //String sql = "select count(*) as totalcnt from current_relations_" + getMapId() + " where tags->'type' = 'review'";
-
         return new SQLQuery<>(super.getConnection(), DbUtils.getConfiguration(super.getMapId()))
                 .select()
                 .from(currentRelations)
@@ -59,8 +57,6 @@ class ReviewableStatisticsQuery extends ReviewableQueryBase implements IReviewab
     }
 
     private long getRemainingReviewablesCount() {
-        //String sql = "select count(*) as remaining from current_relations_" + getMapId() + " where tags->'hoot:review:needs' = 'yes'";
-
         return new SQLQuery<>(super.getConnection(), DbUtils.getConfiguration(super.getMapId()))
                 .select()
                 .from(currentRelations)

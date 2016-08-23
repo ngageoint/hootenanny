@@ -185,8 +185,7 @@ class AllReviewableItemsQuery extends ReviewableQueryBase implements IReviewable
      */
     private ReviewableItemBbox getRelationMemberBbox(long relId) {
         ReviewableBboxQuery reviewableBboxQuery = new ReviewableBboxQuery(super.getConnection(), getMapId(), relId);
-        ReviewableItemBbox reviewableItemBbox = (ReviewableItemBbox) reviewableBboxQuery.execQuery();
-        return reviewableItemBbox;
+        return (ReviewableItemBbox) reviewableBboxQuery.execQuery();
     }
 
     /**
@@ -232,8 +231,7 @@ class AllReviewableItemsQuery extends ReviewableQueryBase implements IReviewable
      * @return - SQL String
      */
     private SQLQuery<CurrentRelationMembers> getReviewableRelationMembersCountByTypeQuery(DbUtils.nwr_enum memberType) {
-        SQLQuery<CurrentRelationMembers> query =
-                new SQLQuery<>(super.getConnection(), DbUtils.getConfiguration(getMapId()))
+        return new SQLQuery<>(super.getConnection(), DbUtils.getConfiguration(getMapId()))
                         .select(currentRelationMembers)
                         .from(currentRelationMembers)
                         .where(currentRelationMembers.relationId
@@ -242,8 +240,6 @@ class AllReviewableItemsQuery extends ReviewableQueryBase implements IReviewable
                                         .from(currentRelations)
                                         .where(Expressions.booleanTemplate("exist(tags,'hoot:review:needs')")))
                                 .and(currentRelationMembers.memberType.eq(memberType)));
-
-        return query;
     }
 
     /**
@@ -255,8 +251,7 @@ class AllReviewableItemsQuery extends ReviewableQueryBase implements IReviewable
      * @return - result count
      */
     private long getReviewableRelationMembersCount(DbUtils.nwr_enum type) {
-        long recordCount = getReviewableRelationMembersCountByTypeQuery(type).fetchCount();
-        return recordCount;
+        return getReviewableRelationMembersCountByTypeQuery(type).fetchCount();
     }
 
     /**
@@ -270,9 +265,7 @@ class AllReviewableItemsQuery extends ReviewableQueryBase implements IReviewable
         Double minLon = tup.get(Expressions.numberPath(Double.class, bboxPath, "minlon"));
         Double maxLon = tup.get(Expressions.numberPath(Double.class, bboxPath, "maxlon"));
 
-        BoundingBox bbox = new BoundingBox(minLon, minLat, maxLon, maxLat);
-
-        return bbox;
+        return new BoundingBox(minLon, minLat, maxLon, maxLat);
     }
 
     /**

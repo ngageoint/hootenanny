@@ -26,10 +26,9 @@
  */
 package hoot.services.readers.review;
 
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
+
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -65,30 +64,15 @@ public class ReviewReferencesRetriever {
     }
 
     private List<Long> getAllReviewRelations(ElementInfo queryElementInfo, long mapId) {
-        String currentRelationMembersTableName = "current_relation_members_" + mapId;
-        String sql = "select relation_id from " + currentRelationMembersTableName;
-        String currentRelationsTableName = "current_relations_" + mapId;
-        sql += " join " + currentRelationsTableName + " on " + currentRelationMembersTableName + ".relation_id = "
-                + currentRelationsTableName + ".id";
-        sql += " where " + currentRelationMembersTableName + ".member_id = " + queryElementInfo.getId() + " and "
-                + currentRelationMembersTableName + ".member_type = '"
-                + Element.elementTypeFromString(queryElementInfo.getType()).toString().toLowerCase() + "'";
-
-        List<Long> relationIds = new ArrayList<>();
-
-        try (Statement stmt = connection.createStatement()) {
-            try (ResultSet rs = stmt.executeQuery(sql)){
-                while (rs.next()) {
-                    relationIds.add(rs.getLong(1));
-                }
-            }
-        }
-        catch (SQLException e) {
-            throw new RuntimeException("Error getting all review relations!", e);
-        }
-
-        return relationIds;
-
+        return new SQLQuery<>(this.connection, DbUtils.getConfiguration(mapId))
+                .select(currentRelationMembers.relationId)
+                .from(currentRelationMembers)
+                .join(currentRelations).on(currentRelationMembers.relationId.eq(currentRelations.id))
+                .where(currentRelationMembers.memberId.eq(queryElementInfo.getId())
+                        .and(currentRelationMembers.memberType.eq(
+                                Element.elementEnumForElementType(
+                                        Element.elementTypeFromString(queryElementInfo.getType())))))
+                .fetch();
     }
 
     /**
@@ -105,7 +89,7 @@ public class ReviewReferencesRetriever {
 
         long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId(), connection);
 
-        // check for query element existence
+        // check for query element aexistence
         Set<Long> elementIds = new HashSet<>();
         elementIds.add(queryElementInfo.getId());
         if ((StringUtils.trimToNull(queryElementInfo.getType()) == null) || !Element.allElementsExist(mapIdNum,
