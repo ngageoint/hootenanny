@@ -44,6 +44,66 @@ if (server.cluster.isMaster) {
             });
         });
 
+        describe('handleInputs', function(){
+
+/*
+        case '/osmtotds':
+            payload.transMap = osmToTdsMap;
+            payload.trandDir = 'toogr';
+            result = osmtotds(payload);
+            break;
+        case '/tdstoosm':
+            payload.transMap = tdsToOsmMap;
+            payload.trandDir = 'toosm';
+            result = tdstoosm(payload);
+            break;
+        case '/taginfo/key/values':
+            result = getTaginfoKeyFields(payload);
+            break;
+        case '/taginfo/keys/all':
+            result = getTaginfoKeyFields(payload);
+            break;
+        case '/schema':
+            result = getTaginfoKeys(payload);
+            break;
+        case '/capabilities':
+            result = getCapabilities();
+            break;
+        default:
+            throw new Error('Not found');
+            break;
+*/
+            it('should handle osmtotds GET', function(){
+                //http://localhost:8094/osmtotds?idval=AL015&geom=Point&translation=MGCP&idelem=fcode
+                var schema = server.handleInputs({
+                    idval: 'AL015',
+                    geom: 'Point',
+                    translation: 'MGCP',
+                    idelem: 'fcode',
+                    method: 'GET',
+                    path: '/osmtotds'
+                });
+                assert.equal(schema.desc, 'General Building Point Feature');
+                assert.equal(schema.columns[0].name, 'ACC');
+                assert.equal(schema.columns[0].enumerations[0].name, 'Accurate');
+                assert.equal(schema.columns[0].enumerations[0].value, '1');
+            });
+
+            function notFound() {
+                server.handleInputs({
+                    idval: 'AL015',
+                    geom: 'Point',
+                    translation: 'MGCP',
+                    idelem: 'fcode',
+                    path: '/foo'
+                })
+            }
+
+            it('throws error if not found', function(){
+                assert.throws(notFound, Error, 'Not found');
+            });
+        });
+
         describe('capabilities', function () {
           it('should return 200', function (done) {
             http.get('http://localhost:8094/capabilities', function (res) {

@@ -15,7 +15,7 @@ var serverPort = 8094;
 var util = require('util');
 var nCPU = os.cpus().length;
 
-var availableTrans = {'TDSv40':{'isvailable':'true'}, 'TDSv61':{'isvailable':'true'}, 'MGCP':{'isvailable':'true'}};
+var availableTrans = {'TDSv40':{'isavailable':'true'}, 'TDSv61':{'isavailable':'true'}, 'MGCP':{'isavailable':'true'}};
 var HOOT_HOME = process.env.HOOT_HOME;
 //Moving hoot init to the request handler allows stxxl temp file cleanup to happen properly.
 //hoot = require(HOOT_HOME + '/lib/HootJs');
@@ -80,17 +80,17 @@ var tdsToOsmMap = {
     http.createServer(
 
         function(request, response){
-            try
-            {
+            try {
                 var header = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'};
-                if (request.method === "POST") {
-                    var payload = "";
+                if (request.method === 'POST') {
+                    var payload = '';
                     request.on('data', function(chunk){
                         payload += chunk;
                     });
 
                     request.on('end', function(payload){
                         payload.method = 'POST';
+                        payload.path = url_parts.pathname;
 
                         var result = handleInputs(payload);
 
@@ -98,10 +98,11 @@ var tdsToOsmMap = {
                         response.end(postHandler(JSON.parse(result)));
                     });
 
-                } else if (request.method === "GET") {
-                    var url_parts = url.parse(request.url,true);
+                } else if (request.method === 'GET') {
+                    var url_parts = url.parse(request.url, true);
                     var payload = url_parts.query;
                     payload.method = 'POST';
+                    payload.path = url_parts.pathname;
 
                     var result = handleInputs(payload);
 
@@ -116,8 +117,10 @@ var tdsToOsmMap = {
                 var status = 500;
                 if (err.message.indexOf('Unsupported') > 0)
                     status = 400;
+                if (err.message.indexOf('Not found') > 0)
+                    status = 404;
                 response.writeHead(status, header);
-                response.write(JSON.stringify({error: err});
+                response.write(JSON.stringify({error: err}));
                 response.end();
             }
 
@@ -127,7 +130,7 @@ var tdsToOsmMap = {
 
 function handleInputs(payload) {
     var result;
-    switch(url.parse(request.url).pathname) {
+    switch(payload.path) {
         case '/osmtotds':
             payload.transMap = osmToTdsMap;
             payload.trandDir = 'toogr';
@@ -151,147 +154,89 @@ function handleInputs(payload) {
             result = getCapabilities();
             break;
         default:
-            throw new Error('Unsupported path');
+            throw new Error('Not found');
             break;
     }
     return result;
-}
+};
 
-var getCapabilities = function()
-{
+var getCapabilities = function() {
     if (request.method === 'GET'){
         return {
                 output: JSON.stringify(availableTrans),
                 status: 200
             };
     } else {
-        throw new Error('Unsupported method')
+        throw new Error('Unsupported method');
     }
-}
+};
 
-// var populateOsmToTdsmap = function()
-// {
-//     var hoot = require(HOOT_HOME + '/lib/HootJs');
-//     // logVerbose = hoot.logVerbose;
-//     // logWarn = hoot.logWarn;
-//     if(!osmToTdsMap['TDSv40']) {
-//         osmToTdsMap['TDSv40'] = new hoot.TranslationOp({
-//                                     'translation.script':HOOT_HOME + '/translations/OSM_to_englishTDS.js',
-//                                     'translation.direction':'toogr'});
-//     }
+// This is where all interesting things happen interfacing with hoot core lib directly
+var postHandler = function(data) {
+    var hoot = require(HOOT_HOME + '/lib/HootJs');
+    var start = new Date().getTime();
+    var result = {};
 
-//     if(!osmToTdsMap['TDSv61']) {
-//         osmToTdsMap['TDSv61'] = new hoot.TranslationOp({
-//                             'translation.script':HOOT_HOME + '/translations/OSM_to_englishTDS61.js',
-//                             'translation.direction':'toogr'});
-//     }
+    if (data.uid) {
+        result.uid = data.uid;
+    }
+    if (data.command) {
+        result.command = data.command;
+    }
 
-//     if(!osmToTdsMap['MGCP']) {
-//         osmToTdsMap['MGCP'] = new hoot.TranslationOp({
-//                             'translation.script':HOOT_HOME + '/translations/OSM_to_englishMGCP.js',
-//                             'translation.direction':'toogr'});
-//     }
-// }
+    var translation = new hoot.TranslationOp({
+        'translation.script': HOOT_HOME + data.transMap[data.translation],
+        'translation.direction': data.transDir});
+
+    if (data.command == 'translate') {
+        var map = new hoot.OsmMap();
+        hoot.loadMapFromString(map, data.input);
+        translation.apply(map);
+        xml = hoot.OsmWriter.toString(map);
+        result.output = xml;
+    } else {
+        throw new Error('Unrecognized command');
+    }
+
+    result.elapsed = new Date().getTime() - start;
+    return result;
+};
 
 // OSM to TDS request handler
-var osmtotds = function(params)
-{
+var osmtotds = function(params) {
 
-    if(params.method === "POST"){
+    if(params.method === 'POST'){
         return postHandler(params);
-    } else if (params.method === "GET"){
+    } else if (params.method === 'GET'){
+        // http://localhost:8094/osmtotds?idval=AL015&geom=Point&translation=MGCP&idelem=fcode
         // When we get get request on /osmtotds then produce fields based on supplied fcode
 
-        var featSchema = "";
-        var featWGeomMatchSchema = null;
-        var geom = params.geom;
-        var trns = params.translation;
+        var schema = (params.translation) ? schemaMap[params.translation].getDbSchema() : schemaMap['TDSv61'].getDbSchema();
 
-        var schema = schemaMap['TDSv61'].getDbSchema();
-        if(trns){
-            var schModule = schemaMap[trns];
-            if(schModule){
-                schema = schModule.getDbSchema();
-            }
-        }
-        for(var ii=0; ii<schema.length; ii++){
-            var elem = schema[ii];
-            if(elem[params.idelem] === params.idval){
-                featSchema = elem;
-                // We will take anything first and then if there is matching the geom
-                // then it will take precedent
-                if(geom === elem.geom){
-                    featWGeomMatchSchema = elem;
-                }
-            }
+        var match = schema.filter(function(d) {
+            return d[params.idelem] === params.idval && d.geom === params.geom;
+        });
+
+        if (match.length !== 1) {
+            schemaError(params);
         }
 
-        if(featWGeomMatchSchema){
-            featSchema = featWGeomMatchSchema;
-        }
-
-        return JSON.stringify(featSchema);
+        return match[0];
     }
-}
+};
 
-
-// var populateTdsToOsmMap = function()
-// {
-//     var hoot = require(HOOT_HOME + '/lib/HootJs');
-//     logVerbose = hoot.logVerbose;
-//     logWarn = hoot.logWarn;
-//     if(!tdsToOsmMap['TDSv40'])
-//     {
-//         tdsToOsmMap['TDSv40'] = new hoot.TranslationOp({
-//                             'translation.script':HOOT_HOME + '/translations/englishTDS_to_OSM.js',
-//                             'translation.direction':'toosm'});
-//     }
-
-//     if(!tdsToOsmMap['TDSv61'])
-//     {
-//         tdsToOsmMap['TDSv61'] = new hoot.TranslationOp({
-//                             'translation.script':HOOT_HOME + '/translations/englishTDS61_to_OSM.js',
-//                             'translation.direction':'toosm'});
-//     }
-
-//     if(!tdsToOsmMap['MGCP'])
-//     {
-//         tdsToOsmMap['MGCP'] = new hoot.TranslationOp({
-//                             'translation.script':HOOT_HOME + '/translations/englishMGCP_to_OSM.js',
-//                             'translation.direction':'toosm'});
-//     }
-// }
 // TDS to OSM handler
 var tdstoosm = function(params) {
 
-    if (params.method === "POST") {
+    if (params.method === 'POST') {
         return postHandler(params);
-    } else if (params.method === "GET") {
-        var etdsToOSMDirect = null;
+    } else if (params.method === 'GET') {
+        var hoot = require(HOOT_HOME + '/lib/HootJs');
+        var osm = params.transMap[params.translation].toOSM({
+            'Feature Code': params.fcode
+        }, '', '');
 
-        var translation = params.translation;
-
-        hoot = require(HOOT_HOME + '/lib/HootJs');
-        createUuid = hoot.UuidHelper.createUuid;
-        logVerbose = hoot.logVerbose;
-        logWarn = hoot.logWarn;
-
-        var translationsMap = {};
-        translationsMap['TDSv40'] = require(HOOT_HOME + '/plugins/etds40_osm.js');
-        translationsMap['TDSv61'] = require(HOOT_HOME + '/plugins/etds61_osm.js');
-        translationsMap['MGCP'] = require(HOOT_HOME + '/plugins/emgcp_osm.js');
-
-        var transScript = translationsMap[translation];
-        if(transScript) {
-            etdsToOSMDirect = transScript;
-        } else {
-            etdsToOSMDirect = transScript['TDSv61'];
-        }
-        var attr = {};
-        attr['Feature Code'] = params.fcode;
-        var osm_out = etdsToOSMDirect.toOSM(attr,'','');
-
-        return JSON.stringify(osm_out);
+        return osm;
     }
 }
 
@@ -300,207 +245,119 @@ var tdstoosm = function(params) {
 // http://localhost:8233/taginfo/key/values?fcode=AP030&filter=ways&key=SGCC&page=1&query=Clo&rp=25&sortname=count_ways&sortorder=desc&translation=TDSv61
 var getTaginfoKeyFields = function(params)
 {
-    if(request.method === "POST"){
-        response.writeHead(404, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
-        response.write("Post not supported\n");
-        response.end();
-    } else if(request.method === "GET"){
-        // When we get get request on  /osmtotds then produce fields based on supplied fcode
-        var  url_parts = url.parse(request.url,true);
-        var params = url_parts.query;
-        var featWGeomMatchSchema = null;
+    if (params.method === 'POST') {
+        throw 'Unsupported method';
+    } else if (request.method === 'GET') {
+
         // Line, Point, Area
         var geom = [];
 
-        if(params.filter == 'nodes') {
+        if (params.filter == 'nodes') {
             geom = ['Point'];
-        } else if(params.filter == 'ways') {
+        } else if (params.filter == 'ways') {
             geom = ['Line','Area'];
         }
 
-        var trns = params.translation;
+        var schema = (params.translation) ? schemaMap[params.translation].getDbSchema() : schemaMap['TDSv61'].getDbSchema();
 
-        var schema = schemaMap['TDSv61'].getDbSchema();
-        if(trns){
-            var schModule = schemaMap[trns];
-            if(schModule){
-                schema = schModule.getDbSchema();
-            }
-        }
-        for(var ii=0; ii<schema.length; ii++){
-            var elem = schema[ii];
-            if(elem.fcode === params.fcode){
-                // We will take anything first and then if there is matching the geom
-                // then it will take precedent
-                for(var iii=0; iii<geom.length; iii++){
-                    var curGeom = geom[iii];
-                    if(curGeom === elem.geom){
-                        featWGeomMatchSchema = elem;
-                    }
-                }
+        var match = schema.filter(function(d) {
+            return d.fcode === params.fcode && d.geom === params.geom;
+        });
 
-            }
+        if (match.length !== 1) {
+            schemaError(params);
         }
 
-        var fData = [];
-        if(featWGeomMatchSchema){
-            var fields = featWGeomMatchSchema.columns;
-            for(var j=0; j<fields.length; j++) {
-                var f = fields[j];
+        var data = match[0].columns.filter(function(c) {
+            return c.name === params.key && c.enumerations;
+        }).map(function(d) {
+            return d.enumerations.map(function(e) {
+                return {
+                    value: e.name,
+                    count: 1,
+                    fraction: 0.19,
+                    in_wiki: false,
+                    description: e.name,
+                    internal_val: e.value
+                };
+            });
+        });
 
-                if(f.name == params.key && f.enumerations){
-
-                    for(var jj=0; jj<f.enumerations.length; jj++) {
-                        var nf = {};
-                        var fEnum = f.enumerations[jj];
-                        nf['value'] = fEnum.name;
-                        nf['count'] = 1;
-                        nf['fraction'] = 0.19;
-                        nf['in_wiki'] = false;
-                        nf['description'] = fEnum.name;
-                        nf['internal_val'] = fEnum.value;
-                        fData.push(nf);
-                    }
-                }
-            }
-        }
-
-        var output = {};
-        output['page'] = 1;
-        output['rp'] = fData.length;
-        output['total'] = fData.length;
-        output['url'] = '';
-        output['data'] = fData;
-        response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
-        response.end(JSON.stringify(output));
+        return {
+            page: 1,
+            rp: data.length,
+            total: data.length,
+            url: '',
+            data: data
+        };
     }
 }
 
 // TDS taginfo service
 // This retrieves associated tag keys/fields for requested fcode
 // http://localhost:8233/taginfo/keys/all?page=1&rp=10&sortname=count_ways&sortorder=desc&fcode=AP030&translation=TDSv61&geometry=Line
-var getTaginfoKeys = function(request, response)
+var getTaginfoKeys = function(params)
 {
-    if(request.method === "POST"){
-        response.writeHead(404, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
-        response.write("Post not supported\n");
-        response.end();
-    } else if(request.method === "GET"){
-        // When we get get request on  /osmtotds then produce fields based on supplied fcode
-        var  url_parts = url.parse(request.url,true);
-        var params = url_parts.query;
+    if (params.method === 'POST') {
+        throw new Error('Unsupported method';
+    } else if (request.method === 'GET') {
+
         var featWGeomMatchSchema = null;
         var lastMatchingFeatureSchema = null;
         // Line, Point, Area
         var geom = params.rawgeom;
         var trns = params.translation;
 
-        var schema = schemaMap['TDSv61'].getDbSchema();
-        if(trns){
-            var schModule = schemaMap[trns];
-            if(schModule){
-                schema = schModule.getDbSchema();
-            }
-        }
-        for(var ii=0; ii<schema.length; ii++){
-            var elem = schema[ii];
-            if(elem.fcode === params.fcode){
-                if(geom === elem.geom){
-                    featWGeomMatchSchema = elem;
-                }
-                lastMatchingFeatureSchema = elem;
-            }
+        var schema = (params.translation) ? schemaMap[params.translation].getDbSchema() : schemaMap['TDSv61'].getDbSchema();
+
+        var match = schema.filter(function(d) {
+            return d.fcode === params.fcode;
+        });
+
+        if (match.length > 1) {
+            match = match.filter(function(d) {
+                return d.geom === params.geom;
+            })
         }
 
-        // Sometimes Point is only availble in area (i.e. AK120) so if no match then use whatever available.
-        if(!featWGeomMatchSchema) {
-            featWGeomMatchSchema = lastMatchingFeatureSchema;
-        }
-        var fData = [];
-        if(featWGeomMatchSchema){
-            var fields = featWGeomMatchSchema.columns;
-            for(var j=0; j<fields.length; j++) {
-                var f = fields[j];
-                var nf = {};
-
-                nf['key'] = f.name;
-                nf['count_all'] = 100001;
-                nf['count_all_fraction'] = 0.1;
-                nf['count_nodes'] = 100001;
-                nf['count_nodes_fraction'] = 0.1;
-                nf['count_ways'] = 100001;
-                nf['count_ways_fraction'] = 0.1;
-                nf['count_relations'] = 100001;
-                nf['count_relations_fraction'] = 0.1;
-                nf['values_all'] = 100;
-                nf['users_all'] = 100;
-                nf['in_wiki'] = false;
-                nf['in_josm'] = false;
-
-                fData.push(nf);
-            }
+        if (match.length !== 1) {
+            schemaError(params);
         }
 
-        var output = {};
-        output['page'] = 1;
-        output['rp'] = fData.length;
-        output['total'] = fData.length;
-        output['url'] = '';
-        output['data'] = fData;
-        response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
-        response.end(JSON.stringify(output));
+        var data = match[0].columnsmap(function(d) {
+            return d.enumerations.map(function(e) {
+                return {
+                    key: e.name,
+                    count_all: 100001,
+                    count_all_fraction: 0.1,
+                    count_nodes: 100001,
+                    count_nodes_fraction: 0.1,
+                    count_ways: 100001,
+                    count_ways_fraction: 0.1,
+                    count_relations: 100001,
+                    count_relations_fraction: 0.1,
+                    values_all: 100,
+                    users_all: 100,
+                    in_wiki: false,
+                    in_josm: false,
+                };
+            });
+        });
+
+        return {
+            page: 1,
+            rp: data.length,
+            total: data.length,
+            url: '',
+            data: data
+        };
     }
 }
 
-// This is where all interesting things happen interfacing with hoot core lib directly
-var postHandler = function(data)
-{
-    var hoot = require(HOOT_HOME + '/lib/HootJs');
-    // logVerbose = hoot.logVerbose;
-    // logWarn = hoot.logWarn;
-
-    var resArr = [];
-    var start = new Date().getTime();
-    var result = {};
-
-    if (data.uid) {
-        result.uid = data.uid;
-    }
-    if (data.command) {
-        result.command = daa.command;
-    }
-
-    var cmdTrans = data.translation;
-
-    var tran = translatorMap[cmdTrans];
-
-    var translation = new hoot.TranslationOp({
-        'translation.script':HOOT_HOME + '/translations/englishTDS_to_OSM.js',
-        'translation.direction':'toosm'});
-
-    if (msg.command == 'translate') {
-        var map = new hoot.OsmMap();
-        hoot.loadMapFromString(map, msg.input);
-        tran.apply(map);
-        xml = hoot.OsmWriter.toString(map);
-        result.output = xml;
-    } else {
-        result.status = -1;
-        result.error = 'Unrecognized command';
-    }
-
-    result.elapsed = new Date().getTime() - start;
-    return result;
-}
-
-var getFilteredSchema = function(request, response) {
-    if(request.method === "POST"){
-        response.writeHead(400, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
-        response.write("Post not supported\n");
-        response.end();
-    } else if(request.method === "GET"){
-        var url_parts = url.parse(request.url, true);
-        var params = url_parts.query;
+var getFilteredSchema = function(params) {
+    if (request.method === 'POST') {
+        throw new Error('Unsupported method');
+    } else if (request.method === 'GET') {
 
         // get query params
         var geomType = params.geometry;
@@ -509,16 +366,13 @@ var getFilteredSchema = function(request, response) {
         var maxLevDistance = 1*params.maxlevdst;
         var limitResult = 1*params.limit;
 
-        var result = searchSchema({
+        return searchSchema({
             translation: translation,
             geomType: geomType,
             searchStr: searchStr,
             limitResult: limitResult,
             maxLevDistance: maxLevDistance
         });
-
-        response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
-        response.end(JSON.stringify(result));
     }
 }
 
@@ -654,8 +508,12 @@ var getLevenshteinDistance = function(s, t) {
     return v1[t.length];
 }
 
+var schemaError = function(params) {
+    new Error(throw params.translation + ' for ' + params.geom + ' with ' + params.idelem + '=' + params.idval + ' not found');
+}
+
 if (typeof exports !== 'undefined') {
     exports.cluster = cluster;
     exports.searchSchema = searchSchema;
-    exports.postHandler = postHandler;
+    exports.handleInputs = handleInputs;
 }
