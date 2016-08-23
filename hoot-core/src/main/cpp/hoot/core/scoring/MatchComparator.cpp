@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -349,6 +349,13 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
 
       _tagError(conflated, it->first, "1");
       _tagError(conflated, it->second, "2");
+
+      /*const MatchType expectedMatchType(expectedIndex);
+      const MatchType actualMatchType(actualIndex);
+      _tagTestOutcome(
+        conflated, it->first, expectedMatchType.toString(), actualMatchType.toString());
+      _tagTestOutcome(
+        conflated, it->second, expectedMatchType.toString(), actualMatchType.toString());*/
     }
 
     _confusion[actualIndex][expectedIndex]++;
@@ -589,6 +596,34 @@ bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOs
     }
   }
   return result;
+}
+
+void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString uuid,
+                                      const QString expected, const QString actual)
+{
+  SetTagVisitor stv1("hoot:expected", expected);
+  MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
+  while (it != _actualUuidToEid.end())
+  {
+    if (it.key().contains(uuid))
+    {
+      shared_ptr<Element> eid = map->getElement(it.value());
+      stv1.visit(eid);
+    }
+    it++;
+  }
+
+  SetTagVisitor stv2("hoot:actual", actual);
+  it = _actualUuidToEid.begin();
+  while (it != _actualUuidToEid.end())
+  {
+    if (it.key().contains(uuid))
+    {
+      shared_ptr<Element> eid = map->getElement(it.value());
+      stv2.visit(eid);
+    }
+    it++;
+  }
 }
 
 void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const QString& value)

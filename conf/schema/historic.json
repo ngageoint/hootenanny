@@ -54,5 +54,14 @@
             "name": "place=populated",
             "weight": 0.4
         }
+    },
+    {
+        "isA": "historic",
+        "name": "historic=building",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "historic=monument",
+            "weight": 0.4
+        }
     }
 ]

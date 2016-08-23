@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -59,14 +59,14 @@ double CompactnessExtractor::characteristic(Geometry* g) const
 double CompactnessExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
   const ConstElementPtr& candidate) const
 {
-  if (candidate->getElementType() == ElementType::Node)
+  /*if (candidate->getElementType() == ElementType::Node)
   {
-    LOG_INFO("candidate: " << candidate->toString());
+    LOG_DEBUG("candidate: " << candidate->toString());
   }
   if (target->getElementType() == ElementType::Node)
   {
-    LOG_INFO("target: " << target->toString());
-  }
+    LOG_DEBUG("target: " << target->toString());
+  }*/
   ElementConverter ec(map.shared_from_this());
   shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
   shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);

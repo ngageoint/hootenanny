@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -32,29 +32,30 @@
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/schema/TagAncestorDifferencer.h>
+#include <hoot/core/conflate/MatchDetails.h>
+#include <hoot/core/util/Configurable.h>
+
+#include "PoiPolygonRfClassifier.h"
 
 namespace hoot
 {
 
 /**
- * This is a very simple mechanism for matching POIs to polygons. The following rules are used:
- *
- * - Match - If the names are fairly similar or non-existant & the point is inside the polygon
- * - Review - If the point is inside the polygon, but the names are different OR
- *            If the point is close to the polygon and the names are similar
- * - Miss - Everything else
- *
- * This supports intra-dataset and inter-dataset conflation.
- *
- * If there are multiple overlapping matches then they will all get marked as needing review in
- * PoiPolygonMergerCreator.
+ * This is a very simple mechanism for matching POIs to polygons. See "Building to POI Conflation"
+ * in the Hootenanny Algorithms document for more details.
  */
-class PoiPolygonMatch : public Match
+class PoiPolygonMatch : public Match, public MatchDetails
 {
 public:
 
   PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-    ConstMatchThresholdPtr threshold);
+    ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf);
+
+  PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
+    ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf,
+    double matchDistance, double reviewDistance, double nameScoreThreshold,
+    double typeScoreThreshold);
 
   virtual const MatchClassification& getClassification() const { return _c; }
 
@@ -77,11 +78,29 @@ public:
 
   virtual QString toString() const;
 
+  virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m) const;
+
 private:
+
+  ElementId _eid1;
+  ElementId _eid2;
+  shared_ptr<const PoiPolygonRfClassifier> _rf;
 
   static QString _matchName;
   ElementId _poiEid, _polyEid;
   MatchClassification _c;
+
+  double _matchDistance;
+  double _reviewDistance;
+  double _nameScoreThreshold;
+  double _typeScoreThreshold;
+
+  QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
+
+  //static QString _testUuid;
+
+  void _calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
+                       const ElementId& eid2);
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the names. A score of -1 means one
@@ -90,10 +109,13 @@ private:
   double _calculateNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
 
   /**
-   * Returns true if at least one POI tag is an exact match between the two elements. E.g.
-   * amenity=cafe in e1 and in e2.
+   * Returns true if the tag similarity score is greater than or equal to
+   * poi.polygon.min.tag.score
    */
-  bool _calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2) const;
+  bool _calculateTypeMatch(const ConstOsmMapPtr& map, ConstElementPtr e1, ConstElementPtr e2);
+
+  double _getTagScore(ConstElementPtr e1, ConstElementPtr e2) const;
+  QStringList _getRelatedTags(const Tags& tags) const;
 
 };
 

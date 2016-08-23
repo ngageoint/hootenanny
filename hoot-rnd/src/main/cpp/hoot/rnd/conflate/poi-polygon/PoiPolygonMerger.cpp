@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -60,15 +60,20 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map,
   // Get all the building parts for each status
   vector<ElementId> buildings1 = _getBuildingParts(map, Status::Unknown1);
   vector<ElementId> buildings2 = _getBuildingParts(map, Status::Unknown2);
-  LOG_VARD(buildings1);
-  LOG_VARD(buildings2);
-  LOG_VARD(_pairs);
 
   // Merge all the building parts together into a single building entity using the typical building
   // merge process.
   ElementId finalBuildingEid = _mergeBuildings(map, buildings1, buildings2, replaced);
+  //LOG_VARD(finalBuildingEid);
 
   ElementPtr finalBuilding = map->getElement(finalBuildingEid);
+  if (!finalBuilding.get())
+  {
+    //building merger must not have been able to merge...maybe need an earlier check for this
+    //and also handle it differently...
+    return;
+  }
+  assert(finalBuilding.get());
 
   Tags finalBuildingTags = finalBuilding->getTags();
   if (poiTags1.size())
@@ -173,6 +178,7 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
     // group all the building parts into a single building
     set<ElementId> eids;
     eids.insert(buildings2.begin(), buildings2.end());
+    //LOG_VARD(eids);
     return BuildingMerger::buildBuilding(map, eids)->getElementId();
   }
   else if (buildings2.size() == 0)
@@ -195,7 +201,9 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
   }
 
   assert(replaced.size() == 0);
+  assert(pairs.size() == 0);
   BuildingMerger(pairs).apply(map, replaced);
+  assert(replaced.size() > 0);
 
   set<ElementId> newElement;
   for (size_t i = 0; i < replaced.size(); i++)

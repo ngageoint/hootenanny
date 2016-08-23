@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -65,10 +65,11 @@ class PoiPolygonMatchVisitor : public ElementVisitor
 {
 public:
   PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, vector<const Match*>& result,
-                         ConstMatchThresholdPtr threshold) :
+                         ConstMatchThresholdPtr threshold, shared_ptr<PoiPolygonRfClassifier> rf) :
     _map(map),
     _result(result),
-    _threshold(threshold)
+    _threshold(threshold),
+    _rf(rf)
   {
     _neighborCountMax = -1;
     _neighborCountSum = 0;
@@ -104,7 +105,7 @@ public:
             PoiPolygonMatch::isBuildingIsh(n))
         {
           // score each candidate and push it on the result vector
-          PoiPolygonMatch* m = new PoiPolygonMatch(_map, from, *it, _threshold);
+          PoiPolygonMatch* m = new PoiPolygonMatch(_map, from, *it, _threshold, _rf);
 
           // if we're confident this is a miss
           if (m->getType() == MatchType::Miss)
@@ -192,6 +193,8 @@ private:
   // Used for finding neighbors
   shared_ptr<HilbertRTree> _index;
   deque<ElementId> _indexToEid;
+
+  shared_ptr<PoiPolygonRfClassifier> _rf;
 };
 
 PoiPolygonMatchCreator::PoiPolygonMatchCreator()
@@ -213,7 +216,7 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
 
     if (foundPoi && foundBuilding)
     {
-      result = new PoiPolygonMatch(map, eid1, eid2, getMatchThreshold());
+      result = new PoiPolygonMatch(map, eid1, eid2, getMatchThreshold(), _getRf());
     }
   }
 
@@ -223,7 +226,7 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
 void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  PoiPolygonMatchVisitor v(map, matches, threshold);
+  PoiPolygonMatchVisitor v(map, matches, threshold, _getRf());
   map->visitRo(v);
 }
 
@@ -251,6 +254,16 @@ shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()
                          config.getPoiPolygonReviewThreshold()));
   }
   return _matchThreshold;
+}
+
+shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
+{
+  if (!_rf)
+  {
+    _rf.reset(new PoiPolygonRfClassifier());
+  }
+
+  return _rf;
 }
 
 }
