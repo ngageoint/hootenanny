@@ -46,7 +46,8 @@ namespace hoot
 class ConflictsNetworkMatcherTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherTest);
-  CPPUNIT_TEST(optimizeTest);
+  // used for parameter tuning and isn't a true test.
+  //CPPUNIT_TEST(optimizeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

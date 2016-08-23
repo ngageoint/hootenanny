@@ -31,6 +31,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 
 // Qt
@@ -75,15 +76,36 @@ void IntersectionSplitter::_mapNodesToWays()
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     shared_ptr<Way> w = it->second;
+
+    bool isNetworkType = false;
+
     if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) ||
-        OsmSchema::getInstance().isLinearWaterway(*w))
+      OsmSchema::getInstance().isLinearWaterway(*w))
+    {
+      isNetworkType  = true;
+    }
+    // if the way isn't a network type, maybe it is part of a relation that is a network type.
+    else
+    {
+      const set<long>& relations = _map->getIndex().getElementToRelationMap()->getRelationByElement(
+        w->getElementId());
+
+      foreach (long rid, relations)
+      {
+        ElementPtr r = _map->getRelation(rid);
+        const Tags& tags = r->getTags();
+        if (OsmSchema::getInstance().isLinearHighway(tags, ElementType::Relation) ||
+          OsmSchema::getInstance().isLinearWaterway(*r))
+        {
+          isNetworkType  = true;
+        }
+      }
+    }
+
+    if (isNetworkType)
     {
       _mapNodesToWay(w);
     }
-//    else
-//    {
-//      LOG_DEBUG("IntersectionSplitter skipping way: " << w->getId());
-//    }
   }
 }
 
@@ -148,7 +170,6 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
     //LOG_WARN("way at " << wayId << " does not exist.");
     return;
   }
-  shared_ptr<const Node> node = _map->getNode(nodeId);
 
   //LOG_DEBUG("Splitting way: " << way->getId() << " at node: " << node->getId());
 
@@ -174,6 +195,16 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
     // if a split occurred.
     if (splits.size() > 1)
     {
+      QList<ElementPtr> newWays;
+      foreach (const WayPtr& w, splits)
+      {
+        newWays.append(w);
+      }
+
+      // make sure any ways that are part of relations continue to be part of those relations after
+      // they're split.
+      _map->replace(way, newWays);
+
       _removeWayFromMap(way);
 
       // go through all the resulting splits

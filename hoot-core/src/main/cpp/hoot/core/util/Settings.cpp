@@ -505,6 +505,20 @@ void Settings::parseCommonArguments(QStringList& args)
       QString kv = args[1];
       QStringList kvl = kv.split("+=");
       bool append = true;
+      bool remove = false;
+      if (kvl.size() != 2)
+      {
+        // split on the first '-='
+        int sep = kv.indexOf("-=");
+        kvl.clear();
+        if (sep != -1)
+        {
+          kvl << kv.mid(0, sep);
+          kvl << kv.mid(sep + 2);
+        }
+        append = false;
+        remove = true;
+      }
       if (kvl.size() != 2)
       {
         // split on the first '='
@@ -516,6 +530,7 @@ void Settings::parseCommonArguments(QStringList& args)
           kvl << kv.mid(sep + 1);
         }
         append = false;
+        remove = false;
       }
       if (kvl.size() != 2)
       {
@@ -532,6 +547,16 @@ void Settings::parseCommonArguments(QStringList& args)
       {
         QStringList values = kvl[1].split(";", QString::SkipEmptyParts);
         conf().append(kvl[0], values);
+      }
+      else if (remove)
+      {
+        QStringList values = kvl[1].split(";", QString::SkipEmptyParts);
+        foreach (QString v, values)
+        {
+          QStringList newList = conf().getList(kvl[0]);
+          newList.removeAll(v);
+          conf().set(kvl[0], newList);
+        }
       }
       else
       {

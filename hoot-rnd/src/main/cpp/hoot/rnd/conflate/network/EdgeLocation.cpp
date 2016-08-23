@@ -25,7 +25,7 @@ ConstNetworkVertexPtr EdgeLocation::getVertex(double epsilon) const
 
 QString EdgeLocation::toString() const
 {
-  return QString("{ _e: %1, _portion: %2 }").arg(_e->toString()).arg(_portion);
+  return QString("{ _e: %1, _portion: %2 }").arg(hoot::toString(_e)).arg(_portion);
 }
 
 }

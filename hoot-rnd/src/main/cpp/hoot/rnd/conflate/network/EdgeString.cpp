@@ -31,6 +31,49 @@
 namespace hoot
 {
 
+bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2)
+{
+  bool result = false;
+
+  if (es1.get() == es2.get())
+  {
+    result = true;
+  }
+  else if (es1->getAllEdges().size() != es2->getAllEdges().size())
+  {
+    result = false;
+  }
+  else
+  {
+    result = true;
+
+    for (int i = 0; i < es1->getAllEdges().size(); ++i)
+    {
+      const EdgeString::EdgeEntry& ee1 = es1->getAllEdges()[i];
+      const EdgeString::EdgeEntry& ee2 = es2->getAllEdges()[i];
+
+      if (ee1.getSubline() != ee2.getSubline())
+      {
+        result = false;
+        break;
+      }
+    }
+  }
+
+//  bool strResult = es1->toString() == es2->toString();
+
+//  if (result != strResult)
+//  {
+//    LOG_VARE(result);
+//    LOG_VARE(strResult);
+//    LOG_VARE(es1);
+//    LOG_VARE(es2);
+//    throw HootException();
+//  }
+
+  return result;
+}
+
 EdgeString::EdgeString()
 {
 }
@@ -49,64 +92,75 @@ void EdgeString::addFirstEdge(ConstEdgeSublinePtr subline)
 
 void EdgeString::appendEdge(ConstNetworkEdgePtr e)
 {
-  assert(_edges.size() > 0);
-  assert(isStub() == false);
-
-  if (isEdgeClosed() == true)
+  if (_edges.size() == 0)
   {
-    throw IllegalArgumentException("Illegal argument, you attempted to add an edge to an edge "
-      "string that is already closed. Ends in a partial match?");
-  }
-
-  double fromPortion = 0.0;
-  double toPortion = 1.0;
-  if (e->getFrom() == getToVertex())
-  {
-    // pass
-  }
-  else if (e->getTo() == getToVertex())
-  {
-    fromPortion = 1.0;
-    toPortion = 0.0;
+    addFirstEdge(e);
   }
   else
   {
-    throw HootException("Error attempting to append an edge that isn't connected.");
-  }
+    assert(isStub() == false);
 
-  _edges.append(ConstEdgeSublinePtr(new EdgeSubline(e, fromPortion, toPortion)));
+    if (isEdgeClosed() == true)
+    {
+      throw IllegalArgumentException("Illegal argument, you attempted to add an edge to an edge "
+        "string that is already closed. Ends in a partial match?");
+    }
+
+    double fromPortion = 0.0;
+    double toPortion = 1.0;
+    if (e->getFrom() == getToVertex())
+    {
+      // pass
+    }
+    else if (e->getTo() == getToVertex())
+    {
+      fromPortion = 1.0;
+      toPortion = 0.0;
+    }
+    else
+    {
+      throw HootException("Error attempting to append an edge that isn't connected.");
+    }
+
+    _edges.append(ConstEdgeSublinePtr(new EdgeSubline(e, fromPortion, toPortion)));
+  }
 }
 
 void EdgeString::appendEdge(ConstEdgeSublinePtr subline)
 {
-  assert(_edges.size() > 0);
-  assert(isStub() == false);
-
-  if (isEdgeClosed() == true)
+  if (_edges.size() == 0)
   {
-    throw IllegalArgumentException("Illegal argument, you attempted to add an edge to an edge "
-      "string that is already closed. Ends in a partial match?");
-  }
-
-  ConstEdgeSublinePtr newEntry;
-  if (subline->getStart()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-    subline->getStart()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getToVertex())
-  {
-    newEntry = subline;
-  }
-  else if (subline->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-    subline->getEnd()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getToVertex())
-  {
-    EdgeSublinePtr copy = subline->clone();
-    copy->reverse();
-    newEntry = copy;
+    addFirstEdge(subline);
   }
   else
   {
-    throw HootException("Error attempting to append an edge that isn't connected.");
-  }
+    assert(isStub() == false);
+    if (isEdgeClosed() == true)
+    {
+      throw IllegalArgumentException("Illegal argument, you attempted to add an edge to an edge "
+        "string that is already closed. Ends in a partial match?");
+    }
 
-  _edges.append(EdgeEntry(newEntry));
+    ConstEdgeSublinePtr newEntry;
+    if (subline->getStart()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+      subline->getStart()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getToVertex())
+    {
+      newEntry = subline;
+    }
+    else if (subline->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+      subline->getEnd()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getToVertex())
+    {
+      EdgeSublinePtr copy = subline->clone();
+      copy->reverse();
+      newEntry = copy;
+    }
+    else
+    {
+      throw HootException("Error attempting to append an edge that isn't connected.");
+    }
+
+    _edges.append(EdgeEntry(newEntry));
+  }
 }
 
 Meters EdgeString::calculateLength(const ConstElementProviderPtr& provider) const

@@ -54,7 +54,9 @@ void WayString::append(const WaySubline& subline)
         subline.getStart().getNode(WayLocation::SLOPPY_EPSILON))
       {
         LOG_VARW(back());
+        LOG_VARW(back().getWay());
         LOG_VARW(subline);
+        LOG_VARW(subline.getWay());
         LOG_WARN("Nodes don't match: "
           << back().getEnd().getNode(WayLocation::SLOPPY_EPSILON)->getElementId()
           << " vs. " << subline.getStart().getNode(WayLocation::SLOPPY_EPSILON)->getElementId());

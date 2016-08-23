@@ -3,6 +3,33 @@
 namespace hoot
 {
 
+bool operator==(ConstEdgeSublinePtr es1, ConstEdgeSublinePtr es2)
+{
+  bool result;
+
+  if (es1.get() == es2.get())
+  {
+    result = true;
+  }
+  else if (es1->getStart() == es2->getStart() && es1->getEnd() == es2->getEnd())
+  {
+    result = true;
+  }
+
+//  bool strResult = es1->toString() == es2->toString();
+
+//  if (result != strResult)
+//  {
+//    LOG_VARE(result);
+//    LOG_VARE(strResult);
+//    LOG_VARE(es1);
+//    LOG_VARE(es2);
+//    throw HootException();
+//  }
+
+  return result;
+}
+
 EdgeSubline::EdgeSubline(ConstEdgeLocationPtr start, ConstEdgeLocationPtr end) :
   _start(start),
   _end(end)
@@ -67,7 +94,7 @@ bool EdgeSubline::overlaps(shared_ptr<const EdgeSubline> other) const
 
 QString EdgeSubline::toString() const
 {
-  return QString("{ _start: %1, _end: %2 }").arg(_start->toString()).arg(_end->toString());
+  return QString("{ _start: %1, _end: %2 }").arg(hoot::toString(_start)).arg(hoot::toString(_end));
 }
 
 }

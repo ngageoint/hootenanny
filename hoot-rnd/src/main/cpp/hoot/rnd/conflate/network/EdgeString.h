@@ -112,7 +112,7 @@ public:
 
   bool containsInteriorVertex(ConstNetworkVertexPtr v) const;
 
-  QList<EdgeEntry> getAllEdges() const { return _edges; }
+  const QList<EdgeEntry>& getAllEdges() const { return _edges; }
 
   int getCount() const { return _edges.size(); }
 
@@ -195,19 +195,22 @@ typedef shared_ptr<const EdgeString> ConstEdgeStringPtr;
 bool operator<(ConstEdgeStringPtr, ConstEdgeStringPtr);
 
 // needed for QSet
-inline bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2)
+bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2);
+
+inline uint qHash(const hoot::ConstEdgeStringPtr& es)
 {
-  return es1->toString() == es2->toString();
+  uint result = 0;
+  foreach (const EdgeString::EdgeEntry& e, es->getAllEdges())
+  {
+    result ^= qHash(e.getSubline());
+  }
+
+  return result;
 }
 
 inline uint qHash(const hoot::EdgeStringPtr& es)
 {
-  return qHash(es->toString());
-}
-
-inline uint qHash(const hoot::ConstEdgeStringPtr& es)
-{
-  return qHash(es->toString());
+  return qHash((ConstEdgeStringPtr)es);
 }
 
 }

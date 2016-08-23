@@ -126,11 +126,18 @@ public:
 
 private:
   typedef QHash<ConstNetworkEdgePtr, QSet<ConstEdgeMatchPtr> > EdgeToMatchMap;
+  typedef QHash<ConstNetworkVertexPtr, QSet<ConstEdgeMatchPtr> > VertexToMatchMap;
 
   EdgeToMatchMap _edgeToMatch;
+  /**
+   * Maps from a vertex that touches or is contained by a match to the match.
+   */
+  VertexToMatchMap _vertexToMatch;
   MatchHash _matches;
 
   void _addEdgeToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr &em);
+
+  void _addVertexToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr &em);
 };
 
 typedef shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSetPtr;

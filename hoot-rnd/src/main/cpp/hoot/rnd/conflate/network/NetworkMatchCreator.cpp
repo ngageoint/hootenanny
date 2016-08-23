@@ -84,6 +84,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   ConstMatchThresholdPtr threshold)
 {
   LOG_VAR(threshold);
+  LOG_INFO("Extracting network...");
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
   ElementCriterionPtr c1(new ChainCriterion(new StatusCriterion(Status::Unknown1),
@@ -104,11 +105,14 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   NetworkMatcherPtr matcher(
     Factory::getInstance().constructObject<NetworkMatcher>(ConfigOptions().getNetworkMatcher()));
 
+  LOG_INFO("Matching network...");
   matcher->matchNetworks(map, n1, n2);
 
   NetworkDetailsPtr details(new NetworkDetails(map, n1, n2));
 
-  for (size_t i = 0; i < 30; ++i)
+  LOG_INFO("Optimizing network...");
+
+  for (size_t i = 0; i < 10; ++i)
   {
     if (ConfigOptions().getNetworkMatchWriteDebugMaps())
     {
@@ -126,6 +130,8 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     matcher->iterate();
   }
 
+  LOG_INFO("Creating matches...");
+
   // convert graph edge matches into NetworkMatch objects.
   QList<NetworkEdgeScorePtr> edgeMatch = matcher->getAllEdgeScores();
 
@@ -137,6 +143,8 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
       matches.push_back(_createMatch(details, edgeMatch[i], threshold));
     }
   }
+
+  LOG_INFO("Network match creation complete.");
 }
 
 vector<MatchCreator::Description> NetworkMatchCreator::getAllCreators() const

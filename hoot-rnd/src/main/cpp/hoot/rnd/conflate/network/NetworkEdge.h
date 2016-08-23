@@ -55,11 +55,11 @@ public:
 
   Meters calculateLength(const ConstElementProviderPtr& provider) const;
 
-  Meters contains(const ConstNetworkVertexPtr& v) const;
+  bool contains(const ConstNetworkVertexPtr& v) const;
 
   ConstNetworkVertexPtr getFrom() const { return _from; }
 
-  QList<ConstElementPtr> getMembers() const { return _members; }
+  const QList<ConstElementPtr>& getMembers() const { return _members; }
 
   ConstNetworkVertexPtr getTo() const { return _to; }
 
@@ -92,13 +92,12 @@ bool operator<(ConstNetworkEdgePtr, ConstNetworkEdgePtr);
 inline uint qHash(const ConstNetworkEdgePtr& v)
 {
   uint result = 0;
-  QList<ConstElementPtr> l = v->getMembers();
-  for (int i = 0; i < l.size(); ++i)
+  foreach (const ConstElementPtr& m, v->getMembers())
   {
-    result = qHash(l[i]->getElementId()) ^ result;
+    result = ::qHash(Tgs::cantorPairing(qHash(m->getElementId()), result));
   }
-  result = qHash(v->getFrom()) ^ result;
-  result = qHash(v->getTo()) ^ result;
+  result = ::qHash(Tgs::cantorPairing(qHash(v->getFrom()), result));
+  result = ::qHash(Tgs::cantorPairing(qHash(v->getTo()), result));
 
   return result;
 }

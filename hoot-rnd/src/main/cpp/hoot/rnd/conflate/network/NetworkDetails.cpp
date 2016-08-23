@@ -342,6 +342,8 @@ double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNet
     ConstWayPtr w2 = dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
 
     const SublineCache& sc = _getSublineCache(w1, w2);
+    LOG_VAR(sc.p);
+    LOG_VAR(bestScore);
     result = sc.p * bestScore;
   }
 
@@ -389,7 +391,6 @@ Meters NetworkDetails::getSearchRadius(ConstNetworkVertexPtr v1, ConstNetworkVer
   Meters ce2 = getSearchRadius(v2);
 
   Meters result = sqrt(ce1 * ce1 + ce2 * ce2);
-  LOG_VAR(result);
   return result;
 }
 
@@ -399,7 +400,6 @@ Meters NetworkDetails::getSearchRadius(ConstWayStringPtr ws1, ConstWayStringPtr 
   Meters ce2 = ws2->getMaxCircularError();
 
   Meters result = sqrt(ce1 * ce1 + ce2 * ce2);
-  LOG_VAR(result);
   return result;
 }
 
@@ -409,7 +409,6 @@ Meters NetworkDetails::getSearchRadius(ConstWayPtr w1, ConstWayPtr w2) const
   Meters ce2 = w2->getCircularError();
 
   Meters result = sqrt(ce1 * ce1 + ce2 * ce2);
-  LOG_VAR(result);
   return result;
 }
 
@@ -429,6 +428,8 @@ const NetworkDetails::SublineCache& NetworkDetails::_getSublineCache(ConstWayPtr
 
   MatchClassification c;
   bool reversed = false;
+  LOG_VAR(sr);
+  LOG_VAR(sublineMatch);
   if (sublineMatch.isValid())
   {
     // calculate the match score
@@ -570,7 +571,7 @@ ConstWayPtr NetworkDetails::toWay(ConstNetworkEdgePtr e) const
   return w;
 }
 
-WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e) const
+WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& mapper) const
 {
   QList<EdgeString::EdgeEntry> edges = e->getAllEdges();
   WayStringPtr ws(new WayString());
@@ -588,7 +589,8 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e) const
         LOG_VARW(e);
         throw IllegalArgumentException("Expected a network edge with exactly 1 way.");
       }
-      ConstWayPtr w = dynamic_pointer_cast<const Way>(e->getMembers()[0]);
+      ElementId eid = mapper.mapEid(e->getMembers()[0]->getElementId());
+      ConstWayPtr w = dynamic_pointer_cast<const Way>(_map->getWay(eid));
 
       Meters l = calculateLength(e);
       double startP = subline->getStart()->getPortion();

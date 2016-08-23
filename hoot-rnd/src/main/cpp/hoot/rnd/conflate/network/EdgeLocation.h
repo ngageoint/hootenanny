@@ -4,6 +4,12 @@
 // hoot
 #include "NetworkEdge.h"
 
+// Qt
+#include <QHash>
+
+// Tgs
+#include <tgs/HashMap.h>
+
 namespace hoot
 {
 
@@ -81,6 +87,17 @@ inline bool operator>=(const ConstEdgeLocationPtr& a, const ConstEdgeLocationPtr
 {
   assert(a->getEdge() == b->getEdge());
   return a->getPortion() >= b->getPortion();
+}
+
+inline uint qHash(const ConstEdgeLocationPtr& el)
+{
+//  LOG_VARW(el);
+//  LOG_VARW(qHash(el->getEdge()));
+//  LOG_VARW(::qHash(__gnu_cxx::fastHashDouble()(el->getPortion())));
+  uint result = ::qHash(Tgs::cantorPairing(qHash(el->getEdge()),
+    ::qHash((quint64)__gnu_cxx::fastHashDouble()(el->getPortion()))));
+//  LOG_VARW(result);
+  return result;
 }
 
 }

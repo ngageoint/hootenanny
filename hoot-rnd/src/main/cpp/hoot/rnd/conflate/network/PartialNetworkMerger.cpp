@@ -108,8 +108,8 @@ WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(
   ConstEdgeMatchPtr edgeMatch) const
 {
   // convert the EdgeStrings into WaySublineStrings
-  WayStringPtr str1 = _details->toWayString(edgeMatch->getString1());
-  WayStringPtr str2 = _details->toWayString(edgeMatch->getString2());
+  WayStringPtr str1 = _details->toWayString(edgeMatch->getString1(), *this);
+  WayStringPtr str2 = _details->toWayString(edgeMatch->getString2(), *this);
 
   WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(str1, str2));
 
@@ -125,6 +125,16 @@ WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(
   merger->setTagMerger(TagMergerFactory::getInstance().getDefaultPtr());
 
   return merger;
+}
+
+ElementId PartialNetworkMerger::mapEid(const ElementId &oldEid) const
+{
+  if (_substitions.contains(oldEid))
+  {
+    return mapEid(_substitions[oldEid]);
+  }
+
+  return oldEid;
 }
 
 void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
@@ -218,7 +228,7 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
     // Attributes may be lost, but there isn't really anywhere to put them.
     foreach (ConstElementPtr e, edgeMatch->getString2()->getMembers())
     {
-      RecursiveElementRemover(e->getElementId()).apply(map);
+      RecursiveElementRemover(mapEid(e->getElementId())).apply(map);
     }
   }
   else if (edgeMatch->getString2()->isStub())
@@ -234,11 +244,11 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
 
     foreach (ConstElementPtr e, edgeMatch->getString2()->getMembers())
     {
-      eids.insert(e->getElementId());
+      eids.insert(mapEid(e->getElementId()));
     }
     foreach (ConstElementPtr e, edgeMatch->getString1()->getMembers())
     {
-      eids.insert(e->getElementId());
+      eids.insert(mapEid(e->getElementId()));
     }
 
     ReviewMarker().mark(map, eids, "Ambiguous intersection match. Possible dogleg? Very short "
@@ -248,6 +258,12 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
   {
     throw IllegalArgumentException("Invalid parameter. Expected a stub.");
   }
+}
+
+void PartialNetworkMerger::replace(ElementId oldEid, ElementId newEid)
+{
+  MergerBase::replace(oldEid, newEid);
+  _substitions[oldEid] = newEid;
 }
 
 void PartialNetworkMerger::_splitAllWays(const OsmMapPtr& map,

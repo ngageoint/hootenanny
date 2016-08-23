@@ -2,6 +2,7 @@
 
 // Standard
 #include <math.h>
+#include <iostream>
 
 // Tgs
 #include <tgs/TgsException.h>
@@ -84,16 +85,16 @@ double SimulatedAnnealing::iterate(int kmax)
   ConstStatePtr s = s1;
   _bestScore = s->getScore();
   _bestStates.insert(s);
-  std::cout << "s: " << s->toString().toUtf8().data() << std::endl;
+  //std::cout << "s: " << s->toString().toUtf8().data() << std::endl;
 
   for (int k = 0; k < kmax; ++k)
   {
     double T = 1.0 - (double)k / (double)kmax;
     StatePtr sNew = _generateNeighbor(s, T);
-    std::cout << "s: " << s->toString().toUtf8().data() << std::endl;
-    std::cout << "sNew: " << sNew->toString().toUtf8().data() << std::endl;
+//    std::cout << "s: " << s->toString().toUtf8().data() << std::endl;
+//    std::cout << "sNew: " << sNew->toString().toUtf8().data() << std::endl;
     sNew->setScore(_fitness->f(sNew));
-    cout << "sNew score: " << sNew->getScore() << endl;
+//    cout << "sNew score: " << sNew->getScore() << endl;
 
     if (sNew->getScore() < _bestScore)
     {
@@ -105,7 +106,7 @@ double SimulatedAnnealing::iterate(int kmax)
     {
       _bestStates.insert(sNew);
     }
-    cout << "_bestScore: " << _bestScore << endl;
+//    cout << "_bestScore: " << _bestScore << endl;
 
     if (_pickFromBestScores)
     {

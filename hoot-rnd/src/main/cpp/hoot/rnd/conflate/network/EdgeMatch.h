@@ -27,6 +27,8 @@
 #ifndef EDGEMATCH_H
 #define EDGEMATCH_H
 
+#include <tgs/HashMap.h>
+
 #include "EdgeString.h"
 
 namespace hoot
@@ -64,17 +66,22 @@ public:
    */
   bool contains(ConstNetworkVertexPtr v) const;
 
+  bool containsPartial() const { return getString1()->isPartial() || getString2()->isPartial(); }
+
   bool containsStub() const { return getString1()->isStub() || getString2()->isStub(); }
 
-  EdgeStringPtr getString1() { return _edges1; }
+  EdgeStringPtr getString1() { return _edges1; _resetHash(); }
 
-  EdgeStringPtr getString2() { return _edges2; }
+  EdgeStringPtr getString2() { return _edges2; _resetHash(); }
 
   ConstEdgeStringPtr getString1() const { return _edges1; }
 
   ConstEdgeStringPtr getString2() const { return _edges2; }
 
-  bool containsPartial() const { return getString1()->isPartial() || getString2()->isPartial(); }
+  /**
+   * Call this method if the underlying strings have changed.
+   */
+  void notifyStringChange() { _resetHash(); }
 
   /**
    * Returns true if any of the edges in this edge match overlap with other. Overlapping vertices
@@ -85,13 +92,18 @@ public:
   /**
    * Reverse both edge strings that make up this EdgeMatch.
    */
-  void reverse() const { _edges1->reverse(); _edges2->reverse(); }
+  void reverse() const { _edges1->reverse(); _edges2->reverse(); _resetHash(); }
 
   QString toString() const;
 
 private:
+  mutable uint _hash;
+
+  friend uint qHash(const shared_ptr<const EdgeMatch>& em);
 
   EdgeStringPtr _edges1, _edges2;
+
+  void _resetHash() const { _hash = 0; }
 };
 
 typedef shared_ptr<EdgeMatch> EdgeMatchPtr;
@@ -103,14 +115,20 @@ bool operator<(ConstEdgeMatchPtr, ConstEdgeMatchPtr);
 // needed for QSet
 bool operator==(const hoot::ConstEdgeMatchPtr& em1, const hoot::ConstEdgeMatchPtr& em2);
 
-inline uint qHash(const hoot::EdgeMatchPtr& em)
-{
-  return qHash(em->toString());
-}
-
 inline uint qHash(const hoot::ConstEdgeMatchPtr& em)
 {
-  return qHash(em->toString());
+  if (em->_hash == 0)
+  {
+    em->_hash = qHash(em->getString1()) ^ qHash(em->getString2());
+  }
+  return em->_hash;
+  //return Tgs::cantorPairing(qHash(em->getString1()), qHash(em->getString2()));
+  //return qHash(em->toString()) ^ 0xabcdefg;
+}
+
+inline uint qHash(const hoot::EdgeMatchPtr& em)
+{
+  return qHash((hoot::ConstEdgeMatchPtr)em);
 }
 
 }

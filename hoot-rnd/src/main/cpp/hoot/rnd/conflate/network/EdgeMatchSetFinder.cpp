@@ -79,6 +79,11 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
   bool toMatch = _details->isCandidateMatch(to1, to2);
   bool foundSolution = false;
 
+  if (_steps > 20)
+  {
+    return false;
+  }
+
   LOG_VAR(em);
   LOG_VAR(fromMatch);
   LOG_VAR(toMatch);
@@ -356,6 +361,11 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimFromEdge(ConstEdgeMatchPtr em)
   QList<EdgeSublineMatchPtr> matches = _details->calculateMatchingSublines(
     em->getString1()->getEdge(0), em->getString2()->getEdge(0));
 
+  if (matches.size() == 0)
+  {
+    return result;
+  }
+
   // only the last match is relevant because it matches to the second to last edge in the match.
   ConstEdgeSublinePtr s1 = matches.back()->getSubline1();
   ConstEdgeSublinePtr s2 = matches.back()->getSubline2();
@@ -413,16 +423,21 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimFromEdge(ConstEdgeMatchPtr em)
 
 EdgeMatchPtr EdgeMatchSetFinder::_trimToEdge(ConstEdgeMatchPtr em)
 {
+  EdgeMatchPtr result;
+
   LOG_VAR(em);
   // trim the beginning of the edge string as appropriate.
   QList<EdgeSublineMatchPtr> matches = _details->calculateMatchingSublines(
     em->getString1()->getLastEdge(), em->getString2()->getLastEdge());
 
+  if (matches.size() == 0)
+  {
+    return result;
+  }
+
   // only the first match is relevant because it matches to the second to last edge in the match.
   ConstEdgeSublinePtr s1 = matches.front()->getSubline1();
   ConstEdgeSublinePtr s2 = matches.front()->getSubline2();
-
-  EdgeMatchPtr result;
 
   LOG_VAR(s1);
   LOG_VAR(s2);

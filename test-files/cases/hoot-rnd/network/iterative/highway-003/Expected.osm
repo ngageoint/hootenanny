@@ -74,6 +74,7 @@
         <nd ref="-3"/>
         <nd ref="-4"/>
         <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-1"/>
         <tag k="hoot:status" v="1"/>
     </way>

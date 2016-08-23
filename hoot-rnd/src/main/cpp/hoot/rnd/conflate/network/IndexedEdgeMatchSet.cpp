@@ -44,6 +44,8 @@ void IndexedEdgeMatchSet::addEdgeMatch(const ConstEdgeMatchPtr &em, double score
     // index it so we can quickly determine which match an edge is part of.
     _addEdgeToMatchMapping(em->getString1(), em);
     _addEdgeToMatchMapping(em->getString2(), em);
+    _addVertexToMatchMapping(em->getString1(), em);
+    _addVertexToMatchMapping(em->getString2(), em);
   }
 }
 
@@ -55,6 +57,24 @@ void IndexedEdgeMatchSet::_addEdgeToMatchMapping(ConstEdgeStringPtr str,
   foreach (const EdgeString::EdgeEntry& ee, e)
   {
     _edgeToMatch[ee.getEdge()].insert(em);
+  }
+}
+
+void IndexedEdgeMatchSet::_addVertexToMatchMapping(ConstEdgeStringPtr str,
+  const ConstEdgeMatchPtr &em)
+{
+  QList<EdgeString::EdgeEntry> e = str->getAllEdges();
+
+  foreach (const EdgeString::EdgeEntry& ee, e)
+  {
+    if (ee.getSubline()->getStart()->isExtreme())
+    {
+      _vertexToMatch[ee.getSubline()->getStart()->getVertex()].insert(em);
+    }
+    if (ee.getSubline()->getEnd()->isExtreme())
+    {
+      _vertexToMatch[ee.getSubline()->getEnd()->getVertex()].insert(em);
+    }
   }
 }
 
@@ -143,9 +163,10 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatContain(ConstNetworkE
 QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatTerminateAt(ConstNetworkVertexPtr v)
   const
 {
-  /// @todo replace this with an index. This will get quite slow w/ 100k edges.
   QSet<ConstEdgeMatchPtr> result;
-  foreach (const ConstEdgeMatchPtr& em, _matches.keys())
+  foreach (const ConstEdgeMatchPtr& em,
+//    _matches.keys())
+    _vertexToMatch[v])
   {
     if (em->getString1()->isAtExtreme(v) || em->getString2()->isAtExtreme(v))
     {
@@ -155,7 +176,6 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatTerminateAt(ConstNetw
 
   return result;
 }
-
 
 QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeStringPtr str) const
 {
@@ -172,9 +192,25 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeStri
 QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeMatchPtr e) const
 {
   QSet<ConstEdgeMatchPtr> result;
+  QList<ConstEdgeMatchPtr> list;
+  QSet<ConstEdgeMatchPtr> candidates;
 
-  QSet<ConstEdgeMatchPtr> candidates = getMatchesThatOverlap(e->getString1());
-  candidates.unite(getMatchesThatOverlap(e->getString2()));
+  foreach (const EdgeString::EdgeEntry& ee, e->getString1()->getAllEdges())
+  {
+    foreach(const ConstEdgeMatchPtr em, _edgeToMatch[ee.getEdge()])
+    {
+      list.append(em);
+    }
+  }
+  foreach (const EdgeString::EdgeEntry& ee, e->getString2()->getAllEdges())
+  {
+    foreach(const ConstEdgeMatchPtr em, _edgeToMatch[ee.getEdge()])
+    {
+      list.append(em);
+    }
+  }
+
+  candidates = list.toSet();
 
   foreach (const ConstEdgeMatchPtr& em, candidates)
   {
@@ -191,9 +227,10 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeMatc
 QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithInteriorVertex(ConstNetworkVertexPtr v)
   const
 {
-  /// @todo replace this with an index. This will get quite slow w/ 100k edges.
   QSet<ConstEdgeMatchPtr> result;
-  foreach (const ConstEdgeMatchPtr& em, _matches.keys())
+  foreach (const ConstEdgeMatchPtr& em,
+//    _matches.keys())
+    _vertexToMatch[v])
   {
     if (em->getString1()->containsInteriorVertex(v) ||
       em->getString2()->containsInteriorVertex(v))
@@ -210,9 +247,10 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithTermination(ConstNetw
 {
   QSet<ConstEdgeMatchPtr> result;
 
-  /// @todo replace this with an index. This will get quite slow w/ 100k edges.
-
-  foreach (const ConstEdgeMatchPtr& em, _matches.keys())
+  // go through all the matches that contain v1 and v2
+  foreach (const ConstEdgeMatchPtr& em,
+//    _matches.keys())
+    _vertexToMatch[v1] & _vertexToMatch[v2])
   {
     if (em->getString1()->isFromOnVertex() &&
       em->getString1()->getFromVertex() == v1 &&
@@ -297,7 +335,9 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getConnectingStubs(ConstEdgeLocatio
   // if the vertices in string 1 match
   else if (va1 == vb1)
   {
-    foreach (const ConstEdgeMatchPtr& em, _matches.keys())
+    foreach (const ConstEdgeMatchPtr& em,
+//      _matches.keys())
+      _vertexToMatch[va1] & _vertexToMatch[va2] & _vertexToMatch[vb2])
     {
       if (em->containsStub() && em->contains(va1) && em->contains(va2) && em->contains(vb2))
       {
@@ -308,7 +348,9 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getConnectingStubs(ConstEdgeLocatio
   // if the vertices in string 2 match
   else if (va2 == vb2)
   {
-    foreach (const ConstEdgeMatchPtr& em, _matches.keys())
+    foreach (const ConstEdgeMatchPtr& em,
+//      _matches.keys())
+      _vertexToMatch[va1] & _vertexToMatch[va2] & _vertexToMatch[vb1])
     {
       if (em->containsStub() && em->contains(va1) && em->contains(va2) && em->contains(vb1))
       {

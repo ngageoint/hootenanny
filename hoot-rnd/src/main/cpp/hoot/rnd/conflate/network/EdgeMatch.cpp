@@ -29,22 +29,40 @@
 namespace hoot
 {
 
-/// @todo This and qHash are effective, but inefficient, please come up with a better method.
+/// @todo This could be made faster by only looking at the pointer for comparison. Unfortunately
+/// this would likely break IndexedEdgeMatchSet::contains. Another data structure in there could
+/// certainly alleviate this.
 bool operator==(const hoot::ConstEdgeMatchPtr& em1, const hoot::ConstEdgeMatchPtr& em2)
 {
-  return em1->toString() == em2->toString();
+  bool result = em1.get() == em2.get() ||
+    (em1->getString1() == em2->getString1() && em1->getString2() == em2->getString2());
+
+//  bool strResult = em1->toString() == em2->toString();
+
+//  if (result != strResult)
+//  {
+//    LOG_VARE(result);
+//    LOG_VARE(strResult);
+//    LOG_VARE(em1);
+//    LOG_VARE(em2);
+//    throw HootException();
+//  }
+
+  return result;
 }
 
 EdgeMatch::EdgeMatch()
 {
   _edges1.reset(new EdgeString());
   _edges2.reset(new EdgeString());
+  _resetHash();
 }
 
 EdgeMatch::EdgeMatch(ConstEdgeStringPtr es1, ConstEdgeStringPtr es2) :
   _edges1(es1->clone()),
   _edges2(es2->clone())
 {
+  _resetHash();
 }
 
 shared_ptr<EdgeMatch> EdgeMatch::clone() const

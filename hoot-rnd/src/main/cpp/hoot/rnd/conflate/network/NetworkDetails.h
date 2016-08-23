@@ -37,6 +37,7 @@
 #include <hoot/rnd/conflate/network/SearchRadiusProvider.h>
 
 #include "EdgeSublineMatch.h"
+#include "EidMapper.h"
 
 namespace hoot
 {
@@ -117,7 +118,7 @@ public:
 
   ConstWayPtr toWay(ConstNetworkEdgePtr e) const;
 
-  WayStringPtr toWayString(ConstEdgeStringPtr e) const;
+  WayStringPtr toWayString(ConstEdgeStringPtr e, const EidMapper& mapper = EidMapper()) const;
 
 private:
   shared_ptr<HighwayClassifier> _classifier;

@@ -188,8 +188,12 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNode)
 
   if (wl1.isExtreme(WayLocation::SLOPPY_EPSILON) == false)
   {
-    LOG_VAR(wl1.getWay());
-    LOG_VAR(wl1);
+    LOG_VARW(_mapping->getWayString1());
+    LOG_VARW(_mapping->getWayString2());
+    LOG_VARW(scrapNode);
+    LOG_VARW(wl2);
+    LOG_VARW(wl1.getWay());
+    LOG_VARW(wl1);
     throw IllegalArgumentException("scrapNode should line up with the beginning or end of a way.");
   }
 

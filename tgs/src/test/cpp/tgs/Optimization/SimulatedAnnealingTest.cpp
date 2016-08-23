@@ -64,7 +64,7 @@ public:
         (w == 3 ? 1.0 : 0.5);
 
       double result = 5.0 / std::max(1e-9, v);
-      cout << "v: " << v << " score: " << 5.0 / max(1e-9, v) << endl;
+      //cout << "v: " << v << " score: " << 5.0 / max(1e-9, v) << endl;
 
       return result;
     }

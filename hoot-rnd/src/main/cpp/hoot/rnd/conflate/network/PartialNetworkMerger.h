@@ -7,6 +7,7 @@
 #include <hoot/core/conflate/MergerBase.h>
 
 #include "EdgeMatch.h"
+#include "EidMapper.h"
 #include "NetworkDetails.h"
 
 namespace hoot
@@ -16,7 +17,7 @@ namespace hoot
  * @todo Rename to NetworkMerger and delete NetworkMerger
  * Merges one or more partial matches. The matches must not be conflicting.
  */
-class PartialNetworkMerger : public MergerBase
+class PartialNetworkMerger : public MergerBase, public EidMapper
 {
 public:
   /**
@@ -28,6 +29,14 @@ public:
 
   virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced) const;
 
+  /**
+   * Maps from a retired EID to its latest EID. If this EID has no mapping then the original EID
+   * is returned.
+   */
+  virtual ElementId mapEid(const ElementId& oldEid) const;
+
+  virtual void replace(ElementId oldEid, ElementId newEid);
+
   virtual QString toString() const;
 
 protected:
@@ -38,6 +47,7 @@ private:
   PairsSet _pairs;
   QSet<ConstEdgeMatchPtr> _edgeMatches;
   ConstNetworkDetailsPtr _details;
+  QHash<ElementId, ElementId> _substitions;
   mutable QList<WayMatchStringMerger::SublineMappingPtr> _allSublineMappings;
   mutable QList<WayMatchStringMergerPtr> _mergerList;
 

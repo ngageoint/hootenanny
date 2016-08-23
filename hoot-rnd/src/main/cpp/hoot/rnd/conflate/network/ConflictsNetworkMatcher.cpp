@@ -125,8 +125,10 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
 
 void ConflictsNetworkMatcher::_createMatchRelationships()
 {
+  int count = 0;
   foreach (ConstEdgeMatchPtr em, _edgeMatches->getAllMatches().keys())
   {
+    PROGRESS_INFO(count++ << " / " << _edgeMatches->getAllMatches().size());
     // if the two edges
     //  - overlap
     //  - contain non-extreme vertices that overlap with any vertex in the other edge (see white
@@ -305,6 +307,7 @@ void ConflictsNetworkMatcher::_iterateRank()
 {
   const double partialHandicap = 0.5;
   EdgeScoreMap newScores;
+  LOG_VARW(_scores.size());
   foreach(ConstEdgeMatchPtr em, _scores.keys())
   {
     double numerator = em->containsPartial() || em->containsStub() ? _scores[em] * partialHandicap : _scores[em];
@@ -353,8 +356,10 @@ void ConflictsNetworkMatcher::_iterateSimple()
   const double stubHandicap = _stubHandicap;
   EdgeScoreMap newScores, newWeights;
   double weightSum = EPSILON;
+  int count = 0;
   foreach(ConstEdgeMatchPtr em, _scores.keys())
   {
+    PROGRESS_INFO(++count << "/" << _scores.size());
     double aggression = _aggression;
     double handicap = em->containsPartial() ? partialHandicap : 1.0;
     if (em->containsStub())
@@ -491,10 +496,12 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
   finder.setAddStubsInBothDirections(false);
   finder.setIncludePartialMatches(true);
 
+  int count = 0;
   // go through all the n1 edges
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
+    PROGRESS_INFO(count++ << " / " << em.size());
     ConstNetworkEdgePtr e1 = it.value();
     // find all the n2 edges that are in range of this one
     Envelope env = _details->getEnvelope(it.value());
@@ -504,8 +511,12 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
     while (iit.next())
     {
       ConstNetworkEdgePtr e2 = _index2Edge[iit.getId()];
+      LOG_VAR(e1);
+      LOG_VAR(e2);
 
-      if (_details->getPartialEdgeMatchScore(e1, e2) > 0)
+      double score = _details->getPartialEdgeMatchScore(e1, e2);
+      LOG_VAR(score);
+      if (score > 0)
       {
         // add all the EdgeMatches that are seeded with this edge pair.
         finder.addEdgeMatches(e1, e2);

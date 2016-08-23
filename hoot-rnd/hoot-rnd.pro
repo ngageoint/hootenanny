@@ -139,7 +139,8 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSubline.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSublineMatch.h \
     src/main/cpp/hoot/rnd/conflate/network/PartialNetworkMerger.h \
-    src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.h
+    src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.h \
+    src/main/cpp/hoot/rnd/conflate/network/EidMapper.h
 
 FORMS +=
 

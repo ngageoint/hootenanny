@@ -115,51 +115,6 @@ private:
 
   typedef QHash<ConstEdgeMatchPtr, QList<ConstMatchRelationshipPtr> > MatchRelationshipMap;
 
-  /**
-   * A cost function used to compare network edges. It is a simple lookup.
-   */
-  class CostFunction :
-    public SingleAssignmentProblemSolver<EdgeString, EdgeString>::CostFunction
-  {
-  public:
-    const EdgeScoreMap* em1;
-    const EdgeScoreMap* em2;
-    ConstNetworkVertexPtr v1, v2;
-    double p;
-
-    CostFunction()
-    {
-      p = 1.0;
-      em1 = 0;
-      em2 = 0;
-    }
-
-    /**
-     * Returns the cost associated with assigning actor a to task t.
-     */
-    virtual double cost(const EdgeString* e1,
-                        const EdgeString* e2) const
-    {
-      bool valid = (e1->getFromVertex() == v1 && e2->getFromVertex() == v2) ||
-        (e1->getToVertex() == v1 && e2->getToVertex() == v2);
-
-      LOG_VAR(valid);
-      LOG_VAR(v1);
-      LOG_VAR(v2);
-      double result = 0.0;
-
-      if (valid)
-      {
-        ConstEdgeMatchPtr em(new EdgeMatch(e1->clone(), e2->clone()));
-        result = pow((*em1)[em] * (*em2)[em], p);
-      }
-
-      LOG_VAR(result);
-
-      return result;
-    }
-  };
-
   IndexedEdgeMatchSetPtr _edgeMatches;
   EdgeScoreMap _scores, _weights;
 

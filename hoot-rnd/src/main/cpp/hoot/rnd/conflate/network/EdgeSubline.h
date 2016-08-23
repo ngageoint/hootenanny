@@ -68,8 +68,21 @@ private:
 typedef shared_ptr<EdgeSubline> EdgeSublinePtr;
 typedef shared_ptr<const EdgeSubline> ConstEdgeSublinePtr;
 
+bool operator==(ConstEdgeSublinePtr, ConstEdgeSublinePtr);
+inline bool operator!=(ConstEdgeSublinePtr es1, ConstEdgeSublinePtr es2)
+{
+  return !(es1 == es2);
+}
+
 // not implemented
 bool operator<(ConstEdgeSublinePtr, ConstEdgeSublinePtr);
+
+inline uint qHash(const ConstEdgeSublinePtr& es)
+{
+//  LOG_VARW(qHash(es->getStart()));
+//  LOG_VARW(qHash(es->getEnd()));
+  return ::qHash(Tgs::cantorPairing(qHash(es->getStart()), qHash(es->getEnd())));
+}
 
 }
 
