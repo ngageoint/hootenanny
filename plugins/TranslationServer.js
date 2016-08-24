@@ -15,7 +15,7 @@ var serverPort = 8094;
 var util = require('util');
 var nCPU = os.cpus().length;
 
-var availableTrans = {'TDSv40':{'isavailable':'true'}, 'TDSv61':{'isavailable':'true'}, 'MGCP':{'isavailable':'true'}};
+var availableTrans = {TDSv40: {isavailable: true}, TDSv61: {isavailable: true}, MGCP: {isavailable: true}};
 var HOOT_HOME = process.env.HOOT_HOME;
 //Moving hoot init to the request handler allows stxxl temp file cleanup to happen properly.
 //hoot = require(HOOT_HOME + '/lib/HootJs');
@@ -95,7 +95,7 @@ var tdsToOsmMap = {
                         var result = handleInputs(payload);
 
                         response.writeHead(200, header);
-                        response.end(postHandler(JSON.parse(result)));
+                        response.end(postHandler(result));
                     });
 
                 } else if (request.method === 'GET') {
@@ -151,7 +151,7 @@ function handleInputs(payload) {
             result = getFilteredSchema(payload);
             break;
         case '/capabilities':
-            result = getCapabilities();
+            result = getCapabilities(payload);
             break;
         default:
             throw new Error('Not found');
@@ -160,12 +160,9 @@ function handleInputs(payload) {
     return result;
 };
 
-var getCapabilities = function() {
-    if (request.method === 'GET'){
-        return {
-                output: JSON.stringify(availableTrans),
-                status: 200
-            };
+var getCapabilities = function(params) {
+    if (params.method === 'GET'){
+        return availableTrans;
     } else {
         throw new Error('Unsupported method');
     }
@@ -366,9 +363,9 @@ var getTaginfoKeys = function(params)
 }
 
 var getFilteredSchema = function(params) {
-    if (request.method === 'POST') {
+    if (params.method === 'POST') {
         throw new Error('Unsupported method');
-    } else if (request.method === 'GET') {
+    } else if (params.method === 'GET') {
 
         // get query params
         var geomType = params.geometry;

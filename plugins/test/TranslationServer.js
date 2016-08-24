@@ -17,19 +17,19 @@ var MgcpPointBui = {
                         searchStr: 'Bui'
                     };
 var MgcpResult = [{
-                    name: "PAL015",
-                    fcode: "AL015",
-                    desc: "General Building Point Feature",
-                    geom: "Point",
-                    idx: -1
-                },
-                {
-                    name: "PAL020",
-                    fcode: "AL020",
-                    desc: "Built-Up Area Point Feature",
-                    geom: "Point",
-                    idx: -1
-                }];
+                        name: "PAL015",
+                        fcode: "AL015",
+                        desc: "General Building Point Feature",
+                        geom: "Point",
+                        idx: -1
+                    },
+                    {
+                        name: "PAL020",
+                        fcode: "AL020",
+                        desc: "Built-Up Area Point Feature",
+                        geom: "Point",
+                        idx: -1
+                    }];
 
 if (server.cluster.isMaster) {
     describe('TranslationServer', function () {
@@ -90,7 +90,7 @@ if (server.cluster.isMaster) {
                 assert.equal(schema.columns[0].enumerations[0].value, '1');
             });
 
-            it('should handle tdstoosm GET', function(){
+            it('should handle tdstoosm GET for TDSv61', function(){
                 //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
                 var attrs = server.handleInputs({
                     fcode: 'AL013',
@@ -99,6 +99,28 @@ if (server.cluster.isMaster) {
                     path: '/tdstoosm'
                 }).attrs;
                 assert.equal(attrs.building, 'yes');
+            });
+
+            it('should handle tdstoosm GET for TDSv40', function(){
+                //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
+                var attrs = server.handleInputs({
+                    fcode: 'AP030',
+                    translation: 'TDSv40',
+                    method: 'GET',
+                    path: '/tdstoosm'
+                }).attrs;
+                assert.equal(attrs.highway, 'road');
+            });
+
+            it('should handle tdstoosm GET for MGCP', function(){
+                //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
+                var attrs = server.handleInputs({
+                    fcode: 'BH140',
+                    translation: 'MGCP',
+                    method: 'GET',
+                    path: '/tdstoosm'
+                }).attrs;
+                assert.equal(attrs.waterway, 'river');
             });
 
             it('should handle osmtotds POST', function(){
@@ -217,23 +239,79 @@ if (server.cluster.isMaster) {
                     method: 'GET',
                     path: '/taginfo/keys/all'
                 });
-                console.log(enums);
                 assert.equal(enums.data.length, 15);
             });
 
-            function notFound() {
-                server.handleInputs({
-                    idval: 'AL015',
-                    geom: 'Point',
-                    translation: 'MGCP',
-                    idelem: 'fcode',
-                    path: '/foo'
-                })
-            }
+            it('should handle /capabilities GET', function(){
 
-            it('throws error if not found', function(){
-                assert.throws(notFound, Error, 'Not found');
+                var capas = server.handleInputs({
+                    method: 'GET',
+                    path: '/capabilities'
+                });
+                assert.equal(capas.TDSv61.isavailable, true);
+                assert.equal(capas.TDSv40.isavailable, true);
+                assert.equal(capas.MGCP.isavailable, true);
             });
+
+            it('should handle /schema GET', function(){
+//http://localhost:8094/schema?geometry=point&translation=MGCP&searchstr=Buil&maxlevdst=20&limit=12
+                var schm = server.handleInputs({
+                    geometry: 'line',
+                    translation: 'TDSv40',
+                    searchstr: 'river',
+                    maxlevdst: 20,
+                    limit: 12,
+                    method: 'GET',
+                    path: '/schema'
+                });
+                assert.equal(schm[0].name, 'RIVER_C');
+                assert.equal(schm[0].fcode, 'BH140');
+                assert.equal(schm[0].desc, 'River');
+            });
+
+            it('throws error if url not found', function(){
+                assert.throws(function error() {
+                    server.handleInputs({
+                        idval: 'AL015',
+                        geom: 'Point',
+                        translation: 'TDSv40',
+                        idelem: 'fcode',
+                        method: 'GET',
+                        path: '/foo'
+                    })
+                }, Error, 'Not found');
+            });
+
+            it('throws error if unsupported method', function(){
+                assert.throws(function error() {
+                    server.handleInputs({
+                        method: 'POST',
+                        path: '/schema'
+                    })
+                }, Error, 'Unsupported method');
+            });
+
+            it('throws error if unsupported method', function(){
+                assert.throws(function error() {
+                    server.handleInputs({
+                        method: 'POST',
+                        path: '/capabilities'
+                    })
+                }, Error, 'Unsupported method');
+            });
+
+            it('throws error if unrecognized command', function(){
+                assert.throws(function error() {
+                    server.handleInputs({
+                    command: 'exacerbate',
+                    input: '<osm version="0.6" upload="true" generator="JOSM"><node id="-1" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="building" v="yes"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
+                    translation: 'TDSv61',
+                    method: 'POST',
+                    path: '/osmtotds'
+                    })
+                }, Error, 'Unrecognized command');
+            });
+
         });
 
         describe('capabilities', function () {
