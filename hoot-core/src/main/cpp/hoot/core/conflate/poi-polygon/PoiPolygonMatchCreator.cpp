@@ -39,6 +39,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include "PoiPolygonMatch.h"
 #include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/filters/BuildingishCriterion.h>
 
 // Standard
 #include <fstream>
@@ -101,8 +102,7 @@ public:
       {
         const shared_ptr<const Element>& n = _map->getElement(*it);
 
-        if (n->isUnknown() &&
-            PoiPolygonMatch::isBuildingIsh(n))
+        if (n->isUnknown() && OsmSchema::getInstance().isBuildingIsh(n))
         {
           // score each candidate and push it on the result vector
           PoiPolygonMatch* m = new PoiPolygonMatch(_map, from, *it, _threshold, _rf);
@@ -140,7 +140,7 @@ public:
 
   static bool isMatchCandidate(ConstElementPtr element)
   {
-    return element->isUnknown() && PoiPolygonMatch::isPoiIsh(element);
+    return element->isUnknown() && OsmSchema::getInstance().isPoiIsh(element);
   }
 
   shared_ptr<HilbertRTree>& getIndex()
@@ -152,25 +152,17 @@ public:
       shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
-      // Only index elements satisfy isMatchCandidate(e)
-      //boost::function<bool (ConstElementPtr e)> f = boost::bind(&PoiPolygonMatchVisitor::isMatchCandidate, _1);
-      //shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
-
-      // Null criterion is OK - all elements are considered, none are filtered.
-      // NOT using isMatchCandidate lets us pass PoiPolygonMatchCreatorTest.
-      // Maybe isMatchCandidate is not correct?
-      shared_ptr<ArbitraryCriterion> pCrit;
+      shared_ptr<BuildingishCriterion> buildCrit(new BuildingishCriterion());
 
       // Instantiate our visitor
       IndexElementsVisitor v(_index,
                              _indexToEid,
-                             pCrit,
+                             buildCrit,
                              boost::bind(&PoiPolygonMatchVisitor::getSearchRadius, this, _1),
                              getMap());
 
-      //getMap()->visitRo(v);
-      getMap()->visitNodesRo(v);
       getMap()->visitWaysRo(v);
+      getMap()->visitRelationsRo(v);
       v.finalizeIndex();
     }
 

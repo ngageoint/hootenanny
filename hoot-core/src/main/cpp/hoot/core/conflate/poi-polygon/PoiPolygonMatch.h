@@ -67,12 +67,8 @@ public:
 
   virtual double getProbability() const { return _c.getMatchP(); }
 
-  static bool isBuildingIsh(ConstElementPtr e);
-
   virtual bool isConflicting(const Match& /*other*/, const ConstOsmMapPtr& /*map*/) const
   { return false; }
-
-  static bool isPoiIsh(ConstElementPtr e);
 
   virtual bool isWholeGroup() const { return true; }
 

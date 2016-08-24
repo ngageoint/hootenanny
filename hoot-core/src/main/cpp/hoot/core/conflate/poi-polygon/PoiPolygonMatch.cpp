@@ -85,14 +85,14 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   ConstElementPtr e2 = map->getElement(eid2);
 
   ConstElementPtr poi, poly;
-  if (isPoiIsh(e1) && isBuildingIsh(e2))
+  if (OsmSchema::getInstance().isPoiIsh(e1) && OsmSchema::getInstance().isBuildingIsh(e2))
   {
     _poiEid = eid1;
     _polyEid = eid2;
     poi = e1;
     poly = e2;
   }
-  else if (isPoiIsh(e2) && isBuildingIsh(e1))
+  else if (OsmSchema::getInstance().isPoiIsh(e2) && OsmSchema::getInstance().isBuildingIsh(e1))
   {
     _poiEid = eid2;
     _polyEid = eid1;
@@ -181,21 +181,6 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     LOG_VARD(evidence);
     LOG_DEBUG("**************************");
   }*/
-}
-
-bool PoiPolygonMatch::isBuildingIsh(ConstElementPtr e)
-{
-  return OsmSchema::getInstance().isArea(e->getTags(), e->getElementType()) &&
-    OsmSchema::getInstance().getCategories(e->getTags()).intersects(
-      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-}
-
-bool PoiPolygonMatch::isPoiIsh(ConstElementPtr e)
-{
-  return e->getElementType() == ElementType::Node &&
-    (OsmSchema::getInstance().getCategories(e->getTags()).intersects(
-        OsmSchemaCategory::building() | OsmSchemaCategory::poi()) ||
-     e->getTags().getNames().size() > 0);
 }
 
 double PoiPolygonMatch::_calculateNameScore(ConstElementPtr e1, ConstElementPtr e2) const

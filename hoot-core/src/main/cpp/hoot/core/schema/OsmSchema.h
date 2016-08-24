@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -386,6 +386,9 @@ public:
    * but in the future the list of valid list keys may be stored in the schema file.
    */
   bool isList(const QString& key, const QString& value);
+
+  bool isBuildingIsh(ConstElementPtr e);
+  bool isPoiIsh(ConstElementPtr e);
 
   /**
    * Returns true if the kvp contains metadata about the feature as opposed to real information

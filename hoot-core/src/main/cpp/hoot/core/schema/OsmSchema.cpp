@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -1769,6 +1769,21 @@ bool OsmSchema::isPoi(const Element& e)
   }
 
   return result;
+}
+
+bool OsmSchema::isBuildingIsh(ConstElementPtr e)
+{
+  return isArea(e->getTags(), e->getElementType()) &&
+         getCategories(e->getTags()).intersects(
+           OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+}
+
+bool OsmSchema::isPoiIsh(ConstElementPtr e)
+{
+  return e->getElementType() == ElementType::Node &&
+         (getCategories(e->getTags()).intersects(
+           OsmSchemaCategory::building() | OsmSchemaCategory::poi()) ||
+           e->getTags().getNames().size() > 0);
 }
 
 bool OsmSchema::isReversed(const Element& e) const
