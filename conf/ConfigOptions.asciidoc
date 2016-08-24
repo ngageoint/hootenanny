@@ -1111,6 +1111,13 @@ from the URL.
 Specifies the writer that the OsmMapWriterFactory will use. This overrides any information derived
 from the URL.
 
+=== osm.map.writer.format.xml
+
+* Data Type: bool
+* Default Value: `true`
+
+Turns on autoformatting (line breaks, indentation etc) for XML output.
+
 === osm2ogr.ops
 
 * Data Type: list
