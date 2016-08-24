@@ -191,7 +191,11 @@ var postHandler = function(data) {
     if (data.command == 'translate') {
         var map = new hoot.OsmMap();
         hoot.loadMapFromString(map, data.input);
-        translation.apply(map);
+        try {
+            translation.apply(map);
+        } catch(err) {
+            console.log(err);
+        }
         xml = hoot.OsmWriter.toString(map);
         result.output = xml;
     } else {
@@ -253,8 +257,8 @@ var tdstoosm = function(params) {
 var getTaginfoKeyFields = function(params)
 {
     if (params.method === 'POST') {
-        throw 'Unsupported method';
-    } else if (request.method === 'GET') {
+        throw new Error('Unsupported method');
+    } else if (params.method === 'GET') {
 
         // Line, Point, Area
         var geom = [];
@@ -266,13 +270,16 @@ var getTaginfoKeyFields = function(params)
         }
 
         var schema = (params.translation) ? schemaMap[params.translation].getDbSchema() : schemaMap['TDSv61'].getDbSchema();
-
         var match = schema.filter(function(d) {
-            return d.fcode === params.fcode && d.geom === params.geom;
+            return d.fcode === params.fcode && geom.indexOf(d.geom) > -1;
         });
-
         if (match.length !== 1) {
-            schemaError(params);
+            schemaError({
+                translation: params.translation,
+                idelem: 'fcode',
+                idval: params.fcode,
+                geom: geom
+            });
         }
 
         var data = match[0].columns.filter(function(c) {
@@ -288,7 +295,9 @@ var getTaginfoKeyFields = function(params)
                     internal_val: e.value
                 };
             });
-        });
+        }).reduce(function(a, b) {
+            return a.concat(b);
+        }, []);
 
         return {
             page: 1,

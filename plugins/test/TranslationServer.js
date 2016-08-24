@@ -119,23 +119,23 @@ if (server.cluster.isMaster) {
                 });
             });
 
-            it('should throw an error for unable to translate in osmtotds POST', function(){
-                //http://localhost:8094/osmtotds
-                var osm2trans = server.handleInputs({
-                    command: 'translate',
-                    input: '<osm version="0.6" upload="true" generator="JOSM"><node id="-1" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="poi" v="yes"/><tag k="leisure" v="park"/><tag k="name" v="Garden of the Gods"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
-                    translation: 'MGCP',
-                    method: 'POST',
-                    path: '/osmtotds'
-                });
-                var output = xml2js.parseString(osm2trans.output, function(err, result) {
-                    if (err) console.error(err);
-                    assert.equal(result.osm.node[0].tag[0].$.k, "Feature Code");
-                    assert.equal(result.osm.node[0].tag[0].$.v, "AL013:Building");
-                    assert.equal(result.osm.node[0].tag[1].$.k, "Unique Entity Identifier");
-                    assert.equal(result.osm.node[0].tag[1].$.v, "bfd3f222-8e04-4ddc-b201-476099761302");
-                });
-            });
+            // it('should throw an error for unable to translate in osmtotds POST', function(){
+            //     //http://localhost:8094/osmtotds
+            //     var osm2trans = server.handleInputs({
+            //         command: 'translate',
+            //         input: '<osm version="0.6" upload="true" generator="JOSM"><node id="-1" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="poi" v="yes"/><tag k="leisure" v="park"/><tag k="name" v="Garden of the Gods"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
+            //         translation: 'MGCP',
+            //         method: 'POST',
+            //         path: '/osmtotds'
+            //     });
+            //     var output = xml2js.parseString(osm2trans.output, function(err, result) {
+            //         if (err) console.error(err);
+            //         assert.equal(result.osm.node[0].tag[0].$.k, "Feature Code");
+            //         assert.equal(result.osm.node[0].tag[0].$.v, "AL013:Building");
+            //         assert.equal(result.osm.node[0].tag[1].$.k, "Unique Entity Identifier");
+            //         assert.equal(result.osm.node[0].tag[1].$.v, "bfd3f222-8e04-4ddc-b201-476099761302");
+            //     });
+            // });
 
             it('should handle tdstoosm POST', function(){
                 //http://localhost:8094/tdstoosm
@@ -163,6 +163,43 @@ if (server.cluster.isMaster) {
                     assert.equal(result.osm.node[0].tag[6].$.k, "source:accuracy:horizontal:category");
                     assert.equal(result.osm.node[0].tag[6].$.v, "accurate");
                 });
+            });
+
+            it('should handle /taginfo/key/values GET with NO enums', function(){
+                //http://localhost:8094/taginfo/key/values?fcode=AP030&filter=ways&key=SGCC&page=1&query=Clo&rp=25&sortname=count_ways&sortorder=desc&translation=TDSv61
+//http://localhost:8094/taginfo/key/values?fcode=AA040&filter=nodes&key=ZSAX_RX3&page=1&query=undefined&rp=25&sortname=count_nodes&sortorder=desc&translation=TDSv61
+                var enums = server.handleInputs({
+                    fcode: 'AA040',
+                    filter: 'nodes',
+                    key: 'ZSAX_RX3',
+                    page: '1',
+                    query: 'undefined',
+                    rp: '25',
+                    sortname: 'count_nodes',
+                    sortorder: 'desc',
+                    translation: 'TDSv61',
+                    method: 'GET',
+                    path: '/taginfo/key/values'
+                });
+                assert.equal(enums.data.length, 0);
+            });
+
+            it('should handle /taginfo/key/values GET with enums', function(){
+//http://localhost:8094/taginfo/key/values?fcode=AA040&filter=nodes&key=FUN&page=1&query=Damaged&rp=25&sortname=count_nodes&sortorder=desc&translation=MGCP
+                var enums = server.handleInputs({
+                    fcode: 'AA040',
+                    filter: 'nodes',
+                    key: 'FUN',
+                    page: '1',
+                    query: 'Damaged',
+                    rp: '25',
+                    sortname: 'count_nodes',
+                    sortorder: 'desc',
+                    translation: 'MGCP',
+                    method: 'GET',
+                    path: '/taginfo/key/values'
+                });
+                assert.equal(enums.data.length, 7);
             });
 
             function notFound() {
