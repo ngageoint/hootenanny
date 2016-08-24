@@ -133,12 +133,12 @@ function handleInputs(payload) {
     switch(payload.path) {
         case '/osmtotds':
             payload.transMap = osmToTdsMap;
-            payload.trandDir = 'toogr';
+            payload.transDir = 'toogr';
             result = osmtotds(payload);
             break;
         case '/tdstoosm':
             payload.transMap = tdsToOsmMap;
-            payload.trandDir = 'toosm';
+            payload.transDir = 'toosm';
             result = tdstoosm(payload);
             break;
         case '/taginfo/key/values':
