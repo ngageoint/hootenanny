@@ -7,11 +7,11 @@ Feature: Advanced Conflation Options
 	    And I press "Add Reference Dataset"
 	    And I click the "AllDataTypesACucumber" Dataset
 	    And I press "Add Layer"
-	    Then I wait 5 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
+	    Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
 	    And I press "Add Secondary Dataset"
 	    And I click the "AllDataTypesBCucumber" Dataset
 	    And I press "Add Layer"
-	    Then I wait 5 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
+	    Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
 
 	Scenario: I can set up standard conflation parameters
 	    Then I should see "Conflate"
@@ -221,11 +221,11 @@ Feature: Advanced Conflation Options
 		And I press "Add Reference Dataset"
 	    And I click the "AllDataTypesACucumber" Dataset
 	    And I press "Add Layer"
-	    Then I wait 5 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
+	    Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
 	    And I press "Add Secondary Dataset"
 	    And I click the "AllDataTypesBCucumber" Dataset
 	    And I press "Add Layer"
-	    Then I wait 5 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
+	    Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
 
 	Scenario: I can set up standard conflation parameters
 	    Then I should see "Conflate"
