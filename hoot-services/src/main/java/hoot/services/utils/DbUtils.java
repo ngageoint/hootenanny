@@ -531,8 +531,8 @@ public final class DbUtils {
         else { //recordBatchType == RecordBatchType.DELETE
             List<List<BooleanExpression>> predicateList = new LinkedList<>();
             for (Object o : records) {
-                CurrentRelations way = (CurrentRelations) o;
-                predicateList.add(Collections.singletonList(Expressions.asBoolean(currentRelations.id.eq(way.getId()))));
+                CurrentRelations relation = (CurrentRelations) o;
+                predicateList.add(Collections.singletonList(Expressions.asBoolean(currentRelations.id.eq(relation.getId()))));
             }
 
             return batchRecords(mapId, records, currentRelations,
