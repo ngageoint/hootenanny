@@ -202,6 +202,25 @@ if (server.cluster.isMaster) {
                 assert.equal(enums.data.length, 7);
             });
 
+            it('should handle /taginfo/keys/all GET with enums', function(){
+//http://localhost:8094/taginfo/keys/all?fcode=AA040&page=1&query=&rawgeom=Point&rp=10&sortname=count_nodes&sortorder=desc&translation=MGCP
+
+                var enums = server.handleInputs({
+                    fcode: 'AA040',
+                    rawgeom: 'Point',
+                    key: 'FUN',
+                    page: '1',
+                    rp: '10',
+                    sortname: 'count_nodes',
+                    sortorder: 'desc',
+                    translation: 'MGCP',
+                    method: 'GET',
+                    path: '/taginfo/keys/all'
+                });
+                console.log(enums);
+                assert.equal(enums.data.length, 15);
+            });
+
             function notFound() {
                 server.handleInputs({
                     idval: 'AL015',

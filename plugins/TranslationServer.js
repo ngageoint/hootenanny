@@ -145,10 +145,10 @@ function handleInputs(payload) {
             result = getTaginfoKeyFields(payload);
             break;
         case '/taginfo/keys/all':
-            result = getTaginfoKeyFields(payload);
+            result = getTaginfoKeys(payload);
             break;
         case '/schema':
-            result = getTaginfoKeys(payload);
+            result = getFilteredSchema(payload);
             break;
         case '/capabilities':
             result = getCapabilities();
@@ -316,13 +316,10 @@ var getTaginfoKeys = function(params)
 {
     if (params.method === 'POST') {
         throw new Error('Unsupported method');
-    } else if (request.method === 'GET') {
+    } else if (params.method === 'GET') {
 
-        var featWGeomMatchSchema = null;
-        var lastMatchingFeatureSchema = null;
         // Line, Point, Area
-        var geom = params.rawgeom;
-        var trns = params.translation;
+        params.geom = params.rawgeom;
 
         var schema = (params.translation) ? schemaMap[params.translation].getDbSchema() : schemaMap['TDSv61'].getDbSchema();
 
@@ -340,24 +337,22 @@ var getTaginfoKeys = function(params)
             schemaError(params);
         }
 
-        var data = match[0].columnsmap(function(d) {
-            return d.enumerations.map(function(e) {
-                return {
-                    key: e.name,
-                    count_all: 100001,
-                    count_all_fraction: 0.1,
-                    count_nodes: 100001,
-                    count_nodes_fraction: 0.1,
-                    count_ways: 100001,
-                    count_ways_fraction: 0.1,
-                    count_relations: 100001,
-                    count_relations_fraction: 0.1,
-                    values_all: 100,
-                    users_all: 100,
-                    in_wiki: false,
-                    in_josm: false,
-                };
-            });
+        var data = match[0].columns.map(function(d) {
+            return {
+                key: d.name,
+                count_all: 100001,
+                count_all_fraction: 0.1,
+                count_nodes: 100001,
+                count_nodes_fraction: 0.1,
+                count_ways: 100001,
+                count_ways_fraction: 0.1,
+                count_relations: 100001,
+                count_relations_fraction: 0.1,
+                values_all: 100,
+                users_all: 100,
+                in_wiki: false,
+                in_josm: false,
+            };
         });
 
         return {
