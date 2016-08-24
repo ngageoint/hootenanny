@@ -102,10 +102,8 @@ public:
   int getSize() const { return _matches.size(); }
 
   /**
-   * Returns true if:
-   *  - neither a nor b are stubs.
-   *  - a and b are connected to the same stub, and that stub allows the edges to be implicitly
-   *    connected.
+   * Returns a set of the connecting stubs if a and b are connected to the same stub, and that stub
+   * allows the edges to be implicitly connected.
    *
    * E.g.
    *
