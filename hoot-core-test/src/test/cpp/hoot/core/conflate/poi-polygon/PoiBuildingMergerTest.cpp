@@ -53,6 +53,7 @@ public:
 
   void mergeWayAsBuildingTest()
   {
+    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map, "test-files/conflate/poi-polygon/poi-poly-way-building-in.osm", false,
@@ -72,6 +73,7 @@ public:
 
   void mergeRelationAsBuildingTest()
   {
+    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map, "test-files/conflate/poi-polygon/poi-poly-relation-building-in.osm", false,
