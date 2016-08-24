@@ -1,5 +1,6 @@
 var assert = require('assert'),
-    http = require('http');
+    http = require('http'),
+    xml2js = require('xml2js');
 var server = require('../TranslationServer.js');
 
 var defaults = {};
@@ -31,7 +32,7 @@ var MgcpResult = [{
                 }];
 
 if (server.cluster.isMaster) {
-    describe('server', function () {
+    describe('TranslationServer', function () {
 
         describe('searchSchema', function(){
 
@@ -98,6 +99,70 @@ if (server.cluster.isMaster) {
                     path: '/tdstoosm'
                 }).attrs;
                 assert.equal(attrs.building, 'yes');
+            });
+
+            it('should handle osmtotds POST', function(){
+                //http://localhost:8094/osmtotds
+                var osm2trans = server.handleInputs({
+                    command: 'translate',
+                    input: '<osm version="0.6" upload="true" generator="JOSM"><node id="-1" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="building" v="yes"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
+                    translation: 'TDSv61',
+                    method: 'POST',
+                    path: '/osmtotds'
+                });
+                var output = xml2js.parseString(osm2trans.output, function(err, result) {
+                    if (err) console.error(err);
+                    assert.equal(result.osm.node[0].tag[0].$.k, "Feature Code");
+                    assert.equal(result.osm.node[0].tag[0].$.v, "AL013:Building");
+                    assert.equal(result.osm.node[0].tag[1].$.k, "Unique Entity Identifier");
+                    assert.equal(result.osm.node[0].tag[1].$.v, "bfd3f222-8e04-4ddc-b201-476099761302");
+                });
+            });
+
+            it('should throw an error for unable to translate in osmtotds POST', function(){
+                //http://localhost:8094/osmtotds
+                var osm2trans = server.handleInputs({
+                    command: 'translate',
+                    input: '<osm version="0.6" upload="true" generator="JOSM"><node id="-1" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="poi" v="yes"/><tag k="leisure" v="park"/><tag k="name" v="Garden of the Gods"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
+                    translation: 'MGCP',
+                    method: 'POST',
+                    path: '/osmtotds'
+                });
+                var output = xml2js.parseString(osm2trans.output, function(err, result) {
+                    if (err) console.error(err);
+                    assert.equal(result.osm.node[0].tag[0].$.k, "Feature Code");
+                    assert.equal(result.osm.node[0].tag[0].$.v, "AL013:Building");
+                    assert.equal(result.osm.node[0].tag[1].$.k, "Unique Entity Identifier");
+                    assert.equal(result.osm.node[0].tag[1].$.v, "bfd3f222-8e04-4ddc-b201-476099761302");
+                });
+            });
+
+            it('should handle tdstoosm POST', function(){
+                //http://localhost:8094/tdstoosm
+                var trans2osm = server.handleInputs({
+                    command: 'translate',
+                    input: '<osm version="0.6" upload="true" generator="JOSM"><node id="-9" lon="-104.907037158172" lat="38.8571566428667" version="0"><tag k="Horizontal Accuracy Category" v="Accurate"/><tag k="Built-up Area Density Category" v="Unknown"/><tag k="Commercial Copyright Notice" v="UNK"/><tag k="Feature Code" v="AL020:Built-Up Area Area Feature"/><tag k="Functional Use" v="Other"/><tag k="Condition of Facility" v="Unknown"/><tag k="Name" v="Manitou Springs"/><tag k="Named Feature Identifier" v="UNK"/><tag k="Name Identifier" v="UNK"/><tag k="Relative Importance" v="Unknown"/><tag k="Source Description" v="N_A"/><tag k="Source Date and Time" v="UNK"/><tag k="Source Type" v="Unknown"/><tag k="Associated Text" v="&lt;OSM&gt;{&quot;poi&quot;:&quot;yes&quot;}&lt;/OSM&gt;"/><tag k="MGCP Feature universally unique identifier" v="c6df0618-ce96-483c-8d6a-afa33541646c"/></node></osm>',
+                    translation: 'MGCP',
+                    method: 'POST',
+                    path: '/tdstoosm'
+                });
+                var output = xml2js.parseString(trans2osm.output, function(err, result) {
+                    if (err) console.error(err);
+                    assert.equal(result.osm.node[0].tag[0].$.k, "use");
+                    assert.equal(result.osm.node[0].tag[0].$.v, "other");
+                    assert.equal(result.osm.node[0].tag[1].$.k, "place");
+                    assert.equal(result.osm.node[0].tag[1].$.v, "yes");
+                    assert.equal(result.osm.node[0].tag[2].$.k, "poi");
+                    assert.equal(result.osm.node[0].tag[2].$.v, "yes");
+                    assert.equal(result.osm.node[0].tag[3].$.k, "uuid");
+                    assert.equal(result.osm.node[0].tag[3].$.v, "{c6df0618-ce96-483c-8d6a-afa33541646c}");
+                    assert.equal(result.osm.node[0].tag[4].$.k, "name");
+                    assert.equal(result.osm.node[0].tag[4].$.v, "Manitou Springs");
+                    assert.equal(result.osm.node[0].tag[5].$.k, "landuse");
+                    assert.equal(result.osm.node[0].tag[5].$.v, "built_up_area");
+                    assert.equal(result.osm.node[0].tag[6].$.k, "source:accuracy:horizontal:category");
+                    assert.equal(result.osm.node[0].tag[6].$.v, "accurate");
+                });
             });
 
             function notFound() {
