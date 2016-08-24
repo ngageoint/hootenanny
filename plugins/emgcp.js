@@ -50,57 +50,26 @@ emgcp = {
         }
 
         var eAttrs = {}; // The final English output
+        eAttrs['Feature Code'] = '';
 
-        // Add a default value for the FCODE
-        eAttrs['Feature Code'] = 'Not found';
-
+        // Defensive: This will either be populated or we threw an error earlier
         if (mgcpData.length > 0)
         {
             for (var fNum = 0, fLen = mgcpData.length; fNum < fLen; fNum++)
             {
                 var tFCODE = mgcpData[fNum]['attrs']['FCODE'];
-                if (tFCODE == 'Partial')
-                {
-                    // Go looking for "OSM:XXX" values and copy them to the output
-                    for (var i in mgcpData[fNum]['attrs'])
-                    {
-                        if (i.indexOf('OSM:') > -1)
-                        {
-                            eAttrs[i] = mgcpData[fNum]['attrs'][i];
-                            delete mgcpData[fNum]['attrs'][i]
-                        }
-                    }
-                }
-                else
-                {
-                    // Go through the list of possible attributes and add the missing ones
-                    var tmpList = emgcp.rules.fcodeLookup[tFCODE]['enum'];
-
-                    for (var i=0, elen = tmpList.length; i < elen; i++)
-                    {
-                        // If we don't find one, add it with it's default value
-                        if (!(mgcpData[fNum]['attrs'][tmpList[i]]))
-                        {
-                            mgcpData[fNum]['attrs'][tmpList[i]] = emgcp.rules.engDefault[tmpList[i]];
-                        }
-                    }
-                }
+                delete mgcpData[fNum]['attrs']['FCODE'];
 
                 // Translate the single values
                 for (var val in mgcpData[fNum]['attrs'])
                 {
                     if (val in emgcp.rules.engSingle)
                     {
-                        if (mgcpData[fNum]['attrs'][val] == undefined)
-                        {
-                            eAttrs[emgcp.rules.engSingle[val]] = emgcp.rules.engDefault[val];
-                        }
-                        else
+                        if (mgcpData[fNum]['attrs'][val] !== undefined)
                         {
                             eAttrs[emgcp.rules.engSingle[val]] = mgcpData[fNum]['attrs'][val];
                         }
 
-                        //print('Single: ' + emgcp.rules.engSingle[val] + ' = ' + eAttrs[emgcp.rules.engSingle[val]]);
                         // Cleanup used attrs so we don't translate them again
                         delete mgcpData[fNum]['attrs'][val];
                     }
@@ -112,7 +81,7 @@ emgcp = {
                 // Find an FCODE
                 if (tFCODE in emgcp.rules.fcodeLookup)
                 {
-                    if (eAttrs['Feature Code'] !== 'Not found')
+                    if (eAttrs['Feature Code'] !== '')
                     {
                         eAttrs['Feature Code'] = eAttrs['Feature Code'] + ' & ' + tFCODE + ':' + emgcp.rules.fcodeLookup[tFCODE]['desc'];
                     }
@@ -123,16 +92,6 @@ emgcp = {
                 }
             } // End for mgcpData
 
-        }
-        else
-        {
-            // If we can't find an FCODE, just return the tags.
-
-            // Add "OSM:" to each of the tags
-            for (var i in tags)
-            {
-                eAttrs['OSM:' + i] = tags[i];
-            }
         }
 
         if (config.getOgrDebugDumptags() == 'true')

@@ -59,10 +59,10 @@ function getRawDbSchema()
 function initialize()
 {
     // Make sure the MGCP translator exports extra tags to the TXT field
-    hoot.Settings.set({"ogr.mgcp.extra":"false"});
+    hoot.Settings.set({"ogr.mgcp.extra":"note"});
 
-    // Turn on partial translations
-    hoot.Settings.set({"ogr.partial.translate":"true"});
+    // Throw errors instead of returning partial translations/o2s_X features
+    hoot.Settings.set({"ogr.throw.error":"true"});
 
     // Turn off the ESRI FCSUBTYPE
     hoot.Settings.set({"ogr.tds.add.fcsubtype":"false"});
@@ -101,8 +101,3 @@ function translateToOgr(tags, elementType, geometryType)
 {
         return emgcp.toEnglish(tags, elementType, geometryType)
 } // End of translateToOgr
-
-
-
-
-

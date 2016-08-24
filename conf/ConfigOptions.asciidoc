@@ -1050,6 +1050,13 @@ Geodatabases.
 Export TDS data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one
 FCODE per file/layer (ROAD_L, BUILDING_P etc).
 
+=== ogr.throw.error
+
+* Data Type: bool
+* Default Value: `false`
+
+For the schema switcher, throw errors instead of returning a partial translation/o2s_X feature from a translation.
+
 === ogr.writer.create.all.layers
 
 * Data Type: bool

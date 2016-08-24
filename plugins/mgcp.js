@@ -751,10 +751,16 @@ mgcp = {
                     if (tags[tTags[i]]) hoot.logWarn('Unpacking TXT, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
-
-                tags.note = tObj.text;
             }
 
+            if (tObj.text !== '')
+            {
+                tags.note = tObj.text;
+            }
+            else
+            {
+                delete tags.note;
+            }
         } // End process tags.note
 
     }, // End of applyToOsmPostProcessing
@@ -1234,7 +1240,6 @@ mgcp = {
     toOsm : function(attrs, layerName, geometryType)
     {
         tags = {};  // This is the output
-        // fCode = '';
 
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
@@ -1292,6 +1297,7 @@ mgcp = {
         // isn't used in the translation - this should end up empty.
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
+        delete notUsedAttrs.F_CODE;
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
@@ -1415,7 +1421,19 @@ mgcp = {
         // push the feature to the o2s layer
         if (!layerNameLookup[tableName])
         {
-            // tableName = layerNameLookup[tableName];
+            // For the UI: Throw an error and die if we don't have a valid feature
+            if (config.getOgrThrowError() == 'true')
+            {
+                if (! attrs.F_CODE)
+                {
+                    throw new Error('No Valid FCode');
+                }
+                else
+                {
+                    throw new Error(geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in MGCP TRD4');
+                }
+            }
+
             hoot.logVerbose('FCODE and Geometry: ' + tableName + ' is not in the schema');
 
             if (config.getOgrPartialTranslate() == 'true')
