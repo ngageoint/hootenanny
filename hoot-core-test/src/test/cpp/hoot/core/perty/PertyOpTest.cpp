@@ -57,7 +57,7 @@ class PertyOpTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PertyOpTest);
   CPPUNIT_TEST(runDirectSequentialSimulationTest);
-  CPPUNIT_TEST(runDebugTest);
+  //CPPUNIT_TEST(runDebugTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
