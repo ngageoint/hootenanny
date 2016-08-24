@@ -189,9 +189,9 @@ ggdm30 = {
         ggdmThematicLookup = translate.makeTdsAttrLookup(newSchema);
 
         // Debug:
-        print("ggdmThematicLookup: Start");
-        translate.dumpLookup(ggdmThematicLookup);
-        print("ggdmThematicLookup: End");
+        //print("ggdmThematicLookup: Start");
+        //translate.dumpLookup(ggdmThematicLookup);
+        //print("ggdmThematicLookup: End");
 
         // Add the ESRI Feature Dataset name to the schema
         //  newSchema = translate.addFdName(newSchema,'TDS');
@@ -1926,7 +1926,7 @@ ggdm30 = {
         for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
 
         // If we have unused tags, add them to the memo field.
-        if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'note')
+        if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'attribute')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
