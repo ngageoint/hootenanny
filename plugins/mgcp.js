@@ -331,6 +331,9 @@ mgcp = {
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
+        // Drop the FCSUBTYPE since we don't use it
+        if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
+
         // The swap list. These are the same attr, just named differently
         // These may get converted back on output.
         var swapList = {
@@ -393,17 +396,20 @@ mgcp = {
 
         if (attrs.F_CODE)
         {
-            // Do nothing
+            // Drop the the "Not Found" F_CODE. This is from the UI
+            // NOTE: We _should_ be getting "FCODE" not "F_CODE" from files/UI
+            if (attrs.F_CODE == 'Not found') delete attrs.F_CODE;
         }
         else if (attrs.FCODE)
         {
             // Swap these since the rest of the lookup tables & TDS use F_CODE
-            attrs.F_CODE = attrs.FCODE;
+            if (attrs.FCODE !== 'Not found') attrs.F_CODE = attrs.FCODE;
+
             delete attrs.FCODE;
         }
         else
         {
-            // Time to find an FCODE based on teh filename
+            // Time to find an FCODE based on the filename
             var fCodeMap = [
                 ['AA010', ['aa010']], // Extraction Mine
                 ['AA012', ['aa012']], // Quarry
@@ -579,7 +585,7 @@ mgcp = {
         if (attrs.HWT && attrs.HWT !== '0') tags.amenity = 'place_of_worship';
 
         // Add the LayerName to the source
-        tags.source = 'mgcp:' + layerName.toLowerCase();
+        if ((! tags.source) && layerName !== '') tags.source = 'mgcp:' + layerName.toLowerCase();
 
         // If we have a UID, store it
         if (tags.uuid)
@@ -740,8 +746,9 @@ mgcp = {
                 var tTags = JSON.parse(tObj.tags)
                 for (i in tTags)
                 {
-                    print('Memo: Add: ' + i + ' = ' + tTags[i]);
-                    if (tags[tTags[i]]) print('Overwrite:' + i + ' = ' + tTags[i]);
+                    // Debug
+                    // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking TXT, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
 
@@ -757,7 +764,6 @@ mgcp = {
     {
         // Remove Hoot assigned tags for the source of the data
         if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-        if (tags.source) delete tags.source;
         if (tags.area) delete tags.area;
         if (tags['error:circular']) delete tags['error:circular'];
         if (tags['hoot:status']) delete tags['hoot:status'];
@@ -956,7 +962,7 @@ mgcp = {
         if (tags.bridge == 'viaduct')
         {
             tags.bridge = 'yes';
-            tags['source:text'] = translate.appendValue(tags['source:text'],'Viaduct',';');
+            tags.note = translate.appendValue(tags.note,'Viaduct',';');
         }
 
         // Keep looking for an FCODE
@@ -1416,6 +1422,7 @@ mgcp = {
             {
                 tableName = 'Partial';
                 attrs.FCODE = 'Partial';
+                delete attrs.F_CODE;
 
                 // If we have unused tags, add them to partial feature.
                 if (Object.keys(notUsedTags).length > 0)
@@ -1436,7 +1443,7 @@ mgcp = {
                 for (var i in tags)
                 {
                     // Clean out all of the "source:XXX" tags to save space
-                    // if (i.indexOf('source:') !== -1) delete tags[i];
+                    if (i.indexOf('source:') !== -1) delete tags[i];
                     if (i.indexOf('error:') !== -1) delete tags[i];
                     if (i.indexOf('hoot:') !== -1) delete tags[i];
                 }

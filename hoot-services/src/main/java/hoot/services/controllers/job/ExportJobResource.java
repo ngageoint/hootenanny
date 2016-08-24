@@ -360,7 +360,7 @@ public class ExportJobResource extends JobControllerBase {
             outFileName = outputname;
         }
 
-        ResponseBuilder rBuild = Response.ok(out, MediaType.APPLICATION_OCTET_STREAM);
+        ResponseBuilder rBuild = Response.ok(out);
         rBuild.header("Content-Disposition", "attachment; filename=" + outFileName + ".zip");
 
         return rBuild.build();
@@ -401,7 +401,7 @@ public class ExportJobResource extends JobControllerBase {
 
         entity.put("id", id);
 
-        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     /**
@@ -435,7 +435,7 @@ public class ExportJobResource extends JobControllerBase {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(wfsResources.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(wfsResources.toJSONString()).build();
     }
 
     /**
@@ -483,6 +483,6 @@ public class ExportJobResource extends JobControllerBase {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(exportResources.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(exportResources.toJSONString()).build();
     }
 }

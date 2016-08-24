@@ -137,7 +137,7 @@ public class AdvancedOptResource {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(template.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(template.toJSONString()).build();
     }
 
     private void getOverrides(String isForce) throws IOException, ParseException {

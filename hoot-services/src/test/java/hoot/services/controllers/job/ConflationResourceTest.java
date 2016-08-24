@@ -142,7 +142,6 @@ public class ConflationResourceTest {
             spy.process(inputParams);
         }
         catch (WebApplicationException e) {
-
             Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
             Assert.assertTrue(e.getResponse().getEntity().toString()
                     .contains("OSM_API_DB not allowed as secondary input type"));

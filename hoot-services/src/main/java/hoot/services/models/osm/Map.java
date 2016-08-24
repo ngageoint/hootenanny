@@ -31,7 +31,9 @@ import static com.querydsl.core.types.Projections.tuple;
 import static hoot.services.HootProperties.*;
 
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -733,12 +735,13 @@ public class Map extends Maps {
         List<MapLayer> mapLayerList = new ArrayList<>();
         
         boolean osmApiDbEnabled = Boolean.parseBoolean(OSM_API_DB_ENABLED);
-        
+
         if (osmApiDbEnabled) {
             // add a OSM API db dummy record for the UI for conflation involving OSM API db data
             MapLayer mapLayer = new MapLayer();
             mapLayer.setId(-1); // using id = -1 to identify the OSM API db source layer in the ui
             mapLayer.setName("OSM_API_DB_" + OSM_API_DB_NAME);
+            mapLayer.setDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             mapLayerList.add(mapLayer);
         }
 

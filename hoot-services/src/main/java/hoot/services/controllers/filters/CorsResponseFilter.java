@@ -26,12 +26,12 @@
  */
 package hoot.services.controllers.filters;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
+import java.io.IOException;
 
-import com.sun.jersey.spi.container.ContainerRequest;
-import com.sun.jersey.spi.container.ContainerResponse;
-import com.sun.jersey.spi.container.ContainerResponseFilter;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.core.MultivaluedMap;
 
 
 /**
@@ -43,17 +43,12 @@ public class CorsResponseFilter implements ContainerResponseFilter {
      * Returns a CORS aware filter
      */
     @Override
-    public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
-        ResponseBuilder resp = Response.fromResponse(response.getResponse());
-        resp.header("Access-Control-Allow-Origin", "*")
-            .header("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
-
-        String reqHead = request.getHeaderValue("Access-Control-Request-Headers");
-        if ((reqHead != null) && !reqHead.isEmpty()) {
-            resp.header("Access-Control-Allow-Headers", reqHead);
-        }
-
-        response.setResponse(resp.build());
-        return response;
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
+            throws IOException {
+        MultivaluedMap<String, Object> headers = responseContext.getHeaders();
+        headers.add("Access-Control-Allow-Origin", "*");
+        headers.add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
+        headers.add("Access-Control-Allow-Credentials", "true");
+        headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
     }
 }

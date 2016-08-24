@@ -30,20 +30,17 @@ import static hoot.services.HootProperties.HOME_FOLDER;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.glassfish.jersey.media.multipart.BodyPart;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,18 +48,15 @@ import org.slf4j.LoggerFactory;
 public final class MultipartSerializer {
     private static final Logger logger = LoggerFactory.getLogger(MultipartSerializer.class);
 
-    private MultipartSerializer() {
-    }
+    private MultipartSerializer() {}
 
-    static void serializeFGDB(List<FileItem> fileItemsList, String jobId, Map<String, String> uploadedFiles,
+    private static void serializeFGDB(List<BodyPart> fileItems, String jobId, Map<String, String> uploadedFiles,
             Map<String, String> uploadedFilesPaths) {
         try {
-            Iterator<FileItem> fileItemsIterator = fileItemsList.iterator();
             Map<String, String> folderMap = new HashMap<>();
 
-            while (fileItemsIterator.hasNext()) {
-                FileItem fileItem = fileItemsIterator.next();
-                String fileName = fileItem.getName();
+            for (BodyPart fileItem : fileItems) {
+                String fileName = fileItem.getContentDisposition().getFileName();
 
                 String relPath = FilenameUtils.getPath(fileName);
                 if (relPath.endsWith("/")) {
@@ -71,7 +65,6 @@ public final class MultipartSerializer {
                 fileName = FilenameUtils.getName(fileName);
 
                 String fgdbFolderPath = HOME_FOLDER + "/upload/" + jobId + "/" + relPath;
-
                 boolean isPathSafe = validatePath(HOME_FOLDER + "/upload", fgdbFolderPath);
 
                 if (isPathSafe) {
@@ -89,8 +82,10 @@ public final class MultipartSerializer {
                     String uploadedPath = fgdbFolderPath + "/" + fileName;
                     boolean isFileSafe = validatePath(fgdbFolderPath, uploadedPath);
                     if (isFileSafe) {
-                        File file = new File(uploadedPath);
-                        fileItem.write(file);
+                        try (InputStream fileStream = fileItem.getEntityAs(InputStream.class)) {
+                            File file = new File(uploadedPath);
+                            FileUtils.copyInputStreamToFile(fileStream, file);
+                        }
                     }
                     else {
                         throw new IOException("Illegal file path:" + uploadedPath);
@@ -121,11 +116,11 @@ public final class MultipartSerializer {
         }
     }
 
-    static void serializeUploadedFiles(List<FileItem> fileItemsList, Map<String, String> uploadedFiles,
+    private static void serializeUploadedFiles(List<BodyPart> fileItems, Map<String, String> uploadedFiles,
             Map<String, String> uploadedFilesPaths, String repFolderPath) {
         try {
-            for (FileItem fileItem : fileItemsList) {
-                String fileName = fileItem.getName();
+            for (BodyPart fileItem : fileItems) {
+                String fileName = fileItem.getContentDisposition().getFileName();
 
                 if (fileName == null) {
                     throw new RuntimeException("A valid file name was not specified.");
@@ -135,13 +130,14 @@ public final class MultipartSerializer {
 
                 boolean isPathSafe = validatePath(HOME_FOLDER + "/upload", uploadedPath);
                 if (isPathSafe) {
-                    File file = new File(uploadedPath);
-                    fileItem.write(file);
+                    try (InputStream fileStream = fileItem.getEntityAs(InputStream.class)) {
+                        File file = new File(uploadedPath);
+                        FileUtils.copyInputStreamToFile(fileStream, file);
+                    }
 
                     String[] nameParts = fileName.split("\\.");
                     if (nameParts.length > 1) {
                         String extension = nameParts[nameParts.length - 1].toUpperCase();
-
                         String[] subArr = ArrayUtils.removeElement(nameParts, nameParts[nameParts.length - 1]);
                         String filename = StringUtils.join(subArr, '.');
                         if (extension.equalsIgnoreCase("OSM") || extension.equalsIgnoreCase("GEONAMES")
@@ -174,11 +170,11 @@ public final class MultipartSerializer {
      *            = The list of files uploaded
      * @param uploadedFilesPaths
      *            = The list of uploaded files paths
-     * @param request
+     * @param multiPart
      *            = The request object that holds post data
      */
     public static void serializeUpload(String jobId, String inputType, Map<String, String> uploadedFiles,
-            Map<String, String> uploadedFilesPaths, HttpServletRequest request) {
+            Map<String, String> uploadedFilesPaths, FormDataMultiPart multiPart) {
 
         try {
             // Uploaded data container folder path. It is unique to each job
@@ -189,24 +185,15 @@ public final class MultipartSerializer {
                 File dir = new File(repFolderPath);
                 FileUtils.forceMkdir(dir);
 
-                if (!ServletFileUpload.isMultipartContent(request)) {
-                    throw new Exception("Content type is not multipart/form-data");
-                }
-
-                DiskFileItemFactory fileFactory = new DiskFileItemFactory();
-                File filesDir = new File(repFolderPath);
-                fileFactory.setRepository(filesDir);
-                ServletFileUpload uploader = new ServletFileUpload(fileFactory);
-
-                List<FileItem> fileItemsList = uploader.parseRequest(request);
+                List<BodyPart> bodyParts = multiPart.getBodyParts();
 
                 // If user request type is DIR then treat it as FGDB folder
                 if (inputType.equalsIgnoreCase("DIR")) {
-                    serializeFGDB(fileItemsList, jobId, uploadedFiles, uploadedFilesPaths);
+                    serializeFGDB(bodyParts, jobId, uploadedFiles, uploadedFilesPaths);
                 }
                 else {
                     // Can be shapefile or zip file
-                    serializeUploadedFiles(fileItemsList, uploadedFiles, uploadedFilesPaths, repFolderPath);
+                    serializeUploadedFiles(bodyParts, uploadedFiles, uploadedFilesPaths, repFolderPath);
                 }
             }
             else {
@@ -221,7 +208,7 @@ public final class MultipartSerializer {
     // See #6760
     // Stop file path manipulation vulnerability by validating the new path is
     // within container path
-    static boolean validatePath(String basePath, String newPath) {
+    private static boolean validatePath(String basePath, String newPath) {
         boolean isValidated = false;
 
         try {
@@ -236,8 +223,8 @@ public final class MultipartSerializer {
                 isValidated = true;
             }
         }
-        catch (Exception ex) {
-            logger.error("failed to validate MultipartSerializer path: {}", ex.getMessage());
+        catch (IOException ex) {
+            logger.error("Failed to validate MultipartSerializer path: {}", ex.getMessage());
         }
 
         return isValidated;

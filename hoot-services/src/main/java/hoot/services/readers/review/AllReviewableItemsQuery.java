@@ -171,7 +171,7 @@ class AllReviewableItemsQuery extends ReviewableQueryBase implements IReviewable
         }
 
         AllReviewableItems allReviewableItems = new AllReviewableItems(getMapId(), allReviewables);
-        allReviewableItems.setOverFlow(isPastLimit);
+        allReviewableItems.setOverflow(isPastLimit);
 
         return allReviewableItems;
     }

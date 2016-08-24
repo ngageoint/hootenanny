@@ -120,7 +120,8 @@ tds.rules = {
      'ZI001_NSD':'source:non_spatial_source:datetime', // Source Information : Non-spatial Source Date and Time
      'ZI001_NSN':'source:non_spatial_source:description', // Source Information : Non-spatial Source Description
      'ZI001_SSD':'source:datetime', // Source Information : Spatial Source Date and Time
-     'ZI001_SSN':'source:description', // Source Information : Spatial Source Description
+     //'ZI001_SSN':'source:description', // Source Information : Spatial Source Description
+     'ZI001_SSN':'source', // Source Information : Spatial Source Description
      'ZI001_VSD':'source:vertical_source:datetime', // Source Information : Vertical Source Date and Time
      'ZI001_VSN':'source:vertical_source:description', // Source Information : Vertical Source Description
      'ZI002_CCN':'source:copyright', // Restriction Information : Commercial Copyright Notice

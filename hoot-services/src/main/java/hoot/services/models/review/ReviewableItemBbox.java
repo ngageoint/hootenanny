@@ -32,7 +32,6 @@ import hoot.services.geo.BoundingBox;
 
 
 public class ReviewableItemBbox implements ReviewQueryMapper {
-
     private long mapId;
     private long relationId;
     private BoundingBox bbox;
@@ -57,8 +56,8 @@ public class ReviewableItemBbox implements ReviewQueryMapper {
         return relationId;
     }
 
-    public void setRelationId(long relid) {
-        relationId = relid;
+    public void setRelationId(long relationId) {
+        this.relationId = relationId;
     }
 
     public BoundingBox getBbox() {
@@ -74,6 +73,6 @@ public class ReviewableItemBbox implements ReviewQueryMapper {
     }
 
     public void setMapId(long mapid) {
-        mapId = mapid;
+        this.mapId = mapid;
     }
 }

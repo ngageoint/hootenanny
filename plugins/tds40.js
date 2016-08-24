@@ -539,6 +539,9 @@ tds = {
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
+        // Drop the FCSUBTYPE since we don't use it
+        if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
+
         // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
         // but renamed in different features. Some of these were done during the move from TDSv30 to
         // TDSv40.  We swap these so that there is only one set of rules needed in the One2One section.
@@ -631,9 +634,6 @@ tds = {
             }
         } // End in attrs loop
 
-        // Drop the FCSUBTYPE since we don't use it
-        if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
-
         // Drop all of the XXX Closure default values IFF the associated attributes are
         // not set.
         // Doing this after the main cleaning loop so all of the -999999 values are
@@ -662,7 +662,8 @@ tds = {
 
         if (attrs.F_CODE)
         {
-            // Nothing to do :-)
+            // Drop the the "Not Found" F_CODE. This is from the UI
+            if (attrs.F_CODE == 'Not found') delete attrs.F_CODE;
         }
         else if (attrs.FCODE)
         {
@@ -814,7 +815,7 @@ tds = {
        } // End if AP030
 
         // Add the LayerName to the source
-        tags.source = 'tdsv40:' + layerName.toLowerCase();
+        if ((! tags.source) && layerName !== '') tags.source = 'tdsv40:' + layerName.toLowerCase();
 
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
         if (tags.uuid)
@@ -1010,7 +1011,7 @@ tds = {
         if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
         if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
-        // Unpack the TXT field
+        // Unpack the ZI006_MEM field
         if (tags.note)
         {
             var tObj = translate.unpackMemo(tags.note);
@@ -1020,8 +1021,9 @@ tds = {
                 var tTags = JSON.parse(tObj.tags)
                 for (i in tTags)
                 {
-                    print('Memo: Add: ' + i + ' = ' + tTags[i]);
-                    if (tags[tTags[i]]) print('Overwrite:' + i + ' = ' + tTags[i]);
+                    // Debug
+                    // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
 
@@ -1061,7 +1063,6 @@ tds = {
     {
         // Remove Hoot assigned tags for the source of the data
         if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-        if (tags.source) delete tags.source;
         if (tags.area) delete tags.area;
         if (tags['error:circular']) delete tags['error:circular'];
         if (tags['hoot:status']) delete tags['hoot:status'];

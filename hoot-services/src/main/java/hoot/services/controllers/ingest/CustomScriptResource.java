@@ -148,7 +148,7 @@ public class CustomScriptResource {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(saveArr.toString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(saveArr.toString()).build();
     }
 
     @POST
@@ -243,7 +243,7 @@ public class CustomScriptResource {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(retList.toString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(retList.toString()).build();
     }
 
     /**
@@ -381,7 +381,7 @@ public class CustomScriptResource {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(script, MediaType.TEXT_PLAIN).build();
+        return Response.ok(script).build();
     }
 
     /**
@@ -464,7 +464,7 @@ public class CustomScriptResource {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(script, MediaType.TEXT_PLAIN).build();
+        return Response.ok(script).build();
     }
 
     /**
@@ -514,7 +514,7 @@ public class CustomScriptResource {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(delArr.toString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(delArr.toString()).build();
     }
 
     /**

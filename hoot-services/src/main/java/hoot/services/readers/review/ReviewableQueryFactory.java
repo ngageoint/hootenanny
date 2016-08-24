@@ -28,17 +28,12 @@ package hoot.services.readers.review;
 
 import java.sql.Connection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hoot.services.geo.BoundingBox;
 
 
 final class ReviewableQueryFactory {
-    private static final Logger logger = LoggerFactory.getLogger(ReviewableQueryFactory.class);
 
-    private ReviewableQueryFactory() {
-    }
+    private ReviewableQueryFactory() {}
 
     static IReviewableQuery getReviewableQuery(Connection connection, long mapid, long seqid) {
         return new ReviewableQuery(connection, mapid, seqid);
