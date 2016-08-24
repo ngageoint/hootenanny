@@ -28,14 +28,15 @@ package hoot.services.utils;
 
 
 import static hoot.services.HootProperties.DB_NAME;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
+import static hoot.services.models.db.QMaps.maps;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,7 @@ import org.slf4j.LoggerFactory;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.Configuration;
 import com.querydsl.sql.PostgreSQLTemplates;
 import com.querydsl.sql.RelationalPathBase;
@@ -61,12 +63,9 @@ import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.db.CurrentRelations;
 import hoot.services.models.db.CurrentWays;
 import hoot.services.models.db.QCurrentNodes;
-import hoot.services.models.db.QCurrentRelations;
 import hoot.services.models.db.QCurrentWays;
-import hoot.services.models.db.QMaps;
 import hoot.services.models.db.QReviewBookmarks;
 import hoot.services.models.db.QUsers;
-import hoot.services.models.osm.Element.ElementType;
 
 
 /**
@@ -152,18 +151,18 @@ public final class DbUtils {
      */
     public static List<Long> getMapIdsByName(Connection connection, String mapName) {
         return new SQLQuery<>(connection, getConfiguration())
-                .select(QMaps.maps.id)
-                .from(QMaps.maps)
-                .where(QMaps.maps.displayName.eq(mapName))
-                .orderBy(QMaps.maps.id.asc())
+                .select(maps.id)
+                .from(maps)
+                .where(maps.displayName.eq(mapName))
+                .orderBy(maps.id.asc())
                 .fetch();
     }
 
     public static String getDisplayNameById(Connection conn, long mapId) {
         return new SQLQuery<>(conn, getConfiguration())
-                .select(QMaps.maps.displayName)
-                .from(QMaps.maps)
-                .where(QMaps.maps.id.eq(mapId))
+                .select(maps.displayName)
+                .from(maps)
+                .where(maps.id.eq(mapId))
                 .fetchFirst();
     }
 
@@ -172,17 +171,17 @@ public final class DbUtils {
     /**
      * Get current_nodes record count by map name
      *
-     * @param conn
+     * @param connection
      * @param mapName
      * @return count of nodes record
      */
-    public static long getNodesCountByName(Connection conn, String mapName) {
+    public static long getNodesCountByName(Connection connection, String mapName) {
         long recordCount = 0;
 
-        List<Long> mapIds = getMapIdsByName(conn, mapName);
+        List<Long> mapIds = getMapIdsByName(connection, mapName);
 
         for (Long mapId : mapIds) {
-            recordCount += new SQLQuery<>(conn, getConfiguration(mapId.toString()))
+            recordCount += new SQLQuery<>(connection, getConfiguration(mapId.toString()))
                     .from(QCurrentNodes.currentNodes)
                     .fetchCount();
         }
@@ -193,17 +192,17 @@ public final class DbUtils {
     /**
      * Get current_ways record count by map name
      *
-     * @param conn
+     * @param connection
      * @param mapName
      * @return current_ways record count
      */
-    public static long getWayCountByName(Connection conn, String mapName) {
+    public static long getWayCountByName(Connection connection, String mapName) {
         long recordCount = 0;
 
-        List<Long> mapIds = getMapIdsByName(conn, mapName);
+        List<Long> mapIds = getMapIdsByName(connection, mapName);
 
         for (Long mapId : mapIds) {
-            recordCount += new SQLQuery<>(conn, getConfiguration(mapId.toString()))
+            recordCount += new SQLQuery<>(connection, getConfiguration(mapId.toString()))
                     .from(QCurrentWays.currentWays)
                     .fetchCount();
         }
@@ -214,18 +213,18 @@ public final class DbUtils {
     /**
      * Get current_relations record count by map name
      *
-     * @param conn
+     * @param connection
      * @param mapName
      * @return current_relations record count
      */
-    public static long getRelationCountByName(Connection conn, String mapName) {
+    public static long getRelationCountByName(Connection connection, String mapName) {
         long recordCount = 0;
 
-        List<Long> mapIds = getMapIdsByName(conn, mapName);
+        List<Long> mapIds = getMapIdsByName(connection, mapName);
 
         for (Long mapId : mapIds) {
-            recordCount += new SQLQuery<>(conn, getConfiguration(mapId.toString()))
-                    .from(QCurrentRelations.currentRelations)
+            recordCount += new SQLQuery<>(connection, getConfiguration(mapId.toString()))
+                    .from(currentRelations)
                     .fetchCount();
         }
 
@@ -260,20 +259,20 @@ public final class DbUtils {
     /**
      * Drops the postgis render db created for hoot map dataset
      *
-     * @param conn
+     * @param connection
      *            JDBC Connection
      * @param mapName
      *            String
      */
-    public static void deleteRenderDb(Connection conn, String mapName) {
-        List<Long> mapIds = getMapIdsByName(conn, mapName);
+    public static void deleteRenderDb(Connection connection, String mapName) {
+        List<Long> mapIds = getMapIdsByName(connection, mapName);
 
         if (!mapIds.isEmpty()) {
             long mapId = mapIds.get(0);
             String dbname = null;
 
             try {
-                dbname = conn.getCatalog() + "_renderdb_" + mapId;
+                dbname = connection.getCatalog() + "_renderdb_" + mapId;
             }
             catch (SQLException e) {
                 throw new RuntimeException("Error deleting renderdb for map with id = " + mapId, e);
@@ -286,7 +285,7 @@ public final class DbUtils {
                 logger.warn("Error deleting {} database!", dbname, e1);
 
                 try {
-                    DataDefinitionManager.deleteDb(conn.getCatalog() + "_renderdb_" + mapName, false);
+                    DataDefinitionManager.deleteDb(connection.getCatalog() + "_renderdb_" + mapName, false);
                 }
                 catch (SQLException e2) {
                     logger.warn("No renderdb present to delete for {} or map id {}", mapName, mapId, e2);
@@ -307,9 +306,9 @@ public final class DbUtils {
         Configuration configuration = getConfiguration();
 
         List<Long> mapIds = new SQLQuery<>(connection, configuration)
-                .select(QMaps.maps.id)
-                .from(QMaps.maps)
-                .where(QMaps.maps.displayName.equalsIgnoreCase(mapName))
+                .select(maps.id)
+                .from(maps)
+                .where(maps.displayName.equalsIgnoreCase(mapName))
                 .fetch();
 
         if (!mapIds.isEmpty()) {
@@ -317,8 +316,8 @@ public final class DbUtils {
 
             deleteMapRelatedTablesByMapId(mapId);
 
-            new SQLDeleteClause(connection, configuration, QMaps.maps)
-                    .where(QMaps.maps.displayName.eq(mapName))
+            new SQLDeleteClause(connection, configuration, maps)
+                    .where(maps.displayName.eq(mapName))
                     .execute();
         }
     }
@@ -347,38 +346,21 @@ public final class DbUtils {
                 .fetchFirst();
     }
 
-    public static long updateMapsTableTags(Map<String, String> tags, long mapId, Connection conn) {
-        long execResult;
-        String sql = "update maps set tags = COALESCE(tags, '') || ?::hstore " + "where id=?";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            String hstoreStr = "";
-            for (Map.Entry<String, String> pairs : tags.entrySet()) {
-                if (!hstoreStr.isEmpty()) {
-                    hstoreStr += ",";
-                }
-                hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue() + "\"";
-            }
-            ps.setObject(1, hstoreStr, Types.OTHER);
-            ps.setLong(2, mapId);
-
-            execResult = ps.executeUpdate();
-        }
-        catch (SQLException e) {
-            throw new RuntimeException("Error trying to update map's tags.  mapId = " + mapId, e);
-        }
-
-
-        return execResult;
+    public static long updateMapsTableTags(Map<String, String> tags, long mapId, Connection connection) {
+        return new SQLUpdateClause(connection, getConfiguration(mapId), maps)
+                .where(maps.id.eq(mapId))
+                .set(Arrays.asList(maps.tags),
+                     Arrays.asList(Expressions.stringTemplate("COALESCE(tags, '') || {0}::hstore", tags)))
+                .execute();
     }
 
     public static Map<String, String> getMapsTableTags(long mapId, Connection connection) {
         Map<String, String> tags = new HashMap<>();
 
         List<Object> results = new SQLQuery<>(connection, getConfiguration(mapId))
-                .select(QMaps.maps.tags)
-                .from(QMaps.maps)
-                .where(QMaps.maps.id.eq(mapId))
+                .select(maps.tags)
+                .from(maps)
+                .where(maps.id.eq(mapId))
                 .fetch();
 
         if (!results.isEmpty()) {
@@ -809,70 +791,18 @@ public final class DbUtils {
     }
 
     /**
-     * //TODO: change back to original element generic code
-     */
-    public static Object resultToObj(ResultSet rs, ElementType elementType) throws SQLException {
-        if (elementType == ElementType.Node) {
-            CurrentNodes nodes = new CurrentNodes();
-            nodes.setId(rs.getLong("id"));
-            nodes.setLatitude(rs.getDouble("latitude"));
-            nodes.setLongitude(rs.getDouble("longitude"));
-            nodes.setChangesetId(rs.getLong("changeset_id"));
-            nodes.setVisible(rs.getBoolean("visible"));
-            nodes.setTimestamp(rs.getTimestamp("timestamp"));
-            nodes.setTile(rs.getLong("tile"));
-            nodes.setVersion(rs.getLong("version"));
-            nodes.setTags(rs.getObject("tags"));
-            return nodes;
-        }
-
-        if (elementType == ElementType.Way) {
-            CurrentWays ways = new CurrentWays();
-            ways.setId(rs.getLong("id"));
-            ways.setChangesetId(rs.getLong("changeset_id"));
-            ways.setVisible(rs.getBoolean("visible"));
-            ways.setTimestamp(rs.getTimestamp("timestamp"));
-            ways.setVersion(rs.getLong("version"));
-            ways.setTags(rs.getObject("tags"));
-            return ways;
-        }
-
-        if (elementType == ElementType.Relation) {
-            CurrentRelations rel = new CurrentRelations();
-            rel.setId(rs.getLong("id"));
-            rel.setChangesetId(rs.getLong("changeset_id"));
-            rel.setVisible(rs.getBoolean("visible"));
-            rel.setTimestamp(rs.getTimestamp("timestamp"));
-            rel.setVersion(rs.getLong("version"));
-            rel.setTags(rs.getObject("tags"));
-            return rel;
-        }
-
-        return null;
-    }
-
-    /**
      * Returns table size in byte
      */
     public static long getTableSizeInBytes(String tableName) {
-        long tableSize = 0;
-
         try (Connection conn = createConnection()) {
-            try (Statement stmt = conn.createStatement()) {
-                String sql = "select pg_total_relation_size('" + tableName + "') as tablesize";
-                try (ResultSet rs = stmt.executeQuery(sql)){
-                    while (rs.next()) {
-                        tableSize = rs.getLong("tablesize");
-                    }
-                }
-            }
+            return new SQLQuery<>(conn, getConfiguration())
+                    .select(Expressions.numberTemplate(Long.class, "pg_total_relation_size('" + tableName + "')"))
+                    .from()
+                    .fetchOne();
         }
         catch (SQLException e) {
             String msg = "Error retrieving table size in bytes of " + tableName + " table!";
             throw new RuntimeException(msg, e);
         }
-
-
-        return tableSize;
     }
 }

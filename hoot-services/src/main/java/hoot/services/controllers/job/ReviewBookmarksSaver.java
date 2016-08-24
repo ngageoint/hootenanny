@@ -120,7 +120,8 @@ class ReviewBookmarksSaver {
 
         Configuration configuration = DbUtils.getConfiguration();
         QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
-        return new SQLUpdateClause(conn, configuration, reviewBookmarks).populate(reviewBookmarksDto)
+        return new SQLUpdateClause(conn, configuration, reviewBookmarks)
+                .populate(reviewBookmarksDto)
                 .where(reviewBookmarks.id.eq(reviewBookmarksDto.getId()))
                 .execute();
     }
