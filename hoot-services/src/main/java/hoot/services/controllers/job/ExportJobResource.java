@@ -306,7 +306,7 @@ public class ExportJobResource extends JobControllerBase {
      * To retrieve the output from job make Get request.
      *
      * GET hoot-services/job/export/[job id from export job]?outputname=[user
-     * defined name]&removecache=[true | false]
+     * defined name]&removecache=[true | false]&ext=[file extension override from zip]
      *
      * @param id
      *            ?
@@ -316,6 +316,8 @@ public class ExportJobResource extends JobControllerBase {
      * @param remove
      *            parameter controls if the output file from export job should
      *            be delete when Get request completes.
+     * @param ext
+     *            parameter overrides the file extension of the file being downloaded
      * @return Octet stream
      */
     @GET
@@ -323,8 +325,10 @@ public class ExportJobResource extends JobControllerBase {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response exportFile(@PathParam("id") String id,
                                @QueryParam("outputname") String outputname,
-                               @QueryParam("removecache") String remove) {
+                               @QueryParam("removecache") String remove,
+                               @QueryParam("ext") String ext) {
         File out = null;
+        String fileExt = StringUtils.isEmpty(ext) ? "zip" : ext;
         try {
             File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(TEMP_OUTPUT_PATH, id);
 
@@ -335,7 +339,7 @@ public class ExportJobResource extends JobControllerBase {
                     delPath = workingFolder;
                 }
 
-                out = hoot.services.utils.FileUtils.getFileFromFolder(workingFolder, outputname, "zip");
+                out = hoot.services.utils.FileUtils.getFileFromFolder(workingFolder, outputname, fileExt);
 
                 if ((out == null) || !out.exists()) {
                     throw new NativeInterfaceException("Missing output file",
@@ -361,7 +365,7 @@ public class ExportJobResource extends JobControllerBase {
         }
 
         ResponseBuilder rBuild = Response.ok(out);
-        rBuild.header("Content-Disposition", "attachment; filename=" + outFileName + ".zip");
+        rBuild.header("Content-Disposition", "attachment; filename=" + outFileName + "." + fileExt);
 
         return rBuild.build();
     }
