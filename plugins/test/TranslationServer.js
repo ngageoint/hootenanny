@@ -90,6 +90,19 @@ if (server.cluster.isMaster) {
                 assert.equal(schema.columns[0].enumerations[0].value, '1');
             });
 
+            it('should handle no matches osmtotds GET for MGCP', function() {
+                assert.throws(function error() {
+                    server.handleInputs({
+                        idval: 'FB123',
+                        geom: 'Area',
+                        translation: 'TDSv61',
+                        idelem: 'fcode',
+                        method: 'GET',
+                        path: '/osmtotds'
+                    })
+                }, Error, 'TDSv61 for Area with fcode=FB123 not found');
+            });
+
             it('should handle tdstoosm GET for TDSv61', function() {
                 //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
                 var attrs = server.handleInputs({
@@ -121,6 +134,16 @@ if (server.cluster.isMaster) {
                     path: '/tdstoosm'
                 }).attrs;
                 assert.equal(attrs.waterway, 'river');
+            });
+
+            it('should handle no matches tdstoosm GET for MGCP', function() {
+                var attrs = server.handleInputs({
+                    fcode: 'ZZTOP',
+                    translation: 'MGCP',
+                    method: 'GET',
+                    path: '/tdstoosm'
+                }).attrs;
+                assert(attrs.uuid.length > 0);
             });
 
             it('should handle osmtotds POST', function() {
@@ -287,6 +310,24 @@ if (server.cluster.isMaster) {
                     server.handleInputs({
                         method: 'POST',
                         path: '/schema'
+                    })
+                }, Error, 'Unsupported method');
+            });
+
+            it('throws error if unsupported method', function() {
+                assert.throws(function error() {
+                    server.handleInputs({
+                        method: 'POST',
+                        path: '/taginfo/key/values'
+                    })
+                }, Error, 'Unsupported method');
+            });
+
+            it('throws error if unsupported method', function() {
+                assert.throws(function error() {
+                    server.handleInputs({
+                        method: 'POST',
+                        path: '/taginfo/keys/all'
                     })
                 }, Error, 'Unsupported method');
             });
