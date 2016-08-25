@@ -132,7 +132,7 @@ if (server.cluster.isMaster) {
                     method: 'POST',
                     path: '/osmtotds'
                 });
-                var output = xml2js.parseString(osm2trans.output, function(err, result) {
+                xml2js.parseString(osm2trans.output, function(err, result) {
                     if (err) console.error(err);
                     assert.equal(result.osm.node[0].tag[0].$.k, "Feature Code");
                     assert.equal(result.osm.node[0].tag[0].$.v, "AL013:Building");
