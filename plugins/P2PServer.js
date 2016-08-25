@@ -15,9 +15,9 @@ var HOOT_HOME = process.env.HOOT_HOME;
 //Moving hoot init to the request handler allows stxxl temp file cleanup to happen properly.
 //hoot = require(HOOT_HOME + '/lib/HootJs');
 
-//var nCPU = os.cpus().length;
-//
-// // Argument parser
+// var nCPU = os.cpus().length;
+
+// Argument parser
 // process.argv.forEach(function (val, index, array) {
 //     // port arg
 //     // Note that default port comes from serverPort var
@@ -53,9 +53,9 @@ var HOOT_HOME = process.env.HOOT_HOME;
 //         cluster.fork();
 //     })
 // } else {
-    // We create child process http server
-    // and we all listen on serverPort
-    http.createServer(P2Pserver).listen(serverPort);
+//     // We create child process http server
+//     // and we all listen on serverPort
+     http.createServer(P2Pserver).listen(serverPort);
 // }
 
 function P2Pserver(request, response) {
@@ -74,7 +74,8 @@ function P2Pserver(request, response) {
                 var result = handleInputs(payload);
 
                 response.writeHead(200, header);
-                response.end(postHandler(result));
+                response.write(postHandler(result));
+                response.end();
             });
 
         } else if (request.method === 'GET') {

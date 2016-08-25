@@ -25,10 +25,51 @@ if (server.cluster.isMaster) {
             assert.equal(response.statusCode, '400');
         });
 
+        it('merges two osm poi', function() {
+            var input = "<?xml version='1.0' encoding='UTF-8'?>\
+                <osm version='0.6' upload='true' generator='hootenanny'>\
+                <node id='-3200079' visible='true' lat='48.0479399' lon='11.7012814'>\
+                <tag k='amenity' v='post_office' />\
+                <tag k='error:circular' v='15' />\
+                <tag k='hoot:status' v='1' />\
+                </node>\
+                <node id='-3200083' visible='true' lat='48.04854' lon='11.70194'>\
+                <tag k='amenity' v='post_office' />\
+                <tag k='error:circular' v='150' />\
+                <tag k='name' v='POST, JÄGER-VON-FALL-STRASSE' />\
+                <tag k='hoot:status' v='2' />\
+                </node>\
+                </osm>";
 
+            var request  = httpMocks.createRequest({
+                method: 'POST',
+                url: '/p2pmerge',
+                body: input
+            });
+            var response = httpMocks.createResponse();
+            server.P2Pserver(request, response);
+            assert.equal(response.statusCode, '200');
+            var body = '';
+            response.on('data', function(chunk){
+                body += chunk;
+            })
+            response.on('end', function(body){
+                xml2js.parseString(body, function(err, result) {
+                    if (err) console.error(err);
+                    assert.equal(result.osm.node[0].$.lat, "48.0479399000000029");
+                    assert.equal(result.osm.node[0].$.lon, "11.7012813999999992");
+                    assert.equal(result.osm.node[0].tag[0].$.k, "hoot:status");
+                    assert.equal(result.osm.node[0].tag[0].$.v, "1");
+                    assert.equal(result.osm.node[0].tag[1].$.k, "name");
+                    assert.equal(result.osm.node[0].tag[1].$.v, "POST, JÄGER-VON-FALL-STRASSE");
+                    assert.equal(result.osm.node[0].tag[2].$.k, "amenity");
+                    assert.equal(result.osm.node[0].tag[2].$.v, "post_office");
+                });
+            });
+        });
 
         describe('handleInputs', function() {
-           it('merges two osm poi', function() {
+            it('merges two osm poi', function() {
                 var input = "<?xml version='1.0' encoding='UTF-8'?>\
                     <osm version='0.6' upload='true' generator='hootenanny'>\
                     <node id='-3200079' visible='true' lat='48.0479399' lon='11.7012814'>\
