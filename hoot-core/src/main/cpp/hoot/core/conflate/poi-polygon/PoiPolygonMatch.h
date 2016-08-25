@@ -93,6 +93,8 @@ private:
 
   QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
 
+  int _badGeomCount;
+
   //static QString _testUuid;
 
   void _calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,

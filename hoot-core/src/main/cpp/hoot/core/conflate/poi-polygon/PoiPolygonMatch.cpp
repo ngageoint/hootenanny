@@ -56,7 +56,8 @@ _rf(rf),
 _matchDistance(ConfigOptions().getPoiPolygonMatchDistance()),
 _reviewDistance(ConfigOptions().getPoiPolygonMatchReviewDistance()),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
-_typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold())
+_typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold()),
+_badGeomCount(0)
 {
   _calculateMatch(map, eid1, eid2);
 }
@@ -73,7 +74,8 @@ _rf(rf),
 _matchDistance(matchDistance),
 _reviewDistance(reviewDistance),
 _nameScoreThreshold(nameScoreThreshold),
-_typeScoreThreshold(typeScoreThreshold)
+_typeScoreThreshold(typeScoreThreshold),
+_badGeomCount(0)
 {
   _calculateMatch(map, eid1, eid2);
 }
@@ -108,6 +110,16 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   }
 
   shared_ptr<Geometry> gpoly = ElementConverter(map).convertToGeometry(poly);
+  //may need a better way to handle this...(tried isValid)
+  if (QString::fromStdString(gpoly->toString()).toUpper().contains("EMPTY"))
+  {
+    if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+    {
+      LOG_WARN("Invalid polygon passed to PoiPolygonMatchCreator: " << gpoly->toString());
+    }
+    _c.setMiss();
+    return;
+  }
   shared_ptr<Geometry> gpoi = ElementConverter(map).convertToGeometry(poi);
 
   const bool typeMatch = _calculateTypeMatch(map, poi, poly);
