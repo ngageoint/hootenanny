@@ -51,7 +51,11 @@ class NetworkMatcher
 public:
   const static double EPSILON;
 
+  static string className() { return "hoot::NetworkMatcher"; }
+
   virtual ~NetworkMatcher();
+
+  virtual double getMatchThreshold() const { return 0.15; }
 
   /**
    * Iterate torwards a solution. Each iteration should slowly move towards a better result, but
@@ -68,11 +72,11 @@ public:
 protected:
   HilbertRTreePtr _edge2Index;
   HilbertRTreePtr _vertex2Index;
-  deque<NetworkEdgePtr> _index2Edge;
-  deque<NetworkVertexPtr> _index2Vertex;
+  deque<ConstNetworkEdgePtr> _index2Edge;
+  deque<ConstNetworkVertexPtr> _index2Vertex;
   ConstOsmMapPtr _map;
   OsmNetworkPtr _n1, _n2;
-  NetworkDetailsPtr _details1, _details2;
+  NetworkDetailsPtr _details;
 
   void _createEdge2Index();
 
@@ -81,6 +85,12 @@ protected:
   IntersectionIterator _createIterator(Envelope env, HilbertRTreePtr tree);
 
 };
+
+typedef shared_ptr<NetworkMatcher> NetworkMatcherPtr;
+typedef shared_ptr<const NetworkMatcher> ConstNetworkMatcherPtr;
+
+// not implemented
+bool operator<(ConstNetworkMatcherPtr, ConstNetworkMatcherPtr);
 
 }
 

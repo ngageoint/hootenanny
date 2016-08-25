@@ -44,6 +44,71 @@ class WayMatchStringMergerTest;
 class WayMatchStringMerger
 {
 public:
+  /// @todo clean me
+  class SublineMapping
+  {
+  public:
+    WayPtr newWay1;
+    WaySubline subline2;
+    ConstWayPtr way2;
+
+    WayLocation getEnd1() const { return _end; }
+    WayLocation getEnd2() const { return subline2.getEnd(); }
+
+    WayPtr getNewWay2() const { return _newWay2; }
+
+    WayLocation getStart1() const { return _start; }
+    WayLocation getStart2() const { return subline2.getStart(); }
+    /**
+     * This is only valid if start and end are part of the same way which is not guaranteed.
+     */
+    WaySubline getSubline1() const { return WaySubline(_start, _end); }
+
+    void setEnd1(WayLocation end) { _end = end; }
+
+    void setNewWay2(WayPtr newWay2) { _newWay2 = newWay2; }
+
+    void setStart1(WayLocation start) { _start = start; }
+
+    void setSubline2(const WaySubline& ws) { subline2 = ws; }
+
+    QString toString() const
+    {
+      return QString("{start: %1, end: %2, newWay1: %3, way2: %4, subline2: %5, newWay2: %6}")
+        .arg(hoot::toString(_start))
+        .arg(hoot::toString(_end))
+        .arg(hoot::toString(newWay1 ? newWay1->getElementId() : ElementId()))
+        .arg(hoot::toString(way2 ? way2->getElementId() : ElementId()))
+        .arg(hoot::toString(subline2))
+        .arg(_newWay2 ? hoot::toString(_newWay2->getElementId()) : "<empty>");
+    }
+  private:
+    WayLocation _start;
+    WayLocation _end;
+    WayPtr _newWay2;
+  };
+  typedef boost::shared_ptr<SublineMapping> SublineMappingPtr;
+
+  class SublineMappingLessThan1
+  {
+  public:
+      inline bool operator()(const WayMatchStringMerger::SublineMappingPtr &t1,
+        const WayMatchStringMerger::SublineMappingPtr &t2) const
+      {
+          return min(t1->getStart1(), t1->getEnd1()) < min(t2->getStart1(), t2->getEnd1());
+      }
+  };
+
+  class SublineMappingLessThan2
+  {
+  public:
+      inline bool operator()(const WayMatchStringMerger::SublineMappingPtr &t1,
+        const WayMatchStringMerger::SublineMappingPtr &t2) const
+      {
+        return min(t1->getStart2(), t1->getEnd2()) < min(t2->getStart2(), t2->getEnd2());
+      }
+  };
+
   WayMatchStringMerger(const OsmMapPtr& map, WayMatchStringMappingPtr mapping,
     vector< pair<ElementId, ElementId> >& replaced);
 
@@ -56,6 +121,15 @@ public:
    * Create a subline match string. This is useful if calling a highway classifier.
    */
   WaySublineMatchStringPtr createMatchString() const;
+
+  QList<SublineMappingPtr> getAllSublineMappings() { return _sublineMappingOrder; }
+
+  WayMatchStringMappingPtr getMapping() const { return _mapping; }
+
+  /**
+   * Merge scrapNode into the keeper way node at the end of a keeper way.
+   */
+  void mergeIntersection(ElementId scrapNode);
 
   /**
    * Merge scrapNode into the keeper way.
@@ -79,36 +153,13 @@ public:
 
   void setTagMerger(ConstTagMergerPtr tagMerger) { _tagMerger = tagMerger; }
 
+  /**
+   * This must be called if any of the SublineMappingPtr values are changed. (e.g.
+   * WayMatchStringSplitter)
+   */
+  void updateSublineMapping() { _rebuildWayString1(); _rebuildWayString2(); }
+
 private:
-  class SublineMapping
-  {
-  public:
-    WayLocation start;
-    WayLocation end;
-    WayPtr newWay1;
-    WaySubline subline2;
-    ConstWayPtr way2;
-
-    QString toString() const
-    {
-      return QString("{start: %1, end: %2, newWay1: %3, way2: %4}")
-        .arg(hoot::toString(start))
-        .arg(hoot::toString(end))
-        .arg(hoot::toString(newWay1 ? newWay1->getElementId() : ElementId()))
-        .arg(hoot::toString(way2 ? way2->getElementId() : ElementId()));
-    }
-  };
-  typedef boost::shared_ptr<SublineMapping> SublineMappingPtr;
-
-  class SublineMappingLessThan
-  {
-  public:
-      inline bool operator()(const WayMatchStringMerger::SublineMappingPtr &t1,
-        const WayMatchStringMerger::SublineMappingPtr &t2) const
-      {
-          return min(t1->start, t1->end) < min(t2->start, t2->end);
-      }
-  };
 
   // white box testing
   friend class WayMatchStringMergerTest;
@@ -116,10 +167,7 @@ private:
   OsmMapPtr _map;
   WayMatchStringMappingPtr _mapping;
   vector< pair<ElementId, ElementId> >& _replaced;
-  // Maps way1 to subline mappings.
-  QMultiMap<WayPtr, SublineMappingPtr> _sublineMapping;
   QList<SublineMappingPtr> _sublineMappingOrder;
-  QList<WayPtr> _scraps1;
   QMap<ElementId, WayLocation> _nodeToWayLocation2;
   ConstTagMergerPtr _tagMerger;
 
@@ -129,9 +177,11 @@ private:
 
   WayLocation _findNodeLocation2(WayStringPtr ws, ElementId nodeId);
 
-  void _moveNode(ElementId scrapNode, WayLocation wl1);
+  void _moveNode(ElementId scrapNodeId, WayLocation wl1);
 
+  /// @todo merger these two together.
   void _rebuildWayString1();
+  void _rebuildWayString2();
 
   void _splitPrimary();
 };

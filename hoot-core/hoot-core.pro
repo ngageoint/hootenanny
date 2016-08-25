@@ -507,6 +507,7 @@ SOURCES += \
     src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.cpp \
     src/main/cpp/hoot/core/visitors/IndexElementsVisitor.cpp \
+    src/main/cpp/hoot/core/algorithms/WayMatchStringSplitter.cpp \
     src/main/cpp/hoot/core/filters/ParallelWayCriterion.cpp \
     src/main/cpp/hoot/core/filters/WayBufferCriterion.cpp \
     src/main/cpp/hoot/core/filters/WayDirectionCriterion.cpp \
@@ -1031,6 +1032,7 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/FindWaysVisitor.h \
     src/main/cpp/hoot/core/filters/ContainsNodeCriterion.h \
     src/main/cpp/hoot/core/visitors/FindNodesVisitor.h \
+    src/main/cpp/hoot/core/algorithms/WayMatchStringSplitter.h \
     src/main/cpp/hoot/core/filters/UnknownCriterion.h \
     src/main/cpp/hoot/core/filters/OneWayCriterion.h \
     src/main/cpp/hoot/core/filters/ParallelWayCriterion.h \

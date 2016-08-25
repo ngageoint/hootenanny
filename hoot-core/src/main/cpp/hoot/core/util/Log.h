@@ -106,6 +106,9 @@ public:
   void log(WarningLevel level, const QString& str, const QString& filename,
     const QString& functionName, int lineNumber);
 
+  void progress(WarningLevel level, const string& str, const string& filename,
+    const string& functionName, int lineNumber);
+
   void setLevel(WarningLevel l);
 
 #if HOOT_HAVE_LIBLOG4CXX
@@ -154,6 +157,16 @@ private:
 // use operator<< within the Tgs namespace from within hoot. :(
 #include <tgs/StreamUtils.hh>
 }
+
+#define PROGRESS_LEVEL(level, message) {\
+  if ((level) >= hoot::Log::getInstance().getLevel()) \
+  { \
+    std::stringstream ss_; \
+    ss_ << message; \
+    hoot::Log::getInstance().progress((level), ss_.str(), __FILE__, "", __LINE__); \
+  }}
+
+#define PROGRESS_INFO(str) { PROGRESS_LEVEL(hoot::Log::Info, str) }
 
 /// print out a variable along w/ it's value. E.g. int a = 3; LOG_VAR(a); => logs "a: 3"
 #define LOG_VARD(var) LOG_DEBUG(#var << ": " << (var))
