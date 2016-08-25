@@ -34,7 +34,7 @@ var MgcpResult = [{
 if (server.cluster.isMaster) {
     describe('TranslationServer', function () {
 
-        describe('searchSchema', function(){
+        describe('searchSchema', function() {
 
             it('should search for default options', function(){
                 assert.equal(JSON.stringify(server.searchSchema(defaults)[0]), JSON.stringify(defaultsResult));
@@ -45,7 +45,7 @@ if (server.cluster.isMaster) {
             });
         });
 
-        describe('handleInputs', function(){
+        describe('handleInputs', function() {
 
 /*
         case '/osmtotds':
@@ -74,7 +74,7 @@ if (server.cluster.isMaster) {
             throw new Error('Not found');
             break;
 */
-            it('should handle osmtotds GET', function(){
+            it('should handle osmtotds GET', function() {
                 //http://localhost:8094/osmtotds?idval=AL015&geom=Point&translation=MGCP&idelem=fcode
                 var schema = server.handleInputs({
                     idval: 'AL015',
@@ -90,7 +90,7 @@ if (server.cluster.isMaster) {
                 assert.equal(schema.columns[0].enumerations[0].value, '1');
             });
 
-            it('should handle tdstoosm GET for TDSv61', function(){
+            it('should handle tdstoosm GET for TDSv61', function() {
                 //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
                 var attrs = server.handleInputs({
                     fcode: 'AL013',
@@ -101,7 +101,7 @@ if (server.cluster.isMaster) {
                 assert.equal(attrs.building, 'yes');
             });
 
-            it('should handle tdstoosm GET for TDSv40', function(){
+            it('should handle tdstoosm GET for TDSv40', function() {
                 //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
                 var attrs = server.handleInputs({
                     fcode: 'AP030',
@@ -112,7 +112,7 @@ if (server.cluster.isMaster) {
                 assert.equal(attrs.highway, 'road');
             });
 
-            it('should handle tdstoosm GET for MGCP', function(){
+            it('should handle tdstoosm GET for MGCP', function() {
                 //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
                 var attrs = server.handleInputs({
                     fcode: 'BH140',
@@ -123,7 +123,7 @@ if (server.cluster.isMaster) {
                 assert.equal(attrs.waterway, 'river');
             });
 
-            it('should handle osmtotds POST', function(){
+            it('should handle osmtotds POST', function() {
                 //http://localhost:8094/osmtotds
                 var osm2trans = server.handleInputs({
                     command: 'translate',
@@ -159,7 +159,7 @@ if (server.cluster.isMaster) {
             //     });
             // });
 
-            it('should handle tdstoosm POST', function(){
+            it('should handle tdstoosm POST', function() {
                 //http://localhost:8094/tdstoosm
                 var trans2osm = server.handleInputs({
                     command: 'translate',
@@ -187,7 +187,7 @@ if (server.cluster.isMaster) {
                 });
             });
 
-            it('should handle /taginfo/key/values GET with NO enums', function(){
+            it('should handle /taginfo/key/values GET with NO enums', function() {
                 //http://localhost:8094/taginfo/key/values?fcode=AP030&filter=ways&key=SGCC&page=1&query=Clo&rp=25&sortname=count_ways&sortorder=desc&translation=TDSv61
 //http://localhost:8094/taginfo/key/values?fcode=AA040&filter=nodes&key=ZSAX_RX3&page=1&query=undefined&rp=25&sortname=count_nodes&sortorder=desc&translation=TDSv61
                 var enums = server.handleInputs({
@@ -206,7 +206,7 @@ if (server.cluster.isMaster) {
                 assert.equal(enums.data.length, 0);
             });
 
-            it('should handle /taginfo/key/values GET with enums', function(){
+            it('should handle /taginfo/key/values GET with enums', function() {
 //http://localhost:8094/taginfo/key/values?fcode=AA040&filter=nodes&key=FUN&page=1&query=Damaged&rp=25&sortname=count_nodes&sortorder=desc&translation=MGCP
                 var enums = server.handleInputs({
                     fcode: 'AA040',
@@ -224,7 +224,7 @@ if (server.cluster.isMaster) {
                 assert.equal(enums.data.length, 7);
             });
 
-            it('should handle /taginfo/keys/all GET with enums', function(){
+            it('should handle /taginfo/keys/all GET with enums', function() {
 //http://localhost:8094/taginfo/keys/all?fcode=AA040&page=1&query=&rawgeom=Point&rp=10&sortname=count_nodes&sortorder=desc&translation=MGCP
 
                 var enums = server.handleInputs({
@@ -242,7 +242,7 @@ if (server.cluster.isMaster) {
                 assert.equal(enums.data.length, 15);
             });
 
-            it('should handle /capabilities GET', function(){
+            it('should handle /capabilities GET', function() {
 
                 var capas = server.handleInputs({
                     method: 'GET',
@@ -253,7 +253,7 @@ if (server.cluster.isMaster) {
                 assert.equal(capas.MGCP.isavailable, true);
             });
 
-            it('should handle /schema GET', function(){
+            it('should handle /schema GET', function() {
 //http://localhost:8094/schema?geometry=point&translation=MGCP&searchstr=Buil&maxlevdst=20&limit=12
                 var schm = server.handleInputs({
                     geometry: 'line',
@@ -269,7 +269,7 @@ if (server.cluster.isMaster) {
                 assert.equal(schm[0].desc, 'River');
             });
 
-            it('throws error if url not found', function(){
+            it('throws error if url not found', function() {
                 assert.throws(function error() {
                     server.handleInputs({
                         idval: 'AL015',
@@ -282,7 +282,7 @@ if (server.cluster.isMaster) {
                 }, Error, 'Not found');
             });
 
-            it('throws error if unsupported method', function(){
+            it('throws error if unsupported method', function() {
                 assert.throws(function error() {
                     server.handleInputs({
                         method: 'POST',
@@ -291,7 +291,7 @@ if (server.cluster.isMaster) {
                 }, Error, 'Unsupported method');
             });
 
-            it('throws error if unsupported method', function(){
+            it('throws error if unsupported method', function() {
                 assert.throws(function error() {
                     server.handleInputs({
                         method: 'POST',
@@ -300,7 +300,7 @@ if (server.cluster.isMaster) {
                 }, Error, 'Unsupported method');
             });
 
-            it('throws error if unrecognized command', function(){
+            it('throws error if unrecognized command', function() {
                 assert.throws(function error() {
                     server.handleInputs({
                     command: 'exacerbate',
