@@ -79,17 +79,17 @@ var tdsToOsmMap = {
     // and we all listen on serverPort
     http.createServer(
 
-        function(request, response){
+        function(request, response) {
             try {
                 var header = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'};
                 if (request.method === 'POST') {
                     var payload = '';
-                    request.on('data', function(chunk){
+                    request.on('data', function(chunk) {
                         payload += chunk;
                     });
 
-                    request.on('end', function(payload){
-                        payload.method = 'POST';
+                    request.on('end', function(payload) {
+                        payload.method = request.method;
                         payload.path = url_parts.pathname;
 
                         var result = handleInputs(payload);
@@ -101,7 +101,7 @@ var tdsToOsmMap = {
                 } else if (request.method === 'GET') {
                     var url_parts = url.parse(request.url, true);
                     var payload = url_parts.query;
-                    payload.method = 'POST';
+                    payload.method = request.method;
                     payload.path = url_parts.pathname;
 
                     var result = handleInputs(payload);
