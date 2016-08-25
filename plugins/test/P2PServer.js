@@ -1,10 +1,31 @@
 var assert = require('assert'),
     http = require('http'),
     xml2js = require('xml2js');
+var httpMocks = require('node-mocks-http');
 var server = require('../P2PServer.js');
 
 if (server.cluster.isMaster) {
     describe('P2PServer', function () {
+        it('responds with HTTP 404 if url not found', function() {
+            var request  = httpMocks.createRequest({
+                method: 'GET',
+                url: '/foo'
+            });
+            var response = httpMocks.createResponse();
+            server.P2Pserver(request, response);
+            assert.equal(response.statusCode, '404');
+        });
+        it('repsonds with HTTP 400 if unsupported method', function() {
+            var request  = httpMocks.createRequest({
+                method: 'GET',
+                url: '/p2pmerge'
+            });
+            var response = httpMocks.createResponse();
+            server.P2Pserver(request, response);
+            assert.equal(response.statusCode, '400');
+        });
+
+
 
         describe('handleInputs', function() {
            it('merges two osm poi', function() {
@@ -42,7 +63,7 @@ if (server.cluster.isMaster) {
                 });
             });
 
-           it('throws error if url not found', function() {
+            it('throws error if url not found', function() {
                 assert.throws(function error() {
                     server.handleInputs({
                         method: 'POST',

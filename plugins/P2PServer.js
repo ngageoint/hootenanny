@@ -55,55 +55,54 @@ var HOOT_HOME = process.env.HOOT_HOME;
 // } else {
     // We create child process http server
     // and we all listen on serverPort
-    http.createServer(
-
-        function(request, response){
-            try {
-                var header = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'};
-                if (request.method === 'POST') {
-                    var payload = '';
-                    request.on('data', function(chunk){
-                        payload += chunk;
-                    });
-
-                    request.on('end', function(payload){
-                        payload.method = 'POST';
-                        payload.path = url_parts.pathname;
-
-                        var result = handleInputs(payload);
-
-                        response.writeHead(200, header);
-                        response.end(postHandler(result));
-                    });
-
-                } else if (request.method === 'GET') {
-                    var url_parts = url.parse(request.url, true);
-                    var payload = url_parts.query;
-                    payload.method = 'GET';
-                    payload.path = url_parts.pathname;
-
-                    var result = handleInputs(payload);
-
-                    response.writeHead(200, header);
-                    response.write(result);
-                    response.end();
-                } else {
-                    throw new Error('Unsupported method');
-                }
-
-            } catch (err) {
-                var status = 500;
-                if (err.message.indexOf('Unsupported') > 0)
-                    status = 400;
-                if (err.message.indexOf('Not found') > 0)
-                    status = 404;
-                response.writeHead(status, header);
-                response.write(JSON.stringify({error: err}));
-                response.end();
-            }
-        }
-    ).listen(serverPort);
+    http.createServer(P2Pserver).listen(serverPort);
 // }
+
+function P2Pserver(request, response) {
+    try {
+        var header = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'};
+        if (request.method === 'POST') {
+            var payload = '';
+            request.on('data', function(chunk){
+                payload += chunk;
+            });
+
+            request.on('end', function(payload){
+                payload.method = 'POST';
+                payload.path = url_parts.pathname;
+
+                var result = handleInputs(payload);
+
+                response.writeHead(200, header);
+                response.end(postHandler(result));
+            });
+
+        } else if (request.method === 'GET') {
+            var url_parts = url.parse(request.url, true);
+            var payload = url_parts.query;
+            payload.method = 'GET';
+            payload.path = url_parts.pathname;
+
+            var result = handleInputs(payload);
+
+            response.writeHead(200, header);
+            response.write(result);
+            response.end();
+        } else {
+            throw new Error('Unsupported method');
+        }
+
+    } catch (err) {
+        var status = 500;
+        if (err.message.indexOf('Unsupported') > -1)
+            status = 400;
+        if (err.message.indexOf('Not found') > -1)
+            status = 404;
+        response.writeHead(status, header);
+        response.write(JSON.stringify({error: err}));
+        response.end();
+    }
+}
 
 function handleInputs(params) {
     switch(params.path) {
@@ -147,4 +146,5 @@ var postHandler = function(data)
 if (typeof exports !== 'undefined') {
     exports.cluster = cluster;
     exports.handleInputs = handleInputs;
+    exports.P2Pserver = P2Pserver;
 }
