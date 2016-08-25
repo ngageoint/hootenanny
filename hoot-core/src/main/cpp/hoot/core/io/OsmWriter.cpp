@@ -53,6 +53,7 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmWriter)
 
 OsmWriter::OsmWriter()
 {
+  _formatXml = ConfigOptions().getOsmMapWriterFormatXml();
   _includeIds = false;
   _includeDebug = ConfigOptions().getWriterIncludeDebug();
   _includePointInWays = false;
@@ -161,7 +162,12 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
   }
   QXmlStreamWriter writer(_fp.get());
   writer.setCodec("UTF-8");
-  writer.setAutoFormatting(true);
+
+  if (_formatXml)
+  {
+    writer.setAutoFormatting(true);
+  }
+
   writer.writeStartDocument();
 
   writer.writeStartElement("osm");
