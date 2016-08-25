@@ -5,7 +5,7 @@ namespace hoot
 
 bool operator==(ConstEdgeSublinePtr es1, ConstEdgeSublinePtr es2)
 {
-  bool result;
+  bool result = false;
 
   if (es1.get() == es2.get())
   {

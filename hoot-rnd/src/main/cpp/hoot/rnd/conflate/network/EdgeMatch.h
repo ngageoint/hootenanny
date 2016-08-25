@@ -111,6 +111,7 @@ typedef shared_ptr<const EdgeMatch> ConstEdgeMatchPtr;
 
 // not implemented
 bool operator<(ConstEdgeMatchPtr, ConstEdgeMatchPtr);
+bool operator<(EdgeMatchPtr, EdgeMatchPtr);
 
 // needed for QSet
 bool operator==(const hoot::ConstEdgeMatchPtr& em1, const hoot::ConstEdgeMatchPtr& em2);

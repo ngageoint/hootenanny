@@ -340,6 +340,7 @@ void SingleSidedNetworkMatcher::_updateEdgeScores()
           LOG_VAR(e2);
           LOG_VAR(link);
           LOG_VAR(e2Match);
+          LOG_VAR(_links->values(e2Match));
           throw InternalErrorException("Expected the link to contain either the from or to "
             "vertex.");
         }

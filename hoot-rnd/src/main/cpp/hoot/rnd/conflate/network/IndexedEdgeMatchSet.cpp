@@ -290,17 +290,14 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getConnectingStubs(ConstEdgeMatchPt
 {
   QSet<ConstEdgeMatchPtr> result;
 
-  if (!a->containsStub() && !b->containsStub())
-  {
-    result += getConnectingStubs(a->getString1()->getFrom(), a->getString2()->getFrom(),
-      b->getString1()->getFrom(), b->getString2()->getFrom());
-    result += getConnectingStubs(a->getString1()->getFrom(), a->getString2()->getFrom(),
-      b->getString1()->getTo(), b->getString2()->getTo());
-    result += getConnectingStubs(a->getString1()->getTo(), a->getString2()->getTo(),
-      b->getString1()->getTo(), b->getString2()->getTo());
-    result += getConnectingStubs(a->getString1()->getTo(), a->getString2()->getTo(),
-      b->getString1()->getFrom(), b->getString2()->getFrom());
-  }
+  result += getConnectingStubs(a->getString1()->getFrom(), a->getString2()->getFrom(),
+    b->getString1()->getFrom(), b->getString2()->getFrom());
+  result += getConnectingStubs(a->getString1()->getFrom(), a->getString2()->getFrom(),
+    b->getString1()->getTo(), b->getString2()->getTo());
+  result += getConnectingStubs(a->getString1()->getTo(), a->getString2()->getTo(),
+    b->getString1()->getTo(), b->getString2()->getTo());
+  result += getConnectingStubs(a->getString1()->getTo(), a->getString2()->getTo(),
+    b->getString1()->getFrom(), b->getString2()->getFrom());
 
   return result;
 }

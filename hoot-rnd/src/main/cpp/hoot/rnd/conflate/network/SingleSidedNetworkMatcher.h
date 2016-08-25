@@ -126,7 +126,7 @@ private:
 
   IndexedEdgeMatchSetPtr _edgeMatches;
   EdgeMatchScoreMap _edge2Scores;
-  IndexedEdgeLinksPtr _links;
+  ConstIndexedEdgeLinksPtr _links;
   VertexScoreMap _vertex21Scores;
   /// dampening modifies the aggressiveness of the algorithm. Higher is more aggressive.
   /// EPSILON <= _dampening <= 1.0

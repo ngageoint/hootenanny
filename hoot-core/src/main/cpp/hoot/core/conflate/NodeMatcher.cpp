@@ -214,12 +214,12 @@ double NodeMatcher::scorePair(long nid1, long nid2)
     if (theta2.size() < theta1.size())
     {
       vector<bool> exclude(theta2.size(), false);
-      thetaScore = _calculateAngleScore(theta2, theta1, exclude, 0, nid1 == -2831);
+      thetaScore = _calculateAngleScore(theta2, theta1, exclude, 0);
     }
     else
     {
       vector<bool> exclude(theta1.size(), false);
-      thetaScore = _calculateAngleScore(theta1, theta2, exclude, 0, nid1 == -2831);
+      thetaScore = _calculateAngleScore(theta1, theta2, exclude, 0);
     }
   }
 
