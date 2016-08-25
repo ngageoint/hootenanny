@@ -155,7 +155,6 @@ function handleInputs(payload) {
             break;
         default:
             throw new Error('Not found');
-            break;
     }
     return result;
 };

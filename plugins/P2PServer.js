@@ -106,16 +106,12 @@ var HOOT_HOME = process.env.HOOT_HOME;
 // }
 
 function handleInputs(params) {
-    var result;
     switch(params.path) {
         case '/p2pmerge':
             return mergeP2P(params);
-            break;
         default:
             throw new Error('Not found');
-            break;
     }
-    return result;
 };
 
 var mergeP2P = function(payload)
