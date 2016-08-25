@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,6 +30,9 @@
 
     Based on tds/__init__.js script
 */
+if (typeof hoot === 'undefined') {
+    var hoot = require(process.env.HOOT_HOME + '/lib/HootJs');
+}
 
 // For the OSM+ to TDS translation
 hoot.require('mgcp')
@@ -154,4 +157,6 @@ emgcp_osm = {
 
 } // End of emgcp_osm
 
-exports.toOSM = emgcp_osm.toOSM;
+if (typeof exports !== 'undefined') {
+    exports.toOSM = emgcp_osm.toOSM;
+}

@@ -1,9 +1,13 @@
 var HOOT_HOME = process.env.HOOT_HOME;
 var assert = require('assert');
+if (typeof hoot === 'undefined') {
 hoot = require(HOOT_HOME + '/lib/HootJs');
+}
+if (typeof hoot !== 'undefined') {
 var emgcp_osm = require('../emgcp_osm.js');
 var emgcp_rules = require('../emgcp_rules');
 var mgcp_schema = require('../mgcp_schema');
+}
 
 describe('compare translation methods', function() {
 
@@ -51,18 +55,8 @@ describe('compare translation methods', function() {
         var expected = { 'Feature Code': 'AL020:Built-Up Area Area Feature',
                          Name: 'Manitou Springs',
                          'MGCP Feature universally unique identifier': '4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4',
-                         'Source Date and Time': 'UNK',
-                         'Source Description': 'N_A',
-                         'Name Identifier': 'UNK',
-                         'Named Feature Identifier': 'UNK',
-                         'Commercial Copyright Notice': 'UNK',
-                         'Associated Text': 'N_A',
-                         'Functional Use': 'Other',
-                         'Horizontal Accuracy Category': 'Accurate',
-                         'Built-up Area Density Category': 'Unknown',
-                         'Source Type': 'Unknown',
-                         'Condition of Facility': 'Unknown',
-                         'Relative Importance': 'Unknown'
+                         'Associated Text': '<OSM>{"poi":"yes"}</OSM>',
+                         'Functional Use': 'Other'
                     };
 
         //Assert that poi=yes, amenity=cafe become building=yes, amenity=restaurant

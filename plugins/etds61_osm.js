@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,6 +30,9 @@
 
     This script is the same as the standard "etds_osm" script but uses "tds61" instead of "tds"
 */
+if (typeof hoot === 'undefined') {
+    var hoot = require(process.env.HOOT_HOME + '/lib/HootJs');
+}
 
 // For the new fuzy rules
 hoot.require('SchemaTools')
@@ -156,4 +159,6 @@ etds61_osm = {
 
 } // End of etds61_osm
 
-exports.toOSM = etds61_osm.toOSM;
+if (typeof exports !== 'undefined') {
+    exports.toOSM = etds61_osm.toOSM;
+}
