@@ -32,6 +32,8 @@ namespace hoot
 
 /**
  * Provides match scores for specific aspects of a network.
+ *
+ * @todo #### Delete me!? ####
  */
 class MatchScoreProvider
 {
@@ -60,6 +62,9 @@ public:
 
 typedef shared_ptr<MatchScoreProvider> MatchScoreProviderPtr;
 typedef shared_ptr<const MatchScoreProvider> ConstMatchScoreProviderPtr;
+
+// not implemented
+bool operator<(ConstMatchScoreProviderPtr, ConstMatchScoreProviderPtr);
 
 }
 

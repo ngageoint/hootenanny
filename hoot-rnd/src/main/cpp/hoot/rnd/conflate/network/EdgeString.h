@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/algorithms/linearreference/WayString.h>
 
+#include "EdgeSubline.h"
 #include "NetworkEdge.h"
 #include "NetworkVertex.h"
 
@@ -39,42 +40,87 @@ namespace hoot
 /**
  * Contains one or more ordered edges that are connected together into a string. Each edge may
  * contain just a partial or an entire edge as long as the pieces all connect.
+ *
+ * If the EdgeString is a stub it may only contain one edge and that edge must be a stub. An Edge
+ * string cannot contain a stub and other Edges.
  */
 class EdgeString
 {
 public:
+  /// @todo this structure can likely go away in the near future.
   struct EdgeEntry {
-    ConstNetworkEdgePtr e;
-    bool reversed;
-
-    EdgeEntry(ConstNetworkEdgePtr e, bool reversed)
+    EdgeEntry(ConstEdgeSublinePtr subline) : _subline(subline)
     {
-      this->e = e;
-      this->reversed = reversed;
+    }
+
+    const ConstNetworkEdgePtr& getEdge() const { return _subline->getEdge(); }
+
+    const ConstEdgeSublinePtr& getSubline() const { return _subline; }
+
+    bool isBackwards() const
+    {
+      return _subline->isBackwards();
+    }
+
+    void reverse()
+    {
+      EdgeSublinePtr tmp = _subline->clone();
+      tmp->reverse();
+      _subline = tmp;
     }
 
     QString toString() const
     {
-      return e->toString() + (reversed ? " (reverse)" : "");
+      return _subline->toString();
     }
+
+  private:
+    /// The portion of the edge. The portion is always measured starting at "from" regardless of
+    /// whether or not reversed is set. It is always a value in [0, 1]. If toPortion < fromPortion
+    /// the edge is reversed.
+    ConstEdgeSublinePtr _subline;
   };
 
   EdgeString();
 
-  void addFirstEdge(ConstNetworkEdgePtr e, bool reverse);
+  void addFirstEdge(ConstNetworkEdgePtr e);
+
+  void addFirstEdge(ConstEdgeSublinePtr subline);
 
   void appendEdge(ConstNetworkEdgePtr e);
+
+  void appendEdge(ConstEdgeSublinePtr subline);
+
+  Meters calculateLength(const ConstElementProviderPtr& provider) const;
 
   shared_ptr<EdgeString> clone() const;
 
   /**
-   * Returns true if the specified edge is in this EdgeMatch.
+   * Returns true if the entire string in other is contained by this.
+   */
+  bool contains(const shared_ptr<const EdgeString> other) const;
+
+  /**
+   * Returns true if the specified edge is in this string.
    */
   bool contains(ConstNetworkEdgePtr e) const;
 
-  QList<EdgeEntry> getAllEdges() const { return _edges; }
+  /**
+   * Returns true if the specified vertex is in this string.
+   */
+  bool contains(ConstNetworkVertexPtr e) const;
 
-  ConstNetworkEdgePtr getEdge(int i) const { return _edges[i].e; }
+  bool containsInteriorVertex(ConstNetworkVertexPtr v) const;
+
+  const QList<EdgeEntry>& getAllEdges() const { return _edges; }
+
+  int getCount() const { return _edges.size(); }
+
+  ConstNetworkEdgePtr getEdge(int i) const { return _edges[i].getEdge(); }
+
+  ConstEdgeSublinePtr getEdgeSubline(int i) const { return _edges[i].getSubline(); }
+
+  QSet<ConstNetworkEdgePtr> getEdgeSet() const;
 
   /**
    * Returns the edge that is d meters into the string. The Edge definition of length
@@ -83,17 +129,48 @@ public:
    */
   ConstNetworkEdgePtr getEdgeAtOffset(ConstOsmMapPtr map, Meters offset) const;
 
-  ConstNetworkVertexPtr getFrom() const;
+  ConstEdgeLocationPtr getFrom() const;
 
-  ConstNetworkEdgePtr getFirstEdge() const { return _edges.back().e; }
+  ConstNetworkVertexPtr getFromVertex() const;
 
-  ConstNetworkEdgePtr getLastEdge() const { return _edges.back().e; }
+  ConstNetworkEdgePtr getFirstEdge() const { return _edges.front().getEdge(); }
 
-  Meters calculateLength(const ConstElementProviderPtr& provider) const;
+  ConstNetworkEdgePtr getLastEdge() const { return _edges.back().getEdge(); }
 
   QList<ConstElementPtr> getMembers() const;
 
-  ConstNetworkVertexPtr getTo() const;
+  ConstEdgeLocationPtr getTo() const;
+
+  ConstNetworkVertexPtr getToVertex() const;
+
+  bool isEdgeClosed() const;
+
+  /**
+   * Returns true if v is at the beginning or end of the string.
+   */
+  bool isAtExtreme(ConstNetworkVertexPtr v) const;
+
+  bool isFromOnVertex() const { return getFrom()->isExtreme(EdgeLocation::SLOPPY_EPSILON); }
+
+  /**
+   * If neither terminal is on a vertex return true.
+   */
+  bool isFullPartial() const { return isFromOnVertex() == false && isToOnVertex() == false; }
+
+  /**
+   * If at least one terminal is not on a vertex.
+   */
+  bool isPartial() const { return isFromOnVertex() == false || isToOnVertex() == false; }
+
+  bool isStub() const { return _edges.size() == 1 && _edges[0].getEdge()->isStub(); }
+
+  bool isToOnVertex() const { return getTo()->isExtreme(EdgeLocation::SLOPPY_EPSILON); }
+
+  bool overlaps(shared_ptr<const EdgeString> other) const;
+
+  bool overlaps(const ConstEdgeSublinePtr& es) const;
+
+  bool overlaps(const ConstNetworkEdgePtr& es) const;
 
   void prependEdge(ConstNetworkEdgePtr e);
 
@@ -113,6 +190,28 @@ private:
 
 typedef shared_ptr<EdgeString> EdgeStringPtr;
 typedef shared_ptr<const EdgeString> ConstEdgeStringPtr;
+
+// not implemented
+bool operator<(ConstEdgeStringPtr, ConstEdgeStringPtr);
+
+// needed for QSet
+bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2);
+
+inline uint qHash(const hoot::ConstEdgeStringPtr& es)
+{
+  uint result = 0;
+  foreach (const EdgeString::EdgeEntry& e, es->getAllEdges())
+  {
+    result ^= qHash(e.getSubline());
+  }
+
+  return result;
+}
+
+inline uint qHash(const hoot::EdgeStringPtr& es)
+{
+  return qHash((ConstEdgeStringPtr)es);
+}
 
 }
 

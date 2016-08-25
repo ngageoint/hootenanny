@@ -93,6 +93,11 @@ using namespace std;
 class TestUtils
 {
 public:
+  class RegisteredReset
+  {
+  public:
+    virtual void reset() = 0;
+  };
 
   TestUtils();
 
@@ -110,9 +115,8 @@ public:
   static WayPtr createWay(OsmMapPtr map, Status s, Coordinate c[], Meters ce = 15,
                           const QString& note = "");
 
-  static WayPtr createWay(
-    OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
-    Meters circularError = 15);
+  static WayPtr createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
+    Meters circularError = 15, Tags tags = Tags());
 
   static RelationPtr createRelation(
     OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,
@@ -131,6 +135,17 @@ public:
   static ElementPtr getElementWithTag(OsmMapPtr map, const QString tagKey, const QString tagValue);
 
   /**
+   * Return the singleton instance.
+   */
+  static shared_ptr<TestUtils> getInstance();
+
+  /**
+   * Register a way to reset the environment. This is most useful in plugins to avoid circular
+   * references.
+   */
+  void registerReset(RegisteredReset* r) { _resets.append(r); }
+
+  /**
    * Resets the test environment to a known state.
    */
   static void resetEnvironment();
@@ -139,7 +154,34 @@ public:
    * Converts a string into a format that can be cut/paste into c++ code.
    */
   static QString toQuotedString(QString str);
+
+private:
+  QList<RegisteredReset*> _resets;
+
+  static shared_ptr<TestUtils> _theInstance;
 };
+
+/**
+ * Auto-register reset for a class.
+ */
+template<class T>
+class AutoRegisterResetInstance : public TestUtils::RegisteredReset
+{
+public:
+  AutoRegisterResetInstance()
+  {
+    TestUtils::getInstance()->registerReset(this);
+  }
+
+  virtual void reset()
+  {
+    T::reset();
+  }
+};
+
+#define TEST_UTILS_REGISTER_RESET(ClassName)      \
+  static hoot::AutoRegisterResetInstance<ClassName> ClassName##AutoRegisterReset;
+
 
 }
 

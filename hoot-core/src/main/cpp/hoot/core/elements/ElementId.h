@@ -136,7 +136,7 @@ inline uint qHash(const hoot::ElementId& eid)
 
 inline uint qHash(const std::pair<hoot::ElementId, hoot::ElementId>& peid)
 {
-  return __gnu_cxx::cantorPairing(qHash(peid.first), qHash(peid.second));
+  return Tgs::cantorPairing(qHash(peid.first), qHash(peid.second));
 }
 
 }

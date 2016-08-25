@@ -38,27 +38,44 @@ namespace hoot
 /**
  * Why NetworkVertex? To avoid confusion with the OSM Node.
  *
- * A node is not necessarily associated with just a single OSM node. A node could represent an
+ * A vertex is not necessarily associated with just a single OSM node. A vertex could represent an
  * entire roudabout instead of each of the intersections that make up a roudabout. Whatever makes
  * the conflation more effective.
  */
 class NetworkVertex
 {
 public:
-  NetworkVertex(ConstElementPtr e) : _e(e) {}
+  NetworkVertex(ConstElementPtr e);
 
   ConstElementPtr getElement() const { return _e; }
 
   ElementId getElementId() const { return _e->getElementId(); }
 
+  /**
+   * This should only be used during testing to get consistent results.
+   */
+  static void reset();
+
   QString toString() const;
 
 private:
   ConstElementPtr _e;
+  int _uid;
+  static int uidCount;
 };
 
 typedef shared_ptr<NetworkVertex> NetworkVertexPtr;
 typedef shared_ptr<const NetworkVertex> ConstNetworkVertexPtr;
+
+inline bool operator<(const NetworkVertexPtr& v1, const NetworkVertexPtr& v2)
+{
+  return v1->getElementId() < v2->getElementId();
+}
+
+inline bool operator<(const ConstNetworkVertexPtr& v1, const ConstNetworkVertexPtr& v2)
+{
+  return v1->getElementId() < v2->getElementId();
+}
 
 inline uint qHash(const ConstNetworkVertexPtr& v)
 {
