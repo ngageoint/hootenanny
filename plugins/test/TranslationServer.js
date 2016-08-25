@@ -215,7 +215,7 @@ if (server.cluster.isMaster) {
 //http://localhost:8094/taginfo/key/values?fcode=AA040&filter=nodes&key=ZSAX_RX3&page=1&query=undefined&rp=25&sortname=count_nodes&sortorder=desc&translation=TDSv61
                 var enums = server.handleInputs({
                     fcode: 'AA040',
-                    filter: 'nodes',
+                    filter: 'ways',
                     key: 'ZSAX_RX3',
                     page: '1',
                     query: 'undefined',
@@ -263,6 +263,23 @@ if (server.cluster.isMaster) {
                     path: '/taginfo/keys/all'
                 });
                 assert.equal(enums.data.length, 15);
+            });
+
+            it('should handle /taginfo/keys/all GET with enums', function() {
+
+                var enums = server.handleInputs({
+                    fcode: 'EC030',
+                    rawgeom: 'Area',
+                    key: 'FUN',
+                    page: '1',
+                    rp: '10',
+                    sortname: 'count_ways',
+                    sortorder: 'desc',
+                    translation: 'MGCP',
+                    method: 'GET',
+                    path: '/taginfo/keys/all'
+                });
+                assert.equal(enums.data.length, 14);
             });
 
             it('should handle /capabilities GET', function() {
