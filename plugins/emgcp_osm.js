@@ -77,22 +77,28 @@ emgcp_osm = {
 
         if (attrs['Feature Code'])
         {
-            if (attrs['Feature Code'].indexOf(' & ') > -1)
+            if (attrs['Feature Code'].indexOf('&') > -1)
             {
                 // Two FCODE's
-                var tList = attrs['Feature Code'].split(' & ');
+                var tList = attrs['Feature Code'].split('&');
                 var fcode = tList[0].split(':');
-                attrs['Feature Code'] = fcode[0];
+                attrs['Feature Code'] = fcode[0].trim();
 
                 fcode = tList[1].split(':');
-                fCode2 = fcode[0];
+                fCode2 = fcode[0].trim();
             }
             else
             {
                 // One FCODE
                 var fcode = attrs['Feature Code'].split(':');
-                attrs['Feature Code'] = fcode[0];
+                attrs['Feature Code'] = fcode[0].trim();
+
             }
+        }
+        else
+        {
+            // No FCODE, throw error
+            throw new Error('No Valid Feature Code');
         }
 
         // Translate the single values from "English" to TDS
@@ -117,6 +123,12 @@ emgcp_osm = {
         // Now convert the attributes to tags.
         tags = mgcp.toOsm(nAttrs,'',geometryType);
 
+        // NOTE mgcp.fcodeLookup DOES NOT EXIST until mgcp.toOsm is called.
+        if (! mgcp.fcodeLookup['F_CODE'][nAttrs.F_CODE])
+        {
+            throw new Error('Feature Code ' + nAttrs.F_CODE + ' is not valid for MGCP');
+        }
+
         // Go looking for "OSM:XXX" values and copy them to the output
         for (var i in attrs)
         {
@@ -137,9 +149,13 @@ emgcp_osm = {
                 {
                     if (ftag[1] !== tags[ftag[0]])
                     {
-                        hoot.logVerbose('fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
+                        hoot.logVerbose('emgcp_osm: fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
                     }
                 }
+            }
+            else
+            {
+                throw new Error('Feature Code ' + fCode2 + ' is not valid for MGCP');
             }
         }
 
