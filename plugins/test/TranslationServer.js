@@ -3,39 +3,38 @@ var assert = require('assert'),
     xml2js = require('xml2js');
 var server = require('../TranslationServer.js');
 
-var defaults = {};
-var defaultsResult = {
-                        name: "BLAST_FURNACE_P",
-                        fcode: "AC010",
-                        desc: "Blast-furnace",
-                        geom: "Point"
-                    };
-
-var MgcpPointBui = {
-                        translation: 'MGCP',
-                        geomType: 'point',
-                        searchStr: 'Bui'
-                    };
-var MgcpResult = [{
-                        name: "PAL015",
-                        fcode: "AL015",
-                        desc: "General Building Point Feature",
-                        geom: "Point",
-                        idx: -1
-                    },
-                    {
-                        name: "PAL020",
-                        fcode: "AL020",
-                        desc: "Built-Up Area Point Feature",
-                        geom: "Point",
-                        idx: -1
-                    }];
-
 if (server.cluster.isMaster) {
     describe('TranslationServer', function () {
 
         describe('searchSchema', function() {
 
+            var defaults = {};
+            var defaultsResult = {
+                                    name: "BLAST_FURNACE_P",
+                                    fcode: "AC010",
+                                    desc: "Blast-furnace",
+                                    geom: "Point"
+                                };
+
+            var MgcpPointBui = {
+                                    translation: 'MGCP',
+                                    geomType: 'point',
+                                    searchStr: 'Bui'
+                                };
+            var MgcpResult = [{
+                                    name: "PAL015",
+                                    fcode: "AL015",
+                                    desc: "General Building Point Feature",
+                                    geom: "Point",
+                                    idx: -1
+                                },
+                                {
+                                    name: "PAL020",
+                                    fcode: "AL020",
+                                    desc: "Built-Up Area Point Feature",
+                                    geom: "Point",
+                                    idx: -1
+                                }];
             it('should search for default options', function(){
                 assert.equal(JSON.stringify(server.searchSchema(defaults)[0]), JSON.stringify(defaultsResult));
             });
@@ -47,33 +46,6 @@ if (server.cluster.isMaster) {
 
         describe('handleInputs', function() {
 
-/*
-        case '/osmtotds':
-            payload.transMap = osmToTdsMap;
-            payload.trandDir = 'toogr';
-            result = osmtotds(payload);
-            break;
-        case '/tdstoosm':
-            payload.transMap = tdsToOsmMap;
-            payload.trandDir = 'toosm';
-            result = tdstoosm(payload);
-            break;
-        case '/taginfo/key/values':
-            result = getTaginfoKeyFields(payload);
-            break;
-        case '/taginfo/keys/all':
-            result = getTaginfoKeyFields(payload);
-            break;
-        case '/schema':
-            result = getTaginfoKeys(payload);
-            break;
-        case '/capabilities':
-            result = getCapabilities();
-            break;
-        default:
-            throw new Error('Not found');
-            break;
-*/
             it('should handle osmtotds GET', function() {
                 //http://localhost:8094/osmtotds?idval=AL015&geom=Point&translation=MGCP&idelem=fcode
                 var schema = server.handleInputs({
@@ -136,14 +108,14 @@ if (server.cluster.isMaster) {
                 assert.equal(attrs.waterway, 'river');
             });
 
-            it('should handle no matches tdstoosm GET for MGCP', function() {
+            it('should handle invalid F_CODE in tdstoosm GET for MGCP', function() {
                 var attrs = server.handleInputs({
                     fcode: 'ZZTOP',
                     translation: 'MGCP',
                     method: 'GET',
                     path: '/tdstoosm'
                 }).attrs;
-                assert(attrs.uuid.length > 0);
+                assert.equal(attrs.error, 'Feature Code ZZTOP is not valid for MGCP');
             });
 
             it('should handle osmtotds POST', function() {

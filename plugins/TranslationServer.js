@@ -205,10 +205,12 @@ var postHandler = function(data) {
 var osmtotds = function(params) {
 
     if(params.method === 'POST'){
+        //translation tags in xml from osm to a supported schema
         return postHandler(params);
     } else if (params.method === 'GET'){
         // http://localhost:8094/osmtotds?idval=AL015&geom=Point&translation=MGCP&idelem=fcode
         // When we get get request on /osmtotds then produce fields based on supplied fcode
+        //Get fields for F_CODE from schema
 
         var schema = (params.translation) ? schemaMap[params.translation].getDbSchema() : schemaMap['TDSv61'].getDbSchema();
 
@@ -228,8 +230,10 @@ var osmtotds = function(params) {
 var tdstoosm = function(params) {
 
     if (params.method === 'POST') {
+        //translate tags in xml from a supported schema to osm
         return postHandler(params);
     } else if (params.method === 'GET') {
+        //Get OSM tags for F_CODE
         hoot = require(HOOT_HOME + '/lib/HootJs');
         createUuid = hoot.UuidHelper.createUuid;
         var englishToOsmMap = {
