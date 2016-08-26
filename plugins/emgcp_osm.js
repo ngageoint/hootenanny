@@ -98,7 +98,9 @@ emgcp_osm = {
         else
         {
             // No FCODE, throw error
-            throw new Error('No Valid Feature Code');
+            // throw new Error('No Valid Feature Code');
+            // return null;
+            return {attrs:{'error':'No Valid Feature Code'}, tableName: ''};
         }
 
         // Translate the single values from "English" to TDS
@@ -126,7 +128,9 @@ emgcp_osm = {
         // NOTE mgcp.fcodeLookup DOES NOT EXIST until mgcp.toOsm is called.
         if (! mgcp.fcodeLookup['F_CODE'][nAttrs.F_CODE])
         {
-            throw new Error('Feature Code ' + nAttrs.F_CODE + ' is not valid for MGCP');
+            // throw new Error('Feature Code ' + nAttrs.F_CODE + ' is not valid for MGCP');
+            // return null;
+            return {attrs:{'error':'Feature Code ' + nAttrs.F_CODE + ' is not valid for MGCP'}, tableName: ''};
         }
 
         // Go looking for "OSM:XXX" values and copy them to the output
@@ -155,7 +159,8 @@ emgcp_osm = {
             }
             else
             {
-                throw new Error('Feature Code ' + fCode2 + ' is not valid for MGCP');
+                //throw new Error('Feature Code ' + fCode2 + ' is not valid for MGCP');
+                return {attrs:{'error':'Feature Code ' + fCode2 + ' is not valid for MGCP'}, tableName: ''};
             }
         }
 
