@@ -4,6 +4,21 @@ var assert = require('assert'),
 var httpMocks = require('node-mocks-http');
 var server = require('../P2PServer.js');
 
+var input = "<?xml version='1.0' encoding='UTF-8'?>\
+    <osm version='0.6' upload='true' generator='hootenanny'>\
+    <node id='-3200079' visible='true' lat='48.0479399' lon='11.7012814'>\
+    <tag k='amenity' v='post_office' />\
+    <tag k='error:circular' v='15' />\
+    <tag k='hoot:status' v='1' />\
+    </node>\
+    <node id='-3200083' visible='true' lat='48.04854' lon='11.70194'>\
+    <tag k='amenity' v='post_office' />\
+    <tag k='error:circular' v='150' />\
+    <tag k='name' v='POST, JÄGER-VON-FALL-STRASSE' />\
+    <tag k='hoot:status' v='2' />\
+    </node>\
+    </osm>";
+
 if (server.cluster.isMaster) {
     describe('P2PServer', function () {
         it('responds with HTTP 404 if url not found', function() {
@@ -26,20 +41,6 @@ if (server.cluster.isMaster) {
         });
 
         it('merges two osm poi', function() {
-            var input = "<?xml version='1.0' encoding='UTF-8'?>\
-                <osm version='0.6' upload='true' generator='hootenanny'>\
-                <node id='-3200079' visible='true' lat='48.0479399' lon='11.7012814'>\
-                <tag k='amenity' v='post_office' />\
-                <tag k='error:circular' v='15' />\
-                <tag k='hoot:status' v='1' />\
-                </node>\
-                <node id='-3200083' visible='true' lat='48.04854' lon='11.70194'>\
-                <tag k='amenity' v='post_office' />\
-                <tag k='error:circular' v='150' />\
-                <tag k='name' v='POST, JÄGER-VON-FALL-STRASSE' />\
-                <tag k='hoot:status' v='2' />\
-                </node>\
-                </osm>";
 
             var request  = httpMocks.createRequest({
                 method: 'POST',
@@ -70,21 +71,6 @@ if (server.cluster.isMaster) {
 
         describe('handleInputs', function() {
             it('merges two osm poi', function() {
-                var input = "<?xml version='1.0' encoding='UTF-8'?>\
-                    <osm version='0.6' upload='true' generator='hootenanny'>\
-                    <node id='-3200079' visible='true' lat='48.0479399' lon='11.7012814'>\
-                    <tag k='amenity' v='post_office' />\
-                    <tag k='error:circular' v='15' />\
-                    <tag k='hoot:status' v='1' />\
-                    </node>\
-                    <node id='-3200083' visible='true' lat='48.04854' lon='11.70194'>\
-                    <tag k='amenity' v='post_office' />\
-                    <tag k='error:circular' v='150' />\
-                    <tag k='name' v='POST, JÄGER-VON-FALL-STRASSE' />\
-                    <tag k='hoot:status' v='2' />\
-                    </node>\
-                    </osm>";
-
                 var merged = server.handleInputs({
                     path: '/p2pmerge',
                     method: 'POST',
@@ -122,5 +108,32 @@ if (server.cluster.isMaster) {
                 }, Error, 'Unsupported method');
             });
         });
+
+        describe('p2pmerge', function() {
+            it('should return 200', function(done) {
+                var options = {
+                    hostname: 'localhost',
+                    port: '8096',
+                    path: '/p2pmerge',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                };
+                var req = http.request(options, function(res) {
+                    assert.equal(200, res.statusCode);
+                    res.setEncoding('utf8');
+                    res.on('data', function (body) {
+                        assert(JSON.parse(body).input.length > 0);
+                    });
+                    done();
+                });
+                // write data to request body
+                req.write(input);
+                req.end();
+
+            });
+        });
+
     });
 }
