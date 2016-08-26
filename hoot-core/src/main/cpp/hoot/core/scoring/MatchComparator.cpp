@@ -128,6 +128,15 @@ public:
     if (!uuid.isEmpty())
     {
       _uuidToEid.insert(uuid, e->getElementId());
+
+      //If an item was merged during conflation, its uuid is its original uuid + the concatenated
+      //uuid's of the merged items.  So, add map entries for all the uuid parts, if it contains
+      //multiple.
+      const QStringList uuidParts = uuid.split(";");
+      for (int i = 0; i < uuidParts.size(); i++)
+      {
+        _uuidToEid.insert(uuidParts.at(i), e->getElementId());
+      }
     }
   }
 
@@ -288,7 +297,7 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
       expectedIndex = MatchType::Miss;
     }
 
-    // if this is an expected match
+    // if this is an actual match
     if (_actualMatchGroups.findT(m.first) == _actualMatchGroups.findT(m.second))
     {
       actualIndex = MatchType::Match;
