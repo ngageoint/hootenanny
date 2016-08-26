@@ -44,7 +44,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-//QString PoiPolygonMatch::_testUuid = "{87f8a061-d9f1-5bc9-ac28-27f07c8febae}";
+QString PoiPolygonMatch::_testUuid = "{e657863b-045d-5413-b449-7bfbaf736fd4}";
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
@@ -133,14 +133,13 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   const double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
 
   const double distance = gpoly->distance(gpoi.get());
-  const double matchDistance = _matchDistance;
-  const double reviewDistance = _reviewDistance + ce;
-  const bool closeMatch = distance <= reviewDistance;
+  const double reviewDistancePlusCe = _reviewDistance + ce;
+  const bool closeMatch = distance <= reviewDistancePlusCe;
 
   int evidence = 0;
   evidence += typeMatch ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
-  evidence += distance <= matchDistance ? 2 : 0;
+  evidence += distance <= _matchDistance ? 2 : 0;
 
   if (!closeMatch)
   {
@@ -159,20 +158,9 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     _c.setMiss();
   }
 
- /* if (e1->getTags().get("uuid") == _testUuid ||
+  if (e1->getTags().get("uuid") == _testUuid ||
       e2->getTags().get("uuid") == _testUuid)
   {
-    //_uuid1 = e1->getTags().get("uuid");
-    //_uuid2 = e2->getTags().get("uuid");
-    QStringList names1 = e1->getTags().getNames();
-    names1.append(e1->getTags().getPseudoNames());
-    //_names1 = names1.join(",");
-    QStringList names2 = e2->getTags().getNames();
-    names2.append(e2->getTags().getPseudoNames());
-    //_names2 = names2.join(",");
-    //_circularError1 = e1->getCircularError();
-    //_circularError2 = e2->getCircularError();
-
     LOG_VARD(_eid1);
     LOG_VARD(e1->getTags().get("uuid"));
     LOG_VARD(e1->getTags());
@@ -182,17 +170,17 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     LOG_VARD(typeMatch);
     LOG_VARD(nameMatch);
     LOG_VARD(nameScore);
-    LOG_VARD(names1);
-    LOG_VARD(names2);
     LOG_VARD(closeMatch);
     LOG_VARD(distance);
-    LOG_VARD(reviewDistance);
+    LOG_VARD(_matchDistance);
+    LOG_VARD(_reviewDistance);
+    LOG_VARD(reviewDistancePlusCe);
     LOG_VARD(ce);
     LOG_VARD(e1->getCircularError());
     LOG_VARD(e2->getCircularError());
     LOG_VARD(evidence);
     LOG_DEBUG("**************************");
-  }*/
+  }
 }
 
 double PoiPolygonMatch::_calculateNameScore(ConstElementPtr e1, ConstElementPtr e2) const
@@ -287,25 +275,6 @@ QString PoiPolygonMatch::toString() const
 {
   return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
     arg(_polyEid.toString()).arg(_c.toString());
-
-  /*QString str =
-    QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
-      arg(_polyEid.toString()).arg(_c.toString());
-  str += " UUID1: " + _uuid1 + "\n";
-  str += "UUID2: " + _uuid2 + "\n";
-  str += "type match: " + QString::number(_typeMatch) + "\n";
-  str += "name match: " + QString::number(_nameMatch) + "\n";
-  str += "name score: " + QString::number(_nameScore) + "\n";
-  str += "names 1: " + _names1 + "\n";
-  str += "names 2: " + _names2 + "\n";
-  str += "close match: " + QString::number(_closeMatch) + "\n";
-  str += "distance: " + QString::number(_distance) + "\n";
-  str += "review distance: " + QString::number(_reviewDistance) + "\n";
-  str += "overall circular error: " + QString::number(_ce) + "\n";
-  str += "circular error 1: " + QString::number(_circularError1) + "\n";
-  str += "circular error 2: " + QString::number(_circularError2) + "\n";
-  str += "evidence: " + QString::number(_evidence);
-  return str;*/
 }
 
 }
