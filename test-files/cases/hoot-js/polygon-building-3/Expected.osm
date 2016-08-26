@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3649852013800000" lon="42.5455451455599984"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3649657810600000" lon="42.5457565804500035"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648393784800000" lon="42.5457465603900005"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648566886600000" lon="42.5455351254999954"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648929535900001" lon="42.5456816645500027"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648738182600000" lon="42.5459227033500014"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3647451386000000" lon="42.5459149604999993"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3647638722800000" lon="42.5456756295800034"/>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648210368600001" lon="42.5458087341999942">
         <tag k="REF2" v="00011f"/>
         <tag k="source:name" v="IDP/City Graphic"/>
@@ -10,14 +18,6 @@
         <tag k="security:non_ic_dissem_ctl" v="limited_distribution"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3647638722800000" lon="42.5456756295800034"/>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3647451386000000" lon="42.5459149604999993"/>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648738182600000" lon="42.5459227033500014"/>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648929535900001" lon="42.5456816645500027"/>
-    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648566886600000" lon="42.5455351254999954"/>
-    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648393784800000" lon="42.5457465603900005"/>
-    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3649657810600000" lon="42.5457565804500035"/>
-    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3649852013800000" lon="42.5455451455599984"/>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6"/>
         <nd ref="-7"/>
@@ -49,6 +49,7 @@
         <member type="way" ref="-1" role="reviewee"/>
         <member type="way" ref="-2" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Not sufficiently similar to call a match"/>
         <tag k="hoot:review:sort_order" v="0"/>

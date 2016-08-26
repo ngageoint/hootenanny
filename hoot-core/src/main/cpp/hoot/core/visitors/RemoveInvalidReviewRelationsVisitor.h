@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVEEMPTYREVIEWRELATIONSVISITOR_H
-#define REMOVEEMPTYREVIEWRELATIONSVISITOR_H
+#ifndef REMOVEINVALIDREVIEWRELATIONSVISITOR_H
+#define REMOVEINVALIDREVIEWRELATIONSVISITOR_H
 
 #include "ElementOsmMapVisitor.h"
 
@@ -36,13 +36,13 @@ using namespace std;
 /**
  * Remove all empty review relations
  */
-class RemoveEmptyReviewRelationsVisitor : public ElementOsmMapVisitor
+class RemoveInvalidReviewRelationsVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static string className() { return "hoot::RemoveEmptyReviewRelationsVisitor"; }
+  static string className() { return "hoot::RemoveInvalidReviewRelationsVisitor"; }
 
-  RemoveEmptyReviewRelationsVisitor();
+  RemoveInvalidReviewRelationsVisitor();
 
   virtual void visit(const ElementPtr& e);
 
@@ -50,4 +50,4 @@ public:
 
 }
 
-#endif // REMOVEEMPTYREVIEWRELATIONSVISITOR_H
+#endif // REMOVEINVALIDREVIEWRELATIONSVISITOR_H

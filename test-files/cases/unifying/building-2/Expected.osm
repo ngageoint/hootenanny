@@ -35,6 +35,7 @@
         <member type="way" ref="-2" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Building"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Unmatched buildings are overlapping."/>
         <tag k="hoot:review:sort_order" v="0"/>

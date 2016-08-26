@@ -172,7 +172,7 @@ SOURCES += \
     src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
     src/test/cpp/hoot/core/io/ChangesetDeriverTest.cpp \
     src/test/cpp/hoot/core/io/ElementComparerTest.cpp \
-    src/test/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitorTest.cpp \
+    src/test/cpp/hoot/core/visitors/RemoveInvalidReviewRelationsVisitorTest.cpp \
     src/test/cpp/hoot/core/filters/BuildingWayNodeCriterionTest.cpp \
     src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchTest.cpp \
     src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMergerTest.cpp \

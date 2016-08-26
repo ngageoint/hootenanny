@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="31.5000000000000000" lon="35.7833329999999989">
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.5000000000000000" lon="35.7833299999999994">
+        <tag k="REF2" v="000612"/>
+        <tag k="place" v="tribal_area"/>
+        <tag k="alt_name" v="`Arab Bani Hamida;`Arab Bani Hamidah;‘Arab Banī Hamīda;‘Arab Banī Ḩamīdah"/>
+        <tag k="uuid" v="GeoNames.org:250376"/>
+        <tag k="name" v="‘Arab Banī Ḩamīdah"/>
+        <tag k="error:circular" v="1000"/>
+    </node>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.5000000000000000" lon="35.7833329999999989">
         <tag k="REF1" v="000612"/>
         <tag k="place" v="locality"/>
         <tag k="name:ar" v="عرب بني حميدة"/>
@@ -12,18 +20,11 @@
         <tag k="name:en" v="Arab Bani Hamida"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="31.5000000000000000" lon="35.7833299999999994">
-        <tag k="REF2" v="000612"/>
-        <tag k="place" v="tribal_area"/>
-        <tag k="alt_name" v="`Arab Bani Hamida;`Arab Bani Hamidah;‘Arab Banī Hamīda;‘Arab Banī Ḩamīdah"/>
-        <tag k="uuid" v="GeoNames.org:250376"/>
-        <tag k="name" v="‘Arab Banī Ḩamīdah"/>
-        <tag k="error:circular" v="1000"/>
-    </node>
-    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1" role="reviewee"/>
         <member type="node" ref="-2" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Somewhat similar (0.3m) - very similar names and generic type, very close together, generic type to place match"/>
         <tag k="hoot:review:sort_order" v="0"/>

@@ -20,6 +20,7 @@
         <member type="node" ref="-2" role="reviewee"/>
         <member type="node" ref="-1" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="0"/>
         <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews: Very similar (160m) - very similar names, similar POI type"/>
         <tag k="hoot:review:sort_order" v="0"/>

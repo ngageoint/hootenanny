@@ -130,6 +130,7 @@
         <member type="way" ref="-1" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Building"/>
+        <tag k="hoot:review:members" v="5"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Merging multiple buildings from each data source is error prone and requires a human eye."/>
         <tag k="hoot:review:sort_order" v="0"/>
