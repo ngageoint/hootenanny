@@ -5,20 +5,9 @@ to translate OSM to TDS and TDS to OSM.
 ************************************************************************/
 var http = require('http');
 var url = require('url');
-// cluster for load balancing
-var cluster = require('cluster');
-var os = require('os');
-var fs = require('fs');
-// default port
 var serverPort = 8094;
-
-var util = require('util');
-var nCPU = os.cpus().length;
-
 var availableTrans = {TDSv40: {isavailable: true}, TDSv61: {isavailable: true}, MGCP: {isavailable: true}};
 var HOOT_HOME = process.env.HOOT_HOME;
-//Moving hoot init to the request handler allows stxxl temp file cleanup to happen properly.
-//hoot = require(HOOT_HOME + '/lib/HootJs');
 
 var schemaMap = {
     TDSv40: require(HOOT_HOME + '/plugins/tds40_full_schema.js'),
@@ -38,50 +27,61 @@ var tdsToOsmMap = {
     MGCP: '/translations/englishMGCP_to_OSM.js'
 };
 
-// Argument parser
-// process.argv.forEach(function (val, index, array) {
-//     // port arg
-//     // Note that default port comes from serverPort var
-//   if(val.indexOf('port=') == 0){
-//     var portArg = val.split('=');
-//     if(portArg.length == 2){
-//         serverPort = 1*portArg[1];
-//     }
-//   }
+if (require.main === module) {
 
-//   // thread count arg
-//   // defaults to numbers of CPU
-//   if(val.indexOf('threadcount=') == 0){
-//     var nThreadArg = val.split('=');
-//     if(nThreadArg.length == 2){
-//         var nThreadCnt = 1*nThreadArg[1];
-//         if(nThreadCnt > 0){
-//             nCPU = nThreadCnt;
-//         }
-//     }
-//   }
-// });
+    // cluster for load balancing
+    var cluster = require('cluster');
+    var os = require('os');
+    var nCPU = os.cpus().length;
 
-// // This is when the cluster master gets invoked
-// if(cluster.isMaster){
-//  // Spawn off http server process by requested thread count
-//  for(var i=0; i<nCPU; i++) {
-//      cluster.fork();
-//  }
-// //This doesn't seem right.  When calling cluster.disconnect
-// //and the workers get stopped, this code launches a new process
-//  // // This is for if one child process dies then create new one
-//  // cluster.on('exit', function(worker){
-//  //      cluster.fork();
-//  // })
-// } else {
-    // We create child process http server
-    // and we all listen on serverPort
+    //Argument parser
+    process.argv.forEach(function (val, index, array) {
+        // port arg
+        // Note that default port comes from serverPort var
+        if (val.indexOf('port=') == 0) {
+            var portArg = val.split('=');
+            if (portArg.length == 2){
+                serverPort = 1*portArg[1];
+            }
+        }
+
+        // thread count arg
+        // defaults to numbers of CPU
+        if (val.indexOf('threadcount=') == 0) {
+            var nThreadArg = val.split('=');
+            if (nThreadArg.length == 2) {
+                var nThreadCnt = 1*nThreadArg[1];
+                if (nThreadCnt > 0){
+                    nCPU = nThreadCnt;
+                }
+            }
+        }
+    });
+
+    // This is when the cluster master gets invoked
+    if (cluster.isMaster) {
+        // Spawn off http server process by requested thread count
+        for(var i=0; i<nCPU; i++) {
+            cluster.fork();
+        }
+
+        // This is for if one child process dies then create new one
+        cluster.on('exit', function(worker){
+            cluster.fork();
+        });
+    } else {
+        // We create child process http server
+        // and we all listen on serverPort
+        http.createServer(TranslationServer).listen(serverPort);
+    }
+} else {
     http.createServer(TranslationServer).listen(serverPort);
-// }
+}
+
 
 function TranslationServer(request, response) {
     try {
+
         var header = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'};
         if (request.method === 'POST') {
             var payload = '';
@@ -91,38 +91,36 @@ function TranslationServer(request, response) {
 
             request.on('end', function(payload) {
                 payload.method = request.method;
-                payload.path = url_parts.pathname;
+                payload.path = request.path;
 
                 var result = handleInputs(payload);
 
                 response.writeHead(200, header);
-                response.end(postHandler(result));
+                response.end(JSON.stringify(result));
             });
 
         } else if (request.method === 'GET') {
-            var url_parts = url.parse(request.url, true);
-            var payload = url_parts.query;
+            var payload = request.query;
             payload.method = request.method;
-            payload.path = url_parts.pathname;
+            payload.path = request.path;
 
             var result = handleInputs(payload);
 
             response.writeHead(200, header);
-            response.write(result);
-            response.end();
+            response.end(JSON.stringify(result));
         } else {
             throw new Error('Unsupported method');
         }
 
     } catch (err) {
+        console.error(err.stack);
         var status = 500;
         if (err.message.indexOf('Unsupported') > -1)
             status = 400;
         if (err.message.indexOf('Not found') > -1)
             status = 404;
         response.writeHead(status, header);
-        response.write(JSON.stringify({error: err}));
-        response.end();
+        response.end(JSON.stringify({error: err.message}));
     }
 
 }
@@ -205,13 +203,10 @@ var postHandler = function(data) {
 var osmtotds = function(params) {
 
     if(params.method === 'POST'){
-        //translation tags in xml from osm to a supported schema
+        //translate tags in xml from osm to a supported schema
         return postHandler(params);
     } else if (params.method === 'GET'){
-        // http://localhost:8094/osmtotds?idval=AL015&geom=Point&translation=MGCP&idelem=fcode
-        // When we get get request on /osmtotds then produce fields based on supplied fcode
         //Get fields for F_CODE from schema
-
         var schema = (params.translation) ? schemaMap[params.translation].getDbSchema() : schemaMap['TDSv61'].getDbSchema();
 
         var match = schema.filter(function(d) {
@@ -523,7 +518,7 @@ var schemaError = function(params) {
 }
 
 if (typeof exports !== 'undefined') {
-    exports.cluster = cluster;
     exports.searchSchema = searchSchema;
     exports.handleInputs = handleInputs;
+    exports.TranslationServer = TranslationServer;
 }

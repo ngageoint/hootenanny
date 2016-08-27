@@ -19,121 +19,93 @@ var input = "<?xml version='1.0' encoding='UTF-8'?>\
     </node>\
     </osm>";
 
-if (server.cluster.isMaster) {
-    describe('P2PServer', function () {
-        it('responds with HTTP 404 if url not found', function() {
-            var request  = httpMocks.createRequest({
-                method: 'GET',
-                url: '/foo'
-            });
-            var response = httpMocks.createResponse();
-            server.P2Pserver(request, response);
-            assert.equal(response.statusCode, '404');
+describe('P2PServer', function () {
+    it('responds with HTTP 404 if url not found', function() {
+        var request  = httpMocks.createRequest({
+            method: 'GET',
+            url: '/foo'
         });
-        it('repsonds with HTTP 400 if unsupported method', function() {
-            var request  = httpMocks.createRequest({
-                method: 'GET',
-                url: '/p2pmerge'
-            });
-            var response = httpMocks.createResponse();
-            server.P2Pserver(request, response);
-            assert.equal(response.statusCode, '400');
-        });
-
-        it('merges two osm poi', function() {
-
-            var request  = httpMocks.createRequest({
-                method: 'POST',
-                url: '/p2pmerge',
-                body: input
-            });
-            var response = httpMocks.createResponse();
-            server.P2Pserver(request, response);
-            assert.equal(response.statusCode, '200');
-            var body = '';
-            response.on('data', function(chunk){
-                body += chunk;
-            })
-            response.on('end', function(body){
-                xml2js.parseString(body, function(err, result) {
-                    if (err) console.error(err);
-                    assert.equal(result.osm.node[0].$.lat, "48.0479399000000029");
-                    assert.equal(result.osm.node[0].$.lon, "11.7012813999999992");
-                    assert.equal(result.osm.node[0].tag[0].$.k, "hoot:status");
-                    assert.equal(result.osm.node[0].tag[0].$.v, "1");
-                    assert.equal(result.osm.node[0].tag[1].$.k, "name");
-                    assert.equal(result.osm.node[0].tag[1].$.v, "POST, JÄGER-VON-FALL-STRASSE");
-                    assert.equal(result.osm.node[0].tag[2].$.k, "amenity");
-                    assert.equal(result.osm.node[0].tag[2].$.v, "post_office");
-                });
-            });
-        });
-
-        describe('handleInputs', function() {
-            it('merges two osm poi', function() {
-                var merged = server.handleInputs({
-                    path: '/p2pmerge',
-                    method: 'POST',
-                    osm: input
-                });
-
-                xml2js.parseString(merged.output, function(err, result) {
-                    if (err) console.error(err);
-                    assert.equal(result.osm.node[0].$.lat, "48.0479399000000029");
-                    assert.equal(result.osm.node[0].$.lon, "11.7012813999999992");
-                    assert.equal(result.osm.node[0].tag[0].$.k, "hoot:status");
-                    assert.equal(result.osm.node[0].tag[0].$.v, "1");
-                    assert.equal(result.osm.node[0].tag[1].$.k, "name");
-                    assert.equal(result.osm.node[0].tag[1].$.v, "POST, JÄGER-VON-FALL-STRASSE");
-                    assert.equal(result.osm.node[0].tag[2].$.k, "amenity");
-                    assert.equal(result.osm.node[0].tag[2].$.v, "post_office");
-                });
-            });
-
-            it('throws error if url not found', function() {
-                assert.throws(function error() {
-                    server.handleInputs({
-                        method: 'POST',
-                        path: '/foo'
-                    })
-                }, Error, 'Not found');
-            });
-
-            it('throws error if unsupported method', function() {
-                assert.throws(function error() {
-                    server.handleInputs({
-                        method: 'GET',
-                        path: '/p2pmerge'
-                    })
-                }, Error, 'Unsupported method');
-            });
-        });
-
-        describe('p2pmerge', function() {
-            it('should return 200', function(done) {
-                var options = {
-                    hostname: 'localhost',
-                    port: '8096',
-                    path: '/p2pmerge',
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                };
-                var req = http.request(options, function(res) {
-                    assert.equal(200, res.statusCode);
-                    res.setEncoding('utf8');
-                    res.on('data', function (body) {
-                        assert(JSON.parse(body).input.length > 0);
-                    });
-                    done();
-                });
-                // write data to request body
-                req.write(input);
-                req.end();
-
-            });
-        });
-
+        var response = httpMocks.createResponse();
+        server.P2Pserver(request, response);
+        assert.equal(response.statusCode, '404');
     });
-}
+    it('repsonds with HTTP 400 if unsupported method', function() {
+        var request  = httpMocks.createRequest({
+            method: 'GET',
+            url: '/p2pmerge'
+        });
+        var response = httpMocks.createResponse();
+        server.P2Pserver(request, response);
+        assert.equal(response.statusCode, '400');
+    });
+
+    it('merges two osm poi', function() {
+
+        var request  = httpMocks.createRequest({
+            method: 'POST',
+            url: '/p2pmerge',
+            body: input
+        });
+        var response = httpMocks.createResponse();
+        server.P2Pserver(request, response);
+        assert.equal(response.statusCode, '200');
+        var body = '';
+        response.on('data', function(chunk){
+            body += chunk;
+        })
+        response.on('end', function(body){
+            xml2js.parseString(body, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.node[0].$.lat, "48.0479399000000029");
+                assert.equal(result.osm.node[0].$.lon, "11.7012813999999992");
+                assert.equal(result.osm.node[0].tag[0].$.k, "hoot:status");
+                assert.equal(result.osm.node[0].tag[0].$.v, "1");
+                assert.equal(result.osm.node[0].tag[1].$.k, "name");
+                assert.equal(result.osm.node[0].tag[1].$.v, "POST, JÄGER-VON-FALL-STRASSE");
+                assert.equal(result.osm.node[0].tag[2].$.k, "amenity");
+                assert.equal(result.osm.node[0].tag[2].$.v, "post_office");
+            });
+        });
+    });
+
+    describe('handleInputs', function() {
+        it('merges two osm poi', function() {
+            var merged = server.handleInputs({
+                path: '/p2pmerge',
+                method: 'POST',
+                osm: input
+            });
+
+            xml2js.parseString(merged.output, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.node[0].$.lat, "48.0479399000000029");
+                assert.equal(result.osm.node[0].$.lon, "11.7012813999999992");
+                assert.equal(result.osm.node[0].tag[0].$.k, "hoot:status");
+                assert.equal(result.osm.node[0].tag[0].$.v, "1");
+                assert.equal(result.osm.node[0].tag[1].$.k, "name");
+                assert.equal(result.osm.node[0].tag[1].$.v, "POST, JÄGER-VON-FALL-STRASSE");
+                assert.equal(result.osm.node[0].tag[2].$.k, "amenity");
+                assert.equal(result.osm.node[0].tag[2].$.v, "post_office");
+            });
+        });
+
+        it('throws error if url not found', function() {
+            assert.throws(function error() {
+                server.handleInputs({
+                    method: 'POST',
+                    path: '/foo'
+                })
+            }, Error, 'Not found');
+        });
+
+        it('throws error if unsupported method', function() {
+            assert.throws(function error() {
+                server.handleInputs({
+                    method: 'GET',
+                    path: '/p2pmerge'
+                })
+            }, Error, 'Unsupported method');
+        });
+    });
+
+});
