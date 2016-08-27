@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -59,7 +59,7 @@ public class TranslatorResource extends ServerControllerBase {
         // set default default port and threadcount
         try {
             // Make sure to wipe out previosuly running servers.
-            stopServer(HOME_FOLDER + "/scripts/" + TRANSLATION_SERVER_SCRIPT);
+            stopServer(HOME_FOLDER + TRANSLATION_SERVER_SCRIPT);
 
             // Probably an overkill but just in-case using synch lock
             String currPort = TRANSLATION_SERVER_PORT;
@@ -69,7 +69,7 @@ public class TranslatorResource extends ServerControllerBase {
 
             synchronized (procLock) {
                 String currThreadCnt = TRANSLATION_SERVER_THREAD_COUNT;
-                transProc = startServer(currPort, currThreadCnt, HOME_FOLDER + "/scripts/" + TRANSLATION_SERVER_SCRIPT);
+                transProc = startServer(currPort, currThreadCnt, HOME_FOLDER + TRANSLATION_SERVER_SCRIPT);
             }
         }
         catch (Exception ex) {

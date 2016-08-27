@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -57,7 +57,7 @@ public class P2PResource extends ServerControllerBase {
         // set default default port and threadcount
         try {
             // Make sure to wipe out previosuly running servers.
-            stopServer(HOME_FOLDER + "/scripts/" + P_2_P_SERVER_SCRIPT);
+            stopServer(HOME_FOLDER + P_2_P_SERVER_SCRIPT);
 
             // Probably an overkill but just in-case using synch lock
             String currPort = P_2_P_SERVER_PORT;
@@ -67,7 +67,7 @@ public class P2PResource extends ServerControllerBase {
 
             synchronized (procLock) {
                 String currThreadCnt = P_2_P_SERVER_THREAD_COUNT;
-                _P2PProc = startServer(currPort, currThreadCnt, HOME_FOLDER + "/scripts/" + P_2_P_SERVER_SCRIPT);
+                _P2PProc = startServer(currPort, currThreadCnt, HOME_FOLDER + P_2_P_SERVER_SCRIPT);
             }
         }
         catch (Exception ex) {
@@ -79,9 +79,9 @@ public class P2PResource extends ServerControllerBase {
     /**
      * Destroys all POI to POI server process where it effectively shutting them
      * down.
-     * 
+     *
      * GET hoot-services/services/p2pserver/stop
-     * 
+     *
      * @return JSON containing state
      */
     @GET
@@ -109,9 +109,9 @@ public class P2PResource extends ServerControllerBase {
 
     /**
      * Gets current status of P2P server.
-     * 
+     *
      * GET hoot-services/services/p2pserver/status
-     * 
+     *
      * @return JSON containing state and port it is running
      */
     @GET
