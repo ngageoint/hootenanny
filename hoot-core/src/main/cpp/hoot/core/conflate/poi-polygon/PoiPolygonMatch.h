@@ -92,27 +92,29 @@ public:
    */
   static bool isPoiIsh(const Element& e);
 
+  static void printMatchDistanceInfo();
+
 private:
 
   ElementId _eid1;
   ElementId _eid2;
   shared_ptr<const PoiPolygonRfClassifier> _rf;
-
   static QString _matchName;
   ElementId _poiEid, _polyEid;
   MatchClassification _c;
+  int _badGeomCount;
+  ConstOsmMapPtr _map;
 
   double _matchDistance;
   double _reviewDistance;
   double _nameScoreThreshold;
   double _typeScoreThreshold;
 
-  QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
-
-  int _badGeomCount;
-  ConstOsmMapPtr _map;
-
   static QString _testUuid;
+  static QMultiMap<QString, double> _matchRefIdsToDistances;
+  static QMultiMap<QString, double> _reviewRefIdsToDistances;
+  QString _t1BestKvp;
+  QString _t2BestKvp;
 
   void _calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                        const ElementId& eid2);
@@ -129,7 +131,7 @@ private:
    */
   bool _calculateTypeMatch(const ConstOsmMapPtr& map, ConstElementPtr e1, ConstElementPtr e2);
 
-  double _getTagScore(ConstElementPtr e1, ConstElementPtr e2) const;
+  double _getTagScore(ConstElementPtr e1, ConstElementPtr e2);
   QStringList _getRelatedTags(const Tags& tags) const;
 
   bool _calculateAddressMatch(ConstElementPtr building, ConstElementPtr poi);
