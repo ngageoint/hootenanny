@@ -345,6 +345,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
 {
   const double partialHandicap = _partialHandicap;
   const double stubHandicap = _stubHandicap;
+  double aggression = _aggression;
   EdgeScoreMap newScores, newWeights;
   double weightSum = EPSILON;
   int count = 0;
