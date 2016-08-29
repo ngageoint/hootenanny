@@ -68,8 +68,8 @@ namespace hoot
  *                                         |                |                     |
  *   Total POIs:                           |    240483      |    240483           |
  *   POIs where Levenshtein == Skip-grams  |     11928      |     42005           |
- *   POIs where Levenshtein > Skip-grams   |    161401      |      4277**         |
- *   POIs where Levenshtein < Skip-grams   |     67154      |    194201           |
+ *   POIs where Levenshtein > Skip-grams   |    161401      |    194201           |
+ *   POIs where Levenshtein < Skip-grams   |     67154      |      4277**         |
  *
  *    ** - Only 1.77% of the time did Skip-grams give a better result on training data
  *         than did Levenshtein

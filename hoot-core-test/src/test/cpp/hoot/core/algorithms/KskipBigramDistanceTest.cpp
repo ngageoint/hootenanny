@@ -100,6 +100,7 @@ public:
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3333, kskip1.compare("Main Street", "Second Street"), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3461, kskip2.compare("Main Street", "Second Street"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3448, kskip3.compare("Main Street", "Second Street"), 0.0001);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5641, kskip1.compare("First Second Third Fourth Fifth Sixth", "First Second Third"), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.6041, kskip2.compare("First Second Third Fourth Fifth Sixth", "First Second Third"), 0.0001);
@@ -114,8 +115,11 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8867, kskip3.compare("First Second Third Fourth Fifth Sixth", "First Second Third Fourth Fifth"), 0.0001);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3469, kskip2.compare("KALORAMA COMMUNITY GARDEN", "KALORAMA PARK"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3333, kskip3.compare("KALORAMA COMMUNITY GARDEN", "KALORAMA PARK"), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.2857, kskip2.compare("KALORAMA COMMUNITY GARDEN", "KALORAMA RECREATION CENTER"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3037, kskip3.compare("KALORAMA COMMUNITY GARDEN", "KALORAMA RECREATION CENTER"), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3333, kskip2.compare("KALORAMA RECREATION CENTER", "KALORAMA PARK"), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3392, kskip3.compare("KALORAMA RECREATION CENTER", "KALORAMA PARK"), 0.0001);
 
     //  100% code coverage
     HOOT_STR_EQUALS("1-skip bi-gram", kskip1.toString());
