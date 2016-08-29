@@ -123,7 +123,6 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/EdgeMatch.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeString.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeMatchSetFinder.h \
-    src/main/cpp/hoot/rnd/conflate/network/MatchScoreProvider.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeMatchSet.h \
     src/main/cpp/hoot/rnd/conflate/network/InvertedEdgeMatchSet.h \
     src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeMatchSet.h \

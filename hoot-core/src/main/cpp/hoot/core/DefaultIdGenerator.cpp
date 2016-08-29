@@ -34,4 +34,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(IdGenerator, DefaultIdGenerator)
 
+IdGeneratorPtr DefaultIdGenerator::clone() const
+{
+  DefaultIdGenerator* copy = new DefaultIdGenerator();
+  IdGeneratorPtr result(copy);
+
+  copy->_nodeId = _nodeId;
+  copy->_wayId = _wayId;
+  copy->_relationId = _relationId;
+
+  return result;
+}
+
 }

@@ -31,7 +31,6 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/rnd/conflate/network/IndexedEdgeMatchSet.h>
-#include <hoot/rnd/conflate/network/MatchScoreProvider.h>
 #include <hoot/rnd/conflate/network/NetworkMatcher.h>
 #include <hoot/rnd/conflate/network/NetworkEdgeScore.h>
 #include <hoot/rnd/conflate/network/NetworkVertexScore.h>
