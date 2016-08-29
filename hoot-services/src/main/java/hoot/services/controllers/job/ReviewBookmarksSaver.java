@@ -29,6 +29,7 @@ package hoot.services.controllers.job;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,6 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.Configuration;
 import com.querydsl.sql.dml.SQLInsertClause;
 import com.querydsl.sql.dml.SQLUpdateClause;
@@ -90,9 +90,16 @@ class ReviewBookmarksSaver {
      * @return - total numbers of inserted
      */
     private long insert(ReviewBookmarkSaveRequest request) {
-        SQLInsertClause cl = createInsertClause(request);
-        long nInserted = cl.execute();
-        return nInserted;
+        Configuration configuration = DbUtils.getConfiguration();
+        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+
+        QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
+        return  new SQLInsertClause(conn, configuration, reviewBookmarks)
+                .columns(reviewBookmarks.mapId, reviewBookmarks.relationId, reviewBookmarks.createdAt,
+                        reviewBookmarks.createdBy, reviewBookmarks.detail)
+                .values(request.getMapId(), request.getRelationId(), now, request.getUserId(),
+                        jasonToHStore(request.getDetail()))
+                .execute();
     }
 
     /**
@@ -105,41 +112,6 @@ class ReviewBookmarksSaver {
      * @return total numbers of updated
      */
     private long update(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto) {
-        long nUpdated = getUpdateQuery(request, reviewBookmarksDto).execute();
-        return nUpdated;
-    }
-
-    /**
-     * Creates insert clause
-     * 
-     * @param request
-     *            - request object containing inserted fields
-     * @return - SQLInsertClause
-     */
-    SQLInsertClause createInsertClause(ReviewBookmarkSaveRequest request) {
-        Configuration configuration = DbUtils.getConfiguration();
-        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-
-        QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
-        SQLInsertClause cl = new SQLInsertClause(conn, configuration, reviewBookmarks)
-                .columns(reviewBookmarks.mapId, reviewBookmarks.relationId, reviewBookmarks.createdAt,
-                        reviewBookmarks.createdBy, reviewBookmarks.detail)
-                .values(request.getMapId(), request.getRelationId(), now, request.getUserId(),
-                        jasonToHStore(request.getDetail()));
-
-        return cl;
-    }
-
-    /**
-     * Creates update clause
-     * 
-     * @param request
-     *            - request object containing updated fields
-     * @param reviewBookmarksDto
-     *            - Current review tag
-     * @return - SQLUpdateClause
-     */
-    SQLUpdateClause getUpdateQuery(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto) {
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
         reviewBookmarksDto.setLastModifiedAt(now);
@@ -148,33 +120,29 @@ class ReviewBookmarksSaver {
 
         Configuration configuration = DbUtils.getConfiguration();
         QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
-        SQLUpdateClause res = new SQLUpdateClause(conn, configuration, reviewBookmarks).populate(reviewBookmarksDto)
-                .where(reviewBookmarks.id.eq(reviewBookmarksDto.getId()));
-
-        return res;
+        return new SQLUpdateClause(conn, configuration, reviewBookmarks)
+                .populate(reviewBookmarksDto)
+                .where(reviewBookmarks.id.eq(reviewBookmarksDto.getId()))
+                .execute();
     }
 
     /**
-     * Since QueryDSL does not support hstore this function creates QueryDSL
-     * Expression object form tags json.
-     * 
+     * Converts JSON object to Postgesql hStore objects
+     *
      * @param tags
      *            - json containing tags kv
      * @return - Expression Object for QueryDSL consumption
      */
     private static Object jasonToHStore(JSONObject tags) {
-        String hstoreStr = "";
+        Map<String, String> hStoreObject = new HashMap<>();
 
         if (tags != null) {
             for (Object it : tags.entrySet()) {
                 Map.Entry<Object, Object> pairs = (Map.Entry<Object, Object>) it;
 
-                if (!hstoreStr.isEmpty()) {
-                    hstoreStr += ",";
-                }
-
                 String jsonStr;
                 Object oVal = tags.get(pairs.getKey());
+
                 if (oVal instanceof JSONObject) {
                     jsonStr = ((JSONObject) oVal).toJSONString();
                 }
@@ -194,11 +162,11 @@ class ReviewBookmarksSaver {
                 jsonStr = jsonStr.replace("\\", "\\\\");
                 jsonStr = jsonStr.replace("'", "''");
                 jsonStr = jsonStr.replace("\"", "\\\"");
-                hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + jsonStr + "\"";
+
+                hStoreObject.put(pairs.getKey().toString(), jsonStr);
             }
         }
 
-        hstoreStr = "'" + hstoreStr + "'";
-        return Expressions.template(Object.class, hstoreStr);
+        return hStoreObject;
     }
 }

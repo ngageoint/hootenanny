@@ -437,7 +437,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
       denominator += s;
     }
 
-    newScores[em] = pow(numerator / denominator, _aggression);
+    newScores[em] = pow(numerator / denominator, aggression);
     newWeights[em] = denominator;
     weightSum += denominator;
     LOG_INFO(em << " " << numerator << "/" << denominator << " " << newScores[em] << " " <<

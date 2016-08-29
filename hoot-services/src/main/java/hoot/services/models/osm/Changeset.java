@@ -29,12 +29,9 @@ package hoot.services.models.osm;
 import static hoot.services.HootProperties.*;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.sql.Types;
 import java.util.Calendar;
-import java.util.Map;
+import java.util.HashMap;
 
 import javax.xml.transform.TransformerException;
 
@@ -99,19 +96,30 @@ public class Changeset extends Changesets {
     public static long createChangeset(Document changesetDoc, long mapId, long userId, Connection dbConn) {
         logger.debug("Creating changeset for map ID: {}...", mapId);
 
-        long changesetId = insertNew(mapId, userId, dbConn);
-
-        if ((changesetId == Long.MAX_VALUE) || (changesetId < 1)) {
-            throw new IllegalArgumentException("Invalid changeset ID: " + changesetId);
-        }
-
+        NodeList nodeList;
         try {
-            (new Changeset(mapId, changesetId, dbConn)).insertTags(mapId,
-                    XPathAPI.selectNodeList(changesetDoc, "//changeset/tag"));
+            nodeList = XPathAPI.selectNodeList(changesetDoc, "//changeset/tag");
         }
         catch (TransformerException e) {
             throw new RuntimeException("Error during a call to XPathAPI!", e);
         }
+
+        java.util.Map<String, String> tags = new HashMap<>();
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            NamedNodeMap tagAttributes = nodeList.item(i).getAttributes();
+
+            if ((tagAttributes.getNamedItem("k") == null) || (tagAttributes.getNamedItem("v") == null)) {
+                throw new RuntimeException("Error inserting tags: cannot insert(" + tagAttributes +")");
+            }
+
+            String key = tagAttributes.getNamedItem("k").getNodeValue();
+            String value = tagAttributes.getNamedItem("v").getNodeValue();
+
+            tags.put(key, value);
+        }
+
+        long changesetId = insertNew(mapId, userId, dbConn, tags);
 
         logger.debug("Created changeset for with ID: {} for map with ID: {}", changesetId, mapId);
 
@@ -134,13 +142,7 @@ public class Changeset extends Changesets {
     public static long createChangeset(long mapId, long userId, java.util.Map<String, String> tags, Connection dbConn) {
         logger.debug("Creating changeset for map ID: {}...", mapId);
 
-        long changesetId = insertNew(mapId, userId, dbConn);
-
-        if ((changesetId == Long.MAX_VALUE) || (changesetId < 1)) {
-            throw new IllegalArgumentException("Invalid changeset ID: " + changesetId);
-        }
-
-        (new Changeset(mapId, changesetId, dbConn)).insertTags(mapId, tags);
+        long changesetId = insertNew(mapId, userId, dbConn, tags);
 
         logger.debug("Created changeset for with ID: {} for map with ID: {}", changesetId, mapId);
 
@@ -176,8 +178,6 @@ public class Changeset extends Changesets {
      * @return true if the changeset is open; false otherwise
      */
     private boolean isOpen() {
-        //SQLQueryFactory queryFactory = null;
-
         Changesets changesetRecord = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
                 .select(changesets)
                 .from(changesets)
@@ -386,7 +386,7 @@ public class Changeset extends Changesets {
      *            JDBC Connection
      * @return ID of the inserted changeset
      */
-    public static long insertNew(long mapId, long userId, Connection dbConn) {
+    public static long insertNew(long mapId, long userId, Connection dbConn, java.util.Map<String, String> tags) {
         logger.debug("Inserting new changeset...");
 
         DateTime now = new DateTime();
@@ -403,13 +403,19 @@ public class Changeset extends Changesets {
             closedAt = new Timestamp(now.plusMinutes(changesetIdleTimeout).getMillis());
         }
 
-        return new SQLInsertClause(dbConn, DbUtils.getConfiguration(mapId), changesets)
+        long changesetId = new SQLInsertClause(dbConn, DbUtils.getConfiguration(mapId), changesets)
                 .columns(changesets.closedAt, changesets.createdAt, changesets.maxLat, changesets.maxLon,
-                        changesets.minLat, changesets.minLon, changesets.userId)
+                        changesets.minLat, changesets.minLon, changesets.userId, changesets.tags)
                 .values(closedAt, new Timestamp(now.getMillis()), GeoUtils.DEFAULT_COORD_VALUE,
                         GeoUtils.DEFAULT_COORD_VALUE, GeoUtils.DEFAULT_COORD_VALUE, GeoUtils.DEFAULT_COORD_VALUE,
-                        userId)
+                        userId, tags)
                 .executeWithKey(changesets.id);
+
+        if ((changesetId == Long.MAX_VALUE) || (changesetId < 1)) {
+            throw new RuntimeException("Invalid changeset ID: " + changesetId);
+        }
+
+        return changesetId;
     }
 
     /**
@@ -456,6 +462,7 @@ public class Changeset extends Changesets {
      */
     public boolean requestChangesExceedMaxElementThreshold(Document changesetDiffDoc) {
         int newChangeCount = 0;
+
         try {
             newChangeCount = XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/*/node").getLength()
                     + XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/*/way").getLength()
@@ -472,85 +479,5 @@ public class Changeset extends Changesets {
                 .fetchOne();
 
         return (newChangeCount + changeset.getNumChanges()) > Integer.parseInt(MAXIMUM_CHANGESET_ELEMENTS);
-    }
-
-    private void writeTags(long mapId, String tagsStr) {
-        String sql = "UPDATE changesets_" + mapId + " SET tags=? WHERE id=?";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setObject(1, tagsStr, Types.OTHER);
-            ps.setLong(2, getId());
-
-            long execResult = ps.executeUpdate();
-
-            if (execResult < 1) {
-                throw new IllegalStateException("No tags were changed for changeset_" + mapId);
-            }
-        }
-        catch (SQLException e) {
-            throw new RuntimeException("Error while writing tags to the database!", e);
-        }
-    }
-
-    /**
-     * Inserts all tags for an element into the services database
-     * 
-     * @param mapId
-     *            ID of the map owning the element
-     * @param tags
-     *            map containing tags
-     */
-    private void insertTags(long mapId, java.util.Map<String, String> tags) {
-        try {
-            logger.debug("Inserting tags for changeset with ID: {}", getId());
-
-            String strKv = "";
-            for (Map.Entry<String, String> tagEntry : tags.entrySet()) {
-                if (!strKv.isEmpty()) {
-                    strKv += ",";
-                }
-                strKv += tagEntry.getKey() + "=>" + tagEntry.getValue();
-            }
-            String tagsStr = "";
-            tagsStr += strKv;
-
-            writeTags(mapId, tagsStr);
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Error inserting tags for changeset with ID: "
-                    + getId() + " - " + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Inserts all tags for an element into the services database
-     *
-     * @param mapId
-     *            ID of the map owning the element
-     * @param xml
-     *            list of XML tags
-     */
-    private void insertTags(long mapId, NodeList xml) {
-        try {
-            logger.debug("Inserting tags for changeset with ID: {}", getId());
-
-            String strKv = "";
-            for (int i = 0; i < xml.getLength(); i++) {
-                NamedNodeMap tagAttributes = xml.item(i).getAttributes();
-                String key = "\"" + tagAttributes.getNamedItem("k").getNodeValue() + "\"";
-                String val = "\"" + tagAttributes.getNamedItem("v").getNodeValue() + "\"";
-                if (!strKv.isEmpty()) {
-                    strKv += ",";
-                }
-                strKv += key + "=>" + val;
-            }
-            String tagsStr = "";
-            tagsStr += strKv;
-
-            writeTags(mapId, tagsStr);
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Error inserting tags for changeset with ID: " + getId() + " - " + e.getMessage(), e);
-        }
     }
 }

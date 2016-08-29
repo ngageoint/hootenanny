@@ -121,7 +121,6 @@ public class MapResource {
      */
     @GET
     @Path("/layers")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public MapLayers getLayers() {
         MapLayers mapLayers = null;
@@ -166,7 +165,6 @@ public class MapResource {
      */
     @GET
     @Path("/folders")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public FolderRecords getFolders() {
         FolderRecords folderRecords = null;
@@ -204,7 +202,6 @@ public class MapResource {
      */
     @GET
     @Path("/links")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public LinkRecords getLinks() {
         Configuration configuration = DbUtils.getConfiguration();
@@ -395,7 +392,6 @@ public class MapResource {
      * @return response containing the data of the requested elements
      */
     @GET
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response get(@QueryParam("mapId") String mapId,
                         @QueryParam("bbox") String BBox,
@@ -576,7 +572,6 @@ public class MapResource {
 
     @GET
     @Path("/mbr")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMBR(@QueryParam("mapId") String mapId) {
         JSONObject ret = new JSONObject();
@@ -1035,7 +1030,6 @@ public class MapResource {
 
     @GET
     @Path("/tags")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTags(@QueryParam("mapid") String mapId) {
         JSONObject ret = new JSONObject();
