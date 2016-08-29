@@ -19,8 +19,8 @@ Feature: OSM/TDS Switcher
         Then I wait 10 "seconds" to see "label" element with text "Geographic Name Information : Full Name"
         Then I should see element "#preset-input-TDSv40\/ZI005_FNA" with value "23RD ST NW"
         Then I select the "MGCP" option labelled "Filter By Type"
-        Then I wait 10 "seconds" to see "label" element with text "Horizontal Accuracy Category"
-        Then I should see element "#preset-input-MGCP\/ACC" with value "Accurate"
+        Then I wait 10 "seconds" to see "label" element with text "Thoroughfare Class"
+        Then I should see element "#preset-input-MGCP\/HCT" with value "Unknown"
 
     Scenario: I can add a new feature and switch between attribute schemas
         # Add a point with OSM schema
@@ -37,7 +37,7 @@ Feature: OSM/TDS Switcher
         When I select a node map feature with class "tag-leisure-park"
         And I should see "Edit feature: "
         And I select the "TDSv61" option labelled "Filter By Type"
-        Then I wait 5 "seconds" to see "Feature out of spec"
+        Then I wait 10 "seconds" to see "Feature out of spec"
 
         # Add a point with TDSv61 schema
         When I click the "add-point" button
@@ -61,7 +61,8 @@ Feature: OSM/TDS Switcher
         When I select a node map feature with class "tag-building"
         And I should see "Edit feature: "
         And I select the "MGCP" option labelled "Filter By Type"
-        Then I wait 5 "seconds" to see "label" element with text "Condition of Facility"
+        Then I wait 5 seconds
+        Then I should see element "[id='preset-input-MGCP/FCODE']" with value "AL015:General Building Point Feature"
 
         # Add a point with MGCP schema
         When I click the "add-point" button
