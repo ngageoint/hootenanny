@@ -27,11 +27,11 @@
 package hoot.services.controllers.job;
 
 import static hoot.services.HootProperties.MAX_QUERY_NODES;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
 
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +54,9 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLUpdateClause;
 
 import hoot.services.controllers.osm.MapResource;
 import hoot.services.geo.BoundingBox;
@@ -447,20 +449,14 @@ public class ReviewResource {
          * the changeset id for each review relation - increment the version for
          * each review relation
          */
-        String sql = "";
-        sql += "update current_relations_" + mapId;
-        sql += " set tags = tags || hstore('hoot:review:needs', 'no'),";
-        sql += " changeset_id = " + changesetId + ",";
-        sql += " version = version + 1";
-        sql += " where tags->'type' = 'review'";
+        long numRecordsUpdated = new SQLUpdateClause(connection, DbUtils.getConfiguration(mapId), currentRelations)
+                .where(Expressions.booleanTemplate("tags->'type' = 'review'"))
+                .set(Arrays.asList(currentRelations.changesetId, currentRelations.version, currentRelations.tags),
+                     Arrays.asList(changesetId, Expressions.stringTemplate("version + 1"),
+                                   Expressions.stringTemplate("tags || hstore('hoot:review:needs', 'no')")))
+                .execute();
 
-        try (Statement stmt = connection.createStatement()) {
-            int numRecordsUpdated = stmt.executeUpdate(sql);
-            logger.debug("{} records updated.", numRecordsUpdated);
-        }
-        catch (SQLException e) {
-            throw new RuntimeException("Error retrieving all resolved reviews!", e);
-        }
+        logger.debug("{} records updated.", numRecordsUpdated);
 
         return changesetId;
     }

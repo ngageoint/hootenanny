@@ -26,76 +26,48 @@
  */
 package hoot.services.readers.review;
 
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
+
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.sql.SQLQuery;
+
 import hoot.services.models.review.ReviewQueryMapper;
 import hoot.services.models.review.ReviewableStatistics;
+import hoot.services.utils.DbUtils;
 
 
-/**
- * 
- */
 class ReviewableStatisticsQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(ReviewableStatisticsQuery.class);
 
-    ReviewableStatisticsQuery(Connection connection, long mapid) {
-        super(connection, mapid);
+    ReviewableStatisticsQuery(Connection connection, long mapId) {
+        super(connection, mapId);
     }
 
     private long getTotalReviewablesCount() {
-        long recordCount = 0;
-
-        try (Statement stmt = super.getConnection().createStatement()) {
-            try (ResultSet rs = stmt.executeQuery(getTotalReviewableCountQueryString())) {
-                while (rs.next()) {
-                    recordCount = rs.getLong("totalcnt");
-                }
-            }
-        }
-        catch (SQLException e) {
-            throw new RuntimeException("Error getting count of reviewables!", e);
-        }
-
-        return recordCount;
+        return new SQLQuery<>(super.getConnection(), DbUtils.getConfiguration(super.getMapId()))
+                .select()
+                .from(currentRelations)
+                .where(Expressions.booleanTemplate("tags->'type' = 'review'"))
+                .fetchCount();
     }
 
     private long getRemainingReviewablesCount() {
-        long recordCount = 0;
-
-        try (Statement stmt = super.getConnection().createStatement()) {
-            try (ResultSet rs = stmt.executeQuery(getUnreviewedCountQueryString())) {
-                while (rs.next()) {
-                    recordCount = rs.getLong("remaining");
-                }
-            }
-        }
-        catch (SQLException e) {
-            throw new RuntimeException("Error getting remaining count of reviewables!", e);
-        }
-
-        return recordCount;
+        return new SQLQuery<>(super.getConnection(), DbUtils.getConfiguration(super.getMapId()))
+                .select()
+                .from(currentRelations)
+                .where(Expressions.booleanTemplate("tags->'hoot:review:needs' = 'yes'"))
+                .fetchCount();
     }
 
     @Override
     public ReviewQueryMapper execQuery() {
-        long nTotal = this.getTotalReviewablesCount();
-        long nUnReviewed = this.getRemainingReviewablesCount();
-        ReviewableStatistics ret = new ReviewableStatistics(nTotal, nUnReviewed);
-        return ret;
-    }
-
-    private String getTotalReviewableCountQueryString() {
-        return "select count(*) as totalcnt from current_relations_" + getMapId() + " where tags->'type' = 'review'";
-    }
-
-    private String getUnreviewedCountQueryString() {
-        return "select count(*) as remaining from current_relations_" + getMapId()
-                + " where tags->'hoot:review:needs' = 'yes'";
+        long totalCount = this.getTotalReviewablesCount();
+        long remainingCount = this.getRemainingReviewablesCount();
+        return new ReviewableStatistics(totalCount, remainingCount);
     }
 }

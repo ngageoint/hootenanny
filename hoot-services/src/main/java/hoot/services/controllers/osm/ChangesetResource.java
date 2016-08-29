@@ -308,7 +308,6 @@ public class ChangesetResource {
      */
     @PUT
     @Path("/{changesetId}/close")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public String close(@PathParam("changesetId") Long changesetId,
                         @QueryParam("mapId") Long mapId) {

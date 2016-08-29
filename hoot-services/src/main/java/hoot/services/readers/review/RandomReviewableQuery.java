@@ -28,17 +28,21 @@ package hoot.services.readers.review;
 
 import static hoot.services.HootProperties.RANDOM_QUERY_SEED;
 import static hoot.services.HootProperties.SEED_RANDOM_QUERIES;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.sql.SQLQuery;
+
 import hoot.services.models.review.ReviewQueryMapper;
 import hoot.services.models.review.ReviewableItem;
+import hoot.services.utils.DbUtils;
 
 
 class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
@@ -53,16 +57,11 @@ class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQu
         // using random() in a SQL query so far, no harm is done for the time being.
         if (Boolean.parseBoolean(SEED_RANDOM_QUERIES)) {
             double seed = Double.parseDouble(RANDOM_QUERY_SEED);
-
             if ((seed >= -1.0) && (seed <= 1.0)) {
-                try (Statement stmt = super.getConnection().createStatement()) {
-                    // After executing this, all subsequent calls to random() will be seeded.
-                    try (ResultSet rs = stmt.executeQuery("select setseed(" + seed + ");")) {
-                    }
-                }
-                catch (SQLException e) {
-                    throw new RuntimeException("Error setting seeed!", e);
-                }
+                new SQLQuery<>(super.getConnection(), DbUtils.getConfiguration())
+                        .select(Expressions.numberTemplate(Double.class, "setseed(" + seed + ");"))
+                        .from()
+                        .fetch();
             }
         }
     }
@@ -71,39 +70,21 @@ class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQu
     public ReviewQueryMapper execQuery() {
         ReviewableItem reviewableItem = new ReviewableItem(-1, getMapId(), -1);
 
-        try (Connection connection = getConnection()){
-            try (Statement stmt = connection.createStatement()) {
-                try (ResultSet rs = stmt.executeQuery(getQueryString())) {
-                    long nResCnt = 0;
-                    long relId = -1;
-                    String seqId = "-1";
+        Tuple result = new SQLQuery<Tuple>(this.getConnection(), DbUtils.getConfiguration(getMapId()))
+                .select(currentRelations.id, Expressions.stringTemplate("tags->'hoot:review:sort_order'"))
+                .from(currentRelations)
+                .where(Expressions.booleanTemplate("tags->'hoot:review:needs' = 'yes'"))
+                .orderBy(NumberExpression.random().asc())
+                .limit(1)
+                .fetchOne();
 
-                    while (rs.next()) {
-                        relId = rs.getLong("relid");
-                        seqId = rs.getString("seq");
-                        nResCnt++;
-                    }
-
-                    reviewableItem.setRelationId(relId);
-                    long nSeq = -1;
-                    if (seqId != null) {
-                        nSeq = Long.parseLong(seqId);
-                    }
-
-                    reviewableItem.setSortOrder(nSeq);
-                    reviewableItem.setResultCount(nResCnt);
-                }
-            }
-        }
-        catch (SQLException e) {
-            throw new RuntimeException("Error executing query!", e);
+        if (result != null) {
+            reviewableItem.setRelationId(result.get(0, Long.TYPE));
+            String sortOrder = result.get(1, String.class);
+            reviewableItem.setSortOrder((sortOrder != null) ? Long.parseLong(sortOrder) : -1L);
+            reviewableItem.setResultCount(1L);
         }
 
         return reviewableItem;
-    }
-
-    private String getQueryString() {
-        return "select id as relid, tags->'hoot:review:sort_order' as seq from current_relations_" + getMapId()
-                + " where tags->'hoot:review:needs' = 'yes' order by random() limit 1";
     }
 }

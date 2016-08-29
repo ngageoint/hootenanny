@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.osm;
 
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -162,7 +163,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
             // link some changesets to the user
             Set<Long> changesetIds = new LinkedHashSet<>();
 
-            long changesetId = Changeset.insertNew(mapId, userId, conn);
+            long changesetId = Changeset.insertNew(mapId, userId, conn, new HashMap<String, String>());
             changesetIds.add(changesetId);
             (new Changeset(mapId, changesetId, conn)).setBounds(originalBounds);
 
@@ -177,7 +178,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
             Assert.assertNotNull(changeset);
             Assert.assertEquals(userId, (long) changeset.getUserId());
 
-            changesetId = Changeset.insertNew(mapId, userId, conn);
+            changesetId = Changeset.insertNew(mapId, userId, conn, new HashMap<String, String>());
             changesetIds.add(changesetId);
 
             (new Changeset(mapId, changesetId, conn)).setBounds(originalBounds);

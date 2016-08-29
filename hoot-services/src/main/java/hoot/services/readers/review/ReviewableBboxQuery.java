@@ -202,10 +202,8 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
                         .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node)));
 
         List<Tuple> result = new SQLQuery<>(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
-                .select(currentNodes.latitude.min(),
-                        currentNodes.latitude.max(),
-                        currentNodes.longitude.min(),
-                        currentNodes.longitude.min())
+                .select(currentNodes.latitude.min(), currentNodes.latitude.max(),
+                        currentNodes.longitude.min(), currentNodes.longitude.min())
                 .from(currentNodes)
                 .where(currentNodes.id.in(sub))
                 .fetch();
@@ -226,13 +224,11 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
      * @return - List of relation member ids
      */
     private List<Long> getRelationMembers(long relationId) {
-        List<Long> relationMemberIds = new SQLQuery<>(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
+        return new SQLQuery<>(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
                 .select(currentRelationMembers.memberId)
                 .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(relationId)
                         .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.relation)))
                 .fetch();
-
-        return relationMemberIds;
     }
 }
