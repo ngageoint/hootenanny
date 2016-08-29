@@ -30,7 +30,6 @@ import static hoot.services.HootProperties.*;
 
 import java.io.IOException;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -66,7 +65,6 @@ public class CapabilitiesResource {
      * @return Capability OSM XML
      */
     @GET
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response get() {
         Document responseDoc;
