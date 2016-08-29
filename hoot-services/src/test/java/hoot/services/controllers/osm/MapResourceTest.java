@@ -37,10 +37,14 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
 
 import org.apache.xpath.XPathAPI;
+import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -49,17 +53,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import com.mysema.query.sql.SQLExpressions;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLDeleteClause;
-import com.mysema.query.sql.dml.SQLInsertClause;
-import com.mysema.query.sql.dml.SQLUpdateClause;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.ClientResponse.Status;
-import com.sun.jersey.api.client.UniformInterfaceException;
+import com.querydsl.sql.SQLExpressions;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLDeleteClause;
+import com.querydsl.sql.dml.SQLInsertClause;
+import com.querydsl.sql.dml.SQLUpdateClause;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.DbUtils;
+import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.db.CurrentRelations;
 import hoot.services.models.db.CurrentWays;
@@ -68,13 +69,13 @@ import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.db.QCurrentRelations;
 import hoot.services.models.db.QCurrentWays;
 import hoot.services.models.db.QMaps;
-import hoot.services.geo.BoundingBox;
-import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.MapLayer;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.RelationMember;
+import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.MapUtils;
 import hoot.services.utils.XmlUtils;
@@ -83,10 +84,13 @@ import hoot.services.utils.XmlUtils;
 public class MapResourceTest extends OsmResourceTestAbstract {
     private static Logger log = LoggerFactory.getLogger(MapResourceTest.class);
 
-    protected static QMaps maps = QMaps.maps;
-
     public MapResourceTest() {
-        super("hoot.services.controllers.osm");
+        super();
+    }
+
+    @Override
+    protected Application configure() {
+        return new ResourceConfig(MapResource.class);
     }
 
     private void getMap(String idOrName, String multiLayerUniqueElementIdsStr,
@@ -149,20 +153,23 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             Document responseData = null;
             try {
                 if (useMultiLayerUniqueElementIdsParameter) {
-                    responseData = resource().path("api/0.6/map").queryParam("mapId", idOrName)
+                    responseData = target("api/0.6/map")
+                            .queryParam("mapId", idOrName)
                             .queryParam("bbox", queryBounds.toServicesString())
                             .queryParam("multiLayerUniqueElementIds", multiLayerUniqueElementIdsStr)
-                            .accept(MediaType.TEXT_XML).get(Document.class);
+                            .request(MediaType.TEXT_XML)
+                            .get(Document.class);
                 }
                 else {
-                    responseData = resource().path("api/0.6/map").queryParam("mapId", idOrName)
-                            .queryParam("bbox", queryBounds.toServicesString()).accept(MediaType.TEXT_XML)
+                    responseData = target("api/0.6/map")
+                            .queryParam("mapId", idOrName)
+                            .queryParam("bbox", queryBounds.toServicesString())
+                            .request(MediaType.TEXT_XML)
                             .get(Document.class);
                 }
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -430,16 +437,14 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             // Query an empty map. No elements should be returned.
             Document responseData = null;
             try {
-                responseData = resource()
-                        .path("api/0.6/map")
+                responseData = target("api/0.6/map")
                         .queryParam("mapId", String.valueOf(mapId))
                         .queryParam("bbox", queryBounds.toServicesString())
-                        .accept(MediaType.TEXT_XML)
+                        .request(MediaType.TEXT_XML)
                         .get(Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -498,16 +503,14 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             // one of the relations should be returned.
             Document responseData = null;
             try {
-                responseData = resource()
-                        .path("api/0.6/map")
+                responseData = target("api/0.6/map")
                         .queryParam("mapId", String.valueOf(mapId))
                         .queryParam("bbox", queryBounds.toServicesString())
-                        .accept(MediaType.TEXT_XML)
+                        .request(MediaType.TEXT_XML)
                         .get(Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -651,16 +654,15 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             // one of the relations should be returned.
             Document responseData = null;
             try {
-                responseData = resource()
+                responseData = target()
                         .path("api/0.6/map")
                         .queryParam("mapId", String.valueOf(mapId))
                         .queryParam("bbox", queryBounds.toServicesString())
-                        .accept(MediaType.TEXT_XML)
+                        .request(MediaType.TEXT_XML)
                         .get(Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -783,16 +785,14 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             // one of the relations should be returned.
             Document responseData = null;
             try {
-                responseData = resource()
-                        .path("api/0.6/map")
+                responseData = target("api/0.6/map")
                         .queryParam("mapId", String.valueOf(mapId))
                         .queryParam("bbox", queryBounds.toServicesString())
-                        .accept(MediaType.TEXT_XML)
+                        .request(MediaType.TEXT_XML)
                         .get(Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -851,10 +851,6 @@ public class MapResourceTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testGetMapWithInvisibleElements() throws Exception {
-        QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-        QCurrentWays currentWays = QCurrentWays.currentWays;
-        QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-
         try {
             BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
             BoundingBox queryBounds = OsmTestUtils.createTestQueryBounds();
@@ -867,10 +863,12 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
             // make one of the nodes invisible, so it shouldn't be returned in a map query
-            CurrentNodes invisibleNode = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
+            CurrentNodes invisibleNode = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentNodes)
                     .from(currentNodes)
                     .where(currentNodes.id.eq(nodeIdsArr[3]))
-                    .singleResult(currentNodes);
+                    .fetchOne();
 
             Assert.assertNotNull(invisibleNode);
 
@@ -883,16 +881,19 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             Assert.assertEquals(1, success);
 
-            Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentNodes.visible)
                     .from(currentNodes)
                     .where(currentNodes.id.eq(nodeIdsArr[3]))
-                    .singleResult(currentNodes.visible));
+                    .fetchOne());
 
             // make one of the ways invisible, so it shouldn't be returned in a map query
-            CurrentWays invisibleWay = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            QCurrentWays currentWays = QCurrentWays.currentWays;
+            CurrentWays invisibleWay = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentWays)
                     .from(currentWays)
                     .where(currentWays.id.eq(wayIdsArr[0]))
-                    .singleResult(currentWays);
+                    .fetchOne();
 
             Assert.assertNotNull(invisibleWay);
 
@@ -905,16 +906,19 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             Assert.assertEquals(1, success);
 
-            Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentWays.visible)
                     .from(currentWays)
                     .where(currentWays.id.eq(wayIdsArr[0]))
-                    .singleResult(currentWays.visible));
+                    .fetchOne());
 
             // make one of the relations invisible, so it shouldn't be returned in a map query
-            CurrentRelations invisibleRelation = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
+            CurrentRelations invisibleRelation = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentRelations)
                     .from(currentRelations)
                     .where(currentRelations.id.eq(relationIdsArr[0]))
-                    .singleResult(currentRelations);
+                    .fetchOne();
 
             Assert.assertNotNull(invisibleRelation);
 
@@ -927,25 +931,24 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             Assert.assertEquals(1, success);
 
-            Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentRelations.visible)
                     .from(currentRelations)
                     .where(currentRelations.id.eq(relationIdsArr[0]))
-                    .singleResult(currentRelations.visible));
+                    .fetchOne());
 
             // Query the elements back out geospatially and ensure the invisible
             // node and way do not come back in the results.
             Document responseData = null;
             try {
-                responseData = resource()
-                        .path("api/0.6/map")
+                responseData = target("api/0.6/map")
                         .queryParam("mapId", String.valueOf(mapId))
                         .queryParam("bbox", queryBounds.toServicesString())
-                        .accept(MediaType.TEXT_XML)
+                        .request(MediaType.TEXT_XML)
                         .get(Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -1015,10 +1018,9 @@ public class MapResourceTest extends OsmResourceTestAbstract {
     }
 
     @Ignore
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetMapNodeLimitExceeded() throws Exception {
-        QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
         String originalMaxQueryNodes = MAX_QUERY_NODES;
         try {
             BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1033,24 +1035,24 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             long maxQueryNumberOfNodes = 3;
 
-            Assert.assertTrue(maxQueryNumberOfNodes < new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
+            Assert.assertTrue(maxQueryNumberOfNodes < new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
                     .from(currentNodes)
-                    .count());
+                    .fetchCount());
 
             try {
                 // try to run a query that returns more than the maximum allowed
                 // results size
-                resource()
-                        .path("api/0.6/map")
+                target("api/0.6/map")
                         .queryParam("mapId", String.valueOf(mapId))
                         .queryParam("bbox", queryBounds.toServicesString())
-                        .accept(MediaType.TEXT_XML)
+                        .request(MediaType.TEXT_XML)
                         .get(Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-                Assert.assertTrue(r.getEntity(String.class)
+            catch (WebApplicationException e) {
+                Response r = e.getResponse();
+                Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+                Assert.assertTrue(r.readEntity(String.class)
                         .contains("The maximum number of nodes that may be returned in a map query is "
                                 + maxQueryNumberOfNodes + ".  This query returned " + (maxQueryNumberOfNodes + 1)
                                 + " nodes.  Please " + "execute a query which returns fewer nodes."));
@@ -1069,7 +1071,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetMapInvalidMap() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1081,17 +1083,16 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         try {
             // try to query nodes from a map that doesn't exist
-            resource()
-                    .path("api/0.6/map")
+            target("api/0.6/map")
                     .queryParam("mapId", "-2") //-1 is now a valid id for an osm api db layer
                     .queryParam("bbox", queryBounds.toServicesString())
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.getEntity(String.class).contains("No map exists with ID"));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
 
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
@@ -1099,7 +1100,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetMapMissingMapParam() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1111,22 +1112,21 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         try {
             // try to query nodes from a map that doesn't exist
-            resource()
-                    .path("api/0.6/map")
+            target("api/0.6/map")
                     .queryParam("bbox", queryBounds.toServicesString())
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.getEntity(String.class).contains("No map exists with ID: null"));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists with ID: null"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetMapEmptyMapId() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1138,26 +1138,24 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         try {
             // try to query nodes from a map that doesn't exist
-            resource()
-                    .path("api/0.6/map")
+            target("api/0.6/map")
                     .queryParam("mapId", "")
                     .queryParam("bbox", queryBounds.toServicesString())
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.getEntity(String.class).contains("No map exists with ID:"));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists with ID:"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetMapByNonUniqueName() throws Exception {
-        QMaps maps = QMaps.maps;
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
         BoundingBox queryBounds = OsmTestUtils.createTestQueryBounds();
         long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
@@ -1167,8 +1165,10 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         // insert another map with the same name as the test map
         Maps map = new Maps();
-        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId));
-        long nextMapId = query.uniqueResult(SQLExpressions.nextval(Long.class, "maps_id_seq"));
+        long nextMapId = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(SQLExpressions.nextval(Long.class, "maps_id_seq"))
+                .from()
+                .fetchOne();
 
         map.setId(nextMapId);
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
@@ -1176,21 +1176,21 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         String duplicatedMapName = "map-with-id-" + mapId;
         map.setDisplayName(duplicatedMapName);
         map.setUserId(userId);
+        QMaps maps = QMaps.maps;
         new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), maps).populate(map).execute();
 
         try {
             // try to query nodes from a map name that is linked to multiple map IDs
-            resource().path("api/0.6/map")
+            target("api/0.6/map")
                     .queryParam("mapId", duplicatedMapName)
                     .queryParam("bbox", queryBounds.toServicesString())
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.getEntity(String.class).contains("Multiple maps exist with name: " + duplicatedMapName
-                    + ".  Please specify a " + "single, valid map."));
+            Assert.assertTrue(r.readEntity(String.class).contains("Multiple maps exist"));
 
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
@@ -1200,7 +1200,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetMapMissingBounds() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1211,17 +1211,16 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         try {
             // try to query nodes without specifying a bounds
-            resource()
-                    .path("api/0.6/map")
+            target("api/0.6/map")
                     .queryParam("mapId", String.valueOf(mapId))
                     .queryParam("bbox", "")
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Error parsing bounding box from bbox param"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Error parsing bounding box from bbox param"));
 
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
@@ -1230,7 +1229,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
     }
 
     @Ignore
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetMapBoundsOutsideWorld() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1241,20 +1240,19 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         try {
             // try to query nodes with an invalid bounds
-            resource()
-                    .path("api/0.6/map")
+            target("api/0.6/map")
                     .queryParam("mapId", String.valueOf(mapId))
                     .queryParam("bbox", "-181,-90,180,90")
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
 
             // "bbox" of "-181,-90,180,90" should be corrected to "-180,-90,180,90" on the server side
             // Therefore, the call should not fail because of invalid coordiates
-            Assert.assertFalse(r.getEntity(String.class).contains("Error parsing bounding box from bbox param"));
+            Assert.assertFalse(r.readEntity(String.class).contains("Error parsing bounding box from bbox param"));
 
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
@@ -1263,7 +1261,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
     }
 
     @Ignore
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetMapBoundsTooLarge() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1280,17 +1278,16 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         try {
             // try to query nodes with a bounds that's too large
-            resource()
-                    .path("api/0.6/map")
+            target("api/0.6/map")
                     .queryParam("mapId", String.valueOf(mapId))
                     .queryParam("bbox", queryBounds.toServicesString())
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("The maximum bbox size is"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("The maximum bbox size is"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -1327,8 +1324,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         mapIds.add(mapId3);
 
         // query out the layers
-        MapLayers mapLayers = resource().path("api/0.6/map/layers").accept(MediaType.APPLICATION_JSON)
-                .get(MapLayers.class);
+        MapLayers mapLayers = target("api/0.6/map/layers").request(MediaType.APPLICATION_JSON).get(MapLayers.class);
 
         Assert.assertNotNull(mapLayers);
         Assert.assertNotNull(mapLayers.getLayers());
@@ -1370,11 +1366,12 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), maps).where(maps.id.eq(mapId)).execute();
 
-        Assert.assertNull(/* mapDao.findById(mapId) */
-                new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Assert.assertNull(
+                new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(maps)
                         .from(maps)
                         .where(maps.id.eq(mapId))
-                        .singleResult(maps));
+                        .fetchOne());
 
         // query out the layers
         /*

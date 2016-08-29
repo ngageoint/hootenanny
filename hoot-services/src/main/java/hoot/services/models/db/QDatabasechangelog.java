@@ -1,14 +1,15 @@
 package hoot.services.models.db;
 
-import static com.mysema.query.types.PathMetadataFactory.*;
+import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.mysema.query.types.path.*;
+import com.querydsl.core.types.dsl.*;
 
-import com.mysema.query.types.PathMetadata;
+import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
-import com.mysema.query.types.Path;
+import com.querydsl.core.types.Path;
 
-import com.mysema.query.sql.ColumnMetadata;
+import com.querydsl.sql.ColumnMetadata;
+import java.sql.Types;
 
 
 
@@ -16,8 +17,8 @@ import com.mysema.query.sql.ColumnMetadata;
 /**
  * QDatabasechangelog is a Querydsl query type for Databasechangelog
  */
-@Generated("com.mysema.query.sql.codegen.MetaDataSerializer")
-public class QDatabasechangelog extends com.mysema.query.sql.RelationalPathBase<Databasechangelog> {
+@Generated("com.querydsl.sql.codegen.MetaDataSerializer")
+public class QDatabasechangelog extends com.querydsl.sql.RelationalPathBase<Databasechangelog> {
 
     private static final long serialVersionUID = -1877688353;
 
@@ -60,23 +61,23 @@ public class QDatabasechangelog extends com.mysema.query.sql.RelationalPathBase<
         addMetadata();
     }
 
-    public QDatabasechangelog(PathMetadata<?> metadata) {
+    public QDatabasechangelog(PathMetadata metadata) {
         super(Databasechangelog.class, metadata, "public", "databasechangelog");
         addMetadata();
     }
 
     public void addMetadata() {
-        addMetadata(author, ColumnMetadata.named("author").ofType(12).withSize(255).notNull());
-        addMetadata(comments, ColumnMetadata.named("comments").ofType(12).withSize(255));
-        addMetadata(dateexecuted, ColumnMetadata.named("dateexecuted").ofType(93).withSize(35).withDigits(6).notNull());
-        addMetadata(description, ColumnMetadata.named("description").ofType(12).withSize(255));
-        addMetadata(exectype, ColumnMetadata.named("exectype").ofType(12).withSize(10).notNull());
-        addMetadata(filename, ColumnMetadata.named("filename").ofType(12).withSize(255).notNull());
-        addMetadata(id, ColumnMetadata.named("id").ofType(12).withSize(255).notNull());
-        addMetadata(liquibase, ColumnMetadata.named("liquibase").ofType(12).withSize(20));
-        addMetadata(md5sum, ColumnMetadata.named("md5sum").ofType(12).withSize(35));
-        addMetadata(orderexecuted, ColumnMetadata.named("orderexecuted").ofType(4).withSize(10).notNull());
-        addMetadata(tag, ColumnMetadata.named("tag").ofType(12).withSize(255));
+        addMetadata(author, ColumnMetadata.named("author").withIndex(2).ofType(Types.VARCHAR).withSize(255).notNull());
+        addMetadata(comments, ColumnMetadata.named("comments").withIndex(9).ofType(Types.VARCHAR).withSize(255));
+        addMetadata(dateexecuted, ColumnMetadata.named("dateexecuted").withIndex(4).ofType(Types.TIMESTAMP).withSize(35).withDigits(6).notNull());
+        addMetadata(description, ColumnMetadata.named("description").withIndex(8).ofType(Types.VARCHAR).withSize(255));
+        addMetadata(exectype, ColumnMetadata.named("exectype").withIndex(6).ofType(Types.VARCHAR).withSize(10).notNull());
+        addMetadata(filename, ColumnMetadata.named("filename").withIndex(3).ofType(Types.VARCHAR).withSize(255).notNull());
+        addMetadata(id, ColumnMetadata.named("id").withIndex(1).ofType(Types.VARCHAR).withSize(255).notNull());
+        addMetadata(liquibase, ColumnMetadata.named("liquibase").withIndex(11).ofType(Types.VARCHAR).withSize(20));
+        addMetadata(md5sum, ColumnMetadata.named("md5sum").withIndex(7).ofType(Types.VARCHAR).withSize(35));
+        addMetadata(orderexecuted, ColumnMetadata.named("orderexecuted").withIndex(5).ofType(Types.INTEGER).withSize(10).notNull());
+        addMetadata(tag, ColumnMetadata.named("tag").withIndex(10).ofType(Types.VARCHAR).withSize(255));
     }
 
 }

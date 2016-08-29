@@ -13,7 +13,7 @@ Feature: Clip Dataset
         When I press "Add Reference Dataset"
         And I click the "DcGisRoadsCucumber" Dataset
         And I press "Add Layer"
-        Then I wait 30 "seconds" to see "DcGisRoadsCucumber"
+        Then I wait 15 "seconds" to see "span.strong" element with text "DcGisRoadsCucumber"
         Then I change the reference layer color to blue
     Scenario: I can change coordinates for clip
         When I press "Tools"
@@ -47,6 +47,7 @@ Feature: Clip Dataset
         And I click the "CucumberClip_BB" Dataset
         Then I click first "Add Layer"
         Then I wait 30 "seconds" to see "CucumberClip_BB"
+        Then I wait 5 seconds
         Then I click the "trash.map-button" icon
         And I accept the alert
 

@@ -29,6 +29,7 @@ package hoot.services.review;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -45,7 +46,6 @@ import hoot.services.controllers.osm.ChangesetDbWriter;
  * Various utilities for review process testing
  */
 public class ReviewTestUtils {
-    @SuppressWarnings("unused")
     private static final Logger log = LoggerFactory.getLogger(ReviewTestUtils.class);
 
     public static Connection conn;
@@ -59,9 +59,9 @@ public class ReviewTestUtils {
      * @throws Exception
      * @throws IOException
      */
-    public long populateReviewDataForAllDataTypes(final long mapId, final long userId) throws IOException, Exception {
+    public long populateReviewDataForAllDataTypes(long mapId, long userId) throws IOException, Exception {
         // write the reviewable data to the OSM tables
-        final long changesetId = Changeset.insertNew(mapId, userId, conn);
+        long changesetId = Changeset.insertNew(mapId, userId, conn, new HashMap<String, String>());
         ChangesetDbWriter elementWriter = new ChangesetDbWriter(conn);
         /* final Document response = */
         elementWriter.write(mapId, changesetId,

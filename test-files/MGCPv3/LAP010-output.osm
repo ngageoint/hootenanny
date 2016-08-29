@@ -10,7 +10,7 @@
         <nd ref="-7"/>
         <nd ref="-9"/>
         <nd ref="-9"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:39.412Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:25.065Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -27,7 +27,7 @@
         <nd ref="-4"/>
         <nd ref="-6"/>
         <nd ref="-6"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:39.412Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:25.064Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="width:minimum_traveled_way" v="4"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -44,7 +44,7 @@
         <nd ref="-1"/>
         <nd ref="-3"/>
         <nd ref="-3"/>
-        <tag k="source:ingest:datetime" v="2016-06-09T06:31:39.411Z"/>
+        <tag k="source:ingest:datetime" v="2016-08-19T03:46:25.064Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="width:minimum_traveled_way" v="2.5"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>

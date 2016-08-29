@@ -1,119 +1,158 @@
-19:27:37.728 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-output/translation/MgcpTestLines.shp MgcpTestLines
+22:03:14.985 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/translation/MgcpTest.osm ...
+22:03:15.263 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-output/translation/MgcpTestLines.shp MgcpTestLines
 Loading test-output/translation/MgcpTestLines.shp MgcpTestLines 0 / 2   
 Reprojecting 0 / 6         
-19:27:37.759 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-19:27:37.759 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+22:03:15.298 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+22:03:15.298 INFO  .../core/ops/MergeNearbyNodes.cpp(  72) MergeNearbyNodes start
 MergeNearbyNodes 6 elapsed: 0ms        
-19:27:37.759 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+22:03:15.298 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 2        Ways: 2 / 2        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 6         
-19:27:37.927 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/AAL015.shp AAL015
+22:03:15.560 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/MgcpTranslated.osm ...
+22:03:15.561 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/translation/MgcpTranslated.osm ...
+22:03:15.720 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/AAL015.shp AAL015
 Loading test-files/MGCPv3/AAL015.shp AAL015 0 / 8   
 Reprojecting 0 / 40         
-19:27:37.981 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-19:27:37.981 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 0 1    MergeNearbyNodes 32 elapsed: 0ms        
-19:27:37.981 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+22:03:15.871 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+22:03:15.871 INFO  .../core/ops/MergeNearbyNodes.cpp(  72) MergeNearbyNodes start
+MergeNearbyNodes 0 1    MergeNearbyNodes 32 elapsed: 1ms        
+22:03:15.872 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 8        Ways: 8 / 8        
 Relations: 0 / 0        
 Combining Parts: 0 / 8        Combining Parts: 8 / 8        
 Reprojecting 0 / 32         
-19:27:38.333 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: AAL015 not found.  Creating layer...
-19:27:38.415 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/AAL020.shp AAL020
+22:03:16.014 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_AAL015.osm ...
+22:03:16.016 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/MGCPv3/AAL015-output.osm ...
+22:03:16.376 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_AAL015.osm ...
+22:03:16.506 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: AAL015 not found.  Creating layer...
+22:03:16.508 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: extra_A not found.  Creating layer...
+22:03:16.680 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/AAL020.shp AAL020
 Loading test-files/MGCPv3/AAL020.shp AAL020 0 / 10   
 Reprojecting 0 / 50         
-19:27:38.469 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-19:27:38.469 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+22:03:16.830 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+22:03:16.830 INFO  .../core/ops/MergeNearbyNodes.cpp(  72) MergeNearbyNodes start
 MergeNearbyNodes 50 elapsed: 0ms        
-19:27:38.469 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+22:03:16.830 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 10        Ways: 10 / 10        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 50         
-19:27:38.823 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: AAL020 not found.  Creating layer...
-19:27:38.905 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LAN010.shp LAN010
+22:03:16.976 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_AAL020.osm ...
+22:03:16.978 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/MGCPv3/AAL020-output.osm ...
+22:03:17.330 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_AAL020.osm ...
+22:03:17.457 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: AAL020 not found.  Creating layer...
+22:03:17.460 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: extra_A not found.  Creating layer...
+22:03:17.628 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LAN010.shp LAN010
 Loading test-files/MGCPv3/LAN010.shp LAN010 0 / 6   
 Reprojecting 0 / 18         
-19:27:38.934 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-19:27:38.934 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+22:03:17.663 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+22:03:17.663 INFO  .../core/ops/MergeNearbyNodes.cpp(  72) MergeNearbyNodes start
 MergeNearbyNodes 18 elapsed: 0ms        
-19:27:38.934 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+22:03:17.663 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 6        Ways: 6 / 6        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 18         
-19:27:39.306 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: LAN010 not found.  Creating layer...
-19:27:39.389 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LAP010.shp LAP010
+22:03:17.924 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_LAN010.osm ...
+22:03:17.926 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/MGCPv3/LAN010-output.osm ...
+22:03:18.273 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_LAN010.osm ...
+22:03:18.400 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: LAN010 not found.  Creating layer...
+22:03:18.403 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: extra_L not found.  Creating layer...
+22:03:18.567 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LAP010.shp LAP010
 Loading test-files/MGCPv3/LAP010.shp LAP010 0 / 3   
 Reprojecting 0 / 9         
-19:27:39.428 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-19:27:39.428 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 0 1    MergeNearbyNodes 6 elapsed: 0ms        
-19:27:39.428 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+22:03:18.613 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+22:03:18.613 INFO  .../core/ops/MergeNearbyNodes.cpp(  72) MergeNearbyNodes start
+MergeNearbyNodes 0 1    MergeNearbyNodes 6 elapsed: 1ms        
+22:03:18.614 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 3        Ways: 3 / 3        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 6         
-19:27:39.792 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: LAP010 not found.  Creating layer...
-19:27:39.878 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LAP030.shp LAP030
+22:03:18.875 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_LAP010.osm ...
+22:03:18.876 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/MGCPv3/LAP010-output.osm ...
+22:03:19.230 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_LAP010.osm ...
+22:03:19.357 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: LAP010 not found.  Creating layer...
+22:03:19.360 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: extra_L not found.  Creating layer...
+22:03:19.521 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LAP030.shp LAP030
 Loading test-files/MGCPv3/LAP030.shp LAP030 0 / 6   
 Reprojecting 0 / 12         
-19:27:39.913 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-19:27:39.913 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 12 elapsed: 0ms        
-19:27:39.913 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+22:03:19.563 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+22:03:19.563 INFO  .../core/ops/MergeNearbyNodes.cpp(  72) MergeNearbyNodes start
+MergeNearbyNodes 12 elapsed: 1ms        
+22:03:19.564 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 6        Ways: 6 / 6        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 12         
-19:27:40.306 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: LAP030 not found.  Creating layer...
-19:27:40.390 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LAP050.shp LAP050
+22:03:19.824 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_LAP030.osm ...
+22:03:19.826 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/MGCPv3/LAP030-output.osm ...
+22:03:20.185 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_LAP030.osm ...
+22:03:20.311 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: LAP030 not found.  Creating layer...
+22:03:20.314 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: extra_L not found.  Creating layer...
+22:03:20.488 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LAP050.shp LAP050
 Loading test-files/MGCPv3/LAP050.shp LAP050 0 / 6   
 Reprojecting 0 / 12         
-19:27:40.423 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-19:27:40.423 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+22:03:20.526 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+22:03:20.526 INFO  .../core/ops/MergeNearbyNodes.cpp(  72) MergeNearbyNodes start
 MergeNearbyNodes 12 elapsed: 0ms        
-19:27:40.423 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+22:03:20.526 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 6        Ways: 6 / 6        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 12         
-19:27:40.793 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: LAP050 not found.  Creating layer...
-19:27:40.884 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LBH140.shp LBH140
+22:03:20.788 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_LAP050.osm ...
+22:03:20.790 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/MGCPv3/LAP050-output.osm ...
+22:03:21.137 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_LAP050.osm ...
+22:03:21.264 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: LAP050 not found.  Creating layer...
+22:03:21.267 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: extra_L not found.  Creating layer...
+22:03:21.429 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LBH140.shp LBH140
 Loading test-files/MGCPv3/LBH140.shp LBH140 0 / 15   
 Reprojecting 0 / 30         
-19:27:40.905 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-19:27:40.905 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 30 elapsed: 0ms        
-19:27:40.905 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+22:03:21.454 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+22:03:21.454 INFO  .../core/ops/MergeNearbyNodes.cpp(  72) MergeNearbyNodes start
+MergeNearbyNodes 30 elapsed: 1ms        
+22:03:21.455 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 15        Ways: 15 / 15        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 30         
-19:27:41.287 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: LBH140 not found.  Creating layer...
-19:27:41.370 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/PAL015.shp PAL015
+22:03:21.718 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_LBH140.osm ...
+22:03:21.720 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/MGCPv3/LBH140-output.osm ...
+22:03:22.068 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_LBH140.osm ...
+22:03:22.195 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: LBH140 not found.  Creating layer...
+22:03:22.198 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: extra_L not found.  Creating layer...
+22:03:22.368 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/PAL015.shp PAL015
 Loading test-files/MGCPv3/PAL015.shp PAL015 0 / 40   
 Reprojecting 0 / 40         
-19:27:41.401 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-19:27:41.401 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+22:03:22.405 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+22:03:22.405 INFO  .../core/ops/MergeNearbyNodes.cpp(  72) MergeNearbyNodes start
 MergeNearbyNodes 40 elapsed: 0ms        
-19:27:41.401 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+22:03:22.405 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 0        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 40         
-19:27:41.775 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: PAL015 not found.  Creating layer...
-19:27:41.863 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LAQ040.shp LAQ040
+22:03:22.669 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_PAL015.osm ...
+22:03:22.672 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/MGCPv3/PAL015-output.osm ...
+22:03:23.018 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_PAL015.osm ...
+22:03:23.146 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: PAL015 not found.  Creating layer...
+22:03:23.149 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: extra_P not found.  Creating layer...
+22:03:23.328 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LAQ040.shp LAQ040
 Loading test-files/MGCPv3/LAQ040.shp LAQ040 0 / 3   
 Reprojecting 0 / 6         
-19:27:41.886 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-19:27:41.886 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+22:03:23.355 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+22:03:23.355 INFO  .../core/ops/MergeNearbyNodes.cpp(  72) MergeNearbyNodes start
 MergeNearbyNodes 6 elapsed: 0ms        
-19:27:41.886 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+22:03:23.355 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 3        Ways: 3 / 3        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 6         
-19:27:42.273 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: LAQ040 not found.  Creating layer...
+22:03:23.611 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_LAQ040.osm ...
+22:03:23.612 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/MGCPv3/LAQ040-output.osm ...
+22:03:23.962 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/translation/Mgcpv3_LAQ040.osm ...
+22:03:24.087 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: LAQ040 not found.  Creating layer...
+22:03:24.091 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 283) Layer: LAP030 not found.  Creating layer...

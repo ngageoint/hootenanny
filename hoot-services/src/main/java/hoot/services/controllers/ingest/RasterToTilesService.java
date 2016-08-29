@@ -29,15 +29,12 @@ package hoot.services.controllers.ingest;
 import static hoot.services.HootProperties.RASTER_TO_TILES;
 import static hoot.services.HootProperties.TILE_SERVER_PATH;
 
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.util.UUID;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -45,9 +42,9 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
-import hoot.services.models.db.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobStatusManager;
+import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.nativeinterfaces.JobExecutionManager;
@@ -56,16 +53,6 @@ import hoot.services.utils.DbUtils;
 
 public class RasterToTilesService extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(RasterToTilesService.class);
-
-    static {
-        File dir = new File(TILE_SERVER_PATH);
-        try {
-            FileUtils.forceMkdir(dir);
-        }
-        catch (IOException ioe) {
-            throw new RuntimeException("Error creating " + dir.getAbsolutePath() + " directory!", ioe);
-        }
-    }
 
     public RasterToTilesService() {
         super(RASTER_TO_TILES);

@@ -1,14 +1,15 @@
 package hoot.services.models.db;
 
-import static com.mysema.query.types.PathMetadataFactory.*;
+import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.mysema.query.types.path.*;
+import com.querydsl.core.types.dsl.*;
 
-import com.mysema.query.types.PathMetadata;
+import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
-import com.mysema.query.types.Path;
+import com.querydsl.core.types.Path;
 
-import com.mysema.query.sql.ColumnMetadata;
+import com.querydsl.sql.ColumnMetadata;
+import java.sql.Types;
 
 
 
@@ -16,8 +17,8 @@ import com.mysema.query.sql.ColumnMetadata;
 /**
  * QJobStatus is a Querydsl query type for JobStatus
  */
-@Generated("com.mysema.query.sql.codegen.MetaDataSerializer")
-public class QJobStatus extends com.mysema.query.sql.RelationalPathBase<JobStatus> {
+@Generated("com.querydsl.sql.codegen.MetaDataSerializer")
+public class QJobStatus extends com.querydsl.sql.RelationalPathBase<JobStatus> {
 
     private static final long serialVersionUID = 364396917;
 
@@ -35,7 +36,7 @@ public class QJobStatus extends com.mysema.query.sql.RelationalPathBase<JobStatu
 
     public final StringPath statusDetail = createString("statusDetail");
 
-    public final com.mysema.query.sql.PrimaryKey<JobStatus> jobStatusPkey = createPrimaryKey(jobId);
+    public final com.querydsl.sql.PrimaryKey<JobStatus> jobStatusPkey = createPrimaryKey(jobId);
 
     public QJobStatus(String variable) {
         super(JobStatus.class, forVariable(variable), "public", "job_status");
@@ -52,18 +53,18 @@ public class QJobStatus extends com.mysema.query.sql.RelationalPathBase<JobStatu
         addMetadata();
     }
 
-    public QJobStatus(PathMetadata<?> metadata) {
+    public QJobStatus(PathMetadata metadata) {
         super(JobStatus.class, metadata, "public", "job_status");
         addMetadata();
     }
 
     public void addMetadata() {
-        addMetadata(end, ColumnMetadata.named("end").ofType(93).withSize(35).withDigits(6));
-        addMetadata(jobId, ColumnMetadata.named("job_id").ofType(12).withSize(64).notNull());
-        addMetadata(percentComplete, ColumnMetadata.named("percent_complete").ofType(8).withSize(17).withDigits(17));
-        addMetadata(start, ColumnMetadata.named("start").ofType(93).withSize(35).withDigits(6).notNull());
-        addMetadata(status, ColumnMetadata.named("status").ofType(4).withSize(10).notNull());
-        addMetadata(statusDetail, ColumnMetadata.named("status_detail").ofType(12).withSize(2147483647));
+        addMetadata(end, ColumnMetadata.named("end").withIndex(3).ofType(Types.TIMESTAMP).withSize(35).withDigits(6));
+        addMetadata(jobId, ColumnMetadata.named("job_id").withIndex(1).ofType(Types.VARCHAR).withSize(64).notNull());
+        addMetadata(percentComplete, ColumnMetadata.named("percent_complete").withIndex(5).ofType(Types.DOUBLE).withSize(17).withDigits(17));
+        addMetadata(start, ColumnMetadata.named("start").withIndex(2).ofType(Types.TIMESTAMP).withSize(35).withDigits(6).notNull());
+        addMetadata(status, ColumnMetadata.named("status").withIndex(4).ofType(Types.INTEGER).withSize(10).notNull());
+        addMetadata(statusDetail, ColumnMetadata.named("status_detail").withIndex(6).ofType(Types.VARCHAR).withSize(2147483647));
     }
 
 }

@@ -558,6 +558,9 @@ tds61 = {
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
+        // Drop the FCSUBTYPE since we don't use it
+        if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
+
         // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
         // but renamed in different features. We swap these so that there is only one
         // set of rules needed in the One2One section.
@@ -641,10 +644,7 @@ tds61 = {
 
         } // End in attrs loop
 
-        // Drop the FCSUBTYPE since we don't use it
-        if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
-
-        // Drop all of the XXX Closure default values IFF the associated attributes are 
+        // Drop all of the XXX Closure default values IFF the associated attributes are
         // not set.
         // Doing this after the main cleaning loop so all of the -999999 values are
         // already gone and we can just check for existance.
@@ -689,7 +689,8 @@ tds61 = {
         // Now find an F_CODE
         if (attrs.F_CODE)
         {
-            // Nothing to do :-)
+            // Drop the the "Not Found" F_CODE. This is from the UI
+            if (attrs.F_CODE == 'Not found') delete attrs.F_CODE;
         }
         else if (attrs.FCODE)
         {
@@ -841,7 +842,7 @@ tds61 = {
         }
 
         // Add the LayerName to the source
-        tags.source = 'tdsv61:' + layerName.toLowerCase();
+        if ((! tags.source) && layerName !== '') tags.source = 'tdsv61:' + layerName.toLowerCase();
         
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
         if (attrs.UFI)
@@ -1070,7 +1071,7 @@ tds61 = {
         if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
         if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
-        // Unpack the MEMO field
+        // Unpack the ZI006_MEM field
         if (tags.note)
         {
             var tObj = translate.unpackMemo(tags.note);
@@ -1080,7 +1081,7 @@ tds61 = {
                 var tTags = JSON.parse(tObj.tags)
                 for (i in tTags)
                 {
-                    if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
 
@@ -1102,7 +1103,6 @@ tds61 = {
     {
         // Remove Hoot assigned tags for the source of the data
         if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-        if (tags.source) delete tags.source;
         if (tags.area) delete tags.area;
         if (tags['error:circular']) delete tags['error:circular'];
         if (tags['hoot:status']) delete tags['hoot:status'];
@@ -1727,7 +1727,6 @@ tds61 = {
             delete attrs.ZI005_FNA3;
         }
 
-
         // The ZI001_SDV (source date time) field can only be 20 characters long. When we conflate features,
         // we concatenate the tag values for this field.
         // We are getting guidance from the customer on what value they would like in this field:
@@ -1740,8 +1739,6 @@ tds61 = {
         {
             attrs.ZI001_SDV = translate.chopDateTime(attrs.ZI001_SDV);
         }
-
-
     }, // End applyToNfddPostProcessing
 
 // #####################################################################################################
@@ -1952,37 +1949,54 @@ tds61 = {
         {
             hoot.logVerbose('FCODE and Geometry: ' + gFcode + ' is not in the schema');
 
-            tableName = 'o2s_' + geometryType.toString().charAt(0);
-
-            // Debug:
-            // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
-
-            // Convert all of the Tags to a string so we can jam it into an attribute
-            var str = JSON.stringify(tags);
-
-            // Shapefiles can't handle fields > 254 chars.
-            // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
-            // A nicer thing would be to arrange the tags until they fit neatly
-            if (str.length < 255 || config.getOgrSplitO2s() == 'false') 
+            if (config.getOgrPartialTranslate() == 'true')
             {
-                // return {attrs:{tag1:str}, tableName: tableName};
-                attrs = {tag1:str};
+                tableName = 'Partial';
+                attrs.F_CODE = 'Partial';
+
+                // If we have unused tags, add them to partial feature.
+                if (Object.keys(notUsedTags).length > 0)
+                {
+                    for (var i in notUsedTags)
+                    {
+                        attrs['OSM:' + i] = notUsedTags[i];
+                    }
+                }
             }
             else
             {
-                // Not good. Will fix with the rewrite of the tag splitting code
-                if (str.length > 1012)
-                {
-                    hoot.logVerbose('o2s tags truncated to fit in available space.');
-                    str = str.substring(0,1012);
-                }
+                tableName = 'o2s_' + geometryType.toString().charAt(0);
 
-                // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
-                attrs = {tag1:str.substring(0,253), 
-                         tag2:str.substring(253,506),
-                         tag3:str.substring(506,759),
-                         tag4:str.substring(759,1012)};
+                // Debug:
+                // Dump out what attributes we have converted before they get wiped out
+                if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+
+                // Convert all of the Tags to a string so we can jam it into an attribute
+                var str = JSON.stringify(tags);
+
+                // Shapefiles can't handle fields > 254 chars.
+                // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
+                // A nicer thing would be to arrange the tags until they fit neatly
+                if (str.length < 255 || config.getOgrSplitO2s() == 'false')
+                {
+                    // return {attrs:{tag1:str}, tableName: tableName};
+                    attrs = {tag1:str};
+                }
+                else
+                {
+                    // Not good. Will fix with the rewrite of the tag splitting code
+                    if (str.length > 1012)
+                    {
+                        hoot.logVerbose('o2s tags truncated to fit in available space.');
+                        str = str.substring(0,1012);
+                    }
+
+                    // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
+                    attrs = {tag1:str.substring(0,253),
+                            tag2:str.substring(253,506),
+                            tag3:str.substring(506,759),
+                            tag4:str.substring(759,1012)};
+                }
             }
 
             returnData.push({attrs: attrs, tableName: tableName});

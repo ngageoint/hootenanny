@@ -1,14 +1,15 @@
 package hoot.services.models.db;
 
-import static com.mysema.query.types.PathMetadataFactory.*;
+import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.mysema.query.types.path.*;
+import com.querydsl.core.types.dsl.*;
 
-import com.mysema.query.types.PathMetadata;
+import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
-import com.mysema.query.types.Path;
+import com.querydsl.core.types.Path;
 
-import com.mysema.query.sql.ColumnMetadata;
+import com.querydsl.sql.ColumnMetadata;
+import java.sql.Types;
 
 
 
@@ -16,8 +17,8 @@ import com.mysema.query.sql.ColumnMetadata;
 /**
  * QFolderMapMappings is a Querydsl query type for FolderMapMappings
  */
-@Generated("com.mysema.query.sql.codegen.MetaDataSerializer")
-public class QFolderMapMappings extends com.mysema.query.sql.RelationalPathBase<FolderMapMappings> {
+@Generated("com.querydsl.sql.codegen.MetaDataSerializer")
+public class QFolderMapMappings extends com.querydsl.sql.RelationalPathBase<FolderMapMappings> {
 
     private static final long serialVersionUID = 1476505337;
 
@@ -29,7 +30,7 @@ public class QFolderMapMappings extends com.mysema.query.sql.RelationalPathBase<
 
     public final NumberPath<Long> mapId = createNumber("mapId", Long.class);
 
-    public final com.mysema.query.sql.PrimaryKey<FolderMapMappings> folderMapMappingsPk = createPrimaryKey(id);
+    public final com.querydsl.sql.PrimaryKey<FolderMapMappings> folderMapMappingsPk = createPrimaryKey(id);
 
     public QFolderMapMappings(String variable) {
         super(FolderMapMappings.class, forVariable(variable), "public", "folder_map_mappings");
@@ -46,15 +47,15 @@ public class QFolderMapMappings extends com.mysema.query.sql.RelationalPathBase<
         addMetadata();
     }
 
-    public QFolderMapMappings(PathMetadata<?> metadata) {
+    public QFolderMapMappings(PathMetadata metadata) {
         super(FolderMapMappings.class, metadata, "public", "folder_map_mappings");
         addMetadata();
     }
 
     public void addMetadata() {
-        addMetadata(folderId, ColumnMetadata.named("folder_id").ofType(-5).withSize(19).notNull());
-        addMetadata(id, ColumnMetadata.named("id").ofType(-5).withSize(19).notNull());
-        addMetadata(mapId, ColumnMetadata.named("map_id").ofType(-5).withSize(19).notNull());
+        addMetadata(folderId, ColumnMetadata.named("folder_id").withIndex(3).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(id, ColumnMetadata.named("id").withIndex(1).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(mapId, ColumnMetadata.named("map_id").withIndex(2).ofType(Types.BIGINT).withSize(19).notNull());
     }
 
 }

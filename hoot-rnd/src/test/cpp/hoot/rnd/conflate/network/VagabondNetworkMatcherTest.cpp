@@ -88,9 +88,9 @@ public:
 //    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestD2.osm", true,
 //      Status::Unknown2);
 
-    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/highway-002/Input1.osm", true,
+    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/vagabond/highway-001/Input1.osm", false,
       Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/highway-002/Input2.osm", true,
+    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/vagabond/highway-001/Input2.osm", false,
       Status::Unknown2);
 
     MapCleaner().apply(map);

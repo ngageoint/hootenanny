@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -52,7 +51,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import com.mysema.query.Tuple;
+import com.querydsl.core.Tuple;
 
 import hoot.services.models.db.QMaps;
 import hoot.services.models.db.QUsers;
@@ -95,7 +94,6 @@ public class ElementResource {
      */
     @GET
     @Path("{elementType: node|way|relation}/{elementId}")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response getElement(@QueryParam("mapId") String mapId,
                                @PathParam("elementId") long elementId,
@@ -127,8 +125,7 @@ public class ElementResource {
         catch (IOException ignored) {
         }
 
-        return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
-                       .header("Content-type", MediaType.APPLICATION_XML).build();
+        return Response.ok(new DOMSource(elementDoc)).build();
     }
 
     /**
@@ -143,7 +140,6 @@ public class ElementResource {
      */
     @GET
     @Path("/element/{elementId}")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response getElementByUniqueId(@PathParam("elementId") String elementId) {
         if (!UNIQUE_ELEMENT_ID_PATTERN.matcher(elementId).matches()) {
@@ -179,8 +175,7 @@ public class ElementResource {
         catch (IOException ignored) {
         }
 
-        return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
-                .header("Content-type", MediaType.APPLICATION_XML).build();
+        return Response.ok(new DOMSource(elementDoc)).build();
     }
 
     /**
@@ -198,7 +193,6 @@ public class ElementResource {
      */
     @GET
     @Path("/{elementType: way|relation}/{elementId}/full")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response getFullElement(@QueryParam("mapId") String mapId,
                                    @PathParam("elementId") long elementId,
@@ -218,6 +212,7 @@ public class ElementResource {
             throw wae;
         }
         catch (Exception e) {
+            e.printStackTrace();
             String msg = "Error getting full element data!" +
                     "  mapId = " + mapId + ", elementId = " + elementId + ", elementType = " + elementType;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
@@ -230,8 +225,7 @@ public class ElementResource {
         catch (IOException ignored) {
         }
 
-        return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
-                .header("Content-type", MediaType.APPLICATION_XML).build();
+        return Response.ok(new DOMSource(elementDoc)).build();
     }
 
     /**
@@ -246,7 +240,6 @@ public class ElementResource {
      */
     @GET
     @Path("/element/{elementId}/full")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response getFullElementByUniqueId(@PathParam("elementId") String elementId) {
         if (!UNIQUE_ELEMENT_ID_PATTERN.matcher(elementId).matches()) {
@@ -287,8 +280,7 @@ public class ElementResource {
         catch (IOException ignored) {
         }
 
-        return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
-                .header("Content-type", MediaType.APPLICATION_XML).build();
+        return Response.ok(new DOMSource(elementDoc)).build();
     }
 
     private static Document getElementXml(String mapId, long elementId, ElementType elementType,
@@ -358,7 +350,6 @@ public class ElementResource {
      */
     @GET
     @Path("{elementType: nodes|ways|relations}")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response getElements(@QueryParam("mapId") String mapId,
                                 @QueryParam("elementIds") String elementIds,
@@ -391,8 +382,7 @@ public class ElementResource {
         catch (IOException ignored) {
         }
 
-        return Response.ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
-                .header("Content-type", MediaType.APPLICATION_XML).build();
+        return Response.ok(new DOMSource(elementDoc)).build();
     }
 
     private static Document getElementsXml(String mapId, String[] elementIdsStr, ElementType elementType,

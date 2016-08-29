@@ -36,23 +36,24 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
-import com.mysema.query.sql.RelationalPathBase;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLDeleteClause;
-import com.mysema.query.types.path.NumberPath;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.sql.RelationalPathBase;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLDeleteClause;
 
+import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.db.QChangesets;
 import hoot.services.models.db.QCurrentNodes;
@@ -61,7 +62,6 @@ import hoot.services.models.db.QCurrentRelations;
 import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.models.db.QCurrentWays;
 import hoot.services.models.db.QUsers;
-import hoot.services.geo.BoundingBox;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.DbUtils.EntityChangeType;
@@ -269,19 +269,12 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      * @return a string map with tag key/value pairs
      */
     public Map<String, String> getTags() {
-        Object oTags = null;
         try {
-            oTags = MethodUtils.invokeMethod(record, "getTags");
-
-            if (oTags instanceof PGobject) {
-                return PostgresUtils.postgresObjToHStore((PGobject) MethodUtils.invokeMethod(record, "getTags"));
-            }
+            return PostgresUtils.postgresObjToHStore(MethodUtils.invokeMethod(record, "getTags"));
         }
         catch (Exception e) {
             throw new RuntimeException("Error invoking getTags()", e);
         }
-
-        return (Map<String, String>) oTags;
     }
 
     /**
@@ -477,14 +470,15 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         Element prototype = ElementFactory.create(mapId, elementType, dbConn);
 
         if (!elementIds.isEmpty()) {
-            return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+                    .select(prototype.getElementTable())
                     .from(prototype.getElementTable())
                     .where(prototype.getElementIdField().in(elementIds))
                     .orderBy(prototype.getElementIdField().asc())
-                    .list(prototype.getElementTable());
+                    .fetch();
         }
 
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     /**
@@ -508,11 +502,14 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         if (!elementIds.isEmpty()) {
             QChangesets changesets = QChangesets.changesets;
             QUsers users = QUsers.users;
-            return new SQLQuery(dbConn, DbUtils.getConfiguration(String.valueOf(mapId)))
+            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(String.valueOf(mapId)))
+                    .select(prototype.getElementTable(), users, changesets)
                     .from(prototype.getElementTable())
-                    .join(QChangesets.changesets).on(prototype.getChangesetIdField().eq(changesets.id)).join(users)
-                    .on(changesets.userId.eq(users.id)).where(prototype.getElementIdField().in(elementIds))
-                    .orderBy(prototype.getElementIdField().asc()).list(prototype.getElementTable(), users, changesets);
+                    .join(QChangesets.changesets).on(prototype.getChangesetIdField().eq(changesets.id))
+                    .join(users).on(changesets.userId.eq(users.id))
+                    .where(prototype.getElementIdField().in(elementIds))
+                    .orderBy(prototype.getElementIdField().asc())
+                    .fetch();
         }
 
         return new ArrayList();
@@ -587,8 +584,10 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         Element prototype = ElementFactory.create(mapId, elementType, dbConn);
 
         if (!elementIds.isEmpty()) {
-            return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
-                    .where(prototype.getElementIdField().in(elementIds)).count() == elementIds.size();
+            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+                    .from(prototype.getElementTable())
+                    .where(prototype.getElementIdField().in(elementIds))
+                    .fetchCount() == elementIds.size();
         }
 
         return elementIds.isEmpty();
@@ -612,9 +611,11 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         Element prototype = ElementFactory.create(mapId, elementType, dbConn);
 
         if (!elementIds.isEmpty()) {
-            return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable()).where(
-                    prototype.getElementIdField().in(elementIds).and(prototype.getElementVisibilityField().eq(true)))
-                    .count() == elementIds.size();
+            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+                    .from(prototype.getElementTable())
+                    .where(prototype.getElementIdField().in(elementIds)
+                            .and(prototype.getElementVisibilityField().eq(true)))
+                    .fetchCount() == elementIds.size();
         }
 
         return elementIds.isEmpty();
@@ -729,11 +730,8 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     org.w3c.dom.Element addTagsXml(org.w3c.dom.Element elementXml) {
         try {
             Document doc = elementXml.getOwnerDocument();
-            Map<String, String> tags = getTags();
-
-            if (tags.isEmpty()) {
-                return null;
-            }
+            // We want tags map sorted
+            Map<String, String> tags = new TreeMap<>(this.getTags());
 
             for (Map.Entry<String, String> tagEntry : tags.entrySet()) {
                 org.w3c.dom.Element tagElement = doc.createElement("tag");

@@ -1,8 +1,8 @@
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
-Node Count	117	116	143	
-Way Count	14	12	22	
+Node Count	117	116	144	
+Way Count	14	12	23	
 Relation Count	0	0	9	
-Total Feature Count	25	22	39	
+Total Feature Count	25	22	40	
 Total Conflatable Features	25	22	0	
 Percentage of Total Features Conflatable	100	100	0	
 Untagged Feature Count	0	0	0	
@@ -13,12 +13,12 @@ Features Conflatable by: hoot::BuildingMatchCreator	10	8	0
 Features Conflatable by: hoot::HighwayMatchCreator	4	4	0	
 Features Conflatable by: hoot::ScriptMatchCreator,PoiGeneric.js	11	10		
 Total Conflated Features	0	0	18	
-Percentage of Total Features Conflated	0	0	46.153846153846153	
+Percentage of Total Features Conflated	0	0	45	
 Total Features Marked for Review	0	0	11	
-Percentage of Total Features Marked for Review	0	0	28.205128205128204	
+Percentage of Total Features Marked for Review	0	0	27.500000000000004	
 Total Number of Reviews to be Made	0	0	8	
-Total Unmatched Features	25	22	21	
-Percentage of Total Features Unmatched	100	100	53.846153846153847	
+Total Unmatched Features	25	22	22	
+Percentage of Total Features Unmatched	100	100	55.000000000000007	
 POI Count	11	10	16	
 Conflatable POIs	11	10	0	
 Conflated POIs	0	0	5	
@@ -28,15 +28,15 @@ Unmatched POIs	11	10	11
 Percentage of POIs Conflated	0	0	31.25	
 Percentage of POIs Marked for Review	0	0	68.75	
 Percentage of Unmatched POIs	100	100	68.75	
-Highway Count	4	4	9	
+Highway Count	4	4	10	
 Conflatable Highways	4	4	0	
 Conflated Highways	0	0	8	
 Highways Marked for Review	0	0	0	
 Number of Highway Reviews to be Made	0	0	0	
-Unmatched Highways	4	4	1	
-Percentage of Highways Conflated	0	0	88.888888888888886	
+Unmatched Highways	4	4	2	
+Percentage of Highways Conflated	0	0	80	
 Percentage of Highways Marked for Review	0	0	0	
-Percentage of Unmatched Highways	100	100	11.111111111111111	
+Percentage of Unmatched Highways	100	100	20	
 Building Count	10	8	11	
 Conflatable Buildings	10	8	0	
 Conflated Buildings	0	0	4	
@@ -56,6 +56,6 @@ Meters of Waterway Processed by Conflation	0	0	0
 Percentage of Waterways Conflated	0	0	0	
 Percentage of Waterways Marked for Review	0	0	0	
 Percentage of Unmatched Waterways	0	0	0	
-Difference Between Total Features in Output and Total Features in Inputs			-8	
-Percentage Difference Between Total Features in Output and Total Features in Inputs			-17.021276595744681	
+Difference Between Total Features in Output and Total Features in Inputs			-7	
+Percentage Difference Between Total Features in Output and Total Features in Inputs			-14.893617021276595	
 

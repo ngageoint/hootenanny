@@ -1,14 +1,15 @@
 package hoot.services.models.db;
 
-import static com.mysema.query.types.PathMetadataFactory.*;
+import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.mysema.query.types.path.*;
+import com.querydsl.core.types.dsl.*;
 
-import com.mysema.query.types.PathMetadata;
+import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
-import com.mysema.query.types.Path;
+import com.querydsl.core.types.Path;
 
-import com.mysema.query.sql.ColumnMetadata;
+import com.querydsl.sql.ColumnMetadata;
+import java.sql.Types;
 
 
 
@@ -16,8 +17,8 @@ import com.mysema.query.sql.ColumnMetadata;
 /**
  * QDatabasechangeloglock is a Querydsl query type for Databasechangeloglock
  */
-@Generated("com.mysema.query.sql.codegen.MetaDataSerializer")
-public class QDatabasechangeloglock extends com.mysema.query.sql.RelationalPathBase<Databasechangeloglock> {
+@Generated("com.querydsl.sql.codegen.MetaDataSerializer")
+public class QDatabasechangeloglock extends com.querydsl.sql.RelationalPathBase<Databasechangeloglock> {
 
     private static final long serialVersionUID = -166298230;
 
@@ -31,7 +32,7 @@ public class QDatabasechangeloglock extends com.mysema.query.sql.RelationalPathB
 
     public final DateTimePath<java.sql.Timestamp> lockgranted = createDateTime("lockgranted", java.sql.Timestamp.class);
 
-    public final com.mysema.query.sql.PrimaryKey<Databasechangeloglock> databasechangeloglockPk = createPrimaryKey(id);
+    public final com.querydsl.sql.PrimaryKey<Databasechangeloglock> databasechangeloglockPk = createPrimaryKey(id);
 
     public QDatabasechangeloglock(String variable) {
         super(Databasechangeloglock.class, forVariable(variable), "public", "databasechangeloglock");
@@ -48,16 +49,16 @@ public class QDatabasechangeloglock extends com.mysema.query.sql.RelationalPathB
         addMetadata();
     }
 
-    public QDatabasechangeloglock(PathMetadata<?> metadata) {
+    public QDatabasechangeloglock(PathMetadata metadata) {
         super(Databasechangeloglock.class, metadata, "public", "databasechangeloglock");
         addMetadata();
     }
 
     public void addMetadata() {
-        addMetadata(id, ColumnMetadata.named("id").ofType(4).withSize(10).notNull());
-        addMetadata(locked, ColumnMetadata.named("locked").ofType(-7).withSize(1).notNull());
-        addMetadata(lockedby, ColumnMetadata.named("lockedby").ofType(12).withSize(255));
-        addMetadata(lockgranted, ColumnMetadata.named("lockgranted").ofType(93).withSize(35).withDigits(6));
+        addMetadata(id, ColumnMetadata.named("id").withIndex(1).ofType(Types.INTEGER).withSize(10).notNull());
+        addMetadata(locked, ColumnMetadata.named("locked").withIndex(2).ofType(Types.BIT).withSize(1).notNull());
+        addMetadata(lockedby, ColumnMetadata.named("lockedby").withIndex(4).ofType(Types.VARCHAR).withSize(255));
+        addMetadata(lockgranted, ColumnMetadata.named("lockgranted").withIndex(3).ofType(Types.TIMESTAMP).withSize(35).withDigits(6));
     }
 
 }

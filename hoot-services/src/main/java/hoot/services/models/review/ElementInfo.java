@@ -26,15 +26,12 @@
  */
 package hoot.services.models.review;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
-
-/**
- * Element information
- */
-@XmlRootElement
 public class ElementInfo {
     private long id = -1;
+    private String type;
+    // can be map name or id
+    private String mapId;
 
     public long getId() {
         return id;
@@ -44,9 +41,6 @@ public class ElementInfo {
         this.id = id;
     }
 
-    // can be map name or id
-    private String mapId;
-
     public String getMapId() {
         return mapId;
     }
@@ -54,8 +48,6 @@ public class ElementInfo {
     public void setMapId(String id) {
         this.mapId = id;
     }
-
-    private String type;
 
     public String getType() {
         return type;
@@ -68,10 +60,10 @@ public class ElementInfo {
     public ElementInfo() {
     }
 
-    public ElementInfo(String mapId, long elementId, String elementType) {
+    public ElementInfo(String mapId, long elementId, String type) {
         this.mapId = mapId;
         this.id = elementId;
-        this.type = elementType;
+        this.type = type;
     }
 
     @Override

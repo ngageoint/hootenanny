@@ -32,11 +32,10 @@ import hoot.services.geo.BoundingBox;
 
 
 public class ReviewableItemBboxInfo extends ReviewableItemBbox {
-
     private String needReview;
 
-    public ReviewableItemBboxInfo(BoundingBox bbox, long mapid, long relationid, String needReview) {
-        super(bbox, mapid, relationid);
+    public ReviewableItemBboxInfo(BoundingBox bbox, long mapId, long relationId, String needReview) {
+        super(bbox, mapId, relationId);
         this.needReview = needReview;
     }
 
@@ -44,8 +43,8 @@ public class ReviewableItemBboxInfo extends ReviewableItemBbox {
         return needReview;
     }
 
-    public void setNeedReview(String needreview) {
-        needReview = needreview;
+    public void setNeedReview(String needReview) {
+        this.needReview = needReview;
     }
 
     @Override
@@ -55,7 +54,6 @@ public class ReviewableItemBboxInfo extends ReviewableItemBbox {
         o.put("mapid", this.getMapId());
         o.put("relationid", this.getRelationId());
         o.put("needreview", needReview);
-
         return o.toJSONString();
     }
 }

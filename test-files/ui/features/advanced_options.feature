@@ -7,12 +7,12 @@ Feature: Advanced Conflation Options
 	    And I press "Add Reference Dataset"
 	    And I click the "AllDataTypesACucumber" Dataset
 	    And I press "Add Layer"
-	    Then I wait 30 "seconds" to see "AllDataTypesACucumber"
+	    Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
 	    And I press "Add Secondary Dataset"
 	    And I click the "AllDataTypesBCucumber" Dataset
 	    And I press "Add Layer"
-	    Then I wait 30 "seconds" to see "AllDataTypesBCucumber"
-	    
+	    Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
+
 	Scenario: I can set up standard conflation parameters
 	    Then I should see "Conflate"
 	    And I press "Conflate"
@@ -161,7 +161,7 @@ Feature: Advanced Conflation Options
 		And I check the "Enabled" checkbox
 		And I should see "Engines" combobox enabled
 		And I should see "Search Radius Highway" enabled
-		And I should see "Highway Matcher Max Angle" enabled	
+		And I should see "Highway Matcher Max Angle" enabled
 		And I uncheck the "Enabled" checkbox
 		Then I click on "#hoot_road_options_label"
 		And I should see "Building Options"
@@ -206,26 +206,27 @@ Feature: Advanced Conflation Options
 	    Then I wait 3 "minutes" to see "Merged_AllDataTypes_Advanced"
 	    Then I should see "Complete Review"
 	    And I click the "Complete Review" link
-	    Then I should see "All Reviews Resolved!" 
+	    Then I should see "All Reviews Resolved!"
 	    Then I remove the first layer
 	    Then I select the "sprocket" div
 		And I click the "Merged_AllDataTypes_Advanced" Dataset
 	    And I context click the "Merged_AllDataTypes_Advanced" Dataset
 	    And I click the "Delete (1)" context menu item
-	    Then I accept the alert   
+	    Then I accept the alert
 	    #And I wait 30 "seconds" to not see "Merged_AllDataTypes_Advanced"
 	    Then I select the "sprocket" div
 
 	Scenario: Check for previous settings
+		And I hover over "#map"
 		And I press "Add Reference Dataset"
 	    And I click the "AllDataTypesACucumber" Dataset
 	    And I press "Add Layer"
-	    Then I wait 30 "seconds" to see "AllDataTypesACucumber"
+	    Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
 	    And I press "Add Secondary Dataset"
 	    And I click the "AllDataTypesBCucumber" Dataset
 	    And I press "Add Layer"
-	    Then I wait 30 "seconds" to see "AllDataTypesBCucumber"
-	    
+	    Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
+
 	Scenario: I can set up standard conflation parameters
 	    Then I should see "Conflate"
 	    And I press "Conflate"

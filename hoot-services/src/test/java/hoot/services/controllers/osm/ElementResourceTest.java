@@ -33,12 +33,16 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.xpath.XPathAPI;
+import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -46,14 +50,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.ClientResponse.Status;
-import com.sun.jersey.api.client.UniformInterfaceException;
-
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
-import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.RelationMember;
+import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.RandomNumberGenerator;
@@ -66,7 +66,12 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
     private static final Logger log = LoggerFactory.getLogger(ElementResourceTest.class);
 
     public ElementResourceTest() {
-        super("hoot.services.controllers.osm");
+        super();
+    }
+
+    @Override
+    protected Application configure() {
+        return new ResourceConfig(ElementResource.class);
     }
 
     private static void verifyFirstNodeWasReturned(Document responseData, String id, long changesetId,
@@ -168,21 +173,17 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         Document responseData = null;
         try {
-            responseData = resource()
-                    .path("api/0.6/node/" + nodeIdsArr[0])
+            responseData = target("api/0.6/node/" + nodeIdsArr[0])
                     .queryParam("mapId", String.valueOf(mapId))
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
-
         verifyFirstNodeWasReturned(responseData, String.valueOf(nodeIdsArr[0]), changesetId, originalBounds);
-
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 
@@ -198,16 +199,15 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         Document responseData = null;
         try {
-            responseData = resource()
-                    .path("api/0.6/way/" + wayIdsArr[0])
+            responseData = target("api/0.6/way/" + wayIdsArr[0])
                     .queryParam("mapId", String.valueOf(mapId))
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
+
         Assert.assertNotNull(responseData);
 
         verifyFirstWayWasReturned(responseData, String.valueOf(wayIdsArr[0]), changesetId, null);
@@ -227,15 +227,13 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         Document responseData = null;
         try {
-            responseData = resource()
-                    .path("api/0.6/relation/" + relationIdsArr[0])
+            responseData = target("api/0.6/relation/" + relationIdsArr[0])
                     .queryParam("mapId", String.valueOf(mapId))
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
         Assert.assertNotNull(responseData);
 
@@ -258,14 +256,10 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         String uniqueElementId = mapId + "_n_" + nodeIdsArr[0];
 
         try {
-            responseData = resource()
-                    .path("api/0.6/element/" + uniqueElementId)
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            responseData = target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -288,14 +282,13 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Document responseData = null;
         String uniqueElementId = mapId + "_w_" + wayIdsArr[0];
         try {
-            responseData = resource()
-                    .path("api/0.6/element/" + uniqueElementId)
-                    .accept(MediaType.TEXT_XML)
+            responseData = target("api/0.6/element/" + uniqueElementId)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -319,14 +312,10 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         String uniqueElementId = mapId + "_r_" + relationIdsArr[0];
 
         try {
-            responseData = resource()
-                    .path("api/0.6/element/" + uniqueElementId)
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            responseData = target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -349,15 +338,13 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         Document responseData = null;
         try {
-            responseData = resource()
-                    .path("api/0.6/way/" + wayIdsArr[0] + "/full")
+            responseData = target("api/0.6/way/" + wayIdsArr[0] + "/full")
                     .queryParam("mapId", String.valueOf(mapId))
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -386,15 +373,13 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         Document responseData = null;
         try {
-            responseData = resource()
-                    .path("api/0.6/relation/" + relationIdsArr[0] + "/full")
+            responseData = target("api/0.6/relation/" + relationIdsArr[0] + "/full")
                     .queryParam("mapId", String.valueOf(mapId))
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -424,14 +409,13 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Document responseData = null;
         String uniqueElementId = mapId + "_w_" + wayIdsArr[0];
         try {
-            responseData = resource()
+            responseData = target()
                     .path("api/0.6/element/" + uniqueElementId + "/full")
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -461,14 +445,12 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Document responseData = null;
         String uniqueElementId = mapId + "_r_" + relationIdsArr[0];
         try {
-            responseData = resource()
-                    .path("api/0.6/element/" + uniqueElementId + "/full")
-                    .accept(MediaType.TEXT_XML)
+            responseData = target("api/0.6/element/" + uniqueElementId + "/full")
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);
@@ -484,7 +466,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetNodeDoesntExist() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -495,24 +477,23 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         try {
-            resource()
-                    .path("api/0.6/node/" + nodeIdsArr[nodeIdsArr.length - 1] + 1)
+            target("api/0.6/node/" + nodeIdsArr[nodeIdsArr.length - 1] + 1)
                     .queryParam("mapId", String.valueOf(mapId))
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
 
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("does not exist"));
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetNodeUniqueIdDoesntExist() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -524,21 +505,18 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         String uniqueElementId = mapId + "_n_" + nodeIdsArr[nodeIdsArr.length - 1] + 1;
         try {
-            resource()
-                    .path("api/0.6/element/" + uniqueElementId)
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("does not exist"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetWayDoesntExist() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -549,23 +527,22 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         try {
-            resource()
-                    .path("api/0.6/way/" + wayIdsArr[wayIdsArr.length - 1] + 1)
+            target("api/0.6/way/" + wayIdsArr[wayIdsArr.length - 1] + 1)
                     .queryParam("mapId", String.valueOf(mapId))
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("does not exist"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetWayUniqueIdDoesntExist() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -577,22 +554,18 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         String uniqueElementId = mapId + "_w_" + wayIdsArr[wayIdsArr.length - 1] + 1;
         try {
-            resource()
-                    .path("api/0.6/element/" + uniqueElementId)
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("does not exist"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetWayFullDoesntExist() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -603,22 +576,21 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         try {
-            resource()
-                    .path("api/0.6/way/" + wayIdsArr[wayIdsArr.length - 1] + 1 + "/full")
+            target("api/0.6/way/" + wayIdsArr[wayIdsArr.length - 1] + 1 + "/full")
                     .queryParam("mapId", String.valueOf(mapId))
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("does not exist"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetWayFullUniqueIdDoesntExist() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -630,21 +602,18 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         String uniqueElementId = mapId + "_w_" + wayIdsArr[wayIdsArr.length - 1] + 1;
         try {
-            resource()
-                    .path("api/0.6/element/" + uniqueElementId + "/full")
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("does not exist"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetRelationDoesntExist() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -655,23 +624,22 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         try {
-            resource()
-                    .path("api/0.6/relation/" + relationIdsArr[relationIdsArr.length - 1] + 1)
+            target("api/0.6/relation/" + relationIdsArr[relationIdsArr.length - 1] + 1)
                     .queryParam("mapId", String.valueOf(mapId))
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("does not exist"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetRelationUniqueIdDoesntExist() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -683,22 +651,19 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         String uniqueElementId = mapId + "_r_" + relationIdsArr[relationIdsArr.length - 1] + 1;
         try {
-            resource()
-                    .path("api/0.6/element/" + uniqueElementId)
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("does not exist"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetRelationFullDoesntExist() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -709,23 +674,22 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         try {
-            resource()
-                    .path("api/0.6/relation/" + relationIdsArr[relationIdsArr.length - 1] + 1 + "/full")
+            target("api/0.6/relation/" + relationIdsArr[relationIdsArr.length - 1] + 1 + "/full")
                     .queryParam("mapId", String.valueOf(mapId))
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("does not exist"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetRelationFullUniqueIdDoesntExist() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -737,15 +701,12 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         String uniqueElementId = mapId + "_r_" + relationIdsArr[relationIdsArr.length - 1] + 1;
         try {
-            resource()
-                    .path("api/0.6/element/" + uniqueElementId + "/full")
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("does not exist"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
@@ -754,7 +715,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
     // Technically, could test these map params for each element type, but the
     // map ID checking code should always be the same for all element types.
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetElementMapDoesntExist() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -765,23 +726,22 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         try {
-            resource()
-                    .path("api/0.6/node/" + nodeIdsArr[0])
+            target("api/0.6/node/" + nodeIdsArr[0])
                     .queryParam("mapId", String.valueOf((int) RandomNumberGenerator.nextDouble(mapId + 10 ^ 4, Integer.MAX_VALUE)))
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("No map exists"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetUniqueIdMapDoesntExist() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -794,22 +754,19 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         String uniqueElementId = ((int) RandomNumberGenerator.nextDouble(mapId + 10 ^ 4, Integer.MAX_VALUE)) + "_n_"
                 + nodeIdsArr[0];
         try {
-            resource()
-                    .path("api/0.6/element/" + uniqueElementId)
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("No map exists"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetFullElementMapDoesntExist() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -820,22 +777,21 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         try {
-            resource()
-                    .path("api/0.6/way/" + wayIdsArr[0] + "/full")
+            target("api/0.6/way/" + wayIdsArr[0] + "/full")
                     .queryParam("mapId", String.valueOf((int) RandomNumberGenerator.nextDouble(mapId + 10 ^ 4, Integer.MAX_VALUE)))
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("No map exists"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetElementUniqueIdFullMapDoesntExist() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -848,21 +804,18 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         String uniqueElementId = ((int) RandomNumberGenerator.nextDouble(mapId + 10 ^ 4, Integer.MAX_VALUE)) + "_w_"
                 + wayIdsArr[0];
         try {
-            resource()
-                    .path("api/0.6/element/" + uniqueElementId + "/full")
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("No map exists"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetInvalidElementType() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -873,21 +826,18 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         try {
-            resource()
-                    // invalid element type
-                    .path("api/0.6/blah/" + nodeIdsArr[0])
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            // invalid element type
+            target("api/0.6/blah/" + nodeIdsArr[0]).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetFullInvalidElementType() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -898,22 +848,19 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         try {
-            resource()
-                    // invalid element type
-                    .path("api/0.6/blah/" + nodeIdsArr[0] + "/full")
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            // invalid element type
+            target("api/0.6/blah/" + nodeIdsArr[0] + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetElementUniqueIdInvalidElementIdFormat() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -926,21 +873,18 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         // invalid element ID format
         String uniqueElementId = mapId + "__" + nodeIdsArr[0];
         try {
-            resource()
-                    .path("api/0.6/element/" + uniqueElementId)
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Invalid element ID"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Invalid element ID"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetElementUniqueIdFullInvalidElementIdFormat() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -953,17 +897,13 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         // invalid element ID format
         String uniqueElementId = mapId + "__" + nodeIdsArr[0];
         try {
-            resource()
-                    .path("api/0.6/element/" + uniqueElementId + "/full")
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Invalid element ID"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Invalid element ID"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
@@ -972,7 +912,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
      * A call to get a full node is not allowed, since nodes have no children
      * (like ways and relations do) and, therefore, the call makes no sense.
      */
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetNodeFull() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -983,15 +923,14 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         try {
-            resource()
-                    .path("api/0.6/node/" + nodeIdsArr[0] + "/full")
+            target("api/0.6/node/" + nodeIdsArr[0] + "/full")
                     .queryParam("mapId", String.valueOf(mapId))
-                    .accept(MediaType.TEXT_XML)
+                    .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -1000,7 +939,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
     /*
      * see testGetNodeFull
      */
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetNodeUniqueIdFull() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1012,15 +951,12 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         String uniqueElementId = mapId + "_n_" + nodeIdsArr[0];
         try {
-            resource()
-                    .path("api/0.6/element/" + uniqueElementId + "/full")
-                    .accept(MediaType.TEXT_XML)
-                    .get(Document.class);
+            target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Get Full Element Request Invalid for type = Node"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Get Full Element Request Invalid for type = Node"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }

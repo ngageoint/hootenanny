@@ -31,14 +31,12 @@ if (typeof exports === 'undefined')
     exports = {};
 }
 schemaTools = exports;
-st = schemaTools;
 
 if (typeof hoot === 'undefined')
 {
     var HOOT_HOME = process.env.HOOT_HOME;
-    schemaTools.hoot = require(HOOT_HOME + '/lib/HootJs');
-} else {
-    schemaTools.hoot = hoot;
+    var hoot = require(HOOT_HOME + '/lib/HootJs');
+
 }
 
 schemaTools.expandAliases = function(tags) {
@@ -50,8 +48,8 @@ schemaTools.expandAliases = function(tags) {
         for (var j in t.aliases) {
             var newT = JSON.parse(JSON.stringify(t));
             newT.name = t.aliases[j];
-            newT.key = st.splitKvp(newT.name)[0];
-            newT.value = st.splitKvp(newT.name)[1];
+            newT.key = schemaTools.splitKvp(newT.name)[0];
+            newT.value = schemaTools.splitKvp(newT.name)[1];
             newT.aliases = [];
 
             result.push(newT);
@@ -76,7 +74,7 @@ schemaTools.isSimilar = function(name, threshold, minScore, maxScore) {
         maxScore = minScore;
     }
 
-    if (!st.hoot.OsmSchema.getTagVertex(name)) {
+    if (!hoot.OsmSchema.getTagVertex(name)) {
         throw new Error("Invalid tag specified in isSimilar: " + JSON.stringify(name));
     }
 
@@ -104,14 +102,14 @@ schemaTools.generateRuleTags = function(rule) {
     var result = [];
 
     if (rule.ruleType === 'similarTo') {
-        var tags = st.hoot.OsmSchema.getSimilarTags(rule.name, rule.threshold);
+        var tags = hoot.OsmSchema.getSimilarTags(rule.name, rule.threshold);
 
-        tags = st.expandAliases(tags);
+        tags = schemaTools.expandAliases(tags);
 
         for (i in tags) {
             if (tags[i].value !== '' && tags[i].value !== '*')
             {
-                var schemaScore = st.hoot.OsmSchema.scoreOneWay(tags[i].name, rule.name);
+                var schemaScore = hoot.OsmSchema.scoreOneWay(tags[i].name, rule.name);
                 if (schemaScore >= rule.threshold)
                 {
                     // scale the score so that rule.threshold -> 0, and 1 -> 1. Linearly.
@@ -123,12 +121,12 @@ schemaTools.generateRuleTags = function(rule) {
             }
         }
     } else if (rule.ruleType === 'isA') {
-        var tags = schemaTools.hoot.OsmSchema.getChildTags(rule.name);
+        var tags = hoot.OsmSchema.getChildTags(rule.name);
 
         // Add the parents
-        tags.push.apply(tags,[schemaTools.hoot.OsmSchema.getTagVertex(rule.name)]);
+        tags.push.apply(tags,[hoot.OsmSchema.getTagVertex(rule.name)]);
 
-        tags = st.expandAliases(tags);
+        tags = schemaTools.expandAliases(tags);
 
         for (i in tags) {
             if (tags[i].value !== '' && tags[i].value !== '*')
@@ -138,8 +136,8 @@ schemaTools.generateRuleTags = function(rule) {
             }
         }
     } else if (rule.ruleType === 'simple') {
-        var tags = [schemaTools.hoot.OsmSchema.getTagVertex(rule.name)];
-        tags = st.expandAliases(tags);
+        var tags = [hoot.OsmSchema.getTagVertex(rule.name)];
+        tags = schemaTools.expandAliases(tags);
 
         for (i in tags) {
             tags[i].score = rule.score;
@@ -269,8 +267,8 @@ schemaTools.getWildcardTags = function(kvp, score) {
     var keyRx = new RegExp(split[0]);
     var valueRx = new RegExp(split[1]);
 
-    var allTags = schemaTools.hoot.OsmSchema.getAllTags();
-    allTags = st.expandAliases(allTags);
+    var allTags = hoot.OsmSchema.getAllTags();
+    allTags = schemaTools.expandAliases(allTags);
 
     for (var i in allTags) {
         var tag = allTags[i];
@@ -292,7 +290,7 @@ schemaTools.isA = function(name, score) {
         score = 0.001;
     }
 
-    if (!st.hoot.OsmSchema.getTagVertex(name)) {
+    if (!hoot.OsmSchema.getTagVertex(name)) {
         throw new Error("Invalid tag specified in isA: " + JSON.stringify(name));
     }
 
@@ -309,7 +307,7 @@ schemaTools.simple = function(name, score) {
         score = 2;
     }
 
-    if (!st.hoot.OsmSchema.getTagVertex(name)) {
+    if (!hoot.OsmSchema.getTagVertex(name)) {
         throw new Error("Invalid tag specified in simple: " + JSON.stringify(name));
     }
 
@@ -335,7 +333,7 @@ schemaTools.wildcard = function(name, score) {
         score = 1;
     }
 
-    if (st.getWildcardTags(name).length === 0) {
+    if (schemaTools.getWildcardTags(name).length === 0) {
         throw new Error("wildcard didn't match any tags: " + JSON.stringify(name));
     }
 

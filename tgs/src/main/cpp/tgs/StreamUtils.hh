@@ -334,7 +334,7 @@ std::ostream& operator<<(std::ostream & o, const shared_ptr<T>& v)
 template <class T>
 std::ostream& operator<<(std::ostream & o, const shared_ptr<const T>& v)
 {
-  if (v == 0)
+  if (v.get() == 0)
   {
     o << "null";
   }

@@ -131,9 +131,11 @@ ifneq ($(HADOOP_HOME),)
 endif
 
 plugins-test:
-	echo "Running plugins tests..."
-	# Only run the plugins tests if mocha is installed.
-	cd plugins; (command -v mocha &> /dev/null) && mocha --reporter dot || echo Skipping mocha tests
+ifneq ($(shell which mocha),)
+	cd plugins; mocha --reporter dot --timeout 30000
+else
+	@echo Skipping mocha tests
+endif
 
 pp-test-all:
 ifneq ($(HADOOP_HOME),)

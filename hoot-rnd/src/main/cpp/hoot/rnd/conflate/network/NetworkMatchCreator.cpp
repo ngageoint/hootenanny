@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/MatchThreshold.h>
@@ -35,10 +36,14 @@
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/HighwayCriterion.h>
 #include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/rnd/conflate/network/DebugNetworkMapCreator.h>
 #include <hoot/rnd/conflate/network/IterativeNetworkMatcher.h>
+#include <hoot/rnd/conflate/network/SingleSidedNetworkMatcher.h>
 #include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
 #include <hoot/rnd/conflate/network/NetworkMatch.h>
 #include <hoot/rnd/conflate/network/OsmNetworkExtractor.h>
@@ -79,6 +84,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   ConstMatchThresholdPtr threshold)
 {
   LOG_VAR(threshold);
+  LOG_INFO("Extracting network...");
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
   ElementCriterionPtr c1(new ChainCriterion(new StatusCriterion(Status::Unknown1),
@@ -94,28 +100,51 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   // call class to derive final graph node and graph edge matches
   //IterativeNetworkMatcherPtr matcher = IterativeNetworkMatcher::create();
-  VagabondNetworkMatcherPtr matcher = VagabondNetworkMatcher::create();
+  //VagabondNetworkMatcherPtr matcher = VagabondNetworkMatcher::create();
+  //SingleSidedNetworkMatcherPtr matcher = SingleSidedNetworkMatcher::create();
+  NetworkMatcherPtr matcher(
+    Factory::getInstance().constructObject<NetworkMatcher>(ConfigOptions().getNetworkMatcher()));
+
+  LOG_INFO("Matching network...");
   matcher->matchNetworks(map, n1, n2);
 
-  NetworkDetailsPtr details(new NetworkDetails(map, n1));
+  NetworkDetailsPtr details(new NetworkDetails(map, n1, n2));
+
+  LOG_INFO("Optimizing network...");
 
   for (size_t i = 0; i < 10; ++i)
   {
+    if (ConfigOptions().getNetworkMatchWriteDebugMaps())
+    {
+      OsmMapPtr copy(new OsmMap(map));
+      DebugNetworkMapCreator(matcher->getMatchThreshold()).addDebugElements(copy,
+        matcher->getAllEdgeScores(), matcher->getAllVertexScores());
+
+      MapProjector::projectToWgs84(copy);
+      conf().set(ConfigOptions().getWriterIncludeDebugKey(), true);
+      QString name = QString("tmp/debug-%1.osm").arg(i, 3, 10, QLatin1Char('0'));
+      LOG_INFO("Writing debug map: " << name);
+      OsmMapWriterFactory::getInstance().write(copy, name);
+    }
+
     matcher->iterate();
   }
 
+  LOG_INFO("Creating matches...");
+
   // convert graph edge matches into NetworkMatch objects.
   QList<NetworkEdgeScorePtr> edgeMatch = matcher->getAllEdgeScores();
-  LOG_VAR(edgeMatch);
 
   for (int i = 0; i < edgeMatch.size(); i++)
   {
     /// @todo tunable parameter
-    if (edgeMatch[i]->getScore() > 0.15)
+    if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
       matches.push_back(_createMatch(details, edgeMatch[i], threshold));
     }
   }
+
+  LOG_INFO("Network match creation complete.");
 }
 
 vector<MatchCreator::Description> NetworkMatchCreator::getAllCreators() const
@@ -138,8 +167,8 @@ shared_ptr<MatchThreshold> NetworkMatchCreator::getMatchThreshold()
   {
     ConfigOptions config;
     _matchThreshold.reset(
-      new MatchThreshold(config.getPoiMatchThreshold(), config.getPoiMissThreshold(),
-                         config.getPoiReviewThreshold()));
+      new MatchThreshold(config.getNetworkMatchThreshold(), config.getNetworkMissThreshold(),
+                         config.getNetworkReviewThreshold()));
   }
   return _matchThreshold;
 }

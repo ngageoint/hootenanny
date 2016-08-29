@@ -31,6 +31,7 @@ import static hoot.services.HootProperties.*;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
@@ -38,26 +39,23 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.glassfish.jersey.media.multipart.BodyPart;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -79,8 +77,7 @@ public class BasemapResource extends JobControllerBase {
 
     static {
         basemapRasterExt = new HashMap<>();
-        String extStr = BASEMAP_RASTER_EXTENSIONS;
-        String[] extList = extStr.toLowerCase().split(",");
+        String[] extList = BASEMAP_RASTER_EXTENSIONS.toLowerCase().split(",");
 
         for (String ext : extList) {
             basemapRasterExt.put(ext, ext);
@@ -91,13 +88,6 @@ public class BasemapResource extends JobControllerBase {
         super(BASEMAP_RASTER_TO_TILES);
     }
 
-    public static void createTileServerPath() throws IOException {
-        File file = new File(TILE_SERVER_PATH);
-        if (!file.exists()) {
-            FileUtils.forceMkdir(file);
-        }
-    }
-
     /**
      * Upload dataset file and create TMS tiles.
      * 
@@ -106,19 +96,21 @@ public class BasemapResource extends JobControllerBase {
      * @param inputName
      *            Name of basemap
      * @param projection
-     *            rojection to apply. defaults to EPSG:4326
-     * @param request
+     *            projection to apply. defaults to EPSG:4326
+     * @param multiPart
      *            multipart data
      * @return JSON Array containing JSON of job id
      */
     @POST
     @Path("/upload")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response processUpload(@QueryParam("INPUT_NAME") String inputName,
                                   @QueryParam("PROJECTION") String projection,
-                                  @Context HttpServletRequest request) {
+                                  FormDataMultiPart multiPart) {
         String groupId = UUID.randomUUID().toString();
         JSONArray jobsArr = new JSONArray();
+
         try {
             File uploadDir = new File(HOME_FOLDER + "/upload/");
             if (!uploadDir.exists()) {
@@ -135,25 +127,18 @@ public class BasemapResource extends JobControllerBase {
                 }
             }
 
-            if (!ServletFileUpload.isMultipartContent(request)) {
-                throw new ServletException("Content type is not multipart/form-data");
-            }
-
-            DiskFileItemFactory fileFactory = new DiskFileItemFactory();
-            File filesDir = new File(repFolderPath);
-            fileFactory.setRepository(filesDir);
-            ServletFileUpload uploader = new ServletFileUpload(fileFactory);
-
             Map<String, String> uploadedFiles = new HashMap<>();
             Map<String, String> uploadedFilesPaths = new HashMap<>();
-            List<FileItem> fileItemsList = uploader.parseRequest(request);
+            List<BodyPart> fileItems = multiPart.getBodyParts();
 
-            for (FileItem fileItem : fileItemsList) {
-                String fileName = fileItem.getName();
+            for (BodyPart fileItem : fileItems) {
+                String fileName = fileItem.getContentDisposition().getFileName();
 
-                String uploadedPath = repFolderPath + "/" + fileName;
-                File file = new File(uploadedPath);
-                fileItem.write(file);
+                try (InputStream fileStream = fileItem.getEntityAs(InputStream.class)) {
+                    String uploadedPath = repFolderPath + "/" + fileName;
+                    File file = new File(uploadedPath);
+                    FileUtils.copyInputStreamToFile(fileStream, file);
+                }
 
                 String[] nameParts = fileName.split("\\.");
                 if (nameParts.length > 1) {
@@ -225,7 +210,7 @@ public class BasemapResource extends JobControllerBase {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(jobsArr.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(jobsArr.toJSONString()).build();
     }
 
     /**
@@ -263,7 +248,7 @@ public class BasemapResource extends JobControllerBase {
 
         basemapList.addAll(sortedScripts.values());
 
-        return Response.ok(basemapList.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(basemapList.toJSONString()).build();
     }
 
     private static JSONArray getBasemapListHelper() throws IOException, ParseException {
@@ -369,15 +354,9 @@ public class BasemapResource extends JobControllerBase {
     @GET
     @Path("/enable")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response enableBasemap(@QueryParam("NAME") String basemap, @QueryParam("ENABLE") String enable) {
-        boolean doEnable = true;
-
-        if ((enable != null) && (!enable.isEmpty())) {
-            doEnable = Boolean.parseBoolean(enable);
-        }
-
+    public Response enableBasemap(@QueryParam("NAME") String basemap, @QueryParam("ENABLE") Boolean enable) {
         try {
-            toggleBaseMap(basemap, doEnable);
+            toggleBaseMap(basemap, enable);
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -389,9 +368,9 @@ public class BasemapResource extends JobControllerBase {
 
         JSONObject entity = new JSONObject();
         entity.put("name", basemap);
-        entity.put("isenabled", doEnable);
+        entity.put("isenabled", String.valueOf(enable));
 
-        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     private static void deleteBaseMapHelper(String bmName) throws IOException {
@@ -440,6 +419,6 @@ public class BasemapResource extends JobControllerBase {
         JSONObject entity = new JSONObject();
         entity.put("name", basemap);
 
-        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 }

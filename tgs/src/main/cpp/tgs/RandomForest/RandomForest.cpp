@@ -163,6 +163,8 @@ namespace Tgs
       if(!data->empty())
       {
         _forest.reserve(numTrees);
+        //  Reset the ids so that all forests are created alike
+        RandomTree::resetIds();
 
         for(unsigned int i = 0; i < numTrees; i++)
         {

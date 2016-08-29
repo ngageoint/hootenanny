@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.osm;
 
+import static hoot.services.models.db.QUsers.users;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -51,15 +53,15 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.mysema.query.sql.Configuration;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLInsertClause;
+import com.querydsl.sql.Configuration;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLInsertClause;
 
-import hoot.services.utils.DbUtils;
 import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.osm.User;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -88,7 +90,6 @@ public class UserResource {
      * @return Response with the requested user's information
      */
     @GET
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response get(@PathParam("userId") String userId) {
         logger.debug("Retrieving user with ID: {} ...", userId.trim());
@@ -97,7 +98,6 @@ public class UserResource {
         try (Connection conn = DbUtils.createConnection()) {
             long userIdNum;
             try {
-                QUsers users = QUsers.users;
                 // input mapId may be a map ID or a map name
                 userIdNum = ModelDaoUtils.getRecordIdForInputString(userId, conn, users, users.id, users.displayName);
             }
@@ -113,11 +113,12 @@ public class UserResource {
                 }
             }
 
-            QUsers usersTbl = QUsers.users;
-            SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-
             // there is only ever one test user
-            Users user = query.from(usersTbl).where(usersTbl.id.eq(userIdNum)).singleResult(usersTbl);
+            Users user = new SQLQuery<>(conn, DbUtils.getConfiguration())
+                    .select(users)
+                    .from(users)
+                    .where(users.id.eq(userIdNum))
+                    .fetchOne();
 
             if (user == null) {
                 String message = "No user exists with ID: " + userId + ".  Please request a valid user.";
@@ -137,8 +138,7 @@ public class UserResource {
         catch (IOException ignored) {
         }
 
-        return Response.ok(new DOMSource(responseDoc), MediaType.APPLICATION_XML)
-                .header("Content-type", MediaType.APPLICATION_XML).build();
+        return Response.ok(new DOMSource(responseDoc)).build();
     }
 
     /**
@@ -207,30 +207,34 @@ public class UserResource {
     }
 
     private static List<Users> retrieveAll(Connection connection) {
-        SQLQuery query = new SQLQuery(connection, DbUtils.getConfiguration());
-        query.from(QUsers.users).orderBy(QUsers.users.displayName.asc());
-        List<Users> res = query.list(QUsers.users);
-        return res;
+        List<Users> users = new SQLQuery<>(connection, DbUtils.getConfiguration())
+                .select(QUsers.users)
+                .from(QUsers.users)
+                .orderBy(QUsers.users.displayName.asc())
+                .fetch();
+        return users;
     }
 
     private static Users getOrSaveByEmail(String userEmail, Connection connection) {
-        Users ret = (new SQLQuery(connection, DbUtils.getConfiguration()))
+        Users users = (new SQLQuery<>(connection, DbUtils.getConfiguration()))
+                .select(QUsers.users)
                 .from(QUsers.users)
                 .where(QUsers.users.email.equalsIgnoreCase(userEmail))
-                .singleResult(QUsers.users);
+                .fetchOne();
 
         // none then create
-        if (ret == null) {
+        if (users == null) {
             long nCreated = insert(userEmail, connection);
             if (nCreated > 0) {
-                ret = (new SQLQuery(connection, DbUtils.getConfiguration()))
+                users = (new SQLQuery<>(connection, DbUtils.getConfiguration()))
+                        .select(QUsers.users)
                         .from(QUsers.users)
                         .where(QUsers.users.email.equalsIgnoreCase(userEmail))
-                        .singleResult(QUsers.users);
+                        .fetchOne();
             }
         }
 
-        return ret;
+        return users;
     }
 
     private static long insert(String email, Connection connection) {
@@ -241,8 +245,8 @@ public class UserResource {
 
     private static SQLInsertClause createInsertClause(String email, Connection connection) {
         Configuration configuration = DbUtils.getConfiguration();
-        SQLInsertClause cl = new SQLInsertClause(connection, configuration, QUsers.users).
-                columns(QUsers.users.email, QUsers.users.displayName).values(email, email);
+        SQLInsertClause cl = new SQLInsertClause(connection, configuration, users).
+                columns(users.email, users.displayName).values(email, email);
         return cl;
     }
 }

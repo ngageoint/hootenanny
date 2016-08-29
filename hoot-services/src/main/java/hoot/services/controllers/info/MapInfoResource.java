@@ -28,11 +28,6 @@ package hoot.services.controllers.info;
 
 import static hoot.services.HootProperties.*;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -41,7 +36,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONArray;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +81,7 @@ public class MapInfoResource {
             for (String mapId : mapids) {
                 if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
                     for (String table : maptables) {
-                        combinedMapSize += getTableSizeInBytes(table + "_" + mapId);
+                        combinedMapSize += DbUtils.getTableSizeInBytes(table + "_" + mapId);
                     }
                 }
             }
@@ -103,7 +98,7 @@ public class MapInfoResource {
         entity.put("mapid", mapIds);
         entity.put("size_byte", combinedMapSize);
 
-        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     /**
@@ -127,13 +122,13 @@ public class MapInfoResource {
                 long mapSize = 0;
                 for (String table : maptables) {
                     if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
-                        mapSize += getTableSizeInBytes(table + "_" + mapId);
+                        mapSize += DbUtils.getTableSizeInBytes(table + "_" + mapId);
                     }
                 }
                 JSONObject layer = new JSONObject();
                 layer.put("id", Long.parseLong(mapId));
                 layer.put("size", mapSize);
-                layers.put(layer);
+                layers.add(layer);
             }
         }
         catch (WebApplicationException wae) {
@@ -147,7 +142,7 @@ public class MapInfoResource {
         JSONObject entity = new JSONObject();
         entity.put("layers", layers);
 
-        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     /**
@@ -166,30 +161,6 @@ public class MapInfoResource {
         entity.put("ingest_threshold", INGEST_SIZE_THRESHOLD);
         entity.put("export_threshold", EXPORT_SIZE_THRESHOLD);
 
-        return Response.ok(entity.toJSONString(), MediaType.APPLICATION_JSON).build();
-    }
-
-    /**
-     * Returns table size in byte
-     */
-    private static long getTableSizeInBytes(String tableName) {
-        long tableSize = 0;
-
-        try (Connection conn = DbUtils.createConnection()) {
-            try (Statement stmt = conn.createStatement()) {
-                String sql = "select pg_total_relation_size('" + tableName + "') as tablesize";
-                try (ResultSet rs = stmt.executeQuery(sql)){
-                    while (rs.next()) {
-                        tableSize = rs.getLong("tablesize");
-                    }
-                }
-            }
-        }
-        catch (SQLException e) {
-            String msg = "Error retrieving table size in bytes of " + tableName + " table!";
-            throw new RuntimeException(msg, e);
-        }
-
-        return tableSize;
+        return Response.ok(entity.toJSONString()).build();
     }
 }

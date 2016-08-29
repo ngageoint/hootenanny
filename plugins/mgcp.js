@@ -331,6 +331,9 @@ mgcp = {
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
+        // Drop the FCSUBTYPE since we don't use it
+        if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
+
         // The swap list. These are the same attr, just named differently
         // These may get converted back on output.
         var swapList = {
@@ -393,17 +396,20 @@ mgcp = {
 
         if (attrs.F_CODE)
         {
-            // Do nothing
+            // Drop the the "Not Found" F_CODE. This is from the UI
+            // NOTE: We _should_ be getting "FCODE" not "F_CODE" from files/UI
+            if (attrs.F_CODE == 'Not found') delete attrs.F_CODE;
         }
         else if (attrs.FCODE)
         {
             // Swap these since the rest of the lookup tables & TDS use F_CODE
-            attrs.F_CODE = attrs.FCODE;
+            if (attrs.FCODE !== 'Not found') attrs.F_CODE = attrs.FCODE;
+
             delete attrs.FCODE;
         }
         else
         {
-            // Time to find an FCODE based on teh filename
+            // Time to find an FCODE based on the filename
             var fCodeMap = [
                 ['AA010', ['aa010']], // Extraction Mine
                 ['AA012', ['aa012']], // Quarry
@@ -579,7 +585,7 @@ mgcp = {
         if (attrs.HWT && attrs.HWT !== '0') tags.amenity = 'place_of_worship';
 
         // Add the LayerName to the source
-        tags.source = 'mgcp:' + layerName.toLowerCase();
+        if ((! tags.source) && layerName !== '') tags.source = 'mgcp:' + layerName.toLowerCase();
 
         // If we have a UID, store it
         if (tags.uuid)
@@ -740,8 +746,9 @@ mgcp = {
                 var tTags = JSON.parse(tObj.tags)
                 for (i in tTags)
                 {
-                    print('Memo: Add: ' + i + ' = ' + tTags[i]);
-                    if (tags[tTags[i]]) print('Overwrite:' + i + ' = ' + tTags[i]);
+                    // Debug
+                    // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking TXT, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
 
@@ -757,7 +764,6 @@ mgcp = {
     {
         // Remove Hoot assigned tags for the source of the data
         if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-        if (tags.source) delete tags.source;
         if (tags.area) delete tags.area;
         if (tags['error:circular']) delete tags['error:circular'];
         if (tags['hoot:status']) delete tags['hoot:status'];
@@ -943,21 +949,21 @@ mgcp = {
         
         // Movable Bridges
         if (tags.bridge == 'movable')
-		{
-		  if (! tags['bridge:movable'])
-		  {
-			tags['bridge:movable'] = 'unknown';
-		  }
-		  tags.bridge = 'yes';
-		  attrs.F_CODE = 'AQ040';
-		}
+        {
+            if (! tags['bridge:movable'])
+            {
+            tags['bridge:movable'] = 'unknown';
+            }
+            tags.bridge = 'yes';
+            attrs.F_CODE = 'AQ040';
+        }
 
-		// Viaducts
-		if (tags.bridge == 'viaduct')
-		{
-		  tags.bridge = 'yes';
-		  tags['source:text'] = translate.appendValue(tags['source:text'],'Viaduct',';');
-		}
+        // Viaducts
+        if (tags.bridge == 'viaduct')
+        {
+            tags.bridge = 'yes';
+            tags.note = translate.appendValue(tags.note,'Viaduct',';');
+        }
 
         // Keep looking for an FCODE
         // This uses the fcodeLookup tables that are defined earlier
@@ -1412,44 +1418,62 @@ mgcp = {
             // tableName = layerNameLookup[tableName];
             hoot.logVerbose('FCODE and Geometry: ' + tableName + ' is not in the schema');
 
-            tableName = 'o2s_' + geometryType.toString().charAt(0);
-
-            // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
-
-            for (var i in tags)
+            if (config.getOgrPartialTranslate() == 'true')
             {
-                // Clean out all of the "source:XXX" tags to save space
-                // if (i.indexOf('source:') !== -1) delete tags[i];
-                if (i.indexOf('error:') !== -1) delete tags[i];
-                if (i.indexOf('hoot:') !== -1) delete tags[i];
-            }
+                tableName = 'Partial';
+                attrs.FCODE = 'Partial';
+                delete attrs.F_CODE;
 
-            var str = JSON.stringify(tags);
-
-            // Shapefiles can't handle fields > 254 chars.
-            // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
-            // A nicer thing would be to arrange the tags until they fit neatly
-            if (str.length < 255 || config.getOgrSplitO2s() == 'false')
-            {
-                // return {attrs:{tag1:str}, tableName: tableName};
-                attrs = {tag1:str};
+                // If we have unused tags, add them to partial feature.
+                if (Object.keys(notUsedTags).length > 0)
+                {
+                    for (var i in notUsedTags)
+                    {
+                        attrs['OSM:' + i] = notUsedTags[i];
+                    }
+                }
             }
             else
             {
-                // Not good. Will fix with the rewrite of the tag splitting code
-                if (str.length > 1012)
+                tableName = 'o2s_' + geometryType.toString().charAt(0);
+
+                // Dump out what attributes we have converted before they get wiped out
+                if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+
+                for (var i in tags)
                 {
-                    hoot.logVerbose('o2s tags truncated to fit in available space.');
-                    str = str.substring(0,1012);
+                    // Clean out all of the "source:XXX" tags to save space
+                    if (i.indexOf('source:') !== -1) delete tags[i];
+                    if (i.indexOf('error:') !== -1) delete tags[i];
+                    if (i.indexOf('hoot:') !== -1) delete tags[i];
                 }
 
-                // Now split the text across the available tags
-                attrs = {tag1:str.substring(0,253),
-                         tag2:str.substring(253,506),
-                         tag3:str.substring(506,759),
-                         tag4:str.substring(759,1012)};
-             }
+                var str = JSON.stringify(tags);
+
+                // Shapefiles can't handle fields > 254 chars.
+                // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
+                // A nicer thing would be to arrange the tags until they fit neatly
+                if (str.length < 255 || config.getOgrSplitO2s() == 'false')
+                {
+                    // return {attrs:{tag1:str}, tableName: tableName};
+                    attrs = {tag1:str};
+                }
+                else
+                {
+                    // Not good. Will fix with the rewrite of the tag splitting code
+                    if (str.length > 1012)
+                    {
+                        hoot.logVerbose('o2s tags truncated to fit in available space.');
+                        str = str.substring(0,1012);
+                    }
+
+                    // Now split the text across the available tags
+                    attrs = {tag1:str.substring(0,253),
+                            tag2:str.substring(253,506),
+                            tag3:str.substring(506,759),
+                            tag4:str.substring(759,1012)};
+                }
+            }
 
              returnData.push({attrs: attrs, tableName: tableName});
         }

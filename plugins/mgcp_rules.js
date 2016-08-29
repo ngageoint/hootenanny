@@ -47,7 +47,7 @@ mgcp.rules = {
         // MGCP TRDv4 Only FCODES
         // These are used for both import and export
         ['F_CODE','AA012','landuse','quarry'], // Quarry - NFDD AA010
-        ['F_CODE','AA050','man_made','water_well'], // Well - NFDD BH230
+        ['F_CODE','AA050','man_made','water_well'], // Well - NFDD BH230 or AA054
         ['F_CODE','AC000','facility','yes'], // Processing Facility - NFDD AN010
         ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
         ['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
@@ -121,7 +121,8 @@ mgcp.rules = {
         'NFI':'gndb_id:2', // Named Feature Identifier. Not sure how this is different to NFN
         'NFN':'gndb_id', // Name Identifier
         'RTN':'ref',  // Route Designation
-        'SDP':'source:description', // Source Description
+        //'SDP':'source:description', // Source Description
+        'SDP':'source', // Source Description
         'SDV':'source:datetime', // Source Date and Time
         'TIER_NOTE':'source:commercial_distribution_restriction', // Commercial Distribution Restriction       
         'TXT':'note', // Associated Text

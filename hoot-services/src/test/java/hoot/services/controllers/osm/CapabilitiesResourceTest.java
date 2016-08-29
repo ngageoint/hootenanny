@@ -28,20 +28,20 @@ package hoot.services.controllers.osm;
 
 import static hoot.services.HootProperties.*;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.xpath.XPathAPI;
+import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
 
 import hoot.services.UnitTest;
 import hoot.services.osm.OsmResourceTestAbstract;
@@ -53,7 +53,12 @@ public class CapabilitiesResourceTest extends OsmResourceTestAbstract {
     private static final Logger logger = LoggerFactory.getLogger(CapabilitiesResourceTest.class);
 
     public CapabilitiesResourceTest() {
-        super("hoot.services.controllers.osm");
+        super();
+    }
+
+    @Override
+    protected Application configure() {
+        return new ResourceConfig(CapabilitiesResource.class);
     }
 
     @Test
@@ -61,11 +66,10 @@ public class CapabilitiesResourceTest extends OsmResourceTestAbstract {
     public void testGet() throws Exception {
         Document responseData = null;
         try {
-            responseData = resource().path("api/capabilities").accept(MediaType.TEXT_XML).get(Document.class);
+            responseData = target("api/capabilities").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response " + e.getResponse());
         }
 
         Assert.assertNotNull(responseData);

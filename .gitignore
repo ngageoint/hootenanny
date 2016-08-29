@@ -1,7 +1,7 @@
 hoot-services/src/main/resources/conf/local.conf
 plugins/config.js
-.*.swo
-.*.swp
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
 *.pyc
 *.log
 *.war
@@ -168,3 +168,6 @@ hoot-services/src/main/resources/db/spring-database.xml
 hoot-services/src/main/resources/conf/hoot-services.conf
 hoot-services/src/main/resources/db/*.properties
 ######
+
+compile
+VagrantfileLocal

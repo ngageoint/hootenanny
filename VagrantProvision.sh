@@ -97,13 +97,13 @@ echo "### Installing cucumber gems..."
 gem list --local | grep -q mime-types
 if [ $? -eq 1 ]; then
    #sudo gem install mime-types -v 2.6.2
-   gem install mime-types 
+   gem install mime-types
 fi
-gem list --local | grep -q capybara
-if [ $? -eq 1 ]; then
-   #sudo gem install capybara -v 2.5.0
-   gem install capybara
-fi
+# gem list --local | grep -q capybara
+# if [ $? -eq 1 ]; then
+#    #sudo gem install capybara -v 2.5.0
+#    gem install capybara
+# fi
 gem list --local | grep -q cucumber
 if [ $? -eq 1 ]; then
    #sudo gem install cucumber

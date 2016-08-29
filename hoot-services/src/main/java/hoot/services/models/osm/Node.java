@@ -27,32 +27,29 @@
 package hoot.services.models.osm;
 
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
 
-import com.mysema.query.sql.RelationalPathBase;
-import com.mysema.query.sql.SQLExpressions;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.types.path.BooleanPath;
-import com.mysema.query.types.path.NumberPath;
-import com.mysema.query.types.path.SimplePath;
+import com.querydsl.core.types.dsl.BooleanPath;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.SimplePath;
+import com.querydsl.sql.RelationalPathBase;
+import com.querydsl.sql.SQLExpressions;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLInsertClause;
 
-import hoot.services.utils.DbUtils;
-import hoot.services.utils.DbUtils.EntityChangeType;
-import hoot.services.models.db.CurrentNodes;
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.db.CurrentNodes;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.GeoUtils;
 import hoot.services.utils.QuadTileCalculator;
+import hoot.services.utils.DbUtils.EntityChangeType;
 
 
 /**
@@ -105,10 +102,11 @@ public class Node extends Element {
             nodeRecord = (CurrentNodes) record;
         }
         else {
-            nodeRecord = new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+            nodeRecord = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+                    .select(currentNodes)
                     .from(currentNodes)
                     .where(currentNodes.id.eq(getId()))
-                    .singleResult(currentNodes);
+                    .fetchOne();
         }
 
         return new BoundingBox(nodeRecord.getLongitude(), nodeRecord.getLatitude(), nodeRecord.getLongitude(),
@@ -130,10 +128,11 @@ public class Node extends Element {
         // This seems redundant when compared to Element::getElementRecords
 
         if (!nodeIds.isEmpty()) {
-            return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+                    .select(currentNodes)
                     .from(currentNodes)
                     .where(currentNodes.id.in(nodeIds))
-                    .list(currentNodes);
+                    .fetch();
         }
 
         return new ArrayList<>();
@@ -193,13 +192,16 @@ public class Node extends Element {
 
         // From the Rails port of OSM API:
         // ways = Way.joins(:way_nodes).where(:visible => true, :current_way_nodes => { :node_id => id }).order(:id)
-        SQLQuery owningWaysQuery = new SQLQuery(super.getDbConnection(), DbUtils.getConfiguration(super.getMapId()))
+        SQLQuery<Long> owningWaysQuery =
+                new SQLQuery<>(super.getDbConnection(), DbUtils.getConfiguration(super.getMapId()))
+                .select(currentWayNodes.wayId)
                 .distinct()
                 .from(currentWays)
                 .join(currentWayNodes).on(currentWays.id.eq(currentWayNodes.wayId))
-                .where(currentWays.visible.eq(true).and(currentWayNodes.nodeId.eq(super.getId())));
+                .where(currentWays.visible.eq(true).and(currentWayNodes.nodeId.eq(super.getId())))
+                .orderBy(currentWayNodes.wayId.asc());
 
-        Set<Long> owningWayIds = new TreeSet<>(owningWaysQuery.list(currentWayNodes.wayId));
+        List<Long> owningWayIds = owningWaysQuery.fetch();
 
         if (!owningWayIds.isEmpty()) {
             throw new OSMAPIPreconditionException("Node with ID = " + super.getId() + " is still used by other way(s): "
@@ -209,15 +211,17 @@ public class Node extends Element {
         // From the Rails port of OSM API:
         // rels = Relation.joins(:relation_members).where(:visible => true,
         // :current_relation_members => { :member_type => "Node", :member_id => id }).
-        SQLQuery owningRelationsQuery = new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).distinct()
+        SQLQuery<Long> owningRelationsQuery = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+                .select(currentRelationMembers.relationId)
+                .distinct()
                 .from(currentRelations)
-                .join(currentRelationMembers)
-                .on(currentRelations.id.eq(currentRelationMembers.relationId))
+                .join(currentRelationMembers).on(currentRelations.id.eq(currentRelationMembers.relationId))
                 .where(currentRelations.visible.eq(true)
                         .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node))
-                        .and(currentRelationMembers.memberId.eq(super.getId())));
+                        .and(currentRelationMembers.memberId.eq(super.getId())))
+                .orderBy(currentRelationMembers.relationId.asc());
 
-        Set<Long> owningRelationsIds = new TreeSet<>(owningRelationsQuery.list(currentRelationMembers.relationId));
+        List<Long> owningRelationsIds = owningRelationsQuery.fetch();
 
         if (!owningRelationsIds.isEmpty()) {
             throw new OSMAPIPreconditionException(
@@ -246,8 +250,10 @@ public class Node extends Element {
     @Override
     public org.w3c.dom.Element toXml(org.w3c.dom.Element parentXml, long modifyingUserId,
             String modifyingUserDisplayName, boolean multiLayerUniqueElementIds, boolean addChildren) {
+
         org.w3c.dom.Element element = super.toXml(parentXml, modifyingUserId, modifyingUserDisplayName,
                 multiLayerUniqueElementIds, addChildren);
+
         CurrentNodes nodeRecord = (CurrentNodes) record;
         if (nodeRecord.getVisible()) {
             element.setAttribute("lat", String.valueOf(nodeRecord.getLatitude()));
@@ -380,9 +386,13 @@ public class Node extends Element {
      */
     public static long insertNew(long changesetId, long mapId, double latitude, double longitude,
             java.util.Map<String, String> tags, Connection conn) {
-        long nextNodeId = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                .uniqueResult(SQLExpressions.nextval(Long.class, "current_nodes_id_seq"));
+
+        long nextNodeId = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(SQLExpressions.nextval(Long.class, "current_nodes_id_seq"))
+                .fetchOne();
+
         insertNew(nextNodeId, changesetId, mapId, latitude, longitude, tags, conn);
+
         return nextNodeId;
     }
 
@@ -407,36 +417,12 @@ public class Node extends Element {
      */
     public static void insertNew(long nodeId, long changesetId, long mapId, double latitude, double longitude,
             java.util.Map<String, String> tags, Connection conn) {
-        // querydsl does not support hstore so using jdbc
 
-        String strKv = "";
-        if (tags != null) {
-            for (Map.Entry<String, String> pairs : tags.entrySet()) {
-                String key = "\"" + pairs.getKey() + "\"";
-                String val = "\"" + pairs.getValue() + "\"";
-                if (!strKv.isEmpty()) {
-                    strKv += ",";
-                }
-
-                strKv += key + "=>" + val;
-            }
-        }
-
-        String strTags = "'";
-        strTags += strKv;
-        strTags += "'";
-
-        String sql = "INSERT INTO current_nodes_" + mapId + "(\n"
-                + "            id, latitude, longitude, changeset_id,  visible, \"timestamp\", tile, version, tags)\n"
-                + " VALUES(" + nodeId + "," + latitude + "," + longitude + "," + changesetId + "," + "true" + ","
-                + "CURRENT_TIMESTAMP" + "," + QuadTileCalculator.tileForPoint(latitude, longitude) + "," + "1" + ","
-                + strTags + ")";
-
-        try (Statement stmt = conn.createStatement()){
-            stmt.executeUpdate(sql);
-        }
-        catch (SQLException e) {
-            throw new RuntimeException("Error inserting into the database!", e);
-        }
+        new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), currentNodes)
+                .columns(currentNodes.id, currentNodes.latitude, currentNodes.longitude, currentNodes.changesetId,
+                        currentNodes.visible, currentNodes.tile, currentNodes.version, currentNodes.tags)
+                .values(nodeId, latitude, longitude, changesetId,
+                        Boolean.TRUE, QuadTileCalculator.tileForPoint(latitude, longitude), 1L, tags)
+                .execute();
     }
 }

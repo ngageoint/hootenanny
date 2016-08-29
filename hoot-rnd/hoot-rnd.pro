@@ -33,7 +33,7 @@ include(../Configure.pri)
 
 QMAKE_CXXFLAGS = -I/usr/include/nodejs $$QMAKE_CXXFLAGS
 
-LIBS += -L../lib/ -lTgs -ltbs -lHootCore
+LIBS += -L../lib/ -lTgs -ltbs -lHootCore -lHootCoreTest
 
 UI_DIR = tmp/ui
 MOC_DIR = tmp/moc
@@ -84,8 +84,19 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/InvertedEdgeMatchSet.cpp \
     src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeMatchSet.cpp \
     src/main/cpp/hoot/rnd/conflate/network/EdgeLinkCreator.cpp \
-    src/main/cpp/hoot/rnd/conflate/network/EdgePair.cpp \
     src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeLinks.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/LegacyVertexMatcher.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcher.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcherTest.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/EdgeLocation.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/EdgeSubline.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/EdgeSublineMatch.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/EdgeMatchSetFinderTest.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/PartialNetworkMerger.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/NetworkVertexTest.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherTest.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h \
@@ -117,8 +128,17 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/InvertedEdgeMatchSet.h \
     src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeMatchSet.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeLinkCreator.h \
-    src/main/cpp/hoot/rnd/conflate/network/EdgePair.h \
-    src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeLinks.h
+    src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeLinks.h \
+    src/main/cpp/hoot/rnd/conflate/network/LegacyVertexMatcher.h \
+    src/main/cpp/hoot/rnd/conflate/network/SearchRadiusProvider.h \
+    src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.h \
+    src/main/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcher.h \
+    src/main/cpp/hoot/rnd/conflate/network/EdgeLocation.h \
+    src/main/cpp/hoot/rnd/conflate/network/EdgeSubline.h \
+    src/main/cpp/hoot/rnd/conflate/network/EdgeSublineMatch.h \
+    src/main/cpp/hoot/rnd/conflate/network/PartialNetworkMerger.h \
+    src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.h \
+    src/main/cpp/hoot/rnd/conflate/network/EidMapper.h
 
 FORMS +=
 

@@ -31,9 +31,9 @@ else
 endif
 	echo Running user interface tests...
 ifneq (,$(findstring s,$(MAKEFLAGS)))
-	TOMCAT_PORT=$(TOMCAT_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format progress --strict
+	TOMCAT_PORT=$(TOMCAT_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format progress
 else
-	TOMCAT_PORT=$(TOMCAT_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format pretty --strict
+	TOMCAT_PORT=$(TOMCAT_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format pretty
 endif
 	echo ""
 
@@ -52,7 +52,7 @@ clean:
 	done; \
 	true
 
-coverage:
+coverage: clean-coverage
 	echo Running user interface coverage report...
 ifneq (,$(findstring s,$(MAKEFLAGS)))
 	$(HOOT_HOME)/scripts/CoverHootUI.sh &> coverage.log
@@ -63,6 +63,8 @@ endif
 
 clean-coverage:
 	rm -f coverage.log
+	rm -f screenshot_*.png
+	rm -f screenshot_*.html
 	rm -f $(HOOT_HOME)/hoot-ui/test/istanbul_index.html
 	rm -rf $(HOOT_HOME)/hoot-ui/istanbul
 	rm -rf $(HOOT_HOME)/hoot-ui/mocha-coverage

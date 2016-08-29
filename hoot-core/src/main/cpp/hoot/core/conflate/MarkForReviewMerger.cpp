@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -46,19 +46,40 @@ MarkForReviewMerger::MarkForReviewMerger(const set< pair<ElementId, ElementId> >
 {
 }
 
+MarkForReviewMerger::MarkForReviewMerger(const set<ElementId>& eids, QString note,
+  QString reviewType, double score) :
+  _eids(eids),
+  _note(note),
+  _reviewType(reviewType),
+  _score(score)
+{
+}
+
 void MarkForReviewMerger::apply(const OsmMapPtr& map,
   vector< pair<ElementId, ElementId> >& /*replaced*/) const
 {
-  for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
-    it != _pairs.end(); ++it)
+  assert(!(_eids.size() >=1 && _pairs.size() >= 1));
+
+  if (_eids.size() >= 1)
   {
-    ElementId eid1 = it->first;
-    ElementId eid2 = it->second;
+    ReviewMarker().mark(map, _eids, _note, _reviewType, _score);
+  }
+  else
+  {
+    for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
+      it != _pairs.end(); ++it)
+    {
+      ElementId eid1 = it->first;
+      ElementId eid2 = it->second;
 
-    ElementPtr e1 = map->getElement(eid1);
-    ElementPtr e2 = map->getElement(eid2);
+      ElementPtr e1 = map->getElement(eid1);
+      ElementPtr e2 = map->getElement(eid2);
 
-    ReviewMarker().mark(map, e1, e2, _note, _reviewType, _score);
+      if (e1.get() && e2.get())
+      {
+        ReviewMarker().mark(map, e1, e2, _note, _reviewType, _score);
+      }
+    }
   }
 }
 
@@ -66,12 +87,19 @@ set<ElementId> MarkForReviewMerger::getImpactedElementIds() const
 {
   set<ElementId> result;
 
-  // make sure the map contains all our elements and they aren't conflated.
-  for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
-    it != _pairs.end(); ++it)
+  if (_eids.size() >= 1)
   {
-    result.insert(it->first);
-    result.insert(it->second);
+    result = _eids;
+  }
+  else
+  {
+    // make sure the map contains all our elements and they aren't conflated.
+    for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
+      it != _pairs.end(); ++it)
+    {
+      result.insert(it->first);
+      result.insert(it->second);
+    }
   }
 
   return result;
@@ -105,6 +133,13 @@ void MarkForReviewMerger::replace(ElementId oldEid, ElementId newEid)
     {
       ++it;
     }
+  }
+
+  set<ElementId>::iterator it2 = _eids.find(oldEid);
+  if (it2 != _eids.end())
+  {
+    _eids.erase(it2);
+    _eids.insert(newEid);
   }
 }
 

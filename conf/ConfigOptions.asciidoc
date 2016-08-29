@@ -858,6 +858,107 @@ Possible values include:
   `hoot::SplitMatchCreator` is specified in `match.creators`. Note that the
   script name is not specified in this parameter.
 
+=== network.conflicts.partial.handicap
+
+* Data Type: double
+* Default Value: `0.3`
+
+A larger value will increase the weight of partial matches. A smaller value prefers whole matches
+over partial matches. This value is generally not changed by users. Reasonable range is (0, ~2].
+
+=== network.conflicts.stub.handicap
+
+* Data Type: double
+* Default Value: `.86`
+
+A larger value will increase the weight of stubs. This value is generally not changed by
+users. Reasonable range is (0, ~2].
+
+=== network.conflicts.aggression
+
+* Data Type: double
+* Default Value: `4.4`
+
+A larger value will conflate more aggressively (fewer reviews). Users may want to consider changing
+this value. Reasonable range is [1, ~10].
+
+=== network.conflicts.weight.influence
+
+* Data Type: double
+* Default Value: `0`
+
+A value of 0 will cause all edges to have the same weight with each neighbor, a higher value will
+give matches with more support a higher weight. This value is generally not changed by
+users. Reasonable range is [0, 2].
+
+=== network.conflicts.outbound.weighting
+
+* Data Type: double
+* Default Value: `0`
+
+A value of 0 will cause an edge to contribute (1 * score * weight) to each neighbor. A value
+of 1 will give approx (1 / n * score * weight) influence to each neighbor.
+Reasonable range is [0, 2].
+
+=== network.conflicts.stub.through.weighting
+
+* Data Type: double
+* Default Value: `0.59`
+
+A value of 0 will cause edges that are connected by a stub to contribute directly as neighbors.
+Higher values will reduce that contribution. Reasonable range is [0, ~10].
+
+=== network.match.threshold
+
+* Data Type: double
+* Default Value: `0.15`
+
+The threshold at which a network match is called a match.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== network.match.write.debug.maps
+
+* Data Type: bool
+* Default Value: `false`
+
+If true debug maps will be generated at every iteration. This is useful when debugging. The maps
+can be large and slow things down significantly.
+
+=== network.matcher
+
+* Data Type: string
+* Default Value: `hoot::IterativeNetworkMatcher`
+
+An internal option for manipulating the way network matching occurs. This should only be used for
+debug and test. The parameter must be a class that is registered with the factory and subclasses
+`NetworkMatcher`.
+
+=== network.miss.threshold
+
+* Data Type: double
+* Default Value: `0.85`
+
+The threshold at which a network miss is called a miss.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== network.review.threshold
+
+* Data Type: double
+* Default Value: `0.5`
+
+The threshold at which a network review is called a review. Reviews are also declared in some
+other situations when the relationship is not clear.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
 === node.matcher.strictness
 
 * Data Type: double
@@ -952,6 +1053,13 @@ script.
 * Default Value: `3`
 
 The number of identical log messages that will be emitted before they're silenced.
+
+=== ogr.partial.translate
+
+* Data Type: bool
+* Default Value: `false`
+
+Write partial translations instead of o2s_[PAL] features.
 
 === ogr.reader.bounding.box
 
@@ -1103,6 +1211,13 @@ from the URL.
 
 Specifies the writer that the OsmMapWriterFactory will use. This overrides any information derived
 from the URL.
+
+=== osm.map.writer.format.xml
+
+* Data Type: bool
+* Default Value: `true`
+
+Turns on autoformatting (line breaks, indentation etc) for XML output.
 
 === osm2ogr.ops
 

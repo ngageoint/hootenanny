@@ -27,13 +27,9 @@
 package hoot.services.models.review;
 
 import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class ReviewableItem implements ReviewQueryMapper {
-    private static final Logger logger = LoggerFactory.getLogger(ReviewableItem.class);
-
     private long sortOrder;
     private long mapId;
     private long relationId;
@@ -49,8 +45,8 @@ public class ReviewableItem implements ReviewQueryMapper {
         return relationId;
     }
 
-    public void setRelationId(long relid) {
-        relationId = relid;
+    public void setRelationId(long relationId) {
+        this.relationId = relationId;
     }
 
     public long getSortOrder() {
