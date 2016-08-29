@@ -61,7 +61,7 @@ if (require.main === module) {
 
 function P2Pserver(request, response) {
     try {
-        var header = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'};
+        var header = {'Accept': 'text/xml', 'Content-Type': 'text/xml', 'Access-Control-Allow-Origin': '*'};
         if (request.method === 'POST') {
             var payload = '';
             request.on('data', function(chunk){
@@ -78,7 +78,7 @@ function P2Pserver(request, response) {
                 var result = handleInputs(params);
 
                 response.writeHead(200, header);
-                response.end(JSON.stringify(result));
+                response.end(result);
             });
 
         } else if (request.method === 'GET') {
@@ -139,10 +139,7 @@ var postHandler = function(data)
     var mergedMap = hoot.poiMerge(script, map, -1);
     var xml = hoot.OsmWriter.toString(mergedMap);
 
-    return {
-        //input: data,
-        output: xml
-    };
+    return xml;
 }
 
 if (typeof exports !== 'undefined') {

@@ -81,7 +81,7 @@ if (require.main === module) {
 
 function TranslationServer(request, response) {
     try {
-        var header = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'};
+        var header = {'Access-Control-Allow-Origin': '*'};
         if (request.method === 'POST') {
             var payload = '';
             request.on('data', function(chunk) {
@@ -90,14 +90,16 @@ function TranslationServer(request, response) {
 
             request.on('end', function() {
                 var urlbits = url.parse(request.url, true);
-                var params = JSON.parse(payload);
+                var params = {};
+                params.osm = payload;
                 params.method = request.method;
                 params.path = urlbits.pathname;
 
                 var result = handleInputs(params);
-
+                header['Accept'] = 'text/xml';
+                header['Content-Type'] = 'text/xml';
                 response.writeHead(200, header);
-                response.end(JSON.stringify(result));
+                response.end(result);
             });
 
         } else if (request.method === 'GET') {
@@ -107,7 +109,7 @@ function TranslationServer(request, response) {
             params.path = urlbits.pathname;
 
             var result = handleInputs(params);
-
+            header['Content-Type'] = 'application/json';
             response.writeHead(200, header);
             response.end(JSON.stringify(result));
         } else {
@@ -115,7 +117,6 @@ function TranslationServer(request, response) {
         }
 
     } catch (err) {
-        console.error(err.stack);
         var status = 500;
         if (err.message.indexOf('Unsupported') > -1)
             status = 400;
@@ -127,30 +128,30 @@ function TranslationServer(request, response) {
 
 }
 
-function handleInputs(payload) {
+function handleInputs(params) {
     var result;
-    switch(payload.path) {
+    switch(params.path) {
         case '/osmtotds':
-            payload.transMap = osmToTdsMap;
-            payload.transDir = 'toogr';
-            result = osmtotds(payload);
+            params.transMap = osmToTdsMap;
+            params.transDir = 'toogr';
+            result = osmtotds(params);
             break;
         case '/tdstoosm':
-            payload.transMap = tdsToOsmMap;
-            payload.transDir = 'toosm';
-            result = tdstoosm(payload);
+            params.transMap = tdsToOsmMap;
+            params.transDir = 'toosm';
+            result = tdstoosm(params);
             break;
         case '/taginfo/key/values':
-            result = getTaginfoKeyFields(payload);
+            result = getTaginfoKeyFields(params);
             break;
         case '/taginfo/keys/all':
-            result = getTaginfoKeys(payload);
+            result = getTaginfoKeys(params);
             break;
         case '/schema':
-            result = getFilteredSchema(payload);
+            result = getFilteredSchema(params);
             break;
         case '/capabilities':
-            result = getCapabilities(payload);
+            result = getCapabilities(params);
             break;
         default:
             throw new Error('Not found');
@@ -169,36 +170,15 @@ var getCapabilities = function(params) {
 // This is where all interesting things happen interfacing with hoot core lib directly
 var postHandler = function(data) {
     var hoot = require(HOOT_HOME + '/lib/HootJs');
-    var start = new Date().getTime();
     var result = {};
-
-    if (data.uid) {
-        result.uid = data.uid;
-    }
-    if (data.command) {
-        result.command = data.command;
-    }
-
     var translation = new hoot.TranslationOp({
         'translation.script': HOOT_HOME + data.transMap[data.translation],
         'translation.direction': data.transDir});
 
-    if (data.command == 'translate') {
-        var map = new hoot.OsmMap();
-        hoot.loadMapFromString(map, data.input);
-        try {
-            translation.apply(map);
-        } catch(err) {
-            console.log(err);
-        }
-        xml = hoot.OsmWriter.toString(map);
-        result.output = xml;
-    } else {
-        throw new Error('Unrecognized command');
-    }
-
-    result.elapsed = new Date().getTime() - start;
-    return result;
+    var map = new hoot.OsmMap();
+    hoot.loadMapFromString(map, data.osm);
+    translation.apply(map);
+    return hoot.OsmWriter.toString(map);
 };
 
 // OSM to TDS request handler

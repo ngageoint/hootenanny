@@ -76,7 +76,7 @@ describe('P2PServer', function () {
                 osm: input
             });
 
-            xml2js.parseString(merged.output, function(err, result) {
+            xml2js.parseString(merged, function(err, result) {
                 if (err) console.error(err);
                 assert.equal(result.osm.node[0].$.lat, "48.0479399000000029");
                 assert.equal(result.osm.node[0].$.lon, "11.7012813999999992");
