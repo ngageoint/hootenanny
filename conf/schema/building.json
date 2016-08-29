@@ -194,7 +194,11 @@
         ],
         "isA": "building",
         "name": "building=hospital",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=hospital",
+            "weight": 0.8
+        }
     },
     {
         "categories": [

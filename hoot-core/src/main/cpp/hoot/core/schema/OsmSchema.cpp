@@ -1771,21 +1771,6 @@ bool OsmSchema::isPoi(const Element& e)
   return result;
 }
 
-bool OsmSchema::isBuildingIsh(ConstElementPtr e)
-{
-  return isArea(e->getTags(), e->getElementType()) &&
-         getCategories(e->getTags()).intersects(
-           OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-}
-
-bool OsmSchema::isPoiIsh(ConstElementPtr e)
-{
-  return e->getElementType() == ElementType::Node &&
-         (getCategories(e->getTags()).intersects(
-           OsmSchemaCategory::building() | OsmSchemaCategory::poi()) ||
-           e->getTags().getNames().size() > 0);
-}
-
 bool OsmSchema::isReversed(const Element& e) const
 {
   bool result = false;

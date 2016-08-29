@@ -44,7 +44,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{e657863b-045d-5413-b449-7bfbaf736fd4}";
+QString PoiPolygonMatch::_testUuid = "{d1012bc9-92bc-5931-aac2-aa5702f42b8b}";
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
@@ -80,6 +80,21 @@ _badGeomCount(0)
   _calculateMatch(map, eid1, eid2);
 }
 
+bool PoiPolygonMatch::isBuildingIsh(const Element& e)
+{
+  return OsmSchema::getInstance().isArea(e.getTags(), e.getElementType()) &&
+         OsmSchema::getInstance().getCategories(e.getTags()).intersects(
+           OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+}
+
+bool PoiPolygonMatch::isPoiIsh(const Element& e)
+{
+  return e.getElementType() == ElementType::Node &&
+         (OsmSchema::getInstance().getCategories(e.getTags()).intersects(
+           OsmSchemaCategory::building() | OsmSchemaCategory::poi()) ||
+             e.getTags().getNames().size() > 0);
+}
+
 void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                       const ElementId& eid2)
 {
@@ -87,14 +102,14 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   ConstElementPtr e2 = map->getElement(eid2);
 
   ConstElementPtr poi, poly;
-  if (OsmSchema::getInstance().isPoiIsh(e1) && OsmSchema::getInstance().isBuildingIsh(e2))
+  if (isPoiIsh(*e1) && isBuildingIsh(*e2))
   {
     _poiEid = eid1;
     _polyEid = eid2;
     poi = e1;
     poly = e2;
   }
-  else if (OsmSchema::getInstance().isPoiIsh(e2) && OsmSchema::getInstance().isBuildingIsh(e1))
+  else if (isPoiIsh(*e2) && isBuildingIsh(*e1))
   {
     _poiEid = eid2;
     _polyEid = eid1;
@@ -203,18 +218,21 @@ bool PoiPolygonMatch::_calculateTypeMatch(const ConstOsmMapPtr& /*map*/, ConstEl
   if (t1.get("amenity") == "restaurant" &&
       t2.get("amenity") == "restaurant" &&
       t1.contains("cuisine") && t2.contains("cuisine") &&
-      t1.get("cuisine").toLower() != t2.get("cuisine").toLower())
+      t1.get("cuisine").toLower() != t2.get("cuisine").toLower() &&
+      //Don't return false on regional, since its location dependent and we don't take that into
+      //account.
+      t1.get("cuisine") != "regional" && t2.get("cuisine") != "regional")
   {
     return false;
   }
 
   const double tagScore = _getTagScore(e1, e2);
 
-  /*if (e1->getTags().get("uuid") == _testUuid ||
+  if (e1->getTags().get("uuid") == _testUuid ||
       e2->getTags().get("uuid") == _testUuid)
   {
     LOG_VARD(tagScore);
-  }*/
+  }
 
   return tagScore >= _typeScoreThreshold;
 }
@@ -231,13 +249,14 @@ double PoiPolygonMatch::_getTagScore(ConstElementPtr e1, ConstElementPtr e2) con
     for (int j = 0; j < t2List.size(); j++)
     {
       result = max(OsmSchema::getInstance().score(t1List.at(i), t2List.at(j)), result);
-      /*if (e1->getTags().get("uuid") == _testUuid ||
+
+      if (e1->getTags().get("uuid") == _testUuid ||
           e2->getTags().get("uuid") == _testUuid)
       {
         LOG_VARD(t1List.at(i));
         LOG_VARD(t2List.at(j));
         LOG_VARD(result);
-      }*/
+      }
     }
   }
 
@@ -247,15 +266,22 @@ double PoiPolygonMatch::_getTagScore(ConstElementPtr e1, ConstElementPtr e2) con
 QStringList PoiPolygonMatch::_getRelatedTags(const Tags& tags) const
 {
   QStringList tagsList;
+
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); it++)
   {
-    if ((OsmSchema::getInstance().getCategories(it.key(), it.value()) &
-         (OsmSchemaCategory::building() | OsmSchemaCategory::use() | OsmSchemaCategory::poi()))
-          != OsmSchemaCategory::Empty)
+    //TODO: hack - not sure the correct way to handle these concatenated values yet
+    const QStringList values = it.value().split(";");
+    for (int i = 0; i < values.size(); i++)
     {
-      tagsList.append(it.key() + "=" + it.value());
+      if ((OsmSchema::getInstance().getCategories(it.key(), it.value()) &
+           (OsmSchemaCategory::building() | OsmSchemaCategory::use() | OsmSchemaCategory::poi()))
+             != OsmSchemaCategory::Empty)
+      {
+        tagsList.append(it.key() + "=" + values.at(i));
+      }
     }
   }
+
   return tagsList;
 }
 

@@ -102,7 +102,7 @@ public:
       {
         const shared_ptr<const Element>& n = _map->getElement(*it);
 
-        if (n->isUnknown() && OsmSchema::getInstance().isBuildingIsh(n))
+        if (n->isUnknown() && PoiPolygonMatch::isBuildingIsh(*n))
         {
           // score each candidate and push it on the result vector
           PoiPolygonMatch* m = new PoiPolygonMatch(_map, from, *it, _threshold, _rf);
@@ -140,7 +140,7 @@ public:
 
   static bool isMatchCandidate(ConstElementPtr element)
   {
-    return element->isUnknown() && OsmSchema::getInstance().isPoiIsh(element);
+    return element->isUnknown() && PoiPolygonMatch::isPoiIsh(*element);
   }
 
   shared_ptr<HilbertRTree>& getIndex()
@@ -202,9 +202,8 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
   {
     ConstElementPtr e1 = map->getElement(eid1);
     ConstElementPtr e2 = map->getElement(eid2);
-    bool foundPoi = OsmSchema::getInstance().isPoi(*e1) || OsmSchema::getInstance().isPoi(*e2);
-    bool foundBuilding = OsmSchema::getInstance().isBuilding(e1->getTags(), e1->getElementType()) ||
-        OsmSchema::getInstance().isBuilding(e2->getTags(), e2->getElementType());
+    bool foundPoi = PoiPolygonMatch::isPoiIsh(*e1) || PoiPolygonMatch::isPoiIsh(*e2);
+    bool foundBuilding = PoiPolygonMatch::isBuildingIsh(*e1) || PoiPolygonMatch::isBuildingIsh(*e2);
 
     if (foundPoi && foundBuilding)
     {

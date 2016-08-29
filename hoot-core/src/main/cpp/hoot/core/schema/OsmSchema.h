@@ -387,9 +387,6 @@ public:
    */
   bool isList(const QString& key, const QString& value);
 
-  bool isBuildingIsh(ConstElementPtr e);
-  bool isPoiIsh(ConstElementPtr e);
-
   /**
    * Returns true if the kvp contains metadata about the feature as opposed to real information
    * about the features.

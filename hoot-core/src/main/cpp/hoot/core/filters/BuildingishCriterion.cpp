@@ -27,7 +27,7 @@
 #include "BuildingishCriterion.h"
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/Factory.h>
 
 namespace hoot
@@ -41,7 +41,7 @@ BuildingishCriterion::BuildingishCriterion()
 
 bool BuildingishCriterion::isSatisfied(const shared_ptr<const Element> &e) const
 {
-  return OsmSchema::getInstance().isBuildingIsh(e);
+  return PoiPolygonMatch::isBuildingIsh(*e);
 }
 
 }

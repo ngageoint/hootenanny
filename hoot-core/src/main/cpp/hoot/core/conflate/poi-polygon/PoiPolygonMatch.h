@@ -76,6 +76,22 @@ public:
 
   virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m) const;
 
+  /**
+   * @brief Custom, looser definition of OsmSchema::isBuilding for this matcher
+   *
+   * @param element to be evaluated
+   * @return true if the element meets the criteria; false otherwise
+   */
+  static bool isBuildingIsh(const Element& e);
+
+  /**
+   * @brief Custom, looser definition of OsmSchema::isPoi for this matcher
+   *
+   * @param element to be evaluated
+   * @return true if the element meets the criteria; false otherwise
+   */
+  static bool isPoiIsh(const Element& e);
+
 private:
 
   ElementId _eid1;

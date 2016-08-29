@@ -61,7 +61,7 @@
         "objectType": "tag",
         "similarTo": {
             "name": "historic=monument",
-            "weight": 0.4
+            "weight": 0.8
         }
     }
 ]
