@@ -362,14 +362,7 @@ describe('TranslationServer', function () {
       it('should return 200', function (done) {
         var request  = httpMocks.createRequest({
             method: 'GET',
-            url: '/schema',
-            query: {
-                geometry: 'point',
-                translation: 'MGCP',
-                searchstr: 'Buil',
-                maxlevdst: 20,
-                limit: 12
-            }
+            url: '/schema?geometry=point&translation=MGCP&earchstr=Buil&maxlevdst=20&limit=12'
         });
         var response = httpMocks.createResponse();
         server.TranslationServer(request, response);
@@ -382,13 +375,7 @@ describe('TranslationServer', function () {
       it('should return 200', function (done) {
         var request  = httpMocks.createRequest({
             method: 'GET',
-            url: '/osmtotds',
-            query: {
-                idval: 'AP030',
-                translation: 'MGCP',
-                geom: 'Line',
-                idelem: 'fcode'
-            }
+            url: '/osmtotds?idval=AP030&translation=MGCP&geom=Line&idelem=fcode'
         });
         var response = httpMocks.createResponse();
         server.TranslationServer(request, response);

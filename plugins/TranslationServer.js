@@ -81,7 +81,6 @@ if (require.main === module) {
 
 function TranslationServer(request, response) {
     try {
-
         var header = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'};
         if (request.method === 'POST') {
             var payload = '';
@@ -89,22 +88,25 @@ function TranslationServer(request, response) {
                 payload += chunk;
             });
 
-            request.on('end', function(payload) {
-                payload.method = request.method;
-                payload.path = request.path;
+            request.on('end', function() {
+                var urlbits = url.parse(request.url, true);
+                var params = JSON.parse(payload);
+                params.method = request.method;
+                params.path = urlbits.pathname;
 
-                var result = handleInputs(payload);
+                var result = handleInputs(params);
 
                 response.writeHead(200, header);
                 response.end(JSON.stringify(result));
             });
 
         } else if (request.method === 'GET') {
-            var payload = request.query;
-            payload.method = request.method;
-            payload.path = request.path;
+            var urlbits = url.parse(request.url, true);
+            var params = urlbits.query;
+            params.method = request.method;
+            params.path = urlbits.pathname;
 
-            var result = handleInputs(payload);
+            var result = handleInputs(params);
 
             response.writeHead(200, header);
             response.end(JSON.stringify(result));
