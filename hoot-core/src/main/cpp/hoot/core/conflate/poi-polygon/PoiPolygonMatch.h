@@ -110,6 +110,7 @@ private:
   QMap<QString, shared_ptr<TagAncestorDifferencer> > _tagAncestorDifferencers;
 
   int _badGeomCount;
+  ConstOsmMapPtr _map;
 
   static QString _testUuid;
 
@@ -130,6 +131,8 @@ private:
 
   double _getTagScore(ConstElementPtr e1, ConstElementPtr e2) const;
   QStringList _getRelatedTags(const Tags& tags) const;
+
+  bool _calculateAddressMatch(ConstElementPtr building, ConstElementPtr poi);
 
 };
 

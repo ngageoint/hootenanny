@@ -38,6 +38,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/algorithms/ExactStringDistance.h>
+#include <hoot/core/algorithms/Translator.h>
 
 namespace hoot
 {
@@ -57,7 +59,8 @@ _matchDistance(ConfigOptions().getPoiPolygonMatchDistance()),
 _reviewDistance(ConfigOptions().getPoiPolygonMatchReviewDistance()),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold()),
-_badGeomCount(0)
+_badGeomCount(0),
+_map(map)
 {
   _calculateMatch(map, eid1, eid2);
 }
@@ -75,7 +78,8 @@ _matchDistance(matchDistance),
 _reviewDistance(reviewDistance),
 _nameScoreThreshold(nameScoreThreshold),
 _typeScoreThreshold(typeScoreThreshold),
-_badGeomCount(0)
+_badGeomCount(0),
+_map(map)
 {
   _calculateMatch(map, eid1, eid2);
 }
@@ -142,6 +146,8 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   const double nameScore = _calculateNameScore(poi, poly);
   const bool nameMatch = nameScore >= _nameScoreThreshold;
 
+  const bool addressMatch = _calculateAddressMatch(poly, poi);
+
   // calculate the 2 sigma for the distance between the two objects
   const double sigma1 = e1->getCircularError() / 2.0;
   const double sigma2 = e1->getCircularError() / 2.0;
@@ -154,6 +160,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   int evidence = 0;
   evidence += typeMatch ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
+  evidence += addressMatch ? 1 : 0;
   evidence += distance <= _matchDistance ? 2 : 0;
 
   if (!closeMatch)
@@ -185,6 +192,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     LOG_VARD(typeMatch);
     LOG_VARD(nameMatch);
     LOG_VARD(nameScore);
+    LOG_VARD(addressMatch);
     LOG_VARD(closeMatch);
     LOG_VARD(distance);
     LOG_VARD(_matchDistance);
@@ -287,6 +295,84 @@ QStringList PoiPolygonMatch::_getRelatedTags(const Tags& tags) const
   }
 
   return tagsList;
+}
+
+bool PoiPolygonMatch::_calculateAddressMatch(ConstElementPtr building, ConstElementPtr poi)
+{
+  Tags buildingTags = building->getTags();
+  QString buildingHouseNum = buildingTags.get("addr:housenumber").trimmed();
+  QString buildingStreet =
+    Translator::getInstance().toEnglish(buildingTags.get("addr:street")).trimmed().toLower();
+  QString buildingAddrComb;
+  if (!buildingHouseNum.isEmpty() && !buildingStreet.isEmpty())
+  {
+    buildingAddrComb = buildingHouseNum + " " + buildingStreet;
+  }
+  QString buildingAddrTag =
+    Translator::getInstance().toEnglish(buildingTags.get("address")).trimmed().toLower();
+  if (buildingAddrComb.isEmpty() && buildingAddrTag.isEmpty())
+  {
+    //try to find the address from a building way node instead
+    if (building->getElementType() == ElementType::Way)
+    {
+      ConstWayPtr wayBuilding = dynamic_pointer_cast<const Way>(building);
+      const vector<long> wayNodeIds = wayBuilding->getNodeIds();
+      for (size_t i = 0; i < wayNodeIds.size(); i++)
+      {
+        ConstElementPtr buildingWayNode = _map->getElement(ElementType::Node, wayNodeIds.at(i));
+        buildingTags = buildingWayNode->getTags();
+        buildingHouseNum = buildingTags.get("addr:housenumber").trimmed();
+        buildingStreet =
+          Translator::getInstance().toEnglish(buildingTags.get("addr:street")).trimmed().toLower();
+        buildingAddrTag =
+          Translator::getInstance().toEnglish(buildingTags.get("address")).trimmed().toLower();
+        if (!buildingHouseNum.isEmpty() && !buildingStreet.isEmpty())
+        {
+          buildingAddrComb = buildingHouseNum + " " + buildingStreet;
+        }
+        if (!buildingAddrComb.isEmpty() || !buildingAddrTag.isEmpty())
+        {
+          break;
+        }
+      }
+    }
+    //haven't seen addresses yet in building relations
+    /*else if (e2->getElementType() == ElementType::Relation)
+      {
+
+      }*/
+  }
+
+  Tags poiTags = poi->getTags();
+  const QString poiHouseNum = poiTags.get("addr:housenumber").trimmed();
+  const QString poiStreet =
+    Translator::getInstance().toEnglish(poiTags.get("addr:street")).trimmed().toLower();
+  QString poiAddrComb;
+  if (!poiHouseNum.isEmpty() && !poiStreet.isEmpty())
+  {
+    poiAddrComb = poiHouseNum + " " + poiStreet;
+  }
+  const QString poiAddrTag =
+    Translator::getInstance().toEnglish(poiTags.get("address")).trimmed().toLower();
+
+  if (buildingTags.get("uuid") == _testUuid || poiTags.get("uuid") == _testUuid)
+  {
+    LOG_VARD(buildingAddrComb);
+    LOG_VARD(poiAddrComb);
+    LOG_VARD(buildingAddrTag);
+    LOG_VARD(poiAddrTag);
+  }
+
+  ExactStringDistance addrComp;
+  return
+    (!buildingAddrTag.isEmpty() && !poiAddrTag.isEmpty() &&
+       addrComp.compare(buildingAddrTag, poiAddrTag) == 1.0) ||
+    (!buildingAddrComb.isEmpty() && !poiAddrTag.isEmpty() &&
+       addrComp.compare(buildingAddrComb, poiAddrTag) == 1.0) ||
+    (!poiAddrComb.isEmpty() && !buildingAddrTag.isEmpty() &&
+       addrComp.compare(poiAddrComb, buildingAddrTag) == 1.0) ||
+    (!buildingAddrTag.isEmpty() && !poiAddrTag.isEmpty() &&
+       addrComp.compare(buildingAddrTag, poiAddrTag) == 1.0);
 }
 
 set< pair<ElementId, ElementId> > PoiPolygonMatch::getMatchPairs() const
