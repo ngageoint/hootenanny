@@ -136,6 +136,17 @@ describe('TranslationServer', function () {
             });
         });
 
+        it('should handle bad translation schema value in osmtotds POST', function() {
+            assert.throws(function error() {
+                var osm2trans = server.handleInputs({
+                    osm: '<osm version="0.6" upload="true" generator="JOSM"><node id="-1" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="building" v="yes"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
+                    method: 'POST',
+                    translation: 'TDv61',
+                    path: '/osmtotds'
+                });
+            }, Error, 'Unsupported translation schema');
+        });
+
         // it('should throw an error for unable to translate in osmtotds POST', function(){
         //     //http://localhost:8094/osmtotds
         //     var osm2trans = server.handleInputs({

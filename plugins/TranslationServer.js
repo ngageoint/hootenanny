@@ -90,7 +90,7 @@ function TranslationServer(request, response) {
 
             request.on('end', function() {
                 var urlbits = url.parse(request.url, true);
-                var params = {};
+                var params = urlbits.query;
                 params.osm = payload;
                 params.method = request.method;
                 params.path = urlbits.pathname;
@@ -169,6 +169,9 @@ var getCapabilities = function(params) {
 
 // This is where all interesting things happen interfacing with hoot core lib directly
 var postHandler = function(data) {
+    if (!availableTrans[data.translation] || !availableTrans[data.translation].isavailable) {
+        throw new Error('Unsupported translation schema');
+    }
     var hoot = require(HOOT_HOME + '/lib/HootJs');
     var result = {};
     var translation = new hoot.TranslationOp({
